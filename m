@@ -2,69 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3943B557116
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 04:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F215455711B
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 04:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358667AbiFWCcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 22:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
+        id S231694AbiFWCg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 22:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235053AbiFWCct (ORCPT
+        with ESMTP id S229615AbiFWCgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 22:32:49 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40FE427C3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:32:48 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id h34-20020a17090a29a500b001eb01527d9eso1209795pjd.3
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:32:48 -0700 (PDT)
+        Wed, 22 Jun 2022 22:36:25 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7C43BF91
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:36:24 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d5so16936794plo.12
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:36:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=quZ2IQ4SWEcgE7ipC61B0RJkvViF4XQTv//KDBkmexY=;
-        b=D5CoMtWGKy5O5yykFAI9vdEUUWbxaj7XOC6zumQZ900GKobgHdUPcYxSHr8BDFHOgs
-         gEWeC00ohWF8zIvMplR2ArP+M2A4jMRhjA1eLNkcNTW52IDH/HXc266WgT8bzhyW9rTt
-         zrdY9L8ntbD7KutWYCym69J6xj/b+JZUTvjPfxSec/TdS8QCUHEJg87tATxXbDB3GvN3
-         K80z3b6uYCWw/W0Ajmfp2PTo393/HzM8HNp1RrK+BvQckcKk14SZgDAczxeStaxuco7i
-         Qg6Knbzvn6UuKTWTJofI0mBubhoZY6J5XhyyoSgn+sADA9IGr1mOZNakFiaRWpi3juzn
-         9c/g==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ap/l5/DtRvj53V2CP02OCV8Y9yv6B47W9rFtmSDPxls=;
+        b=FpOyHo8x4jGy05YG6pNB+UTP0d2tDbI8uK8nVnAfyLYHadT0jVXhh164JY6S+Y4Ets
+         StuLbjcpbIXgQfPPKNHjHdrFuZxp/1vsrAwNf+MIRPoxcw2kOtZI+0qyHYG4PtWf4EGZ
+         4YX3AIDmZ0EnsgevwSnayUEl1nJyIOGwjXbMlMLWZ8+We04oQ2oKyh0YzlwFBT2uW/5m
+         sW28f3aZPh+rREYYdhaXmB1yj66IS6Pe9Nx5ez8jz2nMgKIo8SrdNIPH5bvcUB5LURHZ
+         klTqDnqyx8w+fAKTMzbI11ocnkMFpG+Hji/l7D7R1aVizV0BooQ27c5D+vlP5GNpleON
+         NAIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=quZ2IQ4SWEcgE7ipC61B0RJkvViF4XQTv//KDBkmexY=;
-        b=hPPEL9x9hz6/NOeIgA+0vwgiw3FqEFG7PqJL6BafcX+uSap3XsLcTnp5lvilxSSwFY
-         L6R/2rz0AtvfnFgnvofO4TTaTyyPw1+STkgNktuLikFMa8qOoIuVYzBIk1Tqega/m5/l
-         tlny9G5nTVUbadkkDG0X2C9WQAEes/pPCYO7bSb53mVMMSxjB8zDPD/axVcdkxj0c1tS
-         4L7HH/GUeeicISNQ1N5AN+NSyeG5DgkSV4SLfi5BtJ1E6FHa2iSItV4lXyTnBD322qgY
-         yhpMZFIMVBB/rXnt7/1FPlGTMwBd4A0mRN+vqzN/SAVPI3IpX3QhVm+z1hGJ3E/5/IIS
-         k6FA==
-X-Gm-Message-State: AJIora8ldqWDulSku7aQykXrqMCIDIc6IUN40xSyLm05i7Bs09/AwJbe
-        wLsDH/4p+BKoMgEuK8+NqgtcZQ==
-X-Google-Smtp-Source: AGRyM1voA7o8RAytTqIjENhhiofs155ZhpwGhnTup4bssPSJp3uXiT1pKHE1SDXckNv6ln+aVkmTLQ==
-X-Received: by 2002:a17:902:ce82:b0:16a:425c:f214 with SMTP id f2-20020a170902ce8200b0016a425cf214mr8122423plg.123.1655951568101;
-        Wed, 22 Jun 2022 19:32:48 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:f436:1f2d:8390:7bc6])
-        by smtp.gmail.com with ESMTPSA id c11-20020a621c0b000000b0051ba303f1c0sm14199745pfc.127.2022.06.22.19.32.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 19:32:47 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 10:32:32 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     syzbot <syzbot+ec972d37869318fc3ffb@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, mhocko@kernel.org, roman.gushchin@linux.dev,
-        shakeelb@google.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in folio_lruvec_lock_irqsave
-Message-ID: <YrPQwPzyzfFoXFom@FVFYT0MHHV2J.usts.net>
-References: <0000000000004b03c805e2099bf0@google.com>
- <YrM2XCwzu65cb81r@FVFYT0MHHV2J.googleapis.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ap/l5/DtRvj53V2CP02OCV8Y9yv6B47W9rFtmSDPxls=;
+        b=VfWfIHoW5QJH91XQBh1OlHy4W3Kww4Mo3zKq2WOMImKN3kn8Ovpn+Ag1lhsdA0+Jbl
+         OPjMjGG4Minqj1Onti9J/7jsRNQIXuBxIaeskmGBsOMvGzmo+2slbyjgbIOLerrKVU4U
+         QZH9s58zBf1suNjRe/3MkfTrGo5YE9gm10M2yNTTxe+Zntfr6CqJyjZZsY9H1o1H+43L
+         YahNRPGmavuc5EDDsezVKYQ+l8Qfc3WDWbkrmPWVA8qfRJCXBBNkhhoQccYrGw1AO0Ad
+         IperJ9SpDcN8d5OnT2EsRpbGvy4trYRYSYPcU0FfPQP7rqR/BtptxmnHupu70e7bWhXO
+         ImDA==
+X-Gm-Message-State: AJIora/X3xrdxr1+bzx2b23x9xiXA3fddzaseXWeWoZO2oFvbEtS/42I
+        mz+kf/lgvwomH01yai1ofuFhuw==
+X-Google-Smtp-Source: AGRyM1vpifYz050GyEzWzRjhQy8/6B2veXLZvJ6SBiX5HXPWJbx+e9VN+j5wuu1AX6XUoLZCOJnVtA==
+X-Received: by 2002:a17:902:f60d:b0:16a:1a7f:a22f with SMTP id n13-20020a170902f60d00b0016a1a7fa22fmr21280279plg.13.1655951784244;
+        Wed, 22 Jun 2022 19:36:24 -0700 (PDT)
+Received: from [10.4.214.173] ([139.177.225.237])
+        by smtp.gmail.com with ESMTPSA id a13-20020a1709027e4d00b0015e8d4eb26csm13583831pln.182.2022.06.22.19.36.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jun 2022 19:36:23 -0700 (PDT)
+Message-ID: <2d607f47-71fa-9505-b355-7203eb327bab@bytedance.com>
+Date:   Thu, 23 Jun 2022 10:36:10 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrM2XCwzu65cb81r@FVFYT0MHHV2J.googleapis.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH v12 12/14] mm: multi-gen LRU: debugfs interface
+Content-Language: en-US
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+References: <20220614071650.206064-1-yuzhao@google.com>
+ <20220614071650.206064-13-yuzhao@google.com>
+ <214db251-827c-715c-54cf-9c0e9bb5fe30@bytedance.com>
+ <CAOUHufZ8xaVKZD7LNeo8AZv_xywvwef4P8CjdO+npijLHEUfWg@mail.gmail.com>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <CAOUHufZ8xaVKZD7LNeo8AZv_xywvwef4P8CjdO+npijLHEUfWg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,122 +109,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 11:33:48PM +0800, Muchun Song wrote:
-> On Wed, Jun 22, 2022 at 06:49:31AM -0700, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    ac0ba5454ca8 Add linux-next specific files for 20220622
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=14354c18080000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=12809dacb9e7c5e0
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=ec972d37869318fc3ffb
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > 
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+ec972d37869318fc3ffb@syzkaller.appspotmail.com
-> > 
-> >  folio_put include/linux/mm.h:1227 [inline]
-> >  put_page+0x217/0x280 include/linux/mm.h:1279
-> >  unmap_and_move_huge_page mm/migrate.c:1343 [inline]
-> >  migrate_pages+0x3dc3/0x5a10 mm/migrate.c:1440
-> >  do_mbind mm/mempolicy.c:1332 [inline]
-> >  kernel_mbind+0x4d7/0x7d0 mm/mempolicy.c:1479
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> > page has been migrated, last migrate reason: mempolicy_mbind
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 1 PID: 18925 at include/linux/memcontrol.h:800 folio_lruvec include/linux/memcontrol.h:800 [inline]
+
+
+On 2022/6/23 03:13, Yu Zhao wrote:
+> On Wed, Jun 22, 2022 at 3:16 AM Qi Zheng <zhengqi.arch@bytedance.com> wrote:
 > 
-> The warning here is "VM_WARN_ON_ONCE_FOLIO(!memcg && !mem_cgroup_disabled(), folio)",
-> the memcg returned by folio_memcg() seems to be NULL which has 2 possibility, one is
-> that objcg returned by folio_objcg() is NULL, another is that obj_cgroup_memcg(objcg)
-> returns NULL. However, obj_cgroup_memcg() always returns a valid memcg. So Most likely
-> objcg is NULL meaning this page is not charged to memcg. Is this possible for LRU pages?
-> 
-> I am not sure if this issue is caused by my commit cca700a8e695 ("mm: lru: use lruvec
-
-I have asked Andrew to drop this individual commit (to reduce potential impact) since
-this commit can be treated as a separate optimization patch compared to LRU page
-reparenting work.  I will resend this patch again after LRU page reparenting work
-stabilizes.
-
-Thanks.
-
-> lock to serialize memcg changes") since I have removed folio_test_clear_lru() check
-> from folio_batch_move_lru(). We know that a non-lru page may be not charged to memcg.
-> But is it possible for a non-lru page to be passed to folio_batch_move_lru()? Seems
-> impossible. Right? I am not very confident about this commit, hopefully, someone can
-> review it.
+>>> +static ssize_t lru_gen_seq_write(struct file *file, const char __user *src,
+>>> +                              size_t len, loff_t *pos)
+>>> +{
+>>> +     void *buf;
+>>> +     char *cur, *next;
+>>> +     unsigned int flags;
+>>> +     struct blk_plug plug;
+>>> +     int err = -EINVAL;
+>>> +     struct scan_control sc = {
+>>> +             .may_writepage = true,
+>>> +             .may_unmap = true,
+>>> +             .may_swap = true,
+>>> +             .reclaim_idx = MAX_NR_ZONES - 1,
+>>> +             .gfp_mask = GFP_KERNEL,
+>>> +     };
+>>> +
+>>> +     buf = kvmalloc(len + 1, GFP_KERNEL);
+>>> +     if (!buf)
+>>> +             return -ENOMEM;
+>>> +
+>>> +     if (copy_from_user(buf, src, len)) {
+>>> +             kvfree(buf);
+>>> +             return -EFAULT;
+>>> +     }
+>>> +
+>>> +     if (!set_mm_walk(NULL)) {
+>>
+>> The current->reclaim_state will be dereferenced in set_mm_walk(), so
+>> calling set_mm_walk() before set_task_reclaim_state(current,
+>> &sc.reclaim_state) will cause panic:
+>>
+>> [ 1861.154916] BUG: kernel NULL pointer dereference, address:
+>> 0000000000000008
 > 
 > Thanks.
 > 
-> > WARNING: CPU: 1 PID: 18925 at include/linux/memcontrol.h:800 folio_lruvec_lock_irqsave+0x2fd/0x4f0 mm/memcontrol.c:1424
-> > Modules linked in:
-> > CPU: 1 PID: 18925 Comm: syz-executor.3 Not tainted 5.19.0-rc3-next-20220622-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > RIP: 0010:folio_lruvec include/linux/memcontrol.h:800 [inline]
-> > RIP: 0010:folio_lruvec_lock_irqsave+0x2fd/0x4f0 mm/memcontrol.c:1424
-> > Code: 1f 44 00 00 45 31 e4 80 3d 06 3e da 0b 00 0f 85 01 fe ff ff 48 c7 c6 40 6f da 89 4c 89 f7 e8 0a 44 e2 ff c6 05 ea 3d da 0b 01 <0f> 0b e9 e4 fd ff ff e8 67 be ad 07 85 c0 0f 84 37 fd ff ff 80 3d
-> > RSP: 0018:ffffc9000b84f2c8 EFLAGS: 00010246
-> > RAX: 0000000000040000 RBX: fffff9400027e007 RCX: ffffc900135af000
-> > RDX: 0000000000040000 RSI: ffffffff81ce36a6 RDI: fffff52001709e28
-> > RBP: dffffc0000000000 R08: 000000000000003c R09: 0000000000000000
-> > R10: 0000000080000001 R11: 0000000000000001 R12: 0000000000000000
-> > R13: fffff9400027e000 R14: ffffea00013f0000 R15: 0000000000000000
-> > FS:  00007f5cfbb96700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 000000002073f000 CR3: 0000000074b9f000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  folio_lruvec_relock_irqsave include/linux/memcontrol.h:1666 [inline]
-> >  folio_batch_move_lru+0xf9/0x500 mm/swap.c:242
-> >  folio_batch_add_and_move+0xd4/0x130 mm/swap.c:258
-> >  deactivate_file_folio+0x222/0x580 mm/swap.c:678
-> >  invalidate_mapping_pagevec+0x38d/0x5c0 mm/truncate.c:535
-> >  drop_pagecache_sb+0xcf/0x2a0 fs/drop_caches.c:39
-> >  iterate_supers+0x13c/0x290 fs/super.c:694
-> >  drop_caches_sysctl_handler+0xdb/0x110 fs/drop_caches.c:62
-> >  proc_sys_call_handler+0x4a1/0x6e0 fs/proc/proc_sysctl.c:611
-> >  call_write_iter include/linux/fs.h:2057 [inline]
-> >  do_iter_readv_writev+0x3d1/0x640 fs/read_write.c:742
-> >  do_iter_write+0x182/0x700 fs/read_write.c:868
-> >  vfs_iter_write+0x70/0xa0 fs/read_write.c:909
-> >  iter_file_splice_write+0x723/0xc70 fs/splice.c:689
-> >  do_splice_from fs/splice.c:767 [inline]
-> >  direct_splice_actor+0x110/0x180 fs/splice.c:936
-> >  splice_direct_to_actor+0x34b/0x8c0 fs/splice.c:891
-> >  do_splice_direct+0x1a7/0x270 fs/splice.c:979
-> >  do_sendfile+0xae0/0x1240 fs/read_write.c:1262
-> >  __do_sys_sendfile64 fs/read_write.c:1321 [inline]
-> >  __se_sys_sendfile64 fs/read_write.c:1313 [inline]
-> >  __x64_sys_sendfile64+0x149/0x210 fs/read_write.c:1313
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> > RIP: 0033:0x7f5cfaa89109
-> > Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007f5cfbb96168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-> > RAX: ffffffffffffffda RBX: 00007f5cfab9c030 RCX: 00007f5cfaa89109
-> > RDX: 0000000020002080 RSI: 0000000000000005 RDI: 0000000000000006
-> > RBP: 00007f5cfaae305d R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000262 R11: 0000000000000246 R12: 0000000000000000
-> > R13: 00007fff1ef394df R14: 00007f5cfbb96300 R15: 0000000000022000
-> >  </TASK>
-> > 
-> > 
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > 
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > 
+> Apparently I shot myself in the foot by one of the nits between v11 and v12.
 > 
+>>> +             kvfree(buf);
+>>> +             return -ENOMEM;
+>>> +     }
+>>> +
+>>> +     set_task_reclaim_state(current, &sc.reclaim_state);
+>>> +     flags = memalloc_noreclaim_save();
+>>> +     blk_start_plug(&plug);
+>>> +
+>>> +     next = buf;
+>>> +     next[len] = '\0';
+>>> +
+>>> +     while ((cur = strsep(&next, ",;\n"))) {
+>>> +             int n;
+>>> +             int end;
+>>> +             char cmd;
+>>> +             unsigned int memcg_id;
+>>> +             unsigned int nid;
+>>> +             unsigned long seq;
+>>> +             unsigned int swappiness = -1;
+>>> +             unsigned long opt = -1;
+>>> +
+>>> +             cur = skip_spaces(cur);
+>>> +             if (!*cur)
+>>> +                     continue;
+>>> +
+>>> +             n = sscanf(cur, "%c %u %u %lu %n %u %n %lu %n", &cmd, &memcg_id, &nid,
+>>> +                        &seq, &end, &swappiness, &end, &opt, &end);
+>>> +             if (n < 4 || cur[end]) {
+>>> +                     err = -EINVAL;
+>>> +                     break;
+>>> +             }
+>>> +
+>>> +             err = run_cmd(cmd, memcg_id, nid, seq, &sc, swappiness, opt);
+>>> +             if (err)
+>>> +                     break;
+>>> +     }
+>>> +
+>>> +     blk_finish_plug(&plug);
+>>> +     memalloc_noreclaim_restore(flags);
+>>> +     set_task_reclaim_state(current, NULL);
+>>> +
+>>> +     clear_mm_walk();
+>>
+>> Ditto, we can't call clear_mm_walk() after
+>> set_task_reclaim_state(current, NULL).
+>>
+>> Maybe it can be modified as follows:
+>>
+>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>> index 2422edc786eb..552e6ae5243e 100644
+>> --- a/mm/vmscan.c
+>> +++ b/mm/vmscan.c
+>> @@ -5569,12 +5569,12 @@ static ssize_t lru_gen_seq_write(struct file
+>> *file, const char __user *src,
+>>                   return -EFAULT;
+>>           }
+>>
+>> +       set_task_reclaim_state(current, &sc.reclaim_state);
+>>           if (!set_mm_walk(NULL)) {
+>>                   kvfree(buf);
+>>                   return -ENOMEM;
+>>           }
+>>
+>> -       set_task_reclaim_state(current, &sc.reclaim_state);
+> 
+> We need a `goto` because otherwise we leave a dangling
+
+Yes, right. With this:
+
+Reviewed-by: Qi Zheng <zhengqi.arch@bytedance.com>
+
+> `current->reclaim_state`. (I swear I had one.)
+
+(I believe :))
+
+-- 
+Thanks,
+Qi

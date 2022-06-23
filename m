@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADCA557EA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93591557EA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbiFWPcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 11:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
+        id S232066AbiFWPdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 11:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbiFWPcd (ORCPT
+        with ESMTP id S232071AbiFWPdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 11:32:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7527541988
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:32:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655998351;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b2n5xLD7AQDK+GpcG4O4X1piM0yxBHUCyVpdCvBcmLA=;
-        b=jLsuyRQ0L4+mpIGD3ZTFv6MBqlConFdYHax7tTtXC/GhXy3gKWmxKoJBR2do0ELW7Ks45P
-        y4A0heWJQj7sN+Cl9G94Zud2iIKGD9iDsq3el4Xq69Xz2BbwpYk32TduA7g9hUuQt20vPo
-        jYNh6knHlQxatb6QRYwt7y24EnPE1ok=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665-ncYrqMrVM8ihZtydid3xWw-1; Thu, 23 Jun 2022 11:32:30 -0400
-X-MC-Unique: ncYrqMrVM8ihZtydid3xWw-1
-Received: by mail-qk1-f197.google.com with SMTP id r6-20020a05620a298600b006a98e988ba4so23857924qkp.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:32:30 -0700 (PDT)
+        Thu, 23 Jun 2022 11:33:06 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48D35F5D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:33:03 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id s1so28480141wra.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:33:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=T+jpYYOmmAX0tTKDun9RBpmd7SAR9bivQfLucksvyjg=;
+        b=qpbQec73keboHodaP5ziYd1RpAKQqcvoAXsEGV85lzoEhwbJVc+8syz7um4I/eSFwj
+         +NKnV+I/yjQxjihPuFbbBVB6I4VQNahSOkTUqxSzfBCsHDq6LcpWV0AmkMQ39mR2o6G9
+         6oVsbtMZVy8rzLpPCyRUvYjzZkkjU1dzqyGvnsb+E9q1fBegaF4ii3uJMHQLYPpd+zjc
+         3EU024R4KYr2VByEKn+oD14NdJYLSHOEwR7/YVwAkLqMyf+sLzKZjanEI2ID2UbMD76T
+         xnI7ygGgW+dZClKFdVBeecCzS/CLoyqGi9XsSsy+CwFTfIRwrCgFVZcJRuWWsO13Xo1W
+         D/Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=b2n5xLD7AQDK+GpcG4O4X1piM0yxBHUCyVpdCvBcmLA=;
-        b=KupSaueYwdPQgw+KwkCem521MvgncNrDnxlhXqRJMkJZEVSFpBrn/hThEk9K9/v+Ug
-         MuvYYILbIWjlisi+oMF/S6rIdOZDRoAxbI5MWqCbvgq1LgfZCTOh2FUTVSLHgPwNR6cY
-         gC1pIihdCPfKkAshmnoS6U6PzNoyOR+6+OXjiHbbL0+wLbw2rYCWHud/P+cBmWUUcg8f
-         rVdYS0U8I2Y3KYO/zbzZy1q6LDl1zTeaIQQ375yEO5xsBkIgxbyOvPL3R9jLBZYhZDmE
-         IuxpJNP/3AvS/cg8ilxgHPIHFRT6RJXXvv0qZhzD804CW9u8Dbg/WMCAvJpTlcW0mrIG
-         5ELQ==
-X-Gm-Message-State: AJIora/8q89Z8yYO+A5LFKocmq1If7mW1boio/SdEwL2vJuO6Qwjuvdo
-        aII3S+aY0RcZQQOQ1OtR4ImzfsKuB6MUeH49tbm/qf9Bpbz0unjPvujeZ1xDOsZyTCsGIjms5Kg
-        sLrTiinBCOKfebgcaV4KCH4uH
-X-Received: by 2002:a05:6214:29ca:b0:46b:92c5:9f3b with SMTP id gh10-20020a05621429ca00b0046b92c59f3bmr32129042qvb.20.1655998349429;
-        Thu, 23 Jun 2022 08:32:29 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v3ddAmHP4GNMm6NGiuKRAyJLCHiaGoJECW7QzVyWqpeYX0hMGqRDuYk0d3CinVTSkb2kBBeA==
-X-Received: by 2002:a05:6214:29ca:b0:46b:92c5:9f3b with SMTP id gh10-20020a05621429ca00b0046b92c59f3bmr32129018qvb.20.1655998349055;
-        Thu, 23 Jun 2022 08:32:29 -0700 (PDT)
-Received: from halaneylaptop ([2600:1700:1ff0:d0e0::46])
-        by smtp.gmail.com with ESMTPSA id y29-20020a37f61d000000b006a3325fd985sm18291762qkj.13.2022.06.23.08.32.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 08:32:28 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 10:32:26 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        echanude@redhat.com
-Subject: Re: [PATCH] clk: qcom: sc8280xp: add parent to gcc_ufs_phy_axi_clk
- for sa8540p
-Message-ID: <20220623153226.drrbx2jolrxxe7as@halaneylaptop>
-References: <20220623142837.3140680-1-bmasney@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623142837.3140680-1-bmasney@redhat.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=T+jpYYOmmAX0tTKDun9RBpmd7SAR9bivQfLucksvyjg=;
+        b=q3+MdduRUHjnOBHTz6lLyNOFotxRRPkJj4xlOmZQsVlIH94SHxpRz60Pp2HWgNrnZa
+         yqmg6yIPrQG6nPapbU93MXNhyr7eKtv+B8KDbucORKjRDA1pIBc2a+dMUCXJmiflw3UG
+         61jVTNOUlT9xDoRz9aPgqGXSy1R6bE9Le5kkucV7eXJYzHZmlQoUciTFIw9y8UZKd3kY
+         tr3izJ9DnYXgVocH9304MOTh3zNxp7tTy+cydYRgiuYXo3zq2LSCuvZOLqWx0GgsaMgJ
+         OqL9spN4z8q/IXJ8t3krDtVz43pO5QjDUIKX1DvMsZ5llpSK+YtDnB4o/hJjR/6eTOEV
+         Y/fA==
+X-Gm-Message-State: AJIora9+2EWiD5vGHp+3NjZxdCCyzT683hN74I3JsKCoo2ydldhACWeZ
+        YTxUqiZf1EIVv/wI9dx89MYBvw==
+X-Google-Smtp-Source: AGRyM1uJz8mHw8Y25qWrS5jl8b23C+Su6yMsHBR1wYZcqVe31bpUMmp/XYStN6A1o8HxoZxYfsnDJw==
+X-Received: by 2002:a05:6000:1789:b0:219:2aa8:7159 with SMTP id e9-20020a056000178900b002192aa87159mr8504373wrg.474.1655998382265;
+        Thu, 23 Jun 2022 08:33:02 -0700 (PDT)
+Received: from oppo-a74.station (net-37-182-48-184.cust.vodafonedsl.it. [37.182.48.184])
+        by smtp.gmail.com with ESMTPSA id bw8-20020a0560001f8800b0021b9cfca781sm6885583wrb.45.2022.06.23.08.33.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 Jun 2022 08:33:01 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH -next v10 3/4] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <20220610021701.2347602-4-yukuai3@huawei.com>
+Date:   Thu, 23 Jun 2022 17:32:59 +0200
+Cc:     Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <27F2DF19-7CC6-42C5-8CEB-43583EB4AE46@linaro.org>
+References: <20220610021701.2347602-1-yukuai3@huawei.com>
+ <20220610021701.2347602-4-yukuai3@huawei.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,93 +76,228 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 10:28:37AM -0400, Brian Masney wrote:
-> The sa8540p automotive board has the same SOC as the sc8280xp. In order
-> to get the first UFS controller working on the sa8540p,
-> GCC_UFS_REF_CLKREF_CLK needs to be setup as a parent to
-> GCC_UFS_PHY_AXI_CLK.
-> 
-> This clock name came from the DTS for the downstream MSM 5.4 kernel
-> sources for the sa8540p. It also references GCC_UFS_CARD_CLKREF_CLK,
-> however that wasn't needed to get the first UFS controller working.
-> 
+Sorry for the delay.
 
-I'm not knowledgable enough on the clock subsystem or have access to
-documentation to comment on correctness outside of the 5.4 MSM kernel
-you mentioned, but I think this probably deserves a Fixes: tag?
+> Il giorno 10 giu 2022, alle ore 04:17, Yu Kuai <yukuai3@huawei.com> ha =
+scritto:
+>=20
+> Currently, bfq can't handle sync io concurrently as long as they
+> are not issued from root group. This is because
+> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+> bfq_asymmetric_scenario().
+>=20
+> The way that bfqg is counted into 'num_groups_with_pending_reqs':
+>=20
+> Before this patch:
+> 1) root group will never be counted.
+> 2) Count if bfqg or it's child bfqgs have pending requests.
+> 3) Don't count if bfqg and it's child bfqgs complete all the requests.
+>=20
+> After this patch:
+> 1) root group is counted.
+> 2) Count if bfqg have pending requests.
+> 3) Don't count if bfqg complete all the requests.
+>=20
+> With this change, the occasion that only one group is activated can be
+> detected, and next patch will support concurrent sync io in the
+> occasion.
+>=20
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> ---
+> block/bfq-iosched.c | 42 ------------------------------------------
+> block/bfq-iosched.h | 18 +++++++++---------
+> block/bfq-wf2q.c    | 19 ++++---------------
+> 3 files changed, 13 insertions(+), 66 deletions(-)
+>=20
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 0ec21018daba..03b04892440c 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -970,48 +970,6 @@ void __bfq_weights_tree_remove(struct bfq_data =
+*bfqd,
+> void bfq_weights_tree_remove(struct bfq_data *bfqd,
+> 			     struct bfq_queue *bfqq)
+> {
+> -	struct bfq_entity *entity =3D bfqq->entity.parent;
+> -
+> -	for_each_entity(entity) {
+> -		struct bfq_sched_data *sd =3D entity->my_sched_data;
+> -
+> -		if (sd->next_in_service || sd->in_service_entity) {
+> -			/*
+> -			 * entity is still active, because either
+> -			 * next_in_service or in_service_entity is not
+> -			 * NULL (see the comments on the definition of
+> -			 * next_in_service for details on why
+> -			 * in_service_entity must be checked too).
+> -			 *
+> -			 * As a consequence, its parent entities are
+> -			 * active as well, and thus this loop must
+> -			 * stop here.
+> -			 */
+> -			break;
+> -		}
+> -
+> -		/*
+> -		 * The decrement of num_groups_with_pending_reqs is
+> -		 * not performed immediately upon the deactivation of
+> -		 * entity, but it is delayed to when it also happens
+> -		 * that the first leaf descendant bfqq of entity gets
+> -		 * all its pending requests completed. The following
+> -		 * instructions perform this delayed decrement, if
+> -		 * needed. See the comments on
+> -		 * num_groups_with_pending_reqs for details.
+> -		 */
+> -		if (entity->in_groups_with_pending_reqs) {
+> -			entity->in_groups_with_pending_reqs =3D false;
+> -			bfqd->num_groups_with_pending_reqs--;
+> -		}
+> -	}
 
-I can at least also comment that without this change the sa8540p doesn't
-boot on the QDrive3 boards we have.
+With this part removed, I'm missing how you handle the following
+sequence of events:
+1.  a queue Q becomes non busy but still has dispatched requests, so
+it must not be removed from the counter of queues with pending reqs
+yet
+2.  the last request of Q is completed with Q being still idle (non
+busy).  At this point Q must be removed from the counter.  It seems to
+me that this case is not handled any longer
+
+Additional comment: if your changes do not cpus the problem above,
+then this function only invokes __bfq_weights_tree_remove.  So what's
+the point in keeping this function)
+
+> -
+> -	/*
+> -	 * Next function is invoked last, because it causes bfqq to be
+> -	 * freed if the following holds: bfqq is not in service and
+> -	 * has no dispatched request. DO NOT use bfqq after the next
+> -	 * function invocation.
+> -	 */
+
+I would really love it if you leave this comment.  I added it after
+suffering a lot for a nasty UAF.  Of course the first sentence may
+need to be adjusted if the code that precedes it is to be removed.
 
 Thanks,
-Andrew
+Paolo
 
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
-> ---
-> I originally added this under GCC_UFS_PHY_PHY_AUX_CLK since that's
-> what's in the downstream DTS. I was getting errors about
-> GCC_UFS_PHY_AXI_CLK being stuck at off so I moved it there.
-> 
-> Also I don't have access to any documentation for this board so I'm
-> hoping that someone with docs access can verify that this is the
-> appropriate place to put this.
-> 
->  drivers/clk/qcom/gcc-sc8280xp.c | 27 ++++++++++++++-------------
->  1 file changed, 14 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
-> index 4b894442fdf5..4639b50da418 100644
-> --- a/drivers/clk/qcom/gcc-sc8280xp.c
-> +++ b/drivers/clk/qcom/gcc-sc8280xp.c
-> @@ -5685,6 +5685,19 @@ static struct clk_branch gcc_ufs_phy_ahb_clk = {
->  	},
->  };
->  
-> +static struct clk_branch gcc_ufs_ref_clkref_clk = {
-> +	.halt_reg = 0x8c058,
-> +	.halt_check = BRANCH_HALT,
-> +	.clkr = {
-> +		.enable_reg = 0x8c058,
-> +		.enable_mask = BIT(0),
-> +		.hw.init = &(const struct clk_init_data) {
-> +			.name = "gcc_ufs_ref_clkref_clk",
-> +			.ops = &clk_branch2_ops,
-> +		},
-> +	},
-> +};
-> +
->  static struct clk_branch gcc_ufs_phy_axi_clk = {
->  	.halt_reg = 0x77010,
->  	.halt_check = BRANCH_HALT_VOTED,
-> @@ -5696,6 +5709,7 @@ static struct clk_branch gcc_ufs_phy_axi_clk = {
->  		.hw.init = &(const struct clk_init_data) {
->  			.name = "gcc_ufs_phy_axi_clk",
->  			.parent_hws = (const struct clk_hw*[]){
-> +				&gcc_ufs_ref_clkref_clk.clkr.hw,
->  				&gcc_ufs_phy_axi_clk_src.clkr.hw,
->  			},
->  			.num_parents = 1,
-> @@ -5899,19 +5913,6 @@ static struct clk_branch gcc_ufs_phy_unipro_core_hw_ctl_clk = {
->  	},
->  };
->  
-> -static struct clk_branch gcc_ufs_ref_clkref_clk = {
-> -	.halt_reg = 0x8c058,
-> -	.halt_check = BRANCH_HALT,
-> -	.clkr = {
-> -		.enable_reg = 0x8c058,
-> -		.enable_mask = BIT(0),
-> -		.hw.init = &(const struct clk_init_data) {
-> -			.name = "gcc_ufs_ref_clkref_clk",
-> -			.ops = &clk_branch2_ops,
-> -		},
-> -	},
-> -};
+
+> 	__bfq_weights_tree_remove(bfqd, bfqq,
+> 				  &bfqd->queue_weights_tree);
+> }
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index de2446a9b7ab..f0fce94583e4 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -496,27 +496,27 @@ struct bfq_data {
+> 	struct rb_root_cached queue_weights_tree;
+>=20
+> 	/*
+> -	 * Number of groups with at least one descendant process that
+> +	 * Number of groups with at least one process that
+> 	 * has at least one request waiting for completion. Note that
+> 	 * this accounts for also requests already dispatched, but not
+> 	 * yet completed. Therefore this number of groups may differ
+> 	 * (be larger) than the number of active groups, as a group is
+> 	 * considered active only if its corresponding entity has
+> -	 * descendant queues with at least one request queued. This
+> +	 * queues with at least one request queued. This
+> 	 * number is used to decide whether a scenario is symmetric.
+> 	 * For a detailed explanation see comments on the computation
+> 	 * of the variable asymmetric_scenario in the function
+> 	 * bfq_better_to_idle().
+> 	 *
+> 	 * However, it is hard to compute this number exactly, for
+> -	 * groups with multiple descendant processes. Consider a group
+> -	 * that is inactive, i.e., that has no descendant process with
+> +	 * groups with multiple processes. Consider a group
+> +	 * that is inactive, i.e., that has no process with
+> 	 * pending I/O inside BFQ queues. Then suppose that
+> 	 * num_groups_with_pending_reqs is still accounting for this
+> -	 * group, because the group has descendant processes with some
+> +	 * group, because the group has processes with some
+> 	 * I/O request still in flight. num_groups_with_pending_reqs
+> 	 * should be decremented when the in-flight request of the
+> -	 * last descendant process is finally completed (assuming that
+> +	 * last process is finally completed (assuming that
+> 	 * nothing else has changed for the group in the meantime, in
+> 	 * terms of composition of the group and active/inactive state =
+of child
+> 	 * groups and processes). To accomplish this, an additional
+> @@ -525,7 +525,7 @@ struct bfq_data {
+> 	 * we resort to the following tradeoff between simplicity and
+> 	 * accuracy: for an inactive group that is still counted in
+> 	 * num_groups_with_pending_reqs, we decrement
+> -	 * num_groups_with_pending_reqs when the first descendant
+> +	 * num_groups_with_pending_reqs when the first
+> 	 * process of the group remains with no request waiting for
+> 	 * completion.
+> 	 *
+> @@ -533,12 +533,12 @@ struct bfq_data {
+> 	 * carefulness: to avoid multiple decrements, we flag a group,
+> 	 * more precisely an entity representing a group, as still
+> 	 * counted in num_groups_with_pending_reqs when it becomes
+> -	 * inactive. Then, when the first descendant queue of the
+> +	 * inactive. Then, when the first queue of the
+> 	 * entity remains with no request waiting for completion,
+> 	 * num_groups_with_pending_reqs is decremented, and this flag
+> 	 * is reset. After this flag is reset for the entity,
+> 	 * num_groups_with_pending_reqs won't be decremented any
+> -	 * longer in case a new descendant queue of the entity remains
+> +	 * longer in case a new queue of the entity remains
+> 	 * with no request waiting for completion.
+> 	 */
+> 	unsigned int num_groups_with_pending_reqs;
+> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+> index 6f36f3fe5cc8..9c2842bedf97 100644
+> --- a/block/bfq-wf2q.c
+> +++ b/block/bfq-wf2q.c
+> @@ -984,19 +984,6 @@ static void __bfq_activate_entity(struct =
+bfq_entity *entity,
+> 		entity->on_st_or_in_serv =3D true;
+> 	}
+>=20
+> -#ifdef CONFIG_BFQ_GROUP_IOSCHED
+> -	if (!bfq_entity_to_bfqq(entity)) { /* bfq_group */
+> -		struct bfq_group *bfqg =3D
+> -			container_of(entity, struct bfq_group, entity);
+> -		struct bfq_data *bfqd =3D bfqg->bfqd;
 > -
->  static struct clk_branch gcc_usb2_hs0_clkref_clk = {
->  	.halt_reg = 0x8c044,
->  	.halt_check = BRANCH_HALT,
-> -- 
-> 2.36.1
-> 
+> -		if (!entity->in_groups_with_pending_reqs) {
+> -			entity->in_groups_with_pending_reqs =3D true;
+> -			bfqd->num_groups_with_pending_reqs++;
+> -		}
+> -	}
+> -#endif
+> -
+> 	bfq_update_fin_time_enqueue(entity, st, backshifted);
+> }
+>=20
+> @@ -1654,7 +1641,8 @@ void =
+bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+> 	if (!entity->in_groups_with_pending_reqs) {
+> 		entity->in_groups_with_pending_reqs =3D true;
+> #ifdef CONFIG_BFQ_GROUP_IOSCHED
+> -		bfqq_group(bfqq)->num_queues_with_pending_reqs++;
+> +		if (!(bfqq_group(bfqq)->num_queues_with_pending_reqs++))
+> +			bfqq->bfqd->num_groups_with_pending_reqs++;
+> #endif
+> 	}
+> }
+> @@ -1666,7 +1654,8 @@ void =
+bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+> 	if (entity->in_groups_with_pending_reqs) {
+> 		entity->in_groups_with_pending_reqs =3D false;
+> #ifdef CONFIG_BFQ_GROUP_IOSCHED
+> -		bfqq_group(bfqq)->num_queues_with_pending_reqs--;
+> +		if (!(--bfqq_group(bfqq)->num_queues_with_pending_reqs))
+> +			bfqq->bfqd->num_groups_with_pending_reqs--;
+> #endif
+> 	}
+> }
+> --=20
+> 2.31.1
+>=20
 

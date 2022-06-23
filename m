@@ -2,169 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD92557FC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E370D557FD6
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbiFWQ2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
+        id S232270AbiFWQ3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbiFWQ1v (ORCPT
+        with ESMTP id S232209AbiFWQ3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:27:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C1345505;
-        Thu, 23 Jun 2022 09:27:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D571D61F29;
-        Thu, 23 Jun 2022 16:27:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D56B7C3411B;
-        Thu, 23 Jun 2022 16:27:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656001669;
-        bh=mQ/fn0p8cPl4WB2QzHrDHEEQ5APApuVeWejOBIseoBo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=CXItkpNMNvxD7QoYxGuICkZjHYpIyeXGmsSznqc6onqqP9Yaogh5wQYLy0mxK2SVF
-         0kF1LS4itKDyL9o3aZhGuI0wM3MCK8biKylavp+HpFWn2vsGhpiL+zWOa10zykwDmK
-         nhW0o8lNSvfxT/J55BKAXCKYOa0eLKlIhzlBD1+YQu6RlN5QrqxMSUjKm3Cf8yMmzv
-         QC1/YK6hYvvHSQWiUzqofQzI1LMRnUaIcq837L4Y9YYCRlLbXKTJ9hDoyLrU/xI65N
-         v7je9R4R6Y9pUMRJjMsJK5hjkHIZXBOwqDDUBMSWpN3RhhqDiRUc1R/75LFE8U4bLZ
-         ltz0W0KD8CtaA==
-Date:   Thu, 23 Jun 2022 11:27:47 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: mvebu: Use devm_request_irq() for registering
- interrupt handler
-Message-ID: <20220623162747.GA1455992@bhelgaas>
+        Thu, 23 Jun 2022 12:29:30 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F72446B3E;
+        Thu, 23 Jun 2022 09:29:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656001769; x=1687537769;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=shSMQSjp0om7znr1pZFQg0KFLkYI8bsl3XjfCXpVkk4=;
+  b=ir7TMXTJtFrLNXMajO3vlX2ht+HQ/kPoPEGb2QdrPnw5nLtwvn+azo7h
+   wyIqygesm+fPIWx8fLtug5WBCirk80rR4un6FiU73ws7Hqh1fFrBXY0Kb
+   v61t34HAvReWFhkTieNuAV7wH5sy3oKuNNkV0TZJwyhif+1b8Rt73jvY0
+   D5laRS5AUx/8EFNaI/PF3Z/+P+Z/wI1pBMnG7UaVQfT990qsXMAdgagmG
+   9YOu5HlWCVt73bpzOkbJQKq6zplmebH8+p22j5o/Pb7knICy2gxhX6N4W
+   P+g2PvWIY5mlK3+MLS/vQX+Rs5Jkv0XZMsPU5xdH5Jy3d7vpTyDVl/22f
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="281498539"
+X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
+   d="scan'208";a="281498539"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 09:29:28 -0700
+X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
+   d="scan'208";a="615634196"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 09:29:25 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o4Php-000tCz-QO;
+        Thu, 23 Jun 2022 19:29:21 +0300
+Date:   Thu, 23 Jun 2022 19:29:21 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vz@mleia.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lukas@wunner.de, p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: Re: [PATCH 5/8] dt_bindings: rs485: Correct delay values
+Message-ID: <YrSU4eL9hgISg3Y1@smile.fi.intel.com>
+References: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
+ <20220622154659.8710-6-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220524122817.7199-1-pali@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220622154659.8710-6-LinoSanfilippo@gmx.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 24, 2022 at 02:28:17PM +0200, Pali Rohár wrote:
-> Same as in commit a3b69dd0ad62 ("Revert "PCI: aardvark: Rewrite IRQ code to
-> chained IRQ handler"") for pci-aardvark driver, use devm_request_irq()
-> instead of chained IRQ handler in pci-mvebu.c driver.
->
-> This change fixes affinity support and allows to pin interrupts from
-> different PCIe controllers to different CPU cores.
+On Wed, Jun 22, 2022 at 05:46:56PM +0200, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> 
+> The maximum allowed delay for RTS before and RTS after send is 100 ms.
+> Adjust the documentation accordingly.
 
-Several other drivers use irq_set_chained_handler_and_data().  Do any
-of them need similar changes?  The commit log suggests that using
-chained IRQ handlers breaks affinity support.  But perhaps that's not
-the case and the real culprit is some other difference between mvebu
-and the other drivers.
 
-> Fixes: ec075262648f ("PCI: mvebu: Implement support for legacy INTx interrupts")
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
-> Hello Bjorn! This is basically same issue as for pci-aardvark.c:
-> https://lore.kernel.org/linux-pci/20220515125815.30157-1-pali@kernel.org/#t
-> 
-> I tested this patch with pci=nomsi in cmdline (to force kernel to use
-> legacy intx instead of MSI) on A385 and checked that I can set affinity
-> via /proc/irq/XX/smp_affinity file for every mvebu pcie controller to
-> different CPU and legacy interrupts from different cards/controllers
-> were handled by different CPUs.
-> 
-> I think that this is important on Armada XP platforms which have many
-> independent PCIe controllers (IIRC up to 10) and many cores (up to 4).
-> ---
->  drivers/pci/controller/pci-mvebu.c | 30 +++++++++++++++++-------------
->  1 file changed, 17 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> index 8f76d4bda356..de67ea39fea5 100644
-> --- a/drivers/pci/controller/pci-mvebu.c
-> +++ b/drivers/pci/controller/pci-mvebu.c
-> @@ -1017,16 +1017,13 @@ static int mvebu_pcie_init_irq_domain(struct mvebu_pcie_port *port)
->  	return 0;
->  }
->  
-> -static void mvebu_pcie_irq_handler(struct irq_desc *desc)
-> +static irqreturn_t mvebu_pcie_irq_handler(int irq, void *arg)
->  {
-> -	struct mvebu_pcie_port *port = irq_desc_get_handler_data(desc);
-> -	struct irq_chip *chip = irq_desc_get_chip(desc);
-> +	struct mvebu_pcie_port *port = arg;
->  	struct device *dev = &port->pcie->pdev->dev;
->  	u32 cause, unmask, status;
->  	int i;
->  
-> -	chained_irq_enter(chip, desc);
-> -
->  	cause = mvebu_readl(port, PCIE_INT_CAUSE_OFF);
->  	unmask = mvebu_readl(port, PCIE_INT_UNMASK_OFF);
->  	status = cause & unmask;
-> @@ -1040,7 +1037,7 @@ static void mvebu_pcie_irq_handler(struct irq_desc *desc)
->  			dev_err_ratelimited(dev, "unexpected INT%c IRQ\n", (char)i+'A');
->  	}
->  
-> -	chained_irq_exit(chip, desc);
-> +	return status ? IRQ_HANDLED : IRQ_NONE;
->  }
->  
->  static int mvebu_pcie_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
-> @@ -1490,9 +1487,20 @@ static int mvebu_pcie_probe(struct platform_device *pdev)
->  				mvebu_pcie_powerdown(port);
->  				continue;
->  			}
-> -			irq_set_chained_handler_and_data(irq,
-> -							 mvebu_pcie_irq_handler,
-> -							 port);
-> +
-> +			ret = devm_request_irq(dev, irq, mvebu_pcie_irq_handler,
-> +					       IRQF_SHARED | IRQF_NO_THREAD,
-> +					       port->name, port);
-> +			if (ret) {
-> +				dev_err(dev, "%s: cannot register interrupt handler: %d\n",
-> +					port->name, ret);
-> +				irq_domain_remove(port->intx_irq_domain);
-> +				pci_bridge_emul_cleanup(&port->bridge);
-> +				devm_iounmap(dev, port->base);
-> +				port->base = NULL;
-> +				mvebu_pcie_powerdown(port);
-> +				continue;
-> +			}
->  		}
->  
->  		/*
-> @@ -1599,7 +1607,6 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
->  
->  	for (i = 0; i < pcie->nports; i++) {
->  		struct mvebu_pcie_port *port = &pcie->ports[i];
-> -		int irq = port->intx_irq;
->  
->  		if (!port->base)
->  			continue;
-> @@ -1615,9 +1622,6 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
->  		/* Clear all interrupt causes. */
->  		mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
->  
-> -		if (irq > 0)
-> -			irq_set_chained_handler_and_data(irq, NULL, NULL);
-> -
->  		/* Remove IRQ domains. */
->  		if (port->intx_irq_domain)
->  			irq_domain_remove(port->intx_irq_domain);
-> -- 
-> 2.20.1
-> 
+Is it only documentation issue? If the code allows this to be set higher
+than 100, we may not change the documentation since this an ABI (from
+firmware <--> kernel perspective) we need to support old variants.
+
+If the above is true and limit is dictated by the spec, we may issue a
+warning in the code and drop it to the allowed maximum, otherwise we
+can't do much here.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

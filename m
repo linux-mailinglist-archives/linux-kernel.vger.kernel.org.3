@@ -2,103 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE2C5575F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB65C5575F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 10:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiFWIyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 04:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
+        id S230162AbiFWIyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 04:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiFWIyJ (ORCPT
+        with ESMTP id S229790AbiFWIy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 04:54:09 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9041B10559;
-        Thu, 23 Jun 2022 01:54:08 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 73-20020a17090a0fcf00b001eaee69f600so1931459pjz.1;
-        Thu, 23 Jun 2022 01:54:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=CgKFu42pVNbutALOPAyFG9CSppEVlH9cLVPLNYXxSDc=;
-        b=TgWNIU0sVyugoVfuKJctmkNZR5g0jvh0wU5ej56Yfj8LnJBA9GMeWdwdhUSMYSgoXs
-         vQDKVqw/SQcLjxA6/cIeb94CZs1VsmNQ6GwJB6IJv0D225ciqF3j0ah5Dwf5EqDSVesa
-         CtyH9WAqCOdvoJk/R+N1Skk10gECKlAb6cb3lXNW1C/t3+kk7Y+WxD7UhsX5Rg34YvAD
-         ka98Ju44pZ9q5Uyu484L4Bu1HrO6aFYSqCJ4MbLOeuNZRKcysCfXRBVL6aNmIBRT68eB
-         ofV6E8LNIUBAeYDxaouMz9r1DAJmdqTBJA/as3Zg5s1BJrN41K9F11mCIQGtkPe6QYno
-         lVDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=CgKFu42pVNbutALOPAyFG9CSppEVlH9cLVPLNYXxSDc=;
-        b=P6STkgsi6t+yRoJNKGvwwsqqGAAor0X6/lv7QdmsshA7STrWGTV+kfEqnI+puH7nCZ
-         TfE/M0oKVd0rBvg0q1A3Eq/JEJkDOOlqJID1rOJw1qfWyYAcFAXyQa2hKLUKY5D5Ufqt
-         8wIbXLJYQtiZIiyacAaJUuj1wUUqprFRLlXTSnEKD5aXvydO8LyPbFtWhhMI14I9Wdtp
-         4PVL3rOab6tPK1zpPB/LC+5ruRbGulw5bEhFsS/kMatyiYehcU18QkxsQyTU0mjERatC
-         IPPjZy7H/Mb5pSOnvzq4p+LBUGU8rSnPZBG9vA7UaR0Edb6ZJTRKRKpMMLa6etmJdFvZ
-         Tt2g==
-X-Gm-Message-State: AJIora90Y4I9dMjoEHFOZhTz9dML/G4pJoLesQMiUmEpUWCLBQwqK85v
-        tujgDnYHUWh3zMfaE//PpNOfDk8WoBM=
-X-Google-Smtp-Source: AGRyM1tNpAW10PD5eKdQZl31km1eJxSPdtLnll6TymTdk56uqdX65PxOh8YNlwmE9ykHzAVYf+K1Sg==
-X-Received: by 2002:a17:903:120f:b0:15f:99f:9597 with SMTP id l15-20020a170903120f00b0015f099f9597mr38034320plh.45.1655974447951;
-        Thu, 23 Jun 2022 01:54:07 -0700 (PDT)
-Received: from carrot.localdomain (i114-185-17-44.s42.a014.ap.plala.or.jp. [114.185.17.44])
-        by smtp.gmail.com with ESMTPSA id c11-20020aa7952b000000b0052521fd273fsm8387644pfp.218.2022.06.23.01.54.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 Jun 2022 01:54:05 -0700 (PDT)
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-nilfs <linux-nilfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] nilfs2: fix incorrect masking of permission flags for symlinks
-Date:   Thu, 23 Jun 2022 17:54:01 +0900
-Message-Id: <1655974441-5612-1-git-send-email-konishi.ryusuke@gmail.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Jun 2022 04:54:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A012B20F73;
+        Thu, 23 Jun 2022 01:54:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BBCD61CB0;
+        Thu, 23 Jun 2022 08:54:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8843C3411B;
+        Thu, 23 Jun 2022 08:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655974465;
+        bh=53VjtG3sK4phU2SMSC2bl9AUDChPlVTKSBbfz22Eeto=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V5FagiNQRRaGwBs5DXgIDrEytvCZ2Un/5qZYyH3is021RS5vAFJEe3cabYAaRjaYJ
+         PL6OXNhhhGeQRwOcjSDwN4X+9c5MiYG+Rdh1us1qSEsNuEMzwDIwHQN4WS7lxKuCKn
+         USd+DvTpWc3hb++hC/pMpNfzXusSKVKRQ9SVmUxM=
+Date:   Thu, 23 Jun 2022 10:54:22 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nayna Jain <nayna@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
+        linux-efi@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>, gjoyce@ibm.com,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Subject: Re: [RFC PATCH v2 2/3] fs: define a firmware security filesystem
+ named fwsecurityfs
+Message-ID: <YrQqPhi4+jHZ1WJc@kroah.com>
+References: <20220622215648.96723-1-nayna@linux.ibm.com>
+ <20220622215648.96723-3-nayna@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622215648.96723-3-nayna@linux.ibm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The permission flags of newly created symlinks are wrongly dropped on
-nilfs2 with the current umask value even though symlinks should have
-777 (rwxrwxrwx) permissions:
+On Wed, Jun 22, 2022 at 05:56:47PM -0400, Nayna Jain wrote:
+> securityfs is meant for linux security subsystems to expose policies/logs
+> or any other information. However, there are various firmware security
+> features which expose their variables for user management via kernel.
+> There is currently no single place to expose these variables. Different
+> platforms use sysfs/platform specific filesystem(efivarfs)/securityfs
+> interface as find appropriate. Thus, there is a gap in kernel interfaces
+> to expose variables for security features.
+> 
+> Define a firmware security filesystem (fwsecurityfs) to be used for
+> exposing variables managed by firmware and to be used by firmware
+> enabled security features. These variables are platform specific.
+> Filesystem provides platforms to implement their own underlying
+> semantics by defining own inode and file operations.
+> 
+> Similar to securityfs, the firmware security filesystem is recommended
+> to be exposed on a well known mount point /sys/firmware/security.
+> Platforms can define their own directory or file structure under this path.
+> 
+> Example:
+> 
+> # mount -t fwsecurityfs fwsecurityfs /sys/firmware/security
+> 
+> # cd /sys/firmware/security/
+> 
+> Signed-off-by: Nayna Jain <nayna@linux.ibm.com>
+> ---
+>  fs/Kconfig                   |   1 +
+>  fs/Makefile                  |   1 +
+>  fs/fwsecurityfs/Kconfig      |  14 +++
+>  fs/fwsecurityfs/Makefile     |  10 +++
+>  fs/fwsecurityfs/inode.c      | 159 +++++++++++++++++++++++++++++++++++
+>  fs/fwsecurityfs/internal.h   |  13 +++
+>  fs/fwsecurityfs/super.c      | 154 +++++++++++++++++++++++++++++++++
+>  include/linux/fwsecurityfs.h |  29 +++++++
+>  include/uapi/linux/magic.h   |   1 +
+>  9 files changed, 382 insertions(+)
+>  create mode 100644 fs/fwsecurityfs/Kconfig
+>  create mode 100644 fs/fwsecurityfs/Makefile
+>  create mode 100644 fs/fwsecurityfs/inode.c
+>  create mode 100644 fs/fwsecurityfs/internal.h
+>  create mode 100644 fs/fwsecurityfs/super.c
+>  create mode 100644 include/linux/fwsecurityfs.h
+> 
+> diff --git a/fs/Kconfig b/fs/Kconfig
+> index 5976eb33535f..19ea28143428 100644
+> --- a/fs/Kconfig
+> +++ b/fs/Kconfig
+> @@ -276,6 +276,7 @@ config ARCH_HAS_GIGANTIC_PAGE
+>  
+>  source "fs/configfs/Kconfig"
+>  source "fs/efivarfs/Kconfig"
+> +source "fs/fwsecurityfs/Kconfig"
+>  
+>  endmenu
+>  
+> diff --git a/fs/Makefile b/fs/Makefile
+> index 208a74e0b00e..5792cd0443cb 100644
+> --- a/fs/Makefile
+> +++ b/fs/Makefile
+> @@ -137,6 +137,7 @@ obj-$(CONFIG_F2FS_FS)		+= f2fs/
+>  obj-$(CONFIG_CEPH_FS)		+= ceph/
+>  obj-$(CONFIG_PSTORE)		+= pstore/
+>  obj-$(CONFIG_EFIVAR_FS)		+= efivarfs/
+> +obj-$(CONFIG_FWSECURITYFS)		+= fwsecurityfs/
+>  obj-$(CONFIG_EROFS_FS)		+= erofs/
+>  obj-$(CONFIG_VBOXSF_FS)		+= vboxsf/
+>  obj-$(CONFIG_ZONEFS_FS)		+= zonefs/
+> diff --git a/fs/fwsecurityfs/Kconfig b/fs/fwsecurityfs/Kconfig
+> new file mode 100644
+> index 000000000000..f1665511eeb9
+> --- /dev/null
+> +++ b/fs/fwsecurityfs/Kconfig
+> @@ -0,0 +1,14 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# Copyright (C) 2022 IBM Corporation
+> +# Author: Nayna Jain <nayna@linux.ibm.com>
+> +#
+> +
+> +config FWSECURITYFS
+> +	bool "Enable the fwsecurityfs filesystem"
+> +	help
+> +	  This will build the fwsecurityfs file system which is recommended
+> +	  to be mounted on /sys/firmware/security. This can be used by
+> +	  platforms to expose their variables which are managed by firmware.
+> +
+> +	  If you are unsure how to answer this question, answer N.
+> diff --git a/fs/fwsecurityfs/Makefile b/fs/fwsecurityfs/Makefile
+> new file mode 100644
+> index 000000000000..b9931d180178
+> --- /dev/null
+> +++ b/fs/fwsecurityfs/Makefile
+> @@ -0,0 +1,10 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# Copyright (C) 2022 IBM Corporation
+> +# Author: Nayna Jain <nayna@linux.ibm.com>
+> +#
+> +# Makefile for the firmware security filesystem
+> +
+> +obj-$(CONFIG_FWSECURITYFS)		+= fwsecurityfs.o
+> +
+> +fwsecurityfs-objs			:= inode.o super.o
+> diff --git a/fs/fwsecurityfs/inode.c b/fs/fwsecurityfs/inode.c
+> new file mode 100644
+> index 000000000000..5d06dc0de059
+> --- /dev/null
+> +++ b/fs/fwsecurityfs/inode.c
+> @@ -0,0 +1,159 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2022 IBM Corporation
+> + * Author: Nayna Jain <nayna@linux.ibm.com>
+> + */
+> +
+> +#include <linux/sysfs.h>
+> +#include <linux/kobject.h>
+> +#include <linux/fs.h>
+> +#include <linux/fs_context.h>
+> +#include <linux/mount.h>
+> +#include <linux/pagemap.h>
+> +#include <linux/init.h>
+> +#include <linux/namei.h>
+> +#include <linux/security.h>
+> +#include <linux/lsm_hooks.h>
+> +#include <linux/magic.h>
+> +#include <linux/ctype.h>
+> +#include <linux/fwsecurityfs.h>
+> +
+> +#include "internal.h"
+> +
+> +int fwsecurityfs_remove_file(struct dentry *dentry)
+> +{
+> +	drop_nlink(d_inode(dentry));
+> +	dput(dentry);
+> +	return 0;
+> +};
+> +EXPORT_SYMBOL_GPL(fwsecurityfs_remove_file);
+> +
+> +int fwsecurityfs_create_file(const char *name, umode_t mode,
+> +					u16 filesize, struct dentry *parent,
+> +					struct dentry *dentry,
+> +					const struct file_operations *fops)
+> +{
+> +	struct inode *inode;
+> +	int error;
+> +	struct inode *dir;
+> +
+> +	if (!parent)
+> +		return -EINVAL;
+> +
+> +	dir = d_inode(parent);
+> +	pr_debug("securityfs: creating file '%s'\n", name);
 
- $ umask
- 0022
- $ touch file && ln -s file symlink; ls -l file symlink
- -rw-r--r--. 1 root root 0 Jun 23 16:29 file
- lrwxr-xr-x. 1 root root 4 Jun 23 16:29 symlink -> file
+Did you forget to call simple_pin_fs() here or anywhere else?
 
-This fixes the bug by inserting a missing check that excludes
-symlinks.
+And this can be just one function with the directory creation file, just
+check the mode and you will be fine.  Look at securityfs as an example
+of how to make this simpler.
 
-Reported-by: Tommy Pettersson <ptp@lysator.liu.se>
-Reported-by: Ciprian Craciun <ciprian.craciun@gmail.com>
-Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
----
- fs/nilfs2/nilfs.h | 3 +++
- 1 file changed, 3 insertions(+)
+> diff --git a/fs/fwsecurityfs/super.c b/fs/fwsecurityfs/super.c
 
-diff --git a/fs/nilfs2/nilfs.h b/fs/nilfs2/nilfs.h
-index 1344f7d475d3..aecda4fc95f5 100644
---- a/fs/nilfs2/nilfs.h
-+++ b/fs/nilfs2/nilfs.h
-@@ -198,6 +198,9 @@ static inline int nilfs_acl_chmod(struct inode *inode)
- 
- static inline int nilfs_init_acl(struct inode *inode, struct inode *dir)
- {
-+	if (S_ISLNK(inode->i_mode))
-+		return 0;
-+
- 	inode->i_mode &= ~current_umask();
- 	return 0;
- }
--- 
-1.8.3.1
+super.c and inode.c can be in the same file, these are tiny, just make
+one file for the filesystem logic.
 
+thanks,
+
+greg k-h

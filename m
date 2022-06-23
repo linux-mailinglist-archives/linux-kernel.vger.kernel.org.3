@@ -2,80 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1498D557392
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 09:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437CC557397
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 09:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiFWHHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 03:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
+        id S230090AbiFWHKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 03:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiFWHHn (ORCPT
+        with ESMTP id S229904AbiFWHKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 03:07:43 -0400
-Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027D945516;
-        Thu, 23 Jun 2022 00:07:36 -0700 (PDT)
-X-QQ-mid: bizesmtp78t1655968019ta68ekx6
-Received: from ubuntu.localdomain ( [106.117.99.68])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 23 Jun 2022 15:06:53 +0800 (CST)
-X-QQ-SSF: 01000000008000B0C000B00A0000000
-X-QQ-FEAT: UldK9Jsj7VOmQ2cIaotYCceBjTzflJSXNO/wOhM2BXMXKEBCGfYWRj7Workzo
-        MCXEcszpizkMWAwOtIiKvv91EDmfTQ94AX/qJrl0DFVmb3fRLcscz+AevmF3LRt0IHXJCVd
-        K4kVAx2SGRPZUat6b6g+s0lbQbPrjaHVOYkWJNY3PyTjWGC2LXth799Rw8Bh+Ovzg5QVTZ1
-        BGG1nh2ZZzchZdP6rKr73Ambk+jgWsbsfackfV5EPvizmpsYIx3bEiXEq0s2yaQOkdJRpRW
-        Ub7aJgeayeKRYVibFkGSc0s2fsGysJPy58lLOXZtVr0hZpUwBNX1bi2vBHwGGoS7yjzxcXk
-        MQ9n7C6e88n+/0nShyNjZsrILs2Xw==
-X-QQ-GoodBg: 0
-From:   Jiang Jian <jiangjian@cdjrlc.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     manoj@linux.ibm.com, mrochs@linux.ibm.com, ukrishn@linux.ibm.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiang Jian <jiangjian@cdjrlc.com>
-Subject: [PATCH] scsi: cxlflash: drop unexpected word 'a' in comments
-Date:   Thu, 23 Jun 2022 15:06:52 +0800
-Message-Id: <20220623070652.11136-1-jiangjian@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Jun 2022 03:10:31 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AADF45534;
+        Thu, 23 Jun 2022 00:10:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=+Yi5W
+        E6QmU8Q2WHGxfAqHLKBZQtcrArdRuT7E7T90aQ=; b=go/u1KEngFhEzPyU6THYD
+        STPBJhaaqAdtJDEhE2z+nJyYlaesrI889/09ixersTKuSJe2/6o0dDwY0BndtTOo
+        LxLsrdeyFj2JWCz4vH+nzfko302fbIUr5aDW7TSnLl3UxShREJYQXweQTl1FfWul
+        9c9HvAng2bw7x8dSmmjTps=
+Received: from localhost.localdomain (unknown [123.112.69.106])
+        by smtp1 (Coremail) with SMTP id GdxpCgAHRb2dEbRi2eS2Kg--.6843S4;
+        Thu, 23 Jun 2022 15:09:26 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] net: sfp: fix memory leak in sfp_probe()
+Date:   Thu, 23 Jun 2022 15:09:14 +0800
+Message-Id: <20220623070914.1781700-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GdxpCgAHRb2dEbRi2eS2Kg--.6843S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKr1kZrWfAF17WFy7CF13CFg_yoW3urc_WF
+        W2vF43JrWjkrs0qw15Kw1SvrWF9Fy8XFs5ZF4fK3yftry3GanxW3ykXF47Jr9rWrW2vr4D
+        u3sruFsI9w4fGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xREsqXtUUUUU==
+X-Originating-IP: [123.112.69.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiQwYpjFc7aNoYJgAAsA
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-there is an unexpected word 'a' in the comments that need to be dropped
+sfp_probe() allocates a memory chunk from sfp with sfp_alloc(), when
+devm_add_action() fails, sfp is not freed, which leads to a memory leak.
 
-file - drivers/scsi/cxlflash/superpipe.c
-line - 741
+We should free the sfp with sfp_cleanup() when devm_add_action() fails.
 
-* This routine is safe to be called with a a non-initialized context.
-
-changed to:
-
-* This routine is safe to be called with a non-initialized context.
-
-Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 ---
- drivers/scsi/cxlflash/superpipe.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/phy/sfp.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/cxlflash/superpipe.c b/drivers/scsi/cxlflash/superpipe.c
-index df0ebabbf387..fc8526f7f036 100644
---- a/drivers/scsi/cxlflash/superpipe.c
-+++ b/drivers/scsi/cxlflash/superpipe.c
-@@ -738,7 +738,7 @@ int cxlflash_disk_release(struct scsi_device *sdev,
-  * @cfg:	Internal structure associated with the host.
-  * @ctxi:	Context to release.
-  *
-- * This routine is safe to be called with a a non-initialized context.
-+ * This routine is safe to be called with a non-initialized context.
-  * Also note that the routine conditionally checks for the existence
-  * of the context control map before clearing the RHT registers and
-  * context capabilities because it is possible to destroy a context
+diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+index 9a5d5a10560f..366a89adabf5 100644
+--- a/drivers/net/phy/sfp.c
++++ b/drivers/net/phy/sfp.c
+@@ -2517,8 +2517,10 @@ static int sfp_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, sfp);
+ 
+ 	err = devm_add_action(sfp->dev, sfp_cleanup, sfp);
+-	if (err < 0)
++	if (err < 0) {
++		sfp_cleanup(sfp);
+ 		return err;
++	}
+ 
+ 	sff = sfp->type = &sfp_data;
+ 
 -- 
-2.17.1
+2.25.1
 

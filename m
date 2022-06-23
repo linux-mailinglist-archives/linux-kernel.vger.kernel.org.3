@@ -2,157 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B049F557207
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A552557259
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 06:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbiFWEsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 00:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
+        id S231222AbiFWEsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 00:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239533AbiFWDcQ (ORCPT
+        with ESMTP id S239377AbiFWDbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 23:32:16 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD6835A85
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 20:32:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655955134; x=1687491134;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C0UxTz3SU09BlRqhh033JLtXJpxFWAq4zdFdL9m7teY=;
-  b=Jf6A7gUDWcpihE93qpkSKAwNXRbpMV5xUYJoKk3KSc6IekfWVRMQ3q6k
-   RWriyNNkZl0XSwxZZiR3vtptblDm8dyV6avCEoMx1CquFFZOy75lPmrZF
-   Yzjc163s1kcRsrA+IctC6FK1zfg8kVCm4XjKI6STvwfYslKyj3xrajlvH
-   QVTNHa3ERdZV/B2Zi7B+GmqX7XZzQFaNoQ0uHXfCL3GZ78KpOMVddINEz
-   vg4e/GYOmWEQMs32gN7m0hHexTN5yycc5/kqHaAnnKl7l8IIQC9eWQPSf
-   lg1qMoA7zb+CcnsdsuZE76dpnfvPvQF1yJzbcg8lUvJWRNIJGA5+HNoON
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="260431524"
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="260431524"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 20:32:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="765141102"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 22 Jun 2022 20:32:12 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o4DZj-0000e7-Ki;
-        Thu, 23 Jun 2022 03:32:11 +0000
-Date:   Thu, 23 Jun 2022 11:31:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [stable:linux-5.4.y 384/4398]
- drivers/staging/comedi/drivers/comedi_isadma.c:25:17: error: implicit
- declaration of function 'claim_dma_lock'
-Message-ID: <202206231116.2lc9b5qT-lkp@intel.com>
+        Wed, 22 Jun 2022 23:31:42 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CB23584F;
+        Wed, 22 Jun 2022 20:31:39 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id p21so2098177qki.7;
+        Wed, 22 Jun 2022 20:31:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=feedback-id:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iETqc+0lijFZ14zCNnfCSiDsY3yxYpnuYnsCd/H37sM=;
+        b=XKQr60hHEpIr7iE2oQMJHBd/HDGQCZhaSPpmeuw6TyKQkYL2MF+8jdtsqUCz7uL090
+         Rc90KAFbCLt0JwHQ7vCIyEX0mj9/duP+7TF6SlIMyM86A8tJXhvp6mW5g1QMYcFMm06q
+         OZhDv9iwxJwHYCl8D05Sv3M3yI+gUsqDtuKv/FhshrgMg3aaZz2lgZeLKguk6uF7IRXr
+         cNriRKL9+D3vNavHkaKAfctj+1iVXUr8uNGq3KbwjLdVPWLWbnlMjLar4aOtzfnqqsG1
+         IsuxOEdrqkfV7FuJV0wVV7InjeaCmRhOkIonyeI7vJokQaKzp0nLlHjjfWTw37p0n1hs
+         m3Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:feedback-id:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=iETqc+0lijFZ14zCNnfCSiDsY3yxYpnuYnsCd/H37sM=;
+        b=kdRh89l19FS7/sg2UmPC1+PIRxpnLY5vK9YK75uJJXDANv+XHqCCsYbV+nn18IdCIB
+         Wbiwk5Dcs7MgchFiRiA/7Psf2YzQNQEJUyew+mn5mvdxxH0Rm+EmEG6H/9Kkg57h48f6
+         nT9jLFpXdj9AWYxc8g4RpIJfrB4d+EwhrPlJiOCNXhdKuwag4cD5VFDiaLI7p6dGoCjt
+         HNh/Hp9VS3h4WYuv6GrVaB28PBB5UOuScvRXcEBIM9YIW5MT9jyXGcl4luDhyIe51gp4
+         s+z5DnawSjmTFW3Yh8uYpVVerwHfquIXa29nSeNHGawumf7fbdgQkUI5mj+UX/7zDa2T
+         Bz+A==
+X-Gm-Message-State: AJIora9lLR/l7tCpUUwqijNWEIa5YZvD73KnK1J28sX0rLcmVBRSLIIg
+        m0dxmDIzKxsx2j5r/6dsoPXVvFOgk84=
+X-Google-Smtp-Source: AGRyM1tog79QF/BM4XYNYwOk5JDAVQGSrmJOA/BPSicl6+PpfP5C/VU3C9rh50h8yJ2wwtZJnXowiQ==
+X-Received: by 2002:a05:620a:410:b0:6a6:abbe:2018 with SMTP id 16-20020a05620a041000b006a6abbe2018mr4736397qkp.645.1655955098873;
+        Wed, 22 Jun 2022 20:31:38 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id w8-20020a05620a444800b006a6f68c8a87sm19125307qkp.126.2022.06.22.20.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 20:31:38 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 9792927C005A;
+        Wed, 22 Jun 2022 23:31:37 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 22 Jun 2022 23:31:37 -0400
+X-ME-Sender: <xms:mN6zYnQKaLySnOd9VxDXjDwnGZmLTZp5pcoBSLC14CVRiYD-4dkwPw>
+    <xme:mN6zYozHljR1xtO0TqSrgYgIzlLhQmxyZxq-d-vd8Ei8eOXyjVJa_tZojuQ7z_4o6
+    _v48XaZ7RZMfdGxPw>
+X-ME-Received: <xmr:mN6zYs0W6y8qNOg5L2xB5Yu6taF9iYJdInFUKKN7W13mLFGdaxvUbx6732EQ7g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefiedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepfffhvfevuffkfhggtggu
+    jgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfh
+    gvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrhhnpeffkeevvdejhedutdet
+    hfejiedttddthfetffdufeduleektddvgfduvdfhjeelueenucffohhmrghinhepkhgvrh
+    hnvghlrdhorhhgpdhgohhoghhlvgdrtghomhdprhhishgtvhdrohhrghdpghhithhhuhgs
+    rdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:mN6zYnBPdK3t52BMAfRz2zUIZllzPyUBJ7JsU8Y-7lOZuHAn8dqQow>
+    <xmx:mN6zYgg3aPGAOi1epe1R9Xa01Nw-9_ZY9KGDjke08_7ALt_XuFsALw>
+    <xmx:mN6zYro6F5dpRtrEpiVoyiFeKvd60ifj5XAEsR_CwzN6Y-SSRVXdow>
+    <xmx:md6zYvpvOSZfhora_uKsjFdbpAJiFHSus5asheFt3AsquhBWIzp1ug>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Jun 2022 23:31:36 -0400 (EDT)
+Date:   Wed, 22 Jun 2022 20:31:23 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V4 5/5] riscv: atomic: Optimize LRSC-pairs atomic ops
+ with .aqrl annotation
+Message-ID: <YrPei6q4rIAx6Ymf@boqun-archlinux>
+References: <CAJF2gTQoSQq_S4UvAiXgMviT040Ls8+VkDszQSke1a0zbXZ82A@mail.gmail.com>
+ <mhng-7a274375-0d99-41c8-98a3-853d110f62e9@palmer-ri-x1c9>
+ <CAJF2gTTXO42_TsZudaQuB9Re0teu__EZ11JZ96nktMqsQkMYNA@mail.gmail.com>
+ <20220614110258.GA32157@anparri>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220614110258.GA32157@anparri>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Hi,
 
-First bad commit (maybe != root cause):
+On Tue, Jun 14, 2022 at 01:03:47PM +0200, Andrea Parri wrote:
+[...]
+> > 5ce6c1f3535f ("riscv/atomic: Strengthen implementations with fences")
+> > is about fixup wrong spinlock/unlock implementation and not relate to
+> > this patch.
+>
+> No.  The commit in question is evidence of the fact that the changes
+> you are presenting here (as an optimization) were buggy/incorrect at
+> the time in which that commit was worked out.
+> 
+> 
+> > Actually, sc.w.aqrl is very strong and the same with:
+> > fence rw, rw
+> > sc.w
+> > fence rw,rw
+> > 
+> > So "which do not give full-ordering with .aqrl" is not writen in
+> > RISC-V ISA and we could use sc.w/d.aqrl with LKMM.
+> > 
+> > >
+> > > >> describes the issue more specifically, that's when we added these
+> > > >> fences.  There have certainly been complains that these fences are too
+> > > >> heavyweight for the HW to go fast, but IIUC it's the best option we have
+> > > > Yeah, it would reduce the performance on D1 and our next-generation
+> > > > processor has optimized fence performance a lot.
+> > >
+> > > Definately a bummer that the fences make the HW go slow, but I don't
+> > > really see any other way to go about this.  If you think these mappings
+> > > are valid for LKMM and RVWMO then we should figure this out, but trying
+> > > to drop fences to make HW go faster in ways that violate the memory
+> > > model is going to lead to insanity.
+> > Actually, this patch is okay with the ISA spec, and Dan also thought
+> > it was valid.
+> > 
+> > ref: https://lore.kernel.org/lkml/41e01514-74ca-84f2-f5cc-2645c444fd8e@nvidia.com/raw
+> 
+> "Thoughts" on this regard have _changed_.  Please compare that quote
+> with, e.g.
+> 
+>   https://lore.kernel.org/linux-riscv/ddd5ca34-805b-60c4-bf2a-d6a9d95d89e7@nvidia.com/
+> 
+> So here's a suggestion:
+> 
+> Reviewers of your patches have asked:  How come that code we used to
+> consider as buggy is now considered "an optimization" (correct)?
+> 
+> Denying the evidence or going around it is not making their job (and
+> this upstreaming) easier, so why don't you address it?  Take time to
+> review previous works and discussions in this area, understand them,
+> and integrate such knowledge in future submissions.
+> 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.4.y
-head:   f0c280af0ec7c79cf043594974206d87c3c46524
-commit: 53a72858bcae7eaa7df8d167dbf60682d70f82a6 [384/4398] m68knommu: only set CONFIG_ISA_DMA_API for ColdFire sub-arch
-config: m68k-randconfig-r001-20220622 (https://download.01.org/0day-ci/archive/20220623/202206231116.2lc9b5qT-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=53a72858bcae7eaa7df8d167dbf60682d70f82a6
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.4.y
-        git checkout 53a72858bcae7eaa7df8d167dbf60682d70f82a6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/staging/comedi/drivers/
+I agree with Andrea.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+And I actually took a look into this, and I think I find some
+explanation. There are two versions of RISV memory model here:
 
-All errors (new ones prefixed by >>):
+Model 2017: released at Dec 1, 2017 as a draft
 
-   In file included from arch/m68k/include/asm/bug.h:32,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:12,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/m68k/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:51,
-                    from include/linux/seqlock.h:36,
-                    from include/linux/time.h:6,
-                    from include/linux/stat.h:19,
-                    from include/linux/module.h:10,
-                    from drivers/staging/comedi/drivers/comedi_isadma.c:7:
-   include/linux/dma-mapping.h: In function 'dma_map_resource':
-   arch/m68k/include/asm/page_mm.h:169:50: warning: ordered comparison of pointer with null pointer [-Wextra]
-     169 | #define virt_addr_valid(kaddr)  ((void *)(kaddr) >= (void *)PAGE_OFFSET && (void *)(kaddr) < high_memory)
-         |                                                  ^~
-   include/asm-generic/bug.h:139:34: note: in definition of macro 'WARN_ON_ONCE'
-     139 |         int __ret_warn_once = !!(condition);                    \
-         |                                  ^~~~~~~~~
-   arch/m68k/include/asm/page_mm.h:170:33: note: in expansion of macro 'virt_addr_valid'
-     170 | #define pfn_valid(pfn)          virt_addr_valid(pfn_to_virt(pfn))
-         |                                 ^~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:355:26: note: in expansion of macro 'pfn_valid'
-     355 |         if (WARN_ON_ONCE(pfn_valid(PHYS_PFN(phys_addr))))
-         |                          ^~~~~~~~~
-   drivers/staging/comedi/drivers/comedi_isadma.c: In function 'comedi_isadma_program':
->> drivers/staging/comedi/drivers/comedi_isadma.c:25:17: error: implicit declaration of function 'claim_dma_lock' [-Werror=implicit-function-declaration]
-      25 |         flags = claim_dma_lock();
-         |                 ^~~~~~~~~~~~~~
->> drivers/staging/comedi/drivers/comedi_isadma.c:31:9: error: implicit declaration of function 'release_dma_lock' [-Werror=implicit-function-declaration]
-      31 |         release_dma_lock(flags);
-         |         ^~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+	https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/hKywNHBkAXM/m/QzUtxEWLBQAJ
 
+Model 2018: released at May 2, 2018
 
-vim +/claim_dma_lock +25 drivers/staging/comedi/drivers/comedi_isadma.c
+	https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/xW03vmfmPuA/m/bMPk3UCWAgAJ
 
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  16  
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  17  /**
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  18   * comedi_isadma_program - program and enable an ISA DMA transfer
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  19   * @desc:	the ISA DMA cookie to program and enable
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  20   */
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  21  void comedi_isadma_program(struct comedi_isadma_desc *desc)
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  22  {
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  23  	unsigned long flags;
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  24  
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14 @25  	flags = claim_dma_lock();
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  26  	clear_dma_ff(desc->chan);
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  27  	set_dma_mode(desc->chan, desc->mode);
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  28  	set_dma_addr(desc->chan, desc->hw_addr);
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  29  	set_dma_count(desc->chan, desc->size);
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  30  	enable_dma(desc->chan);
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14 @31  	release_dma_lock(flags);
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  32  }
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  33  EXPORT_SYMBOL_GPL(comedi_isadma_program);
-20a1ea7d6ba184 H Hartley Sweeten 2015-01-14  34  
+Noted that previous conversation about commit 5ce6c1f3535f happened at
+March 2018. So the timeline is roughly:
 
-:::::: The code at line 25 was first introduced by commit
-:::::: 20a1ea7d6ba184a1f6e25e85786738003387cada staging: comedi: comedi_isadma: introduce helper module for ISA DMA
+	Model 2017 -> commit 5ce6c1f3535f -> Model 2018
 
-:::::: TO: H Hartley Sweeten <hsweeten@visionengravers.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+And in the email thread of Model 2018, the commit related to model
+changes also got mentioned:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+	https://github.com/riscv/riscv-isa-manual/commit/b875fe417948635ed68b9644ffdf718cb343a81a
+
+in that commit, we can see the changes related to sc.aqrl are:
+
+	 to have occurred between the LR and a successful SC.  The LR/SC
+	 sequence can be given acquire semantics by setting the {\em aq} bit on
+	-the SC instruction.  The LR/SC sequence can be given release semantics
+	-by setting the {\em rl} bit on the LR instruction.  Setting both {\em
+	-  aq} and {\em rl} bits on the LR instruction, and setting the {\em
+	-  aq} bit on the SC instruction makes the LR/SC sequence sequentially
+	-consistent with respect to other sequentially consistent atomic
+	-operations.
+	+the LR instruction.  The LR/SC sequence can be given release semantics
+	+by setting the {\em rl} bit on the SC instruction.  Setting the {\em
+	+  aq} bit on the LR instruction, and setting both the {\em aq} and the {\em
+	+  rl} bit on the SC instruction makes the LR/SC sequence sequentially
+	+consistent, meaning that it cannot be reordered with earlier or
+	+later memory operations from the same hart.
+
+note that Model 2018 explicitly says that "ld.aq+sc.aqrl" is ordered
+against "earlier or later memory operations from the same hart", and
+this statement was not in Model 2017.
+
+So my understanding of the story is that at some point between March and
+May 2018, RISV memory model folks decided to add this rule, which does
+look more consistent with other parts of the model and is useful.
+
+And this is why (and when) "ld.aq+sc.aqrl" can be used as a fully-ordered
+barrier ;-)
+
+Now if my understanding is correct, to move forward, it's better that 1)
+this patch gets resend with the above information (better rewording a
+bit), and 2) gets an Acked-by from Dan to confirm this is a correct
+history ;-)
+
+Regards,
+Boqun
+
+>   Andrea
+> 
+> 
+[...]

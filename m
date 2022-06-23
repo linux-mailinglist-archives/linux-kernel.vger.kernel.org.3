@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4170557130
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 04:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EBA557134
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 04:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377618AbiFWCwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 22:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
+        id S236270AbiFWCx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 22:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377600AbiFWCv4 (ORCPT
+        with ESMTP id S1377707AbiFWCwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 22:51:56 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79E143AE0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:51:46 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so1225359pjr.0
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 19:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=lIFW9cAuPlwQZ+C7VMU14IUSbtewdAOYVyCoJAKjzlQ=;
-        b=Puw8ineJwyWfy8K7QUYI04Wr8Nb2t3lWIHkFlB1hQQLzT5swZYV1wxZgu3zdmjVfn/
-         L0HlSvtZI7htiCUE58+bs7E4/4+tXAl4qPsIqzEL5CBx2z2FY3FCEiyOZy4dNWbEFGfJ
-         ublFUOJMhKzwCTubtZVlrCy4E/Nj68znJFRH22pBgRivO+6M2+5YmEof4fmthJB7pQ8J
-         kUm32nyX6wMxLFRWHwDB2kb0DFF1JqhQvwdym6WuLQDI+QPltciJAr3kqmKG3RZ4UMoA
-         yDoPULmJp2SmYl4/CECuVR+sWJJTkK1B1xyYqgojOt/3YvgnoPXmBGlVAYVPTb/tfVNC
-         E1Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lIFW9cAuPlwQZ+C7VMU14IUSbtewdAOYVyCoJAKjzlQ=;
-        b=Mwsg3QxelWofyilP7/TtII33NFWak1yVapq6Q5YC8FlBpd1dJWxUwEy5I8obf90zX7
-         JFIJmTynpOG50I30OGtxmXIjuw8y8APlGrFcBTu3/LHnG1RQ8fpBnghX1CNTb6e9TfgK
-         t+K6NAMIetfOOH8ZZlITn3rBhdO5Cm9LNpLV/0dWkaxjE+w7vzvHrJJ0gaPmcjUv+71s
-         FQiFR941t1lZmIXh4dyKVj3/bXudSh4iVLKje20tGIipgiSM8g/wwfVynWOt5OeMSlH1
-         xulvbn/f20YIeg95HwLMheGpmEUNympBZSUmFaHIsmfW0tlqE5Vk7JFxupmPNDXXSCLC
-         9/hw==
-X-Gm-Message-State: AJIora9wKnfgypSJJIM9wc4HXGDJSxjwRC9l7sKLPA8F+d/Gb8HzPm9o
-        1V/wW0lKuZW1GMdVy8bLa0Q=
-X-Google-Smtp-Source: AGRyM1tGh13XWNJDm/Ne6cIvj9Kvnz3BzixxtTYVsFdR6x6xDxp58nyO22rT2LXODqdOE+tQ9eT2JA==
-X-Received: by 2002:a17:90a:8d02:b0:1ec:a006:ea13 with SMTP id c2-20020a17090a8d0200b001eca006ea13mr1595429pjo.229.1655952706208;
-        Wed, 22 Jun 2022 19:51:46 -0700 (PDT)
-Received: from [192.168.50.116] (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
-        by smtp.gmail.com with ESMTPSA id c18-20020a170902b69200b00166423df3cdsm13510665pls.209.2022.06.22.19.51.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 19:51:45 -0700 (PDT)
-Message-ID: <09ae5fd3-2276-5d76-a0bf-46dbffeeeade@gmail.com>
-Date:   Wed, 22 Jun 2022 19:51:42 -0700
+        Wed, 22 Jun 2022 22:52:44 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BCE43EC0;
+        Wed, 22 Jun 2022 19:52:33 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 19:52:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1655952751;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ef3A1jFIk2ghqaCFE7HOz1021sh7n1eb4f8YSnsvNOY=;
+        b=ViJppFGoJrwP5h680sfYXw1Y9s8cIL0aKAFEl4ZiYQmr6iSkfPVYxsUcUNGXKZIiTskxQU
+        vmVaYfTWetOSQCr9u8cv9FiHmJy6qauUqIRPKcmypu9C/UxZtdgNyFLNfUl6Mh2NEklMIR
+        +cRZGMjxvfj5QKmWeBjqr3rN77zYeqI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     syzbot <syzbot+ec972d37869318fc3ffb@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, cgroups@vger.kernel.org,
+        hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, mhocko@kernel.org, shakeelb@google.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in folio_lruvec_lock_irqsave
+Message-ID: <YrPVZUXPD7L85mYp@castle>
+References: <0000000000004b03c805e2099bf0@google.com>
+ <YrM2XCwzu65cb81r@FVFYT0MHHV2J.googleapis.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] ARC:kernel:Fix typos in comments
-Content-Language: en-US
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        vgupta@kernel.org, Julia.Lawall@inria.fr,
-        deng.changcheng@zte.com.cn, libang.linuxer@gmail.com
-References: <20220622075204.35329-1-yuanjilin@cdjrlc.com>
-From:   Vineet Gupta <vineetg76@gmail.com>
-In-Reply-To: <20220622075204.35329-1-yuanjilin@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrM2XCwzu65cb81r@FVFYT0MHHV2J.googleapis.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 22, 2022 at 11:33:48PM +0800, Muchun Song wrote:
+> On Wed, Jun 22, 2022 at 06:49:31AM -0700, syzbot wrote:
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> > 
+> > HEAD commit:    ac0ba5454ca8 Add linux-next specific files for 20220622
+> > git tree:       linux-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=14354c18080000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=12809dacb9e7c5e0
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=ec972d37869318fc3ffb
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > 
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+ec972d37869318fc3ffb@syzkaller.appspotmail.com
+> > 
+> >  folio_put include/linux/mm.h:1227 [inline]
+> >  put_page+0x217/0x280 include/linux/mm.h:1279
+> >  unmap_and_move_huge_page mm/migrate.c:1343 [inline]
+> >  migrate_pages+0x3dc3/0x5a10 mm/migrate.c:1440
+> >  do_mbind mm/mempolicy.c:1332 [inline]
+> >  kernel_mbind+0x4d7/0x7d0 mm/mempolicy.c:1479
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > page has been migrated, last migrate reason: mempolicy_mbind
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 1 PID: 18925 at include/linux/memcontrol.h:800 folio_lruvec include/linux/memcontrol.h:800 [inline]
+> 
+> The warning here is "VM_WARN_ON_ONCE_FOLIO(!memcg && !mem_cgroup_disabled(), folio)",
+> the memcg returned by folio_memcg() seems to be NULL which has 2 possibility, one is
+> that objcg returned by folio_objcg() is NULL, another is that obj_cgroup_memcg(objcg)
+> returns NULL. However, obj_cgroup_memcg() always returns a valid memcg. So Most likely
+> objcg is NULL meaning this page is not charged to memcg. Is this possible for LRU pages?
+> 
+> I am not sure if this issue is caused by my commit cca700a8e695 ("mm: lru: use lruvec
+> lock to serialize memcg changes") since I have removed folio_test_clear_lru() check
+> from folio_batch_move_lru(). We know that a non-lru page may be not charged to memcg.
+> But is it possible for a non-lru page to be passed to folio_batch_move_lru()? Seems
+> impossible. Right? I am not very confident about this commit, hopefully, someone can
+> review it.
 
+How about to temporarily drop it?
 
-On 6/22/22 00:52, Jilin Yuan wrote:
-> Delete the redundant word 'call'.
->
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
-> ---
->   arch/arc/kernel/smp.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arc/kernel/smp.c b/arch/arc/kernel/smp.c
-> index d947473f1e6d..6c22a53711e9 100644
-> --- a/arch/arc/kernel/smp.c
-> +++ b/arch/arc/kernel/smp.c
-> @@ -393,7 +393,7 @@ irqreturn_t do_IPI(int irq, void *dev_id)
->    * API called by platform code to hookup arch-common ISR to their IPI IRQ
->    *
->    * Note: If IPI is provided by platform (vs. say ARC MCIP), their intc setup/map
-> - * function needs to call call irq_set_percpu_devid() for IPI IRQ, otherwise
-> + * function needs to call irq_set_percpu_devid() for IPI IRQ, otherwise
->    * request_percpu_irq() below will fail
->    */
->   static DEFINE_PER_CPU(int, ipi_dev);
+I was about to suggest it anyway during the review: it's a standalone
+optimization and the main patchset is already quite big and complex,
+so probably easier to validate it separately.
 
-I'd prefer to have this is the other fix in a single change. No point 
-increasing commits for trivial things.
-
--Vineet
+Thanks!

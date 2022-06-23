@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1AE55777F
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7B9557784
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 12:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiFWKKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 06:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
+        id S231444AbiFWKKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 06:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiFWKKF (ORCPT
+        with ESMTP id S231372AbiFWKKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 06:10:05 -0400
+        Thu, 23 Jun 2022 06:10:06 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E04949F07;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3F649F0D;
         Thu, 23 Jun 2022 03:10:05 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0EAF56601796;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A520666017CF;
         Thu, 23 Jun 2022 11:10:03 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655979003;
-        bh=+y7MosVyFMCeWL500cbHvDLPel8eiklTH/H6ZFzjZ1Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=EoOSch7c2DJRjoiRID56J9pJIkXxdG+jxrFhuCoajbcuS9w4U8+i3ecTcwFwRGZF+
-         ZJiIbbNNqkSlmgWyveYXvJiM7M9xG+K3hv6/LTDYN2eeOHBl/Px3GziBKAELJx+JoN
-         UxeTQpejkI5tZGTAN23bCXxvtGd8mHHifERS9JSWLI8JizcmxfD0nS/CRSJmER5yDM
-         9589/DPPRG860wFpos+BWLSD1gQXxcaD1deaS7hk8iSQ6FhtQUPuTNH/fRq+Q8cybz
-         HM0xfxegcBAZEO9cj8VjbUaHF/PukGheZR+QVSb5EwkoCLDYniRFV4sFfzf94Leo+0
-         AFmx/zGeuNM/Q==
+        s=mail; t=1655979004;
+        bh=fdj/NDREE13nXimTiZFPKHxqmbz8mAHTy/iF6JaIN7U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KbhLxup9FZmSqGXBELMNjXZopSuyFCH+mOrVqAHuo9IseIS7pouJiI0NaKBxt3pZU
+         KfGuMyfOxV4BQUoUe/2HsTR4sxN/RBZ8h6R7zoVdKU59whUASk6q5r6VHAanB/wKpV
+         roAilsWSIgfpgQQSPD5XTKvIpATfhLcEr7+kEtwwvR5gBJDFQzgauAqMoOHRInP71V
+         EGD7PH8TMKZyUNMSaDx0H/K8+FFLWgQqNiVPQEJUvG+fKqK6gJrn3gWydLZhVfmfnB
+         /fH3TqVph350nKJnE9KIbdRdmvNZp5xWU703CvaYtwEP6LO7lCAhWWOh5DDhcxv06I
+         2U0c7UmlIs3Cw==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     robh+dt@kernel.org
@@ -41,10 +41,12 @@ Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         wenst@chromium.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 0/5] Allow getting regulator on MFG for multiple SoCs
-Date:   Thu, 23 Jun 2022 12:09:46 +0200
-Message-Id: <20220623100951.21153-1-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 1/5] soc: mediatek: mt8192-pm-domains: Allow probing vreg supply on MFG0/1
+Date:   Thu, 23 Jun 2022 12:09:47 +0200
+Message-Id: <20220623100951.21153-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220623100951.21153-1-angelogioacchino.delregno@collabora.com>
+References: <20220623100951.21153-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -56,43 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is one of the steps to enable DVFS with the Panfrost driver:
-since Panfrost is already enabling the (required) MFG power domains
-and since the mtk-pm-domains driver is already responsible for
-actually enabling the SRAM PDN, it makes sense to make sure that
-the VSRAM supply is ON when trying to reset/enable the SRAM.
+The MT8192 SoC has multiple MFG power-domains, exclusively used for
+the GPU which, in turn, requires external power supplies: add the
+MTK_SCPD_DOMAIN_SUPPLY cap to MFG0 and MFG1 to allow voting for
+regulators on/off upon usage of these power domains.
 
-For this reason, the MTK_SCPD_DOMAIN_SUPPLY flag was added to one
-more MFG domain, ensuring that the SRAM is actually powered and
-also not relying on the bootloader leaving this supply on; on the
-other hand, this is also making possible to avoid setting a
-sram-supply on the GPU node, making devfreq happy about having
-only one supply and finally allowing DVFS to happen.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/soc/mediatek/mt8192-pm-domains.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-If no domain-supply is declared in devicetree, mtk-pm-domains driver
-probe will anyway keep going, so this is not breaking old devicetrees.
-
-No side effects either when this supply is declared for both a MFG
-domain and Panfrost together.
-
-This series has no dependencies.
-
-AngeloGioacchino Del Regno (5):
-  soc: mediatek: mt8192-pm-domains: Allow probing vreg supply on MFG0/1
-  soc: mediatek: mt8183-pm-domains: Allow probing vreg supply on
-    MFG_ASYNC
-  soc: mediatek: mt8195-pm-domains: Allow probing vreg supply on MFG1
-  soc: mediatek: mt8186-pm-domains: Allow probing vreg supply on MFG1
-  arm64: dts: mediatek: mt8183-kukui: Assign sram supply to mfg_async pd
-
- arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 4 ++++
- arch/arm64/boot/dts/mediatek/mt8183.dtsi       | 2 +-
- drivers/soc/mediatek/mt8183-pm-domains.h       | 1 +
- drivers/soc/mediatek/mt8186-pm-domains.h       | 2 +-
- drivers/soc/mediatek/mt8192-pm-domains.h       | 2 ++
- drivers/soc/mediatek/mt8195-pm-domains.h       | 2 +-
- 6 files changed, 10 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/soc/mediatek/mt8192-pm-domains.h b/drivers/soc/mediatek/mt8192-pm-domains.h
+index 558c4ee4784a..b97b2051920f 100644
+--- a/drivers/soc/mediatek/mt8192-pm-domains.h
++++ b/drivers/soc/mediatek/mt8192-pm-domains.h
+@@ -58,6 +58,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8192[] = {
+ 		.pwr_sta2nd_offs = 0x0170,
+ 		.sram_pdn_bits = GENMASK(8, 8),
+ 		.sram_pdn_ack_bits = GENMASK(12, 12),
++		.caps = MTK_SCPD_DOMAIN_SUPPLY,
+ 	},
+ 	[MT8192_POWER_DOMAIN_MFG1] = {
+ 		.name = "mfg1",
+@@ -85,6 +86,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8192[] = {
+ 				    MT8192_TOP_AXI_PROT_EN_2_CLR,
+ 				    MT8192_TOP_AXI_PROT_EN_2_STA1),
+ 		},
++		.caps = MTK_SCPD_DOMAIN_SUPPLY,
+ 	},
+ 	[MT8192_POWER_DOMAIN_MFG2] = {
+ 		.name = "mfg2",
 -- 
 2.35.1
 

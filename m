@@ -2,237 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21320558B7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 01:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B031558B29
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 00:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbiFWXAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 19:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
+        id S229752AbiFWWPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 18:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiFWXAL (ORCPT
+        with ESMTP id S229464AbiFWWPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 19:00:11 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2064.outbound.protection.outlook.com [40.107.244.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B5A5D112;
-        Thu, 23 Jun 2022 16:00:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DoGy3AGFwHC0+NnXOYj8CmJzqTU3hR9GQS1tYL1sSrOPtnLJKr3sKlMmjDFQKlfVIM31FQvb8pPN81GOY8fPB1Q/kNtd9+uw5JjOdfjWunulgjUJxZRDju5zX2GJp9wChMKUTE6ZMMilDXmEQe/3OkBZXI/zt61cEOv30x1KPOjvr2f0+vHGtHu2HmEQJNEN0ufAMEn/zdjQARX8mmrEMu/MVBAJmNytNDbrii26tQQrIlvt6lCDD+8O9rRog5dhzvniIAM+jjkfcvd9X3QdWYtALi62uuyZzcoJYvINS4epMlPuTyMD/gFfHu2fV0Es4TzE2BmAboPqjqtlDz6gcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iyamViTq1nBVi9xIjb/e7PY0gptonM7vBa3se7GZiFw=;
- b=CFLJNDLBu/E2TYT6VYoqW+81mxIGkIV3mq/kTYoSjr+uq84FXUpoMPdF9LZYF43jZQtuzASzYT0V4qWFlMRHnCOFLY3lR8Sy+2i2ezYN7VSbmm7CEBLrzqtWBCO/gM9HtC5hm8+VJ56hlWnmJqBN0ScpJB4UpwFQ/40i3AdreFtc9Pkg1iTio2hdPyBRXhoXjnmTPfsLNhmfLURfjFK35+yiwvt1boPl6McXyn3aso013Qs3GkmM67vA9NG+HnDTgaQ4PnIomf9CX+XeWRMS7Nb88WZFsJ4mESqw2poEeq8SDg7inWShtiWnn1g69mQLZtwXdhi1H2/DQ1Dwr6s/5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iyamViTq1nBVi9xIjb/e7PY0gptonM7vBa3se7GZiFw=;
- b=atgzjGE3jRVBW7/o7bDUJl/ee5/S6Gu+XZzlD+iAUAljqzH9CrYpsQJ83OKnrx69hJiVHmsc5rX1kkaAphTM9HM6lD/5G8B8hZbtLLCnNsQb7XBpss6iVqSlx2/NsSXcswy3mBvTl3iZdVAc/v9kcjF0OlbAaQ37ewXPU6XGHfI=
-Received: from BN6PR12CA0043.namprd12.prod.outlook.com (2603:10b6:405:70::29)
- by DS7PR12MB5815.namprd12.prod.outlook.com (2603:10b6:8:77::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Thu, 23 Jun
- 2022 23:00:07 +0000
-Received: from BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
- (2603:10b6:405:70:cafe::82) by BN6PR12CA0043.outlook.office365.com
- (2603:10b6:405:70::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.17 via Frontend
- Transport; Thu, 23 Jun 2022 23:00:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT013.mail.protection.outlook.com (10.13.176.182) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5373.15 via Frontend Transport; Thu, 23 Jun 2022 23:00:07 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 23 Jun
- 2022 18:00:06 -0500
-Date:   Thu, 23 Jun 2022 17:07:51 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-api@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <qemu-devel@nongnu.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        <luto@kernel.org>, <jun.nakajima@intel.com>,
-        <dave.hansen@intel.com>, <ak@linux.intel.com>, <david@redhat.com>,
-        <aarcange@redhat.com>, <ddutile@redhat.com>, <dhildenb@redhat.com>,
-        Quentin Perret <qperret@google.com>, <mhocko@suse.com>
-Subject: Re: [PATCH v6 7/8] KVM: Enable and expose KVM_MEM_PRIVATE
-Message-ID: <20220623220751.emt3iqq77faxfzzy@amd.com>
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <20220519153713.819591-8-chao.p.peng@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220519153713.819591-8-chao.p.peng@linux.intel.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 41f2cc68-07a1-439c-c99c-08da556c1df8
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5815:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MMQER8qa581Q0yKLb6m725j+nrTlmsVafu9Jmrkl4r1diWywwDCPswbB9hT/dLvDJF76DL6h/PZUjKcQD/Saw9KuV+o29w/CWT/wABmDG7PsaH6GRo/c/OQc2uVUUFp3R2mAvYRfsR+d+j74AC3inUipssISlM9I/FLqz2+tDypSM7A7Hw7WY7q2zbvIw7BrP5dzJddnOhwEpR3vxX75aWwR6OIa7sG8xlEGalVE3wwVerDWuTAcPxc9z7CDD0kYB+uxgzuGGcnOlTnaMUM89dynoTM/6AvoqT2h6d3oqMlYEkeudT6O8smJTpMxuMuor2la0BfpfU05gB+ZgaTXuwTwx1LxMB72WOBJ7GO1ZlBHltu1Rw6y/NYH+H6D18YpojVm+DxToENfXJ9WS1v4e4gHuwmb12T5n0Hy4w0yKhy2vzjXNwC62m4MxqrMuvcxFJLGI1SO8DU2f0UFy4uFIgimjRvvC+10tQ6nVi0v69iw9vWaA56tHEiTrHWlIE2S65cobqYdXeMVcvJ6KTSXD0q4uJ4P0syAQxBsvzHREvUINFu/+A5CekZ27JjNIXBwtXLRw6DdqAXBwUDRejJnjY2hvAsJCKZCUElYSR3VLYiO518M1spMecqiMHNjfh5aVOBIs3MNqqFi8PzHUlmuWmbrs7KCb00p6Lm5CoAOoTvoyxHftkRCwN3Abs00FsyAMC10NKN28QInCpZ8a23iKAno0pLxuGPFhXpxdHXq34t/P7JNNLuHEVj0pEbHeUvaXXxPjUpRyJPYOkL4UyGb7sP9SIFaVF9XgK5cqaXAaIhRpJAIGd+7ySOtFRgjgd2SpZE1/OYJ8xkjaxj6dStNYg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(376002)(346002)(39860400002)(36840700001)(40470700004)(46966006)(26005)(83380400001)(426003)(186003)(6916009)(36860700001)(82740400003)(5660300002)(40460700003)(6666004)(47076005)(2906002)(336012)(36756003)(82310400005)(70206006)(356005)(8676002)(7416002)(40480700001)(4326008)(70586007)(16526019)(54906003)(44832011)(86362001)(7406005)(316002)(2616005)(8936002)(1076003)(81166007)(41300700001)(478600001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2022 23:00:07.3238
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 41f2cc68-07a1-439c-c99c-08da556c1df8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT013.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5815
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 23 Jun 2022 18:15:35 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6A749B78
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 15:15:33 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id n10so498228plp.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 15:15:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Lv8fuWFnEj20dY6Qx6c1WZJrE8ba+8p1inUKoTp96/w=;
+        b=Q+0Esb0n2/u7z284w/2pQMS+0TVuNu6k0/7WLW24wexCyAgcQwp+DAfYFf8Oxr8yLy
+         YaaNFmwr3QJj5X8BNXFNoZnHNzVgja8+rOaAxS9N3DZ9YqDTPPdrsu4ZQtohcQuo+z0L
+         QZMVRLaa6gWm/8OFFgs5pDT1EH0f0kfBQBz7OAH9v+6SOeNh+UH1q5nLHKHx9Wk/LywJ
+         uT+6DfRqUnwDtE6ePjpfA3Pj2F9AagWyeK0kD4HRo5dr8XxV4YQHGkYWDbS1NI0dnYG5
+         ILiDCkRf3Bv2E1AXYRLQeRnHmsKCwBm91EJ36T/eB/KdqZaMmMGNMMcAoftajwGt4gdu
+         taxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=Lv8fuWFnEj20dY6Qx6c1WZJrE8ba+8p1inUKoTp96/w=;
+        b=qJOyp5se3CMHz6GAee8XepXE930j9WN/uMx03iK6mF0ziEB7+C5+hpCODPJ4lCDJYC
+         QM71qV7KfqvivdvoMpDCpJbUmmKQP91FdyNkca448GxF2tK/nrMtAcrmi1Lo6PvOUjsI
+         W/F1ceI84rWvtkqov7IUKews2JtCu890N3T/4VbAhquwQoMuYvK3G1ba73Lq3HKokdI+
+         1ItiEFuJQCS+f0GcdzqPkgjZhP1UUkrKNGsD27r7zTCx/QCyJjQ4J/H4Sd9Zr0E1AgNz
+         yKXccRW5o4QUs1AnGs5iyvzEKQS47KYrJ0djWUdDe5Ok6fJ4s7Pc7f9zTTped6zbYAa7
+         JSqw==
+X-Gm-Message-State: AJIora8+mItfMStLml+NZq05ls/hLKMWG7JGmhe56j9pYRW6MztWu/JT
+        S8wiK/R1ZnuunNr6kCg83hf5tg==
+X-Google-Smtp-Source: AGRyM1sDFdjef/jMRpZMZdy7OCVQG8uP4Lz9rjzDx/2mDnhKUwt7lRQbLU4mNGlSzQQWN3pYnbqW7w==
+X-Received: by 2002:a17:903:2347:b0:16a:33cd:5308 with SMTP id c7-20020a170903234700b0016a33cd5308mr17395122plh.122.1656022533229;
+        Thu, 23 Jun 2022 15:15:33 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id a4-20020a170902710400b00162037fbb68sm274884pll.215.2022.06.23.15.15.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 15:15:32 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 15:15:32 -0700 (PDT)
+X-Google-Original-Date: Thu, 23 Jun 2022 15:15:29 PDT (-0700)
+Subject:     Re: [PATCH V4 5/5] riscv: atomic: Optimize LRSC-pairs atomic ops with .aqrl annotation
+In-Reply-To: <YrSo/3iUuO0AL76T@boqun-archlinux>
+CC:     Daniel Lustig <dlustig@nvidia.com>, parri.andrea@gmail.com,
+        guoren@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        mark.rutland@arm.com, Will Deacon <will@kernel.org>,
+        peterz@infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        guoren@linux.alibaba.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     boqun.feng@gmail.com
+Message-ID: <mhng-f42f1283-50c1-48f1-ab2e-c5700b352aa1@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:37:12PM +0800, Chao Peng wrote:
-> Register private memslot to fd-based memory backing store and handle the
-> memfile notifiers to zap the existing mappings.
-> 
-> Currently the register is happened at memslot creating time and the
-> initial support does not include page migration/swap.
-> 
-> KVM_MEM_PRIVATE is not exposed by default, architecture code can turn
-> on it by implementing kvm_arch_private_mem_supported().
-> 
-> A 'kvm' reference is added in memslot structure since in
-> memfile_notifier callbacks we can only obtain a memslot reference while
-> kvm is need to do the zapping. The zapping itself reuses code from
-> existing mmu notifier handling.
-> 
-> Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> ---
->  include/linux/kvm_host.h |  10 ++-
->  virt/kvm/kvm_main.c      | 132 ++++++++++++++++++++++++++++++++++++---
->  2 files changed, 131 insertions(+), 11 deletions(-)
-> 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index b0a7910505ed..00efb4b96bc7 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -246,7 +246,7 @@ bool kvm_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
->  #endif
->  
-> -#ifdef KVM_ARCH_WANT_MMU_NOTIFIER
-> +#if defined(KVM_ARCH_WANT_MMU_NOTIFIER) || defined(CONFIG_MEMFILE_NOTIFIER)
->  struct kvm_gfn_range {
->  	struct kvm_memory_slot *slot;
->  	gfn_t start;
-> @@ -577,6 +577,7 @@ struct kvm_memory_slot {
->  	struct file *private_file;
->  	loff_t private_offset;
->  	struct memfile_notifier notifier;
-> +	struct kvm *kvm;
->  };
->  
->  static inline bool kvm_slot_is_private(const struct kvm_memory_slot *slot)
-> @@ -769,9 +770,13 @@ struct kvm {
->  	struct hlist_head irq_ack_notifier_list;
->  #endif
->  
-> +#if (defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)) ||\
-> +	defined(CONFIG_MEMFILE_NOTIFIER)
-> +	unsigned long mmu_notifier_seq;
-> +#endif
-> +
->  #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
->  	struct mmu_notifier mmu_notifier;
-> -	unsigned long mmu_notifier_seq;
->  	long mmu_notifier_count;
->  	unsigned long mmu_notifier_range_start;
->  	unsigned long mmu_notifier_range_end;
-> @@ -1438,6 +1443,7 @@ bool kvm_arch_dy_has_pending_interrupt(struct kvm_vcpu *vcpu);
->  int kvm_arch_post_init_vm(struct kvm *kvm);
->  void kvm_arch_pre_destroy_vm(struct kvm *kvm);
->  int kvm_arch_create_vm_debugfs(struct kvm *kvm);
-> +bool kvm_arch_private_mem_supported(struct kvm *kvm);
->  
->  #ifndef __KVM_HAVE_ARCH_VM_ALLOC
->  /*
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index db9d39a2d3a6..f93ac7cdfb53 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -843,6 +843,73 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
->  
->  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
->  
-> +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
-> +static void kvm_private_mem_notifier_handler(struct memfile_notifier *notifier,
-> +					     pgoff_t start, pgoff_t end)
-> +{
-> +	int idx;
-> +	struct kvm_memory_slot *slot = container_of(notifier,
-> +						    struct kvm_memory_slot,
-> +						    notifier);
-> +	struct kvm_gfn_range gfn_range = {
-> +		.slot		= slot,
-> +		.start		= start - (slot->private_offset >> PAGE_SHIFT),
-> +		.end		= end - (slot->private_offset >> PAGE_SHIFT),
+On Thu, 23 Jun 2022 10:55:11 PDT (-0700), boqun.feng@gmail.com wrote:
+> On Thu, Jun 23, 2022 at 01:09:23PM -0400, Dan Lustig wrote:
+>> On 6/22/2022 11:31 PM, Boqun Feng wrote:
+>> > Hi,
+>> >
+>> > On Tue, Jun 14, 2022 at 01:03:47PM +0200, Andrea Parri wrote:
+>> > [...]
+>> >>> 5ce6c1f3535f ("riscv/atomic: Strengthen implementations with fences")
+>> >>> is about fixup wrong spinlock/unlock implementation and not relate to
+>> >>> this patch.
+>> >>
+>> >> No.  The commit in question is evidence of the fact that the changes
+>> >> you are presenting here (as an optimization) were buggy/incorrect at
+>> >> the time in which that commit was worked out.
+>> >>
+>> >>
+>> >>> Actually, sc.w.aqrl is very strong and the same with:
+>> >>> fence rw, rw
+>> >>> sc.w
+>> >>> fence rw,rw
+>> >>>
+>> >>> So "which do not give full-ordering with .aqrl" is not writen in
+>> >>> RISC-V ISA and we could use sc.w/d.aqrl with LKMM.
+>> >>>
+>> >>>>
+>> >>>>>> describes the issue more specifically, that's when we added these
+>> >>>>>> fences.  There have certainly been complains that these fences are too
+>> >>>>>> heavyweight for the HW to go fast, but IIUC it's the best option we have
+>> >>>>> Yeah, it would reduce the performance on D1 and our next-generation
+>> >>>>> processor has optimized fence performance a lot.
+>> >>>>
+>> >>>> Definately a bummer that the fences make the HW go slow, but I don't
+>> >>>> really see any other way to go about this.  If you think these mappings
+>> >>>> are valid for LKMM and RVWMO then we should figure this out, but trying
+>> >>>> to drop fences to make HW go faster in ways that violate the memory
+>> >>>> model is going to lead to insanity.
+>> >>> Actually, this patch is okay with the ISA spec, and Dan also thought
+>> >>> it was valid.
+>> >>>
+>> >>> ref: https://lore.kernel.org/lkml/41e01514-74ca-84f2-f5cc-2645c444fd8e@nvidia.com/raw
+>> >>
+>> >> "Thoughts" on this regard have _changed_.  Please compare that quote
+>> >> with, e.g.
+>> >>
+>> >>   https://lore.kernel.org/linux-riscv/ddd5ca34-805b-60c4-bf2a-d6a9d95d89e7@nvidia.com/
+>> >>
+>> >> So here's a suggestion:
+>> >>
+>> >> Reviewers of your patches have asked:  How come that code we used to
+>> >> consider as buggy is now considered "an optimization" (correct)?
+>> >>
+>> >> Denying the evidence or going around it is not making their job (and
+>> >> this upstreaming) easier, so why don't you address it?  Take time to
+>> >> review previous works and discussions in this area, understand them,
+>> >> and integrate such knowledge in future submissions.
+>> >>
+>> >
+>> > I agree with Andrea.
+>> >
+>> > And I actually took a look into this, and I think I find some
+>> > explanation. There are two versions of RISV memory model here:
+>> >
+>> > Model 2017: released at Dec 1, 2017 as a draft
+>> >
+>> > 	https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/hKywNHBkAXM/m/QzUtxEWLBQAJ
+>> >
+>> > Model 2018: released at May 2, 2018
+>> >
+>> > 	https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/xW03vmfmPuA/m/bMPk3UCWAgAJ
+>> >
+>> > Noted that previous conversation about commit 5ce6c1f3535f happened at
+>> > March 2018. So the timeline is roughly:
+>> >
+>> > 	Model 2017 -> commit 5ce6c1f3535f -> Model 2018
+>> >
+>> > And in the email thread of Model 2018, the commit related to model
+>> > changes also got mentioned:
+>> >
+>> > 	https://github.com/riscv/riscv-isa-manual/commit/b875fe417948635ed68b9644ffdf718cb343a81a
+>> >
+>> > in that commit, we can see the changes related to sc.aqrl are:
+>> >
+>> > 	 to have occurred between the LR and a successful SC.  The LR/SC
+>> > 	 sequence can be given acquire semantics by setting the {\em aq} bit on
+>> > 	-the SC instruction.  The LR/SC sequence can be given release semantics
+>> > 	-by setting the {\em rl} bit on the LR instruction.  Setting both {\em
+>> > 	-  aq} and {\em rl} bits on the LR instruction, and setting the {\em
+>> > 	-  aq} bit on the SC instruction makes the LR/SC sequence sequentially
+>> > 	-consistent with respect to other sequentially consistent atomic
+>> > 	-operations.
+>> > 	+the LR instruction.  The LR/SC sequence can be given release semantics
+>> > 	+by setting the {\em rl} bit on the SC instruction.  Setting the {\em
+>> > 	+  aq} bit on the LR instruction, and setting both the {\em aq} and the {\em
+>> > 	+  rl} bit on the SC instruction makes the LR/SC sequence sequentially
+>> > 	+consistent, meaning that it cannot be reordered with earlier or
+>> > 	+later memory operations from the same hart.
+>> >
+>> > note that Model 2018 explicitly says that "ld.aq+sc.aqrl" is ordered
+>> > against "earlier or later memory operations from the same hart", and
+>> > this statement was not in Model 2017.
+>> >
+>> > So my understanding of the story is that at some point between March and
+>> > May 2018, RISV memory model folks decided to add this rule, which does
+>> > look more consistent with other parts of the model and is useful.
+>> >
+>> > And this is why (and when) "ld.aq+sc.aqrl" can be used as a fully-ordered
+>> > barrier ;-)
+>> >
+>> > Now if my understanding is correct, to move forward, it's better that 1)
+>> > this patch gets resend with the above information (better rewording a
+>> > bit), and 2) gets an Acked-by from Dan to confirm this is a correct
+>> > history ;-)
+>>
+>> I'm a bit lost as to why digging into RISC-V mailing list history is
+>> relevant here...what's relevant is what was ratified in the RVWMO
+>> chapter of the RISC-V spec, and whether the code you're proposing
+>> is the most optimized code that is correct wrt RVWMO.
+>>
+>> Is your claim that the code you're proposing to fix was based on a
+>> pre-RVWMO RISC-V memory model definition, and you're updating it to
+>> be more RVWMO-compliant?
+>>
+>
+> Well, first it's not my code ;-)
+>
+> The thing is that this patch proposed by Guo Ren kinda fixes/revertes a
+> previous commit 5ce6c1f3535f ("riscv/atomic: Strengthen implementations
+> with fences"). It looks to me that Guo Ren's patch fits the current
+> RISCV memory model and Linux kernel memory model, but the question is
+> that commit 5ce6c1f3535f was also a fix, so why do we change things
+> back and forth? If I understand correctly, this is also what Palmer and
+> Andrea asked for.
 
-This code assumes that 'end' is greater than slot->private_offset, but
-even if slot->private_offset is non-zero, nothing stops userspace from
-allocating pages in the range of 0 through slot->private_offset, which
-will still end up triggering this notifier. In that case gfn_range.end
-will end up going negative, and the below code will limit that to
-slot->npages and do a populate/invalidate for the entire range.
+That's essentially my confusion.  I'm not really a formal memory model 
+guy so I can easily get lost in these bits, but when I saw it I 
+remembered having looked at a fix before.  I dug that up, saw it was 
+from someone who likley knows a lot more about formal memory models than 
+I do, and thus figured I'd ask everyone to see what's up.
 
-Not sure if this covers all the cases, but this fixes the issue for me:
+IMO if that original fix was made to a pre-ratification version of WMO, 
+this new version is legal WRT the ratified WMO then the code change is 
+fine to take on for-next.  That said, we should be explicit about why 
+it's legal and why the reasoning in the previous patch is no loger 
+connect, just to make sure everyone can follow along.
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 903ffdb5f01c..4c744d8f7527 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -872,6 +872,19 @@ static void kvm_private_mem_notifier_handler(struct memfile_notifier *notifier,
-                .may_block      = true,
-        };
+> My understanding is that commit 5ce6c1f3535f was based on a draft RVWMO
+> that was different than the current one. I'd love to record this
+> difference in the commit log of Guo Ren's patch, so that later on we
+> know why we changed things back and forth. To do so, the confirmation
+> from RVWMO authors is helpful.
 
-        struct kvm *kvm = slot->kvm;
-+
-+       if (slot->private_offset > end)
-+               return;
-+
+Agreed.  IMO that's always good hygine, but it's extra important when 
+we're dealing with external specifications in a complex field like 
+formal models.
 
+> Hope that I make things more clear ;-)
+>
+> Regards,
+> Boqun
+>
+>> Dan
+>>
+>> > Regards,
+>> > Boqun
+>> >
+>> >>   Andrea
+>> >>
+>> >>
+>> > [...]

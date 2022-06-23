@@ -2,145 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD90557E5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 16:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40E1557E61
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 17:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbiFWO6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 10:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
+        id S232039AbiFWPAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 11:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbiFWO6o (ORCPT
+        with ESMTP id S231744AbiFWPAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 10:58:44 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B496725285
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:58:42 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id u15so13980225ejc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 07:58:42 -0700 (PDT)
+        Thu, 23 Jun 2022 11:00:04 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A94255B8
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:00:02 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id z19so12097802edb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 08:00:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y3C1rVPk3dPdQBmkyB1J9bluo/i+1VAHektHpfoJOfg=;
-        b=eVaMHAr2oC82IAagxnteHFSDcz7RlK0q2TZUuHIizv2N5Kq5o9RBYn/2V1MywyL6i3
-         QdvHiX21MNjDcFOs1BNL08YsmRqqaK2gHafg2vinVJWoSAzyueB8pPLhYNI5LG0nB9r/
-         vV5y7JVBLEqNCeAkpLHApqchL5gU6ZszSf9o9VN3nXvz8xfZ5Dck4nLvPRMdeXuEmjQj
-         qipaYGlOKb/1pUDtZIDAwncuSheh1K6YvswOOoQ2j9RZRr0gxegpYYBEeNAe3YydJ/hb
-         SnVN4vWa+HZ1pqlzp2+Si1/DLDAUNA7xyvZQLkPZw57CKTEt0lN3p7t8bcF2jYk6fAjv
-         9j7Q==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1I+H7mKLuciospk8XLiOwY0zoRetqfQqz09CPUbHidw=;
+        b=4+UNEOjuTT2kDTMTdbBW1QEMujI3B7rcPT7Hzcx5pHVwXAhc4Mz6eDCry9sPWqeLET
+         kRP5LDwRA+NrO29G2jFdmzUP3TOv31hMvTsBFh7r2tAajCddBFA/eYil8SxfNtCuq879
+         Ah/J74ENxQvkS2vGuAc54nEwePygDD8JhD9hW7qSbjgP5bqfTc/MWQ/9JqfxGLrqQxhS
+         VgKvxtQnTvVDUK6In+O517MASyt+1KJegVdGWqAPpa74Hoir+uNQVDlnSw0Raoskq1sl
+         4YOrnZI3+pHyBVacaYs4XQjBhdD4JTGeqJwLWCScDSI8eT5URwm8dFSfukyGBENawTmY
+         4pmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y3C1rVPk3dPdQBmkyB1J9bluo/i+1VAHektHpfoJOfg=;
-        b=7O3CUCXBnay8F78qewHTTBVVCtfsJbvvHvNZfOsvhyOrtiwEGOWgEwEIBFg+zem8Hf
-         U2a95Fe4XJorOpAUS7xpTnOMQ9c7BULVF22rMuj0dknmBq21nx4JuSSG2NMjlJu+pMM1
-         xYaqCiEimeGXgnJUF3jJLEkm/HIqAYQmestR358V+PfYjs4xI+5sDRa3Eet+FiikHXEY
-         MznX0+EPZUACf8LsQwarfD1cCgK33oefg9ggSvfpDxs8XUv4jS+B/HtfVITy6mSQISOU
-         H9p4F42NadYG29johRBd3Zbo7hStbuWTo7cDZ4Dus+FAlVGO6AnKQ9rjxr1L0zEs/4+n
-         legw==
-X-Gm-Message-State: AJIora+909L5A6Qd6AcJM2XKbu3WIsmoHKKGop+kzxWl/IQ+6ehFuVKz
-        NX+nODcvr72TZ97K8RKrmMoYRQ==
-X-Google-Smtp-Source: AGRyM1sci6mwJozc2hMmlhymIpKJZRmDhVDXZoRmJzbimMA7FpKYPx4rRJO+hTuNriUckbfyZ4eqSA==
-X-Received: by 2002:a17:907:9816:b0:726:2b90:4bab with SMTP id ji22-20020a170907981600b007262b904babmr939600ejc.544.1655996321231;
-        Thu, 23 Jun 2022 07:58:41 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id c18-20020a05640227d200b0042617ba6396sm18238783ede.32.2022.06.23.07.58.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 07:58:40 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [GIT PULL] dt-bindings: qcom for v5.20
-Date:   Thu, 23 Jun 2022 16:58:37 +0200
-Message-Id: <20220623145837.456817-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1I+H7mKLuciospk8XLiOwY0zoRetqfQqz09CPUbHidw=;
+        b=k3nU3TPxJyyb/c3Xc8dOr4K0jE555DBsz7l5DXJHohLPQxTp3VFuf3Sd6sO/v9l9Fm
+         5tqcpRqUq1GLx4E27IxkbVoEvSvl08jcqOn/bXVOUDdBRRh/et0pN1NQ0yeQxCs+Tq0x
+         WJh9VXwDG3dKXcAoUQpRQZIZHQNQrp0Oc9T+xkXEucIFgGw3X3et3Rk++4xFeGNy1QZL
+         zgLFpPyHX5sXJpDyoUtALFqR8DqRzkGBpxY6u7aHfZEZCc1dqGnhNw0I6K0fa6zUR+wf
+         8rJrOA46H+mVNRE7v2pcyzccJWntJ06gIh3tXnMDRwU/E2X25xMwIknt9nVhFSfnWL2a
+         p7lA==
+X-Gm-Message-State: AJIora9J3pgNWHYIYsSSwcwpsi4GGXKvynHbb1NkGR6rsGSH7ztsBD1e
+        vnd6I92GFMY1+TYbdhZwPYEiOPO/Cn04Q7jaUB03kw==
+X-Google-Smtp-Source: AGRyM1t7VL7bhQSqgEA8UycOf9E2ObyYZrbsvOUrhuoWRmzWAIHGjQJBhDlRMa1QNh6mmLSBhtvg6rDl+1ETB/t2wDs=
+X-Received: by 2002:a05:6402:2402:b0:435:3418:61b5 with SMTP id
+ t2-20020a056402240200b00435341861b5mr11157236eda.82.1655996400602; Thu, 23
+ Jun 2022 08:00:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220622155422.23945-1-menglongwoo@aliyun.com>
+In-Reply-To: <20220622155422.23945-1-menglongwoo@aliyun.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 23 Jun 2022 16:59:50 +0200
+Message-ID: <CAMRc=MdcxeRAHyGw2PPL9sN8qHL=YLKHDu2TDpCUUjBdNW3Qcw@mail.gmail.com>
+Subject: Re: [PATCH 0/2] gpio: gpio-sim: read property 'gpio-base' from dtb
+To:     Menglong Wu <menglongwoo@aliyun.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob and Bjorn,
+On Wed, Jun 22, 2022 at 5:54 PM Menglong Wu <menglongwoo@aliyun.com> wrote:
+>
+> The first GPIO number of the gpio-sim module is dynamic.
+>
+> gpio_chip.base = -1.
+>
+> ```
+>     gpio-sim {
+>         compatible = "gpio-simulator";
+>         bank0 {
+>             gpio-controller;
+>             #gpio-cells = <2>;
+>             ngpios = <16>;
+>             gpio-sim,label = "dt-bank0";
+>             gpio-line-names = "", "sim-foo", "", "sim-bar";
+>         };
+>     };
+> ```
+>
+> If I want to export GPIO from user space. I have to confirm the number
+> from the debugfs filesystem. The 16 GPIO be map to 2032-2047.
+>
 
-I am fixing/improving quite a lot of Qualcomm bindings and I produced several
-separate patchsets. They wait on mailing list for quite a long time, in some
-cases two months, so I decided to grab all them and send in one organized pull.
+I find it ironic that you're trying to use sysfs to play with the
+module whose sole purpose is to facilitate the move away from it. I'd
+like to hear a very good reason to add this option because otherwise
+you're exposing information that should very much be hidden from
+user-space.
 
-All patches here got Rob's ack.
+Bart
 
-This also brings compatibles for Qualcomm boards, therefore it might be
-desirable to merge everything through Bjorn's tree, however at this point I
-want to just get it merged as fast as possible, because I am really afraid they
-will miss the v5.20 cycle.  Therefore the pull is towards Rob, but maybe
-First-comes-first-served is also good approach.
-
-Best regards,
-Krzysztof
-
-
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-bindings-qcom-5.20
-
-for you to fetch changes up to f9702486c77ba74f65859098e3d8e4bdb2e8a745:
-
-  dt-bindings: arm: qcom: add missing SM6350 board compatibles (2022-06-22 10:11:34 +0200)
-
-----------------------------------------------------------------
-Devicetree bindings for Qualcomm for v5.20
-
-Cleanup, fixes and additions of missing pieces for Qualcomm bindings.
-These are address dtbs_check warnings and do not bring new hardware
-(new compatibles are added for existing boards/hardware).
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (24):
-      dt-bindings: soc: qcom,rpmh-rsc: simplify qcom,tcs-config
-      spi: dt-bindings: qcom,spi-geni-qcom: allow three interconnects
-      dt-bindings: soc: qcom: aoss: document qcom,sm8450-aoss-qmp
-      dt-bindings: soc: qcom: qcom,smd-rpm: add power-controller
-      dt-bindings: nvmem: qfprom: add IPQ8064 and SDM630 compatibles
-      dt-bindings: leds: qcom-wled: fix number of addresses
-      dt-bindings: arm: qcom: fix Alcatel OneTouch Idol 3 compatibles
-      dt-bindings: arm: qcom: fix Longcheer L8150 compatibles
-      dt-bindings: arm: qcom: fix MSM8916 MTP compatibles
-      dt-bindings: arm: qcom: fix MSM8994 boards compatibles
-      dt-bindings: arm: qcom: add missing MSM8916 board compatibles
-      dt-bindings: arm: qcom: add missing MSM8994 board compatibles
-      dt-bindings: arm: qcom: add missing SM8150 board compatibles
-      dt-bindings: arm: qcom: add missing SM8250 board compatibles
-      dt-bindings: arm: qcom: add missing SM8350 board compatibles
-      dt-bindings: vendor-prefixes: add Shift GmbH
-      dt-bindings: arm: qcom: add missing MSM8998 board compatibles
-      dt-bindings: arm: qcom: add missing MSM8992 board compatibles
-      dt-bindings: arm: qcom: add missing QCS404 board compatibles
-      dt-bindings: arm: qcom: add missing SDM630 board compatibles
-      dt-bindings: arm: qcom: add missing SDM636 board compatibles
-      dt-bindings: arm: qcom: add missing SDM845 board compatibles
-      dt-bindings: arm: qcom: add missing SM6125 board compatibles
-      dt-bindings: arm: qcom: add missing SM6350 board compatibles
-
- Documentation/devicetree/bindings/arm/qcom.yaml    | 108 +++++++++++++++++++--
- .../bindings/leds/backlight/qcom-wled.yaml         |   9 +-
- .../devicetree/bindings/nvmem/qcom,qfprom.yaml     |   2 +
- .../bindings/soc/qcom/qcom,aoss-qmp.yaml           |   1 +
- .../bindings/soc/qcom/qcom,rpmh-rsc.yaml           |  33 +++----
- .../devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml |   3 +
- .../bindings/spi/qcom,spi-geni-qcom.yaml           |   5 +-
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- 8 files changed, 133 insertions(+), 30 deletions(-)
+>
+> ```
+> [root@QEMU-ARM ~]# cat /sys/kernel/debug/gpio
+> gpiochip0: GPIOs 2032-2047, parent: platform/gpio-sim, dt-bank0:
+>
+>  gpio-2033 (sim-foo             )
+>  gpio-2035 (sim-bar             )
+> ```
+>
+> Change
+>
+> Then add the property 'gpio-base' to fix the base number.
+> Although the method is be DEPRECATED (include/linux/gpio/driver.h)
+>
+> ```
+>     gpio-sim {
+>         compatible = "gpio-simulator";
+>         bank0 {
+>             gpio-controller;
+>             #gpio-cells = <2>;
+>             gpio-base = <300>;
+>             ngpios = <16>;
+>             gpio-sim,label = "dt-bank0";
+>             gpio-line-names = "", "sim-foo", "", "sim-bar";
+>         };
+>     };
+> ```
+>
+> This base number is always 300.
+>
+> ```
+> [root@QEMU-ARM ~]# cat /sys/kernel/debug/gpio
+> gpiochip0: GPIOs 300-315, parent: platform/gpio-sim, dt-bank0:
+>  gpio-301 (sim-foo             )
+>  gpio-303 (sim-bar             )
+> [root@QEMU-ARM ~]# echo 300 > /sys/class/gpio/export
+> ```
+>
+>
+>
+>
+> Menglong Wu (2):
+>   gpio: gpio-sim: initialize gpio_chip->base from dtb
+>   docs: gpio-sim device-tree example with gpio-base
+>
+>  Documentation/admin-guide/gpio/gpio-sim.rst | 3 +++
+>  drivers/gpio/gpio-sim.c                     | 7 ++++++-
+>  2 files changed, 9 insertions(+), 1 deletion(-)
+>
+> --
+> 2.30.2
+>

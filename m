@@ -2,129 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3998D557013
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3170557012
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbiFWBpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 21:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S1376469AbiFWBq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 21:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358657AbiFWBpv (ORCPT
+        with ESMTP id S1359719AbiFWBqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 21:45:51 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1451343AC8
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 18:45:51 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id k12-20020a17090a404c00b001eaabc1fe5dso1087611pjg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 18:45:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=XBccRW3f809STZYPXXYOmdRu7QvxDSYP9NM/SprVkxQ=;
-        b=hLQCWBlBMI7cXx2E87+ADwS9i4fRnadmJHUVnCjL+L3Ew5SWwQ755AeopCCQWXLrwZ
-         sE+R9hJmUQKThtWQSBQJw4uiHGHVi/JLX9hl/ararv01AKc/kQZ6W3wOOAPGmtSKQLwM
-         jYIcZu0muVb8lsmUyAJBZVVrpp4MpfMUZuOFbgqotSVOH3M4IViviOjqa7BTeEwA0FY8
-         mIBhuf3H12Ffp/NZ89ITdv0Duv8uFapXEdLawLEbXbkYGN1xzl14Wm4z/pPQNZesyB8L
-         KDJu7GHEWHSQiG5qmCgGcCLdKY6Aoev2zmpDTHJjY6ODKYyZlHpW7SR0f94HNG1/Hvbk
-         AVEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=XBccRW3f809STZYPXXYOmdRu7QvxDSYP9NM/SprVkxQ=;
-        b=aT4lUALJ5Git7NGipESJDHoRx/COPX7eTE7qJmYl/G3pw23UmO6ZcypK12cD38Kl1V
-         74i5S3gMCwKhUBKVrtBVm/Fr9Zxta0KqN/lJKvqjYNAjhBHiAnmGaAIPry+ZUQIye8Gg
-         fjkScqd8ksvDV/Fswy7NUkVQaMCak+Zlch2vmcDGpJY/7/ehBi+jQhAeP29CWZR8kUfc
-         4fIgQCncDCcPIX4oYM1XYfN2dfqi0QMFgKJNUDN6k367FtfVjIduaA2j225dY9gRiVZk
-         4MSMTUsvCkfChezRLZALywq3losZ/YmqKM8u3KMZxd30Suzwj1YlB1O7j1JkKiC5dANG
-         Xorg==
-X-Gm-Message-State: AJIora+bOBCQ6S+TygNNHf5TZkbKZv4u4hdkNHJtTlXdXv/eMwHaMiX2
-        6Oq9CH7/1t7TFqJTj4IeogA=
-X-Google-Smtp-Source: AGRyM1v79HHyCnNn6RyfKdzxg4cWNNvw6QTiaNpLe4NjJnmtnDArzRRTbD21t8VWNjkFTXBN2iSwSw==
-X-Received: by 2002:a17:90a:e7c8:b0:1e6:961f:999d with SMTP id kb8-20020a17090ae7c800b001e6961f999dmr1359069pjb.23.1655948750578;
-        Wed, 22 Jun 2022 18:45:50 -0700 (PDT)
-Received: from [192.168.50.247] ([103.84.139.165])
-        by smtp.gmail.com with ESMTPSA id d26-20020a63735a000000b0040cba7ef9b9sm6901613pgn.9.2022.06.22.18.45.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jun 2022 18:45:49 -0700 (PDT)
-Message-ID: <b0d778de-9be7-f1a0-9356-9daa398edf5e@gmail.com>
-Date:   Thu, 23 Jun 2022 09:45:46 +0800
+        Wed, 22 Jun 2022 21:46:22 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311A1434B2;
+        Wed, 22 Jun 2022 18:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655948781; x=1687484781;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QCwPmWYcD+MquAMSOXPCydTeGHAkPZLuW112dPh/u+U=;
+  b=XweCD7xUIXkAvbggPhGUMSEFlIMelIS4GuZfMfSY06KClvLanY8AGkOh
+   hHouaYKAE5T0q7YHREd6ISd5lzT9zWfk0I93WC2+CdlXmU90BkX2hIaJZ
+   e2Rwabmt0TmMZPcSuG0NFNxcn/Ma1DoGKGGmfaZVO3e9Ljr0+lX05Xf7r
+   opwvW3HC0TupbWF958QRrV/EXbJusaGPJ5qkqvePGEuCfA+23zsV19Uyg
+   V0uj8/e9ngG/Jwvi3OydXGMleO37UQYF5sNBFztVv6nCPBpmXMOz3EPcD
+   KKxZtVHh6C4vbhyFaWnczyp+1RdQQ4fx3ijhoOAC+TAnUC2wepP2BV9rY
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="260413503"
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="260413503"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 18:46:20 -0700
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="644487121"
+Received: from yutaoxu-mobl.ccr.corp.intel.com (HELO [10.249.172.190]) ([10.249.172.190])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 18:46:18 -0700
+Message-ID: <e18cca4c-c324-c1ab-7a2f-0f97c6387475@linux.intel.com>
+Date:   Thu, 23 Jun 2022 09:46:16 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH] gpu: drm: fix possible memory leak in drm_addmap_core()
+Cc:     baolu.lu@linux.intel.com, kvm@vger.kernel.org,
+        iommu@lists.linux.dev, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, jgg@nvidia.com
+Subject: Re: [PATCH v2 1/2] vfio/type1: Simplify bus_type determination
 Content-Language: en-US
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220509054441.17282-1-hbh25y@gmail.com>
- <ea67fa6b-0fcd-4b59-861f-360e74a4d70a@gmail.com>
-In-Reply-To: <ea67fa6b-0fcd-4b59-861f-360e74a4d70a@gmail.com>
+To:     Robin Murphy <robin.murphy@arm.com>, alex.williamson@redhat.com,
+        cohuck@redhat.com
+References: <b1d13cade281a7d8acbfd0f6a33dcd086207952c.1655898523.git.robin.murphy@arm.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <b1d13cade281a7d8acbfd0f6a33dcd086207952c.1655898523.git.robin.murphy@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/23 09:57, Hangyu Hua wrote:
-> On 2022/5/9 13:44, Hangyu Hua wrote:
->> map->handle need to be handled correctly when map->type is _DRM_SHM or
->> _DRM_CONSISTENT just like map->type is _DRM_REGISTERS.
->>
->> Fixes: 8d153f7107ff ("drm: update user token hashing and map handles")
->> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
->> ---
->>   drivers/gpu/drm/drm_bufs.c | 18 ++++++++++++++++++
->>   1 file changed, 18 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/drm_bufs.c b/drivers/gpu/drm/drm_bufs.c
->> index fcca21e8efac..2b3f504c5f9c 100644
->> --- a/drivers/gpu/drm/drm_bufs.c
->> +++ b/drivers/gpu/drm/drm_bufs.c
->> @@ -344,6 +344,15 @@ static int drm_addmap_core(struct drm_device 
->> *dev, resource_size_t offset,
->>       if (!list) {
->>           if (map->type == _DRM_REGISTERS)
->>               iounmap(map->handle);
->> +        else if (map->type == _DRM_SHM) {
->> +            dev->sigdata.lock = dev->master->lock.hw_lock = NULL;
->> +            vfree(map->handle);
->> +        } else if (map->type == _DRM_CONSISTENT) {
->> +            dma_free_coherent(dev->dev,
->> +                      map->size,
->> +                      map->handle,
->> +                      map->offset);
->> +        }
->>           kfree(map);
->>           return -EINVAL;
->>       }
->> @@ -361,6 +370,15 @@ static int drm_addmap_core(struct drm_device 
->> *dev, resource_size_t offset,
->>       if (ret) {
->>           if (map->type == _DRM_REGISTERS)
->>               iounmap(map->handle);
->> +        else if (map->type == _DRM_SHM) {
->> +            dev->sigdata.lock = dev->master->lock.hw_lock = NULL;
->> +            vfree(map->handle);
->> +        } else if (map->type == _DRM_CONSISTENT) {
->> +            dma_free_coherent(dev->dev,
->> +                      map->size,
->> +                      map->handle,
->> +                      map->offset);
->> +        }
->>           kfree(map);
->>           kfree(list);
->>           mutex_unlock(&dev->struct_mutex);
-> 
-> Gentel ping.
+On 2022/6/22 20:04, Robin Murphy wrote:
+> Since IOMMU groups are mandatory for drivers to support, it stands to
+> reason that any device which has been successfully be added to a group
+> must be on a bus supported by that IOMMU driver, and therefore a domain
+> viable for any device in the group must be viable for all devices in
+> the group. This already has to be the case for the IOMMU API's internal
+> default domain, for instance. Thus even if the group contains devices on
+> different buses, that can only mean that the IOMMU driver actually
+> supports such an odd topology, and so without loss of generality we can
+> expect the bus type of any device in a group to be suitable for IOMMU
+> API calls.
 
-Gentel ping.
+Ideally we could remove bus->iommu_ops and all IOMMU APIs go through the
+dev_iommu_ops().
+
+> 
+> Replace vfio_bus_type() with a simple call to resolve an appropriate
+> member device from which to then derive a bus type. This is also a step
+> towards removing the vague bus-based interfaces from the IOMMU API, when
+> we can subsequently switch to using this device directly.
+> 
+> Furthermore, scrutiny reveals a lack of protection for the bus being
+> removed while vfio_iommu_type1_attach_group() is using it; the reference
+> that VFIO holds on the iommu_group ensures that data remains valid, but
+> does not prevent the group's membership changing underfoot. Holding the
+> vfio_device for as long as we need here also neatly solves this.
+> 
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+
+Best regards,
+baolu
+
+> ---
+> 
+> After sleeping on it, I decided to type up the helper function approach
+> to see how it looked in practice, and in doing so realised that with one
+> more tweak it could also subsume the locking out of the common paths as
+> well, so end up being a self-contained way for type1 to take care of its
+> own concern, which I rather like.
+> 
+>   drivers/vfio/vfio.c             | 18 +++++++++++++++++-
+>   drivers/vfio/vfio.h             |  3 +++
+>   drivers/vfio/vfio_iommu_type1.c | 30 +++++++++++-------------------
+>   3 files changed, 31 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
+> index 61e71c1154be..73bab04880d0 100644
+> --- a/drivers/vfio/vfio.c
+> +++ b/drivers/vfio/vfio.c
+> @@ -448,7 +448,7 @@ static void vfio_group_get(struct vfio_group *group)
+>    * Device objects - create, release, get, put, search
+>    */
+>   /* Device reference always implies a group reference */
+> -static void vfio_device_put(struct vfio_device *device)
+> +void vfio_device_put(struct vfio_device *device)
+>   {
+>   	if (refcount_dec_and_test(&device->refcount))
+>   		complete(&device->comp);
+> @@ -475,6 +475,22 @@ static struct vfio_device *vfio_group_get_device(struct vfio_group *group,
+>   	return NULL;
+>   }
+>   
+> +struct vfio_device *vfio_device_get_from_iommu(struct iommu_group *iommu_group)
+> +{
+> +	struct vfio_group *group = vfio_group_get_from_iommu(iommu_group);
+> +	struct vfio_device *device;
+> +
+> +	mutex_lock(&group->device_lock);
+> +	list_for_each_entry(device, &group->device_list, group_next) {
+> +		if (vfio_device_try_get(device)) {
+> +			mutex_unlock(&group->device_lock);
+> +			return device;
+> +		}
+> +	}
+> +	mutex_unlock(&group->device_lock);
+> +	return NULL;
+> +}
+> +
+>   /*
+>    * VFIO driver API
+>    */
+> diff --git a/drivers/vfio/vfio.h b/drivers/vfio/vfio.h
+> index a67130221151..e8f21e64541b 100644
+> --- a/drivers/vfio/vfio.h
+> +++ b/drivers/vfio/vfio.h
+> @@ -70,3 +70,6 @@ struct vfio_iommu_driver_ops {
+>   
+>   int vfio_register_iommu_driver(const struct vfio_iommu_driver_ops *ops);
+>   void vfio_unregister_iommu_driver(const struct vfio_iommu_driver_ops *ops);
+> +
+> +struct vfio_device *vfio_device_get_from_iommu(struct iommu_group *iommu_group);
+> +void vfio_device_put(struct vfio_device *device);
+> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+> index c13b9290e357..e38b8bfde677 100644
+> --- a/drivers/vfio/vfio_iommu_type1.c
+> +++ b/drivers/vfio/vfio_iommu_type1.c
+> @@ -1679,18 +1679,6 @@ static int vfio_dma_do_map(struct vfio_iommu *iommu,
+>   	return ret;
+>   }
+>   
+> -static int vfio_bus_type(struct device *dev, void *data)
+> -{
+> -	struct bus_type **bus = data;
+> -
+> -	if (*bus && *bus != dev->bus)
+> -		return -EINVAL;
+> -
+> -	*bus = dev->bus;
+> -
+> -	return 0;
+> -}
+> -
+>   static int vfio_iommu_replay(struct vfio_iommu *iommu,
+>   			     struct vfio_domain *domain)
+>   {
+> @@ -2159,7 +2147,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>   	struct vfio_iommu *iommu = iommu_data;
+>   	struct vfio_iommu_group *group;
+>   	struct vfio_domain *domain, *d;
+> -	struct bus_type *bus = NULL;
+> +	struct vfio_device *iommu_api_dev;
+>   	bool resv_msi, msi_remap;
+>   	phys_addr_t resv_msi_base = 0;
+>   	struct iommu_domain_geometry *geo;
+> @@ -2192,18 +2180,19 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>   		goto out_unlock;
+>   	}
+>   
+> -	/* Determine bus_type in order to allocate a domain */
+> -	ret = iommu_group_for_each_dev(iommu_group, &bus, vfio_bus_type);
+> -	if (ret)
+> +	/* Resolve the group back to a member device for IOMMU API ops */
+> +	ret = -ENODEV;
+> +	iommu_api_dev = vfio_device_get_from_iommu(iommu_group);
+> +	if (!iommu_api_dev)
+>   		goto out_free_group;
+>   
+>   	ret = -ENOMEM;
+>   	domain = kzalloc(sizeof(*domain), GFP_KERNEL);
+>   	if (!domain)
+> -		goto out_free_group;
+> +		goto out_put_dev;
+>   
+>   	ret = -EIO;
+> -	domain->domain = iommu_domain_alloc(bus);
+> +	domain->domain = iommu_domain_alloc(iommu_api_dev->dev->bus);
+>   	if (!domain->domain)
+>   		goto out_free_domain;
+>   
+> @@ -2258,7 +2247,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>   	list_add(&group->next, &domain->group_list);
+>   
+>   	msi_remap = irq_domain_check_msi_remap() ||
+> -		    iommu_capable(bus, IOMMU_CAP_INTR_REMAP);
+> +		    iommu_capable(iommu_api_dev->dev->bus, IOMMU_CAP_INTR_REMAP);
+>   
+>   	if (!allow_unsafe_interrupts && !msi_remap) {
+>   		pr_warn("%s: No interrupt remapping support.  Use the module param \"allow_unsafe_interrupts\" to enable VFIO IOMMU support on this platform\n",
+> @@ -2331,6 +2320,7 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>   	iommu->num_non_pinned_groups++;
+>   	mutex_unlock(&iommu->lock);
+>   	vfio_iommu_resv_free(&group_resv_regions);
+> +	vfio_device_put(iommu_api_dev);
+>   
+>   	return 0;
+>   
+> @@ -2342,6 +2332,8 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>   	vfio_iommu_resv_free(&group_resv_regions);
+>   out_free_domain:
+>   	kfree(domain);
+> +out_put_dev:
+> +	vfio_device_put(iommu_api_dev);
+>   out_free_group:
+>   	kfree(group);
+>   out_unlock:
+

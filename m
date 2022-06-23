@@ -2,167 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E038F55898D
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6354558992
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 21:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiFWTuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 15:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S229980AbiFWTvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 15:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiFWTuA (ORCPT
+        with ESMTP id S229547AbiFWTu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 15:50:00 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FAB2E08D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:48:07 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 184so368272pga.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:48:07 -0700 (PDT)
+        Thu, 23 Jun 2022 15:50:57 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DACB7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:50:56 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-317741c86fdso4956267b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 12:50:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fwXOVWaOks5aEB9DnQ0+LscIdibd3v9vBir98C6rDhg=;
-        b=CQndzaYspw1/WKtdaLFGLHVaJegMtkhawi5iLktrm/WtozYiFtOC8IG/36xJvdHg4W
-         k6vB1z9W/Cs08olUSBnSn32v+KVGz9b0wEvkWCRfKCMpZi3y8M/brwvaxp/GZVlJsdE+
-         a5ACIRVUCZAO29t6ZGW5et/uRRD1d3WvAgDAcb2SSxWfqVGM12ELdbBknV/GtDWC6mKA
-         vP4/Z9l+Rztp5bFydD/NohQTZcm/AUhsbJonqQaWM8fuRR+S///2Ib7H9EtQuQMn2i4X
-         KMVLtUOUN9eYoG6H9iKils1LWKtkKcSn59RJkEiJWSH634OQjWGq5brVdUBGXvOiHxB4
-         Yv9w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A0c0cqma89+9GUKY/iVUbbVU1cNPUk0oJ5cVoRl/jck=;
+        b=ZyyNFMRx5E/9vt53oa8zxARaSY/cuXaXex0tUYjxfFMVjar+zI2VF0BhKLrJb7oK39
+         CYgTLmmqeQ+sWk0jH1Bcj78r3PASgzRRZy2XLkpZ8qiChRHGj2+hb4vNUUVT1INj8yA6
+         LT1EPXm7Cul0FfmXNy/6qvRJyCF6EtUorIhTRySZqmOZ8ZIGWZoaAmrqdFylW8YNttUj
+         M9TWmpBtuLJxaI9V0RbPatHmrILiHD/rJUrbsE/zYlY6oHeeK2gKAN7lzpvhoofhDlxg
+         Zk4AEK0cpx1IwnW+3LJRs8qcK52k+sP9i0PTMtVIm56LBPuC7Ozz4FMiUvfSQqEL7Li1
+         lc2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fwXOVWaOks5aEB9DnQ0+LscIdibd3v9vBir98C6rDhg=;
-        b=dU9FKSXvVY/rcLiKOeMiG6SZlGI441hSbX7rqPAEAs9lgJry6kECtZXRKxRW/ORLac
-         3mz2dm9qFSmnzhOVkVNOpWCjpjExRh0DibDtyad8uGENnaAV8gtmGwkni7KG3Jhj4JJR
-         srsbw6IDGVlT269rbb1ZzLp+OL9Vmhf6GuBNIdOOvSWd6gFABogeKP+uVJWHYmsV24g2
-         H4kgzLbqBOu4UMhWlxHaOk+TOGlrkYSQew236tecgj381tfrBnb0uwglxp6CZvYNC2hC
-         /0olJq06844xI4cNGtJZmkOAiIgRS6wiLqhkqFOKImzGyCGV4fp3jKBWAavW9fPVyHGI
-         8IeA==
-X-Gm-Message-State: AJIora8kH6FLHsX6yifFQftUlgARG3BC+a6sIjV2/27r6g4YAmkf8+pl
-        +LPkCWjqgEjNtTkQRKCJrm+OrA==
-X-Google-Smtp-Source: AGRyM1sfHJfUUw/z2jILs3RXN+LCGbbXiT6lLVzBDJ8fDqyWZMCpRFSMeph94IMzJrMYodDY7V2XQg==
-X-Received: by 2002:a63:790c:0:b0:40c:3c04:e3d3 with SMTP id u12-20020a63790c000000b0040c3c04e3d3mr8898464pgc.44.1656013686345;
-        Thu, 23 Jun 2022 12:48:06 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id i13-20020aa787cd000000b00522d329e36esm22686pfo.140.2022.06.23.12.48.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 12:48:05 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 19:48:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v7 22/23] KVM: x86/mmu: Extend Eager Page Splitting to
- nested MMUs
-Message-ID: <YrTDcrsn0/+alpzf@google.com>
-References: <20220622192710.2547152-1-pbonzini@redhat.com>
- <20220622192710.2547152-23-pbonzini@redhat.com>
- <CALzav=fH_9_LKVE0_UCftwy2KZaB3nSBoWU07aPWALag4_mcHQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A0c0cqma89+9GUKY/iVUbbVU1cNPUk0oJ5cVoRl/jck=;
+        b=7COVaOyOBDWk4gXpL3O41gNtkyctBsNcUK3hqEO9IZ7PimbyaYpF16bMRy9elRgBPS
+         6T8xsiICUbeNbStFdsyU4fC4RcvUZFpJ51n+ADyH+4eEY3y82zCR/zVtq63XUl0EtIiB
+         IAK34L2GibUESyUwlqabdFlvwwhF0Y1C9Na9LXbv9/tnUE6Urmz5Tm3iZRFwGh213bw8
+         5njySoeIXkTSoV3YXHIXAAtLLklZ8RePqrftElUS2l0Bwoa4lYHIP1i8e0L/ust6I1Zf
+         plOXpQevNhZxFXdX4HhLe8oPXuNl6aFeB+wuPMqpl7CUGM/VZFBNIgz/e/pL412gSRib
+         jJzQ==
+X-Gm-Message-State: AJIora+qwXgFJALbGWFLczNnzXf9hIiPVpm3RclcrowB0/ua2OGRyFqk
+        MSO1IUMQJmwkULaW3ltjUEFP2+D0sIEuGef00gu/Eg==
+X-Google-Smtp-Source: AGRyM1tzrobr2NzAtujqB5kVrNJZt5e0DxPVJogaxye2ERCF+QHcMFNh9iBbGIqmKcu24EEvO9jCEWNRrFH7KHoPhXg=
+X-Received: by 2002:a81:c44b:0:b0:317:5a3b:3fc5 with SMTP id
+ s11-20020a81c44b000000b003175a3b3fc5mr12474505ywj.39.1656013855437; Thu, 23
+ Jun 2022 12:50:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALzav=fH_9_LKVE0_UCftwy2KZaB3nSBoWU07aPWALag4_mcHQ@mail.gmail.com>
+References: <20220623191147.1916067-1-masahiroy@kernel.org>
+In-Reply-To: <20220623191147.1916067-1-masahiroy@kernel.org>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Thu, 23 Jun 2022 12:50:19 -0700
+Message-ID: <CABCJKucFQtqKqZTdF06cCuLJqSp6f6NBmffsU4jGC05XOPqFrg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: link vmlinux only once for CONFIG_TRIM_UNUSED_KSYMS
+ (2nd attempt)
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild <linux-kbuild@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Pitre <nico@fluxnic.net>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022, David Matlack wrote:
-> On Wed, Jun 22, 2022 at 12:27 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+On Thu, Jun 23, 2022 at 12:12 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> If CONFIG_TRIM_UNUSED_KSYMS is enabled and the kernel is built from
+> a pristine state, the vmlinux is linked twice.
+>
+> Commit 3fdc7d3fe4c0 ("kbuild: link vmlinux only once for
+> CONFIG_TRIM_UNUSED_KSYMS") explains why this happens, but it did not fix
+> the issue at all.
+>
+> Now I realized I had applied a wrong patch.
+>
+> In v1 patch [1], the autoksyms_recursive target correctly recurses to
+> "$(MAKE) -f $(srctree)/Makefile autoksyms_recursive".
+>
+> In v2 patch [2], I accidentally dropped the diff line, and it recurses to
+> "$(MAKE) -f $(srctree)/Makefile vmlinux".
+>
+> Restore the code I intended in v1.
+>
+> [1]: https://lore.kernel.org/linux-kbuild/1521045861-22418-8-git-send-email-yamada.masahiro@socionext.com/
+> [2]: https://lore.kernel.org/linux-kbuild/1521166725-24157-8-git-send-email-yamada.masahiro@socionext.com/
+>
+> Fixes: 3fdc7d3fe4c0 ("kbuild: link vmlinux only once for CONFIG_TRIM_UNUSED_KSYMS")
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 513c1fbf7888..a3ff166c5035 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1141,7 +1141,7 @@ KBUILD_MODULES := 1
+>
+>  autoksyms_recursive: descend modules.order
+>         $(Q)$(CONFIG_SHELL) $(srctree)/scripts/adjust_autoksyms.sh \
+> -         "$(MAKE) -f $(srctree)/Makefile vmlinux"
+> +         "$(MAKE) -f $(srctree)/Makefile autoksyms_recursive"
+>  endif
+>
+>  autoksyms_h := $(if $(CONFIG_TRIM_UNUSED_KSYMS), include/generated/autoksyms.h)
 
-Please trim replies.
+Thanks for looking into this, Masahiro! I can confirm that this patch
+fixes the issue with vmlinux getting linked twice in our use case.
 
-> > +static int topup_split_caches(struct kvm *kvm)
-> > +{
-> > +       int r;
-> > +
-> > +       lockdep_assert_held(&kvm->slots_lock);
-> > +
-> > +       /*
-> > +        * It's common to need all SPLIT_DESC_CACHE_MIN_NR_OBJECTS (513) objects
-> > +        * when splitting a page, but setting capacity == min would cause
-> > +        * KVM to drop mmu_lock even if just one object was consumed from the
-> > +        * cache.  So make capacity larger than min and handle two huge pages
-> > +        * without having to drop the lock.
-> 
-> I was going to do some testing this week to confirm, but IIUC KVM will
-> only allocate from split_desc_cache if the L1 hypervisor has aliased a
-> huge page in multiple {E,N}PT12 page table entries. i.e. L1 is mapping
-> a huge page into an L2 multiple times, or mapped into multiple L2s.
-> This should be common in traditional, process-level, shadow paging,
-> but I think will be quite rare for nested shadow paging.
+Tested-by: Sami Tolvanen <samitolvanen@google.com>
 
-Ooooh, right, I forgot that that pte_list_add() needs to allocate if and only if
-there are multiple rmap entries, otherwise rmap->val points that the one and only
-rmap directly.
-
-Doubling the capacity is all but guaranteed to be pointless overhead.  What about
-buffering with the default capacity?  That way KVM doesn't have to topup if it
-happens to encounter an aliased gfn.  It's arbitrary, but so is the default capacity
-size.
-
-E.g. as fixup
-
----
- arch/x86/kvm/mmu/mmu.c | 26 +++++++++++++++-----------
- 1 file changed, 15 insertions(+), 11 deletions(-)
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 22b87007efff..90d6195edcf3 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6125,19 +6125,23 @@ static bool need_topup_split_caches_or_resched(struct kvm *kvm)
-
- static int topup_split_caches(struct kvm *kvm)
- {
--	int r;
--
--	lockdep_assert_held(&kvm->slots_lock);
--
- 	/*
--	 * It's common to need all SPLIT_DESC_CACHE_MIN_NR_OBJECTS (513) objects
--	 * when splitting a page, but setting capacity == min would cause
--	 * KVM to drop mmu_lock even if just one object was consumed from the
--	 * cache.  So make capacity larger than min and handle two huge pages
--	 * without having to drop the lock.
-+	 * Allocating rmap list entries when splitting huge pages for nested
-+	 * MMUs is rare as KVM needs to allocate if and only if there is more
-+	 * than one rmap entry for the gfn, i.e. requires an L1 gfn to be
-+	 * aliased by multiple L2 gfns, which is very atypical for VMMs.  If
-+	 * there is only one rmap entry, rmap->val points directly at that one
-+	 * entry and doesn't need to allocate a list.  Buffer the cache by the
-+	 * default capacity so that KVM doesn't have to topup the cache if it
-+	 * encounters an aliased gfn or two.
- 	 */
--	r = __kvm_mmu_topup_memory_cache(&kvm->arch.split_desc_cache,
--					 2 * SPLIT_DESC_CACHE_MIN_NR_OBJECTS,
-+	const int capacity = SPLIT_DESC_CACHE_MIN_NR_OBJECTS +
-+			     KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
-+	int r;
-+
-+	lockdep_assert_held(&kvm->slots_lock);
-+
-+	r = __kvm_mmu_topup_memory_cache(&kvm->arch.split_desc_cache, capacity,
- 					 SPLIT_DESC_CACHE_MIN_NR_OBJECTS);
- 	if (r)
- 		return r;
-
-base-commit: 436b1c29f36ed3d4385058ba6f0d6266dbd2a882
---
-
+Sami

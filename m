@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356F3558A83
+	by mail.lfdr.de (Postfix) with ESMTP id 7E032558A84
 	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiFWVNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 17:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
+        id S229750AbiFWVNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 17:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiFWVNc (ORCPT
+        with ESMTP id S229950AbiFWVNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 17:13:32 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5731F506E0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:13:31 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id r20so547593wra.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:13:31 -0700 (PDT)
+        Thu, 23 Jun 2022 17:13:35 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E7250B03
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:13:34 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so414652wms.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:13:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7iiZ1g2foyg+pIBZL+lLC+0n9kDHXAVzLQyCSVfDJ08=;
-        b=g4Grn3YmGC1+IcwN8QObevjbd44d+989zZV+3JaTY0xt8f1ITTyHLY15SH3o3Pclfo
-         jYDv4Vr7GOSZ05ufB0Br/B8EHSblAJr/fkGVc72codtkMdE1zq9PJbCd6sodW2TQSLum
-         osZmiOCWEG6jhR3R0gbVnM4Izz2BwSG0aFlC+jqlPGEbGTFX/8j6HmecQ5jEumqbInp8
-         sKZV22XFx1wYMMOAZMGgs+U351HVh/hct3l5X6lwd8hD8vS2MF+O2WY+nfspmYPLTxy7
-         TD5hml3FtevOv1YsGFALikrAqkz1NrpKtR1VCfoejqakoB6HkBwfMAlJVNRI/aA36gXf
-         9kLQ==
+        bh=VqID5x/tjmobIccvt6tf2g3gXW+2/FDTRjd9KrrHqF4=;
+        b=WNeouhwZYUPPBBHO7307nHyxJ9XH1mT1cVB692WnpZFRrcCViR+9OjwGR1fSISBDcQ
+         +fjtJBH9ryQ+z2qB4OcWcqQIYjitMM8UJxXY+nrOdy6WJn2926X1UDKizIRC+95k/Biy
+         Y1VXgNSdvLxJB0uBNTQxKs40JCLW0s7hD5I+pzd1trSYYUEOR7X+iTX6/bxESJnn9tGh
+         n/FwgloopEhy+vs3HaF35yipXR5BG6lCgJI60DNHb/hKcu3/jPxSmBpIx6QF8jK1W90f
+         +O3Ush+nI0EG+72TNMo7H9Y/fI0SPCSkgW0kZLDK7pian6wFJTAkaQAKB/k0gl1Hiix6
+         lL8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7iiZ1g2foyg+pIBZL+lLC+0n9kDHXAVzLQyCSVfDJ08=;
-        b=R+wTkg3D3gz5jPhO5voJBfuDgKwps2faq89fn1nhTN4EFO0J7QMlO0rIiGf3ggIGNW
-         IWOOgBXn/t9LdFlHtzz9bdXmALs+qb3dcjvPqxhIUglgvCyaiUg30lrzgNk7msSQNgwJ
-         Qps8TvThstsnloAhNdMtpYxjKoSKW7NLTQDrn8TzTqixi4u9wFIl30wuBPFH7nGwY67O
-         +H26egCI2w5/H9Z3zXQ2aUZ+GvAMoyb3/H2C/rf3OYW/8N05b26RS2jyjgxsdWUnQKPP
-         jpU2KBY6NmUJn+yFrI9bSqhkgnJCc1DuvRSwg06niGw4KMtQ/29syvBPTLR1S8Nb6c/l
-         aQ/Q==
-X-Gm-Message-State: AJIora/gOOMo0Drcs1Mg0HFxc3gxOHDTF1upXvgPEQx3M1kLxCOKimSR
-        Ljn7bJLWctvzCR9v5N3yCeY=
-X-Google-Smtp-Source: AGRyM1vHoi5qUwVQ7GRAfiQIs4odq2EG3Vef2E3QjtfiIxAnIND7243E1l5CFaj1TE5wf764TtYLEA==
-X-Received: by 2002:adf:fa52:0:b0:21b:910d:cddd with SMTP id y18-20020adffa52000000b0021b910dcdddmr10192030wrr.291.1656018810933;
-        Thu, 23 Jun 2022 14:13:30 -0700 (PDT)
+        bh=VqID5x/tjmobIccvt6tf2g3gXW+2/FDTRjd9KrrHqF4=;
+        b=fELqrhtrXMCqiclXJzuXuEAjWALoOV+jU3VsBHPAV8PSStDzeRRgO7kZ9mEk9Fp8Kp
+         YxjItsYexLwvuJIyKTWsKkEtXaP6WiY6/fy8WHTd3wR5ffaV2Z6kSnaRBTNEbzmZ04I2
+         fp5TWH1JElE8NZxYxaqH0azTjYLEOaR1e2nM+eWEbMDPepbXTJfcMmi9qmUXlTjL4hnz
+         +0w1ofevhSOODaJ2XMitnxyypm5QdZZH+JLqoGUTzPeHKac6qZIOjAwDidF8Bp8gxxWr
+         YFfn5f7JxREn3wZVlvOrZggoc9RuntF+NjXBhzvlW087ZKuNU2iemu7UWuCO3HPLxI67
+         RP9Q==
+X-Gm-Message-State: AJIora+cFj1nQDTMwYIFVNejWw042C0OCWJVziavkysgU1yWaFyV8j2+
+        SULu2qgDdBKS/QoUn7EvSjk=
+X-Google-Smtp-Source: AGRyM1u0qTmDVNQgQjlHVSFDyEpSORhptzldhUSlvugxOT3R2t6PvpxsdIF5N2CbS35e9NDQJEYHGw==
+X-Received: by 2002:a05:600c:19c9:b0:39c:72fc:9530 with SMTP id u9-20020a05600c19c900b0039c72fc9530mr6292709wmq.88.1656018812622;
+        Thu, 23 Jun 2022 14:13:32 -0700 (PDT)
 Received: from localhost (92.40.171.44.threembb.co.uk. [92.40.171.44])
-        by smtp.gmail.com with ESMTPSA id ay26-20020a5d6f1a000000b0021baf5e590dsm412186wrb.71.2022.06.23.14.13.30
+        by smtp.gmail.com with ESMTPSA id j3-20020adfe503000000b0021b8a0d680esm400194wrm.86.2022.06.23.14.13.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 14:13:30 -0700 (PDT)
+        Thu, 23 Jun 2022 14:13:32 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
         andy.shevchenko@gmail.com, mazziesaccount@gmail.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 03/12] regmap-irq: Cleanup sizeof(...) use in memory allocation
-Date:   Thu, 23 Jun 2022 22:14:11 +0100
-Message-Id: <20220623211420.918875-4-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v2 04/12] regmap-irq: Remove an unnecessary restriction on type_in_mask
+Date:   Thu, 23 Jun 2022 22:14:12 +0100
+Message-Id: <20220623211420.918875-5-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20220623211420.918875-1-aidanmacdonald.0x0@gmail.com>
 References: <20220623211420.918875-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -70,78 +70,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of mentioning unsigned int directly, use a sizeof(...)
-involving the buffer we're allocating to ensure the types don't
-get out of sync.
+Check types_supported instead of checking type_rising/falling_val
+when using type_in_mask interrupts. This makes the intent clearer
+and allows a type_in_mask irq to support level or edge triggers,
+rather than only edge triggers.
+
+Update the documentation and comments to reflect the new behavior.
+
+This shouldn't affect existing drivers, because if they didn't
+set types_supported properly the type buffer wouldn't be updated.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/base/regmap/regmap-irq.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/base/regmap/regmap-irq.c | 19 ++++++++-----------
+ include/linux/regmap.h           |  8 +++++---
+ 2 files changed, 13 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-index 475a959e2b8b..dca27b4e29d3 100644
+index dca27b4e29d3..fd7c4315d16b 100644
 --- a/drivers/base/regmap/regmap-irq.c
 +++ b/drivers/base/regmap/regmap-irq.c
-@@ -670,30 +670,30 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+@@ -252,22 +252,19 @@ static void regmap_irq_enable(struct irq_data *data)
+ 	struct regmap *map = d->map;
+ 	const struct regmap_irq *irq_data = irq_to_regmap_irq(d, data->hwirq);
+ 	unsigned int reg = irq_data->reg_offset / map->reg_stride;
+-	unsigned int mask, type;
+-
+-	type = irq_data->type.type_falling_val | irq_data->type.type_rising_val;
++	unsigned int mask;
  
- 	if (chip->num_main_regs) {
- 		d->main_status_buf = kcalloc(chip->num_main_regs,
--					     sizeof(unsigned int),
-+					     sizeof(*d->main_status_buf),
- 					     GFP_KERNEL);
- 
- 		if (!d->main_status_buf)
- 			goto err_alloc;
- 	}
- 
--	d->status_buf = kcalloc(chip->num_regs, sizeof(unsigned int),
-+	d->status_buf = kcalloc(chip->num_regs, sizeof(*d->status_buf),
- 				GFP_KERNEL);
- 	if (!d->status_buf)
- 		goto err_alloc;
- 
--	d->mask_buf = kcalloc(chip->num_regs, sizeof(unsigned int),
-+	d->mask_buf = kcalloc(chip->num_regs, sizeof(*d->mask_buf),
- 			      GFP_KERNEL);
- 	if (!d->mask_buf)
- 		goto err_alloc;
- 
--	d->mask_buf_def = kcalloc(chip->num_regs, sizeof(unsigned int),
-+	d->mask_buf_def = kcalloc(chip->num_regs, sizeof(*d->mask_buf_def),
- 				  GFP_KERNEL);
- 	if (!d->mask_buf_def)
- 		goto err_alloc;
- 
- 	if (chip->wake_base) {
--		d->wake_buf = kcalloc(chip->num_regs, sizeof(unsigned int),
-+		d->wake_buf = kcalloc(chip->num_regs, sizeof(*d->wake_buf),
- 				      GFP_KERNEL);
- 		if (!d->wake_buf)
- 			goto err_alloc;
-@@ -702,11 +702,11 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 	num_type_reg = chip->type_in_mask ? chip->num_regs : chip->num_type_reg;
- 	if (num_type_reg) {
- 		d->type_buf_def = kcalloc(num_type_reg,
--					  sizeof(unsigned int), GFP_KERNEL);
-+					  sizeof(*d->type_buf_def), GFP_KERNEL);
- 		if (!d->type_buf_def)
- 			goto err_alloc;
- 
--		d->type_buf = kcalloc(num_type_reg, sizeof(unsigned int),
-+		d->type_buf = kcalloc(num_type_reg, sizeof(*d->type_buf),
- 				      GFP_KERNEL);
- 		if (!d->type_buf)
- 			goto err_alloc;
-@@ -723,7 +723,7 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 
- 		for (i = 0; i < chip->num_virt_regs; i++) {
- 			d->virt_buf[i] = kcalloc(chip->num_regs,
--						 sizeof(unsigned int),
-+						 sizeof(**d->virt_buf),
- 						 GFP_KERNEL);
- 			if (!d->virt_buf[i])
- 				goto err_alloc;
+ 	/*
+ 	 * The type_in_mask flag means that the underlying hardware uses
+-	 * separate mask bits for rising and falling edge interrupts, but
+-	 * we want to make them into a single virtual interrupt with
+-	 * configurable edge.
++	 * separate mask bits for each interrupt trigger type, but we want
++	 * to have a single logical interrupt with a configurable type.
+ 	 *
+-	 * If the interrupt we're enabling defines the falling or rising
+-	 * masks then instead of using the regular mask bits for this
+-	 * interrupt, use the value previously written to the type buffer
+-	 * at the corresponding offset in regmap_irq_set_type().
++	 * If the interrupt we're enabling defines any supported types
++	 * then instead of using the regular mask bits for this interrupt,
++	 * use the value previously written to the type buffer at the
++	 * corresponding offset in regmap_irq_set_type().
+ 	 */
+-	if (d->chip->type_in_mask && type)
++	if (d->chip->type_in_mask && irq_data->type.types_supported)
+ 		mask = d->type_buf[reg] & irq_data->mask;
+ 	else
+ 		mask = irq_data->mask;
+diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+index f75911239977..106ca1172d3d 100644
+--- a/include/linux/regmap.h
++++ b/include/linux/regmap.h
+@@ -1468,9 +1468,11 @@ struct regmap_irq_sub_irq_map {
+  * @clear_ack:  Use this to set 1 and 0 or vice-versa to clear interrupts.
+  * @wake_invert: Inverted wake register: cleared bits are wake enabled.
+  * @type_invert: Invert the type flags.
+- * @type_in_mask: Use the mask registers for controlling irq type. For
+- *                interrupts defining type_rising/falling_mask use mask_base
+- *                for edge configuration and never update bits in type_base.
++ * @type_in_mask: Use the mask registers for controlling irq type. Use this if
++ *		  the hardware provides separate bits for rising/falling edge
++ *		  or low/high level interrupts and they should be combined into
++ *		  a single logical interrupt. Use &struct regmap_irq_type data
++ *		  to define the mask bit for each irq type.
+  * @clear_on_unmask: For chips with interrupts cleared on read: read the status
+  *                   registers before unmasking interrupts to clear any bits
+  *                   set when they were masked.
 -- 
 2.35.1
 

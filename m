@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F751558313
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2E9558314
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233311AbiFWRYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S233293AbiFWRY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234106AbiFWRXJ (ORCPT
+        with ESMTP id S234136AbiFWRXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:23:09 -0400
+        Thu, 23 Jun 2022 13:23:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA8E62BE9;
-        Thu, 23 Jun 2022 10:01:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B083F62BF4;
+        Thu, 23 Jun 2022 10:01:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4E786159A;
-        Thu, 23 Jun 2022 17:01:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B52DC3411B;
-        Thu, 23 Jun 2022 17:01:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C74D261573;
+        Thu, 23 Jun 2022 17:01:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F262C3411B;
+        Thu, 23 Jun 2022 17:01:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003691;
-        bh=2XrBjZ9r1JiQmbgW7MJXyVhxs+2lGIZGcEAZKhkzzC8=;
+        s=korg; t=1656003695;
+        bh=IXRIJ1GHDIZo2SuBShIm4o6PtlLtHIr1VFnSfZwBj5Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E/mJJXNvasuv+63r6y8QXcIiNl8JfSgwgU/5K52aMBDFyY08uH1MVrKMFgtzTLTq2
-         NQOqh8Ml4iKcXQpBlJzov6kxlcrJSLZkURFgK0CSrLP2qo0gWE0M/hnm8tktB37QQI
-         ad+u7Fpjfm9btKKBV4ZgEmq0mIb6wJuDs2WoKO2A=
+        b=EzN7Y18P++lC71x4222Qeg121G9VTf5KuD5wjUo/wjvn60L9vvT5hsQS4yNXW0Ap1
+         5M2mSjcE9YW8oiCmxerH7Dn8ibyf95AV+chN0qUhVbBXt6VS6QI6ArtJH+Xp42GVBg
+         KKRffKo03mIEVtpmGQayxi1evIH3cF/VObJ9xBVg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Ard Biesheuvel <ardb@kernel.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.14 057/237] crypto: blake2s - include <linux/bug.h> instead of <asm/bug.h>
-Date:   Thu, 23 Jun 2022 18:41:31 +0200
-Message-Id: <20220623164344.798449731@linuxfoundation.org>
+Subject: [PATCH 4.14 058/237] crypto: blake2s - adjust include guard naming
+Date:   Thu, 23 Jun 2022 18:41:32 +0200
+Message-Id: <20220623164344.827875681@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623164343.132308638@linuxfoundation.org>
 References: <20220623164343.132308638@linuxfoundation.org>
@@ -58,11 +58,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Eric Biggers <ebiggers@google.com>
 
-commit bbda6e0f1303953c855ee3669655a81b69fbe899 upstream.
+commit 8786841bc2020f7f2513a6c74e64912f07b9c0dc upstream.
 
-Address the following checkpatch warning:
-
-	WARNING: Use #include <linux/bug.h> instead of <asm/bug.h>
+Use the full path in the include guards for the BLAKE2s headers to avoid
+ambiguity and to match the convention for most files in include/crypto/.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 Acked-by: Ard Biesheuvel <ardb@kernel.org>
@@ -70,24 +69,46 @@ Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/crypto/blake2s.h |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ include/crypto/blake2s.h          |    6 +++---
+ include/crypto/internal/blake2s.h |    6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
 --- a/include/crypto/blake2s.h
 +++ b/include/crypto/blake2s.h
-@@ -6,12 +6,11 @@
- #ifndef BLAKE2S_H
- #define BLAKE2S_H
+@@ -3,8 +3,8 @@
+  * Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+  */
  
-+#include <linux/bug.h>
+-#ifndef BLAKE2S_H
+-#define BLAKE2S_H
++#ifndef _CRYPTO_BLAKE2S_H
++#define _CRYPTO_BLAKE2S_H
+ 
+ #include <linux/bug.h>
  #include <linux/types.h>
- #include <linux/kernel.h>
- #include <linux/string.h>
+@@ -99,4 +99,4 @@ static inline void blake2s(u8 *out, cons
+ 	blake2s_final(&state, out);
+ }
  
--#include <asm/bug.h>
--
- enum blake2s_lengths {
- 	BLAKE2S_BLOCK_SIZE = 64,
- 	BLAKE2S_HASH_SIZE = 32,
+-#endif /* BLAKE2S_H */
++#endif /* _CRYPTO_BLAKE2S_H */
+--- a/include/crypto/internal/blake2s.h
++++ b/include/crypto/internal/blake2s.h
+@@ -1,7 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 OR MIT */
+ 
+-#ifndef BLAKE2S_INTERNAL_H
+-#define BLAKE2S_INTERNAL_H
++#ifndef _CRYPTO_INTERNAL_BLAKE2S_H
++#define _CRYPTO_INTERNAL_BLAKE2S_H
+ 
+ #include <crypto/blake2s.h>
+ 
+@@ -16,4 +16,4 @@ static inline void blake2s_set_lastblock
+ 	state->f[0] = -1;
+ }
+ 
+-#endif /* BLAKE2S_INTERNAL_H */
++#endif /* _CRYPTO_INTERNAL_BLAKE2S_H */
 
 

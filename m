@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1805F556F99
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 02:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1A0556F9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 02:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359229AbiFWAmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 20:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
+        id S1358502AbiFWAnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 20:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237295AbiFWAmO (ORCPT
+        with ESMTP id S1376872AbiFWAnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 20:42:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5CD424BA;
-        Wed, 22 Jun 2022 17:42:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BAFF61C16;
-        Thu, 23 Jun 2022 00:42:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0F45C34114;
-        Thu, 23 Jun 2022 00:42:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655944932;
-        bh=4npytdzwvKZpccogoQp7RnVfqzasKCP7V71zBvDkfMM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qf+m0/8cZwm78jw7iKWEJkatIJ1BZLCSIU0RzmzOIdw9kAv9VhtN9l0twYJcpFddb
-         PAI4AVWPQRv0HknnKBoN2VrXXv3fp/KWPzhA7UJ/pihaCDGvLfikhMLlxszNZtO3j7
-         QWO2t+4jnnCquzdOloMeNjJnBDWkR21gPdjKeYWlnoU4XJ6F+bR9UYrianT+IHEx1f
-         FgoV+bWVoAm4ngrFy52uUZPklNSMg9cbHyPhFzw/EMn3ho4dsB2hk5QV1jaX1bQ3lJ
-         PGAKFoLkAI3jIFgJkh2Wtb+vdGP4vXaPmDZF9b1/SaC+b5h0WE8gUzG520+7CZY+Rm
-         x4jBbzUr7GpRA==
-Date:   Wed, 22 Jun 2022 17:42:11 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v3 25/25] xfs: Support large folios
-Message-ID: <YrO243DkbckLTfP7@magnolia>
-References: <20211216210715.3801857-1-willy@infradead.org>
- <20211216210715.3801857-26-willy@infradead.org>
+        Wed, 22 Jun 2022 20:43:40 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFD792FFDC
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 17:43:38 -0700 (PDT)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL983t7NiK3ZVAA--.30427S3;
+        Thu, 23 Jun 2022 08:43:36 +0800 (CST)
+Subject: Re: [PATCH v2 2/2] LoongArch: No need to call RESTORE_ALL_AND_RET for
+ all syscalls
+To:     Huacai Chen <chenhuacai@kernel.org>
+References: <1655806074-17454-1-git-send-email-yangtiezhu@loongson.cn>
+ <1655806074-17454-3-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H6YYhMAyOG+-PDKiLBv1fDoFmkQUSBa4zt=Lf4=HZGxHQ@mail.gmail.com>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>, Jun Yi <yijun@loongson.cn>,
+        Rui Wang <wangrui@loongson.cn>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <1a431c16-ecef-f7e9-4c4f-936e4bb3aeea@loongson.cn>
+Date:   Thu, 23 Jun 2022 08:43:35 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216210715.3801857-26-willy@infradead.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAAhV-H6YYhMAyOG+-PDKiLBv1fDoFmkQUSBa4zt=Lf4=HZGxHQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxL983t7NiK3ZVAA--.30427S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3XryruFykJrWxCr1kZry3twb_yoWxKrWDpF
+        WxAFnakF4DWry8Ar9a9F18WrZ0y3Z3WF45Gr4UCFWxCw1v93sxXryvvFWUKF1qgw4FkF4j
+        qa4Fq3s2gws8t3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
+        WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCY02Avz4vE14v_twCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUjg18DUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,159 +66,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[resend with shorter 522.out file to keep us under the 300k maximum]
+Cc Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-On Thu, Dec 16, 2021 at 09:07:15PM +0000, Matthew Wilcox (Oracle) wrote:
-> Now that iomap has been converted, XFS is large folio safe.
-> Indicate to the VFS that it can now create large folios for XFS.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-> ---
->  fs/xfs/xfs_icache.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
-> index da4af2142a2b..cdc39f576ca1 100644
-> --- a/fs/xfs/xfs_icache.c
-> +++ b/fs/xfs/xfs_icache.c
-> @@ -87,6 +87,7 @@ xfs_inode_alloc(
->  	/* VFS doesn't initialise i_mode or i_state! */
->  	VFS_I(ip)->i_mode = 0;
->  	VFS_I(ip)->i_state = 0;
-> +	mapping_set_large_folios(VFS_I(ip)->i_mapping);
->  
->  	XFS_STATS_INC(mp, vn_active);
->  	ASSERT(atomic_read(&ip->i_pincount) == 0);
-> @@ -320,6 +321,7 @@ xfs_reinit_inode(
->  	inode->i_rdev = dev;
->  	inode->i_uid = uid;
->  	inode->i_gid = gid;
-> +	mapping_set_large_folios(inode->i_mapping);
+On 06/22/2022 06:01 PM, Huacai Chen wrote:
+> Hi, Tiezhu,
+>
+> On Tue, Jun 21, 2022 at 6:08 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>>
+>> In handle_syscall, it is unnecessary to call RESTORE_ALL_AND_RET
+>> for all syscalls.
+>>
+>> (1) rt_sigreturn call RESTORE_ALL_AND_RET.
+>> (2) The other syscalls call RESTORE_STATIC_SOME_SP_AND_RET.
+>>
+>> This patch only adds the minimal changes as simple as possible
+>> to reduce the code complexity, at the same time, it can reduce
+>> many load instructions.
+>>
+>> Here are the test environments:
+>>
+>>   Hardware: Loongson-LS3A5000-7A1000-1w-A2101
+>>   Firmware: UDK2018-LoongArch-A2101-pre-beta8 [1]
+>>   System: loongarch64-clfs-system-5.0 [2]
+>>
+>> The system passed functional testing used with the following
+>> test case without and with this patch:
+>>
+>>   git clone https://github.com/hevz/sigaction-test.git
+>>   cd sigaction-test
+>>   make check
+>>
+>> Additionally, use UnixBench syscall to test the performance:
+>>
+>>   git clone https://github.com/kdlucas/byte-unixbench.git
+>>   cd byte-unixbench/UnixBench/
+>>   make
+>>   pgms/syscall 600
+>>
+>> In order to avoid the performance impact, add init=/bin/bash
+>> to the boot cmdline.
+>>
+>> Here is the test result, the bigger the better, it shows about
+>> 1.2% gain tested with close, getpid and exec [3]:
+>>
+>>   duration  without_this_patch  with_this_patch
+>>   600 s     626558267 lps       634244079 lps
+>>
+>> [1] https://github.com/loongson/Firmware/tree/main/5000Series/PC/A2101
+>> [2] https://github.com/sunhaiyong1978/CLFS-for-LoongArch/releases/tag/5.0
+>> [3] https://github.com/kdlucas/byte-unixbench/blob/master/UnixBench/src/syscall.c
+> I test your patch and the whole UnixBench result is like this:
+>
+> Before patch, single thread:
+>
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0    9235787.7    791.4
+> Double-Precision Whetstone                       55.0       2758.7    501.6
+> Execl Throughput                                 43.0       2386.8    555.1
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     191752.0    484.2
+> File Copy 256 bufsize 500 maxblocks            1655.0      78737.9    475.8
+> File Copy 4096 bufsize 8000 maxblocks          5800.0     297402.5    512.8
+> Pipe Throughput                               12440.0     353658.1    284.3
+> Pipe-based Context Switching                   4000.0     120140.8    300.4
+> Process Creation                                126.0       5735.0    455.2
+> Shell Scripts (1 concurrent)                     42.4       2701.5    637.1
+> Shell Scripts (8 concurrent)                      6.0        894.9   1491.5
+> System Call Overhead                          15000.0     557467.4    371.6
+>                                                                    ========
+> System Benchmarks Index Score                                         516.1
+>
+> After patch, single thread:
+>
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0    9235688.9    791.4
+> Double-Precision Whetstone                       55.0       2758.7    501.6
+> Execl Throughput                                 43.0       2377.8    553.0
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     192545.5    486.2
+> File Copy 256 bufsize 500 maxblocks            1655.0      79735.0    481.8
+> File Copy 4096 bufsize 8000 maxblocks          5800.0     299621.9    516.6
+> Pipe Throughput                               12440.0     354969.1    285.3
+> Pipe-based Context Switching                   4000.0     118307.5    295.8
+> Process Creation                                126.0       5757.0    456.9
+> Shell Scripts (1 concurrent)                     42.4       2695.4    635.7
+> Shell Scripts (8 concurrent)                      6.0        894.4   1490.6
+> System Call Overhead                          15000.0     563582.7    375.7
+>                                                                    ========
+> System Benchmarks Index Score                                         517.0
+>
+> Before patch, multi-threads:
+>
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0   36943633.4   3165.7
+> Double-Precision Whetstone                       55.0      11035.8   2006.5
+> Execl Throughput                                 43.0       8800.1   2046.5
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     277638.3    701.1
+> File Copy 256 bufsize 500 maxblocks            1655.0      92530.5    559.1
+> File Copy 4096 bufsize 8000 maxblocks          5800.0     524344.3    904.0
+> Pipe Throughput                               12440.0    1359237.2   1092.6
+> Pipe-based Context Switching                   4000.0     571511.4   1428.8
+> Process Creation                                126.0      20823.3   1652.6
+> Shell Scripts (1 concurrent)                     42.4       6883.9   1623.6
+> Shell Scripts (8 concurrent)                      6.0        981.7   1636.1
+> System Call Overhead                          15000.0    2029539.8   1353.0
+>                                                                    ========
+> System Benchmarks Index Score                                        1367.4
+>
+> After patch, multi-threads:
+>
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0   36943793.6   3165.7
+> Double-Precision Whetstone                       55.0      11035.5   2006.4
+> Execl Throughput                                 43.0       8768.3   2039.1
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     277962.9    701.9
+> File Copy 256 bufsize 500 maxblocks            1655.0      92059.7    556.3
+> File Copy 4096 bufsize 8000 maxblocks          5800.0     525937.5    906.8
+> Pipe Throughput                               12440.0    1361566.6   1094.5
+> Pipe-based Context Switching                   4000.0     575835.4   1439.6
+> Process Creation                                126.0      20426.4   1621.1
+> Shell Scripts (1 concurrent)                     42.4       6877.5   1622.0
+> Shell Scripts (8 concurrent)                      6.0        980.3   1633.8
+> System Call Overhead                          15000.0    2049771.6   1366.5
+>                                                                    ========
+> System Benchmarks Index Score                                        1366.6
+>
+> From my point of view, the benefit is negligible.
 
-Hmm.  Ever since 5.19-rc1, I've noticed that fsx in generic/522 now
-reports file corruption after 20 minutes of runtime.  The corruption is
-surprisingly reproducible (522.out.bad attached below) in that I ran it
-three times and always got the same bad offset (0x6e000) and always the
-same opcode (6213798(166 mod 256) MAPREAD).
+There is another way to look at what is going on.
+This patch is related with syscall, I prefer to
+observe "System Call Overhead" in the test results.
 
-I turned off multipage folios and now 522 has run for over an hour
-without problems, so before I go do more debugging, does this ring a
-bell to anyone?
+Here are the INDEX of "System Call Overhead" in your test results:
 
-[addendum: Apparently vger now has a 300K message size limit; if you
-want the full output, see https://djwong.org/docs/522.out.txt ]
+thread   before_patch    after_patch    gain
+single   371.6           375.7          1.103%
+multi    1353.0          1366.5         0.998%
 
---D
+For now, I would like to wait for other people's review.
+If the conclusion is the optimization is meaningless,
+I am fine with ignoring this patch.
 
-QA output created by 522
-READ BAD DATA: offset = 0x69e3e, size = 0x1c922, fname = /mnt/junk
-OFFSET	GOOD	BAD	RANGE
-0x6e000	0x0000	0x9173	0x00000
-operation# (mod 256) for the bad data may be 145
-0x6e001	0x0000	0x7391	0x00001
-operation# (mod 256) for the bad data may be 145
-0x6e002	0x0000	0x9195	0x00002
-operation# (mod 256) for the bad data may be 145
-0x6e003	0x0000	0x9591	0x00003
-operation# (mod 256) for the bad data may be 145
-0x6e004	0x0000	0x91b5	0x00004
-operation# (mod 256) for the bad data may be 145
-0x6e005	0x0000	0xb591	0x00005
-operation# (mod 256) for the bad data may be 145
-0x6e006	0x0000	0x91e2	0x00006
-operation# (mod 256) for the bad data may be 145
-0x6e007	0x0000	0xe291	0x00007
-operation# (mod 256) for the bad data may be 145
-0x6e008	0x0000	0x919d	0x00008
-operation# (mod 256) for the bad data may be 145
-0x6e009	0x0000	0x9d91	0x00009
-operation# (mod 256) for the bad data may be 145
-0x6e00a	0x0000	0x91e8	0x0000a
-operation# (mod 256) for the bad data may be 145
-0x6e00b	0x0000	0xe891	0x0000b
-operation# (mod 256) for the bad data may be 145
-0x6e00c	0x0000	0x91c9	0x0000c
-operation# (mod 256) for the bad data may be 145
-0x6e00d	0x0000	0xc991	0x0000d
-operation# (mod 256) for the bad data may be 145
-0x6e00e	0x0000	0x9147	0x0000e
-operation# (mod 256) for the bad data may be 145
-0x6e00f	0x0000	0x4791	0x0000f
-operation# (mod 256) for the bad data may be 145
-LOG DUMP (6213798 total operations):
+Thanks,
+Tiezhu
 
-<snip>
+>
+>
+> Huacai
+>
+>>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>  arch/loongarch/include/asm/stackframe.h |  5 +++++
+>>  arch/loongarch/kernel/entry.S           | 15 +++++++++++++++
+>>  2 files changed, 20 insertions(+)
+>>
+>> diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
+>> index 4ca9530..551ab8f 100644
+>> --- a/arch/loongarch/include/asm/stackframe.h
+>> +++ b/arch/loongarch/include/asm/stackframe.h
+>> @@ -216,4 +216,9 @@
+>>         RESTORE_SP_AND_RET \docfi
+>>         .endm
+>>
+>> +       .macro  RESTORE_STATIC_SOME_SP_AND_RET docfi=0
+>> +       RESTORE_STATIC \docfi
+>> +       RESTORE_SOME \docfi
+>> +       RESTORE_SP_AND_RET \docfi
+>> +       .endm
+>>  #endif /* _ASM_STACKFRAME_H */
+>> diff --git a/arch/loongarch/kernel/entry.S b/arch/loongarch/kernel/entry.S
+>> index d5b3dbc..c764c99 100644
+>> --- a/arch/loongarch/kernel/entry.S
+>> +++ b/arch/loongarch/kernel/entry.S
+>> @@ -14,6 +14,7 @@
+>>  #include <asm/regdef.h>
+>>  #include <asm/stackframe.h>
+>>  #include <asm/thread_info.h>
+>> +#include <asm/unistd.h>
+>>
+>>         .text
+>>         .cfi_sections   .debug_frame
+>> @@ -62,9 +63,23 @@ SYM_FUNC_START(handle_syscall)
+>>         li.d    tp, ~_THREAD_MASK
+>>         and     tp, tp, sp
+>>
+>> +       /* Syscall number held in a7, we can store it in TI_SYSCALL. */
+>> +        LONG_S  a7, tp, TI_SYSCALL
+>> +
+>>         move    a0, sp
+>>         bl      do_syscall
+>>
+>> +       /*
+>> +        * Syscall number held in a7 which is stored in TI_SYSCALL.
+>> +        * rt_sigreturn call RESTORE_ALL_AND_RET.
+>> +        * The other syscalls call RESTORE_STATIC_SOME_SP_AND_RET.
+>> +        */
+>> +       LONG_L  t3, tp, TI_SYSCALL
+>> +       li.w    t4, __NR_rt_sigreturn
+>> +       beq     t3, t4, 1f
+>> +
+>> +       RESTORE_STATIC_SOME_SP_AND_RET
+>> +1:
+>>         RESTORE_ALL_AND_RET
+>>  SYM_FUNC_END(handle_syscall)
+>>
+>> --
+>> 2.1.0
+>>
 
-6213732(100 mod 256): COLLAPSE 0x3b000 thru 0x4efff	(0x14000 bytes)
-6213733(101 mod 256): READ     0x1953d thru 0x29311	(0xfdd5 bytes)
-6213734(102 mod 256): INSERT 0x14000 thru 0x2ffff	(0x1c000 bytes)
-6213735(103 mod 256): COPY 0x1d381 thru 0x36d38	(0x199b8 bytes) to 0x64491 thru 0x7de48	******EEEE
-6213736(104 mod 256): ZERO     0x74247 thru 0x927bf	(0x1e579 bytes)
-6213737(105 mod 256): INSERT 0x8000 thru 0x16fff	(0xf000 bytes)
-6213738(106 mod 256): READ     0x87aba thru 0x8ce48	(0x538f bytes)
-6213739(107 mod 256): TRUNCATE DOWN	from 0x8ce49 to 0x46571	******WWWW
-6213740(108 mod 256): SKIPPED (no operation)
-6213741(109 mod 256): ZERO     0x55674 thru 0x70d41	(0x1b6ce bytes)	******ZZZZ
-6213742(110 mod 256): PUNCH    0xc8b5 thru 0xe80d	(0x1f59 bytes)
-6213743(111 mod 256): TRUNCATE DOWN	from 0x70d42 to 0x11ade	******WWWW
-6213744(112 mod 256): COLLAPSE 0x6000 thru 0xffff	(0xa000 bytes)
-6213745(113 mod 256): SKIPPED (no operation)
-6213746(114 mod 256): MAPREAD  0x2625 thru 0x7add	(0x54b9 bytes)
-6213747(115 mod 256): CLONE 0x2000 thru 0x6fff	(0x5000 bytes) to 0x10000 thru 0x14fff
-6213748(116 mod 256): SKIPPED (no operation)
-6213749(117 mod 256): TRUNCATE UP	from 0x15000 to 0x8d131	******WWWW
-6213750(118 mod 256): WRITE    0x82547 thru 0x88334	(0x5dee bytes)
-6213751(119 mod 256): DEDUPE 0x7d000 thru 0x83fff	(0x7000 bytes) to 0x22000 thru 0x28fff
-6213752(120 mod 256): READ     0x11e69 thru 0x2864c	(0x167e4 bytes)
-6213753(121 mod 256): INSERT 0x41000 thru 0x45fff	(0x5000 bytes)
-6213754(122 mod 256): COPY 0x2ca4c thru 0x2ed9f	(0x2354 bytes) to 0x2fef1 thru 0x32244
-6213755(123 mod 256): MAPWRITE 0x70677 thru 0x8b993	(0x1b31d bytes)
-6213756(124 mod 256): FALLOC   0x7229f thru 0x91158	(0x1eeb9 bytes) INTERIOR
-6213757(125 mod 256): COLLAPSE 0x13000 thru 0x2bfff	(0x19000 bytes)
-6213758(126 mod 256): COPY 0x9271 thru 0xba34	(0x27c4 bytes) to 0x3227c thru 0x34a3f
-6213759(127 mod 256): CLONE 0x23000 thru 0x2cfff	(0xa000 bytes) to 0x6c000 thru 0x75fff	******JJJJ
-6213760(128 mod 256): READ     0x44cff thru 0x4c4a1	(0x77a3 bytes)
-6213761(129 mod 256): DEDUPE 0x60000 thru 0x73fff	(0x14000 bytes) to 0x39000 thru 0x4cfff	BBBB******
-6213762(130 mod 256): COLLAPSE 0x39000 thru 0x3ffff	(0x7000 bytes)
-6213763(131 mod 256): WRITE    0x57565 thru 0x5e710	(0x71ac bytes)
-6213764(132 mod 256): MAPREAD  0x39c49 thru 0x4accd	(0x11085 bytes)
-6213765(133 mod 256): ZERO     0x4faf5 thru 0x6a5cc	(0x1aad8 bytes)
-6213766(134 mod 256): MAPREAD  0x57f8 thru 0x8c98	(0x34a1 bytes)
-6213767(135 mod 256): MAPREAD  0x5cbd8 thru 0x72130	(0x15559 bytes)	***RRRR***
-6213768(136 mod 256): SKIPPED (no operation)
-6213769(137 mod 256): INSERT 0x24000 thru 0x32fff	(0xf000 bytes)
-6213770(138 mod 256): COPY 0x32b0c thru 0x4d035	(0x1a52a bytes) to 0x4f97f thru 0x69ea8
-6213771(139 mod 256): DEDUPE 0x3f000 thru 0x52fff	(0x14000 bytes) to 0x23000 thru 0x36fff
-6213772(140 mod 256): READ     0x6d9bf thru 0x81130	(0x13772 bytes)	***RRRR***
-6213773(141 mod 256): TRUNCATE DOWN	from 0x81131 to 0x569c0	******WWWW
-6213774(142 mod 256): MAPREAD  0x354d5 thru 0x44e7b	(0xf9a7 bytes)
-6213775(143 mod 256): MAPWRITE 0x547c4 thru 0x60a8e	(0xc2cb bytes)
-6213776(144 mod 256): SKIPPED (no operation)
-6213777(145 mod 256): WRITE    0x28ada thru 0x4356c	(0x1aa93 bytes)
-6213778(146 mod 256): ZERO     0x74c28 thru 0x91fec	(0x1d3c5 bytes)
-6213779(147 mod 256): INSERT 0x12000 thru 0x1cfff	(0xb000 bytes)
-6213780(148 mod 256): ZERO     0x30834 thru 0x330f7	(0x28c4 bytes)
-6213781(149 mod 256): PUNCH    0x36080 thru 0x42edc	(0xce5d bytes)
-6213782(150 mod 256): DEDUPE 0x14000 thru 0x19fff	(0x6000 bytes) to 0x49000 thru 0x4efff
-6213783(151 mod 256): DEDUPE 0x51000 thru 0x5efff	(0xe000 bytes) to 0x2a000 thru 0x37fff
-6213784(152 mod 256): WRITE    0x2448e thru 0x400f5	(0x1bc68 bytes)
-6213785(153 mod 256): ZERO     0x87615 thru 0x927bf	(0xb1ab bytes)
-6213786(154 mod 256): READ     0x5afc thru 0xa32c	(0x4831 bytes)
-6213787(155 mod 256): SKIPPED (no operation)
-6213788(156 mod 256): ZERO     0x7aab0 thru 0x7e2b3	(0x3804 bytes)
-6213789(157 mod 256): INSERT 0x45000 thru 0x58fff	(0x14000 bytes)
-6213790(158 mod 256): FALLOC   0x1a80e thru 0x289a3	(0xe195 bytes) INTERIOR
-6213791(159 mod 256): SKIPPED (no operation)
-6213792(160 mod 256): SKIPPED (no operation)
-6213793(161 mod 256): FALLOC   0x2aca thru 0x20562	(0x1da98 bytes) INTERIOR
-6213794(162 mod 256): ZERO     0x72fb9 thru 0x75887	(0x28cf bytes)
-6213795(163 mod 256): COPY 0xa62e thru 0x218d0	(0x172a3 bytes) to 0x28ab1 thru 0x3fd53
-6213796(164 mod 256): SKIPPED (no operation)
-6213797(165 mod 256): COPY 0xa666 thru 0xf6a1	(0x503c bytes) to 0x353f0 thru 0x3a42b
-6213798(166 mod 256): MAPREAD  0x69e3e thru 0x8675f	(0x1c922 bytes)	***RRRR***
-Log of operations saved to "/mnt/junk.fsxops"; replay with --replay-ops
-Correct content saved for comparison
-(maybe hexdump "/mnt/junk" vs "/mnt/junk.fsxgood")
-Silence is golden

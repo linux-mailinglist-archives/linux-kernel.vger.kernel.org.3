@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E0C55810B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EDF558108
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbiFWQzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
+        id S233064AbiFWQzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 12:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233910AbiFWQvw (ORCPT
+        with ESMTP id S233809AbiFWQvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:51:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6302C2656B;
-        Thu, 23 Jun 2022 09:51:48 -0700 (PDT)
+        Thu, 23 Jun 2022 12:51:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F7150B16;
+        Thu, 23 Jun 2022 09:49:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBCC961FC2;
-        Thu, 23 Jun 2022 16:51:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A6AC3411B;
-        Thu, 23 Jun 2022 16:51:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 508DA61FC6;
+        Thu, 23 Jun 2022 16:49:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23624C3411B;
+        Thu, 23 Jun 2022 16:49:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003107;
-        bh=05Y6AWTeW8ezSzmEjPC+H7znKCnSHRPXCjLjCPqM9cQ=;
+        s=korg; t=1656002984;
+        bh=Z4NgkESxWxdWTbCmzVLX7Yj+ImAw80bZlglCyZrpjkE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dxFRNb3U5LK8ZNPLxkKYVKv8IgxBXUnOWrDRYMovkf3MfLvOnx11oUxsLKjoy+f4f
-         1slGCyI6nr44wLzVQpdoT6NtvDne8kIiboty3zj8GLSNdNtDcZ8NK1PVRNvC2v5vbI
-         4fCSyTt1yJopombvnmfsDH/2H/4Dlf++Qod9FyYw=
+        b=1JOKxRa4nNKrCKw9awPRfaQ0Tg/inTROjsh2CJs1hos0tRKfQ5Skx+8OUxhLlK9GB
+         cPqui3csrZz7ZKMSgyzUhWKX25hlNW3KG+BbBgj7/pmR2JVhvSYCcMiN19pR8F+dix
+         YxsCjIkxJ2m72ZwQxkN5t8OhnQ8yCwZPxyqSG5Oo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Theodore Tso <tytso@mit.edu>,
-        Ard Biesheuvel <ardb@kernel.org>,
+        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 091/264] random: avoid superfluous call to RDRAND in CRNG extraction
-Date:   Thu, 23 Jun 2022 18:41:24 +0200
-Message-Id: <20220623164346.646040605@linuxfoundation.org>
+Subject: [PATCH 4.9 092/264] random: dont reset crng_init_cnt on urandom_read()
+Date:   Thu, 23 Jun 2022 18:41:25 +0200
+Message-Id: <20220623164346.675535475@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
 References: <20220623164344.053938039@linuxfoundation.org>
@@ -55,61 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Jann Horn <jannh@google.com>
 
-commit 2ee25b6968b1b3c66ffa408de23d023c1bce81cf upstream.
+commit 6c8e11e08a5b74bb8a5cdd5cbc1e5143df0fba72 upstream.
 
-RDRAND is not fast. RDRAND is actually quite slow. We've known this for
-a while, which is why functions like get_random_u{32,64} were converted
-to use batching of our ChaCha-based CRNG instead.
+At the moment, urandom_read() (used for /dev/urandom) resets crng_init_cnt
+to zero when it is called at crng_init<2. This is inconsistent: We do it
+for /dev/urandom reads, but not for the equivalent
+getrandom(GRND_INSECURE).
 
-Yet CRNG extraction still includes a call to RDRAND, in the hot path of
-every call to get_random_bytes(), /dev/urandom, and getrandom(2).
+(And worse, as Jason pointed out, we're only doing this as long as
+maxwarn>0.)
 
-This call to RDRAND here seems quite superfluous. CRNG is already
-extracting things based on a 256-bit key, based on good entropy, which
-is then reseeded periodically, updated, backtrack-mutated, and so
-forth. The CRNG extraction construction is something that we're already
-relying on to be secure and solid. If it's not, that's a serious
-problem, and it's unlikely that mixing in a measly 32 bits from RDRAND
-is going to alleviate things.
+crng_init_cnt is only read in crng_fast_load(); it is relevant at
+crng_init==0 for determining when to switch to crng_init==1 (and where in
+the RNG state array to write).
 
-And in the case where the CRNG doesn't have enough entropy yet, we're
-already initializing the ChaCha key row with RDRAND in
-crng_init_try_arch_early().
+As far as I understand:
 
-Removing the call to RDRAND improves performance on an i7-11850H by
-370%. In other words, the vast majority of the work done by
-extract_crng() prior to this commit was devoted to fetching 32 bits of
-RDRAND.
+ - crng_init==0 means "we have nothing, we might just be returning the same
+   exact numbers on every boot on every machine, we don't even have
+   non-cryptographic randomness; we should shove every bit of entropy we
+   can get into the RNG immediately"
+ - crng_init==1 means "well we have something, it might not be
+   cryptographic, but at least we're not gonna return the same data every
+   time or whatever, it's probably good enough for TCP and ASLR and stuff;
+   we now have time to build up actual cryptographic entropy in the input
+   pool"
+ - crng_init==2 means "this is supposed to be cryptographically secure now,
+   but we'll keep adding more entropy just to be sure".
 
-Reviewed-by: Theodore Ts'o <tytso@mit.edu>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+The current code means that if someone is pulling data from /dev/urandom
+fast enough at crng_init==0, we'll keep resetting crng_init_cnt, and we'll
+never make forward progress to crng_init==1. It seems to be intended to
+prevent an attacker from bruteforcing the contents of small individual RNG
+inputs on the way from crng_init==0 to crng_init==1, but that's misguided;
+crng_init==1 isn't supposed to provide proper cryptographic security
+anyway, RNG users who care about getting secure RNG output have to wait
+until crng_init==2.
+
+This code was inconsistent, and it probably made things worse - just get
+rid of it.
+
+Signed-off-by: Jann Horn <jannh@google.com>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/char/random.c |    4 ----
+ 1 file changed, 4 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1074,7 +1074,7 @@ static void crng_reseed(struct crng_stat
- static void _extract_crng(struct crng_state *crng,
- 			  __u32 out[CHACHA20_BLOCK_WORDS])
+@@ -1821,7 +1821,6 @@ urandom_read_nowarn(struct file *file, c
+ static ssize_t
+ urandom_read(struct file *file, char __user *buf, size_t nbytes, loff_t *ppos)
  {
--	unsigned long v, flags, init_time;
-+	unsigned long flags, init_time;
+-	unsigned long flags;
+ 	static int maxwarn = 10;
  
- 	if (crng_ready()) {
- 		init_time = READ_ONCE(crng->init_time);
-@@ -1084,8 +1084,6 @@ static void _extract_crng(struct crng_st
- 				    &input_pool : NULL);
+ 	if (!crng_ready() && maxwarn > 0) {
+@@ -1829,9 +1828,6 @@ urandom_read(struct file *file, char __u
+ 		if (__ratelimit(&urandom_warning))
+ 			pr_notice("%s: uninitialized urandom read (%zd bytes read)\n",
+ 				  current->comm, nbytes);
+-		spin_lock_irqsave(&primary_crng.lock, flags);
+-		crng_init_cnt = 0;
+-		spin_unlock_irqrestore(&primary_crng.lock, flags);
  	}
- 	spin_lock_irqsave(&crng->lock, flags);
--	if (arch_get_random_long(&v))
--		crng->state[14] ^= v;
- 	chacha20_block(&crng->state[0], out);
- 	if (crng->state[12] == 0)
- 		crng->state[13]++;
+ 
+ 	return urandom_read_nowarn(file, buf, nbytes, ppos);
 
 

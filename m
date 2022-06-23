@@ -2,108 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D907B5587C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95ABE5587F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbiFWSne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
+        id S231825AbiFWS4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233796AbiFWSnF (ORCPT
+        with ESMTP id S235655AbiFWSqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 14:43:05 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2719F3CE
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:45:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656006343; x=1687542343;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kruoeecJbcbp4F95d35APFVprxdw2Nf0/sR6Tvn7Ivc=;
-  b=fPG7w+bkq8bwmKG0RZ0UOXIpUmGjzNTVvmdfufrpUUI9+gXWVZQimouu
-   gnm9LRjCnk1EInTEAx+PXcOYC0zbWfRfRClCVfFXFdbFvtj5LR6nDMJr+
-   nn769Zussdl+PWWEZ3RkT5Mjbdatw+vtocLjWAmvoHqpeXFNxyvs5vEDj
-   wRKl/V9Inp0oyJBfokyOhUvY0BAr2Y5MHy6tyVa7cwL2TS3bxhLEA/oOY
-   FjBOydDqU8YhMFDEjbfwVJG7jF78K569dknG4h0WnCnQXTmy/9NDy17rh
-   NyQzVRzCJoCu2cux1oCUxkVl0D8V64/5oY/FRZfRbx7QQ4Cc33n1VP7Xz
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="342476594"
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="342476594"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 10:45:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="678165491"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Jun 2022 10:45:18 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o4QtK-0002Uq-AH;
-        Thu, 23 Jun 2022 17:45:18 +0000
-Date:   Fri, 24 Jun 2022 01:44:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     marxin <mliska@suse.cz>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andi Kleen <andi@firstfloor.org>
-Subject: [jirislaby:lto 4/45] kernel/static_call_inline.c:504:15: warning: no
- previous prototype for 'func_a'
-Message-ID: <202206240131.GMBBDfhI-lkp@intel.com>
+        Thu, 23 Jun 2022 14:46:25 -0400
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0685DA8B45
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:50:07 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 3E6BF240027
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 19:49:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1656006597; bh=9z4F8N+hb9sjB8yqiYKIg3nnlI5xJEvNG+P1PWED4G4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rp+7qA98zOJ1HB9Vu9bhFOBWPbGZNk0gze9vAYENIgC2F3KHc+m8gU6Xm5qTvjsGs
+         ie8y+Zw8WrQBFq/hmTmluIAXPHl5n8PdgrL1xIug+qPE0uEGC9l3cQlebEnX6KJ39Y
+         /RNEekjlfMbNmxDZarxpeQYqAfYVm08Y+LoHTW/L1/RjfqL5AEeW0JyNcSaY32UrAc
+         F2NQB8K64hEDjTlqZvoqcPWDxOMe9ZDJNBWC06J3HhfGIHv04iBzDtXFKUg2Ki50uV
+         llIk/3q/ozK1sRXflksG4ZWdzy6HAKKBuxOMgb7jFgpi3nZiL+InbtunFagN2tZ4bK
+         LBQd90Oz5gTEg==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4LTSSh2PVrz6tmY;
+        Thu, 23 Jun 2022 19:49:56 +0200 (CEST)
+Date:   Thu, 23 Jun 2022 17:49:04 +0000
+From:   Tom Schwindl <schwindl@posteo.de>
+To:     corbet@lwn.net
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] docs: driver-api: gpio: Fix some typos
+Message-ID: <YrSnkBodv7TYvtMb@posteo.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git lto
-head:   8047611082d70c5263114fabce8c80a4c3d251fa
-commit: e99286245556c2e8709aaa23124b9a7a10fa975b [4/45] static_call: Make static call functions visible
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220624/202206240131.GMBBDfhI-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=e99286245556c2e8709aaa23124b9a7a10fa975b
-        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
-        git fetch --no-tags jirislaby lto
-        git checkout e99286245556c2e8709aaa23124b9a7a10fa975b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Signed-off-by: Tom Schwindl <schwindl@posteo.de>
+---
+ Documentation/driver-api/gpio/consumer.rst   | 2 +-
+ Documentation/driver-api/gpio/driver.rst     | 6 +++---
+ Documentation/driver-api/gpio/using-gpio.rst | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/static_call_inline.c:504:15: warning: no previous prototype for 'func_a' [-Wmissing-prototypes]
-     504 | int __visible func_a(int x)
-         |               ^~~~~~
->> kernel/static_call_inline.c:509:15: warning: no previous prototype for 'func_b' [-Wmissing-prototypes]
-     509 | int __visible func_b(int x)
-         |               ^~~~~~
-
-
-vim +/func_a +504 kernel/static_call_inline.c
-
-   503	
- > 504	int __visible func_a(int x)
-   505	{
-   506		return x+1;
-   507	}
-   508	
- > 509	int __visible func_b(int x)
-   510	{
-   511		return x+2;
-   512	}
-   513	
-
+diff --git a/Documentation/driver-api/gpio/consumer.rst b/Documentation/driver-api/gpio/consumer.rst
+index 72bcf5f5e3a2..de6fc79ad6f0 100644
+--- a/Documentation/driver-api/gpio/consumer.rst
++++ b/Documentation/driver-api/gpio/consumer.rst
+@@ -114,7 +114,7 @@ For a function using multiple GPIOs all of those can be obtained with one call::
+ 
+ This function returns a struct gpio_descs which contains an array of
+ descriptors.  It also contains a pointer to a gpiolib private structure which,
+-if passed back to get/set array functions, may speed up I/O proocessing::
++if passed back to get/set array functions, may speed up I/O processing::
+ 
+ 	struct gpio_descs {
+ 		struct gpio_array *info;
+diff --git a/Documentation/driver-api/gpio/driver.rst b/Documentation/driver-api/gpio/driver.rst
+index 70ff43ac4fcc..6baaeab79534 100644
+--- a/Documentation/driver-api/gpio/driver.rst
++++ b/Documentation/driver-api/gpio/driver.rst
+@@ -119,7 +119,7 @@ GPIO lines with debounce support
+ Debouncing is a configuration set to a pin indicating that it is connected to
+ a mechanical switch or button, or similar that may bounce. Bouncing means the
+ line is pulled high/low quickly at very short intervals for mechanical
+-reasons. This can result in the value being unstable or irqs fireing repeatedly
++reasons. This can result in the value being unstable or irqs firing repeatedly
+ unless the line is debounced.
+ 
+ Debouncing in practice involves setting up a timer when something happens on
+@@ -219,7 +219,7 @@ use a trick: when a line is set as output, if the line is flagged as open
+ drain, and the IN output value is low, it will be driven low as usual. But
+ if the IN output value is set to high, it will instead *NOT* be driven high,
+ instead it will be switched to input, as input mode is high impedance, thus
+-achieveing an "open drain emulation" of sorts: electrically the behaviour will
++achieving an "open drain emulation" of sorts: electrically the behaviour will
+ be identical, with the exception of possible hardware glitches when switching
+ the mode of the line.
+ 
+@@ -642,7 +642,7 @@ In this case the typical set-up will look like this:
+ 
+ As you can see pretty similar, but you do not supply a parent handler for
+ the IRQ, instead a parent irqdomain, an fwnode for the hardware and
+-a funcion .child_to_parent_hwirq() that has the purpose of looking up
++a function .child_to_parent_hwirq() that has the purpose of looking up
+ the parent hardware irq from a child (i.e. this gpio chip) hardware irq.
+ As always it is good to look at examples in the kernel tree for advice
+ on how to find the required pieces.
+diff --git a/Documentation/driver-api/gpio/using-gpio.rst b/Documentation/driver-api/gpio/using-gpio.rst
+index 64c8d3f76c3a..894d88855d73 100644
+--- a/Documentation/driver-api/gpio/using-gpio.rst
++++ b/Documentation/driver-api/gpio/using-gpio.rst
+@@ -44,7 +44,7 @@ These devices will appear on the system as ``/dev/gpiochip0`` thru
+ found in the kernel tree ``tools/gpio`` subdirectory.
+ 
+ For structured and managed applications, we recommend that you make use of the
+-libgpiod_ library. This provides helper abstractions, command line utlities
++libgpiod_ library. This provides helper abstractions, command line utilities
+ and arbitration for multiple simultaneous consumers on the same GPIO chip.
+ 
+ .. _libgpiod: https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+

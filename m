@@ -2,147 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38FC5587D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B9D5587F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiFWSwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
+        id S229787AbiFWS46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbiFWSwb (ORCPT
+        with ESMTP id S230170AbiFWS4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 14:52:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75833DD2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:58:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656007094;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hO3C7xO3ja36osrf6zGLlB+eVxsywrftX4QKaeVYSqQ=;
-        b=ELWxKeaw0PYoyrl3dLIsO9T7dniViaKgGJyEwfy6CUvn3VwnKzllGPsGCWSqWfLyciH0lv
-        8Xv7vC38sdgTWrXha4pO1yQzLFUmlN82l0IkOs+gjXk0TxPTGGQUFSCEf3drh9l4GSeABb
-        PohLpbefnJG3vYqxss2ArtVG97QS79g=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-5H7gYDjlOC2S0_J0DHRiUg-1; Thu, 23 Jun 2022 13:58:13 -0400
-X-MC-Unique: 5H7gYDjlOC2S0_J0DHRiUg-1
-Received: by mail-ed1-f70.google.com with SMTP id y4-20020aa7ccc4000000b0042df06d83bcso3234edt.22
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:58:13 -0700 (PDT)
+        Thu, 23 Jun 2022 14:56:33 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72977104EE8;
+        Thu, 23 Jun 2022 11:01:27 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id y32so298702lfa.6;
+        Thu, 23 Jun 2022 11:01:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=htpW4KO87Pa3rfVeMc6d2EASyy2GIlidpaFdVmoZj4s=;
+        b=Mccp92zjcX1919GaiWQ+VcL44gQ1EA9AwWWZhvKCZACiwpUQzrT5asRNoyYMMeJKeC
+         yy/NqYIyPtk0agQcs5WsY9lJn2YR5/tQ19F7LTwOI6teZ09YI+MJW+vrfMnml19eJH9W
+         StZkhocl5dtWKAdtG5QOWy4AoGTqZajadCgPjbh8vbjw3qjfrBxQFGbGKG1S1eFika4f
+         iz3UbI46YvLKErei68dWMmN2PQPtZXRGKO8UnvCMrqWl1yG1JjteJCCwXoerzr0t2A1N
+         VjVir3hJ6EXhYzrkJ65P/LA8tcdSLX4Y6vsnbVAIdq9UTFeXC3SdGD4c7gIFoLF41/ya
+         hC4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hO3C7xO3ja36osrf6zGLlB+eVxsywrftX4QKaeVYSqQ=;
-        b=FK7CKU37P4bmVBff3JzzFt0jiIGia546oGu9HgEjFMAmBhUiolgaQjNWzZkxOBkB7t
-         PcyaPHP/DWFzyzATqGc0QS+oME3q53g2AYM9zR1DhWcHzkIVvTmyFi6r9bbrS3QQdtme
-         Rfysg2+XBqnOH+79KwAROPjxr7HG7ErATeDoSiQkKbGbN6ZaFk368FITLnIFt/LpSp+W
-         PEw2avugRud1WC/+Isg5TZpXrAYnT/1OytAxgiwGyVNnA8CDbx0q3rKX17vD2vkujr67
-         BO/1lVvm/1RUCsc4eLdL1fRwsMhyyVbXgvg47bpIfuYknmiFp89Kd+EyDDRbKywqhAcQ
-         0TWw==
-X-Gm-Message-State: AJIora/lDF9AI/lBmTB1eAU5u8s+/5iUxSrlT3MVWChmu6xhZ8TjHJS5
-        TB0lHeJg4u/P+ljbMYDc4j3m3KobHL6InPFdtJKiq6BQs1FhoRg0ebEMunDLWomCsLizK+POVm4
-        9ZQNddu0lCpOoNmqYviXygWBG
-X-Received: by 2002:aa7:c952:0:b0:434:edcc:f247 with SMTP id h18-20020aa7c952000000b00434edccf247mr12040733edt.412.1656007092246;
-        Thu, 23 Jun 2022 10:58:12 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vY722wduq0ncSL6sZXrBQYki6fKrhE9WhJwCUn2NqaPkVZNv02PSySZU23VNdhAvPIG00oWQ==
-X-Received: by 2002:aa7:c952:0:b0:434:edcc:f247 with SMTP id h18-20020aa7c952000000b00434edccf247mr12040713edt.412.1656007092013;
-        Thu, 23 Jun 2022 10:58:12 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id l1-20020a1709063d2100b006fe8bf56f53sm11199042ejf.43.2022.06.23.10.58.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 10:58:11 -0700 (PDT)
-Message-ID: <21ac5af2-6cb7-29a9-dcc5-467336951982@redhat.com>
-Date:   Thu, 23 Jun 2022 19:58:03 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=htpW4KO87Pa3rfVeMc6d2EASyy2GIlidpaFdVmoZj4s=;
+        b=1JanYD5U8FjT6zhVreDEfABf9swN/dQrp6QqHvhGxxXjXHxRXS1M8sUZpB81EEwIIC
+         /C6f7lK1h0AwNUjdfIgz5MIT4RXC4yTcEAhLTIAhCdQunD1T1JZ0vUlhguSWqmuqWK2T
+         BSY8oNQ1j/RoynHGgBih0YJ9oRFg9JK0H/V7gysNCvUqy1Yvn7NrEfw5QOMbWbQcKAWo
+         +eig0Tw+WjUFg/ftDYwavXPDMCrlXsHI8DZF9eD8HCpvlOcEBI62FGWSd8xSCLLJoAuk
+         /yNn3Js7PYw+5sgvDV7KzURNCKjbFDrPO1dJjAfMsIUmLrvhS3q88/HWvXv3HGBuf00Y
+         N3pQ==
+X-Gm-Message-State: AJIora+DOQkJKLtTDeVbDjU/6obtMlmj4h/SzbDPriAaEEOZrAl5te1M
+        3cxZSV5INFiR/2WM/2Odu8zt6CrIzP0Lo1iGWpqvPe2g0Y0zA/3h
+X-Google-Smtp-Source: AGRyM1tGbyFaN7xD4syfsOma3gUoWvRL9AeKqEpXbVc0stZoknt2cnh9AdCxTQhuI7/2pxW4uHg+rH97OEElrDn8l58=
+X-Received: by 2002:a05:6512:3183:b0:47f:79f3:af9a with SMTP id
+ i3-20020a056512318300b0047f79f3af9amr6025265lfe.182.1656007284378; Thu, 23
+ Jun 2022 11:01:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] MAINTAINERS: Reorganize KVM/x86 maintainership
-Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>
-References: <20220623114615.2600316-1-pbonzini@redhat.com>
- <878rpny47v.fsf@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <878rpny47v.fsf@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-8-peterwu.pub@gmail.com>
+In-Reply-To: <20220623115631.22209-8-peterwu.pub@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 23 Jun 2022 20:00:47 +0200
+Message-ID: <CAHp75Vd95sEQz8y4ZcviUKaC9ic27yitR+VCwkfb38MTTe0mkg@mail.gmail.com>
+Subject: Re: [PATCH v3 07/14] mfd: mt6370: Add Mediatek MT6370 support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang <cy_huang@richtek.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        szuni chen <szunichen@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/22 14:05, Vitaly Kuznetsov wrote:
->> +KVM PARAVIRT (KVM/paravirt)
->> +M:	Paolo Bonzini <pbonzini@redhat.com>
->> +R:	Wanpeng Li <wanpengli@tencent.com>
->> +L:	kvm@vger.kernel.org
->> +S:	Supported
->> +T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
->> +F:	arch/x86/kernel/kvm.c
->> +F:	arch/x86/kernel/kvmclock.c
->> +F:	arch/x86/include/asm/pvclock-abi.h
->> +F:	include/linux/kvm_para.h
->> +F:	include/uapi/linux/kvm_para.h
->> +F:	include/uapi/asm-generic/kvm_para.h
->> +F:	include/asm-generic/kvm_para.h
->> +F:	arch/um/include/asm/kvm_para.h
->> +F:	arch/x86/include/asm/kvm_para.h
->> +F:	arch/x86/include/uapi/asm/kvm_para.h
-> 
-> If we add Async PF to the 'KVM/paravirt' scope:
-> 
-> +F:   virt/kvm/async_pf.c
-> and maybe even
-> +F:   arch/x86/kvm/x86.c
-> 
-> then I can probably volunteer as a reviewer.
+On Thu, Jun 23, 2022 at 1:59 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+>
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>
+> Add Mediatek MT6370 MFD support.
 
-There is of course a host component to all paravirt infrastructure, the 
-idea was to have a separate part specifically for the guest side.  It 
-tends to have its own set of issues (e.g. suspend/resume, 32-bit, etc.). 
-  I will add you anyway as reviewer, it makes sense.
+...
 
->> +KVM X86 HYPER-V (KVM/hyper-v)
->> +M:	Vitaly Kuznetsov <vkuznets@redhat.com>
->> +M:	Sean Christopherson <seanjc@google.com>
->> +M:	Paolo Bonzini <pbonzini@redhat.com>
-> 
-> Don't we also need:
-> 
-> S:   Supported
-> L:   kvm@vger.kernel.org
-> 
-> here?
+> +config MFD_MT6370
+> +       tristate "Mediatek MT6370 SubPMIC"
+> +       select MFD_CORE
+> +       select REGMAP_I2C
+> +       select REGMAP_IRQ
+> +       depends on I2C
+> +       help
+> +         Say Y here to enable MT6370 SubPMIC functional support.
+> +         It consists of a single cell battery charger with ADC monitoring, RGB
+> +         LEDs, dual channel flashlight, WLED backlight driver, display bias
+> +         voltage supply, one general purpose LDO, and the USB Type-C & PD
+> +         controller complies with the latest USB Type-C and PD standards.
 
-Yeah, especially the "S" (the list is caught by the generic KVM part).
+What will be the module name in case it's chosen to be built as a module?
 
-Paolo
+...
 
->> +T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
->> +F:	arch/x86/kvm/hyperv.*
->> +F:	arch/x86/kvm/kvm_onhyperv.*
->> +F:	arch/x86/kvm/svm/svm_onhyperv.*
-> 
-> +F:   arch/x86/kvm/svm/hyperv.*
-> 
->> +F:	arch/x86/kvm/vmx/evmcs.*
->> +
->>   KERNFS
->>   M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>   M:	Tejun Heo <tj@kernel.org>
-> 
+>  obj-$(CONFIG_INTEL_SOC_PMIC_BXTWC)  += intel_soc_pmic_bxtwc.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_CHTWC)     += intel_soc_pmic_chtwc.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_CHTDC_TI)  += intel_soc_pmic_chtdc_ti.o
+>  obj-$(CONFIG_MFD_MT6360)       += mt6360-core.o
+> +obj-$(CONFIG_MFD_MT6370)       += mt6370.o
+>  mt6397-objs                    := mt6397-core.o mt6397-irq.o mt6358-irq.o
+>  obj-$(CONFIG_MFD_MT6397)       += mt6397.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_MRFLD)     += intel_soc_pmic_mrfld.o
 
+This whole bunch of drivers is in the wrong place in Makefile.
+
+https://lore.kernel.org/all/20220616182524.7956-2-andriy.shevchenko@linux.intel.com/
+
+...
+
+> +#define MT6370_REG_MAXADDR     0x1FF
+
+Wondering if (BIT(10) - 1) gives a better hint on how hardware limits
+this (so it will be clear it's 10-bit address).
+
+...
+
+> +static int mt6370_check_vendor_info(struct mt6370_info *info)
+> +{
+> +       unsigned int devinfo;
+> +       int ret;
+> +
+> +       ret = regmap_read(info->regmap, MT6370_REG_DEV_INFO, &devinfo);
+> +       if (ret)
+> +               return ret;
+> +
+> +       switch (FIELD_GET(MT6370_VENID_MASK, devinfo)) {
+> +       case MT6370_VENID_RT5081:
+> +       case MT6370_VENID_RT5081A:
+> +       case MT6370_VENID_MT6370:
+> +       case MT6370_VENID_MT6371:
+> +       case MT6370_VENID_MT6372P:
+> +       case MT6370_VENID_MT6372CP:
+
+return 0;
+
+> +               break;
+> +       default:
+> +               dev_err(info->dev, "Unknown Vendor ID 0x%02x\n", devinfo);
+> +               return -ENODEV;
+> +       }
+> +
+> +       return 0;
+
+...and drop these two lines?
+
+> +}
+
+...
+
+> +       bank_idx = *(u8 *)reg_buf;
+> +       bank_addr = *(u8 *)(reg_buf + 1);
+
+Why not
+
+  const u8 *u8_buf = reg_buf;
+
+  bank_idx = u8_buf[0];
+  bank_addr = u8_buf[1];
+
+?
+
+...
+
+> +       if (ret < 0)
+> +               return ret;
+> +       else if (ret != val_size)
+
+Redundant 'else'.
+
+> +               return -EIO;
+
+...
+
+> +       bank_idx = *(u8 *)data;
+> +       bank_addr = *(u8 *)(data + 1);
+
+As per above.
+
+-- 
+With Best Regards,
+Andy Shevchenko

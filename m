@@ -2,107 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A474955773B
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B27855772F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbiFWJ4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
+        id S231261AbiFWJzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiFWJ4G (ORCPT
+        with ESMTP id S229592AbiFWJzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:56:06 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F78C4615F;
-        Thu, 23 Jun 2022 02:56:05 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id s1so27142426wra.9;
-        Thu, 23 Jun 2022 02:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=6Cgf9hVSkM/EuU/G5NtEggFm/5gYU2/ohft6Hi2iUoM=;
-        b=DLmoXC2LYtmMgIH+URO1IHtjbJCkAlV59T4EGENzDuHw84VK8aoJRf91/NSWhHmkLq
-         la7BekdDXIMQn5158NIifoyNSxZ8rOGLI4tmMtNQuFu09+Je2Cxuo7h8SQQMIVXThZMs
-         8VT/86TI0kDnTa4ob3cL1JI/mU9v/1Gz51zfzHYQ8A/8LW2xVMxzdv4Ob9qaA8GOv6xS
-         Yi4R3/5NY9nOtFNzri5fKyCDwKG0PRRndmIRvK8O17szrd38RoIwjZMS2x+ZesVzcP2F
-         5+3Gn513loHRpcMpd3PgraUPt+wVBI+8OrOXqaF5u2M7VX29rSW+A5iNjl/6PBL0wYKs
-         dCIQ==
+        Thu, 23 Jun 2022 05:55:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 301142BB33
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:55:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655978121;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LcK/ElvToq/GKGaUTeOWlSYLGB2z7CGdZ3c0oLrfcZU=;
+        b=VGiiahHrsCsCTVkzbYOqEOsQvzukkbIb2MRBov05pAM/24Jdu7bu77/bXk4B+nqpfH+q+6
+        eYpUGJfv771SqcyB40aCVAZgA8cNpDf0AzOjjcRK9Iv97EsGc5LLfqxkxZuTnKTVYVOqua
+        XE50EGZh2eXTXCDWIrjxnLVA6N8DFy8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-474-ffpYzy0IMTS5oVwWBGW_aA-1; Thu, 23 Jun 2022 05:55:18 -0400
+X-MC-Unique: ffpYzy0IMTS5oVwWBGW_aA-1
+Received: by mail-wm1-f70.google.com with SMTP id o23-20020a05600c511700b0039743cd8093so1178293wms.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:55:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=6Cgf9hVSkM/EuU/G5NtEggFm/5gYU2/ohft6Hi2iUoM=;
-        b=b+qEexuLvQEmLtIUFiBRosWADih45Zu3iIzuFMVrd5QltGgsOgjb5/So4aKXFbxXRB
-         Kz006KsYPjWWsy2LO3HYCt4bY9a2E89EpaNPUvM76ypHaST1vHOuY9SqjJXceD6tCX4+
-         gnlFWWzbGi3xTZFYSkRule/nW6VdX2EShd0zQd0tfXSDGr+NooszkvEqRUiZeZNOhnV8
-         fOT2kJnGasLpVpYToDUz4FKpGohIlEkaI1Nq3INbA3Ra9N4NhVmETFdpphHD2cWYygDL
-         68pizVV7pNWzcIeTGHBWw6RTE6tZO/8qgB6eTtoAng4zjRY4XAegtfywAoS7/QBcHsqx
-         MRnw==
-X-Gm-Message-State: AJIora/kK6BMb9aCxttFJ1inNR4V1ArynBGPKnRQBtkh+wmJr/R8cBx0
-        n1AGCaOUZG2znNdWsCvHB/sy7L/M4zI=
-X-Google-Smtp-Source: AGRyM1vZrhIfv6R1QkV1NYPXd8xWwai/oZGPfNY5LyQaTGsyWgUNU53R1OmMZyCCfCJniSdsnvSlzA==
-X-Received: by 2002:a05:6000:1a89:b0:21b:83a9:aa6f with SMTP id f9-20020a0560001a8900b0021b83a9aa6fmr7545833wry.33.1655978163774;
-        Thu, 23 Jun 2022 02:56:03 -0700 (PDT)
-Received: from felia.fritz.box (200116b826a89a00b5a52346a320d486.dip.versatel-1u1.de. [2001:16b8:26a8:9a00:b5a5:2346:a320:d486])
-        by smtp.gmail.com with ESMTPSA id bp17-20020a5d5a91000000b0021b9870049dsm7938326wrb.82.2022.06.23.02.56.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 02:56:03 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: rectify entry for NVIDIA TEGRA DRM and VIDEO DRIVER
-Date:   Thu, 23 Jun 2022 11:54:52 +0200
-Message-Id: <20220623095452.30745-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LcK/ElvToq/GKGaUTeOWlSYLGB2z7CGdZ3c0oLrfcZU=;
+        b=KzdZSDdANKJYMAvX1T18ohtyxrSWDFm8Y3cdHUciIyCQleRJ1MWx6d2K3RgeXa/BYt
+         Mm7nThNz0NJh14E0/IZJfRPGVPe1uvA38cA5s3MkHbKzMd2Tl6jV8Qw58Efz62ggpgcm
+         4u99fCe70KtHDOfyisGGUPSvdujhKgenv8Tn4Gs9d69zhiyvTCjKw85daj0iUxh+ov9W
+         OH77/tvZqTdli2Ni9AXcsP+ziN0QksQ5bxPkEvrl93ICtZGk468afO9mRJeukdQBVbVT
+         z/7DLdJ7Iia5In8xV5PNsGhBSmMqjylid4T9qElygg+42WMASGmvgeAiR8+aCxKgSdO7
+         ftnA==
+X-Gm-Message-State: AJIora8jl0nh9/JPh4E0WpTfI4N5C8Y3HyRWhh72dBFrHWb1DEZJ0F2c
+        0FqfaQYqK1x24C5NjvNZoy8cBS6A889+5GgrNfbhKGLKRk58IKZ1Z9v5xFbNekvmY9EXYKGIAHu
+        rj0AspE4vvJgDQ6C8fTvGhJ3sVXJQiIQ5Bz0zQlRJ
+X-Received: by 2002:a7b:c4ce:0:b0:3a0:2ac4:3233 with SMTP id g14-20020a7bc4ce000000b003a02ac43233mr3167191wmk.92.1655978117407;
+        Thu, 23 Jun 2022 02:55:17 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tWWfknRvDP524lHe6dlXZBJVCYmj0zoYe2ybjVKioiQLsF7GQ7KgpdkDjinkKIxuFs8fmriuxQO2+bQbrXoaE=
+X-Received: by 2002:a7b:c4ce:0:b0:3a0:2ac4:3233 with SMTP id
+ g14-20020a7bc4ce000000b003a02ac43233mr3167181wmk.92.1655978117238; Thu, 23
+ Jun 2022 02:55:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220623093716.13338-1-jiaming@nfschina.com>
+In-Reply-To: <20220623093716.13338-1-jiaming@nfschina.com>
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+Date:   Thu, 23 Jun 2022 11:55:06 +0200
+Message-ID: <CAHc6FU5h+QDHgvNupAmjsnhKDCAXCpdy-3x8Qk-x3qwLMWvwZQ@mail.gmail.com>
+Subject: Re: [PATCH] gfs2: Fix spelling mistake
+To:     Zhang Jiaming <jiaming@nfschina.com>
+Cc:     Bob Peterson <rpeterso@redhat.com>,
+        cluster-devel <cluster-devel@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, liqiong@nfschina.com,
+        renyu@nfschina.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit fd27de58b0ad ("dt-bindings: display: tegra: Convert to json-schema")
-converts nvidia,tegra20-host1x.txt to yaml, but missed to adjust its
-references in MAINTAINERS.
+On Thu, Jun 23, 2022 at 11:41 AM Zhang Jiaming <jiaming@nfschina.com> wrote:
+> Change 'accomodate' to 'accommodate'.
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+Applied, thanks.
 
-Repair these file references in NVIDIA TEGRA DRM and VIDEO DRIVER.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Thierry, please pick this minor non-urgent clean-up on top of the commit above.
-
- MAINTAINERS | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1e99a4249dba..f84dba7ee301 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6767,7 +6767,7 @@ L:	dri-devel@lists.freedesktop.org
- L:	linux-tegra@vger.kernel.org
- S:	Supported
- T:	git git://anongit.freedesktop.org/tegra/linux.git
--F:	Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
-+F:	Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml
- F:	Documentation/devicetree/bindings/gpu/host1x/
- F:	drivers/gpu/drm/tegra/
- F:	drivers/gpu/host1x/
-@@ -19757,7 +19757,7 @@ M:	Sowjanya Komatineni <skomatineni@nvidia.com>
- L:	linux-media@vger.kernel.org
- L:	linux-tegra@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
-+F:	Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml
- F:	drivers/staging/media/tegra-video/
- 
- TEGRA XUSB PADCTL DRIVER
--- 
-2.17.1
+Andreas
 

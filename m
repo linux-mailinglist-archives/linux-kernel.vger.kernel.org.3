@@ -2,160 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94EC558B34
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 00:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59101558B36
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 00:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiFWWXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 18:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S230050AbiFWWYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 18:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiFWWW7 (ORCPT
+        with ESMTP id S229446AbiFWWYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 18:22:59 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2079.outbound.protection.outlook.com [40.107.93.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEBF62D4;
-        Thu, 23 Jun 2022 15:22:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SRuVS1yFZWES8AYnUjAsQTWJ1ChPB8iaonCac9ELJ+KmJ6wpvEWsjHtxJ9mU+QkeHdeh4mLS1ccFUxEZ8EInOlltJomm9r3OiE4Tmq/c9v3ZId98izIMkKDH0+13vH81diicH9sjlVMgnDMiaLw3EhqCsXrJsUwtKIrUSug8lEyHamSWdpQFwWNauk9qscET4ewYIEQYmFzHATBJuFRV8nYEK8eNkGn5L2m4gwaCbEAqfKQpVFV7BfEmLFhLl70GvQrTfxy6m4IBe5xZy0VD6Djx7RwauW1HElKP/JHSMEa1wUpMDGS48m/llrcokdwrn7vBVkPS/vm0AhobBdJLjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AH81Z2QrHJiFevRWk1nXMam6jNQmbermNSXNbIycy5k=;
- b=NGw/Ku6GpjaNM53vvKHwHG0QqYIXk6Gvo/undxu4r//aXMynAfAald5lAL+QPfeSL6tqfuRzHdRXpQEfuk5bWLgqrd0mgVf7036jXIqKD7uq8k2em/T1KtlV3ukcJvf4HJQo44/3Hk63qtaA0OTCGP/3wVSiGo0lt3A+RDxCuBklwZQ3BoEQ77tynk3bzImfvI8H9d/gjB1mzMLW00YkCVMd7Ais0SfYOIsJAmkyJVlauQ6nx4JCTBtMLrIS+9pSHmX3xNsPioIXCT4C0qO/nYkzG4sowLXr0vOFKyjCOVn1mXrHQ8hTm0O2UaEUWbFFImGuHBBuHnlt6mZo/pe4zA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AH81Z2QrHJiFevRWk1nXMam6jNQmbermNSXNbIycy5k=;
- b=A+DP8iNBBtNExlemi8+FD5QIWTkOLQFPIYpoF+mSMAnPvKvOyUQ1Dfowlxo9s3bLwx9ke6Eo8tY4iiaSwZ1GDK8uuj48L70QIoAv0OXQ2WVR5rEWn0Upj9Ee7ZmZy9Asq2OigAmD2tpWes6qQNFF/sfeZoa6VFt0nuQXV4pmmMg=
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by DM5PR12MB2391.namprd12.prod.outlook.com (2603:10b6:4:b3::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.20; Thu, 23 Jun
- 2022 22:22:53 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d%7]) with mapi id 15.20.5373.015; Thu, 23 Jun 2022
- 22:22:52 +0000
-From:   "Kalra, Ashish" <Ashish.Kalra@amd.com>
-To:     Marc Orr <marcorr@google.com>
-CC:     x86 <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Alper Gun <alpergun@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: RE: [PATCH Part2 v6 03/49] x86/sev: Add the host SEV-SNP
- initialization support
-Thread-Topic: [PATCH Part2 v6 03/49] x86/sev: Add the host SEV-SNP
- initialization support
-Thread-Index: AQHYh0KYcxQqbwBTdUCpGH+ovKgAp61dj73A
-Date:   Thu, 23 Jun 2022 22:22:52 +0000
-Message-ID: <SN6PR12MB27672239E54FD0DD98A68EFB8EB59@SN6PR12MB2767.namprd12.prod.outlook.com>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <8f4eef289aba5067582d0d3535299c22a4e5c4c4.1655761627.git.ashish.kalra@amd.com>
- <CAA03e5FgfVQbz=pvMeBpOHENe5Rf_7UvE3iAqcgm=9nmwGEEBw@mail.gmail.com>
-In-Reply-To: <CAA03e5FgfVQbz=pvMeBpOHENe5Rf_7UvE3iAqcgm=9nmwGEEBw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-06-23T22:18:14Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=a347d247-b0e0-4cfd-a7e5-2ef85ac56a85;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-06-23T22:22:50Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 22e73bdd-a8ca-4747-8ebb-1fa4601d7963
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8676fb36-0964-48e2-694e-08da5566ea1d
-x-ms-traffictypediagnostic: DM5PR12MB2391:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1NBy9r2meVsP102DbaNY9pEE4UHkzOQPLVtcz4D39Mx8Ngf1r/hkbucpLMk5Uqj+FqWFuqbU79MZo/iPufdiqdqidsAeak9i0i1lQxi102aww7EH/g9pkNfipzJ6izuezKgkgIZYaiLmC7DyuS6UdVhN/RCWP1shoxQjg1oIbiTdswxctefkuX9njlqnxmVbroPRX6lPJ3V8h4UBvnHtcvP6zA8Pq7CRdggOkbZViZdOwHeUFe/u/jzOPrOE/7SVsiPtx8hU+eokiROl0YtkC8fYzfQOeRjc+dnNkAm5GeTPWzyN5kvytIJxSQyop65X949lRfIVBnjDEUnNA4SW8Vpvo3PdvhXZIZ7JZM5fH1hWVx8vGOwprUeGLeVRtGkp4Y/Uneam8HlO4OAf8EvexjX0NYzDpCGhg5Z514enHYMYNvHFkACTMdY6K8ZYOcMVhSkj8ysgRDx54G3FjJCS7xuFC5KUJ61jyH5/q+kmPp4WF2nc1RH+QAKI+okGpu++4y8TDRiJnShj9qR+z8YrKBUcba0TwDCVc6LQ7tGkw2NOd9cGIDc8ZFZoK4azwRsEfYgHQns4AVUdPSFtWFB2DTZDiWQ+afVqxO8Cn/F/MwatliOwN6xJc7PnvGKlPDxmchyjv2oFSq1LO5DR5Ntztcynj/RC86SZ75Q9VMsqw1jQHec2pnFLi2UtveMy7DzQ8Y/89aRg4+TBn0Gnk3lmzXzd7QiVh7NH3PSHgK9Cu+8WRWfqDvrQpqOynFzIGHEB+Bo93m6QfaYeXIsLDgIShtjB0UOfHq9PJfati4fzJoE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(136003)(366004)(396003)(376002)(2906002)(33656002)(86362001)(38100700002)(7416002)(8936002)(5660300002)(52536014)(316002)(122000001)(4744005)(7406005)(66446008)(4326008)(76116006)(71200400001)(7696005)(6506007)(66476007)(55016003)(64756008)(6916009)(478600001)(186003)(66556008)(83380400001)(41300700001)(38070700005)(9686003)(66946007)(26005)(8676002)(54906003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?MoupNYrVcgukKJAOv1zcmDWoeqE7wxD3vYkXatqNHVemthevkr//OSR7un3Y?=
- =?us-ascii?Q?ea8AT5kClIVI49EWLIk2q/wHwfN29/HIV8VOcQmosc2qMpp86RbLdC7Nq2WA?=
- =?us-ascii?Q?dthoOdCnRDb3vMTNPL4SNYPSWsNcvEbD8vD8pgG6IT3tTjo3z5tiGub4lMMS?=
- =?us-ascii?Q?AmlOFPknxlRdBLIiTdQWYHtq5AoIha5y6654QvA0pYP67gq+WrJE439Jglmc?=
- =?us-ascii?Q?s7zQnawFoe5dJ6VYpNgeZUl3Y4EuJEzvxW+n6/+oMnoKsCSv2wHZLeNYAvYJ?=
- =?us-ascii?Q?lzAMu70BXYrxC0SaaNvZS6yMIspueh8SQZvvwd/usTyc4bhaeUqXeeHcC0Xm?=
- =?us-ascii?Q?WFBcsTMi4chEde64uZ11RiIgRfGI4DW3scJz5RxoF127uF3hSoeC+nG+zOOU?=
- =?us-ascii?Q?NL3zSJd3Ny82i8K5M2N8wh/GttyD9buNihrph4jhsDzNPbEUA6YAnElb2cRq?=
- =?us-ascii?Q?mlfgvTgkQGhHYqQ8iIQebKcIBSbCOPSY4QvxVPcWHZJ4TMHwrxrn8N47hyw7?=
- =?us-ascii?Q?FgH5nrJ5kJgzJmyVkn4AWH8STNOLpURQv3lmvzbxADlIk1yUBR4/0aLjaE8l?=
- =?us-ascii?Q?z3cl4jjpZRk/1/e5h5UJjFy/T95NEc96aBq64ONPj56t1KtI1pVJA/gizsqy?=
- =?us-ascii?Q?SWmlG45is9t/FpKhM0zCMY5U6susteZhtfJaEBPAfo4NQqy0Ww91sJEp+xUT?=
- =?us-ascii?Q?OleqXZnU0YIomRwuFj2mYgVqi8ylZJNtBGtLxf9OdEWFeJL9dd60YsTHBCNo?=
- =?us-ascii?Q?XJ9uq5tYESKAbqZ5gCfpnrgvAQ1WqDM/syoOisAaXPKn8bgieToUTK7HUiEr?=
- =?us-ascii?Q?sZ6sJVKo38zO9Ekr6GH8Hv7tHMzLD7HV2hveNif1+XyQbnbB1tAfTgl5RAuf?=
- =?us-ascii?Q?+J4SGOLeIGx5z2ZBtuLvBFjNnM3ekJWxQfdRyYYGIZZHNXop1BiqF4BrHKKh?=
- =?us-ascii?Q?/Fpe4xypBSZxhl8SNnyLxrHrQyOextigsk1XL4cfYo1mx+EdoEkfxdNtZY21?=
- =?us-ascii?Q?i7eqbreXXEgqFkkFyiM1v7q+AkeAbQFKWJaBEV2vQw9mEjJYDgPZ4LttwtEr?=
- =?us-ascii?Q?QdG8T+qDKHTUeV4Bn+Kq6iFbUzf+G/W/XognDpFxyZUsz7BgLhHMHq7byVf5?=
- =?us-ascii?Q?xaaJyfWlg97ZCjcW9Z8mHrXTBsVhQ0VIOXcLzo8QnBr12Ax1NdMe2he2PeVw?=
- =?us-ascii?Q?Ds+gY/a49HuwiqfwauYMYCUhjiR6ufeeve7y/gB9jjZHlUococArnUPiBYGb?=
- =?us-ascii?Q?2wvlP4fnB7kvwvHmhorJk91OL8y1ZZMQA+ozIVA5loQllj29zu4RcSJK7M8C?=
- =?us-ascii?Q?V0RDKr/D6UJ2lETK/FBXcsL1IiKja1VvmqaIV+MWzte+fi9eqc2YcHJjnAfw?=
- =?us-ascii?Q?H8AT73dR/nlLV2lgm4BIyGGQ0BO8Yz++4OvFZMePMSNxoXSrZypikWK9Ly6q?=
- =?us-ascii?Q?SNZ/LIte8p4koajP/2y2/p7EU7eGk1i5NEh/8iOIMBBZTM9vQTlyHA4kWV0g?=
- =?us-ascii?Q?GTPy+DcWA6z1Q2BBL68Qhk7UAZsjmz5ru1SjzJGJ0N54BoCSGwFfVQPJe0IR?=
- =?us-ascii?Q?DPzfo8sXoBptYqSIEa4=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 23 Jun 2022 18:24:14 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA89C4F447;
+        Thu, 23 Jun 2022 15:24:13 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id m184so285957wme.1;
+        Thu, 23 Jun 2022 15:24:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=o9e7Ts6Hi1opGJ+Atgw8mcn0YfjvILiLQjVr7seDMqI=;
+        b=cQ2r0YSj1G3iIlkPp6y6hD8Q5AAqYFX9fj5ddmgVVL+fNOom/gJ0WpQLxLOvfe9S3t
+         juc4g3J5H0Nyu8vKcWqy0wVLLvJSq+XfuDSeamNbKBe4cJNK7QX8JyLcFgmzearj64ri
+         9LI+NblNTRWj1psOFS+dGrs9arCYwMaMr7MR4YWfgWpoCQ61Nm/2hXhDFptZSVv/Vs71
+         nkr7qnPCW5yn3vp13tCPhcnR4YOx8UAuZ6pFOo1RtZ3cVRrMCd73x1YI0p2rFLa1Dw28
+         dP7GMCAvpyQaK24vFr36fFwz93yHeF6Mr5m3UX1Z+Y8YROkjOwecMzMGkwveiK5bBedx
+         Chww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=o9e7Ts6Hi1opGJ+Atgw8mcn0YfjvILiLQjVr7seDMqI=;
+        b=ttyh2jjTwsi1ewYJ2bMxYB8i4a6CvJpMZUz/BoNsC6RZGxaxhIO7Sz/67zUVm1WIBc
+         7yqLRbz8Fpy6MrmxPliF0OrCQiCEaOLnV/n3hfukvo0SH1BCoMs/BujbC5QDl3jaG1AJ
+         qyZYpflfWlvFdgPVlvGhDS0kj9eTkZDTea2RPyxylSPa5kfsgjz0ywSjKYTZtuMM9e1m
+         rtdslGMqvqBhX9V5ltM3txd1bq6VgCNj7SvUl91Ag1/ZRKeZUuU/XTe1S6BImYRXB6jw
+         g4L6oXESlAX4g86q5Tq8p87W0QfpbnQk0Y9t/Vy4lO31s90TjfpQqInb3HYMBwqabaMD
+         rjzQ==
+X-Gm-Message-State: AJIora94lDrvlnkYxCKeTwetP6Drf7v5D4g9IarXHdtrr4NuHbkwl3Qs
+        IjH2j6XgUF4XZdXFABuHpIU=
+X-Google-Smtp-Source: AGRyM1s5VhCyYuY1AsAMuPOJCF1TBATF4MKTEVmcjplu6RT/IEdRP88V6ybdqnTVUVR7q2b51cxt9Q==
+X-Received: by 2002:a05:600c:414b:b0:3a0:331b:4199 with SMTP id h11-20020a05600c414b00b003a0331b4199mr172150wmm.193.1656023052224;
+        Thu, 23 Jun 2022 15:24:12 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:6d40:29d:ba85:78f8:3d80:548? ([2a02:810d:6d40:29d:ba85:78f8:3d80:548])
+        by smtp.gmail.com with ESMTPSA id j25-20020a5d4539000000b0021b86dbad37sm517511wra.68.2022.06.23.15.24.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jun 2022 15:24:11 -0700 (PDT)
+Message-ID: <3f37e3fa-1b7d-1dbb-327c-69a4e96bdcdc@gmail.com>
+Date:   Fri, 24 Jun 2022 00:24:09 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8676fb36-0964-48e2-694e-08da5566ea1d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jun 2022 22:22:52.8698
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Gak1Su4/aLrTPLoHQX5DSQtKPSjalqucegjBN9Vb6pSPguTJwlvbXojrcgTUhynAtOgbD1REn4cP5g5mU3qzgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2391
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] hid: Add support for the xp-pen deco mini7 tablet
+Content-Language: en-US
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
+        spbnick@gmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <85312611-797f-2dd2-f864-f7c13cb889f9@gmail.com>
+ <nycvar.YFH.7.76.2206091058530.14340@cbobk.fhfr.pm>
+ <c856a79c-1d42-6af5-0ff3-589688701fc0@gmail.com>
+ <20220623175116.GA4757@elementary>
+From:   Stefan Berzl <stefanberzl@gmail.com>
+In-Reply-To: <20220623175116.GA4757@elementary>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -163,35 +78,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+Hello there!
 
->> +static int __init snp_rmptable_init(void) {
->> +       if (!boot_cpu_has(X86_FEATURE_SEV_SNP))
->> +               return 0;
->> +
->> +       if (!iommu_sev_snp_supported())
->> +               goto nosnp;
->> +
->> +       if (__snp_rmptable_init())
->> +               goto nosnp;
->> +
->> +       cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,=20
->> + "x86/rmptable_init:online", __snp_enable, NULL);
->> +
->> +       return 0;
->> +
->> +nosnp:
->> +       setup_clear_cpu_cap(X86_FEATURE_SEV_SNP);
->> +       return 1;
+On 23/06/2022 19:51, José Expósito wrote:
+> Hi Stefan,
+> 
+> On Wed, Jun 22, 2022 at 11:31:05PM +0200, Stefan Berzl wrote:
+>> Hello!
+>>
+>>>> >From f9bb82e400effd3aea37b2be710add9e2bb832da Mon Sep 17 00:00:00 2001
+>>>> From: Stefan Berzl <stefanberzl@gmail.com>
+>>>> Date: Fri, 11 Mar 2022 04:04:30 +0100
+>>>> Subject: [PATCH] hid: Add support for the xp-pen deco mini7 tablet
+>>>>
+>>>> ...
+>>>
+>>> Stefan,
+>>>
+>>> sorry for not responding earlier, but this patch somehow fell in between 
+>>> cracks. Please for your further submissions do not forget to at least CC 
+>>> some of the relevant malinglists as well.
+>>
+>> Will do... I am still new to the process and tend to forget things, but 
+>> I'll do my best.
+>>
+>>> Quite a lot has changed in uclogic driver since then, as José has been 
+>>> pushing quite a lot of code there from DIGImend project ... could you 
+>>> please update your patch on top of current codebase and resend it?
+>>>
+>>> Thanks,
+>>>
+>>
+>> I think you'll be pleased to find that José's work is basically a 
+>> superset of mine, therefore eliminating the need for my patch 
+>> altogether. When running his newest deco l code, the deco mini 7 is 
+>> fully supported as well. I should have given a tested-by or something, 
+>> but since I am still new to this, I was kinda hesitant with the big 
+>> changes introduced by the newest digimend work. As you know, there is no 
+>> sort of registry to differentiate devices by ability, so one or two
+>> useless evdev devices are generated for hardware the tablet may or may 
+>> not have, like "Touch Ring" or "Touch Strip". I thought that this might 
+>> cause confusion and would have to be amended.
+> 
+> Useless event nodes should not be created. At the moment, the driver
+> disables all interfaces that are not used and, after switching to "raw"
+> mode, it should only create a node for each valid device.
+> 
+> At the moment, there are only HID descriptors for the frame and the pen
+> so, if your tablet is creating a touch ring device, something is not
+> working as expected.
+> 
+> Running "sudo libinput record" should display only the frame and the
+> pen. Does it show something different in your case?
+> 
+> 	$ sudo libinput record
+> 	[...]
+> 	/dev/input/event21:	Hanvon Ugee Technology Co.,Ltd Deco L
+> 	/dev/input/event22:	Hanvon Ugee Technology Co.,Ltd Deco L Pad
 
->Seems odd that we're returning 1 here, rather than 0. I tried to figure ou=
-t how the initcall return values are used and failed. My impression was 0 m=
-eans success and a negative number means failure.
->But maybe this is normal.
+This is certainly true for the newer xppen devices we are working on. 
+However, while waiting for the xppen stuff to gain support, I bought a
+tablet  that's already supported, the Gaomon S620. Executing libinput 
+record or any other command that lists the devices, like evemu-describe, 
+gives:
 
-I think that initcall values are typically ignored, but it should return 0 =
-on success and negative on error. So probably should fix this to return som=
-ething like -ENOSYS instead of 1.
+/dev/input/event15: GAOMON Gaomon Tablet
+/dev/input/event16: GAOMON Gaomon Tablet Pad
+/dev/input/event17: GAOMON Gaomon Tablet Touch Strip
+/dev/input/event18: GAOMON Gaomon Tablet Dial
 
-Thanks,
-Ashish
+>> There is however one caveat that seems to be unique to the mini7, which 
+>> is the ack packet that is sent when switching to the vendor defined 
+>> usage. It doesn't do much though, as currently it gets interpreted as a 
+>> pen report and since it doesn't have useful values, causes the cursor to 
+>> go to the top left screen position. Since the ack packet is only sent 
+>> once, it ought to be of little consequence.
+>>
+>> I would of course fix this, but I don't really know what's the preferred 
+>> way. One can obviously simply set up an urb to catch this, but it would 
+>> have to be a special corner case for the mini 7, as José assures me that 
+>> none of his tablets display similar behavior. Is this acceptable?
+> 
+> My tablets also send an ACK packet, but in my case it does not have any
+> visible effects. Maybe it is related to the DE environment used. I
+> tested it on elementary OS (Ubuntu) and Fedora 36, in both cases the
+> ACK is ignored... But catching it is fine, we can include the code you
+> suggest.
+
+Can the contents maybe differ?
+
+This is the ack the mini 7 gives me:
+02 b1 04 00 00 00 00 00 00 00 00 00
+
+While this is a button:
+02 f0 00 00 00 00 00 00 00 00 00 00
+
+And here we have pen movement:
+02 a1 59 23 ef 32 b8 0e 00 00 00 00
+
+>> José already had a look at some firmware device descriptor string that 
+>> reports the number of buttons and what not, but as far as I know, it 
+>> doesn't say anything about ack packets (right José? Does it say 
+>> anything about touch strips or similar?).
+> 
+> In the devices I tested, the ACK packet is always present, so it should
+> be fine to catch it. I'll test your patch in all the devices I own to
+> be safe.
+> 
+> Best wishes,
+> Jose
+> 
+
+Yours truly
+Stefan Berzl

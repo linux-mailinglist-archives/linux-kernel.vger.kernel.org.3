@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D99557872
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B3A557876
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 13:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbiFWLJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 07:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
+        id S231239AbiFWLJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 07:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiFWLI5 (ORCPT
+        with ESMTP id S230357AbiFWLJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 07:08:57 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150047.outbound.protection.outlook.com [40.107.15.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352B14B857;
-        Thu, 23 Jun 2022 04:08:56 -0700 (PDT)
+        Thu, 23 Jun 2022 07:09:46 -0400
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50083.outbound.protection.outlook.com [40.107.5.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB014B856;
+        Thu, 23 Jun 2022 04:09:45 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kmevyHc/gvxdsF9KgRz/Qc24FBdc7FrSqft4ozUzS9qN75JcwlMhd4LAKu77BvyHxkEyHdcmpgCga/OqNUTet7zJbzoV2SxnT+THYOnWIvBrcSRiiETod033NHfvfN/o5CBu26XtP71F+tCgzMBu7VgXxlUdnWl1r0FO/V13J+vWTII3rf7h6QhS74ELVWvh2QLgPtB0QAtCIlz0JSOKfQd+sanQoVCZtT08xYKTRE/mO/LspiWBNC2PWplcksn8CDvsjhFULkc4mX303lZ4LUMiGBuKlWBhOkFjTMOmSr/0M5CtDh12y72nA2UfmCEITKMjQ5WXG5pekz3WtJUusg==
+ b=DyxDvDcffclcBfIRVTBuSWK2+Ma8FEiVI55RmnftUsaqb9c5eSQXEGmSrzg+stSegluTi94R7XqMXhB4jZ+YesvKcam6HhBzIEYw4LJJZ51rbON1jcBWt9l6dKTPvvfg4brbe637DvnWIxHN0hX2Np5rItuIJOi0i+p57I8HWGg9BHzZi2jrSnCLedZjIYjT5TBJoAvBm1JelotlIakzMz0dR136/qvxQynzbMmk4cPeYp2e44hCUsL5XanKdFUZspnIfXJK0m9WV4SZ4e7m7Nqc4or3vOf1f0GgYGOI57nemGxWEfg5dftR0K6LgyEOonWvvi9aaS1jMphPD3RLwA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4qaU618toocpr3tkx5w/cQdPMjqL2Lj0eZb33b0D0/w=;
- b=eVCZVb50GK3GpGA1t+d/RYIABmFcw1vsVkXjaK9+U5wnr1kneeEdjfCJ0PKmVxrqP2MCItijafThXem8zQaGIdo0jak2nRhgywC7Omk/CMmOcDR+vo4x3PE1sedM7Vf566hCxIsUX5JuPU0l88rnx3MGkUrk6oIHK+DOsSUcddVjTRtgYytz/B4UCJxoAQ7T6bLAXePv1cZStUnA8u95+X6l5QKw1mb3/2xIaUTHRUw3n8KUs8+3FyBKHO999ta/ujD+DvUQi6fChqBZMt+36oG3eeg9BA4534QTtYxCFJb3N392KoVwKz6BNyvVEzRp96TKSqXTqXG8YOZPe+F56A==
+ bh=B1np0z7Za5smEbYnBxWT2AMtjAk5wxtm8Qhms7AUqUo=;
+ b=dmZpYEWC9A9d6y4Phj85i8xF9mgJhfVlvj+FHM1aKEOR3squW7+8n4ztcIH4qY0LCZAFJ1a47B2x8j7dI8d2wPYdjB30fzh0A0odrBEF2Sd+kxlVknpTqXMF5Zdgd2cU/xFka4VTQ+iTA5f9jJ1J2wSXmKYBfiEzRM6ua9gURx3GAFjgHRquay+anNUn3rLReecLiQRE/2Qa73UWB0pVKyIfQV0XAKxPeFQCzQ4P3lbCvU6A5B/PTVpthvOCAZpcgSBIk50XWmdG0ftzCXOo7KeSY8tFYE7MqmWEkG+S7ARL2sQ5w+GeDtTEsdpc4j+fdHA4Ay/xbRFCT2Y2/kfMZQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4qaU618toocpr3tkx5w/cQdPMjqL2Lj0eZb33b0D0/w=;
- b=ny8de3ZHEm2Re++6y6N++rQFSvSjcmK2KQDXkgX7s7AQVtPw9PolyksXyNOoJ+oH7DhB9SlBx4HAS2I/BiIog8uwtN3DAvigD58gdZkmqjUXufbPTl0HauKZY4rExZINNuJX8mBltLWOOafcJ32lo0hhC48W2/rtj61FHoH5TdI=
+ bh=B1np0z7Za5smEbYnBxWT2AMtjAk5wxtm8Qhms7AUqUo=;
+ b=N8E81QWf4UI/zfjIrCeazU/CggYyjZarEP9LKHkt+MvUAtmhGS1TJ6IpztR1vGGjl7gABstm+TgwL+zYgS0aYa8g1IyQa17BU5fZOIfMJ1pfxqMmZ+//gzw4MCVhzlqLCep+5RnidojvA8JafoUmXpAMnE/8Ms+g+KxPiNn7lEM=
 Received: from AM6PR04MB5334.eurprd04.prod.outlook.com (2603:10a6:209:50::28)
  by VI1PR04MB5744.eurprd04.prod.outlook.com (2603:10a6:803:e4::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Thu, 23 Jun
- 2022 11:08:53 +0000
+ 2022 11:09:43 +0000
 Received: from AM6PR04MB5334.eurprd04.prod.outlook.com
  ([fe80::99e:6ee:d17:e114]) by AM6PR04MB5334.eurprd04.prod.outlook.com
  ([fe80::99e:6ee:d17:e114%5]) with mapi id 15.20.5373.015; Thu, 23 Jun 2022
- 11:08:53 +0000
+ 11:09:43 +0000
 From:   Gaurav Jain <gaurav.jain@nxp.com>
 To:     Jiang Jian <jiangjian@cdjrlc.com>,
-        "+horia.geanta@nxp.com" <+horia.geanta@nxp.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>
-CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>
+CC:     "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] [PATCH] crypto: caam - drop unexpected word 'for' in
+Subject: RE: [EXT] [PATCH] crypto: caam - drop unexpected word 'a' in comments
+Thread-Topic: [EXT] [PATCH] crypto: caam - drop unexpected word 'a' in
  comments
-Thread-Topic: [EXT] [PATCH] crypto: caam - drop unexpected word 'for' in
- comments
-Thread-Index: AQHYhuvAVru4alL4Ekeu4mkmAqO4g61c1T0A
-Date:   Thu, 23 Jun 2022 11:08:53 +0000
-Message-ID: <AM6PR04MB53341F90195C0E472F7868FDE7B59@AM6PR04MB5334.eurprd04.prod.outlook.com>
-References: <20220623102536.34573-1-jiangjian@cdjrlc.com>
-In-Reply-To: <20220623102536.34573-1-jiangjian@cdjrlc.com>
+Thread-Index: AQHYhtB+o2ueF9uQqk6MJtqThgvv261c1bBg
+Date:   Thu, 23 Jun 2022 11:09:43 +0000
+Message-ID: <AM6PR04MB533467A651C6443982B60A2CE7B59@AM6PR04MB5334.eurprd04.prod.outlook.com>
+References: <20220623071123.12885-1-jiangjian@cdjrlc.com>
+In-Reply-To: <20220623071123.12885-1-jiangjian@cdjrlc.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -62,55 +61,55 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b0ccbadf-2aa7-4f52-049c-08da5508c249
+x-ms-office365-filtering-correlation-id: a2ba5e5c-bc9f-49b4-7e3c-08da5508e013
 x-ms-traffictypediagnostic: VI1PR04MB5744:EE_
-x-microsoft-antispam-prvs: <VI1PR04MB5744C908EC003D604A89B007E7B59@VI1PR04MB5744.eurprd04.prod.outlook.com>
+x-microsoft-antispam-prvs: <VI1PR04MB5744441673651F90DA0774BEE7B59@VI1PR04MB5744.eurprd04.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1sYBYdFwgv+YkQJNaFFWrINP9FV0Cnvs6YYwde3ZI96+xo1AUyPHyKileK/SbACNEPUOcWPIXA9mEvHhMEtxzVWSiYMYx4K8OwljXTqOrK8hlJWaaPC1gCc/0z1iFMy+g+IW2LM0dWmnhOU5B9FKnQA4J0tuaLFOPfYvQCwMFD6rL+AaPiQTZzholI7PP3zj97QM+rqmrGP0cFevB2151XsEdsAoLsB2UFRMA6+A6PW3/Q1DZUK/LsFa4uauJD7bEUQ3ZZ79cSSIixzFiOeW5Uf3uuAFKMMxeLh87cMr9/ihfGXCdIf2d7DXlKJk1GLiBKT4ifX5xbwRHNeiRV2PdEj/ohYYeRPVKtOoyGQt9k0gf6jfepa0pckeLMUPsSsu3LuVpRrgkwk2XPsKSyN1TZkBSDfIMeY+Xxj4bTAXkJVbqj8tYcbnp/Kw5X+AuoI1UEZXtP3wM/isS8Cu7JLtd8CHsHf2Qh5o+bqrMo0QP6xA8wZy549X5Y4TKto06JNc3A2ff0sUcx0kOfru3pVQV4oYAooMhL7gTJCVoBglt12UyxxR0ROpPjEn79BMm26pF7sdjTV43OM1tGG6IzD6cng6TzMRQNjCraE5/OrNPn8MtVx23clKHMEu27bAxAHfnjqC3ac4VkdJGB5RPffuPthXzRjZzJTdnzYhdlumJrAViHp0H8HOMitowOtryzTStSpknCgzP5X8YrSB0vD25U0rp7B+JN1H26yccy2kcFagQyT9pwVFkR4EqNGPtdi3
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5334.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(366004)(346002)(39860400002)(396003)(53546011)(8936002)(26005)(7696005)(478600001)(38070700005)(52536014)(6506007)(122000001)(55236004)(41300700001)(2906002)(9686003)(44832011)(55016003)(83380400001)(5660300002)(38100700002)(66946007)(33656002)(86362001)(71200400001)(186003)(8676002)(316002)(54906003)(110136005)(76116006)(66476007)(4326008)(66446008)(66556008)(64756008);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: zqUFv0eFdiEW/QZa3yCQSTy8rJzfJZY9Kc0VMzFY20u1POhSogg/w41CEd2FC05epZm8x9gHXZQWSbEme0tWskUndWya03kKRELj6VUpbZSw8mvuDcC3ivyASBtALCiXNaMmEZSopNHO6JP4S4IVyCkrL/m1DDwSxoeGNMdgLOuObnMUvzgqwgwVmIRwKwQ9HV1dqyEW5D5I0hHix0q157GKUclGOyBKJbquSCJ3BIOMrlsoHZGrqHeTREhCQDC3bjmh/06RcLRwUqxnAv0GD8YJDaHT3WOb3W3gfi2Y/pyprB3VgZuJSXrMXDZhWcHaK3JQZcHEbQNdd2EN0dJd72OQeqlTr9BaXRlEL4/Cq9zdTjOlU6HavN5Zi/L1P9DqyikpkUd4+o27Bk1xnMCMSHTeCmPxSULtOXXQPVkRxmEkJ5I2yPp1mBZEWzxF8j62+SD+RwNTyhsB7H7AFJqnVFmbZUccNdvuuev3s+QnADtLO6qaRcyDsLiIt8JQuADATWX5BLpsLtp3Hj3cFdx9efQnlBe3FmN1xi6DGGxB16vst1uk1WIUeUYXlgxmOG2eA9px6C0RS/rYo1bjT7HksMlLaZJ6/uSuMhmQUm9fl3bEPyrYvxhQLsYf7//n/Ygrsl5N++HqAX5kp8yisR991XVnXmTog8fgZrCRNKeaqBwxuDj07YDSlJgUdZbXy4wO1KYtwCgN1/1wtBv0xl0MdFVBEvmV/BWsGU3hsEbd6G6NMc0AHqVNMMK+mSV/Mn5T
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5334.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(346002)(136003)(376002)(366004)(86362001)(186003)(71200400001)(38100700002)(33656002)(66946007)(66556008)(76116006)(66476007)(4326008)(66446008)(64756008)(316002)(54906003)(8676002)(6636002)(110136005)(6506007)(478600001)(38070700005)(52536014)(41300700001)(122000001)(55236004)(53546011)(8936002)(26005)(7696005)(44832011)(55016003)(83380400001)(5660300002)(2906002)(9686003);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JDxat9VtFZlkSGwO82ENrryS/MH3YYD9b/xMVJcsIpDiegjSizu8+1oKWMcA?=
- =?us-ascii?Q?UuPCGwarz0RzUrTILix7EuZEgUUXv9qFUgHqAQgA9sIc8CM2pVVTPvEOfbvD?=
- =?us-ascii?Q?J/jpUWb+6Eql5zspF4wMXIjllAMQuHA0AJWlKvk5QVaOCpYRLNJ06fVVZ2lp?=
- =?us-ascii?Q?rDyK+C3AsuJHDJv5fBEZ58o97ZcMjsNpme29m18/yITb6oPzweDJ+G5nWlJI?=
- =?us-ascii?Q?/eiR6BGEiz372Q4JrPNxgVmxsWhrW8nd4PnZKV2hlC6ixe6uH5nabiMx1Rk4?=
- =?us-ascii?Q?1MI2NinlK+AqeguvC0U6D4KGrGChQLeXaHJoVACVj2SlmZq/13Tky7r0g1le?=
- =?us-ascii?Q?0uJ3GjXedTIsGICxsnb4HbFt1g0fSjBWeKO27L18bCgZiXqZzItMxquFjWZG?=
- =?us-ascii?Q?DQpATq1C2Xyjml8jWwBbvM7xnOpNnhUaOY6wFMQZ1SonLWOMYkmOp5NECae3?=
- =?us-ascii?Q?7JpNmcgUdS51xVLFDoqvgGvNG+J8ro7Bu5x5C5HvAT8hxUCV7cO0njQa3DKe?=
- =?us-ascii?Q?3sbC0mTyFZt+xurHHEXQeQ4xFoMgYT5xSWplYn/uX8UVnr6kpyirLpFmdsQd?=
- =?us-ascii?Q?45mawI6dJ0AjeF+YQ1O/g2DfR4YyBpamUCSbKTAZXFvp4ZAdnWU9+DM7tj04?=
- =?us-ascii?Q?mMkDEvElcIxhku3Ta/zP0gOL6z9bFPO2NfF6gYPXMvYYEH66dv3pC9nI/Msk?=
- =?us-ascii?Q?jXwTmR3cz5Bq8gkCMd8u9zzzWw+NA7UIRQf2OkxA0Uo4gtYyYpX0vfWwXDQP?=
- =?us-ascii?Q?5iEFC8bH3/Kq5FWS9+QFaV+GHwi8/U8S7yA8MsOo/DfKXeTMdN78THo7fT+O?=
- =?us-ascii?Q?LV+cC7N4yEr0YZl+DFF+7CrSUy3lKZn34pvseJMR4KnS/tvLdjY7nkBDxXzq?=
- =?us-ascii?Q?yWwmLZb3OP3c69v0z8iAlg7kS09av2ciBXbQZ0HHznVXq7RCZmIK8SneV5jr?=
- =?us-ascii?Q?ozcEML44176bXdV69DTRHTeagp8wj8t8eg8WGhnylARF3IdGG1HKudDV7cKT?=
- =?us-ascii?Q?uWHgGuc05ZLcVVJh8La9zGkf9uC1fI5pmBOxbpaGlcQiS8rRNT9aJNVx01jp?=
- =?us-ascii?Q?7CeAjaLPr2PrrOmxJgG0lBIYgltom91EVNhijJBVALK5acAdcmMneXr/V7Y9?=
- =?us-ascii?Q?610gMsieDZx2os/p5l9/bWaGt3LhykIJqUM0/lccCEhP3mQn7Nm31+Y0i1XW?=
- =?us-ascii?Q?afGDkKJ/KbM5h6vHq10fy+zMFvmablQuKsu1vctMiXULwP+yQgFAli8sXNRd?=
- =?us-ascii?Q?ZmKRXzcSlQra7gVAdOb0GPWZQUrM7yIdiFwJfaI4/njOV7Wd25tGCKsfwxLG?=
- =?us-ascii?Q?maKPezJYTxphCTQ9cFrhqO6gHthiGTtvb/qhwTaXM+T7Sj0zaMz84VstaAYa?=
- =?us-ascii?Q?k/rFrW/kEFXW+bwmD2K4IAhKhu1+qFUJOF4n6HgyXEZ5f9MUZlK0bXrbP1yM?=
- =?us-ascii?Q?xOXdAJLRrJZqahQadATXNqKU0CXP1XnTjWtOMP+wbAsIkxMzbNs9CUm6WyKz?=
- =?us-ascii?Q?CwrCx0KChApuN0yUDubYfV8wyf4LeUYQqbqtM0fNBJkvQh0y0BIgznK9WxnG?=
- =?us-ascii?Q?5ZBO9x2CWZ12E9KwZB/H9lNqejPJ+Yyh+UlwJpre?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?EZqkmZWIBKVCgEJS3BkoKGxUtsLLWzhVf9N1Qm2GnCFRDq81N6W3x7a51V16?=
+ =?us-ascii?Q?2BcSUADUsqfpy3R/AyLhRSo3/FJYqfwuuLpkTNMUYqDdTld+AkuhhakCfuF+?=
+ =?us-ascii?Q?9SNrW3dZKMulLYV/Tchv8umH1PtJL+CCOR71mMB6J77q+Cq5DIWcq5RcApln?=
+ =?us-ascii?Q?szkEgGJKo6ylvASF+ZDLc15z680/DLecMNXikoPiNtfrZTOtwuvBHcdPlRnA?=
+ =?us-ascii?Q?9ZCNuBcJH2ZTH7AaBGI2I1TtlYdYXb7K87xJV1aoJudnNbQFtRx0spiOYuws?=
+ =?us-ascii?Q?6IfP31yuzpMMRitDYhqg1uTcswa45rczlw027CXlQjaWlK49oKHKpLpVDeYL?=
+ =?us-ascii?Q?00P1b3G/0UaJ0DQIcr7Fu+kwNS7/2nFY3WeN6637dylzCFIc8DGUjKz3toL6?=
+ =?us-ascii?Q?1LojO63Os/03NBx4SBzpbXqWyYlyhtHmOZA+wrTYslUiapah5uym6Kv2KODe?=
+ =?us-ascii?Q?K1cVHW6NaKnhVcXSDIs8+8N3aqLiiwYO7XOyoCREXLH1JAXGh8EHrPxyFxCR?=
+ =?us-ascii?Q?Rcvj885ciMdSTgptL+YCw6uVmbQbcYMqc+jOrgncEBEuxEvvUXk8gruyQpPi?=
+ =?us-ascii?Q?y2zCDdNHPYilRDEe/Z5DYtKIOyQn5Ti/fniK/RlhlzUiJTtyjuN4jKXI4+0c?=
+ =?us-ascii?Q?2z4QPvwZZNa8wwn6BFHAUd8SNOCZda0JWinLhAVc+3QClnu+1nt36qiUYCTT?=
+ =?us-ascii?Q?mmRG1CJKXCFljFAIoS6ZwbrHWSTMvgCHiwUlQyoaij8yfVBZ3fltomWMd6JM?=
+ =?us-ascii?Q?70lniiBu4ICl1RFvLpy1IdMywIUvDO/b59H50mSQNEDE7XIZI9mioo4of+XB?=
+ =?us-ascii?Q?90gbn53wHkNu63+3Nnk2m7c3ZeQubdketf2OHugjRPxteHlyHHc5dPcPTZTy?=
+ =?us-ascii?Q?v597iKN5UVX2JsOMldsxHud0pNv5/jo0+RDr79QJnESiBsNqFWctor77tn35?=
+ =?us-ascii?Q?n3NLM99aSDKRPXnSsfO38ELjpIMTxld3PtZcxfTtE/nXSQkah7Fa0Bo68Chg?=
+ =?us-ascii?Q?/pd7hHFIuaFkzGAYWzVlh6v/uatlL8R0z2xsNuaRMg1h1Q9kwDn9Ea9cKqlU?=
+ =?us-ascii?Q?D9VTm+UpKKMh8faUt2dhQh5k6Abs9GETQCVa0/nE+5t1mosMQxKOFI83cuYR?=
+ =?us-ascii?Q?51axSzssnjUw+iX55W/ZsR0AVQywiu4NkVVJlbyOZ6hZaV9O8fVwb0ncW2/p?=
+ =?us-ascii?Q?zkQmMjJY3dGGh7mdXrZH8aiyYhDcLwswuIjzkxFfvBmJsqFfi6cjHtB/4RO8?=
+ =?us-ascii?Q?/UOVAayO0qE9r2EOkocSHJoips4ijwMHQgWHTTsaOr9zwzNrf+ViAp97M0sA?=
+ =?us-ascii?Q?43Gpb0r0uGYJjZVI/ALetkcJKtPVkbDom/jj4HkBBMkJ0IIjA4hoS22l9SEL?=
+ =?us-ascii?Q?wyL7oYvOuyJjvXivky6soNTBMJ7DkZoqzTGAtFLpeAl7s6ZRqfNJzgWosOK6?=
+ =?us-ascii?Q?yLem0m4O+hu3u5IebdlR4jzX6HfGM6sUUWNS5evRTxy2hXE1CsBVngiDIJws?=
+ =?us-ascii?Q?q2epQF0+ZJuzltLxdF8OZKGHwHxjzJpJ1fbxnI166BFoR/WhdH5I/OiTjsNe?=
+ =?us-ascii?Q?CW/l9wCdG68uyVUXUFrmsYii5iudsvD5EuNkL1DZ?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5334.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0ccbadf-2aa7-4f52-049c-08da5508c249
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jun 2022 11:08:53.3854
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2ba5e5c-bc9f-49b4-7e3c-08da5508e013
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jun 2022 11:09:43.3663
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jI8Ikk3J007g8guYV/z7hlaOUemnaD3slyhjiHUxpgc78+DqhFGyRS+7uD+iYcT1/YxJI1hjsKVgm2H+mzpzgw==
+X-MS-Exchange-CrossTenant-userprincipalname: Xkn+tpOGqCIm4Fk1aars56kIUrdI/kD+5/1M1btZkmHrcMAO64kG0Vc2vYk1HpIPgTHfbG/EDGqu6JAMHYTO+Q==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5744
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -126,49 +125,60 @@ Reviewed-by: Gaurav Jain <gaurav.jain@nxp.com>
 
 > -----Original Message-----
 > From: Jiang Jian <jiangjian@cdjrlc.com>
-> Sent: Thursday, June 23, 2022 3:56 PM
-> To: +horia.geanta@nxp.com; Pankaj Gupta <pankaj.gupta@nxp.com>; Gaurav
-> Jain <gaurav.jain@nxp.com>; herbert@gondor.apana.org.au;
-> davem@davemloft.net
-> Cc: linux-crypto@vger.kernel.org; linux-kernel@vger.kernel.org; Jiang Jia=
-n
+> Sent: Thursday, June 23, 2022 12:41 PM
+> To: Horia Geanta <horia.geanta@nxp.com>; Pankaj Gupta
+> <pankaj.gupta@nxp.com>; Gaurav Jain <gaurav.jain@nxp.com>
+> Cc: herbert@gondor.apana.org.au; davem@davemloft.net; linux-
+> crypto@vger.kernel.org; linux-kernel@vger.kernel.org; Jiang Jian
 > <jiangjian@cdjrlc.com>
-> Subject: [EXT] [PATCH] crypto: caam - drop unexpected word 'for' in comme=
-nts
+> Subject: [EXT] [PATCH] crypto: caam - drop unexpected word 'a' in comment=
+s
 >=20
 > Caution: EXT Email
 >=20
-> there is an unexpected word 'for' in the comments that need to be dropped
+> Drop the unexpected word 'a' in the comments that need to be dropped
 >=20
-> file - drivers/crypto/caam/caamhash_desc.c
-> line - 25
->=20
-> *              must be false for for ahash first and digest
->=20
-> changed to:
->=20
-> *              must be false for ahash first and digest
+> * This is a a cache of buffers, from which the users of CAAM QI driver
+> -->
+> * This is a cache of buffers, from which the users of CAAM QI driver
 >=20
 > Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
 > ---
->  drivers/crypto/caam/caamhash_desc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/crypto/caam/caamalg_qi2.c | 2 +-
+>  drivers/crypto/caam/qi.c          | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 >=20
-> diff --git a/drivers/crypto/caam/caamhash_desc.c
-> b/drivers/crypto/caam/caamhash_desc.c
-> index 78383d77da99..619564509936 100644
-> --- a/drivers/crypto/caam/caamhash_desc.c
-> +++ b/drivers/crypto/caam/caamhash_desc.c
-> @@ -22,7 +22,7 @@
->   * @ctx_len: size of Context Register
->   * @import_ctx: true if previous Context Register needs to be restored
->   *              must be true for ahash update and final
-> - *              must be false for for ahash first and digest
-> + *              must be false for ahash first and digest
->   * @era: SEC Era
->   */
->  void cnstr_shdsc_ahash(u32 * const desc, struct alginfo *adata, u32 stat=
-e,
+> diff --git a/drivers/crypto/caam/caamalg_qi2.c
+> b/drivers/crypto/caam/caamalg_qi2.c
+> index 6753f0e6e55d..4b81fb33f199 100644
+> --- a/drivers/crypto/caam/caamalg_qi2.c
+> +++ b/drivers/crypto/caam/caamalg_qi2.c
+> @@ -29,7 +29,7 @@
+>                                  SHA512_DIGEST_SIZE * 2)
+>=20
+>  /*
+> - * This is a a cache of buffers, from which the users of CAAM QI driver
+> + * This is a cache of buffers, from which the users of CAAM QI driver
+>   * can allocate short buffers. It's speedier than doing kmalloc on the h=
+otpath.
+>   * NOTE: A more elegant solution would be to have some headroom in the
+> frames
+>   *       being processed. This can be added by the dpaa2-eth driver. Thi=
+s would
+> diff --git a/drivers/crypto/caam/qi.c b/drivers/crypto/caam/qi.c index
+> 8163f5df8ebf..49439d0d1b3c 100644
+> --- a/drivers/crypto/caam/qi.c
+> +++ b/drivers/crypto/caam/qi.c
+> @@ -75,7 +75,7 @@ bool caam_congested __read_mostly;
+> EXPORT_SYMBOL(caam_congested);
+>=20
+>  /*
+> - * This is a a cache of buffers, from which the users of CAAM QI driver
+> + * This is a cache of buffers, from which the users of CAAM QI driver
+>   * can allocate short (CAAM_QI_MEMCACHE_SIZE) buffers. It's faster than
+>   * doing malloc on the hotpath.
+>   * NOTE: A more elegant solution would be to have some headroom in the
+> frames
 > --
 > 2.17.1
 

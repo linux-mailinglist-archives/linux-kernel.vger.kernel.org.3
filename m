@@ -2,157 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA91558773
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B7C55877F
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 20:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiFWS0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 14:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S232830AbiFWS1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 14:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237203AbiFWS0I (ORCPT
+        with ESMTP id S237203AbiFWS0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 14:26:08 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DD86F7BE
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:27:23 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31772f8495fso1258077b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EL/06AiO/r0aaZHGPm8olM4Z1g8u3q+FzLtpTcwW9+E=;
-        b=JnCT42yA4RwkalddkzPrJcFW4xS8/AuSbzy9tJ3tePu5bM24Ibqr3x++pzaPDrLfSq
-         kaGJTArX9fUCrT0wKKOCtTLYJfjz7rj9imdcL7Pqfb4slmHg8IMENvZlqFm4OXbLEZny
-         J9YpduFdJ0C9SGIfK3lAhmOLKKSD54emhGXwyTKd4zLc6mUsVCr0UEcbk+IU96MD0I9r
-         JA/jzjJFQ+fQd7mJ8EkAmfjizWANCRRDX1m02PA1R+yQuTc3BWGj/hPC7P5U7eOqhdOe
-         TNE+ns8QKBZrDwGhF91i4cSeiE94OXjudpzhMpSeD6m7B9EcjFqLK1KazAZTYMoHsxV2
-         /pXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EL/06AiO/r0aaZHGPm8olM4Z1g8u3q+FzLtpTcwW9+E=;
-        b=2qY9OS7f0bSwluzMsWQ1zfD4rr6o07DXrJnIJKUHnnNGZvZF6r794e3b+77/uGS3IB
-         j4PNFnRZVHsT9VErPPROQ4WWmpdjGR/ZOpzMYd9SBAGYXsZd9+F29AAeXbV9rOD7p5bo
-         iduft982VRNeAUYgOjbLl9e0R8/Zfw/7XSJomhDj4XvswJrCwjZqhSd61po1b/bW4D7q
-         3epRdRE/W2IoCXoPGY3l0xkacDwWX+l8ANrw25gCHti+peaEQA+sGvo61MhNrQMEF9Oq
-         yN7Bci9OMY0QvA4pe7J5DqDbl7tjE+0juRDhukaQtxXBO74mrxN0+t6JilX5Dp4YxCuH
-         2OBA==
-X-Gm-Message-State: AJIora+ORBBVQurXGbn+gSn7SrJqJGvrJiVDt5pFPQbyKm6KIfSLF8cc
-        H2DZDD2MTq5cQgLX5StbH5OBp5m9KhvOzCkH6zLEVA==
-X-Google-Smtp-Source: AGRyM1th3RmV9czY2nAQEMvAwHPPL7mFnNzI7DxsJuq4R6Wbusl3da+wwbtdHDw4EMO4U/ky+UtTRttD4UQUKoucelI=
-X-Received: by 2002:a81:a095:0:b0:317:d4ce:38b6 with SMTP id
- x143-20020a81a095000000b00317d4ce38b6mr11755149ywg.83.1656005242403; Thu, 23
- Jun 2022 10:27:22 -0700 (PDT)
+        Thu, 23 Jun 2022 14:26:51 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD9E12AAD;
+        Thu, 23 Jun 2022 10:27:49 -0700 (PDT)
+Received: from mail-yb1-f177.google.com ([209.85.219.177]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MIdS1-1nqOOc3dJN-00Ecgv; Thu, 23 Jun 2022 19:27:48 +0200
+Received: by mail-yb1-f177.google.com with SMTP id 15so247910ybc.2;
+        Thu, 23 Jun 2022 10:27:47 -0700 (PDT)
+X-Gm-Message-State: AJIora8RZpDd+59VbRnMN/KVRZXiNQaIKsAOheSqMW+wYkB1cUNpHNfZ
+        Vw7IRO0bU0HX5nRDiiE/iLW1IYnc/nHLNPRZw2E=
+X-Google-Smtp-Source: AGRyM1sXbb09Op2pKcfwN6L4Ch/Q1/ff1/rtYtQX7EpRNhlw5gpcBOXG6GSX/Y4gtaFZA0hA29oa5+K8UMCqojOyXHY=
+X-Received: by 2002:a25:86cf:0:b0:669:b4e7:7723 with SMTP id
+ y15-20020a2586cf000000b00669b4e77723mr2373815ybm.106.1656005266613; Thu, 23
+ Jun 2022 10:27:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220623080344.783549-1-saravanak@google.com> <20220623080344.783549-3-saravanak@google.com>
- <20220623100421.GY1615@pengutronix.de>
-In-Reply-To: <20220623100421.GY1615@pengutronix.de>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 23 Jun 2022 10:26:46 -0700
-Message-ID: <CAGETcx_eVkYtVX9=TOKnhpP2_ZpJwRDoBye3i7ND2u5Q-eQfPg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when fw_devlink.strict=1
-To:     sascha hauer <sha@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, peng fan <peng.fan@nxp.com>,
-        kevin hilman <khilman@kernel.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
-        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
-        andrew lunn <andrew@lunn.ch>,
-        heiner kallweit <hkallweit1@gmail.com>,
-        russell king <linux@armlinux.org.uk>,
-        "david s. miller" <davem@davemloft.net>,
-        eric dumazet <edumazet@google.com>,
-        jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>,
-        linus walleij <linus.walleij@linaro.org>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
-        david ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
+References: <20220621133526.29662-1-mikoxyzzz@gmail.com> <CAKwvOd=Bmu40+_11GOBTeJBjToUf0LNG_RX0RiLcRLimUUkgcw@mail.gmail.com>
+ <CAK7LNAT3FrpLnhSgfTo5bxk-9cHm6g1ti58wSY6W-fxMx+mUrA@mail.gmail.com>
+In-Reply-To: <CAK7LNAT3FrpLnhSgfTo5bxk-9cHm6g1ti58wSY6W-fxMx+mUrA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 23 Jun 2022 19:27:29 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2SkawPCtBgm4J9rUawRYa1CT_-BqTbdE-SUUa=9VC2pg@mail.gmail.com>
+Message-ID: <CAK8P3a2SkawPCtBgm4J9rUawRYa1CT_-BqTbdE-SUUa=9VC2pg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Kconfig: -O3 enablement
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Miko Larsson <mikoxyzzz@gmail.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Chris Down <chris@chrisdown.name>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Oleksandr Natalenko <oleksandr@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:Cyi0DH3Ra8ysKGtDX+mBsA7v5zjRM8tFt84HZmMpMjGHJWhDpcX
+ pGMpm8I6Qnt0Ze+QaYri7NRakaZiRR+n51HZxxV/t1hDj9oVjM/5QsxFz5cDdvekJF9AlCk
+ 9tHg1ZJM+XyGrpZduFckyIg5FMeNSWnnATQ+ehbMER06fLl2K2gvlGCXtnflXJWQ6SRvu1E
+ CxO7ed1f6WeJCRNlb4eCA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MROt+qzB0Jw=:AQDMG/uxv0QsQ50AHf4NWn
+ Mlkhoi8K1LczfCGgEhI12c3p1RcrK4M2axDBr68sPCExEgW+prjyu+64+ECRABGMV5nhUNeyG
+ WwvcPHQhkcIGK9Qr8/1S0q5XAamFaWSDfE82ODrgkcIlemuvwZ05hS0Mh+eXHV/40ZE8EWGSe
+ YV7IDSkUjSXgHlgWPi2vKN8//yclP9I0Zg0dFY7gpi0w1cOOuA+1RNDj1qndxLUb/nHT3tv1R
+ NMV/uRnQBDibBJfqsAH6ifnlJ86xtrSnGUWeNyPD8ghUF3lAm0n377ZpDFrfTfrz9zIeX/HE8
+ S0Lt5UU70IzKpfExW6o8PX0V7sNonCwwMEawMblH/ounOR5qH3e7xHcz+k3PODrz2pBA+SAUY
+ KniHnKtuDAJny3EQztwyA13D/2yhLigryaVTxi4qeQJns/4iv/xPtUmg1I7iQ1bJKpMf2zDgp
+ jDOw8EG6P5ZPGo52Zb4JQyYg/J5SljDKV5iPsw/LFOsfWkAVo2Z3G/qhbTn1/yv9JeYT+2lZV
+ 8MFnRjVR/71YHwUdqvelsOnYglNf0FgzRNvSpSouuKtwYAQRCckZmhbVnqMvZccRXR0j2CBiD
+ 9zxxAvwwqb8RtrlEGkZ88/EcTgB1VhHJuO1XJOd9ah5Gd0IY20GQ8WvS8rhFbFUpAPfqgly18
+ rg0sSXUXpT/RYErkW1ThMMI8Hjq7EB4pbqSa3gjGBNZH+4A2hMqQ7wG083nyrHLnSOLEjYPva
+ 2A9jTSnFrZYTHrz3K6evQKo3NfpyXQGKyGHJAQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 3:05 AM sascha hauer <sha@pengutronix.de> wrote:
->
-> On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
-> > Commit 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
-> > enabled iommus and dmas dependency enforcement by default. On some
-> > systems, this caused the console device's probe to get delayed until the
-> > deferred_probe_timeout expires.
+On Wed, Jun 22, 2022 at 3:57 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> On Wed, Jun 22, 2022 at 1:17 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
 > >
-> > We need consoles to work as soon as possible, so mark the console device
-> > node with FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to delay
-> > the probe of the console device for suppliers without drivers. The
-> > driver can then make the decision on where it can probe without those
-> > suppliers or defer its probe.
+> > On Tue, Jun 21, 2022 at 6:35 AM Miko Larsson <mikoxyzzz@gmail.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > This very small series allows -O3 to be used for all architectures. The
+> > > first patch marks -O3 as experimental, with the reasoning being that it
+> > > might expose unwanted regressions to users, and the second patch
+> > > actually allows -O3 by removing the "depend on ARC" string.
 > >
-> > Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
-> > Reported-by: Sascha Hauer <sha@pengutronix.de>
-> > Reported-by: Peng Fan <peng.fan@nxp.com>
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > Tested-by: Peng Fan <peng.fan@nxp.com>
-> > ---
-> >  drivers/of/base.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/of/base.c b/drivers/of/base.c
-> > index d4f98c8469ed..a19cd0c73644 100644
-> > --- a/drivers/of/base.c
-> > +++ b/drivers/of/base.c
-> > @@ -1919,6 +1919,8 @@ void of_alias_scan(void * (*dt_alloc)(u64 size, u64 align))
-> >                       of_property_read_string(of_aliases, "stdout", &name);
-> >               if (name)
-> >                       of_stdout = of_find_node_opts_by_path(name, &of_stdout_options);
-> > +             if (of_stdout)
-> > +                     of_stdout->fwnode.flags |= FWNODE_FLAG_BEST_EFFORT;
->
-> The device given in the stdout-path property doesn't necessarily have to
-> be consistent with the console= parameter. The former is usually
-> statically set in the device trees contained in the kernel while the
-> latter is dynamically set by the bootloader. So if you change the
-> console uart in the bootloader then you'll still run into this trap.
->
-> It's problematic to consult only the device tree for dependencies. I
-> found several examples of drivers in the tree for which dma support
-> is optional. They use it if they can, but continue without it when
-> not available. "hwlock" is another property which consider several
-> drivers as optional. Also consider SoCs in early upstreaming phases
-> when the device tree is merged with "dmas" or "hwlock" properties,
-> but the corresponding drivers are not yet upstreamed. It's not nice
-> to defer probing of all these devices for a long time.
->
-> I wonder if it wouldn't be a better approach to just probe all devices
-> and record the device(node) they are waiting on. Then you know that you
-> don't need to probe them again until the device they are waiting for
-> is available.
+> > I think we should just remove -O3 support from KCONFIG.
 
-That actually breaks things in a worse sense. There are cases where
-the consumer driver is built in and the optional supplier driver is
-loaded at boot. Without fw_devlink and the deferred probe timeout, we
-end up probing the consumer with limited functionality. With the
-current setup, sure we delay some probes a bit but at least everything
-works with the right functionality. And you can reduce or remove the
-delay if you want to optimize it.
+I agree that would be best
 
--Saravana
+> > If someone wants to mess around with "experimental features," there's
+> > nothing stopping you from doing:
+> >
+> > $ make KCFLAGS=-O3
+> >
+>
+> ARC uses -O3 since day1.
+>
+> "Generic build system uses -O2, we want -O3"
+> in commit cfdbc2e16e65c1ec1c23057640607cee98d1a1bd
+>
+> If they want -O3, it is up to the ARC maintainer.
+
+I suppose whatever the reason for using -O3 at the time has
+likely changed by now.
+
+> If you want to say "use this option carefully",
+> EXPERT might be another option.
+>
+>     depends on ARC || EXPERT
+
+This probably also needs a dependency on !COMPILE_TEST so we don't
+report compile-time problems that are specific to -O3. Maybe a good first
+step would be to turn this into
+
+      depends on ARCH && EXPERT && !COMPILE_TEST
+
+which should help both with compile-testing on ARC, and it would
+prevent it from being visible on other architectures.
+
+        Arnd

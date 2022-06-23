@@ -2,126 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D046B5570BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F025355709D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377890AbiFWBy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 21:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S1378170AbiFWBxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 21:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377644AbiFWBwb (ORCPT
+        with ESMTP id S1377277AbiFWBwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 21:52:31 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C720343AEA;
-        Wed, 22 Jun 2022 18:51:54 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LT39q6k6hzkWkG;
-        Thu, 23 Jun 2022 09:50:39 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 23 Jun 2022 09:51:53 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 23 Jun 2022 09:51:52 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kbuild@vger.kernel.org>, <live-patching@vger.kernel.org>
-CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <masahiroy@kernel.org>, <michal.lkml@markovi.net>,
-        <ndesaulniers@google.com>, <mark.rutland@arm.com>,
-        <pasha.tatashin@soleen.com>, <broonie@kernel.org>,
-        <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
-        <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>,
-        <daniel.thompson@linaro.org>
-Subject: [PATCH v6 33/33] objtool: revert c_file fallthrough detection for arm64
-Date:   Thu, 23 Jun 2022 09:49:17 +0800
-Message-ID: <20220623014917.199563-34-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220623014917.199563-1-chenzhongjin@huawei.com>
-References: <20220623014917.199563-1-chenzhongjin@huawei.com>
+        Wed, 22 Jun 2022 21:52:22 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5240443AF0;
+        Wed, 22 Jun 2022 18:51:52 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25N1FPnN029418;
+        Thu, 23 Jun 2022 01:50:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=TsI+ILPUKVz3yg7piZ6IP0m7tWX8TJEnXWgNEGMDWNc=;
+ b=bY4gNorDsHYNJG2Bf7vLFZ9c7LcQJRlzLlHQz6IP10ZnGAfNcqnbh0O1IuDT8cLTS7Lt
+ 1nYfP7kdHEM1Lw4ozSdfDo3PWjcfmwa2pobiTI7dFCJciaHxLFjnx6U6CDeCEB1Nu/tk
+ VrVoa4J39NN56aQOFrgcjqvsJH45Lhz7wkMMdcK+W6Ya3+SD+xpQvil4WsOCUn8Ac8cP
+ gBdgo+Ie6cD9STH9X2471OYHcYpaYBAUsSb5HMaeQa8kYqsrbjmNBeF24EnqX24Uxr08
+ PC5z8qPq6ekKDxxDQGQyGsBXEfU3yFv9cPy6N43LUd3l4K2d3SQ4IhVlctaPb5TKZZcW QA== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gvebm0q3u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jun 2022 01:50:48 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25N1aPW6003841;
+        Thu, 23 Jun 2022 01:50:47 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma01dal.us.ibm.com with ESMTP id 3guk92kbnh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jun 2022 01:50:47 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25N1okmM35651890
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Jun 2022 01:50:46 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 54C0AC605A;
+        Thu, 23 Jun 2022 01:50:46 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7AAF7C6057;
+        Thu, 23 Jun 2022 01:50:45 +0000 (GMT)
+Received: from [9.211.125.38] (unknown [9.211.125.38])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Jun 2022 01:50:45 +0000 (GMT)
+Message-ID: <e200854b-116a-cbf3-256d-92a9c490b9bc@linux.vnet.ibm.com>
+Date:   Wed, 22 Jun 2022 21:50:45 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [RFC PATCH v2 2/3] fs: define a firmware security filesystem
+ named fwsecurityfs
+Content-Language: en-US
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-fsdevel@vger.kernel.org
+Cc:     linux-efi@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>, gjoyce@ibm.com,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+References: <20220622215648.96723-1-nayna@linux.ibm.com>
+ <20220622215648.96723-3-nayna@linux.ibm.com>
+ <e5399b47-5382-99e6-9a79-c0947a696917@schaufler-ca.com>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+In-Reply-To: <e5399b47-5382-99e6-9a79-c0947a696917@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: xCCZ1rp5CwqPjADRXKVg0nEJScoazKR5
+X-Proofpoint-GUID: xCCZ1rp5CwqPjADRXKVg0nEJScoazKR5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-22_08,2022-06-22_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=835 priorityscore=1501 spamscore=0 suspectscore=0
+ impostorscore=0 clxscore=1011 adultscore=0 mlxscore=0 bulkscore=0
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2204290000 definitions=main-2206230004
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'commit 08feafe8d195 ("objtool: Fix function fallthrough detection for vmlinux")'
-This commit canceled c_file which used to make fallthrough detection
-only works on C objects.
 
-However in arm64/crypto/aes-mods.S, there are cases that JUMP at the
-end of function which make objtool wrongly detected them as fall through.
+On 6/22/22 18:29, Casey Schaufler wrote:
+> On 6/22/2022 2:56 PM, Nayna Jain wrote:
+>> securityfs is meant for linux security subsystems to expose 
+>> policies/logs
+>> or any other information. However, there are various firmware security
+>> features which expose their variables for user management via kernel.
+>> There is currently no single place to expose these variables. Different
+>> platforms use sysfs/platform specific filesystem(efivarfs)/securityfs
+>> interface as find appropriate. Thus, there is a gap in kernel interfaces
+>> to expose variables for security features.
+>
+> Why not put the firmware entries under /sys/kernel/security/firmware?
 
-Revert c_file before this is fixed.
+ From man 5 sysfs page:
 
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- tools/objtool/check.c                   | 3 +--
- tools/objtool/include/objtool/objtool.h | 2 +-
- tools/objtool/objtool.c                 | 1 +
- 3 files changed, 3 insertions(+), 3 deletions(-)
+/sys/firmware: This subdirectory contains interfaces for viewing and 
+manipulating firmware-specific objects and attributes.
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 8ff7c30df513..95cb88da4ed5 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -541,7 +541,6 @@ static struct instruction *find_last_insn(struct objtool_file *file,
- 	struct instruction *insn = NULL;
- 	unsigned int offset;
- 	unsigned int end = (sec->sh.sh_size > 10) ? sec->sh.sh_size - 10 : 0;
--
- 	for (offset = sec->sh.sh_size - 1; offset >= end && !insn; offset--)
- 		insn = find_insn(file, sec, offset);
- 
-@@ -3220,7 +3219,7 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
- 	while (1) {
- 		next_insn = next_insn_to_validate(file, insn);
- 
--		if (func && insn->func && func != insn->func->pfunc) {
-+		if (file->c_file && func && insn->func && func != insn->func->pfunc) {
- 			WARN("%s() falls through to next function %s()",
- 			     func->name, insn->func->name);
- 			return 1;
-diff --git a/tools/objtool/include/objtool/objtool.h b/tools/objtool/include/objtool/objtool.h
-index a6e72d916807..7a5c13a78f87 100644
---- a/tools/objtool/include/objtool/objtool.h
-+++ b/tools/objtool/include/objtool/objtool.h
-@@ -27,7 +27,7 @@ struct objtool_file {
- 	struct list_head static_call_list;
- 	struct list_head mcount_loc_list;
- 	struct list_head endbr_list;
--	bool ignore_unreachables, hints, rodata;
-+	bool ignore_unreachables, c_file, hints, rodata;
- 
- 	unsigned int nr_endbr;
- 	unsigned int nr_endbr_int;
-diff --git a/tools/objtool/objtool.c b/tools/objtool/objtool.c
-index 512669ce064c..d33620b1392d 100644
---- a/tools/objtool/objtool.c
-+++ b/tools/objtool/objtool.c
-@@ -105,6 +105,7 @@ struct objtool_file *objtool_open_read(const char *_objname)
- 	INIT_LIST_HEAD(&file.static_call_list);
- 	INIT_LIST_HEAD(&file.mcount_loc_list);
- 	INIT_LIST_HEAD(&file.endbr_list);
-+	file.c_file = !opts.link && find_section_by_name(file.elf, ".comment");
- 	file.ignore_unreachables = opts.no_unreachable;
- 	file.hints = false;
- 
--- 
-2.17.1
+/sys/kernel: This subdirectory contains various files and subdirectories 
+that provide information about the running kernel.
+
+The security variables which are supposed to be exposed via fwsecurityfs 
+are managed by firmware, stored in firmware managed space and also often 
+consumed by firmware for enabling various security features.
+
+ From git commit b67dbf9d4c1987c370fd18fdc4cf9d8aaea604c2, the purpose 
+of securityfs(/sys/kernel/security) is to provide a common place for all 
+kernel LSMs to use a common place. The idea of 
+fwsecurityfs(/sys/firmware/security) is to similarly provide a common 
+place for all firmware security objects.
+
+By having another firmware directory within /sys/kernel/security would 
+mean scattering firmware objects at multiple places and confusing the 
+purpose of /sys/kernel and /sys/firmware.
+
+Thanks & Regards,
+
+      - Nayna
 

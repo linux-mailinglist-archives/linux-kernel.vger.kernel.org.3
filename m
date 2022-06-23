@@ -2,106 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C6E556FD5
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13F9556FE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 03:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236575AbiFWB1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 22 Jun 2022 21:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
+        id S239202AbiFWB2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 22 Jun 2022 21:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236540AbiFWB1S (ORCPT
+        with ESMTP id S1345283AbiFWB2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 22 Jun 2022 21:27:18 -0400
-Received: from mail-pg1-f196.google.com (mail-pg1-f196.google.com [209.85.215.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC4942A08
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 18:27:16 -0700 (PDT)
-Received: by mail-pg1-f196.google.com with SMTP id a14so8072181pgh.11
-        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 18:27:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HNPzzADt89xo5zs6PZNoGyHBhvApF8RGasyMsX1K6+Q=;
-        b=wMY07f2TdHjD25Yeiv4irGcdgqd3acmP05ALs1upIPKvFYlM+3z+RpfQ0m1OUC7QBt
-         +SUDvT2tzgk/SC17KD+4QjUwam3MSBXqmxUy7c6ryrzKa/Yu53T+19KL7UbSwUMcaEvE
-         QJ28bIdznf4Qu5biYWZ7kr0fxzf8zF5ubqKj7MdI3R3b6VSY7zoB5aSB5LHzlddSczPz
-         ThP8AGN0unN9RY6JZZI5SzUFo71gl8+Niu+MaZcJ0OOYEOmPFUHBaxShXOPALQzaLmFa
-         KmZuQMibiirqQI6cJqNt/1ZfoQo8BsBDuaZCEqVHpVOBalSfg+4oIwPHTDBYbysbUGLb
-         b7wg==
-X-Gm-Message-State: AJIora+LbgULiCalhMOjCk5EOjJku3uQ7Xt8vylmOxHvkmuFjsA9+D/K
-        Bap2EaEg8mqAlvR9inlLOQ==
-X-Google-Smtp-Source: AGRyM1slyIMjS+dECh4SopuEF2n3vHBOXmq2DPnk2fOXCjRzZuZeUYSXEtu0dJzsatkcU1zoVwBIlQ==
-X-Received: by 2002:a63:1846:0:b0:3fd:dd12:ffa8 with SMTP id 6-20020a631846000000b003fddd12ffa8mr5339853pgy.337.1655947635915;
-        Wed, 22 Jun 2022 18:27:15 -0700 (PDT)
-Received: from localhost.localdomain ([156.146.53.107])
-        by smtp.gmail.com with ESMTPSA id p13-20020a170902e74d00b0016a4a57a25asm2255342plf.152.2022.06.22.18.27.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 18:27:15 -0700 (PDT)
-From:   sunliming <sunliming@kylinos.cn>
-To:     quic_abhinavk@quicinc.com, robdclark@gmail.com,
-        dmitry.baryshkov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, sunliming@kylinos.cn,
-        kelulanainsley@gmail.com, freedreno@lists.freedesktop.org,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH RESEND] drm/msm/dpu: Fix variable dereferenced before check
-Date:   Thu, 23 Jun 2022 09:27:07 +0800
-Message-Id: <20220623012707.453972-1-sunliming@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 22 Jun 2022 21:28:10 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295CF1FA76
+        for <linux-kernel@vger.kernel.org>; Wed, 22 Jun 2022 18:28:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655947687; x=1687483687;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=G3vyVfGyjVDNe/UsKsUwwq4Eqoe99LLJdjZAyJ/ETVo=;
+  b=BQkyDaJU5X6Kg0vPbO3jvQIUIOW9Tapaw7Ao+cny0f4qoF3mmw0teInE
+   lII9INy5gfZTd0o7gvrMdPC71pfEDpNVYIJCHcjndsYQEWPERuum8Hqed
+   NHZtRvVZ6gtQHViPo4ncQvbse3YLebfy33rgCRTUOWFxmGtQPEDcL6iGr
+   POycY9kgQXo2Q/bUA05dkjJS/CaP8+a0U1lIBxManjJDmw+LqKcsFtViJ
+   6hmzNv20bQ5/F0xwF/C1sXzuvUBeKzxdCKtSyK2OEbtXn8Zv6Rq0HpAgX
+   06DgPc5PzNfaKHEcHmMOQVWS5yBmrL7+VxpWtV7IqGwnn3FxjQl1JHQbr
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="263625927"
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="263625927"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 18:28:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="538701997"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Jun 2022 18:28:05 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o4BdX-0000HQ-EX;
+        Thu, 23 Jun 2022 01:27:59 +0000
+Date:   Thu, 23 Jun 2022 09:27:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [kbingham-rcar:kbingham/drm-misc/next/sn65dsi86/hpd 10/21]
+ drivers/gpu/drm/bridge/parade-ps8640.c:524:9: error: implicit declaration of
+ function 'drm_bridge_chain_pre_enable'; did you mean
+ 'drm_bridge_hpd_enable'?
+Message-ID: <202206230936.HWBqaAwV-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes the following smatch warning:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git kbingham/drm-misc/next/sn65dsi86/hpd
+head:   69c67e7d89e9e68e6ffb17deec7112af1d529ac9
+commit: b88732c0df106217e663da0458bd46d061ec3ce4 [10/21] drm/bridge: Drop unused drm_bridge_chain functions
+config: arc-randconfig-r043-20220622 (https://download.01.org/0day-ci/archive/20220623/202206230936.HWBqaAwV-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git/commit/?id=b88732c0df106217e663da0458bd46d061ec3ce4
+        git remote add kbingham-rcar https://git.kernel.org/pub/scm/linux/kernel/git/kbingham/rcar.git
+        git fetch --no-tags kbingham-rcar kbingham/drm-misc/next/sn65dsi86/hpd
+        git checkout b88732c0df106217e663da0458bd46d061ec3ce4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/gpu/drm/bridge/
 
-drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:261
-dpu_encoder_phys_wb_atomic_check() warn: variable dereferenced before check 'conn_state'
-
-Signed-off-by: sunliming <sunliming@kylinos.cn>
+If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
-index 59da348ff339..0ec809ab06e7 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
-@@ -252,11 +252,6 @@ static int dpu_encoder_phys_wb_atomic_check(
- 	DPU_DEBUG("[atomic_check:%d, \"%s\",%d,%d]\n",
- 			phys_enc->wb_idx, mode->name, mode->hdisplay, mode->vdisplay);
- 
--	if (!conn_state->writeback_job || !conn_state->writeback_job->fb)
--		return 0;
--
--	fb = conn_state->writeback_job->fb;
--
- 	if (!conn_state || !conn_state->connector) {
- 		DPU_ERROR("invalid connector state\n");
- 		return -EINVAL;
-@@ -267,6 +262,11 @@ static int dpu_encoder_phys_wb_atomic_check(
- 		return -EINVAL;
- 	}
- 
-+	if (!conn_state->writeback_job || !conn_state->writeback_job->fb)
-+		return 0;
-+
-+	fb = conn_state->writeback_job->fb;
-+
- 	DPU_DEBUG("[fb_id:%u][fb:%u,%u]\n", fb->base.id,
- 			fb->width, fb->height);
- 
+All errors (new ones prefixed by >>):
+
+   drivers/gpu/drm/bridge/parade-ps8640.c: In function 'ps8640_bridge_get_edid':
+>> drivers/gpu/drm/bridge/parade-ps8640.c:524:9: error: implicit declaration of function 'drm_bridge_chain_pre_enable'; did you mean 'drm_bridge_hpd_enable'? [-Werror=implicit-function-declaration]
+     524 |         drm_bridge_chain_pre_enable(bridge);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |         drm_bridge_hpd_enable
+>> drivers/gpu/drm/bridge/parade-ps8640.c:534:17: error: implicit declaration of function 'drm_bridge_chain_post_disable'; did you mean 'drm_atomic_bridge_chain_post_disable'? [-Werror=implicit-function-declaration]
+     534 |                 drm_bridge_chain_post_disable(bridge);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                 drm_atomic_bridge_chain_post_disable
+   cc1: some warnings being treated as errors
+
+
+vim +524 drivers/gpu/drm/bridge/parade-ps8640.c
+
+13afcdd7277eff9 Philip Chen            2021-09-21  504  
+d82c12ab16b8477 Enric Balletbo i Serra 2020-08-26  505  static struct edid *ps8640_bridge_get_edid(struct drm_bridge *bridge,
+d82c12ab16b8477 Enric Balletbo i Serra 2020-08-26  506  					   struct drm_connector *connector)
+d82c12ab16b8477 Enric Balletbo i Serra 2020-08-26  507  {
+d82c12ab16b8477 Enric Balletbo i Serra 2020-08-26  508  	struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
+826cff3f7ebba46 Philip Chen            2021-10-28  509  	bool poweroff = !ps_bridge->pre_enabled;
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  510  	struct edid *edid;
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  511  
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  512  	/*
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  513  	 * When we end calling get_edid() triggered by an ioctl, i.e
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  514  	 *
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  515  	 *   drm_mode_getconnector (ioctl)
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  516  	 *     -> drm_helper_probe_single_connector_modes
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  517  	 *        -> drm_bridge_connector_get_modes
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  518  	 *           -> ps8640_bridge_get_edid
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  519  	 *
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  520  	 * We need to make sure that what we need is enabled before reading
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  521  	 * EDID, for this chip, we need to do a full poweron, otherwise it will
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  522  	 * fail.
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  523  	 */
+46f206304db0311 Enric Balletbo i Serra 2020-08-27 @524  	drm_bridge_chain_pre_enable(bridge);
+d82c12ab16b8477 Enric Balletbo i Serra 2020-08-26  525  
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  526  	edid = drm_get_edid(connector,
+d82c12ab16b8477 Enric Balletbo i Serra 2020-08-26  527  			    ps_bridge->page[PAGE0_DP_CNTL]->adapter);
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  528  
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  529  	/*
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  530  	 * If we call the get_edid() function without having enabled the chip
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  531  	 * before, return the chip to its original power state.
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  532  	 */
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  533  	if (poweroff)
+46f206304db0311 Enric Balletbo i Serra 2020-08-27 @534  		drm_bridge_chain_post_disable(bridge);
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  535  
+46f206304db0311 Enric Balletbo i Serra 2020-08-27  536  	return edid;
+d82c12ab16b8477 Enric Balletbo i Serra 2020-08-26  537  }
+d82c12ab16b8477 Enric Balletbo i Serra 2020-08-26  538  
+
+:::::: The code at line 524 was first introduced by commit
+:::::: 46f206304db0311b0920479f42accaa7cb472fdc drm/bridge: ps8640: Rework power state handling
+
+:::::: TO: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+:::::: CC: Neil Armstrong <narmstrong@baylibre.com>
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

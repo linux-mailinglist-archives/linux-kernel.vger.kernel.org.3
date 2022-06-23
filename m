@@ -2,105 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D998F558AD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA2F558AE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 23:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiFWVhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 17:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
+        id S229553AbiFWVp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 17:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiFWVhq (ORCPT
+        with ESMTP id S229469AbiFWVp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 17:37:46 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80984F457
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:37:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656020264; x=1687556264;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=X+Fu+IYtOXy7Z7jjxYt12Y5ve5dihyNWHmzBMUKkYNk=;
-  b=WuudsgXS6V9ebYGcP5omaSBnvkHklVnCCWhreCXvJxKKWkKMvyLkbDtH
-   wyITq9pxEwtnRf2b01hW3L02CQz3mEjdc7l43JL1njB4gIXzmkiyncuqn
-   2mieV8SuMUjMGL6bujDKKgNkRU95PzmTjq0MpPn+dOLUStcRggzYSYw38
-   ziJvdxftNd+sNKUunqKJxEV8sJkA8Nem/DU5XAncezuxZjeJA88DGGn9O
-   XZLed60bENOABaY7Mo+HyHL2aweXNQqf00d7DbIpkXFVS3iNfLYFqZPyZ
-   siNvrhdxrphP6Dh4eyi50sBcOWn/Xkebsnzw8ZJgM8r4akW6FPqOb63vE
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="263884315"
-X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
-   d="scan'208";a="263884315"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 14:37:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
-   d="scan'208";a="592899367"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Jun 2022 14:37:43 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o4UWE-0003Bz-Fl;
-        Thu, 23 Jun 2022 21:37:42 +0000
-Date:   Fri, 24 Jun 2022 05:37:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mathias Krause <minipli@grsecurity.net>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: kernel/sched/rt.c:257:6: warning: no previous declaration for
- 'unregister_rt_sched_group'
-Message-ID: <202206240552.NqXLKyZT-lkp@intel.com>
+        Thu, 23 Jun 2022 17:45:57 -0400
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55E25DF10
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:45:56 -0700 (PDT)
+Received: by mail-qv1-f46.google.com with SMTP id y14so1953986qvs.10
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 14:45:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding;
+        bh=0CKIvS9aMMD66vxtqOCpuSRDl9nO4eJxY8IunK0l4JM=;
+        b=kiXTECQuqsVsoAs6FW8RtPr1gnI5f+58WVXHXXPoKqUaxVWZz9GwfoZQevO566/mSE
+         7rHxJ2QYgzSlhzU/3+ZpZSXb1Yvi/I1+4kp15iCNFLuG0C3DT1mzwz8Oss5Wuwed3uhF
+         d+t16nmkRA/RJf/jXj0NhFhDJ5ni5ehsdYBikC5/wL8Ztc8tq+qD3KwRMNVni7NaG8Qs
+         7FVpnXKL9BbG52h+JhKp+qBVdZAC60t9hV5omZOSSfD4SaNT4uTRCbC/HgTJYomjI4ya
+         clcc2vFCLsK4utYC4jT+BRNtCKb9AvNyVCvnesPtQ1OpHdxPodGQj6KI5sdoKwh010YI
+         4xgw==
+X-Gm-Message-State: AJIora9hKm0dPTwh60DHuxv3CLm+XGnz7z31RYbwoCai/+gUWUW0DwY8
+        pjUkR8tU3/i2FxdzCQDo5mF70iyrpdZ4af/XDFM=
+X-Google-Smtp-Source: AGRyM1v2usadGTyZlqb6Ml0femKSWEGiKQVOdlevtUzZRfFJcHhEqUEnKteRGPis2XQ5p5NCS+A1cw==
+X-Received: by 2002:a05:6214:e83:b0:470:54c3:e18e with SMTP id hf3-20020a0562140e8300b0047054c3e18emr13015049qvb.3.1656020755830;
+        Thu, 23 Jun 2022 14:45:55 -0700 (PDT)
+Received: from castiana ([2602:fc62:a:35::50])
+        by smtp.gmail.com with ESMTPSA id n8-20020a05620a222800b006ab935c1563sm483237qkh.8.2022.06.23.14.45.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 14:45:55 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 16:45:52 -0500
+From:   =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Faiyaz Mohammed <faiyazm@codeaurora.org>,
+        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
+        stable@vger.kernel.org
+Subject: [PATCH RESEND] tools/vm/slabinfo: Handle files in debugfs
+Message-ID: <YrTfEHvpysJAVWWr@castiana>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mailer: git-send-email 2.34.1
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   92f20ff72066d8d7e2ffb655c2236259ac9d1c5d
-commit: b027789e5e50494c2325cc70c8642e7fd6059479 sched/fair: Prevent dead task groups from regaining cfs_rq's
-date:   7 months ago
-config: i386-randconfig-a004-20220620 (https://download.01.org/0day-ci/archive/20220624/202206240552.NqXLKyZT-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b027789e5e50494c2325cc70c8642e7fd6059479
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b027789e5e50494c2325cc70c8642e7fd6059479
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Commit 64dd68497be76 relocated and renamed the alloc_calls and
+free_calls files from /sys/kernel/slab/NAME/*_calls over to
+/sys/kernel/debug/slab/NAME/*_calls but didn't update the slabinfo tool
+with the new location.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This change will now have slabinfo look at the new location (and filenames)
+with a fallback to the prior files.
 
-All warnings (new ones prefixed by >>):
+Fixes: 64dd68497be76 ("mm: slub: move sysfs slab alloc/free interfaces to debugfs")
+Cc: stable@vger.kernel.org
+Signed-off-by: Stéphane Graber <stgraber@ubuntu.com>
+Tested-by: Stéphane Graber <stgraber@ubuntu.com>
+---
+ tools/vm/slabinfo.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
->> kernel/sched/rt.c:257:6: warning: no previous declaration for 'unregister_rt_sched_group' [-Wmissing-declarations]
-    void unregister_rt_sched_group(struct task_group *tg) { }
-         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/sched/rt.c:259:6: warning: no previous declaration for 'free_rt_sched_group' [-Wmissing-declarations]
-    void free_rt_sched_group(struct task_group *tg) { }
-         ^~~~~~~~~~~~~~~~~~~
-   kernel/sched/rt.c:261:5: warning: no previous declaration for 'alloc_rt_sched_group' [-Wmissing-declarations]
-    int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent)
-        ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/rt.c:675:6: warning: no previous declaration for 'sched_rt_bandwidth_account' [-Wmissing-declarations]
-    bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/unregister_rt_sched_group +257 kernel/sched/rt.c
-
-   256	
- > 257	void unregister_rt_sched_group(struct task_group *tg) { }
-   258	
-
+diff --git a/tools/vm/slabinfo.c b/tools/vm/slabinfo.c
+index 9b68658b6bb8..5b98f3ee58a5 100644
+--- a/tools/vm/slabinfo.c
++++ b/tools/vm/slabinfo.c
+@@ -233,6 +233,24 @@ static unsigned long read_slab_obj(struct slabinfo *s, const char *name)
+ 	return l;
+ }
+ 
++static unsigned long read_debug_slab_obj(struct slabinfo *s, const char *name)
++{
++	char x[128];
++	FILE *f;
++	size_t l;
++
++	snprintf(x, 128, "/sys/kernel/debug/slab/%s/%s", s->name, name);
++	f = fopen(x, "r");
++	if (!f) {
++		buffer[0] = 0;
++		l = 0;
++	} else {
++		l = fread(buffer, 1, sizeof(buffer), f);
++		buffer[l] = 0;
++		fclose(f);
++	}
++	return l;
++}
+ 
+ /*
+  * Put a size string together
+@@ -409,14 +427,18 @@ static void show_tracking(struct slabinfo *s)
+ {
+ 	printf("\n%s: Kernel object allocation\n", s->name);
+ 	printf("-----------------------------------------------------------------------\n");
+-	if (read_slab_obj(s, "alloc_calls"))
++	if (read_debug_slab_obj(s, "alloc_traces"))
++		printf("%s", buffer);
++	else if (read_slab_obj(s, "alloc_calls"))
+ 		printf("%s", buffer);
+ 	else
+ 		printf("No Data\n");
+ 
+ 	printf("\n%s: Kernel object freeing\n", s->name);
+ 	printf("------------------------------------------------------------------------\n");
+-	if (read_slab_obj(s, "free_calls"))
++	if (read_debug_slab_obj(s, "free_traces"))
++		printf("%s", buffer);
++	else if (read_slab_obj(s, "free_calls"))
+ 		printf("%s", buffer);
+ 	else
+ 		printf("No Data\n");
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

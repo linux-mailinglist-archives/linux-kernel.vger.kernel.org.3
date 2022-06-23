@@ -2,128 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EDC25582D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04225582E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbiFWRUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 13:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
+        id S232424AbiFWRVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233970AbiFWRSa (ORCPT
+        with ESMTP id S233484AbiFWRVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 13:18:30 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A789B550
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 10:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656003624; x=1687539624;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=J9s/LpFILeLPTlseYxUrJteIVRlhiZdWHoHvHoBnIYU=;
-  b=gc7Wx7vCmeJZE0/Wb6nF63L3okTIW8USO6hva5J5G1MY0STnW3VqVguP
-   KtWwrAwcPEifNqPp57Zqw/gSIzuqR0xztpQ/P9YytI1eOqDJzL5gG40V/
-   rYDxZzJZi7VO/sf26np0Ij83r5OhD7TCLfdvfGCmDPoLBAYnyG1Ll7iQV
-   15fl5DQnllCAY6e1M85VVZ9zAP81FvqXQAMOsg4gcMxifXc0R44KXJYAm
-   HXqfNgUV7Zj1giGl+EdzpEPUFH9B0dwCUQ5PrzvX87t6boWP32FrJqjDp
-   DfCiqJrrPIXIPtMfoOZd3uUv5ngkSuEZGPT2RCVCNh96xm9SzP766QpQn
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="279544659"
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="279544659"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 10:00:20 -0700
-X-IronPort-AV: E=Sophos;i="5.92,216,1650956400"; 
-   d="scan'208";a="834723685"
-Received: from anefedov-mobl.ccr.corp.intel.com (HELO localhost) ([10.252.38.20])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 10:00:15 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Jiang Jian <jiangjian@cdjrlc.com>, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-        tvrtko.ursulin@linux.intel.com, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiang Jian <jiangjian@cdjrlc.com>
-Subject: Re: [PATCH] GPU: drm: i915: drop unexpected word 'for' in comments
-In-Reply-To: <20220623101113.28470-1-jiangjian@cdjrlc.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220623101113.28470-1-jiangjian@cdjrlc.com>
-Date:   Thu, 23 Jun 2022 20:00:11 +0300
-Message-ID: <871qvfnwmc.fsf@intel.com>
+        Thu, 23 Jun 2022 13:21:08 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D63CD931;
+        Thu, 23 Jun 2022 10:00:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656003644; x=1687539644;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sxe/FHbgTxmtRkdi6mtiWVttB6WJVeL/b+JDfTfUZwA=;
+  b=DOBcG5NC4tVXA18ubKWoqGWoFPcuX8wKFBxMLFvrlueaegRBfWQIQYWv
+   dCK0RHUxBKH3LV9eZ+h0244Pm90B9goEV+ApscRqhDy/6vV0kxsK8leCk
+   RlRsQX1qXmqEjm8jYCPGEZSqsTpp/TDabbqZzd0f83bqn4eqQYOwf9qqu
+   I=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Jun 2022 10:00:37 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 10:00:37 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 23 Jun 2022 10:00:36 -0700
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 23 Jun
+ 2022 10:00:35 -0700
+Message-ID: <236a5ed2-566c-9ee8-4189-8c647044a82f@quicinc.com>
+Date:   Thu, 23 Jun 2022 11:00:35 -0600
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v4 1/1] bus: mhi: host: Move IRQ allocation to controller
+ registration phase
+Content-Language: en-US
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Qiang Yu <quic_qianyu@quicinc.com>
+CC:     <quic_hemantk@quicinc.com>, <loic.poulain@linaro.org>,
+        <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_cang@quicinc.com>
+References: <1655952183-66792-1-git-send-email-quic_qianyu@quicinc.com>
+ <20220623115436.GA15542@thinkpad>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20220623115436.GA15542@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Jun 2022, Jiang Jian <jiangjian@cdjrlc.com> wrote:
-> there is an unexpected word 'for' in the comments that need to be dropped
+On 6/23/2022 5:54 AM, Manivannan Sadhasivam wrote:
+> On Thu, Jun 23, 2022 at 10:43:03AM +0800, Qiang Yu wrote:
+>> During runtime, the MHI endpoint may be powered up/down several times.
+>> So instead of allocating and destroying the IRQs all the time, let's just
+>> enable/disable IRQs during power up/down.
+>>
+>> The IRQs will be allocated during mhi_register_controller() and freed
+>> during mhi_unregister_controller(). This works well for things like PCI
+>> hotplug also as once the PCI device gets removed, the controller will
+>> get unregistered. And once it comes back, it will get registered back
+>> and even if the IRQ configuration changes (MSI), that will get accounted.
+>>
+>> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
+> 
+> I thought I already gave my r-o-b. But anyway,
+> 
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> 
+> I'll wait for a review from Jeff before applying.
 
-While it's also unexpected, it's really *duplicated* word.
+Looks good to me.
 
-> file - drivers/gpu/drm/i915/i915_reg.h
-> line - 2537
->
->  * Please check the detailed lore in the commit message for for experimental
->
-> changed to:
->
->  * Please check the detailed lore in the commit message for experimental
->
+Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 
-The above is just duplication of the patch itself, and completely
-unnecessary.
+> 
+> Thanks,
+> Mani
+> 
+>> ---
+>> v3->v4: move mhi_init_irq_setup() above mhi_alloc_device()
+>> v2->v3: change commit text and comments.
+>> v1->v2: Rewrite commit text. Remove a random change. Use
+>>          inline enables.
+>>
+>>   drivers/bus/mhi/host/init.c | 17 ++++++++++++++++-
+>>   drivers/bus/mhi/host/pm.c   | 19 +++++++++++++------
+>>   2 files changed, 29 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+>> index cbb86b2..a1d37da 100644
+>> --- a/drivers/bus/mhi/host/init.c
+>> +++ b/drivers/bus/mhi/host/init.c
+>> @@ -179,6 +179,12 @@ int mhi_init_irq_setup(struct mhi_controller *mhi_cntrl)
+>>   				   "bhi", mhi_cntrl);
+>>   	if (ret)
+>>   		return ret;
+>> +	/*
+>> +	 * IRQs should be enabled during mhi_async_power_up(), so disable them explicitly here.
+>> +	 * Due to the use of IRQF_SHARED flag as default while requesting IRQs, we assume that
+>> +	 * IRQ_NOAUTOEN is not applicable.
+>> +	 */
+>> +	disable_irq(mhi_cntrl->irq[0]);
+>>   
+>>   	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+>>   		if (mhi_event->offload_ev)
+>> @@ -200,6 +206,8 @@ int mhi_init_irq_setup(struct mhi_controller *mhi_cntrl)
+>>   				mhi_cntrl->irq[mhi_event->irq], i);
+>>   			goto error_request;
+>>   		}
+>> +
+>> +		disable_irq(mhi_cntrl->irq[mhi_event->irq]);
+>>   	}
+>>   
+>>   	return 0;
+>> @@ -979,12 +987,16 @@ int mhi_register_controller(struct mhi_controller *mhi_cntrl,
+>>   		goto err_destroy_wq;
+>>   	}
+>>   
+>> +	ret = mhi_init_irq_setup(mhi_cntrl);
+>> +	if (ret)
+>> +		goto err_ida_free;
+>> +
+>>   	/* Register controller with MHI bus */
+>>   	mhi_dev = mhi_alloc_device(mhi_cntrl);
+>>   	if (IS_ERR(mhi_dev)) {
+>>   		dev_err(mhi_cntrl->cntrl_dev, "Failed to allocate MHI device\n");
+>>   		ret = PTR_ERR(mhi_dev);
+>> -		goto err_ida_free;
+>> +		goto error_setup_irq;
+>>   	}
+>>   
+>>   	mhi_dev->dev_type = MHI_DEVICE_CONTROLLER;
+>> @@ -1007,6 +1019,8 @@ int mhi_register_controller(struct mhi_controller *mhi_cntrl,
+>>   
+>>   err_release_dev:
+>>   	put_device(&mhi_dev->dev);
+>> +error_setup_irq:
+>> +	mhi_deinit_free_irq(mhi_cntrl);
+>>   err_ida_free:
+>>   	ida_free(&mhi_controller_ida, mhi_cntrl->index);
+>>   err_destroy_wq:
+>> @@ -1027,6 +1041,7 @@ void mhi_unregister_controller(struct mhi_controller *mhi_cntrl)
+>>   	struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
+>>   	unsigned int i;
+>>   
+>> +	mhi_deinit_free_irq(mhi_cntrl);
+>>   	mhi_destroy_debugfs(mhi_cntrl);
+>>   
+>>   	destroy_workqueue(mhi_cntrl->hiprio_wq);
+>> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
+>> index dc2e8ff..4a42186 100644
+>> --- a/drivers/bus/mhi/host/pm.c
+>> +++ b/drivers/bus/mhi/host/pm.c
+>> @@ -500,7 +500,7 @@ static void mhi_pm_disable_transition(struct mhi_controller *mhi_cntrl)
+>>   	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+>>   		if (mhi_event->offload_ev)
+>>   			continue;
+>> -		free_irq(mhi_cntrl->irq[mhi_event->irq], mhi_event);
+>> +		disable_irq(mhi_cntrl->irq[mhi_event->irq]);
+>>   		tasklet_kill(&mhi_event->task);
+>>   	}
+>>   
+>> @@ -1060,12 +1060,13 @@ static void mhi_deassert_dev_wake(struct mhi_controller *mhi_cntrl,
+>>   
+>>   int mhi_async_power_up(struct mhi_controller *mhi_cntrl)
+>>   {
+>> +	struct mhi_event *mhi_event = mhi_cntrl->mhi_event;
+>>   	enum mhi_state state;
+>>   	enum mhi_ee_type current_ee;
+>>   	enum dev_st_transition next_state;
+>>   	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+>>   	u32 interval_us = 25000; /* poll register field every 25 milliseconds */
+>> -	int ret;
+>> +	int ret, i;
+>>   
+>>   	dev_info(dev, "Requested to power ON\n");
+>>   
+>> @@ -1117,9 +1118,15 @@ int mhi_async_power_up(struct mhi_controller *mhi_cntrl)
+>>   		mhi_write_reg(mhi_cntrl, mhi_cntrl->bhi, BHI_INTVEC, 0);
+>>   	}
+>>   
+>> -	ret = mhi_init_irq_setup(mhi_cntrl);
+>> -	if (ret)
+>> -		goto error_exit;
+>> +	/* IRQs have been requested during probe, so we just need to enable them. */
+>> +	enable_irq(mhi_cntrl->irq[0]);
+>> +
+>> +	for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+>> +		if (mhi_event->offload_ev)
+>> +			continue;
+>> +
+>> +		enable_irq(mhi_cntrl->irq[mhi_event->irq]);
+>> +	}
+>>   
+>>   	/* Transition to next state */
+>>   	next_state = MHI_IN_PBL(current_ee) ?
+>> @@ -1182,7 +1189,7 @@ void mhi_power_down(struct mhi_controller *mhi_cntrl, bool graceful)
+>>   	/* Wait for shutdown to complete */
+>>   	flush_work(&mhi_cntrl->st_worker);
+>>   
+>> -	free_irq(mhi_cntrl->irq[0], mhi_cntrl);
+>> +	disable_irq(mhi_cntrl->irq[0]);
+>>   }
+>>   EXPORT_SYMBOL_GPL(mhi_power_down);
+>>   
+>> -- 
+>> Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+>>
+> 
 
-The patch subject prefix should be something like "drm/i915:" or
-"drm/i915/reg:".
-
-Pro-tip for figuring out good guesses of what the subject prefix should
-be:
-
-$ git log --since={5-year} --no-merges --pretty=format:%s -- drivers/gpu/drm/i915/i915_reg.h | sed 's/:.*//' | sort | uniq -c | sort -rn | head
-    312 drm/i915
-    113 drm/i915/icl
-     57 drm/i915/tgl
-     26 drm/i915/cnl
-     25 drm/i915/display
-     22 drm/i915/dg2
-     16 drm/i915/psr
-     14 drm/i915/gt
-     14 drm/i915/adl_p
-     12 drm/i915/dg1
-
-The patch itself is fine, but I'm nitpicking on the commit message
-because I've seen lots of patches like this, with the same kind of stuff
-in the commit messages.
-
-BR,
-Jani.
-
-
-> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
-> ---
->  drivers/gpu/drm/i915/i915_reg.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/i915/i915_reg.h b/drivers/gpu/drm/i915/i915_reg.h
-> index 616164fa2e32..738c020396af 100644
-> --- a/drivers/gpu/drm/i915/i915_reg.h
-> +++ b/drivers/gpu/drm/i915/i915_reg.h
-> @@ -2534,7 +2534,7 @@
->   * HDMI/DP bits are g4x+
->   *
->   * WARNING: Bspec for hpd status bits on gen4 seems to be completely confused.
-> - * Please check the detailed lore in the commit message for for experimental
-> + * Please check the detailed lore in the commit message for experimental
->   * evidence.
->   */
->  /* Bspec says GM45 should match G4X/VLV/CHV, but reality disagrees */
-
--- 
-Jani Nikula, Intel Open Source Graphics Center

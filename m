@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA59558118
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 18:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586C155856D
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 19:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231951AbiFWQzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 12:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
+        id S235723AbiFWR5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 13:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233844AbiFWQvo (ORCPT
+        with ESMTP id S235445AbiFWRwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 12:51:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24F3388B;
-        Thu, 23 Jun 2022 09:50:14 -0700 (PDT)
+        Thu, 23 Jun 2022 13:52:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2112563A7;
+        Thu, 23 Jun 2022 10:13:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69821B82490;
-        Thu, 23 Jun 2022 16:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8EE4C3411B;
-        Thu, 23 Jun 2022 16:50:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D334B82498;
+        Thu, 23 Jun 2022 17:13:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00F7EC341CA;
+        Thu, 23 Jun 2022 17:13:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656003012;
-        bh=6CbJEz9dZhAvM7TpoGdDWtovp5b/ok5BPvoY6F7n+ow=;
+        s=korg; t=1656004405;
+        bh=b3tAOqFWHhp7uK8IscYVSpe8+FpMUzq1THBxCN2AgNA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ObvqhfJt2Og+0lNC+F9RwkemW42k0thN3Qn1/PW90ZNyqAOnoHJYKvsyXR+SszP+4
-         aMHZXHndave8crij/mrgZEP1W1DdZ4mKIo4RPIA+BrC3XiR1xtjZ7khF/2jIFK3G/R
-         E+GxAyeU/TiLLhoGpDoGfgOGWi0p2lGkt4+ez0/A=
+        b=Vl2k/0rDfkVBFgPGxvKKcWUbg4Hqq12znSnW4IX3Ngqje4IQWT2GQux7lAq+rTf10
+         GfCscAAKUfi4np6ku4c2VAh7VHomdaKPEr00zQM/hTjWhYSOEtG23Zv1Pp1yBw/2pS
+         iQIZHwSl64DeV80Gyjw2e2aOpaNVVE0ZjVSD09Uc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Andy Lutomirski <luto@kernel.org>,
+        Theodore Tso <tytso@mit.edu>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 4.9 101/264] random: remove unused OUTPUT_POOL constants
+Subject: [PATCH 4.19 027/234] random: remove kernel.random.read_wakeup_threshold
 Date:   Thu, 23 Jun 2022 18:41:34 +0200
-Message-Id: <20220623164346.928801604@linuxfoundation.org>
+Message-Id: <20220623164343.833023360@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-References: <20220623164344.053938039@linuxfoundation.org>
+In-Reply-To: <20220623164343.042598055@linuxfoundation.org>
+References: <20220623164343.042598055@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Andy Lutomirski <luto@kernel.org>
 
-commit 0f63702718c91d89c922081ac1e6baeddc2d8b1a upstream.
+commit c95ea0c69ffda19381c116db2be23c7e654dac98 upstream.
 
-We no longer have an output pool. Rather, we have just a wakeup bits
-threshold for /dev/random reads, presumably so that processes don't
-hang. This value, random_write_wakeup_bits, is configurable anyway. So
-all the no longer usefully named OUTPUT_POOL constants were doing was
-setting a reasonable default for random_write_wakeup_bits. This commit
-gets rid of the constants and just puts it all in the default value of
-random_write_wakeup_bits.
+It has no effect any more, so remove it.  We can revert this if
+there is some user code that expects to be able to set this sysctl.
 
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Andy Lutomirski <luto@kernel.org>
+Link: https://lore.kernel.org/r/a74ed2cf0b5a5451428a246a9239f5bc4e29358f.1577088521.git.luto@kernel.org
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/char/random.c |   18 +-----------------
+ 1 file changed, 1 insertion(+), 17 deletions(-)
 
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -364,8 +364,6 @@
-  */
- #define INPUT_POOL_SHIFT	12
- #define INPUT_POOL_WORDS	(1 << (INPUT_POOL_SHIFT-5))
--#define OUTPUT_POOL_SHIFT	10
--#define OUTPUT_POOL_WORDS	(1 << (OUTPUT_POOL_SHIFT-5))
- #define EXTRACT_SIZE		(BLAKE2S_HASH_SIZE / 2)
+@@ -370,12 +370,6 @@
+ #define ENTROPY_BITS(r) ((r)->entropy_count >> ENTROPY_SHIFT)
  
  /*
-@@ -383,7 +381,7 @@
+- * The minimum number of bits of entropy before we wake up a read on
+- * /dev/random.  Should be enough to do a significant reseed.
+- */
+-static int random_read_wakeup_bits = 64;
+-
+-/*
+  * If the entropy count falls under this number of bits, then we
   * should wake up processes which are selecting or polling on write
   * access to /dev/random.
-  */
--static int random_write_wakeup_bits = 28 * OUTPUT_POOL_WORDS;
-+static int random_write_wakeup_bits = 28 * (1 << 5);
+@@ -2073,8 +2067,7 @@ SYSCALL_DEFINE3(getrandom, char __user *
  
- /*
-  * Originally, we used a primitive polynomial of degree .poolwords
+ #include <linux/sysctl.h>
+ 
+-static int min_read_thresh = 8, min_write_thresh;
+-static int max_read_thresh = OUTPUT_POOL_WORDS * 32;
++static int min_write_thresh;
+ static int max_write_thresh = INPUT_POOL_WORDS * 32;
+ static int random_min_urandom_seed = 60;
+ static char sysctl_bootid[16];
+@@ -2150,15 +2143,6 @@ struct ctl_table random_table[] = {
+ 		.data		= &input_pool.entropy_count,
+ 	},
+ 	{
+-		.procname	= "read_wakeup_threshold",
+-		.data		= &random_read_wakeup_bits,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= &min_read_thresh,
+-		.extra2		= &max_read_thresh,
+-	},
+-	{
+ 		.procname	= "write_wakeup_threshold",
+ 		.data		= &random_write_wakeup_bits,
+ 		.maxlen		= sizeof(int),
 
 

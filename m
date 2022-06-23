@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1AF5576D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC9B5576A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 23 Jun 2022 11:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiFWJkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 05:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43848 "EHLO
+        id S230441AbiFWJc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 05:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiFWJku (ORCPT
+        with ESMTP id S230324AbiFWJcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 05:40:50 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62CB49909;
-        Thu, 23 Jun 2022 02:40:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655977249; x=1687513249;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aXck3R6A19uHBgiDNe8YoiehvkSU+RaF1az/CheoTnE=;
-  b=ZMDhH1U7VgRc46poQhkaX+XPu/kGm2gNEoIpScUXqEVGozZ6WWd9jG1o
-   oF8Ujrb0hj3WiBSCCRS5njs3GwXQYlT61r6Su5lkK5GxR7TzKtF4C/8AV
-   F/rHzMg0qQ3vGmTg45YeFrcqdVTX7viqGff58zVgV9g+RZVfkBxfnKhK5
-   KubK9YvQr7DUWOr72d6MIcOFdSkKf0IuGMKwSKj4Cdo7O0Fad2+RZKeFC
-   kB8NHLEG+dEL57TY67oOpCealf25D96uygIebao5DroYtvXQqvRbd9I+y
-   lazcTIvI5awFooEroUBqtnH6kno324aympiKDj/9ktZYJel3KDQL/3ni7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="344664561"
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="344664561"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 02:40:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
-   d="scan'208";a="690943635"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Jun 2022 02:40:46 -0700
-Date:   Thu, 23 Jun 2022 17:32:37 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, corbet@lwn.net,
-        conor.dooley@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru
-Subject: Re: [PATCH v21 5/5] MAINTAINERS: add Microchip PolarFire FPGA
- drivers entry
-Message-ID: <20220623093237.GC1752270@yilunxu-OptiPlex-7050>
-References: <20220621153847.103052-1-i.bornyakov@metrotek.ru>
- <20220621153847.103052-6-i.bornyakov@metrotek.ru>
+        Thu, 23 Jun 2022 05:32:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4050A184
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 02:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655976771;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=06kaMflGnUnS/V8ph3wEzp7LZpvIbOHFK6oUZfaSoWM=;
+        b=iywpdV4TjB/ybFLLt4WxE7Gu56LTLJ6VFOoWvvsoYfyqZtuCWh8d03Sm5aXRBBV4ObYIip
+        yBZ+NpfJe5HefXYz1ulfiVjHrm6hKGKixZ3tSHrMLmXdKIICCcclT1D5JlVXuCCFAiJ426
+        0DYFbQe7PldJZW5Qu2JJqITdFle9v+E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-368-m4fLhkaZNHyJ5oeQhajJPQ-1; Thu, 23 Jun 2022 05:32:46 -0400
+X-MC-Unique: m4fLhkaZNHyJ5oeQhajJPQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0815F185A7B2;
+        Thu, 23 Jun 2022 09:32:46 +0000 (UTC)
+Received: from [10.40.194.231] (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4B509C2811A;
+        Thu, 23 Jun 2022 09:32:45 +0000 (UTC)
+Message-ID: <cc5f4465-49cf-3a87-e502-4bb21f2e3163@redhat.com>
+Date:   Thu, 23 Jun 2022 11:32:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621153847.103052-6-i.bornyakov@metrotek.ru>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.10.0
+Subject: Re: [Intel-gfx] i915: crash with 5.19-rc2
+Content-Language: en-US
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        intel-gfx@lists.freedesktop.org, chris@chris-wilson.co.uk
+References: <584ae788-05e3-5824-8c85-cbb833677850@redhat.com>
+ <YrN/mI4Qlo66qBmg@intel.com>
+From:   Zdenek Kabelac <zkabelac@redhat.com>
+In-Reply-To: <YrN/mI4Qlo66qBmg@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 06:38:47PM +0300, Ivan Bornyakov wrote:
-> Add MAINTAINERS entry for the newly added Microchip PolarFire (MPF) FPGA
-> manager. Add myself as a reviewer and Conor Dooley as a maintainer.
-> 
-> Suggested-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Dne 22. 06. 22 v 22:46 Rodrigo Vivi napsal(a):
+> Hi Zdenek,
+>
+> On Wed, Jun 22, 2022 at 01:18:42PM +0200, Zdenek Kabelac wrote:
+>> Hello
+>>
+>> While somewhat oldish hw (T61, 4G, C2D) - I've now witnessed new crash with Xorg:
+>>
+>> (happened while reopening iconified Firefox window  - running 'standard'
+>> rawhide -nodebug kernel 5.19.0-0.rc2.21.fc37.x86_64)
+> any bisect possible?
+>
+> if possible, could you please file a bug?
+> https://gitlab.freedesktop.org/drm/intel/-/wikis/How-to-file-i915-bugs
+>
+> I know I know, the account requirement :/
+> also on main kernel bugzilla is probably better than the email here.
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-> ---
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b774f21828f7..ed2517574804 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7884,6 +7884,14 @@ S:	Maintained
->  F:	Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
->  F:	drivers/fpga/intel-m10-bmc-sec-update.c
->  
-> +MICROCHIP POLARFIRE FPGA DRIVERS
-> +M:	Conor Dooley <conor.dooley@microchip.com>
-> +R:	Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> +L:	linux-fpga@vger.kernel.org
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-> +F:	drivers/fpga/microchip-spi.c
-> +
->  FPU EMULATOR
->  M:	Bill Metzenthen <billm@melbpc.org.au>
->  S:	Maintained
-> -- 
-> 2.25.1
-> 
+Hi
+
+
+So far this bisect does not seem doable, since this crash happened after 
+several days of  uptime and so far happened just once (and I'm now already on 
+-rc3).
+
+If I'll spot any more regular approach to hit this crash, I may try bisecting. 
+Meanwhile I just hope, someone will get an idea what has changed recently (I'd 
+not seen such crash with 5.18). Although I need to say that I'm witnessing 
+some GPU restarts lately causing just some 'temporary hanging' of Xorg 
+desktop, but that's not such a big deal.
+
+Zdenek
+

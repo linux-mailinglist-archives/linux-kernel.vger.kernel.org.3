@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBF0559536
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA87559532
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiFXISa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
+        id S229862AbiFXISo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 04:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiFXIS3 (ORCPT
+        with ESMTP id S229813AbiFXISd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:18:29 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA5763612
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:18:25 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id c65so2371123edf.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:18:25 -0700 (PDT)
+        Fri, 24 Jun 2022 04:18:33 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522836363F
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:18:32 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id cw10so3184911ejb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:18:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=qVB8bxx/r3S0fdgYdnv0n6Orbk3zdo+20SameD8/IKc=;
-        b=h1oK/vu/uSxYa5LkNyd81gudxYa95rDOqzAavEXzV+f0GyVRNjKdN8pPA3mXK418xG
-         rBYWIs83RfC3BkFrlQerH89Pa89ZxxiG0P5A4obM1r5X5PPKSRwYQ3rg1z1tlmD+fCpr
-         +EKpEXbvvRhD0teOgVgPpJ/IuznJx+bk/+3uYfJ1RerThkowl9zTOkZCsf//lJK3jlka
-         Epuyw14kA0b1v5zd8+9ktnmlHr6iQdpsjirkhX2+SJBQOSDM+70gO4f8jBVuVmGlHJNV
-         LT43hlt2pTxvI0fe8XEaUn3ppYYkzku/ENo+LFEHoV173tfnSHFWNyUOUG7k3Bvk8pm+
-         1baQ==
+        bh=ku+g6mH8ZtuEKNgu6VjhrNGoqiS6ry/wCTbIBt3/GQE=;
+        b=SrzkAYFywwE4KrBRkZEgbZe97t9oQ6QOcINHeDh+qKi+h/tULRuRL9up5ahQJi0BHx
+         1ERpQV3i5md1keFw6ib4iuscoIXbRMc4OoSTfkf/0JuyBuMx2yE5d+VuCZKlb+e2ydAv
+         5qFTFHiUB3q+1qqLpxnDIPd/vqeriUMxtl3SOGo73K2fG9EtHuYeePfSheEb8/8ANM+k
+         eG4cghoyIplOCn2+G4c+P8N3X+vglkd9sN1Hc29bRaUxH/EotEksy1u7fQBq3yGl79XY
+         IsC5muYGdmRxX1LUj98aoURRTymJvls2yUuxwEUs1nF9bOpnmtzupShon/p7TptCzyHp
+         /dTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=qVB8bxx/r3S0fdgYdnv0n6Orbk3zdo+20SameD8/IKc=;
-        b=wK1u5CB3kGv1EpWqgihfIg1Y0c7fkOQP58dHNjK+16E50G7lZEBwHfXXJlbzdq/7Kh
-         xrABVf0rgbZCAFMWtWvI2noMURcpIt92I9Si0Ru3VHpq0Xa0xnaANKbZPMxOnRVacTYx
-         2HZwov9Jy8djTPso7wIHlkIYAaZ8o38yEqytx7X54qDrFf6dSbUyV+jW7USlZif4SBNx
-         vhOW+jpX4P7OzwC9hpUxu1OG2LZIL0eaG0QShqI9VaM1vdaEa46ilPkOInNDguvdzR5w
-         VWbUnRG+Jl+Ej2cEYSo4PRUcngkXSRAwkvscVwfOH3Kgaw+ujhg2bmUQZQjbVm4xWR3v
-         iB4A==
-X-Gm-Message-State: AJIora/+e2vIj1xkTDxZJNPYKGQH8ReT1854ge4WVzxJ0zOlh9i1gKAs
-        xlC7IxuhFQAmg38cgTC8sOAjmg==
-X-Google-Smtp-Source: AGRyM1vHr4xowKwQ5Nwu/LWw9TGrDN7QBcEOmV5mZLUL+m+jloOePEt0fBnbVZQzfQD0OBvHj1ZtAg==
-X-Received: by 2002:aa7:d6c9:0:b0:435:6698:589a with SMTP id x9-20020aa7d6c9000000b004356698589amr16029481edr.59.1656058703927;
-        Fri, 24 Jun 2022 01:18:23 -0700 (PDT)
+        bh=ku+g6mH8ZtuEKNgu6VjhrNGoqiS6ry/wCTbIBt3/GQE=;
+        b=WVSadrtSnwh/nNl4gA54iaJu+Fu8XoGr9fSx4kjVt6jGRVCBDZBnhwWuq1HqVhetp/
+         hy/bJjXBkQf3HRQSX0WlCj1ehVN9rGCqKtr018/c3j2g9BvyhAAtRaihXNOUvbiUr3UZ
+         O/vtZh6Iyq0NecwSIMgM44HQOECfVpkxxObJE0w+q58viWXuPle1JutiE4pmvrVni7H4
+         3PDYbjgsAjZSsQHHnEolT4NBduVmkjx/BsXfU1s/Ascg5eURq1inS+MGPslG2TmsEswE
+         FWN2UMjDna42Ft+2zCZOq58C8+gSIX1K/zjUR7G8Y7NTUhGrAL4esP/nwyz6ftuW2Ufc
+         XmsQ==
+X-Gm-Message-State: AJIora+eiUsUHZHD4jAmaC51LhrKOSN7Ci4519PMQe5Jl13bIKwRLPY/
+        4JWy3CesZzlnyzDhQXc/fd09PQ==
+X-Google-Smtp-Source: AGRyM1vDJ1ilNFbcJCloY+qyC5NXLH/wPECYN7/lSbVjCsXgDAbxJtcZoGXGprbeIgu7cqm5JYVB2A==
+X-Received: by 2002:a17:906:147:b0:712:1288:348f with SMTP id 7-20020a170906014700b007121288348fmr11899014ejh.324.1656058710733;
+        Fri, 24 Jun 2022 01:18:30 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id r22-20020a170906705600b00703e09dd2easm701619ejj.147.2022.06.24.01.18.22
+        by smtp.gmail.com with ESMTPSA id a18-20020aa7cf12000000b0043503d2fa35sm1383360edy.87.2022.06.24.01.18.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 01:18:22 -0700 (PDT)
+        Fri, 24 Jun 2022 01:18:30 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
         arm@kernel.org, soc@kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL fixes] memory: fixes: for v5.19
-Date:   Fri, 24 Jun 2022 10:18:19 +0200
-Message-Id: <20220624081819.33617-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL] memory: drivers for v5.19
+Date:   Fri, 24 Jun 2022 10:18:28 +0200
+Message-Id: <20220624081828.33649-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,32 +75,23 @@ The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-fixes-5.19
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.20
 
-for you to fetch changes up to 1332661e09304b7b8e84e5edc11811ba08d12abe:
+for you to fetch changes up to 0d97f2176dec9c1e070215c4e28ba87e036458c9:
 
-  memory: samsung: exynos5422-dmc: Fix refcount leak in of_get_dram_timings (2022-06-06 11:18:20 +0200)
-
-----------------------------------------------------------------
-Memory controller drivers - fixes for v5.19
-
-Broken in current cycle:
-1. OMAP GPMC: fix Kconfig dependency for OMAP_GPMC, so it will not be visible
-   for everyone (driver is specific to OMAP).
-
-Broken before:
-1. Mediatek SMI: fix missing put_device() in error paths.
-2. Exynos DMC: fix OF node leaks in error paths.
+  memory: mtk-smi: Add support for MT6795 Helio X10 (2022-06-06 11:11:50 +0200)
 
 ----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      memory: omap-gpmc: OMAP_GPMC should depend on ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3
+Memory controller drivers for v5.20
 
-Miaoqian Lin (2):
-      memory: mtk-smi: add missing put_device() call in mtk_smi_device_link_common
-      memory: samsung: exynos5422-dmc: Fix refcount leak in of_get_dram_timings
+Add MediaTek MT6795 Helio X10 SMI support.
 
- drivers/memory/Kconfig                  |  1 +
- drivers/memory/mtk-smi.c                |  5 ++++-
- drivers/memory/samsung/exynos5422-dmc.c | 29 ++++++++++++++++++-----------
- 3 files changed, 23 insertions(+), 12 deletions(-)
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (2):
+      dt-bindings: memory: mtk-smi: Add MT6795 Helio X10 bindings
+      memory: mtk-smi: Add support for MT6795 Helio X10
+
+ .../memory-controllers/mediatek,smi-common.yaml         |  1 +
+ .../bindings/memory-controllers/mediatek,smi-larb.yaml  |  1 +
+ drivers/memory/mtk-smi.c                                | 17 +++++++++++++++++
+ 3 files changed, 19 insertions(+)

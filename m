@@ -2,101 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC2B558CD1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 03:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F67558CD5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 03:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbiFXB1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 21:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        id S231171AbiFXBap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 21:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiFXB1A (ORCPT
+        with ESMTP id S229553AbiFXBao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 21:27:00 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8437A60C55;
-        Thu, 23 Jun 2022 18:26:59 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LTfZb4zCfzkWmn;
-        Fri, 24 Jun 2022 09:25:43 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 24 Jun 2022 09:26:57 +0800
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 24 Jun 2022 09:26:57 +0800
-Subject: Re: [RFC 00/13] perf: Add perf kwork
-To:     "Paul A. Clarke" <pc@us.ibm.com>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
-References: <20220613094605.208401-1-yangjihong1@huawei.com>
- <YrMuQXIn9DdhZl2w@li-be644d4c-2c59-11b2-a85c-bc3dba3ed00b.ibm.com>
- <3cccc03a-c2bc-91d9-60b9-daf180c6b108@huawei.com>
- <YrR34345A4h/5RfU@li-be644d4c-2c59-11b2-a85c-bc3dba3ed00b.ibm.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <8ee806af-7ced-6f8f-ef66-a75819f19375@huawei.com>
-Date:   Fri, 24 Jun 2022 09:26:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Thu, 23 Jun 2022 21:30:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BAF75DC0C
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 18:30:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656034242;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XQueJ1NBfP6rBWtDaDGGyAl5dbRuYQpX5eBYhbGPVcE=;
+        b=XoF258+ZOdfneF5GsB93wGBLoT/1HSA7vD0pE5S6XyzvkIe6v/aj+krv4nNx9j2crmxgic
+        6okctcJEX03XUz/Vi2tflZ8sbNeBTgsNbzZUxQx9d6k2fYQbMwuENDaJaR2tLgCBVwJvET
+        YOJsxC9T8XEDxg27W5jikukBznYzRvs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-618-UtdlkmqBM_65ZRNQOSRZkg-1; Thu, 23 Jun 2022 21:30:37 -0400
+X-MC-Unique: UtdlkmqBM_65ZRNQOSRZkg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7AF113C17321;
+        Fri, 24 Jun 2022 01:30:29 +0000 (UTC)
+Received: from localhost (ovpn-12-66.pek2.redhat.com [10.72.12.66])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 899B640D0168;
+        Fri, 24 Jun 2022 01:30:28 +0000 (UTC)
+Date:   Fri, 24 Jun 2022 09:30:24 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        linux-rt-users@vger.kernel.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        Arnd Bergmann <arnd@arndb.de>, Petr Mladek <pmladek@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <jlelli@redhat.com>,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+Subject: Re: [PATCH v2] panic, kexec: Make __crash_kexec() NMI safe
+Message-ID: <YrUTsJiIQb583fKy@MiWiFi-R3L-srv>
+References: <20220620111520.1039685-1-vschneid@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <YrR34345A4h/5RfU@li-be644d4c-2c59-11b2-a85c-bc3dba3ed00b.ibm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220620111520.1039685-1-vschneid@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On 2022/6/23 22:25, Paul A. Clarke wrote:
-> On Thu, Jun 23, 2022 at 09:02:45AM +0800, Yang Jihong wrote:
->> On 2022/6/22 22:59, Paul A. Clarke wrote:
->>> On Mon, Jun 13, 2022 at 05:45:52PM +0800, Yang Jihong wrote:
->>>> Sometimes, we need to analyze time properties of kernel work such as irq,
->>>> softirq, and workqueue, such as delay and running time of specific interrupts.
->>>> Currently, these events have kernel tracepoints, but perf tool does not
->>>> directly analyze the delay of these events
->>>>
->>>> The perf-kwork tool is used to trace time properties of kernel work
->>>> (such as irq, softirq, and workqueue), including runtime, latency,
->>>> and timehist, using the infrastructure in the perf tools to allow
->>>> tracing extra targets
->>>>
->>>> test case:
->>>>
->>>>     # perf kwork report
->>>>
->>>>       Kwork Name                | Cpu  | Total Runtime | Frequency | Max runtime   | Max runtime start   | Max runtime end     |
->>>>      ---------------------------------------------------------------------------------------------------------------------------
->>>>       (s)RCU:9                  | 0007 |      3.488 ms |      1258 |      0.145 ms |    3398384.220013 s |    3398384.220157 s |
->>>>       (s)NET_RX:3               | 0003 |      1.866 ms |       156 |      0.042 ms |    3398385.629764 s |    3398385.629806 s |
->>>>       (s)TIMER:1                | 0000 |      1.799 ms |       117 |      0.055 ms |    3398385.568033 s |    3398385.568088 s |
->>>>       (w)0xffff9c66e563ee98     | 0006 |      1.561 ms |         5 |      0.351 ms |    3398384.060021 s |    3398384.060371 s |
->>>
->>> What units are used for "Frequency"? It would be helpful to include somewhere.
+On 06/20/22 at 12:15pm, Valentin Schneider wrote:
+> Attempting to get a crash dump out of a debug PREEMPT_RT kernel via an NMI
+> panic() doesn't work. The cause of that lies in the PREEMPT_RT definition
+> of mutex_trylock():
 > 
->> This refers to the number of event in the trace period.
+> 	if (IS_ENABLED(CONFIG_DEBUG_RT_MUTEXES) && WARN_ON_ONCE(!in_task()))
+> 		return 0;
 > 
-> I see. I suggest changing the column heading to say that.
-> "Count", "Number of Events", "Occurrences", something like that.
+> This prevents an NMI panic() from executing the main body of
+> __crash_kexec() which does the actual kexec into the kdump kernel.
+> The warning and return are explained by:
 > 
-> "Frequency" is a count-per-time-unit, like hertz, which doesn't
-> match well here.
+>   6ce47fd961fa ("rtmutex: Warn if trylock is called from hard/softirq context")
+>   [...]
+>   The reasons for this are:
+> 
+>       1) There is a potential deadlock in the slowpath
+> 
+>       2) Another cpu which blocks on the rtmutex will boost the task
+> 	 which allegedly locked the rtmutex, but that cannot work
+> 	 because the hard/softirq context borrows the task context.
+> 
+> Furthermore, grabbing the lock isn't NMI safe, so do away with it and
+> use an atomic variable to serialize reads vs writes of
+> kexec_crash_image.
+> 
+> Tested by triggering NMI panics via:
+> 
+>   $ echo 1 > /proc/sys/kernel/panic_on_unrecovered_nmi
+>   $ echo 1 > /proc/sys/kernel/unknown_nmi_panic
+>   $ echo 1 > /proc/sys/kernel/panic
+> 
+>   $ ipmitool power diag
+> 
+> Fixes: 6ce47fd961fa ("rtmutex: Warn if trylock is called from hard/softirq context")
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+> v1 -> v2
+> ++++++++
+> 
+> o Changed from Peterson-like synchronization to simpler atomic_cmpxchg
+>   (Petr)
+> o Slightly reworded changelog
+> o Added Fixes: tag. Technically should be up to since kexec can happen
+>   in an NMI, but that isn't such a clear target
+> ---
+>  include/linux/kexec.h |  1 +
+>  kernel/kexec.c        | 16 ++++++++++++----
+>  kernel/kexec_core.c   | 36 +++++++++++++++++++-----------------
+>  kernel/kexec_file.c   | 11 +++++++++++
+>  4 files changed, 43 insertions(+), 21 deletions(-)
+> 
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index ce6536f1d269..5849a15ae3dd 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -369,6 +369,7 @@ extern int kimage_crash_copy_vmcoreinfo(struct kimage *image);
+>  
+>  extern struct kimage *kexec_image;
+>  extern struct kimage *kexec_crash_image;
+> +extern atomic_t crash_kexec_lock;
+>  extern int kexec_load_disabled;
+>  
+>  #ifndef kexec_flush_icache_page
+> diff --git a/kernel/kexec.c b/kernel/kexec.c
+> index b5e40f069768..73e0df2c608f 100644
+> --- a/kernel/kexec.c
+> +++ b/kernel/kexec.c
+> @@ -94,14 +94,20 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
+>  	/*
+>  	 * Because we write directly to the reserved memory region when loading
+>  	 * crash kernels we need a mutex here to prevent multiple crash kernels
+> -	 * from attempting to load simultaneously, and to prevent a crash kernel
+> -	 * from loading over the top of a in use crash kernel.
+> -	 *
+> -	 * KISS: always take the mutex.
+> +	 * from attempting to load simultaneously.
+>  	 */
+>  	if (!mutex_trylock(&kexec_mutex))
+>  		return -EBUSY;
 
-OK, I'll fix in next version.
+So kexec_mutex is degenerated to only avoid simultaneous loading,
+should we rename to reflect that?, e.g kexec_load_mutex.
 
-Thanks,
-Jihong
+>  
+> +	/*
+> +	 * Prevent loading a new crash kernel while one is in use.
+> +	 * See associated comment in __crash_kexec().
+> +	 */
+> +	if (atomic_cmpxchg_acquire(&crash_kexec_lock, 0, 1)) {
+> +		ret = -EBUSY;
+> +		goto out_unlock_mutex;
+> +	}
+> +
+>  	if (flags & KEXEC_ON_CRASH) {
+>  		dest_image = &kexec_crash_image;
+>  		if (kexec_crash_image)
+> @@ -165,6 +171,8 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
+>  
+>  	kimage_free(image);
+>  out_unlock:
+> +	atomic_set_release(&crash_kexec_lock, 0);
+> +out_unlock_mutex:
+>  	mutex_unlock(&kexec_mutex);
+>  	return ret;
+>  }
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 4d34c78334ce..f957109a266c 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -933,6 +933,7 @@ int kimage_load_segment(struct kimage *image,
+>  
+>  struct kimage *kexec_image;
+>  struct kimage *kexec_crash_image;
+> +atomic_t crash_kexec_lock = ATOMIC_INIT(0);
+>  int kexec_load_disabled;
+>  #ifdef CONFIG_SYSCTL
+>  static struct ctl_table kexec_core_sysctls[] = {
+> @@ -964,25 +965,26 @@ late_initcall(kexec_core_sysctl_init);
+>   */
+>  void __noclone __crash_kexec(struct pt_regs *regs)
+>  {
+> -	/* Take the kexec_mutex here to prevent sys_kexec_load
+> -	 * running on one cpu from replacing the crash kernel
+> -	 * we are using after a panic on a different cpu.
+> -	 *
+> -	 * If the crash kernel was not located in a fixed area
+> -	 * of memory the xchg(&kexec_crash_image) would be
+> -	 * sufficient.  But since I reuse the memory...
+> +	/*
+> +	 * This should be taking kexec_mutex before doing anything with the
+> +	 * kexec_crash_image, but this code can be run in NMI context which
+> +	 * means we can't even trylock. This is circumvented by using an
+> +	 * atomic variable that is *also* used by the codepaths that take
+> +	 * the mutex to modify kexec_crash_image.
+>  	 */
+> -	if (mutex_trylock(&kexec_mutex)) {
+> -		if (kexec_crash_image) {
+> -			struct pt_regs fixed_regs;
+> -
+> -			crash_setup_regs(&fixed_regs, regs);
+> -			crash_save_vmcoreinfo();
+> -			machine_crash_shutdown(&fixed_regs);
+> -			machine_kexec(kexec_crash_image);
+> -		}
+> -		mutex_unlock(&kexec_mutex);
+> +	if (atomic_cmpxchg_acquire(&crash_kexec_lock, 0, 1))
+> +		return;
+> +
+> +	if (kexec_crash_image) {
+> +		struct pt_regs fixed_regs;
+> +
+> +		crash_setup_regs(&fixed_regs, regs);
+> +		crash_save_vmcoreinfo();
+> +		machine_crash_shutdown(&fixed_regs);
+> +		machine_kexec(kexec_crash_image);
+>  	}
+> +
+> +	atomic_set_release(&crash_kexec_lock, 0);
+>  }
+>  STACK_FRAME_NON_STANDARD(__crash_kexec);
+>  
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 145321a5e798..3faec031cfc9 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -337,6 +337,15 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
+>  	if (!mutex_trylock(&kexec_mutex))
+>  		return -EBUSY;
+>  
+> +	/*
+> +	 * Prevent loading a new crash kernel while one is in use.
+> +	 * See associated comment in __crash_kexec().
+> +	 */
+> +	if (atomic_cmpxchg_acquire(&crash_kexec_lock, 0, 1)) {
+> +		ret = -EBUSY;
+> +		goto out_mutex_unlock;
+> +	}
+> +
+>  	dest_image = &kexec_image;
+>  	if (flags & KEXEC_FILE_ON_CRASH) {
+>  		dest_image = &kexec_crash_image;
+> @@ -406,6 +415,8 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
+>  	if ((flags & KEXEC_FILE_ON_CRASH) && kexec_crash_image)
+>  		arch_kexec_protect_crashkres();
+>  
+> +	atomic_set_release(&crash_kexec_lock, 0);
+> +out_mutex_unlock:
+>  	mutex_unlock(&kexec_mutex);
+>  	kimage_free(image);
+>  	return ret;
+> -- 
+> 2.31.1
+> 
+

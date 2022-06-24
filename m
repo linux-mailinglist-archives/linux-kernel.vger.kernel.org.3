@@ -2,90 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783F55595D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 130645596FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiFXIwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40884 "EHLO
+        id S229928AbiFXJqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 05:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiFXIwd (ORCPT
+        with ESMTP id S229469AbiFXJqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:52:33 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D515D6E7AA
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:52:31 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VHGcxXq_1656060747;
-Received: from 30.97.49.29(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VHGcxXq_1656060747)
-          by smtp.aliyun-inc.com;
-          Fri, 24 Jun 2022 16:52:28 +0800
-Message-ID: <ed072ac6-cc70-9070-4e9d-281b9b60c9a6@linux.alibaba.com>
-Date:   Fri, 24 Jun 2022 16:52:34 +0800
+        Fri, 24 Jun 2022 05:46:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8383A792B6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 02:46:20 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LTscF0KCKzSh2t;
+        Fri, 24 Jun 2022 17:42:53 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 24 Jun
+ 2022 17:46:18 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <akpm@linux-foundation.org>,
+        <pasha.tatashin@soleen.com>, <tongtiangen@huawei.com>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] riscv/mm: Fix build error while PAGE_TABLE_CHECK enabled without MMU
+Date:   Fri, 24 Jun 2022 16:52:36 +0800
+Message-ID: <20220624085236.18544-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH v2 2/3] mm: Add PUD level pagetable account
-To:     Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1655887440.git.baolin.wang@linux.alibaba.com>
- <f7b2a6f6f5dfecbcac07fa3e187f10860c3a39ee.1655887440.git.baolin.wang@linux.alibaba.com>
- <YrMpZlQHMuCy06/m@linux.ibm.com> <YrRqhj3p/KKU73f1@casper.infradead.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <YrRqhj3p/KKU73f1@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+mm/page_table_check.c: In function ‘__page_table_check_pte_clear’:
+mm/page_table_check.c:148:6: error: implicit declaration of function ‘pte_user_accessible_page’; did you mean ‘user_access_save’? [-Werror=implicit-function-declaration]
+  if (pte_user_accessible_page(pte)) {
+      ^~~~~~~~~~~~~~~~~~~~~~~~
+      user_access_save
 
+ARCH_SUPPORTS_PAGE_TABLE_CHECK should only enabled with MMU.
 
-On 6/23/2022 9:28 PM, Matthew Wilcox wrote:
-> On Wed, Jun 22, 2022 at 09:38:30AM -0500, Mike Rapoport wrote:
->> On Wed, Jun 22, 2022 at 04:58:53PM +0800, Baolin Wang wrote:
->>> +++ b/arch/loongarch/include/asm/pgalloc.h
->>> @@ -89,10 +89,15 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
->>>   static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
->>>   {
->>>   	pud_t *pud;
->>> +	struct page *pg;
->>
->> 	struct page *page;
->>
->> looks better IMO.
->>
->>> +
->>> +	pg = alloc_pages(GFP_KERNEL & ~__GFP_HIGHMEM, PUD_ORDER);
-> 
-> GFP_KERNEL does not include __GFP_HIGHMEM, so you can just use
-> GFP_KERNEL here.
+Fixes: 3fee229a8eb9 ("riscv/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ arch/riscv/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes. Thanks.
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 850f6fbb0b5f..d6a07b9add05 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -38,7 +38,7 @@ config RISCV
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
+ 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+ 	select ARCH_SUPPORTS_HUGETLBFS if MMU
+-	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
++	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
+ 	select ARCH_USE_MEMTEST
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+-- 
+2.17.1
 
-> 
->>> +	if (!pg)
->>> +		return NULL;
->>>   
->>> -	pud = (pud_t *) __get_free_pages(GFP_KERNEL, PUD_ORDER);
->>> -	if (pud)
->>> -		pud_init((unsigned long)pud, (unsigned long)invalid_pmd_table);
->>> +	pgtable_set_and_inc(pg);
->>> +	pud = (pud_t *)page_address(pg);
->>
->> I don't think __get_free_pages() should be replaced with alloc_pages()
->> here, just call pgtable_set_and_inc() with virt_to_page(pud).
-> 
-> I don't understand why you want that.  Take a look at the implementation
-> of __get_free_pages().  Converting back to a struct page after calling
-> that seems like a real waste of time to me.
-
-IMO I have no strong preference. The code can be simpler with using 
-__get_free_pages(), however like Matthew said it will add more conversion.

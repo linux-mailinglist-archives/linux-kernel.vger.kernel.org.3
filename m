@@ -2,88 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FE2559D0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814A4559D10
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232395AbiFXPLa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Jun 2022 11:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        id S232619AbiFXPMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 11:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231672AbiFXPL1 (ORCPT
+        with ESMTP id S232511AbiFXPMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 11:11:27 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2588E4CD7F
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:11:25 -0700 (PDT)
-Received: from mail-yb1-f176.google.com ([209.85.219.176]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N1Oft-1ngfqK3s4p-012niI for <linux-kernel@vger.kernel.org>; Fri, 24 Jun
- 2022 17:11:24 +0200
-Received: by mail-yb1-f176.google.com with SMTP id d5so5000799yba.5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:11:23 -0700 (PDT)
-X-Gm-Message-State: AJIora+xZouIQgJlXCJt6C8QmN9QLyfmR9yGjUtFRkA+2fUgxzAseTnO
-        EPHTHWo4D6DyYeYJEDUqmrYDHxcDPdidWfD/Ghk=
-X-Google-Smtp-Source: AGRyM1vJJnhlcyd7ZSZrixr3FMT9677Grp/rNK0TzdIxtZ3Z0+OUPG5WXg1A6g8fJkwRsaVEZy+JKkarEpgkYASSVk4=
-X-Received: by 2002:a25:9f87:0:b0:669:4345:a8c0 with SMTP id
- u7-20020a259f87000000b006694345a8c0mr15555982ybq.472.1656083482781; Fri, 24
- Jun 2022 08:11:22 -0700 (PDT)
+        Fri, 24 Jun 2022 11:12:35 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B91E4D9CF
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:12:33 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id j21so5041696lfe.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:12:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x8Jy0OJ39PBOXthgIfAdqP1jgQfbb438h2GvJW/Mdq0=;
+        b=mVTuWLuN8XZpFMJ+S+7U0qjJl+qK5dJblLURULdgRe/zT3wWoBwZfRqWcI9kIGhQix
+         nJ0AlpkWAXgQzKGyiv+kR+rVuzVz+DEiOKI+39aGe1PTUDQ8PQmnF7lzUOTyeVqe+jYj
+         /sPnpedyt4AqMb/Oe/lOmeQR9MXlebXyA5UNaCTZQAkhpYwhIjp+b0opRH/UNwzNPtdQ
+         Kk22/0JzzDkTIXbMGifjZwkz6D6F0dqP5YXT6OK/4HiWJaQ2EEPlJAoKT7iFqZHu+CO3
+         yCdSI3Vrj02rJYLXVd24AKX1AmjoKBptyIgnOqn/2cJdm0bxgeklwSTdhUM5wS9vLoIB
+         buLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x8Jy0OJ39PBOXthgIfAdqP1jgQfbb438h2GvJW/Mdq0=;
+        b=vrsqKVihTrO6Qgz8jSnKE8RDGHH1N1G/sa/3eNMneE/ay2EEAswIcgTUaG6RGHV1vu
+         jzcpjBXoq34F47oVDBA9i1n+fLDRW+e9D/pVW/GFraRiUoxLo+Pe0PHWakQvc8ZYUk0q
+         EGwCuXFfKn4JVtNHT/72yyQV5yNF6h2zJjTzwFSi5QXANdZye7Z4e5qaX7X49YEjwF7U
+         wCqQ61ycq6ozTH8ZwcPUaHUEby4hGnGC+OpLVP1PJcteQn4ujqkFutOLnW2pH6QvZWPs
+         TYZBsm/jh6CvLBAl9aJp8HOQaEAJ5dDonHb1qmyFvE0p3KLDn3ZbPAVzYNYGIvP9SDuw
+         24pg==
+X-Gm-Message-State: AJIora9n5V2TRsTbzcnovMCitPbJlvNDKPa9Se6uoyQzKxrYVOmaUCp+
+        tMYbqoptl6FSO1yHDqOpcMgOGxOJD8ZTyInwBpiErQ==
+X-Google-Smtp-Source: AGRyM1ux6fJI1UqfhbKtYI3380oq0Yc9WPcnS1B8UQFcR4k15s9NIrtzUEPIL6muaukL0Y7LrG0POm9dBMYr5wpMzHA=
+X-Received: by 2002:a05:6512:401a:b0:47f:6ea5:dace with SMTP id
+ br26-20020a056512401a00b0047f6ea5dacemr9014219lfb.402.1656083551555; Fri, 24
+ Jun 2022 08:12:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220605075841.19929-1-linmq006@gmail.com> <m3wnd76ako.fsf@t19.piap.pl>
-In-Reply-To: <m3wnd76ako.fsf@t19.piap.pl>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 24 Jun 2022 17:11:06 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3dDJrPPM6gRc+s7OQStphWdvWRdcELtNBXSzvd+gxoLw@mail.gmail.com>
-Message-ID: <CAK8P3a3dDJrPPM6gRc+s7OQStphWdvWRdcELtNBXSzvd+gxoLw@mail.gmail.com>
-Subject: Re: [PATCH] ARM: cns3xxx: Fix refcount leak in cns3xxx_init
-To:     =?UTF-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-Cc:     Miaoqian Lin <linmq006@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <cover.1655761627.git.ashish.kalra@amd.com> <7845d453af6344d0b156493eb4555399aad78615.1655761627.git.ashish.kalra@amd.com>
+In-Reply-To: <7845d453af6344d0b156493eb4555399aad78615.1655761627.git.ashish.kalra@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 24 Jun 2022 09:12:20 -0600
+Message-ID: <CAMkAt6oGzqoMxN5ws9QZ9P1q5Rah92bb4V2KSYBgi0guMGUKAQ@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 35/49] KVM: SVM: Remove the long-lived GHCB host map
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:n5MdKEkkXMtSOTgpnCbms+npJ8lvJY407XvU7TA1qF8g1iVn6N8
- L4R5ILDoOjNhCC818KJPhZlk3uSJWi0NyBHWsOd+ORkLliTib7hInjrqTAlxe4weXMsySB0
- GpdD/vmUD3jotPL16aTRlTKB20QhBAYjgklq//L6qg+C3vKrFllgd3nf831kUfEJs8kPr3X
- xI4uUbcIxZi6RKB3iPUBA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DaDFQRbkddw=:iRyVpdIvaPcMifQWf/V16x
- tNXUWZFwK9HB6guS2imJ+ZzASCa8AlLsg6ct5wPIwte6LGTYaBM/5HhzueBgUEApWwpQRF1wN
- h0uL1B+puZVsJjDyqfL5uGzxFdUr4RudSZfZUyxuanD4BBdKTPWsnieyuB0gLbepaFKewMxnQ
- R2lQzKmfs14OAN1703EUiGuj50PD3xir7F/q/s/mN3ROeyVQolTSc1iKnDqpuo8xXbY+3UGQ4
- FCAj7fL2AB9NF9eUMerCui2HhUBmuL+n+ydUu0JGUBoDDT1N8Pm4s7hGya1ertS5qMCVn02ju
- rhpNfbK2iw1v5p0I27UUj5N5YjmKDr+MxIVteEfifR3soAd0mqoLch5az4ERhuWrIAnMQENAv
- 6aVQqR8OraT8wG84h8eNv8wRHMG9GzOaXNrpGw1hVIR0LFyWfQmAPaZ0sfpTHdlEuV5gvYBUO
- KR1vJ/4aFzfMR08Oxk/7n+jQvfr57/RVfQ/+A0Mrc+8L/TBgJ1tbR+ukDq6EP4nCeJ23ZfeoB
- Er79jVhYwZ5rwJBdZ5dH4H5qfp5JuJfRmbQspDDII8kVtyOovGH4biOkcAXt5vLKcv7zx4XGK
- 909ovtfbbewNllEqyw7RvbZAKG/tZPIVbVMrnS09D+NhpdeafI4KiPQKaMwBs8CC3SrPVh9TM
- I1VadikK8/zcLS5kfcpgUwwHB8mO9O+rbp3DUpE2kMHA7QA0vXv2dZm8icmVIupiu47yx8gDT
- yExTsjNNwlGPbb9THIUk5xjj+aHcYrqVv7yHQA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 10:36 AM Krzysztof Hałasa <khalasa@piap.pl> wrote:
+On Mon, Jun 20, 2022 at 5:11 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
 >
-> Miaoqian Lin <linmq006@gmail.com> writes:
+> From: Brijesh Singh <brijesh.singh@amd.com>
 >
-> > of_find_compatible_node() returns a node pointer with refcount
-> > incremented, we should use of_node_put() on it when done.
-> > Add missing of_node_put() to avoid refcount leak.
-> >
-> > Fixes: 415f59142d9d ("ARM: cns3xxx: initial DT support")
-> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> On VMGEXIT, sev_handle_vmgexit() creates a host mapping for the GHCB GPA,
+> and unmaps it just before VM-entry. This long-lived GHCB map is used by
+> the VMGEXIT handler through accessors such as ghcb_{set_get}_xxx().
 >
-> Acked-by: Krzysztof Halasa <khalasa@piap.pl>
+> A long-lived GHCB map can cause issue when SEV-SNP is enabled. When
+> SEV-SNP is enabled the mapped GPA needs to be protected against a page
+> state change.
 >
-> Arnd, I guess you are in the best position to pick this patch up?
-> Thanks to both of you.
+> To eliminate the long-lived GHCB mapping, update the GHCB sync operations
+> to explicitly map the GHCB before access and unmap it after access is
+> complete. This requires that the setting of the GHCBs sw_exit_info_{1,2}
+> fields be done during sev_es_sync_to_ghcb(), so create two new fields in
+> the vcpu_svm struct to hold these values when required to be set outside
+> of the GHCB mapping.
+>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/kvm/svm/sev.c | 131 ++++++++++++++++++++++++++---------------
+>  arch/x86/kvm/svm/svm.c |  12 ++--
+>  arch/x86/kvm/svm/svm.h |  24 +++++++-
+>  3 files changed, 111 insertions(+), 56 deletions(-)
+>
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 01ea257e17d6..c70f3f7e06a8 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2823,15 +2823,40 @@ void sev_free_vcpu(struct kvm_vcpu *vcpu)
+>         kvfree(svm->sev_es.ghcb_sa);
+>  }
+>
+> +static inline int svm_map_ghcb(struct vcpu_svm *svm, struct kvm_host_map *map)
+> +{
+> +       struct vmcb_control_area *control = &svm->vmcb->control;
+> +       u64 gfn = gpa_to_gfn(control->ghcb_gpa);
+> +
+> +       if (kvm_vcpu_map(&svm->vcpu, gfn, map)) {
+> +               /* Unable to map GHCB from guest */
+> +               pr_err("error mapping GHCB GFN [%#llx] from guest\n", gfn);
+> +               return -EFAULT;
+> +       }
+> +
+> +       return 0;
+> +}
 
-Done now, thanks!
+There is a perf cost to this suggestion but it might make accessing
+the GHCB safer for KVM. Have you thought about just using
+kvm_read_guest() or copy_from_user() to fully copy out the GCHB into a
+KVM owned buffer, then copying it back before the VMRUN. That way the
+KVM doesn't need to guard against page_state_changes on the GHCBs,
+that could be a perf improvement in a follow up.
 
-        Arnd
+Since we cannot unmap GHCBs I don't think UPM will help here so we
+probably want to make these patches safe against malicious guests
+making GHCBs private. But maybe UPM does help?

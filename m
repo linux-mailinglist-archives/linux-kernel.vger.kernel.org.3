@@ -2,93 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CF2559B3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10C3559B4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232385AbiFXOKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 10:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37696 "EHLO
+        id S231940AbiFXORr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 10:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232418AbiFXOKG (ORCPT
+        with ESMTP id S230195AbiFXORn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 10:10:06 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C87562C4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:10:00 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25ODBlUR019365;
-        Fri, 24 Jun 2022 14:09:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=hIACM6BfZZgoZ9/t+CT5affcXAiGhhbM8EZitKpG2cI=;
- b=IcbuAN/yVxqYpjtBzi6O5YOpLcR6cuKqErfGEjfSwM0h9pnMeG2S5ezN+1x46qeGBLWl
- 57p7JpeeSOTnyeAaX1VTqcEL1+9wrWz2Qxc9Ghy2WbKEzUaaDcs2b1IFQiswNVk24niY
- xMeThWVaU4yJ4gZw5gJkvCoGP4tm/n3gYAcReUdJvQI9kfPVZWXlcoelV/iTZHoewk0n
- orGaKg79TbEkTSZ5GrUsAW+rdJSJ2Ouy+X9nMGGpnsIrnxgt6b9yy7NBsSfMNPYt7TVq
- 0iEzPOmP+hbyFAAUiwJnKdhLm84ksRkCJ84zWQSCXZBvxy14VaFubtD8SaWkwGlYVeqa xg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gw9hyrru9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jun 2022 14:09:40 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25ODSLsb022052;
-        Fri, 24 Jun 2022 14:09:40 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gw9hyrrth-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jun 2022 14:09:40 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25OE6CNN016148;
-        Fri, 24 Jun 2022 14:09:37 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3gs6b994d8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jun 2022 14:09:37 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25OE9Z1O18940342
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Jun 2022 14:09:35 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5FC4CA4057;
-        Fri, 24 Jun 2022 14:09:35 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0C5E1A4040;
-        Fri, 24 Jun 2022 14:09:35 +0000 (GMT)
-Received: from [9.101.4.33] (unknown [9.101.4.33])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 24 Jun 2022 14:09:34 +0000 (GMT)
-Message-ID: <040a8f52-980f-146c-6811-9a0ce9157f08@linux.ibm.com>
-Date:   Fri, 24 Jun 2022 16:09:34 +0200
+        Fri, 24 Jun 2022 10:17:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E443B4F9D0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:17:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A287A21AF3;
+        Fri, 24 Jun 2022 14:17:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1656080260; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=NUWT7Az6AfDgXDht5tXPsuar4v3himkpXGRyfkP9Eq0=;
+        b=FwKP6IqEXM3nftv3QLRFKinPQfArT91WC30EG6S/Ei4HAOCkEtPixTbbOba1aWAzcA7tMc
+        XZagoP2lZtpjv6lqadbBF1CUnG2NXzphU63LYw3QqVAFojN+yNdiSNUEa9wW0lQtcU27Jl
+        bfMAMruD0DlVaSYZ1aqss/7mNA9YMjs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1656080260;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=NUWT7Az6AfDgXDht5tXPsuar4v3himkpXGRyfkP9Eq0=;
+        b=pwxKx5gUZuOwqQ4dPUKBB7900p0G22soIBpb9syIi2l4O/kZWIEOcVIgX0FxqJx74gnWOa
+        vhDfq8P5y7um+aBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8014513ACA;
+        Fri, 24 Jun 2022 14:17:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 07jgHoTHtWKoHQAAMHmgww
+        (envelope-from <iivanov@suse.de>); Fri, 24 Jun 2022 14:17:40 +0000
+From:   "Ivan T. Ivanov" <iivanov@suse.de>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Ivan T. Ivanov" <iivanov@suse.de>
+Subject: [PATCH 0/1] arm64: Add stack unwinder unit tests
+Date:   Fri, 24 Jun 2022 17:09:59 +0300
+Message-Id: <20220624141000.88120-1-iivanov@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH v2 4/4] pseries/mobility: Set NMI watchdog factor during
- LPM
-Content-Language: fr
-To:     Nathan Lynch <nathanl@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        haren@linux.vnet.ibm.com, npiggin@gmail.com
-References: <20220614135414.37746-1-ldufour@linux.ibm.com>
- <20220614135414.37746-5-ldufour@linux.ibm.com> <87sfnvmgql.fsf@linux.ibm.com>
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <87sfnvmgql.fsf@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: yuO9Fjnte4pDDmNfCbBbDPgSyskw8CeR
-X-Proofpoint-ORIG-GUID: ZghCb-F_2QSGKahCJ6XSXNfeCCuz7BnB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-24_07,2022-06-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- lowpriorityscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0
- priorityscore=1501 clxscore=1015 suspectscore=0 mlxscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206240055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -97,110 +69,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2022, 19:28:34, Nathan Lynch wrote:
-> Laurent Dufour <ldufour@linux.ibm.com> writes:
->> diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/platforms/pseries/mobility.c
->> index 179bbd4ae881..4284ceaf9060 100644
->> --- a/arch/powerpc/platforms/pseries/mobility.c
->> +++ b/arch/powerpc/platforms/pseries/mobility.c
->> @@ -48,6 +48,39 @@ struct update_props_workarea {
->>  #define MIGRATION_SCOPE	(1)
->>  #define PRRN_SCOPE -2
->>  
->> +#ifdef CONFIG_PPC_WATCHDOG
->> +static unsigned int lpm_nmi_wd_factor = 200;
->> +
->> +#ifdef CONFIG_SYSCTL
->> +static struct ctl_table lpm_nmi_wd_factor_ctl_table[] = {
->> +	{
->> +		.procname	= "lpm_nmi_watchdog_factor",
-> 
-> Assuming the basic idea is acceptable, I suggest making the user-visible
-> name more generic (e.g. "nmi_watchdog_factor") in case it makes sense to
-> apply this to other contexts in the future.
+Hi,
 
-Fair enough, indeed, I was wondering if "lpm" is meaningful.
+Here is my initial arm64 unwinder test support. Code is based on s390
+unwinder tests, while errors introduced are mine. I am hopping that it
+will be useful for testing and validating upcoming arm64
+arch_stack_walk_reliable() support.
 
-> 
->> +		.data		= &lpm_nmi_wd_factor,
->> +		.maxlen		= sizeof(int),
->> +		.mode		= 0644,
->> +		.proc_handler	= proc_douintvec_minmax,
->> +	},
->> +	{}
->> +};
->> +static struct ctl_table lpm_nmi_wd_factor_sysctl_root[] = {
->> +	{
->> +		.procname       = "kernel",
->> +		.mode           = 0555,
->> +		.child          = lpm_nmi_wd_factor_ctl_table,
->> +	},
->> +	{}
->> +};
->> +
->> +static int __init register_lpm_nmi_wd_factor_sysctl(void)
->> +{
->> +	register_sysctl_table(lpm_nmi_wd_factor_sysctl_root);
->> +
->> +	return 0;
->> +}
->> +device_initcall(register_lpm_nmi_wd_factor_sysctl);
->> +#endif /* CONFIG_SYSCTL */
->> +#endif /* CONFIG_PPC_WATCHDOG */
->> +
->>  static int mobility_rtas_call(int token, char *buf, s32 scope)
->>  {
->>  	int rc;
->> @@ -702,6 +735,7 @@ static int pseries_suspend(u64 handle)
->>  static int pseries_migrate_partition(u64 handle)
->>  {
->>  	int ret;
->> +	unsigned int factor = lpm_nmi_wd_factor;
->>  
->>  	ret = wait_for_vasi_session_suspending(handle);
->>  	if (ret)
->> @@ -709,6 +743,13 @@ static int pseries_migrate_partition(u64 handle)
->>  
->>  	vas_migration_handler(VAS_SUSPEND);
->>  
->> +#ifdef CONFIG_PPC_WATCHDOG
->> +	if (factor) {
->> +		pr_info("Set the NMI watchdog factor to %u%%\n", factor);
->> +		watchdog_nmi_set_lpm_factor(factor);
->> +	}
->> +#endif /* CONFIG_PPC_WATCHDOG */
->> +
->>  	ret = pseries_suspend(handle);
->>  	if (ret == 0) {
->>  		post_mobility_fixup();
->> @@ -716,6 +757,13 @@ static int pseries_migrate_partition(u64 handle)
->>  	} else
->>  		pseries_cancel_migration(handle, ret);
->>  
->> +#ifdef CONFIG_PPC_WATCHDOG
->> +	if (factor) {
->> +		pr_info("Restoring NMI watchdog timer\n");
->> +		watchdog_nmi_set_lpm_factor(0);
->> +	}
->> +#endif /* CONFIG_PPC_WATCHDOG */
->> +
-> 
-> A couple more suggestions:
-> 
-> * Move the prints into a single statement in watchdog_nmi_set_lpm_factor().
+This patch is was tested on top of latest Madhavan work [1].
 
-You're right that sounds a better place.
+As expected unwinding trough IRQ fails. Here is the output of current
+statue of affair:
 
-> 
-> * Add no-op versions of watchdog_nmi_set_lpm_factor for
->   !CONFIG_PPC_WATCHDOG so we can minimize the #ifdef here.
->
+# modprobe test_unwind
+[   14.905945]     # Subtest: test_unwind
+[   14.905948]     1..1
+[   14.905949]         # Subtest: test_unwind_flags
+[   14.906243]         ok 1 - UWM_DEFAULT
+[   14.906375]         ok 2 - UWM_REGS
+[   14.906902]         ok 3 - UWM_CALLER
+[   14.907010]         ok 4 - UWM_CALLER | UWM_REGS
+[   14.907220]         ok 5 - UWM_THREAD
+[   14.907445]         ok 6 - UWM_THREAD | UWM_CALLER
+[   14.912600]     # test_unwind_flags:  test_unwind+0x70/0x280 [test_unwind]
+[   14.912602]     # test_unwind_flags:  unwindme_func4+0x64/0x260 [test_unwind]
+[   14.912604]     # test_unwind_flags:  unwindme_func3+0x58/0x80 [test_unwind]
+[   14.912605]     # test_unwind_flags:  unwindme_func2+0x18/0x28 [test_unwind]
+[   14.912606]     # test_unwind_flags:  unwindme_func1+0x18/0x28 [test_unwind]
+[   14.912607]     # test_unwind_flags:  unwindme_timer_fn+0x38/0x54 [test_unwind]
+[   14.912608]     # test_unwind_flags:  call_timer_fn+0x38/0x1e0
+[   14.912609]     # test_unwind_flags:  run_timer_softirq+0x500/0x550
+[   14.912610]     # test_unwind_flags:  __do_softirq+0x124/0x3bc
+[   14.912611]     # test_unwind_flags:  irq_exit_rcu+0xf0/0x110
+[   14.912611]     # test_unwind_flags:  el1_interrupt+0x3c/0x70
+[   14.912612]     # test_unwind_flags:  el1h_64_irq_handler+0x18/0x28
+[   14.912612]     # test_unwind_flags:  el1h_64_irq+0x64/0x68
+[   14.912613]     # test_unwind_flags:  arch_cpu_idle+0x18/0x28
+[   14.912614]     # test_unwind_flags:  default_idle_call+0x6c/0x1d0
+[   14.912614]     # test_unwind_flags:  do_idle+0x1f0/0x290
+[   14.912615]     # test_unwind_flags:  cpu_startup_entry+0x30/0x38
+[   14.912615]     # test_unwind_flags:  kernel_init+0x0/0x140
+[   14.912616]     # test_unwind_flags:  arch_post_acpi_subsys_init+0x0/0x28
+[   14.912617]     # test_unwind_flags:  start_kernel+0x6dc/0x718
+[   14.912618]     # test_unwind_flags:  __primary_switched+0xc0/0xc8
+[   14.912618]     # test_unwind_flags:
+[   14.912644]     # test_unwind_flags: EXPECTATION FAILED at arch/arm64/kernel/test_unwind.c:501
+[   14.912644]     Expected 0 == test_unwind_irq(&u), but
+[   14.912644]         test_unwind_irq(&u) == -22
+[   14.912656]         not ok 7 - UWM_IRQ
+[   14.924625]     # test_unwind_flags:  unwindme_func4+0xa0/0x260 [test_unwind]
+[   14.924630]     # test_unwind_flags:  unwindme_func3+0x58/0x80 [test_unwind]
+[   14.924632]     # test_unwind_flags:  unwindme_func2+0x18/0x28 [test_unwind]
+[   14.924634]     # test_unwind_flags:  unwindme_func1+0x18/0x28 [test_unwind]
+[   14.924636]     # test_unwind_flags:  unwindme_timer_fn+0x38/0x54 [test_unwind]
+[   14.924638]     # test_unwind_flags:  call_timer_fn+0x38/0x1e0
+[   14.924639]     # test_unwind_flags:  run_timer_softirq+0x500/0x550
+[   14.924641]     # test_unwind_flags:  __do_softirq+0x124/0x3bc
+[   14.924643]     # test_unwind_flags:  irq_exit_rcu+0xf0/0x110
+[   14.924645]     # test_unwind_flags:  el1_interrupt+0x3c/0x70
+[   14.924646]     # test_unwind_flags:  el1h_64_irq_handler+0x18/0x28
+[   14.924647]     # test_unwind_flags:  el1h_64_irq+0x64/0x68
+[   14.924648]     # test_unwind_flags:  arch_cpu_idle+0x18/0x28
+[   14.924649]     # test_unwind_flags:  default_idle_call+0x6c/0x1d0
+[   14.924650]     # test_unwind_flags:  do_idle+0x1f0/0x290
+[   14.924651]     # test_unwind_flags:  cpu_startup_entry+0x30/0x38
+[   14.924653]     # test_unwind_flags:  kernel_init+0x0/0x140
+[   14.924654]     # test_unwind_flags:  arch_post_acpi_subsys_init+0x0/0x28
+[   14.924655]     # test_unwind_flags:  start_kernel+0x6dc/0x718
+[   14.924656]     # test_unwind_flags:  __primary_switched+0xc0/0xc8
+[   14.924657]     # test_unwind_flags:
+[   14.924677]     # test_unwind_flags: EXPECTATION FAILED at arch/arm64/kernel/test_unwind.c:501
+[   14.924677]     Expected 0 == test_unwind_irq(&u), but
+[   14.924677]         test_unwind_irq(&u) == -22
+[   14.924724]         not ok 8 - UWM_IRQ | UWM_REGS
+[   14.936710]     # test_unwind_flags:  test_unwind+0x70/0x280 [test_unwind]
+[   14.936717]     # test_unwind_flags:  unwindme_func4+0x64/0x260 [test_unwind]
+[   14.936720]     # test_unwind_flags:  unwindme_func3+0x58/0x80 [test_unwind]
+[   14.936722]     # test_unwind_flags:  unwindme_func2+0x18/0x28 [test_unwind]
+[   14.936725]     # test_unwind_flags:  unwindme_func1+0x18/0x28 [test_unwind]
+[   14.936727]     # test_unwind_flags:  unwindme_timer_fn+0x38/0x54 [test_unwind]
+[   14.936729]     # test_unwind_flags:  call_timer_fn+0x38/0x1e0
+[   14.936732]     # test_unwind_flags:  run_timer_softirq+0x500/0x550
+[   14.936734]     # test_unwind_flags:  __do_softirq+0x124/0x3bc
+[   14.936736]     # test_unwind_flags:  irq_exit_rcu+0xf0/0x110
+[   14.936738]     # test_unwind_flags:  el1_interrupt+0x3c/0x70
+[   14.936739]     # test_unwind_flags:  el1h_64_irq_handler+0x18/0x28
+[   14.936741]     # test_unwind_flags:  el1h_64_irq+0x64/0x68
+[   14.936743]     # test_unwind_flags:  arch_cpu_idle+0x18/0x28
+[   14.936744]     # test_unwind_flags:  default_idle_call+0x6c/0x1d0
+[   14.936746]     # test_unwind_flags:  do_idle+0x1f0/0x290
+[   14.936748]     # test_unwind_flags:  cpu_startup_entry+0x30/0x38
+[   14.936749]     # test_unwind_flags:  secondary_start_kernel+0x198/0x1c8
+[   14.936751]     # test_unwind_flags:  __secondary_switched+0xa0/0xa4
+[   14.936753]     # test_unwind_flags:
+[   14.936839]     # test_unwind_flags: EXPECTATION FAILED at arch/arm64/kernel/test_unwind.c:501
+[   14.936839]     Expected 0 == test_unwind_irq(&u), but
+[   14.936839]         test_unwind_irq(&u) == -22
+[   14.936874]         not ok 9 - UWM_IRQ | UWM_CALLER
+[   14.944623]     # test_unwind_flags:  unwindme_func3+0x3c/0x80 [test_unwind]
+[   14.944628]     # test_unwind_flags:  unwindme_func2+0x18/0x28 [test_unwind]
+[   14.944631]     # test_unwind_flags:  unwindme_func1+0x18/0x28 [test_unwind]
+[   14.944633]     # test_unwind_flags:  unwindme_timer_fn+0x38/0x54 [test_unwind]
+[   14.944636]     # test_unwind_flags:  call_timer_fn+0x38/0x1e0
+[   14.944638]     # test_unwind_flags:  run_timer_softirq+0x500/0x550
+[   14.944641]     # test_unwind_flags:  __do_softirq+0x124/0x3bc
+[   14.944643]     # test_unwind_flags:  irq_exit_rcu+0xf0/0x110
+[   14.944646]     # test_unwind_flags:  el1_interrupt+0x3c/0x70
+[   14.944649]     # test_unwind_flags:  el1h_64_irq_handler+0x18/0x28
+[   14.944650]     # test_unwind_flags:  el1h_64_irq+0x64/0x68
+[   14.944652]     # test_unwind_flags:  arch_cpu_idle+0x18/0x28
+[   14.944654]     # test_unwind_flags:  default_idle_call+0x6c/0x1d0
+[   14.944656]     # test_unwind_flags:  do_idle+0x1f0/0x290
+[   14.944657]     # test_unwind_flags:  cpu_startup_entry+0x2c/0x38
+[   14.944659]     # test_unwind_flags:  secondary_start_kernel+0x198/0x1c8
+[   14.944661]     # test_unwind_flags:  __secondary_switched+0xa0/0xa4
+[   14.944662]     # test_unwind_flags:
+[   14.944687]     # test_unwind_flags: EXPECTATION FAILED at arch/arm64/kernel/test_unwind.c:501
+[   14.944687]     Expected 0 == test_unwind_irq(&u), but
+[   14.944687]         test_unwind_irq(&u) == -22
+[   14.944737]         not ok 10 - UWM_IRQ | UWM_CALLER | UWM_REGS
+[   14.945009]         ok 11 - UWM_REGS
+[   14.945174]         ok 12 - UWM_KPROBE_ON_FTRACE
+[   14.945299]         ok 13 - UWM_KPROBE_ON_FTRACE | UWM_REGS
+[   14.946894]     # test_unwind_flags:  test_unwind+0x70/0x280 [test_unwind]
+[   14.946902]     # test_unwind_flags:  test_unwind_ftrace_handler+0x28/0x40 [test_unwind]
+[   14.946904]     # test_unwind_flags:  arch_ftrace_ops_list_func+0xd8/0x1b0
+[   14.946906]     # test_unwind_flags:  ftrace_call+0x4/0x2c
+[   14.946908]     # test_unwind_flags:  test_unwind_ftraced_func+0x8/0x28 [test_unwind]
+[   14.946910]     # test_unwind_flags:  unwindme_func4+0x1b4/0x260 [test_unwind]
+[   14.946912]     # test_unwind_flags:  unwindme_func3+0x58/0x80 [test_unwind]
+[   14.946915]     # test_unwind_flags:  unwindme_func2+0x18/0x28 [test_unwind]
+[   14.946917]     # test_unwind_flags:  unwindme_func1+0x18/0x28 [test_unwind]
+[   14.946918]     # test_unwind_flags:  test_unwind_flags+0x5c/0x288 [test_unwind]
+[   14.946920]     # test_unwind_flags:  kunit_try_run_case+0x58/0xc0 [kunit]
+[   14.946921]     # test_unwind_flags:  kunit_generic_run_threadfn_adapter+0x28/0x38 [kunit]
+[   14.946923]     # test_unwind_flags:  kthread+0x118/0x128
+[   14.946924]     # test_unwind_flags:  ret_from_fork+0x10/0x20
+[   14.946925]     # test_unwind_flags:
+[   15.104639]     # test_unwind_flags: EXPECTATION FAILED at arch/arm64/kernel/test_unwind.c:503
+[   15.104639]     Expected 0 == unwindme_func1(&u), but
+[   15.104639]         unwindme_func1(&u) == -22
+[   15.104691]         not ok 14 - UWM_FTRACE
+[   15.240652]         ok 15 - UWM_FTRACE | UWM_REGS
+[   15.264620]         ok 16 - UWM_KRETPROBE
+[   15.292603]         ok 17 - UWM_KRETPROBE | UWM_REGS
+[   15.293173]     # test_unwind_flags:  test_unwind+0x70/0x280 [test_unwind]
+[   15.293175]     # test_unwind_flags:  kretprobe_ret_handler+0x38/0x50 [test_unwind]
+[   15.293177]     # test_unwind_flags:  __kretprobe_trampoline_handler+0xec/0x188
+[   15.293178]     # test_unwind_flags:  trampoline_probe_handler+0x30/0x50
+[   15.293180]     # test_unwind_flags:  __kretprobe_trampoline+0x74/0xc8
+[   15.293181]     # test_unwind_flags:  test_unwind_kretprobed_func_caller+0x18/0x28 [test_unwind]
+[   15.293183]     # test_unwind_flags:  test_unwind_kretprobe+0xac/0x148 [test_unwind]
+[   15.293185]     # test_unwind_flags:  unwindme_func4+0xf0/0x260 [test_unwind]
+[   15.293186]     # test_unwind_flags:  unwindme_func3+0x58/0x80 [test_unwind]
+[   15.293187]     # test_unwind_flags:  unwindme_func2+0x18/0x28 [test_unwind]
+[   15.293188]     # test_unwind_flags:  unwindme_func1+0x18/0x28 [test_unwind]
+[   15.293189]     # test_unwind_flags:  test_unwind_flags+0x5c/0x288 [test_unwind]
+[   15.293190]     # test_unwind_flags:  kunit_try_run_case+0x58/0xc0 [kunit]
+[   15.293191]     # test_unwind_flags:  kunit_generic_run_threadfn_adapter+0x28/0x38 [kunit]
+[   15.293192]     # test_unwind_flags:  kthread+0x118/0x128
+[   15.293192]     # test_unwind_flags:  ret_from_fork+0x10/0x20
+[   15.293193]     # test_unwind_flags:
+[   15.308570]     # test_unwind_flags: EXPECTATION FAILED at arch/arm64/kernel/test_unwind.c:503
+[   15.308570]     Expected 0 == unwindme_func1(&u), but
+[   15.308570]         unwindme_func1(&u) == -22
+[   15.308611]         not ok 18 - UWM_KRETPROBE_HANDLER
+[   15.324616]         ok 19 - UWM_KRETPROBE_HANDLER | UWM_REGS
+[   15.324620]     # test_unwind_flags: pass:11 fail:6 skip:2 total:19
+[   15.324623]     not ok 1 - test_unwind_flags
+[   15.324626] # Totals: pass:11 fail:6 skip:2 total:19
+[   15.324628] not ok 1 - test_unwind
 
-Furthermore, this breaks compilation when !CONFIG_PPC_WATCHDOG because
-lpm_nmi_wd_factor is not defined. I'll rework that part.
+Regards,
+Ivan
 
-> Otherwise this looks fine to me.
+[1] 20220617210717.27126-1-madvenka@linux.microsoft.com
 
-Thanks,
-Laurent.
+Ivan T. Ivanov (1):
+  arm64: Add initial set of stack unwinder self tests
+
+ arch/arm64/Kconfig.debug        |  12 +
+ arch/arm64/kernel/Makefile      |   1 +
+ arch/arm64/kernel/stacktrace.c  |  23 ++
+ arch/arm64/kernel/test_unwind.c | 518 ++++++++++++++++++++++++++++++++
+ include/linux/stacktrace.h      |   1 +
+ 5 files changed, 555 insertions(+)
+ create mode 100644 arch/arm64/kernel/test_unwind.c
+
+-- 
+2.35.3
 

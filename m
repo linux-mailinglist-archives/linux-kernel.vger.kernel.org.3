@@ -2,96 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA81D5596A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A675596B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbiFXJao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 05:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
+        id S231676AbiFXJbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 05:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiFXJaj (ORCPT
+        with ESMTP id S230013AbiFXJbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 05:30:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A998F29817;
-        Fri, 24 Jun 2022 02:30:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E48C62072;
-        Fri, 24 Jun 2022 09:30:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48530C341C0;
-        Fri, 24 Jun 2022 09:30:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656063037;
-        bh=fCo+37lS9RXjimcPtcfJ1/CRyO6x8Ddi+h/sRG2BNaE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ArdhgntWfBKlsSdoXNrsOKrWIlssbrOVvQZHAq/Cqgd1FmQ+aERFWtSIH9lpKOAcv
-         AuN/6IQp4CaTeIUJQ6X1C8v/d4QgHLHOiAjVA5YixksNhh/5sEtujeBA33h15QtMBP
-         FuD+nBpaksaAtO5EMFaTaTfsn8gSb5JV9JvbLp7tDfJ9RA2nY3lKmmsBhzEdIw7dqW
-         5dmvKitBhspUNCsOxlYJzjpaoKmIGuBGyUSBQlqPExFwP/t6u5VA6cnCvMU7uMnMJG
-         LdtjNh6OXbVNMmf/Gkg/epyBignacMDN6MSRX5jjLKcmG7qcs3oQGWUks1G62sPqFu
-         mV9zD/uVhl+/g==
-Received: by pali.im (Postfix)
-        id 640A6711; Fri, 24 Jun 2022 11:30:34 +0200 (CEST)
-Date:   Fri, 24 Jun 2022 11:30:34 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Marek Behun <marek.behun@nic.cz>,
-        Josef Schlehofer <josef.schlehofer@nic.cz>
-Subject: Re: [PATCH] powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers
-Message-ID: <20220624093034.qcuodruw4e7b6tuy@pali>
-References: <20220511143712.22550-1-pali@kernel.org>
- <877d5669mc.fsf@mpe.ellerman.id.au>
- <20220624082700.pzqm2wgrfpbukyfz@pali>
+        Fri, 24 Jun 2022 05:31:45 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5BE3BF8C
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 02:31:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hongnan.li@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VHGmWSp_1656063100;
+Received: from 30.225.24.47(mailfrom:hongnan.li@linux.alibaba.com fp:SMTPD_---0VHGmWSp_1656063100)
+          by smtp.aliyun-inc.com;
+          Fri, 24 Jun 2022 17:31:40 +0800
+Message-ID: <2e708294-a2df-e775-4ea8-5b1fd0aa4544@linux.alibaba.com>
+Date:   Fri, 24 Jun 2022 17:31:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH v2] erofs: update ctx->pos for every emitted dirent
+Content-Language: en-US
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     Chao Yu <chao@kernel.org>, linux-erofs@lists.ozlabs.org,
+        xiang@kernel.org, linux-kernel@vger.kernel.org
+References: <20220527072536.68516-1-hongnan.li@linux.alibaba.com>
+ <20220609034006.76649-1-hongnan.li@linux.alibaba.com>
+ <0c139517-e976-5017-8e7a-d34c38f0f6bb@kernel.org>
+ <70fe93a3-7af5-b563-dcb7-3f7be81348ed@linux.alibaba.com>
+ <YrBl4CMZUiO6YqNM@B-P7TQMD6M-0146.local>
+From:   hongnanLi <hongnan.li@linux.alibaba.com>
+In-Reply-To: <YrBl4CMZUiO6YqNM@B-P7TQMD6M-0146.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220624082700.pzqm2wgrfpbukyfz@pali>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 24 June 2022 10:27:00 Pali Rohár wrote:
-> On Friday 24 June 2022 13:08:59 Michael Ellerman wrote:
-> > Pali Rohár <pali@kernel.org> writes:
-> > > CZ.NIC Turris 1.0 and 1.1 are open source routers, they have dual-core
-> > > PowerPC Freescale P2020 CPU and are based on Freescale P2020RDB-PC-A board.
-> > > Hardware design is fully open source, all firmware and hardware design
-> > > files are available at Turris project website:
-> > >
-> > > https://docs.turris.cz/hw/turris-1x/turris-1x/
-> > > https://project.turris.cz/en/hardware.html
-> > >
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > ---
-> > >  arch/powerpc/boot/dts/turris1x.dts | 470 +++++++++++++++++++++++++++++
-> > >  1 file changed, 470 insertions(+)
-> > >  create mode 100644 arch/powerpc/boot/dts/turris1x.dts
-> > 
-> > The headers say you Cc'ed this to the devicetree list, but I don't see
-> > it in the devicetree patchwork:
-> > 
-> >   https://patchwork.ozlabs.org/project/devicetree-bindings/list/?state=*&q=turris&archive=both
-> 
-> Email is on the devicetree list:
-> https://lore.kernel.org/linux-devicetree/20220511143712.22550-1-pali@kernel.org/
-> 
-> > Which means it hasn't been run through Rob's CI scripts.
-> > 
-> > Maybe try a resend?
-> > 
-> > cheers
+Hi Gao Xiang,
 
-Now I sent V2 and it appeared in devicetree list archive too:
-https://lore.kernel.org/linux-devicetree/20220624085550.20570-1-pali@kernel.org/
+on 2022/6/20 下午8:19, Gao Xiang wrote:
+> Hi Hongnan,
+> 
+> On Mon, Jun 20, 2022 at 05:37:07PM +0800, hongnanLi wrote:
+>> on 2022/6/19 8:19, Chao Yu wrote:
+>>> On 2022/6/9 11:40, Hongnan Li wrote:
+>>>> erofs_readdir update ctx->pos after filling a batch of dentries
+>>>> and it may cause dir/files duplication for NFS readdirplus which
+>>>> depends on ctx->pos to fill dir correctly. So update ctx->pos for
+>>>> every emitted dirent in erofs_fill_dentries to fix it.
+>>>>
+>>>> Fixes: 3e917cc305c6 ("erofs: make filesystem exportable")
+>>>> Signed-off-by: Hongnan Li <hongnan.li@linux.alibaba.com>
+>>>> ---
+>>>>    fs/erofs/dir.c | 20 ++++++++++----------
+>>>>    1 file changed, 10 insertions(+), 10 deletions(-)
+>>>>
+>>>> diff --git a/fs/erofs/dir.c b/fs/erofs/dir.c
+>>>> index 18e59821c597..94ef5287237a 100644
+>>>> --- a/fs/erofs/dir.c
+>>>> +++ b/fs/erofs/dir.c
+>>>> @@ -22,10 +22,9 @@ static void debug_one_dentry(unsigned char
+>>>> d_type, const char *de_name,
+>>>>    }
+>>>>    static int erofs_fill_dentries(struct inode *dir, struct
+>>>> dir_context *ctx,
+>>>> -                   void *dentry_blk, unsigned int *ofs,
+>>>> +                   void *dentry_blk, struct erofs_dirent *de,
+>>>>                       unsigned int nameoff, unsigned int maxsize)
+>>>>    {
+>>>> -    struct erofs_dirent *de = dentry_blk + *ofs;
+>>>>        const struct erofs_dirent *end = dentry_blk + nameoff;
+>>>>        while (de < end) {
+>>>> @@ -59,9 +58,8 @@ static int erofs_fill_dentries(struct inode *dir,
+>>>> struct dir_context *ctx,
+>>>>                /* stopped by some reason */
+>>>>                return 1;
+>>>>            ++de;
+>>>> -        *ofs += sizeof(struct erofs_dirent);
+>>>> +        ctx->pos += sizeof(struct erofs_dirent);
+>>>>        }
+>>>> -    *ofs = maxsize;
+>>>>        return 0;
+>>>>    }
+>>>> @@ -95,7 +93,7 @@ static int erofs_readdir(struct file *f, struct
+>>>> dir_context *ctx)
+>>>>                      "invalid de[0].nameoff %u @ nid %llu",
+>>>>                      nameoff, EROFS_I(dir)->nid);
+>>>>                err = -EFSCORRUPTED;
+>>>> -            goto skip_this;
+>>>> +            break;
+>>>>            }
+>>>>            maxsize = min_t(unsigned int,
+>>>> @@ -106,17 +104,19 @@ static int erofs_readdir(struct file *f,
+>>>> struct dir_context *ctx)
+>>>>                initial = false;
+>>>>                ofs = roundup(ofs, sizeof(struct erofs_dirent));
+>>>> -            if (ofs >= nameoff)
+>>>> +            if (ofs >= nameoff) {
+>>>> +                ctx->pos = blknr_to_addr(i) + ofs;
+>>>>                    goto skip_this;
+>>>> +            }
+>>>>            }
+>>>> -        err = erofs_fill_dentries(dir, ctx, de, &ofs,
+>>>> -                      nameoff, maxsize);
+>>>> -skip_this:
+>>>>            ctx->pos = blknr_to_addr(i) + ofs;
+>>>
+>>> Why updating ctx->pos before erofs_fill_dentries()?
+>>>
+>>> Thanks,
+>>
+>> It’s to ensure the ctx->pos is correct and up to date in
+>> erofs_fill_dentries() so that we can update ctx->pos instead of ofs for
+>> every emitted dirent.
+>>
+> 
+> How about this, since blknr_to_addr(i) + maxsize should be the start of
+> the next dir block.
+> 
+> 	if (initial) {
+> 		ofs = roundup(ofs, sizeof(struct erofs_dirent));
+> 		ctx->pos = blknr_to_addr(i) + ofs;
+> 		if (ofs >= nameoff)
+> 			goto skip_this;
+> 	}
+> 	err = erofs_fill_dentries(dir, ctx, de, (void *)de + ofs,
+> 				  nameoff, maxsize);
+> 	if (err)
+> 		break;
+> 	ctx->pos = blknr_to_addr(i) + maxsize;
+> 
+
+Thanks for your suggestion. It looks good and works well in my test. I 
+will send PATCH v3 later if everything else is okay.
+
+Thanks,
+Hongnan Li

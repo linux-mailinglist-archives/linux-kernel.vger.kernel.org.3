@@ -2,130 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E97FC559D17
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F03559D1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbiFXPNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 11:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S232539AbiFXPPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 11:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232638AbiFXPNE (ORCPT
+        with ESMTP id S232203AbiFXPPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 11:13:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4312D6340;
-        Fri, 24 Jun 2022 08:13:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C16B143D;
-        Fri, 24 Jun 2022 08:13:03 -0700 (PDT)
-Received: from [10.57.84.111] (unknown [10.57.84.111])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CAEAB3F534;
-        Fri, 24 Jun 2022 08:13:01 -0700 (PDT)
-Message-ID: <42679e49-4a04-4700-f420-f6ffe0f4b7d1@arm.com>
-Date:   Fri, 24 Jun 2022 16:12:55 +0100
+        Fri, 24 Jun 2022 11:15:32 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF514E387;
+        Fri, 24 Jun 2022 08:15:26 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 47228E0009;
+        Fri, 24 Jun 2022 15:15:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656083725;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8C1pYPeFG6ewoGUkNiTOuEAm3DxzdUPHi8Qj0Tqk/sM=;
+        b=DvGenKFMhPmLrsjN/4lRuwa151q5eEmmuBYO/YlESIIvmrtefVJItOgrnQDS+iU2BKt9LN
+        8TxwPU7dgQgm7StQ9uAR3Mn+pgHEiyfrg7LJbXhKOPDDeVsiurUn18Gp8nbCVAMOe+1lVX
+        2MwITdLVMlW4yU2s3B9z28NmcHThvPRXkTqwfNoLWcYKaSG2aQOW6egmjhAwa1Njmv1Ukv
+        U8gXcgXKZWY9MulZQ4r70lrOpqQkfaFXjTH6AZCAsUWDPAWl8Ql+DUc6ENGyuT6aF2KqYH
+        f12IIi1ngS7mh63e3Y5Wuh1R5ORkRM946df11OucAv/0mdry1A8c0jKMsJin7g==
+Date:   Fri, 24 Jun 2022 17:14:29 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] net: ocelot: fix wrong time_after usage
+Message-ID: <20220624171429.4b3f7c0a@fixe.home>
+In-Reply-To: <20220521162108.bact3sn4z2yuysdt@skbuf>
+References: <YoeMW+/KGk8VpbED@lunn.ch>
+        <20220520213115.7832-1-paskripkin@gmail.com>
+        <YojvUsJ090H/wfEk@lunn.ch>
+        <20220521162108.bact3sn4z2yuysdt@skbuf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 1/2] vfio/type1: Simplify bus_type determination
-Content-Language: en-GB
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     cohuck@redhat.com, iommu@lists.linux.dev,
-        iommu@lists.linux-foundation.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <b1d13cade281a7d8acbfd0f6a33dcd086207952c.1655898523.git.robin.murphy@arm.com>
- <20220622161721.469fc9eb.alex.williamson@redhat.com>
- <68263bd7-4528-7acb-b11f-6b1c6c8c72ef@arm.com>
- <20220623170044.1757267d.alex.williamson@redhat.com>
- <20220624015030.GJ4147@nvidia.com>
- <20220624081159.508baed3.alex.williamson@redhat.com>
- <20220624141836.GS4147@nvidia.com>
- <20220624082831.22de3d51.alex.williamson@redhat.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220624082831.22de3d51.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-24 15:28, Alex Williamson wrote:
-> On Fri, 24 Jun 2022 11:18:36 -0300
-> Jason Gunthorpe <jgg@nvidia.com> wrote:
-> 
->> On Fri, Jun 24, 2022 at 08:11:59AM -0600, Alex Williamson wrote:
->>> On Thu, 23 Jun 2022 22:50:30 -0300
->>> Jason Gunthorpe <jgg@nvidia.com> wrote:
->>>    
->>>> On Thu, Jun 23, 2022 at 05:00:44PM -0600, Alex Williamson wrote:
->>>>    
->>>>>>>> +struct vfio_device *vfio_device_get_from_iommu(struct iommu_group *iommu_group)
->>>>>>>> +{
->>>>>>>> +	struct vfio_group *group = vfio_group_get_from_iommu(iommu_group);
->>>>>>>> +	struct vfio_device *device;
->>>>>>>
->>>>>>> Check group for NULL.
->>>>>>
->>>>>> OK - FWIW in context this should only ever make sense to call with an
->>>>>> iommu_group which has already been derived from a vfio_group, and I did
->>>>>> initially consider a check with a WARN_ON(), but then decided that the
->>>>>> unguarded dereference would be a sufficiently strong message. No problem
->>>>>> with bringing that back to make it more defensive if that's what you prefer.
->>>>>
->>>>> A while down the road, that's a bit too much implicit knowledge of the
->>>>> intent and single purpose of this function just to simply avoid a test.
->>>>
->>>> I think we should just pass the 'struct vfio_group *' into the
->>>> attach_group op and have this API take that type in and forget the
->>>> vfio_group_get_from_iommu().
->>>
->>> That's essentially what I'm suggesting, the vfio_group is passed as an
->>> opaque pointer which type1 can use for a
->>> vfio_group_for_each_vfio_device() type call.  Thanks,
->>
->> I don't want to add a whole vfio_group_for_each_vfio_device()
->> machinery that isn't actually needed by anything.. This is all
->> internal, we don't need to design more than exactly what is needed.
->>
->> At this point if we change the signature of the attach then we may as
->> well just pass in the representative vfio_device, that is probably
->> less LOC overall.
-> 
-> That means that vfio core still needs to pick an arbitrary
-> representative device, which I find in fundamental conflict to the
-> nature of groups.  Type1 is the interface to the IOMMU API, if through
-> the IOMMU API we can make an assumption that all devices within the
-> group are equivalent for a given operation, that should be done in type1
-> code, not in vfio core.  A for-each interface is commonplace and not
-> significantly more code or design than already proposed.  Thanks,
+Le Sat, 21 May 2022 16:21:09 +0000,
+Vladimir Oltean <vladimir.oltean@nxp.com> a =C3=A9crit :
 
-It also occurred to me this morning that there's another middle-ground 
-option staring out from the call-wrapping notion I mentioned yesterday - 
-while I'm not keen to provide it from the IOMMU API, there's absolutely 
-no reason that VFIO couldn't just use the building blocks by itself, and 
-in fact it works out almost absurdly simple:
+> On Sat, May 21, 2022 at 03:55:30PM +0200, Andrew Lunn wrote:
+> > On Sat, May 21, 2022 at 12:31:15AM +0300, Pavel Skripkin wrote: =20
+> > > Accidentally noticed, that this driver is the only user of
+> > > while (time_after(jiffies...)).
+> > >=20
+> > > It looks like typo, because likely this while loop will finish after =
+1st
+> > > iteration, because time_after() returns true when 1st argument _is af=
+ter_
+> > > 2nd one.
+> > >=20
+> > > There is one possible problem with this poll loop: the scheduler coul=
+d put
+> > > the thread to sleep, and it does not get woken up for
+> > > OCELOT_FDMA_CH_SAFE_TIMEOUT_US. During that time, the hardware has do=
+ne
+> > > its thing, but you exit the while loop and return -ETIMEDOUT.
+> > >=20
+> > > Fix it by using sane poll API that avoids all problems described above
+> > >=20
+> > > Fixes: 753a026cfec1 ("net: ocelot: add FDMA support")
+> > > Suggested-by: Andrew Lunn <andrew@lunn.ch>
+> > > Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> > > ---
+> > >=20
+> > > I can't say if 0 is a good choise for 5th readx_poll_timeout() argume=
+nt,
+> > > so this patch is build-tested only. =20
+> >  =20
+> > > Testing and suggestions are welcomed! =20
+> >=20
+> > If you had the hardware, i would suggest you profile how often it does
+> > complete on the first iteration. And when it does not complete on the
+> > first iteration, how many more iterations it needs.
+> >=20
+> > Tobias made an interesting observation with the mv88e6xxx switch. He
+> > found that two tight polls was enough 99% of the time. Putting a sleep
+> > in there doubles the time it took to setup the switch. So he ended up
+> > with a hybrid of open coded polling twice, followed by iopoll with a
+> > timer value set.
+> >=20
+> > That was with a heavily used poll function. How often is this function
+> > used? No point in overly optimising this if it is not used much. =20
+>=20
+> If you're looking at me, I don't have the hardware to test, sorry.
+> Frame DMA is one of the components NXP removed when building their DSA
+> variants of these switches. But the function is called once or twice per
+> NAPI poll cycle, so it's worth optimizing as much as possible.
+>=20
+> Clement, could you please do some testing? The patch that Andrew is
+> talking about is 35da1dfd9484 ("net: dsa: mv88e6xxx: Improve performance
+> of busy bit polling").
 
-static bool vfio_device_capable(struct device *dev, void *data)
-{
-	return device_iommu_capable(dev, (enum iommu_cap)data);
-}
+So I actually tested and added logging to see if the CH_SAFE
+register bits are set for the channel on the first iteration. From
+what I could test (iperf3 with huge/non huge packets, TCP/UDP), it
+always return true on the first try. So since I think Pavel solution
+is ok to go with.
 
-bool vfio_group_capable(struct iommu_group *group, enum iommu_cap cap)
-{
-	return iommu_group_for_each_dev(group, (void *)cap, vfio_device_capable);
-}
+However, since ocelot_fdma_wait_chan_safe() is also called in the napi
+poll function of this driver, I don't think sleeping is allowed (softirq
+context) and thus I would suggest using the readx_poll_timeout_atomic()
+function instead.
 
-and much the same for iommu_domain_alloc() once I get that far. The 
-locking concern neatly disappears because we're no longer holding any 
-bus or device pointer that can go stale. How does that seem as a 
-compromise for now, looking forward to Jason's longer-term view of 
-rearranging the attach_group process such that a vfio_device falls 
-naturally to hand?
+Regarding the delay to wait between each read, I don't have any
+information about that possible value, the datasheet only says "wait
+for the bit to be set" so I guess we'll have to live with an
+approximate value.
 
-Cheers,
-Robin.
+Thanks,
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

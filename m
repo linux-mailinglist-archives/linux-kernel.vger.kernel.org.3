@@ -2,104 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C099C559FF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C84B55A070
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbiFXRj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
+        id S231423AbiFXRjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbiFXRiV (ORCPT
+        with ESMTP id S231945AbiFXRi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:38:21 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E6A38D84
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:38:14 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id k14so2702111plh.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:38:14 -0700 (PDT)
+        Fri, 24 Jun 2022 13:38:28 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1654D24E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:38:27 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id q140so3040738pgq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:38:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=TMGl2uGFo9WP1IR3TTIhsHP9uWyzq0KMX5Ki6ojzI4k=;
-        b=Z1gOC9MsNTnTOKdW6JLQOA6GStPqHNdMDGNQ276jBGI4DzN2LiUlL7R0CUUAxOeO5l
-         TbABOthK1gLVn+F+B1T+KWRK93ogMkNVrAtbVQqOPm+aGLN8+IjtKKWgw8xWU1qItG32
-         jwMxPswhDw1TyYKjbmaR4AxWdeJAaW/BIozkvOJ82HDAmO7E/3vytffty+BtamlS87ds
-         9SnOHyO4Du3UNhYj9AVaaTN54ubMSjJmtZG4g5oLAz/sJBhht2057ltozkRBGeGL5HLl
-         ZTKC3e4DWVYxZXGt6zM2/yj5vSOqOSbqZJr+84U4/1C8wsDqxbwA/HcpBVlZsufjJVX6
-         7nrQ==
+        bh=3kDqsealhz+clkDjmQMJ0LSGvDM3X4MUEdmUqyhprC4=;
+        b=juBhL6FdKN33HFxCeJTuvPGoDF/55JA3lmhW9LFCphk+c6G2qjT+/cZjhqfZ38m8BK
+         Fu6K7ic8BdlkA78wRSfeIEZbhUztnhLqj2T7E8NSK3bdAyKoBzcx/bCJJNyPD7qZh8SN
+         KqCZzKM7Boi/7jzwhRKdgmwgcEkbupwvDIlUlrUNtl/akyAALdGUzvcGvJ6KXbOJr0O9
+         VoMVlPS2Ffu/FV2ITE3+jqoGbalBS7navDyZ35/2l47IMn2rTaNmaVGbUJIh+TUWnZkv
+         ILxZg5BqiiS2E/i9jIUGu9KsU2IVqAUD63/d4zpMS/HmAWsU9GykYdJ2ZDXqrEz4Js5T
+         S3Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=TMGl2uGFo9WP1IR3TTIhsHP9uWyzq0KMX5Ki6ojzI4k=;
-        b=ujrTU6ZNNSLOLaqha1lSoZO30i9yGgQsstR1cQo+iaiAM0FFcJyrEzIM3lQDA7YzE2
-         NdDlAnIpxdOR1uvcMxPOr/ikK38TLGJ+WUOlSvgqkTt8REIehMm2isNtlLzsHS8R6ArP
-         mwxi5f4YXMAiSYbcnRkfvzDVkQUxnlj1WY3HkASzhsiCYJmCfGDVqq880wH7amS7a3X6
-         LdplCHi+iD7mTaiZylQklxHCeO1RvoTx9K3aAPUwtckXSontpeB2rFCHo/zCSOGJEPqs
-         8c1vYY4jLXYmgMbkLUS7F9WI1kOsO8ScMi/+NzX0wyq8wXLdbM7Y38pU+ZnUAOXjyeBc
-         nnXg==
-X-Gm-Message-State: AJIora9Vsqdw20BYEm4tMO3n+uYjc/lDQLu+52o0gUVN+0dVvkVzVrmG
-        mHHABoosgdiAMIwx3AxGCXarllWKTdspkQ==
-X-Google-Smtp-Source: AGRyM1vR6RMJJ8QP6V4B/JeC/lrCUXi3L3lfDEB1qkp6dXgvBtxa6BeUp82g0XjBzuUEbBwVpAaH6A==
-X-Received: by 2002:a17:902:860c:b0:16a:20a0:f6e4 with SMTP id f12-20020a170902860c00b0016a20a0f6e4mr181332plo.164.1656092293946;
-        Fri, 24 Jun 2022 10:38:13 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id w185-20020a6262c2000000b0052523f7050bsm2002295pfb.118.2022.06.24.10.38.11
+        bh=3kDqsealhz+clkDjmQMJ0LSGvDM3X4MUEdmUqyhprC4=;
+        b=1TP9KIEsD/2+aZcEgV9Iadx5uLwaicC3ouehD/RYtk56Tdw5N8bd9/vmVSmaBvF3nD
+         hLK8WqRJqMZgdsk6IqebpDVJ3200GhRQuqgITxHQu41TCtPEeWzNmawGdM1q3NtjSX7r
+         /NCOEki0af4/9U6DhYPPkU3XPFjNrw0JiYSjufZFpwZmB7tzD3XfzhK4DKTlsaLouB9H
+         x21MMcVsbOwJC0S3/yh/FWVNqkdGlzYlTkt9u1n+3d7UvqDxcMsJlN2eZi/2W3Hiv82j
+         nrOCBv3Z3YUVx6l6XnQxXZxqtkGAir+E+Ee9nQJWAoJtMiiXn1zv7bX6n8d0PK5AewzO
+         wrQA==
+X-Gm-Message-State: AJIora9Wn8d7j5bfB1CqXd1XRvnDd9D2WwHZNx8bBqRq+BpRfK4P1ufr
+        TBhE9r72CTG3sqBXTpMCHADQ1g==
+X-Google-Smtp-Source: AGRyM1uLvnAJjhQ/EXwZDy/O3e1qyJGFOi/LsFUKFis0PhPPsRz7w61giAEqPL8upDGjoAbmyzMb3Q==
+X-Received: by 2002:a63:884a:0:b0:40c:ab0d:fa21 with SMTP id l71-20020a63884a000000b0040cab0dfa21mr11358pgd.404.1656092306583;
+        Fri, 24 Jun 2022 10:38:26 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id n3-20020a170902d2c300b0016796cdd802sm2151603plc.19.2022.06.24.10.38.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 10:38:12 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 11:38:10 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Saud Farooqui <farooqui_saud@hotmail.com>
-Cc:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lkp@intel.com
-Subject: Re: [PATCH v1] rpmsg: strcpy is not safe, use strscpy_pad() instead
-Message-ID: <20220624173810.GD1736477@p14s>
-References: <20220622174616.GD1606016@p14s>
- <PA4P189MB14210AA95DCA3715AFA7F4A68BB59@PA4P189MB1421.EURP189.PROD.OUTLOOK.COM>
+        Fri, 24 Jun 2022 10:38:25 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 17:38:21 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] KVM: x86/mmu: Use "unsigned int", not "u32", for
+ SPTEs' @access info
+Message-ID: <YrX2ja1r1/7LGv+k@google.com>
+References: <20220624171808.2845941-1-seanjc@google.com>
+ <20220624171808.2845941-3-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PA4P189MB14210AA95DCA3715AFA7F4A68BB59@PA4P189MB1421.EURP189.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220624171808.2845941-3-seanjc@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 02:20:47PM +0500, Saud Farooqui wrote:
-> Replace strcpy() with strscpy_pad() for copying the rpmsg
-> device name in rpmsg_register_device_override().
+On Fri, Jun 24, 2022 at 05:18:07PM +0000, Sean Christopherson wrote:
+> Use an "unsigned int" for @access parameters instead of a "u32", mostly
+> to be consistent throughout KVM, but also because "u32" is misleading.
+> @access can actually squeeze into a u8, i.e. doesn't need 32 bits, but is
+> as an "unsigned int" because sp->role.access is an unsigned int.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Saud Farooqui <farooqui_saud@hotmail.com>
-> ---
->  drivers/rpmsg/rpmsg_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> No functional change intended.
 > 
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index 290c1f02da10..a4bad4b00414 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -604,7 +604,7 @@ int rpmsg_register_device_override(struct rpmsg_device *rpdev,
->  	int ret;
->  
->  	if (driver_override)
-> -		strcpy(rpdev->id.name, driver_override);
-> +		strscpy_pad(rpdev->id.name, driver_override, RPMSG_NAME_SIZE);
+> Link: https://lore.kernel.org/all/YqyZxEfxXLsHGoZ%2F@google.com
+> Cc: David Matlack <dmatlack@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Applied.
-
-Thanks,
-Mathieu
-
->  
->  	dev_set_name(dev, "%s.%s.%d.%d", dev_name(dev->parent),
->  		     rpdev->id.name, rpdev->src, rpdev->dst);
-> -- 
-> 2.25.1
-> 
+Reviewed-by: David Matlack <dmatlack@google.com>

@@ -2,46 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A675596B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CB65596B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbiFXJbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 05:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
+        id S232046AbiFXJcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 05:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiFXJbp (ORCPT
+        with ESMTP id S232007AbiFXJcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 05:31:45 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5BE3BF8C
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 02:31:43 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hongnan.li@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VHGmWSp_1656063100;
-Received: from 30.225.24.47(mailfrom:hongnan.li@linux.alibaba.com fp:SMTPD_---0VHGmWSp_1656063100)
-          by smtp.aliyun-inc.com;
-          Fri, 24 Jun 2022 17:31:40 +0800
-Message-ID: <2e708294-a2df-e775-4ea8-5b1fd0aa4544@linux.alibaba.com>
-Date:   Fri, 24 Jun 2022 17:31:40 +0800
+        Fri, 24 Jun 2022 05:32:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C3B3BF8C
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 02:32:07 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 223D11F8BA;
+        Fri, 24 Jun 2022 09:32:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1656063126; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=U05t/Xfvw3gM8q3xuk5OGGCBzvwg4X9/WMErVj5lY8c=;
+        b=VFH8sFvuEBdtswvvFrUuKvr5Ijh2bkdYxd0zzQuR9xWWvU7Ezd0MK+NI3fV/Ucwd9jqeM6
+        drUB7RBQZlX1IKUtDFHh0pzAQWGgHTArrnqNU3x1x/lW5AauIZbtat410O2N9mBpjMM3lQ
+        26NNHfG1xMLtPT4wIGm9FriIw957q7g=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C500D13ACA;
+        Fri, 24 Jun 2022 09:32:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vRRiI5SEtWLMCwAAMHmgww
+        (envelope-from <wqu@suse.com>); Fri, 24 Jun 2022 09:32:04 +0000
+From:   Qu Wenruo <wqu@suse.com>
+To:     linux-kernel@vger.kernel.org, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk
+Subject: [PATCH] lib: bitmap: fix the duplicated comments on bitmap_to_arr64()
+Date:   Fri, 24 Jun 2022 17:31:47 +0800
+Message-Id: <0d85e1dbad52ad7fb5787c4432bdb36cbd24f632.1656063005.git.wqu@suse.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH v2] erofs: update ctx->pos for every emitted dirent
-Content-Language: en-US
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     Chao Yu <chao@kernel.org>, linux-erofs@lists.ozlabs.org,
-        xiang@kernel.org, linux-kernel@vger.kernel.org
-References: <20220527072536.68516-1-hongnan.li@linux.alibaba.com>
- <20220609034006.76649-1-hongnan.li@linux.alibaba.com>
- <0c139517-e976-5017-8e7a-d34c38f0f6bb@kernel.org>
- <70fe93a3-7af5-b563-dcb7-3f7be81348ed@linux.alibaba.com>
- <YrBl4CMZUiO6YqNM@B-P7TQMD6M-0146.local>
-From:   hongnanLi <hongnan.li@linux.alibaba.com>
-In-Reply-To: <YrBl4CMZUiO6YqNM@B-P7TQMD6M-0146.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,103 +57,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gao Xiang,
+Thanks to the recent commit 0a97953fd221 ("lib: add
+bitmap_{from,to}_arr64") now we can directly convert a U64 value into a
+bitmap and vice verse.
 
-on 2022/6/20 下午8:19, Gao Xiang wrote:
-> Hi Hongnan,
-> 
-> On Mon, Jun 20, 2022 at 05:37:07PM +0800, hongnanLi wrote:
->> on 2022/6/19 8:19, Chao Yu wrote:
->>> On 2022/6/9 11:40, Hongnan Li wrote:
->>>> erofs_readdir update ctx->pos after filling a batch of dentries
->>>> and it may cause dir/files duplication for NFS readdirplus which
->>>> depends on ctx->pos to fill dir correctly. So update ctx->pos for
->>>> every emitted dirent in erofs_fill_dentries to fix it.
->>>>
->>>> Fixes: 3e917cc305c6 ("erofs: make filesystem exportable")
->>>> Signed-off-by: Hongnan Li <hongnan.li@linux.alibaba.com>
->>>> ---
->>>>    fs/erofs/dir.c | 20 ++++++++++----------
->>>>    1 file changed, 10 insertions(+), 10 deletions(-)
->>>>
->>>> diff --git a/fs/erofs/dir.c b/fs/erofs/dir.c
->>>> index 18e59821c597..94ef5287237a 100644
->>>> --- a/fs/erofs/dir.c
->>>> +++ b/fs/erofs/dir.c
->>>> @@ -22,10 +22,9 @@ static void debug_one_dentry(unsigned char
->>>> d_type, const char *de_name,
->>>>    }
->>>>    static int erofs_fill_dentries(struct inode *dir, struct
->>>> dir_context *ctx,
->>>> -                   void *dentry_blk, unsigned int *ofs,
->>>> +                   void *dentry_blk, struct erofs_dirent *de,
->>>>                       unsigned int nameoff, unsigned int maxsize)
->>>>    {
->>>> -    struct erofs_dirent *de = dentry_blk + *ofs;
->>>>        const struct erofs_dirent *end = dentry_blk + nameoff;
->>>>        while (de < end) {
->>>> @@ -59,9 +58,8 @@ static int erofs_fill_dentries(struct inode *dir,
->>>> struct dir_context *ctx,
->>>>                /* stopped by some reason */
->>>>                return 1;
->>>>            ++de;
->>>> -        *ofs += sizeof(struct erofs_dirent);
->>>> +        ctx->pos += sizeof(struct erofs_dirent);
->>>>        }
->>>> -    *ofs = maxsize;
->>>>        return 0;
->>>>    }
->>>> @@ -95,7 +93,7 @@ static int erofs_readdir(struct file *f, struct
->>>> dir_context *ctx)
->>>>                      "invalid de[0].nameoff %u @ nid %llu",
->>>>                      nameoff, EROFS_I(dir)->nid);
->>>>                err = -EFSCORRUPTED;
->>>> -            goto skip_this;
->>>> +            break;
->>>>            }
->>>>            maxsize = min_t(unsigned int,
->>>> @@ -106,17 +104,19 @@ static int erofs_readdir(struct file *f,
->>>> struct dir_context *ctx)
->>>>                initial = false;
->>>>                ofs = roundup(ofs, sizeof(struct erofs_dirent));
->>>> -            if (ofs >= nameoff)
->>>> +            if (ofs >= nameoff) {
->>>> +                ctx->pos = blknr_to_addr(i) + ofs;
->>>>                    goto skip_this;
->>>> +            }
->>>>            }
->>>> -        err = erofs_fill_dentries(dir, ctx, de, &ofs,
->>>> -                      nameoff, maxsize);
->>>> -skip_this:
->>>>            ctx->pos = blknr_to_addr(i) + ofs;
->>>
->>> Why updating ctx->pos before erofs_fill_dentries()?
->>>
->>> Thanks,
->>
->> It’s to ensure the ctx->pos is correct and up to date in
->> erofs_fill_dentries() so that we can update ctx->pos instead of ofs for
->> every emitted dirent.
->>
-> 
-> How about this, since blknr_to_addr(i) + maxsize should be the start of
-> the next dir block.
-> 
-> 	if (initial) {
-> 		ofs = roundup(ofs, sizeof(struct erofs_dirent));
-> 		ctx->pos = blknr_to_addr(i) + ofs;
-> 		if (ofs >= nameoff)
-> 			goto skip_this;
-> 	}
-> 	err = erofs_fill_dentries(dir, ctx, de, (void *)de + ofs,
-> 				  nameoff, maxsize);
-> 	if (err)
-> 		break;
-> 	ctx->pos = blknr_to_addr(i) + maxsize;
-> 
+However when checking the header there is duplicated helper for
+bitmap_to_arr64(), but no bitmap_from_arr64().
 
-Thanks for your suggestion. It looks good and works well in my test. I 
-will send PATCH v3 later if everything else is okay.
+Just fix the copy-n-paste error.
 
-Thanks,
-Hongnan Li
+Signed-off-by: Qu Wenruo <wqu@suse.com>
+---
+ include/linux/bitmap.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
+index 2e6cd5681040..f091a1664bf1 100644
+--- a/include/linux/bitmap.h
++++ b/include/linux/bitmap.h
+@@ -71,9 +71,9 @@ struct device;
+  *  bitmap_release_region(bitmap, pos, order)   Free specified bit region
+  *  bitmap_allocate_region(bitmap, pos, order)  Allocate specified bit region
+  *  bitmap_from_arr32(dst, buf, nbits)          Copy nbits from u32[] buf to dst
++ *  bitmap_from_arr64(dst, buf, nbits)          Copy nbits from u64[] buf to dst
+  *  bitmap_to_arr32(buf, src, nbits)            Copy nbits from buf to u32[] dst
+  *  bitmap_to_arr64(buf, src, nbits)            Copy nbits from buf to u64[] dst
+- *  bitmap_to_arr64(buf, src, nbits)            Copy nbits from buf to u64[] dst
+  *  bitmap_get_value8(map, start)               Get 8bit value from map at start
+  *  bitmap_set_value8(map, value, start)        Set 8bit value to map at start
+  *
+-- 
+2.36.1
+

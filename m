@@ -2,262 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D3F559A0E
+	by mail.lfdr.de (Postfix) with ESMTP id B28AC559A0F
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232112AbiFXNCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 09:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
+        id S232140AbiFXNCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 09:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbiFXNCJ (ORCPT
+        with ESMTP id S232110AbiFXNCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 09:02:09 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2043.outbound.protection.outlook.com [40.107.92.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692EC52E49;
-        Fri, 24 Jun 2022 06:02:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oOUggiIi2v5uGQ7owBCEJqY6YtaN+po3d8bGLVrmhLDSi6MSGMkLJyPYKzGiuHiKSJatOjkHqVkcXJKRCXyNdX2CMiKjgy0PJPMathhq8GARr6EbOD8lJAOO3O+SYI88akIiC8MWpgcf+8Qo1KwBiX7DMb/53CrGRXoptnIGhY0kIqX3SabOYsbXwjbzVyZbAH9V/9AkPi/NHDhoCBjm5/zNdn6JNmoDaJZXQrY7h+U4tH45PXHO4Oilb8YLU3FOHFeZsYs+3WjJF0iYnWC1wRLv1kNWR/3p1I8lO1gJGtxhAwoT1DN9Hzq5B5oP/X2UgNH6pLyxnkx2b7f55MPQ3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8on6/xXxc0lsJx1jxYZS6kAyl65PGQ9qYN645XAhyPc=;
- b=G0ulSERJbdqu7gzEUsdyiuURD2A3E2eOY4f8YXVQTGoGu5BbExdlKJsTFRf0YBqqJskOF45CApxrlha5HWx6WiHf5s3w+rhFhGZ8upZyihlmS/rMuxd3SGN9Fju/2f8MBIOi7rlWM7YWjunwnx6crsEqyqyLSnsblR7hr5thc+SBGz40aMWlfdYANsuhvS0PxjsNcGERzBN5FDWQ3r4pP+vq3WFRgbslJujGLW3WFr9rveoZFmXRc2eYCkETUjGRNZC/XaEQN2Wd2QjlVnU2UmabAk8bBuA2iHk6qtKiya4n05ZJwKnd6o0+Q7INBd5k6RscTUIko/yv1T84grTd4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8on6/xXxc0lsJx1jxYZS6kAyl65PGQ9qYN645XAhyPc=;
- b=zyEIypN/7Zv21SNu1jm6K17i2ljKEyft/klCapsFyJB8tq1DA8+/SRT0yiL4ivP3fvUNX3dRzbq2fDjlfSca1TRqajKkt1/Z/XApEDQ4hCqkr765/RYSVIPFDFhn+XuvNNrOzwAQPgBdI0sGCOOMcRbPwqlKiq9QNjwgcF3TYyk=
-Received: from BN1PR12CA0016.namprd12.prod.outlook.com (2603:10b6:408:e1::21)
- by MW5PR12MB5649.namprd12.prod.outlook.com (2603:10b6:303:19d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Fri, 24 Jun
- 2022 13:02:04 +0000
-Received: from BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e1:cafe::e2) by BN1PR12CA0016.outlook.office365.com
- (2603:10b6:408:e1::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15 via Frontend
- Transport; Fri, 24 Jun 2022 13:02:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT053.mail.protection.outlook.com (10.13.177.209) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5373.15 via Frontend Transport; Fri, 24 Jun 2022 13:02:03 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Fri, 24 Jun
- 2022 08:02:02 -0500
-Date:   Fri, 24 Jun 2022 08:01:44 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-CC:     Sean Christopherson <seanjc@google.com>,
-        Andy Lutomirski <luto@kernel.org>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <qemu-devel@nongnu.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Steven Price" <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Vishal Annapurve" <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        <jun.nakajima@intel.com>, <dave.hansen@intel.com>,
-        <ak@linux.intel.com>, <david@redhat.com>, <aarcange@redhat.com>,
-        <ddutile@redhat.com>, <dhildenb@redhat.com>,
-        Quentin Perret <qperret@google.com>, <mhocko@suse.com>,
-        "Nikunj A. Dadhania" <nikunj@amd.com>
-Subject: Re: [PATCH v6 4/8] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <20220624130144.2ydfbhytrtv4vgsl@amd.com>
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <20220519153713.819591-5-chao.p.peng@linux.intel.com>
- <8840b360-cdb2-244c-bfb6-9a0e7306c188@kernel.org>
- <YofeZps9YXgtP3f1@google.com>
- <20220623225949.kkdx6uwjlk2ec4iq@amd.com>
- <20220624085426.GB2178308@chaop.bj.intel.com>
+        Fri, 24 Jun 2022 09:02:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3F7532DB;
+        Fri, 24 Jun 2022 06:02:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E03C0B828B7;
+        Fri, 24 Jun 2022 13:02:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EA83C34114;
+        Fri, 24 Jun 2022 13:02:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656075733;
+        bh=qOkoAj3Cs3l+78kYs69ixIJ+E+RhjTYf6phoLBKg1Vs=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ZeqwkSFYQPkWyQgLUwUbdHNDJxaJg1223a2m8TiSo6A9mjaalCoxhXYwRcT1Mn9DA
+         EXqw05IjZAU+d/6bitVvkSvQ+pzZjynxfOoByg8yYEgk6NOBwheWERCDXnhdxk2Z3C
+         w/wQakaxpUKOOZhHlg+f0JzlWsh5GvPxcsjMERTjyTZbc1PzAIlGaLoM8EbrFymLah
+         9R0xGiwqmxBB2brp0e/j+O5vPF4BsjfOXZLl8CCKH/IaoQNv3yKRbHJr/4y6G0SdH9
+         1c0vUzPRRlZh8M0jqO01E/hwwCTKSNpE6vWW1HftopMQDctHYMa/kgL1B/oG+DznhT
+         gHRTmL+8QN7eQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 371FD5C00A1; Fri, 24 Jun 2022 06:02:13 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 06:02:13 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [RFC PATCH] rcu: back off on allocation failure in
+ fill_page_cache_func
+Message-ID: <20220624130213.GT1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220622114711.28154-1-mhocko@kernel.org>
+ <YrNlXkLfDpd+Ulxf@pc638.lan>
+ <20220624033950.GP1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YrVlG2XmKHcUSkTS@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220624085426.GB2178308@chaop.bj.intel.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b42f8dc5-8468-4f9a-ae39-08da55e1bc03
-X-MS-TrafficTypeDiagnostic: MW5PR12MB5649:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6ctnYInZpoqd5MX5k37KdlMO1N+u+N8TUnG8Nn0pudaAFTtkPcIfhB7wpCcqzTOu0vqQ6s4b1wPQZ9fR4wfBs8PdH2Q1d5rBD6FkhhUZwwRewYiO3YIaX2ZfqsprYJ/BJp05ph8A4wplzmG2crJ7CCWQCUmtYrhdSfiVCwkjGfzVvGLgoZ9OQ/BqQQ00idCTumMnte37z6r7oH4Codz+5xpDdrN3IFUYO23x0XAwweonRWc7DOciT5/CqBh5OHoDOx2gGGhtLoaoASIUJzXq8v3ab6ylhnrQU0xleTf6n9RlPJE55TBcRX7EENrRyh0GN6YHcLZUxPEA+pYVckjPGUCav++pOm4tjJ4y/XbDNTW+7SE0BCDIDwAjjoVQ7L7zILW0Ce8fqSR7raRLZfNKih+V4VGKnuo8BPKwowAMmTFtYLg/WE3+ydA1B9xBqv22jXMHYYR71quaMEkt4duFhKphpN7Zrh1KwSCq6q2fyyzdz+CYReEmIOdulN9rpMfy1wvqRrsP7jiua6kEN7vfp8Q8zLJ6ZftjDPKJ5wo1olscjQhjzF3SJet9CpNOCAwTWAqtsDtA/0w5ECQXCNterzetvEdQ0JgAdi9OAAe/4V25i+48ScljHSS1JUEjrxFATEC9AyvDR36fPaJDWBvk3e2KJH4TRpJw7eD7f2eLTa5FhnhB1TJq3A+D8Kdt50uFczwykPP24NF0Ky/VFW6cHiH1jXqCNZRev4DNkuCw3o07iVzE2WeO+LcKsd4c+GKabgpFjC+mZbkeUYMesuVmzLGoPlsrcls5gJIGk0zJfyE87iFX41ZEGwzjztRBB0l5lLMqchyDtOCxCmdOGbginQTfHzyCkXVXjdqBeZIcHcQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(376002)(346002)(39860400002)(40470700004)(46966006)(36840700001)(26005)(41300700001)(86362001)(40460700003)(6666004)(54906003)(966005)(478600001)(8936002)(5660300002)(2616005)(7406005)(44832011)(82310400005)(2906002)(426003)(47076005)(186003)(16526019)(1076003)(7416002)(8676002)(82740400003)(36860700001)(356005)(40480700001)(81166007)(316002)(6916009)(4326008)(36756003)(83380400001)(70206006)(70586007)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2022 13:02:03.5925
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b42f8dc5-8468-4f9a-ae39-08da55e1bc03
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5649
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YrVlG2XmKHcUSkTS@dhcp22.suse.cz>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 04:54:26PM +0800, Chao Peng wrote:
-> On Thu, Jun 23, 2022 at 05:59:49PM -0500, Michael Roth wrote:
-> > On Fri, May 20, 2022 at 06:31:02PM +0000, Sean Christopherson wrote:
-> > > On Fri, May 20, 2022, Andy Lutomirski wrote:
-> > > > The alternative would be to have some kind of separate table or bitmap (part
-> > > > of the memslot?) that tells KVM whether a GPA should map to the fd.
+On Fri, Jun 24, 2022 at 09:17:47AM +0200, Michal Hocko wrote:
+> On Thu 23-06-22 20:39:50, Paul E. McKenney wrote:
+> > On Wed, Jun 22, 2022 at 08:54:22PM +0200, Uladzislau Rezki wrote:
+> > > On Wed, Jun 22, 2022 at 01:47:11PM +0200, Michal Hocko wrote:
+> > > > From: Michal Hocko <mhocko@suse.com>
 > > > > 
-> > > > What do you all think?
+> > > > fill_page_cache_func allocates couple of pages to store
+> > > > kvfree_rcu_bulk_data. This is a lightweight (GFP_NORETRY) allocation
+> > > > which can fail under memory pressure. The function will, however keep
+> > > > retrying even when the previous attempt has failed.
+> > > > 
+> > > > While this is not really incorrect there is one thing to consider. This
+> > > > allocation is invoked from the WQ context and that means that if the
+> > > > memory reclaim gets stuck it can hog the worker for quite some time.
+> > > > WQ concurrency is only triggered when the worker context sleeps and that
+> > > > is not guaranteed for __GFP_NORETRY allocation attempts (see
+> > > > should_reclaim_retry).
+> > > > 
+> > > > We have seen WQ lockups
+> > > > kernel: BUG: workqueue lockup - pool cpus=93 node=1 flags=0x1 nice=0 stuck for 32s!
+> > > > [...]
+> > > > kernel: pool 74: cpus=37 node=0 flags=0x1 nice=0 hung=32s workers=2 manager: 2146
+> > > > kernel:   pwq 498: cpus=249 node=1 flags=0x1 nice=0 active=4/256 refcnt=5
+> > > > kernel:     in-flight: 1917:fill_page_cache_func
+> > > > kernel:     pending: dbs_work_handler, free_work, kfree_rcu_monitor
+> > > > 
+> > > > Originaly, we thought that several retries with direct reclaim being
+> > > > stuck is the underlying reason but we couldn't have confirmed that and
+> > > > have seen a similar lockups detected even without any heavy memory
+> > > > pressure so there is likely something else/more going on. On the other
+> > > > hand failing the allocation shouldn't have a big impact and from the
+> > > > code it is not really obvious why retrying is desirable so back off
+> > > > after the allocation failure.
+> > > > 
+> > > > Cc: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > > > Cc: Frederic Weisbecker <frederic@kernel.org>
+> > > > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> > > > Cc: Josh Triplett <josh@joshtriplett.org>
+> > > > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > > > Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > > > Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+> > > > Cc: Joel Fernandes <joel@joelfernandes.org>
+> > > > Signed-off-by: Michal Hocko <mhocko@suse.com>
+> > > > ---
+> > > > 
+> > > > Hi,
+> > > > I am sending this as an RFC because I couldn't prove that the WQ
+> > > > concurency issue as a result from the allocation retry is really a
+> > > > problem. On the other hand I couldn't see a good reason to retry after a
+> > > > previous failure. While the kswapd running in the background could have
+> > > > released some memory this is a not really guaranteed and mostly a
+> > > > wishful thinking.
+> > > > 
+> > > > I do not understand the code well enough so I could be easily missing
+> > > > something. If the patch is a wrong thing to do then it would be really
+> > > > nice to add a comment why the retry is desirable and a good thing to do.
+> > > > 
+> > > > The retry loop should be bound to rcu_min_cached_objs which is quite
+> > > > small but configurable so this can get large in some setups.
+> > > > 
+> > > > Thanks
+> > > > 
+> > > >  kernel/rcu/tree.c | 17 +++++++++--------
+> > > >  1 file changed, 9 insertions(+), 8 deletions(-)
+> > > > 
+> > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > index c25ba442044a..54a3a19c4c0b 100644
+> > > > --- a/kernel/rcu/tree.c
+> > > > +++ b/kernel/rcu/tree.c
+> > > > @@ -3508,15 +3508,16 @@ static void fill_page_cache_func(struct work_struct *work)
+> > > >  		bnode = (struct kvfree_rcu_bulk_data *)
+> > > >  			__get_free_page(GFP_KERNEL | __GFP_NORETRY | __GFP_NOMEMALLOC | __GFP_NOWARN);
+> > > >  
+> > > > -		if (bnode) {
+> > > > -			raw_spin_lock_irqsave(&krcp->lock, flags);
+> > > > -			pushed = put_cached_bnode(krcp, bnode);
+> > > > -			raw_spin_unlock_irqrestore(&krcp->lock, flags);
+> > > > +		if (!bnode)
+> > > > +			break;
+> > > >  
+> > > > -			if (!pushed) {
+> > > > -				free_page((unsigned long) bnode);
+> > > > -				break;
+> > > > -			}
+> > > > +		raw_spin_lock_irqsave(&krcp->lock, flags);
+> > > > +		pushed = put_cached_bnode(krcp, bnode);
+> > > > +		raw_spin_unlock_irqrestore(&krcp->lock, flags);
+> > > > +
+> > > > +		if (!pushed) {
+> > > > +			free_page((unsigned long) bnode);
+> > > > +			break;
+> > > >  		}
+> > > >  	}
+> > > >  
+> > > > -- 
+> > > > 2.30.2
+> > > >
+> > > OK. You would like to break the loop once an allocation does not succeed.
+> > > To me it also makes sense, i mean there is no reason to repeat it several
+> > > times that can lead to worqueue hogging.
 > > > 
-> > > My original proposal was to have expolicit shared vs. private memslots, and punch
-> > > holes in KVM's memslots on conversion, but due to the way KVM (and userspace)
-> > > handle memslot updates, conversions would be painfully slow.  That's how we ended
-> > > up with the current propsoal.
-> > > 
-> > > But a dedicated KVM ioctl() to add/remove shared ranges would be easy to implement
-> > > and wouldn't necessarily even need to interact with the memslots.  It could be a
-> > > consumer of memslots, e.g. if we wanted to disallow registering regions without an
-> > > associated memslot, but I think we'd want to avoid even that because things will
-> > > get messy during memslot updates, e.g. if dirty logging is toggled or a shared
-> > > memory region is temporarily removed then we wouldn't want to destroy the tracking.
-> > > 
-> > > I don't think we'd want to use a bitmap, e.g. for a well-behaved guest, XArray
-> > > should be far more efficient.
-> > > 
-> > > One benefit to explicitly tracking this in KVM is that it might be useful for
-> > > software-only protected VMs, e.g. KVM could mark a region in the XArray as "pending"
-> > > based on guest hypercalls to share/unshare memory, and then complete the transaction
-> > > when userspace invokes the ioctl() to complete the share/unshare.
+> > > Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> 
+> Thanks for the review!
+> 
+> > Queued for testing and further review, thank you both!
 > > 
-> > Another upside to implementing a KVM ioctl is basically the reverse of the
-> > discussion around avoiding double-allocations: *supporting* double-allocations.
-> > 
-> > One thing I noticed while testing SNP+UPM support is a fairly dramatic
-> > slow-down with how it handles OVMF, which does some really nasty stuff
-> > with DMA where it takes 1 or 2 pages and flips them between
-> > shared/private on every transaction. Obviously that's not ideal and
-> > should be fixed directly at some point, but it's something that exists in the
-> > wild and might not be the only such instance where we need to deal with that
-> > sort of usage pattern. 
-> > 
-> > With the current implementation, one option I had to address this was to
-> > disable hole-punching in QEMU when doing shared->private conversions:
-> > 
-> > Boot time from 1GB guest:
-> >                                SNP:   32s
-> >                            SNP+UPM: 1m43s
-> >   SNP+UPM (disable shared discard): 1m08s
-> > 
-> > Of course, we don't have the option of disabling discard/hole-punching
-> > for private memory to see if we get similar gains there, since that also
-> > doubles as the interface for doing private->shared conversions.
+> > My normal process would send this not into the upcoming merge window
+> > (v5.20?) but instead into the next one (v6.0?).  Please let me know if
+> > this is more urgent then that, and I will see what I can do.
 > 
-> Private should be the same, minus time consumed for private memory, the
-> data should be close to SNP case. You can't try that in current version
-> due to we rely on the existence of the private page to tell a page is
-> private.
-> 
-> > A separate
-> > KVM ioctl to decouple these 2 things would allow for that, and allow for a
-> > way for userspace to implement things like batched/lazy-discard of
-> > previously-converted pages to deal with cases like these.
-> 
-> The planned ioctl includes two responsibilities:
->   - Mark the range as private/shared
->   - Zap the existing SLPT mapping for the range
-> 
-> Whether doing the hole-punching or not on the fd is unrelated to this
-> ioctl, userspace has freedom to do that or not. Since we don't reply on
-> the fact that private memoy should have been allocated, we can support
-> lazy faulting and don't need explicit fallocate(). That means, whether
-> the memory is discarded or not in the memory backing store is not
-> required by KVM, but be a userspace option.
+> No, it is not really urgent. As I've said, it turned out that there are
+> other contributors to the WQ stalls so this is mostly a cosmetic change.
 
-Nice, that sounds promising.
+The merge window after this coming one, then!
 
-> 
-> > 
-> > Another motivator for these separate ioctl is that, since we're considering
-> > 'out-of-band' interactions with private memfd where userspace might
-> > erroneously/inadvertently do things like double allocations, another thing it
-> > might do is pre-allocating pages in the private memfd prior to associating
-> > the memfd with a private memslot. Since the notifiers aren't registered until
-> > that point, any associated callbacks that would normally need to be done as
-> > part of those fallocate() notification would be missed unless we do something
-> > like 'replay' all the notifications once the private memslot is registered and
-> > associating with a memfile notifier. But that seems a bit ugly, and I'm not
-> > sure how well that would work. This also seems to hint at this additional
-> > 'conversion' state being something that should be owned and managed directly
-> > by KVM rather than hooking into the allocations.
-> 
-> Right, once we move the private/shared state into KVM then we don't rely
-> on those callbacks so the 'replay' thing is unneeded. fallocate()
-> notification is useless for sure, invalidate() is likely still needed,
-> just like the invalidate for mmu_notifier to bump the mmu_seq and do the
-> zap.
+Ah, and I forgot to send the wordsmithed patch, please see below.  Just
+in case I messed something up.
 
-Ok, yah, makes sense that we'd still up needing the invalidation hooks.
+							Thanx, Paul
 
-> 
-> > 
-> > It would also nicely solve the question of how to handle in-place
-> > encryption, since unlike userspace, KVM is perfectly capable of copying
-> > data from shared->private prior to conversion / guest start, and
-> > disallowing such things afterward. Would just need an extra flag basically.
-> 
-> Agree it's possible to do additional copy during the conversion but I'm
-> not so confident this is urgent and the right API. Currently TDX does
-> not have this need. Maybe as the first step just add the conversion
-> itself. Adding additional feature like this can always be possible
-> whenever we are clear.
+------------------------------------------------------------------------
 
-That seems fair. In the meantime we can adopt the approach proposed by
-Sean and Vishal[1] and handle it directly in the relevant SNP KVM ioctls.
+commit 29dc4a37468641e2a9fca7f8c41c4d30f3c659a9
+Author: Michal Hocko <mhocko@suse.com>
+Date:   Wed Jun 22 13:47:11 2022 +0200
 
-If we end up keeping that approach we'll probably want to make sure these
-KVM-driven 'implicit' conversions are documented in the KVM/SNP API so that
-userspace can account for it in it's view of what's private/shared. In this
-case at least it's pretty obvious, just thinking of when other archs and
-VMMs utilizing this more.
+    rcu: Back off upon fill_page_cache_func() allocation failure
+    
+    The fill_page_cache_func() function allocates couple of pages to store
+    kvfree_rcu_bulk_data structures. This is a lightweight (GFP_NORETRY)
+    allocation which can fail under memory pressure. The function will,
+    however keep retrying even when the previous attempt has failed.
+    
+    This retrying is in theory correct, but in practice the allocation is
+    invoked from workqueue context, which means that if the memory reclaim
+    gets stuck, these retries can hog the worker for quite some time.
+    Although the workqueues subsystem automatically adjusts concurrency, such
+    adjustment is not guaranteed to happen until the worker context sleeps.
+    And the fill_page_cache_func() function's retry loop is not guaranteed
+    to sleep (see the should_reclaim_retry() function).
+    
+    And we have seen this function cause workqueue lockups:
+    
+    kernel: BUG: workqueue lockup - pool cpus=93 node=1 flags=0x1 nice=0 stuck for 32s!
+    [...]
+    kernel: pool 74: cpus=37 node=0 flags=0x1 nice=0 hung=32s workers=2 manager: 2146
+    kernel:   pwq 498: cpus=249 node=1 flags=0x1 nice=0 active=4/256 refcnt=5
+    kernel:     in-flight: 1917:fill_page_cache_func
+    kernel:     pending: dbs_work_handler, free_work, kfree_rcu_monitor
+    
+    Originally, we thought that the root cause of this lockup was several
+    retries with direct reclaim, but this is not yet confirmed.  Furthermore,
+    we have seen similar lockups without any heavy memory pressure.  This
+    suggests that there are other factors contributing to these lockups.
+    However, it is not really clear that endless retries are desireable.
+    
+    So let's make the fill_page_cache_func() function back off after
+    allocation failure.
+    
+    Cc: Uladzislau Rezki (Sony) <urezki@gmail.com>
+    Cc: "Paul E. McKenney" <paulmck@kernel.org>
+    Cc: Frederic Weisbecker <frederic@kernel.org>
+    Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+    Cc: Josh Triplett <josh@joshtriplett.org>
+    Cc: Steven Rostedt <rostedt@goodmis.org>
+    Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+    Cc: Joel Fernandes <joel@joelfernandes.org>
+    Signed-off-by: Michal Hocko <mhocko@suse.com>
+    Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-Thanks!
-
--Mike
-
-[1] https://lore.kernel.org/kvm/20220524205646.1798325-4-vannapurve@google.com/T/#m1e9bb782b1bea66c36ae7c4c9f4f0c35c2d7e338
-
-> 
-> Thanks,
-> Chao
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 8240c4d631eef..89cb173a1a952 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3183,15 +3183,16 @@ static void fill_page_cache_func(struct work_struct *work)
+ 		bnode = (struct kvfree_rcu_bulk_data *)
+ 			__get_free_page(GFP_KERNEL | __GFP_NORETRY | __GFP_NOMEMALLOC | __GFP_NOWARN);
+ 
+-		if (bnode) {
+-			raw_spin_lock_irqsave(&krcp->lock, flags);
+-			pushed = put_cached_bnode(krcp, bnode);
+-			raw_spin_unlock_irqrestore(&krcp->lock, flags);
++		if (!bnode)
++			break;
+ 
+-			if (!pushed) {
+-				free_page((unsigned long) bnode);
+-				break;
+-			}
++		raw_spin_lock_irqsave(&krcp->lock, flags);
++		pushed = put_cached_bnode(krcp, bnode);
++		raw_spin_unlock_irqrestore(&krcp->lock, flags);
++
++		if (!pushed) {
++			free_page((unsigned long) bnode);
++			break;
+ 		}
+ 	}
+ 

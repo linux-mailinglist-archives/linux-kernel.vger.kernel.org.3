@@ -2,163 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C2E55A306
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 22:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C9C55A315
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 22:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbiFXUtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 16:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
+        id S229852AbiFXUyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 16:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbiFXUtF (ORCPT
+        with ESMTP id S231220AbiFXUyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 16:49:05 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5461351300
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:49:03 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id lw20so7044395ejb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:49:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4Hm+RwF6zdRTAP4jPbUkFegWvOdyeCN+KoGv/KdQyOQ=;
-        b=IbqRHr8pQpzMu6gfF9LxN6XfTvx/Z2IK+Zbycio945d5nIgTnwXNVNK+j4lk/X495z
-         yuXBe4k0pIlvnpwAIZ5aNZcZ7xdA4653i+Xo1XsGB8DAuSCJF2kDY1Lcy0UFc0OXRHOm
-         xDJ129UaWAVhiGChIz6Qs3E9N4JwBx1Om0jvg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=4Hm+RwF6zdRTAP4jPbUkFegWvOdyeCN+KoGv/KdQyOQ=;
-        b=XjZfGAVvc8WXkF/lJIFjvbN7glmEFBeCa8UAHJ0UwLuhuz0IE8/Rgn+2QKTUjonWmB
-         FGO7wzsipYazc/NJCq67KYX4ZKEI3SZGDSExVVBsSe7Mc3lO3PUih29XoIl7d1eK4YbX
-         zytRGCvO8Rzxfkw7KbJQPgcmEENsbfyyQHo9ONpO97Z0fjV3Jv3DB0gF1wyr32tu/IJR
-         QJdcO25HBnsllta67KAObCJUKv45CFWwrJ4W91Qvx+mxib6E4o7+4C5PB/VVpnbm2QWk
-         CtRyP7ifq+k8Oum7TqKGv6WXUD/VJD8IHO4//PfzOeWwvQOJDM63uAts+RjLvk+7xsPY
-         4LLQ==
-X-Gm-Message-State: AJIora94bwWJD/l2TS17WcvfYs0J9E6XX+5Gdjcten+25yCfdKlXKzCk
-        s1QHp0K+N8eF43JlZ4mH5ycT+w==
-X-Google-Smtp-Source: AGRyM1tUC838ztsYx8GI1aLILWxJgp48uXukKVyAcZfd/hrTaM4Z8OcVOEnxZ/ckpyMWLdikl4heVA==
-X-Received: by 2002:a17:906:9b92:b0:722:f705:759d with SMTP id dd18-20020a1709069b9200b00722f705759dmr839195ejc.745.1656103741909;
-        Fri, 24 Jun 2022 13:49:01 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id d2-20020aa7d682000000b0042dddaa8af3sm2726082edr.37.2022.06.24.13.49.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 13:49:01 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 22:48:59 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Chris Healy <cphealy@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/2] drm: Add DRM_GEM_FOPS
-Message-ID: <YrYjO1oSUqL8f4xV@phenom.ffwll.local>
-Mail-Followup-To: Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Chris Healy <cphealy@gmail.com>, Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220609174213.2265938-1-robdclark@gmail.com>
+        Fri, 24 Jun 2022 16:54:37 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D397B377;
+        Fri, 24 Jun 2022 13:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656104076; x=1687640076;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OGRCWcSZbuCnqCgexufNep7K7yBOQCMz/pRFnb9S8RA=;
+  b=UywqbOgwdqdkICfDYnAaHz5oVdDodF6dfOdW6zIk6MnjoyocElrRJwEQ
+   FJ80LKF/DSy97F2RrpV3vsVc/TjVwjPFV3S14m6MjAZXYlxU3oqLgJmLn
+   t2Pg5L2MnXrz+vUkN54QTncaFD7kZFHELY8EZ0LAvzDkfdjArvWMcW/zs
+   m3Uil9cJPZ8MLQZXnDB33zfr7BXSLkRVOc4K2a/pIPPJrsdoihCn8+iim
+   paBmkM6S90xx1eAMUJ3LkRZQDV0dliTOybZUh2iwWxB0mru7Gv3emckuL
+   aLEK6R0o4/e6yMEdl9SqQ6Ad6BUknbqhgV2LwOrdlo/MNlHg+RryiHOXP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="306556523"
+X-IronPort-AV: E=Sophos;i="5.92,220,1650956400"; 
+   d="scan'208";a="306556523"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 13:54:36 -0700
+X-IronPort-AV: E=Sophos;i="5.92,220,1650956400"; 
+   d="scan'208";a="593384218"
+Received: from vhavel-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.216.91])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 13:54:33 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v3 0/6] serial: A few cleanups
+Date:   Fri, 24 Jun 2022 23:54:18 +0300
+Message-Id: <20220624205424.12686-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609174213.2265938-1-robdclark@gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 10:42:11AM -0700, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> The DEFINE_DRM_GEM_FOPS() helper is a bit limiting if a driver wants to
-> provide additional file ops, like show_fdinfo().
-> 
-> v2: Split out DRM_GEM_FOPS instead of making DEFINE_DRM_GEM_FOPS
->     varardic
-> v3: nits
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+Here are a few cleanup to semi-random things I've come across while
+reading the code.
 
-We're at three drivers, maybe it'd be better if this is more standardized?
-I feel like we're opening a bit a can of worms here where everyone just
-has some good odl fashioned fun. It's at least much better documented than
-the old property proliferation :-)
--Daniel
+The series had initially only patches 3-6 but then msm_serial exploded
+during build because of redefining UART_SCR so I had to resolve the
+namespace conflict. It would have probably being avoided if there would
+have been linux/serial_reg.h but it was recently ruled out:
 
-> ---
->  include/drm/drm_gem.h | 26 ++++++++++++++++++--------
->  1 file changed, 18 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
-> index 9d7c61a122dc..87cffc9efa85 100644
-> --- a/include/drm/drm_gem.h
-> +++ b/include/drm/drm_gem.h
-> @@ -314,6 +314,23 @@ struct drm_gem_object {
->  	const struct drm_gem_object_funcs *funcs;
->  };
->  
-> +/**
-> + * DRM_GEM_FOPS - Default drm GEM file operations
-> + *
-> + * This macro provides a shorthand for setting the GEM file ops in the
-> + * &file_operations structure.  If all you need are the default ops, use
-> + * DEFINE_DRM_GEM_FOPS instead.
-> + */
-> +#define DRM_GEM_FOPS \
-> +	.open		= drm_open,\
-> +	.release	= drm_release,\
-> +	.unlocked_ioctl	= drm_ioctl,\
-> +	.compat_ioctl	= drm_compat_ioctl,\
-> +	.poll		= drm_poll,\
-> +	.read		= drm_read,\
-> +	.llseek		= noop_llseek,\
-> +	.mmap		= drm_gem_mmap
-> +
->  /**
->   * DEFINE_DRM_GEM_FOPS() - macro to generate file operations for GEM drivers
->   * @name: name for the generated structure
-> @@ -330,14 +347,7 @@ struct drm_gem_object {
->  #define DEFINE_DRM_GEM_FOPS(name) \
->  	static const struct file_operations name = {\
->  		.owner		= THIS_MODULE,\
-> -		.open		= drm_open,\
-> -		.release	= drm_release,\
-> -		.unlocked_ioctl	= drm_ioctl,\
-> -		.compat_ioctl	= drm_compat_ioctl,\
-> -		.poll		= drm_poll,\
-> -		.read		= drm_read,\
-> -		.llseek		= noop_llseek,\
-> -		.mmap		= drm_gem_mmap,\
-> +		DRM_GEM_FOPS,\
->  	}
->  
->  void drm_gem_object_release(struct drm_gem_object *obj);
-> -- 
-> 2.36.1
-> 
+  https://lore.kernel.org/lkml/CAPDyKFqHLQ8YTc3wzaFOdAA7Ay9RBEfdQC5uN574=oMavi6iCQ@mail.gmail.com/t/
+
+(Now there would 3 items already in serial_reg.h already but it would
+leave only async_icount into serial.h so the same problem in other
+file).
+
+v3:
+- Remove one useless comment
+- Improve changelog texts
+
+v2:
+- Fix commit summary line prefix
+
+
+Ilpo Järvinen (6):
+  serial: msm: Convert container_of UART_TO_MSM to static inline
+  serial: msm: Rename UART_* defines to MSM_UART_*
+  serial: Use bits for UART_LSR_BRK_ERROR_BITS/MSR_ANY_DELTA
+  serial: 8250: Use C99 array initializer & define UART_REG_UNMAPPED
+  serial: Convert SERIAL_XMIT_SIZE to UART_XMIT_SIZE
+  serial: Consolidate BOTH_EMPTY use
+
+ arch/mips/ath79/early_printk.c           |   9 +-
+ drivers/accessibility/speakup/serialio.h |   3 +-
+ drivers/tty/amiserial.c                  |  18 +-
+ drivers/tty/mips_ejtag_fdc.c             |   2 +-
+ drivers/tty/serial/8250/8250_early.c     |   4 +-
+ drivers/tty/serial/8250/8250_port.c      |  50 +--
+ drivers/tty/serial/meson_uart.c          |   2 +-
+ drivers/tty/serial/msm_serial.c          | 550 ++++++++++++-----------
+ drivers/tty/serial/omap-serial.c         |   7 +-
+ drivers/tty/serial/owl-uart.c            |   2 +-
+ drivers/tty/serial/pch_uart.c            |   7 +-
+ drivers/tty/serial/pxa.c                 |   5 +-
+ drivers/tty/serial/rda-uart.c            |   2 +-
+ drivers/tty/serial/sunsu.c               |   4 +-
+ drivers/tty/serial/vr41xx_siu.c          |   4 +-
+ include/linux/serial.h                   |  15 +-
+ include/uapi/linux/serial_reg.h          |   4 +-
+ 17 files changed, 342 insertions(+), 346 deletions(-)
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.30.2
+

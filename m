@@ -2,120 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4918A558C14
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 02:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4711558C16
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 02:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbiFXADe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 20:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
+        id S231468AbiFXAET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 20:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiFXADd (ORCPT
+        with ESMTP id S229645AbiFXAES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 20:03:33 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDE754BFE;
-        Thu, 23 Jun 2022 17:03:32 -0700 (PDT)
+        Thu, 23 Jun 2022 20:04:18 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0D8562CC
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:04:17 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id w19-20020a17090a8a1300b001ec79064d8dso4154027pjn.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656029012; x=1687565012;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=V+hXaNzG1xRg90Us21edRjM0CTBX8UcXbRwupTdVLP4=;
-  b=cFYTK54l0Jj3I3KYIToLQgh2MBUdxyveACW4z74SGmzLY78dBMlA2Ces
-   gJhBGQNfJIfQhtwa4d7XWjLXs74/YuMT/+UrtWBoFpycfC/5V1zxgfr3O
-   kAoWJOq5ve7TsbkEfnJFg0bVzs3rz9UDFIU+ImMNbNX9hVSX2mjXQnvSf
-   0=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Jun 2022 17:03:32 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 17:03:31 -0700
-Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 23 Jun
- 2022 17:03:31 -0700
-Date:   Thu, 23 Jun 2022 17:03:30 -0700
-From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, <tharvey@gateworks.com>,
-        <rjones@gateworks.com>, Matti Vaittinen <mazziesaccount@gmail.com>,
-        <orsonzhai@gmail.com>, <baolin.wang7@gmail.com>,
-        <zhang.lyra@gmail.com>, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        <linux-actions@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH 18/49] mfd: qcom-pm8008: Add broken_mask_unmask irq chip
- flag
-Message-ID: <20220624000329.GB21400@quicinc.com>
-References: <20220620200644.1961936-1-aidanmacdonald.0x0@gmail.com>
- <20220620200644.1961936-19-aidanmacdonald.0x0@gmail.com>
- <CAHp75Vea8F5ogP8kjfdP4SK3aeohoRnkGZ7LtsLuwfXwL+APvA@mail.gmail.com>
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aR3UMVXNJuFYXHEFaVui3S/bLvpbWl7F9qhTqAkCqU8=;
+        b=Hqf/87S0rYc3YO1mmftbe/pRY+U84b5V2ONzOenkIThl1iQOtr+PjeA+R0o4HUhBri
+         eBciKAiGzNgeX/2NDv+dn7aksHDalV0whg66lmxPfY415HpmlVhb3iqOduUz1xlFoZQH
+         ehVkaaOxKag15ztDOQmEzPJzQfGSpGAcP3szyJpwMW04oc0cC8DIqSfCFCChJlZnIf3t
+         UUrQXywbBR25UZjrxLdHYor3yE3VVsuXf1l+Jq+5/J/WcfLXZTTQNCOZh07PVAY8QpLz
+         VPnIDUKndZnLssxPkQtTp4SmElMwALEy98cNQ5QoLeZp+dw12TnF8ZoeUNNsHGIqmKdQ
+         isxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aR3UMVXNJuFYXHEFaVui3S/bLvpbWl7F9qhTqAkCqU8=;
+        b=N4Mp3e1qS3asN9vMEYsOs3dZms3TSR9QAbAF1iakPRhjfEHuW9SI4HLqUaIL395OcT
+         3MV1L85Vypnp1ChXJZNYlcic5WwIXBK9zpMmrM5TMII4Mn8un7HKyJacRtsPkiwajZUd
+         X5WoO3plQY4SbJAvde6jCjiku6OhCkY6mK5pcW6fQ0KPZJ/ysaVtJODH5D9QdaclEvV0
+         Cvm00AZNn43osmrTHWpL3TksmJ+Yu/aRTaiY54ahm3KR/YnTz+gfO9cQlZX2cmDnnZ7C
+         HKvCSn/ut3mk9N+jTn7tf+BCmUAajlDri+CTZInGyK/yC6z1Rt/fZ9EPqWI0fuZpyqy+
+         IUjg==
+X-Gm-Message-State: AJIora/L7+b+nco2j0GMibtGcgRRz880acuXrDFQwLqEnAHspfRiUNM9
+        A8IX1I6u1VWqpmKs0HKEMBMqmA==
+X-Google-Smtp-Source: AGRyM1tpyr8ete82+M/6LC+zY3ZuFXiGABgTIUa1dsT3jGlH8w1nZYKl2R4L+YalNDc2emkjGkDM9g==
+X-Received: by 2002:a17:902:f602:b0:16a:178a:7b0b with SMTP id n2-20020a170902f60200b0016a178a7b0bmr27032003plg.20.1656029056747;
+        Thu, 23 Jun 2022 17:04:16 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id x5-20020a17090a1f8500b001e87bd6f6c2sm2513931pja.50.2022.06.23.17.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 17:04:16 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 00:04:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v1 03/10] KVM: VMX: Move
+ CPU_BASED_{CR3_LOAD,CR3_STORE,INVLPG}_EXITING filtering out of
+ setup_vmcs_config()
+Message-ID: <YrT/fHgxKUrsH7fE@google.com>
+References: <20220622164432.194640-1-vkuznets@redhat.com>
+ <20220622164432.194640-4-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHp75Vea8F5ogP8kjfdP4SK3aeohoRnkGZ7LtsLuwfXwL+APvA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220622164432.194640-4-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 11:35:09AM +0200, Andy Shevchenko wrote:
-> On Mon, Jun 20, 2022 at 10:08 PM Aidan MacDonald
-> <aidanmacdonald.0x0@gmail.com> wrote:
-> >
-> > The qcom-pm8008 appears to use "1 to enable" convention for
-> > enabling interrupts, with separate set and clear registers.
-> > It's relying on masks and unmasks being inverted from their
+On Wed, Jun 22, 2022, Vitaly Kuznetsov wrote:
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> It relies
-> 
-> > intuitive meaning, so it needs the broken_mask_unmask flag.
-> 
-> How has it worked until now?
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 01294a2fc1c1..4583de7f0324 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -4293,6 +4293,16 @@ static u32 vmx_exec_control(struct vcpu_vmx *vmx)
+>  			  CPU_BASED_MONITOR_TRAP_FLAG |
+>  			  CPU_BASED_PAUSE_EXITING);
+>  
+> +	if (vmcs_config.cpu_based_2nd_exec_ctrl & SECONDARY_EXEC_ENABLE_EPT) {
+> +		/*
+> +		 * CR3 accesses and invlpg don't need to cause VM Exits when EPT
+> +		 * enabled.
+> +		 */
+> +		exec_control &= ~(CPU_BASED_CR3_LOAD_EXITING |
+> +				  CPU_BASED_CR3_STORE_EXITING |
+> +				  CPU_BASED_INVLPG_EXITING);
+> +	}
 
-It is as Aidan rightly pointed out. When I was writing the pm8008 driver, I
-found that the mask and unmask terminology used in the framework was inverted
-when it came to the hardware, so I had to make do and swap them.
+No need to clear them based on support, just invert the logic so that KVM leaves
+them set in the base config and then cleares them if EPT is enabled (instead of
+clearing them if EPT is supported and then restoring them if EPT is disabled via
+module param).
 
-It works because in regmap_irq_sync_unlock(), the same mask is used to update
-mask_reg and unmask_reg, except that it is inverted for updating the unmask
-register. So, by just swapping which register gets updated with the plain mask
-and which one gets updated with the inverted mask, I could use the framework to
-accomplish the setting and clearing of the correct registers.
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Thu, 23 Jun 2022 17:00:58 -0700
+Subject: [PATCH] KVM: VMX: Clear controls obsoleted by EPT at runtime, not
+ setup
+
+Clear the CR3 and INVLPG interception controls at runtime based on
+whether or not EPT is being _used_, as opposed to clearing the bits at
+setup if EPT is _supported_ in hardware, and then restoring them when EPT
+is not used.  Not mucking with the base config will allow using the base
+config as the starting point for emulating the VMX capability MSRs.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/vmx/vmx.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
+
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 5d8f28b5d6ca..f39af86a6c50 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -2550,13 +2550,8 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+ 	rdmsr_safe(MSR_IA32_VMX_EPT_VPID_CAP,
+ 		&vmx_cap->ept, &vmx_cap->vpid);
+
+-	if (_cpu_based_2nd_exec_control & SECONDARY_EXEC_ENABLE_EPT) {
+-		/* CR3 accesses and invlpg don't need to cause VM Exits when EPT
+-		   enabled */
+-		_cpu_based_exec_control &= ~(CPU_BASED_CR3_LOAD_EXITING |
+-					     CPU_BASED_CR3_STORE_EXITING |
+-					     CPU_BASED_INVLPG_EXITING);
+-	} else if (vmx_cap->ept) {
++	if (!(_cpu_based_2nd_exec_control & SECONDARY_EXEC_ENABLE_EPT) &&
++	    vmx_cap->ept) {
+ 		pr_warn_once("EPT CAP should not exist if not support "
+ 				"1-setting enable EPT VM-execution control\n");
+
+@@ -4320,10 +4315,12 @@ static u32 vmx_exec_control(struct vcpu_vmx *vmx)
+ 				CPU_BASED_CR8_LOAD_EXITING;
+ #endif
+ 	}
+-	if (!enable_ept)
+-		exec_control |= CPU_BASED_CR3_STORE_EXITING |
+-				CPU_BASED_CR3_LOAD_EXITING  |
+-				CPU_BASED_INVLPG_EXITING;
++
++	/* No need to intercept CR3 access or INVPLG when using EPT. */
++	if (enable_ept)
++		exec_control &= ~(CPU_BASED_CR3_LOAD_EXITING |
++				  CPU_BASED_CR3_STORE_EXITING |
++				  CPU_BASED_INVLPG_EXITING);
+ 	if (kvm_mwait_in_guest(vmx->vcpu.kvm))
+ 		exec_control &= ~(CPU_BASED_MWAIT_EXITING |
+ 				CPU_BASED_MONITOR_EXITING);
+
+base-commit: d365a92177bda6629885401d44fbe912106b3df6
+--
+

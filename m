@@ -2,62 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9245955947B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5578C559487
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiFXIAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
+        id S230257AbiFXICT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 04:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiFXIAd (ORCPT
+        with ESMTP id S230160AbiFXICR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:00:33 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FC26B8C9;
-        Fri, 24 Jun 2022 01:00:32 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1o4eEO-00AgF9-Nt; Fri, 24 Jun 2022 17:59:58 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 24 Jun 2022 15:59:57 +0800
-Date:   Fri, 24 Jun 2022 15:59:57 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-crypto@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64/crypto: Select AEAD2 for GHASH_ARM64_CE
-Message-ID: <YrVu/T3saRzkh61I@gondor.apana.org.au>
-References: <20220622142557.144536-1-quic_qiancai@quicinc.com>
- <YrSgH//ysOd/Qumo@sol.localdomain>
- <YrS6MIhv/ze4rbxy@qian>
+        Fri, 24 Jun 2022 04:02:17 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB96E6B8ED
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:02:16 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o4eGY-0007MN-GR; Fri, 24 Jun 2022 10:02:10 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o4eGW-002Nzj-4h; Fri, 24 Jun 2022 10:02:09 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o4eGW-00DBgC-Mm; Fri, 24 Jun 2022 10:02:08 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>
+Subject: [PATCH net-next v1 1/1] net: asix: add optional flow control support
+Date:   Fri, 24 Jun 2022 10:02:07 +0200
+Message-Id: <20220624080208.3143093-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrS6MIhv/ze4rbxy@qian>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 03:08:32PM -0400, Qian Cai wrote:
->
-> I am not sure about that. I chose CRYPTO_AEAD2 because that is in the
-> Makefile.
-> 
-> obj-$(CONFIG_CRYPTO_AEAD2) += aead.o
+Add optional flow control support with respect to the link partners
+abilities.
 
-As Eric said, AEAD2 is for internal use only and the correct option
-for general use is CONFIG_CRYPTO_AEAD.
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ drivers/net/usb/asix_common.c  | 10 ++++++++++
+ drivers/net/usb/asix_devices.c |  2 ++
+ 2 files changed, 12 insertions(+)
 
-Thanks,
+diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+index b4a1b7abcfc9..c9df7cd8daae 100644
+--- a/drivers/net/usb/asix_common.c
++++ b/drivers/net/usb/asix_common.c
+@@ -420,6 +420,8 @@ void asix_adjust_link(struct net_device *netdev)
+ 	u16 mode = 0;
+ 
+ 	if (phydev->link) {
++		bool tx_pause, rx_pause;
++
+ 		mode = AX88772_MEDIUM_DEFAULT;
+ 
+ 		if (phydev->duplex == DUPLEX_HALF)
+@@ -427,6 +429,14 @@ void asix_adjust_link(struct net_device *netdev)
+ 
+ 		if (phydev->speed != SPEED_100)
+ 			mode &= ~AX_MEDIUM_PS;
++
++		phy_get_pause(phydev, &tx_pause, &rx_pause);
++
++		if (rx_pause)
++			mode |= AX_MEDIUM_RFC;
++
++		if (tx_pause)
++			mode |= AX_MEDIUM_TFC;
+ 	}
+ 
+ 	asix_write_medium_mode(dev, mode, 0);
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index 5b5eb630c4b7..1bb12bbc34bf 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -677,6 +677,8 @@ static int ax88772_init_phy(struct usbnet *dev)
+ 	phy_suspend(priv->phydev);
+ 	priv->phydev->mac_managed_pm = 1;
+ 
++	phy_support_asym_pause(priv->phydev);
++
+ 	phy_attached_info(priv->phydev);
+ 
+ 	if (priv->embd_phy)
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.30.2
+

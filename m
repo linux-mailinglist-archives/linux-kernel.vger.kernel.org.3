@@ -2,74 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E1E559F62
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9997E559F7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbiFXRJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
+        id S231834AbiFXRJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbiFXRJC (ORCPT
+        with ESMTP id S231772AbiFXRJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:09:02 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB4B51E7E;
-        Fri, 24 Jun 2022 10:09:01 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id BBE9DE0005;
-        Fri, 24 Jun 2022 17:08:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656090540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vu75/Qb+i/F4hmojAa19FfVuxCVN3Y8Kms3HlIXz4Bw=;
-        b=EPrBT8fGVuNJl/TAirSVa37usMnguJ0f1Y0xCAG/d96OU78UCw5V15KNdh1kTrqTzhmwRM
-        5KkxbWDqBAC262Hmr4xvEWBpm1YlY2uOsVyvSJv2IJL6Bwnzmtm5afkDZF+jTO0ACeyaSv
-        1d+WlMjNucOXDEg/loZSQZuHMEZlQ370ElPpojW0jgN3qSAbLz7NN1TMlBJTF459MWJfI1
-        fl1yBlNFto30n88gyTf49IaFemdXouxYWDlvx9j9jAoadjyPmQX9eDyUX7isx8z6x3f2xn
-        TDD8+4W7iAjcja+49M1ktfCke0ltcy/7sPw5AB+Hmjo3PtzcS4FLDfQ5Hks4Ig==
-Date:   Fri, 24 Jun 2022 19:08:58 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     foss+kernel@0leil.net
-Cc:     linux-rtc@vger.kernel.org, quentin.schulz@theobroma-systems.com,
-        linux-kernel@vger.kernel.org, a.zummo@towertech.it
-Subject: Re: [PATCH] rtc: isl1208: do not advertise update interrupt feature
- if no interrupt specified
-Message-ID: <165609051724.27429.18295826165750824603.b4-ty@bootlin.com>
-References: <20220523145320.123713-1-foss+kernel@0leil.net>
+        Fri, 24 Jun 2022 13:09:16 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7635D51E42
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:09:15 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 9so2965173pgd.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+34mV2GgOppVanfZ9ynO37pzqtHQm+7qlycXpXslgnM=;
+        b=eMygqP5xYgaPLOrAm2dSertr6ihOdd7ZvWCAapgpBZ5NGgsxm/XETmCXorvfWcoQOa
+         J07BzPskgHYbp428pfpLncjWWyxRqwi/3bRdXq0PAYfYSHUYqSAHylMdzhKNI4CHP5lu
+         SBUWGbKnLZ2SJY7ql1yURDYn4LDJuWD3J1PTRyc6yBnFv1jX51anuxioeWgjS0NJgZU0
+         2N1GUX6XYwjZLQSjl2pCt8viM3TThqv/uZwWBUZxClSDYXSns25C+/gOJwOHYl0dNFJg
+         TN65G2VGP5/xVwrLLc6EWoJxzjKf9FicEyu6FPiO/TFIQelbygVU3kMesI4AaEosYDH4
+         IICw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+34mV2GgOppVanfZ9ynO37pzqtHQm+7qlycXpXslgnM=;
+        b=VfADUNyPQ/UlD9KK0in8Jre79KaatIRTHaWZOrejp+WXKexOTGuAcv51XOOzex2BMn
+         4RDNdNaGA1sAIvhjK+W2j7kaRbC9DPMicGjqLquwcPvw5SdZMLvnDEMNXUqoKrenJKuK
+         f+qoixTbAs2O0EEjDhKhC4aNx+cCUwXwXcT+OHrC6p/jtUOHuWRO6lHBhQ4yI60WQNu4
+         5D3B6oKq1eAD520+mUUj8A8ci2NBYlA/EtD3tgoruAMqKr+bYxaKE4anq5qjy0FzGSrh
+         fKbjiN2HkhW2mpURKhK/9UZQonKWCRULg2fj4hDc5W+UTuZfQHc8nWv7sIvJDIItcywG
+         h9aQ==
+X-Gm-Message-State: AJIora+xuTpaZb47tgTq9VHcMxFYPgS0GWpI+VxnPlHETTuAtXtSup5m
+        NCVSoxMj2amwm5Ognd39KbOwqRv0GfmzDQ==
+X-Google-Smtp-Source: AGRyM1sFfGPH+nQhntZBQ49g61G9RcFCMhhpVE3+mKE6QpMSt17EeuUnHDPLfMigz6YbdEvv1IP64g==
+X-Received: by 2002:aa7:86c9:0:b0:525:3d39:8d0f with SMTP id h9-20020aa786c9000000b005253d398d0fmr170020pfo.54.1656090554666;
+        Fri, 24 Jun 2022 10:09:14 -0700 (PDT)
+Received: from google.com (55.212.185.35.bc.googleusercontent.com. [35.185.212.55])
+        by smtp.gmail.com with ESMTPSA id jj22-20020a170903049600b001674d61c1c6sm2023237plb.272.2022.06.24.10.09.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 10:09:13 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 10:09:09 -0700
+From:   Zach O'Keefe <zokeefe@google.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>, akpm@linux-foundation.org,
+        shy828301@gmail.com, willy@infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 14/16] mm/huge_memory: fix comment of page_deferred_list
+Message-ID: <YrXvtRSm0koKa89w@google.com>
+References: <20220622170627.19786-1-linmiaohe@huawei.com>
+ <20220622170627.19786-15-linmiaohe@huawei.com>
+ <YrQVOcF4PirjGa/M@FVFYT0MHHV2J.usts.net>
+ <0b1a1633-2e07-87df-b707-3058353f5609@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220523145320.123713-1-foss+kernel@0leil.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0b1a1633-2e07-87df-b707-3058353f5609@huawei.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 16:53:20 +0200, Quentin Schulz wrote:
-> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+On 23 Jun 20:26, Miaohe Lin wrote:
+> On 2022/6/23 15:24, Muchun Song wrote:
+> > On Thu, Jun 23, 2022 at 01:06:25AM +0800, Miaohe Lin wrote:
+> >> The current comment is confusing because if global or memcg deferred list
+> >> in the second tail page is occupied by compound_head, why we still use
+> >> page[2].deferred_list here? I think it wants to say that Global or memcg
+> >> deferred list in the first tail page is occupied by compound_mapcount and
+> >> compound_pincount so we use the second tail page's deferred_list instead.
+> >>
+> >> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> >> ---
+> >>  include/linux/huge_mm.h | 4 ++--
+> >>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> >> index 12b297f9951d..2e8062b3417a 100644
+> >> --- a/include/linux/huge_mm.h
+> >> +++ b/include/linux/huge_mm.h
+> >> @@ -294,8 +294,8 @@ static inline bool thp_migration_supported(void)
+> >>  static inline struct list_head *page_deferred_list(struct page *page)
+> >>  {
+> >>  	/*
+> >> -	 * Global or memcg deferred list in the second tail pages is
+> >> -	 * occupied by compound_head.
+> >> +	 * Global or memcg deferred list in the first tail page is
+> >> +	 * occupied by compound_mapcount and compound_pincount.
+> >>  	 */
+> > 
+> > The structure of "struct page" seems to have told us the information that
+> > we resue the 2nd tail page to be used as deferred_list. I am not sure the
 > 
-> If an ISL1208 device does not have an interrupt line routed, the feature
-> shouldn't be advertised (it is by default in rtc core) or it'll confuse
-> userspace requesting that feature (such as hwclock from util-linux).
+> Yes, it does.
 > 
+> > value of those comments. Maybe better to remove them?
 > 
-> [...]
+> IMHO above comment tries to tell us why deferred list in the second tail page is used
+> instead of first tail page. But it should be fine to remove the above comments as they
+> don't seem to provide much info (thought I'm not really sure).
+> 
+> Thanks.
+> 
 
-Applied, thanks!
+Just a suggestion - feel free to disregard. Maybe we don't need to repeat the
+comments in struct page, but maybe a "see organization of tail pages of compound
+page in "struct page" definition" would at least point new people to where this
+magic 2 comes from.  Maybe an obvious place to check after you're familiar with
+overloading struct page data for compound pages - but IMO it's not obvious for
+newcomers.
 
-[1/1] rtc: isl1208: do not advertise update interrupt feature if no interrupt specified
-      commit: ddc9c54b6b993bca4aa810402b17a0f42c5744d1
-
-Best regards,
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> > 
+> > Thanks.
+> > 
+> >>  	return &page[2].deferred_list;
+> >>  }
+> >> -- 
+> >> 2.23.0
+> >>
+> >>
+> > .
+> > 
+> 

@@ -2,77 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D843655A06C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA40559FEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiFXRst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S231548AbiFXRw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232055AbiFXRso (ORCPT
+        with ESMTP id S232786AbiFXRwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:48:44 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7A141320
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:48:41 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id n10so2762895plp.0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:48:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zliD2Qsx7OubU1h4LVAM9OejLzFcsBaCjZJRdpEsKrg=;
-        b=Pz4gqJjlBZdH2FUZf+LZ3Zk2c4Q5PjoLHgSJvUIfFCXLQ3s0DQzl2M7apET6Zy18l+
-         gg0BY+PsbRil96ZfM2R0pnbNH0l4VO7BByOsiIJRLMuVeDsIjk5zBu5mdXPAuoNx6L7B
-         hNj9RV6ELW7Ls1GQSQx6AOxZK02AhyVXkIwbg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zliD2Qsx7OubU1h4LVAM9OejLzFcsBaCjZJRdpEsKrg=;
-        b=hiQHIVPzwloOsiFOde1NAIewV0FPcSSQYfcRU+w21m2ilGO8or5CAGjxUv+w19xvpF
-         FBag7jxx5MdQ6lV02RHrSut0OgxKISPYfSxuVgeLgmsKLaAy/HB6AMJSsGixA5R+EsV9
-         0EtjVFTIlAbxByUMWWCRRhXONHW9Q3fb1duwri9v2nZaF0oe8nfvKRZEgW4glrC+3X4m
-         LFt0b4/o1ztYqAjWOaB93YbvK2X0IQdSJ4kMM+l7TRWt/5Rj6LbAuhrOfmQ9IO5D7yLV
-         1dNjxoo3OlVq/zkBlE5fue693JDd5UapwTeZ67ucCynVe3dwqLqFSUBqsJJBYZ+BzMKS
-         fmaA==
-X-Gm-Message-State: AJIora+Naq1Iz5hHUzoaIN1YntZcqPtgr0qB312D+CD5XHqs2iCvd7cq
-        Mrmrit11CRKJmCgCR+pxR3kxPA==
-X-Google-Smtp-Source: AGRyM1uURdhPI99lDJvqkOTCp86a8zulQKgFl/xro0YHHIZMRm4Fw3TKtsoXL4ek9b2CUpM+7eruIw==
-X-Received: by 2002:a17:903:2443:b0:16a:2b65:7edd with SMTP id l3-20020a170903244300b0016a2b657eddmr332318pls.20.1656092921012;
-        Fri, 24 Jun 2022 10:48:41 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170902e9c200b00168ba5ac8adsm2111628plk.163.2022.06.24.10.48.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 10:48:40 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 10:48:39 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 3/4][next] scsi: megaraid_sas: Replace one-element
- array with flexible-array member in MR_DRV_RAID_MAP
-Message-ID: <202206241047.903049ED@keescook>
-References: <cover.1628136510.git.gustavoars@kernel.org>
- <b43d4083d9788bb746dc0b2205d6a67ebb609b0d.1628136510.git.gustavoars@kernel.org>
- <202206221457.1A12D768EF@keescook>
- <20220623014533.GA7132@embeddedor>
- <20220623031401.GA8896@embeddedor>
- <202206230816.1383511C@keescook>
- <20220623153825.GA6458@embeddedor>
+        Fri, 24 Jun 2022 13:52:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15AA45252C;
+        Fri, 24 Jun 2022 10:51:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 630C51042;
+        Fri, 24 Jun 2022 10:51:54 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 285823F792;
+        Fri, 24 Jun 2022 10:51:53 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     alex.williamson@redhat.com, cohuck@redhat.com
+Cc:     kvm@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, jgg@nvidia.com,
+        baolu.lu@linux.intel.com, iommu@lists.linux.dev
+Subject: [PATCH v3 1/2] vfio/type1: Simplify bus_type determination
+Date:   Fri, 24 Jun 2022 18:51:44 +0100
+Message-Id: <194a12d3434d7b38f84fa96503c7664451c8c395.1656092606.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.36.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623153825.GA6458@embeddedor>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,12 +41,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 05:38:25PM +0200, Gustavo A. R. Silva wrote:
-> Which object files are you comparing here? because I don't see the zero
-> change when comparing the before and after of megaraid_sas_fp.o with
-> the change you propose.
+Since IOMMU groups are mandatory for drivers to support, it stands to
+reason that any device which has been successfully added to a group
+must be on a bus supported by that IOMMU driver, and therefore a domain
+viable for any device in the group must be viable for all devices in
+the group. This already has to be the case for the IOMMU API's internal
+default domain, for instance. Thus even if the group contains devices on
+different buses, that can only mean that the IOMMU driver actually
+supports such an odd topology, and so without loss of generality we can
+expect the bus type of any device in a group to be suitable for IOMMU
+API calls.
 
-Hm, maybe I did something wrong. But I was looking at megaraid_sas_fp.o
+Furthermore, scrutiny reveals a lack of protection for the bus being
+removed while vfio_iommu_type1_attach_group() is using it; the reference
+that VFIO holds on the iommu_group ensures that data remains valid, but
+does not prevent the group's membership changing underfoot.
 
+We can address both concerns by recycling vfio_bus_type() into some
+superficially similar logic to indirect the IOMMU API calls themselves.
+Each call is thus protected from races by the IOMMU group's own locking,
+and we no longer need to hold group-derived pointers beyond that scope.
+It also gives us an easy path for the IOMMU API's migration of bus-based
+interfaces to device-based, of which we can already take the first step
+with device_iommu_capable(). As with domains, any capability must in
+practice be consistent for devices in a given group - and after all it's
+still the same capability which was expected to be consistent across an
+entire bus! - so there's no need for any complicated validation.
+
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
+
+v3: Complete rewrite yet again, and finally it doesn't feel like we're
+stretching any abstraction boundaries the wrong way, and the diffstat
+looks right too. I did think about embedding IOMMU_CAP_INTR_REMAP
+directly in the callback, but decided I like the consistency of minimal
+generic wrappers. And yes, if the capability isn't supported then it
+does end up getting tested for the whole group, but meh, it's harmless.
+
+ drivers/vfio/vfio_iommu_type1.c | 42 +++++++++++++++++----------------
+ 1 file changed, 22 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+index c13b9290e357..a77ff00c677b 100644
+--- a/drivers/vfio/vfio_iommu_type1.c
++++ b/drivers/vfio/vfio_iommu_type1.c
+@@ -1679,18 +1679,6 @@ static int vfio_dma_do_map(struct vfio_iommu *iommu,
+ 	return ret;
+ }
+ 
+-static int vfio_bus_type(struct device *dev, void *data)
+-{
+-	struct bus_type **bus = data;
+-
+-	if (*bus && *bus != dev->bus)
+-		return -EINVAL;
+-
+-	*bus = dev->bus;
+-
+-	return 0;
+-}
+-
+ static int vfio_iommu_replay(struct vfio_iommu *iommu,
+ 			     struct vfio_domain *domain)
+ {
+@@ -2153,13 +2141,25 @@ static void vfio_iommu_iova_insert_copy(struct vfio_iommu *iommu,
+ 	list_splice_tail(iova_copy, iova);
+ }
+ 
++static int vfio_iommu_device_capable(struct device *dev, void *data)
++{
++	return device_iommu_capable(dev, (enum iommu_cap)data);
++}
++
++static int vfio_iommu_domain_alloc(struct device *dev, void *data)
++{
++	struct iommu_domain **domain = data;
++
++	*domain = iommu_domain_alloc(dev->bus);
++	return 1; /* Don't iterate */
++}
++
+ static int vfio_iommu_type1_attach_group(void *iommu_data,
+ 		struct iommu_group *iommu_group, enum vfio_group_type type)
+ {
+ 	struct vfio_iommu *iommu = iommu_data;
+ 	struct vfio_iommu_group *group;
+ 	struct vfio_domain *domain, *d;
+-	struct bus_type *bus = NULL;
+ 	bool resv_msi, msi_remap;
+ 	phys_addr_t resv_msi_base = 0;
+ 	struct iommu_domain_geometry *geo;
+@@ -2192,18 +2192,19 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+ 		goto out_unlock;
+ 	}
+ 
+-	/* Determine bus_type in order to allocate a domain */
+-	ret = iommu_group_for_each_dev(iommu_group, &bus, vfio_bus_type);
+-	if (ret)
+-		goto out_free_group;
+-
+ 	ret = -ENOMEM;
+ 	domain = kzalloc(sizeof(*domain), GFP_KERNEL);
+ 	if (!domain)
+ 		goto out_free_group;
+ 
++	/*
++	 * Going via the iommu_group iterator avoids races, and trivially gives
++	 * us a representative device for the IOMMU API call. We don't actually
++	 * want to iterate beyond the first device (if any).
++	 */
+ 	ret = -EIO;
+-	domain->domain = iommu_domain_alloc(bus);
++	iommu_group_for_each_dev(iommu_group, &domain->domain,
++				 vfio_iommu_domain_alloc);
+ 	if (!domain->domain)
+ 		goto out_free_domain;
+ 
+@@ -2258,7 +2259,8 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+ 	list_add(&group->next, &domain->group_list);
+ 
+ 	msi_remap = irq_domain_check_msi_remap() ||
+-		    iommu_capable(bus, IOMMU_CAP_INTR_REMAP);
++		    iommu_group_for_each_dev(iommu_group, (void *)IOMMU_CAP_INTR_REMAP,
++					     vfio_iommu_device_capable);
+ 
+ 	if (!allow_unsafe_interrupts && !msi_remap) {
+ 		pr_warn("%s: No interrupt remapping support.  Use the module param \"allow_unsafe_interrupts\" to enable VFIO IOMMU support on this platform\n",
 -- 
-Kees Cook
+2.36.1.dirty
+

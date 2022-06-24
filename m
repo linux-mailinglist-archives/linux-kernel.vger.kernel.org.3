@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B00655A009
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2EB55A063
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiFXR1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
+        id S229478AbiFXRa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiFXR0k (ORCPT
+        with ESMTP id S229797AbiFXRa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:26:40 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26892BE6;
-        Fri, 24 Jun 2022 10:26:39 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id s17so3378785iob.7;
-        Fri, 24 Jun 2022 10:26:39 -0700 (PDT)
+        Fri, 24 Jun 2022 13:30:26 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FF83DA4C
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:30:25 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id p3-20020a17090a428300b001ec865eb4a2so6413047pjg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:30:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=v2GOxsdoVsaZXbVgLmusuJ8AUNrNNpTNLGvKGWBrh8o=;
+        b=OJsudXwOMYv/+uIFVCAy9ZHd+hLkuAC8DSDK1yeMkLccT+t9CIPMdgpMgi3dNglErN
+         vjrXLXCxn0Isb7JwLx6gtRLjX0ue9nCcYi2HxBQfyTL7gzwOzMUurRZnVPzjGGXytiUX
+         8QKEfAbE62kS6eIKHPOs4cbXWEQzFVqou8DJ8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=92QKbH/mPXhxHIYJf1fLlrKB6WxLUvpdcDo1o4OtEnM=;
-        b=nkLqdtay6VGjJqffHvqtqksKSKVkBilY1c1m5KAlQMy8AJo7DT/wTGSiN7+Hvhm6OZ
-         5NK5dApuZdhWE7sD7gmiuW8mnZNgcBVUWr08Y2QT5VUkWgLZWrdwwqNJFe3KLCMcVDiy
-         OQkBVynzJVclFSBAvtlpFjkdTFkU7nBi+RExRN7qf2SF4KNAnAp6m35rcdlw3XWHjg0O
-         jyaGn8aX9MWabkgmH4krflJGpABcTYGkLvT9Ff1Cn7vmFykm0oh3DpTKayQDOu7LFBY1
-         KBdZbUaiR+/9Mg6TXWzJbqbh+o2F5a/G524sZ1RjL+AJcIYtJGIsyIPiLUmvaUnoWf/K
-         cWTA==
-X-Gm-Message-State: AJIora/T87xyD3LzBX1ATxDZL4VjYTWfmf/6ffZkthaxIq5ZiERfn/8E
-        aw/Pd2wwO9Z6XxwV5t2hItwyaxa/og==
-X-Google-Smtp-Source: AGRyM1s8SzrwSpGacP/r2ARwl+tUdS8WymnOz9QJv44qHprtsvHiQ9e/7OSdNfiAyfKqtnqiAMvqmw==
-X-Received: by 2002:a02:90ce:0:b0:32e:e2ce:b17c with SMTP id c14-20020a0290ce000000b0032ee2ceb17cmr153954jag.268.1656091599142;
-        Fri, 24 Jun 2022 10:26:39 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id u10-20020a92da8a000000b002d925059ba6sm1354817iln.87.2022.06.24.10.26.36
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=v2GOxsdoVsaZXbVgLmusuJ8AUNrNNpTNLGvKGWBrh8o=;
+        b=G0h1w7NOTWK0Osz8fE2Z+6FPlE1lSmjS/Kyu9Am8wZZOsKxBTfW0UUnivQj8q8kra2
+         NfVOPbFi3ZRaCMgatfDOlhCI4jJ8bEx7qIpJIRqnvhMyvjVXOvZhrGR+W04E1Hrpi7sp
+         ArpR5SMnBVc83DTcbNlpkTog+gihFJQSYaiNAMpMXe0kAPB33fBSlycb980HppiJ9mTu
+         vwbh2wXy49kHcBOy4gbyI6V8o8AYjB7VMC5Wfitp4JeT9dGxBwzKLeAe1u5Ta23PWko2
+         oVTjuRxDxQBFglMZTQhJo8LG68Ym7tYs/144iqfIsAp7UBZoa92zB3pWq8Igci80wfaN
+         Bbhg==
+X-Gm-Message-State: AJIora9f2G9ltvvS6IRMJpDnn6DpxjW73hmUg8q57rxlmPXD8pnyv/Ai
+        G+0TkxrW4QnirlUeEwqS1ms36Q==
+X-Google-Smtp-Source: AGRyM1uZTK3A1CVfTWihEZf+BbMTle53u4bICa5k01rPPWkPoK245E6WQSY+2isNcfDoVNY/wnEPtA==
+X-Received: by 2002:a17:90b:1b0e:b0:1ec:e2f6:349e with SMTP id nu14-20020a17090b1b0e00b001ece2f6349emr5218674pjb.14.1656091824621;
+        Fri, 24 Jun 2022 10:30:24 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m13-20020a170902e40d00b00167838b82e0sm2059425ple.205.2022.06.24.10.30.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 10:26:38 -0700 (PDT)
-Received: (nullmailer pid 146342 invoked by uid 1000);
-        Fri, 24 Jun 2022 17:26:34 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        wenst@chromium.org, p.zabel@pengutronix.de,
-        chun-jie.chen@mediatek.com, matthias.bgg@gmail.com,
-        sboyd@kernel.org, konrad.dybcio@somainline.org,
-        linux-clk@vger.kernel.org, fparent@baylibre.com,
-        phone-devel@vger.kernel.org, robh+dt@kernel.org,
-        y.oudjana@protonmail.com, rex-bc.chen@mediatek.com,
-        martin.botka@somainline.org, marijn.suijten@somainline.org,
-        sam.shih@mediatek.com, kernel@collabora.com,
-        mturquette@baylibre.com, linux-arm-kernel@lists.infradead.org,
-        ikjn@chromium.org, krzysztof.kozlowski+dt@linaro.org,
-        weiyi.lu@mediatek.com, miles.chen@mediatek.com, ck.hu@mediatek.com,
-        linux-mediatek@lists.infradead.org, jason-jh.lin@mediatek.com,
-        ~postmarketos/upstreaming@lists.sr.ht, bgolaszewski@baylibre.com,
-        paul.bouchara@somainline.org, devicetree@vger.kernel.org
-In-Reply-To: <20220624093525.243077-5-angelogioacchino.delregno@collabora.com>
-References: <20220624093525.243077-1-angelogioacchino.delregno@collabora.com> <20220624093525.243077-5-angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v3 4/7] dt-bindings: clock: mediatek: Add clock driver bindings for MT6795
-Date:   Fri, 24 Jun 2022 11:26:34 -0600
-Message-Id: <1656091594.386709.146341.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Fri, 24 Jun 2022 10:30:24 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 10:30:23 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Peter Jones <pjones@redhat.com>, Jeremy Kerr <jk@ozlabs.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCH v3 1/9] pstore: Add priv field to pstore_record for
+ backend specific use
+Message-ID: <202206241029.9C0891C5B6@keescook>
+References: <20220624084925.724516-1-ardb@kernel.org>
+ <20220624084925.724516-2-ardb@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624084925.724516-2-ardb@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,42 +74,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Jun 2022 11:35:22 +0200, AngeloGioacchino Del Regno wrote:
-> Add the bindings for the clock drivers of the MediaTek Helio X10
-> MT6795 SoC.
+On Fri, Jun 24, 2022 at 10:49:17AM +0200, Ard Biesheuvel wrote:
+> The EFI pstore backend will need to store per-record variable name data
+> when we switch away from the efivars layer. Add a priv field to struct
+> pstore_record, and document it as holding a backend specific pointer
+> that is assumed to be a kmalloc()d buffer, and will be kfree()d when the
+> entire record is freed.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../bindings/clock/mediatek,mt6795-clock.yaml | 66 +++++++++++++++++
->  .../clock/mediatek,mt6795-sys-clock.yaml      | 74 +++++++++++++++++++
->  2 files changed, 140 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt6795-clock.yaml
->  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.yaml
-> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I'm a fan! This is useful, and I'll likely try to use it for some of the
+RAM-specific things too. :)
 
-yamllint warnings/errors:
+Acked-by: Kees Cook <keescook@chromium.org>
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.example.dtb: power-controller@10001000: '#power-domain-cells' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/power-domain.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.example.dtb: power-controller@10003000: '#power-domain-cells' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/power-domain.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+-- 
+Kees Cook

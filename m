@@ -2,101 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56420559267
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 07:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7926855926B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 07:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiFXFi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 01:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        id S229879AbiFXFjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 01:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiFXFiZ (ORCPT
+        with ESMTP id S229451AbiFXFjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 01:38:25 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66C22E9FD
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 22:38:24 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id p3-20020a17090a428300b001ec865eb4a2so4720383pjg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 22:38:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Y/SRxapVYozuhYMhBtEsKZgWVsRXORX77DHgWSqH9Xc=;
-        b=D0Rue8sUgpd0Oz2oDwADqo0yETl19CbGgl0NcxTFdcpLIfiidGTvMiEGSbHFZbcinq
-         baW0/Q++m/pcm5SiLWeU6l8prNwGUXlHPWd5JSYtBX0getqN+v508vHly1iMtuPTYIXh
-         B6xX9I3CXSVoN48uO0snxhaqwLgcVRhSnamxeHC/w7q0mpeGLV71d7ceAi4+WglCM/A2
-         bRbm9FlYjmMaZ/yFuL3plszZsIfsa0Q7d8qFjpb0gdvCv13Ulwbw5ZUT8ARVuUx5vTlm
-         dlAO/u8xtb/R2YRQydQQ7m8Klz1GWiE0uajAvw6EUH+zfN0U8DyZnXixMEN0LDwU2nNI
-         1xpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Y/SRxapVYozuhYMhBtEsKZgWVsRXORX77DHgWSqH9Xc=;
-        b=mlSEkM+3zgtzYrsNEafSv/+a+G3XucRBifHzzIHB2ULA7ExajCjgn1bYeaXfyECP2z
-         YPBXC5kCx/JDHuqwdT6tXQq1AUB2vQue/+jskRCtiqYHFxTQ/mjxdL2JsNUS/fBguSXT
-         PSpnqvQ063MBpWJwj1542Y6NSX7s+KOhnxhQTDZeYbrWPHUIK73L/wyzTZuryfOe9u/7
-         yU3vanb73nBAWYUlFzBUldskKHJOv3ckPtgtZJhGlLCfixrFZVucG9rF2dQgCMbrzHIc
-         PfbgrliPeoY7Ow1zY2KLzM7+RZ0IJYnrDE9RvuZFV1AkDtJeSSTY6qJFP0LW3eXV2wZu
-         OGeQ==
-X-Gm-Message-State: AJIora9zTjxlguQnBbkLDTl0UJBjg+wdJ9XNC/0C4b0scXrsFfaaOrtL
-        X4yyXySIBDrL27RTp8zrTBJCEg==
-X-Google-Smtp-Source: AGRyM1toya/YrdeGKw+SyYyN5TqtRXMFJanSddtA7xBFHFmaieaTouohS+OBViv/YKTrufCn4l1Evw==
-X-Received: by 2002:a17:90a:408f:b0:1e3:23a:2370 with SMTP id l15-20020a17090a408f00b001e3023a2370mr1959764pjg.84.1656049104303;
-        Thu, 23 Jun 2022 22:38:24 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id 2-20020a056a00072200b00525217fe273sm641043pfm.187.2022.06.23.22.38.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 22:38:23 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 11:08:21 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/31] cpufreq: tegra20: Migrate to
- dev_pm_opp_set_config()
-Message-ID: <20220624053821.e6emke6gortqn72a@vireshk-i7>
-References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <4b38ceed657bfcf87ff9ab0dd69dd1f2f5658b24.1653564321.git.viresh.kumar@linaro.org>
- <793e49ea-aeb0-a47a-9fe8-742a6397bb35@collabora.com>
- <5c0e697e-abca-bcf0-cf68-d9c240d82527@collabora.com>
+        Fri, 24 Jun 2022 01:39:11 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D405DF19;
+        Thu, 23 Jun 2022 22:39:05 -0700 (PDT)
+X-UUID: 8974fcc91cf4473f861aa31b1ed3be7e-20220624
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:696aae49-583a-4e22-9975-bd4e6d524399,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:17d673d8-850a-491d-a127-60d9309b2b3e,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 8974fcc91cf4473f861aa31b1ed3be7e-20220624
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2041637942; Fri, 24 Jun 2022 13:39:01 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 24 Jun 2022 13:39:00 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 24 Jun 2022 13:39:00 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 24 Jun 2022 13:38:58 +0800
+Message-ID: <8a5e9c81ab1487154828af3ca21e62e39bcce18c.camel@mediatek.com>
+Subject: Re: [PATCH v3 1/5] iommu: Return -EMEDIUMTYPE for incompatible
+ domain and device/group
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>,
+        Baolu Lu <baolu.lu@linux.intel.com>
+CC:     <joro@8bytes.org>, <will@kernel.org>, <marcan@marcan.st>,
+        <sven@svenpeter.dev>, <robin.murphy@arm.com>,
+        <robdclark@gmail.com>, <matthias.bgg@gmail.com>,
+        <orsonzhai@gmail.com>, <baolin.wang7@gmail.com>,
+        <zhang.lyra@gmail.com>, <jean-philippe@linaro.org>,
+        <alex.williamson@redhat.com>, <jgg@nvidia.com>,
+        <kevin.tian@intel.com>, <suravee.suthikulpanit@amd.com>,
+        <alyssa@rosenzweig.io>, <dwmw2@infradead.org>,
+        <mjrosato@linux.ibm.com>, <gerald.schaefer@linux.ibm.com>,
+        <thierry.reding@gmail.com>, <vdumpa@nvidia.com>,
+        <jonathanh@nvidia.com>, <cohuck@redhat.com>,
+        <thunder.leizhen@huawei.com>, <tglx@linutronix.de>,
+        <chenxiang66@hisilicon.com>, <christophe.jaillet@wanadoo.fr>,
+        <john.garry@huawei.com>, <yangyingliang@huawei.com>,
+        <jordan@cosmicpenguin.net>, <iommu@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>, <kvm@vger.kernel.org>
+Date:   Fri, 24 Jun 2022 13:38:58 +0800
+In-Reply-To: <YrUk8IINqDEZLfIa@Asurada-Nvidia>
+References: <20220623200029.26007-1-nicolinc@nvidia.com>
+         <20220623200029.26007-2-nicolinc@nvidia.com>
+         <270eec00-8aee-2288-4069-d604e6da2925@linux.intel.com>
+         <YrUk8IINqDEZLfIa@Asurada-Nvidia>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5c0e697e-abca-bcf0-cf68-d9c240d82527@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29-05-22, 19:59, Dmitry Osipenko wrote:
-> With that fixed, now there is another error:
+On Thu, 2022-06-23 at 19:44 -0700, Nicolin Chen wrote:
+> On Fri, Jun 24, 2022 at 09:35:49AM +0800, Baolu Lu wrote:
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > On 2022/6/24 04:00, Nicolin Chen wrote:
+> > > diff --git a/drivers/iommu/mtk_iommu_v1.c
+> > > b/drivers/iommu/mtk_iommu_v1.c
+> > > index e1cb51b9866c..5386d889429d 100644
+> > > --- a/drivers/iommu/mtk_iommu_v1.c
+> > > +++ b/drivers/iommu/mtk_iommu_v1.c
+> > > @@ -304,7 +304,7 @@ static int mtk_iommu_v1_attach_device(struct
+> > > iommu_domain *domain, struct device
+> > >       /* Only allow the domain created internally. */
+> > >       mtk_mapping = data->mapping;
+> > >       if (mtk_mapping->domain != domain)
+> > > -             return 0;
+> > > +             return -EMEDIUMTYPE;
+> > > 
+> > >       if (!data->m4u_dom) {
+> > >               data->m4u_dom = dom;
+> > 
+> > This change looks odd. It turns the return value from success to
+> > failure. Is it a bug? If so, it should go through a separated fix
+> > patch.
+
+Thanks for the review:)
+
 > 
-> [    1.761945] cpu cpu0: _of_add_opp_table_v2: no supported OPPs
-> [    1.761960] cpu cpu0: OPP table can't be empty
+> Makes sense.
 > 
-> I see this on Tegra30, but not on Tegra20. Apparently OPP table
-> refcounting is broken on Tegra30 by this patchset. To make it clear,
-> there are no error without these OPP patches applied. I may take a
-> closer look if will be needed, just ping me.
+> I read the commit log of the original change:
+> 
+https://lore.kernel.org/r/1589530123-30240-1-git-send-email-yong.wu@mediatek.com
+> 
+> It doesn't seem to allow devices to get attached to different
+> domains other than the shared mapping->domain, created in the
+> in the mtk_iommu_probe_device(). So it looks like returning 0
+> is intentional. Though I am still very confused by this return
+> value here, I doubt it has ever been used in a VFIO context.
 
-Hi Jon,
+It's not used in VFIO context. "return 0" just satisfy the iommu
+framework to go ahead. and yes, here we only allow the shared "mapping-
+>domain" (All the devices share a domain created internally).
 
-Dmitry reported this on Tegra30 earlier, do you also see such a
-failure ? Would be helpful to get this fixed as well, if it still
-exists.
+thus I think we should still keep "return 0" here.
 
--- 
-viresh
+Thanks:)
+
+> 
+> Young, would you please give us some input?
+> 
+> Overall, I feel it's better to play it safe here by dropping
+> this part. If we later confirm there is a need to fix it, we
+> will do that in a separate patch anyway.
+> 
+> Thanks
+> Nic
+

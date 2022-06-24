@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3949955A1E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 21:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FED555A1E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 21:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231405AbiFXT1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 15:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
+        id S231192AbiFXTat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 15:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiFXT1G (ORCPT
+        with ESMTP id S229451AbiFXTap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 15:27:06 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974EA48328;
-        Fri, 24 Jun 2022 12:27:05 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 9278E31A;
-        Fri, 24 Jun 2022 19:27:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 9278E31A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1656098824; bh=1Tl+2VcojDecCEW67KaGgou+vGthJ0QFAm7poWodRvk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=CXbnElIJmvmgDUlbluzNCNfxDH6z6VQTD1MsHkndvrTyVlCCfxgCo8NnA6W0NQ9Pn
-         hbWdzKXHBUBqTmT3zFis5EtScJ6Ul7oZ86bajW+Vp3AwUvkqzwdIhEEVlw9w92pJnt
-         1hrVohDc7dr5oQ7GkAG7vwuODjxYHZbeh4x51XrtH3hNQSXdMz+8+uTa4J/y5PkznW
-         SEvA9BEl6GcIUtVppCdfbwl6wh2ILydQGxiXPiUJdoaXLMal8pUsAhBj7A5RazmsS3
-         jhmvQ2OiAuq2VZ/zJPD65emLvXqX1LCpiNFO657ijZ2OsN0OoKOYPC3k5gjnTylkiN
-         EGsyplVXF2hKw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, Harinder Singh <sharinder@google.com>,
-        Tim Bird <tim.bird@sony.com>
-Subject: Re: [PATCH] Documentation: kunit: eliminate code-block warnings
-In-Reply-To: <20220401024707.10550-1-rdunlap@infradead.org>
-References: <20220401024707.10550-1-rdunlap@infradead.org>
-Date:   Fri, 24 Jun 2022 13:27:03 -0600
-Message-ID: <87fsjt50c8.fsf@meer.lwn.net>
+        Fri, 24 Jun 2022 15:30:45 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAFA51319;
+        Fri, 24 Jun 2022 12:30:44 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 56E4BE0004;
+        Fri, 24 Jun 2022 19:30:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656099041;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iKFQojvU/Z4xJXXg9m8WeraQpHiDGSwFdVIDjpYzlrc=;
+        b=ilHnaDOy/xGvBXeawsdx83QWHi87hzMkk/ldH6oGbb1G6qMetU+xhquoD8ARuso0McG85K
+        vqttFHHUWT9KGzdKCvHCjho/uHEqIk7rdK4RYaesERV07h4093L/Z+2uZR4POp35kt25Zr
+        BBi8+Fa8sA3TNZ/kLWGoYnZHW/d1uR0aJKu2376HwNZVPAJIJevGWIfjdv5G31jqOT664G
+        rpxfK5KYmSp9HzfjTtjTd3YX+Av1aPr3bC0RiIvrmMlNEjrWPg6mAxKXmaJF/FxmrEx6gy
+        KoqTb/Ss4A1YkO59RkUFZtpp/uh5w+gth9M+3CYY9T2Rj/V5s26wxOfYbc9r8A==
+Date:   Fri, 24 Jun 2022 21:30:38 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     robh+dt@kernel.org, agross@kernel.org, a.zummo@towertech.it,
+        krzysztof.kozlowski+dt@linaro.org, bjorn.andersson@linaro.org,
+        quic_c_skakit@quicinc.com
+Cc:     quic_tsoni@quicinc.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lee.jones@linaro.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 0/2] Update the binding documents with latest mail ID
+Message-ID: <165609897247.33320.6918087685461996896.b4-ty@bootlin.com>
+References: <1655874639-11273-1-git-send-email-quic_c_skakit@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1655874639-11273-1-git-send-email-quic_c_skakit@quicinc.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,85 +54,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
+On Wed, 22 Jun 2022 10:40:37 +0530, Satya Priya wrote:
+> Satya Priya (2):
+>   dt-bindings: mfd: qcom-pm8xxx: Update the maintainers section
+>   dt-bindings: rtc: qcom-pm8xxx-rtc: Update the maintainers section
+> 
+> Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml     | 2 +-
+>  Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> [...]
 
-> Fix Sphinx complaints about code-block directive missing an argument.
-> For start.rst, add "none" since that is already heavily used in that
-> file. For run_wrapper.rst, use the simpler "::" literal block instead.
+Applied, thanks!
 
-[Sorry that this fell through the cracks; I'm never quite sure who is
-going to handle kunit patches]
+[2/2] dt-bindings: rtc: qcom-pm8xxx-rtc: Update the maintainers section
+      commit: fa1f8e6ac455b20955f107023916eef946674cb8
 
-> dev-tools/kunit/start.rst:83: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
->
-> dev-tools/kunit/run_wrapper.rst:17: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
-
-So which version of Sphinx are you using?  The language argument became
-optional in 2.0, so you'd need to be running something pretty ancient to
-see this.
-
-Ah, I see 1.8.5 in your later message...how wedded are you to that
-version?
-
-Ostensibly we support back to 1.7, so I guess we should stick by its
-rules.  But the better solution, I think, is to raise our minimum
-version; I think I'll look into that shortly.
-
-> dev-tools/kunit/run_wrapper.rst:23: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
-> dev-tools/kunit/run_wrapper.rst:31: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
-> dev-tools/kunit/run_wrapper.rst:51: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
-> dev-tools/kunit/run_wrapper.rst:57: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
-> dev-tools/kunit/run_wrapper.rst:78: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
-> dev-tools/kunit/run_wrapper.rst:85: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
-> dev-tools/kunit/run_wrapper.rst:109: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
-> dev-tools/kunit/run_wrapper.rst:116: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
-> dev-tools/kunit/run_wrapper.rst:124: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
-> dev-tools/kunit/run_wrapper.rst:139: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
-> dev-tools/kunit/run_wrapper.rst:162: WARNING: Error in "code-block" directive:
-> 1 argument(s) required, 0 supplied.
->
-> Fixes: c48b9ef1f794 ("Documentation: KUnit: Rewrite getting started")
-> Fixes: 46201d47d6c4 ("Documentation: kunit: Reorganize documentation related to running tests")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Brendan Higgins <brendanhiggins@google.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: Harinder Singh <sharinder@google.com>
-> Cc: Tim Bird <tim.bird@sony.com>
-> ---
->  Documentation/dev-tools/kunit/run_wrapper.rst |   24 ++++++++--------
->  Documentation/dev-tools/kunit/start.rst       |    2 -
->  2 files changed, 13 insertions(+), 13 deletions(-)
->
-> --- linux-next-20220331.orig/Documentation/dev-tools/kunit/run_wrapper.rst
-> +++ linux-next-20220331/Documentation/dev-tools/kunit/run_wrapper.rst
-> @@ -14,13 +14,13 @@ tests, and formats the test results.
->  
->  Run command:
->  
-> -.. code-block::
-> +::
-
-A much nicer fix for these would have been just:
-
-  Run command::
-
-Oh well, I've applied it.
-
-Thanks,
-
-jon
+Best regards,
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

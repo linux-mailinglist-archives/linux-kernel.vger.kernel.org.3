@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D7755A175
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 21:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7A355A180
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 21:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbiFXTNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 15:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S230504AbiFXTNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 15:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbiFXTMm (ORCPT
+        with ESMTP id S231512AbiFXTMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 15:12:42 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F293181A37;
-        Fri, 24 Jun 2022 12:12:41 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        Fri, 24 Jun 2022 15:12:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5257081DBA;
+        Fri, 24 Jun 2022 12:12:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 1B79431A;
-        Fri, 24 Jun 2022 19:12:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 1B79431A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1656097961; bh=MpPrOxX6z/lQ6cdX+XEUdc9zOOieEi7IAhJTqR36Er4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=FHCP6XVH2CLk2hggk3UZwUCOuT71hv8eacYgUjO5JMOa0LDWDSmCjc5uMlQZ8xYeS
-         AoO6HkaWfYBThjZoHn7ugQDALfJB5hwKwqLiUgDu8HtkcDRF91ftnN8s9ic1J85rd9
-         RD3t1D6GhikFnZoPwQsr4SfecixGapQx9ggqCnqb8KqUJLNBLqRCqdkqcNJgtx8DsE
-         rapcIocgEMZG+RkKCyFg7HXFnP1dYutYIzHxB849wM6FczQw75V8ANBKEf6chmFo+k
-         DMppTfLWQiGWfgbqvsF7lsw2IO0xDQohlfiDl8/0HGyalonyX+W6ujgs63EK3zDqxv
-         LDVwlpA4kRp8w==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Tom Schwindl <schwindl@posteo.de>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] docs: driver-api: gpio: Fix some typos
-In-Reply-To: <YrTdAv3YPlCiDr2u@posteo.de>
-References: <YrTdAv3YPlCiDr2u@posteo.de>
-Date:   Fri, 24 Jun 2022 13:12:40 -0600
-Message-ID: <87sfnt5107.fsf@meer.lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E43D1621A3;
+        Fri, 24 Jun 2022 19:12:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62EC7C34114;
+        Fri, 24 Jun 2022 19:12:48 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="itCPwM20"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656097966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4Opv7H7b7jpTZpdXbND2IHSq5Uo5YT03x2GlaOQr9ns=;
+        b=itCPwM20JiYyV1kN1+KDhxgW9w0RihJJu6flpMpZtuZ8oJ0DFV0juVxcxWghz5ae4y59Tq
+        Ek+LUY8t7g9LNLYunYWoKtKz/TxRPNMbQi+OIJnRX5c10ispOAwInSzEKzTvsqvdPGS/KJ
+        WibS2bs7Fpa7NZsS7PEwJlz0XS9DXCs=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1fb3e598 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 24 Jun 2022 19:12:46 +0000 (UTC)
+Date:   Fri, 24 Jun 2022 21:12:42 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Gregory Erwin <gregerwin256@gmail.com>
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Rui Salvaterra <rsalvaterra@gmail.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] ath9k: rng: escape sleep loop when unregistering
+Message-ID: <YrYMqqqoK7HBAXgJ@zx2c4.com>
+References: <YrUKUt5nvX8qf1Je@zx2c4.com>
+ <20220624011449.1473399-1-Jason@zx2c4.com>
+ <CAO+Okf5k+C+SE6pMVfPf-d8MfVPVq4PO7EY8Hys_DVXtent3HA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAO+Okf5k+C+SE6pMVfPf-d8MfVPVq4PO7EY8Hys_DVXtent3HA@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tom Schwindl <schwindl@posteo.de> writes:
+Hi Gregory,
 
-> Correct some simple spelling mistakes in consumer.rst, driver.rst
-> and using-gpio.rst.
->
-> Signed-off-by: Tom Schwindl <schwindl@posteo.de>
-> ---
->  Documentation/driver-api/gpio/consumer.rst   | 2 +-
->  Documentation/driver-api/gpio/driver.rst     | 6 +++---
->  Documentation/driver-api/gpio/using-gpio.rst | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
+On Thu, Jun 23, 2022 at 10:25:26PM -0700, Gregory Erwin wrote:
+> Hi Jason,
+> 
+> I think you are on the right track, but even with this patch
+> 'ip link set wlan0 down' blocks until the hwrng reader gives up.
+> The reader can either be userspace (dd, cat, etc) or it can also
+> be the rng_core module. I can replicate the hang in the two different
+> situations, so I gathered two stack traces for 'ip' depending on the
+> reader of hwrng:
 
-Applied, thanks.
+Thanks for the traces. I'll send a v2 to you shortly.
 
-jon
+Jason

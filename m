@@ -2,139 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C60559B46
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED53A559C39
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232415AbiFXOPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 10:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
+        id S232983AbiFXOhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 10:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbiFXOP1 (ORCPT
+        with ESMTP id S232524AbiFXOfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 10:15:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8814B5639E;
-        Fri, 24 Jun 2022 07:15:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F6BBB828DA;
-        Fri, 24 Jun 2022 14:15:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7682C34114;
-        Fri, 24 Jun 2022 14:15:08 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Y1s5r4Kh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656080106;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dpWcY0NYNZuezo2Tw0JtyiSfj9c/CF2JU5aAznNpM8M=;
-        b=Y1s5r4KhWMGGLtWRMz0m53TqO+2HVN6EzdpbVeQB/he3PkOZ+gRFK2y2IDbAoPcrBsyun+
-        7TbkC2jCthSeTFADtebhiEgLk3qSKaFy1BcPBlI2WUySrSlY4uORNVdgTAjRu7fgrJp7mB
-        UtK8UtlG6x/s/673UrhKQZKMybmPtMA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3fab5d6c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 24 Jun 2022 14:15:06 +0000 (UTC)
-Received: by mail-io1-f50.google.com with SMTP id h85so2832569iof.4;
-        Fri, 24 Jun 2022 07:15:06 -0700 (PDT)
-X-Gm-Message-State: AJIora98ooDFiLUwb4aj9PaKSkKjHVornbJoF8DCfcqrhSN3WZXiG3SC
-        HekbR6vWsiuOoRG6L1FEQDQlmc8dUp99cYDgix8=
-X-Google-Smtp-Source: AGRyM1t1InIqxukka1FzW9hva/iu0Be7xBboO5VNY8Vzat7NBpl5N1IllrbmNr4RPAeG8SjpJkBdnVQx0iRMYpNWvUw=
-X-Received: by 2002:a05:6638:470a:b0:331:bd53:87a2 with SMTP id
- cs10-20020a056638470a00b00331bd5387a2mr8932516jab.204.1656080105550; Fri, 24
- Jun 2022 07:15:05 -0700 (PDT)
+        Fri, 24 Jun 2022 10:35:44 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D7254EF41;
+        Fri, 24 Jun 2022 07:35:17 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 95B3D16C0;
+        Fri, 24 Jun 2022 17:17:45 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 95B3D16C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1656080266;
+        bh=gBO/Fzd57VMdbFrJwQvKed9BQE5emVVvGrhVWB1wuys=;
+        h=From:To:CC:Subject:Date:From;
+        b=T3jUpF2mg1ifssmj2BLTpIeonf7tZ9POgcShAWvunW2aoQY7wFVMvXCKCfS0HdEKO
+         jTquOmGBsEk9lJCatArY/PSLAOdFDO6GX/AETPiPv4aQVzYpmHMH2pUiyHSDt6TzqF
+         FedEE1DTPTYIl+EWVNTDGRxutTQAVSCGR7zccvqE=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 24 Jun 2022 17:16:25 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        <linux-usb@vger.kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        <linux-snps-arc@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND v9 0/5] dt-bindings: usb: Harmonize xHCI/EHCI/OHCI/DWC3 nodes name
+Date:   Fri, 24 Jun 2022 17:16:16 +0300
+Message-ID: <20220624141622.7149-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <20220622105435.203922-1-Jason@zx2c4.com> <87a6a2qirw.fsf@linux.ibm.com>
-In-Reply-To: <87a6a2qirw.fsf@linux.ibm.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 24 Jun 2022 16:14:54 +0200
-X-Gmail-Original-Message-ID: <CAHmME9q9XY=nWvfbV+sV_frRaKPGBWSyShUShQyMayA_FpNWPg@mail.gmail.com>
-Message-ID: <CAHmME9q9XY=nWvfbV+sV_frRaKPGBWSyShUShQyMayA_FpNWPg@mail.gmail.com>
-Subject: Re: [PATCH] powerpc/kvm: don't crash on missing rng, and use darn
-To:     Fabiano Rosas <farosas@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabiano,
+As the subject states this series is an attempt to harmonize the xHCI,
+EHCI, OHCI and DWC USB3 DT nodes with the DT schema introduced in the
+framework of the patchset [1].
 
-On Fri, Jun 24, 2022 at 3:43 PM Fabiano Rosas <farosas@linux.ibm.com> wrote:
->
-> "Jason A. Donenfeld" <Jason@zx2c4.com> writes:
->
-> > On POWER8 systems that don't have ibm,power-rng available, a guest that
-> > ignores the KVM_CAP_PPC_HWRNG flag and calls H_RANDOM anyway will
-> > dereference a NULL pointer. And on machines with darn instead of
-> > ibm,power-rng, H_RANDOM won't work at all.
-> >
-> > This patch kills two birds with one stone, by routing H_RANDOM calls to
-> > ppc_md.get_random_seed, and doing the real mode check inside of it.
-> >
-> > Cc: stable@vger.kernel.org # v4.1+
-> > Cc: Michael Ellerman <mpe@ellerman.id.au>
-> > Fixes: e928e9cb3601 ("KVM: PPC: Book3S HV: Add fast real-mode H_RANDOM implementation.")
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> >
-> > This patch must be applied ontop of:
-> > 1) https://github.com/linuxppc/linux/commit/f3eac426657d985b97c92fa5f7ae1d43f04721f3
-> > 2) https://lore.kernel.org/all/20220622102532.173393-1-Jason@zx2c4.com/
-> >
-> >
-> >  arch/powerpc/include/asm/archrandom.h |  5 ----
-> >  arch/powerpc/kvm/book3s_hv_builtin.c  |  5 ++--
-> >  arch/powerpc/platforms/powernv/rng.c  | 33 +++++++--------------------
-> >  3 files changed, 11 insertions(+), 32 deletions(-)
-> >
-> > diff --git a/arch/powerpc/include/asm/archrandom.h b/arch/powerpc/include/asm/archrandom.h
-> > index 11d4815841ab..3af27bb84a3d 100644
-> > --- a/arch/powerpc/include/asm/archrandom.h
-> > +++ b/arch/powerpc/include/asm/archrandom.h
-> > @@ -38,12 +38,7 @@ static inline bool __must_check arch_get_random_seed_int(unsigned int *v)
-> >  #endif /* CONFIG_ARCH_RANDOM */
-> >
-> >  #ifdef CONFIG_PPC_POWERNV
-> > -int pnv_hwrng_present(void);
-> >  int pnv_get_random_long(unsigned long *v);
-> > -int pnv_get_random_real_mode(unsigned long *v);
-> > -#else
-> > -static inline int pnv_hwrng_present(void) { return 0; }
-> > -static inline int pnv_get_random_real_mode(unsigned long *v) { return 0; }
-> >  #endif
-> >
-> >  #endif /* _ASM_POWERPC_ARCHRANDOM_H */
-> > diff --git a/arch/powerpc/kvm/book3s_hv_builtin.c b/arch/powerpc/kvm/book3s_hv_builtin.c
-> > index 799d40c2ab4f..1c6672826db5 100644
-> > --- a/arch/powerpc/kvm/book3s_hv_builtin.c
-> > +++ b/arch/powerpc/kvm/book3s_hv_builtin.c
-> > @@ -176,13 +176,14 @@ EXPORT_SYMBOL_GPL(kvmppc_hcall_impl_hv_realmode);
-> >
-> >  int kvmppc_hwrng_present(void)
-> >  {
-> > -     return pnv_hwrng_present();
-> > +     return ppc_md.get_random_seed != NULL;
-> >  }
-> >  EXPORT_SYMBOL_GPL(kvmppc_hwrng_present);
-> >
-> >  long kvmppc_rm_h_random(struct kvm_vcpu *vcpu)
-> >  {
-> > -     if (pnv_get_random_real_mode(&vcpu->arch.regs.gpr[4]))
-> > +     if (ppc_md.get_random_seed &&
-> > +         ppc_md.get_random_seed(&vcpu->arch.regs.gpr[4]))
-> >               return H_SUCCESS;
->
-> This is the same as arch_get_random_seed_long, perhaps you could use it
-> instead.
+Firstly as Krzysztof suggested we've deprecated a support of DWC USB3
+controllers with "synopsys,"-vendor prefix compatible string in favor of
+the ones with valid "snps,"-prefix. It's done in all the DTS files,
+which have been unfortunate to define such nodes.
 
-Sure, why not. Will send a v2.
+Secondly we suggest to fix the snps,quirk-frame-length-adjustment property
+declaration in the Amlogic meson-g12-common.dtsi DTS file, since it has
+been erroneously declared as boolean while having uint32 type. Neil said
+it was ok to init that property with 0x20 value.
 
-Jason
+Thirdly the main part of the patchset concern fixing the xHCI, EHCI/OHCI
+and DWC USB3 DT nodes name as in accordance with their DT schema the
+corresponding node name is suppose to comply with the Generic USB HCD DT
+schema, which requires the USB nodes to have the name acceptable by the
+regexp: "^usb(@.*)?". Such requirement had been applicable even before we
+introduced the new DT schema in [1], but as we can see it hasn't been
+strictly implemented for a lot the DTS files. Since DT schema is now
+available the automated DTS validation shall make sure that the rule isn't
+violated.
+
+Note most of these patches have been a part of the last three patches of
+[1]. But since there is no way to have them merged in in a combined
+manner, I had to move them to the dedicated series and split them up so to
+be accepted by the corresponding subsystem maintainers one-by-one.
+
+[1] Link: https://lore.kernel.org/linux-usb/20201014101402.18271-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v1:
+- As Krzysztof suggested I've created a script which checked whether the
+  node names had been also updated in all the depended dts files. As a
+  result I found two more files which should have been also modified:
+  arch/arc/boot/dts/{axc003.dtsi,axc003_idu.dtsi}
+- Correct the USB DWC3 nodes name found in
+  arch/arm64/boot/dts/apm/{apm-storm.dtsi,apm-shadowcat.dtsi} too.
+
+Link: https://lore.kernel.org/linux-usb/20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru
+Changelog v2:
+- Drop the patch:
+  [PATCH 01/29] usb: dwc3: Discard synopsys,dwc3 compatibility string
+  and get back the one which marks the "synopsys,dwc3" compatible string
+  as deprecated into the DT schema related series.
+- Drop the patches:
+  [PATCH 03/29] arm: dts: am437x: Correct DWC USB3 compatible string
+  [PATCH 04/29] arm: dts: exynos: Correct DWC USB3 compatible string
+  [PATCH 07/29] arm: dts: bcm53x: Harmonize EHCI/OHCI DT nodes name
+  [PATCH 08/29] arm: dts: stm32: Harmonize EHCI/OHCI DT nodes name
+  [PATCH 16/29] arm: dts: bcm5301x: Harmonize xHCI DT nodes name
+  [PATCH 19/29] arm: dts: exynos: Harmonize DWC USB3 DT nodes name
+  [PATCH 21/29] arm: dts: ls1021a: Harmonize DWC USB3 DT nodes name
+  [PATCH 22/29] arm: dts: omap5: Harmonize DWC USB3 DT nodes name
+  [PATCH 24/29] arm64: dts: allwinner: h6: Harmonize DWC USB3 DT nodes name
+  [PATCH 26/29] arm64: dts: exynos: Harmonize DWC USB3 DT nodes name
+  [PATCH 27/29] arm64: dts: layerscape: Harmonize DWC USB3 DT nodes name
+  since they have been applied to the corresponding maintainers repos.
+- Fix drivers/usb/dwc3/dwc3-qcom.c to be looking for the "usb@"-prefixed
+  sub-node and falling back to the "dwc3@"-prefixed one on failure.
+
+Link: https://lore.kernel.org/linux-usb/20201111091552.15593-1-Sergey.Semin@baikalelectronics.ru
+Changelog v3:
+- Drop the patches:
+  [PATCH v2 04/18] arm: dts: hisi-x5hd2: Harmonize EHCI/OHCI DT nodes name
+  [PATCH v2 06/18] arm64: dts: hisi: Harmonize EHCI/OHCI DT nodes name
+  [PATCH v2 07/18] mips: dts: jz47x: Harmonize EHCI/OHCI DT nodes name
+  [PATCH v2 08/18] mips: dts: sead3: Harmonize EHCI/OHCI DT nodes name
+  [PATCH v2 09/18] mips: dts: ralink: mt7628a: Harmonize EHCI/OHCI DT nodes name
+  [PATCH v2 11/18] arm64: dts: marvell: cp11x: Harmonize xHCI DT nodes name
+  [PATCH v2 12/18] arm: dts: marvell: armada-375: Harmonize DWC USB3 DT nodes name
+  [PATCH v2 16/18] arm64: dts: hi3660: Harmonize DWC USB3 DT nodes name
+  since they have been applied to the corresponding maintainers repos.
+
+Link: https://lore.kernel.org/linux-usb/20201205155621.3045-1-Sergey.Semin@baikalelectronics.ru
+Changelog v4:
+- Just resend.
+
+Link: https://lore.kernel.org/linux-usb/20201210091756.18057-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v5:
+- Drop the patch:
+  [PATCH v4 02/10] arm64: dts: amlogic: meson-g12: Set FL-adj property value
+  since it has been applied to the corresponding maintainers repos.
+- Get back the patch:
+  [PATCH 21/29] arm: dts: ls1021a: Harmonize DWC USB3 DT nodes name
+  as it has been missing in the kernel 5.11-rc7
+- Rebase onto the kernel 5.11-rc7.
+
+Link: https://lore.kernel.org/lkml/20210208135154.6645-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v6:
+- Just resend and add linux-usb.vger.kernel.org to the list of Ccecipients.
+
+Link: https://lore.kernel.org/linux-usb/20210210172850.20849-1-Sergey.Semin@baikalelectronics.ru
+Link: https://lore.kernel.org/linux-usb/20210212205521.14280-1-Sergey.Semin@baikalelectronics.ru
+Changelog v7:
+- Replace "of_get_child_by_name(np, "usb") ?: of_get_child_by_name(np, "dwc3");"
+  pattern with using of_get_compatible_child() method in the Qcom DWC3 driver.
+- Drop the patches:
+  [PATCH v6 01/10] arm: dts: ls1021a: Harmonize DWC USB3 DT nodes name
+  [PATCH v6 02/10] arm: dts: keystone: Correct DWC USB3 compatible string
+  [PATCH v6 06/10] arm: dts: keystone: Harmonize DWC USB3 DT nodes name
+  since they have been applied to the corresponding maintainers repos.
+- Cleanup the list of recipients.
+- Rebase onto kernel 5.12-rc4.
+
+Link: https://lore.kernel.org/lkml/20210324204836.29668-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v8:
+- Just resend.
+
+Link: https://lore.kernel.org/lkml/20210409113029.7144-1-Sergey.Semin@baikalelectronics.ru
+Changelog v9:
+- Drop the patches:
+  [PATCH RESEND v8 1/8] arm: dts: ls1021a: Harmonize DWC USB3 DT nodes name
+  [PATCH RESEND v8 7/8] usb: dwc3: qcom: Detect DWC3 DT-nodes using compatible string
+  since they have been applied to the corresponding maintainers repos.
+- Rebase onto the kernel 5.19-rcX.
+
+Cc: Khuong Dinh <khuong@os.amperecomputing.com>
+Cc: Patrice Chotard <patrice.chotard@st.com>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (5):
+  arc: dts: Harmonize EHCI/OHCI DT nodes name
+  arm: dts: lpc18xx: Harmonize EHCI/OHCI DT nodes name
+  powerpc: dts: akebono: Harmonize EHCI/OHCI DT nodes name
+  arm: dts: stih407-family: Harmonize DWC USB3 DT nodes name
+  arm64: dts: apm: Harmonize DWC USB3 DT nodes name
+
+ arch/arc/boot/dts/axc003.dtsi              | 4 ++--
+ arch/arc/boot/dts/axc003_idu.dtsi          | 4 ++--
+ arch/arc/boot/dts/axs10x_mb.dtsi           | 4 ++--
+ arch/arc/boot/dts/hsdk.dts                 | 4 ++--
+ arch/arc/boot/dts/vdk_axs10x_mb.dtsi       | 2 +-
+ arch/arm/boot/dts/lpc18xx.dtsi             | 4 ++--
+ arch/arm/boot/dts/stih407-family.dtsi      | 2 +-
+ arch/arm64/boot/dts/apm/apm-shadowcat.dtsi | 4 ++--
+ arch/arm64/boot/dts/apm/apm-storm.dtsi     | 6 +++---
+ arch/powerpc/boot/dts/akebono.dts          | 6 +++---
+ 10 files changed, 20 insertions(+), 20 deletions(-)
+
+-- 
+2.35.1
+

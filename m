@@ -2,197 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B17D55A451
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B731155A450
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbiFXWTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 18:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
+        id S231708AbiFXWTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 18:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiFXWTC (ORCPT
+        with ESMTP id S231312AbiFXWTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 18:19:02 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E88585D16;
-        Fri, 24 Jun 2022 15:18:58 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id fd6so5300702edb.5;
-        Fri, 24 Jun 2022 15:18:58 -0700 (PDT)
+        Fri, 24 Jun 2022 18:19:14 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3351585D1D
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:19:13 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-fe023ab520so5568715fac.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:19:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ulIt/Igd8gDLR6TWT3Hlfca+jdris+ZEDB86QcOsJGw=;
-        b=CO8BiD4fs3OYUDtRl7xvny/phW+PwBlQGwIYDps/YPmCV3QOSxe/vbQwAnjHmAxkL4
-         VlWUMC9JYKGIgTacugRHWlDpn3QNtHI7cLgXWKdeYhsKIi7YMYOPo2fBwfLzKMxH5WvC
-         OKcfMcWTl2077iOMzlXpZrBlfhXuReA+geB5VSA3xcDzIziOtczjTalyolLiqjUZaRbR
-         rzlPDQpZF6l5s9uACs0IqQ9mUvuyyJ29J3UYnRjP4liHAl4l85XGibx4W27cqvFbreol
-         zSzbQ9suXdgcIqWeKvzNW/Uaye9GJ5xHlrDKYL6HZyIH8M+AM1dFMpSAcWaKClAf/dRF
-         XTHQ==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=CyvBY3o6akwDhbTyUnp7S1ZlB8cDpp5Z1nlTYcNTFxU=;
+        b=auGjjc0Mj0VFveoavb01xQCfpkr+jD11y+oq6aS0lfPFoo2Qoe784OKRry3x4sZRLO
+         pwv+0hCmGexeAavPgfq+10X+qBzoMtcKHMKAMlu7nT4fpInzFMGHcPs+ugPK/AEHHmqu
+         RkDn1P3TXhxU/boNeBoIdAEb7yO/fom6ZEX88=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ulIt/Igd8gDLR6TWT3Hlfca+jdris+ZEDB86QcOsJGw=;
-        b=bcdrVwNw1u01ZJQSJX/4fi+B4fCen7UpFCku6ndytJju6oftlp0NuZ90iBIYIzI9wO
-         Vhw+mpqm7EPE2AEek9LAOH9Zy8Yn8Fh+NKn22oL3C97oP4+LGZtpj5m4j0nNHCC6wAY+
-         OgGKOo8xqBFeb97dCReBhOUVhvAaPkgX7L/il8E+Wnns8fmyp3U5kEMXKwVTvpa95VBs
-         Zll5l/y11VLqSJUutjHjC6MbpiLgZvyJQQhMtlTfB/JYugfCgLxim3c1Gpzs/nIj6osO
-         SFhPwDcNmsw8G1/tmNyCzxPal81OR1XpFlWcfZRub86c4qZDZT3CAr+h3mcWXx5um22B
-         L7xA==
-X-Gm-Message-State: AJIora+80S2e5a73F40UJPtDfnjtbWjLlwc3YWpa3JNyZ2OocjGpGqql
-        pbI0onlGX6wNWfIBFtNdj3KmUY9F6oL1yFXuD98=
-X-Google-Smtp-Source: AGRyM1tnJoQudUlMTxFEjBDPNW+JIoG2Yj25BxvcmRcoFLK8C8K5ObZOeaMQ1fWn73jOf8qD+LVl2nMfEIRxZPjGn5M=
-X-Received: by 2002:a05:6402:3514:b0:435:f24a:fbad with SMTP id
- b20-20020a056402351400b00435f24afbadmr1530472edd.311.1656109137035; Fri, 24
- Jun 2022 15:18:57 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=CyvBY3o6akwDhbTyUnp7S1ZlB8cDpp5Z1nlTYcNTFxU=;
+        b=gGehKdXh2Uru6L1tiNnQKxLckTu5VtsJupnh8936hv6J7cvj3cyLV1AhxTRQ5/lXe5
+         8Yxb1eZYKLRTjdrLyX1sE7HdZsZnH0vYCNFoJbgP1dh1YmUgZF8oRT9qfAWJ3/04GVVv
+         E1wJscjKPCzm8n4g5i1GtPCjpZ99oz3obVX9XD1ifNF6S9OpdZkdifcUuFCmyMOzBXZb
+         dGDUayjIkwqiyC62wBUhZNr+81Hk7qmFdlnlcwlZjiEsuuGQoctrUBa80L+WhrScTATt
+         mrq2lHsnptZBazSiCxk7UYearys9unl1lZLVXp0e82O1WBhJyWHU6flKllLNuVEe+LSY
+         rQwQ==
+X-Gm-Message-State: AJIora+lh+u0G6kyDxQYqhwEXpeCMdSmkS193hycGZUGEkXVK7B5PUeH
+        XLpV01EMrBD5GP/lf3HY9vM8eCsu4dUDE5T7vEIMDXSXyG4=
+X-Google-Smtp-Source: AGRyM1ta9IChV8i9AY3F7HqXJ7U2xfER4Z9xoWBB3POe6nuFgx0iOlcYkdI2qbn3ObkLqTjmum1sin2idrz6vVpTVgM=
+X-Received: by 2002:a05:6870:b381:b0:fe:2004:b3b5 with SMTP id
+ w1-20020a056870b38100b000fe2004b3b5mr810637oap.63.1656109152273; Fri, 24 Jun
+ 2022 15:19:12 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 24 Jun 2022 15:19:11 -0700
 MIME-Version: 1.0
-References: <1656089118-577-1-git-send-email-alan.maguire@oracle.com> <1656089118-577-2-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1656089118-577-2-git-send-email-alan.maguire@oracle.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 24 Jun 2022 15:18:45 -0700
-Message-ID: <CAEf4BzaigeecrZi9QSxR5o6afY0GPdF5v7yFjZ_Ft_wikF9rMA@mail.gmail.com>
-Subject: Re: [RFC bpf-next 1/2] bpf: add a kallsyms BPF iterator
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, void@manifault.com,
-        swboyd@chromium.org, Nick Desaulniers <ndesaulniers@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+In-Reply-To: <fa7f8bf1-33cd-5515-0143-6596df2bd740@quicinc.com>
+References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com>
+ <1656090912-18074-3-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n52RW+UFJ=hqMWjwR8qvEbww7QjzPW1nhL3Atd97QXAnYw@mail.gmail.com>
+ <007ea4c9-9701-f4ab-3278-5d36bf2018c4@quicinc.com> <CAE-0n53kNCK0ajHfY2WQr5HEQZtZSBLnhfbTuZwaUNEOZhsKPg@mail.gmail.com>
+ <fa7f8bf1-33cd-5515-0143-6596df2bd740@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 24 Jun 2022 15:19:11 -0700
+Message-ID: <CAE-0n51g-EVsC-i9=sJV-ySa8VnE+yT7cg=b-TNMi9+3uBiOVA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] drm/msm/dp: decoupling dp->id out of dp
+ controller_id at scxxxx_dp_cfg table
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 9:45 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+Quoting Kuogee Hsieh (2022-06-24 14:49:57)
 >
-> add a "kallsyms" iterator which provides access to a "struct kallsym_iter"
-> for each symbol.  Intent is to support more flexible symbol parsing
-> as discussed in [1].
+> On 6/24/2022 2:40 PM, Stephen Boyd wrote:
+> > Quoting Kuogee Hsieh (2022-06-24 14:17:50)
+> >> On 6/24/2022 1:00 PM, Stephen Boyd wrote:
+> >>> Quoting Kuogee Hsieh (2022-06-24 10:15:11)
+> >>>> Current the index (dp->id) of DP descriptor table (scxxxx_dp_cfg[]) =
+are tightly
+> >>>> coupled with DP controller_id. This means DP use controller id 0 mus=
+t be placed
+> >>>> at first entry of DP descriptor table (scxxxx_dp_cfg[]). Otherwise t=
+he internal
+> >>>> INTF will mismatch controller_id. This will cause controller kickoff=
+ wrong
+> >>>> interface timing engine and cause dpu_encoder_phys_vid_wait_for_comm=
+it_done
+> >>>> vblank timeout error.
+> >>>>
+> >>>> This patch add controller_id field into struct msm_dp_desc to break =
+the tightly
+> >>>> coupled relationship between index (dp->id) of DP descriptor table w=
+ith DP
+> >>>> controller_id.
+> >>> Please no. This reverts the intention of commit bb3de286d992
+> >>> ("drm/msm/dp: Support up to 3 DP controllers")
+> >>>
+> >>>       A new enum is introduced to document the connection between the
+> >>>       instances referenced in the dpu_intf_cfg array and the controll=
+ers in
+> >>>       the DP driver and sc7180 is updated.
+> >>>
+> >>> It sounds like the intent of that commit failed to make a strong enou=
+gh
+> >>> connection. Now it needs to match the INTF number as well? I can't
+> >>> really figure out what is actually wrong, because this patch undoes t=
+hat
+> >>> intentional tight coupling. Is the next patch the important part that
+> >>> flips the order of the two interfaces?
+> >> The commit bb3de286d992have two problems,
+> >>
+> >> 1)=C2=A0 The below sc7280_dp_cfg will not work, if eDP use
+> >> MSM_DP_CONTROLLER_2 instead of=C2=A0 MSM_DP_CONTROLLER_1
+> > Why would we use three indices for an soc that only has two indices
+> > possible? This is not a real problem?
 >
-> [1] https://lore.kernel.org/all/YjRPZj6Z8vuLeEZo@krava/
+> I do not what will happen at future, it may have more dp controller use
+> late.
 >
-> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  kernel/kallsyms.c | 93 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 93 insertions(+)
+> at current soc, below table has only one eDP will not work either.
 >
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index fbdf8d3..ffaf464 100644
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-> @@ -30,6 +30,7 @@
->  #include <linux/module.h>
->  #include <linux/kernel.h>
->  #include <linux/bsearch.h>
-> +#include <linux/btf_ids.h>
+> static const struct msm_dp_config sc7280_dp_cfg =3D {
+>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .descs =3D (const struct msm=
+_dp_desc[]) {
+>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 [MSM_DP_CONTROLLER_1] =3D { .io_start =3D 0x0aea0000,
+> .connector_type =3D DRM_MODE_CONNECTOR_eDP, .wide_bus_en =3D true },
 >
->  /*
->   * These will be re-linked against their real values
-> @@ -799,6 +800,95 @@ static int s_show(struct seq_file *m, void *p)
->         .show = s_show
->  };
+>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .num_descs =3D 1,
+
+So the MSM_DP_CONTROLLER_* number needs to match what exactly?
+
 >
-> +#ifdef CONFIG_BPF_SYSCALL
-> +
-> +struct bpf_iter__kallsyms {
+> >
+> >> since it have num_descs =3D2 but eDP is at index 2 (CONTROLLER_2) whic=
+h
+> >> never be reached.
+> >>
+> >> static const struct msm_dp_config sc7280_dp_cfg =3D {
+> >>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .descs =3D (const struct =
+msm_dp_desc[]) {
+> >>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 [MSM_DP_CONTROLLER_2] =3D { .io_start =3D 0x0aea00=
+00,
+> >> .connector_type =3D DRM_MODE_CONNECTOR_eDP, .wide_bus_en =3D true },
+> >>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 [MSM_DP_CONTROLLER_0] =3D { .io_start =3D 0x0ae900=
+00,
+> >> .connector_type =3D DRM_MODE_CONNECTOR_DisplayPort, .wide_bus_en =3D t=
+rue },
+> >>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 },
+> >>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .num_descs =3D 2,
+> >> };
+> >>
+> >> 2)=C2=A0 DP always has index of 0 (dp->id =3D 0) and the first one to =
+call
+> >> msm_dp_modeset_init(). This make DP always place at head of bridge cha=
+in.
+> > What does this mean? Are you talking about the list of bridges in drm
+> > core, i.e. 'bridge_list'?
+> yes,
 
-So I know this is derived from /proc/kallsyms, but for BPF iterators
-we have a singular name convention (e.g., iter/task and
-iter/task_vma), which makes sense because we call BPF program for each
-individual item. So here it seems like "iter/ksym" would make good
-sense?
+I changed the drm_bridge_add() API and that doesn't make any difference.
+The corruption is still seen. That would imply it is not the order of
+the list of bridges.
 
-> +       __bpf_md_ptr(struct bpf_iter_meta *, meta);
-> +       __bpf_md_ptr(struct kallsym_iter *, kallsym_iter);
+---8<---
+diff --git a/drivers/gpu/drm/drm_bridge.c b/drivers/gpu/drm/drm_bridge.c
+index e275b4ca344b..e3518101b65e 100644
+--- a/drivers/gpu/drm/drm_bridge.c
++++ b/drivers/gpu/drm/drm_bridge.c
+@@ -165,7 +165,7 @@ void drm_bridge_add(struct drm_bridge *bridge)
+ 	mutex_init(&bridge->hpd_mutex);
 
-nit: can we call this field just "ksym"?
+ 	mutex_lock(&bridge_lock);
+-	list_add_tail(&bridge->list, &bridge_list);
++	list_add(&bridge->list, &bridge_list);
+ 	mutex_unlock(&bridge_lock);
+ }
+ EXPORT_SYMBOL(drm_bridge_add);
 
-> +};
-> +
-> +static int s_prog_seq_show(struct seq_file *m, bool in_stop)
-> +{
-> +       struct bpf_iter__kallsyms ctx;
-> +       struct bpf_iter_meta meta;
-> +       struct bpf_prog *prog;
-> +
-> +       meta.seq = m;
-> +       prog = bpf_iter_get_info(&meta, in_stop);
-> +       if (!prog)
-> +               return 0;
-> +
-> +       ctx.meta = &meta;
-> +       ctx.kallsym_iter = m ? m->private : NULL;
-> +       return bpf_iter_run_prog(prog, &ctx);
-> +}
-> +
-> +static int bpf_iter_s_seq_show(struct seq_file *m, void *p)
-
-stupid question, but what does "_s_" part stand for? Is it for "sym"?
-If yes, maybe then "bpf_iter_ksym_seq_show"?
-
-> +{
-> +       return s_prog_seq_show(m, false);
-> +}
-> +
-
-[...]
-
-> +static struct bpf_iter_reg kallsyms_iter_reg_info = {
-> +       .target                 = "kallsyms",
-> +       .ctx_arg_info_size      = 1,
-> +       .ctx_arg_info           = {
-> +               { offsetof(struct bpf_iter__kallsyms, kallsym_iter),
-> +                 PTR_TO_BTF_ID_OR_NULL },
-> +       },
-> +       .seq_info               = &kallsyms_iter_seq_info,
-> +};
-> +
-> +BTF_ID_LIST(btf_kallsym_iter_id)
-> +BTF_ID(struct, kallsym_iter)
-> +
-> +static void __init bpf_kallsyms_iter_register(void)
-> +{
-> +       kallsyms_iter_reg_info.ctx_arg_info[0].btf_id = *btf_kallsym_iter_id;
-> +       if (bpf_iter_reg_target(&kallsyms_iter_reg_info))
-> +               pr_warn("Warning: could not register bpf kallsyms iterator\n");
-> +}
-> +
-> +#endif /* CONFIG_PROC_FS */
-
-Is there any reason to depend on CONFIG_PROC_FS for BPF iterator?
-Seems like kernel/kallsyms.c itself is only depending on
-CONFIG_KALLSYMS? So why adding unnecessary dependency?
-
-> +
-> +#endif /* CONFIG_BPF_SYSCALL */
-> +
->  static inline int kallsyms_for_perf(void)
->  {
->  #ifdef CONFIG_PERF_EVENTS
-> @@ -885,6 +975,9 @@ const char *kdb_walk_kallsyms(loff_t *pos)
->  static int __init kallsyms_init(void)
->  {
->         proc_create("kallsyms", 0444, NULL, &kallsyms_proc_ops);
-> +#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
-> +       bpf_kallsyms_iter_register();
-> +#endif
->         return 0;
->  }
->  device_initcall(kallsyms_init);
-> --
-> 1.8.3.1
+> >
+> >> At next patch eDP must be placed at head of bridge chain to fix eDP
+> >> corruption issue. This is the purpose of this patch. I will revise the
+> >> commit text.
+> >>
+> > Wouldn't that be "broken" again if we decided to change drm_bridge_add(=
+)
+> > to add to the list head instead of list tail? Or if somehow
+> > msm_dp_modeset_init() was called in a different order so that the DP
+> > bridge was added before the eDP bridge?
+>
+> we have no control of drm_bridge_add().
+>
+> Since drm perform screen update following bridge chain sequentially, we
+> have to make sure primary always update first.
 >

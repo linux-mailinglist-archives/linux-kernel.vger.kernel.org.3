@@ -2,109 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99402559288
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 07:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A4555928A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 07:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiFXFwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 01:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S229894AbiFXFzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 01:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiFXFwe (ORCPT
+        with ESMTP id S229598AbiFXFzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 01:52:34 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CDA699AF
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 22:52:33 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id l6so1187579plg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 22:52:33 -0700 (PDT)
+        Fri, 24 Jun 2022 01:55:52 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CFD53A55
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 22:55:51 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id g26so2548116ejb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 22:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kS7je0dcRsUISdffSoxUviDsBXhqWD5R3EEaLG3WV4Y=;
-        b=q8IkDnvh1Cu3hw8WQYu1Y0x7SAeul3kp00HcnhJ9OSTsHmoxPT4uZMfLUY0bxIMXku
-         iT7LFJXWL78mzzuibDp5ul57Dad5Ka2v5ZV2DNYvSOEMsDCn520Wk31ZdpIGGdz9Kir4
-         8jBt4D7ZGZg4XF6QqTxAiRh7fPI6N+pq42/3fCKhlRoIl2twJtMFKC6VrUvCwITDur2U
-         5kFErN8MO5ZUdc+PO5hb999jXs3VHrPedfXuLAAb3tpdADbsqESXRIt22OmHH/5Y7xtc
-         tdQn6hD1jF4GPRsRlIw8bLKu3nNOqU89sFC3Be2oVC1fLCxLj6iQeNHYMOijqYF2zdxY
-         knjg==
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=ez1VrommP2Qk5ZxjhOr9MjaCYHC2kUPrG3Ztqlyf9f8=;
+        b=RU8+IA6ajxvlsi2yZP/JStVZvRskiVyWObqhaz9OHyoEF5WuhJtPRhgrAP7Qkubeje
+         qNrrwSStpZSqJQOdkDFu8fA1WJfbLqGw+Qa4sjAaftLP4oY2H/NiAL//lzIeK8UVYTOC
+         3bJvBBjBOx2KIJqjCOdUCerDTG2i/1EEzcaVAfLBW8TYcu+MYk8mbyhBRhPAJtSp/fT+
+         9oV9rojORXEel0lWRgOD/8+qxU8LQYWVs1f/lTB3cV8tozohXhA5TLc+7GveUAoKxsfX
+         eOQP3JexIo2tELye7LzJ2BHTV0XDytcgd/4dBhCl1tJRTgQ5tqzNqax6ZbjXSMGiKaXh
+         QoRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kS7je0dcRsUISdffSoxUviDsBXhqWD5R3EEaLG3WV4Y=;
-        b=ogTlP0OabvvjIKa1+zK93Gdni3sHxrbcxcK3QstU5YD4obgZEh4PCcY33vixiwTyyV
-         cqxqUAbPqXatot5vAjGY/ZWVn65UwEca9erJad0e4lOD8zyqm6DEK1BnHxrlae3c6/HH
-         e2fVxyTObKOjYwVLkAF18ZRjBsRKT8DTBg2jFlH02taHfd6AW0amMvKLaJqYpuQ3JHa9
-         MEJOrVWWyRNgfj5G1h8zRZ1sjr1pQQwOqQnc+MqT9tXtP+eT9e5Pd8/ZT0pJHsIPxRex
-         xggP6Q4j4gAWnhCn39za8stbbLbg6sVBS0Hp6mXAEajj6r7XJAmlsyxeIs8P1Yh3eZUD
-         nC+w==
-X-Gm-Message-State: AJIora8MZsdlX0V5SBWeNNxI47U6PFWL+sXXXG8dCQ2xh0IyZwKRqDdK
-        Gh0OXc00LpHLhuEpqIRJXKs=
-X-Google-Smtp-Source: AGRyM1uwB431JlIyYgxTLIL3PTdW9faGO5ffqUvlZQEe8IPe1X/DHig9tf1kdbxdj0AUXA6S96w1NA==
-X-Received: by 2002:a17:90b:794:b0:1ec:c760:5736 with SMTP id l20-20020a17090b079400b001ecc7605736mr1954563pjz.241.1656049952989;
-        Thu, 23 Jun 2022 22:52:32 -0700 (PDT)
-Received: from localhost (c-67-180-87-133.hsd1.ca.comcast.net. [67.180.87.133])
-        by smtp.gmail.com with ESMTPSA id s17-20020a170903215100b0016a4ca6516dsm126589ple.278.2022.06.23.22.52.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 22:52:32 -0700 (PDT)
-Date:   Thu, 23 Jun 2022 22:52:14 -0700
-From:   Chang Yu <marcus.yu.56@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Greg KH <greg@kroah.com>, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: r8188eu: combine nested if statements into
- one
-Message-ID: <YrVRDilTaAIVkpwV@zephyrus-g14.localdomain>
-References: <20220623031515.402691-1-marcus.yu.56@gmail.com>
- <20220623051404.410632-1-marcus.yu.56@gmail.com>
- <YrQ2Izg1b399yJou@kroah.com>
- <YrUw3lejTP0UyWmt@zephyrus-g14.localdomain>
- <20220624053930.GU16517@kadam>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=ez1VrommP2Qk5ZxjhOr9MjaCYHC2kUPrG3Ztqlyf9f8=;
+        b=qxKTL24jK1qYnOmx+fJbkz675EfqbRBHuIU+jxwgR8cEjbpkvoBkqqwxNKbPQKzGxU
+         TJ96Cw6F1Z/A1LIXFCuJHZ9CImeuugGmn79unxgNqIuoiIjtMOdaq+gQcnT/6AiVRMgQ
+         9TLqGnJb1EsADv0CZ3CuKe3OJO+U83uDXjL5Di5lQ/ciT0wWSX+z7bpd4J+iq840UsUR
+         QfKcBFa2/L9UKc2v/lj2/aJC2l3uwupMTS4lxY5dYxt1LoMJjDuEJRkr7mfHrwWyMMWj
+         6ZSpG4ihQcE50iEzUoydgbMGrCBGk8zN3fcAvJiromgmpFObGUcQJ3HLNYrkqRNJ+CWZ
+         JgDg==
+X-Gm-Message-State: AJIora8eBZsHi6dJ8kt2FvgqO7RtawLAM3YK05ZHETo0aCAGPJBnFWIR
+        9jyWXd0Rxd0tYfdbljdFYf+pfyHESFPvFP0HbOawWS12Loo=
+X-Google-Smtp-Source: AGRyM1s9DWSgaaYjKV+ygtUtnyY/xvFVCHDOUJFrF/waPpf+TM39GrCQw57lguYBQp0THNQ39GTLePccCVp24Pr7CKY=
+X-Received: by 2002:a17:907:969f:b0:722:d37b:c82d with SMTP id
+ hd31-20020a170907969f00b00722d37bc82dmr11784829ejc.770.1656050149326; Thu, 23
+ Jun 2022 22:55:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220624053930.GU16517@kadam>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Fri, 24 Jun 2022 15:55:38 +1000
+Message-ID: <CAPM=9tyLoZOkc56K2auFtdjhuUxP=Xwj41evB053YZrHyQNSxg@mail.gmail.com>
+Subject: [git pull] drm fixes for 5.19-rc4
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 08:39:30AM +0300, Dan Carpenter wrote:
-> On Thu, Jun 23, 2022 at 08:34:54PM -0700, Chang Yu wrote:
-> > > - You did not specify a description of why the patch is needed,
-> >
-> > I'm not entirely sure how to fix this. I checked the original patch
-> > again and the subject and the body looks OK to me. I'm still a newbie so
-> > I might have missed a couple of things. It would be greatly appreciated
-> > if someone could point out what's missing.
-> 
-> What's the advantage of combining if statements?  Out of all the if
-> statements in the kernel why did you pick that one?  Probably it's
-> because the indenting was wrong, no?
-> 
-> Write the commit message like this:
-> 
-> [PATCH v3] staging: r8188eu: clean up if statement
-> 
-> I noticed that the if statement was strange and the code was indented
-> too far.  It is cleaner to combine both if statements as well.
-> 
-> regards,
-> dan carpenter
+Hi Linus,
 
-Understood. Thank you for pointing this out to me. I didn't realize the
-description was too general. I simply assumed that the reason for
-combining if statements is obvious and did not elaborate. I see now this
-is not the right assumption to make. I will revise the patch shortly.
+Fixes for this week, bit larger than normal, but I think the last
+couple have been quieter, and it's only rc4. There are a lot of small
+msm fixes, and a slightly larger set of vc4 fixes. The vc4 fixes clean
+up a lot of crashes around the rPI4 hardware differences from earlier
+ones, and problems in the page flip and modeset code which assumed
+earlier hw, so I thought it would be okay to keep them in.
 
-Thank you!
+Otherwise, it's a few amdgpu, i915, sun4i and a panel quirk.
 
-Best,
-Chang
+Let me know if there are any issues. Just a headsup as well myself and
+danvet will be out the week 4th-10th July so you might not get an rc6
+round, rc5 next week should be fine.
+
+Regards,
+Dave.
+
+drm-fixes-2022-06-24:
+drm fixes for 5.19-rc4
+
+amdgpu:
+- Adjust GTT size logic
+- eDP fix for RMB
+- DCN 3.15 fix
+- DP training fix
+- Color encoding fix for DCN2+
+
+sun4i:
+- multiple suspend fixes
+
+vc4:
+- rework driver split for rpi4,
+  fixes multiple crashers.
+
+panel:
+- quirk for Aya Neo Next
+
+i915:
+- Revert low voltage SKU check removal to fix display issues
+- Apply PLL DCO fraction workaround for ADL-S
+- Don't show engine classes not present in client fdinfo
+
+msm:
+- Workaround for parade DSI bridge power sequencing
+- Fix for multi-planar YUV format offsets
+- Limiting WB modes to max sspp linewidth
+- Fixing the supported rotations to add 180 back for IGT
+- Fix to handle pm_runtime_get_sync() errors to avoid unclocked access
+  in the bind() path for dpu driver
+- Fix the irq_free() without request issue which was a being hit frequently
+  in CI.
+- Fix to add minimum ICC vote in the msm_mdss pm_resume path to address
+  bootup splats
+- Fix to avoid dereferencing without checking in WB encoder
+- Fix to avoid crash during suspend in DP driver by ensuring interrupt
+  mask bits are updated
+- Remove unused code from dpu_encoder_virt_atomic_check()
+- Fix to remove redundant init of dsc variable
+- Fix to ensure mmap offset is initialized to avoid memory corruption
+  from unpin/evict
+- Fix double runpm disable in probe-defer path
+- VMA fenced-unpin fixes
+- Fix for WB max-width
+- Fix for rare dp resolution change issue
+The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e=
+:
+
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
+
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-06-24
+
+for you to fetch changes up to 1e9124df8be0a43e4e9a10c5d1140d6ca8e50132:
+
+  Merge tag 'drm-msm-fixes-2022-06-20' of
+https://gitlab.freedesktop.org/drm/msm into drm-fixes (2022-06-24
+10:11:27 +1000)
+
+----------------------------------------------------------------
+drm fixes for 5.19-rc4
+
+amdgpu:
+- Adjust GTT size logic
+- eDP fix for RMB
+- DCN 3.15 fix
+- DP training fix
+- Color encoding fix for DCN2+
+
+sun4i:
+- multiple suspend fixes
+
+vc4:
+- rework driver split for rpi4,
+  fixes multiple crashers.
+
+panel:
+- quirk for Aya Neo Next
+
+i915:
+- Revert low voltage SKU check removal to fix display issues
+- Apply PLL DCO fraction workaround for ADL-S
+- Don't show engine classes not present in client fdinfo
+
+msm:
+- Workaround for parade DSI bridge power sequencing
+- Fix for multi-planar YUV format offsets
+- Limiting WB modes to max sspp linewidth
+- Fixing the supported rotations to add 180 back for IGT
+- Fix to handle pm_runtime_get_sync() errors to avoid unclocked access
+  in the bind() path for dpu driver
+- Fix the irq_free() without request issue which was a being hit frequently
+  in CI.
+- Fix to add minimum ICC vote in the msm_mdss pm_resume path to address
+  bootup splats
+- Fix to avoid dereferencing without checking in WB encoder
+- Fix to avoid crash during suspend in DP driver by ensuring interrupt
+  mask bits are updated
+- Remove unused code from dpu_encoder_virt_atomic_check()
+- Fix to remove redundant init of dsc variable
+- Fix to ensure mmap offset is initialized to avoid memory corruption
+  from unpin/evict
+- Fix double runpm disable in probe-defer path
+- VMA fenced-unpin fixes
+- Fix for WB max-width
+- Fix for rare dp resolution change issue
+
+----------------------------------------------------------------
+Abhinav Kumar (1):
+      drm/msm/dpu: limit wb modes based on max_mixer_width
+
+Alex Deucher (1):
+      drm/amdgpu: Adjust logic around GTT size (v3)
+
+Dan Carpenter (1):
+      drm/vc4: fix error code in vc4_check_tex_size()
+
+Dave Airlie (4):
+      Merge tag 'amd-drm-fixes-5.19-2022-06-22' of
+https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
+      Merge tag 'drm-misc-fixes-2022-06-23' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+      Merge tag 'drm-intel-fixes-2022-06-22' of
+git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
+      Merge tag 'drm-msm-fixes-2022-06-20' of
+https://gitlab.freedesktop.org/drm/msm into drm-fixes
+
+George Shen (1):
+      drm/amd/display: Fix typo in override_lane_settings
+
+Jason A. Donenfeld (1):
+      drm/i915/display: Re-add check for low voltage sku for max dp source =
+rate
+
+Jernej Skrabec (1):
+      drm/sun4i: Add DMA mask and segment size
+
+Jonathan Marek (1):
+      drm/msm: use for_each_sgtable_sg to iterate over scatterlist
+
+Joshua Ashton (1):
+      amd/display/dc: Fix COLOR_ENCODING and COLOR_RANGE doing nothing
+for DCN20+
+
+Kuogee Hsieh (2):
+      drm/msm/dp: check core_initialized before disable interrupts at
+dp_display_unbind()
+      drm/msm/dp: force link training for display resolution change
+
+Mario Limonciello (1):
+      drm/amd: Revert "drm/amd/display: keep eDP Vdd on when eDP
+stream is already enabled"
+
+Maxime Ripard (14):
+      drm/vc4: plane: Prevent async update if we don't have a dlist
+      drm/vc4: Consolidate Hardware Revision Check
+      drm/vc4: bo: Rename vc4_dumb_create
+      drm/vc4: bo: Split out Dumb buffers fixup
+      drm/vc4: drv: Register a different driver on BCM2711
+      drm/vc4: kms: Register a different drm_mode_config_funcs on BCM2711
+      drm/vc4: plane: Register a different drm_plane_helper_funcs on BCM271=
+1
+      drm/vc4: drv: Skip BO Backend Initialization on BCM2711
+      drm/vc4: crtc: Use an union to store the page flip callback
+      drm/vc4: crtc: Move the BO handling out of common page-flip callback
+      drm/vc4: crtc: Move the BO Handling out of Common Page-Flip Handler
+      drm/vc4: crtc: Don't call into BO Handling on Async Page-Flips on BCM=
+2711
+      drm/vc4: crtc: Fix out of order frames during asynchronous page flips
+      drm/vc4: Warn if some v3d code is run on BCM2711
+
+Maximilian Luz (1):
+      drm/msm: Fix double pm_runtime_disable() call
+
+Maya Matuszczyk (1):
+      drm: panel-orientation-quirks: Add quirk for Aya Neo Next
+
+Miaoqian Lin (1):
+      drm/msm/mdp4: Fix refcount leak in mdp4_modeset_init_intf
+
+Qingqing Zhuo (1):
+      drm/amd/display: Fix DC warning at driver load
+
+Rob Clark (7):
+      Merge tag 'msm-next-5.19-fixes-06-01' of
+https://gitlab.freedesktop.org/abhinavk/msm into msm-fixes-staging
+      drm/msm: Ensure mmap offset is initialized
+      drm/msm: Switch ordering of runpm put vs devfreq_idle
+      drm/msm/gem: Separate object and vma unpin
+      drm/msm/gem: Drop early returns in close/purge vma
+      drm/msm: Drop update_fences()
+      drm/msm: Don't overwrite hw fence in hw_init
+
+Samuel Holland (2):
+      drm/sun4i: dw-hdmi: Fix ddc-en GPIO consumer conflict
+      drm/sun4i: Fix crash during suspend after component bind failure
+
+Saud Farooqui (2):
+      drm/vc4: hdmi: Fixed possible integer overflow
+      drm/sun4i: Return if frontend is not present
+
+Tvrtko Ursulin (1):
+      drm/i915/fdinfo: Don't show engine classes not present
+
+Ville Syrj=C3=A4l=C3=A4 (1):
+      drm/i915: Implement w/a 22010492432 for adl-s
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c            |  20 ++-
+ .../amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c |   2 +-
+ drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c   |   2 +-
+ .../amd/display/dc/dce110/dce110_hw_sequencer.c    |  24 +--
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_dpp.c   |   3 +
+ drivers/gpu/drm/amd/display/dc/dcn201/dcn201_dpp.c |   3 +
+ drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dpp.c   |   3 +
+ drivers/gpu/drm/drm_panel_orientation_quirks.c     |   6 +
+ drivers/gpu/drm/i915/display/intel_dp.c            |  32 +++-
+ drivers/gpu/drm/i915/display/intel_dpll_mgr.c      |   4 +-
+ drivers/gpu/drm/i915/i915_drm_client.c             |   5 +-
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c            |  14 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_writeback.c      |   9 +-
+ drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c           |   2 +
+ drivers/gpu/drm/msm/dp/dp_ctrl.c                   |  33 +++-
+ drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   2 +-
+ drivers/gpu/drm/msm/dp/dp_display.c                |  16 +-
+ drivers/gpu/drm/msm/msm_drv.c                      |   2 +-
+ drivers/gpu/drm/msm/msm_drv.h                      |   1 +
+ drivers/gpu/drm/msm/msm_fence.c                    |   8 +-
+ drivers/gpu/drm/msm/msm_gem.c                      |   7 +-
+ drivers/gpu/drm/msm/msm_gem.h                      |  11 +-
+ drivers/gpu/drm/msm/msm_gem_prime.c                |  15 ++
+ drivers/gpu/drm/msm/msm_gem_submit.c               |  18 +-
+ drivers/gpu/drm/msm/msm_gem_vma.c                  |   6 +-
+ drivers/gpu/drm/msm/msm_gpu.c                      |  27 +--
+ drivers/gpu/drm/msm/msm_iommu.c                    |   2 +-
+ drivers/gpu/drm/msm/msm_ringbuffer.c               |   2 +-
+ drivers/gpu/drm/sun4i/sun4i_drv.c                  |  12 +-
+ drivers/gpu/drm/sun4i/sun4i_layer.c                |   2 +-
+ drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c              |  54 +-----
+ drivers/gpu/drm/sun4i/sun8i_dw_hdmi.h              |   2 -
+ drivers/gpu/drm/vc4/vc4_bo.c                       |  62 ++++++-
+ drivers/gpu/drm/vc4/vc4_crtc.c                     | 196 +++++++++++++++--=
+----
+ drivers/gpu/drm/vc4/vc4_drv.c                      |  97 ++++++++--
+ drivers/gpu/drm/vc4/vc4_drv.h                      |  19 +-
+ drivers/gpu/drm/vc4/vc4_gem.c                      |  40 +++++
+ drivers/gpu/drm/vc4/vc4_hdmi.c                     |   2 +-
+ drivers/gpu/drm/vc4/vc4_hvs.c                      |  18 +-
+ drivers/gpu/drm/vc4/vc4_irq.c                      |  16 ++
+ drivers/gpu/drm/vc4/vc4_kms.c                      |  24 ++-
+ drivers/gpu/drm/vc4/vc4_perfmon.c                  |  47 ++++-
+ drivers/gpu/drm/vc4/vc4_plane.c                    |  29 ++-
+ drivers/gpu/drm/vc4/vc4_render_cl.c                |   4 +
+ drivers/gpu/drm/vc4/vc4_v3d.c                      |  15 ++
+ drivers/gpu/drm/vc4/vc4_validate.c                 |  16 ++
+ drivers/gpu/drm/vc4/vc4_validate_shaders.c         |   4 +
+ 47 files changed, 670 insertions(+), 268 deletions(-)

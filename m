@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5BC559737
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A835559739
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbiFXKAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 06:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        id S230519AbiFXKAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 06:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiFXKA3 (ORCPT
+        with ESMTP id S230346AbiFXKAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 06:00:29 -0400
+        Fri, 24 Jun 2022 06:00:30 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BB87A1A0;
-        Fri, 24 Jun 2022 03:00:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E5669FA2;
+        Fri, 24 Jun 2022 03:00:29 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9BB146601706;
-        Fri, 24 Jun 2022 11:00:26 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8E9F066017FD;
+        Fri, 24 Jun 2022 11:00:27 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656064827;
-        bh=kE25mZowYawxksYFtTK6e46BuEVPPKrDas/B81hlGfU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dK5lHwZzHT0WmQPPa28n8ROtFdjlfq8SR8AslZ7EoynyJLA/3w7rSAvvob5e2QiNJ
-         UAkKJdGIUyczVADiyyXi/M4xZHLQSnHe2zlu5QZb4BdC8O+QQW2gszJAxnbAMoTi1D
-         MkyjnSF2M+f3dYN5t5eDVX6yTdJbvsEeIC2T6jV20ic6Jbpfe2vLSp5B/wd7Gp5x/H
-         QMUcz2WId2rgFUNWNeXvAsaWS8YpoPpG4lMZuh6D9sVM4Yhbkofx1bKstiQoH6yA3j
-         /jMklss5NuhsJCUAkbsez2Nj4IpaGZOuXaD61mBrn0it050z6qWwcng93VF4FTKLKm
-         0PcpX0tzAyySw==
+        s=mail; t=1656064828;
+        bh=+tbA2mMjLvnob9i0FUJBkZUlvwlPPYOIKEfXsZGjTgQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kEaRpXHI1/TQ3qk2fDXhR1ySWEHNHCIoe8GPvUlpBe7t0mwvMJ4UMy5EmbA/95CPj
+         j0wyRThFpyUBr8WA6d5OeXd7bs5Ae8XqEvHe31eSK8SJK4dFzVS3pKLz0n1RJQ+SVq
+         YTy4BiTtJaqcTCrFm+fzTbIqy60UkrRB9WnyUclCyHYbXNztmrSIkUkN14nyblXm91
+         WZZlCtia6FcZS0Z3GfplEISQS1GgYUsuHTFn3whF2aPMN11wI187L/4Nq0imSOp4jE
+         cuZJEpcFHRgRSjoIFIYXesEF/h2z17exAyeMO+YRpGAcJ79p/vl4sez49PAjvgnxOW
+         yj4uKAZsI6m9w==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     yong.wu@mediatek.com
@@ -44,11 +44,14 @@ Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
         martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
         phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v4 0/3] MediaTek Helio X10 MT6795 - M4U/IOMMU Support
-Date:   Fri, 24 Jun 2022 12:00:13 +0200
-Message-Id: <20220624100016.246442-1-angelogioacchino.delregno@collabora.com>
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v4 1/3] dt-bindings: mediatek: Add bindings for MT6795 M4U
+Date:   Fri, 24 Jun 2022 12:00:14 +0200
+Message-Id: <20220624100016.246442-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220624100016.246442-1-angelogioacchino.delregno@collabora.com>
+References: <20220624100016.246442-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -60,39 +63,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In an effort to give some love to the apparently forgotten MT6795 SoC,
-I am upstreaming more components that are necessary to support platforms
-powered by this one apart from a simple boot to serial console.
+Add bindings for the MediaTek Helio X10 (MT6795) IOMMU/M4U.
 
-This series introduces support for the IOMMUs found on this SoC.
-
-Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
-
-Changes in v4:
- - Retitled mtk_iommu commits to iommu/mediatek as suggested by Yong Wu
- - Removed unused M4U_LARB5_ID definition
- - Rebased on next-20220624 and
-   https://patchwork.kernel.org/project/linux-mediatek/list/?series=650969
-
-Changes in v3:
- - Added new flag as suggested by Yong Wu
- - Rebased on top of https://patchwork.kernel.org/project/linux-mediatek/list/?series=648784
-
-Changes in v2:
- - Rebased on top of https://patchwork.kernel.org/project/linux-mediatek/list/?series=642681
-
-
-AngeloGioacchino Del Regno (3):
-  dt-bindings: mediatek: Add bindings for MT6795 M4U
-  iommu/mediatek: Introduce new flag TF_PORT_TO_ADDR_MT8173
-  iommu/mediatek: Add support for MT6795 Helio X10 M4Us
-
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Acked-by: Rob Herring <robh@kernel.org>
+---
  .../bindings/iommu/mediatek,iommu.yaml        |  4 +
- drivers/iommu/mtk_iommu.c                     | 21 +++-
  include/dt-bindings/memory/mt6795-larb-port.h | 95 +++++++++++++++++++
- 3 files changed, 118 insertions(+), 2 deletions(-)
+ 2 files changed, 99 insertions(+)
  create mode 100644 include/dt-bindings/memory/mt6795-larb-port.h
 
+diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+index fee0241b5098..839e3be0bf3c 100644
+--- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
++++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+@@ -73,6 +73,7 @@ properties:
+           - mediatek,mt2701-m4u  # generation one
+           - mediatek,mt2712-m4u  # generation two
+           - mediatek,mt6779-m4u  # generation two
++          - mediatek,mt6795-m4u  # generation two
+           - mediatek,mt8167-m4u  # generation two
+           - mediatek,mt8173-m4u  # generation two
+           - mediatek,mt8183-m4u  # generation two
+@@ -124,6 +125,7 @@ properties:
+       dt-binding/memory/mt2701-larb-port.h for mt2701 and mt7623,
+       dt-binding/memory/mt2712-larb-port.h for mt2712,
+       dt-binding/memory/mt6779-larb-port.h for mt6779,
++      dt-binding/memory/mt6795-larb-port.h for mt6795,
+       dt-binding/memory/mt8167-larb-port.h for mt8167,
+       dt-binding/memory/mt8173-larb-port.h for mt8173,
+       dt-binding/memory/mt8183-larb-port.h for mt8183,
+@@ -148,6 +150,7 @@ allOf:
+             enum:
+               - mediatek,mt2701-m4u
+               - mediatek,mt2712-m4u
++              - mediatek,mt6795-m4u
+               - mediatek,mt8173-m4u
+               - mediatek,mt8186-iommu-mm
+               - mediatek,mt8192-m4u
+@@ -177,6 +180,7 @@ allOf:
+           contains:
+             enum:
+               - mediatek,mt2712-m4u
++              - mediatek,mt6795-m4u
+               - mediatek,mt8173-m4u
+ 
+     then:
+diff --git a/include/dt-bindings/memory/mt6795-larb-port.h b/include/dt-bindings/memory/mt6795-larb-port.h
+new file mode 100644
+index 000000000000..58cf6a6b6372
+--- /dev/null
++++ b/include/dt-bindings/memory/mt6795-larb-port.h
+@@ -0,0 +1,95 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2022 Collabora Ltd.
++ * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
++ */
++
++#ifndef _DT_BINDINGS_MEMORY_MT6795_LARB_PORT_H_
++#define _DT_BINDINGS_MEMORY_MT6795_LARB_PORT_H_
++
++#include <dt-bindings/memory/mtk-memory-port.h>
++
++#define M4U_LARB0_ID			0
++#define M4U_LARB1_ID			1
++#define M4U_LARB2_ID			2
++#define M4U_LARB3_ID			3
++#define M4U_LARB4_ID			4
++
++/* larb0 */
++#define M4U_PORT_DISP_OVL0		MTK_M4U_ID(M4U_LARB0_ID, 0)
++#define M4U_PORT_DISP_RDMA0		MTK_M4U_ID(M4U_LARB0_ID, 1)
++#define M4U_PORT_DISP_RDMA1		MTK_M4U_ID(M4U_LARB0_ID, 2)
++#define M4U_PORT_DISP_WDMA0		MTK_M4U_ID(M4U_LARB0_ID, 3)
++#define M4U_PORT_DISP_OVL1		MTK_M4U_ID(M4U_LARB0_ID, 4)
++#define M4U_PORT_DISP_RDMA2		MTK_M4U_ID(M4U_LARB0_ID, 5)
++#define M4U_PORT_DISP_WDMA1		MTK_M4U_ID(M4U_LARB0_ID, 6)
++#define M4U_PORT_DISP_OD_R		MTK_M4U_ID(M4U_LARB0_ID, 7)
++#define M4U_PORT_DISP_OD_W		MTK_M4U_ID(M4U_LARB0_ID, 8)
++#define M4U_PORT_MDP_RDMA0		MTK_M4U_ID(M4U_LARB0_ID, 9)
++#define M4U_PORT_MDP_RDMA1		MTK_M4U_ID(M4U_LARB0_ID, 10)
++#define M4U_PORT_MDP_WDMA		MTK_M4U_ID(M4U_LARB0_ID, 11)
++#define M4U_PORT_MDP_WROT0		MTK_M4U_ID(M4U_LARB0_ID, 12)
++#define M4U_PORT_MDP_WROT1		MTK_M4U_ID(M4U_LARB0_ID, 13)
++
++/* larb1 */
++#define M4U_PORT_VDEC_MC		MTK_M4U_ID(M4U_LARB1_ID, 0)
++#define M4U_PORT_VDEC_PP		MTK_M4U_ID(M4U_LARB1_ID, 1)
++#define M4U_PORT_VDEC_UFO		MTK_M4U_ID(M4U_LARB1_ID, 2)
++#define M4U_PORT_VDEC_VLD		MTK_M4U_ID(M4U_LARB1_ID, 3)
++#define M4U_PORT_VDEC_VLD2		MTK_M4U_ID(M4U_LARB1_ID, 4)
++#define M4U_PORT_VDEC_AVC_MV		MTK_M4U_ID(M4U_LARB1_ID, 5)
++#define M4U_PORT_VDEC_PRED_RD		MTK_M4U_ID(M4U_LARB1_ID, 6)
++#define M4U_PORT_VDEC_PRED_WR		MTK_M4U_ID(M4U_LARB1_ID, 7)
++#define M4U_PORT_VDEC_PPWRAP		MTK_M4U_ID(M4U_LARB1_ID, 8)
++
++/* larb2 */
++#define M4U_PORT_CAM_IMGO		MTK_M4U_ID(M4U_LARB2_ID, 0)
++#define M4U_PORT_CAM_RRZO		MTK_M4U_ID(M4U_LARB2_ID, 1)
++#define M4U_PORT_CAM_AAO		MTK_M4U_ID(M4U_LARB2_ID, 2)
++#define M4U_PORT_CAM_LCSO		MTK_M4U_ID(M4U_LARB2_ID, 3)
++#define M4U_PORT_CAM_ESFKO		MTK_M4U_ID(M4U_LARB2_ID, 4)
++#define M4U_PORT_CAM_IMGO_S		MTK_M4U_ID(M4U_LARB2_ID, 5)
++#define M4U_PORT_CAM_LSCI		MTK_M4U_ID(M4U_LARB2_ID, 6)
++#define M4U_PORT_CAM_LSCI_D		MTK_M4U_ID(M4U_LARB2_ID, 7)
++#define M4U_PORT_CAM_BPCI		MTK_M4U_ID(M4U_LARB2_ID, 8)
++#define M4U_PORT_CAM_BPCI_D		MTK_M4U_ID(M4U_LARB2_ID, 9)
++#define M4U_PORT_CAM_UFDI		MTK_M4U_ID(M4U_LARB2_ID, 10)
++#define M4U_PORT_CAM_IMGI		MTK_M4U_ID(M4U_LARB2_ID, 11)
++#define M4U_PORT_CAM_IMG2O		MTK_M4U_ID(M4U_LARB2_ID, 12)
++#define M4U_PORT_CAM_IMG3O		MTK_M4U_ID(M4U_LARB2_ID, 13)
++#define M4U_PORT_CAM_VIPI		MTK_M4U_ID(M4U_LARB2_ID, 14)
++#define M4U_PORT_CAM_VIP2I		MTK_M4U_ID(M4U_LARB2_ID, 15)
++#define M4U_PORT_CAM_VIP3I		MTK_M4U_ID(M4U_LARB2_ID, 16)
++#define M4U_PORT_CAM_LCEI		MTK_M4U_ID(M4U_LARB2_ID, 17)
++#define M4U_PORT_CAM_RB			MTK_M4U_ID(M4U_LARB2_ID, 18)
++#define M4U_PORT_CAM_RP			MTK_M4U_ID(M4U_LARB2_ID, 19)
++#define M4U_PORT_CAM_WR			MTK_M4U_ID(M4U_LARB2_ID, 20)
++
++/* larb3 */
++#define M4U_PORT_VENC_RCPU		MTK_M4U_ID(M4U_LARB3_ID, 0)
++#define M4U_PORT_VENC_REC		MTK_M4U_ID(M4U_LARB3_ID, 1)
++#define M4U_PORT_VENC_BSDMA		MTK_M4U_ID(M4U_LARB3_ID, 2)
++#define M4U_PORT_VENC_SV_COMV		MTK_M4U_ID(M4U_LARB3_ID, 3)
++#define M4U_PORT_VENC_RD_COMV		MTK_M4U_ID(M4U_LARB3_ID, 4)
++#define M4U_PORT_JPGENC_BSDMA		MTK_M4U_ID(M4U_LARB3_ID, 5)
++#define M4U_PORT_REMDC_SDMA		MTK_M4U_ID(M4U_LARB3_ID, 6)
++#define M4U_PORT_REMDC_BSDMA		MTK_M4U_ID(M4U_LARB3_ID, 7)
++#define M4U_PORT_JPGENC_RDMA		MTK_M4U_ID(M4U_LARB3_ID, 8)
++#define M4U_PORT_JPGENC_SDMA		MTK_M4U_ID(M4U_LARB3_ID, 9)
++#define M4U_PORT_JPGDEC_WDMA		MTK_M4U_ID(M4U_LARB3_ID, 10)
++#define M4U_PORT_JPGDEC_BSDMA		MTK_M4U_ID(M4U_LARB3_ID, 11)
++#define M4U_PORT_VENC_CUR_LUMA		MTK_M4U_ID(M4U_LARB3_ID, 12)
++#define M4U_PORT_VENC_CUR_CHROMA	MTK_M4U_ID(M4U_LARB3_ID, 13)
++#define M4U_PORT_VENC_REF_LUMA		MTK_M4U_ID(M4U_LARB3_ID, 14)
++#define M4U_PORT_VENC_REF_CHROMA	MTK_M4U_ID(M4U_LARB3_ID, 15)
++#define M4U_PORT_REMDC_WDMA		MTK_M4U_ID(M4U_LARB3_ID, 16)
++#define M4U_PORT_VENC_NBM_RDMA		MTK_M4U_ID(M4U_LARB3_ID, 17)
++#define M4U_PORT_VENC_NBM_WDMA		MTK_M4U_ID(M4U_LARB3_ID, 18)
++
++/* larb4 */
++#define M4U_PORT_MJC_MV_RD		MTK_M4U_ID(M4U_LARB4_ID, 0)
++#define M4U_PORT_MJC_MV_WR		MTK_M4U_ID(M4U_LARB4_ID, 1)
++#define M4U_PORT_MJC_DMA_RD		MTK_M4U_ID(M4U_LARB4_ID, 2)
++#define M4U_PORT_MJC_DMA_WR		MTK_M4U_ID(M4U_LARB4_ID, 3)
++
++#endif
 -- 
 2.35.1
 

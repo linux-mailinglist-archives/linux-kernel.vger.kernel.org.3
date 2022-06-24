@@ -2,173 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3334C559599
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE9755959E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiFXImh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
+        id S230061AbiFXIrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 04:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiFXIme (ORCPT
+        with ESMTP id S229683AbiFXIrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:42:34 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED40B766AD;
-        Fri, 24 Jun 2022 01:42:31 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id fd6so2445063edb.5;
-        Fri, 24 Jun 2022 01:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W/bNzydjLfS6FoWzLmCL3RjLpUy/CcRj6s94kxyuCxs=;
-        b=dTPHHSO6M3UC5M8AVVvieHM4AB6cdsU8zcydSDgycYuedEfXZZaRt++dvOrsBvTItV
-         ilvb1kuhxEMzvxmvSRhiXgiLncWv4pj2a6GWeu1ikelJY4w+RKvhhykPs/0qH1ee/WuK
-         azModRmICrq7ckO6FmLLIgOjwxTHO00AQ0w1puoMLfhV7ChNcQwFLghIHK7JMgTms8KE
-         EhyZWnfbCrGfa+ZupoW+FxABcTFDX/eFafA/DIlg4eltS6AN1vN/Fqf9rpsUCiCPOFqv
-         KXqdYBHWB4CfwGsx57WolI8w+d4uEPD04TYWw0BwbHX8UIufYJY44SKSMBVWfjOZpAMN
-         hqKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W/bNzydjLfS6FoWzLmCL3RjLpUy/CcRj6s94kxyuCxs=;
-        b=Mo9Ktv66fbaEyoqKMXlw+OP+je6Oa0yKzhzijI4i+rUL+V4o5Pw4qnNcM79I6LsWa0
-         U7dwsgyNTmG9x9FvlzJgy7VmvvGH5dbs4pYkVPrDiRr9cGc2VhE4n/TZsiooOoHYAbr1
-         Be42P51oMoGDicUi2aDOxUIEJuEVNwPFku05MOYJj9XB2fNic+YyMvaHM4UnBmYQJrqb
-         FzMcZj7aolxv1jUfrN7krz8nzzk5wqxdOtCFunKMO58bu036Nx3XiHBfzkdsGoyj1yCf
-         XMsvOupA8qcCrIP+XBECSkaqqkVgdxie4oYiQc7ZRHuCFsqiXWK+mxoq6gQDYAH9bzhR
-         LYWQ==
-X-Gm-Message-State: AJIora+Ho+SCmTot+MP8JouvkcSA9EVBsLJOrwelfThI/JBWHJGCesgJ
-        KVv7/8g2KWWGomBlqyp6LG4=
-X-Google-Smtp-Source: AGRyM1sNHCF89oZ3BAIwX//5qMMQTDe1k2bkioJtl3MyjPZ5NBbsj0VzPVD7jgiVzp5sXMWsONjExw==
-X-Received: by 2002:a05:6402:3298:b0:435:8145:e6db with SMTP id f24-20020a056402329800b004358145e6dbmr16072573eda.294.1656060150387;
-        Fri, 24 Jun 2022 01:42:30 -0700 (PDT)
-Received: from localhost.localdomain (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
-        by smtp.gmail.com with ESMTPSA id o12-20020a056402038c00b0043561e0c9adsm1434824edv.52.2022.06.24.01.42.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 01:42:28 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>,
-        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        David Sterba <dsterba@suse.cz>
-Subject: [RFC PATCH] btrfs: Replace kmap_atomic() with kmap_local_page()
-Date:   Fri, 24 Jun 2022 10:42:15 +0200
-Message-Id: <20220624084215.7287-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 24 Jun 2022 04:47:12 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00D94F1EF;
+        Fri, 24 Jun 2022 01:47:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656060431; x=1687596431;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=Jc8yORiINhpFzMTo8QL55TU28YhiMcNQ45ukyK/l2T4=;
+  b=J+itO333pEe0lD7h4UCLylQhKjz/cC3Brz7o4DZu/mugC8zlX8EbPHjn
+   ESycCCZwvltZvaqp5pqbDoM1z3qdOb8z35PGhrqUOOglEYDs0yosBmUS9
+   /V6eJIZGKveyH46orbbj5xCUPs766GPOvIWUp06GDAGW/NikMdaN/VOEx
+   +KC7TAO9+bvvHUNtiZv3XR+PuMGBoIGnsDnFk2YJFWhMuDu3feYhk6nAF
+   3iTWySQ6hzxNjncDHn2vU/7MGdVxRPRattnmk4VagUgTrTlUx0iWsr2U5
+   AWbQYQ1VDo50CTR5iuJcDTDiJiX09DoXOGCZ+trvy5fqXiUMdEUIGqYT1
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="261382642"
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="261382642"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 01:47:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="586508201"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga007.jf.intel.com with ESMTP; 24 Jun 2022 01:47:01 -0700
+Date:   Fri, 24 Jun 2022 16:43:41 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, mhocko@suse.com
+Subject: Re: [PATCH v6 7/8] KVM: Enable and expose KVM_MEM_PRIVATE
+Message-ID: <20220624084341.GA2178308@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <20220519153713.819591-8-chao.p.peng@linux.intel.com>
+ <20220623220751.emt3iqq77faxfzzy@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220623220751.emt3iqq77faxfzzy@amd.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap_atomic() is being deprecated in favor of kmap_local_page() where it
-is feasible. With kmap_local_page() mappings are per thread, CPU local,
-and not globally visible.
+On Thu, Jun 23, 2022 at 05:07:51PM -0500, Michael Roth wrote:
+...
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index db9d39a2d3a6..f93ac7cdfb53 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -843,6 +843,73 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
+> >  
+> >  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
+> >  
+> > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM
+> > +static void kvm_private_mem_notifier_handler(struct memfile_notifier *notifier,
+> > +					     pgoff_t start, pgoff_t end)
+> > +{
+> > +	int idx;
+> > +	struct kvm_memory_slot *slot = container_of(notifier,
+> > +						    struct kvm_memory_slot,
+> > +						    notifier);
+> > +	struct kvm_gfn_range gfn_range = {
+> > +		.slot		= slot,
+> > +		.start		= start - (slot->private_offset >> PAGE_SHIFT),
+> > +		.end		= end - (slot->private_offset >> PAGE_SHIFT),
+> 
+> This code assumes that 'end' is greater than slot->private_offset, but
+> even if slot->private_offset is non-zero, nothing stops userspace from
+> allocating pages in the range of 0 through slot->private_offset, which
+> will still end up triggering this notifier. In that case gfn_range.end
+> will end up going negative, and the below code will limit that to
+> slot->npages and do a populate/invalidate for the entire range.
+> 
+> Not sure if this covers all the cases, but this fixes the issue for me:
 
-As far as I can see, the kmap_atomic() calls in compression.c and in
-inode.c can be safely converted.
+Right, already noticed this issue, will fix in next version. Thanks.
 
-Above all else, David Sterba has confirmed that "The context in
-check_compressed_csum is atomic [...]" and that "kmap_atomic() in inode.c
-[...] also can be replaced by kmap_local_page().".[1]
-
-Therefore, convert all kmap_atomic() calls currently still left in fs/btrfs
-to kmap_local_page().
-
-This is an RFC only because, testing with "./check -g quick" (xfstests) on
-a QEMU + KVM 32-bits VM with 4GB RAM and booting a kernel with HIGHMEM64GB
-enabled, outputs several errors. These errors seem to be exactly the same
-which are being output without this patch. It apparently seems that these
-changes don't introduce further errors, however I'd like to ask for
-comments before sending a "real" patch.
-
-With this patch, there are no more call sites for kmap() and kmap_atomic()
-in fs/btrfs.
-
-[1] https://lore.kernel.org/linux-btrfs/20220601132545.GM20633@twin.jikos.cz/
-
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Suggested-by: David Sterba <dsterba@suse.cz>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- fs/btrfs/compression.c |  4 ++--
- fs/btrfs/inode.c       | 12 ++++++------
- 2 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/fs/btrfs/compression.c b/fs/btrfs/compression.c
-index f4564f32f6d9..b49719ae45b4 100644
---- a/fs/btrfs/compression.c
-+++ b/fs/btrfs/compression.c
-@@ -175,10 +175,10 @@ static int check_compressed_csum(struct btrfs_inode *inode, struct bio *bio,
- 		/* Hash through the page sector by sector */
- 		for (pg_offset = 0; pg_offset < bytes_left;
- 		     pg_offset += sectorsize) {
--			kaddr = kmap_atomic(page);
-+			kaddr = kmap_local_page(page);
- 			crypto_shash_digest(shash, kaddr + pg_offset,
- 					    sectorsize, csum);
--			kunmap_atomic(kaddr);
-+			kunmap_local(kaddr);
- 
- 			if (memcmp(&csum, cb_sum, csum_size) != 0) {
- 				btrfs_print_data_csum_error(inode, disk_start,
-diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-index 7d84d57a0653..5fb4f6e929e5 100644
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@ -332,9 +332,9 @@ static int insert_inline_extent(struct btrfs_trans_handle *trans,
- 			cur_size = min_t(unsigned long, compressed_size,
- 				       PAGE_SIZE);
- 
--			kaddr = kmap_atomic(cpage);
-+			kaddr = kmap_local_page(cpage);
- 			write_extent_buffer(leaf, kaddr, ptr, cur_size);
--			kunmap_atomic(kaddr);
-+			kunmap_local(kaddr);
- 
- 			i++;
- 			ptr += cur_size;
-@@ -345,9 +345,9 @@ static int insert_inline_extent(struct btrfs_trans_handle *trans,
- 	} else {
- 		page = find_get_page(inode->vfs_inode.i_mapping, 0);
- 		btrfs_set_file_extent_compression(leaf, ei, 0);
--		kaddr = kmap_atomic(page);
-+		kaddr = kmap_local_page(page);
- 		write_extent_buffer(leaf, kaddr, ptr, size);
--		kunmap_atomic(kaddr);
-+		kunmap_local(kaddr);
- 		put_page(page);
- 	}
- 	btrfs_mark_buffer_dirty(leaf);
-@@ -3355,11 +3355,11 @@ static int check_data_csum(struct inode *inode, struct btrfs_bio *bbio,
- 	offset_sectors = bio_offset >> fs_info->sectorsize_bits;
- 	csum_expected = ((u8 *)bbio->csum) + offset_sectors * csum_size;
- 
--	kaddr = kmap_atomic(page);
-+	kaddr = kmap_local_page(page);
- 	shash->tfm = fs_info->csum_shash;
- 
- 	crypto_shash_digest(shash, kaddr + pgoff, len, csum);
--	kunmap_atomic(kaddr);
-+	kunmap_local(kaddr);
- 
- 	if (memcmp(csum, csum_expected, csum_size))
- 		goto zeroit;
--- 
-2.36.1
-
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 903ffdb5f01c..4c744d8f7527 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -872,6 +872,19 @@ static void kvm_private_mem_notifier_handler(struct memfile_notifier *notifier,
+>                 .may_block      = true,
+>         };
+> 
+>         struct kvm *kvm = slot->kvm;
+> +
+> +       if (slot->private_offset > end)
+> +               return;
+> +
+> 

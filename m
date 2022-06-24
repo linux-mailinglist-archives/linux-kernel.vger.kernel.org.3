@@ -2,128 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA038559AB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78E9559AC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbiFXNzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 09:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
+        id S231877AbiFXN4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 09:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiFXNzH (ORCPT
+        with ESMTP id S230073AbiFXN4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 09:55:07 -0400
-Received: from relay2.uni-heidelberg.de (relay2.uni-heidelberg.de [129.206.119.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1297946152
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 06:55:04 -0700 (PDT)
-X-IPAS-Result: =?us-ascii?q?A2DwBAA6wbViffxkzoFaHgEBCxIMggQLhHyUEAEBAQaMb?=
- =?us-ascii?q?wOHHIonggcBAQEBAQEBAQEJQgQBAT0BAooPJzYHDgECBAEBAQEDAgMBAQEBA?=
- =?us-ascii?q?QEDAQEGAQEBAQEHBBQBASM8J4V1hkMGJwsBRhBRVxmCeAIBAYJmAQMwrH0yg?=
- =?us-ascii?q?QGGWQGBP4FlgT2JV4UfgUCBEIEVM4M1hRGFbgSZRwoDCQQHBUYXEk4xIQJFC?=
- =?us-ascii?q?xwBCAYGBwEIAQUIKAQCAQEBBgUYFAEDAQETEgUTDAcoChICEgwKGwcHAwsFM?=
- =?us-ascii?q?g0CDgcBAQwPAQIPAwECEQEHAgkSCAYPKwgDAQEDAQcBAgIDIAsCAxYJBwgCA?=
- =?us-ascii?q?QIFAgIBAw8BCAocEhAUAgQNBB4JAggBAhkeLAcCAgQOAyMdCAsKAw4DBAMBE?=
- =?us-ascii?q?AIYBwIBFQEFAgQIBAEDBgMIFRkBDScEBwMSAg0BBgECBgEBBQUBAxgIAxQDB?=
- =?us-ascii?q?QECCAMWBwECIQUKJgkEDQMBIhsCAwMBBBsKAgECAgUWBQIBAQIDAgYVBgICP?=
- =?us-ascii?q?y8RHQ0IBAgECRIcIwECDAEEAQIHLwUELQIBAR4EBQEFDwIIAQEWAgYEAwICA?=
- =?us-ascii?q?wEBAgEWAhAIAggnFwcTMxkBBTcUDg8BAwYIGRwiBwkHBQYWAw4VJx4pBQcRE?=
- =?us-ascii?q?hsPBA0NCjQgFiQBAQ4FAwESGREOBxQKUyYhFRAGASsWAwQBAwMCBhwBAgMlA?=
- =?us-ascii?q?hIGDgUBIh0Zmm8gexOBRJN4rm0Hg1EQAaA1lmICkgCWcKJuhE41gTMIOoFMT?=
- =?us-ascii?q?SODOFEZD5xyczsCBgsBAQMJjwEBAQ?=
-IronPort-Data: A9a23:UZY6FK6sPbwuOpiRlBCorAxRtKXHchMFZxGqfqrLsTDasY5as4F+v
- jMWXWrTa/yMM2D9ftl+Ydu19ElT65bQyIdkGVE/rSw0Zn8b8sCt6faxdxqvZXPMcqUvb67FA
- +E2MISowBUcFyeEzvuVGuG96yE6j8lkf5KkYAL+EngZqTRMFWFw03qPp8Zj2tQy2YbjX1vX0
- T/Pi5S31GGNimYc3l08tvrrRCNH5JwebxtB4zTSzdgS1LPvvyF94KA3fMldHFOgKmVgJdNWc
- s6YpF2PEsM1yD92Yj+tuu6TnkTn2dc+NyDW4pZdc/DKbhSvOkXe345jXMfwZ3u7hB2tgdRu1
- edWlKCIcl80GaTwxMsHEBhHRnQW0a1uoNcrIFC6uM2XlxSAbn3thvVjDU07OYcV4OkxDWwmG
- f4wcWpcKErb2aTvmOr9ELQ27iggBJCD0Ic3oXpgyTzBFfs8aYvfXqmM+NlZmTc9h8xDGfzTf
- cVfZTcHgBHoOkARaw1IUs5v9AuuriPSSjZKpwqKn61t30rf6xND7YbfH/OAL7RmQu0OwhjE/
- Duel4jjOTkVLtGQyjqt9nOqm//Bmj79VIsOFbq+sPlwjzW7wm0VFQ1TTkeyrvi/hWa6WslDM
- AoQ+ywzve4++VLDZtemRBa45nGFojYbRsZUFOo5rgqKz8L85wefG3hBTTNbbtEinNE5SCZs1
- VKTmd7tQzt1v9WopWm1876VqWvrfzUTLCoCaC4IQA8P7sPs5o0+5v7Scjp9OIqrisLoKyrR/
- wix9DUZjolPotRI1rruqDgrnAmQjpTOSwc04CDeUWSk8h51aeaZi2qAtAezARFocdfxc7WRg
- JQXs5TPsLlWUvlhgATdHrVVRdlF8t7YaGW0vLJ5I3U23xiAk5JJVaBd4T1zIE1kKMlsldTBP
- h6K41s5CHN7FnKmYKkyXCllEdg2wK3qGM7qPs04g/JLa5l1LFbB4SdvIE6d3mzglEIhi655N
- ZrznSeQ4ZQyV/QPINmeHrl1PVoXKsYWnj+7qXfTk03P7FZmTCTJIYrpymemYOEj97+jqw7I6
- dtZPMbi40wBDbOmOniPq99LdgtiwZ0H6Xbe9ZY/mgmrfFQOJY3dI6CJqV/cU9Y9zvkLz7mgE
- o+VAxcElgaXaYL7xfWiMSw9NOm2Bf6TXFoxMCgzIFvgxn4if4u196YDZtMxcKU48/ZgpcOYv
- NFaE/hs9s9nFG+dkxxDNsaVkWCXXE727SqUITGfaSQyF7Y4AVOUkjMSVle0qXNm4+venZdWn
- oBMISuBEMRaGVg9XZ2IAB9tpnvo1UUgdCtJdxOgCrFulI/EquCG9wSZYicLHvwx
-IronPort-HdrOrdr: A9a23:+S/gpqkzBCbdZSkcJUV8eFEVXGfpDfIV3DAbv31ZSRFFG/Fw9v
- re5cjzsCWftN9/YgBEpTntAtjjfZqYz+8X3WBzB9aftWvdyQ+VxehZhOOI/9SjIU3DH4VmpM
- BdmsZFebvN5JtB4foSIjPULz/t+ra6GWmT69vj8w==
-X-IronPort-Anti-Spam-Filtered: true
-Received: from mail01.uni-heidelberg.de ([129.206.100.252])
-  by relay2.uni-heidelberg.de with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Jun 2022 15:55:04 +0200
-Received: from localhost (ip2505f6aa.dynamic.kabel-deutschland.de [37.5.246.170])
-        (Authenticated sender: ln194)
-        by mail01.uni-heidelberg.de (Postfix) with ESMTPSA id D408330011A56;
-        Fri, 24 Jun 2022 15:55:03 +0200 (CEST)
-From:   Felix Schlepper <f3sch.git@outlook.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Felix Schlepper <f3sch.git@outlook.com>
-Subject: [PATCH v5 3/3] Staging: rtl8192e: Cleaning up error handling
-Date:   Fri, 24 Jun 2022 15:54:55 +0200
-Message-Id: <13b32131cd00a1f0b8793657a24ada71240a8350.1656078068.git.f3sch.git@outlook.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1656078068.git.f3sch.git@outlook.com>
-References: <cover.1656078068.git.f3sch.git@outlook.com>
+        Fri, 24 Jun 2022 09:56:18 -0400
+Received: from theia.8bytes.org (8bytes.org [81.169.241.247])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678DA4D608
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 06:56:17 -0700 (PDT)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 03495672; Fri, 24 Jun 2022 15:56:15 +0200 (CEST)
+Date:   Fri, 24 Jun 2022 15:56:14 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Subject: [git pull] IOMMU Fixes for Linux v5.19-rc3
+Message-ID: <YrXCfic1ua0DdDBQ@8bytes.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="i5gdFe3KS1rh1Ndu"
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Moved error handling to one common block.
-This removes double checking if all txb->fragments[]
-were initialized.
-The original code worked fine, but this is cleaner.
 
-Signed-off-by: Felix Schlepper <f3sch.git@outlook.com>
----
- drivers/staging/rtl8192e/rtllib_tx.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+--i5gdFe3KS1rh1Ndu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
-index 1307cf55741a..42f81b23a144 100644
---- a/drivers/staging/rtl8192e/rtllib_tx.c
-+++ b/drivers/staging/rtl8192e/rtllib_tx.c
-@@ -214,19 +214,19 @@ static struct rtllib_txb *rtllib_alloc_txb(int nr_frags, int txb_size,
- 
- 	for (i = 0; i < nr_frags; i++) {
- 		txb->fragments[i] = dev_alloc_skb(txb_size);
--		if (unlikely(!txb->fragments[i])) {
--			i--;
--			break;
--		}
-+		if (unlikely(!txb->fragments[i]))
-+			goto err_free;
- 		memset(txb->fragments[i]->cb, 0, sizeof(txb->fragments[i]->cb));
- 	}
--	if (unlikely(i != nr_frags)) {
--		while (i >= 0)
--			dev_kfree_skb_any(txb->fragments[i--]);
--		kfree(txb);
--		return NULL;
--	}
-+
- 	return txb;
-+
-+err_free:
-+	while (--i >= 0)
-+		dev_kfree_skb_any(txb->fragments[i]);
-+	kfree(txb);
-+
-+	return NULL;
- }
- 
- static int rtllib_classify(struct sk_buff *skb, u8 bIsAmsdu)
--- 
-2.36.1
+Hi Linus,
 
+The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
+
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git tags/iommu-fixes-v5.19-rc3
+
+for you to fetch changes up to c242507c1b895646b4a25060df13b6214805759f:
+
+  MAINTAINERS: Add new IOMMU development mailing list (2022-06-24 15:36:11 +0200)
+
+----------------------------------------------------------------
+IOMMU Fixes for Linux v5.19-rc3
+
+Including:
+
+	- Add a new IOMMU mailing list to the MAINTAINERS file to
+	  prepare for the a list migration happening on July 5th. The
+	  old list needs to stay in place until the switch happens to
+	  guarantee seemless archiving of list email.
+
+	- Fix compatible device-tree string for rcar-gen4 in Renesas
+	  IOMMU driver.
+
+----------------------------------------------------------------
+Joerg Roedel (1):
+      MAINTAINERS: Add new IOMMU development mailing list
+
+Yoshihiro Shimoda (1):
+      iommu/ipmmu-vmsa: Fix compatible for rcar-gen4
+
+ MAINTAINERS                | 11 +++++++++++
+ drivers/iommu/ipmmu-vmsa.c |  2 +-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+Please pull.
+
+Thanks,
+
+	Joerg
+
+--i5gdFe3KS1rh1Ndu
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEr9jSbILcajRFYWYyK/BELZcBGuMFAmK1wn4ACgkQK/BELZcB
+GuOZaBAApa52HkW7MJ1GuhOvN0LLqNWMUOI1ED+dgNjSeLXH47WANnM4g/23uXfl
+82YBQ8Gp8Cq+Xtv9cJPb1ol5GwXYrG4c3FMwqcwp9l8fLwyb1VwPXPNvFrHSrrin
+GqVuBuWzv1M4k2yrggeVMztd9pt2N4OFfnzSbVTxGoErbbSv3S0o6o7/N0Gk79AY
+5GrOVCGKZXz6lgJzzyBQBOb35IHBkFHzZm0GLCO6xOGBxSsChAWGOqOkC5acggJo
+i6aaukPeD4Das20Vkph9Q/xKSGEIfZwhC4Bh/tuUEczgdKopoDO7uua/yX2POdJK
+E1o1T7+OaklNFofIbGBm/83FcjOqQ6V8pkMmuvisvhoxm7CWdFqUg5IwSyCKsMjW
+jlAduZ12RqYv6fPWisdkGxwZXtJhe+tYMFl/SBMpYZ0fGSg78QrXM0w3oWErsU7a
+UAu0Ev8kglohHLpHTBQLM3dKNhaTgs1ZUZP0ZrY52jfcoyC7sb9H5NUmfMBS2ja2
+nLxZsKkdC42ZzrtgB4g0PeIlykD/iZ/gA9nlwoOFoOZEnl9jM3WlTUmRgJvk9WIu
+n31JiCJlOgAEOKVgQqnwgvdUi8UdU2rdUAOfeK/A/elUWg5dGUqxEZ33xIVQlyZr
+ZVDw7hdIMAF/0p33z3Lpo9ydGZ5lpD8SrlcvKDFdaNjj0PGJZMo=
+=ajTF
+-----END PGP SIGNATURE-----
+
+--i5gdFe3KS1rh1Ndu--

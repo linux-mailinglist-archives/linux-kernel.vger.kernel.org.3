@@ -2,119 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8496559BAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9034559C6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232578AbiFXOey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 10:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
+        id S232450AbiFXOhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 10:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbiFXOeo (ORCPT
+        with ESMTP id S232748AbiFXOfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 10:34:44 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id EFA614EDE3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:34:41 -0700 (PDT)
-Received: (qmail 34279 invoked by uid 1000); 24 Jun 2022 10:34:40 -0400
-Date:   Fri, 24 Jun 2022 10:34:40 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+aa620fb1ece874a3f34c@syzkaller.appspotmail.com>
-Cc:     Julia.Lawall@inria.fr, andreyknvl@gmail.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, hdanton@sina.com, jannh@google.com,
-        jj251510319013@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, schspa@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: null-ptr-deref Read in ida_free (2)
-Message-ID: <YrXLgOCf4e4kmIzH@rowland.harvard.edu>
-References: <000000000000fd80ab05e2314a27@google.com>
+        Fri, 24 Jun 2022 10:35:51 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309B7563AC
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:35:27 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B1ECC2000A;
+        Fri, 24 Jun 2022 14:35:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656081326;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=19T0/4IPPW1GQWI31VpPxCmK00qIsCKpQrmNNviZXf8=;
+        b=epq+BuYnxlAKsTU/Ce94aJ1lSbVtGjNy0FuSDoSsFQooJpdVjQuH2hQnsiEernff1IrM8V
+        5zjEs8L9RGNMp1webmA82qcYjxm4/yGVdXOZt0tvo0hWd1GobIO62N5hxUK2mHOyJK6C+q
+        +pmEPCGD1S+sZkktRQbgNKxRlhlMGy3toKVH05+94v7Lwwdgt48SF5COtbhnDi2ytDRT1O
+        GgfLTRaa3E7w44hHeQ4cYkGHT2Yv8s4okbzzGI9yXtuD5zJaaj6K6BlW/aDboL7njDZXjq
+        pQ/u/gJIQu0HdXQ/0E0Q9Q93R4n5FipkM2Rq2LZML1Xv49Mr257OBj4V8pzQTA==
+Date:   Fri, 24 Jun 2022 16:35:25 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Ripard <mripard@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] drm: logicvc: Fix uninitialized variable in probe
+Message-ID: <YrXLrVUIavGWC4sx@aptenodytes>
+References: <Yqh6OfSiPFuVrGo4@kili>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="DwiraIsIEPc2Ikp+"
 Content-Disposition: inline
-In-Reply-To: <000000000000fd80ab05e2314a27@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Yqh6OfSiPFuVrGo4@kili>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 06:10:22AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    08897940f458 Add linux-next specific files for 20220623
-> git tree:       linux-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=14fc8c60080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=fb185a52c6ad0a8e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=aa620fb1ece874a3f34c
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=116b4140080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ab12e4080000
-> 
-> The issue was bisected to:
-> 
-> commit f2d8c2606825317b77db1f9ba0fc26ef26160b30
-> Author: Alan Stern <stern@rowland.harvard.edu>
-> Date:   Mon Jun 13 14:17:03 2022 +0000
-> 
->     usb: gadget: Fix non-unique driver names in raw-gadget driver
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15b40318080000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=17b40318080000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13b40318080000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+aa620fb1ece874a3f34c@syzkaller.appspotmail.com
-> Fixes: f2d8c2606825 ("usb: gadget: Fix non-unique driver names in raw-gadget driver")
-> 
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
-> BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
-> BUG: KASAN: null-ptr-deref in ida_free+0x1b6/0x2e0 lib/idr.c:510
-> Read of size 8 at addr 0000000000000000 by task syz-executor185/3627
-> 
-> CPU: 1 PID: 3627 Comm: syz-executor185 Not tainted 5.19.0-rc3-next-20220623-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
->  check_region_inline mm/kasan/generic.c:183 [inline]
->  kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
->  instrument_atomic_read include/linux/instrumented.h:71 [inline]
->  test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
->  ida_free+0x1b6/0x2e0 lib/idr.c:510
->  dev_free+0xec/0x700 drivers/usb/gadget/legacy/raw_gadget.c:212
->  kref_put include/linux/kref.h:65 [inline]
->  raw_release+0x219/0x290 drivers/usb/gadget/legacy/raw_gadget.c:424
->  __fput+0x277/0x9d0 fs/file_table.c:317
->  task_work_run+0xdd/0x1a0 kernel/task_work.c:177
->  exit_task_work include/linux/task_work.h:38 [inline]
->  do_exit+0xb05/0x2a00 kernel/exit.c:795
->  do_group_exit+0xd2/0x2f0 kernel/exit.c:925
->  __do_sys_exit_group kernel/exit.c:936 [inline]
->  __se_sys_exit_group kernel/exit.c:934 [inline]
->  __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> RIP: 0033:0x7f12d28b6bd9
-> Code: Unable to access opcode bytes at RIP 0x7f12d28b6baf.
-> RSP: 002b:00007ffea2859da8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-> RAX: ffffffffffffffda RBX: 00007f12d292b3f0 RCX: 00007f12d28b6bd9
-> RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-> RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 000000000000000b
-> R10: 00007ffea2857e00 R11: 0000000000000246 R12: 00007f12d292b3f0
-> R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
->  </TASK>
-> ==================================================================
 
-This should be fixed by the patch that was just merged.
+--DwiraIsIEPc2Ikp+
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Alan Stern
+Hi Dan,
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 90bc2af24638
+On Tue 14 Jun 22, 15:08, Dan Carpenter wrote:
+> The "regmap" is supposed to be initialized to NULL but it's used
+> without being initialized.
+>=20
+> Fixes: efeeaefe9be5 ("drm: Add support for the LogiCVC display controller=
+")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+
+Nice catch, thanks a lot!
+
+Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+
+Cheers,
+
+Paul
+
+> ---
+>  drivers/gpu/drm/logicvc/logicvc_drm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/logicvc/logicvc_drm.c b/drivers/gpu/drm/logi=
+cvc/logicvc_drm.c
+> index df1805cf0f95..0b983a33f9ff 100644
+> --- a/drivers/gpu/drm/logicvc/logicvc_drm.c
+> +++ b/drivers/gpu/drm/logicvc/logicvc_drm.c
+> @@ -298,7 +298,7 @@ static int logicvc_drm_probe(struct platform_device *=
+pdev)
+>  	struct logicvc_drm *logicvc;
+>  	struct device *dev =3D &pdev->dev;
+>  	struct drm_device *drm_dev;
+> -	struct regmap *regmap;
+> +	struct regmap *regmap =3D NULL;
+>  	struct resource res;
+>  	void __iomem *base;
+>  	int irq;
+> --=20
+> 2.35.1
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--DwiraIsIEPc2Ikp+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmK1y60ACgkQ3cLmz3+f
+v9F7Kwf/QJpFMndulFNyA2x3mb7KHVGg3dQKG+3a7CvlFT2m+N0OUW6HcXSkmz+x
+Z7Ccffbm4Lb2E+gQucPwwPDReZieX4IrVhiHQfoc5IRTq5916CRouPxGGmzzq5KS
+pUYjhWq9PNNNU+oDiZ6k04H2ozX8T8fABH7/U2ZBeRZ0oocBXMZL2hXnvNbLou4C
+1dPE5D/rMZ7qGKkFi7Oks5c1IWz3Sx9ieku6ZH+AGbq7yr5ILxt5zfIuEH02NPZ9
+DpaVENSmpOccaOZcM00rIbUFwVpLptmV56Woar15J9NZBcgewR2j655GQk/M1jG9
+hMSQofNJAMMQRLPA3S7vgd8+lnQTrA==
+=Ojhr
+-----END PGP SIGNATURE-----
+
+--DwiraIsIEPc2Ikp+--

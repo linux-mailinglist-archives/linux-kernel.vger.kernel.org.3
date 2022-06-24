@@ -2,115 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D1F559AA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0CA559AA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232193AbiFXNpY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Jun 2022 09:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
+        id S231271AbiFXNuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 09:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiFXNpU (ORCPT
+        with ESMTP id S231182AbiFXNuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 09:45:20 -0400
-Received: from relay5.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AD72619
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 06:45:18 -0700 (PDT)
-Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay02.hostedemail.com (Postfix) with ESMTP id 8FBE0348F7;
-        Fri, 24 Jun 2022 13:45:16 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id 4145220015;
-        Fri, 24 Jun 2022 13:45:15 +0000 (UTC)
-Message-ID: <ca26910886a765dd7edc4815ef90bedbd0f99a95.camel@perches.com>
-Subject: Re: [PATCH v2 01/12] regmap-irq: Convert bool bitfields to unsigned
- int
-From:   Joe Perches <joe@perches.com>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Fri, 24 Jun 2022 06:45:14 -0700
-In-Reply-To: <Z2ggoG49naOiT1BMxPbsMc2zOjAUEnha@localhost>
-References: <20220623211420.918875-1-aidanmacdonald.0x0@gmail.com>
-         <20220623211420.918875-2-aidanmacdonald.0x0@gmail.com>
-         <CAHp75VfTqTfMsrdqyqRj61JAAJ4a_h3rrFriY2d+rrqpVviy=w@mail.gmail.com>
-         <YrWqAqGUuy8Z0F3x@sirena.org.uk>
-         <4937c0cc9dbc9d06cb626465bd37cbcf76c80a0b.camel@perches.com>
-         <Z2ggoG49naOiT1BMxPbsMc2zOjAUEnha@localhost>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Fri, 24 Jun 2022 09:50:18 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB694BFED;
+        Fri, 24 Jun 2022 06:50:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9367DCE29B8;
+        Fri, 24 Jun 2022 13:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A7554C3411C;
+        Fri, 24 Jun 2022 13:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656078613;
+        bh=3UkPy7STqFRs8CQ0EKjj66l2bP7z9nK2keUVGhK0LJE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oshD4W5FRHMmpHpTdoXitxwhEiDe7BtTr8iuzsTS/3iwgcceu4wAKmSpKPZ1eObKa
+         srI8U8xL29RCRhZDJAM/dpkGAfKenzzjVlbAFKTu5S4oftLMKQ+uCzkcWKRJ2dsQh4
+         jGoiIh4zorBzQyNr/ljQ7/kdyRjkHjvk42MoaObdI2DRzQF4Jp0InTzd2vz1/Ent/Y
+         b7ZtoCD4xJlIG62W2IFEj8ZbBx84TbkDmbGDCAVIxmo8JReqiN0fYDjmxRLHTCMOL2
+         6taBAUeZjUdyGti5MscwJ/S+SgJJzKnhRNPD4WGhb41ALwjGyOB9qc/zn3nCpqTLno
+         tLth+AOdlVkFA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8AEA1E85DBE;
+        Fri, 24 Jun 2022 13:50:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] bpf: Replace 0 with BPF_K
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165607861356.799.9349241350259159003.git-patchwork-notify@kernel.org>
+Date:   Fri, 24 Jun 2022 13:50:13 +0000
+References: <20220622031923.65692-1-wangchuanguo@inspur.com>
+In-Reply-To: <20220622031923.65692-1-wangchuanguo@inspur.com>
+To:     Simon wang <wangchuanguo@inspur.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Stat-Signature: oj1mfyszgctb9y5x9ca7yk88ouwo3wmz
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 4145220015
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX199JvKTOf4Uzq/iWnRzovqBECkde32PCfU=
-X-HE-Tag: 1656078315-170775
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-24 at 14:05 +0100, Aidan MacDonald wrote:
-> Joe Perches <joe@perches.com> writes:
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Tue, 21 Jun 2022 23:19:23 -0400 you wrote:
+> From: Simon Wang <wangchuanguo@inspur.com>
 > 
-> > On Fri, 2022-06-24 at 13:11 +0100, Mark Brown wrote:
-> > > On Thu, Jun 23, 2022 at 11:26:10PM +0200, Andy Shevchenko wrote:
-> > > > On Thu, Jun 23, 2022 at 11:13 PM Aidan MacDonald
-> > > 
-> > > > > Use 'unsigned int' for bitfields for consistency with most other
-> > > > > kernel code.
-> > > 
-> > > > There is no point to convert the fields you are about to remove.
-> > > 
-> > > > So, either don't touch them or make this patch closer to the end of the series.
-> > > 
-> > > It costs us nothing to convert them, this isn't a difficult or hard to
-> > > understand refactoring - the patch is fine the way it is.
-> > 
-> > Modulo the defects that might be introduced if an overflow occurs.
-> > 
-> > struct foo {
-> > 	unsigned int a:1;
-> > 	bool b:1;
-> > }
-> > 
-> > Assign a non-zero int without bit 0 set to each and see if
-> > a and b differ.
+> Enhance readability.
 > 
-> Bool permits implicit pointer-to-bool conversions, so it isn't free
-> of pitfalls either.
+> Signed-off-by: Simon Wang <wangchuanguo@inspur.com>
+> ---
+>  kernel/bpf/verifier.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Care to describe some of those pitfalls?
-I can't think of any off the top of my head.
+Here is the summary with links:
+  - bpf: Replace 0 with BPF_K
+    https://git.kernel.org/bpf/bpf-next/c/395e942d34a2
 
-> Overflow is probably more dangerous in general,
-> but here there's little chance of pointers or overflow getting involved.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-I don't know _this_ code at all, nor have I read it.
-
-If all the conversions are just deleted later, then of course
-it should not be converted at all.
-
-I'm just commenting on the proposed refactoring.
-
-I'm trying to show that conversions of bool:1->unsigned int:1
-as being trivial are not so trivial after all.
-
-It's fairly common to have code like:
-
-	[bool] foo.bar = some_value & SETTING;
-
-where some value is tested for a mask/bit and a non-zero is true.
-
-So conversions of foo.bar from bool:1 to unsigned int:1 are not
-wise unless all possible side effects are known.
 

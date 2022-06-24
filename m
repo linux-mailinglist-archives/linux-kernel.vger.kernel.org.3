@@ -2,58 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FE1559C7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D357559BEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbiFXOkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 10:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        id S233134AbiFXOld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 10:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233043AbiFXOkO (ORCPT
+        with ESMTP id S231916AbiFXOl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 10:40:14 -0400
-Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB72867E54;
-        Fri, 24 Jun 2022 07:40:06 -0700 (PDT)
-Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id B0E765BC4;
-        Fri, 24 Jun 2022 17:41:21 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com B0E765BC4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1656081681;
-        bh=6sHoSStFQUNEsO5LDwS5F4ggSISy6Oi5GEqrwch7vao=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=jVDXkcVCrxEiP6VJUfSCgEVbHhwrTaE+F6ZJZrejqhTYOvlZeGeOTQQ4i8WRAYJkE
-         2GjNHGpQk1THQ8gfi3QI/YkwCM/lMNex4kiMKw8nkWDpJQKQgN7AYzG7ZiH3W2fi7x
-         9ag8zj1a+NoaHzNd0+Rn4MdrOwclIujyI05dyM0I=
-Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 24 Jun 2022 17:40:02 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pci@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v4 12/15] PCI: dwc: Add iATU regions size detection procedure
-Date:   Fri, 24 Jun 2022 17:39:44 +0300
-Message-ID: <20220624143947.8991-13-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru>
+        Fri, 24 Jun 2022 10:41:29 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B241E64796;
+        Fri, 24 Jun 2022 07:41:27 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1A703E0002;
+        Fri, 24 Jun 2022 14:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656081686;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=m9VUnPmey1EW3PlxwufpVuRcBXj7WqcXOePoquITgbY=;
+        b=f26t62yJa4myIehQUKbczIFXeSlDXNWR2044wOkaZ5x052xBkOsk5bVQOV32z8wUtW6w3b
+        qO9T5Cfr6Guk2Ys5SRmtx1ntQVZAxZ/TPYfiepiSTTADI0I1Y3nGWEamZ+EDUUDPu8vCOS
+        F3uWGrgY1rBHCcj0J0nW2+OuFoCvC34JasW+S8ItICVnOIRu2UiWeZq7fzKYGBITWc3uK1
+        uirbGQqG1XwyGQjs+XUbHsr8r9Pd516W0gu7XSibucitviboHbdWdYfsVjw3liYA3R8n/B
+        Paw56iw/XXt4STtKtjweblWhu2u86NJbwYMgA8e6GRlxtumqeYwu3+TMvjuPkQ==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Jose Abreu <joabreu@synopsys.com>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v9 00/16] add support for Renesas RZ/N1 ethernet subsystem devices
+Date:   Fri, 24 Jun 2022 16:39:45 +0200
+Message-Id: <20220624144001.95518-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,119 +73,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Depending on the DWC PCIe RC/EP/DM IP-core configuration parameters the
-controllers can be equipped not only with various number of inbound and
-outbound iATU windows, but with varied regions settings like alignment
-(which is also the minimum window size), minimum and maximum sizes. So to
-speak if internal ATU is enabled for the denoted IP-cores then the former
-settings will be defined by the CX_ATU_MIN_REGION_SIZE parameter while the
-later one will be determined by the CX_ATU_MAX_REGION_SIZE configuration
-parameter. Anyway having these parameters used in the driver will help to
-verify whether the requested inbound or outbound memory mappings can be
-fully created. Currently the driver doesn't perform any corresponding
-checking.
+The Renesas RZ/N1 SoCs features an ethernet subsystem which contains
+(most notably) a switch, two GMACs, and a MII converter [1]. This
+series adds support for the switch and the MII converter.
 
-Note 1. The extended iATU regions have been supported since DWC PCIe
-v4.60a. There is no need in testing the upper limit register availability
-for the older cores.
+The MII converter present on this SoC has been represented as a PCS
+which sit between the MACs and the PHY. This PCS driver is probed from
+the device-tree since it requires to be configured. Indeed the MII
+converter also contains the registers that are handling the muxing of
+ports (Switch, MAC, HSR, RTOS, etc) internally to the SoC.
 
-Note 2. The regions alignment is determined with using the fls() method
-since the lower four bits of the ATU Limit register can be occupied with
-the Circular Buffer Increment setting, which can be initialized with
-zeros.
+The switch driver is based on DSA and exposes 4 ports + 1 CPU
+management port. It include basic bridging support as well as FDB and
+statistics support.
 
-The (dma-)ranges verification will be added a bit later in one of the next
-commits.
+Link: [1] https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1l-group-users-manual-r-engine-and-ethernet-peripherals
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- drivers/pci/controller/dwc/pcie-designware.c | 33 +++++++++++++++++---
- drivers/pci/controller/dwc/pcie-designware.h |  2 ++
- 2 files changed, 31 insertions(+), 4 deletions(-)
+-----
+Changes in V9:
+- Cover letter:
+  - Remove comment about RZN1 patches that are now in the master branch.
+- Commits:
+  - Add Vladimir Oltean Reviewed-by
+- PCS:
+  - Add "Depends on OF" for PCS_RZN1_MIIC due to error found by intel
+    kernel test robot <lkp@intel.com>.
+  - Check return value of of_property_read_u32() for
+    "renesas,miic-switch-portin" property before setting conf.
+  - Return miic_parse_dt() return value in miic_probe() on error
+- Switch:
+  - Add "Depends on OF" for NET_DSA_RZN1_A5PSW due to errors found by
+    intel kernel test robot <lkp@intel.com>.
+- DT:
+  - Add spaces between switch port and '{'
 
-diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-index f2aa65d02a6c..776752891d11 100644
---- a/drivers/pci/controller/dwc/pcie-designware.c
-+++ b/drivers/pci/controller/dwc/pcie-designware.c
-@@ -8,9 +8,11 @@
-  * Author: Jingoo Han <jg1.han@samsung.com>
-  */
- 
-+#include <linux/bitops.h>
- #include <linux/delay.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
-+#include <linux/sizes.h>
- #include <linux/types.h>
- 
- #include "../../pci.h"
-@@ -525,7 +527,8 @@ static bool dw_pcie_iatu_unroll_enabled(struct dw_pcie *pci)
- static void dw_pcie_iatu_detect_regions(struct dw_pcie *pci)
- {
- 	int max_region, ob, ib;
--	u32 val;
-+	u32 val, min, dir;
-+	u64 max;
- 
- 	if (pci->iatu_unroll_enabled) {
- 		max_region = min((int)pci->atu_size / 512, 256);
-@@ -548,8 +551,29 @@ static void dw_pcie_iatu_detect_regions(struct dw_pcie *pci)
- 			break;
- 	}
- 
--	pci->num_ib_windows = ib;
-+	if (ob) {
-+		dir = PCIE_ATU_REGION_DIR_OB;
-+	} else if (ib) {
-+		dir = PCIE_ATU_REGION_DIR_IB;
-+	} else {
-+		dev_err(pci->dev, "No iATU regions found\n");
-+		return;
-+	}
-+
-+	dw_pcie_writel_atu(pci, dir, 0, PCIE_ATU_LIMIT, 0x0);
-+	min = dw_pcie_readl_atu(pci, dir, 0, PCIE_ATU_LIMIT);
-+
-+	if (dw_pcie_ver_is_ge(pci, 460A)) {
-+		dw_pcie_writel_atu(pci, dir, 0, PCIE_ATU_UPPER_LIMIT, 0xFFFFFFFF);
-+		max = dw_pcie_readl_atu(pci, dir, 0, PCIE_ATU_UPPER_LIMIT);
-+	} else {
-+		max = 0;
-+	}
-+
- 	pci->num_ob_windows = ob;
-+	pci->num_ib_windows = ib;
-+	pci->region_align = 1 << fls(min);
-+	pci->region_limit = (max << 32) | (SZ_4G - 1);
- }
- 
- void dw_pcie_iatu_detect(struct dw_pcie *pci)
-@@ -582,8 +606,9 @@ void dw_pcie_iatu_detect(struct dw_pcie *pci)
- 	dev_info(pci->dev, "iATU unroll: %s\n", pci->iatu_unroll_enabled ?
- 		"enabled" : "disabled");
- 
--	dev_info(pci->dev, "Detected iATU regions: %u outbound, %u inbound\n",
--		 pci->num_ob_windows, pci->num_ib_windows);
-+	dev_info(pci->dev, "iATU regions: %u ob, %u ib, align %uK, limit %lluG\n",
-+		 pci->num_ob_windows, pci->num_ib_windows,
-+		 pci->region_align / SZ_1K, (pci->region_limit + 1) / SZ_1G);
- }
- 
- void dw_pcie_setup(struct dw_pcie *pci)
-diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-index c18f0db09b31..25c86771c810 100644
---- a/drivers/pci/controller/dwc/pcie-designware.h
-+++ b/drivers/pci/controller/dwc/pcie-designware.h
-@@ -272,6 +272,8 @@ struct dw_pcie {
- 	size_t			atu_size;
- 	u32			num_ib_windows;
- 	u32			num_ob_windows;
-+	u32			region_align;
-+	u64			region_limit;
- 	struct dw_pcie_rp	pp;
- 	struct dw_pcie_ep	ep;
- 	const struct dw_pcie_ops *ops;
+Changes in V8:
+- Commits:
+  - Reorder Acked-By and Rewieved-by chronologically and add Florian
+    Fainelli Reviewed-By.
+- PCS:
+  - Fix of node leaks
+- MAINTAINERS:
+  - Reorder L: before S:
+
+Resent V7 due to messed up cover letter.
+
+Changes in V7:
+- Commits:
+  - Add Rob Herring Acked-by for commit "dt-bindings: net: snps,dwmac: add
+    "power-domains" property"
+  - Rebased on net-next/master
+- MAINTAINERS:
+  - Add renesas-soc and netdev mailing lists
+
+Changes in V6:
+- Commits:
+  - Add commit which enable ethernet switch on RZ/N1D-DB board
+  - Add commit which adds "renesas,rzn1-gmac" compatible t
+    "snps,dwmac" bindings
+  - Fix mutex change being done in FDB feature commit
+  - Add commit which  adds"power-domains" to "snps,dwmac" bindings
+- Bindings and DT
+  - Add clock-names to MII converter and make it required
+  - Added Reviewed-by Geert on MII converter binding
+  - Added "power-domains" to switch bindings and to switch description
+  - Use new compatible "renesas,rzn1-gmac" for GMAC2
+  - Describe all switch ports in ethernet switch node
+  - Add phy-mode = "internal" to cpu port
+- PCS:
+  - use phy_interface_mode_is_rgmii() instead of open coded check
+  - Add device_link_add() call in miic_create()
+- Switch:
+  - Fix missing of_node_put(port) in case of loop break.
+  - Fix comment alignment for statistics defines
+  - Move lk_lock mutex locking outside of the fdb_dump loop
+
+Changes in V5:
+- MAINTAINERS:
+  - Add Florian Fainelli Reviewed-by
+- Switch:
+  - Switch Lookup table lock to a mutex instead of a spinlock
+  - Only handle "ethernet-ports" property for switch ports
+  - Handle RGMII_ID/RXID/TXID
+  - Add check for pdata to be non null in remove
+  - Add missing of_node_put() for mdio and ports
+  - Applied Florian Fainelli patch which makes stats description
+    shorter
+  - Add Kconfig dependency on ARCH_RZN1 to avoid Kconfig "unmet direct
+    dependency"
+- PCS:
+  - Handle RGMII_ID/RXID/TXID
+  - Use value instead of BIT() for speed/mode
+- Tag driver:
+  - Add Florian Fainelli Reviewed-by
+
+Changes in V4:
+- Add ETH_P_DSA_A5PSW in uapi/linux/if_ether.h
+- PCS:
+  - Use devm_pm_runtime_enable() instead of pm_runtime_enable()
+- Switch:
+  - Return -EOPNOTSUPP and set extack when multiple bridges are created
+  - Remove error messages in fdb_del if entry does not exists
+  - Add compatibility with "ethernet-ports" device-tree property
+- Tag driver:
+  - Use ETH_ZLEN as padding len
+
+Changes in V3:
+- PCS:
+  - Fixed reverse christmas tree declaration
+  - Remove spurious pr_err
+  - Use pm_runtime functions
+- Tag driver:
+  - Remove packed attribute from the tag struct
+- Switch:
+  - Fix missing spin_unlock in fdb_dump in case of error
+  - Add static qualifier to dsa_switch_ops
+  - Add missing documentation for hclk and clk members of struct a5psw
+  - Changed types of fdb_entry to u16 to discard GCC note on char
+    packed bitfields and add reserved field
+- Added Reviewed-by tag from Florian Fainelli
+
+Changes in V2:
+- PCS:
+  - Fix Reverse Christmas tree declaration
+  - Removed stray newline
+  - Add PCS remove function and disable clocks in them
+  - Fix miic_validate function to return correct values
+  - Split PCS CONV_MODE definition
+  - Reordered phylink_pcs_ops in definition order
+  - Remove interface setting in miic_link_up
+  - Remove useless checks for invalid interface/speed and error prints
+  - Replace phylink_pcs_to_miic_port macro by a static function
+  - Add comment in miic_probe about platform_set_drvdata
+- Bindings:
+ - Fix wrong path for mdio.yaml $ref
+ - Fix yamllint errors
+- Tag driver:
+  - Squashed commit that added tag value with tag driver
+  - Add BUILD_BUG_ON for tag size
+  - Split control_data2 in 2 16bits values
+- Switch:
+  - Use .phylink_get_caps instead of .phylink_validate and fill
+    supported_interface correctly
+  - Use fixed size (ETH_GSTRING_LEN) string for stats and use memcpy
+  - Remove stats access locking since RTNL lock is used in upper layers
+  - Check for non C45 addresses in mdio_read/write and return
+    -EOPNOTSUPP
+  - Add get_eth_mac_stats, get_eth_mac_ctrl_stat, get_rmon_stats
+  - Fix a few indentation problems
+  - Remove reset callback from MDIO bus operation
+  - Add phy/mac/rmon stats
+- Add get_rmon_stat to dsa_ops
+
+Clément Léger (16):
+  net: dsa: allow port_bridge_join() to override extack message
+  net: dsa: add support for ethtool get_rmon_stats()
+  net: dsa: add Renesas RZ/N1 switch tag driver
+  dt-bindings: net: pcs: add bindings for Renesas RZ/N1 MII converter
+  net: pcs: add Renesas MII converter driver
+  dt-bindings: net: dsa: add bindings for Renesas RZ/N1 Advanced 5 port
+    switch
+  net: dsa: rzn1-a5psw: add Renesas RZ/N1 advanced 5 port switch driver
+  net: dsa: rzn1-a5psw: add statistics support
+  net: dsa: rzn1-a5psw: add FDB support
+  dt-bindings: net: snps,dwmac: add "power-domains" property
+  dt-bindings: net: snps,dwmac: add "renesas,rzn1" compatible
+  ARM: dts: r9a06g032: describe MII converter
+  ARM: dts: r9a06g032: describe GMAC2
+  ARM: dts: r9a06g032: describe switch
+  ARM: dts: r9a06g032-rzn1d400-db: add switch description
+  MAINTAINERS: add Renesas RZ/N1 switch related driver entry
+
+ .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  |  134 +++
+ .../bindings/net/pcs/renesas,rzn1-miic.yaml   |  171 +++
+ .../devicetree/bindings/net/snps,dwmac.yaml   |    5 +
+ MAINTAINERS                                   |   13 +
+ arch/arm/boot/dts/r9a06g032-rzn1d400-db.dts   |  117 ++
+ arch/arm/boot/dts/r9a06g032.dtsi              |  108 ++
+ drivers/net/dsa/Kconfig                       |    9 +
+ drivers/net/dsa/Makefile                      |    1 +
+ drivers/net/dsa/rzn1_a5psw.c                  | 1062 +++++++++++++++++
+ drivers/net/dsa/rzn1_a5psw.h                  |  259 ++++
+ drivers/net/pcs/Kconfig                       |    8 +
+ drivers/net/pcs/Makefile                      |    1 +
+ drivers/net/pcs/pcs-rzn1-miic.c               |  520 ++++++++
+ include/dt-bindings/net/pcs-rzn1-miic.h       |   33 +
+ include/linux/pcs-rzn1-miic.h                 |   18 +
+ include/net/dsa.h                             |    5 +
+ include/uapi/linux/if_ether.h                 |    1 +
+ net/dsa/Kconfig                               |    7 +
+ net/dsa/Makefile                              |    1 +
+ net/dsa/slave.c                               |   18 +-
+ net/dsa/tag_rzn1_a5psw.c                      |  113 ++
+ 21 files changed, 2602 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
+ create mode 100644 Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
+ create mode 100644 drivers/net/dsa/rzn1_a5psw.c
+ create mode 100644 drivers/net/dsa/rzn1_a5psw.h
+ create mode 100644 drivers/net/pcs/pcs-rzn1-miic.c
+ create mode 100644 include/dt-bindings/net/pcs-rzn1-miic.h
+ create mode 100644 include/linux/pcs-rzn1-miic.h
+ create mode 100644 net/dsa/tag_rzn1_a5psw.c
+
 -- 
-2.35.1
+2.36.1
 

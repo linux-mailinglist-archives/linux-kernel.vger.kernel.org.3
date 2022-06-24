@@ -2,174 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2756B55A0B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 821C155A0C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiFXSKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 14:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
+        id S230310AbiFXSOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 14:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiFXSKh (ORCPT
+        with ESMTP id S229480AbiFXSO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 14:10:37 -0400
-Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2566E60E32
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:10:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=VNymKOoqcg3pGTMnfjGRMvDmuCkOCa01F2ZxFC/A6/w=;
-        b=W96F2JjHh8CDcsJSZvfKw5C4AGufkvTf+lF8ecT/ZguDNkCJCdIVF/3xcGS5qEXVtkVKA+clvSb0S
-         42vavh7CYg9GA9awDHJ9ZUcBaRdc0zunoMdqlPhe/wNWpr/tExfuiI0IXK9Kyk5TvlucCdPw3gg8XE
-         eFs7+Pgbbgp6uvmyp7I7MMJdr9THlvG5vj3w0JypQqGumcyxf41cgser+QdAF0wZ8XDzfQz8SzHJaY
-         vhv7P74zi1icGvbX2N9ISNw5L84gmWd0AOLdtXm57v+vtw9wfRYGIJUxmfvIYNdcBr0LHBUgs4XK0C
-         7p9ztRCzhQRwHFtzPrRyYVFRbpDey5A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=VNymKOoqcg3pGTMnfjGRMvDmuCkOCa01F2ZxFC/A6/w=;
-        b=1b5J72DSnPYK8nZWg70GlTAiNPwhCRsGn6Xj/QYy6JxRwSLhHbirlBE7WXSYi3R1NhtqiwNoZMBMG
-         dxYuiu9AQ==
-X-HalOne-Cookie: c7b4917d86e3993e0abb9103ff3df1cade167dbb
-X-HalOne-ID: ee825b54-f3e8-11ec-8233-d0431ea8bb10
-Received: from mailproxy2.cst.dirpod3-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id ee825b54-f3e8-11ec-8233-d0431ea8bb10;
-        Fri, 24 Jun 2022 18:10:30 +0000 (UTC)
-Date:   Fri, 24 Jun 2022 20:10:28 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     allen <allen.chen@ite.com.tw>
-Cc:     "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        David Airlie <airlied@linux.ie>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Pin-yen Lin <treapking@chromium.org>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Pin-yen Lin <treapking@google.com>
-Subject: Re: [PATCH] drm/bridge: add it6505 driver read config from dt
- property
-Message-ID: <YrX+FOAycejw8wV0@ravnborg.org>
-References: <20220623093154.52701-1-allen.chen@ite.com.tw>
+        Fri, 24 Jun 2022 14:14:29 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1906D4707F;
+        Fri, 24 Jun 2022 11:14:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656094468; x=1687630468;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YeV/d+4LsC7Rh9IZcGmWfqXWcLSrc2sIo/Y1Mv7nibY=;
+  b=GCo0mhYc/H6FzyBwRxwoAqUFinUnqC0twLgVD8cDkDG9YBceW2nIGFEL
+   XIzRTXnZlgrUmY6HM6iQmA3GrY7QpTrXUp8PM6CYqi9oBK93B8IQXTfWt
+   lhtp9c+JgWB1HwTfU/iYseyZaBgkhltoRRVJ3vJsqJaphYuJBZU+pbMFy
+   fqtQjqZ0zZ7rOBzGzNu+UIwJvKL1Wq1sRp85tvqqHFXdJbqrnIZRwmOIa
+   1rsgrTQP41RU8Pfy8BmeI+RnKIL2MjTm2HoZu859Z38qw7V++/JYUHLWL
+   Bcbd1CfCoOXJF8n8SO0ghPAcdSMUN4qcxZfN80puxaSvt5xvygx7JqyQQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="282146947"
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="282146947"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 11:14:07 -0700
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="731418689"
+Received: from mdedeogl-mobl.amr.corp.intel.com (HELO [10.209.126.186]) ([10.209.126.186])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 11:14:05 -0700
+Message-ID: <b3000916-3be3-58e5-0440-ec9abda69934@intel.com>
+Date:   Fri, 24 Jun 2022 11:13:30 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623093154.52701-1-allen.chen@ite.com.tw>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
+ memory
+Content-Language: en-US
+To:     Peter Gonda <pgonda@google.com>
+Cc:     Marc Orr <marcorr@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo <marcelo.cerri@canonical.com>, tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        the arch/x86 maintainers <x86@kernel.org>,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <CAMkAt6osbEGBFrgn=y1=x4mDHC1aL40BwaW0NdGHF8qmWd7ktA@mail.gmail.com>
+ <5af19000-4482-7eb9-f158-0a461891f087@intel.com>
+ <CAA03e5F480=psSECDAkXQEvNKk3une-4dJV57Hde4z4MMzh=1A@mail.gmail.com>
+ <e09dae40-d269-cfed-d048-3e62275c1bb7@intel.com>
+ <CAA03e5HxiLkOUbOrsgbzVdAUNZvnnryuNcqrz1ZWECtWLwKMXA@mail.gmail.com>
+ <1e7ad728-d796-c84d-b7ba-b96d8f9fcd0c@intel.com>
+ <CAMkAt6pzMSUuuA7Kc-sVEGw1FYpDoRrKs-dco++2rpqB219_ng@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAMkAt6pzMSUuuA7Kc-sVEGw1FYpDoRrKs-dco++2rpqB219_ng@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi allen.
+On 6/24/22 11:10, Peter Gonda wrote:
+>> How big is the window going to be where we have guests that can have
+>> unaccepted memory, but don't have acceptance support?  For TDX, it's
+>> looking like it'll probably _just_ be 5.19.  Is TDX on 5.19 in shape
+>> that cloud providers can deploy it?  Or, is stuff like lack of
+>> attestation a deal breaker?
+> This is complicated because distros don't run upstream linux versions.
+> If I understand correctly (I see some distro emails on here so please
+> correct me) distros normally maintain forks which they backport things
+> into. So I cannot answer this question. It is possible that a
+> hypothetical distro backports only the SNP/TDX initial patches and
+> doesn't take these for many releases.
 
-On Thu, Jun 23, 2022 at 05:31:54PM +0800, allen wrote:
-> From: allen chen <allen.chen@ite.com.tw>
-> 
-> add read max-lane and max-pixel-clock from dt property
-> 
-> Signed-off-by: Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
-Can you fix so your s-o-b mail and author mail matches?
-As it is now an error is flagged as they do not match.
-
-	Sam
-
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> ---
->  drivers/gpu/drm/bridge/ite-it6505.c | 35 ++++++++++++++++++++++++++---
->  1 file changed, 32 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> index 4b673c4792d77..c9121d4635a52 100644
-> --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -436,6 +436,8 @@ struct it6505 {
->  	bool powered;
->  	bool hpd_state;
->  	u32 afe_setting;
-> +	u32 max_dpi_pixel_clock;
-> +	u32 max_lane_count;
->  	enum hdcp_state hdcp_status;
->  	struct delayed_work hdcp_work;
->  	struct work_struct hdcp_wait_ksv_list;
-> @@ -1466,7 +1468,8 @@ static void it6505_parse_link_capabilities(struct it6505 *it6505)
->  	it6505->lane_count = link->num_lanes;
->  	DRM_DEV_DEBUG_DRIVER(dev, "Sink support %d lanes training",
->  			     it6505->lane_count);
-> -	it6505->lane_count = min_t(int, it6505->lane_count, MAX_LANE_COUNT);
-> +	it6505->lane_count = min_t(int, it6505->lane_count,
-> +				   it6505->max_lane_count);
->  
->  	it6505->branch_device = drm_dp_is_branch(it6505->dpcd);
->  	DRM_DEV_DEBUG_DRIVER(dev, "Sink %sbranch device",
-> @@ -2895,7 +2898,7 @@ it6505_bridge_mode_valid(struct drm_bridge *bridge,
->  	if (mode->flags & DRM_MODE_FLAG_INTERLACE)
->  		return MODE_NO_INTERLACE;
->  
-> -	if (mode->clock > DPI_PIXEL_CLK_MAX)
-> +	if (mode->clock > it6505->max_dpi_pixel_clock)
->  		return MODE_CLOCK_HIGH;
->  
->  	it6505->video_info.clock = mode->clock;
-> @@ -3057,6 +3060,8 @@ static void it6505_parse_dt(struct it6505 *it6505)
->  {
->  	struct device *dev = &it6505->client->dev;
->  	u32 *afe_setting = &it6505->afe_setting;
-> +	u32 *max_lane_count = &it6505->max_lane_count;
-> +	u32 *max_dpi_pixel_clock = &it6505->max_dpi_pixel_clock;
->  
->  	it6505->lane_swap_disabled =
->  		device_property_read_bool(dev, "no-laneswap");
-> @@ -3072,7 +3077,31 @@ static void it6505_parse_dt(struct it6505 *it6505)
->  	} else {
->  		*afe_setting = 0;
->  	}
-> -	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %d", *afe_setting);
-> +
-> +	if (device_property_read_u32(dev, "max-lane-count",
-> +				     max_lane_count) == 0) {
-> +		if (*max_lane_count > 4 || *max_lane_count == 3) {
-> +			dev_err(dev, "max lane count error, use default");
-> +			*max_lane_count = MAX_LANE_COUNT;
-> +		}
-> +	} else {
-> +		*max_lane_count = MAX_LANE_COUNT;
-> +	}
-> +
-> +	if (device_property_read_u32(dev, "max-dpi-pixel-clock",
-> +				     max_dpi_pixel_clock) == 0) {
-> +		if (*max_dpi_pixel_clock > 297000) {
-> +			dev_err(dev, "max pixel clock error, use default");
-> +			*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
-> +		}
-> +	} else {
-> +		*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
-> +	}
-> +
-> +	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %u, max_lane_count: %u",
-> +			     it6505->afe_setting, it6505->max_lane_count);
-> +	DRM_DEV_DEBUG_DRIVER(dev, "using max_dpi_pixel_clock: %u kHz",
-> +			     it6505->max_dpi_pixel_clock);
->  }
->  
->  static ssize_t receive_timing_debugfs_show(struct file *file, char __user *buf,
-> -- 
-> 2.25.1
+Distros could also backport a bare-bones version of this set that
+doesn't do anything fancy and just synchronously accepts the memory at
+boot.  No bitmap, no page allocator changes.  It'll slow boot down, but
+is better than having no RAM.

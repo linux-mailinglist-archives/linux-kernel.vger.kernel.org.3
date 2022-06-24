@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C3A55A378
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF2B55A37D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbiFXVax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 17:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
+        id S231518AbiFXVa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 17:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiFXVaw (ORCPT
+        with ESMTP id S231423AbiFXVax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 17:30:52 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BD97FD0E
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:51 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id j10-20020aa783ca000000b00518265c7cacso1647811pfn.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:51 -0700 (PDT)
+        Fri, 24 Jun 2022 17:30:53 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB8A7FD0E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:52 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id n21-20020a056a000d5500b005251893308cso1638806pfv.6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=zMPtClkNy/rRRFXv8P9eDIPEjyOeV59e+BT5wJdtnTI=;
-        b=UzL3u/9KI/PTLzCg/P+tuJKTRZT0mfc25ekz6upxcv9OfUHPNAylLKxx6yYmXOBnLi
-         USobz+Ex9DSU2fpFB659H0rDnBmur9AjTjyAfscyFsAEiwgof/WG81MGCJr7D+KhSsyo
-         cxnIaSTlBRgEoF/q2DI4UC5eU2YU14q1EhqaF0QcLfimm5iBvlRh7ZiOaRW+utsujlP1
-         yx5d8N2Dqy0X8eXmrovFnTNpK6IhqtYr6YnqCRSXMDpTi0fvBYicFp+51HeYCkHo+xPn
-         Cv6wYXL9C5ICsMmyDaf9TlvteF3rbOpSneFcAIvbNBdFNGoyGXXtQQjQ2ZoUniiWeJxz
-         8E0A==
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=ICaGYy1bxClqsMr84xS9Z2iY/dNy9kl//MDmpzal8X4=;
+        b=EuR98mP+tn9jie3sAeJxuGzTMcy/XECRgpnOsmsm5vvlMkYMIto/8JtRhSIjw9lMSf
+         1x72TWYnxmt53MX597QAUXAq1GcS98OkIDfi5g2oRBRx9l9QtSw/6RcIxm+URxRXvP7A
+         1qDqUQ72llWr2Neo171cQpFRwtwycRmuHG6T90ZCbPwzPrLL4EDDS96RBNYkIIKzd9uj
+         O9x+voPh91LaBga+5WFN0RBy6XY3RMGuQnBI6G2z3Uakvdo+U9W9iv5+brYZpY7s8Pv+
+         liteH/FB2uTh1Ekc4XVQ0iB+xF7Volgpuxat8y7kvd/oRhGdgjWw5BdmzZwrajmTeDE/
+         1pKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=zMPtClkNy/rRRFXv8P9eDIPEjyOeV59e+BT5wJdtnTI=;
-        b=NtZ/t4IsxLc0oyiYUCTHQiZ34c3gzVcD83AzUoe7lV63QIRNXVaVu6MY0n635CxWLd
-         lj/5y2aNzvOBaeJo1eITAo22EXe+MS0+oNXjF1xL85yJNUH3ctoHCb490vgjm2oOp+kS
-         HJV7mdfPdkTSx4Swj7Erq+GH2dVMB7vaGHp+qva21gRqoTK20QL+jIGXSMDKet63Ff9j
-         Ywas8ELVWcMvGxDeAVKa+6yDFZPWpnhyDtjxlfKGfqwTJ4uwrO8AaZh3mnVH5QFkWXkN
-         Ajzm+4WLU4U/P+XqgowObRQh7UB/wM2Zoo/CzTikOmim54wkl+mk+HMbvyu40ovwj+Y8
-         B/gw==
-X-Gm-Message-State: AJIora+BUC6RlPrcnyTIBcQ7JSP8UygilxtompHlmhdHncPAebpbUWsY
-        mhzcx2heGc1qlqgbmNL7G7nxBSJMUkM=
-X-Google-Smtp-Source: AGRyM1tkcN2VjS7vtoEyCYilN3tph0RZx7u8qAibppLJACIOeYHd2iTFQfTI8+Wqe43vwTgU2shU56fEf74=
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=ICaGYy1bxClqsMr84xS9Z2iY/dNy9kl//MDmpzal8X4=;
+        b=8B81/rJWasQZaCP9xNXtuZTEp3DBr+crW5iirwx+b0f6q7ShDUzT9lRIbQcA0gdRwY
+         186iNUFb+WyIvxh5+YCpEd4d0ApTLzkQTaIMdnDR8080CFmvgUPw5t0JcIBNv+/5RabS
+         L2iVkuogl4jV8huwAzfTqhtP0TBtXB8vt9PHZbI5LYTdc4xReVBVmcI1J3xezsfpa4G5
+         sx4aWwaFOlvq4t7W/wO9Fm5PyuJvIyM38jvCsGZhlV6Mg68nKmio8qIyjEbFK274c4wF
+         H0q9KCenl92fAd7N7lpu/8AN7Srm1aeQmi25lX2VVjax4Kku4lBESZ25dW9Q85BktsPm
+         QFWg==
+X-Gm-Message-State: AJIora9xZYVvLYmoaHrdNfoIO974+xPWXDjorw3297EVgPaAKyJxOJjH
+        W247K2fPrCmImgLDXYHCcIiPts+xrdc=
+X-Google-Smtp-Source: AGRyM1soHmDol5uisTNLRvpaxaglJLD4MnzM/G9seXjCj78n330EZb2VxQUAG9Uc7TQCeviIawphfk/SLPk=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:8c51:0:b0:525:4141:fe5e with SMTP id
- e17-20020aa78c51000000b005254141fe5emr962347pfd.51.1656106250779; Fri, 24 Jun
- 2022 14:30:50 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:174b:b0:525:4eea:8ff2 with SMTP id
+ j11-20020a056a00174b00b005254eea8ff2mr1147112pfc.23.1656106252545; Fri, 24
+ Jun 2022 14:30:52 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 24 Jun 2022 21:30:35 +0000
-Message-Id: <20220624213039.2872507-1-seanjc@google.com>
+Date:   Fri, 24 Jun 2022 21:30:36 +0000
+In-Reply-To: <20220624213039.2872507-1-seanjc@google.com>
+Message-Id: <20220624213039.2872507-2-seanjc@google.com>
 Mime-Version: 1.0
+References: <20220624213039.2872507-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v2 0/4] KVM: x86/mmu: Cleanups for eager page splitting
+Subject: [PATCH v2 1/4] KVM: x86/mmu: Add optimized helper to retrieve an
+ SPTE's index
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -70,40 +74,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eager page splitting cleanups for a few minor things that were noted in
-code review but didn't make it into the committed code.
+Add spte_index() to dedup all the code that calculates a SPTE's index
+into its parent's page table and/or spt array.  Opportunistically tweak
+the calculation to avoid pointer arithmetic, which is subtle (subtract in
+8-byte chunks) and less performant (requires the compiler to generate the
+subtraction).
 
-Patch 1 goes beyond the eager page splitting series, but it's still very
-much relevant.
+Suggested-by: David Matlack <dmatlack@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/mmu/mmu.c         | 22 ++++++++++------------
+ arch/x86/kvm/mmu/paging_tmpl.h |  4 ++--
+ arch/x86/kvm/mmu/spte.h        |  6 ++++++
+ 3 files changed, 18 insertions(+), 14 deletions(-)
 
-The last patch in particular is a bit more urgent than I first realized.
-I had forgotten that pte_list_desc is now 128 bytes, and I also had a
-brain fart and thought it was just allocating pointers, i.e. 8 bytes.
-In other words, I was thinking the 513 object buffer was "only" wasting
-~8kb per VM, whereas it actually costs ~64kb per VM.
-
-v2:
- - Add helper to compute SPTE's index into its parent. [David].
- - Collect reviews [David].
- - Tweak the comment in the last patch after more analysis.
-
-v1:
- - https://lore.kernel.org/all/20220624171808.2845941-1-seanjc@google.com
-
-Sean Christopherson (4):
-  KVM: x86/mmu: Add optimized helper to retrieve an SPTE's index
-  KVM: x86/mmu: Expand quadrant comment for PG_LEVEL_4K shadow pages
-  KVM: x86/mmu: Use "unsigned int", not "u32", for SPTEs' @access info
-  KVM: x86/mmu: Buffer nested MMU split_desc_cache only by default
-    capacity
-
- arch/x86/kvm/mmu/mmu.c         | 74 +++++++++++++++++++++-------------
- arch/x86/kvm/mmu/paging_tmpl.h |  4 +-
- arch/x86/kvm/mmu/spte.h        |  6 +++
- 3 files changed, 53 insertions(+), 31 deletions(-)
-
-
-base-commit: 4b88b1a518b337de1252b8180519ca4c00015c9e
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index bd74a287b54a..b04e9ce2469a 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -1036,7 +1036,7 @@ static void rmap_remove(struct kvm *kvm, u64 *spte)
+ 	struct kvm_rmap_head *rmap_head;
+ 
+ 	sp = sptep_to_sp(spte);
+-	gfn = kvm_mmu_page_get_gfn(sp, spte - sp->spt);
++	gfn = kvm_mmu_page_get_gfn(sp, spte_index(spte));
+ 
+ 	/*
+ 	 * Unlike rmap_add, rmap_remove does not run in the context of a vCPU
+@@ -1587,7 +1587,7 @@ static void __rmap_add(struct kvm *kvm,
+ 	int rmap_count;
+ 
+ 	sp = sptep_to_sp(spte);
+-	kvm_mmu_page_set_translation(sp, spte - sp->spt, gfn, access);
++	kvm_mmu_page_set_translation(sp, spte_index(spte), gfn, access);
+ 	kvm_update_page_stats(kvm, sp->role.level, 1);
+ 
+ 	rmap_head = gfn_to_rmap(gfn, sp->role.level, slot);
+@@ -1714,11 +1714,9 @@ static void kvm_mmu_mark_parents_unsync(struct kvm_mmu_page *sp)
+ static void mark_unsync(u64 *spte)
+ {
+ 	struct kvm_mmu_page *sp;
+-	unsigned int index;
+ 
+ 	sp = sptep_to_sp(spte);
+-	index = spte - sp->spt;
+-	if (__test_and_set_bit(index, sp->unsync_child_bitmap))
++	if (__test_and_set_bit(spte_index(spte), sp->unsync_child_bitmap))
+ 		return;
+ 	if (sp->unsync_children++)
+ 		return;
+@@ -2201,7 +2199,7 @@ static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct, unsig
+ 	 */
+ 	if (role.has_4_byte_gpte) {
+ 		WARN_ON_ONCE(role.level != PG_LEVEL_4K);
+-		role.quadrant = (sptep - parent_sp->spt) % 2;
++		role.quadrant = spte_index(sptep) & 1;
+ 	}
+ 
+ 	return role;
+@@ -2826,7 +2824,7 @@ static int mmu_set_spte(struct kvm_vcpu *vcpu, struct kvm_memory_slot *slot,
+ 		rmap_add(vcpu, slot, sptep, gfn, pte_access);
+ 	} else {
+ 		/* Already rmapped but the pte_access bits may have changed. */
+-		kvm_mmu_page_set_access(sp, sptep - sp->spt, pte_access);
++		kvm_mmu_page_set_access(sp, spte_index(sptep), pte_access);
+ 	}
+ 
+ 	return ret;
+@@ -2842,7 +2840,7 @@ static int direct_pte_prefetch_many(struct kvm_vcpu *vcpu,
+ 	int i, ret;
+ 	gfn_t gfn;
+ 
+-	gfn = kvm_mmu_page_get_gfn(sp, start - sp->spt);
++	gfn = kvm_mmu_page_get_gfn(sp, spte_index(start));
+ 	slot = gfn_to_memslot_dirty_bitmap(vcpu, gfn, access & ACC_WRITE_MASK);
+ 	if (!slot)
+ 		return -1;
+@@ -2868,7 +2866,7 @@ static void __direct_pte_prefetch(struct kvm_vcpu *vcpu,
+ 
+ 	WARN_ON(!sp->role.direct);
+ 
+-	i = (sptep - sp->spt) & ~(PTE_PREFETCH_NUM - 1);
++	i = spte_index(sptep) & ~(PTE_PREFETCH_NUM - 1);
+ 	spte = sp->spt + i;
+ 
+ 	for (i = 0; i < PTE_PREFETCH_NUM; i++, spte++) {
+@@ -6146,8 +6144,8 @@ static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm, u64 *hu
+ 	unsigned int access;
+ 	gfn_t gfn;
+ 
+-	gfn = kvm_mmu_page_get_gfn(huge_sp, huge_sptep - huge_sp->spt);
+-	access = kvm_mmu_page_get_access(huge_sp, huge_sptep - huge_sp->spt);
++	gfn = kvm_mmu_page_get_gfn(huge_sp, spte_index(huge_sptep));
++	access = kvm_mmu_page_get_access(huge_sp, spte_index(huge_sptep));
+ 
+ 	/*
+ 	 * Note, huge page splitting always uses direct shadow pages, regardless
+@@ -6221,7 +6219,7 @@ static int shadow_mmu_try_split_huge_page(struct kvm *kvm,
+ 	u64 spte;
+ 
+ 	/* Grab information for the tracepoint before dropping the MMU lock. */
+-	gfn = kvm_mmu_page_get_gfn(huge_sp, huge_sptep - huge_sp->spt);
++	gfn = kvm_mmu_page_get_gfn(huge_sp, spte_index(huge_sptep));
+ 	level = huge_sp->role.level;
+ 	spte = *huge_sptep;
+ 
+diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+index 2448fa8d8438..d06dee7d38a8 100644
+--- a/arch/x86/kvm/mmu/paging_tmpl.h
++++ b/arch/x86/kvm/mmu/paging_tmpl.h
+@@ -595,7 +595,7 @@ static void FNAME(pte_prefetch)(struct kvm_vcpu *vcpu, struct guest_walker *gw,
+ 	if (sp->role.direct)
+ 		return __direct_pte_prefetch(vcpu, sp, sptep);
+ 
+-	i = (sptep - sp->spt) & ~(PTE_PREFETCH_NUM - 1);
++	i = spte_index(sptep) & ~(PTE_PREFETCH_NUM - 1);
+ 	spte = sp->spt + i;
+ 
+ 	for (i = 0; i < PTE_PREFETCH_NUM; i++, spte++) {
+@@ -933,7 +933,7 @@ static void FNAME(invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa)
+ 				break;
+ 
+ 			pte_gpa = FNAME(get_level1_sp_gpa)(sp);
+-			pte_gpa += (sptep - sp->spt) * sizeof(pt_element_t);
++			pte_gpa += spte_index(sptep) * sizeof(pt_element_t);
+ 
+ 			mmu_page_zap_pte(vcpu->kvm, sp, sptep, NULL);
+ 			if (is_shadow_present_pte(old_spte))
+diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+index b5c855f5514f..ba3dccb202bc 100644
+--- a/arch/x86/kvm/mmu/spte.h
++++ b/arch/x86/kvm/mmu/spte.h
+@@ -190,6 +190,12 @@ static inline bool is_removed_spte(u64 spte)
+ 	return spte == REMOVED_SPTE;
+ }
+ 
++/* Get an SPTE's index into its parent's page table (and the spt array). */
++static inline int spte_index(u64 *sptep)
++{
++	return ((unsigned long)sptep / sizeof(*sptep)) & (SPTE_ENT_PER_PAGE - 1);
++}
++
+ /*
+  * In some cases, we need to preserve the GFN of a non-present or reserved
+  * SPTE when we usurp the upper five bits of the physical address space to
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

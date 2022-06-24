@@ -2,100 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9899355A3E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8278555A3EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbiFXVtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 17:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
+        id S231204AbiFXVuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 17:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiFXVtd (ORCPT
+        with ESMTP id S229850AbiFXVuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 17:49:33 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8554D87B56
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:49:32 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id k127so3612631pfd.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:49:32 -0700 (PDT)
+        Fri, 24 Jun 2022 17:50:02 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C3787B57;
+        Fri, 24 Jun 2022 14:50:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=OZTnn904cGbOAF5rFW+CqzP10VgOzvWMTEoPdfcE1ZA=;
-        b=J8J5m7QD00jSZDZ0ED7mfv3m+RSX7WzclJYctgKeMgbTwj5OPmNyubLG/W83dcIaNi
-         AZBF2R7XQEBkB8wB6JCuQCFZjpYecUBlsZquG2GOUBAdYO7O/2nVBUQJ8bPoy3YHeBWR
-         KlB0zcxsRbZKmuI9qIOruXhhocnL/suPUhEYenoDsJc4wmSE2tKiwPTn/dWbMwq+V8aB
-         qMg0zGGuEWPWj8dNXgVIbWjVJs6MkPAuOU6r1rGquucCLDtAjtzFpOz/mMjwID7yvffC
-         9gqOPmxwM6gRh1EtjIm7MRVuZiboP6jYCvN+r5ypGI3JyUfuqGctgJnMDpQXI2Y16OUa
-         2FCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=OZTnn904cGbOAF5rFW+CqzP10VgOzvWMTEoPdfcE1ZA=;
-        b=LZjDX3/O0WNe0M2Y6DhR0Q1sVTb6dpzWjegZUs+zuFGRFxf+BPnu/TB36SdhvrLU4N
-         +j2+0WyBRlp+nW0fkRAGU962XrVPg6Xljwj9Me7hTJFIRrSFTOCkGqVK7S23r+U3dQCt
-         PevrqVMv3S5UAcVXy2ZZ/xeJcgeUXaThH8cOrFbHHChXWfEqVeHyQ3aPiHKkXNqaIJ2K
-         6ZwgAbX+hsc0qjV5aJlrM/QgC7U5k64dn2VzgKc4RHhR6iUNSk9AbhifTFoDZYu4a35u
-         DYcaj+wKiSsz0CNCC/T0cuYYxvrugPOW1EAbb4eymY5aq07r+Vdls4iJMam2mgiaxgjZ
-         yh6g==
-X-Gm-Message-State: AJIora/LEXeO7ozVN0BKhfRtn2eGr3YZpa1a79J98QB2sKPdh+hwwc92
-        tbm/mJO1C8F+ZtoaOMxduUjfBux49hh5Ql58bW8=
-X-Google-Smtp-Source: AGRyM1u1NDpDm2e29UEdUXejR6vVizhBAylatZujpWg0u3c8WuR0wmlfKVExje5frjgBQbluusqg/V51aJiVuHaf+Tc=
-X-Received: by 2002:a65:6c0a:0:b0:3fa:c20c:cbe7 with SMTP id
- y10-20020a656c0a000000b003fac20ccbe7mr799900pgu.611.1656107372099; Fri, 24
- Jun 2022 14:49:32 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656107401; x=1687643401;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Gj3rUSwKlHtm3nitzpRKCGaNFtLR8hFTKlr9kRHfVsQ=;
+  b=r4VyR+rhgKHt8Iv4ggJKSpGnK8K3JorLkMqqZPHQzCYnXiJ6QNDxxiY/
+   YZ5QBhl7Qvr6JWCiUEkQv8GtL2EqPDhU36iEyKq7+WrBmuxDUZ1RMnUV1
+   63qTzpiK67cMkP5TX6kwMVX8wNpl83bWtUEF6PKe9ZhXY4GzX+P4wLD7k
+   0=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 24 Jun 2022 14:50:00 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 14:50:00 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 24 Jun 2022 14:49:59 -0700
+Received: from [10.110.58.84] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 24 Jun
+ 2022 14:49:58 -0700
+Message-ID: <fa7f8bf1-33cd-5515-0143-6596df2bd740@quicinc.com>
+Date:   Fri, 24 Jun 2022 14:49:57 -0700
 MIME-Version: 1.0
-Received: by 2002:a17:90a:62cc:0:0:0:0 with HTTP; Fri, 24 Jun 2022 14:49:31
- -0700 (PDT)
-Reply-To: c12345shara@gmail.com
-From:   Mrs Sharalsi Canales <cwillk2019@gmail.com>
-Date:   Fri, 24 Jun 2022 23:49:31 +0200
-Message-ID: <CAKDv1qVezyRY0XP7-bceC4tqvBkOoDzdY0s5c_a9kPK34CCwfA@mail.gmail.com>
-Subject: Urgent Attention Needed
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:443 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5007]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [cwillk2019[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [cwillk2019[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1 2/3] drm/msm/dp: decoupling dp->id out of dp
+ controller_id at scxxxx_dp_cfg table
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
+        <daniel@ffwll.ch>, <dianders@chromium.org>,
+        <dmitry.baryshkov@linaro.org>, <dri-devel@lists.freedesktop.org>,
+        <robdclark@gmail.com>, <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com>
+ <1656090912-18074-3-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n52RW+UFJ=hqMWjwR8qvEbww7QjzPW1nhL3Atd97QXAnYw@mail.gmail.com>
+ <007ea4c9-9701-f4ab-3278-5d36bf2018c4@quicinc.com>
+ <CAE-0n53kNCK0ajHfY2WQr5HEQZtZSBLnhfbTuZwaUNEOZhsKPg@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n53kNCK0ajHfY2WQr5HEQZtZSBLnhfbTuZwaUNEOZhsKPg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear,Peace be unto you my dear , My name is Mrs Sharalis  Canales,i
-have something very important and urgent to to discus with you,if yes
-get back to me for more details,thanks dear
-waiting to hear from you
-Mrs Sharalis Canales
+
+On 6/24/2022 2:40 PM, Stephen Boyd wrote:
+> Quoting Kuogee Hsieh (2022-06-24 14:17:50)
+>> On 6/24/2022 1:00 PM, Stephen Boyd wrote:
+>>> Quoting Kuogee Hsieh (2022-06-24 10:15:11)
+>>>> Current the index (dp->id) of DP descriptor table (scxxxx_dp_cfg[]) are tightly
+>>>> coupled with DP controller_id. This means DP use controller id 0 must be placed
+>>>> at first entry of DP descriptor table (scxxxx_dp_cfg[]). Otherwise the internal
+>>>> INTF will mismatch controller_id. This will cause controller kickoff wrong
+>>>> interface timing engine and cause dpu_encoder_phys_vid_wait_for_commit_done
+>>>> vblank timeout error.
+>>>>
+>>>> This patch add controller_id field into struct msm_dp_desc to break the tightly
+>>>> coupled relationship between index (dp->id) of DP descriptor table with DP
+>>>> controller_id.
+>>> Please no. This reverts the intention of commit bb3de286d992
+>>> ("drm/msm/dp: Support up to 3 DP controllers")
+>>>
+>>>       A new enum is introduced to document the connection between the
+>>>       instances referenced in the dpu_intf_cfg array and the controllers in
+>>>       the DP driver and sc7180 is updated.
+>>>
+>>> It sounds like the intent of that commit failed to make a strong enough
+>>> connection. Now it needs to match the INTF number as well? I can't
+>>> really figure out what is actually wrong, because this patch undoes that
+>>> intentional tight coupling. Is the next patch the important part that
+>>> flips the order of the two interfaces?
+>> The commit bb3de286d992have two problems,
+>>
+>> 1)  The below sc7280_dp_cfg will not work, if eDP use
+>> MSM_DP_CONTROLLER_2 instead of  MSM_DP_CONTROLLER_1
+> Why would we use three indices for an soc that only has two indices
+> possible? This is not a real problem?
+
+I do not what will happen at future, it may have more dp controller use 
+late.
+
+at current soc, below table has only one eDP will not work either.
+
+static const struct msm_dp_config sc7280_dp_cfg = {
+          .descs = (const struct msm_dp_desc[]) {
+                  [MSM_DP_CONTROLLER_1] = { .io_start = 0x0aea0000,
+.connector_type = DRM_MODE_CONNECTOR_eDP, .wide_bus_en = true },
+
+          .num_descs = 1,
+};
+
+>
+>> since it have num_descs =2 but eDP is at index 2 (CONTROLLER_2) which
+>> never be reached.
+>>
+>> static const struct msm_dp_config sc7280_dp_cfg = {
+>>           .descs = (const struct msm_dp_desc[]) {
+>>                   [MSM_DP_CONTROLLER_2] = { .io_start = 0x0aea0000,
+>> .connector_type = DRM_MODE_CONNECTOR_eDP, .wide_bus_en = true },
+>>                   [MSM_DP_CONTROLLER_0] = { .io_start = 0x0ae90000,
+>> .connector_type = DRM_MODE_CONNECTOR_DisplayPort, .wide_bus_en = true },
+>>           },
+>>           .num_descs = 2,
+>> };
+>>
+>> 2)  DP always has index of 0 (dp->id = 0) and the first one to call
+>> msm_dp_modeset_init(). This make DP always place at head of bridge chain.
+> What does this mean? Are you talking about the list of bridges in drm
+> core, i.e. 'bridge_list'?
+yes,
+>
+>> At next patch eDP must be placed at head of bridge chain to fix eDP
+>> corruption issue. This is the purpose of this patch. I will revise the
+>> commit text.
+>>
+> Wouldn't that be "broken" again if we decided to change drm_bridge_add()
+> to add to the list head instead of list tail? Or if somehow
+> msm_dp_modeset_init() was called in a different order so that the DP
+> bridge was added before the eDP bridge?
+
+we have no control of drm_bridge_add().
+
+Since drm perform screen update following bridge chain sequentially, we 
+have to make sure primary always update first.
+

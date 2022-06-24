@@ -2,83 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7888555989A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 13:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7386A5598C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 13:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiFXLjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 07:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        id S231739AbiFXLpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 07:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiFXLjm (ORCPT
+        with ESMTP id S231707AbiFXLpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 07:39:42 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CB36802C
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 04:39:40 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id g26so4130211ejb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 04:39:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Wj6+le4xQYgRWhbJ4o+JcrPIptpoGXL5M4xVrdtZbXI=;
-        b=O26iv82q0trCWgDQwRmW6rUiSusM7pWvnNkO+V25QbNy7sOhu5esaQuJS7PwEwU3me
-         Y5h7BfA9Gsbe2XrGvelcv6XAS5b+QDIjWuyq9j37ZvWmhRmJ48gmjKfPI+n6s0JkG0Im
-         CDVkH9TIGF7b8/w7lXV62OP94WgbzGfx7wpTJbGIrqDtM3uOjQnbLKSKlKwAtePFBT0V
-         p0UC7KC2dcsZiVk+jsW+BB+3hwR39LVFSI68D3J4t1grJmX1kHAWk4K42QCX24AX1oi0
-         SbMSM89C1Pj1C7dtRAeCcSnHR7lTOSfcpvpwV+KgsO9loIxaBH/9by5n0QkWSZvgYpVw
-         4zZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Wj6+le4xQYgRWhbJ4o+JcrPIptpoGXL5M4xVrdtZbXI=;
-        b=WHQmK1oUXYoZg3gr3gnis/G+cupxHRXEVkA0HFjszi3Rh932mttFOCwpoWxD8jXE/C
-         zcDCGbHFbRDeKA4zsCooC+BswUDEgftyZBW26/T2T5iQ80LkzACbwFIZlz6rnHXWPJU7
-         8q65+AQeivN0zzhJ/01MEN1Iz+aDcpyWN8AcYRmbhWKk4t4IoLuOcmCiJJHfdNWscxrY
-         6B7L1Os6T0CoVlTGCumFf982VHyhAYbU5LOgaPNRpFxDZ2eimNpe4zTgdMlua6yyn/df
-         3dqRz+24Y+lZHx8gCU1jPc9H9fpfYC1n8o2CSWsOmCY6ws0WJtzrSV7mpxUXPA4qHLYF
-         KGFA==
-X-Gm-Message-State: AJIora9dC/115FEbq1umKJ+jPfDY3xAWLN0bcvp+frerXj3+W6Wceqto
-        Io9YhtXafRkRP8UmTBRxw5a1ug==
-X-Google-Smtp-Source: AGRyM1tMl63rWpj4b70pBJHZZBdq7tLURrxHPvEhTWmOq2GveNEsVZf4u0behvJ6CGqQ22A5aqS+/g==
-X-Received: by 2002:a17:907:7e81:b0:726:2912:7467 with SMTP id qb1-20020a1709077e8100b0072629127467mr7207432ejc.373.1656070778635;
-        Fri, 24 Jun 2022 04:39:38 -0700 (PDT)
-Received: from [192.168.0.235] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id r1-20020a17090638c100b007219c20dcd8sm962517ejd.196.2022.06.24.04.39.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 04:39:38 -0700 (PDT)
-Message-ID: <8956c98e-657c-0263-c8d9-d6beb54410f9@linaro.org>
-Date:   Fri, 24 Jun 2022 13:39:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 06/14] dt-bindings: mfd: Add Mediatek MT6370
-Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de
-Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
-        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        Fri, 24 Jun 2022 07:45:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6487C867;
+        Fri, 24 Jun 2022 04:45:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41EACB82843;
+        Fri, 24 Jun 2022 11:45:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D09C34114;
+        Fri, 24 Jun 2022 11:45:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656071102;
+        bh=2OdxBW7zOQDflGPS+i+6wvl/FUJ2680bq4VvcnCLOvA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=10zZhcC3sv1Ebk8gLwIOBVQc0ANNaJGC6wMd597qmtQ6C/Xhugkc+N1cb41qIx2Ba
+         D0GrQEy3DUWE5l1fz1kzeJvyhSfFMiPZR/0O2TlffcnCby6+fFQF5lzaDk46iwj2uV
+         F/THNDBAfuArcsXYouK85ba37aTQXvjrlvCN1NyM=
+Date:   Fri, 24 Jun 2022 13:39:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>,
+        Julian Scheel <julian@jusst.de>,
+        xin lin <xin.lin@mediatek.com>,
+        Yunhao Tian <t123yh.xyz@gmail.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-References: <20220623115631.22209-1-peterwu.pub@gmail.com>
- <20220623115631.22209-7-peterwu.pub@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220623115631.22209-7-peterwu.pub@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        linux-mediatek@lists.infradead.org,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: Re: [PATCH] usb: gadget: f_uac1: add IAD descriptor
+Message-ID: <YrWif4oeelZrctmr@kroah.com>
+References: <20220622085757.23437-1-chunfeng.yun@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622085757.23437-1-chunfeng.yun@mediatek.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,93 +60,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2022 13:56, ChiaEn Wu wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
+On Wed, Jun 22, 2022 at 04:57:57PM +0800, Chunfeng Yun wrote:
+> From: xin lin <xin.lin@mediatek.com>
 > 
-> Add Mediatek MT6370 binding documentation.
+> Win10 can not enumerate composite device of UVC+UAC1+ADB without IAD descriptor
+> in uac1.0, so add it.
+
+I do not know what this means at all, sorry.  Can you please provide a
+better changelog text that describes what all of this is in more detail?
+
+
+
 > 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: xin lin <xin.lin@mediatek.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
+>  drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 > 
-> v3
-> - Use " in entire patchset
-> - Refine ADC description
-> - Rename "enable-gpio" to "enable-gpios" in "regualtor"
-> - Change "/schemas/" to "../" in every reference of all MT6370 modules
-> ---
->  .../devicetree/bindings/mfd/mediatek,mt6370.yaml   | 280 +++++++++++++++++++++
->  include/dt-bindings/iio/adc/mediatek,mt6370_adc.h  |  18 ++
->  2 files changed, 298 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
->  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> new file mode 100644
-> index 0000000..fa9da13
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> @@ -0,0 +1,280 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/mediatek,mt6370.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+> index 6f0e1d803dc2..8390207bc513 100644
+> --- a/drivers/usb/gadget/function/f_uac1.c
+> +++ b/drivers/usb/gadget/function/f_uac1.c
+> @@ -71,6 +71,17 @@ static inline struct f_uac1_opts *g_audio_to_uac1_opts(struct g_audio *audio)
+>   * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
+>   */
+>  
+> +static struct usb_interface_assoc_descriptor iad_desc = {
+> +	.bLength = sizeof(iad_desc),
+> +	.bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
 > +
-> +title: Mediatek MT6370 SubPMIC
+> +	.bFirstInterface = 0,
+> +	.bInterfaceCount = 3,
+> +	.bFunctionClass = USB_CLASS_AUDIO,
+> +	.bFunctionSubClass = 0,
+> +	.bFunctionProtocol = UAC_VERSION_1,
+> +};
 > +
-> +maintainers:
-> +  - ChiYuan Huang <cy_huang@richtek.com>
-> +
-> +description: |
-> +  MT6370 is a highly-integrated smart power management IC, which includes a
-> +  single cell Li-Ion/Li-Polymer switching battery charger, a USB Type-C &
-> +  Power Delivery (PD) controller, dual flash LED current sources, a RGB LED
-> +  driver, a backlight WLED driver, a display bias driver and a general LDO for
-> +  portable devices.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt6370
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  wakeup-source: true
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  "#interrupt-cells":
-> +    const: 1
-> +
-> +  adc:
-> +    type: object
-> +    description: |
-> +      Provides 9 channels for system monitoring, including VBUSDIV5 (lower
-> +      accuracy, higher measure range), VBUSDIV2 (higher accuracy, lower
-> +      measure range), VBAT, VSYS, CHG_VDDP, TS_BAT, IBUS, IBAT, and TEMP_JC.
-> +
-> +    properties:
-> +      compatible:
-> +        const: mediatek,mt6370-adc
-> +
-> +      "#io-channel-cells":
-> +        const: 1
-> +
-> +    required:
-> +      - compatible
-> +      - "#io-channel-cells"
-> +
-> +  backlight:
-> +    type: object
-> +    $ref: ../leds/backlight/mediatek,mt6370-backlight.yaml#
+>  /* B.3.1  Standard AC Interface Descriptor */
+>  static struct usb_interface_descriptor ac_interface_desc = {
+>  	.bLength =		USB_DT_INTERFACE_SIZE,
+> @@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor as_iso_in_desc = {
+>  };
+>  
+>  static struct usb_descriptor_header *f_audio_desc[] = {
+> +	(struct usb_descriptor_header *)&iad_desc,
 
-This was correct before: /schemas/leds/ ....
+Why put this first?  Is that a requirement?
 
-Same in other places.
+>  	(struct usb_descriptor_header *)&ac_interface_desc,
+>  	(struct usb_descriptor_header *)&ac_header_desc,
+>  
+> @@ -293,6 +305,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
+>  };
+>  
+>  enum {
+> +	STR_ASSOC,
+
+Again, why first?
+
+>  	STR_AC_IF,
+>  	STR_USB_OUT_IT,
+>  	STR_USB_OUT_IT_CH_NAMES,
+> @@ -310,6 +323,7 @@ enum {
+>  
+>  static struct usb_string strings_uac1[] = {
+>  	/* [STR_AC_IF].s = DYNAMIC, */
+> +	[STR_ASSOC].s = "Source/Sink",
+>  	[STR_USB_OUT_IT].s = "Playback Input terminal",
+>  	[STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
+>  	[STR_IO_OUT_OT].s = "Playback Output terminal",
+> @@ -1058,6 +1072,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+>  	as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
+>  	as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
+>  
+> +	iad_desc.bInterfaceCount = 1;
+
+Why this change?
 
 
-Best regards,
-Krzysztof
+>  	ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc->bLength);
+>  
+>  	if (EPIN_EN(opts)) {
+> @@ -1068,6 +1083,7 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+>  		if (FUIN_EN(opts))
+>  			len += in_feature_unit_desc->bLength;
+>  		ac_header_desc->wTotalLength = cpu_to_le16(len);
+> +		iad_desc.bInterfaceCount++;
+>  	}
+>  	if (EPOUT_EN(opts)) {
+>  		u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
+> @@ -1077,9 +1093,11 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+>  		if (FUOUT_EN(opts))
+>  			len += out_feature_unit_desc->bLength;
+>  		ac_header_desc->wTotalLength = cpu_to_le16(len);
+> +		iad_desc.bInterfaceCount++;
+>  	}
+>  
+>  	i = 0;
+> +	f_audio_desc[i++] = USBDHDR(&iad_desc);
+
+Again, why first?
+
+>  	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
+>  	f_audio_desc[i++] = USBDHDR(ac_header_desc);
+>  
+> @@ -1217,6 +1235,7 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+>  		}
+>  	}
+>  
+> +	iad_desc.iFunction = us[STR_ASSOC].id;
+>  	ac_interface_desc.iInterface = us[STR_AC_IF].id;
+>  	usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
+>  	usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
+> @@ -1302,6 +1321,8 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+>  	status = usb_interface_id(c, f);
+>  	if (status < 0)
+>  		goto err_free_fu;
+> +
+> +	iad_desc.bFirstInterface = status;
+
+Shouldn't this be needed without your change?
+
+thanks,
+
+greg k-h

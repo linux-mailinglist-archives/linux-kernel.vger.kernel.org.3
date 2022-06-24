@@ -2,163 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1E655A029
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1039355A042
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232473AbiFXRj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
+        id S231238AbiFXRhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232304AbiFXRiC (ORCPT
+        with ESMTP id S231162AbiFXRhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:38:02 -0400
-Received: from mail-ua1-x94a.google.com (mail-ua1-x94a.google.com [IPv6:2607:f8b0:4864:20::94a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5E96F4BB
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:46 -0700 (PDT)
-Received: by mail-ua1-x94a.google.com with SMTP id g1-20020ab00e01000000b00379820aee7cso1007801uak.18
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=u+0c8IGQItY5NCCATolNVsWOPdUIr5MDdbCK/q0TIvo=;
-        b=D90ixVslphWwRS1UyK82N/Fu4Pbp7RfYXJAXQqDLm0AYhlK59/wd1jqEmTakmfoAdM
-         bCaJEmUAqS6tCX2dak5OsRfQg3/S32jkFNOOv5AhzS6KIq2Y8/bxRLDG5Ynhh7Q4ZWRf
-         T28FEgQTuQAmTAzbinSDCUL5FqalKu06/tPW5zgoGnZaHOERoYdGxV1amlIWNDhV6gNx
-         Hux7xxh8o8EA2S1TUMwn3Pd1RB6gqb3P03MxNrYVTbnyXFz2pdn7Ecfkw2C38+x5Tq4t
-         6G6ZSXt7n/jc3VeCFkh0qVe2rMcVgaPEC639yccX83zFJnO8qJjsZQZj8m3ROTU/7Otn
-         uqtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=u+0c8IGQItY5NCCATolNVsWOPdUIr5MDdbCK/q0TIvo=;
-        b=x85XUDyONTdTiIquoeP4ANjI8LvZpTxHNSFFghfBWCZ36HTIVF+TSUZk8iPUKb5iqs
-         SVEW9ic4LPbROTj1lYbKBJTOZyspEeOvjwFcRS0eKINI1dHEdSqrgesD5P9OJf1J3fXO
-         8glJh3xhDpXZqdCW8i5UV8sx6IPq2TFA9foRuTOSNWW/IX85VNeK0Hmx+RUZHMLgF5HL
-         VEBQSzOYxqrhSj5veRk0bQSkgxM8+DITfcPl7/J+b9WyClZUddV+IXbU+CvVEPmUsPf2
-         9oMpBQHK9065AQc6i6nC9SxveSnJ8BDRfFBZIjMScPRQPBD9k7DY0wSLEZh27d7hN4nT
-         xoDA==
-X-Gm-Message-State: AJIora9w5RWF9H+KIX/y7YcwgaQgld55rJovXMWQPpksKTPbvf75KWZC
-        VvxtPt4Rn8esYMTzvnHsQrLtJ8w/qQP7lOfs
-X-Google-Smtp-Source: AGRyM1sXBK2BOgwtHhnCdm6QzU6aNINH2NrcD5ngkogaDCkYiXeckpXlq4vGXhiBI+c1PtjBBhz07CDWB+WagWPT
-X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a05:6122:1990:b0:36b:f70c:ba55 with
- SMTP id bv16-20020a056122199000b0036bf70cba55mr26413vkb.12.1656092265972;
- Fri, 24 Jun 2022 10:37:45 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 17:36:56 +0000
-In-Reply-To: <20220624173656.2033256-1-jthoughton@google.com>
-Message-Id: <20220624173656.2033256-27-jthoughton@google.com>
-Mime-Version: 1.0
-References: <20220624173656.2033256-1-jthoughton@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [RFC PATCH 26/26] selftests: add HugeTLB HGM to KVM demand paging selftest
-From:   James Houghton <jthoughton@google.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        James Houghton <jthoughton@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Fri, 24 Jun 2022 13:37:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 64AB262C13
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656092226;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TqUnppsLw+ptEFOWt96xqRoxkSJ1xKv0wtk/TcEKVps=;
+        b=BFVrBJQ8bT/BPBVGa4c75qhAS4AJy4MEv76CafLHiIWRngrNDiatuvtwp/WTrPDg+91+Lj
+        ZcTB0EspBYkmdIzRQB5FtUt00NhNDrZ6Z57EqemqGtHHaJPxBlg3Fyz/2Kti7aYdIwXMF4
+        e/Cw8aoo1MZEhdUZqNZ8EjusYGuFJEs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-352-NlKausoxPTGBlsCfhDCECA-1; Fri, 24 Jun 2022 13:37:01 -0400
+X-MC-Unique: NlKausoxPTGBlsCfhDCECA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B88F729AB442;
+        Fri, 24 Jun 2022 17:37:00 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.9.80])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0226A492C3B;
+        Fri, 24 Jun 2022 17:36:59 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id B7C8E2209F9; Fri, 24 Jun 2022 13:36:59 -0400 (EDT)
+Date:   Fri, 24 Jun 2022 13:36:59 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Tycho Andersen <tycho@tycho.pizza>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        fuse-devel@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: strange interaction between fuse + pidns
+Message-ID: <YrX2O4Yv8elsQkF9@redhat.com>
+References: <YrShFXRLtRt6T/j+@risky>
+ <YrThSLvG8JSLHG4j@redhat.com>
+ <YrT6Hdqp36HLK9PJ@netflix>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrT6Hdqp36HLK9PJ@netflix>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This doesn't address collapsing yet, and it only works with the MINOR
-mode (UFFDIO_CONTINUE).
+On Thu, Jun 23, 2022 at 05:41:17PM -0600, Tycho Andersen wrote:
+> On Thu, Jun 23, 2022 at 05:55:20PM -0400, Vivek Goyal wrote:
+> > So in this case single process is client as well as server. IOW, one
+> > thread is fuse server servicing fuse requests and other thread is fuse
+> > client accessing fuse filesystem?
+> 
+> Yes. Probably an abuse of the API and something people Should Not Do,
+> but as you say the kernel still shouldn't lock up like this.
+> 
+> > > since the thread has a copy of
+> > > the fd table with an fd pointing to the same fuse device, the reference
+> > > count isn't decremented to zero in fuse_dev_release(), and the task hangs
+> > > forever.
+> > 
+> > So why did fuse server thread stop responding to fuse messages. Why
+> > did it not complete flush.
+> 
+> In this particular case I think it's because the application crashed
+> for unrelated reasons and tried to exit the pidns, hitting this
+> problem.
+> 
+> > BTW, unkillable wait happens on ly fc->no_interrupt = 1. And this seems
+> > to be set only if server probably some previous interrupt request
+> > returned -ENOSYS.
+> > 
+> > fuse_dev_do_write() {
+> >                 else if (oh.error == -ENOSYS)
+> >                         fc->no_interrupt = 1;
+> > }
+> > 
+> > So a simple workaround might be for server to implement support for
+> > interrupting requests.
+> 
+> Yes, but that is the libfuse default IIUC.
 
-Signed-off-by: James Houghton <jthoughton@google.com>
----
- tools/testing/selftests/kvm/include/test_util.h |  2 ++
- tools/testing/selftests/kvm/lib/kvm_util.c      |  2 +-
- tools/testing/selftests/kvm/lib/test_util.c     | 14 ++++++++++++++
- 3 files changed, 17 insertions(+), 1 deletion(-)
+Looking at libfuse code. I understand low level API interface and for
+that looks like generic code itself will take care of this (without
+needing support from filesystem).
 
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index 99e0dcdc923f..6209e44981a7 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -87,6 +87,7 @@ enum vm_mem_backing_src_type {
- 	VM_MEM_SRC_ANONYMOUS_HUGETLB_16GB,
- 	VM_MEM_SRC_SHMEM,
- 	VM_MEM_SRC_SHARED_HUGETLB,
-+	VM_MEM_SRC_SHARED_HUGETLB_HGM,
- 	NUM_SRC_TYPES,
- };
- 
-@@ -105,6 +106,7 @@ size_t get_def_hugetlb_pagesz(void);
- const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i);
- size_t get_backing_src_pagesz(uint32_t i);
- bool is_backing_src_hugetlb(uint32_t i);
-+bool is_backing_src_shared_hugetlb(enum vm_mem_backing_src_type src_type);
- void backing_src_help(const char *flag);
- enum vm_mem_backing_src_type parse_backing_src_type(const char *type_name);
- long get_run_delay(void);
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 1665a220abcb..382f8fb75b7f 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -993,7 +993,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
- 	region->fd = -1;
- 	if (backing_src_is_shared(src_type))
- 		region->fd = kvm_memfd_alloc(region->mmap_size,
--					     src_type == VM_MEM_SRC_SHARED_HUGETLB);
-+				is_backing_src_shared_hugetlb(src_type));
- 
- 	region->mmap_start = mmap(NULL, region->mmap_size,
- 				  PROT_READ | PROT_WRITE,
-diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index 6d23878bbfe1..710dc42077fe 100644
---- a/tools/testing/selftests/kvm/lib/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -254,6 +254,13 @@ const struct vm_mem_backing_src_alias *vm_mem_backing_src_alias(uint32_t i)
- 			 */
- 			.flag = MAP_SHARED,
- 		},
-+		[VM_MEM_SRC_SHARED_HUGETLB_HGM] = {
-+			/*
-+			 * Identical to shared_hugetlb except for the name.
-+			 */
-+			.name = "shared_hugetlb_hgm",
-+			.flag = MAP_SHARED,
-+		},
- 	};
- 	_Static_assert(ARRAY_SIZE(aliases) == NUM_SRC_TYPES,
- 		       "Missing new backing src types?");
-@@ -272,6 +279,7 @@ size_t get_backing_src_pagesz(uint32_t i)
- 	switch (i) {
- 	case VM_MEM_SRC_ANONYMOUS:
- 	case VM_MEM_SRC_SHMEM:
-+	case VM_MEM_SRC_SHARED_HUGETLB_HGM:
- 		return getpagesize();
- 	case VM_MEM_SRC_ANONYMOUS_THP:
- 		return get_trans_hugepagesz();
-@@ -288,6 +296,12 @@ bool is_backing_src_hugetlb(uint32_t i)
- 	return !!(vm_mem_backing_src_alias(i)->flag & MAP_HUGETLB);
- }
- 
-+bool is_backing_src_shared_hugetlb(enum vm_mem_backing_src_type src_type)
-+{
-+	return src_type == VM_MEM_SRC_SHARED_HUGETLB ||
-+		src_type == VM_MEM_SRC_SHARED_HUGETLB_HGM;
-+}
-+
- static void print_available_backing_src_types(const char *prefix)
- {
- 	int i;
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+libfuse/lib/fuse_lowlevel.c
+
+do_interrupt().
+
+> 
+> > Having said that, this does sounds like a problem and probably should
+> > be fixed at kernel level.
+> > 
+> > > 
+> > > diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
+> > > index 0e537e580dc1..c604dfcaec26 100644
+> > > --- a/fs/fuse/dev.c
+> > > +++ b/fs/fuse/dev.c
+> > > @@ -297,7 +297,6 @@ void fuse_request_end(struct fuse_req *req)
+> > >  		spin_unlock(&fiq->lock);
+> > >  	}
+> > >  	WARN_ON(test_bit(FR_PENDING, &req->flags));
+> > > -	WARN_ON(test_bit(FR_SENT, &req->flags));
+> > >  	if (test_bit(FR_BACKGROUND, &req->flags)) {
+> > >  		spin_lock(&fc->bg_lock);
+> > >  		clear_bit(FR_BACKGROUND, &req->flags);
+> > > @@ -381,30 +380,33 @@ static void request_wait_answer(struct fuse_req *req)
+> > >  			queue_interrupt(req);
+> > >  	}
+> > >  
+> > > -	if (!test_bit(FR_FORCE, &req->flags)) {
+> > > -		/* Only fatal signals may interrupt this */
+> > > -		err = wait_event_killable(req->waitq,
+> > > -					test_bit(FR_FINISHED, &req->flags));
+> > > -		if (!err)
+> > > -			return;
+> > > +	/* Only fatal signals may interrupt this */
+> > > +	err = wait_event_killable(req->waitq,
+> > > +				test_bit(FR_FINISHED, &req->flags));
+> > 
+> > Trying to do a fatal signal killable wait sounds reasonable. But I am
+> > not sure about the history.
+> > 
+> > - Why FORCE requests can't do killable wait.
+> > - Why flush needs to have FORCE flag set.
+> 
+> args->force implies a few other things besides this killable wait in
+> fuse_simple_request(), most notably:
+> 
+> req = fuse_request_alloc(fm, GFP_KERNEL | __GFP_NOFAIL);
+> 
+> and
+> 
+> __set_bit(FR_WAITING, &req->flags);
+
+FR_WAITING stuff is common between both type of requests. We set it
+in fuse_get_req() as well which is called for non-force requests.
+
+So there seem to be only two key difference. 
+
+- We allocate request with flag __GFP_NOFAIL for force. So don't
+  want memory allocation to fail.
+
+- And this special casing of non-killable wait. 
+
+Miklos probably will have more thoughts on this. 
+
+Thanks
+Vivek
+
+> 
+> seems like it probably can be invoked from some non-user/atomic
+> context somehow?
+> 
+> > > +	if (!err)
+> > > +		return;
+> > >  
+> > > -		spin_lock(&fiq->lock);
+> > > -		/* Request is not yet in userspace, bail out */
+> > > -		if (test_bit(FR_PENDING, &req->flags)) {
+> > > -			list_del(&req->list);
+> > > -			spin_unlock(&fiq->lock);
+> > > -			__fuse_put_request(req);
+> > > -			req->out.h.error = -EINTR;
+> > > -			return;
+> > > -		}
+> > > +	spin_lock(&fiq->lock);
+> > > +	/* Request is not yet in userspace, bail out */
+> > > +	if (test_bit(FR_PENDING, &req->flags)) {
+> > > +		list_del(&req->list);
+> > >  		spin_unlock(&fiq->lock);
+> > > +		__fuse_put_request(req);
+> > > +		req->out.h.error = -EINTR;
+> > > +		return;
+> > >  	}
+> > > +	spin_unlock(&fiq->lock);
+> > >  
+> > >  	/*
+> > > -	 * Either request is already in userspace, or it was forced.
+> > > -	 * Wait it out.
+> > > +	 * Womp womp. We sent a request to userspace and now we're getting
+> > > +	 * killed.
+> > >  	 */
+> > > -	wait_event(req->waitq, test_bit(FR_FINISHED, &req->flags));
+> > > +	set_bit(FR_INTERRUPTED, &req->flags);
+> > > +	/* matches barrier in fuse_dev_do_read() */
+> > > +	smp_mb__after_atomic();
+> > > +	/* request *must* be FR_SENT here, because we ignored FR_PENDING before */
+> > > +	WARN_ON(!test_bit(FR_SENT, &req->flags));
+> > > +	queue_interrupt(req);
+> > >  }
+> > >  
+> > >  static void __fuse_request_send(struct fuse_req *req)
+> > > 
+> > > avaialble as a full patch here:
+> > > https://github.com/tych0/linux/commit/81b9ff4c8c1af24f6544945da808dbf69a1293f7
+> > > 
+> > > but now things are even weirder. Tasks are stuck at the killable wait, but with
+> > > a SIGKILL pending for the thread group.
+> > 
+> > That's strange. No idea what's going on.
+> 
+> Thanks for taking a look. This is where it falls apart for me. In
+> principle the patch seems simple, but this sleeping behavior is beyond
+> my understanding.
+> 
+> Tycho
+> 
 

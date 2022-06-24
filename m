@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA0B55A024
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050EA559FE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbiFXRiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S232343AbiFXRiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiFXRhN (ORCPT
+        with ESMTP id S231162AbiFXRhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:37:13 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596C35DF25
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:12 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id c10-20020a251c0a000000b00669b463d2e1so2744999ybc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:12 -0700 (PDT)
+        Fri, 24 Jun 2022 13:37:14 -0400
+Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F73609CA
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:13 -0700 (PDT)
+Received: by mail-ua1-x949.google.com with SMTP id v19-20020ab05593000000b0037ed9894dfbso1008709uaa.19
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=0YfnJKuQrbw7pcq3GiMHpIZjYaYv7/J4Psozl7GAbkY=;
-        b=rhedzQCKx2wNhVDSGuAJpH9VZYMHroyUpR1McnELZRf5xZDgeN7uNFXQFUQY36oI+V
-         sQBZjS3MbDOeENElKNgbkCSeJdkA4KvbvhCfXewwUZV8VRhUz4h9mZPxYQQ152Wr/FN/
-         5BdmdPLWcel0PhshC6zVgGbHZJRq7Q7vjb3TkLcOA4+olBP02aOCGQ9Oozydj+ubNW0a
-         x/51FkRIRk4fHQ5AYf3+Jpxz4mZgUNsIXL+ynW22YI6IcrDX3OU3vcAglWcWj6mxHBI5
-         z3zP8e+fcp3Sh89Okw6YqgR52njYR4st6QIktXU0C0bgCozw42NZ4PuV/5cZ6iJXZUXt
-         qYDg==
+        bh=cBo7lIiy2jlsdOG5qT1oBCHlWVvIiK17uVsMNAgjZEA=;
+        b=NJEF0grG6xcnUMzJ7Xx8DncxrM3Dg/CCXuZcQoPGVS8RMCRW7OVDsyTMq2msiIkgR3
+         QD3rc43cPJSTJK/tuSyrg1IgeA7F7F0rpMnzeXl2raeM1+E+9KIbYlUZ6X/l+oQ1o3X8
+         FetdG0D5zD5JUcSef1agw+Hok5ZWwdiJaZLaL/pl4egaQHqe4C6GaU0IcgckBRNz/QIi
+         XvX1VQlmkldTFcvliG4NEQiL7t+Leo3XWSFsPzela+hWWv2mTwnOC5NDGzw04gi1JEMx
+         Hu59PBmYCm43RJHjH32Pik1VWkbEEt2CtqEMLAHbbH1gUokwIOPzG/lqTGqFU3e6iia/
+         o9Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=0YfnJKuQrbw7pcq3GiMHpIZjYaYv7/J4Psozl7GAbkY=;
-        b=yW0Q1bmgM5aP1SAicqs1tAxGxIYHB33SRoHBYbAShJ8CvecuZbuDd7hfsmV4i/0BEV
-         2ffzGnG5ISMSWIBhsVg/PomNNvKcpVtHhWe1prcSMkEeL+vNRUZ2yFp1DybDlKycOIUe
-         UNVfUt+XXaGtCV++zOSkZqMF3coVuUoTwkiKDHEtWGHu076S7QLMfJcxNDYMnNJXZMEH
-         SlurY9bgu9Z3ohNl/CcZOAaNOrA+2sXxaKJvfnMsaZeK8UuVfVijJfj4eAkTze8DyUoX
-         b7gLRmdJhFR0O2ynMm5dQIA3AxeHHMQiRDYLqp8lXs6lHw0KJQxMf2rv+/5ipOFE5ICY
-         OvZQ==
-X-Gm-Message-State: AJIora+cjaf55RZa3Bj5QdCuV1HXZxridAJALNLKrBybpKnXenGGzLN0
-        ePcghfHfVS0IqIs13rVWp6Q/lCYhKfYM3w6e
-X-Google-Smtp-Source: AGRyM1s/D7w5lW8rHIOJ8tPXZ//y7BlXl1scm2CvIFSsZAI4asuL+1307Qq/vgDdbLiEG20sjasM/mVp1mTCdeSz
+        bh=cBo7lIiy2jlsdOG5qT1oBCHlWVvIiK17uVsMNAgjZEA=;
+        b=2v9179SbMHcLuxNtYpgOaD7B6pkjArD/My5tHiQq89JV94ZTez4gTxEAvQA3GIfm5L
+         4+JzF5iE/eoPvg3uHihzEV5ASB3a8++izognLZi82iaGQNg/7+nddf6qBRIJc3WTBUxC
+         WtW8M8duMfd3gZMHkdcjrCBCnNaNTX9l80IP4MyqOHdtWHA+bf0YaczYJShaBNFaO4w/
+         YPLl4sJcJTNaJFBLjKQE4NmKXTTtrVX64B72XWOdMCdVKsSFHxHeubh3ZUhaDHc/6Cf+
+         iXBvRykGMkJVyDLdgGAzxH1h21vS3HI6HtaJ1BlwM1xaLgPlRK+9UwAZZlnlU2iZTiyc
+         HE0A==
+X-Gm-Message-State: AJIora+bsCbYhOIReLGBKvmOEenSrvNjT9x7NXE73t7HeVMIy5Y2gGZ9
+        V1e5zHLrFHf3mYtoVHIOTDL8d/8BR/hfo0nL
+X-Google-Smtp-Source: AGRyM1uKLxV44YzBDP/q42+n2ejxUvrdr7EuCEClIr+ZyRlO8QyvjxzdjM1m0/iYLEcLM71c8MSRgqLgbnEZ/vLa
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a0d:f4c5:0:b0:317:7f89:f547 with SMTP
- id d188-20020a0df4c5000000b003177f89f547mr18475ywf.334.1656092231687; Fri, 24
- Jun 2022 10:37:11 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 17:36:31 +0000
+ (user=jthoughton job=sendgmr) by 2002:a05:6122:25b:b0:36c:5f1a:d94b with SMTP
+ id t27-20020a056122025b00b0036c5f1ad94bmr11908478vko.31.1656092233083; Fri,
+ 24 Jun 2022 10:37:13 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 17:36:32 +0000
 In-Reply-To: <20220624173656.2033256-1-jthoughton@google.com>
-Message-Id: <20220624173656.2033256-2-jthoughton@google.com>
+Message-Id: <20220624173656.2033256-3-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20220624173656.2033256-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [RFC PATCH 01/26] hugetlb: make hstate accessor functions const
+Subject: [RFC PATCH 02/26] hugetlb: sort hstates in hugetlb_init_hstates
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -77,62 +77,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is just a const-correctness change so that the new hugetlb_pte
-changes can be const-correct too.
-
-Acked-by: David Rientjes <rientjes@google.com>
+When using HugeTLB high-granularity mapping, we need to go through the
+supported hugepage sizes in decreasing order so that we pick the largest
+size that works. Consider the case where we're faulting in a 1G hugepage
+for the first time: we want hugetlb_fault/hugetlb_no_page to map it with
+a PUD. By going through the sizes in decreasing order, we will find that
+PUD_SIZE works before finding out that PMD_SIZE or PAGE_SIZE work too.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- include/linux/hugetlb.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ mm/hugetlb.c | 40 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 37 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index e4cff27d1198..498a4ae3d462 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -715,7 +715,7 @@ static inline struct hstate *hstate_vma(struct vm_area_struct *vma)
- 	return hstate_file(vma->vm_file);
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index a57e1be41401..5df838d86f32 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -33,6 +33,7 @@
+ #include <linux/migrate.h>
+ #include <linux/nospec.h>
+ #include <linux/delayacct.h>
++#include <linux/sort.h>
+ 
+ #include <asm/page.h>
+ #include <asm/pgalloc.h>
+@@ -48,6 +49,10 @@
+ 
+ int hugetlb_max_hstate __read_mostly;
+ unsigned int default_hstate_idx;
++/*
++ * After hugetlb_init_hstates is called, hstates will be sorted from largest
++ * to smallest.
++ */
+ struct hstate hstates[HUGE_MAX_HSTATE];
+ 
+ #ifdef CONFIG_CMA
+@@ -3144,14 +3149,43 @@ static void __init hugetlb_hstate_alloc_pages(struct hstate *h)
+ 	kfree(node_alloc_noretry);
  }
  
--static inline unsigned long huge_page_size(struct hstate *h)
-+static inline unsigned long huge_page_size(const struct hstate *h)
++static int compare_hstates_decreasing(const void *a, const void *b)
++{
++	const int shift_a = huge_page_shift((const struct hstate *)a);
++	const int shift_b = huge_page_shift((const struct hstate *)b);
++
++	if (shift_a < shift_b)
++		return 1;
++	if (shift_a > shift_b)
++		return -1;
++	return 0;
++}
++
++static void sort_hstates(void)
++{
++	unsigned long default_hstate_sz = huge_page_size(&default_hstate);
++
++	/* Sort from largest to smallest. */
++	sort(hstates, hugetlb_max_hstate, sizeof(*hstates),
++	     compare_hstates_decreasing, NULL);
++
++	/*
++	 * We may have changed the location of the default hstate, so we need to
++	 * update it.
++	 */
++	default_hstate_idx = hstate_index(size_to_hstate(default_hstate_sz));
++}
++
+ static void __init hugetlb_init_hstates(void)
  {
- 	return (unsigned long)PAGE_SIZE << h->order;
- }
-@@ -729,27 +729,27 @@ static inline unsigned long huge_page_mask(struct hstate *h)
- 	return h->mask;
- }
+ 	struct hstate *h, *h2;
  
--static inline unsigned int huge_page_order(struct hstate *h)
-+static inline unsigned int huge_page_order(const struct hstate *h)
- {
- 	return h->order;
- }
+-	for_each_hstate(h) {
+-		if (minimum_order > huge_page_order(h))
+-			minimum_order = huge_page_order(h);
++	sort_hstates();
  
--static inline unsigned huge_page_shift(struct hstate *h)
-+static inline unsigned huge_page_shift(const struct hstate *h)
- {
- 	return h->order + PAGE_SHIFT;
- }
- 
--static inline bool hstate_is_gigantic(struct hstate *h)
-+static inline bool hstate_is_gigantic(const struct hstate *h)
- {
- 	return huge_page_order(h) >= MAX_ORDER;
- }
- 
--static inline unsigned int pages_per_huge_page(struct hstate *h)
-+static inline unsigned int pages_per_huge_page(const struct hstate *h)
- {
- 	return 1 << h->order;
- }
- 
--static inline unsigned int blocks_per_huge_page(struct hstate *h)
-+static inline unsigned int blocks_per_huge_page(const struct hstate *h)
- {
- 	return huge_page_size(h) / 512;
- }
++	/* The last hstate is now the smallest. */
++	minimum_order = huge_page_order(&hstates[hugetlb_max_hstate - 1]);
++
++	for_each_hstate(h) {
+ 		/* oversize hugepages were init'ed in early boot */
+ 		if (!hstate_is_gigantic(h))
+ 			hugetlb_hstate_alloc_pages(h);
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

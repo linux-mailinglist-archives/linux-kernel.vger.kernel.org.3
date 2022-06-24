@@ -2,106 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CF55599A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B50DE5599A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbiFXM2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 08:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S230270AbiFXM3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 08:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiFXM2K (ORCPT
+        with ESMTP id S229778AbiFXM3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 08:28:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C2E3AA
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:28:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656073683; x=1687609683;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NDc9vT5IoTosV8G5N/QPmWU33g+WHJMMCUppE1xtYQc=;
-  b=n6euJB9tBZ13QNHqqLVnP/qCvM/G0ENgX04a2cq2rhXLqVxhJSeJfK8v
-   z2GEkvmganNwyqsL7tlXlDQDffogSMKXQ+Z9+cuvZGh/a9rZPOvor4hlb
-   W6HqQGoYbpeooNYq19+Y8XXq02RQme8mZf+K9/FD9XpIg6bQxksAEdMF3
-   /XPdIEkzjm2gvy4B++MHw2XwaHu7Y4QMLqf7xau/tmlQ9f0uQ5WuTLRz8
-   odQZA1HWbQqYrh0OQjzMp342ATMGnPwgI+7Tpe4sX6j86jewt8O8KxA8L
-   ji0FHldSjz3l2qB/+6qztJjfob/6Q21GDgmvZha45RenuUBpKdLavOVLV
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="367309483"
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="367309483"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 05:28:03 -0700
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="621703917"
-Received: from cma16-mobl1.ccr.corp.intel.com (HELO chenyu5-mobl1.lan) ([10.255.29.162])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 05:27:57 -0700
-Date:   Fri, 24 Jun 2022 20:27:53 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Mel Gorman <mgorman@suse.de>, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Barry Song <21cnbao@gmail.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Len Brown <len.brown@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Aubrey Li <aubrey.li@intel.com>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Tim Chen <tim.c.chen@intel.com>, linux-kernel@vger.kernel.org,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Mohini Narkhede <mohini.narkhede@intel.com>
-Subject: Re: [PATCH v4] sched/fair: Introduce SIS_UTIL to search idle CPU
- based on sum of util_avg
-Message-ID: <20220624122753.GA6149@chenyu5-mobl1.lan>
-References: <20220612163428.849378-1-yu.c.chen@intel.com>
- <76c94a3b-6ca2-e0e2-c618-42b147d2737d@amd.com>
- <20220624020723.GA11803@chenyu5-mobl1>
- <4027cf04-d39e-d8fd-b3af-c1873757bb39@amd.com>
+        Fri, 24 Jun 2022 08:29:43 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D9A4B86B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:29:42 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 15so4274165ybc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:29:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2nQO6CeYq5fKHfv30czV2m4ZtSM4QjltO0wwv/dnqkA=;
+        b=pj0s49K9iGzTNZ9BU6izO5Hh1ZIt1MaYN4ZXoSYBHkReYDj2fwnN13fi9Zd5giPvJ0
+         /xcBXDwwmd4TSi/KCN/QhCRqkUZdkzJHxjssFmBCVQFIuNwA9l5IJd81Uc9l3QoR7LUD
+         uWYCrDkdwZqKugVguoxl8F4MMqMVi5fda4NtYPorHFU2nPDyC4XyhnHLSJi8kZ12rUkg
+         9rDsg4ONoPe+xVVd+Vp5XSMqh4DIQSAIsMVuIhoI78un5BOZN8Lz9FHFp3LjfsIozg3q
+         Hq2eBOoOzCChEAy7W+ryEl9mdw0MKsU2NUYQ2MzjtairrsmKCibNAbAHB+DYBFo38QcJ
+         +WVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2nQO6CeYq5fKHfv30czV2m4ZtSM4QjltO0wwv/dnqkA=;
+        b=atW2nSj8bDt897HbOe5MDCNiHvwL6pPfjnMllKAYK36mApPnVB/4lFMeHnRW26vPzp
+         WtMNUGt3ILiEU14gRHKij3IRjL39TSR8daS2cVuKju4PPUMfTIi8xxKzj3rizcRUnGk5
+         VeNYnz2h1g4UpAOTVDDUaeXyIWEpQOOIAov3hvKvUe9pjK1xJpNndhqtjDPmk/RA2YBI
+         ytrbKD2bYX7uFiY/VkAX0Vxd9q19aU73KlddhwXEz6+YbK+5KANnnQZck5ZF8a4lPBYE
+         b5yWD9Bpr1oOXxhHbVaGay9Em1SbYIrctV44iNDDPY3Ip2PHV0y8Fd/mV1vOoknFzJ1w
+         AdWQ==
+X-Gm-Message-State: AJIora+i0v17Z4kJ2eBJl3RyUvN2tELYB+ox77ER1jplx9JRbR2IgcHT
+        ovbasFx9RGv+Nws0xcXl+OdrmGiyE1rWzU1szk302g==
+X-Google-Smtp-Source: AGRyM1tOZFaEaVQKL3O/4ZeAuY/ouoz02/V9pgqlyavmMkV2SFrmfg7c4zcy3rKoZgIu5wbx1OO2C2/hWFbq6g94oKM=
+X-Received: by 2002:a05:6902:a:b0:65c:b38e:6d9f with SMTP id
+ l10-20020a056902000a00b0065cb38e6d9fmr15283526ybh.36.1656073781827; Fri, 24
+ Jun 2022 05:29:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4027cf04-d39e-d8fd-b3af-c1873757bb39@amd.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220624041217.1805512-1-niejianglei2021@163.com>
+In-Reply-To: <20220624041217.1805512-1-niejianglei2021@163.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 24 Jun 2022 14:29:30 +0200
+Message-ID: <CANn89i+=8odkFV=b_krwKq2+u5S9q7KSvQ6jDCHX7gG8+LdnSw@mail.gmail.com>
+Subject: Re: [PATCH] bnx2x: fix memory leak in bnx2x_tpa_stop()
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     Ariel Elior <aelior@marvell.com>, skalluru@marvell.com,
+        manishc@marvell.com, David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 09:34:49AM +0530, K Prateek Nayak wrote:
-> Hello Chenyu,
-> 
-> On 6/24/2022 7:37 AM, Chen Yu wrote:
-> 
-> >
-> > [..snip..]>
-> >> With v4 on the current tip, I don't see any need for
-> >> a special case for systems with smaller LLCs with
-> >> SIS_PROP disabled and SIS_UITL enable. Even SIS Efficiency
-> >> seems to be better with SIS_UTIL for hackbench.
-> >>
-> >> Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
-> > Thanks again. Would you mind if I add this test report link into next patch
-> > version?
-> 
-> Sure.
-> I'm assuming the next version will disables SIS_PROP and only
-> keep SIS_UTIL enabled which is the same configuration we ran
-> during this round of testing. The results should stay the same :)
-> --
-Yes Peter has helped me change the default value of SIS_PROP and with
-the current link in commit log, I assume we can find your data via it.
+On Fri, Jun 24, 2022 at 6:12 AM Jianglei Nie <niejianglei2021@163.com> wrote:
+>
+> bnx2x_tpa_stop() allocates a memory chunk from new_data with
+> bnx2x_frag_alloc(). The new_data should be freed when some errors occur.
+> But when "pad + len > fp->rx_buf_size" is true, bnx2x_tpa_stop() returns
+> without releasing the new_data, which leads to a memory leak.
+>
+> We should free the new_data with bnx2x_frag_free() when "pad + len >
+> fp->rx_buf_size" is true.
+>
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> ---
+>  drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+> index 5729a5ab059d..4cbd3ba5acb9 100644
+> --- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+> +++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+> @@ -789,6 +789,7 @@ static void bnx2x_tpa_stop(struct bnx2x *bp, struct bnx2x_fastpath *fp,
+>                         BNX2X_ERR("skb_put is about to fail...  pad %d  len %d  rx_buf_size %d\n",
+>                                   pad, len, fp->rx_buf_size);
+>                         bnx2x_panic();
+> +                       bnx2x_frag_free(fp, new_data);
 
-thanks,
-Chenyu
-> Thanks and Regards,
-> Prateek
+This will crash the host if new_data == NULL
+
+Really, given that BNX2X_STOP_ON_ERROR is not defined, I am not sure
+we really care about this ?
+
+>                         return;
+>                 }
+>  #endif
+> --
+> 2.25.1
+>

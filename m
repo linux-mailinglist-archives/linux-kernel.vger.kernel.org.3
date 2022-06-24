@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CD955937F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 833FD55937B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiFXGcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 02:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
+        id S229478AbiFXGcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 02:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbiFXGcI (ORCPT
+        with ESMTP id S230018AbiFXGcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 02:32:08 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB52609CA
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:32:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LTnN159zNz4xZj;
-        Fri, 24 Jun 2022 16:32:01 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1656052322;
-        bh=P/l9k24ueAGNrZN2eX9B52ADsu9gsrUuIWkIUWXutKk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=TnhK007pd8/cxruAnH3n4r2z/szHgOCDRslEwn9VVdQ/+X+Is7Ln62BxoIAYZeC7T
-         Kg9l4Bdaq8UMZIQ3PDMxleL6NmeT3aBA20xUGEMUS/tK1tO0ZceChn6AYglus+RxBm
-         lW0n5syTWPaz/huNhuPhx7SGnH9LBxpF96H5F8Nm/OV7m9eDqRUTMxvRRqCk6H7AGw
-         K3svGvxdFvMtnlxEZkJDBgvwENR0PVgaxGgSCnqU+1kjdTlAV68e0oK7aHZ+vcw1li
-         BccZkpc3KOuEX7AnEc1dMaVuFYGv+f/mYY9+oCor8mzfPBFiBnTzppFz6zEV0bfN/+
-         E/mrugwXeO7eg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Laurent Dufour <ldufour@linux.ibm.com>, benh@kernel.crashing.org,
-        paulus@samba.org, nathanl@linux.ibm.com, haren@linux.vnet.ibm.com,
-        npiggin@gmail.com
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] watchdog: export watchdog_mutex and
- lockup_detector_reconfigure
-In-Reply-To: <20220614135414.37746-3-ldufour@linux.ibm.com>
-References: <20220614135414.37746-1-ldufour@linux.ibm.com>
- <20220614135414.37746-3-ldufour@linux.ibm.com>
-Date:   Fri, 24 Jun 2022 16:31:55 +1000
-Message-ID: <871qve6084.fsf@mpe.ellerman.id.au>
+        Fri, 24 Jun 2022 02:32:45 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338285DF05
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:32:44 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-3176d94c236so15586167b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:32:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3OshtKPyDmR7YV5uvnKbuzQWgcD3M6gJPkQNeuhQ0T4=;
+        b=B4OWrDTnmgU/qgSF0bK8sg0O9qDchT1gyXRsgdE2LYSbxuSOLpe04fvvyUDzjqF50h
+         oA88JZ6r/jVAZ+i5wc1hLHIlFBrRSIH2kSjOb0AGT/WoloHAphN+x1nNBVYo0I0vL+S2
+         WYO9/26Q8t/A0xOXmeHJsZ24ihbWxBkGk1uHVBnxPDtTVMn4uzT0h1JFIr4XWUL30sxk
+         B4uCWxDgJJJWS7ExWTgI8JpnrlAu1KGvSrIWdFBB6amwVlIBqmFXRTM1bQFB+IFfRFz6
+         mQ6X7AoPZkpaHE4irnmEoqQaecMMuy17hTmVs8zFWt6f0WJ3/Dh0Hhpu+UL0SU51sFwL
+         4+mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3OshtKPyDmR7YV5uvnKbuzQWgcD3M6gJPkQNeuhQ0T4=;
+        b=f8YmHwEWBNmEBRyUSjwHPkfmCGyD1FQihYm5i9/eQLru+wyrPbL8dXjUA4iPE25Q8x
+         Riy2u6M8rePa+8eDbWKqUtyc8LBks3GIjTLhAG1KV+svMX4b9uDevSZhvTXe5yfPfgDK
+         SsaaMe7ZjcpmkkRcC1pTjFWxvCgW2XSeGqAyp+kPOltvgxsVDfAxFZkN09Oo0mIEBRwg
+         Yx9IFE6Oou+2N5OVxvPVgqYWpuVyaFQRCNZkCdddbxfGSazKRGsrExShHQxZxhsYl3Iy
+         mpXtrt7N7zATZW7fc/BuvGKdxJSm9ro035/Q2pfBkABPKGaOWs2xwhhpnqR0nbQ4R3ST
+         dp2A==
+X-Gm-Message-State: AJIora87aDFXCHkCbHRzCGCq0hjxwiBJVGmViGEeBDA53+Pfwyf+rT5N
+        NTIbQXfE3pPZJFIFKai0qTQmkd+x8Yyb5v3Vc7rfTQ==
+X-Google-Smtp-Source: AGRyM1upexU7nH70k2OVAPeGCqZo4Njm4UBNxm5xm4hJV8kd77tC+MlkEjLJsYM/feTLsXCxabBH2QAJc8GcRdfHWmw=
+X-Received: by 2002:a81:3a81:0:b0:317:7dcf:81d4 with SMTP id
+ h123-20020a813a81000000b003177dcf81d4mr15025328ywa.47.1656052363192; Thu, 23
+ Jun 2022 23:32:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <YrVUujEka5jSXZvt@archdragon> <CANn89iKLpGamedvzZjnhpNUUpPJ7ueiGo62DH0XM+omQvhr9HA@mail.gmail.com>
+ <YrVYywPFYiqWJo4a@archdragon>
+In-Reply-To: <YrVYywPFYiqWJo4a@archdragon>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 24 Jun 2022 08:32:31 +0200
+Message-ID: <CANn89iJOibYQCsY+ekObagmwmPap0FGqYdJacsO1mVvOgkKmdg@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in cfusbl_device_notify
+To:     "Dae R. Jeong" <threeearcat@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Laurent Dufour <ldufour@linux.ibm.com> writes:
-> In some cricunstances it may be interesting to reconfigure the watchdog
-> from inside the kernel.
+On Fri, Jun 24, 2022 at 8:25 AM Dae R. Jeong <threeearcat@gmail.com> wrote:
 >
-> On PowerPC, this may helpful before and after a LPAR migration (LPM) is
-> initiated, because it implies some latencies, watchdog, and especially NMI
-> watchdog is expected to be triggered during this operation. Reconfiguring
-> the watchdog, would prevent it to happen too frequently during LPM.
+> On Fri, Jun 24, 2022 at 08:15:54AM +0200, Eric Dumazet wrote:
+> > On Fri, Jun 24, 2022 at 8:08 AM Dae R. Jeong <threeearcat@gmail.com> wrote:
+> > >
+> > > Hello,
+> > >
+> > > We observed a crash "KASAN: use-after-free Read in cfusbl_device_notify" during fuzzing.
+> >
+> > This is a known problem.
+> >
+> > Some drivers do not like NETDEV_UNREGISTER being delivered multiple times.
+> >
+> > Make sure in your fuzzing to have NET_DEV_REFCNT_TRACKER=y
+> >
+> > Thanks.
 >
-> The watchdog_mutex is exported to allow some variable to be changed under
-> its protection and prevent any conflict.
-> The lockup_detector_reconfigure() function is exported and is expected to
-> be called under the protection of watchdog_mutex.
+> Our config already have CONFIG_NET_DEV_REFCNT_TRACKER=y.
+
+Are you also setting netdev_unregister_timeout_secs to a smaller value ?
+
+netdev_unregister_timeout_secs
+------------------------------
+
+Unregister network device timeout in seconds.
+This option controls the timeout (in seconds) used to issue a warning while
+waiting for a network device refcount to drop to 0 during device
+unregistration. A lower value may be useful during bisection to detect
+a leaked reference faster. A larger value may be useful to prevent false
+warnings on slow/loaded systems.
+Default value is 10, minimum 1, maximum 3600.
+
+
+> Anyway, this UAF report seems not interesting.
 >
-> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
-> ---
->  include/linux/nmi.h | 3 +++
->  kernel/watchdog.c   | 6 +++---
->  2 files changed, 6 insertions(+), 3 deletions(-)
-
-Is there a maintainer for kernel/watchdog.c ?
-
-There's Wim & Guenter at linux-watchdog@vger but I think that's only for
-drivers/watchdog?
-
-Maybe we should Cc that list anyway?
-
-
-> diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-> index 750c7f395ca9..84300fb0f90a 100644
-> --- a/include/linux/nmi.h
-> +++ b/include/linux/nmi.h
-> @@ -122,6 +122,9 @@ int watchdog_nmi_probe(void);
->  int watchdog_nmi_enable(unsigned int cpu);
->  void watchdog_nmi_disable(unsigned int cpu);
->  
-> +extern struct mutex watchdog_mutex;
-> +void lockup_detector_reconfigure(void);
-
-It would be preferable if we didn't export the mutex.
-
-I think you could arrange that by ...
-
-Renaming lockup_detector_configure() to __lockup_detector_configure()
-and then adding a new lockup_detector_configure() that is non-static and
-takes the lock around __lockup_detector_configure().
-
-cheers
+> Thank you for your quick reply.
+>
+>
+> Best regards,
+> Dae R. Jeong.

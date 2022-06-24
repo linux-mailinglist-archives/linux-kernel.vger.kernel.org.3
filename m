@@ -2,228 +2,441 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC1B559B8E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DB4559B90
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232261AbiFXOdF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Jun 2022 10:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
+        id S232400AbiFXOdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 10:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiFXOdE (ORCPT
+        with ESMTP id S232308AbiFXOdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 10:33:04 -0400
-Received: from mail3.swissbit.com (mail3.swissbit.com [176.95.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D6F95AC;
-        Fri, 24 Jun 2022 07:32:59 -0700 (PDT)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 538BE462FA7;
-        Fri, 24 Jun 2022 16:32:58 +0200 (CEST)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 43EA3462F67;
-        Fri, 24 Jun 2022 16:32:58 +0200 (CEST)
-X-TM-AS-ERS: 10.149.2.84-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
-        by mail3.swissbit.com (Postfix) with ESMTPS;
-        Fri, 24 Jun 2022 16:32:58 +0200 (CEST)
-Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex02.sbitdom.lan
- (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 24 Jun
- 2022 16:32:57 +0200
-Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex04.sbitdom.lan
- (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 24 Jun
- 2022 16:32:57 +0200
-Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
- sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
- 15.02.1118.009; Fri, 24 Jun 2022 16:32:57 +0200
-From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>
-Subject: Re: [PATCH] mmc: block: Add single read for 4k sector cards
-Thread-Topic: [PATCH] mmc: block: Add single read for 4k sector cards
-Thread-Index: AdiH1yskOTiMmBAQQCyuCs385lDFyw==
-Date:   Fri, 24 Jun 2022 14:32:57 +0000
-Message-ID: <e965379bfeec416baa9d6203a6f9d789@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.153.3.44]
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Fri, 24 Jun 2022 10:33:37 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7889247549
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:33:34 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id by38so2963407ljb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:33:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0yhMNVTfPgAiz+CgtIR9pHMpZQGSdtbAVl/2DeBNAqc=;
+        b=SjJEMzrWxAcKwc5YzGrav8NBQX276eeEeaWCtW3CaaxjO2ltEuVAL6sjneDt8mLwMn
+         G6omp21sIapg84ueYj+ecm4lMnl2oPZc8MrWyBu7vx5vt3yt77+RjCP//eeuR7ow53sn
+         VnnylV8XIzAoEQEuEz4hxs8qd3t0zqP4KQ9SzEQh0VCHd4ml8YA99OQxsqxV3YgqjJjL
+         aWusHu4Bphs1xWYY5SOgSPxmBo+MvIuc/HJDTXMRpWrdYBJWzuf/0vsMJWq14wpSeisJ
+         MnxOEE3UFKvBxX5t+eB5AQfzMwsQX0c/vbKbT//6/qzs6CLTB1B9hAzjiZz/YUrPRgCg
+         585A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0yhMNVTfPgAiz+CgtIR9pHMpZQGSdtbAVl/2DeBNAqc=;
+        b=ixSmUb+jKlvH/UMFW2y5073Cm2S++nA2cz2pH4I5Xe+AhStAxccy1OZTTMCJpoEc98
+         kIJfdJ6lvrS9b96wHFSjCm2cExa/9GT8BuDszjEJn3CMbA047YLlzN4Fp2MdKM1Nrh15
+         QC0J3dMNfbn3nA6Bx+jXmiuaSGGkH9qqyloxdK/jNalqVvO1fJgGMV9yS+mPJjHbfjEI
+         u0H5N6SWRzsAuzSb0g8zN5ZWD23R0s4chJsiPf/3g/CK1VCKAjym3P7SYGVuwd7F+Fpf
+         ruH8B4qBWxrboxxOzluHcgXwcRRDirnUx06UWDCcPk9klPoBMTf5IxJyo+ocJyJCd7VC
+         zTsQ==
+X-Gm-Message-State: AJIora9Z60Zr+o7Hb4x/KvYEY+rD86yATW33QWRMR6Mav6nZzfcbey6K
+        ukNyKn4Aw2kI8tcUl4jKA2ariKGufnv/PUMOiMzulQ==
+X-Google-Smtp-Source: AGRyM1vdiMmZacgjEGkkuIL1NK5wWJI4LMznvMCziB6kOQphLZLpwbEtJYE7oZ87HpYB93JjjWFeHHJ2h3V4164qP4I=
+X-Received: by 2002:a2e:2a43:0:b0:25a:84a9:921c with SMTP id
+ q64-20020a2e2a43000000b0025a84a9921cmr7511271ljq.83.1656081212439; Fri, 24
+ Jun 2022 07:33:32 -0700 (PDT)
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-26974.007
-X-TMASE-Result: 10--12.512700-10.000000
-X-TMASE-MatchedRID: Q8pJWSpPf0PUL3YCMmnG4pTQgFTHgkhZt3aeg7g/usD1+jb2zOGK7OK5
-        fhRxt1aA4ruJaXulXG4KRuKRI67R4LhXk2RXhtGjDstQFfLVA/DKIqAq0jIHisC5DTEMxpeQfiq
-        1gj2xET/uo3YBjUsFh++lWejEHPhXWcA4Y6culFaJJ72DuZB0nPb991FvFjWAEpDbHQbzmIO6PD
-        0Fdea44N0atarVue7jVjuZo7EjjJ+h8NIgadoMHirLqyE6Ur/jkYC3rjkUXRK3RvMIU209nDMk6
-        zagxM2Oe+eZU8eiw0baRAPOGshFwrHBXufBXtjLdhkilCSjv7V9LQinZ4QefLjBOloUqqjh1GcR
-        AJRT6POOhzOa6g8KrYOvQKhqpB35jL84gJZ6v0TZq/0He3DXnIBY6MwytuE7a1i9+Un/eIo=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: cb6cb1a9-3215-4767-a0cf-0aaa6a489dfd-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1655761627.git.ashish.kalra@amd.com> <fdf036c1e2fdf770da8238b31056206be08a7c1b.1655761627.git.ashish.kalra@amd.com>
+In-Reply-To: <fdf036c1e2fdf770da8238b31056206be08a7c1b.1655761627.git.ashish.kalra@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 24 Jun 2022 08:33:21 -0600
+Message-ID: <CAMkAt6o2cQPAAzYK31myzBQWckUSQWVOOV2+-5VpnTym-wN7sA@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 26/49] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_UPDATE command
+To:     Ashish Kalra <Ashish.Kalra@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->Hi,
+On Mon, Jun 20, 2022 at 5:08 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
 >
->> Cards with 4k native sector size may only be read 4k-aligned,
->> accommodate for this in the single read recovery and use it.
+> From: Brijesh Singh <brijesh.singh@amd.com>
 >
->Fixes: 2bf22b39823c (mmc: core: add workaround for controllers with broken multiblock reads)
-If a Fixes tag is appropriate it should be mmc: block: Add blk-mq support, right?
-(The commit introducing the FIXME)
+> The KVM_SEV_SNP_LAUNCH_UPDATE command can be used to insert data into the
+> guest's memory. The data is encrypted with the cryptographic context
+> created with the KVM_SEV_SNP_LAUNCH_START.
+>
+> In addition to the inserting data, it can insert a two special pages
+> into the guests memory: the secrets page and the CPUID page.
+>
+> While terminating the guest, reclaim the guest pages added in the RMP
+> table. If the reclaim fails, then the page is no longer safe to be
+> released back to the system and leak them.
+>
+> For more information see the SEV-SNP specification.
+>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  .../virt/kvm/x86/amd-memory-encryption.rst    |  29 +++
+>  arch/x86/kvm/svm/sev.c                        | 187 ++++++++++++++++++
+>  include/uapi/linux/kvm.h                      |  19 ++
+>  3 files changed, 235 insertions(+)
+>
+> diff --git a/Documentation/virt/kvm/x86/amd-memory-encryption.rst b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
+> index 878711f2dca6..62abd5c1f72b 100644
+> --- a/Documentation/virt/kvm/x86/amd-memory-encryption.rst
+> +++ b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
+> @@ -486,6 +486,35 @@ Returns: 0 on success, -negative on error
+>
+>  See the SEV-SNP specification for further detail on the launch input.
+>
+> +20. KVM_SNP_LAUNCH_UPDATE
+> +-------------------------
+> +
+> +The KVM_SNP_LAUNCH_UPDATE is used for encrypting a memory region. It also
+> +calculates a measurement of the memory contents. The measurement is a signature
+> +of the memory contents that can be sent to the guest owner as an attestation
+> +that the memory was encrypted correctly by the firmware.
+> +
+> +Parameters (in): struct  kvm_snp_launch_update
+> +
+> +Returns: 0 on success, -negative on error
+> +
+> +::
+> +
+> +        struct kvm_sev_snp_launch_update {
+> +                __u64 start_gfn;        /* Guest page number to start from. */
+> +                __u64 uaddr;            /* userspace address need to be encrypted */
+> +                __u32 len;              /* length of memory region */
+> +                __u8 imi_page;          /* 1 if memory is part of the IMI */
+> +                __u8 page_type;         /* page type */
+> +                __u8 vmpl3_perms;       /* VMPL3 permission mask */
+> +                __u8 vmpl2_perms;       /* VMPL2 permission mask */
+> +                __u8 vmpl1_perms;       /* VMPL1 permission mask */
+> +        };
+> +
+> +See the SEV-SNP spec for further details on how to build the VMPL permission
+> +mask and page type.
+> +
+> +
+>  References
+>  ==========
+>
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 41b83aa6b5f4..b5f0707d7ed6 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/processor.h>
+>  #include <linux/trace_events.h>
+>  #include <linux/hugetlb.h>
+> +#include <linux/sev.h>
+>
+>  #include <asm/pkru.h>
+>  #include <asm/trapnr.h>
+> @@ -233,6 +234,49 @@ static void sev_decommission(unsigned int handle)
+>         sev_guest_decommission(&decommission, NULL);
+>  }
+>
+> +static inline void snp_leak_pages(u64 pfn, enum pg_level level)
+> +{
+> +       unsigned int npages = page_level_size(level) >> PAGE_SHIFT;
+> +
+> +       WARN(1, "psc failed pfn 0x%llx pages %d (leaking)\n", pfn, npages);
+> +
+> +       while (npages) {
+> +               memory_failure(pfn, 0);
+> +               dump_rmpentry(pfn);
+> +               npages--;
+> +               pfn++;
+> +       }
+> +}
 
->> 
->> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
->> ---
->>  drivers/mmc/core/block.c | 26 ++++++++++++++------------
->>  1 file changed, 14 insertions(+), 12 deletions(-)
->> 
->> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
->> index f4a1281658db..6f0b24cb0747 100644
->> --- a/drivers/mmc/core/block.c
->> +++ b/drivers/mmc/core/block.c
->> @@ -176,7 +176,7 @@ static inline int mmc_blk_part_switch(struct
->> mmc_card *card,
->>                                       unsigned int part_type);
->>  static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
->>                                struct mmc_card *card,
->> -                              int disable_multi,
->> +                              int recovery_mode,
->>                                struct mmc_queue *mq);
->>  static void mmc_blk_hsq_req_done(struct mmc_request *mrq);
->> 
->> @@ -1302,7 +1302,7 @@ static void mmc_blk_eval_resp_error(struct
->> mmc_blk_request *brq)
->>  }
->> 
->>  static void mmc_blk_data_prep(struct mmc_queue *mq, struct
->> mmc_queue_req *mqrq,
->> -                             int disable_multi, bool *do_rel_wr_p,
->> +                             int recovery_mode, bool *do_rel_wr_p,
->>                               bool *do_data_tag_p)
->>  {
->>         struct mmc_blk_data *md = mq->blkdata;
->> @@ -1372,8 +1372,11 @@ static void mmc_blk_data_prep(struct
->> mmc_queue *mq, struct mmc_queue_req *mqrq,
->>                  * at a time in order to accurately determine which
->>                  * sectors can be read successfully.
->>                  */
->> -               if (disable_multi)
->> +               if (recovery_mode) {
->>                         brq->data.blocks = 1;
->> +                       if (mmc_large_sector(card))
->> +                               brq->data.blocks = 8;
->Maybe a ternary operator here?
-> 
-Sure!
->> +               }
->> 
->>                 /*
->>                  * Some controllers have HW issues while operating
->> @@ -1590,7 +1593,7 @@ static int mmc_blk_cqe_issue_rw_rq(struct
->> mmc_queue *mq, struct request *req)
->> 
->>  static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
->>                                struct mmc_card *card,
->> -                              int disable_multi,
->> +                              int recovery_mode,
->>                                struct mmc_queue *mq)
->>  {
->>         u32 readcmd, writecmd;
->> @@ -1599,7 +1602,7 @@ static void mmc_blk_rw_rq_prep(struct
->> mmc_queue_req *mqrq,
->>         struct mmc_blk_data *md = mq->blkdata;
->>         bool do_rel_wr, do_data_tag;
->> 
->> -       mmc_blk_data_prep(mq, mqrq, disable_multi, &do_rel_wr,
->> &do_data_tag);
->> +       mmc_blk_data_prep(mq, mqrq, recovery_mode, &do_rel_wr,
->> &do_data_tag);
->> 
->>         brq->mrq.cmd = &brq->cmd;
->> 
->> @@ -1690,7 +1693,7 @@ static int mmc_blk_fix_state(struct mmc_card
->> *card, struct request *req)
->> 
->>  #define MMC_READ_SINGLE_RETRIES        2
->> 
->> -/* Single sector read during recovery */
->> +/* Single (native) sector read during recovery */
->>  static void mmc_blk_read_single(struct mmc_queue *mq, struct request
->> *req)
->>  {
->>         struct mmc_queue_req *mqrq = req_to_mmc_queue_req(req);
->> @@ -1698,6 +1701,7 @@ static void mmc_blk_read_single(struct
->> mmc_queue *mq, struct request *req)
->>         struct mmc_card *card = mq->card;
->>         struct mmc_host *host = card->host;
->>         blk_status_t error = BLK_STS_OK;
->> +       size_t bytes_per_read = mmc_large_sector(card) ? 4069 : 512;
->Typo: 4069 -> 4096
-Oh wow, thanks, not sure how I missed that, in that case it was not just sloppy testing,
-but a manual rewrite from the kernel source for the board I currently have an eMMC with 4k native sector size on.
-(So also sloppy testing)
+Should this be deduplicated with the snp_leak_pages() in "crypto: ccp:
+Handle the legacy TMR allocation when SNP is enabled" ?
 
+> +
+> +static int snp_page_reclaim(u64 pfn)
+> +{
+> +       struct sev_data_snp_page_reclaim data = {0};
+> +       int err, rc;
+> +
+> +       data.paddr = __sme_set(pfn << PAGE_SHIFT);
+> +       rc = snp_guest_page_reclaim(&data, &err);
+> +       if (rc) {
+> +               /*
+> +                * If the reclaim failed, then page is no longer safe
+> +                * to use.
+> +                */
+> +               snp_leak_pages(pfn, PG_LEVEL_4K);
+> +       }
+> +
+> +       return rc;
+> +}
+> +
+> +static int host_rmp_make_shared(u64 pfn, enum pg_level level, bool leak)
+> +{
+> +       int rc;
+> +
+> +       rc = rmp_make_shared(pfn, level);
+> +       if (rc && leak)
+> +               snp_leak_pages(pfn, level);
+> +
+> +       return rc;
+> +}
+> +
+>  static void sev_unbind_asid(struct kvm *kvm, unsigned int handle)
+>  {
+>         struct sev_data_deactivate deactivate;
+> @@ -1902,6 +1946,123 @@ static int snp_launch_start(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>         return rc;
+>  }
 >
->Thanks,
->Avri
->> 
->>         do {
->>                 u32 status;
->> @@ -1732,13 +1736,13 @@ static void mmc_blk_read_single(struct
->> mmc_queue *mq, struct request *req)
->>                 else
->>                         error = BLK_STS_OK;
->> 
->> -       } while (blk_update_request(req, error, 512));
->> +       } while (blk_update_request(req, error, bytes_per_read));
->> 
->>         return;
->> 
->>  error_exit:
->>         mrq->data->bytes_xfered = 0;
->> -       blk_update_request(req, BLK_STS_IOERR, 512);
->> +       blk_update_request(req, BLK_STS_IOERR, bytes_per_read);
->>         /* Let it try the remaining request again */
->>         if (mqrq->retries > MMC_MAX_RETRIES - 1)
->>                 mqrq->retries = MMC_MAX_RETRIES - 1;
->> @@ -1879,10 +1883,8 @@ static void mmc_blk_mq_rw_recovery(struct
->> mmc_queue *mq, struct request *req)
->>                 return;
->>         }
->> 
->> -       /* FIXME: Missing single sector read for large sector size */
->> -       if (!mmc_large_sector(card) && rq_data_dir(req) == READ &&
->> -           brq->data.blocks > 1) {
->> -               /* Read one sector at a time */
->> +       if (rq_data_dir(req) == READ && brq->data.blocks > 1) {
->> +               /* Read one (native) sector at a time */
->>                 mmc_blk_read_single(mq, req);
->>                 return;
->>         }
->> --
->> 2.36.1
->> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
->> Managing Director: Dr. Jan Peter Berns.
->> Commercial register of local courts: Freiburg HRB381782
->
->
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
+> +static bool is_hva_registered(struct kvm *kvm, hva_t hva, size_t len)
+> +{
+> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> +       struct list_head *head = &sev->regions_list;
+> +       struct enc_region *i;
+> +
+> +       lockdep_assert_held(&kvm->lock);
+> +
+> +       list_for_each_entry(i, head, list) {
+> +               u64 start = i->uaddr;
+> +               u64 end = start + i->size;
+> +
+> +               if (start <= hva && end >= (hva + len))
+> +                       return true;
+> +       }
 
+Given that usersapce could load sev->regions_list with any # of any
+sized regions. Should we add a  cond_resched() like in
+sev_vm_destroy()?
+
+> +
+> +       return false;
+> +}
+> +
+> +static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> +{
+> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> +       struct sev_data_snp_launch_update data = {0};
+> +       struct kvm_sev_snp_launch_update params;
+> +       unsigned long npages, pfn, n = 0;
+> +       int *error = &argp->error;
+> +       struct page **inpages;
+> +       int ret, i, level;
+> +       u64 gfn;
+> +
+> +       if (!sev_snp_guest(kvm))
+> +               return -ENOTTY;
+> +
+> +       if (!sev->snp_context)
+> +               return -EINVAL;
+> +
+> +       if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data, sizeof(params)))
+> +               return -EFAULT;
+> +
+> +       /* Verify that the specified address range is registered. */
+> +       if (!is_hva_registered(kvm, params.uaddr, params.len))
+> +               return -EINVAL;
+> +
+> +       /*
+> +        * The userspace memory is already locked so technically we don't
+> +        * need to lock it again. Later part of the function needs to know
+> +        * pfn so call the sev_pin_memory() so that we can get the list of
+> +        * pages to iterate through.
+> +        */
+> +       inpages = sev_pin_memory(kvm, params.uaddr, params.len, &npages, 1);
+> +       if (!inpages)
+> +               return -ENOMEM;
+> +
+> +       /*
+> +        * Verify that all the pages are marked shared in the RMP table before
+> +        * going further. This is avoid the cases where the userspace may try
+> +        * updating the same page twice.
+> +        */
+> +       for (i = 0; i < npages; i++) {
+> +               if (snp_lookup_rmpentry(page_to_pfn(inpages[i]), &level) != 0) {
+> +                       sev_unpin_memory(kvm, inpages, npages);
+> +                       return -EFAULT;
+> +               }
+> +       }
+> +
+> +       gfn = params.start_gfn;
+> +       level = PG_LEVEL_4K;
+> +       data.gctx_paddr = __psp_pa(sev->snp_context);
+> +
+> +       for (i = 0; i < npages; i++) {
+> +               pfn = page_to_pfn(inpages[i]);
+> +
+> +               ret = rmp_make_private(pfn, gfn << PAGE_SHIFT, level, sev_get_asid(kvm), true);
+> +               if (ret) {
+> +                       ret = -EFAULT;
+> +                       goto e_unpin;
+> +               }
+> +
+> +               n++;
+> +               data.address = __sme_page_pa(inpages[i]);
+> +               data.page_size = X86_TO_RMP_PG_LEVEL(level);
+> +               data.page_type = params.page_type;
+> +               data.vmpl3_perms = params.vmpl3_perms;
+> +               data.vmpl2_perms = params.vmpl2_perms;
+> +               data.vmpl1_perms = params.vmpl1_perms;
+> +               ret = __sev_issue_cmd(argp->sev_fd, SEV_CMD_SNP_LAUNCH_UPDATE, &data, error);
+> +               if (ret) {
+> +                       /*
+> +                        * If the command failed then need to reclaim the page.
+> +                        */
+> +                       snp_page_reclaim(pfn);
+> +                       goto e_unpin;
+> +               }
+> +
+> +               gfn++;
+> +       }
+> +
+> +e_unpin:
+> +       /* Content of memory is updated, mark pages dirty */
+> +       for (i = 0; i < n; i++) {
+
+Since |n| is not only a loop variable but actually carries the number
+of private pages over to e_unpin can we use a more descriptive name?
+How about something like 'nprivate_pages'?
+
+> +               set_page_dirty_lock(inpages[i]);
+> +               mark_page_accessed(inpages[i]);
+> +
+> +               /*
+> +                * If its an error, then update RMP entry to change page ownership
+> +                * to the hypervisor.
+> +                */
+> +               if (ret)
+> +                       host_rmp_make_shared(pfn, level, true);
+> +       }
+> +
+> +       /* Unlock the user pages */
+> +       sev_unpin_memory(kvm, inpages, npages);
+> +
+> +       return ret;
+> +}
+> +
+>  int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
+>  {
+>         struct kvm_sev_cmd sev_cmd;
+> @@ -1995,6 +2156,9 @@ int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
+>         case KVM_SEV_SNP_LAUNCH_START:
+>                 r = snp_launch_start(kvm, &sev_cmd);
+>                 break;
+> +       case KVM_SEV_SNP_LAUNCH_UPDATE:
+> +               r = snp_launch_update(kvm, &sev_cmd);
+> +               break;
+>         default:
+>                 r = -EINVAL;
+>                 goto out;
+> @@ -2113,6 +2277,29 @@ find_enc_region(struct kvm *kvm, struct kvm_enc_region *range)
+>  static void __unregister_enc_region_locked(struct kvm *kvm,
+>                                            struct enc_region *region)
+>  {
+> +       unsigned long i, pfn;
+> +       int level;
+> +
+> +       /*
+> +        * The guest memory pages are assigned in the RMP table. Unassign it
+> +        * before releasing the memory.
+> +        */
+> +       if (sev_snp_guest(kvm)) {
+> +               for (i = 0; i < region->npages; i++) {
+> +                       pfn = page_to_pfn(region->pages[i]);
+> +
+> +                       if (!snp_lookup_rmpentry(pfn, &level))
+> +                               continue;
+> +
+> +                       cond_resched();
+> +
+> +                       if (level > PG_LEVEL_4K)
+> +                               pfn &= ~(KVM_PAGES_PER_HPAGE(PG_LEVEL_2M) - 1);
+> +
+> +                       host_rmp_make_shared(pfn, level, true);
+> +               }
+> +       }
+> +
+>         sev_unpin_memory(kvm, region->pages, region->npages);
+>         list_del(&region->list);
+>         kfree(region);
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 0cb119d66ae5..9b36b07414ea 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1813,6 +1813,7 @@ enum sev_cmd_id {
+>         /* SNP specific commands */
+>         KVM_SEV_SNP_INIT,
+>         KVM_SEV_SNP_LAUNCH_START,
+> +       KVM_SEV_SNP_LAUNCH_UPDATE,
+>
+>         KVM_SEV_NR_MAX,
+>  };
+> @@ -1929,6 +1930,24 @@ struct kvm_sev_snp_launch_start {
+>         __u8 pad[6];
+>  };
+>
+> +#define KVM_SEV_SNP_PAGE_TYPE_NORMAL           0x1
+> +#define KVM_SEV_SNP_PAGE_TYPE_VMSA             0x2
+> +#define KVM_SEV_SNP_PAGE_TYPE_ZERO             0x3
+> +#define KVM_SEV_SNP_PAGE_TYPE_UNMEASURED       0x4
+> +#define KVM_SEV_SNP_PAGE_TYPE_SECRETS          0x5
+> +#define KVM_SEV_SNP_PAGE_TYPE_CPUID            0x6
+> +
+> +struct kvm_sev_snp_launch_update {
+> +       __u64 start_gfn;
+> +       __u64 uaddr;
+> +       __u32 len;
+> +       __u8 imi_page;
+> +       __u8 page_type;
+> +       __u8 vmpl3_perms;
+> +       __u8 vmpl2_perms;
+> +       __u8 vmpl1_perms;
+> +};
+> +
+>  #define KVM_DEV_ASSIGN_ENABLE_IOMMU    (1 << 0)
+>  #define KVM_DEV_ASSIGN_PCI_2_3         (1 << 1)
+>  #define KVM_DEV_ASSIGN_MASK_INTX       (1 << 2)
+> --
+> 2.25.1
+>

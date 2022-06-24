@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CA05599F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29975599F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231913AbiFXMyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 08:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
+        id S231927AbiFXMys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 08:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbiFXMyi (ORCPT
+        with ESMTP id S230053AbiFXMyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 08:54:38 -0400
-Received: from outbound-smtp11.blacknight.com (outbound-smtp11.blacknight.com [46.22.139.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0816625A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:54:36 -0700 (PDT)
+        Fri, 24 Jun 2022 08:54:47 -0400
+Received: from outbound-smtp51.blacknight.com (outbound-smtp51.blacknight.com [46.22.136.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A552F4F9E5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:54:46 -0700 (PDT)
 Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp11.blacknight.com (Postfix) with ESMTPS id 093D31C3BC0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:54:35 +0100 (IST)
-Received: (qmail 6834 invoked from network); 24 Jun 2022 12:54:34 -0000
+        by outbound-smtp51.blacknight.com (Postfix) with ESMTPS id 50B78FAC5F
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:54:45 +0100 (IST)
+Received: (qmail 7081 invoked from network); 24 Jun 2022 12:54:44 -0000
 Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPA; 24 Jun 2022 12:54:34 -0000
+  by 81.17.254.9 with ESMTPA; 24 Jun 2022 12:54:44 -0000
 From:   Mel Gorman <mgorman@techsingularity.net>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
@@ -32,87 +32,165 @@ Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
         LKML <linux-kernel@vger.kernel.org>,
         Linux-MM <linux-mm@kvack.org>,
         Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH v5 00/7] Drain remote per-cpu directly
-Date:   Fri, 24 Jun 2022 13:54:16 +0100
-Message-Id: <20220624125423.6126-1-mgorman@techsingularity.net>
+Subject: [PATCH 1/7] mm/page_alloc: Add page->buddy_list and page->pcp_list
+Date:   Fri, 24 Jun 2022 13:54:17 +0100
+Message-Id: <20220624125423.6126-2-mgorman@techsingularity.net>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220624125423.6126-1-mgorman@techsingularity.net>
+References: <20220624125423.6126-1-mgorman@techsingularity.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This replaces the existing version on mm-unstable. While there are
-some fixes, this is mostly refactoring of patch 5 based on Vlastimil's
-feedback to reduce churn in later patches. The level of refactoring made
--fix patches excessively complicated.
+The page allocator uses page->lru for storing pages on either buddy or PCP
+lists.  Create page->buddy_list and page->pcp_list as a union with
+page->lru.  This is simply to clarify what type of list a page is on in
+the page allocator.
 
-Changelog since v4
-o Fix lockdep issues in patch 7
-o Refactor patch 5 to reduce churn in patches 6 and 7
-o Rebase to 5.19-rc3
+No functional change intended.
 
-Some setups, notably NOHZ_FULL CPUs, may be running realtime or
-latency-sensitive applications that cannot tolerate interference due to
-per-cpu drain work queued by __drain_all_pages().  Introduce a new
-mechanism to remotely drain the per-cpu lists. It is made possible by
-remotely locking 'struct per_cpu_pages' new per-cpu spinlocks.  This has
-two advantages, the time to drain is more predictable and other unrelated
-tasks are not interrupted.
+[minchan@kernel.org: fix page lru fields in macros]
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+Tested-by: Minchan Kim <minchan@kernel.org>
+Acked-by: Minchan Kim <minchan@kernel.org>
+Reviewed-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+---
+ include/linux/mm_types.h |  5 +++++
+ mm/page_alloc.c          | 24 ++++++++++++------------
+ 2 files changed, 17 insertions(+), 12 deletions(-)
 
-This series has the same intent as Nicolas' series "mm/page_alloc: Remote
-per-cpu lists drain support" -- avoid interference of a high priority task
-due to a workqueue item draining per-cpu page lists.  While many workloads
-can tolerate a brief interruption, it may cause a real-time task running
-on a NOHZ_FULL CPU to miss a deadline and at minimum, the draining is
-non-deterministic.
-
-Currently an IRQ-safe local_lock protects the page allocator per-cpu
-lists. The local_lock on its own prevents migration and the IRQ disabling
-protects from corruption due to an interrupt arriving while a page
-allocation is in progress.
-
-This series adjusts the locking.  A spinlock is added to struct
-per_cpu_pages to protect the list contents while local_lock_irq is
-ultimately replaced by just the spinlock in the final patch.  This allows
-a remote CPU to safely. Follow-on work should allow the spin_lock_irqsave
-to be converted to spin_lock to avoid IRQs being disabled/enabled in
-most cases. The follow-on patch will be one kernel release later as it
-is relatively high risk and it'll make bisections more clear if there
-are any problems.
-
-Patch 1 is a cosmetic patch to clarify when page->lru is storing buddy pages
-	and when it is storing per-cpu pages.
-
-Patch 2 shrinks per_cpu_pages to make room for a spin lock. Strictly speaking
-	this is not necessary but it avoids per_cpu_pages consuming another
-	cache line.
-
-Patch 3 is a preparation patch to avoid code duplication.
-
-Patch 4 is a minor correction.
-
-Patch 5 uses a spin_lock to protect the per_cpu_pages contents while still
-	relying on local_lock to prevent migration, stabilise the pcp
-	lookup and prevent IRQ reentrancy.
-
-Patch 6 remote drains per-cpu pages directly instead of using a workqueue.
-
-Patch 7 uses a normal spinlock instead of local_lock for remote draining
-
-Nicolas Saenz Julienne (1):
-  mm/page_alloc: Remotely drain per-cpu lists
-
- include/linux/mm_types.h |   5 +
- include/linux/mmzone.h   |  12 +-
- mm/page_alloc.c          | 386 ++++++++++++++++++++++++---------------
- 3 files changed, 250 insertions(+), 153 deletions(-)
-
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index c29ab4c0cd5c..e6321ec7621d 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -87,6 +87,7 @@ struct page {
+ 			 */
+ 			union {
+ 				struct list_head lru;
++
+ 				/* Or, for the Unevictable "LRU list" slot */
+ 				struct {
+ 					/* Always even, to negate PageTail */
+@@ -94,6 +95,10 @@ struct page {
+ 					/* Count page's or folio's mlocks */
+ 					unsigned int mlock_count;
+ 				};
++
++				/* Or, free page */
++				struct list_head buddy_list;
++				struct list_head pcp_list;
+ 			};
+ 			/* See page-flags.h for PAGE_MAPPING_FLAGS */
+ 			struct address_space *mapping;
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e008a3df0485..247fa7502199 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -785,7 +785,7 @@ static inline bool set_page_guard(struct zone *zone, struct page *page,
+ 		return false;
+ 
+ 	__SetPageGuard(page);
+-	INIT_LIST_HEAD(&page->lru);
++	INIT_LIST_HEAD(&page->buddy_list);
+ 	set_page_private(page, order);
+ 	/* Guard pages are not available for any usage */
+ 	__mod_zone_freepage_state(zone, -(1 << order), migratetype);
+@@ -928,7 +928,7 @@ static inline void add_to_free_list(struct page *page, struct zone *zone,
+ {
+ 	struct free_area *area = &zone->free_area[order];
+ 
+-	list_add(&page->lru, &area->free_list[migratetype]);
++	list_add(&page->buddy_list, &area->free_list[migratetype]);
+ 	area->nr_free++;
+ }
+ 
+@@ -938,7 +938,7 @@ static inline void add_to_free_list_tail(struct page *page, struct zone *zone,
+ {
+ 	struct free_area *area = &zone->free_area[order];
+ 
+-	list_add_tail(&page->lru, &area->free_list[migratetype]);
++	list_add_tail(&page->buddy_list, &area->free_list[migratetype]);
+ 	area->nr_free++;
+ }
+ 
+@@ -952,7 +952,7 @@ static inline void move_to_free_list(struct page *page, struct zone *zone,
+ {
+ 	struct free_area *area = &zone->free_area[order];
+ 
+-	list_move_tail(&page->lru, &area->free_list[migratetype]);
++	list_move_tail(&page->buddy_list, &area->free_list[migratetype]);
+ }
+ 
+ static inline void del_page_from_free_list(struct page *page, struct zone *zone,
+@@ -962,7 +962,7 @@ static inline void del_page_from_free_list(struct page *page, struct zone *zone,
+ 	if (page_reported(page))
+ 		__ClearPageReported(page);
+ 
+-	list_del(&page->lru);
++	list_del(&page->buddy_list);
+ 	__ClearPageBuddy(page);
+ 	set_page_private(page, 0);
+ 	zone->free_area[order].nr_free--;
+@@ -1504,11 +1504,11 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 		do {
+ 			int mt;
+ 
+-			page = list_last_entry(list, struct page, lru);
++			page = list_last_entry(list, struct page, pcp_list);
+ 			mt = get_pcppage_migratetype(page);
+ 
+ 			/* must delete to avoid corrupting pcp list */
+-			list_del(&page->lru);
++			list_del(&page->pcp_list);
+ 			count -= nr_pages;
+ 			pcp->count -= nr_pages;
+ 
+@@ -3068,7 +3068,7 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+ 		 * for IO devices that can merge IO requests if the physical
+ 		 * pages are ordered properly.
+ 		 */
+-		list_add_tail(&page->lru, list);
++		list_add_tail(&page->pcp_list, list);
+ 		allocated++;
+ 		if (is_migrate_cma(get_pcppage_migratetype(page)))
+ 			__mod_zone_page_state(zone, NR_FREE_CMA_PAGES,
+@@ -3318,7 +3318,7 @@ void mark_free_pages(struct zone *zone)
+ 
+ 	for_each_migratetype_order(order, t) {
+ 		list_for_each_entry(page,
+-				&zone->free_area[order].free_list[t], lru) {
++				&zone->free_area[order].free_list[t], buddy_list) {
+ 			unsigned long i;
+ 
+ 			pfn = page_to_pfn(page);
+@@ -3407,7 +3407,7 @@ static void free_unref_page_commit(struct page *page, int migratetype,
+ 	__count_vm_event(PGFREE);
+ 	pcp = this_cpu_ptr(zone->per_cpu_pageset);
+ 	pindex = order_to_pindex(migratetype, order);
+-	list_add(&page->lru, &pcp->lists[pindex]);
++	list_add(&page->pcp_list, &pcp->lists[pindex]);
+ 	pcp->count += 1 << order;
+ 
+ 	/*
+@@ -3670,8 +3670,8 @@ struct page *__rmqueue_pcplist(struct zone *zone, unsigned int order,
+ 				return NULL;
+ 		}
+ 
+-		page = list_first_entry(list, struct page, lru);
+-		list_del(&page->lru);
++		page = list_first_entry(list, struct page, pcp_list);
++		list_del(&page->pcp_list);
+ 		pcp->count -= 1 << order;
+ 	} while (check_new_pcp(page, order));
+ 
 -- 
 2.35.3
 

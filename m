@@ -2,102 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 170AD559CD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BB8559CD7
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbiFXOtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 10:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
+        id S233465AbiFXOuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 10:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233873AbiFXOtF (ORCPT
+        with ESMTP id S233982AbiFXOtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 10:49:05 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EE88152F;
-        Fri, 24 Jun 2022 07:44:36 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25ODhpVb031953;
-        Fri, 24 Jun 2022 14:44:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=2pXMCIgHJV6KAGdqoqXTrc497x6cWYzX2MTlOhCHfl4=;
- b=thakw+/g02odGKiUDC6CL+Mg9JrkCnvzKayejAB6vNlXr0aJHBHlHgaCS9UdPfVWa1O5
- pX3eG5XU7hxDB/Gx2yy1LATUvIVqXioy9y8dsDGok8Dkq1rGi6P5j2w2/Nmi8I2heIso
- 2++bH/7ski2J5YBNeIlX13RFZqIZFYAMaUsGSXI3GMfHXVM9rP6e/7gve50YhsjwZH9A
- mR/OSiPEeS8faHWWXpfb3M8CGzibS+5q+fOoDe9HDnXBidSh9RUcniwxp8GJjOAAP9BF
- 6FgGXn5cxdCnwShIX4nfXv19NN5F9Md/WCvufz+T31fSPYB40ynZIQ9cWWYixGd7RqVe fA== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gwedesm7c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jun 2022 14:44:13 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25OELiCV009114;
-        Fri, 24 Jun 2022 14:44:12 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma03dal.us.ibm.com with ESMTP id 3gs6bajnun-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jun 2022 14:44:12 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25OEiBP731719754
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Jun 2022 14:44:11 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C7C678063;
-        Fri, 24 Jun 2022 14:44:11 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7870E7805E;
-        Fri, 24 Jun 2022 14:44:10 +0000 (GMT)
-Received: from localhost (unknown [9.65.252.72])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Fri, 24 Jun 2022 14:44:10 +0000 (GMT)
-From:   Fabiano Rosas <farosas@linux.ibm.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linuxppc-dev@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] powerpc/kvm: don't crash on missing rng, and use
- darn
-In-Reply-To: <20220624142322.2049826-3-Jason@zx2c4.com>
-References: <20220624142322.2049826-1-Jason@zx2c4.com>
- <20220624142322.2049826-3-Jason@zx2c4.com>
-Date:   Fri, 24 Jun 2022 11:44:08 -0300
-Message-ID: <874k0aqfyf.fsf@linux.ibm.com>
+        Fri, 24 Jun 2022 10:49:18 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165BF81A10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:44:52 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id k15so2910992iok.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:44:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=l9AyWH5dUXc9VfLxh9TSFmwBAk0sP5BF5RMNQJrS+GQ=;
+        b=NUcpgBpcF36VbOGUS1YV2k5kVjagmhvmZsZX2BDnVmHAS4AFH+0T+VuZ6ewW6Lq3VJ
+         +XuYpCbBfCDuDONbUo4fKFdfxM9hWbNU7vODkO6OxYjMYqsMrEm/x0AXzaYmA963mV+M
+         UdVPj23gfbA1zaF3YFD0zzd8IDhdQVQUjL3a+6rzE6uoSOC+VpYt+/REH5qtC2MgWxhO
+         DPXkGLC3M5v8U7ip+9a83kF5gI+KdQsFkYUxg/5VDarQnAXmStSHp8Ebw+otHg5N/yMy
+         R3qFUq89n4g+/aOaV+Sj8T2IN/uw2IO4ZLQ8kRfK521GyEbxDv9dkBi95TuIT8rLp171
+         tD0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=l9AyWH5dUXc9VfLxh9TSFmwBAk0sP5BF5RMNQJrS+GQ=;
+        b=DPpon4kpAlrbpZTk+KP79pTAQhMJyaeytyU55uWwnVDMN3rJ6AsvYbcIERQuDzdnJa
+         kn+Y8zR8pzQeh1PTuks7LdBv5oz5CaDuuO7vl4ilzBCak6ezLheurxpI8cYLUixTZXIK
+         emBpXYo7GvUTKivDKLvoJMsck/XpEHjv5DxFCOCfvRaKQKOpk3orK2NPTlWYW09b4lRK
+         tXDdVGQafiOp5HbGl3lfpM7cVlV126whLhuRXi4O1abcug8G2d/eNx7rLTUxDxLCcBLr
+         XtnidRT9n6Zdvt+cFktEXWSOkRCxF5cNlH0of1kmbpAu60gyLn+lXmVMEHvbJyo028hB
+         VrVQ==
+X-Gm-Message-State: AJIora8S25GzLYIojm0uvnEUW6MCEyPuqElmpB63yzJZNNKHCdJoHSsT
+        1iRP3HKAi/ptosZLurljaZ72DiVAt2Y/PQUiIPI=
+X-Google-Smtp-Source: AGRyM1tJUGmTCTefR3roS3zpgrafDQnBMuaL9GJrDzPV9lhk36gyAQG4+hcufjOifr9OQ47EUcNOJRw7al4lInZchCE=
+X-Received: by 2002:a02:94a2:0:b0:339:e395:764c with SMTP id
+ x31-20020a0294a2000000b00339e395764cmr6704382jah.230.1656081887142; Fri, 24
+ Jun 2022 07:44:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: WGq4-4M6-bGPoD6pQDgTmrzJ_4o1fsug
-X-Proofpoint-GUID: WGq4-4M6-bGPoD6pQDgTmrzJ_4o1fsug
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-24_07,2022-06-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 phishscore=0 bulkscore=0
- mlxlogscore=604 spamscore=0 suspectscore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206240056
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Sender: noelinekasse@gmail.com
+Received: by 2002:a02:900c:0:0:0:0:0 with HTTP; Fri, 24 Jun 2022 07:44:46
+ -0700 (PDT)
+From:   Orlando Moris <kelvinedmond612@gmail.com>
+Date:   Fri, 24 Jun 2022 14:44:46 +0000
+X-Google-Sender-Auth: x--RhJGUvU0SAIcHgM9YJJqEeoY
+Message-ID: <CALZWmmwa_-BS7joKjO5_AVN4q+c69w7sFF3YE9nKT1WaTiELDw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
-
-> On POWER8 systems that don't have ibm,power-rng available, a guest that
-> ignores the KVM_CAP_PPC_HWRNG flag and calls H_RANDOM anyway will
-> dereference a NULL pointer. And on machines with darn instead of
-> ibm,power-rng, H_RANDOM won't work at all.
->
-> This patch kills two birds with one stone, by routing H_RANDOM calls to
-> ppc_md.get_random_seed, and doing the real mode check inside of it.
->
-> Cc: stable@vger.kernel.org # v4.1+
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Fixes: e928e9cb3601 ("KVM: PPC: Book3S HV: Add fast real-mode H_RANDOM implementation.")
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-
-Reviewed-by: Fabiano Rosas <farosas@linux.ibm.com>
-
+Hallo, Houd er rekening mee dat deze e-mail die in uw mailbox is
+binnengekomen geen fout is, maar specifiek aan u is geadresseerd voor
+uw vriendelijke overweging. Ik heb een voorstel van ($ 7.500.000,00)
+achtergelaten door mijn overleden klant ingenieur Carlos, die werkte
+en leefde hier in (Lome Togo) voor zijn dood in een ongelukkig
+auto-ongeluk met zijn familie, neem ik contact met u op als
+nabestaanden van hem, zodat u het geld bij claims kunt ontvangen. op
+uw snelle reactie zal ik u informeren over de modi van
+uitvoering van dit verbond, neem contact met mij op via deze e-mails
+(orlandomoris56@gmail.com)

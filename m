@@ -2,303 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25E25592BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A877F5592BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbiFXGCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 02:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        id S230207AbiFXGCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 02:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiFXGCk (ORCPT
+        with ESMTP id S230195AbiFXGCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 02:02:40 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1D069246;
-        Thu, 23 Jun 2022 23:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656050559; x=1687586559;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=M28AR2+gE5PYG7d0gC02iP64d6sCJq6k2gkhyc/RX8s=;
-  b=C3Ml6LcGHp1DAq/psiX9EmS6/ttFaZ8SovvPE84Qu2BSJhn3lU1u/3fr
-   JOyiMDAC4tfWzi04KYMCTMiDPceG3RfskWWGo6N5l8matCdXU81GZby10
-   c4snVrCIIDk5N8ubezk+FE8024qjRcsP1ggUEhlS4liK0KpVlYVBjHmHo
-   AKQ+u/SWInrborIXi3Po+WthamNlywxgNaZwQWq7wOE4tImq5SvKUFZjU
-   hNJzeYDE0Za8nDmeA2e3Wka14pCVmpXS3qoWuQOv9VnpRNFxzi6LMI4iJ
-   cujauhPBzyxGRe2rIqeurV0PGMddHIu5KA89Iz5nrFCjIkVCLZx2VE3M3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="279697025"
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="279697025"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 23:02:39 -0700
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="593076850"
-Received: from zhaohaif-mobl1.ccr.corp.intel.com (HELO [10.254.209.161]) ([10.254.209.161])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 23:02:36 -0700
-Message-ID: <eb2257b1-1213-1001-74bd-085af5d50dad@linux.intel.com>
-Date:   Fri, 24 Jun 2022 14:02:34 +0800
+        Fri, 24 Jun 2022 02:02:51 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E83769270
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:02:50 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id e2so1982993edv.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+LB609c/jYmQtqojEPch2ria3pGib1paFUkDRzDn6ac=;
+        b=I3bfm4XDkKJiTYM8lT+COphHeM4VHVojYTWh5p+4beMt3kfoXt+YHBeZJQeNt80HF5
+         8Xk/cS1yGnBWeaf81Cc6elRO1ziuf7/GHURaz5se1841pydRMxIXtSQEqPJUPPWF4S5B
+         3I4imrdorm/sWyCfPOtU8RPRYlvn94balDGiZYFuOqHXOHzeJ/HzfGPo5XgTb/2X2aD2
+         nkHKe3Q5e0djZyqTmIj4k5qwIaHBMb1TyVmHHzWTxEsVtr2VCSPlgJWAlJ+DRVBgprDe
+         KyIMi57snvs6H7uvYQCkLTF4+WGlzWEXu3APE57wqEfZ/dzaZ9VQQx/d9smbGiftYdm8
+         KXuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+LB609c/jYmQtqojEPch2ria3pGib1paFUkDRzDn6ac=;
+        b=OqMyLSQF0Pj/Lb58s17cnE9gNR5QdkFu9cYD1ecjznlYKgt4M6S04dWwi/+S248fWH
+         o9ua7Ieo41a9Zek8mZnRQO0upc3NMTo55Z/R6XshqwOFkSuqHjGAYcaAHLYYUmcWx0K7
+         1fJAvwNPzvE48TCTaY61I6+qwHT/euP3EKYt0mJIPUn6D43urfq54GGem0VHZZHEbggu
+         n5HFS5l6GFSE7+bmbfydamMpzT09uB00FBnUI9oAlQyV0BODt88u7HVBQzguRUnAlgGV
+         RItvfwoT9JK9CWgmN5aPJdcGfrAO/S5xepypSrpspfiYZSB+sBjbu2Du0bqVqfjEY9L3
+         MfMQ==
+X-Gm-Message-State: AJIora8aGrFi7S3biELiI/f35lf5cT8Bg8aoEZc+yUDc5ESj4A3iPjpw
+        NuMJ7SN//JqPcMB5o+P/Ly8oyc9IjJsC+/csW31MJYjwT7o=
+X-Google-Smtp-Source: AGRyM1sPCL4IZeRy5438DyfeOwib7ruP6F5Y3Lx776mw47yo3g1XQs4GIkwpZVNZO1pkqc30d6UM7TmeZwclwK7MMM4=
+X-Received: by 2002:a05:6402:354d:b0:435:93f9:fc0b with SMTP id
+ f13-20020a056402354d00b0043593f9fc0bmr15474165edd.288.1656050568672; Thu, 23
+ Jun 2022 23:02:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 1/1] iommu/vt-d: Fix RID2PASID setup/teardown failure
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Cc:     Chenyi Qiang <chenyi.qiang@intel.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20220623065720.727849-1-baolu.lu@linux.intel.com>
-From:   Ethan Zhao <haifeng.zhao@linux.intel.com>
-In-Reply-To: <20220623065720.727849-1-baolu.lu@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220601151441.9128-1-daniel.lezcano@linaro.org>
+ <20220601151441.9128-3-daniel.lezcano@linaro.org> <be8395e3-98d7-7a8f-7153-c491b22d4463@arm.com>
+ <cb35e356-bc90-2a67-6983-1a4c3a0ea62d@linaro.org> <eada018c-b857-7946-ae4b-2532e6866a45@arm.com>
+ <CAHRSSEz9ExOgvByycztKYf1ncxCKeoy3uHuyQcnUC1r5nujc2w@mail.gmail.com> <0ca654c0-d7b4-b955-7e9b-542452659694@linaro.org>
+In-Reply-To: <0ca654c0-d7b4-b955-7e9b-542452659694@linaro.org>
+From:   Wei Wang <wvw@google.com>
+Date:   Thu, 23 Jun 2022 23:02:37 -0700
+Message-ID: <CAGXk5yqCNUpGpHkecVP8U=ys9NF6dJAMu6R0E+jpgvcSVFN+Ug@mail.gmail.com>
+Subject: Re: [PATCH 3/3] thermal/sysfs: Remove cooling device sysfs statistics
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi，
-
-在 2022/6/23 14:57, Lu Baolu 写道:
-> The IOMMU driver shares the pasid table for PCI alias devices. When the
-> RID2PASID entry of the shared pasid table has been filled by the first
-> device, the subsequent device will encounter the "DMAR: Setup RID2PASID
-> failed" failure as the pasid entry has already been marked as present.
-> As the result, the IOMMU probing process will be aborted.
+On Fri, Jun 3, 2022 at 4:04 AM Daniel Lezcano <daniel.lezcano@linaro.org> w=
+rote:
 >
-> On the contrary, when any alias device is hot-removed from the system,
-> for example, by writing to /sys/bus/pci/devices/.../remove, the shared
-> RID2PASID will be cleared without any notifications to other devices.
-> As the result, any DMAs from those rest devices are blocked.
 >
-> Sharing pasid table among PCI alias devices could save two memory pages
-> for devices underneath the PCIe-to-PCI bridges. Anyway, considering that
-> those devices are rare on modern platforms that support VT-d in scalable
-> mode and the saved memory is negligible, it's reasonable to remove this
-> part of immature code to make the driver feasible and stable.
-In my understanding, thus cleanning will make the pasid table become
-per-dev datastructure whatever the dev is pci-alias or not, and the
-pasid_pte_is_present(pte)will only check against every pci-alias' own
-private pasid table,the setup stagewouldn't break, so does the
-detach/release path, and little value to code otherreference counter
-like complex implenmataion, looks good to me !
-
-
-Thanks,
-
-Ethan
-
-> Fixes: ef848b7e5a6a0 ("iommu/vt-d: Setup pasid entry for RID2PASID support")
-> Reported-by: Chenyi Qiang <chenyi.qiang@intel.com>
-> Reported-by: Ethan Zhao <haifeng.zhao@linux.intel.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
->   include/linux/intel-iommu.h |  3 --
->   drivers/iommu/intel/pasid.h |  1 -
->   drivers/iommu/intel/iommu.c | 24 -------------
->   drivers/iommu/intel/pasid.c | 69 ++-----------------------------------
->   4 files changed, 3 insertions(+), 94 deletions(-)
+> Hi Todd,
 >
-> Change log:
-> v3:
->   - Ethan pointed out that there's also problem in the device release
->     path. Let's remove this part of immature code for now.
+> [adding Wei]
 >
-> v2:
->   - Add domain validity check in RID2PASID entry setup.
+> On 02/06/2022 21:02, Todd Kjos wrote:
+> > On Thu, Jun 2, 2022 at 2:16 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
-> index 4f29139bbfc3..5fcf89faa31a 100644
-> --- a/include/linux/intel-iommu.h
-> +++ b/include/linux/intel-iommu.h
-> @@ -612,7 +612,6 @@ struct intel_iommu {
->   struct device_domain_info {
->   	struct list_head link;	/* link to domain siblings */
->   	struct list_head global; /* link to global list */
-> -	struct list_head table;	/* link to pasid table */
->   	u32 segment;		/* PCI segment number */
->   	u8 bus;			/* PCI bus number */
->   	u8 devfn;		/* PCI devfn number */
-> @@ -729,8 +728,6 @@ extern int dmar_ir_support(void);
->   void *alloc_pgtable_page(int node);
->   void free_pgtable_page(void *vaddr);
->   struct intel_iommu *domain_get_iommu(struct dmar_domain *domain);
-> -int for_each_device_domain(int (*fn)(struct device_domain_info *info,
-> -				     void *data), void *data);
->   void iommu_flush_write_buffer(struct intel_iommu *iommu);
->   int intel_iommu_enable_pasid(struct intel_iommu *iommu, struct device *dev);
->   struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn);
-> diff --git a/drivers/iommu/intel/pasid.h b/drivers/iommu/intel/pasid.h
-> index 583ea67fc783..bf5b937848b4 100644
-> --- a/drivers/iommu/intel/pasid.h
-> +++ b/drivers/iommu/intel/pasid.h
-> @@ -74,7 +74,6 @@ struct pasid_table {
->   	void			*table;		/* pasid table pointer */
->   	int			order;		/* page order of pasid table */
->   	u32			max_pasid;	/* max pasid */
-> -	struct list_head	dev;		/* device list */
->   };
->   
->   /* Get PRESENT bit of a PASID directory entry. */
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index 44016594831d..5c0dce78586a 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -320,30 +320,6 @@ EXPORT_SYMBOL_GPL(intel_iommu_gfx_mapped);
->   DEFINE_SPINLOCK(device_domain_lock);
->   static LIST_HEAD(device_domain_list);
->   
-> -/*
-> - * Iterate over elements in device_domain_list and call the specified
-> - * callback @fn against each element.
-> - */
-> -int for_each_device_domain(int (*fn)(struct device_domain_info *info,
-> -				     void *data), void *data)
-> -{
-> -	int ret = 0;
-> -	unsigned long flags;
-> -	struct device_domain_info *info;
-> -
-> -	spin_lock_irqsave(&device_domain_lock, flags);
-> -	list_for_each_entry(info, &device_domain_list, global) {
-> -		ret = fn(info, data);
-> -		if (ret) {
-> -			spin_unlock_irqrestore(&device_domain_lock, flags);
-> -			return ret;
-> -		}
-> -	}
-> -	spin_unlock_irqrestore(&device_domain_lock, flags);
-> -
-> -	return 0;
-> -}
-> -
->   const struct iommu_ops intel_iommu_ops;
->   
->   static bool translation_pre_enabled(struct intel_iommu *iommu)
-> diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-> index cb4c1d0cf25c..17cad7c1f62d 100644
-> --- a/drivers/iommu/intel/pasid.c
-> +++ b/drivers/iommu/intel/pasid.c
-> @@ -86,54 +86,6 @@ void vcmd_free_pasid(struct intel_iommu *iommu, u32 pasid)
->   /*
->    * Per device pasid table management:
->    */
-> -static inline void
-> -device_attach_pasid_table(struct device_domain_info *info,
-> -			  struct pasid_table *pasid_table)
-> -{
-> -	info->pasid_table = pasid_table;
-> -	list_add(&info->table, &pasid_table->dev);
-> -}
-> -
-> -static inline void
-> -device_detach_pasid_table(struct device_domain_info *info,
-> -			  struct pasid_table *pasid_table)
-> -{
-> -	info->pasid_table = NULL;
-> -	list_del(&info->table);
-> -}
-> -
-> -struct pasid_table_opaque {
-> -	struct pasid_table	**pasid_table;
-> -	int			segment;
-> -	int			bus;
-> -	int			devfn;
-> -};
-> -
-> -static int search_pasid_table(struct device_domain_info *info, void *opaque)
-> -{
-> -	struct pasid_table_opaque *data = opaque;
-> -
-> -	if (info->iommu->segment == data->segment &&
-> -	    info->bus == data->bus &&
-> -	    info->devfn == data->devfn &&
-> -	    info->pasid_table) {
-> -		*data->pasid_table = info->pasid_table;
-> -		return 1;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -static int get_alias_pasid_table(struct pci_dev *pdev, u16 alias, void *opaque)
-> -{
-> -	struct pasid_table_opaque *data = opaque;
-> -
-> -	data->segment = pci_domain_nr(pdev->bus);
-> -	data->bus = PCI_BUS_NUM(alias);
-> -	data->devfn = alias & 0xff;
-> -
-> -	return for_each_device_domain(&search_pasid_table, data);
-> -}
->   
->   /*
->    * Allocate a pasid table for @dev. It should be called in a
-> @@ -143,28 +95,18 @@ int intel_pasid_alloc_table(struct device *dev)
->   {
->   	struct device_domain_info *info;
->   	struct pasid_table *pasid_table;
-> -	struct pasid_table_opaque data;
->   	struct page *pages;
->   	u32 max_pasid = 0;
-> -	int ret, order;
-> -	int size;
-> +	int order, size;
->   
->   	might_sleep();
->   	info = dev_iommu_priv_get(dev);
->   	if (WARN_ON(!info || !dev_is_pci(dev) || info->pasid_table))
->   		return -EINVAL;
->   
-> -	/* DMA alias device already has a pasid table, use it: */
-> -	data.pasid_table = &pasid_table;
-> -	ret = pci_for_each_dma_alias(to_pci_dev(dev),
-> -				     &get_alias_pasid_table, &data);
-> -	if (ret)
-> -		goto attach_out;
-> -
->   	pasid_table = kzalloc(sizeof(*pasid_table), GFP_KERNEL);
->   	if (!pasid_table)
->   		return -ENOMEM;
-> -	INIT_LIST_HEAD(&pasid_table->dev);
->   
->   	if (info->pasid_supported)
->   		max_pasid = min_t(u32, pci_max_pasids(to_pci_dev(dev)),
-> @@ -182,9 +124,7 @@ int intel_pasid_alloc_table(struct device *dev)
->   	pasid_table->table = page_address(pages);
->   	pasid_table->order = order;
->   	pasid_table->max_pasid = 1 << (order + PAGE_SHIFT + 3);
-> -
-> -attach_out:
-> -	device_attach_pasid_table(info, pasid_table);
-> +	info->pasid_table = pasid_table;
->   
->   	return 0;
->   }
-> @@ -202,10 +142,7 @@ void intel_pasid_free_table(struct device *dev)
->   		return;
->   
->   	pasid_table = info->pasid_table;
-> -	device_detach_pasid_table(info, pasid_table);
-> -
-> -	if (!list_empty(&pasid_table->dev))
-> -		return;
-> +	info->pasid_table = NULL;
->   
->   	/* Free scalable mode PASID directory tables: */
->   	dir = pasid_table->table;
+> [ ... ]
+>
+> >> I see, it makes sense. Let's see if Todd and Android folks don't
+> >> use this thermal sysfs stats, so we could remove them.
+> >
+> > Android HALs do use the thermal sysfs stats. debugfs isn't a viable
+> > replacement since debugfs must not be mounted during normal operation.
+>
+> Thanks for your answer.
+>
+> I'm curious, what is the purpose of getting the statistics, especially
+> the transitions stats from normal operation?
+>
+> There were some complains about systems having a high number of cooling
+> devices with a lot of states. The state transitions are represented as a
+> matrix and result in up to hundred of megabytes of memory wasted.
+>
+> Moreover, sysfs being limited a page size, the output is often truncated.
+>
+> As it is automatically enabled for GKI, this waste of memory which is
+> not negligible for system with low memory can not be avoided.
+>
+> I went through the thermal HAL but did not find an usage of these
+> statistics, do you have a pointer to the code using them ?
+>
+> Thanks
+>
+>    -- Daniel
+>
+>
 
--- 
-"firm, enduring, strong, and long-lived"
+Sorry for the late reply, trying to catch up on emails after sick
+recovery. We use it for stats collection to understand thermal
+residency, and it is not in the HAL code, we don't use the transition
+table heavily though. Are some of the devices having too many cooling
+devices? Can we have a config to enable stats for a given cooling
+device?
 
+Thanks!
+-Wei
+
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog

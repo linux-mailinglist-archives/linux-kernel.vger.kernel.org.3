@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C579E55A002
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB55455A079
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbiFXRke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        id S231667AbiFXRkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232333AbiFXRjo (ORCPT
+        with ESMTP id S231410AbiFXRk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:39:44 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11ABE3D1C1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:39:36 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id w19-20020a17090a8a1300b001ec79064d8dso6453520pjn.2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:39:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rkX1oaIqIjSQ+fhxhMvndP4sOtvnnrDnDjuV5umF/NU=;
-        b=h39vafez0xPfjeqmyVCqsVEnND5p4DQC/7P/f19Qd/5AACaxcSGjhb59Tcy21u00+6
-         CqmXwsFB1M3UAmRj/DHtfuG0dy1UevWDMa/M2O+0Qxx1yvJM1JCrt+ctAWkrsxjPifl6
-         bASfdDlzi3t/bFHSiFhsgWpN2ifrQ4LbRne90=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rkX1oaIqIjSQ+fhxhMvndP4sOtvnnrDnDjuV5umF/NU=;
-        b=3D9jmFF7x7RsVNgRjlN3tBW3TqnPeDreUxZRSc5T+b3vJs9MmAtGScCsq5SQQFoK3g
-         Jp6fQY6HsW6TtIu6YaNq7rdkNrFWXbRvvuAgsMp2Efa80LgTEVnFuDLariE0hBtcnMoJ
-         fod9btM7homi7SEQJZ+rdQ2LnDDnNyD1vbzeR1BFRywdOy1WAsEuAQZFQ0A8i44kfOJR
-         trsfm+neux3xYghjVtz9hPXa5n4+NPkevoBNpvqt0wb3goViUuVEbZgJ0VvnsmgaX1pN
-         gumEbH9WMAzC8LWajLoxTryVOURS6RKRvgx6p9Dx3D7iVvAw72892ogq8U4tBqCucnQi
-         37wA==
-X-Gm-Message-State: AJIora9YMS0az5E0AS32xFVrJNQCXI5GO1py3SNNxGspvJ71poO7oMdv
-        xi0kw0en6r5sCP/3w1ZjiaSyeZ3ZyGhDxA==
-X-Google-Smtp-Source: AGRyM1smB8K/UWVQFuL8bSpt3tgOdRk5hNU98NCVefIgSohiO2UNLio86AJpaKdlgR8zuSL5E3mtWQ==
-X-Received: by 2002:a17:902:ef47:b0:169:a2a7:94cf with SMTP id e7-20020a170902ef4700b00169a2a794cfmr163884plx.143.1656092375445;
-        Fri, 24 Jun 2022 10:39:35 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 71-20020a63034a000000b0040d2d9f15e0sm1916327pgd.20.2022.06.24.10.39.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 10:39:35 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 10:39:34 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Jiang Jian <jiangjian@cdjrlc.com>
-Cc:     deller@gmx.de, James.Bottomley@hansenpartnership.com,
-        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] parisc: aligned '*' in comments
-Message-ID: <202206241039.B98CEE0735@keescook>
-References: <20220621063823.22064-1-jiangjian@cdjrlc.com>
+        Fri, 24 Jun 2022 13:40:27 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC62B11440;
+        Fri, 24 Jun 2022 10:40:25 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9C081240005;
+        Fri, 24 Jun 2022 17:40:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656092424;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i+I0fAg7dAYLMjZXVCRufkyrCMRSm4aTbpDZNNw4VYY=;
+        b=K7FCNMXUQucpCpZjepBBIywZZdzJ78N7wWoHsTXLIihwMJ2L07JwbFquU7gfJEMXV8Krqg
+        2B12YhbbnggCBS1iCEAgRFT9Nc6haQySllbZnvGDHggkTnzBxbz3CiEjIwarHRMIFRYmY3
+        g+b9wUL4Uqol6uPWgjoBqPxrsid/msiXslgN0ByIl6csR07FCUmuuTs3vLC6Mal3PuGzzE
+        jXxWHq6nR0ZHHJ0/yxRe27Iny3YjLV7Vq89wiK5ugFPXMx9Fp3p2VVbVN5IIGFvfj6m8SD
+        OVUaOZbFOMPTe0G9w8J1TyzfVmT3y1w5fC9IV478muUoMMqIytgaoP45HOjGSQ==
+Date:   Fri, 24 Jun 2022 19:40:21 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     a.zummo@towertech.it, long17.cool@163.com, steve@sk2.org
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wsa@kernel.org
+Subject: Re: [PATCH] rtc: use simple i2c probe
+Message-ID: <165609236793.30693.563618039150236880.b4-ty@bootlin.com>
+References: <20220610162346.4134094-1-steve@sk2.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220621063823.22064-1-jiangjian@cdjrlc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220610162346.4134094-1-steve@sk2.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 02:38:23PM +0800, Jiang Jian wrote:
-> Consider * alignment in comments
+On Fri, 10 Jun 2022 18:23:43 +0200, Stephen Kitt wrote:
+> All these drivers have an i2c probe function which doesn't use the
+> "struct i2c_device_id *id" parameter, so they can trivially be
+> converted to the "probe_new" style of probe with a single argument.
 > 
-> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+> This change was done using the following Coccinelle script, and fixed
+> up for whitespace changes:
+> 
+> [...]
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Applied, thanks!
 
+[1/1] rtc: use simple i2c probe
+      commit: 4e4a13cc302ec6ea9b04422a02ebfd422e9eb9a8
+
+Best regards,
 -- 
-Kees Cook
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

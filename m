@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D93559FE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0560455A03B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232558AbiFXRjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
+        id S232456AbiFXRjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbiFXRht (ORCPT
+        with ESMTP id S232204AbiFXRh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:37:49 -0400
+        Fri, 24 Jun 2022 13:37:56 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F616DB25
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:41 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id k206-20020a2556d7000000b0066c815d2aa5so941335ybb.23
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60436DB28
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:42 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id e85-20020a25e758000000b00668ad2fcfdcso2776845ybh.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=HisKs0OAYNP82NuB/Frk0iPqJLb2lc+sAZjNm287jcQ=;
-        b=P/aHZ9fJlVwvkJfaZVFajZm98KOIfMj2IYppFM5LuQ1zf9EsSZ8qMdlGw+rfUUepxT
-         Rk4rneqzgNI3hBkLTvsDOw/sovXOPg7QHxBlzbSMDv947qVGHCYD/AKf6PpAucF+SB8+
-         CPR/TNLo08h/tyhtM460hIdHHPcABjdzuulR5lTk4iFehrldnIL1GfqZda2In7YFtggB
-         usvpcPQWqZ0WphYnX3EhkMBx+Typu02xyZyvlY2VIUMvBbNVFv8qTl1N/MQr/QOO/hLC
-         HQXC2pLyWYxCtUrqnUx0Na56WcsA/KgE6sPe3nZndOHiUWkRsKxAtTwz+BZWdqDY7Yot
-         OYtw==
+        bh=fAGdwktIt8KMFEeY6rcBub88vVCunW5aTmCo6YUaLic=;
+        b=Vv9tNv7i10/uP/TErfNMavUn+CONiybyM+rrVRU58xqDyKcuGlAEDDrYb4H8klnBqK
+         6JRS9rF1Ax96bUDo9E8Q4msDjYxTQRaGDpgp0PfneuVYFjBRZnNER/PyTbYsKCHGqcfZ
+         wZWHRDAniodz7pO51uXdkiH13sfi6Axk4M+P3ph2OFO2iVkw+faALWo+6f5rgiVVvomg
+         DpY1Vfkw9K59AUl480vwthENZtLgRMWXBf+ShceS/WJ9l4dL6v1IQjWdqA0Jh9uJzr7B
+         6UZ1PTjJenNdIGVZeRP15MnVvJZeuiEXKSxtsNuQDFnn+yupWoF7oiY8vsG+FIoUiDIP
+         Hx5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=HisKs0OAYNP82NuB/Frk0iPqJLb2lc+sAZjNm287jcQ=;
-        b=inpdvmUfXcdc8NIsDaRe0EJei0qQrrijB2J9nk69Ct0hMQfF80yT0hks0joGf7OlBB
-         /lEYxDaWll/g9p4JUNEEI0gAhWZHRdAOJM2JC9ioTkKN8LwF7/qVEFcXJY4nj3R4YbZT
-         j75grbvusV9QE24XQAlGeRyxQsjNR5qIHlU/ANShMkVHluXGqeJAb6T3NH9U+4g+zLas
-         fPTmyVigB7A3j/JVFg0z6tVryRBNaGvzAk/KoK35eAPB6GFMuZiCWMX6OqDGeRSo4oQB
-         IKTuhUd58TkYBe1idkrX0+yXWp8+mvjLH2Ve3HIAlZ9ogandy/CP0tZ1FqRd+psQNyYR
-         PHrw==
-X-Gm-Message-State: AJIora+j3In+lotx9Pp94AwTqD455KBpjRQjvim4IXqCSkXW3S9itAOs
-        xIXjcoUiRWLOEp0BO8o8hrfC/FTJhXiEbLrb
-X-Google-Smtp-Source: AGRyM1tzk7GXyftSzcieFt/kefrccg/jUZ3bHYFjHpboz2q85ML1dIMb8Z3beFS8X7RsMAKgtTvTxLeNH4OzIoqy
+        bh=fAGdwktIt8KMFEeY6rcBub88vVCunW5aTmCo6YUaLic=;
+        b=29DP/W2ZUO6j5FvloLuOzmHuL+hT6QPOn3T/ewUJbwqNUithCSw67Z1XhPI3pw5mbB
+         bBOizCSeuoPP3OIbvLGULkNazts3wMvnxwYU4TYeNU0LX4Uf1DNvDlKfRKHE4+xsQuwf
+         QWTeYM9jeRWBnXRGfWWzlkcf1fsHsuFTClVGZQeFXGuktwWXnSHKZzygqnHvF/26bFfZ
+         UDt5wyJV3Hy53WI7+/99qeIuJ1cKSEd4hplj2vtT35fRnuOTUTxRwzW+Kxo8If/0m+2d
+         rFKvi3WQyqcQ4kxbd6kouYShO5OW5+Oi06Eb/EHcW8S8FbfS1cQq167w5vngimvGnfdY
+         bhQQ==
+X-Gm-Message-State: AJIora+61CntuQgoeBrWGUTJRe1dLmSEZNSzluujcxR5STHj+iM9OKqP
+        OokfuV7sw4lRillueQf6kjRnYo1tKEEAmW6w
+X-Google-Smtp-Source: AGRyM1s9InsMUuonAQPM2rPsoKgLt0oAO15w8QDXDBNTwbyi4uqbeJxT6CBZesWu39P67C1HtW9QkiD1Grt/J/X2
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a0d:e60e:0:b0:317:893c:90a3 with SMTP
- id p14-20020a0de60e000000b00317893c90a3mr18394744ywe.241.1656092260720; Fri,
- 24 Jun 2022 10:37:40 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 17:36:52 +0000
+ (user=jthoughton job=sendgmr) by 2002:a81:64f:0:b0:318:8841:b44e with SMTP id
+ 76-20020a81064f000000b003188841b44emr29471ywg.216.1656092262019; Fri, 24 Jun
+ 2022 10:37:42 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 17:36:53 +0000
 In-Reply-To: <20220624173656.2033256-1-jthoughton@google.com>
-Message-Id: <20220624173656.2033256-23-jthoughton@google.com>
+Message-Id: <20220624173656.2033256-24-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20220624173656.2033256-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [RFC PATCH 22/26] madvise: add uapi for HugeTLB HGM collapse: MADV_COLLAPSE
+Subject: [RFC PATCH 23/26] userfaultfd: add UFFD_FEATURE_MINOR_HUGETLBFS_HGM
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -77,95 +77,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit is co-opting the same madvise mode that is being introduced
-by zokeefe@google.com to manually collapse THPs[1].
-
-As with the rest of the high-granularity mapping support, MADV_COLLAPSE
-is only supported for shared VMAs right now.
-
-[1] https://lore.kernel.org/linux-mm/20220604004004.954674-10-zokeefe@google.com/
+This is so that userspace is aware that their kernel was compiled with
+HugeTLB high-granularity mapping and that UFFDIO_CONTINUE down to
+PAGE_SIZE-aligned chunks are valid.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- include/uapi/asm-generic/mman-common.h |  2 ++
- mm/madvise.c                           | 23 +++++++++++++++++++++++
- 2 files changed, 25 insertions(+)
+ fs/userfaultfd.c                 | 7 ++++++-
+ include/uapi/linux/userfaultfd.h | 2 ++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-index 6c1aa92a92e4..b686920ca731 100644
---- a/include/uapi/asm-generic/mman-common.h
-+++ b/include/uapi/asm-generic/mman-common.h
-@@ -77,6 +77,8 @@
- 
- #define MADV_DONTNEED_LOCKED	24	/* like DONTNEED, but drop locked pages too */
- 
-+#define MADV_COLLAPSE	25		/* collapse an address range into hugepages */
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index 77c1b8a7d0b9..59bfdb7a67e0 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -1935,10 +1935,15 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
+ 		goto err_out;
+ 	/* report all available features and ioctls to userland */
+ 	uffdio_api.features = UFFD_API_FEATURES;
 +
- /* compatibility flags */
- #define MAP_FILE	0
- 
-diff --git a/mm/madvise.c b/mm/madvise.c
-index d7b4f2602949..c624c0f02276 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -59,6 +59,7 @@ static int madvise_need_mmap_write(int behavior)
- 	case MADV_FREE:
- 	case MADV_POPULATE_READ:
- 	case MADV_POPULATE_WRITE:
-+	case MADV_COLLAPSE:
- 		return 0;
- 	default:
- 		/* be safe, default to 1. list exceptions explicitly */
-@@ -981,6 +982,20 @@ static long madvise_remove(struct vm_area_struct *vma,
- 	return error;
- }
- 
-+static int madvise_collapse(struct vm_area_struct *vma,
-+			    struct vm_area_struct **prev,
-+			    unsigned long start, unsigned long end)
-+{
-+	bool shared = vma->vm_flags & VM_SHARED;
-+	*prev = vma;
+ #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+ 	uffdio_api.features &=
+ 		~(UFFD_FEATURE_MINOR_HUGETLBFS | UFFD_FEATURE_MINOR_SHMEM);
+-#endif
++#ifndef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
++	uffdio_api.features &= ~UFFD_FEATURE_MINOR_HUGETLBFS_HGM;
++#endif  /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
++#endif  /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
 +
-+	/* Only allow collapsing for HGM-enabled, shared mappings. */
-+	if (!is_vm_hugetlb_page(vma) || !hugetlb_hgm_enabled(vma) || !shared)
-+		return -EINVAL;
-+
-+	return hugetlb_collapse(vma->vm_mm, vma, start, end);
-+}
-+
- /*
-  * Apply an madvise behavior to a region of a vma.  madvise_update_vma
-  * will handle splitting a vm area into separate areas, each area with its own
-@@ -1011,6 +1026,8 @@ static int madvise_vma_behavior(struct vm_area_struct *vma,
- 	case MADV_POPULATE_READ:
- 	case MADV_POPULATE_WRITE:
- 		return madvise_populate(vma, prev, start, end, behavior);
-+	case MADV_COLLAPSE:
-+		return madvise_collapse(vma, prev, start, end);
- 	case MADV_NORMAL:
- 		new_flags = new_flags & ~VM_RAND_READ & ~VM_SEQ_READ;
- 		break;
-@@ -1158,6 +1175,9 @@ madvise_behavior_valid(int behavior)
- #ifdef CONFIG_MEMORY_FAILURE
- 	case MADV_SOFT_OFFLINE:
- 	case MADV_HWPOISON:
-+#endif
-+#ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
-+	case MADV_COLLAPSE:
+ #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_WP
+ 	uffdio_api.features &= ~UFFD_FEATURE_PAGEFAULT_FLAG_WP;
  #endif
- 		return true;
+diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+index 7d32b1e797fb..50fbcb0bcba0 100644
+--- a/include/uapi/linux/userfaultfd.h
++++ b/include/uapi/linux/userfaultfd.h
+@@ -32,6 +32,7 @@
+ 			   UFFD_FEATURE_SIGBUS |		\
+ 			   UFFD_FEATURE_THREAD_ID |		\
+ 			   UFFD_FEATURE_MINOR_HUGETLBFS |	\
++			   UFFD_FEATURE_MINOR_HUGETLBFS_HGM |	\
+ 			   UFFD_FEATURE_MINOR_SHMEM |		\
+ 			   UFFD_FEATURE_EXACT_ADDRESS |		\
+ 			   UFFD_FEATURE_WP_HUGETLBFS_SHMEM)
+@@ -213,6 +214,7 @@ struct uffdio_api {
+ #define UFFD_FEATURE_MINOR_SHMEM		(1<<10)
+ #define UFFD_FEATURE_EXACT_ADDRESS		(1<<11)
+ #define UFFD_FEATURE_WP_HUGETLBFS_SHMEM		(1<<12)
++#define UFFD_FEATURE_MINOR_HUGETLBFS_HGM	(1<<13)
+ 	__u64 features;
  
-@@ -1351,6 +1371,9 @@ int madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
-  *		triggering read faults if required
-  *  MADV_POPULATE_WRITE - populate (prefault) page tables writable by
-  *		triggering write faults if required
-+ *  MADV_COLLAPSE - collapse a high-granularity HugeTLB mapping into huge
-+ *		mappings. This is useful after an entire hugepage has been
-+ *		mapped with individual small UFFDIO_CONTINUE operations.
-  *
-  * return values:
-  *  zero    - success
+ 	__u64 ioctls;
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

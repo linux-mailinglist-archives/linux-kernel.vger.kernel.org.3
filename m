@@ -2,132 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC2955A37F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0AA55A3B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbiFXVbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 17:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
+        id S231794AbiFXVgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 17:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbiFXVa6 (ORCPT
+        with ESMTP id S231654AbiFXVgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 17:30:58 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0139A81702
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:58 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id u13-20020a170902e5cd00b0016a53274671so1843212plf.15
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:57 -0700 (PDT)
+        Fri, 24 Jun 2022 17:36:19 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583513EAAE
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:36:18 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2ef5380669cso36560247b3.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:36:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=FBTaEZTEg5GSVpewRBYKdCI+FLeByH1Vcwz0M7m4O+0=;
-        b=SWbZ73EHxyjh8o5NT5+YNokKeaatVJ46ekafm3q2KaueYufnteAQ+nNnv0g8VuQmzQ
-         dHdFDYemFGBvCT+4wkiipM0eUtXvZUQYQ/2yu1xl/ziQv8ITCGWREJevCH/qZKYhaPqx
-         JGlwkxDPC2I9qUSoxy/vzMyPDYGWqWUePXYQNHNloS7yfJiyjPmc5xjvxftfm3WGFA4x
-         Ws8ly60Yx3TPDrBH5Iy6hhgA1rHtTn7701i3Tn/rhUObgTU8LfBPMX/VmGPMyk4xFrsf
-         cd+bqJ0ZwVcILvOgSExuBkQ2KKX58+0nCQINRuuQjWpSwdslQIsAuu7Bxm1i+TquTdws
-         OeYg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=cGTylEOWtLkcLIsxYVoGzfL+q0nSap9+8NoSlXBuXe4=;
+        b=cmDy8lsyV2rPNiNRuYkEb5rHWD8XZVHKqJZAeKf3TnWZFLlj+/DTdLUMbXEmtTuv9s
+         4KLbNJHfJqFtWZDtoSIB0jA5BkjqsNets6Rbr/qrINRnJTlQirI2k20GLR/Ql3zSe9Wq
+         Pb5aXUq1NZ5lDKQQMD7a39HTujZM62LjFsQtIqhJoX7pGAoQGMqpg1+inV2FswApITO2
+         CmT3BH618Yqgt62CZsqxQ5e1jZosKUxMbd0fExcTgjLrAxPBxkG7CVcmjw/O8dvTmdbG
+         l6UouC6UHf0T16KEM/mMUtmMtJOh0vyJl540PkTEmkGnFr3Ic8OHzXavkS9AsevSsxDH
+         c7uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=FBTaEZTEg5GSVpewRBYKdCI+FLeByH1Vcwz0M7m4O+0=;
-        b=htIXv32aeleqn0UBWhSuRzLvsCD6nk9u4NvxUYNYsr1/onBL0QyAvil2D3rFFRIufZ
-         sxaAI7dUp8PO0f2sus/9W6/Ly4V7WFCfUjUjvDVyMycxO0FSxdMxSEQWKfWyl0Fbareu
-         sLFV1SrgEtRwF8ZKql4NHP+k71ETNEeGoXEVjVtvw7UD9u2E5yYu8x/xvk5aEgGfelFh
-         Am/pyrTcNgJ3ndAV4ih0H1OPC+rcoH9OXA73Bl2ICDRxc03PpSXoyBa4Xp8FXYUVhGu5
-         y/bKRlS218I9RPCxdpDd8GM1Ny1po6WF8g6fk6SOpL0EPY6dN6g/flpozqY3Y/K30PAx
-         CjVA==
-X-Gm-Message-State: AJIora/n4Re7a7QZpxn2YMzp6kg9rzDhgiaOv+6mvmh4CkGs+pE/8M12
-        mhx6iAb7XL+dn2Pc/zBE9O32C1d59xY=
-X-Google-Smtp-Source: AGRyM1sugnfEsmqVDhbHA4jyTxXo0iuQG8dGD8pRvqXU8Z2EFcOSud0AzOY1pj5YaZMeBTqxatGprCqYfyI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:d2c4:b0:16a:5c48:8312 with SMTP id
- n4-20020a170902d2c400b0016a5c488312mr1169374plc.45.1656106257561; Fri, 24 Jun
- 2022 14:30:57 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 24 Jun 2022 21:30:39 +0000
-In-Reply-To: <20220624213039.2872507-1-seanjc@google.com>
-Message-Id: <20220624213039.2872507-5-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220624213039.2872507-1-seanjc@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v2 4/4] KVM: x86/mmu: Buffer nested MMU split_desc_cache only
- by default capacity
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cGTylEOWtLkcLIsxYVoGzfL+q0nSap9+8NoSlXBuXe4=;
+        b=Ck47hAgGjuuZjSk05lJ4a11GaykJMF2di9lXeAQ7yb6p/6BiKyGsIK//4xvAXu5Zsy
+         SvwPouPn6QVjgYaavxtgw8prA1415weMg4SE93rYiLbZlzxYWj1aPLEYiufxgdWajIA0
+         vwrzWIa+MB9DBZK5vL1Kp3i8MlA3H3zJjmWMxgin2Iv3pRXuaWrnSU20oi7Tv8tZMvfo
+         ARTcKWhPNNp21pKmlpoUPrxrWuqP/+ku1GR56ag1D9uJ40xatxKhJcXfxpsmdBGp5Pvc
+         zAAXXux16IYGaWGRMHdqIbdAQvMgvjYlKrBPhuavwduKV6O2tITCbJ9ohgot+6e1ner5
+         WxSg==
+X-Gm-Message-State: AJIora8tN+D1rPar/GocM6bzEF+WGbJ8lfPH9w1bjsN1p13QVJ1EBd/D
+        uOQADGrvtL9JMLcjQrLy8mfoJ/KyRPdu6BDNGuKocw==
+X-Google-Smtp-Source: AGRyM1v7bTPADut4sgzebmriq1YeKB4PBfCCubvcMefuaUSK78eOKMtZqJdaXmsewcrgPAHhOp3HhKhV310/qVQEQyc=
+X-Received: by 2002:a0d:cc54:0:b0:317:752c:bcf3 with SMTP id
+ o81-20020a0dcc54000000b00317752cbcf3mr1068283ywd.437.1656106577632; Fri, 24
+ Jun 2022 14:36:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-13-peterwu.pub@gmail.com>
+ <CACRpkdZatfOFmeGXepTrjAk1or4W6KNUEaXnP+srRebfM=52AA@mail.gmail.com>
+ <CACRpkdbzZqerE_2PeGMUWRbtjK=9P8V763cj83ZqjP4n6AVHAg@mail.gmail.com> <CA+hk2fZEG0TxMGhGJY21w=MmXgKsH5mYCYynQV1jbhpOCyf3qg@mail.gmail.com>
+In-Reply-To: <CA+hk2fZEG0TxMGhGJY21w=MmXgKsH5mYCYynQV1jbhpOCyf3qg@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 24 Jun 2022 23:36:06 +0200
+Message-ID: <CACRpkdYoR9SGQdxJQmUReP7SLk_BxG0yuTWAL__o90PuO8sCqA@mail.gmail.com>
+Subject: Re: [PATCH v3 12/14] leds: mt6370: Add Mediatek MT6370 current sink
+ type LED Indicator support
+To:     szuni chen <szunichen@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
+        alice_chen@richtek.com, Linux PM <linux-pm@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ChiYuan Huang <cy_huang@richtek.com>, chiaen_wu@richtek.com,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Buffer split_desc_cache, the cache used to allcoate rmap list entries,
-only by the default cache capacity (currently 40), not by doubling the
-minimum (513).  Aliasing L2 GPAs to L1 GPAs is uncommon, thus eager page
-splitting is unlikely to need 500+ entries.  And because each object
-is (currently) a non-trivial 128 bytes (see struct pte_list_desc), those
-extra ~500 entries means KVM is in all likelihood wasting ~64kb of memory.
+On Fri, Jun 24, 2022 at 9:20 AM szuni chen <szunichen@gmail.com> wrote:
 
-Link: https://lore.kernel.org/all/YrTDcrsn0%2F+alpzf@google.com
-Reviewed-by: David Matlack <dmatlack@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 27 ++++++++++++++++++---------
- 1 file changed, 18 insertions(+), 9 deletions(-)
+> > I meant this one. Move that into drivers/leds/flash
+> >  drivers/leds/flash/leds-mt6370-flash.c             |  657 ++++++++++++
+>
+> In next version, I'll use "leds: flash: ......" instead of "leds:
+> flashlight: ......" in subject.
+> May I confirm that the driver has already in the drivers/leds/flash,
+> so I don=E2=80=99t have to move it in next version?
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index eae5c801e442..52664c3caaab 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6123,17 +6123,26 @@ static bool need_topup_split_caches_or_resched(struct kvm *kvm)
- 
- static int topup_split_caches(struct kvm *kvm)
- {
--	int r;
--
--	lockdep_assert_held(&kvm->slots_lock);
--
- 	/*
--	 * Setting capacity == min would cause KVM to drop mmu_lock even if
--	 * just one object was consumed from the cache, so make capacity
--	 * larger than min.
-+	 * Allocating rmap list entries when splitting huge pages for nested
-+	 * MMUs is uncommon as KVM needs to use a list if and only if there is
-+	 * more than one rmap entry for a gfn, i.e. requires an L1 gfn to be
-+	 * aliased by multiple L2 gfns and/or from multiple nested roots with
-+	 * different roles.  Aliasing gfns when using TDP is atypical for VMMs;
-+	 * a few gfns are often aliased during boot, e.g. when remapping BIOS,
-+	 * but aliasing rarely occurs post-boot or for many gfns.  If there is
-+	 * only one rmap entry, rmap->val points directly at that one entry and
-+	 * doesn't need to allocate a list.  Buffer the cache by the default
-+	 * capacity so that KVM doesn't have to drop mmu_lock to topup if KVM
-+	 * encounters an aliased gfn or two.
- 	 */
--	r = __kvm_mmu_topup_memory_cache(&kvm->arch.split_desc_cache,
--					 2 * SPLIT_DESC_CACHE_MIN_NR_OBJECTS,
-+	const int capacity = SPLIT_DESC_CACHE_MIN_NR_OBJECTS +
-+			     KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
-+	int r;
-+
-+	lockdep_assert_held(&kvm->slots_lock);
-+
-+	r = __kvm_mmu_topup_memory_cache(&kvm->arch.split_desc_cache, capacity,
- 					 SPLIT_DESC_CACHE_MIN_NR_OBJECTS);
- 	if (r)
- 		return r;
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+Yeah you're right, I am just writing wrong comments today, it is already
+correct. Sorry!
 
+Yours,
+Linus Walleij

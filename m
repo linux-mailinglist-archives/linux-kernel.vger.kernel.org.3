@@ -2,93 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B350559C06
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07C1559C7F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233001AbiFXOhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 10:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
+        id S232901AbiFXOhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 10:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232841AbiFXOgm (ORCPT
+        with ESMTP id S232791AbiFXOhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 10:36:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB3056C07
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:35:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CCAEB82925
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:35:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 646D3C341C0;
-        Fri, 24 Jun 2022 14:35:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656081347;
-        bh=fES71k0ZtQMfRPu9DCT9ZOVYdQvNBjl3fNHC6w3pSEc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Hsmdt5LTyq7cqedpM7gD3mcbjTqTZVbXcWKBNDxL/nyNXh7QuMwjQ7X3ZkyQfEMS5
-         Kdh+uekKRjxFdw0vb9b8c6lwbHpQqddsFR4oHiVYwa5BNCUy3eHchli72h2SDIuN41
-         eWKSgqEpPHVxgOfnphX4wAtuA0nksQX4p+f8jQbXuc8w9G32PNwcLP4/fB62l3+jqw
-         H0LDGLFIFqEz8Kb63K/UqL4SxCQ3FOJjUFbQiuYnFn8KnA0LwJ/rtjmUCDKd0108Hy
-         cAyth5zSs6zw/PuBediVxP+YxqQUm/7CT5eQ6Td9KeKJ1juFc97abm97Yy0gvZjprA
-         ZtYgphvV7oKDg==
-From:   Mark Brown <broonie@kernel.org>
-To:     jiapeng.chong@linux.alibaba.com, lgirdwood@gmail.com
-Cc:     alsa-devel@alsa-project.org, tiwai@suse.com, heiko@sntech.de,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, perex@perex.cz
-In-Reply-To: <20220624082745.68367-1-jiapeng.chong@linux.alibaba.com>
-References: <20220624082745.68367-1-jiapeng.chong@linux.alibaba.com>
-Subject: Re: [PATCH] ASoC: rockchip: i2s: Fix missing error code in rockchip_i2s_probe()
-Message-Id: <165608134513.445804.8165290048747586515.b4-ty@kernel.org>
-Date:   Fri, 24 Jun 2022 15:35:45 +0100
+        Fri, 24 Jun 2022 10:37:02 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF24A563AC
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:36:53 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 058F86000F;
+        Fri, 24 Jun 2022 14:36:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656081411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xDw6yLjQXYdImD1b38J6a4KT0sSwWeEKKVw++nHyiiw=;
+        b=GBxJLAsyGFOR7YXJ3b4olBaDJSFns7lV4HmQmwrj3DjgMCKbU2icOOKzmjc+EMul1fe9jA
+        +0If9CrUQeij0YepDQtCI7n4sW9FwarvheMa8DB0lTTyyGVTGNSFEdBkPp+5tTgidpI4Eh
+        tzQm5LqkArdPvo+055PB17JYqLEOWfE27u2f/Ljv1i5t1Xy9hgwVuv9bRrFDj5Gsy+C2jT
+        u1BHUrNEb+oI9BPrxMiuNUF+2Dt2kXh4O2IRZLT2c4/kIdckKcENhLcmNlVwERawDZLi7B
+        XGz96yohFeR1z9dg6h29VIotoeGdSJFbt5jj5KESfvkxHuGXtmDtiHpPKbHz9w==
+Date:   Fri, 24 Jun 2022 16:36:50 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        airlied@linux.ie, daniel@ffwll.ch, mripard@kernel.org
+Subject: Re: [PATCH -next] drm/logicvc: add missing of_node_put() in
+ logicvc_layers_init()
+Message-ID: <YrXMAvuHJgls+wNM@aptenodytes>
+References: <20220614112112.1537319-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xxTdvUN19r+Gzqln"
+Content-Disposition: inline
+In-Reply-To: <20220614112112.1537319-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Jun 2022 16:27:45 +0800, Jiapeng Chong wrote:
-> The error code is missing in this code scenario, add the error code
-> '-EINVAL' to the return value 'ret'.
-> 
-> This was found by coccicheck:
-> 
-> sound/soc/rockchip/rockchip_i2s.c:810 rockchip_i2s_probe() warn: missing error code 'ret'.
-> 
-> [...]
 
-Applied to
+--xxTdvUN19r+Gzqln
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Hi Yang,
 
-Thanks!
+On Tue 14 Jun 22, 19:21, Yang Yingliang wrote:
+> The of_node_put() need be called in error path in logicvc_layers_init().
+>=20
+> Fixes: efeeaefe9be5 ("drm: Add support for the LogiCVC display controller=
+")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-[1/1] ASoC: rockchip: i2s: Fix missing error code in rockchip_i2s_probe()
-      commit: 7f6409fd9b54b6f56444edc996cd28059f215415
+Thanks for the fix!
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Cheers,
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Paul
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+> ---
+>  drivers/gpu/drm/logicvc/logicvc_layer.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/logicvc/logicvc_layer.c b/drivers/gpu/drm/lo=
+gicvc/logicvc_layer.c
+> index bae1c7f99569..00a37563a6dc 100644
+> --- a/drivers/gpu/drm/logicvc/logicvc_layer.c
+> +++ b/drivers/gpu/drm/logicvc/logicvc_layer.c
+> @@ -610,8 +610,11 @@ int logicvc_layers_init(struct logicvc_drm *logicvc)
+>  		}
+> =20
+>  		ret =3D logicvc_layer_init(logicvc, layer_node, index);
+> -		if (ret)
+> +		if (ret) {
+> +			of_node_put(layer_node);
+> +			of_node_put(layers_node);
+>  			goto error;
+> +		}
+> =20
+>  		of_node_put(layer_node);
+>  	}
+> --=20
+> 2.25.1
+>=20
 
-Thanks,
-Mark
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--xxTdvUN19r+Gzqln
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmK1zAIACgkQ3cLmz3+f
+v9FN7Qf+LIL1J4SHKzIrLJHuIEUfhHXkXKC8tqdNPVLJP7DFRbJyiHzqRLF0KzDd
+7/X2s5prFv14Fd0/uSUB2IVz1hIdwR1cSJ5BqXC2qAuFvNqO00OGho6uOqDCUYKn
+Zos0vutZM/2ha2cV3JunHcooZk1Quw+qrUw6Al8aFFg088CZsVngKj3hI80QkID4
+RPGJcQ25iRBQdSI7jxtyqHV47xJ3ZnQ+kTDkrkvJ/AbCs5sxPZMgyVfM+fRPuAOD
+F8kV0Vt7MzRp4sunrtsoDuwnsr0Il+odbx9W9z6M/VMYuV2ZIUSGOglY74JLR0aV
+3ZzGDtLtSrjL0DAMu4qT5fONgxuRTA==
+=7SJk
+-----END PGP SIGNATURE-----
+
+--xxTdvUN19r+Gzqln--

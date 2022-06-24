@@ -2,124 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D4B558FF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 06:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA456558FF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 06:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbiFXE1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 00:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
+        id S229643AbiFXE2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 00:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiFXE1e (ORCPT
+        with ESMTP id S229441AbiFXE2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 00:27:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B268D6808C
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 21:27:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 468A9620E3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 04:27:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC198C34114;
-        Fri, 24 Jun 2022 04:27:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656044852;
-        bh=V15RsvX1+kM5FL7HzYFUlsvJt53ggBmFiKd/GuXmjCs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NmvU82paGPiRMAiacFz4FNJVJxeI1JbNtw1jbHoW5e3CVlH8tpmUdd6lv5BSwcdM1
-         v4uL9Z7gi4ooLx2Ipm3aBWYTsPLztS/myXB1ropefpunTGcqBnKgapgHR8Z7qNpNlm
-         CtAWngEOk9V9dqcka22jrMTwBN35I0NbNLic/7xIH46rzszA/U65ddirNeJx92VHb4
-         /F28tF9VLYMqgi/oZAwrTyK4Tk/CN5emI9bQkR3X7AoHtWD5GIAt7+F7/aE2Bxtxt0
-         /wQ8RzJWkoUSdHAEjCp57j6a422udJVCSevxb2JaSHjkTYDn7TLqN9dkFAUjOM+gkV
-         OxLqHRgK6hALw==
-Date:   Fri, 24 Jun 2022 09:57:28 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        tiwai@suse.de, broonie@kernel.org, gregkh@linuxfoundation.org,
-        srinivas.kandagatla@linaro.org,
-        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
-        bard.liao@intel.com, peter.ujfalusi@linux.intel.com,
-        ranjani.sridharan@linux.intel.com
-Subject: Re: [PATCH v2 1/2] soundwire: Intel: add trigger callback
-Message-ID: <YrU9MEAVQojxE5i4@matsya>
-References: <20220616011758.21155-1-yung-chuan.liao@linux.intel.com>
- <20220616011758.21155-2-yung-chuan.liao@linux.intel.com>
+        Fri, 24 Jun 2022 00:28:51 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98AE506CA;
+        Thu, 23 Jun 2022 21:28:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656044929; x=1687580929;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QH5uBpNzzzCen9Zs76R2e80kGV9JSlE7H9DNbONwgs4=;
+  b=kncBKnBQWDvYnUP21CL2lmooN/GD963maksO3YKeMrXKBbZG7kWojqWt
+   pYt/b2QixyVheaJGdQQwWbMmw+rWRq18R2zfSbpQM5g9+awyyXECztAT2
+   y2ZoXrxUp3zCeVIv+5VI78MY4+wCtakItWMIkh5f7FcGXpKolwwwfnsXK
+   HYJbd2cS5FEjr005okUszBZbFx1KgEBomfEb0wJu/wZyyBK4e99AZlmEj
+   VIlrOrq2tp1qZZP1hhXMPgD/dSrcg2hGTPdqxo+S+1x7LUlHGp/uXDKzY
+   w6QRVz8QMW3BqL+X3GT0O+LbiKs014CItY4Kh1qJ/wuqo2XFvwEADvN9J
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="342607051"
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="342607051"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 21:28:49 -0700
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="645095406"
+Received: from zengguan-mobl1.ccr.corp.intel.com (HELO [10.255.31.117]) ([10.255.31.117])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 21:28:47 -0700
+Message-ID: <fc6c4f6e-07c6-2d16-5457-dbe03ceb1bee@intel.com>
+Date:   Fri, 24 Jun 2022 12:28:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616011758.21155-2-yung-chuan.liao@linux.intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] KVM: selftest: Enhance handling WRMSR ICR register in
+ x2APIC mode
+Content-Language: en-US
+To:     "Gao, Chao" <chao.gao@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220623094511.26066-1-guang.zeng@intel.com>
+ <20220623103314.GA14006@gao-cwp>
+From:   Zeng Guang <guang.zeng@intel.com>
+In-Reply-To: <20220623103314.GA14006@gao-cwp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16-06-22, 09:17, Bard Liao wrote:
-> When a pipeline is split into FE and BE parts, the BE pipeline may need to
-> be triggered separately in the BE trigger op. So add the trigger callback
-> in the link_res ops that will be invoked during BE DAI trigger.
-> 
-> Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-> Reviewed-by: Rander Wang <rander.wang@intel.com>
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-> ---
->  drivers/soundwire/intel.c           | 8 ++++++++
->  include/linux/soundwire/sdw_intel.h | 1 +
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-> index 505c5ef061e3..2e7c27d303b4 100644
-> --- a/drivers/soundwire/intel.c
-> +++ b/drivers/soundwire/intel.c
-> @@ -1004,9 +1004,17 @@ static int intel_trigger(struct snd_pcm_substream *substream, int cmd, struct sn
->  {
->  	struct sdw_cdns *cdns = snd_soc_dai_get_drvdata(dai);
->  	struct sdw_intel *sdw = cdns_to_intel(cdns);
-> +	struct sdw_intel_link_res *res = sdw->link_res;
->  	struct sdw_cdns_dma_data *dma;
->  	int ret = 0;
->  
-> +	/* The .trigger callback is used to send required IPC to audio
-> +	 * firmware. The .free_stream callback will still be called
-> +	 * by intel_free_stream() in the TRIGGER_SUSPEND case.
-> +	 */
 
-we dont use this style multi-line comment, pls fix it to:
-        /*
-         * The .trigger callback is used to send required IPC to ..
-         * ...
-         */
+On 6/23/2022 6:33 PM, Gao, Chao wrote:
+> On Thu, Jun 23, 2022 at 05:45:11PM +0800, Zeng Guang wrote:
+>
+>> +		ASSERT_EQ(icr & ~APIC_ICR_BUSY, val & ~APIC_ICR_BUSY);
+> Probably add a comment for it would be better. E.g.,
+>
+> APIC_ICR_BUSY is removed and not used when CPU is in x2APIC mode.
+> It is undefined whether write 1 to this bit will be preserved. So,
+> even KVM keeps this bit cleared in some cases even in x2apic mode,
+> no guarantee that hardware (specifically, CPU ucode when Intel IPI
+> virtualization enabled) will clear the bit. So, skip checking this
+> bit.
+Hardware won't touch APIC_ICR_BUSY in x2apic mode. It totally depends on 
+KVM to
+clear it or not if set for test purpose. While in Intel IPI 
+virtualization case,
+KVM doesn't take care of this bit in vICR writes. So how about the 
+comments as
+below:
 
-with that fixed:
+APIC_ICR_BUSY is removed and not used when CPU is in x2APIC mode.
+KVM doesn't guarantee to clear this bit in some cases e.g. When
+Intel IPI virtualization enabled, if it's set for test purpose.
+So, skip checking this bit.
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+Thanks.
+Zeng Guang
 
-> +	if (res->ops && res->ops->trigger)
-> +		res->ops->trigger(dai, cmd, substream->stream);
-> +
->  	dma = snd_soc_dai_get_dma_data(dai, substream);
->  	if (!dma) {
->  		dev_err(dai->dev, "failed to get dma data in %s\n",
-> diff --git a/include/linux/soundwire/sdw_intel.h b/include/linux/soundwire/sdw_intel.h
-> index b5b489ea1aef..ec16ae49e6a4 100644
-> --- a/include/linux/soundwire/sdw_intel.h
-> +++ b/include/linux/soundwire/sdw_intel.h
-> @@ -121,6 +121,7 @@ struct sdw_intel_ops {
->  			     struct sdw_intel_stream_params_data *params_data);
->  	int (*free_stream)(struct device *dev,
->  			   struct sdw_intel_stream_free_data *free_data);
-> +	int (*trigger)(struct snd_soc_dai *dai, int cmd, int stream);
->  };
->  
->  /**
-> -- 
-> 2.17.1
-
--- 
-~Vinod

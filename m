@@ -2,104 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13ED055A47E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B72F55A47F
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbiFXWvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 18:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
+        id S231405AbiFXWxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 18:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiFXWvI (ORCPT
+        with ESMTP id S229912AbiFXWxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 18:51:08 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642092E9FD
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:51:07 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id f15so1945598ilj.11
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:51:07 -0700 (PDT)
+        Fri, 24 Jun 2022 18:53:31 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597B443EF7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:53:30 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id o18so3294250plg.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:53:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Hdt4ZYpp63JRACIsbloHgicgraSn3MN/dM7NXJQ38ns=;
-        b=DL0Yy/9Uqn6QLp2L9FMPSa14qJ2xpVciSvvIOpCJ8ZLFEYFVR9XAHEV1C+IURrGH3f
-         +jBTpPSruIoY6t3oO63RyA8P0EVxB94mzRnyCMU7AkfBK5ZcDoVnVtL57SyXG6rsifvr
-         RkNcfsIt9aTMZU2QfQxC/+9yuSQmRRKPGw3PQ=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tVvmPFlVYh1eywyk8X/ZOhSRyJAUFIuskvR1LEIJ1vQ=;
+        b=s8He2MsJOXCaycrGX1mG1fxPyK0GY+qid/53Ua4JIpGXeMfcDd0DpeNADBbGJb0dxX
+         bZiMS/Li4XNAF466IkSip2+IKEZTgaafJ+UhHRLp9YCj3k4Z0YIhNKjTOvtbFoHbC67d
+         1KaAr6lnZjWTHOIswYWgxW4Ibmcarfa9HMDP8CMW76N6YEQ1Kd0EEaTAmM4o2iYvoWN6
+         YiE1gTDSV6xkD8QitprAPGpVCBl4M09SZw/7BBlD/Pvzih4JcxGNFxOH6/CCA8GJ/Dvt
+         Xsi8/LCcIKXN6IXFT4qthznVMO5+ArrnlP8cojvRXovuos9l7X0++8XfeJXVZqr0+vG8
+         tLiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Hdt4ZYpp63JRACIsbloHgicgraSn3MN/dM7NXJQ38ns=;
-        b=Ey6hN86OjDem+S7VxqndxKWFr5WxdDmLOyCUJ/YYaM4T4OUZHJ19CZFHQa/PLuzlRc
-         8tfcubMu3AXsPX0iGvlaUYzvDVJPEXXvhWTY495S1ra0OuP1Gwf6X/WXUN7YiidyDlO+
-         ylC/oo8dXEoSwCbPUce/h2GZjCKeLAszm04CVmR/xIeE+XGcoi63hWz3eARmC869HwxU
-         ISwl1BV5Ef0wKY8HzMBUbNBpE5rqEmU6vDF/8/jC3ubu/A3+NQn+/semqU9SC4E9DbHQ
-         foSINxdTvy4C4d/8DIQPyov6OvkWR/v+sJkuo51dgxP5LuDPTaNEUYagcVy/KF5YpPyi
-         QrVg==
-X-Gm-Message-State: AJIora95lg9R/PfpBAYcrQdO2QksAct4g+empOd+RWg1eGyh8Kc/A5/4
-        eKlkX9djHHoOcDsDMMlwN3D7uA==
-X-Google-Smtp-Source: AGRyM1u/FnJ52CsCRMaa4h061AAVxSmVj3hBpymHat5NnwOaXChjPl4I3PgKRMvF9p/y37at0a7nTw==
-X-Received: by 2002:a05:6e02:1645:b0:2d6:5dd3:e627 with SMTP id v5-20020a056e02164500b002d65dd3e627mr731794ilu.268.1656111066780;
-        Fri, 24 Jun 2022 15:51:06 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id q45-20020a056638346d00b00331563be3ecsm1613766jav.121.2022.06.24.15.51.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 15:51:06 -0700 (PDT)
-Subject: Re: [PATCH 1/3] Documentation: kunit: remove duplicate kunit-tool.rst
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Daniel Latypov <dlatypov@google.com>,
-        brendanhiggins@google.com, davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220603195626.121922-1-dlatypov@google.com>
- <87pmix3ktq.fsf@meer.lwn.net>
- <2c3399e9-4f4e-a71a-4030-e4e6d72b5d4e@linuxfoundation.org>
- <8735ft3co5.fsf@meer.lwn.net>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <96154234-7842-3bc9-d89f-eb20be40e6de@linuxfoundation.org>
-Date:   Fri, 24 Jun 2022 16:51:05 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tVvmPFlVYh1eywyk8X/ZOhSRyJAUFIuskvR1LEIJ1vQ=;
+        b=h3lJeZXUqz2ErIOxs5sxcaFUzNaP/Rk0DYfp7i3z8QXSy4KXJ+n6Ify/8wr6A1D2kj
+         A7AawAFYPsDlSYKs/OkjMdz5MIv1HHwTkrXHgpj480Y9gb6P17wsnc7ocTdjcq9ZmL53
+         yIgqK77DUNJgoXNzPvo7qhSrBpw7E85jaL+ruJHmJtdrZMKUmLm4lkaTPk9Myt3jkhY8
+         CHyQv38XoKyD08TTEPowkg28g1ZtmNuCKStbjWCxCb7CHTEk5XS6Q+SWY/cWlPFM3Akg
+         H8PDgknUdG8isefZ/QJ6DgFKZCyz9XjvPcPvz2Gvujxi072OzHgdux8AOTReZfk5aghF
+         Bu4Q==
+X-Gm-Message-State: AJIora+4PrFAdZe4QSvp+T2C1tAxxQYjdTCSRrG3GCAg7qiGWx/vQCq/
+        BKKGfMII3HZ4WkOxQJtsgNVZLg==
+X-Google-Smtp-Source: AGRyM1sikow0gG68DKTKWU8HtFkMlDC51Zl4CzpPGehlxEKYiexl56kpexQ5GM+J4tWOjs6aJ5EmFg==
+X-Received: by 2002:a17:902:6b8c:b0:168:fee5:884 with SMTP id p12-20020a1709026b8c00b00168fee50884mr1348279plk.105.1656111209721;
+        Fri, 24 Jun 2022 15:53:29 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id bj23-20020a056a00319700b0052584b69a50sm218842pfb.66.2022.06.24.15.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 15:53:29 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 22:53:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Lan Tianyu <Tianyu.Lan@microsoft.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] KVM: x86/mmu: Fix wrong gfn range of tlb flushing in
+ kvm_set_pte_rmapp()
+Message-ID: <YrZAZXHJTsUp8yuP@google.com>
+References: <cover.1656039275.git.houwenlong.hwl@antgroup.com>
+ <a92b4b56116f0f71ffceab2b4ff3c03f47fd468f.1656039275.git.houwenlong.hwl@antgroup.com>
 MIME-Version: 1.0
-In-Reply-To: <8735ft3co5.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a92b4b56116f0f71ffceab2b4ff3c03f47fd468f.1656039275.git.houwenlong.hwl@antgroup.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/22 4:43 PM, Jonathan Corbet wrote:
-> Shuah Khan <skhan@linuxfoundation.org> writes:
-> 
->>> So not that long ago these patches were going through Shuah...it seems
->>> that's not happening anymore?  I can pick up kunit docs patches,
->>> certainly.  I've taken the silence on these as assent and applied them.
->>>
->>
->> I am still taking ksefltest and kunit doc patches through my tree. I wait
->> for Brendan to ack at times. This one didn't show up in linux-kselftest
->> list it appears.
->>
->> If you cc linux-kselftest and I get an ack from Brendan, I will take this
->> through kselftest tree.
-> 
-> As I said up above, I went ahead and applied them.  I can drop them
-> again if you want to carry them, just let me know.
-> 
+On Fri, Jun 24, 2022, Hou Wenlong wrote:
+> When the spte of hupe page is dropped in kvm_set_pte_rmapp(),
+> the whole gfn range covered by the spte should be flushed.
+> However, rmap_walk_init_level() doesn't align down the gfn
+> for new level like tdp iterator does, then the gfn used in
+> kvm_set_pte_rmapp() is not the base gfn of huge page. And
+> the size of gfn range is wrong too for huge page. Since
+> the base gfn of huge page is more meaningful during the
+> rmap walking, so align down the gfn for new level and use
+> the correct size of huge page for tlb flushing in
+> kvm_set_pte_rmapp().
 
-Jon, yes please go ahead and drop this one. I will wait for Brendan
-to ack it. Reduces confusion in the future. Very often, there is code
-dependencies as well.
+It's also worth noting that kvm_set_pte_rmapp() is the other user of the rmap
+iterators that consumes @gfn, i.e. modifying iterator->gfn is safe-ish.
 
-Daniel, please don't skip kselftest list in the future.
+> Fixes: c3134ce240eed ("KVM: Replace old tlb flush function with new one to flush a specified range.")
+> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index b8a1f5b46b9d..37bfc88ea212 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -1427,7 +1427,7 @@ static bool kvm_set_pte_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+>  	}
+>  
+>  	if (need_flush && kvm_available_flush_tlb_with_range()) {
+> -		kvm_flush_remote_tlbs_with_address(kvm, gfn, 1);
+> +		kvm_flush_remote_tlbs_with_address(kvm, gfn, KVM_PAGES_PER_HPAGE(level));
+>  		return false;
+>  	}
+>  
+> @@ -1455,7 +1455,7 @@ static void
+>  rmap_walk_init_level(struct slot_rmap_walk_iterator *iterator, int level)
+>  {
+>  	iterator->level = level;
+> -	iterator->gfn = iterator->start_gfn;
+> +	iterator->gfn = iterator->start_gfn & -KVM_PAGES_PER_HPAGE(level);
 
-thanks,
--- Shuah
+Hrm, arguably this be done on start_gfn in slot_rmap_walk_init().  Having iter->gfn
+be less than iter->start_gfn will be odd.
+
+>  	iterator->rmap = gfn_to_rmap(iterator->gfn, level, iterator->slot);
+>  	iterator->end_rmap = gfn_to_rmap(iterator->end_gfn, level, iterator->slot);
+>  }
+> -- 
+> 2.31.1
+> 

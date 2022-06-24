@@ -2,93 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE42558EFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 05:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E000558F09
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 05:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiFXDQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 23:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
+        id S229914AbiFXDVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 23:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiFXDQ0 (ORCPT
+        with ESMTP id S229469AbiFXDVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 23:16:26 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C79764F3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 20:16:25 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id s185so1216205pgs.3
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 20:16:25 -0700 (PDT)
+        Thu, 23 Jun 2022 23:21:51 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D97762710
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 20:21:50 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id o16so1343361wra.4
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 20:21:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+vDFwyU6gU2J6FMTxOqBa2GFVZE6B6F1CPfaNmdAisY=;
-        b=oPf9v26asLtQByW8ysQTVAHXOd/SeOsXCALSM6mLz2VuTD8b8wWp/R1goEFpZxS7+Z
-         PBi6RqjS4yd9y97kDMJ+2ycPGd3QtZtJxprb3Ihi6V+JG+z92w4dg9AVto9AEY+z5eXJ
-         7T+jZ7X6ZjKbs4fvRbKbtP+PnSwIEP/NWyUNdhGIHOEiVgf6fN2vbMQPQhl6pwE1w48S
-         j7r0fCsfWfYu1l+SzwK6PR1SU+x8v5twORX6lUxsLBoSDRR335bu9ZJwaHGK0xMk15/R
-         MXv0vBiJxp8BmhTGnVa8WqOFkTAAwe8REypeDhyicem1HjFYzJC2JEUNh0FPpE496N6x
-         L6hQ==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nkA12o8J/G8WC/x2ZjqUQFWdUod71jTMrhuVlQ+gIfc=;
+        b=cB+o0n9FydEJuF7kdgUBwLms6sg/mL07v5Fm4wCK5oaeo52McxaVgaMqRXxn82FBYl
+         YxRmxsrCOhxOyr1v5satohMH1/s+X6ZRb+NJZsgIthjEXz6y1+tTqFm9WOGZz6rr3SU/
+         zxWAbi5cozSEypGIO33gbc+ffLdv5Sp3E+DAETn5U87nrlBRouptfEhknKi4Q0S6RWgc
+         cpkb+qF9DXJ54Hj4sYi+NOHN1ZYPWYZfkUTQBbwufaxWiz9mBlye7YYbqmcYiM9KFWbU
+         aakhigOid5o+64hSNKle7XLMwbisINZEz+pZtDge+dsqY4Z+lGnJ08gdtXl5Xz5lLx1D
+         U6dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+vDFwyU6gU2J6FMTxOqBa2GFVZE6B6F1CPfaNmdAisY=;
-        b=wqG5dSx+FBGMcVUhtF6Cw+x0cIzYtoMuap2X/c1rRif+3sNM2NqZ+6hsDaf+Hy9up2
-         iIRmwcnRVS1Qksz7c0h0rDPt6TiWSdCLrqF8ogRPrOVrMCTV9GHjriCOsOBQX4n2vHWL
-         I1ZaQPW/LEn67/IkZ+x+ax/20RZkuy56a1+jwKfT/KWUrChXieJ3wXiwYDmND9aby0Ly
-         JT2sstDGC+FbCsZhYEfZqd33KcnFM7cwEaNT0bRqa8y2hSCeGVAbBd3sPWmYWFs40yer
-         LEs5OL/W4gDJpXCwn3QvowJ6FqXjToatwLxPRZdopN7eL5eAlF3Z/3cB7N66sT6GyQsL
-         c9NA==
-X-Gm-Message-State: AJIora/fHud9YqFfB1cpv8iBdq6HBb3LY2ucIIUZkRskIGyf4+JK0ao2
-        gqUBaDzuM4N3em6ehL1ayDc=
-X-Google-Smtp-Source: AGRyM1um0CKTli+3oCXxDwQfDi9hCwlWfT9FC81sDHGDu3MpiJcQ4WnbvDd6nXDfo6qz6XyYw2ZWrQ==
-X-Received: by 2002:a63:f506:0:b0:3fc:962b:6e02 with SMTP id w6-20020a63f506000000b003fc962b6e02mr10007713pgh.266.1656040584859;
-        Thu, 23 Jun 2022 20:16:24 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-14.three.co.id. [116.206.28.14])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170902d34c00b0015e8d4eb2afsm521684plk.249.2022.06.23.20.16.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 20:16:24 -0700 (PDT)
-Message-ID: <bc46dfd5-474f-386c-c646-c15d82f5ffed@gmail.com>
-Date:   Fri, 24 Jun 2022 10:16:20 +0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nkA12o8J/G8WC/x2ZjqUQFWdUod71jTMrhuVlQ+gIfc=;
+        b=wWpwUllZcirs3MRgKgw+j/llynxMBxYe2olbDCMRrZUq/+8tP16iIjbUwXmKLQD83k
+         H3TqiBBWkmXBD5oFs17gG71hc4EGcUUjQicxY1NGmu+zM6knSHwirp4jsA58N2EpZCgJ
+         guM6hw/nB4LUGZA/dGgejEWl6vVrPAt5HvIvLgkNbddRS4g+dm/K1vw0BUmlPTaZAUW/
+         hUY/X3EXFirsEgxN9DALZd4j4nu0O8eaX2LXm3cAMWH0DoxWY6y68kenb94ydb5g8Uxh
+         07YyT2A24i0XyqMRnw/ayZdVmNXBlxQVAtq5PI9iMDgOL7GsSjGaVqq16P6ejpi64HbF
+         +ndg==
+X-Gm-Message-State: AJIora/wjE6nGZnW7RTwGKy/HXv153H0qqGJ6qZa6AmPX2R4WXipau0t
+        p/KoDlvtbL18VICqHchrTIj/IAaRpdlYNvSctzne
+X-Google-Smtp-Source: AGRyM1vzEq1PW3uWevmMOO7hQB/5IqqeX5H+D3AuL1YvM7TVvsF3TSr0F7DNVOKp8u3V2fk0wOc1mjVvEQuIplvXnCM=
+X-Received: by 2002:a5d:4848:0:b0:21b:8cda:5747 with SMTP id
+ n8-20020a5d4848000000b0021b8cda5747mr11337757wrs.483.1656040908556; Thu, 23
+ Jun 2022 20:21:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] ARC:mm:Fix syntax errors in comments
-Content-Language: en-US
-To:     Vineet Gupta <vgupta@kernel.org>, Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     Julia.Lawall@inria.fr, rdunlap@infradead.org,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220622080423.41570-1-yuanjilin@cdjrlc.com>
- <YrLTCXLrr3HB39lv@debian.me>
- <d104124c-5196-bc80-b3e3-0ab55f0cc35e@kernel.org>
- <89bc29c5-ad82-4f20-2855-44e57b043c49@gmail.com>
- <ac0b07c8-0cd4-6ab4-2939-ead4c813ef78@kernel.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <ac0b07c8-0cd4-6ab4-2939-ead4c813ef78@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220621233939.993579-1-fred@cloudflare.com> <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
+ <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
+In-Reply-To: <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 23 Jun 2022 23:21:37 -0400
+Message-ID: <CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
+To:     Frederick Lawler <fred@cloudflare.com>
+Cc:     Casey Schaufler <casey@schaufler-ca.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, brauner@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/22 08:57, Vineet Gupta wrote:
-> "Repeated" is the key - First time I'd politely tell them to DTRT but will just ignore if things continue.
-> 
->> Lazily speaking, I'd like to privately notice the
->> submitter about the situation, and I withhold these for now.
-> 
-> Funny that you say this: ever since this got posted I now see 3 patches for typo fixes :-)
-> But it is something in maintainers purview and for now i'm ok.
-> 
+On Wed, Jun 22, 2022 at 10:24 AM Frederick Lawler <fred@cloudflare.com> wrote:
+> On 6/21/22 7:19 PM, Casey Schaufler wrote:
+> > On 6/21/2022 4:39 PM, Frederick Lawler wrote:
+> >> While creating a LSM BPF MAC policy to block user namespace creation, we
+> >> used the LSM cred_prepare hook because that is the closest hook to
+> >> prevent
+> >> a call to create_user_ns().
+> >>
+> >> The calls look something like this:
+> >>
+> >>      cred = prepare_creds()
+> >>          security_prepare_creds()
+> >>              call_int_hook(cred_prepare, ...
+> >>      if (cred)
+> >>          create_user_ns(cred)
+> >>
+> >> We noticed that error codes were not propagated from this hook and
+> >> introduced a patch [1] to propagate those errors.
+> >>
+> >> The discussion notes that security_prepare_creds()
+> >> is not appropriate for MAC policies, and instead the hook is
+> >> meant for LSM authors to prepare credentials for mutation. [2]
+> >>
+> >> Ultimately, we concluded that a better course of action is to introduce
+> >> a new security hook for LSM authors. [3]
+> >>
+> >> This patch set first introduces a new security_create_user_ns() function
+> >> and create_user_ns LSM hook, then marks the hook as sleepable in BPF.
+> >
+> > Why restrict this hook to user namespaces? It seems that an LSM that
+> > chooses to preform controls on user namespaces may want to do so for
+> > network namespaces as well.
+>
+> IIRC, CLONE_NEWUSER is the only namespace flag that does not require
+> CAP_SYS_ADMIN. There is a security use case to prevent this namespace
+> from being created within an unprivileged environment. I'm not opposed
+> to a more generic hook, but I don't currently have a use case to block
+> any others. We can also say the same is true for the other namespaces:
+> add this generic security function to these too.
+>
+> I'm curious what others think about this too.
 
-Thanks.
+While user namespaces are obviously one of the more significant
+namespaces from a security perspective, I do think it seems reasonable
+that the LSMs could benefit from additional namespace creation hooks.
+However, I don't think we need to do all of them at once, starting
+with a userns hook seems okay to me.
+
+I also think that using the same LSM hook as an access control point
+for all of the different namespaces would be a mistake.  At the very
+least we would need to pass a flag or some form of context to the hook
+to indicate which new namespace(s) are being requested and I fear that
+is a problem waiting to happen.  That isn't to say someone couldn't
+mistakenly call the security_create_user_ns(...) from the mount
+namespace code, but I suspect that is much easier to identify as wrong
+than the equivalent security_create_ns(USER, ...).
+
+We also should acknowledge that while in most cases the current task's
+credentials are probably sufficient to make any LSM access control
+decisions around namespace creation, it's possible that for some
+namespaces we would need to pass additional, namespace specific info
+to the LSM.  With a shared LSM hook this could become rather awkward.
+
+> > Also, the hook seems backwards. You should
+> > decide if the creation of the namespace is allowed before you create it.
+> > Passing the new namespace to a function that checks to see creating a
+> > namespace is allowed doesn't make a lot off sense.
+>
+> I think having more context to a security hook is a good thing.
+
+This is one of the reasons why I usually like to see at least one LSM
+implementation to go along with every new/modified hook.  The
+implementation forces you to think about what information is necessary
+to perform a basic access control decision; sometimes it isn't always
+obvious until you have to write the access control :)
+
+[aside: If you would like to explore the SELinux implementation let me
+know, I'm happy to work with you on this.  I suspect Casey and the
+other LSM maintainers would also be willing to do the same for their
+LSMs.]
+
+In this particular case I think the calling task's credentials are
+generally all that is needed.  You mention that the newly created
+namespace would be helpful, so I'll ask: what info in the new ns do
+you believe would be helpful in making an access decision about its
+creation?
+
+Once we've sorted that we can make a better decision about the hook
+placement, but right now my gut feeling is that we only need to pass
+the task's creds, and I think placing the hook right after the UID/GID
+mapping check (before the new ns allocation) would be the best spot.
 
 -- 
-An old man doll... just what I always wanted! - Clara
+paul-moore.com

@@ -2,120 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DB955957C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4994B559582
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbiFXIcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
+        id S229764AbiFXIea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 04:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbiFXIcW (ORCPT
+        with ESMTP id S229598AbiFXIe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:32:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27B9F24BD7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656059540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=CgygOx5yPDyYMb31XsTetk6Htk9rXafuen11iv6Q0EQ=;
-        b=SQ47YGVq2DqEgDPEiZeaBNhbrmWQsB8lI4dEyMlGjDHKeKKKlsECQbWgs4/KIVZxPQeskl
-        ho4ATx1yAuy16Z2O3BCgdyIpvPWkCp0qP6WL7lJ5uBRwP68PBN/NziLkT+LNRbSRWqLkJa
-        kqjQ6P0q47aImwVpOoEllhtRiiRcdIk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-653-D107xuevOlKyKasx9ESEeg-1; Fri, 24 Jun 2022 04:32:16 -0400
-X-MC-Unique: D107xuevOlKyKasx9ESEeg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 682B785A589;
-        Fri, 24 Jun 2022 08:32:16 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4AB79416171;
-        Fri, 24 Jun 2022 08:32:16 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] KVM fixes for Linux 5.19-rc4
-Date:   Fri, 24 Jun 2022 04:32:16 -0400
-Message-Id: <20220624083216.2723369-1-pbonzini@redhat.com>
+        Fri, 24 Jun 2022 04:34:27 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2414A3D6;
+        Fri, 24 Jun 2022 01:34:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656059667; x=1687595667;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GL7gNHkZqM1sWdOok001Mz0b5ZGecYzNGjnRUb23NBQ=;
+  b=A8gxWgVNKoGYCXxxommMEyl9F2eyFoyZfJK3OUxc6YBCOSv8BsYgIo5Z
+   FLSVRp0cBQaKJ9lNZtPDTCkRQ0c9/2nlELekYKb/ex+PDbhIan+ywwoUm
+   vJ+PNfIbqEriUtRjnFUSIn1lObYOwMvHvhQV1NNCxRWnhWt4snVqxE7ge
+   fhXXe0Sh0/3TdZCSrllSJiORNG7VBdjbNLkkLaEMfzmokg7zXb/uS+2S8
+   ww9xT0MYlP3p8A/MA+gYxxcURlU6plD80EmkdZ+C0JFyRQfiEf9pWvUFF
+   Dcon13CnfCxineRuG5PyiRyEFIjAHj9BOIGgAIqAOKgUIvsOY5KvXFQHI
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="282038036"
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="282038036"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 01:34:26 -0700
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="915596863"
+Received: from acamigob-mobl.amr.corp.intel.com (HELO [10.212.103.132]) ([10.212.103.132])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 01:34:22 -0700
+Message-ID: <160e613f-a0a8-18ff-5d4b-249d4280caa8@linux.intel.com>
+Date:   Fri, 24 Jun 2022 09:34:21 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5/6] drm/i915/gt: Serialize GRDOM access between multiple
+ engine resets
+Content-Language: en-US
+To:     Andi Shyti <andi.shyti@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Chris Wilson <chris.p.wilson@intel.com>,
+        Fei Yang <fei.yang@intel.com>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Bruce Chang <yu.bruce.chang@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        John Harrison <John.C.Harrison@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, mauro.chehab@linux.intel.com,
+        Mika Kuoppala <mika.kuoppala@linux.intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        stable@vger.kernel.org,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>
+References: <cover.1655306128.git.mchehab@kernel.org>
+ <5ee647f243a774927ec328bfca8212abc4957909.1655306128.git.mchehab@kernel.org>
+ <YrRLyg1IJoZpVGfg@intel.intel>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <YrRLyg1IJoZpVGfg@intel.intel>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
 
-The following changes since commit 24625f7d91fb86b91e14749633a7f022f5866116:
+On 23/06/2022 12:17, Andi Shyti wrote:
+> Hi Mauro,
+> 
+> On Wed, Jun 15, 2022 at 04:27:39PM +0100, Mauro Carvalho Chehab wrote:
+>> From: Chris Wilson <chris.p.wilson@intel.com>
+>>
+>> Don't allow two engines to be reset in parallel, as they would both
+>> try to select a reset bit (and send requests to common registers)
+>> and wait on that register, at the same time. Serialize control of
+>> the reset requests/acks using the uncore->lock, which will also ensure
+>> that no other GT state changes at the same time as the actual reset.
+>>
+>> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
+>>
+>> Reported-by: Mika Kuoppala <mika.kuoppala@linux.intel.com>
+>> Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
+>> Cc: Mika Kuoppala <mika.kuoppala@linux.intel.com>
+>> Cc: Andi Shyti <andi.shyti@intel.com>
+>> Cc: stable@vger.kernel.org
+>> Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+>> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> 
+> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
 
-  Merge tag 'for-linus' of git://git.kernel.org/pub/scm/virt/kvm/kvm (2022-06-14 07:57:18 -0700)
+Notice I had a bunch of questions and asks in this series so please do 
+not merge until those are addressed.
 
-are available in the Git repository at:
+In this particular patch (and some others) for instance Fixes: tag, at 
+least against that sha, shouldn't be there.
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+Regards,
 
-for you to fetch changes up to 6defa24d3b12bbd418bc8526dea1cbc605265c06:
-
-  KVM: SEV: Init target VMCBs in sev_migrate_from (2022-06-24 04:10:18 -0400)
-
-----------------------------------------------------------------
-ARM64:
-
-* Fix a regression with pKVM when kmemleak is enabled
-
-* Add Oliver Upton as an official KVM/arm64 reviewer
-
-selftests:
-
-* deal with compiler optimizations around hypervisor exits
-
-x86:
-
-* MAINTAINERS reorganization
-
-* Two SEV fixes
-
-----------------------------------------------------------------
-Dmitry Klochkov (1):
-      tools/kvm_stat: fix display of error when multiple processes are found
-
-Marc Zyngier (1):
-      KVM: arm64: Add Oliver as a reviewer
-
-Mingwei Zhang (1):
-      KVM: x86/svm: add __GFP_ACCOUNT to __sev_dbg_{en,de}crypt_user()
-
-Paolo Bonzini (2):
-      Merge tag 'kvmarm-fixes-5.19-2' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
-      MAINTAINERS: Reorganize KVM/x86 maintainership
-
-Peter Gonda (1):
-      KVM: SEV: Init target VMCBs in sev_migrate_from
-
-Quentin Perret (1):
-      KVM: arm64: Prevent kmemleak from accessing pKVM memory
-
-Raghavendra Rao Ananta (1):
-      selftests: KVM: Handle compiler optimizations in ucall
-
- MAINTAINERS                                     | 42 +++++++++++----
- arch/arm64/kvm/arm.c                            |  6 +--
- arch/x86/kvm/svm/sev.c                          | 72 ++++++++++++++++---------
- arch/x86/kvm/svm/svm.c                          | 11 +---
- arch/x86/kvm/svm/svm.h                          |  2 +-
- tools/kvm/kvm_stat/kvm_stat                     |  3 +-
- tools/testing/selftests/kvm/lib/aarch64/ucall.c |  9 ++--
- 7 files changed, 92 insertions(+), 53 deletions(-)
-
+Tvrtko

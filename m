@@ -2,176 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA72855A43E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7AA55A441
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbiFXWOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 18:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S231769AbiFXWPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 18:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiFXWOe (ORCPT
+        with ESMTP id S229873AbiFXWPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 18:14:34 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4341A87D75
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:14:33 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id o4so878058wrh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:14:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=06tbzvuWnDn/ojvXnYPhb8CvvsnPZweg8Ptkv04ne9A=;
-        b=PezAL6Z4bntjGvU+BMZLwRyhf28/GmBbIJBsejRH4AXcHj0tEMTzn0npOOKoQycFMd
-         MV5n8Vq7cziNpbAUtr4QJNY39+kZjKT8t1BehD2UIH+1L0axymRzGaiDpEv9IvJTVw+I
-         t8UXmTIpQqtGkE2KJZE2kR3ShlyayRxfpdoB2VkfA03l8nnH4vglTRo9xQhV1hkJRA+L
-         fIc4vv119yqNnytJ2q0ixppfhnFNd+uQkDSHguz8oTdBnwdNWfqQcRtg7LzWYL+NNvCa
-         bIRxgK7gpbSOeS0134bGmanM74Wv4BmqsLMWULmsZxPc0k0NVLTUhIYHf9Z1eowOK1xG
-         6c5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=06tbzvuWnDn/ojvXnYPhb8CvvsnPZweg8Ptkv04ne9A=;
-        b=YWqeDQQmklpFZkuy423Jj8eQDg2BgI1AY1w3NT03zwmBPCFBiQwZYMHSm3iiBYUQWL
-         GB1hOK2emQ+6oF/QclaH9/D7IX15TmANv4KmirS9tDsb+brXqK4megof3dJY0igU6WgC
-         EzmPuWd2BahRD6rtHNfPd8jgvHgNsE8RFBfVbjGS6aJrxh4q4IGF+peRHObEl+LGeGmO
-         Wt+EX0QA33JSq3F4GmA36TP5/i5cm1CHaFQ6BejYtRaF5QhlNoEDf95/0eDknMsQDszi
-         MJiuc5x8rYIP4FyTbKM1c0f90i0u6Pt/JNKXY1q/4gR4yTH2xN0i9ocdqDapoHYeg6nw
-         wwQw==
-X-Gm-Message-State: AJIora+yU4sQZlsYmGnrH25dOdQbNg8hf0gVrpUO/A7ADCN7sCIdrL1O
-        2JFDUo7ZZ/L2rZzsku7TDe47HLAM7EaMLxw5rWRNYg==
-X-Google-Smtp-Source: AGRyM1sarZuBwUn1KFngbXMFDQ2bFNAHV4wVHQMYAe95mqZf6gYFG9NKduLzGFHQNbVi8OvNTHmL6M6mjJrd9b7iMHk=
-X-Received: by 2002:a5d:6ac4:0:b0:21b:a724:1711 with SMTP id
- u4-20020a5d6ac4000000b0021ba7241711mr1129245wrw.80.1656108871698; Fri, 24 Jun
- 2022 15:14:31 -0700 (PDT)
+        Fri, 24 Jun 2022 18:15:34 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20C138858F;
+        Fri, 24 Jun 2022 15:15:33 -0700 (PDT)
+Received: from [192.168.254.32] (unknown [47.189.24.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0682620C7943;
+        Fri, 24 Jun 2022 15:15:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0682620C7943
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1656108932;
+        bh=hAvoj8jjZe3egtsndVQDOBocwQja3xej+5CD+Ld/09U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AIM3UBtfsqGjo5ImQw5cmqOAgxzr7cv8le3OqzCp3cdmlFqMIbKU99rUajFZ5jc0k
+         2OV8HIVuJSX5C3BqpvV4foKGinW2GXmWmyoOFI9UwrnCAC+BlzFDL0KdXfqN1hZJhZ
+         EfnKBYEr12ZFYR4Uzb75eook4yQ4dvvKKYNCzFxk=
+Message-ID: <3180d0d3-2a92-13cd-2342-39b8400e3306@linux.microsoft.com>
+Date:   Fri, 24 Jun 2022 17:15:31 -0500
 MIME-Version: 1.0
-References: <20220623000530.1194226-1-yosryahmed@google.com>
- <YrQe5A+FXnbgOR1f@dhcp22.suse.cz> <CAJD7tkanavKpKrQr8-jA8pukgD7OY4eOwJRZufJ2NoThD12G+Q@mail.gmail.com>
- <YrQ1o3CeaZWhm+h4@dhcp22.suse.cz> <CAJD7tkadsLOV7GMFAm+naX4Y1WpZ-4=NkAhAMxNw60iaRPWx=w@mail.gmail.com>
- <YrSWruhPlJV1X9kp@dhcp22.suse.cz> <CALvZod6eLa1X1FJ2Qi6FXhFA-qBCP4mN2SB31MSgjj+g8hKo6Q@mail.gmail.com>
- <YrSdFy3qYdG+rGR6@dhcp22.suse.cz> <CAJD7tkZNEtzJMDsLMHuNHkxFfurS37UuK=zFcPCkOkWfN-dbJQ@mail.gmail.com>
- <CAJuCfpG6D1fhc4c_-0cL=rmXUbhdROSWsObYrZ7Mp4=+sBkT7Q@mail.gmail.com>
-In-Reply-To: <CAJuCfpG6D1fhc4c_-0cL=rmXUbhdROSWsObYrZ7Mp4=+sBkT7Q@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 24 Jun 2022 15:13:55 -0700
-Message-ID: <CAJD7tkY6Jg3+Pb95B0YAvHdgYKvKv_D8Tbc62hX5wzCmWUF6xQ@mail.gmail.com>
-Subject: Re: [PATCH] mm: vmpressure: don't count userspace-induced reclaim as
- memory pressure
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Michal Hocko <mhocko@suse.com>, Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v15 0/6] arm64: Reorganize the unwinder and implement
+ stack trace reliability checks
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>
+Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, jamorris@linux.microsoft.com,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
+ <20220617210717.27126-1-madvenka@linux.microsoft.com>
+ <20220623173224.GB16966@willie-the-truck> <YrWjH4H7KxLAqfph@sirena.org.uk>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <YrWjH4H7KxLAqfph@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 3:10 PM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Thu, Jun 23, 2022 at 10:26 AM Yosry Ahmed <yosryahmed@google.com> wrote:
-> >
-> > On Thu, Jun 23, 2022 at 10:04 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Thu 23-06-22 09:42:43, Shakeel Butt wrote:
-> > > > On Thu, Jun 23, 2022 at 9:37 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > > >
-> > > > > On Thu 23-06-22 09:22:35, Yosry Ahmed wrote:
-> > > > > > On Thu, Jun 23, 2022 at 2:43 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > > > > >
-> > > > > > > On Thu 23-06-22 01:35:59, Yosry Ahmed wrote:
-> > > > > [...]
-> > > > > > > > In our internal version of memory.reclaim that we recently upstreamed,
-> > > > > > > > we do not account vmpressure during proactive reclaim (similar to how
-> > > > > > > > psi is handled upstream). We want to make sure this behavior also
-> > > > > > > > exists in the upstream version so that consolidating them does not
-> > > > > > > > break our users who rely on vmpressure and will start seeing increased
-> > > > > > > > pressure due to proactive reclaim.
-> > > > > > >
-> > > > > > > These are good reasons to have this patch in your tree. But why is this
-> > > > > > > patch benefitial for the upstream kernel? It clearly adds some code and
-> > > > > > > some special casing which will add a maintenance overhead.
-> > > > > >
-> > > > > > It is not just Google, any existing vmpressure users will start seeing
-> > > > > > false pressure notifications with memory.reclaim. The main goal of the
-> > > > > > patch is to make sure memory.reclaim does not break pre-existing users
-> > > > > > of vmpressure, and doing it in a way that is consistent with psi makes
-> > > > > > sense.
-> > > > >
-> > > > > memory.reclaim is v2 only feature which doesn't have vmpressure
-> > > > > interface. So I do not see how pre-existing users of the upstream kernel
-> > > > > can see any breakage.
-> > > > >
-> > > >
-> > > > Please note that vmpressure is still being used in v2 by the
-> > > > networking layer (see mem_cgroup_under_socket_pressure()) for
-> > > > detecting memory pressure.
-> > >
-> > > I have missed this. It is hidden quite good. I thought that v2 is
-> > > completely vmpressure free. I have to admit that the effect of
-> > > mem_cgroup_under_socket_pressure is not really clear to me. Not to
-> > > mention whether it should or shouldn't be triggered for the user
-> > > triggered memory reclaim. So this would really need some explanation.
-> >
-> > vmpressure was tied into socket pressure by 8e8ae645249b ("mm:
-> > memcontrol: hook up vmpressure to socket pressure"). A quick look at
-> > the commit log and the code suggests that this is used all over the
-> > socket and tcp code to throttles the memory consumption of the
-> > networking layer if we are under pressure.
-> >
-> > However, for proactive reclaim like memory.reclaim, the target is to
-> > probe the memcg for cold memory. Reclaiming such memory should not
-> > have a visible effect on the workload performance. I don't think that
-> > any network throttling side effects are correct here.
->
-> IIUC, this change is fixing two mechanisms during userspace-induced
-> memory pressure:
-> 1. psi accounting, which I think is not controversial and makes sense to me;
-> 2. vmpressure signal, which is a "kinda" obsolete interface and might
-> be viewed as controversial.
-> I would suggest splitting the patch into two, first to fix psi
-> accounting and second to fix vmpressure signal. This way the first one
-> (probably the bigger of the two) can be reviewed and accepted easily
-> while debates continue on the second one.
 
-This change should be NOP for psi. psi was already fixed by
-e22c6ed90aa9 ("mm: memcontrol: don't count limit-setting reclaim
-as memory pressure") by Johannes a while ago. This patch does the same
-for vmpressure, but in a different way, as the same approach of
-e22c6ed90aa9 cannot be used.
 
-The changes you are seeing in this patch for psi are basically
-reverting e22c6ed90aa9 and using the newly introduced flag that
-handles vmpressure to handle psi as well, to avoid having two separate
-ways to address accounting memory pressure during userspace-induced
-reclaim.
+On 6/24/22 06:42, Mark Brown wrote:
+> On Thu, Jun 23, 2022 at 06:32:24PM +0100, Will Deacon wrote:
+>> On Fri, Jun 17, 2022 at 04:07:11PM -0500, madvenka@linux.microsoft.com wrote:
+> 
+>>> as HAVE_RELIABLE_STACKTRACE depends on STACK_VALIDATION which is not present
+>>> yet. This patch will be added in the future once Objtool is enhanced to
+>>> provide stack validation in some form.
+> 
+>> Given that it's not at all obvious that we're going to end up using objtool
+>> for arm64, does this patch series gain us anything in isolation?
+> 
+> Having the reliability information seems like it should be useful in
+> general even without doing live patching - we can use it to annotate
+> stack traces to warn people about anything that might be suspect in
+> there.  For live patching it's probably something we'll want regardless
+> of the use of objtool, it's one more robustness check which always
+> helps.
 
->
-> >
-> > >
-> > > > Though IMO we should deprecate vmpressure altogether.
-> > >
-> > > Yes it should be really limited to v1. But as I've said the effect on
-> > > mem_cgroup_under_socket_pressure is not really clear to me. It really
-> > > seems the v2 support has been introduced deliberately.
-> > >
-> > > --
-> > > Michal Hocko
-> > > SUSE Labs
+Hi Mark, Will,
+
+Your comments got me to thinking about the Objtool patch series I have sent earlier.
+
+Since the general feeling is that Objtool is unlikely to be our path to livepatch on ARM64, I think that I can implement what I want in a simpler way as a kernel-only solution. The kernel already has a decoder. I don't need
+to provide one. In the kernel-only solution, I don't have to worry about relocations, alternatives, etc, etc.
+
+The number of patches would be about half of the original series with simpler code in many of the patches.
+
+The amount of memory consumed by the CFI entries will most likely be just a fraction of the original series.
+
+I will investigate this. If it works and turns out to be a lot simpler, I will send this as v3 of the livepatch
+patch series. Also, if this works, we can replace the various reliability checks with just a single fp validation
+check in the unwinder.
+
+Thanks for the input.
+
+Madhavan
+

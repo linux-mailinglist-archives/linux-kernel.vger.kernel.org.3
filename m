@@ -2,344 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A4555928A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 07:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AD355928C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 07:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiFXFzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 01:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S229820AbiFXF6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 01:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiFXFzw (ORCPT
+        with ESMTP id S229598AbiFXF6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 01:55:52 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CFD53A55
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 22:55:51 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id g26so2548116ejb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 22:55:50 -0700 (PDT)
+        Fri, 24 Jun 2022 01:58:46 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986A767E7C
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 22:58:43 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id a15so1631012pfv.13
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 22:58:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ez1VrommP2Qk5ZxjhOr9MjaCYHC2kUPrG3Ztqlyf9f8=;
-        b=RU8+IA6ajxvlsi2yZP/JStVZvRskiVyWObqhaz9OHyoEF5WuhJtPRhgrAP7Qkubeje
-         qNrrwSStpZSqJQOdkDFu8fA1WJfbLqGw+Qa4sjAaftLP4oY2H/NiAL//lzIeK8UVYTOC
-         3bJvBBjBOx2KIJqjCOdUCerDTG2i/1EEzcaVAfLBW8TYcu+MYk8mbyhBRhPAJtSp/fT+
-         9oV9rojORXEel0lWRgOD/8+qxU8LQYWVs1f/lTB3cV8tozohXhA5TLc+7GveUAoKxsfX
-         eOQP3JexIo2tELye7LzJ2BHTV0XDytcgd/4dBhCl1tJRTgQ5tqzNqax6ZbjXSMGiKaXh
-         QoRA==
+        bh=mkT5VsPQuJIUpR6DhxoHikkl9hw8/mnThH9CG3OtTQA=;
+        b=UOl+hrib1e3Aocwgb7erU6umLmivsBwNvLC9H00sT05Vg8VG0H7E3b4+YSkbX7KaVk
+         m+UOHmBOIG6LgZDV4r9iysNyeBfzOYeY41IKCA4JSgLYpx3TfMMzHn1YXD+8SnxfMMJX
+         UPuraTdHeXLXUasN/tK9HfhAQtYzCOFistiuu6UKkd4ZMMixcKponrOgm7kSe3OQUUrM
+         YXDfuhZ5pHefWH2g5X6xDZSpIbpMwkieebQLk+ZLGcsHcTX1SEn82fFKP2BIkCin7yGv
+         BXJoo/lFoGhbB+3E7VnSsaZhL4xiKLgiiVivtQNNcXfFr3+iLJ3CYyCBzCBC+C+yfENu
+         JMPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ez1VrommP2Qk5ZxjhOr9MjaCYHC2kUPrG3Ztqlyf9f8=;
-        b=qxKTL24jK1qYnOmx+fJbkz675EfqbRBHuIU+jxwgR8cEjbpkvoBkqqwxNKbPQKzGxU
-         TJ96Cw6F1Z/A1LIXFCuJHZ9CImeuugGmn79unxgNqIuoiIjtMOdaq+gQcnT/6AiVRMgQ
-         9TLqGnJb1EsADv0CZ3CuKe3OJO+U83uDXjL5Di5lQ/ciT0wWSX+z7bpd4J+iq840UsUR
-         QfKcBFa2/L9UKc2v/lj2/aJC2l3uwupMTS4lxY5dYxt1LoMJjDuEJRkr7mfHrwWyMMWj
-         6ZSpG4ihQcE50iEzUoydgbMGrCBGk8zN3fcAvJiromgmpFObGUcQJ3HLNYrkqRNJ+CWZ
-         JgDg==
-X-Gm-Message-State: AJIora8eBZsHi6dJ8kt2FvgqO7RtawLAM3YK05ZHETo0aCAGPJBnFWIR
-        9jyWXd0Rxd0tYfdbljdFYf+pfyHESFPvFP0HbOawWS12Loo=
-X-Google-Smtp-Source: AGRyM1s9DWSgaaYjKV+ygtUtnyY/xvFVCHDOUJFrF/waPpf+TM39GrCQw57lguYBQp0THNQ39GTLePccCVp24Pr7CKY=
-X-Received: by 2002:a17:907:969f:b0:722:d37b:c82d with SMTP id
- hd31-20020a170907969f00b00722d37bc82dmr11784829ejc.770.1656050149326; Thu, 23
- Jun 2022 22:55:49 -0700 (PDT)
+        bh=mkT5VsPQuJIUpR6DhxoHikkl9hw8/mnThH9CG3OtTQA=;
+        b=PoZJjy4m07Y30kfDtvClHWosnyxpJD8IPewRAmev3jD8aMW5Pkq4O/T7zGsAeJXGBR
+         qNWbjkLusHAaw6p9YBl+45jv5Mp+UVhtj4uxg976laDr8JfgVUXwBj0mzoVyPInYM22m
+         Lu4KAbZmB9koBuzToJ422D6PDu0FDubKbQlIOCtdBBjNWaixPgat14txcouwfDv/koLl
+         2x87cMQvado0hJRaRa+An6HuP/jY7/U5Kg1kuyRwwrzweFnI47vfRV/k8h+vFoB7JI82
+         FPdHUp70kL+6Brhu9LVGmPW6c7sYTEG6IDqcV87FIy25GWiDRCq2ViLKiuvx3ISiQmAC
+         S+Fw==
+X-Gm-Message-State: AJIora8YASILv+J+ls+RyKRgOqdpLUwhZoNX8XSs/JHzEuK1xszGRNHc
+        4d+pYMx7I/TjTDOB6VklS6DBUw==
+X-Google-Smtp-Source: AGRyM1ti4aU43DYpsfZld3O4DiHkfxmRIl70oeYURWSPn3X6DWBE3rgnOyGrdn69LP/m8qiwbnxs4Q==
+X-Received: by 2002:a05:6a00:21c7:b0:51c:4b2d:f82f with SMTP id t7-20020a056a0021c700b0051c4b2df82fmr44228553pfj.29.1656050323019;
+        Thu, 23 Jun 2022 22:58:43 -0700 (PDT)
+Received: from bogon.bytedance.net ([61.120.150.70])
+        by smtp.gmail.com with ESMTPSA id q5-20020a170902bd8500b001640beeebf1sm811135pls.268.2022.06.23.22.58.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 22:58:42 -0700 (PDT)
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+To:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, xieyongji@bytedance.com,
+        fam.zheng@bytedance.com,
+        Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>,
+        Miklos Szeredi <mszeredi@redhat.com>
+Subject: [PATCH] fuse: writeback_cache consistency enhancement (writeback_cache_v2)
+Date:   Fri, 24 Jun 2022 13:58:25 +0800
+Message-Id: <20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 24 Jun 2022 15:55:38 +1000
-Message-ID: <CAPM=9tyLoZOkc56K2auFtdjhuUxP=Xwj41evB053YZrHyQNSxg@mail.gmail.com>
-Subject: [git pull] drm fixes for 5.19-rc4
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Some users may want both the high performance of the writeback_cahe mode and
+a little bit more consistency among FUSE mounts. In the current writeback
+mode implementation, users of one FUSE mount can never see the file
+expansion done by other FUSE mounts.
 
-Fixes for this week, bit larger than normal, but I think the last
-couple have been quieter, and it's only rc4. There are a lot of small
-msm fixes, and a slightly larger set of vc4 fixes. The vc4 fixes clean
-up a lot of crashes around the rPI4 hardware differences from earlier
-ones, and problems in the page flip and modeset code which assumed
-earlier hw, so I thought it would be okay to keep them in.
+Based on the suggested writeback V2 patch in the upstream mailing-list [1],
+this commit allows the cmtime and size to be updated from server in
+writeback mode. Compared with the writeback V2 patch in [1], this commit has
+several differences:
 
-Otherwise, it's a few amdgpu, i915, sun4i and a panel quirk.
+    1. Ensure c/mtime are not updated from kernel to server. IOW, the cmtime
+    generated by kernel are just temporary values that are never flushed to
+    server, and they can also be updated by the official server cmtime when
+    the writeback cache is clean.
 
-Let me know if there are any issues. Just a headsup as well myself and
-danvet will be out the week 4th-10th July so you might not get an rc6
-round, rc5 next week should be fine.
+    2. Skip mtime-based revalidation when fc->auto_inval_data is set with
+    fc->writeback_cache_v2. Because the kernel-generated temporary cmtime
+    are likely not equal to the offical server cmtime.
 
-Regards,
-Dave.
+    3. If any page is ever flushed to the server during FUSE_GETATTR
+    handling on fuse server, even if the cache is clean when
+    fuse_change_attributes() checks, we should not update the i_size. This
+    is because the FUSE_GETATTR may get a staled size before the FUSE_WRITE
+    request changes server inode size. This commit ensures this by
+    increasing attr_version after writeback for writeback_cache_v2. In that
+    case, we should also ensure the ordering of the attr_version updating
+    and the fi->writepages RB-tree updating. So that if a fuse page
+    writeback ever happens during fuse_change_attributes(), either the
+    fi->writepages is not empty, or the attr_version is increased. So we
+    never mistakenly update a stale file size from server to kernel.
 
-drm-fixes-2022-06-24:
-drm fixes for 5.19-rc4
+With this patch, writeback mode can consider the server c/mtime as the
+official one. When inode attr is timeout or invalidated, kernel has chance
+to see size and c/mtime modified by others.
 
-amdgpu:
-- Adjust GTT size logic
-- eDP fix for RMB
-- DCN 3.15 fix
-- DP training fix
-- Color encoding fix for DCN2+
+Together with another patch [2], a FUSE daemon is able to implement
+close-to-open (CTO) consistency like what is done in NFS clients.
 
-sun4i:
-- multiple suspend fixes
+[1] https://lore.kernel.org/linux-fsdevel/Ymfu8fGbfYi4FxQ4@miu.piliscsaba.redhat.com
+[2] https://lore.kernel.org/linux-fsdevel/20220608104202.19461-1-zhangjiachen.jaycee@bytedance.com/
 
-vc4:
-- rework driver split for rpi4,
-  fixes multiple crashers.
+Suggested-by: Miklos Szeredi <mszeredi@redhat.com>
+Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+---
+ fs/fuse/file.c            | 17 +++++++++++++++
+ fs/fuse/fuse_i.h          |  3 +++
+ fs/fuse/inode.c           | 44 +++++++++++++++++++++++++++++++++++++--
+ include/uapi/linux/fuse.h |  5 +++++
+ 4 files changed, 67 insertions(+), 2 deletions(-)
 
-panel:
-- quirk for Aya Neo Next
+diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+index 9b64e2ff1c96..35bdc7af8468 100644
+--- a/fs/fuse/file.c
++++ b/fs/fuse/file.c
+@@ -1829,6 +1829,15 @@ static void fuse_writepage_end(struct fuse_mount *fm, struct fuse_args *args,
+ 		 */
+ 		fuse_send_writepage(fm, next, inarg->offset + inarg->size);
+ 	}
++
++	if (fc->writeback_cache_v2)
++		fi->attr_version = atomic64_inc_return(&fc->attr_version);
++	/*
++	 * Ensure attr_version increases before the page is move out of the
++	 * writepages rb-tree.
++	 */
++	smp_mb();
++
+ 	fi->writectr--;
+ 	fuse_writepage_finish(fm, wpa);
+ 	spin_unlock(&fi->lock);
+@@ -1858,10 +1867,18 @@ static struct fuse_file *fuse_write_file_get(struct fuse_inode *fi)
+ 
+ int fuse_write_inode(struct inode *inode, struct writeback_control *wbc)
+ {
++	struct fuse_conn *fc = get_fuse_conn(inode);
+ 	struct fuse_inode *fi = get_fuse_inode(inode);
+ 	struct fuse_file *ff;
+ 	int err;
+ 
++	/*
++	 * Kernel c/mtime should not be updated to the server in the
++	 * writeback_cache_v2 mode as server c/mtime are official.
++	 */
++	if (fc->writeback_cache_v2)
++		return 0;
++
+ 	/*
+ 	 * Inode is always written before the last reference is dropped and
+ 	 * hence this should not be reached from reclaim.
+diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+index 488b460e046f..47de36146fb8 100644
+--- a/fs/fuse/fuse_i.h
++++ b/fs/fuse/fuse_i.h
+@@ -654,6 +654,9 @@ struct fuse_conn {
+ 	/* show legacy mount options */
+ 	unsigned int legacy_opts_show:1;
+ 
++	/* Improved writeback cache policy */
++	unsigned writeback_cache_v2:1;
++
+ 	/*
+ 	 * fs kills suid/sgid/cap on write/chown/trunc. suid is killed on
+ 	 * write/trunc only if caller did not have CAP_FSETID.  sgid is killed
+diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+index 8c0665c5dff8..2d5fa82b08b6 100644
+--- a/fs/fuse/inode.c
++++ b/fs/fuse/inode.c
+@@ -237,14 +237,41 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
+ 	u32 cache_mask;
+ 	loff_t oldsize;
+ 	struct timespec64 old_mtime;
++	bool try_wb_update = false;
++
++	if (fc->writeback_cache_v2 && S_ISREG(inode->i_mode)) {
++		inode_lock(inode);
++		try_wb_update = true;
++	}
+ 
+ 	spin_lock(&fi->lock);
+ 	/*
+ 	 * In case of writeback_cache enabled, writes update mtime, ctime and
+ 	 * may update i_size.  In these cases trust the cached value in the
+ 	 * inode.
++	 *
++	 * In writeback_cache_v2 mode, if all the following conditions are met,
++	 * then we allow the attributes to be refreshed:
++	 *
++	 * - inode is not in the process of being written (I_SYNC)
++	 * - inode has no dirty pages (I_DIRTY_PAGES)
++	 * - inode data-related attributes are clean (I_DIRTY_DATASYNC)
++	 * - inode does not have any page writeback in progress
++	 *
++	 * Note: checking PAGECACHE_TAG_WRITEBACK is not sufficient in fuse,
++	 * since inode can appear to have no PageWriteback pages, yet still have
++	 * outstanding write request.
+ 	 */
+ 	cache_mask = fuse_get_cache_mask(inode);
++	if (try_wb_update && !(inode->i_state & (I_DIRTY_PAGES | I_SYNC |
++	    I_DIRTY_DATASYNC)) && RB_EMPTY_ROOT(&fi->writepages))
++		cache_mask &= ~(STATX_MTIME | STATX_CTIME | STATX_SIZE);
++	/*
++	 * Ensure the ordering of cleanness checking and following attr_version
++	 * comparison.
++	 */
++	smp_mb();
++
+ 	if (cache_mask & STATX_SIZE)
+ 		attr->size = i_size_read(inode);
+ 
+@@ -283,7 +310,13 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
+ 			truncate_pagecache(inode, attr->size);
+ 			if (!fc->explicit_inval_data)
+ 				inval = true;
+-		} else if (fc->auto_inval_data) {
++		} else if (!fc->writeback_cache_v2 && fc->auto_inval_data) {
++			/*
++			 * When fc->writeback_cache_v2 is set, the old_mtime
++			 * can be generated by kernel and must not equal to
++			 * new_mtime generated by server. So skip in such
++			 * case.
++			 */
+ 			struct timespec64 new_mtime = {
+ 				.tv_sec = attr->mtime,
+ 				.tv_nsec = attr->mtimensec,
+@@ -303,6 +336,9 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
+ 
+ 	if (IS_ENABLED(CONFIG_FUSE_DAX))
+ 		fuse_dax_dontcache(inode, attr->flags);
++
++	if (try_wb_update)
++		inode_unlock(inode);
+ }
+ 
+ static void fuse_init_inode(struct inode *inode, struct fuse_attr *attr)
+@@ -1153,6 +1189,10 @@ static void process_init_reply(struct fuse_mount *fm, struct fuse_args *args,
+ 				fc->async_dio = 1;
+ 			if (flags & FUSE_WRITEBACK_CACHE)
+ 				fc->writeback_cache = 1;
++			if (flags & FUSE_WRITEBACK_CACHE_V2) {
++				fc->writeback_cache = 1;
++				fc->writeback_cache_v2 = 1;
++			}
+ 			if (flags & FUSE_PARALLEL_DIROPS)
+ 				fc->parallel_dirops = 1;
+ 			if (flags & FUSE_HANDLE_KILLPRIV)
+@@ -1234,7 +1274,7 @@ void fuse_send_init(struct fuse_mount *fm)
+ 		FUSE_ABORT_ERROR | FUSE_MAX_PAGES | FUSE_CACHE_SYMLINKS |
+ 		FUSE_NO_OPENDIR_SUPPORT | FUSE_EXPLICIT_INVAL_DATA |
+ 		FUSE_HANDLE_KILLPRIV_V2 | FUSE_SETXATTR_EXT | FUSE_INIT_EXT |
+-		FUSE_SECURITY_CTX;
++		FUSE_SECURITY_CTX | FUSE_WRITEBACK_CACHE_V2;
+ #ifdef CONFIG_FUSE_DAX
+ 	if (fm->fc->dax)
+ 		flags |= FUSE_MAP_ALIGNMENT;
+diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+index d6ccee961891..b474763bcf59 100644
+--- a/include/uapi/linux/fuse.h
++++ b/include/uapi/linux/fuse.h
+@@ -194,6 +194,7 @@
+  *  - add FUSE_SECURITY_CTX init flag
+  *  - add security context to create, mkdir, symlink, and mknod requests
+  *  - add FUSE_HAS_INODE_DAX, FUSE_ATTR_DAX
++ *  - add FUSE_WRITEBACK_CACHE_V2 init flag
+  */
+ 
+ #ifndef _LINUX_FUSE_H
+@@ -353,6 +354,9 @@ struct fuse_file_lock {
+  * FUSE_SECURITY_CTX:	add security context to create, mkdir, symlink, and
+  *			mknod
+  * FUSE_HAS_INODE_DAX:  use per inode DAX
++ * FUSE_WRITEBACK_CACHE_V2:
++ *			allow time/size to be refreshed if no pending write
++ *			c/mtime not updated from kernel to server
+  */
+ #define FUSE_ASYNC_READ		(1 << 0)
+ #define FUSE_POSIX_LOCKS	(1 << 1)
+@@ -389,6 +393,7 @@ struct fuse_file_lock {
+ /* bits 32..63 get shifted down 32 bits into the flags2 field */
+ #define FUSE_SECURITY_CTX	(1ULL << 32)
+ #define FUSE_HAS_INODE_DAX	(1ULL << 33)
++#define FUSE_WRITEBACK_CACHE_V2	(1ULL << 34)
+ 
+ /**
+  * CUSE INIT request/reply flags
+-- 
+2.20.1
 
-i915:
-- Revert low voltage SKU check removal to fix display issues
-- Apply PLL DCO fraction workaround for ADL-S
-- Don't show engine classes not present in client fdinfo
-
-msm:
-- Workaround for parade DSI bridge power sequencing
-- Fix for multi-planar YUV format offsets
-- Limiting WB modes to max sspp linewidth
-- Fixing the supported rotations to add 180 back for IGT
-- Fix to handle pm_runtime_get_sync() errors to avoid unclocked access
-  in the bind() path for dpu driver
-- Fix the irq_free() without request issue which was a being hit frequently
-  in CI.
-- Fix to add minimum ICC vote in the msm_mdss pm_resume path to address
-  bootup splats
-- Fix to avoid dereferencing without checking in WB encoder
-- Fix to avoid crash during suspend in DP driver by ensuring interrupt
-  mask bits are updated
-- Remove unused code from dpu_encoder_virt_atomic_check()
-- Fix to remove redundant init of dsc variable
-- Fix to ensure mmap offset is initialized to avoid memory corruption
-  from unpin/evict
-- Fix double runpm disable in probe-defer path
-- VMA fenced-unpin fixes
-- Fix for WB max-width
-- Fix for rare dp resolution change issue
-The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e=
-:
-
-  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2022-06-24
-
-for you to fetch changes up to 1e9124df8be0a43e4e9a10c5d1140d6ca8e50132:
-
-  Merge tag 'drm-msm-fixes-2022-06-20' of
-https://gitlab.freedesktop.org/drm/msm into drm-fixes (2022-06-24
-10:11:27 +1000)
-
-----------------------------------------------------------------
-drm fixes for 5.19-rc4
-
-amdgpu:
-- Adjust GTT size logic
-- eDP fix for RMB
-- DCN 3.15 fix
-- DP training fix
-- Color encoding fix for DCN2+
-
-sun4i:
-- multiple suspend fixes
-
-vc4:
-- rework driver split for rpi4,
-  fixes multiple crashers.
-
-panel:
-- quirk for Aya Neo Next
-
-i915:
-- Revert low voltage SKU check removal to fix display issues
-- Apply PLL DCO fraction workaround for ADL-S
-- Don't show engine classes not present in client fdinfo
-
-msm:
-- Workaround for parade DSI bridge power sequencing
-- Fix for multi-planar YUV format offsets
-- Limiting WB modes to max sspp linewidth
-- Fixing the supported rotations to add 180 back for IGT
-- Fix to handle pm_runtime_get_sync() errors to avoid unclocked access
-  in the bind() path for dpu driver
-- Fix the irq_free() without request issue which was a being hit frequently
-  in CI.
-- Fix to add minimum ICC vote in the msm_mdss pm_resume path to address
-  bootup splats
-- Fix to avoid dereferencing without checking in WB encoder
-- Fix to avoid crash during suspend in DP driver by ensuring interrupt
-  mask bits are updated
-- Remove unused code from dpu_encoder_virt_atomic_check()
-- Fix to remove redundant init of dsc variable
-- Fix to ensure mmap offset is initialized to avoid memory corruption
-  from unpin/evict
-- Fix double runpm disable in probe-defer path
-- VMA fenced-unpin fixes
-- Fix for WB max-width
-- Fix for rare dp resolution change issue
-
-----------------------------------------------------------------
-Abhinav Kumar (1):
-      drm/msm/dpu: limit wb modes based on max_mixer_width
-
-Alex Deucher (1):
-      drm/amdgpu: Adjust logic around GTT size (v3)
-
-Dan Carpenter (1):
-      drm/vc4: fix error code in vc4_check_tex_size()
-
-Dave Airlie (4):
-      Merge tag 'amd-drm-fixes-5.19-2022-06-22' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      Merge tag 'drm-misc-fixes-2022-06-23' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-      Merge tag 'drm-intel-fixes-2022-06-22' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-      Merge tag 'drm-msm-fixes-2022-06-20' of
-https://gitlab.freedesktop.org/drm/msm into drm-fixes
-
-George Shen (1):
-      drm/amd/display: Fix typo in override_lane_settings
-
-Jason A. Donenfeld (1):
-      drm/i915/display: Re-add check for low voltage sku for max dp source =
-rate
-
-Jernej Skrabec (1):
-      drm/sun4i: Add DMA mask and segment size
-
-Jonathan Marek (1):
-      drm/msm: use for_each_sgtable_sg to iterate over scatterlist
-
-Joshua Ashton (1):
-      amd/display/dc: Fix COLOR_ENCODING and COLOR_RANGE doing nothing
-for DCN20+
-
-Kuogee Hsieh (2):
-      drm/msm/dp: check core_initialized before disable interrupts at
-dp_display_unbind()
-      drm/msm/dp: force link training for display resolution change
-
-Mario Limonciello (1):
-      drm/amd: Revert "drm/amd/display: keep eDP Vdd on when eDP
-stream is already enabled"
-
-Maxime Ripard (14):
-      drm/vc4: plane: Prevent async update if we don't have a dlist
-      drm/vc4: Consolidate Hardware Revision Check
-      drm/vc4: bo: Rename vc4_dumb_create
-      drm/vc4: bo: Split out Dumb buffers fixup
-      drm/vc4: drv: Register a different driver on BCM2711
-      drm/vc4: kms: Register a different drm_mode_config_funcs on BCM2711
-      drm/vc4: plane: Register a different drm_plane_helper_funcs on BCM271=
-1
-      drm/vc4: drv: Skip BO Backend Initialization on BCM2711
-      drm/vc4: crtc: Use an union to store the page flip callback
-      drm/vc4: crtc: Move the BO handling out of common page-flip callback
-      drm/vc4: crtc: Move the BO Handling out of Common Page-Flip Handler
-      drm/vc4: crtc: Don't call into BO Handling on Async Page-Flips on BCM=
-2711
-      drm/vc4: crtc: Fix out of order frames during asynchronous page flips
-      drm/vc4: Warn if some v3d code is run on BCM2711
-
-Maximilian Luz (1):
-      drm/msm: Fix double pm_runtime_disable() call
-
-Maya Matuszczyk (1):
-      drm: panel-orientation-quirks: Add quirk for Aya Neo Next
-
-Miaoqian Lin (1):
-      drm/msm/mdp4: Fix refcount leak in mdp4_modeset_init_intf
-
-Qingqing Zhuo (1):
-      drm/amd/display: Fix DC warning at driver load
-
-Rob Clark (7):
-      Merge tag 'msm-next-5.19-fixes-06-01' of
-https://gitlab.freedesktop.org/abhinavk/msm into msm-fixes-staging
-      drm/msm: Ensure mmap offset is initialized
-      drm/msm: Switch ordering of runpm put vs devfreq_idle
-      drm/msm/gem: Separate object and vma unpin
-      drm/msm/gem: Drop early returns in close/purge vma
-      drm/msm: Drop update_fences()
-      drm/msm: Don't overwrite hw fence in hw_init
-
-Samuel Holland (2):
-      drm/sun4i: dw-hdmi: Fix ddc-en GPIO consumer conflict
-      drm/sun4i: Fix crash during suspend after component bind failure
-
-Saud Farooqui (2):
-      drm/vc4: hdmi: Fixed possible integer overflow
-      drm/sun4i: Return if frontend is not present
-
-Tvrtko Ursulin (1):
-      drm/i915/fdinfo: Don't show engine classes not present
-
-Ville Syrj=C3=A4l=C3=A4 (1):
-      drm/i915: Implement w/a 22010492432 for adl-s
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c            |  20 ++-
- .../amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c |   2 +-
- drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c   |   2 +-
- .../amd/display/dc/dce110/dce110_hw_sequencer.c    |  24 +--
- drivers/gpu/drm/amd/display/dc/dcn20/dcn20_dpp.c   |   3 +
- drivers/gpu/drm/amd/display/dc/dcn201/dcn201_dpp.c |   3 +
- drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dpp.c   |   3 +
- drivers/gpu/drm/drm_panel_orientation_quirks.c     |   6 +
- drivers/gpu/drm/i915/display/intel_dp.c            |  32 +++-
- drivers/gpu/drm/i915/display/intel_dpll_mgr.c      |   4 +-
- drivers/gpu/drm/i915/i915_drm_client.c             |   5 +-
- drivers/gpu/drm/msm/adreno/adreno_gpu.c            |  14 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_writeback.c      |   9 +-
- drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c           |   2 +
- drivers/gpu/drm/msm/dp/dp_ctrl.c                   |  33 +++-
- drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   2 +-
- drivers/gpu/drm/msm/dp/dp_display.c                |  16 +-
- drivers/gpu/drm/msm/msm_drv.c                      |   2 +-
- drivers/gpu/drm/msm/msm_drv.h                      |   1 +
- drivers/gpu/drm/msm/msm_fence.c                    |   8 +-
- drivers/gpu/drm/msm/msm_gem.c                      |   7 +-
- drivers/gpu/drm/msm/msm_gem.h                      |  11 +-
- drivers/gpu/drm/msm/msm_gem_prime.c                |  15 ++
- drivers/gpu/drm/msm/msm_gem_submit.c               |  18 +-
- drivers/gpu/drm/msm/msm_gem_vma.c                  |   6 +-
- drivers/gpu/drm/msm/msm_gpu.c                      |  27 +--
- drivers/gpu/drm/msm/msm_iommu.c                    |   2 +-
- drivers/gpu/drm/msm/msm_ringbuffer.c               |   2 +-
- drivers/gpu/drm/sun4i/sun4i_drv.c                  |  12 +-
- drivers/gpu/drm/sun4i/sun4i_layer.c                |   2 +-
- drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c              |  54 +-----
- drivers/gpu/drm/sun4i/sun8i_dw_hdmi.h              |   2 -
- drivers/gpu/drm/vc4/vc4_bo.c                       |  62 ++++++-
- drivers/gpu/drm/vc4/vc4_crtc.c                     | 196 +++++++++++++++--=
-----
- drivers/gpu/drm/vc4/vc4_drv.c                      |  97 ++++++++--
- drivers/gpu/drm/vc4/vc4_drv.h                      |  19 +-
- drivers/gpu/drm/vc4/vc4_gem.c                      |  40 +++++
- drivers/gpu/drm/vc4/vc4_hdmi.c                     |   2 +-
- drivers/gpu/drm/vc4/vc4_hvs.c                      |  18 +-
- drivers/gpu/drm/vc4/vc4_irq.c                      |  16 ++
- drivers/gpu/drm/vc4/vc4_kms.c                      |  24 ++-
- drivers/gpu/drm/vc4/vc4_perfmon.c                  |  47 ++++-
- drivers/gpu/drm/vc4/vc4_plane.c                    |  29 ++-
- drivers/gpu/drm/vc4/vc4_render_cl.c                |   4 +
- drivers/gpu/drm/vc4/vc4_v3d.c                      |  15 ++
- drivers/gpu/drm/vc4/vc4_validate.c                 |  16 ++
- drivers/gpu/drm/vc4/vc4_validate_shaders.c         |   4 +
- 47 files changed, 670 insertions(+), 268 deletions(-)

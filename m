@@ -2,135 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C967558F88
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 06:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71702558FC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 06:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiFXEOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 00:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
+        id S229948AbiFXEYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 00:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiFXEOF (ORCPT
+        with ESMTP id S229462AbiFXEYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 00:14:05 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467214FC5D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 21:14:03 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id n144so2477203ybf.12
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 21:14:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1qA3djIvmCXy0qDgHJwJPAvZJI/yB7Iv/v6zV71DlqI=;
-        b=dbZ9+ZC5GXZBRWNne1PZdMvrN9BTVVpQyaGafXlsAtWJeAd9l8oyXDXIqFysIl9GVm
-         N4H+lFbi6/LBOckdOGoUbN7WtfvcNbNBOeOFC7rh5NtINkkrczh+6eZUtMSYo2E3AY9Q
-         KYGicWB9gM91hpq5XTmgvSFGXfHwUfmiFGF4JIDqGyLQZ9Ioy2r1nLhocjJhDW2tTunF
-         +GaqHi5XbJRMj4kjJ73QHO1rFkP1twxXYdL2Vjmx+CyHxUvo5vkbtNGr14PQ0ANIM6bW
-         nq7VV+wsKB9fTNwybydirk3rRQxeekz89JST0ITd5vaJmhm+joNueRsC/J/thMNGvbjz
-         MofQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1qA3djIvmCXy0qDgHJwJPAvZJI/yB7Iv/v6zV71DlqI=;
-        b=Nt8x5oBuAgt09l4Q0qbZ5bF4UDX3rOAglw3tgiyBMExJpWAKs2HwJczzmtwC5A0Erm
-         jKS0ITLK5egDP9jT92cbUa7JKrp8IhSBqJm/+wEYViW3BSC45g7vxqNPCDjDRzDm5pz1
-         dmZ6oEx5D1s56q+rjIJaasTeMzCYyTqbBjGXAm1aeaAbcCA7yUKW7o00F4v5T2FeL29Z
-         Vcz5C3edNViOGQ1ROkMacZew8SmDtE9++syL91PwvIoNBAbJAn5/H5qdi3/rzi75oJyA
-         TSD1ptYg0s1tXWcqBLt+YkTWk/WWOfnf8NEVpiA68B7R5U72w1Fh+FUrEtQDWA876ZSz
-         Kvdw==
-X-Gm-Message-State: AJIora+kowkIlJrYyni/rHXkjAl45x2sYvi80zJy/2NQ14SJALu6AfxP
-        kOeoHu/VBeohpEejmFUIgjWwRJug0u/RhWWoi8TGNA==
-X-Google-Smtp-Source: AGRyM1u5NmicPX8kPXvz1kiPZ+hNXNfnIUMJsLYPxSR6t62siw34qIBUx64zMORNQHZNj8XRPh/W7Dh2yu7XetMiJhw=
-X-Received: by 2002:a25:6c5:0:b0:669:a17a:2289 with SMTP id
- 188-20020a2506c5000000b00669a17a2289mr9871960ybg.231.1656044042254; Thu, 23
- Jun 2022 21:14:02 -0700 (PDT)
+        Fri, 24 Jun 2022 00:24:52 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC8768089;
+        Thu, 23 Jun 2022 21:24:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656044691; x=1687580691;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kVDxIvarWkuRah5cpv92jCl+ab4t1rlKwD8uPlR7P2s=;
+  b=hq1jzfcWVFxVXUL91zp8yqUfAAVud8iC4A9gg97NOfh3IjUNO5wdkr/a
+   QVg0YCgw9Xqa5TYNptJhxio15jVcnK0bM7tMNEsFu0q616cWvbmTYfY2j
+   efsVrzp3BZT91xExwEmyZwfa77pK8syfYnPZN2VWk1BtnKruP1qwLYNad
+   GQB4jB9z9fkYEu1gUt/2STLeAIncizfVbgHLspP32VInv8LTWCEu/hxch
+   HIjwX3BUcvWRjGLIl5PF3lObU/VUJmoFE8aspKnKSz/iP5lLGAtWxGaFp
+   mzTe0sfvb5cWRZEs13DgGEXWxS5+3P4n3b/vEwTuaDwaUpodBEJu7oKxA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="260736270"
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="260736270"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 21:24:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="915522842"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Jun 2022 21:24:48 -0700
+Date:   Fri, 24 Jun 2022 12:16:37 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, corbet@lwn.net,
+        conor.dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: Re: [PATCH v22 0/5] Microchip Polarfire FPGA manager
+Message-ID: <20220624041637.GA1979449@yilunxu-OptiPlex-7050>
+References: <20220623163248.3672-1-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-References: <20220619150456.GB34471@xsang-OptiPlex-9020> <20220622172857.37db0d29@kernel.org>
- <CADvbK_csvmkKe46hT9792=+Qcjor2EvkkAnr--CJK3NGX-N9BQ@mail.gmail.com>
- <CADvbK_eQUmb942vC+bG+NRzM1ki1LiCydEDR1AezZ35Jvsdfnw@mail.gmail.com> <20220623185730.25b88096@kernel.org>
-In-Reply-To: <20220623185730.25b88096@kernel.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 24 Jun 2022 06:13:51 +0200
-Message-ID: <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
-Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Xin Long <lucien.xin@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        network dev <netdev@vger.kernel.org>,
-        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        "Tang, Feng" <feng.tang@intel.com>, zhengjun.xing@linux.intel.com,
-        fengwei.yin@intel.com, Ying Xu <yinxu@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220623163248.3672-1-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 3:57 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Thu, 23 Jun 2022 18:50:07 -0400 Xin Long wrote:
-> > From the perf data, we can see __sk_mem_reduce_allocated() is the one
-> > using CPU the most more than before, and mem_cgroup APIs are also
-> > called in this function. It means the mem cgroup must be enabled in
-> > the test env, which may explain why I couldn't reproduce it.
-> >
-> > The Commit 4890b686f4 ("net: keep sk->sk_forward_alloc as small as
-> > possible") uses sk_mem_reclaim(checking reclaimable >= PAGE_SIZE) to
-> > reclaim the memory, which is *more frequent* to call
-> > __sk_mem_reduce_allocated() than before (checking reclaimable >=
-> > SK_RECLAIM_THRESHOLD). It might be cheap when
-> > mem_cgroup_sockets_enabled is false, but I'm not sure if it's still
-> > cheap when mem_cgroup_sockets_enabled is true.
-> >
-> > I think SCTP netperf could trigger this, as the CPU is the bottleneck
-> > for SCTP netperf testing, which is more sensitive to the extra
-> > function calls than TCP.
-> >
-> > Can we re-run this testing without mem cgroup enabled?
->
-> FWIW I defer to Eric, thanks a lot for double checking the report
-> and digging in!
+On Thu, Jun 23, 2022 at 07:32:43PM +0300, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Microchip Polarfire
+> FPGAs over slave SPI interface with .dat formatted bitsream image.
+> 
+> Changelog:
+>   v1 -> v2: fix printk formating
+>   v2 -> v3:
+>    * replace "microsemi" with "microchip"
+>    * replace prefix "microsemi_fpga_" with "mpf_"
+>    * more sensible .compatible and .name strings
+>    * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
+>   v3 -> v4: fix unused variable warning
+>     Put 'mpf_of_ids' definition under conditional compilation, so it
+>     would not hang unused if CONFIG_OF is not enabled.
+>   v4 -> v5:
+>    * prefix defines with MPF_
+>    * mdelay() -> usleep_range()
+>    * formatting fixes
+>    * add DT bindings doc
+>    * rework fpga_manager_ops.write() to fpga_manager_ops.write_sg()
+>      We can't parse image header in write_init() because image header
+>      size is not known beforehand. Thus parsing need to be done in
+>      fpga_manager_ops.write() callback, but fpga_manager_ops.write()
+>      also need to be reenterable. On the other hand,
+>      fpga_manager_ops.write_sg() is called once. Thus, rework usage of
+>      write() callback to write_sg().
+>   v5 -> v6: fix patch applying
+>      I forgot to clean up unrelated local changes which lead to error on
+>      patch 0001-fpga-microchip-spi-add-Microchip-MPF-FPGA-manager.patch
+>      applying on vanilla kernel.
+>   v6 -> v7: fix binding doc to pass dt_binding_check
+>   v7 -> v8: another fix for dt_binding_check warning
+>   v8 -> v9:
+>    * add another patch to support bitstream offset in FPGA image buffer
+>    * rework fpga_manager_ops.write_sg() back to fpga_manager_ops.write()
+>    * move image header parsing from write() to write_init()
+>   v9 -> v10:
+>    * add parse_header() callback to fpga_manager_ops
+>    * adjust fpga_mgr_write_init[_buf|_sg]() for parse_header() usage
+>    * implement parse_header() in microchip-spi driver
+>   v10 -> v11: include missing unaligned.h to microchip-spi
+>      fix error: implicit declaration of function 'get_unaligned_le[16|32]'
+>   v11 -> v12:
+>    * microchip-spi: double read hw status, ignore first read, because it
+>      can be unreliable.
+>    * microchip-spi: remove sleep between status readings in
+>      poll_status_not_busy() to save a few seconds. Status is polled on
+>      every 16 byte writes - that is quite often, therefore
+>      usleep_range() accumulate to a considerable number of seconds.
+>   v12 -> v13:
+>    * fpga-mgr: separate fpga_mgr_parse_header_buf() from
+>      fpga_mgr_write_init_buf()
+>    * fpga-mgr: introduce FPGA_MGR_STATE_PARSE_HEADER and
+>      FPGA_MGR_STATE_PARSE_HEADER_ERR fpga_mgr_states
+>    * fpga-mgr: rename fpga_mgr_write_init_sg() to fpga_mgr_prepare_sg()
+>      and rework with respect to a new fpga_mgr_parse_header_buf()
+>    * fpga-mgr: rework write accounting in fpga_mgr_buf_load_sg() for
+>      better clarity
+>    * microchip-spi: rename MPF_STATUS_POLL_TIMEOUT to
+>      MPF_STATUS_POLL_RETRIES
+>    * microchip-spi: add comment about status reading quirk to
+>      mpf_read_status()
+>    * microchip-spi: rename poll_status_not_busy() to mpf_poll_status()
+>      and add comment.
+>    * microchip-spi: make if statement in mpf_poll_status() easier to
+>      read.
+>   v13 -> v14:
+>    * fpga-mgr: improvements from Xu Yilun in
+>       - fpga_mgr_parse_header_buf()
+>       - fpga_mgr_write_init_buf()
+>       - fpga_mgr_prepare_sg()
+>       - fpga_mgr_buf_load_sg()
+>    * fpga-mgr: add check for -EAGAIN from fpga_mgr_parse_header_buf()
+>      when called from fpga_mgr_buf_load_mapped()
+>    * microchip-spi: remove excessive cs_change from second spi_transfer
+>      in mpf_read_status()
+>    * microchip-spi: change type of components_size_start,
+>      bitstream_start, i from size_t to u32 in mpf_ops_parse_header()
+>   v14 -> v15: eliminate memcpy() in mpf_ops_write()
+>     Eliminate excessive memcpy() in mpf_ops_write() by using
+>     spi_sync_transfer() instead of spi_write().
+>   v15 -> v16:
+>    * microchip-spi: change back components_size_start and
+>      bitstream_start variables types to size_t, i - to u16 in
+>      mpf_ops_parse_header()
+>    * fpga-mgr: rename fpga_parse_header_buf() to
+>      fpga_parse_header_mapped(). It serves only mapped FPGA image now,
+>      adjust it accordingly.
+>    * fpga-mgr: separate fpga_mgr_parse_header_sg_first() and
+>      fpga_mgr_parse_header_sg() from fpga_mgr_prepare_sg()
+>   v16 -> v17:
+>    * fpga-mgr: return size of allocated header from
+>      fpga_mgr_parse_header_sg(), add `char **ret_buf` to function args
+>      to save pointer to allocated header. This allow us to call
+>      fpga_mgr_write_init_buf() with exact size of allocated header.
+>    * document parse_header() callback in fpga-mgr.rst
+>   v17 -> v18:
+>    * fpga-mgr: change back fpga_mgr_parse_header_sg() to return
+>      allocated buffer but set buffer size into output parameter
+>    * fpga-mgr: check returned pointer from krealloc for ZERO_OR_NULL_PTR
+>      in fpga_mgr_paese_header_sg() as krealloc may return ZERO_SIZE_PTR.
+>    * fpga-mgr: in fpga_mgr_prepare_sg() return fpga_mgr_write_init() on
+>      fast path only when both initial_header_size and parse_header() are
+>      not defined.
+>    * docs: fpga-mgr: a few rewords from Xu Yilun
+>   v18 -> v19:
+>    * microchip-spi: split multiple assignments on a single line in
+>      functions mpf_read_status() and mpf_ops_parse_header()
+>    * fpga-mgr: add braces {} around "else if" arm in
+>      fpga_mgr_prepare_sg()
+>    * fpga-mgr: don't reuse krealloc() arg in fpga_mgr_parse_header_sg().
+>      If krealloc() returns NULL, it doesn't free the original.
+>   v19 -> v20:
+>    * fpga-mgr: initialize info->header_size with
+>      mops->initial_header_size at fpga_mgr_load().
+>    * fpga-mgr: add mops->skip_header boolean flag. Adjust skipping
+>      header before write to check against skip_header flag instead of
+>      mere presence of info->header_size.
+>    * fpga-mgr: split check for ZERO_OR_NULL_PTR() after realloc() in
+>      fpga_mgr_parse_header_sg() function to check against zero header +
+>      check against NULL returned from realloc().
+>    * docs: fpga-mgr: adjust for skip_header flag.
+>    * microchip-spi: add skip_header to mpf_ops.
+>   v20 -> v21:
+>    * fpga-mgr: in function fpga_mgr_parse_header_sg(), after
+>      reallocation of a buffer for a new header, copy only exceeding
+>      part, since realloc preserve old buffer content.
+>    * fpga-mgr: in function fpga_mgr_buf_load_sg() instead of manually
+>      counting fragments with header that should be skipped, use
+>      sg_miter_skip().
+>    * fpga-mgr: add tag "Suggested-by: Xu Yilun <yilun.xu@intel.com>"
+>      since all changes in fpga-mgr was his ideas.
+>    * MAINTAINERS: add entry for Microchip PolarFire FPGA drivers as
+>      Conor Dooley suggested.
+>   v21 -> v22:
+>    * fpga-mgr: in function fpga_mgr_buf_load_sg() drop excessive
+>      sg_miter_stop() when sg_miter_skip() reaches end of sg_mapping_iter
+> 
+> Ivan Bornyakov (5):
+>   fpga: fpga-mgr: support bitstream offset in image buffer
+>   docs: fpga: mgr: document parse_header() callback
+>   fpga: microchip-spi: add Microchip MPF FPGA manager
+>   dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
+>   MAINTAINERS: add Microchip PolarFire FPGA drivers entry
+> 
+>  .../fpga/microchip,mpf-spi-fpga-mgr.yaml      |  44 ++
+>  Documentation/driver-api/fpga/fpga-mgr.rst    |  27 +-
+>  MAINTAINERS                                   |   8 +
+>  drivers/fpga/Kconfig                          |   8 +
+>  drivers/fpga/Makefile                         |   1 +
+>  drivers/fpga/fpga-mgr.c                       | 223 ++++++++--
+>  drivers/fpga/microchip-spi.c                  | 398 ++++++++++++++++++
+>  include/linux/fpga/fpga-mgr.h                 |  24 +-
+>  8 files changed, 700 insertions(+), 33 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+>  create mode 100644 drivers/fpga/microchip-spi.c
 
-I did tests with TCP + memcg and noticed a very small additional cost
-in memcg functions,
-because of suboptimal layout:
+Applied the series to for-next
 
-Extract of an internal Google bug, update from June 9th:
+Thanks for the improvement to FPGA core.
+Yilun
 
---------------------------------
-I have noticed a minor false sharing to fetch (struct
-mem_cgroup)->css.parent, at offset 0xc0,
-because it shares the cache line containing struct mem_cgroup.memory,
-at offset 0xd0
-
-Ideally, memcg->socket_pressure and memcg->parent should sit in a read
-mostly cache line.
------------------------
-
-But nothing that could explain a "-69.4% regression"
-
-memcg has a very similar strategy of per-cpu reserves, with
-MEMCG_CHARGE_BATCH being 32 pages per cpu.
-
-It is not clear why SCTP with 10K writes would overflow this reserve constantly.
-
-Presumably memcg experts will have to rework structure alignments to
-make sure they can cope better
-with more charge/uncharge operations, because we are not going back to
-gigantic per-socket reserves,
-this simply does not scale.
+> 
+> -- 
+> 2.36.1
+> 

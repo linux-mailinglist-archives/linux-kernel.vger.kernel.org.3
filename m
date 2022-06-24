@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9AC559F66
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B40559F19
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbiFXRHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
+        id S231576AbiFXRGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbiFXRHu (ORCPT
+        with ESMTP id S231526AbiFXRGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:07:50 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46A54D9FC
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:07:48 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id u15so5926016ejc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:07:48 -0700 (PDT)
+        Fri, 24 Jun 2022 13:06:05 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECF24D60A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:06:04 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id u9so4297470oiv.12
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:06:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=njhxjTKf5qgs999H/NFNZlENyL8kuhp42cJfuLDuDe8=;
-        b=DRmse1ypXl3VHFhtM0fcsmCn7+/q47zNeWtzMZTE+8ishHTdLgLxHlbVqqKO27TDCX
-         QyCX/uRL352TkcOj0XEA1jqrTDB4+g1jygkbeGFYVUTut1Q1enRegCed8YUgqchsnVlW
-         BxplUtOmtf2h9ihNfB1YvxNPnDixxWeQqXjFbevoee7gjWSntrGBH9oGWvINUUsB9KoJ
-         qu0e4VbUNSAG0n0L7Ryvb46akd6jUkn9Cyv0YF5YeASDU9pRm0xNzGzsXrzys8JHhRiR
-         etgbLPC2GNJYVjH5Kh7kmckCmZA6z/KoxUm7egZb6rBhk2IhFFoAaABVqLga9lMQpBgJ
-         tN3Q==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0+0vhPEExLAjmHmvWpzqEFXlBkwHLniOzXACImlZjrY=;
+        b=Y3mu5a2lveFJrWpQklsmSrTWN64yCIpvDo+RT/i91W74AZ3BUMW1bIWJYDW8u4SaUl
+         dSSx0h06uVpA/sc7sE//Yjzbsc2ju4EIBKcm6Ctr6i2zNCe316zBQvuG7phJiGVrSvUA
+         v3MwBaqJUkqC0QFHo/T+i+m5qlDKhoen47JoXF+6dwTQgqOHDe88bJKcHJ8Q2MXwNphU
+         QzfqxpHXpilXixRBClD67ppKEhEEeYgmdOCx6zQyUJOT4mfCZ1XX9W4uYAuFUPxuyifF
+         hPvrfJd9IIlsZd7mBsZG3aetEzsk77QGIH10KMy4Cv864w062iG8SILWrde16ZGhHxnX
+         6rfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=njhxjTKf5qgs999H/NFNZlENyL8kuhp42cJfuLDuDe8=;
-        b=GIUJDGBsC3GYqXEC+gxDhkBeqEExTxE7nWSP6s37+zUp60Ajt1iAfZA03zafHEspze
-         WFGf1GQKB3wW2DAqTadzlwIpZ5DrpDaQH7idRfP5YDhWydB+AL/U0kfvvBNjEohHXUah
-         9Jdg88cmeHF/iNlNBQmJtBWaXqXoNXBJ2LuPDl8Dkquo62p0L3MGVGA2OoV0V0LoChqc
-         1TR02oKJpXubExqOmfc5k9pXaNtXV5AXh6Nz4cCjDzPlbKpKpPQ1PWnwcj/8W63y0K5b
-         M/v/G94+jOjO968cWe7lqtCQopbSlitnRihPT/09ndGatyoX6+/xdhH9HrHVLqNBLvvY
-         TorQ==
-X-Gm-Message-State: AJIora9k1MLe/CasY4q/TL/Ln5iP3KVgXRgxyrFeIUTZ/80s7LmIRjpa
-        huuDUeafzTxsvLsjFh3faZr4NQ==
-X-Google-Smtp-Source: AGRyM1usU5fpLW1YUCimsRoTEJR1DvpJy1/MZt5fr7TyD1VT7jW9A3P3c5qYz+5Zb+cMdCk6FTIlyQ==
-X-Received: by 2002:a17:906:5d08:b0:6ff:8ed:db63 with SMTP id g8-20020a1709065d0800b006ff08eddb63mr14168737ejt.408.1656090467032;
-        Fri, 24 Jun 2022 10:07:47 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b19-20020aa7dc13000000b00435959d3605sm2455929edu.84.2022.06.24.10.07.45
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0+0vhPEExLAjmHmvWpzqEFXlBkwHLniOzXACImlZjrY=;
+        b=pfqAUX8ZKCritoGMcgDV3We6zxiwd0i1VLpm0zsVxcOKkNvbPZLEy13NAwdy8sIVc9
+         6BUOAFc4TDnZKwNm5uO9mIkk4NdpWTk3OEKyrJ+ajRawETAWein5TNa6fUKiRD0kU1AA
+         iQuWziId8xFPoIuTNS600TRqSGG5Zx4/0kvaCu4B0zLgg1CoXLrjAIHLgQlr0RnmfVKl
+         LoeCYSCP0NkqQPK+dOIHWVMyCzAXQ0NOyPIltDmU0ZqvYHj/I9T3JqV7gppRAYgrHlmo
+         KWy2Xkb6RnD+aBKP9/IR7V2TOTLzVatW44snLOdJ3pDatvI3J/KBTgnoJqgtgFXR2CDs
+         N85A==
+X-Gm-Message-State: AJIora9ysxNnCK0ybCMNmBUS+OMiFMCOfmXsW6YuaGQNDTRVnownXWb9
+        0BBdnvoHL/IyUH+F/uyQ+ku5dQ==
+X-Google-Smtp-Source: AGRyM1txfnmyDcykZy0fXC5KNNgxnfMaOc//EpKeR/oIrHOotIDXvosZFm+cAeMGPhFMd4+XEsa78A==
+X-Received: by 2002:a05:6808:23cb:b0:335:2987:1209 with SMTP id bq11-20020a05680823cb00b0033529871209mr38099oib.69.1656090364070;
+        Fri, 24 Jun 2022 10:06:04 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id i14-20020a056830402e00b0060b128b935csm1807450ots.39.2022.06.24.10.06.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 10:07:46 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rahul Bedarkar <rahulbedarkar89@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] MIPS: dts: align gpio-key node names with dtschema
-Date:   Fri, 24 Jun 2022 19:07:40 +0200
-Message-Id: <20220624170740.66271-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220624170740.66271-1-krzysztof.kozlowski@linaro.org>
-References: <20220624170740.66271-1-krzysztof.kozlowski@linaro.org>
+        Fri, 24 Jun 2022 10:06:03 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 10:08:05 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Taniya Das <tdas@codeaurora.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette ? <mturquette@baylibre.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] clk: qcom: sc7280: Update clk_init_data to const
+ for GCC
+Message-ID: <YrXvdWe5c1ZdS0AR@ripper>
+References: <20220202183528.3911-1-tdas@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202183528.3911-1-tdas@codeaurora.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,69 +74,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The node names should be generic and DT schema expects certain pattern
-(e.g. with key/button/switch).
+On Wed 02 Feb 10:35 PST 2022, Taniya Das wrote:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/mips/boot/dts/ingenic/ci20.dts                        | 2 +-
- arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts | 2 +-
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts         | 2 +-
- arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts         | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+> Update clk_init_data to const and also use index instead of fw_name for
+> global clock controller.
+> 
+> Fixes: a3cc092196ef6 ("clk: qcom: Add Global Clock controller (GCC) driver for SC7280")
+> Signed-off-by: Taniya Das <tdas@codeaurora.org>
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index ab6e3dc0bc1d..37c46720c719 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -31,7 +31,7 @@ memory {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		sw1 {
-+		switch {
- 			label = "ci20:sw1";
- 			linux,code = <KEY_F13>;
- 			gpios = <&gpd 17 GPIO_ACTIVE_HIGH>;
-diff --git a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-index 826e91b840a3..179558161f85 100644
---- a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-+++ b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-@@ -26,7 +26,7 @@ gpio-keys {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinmux_gpio_gpio>;	/* GPIO11 */
- 
--		user_btn1 {
-+		button {
- 			label = "USER_BTN1";
- 			gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
- 			linux,code =<KEY_PROG1> ;
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-index 37037e4f3c3b..24eebc5a85b1 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts
-@@ -29,7 +29,7 @@ i2c@900 {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		reset {
-+		key-reset {
- 			label = "reset";
- 			gpios = <&gpio 18 GPIO_ACTIVE_HIGH>;
- 			linux,code = <KEY_RESTART>;
-diff --git a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-index a6201a119a1f..34006e667780 100644
---- a/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-+++ b/arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts
-@@ -29,7 +29,7 @@ i2c@900 {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		reset {
-+		key-reset {
- 			label = "reset";
- 			gpios = <&gpio 18 GPIO_ACTIVE_HIGH>;
- 			linux,code = <KEY_RESTART>;
--- 
-2.34.1
+Hi Taniya,
 
+I'm not able to find a new revision of this series in the inbox, could
+you please respin it?
+
+> ---
+>  drivers/clk/qcom/gcc-sc7280.c | 362 +++++++++++++++++-----------------
+>  1 file changed, 181 insertions(+), 181 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/gcc-sc7280.c b/drivers/clk/qcom/gcc-sc7280.c
+> index 423627d49719..ccecd3d8a6d9 100644
+> --- a/drivers/clk/qcom/gcc-sc7280.c
+> +++ b/drivers/clk/qcom/gcc-sc7280.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2020-2022, The Linux Foundation. All rights reserved.
+>   */
+> 
+>  #include <linux/clk-provider.h>
+> @@ -45,10 +45,10 @@ static struct clk_alpha_pll gcc_gpll0 = {
+>  	.clkr = {
+>  		.enable_reg = 0x52010,
+>  		.enable_mask = BIT(0),
+> -		.hw.init = &(struct clk_init_data){
+> +		.hw.init = &(const struct clk_init_data){
+
+And while doing so, please split this into one patch adding the const...
+
+>  			.name = "gcc_gpll0",
+>  			.parent_data = &(const struct clk_parent_data){
+> -				.fw_name = "bi_tcxo",
+> +				.index = 0,
+
+and a separate patch changing fw_name to index. If there are regressions
+we want to be able to bisect it down to the right one.
+
+Also, please add a define for BI_TCXO, instead of having a comment in
+most places - like I did in gcc-sc8280xp.c (but as we have existing dts
+I don't think it's wise to replace all fw_name entries with .index)..
+
+Thanks,
+Bjorn

@@ -2,145 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E6C55A12A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C72255A144
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbiFXScD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 14:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
+        id S231411AbiFXSco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 14:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiFXScA (ORCPT
+        with ESMTP id S229981AbiFXSck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 14:32:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B95A7C516;
-        Fri, 24 Jun 2022 11:32:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9BE31042;
-        Fri, 24 Jun 2022 11:31:59 -0700 (PDT)
-Received: from [10.57.84.111] (unknown [10.57.84.111])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 862573F792;
-        Fri, 24 Jun 2022 11:31:53 -0700 (PDT)
-Message-ID: <c9dee5e3-4525-b9bf-3775-30995d59af9e@arm.com>
-Date:   Fri, 24 Jun 2022 19:31:47 +0100
+        Fri, 24 Jun 2022 14:32:40 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA7D7FD14;
+        Fri, 24 Jun 2022 11:32:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1656095550; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9ymJhhAk5CJyVp4Q5xijWVQG2xULEuBtYjgBkRWlJFA=;
+        b=D1E8UHUpvscjO4QUep6E7FgQRsid5sBy9GeA6feJcL9MhUhnokIfZP4pd/DwwXgKs648c7
+        Iy2kC+nFFHfbW1whnwZlFDh/ZZqX1UKvxgmdFBUGiXE31eV6v0QfwP54mpxW6+fmP6NVxy
+        H7bfe4uFk4kxnN2m9LEWLFTbY9CR1n8=
+Date:   Fri, 24 Jun 2022 19:32:20 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2] brcmfmac: Remove #ifdef guards for PM related
+ functions
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>
+Cc:     Arend Van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <WHVZDR.GB0H9SQC9PDP@crapouillou.net>
+In-Reply-To: <3013994a-487c-56eb-42d6-b8cdf7615405@quicinc.com>
+References: <20220623124221.18238-1-paul@crapouillou.net>
+        <9f623bb6-8957-0a9a-3eb7-9a209965ea6e@gmail.com>
+        <3013994a-487c-56eb-42d6-b8cdf7615405@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 3/5] vfio/iommu_type1: Remove the domain->ops
- comparison
-Content-Language: en-GB
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Nicolin Chen <nicolinc@nvidia.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "marcan@marcan.st" <marcan@marcan.st>,
-        "sven@svenpeter.dev" <sven@svenpeter.dev>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "orsonzhai@gmail.com" <orsonzhai@gmail.com>,
-        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
-        "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "alyssa@rosenzweig.io" <alyssa@rosenzweig.io>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "yong.wu@mediatek.com" <yong.wu@mediatek.com>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "vdumpa@nvidia.com" <vdumpa@nvidia.com>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "thunder.leizhen@huawei.com" <thunder.leizhen@huawei.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "john.garry@huawei.com" <john.garry@huawei.com>,
-        "chenxiang66@hisilicon.com" <chenxiang66@hisilicon.com>,
-        "saiprakash.ranjan@codeaurora.org" <saiprakash.ranjan@codeaurora.org>,
-        "isaacm@codeaurora.org" <isaacm@codeaurora.org>,
-        "yangyingliang@huawei.com" <yangyingliang@huawei.com>,
-        "jordan@cosmicpenguin.net" <jordan@cosmicpenguin.net>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-References: <20220616000304.23890-1-nicolinc@nvidia.com>
- <20220616000304.23890-4-nicolinc@nvidia.com>
- <BL1PR11MB52717050DBDE29A81637BBFA8CAC9@BL1PR11MB5271.namprd11.prod.outlook.com>
- <YqutYjgtFOTXCF0+@Asurada-Nvidia>
- <6e1280c5-4b22-ebb3-3912-6c72bc169982@arm.com>
- <20220624131611.GM4147@nvidia.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220624131611.GM4147@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-24 14:16, Jason Gunthorpe wrote:
-> On Wed, Jun 22, 2022 at 08:54:45AM +0100, Robin Murphy wrote:
->> On 2022-06-16 23:23, Nicolin Chen wrote:
->>> On Thu, Jun 16, 2022 at 06:40:14AM +0000, Tian, Kevin wrote:
->>>
->>>>> The domain->ops validation was added, as a precaution, for mixed-driver
->>>>> systems. However, at this moment only one iommu driver is possible. So
->>>>> remove it.
->>>>
->>>> It's true on a physical platform. But I'm not sure whether a virtual platform
->>>> is allowed to include multiple e.g. one virtio-iommu alongside a virtual VT-d
->>>> or a virtual smmu. It might be clearer to claim that (as Robin pointed out)
->>>> there is plenty more significant problems than this to solve instead of simply
->>>> saying that only one iommu driver is possible if we don't have explicit code
->>>> to reject such configuration. 😊
->>>
->>> Will edit this part. Thanks!
->>
->> Oh, physical platforms with mixed IOMMUs definitely exist already. The main
->> point is that while bus_set_iommu still exists, the core code effectively
->> *does* prevent multiple drivers from registering - even in emulated cases
->> like the example above, virtio-iommu and VT-d would both try to
->> bus_set_iommu(&pci_bus_type), and one of them will lose. The aspect which
->> might warrant clarification is that there's no combination of supported
->> drivers which claim non-overlapping buses *and* could appear in the same
->> system - even if you tried to contrive something by emulating, say, VT-d
->> (PCI) alongside rockchip-iommu (platform), you could still only describe one
->> or the other due to ACPI vs. Devicetree.
-> 
-> Right, and that is still something we need to protect against with
-> this ops check. VFIO is not checking that the bus's are the same
-> before attempting to re-use a domain.
-> 
-> So it is actually functional and does protect against systems with
-> multiple iommu drivers on different busses.
+Hi,
 
-But as above, which systems *are* those? Everything that's on my radar 
-would have drivers all competing for the platform bus - Intel and s390 
-are somewhat the odd ones out in that respect, but are also non-issues 
-as above. FWIW my iommu/bus dev branch has got as far as the final bus 
-ops removal and allowing multiple driver registrations, and before it 
-allows that, it does now have the common attach check that I sketched 
-out in the previous discussion of this.
+Le ven., juin 24 2022 at 09:31:22 -0700, Jeff Johnson=20
+<quic_jjohnson@quicinc.com> a =E9crit :
+> On 6/24/2022 2:24 AM, Arend Van Spriel wrote:
+>> On 6/23/2022 2:42 PM, Paul Cercueil wrote:
+>=20
+> [snip]
+>=20
+>>> -    if (sdiodev->freezer) {
+>>> +    if (IS_ENABLED(CONFIG_PM_SLEEP) && sdiodev->freezer) {
+>>=20
+>> This change is not necessary. sdiodev->freezer will be NULL when=20
+>> =7FCONFIG_PM_SLEEP is not enabled.
+>=20
+> but won't the compiler be able to completely optimize the code away=20
+> if the change is present?
 
-It's probably also noteworthy that domain->ops is no longer the same 
-domain->ops that this code was written to check, and may now be 
-different between domains from the same driver.
+That's correct. But do we want to complexify a bit the code for the=20
+sake of saving a few bytes? I leave that as an open question to the=20
+maintainer, I'm really fine with both options.
 
-Thanks,
-Robin.
+Cheers,
+-Paul
+
+

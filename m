@@ -2,77 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90E55592E3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD703559301
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiFXGDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 02:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
+        id S229808AbiFXGGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 02:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbiFXGDK (ORCPT
+        with ESMTP id S229523AbiFXGGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 02:03:10 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2567613F87
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:03:06 -0700 (PDT)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Fri, 24 Jun 2022 14:02:56
- +0800 (GMT+08:00)
-X-Originating-IP: [10.190.70.246]
-Date:   Fri, 24 Jun 2022 14:02:56 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, davem@davemloft.net,
-        alexander.deucher@amd.com, kuba@kernel.org, broonie@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: rtl8192u: Fix sleep in atomic context bug
- in dm_fsync_timer_callback
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <YrQ2gXtX2FOkyNgu@kroah.com>
-References: <20220623055912.84138-1-duoming@zju.edu.cn>
- <YrQ2gXtX2FOkyNgu@kroah.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Fri, 24 Jun 2022 02:06:12 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C0B45796
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:06:12 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n10so1286087plp.0
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=59X2Y/lmawDJzmXwQWp9mJFaRGi+BKzpUp2IksdQUqM=;
+        b=OnJXKxUvdaQmcj7PIEfMQNOZQNQrgxlyqFN9pCLtIv2JPQFwKTqbYue+ASHmg7LJHy
+         BLqF6T9A3bZliGYY2FuNcbcMjUFDn1Ukxn/AKAalmbGHX/lN6MWAFZ6lZI6E1JSsxi8w
+         ImtOP5ZnM+BJORSm9xxUjoCkhdO50ENI5Ma8o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=59X2Y/lmawDJzmXwQWp9mJFaRGi+BKzpUp2IksdQUqM=;
+        b=NwEfm/qQQ0iXbyLQ93kai0DCrYqA79qRmwai9/QDDhy9BZNZBZkzyHQwjjYYlMZ3CN
+         A0ugLiHY60KOeIu51F7g++MiFXaGhMXwS/4Bc+ahgYi1++SF3Fg7xVh1pV/wbg0KOPrN
+         EtezVKGL7zE+EqeDhtIH+m+YdxJJVZKBF9K3Xz+JBnjzAQSauD/cTkjnEhVEBQ7MW5nr
+         5S9/bibQ4tg00elE5AQBqxg0pXYQi9RO3J1vbRrqOmj7283SO5f3MDefCCWIyyGg42DH
+         oZ/Qkx0tvpmORJ8ESKwO9ELmXV3BDxGQw3raude1rSGLD34NPG9kmGl/WL+SxDgVARvS
+         PLag==
+X-Gm-Message-State: AJIora+XcMm3mW6YYsXmcSUbJebAW9aQGDvLAtoev6b/dwhnr7BM79dH
+        eNGThnl3NGlfnMj93eVX302T2jPvSLbrVg==
+X-Google-Smtp-Source: AGRyM1tFIpPGmWtk1MlqL9vrcPT41S0nFC9urfAPlwORV2qpEJeMO3V45pNMPosGn/lLjhDHolVF8A==
+X-Received: by 2002:a17:902:74c7:b0:16a:1be3:b7f2 with SMTP id f7-20020a17090274c700b0016a1be3b7f2mr27150781plt.42.1656050771473;
+        Thu, 23 Jun 2022 23:06:11 -0700 (PDT)
+Received: from senozhatsky.kddi.com ([240f:75:7537:3187:421d:f075:63ad:7026])
+        by smtp.gmail.com with ESMTPSA id k7-20020a170902694700b0016511314b94sm850765plt.159.2022.06.23.23.06.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 23:06:11 -0700 (PDT)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>
+Cc:     Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCH v2] zram: do not lookup algorithm in backends table
+Date:   Fri, 24 Jun 2022 15:06:06 +0900
+Message-Id: <20220624060606.1014474-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
 MIME-Version: 1.0
-Message-ID: <1ddff589.e0f1.181944e6c1a.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgDXT0OQU7VieOfKAA--.1674W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgYLAVZdtaYJ8wACsu
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBUaHUsIDIzIEp1biAyMDIyIDExOjQ2OjQxICswMjAwIEdyZWcgS0ggd3JvdGU6
-Cgo+IE9uIFRodSwgSnVuIDIzLCAyMDIyIGF0IDAxOjU5OjEyUE0gKzA4MDAsIER1b21pbmcgWmhv
-dSB3cm90ZToKPiA+IFRoZXJlIGFyZSBzbGVlcCBpbiBhdG9taWMgY29udGV4dCBidWdzIHdoZW4g
-ZG1fZnN5bmNfdGltZXJfY2FsbGJhY2sgaXMKPiA+IGV4ZWN1dGluZy4gVGhlIHJvb3QgY2F1c2Ug
-aXMgdGhhdCB0aGUgbWVtb3J5IGFsbG9jYXRpb24gZnVuY3Rpb25zIHdpdGgKPiA+IEdGUF9LRVJO
-RUwgb3IgR0ZQX05PSU8gcGFyYW1ldGVycyBhcmUgY2FsbGVkIGluIGRtX2ZzeW5jX3RpbWVyX2Nh
-bGxiYWNrCj4gPiB3aGljaCBpcyBhIHRpbWVyIGhhbmRsZXIuIFRoZSBjYWxsIHBhdGhzIHRoYXQg
-Y291bGQgdHJpZ2dlciBidWdzIGFyZQo+ID4gc2hvd24gYmVsb3c6Cj4gPiAKPiA+ICAgICAoaW50
-ZXJydXB0IGNvbnRleHQpCj4gPiBkbV9mc3luY190aW1lcl9jYWxsYmFjawo+ID4gICB3cml0ZV9u
-aWNfYnl0ZQo+ID4gICAgIGt6YWxsb2Moc2l6ZW9mKGRhdGEpLCBHRlBfS0VSTkVMKTsgLy9tYXkg
-c2xlZXAKPiA+ICAgICB1c2JfY29udHJvbF9tc2cKPiA+ICAgICAgIGttYWxsb2MoLi4sIEdGUF9O
-T0lPKTsgLy9tYXkgc2xlZXAKPiA+ICAgd3JpdGVfbmljX2R3b3JkCj4gPiAgICAga3phbGxvYyhz
-aXplb2YoZGF0YSksIEdGUF9LRVJORUwpOyAvL21heSBzbGVlcAo+ID4gICAgIHVzYl9jb250cm9s
-X21zZwo+ID4gICAgICAga21hbGxvYyguLiwgR0ZQX05PSU8pOyAvL21heSBzbGVlcAo+ID4gCj4g
-PiBUaGlzIHBhdGNoIHVzZXMgZGVsYXllZCB3b3JrIHRvIHJlcGxhY2UgdGltZXIgYW5kIG1vdmVz
-IHRoZSBvcGVyYXRpb25zCj4gPiB0aGF0IG1heSBzbGVlcCBpbnRvIHRoZSBkZWxheWVkIHdvcmsg
-aW4gb3JkZXIgdG8gbWl0aWdhdGUgYnVncy4KPiA+IAo+ID4gRml4ZXM6IDhmYzg1OThlNjFmNiAo
-IlN0YWdpbmc6IEFkZGVkIFJlYWx0ZWsgcnRsODE5MnUgZHJpdmVyIHRvIHN0YWdpbmciKQo+ID4g
-U2lnbmVkLW9mZi1ieTogRHVvbWluZyBaaG91IDxkdW9taW5nQHpqdS5lZHUuY24+Cj4gPiAtLS0K
-PiA+IENoYW5nZXMgaW4gdjI6Cj4gPiAgIC0gVXNlIGRlbGF5ZWQgd29yayB0byByZXBsYWNlIHRp
-bWVyLgo+IAo+IERpZCB5b3UgdGVzdCB0aGlzIHdpdGggcmVhbCBoYXJkd2FyZSB0byB2ZXJpZnkg
-aXQgc3RpbGwgd29ya3M/CgpJIGFtIHRlc3RpbmcgdGhpcyBhbmQgSSB3aWxsIGdpdmUgeW91IGZl
-ZWRiYWNrIHdpdGhpbiBvbmUgb3IgdHdvIGRheXMuCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhv
-dQ==
+Always use crypto_has_comp() so that crypto can lookup module,
+call usermodhelper to load the modules, wait for usermodhelper
+to finish and so on. Otherwise crypto will do all of these steps
+under CPU hot-plug lock and this looks like too much stuff to
+handle under the CPU hot-plug lock. Besides this can end up in
+a deadlock when usermodhelper triggers a code path that attempts
+to lock the CPU hot-plug lock, that zram already holds.
+
+An example of such deadlock:
+
+- path A. zram grabs CPU hot-plug lock, execs /sbin/modprobe from crypto
+  and waits for modprobe to finish
+
+disksize_store
+ zcomp_create
+  __cpuhp_state_add_instance
+   __cpuhp_state_add_instance_cpuslocked
+    zcomp_cpu_up_prepare
+     crypto_alloc_base
+      crypto_alg_mod_lookup
+       call_usermodehelper_exec
+        wait_for_completion_killable
+         do_wait_for_common
+          schedule
+
+- path B. async work kthread that brings in scsi device. It wants to
+  register CPUHP states at some point, and it needs the CPU hot-plug
+  lock for that, which is owned by zram.
+
+async_run_entry_fn
+ scsi_probe_and_add_lun
+  scsi_mq_alloc_queue
+   blk_mq_init_queue
+    blk_mq_init_allocated_queue
+     blk_mq_realloc_hw_ctxs
+      __cpuhp_state_add_instance
+       __cpuhp_state_add_instance_cpuslocked
+        mutex_lock
+         schedule
+
+- path C. modprobe sleeps, waiting for all aync works to finish.
+
+load_module
+ do_init_module
+  async_synchronize_full
+   async_synchronize_cookie_domain
+    schedule
+
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ drivers/block/zram/zcomp.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/block/zram/zcomp.c b/drivers/block/zram/zcomp.c
+index 052aa3f65514..0916de952e09 100644
+--- a/drivers/block/zram/zcomp.c
++++ b/drivers/block/zram/zcomp.c
+@@ -63,12 +63,6 @@ static int zcomp_strm_init(struct zcomp_strm *zstrm, struct zcomp *comp)
+ 
+ bool zcomp_available_algorithm(const char *comp)
+ {
+-	int i;
+-
+-	i = sysfs_match_string(backends, comp);
+-	if (i >= 0)
+-		return true;
+-
+ 	/*
+ 	 * Crypto does not ignore a trailing new line symbol,
+ 	 * so make sure you don't supply a string containing
+@@ -217,6 +211,11 @@ struct zcomp *zcomp_create(const char *compress)
+ 	struct zcomp *comp;
+ 	int error;
+ 
++	/*
++	 * Crypto API will execute /sbin/modprobe if the compression module
++	 * is not loaded yet. We must do it here, otherwise we are about to
++	 * call /sbin/modprobe under CPU hot-plug lock.
++	 */
+ 	if (!zcomp_available_algorithm(compress))
+ 		return ERR_PTR(-EINVAL);
+ 
+-- 
+2.37.0.rc0.104.g0611611a94-goog
+

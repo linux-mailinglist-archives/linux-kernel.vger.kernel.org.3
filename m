@@ -2,53 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68C1559D58
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19826559D4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbiFXP06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 11:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
+        id S232620AbiFXP3R convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Jun 2022 11:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiFXP0u (ORCPT
+        with ESMTP id S232225AbiFXP3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 11:26:50 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421CD517C4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:26:47 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6894C1C000A;
-        Fri, 24 Jun 2022 15:26:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656084405;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cOBna43ZB0lJCDekpVEqf7GVrwOErW7lnHWKCAFoDIg=;
-        b=VIeBbMouu4FRIkCnML49qgRcF+vMECewXOrt2LsveUbMwYzLoZV83L0rJtnBz1noP2j03E
-        IBxv5QWf0a4wVWi990MihCbQvPsjeLNwONphIbUivuA4IW4mlLiGMc+tJJi1kYOj7EjynR
-        3VdI+xTP7u0Pz10bcayLH6mo0edU+NJwkHcfGku0Eyik8FZRIp2k81i+/ee7H4CS49UXzx
-        Z4dOBD7G+mjJuBlKza7OVSaQ2v+AMu9j3BKJjxSh7jHhkOxL/3JBZJKgBq3Ijs9x+Pp+U/
-        BpdQ1+QutoMfiAdcyKDvLc3usPeHUkBgIKyvkdI77hpr3+X8NIgvRpE21SYyuw==
-Date:   Fri, 24 Jun 2022 17:26:44 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     kbuild-all@lists.01.org, lkp@intel.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: fix device_node_continue.cocci warnings (fwd)
-Message-ID: <YrXXtIYHk2o5ZS9G@aptenodytes>
-References: <alpine.DEB.2.22.394.2206121300120.3447@hadrien>
- <YrXTY77HjvNnuc1B@aptenodytes>
+        Fri, 24 Jun 2022 11:29:12 -0400
+Received: from mail3.swissbit.com (mail3.swissbit.com [176.95.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B1528E1B;
+        Fri, 24 Jun 2022 08:29:10 -0700 (PDT)
+Received: from mail3.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 7E6F9462FA7;
+        Fri, 24 Jun 2022 17:29:09 +0200 (CEST)
+Received: from mail3.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 6D695462CBA;
+        Fri, 24 Jun 2022 17:29:09 +0200 (CEST)
+X-TM-AS-ERS: 10.149.2.84-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
+        by mail3.swissbit.com (Postfix) with ESMTPS;
+        Fri, 24 Jun 2022 17:29:09 +0200 (CEST)
+Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex02.sbitdom.lan
+ (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 24 Jun
+ 2022 17:29:08 +0200
+Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
+ sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
+ 15.02.1118.009; Fri, 24 Jun 2022 17:29:08 +0200
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>
+Subject: [PATCHv2] mmc: block: Add single read for 4k sector cards
+Thread-Topic: [PATCHv2] mmc: block: Add single read for 4k sector cards
+Thread-Index: AdiH1Z78PWKS04XBSm2UVHulaa4UxQ==
+Date:   Fri, 24 Jun 2022 15:29:08 +0000
+Message-ID: <6e379c703fe149e1923b31df1a33701e@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.153.3.44]
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="j8s6M7Kf9VxwIgM8"
-Content-Disposition: inline
-In-Reply-To: <YrXTY77HjvNnuc1B@aptenodytes>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-TMASE-Version: DDEI-5.1-9.0.1002-26976.000
+X-TMASE-Result: 10-0.824300-10.000000
+X-TMASE-MatchedRID: h20DFeLkM88us6wjYQDwl99JA2lmQRNUWQ3R4k5PTnBcvdqWtCoykonO
+        /I/i7S2AIvrftAIhWmLy9zcRSkKatUMs9ucSNhdqfzgVmnL/olU/xRB6OGnb2kty8cifGH0Uvkd
+        hW6prVWndGrWq1bnu41Y7maOxI4yfofDSIGnaDB4qy6shOlK/41r2hZxjCLzqdp0lJHrlwkyjxY
+        yRBa/qJSKDrFoK/LNdjoczmuoPCq00gLhcnywLiVLjNjYCJ24nsA03FXQxlAjflN0FGdrMD5MNn
+        Uawz7eaQwymtxuJ6y0=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 6690e258-12d2-4c66-a7ee-028c302f59ad-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,111 +73,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Cards with 4k native sector size may only be read 4k-aligned,
+accommodate for this in the single read recovery and use it.
 
---j8s6M7Kf9VxwIgM8
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 81196976ed946 (mmc: block: Add blk-mq support)
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+---
+ drivers/mmc/core/block.c | 25 ++++++++++++-------------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
 
-Hi,
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index f4a1281658db..a75a208ce203 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -176,7 +176,7 @@ static inline int mmc_blk_part_switch(struct mmc_card *card,
+ 				      unsigned int part_type);
+ static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
+ 			       struct mmc_card *card,
+-			       int disable_multi,
++			       int recovery_mode,
+ 			       struct mmc_queue *mq);
+ static void mmc_blk_hsq_req_done(struct mmc_request *mrq);
+ 
+@@ -1302,7 +1302,7 @@ static void mmc_blk_eval_resp_error(struct mmc_blk_request *brq)
+ }
+ 
+ static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
+-			      int disable_multi, bool *do_rel_wr_p,
++			      int recovery_mode, bool *do_rel_wr_p,
+ 			      bool *do_data_tag_p)
+ {
+ 	struct mmc_blk_data *md = mq->blkdata;
+@@ -1372,8 +1372,8 @@ static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_req *mqrq,
+ 		 * at a time in order to accurately determine which
+ 		 * sectors can be read successfully.
+ 		 */
+-		if (disable_multi)
+-			brq->data.blocks = 1;
++		if (recovery_mode)
++			brq->data.blocks = mmc_large_sector(card) ? 8 : 1;
+ 
+ 		/*
+ 		 * Some controllers have HW issues while operating
+@@ -1590,7 +1590,7 @@ static int mmc_blk_cqe_issue_rw_rq(struct mmc_queue *mq, struct request *req)
+ 
+ static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
+ 			       struct mmc_card *card,
+-			       int disable_multi,
++			       int recovery_mode,
+ 			       struct mmc_queue *mq)
+ {
+ 	u32 readcmd, writecmd;
+@@ -1599,7 +1599,7 @@ static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
+ 	struct mmc_blk_data *md = mq->blkdata;
+ 	bool do_rel_wr, do_data_tag;
+ 
+-	mmc_blk_data_prep(mq, mqrq, disable_multi, &do_rel_wr, &do_data_tag);
++	mmc_blk_data_prep(mq, mqrq, recovery_mode, &do_rel_wr, &do_data_tag);
+ 
+ 	brq->mrq.cmd = &brq->cmd;
+ 
+@@ -1690,7 +1690,7 @@ static int mmc_blk_fix_state(struct mmc_card *card, struct request *req)
+ 
+ #define MMC_READ_SINGLE_RETRIES	2
+ 
+-/* Single sector read during recovery */
++/* Single (native) sector read during recovery */
+ static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
+ {
+ 	struct mmc_queue_req *mqrq = req_to_mmc_queue_req(req);
+@@ -1698,6 +1698,7 @@ static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
+ 	struct mmc_card *card = mq->card;
+ 	struct mmc_host *host = card->host;
+ 	blk_status_t error = BLK_STS_OK;
++	size_t bytes_per_read = mmc_large_sector(card) ? 4096 : 512;
+ 
+ 	do {
+ 		u32 status;
+@@ -1732,13 +1733,13 @@ static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
+ 		else
+ 			error = BLK_STS_OK;
+ 
+-	} while (blk_update_request(req, error, 512));
++	} while (blk_update_request(req, error, bytes_per_read));
+ 
+ 	return;
+ 
+ error_exit:
+ 	mrq->data->bytes_xfered = 0;
+-	blk_update_request(req, BLK_STS_IOERR, 512);
++	blk_update_request(req, BLK_STS_IOERR, bytes_per_read);
+ 	/* Let it try the remaining request again */
+ 	if (mqrq->retries > MMC_MAX_RETRIES - 1)
+ 		mqrq->retries = MMC_MAX_RETRIES - 1;
+@@ -1879,10 +1880,8 @@ static void mmc_blk_mq_rw_recovery(struct mmc_queue *mq, struct request *req)
+ 		return;
+ 	}
+ 
+-	/* FIXME: Missing single sector read for large sector size */
+-	if (!mmc_large_sector(card) && rq_data_dir(req) == READ &&
+-	    brq->data.blocks > 1) {
+-		/* Read one sector at a time */
++	if (rq_data_dir(req) == READ && brq->data.blocks > 1) {
++		/* Read one (native) sector at a time */
+ 		mmc_blk_read_single(mq, req);
+ 		return;
+ 	}
+-- 
+2.36.1
 
-On Fri 24 Jun 22, 17:08, Paul Kocialkowski wrote:
-> Hi Julia,
->=20
-> On Sun 12 Jun 22, 13:02, Julia Lawall wrote:
-> > The of_node_put does not seem to be needed.  Note that there is none at
-> > the preceeding continues.
->=20
-> That looks like a correct fix, thanks!
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
 
-Pushed to drm-misc-next, thanks!
-
-Paul
-
-> > julia
-> >=20
-> > ---------- Forwarded message ----------
-> > Date: Sat, 11 Jun 2022 06:02:45 +0800
-> > From: kernel test robot <lkp@intel.com>
-> > To: kbuild@lists.01.org
-> > Cc: lkp@intel.com, Julia Lawall <julia.lawall@lip6.fr>
-> > Subject: [PATCH] drm: fix device_node_continue.cocci warnings
-> >=20
-> > CC: kbuild-all@lists.01.org
-> > BCC: lkp@intel.com
-> > CC: Linux Memory Management List <linux-mm@kvack.org>
-> > TO: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > CC: Maxime Ripard <mripard@kernel.org>
-> > CC: David Airlie <airlied@linux.ie>
-> > CC: Daniel Vetter <daniel@ffwll.ch>
-> > CC: dri-devel@lists.freedesktop.org
-> > CC: linux-kernel@vger.kernel.org
-> >=20
-> > From: kernel test robot <lkp@intel.com>
-> >=20
-> > drivers/gpu/drm/logicvc/logicvc_layer.c:616:2-13: ERROR: probable doubl=
-e put.
-> >=20
-> >  Device node iterators put the previous value of the index variable, so=
- an
-> >  explicit put causes a double put.
-> >=20
-> > Generated by: scripts/coccinelle/iterators/device_node_continue.cocci
-> >=20
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: kernel test robot <lkp@intel.com>
-> > ---
-> >=20
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-=2Egit master
-> > head:   6d0c806803170f120f8cb97b321de7bd89d3a791
-> > commit: efeeaefe9be56e8ae5e5b4e9ff6d2275ec977ec5 [2027/2566] drm: Add s=
-upport for the LogiCVC display controller
-> > :::::: branch date: 17 hours ago
-> > :::::: commit date: 31 hours ago
-> >=20
-> > Please take the patch only if it's a positive warning. Thanks!
-> >=20
-> >  drivers/gpu/drm/logicvc/logicvc_layer.c |    2 --
-> >  1 file changed, 2 deletions(-)
-> >=20
-> > --- a/drivers/gpu/drm/logicvc/logicvc_layer.c
-> > +++ b/drivers/gpu/drm/logicvc/logicvc_layer.c
-> > @@ -612,8 +612,6 @@ int logicvc_layers_init(struct logicvc_d
-> >  		ret =3D logicvc_layer_init(logicvc, layer_node, index);
-> >  		if (ret)
-> >  			goto error;
-> > -
-> > -		of_node_put(layer_node);
-> >  	}
-> >=20
-> >  	of_node_put(layers_node);
->=20
-> --=20
-> Paul Kocialkowski, Bootlin
-> Embedded Linux and kernel engineering
-> https://bootlin.com
-
-
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---j8s6M7Kf9VxwIgM8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmK117MACgkQ3cLmz3+f
-v9GFUwf/az5hyKfcTdyQcgK2Hh4Cjqq2ZHdkl8bUbiYalB83GruGXqXVrp5DZ2+v
-sIg19Ssgv1GMiTAvVZuT8EqHpZPcoPQceVKyFp4S7EmBmxctiyTq7/3FBGZPf8i3
-FO2hGK3lbgfL0ur+sUuPugzW8/iUWg2AsWuuzGvEJaTtZmOURPSgJrdgrQrCJK4Q
-AO4PGOvd8lqC/yqFokvr/XFFnOpm3qF2jdOUJpQ0/n3heMLYHnGmY5XC7VD2LmNf
-wAVKcakylgPhpDTrbx//lZ6Q1SW/UiWsnexGIIjvBRd4tU+j07A6eQqPx+f1UmsA
-9VVviBqMk2ytHuOAOHBjNx+34d/S4Q==
-=0QdG
------END PGP SIGNATURE-----
-
---j8s6M7Kf9VxwIgM8--

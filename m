@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4F8559DCD
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC75559DDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbiFXPwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 11:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
+        id S230078AbiFXPzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 11:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbiFXPwd (ORCPT
+        with ESMTP id S229889AbiFXPyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 11:52:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F4C4E3B4;
-        Fri, 24 Jun 2022 08:52:31 -0700 (PDT)
-Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7EECA66017FA;
-        Fri, 24 Jun 2022 16:52:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656085949;
-        bh=DgfoNJhSsryqfplIgapwVlrJl8IUXtflN7RQAeVipj8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RRcB9OTSGwTrzCzogGYid2DA7CbLSkQf0DinQj+He0ch53qch29VhNLuAvYoinfW9
-         OTtnD33hlk+VKIZG7Wtk2f0sJttrOgCLYU5kqkATYdDs9pnpp/nwX7+AZ+hX2fUAWD
-         1ssL0Hn2Fe0kVs7GLy8CNzY1I+ootvjrMHWEcGjgYar4i2HiZx4djX7SHdLkPNlTCo
-         3Yk2Iy5CdOJ9B3fS4IldNxuagX2/14WxtdqrDLXv8gwMW/UGkQ1z3G9Il3jItwdWMZ
-         3nYMAjFFh7XSHsXI1fVveaCuyrhuhxZi0Kr1e0nUbKOXLN0afb4gandBH8J9pERLXm
-         hp/wdkGLGXC8w==
-Date:   Fri, 24 Jun 2022 11:52:24 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Guodong Liu <guodong.liu@mediatek.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v2 1/5] pinctrl: mediatek: add generic driving setup
- property on mt8192
-Message-ID: <20220624155224.lizeca5rnruhihdn@notapiano>
-References: <20220624133700.15487-1-guodong.liu@mediatek.com>
- <20220624133700.15487-2-guodong.liu@mediatek.com>
+        Fri, 24 Jun 2022 11:54:54 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCFB21839;
+        Fri, 24 Jun 2022 08:54:53 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25OBjq7O006621;
+        Fri, 24 Jun 2022 17:54:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=HoeVTfxf/DYnA17IxGe5aE0zIDbNSRToMCzD77yE0xM=;
+ b=5y8qKJRSFEWz6zPYa39P1GJFHQfOeAyM+PMZ+nM3pnGm19bIwy3Td9TTdi4ojjOy21ME
+ 6Z992+9TIlCnVw3ey9CkcGakXIMshKEJd8WtaIn5vnAZYmZo251o+xn7E9jMqkpIZiAG
+ PGggJbwWlYXBCQHgDyuhkQbYHyB2bLpFNuQ7KAzhUddDE7lgPZYyv4znI1Xca9bhKmhW
+ lAg5nCaeoYF4tJ3Wwum0T8lRaZIOILrTyT0Gxsuf4wt3NRSK1aMq70k4hrtgi1r0BqI1
+ KOVPaHkSvQznU7p4M4JQ2qMPQLLD9zbulHCpNlavJIbWpd6K2oxVyVX8OoZ9IRXSsb/V 3w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gua1nq8b4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Jun 2022 17:54:29 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2BC0510002A;
+        Fri, 24 Jun 2022 17:54:26 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9DCFF226FB9;
+        Fri, 24 Jun 2022 17:54:26 +0200 (CEST)
+Received: from localhost (10.75.127.50) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 24 Jun
+ 2022 17:54:25 +0200
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <robh+dt@kernel.org>, <heikki.krogerus@linux.intel.com>,
+        <gregkh@linuxfoundation.org>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
+        <fabrice.gasnier@foss.st.com>
+Subject: [PATCH 0/4] usb: typec: ucsi: add support for stm32g0
+Date:   Fri, 24 Jun 2022 17:54:09 +0200
+Message-ID: <20220624155413.399190-1-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220624133700.15487-2-guodong.liu@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-24_07,2022-06-23_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,38 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guodong,
+STM32G0 provides an integrated USB Type-C and power delivery interface [1].
+It can be programmed with a firmware [2] to act as a PPM. Currently it
+implements UCSI protocol over I2C interface. A GPIO is used as an interrupt
+line.
 
-please see comments below.
+This series adds a driver to support it, including:
+- dt-bindings documentation
+- optional STM32G0 firmware control and update, over a secondary I2C address
+- power management
 
-On Fri, Jun 24, 2022 at 09:36:56PM +0800, Guodong Liu wrote:
-> 1. The dt-binding expects that drive-strength arguments be passed
-> in mA, but the driver was expecting raw values. And that this
-> commit changes the driver so that it is aligned with the binding.
-> 2. This commit provides generic driving setup, which support
-> 2/4/6/8/10/12/14/16mA driving, original driver just set raw data
-> setup setting when use drive-strength property.
+[1] https://wiki.st.com/stm32mcu/wiki/Introduction_to_USB_Power_Delivery_with_STM32
+[2] https://github.com/STMicroelectronics/x-cube-ucsi
 
-This commit message is a bit confusing, I suggest using the following commit
-message instead:
+Fabrice Gasnier (4):
+  dt-bindings: usb: typec: add bindings for stm32g0 controller
+  usb: typec: ucsi: stm32g0: add support for stm32g0 i2c controller
+  usb: typec: ucsi: stm32g0: add bootloader support
+  usb: typec: ucsi: stm32g0: add support for power management
 
-The dt-binding expects the drive-strength arguments to be passed in mA, but the
-driver was using callbacks that expect raw values instead. Change the callbacks
-for the ones that operate on mA values, so that the driver is in accordance to
-the dt-binding.
+ .../bindings/usb/st,typec-stm32g0.yaml        |  83 ++
+ drivers/usb/typec/ucsi/Kconfig                |  10 +
+ drivers/usb/typec/ucsi/Makefile               |   1 +
+ drivers/usb/typec/ucsi/ucsi_stm32g0.c         | 777 ++++++++++++++++++
+ 4 files changed, 871 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
+ create mode 100644 drivers/usb/typec/ucsi/ucsi_stm32g0.c
 
-The drive-strength property requiring values in mA is the standard and other
-MediaTek SoCs of the same generation already do the same, so this change avoids
-mt8192 having a non-standard property.
+-- 
+2.25.1
 
-There are no current upstream users of this driver, so this change doesn't cause
-any regression.
-
-> 
-> Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
-
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
-Thanks,
-Nícolas

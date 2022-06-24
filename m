@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9B555A1DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 21:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CAE55A1F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 21:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbiFXTeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 15:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
+        id S230175AbiFXTgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 15:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiFXTeC (ORCPT
+        with ESMTP id S229645AbiFXTgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 15:34:02 -0400
-Received: from mailrelay1-1.pub.mailoutpod1-cph3.one.com (mailrelay1-1.pub.mailoutpod1-cph3.one.com [46.30.210.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB987A1A9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 12:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=Sihz11luVbLnMRxUqT40UrsUUIvpNZ+iZ5XFmcP949s=;
-        b=fvhFy7tCy17aa75hVRKipc5JOYdRa1Z+RHBoenbtgriuGr33sLd85dLt4rr0BZOGVw47PyRE1fpkC
-         pKJIpOzBY6k830ZRkM951a5iRedSU35/iHW/WrMzzV6Uj3H35r86dE2id0AQ9uAgPWMUxFgZ84HLxQ
-         UhVA2j5/Rqqhko6KleF0iMHt8EbD+MFsYnz0ULbpZbG8491f/xvE8kKoRPOa6EpfcZdBey3wD8C2UT
-         n4i5v7GGloV8NxaydiDBv/VY4KqliThyLs28AM6FX7+HKE37RQ9HXitKGR4Q8SFa81jn1oem9pOmjd
-         VYOMSI3oUiJRZenZDIbYBPnlhvUsYCQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=Sihz11luVbLnMRxUqT40UrsUUIvpNZ+iZ5XFmcP949s=;
-        b=8n9lroMQRcWpKMLu+unfvxTIumDzZX5gumVYDE20P3bgMXlOjnxe38bbVMAApCEO3vVTybIPOVmC8
-         rnB6Y/QDA==
-X-HalOne-Cookie: 2f5100d8768ceeccfebdba1eab392d44dbdd208c
-X-HalOne-ID: 97d51f3c-f3f4-11ec-a6c4-d0431ea8a283
-Received: from mailproxy1.cst.dirpod4-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 97d51f3c-f3f4-11ec-a6c4-d0431ea8a283;
-        Fri, 24 Jun 2022 19:33:58 +0000 (UTC)
-Date:   Fri, 24 Jun 2022 21:33:57 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Jiang Jian <jiangjian@cdjrlc.com>
-Cc:     linus.walleij@linaro.org, thierry.reding@gmail.com,
-        airlied@linux.ie, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/panel: nt35510: Remove duplicate 'the' in two places.
-Message-ID: <YrYRpfRapDZllh01@ravnborg.org>
-References: <20220621140151.14404-1-jiangjian@cdjrlc.com>
+        Fri, 24 Jun 2022 15:36:37 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DA481D8C;
+        Fri, 24 Jun 2022 12:36:35 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 390E1E0003;
+        Fri, 24 Jun 2022 19:36:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656099394;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gn38J0/acl2kOuqtLJoK7NFueOpNaEXUwlW0/5tfV8I=;
+        b=DwkGdEG4cpTELBeBcdmoCaiN2UoB6kbQ8wHBtCAvTbRI1uKlF8CpaTPKwZyytAxGz6+nGK
+        L2s7wbQXvhEi425qbNyTRY/15DLXN2C725Wxg1ydfb4o2NZLhOjMvzcZ66h0pWYhqJqvSu
+        h4ZHI6Mq74wLGXpv3fktc/oeEJtSEkbidGU7Wl3WxK2yV/hwCnuGtTcGkiLiKWHm1+77Up
+        6eu1zBag8YVL0TEULBR6zyYBgS0bbca/sTbq0dNc1SfkY4rjPrUVFpwXnmLFr7KSsBN8le
+        wwTt/G/dNOi8t62/+3MRBMUVVqV/Ipt52e3OD5vxHHBR5//xUIKgJVEAEoqwWA==
+Date:   Fri, 24 Jun 2022 21:36:31 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     a.zummo@towertech.it, nm@ti.com, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org
+Cc:     afd@ti.com, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com
+Subject: Re: [PATCH V4 0/2] rtc: Introduce rtc-ti-k3
+Message-ID: <165609935670.33848.14304179629453424484.b4-ty@bootlin.com>
+References: <20220623170808.20998-1-nm@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220621140151.14404-1-jiangjian@cdjrlc.com>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220623170808.20998-1-nm@ti.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 10:01:51PM +0800, Jiang Jian wrote:
-> file: ./drivers/gpu/drm/panel/panel-novatek-nt35510.c
-> line: 193,214,253
-> * amplification for the the step-up circuit:
-> changed to
-> * amplification for the step-up circuit:
+On Thu, 23 Jun 2022 12:08:06 -0500, Nishanth Menon wrote:
+> One more round..
 > 
-> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+> This series adds support for TI K3 RTC as instantiated on TI's AM625
+> SoC.
+> 
+> Documentation in the current early release version of Technical
+> Reference Manual is incomplete at the moment, but due to be updated
+> later this year.
+> https://www.ti.com/lit/pdf/spruiv7
+> 
+> [...]
 
-Thanks, applied to drm-misc (drm-misc-next)
+Applied, thanks!
 
-	Sam
+[1/2] dt-bindings: rtc: Add TI K3 RTC description
+      commit: 5e665cf1f0c52163de5517bfb9258390e63772b2
+[2/2] rtc: Introduce ti-k3-rtc
+      commit: b09d633575e54e98e1362bd5c36cd9571cb71d8a
+
+Best regards,
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

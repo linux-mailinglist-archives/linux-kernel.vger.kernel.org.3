@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3C8559BD9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BECA2559BF2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232947AbiFXOhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 10:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
+        id S232621AbiFXOg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 10:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232710AbiFXOfo (ORCPT
+        with ESMTP id S232700AbiFXOfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 10:35:44 -0400
+        Fri, 24 Jun 2022 10:35:41 -0400
 Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48AC55DF2B;
-        Fri, 24 Jun 2022 07:35:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 749B64EDDB;
+        Fri, 24 Jun 2022 07:35:12 -0700 (PDT)
 Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id 9680F16C3;
-        Fri, 24 Jun 2022 17:17:47 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 9680F16C3
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 2CA7216C4;
+        Fri, 24 Jun 2022 17:17:48 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 2CA7216C4
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1656080267;
-        bh=VjyxAcMepOyqZqRyUPoUg9jWo9vWfhMdZZrNXa6WyMQ=;
+        d=baikalelectronics.ru; s=mail; t=1656080268;
+        bh=kDuuhLvgWjwCl2RDg/HQ/klWnKI9hNFxtPsc1NN2N1I=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=L5euMlCpTuEQcfs5UusI5OsW5uZNWnKV33aAJu/oXI9mhXHpPLTEyUGi6SizUaYyj
-         o0n4kjJlu+4dd+dVue1lN0bp8KZzoQ+rGJ4IPhjNNW1wHZcKDlQ6lqd6//2V7v0J07
-         4WiHKrdkJSjxbsNREPkv5V622DNb9/4pGZLeUnQE=
+        b=brJscAwWCIlrNbG8lE0uiLSq9rStHDmfsZCrEEjOeeFTYQgm1NYf2JvL7PegwhbR6
+         oIioDC5oh7ZHvPLrgu823ZwI5mx6sL8OjIl+GwcG4R4aInfAKDC+2JpnxVfUpXqDol
+         dk6tsEgXLGLIv1+O2zvZI5jxtCktmqpDxUOnfOFU=
 Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
  Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 24 Jun 2022 17:16:28 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
@@ -41,21 +41,22 @@ To:     Andy Gross <agross@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Khuong Dinh <khuong@os.amperecomputing.com>,
         Patrice Chotard <patrice.chotard@st.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
         <linux-arm-msm@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linuxppc-dev@lists.ozlabs.org>,
         <linux-snps-arc@lists.infradead.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v9 3/5] powerpc: dts: akebono: Harmonize EHCI/OHCI DT nodes name
-Date:   Fri, 24 Jun 2022 17:16:19 +0300
-Message-ID: <20220624141622.7149-4-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH RESEND v9 4/5] arm: dts: stih407-family: Harmonize DWC USB3 DT nodes name
+Date:   Fri, 24 Jun 2022 17:16:20 +0300
+Message-ID: <20220624141622.7149-5-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220624141622.7149-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220624141622.7149-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -71,48 +72,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In accordance with the Generic EHCI/OHCI bindings the corresponding node
+In accordance with the DWC USB3 bindings the corresponding node
 name is suppose to comply with the Generic USB HCD DT schema, which
 requires the USB nodes to have the name acceptable by the regexp:
-"^usb(@.*)?" . Make sure the "generic-ehci" and "generic-ohci"-compatible
-nodes are correctly named.
+"^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
+named.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+Reviewed-by: Patrice Chotard <patrice.chotard@st.com>
 ---
- arch/powerpc/boot/dts/akebono.dts | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/stih407-family.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/boot/dts/akebono.dts b/arch/powerpc/boot/dts/akebono.dts
-index df18f8dc4642..343326c30380 100644
---- a/arch/powerpc/boot/dts/akebono.dts
-+++ b/arch/powerpc/boot/dts/akebono.dts
-@@ -126,7 +126,7 @@ SATA0: sata@30000010000 {
- 			interrupts = <93 2>;
- 		};
+diff --git a/arch/arm/boot/dts/stih407-family.dtsi b/arch/arm/boot/dts/stih407-family.dtsi
+index 1713f7878117..7ba528315dbe 100644
+--- a/arch/arm/boot/dts/stih407-family.dtsi
++++ b/arch/arm/boot/dts/stih407-family.dtsi
+@@ -725,7 +725,7 @@ st_dwc3: dwc3@8f94000 {
  
--		EHCI0: ehci@30010000000 {
-+		EHCI0: usb@30010000000 {
- 			compatible = "ibm,476gtr-ehci", "generic-ehci";
- 			reg = <0x300 0x10000000 0x0 0x10000>;
- 			interrupt-parent = <&MPIC>;
-@@ -140,14 +140,14 @@ SD0: sd@30000000000 {
- 			interrupt-parent = <&MPIC>;
- 		};
+ 			status = "disabled";
  
--		OHCI0: ohci@30010010000 {
-+		OHCI0: usb@30010010000 {
- 			compatible = "ibm,476gtr-ohci", "generic-ohci";
- 			reg = <0x300 0x10010000 0x0 0x10000>;
- 			interrupt-parent = <&MPIC>;
- 			interrupts = <89 1>;
- 			};
- 
--		OHCI1: ohci@30010020000 {
-+		OHCI1: usb@30010020000 {
- 			compatible = "ibm,476gtr-ohci", "generic-ohci";
- 			reg = <0x300 0x10020000 0x0 0x10000>;
- 			interrupt-parent = <&MPIC>;
+-			dwc3: dwc3@9900000 {
++			dwc3: usb@9900000 {
+ 				compatible	= "snps,dwc3";
+ 				reg		= <0x09900000 0x100000>;
+ 				interrupts	= <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.35.1
 

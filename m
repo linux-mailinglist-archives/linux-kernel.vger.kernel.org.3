@@ -2,55 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B18559993
+	by mail.lfdr.de (Postfix) with ESMTP id 3D806559992
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiFXMSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 08:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
+        id S230410AbiFXMSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 08:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiFXMSe (ORCPT
+        with ESMTP id S229522AbiFXMSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 08:18:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94E81168;
-        Fri, 24 Jun 2022 05:18:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5722461655;
-        Fri, 24 Jun 2022 12:18:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63E3EC34114;
-        Fri, 24 Jun 2022 12:18:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656073112;
-        bh=Vrl/35KfEA8EXbn5hdEP2XvtFH/JWegI4kprxqGCvz8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=st/AuHrEZ7YjHPn6RpxtJT00QhQHgZJ+TSKJnaNAs5PUD6P85zteMKnXkL/XYZ0aE
-         6dO2FhsmutMlCQZ7DTR4Pc5jDCW0Sz57NUR4Cs40idy550oMTVJolVulYAfwPEcFyw
-         a8xA+085x65qFaFO1EPKtSv0gdvH1enSUjJ0ZOgrWwXyITAugCEFN6SRWSMN5k08ix
-         P2y9iHInJp73O1dblnRM2Z5ALsUas5k9O0VJrqZLr8Dj4n6Nis+C+Ah8hOz/C24mqc
-         0m1G5d+8wn8ec0SUXrFz6BL3Cc4bLEI8je+6SvQCwfvlzYRefVnSmm5qCtFMNgzXld
-         YZSqZ00OTTkYg==
-Date:   Fri, 24 Jun 2022 13:18:26 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
-Cc:     mark.rutland@arm.com, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V6] arm64: perf: Make exporting of pmu events configurable
-Message-ID: <20220624121825.GB18561@willie-the-truck>
-References: <1654779589-19937-1-git-send-email-quic_c_spathi@quicinc.com>
+        Fri, 24 Jun 2022 08:18:42 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A79910547
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:18:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656073121; x=1687609121;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=517H1yHK+nS4fYXm61DYKdd+jOnnRIOAzK1KRZWOQGA=;
+  b=E+g5uVb8aXWRawUxyY+D8VKXqdWuB/Hfp05fs4SCYilSSjnmgmX8Q5vy
+   jcj0dDt027MJ0pAvmyVKB8W+BiEa8+SgV3hCt/Y8ep9RDZ0ltdl8c2RA4
+   Y5tcuSMBEcBqs9csU0OpwFccBJwClxYdh8pwzpx5eXQfM9/y6Zu1rxt09
+   eTcEe66saxk0cEBDJPcYGUsqSrDzpnktLwan0Hd9ZFDqDMWg7bZGa6Oaa
+   jOR/h7/kOiLjPv3ySJ75zv8qyI6UyXUiJk7Asyh1w/bxfjMrDiaw0uzyt
+   2VzbQIJ/7m51e7g63Tvo/5/vcA7rG+33APY7GQZnVzidUE7s+XZ5RI3eR
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="281032213"
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="281032213"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 05:18:41 -0700
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="645250458"
+Received: from cma16-mobl1.ccr.corp.intel.com (HELO chenyu5-mobl1) ([10.255.29.162])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 05:18:35 -0700
+Date:   Fri, 24 Jun 2022 20:18:31 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Mel Gorman <mgorman@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Len Brown <len.brown@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Tim Chen <tim.c.chen@intel.com>, linux-kernel@vger.kernel.org,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Mohini Narkhede <mohini.narkhede@intel.com>
+Subject: Re: [PATCH v4] sched/fair: Introduce SIS_UTIL to search idle CPU
+ based on sum of util_avg
+Message-ID: <20220624121831.GA5570@chenyu5-mobl1>
+References: <20220612163428.849378-1-yu.c.chen@intel.com>
+ <76c94a3b-6ca2-e0e2-c618-42b147d2737d@amd.com>
+ <YrVn9t2kLHB21uG1@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1654779589-19937-1-git-send-email-quic_c_spathi@quicinc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YrVn9t2kLHB21uG1@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,80 +76,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 06:29:49PM +0530, Srinivasarao Pathipati wrote:
-> The PMU export bit (PMCR_EL0.X) is getting reset during pmu reset,
-> Make it configurable using sysctls to enable/disable at runtime.
+On Fri, Jun 24, 2022 at 09:29:58AM +0200, Peter Zijlstra wrote:
+> On Wed, Jun 22, 2022 at 12:06:55PM +0530, K Prateek Nayak wrote:
+> > Hello Chenyu,
+> > 
+> > I'm sorry for the delay. The testing took a while but below are
+> > the results from testing on our system.
+> > 
+> > tl;dr
+> > 
+> > o We ran all the tests with with SIS_PROP disabled.
+> > o tbench reaches close to saturation early with 256 clients.
+> > o schbench shows improvements for low worker counts.
+> > o All other benchmark results seem comparable to tip.
+> >   We don't see any serious regressions with v4.
+> > 
+> > > @@ -61,6 +61,7 @@ SCHED_FEAT(TTWU_QUEUE, true)
+> > >   * When doing wakeups, attempt to limit superfluous scans of the LLC domain.
+> > >   */
+> > >  SCHED_FEAT(SIS_PROP, true)
+> > 
+> > SIS_PROP was disabled in our testing as follows:
+> > 
+> > --
+> > -SCHED_FEAT(SIS_PROP, true)
+> > +SCHED_FEAT(SIS_PROP, false)
 > 
-> Signed-off-by: Srinivasarao Pathipati <quic_c_spathi@quicinc.com>
-> ---
-> Changes since V5:
-> 	- removed configuring with kernel parameters.
-> Changes since V4:
-> 	- Registering sysctls dynamically for only arm64 as suggested by Will
-> 	- Not removed the code to configure with kernel parameters 
-> 	  as the sysctl's kernel parameter(sysctl.kernel.export_pmu_events)
-> 	  is not working at early bootup. pmu_reset() getting called before 
-> 	  sysctl's kernel parameter is set.
-> Changes since V3:
-> 	- export bit is now configurable with sysctl
-> 	- enabling export bit on reset instead of retaining
+> So how about I make this change.
 > 
-> Changes since V2:
-> 	Done below changes as per Will's comments
-> 	- enabling pmcr_x now configurable with kernel parameters and
-> 	  by default it is disabled.
-> 	
-> Changes since V1:
-> 	- Preserving only PMCR_X bit as per Robin Murphy's comment.
+> > With v4 on the current tip, I don't see any need for
+> > a special case for systems with smaller LLCs with
+> > SIS_PROP disabled and SIS_UITL enable. Even SIS Efficiency
+> > seems to be better with SIS_UTIL for hackbench.
+> > 
+> > Tested-by: K Prateek Nayak <kprateek.nayak@amd.com> 
 > 
-> ---
->  Documentation/admin-guide/sysctl/kernel.rst | 11 +++++++++++
->  arch/arm64/kernel/perf_event.c              | 13 +++++++++++++
->  2 files changed, 24 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-> index ddccd10..c2ecd84 100644
-> --- a/Documentation/admin-guide/sysctl/kernel.rst
-> +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -267,6 +267,17 @@ domain names are in general different. For a detailed discussion
->  see the ``hostname(1)`` man page.
->  
->  
-> +export_pmu_events (arm64 only)
-> +==============================
-> +
-> +Controls the PMU export bit (PMCR_EL0.X), which enables the exporting of
-> +events over an IMPLEMENTATION DEFINED PMU event export bus to another device.
-> +
-> +0: disables exporting of events (default).
-> +
-> +1: enables exporting of events.
-> +
-> +
->  firmware_config
->  ===============
->  
-> diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-> index cb69ff1..a8c32a0 100644
-> --- a/arch/arm64/kernel/perf_event.c
-> +++ b/arch/arm64/kernel/perf_event.c
-> @@ -298,6 +298,7 @@ PMU_FORMAT_ATTR(long, "config1:0");
->  PMU_FORMAT_ATTR(rdpmc, "config1:1");
->  
->  static int sysctl_perf_user_access __read_mostly;
-> +static int sysctl_export_pmu_events __read_mostly;
->  
->  static inline bool armv8pmu_event_is_64bit(struct perf_event *event)
->  {
-> @@ -1047,6 +1048,9 @@ static void armv8pmu_reset(void *info)
->  	if (armv8pmu_has_long_event(cpu_pmu))
->  		pmcr |= ARMV8_PMU_PMCR_LP;
->  
-> +	if (sysctl_export_pmu_events)
-> +		pmcr |= ARMV8_PMU_PMCR_X;
+> And apply this thing, lets see how it fares..
 
-I think we need to do this in armv8pmu_start() rather than armv8pmu_reset(),
-otherwise any changes to the sysctl at runtime won't take effect unless you
-do something like re-online the CPU.
+OK, thanks, Peter.
 
-Will
+
+Best,
+Chenyu

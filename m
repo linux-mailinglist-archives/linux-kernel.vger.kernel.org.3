@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810C6558F7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 06:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6494B558F80
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 06:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiFXEKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 00:10:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
+        id S230421AbiFXEKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 00:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbiFXEKO (ORCPT
+        with ESMTP id S229615AbiFXEKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 24 Jun 2022 00:10:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47ECE6808E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2487C6808D
         for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 21:10:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C573A620E1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A98BB620D1
         for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 04:10:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F30AFC341CB;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CF3BBC3411C;
         Fri, 24 Jun 2022 04:10:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656043813;
-        bh=tqLxnTqX0/YGCvTDapKoLsWJgHuvKkB7+RgaFEymIfM=;
+        s=k20201202; t=1656043812;
+        bh=EBu6ckTNMwf8gEEouQT4wC2duA1lPbCyWbx4zFfY/r0=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=IYg0VTPgOL6B7jWoGQ12Z4AXiGr4T33txRg1dofPg6bThxcICEQIEYm+rZ3quMy9R
-         UbChEmn8DjUXMwja8Uc5FooP5qATqRsDwf5Zxr3oiFTT96W38EJ8BmwgZu96WtW2OY
-         v/w2eSFPHX9VVhqjnX7yL4hzhZwwUwtWktM806+22VDorsIJhPbSBT9TBXLhQ7HiCU
-         OF6TSovZRcyMiWIqbNwKfYNhhKn0rinNFkDYctWNnnQ6grhnXS7WhBbeqiIz2nPpYl
-         Y7PyNVi1PBImg7ezYEvXzYFLaAEiecz8oC6MogAZWCdI5JgDdV4tdtLKWYqoSJ6ix6
-         I1I/byNjxbYZg==
+        b=ikkV4lslhZAj1J8yHf7RZWuaGNqvg96EGWo61Fa8b605AQJww8caRpbZynV5q1kHk
+         mUoikyfjx3JDLHtgcoc8Us9bZ5P65q7KZqodmMU3AL2HcrHBAVeWiAyh3QXn+I3/HA
+         hDQwc+EPuENHsgp/1oWkplqLjgfNfnBM+E+sgH1Iu3bKG1CXhuwcXuAPF53P6UY5f6
+         w5IkWg9vVgjnRHqwe7BsHJpMaRxhmXRy/Pw+A5/gZNd1C6DJVYclHIzP1+oKwCRbG3
+         9q50nicEY9SdrDLjVztaCvkZND0qEcfw4lMqF1kZObdXuNYYi8vrOyOwgcD3+Rt474
+         /M6+gQi7CRZIg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DD2A3E7BA3C;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B41FCE737F0;
         Fri, 24 Jun 2022 04:10:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Subject: Re: [PATCH] platform/chrome: wilco_ec: event: Fix typo in comment
 From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165604381290.31124.8764983099563999401.git-patchwork-notify@kernel.org>
+Message-Id: <165604381273.31124.6187796699911998153.git-patchwork-notify@kernel.org>
 Date:   Fri, 24 Jun 2022 04:10:12 +0000
 References: <20220622061442.18242-1-jiangjian@cdjrlc.com>
 In-Reply-To: <20220622061442.18242-1-jiangjian@cdjrlc.com>
@@ -59,7 +59,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to chrome-platform/linux.git (for-next)
+This patch was applied to chrome-platform/linux.git (for-kernelci)
 by Tzung-Bi Shih <tzungbi@kernel.org>:
 
 On Wed, 22 Jun 2022 14:14:42 +0800 you wrote:

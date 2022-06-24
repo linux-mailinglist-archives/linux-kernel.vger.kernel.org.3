@@ -2,298 +2,359 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2624B559344
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5024755934B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiFXGWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 02:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S230125AbiFXGXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 02:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiFXGWn (ORCPT
+        with ESMTP id S229956AbiFXGXW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 02:22:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96C43FDA5;
-        Thu, 23 Jun 2022 23:22:42 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25O5orOT006898;
-        Fri, 24 Jun 2022 06:22:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Di51jl6wOZ18ExhrQMG2SxXoh7hgGushxQFiaaPCd9Q=;
- b=n2xZ7L0mM7V7Huz787QNeqiB4mT0ttcPOP6ORdNlp28T/G1C27lckGxV6SBfgMFzeboq
- szAFrBD8Wta+6QV9VKvebSzp4FYquRTJiT4uOfMdc3gat9g6u0cujvnvkYNm5xjsHqPl
- CYV+YCddv/5OjyaRB2Beso/iDCKSlp0yewxTnINVY6t5XSBGz7dU85Ag27y/QUHamfeW
- bgh+t0suYCAGrR+ikjZN0NVRGou2n4QV5LyGSiGFP3SunwtousR+S+WbqdR/UTct4zd9
- NW5/XFMQ2pMrFzZHBecJQ6fVqn10Z/rLy+iB+KH/iBlP5uS8x+I5+eK0+xmdSfRpwCuP aQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gw7fxrpmu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jun 2022 06:22:42 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25O5u0GV027351;
-        Fri, 24 Jun 2022 06:22:41 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gw7fxrpm2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jun 2022 06:22:41 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25O6K4uZ016759;
-        Fri, 24 Jun 2022 06:22:39 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3gv3mba4na-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jun 2022 06:22:39 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25O6MZkO20644100
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Jun 2022 06:22:35 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7014C4C040;
-        Fri, 24 Jun 2022 06:22:35 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C0EC4C044;
-        Fri, 24 Jun 2022 06:22:34 +0000 (GMT)
-Received: from [9.145.85.86] (unknown [9.145.85.86])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 24 Jun 2022 06:22:34 +0000 (GMT)
-Message-ID: <5217b1ec-c170-d046-5158-e17ffcfe8316@linux.ibm.com>
-Date:   Fri, 24 Jun 2022 08:22:34 +0200
+        Fri, 24 Jun 2022 02:23:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52B8F38B7
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:23:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656051799;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e/ivYxAMfggPbkQhef/AlBbsVkIIj7YA57YGPWnP6cg=;
+        b=GzYuVFuiILJzJ9eJRfk/VyWM0GD6FFrCO+32q80B1FnQLgCU3Ki/BrDNudLajdxRxaWANH
+        /rYQnKIeaOmeg7F6XXg9E+8qUJ42Bz6NaVzBZeOIbx14R+jb091Y60j+l1AAb76yL4Bc2v
+        5OfUYmLGImJ7WKUrDSLLilR4vw9+6nA=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-43-ZAGXRt44NXirtFEcP6Yptw-1; Fri, 24 Jun 2022 02:23:17 -0400
+X-MC-Unique: ZAGXRt44NXirtFEcP6Yptw-1
+Received: by mail-wm1-f72.google.com with SMTP id j20-20020a05600c1c1400b0039c747a1e5aso980199wms.9
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:23:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=e/ivYxAMfggPbkQhef/AlBbsVkIIj7YA57YGPWnP6cg=;
+        b=ldqPX5YC+GmaBxaRYkUU2tVIv7PFhh+2AjZOqFx74A5INVKunF/d1mx+VZrQzXhOwL
+         t1neETCAJvdXaIunjsRPUVduw8Q/J1L3b/NOtqTjN1p8Ak4H8YeLA8kUan0y0hzlw7IG
+         rW7EwyBaidadd5O3Rwe5uJ77zyZPvBJORkkC1dSEnpaWU0PyA575SkFMGlmGWthLaJVV
+         ApYN+tIfyigs/aUFLkt4QYpwijuDDsh6iScioVE3lzWw8zzvtmoqHSpWp/hN6QOku44n
+         WbrRZBvJq/xJIqQocrK/7ZxPIoJQrUbvAyp8WXHXnlyJYrV1MX7e9iuFJ7YBGFlBN42D
+         vPew==
+X-Gm-Message-State: AJIora8r3gdJNOTQr1eZRuc+zQXjO7AGwwdBQPRp0vUh2fL1GigUBqit
+        0mwu98qDCOGK/ngWHafeOiW/sDwUKYAjnggWPdt8VU9O8RsfoQZ1W7Ols6zFivwWUX+6zi15gww
+        wgsGN4noCTitoogsy3plVPNfn
+X-Received: by 2002:a1c:4d0a:0:b0:3a0:2d95:49d3 with SMTP id o10-20020a1c4d0a000000b003a02d9549d3mr1832917wmh.44.1656051796385;
+        Thu, 23 Jun 2022 23:23:16 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vXk8MoM3bKuxlq8MYAnwn3uELmc7TcCW0NDyFVgA6fjBwDNdzTxw+OdBRVCVTmghHkUr8QeA==
+X-Received: by 2002:a1c:4d0a:0:b0:3a0:2d95:49d3 with SMTP id o10-20020a1c4d0a000000b003a02d9549d3mr1832887wmh.44.1656051796045;
+        Thu, 23 Jun 2022 23:23:16 -0700 (PDT)
+Received: from redhat.com ([2.55.188.216])
+        by smtp.gmail.com with ESMTPSA id l17-20020a5d5611000000b002101ed6e70fsm1350571wrv.37.2022.06.23.23.23.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 23:23:15 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 02:23:11 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Albert Huang <huangjie.albert@bytedance.com>,
+        yuanzhu@bytedance.com,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] virtio_ring : keep used_wrap_counter in
+ vq->last_used_idx
+Message-ID: <20220624022136-mutt-send-email-mst@kernel.org>
+References: <20220616101823-mutt-send-email-mst@kernel.org>
+ <20220617020411.80367-1-huangjie.albert@bytedance.com>
+ <CACGkMEutq89farjWTdPY8R8wq8gCJLU2SWJrv+x=pPA5fv6+Uw@mail.gmail.com>
+ <20220622081543-mutt-send-email-mst@kernel.org>
+ <CACGkMEtaAFN+ntKvbbGYNf2O_-wSgc+Z4VVETVBEBNJi4bz9oA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, cohuck@redhat.com, david@redhat.com,
-        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
-        nrb@linux.ibm.com
-References: <20220620125437.37122-1-pmorel@linux.ibm.com>
- <20220620125437.37122-3-pmorel@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v10 2/3] KVM: s390: guest support for topology function
-In-Reply-To: <20220620125437.37122-3-pmorel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: lb-mluRrEEYCQspZr6VJMT6wCmQyqykT
-X-Proofpoint-ORIG-GUID: IpcmkmX6gChLJNIVCbJ2K3pyAaprb5J9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-24_04,2022-06-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 impostorscore=0 mlxlogscore=999 malwarescore=0
- spamscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 phishscore=0
- clxscore=1015 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2204290000 definitions=main-2206240022
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEtaAFN+ntKvbbGYNf2O_-wSgc+Z4VVETVBEBNJi4bz9oA@mail.gmail.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/22 14:54, Pierre Morel wrote:
-> We report a topology change to the guest for any CPU hotplug.
+On Thu, Jun 23, 2022 at 09:30:47AM +0800, Jason Wang wrote:
+> On Wed, Jun 22, 2022 at 8:16 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Wed, Jun 22, 2022 at 04:51:22PM +0800, Jason Wang wrote:
+> > > On Fri, Jun 17, 2022 at 10:04 AM Albert Huang
+> > > <huangjie.albert@bytedance.com> wrote:
+> > > >
+> > > > From: "huangjie.albert" <huangjie.albert@bytedance.com>
+> > > >
+> > > > the used_wrap_counter and the vq->last_used_idx may get
+> > > > out of sync if they are separate assignment，and interrupt
+> > > > might use an incorrect value to check for the used index.
+> > > >
+> > > > for example:OOB access
+> > > > ksoftirqd may consume the packet and it will call:
+> > > > virtnet_poll
+> > > >         -->virtnet_receive
+> > > >                 -->virtqueue_get_buf_ctx
+> > > >                         -->virtqueue_get_buf_ctx_packed
+> > > > and in virtqueue_get_buf_ctx_packed:
+> > > >
+> > > > vq->last_used_idx += vq->packed.desc_state[id].num;
+> > > > if (unlikely(vq->last_used_idx >= vq->packed.vring.num)) {
+> > > >          vq->last_used_idx -= vq->packed.vring.num;
+> > > >          vq->packed.used_wrap_counter ^= 1;
+> > > > }
+> > > >
+> > > > if at the same time, there comes a vring interrupt，in vring_interrupt:
+> > > > we will call:
+> > > > vring_interrupt
+> > > >         -->more_used
+> > > >                 -->more_used_packed
+> > > >                         -->is_used_desc_packed
+> > > > in is_used_desc_packed, the last_used_idx maybe >= vq->packed.vring.num.
+> > > > so this could case a memory out of bounds bug.
+> > > >
+> > > > this patch is to keep the used_wrap_counter in vq->last_used_idx
+> > > > so we can get the correct value to check for used index in interrupt.
+> > > >
+> > > > v3->v4:
+> > > > - use READ_ONCE/WRITE_ONCE to get/set vq->last_used_idx
+> > > >
+> > > > v2->v3:
+> > > > - add inline function to get used_wrap_counter and last_used
+> > > > - when use vq->last_used_idx, only read once
+> > > >   if vq->last_used_idx is read twice, the values can be inconsistent.
+> > > > - use last_used_idx & ~(-(1 << VRING_PACKED_EVENT_F_WRAP_CTR))
+> > > >   to get the all bits below VRING_PACKED_EVENT_F_WRAP_CTR
+> > > >
+> > > > v1->v2:
+> > > > - reuse the VRING_PACKED_EVENT_F_WRAP_CTR
+> > > > - Remove parameter judgment in is_used_desc_packed,
+> > > > because it can't be illegal
+> > > >
+> > > > Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
+> > > > ---
+> > > >  drivers/virtio/virtio_ring.c | 75 ++++++++++++++++++++++--------------
+> > > >  1 file changed, 47 insertions(+), 28 deletions(-)
+> > > >
+> > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > > > index 13a7348cedff..719fbbe716d6 100644
+> > > > --- a/drivers/virtio/virtio_ring.c
+> > > > +++ b/drivers/virtio/virtio_ring.c
+> > > > @@ -111,7 +111,12 @@ struct vring_virtqueue {
+> > > >         /* Number we've added since last sync. */
+> > > >         unsigned int num_added;
+> > > >
+> > > > -       /* Last used index we've seen. */
+> > > > +       /* Last used index  we've seen.
+> > > > +        * for split ring, it just contains last used index
+> > > > +        * for packed ring:
+> > > > +        * bits up to VRING_PACKED_EVENT_F_WRAP_CTR include the last used index.
+> > > > +        * bits from VRING_PACKED_EVENT_F_WRAP_CTR include the used wrap counter.
+> > > > +        */
+> > > >         u16 last_used_idx;
+> > > >
+> > > >         /* Hint for event idx: already triggered no need to disable. */
+> > > > @@ -154,9 +159,6 @@ struct vring_virtqueue {
+> > > >                         /* Driver ring wrap counter. */
+> > > >                         bool avail_wrap_counter;
+> > > >
+> > > > -                       /* Device ring wrap counter. */
+> > > > -                       bool used_wrap_counter;
+> > > > -
+> > > >                         /* Avail used flags. */
+> > > >                         u16 avail_used_flags;
+> > > >
+> > > > @@ -973,6 +975,15 @@ static struct virtqueue *vring_create_virtqueue_split(
+> > > >  /*
+> > > >   * Packed ring specific functions - *_packed().
+> > > >   */
+> > > > +static inline bool packed_used_wrap_counter(u16 last_used_idx)
+> > > > +{
+> > > > +       return !!(last_used_idx & (1 << VRING_PACKED_EVENT_F_WRAP_CTR));
+> > > > +}
+> > > > +
+> > > > +static inline u16 packed_last_used(u16 last_used_idx)
+> > > > +{
+> > > > +       return last_used_idx & ~(-(1 << VRING_PACKED_EVENT_F_WRAP_CTR));
+> > > > +}
+> > >
+> > > Any reason we need a minus after the shift?
+> >
+> > The point is to say "all bits above VRING_PACKED_EVENT_F_WRAP_CTR".
+> > Has no effect currently but will if last_used_idx is extended to 32 bit.
 > 
-> The reporting to the guest is done using the Multiprocessor
-> Topology-Change-Report (MTCR) bit of the utility entry in the guest's
-> SCA which will be cleared during the interpretation of PTF.
+> Ok, but we don't do this for other uses for VRING_PACKED_EVENT_F_WRAP_CTR.
 > 
-> On every vCPU creation we set the MCTR bit to let the guest know the
-> next time he uses the PTF with command 2 instruction that the
-> topology changed and that he should use the STSI(15.1.x) instruction
-> to get the topology details.
+> I wonder how much value we do it only here.
 > 
-> STSI(15.1.x) gives information on the CPU configuration topology.
-> Let's accept the interception of STSI with the function code 15 and
-> let the userland part of the hypervisor handle it when userland
-> support the CPU Topology facility.
-> 
-> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
-> ---
->   arch/s390/include/asm/kvm_host.h | 11 ++++++++---
->   arch/s390/kvm/kvm-s390.c         | 27 ++++++++++++++++++++++++++-
->   arch/s390/kvm/priv.c             | 15 +++++++++++----
->   arch/s390/kvm/vsie.c             |  3 +++
->   4 files changed, 48 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index 766028d54a3e..bb54196d4ed6 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -97,15 +97,19 @@ struct bsca_block {
->   	union ipte_control ipte_control;
->   	__u64	reserved[5];
->   	__u64	mcn;
-> -	__u64	reserved2;
-> +#define SCA_UTILITY_MTCR	0x8000
+> Thanks
 
-I'm not too happy having this in the bsca but not in the esca. I'd 
-suggest putting it outside the structs or to go with my next suggestion:
+I don't care much either way. Feel free to go ahead and play with
+different versions so see which works better.
 
-Just make it a bit field struct and make that a member in bsca/esca.
-No messing about with ANDing, ORing etc.
-
-It's unfortunate that we only use one bit in that field but I'd still 
-find it easier to read.
-
-> +	__u16	utility;
-> +	__u8	reserved2[6];
->   	struct bsca_entry cpu[KVM_S390_BSCA_CPU_SLOTS];
->   };
->   
->   struct esca_block {
->   	union ipte_control ipte_control;
-> -	__u64   reserved1[7];
-> +	__u64   reserved1[6];
-> +	__u16	utility;
-> +	__u8	reserved2[6];
->   	__u64   mcn[4];
-> -	__u64   reserved2[20];
-> +	__u64   reserved3[20];
->   	struct esca_entry cpu[KVM_S390_ESCA_CPU_SLOTS];
->   };
->   
-> @@ -249,6 +253,7 @@ struct kvm_s390_sie_block {
->   #define ECB_SPECI	0x08
->   #define ECB_SRSI	0x04
->   #define ECB_HOSTPROTINT	0x02
-> +#define ECB_PTF		0x01
->   	__u8	ecb;			/* 0x0061 */
->   #define ECB2_CMMA	0x80
->   #define ECB2_IEP	0x20
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 8fcb56141689..95b96019ca8e 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -1691,6 +1691,25 @@ static int kvm_s390_get_cpu_model(struct kvm *kvm, struct kvm_device_attr *attr)
->   	return ret;
->   }
->   
-> +/**
-> + * kvm_s390_sca_set_mtcr
-> + * @kvm: guest KVM description
-> + *
-> + * Is only relevant if the topology facility is present,
-> + * the caller should check KVM facility 11
-
-I'm not sure that this statement make sense since you set the mctr in 
-kvm_s390_vcpu_setup() unconditionally and don't check stfle 11.
-
-I think we can remove the second line from this.
-
-> + *
-> + * Updates the Multiprocessor Topology-Change-Report to signal
-> + * the guest with a topology change.
-
-Please swap those two comments
-
-> + */
-> +static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
-> +{
-> +	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
-
-Please put the comment above the statement and maybe extend it a bit:
-SCA version doesn't matter, the utility field always has the same offset.
-
-> +
-> +	ipte_lock(kvm);
-> +	sca->utility |= SCA_UTILITY_MTCR;
-> +	ipte_unlock(kvm);
-> +}
-> +
->   static int kvm_s390_vm_set_attr(struct kvm *kvm, struct kvm_device_attr *attr)
->   {
->   	int ret;
-> @@ -3143,7 +3162,6 @@ __u64 kvm_s390_get_cpu_timer(struct kvm_vcpu *vcpu)
->   
->   void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
->   {
-> -
-
-Please remove that change
-
->   	gmap_enable(vcpu->arch.enabled_gmap);
->   	kvm_s390_set_cpuflags(vcpu, CPUSTAT_RUNNING);
->   	if (vcpu->arch.cputm_enabled && !is_vcpu_idle(vcpu))
-> @@ -3272,6 +3290,11 @@ static int kvm_s390_vcpu_setup(struct kvm_vcpu *vcpu)
->   		vcpu->arch.sie_block->ecb |= ECB_HOSTPROTINT;
->   	if (test_kvm_facility(vcpu->kvm, 9))
->   		vcpu->arch.sie_block->ecb |= ECB_SRSI;
-> +
-> +	/* PTF needs guest facilities to enable interpretation */
-> +	if (test_kvm_facility(vcpu->kvm, 11))
-> +		vcpu->arch.sie_block->ecb |= ECB_PTF;
-> +
->   	if (test_kvm_facility(vcpu->kvm, 73))
->   		vcpu->arch.sie_block->ecb |= ECB_TE;
->   	if (!kvm_is_ucontrol(vcpu->kvm))
-> @@ -3403,6 +3426,8 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
->   	rc = kvm_s390_vcpu_setup(vcpu);
->   	if (rc)
->   		goto out_ucontrol_uninit;
-> +
-> +	kvm_s390_sca_set_mtcr(vcpu->kvm);
->   	return 0;
->   
->   out_ucontrol_uninit:
-> diff --git a/arch/s390/kvm/priv.c b/arch/s390/kvm/priv.c
-> index 12c464c7cddf..77a692238585 100644
-> --- a/arch/s390/kvm/priv.c
-> +++ b/arch/s390/kvm/priv.c
-> @@ -873,10 +873,13 @@ static int handle_stsi(struct kvm_vcpu *vcpu)
->   	if (vcpu->arch.sie_block->gpsw.mask & PSW_MASK_PSTATE)
->   		return kvm_s390_inject_program_int(vcpu, PGM_PRIVILEGED_OP);
->   
-> -	if (fc > 3) {
-> -		kvm_s390_set_psw_cc(vcpu, 3);
-> -		return 0;
-> -	}
-> +	/* Bailout forbidden function codes */
-> +	if (fc > 3 && fc != 15)
-> +		goto out_no_data;
-> +
-> +	/* fc 15 is provided with PTF/CPU topology support */
-> +	if (fc == 15 && !test_kvm_facility(vcpu->kvm, 11))
-> +		goto out_no_data;
->   
->   	if (vcpu->run->s.regs.gprs[0] & 0x0fffff00
->   	    || vcpu->run->s.regs.gprs[1] & 0xffff0000)
-> @@ -910,6 +913,10 @@ static int handle_stsi(struct kvm_vcpu *vcpu)
->   			goto out_no_data;
->   		handle_stsi_3_2_2(vcpu, (void *) mem);
->   		break;
-> +	case 15:
-> +		trace_kvm_s390_handle_stsi(vcpu, fc, sel1, sel2, operand2);
-> +		insert_stsi_usr_data(vcpu, operand2, ar, fc, sel1, sel2);
-> +		return -EREMOTE;
->   	}
->   	if (kvm_s390_pv_cpu_is_protected(vcpu)) {
->   		memcpy((void *)sida_origin(vcpu->arch.sie_block), (void *)mem,
-> diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
-> index dada78b92691..4f4fee697550 100644
-> --- a/arch/s390/kvm/vsie.c
-> +++ b/arch/s390/kvm/vsie.c
-> @@ -503,6 +503,9 @@ static int shadow_scb(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
->   	/* Host-protection-interruption introduced with ESOP */
->   	if (test_kvm_cpu_feat(vcpu->kvm, KVM_S390_VM_CPU_FEAT_ESOP))
->   		scb_s->ecb |= scb_o->ecb & ECB_HOSTPROTINT;
-> +	/* CPU Topology */
-
-Maybe also add:
-This facility only uses the utility field of the SCA and none of the cpu 
-entries that are problematic with the other interpretation facilities so 
-we can pass it through.
-
-> +	if (test_kvm_facility(vcpu->kvm, 11))
-> +		scb_s->ecb |= scb_o->ecb & ECB_PTF;
->   	/* transactional execution */
->   	if (test_kvm_facility(vcpu->kvm, 73) && wants_tx) {
->   		/* remap the prefix is tx is toggled on */
+> >
+> >
+> > > Others look good.
+> > >
+> > > Thanks
+> > >
+> > > >
+> > > >  static void vring_unmap_extra_packed(const struct vring_virtqueue *vq,
+> > > >                                      struct vring_desc_extra *extra)
+> > > > @@ -1406,8 +1417,14 @@ static inline bool is_used_desc_packed(const struct vring_virtqueue *vq,
+> > > >
+> > > >  static inline bool more_used_packed(const struct vring_virtqueue *vq)
+> > > >  {
+> > > > -       return is_used_desc_packed(vq, vq->last_used_idx,
+> > > > -                       vq->packed.used_wrap_counter);
+> > > > +       u16 last_used;
+> > > > +       u16 last_used_idx;
+> > > > +       bool used_wrap_counter;
+> > > > +
+> > > > +       last_used_idx = READ_ONCE(vq->last_used_idx);
+> > > > +       last_used = packed_last_used(last_used_idx);
+> > > > +       used_wrap_counter = packed_used_wrap_counter(last_used_idx);
+> > > > +       return is_used_desc_packed(vq, last_used, used_wrap_counter);
+> > > >  }
+> > > >
+> > > >  static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+> > > > @@ -1415,7 +1432,8 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+> > > >                                           void **ctx)
+> > > >  {
+> > > >         struct vring_virtqueue *vq = to_vvq(_vq);
+> > > > -       u16 last_used, id;
+> > > > +       u16 last_used, id, last_used_idx;
+> > > > +       bool used_wrap_counter;
+> > > >         void *ret;
+> > > >
+> > > >         START_USE(vq);
+> > > > @@ -1434,7 +1452,9 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+> > > >         /* Only get used elements after they have been exposed by host. */
+> > > >         virtio_rmb(vq->weak_barriers);
+> > > >
+> > > > -       last_used = vq->last_used_idx;
+> > > > +       last_used_idx = READ_ONCE(vq->last_used_idx);
+> > > > +       used_wrap_counter = packed_used_wrap_counter(last_used_idx);
+> > > > +       last_used = packed_last_used(last_used_idx);
+> > > >         id = le16_to_cpu(vq->packed.vring.desc[last_used].id);
+> > > >         *len = le32_to_cpu(vq->packed.vring.desc[last_used].len);
+> > > >
+> > > > @@ -1451,12 +1471,15 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+> > > >         ret = vq->packed.desc_state[id].data;
+> > > >         detach_buf_packed(vq, id, ctx);
+> > > >
+> > > > -       vq->last_used_idx += vq->packed.desc_state[id].num;
+> > > > -       if (unlikely(vq->last_used_idx >= vq->packed.vring.num)) {
+> > > > -               vq->last_used_idx -= vq->packed.vring.num;
+> > > > -               vq->packed.used_wrap_counter ^= 1;
+> > > > +       last_used += vq->packed.desc_state[id].num;
+> > > > +       if (unlikely(last_used >= vq->packed.vring.num)) {
+> > > > +               last_used -= vq->packed.vring.num;
+> > > > +               used_wrap_counter ^= 1;
+> > > >         }
+> > > >
+> > > > +       last_used = (last_used | (used_wrap_counter << VRING_PACKED_EVENT_F_WRAP_CTR));
+> > > > +       WRITE_ONCE(vq->last_used_idx, last_used);
+> > > > +
+> > > >         /*
+> > > >          * If we expect an interrupt for the next entry, tell host
+> > > >          * by writing event index and flush out the write before
+> > > > @@ -1465,9 +1488,7 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+> > > >         if (vq->packed.event_flags_shadow == VRING_PACKED_EVENT_FLAG_DESC)
+> > > >                 virtio_store_mb(vq->weak_barriers,
+> > > >                                 &vq->packed.vring.driver->off_wrap,
+> > > > -                               cpu_to_le16(vq->last_used_idx |
+> > > > -                                       (vq->packed.used_wrap_counter <<
+> > > > -                                        VRING_PACKED_EVENT_F_WRAP_CTR)));
+> > > > +                               cpu_to_le16(vq->last_used_idx));
+> > > >
+> > > >         LAST_ADD_TIME_INVALID(vq);
+> > > >
+> > > > @@ -1499,9 +1520,7 @@ static unsigned int virtqueue_enable_cb_prepare_packed(struct virtqueue *_vq)
+> > > >
+> > > >         if (vq->event) {
+> > > >                 vq->packed.vring.driver->off_wrap =
+> > > > -                       cpu_to_le16(vq->last_used_idx |
+> > > > -                               (vq->packed.used_wrap_counter <<
+> > > > -                                VRING_PACKED_EVENT_F_WRAP_CTR));
+> > > > +                       cpu_to_le16(vq->last_used_idx);
+> > > >                 /*
+> > > >                  * We need to update event offset and event wrap
+> > > >                  * counter first before updating event flags.
+> > > > @@ -1518,8 +1537,7 @@ static unsigned int virtqueue_enable_cb_prepare_packed(struct virtqueue *_vq)
+> > > >         }
+> > > >
+> > > >         END_USE(vq);
+> > > > -       return vq->last_used_idx | ((u16)vq->packed.used_wrap_counter <<
+> > > > -                       VRING_PACKED_EVENT_F_WRAP_CTR);
+> > > > +       return vq->last_used_idx;
+> > > >  }
+> > > >
+> > > >  static bool virtqueue_poll_packed(struct virtqueue *_vq, u16 off_wrap)
+> > > > @@ -1537,7 +1555,7 @@ static bool virtqueue_poll_packed(struct virtqueue *_vq, u16 off_wrap)
+> > > >  static bool virtqueue_enable_cb_delayed_packed(struct virtqueue *_vq)
+> > > >  {
+> > > >         struct vring_virtqueue *vq = to_vvq(_vq);
+> > > > -       u16 used_idx, wrap_counter;
+> > > > +       u16 used_idx, wrap_counter, last_used_idx;
+> > > >         u16 bufs;
+> > > >
+> > > >         START_USE(vq);
+> > > > @@ -1550,9 +1568,10 @@ static bool virtqueue_enable_cb_delayed_packed(struct virtqueue *_vq)
+> > > >         if (vq->event) {
+> > > >                 /* TODO: tune this threshold */
+> > > >                 bufs = (vq->packed.vring.num - vq->vq.num_free) * 3 / 4;
+> > > > -               wrap_counter = vq->packed.used_wrap_counter;
+> > > > +               last_used_idx = READ_ONCE(vq->last_used_idx);
+> > > > +               wrap_counter = packed_used_wrap_counter(last_used_idx);
+> > > >
+> > > > -               used_idx = vq->last_used_idx + bufs;
+> > > > +               used_idx = packed_last_used(last_used_idx) + bufs;
+> > > >                 if (used_idx >= vq->packed.vring.num) {
+> > > >                         used_idx -= vq->packed.vring.num;
+> > > >                         wrap_counter ^= 1;
+> > > > @@ -1582,9 +1601,10 @@ static bool virtqueue_enable_cb_delayed_packed(struct virtqueue *_vq)
+> > > >          */
+> > > >         virtio_mb(vq->weak_barriers);
+> > > >
+> > > > -       if (is_used_desc_packed(vq,
+> > > > -                               vq->last_used_idx,
+> > > > -                               vq->packed.used_wrap_counter)) {
+> > > > +       last_used_idx = READ_ONCE(vq->last_used_idx);
+> > > > +       wrap_counter = packed_used_wrap_counter(last_used_idx);
+> > > > +       used_idx = packed_last_used(last_used_idx);
+> > > > +       if (is_used_desc_packed(vq, used_idx, wrap_counter)) {
+> > > >                 END_USE(vq);
+> > > >                 return false;
+> > > >         }
+> > > > @@ -1689,7 +1709,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
+> > > >         vq->notify = notify;
+> > > >         vq->weak_barriers = weak_barriers;
+> > > >         vq->broken = true;
+> > > > -       vq->last_used_idx = 0;
+> > > > +       vq->last_used_idx = 0 | (1 << VRING_PACKED_EVENT_F_WRAP_CTR);
+> > > >         vq->event_triggered = false;
+> > > >         vq->num_added = 0;
+> > > >         vq->packed_ring = true;
+> > > > @@ -1720,7 +1740,6 @@ static struct virtqueue *vring_create_virtqueue_packed(
+> > > >
+> > > >         vq->packed.next_avail_idx = 0;
+> > > >         vq->packed.avail_wrap_counter = 1;
+> > > > -       vq->packed.used_wrap_counter = 1;
+> > > >         vq->packed.event_flags_shadow = 0;
+> > > >         vq->packed.avail_used_flags = 1 << VRING_PACKED_DESC_F_AVAIL;
+> > > >
+> > > > --
+> > > > 2.31.1
+> > > >
+> >
 

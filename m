@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3586B5593D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3F95593D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbiFXG5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 02:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
+        id S230495AbiFXG6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 02:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiFXG4y (ORCPT
+        with ESMTP id S230220AbiFXG6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 02:56:54 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FCB67E7B;
-        Thu, 23 Jun 2022 23:56:53 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id 65so1744822pfw.11;
-        Thu, 23 Jun 2022 23:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CQLW04s8vb4y/9XuYLHdde+ABYigEI4asQuaKgLJKrc=;
-        b=EaJlsD5vomAKolqToFKbaK9jwrVvh6ooFjnstoPX7A0a2umRNYpz9NH3KVmtY32G2B
-         Z4bLBwWRl9uhoasIHDdcc0KQsrwKQZv9VvU01IopJVPIUBlIMIJvOfnu6MdnHgDfh+R/
-         7HkwqeOZxFh4Vr5R/T0/yUt4MWFSjHTHXT5zFX5xC3eFhJ0HjCnQ6nSNzOVddcUL36Um
-         /EaACA5h/5jcM9LgrgwK8gw/bIBn2/maGcajsmMxsUUVbIThGdxN8OPvBY+8Ap82xzCm
-         NXX9mNyyt0URHsVvVPA3+b3RzFREjJ4Fm89nB9WyMb+8XXVrakT1VRbIzyj5Ryya9u3U
-         Qojg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CQLW04s8vb4y/9XuYLHdde+ABYigEI4asQuaKgLJKrc=;
-        b=MYzRDJ2s5+B3ku/692qVpek7T8DA8Ae0hxIei/Od71t/Qza5P17xBSQMPRhmV8k5Xe
-         uchBIiGmkkiTK3IyOD5U8SOa5tqBQzpgUSc4nsSDoBhS+ZQV/0Ju/Nu5CZWpjfLef3b4
-         IiKVYrTFgcParMA85w/9p5uvGBHw7uBWEvO5K60f5kLHPld+QmvFHqTIpuTV6tF+5qq0
-         /x3WXVuzgVEIqQqNoS0rvRxgWyWhuUEGQlQ70PhCD6qc668sA/gdGytxkQhiM9EGaOQB
-         6tUGoDM6LVg4tAX2bSo22HD2owVrkEMpbT3E0K4u3uxzYNpHa97kVmIyLZcrRTm4xsAU
-         rDMg==
-X-Gm-Message-State: AJIora/8HNLZyR+UfCLnA09fRfGR/SnKnMoBrJFLQM8e/Psfyq1LFWsS
-        oAZMvpjUgk5/mCK3nPiCzc/GpubfFAt1cQ==
-X-Google-Smtp-Source: AGRyM1vE7dCW7jW8K5Sj06K5myCG9Uagi6GaFVdToms/HjUTM7g5G2vtGxXs54WjU2i5Yk8Z8Vx0Ww==
-X-Received: by 2002:a63:680a:0:b0:40d:bb2:19f4 with SMTP id d10-20020a63680a000000b0040d0bb219f4mr10564952pgc.593.1656053812518;
-        Thu, 23 Jun 2022 23:56:52 -0700 (PDT)
-Received: from archdragon (dragonet.kaist.ac.kr. [143.248.133.220])
-        by smtp.gmail.com with ESMTPSA id 9-20020a170902c20900b0015e8d4eb1dfsm985871pll.41.2022.06.23.23.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 23:56:52 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 15:56:48 +0900
-From:   "Dae R. Jeong" <threeearcat@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: KASAN: use-after-free Read in cfusbl_device_notify
-Message-ID: <YrVgMPxy2vNT9stU@archdragon>
-References: <YrVUujEka5jSXZvt@archdragon>
- <CANn89iKLpGamedvzZjnhpNUUpPJ7ueiGo62DH0XM+omQvhr9HA@mail.gmail.com>
- <YrVYywPFYiqWJo4a@archdragon>
- <CANn89iJOibYQCsY+ekObagmwmPap0FGqYdJacsO1mVvOgkKmdg@mail.gmail.com>
+        Fri, 24 Jun 2022 02:58:07 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD0C233;
+        Thu, 23 Jun 2022 23:57:53 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25O6Dqij039822;
+        Fri, 24 Jun 2022 06:57:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : content-transfer-encoding : in-reply-to : references :
+ subject : from : cc : to : message-id : date; s=pp1;
+ bh=ZOkWcd3P/zDX/fKtBJcx0GUV33m8zdRhwp+2GKVmW4Y=;
+ b=q3dzrytvg/HR8ufVRjWNAgA55Vxoe8PmyycK3Y8jBXVw6cXEZfVOINXbS0+SV3z15McZ
+ Kj/2Ry3puYoLhdLtx2PLpvECB5ndDQo6RJhtJLINu3515uOy/blZ9J/mkF4neFeq/XoH
+ xYqurLw3s/5W5jEgbZUH4blmhAMRIGt8djj93OXVJr1a1D8DrzsP4dojW1TouA4PqfrB
+ dh/p0iDA5J/4PHmPQB3wvOkFPC+8BOS/AxXgsJOBgJFEKBeZz+hHn+e5bxUfyC9gKnaG
+ GmjJ9fWqluUkHh/aRvUXkVO+eGsCiee01XMnsMIHSlUnHJvgoIUgHIoqdX5hqBExds0K Lw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gw7tgh1cb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Jun 2022 06:57:52 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25O6MFBR029496;
+        Fri, 24 Jun 2022 06:57:51 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gw7tgh1bk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Jun 2022 06:57:51 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25O6p1VY018667;
+        Fri, 24 Jun 2022 06:57:49 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3gvuj7rw84-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Jun 2022 06:57:49 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25O6vk2x15663360
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Jun 2022 06:57:46 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A95BFA4040;
+        Fri, 24 Jun 2022 06:57:46 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8BDC0A4053;
+        Fri, 24 Jun 2022 06:57:46 +0000 (GMT)
+Received: from li-ca45c2cc-336f-11b2-a85c-c6e71de567f1.ibm.com (unknown [9.171.95.53])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 24 Jun 2022 06:57:46 +0000 (GMT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANn89iJOibYQCsY+ekObagmwmPap0FGqYdJacsO1mVvOgkKmdg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220620125437.37122-2-pmorel@linux.ibm.com>
+References: <20220620125437.37122-1-pmorel@linux.ibm.com> <20220620125437.37122-2-pmorel@linux.ibm.com>
+Subject: Re: [PATCH v10 1/3] KVM: s390: ipte lock for SCA access should be contained in KVM
+From:   Nico Boehr <nrb@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, pmorel@linux.ibm.com,
+        wintera@linux.ibm.com, seiden@linux.ibm.com
+To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
+Message-ID: <165605386635.8840.16705488876454527148@localhost.localdomain>
+User-Agent: alot/0.8.1
+Date:   Fri, 24 Jun 2022 08:57:46 +0200
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: iwjZuO9ZdYlIA8yS7oLhWObprYRD7f3W
+X-Proofpoint-GUID: 4DJm1WFd1BiNFHqyRgOPEBt2db1ooMgH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-24_04,2022-06-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ impostorscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0
+ suspectscore=0 spamscore=0 adultscore=0 clxscore=1015 mlxlogscore=972
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206240023
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 08:32:31AM +0200, Eric Dumazet wrote:
-> On Fri, Jun 24, 2022 at 8:25 AM Dae R. Jeong <threeearcat@gmail.com> wrote:
-> >
-> > On Fri, Jun 24, 2022 at 08:15:54AM +0200, Eric Dumazet wrote:
-> > > On Fri, Jun 24, 2022 at 8:08 AM Dae R. Jeong <threeearcat@gmail.com> wrote:
-> > > >
-> > > > Hello,
-> > > >
-> > > > We observed a crash "KASAN: use-after-free Read in cfusbl_device_notify" during fuzzing.
-> > >
-> > > This is a known problem.
-> > >
-> > > Some drivers do not like NETDEV_UNREGISTER being delivered multiple times.
-> > >
-> > > Make sure in your fuzzing to have NET_DEV_REFCNT_TRACKER=y
-> > >
-> > > Thanks.
-> >
-> > Our config already have CONFIG_NET_DEV_REFCNT_TRACKER=y.
-> 
-> Are you also setting netdev_unregister_timeout_secs to a smaller value ?
-> 
-> netdev_unregister_timeout_secs
-> ------------------------------
-> 
-> Unregister network device timeout in seconds.
-> This option controls the timeout (in seconds) used to issue a warning while
-> waiting for a network device refcount to drop to 0 during device
-> unregistration. A lower value may be useful during bisection to detect
-> a leaked reference faster. A larger value may be useful to prevent false
-> warnings on slow/loaded systems.
-> Default value is 10, minimum 1, maximum 3600.
+Quoting Pierre Morel (2022-06-20 14:54:35)
+> We can check if SIIF is enabled by testing the sclp_info struct
+> instead of testing the sie control block eca variable.
+> sclp.has_ssif is the only requirement to set ECA_SII anyway
+> so we can go straight to the source for that.
+>=20
+> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
 
-We are using the same config that Syzkaller uses. So its value is 140.
-
-I'm not a network developer so I don't know whether there is a
-possibility of a false alarm. Our fuzzer is a research prototype in
-development, and I don't want to interrupt you with false alarms...
-
-> > Anyway, this UAF report seems not interesting.
-> >
-> > Thank you for your quick reply.
-> >
-> >
-> > Best regards,
-> > Dae R. Jeong.
-
-Best regards,
-Dae R. Jeong.
+Reviewed-by: Nico Boehr <nrb@linux.ibm.com>

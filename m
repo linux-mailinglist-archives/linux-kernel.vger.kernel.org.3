@@ -2,122 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD2D559EE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33385559ED9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiFXQsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 12:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        id S229784AbiFXQuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 12:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiFXQsk (ORCPT
+        with ESMTP id S229476AbiFXQub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 12:48:40 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5A449918
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:48:38 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id r1so2574501plo.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:48:38 -0700 (PDT)
+        Fri, 24 Jun 2022 12:50:31 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563124EDCF;
+        Fri, 24 Jun 2022 09:50:30 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id eo8so4365995edb.0;
+        Fri, 24 Jun 2022 09:50:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7vaOGSSaS2BSeF0eCGOBdnJBKLvorCKIGcPWI6JfN0M=;
-        b=y/IbSUpXpt2dGe1jDFLOsSSUkh1YBHRUnJmUb8sFZZm5NLih02wnUPXYt5zjjKeypb
-         5Ffpu8piazgJRDNC42kW6T6j1S8K0mebrE7N0RwQPnfu+w8dFmATyybUe8Li6Ax2Pbsq
-         6i0tJIm6mnulrZuaP8LlD+bk0IDIh7ztPilxJLZ2r82xW5PSaATQjSK6ypPckDxrjzPQ
-         1bJK58MfXrbD6UbHeCtj6QwHeNzd3TOhfuFAniLjlYZ5xRUrZA93EYYGbms/FfDtCwRZ
-         fD3/L6ZsvUORcp5roVkzX0bDUqQJrvcXD+t6BkwOR2kijU8lP3ghEMss2dpRQ7RGgeA7
-         3xtA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D6bSR6eKZinN1uglMVeg9l3qo/AOUJIfypofdktuB4E=;
+        b=WSBylA0owMVGcEdh93AP5NVJHW6tL1PlszLC9ZsTlN2oVBRMxpllo/mD84O2RdmM26
+         wFQJI9sJatNUjam5txYBMCemE1OFvvi2HWRhScI90pNlIRzbvSQPlvUKhce06PN6Y3tm
+         9H76N4O1AClN7AwJZuWcGJa8swByyAoFEdHGN7NlRU/+6A3qASSR3AdYlrPxm1LVxO4b
+         zW5RgFjGKLCdSqKjXpNv0gai8dZBIQ3cNo4e1MmB2KPm57fxZpiix8E7X7M6IhTdaWBl
+         Q63jZdSuMMhAKwRNlq/MfpERWaZyq9Izg+WPplhGNNS8dRsfKUwIW/OS3A9N7XPaEQCg
+         pcDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7vaOGSSaS2BSeF0eCGOBdnJBKLvorCKIGcPWI6JfN0M=;
-        b=EjhB4xFFS0ayV3nJhx0Ct08hefIjCHQhB2vetHXOgjCSTGfm5RMIG4xlPsEAqSDObE
-         1txj8AgcuPljJGmENszB4FIjHSj1TtTAlG6ob3MRjWsQvnMDe0LAWAl7rCvv4H5kPnE7
-         7AKtihu8yCZ8QoolcroCrrxm4zIIaQjl8O5qlgCNSh9c7sGsTYdhuDSXbPZ/05PEnZp8
-         kAVZSg6EWajGXdqACkmVURIuT6cXK1e2FoE94+yrPyaNVEHZwK1belaSorTcKChDPVuY
-         8Zd96ipXXc/QC4lsKlTMBNpd+QqDga98qY1PdJhezS2HqN851L3VpJpHcQGTcenChVA4
-         4Fqg==
-X-Gm-Message-State: AJIora/6a1SE3lx6FclVHRCo92a8Naa1vB8YYjqbZbMeH0nNHGnCRCGj
-        qLvGbARtLUzxu6wc8cMI1TXl9A==
-X-Google-Smtp-Source: AGRyM1sMTKHk1czlE8w1vn1du6WoyJEAfH19Gy+e0hnTwhXskgrBEnEhnbwsZHR1W2asFkceOKtghg==
-X-Received: by 2002:a17:902:e8d7:b0:168:e2da:893c with SMTP id v23-20020a170902e8d700b00168e2da893cmr45709631plg.152.1656089318365;
-        Fri, 24 Jun 2022 09:48:38 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id h9-20020a170902f70900b001663cf001besm2033477plo.174.2022.06.24.09.48.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 09:48:36 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 10:48:34 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Cc:     bjorn.andersson@linaro.org, robin.murphy@arm.com, hch@lst.de,
-        m.szyprowski@samsung.com, matthias.bgg@gmail.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, yj.chiang@mediatek.com
-Subject: Re: [PATCH 0/2] dma-mapping, remoteproc: Fix dma_mem leak after
- rproc_shutdown
-Message-ID: <20220624164834.GA1736477@p14s>
-References: <20220422062436.14384-1-mark-pk.tsai@mediatek.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D6bSR6eKZinN1uglMVeg9l3qo/AOUJIfypofdktuB4E=;
+        b=qwM+mxMLL3MZS/D1ZnPJTr2TuaD5W8f1yq433xumXqGuqOyS0brbFfRCSMgDH6f+oW
+         KIEOHf6Xi8lL1za96Sxih1IGtQE5JDi1BrLSayYHGW6dV+K4H9zt//EYAjxwQngqcB8W
+         LIC62LP0HGYPAEvyEWAJrDlsKFcMvwwwhUwZevD+SqeYBLvJPQaDdnRf0T6Ibzsy0WyC
+         i1NaZGx3TivScVmUQpc9pkhWVK1xpdtuwwAQbNCYsL2i/TCa/mEtNXe3w7mf7IlNtKN5
+         bjC/tFLxnmo2tBVWGzvhttqjVKB7d1yeSlgnjbgQkqhXtBs6/dSlyhYaU483RM4Lq7Rc
+         WUIw==
+X-Gm-Message-State: AJIora801lfhif4hdBbEtY4K4RFuhCyzj7SFZX2vQ5an0/QRmcJ1sAHi
+        Mg+9xwaixuNqVE9l3rqS4rFWjqJIz7cgjyj1BYdLXUlqhYU=
+X-Google-Smtp-Source: AGRyM1t+bTNZdEMZEsDZnO7STdl64p2wN3eY2r0luJn8BUEps4cKK8JgFGhhKrUrVSziA3+0tzaDUFTXjoLk97KmlLE=
+X-Received: by 2002:a05:6402:3487:b0:435:b0d2:606e with SMTP id
+ v7-20020a056402348700b00435b0d2606emr17614edc.66.1656089428911; Fri, 24 Jun
+ 2022 09:50:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422062436.14384-1-mark-pk.tsai@mediatek.com>
+References: <20220621163757.760304-1-roberto.sassu@huawei.com>
+ <20220621163757.760304-3-roberto.sassu@huawei.com> <20220621223248.f6wgyewajw6x4lgr@macbook-pro-3.dhcp.thefacebook.com>
+ <796b55c79be142cab6a22dd281fdb9fa@huawei.com> <f2d3da08e7774df9b44cc648dda7d0b8@huawei.com>
+ <CAADnVQKVx9o1PcCV_F3ywJCzDTPtQG4MTKM2BmwdCwNvyxdNPg@mail.gmail.com> <27e25756f96548aeb56d1af5c94197f6@huawei.com>
+In-Reply-To: <27e25756f96548aeb56d1af5c94197f6@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 24 Jun 2022 09:50:17 -0700
+Message-ID: <CAADnVQ+PnTOK-6dE2LMsjUU_OPksX=QVxZ-QvvaxDWTw7rRR5Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/5] bpf: Add bpf_lookup_user_key() and bpf_key_put() helpers
+To:     Roberto Sassu <roberto.sassu@huawei.com>
+Cc:     "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "kafai@fb.com" <kafai@fb.com>, "yhs@fb.com" <yhs@fb.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 02:24:34PM +0800, Mark-PK Tsai wrote:
-> Release dma coherent memory before rvdev is free in
-> rproc_rvdev_release().
-> 
-> Below is the kmemleak report:
-> unreferenced object 0xffffff8051c1a980 (size 128):
->   comm "sh", pid 4895, jiffies 4295026604 (age 15481.896s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<000000003a0f3ec0>] dma_declare_coherent_memory+0x44/0x11c
->     [<00000000ad243164>] rproc_add_virtio_dev+0xb8/0x20c
->     [<00000000d219c8e9>] rproc_vdev_do_start+0x18/0x24
->     [<00000000e694b468>] rproc_start+0x22c/0x3e0
->     [<000000000b938941>] rproc_boot+0x4a4/0x860
->     [<000000003c4dc532>] state_store.52856+0x10c/0x1b8
->     [<00000000df2297ac>] dev_attr_store+0x34/0x84
->     [<0000000083a53bdb>] sysfs_kf_write+0x60/0xbc
->     [<000000008ed830df>] kernfs_fop_write+0x198/0x458
->     [<0000000072b9ad06>] __vfs_write+0x50/0x210
->     [<00000000377d7469>] vfs_write+0xe4/0x1a8
->     [<00000000c3fc594e>] ksys_write+0x78/0x144
->     [<000000009aef6f4b>] __arm64_sys_write+0x1c/0x28
->     [<0000000003496a98>] el0_svc_common+0xc8/0x22c
->     [<00000000ea3fe7a3>] el0_svc_compat_handler+0x1c/0x28
->     [<00000000d1a85a4e>] el0_svc_compat+0x8/0x24
-> 
-> Mark-PK Tsai (2):
->   dma-mapping: Add dma_release_coherent_memory to DMA API
->   remoteproc: Fix dma_mem leak after rproc_shutdown
-> 
->  drivers/remoteproc/remoteproc_core.c |  1 +
->  include/linux/dma-map-ops.h          |  3 +++
->  kernel/dma/coherent.c                | 10 ++++++++--
->  3 files changed, 12 insertions(+), 2 deletions(-)
+On Fri, Jun 24, 2022 at 8:32 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+>
+> > From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
+> > Sent: Thursday, June 23, 2022 10:54 PM
+> > On Thu, Jun 23, 2022 at 5:36 AM Roberto Sassu <roberto.sassu@huawei.com>
+> > wrote:
+> > >
+> > > > From: Roberto Sassu [mailto:roberto.sassu@huawei.com]
+> > > > Sent: Wednesday, June 22, 2022 9:12 AM
+> > > > > From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
+> > > > > Sent: Wednesday, June 22, 2022 12:33 AM
+> > > > > On Tue, Jun 21, 2022 at 06:37:54PM +0200, Roberto Sassu wrote:
+> > > > > > Add the bpf_lookup_user_key() and bpf_key_put() helpers, to respectively
+> > > > > > search a key with a given serial, and release the reference count of the
+> > > > > > found key.
+> > > > > >
+> > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > ---
+> > > > > >  include/uapi/linux/bpf.h       | 16 ++++++++++++
+> > > > > >  kernel/bpf/bpf_lsm.c           | 46
+> > ++++++++++++++++++++++++++++++++++
+> > > > > >  kernel/bpf/verifier.c          |  6 +++--
+> > > > > >  scripts/bpf_doc.py             |  2 ++
+> > > > > >  tools/include/uapi/linux/bpf.h | 16 ++++++++++++
+> > > > > >  5 files changed, 84 insertions(+), 2 deletions(-)
+> > > > > >
+> > > > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > > > > > index e81362891596..7bbcf2cd105d 100644
+> > > > > > --- a/include/uapi/linux/bpf.h
+> > > > > > +++ b/include/uapi/linux/bpf.h
+> > > > > > @@ -5325,6 +5325,20 @@ union bpf_attr {
+> > > > > >   *               **-EACCES** if the SYN cookie is not valid.
+> > > > > >   *
+> > > > > >   *               **-EPROTONOSUPPORT** if CONFIG_IPV6 is not builtin.
+> > > > > > + *
+> > > > > > + * struct key *bpf_lookup_user_key(u32 serial, unsigned long flags)
+> > > > > > + *       Description
+> > > > > > + *               Search a key with a given *serial* and the provided *flags*,
+> > and
+> > > > > > + *               increment the reference count of the key.
+> > > > >
+> > > > > Why passing 'flags' is ok to do?
+> > > > > Please think through every line of the patch.
+> > > >
+> > > > To be honest, I thought about it. Probably yes, I should do some
+> > > > sanitization, like I did for the keyring ID. When I checked
+> > > > lookup_user_key(), I saw that flags are checked individually, so
+> > > > an arbitrary value passed to the helper should not cause harm.
+> > > > Will do sanitization, if you prefer. It is just that we have to keep
+> > > > the eBPF code in sync with key flag definition (unless we have
+> > > > a 'last' flag).
+> > >
+> > > I'm not sure that having a helper for lookup_user_key() alone is
+> > > correct. By having separate helpers for lookup and usage of the
+> > > key, nothing would prevent an eBPF program to ask for a
+> > > permission to pass the access control check, and then use the
+> > > key for something completely different from what it requested.
+> > >
+> > > Looking at how lookup_user_key() is used in security/keys/keyctl.c,
+> > > it seems clear that it should be used together with the operation
+> > > that needs to be performed. Only in this way, the key permission
+> > > would make sense.
+> >
+> > lookup is roughly equivalent to open when all permission checks are done.
+> > And using the key is read/write.
+>
+> For bpf_verify_pkcs7_signature(), we need the search permission
+> on the keyring containing the key used for signature verification.
 
-Applied.
+you mean lookup_user_key(serial, flags, KEY_NEED_SEARCH) ?
 
-Thanks,
-Mathieu
-
-> 
-> -- 
-> 2.18.0
-> 
+right. and ? what's your point?

@@ -2,96 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CA155912B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 07:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C635591BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 07:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbiFXEuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 00:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
+        id S229571AbiFXExX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 00:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232105AbiFXEsc (ORCPT
+        with ESMTP id S232118AbiFXExE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 00:48:32 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2866998A
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 21:48:30 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id g186so1374492pgc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 21:48:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=4THMhvS8M5ZnFTHvTFejhkWhYsuAvg/ZgzsYmQOutl8=;
-        b=jZ+UoLM3M7Aw8FzFUs4vfV0xGVF+Z1rgG06Q0g6ddvpteFSUct4m0aAnWG/UHlIHcy
-         xDIWATlB0GGjs/hfRkxe6UQ1V4kDs2Fm3V/6fxpXi023MU/ojZBBXm7JW8wCFWafwRbY
-         ZPHpdFFCz4HQaws9xVkBWt/pnD6GgEBKfUCt/XZPKwwH8Eji0UWJl8bjjLOYO2Km/VcU
-         riLaGCyFAc2cIrl3N/VncOYPKf8urgmhHUYRlJWR81bCqV+fn5a5+P3hY9dVVfzj35qZ
-         3V3zmkqcGPJtvORY1fF7FSMecx1wrSvXDD/7UYn08WWFqdnoryi8KMch/00RWyQK0gLR
-         DpLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding:cc:from:to;
-        bh=4THMhvS8M5ZnFTHvTFejhkWhYsuAvg/ZgzsYmQOutl8=;
-        b=snP6FyFy2Qg2ztVWZ/1dT5U2L23HB68p8Xzhyi/oA9i/8qK9b3Yq+BV6uo64w/SlUN
-         WA2OgNMZCTQM3FywnOhzj4ePUmk8UDRXW67caxq+dDYaJl2qDP4hjNNPLVnUtZnDcSZN
-         /QZVqTPSxPEyAdBcjuvmVNDS5s5WmCR7xF3V+jeSzYsKtHii83jIXWSiQWh357NJH1cF
-         DE6oIeA079prRXho/0dU0ZdtzQffgZcrZuHt7XV+mtpWpB9mRHn7NMsSKRWURvpF15ru
-         /iXxyLE9pACga3/crWfm0WgIL6T5xqxO1OmyEfNTqgDUAbZ/IFphrU95cW1h/RQbBdGV
-         eeCw==
-X-Gm-Message-State: AJIora8j2HmOOcVcVNegKS1AxpLVn16MCKRCGdPY017aMHFStSG2gH5j
-        /tBBlv67qA/fE07CcJGt/i51X+pVDnYWxw==
-X-Google-Smtp-Source: AGRyM1tjG9XTGQzrvxKP1b0oJm9GIdXwYRdfAbtw1YGd6ry6SLMEHPonI2hZnL7q9k/q2Z13VDkRjA==
-X-Received: by 2002:aa7:9206:0:b0:525:1068:c026 with SMTP id 6-20020aa79206000000b005251068c026mr31366064pfo.52.1656046110313;
-        Thu, 23 Jun 2022 21:48:30 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id k26-20020aa7821a000000b0052517150777sm555865pfi.41.2022.06.23.21.48.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 21:48:29 -0700 (PDT)
-Subject: [PATCH v2 5/5] RISC-V: Allow kexec_file() on 32-bit platforms
-Date:   Thu, 23 Jun 2022 21:48:11 -0700
-Message-Id: <20220624044811.9682-6-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220624044811.9682-1-palmer@rivosinc.com>
-References: <20220624044811.9682-1-palmer@rivosinc.com>
+        Fri, 24 Jun 2022 00:53:04 -0400
+Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6B3474E65;
+        Thu, 23 Jun 2022 21:50:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Tb64P
+        u0w0mNUC4InDOg/CyJ1ovpbrmbwN790T5bKgDo=; b=Zqz3OQyXpldZtEwasKiQU
+        a8HLtGK5Jc5m+ggrT9rZZcdm0rzfIZDlie6eXqAAmc/dHtwcJoVdv3HMp5zaRhBa
+        TwK+qAw46MSMLQ2pGBF6F75h4DoNe50/+f2DsAXIotClOzoCpc4bBnDWrphW6CMy
+        M2nVCj9ddyaMDrsZQu3hzs=
+Received: from localhost.localdomain (unknown [123.112.69.106])
+        by smtp1 (Coremail) with SMTP id GdxpCgAnludnQrVi8XdDKw--.42139S4;
+        Fri, 24 Jun 2022 12:49:51 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH v2] net: sfp: fix memory leak in sfp_probe()
+Date:   Fri, 24 Jun 2022 12:49:41 +0800
+Message-Id: <20220624044941.1807118-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Cc:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-            linux-security-module@vger.kernel.org,
-            Palmer Dabbelt <palmer@rivosinc.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        linux-integrity@vger.kernel.org
+X-CM-TRANSID: GdxpCgAnludnQrVi8XdDKw--.42139S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKr1fJr1UXFyftw4fJrW7XFb_yoW3urb_CF
+        47XF4fGryUCr4qqw15K34SvrWS9Fy8ZFs5CF1fK3yagFy3Gws8u3yvvF47Jr1UWrW2vr4U
+        uF9rZFsa9r1fKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xREF4i5UUUUU==
+X-Originating-IP: [123.112.69.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/xtbBOQ8qjF-POHMHlgAAsa
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the build issues now sorted out we can enable kexec_file() on
-32-bit platforms as well.
+sfp_probe() allocates a memory chunk from sfp with sfp_alloc(). When
+devm_add_action() fails, sfp is not freed, which leads to a memory leak.
 
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+We should use devm_add_action_or_reset() instead of devm_add_action().
+
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 ---
- arch/riscv/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/net/phy/sfp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 898052ff743e..a246f2fe60c2 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -388,7 +388,6 @@ config KEXEC_FILE
- 	select KEXEC_CORE
- 	select KEXEC_ELF
- 	select HAVE_IMA_KEXEC if IMA
--	depends on 64BIT
- 	help
- 	  This is new version of kexec system call. This system call is
- 	  file based and takes file descriptors as system call argument
+diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+index 9a5d5a10560f..e7b0e12cc75b 100644
+--- a/drivers/net/phy/sfp.c
++++ b/drivers/net/phy/sfp.c
+@@ -2516,7 +2516,7 @@ static int sfp_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, sfp);
+ 
+-	err = devm_add_action(sfp->dev, sfp_cleanup, sfp);
++	err = devm_add_action_or_reset(sfp->dev, sfp_cleanup, sfp);
+ 	if (err < 0)
+ 		return err;
+ 
 -- 
-2.34.1
+2.25.1
 

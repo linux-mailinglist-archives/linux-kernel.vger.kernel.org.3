@@ -2,319 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD90558C38
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 02:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD92558C40
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 02:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiFXAY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 20:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
+        id S230244AbiFXA2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 20:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiFXAYX (ORCPT
+        with ESMTP id S230023AbiFXA2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 20:24:23 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE072522F9;
-        Thu, 23 Jun 2022 17:24:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=rj4fNq4dsD4RucdU9q2oXV1dsLBQIM0KGDC67E3P3Bw=; b=YcqONt6bkbgauMcaGozlppn8Z4
-        jKvT67nUjBgVJGmKloswod+VIAUtS8HpOJuvU0yebcKg/Ug/ywLR9cWoHAhjJVlA5/00YJH2XCXKZ
-        pMx1KXV7Lqe1r/t+Gr5heEsIn86xLwcDe6XQfQ1gJzsS1EzHetGebHBGcF13JEoVOKr46MbP2QXoQ
-        Vx3ZpYmnUU1BkLO1UrVeSpVaM6GL6c78G2TCXx8eVWtywGHBE43OHw2z0MScofzR4gZ5voajkGYV8
-        t1O8KGu9kkgMkTn7xJyI51OJCaIioSMhE36RRY3KSccRKInqIsc3AIqzerefsv3QJCB4PLxTBu99F
-        g4iD4suQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33014)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1o4X7N-0005Kv-Ii; Fri, 24 Jun 2022 01:24:13 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1o4X7K-0000Rl-Gz; Fri, 24 Jun 2022 01:24:10 +0100
-Date:   Fri, 24 Jun 2022 01:24:10 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next 25/28] [RFC] net: dpaa: Convert to phylink
-Message-ID: <YrUEKmQzXC1OXrHV@shell.armlinux.org.uk>
-References: <20220617203312.3799646-1-sean.anderson@seco.com>
- <20220617203312.3799646-26-sean.anderson@seco.com>
- <Yqz5wHy9zAQL1ddg@shell.armlinux.org.uk>
- <dde1fcc4-4ee8-6426-4f1f-43277e88d406@seco.com>
- <Yq2LLW5twHaHtRBY@shell.armlinux.org.uk>
- <84c2aaaf-6efb-f170-e6d3-76774f3fa98a@seco.com>
- <8becaec4-6dc3-8a45-081a-1a1e8e5f9a45@seco.com>
+        Thu, 23 Jun 2022 20:28:12 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7B01180D
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:28:09 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id e63so932872pgc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=P4Yje83rZYDRwuL9uo9EpMh58B6jkiYDBp8jSKu+8xU=;
+        b=IUqbXQUyFPdxLRIJZ1sfcGFJ6lHDyH0SdlPGW96Ps+WO1W4m4JbAiwTZdMkKacl+MM
+         D5DjVbMguKKKfOEV6Yl7t72SfBwhAbK41aGj+mBhVLVvxmMIHEFzk4sjh5+rBvGALNqO
+         S8Gh5ygMb3xtpnxKqjFVqaOSvF9ykpbsXzfCOPU5EUZ0FlEC4iAXFhvTstnDtI1yLm+M
+         xr+F1GL0yzIohwkliEUKWoxjNr9v+ywYg/NrPryFnFrmULKs5kAeouQDX+51rEAxuH3s
+         ukYigjwuqbpal/SjKujJSmPK9uKTCEV6aWpTqgK24biQzsVZP6+UYL/wqYWc4g+StEYW
+         xi5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P4Yje83rZYDRwuL9uo9EpMh58B6jkiYDBp8jSKu+8xU=;
+        b=YsxQN55xaawp5IMpVdt/eos5jXFCHZEDw2GR+LJS++XKcIVaxJCi/b1ULbOHu+P+yK
+         bGQ/lPEPb5msQKEDth34qfltOmM1la7tktx6Iz/GNZMJv5PvRHgAH31ObsiAt+Qt/8nM
+         gPce2t0PHQW1yQCZl0Xt/xvVv/JBWg3kThzk264Usz1rCHDYdY4y1BQm548DTuYImFwW
+         HUbFQAzHxBlOtj4ki5/83vbNGNiOXtCz1O5+jHiXlnX+lmMbp8OWVePKImkmYYMQ9noA
+         n8kmS7ViEtgp+xgDYAPn6rVSdMfA5epiRBFHCeQu3a9CBjL8Emrup0q4H3mZ/+M2sGDp
+         sXpQ==
+X-Gm-Message-State: AJIora8tE7ShswYFj71uyQX6LoQNI4Yb6EtjxZFvh3G1a11B/cGxxVAh
+        eyBDfT80M7VjvViRPHirJ7kmcA==
+X-Google-Smtp-Source: AGRyM1s4tA8aTDDu3gGkINrxoWIx2aC28XlcSQwcSIGGo+MPKiMLb03umdr2bcjVfA21s3ZLy9ye1w==
+X-Received: by 2002:a63:7046:0:b0:40c:af8d:a6 with SMTP id a6-20020a637046000000b0040caf8d00a6mr9703157pgn.38.1656030488471;
+        Thu, 23 Jun 2022 17:28:08 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id s11-20020a170902a50b00b001620eb3a2d6sm374708plq.203.2022.06.23.17.28.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 17:28:07 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 05:58:05 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 21/31] soc/tegra: Remove the call to
+ devm_pm_opp_set_clkname()
+Message-ID: <20220624002805.anv62ufihdrncwus@vireshk-i7>
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <1e88b248352afe03cd3bf0e887b1f2be86b5afb5.1653564321.git.viresh.kumar@linaro.org>
+ <12c085af-1202-95cf-e9ad-ddcfbdadf0d6@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8becaec4-6dc3-8a45-081a-1a1e8e5f9a45@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <12c085af-1202-95cf-e9ad-ddcfbdadf0d6@nvidia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 06:39:08PM -0400, Sean Anderson wrote:
-> Hi Russell,
+On 23-06-22, 22:15, Jon Hunter wrote:
+> On 26/05/2022 12:42, Viresh Kumar wrote:
+> > diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
+> > index 32c346b72635..49a5360f4507 100644
+> > --- a/drivers/soc/tegra/common.c
+> > +++ b/drivers/soc/tegra/common.c
+> > @@ -108,12 +108,6 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+> >   	u32 hw_version;
+> >   	int err;
+> > -	err = devm_pm_opp_set_clkname(dev, NULL);
+> > -	if (err) {
+> > -		dev_err(dev, "failed to set OPP clk: %d\n", err);
+> > -		return err;
+> > -	}
+> > -
+> >   	/* Tegra114+ doesn't support OPP yet */
+> >   	if (!of_machine_is_compatible("nvidia,tegra20") &&
+> >   	    !of_machine_is_compatible("nvidia,tegra30"))
 > 
-> On 6/18/22 11:58 AM, Sean Anderson wrote:
-> > Hi Russell,
-> > 
-> > On 6/18/22 4:22 AM, Russell King (Oracle) wrote:
-> >> On Fri, Jun 17, 2022 at 08:45:38PM -0400, Sean Anderson wrote:
-> >>> Hi Russell,
-> >>>
-> >>> Thanks for the quick response.
-> >>> ...
-> >>> Yes, I've been using the debug prints in phylink extensively as part of
-> >>> debugging :)
-> >>>
-> >>> In this case, I added a debug statement to phylink_resolve printing out
-> >>> cur_link_state, link_state.link, and pl->phy_state.link. I could see that
-> >>> the phy link state was up and the mac (pcs) state was down. By inspecting
-> >>> the PCS's registers, I determined that this was because AN had not completed
-> >>> (in particular, the link was up in BMSR). I believe that forcing in-band-status
-> >>> (by setting ovr_an_inband) shouldn't be necessary, but I was unable to get a link
-> >>> up on any interface without it. In particular, the pre-phylink implementation
-> >>> disabled PCS AN only for fixed links (which you can see in patch 23).
-> >>
-> >> I notice that prior to patch 23, the advertisment register was set to
-> >> 0x4001, but in phylink_mii_c22_pcs_encode_advertisement() we set it to
-> >> 0x0001 (bit 14 being the acknowledge bit from the PCS to the PHY, which
-> >> is normally managed by hardware.
-> >>
-> >> It may be worth testing whether setting bit 14 changes the behaviour.
-> > 
-> > Thanks for the tip. I'll try that out on Monday.
 > 
-> Well, I was playing around with this some more, and I found that I could enable
-> it if I set one of the 10G lanes to SGMII. Not sure what's going on there. It's
-> possible one of the lanes is mismatched, but I'm still looking into it.
+> This appears to be breaking a few Tegra drivers. For example, on Tegra210
+> Jetson TX1 I am seeing the following and the eMMC is no longer working ...
 > 
-> ---
+> [    0.526729] sdhci-tegra 700b0600.mmc: dev_pm_opp_set_rate: device's opp table doesn't exist
+> [    0.526733] sdhci-tegra 700b0600.mmc: failed to set clk rate to 400000Hz: -19
+> [    0.528830] sdhci-tegra 700b0600.mmc: dev_pm_opp_set_rate: device's opp table doesn't exist
+> [    0.528833] sdhci-tegra 700b0600.mmc: failed to set clk rate to 400000Hz: -19
 > 
-> How is rate adaptation in the phy supposed to work? One of the 10G interfaces on
-> the RDB is hooked up to an AQR113 which can adapt rates below 10G to XFI using
-> pause frames.
-
-Rate adaption support isn't something that phylink officially supports.
-It can be bodged around (and some drivers do) but that's the official
-line - there is no code in phylink to make it work.
-
-For example, if you have a PHY that's doing rate adaption, and the PHY
-reports what has been negotiated on the media side. That gets reported
-back to the PCS and MAC. The only way these blocks can tell that there's
-something going on is if they say "hey, but the link to the PHY is
-operating at 10G and the media speed is 100M, so something fishy is
-going on, the PHY must be doing rate adaption."
-
-That's the bottom line to this - phylink doesn't yet support rate
-adaption by any of the blocks - mainly because there is no way for
-any of those blocks to indicate that they're doing rate adaption.
-
-The implementation of phylink_generic_validate() assumes there is no
-rate adaption (as per the current design of phylink).
-
-The reason phylink_generic_validate() has come into existence recently
-is to (1) get rid of the numerous almost identical but buggy
-implementations of the validate() method, and (2) to eventually allow
-me to get rid of the validate() method. The validate() method is not
-very well suited to systems with rate adaption - as validate() stands,
-every MAC today that _could_ be connected with something that does rate
-adaption needs to have special handling in that method when that is
-true - that clearly isn't a good idea when it's dependent on the
-properties of the devices towards the media from the MAC.
-
-Ocelot does make rate adaption work by doing exactly this - it has its
-own validate() method that returns all the link modes that it wishes
-the system to support, and it ignores some of what phylink communicates
-via the link_up() callbacks such as rx_pause. This means this MAC driver
-wouldn't behave correctly as a system if rate adaption wasn't present.
-
-
-Now, the thing about rate adaption is there are several different ways
-to do it - and Marvell 88x3310 illustrates them both, because this PHY
-supports rate adaption but depending on whether the PHY has MACSEC
-hardware support or not depende on its behaviour:
-
-- If no MACSEC, then the PHY requires that the MAC paces the rate at
-  which packets are sent, otherwise the PHYs FIFOs will overflow.
-  Therefore, the MAC must know: (1) the speed of the media side, and
-  (2) that the PHY requires this behaviour. Marvell even go as far as
-  stating that the way to achieve this is to extend the IPG in the MACs
-  settings.
-
-- If MACSEC, then the PHY sends pause frames back to the MAC to rate
-  limit the packet rate from the MAC. Therefore, the MAC must accept
-  pause frames to throttle the transmit rate whether or not pause
-  frames were negotiated on the media side.
-
-So, doing this right, you need knowledge of the rate adaption
-implementation - there isn't a "generic" solution to this. It isn't
-just a case of "allow all speeds at the media side at or below PHY
-interface speed" although that is part of it. (More on this below.)
-
-> This is nice and all, but the problem is that phylink_get_linkmodes
-> sees that we're using PHY_INTERFACE_MODE_10GKR and doesn't add any
-> of the lower link speeds (just MAC_10000).
-
-Do you really have a 10GBASE-KR link - a backplane link? This has
-negotiation embedded in it. Or do you have a link that is using the
-10GBASE-R protocol? (Please don't use PHY_INTERFACE_MODE_10GKR unless
-you really have a 10GBASE-KR link as defined by 802.3).
-
-> This results in ethtool output of
+> I have seen another instance of this on Jetson Xavier NX ...
 > 
-> Settings for eth6:
-> 	Supported ports: [  ]
-> 	Supported link modes:   10000baseT/Full
-> 	                        10000baseKX4/Full
-> 	                        10000baseKR/Full
-> 	Supported pause frame use: Symmetric Receive-only
-> 	Supports auto-negotiation: Yes
-> 	Supported FEC modes: Not reported
-> 	Advertised link modes:  10000baseT/Full
-> 	                        10000baseKX4/Full
-> 	                        10000baseKR/Full
-> 	Advertised pause frame use: Symmetric Receive-only
-> 	Advertised auto-negotiation: Yes
-> 	Advertised FEC modes: Not reported
-> 	Link partner advertised link modes:  10baseT/Half 10baseT/Full
-> 	                                     100baseT/Half 100baseT/Full
-> 	Link partner advertised pause frame use: Symmetric
-> 	Link partner advertised auto-negotiation: Yes
-> 	Link partner advertised FEC modes: Not reported
-> 	Speed: Unknown!
-> 	Duplex: Unknown! (255)
-> 	Auto-negotiation: on
-> 	Port: MII
-> 	PHYAD: 0
-> 	Transceiver: external
->         Current message level: 0x00002037 (8247)
->                                drv probe link ifdown ifup hw
-> 	Link detected: yes
+> [   12.301336] tegra-pwm 32d0000.pwm: dev_pm_opp_set_rate: device's opp table doesn't exist
+> [   12.301350] tegra-pwm 32d0000.pwm: Failed to set max frequency: -19
 > 
-> The speed and duplex are "Unknown!" because the negotiated link mode (100Base-TX)
-> doesn't intersect with the advertised link modes (10000Base-T etc). This is
-> currently using genphy; does there need to be driver support for this sort of thing?
+> Bisect is point to this commit and so something is not working as
+> expected.
 
-Without knowing whether this is a clause 22 or clause 45 PHY, I'd just
-be guessing, but...
+Thanks again Jon.
 
-genphy's C45 support is rudimentary and should not be used.
-genphy's C22 support is better for basic control of PHYs but should not
-be used if there's a more specific driver.
+This is what happens when the special code doesn't have a comment
+attached with it. Neither the reviewer, nor the author remember why
+the special piece was required :)
 
-If this is a C22 PHY, I'm surprised that it managed to link with its
-partner - we should have cleared anything but the 10000M modes in the
-PHY which should have caused the media side autonegotiation to fail.
+I had to go through the whole sequence, along with DT to understand
+what might have broken this stuff :)
 
-However, with the Ocelot-style workaround I mentioned above, that would
-allow the 100M speeds to be advertised, and phylib would then be able
-to resolve them to the appropriate speed/duplex. I don't condone doing
-that though, I'd prefer a proper solution to this problem.
+I will drop this patch and add this comment in its place:
 
-> Should the correct speed even be reported here? The MAC and PCS still need to be
-> configured for XFI.
-> 
-> Another problem is that the rate adaptation is supposed to happen with pause frames.
-> Unfortunately, pause frames are disabled:
-> 
-> Pause parameters for eth6:
-> Autonegotiate:	on
-> RX:		off
-> TX:		off
-> RX negotiated: on
-> TX negotiated: on
+diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
+index 32c346b72635..9f3fdeb1a11c 100644
+--- a/drivers/soc/tegra/common.c
++++ b/drivers/soc/tegra/common.c
+@@ -108,6 +108,13 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+        u32 hw_version;
+        int err;
 
-I think you're misreading that - don't worry, I don't think you're the
-only one.
++       /*
++        * For some devices we don't have any OPP table in the DT, and in order
++        * to use the same code path for all the devices, we create a dummy OPP
++        * table for them via this call. The dummy OPP table is only capable of
++        * doing clk_set_rate() on invocation of dev_pm_opp_set_rate() and
++        * doesn't provide any other functionality.
++        */
+        err = devm_pm_opp_set_clkname(dev, NULL);
+        if (err) {
+                dev_err(dev, "failed to set OPP clk: %d\n", err);
 
-"Autonegotiate" is the value of ethtool's pauseparam "autoneg" setting
-which determines whether the resutl of autonegotiation is used or
-whether manual settings are used.
 
-"RX" and "TX" are the manual settings, which will force pause frame
-reception and transmission gating when "Autonegotiate" is off. These
-can be read-modify-written (and are by ethtool) so it's important
-that they return what was previously configured, not what the hardware
-is doing. See do_spause() in the ethtool source code.
-
-"RX negotiated" and "TX negotiated" are ethtool's own derivation from
-our and link-partner advertisements and in no way reflect what the
-hardware is actually doing. These reflect what was negotiated on the
-media between the PHYs.
-
-See dump_pause() in the ethtool source code for the function that
-produces the output you quoted above.
-
-Phylink's "Link is Up" message gives the details for the link - the
-speed and duplex will be the media side of the link (which is what gets
-passed in all the link_up() methods). The pause settings come from the
-media side negotiation if pause autoneg is enabled, otherwise they come
-from the pauseparam forced modes. I think this should only ever report
-the media-negotiated settings.
-
-If we need support for rate adaption with pause frames, then you are
-right that we need the MAC to be open to receive those frames, and
-right now, as I said above, there is no support in phylink at present
-to make that happen. I'm not saying there shouldn't be, I'm just saying
-that's how it is today.
-
-In order to do this, we would need to have some way of knowing that:
-(a) the PHY is a rate adapting PHY (which means it must not use genphy.)
-(b) the PHY is will send pause frames towards the MAC to pace it.
-
-This would need to be added to phylib, and then phylink can query
-phylib for that information and, when telling the MAC that the link
-is up, also enable rx_pause.
-
-The same is true at the PCS level - we don't have any way to know if
-a PCS is doing rate adaption, so until we have a way to know that,
-phylink can't enable rx_pause.
-
-There is one final issue that needs to be considered - what if the
-PHY is a rate adapting PHY which sends pause frames, but it has been
-coupled with a MAC that doesn't have support to act on those pause
-frames? Do we print a warning? Do we refuse to bring the link up?
-Do we fall back to requiring the MAC to increase the IPG? What if the
-MAC isn't capable of increasing the IPG? How do we tell the MAC to
-increase the IPG, another flag in its link_up() method?
-
-> Maybe this is because phylink_mii_c45_pcs_get_state doesn't check for pause modes?
-
-With a 10GBASE-R PCS, there is no in-band status on the link, and so
-there is no communication of pause frame negotiation status to the
-PCS - meaning, there is no way to read it from the PCS.
-
-Let me be clear about this: this is a shortcoming of phylink, but
-phylink had to start somewhere, and all the hardware I have does not
-support rate adaption.
-
-I'd like this problem to get solved - I have some experimental patches
-that allow a PCS to say "hey, I'm doing rate adaption, don't bother
-with the MAC validation" but I get the feeling that's not really
-sufficient.
-
-Anyway, I'm afraid it's very late here, so I can't put any more
-thought into this tonight, but I hope the above is at least helpful
-and gives some ideas what needs to be done to solve this.
-
-Thanks.
+Though there will still be a problem here with my changes, we don't
+accept NULL clkname anymore for the set-clkname API. And tegra does
+this to pick the first clock available in DT (at index 0) I think.
+Other drivers (mostly qcom) who need such dummy OPP table, provide a
+real clock name instead. Will it be possible to pass that here somehow
+?
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+viresh

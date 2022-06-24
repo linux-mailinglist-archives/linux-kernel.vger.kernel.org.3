@@ -2,63 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFD455A4EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CE555A4F5
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiFXXkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 19:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
+        id S231643AbiFXXln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 19:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiFXXkT (ORCPT
+        with ESMTP id S229450AbiFXXll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 19:40:19 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAEC89D32
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:40:18 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id u15so7615287ejc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:40:18 -0700 (PDT)
+        Fri, 24 Jun 2022 19:41:41 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A393489D33
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:41:40 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id jb13so3334541plb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ioGTNHXffZwnZ8I7y2BRheK/DbmuKIFCf1q9qCvNtRE=;
-        b=gPUgC1E8eC2BqehwvtcAgsVR+1S+BTJA9WU5iGYKvy4xUBKGEbcb3f5NG2dSVmkMaL
-         J0foMgTURbKIFnRnbsj58R+I8QxePawmLt5GxBwk1f3eIjfsRBUg4NwXldr7Z4hdTHmK
-         DW8NHmYIkHd1kfQEj9hJKqxrPZ7b7MkzZHdCE3f2Sng0BMeZR/jY00wCr2S2nJZoU9+X
-         tWk5Eg+ehQq4J9nyR34lLr7rj29iW/NtN/QvVXjd8UDCOZSv4IeImJK6NwKlIG3PA50Z
-         X3lu/4llQ5L9ifwgfVyYqfGMRPmC1sj3klUTNf/JkPvbivh59rMwhGMlmOVQtXFRaGLO
-         RytA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3xnBvzrRmX/ejhmjRn6AoNfZ6p3RCpkOG+Vy08xprps=;
+        b=AS3DaGG61PYQBaU/p+BC2EOrkBhfu3MaqbJkNmutFIQKb6hE58NVV2T2HN5MPwWFKa
+         cRf7njThcQFyvGXySMvrsvwCo02+qfboGW1pVKbYwZ24zTxDlM4SdkOlaaDFVJvDXPIL
+         OetXbsRtBoPDnOt5HdCQ3Q5JqWpf8ZVwSOnb3+xYio8ZK4/NjtBacXonZ1fqjV8WXYXl
+         WU3NZOiVBo3AsoXU3X5dmZemrU+NDtUm4b9Yn4FBO/V9W87+Q3OJ5LZc/Nwe2iFLrDsE
+         ZinA615CpiS5kp60zPU5bVWNiOI19/qMTyJP5t7KTw/k98Pz4cOoPF8LyMsswOMQr1cy
+         oMiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ioGTNHXffZwnZ8I7y2BRheK/DbmuKIFCf1q9qCvNtRE=;
-        b=IqhWGHhc7MwR4dyyttz7+fw1bFZdEHA33ytnpUb7Dycpu8Kj564XMG+ldPB2e3uJCt
-         m8L/dimn6Xflq97W+1ps/blH0DS7gD+yAT8jmA0h62gM7yVbIqB/mAXZW7O7/JxStKzn
-         I9L7d6C22qcpM9eCVmLeFMGMSlgVOQqB/6uhi8TjV19uwxbyitwo8KzujJXdcjT08oL0
-         ItRhVV8DikKZNUXuwfWVIYalnZ68JZr9hUyvgRPvafA4hjT0tZQtD9Xc19+Sz6amcQj2
-         yqD6O9zNRxW+54IyZ5R0o33ENIbHLMkR9L89AUGKMXlLCneTOfbWlAbpJe+/4Eii4fDr
-         NmgQ==
-X-Gm-Message-State: AJIora/XKr0WJ4G4boy4gbUukN404XmsBsl5oESK9NABNwEVEs8MyuBB
-        TYE6G7057hdkqz1a8D+uZmdk5d8sn8dWfBSiYyMz5A==
-X-Google-Smtp-Source: AGRyM1s4ws/aqxlJeM5cTpkwHOGmCVjfTOdh8yuqMaDTlT05PSaxFD6smAlqQyw8HO9CERa4VC023nFn6040NePICfw=
-X-Received: by 2002:a17:906:308f:b0:709:af33:9fa7 with SMTP id
- 15-20020a170906308f00b00709af339fa7mr1347941ejv.369.1656114017449; Fri, 24
- Jun 2022 16:40:17 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3xnBvzrRmX/ejhmjRn6AoNfZ6p3RCpkOG+Vy08xprps=;
+        b=lVpKbKdfBIsnJs3tvcbgLIcIRuAdB5wLmchBHi9UvhuM2VADlETjrl1wZ4JU62n9A6
+         rD1jCGjVcR8Fg2EvBwGiIMkMXvt+eHfthVf2UOGxJpk0CldBt3DrAHZHrav50nph4I0U
+         Q0pJ9rY4Fs7PIYPTYk0WAAwN/vZQgZkiNN5k15sCij1agvQCaabgQ+SH5vG6Qm1Pli5S
+         Y3cLXrwspoZdJfJSSZYdd5sXHQ2st/awiRHfjh/zyRnhBTmtdLgdMDBEbbPC9y5wh2Yv
+         3kqutMeNuaYUdCyi5hpkRmfg7x6ij/F9C9CPXyg52cTvgleEoDp7jTJul8UwlYp8SToe
+         Ke2w==
+X-Gm-Message-State: AJIora/8D0/LLMUqZxqrqN7eTxrlaTa1wJD8MaLwHmhjhHKF8wBYFsQP
+        DPKnXdMSTK7cgaKxISFJDtUZsg==
+X-Google-Smtp-Source: AGRyM1uzvJMxrnVztGfw3Vxr8c4HN/RJBw6KcIENR+surAs1biy9lt0CP8HFqlurE+rRWKy50934fQ==
+X-Received: by 2002:a17:902:d712:b0:167:757c:a6f4 with SMTP id w18-20020a170902d71200b00167757ca6f4mr1476590ply.5.1656114100011;
+        Fri, 24 Jun 2022 16:41:40 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id 2-20020a170902c24200b0016a6130128bsm2352299plg.211.2022.06.24.16.41.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 16:41:39 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 23:41:34 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] KVM: x86/mmu: Add optimized helper to retrieve an
+ SPTE's index
+Message-ID: <YrZLriNw1CElOKbz@google.com>
+References: <20220624213039.2872507-1-seanjc@google.com>
+ <20220624213039.2872507-2-seanjc@google.com>
 MIME-Version: 1.0
-References: <20220603195626.121922-1-dlatypov@google.com> <87pmix3ktq.fsf@meer.lwn.net>
- <2c3399e9-4f4e-a71a-4030-e4e6d72b5d4e@linuxfoundation.org>
- <8735ft3co5.fsf@meer.lwn.net> <96154234-7842-3bc9-d89f-eb20be40e6de@linuxfoundation.org>
-In-Reply-To: <96154234-7842-3bc9-d89f-eb20be40e6de@linuxfoundation.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 24 Jun 2022 16:40:06 -0700
-Message-ID: <CAGS_qxpQvftq2qiiaNhr5sAkJWgQhtB1CK2_ZeYASLYynWVHRA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] Documentation: kunit: remove duplicate kunit-tool.rst
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, brendanhiggins@google.com,
-        davidgow@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624213039.2872507-2-seanjc@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -70,38 +77,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 3:51 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 6/24/22 4:43 PM, Jonathan Corbet wrote:
-> > Shuah Khan <skhan@linuxfoundation.org> writes:
-> >
-> >>> So not that long ago these patches were going through Shuah...it seems
-> >>> that's not happening anymore?  I can pick up kunit docs patches,
-> >>> certainly.  I've taken the silence on these as assent and applied them.
-> >>>
-> >>
-> >> I am still taking ksefltest and kunit doc patches through my tree. I wait
-> >> for Brendan to ack at times. This one didn't show up in linux-kselftest
-> >> list it appears.
-> >>
-> >> If you cc linux-kselftest and I get an ack from Brendan, I will take this
-> >> through kselftest tree.
-> >
-> > As I said up above, I went ahead and applied them.  I can drop them
-> > again if you want to carry them, just let me know.
-> >
->
-> Jon, yes please go ahead and drop this one. I will wait for Brendan
-> to ack it. Reduces confusion in the future. Very often, there is code
-> dependencies as well.
->
-> Daniel, please don't skip kselftest list in the future.
+On Fri, Jun 24, 2022 at 09:30:36PM +0000, Sean Christopherson wrote:
+> Add spte_index() to dedup all the code that calculates a SPTE's index
+> into its parent's page table and/or spt array.  Opportunistically tweak
+> the calculation to avoid pointer arithmetic, which is subtle (subtract in
+> 8-byte chunks) and less performant (requires the compiler to generate the
+> subtraction).
+> 
+> Suggested-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Ack.
-I was hoping to avoid confusion about who should apply them; looks
-like it created more.
+Thanks for the cleanup. I did a git-grep to look for any other users to
+convert to spte_index() and didn't find any.
 
-Just a note: this one has no code dependencies, so it can be applied
-whenever or wherever.
-
-Daniel
+Reviewed-by: David Matlack <dmatlack@google.com>

@@ -2,78 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17DEB559F6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BC0559F8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbiFXRSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
+        id S232113AbiFXRTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231166AbiFXRSP (ORCPT
+        with ESMTP id S231132AbiFXRSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:18:15 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C69CF1E3E1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:18:12 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 8E11392009C; Fri, 24 Jun 2022 19:18:11 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 86F1F92009B;
-        Fri, 24 Jun 2022 18:18:11 +0100 (BST)
-Date:   Fri, 24 Jun 2022 18:18:11 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PING^2][PATCH] RISC-V: PCI: Avoid handing out address 0 to
- devices
-In-Reply-To: <mhng-a0733eea-8220-4bf6-b1da-9de3139dbae3@palmer-ri-x1c9>
-Message-ID: <alpine.DEB.2.21.2206231750490.57474@angie.orcam.me.uk>
-References: <mhng-a0733eea-8220-4bf6-b1da-9de3139dbae3@palmer-ri-x1c9>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Fri, 24 Jun 2022 13:18:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08C7447AFD
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:18:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656091131;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DPw7e4tEvF/rfLD9qEFron5ByavvAW72LnDfMRrQrXQ=;
+        b=bZq5H0aCEo0ZQPnBGu5xM6X2IFnE3mcDogYwy0AIVF+ho9lM02K3sJNjGw/1BGcPYgXjoN
+        HhM6rxnrdGtj45DM7EbQPPSCJOsf2ce1MHZJKQ8SKjc4eeyGiTiUtbR4s78phrSCm5WmXv
+        LtEEqQJOAR+FqoLYXQexCicOImpQOdM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-110-nTvsyNMgO5aulpHklEcfJQ-1; Fri, 24 Jun 2022 13:18:49 -0400
+X-MC-Unique: nTvsyNMgO5aulpHklEcfJQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 15A13802D2C;
+        Fri, 24 Jun 2022 17:18:49 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F26E1492CA6;
+        Fri, 24 Jun 2022 17:18:48 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [PATCH v2 0/8] KVM: x86: vcpu->arch.pio* cleanups
+Date:   Fri, 24 Jun 2022 13:18:40 -0400
+Message-Id: <20220624171848.2801602-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Jun 2022, Palmer Dabbelt wrote:
+These patches complete the job started by commit 3b27de271839 ("KVM:
+x86: split the two parts of emulator_pio_in", 2021-10-22).  The commit
+message eloquently said that emulator_pio_in_out "currently hardcodes
+vcpu->arch.pio_data as the source/destination buffer, which sucks but
+will be fixed after the more severe SEV-ES buffer overflow".  Some time
+has passed and it's high time to do it.
 
-> > > Therefore avoid handing out address 0, by bumping the lowest address
-> > > available to PCI via PCIBIOS_MIN_IO and PCIBIOS_MIN_MEM up by 4 and 16
-> > > respectively, which is the minimum allocation size for I/O and memory
-> > > BARs.
-> > 
-> >  Ping for:
-> > <https://lore.kernel.org/lkml/alpine.DEB.2.21.2204271207590.9383@angie.orcam.me.uk/>
-> 
-> Sorry, I got this mixed up with the non-RISC-V patch.
+After this series, in-kernel PIO does not use vcpu->arch.pio* anymore;
+it is only used by complete_emulator_pio_in.
 
- If you mean this:
+Paolo
 
-<https://lore.kernel.org/lkml/alpine.DEB.2.21.2202260044180.25061@angie.orcam.me.uk/>
+v1->v2:
+- split out "KVM: x86: complete fast IN directly with complete_emulator_pio_in()"
+- remove WARN if emulated PIO performs successful in-kernel iterations before
+  falling back to userspace, it is (unfortunately) valid if SRCU changes mid-loop.
+- new patch 3 to handle unregistered devices mid-loop, dropping writes and reading
+  as zero
+- WARN if non-NULL data is passed to emulator_pio_in_out() before the code is
+  ready to handle in-kernel PIO without vcpu->arch.pio*
+- use "size" in SEV case instead of vcpu->arch.pio_size
 
-then we just don't have consensus to move forward.  If we ever do for a 
-generic change, then we can revert the RISC-V platform solution, as it's 
-merely an internal implementation detail and not a part of the ABI or 
-something.
+Paolo Bonzini (8):
+  KVM: x86: complete fast IN directly with complete_emulator_pio_in()
+  KVM: x86: inline kernel_pio into its sole caller
+  KVM: x86: drop PIO from unregistered devices
+  KVM: x86: move all vcpu->arch.pio* setup in emulator_pio_in_out()
+  KVM: x86: wean in-kernel PIO from vcpu->arch.pio*
+  KVM: x86: wean fast IN from emulator_pio_in
+  KVM: x86: de-underscorify __emulator_pio_in
+  KVM: SEV-ES: reuse advance_sev_es_emulated_ins for OUT too
 
->  David poked me about
-> it, this is on for-next.  It's passing my tests, but they're just QEMU so
-> probably not all that exciting here.
+ arch/x86/kvm/trace.h |   2 +-
+ arch/x86/kvm/x86.c   | 133 ++++++++++++++++++++-----------------------
+ 2 files changed, 62 insertions(+), 73 deletions(-)
 
- Thanks!  I don't know offhand what QEMU supports as far as the RISC-V 
-architecture is concerned; I guess you can't just enable a PCI port-I/O 
-serial port in the simulator and see if it works with Linux or not.
+-- 
+2.31.1
 
- Anyway it's just number shuffling, so the change should be reasonably 
-safe.
-
-  Maciej

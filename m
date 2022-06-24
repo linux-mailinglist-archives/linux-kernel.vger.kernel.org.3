@@ -2,89 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CA755A4D0
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5837155A4CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiFXX0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 19:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
+        id S230400AbiFXX1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 19:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiFXX0J (ORCPT
+        with ESMTP id S229853AbiFXX1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 19:26:09 -0400
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1640D81530;
-        Fri, 24 Jun 2022 16:26:09 -0700 (PDT)
-Received: by mail-pl1-f179.google.com with SMTP id r1so3309523plo.10;
-        Fri, 24 Jun 2022 16:26:09 -0700 (PDT)
+        Fri, 24 Jun 2022 19:27:38 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F061B87D67
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:27:37 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id q8-20020a632a08000000b00402de053ef9so1671952pgq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=bGEwwK9r6L7n5r0u6Dx3CqpLQXQpKyDLKzzGFvy5vt0=;
+        b=hRmiXc9tTN/+eUZA5alTpsbp4FGvgtMAZJ9DmACX/Cmz+vdWGk7NkwDov0rb09Ntnj
+         8JasqyMD0UnmFBj0nOR43A0gtVIYWKT/v2/qjHd8NNOpz8bPgJIcLswVkW7qr121FHcu
+         mrsTgcxfkdfuv57II9ZKwVfM07UGhBzliy1i0db5qF6w8CSpxd5Z5BiyDqLtGnjwwCv+
+         nN/z/kaSombuGitx8ODDfSSSLRz2JHGxgomOm9gbnG0+DKq4IiHpqKR1hb2L7lZQ+AR9
+         yKFhbFNYuN4XEoHjQspVvllPL//RqBF4QuNuEg5j6B0dkesA/r/9j9EyXdX8NUFnir5N
+         jKIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lzbd439a0AH9s5v7J1HqFQrBqbp6L4thaAYy/6dD0Yg=;
-        b=mKFyMbpW3Djss0w9C54g9NRVfWPGgn7ZCdeGFTCXJETN8x6b9AGHxYuqI2JABcrs41
-         EPmA9vyNQRWGPOxvsX1sSaosyCFoLPPZfFE70jHVc0TvLjEK55jYgeH71j0wK9JTrKDB
-         ubjEAu3BgyQjaLn1nw5M//Id8UrZcXcGMvGhwQMOetl57lJ723WbZs2297MdDzjIyPDa
-         BIC+O0XCjTbYtR/a8CTwgnxQXXlSfBm1K/kND+i8R4pG1HX4ugRrryR3e9+38/BhZngq
-         0vlpR5PJGddBDGPCz++A6lO9T22xLk+QexONMd3Yr0KKZDaoumUdAdpcZWsXvoOJHiKb
-         VNrQ==
-X-Gm-Message-State: AJIora/TcgSrcNFwjtKjL/RANESAA4dwPaznU/NnM1qLEfOngIb/HOMF
-        rmkgkestpbk37YT+VzITp7I=
-X-Google-Smtp-Source: AGRyM1vGeTj4pZks5wNU8NnkhYzjHbXShLs9KiTB65zBx/JPn3w/thDnN0GBoW6t20uvorML2rEgpw==
-X-Received: by 2002:a17:90b:3a89:b0:1ec:93d2:f47d with SMTP id om9-20020a17090b3a8900b001ec93d2f47dmr1378634pjb.139.1656113168309;
-        Fri, 24 Jun 2022 16:26:08 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:4e1:3e2c:e2fe:b5e0? ([2620:15c:211:201:4e1:3e2c:e2fe:b5e0])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902bd8500b001640beeebf1sm2301901pls.268.2022.06.24.16.26.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 16:26:07 -0700 (PDT)
-Message-ID: <5a4a42fe-c5c8-63fe-365f-e6c74a279cc2@acm.org>
-Date:   Fri, 24 Jun 2022 16:26:06 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC PATCH] RDMA/srp: Fix use-after-free in srp_exit_cmd_priv
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Li Zhijian <lizhijian@fujitsu.com>
-Cc:     Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220624040253.1420844-1-lizhijian@fujitsu.com>
- <20220624225908.GA303931@nvidia.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220624225908.GA303931@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=bGEwwK9r6L7n5r0u6Dx3CqpLQXQpKyDLKzzGFvy5vt0=;
+        b=I/Y+w0yS1vvNCIiw0lW0Wz3IW23ZraI3ldYTdfMFmKHCoR5Swh/xOnoxytnkw1KgSS
+         bnr6caA4KH1PLxVyPp2U25lfDw+I5RCDmfCPyNr3HkN6Gj6P5ao+uTBTMXz0HBSdrC09
+         QmdWLUBt5cQJUvDSSvMzSZQrYnked2qfHLWM77pMagRFjCPaF7szzjZLK9Y6mETAsXL4
+         LSl3znpkEUkpSp65NiVbpPTKFdo1NR6r2I0xsvuwyln7/mE7qmzo6ZK56+IRIJGriXxW
+         nKwWMyd3d3Ni3mcMRvtaIiWC2VIm+gRDjSom9/0h30h5MlqilYvmfw8cn6r9qzIM6TiK
+         9lAg==
+X-Gm-Message-State: AJIora8g4G2gh52czxnjZQvWBiLJtlhqPHb6hn94XeLslE1qREbcRDC1
+        40nFMhwN5EWPh5PK5b60cIrm1b47YvA=
+X-Google-Smtp-Source: AGRyM1soUMSp2JRrMGymkYgHj1TJiKUDBciGq3uHyTvhFQ/4ohUJlXI395zGAoN08rEPVNjI6W8LQd4mdaM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:aa7:9206:0:b0:525:1068:c026 with SMTP id
+ 6-20020aa79206000000b005251068c026mr1604348pfo.52.1656113257525; Fri, 24 Jun
+ 2022 16:27:37 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 24 Jun 2022 23:27:31 +0000
+Message-Id: <20220624232735.3090056-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH 0/4] KVM: x86/mmu: pte_list_desc fix and cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peter Xu <peterx@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/22 15:59, Jason Gunthorpe wrote:
-> I don't even understand how get_device() prevents this call chain??
-> 
-> It looks to me like the problem is srp_remove_one() is not waiting for
-> or canceling some outstanding work.
+Reviewing the eager page splitting code made me realize that burning 14
+rmap entries for nested TDP MMUs is extremely wasteful due to the per-vCPU
+caches allocating 40 entries by default.  For nested TDP, aliasing L2 gfns
+to L1 gfns is quite rare and is not performance critical (it's exclusively
+pre-boot behavior for sane setups).
 
-Hi Jason,
+Patch 1 fixes a bug where pte_list_desc is not correctly aligned nor sized
+on 32-bit kernels.  The primary motivation for the fix is to be able to add
+a compile-time assertion on the size being a multiple of the cache line
+size, I doubt anyone cares about the performance/memory impact.
 
-My conclusions from the call traces in Li's email are as follows:
-* scsi_host_dev_release() can get called after srp_remove_one().
-* srp_exit_cmd_priv() uses the ib_device pointer. If srp_remove_one() is 
-called before srp_exit_cmd_priv() then a use-after-free is triggered.
+Patch 2 tweaks MMU setup to support a dynamic pte_list_desc size.
 
-Is calling get_device() and put_device() on the struct ib_device an 
-acceptable way to fix this? If so, I recommend to insert a get_device() 
-call after the scsi_add_host() call and put_device() calls after the two 
-scsi_remove_host() calls instead of merging the patch at the start of 
-this email thread.
+Patch 3 reduces the number of sptes per pte_list_desc to 2 for nested TDP
+MMUs, i.e. allocates the bare minimum to prioritize the memory footprint
+over performance for sane setups.
 
-Thanks,
+Patch 4 fills the pte_list_desc cache if and only if rmaps are in use,
+i.e. doesn't allocate pte_list_desc when using the TDP MMU until nested
+TDP is used.
 
-Bart.
+Sean Christopherson (4):
+  KVM: x86/mmu: Track the number entries in a pte_list_desc with a ulong
+  KVM: x86/mmu: Defer "full" MMU setup until after vendor
+    hardware_setup()
+  KVM: x86/mmu: Shrink pte_list_desc size when KVM is using TDP
+  KVM: x86/mmu: Topup pte_list_desc cache iff VM is using rmaps
+
+ arch/x86/include/asm/kvm_host.h |  5 ++-
+ arch/x86/kvm/mmu/mmu.c          | 78 +++++++++++++++++++++++----------
+ arch/x86/kvm/x86.c              | 17 ++++---
+ 3 files changed, 70 insertions(+), 30 deletions(-)
+
+
+base-commit: 4b88b1a518b337de1252b8180519ca4c00015c9e
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+

@@ -2,60 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D6955A201
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 21:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7912555A213
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 21:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbiFXTkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 15:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
+        id S231178AbiFXTmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 15:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiFXTku (ORCPT
+        with ESMTP id S229446AbiFXTmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 15:40:50 -0400
-Received: from mailrelay1-1.pub.mailoutpod1-cph3.one.com (mailrelay1-1.pub.mailoutpod1-cph3.one.com [46.30.210.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D0A823BD
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 12:40:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=Ad+DhE3IbR2iex/yzIihLX8YVyGXpjxJ1bB/wP9flSI=;
-        b=mytJqSGFcuARUCabX8nUTEB/63IYrkijltDqr6UmmHvKrxZ9w44lUTPvkutRRZleY7JX9dHMVTBzO
-         xfzQ3HKpGMUL8EDCjwY0/iFTf8rNPqV4kJcGEiypUxGpexBZF90ic6klsxM3I+rfbKYwecIYTLUJno
-         ggtNWD1np/PoeZv48NfpW3mdKYCWg6ZReiWn5cIGGVDuyZCOOITQVuzCJa7dnkFltzV1Ak7dO4KNWh
-         oLQWZCkqPqDVD+Gbinx/r83gD7NMdQq0ZY6XHrZcFmdmUwB90Zzo+0NIBw9GbACmRUYvZ8OKc8CRL2
-         w4LU4YaYf3nPI32LawHlnqgyK96wmUw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=Ad+DhE3IbR2iex/yzIihLX8YVyGXpjxJ1bB/wP9flSI=;
-        b=rR+tHXGotv42P7yrodke39gH5FV4pav+ErgJmaVngNqdZ1iIOVUbe5MgOgl6gpeguV06GZemdMnpK
-         pJvNDIgCQ==
-X-HalOne-Cookie: f849e6918b8cd146939bcb738a198ec6a476cb6a
-X-HalOne-ID: 8b496d47-f3f5-11ec-a6c4-d0431ea8a283
-Received: from mailproxy2.cst.dirpod3-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 8b496d47-f3f5-11ec-a6c4-d0431ea8a283;
-        Fri, 24 Jun 2022 19:40:47 +0000 (UTC)
-Date:   Fri, 24 Jun 2022 21:40:45 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] drm/panel: Use backlight helper
-Message-ID: <YrYTPbn32QM5wLa1@ravnborg.org>
-References: <20220616172316.1355133-2-steve@sk2.org>
+        Fri, 24 Jun 2022 15:42:17 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCCF82684;
+        Fri, 24 Jun 2022 12:42:16 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 87CD02A0;
+        Fri, 24 Jun 2022 19:42:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 87CD02A0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1656099736; bh=JUzKm/L5+zBJhnDBfJre5xrFZKsQlVuNcD548RrRD30=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=C05qtDTf7xaJChqZyrJnaHvSj1ZDdMwHIkVgrnV5ZxcSj6YiHgZ2tQFgVJ6aVIB/2
+         thsLPAgFf5fcuNfUrThUany9kToUE8krE7J8kTB1sjqHJxyjDDRwkA+IyH/qXyUDeC
+         /kwd3gXU3dPHH8QPicZX5YQvKiEgPV7V15GsIxq/aNBbk47CVHF6BnlqN5eTGBmP40
+         4f/QZJEVuuxBTuP9R5oaCbp0AHwHX75tzCc4Ih7jhm+MX7bpBocncZWsuRVdSFrxn/
+         BdbmK1hbhisROqQ+6ioJltKHAHotSmGTAmtZl0E+QggBfT+4LJiTxBddDkPDfLbuMF
+         OYI+8/4BMRc8w==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Wu XiangCheng <bobwxc@email.cn>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>
+Cc:     Li Feng <felixlee868@icloud.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] docs/zh_CN: Update zh_CN/kernel-hacking/hacking.rst to
+ 5.19-rc1
+In-Reply-To: <Yp41+eTjoPRa4hrl@bobwxc.mipc>
+References: <Yp41+eTjoPRa4hrl@bobwxc.mipc>
+Date:   Fri, 24 Jun 2022 13:42:15 -0600
+Message-ID: <87tu893l2g.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616172316.1355133-2-steve@sk2.org>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,23 +53,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 07:23:13PM +0200, Stephen Kitt wrote:
-> backlight_properties.fb_blank is deprecated. The states it represents
-> are handled by other properties; but instead of accessing those
-> properties directly, drivers should use the helpers provided by
-> backlight.h.
-> 
-> Instead of retrieving the backlight brightness in struct
-> backlight_properties manually, and then checking whether the backlight
-> should be on at all, use backlight_get_brightness() which does all
-> this and insulates this from future changes.
-> 
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: dri-devel@lists.freedesktop.org
-Thanks, applied to drm-misc (drm-misc-next)
+Wu XiangCheng <bobwxc@email.cn> writes:
 
-	Sam
+> * update to commit f35cf1a59e9a ("Documentation: kernel-hacking: minor
+>   edits for style")
+>
+> * fix a homophone typo reported by Li Feng
+>
+> Reported-by: Li Feng <felixlee868@icloud.com>
+> Signed-off-by: Wu XiangCheng <bobwxc@email.cn>
+> ---
+>  .../zh_CN/kernel-hacking/hacking.rst          | 22 +++++++++----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+
+Series applied, thanks.
+
+jon

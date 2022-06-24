@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9024559FDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4FA55A07F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbiFXRhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
+        id S232287AbiFXRi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbiFXRh2 (ORCPT
+        with ESMTP id S231851AbiFXRha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:37:28 -0400
-Received: from mail-vk1-xa4a.google.com (mail-vk1-xa4a.google.com [IPv6:2607:f8b0:4864:20::a4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9256A609CA
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:27 -0700 (PDT)
-Received: by mail-vk1-xa4a.google.com with SMTP id y8-20020a1f3208000000b0035e4cb54f24so908851vky.17
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:27 -0700 (PDT)
+        Fri, 24 Jun 2022 13:37:30 -0400
+Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2234162C13
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:29 -0700 (PDT)
+Received: by mail-ua1-x949.google.com with SMTP id j14-20020ab01d0e000000b0037f3ad22193so1059489uak.0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=9NP33zy0A1MX3vEGrpVIKeFhmsIPx2kWV4buJ37voF4=;
-        b=ZKOKH7vAAREURJ1l8IWF0iXVyZJmt/59w23N609lJlz66JMzYMime9PnmzUaf55ztT
-         vzLMK8s9/fXSSxWnYgNDHKf7LqeMXxNL7KAl5SuDjU3NQJJ60yl5tOO73MRzJCUdunKz
-         7Lgn3pxPgvpWylL4Lwm2BTczrJtzLYwEI/PWM2Cho00mXJipoxojyLs3eWxEQPPDnMB8
-         Oxl49ZR9JG0HGfk3WVBD25dYMN0YwU/lye70tN93BwsbS6nd07nY55SUbsCU9gTsjkxw
-         9k4o1zcXpunPWXdWooquHfqVjKqZmpuvtPY3r1RM36B/t5rz9uVN89mK3zfIIDtHV9hY
-         WUTw==
+        bh=fLhWVrtL3jCVQZTI/SpR/dF9bcFaOpNW6kUek+4VMrQ=;
+        b=h/ysFkhblpzJ+iMXOAuoAW1RCDzHD/+S02IOwgDp+W1ftcj/5GpmKopNXVJGmI11dt
+         mAS2/ecnjScCvn9y+SSrPgkps+68W5ymor9ZeqP24UdBQp7MkKwq9sGbZh9bcS3Kot12
+         BGqJ5gfYWmse/+yrqaROihgM78qPJlOL2tffwnW0DZUm7UP9c6M6BVGl7wnznm72cE8e
+         Gmgcs44D/bkYNixg8jOWwZMa5AJhJKIcbwa6ooNOCsk7KyEQSYEcelE/7NURJzuTXfld
+         QKmlDWTSdSuaR2EkI87u4H/5x0GVEh50Cju+5MyrG72wa/G6IgHcBFf2GIqziepRDeTo
+         ynXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=9NP33zy0A1MX3vEGrpVIKeFhmsIPx2kWV4buJ37voF4=;
-        b=F8mnT85Rrefc5OkIBHJ8rVdSwjmj0w/w43Lui8wkrAdfKMWGMJ2ffxSo7IFCCIGESW
-         l6bb90mAAl74KUCNi1q4DmwwUYgdTXBmXbZzht5nVLEeZKuWnviOvAGWGTFo4qt1twKl
-         MlNGG5BK/CjhnayJeyAJy8123qywojhFbGiafPyZgBgPj3IkpqlTYwQj/NH8FMrIG4Nt
-         0xEV6hYjwZp8iGOGHn2yxXLtD2eT2fyHykhKz+vclrJivSRBqSNWhovORK7QEzpOzat6
-         sDepQq/+1Jp0WPs0YYoh2ueSbAmeLAQTL8BhAlqKcaa9MsX7p6vMxdIbMER9vNIlSRBD
-         cv/g==
-X-Gm-Message-State: AJIora8w08kgWFYdTVGD8gQdcPyMR4zJjwunYIRmsp4ZSKrlm6EUr+S0
-        cAKTI9zachEUn5+kvxJNyRtC3xbyBfCycCoB
-X-Google-Smtp-Source: AGRyM1ud2VpyFSoYe3jfqlLqsCZHAGiyta2WrrFtmqkuRYO0f2uYFJE5sTDJIrzr1fNDbhgGC1mFcexvMmBaf2W2
+        bh=fLhWVrtL3jCVQZTI/SpR/dF9bcFaOpNW6kUek+4VMrQ=;
+        b=HTZlH8smlUzrKWjBJfkuXoGi6myGN96LENsE/GGbMTbNpOl67OZ4hdkdyNQGESX7/U
+         lLoKjGadfStgy/uhR7z9+lIZC4zieMWHRS2MaKm8h4JhzthzFXcMrlNTgtem1kD7s1MH
+         3Qu3vaWsFPInwfTXPI+TobMEanNxfxJRSONVdisEdGaNuBIQJFB77kocw1nuomo4UfHo
+         k0aaRp3uRWMzY6wOkEw2c2aTVzrP58inFMpP1GUefxZmkAoGdehT/l1TnWXoJKLtFRQe
+         QSqHiKbrhOo1eLcAbbW/+uIG5EMM5ENYAtxARHDbg/RxNFNAgi+6I6+hSMg9xX6PkBiX
+         JOyA==
+X-Gm-Message-State: AJIora/OB0iYlODwmQ3XsPMTYPdWcknlG5GfZN/iXZX4UaHISG+JgxqF
+        Qw7ENSb69PLJafsrXO8CInTUmCJagC2ThSN9
+X-Google-Smtp-Source: AGRyM1uRSxwvI1ZalFt+ckvzYpzesshV4sVRNlb4t9wpXcehiUcvJo2Hg3rBOz88Imnv+bFCKqP3jsH6tlItOe1M
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a67:ef4a:0:b0:354:6546:8b97 with SMTP
- id k10-20020a67ef4a000000b0035465468b97mr8260702vsr.83.1656092246792; Fri, 24
- Jun 2022 10:37:26 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 17:36:42 +0000
+ (user=jthoughton job=sendgmr) by 2002:a67:c30f:0:b0:354:45bf:748c with SMTP
+ id r15-20020a67c30f000000b0035445bf748cmr351vsj.13.1656092248216; Fri, 24 Jun
+ 2022 10:37:28 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 17:36:43 +0000
 In-Reply-To: <20220624173656.2033256-1-jthoughton@google.com>
-Message-Id: <20220624173656.2033256-13-jthoughton@google.com>
+Message-Id: <20220624173656.2033256-14-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20220624173656.2033256-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [RFC PATCH 12/26] hugetlb: add HugeTLB splitting functionality
+Subject: [RFC PATCH 13/26] hugetlb: add huge_pte_alloc_high_granularity
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -77,152 +77,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The new function, hugetlb_split_to_shift, will optimally split the page
-table to map a particular address at a particular granularity.
+This function is to be used to do a HugeTLB page table walk where we may
+need to split a leaf-level huge PTE into a new page table level.
 
-This is useful for punching a hole in the mapping and for mapping small
-sections of a HugeTLB page (via UFFDIO_CONTINUE, for example).
+Consider the case where we want to install 4K inside an empty 1G page:
+1. We walk to the PUD and notice that it is pte_none.
+2. We split the PUD by calling `hugetlb_split_to_shift`, creating a
+   standard PUD that points to PMDs that are all pte_none.
+3. We continue the PT walk to find the PMD. We split it just like we
+   split the PUD.
+4. We find the PTE and give it back to the caller.
+
+To avoid concurrent splitting operations on the same page table entry,
+we require that the mapping rwsem is held for writing while collapsing
+and for reading when doing a high-granularity PT walk.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- mm/hugetlb.c | 122 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 122 insertions(+)
+ include/linux/hugetlb.h | 23 ++++++++++++++
+ mm/hugetlb.c            | 67 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 90 insertions(+)
 
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 605aa19d8572..321f5745d87f 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -1176,14 +1176,37 @@ static inline void set_huge_pte_at(struct mm_struct *mm, unsigned long addr,
+ }
+ #endif	/* CONFIG_HUGETLB_PAGE */
+ 
++enum split_mode {
++	HUGETLB_SPLIT_NEVER   = 0,
++	HUGETLB_SPLIT_NONE    = 1 << 0,
++	HUGETLB_SPLIT_PRESENT = 1 << 1,
++	HUGETLB_SPLIT_ALWAYS  = HUGETLB_SPLIT_NONE | HUGETLB_SPLIT_PRESENT,
++};
+ #ifdef CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING
+ /* If HugeTLB high-granularity mappings are enabled for this VMA. */
+ bool hugetlb_hgm_enabled(struct vm_area_struct *vma);
++int huge_pte_alloc_high_granularity(struct hugetlb_pte *hpte,
++				    struct mm_struct *mm,
++				    struct vm_area_struct *vma,
++				    unsigned long addr,
++				    unsigned int desired_sz,
++				    enum split_mode mode,
++				    bool write_locked);
+ #else
+ static inline bool hugetlb_hgm_enabled(struct vm_area_struct *vma)
+ {
+ 	return false;
+ }
++static inline int huge_pte_alloc_high_granularity(struct hugetlb_pte *hpte,
++					   struct mm_struct *mm,
++					   struct vm_area_struct *vma,
++					   unsigned long addr,
++					   unsigned int desired_sz,
++					   enum split_mode mode,
++					   bool write_locked)
++{
++	return -EINVAL;
++}
+ #endif
+ 
+ static inline spinlock_t *huge_pte_lock(struct hstate *h,
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 3ec2a921ee6f..eaffe7b4f67c 100644
+index eaffe7b4f67c..6e0c5fbfe32c 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -102,6 +102,18 @@ struct mutex *hugetlb_fault_mutex_table ____cacheline_aligned_in_smp;
- /* Forward declaration */
- static int hugetlb_acct_memory(struct hstate *h, long delta);
- 
-+/*
-+ * Find the subpage that corresponds to `addr` in `hpage`.
-+ */
-+static struct page *hugetlb_find_subpage(struct hstate *h, struct page *hpage,
-+				 unsigned long addr)
-+{
-+	size_t idx = (addr & ~huge_page_mask(h))/PAGE_SIZE;
-+
-+	BUG_ON(idx >= pages_per_huge_page(h));
-+	return &hpage[idx];
-+}
-+
- static inline bool subpool_is_free(struct hugepage_subpool *spool)
- {
- 	if (spool->count)
-@@ -7044,6 +7056,116 @@ static unsigned int __shift_for_hstate(struct hstate *h)
- 	for ((tmp_h) = hstate; (shift) = __shift_for_hstate(tmp_h), \
- 			       (tmp_h) <= &hstates[hugetlb_max_hstate]; \
- 			       (tmp_h)++)
+@@ -7166,6 +7166,73 @@ static int hugetlb_split_to_shift(struct mm_struct *mm, struct vm_area_struct *v
+ 	tlb_finish_mmu(&tlb);
+ 	return ret;
+ }
 +
 +/*
-+ * Given a particular address, split the HugeTLB PTE that currently maps it
-+ * so that, for the given address, the PTE that maps it is `desired_shift`.
-+ * This function will always split the HugeTLB PTE optimally.
++ * Similar to huge_pte_alloc except that this can be used to create or walk
++ * high-granularity mappings. It will automatically split existing HugeTLB PTEs
++ * if required by @mode. The resulting HugeTLB PTE will be returned in @hpte.
 + *
-+ * For example, given a HugeTLB 1G page that is mapped from VA 0 to 1G. If we
-+ * call this function with addr=0 and desired_shift=PAGE_SHIFT, will result in
-+ * these changes to the page table:
-+ * 1. The PUD will be split into 2M PMDs.
-+ * 2. The first PMD will be split again into 4K PTEs.
++ * There are three options for @mode:
++ *  - HUGETLB_SPLIT_NEVER   - Never split.
++ *  - HUGETLB_SPLIT_NONE    - Split empty PTEs.
++ *  - HUGETLB_SPLIT_PRESENT - Split present PTEs.
++ *  - HUGETLB_SPLIT_ALWAYS  - Split both empty and present PTEs.
 + */
-+static int hugetlb_split_to_shift(struct mm_struct *mm, struct vm_area_struct *vma,
-+			   const struct hugetlb_pte *hpte,
-+			   unsigned long addr, unsigned long desired_shift)
++int huge_pte_alloc_high_granularity(struct hugetlb_pte *hpte,
++				    struct mm_struct *mm,
++				    struct vm_area_struct *vma,
++				    unsigned long addr,
++				    unsigned int desired_shift,
++				    enum split_mode mode,
++				    bool write_locked)
 +{
-+	unsigned long start, end, curr;
++	struct address_space *mapping = vma->vm_file->f_mapping;
++	bool has_write_lock = write_locked;
 +	unsigned long desired_sz = 1UL << desired_shift;
-+	struct hstate *h = hstate_vma(vma);
 +	int ret;
-+	struct hugetlb_pte new_hpte;
-+	struct mmu_notifier_range range;
-+	struct page *hpage = NULL;
-+	struct page *subpage;
-+	pte_t old_entry;
-+	struct mmu_gather tlb;
 +
-+	BUG_ON(!hpte->ptep);
-+	BUG_ON(hugetlb_pte_size(hpte) == desired_sz);
++	BUG_ON(!hpte);
 +
-+	start = addr & hugetlb_pte_mask(hpte);
-+	end = start + hugetlb_pte_size(hpte);
++	if (has_write_lock)
++		i_mmap_assert_write_locked(mapping);
++	else
++		i_mmap_assert_locked(mapping);
 +
-+	i_mmap_assert_write_locked(vma->vm_file->f_mapping);
++retry:
++	ret = 0;
++	hugetlb_pte_init(hpte);
 +
-+	BUG_ON(!hpte->ptep);
-+	/* This function only works if we are looking at a leaf-level PTE. */
-+	BUG_ON(!hugetlb_pte_none(hpte) && !hugetlb_pte_present_leaf(hpte));
++	ret = hugetlb_walk_to(mm, hpte, addr, desired_sz,
++			      !(mode & HUGETLB_SPLIT_NONE));
++	if (ret || hugetlb_pte_size(hpte) == desired_sz)
++		goto out;
 +
-+	/*
-+	 * Clear the PTE so that we will allocate the PT structures when
-+	 * walking the page table.
-+	 */
-+	old_entry = huge_ptep_get_and_clear(mm, start, hpte->ptep);
-+
-+	if (!huge_pte_none(old_entry))
-+		hpage = pte_page(old_entry);
-+
-+	BUG_ON(!IS_ALIGNED(start, desired_sz));
-+	BUG_ON(!IS_ALIGNED(end, desired_sz));
-+
-+	for (curr = start; curr < end;) {
-+		struct hstate *tmp_h;
-+		unsigned int shift;
-+
-+		for_each_hgm_shift(h, tmp_h, shift) {
-+			unsigned long sz = 1UL << shift;
-+
-+			if (!IS_ALIGNED(curr, sz) || curr + sz > end)
-+				continue;
-+			/*
-+			 * If we are including `addr`, we need to make sure
-+			 * splitting down to the correct size. Go to a smaller
-+			 * size if we are not.
-+			 */
-+			if (curr <= addr && curr + sz > addr &&
-+					shift > desired_shift)
-+				continue;
-+
-+			/*
-+			 * Continue the page table walk to the level we want,
-+			 * allocate PT structures as we go.
-+			 */
-+			hugetlb_pte_copy(&new_hpte, hpte);
-+			ret = hugetlb_walk_to(mm, &new_hpte, curr, sz,
-+					      /*stop_at_none=*/false);
-+			if (ret)
-+				goto err;
-+			BUG_ON(hugetlb_pte_size(&new_hpte) != sz);
-+			if (hpage) {
-+				pte_t new_entry;
-+
-+				subpage = hugetlb_find_subpage(h, hpage, curr);
-+				new_entry = make_huge_pte_with_shift(vma, subpage,
-+								     huge_pte_write(old_entry),
-+								     shift);
-+				set_huge_pte_at(mm, curr, new_hpte.ptep, new_entry);
-+			}
-+			curr += sz;
-+			goto next;
++	if (
++		((mode & HUGETLB_SPLIT_NONE) && hugetlb_pte_none(hpte)) ||
++		((mode & HUGETLB_SPLIT_PRESENT) &&
++		  hugetlb_pte_present_leaf(hpte))
++	   ) {
++		if (!has_write_lock) {
++			i_mmap_unlock_read(mapping);
++			i_mmap_lock_write(mapping);
++			has_write_lock = true;
++			goto retry;
 +		}
-+		/* We couldn't find a size that worked. */
-+		BUG();
-+next:
-+		continue;
++		ret = hugetlb_split_to_shift(mm, vma, hpte, addr,
++					     desired_shift);
 +	}
 +
-+	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
-+				start, end);
-+	mmu_notifier_invalidate_range_start(&range);
-+	return 0;
-+err:
-+	tlb_gather_mmu(&tlb, mm);
-+	/* Free any newly allocated page table entries. */
-+	hugetlb_free_range(&tlb, hpte, start, curr);
-+	/* Restore the old entry. */
-+	set_huge_pte_at(mm, start, hpte->ptep, old_entry);
-+	tlb_finish_mmu(&tlb);
++out:
++	if (has_write_lock && !write_locked) {
++		/* Drop the write lock. */
++		i_mmap_unlock_write(mapping);
++		i_mmap_lock_read(mapping);
++		has_write_lock = false;
++		goto retry;
++	}
++
 +	return ret;
 +}
  #endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */

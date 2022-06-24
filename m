@@ -2,130 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEAD559571
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DB955957C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231800AbiFXI2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+        id S231839AbiFXIcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 04:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbiFXI2q (ORCPT
+        with ESMTP id S231133AbiFXIcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:28:46 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86968248FC
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:28:45 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3176b6ed923so17432367b3.11
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=juJPwPR296pSJZwsH9/Iy+TMiLjsg5L/e3X7qop/D3w=;
-        b=Yen0y2jHteguKUwEE6qaiTm+lhM9bjOuVD5af9lqIfB669iZhRqRU+TC8W6kj0hI3M
-         YG3d6JOmMQ5+s1J+K+s4D6C8jualhWVv70vHc3EkNIE2cpKal4D48l0vJAiqwcX0p2CG
-         F9tUhwi2kPg0X5cHoKyCGOO5FHxcxGuBLhgT0QoAI2A/xvHiRMrTQNktW6/o3SyyOGSK
-         pe7IfdAY1PfZmHSU+A1FKLxfXQUSfCB1OwSiEcWDkbmxneFZUS5YCvsT9jJQ2M4ERlt8
-         kPX6xhEblEjJUoujRI3ab/ZUqtI7zEGzWjZOQNFJU6vWPcfzfjwowpBy4gWsCdzgdpcr
-         dpQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=juJPwPR296pSJZwsH9/Iy+TMiLjsg5L/e3X7qop/D3w=;
-        b=BWprIbY6NwdyU1IMdDaV6uhf5OLJyz55yZ0fcAfsswJecxN38KVogw+2DD4xkzrCOV
-         M3Gppycc1PVAu0UUukrZE0tiIR1PejZMpdnxrmK+3x6gqmZCzIGV1wkcgcjZ48FB3gAZ
-         HQKbF486oQCm1EToy0jSqdkoKmkrUGDuefxOYwl3NmwMHhm4wkn1KKyOCUNeq8x0vWqm
-         GDDXxSHgEm3uaSVY0jNweJuc16b3dzuLUmrqWobULvMQpbNNRFEshBhVxd4okVLoyGk6
-         w9qi4LaIKxv4zNqtTm1YR5zM1ybNCi3qxQdrxeenmEA8vWR96BX5z9TIYwyWN1o4XAPR
-         FJrw==
-X-Gm-Message-State: AJIora93s2+rcIcgWmqCIGQQOriprA8Pz7OnqZmWEtmwAZ5ScFOC8dt3
-        W6XvxZYszMByo0m77EVwSanHUfacoPwl+csQ3Iq/rg==
-X-Google-Smtp-Source: AGRyM1vpXuHX/b68bS4ayavud0a5eakM5MhbMfcsLJodMJUZ4whj1SvXh17eHSaMDiWAQlCGApLgvLq0yCqBlwuOVj0=
-X-Received: by 2002:a81:3a12:0:b0:314:6097:b801 with SMTP id
- h18-20020a813a12000000b003146097b801mr15576175ywa.512.1656059324577; Fri, 24
- Jun 2022 01:28:44 -0700 (PDT)
+        Fri, 24 Jun 2022 04:32:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27B9F24BD7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:32:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656059540;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CgygOx5yPDyYMb31XsTetk6Htk9rXafuen11iv6Q0EQ=;
+        b=SQ47YGVq2DqEgDPEiZeaBNhbrmWQsB8lI4dEyMlGjDHKeKKKlsECQbWgs4/KIVZxPQeskl
+        ho4ATx1yAuy16Z2O3BCgdyIpvPWkCp0qP6WL7lJ5uBRwP68PBN/NziLkT+LNRbSRWqLkJa
+        kqjQ6P0q47aImwVpOoEllhtRiiRcdIk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-D107xuevOlKyKasx9ESEeg-1; Fri, 24 Jun 2022 04:32:16 -0400
+X-MC-Unique: D107xuevOlKyKasx9ESEeg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 682B785A589;
+        Fri, 24 Jun 2022 08:32:16 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4AB79416171;
+        Fri, 24 Jun 2022 08:32:16 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for Linux 5.19-rc4
+Date:   Fri, 24 Jun 2022 04:32:16 -0400
+Message-Id: <20220624083216.2723369-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20220623111937.6491-1-yee.lee@mediatek.com> <20220623111937.6491-2-yee.lee@mediatek.com>
- <CANpmjNN-jsZoVmJWD2Dz6O3_YVjy0av6e0iD-+OYXpik1LbLvg@mail.gmail.com> <bdfd039fbde06113071f773ae6d5635ff4664e2c.camel@mediatek.com>
-In-Reply-To: <bdfd039fbde06113071f773ae6d5635ff4664e2c.camel@mediatek.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 24 Jun 2022 10:28:08 +0200
-Message-ID: <CANpmjNPfkFjUteMCDzUSPmTKbpnSfjmWqp9ft8vb-v=B8eeRKw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] mm: kfence: skip kmemleak alloc in kfence_pool
-To:     Yee Lee <yee.lee@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:KFENCE" <kasan-dev@googlegroups.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Jun 2022 at 10:20, 'Yee Lee' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> On Thu, 2022-06-23 at 13:59 +0200, Marco Elver wrote:
-> > On Thu, 23 Jun 2022 at 13:20, yee.lee via kasan-dev
-> > <kasan-dev@googlegroups.com> wrote:
-> > >
-> > > From: Yee Lee <yee.lee@mediatek.com>
-> > >
-> > > Use MEMBLOCK_ALLOC_NOLEAKTRACE to skip kmemleak registration when
-> > > the kfence pool is allocated from memblock. And the kmemleak_free
-> > > later can be removed too.
-> >
-> > Is this purely meant to be a cleanup and non-functional change?
-> >
-> > > Signed-off-by: Yee Lee <yee.lee@mediatek.com>
-> > >
-> > > ---
-> > >  mm/kfence/core.c | 18 ++++++++----------
-> > >  1 file changed, 8 insertions(+), 10 deletions(-)
-> > >
-> > > diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> > > index 4e7cd4c8e687..0d33d83f5244 100644
-> > > --- a/mm/kfence/core.c
-> > > +++ b/mm/kfence/core.c
-> > > @@ -600,14 +600,6 @@ static unsigned long kfence_init_pool(void)
-> > >                 addr += 2 * PAGE_SIZE;
-> > >         }
-> > >
-> > > -       /*
-> > > -        * The pool is live and will never be deallocated from this
-> > > point on.
-> > > -        * Remove the pool object from the kmemleak object tree, as
-> > > it would
-> > > -        * otherwise overlap with allocations returned by
-> > > kfence_alloc(), which
-> > > -        * are registered with kmemleak through the slab post-alloc
-> > > hook.
-> > > -        */
-> > > -       kmemleak_free(__kfence_pool);
-> >
-> > This appears to only be a non-functional change if the pool is
-> > allocated early. If the pool is allocated late using page-alloc, then
-> > there'll not be a kmemleak_free() on that memory and we'll have the
-> > same problem.
->
-> Do you mean the kzalloc(slab_is_available) in memblock_allc()? That
-> implies that MEMBLOCK_ALLOC_NOLEAKTRACE has no guarantee skipping
-> kmemleak_alloc from this. (Maybe add it?)
+Linus,
 
-No, if KFENCE is initialized through kfence_init_late() ->
-kfence_init_pool_late() -> kfence_init_pool().
+The following changes since commit 24625f7d91fb86b91e14749633a7f022f5866116:
+
+  Merge tag 'for-linus' of git://git.kernel.org/pub/scm/virt/kvm/kvm (2022-06-14 07:57:18 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+
+for you to fetch changes up to 6defa24d3b12bbd418bc8526dea1cbc605265c06:
+
+  KVM: SEV: Init target VMCBs in sev_migrate_from (2022-06-24 04:10:18 -0400)
+
+----------------------------------------------------------------
+ARM64:
+
+* Fix a regression with pKVM when kmemleak is enabled
+
+* Add Oliver Upton as an official KVM/arm64 reviewer
+
+selftests:
+
+* deal with compiler optimizations around hypervisor exits
+
+x86:
+
+* MAINTAINERS reorganization
+
+* Two SEV fixes
+
+----------------------------------------------------------------
+Dmitry Klochkov (1):
+      tools/kvm_stat: fix display of error when multiple processes are found
+
+Marc Zyngier (1):
+      KVM: arm64: Add Oliver as a reviewer
+
+Mingwei Zhang (1):
+      KVM: x86/svm: add __GFP_ACCOUNT to __sev_dbg_{en,de}crypt_user()
+
+Paolo Bonzini (2):
+      Merge tag 'kvmarm-fixes-5.19-2' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+      MAINTAINERS: Reorganize KVM/x86 maintainership
+
+Peter Gonda (1):
+      KVM: SEV: Init target VMCBs in sev_migrate_from
+
+Quentin Perret (1):
+      KVM: arm64: Prevent kmemleak from accessing pKVM memory
+
+Raghavendra Rao Ananta (1):
+      selftests: KVM: Handle compiler optimizations in ucall
+
+ MAINTAINERS                                     | 42 +++++++++++----
+ arch/arm64/kvm/arm.c                            |  6 +--
+ arch/x86/kvm/svm/sev.c                          | 72 ++++++++++++++++---------
+ arch/x86/kvm/svm/svm.c                          | 11 +---
+ arch/x86/kvm/svm/svm.h                          |  2 +-
+ tools/kvm/kvm_stat/kvm_stat                     |  3 +-
+ tools/testing/selftests/kvm/lib/aarch64/ucall.c |  9 ++--
+ 7 files changed, 92 insertions(+), 53 deletions(-)
+

@@ -2,62 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47CB559E4C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90668559E5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiFXQIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 12:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
+        id S231150AbiFXQIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 12:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiFXQIV (ORCPT
+        with ESMTP id S230519AbiFXQIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 12:08:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9838929CA2;
-        Fri, 24 Jun 2022 09:08:16 -0700 (PDT)
-Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0780866017FA;
-        Fri, 24 Jun 2022 17:08:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656086895;
-        bh=KGOY/hKSjd6Fa8Gy3cPJe3LIX1aHDy62+SKTc+gQNls=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OJhEKwCxKH5CaQUTh954WJwlHVZYeXRtFfVXE2QIBRMmZ7N2GrutyjZCdOEGPRfM6
-         aHeFF1YHf8ADrGN+qK55wKTxMEno1UP3hpuVT01p/e2xg2O8GA1NRsJC33r7Efto3/
-         U7tp7icBQ4A2PSTnpKfODdpbHccrb7EdpnLQirrA+za60VqxGv19t+2mvz63GUq0zL
-         qZE6BNBgJ5AbfC4R0baa62JmjqPu6MhczBVBN+p1Wa+V50F4VWwGsru8lnySjhaFfQ
-         gtKxdP1rMIDyKJCYyTl+qlx3mjoIQ8tdz/R+vaZD5yglBziQ8METSLVenQu7fvMQTL
-         bx1yGvPrmk2LA==
-Date:   Fri, 24 Jun 2022 12:08:10 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Guodong Liu <guodong.liu@mediatek.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v2 4/5] pinctrl: mediatek: dropping original advanced
- drive configuration function
-Message-ID: <20220624160810.alotw7iwvivp5zg6@notapiano>
-References: <20220624133700.15487-1-guodong.liu@mediatek.com>
- <20220624133700.15487-5-guodong.liu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220624133700.15487-5-guodong.liu@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        Fri, 24 Jun 2022 12:08:20 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726B22E087
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:08:13 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id k7so2502878plg.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:cc:from:to:message-id;
+        bh=spPs9Kh5ojs3SRS6SOisJmBowfLYX6h0pwpaQVCmATc=;
+        b=OOQwQsejeQlKbt2UzAYvBYDM91ItcQHMgj5FomAy5gRFoPGhCCYuOas+oX3/kpysGX
+         Rptyn7UjcB/OZrSFIpq8QWU8KKXidyivS/wVCOnTRqr+tse+DOppn9kUdBi37HH+oM83
+         eCqN/hQoAAN8JJexYF7im9rEXASfSmYsgirooRs/E+pTIQkqQFsx0vq3Kc5kmuPpPBgF
+         y+XieLAqDEB7ZnKk6EQ5F5zNywMvRi7l3djlploU551bac5tDkX3Zw1NdjQvATRNHlDu
+         z26QRvkrAM9/9zUqKyTHb8yVc4wCRof7NxnO1HLjtsJ0PTm5Wm4g5ylObydY8ndED2Fb
+         yvlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:cc:from:to:message-id;
+        bh=spPs9Kh5ojs3SRS6SOisJmBowfLYX6h0pwpaQVCmATc=;
+        b=wH1fY8zOk+FavsoDK09ZKjaE58h5PjqXXkIb1AmJ7pYUbMJAxS9b5g/OBqhnMuCGOT
+         985UtdMG88FXRS/TEIFnoAbrYwDNxw5ioYssCk5kbIypJNiY+wR+uFR2XmxtWh+Wc4uq
+         k9yO35hObWCFIwSP38TPZ3QyQXPiYqau7LLu+emQqaLN7AsgvkMaYWbvzktEJsFyCLWK
+         Q6OJ83UA2n6pFKuveyB60Q789a5D8eBHvu3NSo9MZk2nf/uMpCYntOD4YVfwQPgkYaYI
+         M+qPcJsnllgrVhqeoDP98Tz/5kx21lRJZ9p7T+fE1vdImhaxm9611khlTomVGGlzEIwF
+         T1XA==
+X-Gm-Message-State: AJIora91Aj7cKR2Tmg2Z37l2aMVp3IUWC1Q49kG+DYFpeO3dzGNTVnA3
+        zbFcLVT0XJznBLz6LiIN92INiA==
+X-Google-Smtp-Source: AGRyM1umNBt5UoQa8o4X9DncGsEKMTMaXY8F5/kEULHEONR9NnfdGcqdijJnlh2NADsJZ0Aul8jKDw==
+X-Received: by 2002:a17:902:f642:b0:169:714:b079 with SMTP id m2-20020a170902f64200b001690714b079mr43540771plg.117.1656086892581;
+        Fri, 24 Jun 2022 09:08:12 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id h6-20020aa796c6000000b00522c8fb04adsm1976417pfq.176.2022.06.24.09.08.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 09:08:12 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 09:08:12 -0700 (PDT)
+X-Google-Original-Date: Fri, 24 Jun 2022 09:08:06 PDT (-0700)
+Subject: [GIT PULL] A Single RISC-V Fix for 5.19-rc4
+CC:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Message-ID: <mhng-3e339ca6-0ed6-4d02-96b8-2f664f62cc8c@palmer-mbp2014>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,26 +62,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guodong,
+The following changes since commit c836d9d17a7d102ded1ba4dbd4ee0bc42ba26211:
 
-On Fri, Jun 24, 2022 at 09:36:59PM +0800, Guodong Liu wrote:
-> Function bias_combo getter/setters already handle all cases advanced drive
-> configuration, include drive for I2C related pins.
+  RISC-V: Some Svpbmt fixes (2022-06-16 15:48:39 -0700)
 
-This commit message could be improved. I suggest using the following commit
-message:
+are available in the Git repository at:
 
-The bias_combo getter/setter is already able to handle advanced drive
-configuration, which is the reason commit 353d2ef77f2b ("dt-bindings: pinctrl:
-mt8192: Use generic bias instead of pull-*-adv") dropped the pull-up-adv and
-pull-down-adv properties from the binding. With those properties removed,
-there's no longer any use for the adv_pull callbacks, so drop them.
+  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-5.19-rc4
 
-> 
-> Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
+for you to fetch changes up to e83031564137cf37e07c2d10ad468046ff48a0cf:
 
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+  riscv: Fix ALT_THEAD_PMA's asm parameters (2022-06-17 06:16:46 -0700)
 
-Thanks,
-Nícolas
+----------------------------------------------------------------
+A Single RISC-V Fix for 5.19-rc4
+
+* A fix to the T-Head memory type errata workaround that avoids behavior
+  that is unsupported in the LLVM assembler.
+
+----------------------------------------------------------------
+Nathan Chancellor (1):
+      riscv: Fix ALT_THEAD_PMA's asm parameters
+
+ arch/riscv/include/asm/errata_list.h | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)

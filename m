@@ -2,136 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFA055A22D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 21:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7780D55A230
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 21:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbiFXTvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 15:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
+        id S231600AbiFXTxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 15:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiFXTvS (ORCPT
+        with ESMTP id S231545AbiFXTw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 15:51:18 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CC07FD24;
-        Fri, 24 Jun 2022 12:51:16 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id ej4so4873753edb.7;
-        Fri, 24 Jun 2022 12:51:16 -0700 (PDT)
+        Fri, 24 Jun 2022 15:52:59 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1F5B85;
+        Fri, 24 Jun 2022 12:52:57 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id c4so2955892plc.8;
+        Fri, 24 Jun 2022 12:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=IlyhdFMImGeb91lejRrs7vQ8r+23EDsm+NrRwbaFfRE=;
-        b=enHeReQVjJ/UJTqaKyFAhtCBoqIf4KF5UPWDs6zNR4rPduhPJrYpKY1MwhZV4RXVOK
-         vKyBgy8GeEju7Jv6VV67X+bNvMQOxX6V7idVurYMSaGWHnrAgobi1e1XXJWPkqFKirIj
-         2gz0IDsUJWHJt2ZNg67fZY+7FRNOM3VtG+42JJj5DAwrqo9fzTwRRpyinlB8N4oTIbNq
-         Z9B8tl0htTaROmO6eo2pTduVeOHQy3Sqa/VlIGvLv+HRP2A20pTEFggtwNKXKVZqw7Zb
-         AwYpkS74KAXhX2x35AJFPxgD/mFnkmN0TRilXOKqyTjzm3QEUwgB2zSYm+Ai7JUJgFBT
-         D19Q==
+        bh=F64miWX8OIqGg7SQtGzniGR3amqV7Fg7vGx9jO7hUCs=;
+        b=KG3QkLlWUxzLyv8sJMKH921oVvgVk521YHQekwTUWlGSfDMB9pqY0/y10mxQ5RC/sE
+         RACAUQBOb9GFJAD0pNe7zYYb0zT6qdwrMkun4xBAmlAVFUVejeIgPtfkImyTxDcK9joG
+         WIyobwYTQFAzSCctv50iKXFyYvsWZ2NtQoaZp2XypkYmBi9vCH3bCMzGO1zf9oFrsiaA
+         m0sLaImwJ8X3u0ZEBoVB33JOBGWULVChZZaKNosHVhxAR7tgzzxUQiCZEi2cfOGxe8Og
+         JDxEJb/8Q/5s9D41e0wWDLUquxLYba8LZ/0lPR1GoAoRRWGvZ2yuwD1MOHsJbJVbszia
+         ueKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=IlyhdFMImGeb91lejRrs7vQ8r+23EDsm+NrRwbaFfRE=;
-        b=NoXtdAJ+5BISl2RR7r25pCQoHoAaQbvCck0Zo+0cbptduaZb7vawxUArBLrwOcb7Ny
-         aNRR7lT6A3hJh1z3MiBjjrwac3yBq8e132fVh+bKbiMScnhr1DU6T0dCNelXTWZLgf1V
-         oTrN9jGr/XlJZmLQ2AgD6hB+xS5C0uCQAI2pB8KJ4MJzvlCamIry+aLYWjyu44r9ycgz
-         pYAy1lCSTeAUCjF1XrSeqpvThH2sfxlVfeiB7+IDEl47fcww3v+M25r/WFELysLmFw/Z
-         WmOYIIrqlOK49NaMVf2q71rBM8/pp4Hqj3pr2kehhkRn1oL5Gl1v53DAtF1BCHTtgyWu
-         4WGA==
-X-Gm-Message-State: AJIora8i3arYmZXF9HRFA9OqtQxuZIvNMguIk8usJkyALuZEk8L7MiiG
-        Xn6pPzPJqOfbZ15jD3lUsfg=
-X-Google-Smtp-Source: AGRyM1tqs6Ke+BiFNzHottRZZOBZEqN8+W2JhAZk/a1fKvA9kbXP2z0IsZAy0X5EFEu3cOHTZ2UVvA==
-X-Received: by 2002:aa7:dad6:0:b0:435:7a44:7480 with SMTP id x22-20020aa7dad6000000b004357a447480mr981415eds.138.1656100274625;
-        Fri, 24 Jun 2022 12:51:14 -0700 (PDT)
-Received: from fedora.robimarko.hr (dh207-98-60.xnet.hr. [88.207.98.60])
-        by smtp.googlemail.com with ESMTPSA id jz27-20020a17090775fb00b007246492658asm1586316ejc.117.2022.06.24.12.51.13
+        bh=F64miWX8OIqGg7SQtGzniGR3amqV7Fg7vGx9jO7hUCs=;
+        b=G2nsA2DYsiTZ2DX4tPnZEQZLmXhafHW+4EqLGhiaOINCr6L1LC18OKbdl3fgy4S6CY
+         NJE/t7mluWCxbjHqUSyohirdZvXDfZZgE1yV0jHSmp5n7ofgthT2qUtKyWAszXjC4zi7
+         BWPmX1jtZt0o8K+vrDHDz7SKKSvG1oULqaPugigVhHc6RVtSM3xdSzPIwCEkG5MP9f2L
+         iN+A1pVXGshs7JegaTtTHXNAqYQn+Nt8yuAI8zO0sLTE7UHzf94stbRXh/EgHU0a8MMP
+         7+c4UJXe1rdyBV9BsY68hiAyH1iD1HBtmsrtnT+LphsqowO1n0A5i6cVYs2aZd5S++L8
+         cH4w==
+X-Gm-Message-State: AJIora/oMMZFtiKlW2Yb2xklQXu5oEvARrnSxrs2kMWb+EoTM4S1gZlU
+        2Bs4JYKJrRB2pPue4YNgEHw=
+X-Google-Smtp-Source: AGRyM1u5oABiaQ4N9vv8eRRoGYjSna+gp2MU2xgiqmbWPGR0eG0IzoEqq8qbimjBVbruzHb8HViHyQ==
+X-Received: by 2002:a17:90a:8041:b0:1ec:9f10:3c4e with SMTP id e1-20020a17090a804100b001ec9f103c4emr614193pjw.148.1656100377092;
+        Fri, 24 Jun 2022 12:52:57 -0700 (PDT)
+Received: from fedora.. ([103.230.148.187])
+        by smtp.gmail.com with ESMTPSA id h9-20020a170902f70900b001663cf001besm2186069plo.174.2022.06.24.12.52.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 12:51:14 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     bjorn.andersson@linaro.org, agross@kernel.org,
-        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH] pinctrl: qcom: spmi-gpio: make the irqchip immutable
-Date:   Fri, 24 Jun 2022 21:51:12 +0200
-Message-Id: <20220624195112.894916-1-robimarko@gmail.com>
+        Fri, 24 Jun 2022 12:52:56 -0700 (PDT)
+From:   Gautam <gautammenghani201@gmail.com>
+To:     sj@kernel.org, shuah@kernel.org
+Cc:     Gautam <gautammenghani201@gmail.com>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kselftests/damon: add support for checking secureboot status
+Date:   Sat, 25 Jun 2022 01:22:39 +0530
+Message-Id: <20220624195239.7293-1-gautammenghani201@gmail.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 6c846d026d49 ("gpio: Don't fiddle with irqchips marked as
-immutable") added a warning to indicate if the gpiolib is altering the
-internals of irqchips.
+The kernel is in lockdown mode when secureboot is enabled and hence
+debugfs cannot be used. But the error printed after running tests does
+not indicate this currently:
 
-Following this change the following warning is now observed for the SPMI
-PMIC pinctrl driver:
-gpio gpiochip1: (200f000.spmi:pmic@0:gpio@c000): not an immutable chip, please consider fixing it!
+>TAP version 13
+>1..6
+># selftests: damon: debugfs_attrs.sh
+># cat: /sys/kernel/debug/damon/monitor_on: Operation not permitted
+># _debugfs_common.sh: line 48: [: =: unary operator expected
+># cat: /sys/kernel/debug/damon/attrs: Operation not permitted
+># _debugfs_common.sh: line 11: /sys/kernel/debug/damon/attrs: Operation 
+> not permitted
+># writing 1 2 3 4 5 to /sys/kernel/debug/damon/attrs doesn't return 0
+># expected because: valid input
+># _debugfs_common.sh: line 16: /sys/kernel/debug/damon/attrs: Operation 
+> not permitted
+>not ok 1 selftests: damon: debugfs_attrs.sh # exit=1
 
-Fix this by making the irqchip in the SPMI PMIC pinctrl driver immutable.
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
+After adding the check for secureboot, the output is as follows:
+
+>TAP version 13
+>1..6
+># selftests: damon: debugfs_attrs.sh
+># debugfs cannot work with secureboot enabled
+>not ok 1 selftests: damon: debugfs_attrs.sh # exit=1
+
+
+Signed-off-by: Gautam <gautammenghani201@gmail.com>
 ---
- drivers/pinctrl/qcom/pinctrl-spmi-gpio.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ tools/testing/selftests/damon/_chk_dependency.sh | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+ mode change 100644 => 100755 tools/testing/selftests/damon/_chk_dependency.sh
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-index c3255b0bece4..406ee0933d0b 100644
---- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-+++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-@@ -171,7 +171,6 @@ struct pmic_gpio_state {
- 	struct regmap	*map;
- 	struct pinctrl_dev *ctrl;
- 	struct gpio_chip chip;
--	struct irq_chip irq;
- 	u8 usid;
- 	u8 pid_base;
- };
-@@ -988,6 +987,17 @@ static void *pmic_gpio_populate_parent_fwspec(struct gpio_chip *chip,
- 	return fwspec;
- }
- 
-+static const struct irq_chip spmi_gpio_irq_chip = {
-+	.name		= "spmi-gpio",
-+	.irq_ack	= irq_chip_ack_parent,
-+	.irq_mask	= irq_chip_mask_parent,
-+	.irq_unmask	= irq_chip_unmask_parent,
-+	.irq_set_type	= irq_chip_set_type_parent,
-+	.irq_set_wake	= irq_chip_set_wake_parent,
-+	.flags		= IRQCHIP_IMMUTABLE | IRQCHIP_MASK_ON_SUSPEND,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
-+};
+diff --git a/tools/testing/selftests/damon/_chk_dependency.sh b/tools/testing/selftests/damon/_chk_dependency.sh
+old mode 100644
+new mode 100755
+index 0189db81550b..6e45c1fe230e
+--- a/tools/testing/selftests/damon/_chk_dependency.sh
++++ b/tools/testing/selftests/damon/_chk_dependency.sh
+@@ -26,3 +26,13 @@ do
+ 		exit 1
+ 	fi
+ done
 +
- static int pmic_gpio_probe(struct platform_device *pdev)
- {
- 	struct irq_domain *parent_domain;
-@@ -1081,16 +1091,8 @@ static int pmic_gpio_probe(struct platform_device *pdev)
- 	if (!parent_domain)
- 		return -ENXIO;
- 
--	state->irq.name = "spmi-gpio",
--	state->irq.irq_ack = irq_chip_ack_parent,
--	state->irq.irq_mask = irq_chip_mask_parent,
--	state->irq.irq_unmask = irq_chip_unmask_parent,
--	state->irq.irq_set_type = irq_chip_set_type_parent,
--	state->irq.irq_set_wake = irq_chip_set_wake_parent,
--	state->irq.flags = IRQCHIP_MASK_ON_SUSPEND,
--
- 	girq = &state->chip.irq;
--	girq->chip = &state->irq;
-+	gpio_irq_chip_set_chip(girq, &spmi_gpio_irq_chip);
- 	girq->default_type = IRQ_TYPE_NONE;
- 	girq->handler = handle_level_irq;
- 	girq->fwnode = of_node_to_fwnode(state->dev->of_node);
++secureboot_error="Operation not permitted"
++for f in attrs target_ids monitor_on
++do
++	status=$( cat "$DBGFS/$f" 2>&1 )
++	if [ "${status#*$secureboot_error}" != "$status" ]; then
++		echo "debugfs cannot work with secureboot enabled"
++		exit 1
++	fi
++done
 -- 
 2.36.1
 

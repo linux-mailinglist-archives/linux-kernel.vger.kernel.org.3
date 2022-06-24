@@ -2,108 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 579A9559842
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B469F55984D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 13:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiFXK4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 06:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S230320AbiFXLI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 07:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiFXK4q (ORCPT
+        with ESMTP id S229522AbiFXLI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 06:56:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D48677FCC
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:56:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656068203;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IvdUauqtsThSzQf7R6IOvYioKcqImV/YhI4IgCG9bxg=;
-        b=UhJkKhHxum/wJosr9KKxiubLFomUqZAGzMlipKhk2ofDpeCiJw/Y6Wc/e8X4cUsoAU8D7B
-        aNb5AwfZy4ES7aCosLz3JKv+7nGroCTWABeXCL7mKqtYeFShI491RHn+h9rY2H9WJbio7M
-        gBV6auxD1fY8QnbGM1f7lCzoGOJnvQI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-501-mHgtofw8MmmtcB9otddnMA-1; Fri, 24 Jun 2022 06:56:42 -0400
-X-MC-Unique: mHgtofw8MmmtcB9otddnMA-1
-Received: by mail-wm1-f69.google.com with SMTP id i184-20020a1c3bc1000000b003a026f48333so885803wma.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:56:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=IvdUauqtsThSzQf7R6IOvYioKcqImV/YhI4IgCG9bxg=;
-        b=p6kMm71DwJ9nBUVEZ0u/zqJT4qeZOcTWHZhGLtPgQBGJLLqbBLBRssks4kZYgmMpnw
-         numLIeczS3ZooFVC9QTZiOgOo5sFWrhtLBehtrR9/W69h3QPnFCIJQgkITiSCNWzYqD4
-         SRFogCtGyIbiX4Ybfkx/Kn3zt95dqWUWFWdAVOzVpTkmEu/QXGWPeumbkriXoAdfNrXt
-         Yu9aRwg775F1g7VKLd9C24X9K1IlVBYaGH9X5T/xsH6P0gPzvuR7oQwsFfovoPngMleP
-         sxPWwz3wdzZGPutvWOZw1R28AzoJzslTstJ2cWwbmCC3lz+P4s1cfOh9CbHcO6bt5CQ3
-         9UCg==
-X-Gm-Message-State: AJIora8PbkbZiEMb+8QGy4idZTBYdwYDsBHDHN7mDP0yZ+CilZj2DUiS
-        WTIkR4BwVS5qLFLrIkNo1Dn2a7HonV5hIWPWJyOtCtvkNeEu8euaeey1fDGAv95DetTEolCbDgG
-        X9Tp6J5fTi047AkbDLNJOCFqT
-X-Received: by 2002:a7b:c4d9:0:b0:3a0:260f:1f4 with SMTP id g25-20020a7bc4d9000000b003a0260f01f4mr3030030wmk.178.1656068200961;
-        Fri, 24 Jun 2022 03:56:40 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1ul73CGYuf3nWcoswqmbLq2Rn05RHTs/WAiXu6dCDOZbh5SeLlZMogvS80/5i3SlejJlCzeUQ==
-X-Received: by 2002:a7b:c4d9:0:b0:3a0:260f:1f4 with SMTP id g25-20020a7bc4d9000000b003a0260f01f4mr3030008wmk.178.1656068200758;
-        Fri, 24 Jun 2022 03:56:40 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id e16-20020a5d4e90000000b0021b91d1ddbfsm1971603wru.21.2022.06.24.03.56.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 03:56:39 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Schspa Shi <schspa@gmail.com>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com
-Cc:     linux-kernel@vger.kernel.org, zhaohui.shi@horizon.ai,
-        Schspa Shi <schspa@gmail.com>
-Subject: Re: [PATCH] sched: fix bad task migration for rt tasks
-In-Reply-To: <20220623182932.58589-1-schspa@gmail.com>
-References: <20220623182932.58589-1-schspa@gmail.com>
-Date:   Fri, 24 Jun 2022 11:56:38 +0100
-Message-ID: <xhsmhv8sq5nyx.mognet@vschneid.remote.csb>
+        Fri, 24 Jun 2022 07:08:26 -0400
+Received: from 11.mo582.mail-out.ovh.net (11.mo582.mail-out.ovh.net [188.165.38.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EB6522C8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 04:08:24 -0700 (PDT)
+Received: from player694.ha.ovh.net (unknown [10.111.208.149])
+        by mo582.mail-out.ovh.net (Postfix) with ESMTP id 813C8250E7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:03:02 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player694.ha.ovh.net (Postfix) with ESMTPSA id A079C2BDB6F28;
+        Fri, 24 Jun 2022 11:02:58 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-106R0063cb03ecb-227a-4b1b-a9b4-809ab7d74b16,
+                    3A36F777C3506A3F96EA03190DC1808DFCB0D32C) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Stephen Kitt <steve@sk2.org>, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+Subject: [PATCH] docs: admin-guide/sysctl: escape % symbols
+Date:   Fri, 24 Jun 2022 13:02:30 +0200
+Message-Id: <20220624110230.595740-1-steve@sk2.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 11089551134924441172
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudefledgfeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepleegteeujeffjeefjeevhfdtudefjefgteelgedtudekleeiledvvdetudevjedtnecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrieelgedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkedv
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/06/22 02:29, Schspa Shi wrote:
-> @@ -1998,12 +1998,15 @@ static struct rq *find_lock_lowest_rq(struct task_struct *task, struct rq *rq)
->  			 * the mean time, task could have
->  			 * migrated already or had its affinity changed.
->  			 * Also make sure that it wasn't scheduled on its rq.
-> +			 * It is possible the task has running for a while,
-> +			 * And we check task migration disable flag again.
->  			 */
->  			if (unlikely(task_rq(task) != rq ||
->  				     !cpumask_test_cpu(lowest_rq->cpu, &task->cpus_mask) ||
+% symbols need to be escaped to render correctly here, do so.
 
-cf. 95158a89dd50 ("sched,rt: Use the full cpumask for balancing"), this
-made sense to me back then but not so much anymore... Shouldn't this have
-remained a ->cpus_ptr check?
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ Documentation/admin-guide/sysctl/kernel.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I'm going to revisit that commit, I evicted too much of it.
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index ddccd1077462..079a51ed88a9 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -38,8 +38,8 @@ acct
+ 
+ If BSD-style process accounting is enabled these values control
+ its behaviour. If free space on filesystem where the log lives
+-goes below ``lowwater``% accounting suspends. If free space gets
+-above ``highwater``% accounting resumes. ``frequency`` determines
++goes below ``lowwater``\% accounting suspends. If free space gets
++above ``highwater``\% accounting resumes. ``frequency`` determines
+ how often do we check the amount of free space (value is in
+ seconds). Default:
+ 
 
->  				     task_running(rq, task) ||
->  				     !rt_task(task) ||
-> -				     !task_on_rq_queued(task))) {
-> +				     !task_on_rq_queued(task) ||
-> +				     is_migration_disabled(task))) {
->  
->  				double_unlock_balance(rq, lowest_rq);
->  				lowest_rq = NULL;
-> -- 
-> 2.24.3 (Apple Git-128)
+base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
+-- 
+2.30.2
 

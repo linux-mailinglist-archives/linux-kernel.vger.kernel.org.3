@@ -2,71 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE7B559A4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87120559A4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbiFXNUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 09:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
+        id S231737AbiFXNZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 09:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbiFXNUP (ORCPT
+        with ESMTP id S229584AbiFXNZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 09:20:15 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C19D55340;
-        Fri, 24 Jun 2022 06:20:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BF2FB1F8EC;
-        Fri, 24 Jun 2022 13:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1656076812; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y20EeLE8B8Qorbwu1g9EchQUnf3UdaJEcN6H691i3xI=;
-        b=heWHZ0JvOaO8n8TxQZNpBsw0yMM9P7PxY9qwv9Zrwg/9dcfUBCoRZooPZB96T3ekAhObzh
-        A989zpuVbyzC3p7QZ2WGWQGwfcO2fdpSICEshUQam4HXDQrG5WyJdEoZguCTmCqPKkBv1D
-        szw8nukiSMFs/nkSyvQGIHuSjiy6uDg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1656076812;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y20EeLE8B8Qorbwu1g9EchQUnf3UdaJEcN6H691i3xI=;
-        b=rZtFUCKz0dNLJzLgqkNg2tJ3kGf8eJOy91IHH6i0HZFIa61eFh+hid9kLHPDXQd4CH8QpF
-        YGEAzXe9newKqzDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7C46E13480;
-        Fri, 24 Jun 2022 13:20:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NTqPHAy6tWKJfQAAMHmgww
-        (envelope-from <jroedel@suse.de>); Fri, 24 Jun 2022 13:20:12 +0000
-Date:   Fri, 24 Jun 2022 15:20:11 +0200
-From:   Joerg Roedel <jroedel@suse.de>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] MAINTAINERS: Add new IOMMU development mailing list
-Message-ID: <YrW6C4AgJ9U5tcfF@suse.de>
-References: <20220624125139.412-1-joro@8bytes.org>
- <YrW1Oy0ojM5pXREB@infradead.org>
+        Fri, 24 Jun 2022 09:25:20 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47E8F527EA;
+        Fri, 24 Jun 2022 06:25:19 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 614A692009C; Fri, 24 Jun 2022 15:25:17 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 53F1E92009B;
+        Fri, 24 Jun 2022 14:25:17 +0100 (BST)
+Date:   Fri, 24 Jun 2022 14:25:17 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH v6 09/17] mips: use fallback for random_get_entropy()
+ instead of just c0 random
+In-Reply-To: <CAHmME9r-wTkNGVj0sBOM5LVY=jdAw99gne-1g-mwjBnk3q7VqQ@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2206241407240.22231@angie.orcam.me.uk>
+References: <20220423212623.1957011-1-Jason@zx2c4.com> <20220423212623.1957011-10-Jason@zx2c4.com> <alpine.DEB.2.21.2204250113440.9383@angie.orcam.me.uk> <YmicjVbkcppfzE1E@zx2c4.com> <CAHmME9r-wTkNGVj0sBOM5LVY=jdAw99gne-1g-mwjBnk3q7VqQ@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YrW1Oy0ojM5pXREB@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,25 +45,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 05:59:39AM -0700, Christoph Hellwig wrote:
-> Shouldn't this also remove the old list given it has only a few days
-> to live?
+Hi Jason,
 
-No, the new list is not yet archived on lore. There will be a hard
-switch of the archive on July 5th, and after that the old list can be
-removed.
+> > There is lots of optimization potential on a few fronts we've identified
+> > in this thread. Let's save these for a follow-up. I'd rather this
+> > initial one be at least somewhat simple, so that as it gets optimized,
+> > it'll be easy to handle regressions. Also, it probably makes sense for
+> > you to send the patches for these, since you have both the hardware
+> > chops and the hardware itself to assess these ideas. I am interested in
+> > the topic though, so please do CC me.
+> 
+> Everything has been upstream for a little while now, which means
+> development of this can move back to the proper MIPS tree like normal.
+> Did you want to submit some optimizations? Would be happy to look at
+> whatever you have in mind.
 
-Regards,
+ Thank you for the heads-up!
 
--- 
-Jörg Rödel
-jroedel@suse.de
+ Unfortunately I'm a little stuck at the moment, especially as one of my
+main MIPS machines (a 5Kc Malta system) died mid-May while operating.  It 
+seems to be a faulty CPU core card and the base board may be fine, though 
+I cannot know for sure as I only have one each and I don't have a logic 
+analyser or at least a JTAG probe to peek at the system and see what's 
+going on inside.
 
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5
-90409 Nürnberg
-Germany
- 
-(HRB 36809, AG Nürnberg)
-Geschäftsführer: Ivo Totev
+ If anyone knows a source of a replacement Malta, preferably with a 5Kc 
+CoreLV CPU module or another 64-bit hard core card (a number of different 
+ones have been made), then I'll appreciate if you let me know.  I feel 
+rather depressed knowing that many if not most hit the scrapper already 
+while they could still find a good use.  Somehow it is easier to get way 
+more obsolete hardware from 1980/90s just because it was general purpose 
+rather than niche.
 
+ Otherwise I'll try to get back to this stuff later in the year with 
+whatever I have that still runs, but don't hold your breath.  Sorry!
+
+  Maciej

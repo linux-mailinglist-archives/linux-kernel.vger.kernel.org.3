@@ -2,246 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BC75598B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 13:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AECAB5598F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbiFXLnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 07:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
+        id S231767AbiFXMAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 08:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiFXLnh (ORCPT
+        with ESMTP id S230227AbiFXMAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 07:43:37 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415956B8E9;
-        Fri, 24 Jun 2022 04:43:36 -0700 (PDT)
-Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id D2D4A1D74;
-        Fri, 24 Jun 2022 11:42:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1656070962;
-        bh=jv8IdGOGdSV+GhBlmZH3D981qwEa6lnf2CV+RS8Qun8=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=cs2pRmj4hHeDGugH7QMgS4CAwyL7jmc1Zxf2L9ukSfkgcYMbT9DpQdBh14zZsJ+NP
-         o1Bs8GwodApcz+3hS3AKUxHLE/WfI5AekmkKisrr+16PXje5lCsM/uGzeOr5YPQ/4W
-         f7npjFKOURAJV59/V1t+steK9zkHjYNNuBltfGak=
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 2696321AE;
-        Fri, 24 Jun 2022 11:43:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1656071014;
-        bh=jv8IdGOGdSV+GhBlmZH3D981qwEa6lnf2CV+RS8Qun8=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=OO91RV3uS4o/8xpumPvG41UwwVp9JQ2SoTUPSNimzWvaOsYwKKwJcb3Xa5OWFzKJx
-         5DL87edX6S7KOVQIye0A/HaJIlLH3mZY1JzX8DE3ty3uLOHZ1efRBfaeo96bAQEeXM
-         JVdPv+/gp+vFnvzBnfWskEqKaohF7xt1b69rhF6I=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 24 Jun 2022 14:43:33 +0300
-Message-ID: <2e519232-6cc9-f9be-af78-c14d84c7f31f@paragon-software.com>
-Date:   Fri, 24 Jun 2022 14:43:33 +0300
+        Fri, 24 Jun 2022 08:00:18 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4BA76698;
+        Fri, 24 Jun 2022 05:00:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656072018; x=1687608018;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=L7CObdet2addz1owDfCnobhk+prLUKmCD2n9OZyHCsg=;
+  b=VjCFyDG2opOkEf+Yo/6i5GrglXyLDCnR2kPteo5r+D1GFR4ixyVtduEv
+   Hy2hG4WjwKyBWIMVnwGJa7RGq+6L5n18R5mSr9WLF3W9+gzr6XfN/hl4K
+   fXOetOa6+1FCHCHsY6FwpJRrQdzof3q3oKzX9K9rUTe4l2tUbAhbDjuGW
+   0RjCy9HEOyAYMb5i2vGC1/J2Dv0XNRtOkemRGFpOTqVH3VRIR5FoWzMIK
+   jKjxOXI//nhlVkOTd5TxcEdrlj1nv+QMSS521Q9JAq0JxgwCuI+2lWs3+
+   QCXh+IeKjvV3cPJPgoH6sAtTGlUiC5ZQ/ZWp+OmS0+vLN+kaW1z7md01f
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="281029066"
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="281029066"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 05:00:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="586552764"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
+  by orsmga007.jf.intel.com with ESMTP; 24 Jun 2022 05:00:15 -0700
+From:   niravkumar.l.rabara@intel.com
+To:     niravkumar.l.rabara@intel.com
+Cc:     devicetree@vger.kernel.org, dinguyen@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org
+Subject: [PATCH] arm64: dts: altera: socfpga_stratix10: move clocks out of soc node
+Date:   Fri, 24 Jun 2022 19:59:11 +0800
+Message-Id: <20220624115911.3389627-1-niravkumar.l.rabara@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220624031017.3247656-1-niravkumar.l.rabara@intel.com>
+References: <20220624031017.3247656-1-niravkumar.l.rabara@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: [PATCH 3/3] fs/ntfs3: extend ni_insert_nonresident to return inserted
- ATTR_LIST_ENTRY
-Content-Language: en-US
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-To:     <ntfs3@lists.linux.dev>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
-References: <f76c96bb-fdea-e1e5-5f47-c092af5fe556@paragon-software.com>
-In-Reply-To: <f76c96bb-fdea-e1e5-5f47-c092af5fe556@paragon-software.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes xfstest generic/300
-Fixes: 4534a70b7056 ("fs/ntfs3: Add headers and misc files")
+From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
 
-Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+The clocks are not part of the SoC but provided on the board
+(external oscillators). Moving them out of soc node.
+
+Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
 ---
-  fs/ntfs3/attrib.c  | 35 +++++++++++++++++++++--------------
-  fs/ntfs3/frecord.c |  4 ++--
-  fs/ntfs3/index.c   |  2 +-
-  fs/ntfs3/ntfs_fs.h |  2 +-
-  4 files changed, 25 insertions(+), 18 deletions(-)
+ .../boot/dts/altera/socfpga_stratix10.dtsi    | 56 +++++++++----------
+ .../dts/altera/socfpga_stratix10_socdk.dts    | 10 ++--
+ 2 files changed, 32 insertions(+), 34 deletions(-)
 
-diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
-index 3bd51cf4d8bd..65a5f651a4a2 100644
---- a/fs/ntfs3/attrib.c
-+++ b/fs/ntfs3/attrib.c
-@@ -320,7 +320,7 @@ int attr_make_nonresident(struct ntfs_inode *ni, struct ATTRIB *attr,
-  
-  	err = ni_insert_nonresident(ni, attr_s->type, attr_name(attr_s),
-  				    attr_s->name_len, run, 0, alen,
--				    attr_s->flags, &attr, NULL);
-+				    attr_s->flags, &attr, NULL, NULL);
-  	if (err)
-  		goto out3;
-  
-@@ -637,7 +637,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  		/* Insert new attribute segment. */
-  		err = ni_insert_nonresident(ni, type, name, name_len, run,
-  					    next_svcn, vcn - next_svcn,
--					    attr_b->flags, &attr, &mi);
-+					    attr_b->flags, &attr, &mi, NULL);
-  		if (err)
-  			goto out;
-  
-@@ -855,7 +855,7 @@ int attr_data_get_block(struct ntfs_inode *ni, CLST vcn, CLST clen, CLST *lcn,
-  		goto out;
-  	}
-  
--	asize = le64_to_cpu(attr_b->nres.alloc_size) >> sbi->cluster_bits;
-+	asize = le64_to_cpu(attr_b->nres.alloc_size) >> cluster_bits;
-  	if (vcn >= asize) {
-  		err = -EINVAL;
-  		goto out;
-@@ -1047,7 +1047,7 @@ int attr_data_get_block(struct ntfs_inode *ni, CLST vcn, CLST clen, CLST *lcn,
-  	if (evcn1 > next_svcn) {
-  		err = ni_insert_nonresident(ni, ATTR_DATA, NULL, 0, run,
-  					    next_svcn, evcn1 - next_svcn,
--					    attr_b->flags, &attr, &mi);
-+					    attr_b->flags, &attr, &mi, NULL);
-  		if (err)
-  			goto out;
-  	}
-@@ -1647,7 +1647,7 @@ int attr_allocate_frame(struct ntfs_inode *ni, CLST frame, size_t compr_size,
-  	if (evcn1 > next_svcn) {
-  		err = ni_insert_nonresident(ni, ATTR_DATA, NULL, 0, run,
-  					    next_svcn, evcn1 - next_svcn,
--					    attr_b->flags, &attr, &mi);
-+					    attr_b->flags, &attr, &mi, NULL);
-  		if (err)
-  			goto out;
-  	}
-@@ -1812,18 +1812,12 @@ int attr_collapse_range(struct ntfs_inode *ni, u64 vbo, u64 bytes)
-  				err = ni_insert_nonresident(
-  					ni, ATTR_DATA, NULL, 0, run, next_svcn,
-  					evcn1 - eat - next_svcn, a_flags, &attr,
--					&mi);
-+					&mi, &le);
-  				if (err)
-  					goto out;
-  
-  				/* Layout of records maybe changed. */
-  				attr_b = NULL;
--				le = al_find_ex(ni, NULL, ATTR_DATA, NULL, 0,
--						&next_svcn);
--				if (!le) {
--					err = -EINVAL;
--					goto out;
--				}
-  			}
-  
-  			/* Free all allocated memory. */
-@@ -1936,9 +1930,10 @@ int attr_punch_hole(struct ntfs_inode *ni, u64 vbo, u64 bytes, u32 *frame_size)
-  	struct ATTRIB *attr = NULL, *attr_b;
-  	struct ATTR_LIST_ENTRY *le, *le_b;
-  	struct mft_inode *mi, *mi_b;
--	CLST svcn, evcn1, vcn, len, end, alen, dealloc;
-+	CLST svcn, evcn1, vcn, len, end, alen, dealloc, next_svcn;
-  	u64 total_size, alloc_size;
-  	u32 mask;
-+	__le16 a_flags;
-  
-  	if (!bytes)
-  		return 0;
-@@ -2001,6 +1996,7 @@ int attr_punch_hole(struct ntfs_inode *ni, u64 vbo, u64 bytes, u32 *frame_size)
-  
-  	svcn = le64_to_cpu(attr_b->nres.svcn);
-  	evcn1 = le64_to_cpu(attr_b->nres.evcn) + 1;
-+	a_flags = attr_b->flags;
-  
-  	if (svcn <= vcn && vcn < evcn1) {
-  		attr = attr_b;
-@@ -2048,6 +2044,17 @@ int attr_punch_hole(struct ntfs_inode *ni, u64 vbo, u64 bytes, u32 *frame_size)
-  			err = mi_pack_runs(mi, attr, run, evcn1 - svcn);
-  			if (err)
-  				goto out;
-+			next_svcn = le64_to_cpu(attr->nres.evcn) + 1;
-+			if (next_svcn < evcn1) {
-+				err = ni_insert_nonresident(ni, ATTR_DATA, NULL,
-+							    0, run, next_svcn,
-+							    evcn1 - next_svcn,
-+							    a_flags, &attr, &mi,
-+							    &le);
-+				if (err)
-+					goto out;
-+				/* Layout of records maybe changed. */
-+			}
-  		}
-  		/* Free all allocated memory. */
-  		run_truncate(run, 0);
-@@ -2248,7 +2255,7 @@ int attr_insert_range(struct ntfs_inode *ni, u64 vbo, u64 bytes)
-  	if (next_svcn < evcn1 + len) {
-  		err = ni_insert_nonresident(ni, ATTR_DATA, NULL, 0, run,
-  					    next_svcn, evcn1 + len - next_svcn,
--					    a_flags, NULL, NULL);
-+					    a_flags, NULL, NULL, NULL);
-  		if (err)
-  			goto out;
-  	}
-diff --git a/fs/ntfs3/frecord.c b/fs/ntfs3/frecord.c
-index 3576268ee0a1..64041152fd98 100644
---- a/fs/ntfs3/frecord.c
-+++ b/fs/ntfs3/frecord.c
-@@ -1406,7 +1406,7 @@ int ni_insert_nonresident(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  			  const __le16 *name, u8 name_len,
-  			  const struct runs_tree *run, CLST svcn, CLST len,
-  			  __le16 flags, struct ATTRIB **new_attr,
--			  struct mft_inode **mi)
-+			  struct mft_inode **mi, struct ATTR_LIST_ENTRY **le)
-  {
-  	int err;
-  	CLST plen;
-@@ -1439,7 +1439,7 @@ int ni_insert_nonresident(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  	}
-  
-  	err = ni_insert_attr(ni, type, name, name_len, asize, name_off, svcn,
--			     &attr, mi, NULL);
-+			     &attr, mi, le);
-  
-  	if (err)
-  		goto out;
-diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
-index 8468cca5d54d..803dc49269e4 100644
---- a/fs/ntfs3/index.c
-+++ b/fs/ntfs3/index.c
-@@ -1347,7 +1347,7 @@ static int indx_create_allocate(struct ntfs_index *indx, struct ntfs_inode *ni,
-  		goto out;
-  
-  	err = ni_insert_nonresident(ni, ATTR_ALLOC, in->name, in->name_len,
--				    &run, 0, len, 0, &alloc, NULL);
-+				    &run, 0, len, 0, &alloc, NULL, NULL);
-  	if (err)
-  		goto out1;
-  
-diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
-index 6e758ebdc011..1c504ef7dbe4 100644
---- a/fs/ntfs3/ntfs_fs.h
-+++ b/fs/ntfs3/ntfs_fs.h
-@@ -530,7 +530,7 @@ int ni_insert_nonresident(struct ntfs_inode *ni, enum ATTR_TYPE type,
-  			  const __le16 *name, u8 name_len,
-  			  const struct runs_tree *run, CLST svcn, CLST len,
-  			  __le16 flags, struct ATTRIB **new_attr,
--			  struct mft_inode **mi);
-+			  struct mft_inode **mi, struct ATTR_LIST_ENTRY **le);
-  int ni_insert_resident(struct ntfs_inode *ni, u32 data_size,
-  		       enum ATTR_TYPE type, const __le16 *name, u8 name_len,
-  		       struct ATTRIB **new_attr, struct mft_inode **mi,
+diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+index aa2bba75265f..5c7d926d18f7 100644
+--- a/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
++++ b/arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
+@@ -97,6 +97,34 @@ intc: interrupt-controller@fffc1000 {
+ 		      <0x0 0xfffc6000 0x0 0x2000>;
+ 	};
+ 
++	clocks {
++		cb_intosc_hs_div2_clk: cb-intosc-hs-div2-clk {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++		};
++
++		cb_intosc_ls_clk: cb-intosc-ls-clk {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++		};
++
++		f2s_free_clk: f2s-free-clk {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++		};
++
++		osc1: osc1 {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++		};
++
++		qspi_clk: qspi-clk {
++			#clock-cells = <0>;
++			compatible = "fixed-clock";
++			clock-frequency = <200000000>;
++		};
++	};
++
+ 	soc {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+@@ -119,34 +147,6 @@ clkmgr: clock-controller@ffd10000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
+-		clocks {
+-			cb_intosc_hs_div2_clk: cb-intosc-hs-div2-clk {
+-				#clock-cells = <0>;
+-				compatible = "fixed-clock";
+-			};
+-
+-			cb_intosc_ls_clk: cb-intosc-ls-clk {
+-				#clock-cells = <0>;
+-				compatible = "fixed-clock";
+-			};
+-
+-			f2s_free_clk: f2s-free-clk {
+-				#clock-cells = <0>;
+-				compatible = "fixed-clock";
+-			};
+-
+-			osc1: osc1 {
+-				#clock-cells = <0>;
+-				compatible = "fixed-clock";
+-			};
+-
+-			qspi_clk: qspi-clk {
+-				#clock-cells = <0>;
+-				compatible = "fixed-clock";
+-				clock-frequency = <200000000>;
+-			};
+-		};
+-
+ 		gmac0: ethernet@ff800000 {
+ 			compatible = "altr,socfpga-stmmac-a10-s10", "snps,dwmac-3.74a", "snps,dwmac";
+ 			reg = <0xff800000 0x2000>;
+diff --git a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+index 5159cd5771dc..48424e459f12 100644
+--- a/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
++++ b/arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts
+@@ -52,12 +52,6 @@ ref_033v: regulator-v-ref {
+ 	};
+ 
+ 	soc {
+-		clocks {
+-			osc1 {
+-				clock-frequency = <25000000>;
+-			};
+-		};
+-
+ 		eccmgr {
+ 			sdmmca-ecc@ff8c8c00 {
+ 				compatible = "altr,socfpga-s10-sdmmc-ecc",
+@@ -113,6 +107,10 @@ &mmc {
+ 	bus-width = <4>;
+ };
+ 
++&osc1 {
++	clock-frequency = <25000000>;
++};
++
+ &uart0 {
+ 	status = "okay";
+ };
 -- 
-2.36.1
-
+2.25.1
 

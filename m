@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50DE5599A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 264025599B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbiFXM3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 08:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
+        id S231352AbiFXMhQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Jun 2022 08:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiFXM3n (ORCPT
+        with ESMTP id S231237AbiFXMhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 08:29:43 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D9A4B86B
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:29:42 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 15so4274165ybc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:29:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2nQO6CeYq5fKHfv30czV2m4ZtSM4QjltO0wwv/dnqkA=;
-        b=pj0s49K9iGzTNZ9BU6izO5Hh1ZIt1MaYN4ZXoSYBHkReYDj2fwnN13fi9Zd5giPvJ0
-         /xcBXDwwmd4TSi/KCN/QhCRqkUZdkzJHxjssFmBCVQFIuNwA9l5IJd81Uc9l3QoR7LUD
-         uWYCrDkdwZqKugVguoxl8F4MMqMVi5fda4NtYPorHFU2nPDyC4XyhnHLSJi8kZ12rUkg
-         9rDsg4ONoPe+xVVd+Vp5XSMqh4DIQSAIsMVuIhoI78un5BOZN8Lz9FHFp3LjfsIozg3q
-         Hq2eBOoOzCChEAy7W+ryEl9mdw0MKsU2NUYQ2MzjtairrsmKCibNAbAHB+DYBFo38QcJ
-         +WVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2nQO6CeYq5fKHfv30czV2m4ZtSM4QjltO0wwv/dnqkA=;
-        b=atW2nSj8bDt897HbOe5MDCNiHvwL6pPfjnMllKAYK36mApPnVB/4lFMeHnRW26vPzp
-         WtMNUGt3ILiEU14gRHKij3IRjL39TSR8daS2cVuKju4PPUMfTIi8xxKzj3rizcRUnGk5
-         VeNYnz2h1g4UpAOTVDDUaeXyIWEpQOOIAov3hvKvUe9pjK1xJpNndhqtjDPmk/RA2YBI
-         ytrbKD2bYX7uFiY/VkAX0Vxd9q19aU73KlddhwXEz6+YbK+5KANnnQZck5ZF8a4lPBYE
-         b5yWD9Bpr1oOXxhHbVaGay9Em1SbYIrctV44iNDDPY3Ip2PHV0y8Fd/mV1vOoknFzJ1w
-         AdWQ==
-X-Gm-Message-State: AJIora+i0v17Z4kJ2eBJl3RyUvN2tELYB+ox77ER1jplx9JRbR2IgcHT
-        ovbasFx9RGv+Nws0xcXl+OdrmGiyE1rWzU1szk302g==
-X-Google-Smtp-Source: AGRyM1tOZFaEaVQKL3O/4ZeAuY/ouoz02/V9pgqlyavmMkV2SFrmfg7c4zcy3rKoZgIu5wbx1OO2C2/hWFbq6g94oKM=
-X-Received: by 2002:a05:6902:a:b0:65c:b38e:6d9f with SMTP id
- l10-20020a056902000a00b0065cb38e6d9fmr15283526ybh.36.1656073781827; Fri, 24
- Jun 2022 05:29:41 -0700 (PDT)
+        Fri, 24 Jun 2022 08:37:15 -0400
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5712E4BB97
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:37:12 -0700 (PDT)
+Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay09.hostedemail.com (Postfix) with ESMTP id D2E5735619;
+        Fri, 24 Jun 2022 12:37:11 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf05.hostedemail.com (Postfix) with ESMTPA id E93452000E;
+        Fri, 24 Jun 2022 12:37:09 +0000 (UTC)
+Message-ID: <85d412b8b2413d98e429ec129880f69e99c98539.camel@perches.com>
+Subject: Re: [PATCH v3] usb: core: sysfs: convert sysfs snprintf to
+ sysfs_emit
+From:   Joe Perches <joe@perches.com>
+To:     Xuezhi Zhang <zhangxuezhi1@coolpad.com>, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 24 Jun 2022 05:37:08 -0700
+In-Reply-To: <20220624121238.134256-1-zhangxuezhi1@coolpad.com>
+References: <20220624121238.134256-1-zhangxuezhi1@coolpad.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-References: <20220624041217.1805512-1-niejianglei2021@163.com>
-In-Reply-To: <20220624041217.1805512-1-niejianglei2021@163.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 24 Jun 2022 14:29:30 +0200
-Message-ID: <CANn89i+=8odkFV=b_krwKq2+u5S9q7KSvQ6jDCHX7gG8+LdnSw@mail.gmail.com>
-Subject: Re: [PATCH] bnx2x: fix memory leak in bnx2x_tpa_stop()
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     Ariel Elior <aelior@marvell.com>, skalluru@marvell.com,
-        manishc@marvell.com, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Stat-Signature: 9cz97snbq574dqak5cjmwp8gnyddnphg
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: E93452000E
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19doAksNQTzzDb3N0l/jfNYmXntlhnyNPk=
+X-HE-Tag: 1656074229-728643
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 6:12 AM Jianglei Nie <niejianglei2021@163.com> wrote:
->
-> bnx2x_tpa_stop() allocates a memory chunk from new_data with
-> bnx2x_frag_alloc(). The new_data should be freed when some errors occur.
-> But when "pad + len > fp->rx_buf_size" is true, bnx2x_tpa_stop() returns
-> without releasing the new_data, which leads to a memory leak.
->
-> We should free the new_data with bnx2x_frag_free() when "pad + len >
-> fp->rx_buf_size" is true.
->
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-> ---
->  drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
-> index 5729a5ab059d..4cbd3ba5acb9 100644
-> --- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
-> +++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
-> @@ -789,6 +789,7 @@ static void bnx2x_tpa_stop(struct bnx2x *bp, struct bnx2x_fastpath *fp,
->                         BNX2X_ERR("skb_put is about to fail...  pad %d  len %d  rx_buf_size %d\n",
->                                   pad, len, fp->rx_buf_size);
->                         bnx2x_panic();
-> +                       bnx2x_frag_free(fp, new_data);
+On Fri, 2022-06-24 at 20:12 +0800, Xuezhi Zhang wrote:
+> Fix up all sysfs show entries to use sysfs_emit
 
-This will crash the host if new_data == NULL
+Thanks.
 
-Really, given that BNX2X_STOP_ON_ERROR is not defined, I am not sure
-we really care about this ?
+Some trivia: (perhaps for a separate patch)
 
->                         return;
->                 }
->  #endif
-> --
-> 2.25.1
->
+> diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+[]
+> @@ -35,7 +35,7 @@ static ssize_t field##_show(struct device *dev,				\
+>  		return -EINTR;						\
+>  	actconfig = udev->actconfig;					\
+>  	if (actconfig)							\
+> -		rc = sprintf(buf, format_string,			\
+> +		rc = sysfs_emit(buf, format_string,			\
+>  				actconfig->desc.field);			\
+
+It's much more common to use fmt and not format_string
+
+Using fmt would make several multi-line statements fit on a single line
+
+e.g.:
+
+		rc = sysfs_emit(buf, fmt, actconfig->desc.field);	\
+
+> @@ -305,8 +305,8 @@ static ssize_t ltm_capable_show(struct device *dev,
+>  				struct device_attribute *attr, char *buf)
+>  {
+>  	if (usb_device_supports_ltm(to_usb_device(dev)))
+> -		return sprintf(buf, "%s\n", "yes");
+> -	return sprintf(buf, "%s\n", "no");
+> +		return sysfs_emit(buf, "%s\n", "yes");
+> +	return sysfs_emit(buf, "%s\n", "no");
+
+Using a ?: might be nicer
+
+	return sysfs_emit(buf, "%s\n",
+			  usb_device_supports_ltm(to_usb_device(dev)) ? "yes" : "no");
+
+>  static ssize_t persist_store(struct device *dev, struct device_attribute *attr,
+> @@ -372,7 +372,7 @@ static ssize_t connected_duration_show(struct device *dev,
+>  {
+>  	struct usb_device *udev = to_usb_device(dev);
+>  
+> -	return sprintf(buf, "%u\n",
+> +	return sysfs_emit(buf, "%u\n",
+>  			jiffies_to_msecs(jiffies - udev->connect_time));
+
+Might be nicer to rewrap multi-line statements to the open parenthesis
+
+	return sysfs_emit(buf, "%u\n",
+			  jiffies_to_msecs(jiffies - udev->connect_time));
+
+

@@ -2,225 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896CA5597EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 974DA5597EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbiFXKdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 06:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
+        id S230280AbiFXKeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 06:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiFXKdC (ORCPT
+        with ESMTP id S229970AbiFXKeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 06:33:02 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F310C6277;
-        Fri, 24 Jun 2022 03:33:00 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id o4so1195388ilm.9;
-        Fri, 24 Jun 2022 03:33:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=U226G+gJXjVu8Couc5Qv56p1SRGwVv16nFZEn3RxVtU=;
-        b=WZpsM51CgSRUFkewgWRiMqQCwdfKsPxTQTY1/FdwFAv5v1w7p4JLgRHq9illM8ReYx
-         z2I4w1oylu873NcQ0QfYk817rCiBPB0mGufQXo76zV/Icu9IEwOjioYXN0WrZaKX6cL9
-         07Rb+d983LgBkl7ZA2fWK1F/kNdQF9BiZL9Ob4HxWbn3065/DVrpR2hnCisuhiIvh29F
-         a1SdXgqZZPfRMBvTu2ZBrFXqF+/UDBm+1z8lmHXxgxBO4vl/CMvHhqBbS1k+4Bl/Ubp3
-         3Gnny6BLEYiAhqOwP9WZrt/sWfajs0WI0/NMdBj55eW9CetTpTBVfPJIFkRQKlBHknZx
-         L3Ww==
+        Fri, 24 Jun 2022 06:34:16 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159977C53B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:34:15 -0700 (PDT)
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C460E3FC14
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:34:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1656066851;
+        bh=m+hLmhjFMD/AVIUGEN2FBoEu3LJoKdrevWfuYmtLwEY=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=GgGVZ0tqf1FVOzdTAMgeRsK8KmYDK/6Z589WfiJoRsfEVHLfkQFf1GQgIOkijM2Rz
+         a34rF146tG16yFLCst1DFlSkU49tqHcs0N2Ofb2I6XTod/0Pz6p6Kdx7SMX0d3iuNZ
+         5JIiONjZUHZaNYkR6OHC9lKm2jpjEHOAjK1Sr8fyC07BwK+dzGpk57QCFvNf82CRUu
+         Aiay9jft3ou4kaJ0R40TQWSTeA61IXmLztx/iRl7Y4m4PFmyGqM2GTDWG7cvEBY7r4
+         gEthp9skHeRtpJ5CLIhqLwLKzXKS03LsJDOLKKLt1X+2SQ9uDKvlfM65DYcC7DDmsd
+         B0T6OdKaYWtDA==
+Received: by mail-pg1-f197.google.com with SMTP id 15-20020a63020f000000b003fca9ebc5cbso907292pgc.22
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:34:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=U226G+gJXjVu8Couc5Qv56p1SRGwVv16nFZEn3RxVtU=;
-        b=NshXzbaHHDUb4/GW9hDCkuuVfreEfA657/7/DSr4RAWAnJdNNxItmBotumPNwUk0vG
-         GTsAAYiDRoznYyc21jSN9fZsvZlMRaI8hFMbDwpZe1UdlvlHBvQmt84YCJAq2uKHbkKm
-         PSoqL/WBZqIk+R3b9dw5QCkiEyN2MZBcYHz+O8qn/G0xgS8jVM0X8RjZl6/XUum0VO0U
-         VoPx/pxI3BdZ2E5SQa7ahUmKv7nA0O8+6gquEEPFWgX+vy+gpW2+xtJdvNJ1a7fb1fca
-         73XXuDZ9SqJIYCP/H8b/6c44L0Z9d59FwjKt0u9T7v6TySF3wbbl3jFlXzthX09UhQA+
-         oGHw==
-X-Gm-Message-State: AJIora+VG60lyNBVeaMeIJqK9HJGCeYVCz+VbAT07ptFt1CoIkJmGS56
-        eELgQi+Qvo6NlH/Q+dgoALMuxIpX6evtDFq2+AM=
-X-Google-Smtp-Source: AGRyM1vwKPbWsq2euM9m6UqA1rwAUWYo4r1L6FV6jbw4QbMXoRJS9w4dpuFfMGm93LZs8AZ6tCdsbCCLj6aHRPRFCko=
-X-Received: by 2002:a05:6e02:1bc6:b0:2d3:dba7:f626 with SMTP id
- x6-20020a056e021bc600b002d3dba7f626mr8034868ilv.299.1656066780324; Fri, 24
- Jun 2022 03:33:00 -0700 (PDT)
+        bh=m+hLmhjFMD/AVIUGEN2FBoEu3LJoKdrevWfuYmtLwEY=;
+        b=6koCsKtvRmuwjLiP0yblegJp3Y+3A9Z79jIEmW5pESecf+5u1EvcPAwJX3khHdDh0s
+         XyBPq3IbIFElZiJWqxFd+e8iOhLS4Yp5GSvMvogqYF737HdWyiuhvDE1aUg/fdlkHrXR
+         0ko2q+dWT99lMJ1ryj6YpK/wzEe8L1f5iE7xoB3WwvsM5BpDEsVMhXuqZUvFDh1oT1JS
+         +bO+KaFKprH0SmcJUPEAV0VR/7s8DKk9b7HLylr2fIHZgciYM8oML+DCxsgboVAtxeA2
+         LIVBAifcLOovWnLX4SxDcu+nIcq7AFfgcVyV+l2Ye5pqdQuLqqcKecrdkrwikfRemWSR
+         +XuA==
+X-Gm-Message-State: AJIora+Yy1+lhZF4cXoHJ/hleO/QqoLo/TiQB3N8xY6fykC/6FdrZU/y
+        V7pS1tNSEWF73XpH3AGQ/GLQvc9Jj0Uhmime4gKVow30tOpzzhSIKEvhPAUoMhlhJmCzR0QckVR
+        wkpEng+kBaFK+nuI2Ms2/L3brTJK8QVRLG+PnsIIedB4f5P3sm+sI5jzP
+X-Received: by 2002:a17:903:1249:b0:168:e059:59c1 with SMTP id u9-20020a170903124900b00168e05959c1mr43557680plh.0.1656066850024;
+        Fri, 24 Jun 2022 03:34:10 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uiqS0wfZEm4V2eQ6Yh+ZVZJcCBVYzQrD/cYHLJHdmLi/l4zqZ1ktGhSgR5dP3LxmHovdqOJHwdkDGnVVyZ5TU=
+X-Received: by 2002:a17:903:1249:b0:168:e059:59c1 with SMTP id
+ u9-20020a170903124900b00168e05959c1mr43557654plh.0.1656066849686; Fri, 24 Jun
+ 2022 03:34:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-10-peterwu.pub@gmail.com>
- <CAHp75VdgxR9aFQmi_MPrX=t7RMnKDiLAwWMvxbpW9OoQMJkKyw@mail.gmail.com>
-In-Reply-To: <CAHp75VdgxR9aFQmi_MPrX=t7RMnKDiLAwWMvxbpW9OoQMJkKyw@mail.gmail.com>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Fri, 24 Jun 2022 18:32:49 +0800
-Message-ID: <CABtFH5+YLpYdWNsy1DwkKf19L6THo5NYvQ8e3rpo9wkTS9HxwQ@mail.gmail.com>
-Subject: Re: [PATCH v3 09/14] regulator: mt6370: Add mt6370 DisplayBias and
- VibLDO support
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Alice Chen <alice_chen@richtek.com>,
-        cy_huang <cy_huang@richtek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>
+References: <20220429104052.345760505@linuxfoundation.org> <20220429104053.296096344@linuxfoundation.org>
+In-Reply-To: <20220429104053.296096344@linuxfoundation.org>
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+Date:   Fri, 24 Jun 2022 18:33:57 +0800
+Message-ID: <CAMy_GT9YbgqsoLbCDqhHpXNW6EejgK+YaE4YPxpxcmer+qn-1g@mail.gmail.com>
+Subject: Re: [PATCH 5.15 33/33] selftests/bpf: Add test for reg2btf_ids out of
+ bounds access
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Fri, Apr 29, 2022 at 6:47 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>
+> commit 13c6a37d409db9abc9c0bfc6d0a2f07bf0fff60e upstream.
+>
+> This test tries to pass a PTR_TO_BTF_ID_OR_NULL to the release function,
+> which would trigger a out of bounds access without the fix in commit
+> 45ce4b4f9009 ("bpf: Fix crash due to out of bounds access into reg2btf_id=
+s.")
+> but after the fix, it should only index using base_type(reg->type),
+> which should be less than __BPF_REG_TYPE_MAX, and also not permit any
+> type flags to be set for the reg->type.
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> Link: https://lore.kernel.org/bpf/20220220023138.2224652-1-memxor@gmail.c=
+om
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  tools/testing/selftests/bpf/verifier/calls.c |   19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>
+> --- a/tools/testing/selftests/bpf/verifier/calls.c
+> +++ b/tools/testing/selftests/bpf/verifier/calls.c
+> @@ -108,6 +108,25 @@
+>         .errstr =3D "R0 min value is outside of the allowed memory range"=
+,
+>  },
+>  {
+> +       "calls: trigger reg2btf_ids[reg->type] for reg->type > __BPF_REG_=
+TYPE_MAX",
+> +       .insns =3D {
+> +       BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
+> +       BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
+> +       BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 0),
+> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
+> +       BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
+> +       BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
+> +       BPF_EXIT_INSN(),
+> +       },
+> +       .prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
+> +       .result =3D REJECT,
+> +       .errstr =3D "arg#0 pointer type STRUCT prog_test_ref_kfunc must p=
+oint",
+> +       .fixup_kfunc_btf_id =3D {
+> +               { "bpf_kfunc_call_test_acquire", 3 },
+> +               { "bpf_kfunc_call_test_release", 5 },
+> +       },
+> +},
+> +{
+>         "calls: overlapping caller/callee",
+>         .insns =3D {
+>         BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 0),
+>
+>
 
-Thanks for your helpful comments!
+Hello Greg,
 
-Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B46=E6=9C=
-=8824=E6=97=A5 =E9=80=B1=E4=BA=94 =E5=87=8C=E6=99=A82:19=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> On Thu, Jun 23, 2022 at 2:00 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> >
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> >
-> > Add mt6370 DisplayBias and VibLDO support.
->
-> ...
->
-> > +#include <linux/bits.h>
-> > +#include <linux/gpio/consumer.h>
-> > +#include <linux/interrupt.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
->
-> > +#include <linux/of.h>
->
-> Any users of this? (See below)
->
-> > +#include <linux/platform_device.h>
-> > +#include <linux/regmap.h>
-> > +#include <linux/regulator/driver.h>
-> > +#include <linux/regulator/machine.h>
->
-> ...
->
-> > +#define MT6370_LDO_MINUV       1600000
-> > +#define MT6370_LDO_STPUV       200000
-> > +#define MT6370_LDO_N_VOLT      13
-> > +#define MT6370_DBVBOOST_MINUV  4000000
-> > +#define MT6370_DBVBOOST_STPUV  50000
-> > +#define MT6370_DBVBOOST_N_VOLT 45
-> > +#define MT6370_DBVOUT_MINUV    4000000
-> > +#define MT6370_DBVOUT_STPUV    50000
-> > +#define MT6370_DBVOUT_N_VOLT   41
->
-> If UV is a unit suffix, make it _UV.
->
-> ...
->
-> > +               .of_match =3D of_match_ptr("dsvbst"),
->
-> Would it even be called / used if CONFIG_OF=3Dn?
+When I tried to build the bpf selftest from 5.15.49 source tree on a
+Ubuntu Jammy instance running with 5.15.49-051549-generic, I got the
+following error message:
 
-We got a notification from Mark telling us that this patch has been
-applied to git.
-( https://lore.kernel.org/linux-arm-kernel/165599931844.321775.808555909233=
-7130067.b4-ty@kernel.org/
-)
-So, should we need to make any other changes in the next submission?
+In file included from
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/tests.h:21,
+                 from test_verifier.c:432:
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:124:10:
+error: =E2=80=98struct bpf_test=E2=80=99 has no member named =E2=80=98fixup=
+_kfunc_btf_id=E2=80=99
+  124 |         .fixup_kfunc_btf_id =3D {
+      |          ^~~~~~~~~~~~~~~~~~
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:124:9:
+warning: braces around scalar initializer
+  124 |         .fixup_kfunc_btf_id =3D {
+      |         ^
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:124:9:
+note: (near initialization for =E2=80=98tests[150].errstr_unpriv=E2=80=99)
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:125:17:
+warning: braces around scalar initializer
+  125 |                 { "bpf_kfunc_call_test_acquire", 3 },
+      |                 ^
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:125:17:
+note: (near initialization for =E2=80=98tests[150].errstr_unpriv=E2=80=99)
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:125:50:
+warning: excess elements in scalar initializer
+  125 |                 { "bpf_kfunc_call_test_acquire", 3 },
+      |                                                  ^
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:125:50:
+note: (near initialization for =E2=80=98tests[150].errstr_unpriv=E2=80=99)
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:126:17:
+warning: braces around scalar initializer
+  126 |                 { "bpf_kfunc_call_test_release", 5 },
+      |                 ^
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:126:17:
+note: (near initialization for =E2=80=98tests[150].errstr_unpriv=E2=80=99)
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:126:50:
+warning: excess elements in scalar initializer
+  126 |                 { "bpf_kfunc_call_test_release", 5 },
+      |                                                  ^
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:126:50:
+note: (near initialization for =E2=80=98tests[150].errstr_unpriv=E2=80=99)
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:126:17:
+warning: excess elements in scalar initializer
+  126 |                 { "bpf_kfunc_call_test_release", 5 },
+      |                 ^
+/home/ubuntu/linux/tools/testing/selftests/bpf/verifier/calls.c:126:17:
+note: (near initialization for =E2=80=98tests[150].errstr_unpriv=E2=80=99)
+make: *** [Makefile:508:
+/home/ubuntu/linux/tools/testing/selftests/bpf/test_verifier] Error 1
 
->
-> ...
->
-> > +               .regulators_node =3D of_match_ptr("regulators"),
->
-> Ditto.
->
-> ...
->
-> > +       for (i =3D 0; i < ARRAY_SIZE(mt6370_irqs); i++) {
-> > +               irq =3D platform_get_irq_byname(pdev, mt6370_irqs[i].na=
-me);
-> > +
-> > +               rdev =3D priv->rdev[mt6370_irqs[i].rid];
-> > +
-> > +               ret =3D devm_request_threaded_irq(priv->dev, irq, NULL,
-> > +                                               mt6370_irqs[i].handler,=
- 0,
-> > +                                               mt6370_irqs[i].name, rd=
-ev);
-> > +               if (ret) {
->
-> > +                       dev_err(priv->dev,
-> > +                               "Failed to register (%d) interrupt\n", =
-i);
-> > +                       return ret;
->
-> return dev_err_probe(...); ?
->
-> > +               }
-> > +       }
->
-> ...
->
-> > +       for (i =3D 0; i < MT6370_MAX_IDX; i++) {
-> > +               rdev =3D devm_regulator_register(priv->dev,
-> > +                                              mt6370_regulator_descs +=
- i,
-> > +                                              &cfg);
-> > +               if (IS_ERR(rdev)) {
->
-> > +                       dev_err(priv->dev,
-> > +                               "Failed to register (%d) regulator\n", =
-i);
-> > +                       return PTR_ERR(rdev);
->
-> return dev_err_probe(...); ?
->
-> > +               }
-> > +
-> > +               priv->rdev[i] =3D rdev;
-> > +       }
->
-> ...
->
-> > +       if (!priv->regmap) {
-> > +               dev_err(&pdev->dev, "Failed to init regmap\n");
-> > +               return -ENODEV;
-> > +       }
->
-> return dev_err_probe(...);
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+Which is introduced by this commit f59e6886c "selftests/bpf: Add test
+for reg2btf_ids out of bounds access" on 5.15. With this commit
+reverted, there will be another error in progs/timer_crash.c like in
+5.10 [1]:
 
-Best regards,
-ChiaEn Wu
+progs/timer_crash.c:8:19: error: field has incomplete type 'struct bpf_time=
+r'
+        struct bpf_timer timer;
+                         ^
+/home/ubuntu/linux/tools/testing/selftests/bpf/tools/include/bpf/bpf_helper=
+_defs.h:39:8:
+note: forward declaration of 'struct bpf_timer'
+struct bpf_timer;
+       ^
+1 error generated.
+
+Maybe commit "selftests/bpf: Add test for bpf_timer overwriting crash"
+should be reverted on 5.15 as well.
+Thanks
+
+[1] https://www.spinics.net/lists/stable/msg542618.html

@@ -2,160 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE0A559935
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93EC8559927
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232004AbiFXMI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 08:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
+        id S229641AbiFXMGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 08:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbiFXMIW (ORCPT
+        with ESMTP id S231628AbiFXMGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 08:08:22 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2053.outbound.protection.outlook.com [40.107.244.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8872B80516;
-        Fri, 24 Jun 2022 05:08:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OTl27Kkaq9vbhBnlZJSII4N4JZFsVwsEvLQu5Xt4xzvXS37/zGT43MzjMeckCNYGeMLCt3BpoUA0fIW6al9ifU+/St0a5832kbpD7lJTrDa6FfCfnOrgAjBrJ1ROe25wlCLuqzQ08y5H0gtvFB3EUsYVMzh1BtlqaKWEEGvfb7hiPc38HtNQHAu2a5IzOQ1R96YNKLYwDXFRuQWcYE+9QdbqX+ZMQF+evI53lGaIMeCN9sLTbdN2SmrwHhB2OqGRdJ+4DFkHsTw3LcM8/S+P3bgd8WxGmpgNcj1A4Lqr7QX8zLxqxZLofDIg3EsLFN/f7wKqXLBNfAvbskLl/Awqjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=guHhU86EEcYsTUE1xCOphKC4D0End8nTO+NTJFKyStM=;
- b=fyoNdEJmsNPTtN7f1FdpzE/PdPMDZfvJSg5eupxg8fs/81B3sBO6pFpcaykaox6eOBipwgsk6OiqMVHCWy5cMdQD322JlNIoVCKqD9EFaxqQd18d2ECFxeQj4w03BIQEQURxbbFBsi2v2j/UlXMYOJ9eTOJYK3W2ogQvjGcJY7gjl0puqgkfy6Y8F3LL+ByjZ7TrT/9yXeXrxCMPe05HgPuMda5KE9Cri5MaFBNssxE7sw7uXEB12PHnReqO998E6SvQTo8gU8+u+3eA0SMsm8DcESxh2Yl+GqWJVU1oYdXd0UKNmCT/v5WZRufa/YbGt3Ff8mWGrRX312fL+KWs4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=amd.com smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=guHhU86EEcYsTUE1xCOphKC4D0End8nTO+NTJFKyStM=;
- b=D+CN7I55pfq1SLGT/VW7ylc6AYH319s3V6GkiSZdPU3LiXnqmZWyuogNvDaaU305CSYxMyyHTeXB2aWm607zmSF068i6/8bPUC84mW9a6BLIMPR8ZrBsw7hXBx76v5OWWZHfxClqmOfOPY3NmqSH3mc/2DvkOh2N7VSvf0SfZp8=
-Received: from BN8PR04CA0055.namprd04.prod.outlook.com (2603:10b6:408:d4::29)
- by BYAPR02MB5606.namprd02.prod.outlook.com (2603:10b6:a03:9f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.16; Fri, 24 Jun
- 2022 12:08:13 +0000
-Received: from BN1NAM02FT007.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:d4:cafe::d4) by BN8PR04CA0055.outlook.office365.com
- (2603:10b6:408:d4::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.16 via Frontend
- Transport; Fri, 24 Jun 2022 12:08:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT007.mail.protection.outlook.com (10.13.3.155) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5373.15 via Frontend Transport; Fri, 24 Jun 2022 12:08:12 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Fri, 24 Jun 2022 05:08:11 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Fri, 24 Jun 2022 05:08:11 -0700
-Envelope-to: git@amd.com,
- michal.simek@amd.com,
- linux-arm-kernel@lists.infradead.org,
- linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Received: from [172.23.64.2] (port=47741 helo=xhdvnc102.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <manikanta.guntupalli@xilinx.com>)
-        id 1o4i6c-0005Qv-Vx; Fri, 24 Jun 2022 05:08:11 -0700
-Received: by xhdvnc102.xilinx.com (Postfix, from userid 90444)
-        id 7B663104546; Fri, 24 Jun 2022 17:35:59 +0530 (IST)
-From:   Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>
-To:     <michal.simek@xilinx.com>, <michal.simek@amd.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <git@amd.com>
-CC:     Srinivas Goud <srinivas.goud@xilinx.com>,
-        Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>
-Subject: [PATCH 12/12] i2c: xiic: Correct the BNB interrupt enable sequence
-Date:   Fri, 24 Jun 2022 17:35:27 +0530
-Message-ID: <1656072327-13628-13-git-send-email-manikanta.guntupalli@xilinx.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <1656072327-13628-1-git-send-email-manikanta.guntupalli@xilinx.com>
-References: <1656072327-13628-1-git-send-email-manikanta.guntupalli@xilinx.com>
+        Fri, 24 Jun 2022 08:06:20 -0400
+X-Greylist: delayed 84089 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Jun 2022 05:06:15 PDT
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2FF7E03A;
+        Fri, 24 Jun 2022 05:06:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1656072371;
+        bh=i+TLfV7Q9WtZuQ96Ed6tMGTjvVaQatLT38cfNmU5J68=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=cLXPFY372oDe+pbOhU1HNAAz78ygRh06kiA6QHm4hrEbPgK3+EJRXIOreuML4S/7W
+         y06ndLkcXn0bWcP6WHR/GQOWdSvvp9HU036+D5cAcsDKe+fRlBM9hd1ajWG7HUjbtT
+         SEikGSmSjwu5dSmN5dmx8/rsgYl6DmtcS159oFqc=
+Received: from wh-VirtualBox ([117.175.169.40])
+        by newxmesmtplogicsvrszc8.qq.com (NewEsmtp) with SMTP
+        id 18829089; Fri, 24 Jun 2022 20:06:08 +0800
+X-QQ-mid: xmsmtpt1656072368tgl9vexc1
+Message-ID: <tencent_2B372B7CD9C70750319022510DAD3C081108@qq.com>
+X-QQ-XMAILINFO: MDPfhejMR4aI4PAqisrv/a5FviYMYw5okHeM8LAtB8FVYZxnhMSGffLnyl6h1r
+         Rvh6D2upLqn53X9Zb58QU+PlmfEcAAuc3GNqPuhMiv7NdKKNkRAel3HU9QhReS762KW7RQhk9vG9
+         uftPHNIcVk2ATN22wknZ5uf447Sc2qNXg666+Jtj1nDj+NjUFv4dA94yj2YCdwX1Jkr4a/y8Q+aw
+         L80daUrzlK2rV/JPBB0/DPdDfTvbCW55F7RXea74gF+ac5AhChaM2RyVE/rAKz1SGFmQjXGGV8yV
+         FBhgp0HVcJa7Vv9JNPWzydG+RIxq/aST6sTOr7G43vLgvBtz2WB58vsCxOXD/pVZK34gBR9u6hz1
+         90/BPbvYsszovw/PDqHgMsi3fZRDHyh7pc9O9l6/8J2sY3Rj3dVDmtuVkkmp93LLP/1aD6+IdwIa
+         0h8SR+TDjyucOX78Bqg7r/cv5gAEYUV+ON+ypWIe17cCVfgzf1k7Zj7eoAGaTtpzjgE+AxdYc7TZ
+         xhYF4JTcRE62BUBP3yJSPRwj05zvupPLHK6pFDogT0mjPCmyLOVKj5QZftu39OjAiTRpjiIzddsu
+         0eo3se5z5yvmSSzg4kCwhAHNVI/gRlk3AHz+faTW/eZndfCV7U4iSvdZPd64rONaFaXZdO7y1tF4
+         04qplFIXOWaJbIZ+ErDkUtTAvCkCR0rpH5+qF8lg0hac6J9ab4CYrFEz2GPgNh9Klhy4qq3Y1NuM
+         LRKnptbvSwV0iEv5SGSR7akvTORXJCseLC7izEt5HGjHOTGB1B7mS6gYLOz9Y7mGQ2SIpQgargN+
+         /Ugek9KHBs171DCgju3obY7iMs+G6U53dA+J1XGdPgIC4kq0dz7odhHu8zDush9dgrv1f9eoH2L6
+         lW/rtguGludenX44uPd+Xs+6EcdzoUv82C4VFcUkHWTlcL7zdK4tQ8ZwUzOOaVJmwpm4QuOQ2T53
+         XKAlFla84kwvuzRizqM8bzji96ovru
+Date:   Fri, 24 Jun 2022 20:05:30 +0800
+From:   Wei Han <lailitty@foxmail.com>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lailitty@foxmail.com
+Subject: Re: [PATCH] netfilter: xt_esp: add support for ESP match in NAT
+ Traversal
+X-OQ-MSGID: <20220624120530.GA23845@wh-VirtualBox>
+References: <tencent_DDE91CB7412D427A442DB4362364DC04F20A@qq.com>
+ <YrTAyW0phD0OiYN/@salvia>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4ee012a8-ee2a-46ee-664f-08da55da365c
-X-MS-TrafficTypeDiagnostic: BYAPR02MB5606:EE_
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6aIRN2ykVxqKsqhxI9UA2LKqnupxdfsBzUqdtPk7dDQ799a3GJ9Z+31iCTiQce5j+sM3+j2Z/rKUt0Wz5WQPGLNzrqV/+8NondzNcYMMEZ3rlGe/1IJYoJD55aeSf20Jy38IX7cjb6yVi0OIefcS/+mImYL7zhGEP5HVSAW1PVxxlVF6f1xrI5Eqi+cNe8F4uS38G+K+4HXCojdNwChJ1GcpO7ssL6CnQaJS5o8tTuGhEPuLMEu/qgefDWRSZGGCzgblr+/Fr+WuL7gkR1mb3D6ISLJhtAoL08lccNzmIhagf666RslJlZHIyXS/+GEyJqOGe0NbX2vnJeK8TWE97juGYgdeeHDSu0g65tEKri27MtINEFUSAKkUaTXVbtJ9rpExPivst6+9quJvjqa+zVMh6kv2i5OY2IINCBT3VMGt25VfhfUVckc4+5g/ojt/H3407BTJ/WOp3QE8PXQY/TYN541zkoIkSNQyjH5Eq+2aM7HA3OenF1fjxhUKCTSueaPwQCSoCxXbt6UkIq9mDCGR9VE0gUrukIhQ2Wn3hCA7xcawjn6QBYsaSZWI3e0Kp+ICoNnYy5wYbLr5hpviFXJlP2Ij6mWEx0DzlRkeUyCeQcPiB1aVJmH1Jh39/OBVTkPljrYyuxONyc93pE3ZGyHFEaVV6WezQB3R7UNY5T98bGOc6f5j9K+0tfyiNEpUXtdKhuqzt5zkG951V7KmiAz0xhjfxRCkxJCTDn0mmV2d0xJ1tPEnc509dbdE3JTu/5EYulT2A68WcQ/KSCwmBmsFRPyEOWmyMDZa/wM9aZ/lgaXlrft3plJRGHd3GSNBrXrpHr/2E1Czw3SSfE4D5BOGrgXCu3ABk+6ZyY9SdmY=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(136003)(346002)(396003)(36840700001)(46966006)(40470700004)(478600001)(82740400003)(4326008)(356005)(42186006)(44832011)(83380400001)(70586007)(40460700003)(54906003)(186003)(6266002)(41300700001)(2616005)(336012)(70206006)(110136005)(6666004)(8676002)(316002)(36756003)(107886003)(7636003)(26005)(47076005)(5660300002)(426003)(8936002)(2906002)(82310400005)(36860700001)(40480700001)(102446001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2022 12:08:12.8040
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ee012a8-ee2a-46ee-664f-08da55da365c
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT007.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5606
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrTAyW0phD0OiYN/@salvia>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Goud <srinivas.goud@xilinx.com>
+Thank you for your reply, please see my answer below.
 
-With updated AXI IIC IP core(v2.1)there is change in IP behavior
-in dynamic mode, where controller initiate read transfer on IIC
-bus only after getting the value for the number of bytes to receive.
-
-In the existing xiic_start_recv function Bus Not Busy(BNB)
-interrupt is enabled just after "slave address + start"
-write to FIFO and before the "count + stop"write to FIFO.
-Since IIC controller drives the start address of a transaction
-on the bus only after it has received the byte count information
-the above sequence can lead to spurious BNB interrupt in case
-there is any delay after "slave address + start" write to FIFO.
-
-This is fixed by ensuring that BNB interrupt is enabled only
-after "count + stop" has been written to FIFO.
-
-Signed-off-by: Srinivas Goud <srinivas.goud@xilinx.com>
-Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@xilinx.com>
----
- drivers/i2c/busses/i2c-xiic.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index f29acabba5e7..0a34daa9e372 100644
---- a/drivers/i2c/busses/i2c-xiic.c
-+++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -851,13 +851,13 @@ static void xiic_start_recv(struct xiic_i2c *i2c)
- 				      i2c_8bit_addr_from_msg(msg) |
- 				      XIIC_TX_DYN_START_MASK);
- 
--		xiic_irq_clr_en(i2c, XIIC_INTR_BNB_MASK);
--
- 		/* If last message, include dynamic stop bit with length */
- 		val = (i2c->nmsgs == 1) ? XIIC_TX_DYN_STOP_MASK : 0;
- 		val |= msg->len;
- 
- 		xiic_setreg16(i2c, XIIC_DTR_REG_OFFSET, val);
-+
-+		xiic_irq_clr_en(i2c, XIIC_INTR_BNB_MASK);
- 	} else {
- 		/*
- 		 * If previous message is Tx, make sure that Tx FIFO is empty
--- 
-2.25.1
-
+On Thu, Jun 23, 2022 at 09:36:41PM +0200, Pablo Neira Ayuso wrote:
+> On Thu, Jun 23, 2022 at 08:42:48PM +0800, Wei Han wrote:
+> > when the ESP packets traversing Network Address Translators,
+> > which are encapsulated and decapsulated inside UDP packets,
+> > so we need to get ESP data in UDP.
+> > 
+> > Signed-off-by: Wei Han <lailitty@foxmail.com>
+> > ---
+> >  net/netfilter/xt_esp.c | 54 +++++++++++++++++++++++++++++++++++-------
+> >  1 file changed, 45 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/net/netfilter/xt_esp.c b/net/netfilter/xt_esp.c
+> > index 2a1c0ad0ff07..c3feb79a830a 100644
+> > --- a/net/netfilter/xt_esp.c
+> > +++ b/net/netfilter/xt_esp.c
+> > @@ -8,12 +8,14 @@
+> >  #include <linux/skbuff.h>
+> >  #include <linux/in.h>
+> >  #include <linux/ip.h>
+> > +#include <linux/ipv6.h>
+> >  
+> >  #include <linux/netfilter/xt_esp.h>
+> >  #include <linux/netfilter/x_tables.h>
+> >  
+> >  #include <linux/netfilter_ipv4/ip_tables.h>
+> >  #include <linux/netfilter_ipv6/ip6_tables.h>
+> > +#include <net/ip.h>
+> >  
+> >  MODULE_LICENSE("GPL");
+> >  MODULE_AUTHOR("Yon Uriarte <yon@astaro.de>");
+> > @@ -39,17 +41,53 @@ static bool esp_mt(const struct sk_buff *skb, struct xt_action_param *par)
+> >  	struct ip_esp_hdr _esp;
+> >  	const struct xt_esp *espinfo = par->matchinfo;
+> >  
+> > +	const struct iphdr *iph = NULL;
+> > +	const struct ipv6hdr *ip6h = NULL;
+> > +	const struct udphdr *udph = NULL;
+> > +	struct udphdr _udph;
+> > +	int proto = -1;
+> > +
+> >  	/* Must not be a fragment. */
+> >  	if (par->fragoff != 0)
+> >  		return false;
+> >  
+> > -	eh = skb_header_pointer(skb, par->thoff, sizeof(_esp), &_esp);
+> > -	if (eh == NULL) {
+> > -		/* We've been asked to examine this packet, and we
+> > -		 * can't.  Hence, no choice but to drop.
+> > -		 */
+> > -		pr_debug("Dropping evil ESP tinygram.\n");
+> > -		par->hotdrop = true;
+> > +	if (xt_family(par) == NFPROTO_IPV6) {
+> > +		ip6h = ipv6_hdr(skb);
+> > +		if (!ip6h)
+> > +			return false;
+> > +		proto = ip6h->nexthdr;
+> > +	} else {
+> > +		iph = ip_hdr(skb);
+> > +		if (!iph)
+> > +			return false;
+> > +		proto = iph->protocol;
+> > +	}
+> > +
+> > +	if (proto == IPPROTO_UDP) {
+> > +		//for NAT-T
+> > +		udph = skb_header_pointer(skb, par->thoff, sizeof(_udph), &_udph);
+> > +		if (udph && (udph->source == htons(4500) || udph->dest == htons(4500))) {
+> > +			/* Not deal with above data it don't conflict with SPI
+> > +			 * 1.IKE Header Format for Port 4500(Non-ESP Marker 0x00000000)
+> > +			 * 2.NAT-Keepalive Packet Format(0xFF)
+> > +			 */
+> > +			eh = (struct ip_esp_hdr *)((char *)udph + sizeof(struct udphdr));
+> 
+> this is not safe, skbuff might not be linear.
+>
+  Will be modified to "eh = skb_header_pointer(skb, par->thoff + sizeof(struct udphdr), sizeof(_esp), &_esp);"
+> > +		} else {
+> > +			return false;
+> > +		}
+> > +	} else if (proto == IPPROTO_ESP) {
+> > +		//not NAT-T
+> > +		eh = skb_header_pointer(skb, par->thoff, sizeof(_esp), &_esp);
+> > +		if (!eh) {
+> > +			/* We've been asked to examine this packet, and we
+> > +			 * can't.  Hence, no choice but to drop.
+> > +			 */
+> > +			pr_debug("Dropping evil ESP tinygram.\n");
+> > +			par->hotdrop = true;
+> > +			return false;
+> > +		}
+> 
+> This is loose, the user does not have a way to restrict to either
+> ESP over UDP or native ESP. I don't think this is going to look nice
+> from iptables syntax perspective to restrict either one or another
+> mode.
+>
+  This match original purpose is check the ESP packet's SPI value, so I
+  think the user maybe not need to pay attention that the packet is 
+  ESP over UDP or native ESP just get SPI and check it, this patch is 
+  only want to add support for get SPI in ESP over UDP.And the iptables rules like:
+  "iptables -A INPUT -m esp --espspi 0x12345678 -j ACCEPT"
+> > +	} else {
+> > +		//not esp data
+> >  		return false;
+> >  	}
+> >  
+> > @@ -76,7 +114,6 @@ static struct xt_match esp_mt_reg[] __read_mostly = {
+> >  		.checkentry	= esp_mt_check,
+> >  		.match		= esp_mt,
+> >  		.matchsize	= sizeof(struct xt_esp),
+> > -		.proto		= IPPROTO_ESP,
+> >  		.me		= THIS_MODULE,
+> >  	},
+> >  	{
+> > @@ -85,7 +122,6 @@ static struct xt_match esp_mt_reg[] __read_mostly = {
+> >  		.checkentry	= esp_mt_check,
+> >  		.match		= esp_mt,
+> >  		.matchsize	= sizeof(struct xt_esp),
+> > -		.proto		= IPPROTO_ESP,
+> >  		.me		= THIS_MODULE,
+> >  	},
+> >  };
+> > -- 
+> > 2.17.1
+> > 

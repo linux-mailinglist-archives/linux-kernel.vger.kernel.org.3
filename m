@@ -2,150 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E325599E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CA05599F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiFXMvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 08:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
+        id S231913AbiFXMyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 08:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbiFXMvq (ORCPT
+        with ESMTP id S230053AbiFXMyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 08:51:46 -0400
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2014ECE4;
-        Fri, 24 Jun 2022 05:51:45 -0700 (PDT)
-Received: from cap.home.8bytes.org (p5b006cf2.dip0.t-ipconnect.de [91.0.108.242])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by theia.8bytes.org (Postfix) with ESMTPSA id D6869450;
-        Fri, 24 Jun 2022 14:51:42 +0200 (CEST)
-From:   Joerg Roedel <joro@8bytes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        Joerg Roedel <jroedel@suse.de>,
-        Christoph Hellwig <hch@infradead.org>, joro@8bytes.org,
-        stable@vger.kernel.org
-Subject: [PATCH v2] MAINTAINERS: Add new IOMMU development mailing list
-Date:   Fri, 24 Jun 2022 14:51:39 +0200
-Message-Id: <20220624125139.412-1-joro@8bytes.org>
-X-Mailer: git-send-email 2.36.1
+        Fri, 24 Jun 2022 08:54:38 -0400
+Received: from outbound-smtp11.blacknight.com (outbound-smtp11.blacknight.com [46.22.139.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0816625A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:54:36 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp11.blacknight.com (Postfix) with ESMTPS id 093D31C3BC0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:54:35 +0100 (IST)
+Received: (qmail 6834 invoked from network); 24 Jun 2022 12:54:34 -0000
+Received: from unknown (HELO morpheus.112glenside.lan) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPA; 24 Jun 2022 12:54:34 -0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Hugh Dickins <hughd@google.com>, Yu Zhao <yuzhao@google.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH v5 00/7] Drain remote per-cpu directly
+Date:   Fri, 24 Jun 2022 13:54:16 +0100
+Message-Id: <20220624125423.6126-1-mgorman@techsingularity.net>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+This replaces the existing version on mm-unstable. While there are
+some fixes, this is mostly refactoring of patch 5 based on Vlastimil's
+feedback to reduce churn in later patches. The level of refactoring made
+-fix patches excessively complicated.
 
-The IOMMU mailing list will move from lists.linux-foundation.org to
-lists.linux.dev. The hard switch of the archive will happen on July
-5th, but add the new list now already so that people start using the
-list when sending patches. After July 5th the old list will disappear.
+Changelog since v4
+o Fix lockdep issues in patch 7
+o Refactor patch 5 to reduce churn in patches 6 and 7
+o Rebase to 5.19-rc3
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
----
- MAINTAINERS | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Some setups, notably NOHZ_FULL CPUs, may be running realtime or
+latency-sensitive applications that cannot tolerate interference due to
+per-cpu drain work queued by __drain_all_pages().  Introduce a new
+mechanism to remotely drain the per-cpu lists. It is made possible by
+remotely locking 'struct per_cpu_pages' new per-cpu spinlocks.  This has
+two advantages, the time to drain is more predictable and other unrelated
+tasks are not interrupted.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3cf9842d9233..36d1bc999815 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -427,6 +427,7 @@ ACPI VIOT DRIVER
- M:	Jean-Philippe Brucker <jean-philippe@linaro.org>
- L:	linux-acpi@vger.kernel.org
- L:	iommu@lists.linux-foundation.org
-+L:	iommu@lists.linux.dev
- S:	Maintained
- F:	drivers/acpi/viot.c
- F:	include/linux/acpi_viot.h
-@@ -960,6 +961,7 @@ AMD IOMMU (AMD-VI)
- M:	Joerg Roedel <joro@8bytes.org>
- R:	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
- L:	iommu@lists.linux-foundation.org
-+L:	iommu@lists.linux.dev
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git
- F:	drivers/iommu/amd/
-@@ -5962,6 +5964,7 @@ M:	Christoph Hellwig <hch@lst.de>
- M:	Marek Szyprowski <m.szyprowski@samsung.com>
- R:	Robin Murphy <robin.murphy@arm.com>
- L:	iommu@lists.linux-foundation.org
-+L:	iommu@lists.linux.dev
- S:	Supported
- W:	http://git.infradead.org/users/hch/dma-mapping.git
- T:	git git://git.infradead.org/users/hch/dma-mapping.git
-@@ -5974,6 +5977,7 @@ F:	kernel/dma/
- DMA MAPPING BENCHMARK
- M:	Xiang Chen <chenxiang66@hisilicon.com>
- L:	iommu@lists.linux-foundation.org
-+L:	iommu@lists.linux.dev
- F:	kernel/dma/map_benchmark.c
- F:	tools/testing/selftests/dma/
- 
-@@ -7558,6 +7562,7 @@ F:	drivers/gpu/drm/exynos/exynos_dp*
- EXYNOS SYSMMU (IOMMU) driver
- M:	Marek Szyprowski <m.szyprowski@samsung.com>
- L:	iommu@lists.linux-foundation.org
-+L:	iommu@lists.linux.dev
- S:	Maintained
- F:	drivers/iommu/exynos-iommu.c
- 
-@@ -9977,6 +9982,7 @@ INTEL IOMMU (VT-d)
- M:	David Woodhouse <dwmw2@infradead.org>
- M:	Lu Baolu <baolu.lu@linux.intel.com>
- L:	iommu@lists.linux-foundation.org
-+L:	iommu@lists.linux.dev
- S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git
- F:	drivers/iommu/intel/
-@@ -10356,6 +10362,7 @@ IOMMU DRIVERS
- M:	Joerg Roedel <joro@8bytes.org>
- M:	Will Deacon <will@kernel.org>
- L:	iommu@lists.linux-foundation.org
-+L:	iommu@lists.linux.dev
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git
- F:	Documentation/devicetree/bindings/iommu/
-@@ -12504,6 +12511,7 @@ F:	drivers/i2c/busses/i2c-mt65xx.c
- MEDIATEK IOMMU DRIVER
- M:	Yong Wu <yong.wu@mediatek.com>
- L:	iommu@lists.linux-foundation.org
-+L:	iommu@lists.linux.dev
- L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- F:	Documentation/devicetree/bindings/iommu/mediatek*
-@@ -16545,6 +16553,7 @@ F:	drivers/i2c/busses/i2c-qcom-cci.c
- QUALCOMM IOMMU
- M:	Rob Clark <robdclark@gmail.com>
- L:	iommu@lists.linux-foundation.org
-+L:	iommu@lists.linux.dev
- L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
- F:	drivers/iommu/arm/arm-smmu/qcom_iommu.c
-@@ -19170,6 +19179,7 @@ F:	arch/x86/boot/video*
- SWIOTLB SUBSYSTEM
- M:	Christoph Hellwig <hch@infradead.org>
- L:	iommu@lists.linux-foundation.org
-+L:	iommu@lists.linux.dev
- S:	Supported
- W:	http://git.infradead.org/users/hch/dma-mapping.git
- T:	git git://git.infradead.org/users/hch/dma-mapping.git
-@@ -21844,6 +21854,7 @@ M:	Juergen Gross <jgross@suse.com>
- M:	Stefano Stabellini <sstabellini@kernel.org>
- L:	xen-devel@lists.xenproject.org (moderated for non-subscribers)
- L:	iommu@lists.linux-foundation.org
-+L:	iommu@lists.linux.dev
- S:	Supported
- F:	arch/x86/xen/*swiotlb*
- F:	drivers/xen/*swiotlb*
+This series has the same intent as Nicolas' series "mm/page_alloc: Remote
+per-cpu lists drain support" -- avoid interference of a high priority task
+due to a workqueue item draining per-cpu page lists.  While many workloads
+can tolerate a brief interruption, it may cause a real-time task running
+on a NOHZ_FULL CPU to miss a deadline and at minimum, the draining is
+non-deterministic.
+
+Currently an IRQ-safe local_lock protects the page allocator per-cpu
+lists. The local_lock on its own prevents migration and the IRQ disabling
+protects from corruption due to an interrupt arriving while a page
+allocation is in progress.
+
+This series adjusts the locking.  A spinlock is added to struct
+per_cpu_pages to protect the list contents while local_lock_irq is
+ultimately replaced by just the spinlock in the final patch.  This allows
+a remote CPU to safely. Follow-on work should allow the spin_lock_irqsave
+to be converted to spin_lock to avoid IRQs being disabled/enabled in
+most cases. The follow-on patch will be one kernel release later as it
+is relatively high risk and it'll make bisections more clear if there
+are any problems.
+
+Patch 1 is a cosmetic patch to clarify when page->lru is storing buddy pages
+	and when it is storing per-cpu pages.
+
+Patch 2 shrinks per_cpu_pages to make room for a spin lock. Strictly speaking
+	this is not necessary but it avoids per_cpu_pages consuming another
+	cache line.
+
+Patch 3 is a preparation patch to avoid code duplication.
+
+Patch 4 is a minor correction.
+
+Patch 5 uses a spin_lock to protect the per_cpu_pages contents while still
+	relying on local_lock to prevent migration, stabilise the pcp
+	lookup and prevent IRQ reentrancy.
+
+Patch 6 remote drains per-cpu pages directly instead of using a workqueue.
+
+Patch 7 uses a normal spinlock instead of local_lock for remote draining
+
+Nicolas Saenz Julienne (1):
+  mm/page_alloc: Remotely drain per-cpu lists
+
+ include/linux/mm_types.h |   5 +
+ include/linux/mmzone.h   |  12 +-
+ mm/page_alloc.c          | 386 ++++++++++++++++++++++++---------------
+ 3 files changed, 250 insertions(+), 153 deletions(-)
+
 -- 
-2.36.1
+2.35.3
 

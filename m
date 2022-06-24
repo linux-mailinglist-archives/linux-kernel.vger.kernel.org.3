@@ -2,162 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E78559A5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFD2559A51
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231965AbiFXNbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 09:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
+        id S231948AbiFXN1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 09:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiFXNbu (ORCPT
+        with ESMTP id S229584AbiFXN1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 09:31:50 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B0838BFA;
-        Fri, 24 Jun 2022 06:31:41 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 843F71F8EF;
-        Fri, 24 Jun 2022 13:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1656077500;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RgjcjsWwgFCT51qzN2+gjNYaVNpGbaTRZxVXLNJmXbg=;
-        b=VvgWBKdl1CvOhvyADG1uOBOtFL4EJM2iTP2RJqENtsxjEYxFI99ueud6cmoj+xODh0wwcW
-        kMqP/2+9iWPT6AEnQqfytCLGO+D2y6T+8o8FSO3uf4PV21cMv2Cyo8bgWLj0jJBKaV558o
-        OODUa0Kvif5Pec8YeSKL8+/Flq4R9Tc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1656077500;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RgjcjsWwgFCT51qzN2+gjNYaVNpGbaTRZxVXLNJmXbg=;
-        b=rbv9OWQH8nhn7uiUClbt61DsOVh1zVoZ2ZxvEt5asVQO0+SUARI8H8X4igIt64k89EDwJw
-        uzXtiGYjZlESk3DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3F69B13480;
-        Fri, 24 Jun 2022 13:31:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WYCFDry8tWJVBQAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Fri, 24 Jun 2022 13:31:40 +0000
-Date:   Fri, 24 Jun 2022 15:27:01 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     dsterba@suse.cz, Christoph Hellwig <hch@lst.de>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH] btrfs: remove btrfs_writepage_cow_fixup
-Message-ID: <20220624132701.GT20633@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Qu Wenruo <quwenruo.btrfs@gmx.com>,
-        Christoph Hellwig <hch@lst.de>, clm@fb.com, josef@toxicpanda.com,
-        dsterba@suse.com, linux-btrfs@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-References: <20220624122334.80603-1-hch@lst.de>
- <20220624124913.GS20633@twin.jikos.cz>
- <b058e226-8a77-42bc-8c92-5bd23244e7da@gmx.com>
+        Fri, 24 Jun 2022 09:27:19 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F0C53A4B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 06:27:17 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id o8so3160543wro.3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 06:27:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=zWXXv2xfX+nkxMjOUNSHqEiFkW+UBo+JFZKk6soP/kc=;
+        b=uGlffrhFEfJvrJLAbxs99jYoSIG6r+vrcnUhYGQ77KCoa60uiixo2PtDjOK49BJUvk
+         SjVBNUqqtlmWj+KE0yMmHsNcmgfxzutbMBfShyUnG2RIEHd0z6piFMKI16MlhpzdT7+/
+         CdaVphHc2+BrEx/7J2q21fax5Ek4PqsRlfY7UreC12zx99xEeBGfJEsv50ARqukmP1ud
+         m6nQD2KYDXLiE6KPehCAuQmmfihGciJUZQSt1q5uub0WJSPD5WPb0vaGwOgKZbEvNbxS
+         +pxNLXdSQnX+Vr1pL4gkLA8kipTXlDPJib/y1uDW1drFWUeDDSGfkywcwn5oQhFrs8Kq
+         /gbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=zWXXv2xfX+nkxMjOUNSHqEiFkW+UBo+JFZKk6soP/kc=;
+        b=Aog/IeSurW86bnJN69Qs+d56rU33tYGwsgLfmXljnuxzJlFRIfHfSqS2awv++A0XIq
+         Kz8xlB3h+uobJcctyltVybjqVbzpEAkFbnZC6BJOrFj4x9q5UwW89Jfs1CBB+jUCqI/6
+         FUNoUG8LfYAjfZtl4B7tDKZ8pQcTiSZLVRs7nat+eYRK2MNP8QAZ5O632uTzLoCcRmGT
+         j0Fq4woHWf0WSkRJOCuKCnjbEm4YUrYHX6UnJkRU+gg82aDHV7rOIEFktdXkNbWVE+TQ
+         mGtBpNo3YIYNztB1/v7GKZaNfWYkBrSB/bkdh+Kx5+lzFOy/jYue6x955nsYytDkt7+h
+         1lcw==
+X-Gm-Message-State: AJIora/p7LH7nHQJrPy97shsOt7w8mG5AcdDCJFrf70kx9DeO6mlX0+O
+        c9jFjF+995xbWbOINpPtHlvhnw==
+X-Google-Smtp-Source: AGRyM1t/ztNcjWHSThDemc1hDzpBMj4/Q0wX6RuHmfYrc/gRO/S83SWB+S0wY81Wi0jJ1cWdECwWYQ==
+X-Received: by 2002:a05:6000:1a41:b0:20e:687f:1c3 with SMTP id t1-20020a0560001a4100b0020e687f01c3mr13063677wry.415.1656077235868;
+        Fri, 24 Jun 2022 06:27:15 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:3816:2b77:7cfb:ba54? ([2001:861:44c0:66c0:3816:2b77:7cfb:ba54])
+        by smtp.gmail.com with ESMTPSA id z24-20020a1c4c18000000b0039db31f6372sm6663231wmf.2.2022.06.24.06.27.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jun 2022 06:27:15 -0700 (PDT)
+Message-ID: <5f1bd986-e193-b147-8322-3a0bf14fc373@baylibre.com>
+Date:   Fri, 24 Jun 2022 15:27:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b058e226-8a77-42bc-8c92-5bd23244e7da@gmx.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v7 5/5] mtd: rawnand: meson: not support legacy clock
+Content-Language: en-US
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-mtd@lists.infradead.org
+Cc:     kernel test robot <lkp@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220624131257.29906-1-liang.yang@amlogic.com>
+ <20220624131257.29906-6-liang.yang@amlogic.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220624131257.29906-6-liang.yang@amlogic.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 09:12:44PM +0800, Qu Wenruo wrote:
-> On 2022/6/24 20:49, David Sterba wrote:
-> > On Fri, Jun 24, 2022 at 02:23:34PM +0200, Christoph Hellwig wrote:
-> >> Since the page_mkwrite address space operation was added, starting with
-> >> commit 9637a5efd4fb ("[PATCH] add page_mkwrite() vm_operations method")
-> >> in 2006, the kernel does not just dirty random pages without telling
-> >> the file system.
-> >
-> > It does and there's a history behind the fixup worker. tl;dr it can't be
-> > removed, though every now and then somebody comes and tries to.
-> >
-> > On s390 the page status is tracked in two places, hw and in memory and
-> > this needs to be synchronized manually.
-> >
-> > On x86_64 it's not a simple reason but it happens as well in some edge
-> > case where the mappings get removed and dirty page is set deep in the
-> > arch mm code.  We've been chasing it long time ago, I don't recall exact
-> > details and it's been a painful experience.
-> >
-> > If there's been any change on the s390 side or in arch/x86/mm code I
-> > don't know but to be on the safe side, I strongly assume the fixup code
-> > is needed unless proven otherwise.
+Hi,
+
+On 24/06/2022 15:12, Liang Yang wrote:
+> meson NFC driver use common clock interfaces. so the test robot report
+> some errors once using the legacy clock with HAVE_LEGACY_CLK on.
 > 
-> I'd say, if this can be a problem to btrfs, then all fs supporting COW
-> should also be affected, and should have similar workaround.
-
-Probably yes.
-
-> Furthermore, this means we can get a page dirtied without us knowing.
-
-This should not happen because we do have the detection of the page and
-extent state mismatch and the fixup worker makes things right again.
-
-> This is a super big surprise to any fs, and should be properly
-> documented, not just leaving some seemly dead and special code in some
-> random fs.
-
-You seem to be a non-believer that the bug is real and calling the code
-dead. Each filesystem should validate the implementation agains the
-platform where it is and btrfs once found the hard way that there are
-some corner cases where structures get out of sync.
-
-> Furthermore, I'm not sure even if handling this in a fs level is correct.
-> This looks like more a MM problem to me then.
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
+> ---
+>   drivers/mtd/nand/raw/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> 
-> I totally understand it's a pain to debug such lowlevel bug, but
-> shouldn't we have a proper regression for it then?
+> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
+> index 67b7cb67c030..0ff86ca5932d 100644
+> --- a/drivers/mtd/nand/raw/Kconfig
+> +++ b/drivers/mtd/nand/raw/Kconfig
+> @@ -395,7 +395,7 @@ config MTD_NAND_STM32_FMC2
+>   
+>   config MTD_NAND_MESON
+>   	tristate "Support for NAND controller on Amlogic's Meson SoCs"
+> -	depends on ARCH_MESON || COMPILE_TEST
+> +	depends on ARCH_MESON || COMPILE_TEST || COMMON_CLK
 
-The regression test is generic/208 and it was not reliable at all, it
-fired randomly once a week or month, there used to be a BUG() in the
-fixup worker callback.
+This should be :
+	depends on COMMON_CLK && (ARCH_MESON || COMPILE_TEST)
 
-> Instead of just keeping what we know works, I really want to handle this
-> old case/bug in a more modern way.
+>   	select MFD_SYSCON
+>   	help
+>   	  Enables support for NAND controller on Amlogic's Meson SoCs.
 
-As long as the guarantees stay the same, then fine. We need to be able
-to detect the unexpected dirty bit and have a way to react to it.
-
-f4b1363cae43 ("btrfs: do not do delalloc reservation under page lock")
-25f3c5021985 ("Btrfs: keep pages dirty when using btrfs_writepage_fixup_worker")
-1d53c9e67230 ("Btrfs: only associate the locked page with one async_chunk struct")
-
-And the commit that fixed it:
-
-87826df0ec36 ("btrfs: delalloc for page dirtied out-of-band in fixup worker")
-
-You can find several reports in the mailing list archives (search term
-btrfs_writepage_fixup_worker):
-
-https://lore.kernel.org/linux-btrfs/1295053074.15265.6.camel@mercury.localdomain
-
-https://lore.kernel.org/linux-btrfs/20110701174436.GA8352@yahoo.fr
-
-https://lore.kernel.org/linux-btrfs/j0k65i$29a$1@dough.gmane.org
-
-https://lore.kernel.org/linux-btrfs/CAO47_--H0+6bu4qQ2QA9gZcHvGVWO4QUGCAb3+9a5Kg3+23UiQ@mail.gmail.com
-
-https://lore.kernel.org/linux-btrfs/vqfmv8-9ch.ln1@hurikhan.ath.cx
+Neil

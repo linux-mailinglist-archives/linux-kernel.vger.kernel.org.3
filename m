@@ -2,103 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB9A559877
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 13:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5610559874
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 13:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiFXLWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 07:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
+        id S231247AbiFXLXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 07:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbiFXLWr (ORCPT
+        with ESMTP id S231181AbiFXLXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 07:22:47 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9C5794FB
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 04:22:45 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id t5so4098217eje.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 04:22:45 -0700 (PDT)
+        Fri, 24 Jun 2022 07:23:10 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7615C17E17;
+        Fri, 24 Jun 2022 04:23:09 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z11so2976261edp.9;
+        Fri, 24 Jun 2022 04:23:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tgk54MZ41PYHuB/Q4rLG9CYyOFNJDlQyyrk8XZCCg1U=;
-        b=Oyq5vCrpAPNrAziFwKaF2lBkP2jNPRprPBFhuec6kn+YBvz5ss6Ytk/6xOrQO/eBwu
-         8UKDIPAUP6m6QKDwOkcCGfwGNqMMxj9Lv7iBjtxheUp1JumjXMSZ4zVxBlNGypmVpEqE
-         rkZQ2ZzxgmeGxcd64+Xm8PtvF/Gz27BFOwtrwgIu/RMjXfaTDMz9EPeA2d4u1lmmICyn
-         4KerevADvvaCxSCLcYbGGjd9pacaZOPd29c512UV7Arvp0wI01ZPoIHagcw9J526IEi1
-         /ltWhsiXxxeRXLwQk4upL1m46Xm4SElptteEJwp2Izm5+pob1ZNsb1mH67hFZj4mlfb4
-         sjAQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=97l5C7KYjI62mLTEaSBvh8q8hin604D+5jLnZw8o8Hs=;
+        b=gGsd16xApVKpT/QOG6PyUQzbcvKy4PkecAqb4plJuQMkKESiQd5Snhy6ig8Cv4wtfT
+         hY8GVKO1cVP4LQPxMSKIOy/z3+HW5AqITfde0UU2CqxbPt8kpAUBJEgMJmhwOPKpK/wz
+         iGTEpMNFcvgFEwLihX+vyh9vVD86SJMUgB09evZoZKaA+p8/mS01MDXrt08srEsIKob7
+         FujT9R0RRWXDIQuSBYh7/clCHQO8jCvPN3dCglBALhWbqoKzQTQBoF6bW9raBMyy22Ra
+         xi2DH7HwV8hP7KvsVM9fzUQRQULr/0y1I7EKQS2mu4eiNEBzJLsE4uwcRsIt6ocqgJZt
+         KgsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tgk54MZ41PYHuB/Q4rLG9CYyOFNJDlQyyrk8XZCCg1U=;
-        b=LujbHh5nFm8svsguj++NqeJwCooSsHv2FvyTo2hOZe90U1KRlsWi21gvgoxwaiPHXZ
-         9QH9tVZfX5WJ9VvDhYQPH10s4HKBikE/FZsuksE1KeCVja0w76oMYBwpX/At7lw+Xp6S
-         EX7Z87HFXETKjd3nYTshMVDqGsCkw0EUUFzNfXYRBiKZ6nxnadNZBBR+YpnZ6/PiI9VA
-         lIY6JC4lG1Fxn6aXRuJaZ/OhSZ8vTJTnxDDMorgS5e2YwytofdymaaKCBeNtWKyVXXuH
-         BzAKbPRGZRJbOCCYBNOnDnKnIebqbTWYlHCwiLO1C3h4/2ietjNqCmvY9kmBO3tP1KFM
-         qyow==
-X-Gm-Message-State: AJIora+iUxdupRataQjQ6X+Ytjera3sde3RNwYZO1wPdtXylw/C32DTO
-        CRQPtNUEsigKybRknhTPAM4agw==
-X-Google-Smtp-Source: AGRyM1sYtcDa5bMUak2KZgL6+/Fc5vtdSfpUcIOTo5XhIbe5rtkcGY4Iq23VRgOKO7sKLDlaVq/HbA==
-X-Received: by 2002:a17:906:4c9a:b0:726:38df:6f6f with SMTP id q26-20020a1709064c9a00b0072638df6f6fmr495588eju.485.1656069764388;
-        Fri, 24 Jun 2022 04:22:44 -0700 (PDT)
-Received: from [192.168.0.235] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g10-20020aa7dc4a000000b0043567edac3csm1795392edu.61.2022.06.24.04.22.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 04:22:44 -0700 (PDT)
-Message-ID: <5cfb502d-951e-2b5a-aaec-a2ef4c71d5e0@linaro.org>
-Date:   Fri, 24 Jun 2022 13:22:42 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=97l5C7KYjI62mLTEaSBvh8q8hin604D+5jLnZw8o8Hs=;
+        b=vtPlWci1vRjzzDsY3TOir9IPJEu8rGokszu2wjK8OU1p4wDVMVEjxc1YHJ24UoFhll
+         vDsstXbXL4+VCM7KQjbagQ8l/jABN3PqjpL49py8ETfRm7oomzQO05qTm4kRVl5aqNg9
+         S34mQflS/LiMqpZ5mcvbTql0UWxQezjO2qtbRnHwwwxIQyS3OrOQM/jHLb9uo4PVMiqT
+         +HunMhuS1Ar9lolLLxQvHj6Xf4oV2v1cctlMyITrHJNuvxUM+yEmdjtZ2esZnEE9eL6J
+         EsvOwXI91mq9C/433Tbnhka+jfgnL8figIWxSJP2rmnqpad9XYF5MLYrrQkcFXEt3mcP
+         bqPA==
+X-Gm-Message-State: AJIora8lhHHvvFFoMQGd6lK3LdoKjayqajGZraC4DFhaZhVMETdDy5ah
+        WeL7os/FubQivWkGvu/yWJ0Yhl4gBDg=
+X-Google-Smtp-Source: AGRyM1sp0z4XwfeMfTfnogDy8QZgeG5xuxDpxgASKZ3PAEsgPyjKdlX2fKg+NZZqIXQhQtCPdlB7+g==
+X-Received: by 2002:a05:6402:4144:b0:431:6ef0:bef7 with SMTP id x4-20020a056402414400b004316ef0bef7mr17147768eda.151.1656069787952;
+        Fri, 24 Jun 2022 04:23:07 -0700 (PDT)
+Received: from skbuf ([188.27.185.253])
+        by smtp.gmail.com with ESMTPSA id d18-20020a05640208d200b00435bfcad6d1sm1757991edz.74.2022.06.24.04.23.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 04:23:06 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 14:23:04 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [Patch net-next 00/13] net: dsa: microchip: common spi probe for
+ the ksz series switches - part 2
+Message-ID: <20220624112304.zg5qypzwervonsvc@skbuf>
+References: <20220622090425.17709-1-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 04/14] dt-bindings: leds: Add Mediatek MT6370
- flashlight
-Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de
-Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
-        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-References: <20220623115631.22209-1-peterwu.pub@gmail.com>
- <20220623115631.22209-5-peterwu.pub@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220623115631.22209-5-peterwu.pub@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622090425.17709-1-arun.ramadoss@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2022 13:56, ChiaEn Wu wrote:
-> From: Alice Chen <alice_chen@richtek.com>
+On Wed, Jun 22, 2022 at 02:34:12PM +0530, Arun Ramadoss wrote:
+> This patch series aims to refactor the ksz_switch_register routine to have the
+> common flow for the ksz series switch. And this is the follow up patch series.
 > 
-> Add Mediatek MT6370 flashlight binding documentation.
+> First, it tries moves the common implementation in the setup from individual
+> files to ksz_setup. Then implements the common dsa_switch_ops structure instead
+> of independent registration. And then moves the ksz_dev_ops to ksz_common.c,
+> it allows the dynamic detection of which ksz_dev_ops to be used based on
+> the switch detection function.
 > 
-> Signed-off-by: Alice Chen <alice_chen@richtek.com>
-> ---
+> Finally, the patch updates the ksz_spi probe function to be same for all the
+> ksz_switches.
 
+Sorry for being late to the party again. I've looked over the resulting
+code and it appears that there is still some cleanup to do.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+We now have a stray struct ksz8 pointer being allocated by the common
+ksz_spi_probe(), and passed as dev->priv to ksz_switch_alloc() by this
+generic code.
 
+Only ksz8 accesses dev->priv, although it is interesting to note that
+ksz9477_i2c_probe() calls ksz_switch_alloc() with a type-incompatible
+struct i2c_client *i2c that is unused but bogus.
 
-Best regards,
-Krzysztof
+The concept of struct ksz8 was added by commit 9f73e11250fb ("net: dsa:
+microchip: ksz8795: move register offsets and shifts to separate
+struct"), and in essence it isn't a bad idea, it's just that I wasn't
+aware of it, and only ksz8 makes use of it.
+
+You've added some register offsets yourself to ksz_chip_data
+(stp_ctrl_reg, broadcast_ctrl_reg, multicast_ctrl_reg, start_ctrl_reg),
+and it looks like struct ksz8 shares more or less the same purpose -
+regs, masks, shifts etc. Would you mind doing some more consolidation
+work and trying to figure out if we could eliminate a data structure
+unique for ksz8 and integrate that information into struct ksz_chip_data
+(and perhaps use it in more places)?

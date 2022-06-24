@@ -2,147 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD5955944D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 09:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 679B1559453
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 09:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiFXHnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 03:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
+        id S229632AbiFXHp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 03:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiFXHm6 (ORCPT
+        with ESMTP id S229469AbiFXHpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 03:42:58 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3128120AF
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 00:42:57 -0700 (PDT)
+        Fri, 24 Jun 2022 03:45:55 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D610522E6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 00:45:54 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id m1so1999895wrb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 00:45:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656056577; x=1687592577;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=RfyrWIIDa4w9dz4gyd2U2zmHYdad2jtAHPjANf5neDw=;
-  b=i7B5IltNEA/c4ba0NY/I4VsPf93t4cTa1w/JZ9kUKcL6XWCf+h5YU8gE
-   n7vhQp+oZe+SKtKvde1m9h6ZPLPQnkQX7ZaN6rGvNHVq5wYHayt0/0npS
-   0sfnIJ2qhjB7PT+wZYvPFbyZfQzavY2KmE269Ziva7oV67JWDhtTUG38l
-   0=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 24 Jun 2022 00:42:57 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 00:42:57 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 24 Jun 2022 00:42:56 -0700
-Received: from hu-satyap-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 24 Jun 2022 00:42:56 -0700
-From:   Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>
-CC:     Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] sched: fix rq lock recursion issue
-Date:   Fri, 24 Jun 2022 00:42:40 -0700
-Message-ID: <20220624074240.13108-1-quic_satyap@quicinc.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=0ZlmPLrZBq2C2GM7uxjJCPFVuBCp2JLIVhQIgplZtYk=;
+        b=Kp2Nv1BQ1WXuHYS+r+amWX7zs4ExnkoARLCQ3YEZzS+pd3iLAehijDsI13VEWsRW39
+         D+gWnHOT4eCVZ8kLJmNaB8a9XnR1PlXyrBk5KZe3RNkQOLC9GQbzsoE/Cfc7VxYBsjPH
+         Ps8Bz1tau1dvnPaxZ1DXFfIIhgKzyJpC3gAqdyZuMB1OhhlLwv5kMdzCfcxlE1IsSD4Y
+         lQJk/dygWkaMKBLbsK9dBAp9mVkQzuDL8Ew5QdAUE+hw19FMORJhUbg6Qkkh7/bNrHOk
+         Zu3E1BJ5GQVbzW3Xq9GHoeuDkRsHn57ZobjtxEZxpCzAswM4EN/bg1vk60rozNnynm+X
+         vV2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=0ZlmPLrZBq2C2GM7uxjJCPFVuBCp2JLIVhQIgplZtYk=;
+        b=6BVZPuG9qVIOtzjRSqLCP58wZ/XrIKbCn60FB7N85RKa18e7b+dHyKTnFdFAgh8ZAf
+         VQTrxwI6PlsKxBbL57P5dpTTsZ7iBEcOKEiOnhRL2E6ZsACietLw/T06EygWdz+ebqYz
+         nrEdTSx2UbOrBuhTQXHfJHjJZDtL8v6SUT2VNO4gz2FDlupbsLp+Sw9nRnewvpn/7LvN
+         yX+3MWMuPFDJvbL29QoiQ8uS4zXUGePnS/iJwLPWnUxgpuzwnYdsRmv4JB8d4LwRq/3h
+         8Fyo65NvgGIsAjPaJWSBkInesgdMFRfwJv5JSB5GE1e1bwm14QOoW4oJoPzh8C3APpqb
+         Yi6A==
+X-Gm-Message-State: AJIora+AQxnKiWvMFE43tiWnei2JD1AGOHG94rJJQZGMUR6dJX8plzht
+        8FHRi1b2UnaqjmDCnV0YgWqCaA==
+X-Google-Smtp-Source: AGRyM1u229Xg0jnxyiwwGmz48kdjamFG0VBRWUfXHBmPxvLHYMUtXWbKweF8OrKj6IP0zuy0VJl2tg==
+X-Received: by 2002:a05:6000:168c:b0:218:4523:c975 with SMTP id y12-20020a056000168c00b002184523c975mr11934867wrd.23.1656056753037;
+        Fri, 24 Jun 2022 00:45:53 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:f:6020:a0f3:21fd:ac8:ae79])
+        by smtp.gmail.com with ESMTPSA id y15-20020a5d4acf000000b0021b9c520953sm1508526wrs.64.2022.06.24.00.45.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 00:45:52 -0700 (PDT)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     sudeep.holla@arm.com, cristian.marussi@arm.com,
+        linux-arm-kernel@lists.infradead.org, etienne.carriere@linaro.org,
+        linux-kernel@vger.kernel.org
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH] scmi/optee: fix response size warning
+Date:   Fri, 24 Jun 2022 09:45:49 +0200
+Message-Id: <20220624074549.3298-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below recursion is observed in a rare scenario where __schedule()
-takes rq lock, at around same time task's affinity is being changed,
-bpf function for tracing sched_switch calls migrate_enabled(),
-checks for affinity change (cpus_ptr != cpus_mask) lands into
-__set_cpus_allowed_ptr which tries acquire rq lock and causing the
-recursion bug.
+Some protocols check the response size with the expected value but optee
+shared memory doesn't return such size whereas it is available in the
+optee output buffer.
 
-Fix the issue by switching to preempt_enable/disable() for non-RT
-Kernels.
+As an example, the base protocol compares the response size with the
+expected result when requesting the list of protocol which triggers a
+warning with optee shared memory:
 
--010 |spin_bug(lock = ???, msg = ???)
--011 |debug_spin_lock_before(inline)
--011 |do_raw_spin_lock(lock = 0xFFFFFF89323BB600)
--012 |_raw_spin_lock(inline)
--012 |raw_spin_rq_lock_nested(inline)
--012 |raw_spin_rq_lock(inline)
--012 |task_rq_lock(p = 0xFFFFFF88CFF1DA00, rf = 0xFFFFFFC03707BBE8)
--013 |__set_cpus_allowed_ptr(inline)
--013 |migrate_enable()
--014 |trace_call_bpf(call = ?, ctx = 0xFFFFFFFDEF954600)
--015 |perf_trace_run_bpf_submit(inline)
--015 |perf_trace_sched_switch(__data = 0xFFFFFFE82CF0BCB8, preempt = FALSE, prev = ?, next = ?)
--016 |__traceiter_sched_switch(inline)
--016 |trace_sched_switch(inline)
--016 |__schedule(sched_mode = ?)
--017 |schedule()
--018 |arch_local_save_flags(inline)
--018 |arch_irqs_disabled(inline)
--018 |__raw_spin_lock_irq(inline)
--018 |_raw_spin_lock_irq(inline)
--018 |worker_thread(__worker = 0xFFFFFF88CE251300)
--019 |kthread(_create = 0xFFFFFF88730A5A80)
--020 |ret_from_fork(asm)
+[    1.260306] arm-scmi firmware:scmi0: Malformed reply - real_sz:116  calc_sz:4  (loop_num_ret:4)
 
-Signed-off-by: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
+Save the output buffer length and use it when fetching the answer.
+
+Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 ---
- kernel/sched/core.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index bfa7452ca92e..e254e9227341 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2223,6 +2223,7 @@ static void migrate_disable_switch(struct rq *rq, struct task_struct *p)
+Tested on sudeep's for-next/scmi branch
+
+ drivers/firmware/arm_scmi/optee.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/firmware/arm_scmi/optee.c b/drivers/firmware/arm_scmi/optee.c
+index b503c22cfd32..8abace56b958 100644
+--- a/drivers/firmware/arm_scmi/optee.c
++++ b/drivers/firmware/arm_scmi/optee.c
+@@ -117,6 +117,7 @@ struct scmi_optee_channel {
+ 	u32 channel_id;
+ 	u32 tee_session;
+ 	u32 caps;
++	u32 rx_len;
+ 	struct mutex mu;
+ 	struct scmi_chan_info *cinfo;
+ 	union {
+@@ -302,6 +303,9 @@ static int invoke_process_msg_channel(struct scmi_optee_channel *channel, size_t
+ 		return -EIO;
+ 	}
  
- void migrate_disable(void)
- {
-+#ifdef CONFIG_PREEMPT_RT
- 	struct task_struct *p = current;
- 
- 	if (p->migration_disabled) {
-@@ -2234,11 +2235,15 @@ void migrate_disable(void)
- 	this_rq()->nr_pinned++;
- 	p->migration_disabled = 1;
- 	preempt_enable();
-+#else
-+	preempt_disable();
-+#endif
++	/* Save response size */
++	channel->rx_len = param[2].u.memref.size;
++
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(migrate_disable);
  
- void migrate_enable(void)
- {
-+#ifdef CONFIG_PREEMPT_RT
- 	struct task_struct *p = current;
+@@ -353,6 +357,7 @@ static int setup_dynamic_shmem(struct device *dev, struct scmi_optee_channel *ch
+ 	shbuf = tee_shm_get_va(channel->tee_shm, 0);
+ 	memset(shbuf, 0, msg_size);
+ 	channel->req.msg = shbuf;
++	channel->rx_len = msg_size;
  
- 	if (p->migration_disabled > 1) {
-@@ -2265,6 +2270,9 @@ void migrate_enable(void)
- 	p->migration_disabled = 0;
- 	this_rq()->nr_pinned--;
- 	preempt_enable();
-+#else
-+	preempt_enable();
-+#endif
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(migrate_enable);
+@@ -508,7 +513,7 @@ static void scmi_optee_fetch_response(struct scmi_chan_info *cinfo,
+ 	struct scmi_optee_channel *channel = cinfo->transport_info;
  
+ 	if (channel->tee_shm)
+-		msg_fetch_response(channel->req.msg, SCMI_OPTEE_MAX_MSG_SIZE, xfer);
++		msg_fetch_response(channel->req.msg, channel->rx_len, xfer);
+ 	else
+ 		shmem_fetch_response(channel->req.shmem, xfer);
+ }
 -- 
-2.36.1
+2.17.1
 

@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E44D559359
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50BC559360
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbiFXGZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 02:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
+        id S230041AbiFXGZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 02:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiFXGZU (ORCPT
+        with ESMTP id S229996AbiFXGZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 02:25:20 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650494F9E0;
-        Thu, 23 Jun 2022 23:25:20 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id a17so1272189pls.6;
-        Thu, 23 Jun 2022 23:25:20 -0700 (PDT)
+        Fri, 24 Jun 2022 02:25:42 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06B050B09
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:25:40 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id u9so2916948ybq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:25:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YzS6DEPqt3lHPSZZNgKFpPjyHQrp9ZFD5gLKipQgADQ=;
-        b=ldlfMmihFpyEyNLk9EveOKgKcvWKoGOxwobyUknq3LvuLaw2a+jnMEbmbIoIZtaF8O
-         O8V7HKonaKZWwESgR+UqQx4Ofjdix8p0C6wAKAPiJ9mdXbz5NRWouIiwCow+pkN0QPrk
-         bAJds845htlNu511f1gkeIIy6GtXtpVZQAfYxT1xVQGgSOWpQeN99J9Z/kX+psUkJgwP
-         0y11bFBVd83ef98m/bTy8mce/D7vmIFX+ICNpiGjmn9aD4EswVuosypYBNrDOTVErCaB
-         8Nvk/nMF1dajggwP5lvuAqaLQXR1GXLnV5tLZDtB4JJ1r1hPr+xvE6LILsEGSamXY0ZX
-         trMw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3WRM/jegNDF7MJkfKHHwllsaLEoDBdN6Clej3P/Y4lI=;
+        b=D530abNNVW04AkYbW5cBkqRo9d5231SDuKgu4fDW7AaH4jE4mVT5OFUcx+HC+Oclit
+         8chp6jbBbNGEk0P3WtO4E/T3LUNKEl4CZYHCB8kDC72f1y33a5Jl8zQdYz/7h8rofzI9
+         molKE7wLhlBuYhpF8PG8/LP34IC1bse0Fsc34U93w63mTGtgoR/kSBJU3IAZV6RJIDoX
+         vewJ811NMZGN+RX3N8aqUoPR3IjQiufTbvKsQ7KYzVX9rrK377CYprRQ3djZSphTlWnA
+         kr90KekhWjo1rMkgj80oOFkzfZZBsx36WCy428UlmluupR0YrGtaLVqkr96HnOa5PXRo
+         +Ovg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YzS6DEPqt3lHPSZZNgKFpPjyHQrp9ZFD5gLKipQgADQ=;
-        b=O3wJqyRqv/fEsO6GvlVXtI3YhJCNzN56P3ikgluWbWHaMjlUq2HO5cFZ0Qj74c7SKi
-         VZSA+hJ6nruLoOzCJ73I0eU7ADe5F+50855C8E19rNvFutuScKYzZMifm2J44PIre+ry
-         JE05DbvXxhKVsEahm3OZzKbr9AmYP2n23iq4QyIXDvqb91hMMg7T0ncQ/7H3XX8hYvTi
-         Xmeqh4ujK5sFl9PYIU7Ewcp0kvvuhVhFAwGK4BPzncAwqXwVupZAKFs883dSoFRIMuG1
-         NlA0rdCOwGWp33wLAu5T+ov8Ip7DZ7fcuXD6J3thzol4UitQjQEn/cWu6Tm4RbyrGU/e
-         EGdg==
-X-Gm-Message-State: AJIora/Z2dKfoiJrwC2Lcyo8gxK3Frsq5a313SZY/MhzJW3TwgNhdoCx
-        Fv95ZuPgcnMmsdh0WJvB/rw=
-X-Google-Smtp-Source: AGRyM1thgI+CyzAM+KdY/bGmMul5M/V1mcgFSjjfRva8yMVO3W7abyn1Ry2ZWFlUXlV784O7kbFTSQ==
-X-Received: by 2002:a17:902:d905:b0:16a:2917:73dc with SMTP id c5-20020a170902d90500b0016a291773dcmr23306983plz.6.1656051919783;
-        Thu, 23 Jun 2022 23:25:19 -0700 (PDT)
-Received: from archdragon (dragonet.kaist.ac.kr. [143.248.133.220])
-        by smtp.gmail.com with ESMTPSA id a25-20020aa79719000000b0052551c1a413sm760337pfg.204.2022.06.23.23.25.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 23:25:19 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 15:25:15 +0900
-From:   "Dae R. Jeong" <threeearcat@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: KASAN: use-after-free Read in cfusbl_device_notify
-Message-ID: <YrVYywPFYiqWJo4a@archdragon>
-References: <YrVUujEka5jSXZvt@archdragon>
- <CANn89iKLpGamedvzZjnhpNUUpPJ7ueiGo62DH0XM+omQvhr9HA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3WRM/jegNDF7MJkfKHHwllsaLEoDBdN6Clej3P/Y4lI=;
+        b=KtzrErjQLNXykEyCYMPU9yZzUU20LMHq1V4XWu4MObFeFESLiq2tDq8dK1WOKOISeT
+         Ku4GI5sHXjWlPhwv/m6Ry9Yn8qiyiF4C86Q+hkA7ZH8M82oYKkbgeU8o1W9srx2wXV5t
+         yuNFWGByilHIlQx+E/Du9cDIO3AaJzInADTaQFI+4E6pPYaEi/8VoDuWC4n5HDJ8sESy
+         Tdvxb+6SKp9NaRBKg8A6rQaWNdDcyjpQbTkKINMwYXyfJ4nxA+QrFJtGYx+x9jD/SCj0
+         srTRtS5lkxBgcRCuriP6um/VMw/VrRNynGPRwoJV3RAgK2MP88IoazxPf44YS3eRQT5C
+         sY7Q==
+X-Gm-Message-State: AJIora9FZDc0WbpWPuc/R8MdysqAIJabf7hv4A1EhFbRZTTfOX/zBGez
+        o7yswFNEAmnfMFgx8r2iQmdpiVxwRQ9yjsRLmyOr1A==
+X-Google-Smtp-Source: AGRyM1sT2bkts91ktfEoGKQU7+LXoN5AOODxkIaXfQ8ZFlQvpAh1fKz3hE77tVb6U5oyh1MbZfwUv7onSbM8QOjAaWU=
+X-Received: by 2002:a25:1f57:0:b0:669:b6fa:167e with SMTP id
+ f84-20020a251f57000000b00669b6fa167emr4052148ybf.295.1656051940195; Thu, 23
+ Jun 2022 23:25:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANn89iKLpGamedvzZjnhpNUUpPJ7ueiGo62DH0XM+omQvhr9HA@mail.gmail.com>
+References: <20220623115631.22209-1-peterwu.pub@gmail.com> <20220623115631.22209-13-peterwu.pub@gmail.com>
+ <CACRpkdZatfOFmeGXepTrjAk1or4W6KNUEaXnP+srRebfM=52AA@mail.gmail.com>
+In-Reply-To: <CACRpkdZatfOFmeGXepTrjAk1or4W6KNUEaXnP+srRebfM=52AA@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 24 Jun 2022 08:25:29 +0200
+Message-ID: <CACRpkdbzZqerE_2PeGMUWRbtjK=9P8V763cj83ZqjP4n6AVHAg@mail.gmail.com>
+Subject: Re: [PATCH v3 12/14] leds: mt6370: Add Mediatek MT6370 current sink
+ type LED Indicator support
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     lee.jones@linaro.org, daniel.thompson@linaro.org,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, alice_chen@richtek.com,
+        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, cy_huang@richtek.com,
+        chiaen_wu@richtek.com, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-leds@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 08:15:54AM +0200, Eric Dumazet wrote:
-> On Fri, Jun 24, 2022 at 8:08 AM Dae R. Jeong <threeearcat@gmail.com> wrote:
-> >
-> > Hello,
-> >
-> > We observed a crash "KASAN: use-after-free Read in cfusbl_device_notify" during fuzzing.
-> 
-> This is a known problem.
-> 
-> Some drivers do not like NETDEV_UNREGISTER being delivered multiple times.
+On Fri, Jun 24, 2022 at 8:23 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> Thanks for your patch!
 >
-> Make sure in your fuzzing to have NET_DEV_REFCNT_TRACKER=y
-> 
-> Thanks.
+> On Thu, Jun 23, 2022 at 1:58 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+>
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> >
+> > Add Mediatek MT6370 current sink type LED Indicator driver.
+> >
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> (...)
+> >  drivers/leds/Kconfig       |  11 +
+> >  drivers/leds/Makefile      |   1 +
+> >  drivers/leds/leds-mt6370.c | 989 +++++++++++++++++++++++++++++++++++++++++++++
+>
+> There is a drivers/leds/flash subdirectory these days, put the driver
+> in that directory instead.
 
-Our config already have CONFIG_NET_DEV_REFCNT_TRACKER=y.
-Anyway, this UAF report seems not interesting.
+Sorry I'm commenting on the wrong patch.
 
-Thank you for your quick reply.
+I meant this one. Move that into drivers/leds/flash
+ drivers/leds/flash/leds-mt6370-flash.c             |  657 ++++++++++++
 
 
-Best regards,
-Dae R. Jeong.
+Yours,
+Linus Walleij

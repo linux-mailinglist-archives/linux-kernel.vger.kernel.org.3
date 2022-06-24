@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508F255A504
+	by mail.lfdr.de (Postfix) with ESMTP id E5C9155A506
 	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbiFXXpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 19:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbiFXXpr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231823AbiFXXpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 24 Jun 2022 19:45:47 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307B48AC21
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:45:46 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id z12so3033789qki.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:45:46 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230458AbiFXXpo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 24 Jun 2022 19:45:44 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CD88AC28
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:45:42 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-101cdfddfacso5794420fac.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:45:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z3MRZDPjbjqka5SFCsRF0GaePuedl2AIb6glbaDxLPo=;
-        b=T1jZ/wuAXd4vkBbmbjvR4zc2gMr+VrXytSGHLBHq2r677FwX7N3/8VRvVeku7U9PL4
-         z5UOWQn1DzpuX52KtITNRF3Ywiklcq2o9+xtPOrMchkBSRMQBAh9u2490x1FYlA83+Fw
-         3q7/7YYig0nseD0c+Z92CqG7EJ7irgF7zexvcR/iaNm9ym7oke5sLufp9rSdU2HBRYgn
-         lFpWRdhpyb2VnBVu1ENsguh/VNuNa9AdK2OKDjFndacjelg0wh+eEtq2hlJ801HyxLXn
-         OQxYh3jQLwSrcxj2ROwUU9NLUWQl/Z1tLvlA65PmyaHELR6gJsMf2lJpP1DYZsm88RIG
-         kRmg==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=j+1eIf5O9WMahlJkl8hYNSnk/bm8biDohg259LJoO/g=;
+        b=WjPp2QhLMxAzMvmNH6Bdyvi7wrjsIG/6SVnjeCIx33ZdnrT0FzloaiGfU0lA3CDeJb
+         D7xY66ytKYA57XIKpfe59/dnVK12xL/fRml9igY3so3l01YCoor2ZFtI37sGeL7idQg1
+         4VcAOUxad5AkwdS3gKl9l0rQuEiSBnIGTifw4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z3MRZDPjbjqka5SFCsRF0GaePuedl2AIb6glbaDxLPo=;
-        b=OEPFMor6MoxtjiJ4Cq9PqzkYR37i6LxQYNyqLADK+lbIT2bYMh6yRuF0ijt4O3uZ94
-         0tvlhuFak4ovS8VMZRIP0wx+4yz3dnD8XO1aF6z0n2fV18fLtgtnGw3xIfNte8GbNlYo
-         BNNiXtwy4NECGdJUTVyHvYV+rBXRD0Fs3BrfZ5nUxEnRcHJcn0CIaVOeQWLObt55CzCB
-         p7DZhSZdmM74r/dV9sTgtRJ/WQmOF0K5lEANKI1rVhIe7fgecnU6lHev6HDiYN6FAHZ0
-         QS5/I3nffERUAqL5VngchHjwHBxhOKT6+JfVa/hXD2ACq06xUpcev0yrpPCGSTKmYLYf
-         705Q==
-X-Gm-Message-State: AJIora9mEPI/WhS8sD4z2dsnPn8YaqI6Q5AfNJMWQzyGJCMRzgbkcoBr
-        EpIDXRE7Rsr/q8vIRJAXWtuMabMUlAeq1tLV/KaXng==
-X-Google-Smtp-Source: AGRyM1v/i8BJMvLqu4IlBuePJHdL20SOPQr3QObkB7VQeNVKxSUFFYLdnJmiIKpbsI6PhCqNqVQetH1um/ElYuHDTPU=
-X-Received: by 2002:a05:620a:31a0:b0:6a7:549f:a788 with SMTP id
- bi32-20020a05620a31a000b006a7549fa788mr1331198qkb.203.1656114345250; Fri, 24
- Jun 2022 16:45:45 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=j+1eIf5O9WMahlJkl8hYNSnk/bm8biDohg259LJoO/g=;
+        b=upjr1t1M3Tgc2wKaqmQ3Eb2fEl/C+mFLup5UD5AvtanyKMAtCvufy8Zpkt6dQKq+1l
+         D/GkkHearwWEAMCTNA6Sx0q+OrLEmvds1Yc+SyGzIb6SXC7zxXm2OOdaw9hAHt/0ibWz
+         jjZWlYtH7HAzO5YR1E2Snzn6noMxiANtZ9ulygQIfnDwTA8r3S9r90wA+pORmR61AtSC
+         q+djEH1Mf5aryM7i8FYPedjDT2YVjZySuN9Uam5OX8G80ihc9E97h9zgA7fv5TsN0JgV
+         OAX7S7M243/djVw0sezZU5l1bsyqXqYXeDKkaqjfUa4YerUOtOfoGMmcI8PRmDuSb6Gk
+         h3wA==
+X-Gm-Message-State: AJIora8s5YFAazKIh3rV+wj2mq4PtH9R1vlNHGdbocfVyv7SLSa42feM
+        lEEXEGDkdWQsLQ1MTvldlWjmKfBrB9O34F1BZsyFUw==
+X-Google-Smtp-Source: AGRyM1u4e57uuPYmBFxhp7AQ2EnNSWg/r4goHtlbSbtUqSiLnWrjbX1DesaUaEXpyg5Qm32+9mU8qIwp9idPpGqo2As=
+X-Received: by 2002:a05:6870:b381:b0:fe:2004:b3b5 with SMTP id
+ w1-20020a056870b38100b000fe2004b3b5mr1007924oap.63.1656114342063; Fri, 24 Jun
+ 2022 16:45:42 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 24 Jun 2022 16:45:41 -0700
 MIME-Version: 1.0
+In-Reply-To: <0ff3d6a3-dc5c-7c77-f8a1-6c4f6c1a3215@quicinc.com>
 References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com>
- <1656090912-18074-2-git-send-email-quic_khsieh@quicinc.com>
- <CAD=FV=XD0Nb8GiaqEM52rEkUeVjuo46hBv9YUizdDu9zOH6QfA@mail.gmail.com> <0632e72a-3bd2-6320-4a00-6d3cf7d40513@quicinc.com>
-In-Reply-To: <0632e72a-3bd2-6320-4a00-6d3cf7d40513@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 25 Jun 2022 02:45:33 +0300
-Message-ID: <CAA8EJpqfdzmcpGeLHr5wBA7B91rAegoJhpFG=CYyJ4C2gxVBXw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] drm/msm/dp: move struc of msm_display_info to msm_drv.h
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Vinod Koul <vkoul@kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+ <1656090912-18074-3-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n52RW+UFJ=hqMWjwR8qvEbww7QjzPW1nhL3Atd97QXAnYw@mail.gmail.com>
+ <007ea4c9-9701-f4ab-3278-5d36bf2018c4@quicinc.com> <CAE-0n53kNCK0ajHfY2WQr5HEQZtZSBLnhfbTuZwaUNEOZhsKPg@mail.gmail.com>
+ <fa7f8bf1-33cd-5515-0143-6596df2bd740@quicinc.com> <CAE-0n51g-EVsC-i9=sJV-ySa8VnE+yT7cg=b-TNMi9+3uBiOVA@mail.gmail.com>
+ <326912ff-9771-0711-366d-79acd436908b@quicinc.com> <CAE-0n51qrdrFtSr0vRwgYkMgSZfnzQuinaUROQsp30QoDchWQA@mail.gmail.com>
+ <0ff3d6a3-dc5c-7c77-f8a1-6c4f6c1a3215@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 24 Jun 2022 16:45:41 -0700
+Message-ID: <CAE-0n515hMKqQ+Vj1Sg54PpwkbWMYJ77QN+y+KZNBWymjhpWKw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] drm/msm/dp: decoupling dp->id out of dp
+ controller_id at scxxxx_dp_cfg table
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,32 +79,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Jun 2022 at 00:51, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
-> On 6/24/2022 2:40 PM, Doug Anderson wrote:
-> > On Fri, Jun 24, 2022 at 10:15 AM Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
-
-> >> +struct msm_display_info {
-> >> +       int intf_type;
-> >> +       uint32_t capabilities;
-> >> +       uint32_t num_of_h_tiles;
-> >> +       uint32_t h_tile_instance[MAX_H_TILES_PER_DISPLAY];
-> >> +       bool is_te_using_watchdog_timer;
-> > ...but then when you "move" the structure to its new location, which
-> > should be a noop, then <poof> the "dsc" variable vanishes (along with
-> > the kernel doc description of it before the structure).
+Quoting Kuogee Hsieh (2022-06-24 16:30:59)
 >
-> Sorry, i did not resolve the conflicts correctly  when i cherry-pick
-> them to msm-next tree.
+> On 6/24/2022 4:12 PM, Stephen Boyd wrote:
+> > Quoting Kuogee Hsieh (2022-06-24 15:53:45)
+> >> MSM_DP_CONTROLLER_1 need to match to the index =3D 1 of sc7280_dp_cfg[=
+] <=3D=3D This is correct
+> >>
+> >> The problem is sc7280_dp_cfg[] have two entries since eDP place at ind=
+ex
+> >> of MSM_DP_CONTROLLER_1.
+> >>
+> >> but .num_desc =3D 1=C2=A0 <=3D=3D this said only have one entry at sc7=
+280_dp_cfg[]
+> >> table. Therefore eDP will never be found at for loop=C2=A0 at
+> >> _dpu_kms_initialize_displayport().
+> >>
+> > Yes, but what else does the MSM_DP_CONTROLLER_1 need to match? Because
+> > the intention of the previous commit was to make it so the order of
+> > sc7280_dp_cfg couldn't be messed up and not match the
+> > MSM_DP_CONTROLLER_1 value that lives in sc7280_intf[].
 >
-> Will fix them.
+>
+> at=C2=A0 _dpu_kms_initialize_displayport()
+>
+> > -             info.h_tile_instance[0] =3D i; <=3D=3D assign i to become=
+ dp controller id, "i" is index of scxxxx_dp_cfg[]
+>
+> This what I mean MSM_DP_CONTROLLER_1 need to match to index =3D 1 of
+> scxxxx_dp_cfg[].
+>
+> it it is not match, then MSM_DP_CONTROLLER_1 with match to different INTF=
+.
 
-I would strongly suggest doing development on top of msm/next or
-linux-next. Using any other tree results in lots of problems starting
-from the lame Fixes tags that we have been constantly seeing for the
-last few months, conflicts when the patch is being rebased or
-cherry-picked and ending up with the patches not being tested with the
-tree that they are being applied to.
-
--- 
-With best wishes
-Dmitry
+I thought we matched the INTF instance by searching through
+sc7280_intf[] for a matching MSM_DP_CONTROLLER_1 and then returning that
+INTF number. See dpu_encoder_get_intf() and the caller.

@@ -2,83 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9711559971
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E773155998D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbiFXMOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 08:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
+        id S231830AbiFXMQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 08:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbiFXMN6 (ORCPT
+        with ESMTP id S232125AbiFXMP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 08:13:58 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7892A414;
-        Fri, 24 Jun 2022 05:13:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656072819; x=1687608819;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=w9jL8NMkwUoLyGdxlrOaxo4xSZkgTsdTKbiPOLXLDqI=;
-  b=YNQCERsDf/K1JB7qK3JUbMNW5zIE8F6lHWRASRsEd4TY0posRZ5hoKkB
-   nBxPan+zdn4bkdmbvPb5MrUP6qVrUMMt3o6x69F1eejQp73lO0524NphN
-   c6asKNQIcf55cFtQmEj2GLe/tg8JyyqzK1/XilVpSaCQbjxH+M55fVBlH
-   7jeZTmkxa3v552eRZC5Ih5kOmpgdXMHucrzFIR+HwOx45Of6xBF/V60ql
-   kyqTiG+NRW1shvUxK+ReEOXsLrGiOerFskFcD7GMzMrwIvJjiti/fX1zJ
-   aWewNn9QyuNgEZV2iWm074f7zy6+2FbpuNcKeXCheKGM0NO63428yUm2k
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="306454400"
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="306454400"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 05:13:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="563831558"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga006.jf.intel.com with ESMTP; 24 Jun 2022 05:13:32 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25OCDEo9014999;
-        Fri, 24 Jun 2022 13:13:29 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, kernel test robot <lkp@intel.com>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 9/9] lib: test_bitmap: add compile-time optimization/evaluations assertions
-Date:   Fri, 24 Jun 2022 14:13:13 +0200
-Message-Id: <20220624121313.2382500-10-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
-References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
+        Fri, 24 Jun 2022 08:15:28 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA7B6802F;
+        Fri, 24 Jun 2022 05:14:14 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1D836E0011;
+        Fri, 24 Jun 2022 12:14:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1656072853;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=R8YHbVeqUO9nBhg4jGFDepGndFo7k3NShS8ZLBtA3Ps=;
+        b=RbjP6/YetP5HPhGNompMgF/70JE2/dj7etwQ6IkjkkDRXaK6GFBbNiKtG6lhkth3uyfVq9
+        6v8XGzs+S0FR7iouuzqsroXcwndPhXesox3rQtF7Kuoqjb5j98oKi3uN58w8y20W7FWeYq
+        WOTpPXICYYDwGaUfmuypRHvwOGkUEHByGLoZcdXN93HIjpxcWcZciuooPmhT3TSikNT6PJ
+        JDllECBzDE7Azp3i7k4VUAGv1tSke/iUbrGS6djjotq5xlgKwByvKr7BrPk0QR/8AlFAAL
+        OFwXRcyqqiv0RXHBJIXLvQDCOCr0pwODIlArlVP7aDD7RzW4ZH8ecXLPmm6ceQ==
+Date:   Fri, 24 Jun 2022 14:13:20 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     frowand.list@gmail.com
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lizhi Hou <lizhi.hou@xilinx.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 1/2]  of: create of_root if no dtb provided
+Message-ID: <20220624141320.3c473605@fixe.home>
+In-Reply-To: <20220624034327.2542112-2-frowand.list@gmail.com>
+References: <20220624034327.2542112-1-frowand.list@gmail.com>
+        <20220624034327.2542112-2-frowand.list@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,106 +59,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a function to the bitmap test suite, which will ensure that
-compilers are able to evaluate operations performed by the
-bitops/bitmap helpers to compile-time constants when all of the
-arguments are compile-time constants as well, or trigger a build
-bug otherwise. This should work on all architectures and all the
-optimization levels supported by Kbuild.
-The function doesn't perform any runtime tests and gets optimized
-out to nothing after passing the build assertions.
-Unfortunately, Clang for s390 is currently broken (up to the latest
-Git snapshots) -- see the comment in the code -- so for now there's
-a small workaround for it which doesn't alter the logics. Hope we'll
-be able to remove it one day (bugreport is on its way).
+Le Thu, 23 Jun 2022 22:43:26 -0500,
+frowand.list@gmail.com a =C3=A9crit :
 
-Suggested-by: Yury Norov <yury.norov@gmail.com>
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- lib/test_bitmap.c | 62 +++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+> =20
+> +/*
+> + * __dtb_empty_root_begin[] magically created by cmd_dt_S_dtb in
+> + * scripts/Makefile.lib
+> + */
+> +extern void *__dtb_empty_root_begin;
+> +
+>  /*
+>   * of_fdt_limit_memory - limit the number of regions in the /memory node
+>   * @limit: maximum entries
+> @@ -1332,8 +1338,13 @@ bool __init early_init_dt_scan(void *params)
+>   */
+>  void __init unflatten_device_tree(void)
+>  {
 
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index d5923a640457..25967cfa4ab2 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -869,6 +869,67 @@ static void __init test_bitmap_print_buf(void)
- 	}
- }
- 
-+static void __init test_bitmap_const_eval(void)
-+{
-+	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
-+	unsigned long initvar = BIT(2);
-+	unsigned long bitopvar = 0;
-+	unsigned long var = 0;
-+	int res;
-+
-+	/*
-+	 * Compilers must be able to optimize all of those to compile-time
-+	 * constants on any supported optimization level (-O2, -Os) and any
-+	 * architecture. Otherwise, trigger a build bug.
-+	 * The whole function gets optimized out then, there's nothing to do
-+	 * in runtime.
-+	 */
-+
-+	/*
-+	 * Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }`.
-+	 * Clang on s390 optimizes bitops at compile-time as intended, but at
-+	 * the same time stops treating @bitmap and @bitopvar as compile-time
-+	 * constants after regular test_bit() is executed, thus triggering the
-+	 * build bugs below. So, call const_test_bit() there directly until
-+	 * the compiler is fixed.
-+	 */
-+	bitmap_clear(bitmap, 0, BITS_PER_LONG);
-+#if defined(__s390__) && defined(__clang__)
-+	if (!const_test_bit(7, bitmap))
-+#else
-+	if (!test_bit(7, bitmap))
-+#endif
-+		bitmap_set(bitmap, 5, 2);
-+
-+	/* Equals to `unsigned long bitopvar = BIT(20)` */
-+	__change_bit(31, &bitopvar);
-+	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
-+
-+	/* Equals to `unsigned long var = BIT(25)` */
-+	var |= BIT(25);
-+	if (var & BIT(0))
-+		var ^= GENMASK(9, 6);
-+
-+	/* __const_hweight<32|64>(GENMASK(6, 5)) == 2 */
-+	res = bitmap_weight(bitmap, 20);
-+	BUILD_BUG_ON(!__builtin_constant_p(res));
-+	BUILD_BUG_ON(res != 2);
-+
-+	/* !(BIT(31) & BIT(18)) == 1 */
-+	res = !test_bit(18, &bitopvar);
-+	BUILD_BUG_ON(!__builtin_constant_p(res));
-+	BUILD_BUG_ON(!res);
-+
-+	/* BIT(2) & GENMASK(14, 8) == 0 */
-+	res = initvar & GENMASK(14, 8);
-+	BUILD_BUG_ON(!__builtin_constant_p(res));
-+	BUILD_BUG_ON(res);
-+
-+	/* ~BIT(25) */
-+	BUILD_BUG_ON(!__builtin_constant_p(~var));
-+	BUILD_BUG_ON(~var != ~BIT(25));
-+}
-+
- static void __init selftest(void)
- {
- 	test_zero_clear();
-@@ -884,6 +945,7 @@ static void __init selftest(void)
- 	test_for_each_set_clump8();
- 	test_bitmap_cut();
- 	test_bitmap_print_buf();
-+	test_bitmap_const_eval();
- }
- 
- KSTM_MODULE_LOADERS(test_bitmap);
--- 
-2.36.1
+Hi Frank,
 
+This function is only defined when CONFIG_OF_EARLY_FLATTREE is enabled.
+Which means that on platforms that do not select this, the default
+empty device-tree creation will not be done.
+
+This configuration option is selected by the platform and not by the
+user. On x86, only one config enables this (X86_INTEL_CE) which means
+this won't work on all the other platforms even if CONFIG_OF is
+selected. I would need this to work by only selected CONFIG_OF.
+That's why I decided to add the of_root creation in of_core_init()
+using a function (of_fdt_unflatten()) that is provided if CONFIG_OF is
+defined.
+
+> -	__unflatten_device_tree(initial_boot_params, NULL, &of_root,
+> +	if (!initial_boot_params) {
+> +		initial_boot_params =3D (void *) __dtb_empty_root_begin;
+> +		unflatten_and_copy_device_tree();
+> +	} else {
+> +		__unflatten_device_tree(initial_boot_params, NULL, &of_root,
+>  				early_init_dt_alloc_memory_arch, false);
+> +	}
+> =20
+>  	/* Get pointer to "/chosen" and "/aliases" nodes for use everywhere */
+>  	of_alias_scan(early_init_dt_alloc_memory_arch);
+> @@ -1373,6 +1384,12 @@ void __init unflatten_and_copy_device_tree(void)
+>  	unflatten_device_tree();
+>  }
+> =20
+> +void __init setup_of(void)
+> +{
+> +	if (!of_root)
+> +		unflatten_device_tree();
+> +}
+> +
+>  #ifdef CONFIG_SYSFS
+>  static ssize_t of_fdt_raw_read(struct file *filp, struct kobject *kobj,
+>  			       struct bin_attribute *bin_attr,
+> diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
+> index d69ad5bb1eb1..4566876db351 100644
+> --- a/include/linux/of_fdt.h
+> +++ b/include/linux/of_fdt.h
+> @@ -81,6 +81,7 @@ extern const void *of_flat_dt_match_machine(const void =
+*default_match,
+>  /* Other Prototypes */
+>  extern void unflatten_device_tree(void);
+>  extern void unflatten_and_copy_device_tree(void);
+> +extern void setup_of(void);
+>  extern void early_init_devtree(void *);
+>  extern void early_get_first_memblock_info(void *, phys_addr_t *);
+>  #else /* CONFIG_OF_EARLY_FLATTREE */
+> @@ -91,6 +92,7 @@ static inline void early_init_fdt_reserve_self(void) {}
+>  static inline const char *of_flat_dt_get_machine_name(void) { return NUL=
+L; }
+>  static inline void unflatten_device_tree(void) {}
+>  static inline void unflatten_and_copy_device_tree(void) {}
+> +static inline void of_setup(void) {}
+
+Shouldn't this be setup_of(void) ?
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

@@ -2,157 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED0D559263
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 07:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56420559267
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 07:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiFXFg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 01:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
+        id S229659AbiFXFi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 01:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiFXFgz (ORCPT
+        with ESMTP id S229451AbiFXFiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 01:36:55 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E47D5DC0B;
-        Thu, 23 Jun 2022 22:36:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17FB9176C;
-        Thu, 23 Jun 2022 22:36:54 -0700 (PDT)
-Received: from [10.162.41.7] (unknown [10.162.41.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D519B3F66F;
-        Thu, 23 Jun 2022 22:36:46 -0700 (PDT)
-Message-ID: <e536bd05-dbfd-466b-582e-8a220421a8dc@arm.com>
-Date:   Fri, 24 Jun 2022 11:06:44 +0530
+        Fri, 24 Jun 2022 01:38:25 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66C22E9FD
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 22:38:24 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id p3-20020a17090a428300b001ec865eb4a2so4720383pjg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 22:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Y/SRxapVYozuhYMhBtEsKZgWVsRXORX77DHgWSqH9Xc=;
+        b=D0Rue8sUgpd0Oz2oDwADqo0yETl19CbGgl0NcxTFdcpLIfiidGTvMiEGSbHFZbcinq
+         baW0/Q++m/pcm5SiLWeU6l8prNwGUXlHPWd5JSYtBX0getqN+v508vHly1iMtuPTYIXh
+         B6xX9I3CXSVoN48uO0snxhaqwLgcVRhSnamxeHC/w7q0mpeGLV71d7ceAi4+WglCM/A2
+         bRbm9FlYjmMaZ/yFuL3plszZsIfsa0Q7d8qFjpb0gdvCv13Ulwbw5ZUT8ARVuUx5vTlm
+         dlAO/u8xtb/R2YRQydQQ7m8Klz1GWiE0uajAvw6EUH+zfN0U8DyZnXixMEN0LDwU2nNI
+         1xpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y/SRxapVYozuhYMhBtEsKZgWVsRXORX77DHgWSqH9Xc=;
+        b=mlSEkM+3zgtzYrsNEafSv/+a+G3XucRBifHzzIHB2ULA7ExajCjgn1bYeaXfyECP2z
+         YPBXC5kCx/JDHuqwdT6tXQq1AUB2vQue/+jskRCtiqYHFxTQ/mjxdL2JsNUS/fBguSXT
+         PSpnqvQ063MBpWJwj1542Y6NSX7s+KOhnxhQTDZeYbrWPHUIK73L/wyzTZuryfOe9u/7
+         yU3vanb73nBAWYUlFzBUldskKHJOv3ckPtgtZJhGlLCfixrFZVucG9rF2dQgCMbrzHIc
+         PfbgrliPeoY7Ow1zY2KLzM7+RZ0IJYnrDE9RvuZFV1AkDtJeSSTY6qJFP0LW3eXV2wZu
+         OGeQ==
+X-Gm-Message-State: AJIora9zTjxlguQnBbkLDTl0UJBjg+wdJ9XNC/0C4b0scXrsFfaaOrtL
+        X4yyXySIBDrL27RTp8zrTBJCEg==
+X-Google-Smtp-Source: AGRyM1toya/YrdeGKw+SyYyN5TqtRXMFJanSddtA7xBFHFmaieaTouohS+OBViv/YKTrufCn4l1Evw==
+X-Received: by 2002:a17:90a:408f:b0:1e3:23a:2370 with SMTP id l15-20020a17090a408f00b001e3023a2370mr1959764pjg.84.1656049104303;
+        Thu, 23 Jun 2022 22:38:24 -0700 (PDT)
+Received: from localhost ([122.172.201.58])
+        by smtp.gmail.com with ESMTPSA id 2-20020a056a00072200b00525217fe273sm641043pfm.187.2022.06.23.22.38.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 22:38:23 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 11:08:21 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/31] cpufreq: tegra20: Migrate to
+ dev_pm_opp_set_config()
+Message-ID: <20220624053821.e6emke6gortqn72a@vireshk-i7>
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <4b38ceed657bfcf87ff9ab0dd69dd1f2f5658b24.1653564321.git.viresh.kumar@linaro.org>
+ <793e49ea-aeb0-a47a-9fe8-742a6397bb35@collabora.com>
+ <5c0e697e-abca-bcf0-cf68-d9c240d82527@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V4 07/26] mm/mmap: Build protect protection_map[] with
- ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Cc:     "hch@infradead.org" <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220624044339.1533882-1-anshuman.khandual@arm.com>
- <20220624044339.1533882-8-anshuman.khandual@arm.com>
- <10aca763-2313-84bf-9200-6a6037fd748c@csgroup.eu>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <10aca763-2313-84bf-9200-6a6037fd748c@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5c0e697e-abca-bcf0-cf68-d9c240d82527@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/24/22 10:52, Christophe Leroy wrote:
+On 29-05-22, 19:59, Dmitry Osipenko wrote:
+> With that fixed, now there is another error:
 > 
+> [    1.761945] cpu cpu0: _of_add_opp_table_v2: no supported OPPs
+> [    1.761960] cpu cpu0: OPP table can't be empty
 > 
-> Le 24/06/2022 à 06:43, Anshuman Khandual a écrit :
->> protection_map[] has already been moved inside those platforms which enable
-> 
-> Usually "already" means before your series.
-> 
-> Your series is the one that moves protection_map[] so I would have just 
-> said "Now that protection_map[] has been moved inside those platforms 
-> which enable ...."
+> I see this on Tegra30, but not on Tegra20. Apparently OPP table
+> refcounting is broken on Tegra30 by this patchset. To make it clear,
+> there are no error without these OPP patches applied. I may take a
+> closer look if will be needed, just ping me.
 
-Got it, will update the commit message.
+Hi Jon,
 
-> 
->> ARCH_HAS_VM_GET_PAGE_PROT. Hence generic protection_map[] array now can be
->> protected with CONFIG_ARCH_HAS_VM_GET_PAGE_PROT intead of __P000.
->>
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: linux-mm@kvack.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>   include/linux/mm.h | 2 +-
->>   mm/mmap.c          | 5 +----
->>   2 files changed, 2 insertions(+), 5 deletions(-)
->>
->> diff --git a/include/linux/mm.h b/include/linux/mm.h
->> index 237828c2bae2..70d900f6df43 100644
->> --- a/include/linux/mm.h
->> +++ b/include/linux/mm.h
->> @@ -424,7 +424,7 @@ extern unsigned int kobjsize(const void *objp);
->>    * mapping from the currently active vm_flags protection bits (the
->>    * low four bits) to a page protection mask..
->>    */
->> -#ifdef __P000
->> +#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
->>   extern pgprot_t protection_map[16];
-> 
-> Is this declaration still needed ? I have the feeling that 
-> protection_map[] is only used in mm/mmap.c now.
+Dmitry reported this on Tegra30 earlier, do you also see such a
+failure ? Would be helpful to get this fixed as well, if it still
+exists.
 
-At this point generic protection_map[] array is still being used via
-this declaration on many (!ARCH_HAS_VM_GET_PAGE_PROT) platforms such
-as mips, m68k, arm etc.
-
-> 
->>   #endif
->>   
->> diff --git a/mm/mmap.c b/mm/mmap.c
->> index 55c30aee3999..43db3bd49071 100644
->> --- a/mm/mmap.c
->> +++ b/mm/mmap.c
->> @@ -101,7 +101,7 @@ static void unmap_region(struct mm_struct *mm,
->>    *								w: (no) no
->>    *								x: (yes) yes
->>    */
->> -#ifdef __P000
->> +#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
->>   pgprot_t protection_map[16] __ro_after_init = {
-> 
-> Should this be static, as it seems to now be used only in this file ?
-
-This is being used in some platforms as mentioned before.
-
-> And it could also be 'const' instead of __ro_after_init.
-
-Then should be able to be a 'const' wrt  mips, m68k, arm platforms.
-But should this even be changed, if this is going to be dropped off
-eventually ?
-
-> 
->>   	[VM_NONE]					= __P000,
->>   	[VM_READ]					= __P001,
->> @@ -120,9 +120,6 @@ pgprot_t protection_map[16] __ro_after_init = {
->>   	[VM_SHARED | VM_EXEC | VM_WRITE]		= __S110,
->>   	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= __S111
->>   };
->> -#endif
->> -
->> -#ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT
->>   DECLARE_VM_GET_PAGE_PROT
->>   #endif	/* CONFIG_ARCH_HAS_VM_GET_PAGE_PROT */
->>   
+-- 
+viresh

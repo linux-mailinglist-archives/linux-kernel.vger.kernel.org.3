@@ -2,133 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB3155A4BE
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D2055A4C5
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiFXXSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 19:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
+        id S231138AbiFXXZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 19:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiFXXSU (ORCPT
+        with ESMTP id S229797AbiFXXZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 19:18:20 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94ACD6DB02
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:18:19 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-101ab23ff3fso5775743fac.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:18:19 -0700 (PDT)
+        Fri, 24 Jun 2022 19:25:18 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBF481530
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:25:16 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id b125so2932885qkg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:25:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Bc5VjbSeIO9kRIMOracq0GMGGBRs29d0aSqXajp/hwI=;
-        b=wm9N2bR1JIiQdKKktfSBITzvgbQHdwBvVRL8ET8EBdGecfjXp/dodT4tvny5AV497v
-         5ziPjGXtwE7hq7JX+YdHetwCQMygxyKmriMYifft7ZZCztRs6WAk7WiG9tkx23pVvTvC
-         oDVPwfrYhZvOkQPOQc0UaaGe2nOqhgfWMprH7VRVFwB+WeeupGMv+7Eq406aOPOncHq3
-         Xc/w0TFqwFiIDQoJtDx0tmybFEm7PgzSloWtA/ytXjWDJMEOWKGjApufwnf1J43/SPL6
-         v2UdW9408S1xKljwFZMOVsT4r2lxiJnh5EVCfjCwz8e7XIBh3HgC1Rxnsjw47JYisNK/
-         DcHg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FpOasnc+MpC6k8YV2n5CgA0BI1oTbTynNjCcV+ZfHRs=;
+        b=NHb6sx16M7MktkZ3Jo61dJAtykBLRQ7L90BYWPv2UYfd7gTYH2Imv7sGo8sVPuwlCd
+         3MzSMUw6RsrSdaH9kaWcFR/nhX3HUHTrofuDUv3N9XBWRtkmXMs74x9X1h6D7hUvEloQ
+         xZqSxQLB41Sd3P5nsLa3wY60AtTBzwR9xksRX1rO+ijLlptnUAkOt4a4dbPrFdO6ZUOI
+         eJf7OJQp9wYcRSj39MRpVP+exzOBiqETNrSMynq1cLm60ZfW39poLkgFd/c4XlEzX92Z
+         urgI7E+FNaezix5BisyfzLdTRLV6DWggT8YDLErAQ+32QXk6815I9uprKrMtEBtLDi3/
+         v7IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Bc5VjbSeIO9kRIMOracq0GMGGBRs29d0aSqXajp/hwI=;
-        b=cM0TYWjLIi3VwYNN60AHlHOlkC/Mkrvb984Y/nOmijrF94eRJs2b5KucnmMbkV2TKb
-         7RsRhwxw+AaSDhL7a+iOuH3/5zpcfg8K04XXBy27aqPgmtA5M3GjFlGFy3ZDdMJDGQ6o
-         GBi0LB04MGpOa6z96E3u1D1su4Lmhvv9iaulmvzwC36d5ODVaMR5DGxlPDfNGoXpOQ9X
-         H9rz68MSe+16Z+8e6R7EHVKhhTUqWVDIIfuhvjq05APRqDIiKFkPT2WEyrCOEb2maWdD
-         vc7PAnDIreXfc18be57MjnjlD32TozRs1KV/zs8ukqXQ9yA8k6BgRZ1I/bx1lbs4vRrD
-         A2CQ==
-X-Gm-Message-State: AJIora/QA/wGp70YyoLwMv8C/x5FcTa+R6RxbERvPJQNALS07oSNUrxQ
-        LKdpF80+4YtiWiN2CO5jfVb14w==
-X-Google-Smtp-Source: AGRyM1uLz0gWniUEDN4ZcL/LDrNA7m3FzlWIm4VwXNf8DoTvOpG9tIggdpE80lxk+jA4rPKoLcXrWw==
-X-Received: by 2002:a05:6870:5895:b0:fe:489c:d9d3 with SMTP id be21-20020a056870589500b000fe489cd9d3mr3442131oab.149.1656112698919;
-        Fri, 24 Jun 2022 16:18:18 -0700 (PDT)
-Received: from brgl-uxlite.. (BOINGO-WIRE.bear2.Houston1.Level3.net. [4.2.233.242])
-        by smtp.gmail.com with ESMTPSA id v6-20020a4ac906000000b0035eb4e5a6c7sm2110859ooq.29.2022.06.24.16.18.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 16:18:18 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [GIT PULL] gpio: fixes for v5.19-rc4
-Date:   Sat, 25 Jun 2022 01:18:12 +0200
-Message-Id: <20220624231812.5878-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FpOasnc+MpC6k8YV2n5CgA0BI1oTbTynNjCcV+ZfHRs=;
+        b=PhSmH5HIdzh4PoATyoyoXRSIusRaYq0L+bJLLVlHJpO3vg+JGT0EotGTCpVHgKH5ws
+         BlFdaDvObf4j9KZ3H5ckUbaH76vN0kWckpKL6hVidIclEqYPkvEXoGDNTBitBAMTvGY1
+         AFBABHAptv33bddUKO7SaQKzVmOSarc1WqM3xCm99El/XSIg4OQoVgkoZmyJISrAC1XJ
+         EMfV7eotu5mh2Mmp7srm2Tv/s+r5sq6e+AZSdNfT4jVN90iC5ra5+feQ64roPar5Hova
+         kQ1E7q6kE8vYTLPivUbpCESeZbxDdrSprjuyq3CuM2udjRO1zaEjoWtploEPSd3Ey70r
+         sIew==
+X-Gm-Message-State: AJIora8lORsztAXrm9rJPV6HV7HEO7guWgC0Xhz0reubSts35eorfCZl
+        /SQxiJgqtd8JZV0pcnMf5WKBwdVX9CgAcB71W6+KOw==
+X-Google-Smtp-Source: AGRyM1uO6ak+ggMtjMmbHyuZ535rKKAdH4kKHL57dRRG0x0TBx5SohM1ORVa07kNl56sasfydWaRzHmOt05i/wBTFkY=
+X-Received: by 2002:a05:620a:31a0:b0:6a7:549f:a788 with SMTP id
+ bi32-20020a05620a31a000b006a7549fa788mr1285171qkb.203.1656113115648; Fri, 24
+ Jun 2022 16:25:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com>
+ <1656090912-18074-3-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n52RW+UFJ=hqMWjwR8qvEbww7QjzPW1nhL3Atd97QXAnYw@mail.gmail.com> <007ea4c9-9701-f4ab-3278-5d36bf2018c4@quicinc.com>
+In-Reply-To: <007ea4c9-9701-f4ab-3278-5d36bf2018c4@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 25 Jun 2022 02:25:04 +0300
+Message-ID: <CAA8EJprd_kkqU4GZ_p2cZbALCBDE-uFHsnPHXRnra0jZsY_bnA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] drm/msm/dp: decoupling dp->id out of dp
+ controller_id at scxxxx_dp_cfg table
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dri-devel@lists.freedesktop.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org,
+        quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Sat, 25 Jun 2022 at 00:17, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>
+>
+> On 6/24/2022 1:00 PM, Stephen Boyd wrote:
+> > Quoting Kuogee Hsieh (2022-06-24 10:15:11)
+> >> Current the index (dp->id) of DP descriptor table (scxxxx_dp_cfg[]) are tightly
+> >> coupled with DP controller_id. This means DP use controller id 0 must be placed
+> >> at first entry of DP descriptor table (scxxxx_dp_cfg[]). Otherwise the internal
+> >> INTF will mismatch controller_id. This will cause controller kickoff wrong
+> >> interface timing engine and cause dpu_encoder_phys_vid_wait_for_commit_done
+> >> vblank timeout error.
+> >>
+> >> This patch add controller_id field into struct msm_dp_desc to break the tightly
+> >> coupled relationship between index (dp->id) of DP descriptor table with DP
+> >> controller_id.
+> > Please no. This reverts the intention of commit bb3de286d992
+> > ("drm/msm/dp: Support up to 3 DP controllers")
+> >
+> >      A new enum is introduced to document the connection between the
+> >      instances referenced in the dpu_intf_cfg array and the controllers in
+> >      the DP driver and sc7180 is updated.
+> >
+> > It sounds like the intent of that commit failed to make a strong enough
+> > connection. Now it needs to match the INTF number as well? I can't
+> > really figure out what is actually wrong, because this patch undoes that
+> > intentional tight coupling. Is the next patch the important part that
+> > flips the order of the two interfaces?
+>
+> The commit bb3de286d992have two problems,
+>
+> 1)  The below sc7280_dp_cfg will not work, if eDP use
+> MSM_DP_CONTROLLER_2 instead of  MSM_DP_CONTROLLER_1
+>
+> since it have num_descs =2 but eDP is at index 2 (CONTROLLER_2) which
+> never be reached.
+>
+> static const struct msm_dp_config sc7280_dp_cfg = {
+>          .descs = (const struct msm_dp_desc[]) {
+>                  [MSM_DP_CONTROLLER_2] = { .io_start = 0x0aea0000,
+> .connector_type = DRM_MODE_CONNECTOR_eDP, .wide_bus_en = true },
+>                  [MSM_DP_CONTROLLER_0] = { .io_start = 0x0ae90000,
+> .connector_type = DRM_MODE_CONNECTOR_DisplayPort, .wide_bus_en = true },
+>          },
+>          .num_descs = 2,
 
-Please pull the following set of fixes for the next rc. Details are
-in the signed tag as usual.
+Please change num_descs to 3. Or better eliminate it completely and
+iterate up to MSM_DP_CONTROLLER_MAX, checking whether the entry
+contains real values or is just a zero sentinel entry.
 
-Thanks!
-Bartosz Golaszewski
+> };
+>
+> 2)  DP always has index of 0 (dp->id = 0) and the first one to call
+> msm_dp_modeset_init(). This make DP always place at head of bridge chain.
+>
+> At next patch eDP must be placed at head of bridge chain to fix eDP
+> corruption issue. This is the purpose of this patch. I will revise the
+> commit text.
 
-The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
+This text doesn't make sense to me. The dp->id has nothing to do with
+the bridge chains. Each dp entry is a head of the corresponding bridge
+chain. DP with dp->id = 0 and eDP with dp->id = whatever will be parts
+of different encoder -> bridges -> connector chains.
 
-  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.19-rc4
-
-for you to fetch changes up to b0d473185ba887c798ed0cd6f5abf4075363baa4:
-
-  gpio: mxs: Fix header comment (2022-06-23 23:18:13 +0200)
-
-----------------------------------------------------------------
-gpio fixes for v5.19-rc4
-
-- make the irqchip immutable in gpio-realtek-otto
-- fix error code propagation in gpio-winbond
-- fix device removing in gpio-grgpio
-- fix a typo in gpio-mxs which indicates the driver is for a different model
-- documentation fixes
-- MAINTAINERS file updates
-
-----------------------------------------------------------------
-Akira Yokosawa (1):
-      gpio: Fix kernel-doc comments to nested union
-
-Dan Carpenter (1):
-      gpio: winbond: Fix error code in winbond_gpio_get()
-
-Lukas Bulwahn (1):
-      MAINTAINERS: add include/dt-bindings/gpio to GPIO SUBSYSTEM
-
-Sander Vanheule (1):
-      gpio: realtek-otto: Make the irqchip immutable
-
-Stefan Wahren (1):
-      gpio: mxs: Fix header comment
-
-Tom Schwindl (1):
-      docs: driver-api: gpio: Fix filename mismatch
-
-Uwe Kleine-König (1):
-      gpio: grgpio: Fix device removing
-
- Documentation/driver-api/gpio/board.rst    |  2 +-
- Documentation/driver-api/gpio/consumer.rst |  6 +++---
- Documentation/driver-api/gpio/intro.rst    |  6 +++---
- MAINTAINERS                                |  1 +
- drivers/gpio/gpio-grgpio.c                 | 14 +-------------
- drivers/gpio/gpio-mxs.c                    |  2 +-
- drivers/gpio/gpio-realtek-otto.c           | 10 ++++++++--
- drivers/gpio/gpio-winbond.c                |  7 ++++---
- include/linux/gpio/driver.h                | 29 ++++++++++++++++-------------
- 9 files changed, 38 insertions(+), 39 deletions(-)
+-- 
+With best wishes
+Dmitry

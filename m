@@ -2,131 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C6D559F53
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DEB559F6D
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbiFXRSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S232049AbiFXRSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232066AbiFXRSR (ORCPT
+        with ESMTP id S231166AbiFXRSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:18:17 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900022DA99
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:18:16 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id q8-20020a17090311c800b0016a125c933fso1574969plh.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:18:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=M0UiwptlSyW8L+ANHt+ZpR61B6xI8IZ3E4fBNYs6MYg=;
-        b=XrRDk09dnK9G28hf25NsPO2C2O+/LCbUKVT9HMDoIVz3XYOG2M5T+Ff+QUGBKbWeQ+
-         lzl8ylTlJL2SO4Yb+KkHcwOmjaU7KyMkKX+2mkEGnOnKcaBtAU4laopLRua2YlgYbzni
-         CrgEpoEvRdSlzEOrR4SjYkbLiAQMILSTc20i2WoG3Yd8n1Qu1T7g4zjiqTZXApodAnQA
-         GMDSui5nHkJYMdalw4RAeTDx1Ch3xlqDHebtZvpC1DT+9ynLlvlwIcUQRPI2zj65BTlE
-         69wCilA/Soh7oQqcHPhvrYxTf0elWBUfQLoDoIaSeasZTWBWk0iNP67J/TBttFEqwDWu
-         a/yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=M0UiwptlSyW8L+ANHt+ZpR61B6xI8IZ3E4fBNYs6MYg=;
-        b=Y2EJ+cbjToCOoVmu7gN++tIS8K5mjy8zAv/StV3rZU0leLeZQjyquQ4+Bz1k4lkXMf
-         iz1FCWyflNl6T3J6LxnlHvTO79doN7fuxoxmWW3Xjsc71py3IeIaIu7KXZ8hBKtB1U7i
-         +jiyyR0lPhe9Q6AjQ9Yr6UfkFc6cUd9TOsqwv1gV2ZT+vRTGW0VJ4S/fejXRSwZTz82U
-         nzJUy5lyTF6mBwXbPCqf7EdJluq0ft9ie+iSTwrGBWcxhy/e/Zwrsafvg+1Y7xb/oJ1C
-         ywtdt1i61OX1pbw2wwqW3Goe9xnk7XIg0v8CEhYfADEyhQerWMBa2LktMu1O+fP9di+v
-         zQpg==
-X-Gm-Message-State: AJIora/YnhaA8DS+pMjvtX5pDsBrYeeJifnHU64dx+220rivpBlfpC7x
-        UGXdNiVBlojx/f4QVWIkCZLuaa8i+0k=
-X-Google-Smtp-Source: AGRyM1vZh/Fkd6KxNePHgTeQcVycyBP64A6qITCO6uIzEtiy7++NE/gKLrH2ufPgnbUrWMrwnL3Xlb3MaU0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:c94b:b0:16a:3f98:84fd with SMTP id
- i11-20020a170902c94b00b0016a3f9884fdmr120863pla.70.1656091095691; Fri, 24 Jun
- 2022 10:18:15 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 24 Jun 2022 17:18:08 +0000
-In-Reply-To: <20220624171808.2845941-1-seanjc@google.com>
-Message-Id: <20220624171808.2845941-4-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220624171808.2845941-1-seanjc@google.com>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH 3/3] KVM: x86/mmu: Buffer nested MMU split_desc_cache only by
- default capacity
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 24 Jun 2022 13:18:15 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C69CF1E3E1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:18:12 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 8E11392009C; Fri, 24 Jun 2022 19:18:11 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 86F1F92009B;
+        Fri, 24 Jun 2022 18:18:11 +0100 (BST)
+Date:   Fri, 24 Jun 2022 18:18:11 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PING^2][PATCH] RISC-V: PCI: Avoid handing out address 0 to
+ devices
+In-Reply-To: <mhng-a0733eea-8220-4bf6-b1da-9de3139dbae3@palmer-ri-x1c9>
+Message-ID: <alpine.DEB.2.21.2206231750490.57474@angie.orcam.me.uk>
+References: <mhng-a0733eea-8220-4bf6-b1da-9de3139dbae3@palmer-ri-x1c9>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Buffer split_desc_cache, the cache used to allcoate rmap list entries,
-only by the default cache capacity (currently 40), not by doubling the
-minimum (513).  Aliasing L2 GPAs to L1 GPAs is uncommon, thus eager page
-splitting is unlikely to need 500+ entries.  And because each object is a
-non-trivial 128 bytes (see struct pte_list_desc), those extra ~500
-entries means KVM is in all likelihood wasting ~64kb of memory per VM.
+On Wed, 22 Jun 2022, Palmer Dabbelt wrote:
 
-Link: https://lore.kernel.org/all/YrTDcrsn0%2F+alpzf@google.com
-Cc: David Matlack <dmatlack@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+> > > Therefore avoid handing out address 0, by bumping the lowest address
+> > > available to PCI via PCIBIOS_MIN_IO and PCIBIOS_MIN_MEM up by 4 and 16
+> > > respectively, which is the minimum allocation size for I/O and memory
+> > > BARs.
+> > 
+> >  Ping for:
+> > <https://lore.kernel.org/lkml/alpine.DEB.2.21.2204271207590.9383@angie.orcam.me.uk/>
+> 
+> Sorry, I got this mixed up with the non-RISC-V patch.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index e2213eeadebc..069ddf874af1 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6125,17 +6125,25 @@ static bool need_topup_split_caches_or_resched(struct kvm *kvm)
- 
- static int topup_split_caches(struct kvm *kvm)
- {
--	int r;
--
--	lockdep_assert_held(&kvm->slots_lock);
--
- 	/*
--	 * Setting capacity == min would cause KVM to drop mmu_lock even if
--	 * just one object was consumed from the cache, so make capacity
--	 * larger than min.
-+	 * Allocating rmap list entries when splitting huge pages for nested
-+	 * MMUs is uncommon as KVM needs to allocate if and only if there is
-+	 * more than one rmap entry for a gfn, i.e. requires an L1 gfn to be
-+	 * aliased by multiple L2 gfns.  Aliasing gfns when using TDP is very
-+	 * atypical for VMMs; a few gfns are often aliased during boot, e.g.
-+	 * when remapping firmware, but aliasing rarely occurs post-boot).  If
-+	 * there is only one rmap entry, rmap->val points directly at that one
-+	 * entry and doesn't need to allocate a list.  Buffer the cache by the
-+	 * default capacity so that KVM doesn't have to topup the cache if it
-+	 * encounters an aliased gfn or two.
- 	 */
--	r = __kvm_mmu_topup_memory_cache(&kvm->arch.split_desc_cache,
--					 2 * SPLIT_DESC_CACHE_MIN_NR_OBJECTS,
-+	const int capacity = SPLIT_DESC_CACHE_MIN_NR_OBJECTS +
-+			     KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
-+	int r;
-+
-+	lockdep_assert_held(&kvm->slots_lock);
-+
-+	r = __kvm_mmu_topup_memory_cache(&kvm->arch.split_desc_cache, capacity,
- 					 SPLIT_DESC_CACHE_MIN_NR_OBJECTS);
- 	if (r)
- 		return r;
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+ If you mean this:
 
+<https://lore.kernel.org/lkml/alpine.DEB.2.21.2202260044180.25061@angie.orcam.me.uk/>
+
+then we just don't have consensus to move forward.  If we ever do for a 
+generic change, then we can revert the RISC-V platform solution, as it's 
+merely an internal implementation detail and not a part of the ABI or 
+something.
+
+>  David poked me about
+> it, this is on for-next.  It's passing my tests, but they're just QEMU so
+> probably not all that exciting here.
+
+ Thanks!  I don't know offhand what QEMU supports as far as the RISC-V 
+architecture is concerned; I guess you can't just enable a PCI port-I/O 
+serial port in the simulator and see if it works with Linux or not.
+
+ Anyway it's just number shuffling, so the change should be reasonably 
+safe.
+
+  Maciej

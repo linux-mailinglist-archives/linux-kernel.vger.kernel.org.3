@@ -2,62 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9A455A2C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 22:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5B955A2D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 22:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbiFXUdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 16:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S231160AbiFXUgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 16:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiFXUdg (ORCPT
+        with ESMTP id S229607AbiFXUgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 16:33:36 -0400
-Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FCA3057E
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:33:34 -0700 (PDT)
+        Fri, 24 Jun 2022 16:36:45 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FFC3AA73
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:36:44 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id u15so6930332ejc.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:36:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=9rV7rmTUfpzPtlwowSz9p1z60VIIot0KQLA/WiXxBeA=;
-        b=pHDkNdVf6STnjKUshSXvwCtLkvy1okgANpIqFeyr0zbeNDGVDqwZZ36iVmusEI3YbZMTKMU1gzpj3
-         uIdecYgYU9bchEiyS3HNMg60xKyiVavfRz0ZXcg9s3ZEh1Xbq1/NZ4I8INTbnxi3kj7LSQLbHP3DyL
-         +QJHmCddqNg+8LbSxxon87ukMKgIWdX7acJMiWjfqkCFYa4zN44Z9cKs7dZldps79g9u9R+b3D6dt7
-         DWzCRl+FRz+1s/j77tVGMge7uwSKBhPb2KBd/d/3PxGg77+dbH89WQKaLK8GqIcNA5R5wk9V2/3pmn
-         exhoG3U7vPepuW9l1Rl4broKKNqxMag==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=9rV7rmTUfpzPtlwowSz9p1z60VIIot0KQLA/WiXxBeA=;
-        b=WiJlVYaxeG1eVJ9QOAGe9bPNIpKx+3kKMa7EHEO8XjkvwvJOOk8h8v8gmOEXVv4NgbR7Cn/Jr4D27
-         jVTs+9XCA==
-X-HalOne-Cookie: d3783bc8887fa11d3fbd817fdcbe0ed542c9b62f
-X-HalOne-ID: e9d1b734-f3fc-11ec-8233-d0431ea8bb10
-Received: from mailproxy4.cst.dirpod4-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id e9d1b734-f3fc-11ec-8233-d0431ea8bb10;
-        Fri, 24 Jun 2022 20:33:32 +0000 (UTC)
-Date:   Fri, 24 Jun 2022 22:33:30 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     laurent.pinchart@ideasonboard.com, jagan@amarulasolutions.com,
-        jonas@kwiboo.se, airlied@linux.ie, dri-devel@lists.freedesktop.org,
-        narmstrong@baylibre.com, linux-kernel@vger.kernel.org,
-        jernej.skrabec@gmail.com, robert.foss@linaro.org,
-        andrzej.hajda@intel.com, alsi@bang-olufsen.dk,
-        biju.das.jz@bp.renesas.com, maxime@cerno.tech
-Subject: Re: [PATCH v2] drm: bridge: adv7511: Add check for
- mipi_dsi_driver_register
-Message-ID: <YrYfmqJbRmGWh0qw@ravnborg.org>
-References: <20220602103401.2980938-1-jiasheng@iscas.ac.cn>
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2ZlRpEdtEVnBuC7aEnd7d6UXgiUoHLzki+QPk6nXlJo=;
+        b=grPNnukEJPKIcNnJemOGDgxKea/T9pmQbUrVjX1fkdNW4DFFEep8GNYhuqPwoNbYjY
+         XI+N5u6z+zW4ITmghCISZyzSC3ay1C1KDFluTGPgXVRWPyq/0p5zTh43/1KWbFJRI5zo
+         gi6FaaNeRjLvD+bffmfq5EeP2MPq426xKwcM8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=2ZlRpEdtEVnBuC7aEnd7d6UXgiUoHLzki+QPk6nXlJo=;
+        b=ErmszTGnlbn6RWG7VuKvIozL4fyHIp+foNw0w12tbbKFUGFX3ZHu22IG0mta3wV++U
+         bfMDsD/Cu6PjQ6Z8cq26R9P07OuGpmaasQ1sY9zPuZjw4i/aFWUYqbLMvv5NGLfxOCI1
+         AeKv9FbgTdCZJm8JYM69gEgM/NXJIkKkROr6mwDfZtBxrGwXDTeIqY/qh5HchoPO9ER7
+         WsibqgHpiHCEPCy5Czr/n2F/HgNSIVmSq98LQaZBiWk8QJbjZGgYvErAIl5zsnmnaOrX
+         NVqd9Qd0hYN9rT3kTnujhDPZDTnMxrNFaSMNInJGEw2Hh2HOixHifobWjIdgNRBMIvHX
+         owYQ==
+X-Gm-Message-State: AJIora9qDaeYqC5XavRw/IwIvt9xrguvAsDTEFrqpV6DpBmMSznkKcor
+        WQ9Nfc0IJKza/rZfMwDgBJCMoQ==
+X-Google-Smtp-Source: AGRyM1u+bgpkqRd7Tf8NAE0sJHQ4Pm531P9FvYf/RkXKzWMPcEol6g8iSVT+enOuzr6oKZn0svlQ7g==
+X-Received: by 2002:a17:906:9c82:b0:6df:baa2:9f75 with SMTP id fj2-20020a1709069c8200b006dfbaa29f75mr833410ejc.762.1656103002903;
+        Fri, 24 Jun 2022 13:36:42 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id jl18-20020a17090775d200b006fec8e8eff6sm1661323ejc.176.2022.06.24.13.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 13:36:42 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 22:36:40 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     John Stultz <jstultz@google.com>
+Cc:     "T.J. Mercier" <tjmercier@google.com>, Tejun Heo <tj@kernel.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kernel-team@android.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH v7 0/6] Proposal for a GPU cgroup controller
+Message-ID: <YrYgWCTtZqfvCt5D@phenom.ffwll.local>
+Mail-Followup-To: John Stultz <jstultz@google.com>,
+        "T.J. Mercier" <tjmercier@google.com>, Tejun Heo <tj@kernel.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>, Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>, Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>, Shuah Khan <shuah@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>, kernel-team@android.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kselftest@vger.kernel.org
+References: <CABdmKX3ZV6-u-oLvW_wWavAMBfrsZ=C_rCgK_Uz4VjxcRvRFew@mail.gmail.com>
+ <81026ef07c1ce20f8673b75b17bab79a2b39c548.camel@ndufresne.ca>
+ <CABdmKX2LxZ6zZR=fhXfnuWCB2BR+gzDd1-t1DD2A2XP24wvuGQ@mail.gmail.com>
+ <Yn6DpUsoSz1/15Kc@slm.duckdns.org>
+ <CABdmKX1xvm87WMEDkMc9Aye46E4zv1-scenwgaRxHesrOCsaYg@mail.gmail.com>
+ <YodHjYlMx1XGtM2+@slm.duckdns.org>
+ <CABdmKX2Ok023rN1drQgXVZLKUO_DVYrzmEamCgMMu6BPO67yhQ@mail.gmail.com>
+ <CABdmKX0WV8VWgeafVGJ++nJ4xsJD7Wpz=3KX=BW1du=huttfvw@mail.gmail.com>
+ <YrYbwu0iIAJJGXVg@phenom.ffwll.local>
+ <CANDhNCqGjaq-SFvWwkqnEFj4tJcRqCYupZ03wLyCexqTH5MqMg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220602103401.2980938-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+In-Reply-To: <CANDhNCqGjaq-SFvWwkqnEFj4tJcRqCYupZ03wLyCexqTH5MqMg@mail.gmail.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,17 +133,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 06:34:01PM +0800, Jiasheng Jiang wrote:
-> As mipi_dsi_driver_register could return error if fails,
-> it should be better to check the return value and return error
-> if fails.
-> Moreover, if i2c_add_driver fails,  mipi_dsi_driver_register
-> should be reverted.
+On Fri, Jun 24, 2022 at 01:32:45PM -0700, John Stultz wrote:
+> On Fri, Jun 24, 2022 at 1:17 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> >
+> > On Wed, Jun 15, 2022 at 10:31:21AM -0700, T.J. Mercier wrote:
+> > > On Fri, May 20, 2022 at 9:25 AM T.J. Mercier <tjmercier@google.com> wrote:
+> > > >
+> > > > On Fri, May 20, 2022 at 12:47 AM Tejun Heo <tj@kernel.org> wrote:
+> > > > >
+> > > > > Hello,
+> > > > >
+> > > > > On Tue, May 17, 2022 at 04:30:29PM -0700, T.J. Mercier wrote:
+> > > > > > Thanks for your suggestion. This almost works. "dmabuf" as a key could
+> > > > > > work, but I'd actually like to account for each heap. Since heaps can
+> > > > > > be dynamically added, I can't accommodate every potential heap name by
+> > > > > > hardcoding registrations in the misc controller.
+> > > > >
+> > > > > On its own, that's a pretty weak reason to be adding a separate gpu
+> > > > > controller especially given that it doesn't really seem to be one with
+> > > > > proper abstractions for gpu resources. We don't want to keep adding random
+> > > > > keys to misc controller but can definitely add limited flexibility. What
+> > > > > kind of keys do you need?
+> > > > >
+> > > > Well the dmabuf-from-heaps component of this is the initial use case.
+> > > > I was envisioning we'd have additional keys as discussed here:
+> > > > https://lore.kernel.org/lkml/20220328035951.1817417-1-tjmercier@google.com/T/#m82e5fe9d8674bb60160701e52dae4356fea2ddfa
+> > > > So we'd end up with a well-defined core set of keys like "system", and
+> > > > then drivers would be free to use their own keys for their own unique
+> > > > purposes which could be complementary or orthogonal to the core set.
+> > > > Yesterday I was talking with someone who is interested in limiting gpu
+> > > > cores and bus IDs in addition to gpu memory. How to define core keys
+> > > > is the part where it looks like there's trouble.
+> > > >
+> > > > For my use case it would be sufficient to have current and maximum
+> > > > values for an arbitrary number of keys - one per heap. So the only
+> > > > part missing from the misc controller (for my use case) is the ability
+> > > > to register a new key at runtime as heaps are added. Instead of
+> > > > keeping track of resources with enum misc_res_type, requesting a
+> > > > resource handle/ID from the misc controller at runtime is what I think
+> > > > would be required instead.
+> > > >
+> > > Quick update: I'm going to make an attempt to modify the misc
+> > > controller to support a limited amount of dynamic resource
+> > > registration/tracking in place of the new controller in this series.
+> > >
+> > > Thanks everyone for the feedback.
+> >
+> > Somehow I missed this entire chain here.
+> >
+> > I'm not a fan, because I'm kinda hoping we could finally unify gpu memory
+> > account. Atm everyone just adds their one-off solution in a random corner:
+> > - total tracking in misc cgroup controller
+> > - dma-buf sysfs files (except apparently too slow so it'll get deleted
+> >   again)
+> > - random other stuff on open device files os OOM killer can see it
+> >
+> > This doesn't look good.
 > 
-> Fixes: 1e4d58cd7f88 ("drm/bridge: adv7533: Create a MIPI DSI device")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> But I also think one could see it as "gpu memory" is the drm subsystem
+> doing the same thing (in that it's artificially narrow to gpus). It
+> seems we need something to account for buffers allocated by drivers,
+> no matter which subsystem it was in (drm, v4l2, or networking or
+> whatever).
 
-Thanks, added to drm-misc (added to drm-misc-next as this did not look
-like something that required fast forward to mainline).
+This is what the gpucg was. It wasn't called the dmabuf cg because we want
+to account also memory of other types (e.g. drm gem buffer objects which
+aren't exported), and I guess people didn't dare call it an xpu.
 
-	Sam
+But this was absolutely for a lot more than just "gpu drivers in drm".
+Better names welcome.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

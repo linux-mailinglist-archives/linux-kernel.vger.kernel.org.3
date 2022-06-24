@@ -2,430 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29715597D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE695597DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiFXK14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 06:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
+        id S230145AbiFXK1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 06:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiFXK1u (ORCPT
+        with ESMTP id S230197AbiFXK1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 06:27:50 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F8C7C524
+        Fri, 24 Jun 2022 06:27:49 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F3A7C520
         for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:27:46 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id n15so2256108ljg.8
+Received: by mail-ej1-x630.google.com with SMTP id u15so3737705ejc.10
         for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:27:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IpFK0odhcIUGlBz3mfeEAjaAzcx0LDi6jQEfvn/gq6s=;
-        b=DPKizhNZUw/jri4bKrYvkXwtQcNPKkuTvpPRQAt5tc4leiKJnj1B8GyRfQB/RkSkzT
-         WiLkxYeArblvGtKtSuFLQmfcSTlnPrc4gtRfzyfBn8QCJYn9BJQ0jgAozGg7cruTwASo
-         jSm6AzHhwQWfkMQ8SItkFCt/jX+/mg/V9ZMmpTUaGpQItzjCVHnRfpDShhrnYI47xcrn
-         fVBICuS5ewFpyRF3+iVkw1bpg96Us9dh0GCYobQMMAh07cb3z0vPcR/KU7E+NbjwUK0E
-         D4EVT5U31z8NIA3b4BFqQcJ/8DMccRx1TgzXethoD8AeTJ12EKUDLxGlIhioTUZDxIb+
-         vygQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Nuxc36+s4sWQDaVadkc6oPNaa2rIDEmkVevDjA38UUQ=;
+        b=Lu/cMZDQbpDrvP88FBrvMyrvBoGMLxkakNs1O/w0KJCcIFSPOUBY6OryS/oCJ06YOn
+         GbDK7li6a4UHrHldXUyUMMOWrNS7pm9L5bfCAY7TmNWPkoDDJz8VXQFe9Fhpv3m1uc0L
+         t4Sa3S5fCj+Jep4qZr+X95xroO/Fz5Hy4UOnCnNBFg2IacvUZRBw/4DLZFBdZxUBHoUe
+         5PIG9v7XeqxkrKqcy2iOjNxequ8IQZPQLNBUYSNE3EU48hl1FQubHzyALQeSD5oD6gy4
+         XQLb1KUjFcLMpjEJx38RU1Cy1e+e8w6rEg3l9/raR6EjGfIkJCCDcDqn2DXE/qEDSWEt
+         gzVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IpFK0odhcIUGlBz3mfeEAjaAzcx0LDi6jQEfvn/gq6s=;
-        b=rUxhUJjdshibIGYC8i8dW4PotpqAVRovGQwvxmprNnuli067N807yoxK+GA5Q9b3hG
-         BcQEUsIkTYPuNfmeAEqoeqkQMQewGWWqQ13l2gz7tkLENPasI3EiblWyltgkt7VT047g
-         kygua6Pdt2aayqp/LdXPI3oQxwwsY2KeQL0DQBNfSvxmaq00EuiQ+lQ3d0FztFHuTe03
-         Co79Z8PFPlHEk4+bF26burrgAfA46FyhL2RFeD9pCRxUJIIWaRgWEpUNzyXUB34Opmna
-         qqGHlmOyVieAZlF+AwQbtC6Fr4EdX3bl4IiQ5owuRnr/purRfOdHzvvec0vnrVDDMD2M
-         KGfA==
-X-Gm-Message-State: AJIora94bHPRMcYSRjokTQutXMgE6uxMK3zRqsMDSxQYXlFtzP44eYty
-        kn0hUDL08LAwsjg50+jkhT4=
-X-Google-Smtp-Source: AGRyM1t9Qtch0i5VRQSyc3bD9NeJc3EbqXZAGFR3uhsVQQ3ewS6Ekd5Da/aqjl/PZDY1JGVtuOoZBA==
-X-Received: by 2002:a2e:94c9:0:b0:24a:fe13:ce04 with SMTP id r9-20020a2e94c9000000b0024afe13ce04mr7257465ljh.52.1656066464733;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Nuxc36+s4sWQDaVadkc6oPNaa2rIDEmkVevDjA38UUQ=;
+        b=GmMsrdLMEL0MQXWylgLUr7/0YcQXuqYbmL7FI0GQtOW8aL710aj53QWMBeZC1xhqX/
+         a8rpe+wQPgGyXWNHLnVyUPZDgK6u4vHoN9fm6C3mfnRAIMZ8U2vpXBY9o3AfSoH7a1XZ
+         5rh0x04a7aS7N0UA2VCD/hsuzAcCSiRKpTthf54TVb3j6C0ys4G5FwNAd9M8JrS4vycV
+         0mIOmsomslWqmfvZjfTkadw/JSITJy7lnsmVPpR9PFnAzCZjtpaOg8nqmXnTi9LmKfVP
+         sC9+pE5nYz8rv3g6NjOWNA6rI4tO9+C9S1KAb97pgSeh/dffJp2X5R28MdCrsmFlDpGD
+         TteA==
+X-Gm-Message-State: AJIora/bU4bZ/iUDUVGMaHyzX82w45iDgFIWBvVBjyw9tElUuTudCRiz
+        XUnf4J9zCfwXqc/Yqfw4jckw/w==
+X-Google-Smtp-Source: AGRyM1t4wJC/XeeqGXInCg0idKMgknVDGZX7X/fQzRWF0oldACj/ylYne3Hz/Rt8agVjJawt7AOTzw==
+X-Received: by 2002:a17:907:94cb:b0:721:252c:d4bb with SMTP id dn11-20020a17090794cb00b00721252cd4bbmr12681930ejc.148.1656066465307;
+        Fri, 24 Jun 2022 03:27:45 -0700 (PDT)
+Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id o12-20020a056402038c00b0043561e0c9adsm1640034edv.52.2022.06.24.03.27.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Fri, 24 Jun 2022 03:27:44 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id g6-20020a056512118600b0047f7b641951sm296941lfr.272.2022.06.24.03.27.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 03:27:43 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Fri, 24 Jun 2022 12:27:41 +0200
-To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH] mm: fix racing of vb->va when kasan enabled
-Message-ID: <YrWRnSTeDYNFl0wr@pc638.lan>
-References: <CAB8ipk9cAoP6yV_-Gn8bwbn5ezCZujLeMpioa0TiNU5=akBaug@mail.gmail.com>
- <Yq+PMWlARgDhv8uL@pc638.lan>
- <CAGWkznHPdk_yqn2GWPDJaT32+4MnFLnRjdjBkaFv9BLMh4yM=g@mail.gmail.com>
- <CA+KHdyXpdow7SYsbq_7F0zDd5-nYGi6db7R11R3--g3gUu-59w@mail.gmail.com>
- <CAGWkznE5cFfdtmQ2j57goWtpfPGYPsd5Oi3pvb9vcfifodR9OQ@mail.gmail.com>
- <YrGO4cae/03r3PzP@pc638.lan>
- <CAGWkznFdZ1_jrSWSOPkSDyLY1OSodZBy6MTfdwPKo3VoW67GBg@mail.gmail.com>
- <YrHVsryZlnpO/Vha@pc638.lan>
- <CAGWkznEha+6aPi6hoqzSt0ZKpY2_0P4gFx-OFxufqDt6sZc9kw@mail.gmail.com>
- <CAGWkznFx87C=z0ELALyBXdd=CNHAebG3oMNBbeGTC_j50xrYLw@mail.gmail.com>
+Message-ID: <06819889-2c00-83d8-0d25-ce6c2559105a@linaro.org>
+Date:   Fri, 24 Jun 2022 12:27:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGWkznFx87C=z0ELALyBXdd=CNHAebG3oMNBbeGTC_j50xrYLw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 02/14] dt-bindings: power: supply: Add Mediatek MT6370
+ Charger
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de
+Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+References: <20220623115631.22209-1-peterwu.pub@gmail.com>
+ <20220623115631.22209-3-peterwu.pub@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220623115631.22209-3-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Wed, Jun 22, 2022 at 11:15 AM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
-> >
-> > On Tue, Jun 21, 2022 at 10:29 PM Uladzislau Rezki <urezki@gmail.com> wrote:
-> > >
-> > > > On Tue, Jun 21, 2022 at 5:27 PM Uladzislau Rezki <urezki@gmail.com> wrote:
-> > > > >
-> > > > > > On Mon, Jun 20, 2022 at 6:44 PM Uladzislau Rezki <urezki@gmail.com> wrote:
-> > > > > > >
-> > > > > > > > > >
-> > > > > > > > > Is it easy to reproduce? If so could you please describe the steps? As i see
-> > > > > > > > > the freeing of the "vb" is RCU safe whereas vb->va is not. But from the first
-> > > > > > > > > glance i do not see how it can accessed twice. Hm..
-> > > > > > > > It was raised from a monkey test on A13_k515 system and got 1/20 pcs
-> > > > > > > > failed. IMO, vb->va which out of vmap_purge_lock protection could race
-> > > > > > > > with a concurrent ra freeing within __purge_vmap_area_lazy.
-> > > > > > > >
-> > > > > > > Do you have exact steps how you run "monkey" test?
-> > > > > > There are about 30+ kos inserted during startup which could be a
-> > > > > > specific criteria for reproduction. Do you have doubts about the test
-> > > > > > result or the solution?
-> > > > > > >
-> > > > > I do not have any doubt about your test results, so if you can trigger it
-> > > > > then there is an issue at least on the 5.4.161-android12 kernel.
-> > > > >
-> > > > > 1. With your fix we get expanded mutex range, thus the worst case of vmalloc
-> > > > > allocation can be increased when it fails and repeat. Because it also invokes
-> > > > > the purge_vmap_area_lazy() that access the same mutex.
-> > > > I am not sure I get your point. _vm_unmap_aliases calls
-> > > > _purge_vmap_area_lazy instead of purge_vmap_area_lazy. Do you have any
-> > > > other solutions? I really don't think my patch is the best way as I
-> > > > don't have a full view of vmalloc mechanism.
-> > > >
-> > > Yep, but it holds the mutex:
-> I still don't get how _purge_vmap_area_lazy hold vmap_purge_lock?
->
-The user has to take the mutex if it invokes the __purge_vmap_area_lazy()
-function.
-
-> > >
-> > > <snip>
-> > > mutex_lock(&vmap_purge_lock);
-> > > purge_fragmented_blocks_allcpus();
-> > > if (!__purge_vmap_area_lazy(start, end) && flush)
-> > >         flush_tlb_kernel_range(start, end);
-> > > mutex_unlock(&vmap_purge_lock);
-> > > <snip>
-> > >
-> > > I do not have a solution yet. I am trying still to figure out how you can
-> > > trigger it.
-> > >
-> > > <snip>
-> > >         rcu_read_lock();
-> > >         list_for_each_entry_rcu(vb, &vbq->free, free_list) {
-> > >                 spin_lock(&vb->lock);
-> > >                 if (vb->dirty && vb->dirty != VMAP_BBMAP_BITS) {
-> > >                         unsigned long va_start = vb->va->va_start;
-> > > <snip>
-> > >
-> > > so you say that "vb->va->va_start" can be accessed twice. I do not see
-> > > how it can happen. The purge_fragmented_blocks() removes "vb" from the
-> > > free_list and set vb->dirty to the VMAP_BBMAP_BITS to prevent purging
-> > > it again. It is protected by the spin_lock(&vb->lock):
-> > >
-> > > <snip>
-> > > spin_lock(&vb->lock);
-> > > if (vb->free + vb->dirty == VMAP_BBMAP_BITS && vb->dirty != VMAP_BBMAP_BITS) {
-> > >         vb->free = 0; /* prevent further allocs after releasing lock */
-> > >         vb->dirty = VMAP_BBMAP_BITS; /* prevent purging it again */
-> > >         vb->dirty_min = 0;
-> > >         vb->dirty_max = VMAP_BBMAP_BITS;
-> > > <snip>
-> > >
-> > > so the VMAP_BBMAP_BITS is set under spinlock. The _vm_unmap_aliases() checks it:
-> > >
-> > > <snip>
-> > > list_for_each_entry_rcu(vb, &vbq->free, free_list) {
-> > >         spin_lock(&vb->lock);
-> > >         if (vb->dirty && vb->dirty != VMAP_BBMAP_BITS) {
-> > >                 unsigned long va_start = vb->va->va_start;
-> > >                 unsigned long s, e;
-> > > <snip>
-> > >
-> > > if the "vb->dirty != VMAP_BBMAP_BITS". I am missing your point here?
-> > Could the racing be like bellowing scenario?  vb->va accessed in [2]
-> > has been freed in [1]
-> >
-> > _vm_unmap_aliases
-> >                 _vm_unmap_aliases
-> > {
-> >                                {
-> >               list_for_each_entry_rcu(vb, &vbq->free, free_list) {
-> >              __purge_vmap_area_lazy
-> >                      spin_lock(&vb->lock);
-> >                                 merge_or_add_vmap_area
-> >                      if (vb->dirty) {
-> >
-> > kmem_cache_free(vmap_area_cachep, va)[1]
-> >                             unsigned long va_start = vb->va->va_start;
-> > [2]
+On 23/06/2022 13:56, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
 > 
-> reformat the racing graph
->  _vm_unmap_aliases
->                              _vm_unmap_aliases
->  {
->                                               {
->             list_for_each_entry_rcu(vb, &vbq->free, free_list) {
->                    __purge_vmap_area_lazy
->                       spin_lock(&vb->lock);
->                                         merge_or_add_vmap_area
->                       if (vb->dirty) {
+> Add Mediatek MT6370 Charger binding documentation.
 > 
-> kmem_cache_free(vmap_area_cachep, va)[1]
->                              unsigned long va_start = vb->va->va_start; [2]
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
 > 
-> > >
-> > > > >
-> > > > > 2. You run 5.4.161-android12 kernel what is quite old. Could you please
-> > > > > retest with latest kernel? I am asking because on the latest kernel with
-> > > > > CONFIG_KASAN i am not able to reproduce it.
-> > > > >
-> > > > > I do a lot of: vm_map_ram()/vm_unmap_ram()/vmalloc()/vfree() in parallel
-> > > > > by 64 kthreads on my 64 CPUs test system.
-> > > > The failure generates at 20s from starting up, I think it is a rare timing.
-> > > > >
-> > > > > Could you please confirm that you can trigger an issue on the latest kernel?
-> > > > Sorry, I don't have an available latest kernel for now.
-> > > >
-> > > Can you do: "gdb ./vmlinux", execute "l *_vm_unmap_aliases+0x164" and provide
-> > > output?
-> Sorry, I have lost the vmlinux with KASAN enabled and just got some
-> instructions from logs.
->
-> 0xffffffd010678da8 <_vm_unmap_aliases+0x134>: sub x22, x26, #0x28
->                x26 vbq->free
-> 0xffffffd010678dac <_vm_unmap_aliases+0x138>: lsr x8, x22, #3
-> 0xffffffd010678db0 <_vm_unmap_aliases+0x13c>: ldrb w8, [x8,x24]
-> 0xffffffd010678db4 <_vm_unmap_aliases+0x140>: cbz w8,
-> 0xffffffd010678dc0 <_vm_unmap_aliases+0x14c>
-> 0xffffffd010678db8 <_vm_unmap_aliases+0x144>: mov x0, x22
-> 0xffffffd010678dbc <_vm_unmap_aliases+0x148>: bl 0xffffffd0106c9a34
-> <__asan_report_load8_noabort>
-> 0xffffffd010678dc0 <_vm_unmap_aliases+0x14c>: ldr x22, [x22]
-> 0xffffffd010678dc4 <_vm_unmap_aliases+0x150>: lsr x8, x22, #3
-> 0xffffffd010678dc8 <_vm_unmap_aliases+0x154>: ldrb w8, [x8,x24]
-> 0xffffffd010678dcc <_vm_unmap_aliases+0x158>: cbz w8,
-> 0xffffffd010678dd8 <_vm_unmap_aliases+0x164>
-> 0xffffffd010678dd0 <_vm_unmap_aliases+0x15c>: mov x0, x22
-> 0xffffffd010678dd4 <_vm_unmap_aliases+0x160>: bl 0xffffffd0106c9a34
-> <__asan_report_load8_noabort>
->
-Could you please test below patch if that fixes an issue on the 5.4
-kernel:
+> v3
+> - Add items and remove maxItems of io-channels
+> - Add io-channel-names and describe each item
+> - Add "unevaluatedProperties: false" in "usb-otg-vbus-regulator"
+> - Rename "enable-gpio" to "enable-gpios" in "usb-otg-vbus-regulator"
+> ---
+>  .../power/supply/mediatek,mt6370-charger.yaml      | 87 ++++++++++++++++++++++
+>  1 file changed, 87 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> new file mode 100644
+> index 0000000..f138db6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> @@ -0,0 +1,87 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/mediatek,mt6370-charger.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek MT6370 Battery Charger
+> +
+> +maintainers:
+> +  - ChiaEn Wu <chiaen_wu@richtek.com>
+> +
+> +description: |
+> +  This module is part of the MT6370 MFD device.
+> +  Provides Battery Charger, Boost for OTG devices and BC1.2 detection.
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt6370-charger
+> +
+> +  interrupts:
+> +    description: |
+> +      Specify what irqs are needed to be handled by MT6370 Charger driver. IRQ
+> +      "MT6370_IRQ_CHG_MIVR", "MT6370_IRQ_ATTACH" and "MT6370_IRQ_OVPCTRL_UVP_D"
+> +      are required.
+> +    items:
+> +      - description: BC1.2 done irq
+> +      - description: usb plug in irq
+> +      - description: mivr irq
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: attach_i
+> +      - const: uvp_d_evt
+> +      - const: mivr
+> +
+> +  io-channels:
+> +    description: |
+> +      Use ADC channel to read VBUS, IBUS, IBAT, etc., info.
+> +    minItems: 1
+> +    items:
+> +      - description: |
+> +          VBUS voltage with lower accuracy (+-75mV) but higher measure
+> +          range (1~22V)
+> +      - description: |
+> +          VBUS voltage with higher accuracy (+-30mV) but lower measure
+> +          range (1~9.76V)
+> +      - description: the main system input voltage
+> +      - description: battery voltage
+> +      - description: battery temperature-sense input voltage
+> +      - description: IBUS current (required)
+> +      - description: battery current
+> +      - description: |
+> +          regulated output voltage to supply for the PWM low-side gate driver
+> +          and the bootstrap capacitor
+> +      - description: IC junction temperature
+> +
+> +  io-channel-names:
 
-<snip>
-diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-index 4e7809408073..d5b07d7239bd 100644
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -55,6 +55,7 @@ struct vmap_area {
- 
- 	struct rb_node rb_node;         /* address sorted rbtree */
- 	struct list_head list;          /* address sorted list */
-+	struct rcu_head rcu;
- 
- 	/*
- 	 * The following three variables can be packed, because
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index a3c70e275f4e..bb8cfdb06ce6 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -337,14 +337,6 @@ static LLIST_HEAD(vmap_purge_list);
- static struct rb_root vmap_area_root = RB_ROOT;
- static bool vmap_initialized __read_mostly;
- 
--/*
-- * This kmem_cache is used for vmap_area objects. Instead of
-- * allocating from slab we reuse an object from this cache to
-- * make things faster. Especially in "no edge" splitting of
-- * free block.
-- */
--static struct kmem_cache *vmap_area_cachep;
--
- /*
-  * This linked list is used in pair with free_vmap_area_root.
-  * It gives O(1) access to prev/next to perform fast coalescing.
-@@ -532,7 +524,7 @@ link_va(struct vmap_area *va, struct rb_root *root,
- 	}
- 
- 	/* Address-sort this list */
--	list_add(&va->list, head);
-+	list_add_rcu(&va->list, head);
- }
- 
- static __always_inline void
-@@ -547,7 +539,7 @@ unlink_va(struct vmap_area *va, struct rb_root *root)
- 	else
- 		rb_erase(&va->rb_node, root);
- 
--	list_del(&va->list);
-+	list_del_rcu(&va->list);
- 	RB_CLEAR_NODE(&va->rb_node);
- }
- 
-@@ -721,7 +713,7 @@ merge_or_add_vmap_area(struct vmap_area *va,
- 			augment_tree_propagate_from(sibling);
- 
- 			/* Free vmap_area object. */
--			kmem_cache_free(vmap_area_cachep, va);
-+			kfree_rcu(va, rcu);
- 
- 			/* Point to the new merged area. */
- 			va = sibling;
-@@ -748,7 +740,7 @@ merge_or_add_vmap_area(struct vmap_area *va,
- 				unlink_va(va, root);
- 
- 			/* Free vmap_area object. */
--			kmem_cache_free(vmap_area_cachep, va);
-+			kfree_rcu(va, rcu);
- 			return;
- 		}
- 	}
-@@ -928,7 +920,7 @@ adjust_va_to_fit_type(struct vmap_area *va,
- 		 * |---------------|
- 		 */
- 		unlink_va(va, &free_vmap_area_root);
--		kmem_cache_free(vmap_area_cachep, va);
-+		kfree_rcu(va, rcu);
- 	} else if (type == LE_FIT_TYPE) {
- 		/*
- 		 * Split left edge of fit VA.
-@@ -969,7 +961,7 @@ adjust_va_to_fit_type(struct vmap_area *va,
- 			 * a first allocation (early boot up) when we have "one"
- 			 * big free space that has to be split.
- 			 */
--			lva = kmem_cache_alloc(vmap_area_cachep, GFP_NOWAIT);
-+			lva = kmalloc(sizeof(struct vmap_area), GFP_NOWAIT);
- 			if (!lva)
- 				return -1;
- 		}
-@@ -1064,8 +1056,7 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
- 
- 	might_sleep();
- 
--	va = kmem_cache_alloc_node(vmap_area_cachep,
--			gfp_mask & GFP_RECLAIM_MASK, node);
-+	va = kmalloc_node(sizeof(struct vmap_area), gfp_mask & GFP_RECLAIM_MASK, node);
- 	if (unlikely(!va))
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -1091,12 +1082,12 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
- 	preempt_disable();
- 	if (!__this_cpu_read(ne_fit_preload_node)) {
- 		preempt_enable();
--		pva = kmem_cache_alloc_node(vmap_area_cachep, GFP_KERNEL, node);
-+		pva = kmalloc_node(sizeof(struct vmap_area), GFP_KERNEL, node);
- 		preempt_disable();
- 
- 		if (__this_cpu_cmpxchg(ne_fit_preload_node, NULL, pva)) {
- 			if (pva)
--				kmem_cache_free(vmap_area_cachep, pva);
-+				kfree_rcu(pva, rcu);
- 		}
- 	}
- 
-@@ -1145,7 +1136,7 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
- 		pr_warn("vmap allocation for size %lu failed: use vmalloc=<size> to increase size\n",
- 			size);
- 
--	kmem_cache_free(vmap_area_cachep, va);
-+	kfree_rcu(va, rcu);
- 	return ERR_PTR(-EBUSY);
- }
- 
-@@ -1870,7 +1861,7 @@ static void vmap_init_free_space(void)
- 	 */
- 	list_for_each_entry(busy, &vmap_area_list, list) {
- 		if (busy->va_start - vmap_start > 0) {
--			free = kmem_cache_zalloc(vmap_area_cachep, GFP_NOWAIT);
-+			free = kzalloc(sizeof(struct vmap_area), GFP_NOWAIT);
- 			if (!WARN_ON_ONCE(!free)) {
- 				free->va_start = vmap_start;
- 				free->va_end = busy->va_start;
-@@ -1885,7 +1876,7 @@ static void vmap_init_free_space(void)
- 	}
- 
- 	if (vmap_end - vmap_start > 0) {
--		free = kmem_cache_zalloc(vmap_area_cachep, GFP_NOWAIT);
-+		free = kzalloc(sizeof(struct vmap_area), GFP_NOWAIT);
- 		if (!WARN_ON_ONCE(!free)) {
- 			free->va_start = vmap_start;
- 			free->va_end = vmap_end;
-@@ -1903,11 +1894,6 @@ void __init vmalloc_init(void)
- 	struct vm_struct *tmp;
- 	int i;
- 
--	/*
--	 * Create the cache for vmap_area objects.
--	 */
--	vmap_area_cachep = KMEM_CACHE(vmap_area, SLAB_PANIC);
--
- 	for_each_possible_cpu(i) {
- 		struct vmap_block_queue *vbq;
- 		struct vfree_deferred *p;
-@@ -1922,7 +1908,7 @@ void __init vmalloc_init(void)
- 
- 	/* Import existing vmlist entries. */
- 	for (tmp = vmlist; tmp; tmp = tmp->next) {
--		va = kmem_cache_zalloc(vmap_area_cachep, GFP_NOWAIT);
-+		va = kzalloc(sizeof(struct vmap_area), GFP_NOWAIT);
- 		if (WARN_ON_ONCE(!va))
- 			continue;
- 
-@@ -3256,7 +3242,7 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
- 		goto err_free2;
- 
- 	for (area = 0; area < nr_vms; area++) {
--		vas[area] = kmem_cache_zalloc(vmap_area_cachep, GFP_KERNEL);
-+		vas[area] = kzalloc(sizeof(struct vmap_area), GFP_KERNEL);
- 		vms[area] = kzalloc(sizeof(struct vm_struct), GFP_KERNEL);
- 		if (!vas[area] || !vms[area])
- 			goto err_free;
-@@ -3376,8 +3362,7 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
- 			if (vas[area])
- 				continue;
- 
--			vas[area] = kmem_cache_zalloc(
--				vmap_area_cachep, GFP_KERNEL);
-+			vas[area] = kzalloc(sizeof(struct vmap_area), GFP_KERNEL);
- 			if (!vas[area])
- 				goto err_free;
- 		}
-@@ -3388,7 +3373,7 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
- err_free:
- 	for (area = 0; area < nr_vms; area++) {
- 		if (vas[area])
--			kmem_cache_free(vmap_area_cachep, vas[area]);
-+			kfree_rcu(vas[area], rcu);
- 
- 		kfree(vms[area]);
- 	}
-<snip>
+It does not match io-channels, you need minItems here as well.
 
+> +    items:
+> +      - const: vbusdiv5
+> +      - const: vbusdiv2
+> +      - const: vsys
+> +      - const: vbat
+> +      - const: ts_bat
+> +      - const: ibus
+> +      - const: ibat
+> +      - const: chg_vddp
+> +      - const: temp_jc
+> +
 
---
-Uladzislau Rezki
+Best regards,
+Krzysztof

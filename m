@@ -2,79 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CA95595D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783F55595D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiFXIwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
+        id S229768AbiFXIwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 04:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiFXIwe (ORCPT
+        with ESMTP id S229745AbiFXIwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:52:34 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8474766A5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:52:33 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id 73-20020a9d084f000000b00616b04c7656so82559oty.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:52:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=PJTMUT8EzkUJqkPd5ILJeiU8dJRpq2pSfLo4RUdt1gg=;
-        b=B6bcug/cQXN9X4ZbuxHHJlVZr6hnQg963pGyG9h/UpLAKN/mBtwjRyCefXq/xq39u/
-         UoqFI0tFw73RA226hYRJ7NgF6XHQsXkQlDuH51zY3vr82XQW4XQfIdF2A0QFNvjpku4a
-         8bGo72LXVk/HPSHH0oP0f7YtV2MqGs+7OTqYZAiziWzV99DYAql+uFTQo4MERjukESvc
-         RRM3BI+LwCQQ3Cw9XcokRi0hbb2cQrnN4QzuZcCs01xf+TZq6KpkU98WR+IszW1mNziZ
-         5h4WC9FZjgjwTZJwWqRwqpABS39V13UduFVi9Qt5dK+GlqYZbu8yngfgdcNj+VuGIl1u
-         1gLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=PJTMUT8EzkUJqkPd5ILJeiU8dJRpq2pSfLo4RUdt1gg=;
-        b=Bmylj4VTek9rblcAFSaXyANhUFAZN9OpAZQbD72u+sTWxDzWtn2ZmbYTbwIB5qbr1+
-         IVNTx0EyaB+stu1ffSK2DS6cDNfVF78IiWg1JIUImhNJW4+JF7h8e+hE8H1kBLrnUt82
-         /1TbFJ9RJqJZVnriQMDTfq6q+cJKKbvRyFcKlmu2YOlnSTf4lGrqACvl0wt6nxJqXRLs
-         8cwyNqrIGZyKt6bslKCBnUQYTSy9fnApLcelt+tYSWmmYiLzn06m7ILzmcJBnqDtVwAt
-         Oz1Ru6+t3ZnzZoZj9AJceK4B3X1OHz0s9U7KoDUsneatyaDf+pgerq7H6crxtPmFPn1E
-         rfVA==
-X-Gm-Message-State: AJIora9F1qlrDs8HpZbKsxYUeXRHigA9hRAgYGmBu/kHTNF5lTbIJ8lA
-        YC63x6EJ26jvNJha/ihKXc5ZvrsvGRj/MVoxiIQ=
-X-Google-Smtp-Source: AGRyM1utgkfaPqEPJcnV0eeEfKjwi/V4xRFjf3Z+rqXbcDHDRY+o6vCLm5FtogV80LIQIPVZ3xR2daw4erhUDsiZpdo=
-X-Received: by 2002:a9d:604a:0:b0:616:929b:e1a6 with SMTP id
- v10-20020a9d604a000000b00616929be1a6mr3768934otj.22.1656060752940; Fri, 24
- Jun 2022 01:52:32 -0700 (PDT)
+        Fri, 24 Jun 2022 04:52:33 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D515D6E7AA
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:52:31 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VHGcxXq_1656060747;
+Received: from 30.97.49.29(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VHGcxXq_1656060747)
+          by smtp.aliyun-inc.com;
+          Fri, 24 Jun 2022 16:52:28 +0800
+Message-ID: <ed072ac6-cc70-9070-4e9d-281b9b60c9a6@linux.alibaba.com>
+Date:   Fri, 24 Jun 2022 16:52:34 +0800
 MIME-Version: 1.0
-Reply-To: oliverbaruch6@gmail.com
-Sender: alfieharry1212@gmail.com
-Received: by 2002:a05:6358:5384:b0:a5:9b4e:c0e6 with HTTP; Fri, 24 Jun 2022
- 01:52:32 -0700 (PDT)
-From:   Mr Oliver <oliverbaruch6@gmail.com>
-Date:   Fri, 24 Jun 2022 09:52:32 +0100
-X-Google-Sender-Auth: G82WABBKSx8Voz4dAGH4fxg_tys
-Message-ID: <CAF2JN_ODqRA9ZDqZZu+8+aYXv5wB8wKwq7U9hjwsdX6g+BpJ0A@mail.gmail.com>
-Subject: Business Proposal
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH v2 2/3] mm: Add PUD level pagetable account
+To:     Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1655887440.git.baolin.wang@linux.alibaba.com>
+ <f7b2a6f6f5dfecbcac07fa3e187f10860c3a39ee.1655887440.git.baolin.wang@linux.alibaba.com>
+ <YrMpZlQHMuCy06/m@linux.ibm.com> <YrRqhj3p/KKU73f1@casper.infradead.org>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <YrRqhj3p/KKU73f1@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-23 Lower Belgrave Street SW1W 0NR, London.
-Attention: Account/Finance manager
 
-Hello, My name is Mr Oliver Baruch, Account/Finance manager in
-(Premier Oil PLC).
-I have a business proposal that will be beneficial to you and me.
-please contact me for more details of the business to you. thanks.
 
-Forward your response to this email: email: oliverbaruch6@gmail.com
+On 6/23/2022 9:28 PM, Matthew Wilcox wrote:
+> On Wed, Jun 22, 2022 at 09:38:30AM -0500, Mike Rapoport wrote:
+>> On Wed, Jun 22, 2022 at 04:58:53PM +0800, Baolin Wang wrote:
+>>> +++ b/arch/loongarch/include/asm/pgalloc.h
+>>> @@ -89,10 +89,15 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
+>>>   static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
+>>>   {
+>>>   	pud_t *pud;
+>>> +	struct page *pg;
+>>
+>> 	struct page *page;
+>>
+>> looks better IMO.
+>>
+>>> +
+>>> +	pg = alloc_pages(GFP_KERNEL & ~__GFP_HIGHMEM, PUD_ORDER);
+> 
+> GFP_KERNEL does not include __GFP_HIGHMEM, so you can just use
+> GFP_KERNEL here.
+
+Yes. Thanks.
+
+> 
+>>> +	if (!pg)
+>>> +		return NULL;
+>>>   
+>>> -	pud = (pud_t *) __get_free_pages(GFP_KERNEL, PUD_ORDER);
+>>> -	if (pud)
+>>> -		pud_init((unsigned long)pud, (unsigned long)invalid_pmd_table);
+>>> +	pgtable_set_and_inc(pg);
+>>> +	pud = (pud_t *)page_address(pg);
+>>
+>> I don't think __get_free_pages() should be replaced with alloc_pages()
+>> here, just call pgtable_set_and_inc() with virt_to_page(pud).
+> 
+> I don't understand why you want that.  Take a look at the implementation
+> of __get_free_pages().  Converting back to a struct page after calling
+> that seems like a real waste of time to me.
+
+IMO I have no strong preference. The code can be simpler with using 
+__get_free_pages(), however like Matthew said it will add more conversion.

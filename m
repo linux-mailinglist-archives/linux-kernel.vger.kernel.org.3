@@ -2,45 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF0A55A0BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F008255A0A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiFXSJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 14:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S230227AbiFXSKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 14:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiFXSJQ (ORCPT
+        with ESMTP id S229480AbiFXSKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 14:09:16 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 483A33F33B
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:09:15 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 453271042;
-        Fri, 24 Jun 2022 11:09:15 -0700 (PDT)
-Received: from [10.57.84.111] (unknown [10.57.84.111])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 793C93F792;
-        Fri, 24 Jun 2022 11:09:13 -0700 (PDT)
-Message-ID: <c981692b-af7b-453d-39af-402221e174f5@arm.com>
-Date:   Fri, 24 Jun 2022 19:09:08 +0100
+        Fri, 24 Jun 2022 14:10:20 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073C349917
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:10:19 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id j21so5847326lfe.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:10:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hcN3XwIcZstb9s64xvU12TX0znKfRFFze9XJS0Qbx3c=;
+        b=i388ivDFxBMUiQA7obdzFBcEsHyr2kSx+7nBsDjM07lnEAK/xcdqGFSUgzgUY2x5hz
+         DEXehsWQSvUsV1Imkd8PWGjk00nG59mSuOc1lCrJJBgRYyUpD1jYVMip2WU88Ju3wXQC
+         9mMUu5erd6kQecAreB6NiXoTvzd9EWpyT6+hFRSjep65bDfex49cbaRobzUMHHHZ0Z84
+         eXEGdW5cEkmpQdRIfZYO6ikD12SduftZiMeR9H+O6dCGKcrFYtydLGHlB5ozixdcHDZo
+         Sofuo2cji7slhGZ5UqgKB7QK/oxD3m0HAUfdsQDFVoue1IcLToG3jzOqCB83xL9+874H
+         Tl3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hcN3XwIcZstb9s64xvU12TX0znKfRFFze9XJS0Qbx3c=;
+        b=iO4Pqr4hS5BHra8UfcqKRuaOl5uWI4hWcBU2GCC44UlVznEDDvP0keHHB823li9pGj
+         knGyN2WXrEv1O+qKG5emfh02wtqEELhmJ7WlzJjjtfuja2dDKWwJ+OreIN3SPxnXiDgD
+         6r20j3FTdZT9ltijCwBu8FUwemYkcmF1omk9UxGr0FhZe023rPBkOhOfXG97WBZbXH04
+         WGPPzpKY8lT2aawqYwOM1FuiiovK4Rhz65QGRo9EsgGupOK0lxz5Ray7GEKxPnijSXZN
+         SPeiuDcqbQJybvIb9KbhWpgMeQgTs3ImjDgzYDhYdPR8qX4o5Khl8sE9VOsYlcUhfHCq
+         4NwQ==
+X-Gm-Message-State: AJIora8gsRmeuZ3pj++/F2UFHuwYaa8IPpUm4CVusGOunTDupowSgGGj
+        tOu3YnaLz3prJFvIb3qp71sMk/CXVjabc0gh+d1XaQ==
+X-Google-Smtp-Source: AGRyM1tdkubN4l5CrWuEurB1wstbops6ikfefa6G3OKJ5WraDCy19/A/YOyuGj3Y9SbrsN+Oqd+6FVxlMDlWtFoEghE=
+X-Received: by 2002:ac2:5974:0:b0:47f:92db:4480 with SMTP id
+ h20-20020ac25974000000b0047f92db4480mr59927lfp.685.1656094217190; Fri, 24 Jun
+ 2022 11:10:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH RESEND] perf/marvell_cn10k: Add MPAM support for TAD PMU
-Content-Language: en-GB
-To:     Will Deacon <will@kernel.org>, Tanmay Jagdale <tanmay@marvell.com>
-Cc:     mark.rutland@arm.com, robh@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        sgoutham@marvell.com, lcherian@marvell.com, bbhushan2@marvell.com,
-        amitsinght@marvell.com, james.morse@arm.com
-References: <20220527185647.3138084-1-tanmay@marvell.com>
- <20220624121435.GA18561@willie-the-truck>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220624121435.GA18561@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <CAMkAt6osbEGBFrgn=y1=x4mDHC1aL40BwaW0NdGHF8qmWd7ktA@mail.gmail.com>
+ <5af19000-4482-7eb9-f158-0a461891f087@intel.com> <CAA03e5F480=psSECDAkXQEvNKk3une-4dJV57Hde4z4MMzh=1A@mail.gmail.com>
+ <e09dae40-d269-cfed-d048-3e62275c1bb7@intel.com> <CAA03e5HxiLkOUbOrsgbzVdAUNZvnnryuNcqrz1ZWECtWLwKMXA@mail.gmail.com>
+ <1e7ad728-d796-c84d-b7ba-b96d8f9fcd0c@intel.com>
+In-Reply-To: <1e7ad728-d796-c84d-b7ba-b96d8f9fcd0c@intel.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 24 Jun 2022 12:10:05 -0600
+Message-ID: <CAMkAt6pzMSUuuA7Kc-sVEGw1FYpDoRrKs-dco++2rpqB219_ng@mail.gmail.com>
+Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted memory
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Marc Orr <marcorr@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo <marcelo.cerri@canonical.com>, tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        "the arch/x86 maintainers" <x86@kernel.org>, linux-mm@kvack.org,
+        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,87 +97,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-24 13:14, Will Deacon wrote:
-> On Sat, May 28, 2022 at 12:26:47AM +0530, Tanmay Jagdale wrote:
->> The TAD PMU supports following counters that can be filtered by MPAM
->> partition id.
->>      - (0x1a) tad_alloc_dtg : Allocations to DTG.
->>      - (0x1b) tad_alloc_ltg : Allocations to LTG.
->>      - (0x1c) tad_alloc_any : Total allocations to DTG/LTG.
->>      - (0x1d) tad_hit_dtg   : DTG hits.
->>      - (0x1e) tad_hit_ltg   : LTG hits.
->>      - (0x1f) tad_hit_any   : Hit in LTG/DTG.
->>      - (0x20) tad_tag_rd    : Total tag reads.
->>
->> Add a new 'partid' attribute of 16-bits to get the partition id
->> passed from perf tool. This value would be stored in config1 field
->> of perf_event_attr structure.
->>
->> Example:
->> perf stat -e tad/tad_alloc_any,partid=0x12/ <program>
->>
->> - Drop read of TAD_PRF since we don't have to preserve any
->>    bit fields and always write an updated value.
->> - Update register offsets of TAD_PRF and TAD_PFC.
-> 
-> It would be great if you could document some of this under
-> Documentation/admin-guide/perf like many of the other PMU drivers have
-> done.
+On Fri, Jun 24, 2022 at 11:47 AM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 6/24/22 10:19, Marc Orr wrote:
+> >> Is this a matter of
+> >>
+> >>         can boot from a guest firmware that doesn't pre-validate all the
+> >>         guest memory?
+> >>
+> >> or
+> >>
+> >>         can boot from a guest firmware that doesn't pre-validate all the
+> >>         guest memory ... with access to all of that guest's RAM?
+> >>
+> >> In other words, are we talking about "fails to boot" or "can't see all
+> >> the RAM"?
+> > Ah... yeah, you're right, Dave -- I guess it's the latter. The guest
+> > won't have access to all of the memory that the customer is paying
+> > for. But that's still bad. If the customer buys a 96 GB VM and can
+> > only see 4GB because they're kernel doesn't have these patches they're
+> > going to be confused and frustrated.
+>
+> They'll at least be a _bit_ less angry and frustrated than if they were
+> staring at a blank screen. ;)  But, yeah, I totally get the point.
 
-Especially documenting how the user obtains the required partid value to 
-pass.
+Ha! Well we do have that issue in some cases. If you try to run an SEV
+VM with an image that doesn't support SEV you will just get a blank
+serial screen. If we had something like this back then the FW could
+have surfaced a nice error to the user but that's history now.
 
-Thanks,
-Robin.
+>
+> How big is the window going to be where we have guests that can have
+> unaccepted memory, but don't have acceptance support?  For TDX, it's
+> looking like it'll probably _just_ be 5.19.  Is TDX on 5.19 in shape
+> that cloud providers can deploy it?  Or, is stuff like lack of
+> attestation a deal breaker?
 
->> Signed-off-by: Tanmay Jagdale <tanmay@marvell.com>
->> ---
->>   drivers/perf/marvell_cn10k_tad_pmu.c | 23 ++++++++++++++++++-----
->>   1 file changed, 18 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/perf/marvell_cn10k_tad_pmu.c b/drivers/perf/marvell_cn10k_tad_pmu.c
->> index 282d3a071a67..f552e6bffcac 100644
->> --- a/drivers/perf/marvell_cn10k_tad_pmu.c
->> +++ b/drivers/perf/marvell_cn10k_tad_pmu.c
->> @@ -18,10 +18,12 @@
->>   #include <linux/perf_event.h>
->>   #include <linux/platform_device.h>
->>   
->> -#define TAD_PFC_OFFSET		0x0
->> +#define TAD_PFC_OFFSET		0x800
->>   #define TAD_PFC(counter)	(TAD_PFC_OFFSET | (counter << 3))
->> -#define TAD_PRF_OFFSET		0x100
->> +#define TAD_PRF_OFFSET		0x900
->>   #define TAD_PRF(counter)	(TAD_PRF_OFFSET | (counter << 3))
->> +#define TAD_PRF_MATCH_PARTID	(1 << 8)
->> +#define TAD_PRF_PARTID_NS	(1 << 10)
->>   #define TAD_PRF_CNTSEL_MASK	0xFF
->>   #define TAD_MAX_COUNTERS	8
->>   
->> @@ -86,23 +88,32 @@ static void tad_pmu_event_counter_start(struct perf_event *event, int flags)
->>   	struct hw_perf_event *hwc = &event->hw;
->>   	u32 event_idx = event->attr.config;
->>   	u32 counter_idx = hwc->idx;
->> +	u32 partid_filter = 0;
->>   	u64 reg_val;
->> +	u32 partid;
->>   	int i;
->>   
->>   	hwc->state = 0;
->>   
->> +	/* Extract the partid (if any) passed by user */
->> +	partid = event->attr.config1 & 0x3f;
-> 
-> [...]
-> 
->>   PMU_FORMAT_ATTR(event, "config:0-7");
->> +PMU_FORMAT_ATTR(partid, "config1:0-15");
-> 
-> This doesn't seem to match the mask used above?
-> 
-> Will
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+This is complicated because distros don't run upstream linux versions.
+If I understand correctly (I see some distro emails on here so please
+correct me) distros normally maintain forks which they backport things
+into. So I cannot answer this question. It is possible that a
+hypothetical distro backports only the SNP/TDX initial patches and
+doesn't take these for many releases.
+
+I am more familiar with SNP and it does have some attestation support
+in the first patch sets.
+
+Also I should have been more clear. I don't want to try and hold up
+this feature but instead discuss a future usability add-on feature.
+
+>
+>

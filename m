@@ -2,112 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84FC5593A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111425593B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiFXGma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 02:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
+        id S229765AbiFXGnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 02:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbiFXGm2 (ORCPT
+        with ESMTP id S229522AbiFXGnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 02:42:28 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C3E62C22
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:42:27 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 08:42:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1656052944;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wux8PrH3sXXYTLs4zQ4xefDrANKDgBKiLxQ8wvQbsSc=;
-        b=hx7eiWFAV/0ZAid8v1kFraMLRLrtNW+999XVDtsYTQhH7Cd5f+dLDK0jpCXMA1oURuNEo3
-        H2ZkCHyAlmYfSa5Th4ommBcDkoz9eyKg+3hnbCNh4Iocvj4BCT0MGA0AXLs6IIKKFem+ke
-        ZtSs/r9e9OTwo74sMSpjZb4ZOAOxjlh5aH4V0mN9ESdlhbYxhBX9dKhRHC1UT1bzYnt+XB
-        M96HapyUqBmX9OnXnS8jDxoqhYD6K6rIB5GRSMxhzJiWeyGs2H6Hn6MjPVns2JJlhTRu7N
-        o90M44cA7yMMn8UFxD6A2xcA2yldJ8nvTxQR2b4PHzJkc5dySXFCc4dTtMHxTg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1656052944;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wux8PrH3sXXYTLs4zQ4xefDrANKDgBKiLxQ8wvQbsSc=;
-        b=VLmG3ZlpF6nQMSFVGdoiDpWtSejCyIrPQDG/r1K71IPkqMMgEixnXFYUYwVPZO6NZx5STO
-        b55JfQb+TAwfjvBg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mike Stowell <mstowell@redhat.com>
-Subject: Re: [PATCH v2] locking/rtmutex: Limit # of lock stealing for non-RT
- waiters
-Message-ID: <YrVczgIdWoOpVX1D@linutronix.de>
-References: <20220621193641.609712-1-longman@redhat.com>
- <YrRriHsAdxPwEnWW@linutronix.de>
- <be4db8af-7855-1f54-c2f2-947577b71f94@redhat.com>
+        Fri, 24 Jun 2022 02:43:17 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10242427E3;
+        Thu, 23 Jun 2022 23:43:16 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LTncF5lXHzDsQ9;
+        Fri, 24 Jun 2022 14:42:37 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 24 Jun 2022 14:42:59 +0800
+Received: from [10.174.178.208] (10.174.178.208) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 24 Jun 2022 14:42:58 +0800
+Subject: Re: [PATCH 5.10 00/11] 5.10.125-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
+References: <20220623164322.296526800@linuxfoundation.org>
+From:   Samuel Zou <zou_wei@huawei.com>
+Message-ID: <b548e1f3-f2de-2451-876c-36e304febd0f@huawei.com>
+Date:   Fri, 24 Jun 2022 14:42:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <be4db8af-7855-1f54-c2f2-947577b71f94@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220623164322.296526800@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.208]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-23 10:41:17 [-0400], Waiman Long wrote:
->=20
-> On 6/23/22 09:32, Sebastian Andrzej Siewior wrote:
-> > Do you have more insight on how this was tested/ created? Based on that,
-> > systemd and a random kworker waited on a lock for more than 10 minutes.
->=20
-> The hang happens when our QE team run thier kernel tier 1 test which, I
-> think, lasts several hours. The hang happens in some runs but not all of
-> them. So it is kind of opportunistic. Mike should be able to provide a
-> better idea about frequency and so on.
 
-So we talk here about 64+ CPU or more than that?
 
-> > I added a trace-printk each time a non-RT waiter got the lock stolen,
-> > kicked a kernel build and a package upgrade and took a look at the stats
-> > an hour later:
-> > - sh got its lock stolen 3416 times. I didn't lock the pid so I can't
-> >    look back and check how long it waited since the first time.
-> > - the median average of stolen locks is 173.
-> Maybe we should also more lock stealing per waiter than the 10 that I used
-> in the patch. I am open to suggestion to what is a good value to use.
+On 2022/6/24 0:44, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.125 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 25 Jun 2022 16:43:11 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.125-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-I have no idea either. I just looked at a run to see what the number
-actually are. I have no numbers in terms of performance. So what most
-likely happens is that on an unlock operation the waiter gets a wake-up
-but before he gets a chance to acquire the lock, it is already taken and
-he goes back to sleep again. While this looks painful it might be better
-performance wise because the other task was able to acquire the lock
-without waiting. But then it is not fair and this happens.
-One thing that I'm curious about is, what lock is it (one or two global
-hot spots or many). And how to benchmark this=E2=80=A6
+Tested on arm64 and x86 for 5.10.125-rc1,
 
-> > > Fixes: 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock =
-stealing")
-> > > Reported-by: Mike Stowell <mstowell@redhat.com>
-> > > Signed-off-by: Waiman Long <longman@redhat.com>
->=20
-> Thanks for your time looking at the patch.
+Kernel repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-5.10.y
+Version: 5.10.125-rc1
+Commit: 7119d4fdfdd36590d4247bd9dcab4b18fb592de8
+Compiler: gcc version 7.3.0 (GCC)
 
-no problem.
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9094
+passed: 9094
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
 
-> Cheers,
-> Longman
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9094
+passed: 9094
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
 
-Sebastian
+Tested-by: Hulk Robot <hulkrobot@huawei.com>

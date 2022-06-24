@@ -2,100 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BA45596DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1AF95596EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiFXJgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 05:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S231454AbiFXJmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 05:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbiFXJgS (ORCPT
+        with ESMTP id S229496AbiFXJmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 05:36:18 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED05794DD
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 02:36:08 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VHGmXek_1656063365;
-Received: from 30.97.49.29(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VHGmXek_1656063365)
-          by smtp.aliyun-inc.com;
-          Fri, 24 Jun 2022 17:36:06 +0800
-Message-ID: <f484d209-10de-c68b-ceb6-6d6d2b261c3a@linux.alibaba.com>
-Date:   Fri, 24 Jun 2022 17:36:07 +0800
+        Fri, 24 Jun 2022 05:42:50 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C257794DF;
+        Fri, 24 Jun 2022 02:42:49 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LTsbS2NRqzDsTV;
+        Fri, 24 Jun 2022 17:42:12 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 24 Jun 2022 17:42:46 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 24 Jun 2022 17:42:46 +0800
+From:   Guangbin Huang <huangguangbin2@huawei.com>
+To:     <hawk@kernel.org>, <brouer@redhat.com>,
+        <ilias.apalodimas@linaro.org>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>
+CC:     <lorenzo@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
+        <chenhao288@hisilicon.com>
+Subject: [PATCH net-next] net: page_pool: optimize page pool page allocation in NUMA scenario
+Date:   Fri, 24 Jun 2022 17:36:21 +0800
+Message-ID: <20220624093621.12505-1-huangguangbin2@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 3/7] migrate_pages(): fix THP failure counting for -ENOMEM
-To:     Huang Ying <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>
-References: <20220624025309.1033400-1-ying.huang@intel.com>
- <20220624025309.1033400-4-ying.huang@intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220624025309.1033400-4-ying.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Jie Wang <wangjie125@huawei.com>
 
+Currently NIC packet receiving performance based on page pool deteriorates
+occasionally. To analysis the causes of this problem page allocation stats
+are collected. Here are the stats when NIC rx performance deteriorates:
 
-On 6/24/2022 10:53 AM, Huang Ying wrote:
-> In unmap_and_move(), if the new THP cannot be allocated, -ENOMEM will
-> be returned, and migrate_pages() will try to split the THP unless
-> "reason" is MR_NUMA_MISPLACED (that is, nosplit == true).  But when
-> nosplit == true, the THP migration failure will not be counted.  This
-> is incorrect.  So in this patch, the THP migration failure will be
-> counted for -ENOMEM regardless of nosplit is true or false.  The
-> nr_failed counting is fixed too, although that is not used actually.
+bandwidth(Gbits/s)		16.8		6.91
+rx_pp_alloc_fast		13794308	21141869
+rx_pp_alloc_slow		108625		166481
+rx_pp_alloc_slow_h		0		0
+rx_pp_alloc_empty		8192		8192
+rx_pp_alloc_refill		0		0
+rx_pp_alloc_waive		100433		158289
+rx_pp_recycle_cached		0		0
+rx_pp_recycle_cache_full	0		0
+rx_pp_recycle_ring		362400		420281
+rx_pp_recycle_ring_full		6064893		9709724
+rx_pp_recycle_released_ref	0		0
 
-No strong opinion about the 'nr_failed' updating, like you said, we did 
-not use it in this case. Maybe just add some comments instead of adding 
-some unused code? Otherwise looks good to me.
+The rx_pp_alloc_waive count indicates that a large number of pages' numa
+node are inconsistent with the NIC device numa node. Therefore these pages
+can't be reused by the page pool. As a result, many new pages would be
+allocated by __page_pool_alloc_pages_slow which is time consuming. This
+causes the NIC rx performance fluctuations.
 
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+The main reason of huge numa mismatch pages in page pool is that page pool
+uses alloc_pages_bulk_array to allocate original pages. This function is
+not suitable for page allocation in NUMA scenario. So this patch uses
+alloc_pages_bulk_array_node which has a NUMA id input parameter to ensure
+the NUMA consistent between NIC device and allocated pages.
 
-> 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Fixes: 5984fabb6e82 ("mm: move_pages: report the number of non-attempted pages")
-> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> --- >   mm/migrate.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 82444e7df9f1..542533e4e3cf 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1425,11 +1425,11 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   				/*
->   				 * When memory is low, don't bother to try to migrate
->   				 * other pages, just exit.
-> -				 * THP NUMA faulting doesn't split THP to retry.
->   				 */
-> -				if (is_thp && !nosplit) {
-> +				if (is_thp) {
->   					nr_thp_failed++;
-> -					if (!try_split_thp(page, &thp_split_pages)) {
-> +					/* THP NUMA faulting doesn't split THP to retry. */
-> +					if (!nosplit && !try_split_thp(page, &thp_split_pages)) {
->   						nr_thp_split++;
->   						goto retry;
->   					}
-> @@ -1446,6 +1446,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   				 */
->   				list_splice_init(&thp_split_pages, from);
->   				nr_thp_failed += thp_retry;
-> +				if (!no_subpage_counting)
-> +					nr_failed += retry;
->   				goto out;
->   			case -EAGAIN:
->   				if (is_thp)
+Repeated NIC rx performance tests are performed 40 times. NIC rx bandwidth
+is higher and more stable compared to the datas above. Here are three test
+stats, the rx_pp_alloc_waive count is zero and rx_pp_alloc_slow which
+indicates pages allocated from slow patch is relatively low.
+
+bandwidth(Gbits/s)		93		93.9		93.8
+rx_pp_alloc_fast		60066264	61266386	60938254
+rx_pp_alloc_slow		16512		16517		16539
+rx_pp_alloc_slow_ho		0		0		0
+rx_pp_alloc_empty		16512		16517		16539
+rx_pp_alloc_refill		473841		481910		481585
+rx_pp_alloc_waive		0		0		0
+rx_pp_recycle_cached		0		0		0
+rx_pp_recycle_cache_full	0		0		0
+rx_pp_recycle_ring		29754145	30358243	30194023
+rx_pp_recycle_ring_full		0		0		0
+rx_pp_recycle_released_ref	0		0		0
+
+Signed-off-by: Jie Wang <wangjie125@huawei.com>
+---
+ net/core/page_pool.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index f18e6e771993..15997fcd78f3 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -377,6 +377,7 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
+ 	unsigned int pp_order = pool->p.order;
+ 	struct page *page;
+ 	int i, nr_pages;
++	int pref_nid; /* preferred NUMA node */
+ 
+ 	/* Don't support bulk alloc for high-order pages */
+ 	if (unlikely(pp_order))
+@@ -386,10 +387,18 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
+ 	if (unlikely(pool->alloc.count > 0))
+ 		return pool->alloc.cache[--pool->alloc.count];
+ 
++#ifdef CONFIG_NUMA
++	pref_nid = (pool->p.nid == NUMA_NO_NODE) ? numa_mem_id() : pool->p.nid;
++#else
++	/* Ignore pool->p.nid setting if !CONFIG_NUMA, helps compiler */
++	pref_nid = numa_mem_id(); /* will be zero like page_to_nid() */
++#endif
++
+ 	/* Mark empty alloc.cache slots "empty" for alloc_pages_bulk_array */
+ 	memset(&pool->alloc.cache, 0, sizeof(void *) * bulk);
+ 
+-	nr_pages = alloc_pages_bulk_array(gfp, bulk, pool->alloc.cache);
++	nr_pages = alloc_pages_bulk_array_node(gfp, pref_nid, bulk,
++					       pool->alloc.cache);
+ 	if (unlikely(!nr_pages))
+ 		return NULL;
+ 
+-- 
+2.33.0
+

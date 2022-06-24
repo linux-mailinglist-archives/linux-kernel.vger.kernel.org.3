@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2EB55A063
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 879F655A052
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbiFXRa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        id S230058AbiFXRbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiFXRa0 (ORCPT
+        with ESMTP id S229669AbiFXRbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:30:26 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33FF83DA4C
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:30:25 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id p3-20020a17090a428300b001ec865eb4a2so6413047pjg.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:30:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=v2GOxsdoVsaZXbVgLmusuJ8AUNrNNpTNLGvKGWBrh8o=;
-        b=OJsudXwOMYv/+uIFVCAy9ZHd+hLkuAC8DSDK1yeMkLccT+t9CIPMdgpMgi3dNglErN
-         vjrXLXCxn0Isb7JwLx6gtRLjX0ue9nCcYi2HxBQfyTL7gzwOzMUurRZnVPzjGGXytiUX
-         8QKEfAbE62kS6eIKHPOs4cbXWEQzFVqou8DJ8=
+        Fri, 24 Jun 2022 13:31:10 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D322F64D
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:31:09 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id e131so4375974oif.13
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:31:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=v2GOxsdoVsaZXbVgLmusuJ8AUNrNNpTNLGvKGWBrh8o=;
-        b=G0h1w7NOTWK0Osz8fE2Z+6FPlE1lSmjS/Kyu9Am8wZZOsKxBTfW0UUnivQj8q8kra2
-         NfVOPbFi3ZRaCMgatfDOlhCI4jJ8bEx7qIpJIRqnvhMyvjVXOvZhrGR+W04E1Hrpi7sp
-         ArpR5SMnBVc83DTcbNlpkTog+gihFJQSYaiNAMpMXe0kAPB33fBSlycb980HppiJ9mTu
-         vwbh2wXy49kHcBOy4gbyI6V8o8AYjB7VMC5Wfitp4JeT9dGxBwzKLeAe1u5Ta23PWko2
-         oVTjuRxDxQBFglMZTQhJo8LG68Ym7tYs/144iqfIsAp7UBZoa92zB3pWq8Igci80wfaN
-         Bbhg==
-X-Gm-Message-State: AJIora9f2G9ltvvS6IRMJpDnn6DpxjW73hmUg8q57rxlmPXD8pnyv/Ai
-        G+0TkxrW4QnirlUeEwqS1ms36Q==
-X-Google-Smtp-Source: AGRyM1uZTK3A1CVfTWihEZf+BbMTle53u4bICa5k01rPPWkPoK245E6WQSY+2isNcfDoVNY/wnEPtA==
-X-Received: by 2002:a17:90b:1b0e:b0:1ec:e2f6:349e with SMTP id nu14-20020a17090b1b0e00b001ece2f6349emr5218674pjb.14.1656091824621;
-        Fri, 24 Jun 2022 10:30:24 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m13-20020a170902e40d00b00167838b82e0sm2059425ple.205.2022.06.24.10.30.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 10:30:24 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 10:30:23 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Peter Jones <pjones@redhat.com>, Jeremy Kerr <jk@ozlabs.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH v3 1/9] pstore: Add priv field to pstore_record for
- backend specific use
-Message-ID: <202206241029.9C0891C5B6@keescook>
-References: <20220624084925.724516-1-ardb@kernel.org>
- <20220624084925.724516-2-ardb@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CynFqUJ9uA3lR6FKHcs/aiiOSzQMnn/sAq5ba4a97jU=;
+        b=WE+eW38w19GpJvs2IK4vwi36dCn7Jei7mgLTjTYbxeXoi5/0+IrcMTmYwwO/gPAjdp
+         v3TYJzLbZF62cX2C424lZeDTlmIHps3UizILlBz616lqGYvHZKp5RTwDJbhOoiqUFqnz
+         8Xa4emdo9aMHKS/yG6Tv4P6y/fynjoQ0TxVEsjnOsK6DFIboYE1L67g+kv2PwCdu4KAw
+         pqhTO53N1bOOpCAp6nw+vyo50u+XPbXipMYAQFKIv0hA2odySdde/qwblSuXK5Vo0l8+
+         ++Bwf33hLTJNui2i9feS196SS7liAKprLGKybo9WmGcqBytscjCGxWjHEG+pmgzYsaiZ
+         /uCA==
+X-Gm-Message-State: AJIora8T3Kj4Nvuf2Q18VNj9BiRkuqkCvOzSCej5jguhGaRiDW2HfGwx
+        iu1feWsamut2CwLu/VZVDcGbBUjtq6h+K42SB4eR2POoncQ=
+X-Google-Smtp-Source: AGRyM1sIH5vqb/GJyyR0NIaXxydurP749RlKNQgIPWsQjsGooT4qtdVx2OcMhadRFeoc0jYps7HJptFNfCuWrRnqDic=
+X-Received: by 2002:aca:bb56:0:b0:32f:2160:bfd8 with SMTP id
+ l83-20020acabb56000000b0032f2160bfd8mr123209oif.92.1656091868834; Fri, 24 Jun
+ 2022 10:31:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220624084925.724516-2-ardb@kernel.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220602224754.602074-1-namhyung@kernel.org> <YpojK0iaPofkAzd4@google.com>
+In-Reply-To: <YpojK0iaPofkAzd4@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 24 Jun 2022 10:30:57 -0700
+Message-ID: <CAM9d7cjGiBEW0jfoc6iaXnHGhvQZVM-aRke=kdgJEbfSPAt+ug@mail.gmail.com>
+Subject: Re: [PATCH] perf/core: Call LSM hook after copying perf_event_attr
+To:     Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        James Morris <jmorris@namei.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 10:49:17AM +0200, Ard Biesheuvel wrote:
-> The EFI pstore backend will need to store per-record variable name data
-> when we switch away from the efivars layer. Add a priv field to struct
-> pstore_record, and document it as holding a backend specific pointer
-> that is assumed to be a kmalloc()d buffer, and will be kfree()d when the
-> entire record is freed.
-> 
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Hi Peter,
 
-I'm a fan! This is useful, and I'll likely try to use it for some of the
-RAM-specific things too. :)
+On Fri, Jun 3, 2022 at 8:05 AM Joel Fernandes <joel@joelfernandes.org> wrote:
+>
+> On Thu, Jun 02, 2022 at 03:47:54PM -0700, Namhyung Kim wrote:
+> > It passes the attr struct to the security_perf_event_open() but it's
+> > not initialized yet.
+> >
+> > Fixes: da97e18458fb ("perf_event: Add support for LSM and SELinux checks")
+> > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > ---
+> >  kernel/events/core.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > index 7858bafffa9d..e035545f624f 100644
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -12033,12 +12033,12 @@ SYSCALL_DEFINE5(perf_event_open,
+> >       if (flags & ~PERF_FLAG_ALL)
+> >               return -EINVAL;
+> >
+> > -     /* Do we allow access to perf_event_open(2) ? */
+> > -     err = security_perf_event_open(&attr, PERF_SECURITY_OPEN);
+> > +     err = perf_copy_attr(attr_uptr, &attr);
+> >       if (err)
+> >               return err;
+> >
+> > -     err = perf_copy_attr(attr_uptr, &attr);
+> > +     /* Do we allow access to perf_event_open(2) ? */
+> > +     err = security_perf_event_open(&attr, PERF_SECURITY_OPEN);
+>
+> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-Acked-by: Kees Cook <keescook@chromium.org>
+Any chance you can pick this up?
 
--- 
-Kees Cook
+Thanks,
+Namhyung

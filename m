@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71075596D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8305596D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiFXJhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 05:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55620 "EHLO
+        id S230454AbiFXJib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 05:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiFXJhj (ORCPT
+        with ESMTP id S229910AbiFXJi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 05:37:39 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E354E79444
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 02:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Atd5LJgXzo1vZyeUf+/KGPTNYBq0h/PGUpmKMol4gKA=; b=CGjsvzJofFcrSPSXw0tb9JZiNv
-        bAjIyAK0C8xhrporVTwUtjJ5S9Bhet9G683UECw5n0B3opQx6T6ZHqFCNqMKnGBAleljYNhSuSJ1k
-        FkxD2OAGmBd8YmAkhX2R9OfQeeKFFw4fWJTbMcazC1ve4FxYYkJuxS0WL50NXpgrAQy67XeHl5Hcn
-        TQOhio3h4WBwWNXowMO9xq8t3pYSeXD71b2O1EniUpw95+sXhct3/LUCWeeejxkQtsV/AMHua4Xwl
-        QFoQddXjiHw8HAUg8s6PFY++qFbISJ7bK62hKaVa2Jd7wbObdueD+4y+fJu58hc31VC2hwWxBbmwM
-        Fm/H6pnA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o4fkh-001SaQ-OI; Fri, 24 Jun 2022 09:37:23 +0000
-Date:   Fri, 24 Jun 2022 02:37:23 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        nathanl@linux.ibm.com, haren@linux.vnet.ibm.com, npiggin@gmail.com,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] watchdog: export watchdog_mutex and
- lockup_detector_reconfigure
-Message-ID: <YrWF0w3mpYA//BX6@infradead.org>
-References: <20220614135414.37746-1-ldufour@linux.ibm.com>
- <20220614135414.37746-3-ldufour@linux.ibm.com>
+        Fri, 24 Jun 2022 05:38:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F24766BF
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 02:38:28 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o4fli-000450-IB; Fri, 24 Jun 2022 11:38:26 +0200
+Message-ID: <1371d97eff945cac085d7701ed76a6f422d3cd1d.camel@pengutronix.de>
+Subject: Re: [PATCH v2 2/4] drm/etnaviv: add loadavg accounting
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>,
+        "moderated list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <etnaviv@lists.freedesktop.org>,
+        "open list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <dri-devel@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Russell King <linux+etnaviv@armlinux.org.uk>
+Date:   Fri, 24 Jun 2022 11:38:25 +0200
+In-Reply-To: <20220621072050.76229-3-christian.gmeiner@gmail.com>
+References: <20220621072050.76229-1-christian.gmeiner@gmail.com>
+         <20220621072050.76229-3-christian.gmeiner@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614135414.37746-3-ldufour@linux.ibm.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,11 +52,284 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 03:54:12PM +0200, Laurent Dufour wrote:
-> The watchdog_mutex is exported to allow some variable to be changed under
-> its protection and prevent any conflict.
-> The lockup_detector_reconfigure() function is exported and is expected to
-> be called under the protection of watchdog_mutex.
+Am Dienstag, dem 21.06.2022 um 09:20 +0200 schrieb Christian Gmeiner:
+> The GPU has an idle state register where each bit represents the idle
+> state of a sub-GPU component like FE or TX. Sample this register
+> every 10ms and calculate a simple moving average over the sub-GPU
+> component idle states with a total observation time frame of 1s.
+> 
+> This provides us with a percentage based load of each sub-GPU
+> component.
+> 
+> Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+> ---
+>  drivers/gpu/drm/etnaviv/etnaviv_drv.c | 14 ++++++
+>  drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 64 ++++++++++++++++++++++++++-
+>  drivers/gpu/drm/etnaviv/etnaviv_gpu.h | 37 ++++++++++++++++
+>  3 files changed, 114 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> index 1d2b4fb4bcf8..d5c6115e56bd 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> @@ -46,6 +46,19 @@ static void load_gpu(struct drm_device *dev)
+>  	}
+>  }
+>  
+> +static void unload_gpu(struct drm_device *dev)
+> +{
+> +	struct etnaviv_drm_private *priv = dev->dev_private;
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < ETNA_MAX_PIPES; i++) {
+> +		struct etnaviv_gpu *g = priv->gpu[i];
+> +
+> +		if (g)
+> +			etnaviv_gpu_shutdown(g);
+> +	}
+> +}
+> +
+>  static int etnaviv_open(struct drm_device *dev, struct drm_file *file)
+>  {
+>  	struct etnaviv_drm_private *priv = dev->dev_private;
+> @@ -557,6 +570,7 @@ static void etnaviv_unbind(struct device *dev)
+>  	struct drm_device *drm = dev_get_drvdata(dev);
+>  	struct etnaviv_drm_private *priv = drm->dev_private;
+>  
+> +	unload_gpu(drm);
+>  	drm_dev_unregister(drm);
+>  
+>  	component_unbind_all(dev, drm);
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> index 37018bc55810..202002ae75ee 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> @@ -27,6 +27,8 @@
+>  #include "state_hi.xml.h"
+>  #include "cmdstream.xml.h"
+>  
+> +static const ktime_t loadavg_polling_frequency = 10 * NSEC_PER_MSEC;
+> +
+Feeling like a nitpicker, but the thing defined here isn't a frequency,
+but a time delta/interval.
 
-Please provide an actual function accessor instead of directly touching
-a global lock.
+>  static const struct platform_device_id gpu_ids[] = {
+>  	{ .name = "etnaviv-gpu,2d" },
+>  	{ },
+> @@ -745,6 +747,32 @@ static void etnaviv_gpu_hw_init(struct etnaviv_gpu *gpu)
+>  	gpu_write(gpu, VIVS_HI_INTR_ENBL, ~0U);
+>  }
+>  
+> +static enum hrtimer_restart etnaviv_loadavg_function(struct hrtimer *t)
+> +{
+> +	struct etnaviv_gpu *gpu = container_of(t, struct etnaviv_gpu, loadavg_timer);
+> +	const u32 idle = gpu_read(gpu, VIVS_HI_IDLE_STATE);
+> +	int i;
+> +
+> +	gpu->loadavg_last_sample_time = ktime_get();
+> +
+> +	for (i = 0; i < ARRAY_SIZE(etna_idle_module_names); i++)
+> +		if ((idle & etna_idle_module_names[i].bit))
+> +			sma_loadavg_add(&gpu->loadavg_value[i], 0);
+> +		else
+> +			sma_loadavg_add(&gpu->loadavg_value[i], 100);
+> +
+> +	spin_lock(&gpu->loadavg_spinlock);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(etna_idle_module_names); i++)
+> +		gpu->loadavg_percentage[i] = sma_loadavg_read(&gpu->loadavg_value[i]);
+> +
+> +	spin_unlock(&gpu->loadavg_spinlock);
+
+After pondering this for a bit, I don't think we need this spinlock.
+The percentage is a single value per engine, so they are already single
+write atomic. The worst thing that can happen without this spinlock is
+that on read of the loadavg some engines already have the value of
+sample period n+1 integrated, while another set is still at n, which I
+don't think we care much about, as those load values are already quite
+coarse.
+
+> +
+> +	hrtimer_forward_now(t, loadavg_polling_frequency);
+> +
+> +	return HRTIMER_RESTART;
+> +}
+> +
+>  int etnaviv_gpu_init(struct etnaviv_gpu *gpu)
+>  {
+>  	struct etnaviv_drm_private *priv = gpu->drm->dev_private;
+> @@ -839,6 +867,11 @@ int etnaviv_gpu_init(struct etnaviv_gpu *gpu)
+>  	for (i = 0; i < ARRAY_SIZE(gpu->event); i++)
+>  		complete(&gpu->event_free);
+>  
+> +	/* Setup loadavg timer */
+> +	hrtimer_init(&gpu->loadavg_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_SOFT);
+> +	gpu->loadavg_timer.function = etnaviv_loadavg_function;
+> +	hrtimer_start(&gpu->loadavg_timer, loadavg_polling_frequency, HRTIMER_MODE_ABS_SOFT);
+> +
+>  	/* Now program the hardware */
+>  	mutex_lock(&gpu->lock);
+>  	etnaviv_gpu_hw_init(gpu);
+> @@ -859,6 +892,11 @@ int etnaviv_gpu_init(struct etnaviv_gpu *gpu)
+>  	return ret;
+>  }
+>  
+> +void etnaviv_gpu_shutdown(struct etnaviv_gpu *gpu)
+> +{
+> +	hrtimer_cancel(&gpu->loadavg_timer);
+> +}
+> +
+>  #ifdef CONFIG_DEBUG_FS
+>  struct dma_debug {
+>  	u32 address[2];
+> @@ -1585,6 +1623,8 @@ int etnaviv_gpu_wait_idle(struct etnaviv_gpu *gpu, unsigned int timeout_ms)
+>  static int etnaviv_gpu_hw_suspend(struct etnaviv_gpu *gpu)
+>  {
+>  	if (gpu->initialized && gpu->fe_running) {
+> +		hrtimer_cancel(&gpu->loadavg_timer);
+> +
+This isn't symmetric. Here you only cancel the timer when FE was
+running, but in the resume function you unconditionally start the
+timer.
+
+Moving the timer start into etnaviv_gpu_start_fe() seems to be a good
+idea. Sampling the idle state of a GPU with the FE not running doesn't
+make much sense in the first place, as it will unsurprisingly be fully
+idle. Doing this would also allow you to drop the
+etnaviv_gpu_shutdown() and unload_gpu() functions, as the timer doesn't
+need to be started when initializing the GPU.
+
+
+>  		/* Replace the last WAIT with END */
+>  		mutex_lock(&gpu->lock);
+>  		etnaviv_buffer_end(gpu);
+> @@ -1608,7 +1648,8 @@ static int etnaviv_gpu_hw_suspend(struct etnaviv_gpu *gpu)
+>  #ifdef CONFIG_PM
+>  static int etnaviv_gpu_hw_resume(struct etnaviv_gpu *gpu)
+>  {
+> -	int ret;
+> +	s64 missing_samples;
+> +	int ret, i, j;
+>  
+>  	ret = mutex_lock_killable(&gpu->lock);
+>  	if (ret)
+> @@ -1617,7 +1658,27 @@ static int etnaviv_gpu_hw_resume(struct etnaviv_gpu *gpu)
+>  	etnaviv_gpu_update_clock(gpu);
+>  	etnaviv_gpu_hw_init(gpu);
+>  
+> +	/* Update loadavg based on delta of suspend and resume ktime.
+> +	 *
+> +	 * Our SMA algorithm uses a fixed size of 100 items to be able
+> +	 * to calculate the mean over one second as we sample every 10ms.
+> +	 */
+> +	missing_samples = div_s64(ktime_ms_delta(ktime_get(), gpu->loadavg_last_sample_time), 10);
+
+In the timer function you use the loadavg_polling_frequency const for
+this value. It would be good to be consistent here. Probably just
+#define the polling interval and use this both here and in the timer
+function.
+
+> +	missing_samples = min(missing_samples, (s64)100);
+> +
+> +	spin_lock_bh(&gpu->loadavg_spinlock);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(etna_idle_module_names); i++) {
+> +		struct sma_loadavg *loadavg = &gpu->loadavg_value[i];
+> +
+> +		for (j = 0; j < missing_samples; j++)
+> +			sma_loadavg_add(loadavg, 0);
+> +	}
+> +
+> +	spin_unlock_bh(&gpu->loadavg_spinlock);
+> +
+>  	mutex_unlock(&gpu->lock);
+> +	hrtimer_start(&gpu->loadavg_timer, loadavg_polling_frequency, HRTIMER_MODE_ABS_SOFT);
+>  
+>  	return 0;
+>  }
+> @@ -1787,6 +1848,7 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
+>  	gpu->dev = &pdev->dev;
+>  	mutex_init(&gpu->lock);
+>  	mutex_init(&gpu->fence_lock);
+> +	spin_lock_init(&gpu->loadavg_spinlock);
+>  
+>  	/* Map registers: */
+>  	gpu->mmio = devm_platform_ioremap_resource(pdev, 0);
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+> index 85eddd492774..881f071f640e 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+> @@ -10,6 +10,8 @@
+>  #include "etnaviv_gem.h"
+>  #include "etnaviv_mmu.h"
+>  #include "etnaviv_drv.h"
+> +#include "etnaviv_sma.h"
+> +#include "state_hi.xml.h"
+>  
+>  struct etnaviv_gem_submit;
+>  struct etnaviv_vram_mapping;
+> @@ -91,6 +93,33 @@ struct clk;
+>  
+>  #define ETNA_NR_EVENTS 30
+>  
+> +DECLARE_SMA(loadavg, 100)
+> +
+> +static const struct {
+> +    const char *name;
+> +    u32 bit;
+> +} etna_idle_module_names[] = {
+
+Drop the _names prefix. This isn't just enumerating names, but also the
+bit positions in the state register.
+
+Regards,
+Lucas
+
+> +    { "FE", VIVS_HI_IDLE_STATE_FE },
+> +    { "DE", VIVS_HI_IDLE_STATE_DE },
+> +    { "PE", VIVS_HI_IDLE_STATE_PE },
+> +    { "SH", VIVS_HI_IDLE_STATE_SH },
+> +    { "PA", VIVS_HI_IDLE_STATE_PA },
+> +    { "SE", VIVS_HI_IDLE_STATE_SE },
+> +    { "RA", VIVS_HI_IDLE_STATE_RA },
+> +    { "TX", VIVS_HI_IDLE_STATE_TX },
+> +    { "VG", VIVS_HI_IDLE_STATE_VG },
+> +    { "IM", VIVS_HI_IDLE_STATE_IM },
+> +    { "FP", VIVS_HI_IDLE_STATE_FP },
+> +    { "TS", VIVS_HI_IDLE_STATE_TS },
+> +    { "BL", VIVS_HI_IDLE_STATE_BL },
+> +    { "ASYNCFE", VIVS_HI_IDLE_STATE_ASYNCFE },
+> +    { "MC", VIVS_HI_IDLE_STATE_MC },
+> +    { "PPA", VIVS_HI_IDLE_STATE_PPA },
+> +    { "WD", VIVS_HI_IDLE_STATE_WD },
+> +    { "NN", VIVS_HI_IDLE_STATE_NN },
+> +    { "TP", VIVS_HI_IDLE_STATE_TP },
+> +};
+> +
+>  struct etnaviv_gpu {
+>  	struct drm_device *drm;
+>  	struct thermal_cooling_device *cooling;
+> @@ -147,6 +176,13 @@ struct etnaviv_gpu {
+>  	unsigned int freq_scale;
+>  	unsigned long base_rate_core;
+>  	unsigned long base_rate_shader;
+> +
+> +	/* Loadavg: */
+> +	struct hrtimer loadavg_timer;
+> +	spinlock_t loadavg_spinlock;
+> +	ktime_t loadavg_last_sample_time;
+> +	struct sma_loadavg loadavg_value[ARRAY_SIZE(etna_idle_module_names)];
+> +	unsigned int loadavg_percentage[ARRAY_SIZE(etna_idle_module_names)];
+>  };
+>  
+>  static inline void gpu_write(struct etnaviv_gpu *gpu, u32 reg, u32 data)
+> @@ -162,6 +198,7 @@ static inline u32 gpu_read(struct etnaviv_gpu *gpu, u32 reg)
+>  int etnaviv_gpu_get_param(struct etnaviv_gpu *gpu, u32 param, u64 *value);
+>  
+>  int etnaviv_gpu_init(struct etnaviv_gpu *gpu);
+> +void etnaviv_gpu_shutdown(struct etnaviv_gpu *gpu);
+>  bool etnaviv_fill_identity_from_hwdb(struct etnaviv_gpu *gpu);
+>  
+>  #ifdef CONFIG_DEBUG_FS
+
+

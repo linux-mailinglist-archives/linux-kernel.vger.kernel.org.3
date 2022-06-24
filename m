@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8690559F78
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 057F7559F87
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbiFXRTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
+        id S232320AbiFXRTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbiFXRS4 (ORCPT
+        with ESMTP id S232136AbiFXRS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 24 Jun 2022 13:18:56 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E9F968035
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D4AE49B72
         for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:18:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1656091133;
@@ -21,28 +21,28 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JFkbFE9Pn4FMqfM3ZOYs/tb5dPTZApHuXMpgEvAcvYo=;
-        b=f8xwCJZirKYaELdOcgMziHbVNIc+m6TMecndNuHeaeK/7ttkVq8XwGUSZlERcxebY9iJSd
-        kmqJY55Z3t1nhAn4kMUkldbxMkR+wdSW9KKAzAT33MgBYdOZYlUYJafZa0f0euJlWMek23
-        j94v5t+9VL0nKaPyefH4HaUQOWsfMks=
+        bh=1hrqZhznmf7in1ihxZqdR3dERc2u3SLv+rWTvwfVqKo=;
+        b=BFrbNP7NHzglPAbdlsb1XL2zDCg9a6VsHPV3eNBNGTvcJh//qKNCT29Pd5w+p2NeBFEO/n
+        Tnc5CjlR+7q5R15uvHE3yIGbpBQR7jvhMplAYVK8VJw2+4tUO+wCUxkADBbf6uJK7kJt4i
+        Jk0VFCYQ9ldNJV87Y4QAdgUuNlkm0Kg=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-547-cj6eGGT4O7Otfs5tffU3Fw-1; Fri, 24 Jun 2022 13:18:49 -0400
-X-MC-Unique: cj6eGGT4O7Otfs5tffU3Fw-1
+ us-mta-203-xDrcKZkpNrW1sS-BI2gNnQ-1; Fri, 24 Jun 2022 13:18:49 -0400
+X-MC-Unique: xDrcKZkpNrW1sS-BI2gNnQ-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 72E7085A589;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9472E81D9DA;
         Fri, 24 Jun 2022 17:18:49 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5BD6E492C3B;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7B040492C3B;
         Fri, 24 Jun 2022 17:18:49 +0000 (UTC)
 From:   Paolo Bonzini <pbonzini@redhat.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH v2 3/8] KVM: x86: drop PIO from unregistered devices
-Date:   Fri, 24 Jun 2022 13:18:43 -0400
-Message-Id: <20220624171848.2801602-4-pbonzini@redhat.com>
+Subject: [PATCH v2 4/8] KVM: x86: move all vcpu->arch.pio* setup in emulator_pio_in_out()
+Date:   Fri, 24 Jun 2022 13:18:44 -0400
+Message-Id: <20220624171848.2801602-5-pbonzini@redhat.com>
 In-Reply-To: <20220624171848.2801602-1-pbonzini@redhat.com>
 References: <20220624171848.2801602-1-pbonzini@redhat.com>
 MIME-Version: 1.0
@@ -59,52 +59,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM protects the device list with SRCU, and therefore different calls
-to kvm_io_bus_read()/kvm_io_bus_write() can very well see different
-incarnations of kvm->buses.  If userspace unregisters a device while
-vCPUs are running there is no well-defined result.  This patch applies
-a safe fallback by returning early from emulator_pio_in_out().  This
-corresponds to returning zeroes from IN, and dropping the writes on
-the floor for OUT.
+For now, this is basically an excuse to add back the void* argument to
+the function, while removing some knowledge of vcpu->arch.pio* from
+its callers.  The WARN that vcpu->arch.pio.count is zero is also
+extended to OUT operations.
+
+The vcpu->arch.pio* fields still need to be filled even when the PIO is
+handled in-kernel as __emulator_pio_in() is always followed by
+complete_emulator_pio_in().  But after fixing that, it will be possible to
+to only populate the vcpu->arch.pio* fields on userspace exits.
+
+No functional change intended.
 
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
- arch/x86/kvm/x86.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ arch/x86/kvm/trace.h |  2 +-
+ arch/x86/kvm/x86.c   | 21 +++++++++++++--------
+ 2 files changed, 14 insertions(+), 9 deletions(-)
 
+diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
+index bc85622e28b2..2120d7c060a9 100644
+--- a/arch/x86/kvm/trace.h
++++ b/arch/x86/kvm/trace.h
+@@ -154,7 +154,7 @@ TRACE_EVENT(kvm_xen_hypercall,
+ 
+ TRACE_EVENT(kvm_pio,
+ 	TP_PROTO(unsigned int rw, unsigned int port, unsigned int size,
+-		 unsigned int count, void *data),
++		 unsigned int count, const void *data),
+ 	TP_ARGS(rw, port, size, count, data),
+ 
+ 	TP_STRUCT__entry(
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 524a96d26399..5a56d39bd81f 100644
+index 5a56d39bd81f..368d0d4d56ff 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -7593,8 +7593,19 @@ static int emulator_pio_in_out(struct kvm_vcpu *vcpu, int size,
- 			r = kvm_io_bus_read(vcpu, KVM_PIO_BUS, port, size, data);
- 		else
- 			r = kvm_io_bus_write(vcpu, KVM_PIO_BUS, port, size, data);
--		if (r)
--			goto userspace_io;
-+
-+		if (r) {
-+			if (i == 0)
-+				goto userspace_io;
-+
-+			/*
-+			 * Userspace must have unregistered the device while PIO
-+			 * was running.  Drop writes / read as 0 (the buffer
-+			 * was zeroed in __emulator_pio_in).
-+			 */
-+			break;
-+		}
-+
- 		data += size;
- 	}
- 	return 1;
-@@ -7606,7 +7617,6 @@ static int emulator_pio_in_out(struct kvm_vcpu *vcpu, int size,
- 	vcpu->run->io.data_offset = KVM_PIO_PAGE_OFFSET * PAGE_SIZE;
- 	vcpu->run->io.count = count;
- 	vcpu->run->io.port = port;
--
- 	return 0;
+@@ -7576,17 +7576,25 @@ static int emulator_cmpxchg_emulated(struct x86_emulate_ctxt *ctxt,
  }
+ 
+ static int emulator_pio_in_out(struct kvm_vcpu *vcpu, int size,
+-			       unsigned short port,
++			       unsigned short port, void *data,
+ 			       unsigned int count, bool in)
+ {
+-	void *data = vcpu->arch.pio_data;
+ 	unsigned i;
+ 	int r;
+ 
++	WARN_ON_ONCE(vcpu->arch.pio.count);
+ 	vcpu->arch.pio.port = port;
+ 	vcpu->arch.pio.in = in;
+ 	vcpu->arch.pio.count = count;
+ 	vcpu->arch.pio.size = size;
++	if (in) {
++		/* The buffer is only used in complete_emulator_pio_in().  */
++		WARN_ON(data);
++		memset(vcpu->arch.pio_data, 0, size * count);
++	} else {
++		memcpy(vcpu->arch.pio_data, data, size * count);
++	}
++	data = vcpu->arch.pio_data;
+ 
+ 	for (i = 0; i < count; i++) {
+ 		if (in)
+@@ -7623,9 +7631,7 @@ static int emulator_pio_in_out(struct kvm_vcpu *vcpu, int size,
+ static int __emulator_pio_in(struct kvm_vcpu *vcpu, int size,
+ 			     unsigned short port, unsigned int count)
+ {
+-	WARN_ON(vcpu->arch.pio.count);
+-	memset(vcpu->arch.pio_data, 0, size * count);
+-	return emulator_pio_in_out(vcpu, size, port, count, true);
++	return emulator_pio_in_out(vcpu, size, port, NULL, count, true);
+ }
+ 
+ static void complete_emulator_pio_in(struct kvm_vcpu *vcpu, void *val)
+@@ -7674,9 +7680,8 @@ static int emulator_pio_out(struct kvm_vcpu *vcpu, int size,
+ {
+ 	int ret;
+ 
+-	memcpy(vcpu->arch.pio_data, val, size * count);
+-	trace_kvm_pio(KVM_PIO_OUT, port, size, count, vcpu->arch.pio_data);
+-	ret = emulator_pio_in_out(vcpu, size, port, count, false);
++	trace_kvm_pio(KVM_PIO_OUT, port, size, count, val);
++	ret = emulator_pio_in_out(vcpu, size, port, (void *)val, count, false);
+ 	if (ret)
+                 vcpu->arch.pio.count = 0;
  
 -- 
 2.31.1

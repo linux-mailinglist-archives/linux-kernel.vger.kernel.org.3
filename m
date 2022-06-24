@@ -2,121 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E677559CF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1502A559CFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbiFXPBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 11:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
+        id S232139AbiFXPGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 11:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232852AbiFXPBg (ORCPT
+        with ESMTP id S231127AbiFXPGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 11:01:36 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734EA7E037
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:00:58 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 074A720000F;
-        Fri, 24 Jun 2022 15:00:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656082855;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2qXzzJoUbs4d2QN18DeeUOD79uKu2pCH/VKOYe0ryJU=;
-        b=AdugIn5IrOuegRe1MgJXvlpSkfmQeoFzYPsWm/Es3Pas0v/xU3CPJ6FNRpYajhiCbnbNrc
-        jBAYXShmAT94eI3n0JnS9nUCidQbFzj9MpmasgvEoZENyVkJmdP/Ruqwf9BYzy2A3TWAzc
-        c8gEzP6wGu9vTzov5/vxd3R0yf6l6eYNUdvI2iB9eX4ehz3JI87eSavJY/I+Kta1n6yisO
-        Y1/jovWvDOJuGY1lpPVBZkaAni/6rOUpknlQiTBEfZNI+fjmVM+Xnp9E/29TsPRdRaUxli
-        aQGB5L5HL5HCH58CziTaZ63MeTIaekGkqX9g4pJvjJ0LqZBi0Og8sm/ugpD58A==
-Date:   Fri, 24 Jun 2022 17:00:54 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] drm: Remove unnecessary print function dev_err()
-Message-ID: <YrXRplhnlUZ2KV3V@aptenodytes>
-References: <20220613012658.85814-1-yang.lee@linux.alibaba.com>
+        Fri, 24 Jun 2022 11:06:47 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B668841337;
+        Fri, 24 Jun 2022 08:06:45 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 25E145C01DA;
+        Fri, 24 Jun 2022 11:06:45 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Fri, 24 Jun 2022 11:06:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1656083205; x=
+        1656169605; bh=HjT+D1N1osG/gGZVW5EodSJ+cA7Y5+uYwHsMT33cSjw=; b=n
+        bK4GxSQkrXj+mv+hxp0zW+0OPwRz1ButBUhIu7fSLnA4E96zxgrCE6dqG+f7LGaj
+        1eYe8fzdRODokUz9cyQ0F+WzcrjKUyZdsr1wXHKeUobFIO+dBdWe73eCLrT4dvGP
+        JMME3INHUCBeKoM1Tt9+8J1zEKwJQW6rq80+eBFvxDqVI4z9hphrngJoRz/4s/zM
+        qNFj/duSmCrpbH0COptguSv8y+MZMGUH2vAx8qelVI/h+m8iPfIs2U6hGVgEwrMo
+        NfLaqGa3Amuy0wH3FrVdemzqS+yjWcUzUYNxSpDEeYitSBK4Ag2KsobqKTl4B9b+
+        AnIbNHdnkL3sUnBgscqgQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656083205; x=
+        1656169605; bh=HjT+D1N1osG/gGZVW5EodSJ+cA7Y5+uYwHsMT33cSjw=; b=v
+        qvtGt0IX13aS/uwgD8GVvCpfB8hHyJ/0gJwOIX4pnv7xyVK6OZs8LvC7XeekRBfh
+        QLQdiKmF0UumsE4Z3zSVEbCUeHA7w7ZCLXLUk0Vjhem6gRcjY36zB/1QqSpjAj44
+        QeBFoWOubNPCoR/yS+F5vLCWAcx+0BEwox7WT6AYCmvz6hvJwwAal9jTNOovNwAs
+        vqVBgRD6AcTDTEy18PP/h4oQ4gw4BLXd6XbgABvOW+EIko6ZmR4cBCUcGXGZe96j
+        7i+HklAmDtS9n7EIwWCUL2yAuVYEnM0KAj2iR7W4U5ixPZ8hs5IAml6blbUroInQ
+        KiFjPkeTAArp/vpeW27tg==
+X-ME-Sender: <xms:BNO1YmL4ONZqTGqMU--zPKoJF1_-NDfTAG_HRW0MIjrDbsRw3jcSJw>
+    <xme:BNO1YuLpt6Omkimf-8rOE3BBhPFflBX-gaLWgMq-8LYfvnYvX773zoMHPV1kOp3F7
+    8oQrD2fhmP_rQDinUQ>
+X-ME-Received: <xmr:BNO1Ymv5J4GaEEZshQXOkH7BgakTraQ103BVHA8tP0goGFtSQkNtO_un3BzoGtO4cajXILuX-PJ30iPmSKH2vgj4p1dpymwUP1T-QLQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefledgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnheptefgleeggfegkeekgffgleduieduffejffegveevkeejudektdduueet
+    feetfefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:BNO1YrbAouVnEIZKD4ndfS9wcVEc8-W4GuCbuubGI61Rde2kJla6rQ>
+    <xmx:BNO1YtZVe7cBZbZ_ehlomCTXXajIZU3xELf8EByPcorMKih3-tN5Yw>
+    <xmx:BNO1YnBs0CR2_zmmIECtDzfuT9zLKArOzVKTSkXiKOgpbT_NZ24Kuw>
+    <xmx:BdO1Ygw0IiIqSoDeZnISQ8JHLRIBwdgpTxx0Eo7iY04pQtiYTdeJ_w>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 24 Jun 2022 11:06:44 -0400 (EDT)
+Date:   Fri, 24 Jun 2022 17:06:42 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] drm: logicvc: Fix uninitialized variable in probe
+Message-ID: <20220624150642.afkxpnut365i2wew@houat>
+References: <Yqh6OfSiPFuVrGo4@kili>
+ <YrXLrVUIavGWC4sx@aptenodytes>
+ <20220624143717.tykkcznvzq5e5qz2@houat>
+ <YrXOTAR6koA1b8XJ@aptenodytes>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="veaIlB3NsqQJBjp+"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220613012658.85814-1-yang.lee@linux.alibaba.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YrXOTAR6koA1b8XJ@aptenodytes>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---veaIlB3NsqQJBjp+
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Yang,
-
-On Mon 13 Jun 22, 09:26, Yang Li wrote:
-> The print function dev_err() is redundant because platform_get_irq()
-> already prints an error.
+On Fri, Jun 24, 2022 at 04:46:36PM +0200, Paul Kocialkowski wrote:
+> Hi,
 >=20
-> Eliminate the follow coccicheck warning:
-> ./drivers/gpu/drm/logicvc/logicvc_drm.c:352:2-9: line 352 is redundant
-> because platform_get_irq() already prints an error
+> On Fri 24 Jun 22, 16:37, Maxime Ripard wrote:
+> > Hi,
+> >=20
+> > On Fri, Jun 24, 2022 at 04:35:25PM +0200, Paul Kocialkowski wrote:
+> > > On Tue 14 Jun 22, 15:08, Dan Carpenter wrote:
+> > > > The "regmap" is supposed to be initialized to NULL but it's used
+> > > > without being initialized.
+> > > >=20
+> > > > Fixes: efeeaefe9be5 ("drm: Add support for the LogiCVC display cont=
+roller")
+> > > > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > >=20
+> > > Nice catch, thanks a lot!
+> > >=20
+> > > Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> >=20
+> > Since you have the commit rights to drm-misc, you should apply it
 >=20
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> Absolutely, I'm on my way to doing that.
 
-Thanks for the patch!
+Giving your Acked-by is confusing then, because it's kind of implied if
+you apply it.
 
-Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Do I need to reply to the emails with a message indicating that I
+> merged them or is using the tool sufficient?
 
-Paul
+Sending an email is better, dim doesn't do that
 
-> ---
->  drivers/gpu/drm/logicvc/logicvc_drm.c | 1 -
->  1 file changed, 1 deletion(-)
->=20
-> diff --git a/drivers/gpu/drm/logicvc/logicvc_drm.c b/drivers/gpu/drm/logi=
-cvc/logicvc_drm.c
-> index df1805cf0f95..437b3011ae1e 100644
-> --- a/drivers/gpu/drm/logicvc/logicvc_drm.c
-> +++ b/drivers/gpu/drm/logicvc/logicvc_drm.c
-> @@ -349,7 +349,6 @@ static int logicvc_drm_probe(struct platform_device *=
-pdev)
-> =20
->  	irq =3D platform_get_irq(pdev, 0);
->  	if (irq < 0) {
-> -		dev_err(dev, "Failed to get IRQ\n");
->  		ret =3D -ENODEV;
->  		goto error_reserved_mem;
->  	}
-> --=20
-> 2.20.1.7.g153144c
->=20
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---veaIlB3NsqQJBjp+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmK10aYACgkQ3cLmz3+f
-v9EGeQf/Q01Lx/F9D+C2pQeGKz3ffuzTDhSn3Tm7+EUUsYblieed+d8NDOXdDSWF
-dkkdvlubJP2VOLFRioFp6JbCmPW5ul7CdTE8sYtefj8Kdt/ghau8j5KI6kN4CM+L
-SvCfuS8dc7Av3mfSWW/7vURJO3oLs1MnAEKZAdK+yYhBRoih8200mo8AC0leuVz/
-5f/zmyQ5C2COwQ/vkG8YMoGpDJIk65jvxlBqbRv80bfLCoNY4gLEG4m/3TpSZNk9
-FtXolEz03RckdXsuT3tqXUmHQ7WTWgjfk7v+xuKJ83nj10Xgw9ImGoyVjBVkef3O
-lyYYhtTL4IkrQ86COfhQijTeByJe3A==
-=7pE3
------END PGP SIGNATURE-----
-
---veaIlB3NsqQJBjp+--
+Maxime

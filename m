@@ -2,59 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E09C5596A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17079559673
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiFXJ03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 05:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        id S230487AbiFXJWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 05:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbiFXJ0X (ORCPT
+        with ESMTP id S230323AbiFXJWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 05:26:23 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3261377044;
-        Fri, 24 Jun 2022 02:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656062779; x=1687598779;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=v5bfWTJCoo5BBPZT3CLaQHxq1vNHu4D3VcxL1e2EOtI=;
-  b=XyABwVWu1TKzL7CjEQsr3vq6eZToWopctbXyD7A3IuIQ/sk78TUN1TyY
-   4IWWGmDXXlag1/BUXNHnC5MlCqiG9BT7Rb8ext54WtDslqw0yrZAxArUX
-   /xBY5uEhJQa1v3vuBTRchFzlKZThieuIHcyq8vjmE62OZJp25DeA53TuW
-   WFjPo8tGNVx9NJHwkcWlzCv00D7hBB0SrPw78m+7x1xsf7FGG5erqtwyM
-   DPkSwNkAbLt72HvOz32tG8k55Uy3w9PRMEhqKkZrV89YRsYVVnj5toKgp
-   PD9kmGt6Pw5IM1BoeP1Hi5ap8ymBW1rneAeBJQkzePGpsXZyRNMtdFmDJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="261389200"
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="261389200"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 02:26:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="691454982"
-Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
-  by fmsmga002.fm.intel.com with ESMTP; 24 Jun 2022 02:26:16 -0700
-From:   Tianfei Zhang <tianfei.zhang@intel.com>
-To:     yilun.xu@intel.com, lee.jones@linaro.org
-Cc:     hao.wu@intel.com, trix@redhat.com, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, russell.h.weight@intel.com,
-        matthew.gerlach@linux.intel.com,
-        Tianfei Zhang <tianfei.zhang@intel.com>
-Subject: [PATCH v3 3/3] mfd: intel-m10-bmc: support different BMC base register address
-Date:   Fri, 24 Jun 2022 05:22:29 -0400
-Message-Id: <20220624092229.45854-4-tianfei.zhang@intel.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220624092229.45854-1-tianfei.zhang@intel.com>
-References: <20220624092229.45854-1-tianfei.zhang@intel.com>
+        Fri, 24 Jun 2022 05:22:43 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E6E69FB7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 02:22:42 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o4fWT-0001bX-2p; Fri, 24 Jun 2022 11:22:41 +0200
+Message-ID: <1a694037c631c298c6952cdf4bf54fcc6d2f08e9.camel@pengutronix.de>
+Subject: Re: [PATCH v2 1/4] drm/etnaviv: add simple moving average (SMA)
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>,
+        "moderated list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <etnaviv@lists.freedesktop.org>,
+        "open list:DRM DRIVERS FOR VIVANTE GPU IP" 
+        <dri-devel@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Russell King <linux+etnaviv@armlinux.org.uk>
+Date:   Fri, 24 Jun 2022 11:22:39 +0200
+In-Reply-To: <20220621072050.76229-2-christian.gmeiner@gmail.com>
+References: <20220621072050.76229-1-christian.gmeiner@gmail.com>
+         <20220621072050.76229-2-christian.gmeiner@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,69 +52,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are different base addresses for the MAX10 CSR registers.
-Introducing a new member "base" in intel_m10bmc data structure
-to support different BMC base register addresses.
+Hi Christian,
 
-Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
----
-v3:
- - use a new member "base" instead of m10bmc_csr data structure.
----
- drivers/mfd/intel-m10-bmc-pmci.c  | 1 +
- drivers/mfd/intel-m10-bmc.c       | 1 +
- include/linux/mfd/intel-m10-bmc.h | 4 +++-
- 3 files changed, 5 insertions(+), 1 deletion(-)
+Am Dienstag, dem 21.06.2022 um 09:20 +0200 schrieb Christian Gmeiner:
+> This adds a SMA algorithm inspired by Exponentially weighted moving
+> average (EWMA) algorithm found in the kernel.
+> 
+Still not sure about this one. I _feel_ that a simple moving average
+over a period of one second does not do a good job of reflecting the
+real GPU load for a bursty workload, where EWMA might be better suited.
+But then I also don't have a real informed opinion to offer on this.
 
-diff --git a/drivers/mfd/intel-m10-bmc-pmci.c b/drivers/mfd/intel-m10-bmc-pmci.c
-index 93eca4483ac7..26eeda9720dc 100644
---- a/drivers/mfd/intel-m10-bmc-pmci.c
-+++ b/drivers/mfd/intel-m10-bmc-pmci.c
-@@ -221,6 +221,7 @@ static int pmci_probe(struct dfl_device *ddev)
- 		return -ENOMEM;
- 
- 	pmci->m10bmc.dev = dev;
-+	pmci->m10bmc.base = M10BMC_PMCI_SYS_BASE;
- 	pmci->dev = dev;
- 
- 	pmci->base = devm_ioremap_resource(dev, &ddev->mmio_res);
-diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
-index 7e521df29c72..f4cb67629404 100644
---- a/drivers/mfd/intel-m10-bmc.c
-+++ b/drivers/mfd/intel-m10-bmc.c
-@@ -171,6 +171,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
- 		return -ENOMEM;
- 
- 	ddata->dev = dev;
-+	ddata->base = M10BMC_SYS_BASE;
- 
- 	ddata->regmap =
- 		devm_regmap_init_spi_avmm(spi, &intel_m10bmc_regmap_config);
-diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-index 7b58af207b72..0c81dbcdc3dc 100644
---- a/include/linux/mfd/intel-m10-bmc.h
-+++ b/include/linux/mfd/intel-m10-bmc.h
-@@ -130,10 +130,12 @@
-  * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
-  * @dev: this device
-  * @regmap: the regmap used to access registers by m10bmc itself
-+ * @base: the base address of MAX10 BMC registers
-  */
- struct intel_m10bmc {
- 	struct device *dev;
- 	struct regmap *regmap;
-+	unsigned int base;
- };
- 
- /*
-@@ -165,6 +167,6 @@ m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
-  * M10BMC_SYS_BASE accordingly.
-  */
- #define m10bmc_sys_read(m10bmc, offset, val) \
--	m10bmc_raw_read(m10bmc, M10BMC_SYS_BASE + (offset), val)
-+	m10bmc_raw_read(m10bmc, (m10bmc)->base + (offset), val)
- 
- #endif /* __MFD_INTEL_M10_BMC_H */
--- 
-2.26.2
+Regards,
+Lucas
+
+> Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+> ---
+>  drivers/gpu/drm/etnaviv/etnaviv_sma.h | 53 +++++++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_sma.h
+> 
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_sma.h b/drivers/gpu/drm/etnaviv/etnaviv_sma.h
+> new file mode 100644
+> index 000000000000..81564d5cbdc3
+> --- /dev/null
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_sma.h
+> @@ -0,0 +1,53 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020 Etnaviv Project
+> + */
+> +
+> +#ifndef __ETNAVIV_SMA_H__
+> +#define __ETNAVIV_SMA_H__
+> +
+> +#include <linux/bug.h>
+> +#include <linux/compiler.h>
+> +
+> +/*
+> + * Simple moving average (SMA)
+> + *
+> + * This implements a fixed-size SMA algorithm.
+> + *
+> + * The first argument to the macro is the name that will be used
+> + * for the struct and helper functions.
+> + *
+> + * The second argument, the samples, expresses how many samples are
+> + * used for the SMA algorithm.
+> + */
+> +
+> +#define DECLARE_SMA(name, _samples) \
+> +    struct sma_##name { \
+> +        unsigned long pos; \
+> +        unsigned long sum; \
+> +        unsigned long samples[_samples]; \
+> +    }; \
+> +    static inline void sma_##name##_init(struct sma_##name *s) \
+> +    { \
+> +        BUILD_BUG_ON(!__builtin_constant_p(_samples));	\
+> +        memset(s, 0, sizeof(struct sma_##name)); \
+> +    } \
+> +    static inline unsigned long sma_##name##_read(struct sma_##name *s) \
+> +    { \
+> +        BUILD_BUG_ON(!__builtin_constant_p(_samples));	\
+> +        return s->sum / _samples; \
+> +    } \
+> +    static inline void sma_##name##_add(struct sma_##name *s, unsigned long val) \
+> +    { \
+> +        unsigned long pos = READ_ONCE(s->pos); \
+> +        unsigned long sum = READ_ONCE(s->sum); \
+> +        unsigned long sample = READ_ONCE(s->samples[pos]); \
+> +      \
+> +        BUILD_BUG_ON(!__builtin_constant_p(_samples));	\
+> +      \
+> +       WRITE_ONCE(s->sum, sum - sample + val); \
+> +       WRITE_ONCE(s->samples[pos], val); \
+> +       WRITE_ONCE(s->pos, pos + 1 == _samples ? 0 : pos + 1); \
+> +    }
+> +
+> +#endif /* __ETNAVIV_SMA_H__ */
+
 

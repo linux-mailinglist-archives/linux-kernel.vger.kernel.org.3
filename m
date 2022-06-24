@@ -2,136 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B1555A249
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 22:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094F855A24E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 22:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiFXT6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 15:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S231524AbiFXT6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 15:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiFXT6D (ORCPT
+        with ESMTP id S231305AbiFXT6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 15:58:03 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2058.outbound.protection.outlook.com [40.107.220.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027566573;
-        Fri, 24 Jun 2022 12:58:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ETf6qYkXG+QDVqEmPo/tvoWKv/FLlb4Ge1cwI3F5V7T2lFuZyeUVr38qan6fUJrOjecnVlcH2JKad85QsVz4fduOnx9ozbrGXkJD5OYO2j88j2ePD04u6PmwCh7PcFpbcgDow9mMYErhhW8rgb3lvhC/RAzGPYLfw6a27HLv5O2xZ0r6FZ3Mwp5T02pbV7iY334l9l6nuzC+Lx6gh1YdSpXaf8VBUjPY46xP/Qplvc8Hsa3cFczSz7P14v21zqB7MbqD5naM+Bp2u2WhU0nf0RU4MoZgmecKCxo1pqHUlzRNDPshdaU0so7fwGzXxBSCcihcv6pLjwsxgZaPB1DKKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CPHSF5NnU2gVRJ7Q2K62dMXe+cly8A7xCd01/sgtog4=;
- b=essqN8U3/aSUZk370yLbOwDll9R9xQkBM9R+UcCJybHxQ6IUVmTy8nlaTwXZ6bFCRoe28TrVdTjbXpLID8ufv75ee2Eaq2KcmMZ/MyNUPaU2KoOYAxifczPUV3PqVqDz4hwIq3QZPe4MSeP9GndZ87dBcnr9Cvsgny+xMFCRCvn844DH6NazWdxQiZawRHU0/8pnjbsqUFRir4+HJvd03rnxjH6rN7DFIwtpHNOVCEBu6h1K2DPXgvA0iuFryH2ZbsjvpVPqIJidmKt3UeHWPNu1T1PXK+LggZpZ3X7UcOKv5W1F8VHN3FUFzd3AC1Vngky9ZM2zzjSmQEb3YEO7mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CPHSF5NnU2gVRJ7Q2K62dMXe+cly8A7xCd01/sgtog4=;
- b=W2sit0J4M0qg91r5w9dou93NqE5dz7abrxgbqJyABic3DbQrQCbfwfZIZf2377uDRUq1j2TG2quqecrFVrLbrKNG20EyYY1OJnygCIx73oAov8oxuMLR0ej5Sk76PmFtXGjE1/Z1KkE1bOFBilUFkdCiKlts+kgzHVXjZuPBy9cRqgsW2yM63OTvb8bmvkS2tpKH8JKWF2p5glNvS36z3yYC11D3eSeNdWxXpxpwbSH4Sg0OL6fgjQRUjycUte3rNva1G+og/DEE0PmfrjgNEL7b55JbZ0SAAKVd2v9beb/HjTaG/vgfMflJycGpn/r1LXoL3qvWj3PuYndzMTP5LA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BY5PR12MB4003.namprd12.prod.outlook.com (2603:10b6:a03:196::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.18; Fri, 24 Jun
- 2022 19:58:01 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5373.016; Fri, 24 Jun 2022
- 19:58:01 +0000
-Date:   Fri, 24 Jun 2022 16:58:00 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Jiang Jian <jiangjian@cdjrlc.com>
-Cc:     leon@kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RDMA/core: Correct typos in comments
-Message-ID: <20220624195800.GA283233@nvidia.com>
-References: <20220622170853.3644-1-jiangjian@cdjrlc.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622170853.3644-1-jiangjian@cdjrlc.com>
-X-ClientProxiedBy: BL1PR13CA0010.namprd13.prod.outlook.com
- (2603:10b6:208:256::15) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Fri, 24 Jun 2022 15:58:50 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A3B794E1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 12:58:49 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id fd6so4907668edb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 12:58:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aYJrl/wB0ad9MyDM8wwvji/ZDuZftUz6c3QWw/c+yls=;
+        b=Mu4aeU7G2lpQOAQQALgKApY2YNyyfwEim9iUgpMOsdAl20+ZMNrMNqs0Crqn5x1xQ5
+         cJVd276kM+uTsWqBkWgEyU+NTmQ2JyrwepHIrXIlG87uc0ivdULhX8P2B/XJjZ9xvXR+
+         VaKXl1xl6qnbNJRImCqY5AL7onNMSYPWaxEZywP1YHq3rPWuWaF8WzlAcaW8Rtc+rvFw
+         Bu6byZ7S/5eXN9B47BgDM9ghOH2/aQIR33EdOUNGTHnIKWhQ30XNf3MZYvoJTMaACC3b
+         Yne5oYE4/MzUwxEpZMpps5E0eFVMhTIZu9r9kqbgjlLLM0PF44aszFeHcCQ0+3pX5D/I
+         JKZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aYJrl/wB0ad9MyDM8wwvji/ZDuZftUz6c3QWw/c+yls=;
+        b=MOi+qLJsOt90TzIuHL4mcEm2nR7tctESSVdslru3gzuUVT9b3vfN+L5dz7n7ykbqqd
+         i0tD2Koh0mxu3rKEyYGeYCE763uirp1as8XQYDUlP0mGp3hovjPc1wIaH9U7HWwTjEk+
+         tATEC7kn4MIGdG1hI0kbyfSkeJDBKrNH1AuUCYaouAZJ1foiYLyDcskwN8HyYtMdBblZ
+         nJ67X360fXCwT/aqsMZs8TSqGS0Zf0LBNC4ntUaH3Z+DpVagv8J4dpppJ/ANzaJLwZ8a
+         mF3AqB1DPZmKWRSSmZVImKXin9wBghDkYO0fxdLZ48+eOUDpWMCWUfsvarvZ9MfKU7I4
+         sNQg==
+X-Gm-Message-State: AJIora+lEGhh4wDcj68YqD82+fnKMrptz4KHZrRw9wRgn9J62veFGqmQ
+        9yWBIjnMoLKWhzVw7SqTeUuMAkkrhvAbpT0cX7nBAQ==
+X-Google-Smtp-Source: AGRyM1vMzUWJmQCrglTjFheFdJbmfy02e1iBg6c4g/gixoMi/cMSAyDijx+4ELbZ/YQ5KVXE686/xx+qFt4WhiSVHRQ=
+X-Received: by 2002:a05:6402:5188:b0:437:618c:c124 with SMTP id
+ q8-20020a056402518800b00437618cc124mr946758edd.233.1656100727779; Fri, 24 Jun
+ 2022 12:58:47 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 253ebd3a-f32f-417d-8aa4-08da561bd7db
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4003:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A/kzYnxgDmmHjY/e2XiB2dyeaROF7oEcWCu2OvpS+UfYH8ucyl/LNCDHDuOablJDrEivmcq9TL24/7lmG+NFTCiGt6Lno1GKgETWw24ZE6YoLKV8ubIaP884V3uH9OINgeriLHxG5zP01vfklYDMc87Qm1CidRz7VlRJJmrGBINfTdrM2G+h0FLgHFbDL03w5GJyGd3/rioNrcfI+83RQlSihjVkMXtKYA/4aW6+WbtHptRtEdXPSl7d0vyWlxh3uLzpDZDPjcBT8KrqhZxKUPgq5Zwhx7YxwTflYZJgUeWXoAZ5rzIw3qb7RzVwkIYaCMXSMhpPix5vwLtF/4G9t8DRbrnLa0f0pDEdlg3nbrVC7RTxL4wwANhi34YZauBrtWuDkPQki/WOCZSYyNh371URIP3A0htWMABs+C9T/Tk6U9sF++shXiEnUoNAJPXxzET6VBobbtPEPaHt5XOJ+CK6mLd8KgoBIsTIis1o4fcSKHrEvDu2IpoaZIfXpIXdQNdQkSQzPI8KWOO7TsqMmWJ0iowDqQkuX7hcNnFE5lULJWCmcxCn7f7R25X120zIAZeBQYV7R8CS2ZNVUnaD1Q4O19s9glb9JbzI7fPjpTzKV27hIg6xxdYuTqHxDU3MUda4fEkuKSuU7GA5jM6f7scUkOSfPWn1KRA4M4cpYVWa48xhHTatIkW55bVMgArbM17SX2dHo+O1phG584nboNuxvgXnfochRE1p6/QDuRuCkve9MQ/vYXDdM3lbRUSoRTVafkCoLmP9nlF3Q6dt7qv8DikLWfymRlMbZMgRUUQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(376002)(366004)(396003)(39860400002)(4326008)(66476007)(186003)(8676002)(66556008)(2906002)(316002)(66946007)(36756003)(478600001)(33656002)(6916009)(26005)(2616005)(6506007)(4744005)(5660300002)(41300700001)(6512007)(38100700002)(8936002)(83380400001)(1076003)(86362001)(6486002)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Dlks7sDPk0or6/uiC5up17xoQfu1y9gglzQW6FFCbmbqR+efsaJP+tUQqIwr?=
- =?us-ascii?Q?xjy+0t8XQoEzSLd54tFVT+rvl7OTLp039U+YWlToCLrng+mEMBkW5DLIlvRT?=
- =?us-ascii?Q?FGk/Oa0kd0Rn7McZ5OCJVWVa7ooO9+moWVcs90rWq07Zb78HleR7EbuBXEFy?=
- =?us-ascii?Q?U10HZeKomAeAZ90EVU4e3Wu0CwxAPYFkqYsj4fbOXCVMdpYZZ/8yP2Y+Imo3?=
- =?us-ascii?Q?rUQm12Bj4XEJfhtecOEndhbeDa6f6WLvNC2sroAnIZmvsmTjVaJ4dWggYHUF?=
- =?us-ascii?Q?KaWahjY2md9NwjgJaDqa0dN5ZqP8bGPtZ+CffUIFuAzZip0fmMhjGs/Xea6Y?=
- =?us-ascii?Q?3KyEYPKFrwdWAejGgic1GnVXkuyb2qv/d6E3CY66fSIurvwFsG+H6p6jckjG?=
- =?us-ascii?Q?r1cnVzogRd34sg90VesHUz3NSFBPCM5GMCiPyo67AAMp6+kzT48yR5Cqfs+U?=
- =?us-ascii?Q?ybJPy982iYK+gUbJf9JDkSVBt9FkKBGNeVrtNV2EWnOkHc2LrZ0GP1N879S2?=
- =?us-ascii?Q?6nCIwYpqEFPEUNS5+JSLeDc9dOkgqMordeaTSl2NMAZSWDnHgarEIJpxwawK?=
- =?us-ascii?Q?87/AvmoQInimrQ/mu1dSdnwIPfB6BFD3Z/U23ccQ9MK7eueL/RDiXwY3UNSI?=
- =?us-ascii?Q?02Ha843nOnbKZdZnSCC9lx36dLxxYxT/Xst9tiIVGYdqRYSor/ik6fBzsq7D?=
- =?us-ascii?Q?NR5SPX4Wylxe0tTbD5P+pu59MA/hIx5RX8yuS5PHDQweZvzR6snAK+MwxL5e?=
- =?us-ascii?Q?vHPtVBnMfc4xW0TOtJz55mZfu3bJRPt++EyCWG677ZpBG1xcygxYqujmylXL?=
- =?us-ascii?Q?qYf4Wlz35LXOcZ2pfg+3jH2paxNtH8q59/fxkSKm74qB7QDDxvyGwoqZeBtX?=
- =?us-ascii?Q?L3VG1JA+ul5no/i1w96EVQ0ZKHqwtpbAD6LS3JYlscLICd7QgXGIetvo/Vl2?=
- =?us-ascii?Q?proGYZGMTZ5o9702ulWO1bFuGd6roycD3GGFHSDP4wKA9Ec1UhlTSrPvuxHy?=
- =?us-ascii?Q?Kyh8YpnR4rhQ38T7sx43gqUT8e+3tsMxTKazcHJLEX8VdSL5BPcCMeXTfwcH?=
- =?us-ascii?Q?pvcnQPUji/8vSS6t1Hy87Jtf4CpTqGqeNbpkKXztsGjNUcElm8nJ7u5R2ZZj?=
- =?us-ascii?Q?hT5xhrVw05+xJ7KllnApMxs9cQhsjPXiOumXnINGsLg5V84LYpbL8rUu9+IZ?=
- =?us-ascii?Q?KRSk7CJL73pVgihwnU76vTX3hA0oi/isTlwqPWlbNH0Ev9UX/l2ElY+ryNTA?=
- =?us-ascii?Q?8kNbF2Dgq6Ghcnnh84EejLyY0oazq5uyF+lAcOV2Se4nX1dbb0STYRVD+/Uo?=
- =?us-ascii?Q?6/3C2xXIlQOn8r2JpW2ZTSxzVq16vlGh+1HGaYtLQTrW2FWudfj5lCF+RVJz?=
- =?us-ascii?Q?SZnDNcnUAmI6GD8vSTisS6dB2xN4vxU8bRzVCTJ+PlB+dgixjbY2wp650j2D?=
- =?us-ascii?Q?agR5Tgnh4frotoYZnh+6y8VvUs9UVnRPeapj1O8L5683gLZL8sn6E7h9hb9T?=
- =?us-ascii?Q?sqV47MvY1Xy9lxGKrGFyOG6s1Cxx0y0re1FzzX7hWRQkMmUiwPtPZgMIHfZj?=
- =?us-ascii?Q?mESuFjYewuTKGfVxWYVl7XzsbbxDjcajugBUX40Z?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 253ebd3a-f32f-417d-8aa4-08da561bd7db
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2022 19:58:01.3484
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Tqfn9A9AlEzF4quVHaqhMxDEcG01gnr+CqRQwW3OYuvB5ZlReZlBzmzBcdxm4PPo
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4003
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220603195626.121922-1-dlatypov@google.com> <87pmix3ktq.fsf@meer.lwn.net>
+In-Reply-To: <87pmix3ktq.fsf@meer.lwn.net>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 24 Jun 2022 12:58:36 -0700
+Message-ID: <CAGS_qxqOZBr7Ti_pS20Qw3RLH+VjnhR5mDhJ2hyezKSo9Du-ew@mail.gmail.com>
+Subject: Re: [PATCH 1/3] Documentation: kunit: remove duplicate kunit-tool.rst
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     brendanhiggins@google.com, davidgow@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 01:08:53AM +0800, Jiang Jian wrote:
-> there is an unexpected word 'is' in the comments that need to be dropped
-> 
-> file - drivers/infiniband/core/rdma_core.c
-> line - 71
-> 
-> /* work and stuff was only created when the device is is hot-state */
-> 
-> changed t0:
-> 
-> /* work and stuff was only created when the device is hot-state */
-> 
-> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
-> ---
->  drivers/infiniband/core/rdma_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Jun 24, 2022 at 12:47 PM Jonathan Corbet <corbet@lwn.net> wrote:
+>
+> Daniel Latypov <dlatypov@google.com> writes:
+>
+> > The information is duplicated now in run_wrapper.rst, which was added in
+> > commit 46201d47d6c4 ("Documentation: kunit: Reorganize documentation
+> > related to running tests").
+> >
+> > You cna compare these pages here:
+> > https://www.kernel.org/doc/html/v5.18/dev-tools/kunit/run_wrapper.html
+> > https://www.kernel.org/doc/html/v5.18/dev-tools/kunit/kunit-tool.html
+> >
+> > We should have deleted it in then but it got overlooked.
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+>
+> So not that long ago these patches were going through Shuah...it seems
+> that's not happening anymore?  I can pick up kunit docs patches,
+> certainly.  I've taken the silence on these as assent and applied them.
 
-I squashed this patch and the next one about 'for' into one patch and
-applied to for-next
+Thanks!
 
-Thanks,
-Jason
+Tbh, I'm not really sure what the status is either.
+I saw that 46201d47d6c4 (which added the duplication) went through the
+docs tree, so I followed suit for this.
+
+I've been guilty of sending purely doc patches through
+Shuah/-kselftest tree before, but that was mostly when there were code
+change dependencies.
+
+If it makes it simpler, we could try and agree that all kunit doc
+patches go through Shuah going forward?
+Shuah, Bredan: thoughts/opinions?
+
+Daniel

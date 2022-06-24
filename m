@@ -2,647 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8D7559C89
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83977559B63
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbiFXOhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 10:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
+        id S232373AbiFXOUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 10:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232604AbiFXOfm (ORCPT
+        with ESMTP id S232303AbiFXOUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 10:35:42 -0400
-Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB4545DF29;
-        Fri, 24 Jun 2022 07:35:14 -0700 (PDT)
-Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id CA00016D1;
-        Fri, 24 Jun 2022 17:20:25 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com CA00016D1
+        Fri, 24 Jun 2022 10:20:08 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7D454F98
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:20:05 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id s14so2958052ljs.3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:20:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1656080425;
-        bh=ogFUe7xewN2T3G6tadvqdgO4LtRsVAbvotkyAr5QAAw=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=FQlPRKGXo/5KTj0j1OD4lqiqTqAaWrnCdJbvupZ7JiZc80InXgyyLXbCJDEb9Qk4B
-         VXn1vwTcz5C8gvUdXFfJqwDKHwrCIiGuiineZPE2EHoTMULl9QGTUfMlzz8EnmQF+Q
-         wzkO1JYqq41+hZs3O1eRjwiMNFMMn74V+8FMmPXs=
-Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 24 Jun 2022 17:19:06 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-clk@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v5 8/8] clk: baikal-t1: Convert to platform device driver
-Date:   Fri, 24 Jun 2022 17:18:52 +0300
-Message-ID: <20220624141853.7417-9-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru>
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DX4gKze+gSLugENwiJT/N67T0nY4kiuroWR4tE5f6EI=;
+        b=VfEBDmF+RRx2AePp1LKNOXvU7WJWT/O2vbwOK6TcFPNB4pQVsyY0RfX4vhJAh+Mbnb
+         CSpLC4DuU04b6TaGJLqjByKLSlK8rMKagv+1X/BnF+DG6FGTeJTqco41IJxg4BBknO2c
+         9nU6xj5VrURoXdlBlHE2MMDs0tD3YctaUDGt7Tex6JVeCdE7WaXXjW/s4w+mK5j07sok
+         iU8nUCW2GGMNSUiRP8CU+ZLEXk2iKTAe2x+UOMTYWOweClggqSOEWwk7/xetU7NHaeBl
+         PymrdlAltUTGV2UX8jh43nTF58/YGtacCmmHQYeAbukWxoteTQOVOrjG4tdcO81x/oRY
+         ogCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DX4gKze+gSLugENwiJT/N67T0nY4kiuroWR4tE5f6EI=;
+        b=zkSJBvGzg9juYQwZoUhtqgWAG52zYsmID+eBMgQxMKl/gcKdEAj1ZePxCjnx+eXN2s
+         WVwxVfCXdLiPbQSqr1ihP9jRMBHvJphuWQ/NAuMaTwBj+fYVEm+dLRZm9nbzR6QwdlFb
+         TtmyGTZYGNYNgPa4DcgjHku3EDp7cqZm6fAMkc/22x4osBjAgQ9pMGC+15Pgt6kLqQHB
+         /jmayt0cmfJDPmGSeGEh0kRQx2WKUUfkKg+8bmNhiWFLOHUKUxk6ZXFTALWtkTouR/De
+         C1SljgSwCIdm7rvQjzrBJzIe8oABacNDJoL0NTaRupzF3gDzGW8DuMUGUWPIWC6Kc+R6
+         aWVw==
+X-Gm-Message-State: AJIora9N+29PSa5plzrzp38pagw5/wc+ED8d8aSGg7FahaagShfiNAv2
+        NcU3AbcP5WRp9cdblzgWV5ohex6jcTPloks1U4h0AQ==
+X-Google-Smtp-Source: AGRyM1vckgLN+sbO6XgC0Dq/BPpCpn8v6O+aur4z8QeasCmZg9NVntlD3MncTmewgOzkhrloR2oEBJ1vuZjhWgVXoSA=
+X-Received: by 2002:a2e:2a43:0:b0:25a:84a9:921c with SMTP id
+ q64-20020a2e2a43000000b0025a84a9921cmr7482170ljq.83.1656080403810; Fri, 24
+ Jun 2022 07:20:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1655761627.git.ashish.kalra@amd.com> <3a51840f6a80c87b39632dc728dbd9b5dd444cd7.1655761627.git.ashish.kalra@amd.com>
+ <CAMkAt6ruxMazN3NmWHsemDNQj6Uj0PhCVeaxw2unCxU=YZFRWw@mail.gmail.com> <SN6PR12MB276722570164ECD120BA4D628EB39@SN6PR12MB2767.namprd12.prod.outlook.com>
+In-Reply-To: <SN6PR12MB276722570164ECD120BA4D628EB39@SN6PR12MB2767.namprd12.prod.outlook.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 24 Jun 2022 08:19:52 -0600
+Message-ID: <CAMkAt6pcsgp7BK4WGnvTTNayN9zD8wx5CjprnY2Xe_RnpP3sEA@mail.gmail.com>
+Subject: Re: [PATCH Part2 v6 14/49] crypto: ccp: Handle the legacy TMR
+ allocation when SNP is enabled
+To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In accordance with the way the MIPS platform is normally design there are
-only six clock sources which need to be available on the kernel start in
-order to one end up booting correctly:
-+ CPU PLL: needed by the r4k and MIPS GIC timer drivers. The former one is
-  initialized by the arch code, while the later one is implemented in the
-  mips-gic-timer.c driver as the OF-declared timer.
-+ PCIe PLL: required as a parental clock source for the APB/timer domains.
-+ APB clock: needed in order to access all the SoC CSRs at least for the
-  timer OF-declared drivers.
-+ APB Timer{0-2} clocks: these are the DW APB timers which drivers
-  dw_apb_timer_of.c are implemented as the OF-declared timers.
+On Tue, Jun 21, 2022 at 2:17 PM Kalra, Ashish <Ashish.Kalra@amd.com> wrote:
+>
+> [Public]
+>
+> Hello Peter,
+>
+> >> +static int snp_reclaim_pages(unsigned long pfn, unsigned int npages,
+> >> +bool locked) {
+> >> +       struct sev_data_snp_page_reclaim data;
+> >> +       int ret, err, i, n =3D 0;
+> >> +
+> >> +       for (i =3D 0; i < npages; i++) {
+>
+> >What about setting |n| here too, also the other increments.
+>
+> >for (i =3D 0, n =3D 0; i < npages; i++, n++, pfn++)
+>
+> Yes that is simpler.
+>
+> >> +               memset(&data, 0, sizeof(data));
+> >> +               data.paddr =3D pfn << PAGE_SHIFT;
+> >> +
+> >> +               if (locked)
+> >> +                       ret =3D __sev_do_cmd_locked(SEV_CMD_SNP_PAGE_R=
+ECLAIM, &data, &err);
+> >> +               else
+> >> +                       ret =3D sev_do_cmd(SEV_CMD_SNP_PAGE_RECLAIM,
+> >> + &data, &err);
+>
+> > Can we change `sev_cmd_mutex` to some sort of nesting lock type? That c=
+ould clean up this if (locked) code.
+>
+> > +static inline int rmp_make_firmware(unsigned long pfn, int level) {
+> > +       return rmp_make_private(pfn, 0, level, 0, true); }
+> > +
+> > +static int snp_set_rmp_state(unsigned long paddr, unsigned int npages,=
+ bool to_fw, bool locked,
+> > +                            bool need_reclaim)
+>
+> >This function can do a lot and when I read the call sites its hard to se=
+e what its doing since we have a combination of arguments which tell us wha=
+t behavior is happening, some of which are not valid (ex: to_fw =3D=3D true=
+ and need_reclaim =3D=3D true is an >invalid argument combination).
+>
+> to_fw is used to make a firmware page and need_reclaim is for freeing the=
+ firmware page, so they are going to be mutually exclusive.
+>
+> I actually can connect with it quite logically with the callers :
+> snp_alloc_firmware_pages will call with to_fw =3D true and need_reclaim =
+=3D false
+> and snp_free_firmware_pages will do the opposite, to_fw =3D false and nee=
+d_reclaim =3D true.
+>
+> That seems straightforward to look at.
 
-So as long as the clocks above are available early the kernel will
-normally work. Let's convert the Baikal-T1 CCU drivers to the platform
-device drivers keeping that in mind.
+This might be a preference thing but I find it not straightforward.
+When I am reading through unmap_firmware_writeable() and I see
 
-Generally speaking the conversion isn't that complicated since the driver
-infrastructure has been designed as flexible enough for that. First we
-need to add a new PLL/Divider clock features flag which indicates the
-corresponding clock source as a basic one and that clock sources will be
-available on the kernel early boot stages. Second the internal PLL/Divider
-descriptors need to be initialized with -EPROBE_DEFER value as the
-corresponding clock source is unavailable at the early stages. They will
-be allocated and initialized on the Baikal-T1 clock platform driver probe
-procedure. Finally the already available PLL/Divider init functions need
-to be split up into two ones: init procedure performed in the framework of
-the OF-declared clock initialization (of_clk_init()), and the probe
-procedure called by the platform devices bus driver. Note the later method
-will just continue the system clocks initialization started in the former
-one.
+  /* Transition the pre-allocated buffer to the firmware state. */
+  if (snp_set_rmp_state(__pa(map->host), npages, true, true, false))
+   return -EFAULT;
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+I don't actually know what snp_set_rmp_state() is doing unless I go
+look at the definition and see what all those booleans mean. This is
+unlike the rmp_make_shared() and rmp_make_private() functions, each of
+which tells me a lot more about what the function will do just from
+the name.
 
----
 
-Changelog v4:
-- This is a new patch created on v4 lap of the series to make @Stephen
-  a bit more happy about this series.)
----
- drivers/clk/baikal-t1/ccu-div.h     |   3 +
- drivers/clk/baikal-t1/ccu-pll.h     |   8 ++
- drivers/clk/baikal-t1/clk-ccu-div.c | 149 +++++++++++++++++++++++-----
- drivers/clk/baikal-t1/clk-ccu-pll.c | 128 +++++++++++++++++++-----
- 4 files changed, 235 insertions(+), 53 deletions(-)
-
-diff --git a/drivers/clk/baikal-t1/ccu-div.h b/drivers/clk/baikal-t1/ccu-div.h
-index ff97bb30fcc3..76d8ee44d415 100644
---- a/drivers/clk/baikal-t1/ccu-div.h
-+++ b/drivers/clk/baikal-t1/ccu-div.h
-@@ -23,6 +23,8 @@
- 
- /*
-  * CCU Divider private flags
-+ * @CCU_DIV_BASIC: Basic divider clock required by the kernel as early as
-+ *		   possible.
-  * @CCU_DIV_SKIP_ONE: Due to some reason divider can't be set to 1.
-  *		      It can be 0 though, which is functionally the same.
-  * @CCU_DIV_SKIP_ONE_TO_THREE: For some reason divider can't be within [1,3].
-@@ -30,6 +32,7 @@
-  * @CCU_DIV_LOCK_SHIFTED: Find lock-bit at non-standard position.
-  * @CCU_DIV_RESET_DOMAIN: There is a clock domain reset handle.
-  */
-+#define CCU_DIV_BASIC			BIT(0)
- #define CCU_DIV_SKIP_ONE		BIT(1)
- #define CCU_DIV_SKIP_ONE_TO_THREE	BIT(2)
- #define CCU_DIV_LOCK_SHIFTED		BIT(3)
-diff --git a/drivers/clk/baikal-t1/ccu-pll.h b/drivers/clk/baikal-t1/ccu-pll.h
-index 76cd9132a219..a71bfd7b90ec 100644
---- a/drivers/clk/baikal-t1/ccu-pll.h
-+++ b/drivers/clk/baikal-t1/ccu-pll.h
-@@ -13,6 +13,12 @@
- #include <linux/bits.h>
- #include <linux/of.h>
- 
-+/*
-+ * CCU PLL private flags
-+ * @CCU_PLL_BASIC: Basic PLL required by the kernel as early as possible.
-+ */
-+#define CCU_PLL_BASIC		BIT(0)
-+
- /*
-  * struct ccu_pll_init_data - CCU PLL initialization data
-  * @id: Clock private identifier.
-@@ -22,6 +28,7 @@
-  * @sys_regs: Baikal-T1 System Controller registers map.
-  * @np: Pointer to the node describing the CCU PLLs.
-  * @flags: PLL clock flags.
-+ * @features: PLL private features.
-  */
- struct ccu_pll_init_data {
- 	unsigned int id;
-@@ -31,6 +38,7 @@ struct ccu_pll_init_data {
- 	struct regmap *sys_regs;
- 	struct device_node *np;
- 	unsigned long flags;
-+	unsigned long features;
- };
- 
- /*
-diff --git a/drivers/clk/baikal-t1/clk-ccu-div.c b/drivers/clk/baikal-t1/clk-ccu-div.c
-index 71e563e28f86..9713ea71cfda 100644
---- a/drivers/clk/baikal-t1/clk-ccu-div.c
-+++ b/drivers/clk/baikal-t1/clk-ccu-div.c
-@@ -12,6 +12,7 @@
- #define pr_fmt(fmt) "bt1-ccu-div: " fmt
- 
- #include <linux/kernel.h>
-+#include <linux/platform_device.h>
- #include <linux/printk.h>
- #include <linux/slab.h>
- #include <linux/clk-provider.h>
-@@ -201,7 +202,7 @@ static const struct ccu_div_info sys_info[] = {
- 			 CLK_SET_RATE_PARENT),
- 	CCU_DIV_VAR_INFO(CCU_SYS_APB_CLK, "sys_apb_clk",
- 			 "pcie_clk", CCU_SYS_APB_BASE, 5,
--			 CLK_IS_CRITICAL, CCU_DIV_RESET_DOMAIN),
-+			 CLK_IS_CRITICAL, CCU_DIV_BASIC | CCU_DIV_RESET_DOMAIN),
- 	CCU_DIV_GATE_INFO(CCU_SYS_GMAC0_TX_CLK, "sys_gmac0_tx_clk",
- 			  "eth_clk", CCU_SYS_GMAC0_BASE, 5),
- 	CCU_DIV_FIXED_INFO(CCU_SYS_GMAC0_PTP_CLK, "sys_gmac0_ptp_clk",
-@@ -235,28 +236,53 @@ static const struct ccu_div_info sys_info[] = {
- 			   "ref_clk", 25),
- 	CCU_DIV_VAR_INFO(CCU_SYS_TIMER0_CLK, "sys_timer0_clk",
- 			 "ref_clk", CCU_SYS_TIMER0_BASE, 17,
--			 CLK_SET_RATE_GATE, 0),
-+			 CLK_SET_RATE_GATE, CCU_DIV_BASIC),
- 	CCU_DIV_VAR_INFO(CCU_SYS_TIMER1_CLK, "sys_timer1_clk",
- 			 "ref_clk", CCU_SYS_TIMER1_BASE, 17,
--			 CLK_SET_RATE_GATE, 0),
-+			 CLK_SET_RATE_GATE, CCU_DIV_BASIC),
- 	CCU_DIV_VAR_INFO(CCU_SYS_TIMER2_CLK, "sys_timer2_clk",
- 			 "ref_clk", CCU_SYS_TIMER2_BASE, 17,
--			 CLK_SET_RATE_GATE, 0),
-+			 CLK_SET_RATE_GATE, CCU_DIV_BASIC),
- 	CCU_DIV_VAR_INFO(CCU_SYS_WDT_CLK, "sys_wdt_clk",
- 			 "eth_clk", CCU_SYS_WDT_BASE, 17,
- 			 CLK_SET_RATE_GATE, CCU_DIV_SKIP_ONE_TO_THREE)
- };
- 
-+static struct ccu_div_data *axi_data;
-+static struct ccu_div_data *sys_data;
-+
-+static void ccu_div_set_data(struct ccu_div_data *data)
-+{
-+	struct device_node *np = data->np;
-+
-+	if (of_device_is_compatible(np, "baikal,bt1-ccu-axi"))
-+		axi_data = data;
-+	else if (of_device_is_compatible(np, "baikal,bt1-ccu-sys"))
-+		sys_data = data;
-+	else
-+		pr_err("Invalid DT node '%s' specified\n", of_node_full_name(np));
-+}
-+
-+static struct ccu_div_data *ccu_div_get_data(struct device_node *np)
-+{
-+	if (of_device_is_compatible(np, "baikal,bt1-ccu-axi"))
-+		return axi_data;
-+	else if (of_device_is_compatible(np, "baikal,bt1-ccu-sys"))
-+		return sys_data;
-+
-+	pr_err("Invalid DT node '%s' specified\n", of_node_full_name(np));
-+
-+	return NULL;
-+}
-+
- static struct ccu_div *ccu_div_find_desc(struct ccu_div_data *data,
- 					 unsigned int clk_id)
- {
--	struct ccu_div *div;
- 	int idx;
- 
- 	for (idx = 0; idx < data->divs_num; ++idx) {
--		div = data->divs[idx];
--		if (div && div->id == clk_id)
--			return div;
-+		if (data->divs_info[idx].id == clk_id)
-+			return data->divs[idx];
- 	}
- 
- 	return ERR_PTR(-EINVAL);
-@@ -328,14 +354,16 @@ static struct clk_hw *ccu_div_of_clk_hw_get(struct of_phandle_args *clkspec,
- 	clk_id = clkspec->args[0];
- 	div = ccu_div_find_desc(data, clk_id);
- 	if (IS_ERR(div)) {
--		pr_info("Invalid clock ID %d specified\n", clk_id);
-+		if (div != ERR_PTR(-EPROBE_DEFER))
-+			pr_info("Invalid clock ID %d specified\n", clk_id);
-+
- 		return ERR_CAST(div);
- 	}
- 
- 	return ccu_div_get_clk_hw(div);
- }
- 
--static int ccu_div_clk_register(struct ccu_div_data *data)
-+static int ccu_div_clk_register(struct ccu_div_data *data, bool defer)
- {
- 	int idx, ret;
- 
-@@ -343,6 +371,13 @@ static int ccu_div_clk_register(struct ccu_div_data *data)
- 		const struct ccu_div_info *info = &data->divs_info[idx];
- 		struct ccu_div_init_data init = {0};
- 
-+		if (!!(info->features & CCU_DIV_BASIC) ^ defer) {
-+			if (!data->divs[idx])
-+				data->divs[idx] = ERR_PTR(-EPROBE_DEFER);
-+
-+			continue;
-+		}
-+
- 		init.id = info->id;
- 		init.name = info->name;
- 		init.parent_name = info->parent_name;
-@@ -375,30 +410,43 @@ static int ccu_div_clk_register(struct ccu_div_data *data)
- 		}
- 	}
- 
--	ret = of_clk_add_hw_provider(data->np, ccu_div_of_clk_hw_get, data);
--	if (ret) {
--		pr_err("Couldn't register dividers '%s' clock provider\n",
--			of_node_full_name(data->np));
--		goto err_hw_unregister;
--	}
--
- 	return 0;
- 
- err_hw_unregister:
--	for (--idx; idx >= 0; --idx)
-+	for (--idx; idx >= 0; --idx) {
-+		if (!!(data->divs_info[idx].features & CCU_DIV_BASIC) ^ defer)
-+			continue;
-+
- 		ccu_div_hw_unregister(data->divs[idx]);
-+	}
- 
- 	return ret;
- }
- 
--static void ccu_div_clk_unregister(struct ccu_div_data *data)
-+static void ccu_div_clk_unregister(struct ccu_div_data *data, bool defer)
- {
- 	int idx;
- 
--	of_clk_del_provider(data->np);
-+	/* Uninstall only the clocks registered on the specfied stage */
-+	for (idx = 0; idx < data->divs_num; ++idx) {
-+		if (!!(data->divs_info[idx].features & CCU_DIV_BASIC) ^ defer)
-+			continue;
- 
--	for (idx = 0; idx < data->divs_num; ++idx)
- 		ccu_div_hw_unregister(data->divs[idx]);
-+	}
-+}
-+
-+static int ccu_div_of_register(struct ccu_div_data *data)
-+{
-+	int ret;
-+
-+	ret = of_clk_add_hw_provider(data->np, ccu_div_of_clk_hw_get, data);
-+	if (ret) {
-+		pr_err("Couldn't register dividers '%s' clock provider\n",
-+			of_node_full_name(data->np));
-+	}
-+
-+	return ret;
- }
- 
- static int ccu_div_rst_register(struct ccu_div_data *data)
-@@ -418,7 +466,49 @@ static int ccu_div_rst_register(struct ccu_div_data *data)
- 	return 0;
- }
- 
--static void ccu_div_init(struct device_node *np)
-+static int ccu_div_probe(struct platform_device *pdev)
-+{
-+	struct ccu_div_data *data;
-+	int ret;
-+
-+	data = ccu_div_get_data(dev_of_node(&pdev->dev));
-+	if (!data)
-+		return -EINVAL;
-+
-+	ret = ccu_div_clk_register(data, false);
-+	if (ret)
-+		return ret;
-+
-+	ret = ccu_div_rst_register(data);
-+	if (ret)
-+		goto err_clk_unregister;
-+
-+	return 0;
-+
-+err_clk_unregister:
-+	ccu_div_clk_unregister(data, false);
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id ccu_div_of_match[] = {
-+	{ .compatible = "baikal,bt1-ccu-axi" },
-+	{ .compatible = "baikal,bt1-ccu-sys" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, ccu_div_of_match);
-+
-+static struct platform_driver ccu_div_driver = {
-+	.probe  = ccu_div_probe,
-+	.driver = {
-+		.name = "clk-ccu-div",
-+		.of_match_table = ccu_div_of_match,
-+		.suppress_bind_attrs = true,
-+	},
-+};
-+builtin_platform_driver(ccu_div_driver);
-+
-+static __init void ccu_div_init(struct device_node *np)
- {
- 	struct ccu_div_data *data;
- 	int ret;
-@@ -431,22 +521,27 @@ static void ccu_div_init(struct device_node *np)
- 	if (ret)
- 		goto err_free_data;
- 
--	ret = ccu_div_clk_register(data);
-+	ret = ccu_div_clk_register(data, true);
- 	if (ret)
- 		goto err_free_data;
- 
--	ret = ccu_div_rst_register(data);
-+	ret = ccu_div_of_register(data);
- 	if (ret)
- 		goto err_clk_unregister;
- 
-+	ccu_div_set_data(data);
-+
- 	return;
- 
- err_clk_unregister:
--	ccu_div_clk_unregister(data);
-+	ccu_div_clk_unregister(data, true);
- 
- err_free_data:
- 	ccu_div_free_data(data);
- }
-+CLK_OF_DECLARE_DRIVER(ccu_axi, "baikal,bt1-ccu-axi", ccu_div_init);
-+CLK_OF_DECLARE_DRIVER(ccu_sys, "baikal,bt1-ccu-sys", ccu_div_init);
- 
--CLK_OF_DECLARE(ccu_axi, "baikal,bt1-ccu-axi", ccu_div_init);
--CLK_OF_DECLARE(ccu_sys, "baikal,bt1-ccu-sys", ccu_div_init);
-+MODULE_AUTHOR("Serge Semin <Sergey.Semin@baikalelectronics.ru>");
-+MODULE_DESCRIPTION("Baikal-T1 CCU Dividers clock driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/clk/baikal-t1/clk-ccu-pll.c b/drivers/clk/baikal-t1/clk-ccu-pll.c
-index 2445d4b12baf..ad420c6477ee 100644
---- a/drivers/clk/baikal-t1/clk-ccu-pll.c
-+++ b/drivers/clk/baikal-t1/clk-ccu-pll.c
-@@ -12,6 +12,7 @@
- #define pr_fmt(fmt) "bt1-ccu-pll: " fmt
- 
- #include <linux/kernel.h>
-+#include <linux/platform_device.h>
- #include <linux/printk.h>
- #include <linux/slab.h>
- #include <linux/clk-provider.h>
-@@ -31,13 +32,14 @@
- #define CCU_PCIE_PLL_BASE		0x018
- #define CCU_ETH_PLL_BASE		0x020
- 
--#define CCU_PLL_INFO(_id, _name, _pname, _base, _flags)	\
--	{						\
--		.id = _id,				\
--		.name = _name,				\
--		.parent_name = _pname,			\
--		.base = _base,				\
--		.flags = _flags				\
-+#define CCU_PLL_INFO(_id, _name, _pname, _base, _flags, _features)	\
-+	{								\
-+		.id = _id,						\
-+		.name = _name,						\
-+		.parent_name = _pname,					\
-+		.base = _base,						\
-+		.flags = _flags,					\
-+		.features = _features,					\
- 	}
- 
- #define CCU_PLL_NUM			ARRAY_SIZE(pll_info)
-@@ -48,6 +50,7 @@ struct ccu_pll_info {
- 	const char *parent_name;
- 	unsigned int base;
- 	unsigned long flags;
-+	unsigned long features;
- };
- 
- /*
-@@ -61,15 +64,15 @@ struct ccu_pll_info {
-  */
- static const struct ccu_pll_info pll_info[] = {
- 	CCU_PLL_INFO(CCU_CPU_PLL, "cpu_pll", "ref_clk", CCU_CPU_PLL_BASE,
--		     CLK_IS_CRITICAL),
-+		     CLK_IS_CRITICAL, CCU_PLL_BASIC),
- 	CCU_PLL_INFO(CCU_SATA_PLL, "sata_pll", "ref_clk", CCU_SATA_PLL_BASE,
--		     CLK_IS_CRITICAL | CLK_SET_RATE_GATE),
-+		     CLK_IS_CRITICAL | CLK_SET_RATE_GATE, 0),
- 	CCU_PLL_INFO(CCU_DDR_PLL, "ddr_pll", "ref_clk", CCU_DDR_PLL_BASE,
--		     CLK_IS_CRITICAL | CLK_SET_RATE_GATE),
-+		     CLK_IS_CRITICAL | CLK_SET_RATE_GATE, 0),
- 	CCU_PLL_INFO(CCU_PCIE_PLL, "pcie_pll", "ref_clk", CCU_PCIE_PLL_BASE,
--		     CLK_IS_CRITICAL),
-+		     CLK_IS_CRITICAL, CCU_PLL_BASIC),
- 	CCU_PLL_INFO(CCU_ETH_PLL, "eth_pll", "ref_clk", CCU_ETH_PLL_BASE,
--		     CLK_IS_CRITICAL | CLK_SET_RATE_GATE)
-+		     CLK_IS_CRITICAL | CLK_SET_RATE_GATE, 0)
- };
- 
- struct ccu_pll_data {
-@@ -78,16 +81,16 @@ struct ccu_pll_data {
- 	struct ccu_pll *plls[CCU_PLL_NUM];
- };
- 
-+static struct ccu_pll_data *pll_data;
-+
- static struct ccu_pll *ccu_pll_find_desc(struct ccu_pll_data *data,
- 					 unsigned int clk_id)
- {
--	struct ccu_pll *pll;
- 	int idx;
- 
- 	for (idx = 0; idx < CCU_PLL_NUM; ++idx) {
--		pll = data->plls[idx];
--		if (pll && pll->id == clk_id)
--			return pll;
-+		if (pll_info[idx].id == clk_id)
-+			return data->plls[idx];
- 	}
- 
- 	return ERR_PTR(-EINVAL);
-@@ -133,14 +136,16 @@ static struct clk_hw *ccu_pll_of_clk_hw_get(struct of_phandle_args *clkspec,
- 	clk_id = clkspec->args[0];
- 	pll = ccu_pll_find_desc(data, clk_id);
- 	if (IS_ERR(pll)) {
--		pr_info("Invalid PLL clock ID %d specified\n", clk_id);
-+		if (pll != ERR_PTR(-EPROBE_DEFER))
-+			pr_info("Invalid PLL clock ID %d specified\n", clk_id);
-+
- 		return ERR_CAST(pll);
- 	}
- 
- 	return ccu_pll_get_clk_hw(pll);
- }
- 
--static int ccu_pll_clk_register(struct ccu_pll_data *data)
-+static int ccu_pll_clk_register(struct ccu_pll_data *data, bool defer)
- {
- 	int idx, ret;
- 
-@@ -148,6 +153,14 @@ static int ccu_pll_clk_register(struct ccu_pll_data *data)
- 		const struct ccu_pll_info *info = &pll_info[idx];
- 		struct ccu_pll_init_data init = {0};
- 
-+		/* Defer non-basic PLLs allocation for the probe stage */
-+		if (!!(info->features & CCU_PLL_BASIC) ^ defer) {
-+			if (!data->plls[idx])
-+				data->plls[idx] = ERR_PTR(-EPROBE_DEFER);
-+
-+			continue;
-+		}
-+
- 		init.id = info->id;
- 		init.name = info->name;
- 		init.parent_name = info->parent_name;
-@@ -155,6 +168,7 @@ static int ccu_pll_clk_register(struct ccu_pll_data *data)
- 		init.sys_regs = data->sys_regs;
- 		init.np = data->np;
- 		init.flags = info->flags;
-+		init.features = info->features;
- 
- 		data->plls[idx] = ccu_pll_hw_register(&init);
- 		if (IS_ERR(data->plls[idx])) {
-@@ -165,22 +179,71 @@ static int ccu_pll_clk_register(struct ccu_pll_data *data)
- 		}
- 	}
- 
-+	return 0;
-+
-+err_hw_unregister:
-+	for (--idx; idx >= 0; --idx) {
-+		if (!!(pll_info[idx].features & CCU_PLL_BASIC) ^ defer)
-+			continue;
-+
-+		ccu_pll_hw_unregister(data->plls[idx]);
-+	}
-+
-+	return ret;
-+}
-+
-+static void ccu_pll_clk_unregister(struct ccu_pll_data *data, bool defer)
-+{
-+	int idx;
-+
-+	/* Uninstall only the clocks registered on the specfied stage */
-+	for (idx = 0; idx < CCU_PLL_NUM; ++idx) {
-+		if (!!(pll_info[idx].features & CCU_PLL_BASIC) ^ defer)
-+			continue;
-+
-+		ccu_pll_hw_unregister(data->plls[idx]);
-+	}
-+}
-+
-+static int ccu_pll_of_register(struct ccu_pll_data *data)
-+{
-+	int ret;
-+
- 	ret = of_clk_add_hw_provider(data->np, ccu_pll_of_clk_hw_get, data);
- 	if (ret) {
- 		pr_err("Couldn't register PLL provider of '%s'\n",
- 			of_node_full_name(data->np));
--		goto err_hw_unregister;
- 	}
- 
--	return 0;
-+	return ret;
-+}
- 
--err_hw_unregister:
--	for (--idx; idx >= 0; --idx)
--		ccu_pll_hw_unregister(data->plls[idx]);
-+static int ccu_pll_probe(struct platform_device *pdev)
-+{
-+	struct ccu_pll_data *data = pll_data;
- 
--	return ret;
-+	if (!data)
-+		return -EINVAL;
-+
-+	return ccu_pll_clk_register(data, false);
- }
- 
-+static const struct of_device_id ccu_pll_of_match[] = {
-+	{ .compatible = "baikal,bt1-ccu-pll" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, ccu_pll_of_match);
-+
-+static struct platform_driver ccu_pll_driver = {
-+	.probe  = ccu_pll_probe,
-+	.driver = {
-+		.name = "clk-ccu-pll",
-+		.of_match_table = ccu_pll_of_match,
-+		.suppress_bind_attrs = true,
-+	},
-+};
-+builtin_platform_driver(ccu_pll_driver);
-+
- static __init void ccu_pll_init(struct device_node *np)
- {
- 	struct ccu_pll_data *data;
-@@ -194,13 +257,26 @@ static __init void ccu_pll_init(struct device_node *np)
- 	if (ret)
- 		goto err_free_data;
- 
--	ret = ccu_pll_clk_register(data);
-+	ret = ccu_pll_clk_register(data, true);
- 	if (ret)
- 		goto err_free_data;
- 
-+	ret = ccu_pll_of_register(data);
-+	if (ret)
-+		goto err_clk_unregister;
-+
-+	pll_data = data;
-+
- 	return;
- 
-+err_clk_unregister:
-+	ccu_pll_clk_unregister(data, true);
-+
- err_free_data:
- 	ccu_pll_free_data(data);
- }
--CLK_OF_DECLARE(ccu_pll, "baikal,bt1-ccu-pll", ccu_pll_init);
-+CLK_OF_DECLARE_DRIVER(ccu_pll, "baikal,bt1-ccu-pll", ccu_pll_init);
-+
-+MODULE_AUTHOR("Serge Semin <Sergey.Semin@baikalelectronics.ru>");
-+MODULE_DESCRIPTION("Baikal-T1 CCU PLL clock driver");
-+MODULE_LICENSE("GPL");
--- 
-2.35.1
-
+>
+> >Also this for loop over |npages| is duplicated from snp_reclaim_pages().=
+ One improvement here is that on the current
+> >snp_reclaim_pages() if we fail to reclaim a page we assume we cannot rec=
+laim the next pages, this may cause us to snp_leak_pages() more pages than =
+we actually need too.
+>
+> Yes that is true.
+>
+> >What about something like this?
+>
+> >static snp_leak_page(u64 pfn, enum pg_level level) {
+> >   memory_failure(pfn, 0);
+> >   dump_rmpentry(pfn);
+> >}
+>
+> >static int snp_reclaim_page(u64 pfn, enum pg_level level) {
+> >  int ret;
+> >  struct sev_data_snp_page_reclaim data;
+>
+> >  ret =3D sev_do_cmd(SEV_CMD_SNP_PAGE_RECLAIM, &data, &err);
+> >  if (ret)
+> >    goto cleanup;
+>
+> >  ret =3D rmp_make_shared(pfn, level);
+> >  if (ret)
+> >    goto cleanup;
+>
+> > return 0;
+>
+> >cleanup:
+> >    snp_leak_page(pfn, level)
+> >}
+>
+> >typedef int (*rmp_state_change_func) (u64 pfn, enum pg_level level);
+>
+> >static int snp_set_rmp_state(unsigned long paddr, unsigned int npages, r=
+mp_state_change_func state_change, rmp_state_change_func cleanup) {
+> >  struct sev_data_snp_page_reclaim data;
+> >  int ret, err, i, n =3D 0;
+>
+> >  for (i =3D 0, n =3D 0; i < npages; i++, n++, pfn++) {
+> >    ret =3D state_change(pfn, PG_LEVEL_4K)
+> >    if (ret)
+> >      goto cleanup;
+> >  }
+>
+> >  return 0;
+>
+> > cleanup:
+> >  for (; i>=3D 0; i--, n--, pfn--) {
+> >    cleanup(pfn, PG_LEVEL_4K);
+> >  }
+>
+> >  return ret;
+> >}
+>
+> >Then inside of __snp_alloc_firmware_pages():
+>
+> >snp_set_rmp_state(paddr, npages, rmp_make_firmware, snp_reclaim_page);
+>
+> >And inside of __snp_free_firmware_pages():
+>
+> >snp_set_rmp_state(paddr, npages, snp_reclaim_page, snp_leak_page);
+>
+> >Just a suggestion feel free to ignore. The readability comment could be =
+addressed much less invasively by just making separate functions for each v=
+alid combination of arguments here. Like snp_set_rmp_fw_state(), snp_set_rm=
+p_shared_state(),
+> >snp_set_rmp_release_state() or something.
+>
+> >> +static struct page *__snp_alloc_firmware_pages(gfp_t gfp_mask, int
+> >> +order, bool locked) {
+> >> +       unsigned long npages =3D 1ul << order, paddr;
+> >> +       struct sev_device *sev;
+> >> +       struct page *page;
+> >> +
+> >> +       if (!psp_master || !psp_master->sev_data)
+> >> +               return NULL;
+> >> +
+> >> +       page =3D alloc_pages(gfp_mask, order);
+> >> +       if (!page)
+> >> +               return NULL;
+> >> +
+> >> +       /* If SEV-SNP is initialized then add the page in RMP table. *=
+/
+> >> +       sev =3D psp_master->sev_data;
+> >> +       if (!sev->snp_inited)
+> >> +               return page;
+> >> +
+> >> +       paddr =3D __pa((unsigned long)page_address(page));
+> >> +       if (snp_set_rmp_state(paddr, npages, true, locked, false))
+> >> +               return NULL;
+>
+> >So what about the case where snp_set_rmp_state() fails but we were able =
+to reclaim all the pages? Should we be able to signal that to callers so th=
+at we could free |page| here? But given this is an error path already maybe=
+ we can optimize this in a >follow up series.
+>
+> Yes, we should actually tie in to snp_reclaim_pages() success or failure =
+here in the case we were able to successfully unroll some or all of the fir=
+mware state change.
+>
+> > +
+> > +       return page;
+> > +}
+> > +
+> > +void *snp_alloc_firmware_page(gfp_t gfp_mask) {
+> > +       struct page *page;
+> > +
+> > +       page =3D __snp_alloc_firmware_pages(gfp_mask, 0, false);
+> > +
+> > +       return page ? page_address(page) : NULL; }
+> > +EXPORT_SYMBOL_GPL(snp_alloc_firmware_page);
+> > +
+> > +static void __snp_free_firmware_pages(struct page *page, int order,
+> > +bool locked) {
+> > +       unsigned long paddr, npages =3D 1ul << order;
+> > +
+> > +       if (!page)
+> > +               return;
+> > +
+> > +       paddr =3D __pa((unsigned long)page_address(page));
+> > +       if (snp_set_rmp_state(paddr, npages, false, locked, true))
+> > +               return;
+>
+> > Here we may be able to free some of |page| depending how where inside o=
+f snp_set_rmp_state() we failed. But again given this is an error path alre=
+ady maybe we can optimize this in a follow up series.
+>
+> Yes, we probably should be able to free some of the page(s) depending on =
+how many page(s) got reclaimed in snp_set_rmp_state().
+> But these reclamation failures may not be very common, so any failure is =
+indicative of a bigger issue, it might be the case when there is a single p=
+age reclamation error it might happen with all the subsequent
+> pages and so follow a simple recovery procedure, then handling a more com=
+plex recovery for a chunk of pages being reclaimed and another chunk not.
+>
+> Thanks,
+> Ashish
+>
+>
+>

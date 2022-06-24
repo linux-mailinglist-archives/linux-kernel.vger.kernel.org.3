@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1CE655A37B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B1A55A37E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbiFXVbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 17:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
+        id S231190AbiFXVbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 17:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbiFXVaz (ORCPT
+        with ESMTP id S231467AbiFXVa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 17:30:55 -0400
+        Fri, 24 Jun 2022 17:30:57 -0400
 Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3157FD39
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:54 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 15-20020a63020f000000b003fca9ebc5cbso1546806pgc.22
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA32581269
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:56 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id o22-20020a637316000000b0040d238478aeso1557602pgc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=aVL8GM5UlCYwkYpjstIne4ze+uj4PFzbjfg18IJWQlI=;
-        b=MNWyh9kWGEe9f3b2ZEyrpQTABz+TEx0AgE7yK61YYChhZL7DpPrgNJw4jZlShrPH/T
-         6yxzaoxZaBvuHcdqqjG151wMMqI9GWvT+vTYyU8+pqY1vAmC0Vby0UZt58enP6mxuhOz
-         hwgvzRX3qsiRUe9uezVcYWRZwbNL4DurMF99wwND4yZ9krO96vGb41YJMkO76M3cDHEM
-         metf14q/h4Gfwimqb6G6rfwRVgJxjeupcvFyno3QqtZq/vLSk66tFvf5CNz38R+j3yxN
-         bFAYk1w781QG4K555lmuC80JPNPT6FcRFRaYpj2+WrdQ5XXODK5MFTqSBdkf10lJvPo+
-         bHcw==
+        bh=+jnXhzHCPLlyWGuqZQ0mGasvqcBiUClEYUi7f6uXGnA=;
+        b=oMU1MlW+3HAUB8TWEcHWIqU6v3ZgrNxHm+Tp3iBDMZrqPmr/WGzoH7HQuTSZdLaO52
+         Gb1sdyM9iEwOq8CHr2baCpaLbkv06tIYZyXwdAyxq3b+9mOXSiCveMZcDoIhpN7XNFoP
+         AZz1KEI2BDu64hW6HRfrsp4y039H0MhY5iqm2PIwz8x4excaZ6az3/sRqSm3mhfSVDbO
+         ZRVccTtvLbqt+A1utFOFQShRJA2OcrbxF2gm0h390trx4zGXGf4iEvd5XVXiTV+mycc4
+         g5TfbT4xRTTs7G7PskXxxsTv1ArM8+7fgiD2df4FrniuyouldzbJ9a4LkzRRa+YWbE7o
+         JHlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=aVL8GM5UlCYwkYpjstIne4ze+uj4PFzbjfg18IJWQlI=;
-        b=kPFQW2WJCVFhgf1pyruhcVXQYpWqacsthxk5cgEX6PafU+J4Db+nsKZqOvNV27/rWm
-         dUaKtEfW/+Ne0pFuBwyYJZ03CFd/JE+ICaiW1VmgpacZ4S3a18ZgZMk8g0fIATDVNlmW
-         y2Rmmx20srFtAAIlyKt3BjruUNTOUIGrazMg8vRK+WEkbdFRn2LdLpHL8NGSimh1XTh6
-         BcGynVJeQJJ0CsFJIDrrhFIB+SbHDRnBw4wSi5DhMzB/6f9yf8I85r62q3izCYEl3Eq7
-         ezTJc/7liVUzrZMkyj5Ic1yUlWdMuBj3nBnkRsPKGUsto7LUzh+UBzuRgfR/2jHcFnD6
-         JsTA==
-X-Gm-Message-State: AJIora/eJPJVIUa3JJJAewDOY37ZEBqK1xEn+Hmy36c0xZw9jTbgQNjD
-        5VWJehEHdF2oiqTi5juGBCIJbqNrYXE=
-X-Google-Smtp-Source: AGRyM1sMeT4iPH4Z55LvwsYjBdCB6PioE05w9SsEBuG3UpD3DTmlohwidwuec0jKYnkeFNx6hlYHlWLKjBQ=
+        bh=+jnXhzHCPLlyWGuqZQ0mGasvqcBiUClEYUi7f6uXGnA=;
+        b=QWE0lVxrZtsF5sh+3CnlKPSy4HFlk0UjHMU93DbbLD5pV8Aogb4kdQpO7bwtT3yNvy
+         80NQb4DAJAkYUyrqps7TOMxY3TAWayDOIUbIqaLL+DrOnMe9l1kqn+ShNyDJ57Nhc86O
+         WT5s8Tib2cBRpjqiJZUZ4ADR6Cv/esPaZrdtA+RrULBgMgvCocg6HGWzxpVwlVLz6kfm
+         L/3zgrfKeLfn3+jW453PPyD1qM+uUOT7XxhvXyiPSao/yfU3ulDpZTwvhfCHgwX5zG2K
+         rrXL+jIt1t596k25Vg2wlM+637PK4IxvQ8ZeOfO8ERYw0BDWk6Nw2ccBST11AO/W8nVr
+         2mhw==
+X-Gm-Message-State: AJIora/LBUTgMFtYe1rscLYvGTxesk6rK97YfydBUs/O1fEZsEylcabi
+        8UM9nx/8m3LoMiDTE+G3pnmz3mmAVKc=
+X-Google-Smtp-Source: AGRyM1tzdjiNisYNqq4YKLQi4OaXM7gDixiQ7ghRnaWpvtULrzdW//5VP9BJ3ETreJf22QjtlykemyEnLqM=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:e809:b0:16a:22dc:d23a with SMTP id
- u9-20020a170902e80900b0016a22dcd23amr1098100plg.119.1656106254367; Fri, 24
- Jun 2022 14:30:54 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:4a97:b0:1ea:fa24:467c with SMTP id
+ f23-20020a17090a4a9700b001eafa24467cmr389269pjh.1.1656106255902; Fri, 24 Jun
+ 2022 14:30:55 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 24 Jun 2022 21:30:37 +0000
+Date:   Fri, 24 Jun 2022 21:30:38 +0000
 In-Reply-To: <20220624213039.2872507-1-seanjc@google.com>
-Message-Id: <20220624213039.2872507-3-seanjc@google.com>
+Message-Id: <20220624213039.2872507-4-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220624213039.2872507-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v2 2/4] KVM: x86/mmu: Expand quadrant comment for PG_LEVEL_4K
- shadow pages
+Subject: [PATCH v2 3/4] KVM: x86/mmu: Use "unsigned int", not "u32", for
+ SPTEs' @access info
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -74,54 +74,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tweak the comment above the computation of the quadrant for PG_LEVEL_4K
-shadow pages to explicitly call out how and why KVM uses role.quadrant to
-consume gPTE bits.
-
-Opportunistically wrap an unnecessarily long line.
+Use an "unsigned int" for @access parameters instead of a "u32", mostly
+to be consistent throughout KVM, but also because "u32" is misleading.
+@access can actually squeeze into a u8, i.e. doesn't need 32 bits, but is
+as an "unsigned int" because sp->role.access is an unsigned int.
 
 No functional change intended.
 
-Link: https://lore.kernel.org/all/YqvWvBv27fYzOFdE@google.com
-Cc: David Matlack <dmatlack@google.com>
+Link: https://lore.kernel.org/all/YqyZxEfxXLsHGoZ%2F@google.com
+Reviewed-by: David Matlack <dmatlack@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index b04e9ce2469a..83ca71361acd 100644
+index 83ca71361acd..eae5c801e442 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -2166,7 +2166,8 @@ static struct kvm_mmu_page *kvm_mmu_get_shadow_page(struct kvm_vcpu *vcpu,
- 	return __kvm_mmu_get_shadow_page(vcpu->kvm, vcpu, &caches, gfn, role);
+@@ -717,7 +717,8 @@ static u32 kvm_mmu_page_get_access(struct kvm_mmu_page *sp, int index)
+ 	return sp->role.access;
  }
  
--static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct, unsigned int access)
-+static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct,
-+						  unsigned int access)
+-static void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index, gfn_t gfn, u32 access)
++static void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index,
++					 gfn_t gfn, unsigned int access)
  {
- 	struct kvm_mmu_page *parent_sp = sptep_to_sp(sptep);
- 	union kvm_mmu_page_role role;
-@@ -2193,9 +2194,15 @@ static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct, unsig
- 	 * uses 2 PAE page tables, each mapping a 2MiB region. For these,
- 	 * @role.quadrant encodes which half of the region they map.
- 	 *
--	 * Note, the 4 PAE page directories are pre-allocated and the quadrant
--	 * assigned in mmu_alloc_root(). So only page tables need to be handled
--	 * here.
-+	 * Concretely, a 4-byte PDE consumes bits 31:22, while an 8-byte PDE
-+	 * consumes bits 29:21.  To consume bits 31:30, KVM's uses 4 shadow
-+	 * PDPTEs; those 4 PAE page directories are pre-allocated and their
-+	 * quadrant is assigned in mmu_alloc_root().   A 4-byte PTE consumes
-+	 * bits 21:12, while an 8-byte PTE consumes bits 20:12.  To consume
-+	 * bit 21 in the PTE (the child here), KVM propagates that bit to the
-+	 * quadrant, i.e. sets quadrant to '0' or '1'.  The parent 8-byte PDE
-+	 * covers bit 21 (see above), thus the quadrant is calculated from the
-+	 * _least_ significant bit of the PDE index.
- 	 */
- 	if (role.has_4_byte_gpte) {
- 		WARN_ON_ONCE(role.level != PG_LEVEL_4K);
+ 	if (sp_has_gptes(sp)) {
+ 		sp->shadowed_translation[index] = (gfn << PAGE_SHIFT) | access;
+@@ -735,7 +736,8 @@ static void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index, gfn
+ 	          sp->gfn, kvm_mmu_page_get_gfn(sp, index), gfn);
+ }
+ 
+-static void kvm_mmu_page_set_access(struct kvm_mmu_page *sp, int index, u32 access)
++static void kvm_mmu_page_set_access(struct kvm_mmu_page *sp, int index,
++				    unsigned int access)
+ {
+ 	gfn_t gfn = kvm_mmu_page_get_gfn(sp, index);
+ 
+@@ -1580,7 +1582,7 @@ static bool kvm_test_age_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+ static void __rmap_add(struct kvm *kvm,
+ 		       struct kvm_mmu_memory_cache *cache,
+ 		       const struct kvm_memory_slot *slot,
+-		       u64 *spte, gfn_t gfn, u32 access)
++		       u64 *spte, gfn_t gfn, unsigned int access)
+ {
+ 	struct kvm_mmu_page *sp;
+ 	struct kvm_rmap_head *rmap_head;
+@@ -1601,7 +1603,7 @@ static void __rmap_add(struct kvm *kvm,
+ }
+ 
+ static void rmap_add(struct kvm_vcpu *vcpu, const struct kvm_memory_slot *slot,
+-		     u64 *spte, gfn_t gfn, u32 access)
++		     u64 *spte, gfn_t gfn, unsigned int access)
+ {
+ 	struct kvm_mmu_memory_cache *cache = &vcpu->arch.mmu_pte_list_desc_cache;
+ 
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

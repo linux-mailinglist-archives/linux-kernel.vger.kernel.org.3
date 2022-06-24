@@ -2,82 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7317559745
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFF2559752
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbiFXKCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 06:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
+        id S230334AbiFXKFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 06:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiFXKCX (ORCPT
+        with ESMTP id S230509AbiFXKFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 06:02:23 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766347A1AC
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:02:21 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ge10so3642741ejb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GtDx/4MtrxYt8hYrk4oMF8kIZqBnmvODq04HfBb169o=;
-        b=EPz+7sJNDH++V1yMWLrc5mRkOsO+NqZvLBrjqveEPoRRpCThZZ41cOoejZek82+QIG
-         28oBv6aGSlevvdxpkzAkvGzcY201imYWhlJNA5NPN/m/8oVaPWKug7D1CfKK5p14lz55
-         QffaEfY+Y4qMXPxB1unyi1u8N9j+/oWBz86a0NptnrYcqC0/eNqg04+K8wUCbeMzYdbd
-         GKmEV6EeeXdzPfmU6cAv14I0z3c8CIK8QUt7x3COZTbu11U1q0p/q8r+5Xmrpth5PUnh
-         VVO2uDmWpLrqkcL+bp5CZJkgvJYl9JM6P22l9/2AL9SIT3Mzf3uyf3FQsdeWRsijrCKz
-         kLfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GtDx/4MtrxYt8hYrk4oMF8kIZqBnmvODq04HfBb169o=;
-        b=QKqtCaQt8jJqmTSA01utTANjbroQi/acBkJuxOmu0vxIHBUzm/3sxDtl8iV8LHRbG3
-         DfPv6vurKWR0yqywY+TBDHGu1/I86ok5HfxoL7d1K40eIieWwnnvBIHRFln+9GZ0xqH/
-         KpgMJd1JLRsmtA2H/GejbOslgkwpBLj6LYmTEfrnER8d0RIbTTfEyRY/JFgU1mg+M6c7
-         7aOIVE695TmZYV/83ARIW3OKbkvkvfdn4iKlQhhlAy1bBl/e7zmBYV6Yf5qatDRVpR2b
-         raYkI2UM5nPfiuPsnz8JtTegZLZfe1+wsRgVlRoCdAWGXASEbzmXSDleGi4JrYE6aySm
-         cHOg==
-X-Gm-Message-State: AJIora+JLttzMMSGxZLx+aOPghFf+MGePSUCT6nxdvPRaZfdNL3dXC3C
-        eASiQvUboO2l9arSkvYly/txRw==
-X-Google-Smtp-Source: AGRyM1sefjpiKJ7ux0kcypv9fmdJCP+pCzqZ3OVhjn3YCPERtUsWGvmVzsziW2GqNk3WP0rJOKi51A==
-X-Received: by 2002:a17:906:5047:b0:710:456a:695e with SMTP id e7-20020a170906504700b00710456a695emr12397953ejk.433.1656064940041;
-        Fri, 24 Jun 2022 03:02:20 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id uz12-20020a170907118c00b00711aed17047sm850487ejb.28.2022.06.24.03.02.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 03:02:18 -0700 (PDT)
-Message-ID: <5a19a73a-e81a-8f7e-e26c-6c1d8e8331a4@linaro.org>
-Date:   Fri, 24 Jun 2022 12:02:17 +0200
+        Fri, 24 Jun 2022 06:05:50 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B0E4E3B7;
+        Fri, 24 Jun 2022 03:05:49 -0700 (PDT)
+Received: from fsav111.sakura.ne.jp (fsav111.sakura.ne.jp [27.133.134.238])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 25OA5QLd099780;
+        Fri, 24 Jun 2022 19:05:26 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav111.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp);
+ Fri, 24 Jun 2022 19:05:26 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 25OA5Q1V099777
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 24 Jun 2022 19:05:26 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <f754e6cd-8f99-a42e-9b65-3f4971e51432@I-love.SAKURA.ne.jp>
+Date:   Fri, 24 Jun 2022 19:05:25 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v2] dt-bindings: mmc: mtk-sd: Set clocks based on
- compatible
+Subject: Re: [PATCH] tomoyo: Fix typo in comment
 Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-mmc@vger.kernel.org
-References: <20220623154038.771874-1-nfraprado@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220623154038.771874-1-nfraprado@collabora.com>
+To:     Xiang wangx <wangxiang@cdjrlc.com>
+Cc:     jmorris@namei.org, serge@hallyn.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, takedakn@nttdata.co.jp
+References: <20220624070254.33998-1-wangxiang@cdjrlc.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20220624070254.33998-1-wangxiang@cdjrlc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,21 +54,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2022 17:40, Nícolas F. R. A. Prado wrote:
-> The binding was describing a single clock list for all platforms, but
-> that's not really suitable: mt2712 requires an extra 'bus_clk' on some
-> of its controllers, while mt8192 requires four different extra clocks.
-> The rest of the platforms can share the same 3 clocks, with the third
-> being optional as it's not present on all platforms.
+Thanks for a patch, but current is correct. ("path2" means takes two path arguments)
+
+On 2022/06/24 16:02, Xiang wangx wrote:
+> Delete the redundant word 'path'.
 > 
-> Move the clock definitions inside if blocks that match on the
-> compatibles. In practice this gets rid of dtbs_check warnings on mt8192,
-> since the 'bus_clk' clock from mt2712 is no longer expected on this
-> platform.
-
-And now we see that you introduce incompatible change and ABI break.
-This should not be combined with that patch but instead separate patch
-explaining why ABI break is ok.
-
-Best regards,
-Krzysztof
+> Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+> ---
+>  security/tomoyo/file.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/security/tomoyo/file.c b/security/tomoyo/file.c
+> index 1e6077568fde..772f7e1ddf6e 100644
+> --- a/security/tomoyo/file.c
+> +++ b/security/tomoyo/file.c
+> @@ -286,7 +286,7 @@ static bool tomoyo_check_path_number_acl(struct tomoyo_request_info *r,
+>  }
+>  
+>  /**
+> - * tomoyo_check_path2_acl - Check permission for path path operation.
+> + * tomoyo_check_path2_acl - Check permission for path operation.
+>   *
+>   * @r:   Pointer to "struct tomoyo_request_info".
+>   * @ptr: Pointer to "struct tomoyo_acl_info".

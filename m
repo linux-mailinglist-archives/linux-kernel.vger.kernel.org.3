@@ -2,562 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F79E5596AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDFB55595E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbiFXJ20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 05:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
+        id S231144AbiFXI7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 04:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231986AbiFXJ2U (ORCPT
+        with ESMTP id S229830AbiFXI7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 05:28:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AF91EAD2;
-        Fri, 24 Jun 2022 02:28:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE2B062095;
-        Fri, 24 Jun 2022 09:28:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3154C34114;
-        Fri, 24 Jun 2022 09:27:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656062880;
-        bh=C0uYnFRgGGrjy3PiU3f/Ru/C6QDqECnHj7AGp9a1S88=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hWGToQuaB2rQD34YC2A6dAfLblFKm/FEZ580TsHD8vmVbKJmKopHauqZXl0mFI//7
-         1NGGIqAOIhnx0yGEzpK404Ynt+ZW3YhU+2oomxbCGfN0obNRRdoiPjImv4H5EZazkg
-         UbGXCuZoJiYKiDUJO7NE4pzjmTOH7O5pOoo68NJCwp3NmpdxXol/R0tdMpJKXe3kPs
-         h8as7XgVF4eIZcIblVrBoFqVJbqfEL0+IM7k+DjJwtFg4vTTQD/gZxObjfbkAj82by
-         So8KwBMEJ1aMESkheTbPQxgfg6fsOTkXpuVbXLdqMlC6cMg4pC7fnNyVaNfulK2bkj
-         v6aqobazT7ECQ==
-Received: by pali.im (Postfix)
-        id BB5CD711; Fri, 24 Jun 2022 11:27:56 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Marek Behun <marek.behun@nic.cz>,
-        Josef Schlehofer <josef.schlehofer@nic.cz>
-Subject: [PATCH v2] powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers
-Date:   Fri, 24 Jun 2022 10:55:50 +0200
-Message-Id: <20220624085550.20570-1-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220511143712.22550-1-pali@kernel.org>
-References: <20220511143712.22550-1-pali@kernel.org>
+        Fri, 24 Jun 2022 04:59:05 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6229D633D;
+        Fri, 24 Jun 2022 01:59:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656061144; x=1687597144;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ljZR3kvR/OGEYgbIV1wxUkEznb8b1nQMhgYJxvhzmJI=;
+  b=WaAMVSipUXLHgmM40ys/0n9r0hhy3mdqyTLE++/AUZJACnB/HHGCTTMB
+   um7DRJNF0mu4BWWJks75j2pfwOJy5/tkNK1jLLDt2MPJP/lmu+h7wRaxR
+   lAAQ2SbsiTTBPy1kD/Kx7PaWGdIcnv+/n20JDFXNvmOO94AQGjl+QCnYF
+   4=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Jun 2022 01:59:04 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 01:59:03 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 24 Jun 2022 01:59:02 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 24 Jun 2022 01:58:56 -0700
+Date:   Fri, 24 Jun 2022 14:28:53 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "Krishna Kurapati" <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_vpulyala@quicinc.com>
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <20220624085853.GA11991@hu-pkondeti-hyd.qualcomm.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com>
+ <Yp5nf2w8uVZ38/XZ@google.com>
+ <Yqd9IHQEj3Ex+FcF@google.com>
+ <YqjLHyUVEjf7I3MI@google.com>
+ <20220616091110.GA24114@hu-pkondeti-hyd.qualcomm.com>
+ <YqtlRQOwb3t6Xtd0@google.com>
+ <20220620085415.GA13744@hu-pkondeti-hyd.qualcomm.com>
+ <YrSzDhgAvMx4TwD2@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YrSzDhgAvMx4TwD2@google.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CZ.NIC Turris 1.0 and 1.1 are open source routers, they have dual-core
-PowerPC Freescale P2020 CPU and are based on Freescale P2020RDB-PC-A board.
-Hardware design is fully open source, all firmware and hardware design
-files are available at Turris project website:
+On Thu, Jun 23, 2022 at 11:38:06AM -0700, Matthias Kaehlcke wrote:
+> On Mon, Jun 20, 2022 at 02:24:15PM +0530, Pavan Kondeti wrote:
+> > +Felipe, Bjorn
+> > 
+> > On Thu, Jun 16, 2022 at 10:15:49AM -0700, Matthias Kaehlcke wrote:
+> > > On Thu, Jun 16, 2022 at 02:41:10PM +0530, Pavan Kondeti wrote:
+> > > > Hi Matthias/Krishna,
+> > > > 
+> > > > On Tue, Jun 14, 2022 at 10:53:35AM -0700, Matthias Kaehlcke wrote:
+> > > > > On Mon, Jun 13, 2022 at 11:08:32AM -0700, Matthias Kaehlcke wrote:
+> > > > > > On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
+> > > > > > > On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
+> > > > > > > > Hi Krishna,
+> > > > > > > > 
+> > > > > > > > with this version I see xHCI errors on my SC7180 based system, like
+> > > > > > > > these:
+> > > > > > > > 
+> > > > > > > > [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
+> > > > > > > > 
+> > > > > > > > [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
+> > > > > > > > 
+> > > > > > > > After resume a downstream hub isn't enumerated again.
+> > > > > > > > 
+> > > > > > > > So far I didn't see those with v13, but I aso saw the first error with
+> > > > > > > > v16.
+> > > > > > > 
+> > > > > > > It also happens with v13, but only when a wakeup capable vUSB <= 2
+> > > > > > > device is plugged in. Initially I used a wakeup capable USB3 to
+> > > > > > > Ethernet adapter to trigger the wakeup case, however older versions
+> > > > > > > of this series that use usb_wakeup_enabled_descendants() to check
+> > > > > > > for wakeup capable devices didn't actually check for vUSB > 2
+> > > > > > > devices.
+> > > > > > > 
+> > > > > > > So the case were the controller/PHYs is powered down works, but
+> > > > > > > the controller is unhappy when the runtime PM path is used during
+> > > > > > > system suspend.
+> > > > > > 
+> > > > > > The issue isn't seen on all systems using dwc3-qcom and the problem starts
+> > > > > > during probe(). The expected probe sequence is something like this:
+> > > > > > 
+> > > > > > dwc3_qcom_probe
+> > > > > >   dwc3_qcom_of_register_core
+> > > > > >     dwc3_probe
+> > > > > > 
+> > > > > >   if (device_can_wakeup(&qcom->dwc3->dev))
+> > > > > >     ...
+> > > > > > 
+> > > > > > The important part is that device_can_wakeup() is called after dwc3_probe()
+> > > > > > has completed. That's what I see on a QC SC7280 system, where wakeup is
+> > > > > > generally working with these patches.
+> > > > > > 
+> > > > > > However on a QC SC7180 system dwc3_probe() is deferred and only executed after
+> > > > > > dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
+> > > > > > With that the controller/driver ends up in an unhappy state after system
+> > > > > > suspend.
+> > > > > > 
+> > > > > > Probing is deferred on SC7180 because device_links_check_suppliers() finds
+> > > > > > that '88e3000.phy' isn't ready yet.
+> > > > > 
+> > > > > It seems device links could be used to make sure the dwc3 core is present:
+> > > > > 
+> > > > >   Another example for an inconsistent state would be a device link that
+> > > > >   represents a driver presence dependency, yet is added from the consumer’s
+> > > > >   ->probe callback while the supplier hasn’t probed yet: Had the driver core
+> > > > >   known about the device link earlier, it wouldn’t have probed the consumer
+> > > > >   in the first place. The onus is thus on the consumer to check presence of
+> > > > >   the supplier after adding the link, and defer probing on non-presence.
+> > > > > 
+> > > > >   https://www.kernel.org/doc/html/v5.18/driver-api/device_link.html#usage
+> > > > > 
+> > > > > 
+> > > > > You could add something like this to dwc3_qcom_of_register_core():
+> > > > > 
+> > > > > 
+> > > > >   device_link_add(dev, &qcom->dwc3->dev,
+> > > > >   		  DL_FLAG_AUTOREMOVE_CONSUMER | DL_FLAG_AUTOPROBE_CONSUMER);
+> > > > > 
+> > > > >   if (qcom->dwc3->dev.links.status != DL_DEV_DRIVER_BOUND)
+> > > > >       ret = -EPROBE_DEFER;
+> > > > > 
+> > > > > 
+> > > > I am not very sure how the device_link_add() API works. we are the parent and
+> > > > creating a depdency on child probe. That does not sound correct to me.
+> > > 
+> > > The functional dependency is effectively there, the driver already assumes that
+> > > the dwc3 core was probed when of_platform_populate() returns.
+> > > 
+> > > The device link itself doesn't create the dependency on the probe(), the check
+> > > of the link status below does.
+> > > 
+> > > Another option would be to add a link to the PHYs to the dwc3-qcom node in
+> > > the device tree, but I don't think that would be a better solution (and I
+> > > expect Rob would oppose this).
+> > > 
+> > > I'm open to other solutions, so far the device link is the cleanest that came
+> > > to my mind.
+> > > 
+> > > I think the root issue is the driver architecture, with two interdependent
+> > > drivers for the same IP block, instead of a single framework driver with a
+> > > common part (dwc3 core) and vendor specific hooks/data.
+> > > 
+> > > > Any ways, I have another question.
+> > > > 
+> > > > When dwc3_qcom_of_register_core() returns error back to dwc3_qcom_probe(), we
+> > > > goto depopulate label which calls of_platform_depopulate() which destroy the
+> > > > child devices that are populated. how does that ensure that child probe is
+> > > > completed by the time, our probe is called again. The child device it self is
+> > > > gone. Is this working because when our probe is called next time, the child
+> > > > probe depenencies are resolved?
+> > > 
+> > > Good point! It doesn't really ensure that the child is probed (actually it
+> > > won't be probed and DL_FLAG_AUTOPROBE_CONSUMER doesn't make sense here), it
+> > > could happen that dwc3_qcom_probe() is deferred multiple times, but eventually
+> > > the PHYs should be ready and dwc3_probe() be invoked through
+> > > of_platform_populate().
+> > 
+> > This is a generic problem i.e if a parent can only proceed after the child
+> > devices are bounded (i.e probed successfully), how to ensure this behavior
+> > from the parent's probe? Since we can't block the parent probe (async probe is
+> > not the default behavior), we have to identify the condition that the children
+> > are deferring probe, so that parent also can do that.
+> > 
+> > Can we add a API in drivers core to tell if a device probe is deferred or
+> > not? This can be done by testing list_empty(&dev->p->deferred_probe) under
+> > deferred_probe_mutex mutex. The parent can return EPROBE_DEFER based on this
+> > API return value.
+> 
+> That could be an option.
+> 
+> > Another alternative would be explicitly checking if the child device suppliers
+> > are ready or not before adding child device. That would require decoupling
+> > of_platform_populate() to creating devices and adding devices.
+> 
+> It might require a new API since there are plenty of users of
+> of_platform_populate() that rely on the current behavior.
 
-https://docs.turris.cz/hw/turris-1x/turris-1x/
-https://project.turris.cz/en/hardware.html
+Agree. A new API is needed. we also have to consider multiple children
+scenario, where one child is ready but others are not etc.
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
-Changes in v2:
-* Sort all nodes by addresses
-* Fix i2c address for MCU and SPD/EEPROM PSWP
----
- arch/powerpc/boot/dts/turris1x.dts | 475 +++++++++++++++++++++++++++++
- 1 file changed, 475 insertions(+)
- create mode 100644 arch/powerpc/boot/dts/turris1x.dts
+> 
+> > Note that this problem is not just limited to suppliers not ready. if the
+> > dwc3-qcom is made asynchronous probe, then its child also probed
+> > asynchronously and there is no guarantee that child would be probed by the
+> > time of_platform_populate() is returned.  The bus notifier might come handy
+> > in this case. The parent can register for this notifier and waiting for
+> > the children device's BUS_NOTIFY_BOUND_DRIVER/BUS_NOTIFY_DRIVER_NOT_BOUND
+> > notifications. This would also work in our case, if we move to
+> > of_platform_populate() outside the probe().
+> 
+> If I understand correctly the outcome would be a probe() in two stages. The
+> first does as much as it can do without the dwc3 core and leaves the device
+> in a state where it isn't really functional, and the second stage does the
+> rest when BUS_NOTIFY_BOUND_DRIVER is received for the dwc3 core device.
+> 
+> A concern could be the need for additional conditions in some code paths to
+> deal with the half-initialized device.
+> 
+> Why would of_platform_populate() be moved outside of probe()?
+> 
+> To avoid the half-initialized device probe() could block until
+> BUS_NOTIFY_BOUND_DRIVER is received. Probably that should be done with a
+> timeout to avoid blocking forever in case of a problem with probing the
+> dwc3 core.
 
-diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
-new file mode 100644
-index 000000000000..c76b628cf026
---- /dev/null
-+++ b/arch/powerpc/boot/dts/turris1x.dts
-@@ -0,0 +1,475 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Turris 1.x Device Tree Source
-+ *
-+ * Copyright 2013 - 2022 CZ.NIC z.s.p.o. (http://www.nic.cz/)
-+ *
-+ * Pinout, Schematics and Altium hardware design files are open source
-+ * and available at: https://docs.turris.cz/hw/turris-1x/turris-1x/
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/leds/common.h>
-+/include/ "fsl/p2020si-pre.dtsi"
-+
-+/ {
-+	model = "Turris 1.x";
-+	compatible = "cznic,turris1x", "fsl,P2020RDB-PC"; /* fsl,P2020RDB-PC is required for booting Linux */
-+
-+	aliases {
-+		ethernet0 = &enet0;
-+		ethernet1 = &enet1;
-+		ethernet2 = &enet2;
-+		serial0 = &serial0;
-+		serial1 = &serial1;
-+		pci0 = &pci0;
-+		pci1 = &pci1;
-+		pci2 = &pci2;
-+		spi0 = &spi0;
-+	};
-+
-+	memory {
-+		device_type = "memory";
-+	};
-+
-+	soc: soc@ffe00000 {
-+		ranges = <0x0 0x0 0xffe00000 0x00100000>;
-+
-+		i2c@3000 {
-+			/* PCA9557PW GPIO controller for boot config */
-+			gpio-controller@18 {
-+				compatible = "nxp,pca9557";
-+				label = "bootcfg";
-+				reg = <0x18>;
-+				#gpio-cells = <2>;
-+				gpio-controller;
-+				polarity = <0x00>;
-+			};
-+
-+			/* STM32F030R8T6 MCU for power control */
-+			power-control@2a {
-+				/*
-+				 * Turris Power Control firmware runs on STM32F0 MCU.
-+				 * This firmware is open source and available at:
-+				 * https://gitlab.nic.cz/turris/hw/turris_power_control
-+				 */
-+				reg = <0x2a>;
-+			};
-+
-+			/* DDR3 SPD/EEPROM PSWP instruction */
-+			eeprom@32 {
-+				reg = <0x32>;
-+			};
-+
-+			/* SA56004ED temperature control */
-+			temperature-sensor@4c {
-+				compatible = "nxp,sa56004";
-+				reg = <0x4c>;
-+				interrupt-parent = <&gpio>;
-+				interrupts = <12 IRQ_TYPE_LEVEL_LOW>, /* GPIO12 - ALERT pin */
-+					     <13 IRQ_TYPE_LEVEL_LOW>; /* GPIO13 - CRIT pin */
-+			};
-+
-+			/* DDR3 SPD/EEPROM */
-+			eeprom@52 {
-+				compatible = "atmel,spd";
-+				reg = <0x52>;
-+			};
-+
-+			/* MCP79402-I/ST Protected EEPROM */
-+			eeprom@57 {
-+				reg = <0x57>;
-+			};
-+
-+			/* ATSHA204-TH-DA-T crypto module */
-+			crypto@64 {
-+				compatible = "atmel,atsha204";
-+				reg = <0x64>;
-+			};
-+
-+			/* IDT6V49205BNLGI clock generator */
-+			clock-generator@69 {
-+				compatible = "idt,6v49205b";
-+				reg = <0x69>;
-+			};
-+
-+			/* MCP79402-I/ST RTC */
-+			rtc@6f {
-+				compatible = "microchip,mcp7940x";
-+				reg = <0x6f>;
-+				interrupt-parent = <&gpio>;
-+				interrupts = <14 0>; /* GPIO14 - MFP pin */
-+			};
-+		};
-+
-+		/* SPI on connector P1 */
-+		spi0: spi@7000 {
-+		};
-+
-+		gpio: gpio-controller@fc00 {
-+			#interrupt-cells = <2>;
-+			interrupt-controller;
-+		};
-+
-+		/* Connected to SMSC USB2412-DZK 2-Port USB 2.0 Hub Controller */
-+		usb@22000 {
-+			phy_type = "ulpi";
-+			dr_mode = "host";
-+		};
-+
-+		enet0: ethernet@24000 {
-+			/* Connected to port 6 of QCA8337N-AL3C switch */
-+			phy-connection-type = "rgmii-id";
-+
-+			fixed-link {
-+				speed = <1000>;
-+				full-duplex;
-+			};
-+		};
-+
-+		mdio@24520 {
-+			/* KSZ9031RNXCA ethernet phy for WAN port */
-+			phy: ethernet-phy@7 {
-+				interrupts = <3 1 0 0>;
-+				reg = <0x7>;
-+			};
-+
-+			/* QCA8337N-AL3C switch with integrated ethernet PHYs for LAN ports */
-+			switch@10 {
-+				compatible = "qca,qca8337";
-+				interrupts = <2 1 0 0>;
-+				reg = <0x10>;
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+						label = "cpu1";
-+						ethernet = <&enet1>;
-+						phy-mode = "rgmii-id";
-+
-+						fixed-link {
-+							speed = <1000>;
-+							full-duplex;
-+						};
-+					};
-+
-+					port@1 {
-+						reg = <1>;
-+						label = "lan5";
-+					};
-+
-+					port@2 {
-+						reg = <2>;
-+						label = "lan4";
-+					};
-+
-+					port@3 {
-+						reg = <3>;
-+						label = "lan3";
-+					};
-+
-+					port@4 {
-+						reg = <4>;
-+						label = "lan2";
-+					};
-+
-+					port@5 {
-+						reg = <5>;
-+						label = "lan1";
-+					};
-+
-+					port@6 {
-+						reg = <6>;
-+						label = "cpu0";
-+						ethernet = <&enet0>;
-+						phy-mode = "rgmii-id";
-+
-+						fixed-link {
-+							speed = <1000>;
-+							full-duplex;
-+						};
-+					};
-+				};
-+			};
-+		};
-+
-+		ptp_clock@24e00 {
-+			fsl,tclk-period = <5>;
-+			fsl,tmr-prsc = <200>;
-+			fsl,tmr-add = <0xcccccccd>;
-+			fsl,tmr-fiper1 = <0x3b9ac9fb>;
-+			fsl,tmr-fiper2 = <0x0001869b>;
-+			fsl,max-adj = <249999999>;
-+		};
-+
-+		enet1: ethernet@25000 {
-+			/* Connected to port 0 of QCA8337N-AL3C switch */
-+			phy-connection-type = "rgmii-id";
-+
-+			fixed-link {
-+				speed = <1000>;
-+				full-duplex;
-+			};
-+		};
-+
-+		mdio@25520 {
-+			status = "disabled";
-+		};
-+
-+		enet2: ethernet@26000 {
-+			/* Connected to KSZ9031RNXCA ethernet phy (WAN port) */
-+			label = "wan";
-+			phy-handle = <&phy>;
-+			phy-connection-type = "rgmii-id";
-+		};
-+
-+		mdio@26520 {
-+			status = "disabled";
-+		};
-+
-+		sdhc@2e000 {
-+			bus-width = <4>;
-+			cd-gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	lbc: localbus@ffe05000 {
-+		reg = <0 0xffe05000 0 0x1000>;
-+
-+		ranges = <0x0 0x0 0x0 0xef000000 0x01000000>, /* NOR */
-+			 <0x1 0x0 0x0 0xff800000 0x00040000>, /* NAND */
-+			 <0x3 0x0 0x0 0xffa00000 0x00020000>; /* CPLD */
-+
-+		/* S29GL128P90TFIR10 NOR */
-+		nor@0,0 {
-+			compatible = "cfi-flash";
-+			reg = <0x0 0x0 0x01000000>;
-+			bank-width = <2>;
-+			device-width = <1>;
-+
-+			partitions {
-+				compatible = "fixed-partitions";
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+
-+				partition@0 {
-+					/* 128 kB for Device Tree Blob */
-+					reg = <0x00000000 0x00020000>;
-+					label = "dtb";
-+				};
-+
-+				partition@20000 {
-+					/* 1.7 MB for Rescue Linux Kernel Image */
-+					reg = <0x00020000 0x001a0000>;
-+					label = "rescue-kernel";
-+				};
-+
-+				partition@1c0000 {
-+					/* 1.5 MB for Rescue JFFS2 Root File System */
-+					reg = <0x001c0000 0x00180000>;
-+					label = "rescue-rootfs";
-+				};
-+
-+				partition@340000 {
-+					/* 11 MB for TAR.XZ Backup with content of NAND Root File System */
-+					reg = <0x00340000 0x00b00000>;
-+					label = "backup-rootfs";
-+				};
-+
-+				partition@e40000 {
-+					/* 768 kB for Certificates JFFS2 File System */
-+					reg = <0x00e40000 0x000c0000>;
-+					label = "certificates";
-+				};
-+
-+				/* free unused space 0x00f00000-0x00f20000 */
-+
-+				partition@f20000 {
-+					/* 128 kB for U-Boot Environment Variables */
-+					reg = <0x00f20000 0x00020000>;
-+					label = "u-boot-env";
-+				};
-+
-+				partition@f40000 {
-+					/* 768 kB for U-Boot Bootloader Image */
-+					reg = <0x00f40000 0x000c0000>;
-+					label = "u-boot";
-+				};
-+			};
-+		};
-+
-+		/* MT29F2G08ABAEAWP:E NAND */
-+		nand@1,0 {
-+			compatible = "fsl,p2020-fcm-nand", "fsl,elbc-fcm-nand";
-+			reg = <0x1 0x0 0x00040000>;
-+			nand-ecc-mode = "soft";
-+			nand-ecc-algo = "bch";
-+
-+			partitions {
-+				compatible = "fixed-partitions";
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+
-+				partition@0 {
-+					/* 256 MB for UBI with one volume: UBIFS Root File System */
-+					reg = <0x00000000 0x10000000>;
-+					label = "rootfs";
-+				};
-+			};
-+		};
-+
-+		/* LCMXO1200C-3FTN256C FPGA */
-+		cpld@3,0 {
-+			/*
-+			 * Turris CPLD firmware which runs on this Lattice FPGA,
-+			 * is extended version of P1021RDB-PC CPLD v4.1 firmware.
-+			 * It is backward compatible with its original version
-+			 * and the only extension is support for Turris LEDs.
-+			 * Turris CPLD firmware is open source and available at:
-+			 * https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Router_CPLD.v
-+			 */
-+			compatible = "cznic,turris1x-cpld", "fsl,p1021rdb-pc-cpld", "simple-bus";
-+			reg = <0x3 0x0 0x30>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0x3 0x0 0x00020000>;
-+
-+			/* MAX6370KA+T watchdog */
-+			watchdog@2 {
-+				/*
-+				 * CPLD firmware maps SET0, SET1 and SET2
-+				 * input logic of MAX6370KA+T chip to CPLD
-+				 * memory space at byte offset 0x2. WDI
-+				 * input logic is outside of the CPLD and
-+				 * connected via external GPIO.
-+				 */
-+				compatible = "maxim,max6370";
-+				reg = <0x02 0x01>;
-+				gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
-+			};
-+
-+			led-controller@13 {
-+				/*
-+				 * LEDs are controlled by CPLD firmware.
-+				 * All five LAN LEDs share common RGB settings
-+				 * and so it is not possible to set different
-+				 * colors on different LAN ports.
-+				 */
-+				compatible = "cznic,turris1x-leds";
-+				reg = <0x13 0x1d>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				multi-led@0 {
-+					reg = <0x0>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_WAN;
-+				};
-+
-+				multi-led@1 {
-+					reg = <0x1>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_LAN;
-+					function-enumerator = <5>;
-+				};
-+
-+				multi-led@2 {
-+					reg = <0x2>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_LAN;
-+					function-enumerator = <4>;
-+				};
-+
-+				multi-led@3 {
-+					reg = <0x3>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_LAN;
-+					function-enumerator = <3>;
-+				};
-+
-+				multi-led@4 {
-+					reg = <0x4>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_LAN;
-+					function-enumerator = <2>;
-+				};
-+
-+				multi-led@5 {
-+					reg = <0x5>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_LAN;
-+					function-enumerator = <1>;
-+				};
-+
-+				multi-led@6 {
-+					reg = <0x6>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_WLAN;
-+				};
-+
-+				multi-led@7 {
-+					reg = <0x7>;
-+					color = <LED_COLOR_ID_RGB>;
-+					function = LED_FUNCTION_POWER;
-+				};
-+			};
-+		};
-+	};
-+
-+	pci2: pcie@ffe08000 {
-+		/*
-+		 * PCIe bus for on-board TUSB7340RKM USB 3.0 xHCI controller.
-+		 * This xHCI controller is available only on Turris 1.1 boards.
-+		 * Turris 1.0 boards have nothing connected to this PCIe bus,
-+		 * so system would see only PCIe Root Port of this PCIe Root
-+		 * Complex. TUSB7340RKM xHCI controller has four SuperSpeed
-+		 * channels. Channel 0 is connected to the front USB 3.0 port,
-+		 * channel 1 (but only USB 2.0 subset) to USB 2.0 pins on mPCIe
-+		 * slot 1 (CN5), channels 2 and 3 to connector P600.
-+		 *
-+		 * P2020 PCIe Root Port uses 1MB of PCIe MEM and xHCI controller
-+		 * uses 64kB + 8kB of PCIe MEM. No PCIe IO is used or required.
-+		 * So allocate 2MB of PCIe MEM for this PCIe bus.
-+		 */
-+		reg = <0 0xffe08000 0 0x1000>;
-+		ranges = <0x02000000 0x0 0xc0000000 0 0xc0000000 0x0 0x00200000>, /* MEM */
-+			 <0x01000000 0x0 0x00000000 0 0xffc20000 0x0 0x00010000>; /* IO */
-+
-+		pcie@0 {
-+			ranges;
-+		};
-+	};
-+
-+	pci1: pcie@ffe09000 {
-+		/* PCIe bus on mPCIe slot 2 (CN6) for expansion mPCIe card */
-+		reg = <0 0xffe09000 0 0x1000>;
-+		ranges = <0x02000000 0x0 0xa0000000 0 0xa0000000 0x0 0x20000000>, /* MEM */
-+			 <0x01000000 0x0 0x00000000 0 0xffc10000 0x0 0x00010000>; /* IO */
-+
-+		pcie@0 {
-+			ranges;
-+		};
-+	};
-+
-+	pci0: pcie@ffe0a000 {
-+		/*
-+		 * PCIe bus on mPCIe slot 1 (CN5) for expansion mPCIe card.
-+		 * Turris 1.1 boards have in this mPCIe slot additional USB 2.0
-+		 * pins via channel 1 of TUSB7340RKM xHCI controller and also
-+		 * additional SIM card slot, both for USB-based WWAN cards.
-+		 */
-+		reg = <0 0xffe0a000 0 0x1000>;
-+		ranges = <0x02000000 0x0 0x80000000 0 0x80000000 0x0 0x20000000>, /* MEM */
-+			 <0x01000000 0x0 0x00000000 0 0xffc00000 0x0 0x00010000>; /* IO */
-+
-+		pcie@0 {
-+			ranges;
-+		};
-+	};
-+};
-+
-+/include/ "fsl/p2020si-post.dtsi"
--- 
-2.20.1
+Right, we have to split the probe() into two parts. The second stage which
+runs asynchronously should wait for the dwc3 core probe to happen. if at all
+dwc3 core probe is falied (in which case also we get a notification) for any
+reason other than EPROBE_DEFER, we have to undo the first stage.
 
+Thansk,
+Pavan

@@ -2,110 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EE155A4FA
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23EB755A4FD
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231865AbiFXXmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 19:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        id S231875AbiFXXnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 19:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbiFXXmp (ORCPT
+        with ESMTP id S231882AbiFXXnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 19:42:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0DE8AC2F;
-        Fri, 24 Jun 2022 16:42:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78B6B6247A;
-        Fri, 24 Jun 2022 23:42:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9120BC34114;
-        Fri, 24 Jun 2022 23:42:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656114163;
-        bh=mMsl6VDk27tUqj2hs7gILfd5usTjSE5nYWVBee1g1Z0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jj+rfupmd0kO6Z5Zt9eBnqXVsPvcTysVqbhXaB2dtJmYXCk9rC6fMV6q6Nez6+07G
-         EuCt/d461eNx1MqhobwFE1TE82k+1+ne7DTI14Rh/B9APA7uIAUcZuYzPnlK3VsMDH
-         KBOkIuH8BVgUbgMW3iYbJbZSo6xxEkmJOtswiwTtwxmOhv36Tal9keh/72JMEpsUG5
-         1G46IqacjynvUXXDqM0UlG0PgkBGLM0BDar5C1WnK7aGKIbpjZgMFX8eQIsX6BcejD
-         d2QzGgJxE1g88vDzu/lw0rD213mBMdHfABIBzIxad37io5nv5ndlBY6HFQK1DLrNYP
-         XmfED6sDsin8A==
-Date:   Fri, 24 Jun 2022 16:42:34 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     <davem@davemloft.net>, <linux@armlinux.org.uk>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kishon@ti.com>, <vigneshr@ti.com>, <grygorii.strashko@ti.com>
-Subject: Re: [PATCH] net: ethernet: ti: am65-cpsw: Fix devlink port register
- sequence
-Message-ID: <20220624164234.6268f2b7@kernel.org>
-In-Reply-To: <20220623044337.6179-1-s-vadapalli@ti.com>
-References: <20220623044337.6179-1-s-vadapalli@ti.com>
+        Fri, 24 Jun 2022 19:43:12 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EC125E9D
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:43:11 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 9so3735541pgd.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9N529bIxDfr9XbpXlA0R0zIti7KU9RJXWvcDazd0Qjo=;
+        b=ieCervRftYNQfOUPtqT6hkOOGrCZWyg3vQ5GhHz/U5JRmO/HItGhZrHA6OzmQXBdC0
+         Ac9IkEd+msyAwmXtPJ6rWTEhyrkpQKpX2sw+nhor48+P6b+gbuTyTCBkNz8fRHm1Scf3
+         24MMnlrjJ5MG3ZOvwEDY/kzIzZWmZc8fs1lWaAVVFm3CycNcjn8aXd2LiF96Iq0BJS+A
+         U8KnJyNRYjEvdnfA9xErA51o5+rLSbZzhXkKWbhE/fSd89onwZY4LPXVknYAr9Do5Ejm
+         TFT9GRZdhoTlRWMjGT6qTGPYrwIMBA7P39BUfl31Loxw27SAkFmJOhERxv78X/DVChue
+         73Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9N529bIxDfr9XbpXlA0R0zIti7KU9RJXWvcDazd0Qjo=;
+        b=ruZWjdNVD746vEyDCHj7PR65Sr5liDbzX/WJ/z3HVHMXIyawMXcwuATnfX04u4f25U
+         OWjnY6hxGsaz9z5uoYQckUQzabUCQWsz1SMrDmCnGWOMXs8D/jRm3Zn332EJbYyUEq+q
+         MNKGFx67Bnh05nY7lyLTIC3SPo5ENORdPZSMKGHdQS7nN9ulEnvK+9GYTRtTIFq3zzAT
+         ljnaPNeSz7qRR9v/AqIkVnkPdGw8fyz3029ZV+0vwXSa+8c7tK/GJdK4KtDoJbtqzslg
+         30posAntnYMLqccoEW+OIsS8Uk5pz40srWBI8bYBkgD8Bz3fQ5EGqaHcbWznsRJxqxZo
+         oMSg==
+X-Gm-Message-State: AJIora9qiBIa/SsMP+YaR1ep8RBapa7FdvyngEjp1Erzt9ML6gNBjYzd
+        n3mpxcO6EajKFflKTyJTcReGrQ==
+X-Google-Smtp-Source: AGRyM1tEVk6ipro476mDieO78m8ow5umUhkMSny5j044gxk6q2M6B9oRJCAVDDNl/5pl4UtR/hw50w==
+X-Received: by 2002:a62:e919:0:b0:51e:7b6e:5a3b with SMTP id j25-20020a62e919000000b0051e7b6e5a3bmr1377529pfh.78.1656114191098;
+        Fri, 24 Jun 2022 16:43:11 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id b5-20020a170902d40500b0016a13bd845csm2347656ple.165.2022.06.24.16.43.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 16:43:09 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 23:43:04 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] KVM: x86/mmu: Expand quadrant comment for
+ PG_LEVEL_4K shadow pages
+Message-ID: <YrZMCO9V97KD58xV@google.com>
+References: <20220624213039.2872507-1-seanjc@google.com>
+ <20220624213039.2872507-3-seanjc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624213039.2872507-3-seanjc@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Jun 2022 10:13:37 +0530 Siddharth Vadapalli wrote:
-> Renaming interfaces using udevd depends on the interface being registered
-> before its netdev is registered. Otherwise, udevd reads an empty
-> phys_port_name value, resulting in the interface not being renamed.
+On Fri, Jun 24, 2022 at 09:30:37PM +0000, Sean Christopherson wrote:
+> Tweak the comment above the computation of the quadrant for PG_LEVEL_4K
+> shadow pages to explicitly call out how and why KVM uses role.quadrant to
+> consume gPTE bits.
 > 
-> Fix this by registering the interface before registering its netdev
-> by invoking am65_cpsw_nuss_register_devlink() before invoking
-> register_netdev() for the interface.
+> Opportunistically wrap an unnecessarily long line.
 > 
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> No functional change intended.
+> 
+> Link: https://lore.kernel.org/all/YqvWvBv27fYzOFdE@google.com
+> Cc: David Matlack <dmatlack@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Please add a Fixes tag and [PATCH net] in the subject.
-
-> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> index fb92d4c1547d..47a6c4e5360b 100644
-> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-> @@ -2527,6 +2527,10 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
->  		return ret;
->  	}
->  
-> +	ret = am65_cpsw_nuss_register_devlink(common);
-> +	if (ret)
-> +		goto err_cleanup_ndev;
-
-You need to take the devlink_port_type_eth_set() out of this function
-if it's now called before netdev registration and call it after netdev
-registration. Otherwise devlink will generate a netlink notification
-about the port state change with a half-initialized netdev.
-
->  	for (i = 0; i < common->port_num; i++) {
->  		port = &common->ports[i];
->  
-> @@ -2545,17 +2549,12 @@ static int am65_cpsw_nuss_register_ndevs(struct am65_cpsw_common *common)
->  	if (ret)
->  		goto err_cleanup_ndev;
->  
-> -	ret = am65_cpsw_nuss_register_devlink(common);
-> -	if (ret)
-> -		goto clean_unregister_notifiers;
-> -
->  	/* can't auto unregister ndev using devm_add_action() due to
->  	 * devres release sequence in DD core for DMA
->  	 */
->  
->  	return 0;
-> -clean_unregister_notifiers:
-> -	am65_cpsw_unregister_notifiers(common);
-> +
->  err_cleanup_ndev:
->  	am65_cpsw_nuss_cleanup_ndev(common);
->  
-
+Reviewed-by: David Matlack <dmatlack@google.com>

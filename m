@@ -2,708 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA98558D4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 04:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96151558D4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 04:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiFXCoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 22:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
+        id S229956AbiFXCoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 22:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiFXCoY (ORCPT
+        with ESMTP id S229457AbiFXCoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 22:44:24 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8566756752
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 19:44:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656038662; x=1687574662;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7wA9SmBwpIJza8/iy67hOi0gR+wV3h79OkAOs8dOD60=;
-  b=nymUcyoo4gjOFhlWWOCw9TfjgctDzPrQ38IU9vyHRFX0Oaf1+1vsHcvs
-   qimmjWPT+1hHfH4wyaszZZ7fLbAGPMNto3s/nbpl86VQFKzGPQ20Nbn5F
-   CU008D+YMkYhrgODHp2cz2j/uc7YTQIGrwv4COrbAoWwUOsQ2r/u2OHY0
-   qv+uhTGD9rcnAbm6UDQXujq4SP1MG4vEgKuKGmYJXO4+1UVV4GgisUnNU
-   Bp4GEfAJExb8f8Rg6FtmqLF60SUgYVDxOuHzalVlQdfjiHxZGlKkUgUUq
-   qsGDJuqysLFYRB/KwAqbBukzxvG9PTKe2Dbx+ZTEFPr37WNQCuGpI/gfM
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="306369535"
-X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
-   d="scan'208";a="306369535"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 19:43:26 -0700
-X-IronPort-AV: E=Sophos;i="5.92,217,1650956400"; 
-   d="scan'208";a="593013937"
-Received: from yxia2-mobl1.ccr.corp.intel.com (HELO yhuang6-mobl1.ccr.corp.intel.com) ([10.254.214.143])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 19:43:22 -0700
-From:   Huang Ying <ying.huang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Huang Ying <ying.huang@intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
-        Rik van Riel <riel@surriel.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Subject: [PATCH -V4] sched,topology: Update sched topology atomically
-Date:   Fri, 24 Jun 2022 10:43:10 +0800
-Message-Id: <20220624024310.1025333-1-ying.huang@intel.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 23 Jun 2022 22:44:08 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2064.outbound.protection.outlook.com [40.107.223.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F88E515A6;
+        Thu, 23 Jun 2022 19:44:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IymMV4dt7WpYsQM0Mrf5z7Mea833SSxcPQdRxMkeW35nJdu0pftW/dmnAwa0lYXCz/dxEHthE9wJaiAAnCzqcpdpf7Y2Kvl/1EBHTkvXmeZtpnjd8J7sgodLs/4b0Y7DIXT6TA3EDEtaL/QFVOeg7t50u1g6HaDJ8UbiFhamLUMlPTt/0uVO3oHEick620cSh8mYcaZbqYtYZreSdy2tToREGraKAq0W9QKbZJmCG8o9w+lkd/dd95Xr9b+4az0I05TPGBUpLC6cCW5nzfaPnDwEnismkq/KYDf7mG+satcxMWeyudmO7zLEuIDdUPmp1dE5Q5wCaX1RjY32Z/EWWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M2R2CEdoCukeHjMxbmGYQBbhBWeg0sK5VS1VqRK1QIg=;
+ b=E/57XQnkUGQTKpumLTraj0MGvqEm8e7vEqff3CwgqWNISffDiRa5kat84m5ZsLVhIPhQCiI4aXDtHun4qNFr70q3+1JS19W0X1DcQa6HzM+Aqinj9SSrG/QWFDZW+b9efBS/QhVGkU/eviDJTBftRMpp1QS0+OgYyuxcGizibO13IbnNDp9a4xuFF9PQqsnFo89iz1oJSm5YdyguFqVla/dnA4coJE74hik+j8cFtVN2d0crUjyVRe2gj96H9qVZIgKFNlsz4w+Zv/28hzPbCSyENOrVQ5/z3jgAo7xj8qFSomBygCUNbBYcJGv8j7tzt94KjVIbgNFnfDh8fPIe6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M2R2CEdoCukeHjMxbmGYQBbhBWeg0sK5VS1VqRK1QIg=;
+ b=DSae4u/2DbtodGNFd8Zgr56c2uF1OO3R44LuifpjenB2jBSayOMRdQwvY7qXyKbQ9xMX2mvtsksXqRrj2u0hQKJt9JVr2tYzrjZV6g/DGpt0QYLf/Q+yI2fVxzYD4WuejoCMN5rsDN+1JUZKRTP1tcRbWsM+8pK3IelSlzMqWnc/GzDgfLO/Q51JJfIisdapTs2NLEBvypKgIcwL/+bRqMR6GPq8EHu+EY3bN88E4UwaqUtPsf4qvsE/LdXLVMkgM84TP6MKX5HbpuBTHhgMBwe6YK91YDE01fF0H4nbTq6ymzzzSY+fNn+xAyo4Dkl3++5Nj6GPg0wKuEgCvUBSSA==
+Received: from DS7PR03CA0109.namprd03.prod.outlook.com (2603:10b6:5:3b7::24)
+ by CY5PR12MB6057.namprd12.prod.outlook.com (2603:10b6:930:2e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Fri, 24 Jun
+ 2022 02:44:05 +0000
+Received: from DM6NAM11FT016.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b7:cafe::cc) by DS7PR03CA0109.outlook.office365.com
+ (2603:10b6:5:3b7::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.20 via Frontend
+ Transport; Fri, 24 Jun 2022 02:44:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.236) by
+ DM6NAM11FT016.mail.protection.outlook.com (10.13.173.139) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5373.15 via Frontend Transport; Fri, 24 Jun 2022 02:44:05 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 24 Jun
+ 2022 02:44:05 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Thu, 23 Jun
+ 2022 19:44:04 -0700
+Received: from Asurada-Nvidia (10.127.8.10) by mail.nvidia.com (10.129.68.10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26 via Frontend
+ Transport; Thu, 23 Jun 2022 19:44:01 -0700
+Date:   Thu, 23 Jun 2022 19:44:00 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>, <yong.wu@mediatek.com>
+CC:     <joro@8bytes.org>, <will@kernel.org>, <marcan@marcan.st>,
+        <sven@svenpeter.dev>, <robin.murphy@arm.com>,
+        <robdclark@gmail.com>, <matthias.bgg@gmail.com>,
+        <orsonzhai@gmail.com>, <baolin.wang7@gmail.com>,
+        <zhang.lyra@gmail.com>, <jean-philippe@linaro.org>,
+        <alex.williamson@redhat.com>, <jgg@nvidia.com>,
+        <kevin.tian@intel.com>, <suravee.suthikulpanit@amd.com>,
+        <alyssa@rosenzweig.io>, <dwmw2@infradead.org>,
+        <mjrosato@linux.ibm.com>, <gerald.schaefer@linux.ibm.com>,
+        <thierry.reding@gmail.com>, <vdumpa@nvidia.com>,
+        <jonathanh@nvidia.com>, <cohuck@redhat.com>,
+        <thunder.leizhen@huawei.com>, <tglx@linutronix.de>,
+        <chenxiang66@hisilicon.com>, <christophe.jaillet@wanadoo.fr>,
+        <john.garry@huawei.com>, <yangyingliang@huawei.com>,
+        <jordan@cosmicpenguin.net>, <iommu@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>, <kvm@vger.kernel.org>
+Subject: Re: [PATCH v3 1/5] iommu: Return -EMEDIUMTYPE for incompatible
+ domain and device/group
+Message-ID: <YrUk8IINqDEZLfIa@Asurada-Nvidia>
+References: <20220623200029.26007-1-nicolinc@nvidia.com>
+ <20220623200029.26007-2-nicolinc@nvidia.com>
+ <270eec00-8aee-2288-4069-d604e6da2925@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <270eec00-8aee-2288-4069-d604e6da2925@linux.intel.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 771209c9-cd43-40df-d84d-08da558b67d9
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6057:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5TW4vCqbLV1qym1IcY+Uiz8l1iDws9KZnxsjYFwpXUrdb1+vIJr8Arb3/NAPLRSEJ8EYi8+NOEyQHLCkytfYc+NIJiol1rAm+IBPPkSXLXhu2ZVnItpoSuSduXVovdNzTpxkeSyFxbiTl5IW0Fb2CET+y+uMRG5UgPiPlNyygbmnYf2csA8TOhGvzhWKu7lGPR7Xo4KXqz34/u4x0W5BcAXfDgVSyGtbiae5KxXC5ZQBY4RsBgQ7d70Wbfqcf7KKUqemEvOe0svfHg9tbj/1g2bO187YDFBS0ZtCHTlZae88Xa1HMmztvY/tOlnKGgnTI5Jk9g010Daoi3oQ9x/Lopb3dpmxZrBL3H/4bQB5cWbJ1Bb/+GhBpK1O+SATvBz5LjrgrUKMeDQwAOxcYJk2Wh6EUoGafWn76trYJSnlKjaHx4GDOtWNSEkZW9TZYgsok25u5i4dW5AwNCv1pCIDOdkYytBbomX+NItSWPA+wRZtHMu8cdhYQkNzmhNy+pr37jxG6OIdxS+tEIPV9w6ZhoiCb6ApjElQbijpomLUDQ/uB8kdIlDPWpc2fnfGyAWqEP30sIuHHthZWRxQ/kIennA9XdKZtcykr91VFQ/9lzd9DxjelMVUHC+wOGVd9vtoKf38VIQt3Lso6J62hmzrbNg6eauJwmYFmAZBUYch+O8AOMHpEE8J/P0i44D3RC9MmUA+8H1WMGCK3VY0fHwI86LDkVwpjGj/JD/QtUr5lZFsSIFPT6bua3Crk/5KjmlXPM6oauVhJCm4Bg8m8FakNGQMjDrZ8FcD7lgcWAYWEYXB2jpcFGjddGHh8p60CPcz9kxZuJDH6h499GxTjbLuQK8Gy49cv37mF3b0oOpXEw1gAIanpTsamSc8SjzmTjGW5qCcykZOrb7clbIU7GECEcbH5qJcW4ybBUz8uq4SKPo=
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(39860400002)(396003)(346002)(40470700004)(36840700001)(46966006)(316002)(53546011)(81166007)(7406005)(26005)(7416002)(8936002)(336012)(356005)(36860700001)(4326008)(70206006)(5660300002)(70586007)(82740400003)(47076005)(9686003)(186003)(86362001)(33716001)(40460700003)(110136005)(83380400001)(2906002)(478600001)(426003)(82310400005)(41300700001)(55016003)(54906003)(40480700001)(966005)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2022 02:44:05.6241
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 771209c9-cd43-40df-d84d-08da558b67d9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT016.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6057
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When Peter Zijlstra reviewed commit 0fb3978b0aac ("sched/numa: Fix
-NUMA topology for systems with CPU-less nodes") [1], he pointed out
-that sched_domains_numa_distance and sched_domains_numa_masks are made
-separate RCU variables.  That could go side-ways if there were a
-function using both, although there isn't for now.
+On Fri, Jun 24, 2022 at 09:35:49AM +0800, Baolu Lu wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On 2022/6/24 04:00, Nicolin Chen wrote:
+> > diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+> > index e1cb51b9866c..5386d889429d 100644
+> > --- a/drivers/iommu/mtk_iommu_v1.c
+> > +++ b/drivers/iommu/mtk_iommu_v1.c
+> > @@ -304,7 +304,7 @@ static int mtk_iommu_v1_attach_device(struct iommu_domain *domain, struct device
+> >       /* Only allow the domain created internally. */
+> >       mtk_mapping = data->mapping;
+> >       if (mtk_mapping->domain != domain)
+> > -             return 0;
+> > +             return -EMEDIUMTYPE;
+> > 
+> >       if (!data->m4u_dom) {
+> >               data->m4u_dom = dom;
+> 
+> This change looks odd. It turns the return value from success to
+> failure. Is it a bug? If so, it should go through a separated fix patch.
 
-So we update sched_domains_numa_distance and sched_domains_numa_masks
-and some other related sched topology parameters atomically to address
-the potential issues.
+Makes sense.
 
-[1] https://lkml.kernel.org/r/20220214121553.582248-1-ying.huang@intel.com
+I read the commit log of the original change:
+https://lore.kernel.org/r/1589530123-30240-1-git-send-email-yong.wu@mediatek.com
 
-Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Rik van Riel <riel@surriel.com>
-Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+It doesn't seem to allow devices to get attached to different
+domains other than the shared mapping->domain, created in the
+in the mtk_iommu_probe_device(). So it looks like returning 0
+is intentional. Though I am still very confused by this return
+value here, I doubt it has ever been used in a VFIO context.
 
-Changelogs:
+Young, would you please give us some input?
 
-v4:
+Overall, I feel it's better to play it safe here by dropping
+this part. If we later confirm there is a need to fix it, we
+will do that in a separate patch anyway.
 
-- Rebased on v4.19-rc3
-
-v3:
-
-- Fixed a bug to use sched_domain_topology_default as default and
-  white space issue per comments from Valentin Schneider, Thanks!
-
-v2:
-
-- Addressed comments from Valentin Schneider, Thanks!
----
- kernel/sched/fair.c     |  33 ++---
- kernel/sched/sched.h    |   3 +-
- kernel/sched/topology.c | 261 ++++++++++++++++++++++------------------
- 3 files changed, 161 insertions(+), 136 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 77b2048a9326..aeae29ce40ff 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1306,17 +1306,17 @@ static unsigned long score_nearby_nodes(struct task_struct *p, int nid,
- 					int lim_dist, bool task)
- {
- 	unsigned long score = 0;
--	int node, max_dist;
-+	int node, max_dist, type;
-+
-+	sched_fetch_numa_topology(&type, &max_dist);
- 
- 	/*
- 	 * All nodes are directly connected, and the same distance
- 	 * from each other. No need for fancy placement algorithms.
- 	 */
--	if (sched_numa_topology_type == NUMA_DIRECT)
-+	if (type == NUMA_DIRECT)
- 		return 0;
- 
--	/* sched_max_numa_distance may be changed in parallel. */
--	max_dist = READ_ONCE(sched_max_numa_distance);
- 	/*
- 	 * This code is called for each node, introducing N^2 complexity,
- 	 * which should be ok given the number of nodes rarely exceeds 8.
-@@ -1339,7 +1339,7 @@ static unsigned long score_nearby_nodes(struct task_struct *p, int nid,
- 		 * "hoplimit", only nodes closer by than "hoplimit" are part
- 		 * of each group. Skip other nodes.
- 		 */
--		if (sched_numa_topology_type == NUMA_BACKPLANE && dist >= lim_dist)
-+		if (type == NUMA_BACKPLANE && dist >= lim_dist)
- 			continue;
- 
- 		/* Add up the faults from nearby nodes. */
-@@ -1356,7 +1356,7 @@ static unsigned long score_nearby_nodes(struct task_struct *p, int nid,
- 		 * The further away a node is, the less the faults count.
- 		 * This seems to result in good task placement.
- 		 */
--		if (sched_numa_topology_type == NUMA_GLUELESS_MESH) {
-+		if (type == NUMA_GLUELESS_MESH) {
- 			faults *= (max_dist - dist);
- 			faults /= (max_dist - LOCAL_DISTANCE);
- 		}
-@@ -1983,7 +1983,9 @@ static int task_numa_migrate(struct task_struct *p)
- 	long taskimp, groupimp;
- 	struct numa_group *ng;
- 	struct rq *best_rq;
--	int nid, ret, dist;
-+	int nid, ret, dist, type;
-+
-+	sched_fetch_numa_topology(&type, NULL);
- 
- 	/*
- 	 * Pick the lowest SD_NUMA domain, as that would have the smallest
-@@ -2038,8 +2040,7 @@ static int task_numa_migrate(struct task_struct *p)
- 				continue;
- 
- 			dist = node_distance(env.src_nid, env.dst_nid);
--			if (sched_numa_topology_type == NUMA_BACKPLANE &&
--						dist != env.dist) {
-+			if (type == NUMA_BACKPLANE && dist != env.dist) {
- 				taskweight = task_weight(p, env.src_nid, dist);
- 				groupweight = group_weight(p, env.src_nid, dist);
- 			}
-@@ -2274,10 +2275,12 @@ static u64 numa_get_avg_runtime(struct task_struct *p, u64 *period)
- static int preferred_group_nid(struct task_struct *p, int nid)
- {
- 	nodemask_t nodes;
--	int dist;
-+	int dist, max_dist, type;
-+
-+	sched_fetch_numa_topology(&type, &max_dist);
- 
- 	/* Direct connections between all NUMA nodes. */
--	if (sched_numa_topology_type == NUMA_DIRECT)
-+	if (type == NUMA_DIRECT)
- 		return nid;
- 
- 	/*
-@@ -2285,14 +2288,12 @@ static int preferred_group_nid(struct task_struct *p, int nid)
- 	 * scores nodes according to the number of NUMA hinting faults on
- 	 * both the node itself, and on nearby nodes.
- 	 */
--	if (sched_numa_topology_type == NUMA_GLUELESS_MESH) {
-+	if (type == NUMA_GLUELESS_MESH) {
- 		unsigned long score, max_score = 0;
- 		int node, max_node = nid;
- 
--		dist = sched_max_numa_distance;
--
- 		for_each_node_state(node, N_CPU) {
--			score = group_weight(p, node, dist);
-+			score = group_weight(p, node, max_dist);
- 			if (score > max_score) {
- 				max_score = score;
- 				max_node = node;
-@@ -2311,7 +2312,7 @@ static int preferred_group_nid(struct task_struct *p, int nid)
- 	 * keep the complexity of the search down.
- 	 */
- 	nodes = node_states[N_CPU];
--	for (dist = sched_max_numa_distance; dist > LOCAL_DISTANCE; dist--) {
-+	for (dist = max_dist; dist > LOCAL_DISTANCE; dist--) {
- 		unsigned long max_faults = 0;
- 		nodemask_t max_group = NODE_MASK_NONE;
- 		int a, b;
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 47b89a0fc6e5..a21db3a90d1f 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1645,9 +1645,8 @@ enum numa_topology_type {
- 	NUMA_GLUELESS_MESH,
- 	NUMA_BACKPLANE,
- };
--extern enum numa_topology_type sched_numa_topology_type;
--extern int sched_max_numa_distance;
- extern bool find_numa_distance(int distance);
-+extern void sched_fetch_numa_topology(int *type, int *max_distance);
- extern void sched_init_numa(int offline_node);
- extern void sched_update_numa(int cpu, bool online);
- extern void sched_domains_numa_masks_set(unsigned int cpu);
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 05b6c2ad90b9..79c3160c556f 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1504,14 +1504,19 @@ static void claim_allocations(int cpu, struct sched_domain *sd)
- }
- 
- #ifdef CONFIG_NUMA
--enum numa_topology_type sched_numa_topology_type;
-+struct sched_numa_topology {
-+	enum numa_topology_type	type;
-+	int			nr_levels;
-+	int			max_distance;
-+	int			*distances;
-+	struct cpumask		***masks;
-+	struct rcu_head		rcu;
-+};
- 
--static int			sched_domains_numa_levels;
--static int			sched_domains_curr_level;
-+static struct sched_numa_topology default_numa_topology;
-+static struct sched_numa_topology __rcu *sched_numa_topology = &default_numa_topology;
- 
--int				sched_max_numa_distance;
--static int			*sched_domains_numa_distance;
--static struct cpumask		***sched_domains_numa_masks;
-+static int sched_domains_curr_level;
- #endif
- 
- /*
-@@ -1618,11 +1623,13 @@ sd_init(struct sched_domain_topology_level *tl,
- 
- #ifdef CONFIG_NUMA
- 	} else if (sd->flags & SD_NUMA) {
-+		lockdep_assert_cpus_held();
-+
- 		sd->cache_nice_tries = 2;
- 
- 		sd->flags &= ~SD_PREFER_SIBLING;
- 		sd->flags |= SD_SERIALIZE;
--		if (sched_domains_numa_distance[tl->numa_level] > node_reclaim_distance) {
-+		if (sched_numa_topology->distances[tl->numa_level] > node_reclaim_distance) {
- 			sd->flags &= ~(SD_BALANCE_EXEC |
- 				       SD_BALANCE_FORK |
- 				       SD_WAKE_AFFINE);
-@@ -1669,7 +1676,8 @@ static struct sched_domain_topology_level default_topology[] = {
- 
- static struct sched_domain_topology_level *sched_domain_topology =
- 	default_topology;
--static struct sched_domain_topology_level *sched_domain_topology_saved;
-+static struct sched_domain_topology_level *sched_domain_topology_default =
-+	default_topology;
- 
- #define for_each_sd_topology(tl)			\
- 	for (tl = sched_domain_topology; tl->mask; tl++)
-@@ -1680,14 +1688,16 @@ void set_sched_topology(struct sched_domain_topology_level *tl)
- 		return;
- 
- 	sched_domain_topology = tl;
--	sched_domain_topology_saved = NULL;
-+	sched_domain_topology_default = tl;
- }
- 
- #ifdef CONFIG_NUMA
- 
- static const struct cpumask *sd_numa_mask(int cpu)
- {
--	return sched_domains_numa_masks[sched_domains_curr_level][cpu_to_node(cpu)];
-+	lockdep_assert_cpus_held();
-+
-+	return sched_numa_topology->masks[sched_domains_curr_level][cpu_to_node(cpu)];
- }
- 
- static void sched_numa_warn(const char *str)
-@@ -1718,27 +1728,38 @@ static void sched_numa_warn(const char *str)
- bool find_numa_distance(int distance)
- {
- 	bool found = false;
--	int i, *distances;
-+	int i;
-+	struct sched_numa_topology *topology;
- 
- 	if (distance == node_distance(0, 0))
- 		return true;
- 
- 	rcu_read_lock();
--	distances = rcu_dereference(sched_domains_numa_distance);
--	if (!distances)
--		goto unlock;
--	for (i = 0; i < sched_domains_numa_levels; i++) {
--		if (distances[i] == distance) {
-+	topology = rcu_dereference(sched_numa_topology);
-+	for (i = 0; i < topology->nr_levels; i++) {
-+		if (topology->distances[i] == distance) {
- 			found = true;
- 			break;
- 		}
- 	}
--unlock:
- 	rcu_read_unlock();
- 
- 	return found;
- }
- 
-+void sched_fetch_numa_topology(int *type, int *max_distance)
-+{
-+	struct sched_numa_topology *topology;
-+
-+	rcu_read_lock();
-+	topology = rcu_dereference(sched_numa_topology);
-+	if (type)
-+		*type = topology->type;
-+	if (max_distance)
-+		*max_distance = topology->max_distance;
-+	rcu_read_unlock();
-+}
-+
- #define for_each_cpu_node_but(n, nbut)		\
- 	for_each_node_state(n, N_CPU)		\
- 		if (n == nbut)			\
-@@ -1764,14 +1785,15 @@ bool find_numa_distance(int distance)
-  *   there is an intermediary node C, which is < N hops away from both
-  *   nodes A and B, the system is a glueless mesh.
-  */
--static void init_numa_topology_type(int offline_node)
-+static void init_numa_topology_type(int offline_node,
-+				    struct sched_numa_topology *topology)
- {
- 	int a, b, c, n;
- 
--	n = sched_max_numa_distance;
-+	n = topology->max_distance;
- 
--	if (sched_domains_numa_levels <= 2) {
--		sched_numa_topology_type = NUMA_DIRECT;
-+	if (topology->nr_levels <= 2) {
-+		topology->type = NUMA_DIRECT;
- 		return;
- 	}
- 
-@@ -1785,32 +1807,77 @@ static void init_numa_topology_type(int offline_node)
- 			for_each_cpu_node_but(c, offline_node) {
- 				if (node_distance(a, c) < n &&
- 				    node_distance(b, c) < n) {
--					sched_numa_topology_type =
--							NUMA_GLUELESS_MESH;
-+					topology->type = NUMA_GLUELESS_MESH;
- 					return;
- 				}
- 			}
- 
--			sched_numa_topology_type = NUMA_BACKPLANE;
-+			topology->type = NUMA_BACKPLANE;
- 			return;
- 		}
- 	}
- 
- 	pr_err("Failed to find a NUMA topology type, defaulting to DIRECT\n");
--	sched_numa_topology_type = NUMA_DIRECT;
-+	topology->type = NUMA_DIRECT;
- }
- 
-+static void sched_numa_topology_free(struct sched_numa_topology *topology)
-+{
-+	int i, j;
-+
-+	if (!topology)
-+		return;
-+
-+	kfree(topology->distances);
-+	for (i = 0; i < topology->nr_levels && topology->masks; i++) {
-+		if (!topology->masks[i])
-+			continue;
-+		for_each_node(j)
-+			kfree(topology->masks[i][j]);
-+		kfree(topology->masks[i]);
-+	}
-+	kfree(topology->masks);
-+	kfree(topology);
-+}
-+
-+static void sched_numa_topology_free_rcu(struct rcu_head *head)
-+{
-+	struct sched_numa_topology *topology;
-+
-+	topology = container_of(head, struct sched_numa_topology, rcu);
-+	sched_numa_topology_free(topology);
-+}
-+
-+static void sched_numa_topology_switch(struct sched_numa_topology *topology,
-+				       struct sched_domain_topology_level *tl)
-+{
-+	struct sched_numa_topology *old_topology = sched_numa_topology;
-+	struct sched_domain_topology_level *old_tl = sched_domain_topology;
-+
-+	rcu_assign_pointer(sched_numa_topology, topology);
-+	sched_domain_topology = tl;
-+
-+	if (old_topology == &default_numa_topology)
-+		return;
-+
-+	init_rcu_head(&old_topology->rcu);
-+	call_rcu(&old_topology->rcu, sched_numa_topology_free_rcu);
-+	kfree(old_tl);
-+}
- 
- #define NR_DISTANCE_VALUES (1 << DISTANCE_BITS)
- 
- void sched_init_numa(int offline_node)
- {
- 	struct sched_domain_topology_level *tl;
--	unsigned long *distance_map;
-+	unsigned long *distance_map = NULL;
- 	int nr_levels = 0;
- 	int i, j;
--	int *distances;
--	struct cpumask ***masks;
-+	struct sched_numa_topology *topology;
-+
-+	topology = kzalloc(sizeof(*topology), GFP_KERNEL);
-+	if (!topology)
-+		goto out;
- 
- 	/*
- 	 * O(nr_nodes^2) deduplicating selection sort -- in order to find the
-@@ -1818,7 +1885,7 @@ void sched_init_numa(int offline_node)
- 	 */
- 	distance_map = bitmap_alloc(NR_DISTANCE_VALUES, GFP_KERNEL);
- 	if (!distance_map)
--		return;
-+		goto free_topology;
- 
- 	bitmap_zero(distance_map, NR_DISTANCE_VALUES);
- 	for_each_cpu_node_but(i, offline_node) {
-@@ -1827,8 +1894,7 @@ void sched_init_numa(int offline_node)
- 
- 			if (distance < LOCAL_DISTANCE || distance >= NR_DISTANCE_VALUES) {
- 				sched_numa_warn("Invalid distance value range");
--				bitmap_free(distance_map);
--				return;
-+				goto free_bitmap;
- 			}
- 
- 			bitmap_set(distance_map, distance, 1);
-@@ -1839,20 +1905,19 @@ void sched_init_numa(int offline_node)
- 	 * allocate memory accordingly.
- 	 */
- 	nr_levels = bitmap_weight(distance_map, NR_DISTANCE_VALUES);
-+	topology->nr_levels = nr_levels;
- 
--	distances = kcalloc(nr_levels, sizeof(int), GFP_KERNEL);
--	if (!distances) {
--		bitmap_free(distance_map);
--		return;
--	}
-+	topology->distances = kcalloc(nr_levels, sizeof(int), GFP_KERNEL);
-+	if (!topology->distances)
-+		goto free_bitmap;
- 
- 	for (i = 0, j = 0; i < nr_levels; i++, j++) {
- 		j = find_next_bit(distance_map, NR_DISTANCE_VALUES, j);
--		distances[i] = j;
-+		topology->distances[i] = j;
- 	}
--	rcu_assign_pointer(sched_domains_numa_distance, distances);
- 
- 	bitmap_free(distance_map);
-+	distance_map = NULL;
- 
- 	/*
- 	 * 'nr_levels' contains the number of unique distances
-@@ -1861,65 +1926,53 @@ void sched_init_numa(int offline_node)
- 	 * numbers.
- 	 */
- 
--	/*
--	 * Here, we should temporarily reset sched_domains_numa_levels to 0.
--	 * If it fails to allocate memory for array sched_domains_numa_masks[][],
--	 * the array will contain less then 'nr_levels' members. This could be
--	 * dangerous when we use it to iterate array sched_domains_numa_masks[][]
--	 * in other functions.
--	 *
--	 * We reset it to 'nr_levels' at the end of this function.
--	 */
--	sched_domains_numa_levels = 0;
--
--	masks = kzalloc(sizeof(void *) * nr_levels, GFP_KERNEL);
--	if (!masks)
--		return;
-+	topology->masks = kzalloc(sizeof(void *) * nr_levels, GFP_KERNEL);
-+	if (!topology->masks)
-+		goto free_bitmap;
- 
- 	/*
- 	 * Now for each level, construct a mask per node which contains all
- 	 * CPUs of nodes that are that many hops away from us.
- 	 */
- 	for (i = 0; i < nr_levels; i++) {
--		masks[i] = kzalloc(nr_node_ids * sizeof(void *), GFP_KERNEL);
--		if (!masks[i])
--			return;
-+		topology->masks[i] = kzalloc(nr_node_ids * sizeof(void *), GFP_KERNEL);
-+		if (!topology->masks[i])
-+			goto free_bitmap;
- 
- 		for_each_cpu_node_but(j, offline_node) {
- 			struct cpumask *mask = kzalloc(cpumask_size(), GFP_KERNEL);
- 			int k;
- 
- 			if (!mask)
--				return;
-+				goto free_bitmap;
- 
--			masks[i][j] = mask;
-+			topology->masks[i][j] = mask;
- 
- 			for_each_cpu_node_but(k, offline_node) {
- 				if (sched_debug() && (node_distance(j, k) != node_distance(k, j)))
- 					sched_numa_warn("Node-distance not symmetric");
- 
--				if (node_distance(j, k) > sched_domains_numa_distance[i])
-+				if (node_distance(j, k) > topology->distances[i])
- 					continue;
- 
- 				cpumask_or(mask, mask, cpumask_of_node(k));
- 			}
- 		}
- 	}
--	rcu_assign_pointer(sched_domains_numa_masks, masks);
- 
- 	/* Compute default topology size */
--	for (i = 0; sched_domain_topology[i].mask; i++);
-+	for (i = 0; sched_domain_topology_default[i].mask; i++);
- 
- 	tl = kzalloc((i + nr_levels + 1) *
- 			sizeof(struct sched_domain_topology_level), GFP_KERNEL);
- 	if (!tl)
--		return;
-+		goto free_bitmap;
- 
- 	/*
- 	 * Copy the default topology bits..
- 	 */
--	for (i = 0; sched_domain_topology[i].mask; i++)
--		tl[i] = sched_domain_topology[i];
-+	for (i = 0; sched_domain_topology_default[i].mask; i++)
-+		tl[i] = sched_domain_topology_default[i];
- 
- 	/*
- 	 * Add the NUMA identity distance, aka single NODE.
-@@ -1943,48 +1996,19 @@ void sched_init_numa(int offline_node)
- 		};
- 	}
- 
--	sched_domain_topology_saved = sched_domain_topology;
--	sched_domain_topology = tl;
-+	topology->max_distance = topology->distances[nr_levels - 1];
-+	init_numa_topology_type(offline_node, topology);
- 
--	sched_domains_numa_levels = nr_levels;
--	WRITE_ONCE(sched_max_numa_distance, sched_domains_numa_distance[nr_levels - 1]);
-+	sched_numa_topology_switch(topology, tl);
- 
--	init_numa_topology_type(offline_node);
--}
--
--
--static void sched_reset_numa(void)
--{
--	int nr_levels, *distances;
--	struct cpumask ***masks;
--
--	nr_levels = sched_domains_numa_levels;
--	sched_domains_numa_levels = 0;
--	sched_max_numa_distance = 0;
--	sched_numa_topology_type = NUMA_DIRECT;
--	distances = sched_domains_numa_distance;
--	rcu_assign_pointer(sched_domains_numa_distance, NULL);
--	masks = sched_domains_numa_masks;
--	rcu_assign_pointer(sched_domains_numa_masks, NULL);
--	if (distances || masks) {
--		int i, j;
--
--		synchronize_rcu();
--		kfree(distances);
--		for (i = 0; i < nr_levels && masks; i++) {
--			if (!masks[i])
--				continue;
--			for_each_node(j)
--				kfree(masks[i][j]);
--			kfree(masks[i]);
--		}
--		kfree(masks);
--	}
--	if (sched_domain_topology_saved) {
--		kfree(sched_domain_topology);
--		sched_domain_topology = sched_domain_topology_saved;
--		sched_domain_topology_saved = NULL;
--	}
-+	return;
-+free_bitmap:
-+	bitmap_free(distance_map);
-+free_topology:
-+	sched_numa_topology_free(topology);
-+out:
-+	sched_numa_topology_switch(&default_numa_topology,
-+				   sched_domain_topology_default);
- }
- 
- /*
-@@ -2002,7 +2026,6 @@ void sched_update_numa(int cpu, bool online)
- 	if (cpumask_weight(cpumask_of_node(node)) != 1)
- 		return;
- 
--	sched_reset_numa();
- 	sched_init_numa(online ? NUMA_NO_NODE : node);
- }
- 
-@@ -2011,14 +2034,17 @@ void sched_domains_numa_masks_set(unsigned int cpu)
- 	int node = cpu_to_node(cpu);
- 	int i, j;
- 
--	for (i = 0; i < sched_domains_numa_levels; i++) {
-+	lockdep_assert_cpus_held();
-+
-+	for (i = 0; i < sched_numa_topology->nr_levels; i++) {
- 		for (j = 0; j < nr_node_ids; j++) {
- 			if (!node_state(j, N_CPU))
- 				continue;
- 
- 			/* Set ourselves in the remote node's masks */
--			if (node_distance(j, node) <= sched_domains_numa_distance[i])
--				cpumask_set_cpu(cpu, sched_domains_numa_masks[i][j]);
-+			if (node_distance(j, node) <=
-+			    sched_numa_topology->distances[i])
-+				cpumask_set_cpu(cpu, sched_numa_topology->masks[i][j]);
- 		}
- 	}
- }
-@@ -2027,10 +2053,12 @@ void sched_domains_numa_masks_clear(unsigned int cpu)
- {
- 	int i, j;
- 
--	for (i = 0; i < sched_domains_numa_levels; i++) {
-+	lockdep_assert_cpus_held();
-+
-+	for (i = 0; i < sched_numa_topology->nr_levels; i++) {
- 		for (j = 0; j < nr_node_ids; j++) {
--			if (sched_domains_numa_masks[i][j])
--				cpumask_clear_cpu(cpu, sched_domains_numa_masks[i][j]);
-+			if (sched_numa_topology->masks[i][j])
-+				cpumask_clear_cpu(cpu, sched_numa_topology->masks[i][j]);
- 		}
- 	}
- }
-@@ -2046,22 +2074,19 @@ void sched_domains_numa_masks_clear(unsigned int cpu)
- int sched_numa_find_closest(const struct cpumask *cpus, int cpu)
- {
- 	int i, j = cpu_to_node(cpu), found = nr_cpu_ids;
--	struct cpumask ***masks;
-+	struct sched_numa_topology *topology;
- 
- 	rcu_read_lock();
--	masks = rcu_dereference(sched_domains_numa_masks);
--	if (!masks)
--		goto unlock;
--	for (i = 0; i < sched_domains_numa_levels; i++) {
--		if (!masks[i][j])
-+	topology = rcu_dereference(sched_numa_topology);
-+	for (i = 0; i < topology->nr_levels; i++) {
-+		if (!topology->masks[i][j])
- 			break;
--		cpu = cpumask_any_and(cpus, masks[i][j]);
-+		cpu = cpumask_any_and(cpus, topology->masks[i][j]);
- 		if (cpu < nr_cpu_ids) {
- 			found = cpu;
- 			break;
- 		}
- 	}
--unlock:
- 	rcu_read_unlock();
- 
- 	return found;
--- 
-2.30.2
-
+Thanks
+Nic

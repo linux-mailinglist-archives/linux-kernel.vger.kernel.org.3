@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832F6559662
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC21559676
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiFXJXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 05:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
+        id S231243AbiFXJXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 05:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbiFXJXD (ORCPT
+        with ESMTP id S231620AbiFXJXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 05:23:03 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BF52BC3;
-        Fri, 24 Jun 2022 02:23:01 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3B5AC66017FA;
-        Fri, 24 Jun 2022 10:22:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656062579;
-        bh=9Soc6n0CqFUw5ZJ1qMew3TiS4i4OwU3mvCqAavwe5wg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nZIokHZdtJm1ECwVKvDQBwV3vTQoam56MCQ88jG9j5oK+852SDX86EZmXOFd0MyFM
-         aoOE3XTvgjpadKYCkxndt1Fas9058NPUY8vNw3kHZOMiuHXGccY9f2ZTQYYdAx6r/T
-         J2JMHnSOU6z96e42d6BHK+l0SK/zlsDiktujVK2C7O8qom6vUZasdBNbl8FOK+aFgo
-         L5WtM+UGHO1v54ID07R6DN4hoVSg32VC1bt5mOYZAWIqvgbBYEwJH4FDvU40sPK0hv
-         bJSDok7cdWaGlT0XXmEJLpP2aydZ2bBXIn50iJrGg3WO8N9ivD+y65P+hB+7uvKfoO
-         c90owLut6DaDw==
-Message-ID: <26ff5b3e-00f6-783e-04ec-b4fcd600175e@collabora.com>
-Date:   Fri, 24 Jun 2022 11:22:56 +0200
+        Fri, 24 Jun 2022 05:23:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E10BF4F9EB
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 02:23:09 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F7F3143D;
+        Fri, 24 Jun 2022 02:23:09 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 652A13F792;
+        Fri, 24 Jun 2022 02:23:08 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 10:22:58 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     sudeep.holla@arm.com, linux-arm-kernel@lists.infradead.org,
+        etienne.carriere@linaro.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scmi/optee: fix response size warning
+Message-ID: <YrWCctNSyKcqSHE9@e120937-lin>
+References: <20220624074549.3298-1-vincent.guittot@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 0/2] MediaTek Helio X10 MT6795 - power domains
-Content-Language: en-US
-To:     robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
-        matthias.bgg@gmail.com, chun-jie.chen@mediatek.com,
-        weiyi.lu@mediatek.com, mbrugger@suse.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com,
-        nfraprado@collabora.com
-References: <20220503141441.125852-1-angelogioacchino.delregno@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220503141441.125852-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624074549.3298-1-vincent.guittot@linaro.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/05/22 16:14, AngeloGioacchino Del Regno ha scritto:
-> In an effort to give some love to the apparently forgotten MT6795 SoC,
-> I am upstreaming more components that are necessary to support platforms
-> powered by this one apart from a simple boot to serial console.
+On Fri, Jun 24, 2022 at 09:45:49AM +0200, Vincent Guittot wrote:
+> Some protocols check the response size with the expected value but optee
+> shared memory doesn't return such size whereas it is available in the
+> optee output buffer.
 > 
-> This series introduces support for the MTCMOS power domains found on
-> the Helio X10.
+> As an example, the base protocol compares the response size with the
+> expected result when requesting the list of protocol which triggers a
+> warning with optee shared memory:
 > 
-> Tested on a Sony Xperia M5 (codename "Holly") smartphone.
+> [    1.260306] arm-scmi firmware:scmi0: Malformed reply - real_sz:116  calc_sz:4  (loop_num_ret:4)
 > 
-> Changes in v2:
->   - Changed license header for mt6795-power.h binding as per
->     Krzysztof's review.
+> Save the output buffer length and use it when fetching the answer.
 > 
-> AngeloGioacchino Del Regno (2):
->    dt-bindings: power: Add MediaTek Helio X10 MT6795 power domains
->    soc: mediatek: pm-domains: Add support for Helio X10 MT6795
-> 
->   .../power/mediatek,power-controller.yaml      |   2 +
->   drivers/soc/mediatek/mt6795-pm-domains.h      | 112 ++++++++++++++++++
->   drivers/soc/mediatek/mtk-pm-domains.c         |   5 +
->   include/dt-bindings/power/mt6795-power.h      |  16 +++
->   4 files changed, 135 insertions(+)
->   create mode 100644 drivers/soc/mediatek/mt6795-pm-domains.h
->   create mode 100644 include/dt-bindings/power/mt6795-power.h
-> 
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 
+Hi Vincent,
 
-Gentle ping for this series...
+> ---
+> 
+> Tested on sudeep's for-next/scmi branch
+> 
+>  drivers/firmware/arm_scmi/optee.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/firmware/arm_scmi/optee.c b/drivers/firmware/arm_scmi/optee.c
+> index b503c22cfd32..8abace56b958 100644
+> --- a/drivers/firmware/arm_scmi/optee.c
+> +++ b/drivers/firmware/arm_scmi/optee.c
+> @@ -117,6 +117,7 @@ struct scmi_optee_channel {
+>  	u32 channel_id;
+>  	u32 tee_session;
+>  	u32 caps;
+> +	u32 rx_len;
+>  	struct mutex mu;
+>  	struct scmi_chan_info *cinfo;
+>  	union {
+> @@ -302,6 +303,9 @@ static int invoke_process_msg_channel(struct scmi_optee_channel *channel, size_t
+>  		return -EIO;
+>  	}
+>  
+> +	/* Save response size */
+> +	channel->rx_len = param[2].u.memref.size;
+> +
+>  	return 0;
+>  }
+>  
+> @@ -353,6 +357,7 @@ static int setup_dynamic_shmem(struct device *dev, struct scmi_optee_channel *ch
+>  	shbuf = tee_shm_get_va(channel->tee_shm, 0);
+>  	memset(shbuf, 0, msg_size);
+>  	channel->req.msg = shbuf;
+> +	channel->rx_len = msg_size;
+>  
+>  	return 0;
+>  }
+> @@ -508,7 +513,7 @@ static void scmi_optee_fetch_response(struct scmi_chan_info *cinfo,
+>  	struct scmi_optee_channel *channel = cinfo->transport_info;
+>  
+>  	if (channel->tee_shm)
+> -		msg_fetch_response(channel->req.msg, SCMI_OPTEE_MAX_MSG_SIZE, xfer);
+> +		msg_fetch_response(channel->req.msg, channel->rx_len, xfer);
+>  	else
+>  		shmem_fetch_response(channel->req.shmem, xfer);
+>  }
 
-I've verified it still applies cleanly on next-20220624.. can we please
-get it merged in?
+Looks good to me.
+
+Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
 
 Thanks,
-Angelo
+Cristian
+

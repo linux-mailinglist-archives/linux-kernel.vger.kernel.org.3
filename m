@@ -2,103 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923FC55A458
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DBE55A45A
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiFXWYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 18:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
+        id S231235AbiFXW0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 18:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiFXWYN (ORCPT
+        with ESMTP id S229797AbiFXW0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 18:24:13 -0400
-Received: from email.cn (m218-171.88.com [110.43.218.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECAB88590;
-        Fri, 24 Jun 2022 15:24:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.cn;
-        s=dkim; h=Date:From:To; bh=wI3llXZ89/86O4qf5yhKKxw89rBdjGt6UL5y2
-        /VdiRI=; b=Iz9v1P3z4/dW/cccl7Kyx37MsCCi1Ka1cZM6oeaVRwnw928ZqzIQP
-        hXhTaHsUFn1PZGwe8GvBS8H88OpYle8+s8OjwIYzuJNJioVa9aXsbNkXWslBsqqY
-        70VRj5UX9XAcaD1KDAjXIR4K2Y3BMqTasUYJxDx0z9nYkPlnvkwgSE=
-Received: from bobwxc.mipc (unknown [120.242.121.172])
-        by v_coremail2-frontend-1 (Coremail) with SMTP id LCKnCgAn2GRuObZi_DEGAA--.16180S2;
-        Sat, 25 Jun 2022 06:23:44 +0800 (CST)
-Date:   Sat, 25 Jun 2022 06:23:42 +0800
-From:   Wu XiangCheng <bobwxc@email.cn>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCH] docs: rename Documentation/vm to Documentation/mm
-Message-ID: <YrSQhNYvcZfTRUnU@bobwxc.mipc>
-References: <20220622132258.457734-1-rppt@kernel.org>
+        Fri, 24 Jun 2022 18:26:39 -0400
+Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769A688945
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:26:35 -0700 (PDT)
+Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
+        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id E1CDF8029053
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 22:26:34 +0000 (UTC)
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 32AE610073850
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 22:26:34 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id 4rl3oHclMNVEz4rl4otJvb; Fri, 24 Jun 2022 22:26:34 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=I5+g+Psg c=1 sm=1 tr=0 ts=62b63a1a
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=JPEYwPQDsx4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=BDCG8O_D2SPVAq3EX74A:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=zEUVMjd6At/VaVcDdqGUbnb9HMrynB1KutbZgP3N6a0=; b=vyTiJrLyojw4tN3o/kOyb6enhj
+        6mKy76Uki/sZc5NF2O+2xGgmTPUHBlCg11Op61uCvSk1SH4ck/C7gXiuGrj5x124mRKl+K1Haxscw
+        EjkV1KNXkP6ZIbZeoAXVDBcckkjt2QzDiykyX253g39R1cSCYyGhYMkijO1/iT9cejxepEk8bROhR
+        Xe0N75/M/NQdyA0yBAnwe1CPEZe8TDEqDAVia/fQEZFr03UdJ5I1CPSHiAi0371MIIAxFu02uKNt/
+        uEwv+yjVq5tXkiFwZ7wd6cQBkgp/F+2uoN9J8El52qNC4ujChG2Qm9rQpk4bponZz1A8aWdHE0FUA
+        sgfuZ+Yg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:45616 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1o4rl2-00434m-JM;
+        Fri, 24 Jun 2022 16:26:32 -0600
+Subject: Re: [PATCH 5.15 0/9] 5.15.50-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220623164322.288837280@linuxfoundation.org>
+In-Reply-To: <20220623164322.288837280@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <8c1b80b5-b01e-e3e7-8a2f-5b8ba799d28c@w6rz.net>
+Date:   Fri, 24 Jun 2022 15:26:30 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220622132258.457734-1-rppt@kernel.org>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=693; i=bobwxc@yeah.net;
- h=from:subject:message-id; bh=VgmFHXt64+nXwE358/BSAtg1wDlAN/7IkKogMn+pOog=;
- b=owEB7QES/pANAwAKAbZbKBIigrCFAcsmYgBitae+1GspiO9tJ2PoZI2fglKFzyee8ot0neMYr9hQ
- UE4bG1yJAbMEAAEKAB0WIQRFujdTmQmloK0WXU+2WygSIoKwhQUCYrWnvgAKCRC2WygSIoKwhc8MDA
- CaoqWKkOIRasV9YGh+5x7pZ3j/IJD/kBk/VDRVJpHJY3AwtkW+JDXPjxZZIGG1fqy+dd5yLqjH8YS6
- kwMFQrmeogNqlfNXpE8IynlU7LqNAAaIoeSIEQE1LgdCFSsVNXcldBOnuZ8aiArlXPe0hdtL9GeifF
- o4i+GQfw7k88/VFpn3DrqfoWYu5n6SXVEth3812Z38he6W4cVMoYM9M1wNRzG87oZwL1vY2nh3ZcyY
- yYq+5Er6lzsJD3f+qewdiZckZTW1mLhspo5nNFL2y1ZY+K2ztn6NLOKn3cfvhmE2qQhOGICGWzEYMl
- U76kd5JV+yuRB9fNwZV34J1whhGqPR6VRl8mmXzP1VOIqmOG2rCYPLXaWCt900E0ldZ7EVzoESM/zD
- JztI2G8Y5daYSD+kWtRIhoVNTsn1Lfv9yGp0yMUCYJmOGfHvSMySVzd16lPbRY5Z3lc6JkQAu53Ah/
- zeW95ef1AQn9bdpaRS3a7Ck9suBSWcOKyW3xa9GMUXuRc=
-X-Developer-Key: i=bobwxc@yeah.net; a=openpgp;
- fpr=2BF2A4AA2F0730C3279ED01D32684A40BCA7AEA7
-X-CM-TRANSID: LCKnCgAn2GRuObZi_DEGAA--.16180S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7JrW5Kw1UAF1fGF4xJw1fWFg_yoWxKrb_ua
-        yfJF1Iyr47AFW8KrsrWw4ayr1kXrZ29ayUXrn8tFWrAF9Fk397KF9Fkw1Fva15Xr4kury5
-        W34rZrZ2kFyagjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb0kYjsxI4VW3JwAYFVCjjxCrM7CY07I20VC2zVCF04k26cxKx2IY
-        s7xG6rWj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI
-        8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VWxJr1U
-        JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l42xK82
-        IY6x8ErcxFaVAv8VWxJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
-        6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2
-        Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-        Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
-        IF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IUU3rc3UUUUU=
-        =
-X-Originating-IP: [120.242.121.172]
-X-CM-SenderInfo: pere453f6hztlloou0/
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1o4rl2-00434m-JM
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:45616
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 08:22:58AM -0500, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> so it will be consistent with code mm directory and with
-> Documentation/admin-guide/mm and won't be confused with virtual
-> machines.
-> 
-> Suggested-by: Matthew Wilcox <willy@infradead.org>
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
+On 6/23/22 9:44 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.50 release.
+> There are 9 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 25 Jun 2022 16:43:11 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.50-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Hi Mike,
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-After applying this patch:
-
-$ grep "/vm/" Documentation/translations/zh_CN/mm/memory-model.rst -n
-132:  以允许设备驱动程序协调与设备内存相关的内存管理事件，通常是GPU内存。参见/vm/hmm.rst。
-
-Please replace '/vm/hmm.rst' with 'Documentation/mm/hmm.rst'.
-
-Thanks,
-	Wu
+Tested-by: Ron Economos <re@w6rz.net>
 

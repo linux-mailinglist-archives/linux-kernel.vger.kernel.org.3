@@ -2,152 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBD0559374
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC2255937C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbiFXGbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 02:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
+        id S229964AbiFXGcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 02:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiFXGbt (ORCPT
+        with ESMTP id S229798AbiFXGb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 02:31:49 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0421656745;
-        Thu, 23 Jun 2022 23:31:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656052308; x=1687588308;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=hI+5wy7XFsTnnUSh755hITNMO1shxmiWTds7IpoTd1k=;
-  b=lIi7JzJ5SL2ioZ1sa4FZTLFrOvHYTNfIscrt14yD2YgboOnrALzcczV0
-   ZsBGS4ZxBZ71O1ATzqc9qjE+XL+F5wKogUVZiw81feuYrK8l5soG5l00J
-   n1BAP+g4a5TiStl23zR96fo5PFF7kHg55kvlYcCLliM9Ej9rzCJsE3sSQ
-   kBx7cBe488OUEDosuaHe7ifY+TFWq91kDE+KjJrRCDFyMDMrooAppbA0R
-   Q2BgxadNoT4jrw0zSUgQHSIFQWWrUegnUIb2iscDW/VAkt0eXO9YAo+9v
-   DtYGPY3h9IlmK4eRAjs9DaRL2rst1eyNxaqot9hB0Qdo5qjBhUmtUvKR0
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="260751660"
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="260751660"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 23:31:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="621619915"
-Received: from orsmsx606.amr.corp.intel.com ([10.22.229.19])
-  by orsmga001.jf.intel.com with ESMTP; 23 Jun 2022 23:31:48 -0700
-Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
- ORSMSX606.amr.corp.intel.com (10.22.229.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 23 Jun 2022 23:31:47 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Thu, 23 Jun 2022 23:31:47 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 23 Jun 2022 23:31:47 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WOEjieCc+4mGXbSuECyhIcjzUxt44r0Za7Jw/SbxAc8YBLSwETYezFS5AMcxYoajOAtZrQiVuqC7u6pegzjbLdnIvQeBxah32o41skmq+tyi/2Mn+uQTrQ9mU7JCY9tlRRicy8ajodNo6agrjqLQNvF1kxGBKxlqZ09vWQxI1sGuqM7Mp8SRbj6CCpsw84uDaOxaYmX6UNzU7HwQI8hkqxjdv1qtm3Ob6CaMk4IOEbUclm755TJtZ7qJg+JApH8oLFxR7UBQ02lEfS9Pjpts3SzSEJf7PWS29wABoN/UIDt42ogjcjM0IP5dreol9fARGS8b6ARz7tdFDpGyNyWvTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hI+5wy7XFsTnnUSh755hITNMO1shxmiWTds7IpoTd1k=;
- b=Udllrt4MhyYnKyV1g9FdUHcxvkWOpCYIqIsbcbmh4t3JgkEfig8farzaqPDmf0/dagG8IqVIMYc2W2xwYP7TYYFjkHx0YMvpGjhacn4kp9lqkJZA3rN9TTNV8WJcOIszV5Z8CE5vBYAwg9a1DgciArlTfppGgxxweFXcWsupx0B5QnlUh6BQ/lP0U7NApNXlQMZiMfAC9trIeQybaTUj7+1uQMk9kafMAafd53l2UZeHkTkW89qV+x/Th++sOmL6HaNhtqLOtH+RfhwCk2xKO4mwuKqjI9jrwCbNtvxbuJdQ5X8kDpLlkUEXnH1fapmRlb8hELB6V+EVjvm7i1pmrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by MN2PR11MB4285.namprd11.prod.outlook.com (2603:10b6:208:191::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Fri, 24 Jun
- 2022 06:31:46 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::8435:5a99:1e28:b38c]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::8435:5a99:1e28:b38c%2]) with mapi id 15.20.5373.017; Fri, 24 Jun 2022
- 06:31:46 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>
-CC:     "Qiang, Chenyi" <chenyi.qiang@intel.com>,
-        Ethan Zhao <haifeng.zhao@linux.intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v3 1/1] iommu/vt-d: Fix RID2PASID setup/teardown failure
-Thread-Topic: [PATCH v3 1/1] iommu/vt-d: Fix RID2PASID setup/teardown failure
-Thread-Index: AQHYhs8ZnDJgEPiUSU6v0m07+WgrOK1eGi/g
-Date:   Fri, 24 Jun 2022 06:31:45 +0000
-Message-ID: <BN9PR11MB5276A576BABC8E9525966E388CB49@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220623065720.727849-1-baolu.lu@linux.intel.com>
-In-Reply-To: <20220623065720.727849-1-baolu.lu@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 92e6a4d1-2d17-4b3d-84e7-08da55ab35f0
-x-ms-traffictypediagnostic: MN2PR11MB4285:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FzSWwi71dXqkhfuhnS3o0ujbfekNxIv1S5eGfbadnUGDVMUtnuHrSeMUEk2Buk5RcUpDUh9B5fkkrZUuDxXQ1JLIOlSPdgSDtr7JCmelUkwL6fKdwX/zFEP8wvlB4l7ZhckVm1DE8EaoVkH1wlIxbrw7YHqLAShKQ3fsWcy6XoIWlV8HNk1+enLVnqkQxX6SBPDgWm1E0+s3o8LVCUhJ+iY7LMfiD7+9v+jX908CJAGKBbj9O7kcON3S2hu7vplasOK4UJneCPLalFzNhKV/5o/JDZOdgzvTBwKUHFODsTKQFJPSIvTQq1KuwYjWKXi7sk9agLtOfTDt4hi41F9dt7Gx0EqHqmI37fgKRxKtvQbcf1250t3gvMWFLL2EPgnF5u3KaBdIKyKfbcm+0IgsiAUtJZ7PKmnPQ3yLeySxSkUPYVduVWxZGHheZph2wyVg8OVPPxqIMkPWveybxFUWAo6wvOnjxyVbQxk1xomv/Ol4grQSOgrSoucz4knUToSfl+OU8OkCMKoewPxeMAnCaFJwCd9j8xHFBiecE/TCTaKtDMYMN/7y/WCybF3iSL95Mz3ZEdC4Cm2rJIhbuZ4FDaKYPvMzrfrdudFD0EsQBHg445NNiHxqJjWTtbQ7Hgr8fin9BsYZIO0Mh1O4G+LnAvDlS9wfGYp/v8DgFsY4F6wYi79OKifHHRDz5GZLWExCL0jRlff7r1gtpoNFrZ3lBZo3Vq8tdSvg3ZiD1gzTBC0AiWDQcWzWorCBynwuPubmxfTwLUGrBBFXok3AsgMmolK54rwG25RtZtAS7IF2gjY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(39860400002)(346002)(366004)(396003)(136003)(76116006)(110136005)(71200400001)(41300700001)(2906002)(478600001)(26005)(66446008)(38070700005)(316002)(83380400001)(5660300002)(6636002)(66556008)(33656002)(86362001)(64756008)(52536014)(66946007)(4326008)(9686003)(8936002)(54906003)(66476007)(8676002)(6506007)(7696005)(38100700002)(122000001)(55016003)(186003)(82960400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XRUyskrgq1Q+UBz1Fy+6z6Ia8ihH7BVGaV7tUXDK5tO/VRN8z3XkiC95754Y?=
- =?us-ascii?Q?OaTH/bVZMUUfldqa8/86tOI3Nt6yp57dyMBWkl5Qy0i476eVcwXKxB4T/bsl?=
- =?us-ascii?Q?tC95ujpt4O6OesYcD5M6EAhzFpnHsZX0G928xNHIMLWE1uQ2IrVR8AjQTlro?=
- =?us-ascii?Q?LvveSGp1vXvsQo4cACT7D5kkj1Q6agnIafipKOSijumGuN+MAqGJ/+3GcnMk?=
- =?us-ascii?Q?7IeqjaGW9KvI6YcMn9eSz0lnV3n4oYFthtSI58STsbCPjhhbxBptRvMH8wdt?=
- =?us-ascii?Q?4SA7hHKfhSmoCnuPOYzmG0PBSeDtMm2//As/52s6mPyog7s0y4PKVrgDt7vh?=
- =?us-ascii?Q?i7SFGhyR7zsxtsQGwFARYCDddw5j4uBVMQtDGCUzbbYbx2Cll6iGmQAAYhvc?=
- =?us-ascii?Q?p4xC/noGHW9b5yo9zI06lNZ+dQ6nMfBOlfxpOCh34v+31nKnQJ3hkgxgqtGp?=
- =?us-ascii?Q?0aU8oGf0WMpsQl6dNR+OlCIj1zHHYfM2qAcAfFWKb/3mVdL2ph5F2A3IG1Eq?=
- =?us-ascii?Q?iGiqILrRScfL9S8+mL60/5Cry71+tWfD0E5P8g8cVv01p7pOF45wh+lE9+bK?=
- =?us-ascii?Q?4dPxmcf7akSWZCgOCz+WKboU2ZVP1TVzLyNvKeDtjyXIV/O02LC1T7oU/p33?=
- =?us-ascii?Q?9dyv0L8KHQ0d0fJmlyIk7xURgGHGlbPg42iRlFSTvLRewg9OBPmsuE0JpT5b?=
- =?us-ascii?Q?awB7guZrVHlfjyjGF/z63/A58Fuejn601KyV9h85MTnVrTZ1gR2XptaE3aiO?=
- =?us-ascii?Q?T5UnjpaIurz2aYfVZt7MBS5K9ZA5w9K60fZNRnK+maRRO16B8BhRdyNOe6/v?=
- =?us-ascii?Q?O/BDgeZYlmEklKP3MVBNZMYk3sxFqxBGjrhbovcWFykyW0bXk6F8qykhRRx8?=
- =?us-ascii?Q?YG5cFMoCPEC4ibzdze+kW4L8mNDXR1JqwJvaCyTsD59W9ugxaGN7r6D8tvyc?=
- =?us-ascii?Q?aieZspJzG5awIOru0WbLLXCKSZBhtAxbpdRtBIT9PQ4xgNZjO93xvRUnoUQr?=
- =?us-ascii?Q?DYWnj/OXl5lczS5STK6OOj8iUC2tjTBHiz3E7RjLXnsdtWpI+Zdd0xDJu0ib?=
- =?us-ascii?Q?cKgAaAOSV2SKrTshBFMcr1+cnrYi/3wFy642PNZXBfKyXM3NQFmElOj+Pz7k?=
- =?us-ascii?Q?2tP8xAKcQT0b/ITDZwee57vfDIHTNkLDBFUDpt0jsH0sC6JwRS93QNxSYM0z?=
- =?us-ascii?Q?Ov2sJPhUwjcn0V1Y0LfYrcbbcX0p8CtY/rdM4DV8k/N6VNdTqdI4ZIp5SYK4?=
- =?us-ascii?Q?wQjsH1oFEjcgO3FrWYb7xSG5ruBP/9r0+5sIBI/v7B3riBD+vKSuFcK+Ti69?=
- =?us-ascii?Q?xWmgiVCFq6lWFgA2lu81DsI9a2bSN5vrq5nRuXHtu27nq0ILegln3jTbTGpq?=
- =?us-ascii?Q?EeTXpcFIBb/qQ9s0Cb3WlG1pfxotKXiYjA5/3sP3l+hJP+PXVTB9yAsOIjbu?=
- =?us-ascii?Q?P/BcZl6pKeuJEOage0D1YNHj3vtSjPEcFlu72MbP59DajI9Jep/1KKdn4w1h?=
- =?us-ascii?Q?w8Sfg7OBBb50xoKjKPI/g/tB2DJizrf4opI4bHliAuaXuBE2K1NluOW1oV4Q?=
- =?us-ascii?Q?jYJAhSK2V8wvjCJvu0K6bQMPQoWX29zB4JBhwf9K?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 24 Jun 2022 02:31:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F9155DF18
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:31:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656052314;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fkwre6WoTaZ3HcBGKyAfeqBPtQ+kpW2QzG2weDAdapc=;
+        b=TrhPxSnNbmwPQFVobh95xt8FQnfueDEpAg9bdRWsXqSjmpDGr+R/Cmkg6EMAyG3uCq1lhM
+        Sdli+14Srnb8HC2/8ylfqSDnfJloKl12Oepe7DMUnwD8BlWVPkN683p3B8LxfTvO+RXHd4
+        daCwYStVBMGbOaT04V9x3HBcwCaXKqw=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-112-lhCsIXg0NguLQzQMI8xPZw-1; Fri, 24 Jun 2022 02:31:53 -0400
+X-MC-Unique: lhCsIXg0NguLQzQMI8xPZw-1
+Received: by mail-wm1-f72.google.com with SMTP id c185-20020a1c35c2000000b0039db3e56c39so2586447wma.5
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:31:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fkwre6WoTaZ3HcBGKyAfeqBPtQ+kpW2QzG2weDAdapc=;
+        b=zn3h13TJ5HLc0nxlG1mB+XxYvAnwZQOJCzuDsPtVTfX65rOfPKNTH/h3qIuQt98aAK
+         HU7CRiyJuTYZc2LKIpL83cp8EQXzLkIkol+BPSPv6Ds7ol065I3OFIL/AnISeEbd7gGQ
+         wvneYeM+A/PK8dm7SOtFrAXzEXjVbZMFi2m5rlAuz8h1aZYI8Q5VniAZfgOMO7WmmhaF
+         evymUyi9tN/wOMvF1UqHYSBAPqyxSRnvI8Fkhgm9D5QmkjPCUERvDhX48c3RuTK5na5t
+         IHjpq8xO1XGi913G0YtB10aA82Cm+yEaJrYBWItbSHi81G8aQaOt5UtzoTXZejrinq3F
+         DO2g==
+X-Gm-Message-State: AJIora/ZTv0K48I9+WzPmEmUp4Ptk8CiR24SlI3ZfgSkMMKe+97QQ2UK
+        psPJ0lwCR9MnnV3B/OcHdEBIzA7omRrq76L8PTxpq+IVHtq+FbtG5nsbi5kD6Ae+j+1eHvBiWgg
+        9qsOsHqCUu39pFAcJY3+oEmJq
+X-Received: by 2002:a5d:6481:0:b0:219:8930:6e48 with SMTP id o1-20020a5d6481000000b0021989306e48mr11516420wri.574.1656052312301;
+        Thu, 23 Jun 2022 23:31:52 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vRwBTxtgCODqWGWtTx/7SSJNNx7vYLqsQ5RQvPSrwfQn6gMWJQbS/U+j9i6mC+QbxjMDDN1g==
+X-Received: by 2002:a5d:6481:0:b0:219:8930:6e48 with SMTP id o1-20020a5d6481000000b0021989306e48mr11516397wri.574.1656052311996;
+        Thu, 23 Jun 2022 23:31:51 -0700 (PDT)
+Received: from redhat.com ([2.55.188.216])
+        by smtp.gmail.com with ESMTPSA id r21-20020a05600c35d500b003a02f957245sm5754978wmq.26.2022.06.23.23.31.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 23:31:51 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 02:31:46 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        kvm <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ben Hutchings <ben@decadent.org.uk>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH V3] virtio: disable notification hardening by default
+Message-ID: <20220624022622-mutt-send-email-mst@kernel.org>
+References: <20220622012940.21441-1-jasowang@redhat.com>
+ <20220622025047-mutt-send-email-mst@kernel.org>
+ <CACGkMEtJY2ioD0L8ifTrCPatG6-NqQ01V=d2L1FeoweKV74LaA@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92e6a4d1-2d17-4b3d-84e7-08da55ab35f0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2022 06:31:45.8757
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +3Grq4NpXedhKFnr3DZxLcgI93EYW22gjF7qCRWfwBLFPfDD208gWu00uLu9oCSE1QdeU90aMDGaF24vu0IGvw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4285
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEtJY2ioD0L8ifTrCPatG6-NqQ01V=d2L1FeoweKV74LaA@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -155,33 +88,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Lu Baolu <baolu.lu@linux.intel.com>
-> Sent: Thursday, June 23, 2022 2:57 PM
->=20
-> The IOMMU driver shares the pasid table for PCI alias devices. When the
-> RID2PASID entry of the shared pasid table has been filled by the first
-> device, the subsequent device will encounter the "DMAR: Setup RID2PASID
-> failed" failure as the pasid entry has already been marked as present.
-> As the result, the IOMMU probing process will be aborted.
->=20
-> On the contrary, when any alias device is hot-removed from the system,
-> for example, by writing to /sys/bus/pci/devices/.../remove, the shared
-> RID2PASID will be cleared without any notifications to other devices.
-> As the result, any DMAs from those rest devices are blocked.
->=20
-> Sharing pasid table among PCI alias devices could save two memory pages
-> for devices underneath the PCIe-to-PCI bridges. Anyway, considering that
-> those devices are rare on modern platforms that support VT-d in scalable
-> mode and the saved memory is negligible, it's reasonable to remove this
-> part of immature code to make the driver feasible and stable.
->=20
-> Fixes: ef848b7e5a6a0 ("iommu/vt-d: Setup pasid entry for RID2PASID
-> support")
-> Reported-by: Chenyi Qiang <chenyi.qiang@intel.com>
-> Reported-by: Ethan Zhao <haifeng.zhao@linux.intel.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+On Wed, Jun 22, 2022 at 03:09:31PM +0800, Jason Wang wrote:
+> On Wed, Jun 22, 2022 at 3:03 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Wed, Jun 22, 2022 at 09:29:40AM +0800, Jason Wang wrote:
+> > > We try to harden virtio device notifications in 8b4ec69d7e09 ("virtio:
+> > > harden vring IRQ"). It works with the assumption that the driver or
+> > > core can properly call virtio_device_ready() at the right
+> > > place. Unfortunately, this seems to be not true and uncover various
+> > > bugs of the existing drivers, mainly the issue of using
+> > > virtio_device_ready() incorrectly.
+> > >
+> > > So let's having a Kconfig option and disable it by default. It gives
+> > > us a breath to fix the drivers and then we can consider to enable it
+> > > by default.
+> > >
+> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> >
+> >
+> > OK I will queue, but I think the problem is fundamental.
+> 
+> If I understand correctly, you want some core IRQ work?
 
-Looks good.
+Yes.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> As discussed
+> before, it doesn't solve all the problems, we still need to do per
+> driver audit.
+> 
+> Thanks
+
+Maybe, but we don't need to tie things to device_ready then.
+We can do
+
+- disable irqs
+- device ready
+- setup everything
+- enable irqs
+
+
+and this works for most things, the only issue is
+this deadlocks if "setup everything" waits for interrupts.
+
+
+With the current approach there's really no good time:
+1.- setup everything
+- device ready
+
+can cause kicks before device is ready
+
+2.- device ready
+- setup everything
+
+can cause callbacks before setup.
+
+So I prefer the 1. and fix the hardening in the core.
+
+
+> >
+> >
+> > > ---
+> > > Changes since V2:
+> > > - Tweak the Kconfig help
+> > > - Add comment for the read_lock() pairing in virtio_ccw
+> > > ---
+> > >  drivers/s390/virtio/virtio_ccw.c |  9 ++++++++-
+> > >  drivers/virtio/Kconfig           | 13 +++++++++++++
+> > >  drivers/virtio/virtio.c          |  2 ++
+> > >  drivers/virtio/virtio_ring.c     | 12 ++++++++++++
+> > >  include/linux/virtio_config.h    |  2 ++
+> > >  5 files changed, 37 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+> > > index 97e51c34e6cf..1f6a358f65f0 100644
+> > > --- a/drivers/s390/virtio/virtio_ccw.c
+> > > +++ b/drivers/s390/virtio/virtio_ccw.c
+> > > @@ -1136,8 +1136,13 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+> > >                       vcdev->err = -EIO;
+> > >       }
+> > >       virtio_ccw_check_activity(vcdev, activity);
+> > > -     /* Interrupts are disabled here */
+> > > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > > +     /*
+> > > +      * Paried with virtio_ccw_synchronize_cbs() and interrupts are
+> > > +      * disabled here.
+> > > +      */
+> > >       read_lock(&vcdev->irq_lock);
+> > > +#endif
+> > >       for_each_set_bit(i, indicators(vcdev),
+> > >                        sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
+> > >               /* The bit clear must happen before the vring kick. */
+> > > @@ -1146,7 +1151,9 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+> > >               vq = virtio_ccw_vq_by_ind(vcdev, i);
+> > >               vring_interrupt(0, vq);
+> > >       }
+> > > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > >       read_unlock(&vcdev->irq_lock);
+> > > +#endif
+> > >       if (test_bit(0, indicators2(vcdev))) {
+> > >               virtio_config_changed(&vcdev->vdev);
+> > >               clear_bit(0, indicators2(vcdev));
+> > > diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
+> > > index b5adf6abd241..c04f370a1e5c 100644
+> > > --- a/drivers/virtio/Kconfig
+> > > +++ b/drivers/virtio/Kconfig
+> > > @@ -35,6 +35,19 @@ menuconfig VIRTIO_MENU
+> > >
+> > >  if VIRTIO_MENU
+> > >
+> > > +config VIRTIO_HARDEN_NOTIFICATION
+> > > +        bool "Harden virtio notification"
+> > > +        help
+> > > +          Enable this to harden the device notifications and suppress
+> > > +          those that happen at a time where notifications are illegal.
+> > > +
+> > > +          Experimental: Note that several drivers still have bugs that
+> > > +          may cause crashes or hangs when correct handling of
+> > > +          notifications is enforced; depending on the subset of
+> > > +          drivers and devices you use, this may or may not work.
+> > > +
+> > > +          If unsure, say N.
+> > > +
+> > >  config VIRTIO_PCI
+> > >       tristate "PCI driver for virtio devices"
+> > >       depends on PCI
+> > > diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> > > index ef04a96942bf..21dc08d2f32d 100644
+> > > --- a/drivers/virtio/virtio.c
+> > > +++ b/drivers/virtio/virtio.c
+> > > @@ -220,6 +220,7 @@ static int virtio_features_ok(struct virtio_device *dev)
+> > >   * */
+> > >  void virtio_reset_device(struct virtio_device *dev)
+> > >  {
+> > > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > >       /*
+> > >        * The below virtio_synchronize_cbs() guarantees that any
+> > >        * interrupt for this line arriving after
+> > > @@ -228,6 +229,7 @@ void virtio_reset_device(struct virtio_device *dev)
+> > >        */
+> > >       virtio_break_device(dev);
+> > >       virtio_synchronize_cbs(dev);
+> > > +#endif
+> > >
+> > >       dev->config->reset(dev);
+> > >  }
+> > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > > index 13a7348cedff..d9d3b6e201fb 100644
+> > > --- a/drivers/virtio/virtio_ring.c
+> > > +++ b/drivers/virtio/virtio_ring.c
+> > > @@ -1688,7 +1688,11 @@ static struct virtqueue *vring_create_virtqueue_packed(
+> > >       vq->we_own_ring = true;
+> > >       vq->notify = notify;
+> > >       vq->weak_barriers = weak_barriers;
+> > > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > >       vq->broken = true;
+> > > +#else
+> > > +     vq->broken = false;
+> > > +#endif
+> > >       vq->last_used_idx = 0;
+> > >       vq->event_triggered = false;
+> > >       vq->num_added = 0;
+> > > @@ -2135,9 +2139,13 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+> > >       }
+> > >
+> > >       if (unlikely(vq->broken)) {
+> > > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > >               dev_warn_once(&vq->vq.vdev->dev,
+> > >                             "virtio vring IRQ raised before DRIVER_OK");
+> > >               return IRQ_NONE;
+> > > +#else
+> > > +             return IRQ_HANDLED;
+> > > +#endif
+> > >       }
+> > >
+> > >       /* Just a hint for performance: so it's ok that this can be racy! */
+> > > @@ -2180,7 +2188,11 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+> > >       vq->we_own_ring = false;
+> > >       vq->notify = notify;
+> > >       vq->weak_barriers = weak_barriers;
+> > > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > >       vq->broken = true;
+> > > +#else
+> > > +     vq->broken = false;
+> > > +#endif
+> > >       vq->last_used_idx = 0;
+> > >       vq->event_triggered = false;
+> > >       vq->num_added = 0;
+> > > diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> > > index 9a36051ceb76..d15c3cdda2d2 100644
+> > > --- a/include/linux/virtio_config.h
+> > > +++ b/include/linux/virtio_config.h
+> > > @@ -257,6 +257,7 @@ void virtio_device_ready(struct virtio_device *dev)
+> > >
+> > >       WARN_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
+> > >
+> > > +#ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
+> > >       /*
+> > >        * The virtio_synchronize_cbs() makes sure vring_interrupt()
+> > >        * will see the driver specific setup if it sees vq->broken
+> > > @@ -264,6 +265,7 @@ void virtio_device_ready(struct virtio_device *dev)
+> > >        */
+> > >       virtio_synchronize_cbs(dev);
+> > >       __virtio_unbreak_device(dev);
+> > > +#endif
+> > >       /*
+> > >        * The transport should ensure the visibility of vq->broken
+> > >        * before setting DRIVER_OK. See the comments for the transport
+> > > --
+> > > 2.25.1
+> >
+

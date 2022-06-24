@@ -2,97 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7459A559E60
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47CB559E4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbiFXQHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 12:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
+        id S231181AbiFXQIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 12:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbiFXQHl (ORCPT
+        with ESMTP id S231160AbiFXQIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 12:07:41 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7C15534A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:07:38 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Fri, 24 Jun 2022 12:08:21 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9838929CA2;
+        Fri, 24 Jun 2022 09:08:16 -0700 (PDT)
+Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C7BB41F8BF;
-        Fri, 24 Jun 2022 16:07:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1656086856; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=8wsGpUN1UHHjvwIixiG/ch3Vuvqb7p7EhnrZz6CUSYE=;
-        b=QrRyewZrCg6LT4hn5tCGnl9MAX7vPMxkYVG+zpI1aTS5sbpOUnliLWiA2UdkNiE71nQh3F
-        alPLupPQSY/RdqfutXxd7gJ5yMtMyaNlTv7kJp4esqU1y0OimrKaT8lPfHaa4IG/0pOaVk
-        QGu25m49rZ6c+Tsp/hxfqdJkFraXFVE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9145D13480;
-        Fri, 24 Jun 2022 16:07:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id A5s3IUjhtWJDTQAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 24 Jun 2022 16:07:36 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        sstabellini@kernel.org
-Subject: [GIT PULL] xen: branch for v5.19-rc4
-Date:   Fri, 24 Jun 2022 18:07:36 +0200
-Message-Id: <20220624160736.14606-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0780866017FA;
+        Fri, 24 Jun 2022 17:08:13 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656086895;
+        bh=KGOY/hKSjd6Fa8Gy3cPJe3LIX1aHDy62+SKTc+gQNls=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OJhEKwCxKH5CaQUTh954WJwlHVZYeXRtFfVXE2QIBRMmZ7N2GrutyjZCdOEGPRfM6
+         aHeFF1YHf8ADrGN+qK55wKTxMEno1UP3hpuVT01p/e2xg2O8GA1NRsJC33r7Efto3/
+         U7tp7icBQ4A2PSTnpKfODdpbHccrb7EdpnLQirrA+za60VqxGv19t+2mvz63GUq0zL
+         qZE6BNBgJ5AbfC4R0baa62JmjqPu6MhczBVBN+p1Wa+V50F4VWwGsru8lnySjhaFfQ
+         gtKxdP1rMIDyKJCYyTl+qlx3mjoIQ8tdz/R+vaZD5yglBziQ8METSLVenQu7fvMQTL
+         bx1yGvPrmk2LA==
+Date:   Fri, 24 Jun 2022 12:08:10 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Guodong Liu <guodong.liu@mediatek.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v2 4/5] pinctrl: mediatek: dropping original advanced
+ drive configuration function
+Message-ID: <20220624160810.alotw7iwvivp5zg6@notapiano>
+References: <20220624133700.15487-1-guodong.liu@mediatek.com>
+ <20220624133700.15487-5-guodong.liu@mediatek.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220624133700.15487-5-guodong.liu@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Hi Guodong,
 
-Please git pull the following tag:
+On Fri, Jun 24, 2022 at 09:36:59PM +0800, Guodong Liu wrote:
+> Function bias_combo getter/setters already handle all cases advanced drive
+> configuration, include drive for I2C related pins.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-5.19a-rc4-tag
+This commit message could be improved. I suggest using the following commit
+message:
 
-xen: branch for v5.19-rc4
+The bias_combo getter/setter is already able to handle advanced drive
+configuration, which is the reason commit 353d2ef77f2b ("dt-bindings: pinctrl:
+mt8192: Use generic bias instead of pull-*-adv") dropped the pull-up-adv and
+pull-down-adv properties from the binding. With those properties removed,
+there's no longer any use for the adv_pull callbacks, so drop them.
 
-It contains the following fixes:
+> 
+> Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
 
-- A rare deadlock in Qubes-OS between the i915 driver and Xen grant
-  unmapping, solved by making the unmapping fully asynchronous
-- A bug in the Xen blkfront driver caused by incomplete error handling
-- A fix for undefined behavior (shifting a signed int by 31 bits)
-- A fix in the Xen drmfront driver avoiding a WARN()
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Thanks.
-
-Juergen
-
- drivers/block/xen-blkfront.c            |  19 ++--
- drivers/gpu/drm/xen/xen_drm_front_gem.c |   2 +-
- drivers/xen/features.c                  |   2 +-
- drivers/xen/gntdev-common.h             |   7 ++
- drivers/xen/gntdev.c                    | 157 +++++++++++++++++++++-----------
- 5 files changed, 127 insertions(+), 60 deletions(-)
-
-Demi Marie Obenour (1):
-      xen/gntdev: Avoid blocking in unmap_grant_pages()
-
-Jason Andryuk (1):
-      xen-blkfront: Handle NULL gendisk
-
-Julien Grall (1):
-      x86/xen: Remove undefined behavior in setup_features()
-
-Oleksandr Tyshchenko (1):
-      drm/xen: Add missing VM_DONTEXPAND flag in mmap callback
+Thanks,
+Nícolas

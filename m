@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B1A55A37E
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC2955A37F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiFXVbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 17:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
+        id S231467AbiFXVbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 17:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbiFXVa5 (ORCPT
+        with ESMTP id S231508AbiFXVa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 17:30:57 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA32581269
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:56 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id o22-20020a637316000000b0040d238478aeso1557602pgc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:56 -0700 (PDT)
+        Fri, 24 Jun 2022 17:30:58 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0139A81702
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:58 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id u13-20020a170902e5cd00b0016a53274671so1843212plf.15
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:30:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=+jnXhzHCPLlyWGuqZQ0mGasvqcBiUClEYUi7f6uXGnA=;
-        b=oMU1MlW+3HAUB8TWEcHWIqU6v3ZgrNxHm+Tp3iBDMZrqPmr/WGzoH7HQuTSZdLaO52
-         Gb1sdyM9iEwOq8CHr2baCpaLbkv06tIYZyXwdAyxq3b+9mOXSiCveMZcDoIhpN7XNFoP
-         AZz1KEI2BDu64hW6HRfrsp4y039H0MhY5iqm2PIwz8x4excaZ6az3/sRqSm3mhfSVDbO
-         ZRVccTtvLbqt+A1utFOFQShRJA2OcrbxF2gm0h390trx4zGXGf4iEvd5XVXiTV+mycc4
-         g5TfbT4xRTTs7G7PskXxxsTv1ArM8+7fgiD2df4FrniuyouldzbJ9a4LkzRRa+YWbE7o
-         JHlg==
+        bh=FBTaEZTEg5GSVpewRBYKdCI+FLeByH1Vcwz0M7m4O+0=;
+        b=SWbZ73EHxyjh8o5NT5+YNokKeaatVJ46ekafm3q2KaueYufnteAQ+nNnv0g8VuQmzQ
+         dHdFDYemFGBvCT+4wkiipM0eUtXvZUQYQ/2yu1xl/ziQv8ITCGWREJevCH/qZKYhaPqx
+         JGlwkxDPC2I9qUSoxy/vzMyPDYGWqWUePXYQNHNloS7yfJiyjPmc5xjvxftfm3WGFA4x
+         Ws8ly60Yx3TPDrBH5Iy6hhgA1rHtTn7701i3Tn/rhUObgTU8LfBPMX/VmGPMyk4xFrsf
+         cd+bqJ0ZwVcILvOgSExuBkQ2KKX58+0nCQINRuuQjWpSwdslQIsAuu7Bxm1i+TquTdws
+         OeYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=+jnXhzHCPLlyWGuqZQ0mGasvqcBiUClEYUi7f6uXGnA=;
-        b=QWE0lVxrZtsF5sh+3CnlKPSy4HFlk0UjHMU93DbbLD5pV8Aogb4kdQpO7bwtT3yNvy
-         80NQb4DAJAkYUyrqps7TOMxY3TAWayDOIUbIqaLL+DrOnMe9l1kqn+ShNyDJ57Nhc86O
-         WT5s8Tib2cBRpjqiJZUZ4ADR6Cv/esPaZrdtA+RrULBgMgvCocg6HGWzxpVwlVLz6kfm
-         L/3zgrfKeLfn3+jW453PPyD1qM+uUOT7XxhvXyiPSao/yfU3ulDpZTwvhfCHgwX5zG2K
-         rrXL+jIt1t596k25Vg2wlM+637PK4IxvQ8ZeOfO8ERYw0BDWk6Nw2ccBST11AO/W8nVr
-         2mhw==
-X-Gm-Message-State: AJIora/LBUTgMFtYe1rscLYvGTxesk6rK97YfydBUs/O1fEZsEylcabi
-        8UM9nx/8m3LoMiDTE+G3pnmz3mmAVKc=
-X-Google-Smtp-Source: AGRyM1tzdjiNisYNqq4YKLQi4OaXM7gDixiQ7ghRnaWpvtULrzdW//5VP9BJ3ETreJf22QjtlykemyEnLqM=
+        bh=FBTaEZTEg5GSVpewRBYKdCI+FLeByH1Vcwz0M7m4O+0=;
+        b=htIXv32aeleqn0UBWhSuRzLvsCD6nk9u4NvxUYNYsr1/onBL0QyAvil2D3rFFRIufZ
+         sxaAI7dUp8PO0f2sus/9W6/Ly4V7WFCfUjUjvDVyMycxO0FSxdMxSEQWKfWyl0Fbareu
+         sLFV1SrgEtRwF8ZKql4NHP+k71ETNEeGoXEVjVtvw7UD9u2E5yYu8x/xvk5aEgGfelFh
+         Am/pyrTcNgJ3ndAV4ih0H1OPC+rcoH9OXA73Bl2ICDRxc03PpSXoyBa4Xp8FXYUVhGu5
+         y/bKRlS218I9RPCxdpDd8GM1Ny1po6WF8g6fk6SOpL0EPY6dN6g/flpozqY3Y/K30PAx
+         CjVA==
+X-Gm-Message-State: AJIora/n4Re7a7QZpxn2YMzp6kg9rzDhgiaOv+6mvmh4CkGs+pE/8M12
+        mhx6iAb7XL+dn2Pc/zBE9O32C1d59xY=
+X-Google-Smtp-Source: AGRyM1sugnfEsmqVDhbHA4jyTxXo0iuQG8dGD8pRvqXU8Z2EFcOSud0AzOY1pj5YaZMeBTqxatGprCqYfyI=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:4a97:b0:1ea:fa24:467c with SMTP id
- f23-20020a17090a4a9700b001eafa24467cmr389269pjh.1.1656106255902; Fri, 24 Jun
- 2022 14:30:55 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:d2c4:b0:16a:5c48:8312 with SMTP id
+ n4-20020a170902d2c400b0016a5c488312mr1169374plc.45.1656106257561; Fri, 24 Jun
+ 2022 14:30:57 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 24 Jun 2022 21:30:38 +0000
+Date:   Fri, 24 Jun 2022 21:30:39 +0000
 In-Reply-To: <20220624213039.2872507-1-seanjc@google.com>
-Message-Id: <20220624213039.2872507-4-seanjc@google.com>
+Message-Id: <20220624213039.2872507-5-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220624213039.2872507-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v2 3/4] KVM: x86/mmu: Use "unsigned int", not "u32", for
- SPTEs' @access info
+Subject: [PATCH v2 4/4] KVM: x86/mmu: Buffer nested MMU split_desc_cache only
+ by default capacity
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -74,62 +74,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use an "unsigned int" for @access parameters instead of a "u32", mostly
-to be consistent throughout KVM, but also because "u32" is misleading.
-@access can actually squeeze into a u8, i.e. doesn't need 32 bits, but is
-as an "unsigned int" because sp->role.access is an unsigned int.
+Buffer split_desc_cache, the cache used to allcoate rmap list entries,
+only by the default cache capacity (currently 40), not by doubling the
+minimum (513).  Aliasing L2 GPAs to L1 GPAs is uncommon, thus eager page
+splitting is unlikely to need 500+ entries.  And because each object
+is (currently) a non-trivial 128 bytes (see struct pte_list_desc), those
+extra ~500 entries means KVM is in all likelihood wasting ~64kb of memory.
 
-No functional change intended.
-
-Link: https://lore.kernel.org/all/YqyZxEfxXLsHGoZ%2F@google.com
+Link: https://lore.kernel.org/all/YrTDcrsn0%2F+alpzf@google.com
 Reviewed-by: David Matlack <dmatlack@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 27 ++++++++++++++++++---------
+ 1 file changed, 18 insertions(+), 9 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 83ca71361acd..eae5c801e442 100644
+index eae5c801e442..52664c3caaab 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -717,7 +717,8 @@ static u32 kvm_mmu_page_get_access(struct kvm_mmu_page *sp, int index)
- 	return sp->role.access;
- }
+@@ -6123,17 +6123,26 @@ static bool need_topup_split_caches_or_resched(struct kvm *kvm)
  
--static void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index, gfn_t gfn, u32 access)
-+static void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index,
-+					 gfn_t gfn, unsigned int access)
+ static int topup_split_caches(struct kvm *kvm)
  {
- 	if (sp_has_gptes(sp)) {
- 		sp->shadowed_translation[index] = (gfn << PAGE_SHIFT) | access;
-@@ -735,7 +736,8 @@ static void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index, gfn
- 	          sp->gfn, kvm_mmu_page_get_gfn(sp, index), gfn);
- }
- 
--static void kvm_mmu_page_set_access(struct kvm_mmu_page *sp, int index, u32 access)
-+static void kvm_mmu_page_set_access(struct kvm_mmu_page *sp, int index,
-+				    unsigned int access)
- {
- 	gfn_t gfn = kvm_mmu_page_get_gfn(sp, index);
- 
-@@ -1580,7 +1582,7 @@ static bool kvm_test_age_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- static void __rmap_add(struct kvm *kvm,
- 		       struct kvm_mmu_memory_cache *cache,
- 		       const struct kvm_memory_slot *slot,
--		       u64 *spte, gfn_t gfn, u32 access)
-+		       u64 *spte, gfn_t gfn, unsigned int access)
- {
- 	struct kvm_mmu_page *sp;
- 	struct kvm_rmap_head *rmap_head;
-@@ -1601,7 +1603,7 @@ static void __rmap_add(struct kvm *kvm,
- }
- 
- static void rmap_add(struct kvm_vcpu *vcpu, const struct kvm_memory_slot *slot,
--		     u64 *spte, gfn_t gfn, u32 access)
-+		     u64 *spte, gfn_t gfn, unsigned int access)
- {
- 	struct kvm_mmu_memory_cache *cache = &vcpu->arch.mmu_pte_list_desc_cache;
- 
+-	int r;
+-
+-	lockdep_assert_held(&kvm->slots_lock);
+-
+ 	/*
+-	 * Setting capacity == min would cause KVM to drop mmu_lock even if
+-	 * just one object was consumed from the cache, so make capacity
+-	 * larger than min.
++	 * Allocating rmap list entries when splitting huge pages for nested
++	 * MMUs is uncommon as KVM needs to use a list if and only if there is
++	 * more than one rmap entry for a gfn, i.e. requires an L1 gfn to be
++	 * aliased by multiple L2 gfns and/or from multiple nested roots with
++	 * different roles.  Aliasing gfns when using TDP is atypical for VMMs;
++	 * a few gfns are often aliased during boot, e.g. when remapping BIOS,
++	 * but aliasing rarely occurs post-boot or for many gfns.  If there is
++	 * only one rmap entry, rmap->val points directly at that one entry and
++	 * doesn't need to allocate a list.  Buffer the cache by the default
++	 * capacity so that KVM doesn't have to drop mmu_lock to topup if KVM
++	 * encounters an aliased gfn or two.
+ 	 */
+-	r = __kvm_mmu_topup_memory_cache(&kvm->arch.split_desc_cache,
+-					 2 * SPLIT_DESC_CACHE_MIN_NR_OBJECTS,
++	const int capacity = SPLIT_DESC_CACHE_MIN_NR_OBJECTS +
++			     KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE;
++	int r;
++
++	lockdep_assert_held(&kvm->slots_lock);
++
++	r = __kvm_mmu_topup_memory_cache(&kvm->arch.split_desc_cache, capacity,
+ 					 SPLIT_DESC_CACHE_MIN_NR_OBJECTS);
+ 	if (r)
+ 		return r;
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

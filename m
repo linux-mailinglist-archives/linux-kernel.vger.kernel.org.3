@@ -2,100 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073EA55A02A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BC8559FFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbiFXSA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 14:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
+        id S231527AbiFXSBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 14:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbiFXSAu (ORCPT
+        with ESMTP id S230509AbiFXSBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 14:00:50 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E5E4BBAE
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:00:49 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id e40so4553468eda.2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:00:49 -0700 (PDT)
+        Fri, 24 Jun 2022 14:01:45 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653284D9CE
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:01:44 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id ej4so4520926edb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:01:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PVF1kQELJGnzeWwHQpr93Ja3CpfIbtJSBiq/WRe2Aqw=;
-        b=yIN36rTJWuMdPh8V2chZVAKTrNjd02evEAOOBG7tnsxPBD9iRKdCNtpiHQlIf3S/+v
-         KebiThdpyDKGeT+tocAPjmmfRq4WPnRqv17ZpGKUJFafQ6zbADW/PUJ3kegmq+D0j4iC
-         05PzH/EV6QYXtpbQHYaULEw6PrGsYlqAZkxvWjmqZ43FHJfwmK4DhOCwNHTDsPFf7sgw
-         adRZxjQc1QZ7ezPre4Tt/xPueepCmNqgPVPqH50irrTonfZg9SEsUeCcHL04ijzfgIwc
-         njm/a1PzRqx5k2k7kwL2bTVD0qSCxANDzg4nK9PnT1OAK6Hh1/mRtElmAn7Z0+zg2TGr
-         eY5g==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=FihH+wFZdHJzWdAHO5W9L+MEXrCjKPFXmbCyP+M30fc=;
+        b=CfgI1rTukijr/p19JI7e9i/2E8rGCaNwtR63+EGnzZQdw3kfOo75LFCH8sm5OrZU+h
+         yVfD+TuO+K2UfqyURxxTXLnV2sH0dBr3kGYBdUvFM2+sxlbxuYm3YI57KUSBXi4L3Q+J
+         R33opJx/huDwfocZTx3naQjd6b0xK4xVIPsE52Cci0GHpW79/doJv6s9Bw+Ni853gTkv
+         xV5t/D7uKH9Psp46Kh1C9RXSEfBDE5cPmYDE07Ss9/euZrTHI+6lZdAVhWOouc55yd/M
+         uwnwrOJ7OOMBHbMLdWt1Iiv4GlnD7amK/jWdG4zmm0Bx1Sv7zIyX5QJY1yVg8dUFxoVX
+         mT3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PVF1kQELJGnzeWwHQpr93Ja3CpfIbtJSBiq/WRe2Aqw=;
-        b=gnJe1Pgxe3GWmcE7MfkgYu4gclSyKJ1CZZz9Oe9Rm/bW+jKsrlrnpwkwlM85NKlS4U
-         IOEMXIfA+lXxvz3my8+NYu7P+y40M1sw+g0yBdzlxoicMh56cP5clfAUHn90gfCQetyx
-         MfxkPFZKkWrmbO1MGp9Oab42pP14FI5CNkw9Bd65Yl7izs7cgdqBpTAI5JwlmZc/VBWf
-         kAbAWqrIVI1IleSd2yvD5hukpb1Um3phJ+pHbxiMLDQ30xf7MSbqbbVIE9wVt/L3ZBBF
-         xP47KsT+cV2YWgBkc4rfXNpYJ9SsOzNmu8TWEYMHduc+JHCKFdAdgkvTjMza2l0Mob9s
-         oW4w==
-X-Gm-Message-State: AJIora9XGcIaGq+a/oaaRqaD+ARafsNH+DJVNaEf5IFRD7ZaXo3ksrja
-        cm3qBmVIMWXzsVOuXuaFhMTWZQ==
-X-Google-Smtp-Source: AGRyM1vWeCRg0q2tC0VvZ87RhPAlSposRAQ4DNwHRzbQ2bGcG2ZksnIijyMyr3BZjrfjTm/kH/c30g==
-X-Received: by 2002:a05:6402:2710:b0:435:bf54:8569 with SMTP id y16-20020a056402271000b00435bf548569mr357638edd.165.1656093648159;
-        Fri, 24 Jun 2022 11:00:48 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p22-20020a170906839600b00711d5bc20d5sm1420681ejx.221.2022.06.24.11.00.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 11:00:46 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v5 3/3] arm64: dts: qcom: msm8992-xiaomi-libra: split qcom,msm-id into tuples
-Date:   Fri, 24 Jun 2022 20:00:36 +0200
-Message-Id: <20220624180036.102510-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220624180036.102510-1-krzysztof.kozlowski@linaro.org>
-References: <20220624180036.102510-1-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FihH+wFZdHJzWdAHO5W9L+MEXrCjKPFXmbCyP+M30fc=;
+        b=VTxWuYY+cSC5EsBLjIVsqpTBVXU5Fctktn6onrbUw6Xsh4bndiGVahFbRsr7nv3+Vr
+         SjHrCmOC+PPZ4V2OPJ/hnzdmHAdrjphrGzIqeV6jeogR+TXOfK3J3zBkmNSjz3tUrNxu
+         2iiwKimzNzHO2pkzVRKupJZcsoV1YHtfJp0G3X5/LzaTBRgIXhQlbLzcs71IE18xqL1+
+         NNLK6kK0wkclcg2kbKR0uutyRjJfMrxXHSGOXfKdkxO3n0FD+60H9q2CGFpfeOoEkb+w
+         nnEG2IoLSXupBvpLkQoJoZQAxyHev5ghRBxmKlCoCTjX5ur19Wjlb1ve0SOn1G3bKwbt
+         ligw==
+X-Gm-Message-State: AJIora9jV0AkquVcJloTK6OxNvTkOBXaFO0/uVXv6iD/CcNHyvnBOY0J
+        0+hiCeb4Autlmoe4hQItUuU=
+X-Google-Smtp-Source: AGRyM1td++ElRAofxZa9qKQ/SuYdcx8iXCAN3JnpO5oQCuWWgdSayAZaLIykYwWrH0+Plit+9wT68g==
+X-Received: by 2002:a05:6402:2706:b0:430:6238:78d5 with SMTP id y6-20020a056402270600b00430623878d5mr329759edd.413.1656093702880;
+        Fri, 24 Jun 2022 11:01:42 -0700 (PDT)
+Received: from [192.168.1.100] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
+        by smtp.gmail.com with ESMTPSA id x10-20020a170906298a00b00705cd37fd5asm1489202eje.72.2022.06.24.11.01.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jun 2022 11:01:42 -0700 (PDT)
+Message-ID: <50badb0b-0cac-d935-02bf-f05403f6d765@gmail.com>
+Date:   Fri, 24 Jun 2022 20:01:41 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4] staging: r8188eu: core/rtw_recv.c: clean up nested if
+ statements
+Content-Language: en-US
+To:     Chang Yu <marcus.yu.56@gmail.com>, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220624144526.437322-1-marcus.yu.56@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220624144526.437322-1-marcus.yu.56@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The qcom,msm-id is an uint32 matrix, so a list of tuples.
+On 6/24/22 16:45, Chang Yu wrote:
+> Combine two nested if statements into a single one to fix indentation
+> issue and improve readability, as suggested by checkpatch.pl
+> 
+> Signed-off-by: Chang Yu <marcus.yu.56@gmail.com>
+> ---
+> Changes in v4:
+>   - Added missing change log and resend
+> 
+> Changes in v3:
+>   - Modified subject and description to be more descriptive
+> 
+> Changes in v2:
+>   - Added a pair of parentheses to make operator precedence explicit
+> 
+> 
+>   drivers/staging/r8188eu/core/rtw_recv.c | 6 ++----
+>   1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+> index 6564e82ddd66..020bc212532f 100644
+> --- a/drivers/staging/r8188eu/core/rtw_recv.c
+> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+> @@ -166,10 +166,8 @@ int rtw_free_recvframe(struct recv_frame *precvframe, struct __queue *pfree_recv
+>   
+>   	list_add_tail(&precvframe->list, get_list_head(pfree_recv_queue));
+>   
+> -	if (padapter) {
+> -		if (pfree_recv_queue == &precvpriv->free_recv_queue)
+> -				precvpriv->free_recvframe_cnt++;
+> -	}
+> +	if (padapter && (pfree_recv_queue == &precvpriv->free_recv_queue))
+> +		precvpriv->free_recvframe_cnt++;
+>   
+>   	spin_unlock_bh(&pfree_recv_queue->lock);
+>   
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-index 7748b745a5df..15467b697e94 100644
---- a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-@@ -17,7 +17,7 @@ / {
- 	chassis-type = "handset";
- 
- 	/* required for bootloader to select correct board */
--	qcom,msm-id = <251 0 252 0>;
-+	qcom,msm-id = <251 0>, <252 0>;
- 	qcom,pmic-id = <65545 65546 0 0>;
- 	qcom,board-id = <12 0>;
- 
--- 
-2.34.1
-
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150

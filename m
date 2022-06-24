@@ -2,166 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D3E55A2B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 22:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6FC55A2D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 22:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiFXUdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 16:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
+        id S231144AbiFXUjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 16:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbiFXUdA (ORCPT
+        with ESMTP id S229441AbiFXUi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 16:33:00 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7C9E53
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:32:58 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id e7so4539986wrc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:32:57 -0700 (PDT)
+        Fri, 24 Jun 2022 16:38:59 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB2B4F1F2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:38:58 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id ay16so6984238ejb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:38:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JOawYYsMmXVXjmJlEQmmHixFMSNq4rwAUlbsY6fSBgM=;
-        b=tg7SyNOOcpVv7QNLGjiD5KPi52/+81+/GdcF4vMbyPBIUjBBrCNv+tyegVY20uye/I
-         8Vyz/JGoeTKB1w5QEdFMlq0X9w98WbqAaklpSLN4EHbesVPHavlkpHILt1ZfuYLKpZ8W
-         QWm+Maw4GPgy2ApKPUsawPdD52CVDNryzSvuJBVG/RGE1Y030n422Z6wuG4tFFvBcR27
-         LjOjXsrh4klnn1DcCwwhoI0t8TTxE908V6t7zZjTqlwnAGdcuAOVwj1XL6eJ5KD7NEWR
-         SUf/6y2OeRLz1/Liz1zYe+r9C1qmHOr6YxgkPxXUsGyjo51BPVTKh4OJcFsWrx7rdii2
-         KEPw==
+        bh=TavfSfTVVwaJ2oAtAxMPPR7datLV9IX5RQLV0Gzrz9w=;
+        b=a6mFv9EjMZlxmWaLmjgPajKDMLzFtIpxIiqJTFDSPKn3to/9UQV68jYUhKQ6utybIf
+         mfVHbTLaNkpYEZ6hUgACgXRyWgdh3q/LFTvB2N/EmvEarFGKOTZKJRB/qVD9mQrJgI53
+         JTQWQyAMwB8Pm+nw2EWj+QG+doXYDWavHwXtw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JOawYYsMmXVXjmJlEQmmHixFMSNq4rwAUlbsY6fSBgM=;
-        b=3sEpT1H7T3WOesORQahu0PlNheo8R65BT4CDPpwropnlzA9CXJKsx10NofDlKXF9p+
-         +kHkyjnpG2K9zJeBccYpEdwmtwvaWphmwnPUnULu/tR8oe/DDqvaZtxm2cS+dRj6UGcU
-         xJ/bZtr4u5yPsL0uO4xSqtrl5Y95iuhw2LVAaUzFqos2fdTKKxjpRZB3KKbFMl6jp02E
-         /zag7Lc4WbP24vbGcuqOIyMEzyyS198Tr7Ovr3tam1kERZqNlpi5U77vLCWJpbiqznN+
-         Qpj5vXVKbiapBT5pgOa/2Gx+drxqklHd40E+QwwLhRDIDpeWs3dX787vWn8MPEN0oKWE
-         OdFg==
-X-Gm-Message-State: AJIora9GBPzJTDKpeA9Z1k+ee1w6UMBQKWx1AKMqoufAm1yy4Mpo51GQ
-        reE6aqhUmFMj/X2V2cLZoJh0cMVrWF0F/KjuS3XF
-X-Google-Smtp-Source: AGRyM1sLPS9VvP6ADwx2J+StFzJT3dvaf4MBsF0swSWZC7Xkp/3biNCnrEVvva/rSqr0ebVtvt4hYokyoFIu+/3DmQ4=
-X-Received: by 2002:adf:efd2:0:b0:21b:91ae:68ca with SMTP id
- i18-20020adfefd2000000b0021b91ae68camr833768wrp.514.1656102776455; Fri, 24
- Jun 2022 13:32:56 -0700 (PDT)
+        bh=TavfSfTVVwaJ2oAtAxMPPR7datLV9IX5RQLV0Gzrz9w=;
+        b=E38+NMvfybsj08a7tXHkMrN/Dn5VXJNGaY98u86kznv9uFFZAWkLihYiORuZ8/KpxZ
+         xTm7PmUQnujLVrO44+MDIomDyA8HfcMqgbXxFF8ng9wkYSm+Xy4Me5QoOLrM8ya+T9fn
+         NBVoIokZ6Oaq4czBRr40e971ZRzE5l0eU8B+h9G8CnJrHVSIQSwK6sKjBKq9KClTPsJF
+         vMjR9OJbid7v9sbhT75zAOaGyOcWaHXcHB2cOX1hj/8JAvCKCi06u0YAQhjtuaSiusmW
+         DWSpwv3k6pOCRaYe3fvA2cGNd5LhHX16URndh1h4I5T125KP5mMMMKg1uiR53KHXFIXH
+         +3Bw==
+X-Gm-Message-State: AJIora9Tj3UN7ByNSq7tiwJwc2IRa4E5YoeaOioxbVfCBMn9usXgZ5pI
+        6ujJrdGtgR/CVQOFtDFPCdlf0Orz3bDAjaog
+X-Google-Smtp-Source: AGRyM1vPMke7/PNzczfgu+IJ6CwI4KyfyXIq6hYNVbT3fbr20hFDyPQbRG3aYykAzWTImh22sD3pVQ==
+X-Received: by 2002:a17:906:77c8:b0:722:e753:fbbe with SMTP id m8-20020a17090677c800b00722e753fbbemr802451ejn.692.1656103136630;
+        Fri, 24 Jun 2022 13:38:56 -0700 (PDT)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
+        by smtp.gmail.com with ESMTPSA id c19-20020a170906155300b006fea43db5c1sm1652940ejd.21.2022.06.24.13.38.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jun 2022 13:38:56 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id mf9so7095849ejb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:38:56 -0700 (PDT)
+X-Received: by 2002:adf:d1c1:0:b0:21b:a5e9:b7b2 with SMTP id
+ b1-20020adfd1c1000000b0021ba5e9b7b2mr857431wrd.405.1656102812967; Fri, 24 Jun
+ 2022 13:33:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510235653.933868-1-tjmercier@google.com> <3365cd1d750e84fedc8e75d646a77ffd85619d35.camel@ndufresne.ca>
- <CABdmKX3ZV6-u-oLvW_wWavAMBfrsZ=C_rCgK_Uz4VjxcRvRFew@mail.gmail.com>
- <81026ef07c1ce20f8673b75b17bab79a2b39c548.camel@ndufresne.ca>
- <CABdmKX2LxZ6zZR=fhXfnuWCB2BR+gzDd1-t1DD2A2XP24wvuGQ@mail.gmail.com>
- <Yn6DpUsoSz1/15Kc@slm.duckdns.org> <CABdmKX1xvm87WMEDkMc9Aye46E4zv1-scenwgaRxHesrOCsaYg@mail.gmail.com>
- <YodHjYlMx1XGtM2+@slm.duckdns.org> <CABdmKX2Ok023rN1drQgXVZLKUO_DVYrzmEamCgMMu6BPO67yhQ@mail.gmail.com>
- <CABdmKX0WV8VWgeafVGJ++nJ4xsJD7Wpz=3KX=BW1du=huttfvw@mail.gmail.com> <YrYbwu0iIAJJGXVg@phenom.ffwll.local>
-In-Reply-To: <YrYbwu0iIAJJGXVg@phenom.ffwll.local>
-From:   John Stultz <jstultz@google.com>
-Date:   Fri, 24 Jun 2022 13:32:45 -0700
-Message-ID: <CANDhNCqGjaq-SFvWwkqnEFj4tJcRqCYupZ03wLyCexqTH5MqMg@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] Proposal for a GPU cgroup controller
-To:     "T.J. Mercier" <tjmercier@google.com>, Tejun Heo <tj@kernel.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Laura Abbott <labbott@redhat.com>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        John Stultz <jstultz@google.com>,
-        Carlos Llamas <cmllamas@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kernel-team@android.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org
-Cc:     Daniel Vetter <daniel@ffwll.ch>
+References: <20220609121838.v22.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <CAD=FV=W6erE8ByabmYSL_OWJPKYGqysDMGYQX6j7_PSEYGZ4YQ@mail.gmail.com>
+ <YqpprpUHmlD62YzI@google.com> <CAD=FV=VNDamV4+j07TrnX3cUs2-D5ySbeQ-zfU=Eef8+WagGig@mail.gmail.com>
+ <Yqub17iT4O7aqFMi@google.com> <CAD=FV=VEztPLhsrJecZUdyHCW7ZfFTVvxyqY5CqRVv2mWyrLog@mail.gmail.com>
+ <YquoSMiQS+RG8rOM@google.com> <CAD=FV=W81pSEUbzw2ZQgs_TJ9MLnHQHiDopZXZ6bHdS7QMzAyA@mail.gmail.com>
+ <YqvMffveCPiKQEUk@google.com> <CAD=FV=UJOStPfRR3Hq2DmRBSH-HCtZ16hAU9eVH5w6Hm=WSJRQ@mail.gmail.com>
+ <YqytDNB2y4+qT8GD@google.com>
+In-Reply-To: <YqytDNB2y4+qT8GD@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 24 Jun 2022 13:33:19 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UT0XtMjZ9syQPGXeTEaUrwGTb_LgDow+cofgmx4D30VA@mail.gmail.com>
+Message-ID: <CAD=FV=UT0XtMjZ9syQPGXeTEaUrwGTb_LgDow+cofgmx4D30VA@mail.gmail.com>
+Subject: Re: [PATCH v22 2/3] usb: misc: Add onboard_usb_hub driver
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Bastien Nocera <hadess@hadess.net>,
+        Peter Chen <peter.chen@kernel.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 1:17 PM Daniel Vetter <daniel@ffwll.ch> wrote:
->
-> On Wed, Jun 15, 2022 at 10:31:21AM -0700, T.J. Mercier wrote:
-> > On Fri, May 20, 2022 at 9:25 AM T.J. Mercier <tjmercier@google.com> wrote:
-> > >
-> > > On Fri, May 20, 2022 at 12:47 AM Tejun Heo <tj@kernel.org> wrote:
-> > > >
-> > > > Hello,
-> > > >
-> > > > On Tue, May 17, 2022 at 04:30:29PM -0700, T.J. Mercier wrote:
-> > > > > Thanks for your suggestion. This almost works. "dmabuf" as a key could
-> > > > > work, but I'd actually like to account for each heap. Since heaps can
-> > > > > be dynamically added, I can't accommodate every potential heap name by
-> > > > > hardcoding registrations in the misc controller.
-> > > >
-> > > > On its own, that's a pretty weak reason to be adding a separate gpu
-> > > > controller especially given that it doesn't really seem to be one with
-> > > > proper abstractions for gpu resources. We don't want to keep adding random
-> > > > keys to misc controller but can definitely add limited flexibility. What
-> > > > kind of keys do you need?
-> > > >
-> > > Well the dmabuf-from-heaps component of this is the initial use case.
-> > > I was envisioning we'd have additional keys as discussed here:
-> > > https://lore.kernel.org/lkml/20220328035951.1817417-1-tjmercier@google.com/T/#m82e5fe9d8674bb60160701e52dae4356fea2ddfa
-> > > So we'd end up with a well-defined core set of keys like "system", and
-> > > then drivers would be free to use their own keys for their own unique
-> > > purposes which could be complementary or orthogonal to the core set.
-> > > Yesterday I was talking with someone who is interested in limiting gpu
-> > > cores and bus IDs in addition to gpu memory. How to define core keys
-> > > is the part where it looks like there's trouble.
-> > >
-> > > For my use case it would be sufficient to have current and maximum
-> > > values for an arbitrary number of keys - one per heap. So the only
-> > > part missing from the misc controller (for my use case) is the ability
-> > > to register a new key at runtime as heaps are added. Instead of
-> > > keeping track of resources with enum misc_res_type, requesting a
-> > > resource handle/ID from the misc controller at runtime is what I think
-> > > would be required instead.
-> > >
-> > Quick update: I'm going to make an attempt to modify the misc
-> > controller to support a limited amount of dynamic resource
-> > registration/tracking in place of the new controller in this series.
-> >
-> > Thanks everyone for the feedback.
->
-> Somehow I missed this entire chain here.
->
-> I'm not a fan, because I'm kinda hoping we could finally unify gpu memory
-> account. Atm everyone just adds their one-off solution in a random corner:
-> - total tracking in misc cgroup controller
-> - dma-buf sysfs files (except apparently too slow so it'll get deleted
->   again)
-> - random other stuff on open device files os OOM killer can see it
->
-> This doesn't look good.
+Hi,
 
-But I also think one could see it as "gpu memory" is the drm subsystem
-doing the same thing (in that it's artificially narrow to gpus). It
-seems we need something to account for buffers allocated by drivers,
-no matter which subsystem it was in (drm, v4l2, or networking or
-whatever).
+On Fri, Jun 17, 2022 at 9:34 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+>
+> > Looking at the "companion-hub" case with fresh eyes, too, I wonder if
+> > that can be simpler. If we find a companion hub, do we need both the
+> > check for usb_hcd_is_primary_hcd() and the check to see whether the
+> > pdev was already created?
+>
+> I was also doubting about this and concluded that it is still needed.
+>
+> Let's use once more the trogdor config as example, which has one physical
+> onboard hub chip with a USB 3.1 hub and a USB 2.1 companion hub, connected
+> to the dwc3 controller:
+>
+> &usb_1_dwc3 {
+>         dr_mode = "host";
+>         #address-cells = <1>;
+>         #size-cells = <0>;
+>
+>         /* 2.x hub on port 1 */
+>         usb_hub_2_x: hub@1 {
+>                 compatible = "usbbda,5411";
+>                 reg = <1>;
+>                 vdd-supply = <&pp3300_hub>;
+>                 companion-hub = <&usb_hub_3_x>;
+>         };
+>
+>         /* 3.x hub on port 2 */
+>         usb_hub_3_x: hub@2 {
+>                 compatible = "usbbda,411";
+>                 reg = <2>;
+>                 vdd-supply = <&pp3300_hub>;
+>                 companion-hub = <&usb_hub_2_x>;
+>         };
+> };
+>
+> Let's assume we don't check for the pdev. With our change above for root hubs
+> the loop is now only executed for the primary HCD. In the first iteration
+> we encounter the 2.x hub, it has a companion hub, but that alone doesn't
+> tell us much, so we create a pdev. In the next iteration we encouter the
+> 3.x hub, it also has a companion hub, but we don't know/check that the
+> companion already has a pdev, so we create another one for the same
+> physical hub.
 
-thanks
--john
+Ah, you are correct. You only run into that case for the root hub,
+correct? For everything else it's impossible?
+
+...and I guess things would be different if inside the loop you
+actually set "hcd" to point to the "hcd" of the child device. I guess
+that's where my confusion keeps stemming from. "hcd" is the parent's
+host controller which is not always the same as the child's host
+controller.
+
+It would have been keen if we could somehow know the child's host
+controller and get a pointer to that, but we can't because the child
+device hasn't been enumerated yet.
+
+OK, I'm convinced. I'll mention it in your v23 but maybe I'll have a
+slightly better chance of figuring this out if/when I look at this
+again if we rename "hcd" to "parent_hcd".
+
+
+-Doug

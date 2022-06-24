@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC73455968A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA81D5596A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiFXJ1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 05:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
+        id S231661AbiFXJao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 05:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232039AbiFXJ1i (ORCPT
+        with ESMTP id S229927AbiFXJaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 05:27:38 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC7D77FD3;
-        Fri, 24 Jun 2022 02:27:37 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25O80Faf003188;
-        Fri, 24 Jun 2022 11:27:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=kjc3aiJB+Hj9ReWa1anGkTzwdmkmMYpxyo1+DmPMteQ=;
- b=C54N92ZyrSjoW1L6zWL9u2n+GM/2GThgaz6PJnZskIFMR+bvSkDj+C9hgPvjuIEgZ/0/
- qAmIBXl7if86xi6QW3UNT6pps2ZPCQRKrnmwLELwNCMqdOgIecRVdgIXmIJ85O3O6pDe
- R4h1oGmfKj5RnhuLubYNTb4VzIvEUTfuLbl9m7uLppw1ePJnjoS8NrmEeGeZiDUMzC3S
- WxUrYk29SMmAOWBGuwnXbnM9/kgLbelm7OQESahcP9ZVt6FKaXhzU4wvKKZHcCfF9FmS
- fTG+K0IyVPKzHxHCty7nPyfASEbKTfgNlNZvqqXNK45bHsPN5h9Ra0Pfx3KznXuyr44o gQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gvn8s7r4h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jun 2022 11:27:21 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E6D7D10002A;
-        Fri, 24 Jun 2022 11:27:20 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E1B242138D8;
-        Fri, 24 Jun 2022 11:27:20 +0200 (CEST)
-Received: from localhost (10.75.127.51) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 24 Jun
- 2022 11:27:20 +0200
-From:   <gabriel.fernandez@foss.st.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
-Subject: [PATCH 3/3] ARM: dts: stm32: delete fixed clock node on STM32MP15-SCMI
-Date:   Fri, 24 Jun 2022 11:27:15 +0200
-Message-ID: <20220624092715.1397827-4-gabriel.fernandez@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220624092715.1397827-1-gabriel.fernandez@foss.st.com>
-References: <20220624092715.1397827-1-gabriel.fernandez@foss.st.com>
+        Fri, 24 Jun 2022 05:30:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A998F29817;
+        Fri, 24 Jun 2022 02:30:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E48C62072;
+        Fri, 24 Jun 2022 09:30:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48530C341C0;
+        Fri, 24 Jun 2022 09:30:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656063037;
+        bh=fCo+37lS9RXjimcPtcfJ1/CRyO6x8Ddi+h/sRG2BNaE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ArdhgntWfBKlsSdoXNrsOKrWIlssbrOVvQZHAq/Cqgd1FmQ+aERFWtSIH9lpKOAcv
+         AuN/6IQp4CaTeIUJQ6X1C8v/d4QgHLHOiAjVA5YixksNhh/5sEtujeBA33h15QtMBP
+         FuD+nBpaksaAtO5EMFaTaTfsn8gSb5JV9JvbLp7tDfJ9RA2nY3lKmmsBhzEdIw7dqW
+         5dmvKitBhspUNCsOxlYJzjpaoKmIGuBGyUSBQlqPExFwP/t6u5VA6cnCvMU7uMnMJG
+         LdtjNh6OXbVNMmf/Gkg/epyBignacMDN6MSRX5jjLKcmG7qcs3oQGWUks1G62sPqFu
+         mV9zD/uVhl+/g==
+Received: by pali.im (Postfix)
+        id 640A6711; Fri, 24 Jun 2022 11:30:34 +0200 (CEST)
+Date:   Fri, 24 Jun 2022 11:30:34 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Marek Behun <marek.behun@nic.cz>,
+        Josef Schlehofer <josef.schlehofer@nic.cz>
+Subject: Re: [PATCH] powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers
+Message-ID: <20220624093034.qcuodruw4e7b6tuy@pali>
+References: <20220511143712.22550-1-pali@kernel.org>
+ <877d5669mc.fsf@mpe.ellerman.id.au>
+ <20220624082700.pzqm2wgrfpbukyfz@pali>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-24_05,2022-06-23_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220624082700.pzqm2wgrfpbukyfz@pali>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+On Friday 24 June 2022 10:27:00 Pali Rohár wrote:
+> On Friday 24 June 2022 13:08:59 Michael Ellerman wrote:
+> > Pali Rohár <pali@kernel.org> writes:
+> > > CZ.NIC Turris 1.0 and 1.1 are open source routers, they have dual-core
+> > > PowerPC Freescale P2020 CPU and are based on Freescale P2020RDB-PC-A board.
+> > > Hardware design is fully open source, all firmware and hardware design
+> > > files are available at Turris project website:
+> > >
+> > > https://docs.turris.cz/hw/turris-1x/turris-1x/
+> > > https://project.turris.cz/en/hardware.html
+> > >
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > ---
+> > >  arch/powerpc/boot/dts/turris1x.dts | 470 +++++++++++++++++++++++++++++
+> > >  1 file changed, 470 insertions(+)
+> > >  create mode 100644 arch/powerpc/boot/dts/turris1x.dts
+> > 
+> > The headers say you Cc'ed this to the devicetree list, but I don't see
+> > it in the devicetree patchwork:
+> > 
+> >   https://patchwork.ozlabs.org/project/devicetree-bindings/list/?state=*&q=turris&archive=both
+> 
+> Email is on the devicetree list:
+> https://lore.kernel.org/linux-devicetree/20220511143712.22550-1-pali@kernel.org/
+> 
+> > Which means it hasn't been run through Rob's CI scripts.
+> > 
+> > Maybe try a resend?
+> > 
+> > cheers
 
-Delete the node fixed clock managed by secure world with SCMI.
-
-Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
----
- arch/arm/boot/dts/stm32mp15-scmi.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/arm/boot/dts/stm32mp15-scmi.dtsi b/arch/arm/boot/dts/stm32mp15-scmi.dtsi
-index e90cf3acd0b3..44a8aa6094b2 100644
---- a/arch/arm/boot/dts/stm32mp15-scmi.dtsi
-+++ b/arch/arm/boot/dts/stm32mp15-scmi.dtsi
-@@ -45,3 +45,9 @@ scmi_shm: scmi-sram@0 {
- 		};
- 	};
- };
-+
-+/delete-node/ &clk_hse;
-+/delete-node/ &clk_hsi;
-+/delete-node/ &clk_lse;
-+/delete-node/ &clk_lsi;
-+/delete-node/ &clk_csi;
--- 
-2.25.1
-
+Now I sent V2 and it appeared in devicetree list archive too:
+https://lore.kernel.org/linux-devicetree/20220624085550.20570-1-pali@kernel.org/

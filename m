@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D103559516
+	by mail.lfdr.de (Postfix) with ESMTP id 986FB559517
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbiFXIKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
+        id S231421AbiFXIKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 04:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiFXIKe (ORCPT
+        with ESMTP id S230109AbiFXIKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:10:34 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5935A40E44
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:10:31 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ay16so3114960ejb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:10:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ppOb8unbJrDxFJbdCnHsLpI+FWVgE5qyktBxG9bYt5I=;
-        b=pX3T/iNSMFIpiW6v3ZCV7BMrZgoqn2YBNw05bESjYlb9wXWCAGY4b5maOYnwRMKeJE
-         RJDOE7s16k156GOhEACOHkOjaEc9jb28BlHN5+lKnePc0GH+PXBgee8IjqJv9v8V4fzp
-         KSICDFuOJ5ie1i7Yt33pYlJ5F3Z0Qgs7RYzg/50fVVkmrRhVzC2illK2JWypyqE6EPTY
-         aEPUJCGgZhqBYSTC7zf6juKchn9lplSoe8O/e4Z4XaGoVPo/PXRnrkWArs7FjECsdejr
-         +EJc/SzkjGUd7jz4rqOy/v8MEHDQ8pqsIIYA6PpwDEcxLizlU/UE4v/ZQ7thQkDR9D0J
-         Z4GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ppOb8unbJrDxFJbdCnHsLpI+FWVgE5qyktBxG9bYt5I=;
-        b=S+bvb5yS03BV8IGdBaKJU7aLNN0gbzCSOaEBxfTb655p60Pc9+hBVTAoOs6CmvsBdj
-         S5nUSBYeR6EQmvyDuESS1QmcErt3mLv69Z3W58qzWOxEHjWkYxM6vEZj19KfiGj70cmo
-         VgrH3xmTfsMF0cexraXPBEMrQluWa/adSiNp1Wy1OTwXdmTU4srLKKSggAhyzojjkaFS
-         JjmqjqqKmvfK5S9Fl4rZVOiZFFc9JrhhOm2f/9pppPFXTrjoW8i4brR+ZzehG05Kw6Gf
-         WYDIYMD2Ibwr9BJ8Qh8owdqezE9fQc10nnFoaf26qiUD1Zt37SyDpNcrEf5KYHiRioCd
-         zy9A==
-X-Gm-Message-State: AJIora97k667RagFDWkRw7vf11w+Gxo23gTUYgJknNRRU8WoWTTIDbqH
-        McoVOA55vSWru5sYeCObV0SkzA==
-X-Google-Smtp-Source: AGRyM1vJuMKUo4MW2++Vvkwywwei/ikXA4qoE3wE7t12dNEqmfPn8ssrtIZjbW8wCJgoor2K2/tBAQ==
-X-Received: by 2002:a17:906:7742:b0:708:ad9f:8e88 with SMTP id o2-20020a170906774200b00708ad9f8e88mr11710293ejn.735.1656058229952;
-        Fri, 24 Jun 2022 01:10:29 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q21-20020aa7cc15000000b0042617ba638esm1395924edt.24.2022.06.24.01.10.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 01:10:29 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [GIT PULL][PATCH] pinctrl: samsung: do not use bindings header with constants
-Date:   Fri, 24 Jun 2022 10:10:22 +0200
-Message-Id: <20220624081022.32384-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 24 Jun 2022 04:10:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168E34D9C5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:10:49 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o4eOr-0000PV-Tp; Fri, 24 Jun 2022 10:10:46 +0200
+Message-ID: <2e87590102f9a1315ce0903705245a1e669234bd.camel@pengutronix.de>
+Subject: Re: DMA-buf and uncached system memory
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linaro-mm-sig@lists.linaro.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>
+Date:   Fri, 24 Jun 2022 10:10:44 +0200
+In-Reply-To: <a3d783b4-4d38-c5c1-12d1-80496c1138c0@amd.com>
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+         <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
+         <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com>
+         <20220623101326.18beeab3@eldfell>
+         <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
+         <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
+         <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
+         <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
+         <e691bccc-171d-f674-2817-13a945970f4a@amd.com>
+         <95cca943bbfda6af07339fb8d2dc7f4da3aa0280.camel@pengutronix.de>
+         <05814ddb-4f3e-99d8-025a-c31db7b2c46b@amd.com>
+         <708e27755317a7650ca08ba2e4c14691ac0d6ba2.camel@pengutronix.de>
+         <6287f5f8-d9af-e03d-a2c8-ea8ddcbdc0d8@amd.com>
+         <f3c32cdd2ab4e76546c549b0cebba8e1d19d1cb0.camel@pengutronix.de>
+         <34a1efd9-5447-848b-c08c-de75b48e997e@amd.com>
+         <3c088a9a511762f7868b10dbe431942d3724917a.camel@pengutronix.de>
+         <4ea37684-5dda-94e4-a544-74d3812e8d9d@amd.com>
+         <0edd288595cb53768822c3d9dc18b8506e07a244.camel@pengutronix.de>
+         <a3d783b4-4d38-c5c1-12d1-80496c1138c0@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,120 +70,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Samsung SoC pin controller driver uses only three defines from the
-bindings header with pin configuration register values, which proves
-the point that this header is not a proper bindings-type abstraction
-layer with IDs.
+Am Freitag, dem 24.06.2022 um 08:54 +0200 schrieb Christian König:
+> Am 23.06.22 um 17:26 schrieb Lucas Stach:
+> > Am Donnerstag, dem 23.06.2022 um 14:52 +0200 schrieb Christian König:
+> > > Am 23.06.22 um 14:14 schrieb Lucas Stach:
+> > > > Am Donnerstag, dem 23.06.2022 um 13:54 +0200 schrieb Christian König:
+> > > > > Am 23.06.22 um 13:29 schrieb Lucas Stach:
+> > > > > [SNIP]
+> > > > > I mean I even had somebody from ARM which told me that this is not going
+> > > > > to work with our GPUs on a specific SoC. That there are ARM internal use
+> > > > > cases which just seem to work because all the devices are non-coherent
+> > > > > is completely new to me.
+> > > > > 
+> > > > Yes, trying to hook up a peripheral that assumes cache snooping in some
+> > > > design details to a non coherent SoC may end up exploding in various
+> > > > ways. On the other hand you can work around most of those assumptions
+> > > > by marking the memory as uncached to the CPU, which may tank
+> > > > performance, but will work from a correctness PoV.
+> > > Yeah, and exactly that's what I meant with "DMA-buf is not the framework
+> > > for this".
+> > > 
+> > > See we do support using uncached/not snooped memory in DMA-buf, but only
+> > > for the exporter side.
+> > > 
+> > > For example the AMD and Intel GPUs have a per buffer flag for this.
+> > > 
+> > > The importer on the other hand needs to be able to handle whatever the
+> > > exporter provides.
+> > > 
+> > I fail to construct a case where you want the Vulkan/GL "no domain
+> > transition" coherent semantic without the allocator knowing about this.
+> > If you need this and the system is non-snooping, surely the allocator
+> > will choose uncached memory.
+> 
+> No it won't. The allocator in the exporter is independent of the importer.
+> 
+> That is an important and intentional design decision, cause otherwise 
+> you wouldn't have exporters/importers in the first place and rather a 
+> centralized allocation pool like what dma-heap implements.
+> 
+> See the purpose of DMA-buf is to expose the buffers in the way the 
+> exporter wants to expose them. So when the exporting driver wants to 
+> allocate normal cached system memory then that is perfectly fine and 
+> completely fits into this design.
+> 
+I'm specifically talking about the case where a snooping exporter would
+allocate the GL coherent buffer and a non-snooping importer would need
+to access that buffer with the same "no domain transition needed"
+semantic. That is the thing which we can not make work at all and need
+to fail the attach. If both the exporter and importer are non-snooping
+you would probably get uncached memory, as long as the exporter knows
+how the buffer will be used. Is there a real use-case where the
+exporter doesn't know that the buffer will be used as GL/Vulkan
+coherent and we can't do fallback on the importer side?
 
-Define the needed register values directly in the driver and stop using
-the bindings header.
+> Otherwise we would need to adjust all exporters to the importers, which 
+> is potentially not even possible.
+> 
+> > I agree that you absolutely need to fail the usage when someone imports
+> > a CPU cached buffer and then tries to use it as GL coherent on a non-
+> > snooping system. That simply will not work.
+> 
+> Exactly that, yes. That's what the attach callback is good for.
+> 
+> See we already have tons of cases where buffers can't be shared because 
+> they wasn't initially allocated in a way the importer can deal with 
+> them. But that's perfectly ok and intentional.
+> 
+> For example just take a configuration where a dedicated GPU clones the 
+> display with an integrated GPU. The dedicated GPU needs the image in 
+> local memory for scanout which is usually not accessible to the 
+> integrated GPU.
+> 
+> So either attaching the DMA-buf or creating the KMS framebuffer config 
+> will fail and we are running into the fallback path which involves an 
+> extra copy. And that is perfectly fine and intentional since this 
+> configuration is not supported by the hardware.
+> 
+> > > > > [SNIP]
+> > And here is where our line of thought diverges: the DMA API allows
+> > snooping and non-snooping devices to work together just fine, as it has
+> > explicit domain transitions, which are no-ops if both devices are
+> > snooping, but will do the necessary cache maintenance when one of them
+> > is non-snooping but the memory is CPU cached.
+> > 
+> > I don't see why DMA-buf should be any different here. Yes, you can not
+> > support the "no domain transition" sharing when the memory is CPU
+> > cached and one of the devices in non-snooping, but you can support 99%
+> > of real use-cases like the non-snooped scanout or the UVC video import.
+> 
+> Well I didn't say we couldn't do it that way. What I'm saying that it 
+> was intentionally decided against it.
+> 
+> We could re-iterate that decision, but this would mean that all existing 
+> exporters would now need to provide additional functionality.
+> 
+The way I see it we would only need this for exporters that potentially
+export CPU cached memory, but need to interop with non-snooping
+importers. I guess that can be done on a case-by-case basis and
+wouldn't be a big flag day operation.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220605160508.134075-8-krzysztof.kozlowski@linaro.org
----
+> > > The importer on the other hand needs to be able to deal with that. When
+> > > this is not the case then the importer somehow needs to work around that.
+> > > 
+> > Why? The importer maps the dma-buf via dma_buf_map_attachment, which in
+> > most cases triggers a map via the DMA API on the exporter side. This
+> > map via the DMA API will already do the right thing in terms of cache
+> > management, it's just that we explicitly disable it via
+> > DMA_ATTR_SKIP_CPU_SYNC in DRM because we know that the mapping will be
+> > cached, which violates the DMA API explicit domain transition anyway.
+> 
+> Why doesn't the importer simply calls dma_sync_sg_for_device() as 
+> necessary? See the importer does already know when it needs to access 
+> the buffer and as far as I can see has all the necessary variable to do 
+> the sync.
+> 
+First, it wouldn't be symmetric with the dma_buf_map_attachment, where
+the actual dma_map_sg also happens on the exporter side.
 
-Hi Linus,
+Second, that is again a very x86 with PCI centric view. The importer
+flushing CPU caches by calling dma_sync_sg_for_device will only suffice
+in a world where devices are IO coherent, i.e. they snoop the CPU cache
+but don't participate fully in the system coherency due to never
+keeping dirty cache lines for buffers in system memory.
 
-I have only one patch this cycle, so sending it directly.
+On fully coherent systems like ARM with AMBA CHI or x86 with CXL.cache
+all devices with access to the buffer can keep dirty cache lines in
+their device private caches, so any access from a non-snooping agent
+will require a cache clean on all those devices, which would basically
+require the the dma_buf_sync to be a broadcast operation to the
+exporter and all attached fully coherent importers.
 
-Best regards,
-Krzysztof
+> The exporter on the other hand doesn't know that. So we would need to 
+> transport this information.
+> 
+> Another fundamental problem is that the DMA API isn't designed for 
+> device to device transitions. In other words you have CPU->device and 
+> device->CPU transition, but not device->device. As far as I can see the 
+> DMA API should already have the necessary information if things like 
+> cache flushes are necessary or not.
+> 
+Don't you contradict the second part here with the first? The DMA API
+doesn't have the necessary information about needed cache cleaning on
+the exporters or other attached importers side, when you only call the
+dma_sync on the importer, which is exactly why I'm arguing for putting
+it in the dma_buf ops so we can do the necessary operations on other
+attached clients to make a device->device transition working reliably.
 
+> > > Either by flushing the CPU caches or by rejecting using the imported
+> > > buffer for this specific use case (like AMD and Intel drivers should be
+> > > doing).
+> > > 
+> > > If the Intel or ARM display drivers need non-cached memory and don't
+> > > reject buffer where they don't know this then that's certainly a bug in
+> > > those drivers.
+> > It's not just display drivers, video codec accelerators and most GPUs
+> > in this space are also non-snooping. In the ARM SoC world everyone just
+> > assumes you are non-snooping, which is why things work for most cases
+> > and only a handful like the UVC video import is broken.
+> 
+> That is really interesting to know, but I still think that DMA-buf was 
+> absolutely not designed for this use case.
+> 
+>  From the point of view the primary reason for this was laptops with 
+> both dedicated and integrated GPUs, webcams etc...
+> 
+> That you have a huge number of ARM specific devices which can interop 
+> with themselves, but not with devices outside of their domain is not 
+> something foreseen here.
+> 
+Our recollection of history might differ here, but as Daniel remarked
+kind of snarkily, most of the initial contributors to dma-buf were from
+Linaro and TI, both of which were focused on getting device interop
+working on ARM devices, which at the time were overwhelmingly non-
+snooping. So I kind of doubt that dma-buf wasn't designed for this use-
+case.
 
- drivers/pinctrl/samsung/pinctrl-exynos.c  | 6 ++----
- drivers/pinctrl/samsung/pinctrl-exynos.h  | 3 +++
- drivers/pinctrl/samsung/pinctrl-samsung.c | 4 +---
- drivers/pinctrl/samsung/pinctrl-samsung.h | 8 ++++++++
- 4 files changed, 14 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.c b/drivers/pinctrl/samsung/pinctrl-exynos.c
-index 6d7ca1758292..a8212fc126bf 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos.c
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos.c
-@@ -27,8 +27,6 @@
- #include <linux/soc/samsung/exynos-pmu.h>
- #include <linux/soc/samsung/exynos-regs-pmu.h>
- 
--#include <dt-bindings/pinctrl/samsung.h>
--
- #include "pinctrl-samsung.h"
- #include "pinctrl-exynos.h"
- 
-@@ -173,7 +171,7 @@ static int exynos_irq_request_resources(struct irq_data *irqd)
- 
- 	con = readl(bank->pctl_base + reg_con);
- 	con &= ~(mask << shift);
--	con |= EXYNOS_PIN_FUNC_EINT << shift;
-+	con |= EXYNOS_PIN_CON_FUNC_EINT << shift;
- 	writel(con, bank->pctl_base + reg_con);
- 
- 	raw_spin_unlock_irqrestore(&bank->slock, flags);
-@@ -196,7 +194,7 @@ static void exynos_irq_release_resources(struct irq_data *irqd)
- 
- 	con = readl(bank->pctl_base + reg_con);
- 	con &= ~(mask << shift);
--	con |= EXYNOS_PIN_FUNC_INPUT << shift;
-+	con |= PIN_CON_FUNC_INPUT << shift;
- 	writel(con, bank->pctl_base + reg_con);
- 
- 	raw_spin_unlock_irqrestore(&bank->slock, flags);
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.h b/drivers/pinctrl/samsung/pinctrl-exynos.h
-index bfad1ced8017..7bd6d82c9f36 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos.h
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos.h
-@@ -16,6 +16,9 @@
- #ifndef __PINCTRL_SAMSUNG_EXYNOS_H
- #define __PINCTRL_SAMSUNG_EXYNOS_H
- 
-+/* Values for the pin CON register */
-+#define EXYNOS_PIN_CON_FUNC_EINT	0xf
-+
- /* External GPIO and wakeup interrupt related definitions */
- #define EXYNOS_GPIO_ECON_OFFSET		0x700
- #define EXYNOS_GPIO_EFLTCON_OFFSET	0x800
-diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
-index 26d309d2516d..4837bceb767b 100644
---- a/drivers/pinctrl/samsung/pinctrl-samsung.c
-+++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
-@@ -26,8 +26,6 @@
- #include <linux/of_device.h>
- #include <linux/spinlock.h>
- 
--#include <dt-bindings/pinctrl/samsung.h>
--
- #include "../core.h"
- #include "pinctrl-samsung.h"
- 
-@@ -614,7 +612,7 @@ static int samsung_gpio_set_direction(struct gpio_chip *gc,
- 	data = readl(reg);
- 	data &= ~(mask << shift);
- 	if (!input)
--		data |= EXYNOS_PIN_FUNC_OUTPUT << shift;
-+		data |= PIN_CON_FUNC_OUTPUT << shift;
- 	writel(data, reg);
- 
- 	return 0;
-diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.h b/drivers/pinctrl/samsung/pinctrl-samsung.h
-index fc6f5199c548..9af93e3d8d9f 100644
---- a/drivers/pinctrl/samsung/pinctrl-samsung.h
-+++ b/drivers/pinctrl/samsung/pinctrl-samsung.h
-@@ -53,6 +53,14 @@ enum pincfg_type {
- #define PINCFG_UNPACK_TYPE(cfg)		((cfg) & PINCFG_TYPE_MASK)
- #define PINCFG_UNPACK_VALUE(cfg)	(((cfg) & PINCFG_VALUE_MASK) >> \
- 						PINCFG_VALUE_SHIFT)
-+/*
-+ * Values for the pin CON register, choosing pin function.
-+ * The basic set (input and output) are same between: S3C24xx, S3C64xx, S5PV210,
-+ * Exynos ARMv7, Exynos ARMv8, Tesla FSD.
-+ */
-+#define PIN_CON_FUNC_INPUT		0x0
-+#define PIN_CON_FUNC_OUTPUT		0x1
-+
- /**
-  * enum eint_type - possible external interrupt types.
-  * @EINT_TYPE_NONE: bank does not support external interrupts
--- 
-2.34.1
+Regards,
+Lucas
 

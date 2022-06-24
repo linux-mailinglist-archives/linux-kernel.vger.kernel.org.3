@@ -2,155 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129D8558CFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 03:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A683C558D02
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 03:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbiFXBuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 21:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
+        id S229523AbiFXBvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 21:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiFXBue (ORCPT
+        with ESMTP id S229437AbiFXBvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 21:50:34 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2083.outbound.protection.outlook.com [40.107.220.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C8F36683;
-        Thu, 23 Jun 2022 18:50:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IqJbAoi9L5bLxTif82oBgwiq9Gl9v5hApgm3sOKnBziCEt2lJM8VBdFoGtOQUiAkE89Lc/7fenprh/7UfC4Ctk+hWQ+8l7d02/dVBSv71RvRXCWBysvfjIIiGZv2d4+QQ6JRLv+4etCB+/0BFkVeXNNxdlQohuRqVJlfhgUKddd37WSPOAQ5Il4EKYzSRXvd7qwUuiCtkIdfNYiSk73HAVKoy1zLjovQWnln08W+OOYv9aXR48O6+/seO5GDwbfrOHtBHLHkp9ZtkSVosB7x9Es1KEF5m8sMUs3SWdP7zokynLUUemPfMptpMPRufnbdeI7WPPx4BmcEIPAY4iQuoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B4DHRKlka3MYtTFbBPIU2nOFYSrLrj69UR/YS1bXgz8=;
- b=KGBjsahtp5SrYvR6NH6pcOHgSBA1kzSyehUuzCSWwzUxF63YmxuaQMZHzBxJPGXcnBZu497imvgEErO5oh294JWQc2A1YZUxtYOC7AKZkVfPG/ja4dC+YlUcjj0nuuF5y4TPTKRcOde0vsrqS37BmOoQQRF/1wkR0j1MHv/R4dsFYRJOOLWVYZMDDfUkuegieA6oXyQ/K+mFYVj83Oktz8w1LYNJHIu3xckya265KCaUznCe17GqQJA1hjm0b4tbjlQrhFoDSufAQgic1hJbxDDsAmksKwu//bzFtJn4sa51ZU1k1/KOgYLCOOrNFqQ/bPNBhQCP44Jv+oDRRKs9Iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B4DHRKlka3MYtTFbBPIU2nOFYSrLrj69UR/YS1bXgz8=;
- b=daIOn5hRjZ3NJhsI0YviBkxBm0wICT0/lBq4DnxNFcctcLUgN6VRGFzw1l46PWZhyDzcVB/1RkPqaweiT5PPFKFSsFkPY9OXksC7terVGKz4VlZeXq7NHq5XqO+A8g6T/qJ33Hhuc5y/57g4BV2EcfnwgBj0gPi+aFPD/ZYdPQSy0I/i8G7tQiUHBJVlXyO7vPdHagIxMOB1tbYXHvqoZWfNMr4OKaOR7kHJ4QajLnyXM3VFb+Kqb76N3Llh1QEb8WnQmNrL9WmuqSNWTmxSF2Ubjd3xcJLSFtrEW5ze4p77zUaobk7d149yXTEbAk/G+jMV74N0yOElG0v9db97KA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MW2PR12MB2522.namprd12.prod.outlook.com (2603:10b6:907:f::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Fri, 24 Jun
- 2022 01:50:31 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5373.016; Fri, 24 Jun 2022
- 01:50:31 +0000
-Date:   Thu, 23 Jun 2022 22:50:30 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>, cohuck@redhat.com,
-        iommu@lists.linux.dev, iommu@lists.linux-foundation.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] vfio/type1: Simplify bus_type determination
-Message-ID: <20220624015030.GJ4147@nvidia.com>
-References: <b1d13cade281a7d8acbfd0f6a33dcd086207952c.1655898523.git.robin.murphy@arm.com>
- <20220622161721.469fc9eb.alex.williamson@redhat.com>
- <68263bd7-4528-7acb-b11f-6b1c6c8c72ef@arm.com>
- <20220623170044.1757267d.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623170044.1757267d.alex.williamson@redhat.com>
-X-ClientProxiedBy: BL0PR02CA0009.namprd02.prod.outlook.com
- (2603:10b6:207:3c::22) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Thu, 23 Jun 2022 21:51:21 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFC39522EF;
+        Thu, 23 Jun 2022 18:51:19 -0700 (PDT)
+IronPort-Data: =?us-ascii?q?A9a23=3Aprsgz6h6yUXcqEkp9ze+PJzbX161CxEKZh0ujC4?=
+ =?us-ascii?q?5NGQNrF6WrkUAzGseXG7QbqyNNmb3ct1zaN7ioUkGsJPcz4MxGQU+qHw8FHgiR?=
+ =?us-ascii?q?ejtX4rAdhiqV8+xwmwvdGo+toNGLICowPkcFhcwnT/wdOixxZVA/fvQHOCkUra?=
+ =?us-ascii?q?dYnkZqTJME0/NtzoywobVvaY42bBVMyvV0T/Di5W31G2NglaYAUpIg063ky6Di?=
+ =?us-ascii?q?dyp0N8uUvPSUtgQ1LPWvyF94JvyvshdJVOgKmVfNrbSq+ouUNiEEm3lExcFUrt?=
+ =?us-ascii?q?Jk57wdAsEX7zTIROTzHFRXsBOgDAb/mprjPl9b6FaNC+7iB3Q9zx14M9QvJqrW?=
+ =?us-ascii?q?EEnOLbQsOoAURhECDw4NqpDkFPCCSHl7JLOlhOYKRMAxN0rVinaJ7Yw9u9pAG1?=
+ =?us-ascii?q?m++YfLTcXZBGfwemxxdqTSuJsrsUlItPiMI4Wtjdn1z6xJfovR9bBBbrL4dtZ1?=
+ =?us-ascii?q?TIrrsFIAfvaIcEebFJHYBbfZBtAElQaEpQzmKGvnHaXWzlZrk+F4K8yy2vNxQd?=
+ =?us-ascii?q?ylr/3P7L9fMKGRMBQtkKZvX7duWD4BAwKctCS11Kt8Huqi6nEnT7TX5gbH7m1s?=
+ =?us-ascii?q?PVthTW7wm0VFQ1TW0C3rOe0jmagVN9FbU8Z4Cwjqe417kPDZt38WQCo5X2JpBg?=
+ =?us-ascii?q?RX/JOHOAgrgKA0KzZ50CeHGdsZjpAbsE28d84XhQ02VKT2dDkHzpitPuSU331y?=
+ =?us-ascii?q?1s+hVteIgBMdSlbO3BCFlBDvrHeTEgIpkqnZr5e/GSd1bUZwQ3N/g0=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AlyTdK6lnjpYGEdXB9WiKkMqV/0bpDfIQ3DAb?=
+ =?us-ascii?q?v31ZSRFFG/Fw9vre+MjzsCWYtN9/Yh8dcK+7UpVoLUm8yXcX2/h1AV7BZniEhI?=
+ =?us-ascii?q?LAFugLgrcKqAeQeREWmNQ86Y5QN4B6CPDVSWNxlNvG5mCDeOoI8Z2q97+JiI7l?=
+ =?us-ascii?q?o0tQcQ=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="125651662"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 24 Jun 2022 09:51:18 +0800
+Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
+        by cn.fujitsu.com (Postfix) with ESMTP id 178174D17189;
+        Fri, 24 Jun 2022 09:51:16 +0800 (CST)
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Fri, 24 Jun 2022 09:51:16 +0800
+Received: from [192.168.22.78] (10.167.225.141) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Fri, 24 Jun 2022 09:51:15 +0800
+Message-ID: <fe991e58-f86b-d0b4-65c7-de8c3f65e835@fujitsu.com>
+Date:   Fri, 24 Jun 2022 09:51:15 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 79d5af0f-c829-4779-75d3-08da5583ebe8
-X-MS-TrafficTypeDiagnostic: MW2PR12MB2522:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0cPer+L16Wwl74/UppmeoLJc66sRMGMIYgl/Arwfg3OtQ5Xp8DdfavhARWy680V6TI2Puh4qLQn0idZyrS34uic9Ks0U9U3kM7nGb+4QJnya+yKOF8xwQE1SRMto18gPox9liXJf0RTom9s+mf+tToy3c4u6OSgNvJhw1Xvmke9dqKEkKA37DSkUxtsCfVOyKlWMYCWOnHOAWyxX763Pj/8l+VqiyIvKRsDQshm5JRNbk9hF7sGGxRLRFisbui6vAHMvm0lPUIWl0ImsRUPOXWtBGmo7IcElle13/AZ1toI0i8Ltm32BbP2XR17zkkHTBw58GHxgoN431utDr1O6nsgGcGc3MTLTzHdWOTs0021E19VamMVgZ12b8Wnqb3C9IKlRZCMt2zaIX39LCHSPxtUOBByQRw1BLCrpPMqF57mpDHauoRLSTDREV2gwKFayrdYEBM3MgsMJdYjaU+2o7PxKR/5+ZF5+lzq5tQxH9x8uXTZFnzgZAqBM2a8x2O4zp7CHQ99RdBUgwEZOUGtki+UzcY/OE4N+wqVZc24eJ3tNfbm8W3UiSJxu+QZVv4T9dsFlaLxUDdGp2D8YZXgnS8//4S04/UPs8eA8D/YU1Mj8MurqtDApLVFUQkfhwSZg2+3dp1D4CtDUApKAAP8N8YnYPxxSX4eNrxMc0OrTR2xqGpHBEGjSZRWEyamYJfChPB/SAFNtJTM/s6pGkinRrxAJtgwxHpjGDej93s1J1Ju0lxMegNNNyJHu9FUuNHkP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(376002)(366004)(136003)(346002)(66946007)(6916009)(2616005)(186003)(4326008)(66476007)(86362001)(316002)(2906002)(83380400001)(66556008)(5660300002)(8676002)(33656002)(26005)(1076003)(6512007)(41300700001)(8936002)(6486002)(6506007)(36756003)(38100700002)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4COLO8hQhGICRF+HZIdcS6JuATRDsM2Q2ltRbYYlm9T4Dar9Ve7HODLiByIG?=
- =?us-ascii?Q?hu+OY0PUeUSmUCp8rAHpiIBL0HWrTxAKU7HcfVjXLGskXYos2min1DRovg2w?=
- =?us-ascii?Q?XTKm6CLFZjUYj9uoNQCTu01YeVXgtp/P7EFN8e00BL3j4d6VvD+I27m2mEGf?=
- =?us-ascii?Q?ZEMTAgKhOodw7qzmxc3wvWqk75R1LFC7P9uT1OnEbJmOaBUGamLmJ7v721Vj?=
- =?us-ascii?Q?hq79MB2hRjQqBb8yzkqWWqRwcwyauWINFoTRLgxESPz03GZKWgs0tlskWqNM?=
- =?us-ascii?Q?j0qc6xhtwZI2fnDgtO6MkzmtrnFeGXx4NWXEgSj0I/DvWJn3dGo4nm7sgM60?=
- =?us-ascii?Q?Rf8oBcYRBz9Rh6jYa1nm+b8yyWygTc9KzvUpwqGFDHO4KgqWyCakIhJk+8OL?=
- =?us-ascii?Q?OT8yaVQ4b2CCTedat7nXbErMysMw2FEj5TULPLXsDKucoStJbrE74WSZljl8?=
- =?us-ascii?Q?NdsQiaVrkpk16s7WR4TIs/cTtTcM1adxYJ9HswiPYTmVjAV/9Ce4KrvkBrrj?=
- =?us-ascii?Q?BVDUl/7NOfxVD28HkvpdSg/VznYk15jWsy1xeNR9SmJZotKdXAmFuUf7Fiz+?=
- =?us-ascii?Q?iVvaKRfg1EDHxgwjJw/XWhcM3WmDzEfEC1+5y9Zbrh5IW9KiTRiI7FQ8OaAH?=
- =?us-ascii?Q?j2QqRnMQleYZjqlD1mZAZq+4VTVSQYsg3Wa00bjRmusri7cvfybKi9DvOsju?=
- =?us-ascii?Q?SxKCP16Z0PJRsqNZxOgQtZqRBXMLu8cZl2rmwZcrkVjZj1zie1EVkymOrXQj?=
- =?us-ascii?Q?5fNBk807svUbMXs+u4O++O9/UGD4zXITwAoxfVoioWW21arb2OzTnqoHuk91?=
- =?us-ascii?Q?p+q+1mFi5pTLZVqy3sxJPWbm4L0OL9bcfVWZ7TEnSn97y0snZMmvPBdQyTIa?=
- =?us-ascii?Q?nuJQ/skVlaG2GqQmqNhuE/NOxi+h9BECGarZgdKx34NFac+Z068D/HRyH1kN?=
- =?us-ascii?Q?z/hNqnRiG3Kqap8oT3Tgu6l9QUO8foMZlbLadvnQZEXQNtI1WDVkI9N+PBQf?=
- =?us-ascii?Q?CpMohSnv58X8z0t1l88HLyK200FUzUNuko8qNEMDk89SzB9xBwJzZNlyman9?=
- =?us-ascii?Q?mDnpfCebEA6rSip7HvScbthJ4FG0rz6kR7mDAYUn2oM0KaRfY/NUD1zu/Ziy?=
- =?us-ascii?Q?rDgL7Htz2FjBwoQgE3/4lfxZo4FFpDVopGazgY6qkfiCr7DfLOCP/qYil34M?=
- =?us-ascii?Q?+6gfucjZsEjVudq6BW0GGu9KUBshjnoSrji4qfc+yWfyiaLsbRu6W4yE1QvQ?=
- =?us-ascii?Q?EI2EShMEYdIAIS2N8qkniDmGAowJ73w4XUOv4ZvbdCE1bwn2QuRaFChWxIx0?=
- =?us-ascii?Q?P+Ujf6QqMJ9pbCu2aiRj/86GYSVYwq44ysKIF7STC8IpmtiM7RjofnQ25Vj2?=
- =?us-ascii?Q?ohzwFMvomXJYckxZsccFRi63v/K+LvTTbnBcDsdCrmu0l9ZW/FtUcMxrIK9Z?=
- =?us-ascii?Q?79ouIMu35drQUn6fjh9r5fP3EiQpAlvqbrQP/ODcLGwyZwWEVkUiImzJuusU?=
- =?us-ascii?Q?kROl9reMbzj0GJkRbEj872p64CuuO2Joz7q4zeLIxBTVyTvs10g/LzqiEuRA?=
- =?us-ascii?Q?z8GZfM+SKuEp063aruWqEDqvkAPP1jI5MutNVhfQ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79d5af0f-c829-4779-75d3-08da5583ebe8
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2022 01:50:31.4397
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kxSInNTjfGEjHNmvWTK7oKbvpqj2jOCbfUiPt17nAmwuYB60XatbEnL5h9iRp5WE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2522
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC PATCH v3] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+To:     "Darrick J. Wong" <djwong@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>, <dan.j.williams@intel.com>,
+        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>
+References: <20220410171623.3788004-1-ruansy.fnst@fujitsu.com>
+ <20220615125400.880067-1-ruansy.fnst@fujitsu.com> <YrNIGGBK7/cztV8c@magnolia>
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+In-Reply-To: <YrNIGGBK7/cztV8c@magnolia>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-yoursite-MailScanner-ID: 178174D17189.A3973
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 05:00:44PM -0600, Alex Williamson wrote:
 
-> > >> +struct vfio_device *vfio_device_get_from_iommu(struct iommu_group *iommu_group)
-> > >> +{
-> > >> +	struct vfio_group *group = vfio_group_get_from_iommu(iommu_group);
-> > >> +	struct vfio_device *device;  
-> > > 
-> > > Check group for NULL.  
-> > 
-> > OK - FWIW in context this should only ever make sense to call with an 
-> > iommu_group which has already been derived from a vfio_group, and I did 
-> > initially consider a check with a WARN_ON(), but then decided that the 
-> > unguarded dereference would be a sufficiently strong message. No problem 
-> > with bringing that back to make it more defensive if that's what you prefer.
+
+在 2022/6/23 0:49, Darrick J. Wong 写道:
+> On Wed, Jun 15, 2022 at 08:54:00PM +0800, Shiyang Ruan wrote:
+>> This patch is inspired by Dan's "mm, dax, pmem: Introduce
+>> dev_pagemap_failure()"[1].  With the help of dax_holder and
+>> ->notify_failure() mechanism, the pmem driver is able to ask filesystem
+>> (or mapped device) on it to unmap all files in use and notify processes
+>> who are using those files.
+>>
+>> Call trace:
+>> trigger unbind
+>>   -> unbind_store()
+>>    -> ... (skip)
+>>     -> devres_release_all()   # was pmem driver ->remove() in v1
+>>      -> kill_dax()
+>>       -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_REMOVE)
+>>        -> xfs_dax_notify_failure()
+>>
+>> Introduce MF_MEM_REMOVE to let filesystem know this is a remove event.
+>> So do not shutdown filesystem directly if something not supported, or if
+>> failure range includes metadata area.  Make sure all files and processes
+>> are handled correctly.
+>>
+>> [1]: https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
+>>
+>> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+>>
+>> ==
+>> Changes since v2:
+>>    1. Rebased on next-20220615
+>>
+>> Changes since v1:
+>>    1. Drop the needless change of moving {kill,put}_dax()
+>>    2. Rebased on '[PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink'[2]
+>>
+>> ---
+>>   drivers/dax/super.c         | 2 +-
+>>   fs/xfs/xfs_notify_failure.c | 6 +++++-
+>>   include/linux/mm.h          | 1 +
+>>   3 files changed, 7 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+>> index 9b5e2a5eb0ae..d4bc83159d46 100644
+>> --- a/drivers/dax/super.c
+>> +++ b/drivers/dax/super.c
+>> @@ -323,7 +323,7 @@ void kill_dax(struct dax_device *dax_dev)
+>>   		return;
+>>   
+>>   	if (dax_dev->holder_data != NULL)
+>> -		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
+>> +		dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_REMOVE);
 > 
-> A while down the road, that's a bit too much implicit knowledge of the
-> intent and single purpose of this function just to simply avoid a test.
+> At the point we're initiating a MEM_REMOVE call, is the pmem already
+> gone, or is it about to be gone?
 
-I think we should just pass the 'struct vfio_group *' into the
-attach_group op and have this API take that type in and forget the
-vfio_group_get_from_iommu().
+It's about to be gone.
 
-At this point there is little justification for
-vfio_group_get_from_iommu() existing at all, it should be folded into
-the one use in vfio_group_find_or_alloc() and the locking widened so
-we don't have the unlock/alloc/lock race that requires it to be called
-twice.
+I found two cases:
+   1. exec `unbind` by user, who wants to unplug the pmem
+   2. handle failures during initialization
 
-> I'd lean towards Kevin's idea that we could store bus_type on the
-> vfio_group and pass that to type1, with the same assumptions we're
-> making in the commit log that it's consistent, but that doesn't get us
-> closer to the long term plan of dropping the bus_type interfaces
-> AIUI.
+> 
+>>   
+>>   	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
+>>   	synchronize_srcu(&dax_srcu);
+>> diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
+>> index aa8dc27c599c..91d3f05d4241 100644
+>> --- a/fs/xfs/xfs_notify_failure.c
+>> +++ b/fs/xfs/xfs_notify_failure.c
+>> @@ -73,7 +73,9 @@ xfs_dax_failure_fn(
+>>   	struct failure_info		*notify = data;
+>>   	int				error = 0;
+>>   
+>> -	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
+>> +	/* Do not shutdown so early when device is to be removed */
+>> +	if (!(notify->mf_flags & MF_MEM_REMOVE) ||
+>> +	    XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
+>>   	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
+>>   		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+>>   		return -EFSCORRUPTED;
+>> @@ -182,6 +184,8 @@ xfs_dax_notify_failure(
+>>   
+>>   	if (mp->m_logdev_targp && mp->m_logdev_targp->bt_daxdev == dax_dev &&
+>>   	    mp->m_logdev_targp != mp->m_ddev_targp) {
+>> +		if (mf_flags & MF_MEM_REMOVE)
+>> +			return -EOPNOTSUPP;
+> 
+> The reason I ask is that if the pmem is *about to be* but not yet
+> removed from the system, shouldn't we at least try to flush all dirty
+> files and the log to reduce data loss and minimize recovery time?
 
-Right, the point is to get a representative struct device here to use.
+Yes, they should be flushed.  Will add it.
 
-Jason
+
+--
+Thanks,
+Ruan.
+
+> 
+> If it's already gone, then you might as well shut down immediately,
+> unless there's a chance the pmem will come back(?)
+> 
+> --D
+> 
+>>   		xfs_err(mp, "ondisk log corrupt, shutting down fs!");
+>>   		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+>>   		return -EFSCORRUPTED;
+>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>> index 623c2ee8330a..bbeb31883362 100644
+>> --- a/include/linux/mm.h
+>> +++ b/include/linux/mm.h
+>> @@ -3249,6 +3249,7 @@ enum mf_flags {
+>>   	MF_SOFT_OFFLINE = 1 << 3,
+>>   	MF_UNPOISON = 1 << 4,
+>>   	MF_NO_RETRY = 1 << 5,
+>> +	MF_MEM_REMOVE = 1 << 6,
+>>   };
+>>   int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+>>   		      unsigned long count, int mf_flags);
+>> -- 
+>> 2.36.1
+>>
+>>
+>>
+
+

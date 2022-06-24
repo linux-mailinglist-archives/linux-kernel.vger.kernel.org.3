@@ -2,116 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C9155A506
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E060355A50A
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbiFXXpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 19:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
+        id S231830AbiFXXr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 19:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbiFXXpo (ORCPT
+        with ESMTP id S231190AbiFXXr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 19:45:44 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CD88AC28
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:45:42 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-101cdfddfacso5794420fac.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=j+1eIf5O9WMahlJkl8hYNSnk/bm8biDohg259LJoO/g=;
-        b=WjPp2QhLMxAzMvmNH6Bdyvi7wrjsIG/6SVnjeCIx33ZdnrT0FzloaiGfU0lA3CDeJb
-         D7xY66ytKYA57XIKpfe59/dnVK12xL/fRml9igY3so3l01YCoor2ZFtI37sGeL7idQg1
-         4VcAOUxad5AkwdS3gKl9l0rQuEiSBnIGTifw4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=j+1eIf5O9WMahlJkl8hYNSnk/bm8biDohg259LJoO/g=;
-        b=upjr1t1M3Tgc2wKaqmQ3Eb2fEl/C+mFLup5UD5AvtanyKMAtCvufy8Zpkt6dQKq+1l
-         D/GkkHearwWEAMCTNA6Sx0q+OrLEmvds1Yc+SyGzIb6SXC7zxXm2OOdaw9hAHt/0ibWz
-         jjZWlYtH7HAzO5YR1E2Snzn6noMxiANtZ9ulygQIfnDwTA8r3S9r90wA+pORmR61AtSC
-         q+djEH1Mf5aryM7i8FYPedjDT2YVjZySuN9Uam5OX8G80ihc9E97h9zgA7fv5TsN0JgV
-         OAX7S7M243/djVw0sezZU5l1bsyqXqYXeDKkaqjfUa4YerUOtOfoGMmcI8PRmDuSb6Gk
-         h3wA==
-X-Gm-Message-State: AJIora8s5YFAazKIh3rV+wj2mq4PtH9R1vlNHGdbocfVyv7SLSa42feM
-        lEEXEGDkdWQsLQ1MTvldlWjmKfBrB9O34F1BZsyFUw==
-X-Google-Smtp-Source: AGRyM1u4e57uuPYmBFxhp7AQ2EnNSWg/r4goHtlbSbtUqSiLnWrjbX1DesaUaEXpyg5Qm32+9mU8qIwp9idPpGqo2As=
-X-Received: by 2002:a05:6870:b381:b0:fe:2004:b3b5 with SMTP id
- w1-20020a056870b38100b000fe2004b3b5mr1007924oap.63.1656114342063; Fri, 24 Jun
- 2022 16:45:42 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 24 Jun 2022 16:45:41 -0700
+        Fri, 24 Jun 2022 19:47:27 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03A38BEC4;
+        Fri, 24 Jun 2022 16:47:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 70CD71F891;
+        Fri, 24 Jun 2022 23:47:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1656114445; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aobWKircXEKbGTkT46vsoN1mG2oAxEWPsS6CajoA/6U=;
+        b=uoAaIrouqAUg4vn7RsvgiNCjACanuj9PzdM5fzvNQcyYQ5WhnxPSzG9ByaKlAXiBqmQkwx
+        8qn89Q9/xpl/cQmHs0Rw9pHZ1yP8J0RXVfZlqJlenR1qjqOD4WTtP6HcEsqzhBGVp+UBvJ
+        mDJwXEj0PoIDF9jnXRVQ6XzorSdnXhc=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 38B7113ACA;
+        Fri, 24 Jun 2022 23:47:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id n38fDA1NtmLyUgAAMHmgww
+        (envelope-from <mwilck@suse.com>); Fri, 24 Jun 2022 23:47:25 +0000
+Message-ID: <c2dfae29bb2aa3b6286a3a225a27b116761b9e53.camel@suse.com>
+Subject: Re: [PATCH] lib/sbitmap: Fix invalid loop in
+ __sbitmap_queue_get_batch()
+From:   Martin Wilck <mwilck@suse.com>
+To:     wuchi <wuchi.zero@gmail.com>, axboe@kernel.dk,
+        andriy.shevchenko@linux.intel.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sat, 25 Jun 2022 01:47:24 +0200
+In-Reply-To: <20220605145835.26916-1-wuchi.zero@gmail.com>
+References: <20220605145835.26916-1-wuchi.zero@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.2 
 MIME-Version: 1.0
-In-Reply-To: <0ff3d6a3-dc5c-7c77-f8a1-6c4f6c1a3215@quicinc.com>
-References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com>
- <1656090912-18074-3-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n52RW+UFJ=hqMWjwR8qvEbww7QjzPW1nhL3Atd97QXAnYw@mail.gmail.com>
- <007ea4c9-9701-f4ab-3278-5d36bf2018c4@quicinc.com> <CAE-0n53kNCK0ajHfY2WQr5HEQZtZSBLnhfbTuZwaUNEOZhsKPg@mail.gmail.com>
- <fa7f8bf1-33cd-5515-0143-6596df2bd740@quicinc.com> <CAE-0n51g-EVsC-i9=sJV-ySa8VnE+yT7cg=b-TNMi9+3uBiOVA@mail.gmail.com>
- <326912ff-9771-0711-366d-79acd436908b@quicinc.com> <CAE-0n51qrdrFtSr0vRwgYkMgSZfnzQuinaUROQsp30QoDchWQA@mail.gmail.com>
- <0ff3d6a3-dc5c-7c77-f8a1-6c4f6c1a3215@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 24 Jun 2022 16:45:41 -0700
-Message-ID: <CAE-0n515hMKqQ+Vj1Sg54PpwkbWMYJ77QN+y+KZNBWymjhpWKw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] drm/msm/dp: decoupling dp->id out of dp
- controller_id at scxxxx_dp_cfg table
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dianders@chromium.org, dmitry.baryshkov@linaro.org,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-06-24 16:30:59)
->
-> On 6/24/2022 4:12 PM, Stephen Boyd wrote:
-> > Quoting Kuogee Hsieh (2022-06-24 15:53:45)
-> >> MSM_DP_CONTROLLER_1 need to match to the index =3D 1 of sc7280_dp_cfg[=
-] <=3D=3D This is correct
-> >>
-> >> The problem is sc7280_dp_cfg[] have two entries since eDP place at ind=
-ex
-> >> of MSM_DP_CONTROLLER_1.
-> >>
-> >> but .num_desc =3D 1=C2=A0 <=3D=3D this said only have one entry at sc7=
-280_dp_cfg[]
-> >> table. Therefore eDP will never be found at for loop=C2=A0 at
-> >> _dpu_kms_initialize_displayport().
-> >>
-> > Yes, but what else does the MSM_DP_CONTROLLER_1 need to match? Because
-> > the intention of the previous commit was to make it so the order of
-> > sc7280_dp_cfg couldn't be messed up and not match the
-> > MSM_DP_CONTROLLER_1 value that lives in sc7280_intf[].
->
->
-> at=C2=A0 _dpu_kms_initialize_displayport()
->
-> > -             info.h_tile_instance[0] =3D i; <=3D=3D assign i to become=
- dp controller id, "i" is index of scxxxx_dp_cfg[]
->
-> This what I mean MSM_DP_CONTROLLER_1 need to match to index =3D 1 of
-> scxxxx_dp_cfg[].
->
-> it it is not match, then MSM_DP_CONTROLLER_1 with match to different INTF=
-.
+T24gU3VuLCAyMDIyLTA2LTA1IGF0IDIyOjU4ICswODAwLCB3dWNoaSB3cm90ZToKPiAxLiBHZXR0
+aW5nIG5leHQgaW5kZXggYmVmb3JlIGNvbnRpbnVlIGJyYW5jaC4KPiAyLiBDaGVja2luZyBmcmVl
+IGJpdHMgd2hlbiBzZXR0aW5nIHRoZSB0YXJnZXQgYml0cy4gT3RoZXJ3aXNlLAo+IGl0IG1heSBy
+ZXVzZSB0aGUgYnVzeWluZyBiaXRzLgo+IAo+IFNpZ25lZC1vZmYtYnk6IHd1Y2hpIDx3dWNoaS56
+ZXJvQGdtYWlsLmNvbT4KClJldmlld2VkLWJ5OiBNYXJ0aW4gV2lsY2sgPG13aWxja0BzdXNlLmNv
+bT4KCj4gLS0tCj4goGxpYi9zYml0bWFwLmMgfCA1ICsrKystCj4goDEgZmlsZSBjaGFuZ2VkLCA0
+IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvbGliL3NiaXRt
+YXAuYyBiL2xpYi9zYml0bWFwLmMKPiBpbmRleCBhZTRmZDRkZTllYmUuLjI5ZWIwNDg0MjE1YSAx
+MDA2NDQKPiAtLS0gYS9saWIvc2JpdG1hcC5jCj4gKysrIGIvbGliL3NiaXRtYXAuYwo+IEBAIC01
+MjgsNyArNTI4LDcgQEAgdW5zaWduZWQgbG9uZyBfX3NiaXRtYXBfcXVldWVfZ2V0X2JhdGNoKHN0
+cnVjdAo+IHNiaXRtYXBfcXVldWUgKnNicSwgaW50IG5yX3RhZ3MsCj4goAo+IKCgoKCgoKCgoKCg
+oKCgoKBzYml0bWFwX2RlZmVycmVkX2NsZWFyKG1hcCk7Cj4goKCgoKCgoKCgoKCgoKCgoGlmICht
+YXAtPndvcmQgPT0gKDFVTCA8PCAobWFwX2RlcHRoIC0gMSkpIC0gMSkKPiAtoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKBjb250aW51ZTsKPiAroKCgoKCgoKCgoKCgoKCgoKCgoKCgoKBnb3RvIG5leHQ7
+Cj4goAo+IKCgoKCgoKCgoKCgoKCgoKBuciA9IGZpbmRfZmlyc3RfemVyb19iaXQoJm1hcC0+d29y
+ZCwgbWFwX2RlcHRoKTsKPiCgoKCgoKCgoKCgoKCgoKCgaWYgKG5yICsgbnJfdGFncyA8PSBtYXBf
+ZGVwdGgpIHsKPiBAQCAtNTM5LDYgKzUzOSw4IEBAIHVuc2lnbmVkIGxvbmcgX19zYml0bWFwX3F1
+ZXVlX2dldF9iYXRjaChzdHJ1Y3QKPiBzYml0bWFwX3F1ZXVlICpzYnEsIGludCBucl90YWdzLAo+
+IKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoGdldF9tYXNrID0gKCgxVUwgPDwgbWFwX3RhZ3MpIC0g
+MSkgPDwgbnI7Cj4goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgZG8gewo+IKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgdmFsID0gUkVBRF9PTkNFKG1hcC0+d29yZCk7Cj4gK6CgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKBpZiAoKHZhbCAmIH5nZXRfbWFzaykgIT0gdmFsKQo+ICug
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKBnb3RvIG5leHQ7Cj4goKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKByZXQgPSBhdG9taWNfbG9uZ19jbXB4Y2hnKHB0ciwg
+dmFsLAo+IGdldF9tYXNrIHwgdmFsKTsKPiCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKB9IHdoaWxl
+IChyZXQgIT0gdmFsKTsKPiCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKBnZXRfbWFzayA9IChnZXRf
+bWFzayAmIH5yZXQpID4+IG5yOwo+IEBAIC01NDksNiArNTUxLDcgQEAgdW5zaWduZWQgbG9uZyBf
+X3NiaXRtYXBfcXVldWVfZ2V0X2JhdGNoKHN0cnVjdAo+IHNiaXRtYXBfcXVldWUgKnNicSwgaW50
+IG5yX3RhZ3MsCj4goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKByZXR1cm4gZ2V0X21h
+c2s7Cj4goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgfQo+IKCgoKCgoKCgoKCgoKCgoKB9Cj4gK25l
+eHQ6Cj4goKCgoKCgoKCgoKCgoKCgoC8qIEp1bXAgdG8gbmV4dCBpbmRleC4gKi8KPiCgoKCgoKCg
+oKCgoKCgoKCgaWYgKCsraW5kZXggPj0gc2ItPm1hcF9ucikKPiCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKBpbmRleCA9IDA7Cgo=
 
-I thought we matched the INTF instance by searching through
-sc7280_intf[] for a matching MSM_DP_CONTROLLER_1 and then returning that
-INTF number. See dpu_encoder_get_intf() and the caller.

@@ -2,52 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD693558EC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 05:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E29E558EE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 05:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiFXDJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 23:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S231566AbiFXDKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 23:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiFXDJH (ORCPT
+        with ESMTP id S230476AbiFXDKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 23:09:07 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA4C313AE;
-        Thu, 23 Jun 2022 20:09:05 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LThsm5TPjz4xLT;
-        Fri, 24 Jun 2022 13:09:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1656040142;
-        bh=K++hI2FDkjV3G5478DzfpzmGcEObLlrEm0qg0VKmAH4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=JHX2Ao+4jSwUp4Lj3ajWxHaaPO+OTH7kx/LBQVq9vuerTA4WfbzY9j1VeA0zTZGbv
-         gcWkiP8DEDI6VrW7PNNv7SmUrjOTBHcGIoIKzsLffPV4aq49KcTKjF1roSxxvzMKok
-         tiRC1n0QTPGF7Bzel47PCPX+J+KSGmVd+Ui9HJ9soXKau2mD1hHEjSNxiyVVXLTlpF
-         lWYq24g9zZHP87qx2D4YMG9CXWdExUBszaJL74+t+p7QKOCh3XK7byz3HiuelNGnza
-         q1+9XMBDq6/VqO8NipT1I3rObNZs3VaiOK6VHqpdduGeZxQWDhaEsMY8ks7q4Vzsoi
-         lnyvRUex8xctA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Marek Behun <marek.behun@nic.cz>,
-        Josef Schlehofer <josef.schlehofer@nic.cz>
-Subject: Re: [PATCH] powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers
-In-Reply-To: <20220511143712.22550-1-pali@kernel.org>
-References: <20220511143712.22550-1-pali@kernel.org>
-Date:   Fri, 24 Jun 2022 13:08:59 +1000
-Message-ID: <877d5669mc.fsf@mpe.ellerman.id.au>
+        Thu, 23 Jun 2022 23:10:01 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0729035DE9;
+        Thu, 23 Jun 2022 20:09:59 -0700 (PDT)
+X-UUID: 45f261b4fd574dfba6d430ae40efa86f-20220624
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:9e94d98d-4ef7-4c45-9adb-2a2c935f5650,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:b14ad71,CLOUDID:c2d05638-5e4b-44d7-80b2-bb618cb09d29,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 45f261b4fd574dfba6d430ae40efa86f-20220624
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1068649577; Fri, 24 Jun 2022 11:09:50 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 24 Jun 2022 11:09:48 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Fri, 24 Jun 2022 11:09:48 +0800
+From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>, <ck.hu@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v14 00/15] drm/mediatek: Add MT8195 dp_intf driver
+Date:   Fri, 24 Jun 2022 11:09:31 +0800
+Message-ID: <20220624030946.14961-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,30 +65,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pali Roh=C3=A1r <pali@kernel.org> writes:
-> CZ.NIC Turris 1.0 and 1.1 are open source routers, they have dual-core
-> PowerPC Freescale P2020 CPU and are based on Freescale P2020RDB-PC-A boar=
-d.
-> Hardware design is fully open source, all firmware and hardware design
-> files are available at Turris project website:
->
-> https://docs.turris.cz/hw/turris-1x/turris-1x/
-> https://project.turris.cz/en/hardware.html
->
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
-> ---
->  arch/powerpc/boot/dts/turris1x.dts | 470 +++++++++++++++++++++++++++++
->  1 file changed, 470 insertions(+)
->  create mode 100644 arch/powerpc/boot/dts/turris1x.dts
+The dpi/dpintf driver and the added helper functions are required for
+the DisplayPort driver to work.
 
-The headers say you Cc'ed this to the devicetree list, but I don't see
-it in the devicetree patchwork:
+This series is separated from [1] which is original from Guillaume.
+The display port driver is [2].
 
-  https://patchwork.ozlabs.org/project/devicetree-bindings/list/?state=3D*&=
-q=3Dturris&archive=3Dboth
+Changes for v14:
+1. Separate a new binding patch to modify mediatek string format.
+2. Use GENMASK(4, 0) for INT_MATRIX_SEL_MASK in patch
+   "Add YUV422 output support"
+3. Change kernel doc description of support_direct_pin.
+4. Change to use pixels_per_iter to control quantity of transferred
+   pixels per iterration.
 
-Which means it hasn't been run through Rob's CI scripts.
+Changes for v13:
+1. Change mediatek,mt8195-dp_intf to mediatek,mt8195-dp-intf.
+2. Add kernel doc for mtk_dpi_conf.
+3. Drop patch of tvd_pll enable.
+4. Squash some color format transfer related patches.
+5. Add new patch to support setting of direct connection to pins.
+6. Change fix tag of "drm/mediatek: dpi: Only enable dpi after the bridge is enabled".
 
-Maybe try a resend?
+Changes for v12:
+1. Remove pll_gate.
+2. Add more detailed commit message.
+3. Separate tvd_clk patch and yuv422 output support from add dpintf
+   support patch
+4. Remove limit patch and use common driver codes to determine this.
 
-cheers
+Changes for v11:
+1. Rename ck_cg to pll_gate.
+2. Add some commit message to clarify the modification reason.
+3. Fix some driver order and modify for reviewers' comments.
+
+[1]:https://lore.kernel.org/all/20220523104758.29531-1-granquet@baylibre.com/
+[2]:https://lore.kernel.org/all/20220610105522.13449-1-rex-bc.chen@mediatek.com/
+
+Bo-Chen Chen (5):
+  dt-bindings: mediatek,dpi: Revise mediatek strings to correct format
+  drm/mediatek: dpi: Add kernel document for struct mtk_dpi_conf
+  drm/mediatek: dpi: Add support for quantization range
+  drm/mediatek: dpi: Add YUV422 output support
+  drm/mediatek: dpi: add config to support direct connection to dpi
+    panels
+
+Guillaume Ranquet (9):
+  drm/mediatek: dpi: implement a CK/DE pol toggle in SoC config
+  drm/mediatek: dpi: implement a swap_input toggle in SoC config
+  drm/mediatek: dpi: move dimension mask to SoC config
+  drm/mediatek: dpi: move hvsize_mask to SoC config
+  drm/mediatek: dpi: move swap_shift to SoC config
+  drm/mediatek: dpi: move the yuv422_en_bit to SoC config
+  drm/mediatek: dpi: move the csc_enable bit to SoC config
+  drm/mediatek: dpi: Add dp_intf support
+  drm/mediatek: dpi: Only enable dpi after the bridge is enabled
+
+Markus Schneider-Pargmann (1):
+  dt-bindings: mediatek,dpi: Add DP_INTF compatible
+
+ .../display/mediatek/mediatek,dpi.yaml        |  11 +-
+ drivers/gpu/drm/mediatek/mtk_dpi.c            | 268 +++++++++++++++---
+ drivers/gpu/drm/mediatek/mtk_dpi_regs.h       |  15 +
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c   |   4 +
+ drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |   1 +
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        |   3 +
+ 6 files changed, 252 insertions(+), 50 deletions(-)
+
+-- 
+2.18.0
+

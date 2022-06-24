@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050EA559FE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2452555A038
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbiFXRiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35932 "EHLO
+        id S232357AbiFXRiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbiFXRhO (ORCPT
+        with ESMTP id S231302AbiFXRhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:37:14 -0400
-Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F73609CA
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:13 -0700 (PDT)
-Received: by mail-ua1-x949.google.com with SMTP id v19-20020ab05593000000b0037ed9894dfbso1008709uaa.19
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:13 -0700 (PDT)
+        Fri, 24 Jun 2022 13:37:15 -0400
+Received: from mail-ua1-x94a.google.com (mail-ua1-x94a.google.com [IPv6:2607:f8b0:4864:20::94a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C6D5DF3E
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:14 -0700 (PDT)
+Received: by mail-ua1-x94a.google.com with SMTP id v14-20020ab0768e000000b0037efa637aeeso1006779uaq.23
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=cBo7lIiy2jlsdOG5qT1oBCHlWVvIiK17uVsMNAgjZEA=;
-        b=NJEF0grG6xcnUMzJ7Xx8DncxrM3Dg/CCXuZcQoPGVS8RMCRW7OVDsyTMq2msiIkgR3
-         QD3rc43cPJSTJK/tuSyrg1IgeA7F7F0rpMnzeXl2raeM1+E+9KIbYlUZ6X/l+oQ1o3X8
-         FetdG0D5zD5JUcSef1agw+Hok5ZWwdiJaZLaL/pl4egaQHqe4C6GaU0IcgckBRNz/QIi
-         XvX1VQlmkldTFcvliG4NEQiL7t+Leo3XWSFsPzela+hWWv2mTwnOC5NDGzw04gi1JEMx
-         Hu59PBmYCm43RJHjH32Pik1VWkbEEt2CtqEMLAHbbH1gUokwIOPzG/lqTGqFU3e6iia/
-         o9Gw==
+        bh=t5KTYrM6ct0JWom4isvAtP154HT/fkrm8rvSO1JL/WI=;
+        b=M7hxU1278b0Lh3tABv6L9l9qZ4Alxa0YOqUCt2BED4X975N8JVezOpIosUzb1pRlq1
+         SX94qvz3QX67rX7o3GZ8S0leLb7FFHhNK9SdbX2Rb4HmWbI4dwX/Y22ct/UwPlrwOYgo
+         BEGkS4HWHIzpNKTgxCJfh6kCkdYmxrPG3Nl2ni6y2MM4kjfXPF2tIOcXuallnel4T3/F
+         /EtqJ7IGlIBOBHTK/RDkilRjqZ1ZMgNfsJXOMiaLWaQMYD1+JF22Fefkl8MXbu5xw4Co
+         KYFTD830ASsGDKWn3Fb3Id7J7wa0mQKCv+6AwRNyDerpkb98fQtJVbUhtnQtE3T/QsCS
+         4F8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=cBo7lIiy2jlsdOG5qT1oBCHlWVvIiK17uVsMNAgjZEA=;
-        b=2v9179SbMHcLuxNtYpgOaD7B6pkjArD/My5tHiQq89JV94ZTez4gTxEAvQA3GIfm5L
-         4+JzF5iE/eoPvg3uHihzEV5ASB3a8++izognLZi82iaGQNg/7+nddf6qBRIJc3WTBUxC
-         WtW8M8duMfd3gZMHkdcjrCBCnNaNTX9l80IP4MyqOHdtWHA+bf0YaczYJShaBNFaO4w/
-         YPLl4sJcJTNaJFBLjKQE4NmKXTTtrVX64B72XWOdMCdVKsSFHxHeubh3ZUhaDHc/6Cf+
-         iXBvRykGMkJVyDLdgGAzxH1h21vS3HI6HtaJ1BlwM1xaLgPlRK+9UwAZZlnlU2iZTiyc
-         HE0A==
-X-Gm-Message-State: AJIora+bsCbYhOIReLGBKvmOEenSrvNjT9x7NXE73t7HeVMIy5Y2gGZ9
-        V1e5zHLrFHf3mYtoVHIOTDL8d/8BR/hfo0nL
-X-Google-Smtp-Source: AGRyM1uKLxV44YzBDP/q42+n2ejxUvrdr7EuCEClIr+ZyRlO8QyvjxzdjM1m0/iYLEcLM71c8MSRgqLgbnEZ/vLa
+        bh=t5KTYrM6ct0JWom4isvAtP154HT/fkrm8rvSO1JL/WI=;
+        b=rqUrsJQuZjyUOBwFPG2890L4K0ZBl462ceA2rY/YFWvQVwL83hXKBegJZHMy9SMAmU
+         FahSB3eSDP2qR+8oF736APaCgbgcFlVr1uQ7WFLtAejI/2qkwF2zyO+LXKUBBQttzdIq
+         Us/tIWyKg7v/JtNQTc1EP4SkxeWUxGfoxO0CWGvakw23lqmaoZTq+r6ZS0qMl29V3wL+
+         LrMRWJhbYQo+VKhvKnYESB3VOZ3XKI8CBP/ETeA97kfPnaRsbRkqxHSt8JelWUuWNNvW
+         /pFaXzjHXji2MdVbWwYn4P7cZJoXfui93w2LoDffW1A9toOEY1JCjwEiMjxDqVhSHfi6
+         KAkA==
+X-Gm-Message-State: AJIora9juRgUJvWvmm5yTOlSwE3F2zUFA9+DgTUiFAP3j7WyzvE5LNJd
+        y9FLEeB4OhDZhD16ns6jycl7z8GRH5osuIY8
+X-Google-Smtp-Source: AGRyM1s3Rhw53YqM2sURrEy49E22RRF/1tHTOyTtY+rHKd8zIb/K3DKzbqQUo9FnKORpPjSO3ZnTjnoOojVZvhpT
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a05:6122:25b:b0:36c:5f1a:d94b with SMTP
- id t27-20020a056122025b00b0036c5f1ad94bmr11908478vko.31.1656092233083; Fri,
- 24 Jun 2022 10:37:13 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 17:36:32 +0000
+ (user=jthoughton job=sendgmr) by 2002:a05:6102:3ec8:b0:335:d67e:7535 with
+ SMTP id n8-20020a0561023ec800b00335d67e7535mr71521vsv.47.1656092234176; Fri,
+ 24 Jun 2022 10:37:14 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 17:36:33 +0000
 In-Reply-To: <20220624173656.2033256-1-jthoughton@google.com>
-Message-Id: <20220624173656.2033256-3-jthoughton@google.com>
+Message-Id: <20220624173656.2033256-4-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20220624173656.2033256-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [RFC PATCH 02/26] hugetlb: sort hstates in hugetlb_init_hstates
+Subject: [RFC PATCH 03/26] hugetlb: add make_huge_pte_with_shift
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -77,88 +77,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using HugeTLB high-granularity mapping, we need to go through the
-supported hugepage sizes in decreasing order so that we pick the largest
-size that works. Consider the case where we're faulting in a 1G hugepage
-for the first time: we want hugetlb_fault/hugetlb_no_page to map it with
-a PUD. By going through the sizes in decreasing order, we will find that
-PUD_SIZE works before finding out that PMD_SIZE or PAGE_SIZE work too.
+This allows us to make huge PTEs at shifts other than the hstate shift,
+which will be necessary for high-granularity mappings.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- mm/hugetlb.c | 40 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 37 insertions(+), 3 deletions(-)
+ mm/hugetlb.c | 33 ++++++++++++++++++++-------------
+ 1 file changed, 20 insertions(+), 13 deletions(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index a57e1be41401..5df838d86f32 100644
+index 5df838d86f32..0eec34edf3b2 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -33,6 +33,7 @@
- #include <linux/migrate.h>
- #include <linux/nospec.h>
- #include <linux/delayacct.h>
-+#include <linux/sort.h>
+@@ -4686,23 +4686,30 @@ const struct vm_operations_struct hugetlb_vm_ops = {
+ 	.pagesize = hugetlb_vm_op_pagesize,
+ };
  
- #include <asm/page.h>
- #include <asm/pgalloc.h>
-@@ -48,6 +49,10 @@
++static pte_t make_huge_pte_with_shift(struct vm_area_struct *vma,
++				      struct page *page, int writable,
++				      int shift)
++{
++	bool huge = shift > PAGE_SHIFT;
++	pte_t entry = huge ? mk_huge_pte(page, vma->vm_page_prot)
++			   : mk_pte(page, vma->vm_page_prot);
++
++	if (writable)
++		entry = huge ? huge_pte_mkwrite(entry) : pte_mkwrite(entry);
++	else
++		entry = huge ? huge_pte_wrprotect(entry) : pte_wrprotect(entry);
++	pte_mkyoung(entry);
++	if (huge)
++		entry = arch_make_huge_pte(entry, shift, vma->vm_flags);
++	return entry;
++}
++
+ static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
+-				int writable)
++			   int writable)
+ {
+-	pte_t entry;
+ 	unsigned int shift = huge_page_shift(hstate_vma(vma));
  
- int hugetlb_max_hstate __read_mostly;
- unsigned int default_hstate_idx;
-+/*
-+ * After hugetlb_init_hstates is called, hstates will be sorted from largest
-+ * to smallest.
-+ */
- struct hstate hstates[HUGE_MAX_HSTATE];
- 
- #ifdef CONFIG_CMA
-@@ -3144,14 +3149,43 @@ static void __init hugetlb_hstate_alloc_pages(struct hstate *h)
- 	kfree(node_alloc_noretry);
+-	if (writable) {
+-		entry = huge_pte_mkwrite(huge_pte_mkdirty(mk_huge_pte(page,
+-					 vma->vm_page_prot)));
+-	} else {
+-		entry = huge_pte_wrprotect(mk_huge_pte(page,
+-					   vma->vm_page_prot));
+-	}
+-	entry = pte_mkyoung(entry);
+-	entry = arch_make_huge_pte(entry, shift, vma->vm_flags);
+-
+-	return entry;
++	return make_huge_pte_with_shift(vma, page, writable, shift);
  }
  
-+static int compare_hstates_decreasing(const void *a, const void *b)
-+{
-+	const int shift_a = huge_page_shift((const struct hstate *)a);
-+	const int shift_b = huge_page_shift((const struct hstate *)b);
-+
-+	if (shift_a < shift_b)
-+		return 1;
-+	if (shift_a > shift_b)
-+		return -1;
-+	return 0;
-+}
-+
-+static void sort_hstates(void)
-+{
-+	unsigned long default_hstate_sz = huge_page_size(&default_hstate);
-+
-+	/* Sort from largest to smallest. */
-+	sort(hstates, hugetlb_max_hstate, sizeof(*hstates),
-+	     compare_hstates_decreasing, NULL);
-+
-+	/*
-+	 * We may have changed the location of the default hstate, so we need to
-+	 * update it.
-+	 */
-+	default_hstate_idx = hstate_index(size_to_hstate(default_hstate_sz));
-+}
-+
- static void __init hugetlb_init_hstates(void)
- {
- 	struct hstate *h, *h2;
- 
--	for_each_hstate(h) {
--		if (minimum_order > huge_page_order(h))
--			minimum_order = huge_page_order(h);
-+	sort_hstates();
- 
-+	/* The last hstate is now the smallest. */
-+	minimum_order = huge_page_order(&hstates[hugetlb_max_hstate - 1]);
-+
-+	for_each_hstate(h) {
- 		/* oversize hugepages were init'ed in early boot */
- 		if (!hstate_is_gigantic(h))
- 			hugetlb_hstate_alloc_pages(h);
+ static void set_huge_ptep_writable(struct vm_area_struct *vma,
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

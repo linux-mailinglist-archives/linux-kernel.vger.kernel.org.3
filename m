@@ -2,77 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFEC559ECA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB548559EC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiFXQoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 12:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
+        id S230310AbiFXQoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 12:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiFXQoP (ORCPT
+        with ESMTP id S229478AbiFXQoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 12:44:15 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0EE45078;
-        Fri, 24 Jun 2022 09:44:14 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id z7so2272488qko.8;
-        Fri, 24 Jun 2022 09:44:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lxeOf8gRI7b8vqenJT5BFJHtGU3Y5eC0Lv4oQODAS3I=;
-        b=iFf3VNIquhKPf+anolpFz7WoZ7alkM5djhS/1ISUHHILKCpYssVLUIftUBhD7kyVIg
-         mPjneUZjZU5YNs3Oz287D2wK24vcMRJo8LkhMpke3a/oNkkZdnholy71GJMQ4Hh6iaay
-         eqkpzPX6wVuIbQXpc+70U++QUpMKew35TuKG+/NwHJQKzn7HWxncv2/bQFdZQenrePc0
-         BVKUrN3Yi5IByJh1Nl5AmDdiIuOPYINw3VMyNADHS9/pVH905vN5AukFbAqwT8xBZncD
-         HycL2fk7seNEC0Wf0jN/8+6naXRSuSXmQU8d7uPRzy7Mid+wyYBluVu6VKEyHbLGym36
-         dv+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lxeOf8gRI7b8vqenJT5BFJHtGU3Y5eC0Lv4oQODAS3I=;
-        b=sVtoWtdOPrKU5+BH5fAiKfpHA1k06C69yNM+0IKWRDeUS2RhbwjWpCMl5VgAd05alj
-         ZjjyTm5Plsxk8wrSjKb8PctqZbpLfPwRnIrNf5Q/RhmA8KtiRqOsoyRix8D+lkOPA7V/
-         ogk5Zx0K3b3R96crHNZtLV9FyAfz9vtwtFQ8QuIWTkdawLPgwcD9yZZd2smgKTbVZu+h
-         Y31VbfU/TjrqL8s9QuVt0XmhdQR+aPft+AqVUoICQo3ACRUkV7j2LObVNqRw/uj+a389
-         jEB0jDidsgfiZKCcO245IimL5Rl17g81YiRSsGPsA+xzUGXbmOJDcxOcH6PyQok2/VO1
-         K5vA==
-X-Gm-Message-State: AJIora+WQ0b5um9oCM+4gn+SxUt74TEaeT3M+8OWTM9Lm/v1SYq1++KZ
-        BUsAMOdCC6B9J5nJ6mYZiNO+EPXJJkyGZg==
-X-Google-Smtp-Source: AGRyM1upbhuaWpzC5LYndFf2Uve+B0qHvBXyWbsiOwK4ZUmFW05a55Acw8Q5uC8MlmbM+Of7twaegQ==
-X-Received: by 2002:a05:620a:2681:b0:67e:909f:d5ac with SMTP id c1-20020a05620a268100b0067e909fd5acmr35848qkp.125.1656089053234;
-        Fri, 24 Jun 2022 09:44:13 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:a5d0:6e89:b8e1:59fc? ([2600:1700:2442:6db0:a5d0:6e89:b8e1:59fc])
-        by smtp.gmail.com with ESMTPSA id p10-20020a05620a112a00b006a72b38e2ecsm2036103qkk.51.2022.06.24.09.44.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 09:44:09 -0700 (PDT)
-Message-ID: <6d40876c-2751-01bb-94ab-7c9ab90e636f@gmail.com>
-Date:   Fri, 24 Jun 2022 11:44:07 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] of: create of_root if no dtb provided
+        Fri, 24 Jun 2022 12:44:18 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2088.outbound.protection.outlook.com [40.107.220.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A4745078;
+        Fri, 24 Jun 2022 09:44:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HVcdPPX7HIPtC/bIzBbMAC1QQuhendhOeoINyFczGPUiUGWCRIIkIExSPzYdSZkr33VDcCr1f4MkIy7hjt2eGRcvvT5ZK41WZDobuvBkBE6QaRdI+ur96CRYY4OL+ZITTtmO37MuPJS0/9TfIIfNlgEn7DAznIArBdDSeO56iIoPm6GB6OwbEDeE05HUyHMzkmtUk5/8de4GdSFNkZUqpMnW1bxcRvjNMt9Ufc+pUmJttedB9khWTlqek8+n0dlztuLB0SXgUEKfFC2E82dXxFLzClQGgUUpTnTG3j50hkjv5pcuJ4jwdgTDFM5AVHc8+NFM8A5xWhU4Cg0HpTjt+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qtXuFOvEBRmPnRUhlHqFFQDM0ydTE1DbLyYgQOU8s9Q=;
+ b=Gnn/mSZiG0SFAH420yYrT4NL6cd4yPUOEb4TM+3fCkB/eqzTiW9hN/Rn5gpQQ4WRlHP3/yvikP9aCSxScT0U2zPRbIlaRX1pubfMmTGF8JMZzmcTDAGCTfPvfyKXTv3qkDi04w2I15WtYQtkblDFLPSEEob+T6APiZnonDR9m0RSBxPbHleOt9XvsbTULeYClR0dDyt3GRBtgMyaRNAFZTw8jwerGaQTUGMMXqfmsuhDUFKsIg56z4tA2S3DYGH/oe/j4y8ig2rXtvZTRbyCsi3YOxUoxOaOuPT41CKrSBKUMPsGaPtxWMXxlT16N6cn3SpAKudStlSUJ/6f3aykdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qtXuFOvEBRmPnRUhlHqFFQDM0ydTE1DbLyYgQOU8s9Q=;
+ b=BLBnN0Nzl9vdjqeZ/brCeUdNfbFbHLZMk4IIEHxk5Z6ujC0/CsDAsutrgj33YLOoGcAmPc7Lb+mK++nQoH/K19ydC7tFT2wUZfei7b+iwBcg6XtATz1M6/sYUAFEOu0xZATptS+c0wwRfLMsUYZ7DZyRJtVdiPAE1OoAkCCL9wY=
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
+ by DM6PR12MB3338.namprd12.prod.outlook.com (2603:10b6:5:11f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Fri, 24 Jun
+ 2022 16:44:14 +0000
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::8953:6baa:97bb:a15d]) by SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::8953:6baa:97bb:a15d%7]) with mapi id 15.20.5373.015; Fri, 24 Jun 2022
+ 16:44:14 +0000
+From:   "Kalra, Ashish" <Ashish.Kalra@amd.com>
+To:     Peter Gonda <pgonda@google.com>
+CC:     the arch/x86 maintainers <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Alper Gun <alpergun@google.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Subject: RE: [PATCH Part2 v6 47/49] *fix for stale per-cpu pointer due to
+ cond_resched during ghcb mapping
+Thread-Topic: [PATCH Part2 v6 47/49] *fix for stale per-cpu pointer due to
+ cond_resched during ghcb mapping
+Thread-Index: AQHYh+iH+PG++B4EZ0iZwp1WHU+AG61ewa9w
+Date:   Fri, 24 Jun 2022 16:44:14 +0000
+Message-ID: <SN6PR12MB27675A06ABFCAB1C999264D98EB49@SN6PR12MB2767.namprd12.prod.outlook.com>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <1dbc14735bbc336c171ef8fefd4aef39ddf95816.1655761627.git.ashish.kalra@amd.com>
+ <CAMkAt6o7jjZ9baQfTUO-r8+u0doJVqPm=fz88nQwuxh6qpBS_Q@mail.gmail.com>
+In-Reply-To: <CAMkAt6o7jjZ9baQfTUO-r8+u0doJVqPm=fz88nQwuxh6qpBS_Q@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lizhi Hou <lizhi.hou@xilinx.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220624034327.2542112-1-frowand.list@gmail.com>
- <20220624034327.2542112-2-frowand.list@gmail.com>
- <20220624141320.3c473605@fixe.home>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20220624141320.3c473605@fixe.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-06-24T16:37:54Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=564aeb91-b709-4f47-8c9f-da4f95f53ef1;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-06-24T16:44:12Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 0a2378d2-1477-42ba-9e8f-a4f331dfb7f6
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e5bdc423-6e49-4092-0ad5-08da5600c5e3
+x-ms-traffictypediagnostic: DM6PR12MB3338:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Qp8OuVJupCa+xNQOGhdTip87ux1iutFV6u8A1PUUHXSFtb9tql84Tz1jOhuDbNvlYn2Ul/DnaXvLCx9T8am6ng4sT+nZuE98XFAMYLFKChZnX08385y/p0t+aH7JZ8zikBtKVU4gOu37bBDejvnSY5xO0d0edJ+iFnUxfIvLeRSNOQNUvMf4VmIbbFHnq0/immqDawaukzp5sQJgRWBYMlfQ7pPReQHeLc4M3BgnaPjVpdfIyybEwmRklIxyE238t6WmIGCBdY0M9LiSCBsl1oTL+NPMmSv12Bt2fHsJeI9ee5CxgoZ67FlgKYAjMQVKpRMiBe0WUBMBMW8iZv0h2CJ80HmT0VL+72f10mVAKmV+MWR04OaOvR6WcTSrslqaVS6Jfts0akJKjXHjUFKOtmZ3IUQAtCbxs4tNVSNCNSBU4q1yA5XfSCtc1rlpa/ttNmbigl3eWSn6plc9/gwu5/p3IxoXhggdNZVmg+Fu0jpcPx9l+x9n9itc8e82oGYEC3pp8+iZk9jw6lWluQ5spfAjuHn6lhfW1q5Wf6VkPbEZDtOH66YqKWNwWys/PX0nmMfhO3D65ETFRrQKNP8wbqBPS55kmx7al5IplcFqNyi8RXHTRRaxmxi5OQ4DXzkWLCxujdEbfHbA9EwNrjJTIowUxgBT0WzD2CbWVAnqjdsO43q1VPpA/2eT6w+HIKuHJBcMW9xFiEePxQlipEFAZdmemDGFx7XlSZn4tWrf8dsj/YtQSfmm41pEN6FfEJGzfuyZfilmgMS4FIbrYMe+lmG/sGrZUixDXFDZr85x+Zw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(396003)(346002)(39860400002)(366004)(52536014)(2906002)(4326008)(55016003)(76116006)(66556008)(33656002)(66446008)(478600001)(8936002)(64756008)(8676002)(7416002)(66946007)(41300700001)(86362001)(66476007)(9686003)(71200400001)(122000001)(5660300002)(7406005)(38100700002)(26005)(54906003)(6916009)(83380400001)(6506007)(7696005)(316002)(38070700005)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?T3lhMkgyS0NKbWRTOHQ3OWF0Vnc5MDY5TWN3c0RHaE9IaHEwZXNzbXZzOHFu?=
+ =?utf-8?B?eWZMR2d3RDJIb1hqdDBKeUhQcEJud0xZN2lPQVBmNmFJL3AvYmJLdlBaQVRL?=
+ =?utf-8?B?N3VwZ3FjYnYwb1VRbC9nNFdNaXMyYktXYmVPaWpZMk9UU2FkM1BTdThjcmNW?=
+ =?utf-8?B?N0tteTBuYStOODNHT2JaZmI5MENab1hJUmxscmk4aVZTUHA1bzNHQkJ5czBR?=
+ =?utf-8?B?Wkovbk9NWEZwRUZneG4xMTZ1Q3Z1Wk12aklyM2dKRkRQYVZaeENsRGlqU25B?=
+ =?utf-8?B?YmE3eWdPMVR5RFlSditMN2o4ZUg0NDByeS9ESHM3V1pkVWxPeUltVm9QT2dZ?=
+ =?utf-8?B?dU1kTEZ2Vkp6SE13RmU2cHlUVUxsT1RYN3JNbXB3Qjl3WFA4ejBiQmJaWGVF?=
+ =?utf-8?B?aUJ3RlY5aDVJZE1NWjNydnVuWnd1VDBsRDRaTHZ0cUVvUTlDQ2wxNitCKzZT?=
+ =?utf-8?B?TmFBUHdncHhITmlIb2ovcVNTU3RCSStDVkNPZ04zU2xSc3c3cFRyKytLRGFx?=
+ =?utf-8?B?clB3em5EckxoS09EQXNqTzhLdzRqQlRYRjAwZ2c1R2NHTmcrWHhyYXFmUWxH?=
+ =?utf-8?B?RUUvT0ltUnV4SVh4TldoMmRNRE1vTGdmUGM5UG13RVlhYUErNi9jU2xndGxh?=
+ =?utf-8?B?bHFxb3lvL2JHSHJpWGx1ZFB5OWRITjNtZU1hV0VpSVBtZU1WYjdvaDJuUkhB?=
+ =?utf-8?B?ak9oOVRlaURKMWNmOTQxWmt4Zng2amdSNkdpS3VOQUpNSHBHUkJUakhEVjNr?=
+ =?utf-8?B?TGg4ZHh5cDVXNHRYMkdzQjFuRDRRTi9wV0h4S0tXM3NRV0g0K2tCY2MrNkRK?=
+ =?utf-8?B?V3NBbzU2RkVUVjBBY0duUXR2ZHI1OVJ6eU9EUVRaSzBlUnFYbkpWdmhJT2NO?=
+ =?utf-8?B?UzBQdlhCNGdqL2RUNVM2dldOVklQUVluckZUeHNWaVlWL3I5aVlCdXhvZ0Nj?=
+ =?utf-8?B?ak9pT0UzeU5RNFFDRk1KKzhEbi9jTTM1Zk9PKzZzNWVDeVFReCt6eGpXQkxE?=
+ =?utf-8?B?anhwYmlyS2JqQmtvcDE1eGs2dmdCbmdKaXlxb0lrWDRjZXZ3RlZnYk42ZDFw?=
+ =?utf-8?B?Qk9HRzE4cXQxQ3ZVNkx0ZWlBMko5SFdCamMrQmFRMTI5eXdkSGNzNzZsRlZr?=
+ =?utf-8?B?U2hWQVRvbmR1aDROYnpjNXZ2TmxuTEF3Q0tYMFpVK0NHVHZmY2o0Q3QrYjRZ?=
+ =?utf-8?B?SStES3V1ODZaWkV2S204cVdBRWFvajNYSXdJZ3h0M3hIQTdTOWxqbk9ZcHZj?=
+ =?utf-8?B?M3JLVlVpZHVBWDgyVEVrdVVRMFZoK2lEaG9tS2VkZjYrSFB1Mk9IbEVuN2Jh?=
+ =?utf-8?B?dUwxRklkNWQyaEtHMURzWTlQUW9rYU5wUFNFeFdPZUxwTFlldVVacE53RXJx?=
+ =?utf-8?B?Q3NsRkdMNkpvYkkvVXBrQnVXWm1OWW55Q1BweEtQQXFzTG5CNXB6UzFYdHov?=
+ =?utf-8?B?YnlqbjZhMVRTcjNlRGZKKzRxaXZEV0NCT0llbEsrYUpvK1Z6bURzWFMxRHhX?=
+ =?utf-8?B?UW90eWpKcncybk1tQ0dWRXcvZFZMNWJ5Y3FyazMreXdhNk9uT3A3V2oxQ1hi?=
+ =?utf-8?B?RERBVWsvOVZkcWg5S2FXckhPOFlSUEs5eTByVStOZ2tRN2VLZnppbzE1OVpL?=
+ =?utf-8?B?MlFNd1ZjWnVoMG9Da0crK3pjSlVBaXE0SXpmNC9saDRkKzVyQ0JabXplUmlO?=
+ =?utf-8?B?cnQrY2FvT2x6WGFRKy84R05KK2lpMXJuOVZrcmNHakdyNGxPUjBhZlVJd21z?=
+ =?utf-8?B?S1RSY0plTERuWDFDWVlWREhrNGVKR3RxQ2xkSXliVDYva0hFMFVMcCtYNGhD?=
+ =?utf-8?B?Q3Z0STVIYnpSQ1BzNWNFWFUrK0dEc2MweUlFSVdXdWp2T2hrNkpKTEpzQ2hT?=
+ =?utf-8?B?bllObXVyTDN4cXlibnZNRGtmNnpWRk5nTmNQc3gvaVNIZGJYb0hSRWRTVkp6?=
+ =?utf-8?B?aGtqK2traVJVTGs2cEhSYnEvWis5MEVDenk4S0JCRjhaazZENkJSUFdoaFhS?=
+ =?utf-8?B?cnFrdzBzYUJXR2FEQ1I3bUFFbmR4d1oxMzdJdnByc0poRkpiT2ltWTFEd2lJ?=
+ =?utf-8?B?R1BlcDAyRmN5N1pvOUpzeHlUS2xndEd1cnBMV0pQMmpmUFY0NGZ6WExDcGhy?=
+ =?utf-8?Q?lYT8=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5bdc423-6e49-4092-0ad5-08da5600c5e3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2022 16:44:14.6169
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xRb34E42ANjyfr2LhmbDDQbacmpEWLEEGP1oavWpbflqDaCNbSGbZUZW11Ylbm3IsP2wDem3ga7XAb+AlxoY8g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3338
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,111 +173,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/22 08:13, Clément Léger wrote:
-> Le Thu, 23 Jun 2022 22:43:26 -0500,
-> frowand.list@gmail.com a écrit :
-> 
->>  
->> +/*
->> + * __dtb_empty_root_begin[] magically created by cmd_dt_S_dtb in
->> + * scripts/Makefile.lib
->> + */
->> +extern void *__dtb_empty_root_begin;
->> +
->>  /*
->>   * of_fdt_limit_memory - limit the number of regions in the /memory node
->>   * @limit: maximum entries
->> @@ -1332,8 +1338,13 @@ bool __init early_init_dt_scan(void *params)
->>   */
->>  void __init unflatten_device_tree(void)
->>  {
-> 
-> Hi Frank,
-> 
-> This function is only defined when CONFIG_OF_EARLY_FLATTREE is enabled.
-
-More precisely, only if CONFIG_OF_FLATTREE is enabled.  But that would
-most likely be seleved by CONFIG_OF_EARLY_FLATTREE, so in practice the
-issue you raise is valid.
-
-> Which means that on platforms that do not select this, the default
-> empty device-tree creation will not be done.
-
-Yes, so platforms that need this functionality need to select this
-option.
-
-> 
-> This configuration option is selected by the platform and not by the
-> user. On x86, only one config enables this (X86_INTEL_CE) which means
-> this won't work on all the other platforms even if CONFIG_OF is
-> selected. I would need this to work by only selected CONFIG_OF.
-
-Maybe this means that CONFIG_OF should be changed to select
-CONFIG_OF_FLATTREE.  Any opinions on this Rob?
-
-> That's why I decided to add the of_root creation in of_core_init()
-> using a function (of_fdt_unflatten()) that is provided if CONFIG_OF is
-> defined.
-
-I mentioned this in response to the previous patch series, but will
-repeat here for those who might not have read that email thread.
-
-I do not want the root live tree to be created buy different code in
-different places; I want one central place where this occurs.  When
-the tree can be created in multiple places by different code blocks,
-it becomes more difficult to understand the code and more likely that
-one of the tree creation code blocks is not updated when another is.
-
-> 
->> -	__unflatten_device_tree(initial_boot_params, NULL, &of_root,
->> +	if (!initial_boot_params) {
->> +		initial_boot_params = (void *) __dtb_empty_root_begin;
->> +		unflatten_and_copy_device_tree();
->> +	} else {
->> +		__unflatten_device_tree(initial_boot_params, NULL, &of_root,
->>  				early_init_dt_alloc_memory_arch, false);
->> +	}
->>  
->>  	/* Get pointer to "/chosen" and "/aliases" nodes for use everywhere */
->>  	of_alias_scan(early_init_dt_alloc_memory_arch);
->> @@ -1373,6 +1384,12 @@ void __init unflatten_and_copy_device_tree(void)
->>  	unflatten_device_tree();
->>  }
->>  
->> +void __init setup_of(void)
->> +{
->> +	if (!of_root)
->> +		unflatten_device_tree();
->> +}
->> +
->>  #ifdef CONFIG_SYSFS
->>  static ssize_t of_fdt_raw_read(struct file *filp, struct kobject *kobj,
->>  			       struct bin_attribute *bin_attr,
->> diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
->> index d69ad5bb1eb1..4566876db351 100644
->> --- a/include/linux/of_fdt.h
->> +++ b/include/linux/of_fdt.h
->> @@ -81,6 +81,7 @@ extern const void *of_flat_dt_match_machine(const void *default_match,
->>  /* Other Prototypes */
->>  extern void unflatten_device_tree(void);
->>  extern void unflatten_and_copy_device_tree(void);
->> +extern void setup_of(void);
->>  extern void early_init_devtree(void *);
->>  extern void early_get_first_memblock_info(void *, phys_addr_t *);
->>  #else /* CONFIG_OF_EARLY_FLATTREE */
->> @@ -91,6 +92,7 @@ static inline void early_init_fdt_reserve_self(void) {}
->>  static inline const char *of_flat_dt_get_machine_name(void) { return NULL; }
->>  static inline void unflatten_device_tree(void) {}
->>  static inline void unflatten_and_copy_device_tree(void) {}
->> +static inline void of_setup(void) {}
-> 
-
-> Shouldn't this be setup_of(void) ?
-
-Yes, thanks!  Will fix.
-
-One other thing I need to do is test this patch on a user mode linux
-kernel.
-
--Frank
-
+W0FNRCBPZmZpY2lhbCBVc2UgT25seSAtIEdlbmVyYWxdDQoNCkhlbGxvIFBldGVyLA0KPj4NCj4+
+IEZyb206IE1pY2hhZWwgUm90aCA8bWljaGFlbC5yb3RoQGFtZC5jb20+DQo+Pg0KPj4gU2lnbmVk
+LW9mZi1ieTogTWljaGFlbCBSb3RoIDxtaWNoYWVsLnJvdGhAYW1kLmNvbT4NCg0KPkNhbiB5b3Ug
+YWRkIGEgY29tbWl0IGRlc2NyaXB0aW9uIGhlcmU/IElzIHRoaXMgYSBmaXggZm9yIGV4aXN0aW5n
+IFNFVi1FUyBzdXBwb3J0IG9yIHNob3VsZCB0aGlzIGJlIGluY29ycG9yYXRlZCBpbnRvIGEgcGF0
+Y2ggaW4gdGhpcyBzZXJpZXMgd2hpY2ggYWRkcyB0aGlzIGlzc3VlPw0KDQpUaGlzIGFjdHVhbGx5
+IGZpeGVzIGlzc3VlcyBjYXVzZWQgZHVlIHRvIHByZWVtcHRpb24gaGFwcGVuaW5nIGluIHN2bV9w
+cmVwYXJlX3N3aXRjaF90b19ndWVzdCgpIHdoZW4ga3ZtX3ZjcHVfbWFwKCkgaXMgY2FsbGVkIHRv
+IG1hcCBpbiB0aGUgR0hDQiBiZWZvcmUNCmVudGVyaW5nIHRoZSBndWVzdC4gDQoNClRoaXMgaXMg
+YSB0ZW1wb3JhcnkgZml4IGFuZCB3aGF0IHdlIG5lZWQgdG8gZG8gaXMgdG8gcHJldmVudCBnZXR0
+aW5nIHByZWVtcHRlZCBhZnRlciB2Y3B1X2VudGVyX2d1ZXN0KCkgaGFzIGRpc2FibGVkIHByZWVt
+cHRpb24sIGhhdmUgc29tZSBpZGVhcyBhYm91dA0KdXNpbmcgZ2ZuX3RvX3Bmbl9jYWNoZSgpIGlu
+ZnJhc3RydWN0dXJlIHRvIHJlLXVzZSB0aGUgYWxyZWFkeSBtYXBwZWQgR0hDQiBhdCBndWVzdCBl
+eGl0LCBzbyB0aGF0IHdlIGNhbiBhdm9pZCBjYWxsaW5nIGt2bV92Y3B1X21hcCgpIHRvIHJlLW1h
+cCB0aGUgDQpHSENCLg0KDQpUaGFua3MsDQpBc2hpc2gNCg0KPiAtLS0NCj4gIGFyY2gveDg2L2t2
+bS9zdm0vc3ZtLmMgfCA2ICsrKysrLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygr
+KSwgMSBkZWxldGlvbigtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYva3ZtL3N2bS9zdm0u
+YyBiL2FyY2gveDg2L2t2bS9zdm0vc3ZtLmMgaW5kZXggDQo+IGZjZWQ2ZWE0MjNhZC4uZjc4ZTNi
+MWJkZTBlIDEwMDY0NA0KPiAtLS0gYS9hcmNoL3g4Ni9rdm0vc3ZtL3N2bS5jDQo+ICsrKyBiL2Fy
+Y2gveDg2L2t2bS9zdm0vc3ZtLmMNCj4gQEAgLTEzNTIsNyArMTM1Miw3IEBAIHN0YXRpYyB2b2lk
+IHN2bV92Y3B1X2ZyZWUoc3RydWN0IGt2bV92Y3B1ICp2Y3B1KSAgDQo+IHN0YXRpYyB2b2lkIHN2
+bV9wcmVwYXJlX3N3aXRjaF90b19ndWVzdChzdHJ1Y3Qga3ZtX3ZjcHUgKnZjcHUpICB7DQo+ICAg
+ICAgICAgc3RydWN0IHZjcHVfc3ZtICpzdm0gPSB0b19zdm0odmNwdSk7DQo+IC0gICAgICAgc3Ry
+dWN0IHN2bV9jcHVfZGF0YSAqc2QgPSBwZXJfY3B1KHN2bV9kYXRhLCB2Y3B1LT5jcHUpOw0KPiAr
+ICAgICAgIHN0cnVjdCBzdm1fY3B1X2RhdGEgKnNkOw0KPg0KPiAgICAgICAgIGlmIChzZXZfZXNf
+Z3Vlc3QodmNwdS0+a3ZtKSkNCj4gICAgICAgICAgICAgICAgIHNldl9lc191bm1hcF9naGNiKHN2
+bSk7IEBAIC0xMzYwLDYgKzEzNjAsMTAgQEAgc3RhdGljIA0KPiB2b2lkIHN2bV9wcmVwYXJlX3N3
+aXRjaF90b19ndWVzdChzdHJ1Y3Qga3ZtX3ZjcHUgKnZjcHUpDQo+ICAgICAgICAgaWYgKHN2bS0+
+Z3Vlc3Rfc3RhdGVfbG9hZGVkKQ0KPiAgICAgICAgICAgICAgICAgcmV0dXJuOw0KPg0KPiArICAg
+ICAgIC8qIHNldl9lc191bm1hcF9naGNiKCkgY2FuIHJlc2NoZWQsIHNvIGdyYWIgcGVyLWNwdSBw
+b2ludGVyIGFmdGVyd2FyZC4gKi8NCj4gKyAgICAgICBiYXJyaWVyKCk7DQo+ICsgICAgICAgc2Qg
+PSBwZXJfY3B1KHN2bV9kYXRhLCB2Y3B1LT5jcHUpOw0KPiArDQo+ICAgICAgICAgLyoNCj4gICAg
+ICAgICAgKiBTYXZlIGFkZGl0aW9uYWwgaG9zdCBzdGF0ZSB0aGF0IHdpbGwgYmUgcmVzdG9yZWQg
+b24gVk1FWElUIChzZXYtZXMpDQo+ICAgICAgICAgICogb3Igc3Vic2VxdWVudCB2bWxvYWQgb2Yg
+aG9zdCBzYXZlIGFyZWEuDQo+IC0tDQo+IDIuMjUuMQ0KPg0K

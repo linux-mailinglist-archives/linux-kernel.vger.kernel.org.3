@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D56559E50
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3596559E5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbiFXQI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 12:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+        id S231244AbiFXQIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 12:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbiFXQIV (ORCPT
+        with ESMTP id S231228AbiFXQIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 12:08:21 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CCD39142;
-        Fri, 24 Jun 2022 09:08:19 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id g18so3714462wrb.10;
-        Fri, 24 Jun 2022 09:08:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=5QCcsp/oxE/4aK5lzsCff9T90roPIhhHgQz79caNMm0=;
-        b=nywWrqoT7S5Iyyh6SqrQzlKQY3X52hZhoqeseTw4TA8PjHqSWGls0lr1Z1GG45wc7T
-         ilRYO5/HwDZbE3W/0rSQIrNNlj+oN1rP8X4SqejxGw27dcv/kU6HKNpa0sbhyDb7/8kg
-         SltLregODjAMirVz2CHXo5xeU+fk8TxpNFGj9NeBNA9NoOXPZNla98xGKAsb1A+9VQn3
-         Rcrrjtl1mKTGLGzE8udQvPqy2tO5FEq6SPVaWmSzqGHfR9kwdd5il1OoaNUf4sI0i4DY
-         D7pzczpeRNXkRhtf5bQp/ZWyQhIOUoePOl9kHicutao1JEibogxhZjlK3drqv7GMbpi/
-         jM1Q==
+        Fri, 24 Jun 2022 12:08:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06CAA48E68
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:08:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656086909;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7QYcSN6BSAGdmrZWhumL4g7TVew4M5eK8Stam8vA0Dw=;
+        b=cYSVq6gYt7wHccyPf3ArqWYjoLwLy4+zZqQNTSwbnYuj72gveyCNVC0qxp/cQj7xMioT7B
+        VHHdrUbghL5B2r6UZBSYFvclCbx1zHpLMVkQ5T1bUYRwsLld8gEB7JG6nDoONrV3mULJqs
+        9EW3iQIsStVLt7Ww/rVaYlear6vxUjQ=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-315-Rcdm5aGKM2irW-QK2gVOwg-1; Fri, 24 Jun 2022 12:08:27 -0400
+X-MC-Unique: Rcdm5aGKM2irW-QK2gVOwg-1
+Received: by mail-ed1-f72.google.com with SMTP id c20-20020a05640227d400b004369cf00c6bso1950060ede.22
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:08:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5QCcsp/oxE/4aK5lzsCff9T90roPIhhHgQz79caNMm0=;
-        b=IyR5DCKY3GhMugIBSir19auy5hkOxDHlr1bNbpqSPh6peh58RORFOE6TEnuaw/asK/
-         k2672go6P27dBwEJIBoBVTb4Uvdot6//RdUE+CxB8/tIcgmGr+txE4n1bF1J2Yoa7/15
-         8RaIYVao9Du/8WIBrBkQjYHs51kJhtGRT+Yg0Vo4mSZAGExh0BS6ftB4peRc0lpy6Msl
-         xH6dV8ANxWLv5WF+Uqu8XpFJq+N/qW5ow+GZto+x5i+pjgjlBIxP/rVYOKgdXVXxaWsy
-         woOBcPQl/uZE5XGnq89R7Fwcr+F4hIgCf3LGJIQ2aJpEmBGfrvIl5LWfudLxAULDbDIL
-         X2Kw==
-X-Gm-Message-State: AJIora/8R/nHCZPe896blXAVg3E++DdfA2skhk6D+0REJREVknCTuB/7
-        msSBaOFN+gtofEcQRvAs2Kk=
-X-Google-Smtp-Source: AGRyM1v8XWD6eMjxLPwbRD8oLlGN4gejnKJChEge19xr58Opj+b/4OXgyBk18OXlqG5Rd2aDHkMkjQ==
-X-Received: by 2002:adf:eb88:0:b0:219:b9dd:af57 with SMTP id t8-20020adfeb88000000b00219b9ddaf57mr14093882wrn.7.1656086897824;
-        Fri, 24 Jun 2022 09:08:17 -0700 (PDT)
-Received: from orome (p200300e41f12c800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f12:c800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id d9-20020a05600c3ac900b003a03be22f9fsm2460104wms.18.2022.06.24.09.08.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 09:08:17 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 18:08:15 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 19/40] arm64: dts: tegra: align gpio-key node names
- with dtschema
-Message-ID: <YrXhb5izGPNXEmMK@orome>
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
- <20220616005333.18491-19-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7QYcSN6BSAGdmrZWhumL4g7TVew4M5eK8Stam8vA0Dw=;
+        b=qOqCEVmapOs9Um8fqa9T9Gt2v+VsD6jWRnOHEU84ZPoHKwIZ3XaGeBEpF7H0LnfTWa
+         fmi2PDV/HZUIigyYWSn7eCouF94jH5Px6NuAkLDvuhibK2DsucJJQPrcpQSPwgXU1BjG
+         rCKI0Hqt9BHS1DCOPnpAFJNxl4yWwHGJbWaX7qNaAhV5lbWKHf3vz68OHrMrm9o69mtt
+         9hslhAv4rdwjyb6pqzxiVX0YWh/EGjZ54QMHYF5/mpzYMVqWppssHOm4CP2c0Uud4kQr
+         V9W5P3O9EwTKETtNA0RZ/HU/sy1S5/geQNWJBM+vDmHSNauGot1kR8y5w4gbn0qL9N1N
+         i2ng==
+X-Gm-Message-State: AJIora96fa911zGQwiq/vHSbBciaarm5Z+oxbJa7VVeIjpvi0ZnuqMSN
+        QuM+OW2ZEy1HJLox533URdVqsJ0eJ+ag4SAWCay8X1kBb9qOoNlGiQMWuaRyYbRBmvmXfDCgCNR
+        tLesEl1LgSeLHkNEMeP+k5TFA
+X-Received: by 2002:a05:6402:f14:b0:435:7f82:302b with SMTP id i20-20020a0564020f1400b004357f82302bmr18208478eda.57.1656086906385;
+        Fri, 24 Jun 2022 09:08:26 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sZeLb33f/incZ/Z1MTbmneeUPO/IcG0f4Ys9xu85Ypg4dXzFzZ7s19o9ly3jHyYFcIEpPsUA==
+X-Received: by 2002:a05:6402:f14:b0:435:7f82:302b with SMTP id i20-20020a0564020f1400b004357f82302bmr18208454eda.57.1656086906195;
+        Fri, 24 Jun 2022 09:08:26 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id s3-20020a1709067b8300b0070efa110afcsm1333827ejo.83.2022.06.24.09.08.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jun 2022 09:08:25 -0700 (PDT)
+Message-ID: <413e22f2-2179-74f3-315b-2049d8751d80@redhat.com>
+Date:   Fri, 24 Jun 2022 18:08:22 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="IyLVWPIxofCPGlpx"
-Content-Disposition: inline
-In-Reply-To: <20220616005333.18491-19-krzysztof.kozlowski@linaro.org>
-User-Agent: Mutt/2.2.6 (2022-06-05)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 01/17] x86/cpufeatures: Introduce x2AVIC CPUID bit
+Content-Language: en-US
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     mlevitsk@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+References: <20220519102709.24125-1-suravee.suthikulpanit@amd.com>
+ <20220519102709.24125-2-suravee.suthikulpanit@amd.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220519102709.24125-2-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,80 +83,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/19/22 12:26, Suravee Suthikulpanit wrote:
+> Introduce a new feature bit for virtualized x2APIC (x2AVIC) in
+> CPUID_Fn8000000A_EDX [SVM Revision and Feature Identification].
+> 
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> ---
+>   arch/x86/include/asm/cpufeatures.h | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index 1d6826eac3e6..2721bd1e8e1e 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -343,6 +343,7 @@
+>   #define X86_FEATURE_AVIC		(15*32+13) /* Virtual Interrupt Controller */
+>   #define X86_FEATURE_V_VMSAVE_VMLOAD	(15*32+15) /* Virtual VMSAVE VMLOAD */
+>   #define X86_FEATURE_VGIF		(15*32+16) /* Virtual GIF */
+> +#define X86_FEATURE_X2AVIC		(15*32+18) /* Virtual x2apic */
+>   #define X86_FEATURE_V_SPEC_CTRL		(15*32+20) /* Virtual SPEC_CTRL */
+>   #define X86_FEATURE_SVME_ADDR_CHK	(15*32+28) /* "" SVME addr check */
+>   
 
---IyLVWPIxofCPGlpx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
 
-On Wed, Jun 15, 2022 at 05:53:12PM -0700, Krzysztof Kozlowski wrote:
-[...]
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts b/arch/arm64/=
-boot/dts/nvidia/tegra132-norrin.dts
-> index f16acb4cabaa..62d58221ad3c 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts
-> +++ b/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts
-> @@ -1030,7 +1030,7 @@ clk32k_in: clock-32k {
->  	gpio-keys {
->  		compatible =3D "gpio-keys";
-> =20
-> -		lid {
-> +		switch-lid {
->  			label =3D "Lid";
->  			gpios =3D <&gpio TEGRA_GPIO(R, 4) GPIO_ACTIVE_LOW>;
->  			linux,input-type =3D <5>;
-> @@ -1039,7 +1039,7 @@ lid {
->  			wakeup-source;
->  		};
-> =20
-> -		power {
-> +		switch-power {
-
-This one is actually a key.
-
-[...]
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts b/arch/arm64/b=
-oot/dts/nvidia/tegra210-smaug.dts
-> index a263d51882ee..8494c7b2961b 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
-> +++ b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
-[...]
-> @@ -1772,7 +1772,7 @@ lid {
->  			wakeup-source;
->  		};
-> =20
-> -		tablet_mode {
-> +		key-tablet-mode {
->  			label =3D "Tablet Mode";
->  			gpios =3D <&gpio TEGRA_GPIO(Z, 2) GPIO_ACTIVE_HIGH>;
->  			linux,input-type =3D <EV_SW>;
-
-And this one more like a switch since it's triggered by a magnet, as far
-as I understand.
-
-No need to resend, I can fix these up when I apply. Just let me know if
-you have any objections to me making those changes.
-
-Thierry
-
---IyLVWPIxofCPGlpx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmK14W8ACgkQ3SOs138+
-s6GuoRAAs/Bh3zBxhYqqU+0xHTMaroNOhMkFFFzlQ+JOw+7Wg4AybDOEUQZCU5gP
-YFxNy1JsHoPso+15Y32LoJ3NVwQ82HW3+KBPyPUFHmsuoj8BbNhTJEsc2yht8JV+
-sUbVDThkZu7Tth7i+jrX20VfUPuUK4WveSvRrC3/WY6tzkwWbsEk/lSbP+m5Dir1
-e59WpNyCa41llMSQZzGyOwY2cZ6Y9e64wrqORHrOQxyboVmmeYvtoQADR3a/geF4
-boqK/shRCZDo/ysmfdMfZLjc1XOs5pMYAaOV+xw9VWAhAL8Z7CuOI6sPjHgzBx6q
-SrbW0PVm7fMhWu5YDDUXoKNC2zVmdpWR18AE7zXOUc4aVlVfpWZR02/o9z1/CkYM
-3wpV7DjQWjFWnlUB0Tm0m9mvBLRoH8mjNYcwtPH8g0C4xtPOWrzgl6bFne+cUqBG
-QLNqbqPv+EEvcFOUT2QTO5xEbQaUO9YaF4kNj3dqO0ERT6FFU2z8j/lqmrP5JIuS
-+da5kfHfnMQPYVy/OiWmzCjk+GqQ4apF0DllkRFMFkCqjhiV3QsOF4oX/mUuU4UJ
-gg6DMIE2rF9RikECb/TSspTQHhtFv+0bsb1yYxj7qks8cZAezxSreVnUwWJimEpW
-aspfZ6S6xv3QuBOBP8UyFcWhhgwrBbGgMkQvtNt3KrSnr2C7TUA=
-=ykpI
------END PGP SIGNATURE-----
-
---IyLVWPIxofCPGlpx--

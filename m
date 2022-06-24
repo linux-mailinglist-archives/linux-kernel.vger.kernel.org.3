@@ -2,110 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5769255A043
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4670559FD3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiFXRb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
+        id S230431AbiFXRdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiFXRb0 (ORCPT
+        with ESMTP id S229923AbiFXRdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:31:26 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5EF4B864
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:31:21 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id c65so4438867edf.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:31:21 -0700 (PDT)
+        Fri, 24 Jun 2022 13:33:19 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CF256C06
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:33:18 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id m14so2690909plg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:33:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CG/b0wH+UMkfYfXRKwVOJNE5zV94/elLpfi+TKsRhGM=;
-        b=HfeGJVH/6ikCElyeTJ8/0fWURF3JP7NZ6Ap/LgH98OnZVu2834sBS7Hg9aSwneg2Iw
-         FocaMnDw0144InTI5IQ3y7G1dgQf0fZ7uNMcWiEz1CMM0r/BHsS0eluk+6rGh4eBjn+V
-         2aFBo5k+xlS6iK6r7Xgv9G08lDgcyOHg6f4b/igHfsvfIeGM7A20im/8uvoW9KkM4Vda
-         k1iGOXtZvqDk6fvGGKZF5fF3P/EOTPfgysNCTf2pr6lo0+Wlw4a5HstKr4cCPQtGbvD6
-         +dmCceck4GB2Gspt8xCuw+/9EO5/rw1Dq7nErlk5l5T5c6GyWVHSLzSVS8MMIY0nWHD5
-         XILQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wnfPKujGVoYbURscVTrmuUN9OKz52+48fIZergG9500=;
+        b=dHomln6XLNm+Rim4++kBb7puRRJ7FIAkPypG7ZVqjWPF0O0N0teW4KBLsOl9EFSWLG
+         0h1VO4Z9sk6KdG8cWCqx5+jHpYjLfkM4D1TRTFPYTKz/kfmEYNnPuc7BTFcrvsxbW4h3
+         I3Ex8gzOIJvaZ8edND1PIMaThqOnPZgZhrlCEc8qFRVi9hztX65/I1UnmKCm5UHYYVcY
+         1BIy4X41FalQtPQd8GkkokHJ4s9EKJkpEpfrcGbg2G/BbK/KGz76ohzb7MQpjUUEpBj9
+         MmDOyNAtpguj+91GL/GSJ0cSkvN210Fa+xsl/y8fZiMlG+ekG4kNYq3bx5St+SPpDw5f
+         Q1mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CG/b0wH+UMkfYfXRKwVOJNE5zV94/elLpfi+TKsRhGM=;
-        b=ulKZzmvbPMmjQFOMhuSfP4rPDQdM3Aq81fG0HDCxlDV9A8PybFu8vxKcJ460iLchUY
-         RNA9uXVeY2kOsG8YpQ946QrC6b+hvHFFy9W5QaKIXu06yDkcKx1f45kYQ2u0pjLCQlDU
-         Ip+3In262FBPk+yj21t25ioRgAxWaWGMyqp5wWBvLPiMyCJ+9oysBhHzxVWVaatQAe8s
-         WHwwnET2rO6rmXqEq+CG6IGpGkusy7d6B/IKDPLabJkElaMHZh6mtZUrk71UXpO50Wz1
-         7WWN6h3rHX8NykS/InkTqkezR0rCNWGjtanmLO+hUuGnMoPFRGgeUSx1aWKrowbQGdfj
-         VRBA==
-X-Gm-Message-State: AJIora8EN/bo9M/gApr6y5IIyaXgcpo9F3D/kQjYLjGq1ssGL8ZoaZBK
-        xkSltALGf8R0kNOX2y/IDPtsaOVu1d+o5g==
-X-Google-Smtp-Source: AGRyM1vqnT2ShJHGIA4aE9VkHlN9n8AHcyFDKauqLWZ+G5Irtlq8DjQRDf6siIWtS2A3Z+NcFLURLg==
-X-Received: by 2002:a05:6402:414c:b0:435:1e2a:2c7f with SMTP id x12-20020a056402414c00b004351e2a2c7fmr249960eda.132.1656091880129;
-        Fri, 24 Jun 2022 10:31:20 -0700 (PDT)
-Received: from [192.168.0.237] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id se13-20020a170906ce4d00b006fef0c7072esm1410177ejb.144.2022.06.24.10.31.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 10:31:19 -0700 (PDT)
-Message-ID: <31f5f441-eba3-4ffb-cf68-159cd827ade7@linaro.org>
-Date:   Fri, 24 Jun 2022 19:31:18 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wnfPKujGVoYbURscVTrmuUN9OKz52+48fIZergG9500=;
+        b=djPguQAMfzx1ALh8dh1P8paAYCa1cGGKRfjcBQjuxwCJjSQmMUFRauzHNvViNpcXeu
+         XtJqbAtWGsT/f470LxtEOBmez1/fz/ehYPjPkPgRi0tadn6yVJS3q1cfanfIYIhldBzt
+         pnp05/Z2aZY1KQAPj0IMnt/ev2aPlLNudrCauu92XuUHA9Qms3uJDg9vzpsmFwXVSELI
+         wNDAC12oTKm1ebY3P2zz+n/9ue75vzAq1LnpCUIJgqyjhqaDyVViqM/ZVZk3G6dfEVZ5
+         PcIS1OTPcBiNAdwTeo0HjB1ufoCcQ2Plg6KDsue1KrQmUh/nl0qLjKa1YTa1nQlo3DWu
+         M0Ug==
+X-Gm-Message-State: AJIora909qnYMU1plVbNpfXE8Kmh+z5wWa3rP0Ph67OZyo4822/6QAXB
+        yTvqI5rulSvu8d8Q+KLN9BJIwA==
+X-Google-Smtp-Source: AGRyM1sLQ9gc4+2NWgmV6NNY4iQfcSJcElFyeC3FYsQYipL6qbJGuUvPtNKWEGl8Lj/UGQHyfRsbCw==
+X-Received: by 2002:a17:903:286:b0:16a:1590:bffd with SMTP id j6-20020a170903028600b0016a1590bffdmr149006plr.47.1656091998113;
+        Fri, 24 Jun 2022 10:33:18 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id e21-20020a170902d39500b0016a565febdfsm2071632pld.252.2022.06.24.10.33.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 10:33:17 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 17:33:12 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] KVM: x86/mmu: Avoid subtle pointer arithmetic in
+ kvm_mmu_child_role()
+Message-ID: <YrX1WB1FZzXiR+Io@google.com>
+References: <20220624171808.2845941-1-seanjc@google.com>
+ <20220624171808.2845941-2-seanjc@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] dt-bindings: leds: lp50xx: fix LED children names
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Dan Murphy <dmurphy@ti.com>, linux-leds@vger.kernel.org,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220624111325.96478-1-krzysztof.kozlowski@linaro.org>
- <1656091594.405509.146345.nullmailer@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1656091594.405509.146345.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624171808.2845941-2-seanjc@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/06/2022 19:26, Rob Herring wrote:
-> On Fri, 24 Jun 2022 13:13:25 +0200, Krzysztof Kozlowski wrote:
->> The lp50xx LEDs expects to have single-color LED children with unit
->> addresses.  This is required by the driver and provided by existing
->> DTSes.  Fix the binding to match actual usage.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Fixes: dce1452301e7 ("dt: bindings: lp50xx: Introduce the lp50xx family of RGB drivers")
->> ---
->>  Documentation/devicetree/bindings/leds/leds-lp50xx.yaml | 8 +++++++-
->>  1 file changed, 7 insertions(+), 1 deletion(-)
->>
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/leds-lp50xx.example.dtb: led-controller@14: multi-led@2:#size-cells:0:0: 0 was expected
-> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-> 
+On Fri, Jun 24, 2022 at 05:18:06PM +0000, Sean Christopherson wrote:
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -2168,7 +2168,8 @@ static struct kvm_mmu_page *kvm_mmu_get_shadow_page(struct kvm_vcpu *vcpu,
+>  	return __kvm_mmu_get_shadow_page(vcpu->kvm, vcpu, &caches, gfn, role);
+>  }
+>  
+> -static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct, unsigned int access)
+> +static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct,
+> +						  unsigned int access)
+>  {
+>  	struct kvm_mmu_page *parent_sp = sptep_to_sp(sptep);
+>  	union kvm_mmu_page_role role;
+> @@ -2195,13 +2196,19 @@ static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct, unsig
+>  	 * uses 2 PAE page tables, each mapping a 2MiB region. For these,
+>  	 * @role.quadrant encodes which half of the region they map.
+>  	 *
+> -	 * Note, the 4 PAE page directories are pre-allocated and the quadrant
+> -	 * assigned in mmu_alloc_root(). So only page tables need to be handled
+> -	 * here.
+> +	 * Concretely, a 4-byte PDE consumes bits 31:22, while an 8-byte PDE
+> +	 * consumes bits 29:21.  To consume bits 31:30, KVM's uses 4 shadow
+> +	 * PDPTEs; those 4 PAE page directories are pre-allocated and their
+> +	 * quadrant is assigned in mmu_alloc_root().   A 4-byte PTE consumes
+> +	 * bits 21:12, while an 8-byte PTE consumes bits 20:12.  To consume
+> +	 * bit 21 in the PTE (the child here), KVM propagates that bit to the
+> +	 * quadrant, i.e. sets quadrant to '0' or '1'.  The parent 8-byte PDE
+> +	 * covers bit 21 (see above), thus the quadrant is calculated from the
+> +	 * _least_ significant bit of the PDE index.
+>  	 */
+>  	if (role.has_4_byte_gpte) {
+>  		WARN_ON_ONCE(role.level != PG_LEVEL_4K);
+> -		role.quadrant = (sptep - parent_sp->spt) % 2;
+> +		role.quadrant = ((unsigned long)sptep / sizeof(*sptep)) & 1;
+>  	}
 
-This is expected and fixed in:
-https://lore.kernel.org/all/20220607075247.58048-1-krzysztof.kozlowski@linaro.org/
+I find both difficult to read TBH. And "sptep -> sp->spt" is repeated in
+other places.
 
-I did not combine this patch with above patchset because this one is a
-fix and might be backported to stable.
+How about using this oppotunity to introduce a helper that turns an
+sptep into an index to use here and clean up the other users?
 
-Best regards,
-Krzysztof
+e.g.
+
+static inline int spte_index(u64 *sptep)
+{
+        return ((unsigned long)sptep / sizeof(*sptep)) & (SPTE_ENT_PER_PAGE - 1);
+}
+
+Then kvm_mmu_child_role() becomes:
+
+        if (role.has_4_byte_gpte) {
+        	WARN_ON_ONCE(role.level != PG_LEVEL_4K);
+        	role.quadrant = spte_index(sptep) & 1;
+        }

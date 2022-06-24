@@ -2,212 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AE5558F4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 05:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D55558F4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 05:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiFXDxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 23:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
+        id S230134AbiFXDxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 23:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiFXDxC (ORCPT
+        with ESMTP id S229786AbiFXDxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 23:53:02 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A636B2DF8;
-        Thu, 23 Jun 2022 20:53:00 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id k20so1145974qkj.1;
-        Thu, 23 Jun 2022 20:53:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=jFjbFWbsQToqDA8+D3foTir4V11S3makzDP6KaddiXk=;
-        b=pJozIOLD7RqGuye/lDl9ttTO8v5xyU502lQ8dahAhv/hIDHGoNeY/GYqX2c+m8SMjk
-         sk7mbjho4vPUNaved+Hf/M2JDS+uxlOXK9wQNxopBnn282lgqM//YGEikuGHeEsKwY2X
-         pO0+TPgeVNOZEXirkjnGCsGQk+sO/+Liap69dCdaQcboUK6ODf5bt8d7DzFtiOtlbVOV
-         2XY9zoHp0NFZTj7xKjublnO0ognb8wYvRPp+6h0yFOyF3oEkO1sx0AeZ7VylA2/pL7qZ
-         8UcWi4xDhczY29MpPpsiifjsHzn/EqmA/1VOHf5Tw0L6VzxlY+oh3fiJaXT7QVS7+WPU
-         zF1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=jFjbFWbsQToqDA8+D3foTir4V11S3makzDP6KaddiXk=;
-        b=Y1fqlf6RYYSCfagmcDQCoo61ntTpNIB3ahi3i0VJHDhgpx7gTOVX+0724pl5aw6pTA
-         PjWZNMDedW6xxQj4oo/VmK+6PYC1alTFveRp1CmBNUkwTrRgK+n2dNZzIv82B+w6MuuX
-         jbP3DRCRtWvOwSWe62hDmx3r0vUNLG8+pSGuqxggkjpFyx7iIkoH+PCjiPVOXE17ACd0
-         y4snLpWNYFbRGhfC72AtuL66Xe6iv5lkvpj+PAiFeyKXXDq4WqZOBI61WKFvId2DWidO
-         E1rSn+PDc4Z3PxabR3qR0/iLFEjprQxu2PsNd1rakWhfQkiPJC//0/N3Wo9JtCV1K5wB
-         v+Gw==
-X-Gm-Message-State: AJIora/pS69crZMfNsNPG8/8wPN71JTju2e99PoNvxWezOywolnvGchY
-        7OyUUN3mU5gY93WqsIKLz/8=
-X-Google-Smtp-Source: AGRyM1uw52y3qqBwl8c5hW8ZZhzkECGp+Xmrrth2mPnnZHEgRVCmeAS8FPK2PYSxXOCBq0Wq9aODWg==
-X-Received: by 2002:a37:c50:0:b0:6af:46d:c373 with SMTP id 77-20020a370c50000000b006af046dc373mr952136qkm.659.1656042779802;
-        Thu, 23 Jun 2022 20:52:59 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:742c:47ee:54c0:bcc7? ([2600:1700:2442:6db0:742c:47ee:54c0:bcc7])
-        by smtp.gmail.com with ESMTPSA id x11-20020a05620a448b00b006a768c699adsm1145926qkp.125.2022.06.23.20.52.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jun 2022 20:52:59 -0700 (PDT)
-Message-ID: <8be0e1b7-92a9-f0ec-04ac-6946bd1d8103@gmail.com>
-Date:   Thu, 23 Jun 2022 22:52:58 -0500
+        Thu, 23 Jun 2022 23:53:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4AA22BE5;
+        Thu, 23 Jun 2022 20:53:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE654B82623;
+        Fri, 24 Jun 2022 03:53:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE99BC341C8;
+        Fri, 24 Jun 2022 03:53:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656042817;
+        bh=MDW04LtN9gsOkAPK8AC+W1huYS3fs4Xm5ji94UzHS+w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eG4B2/eJi0mqx80HOXU/s7snQLmtV1YShU2HfDsvp0fQHP0QBTHQ3MvdBoobG+wsS
+         K44X5dPMlS/akJuW602g42YDS1JXVtnLn70HEISW78imTnYIIMJWae+O8++3f8ZNAI
+         pw7hC6aEgW7sP7Pkdc7N+pkdEk84heFPBX8oTvsav6zLFafl8wzLOR0Vn+/63/Xkac
+         dowy0Tgu+CcnSNRyBq9tSXb+JPztU0tfNXr4lwXh1aqRwRav8UETrfx6lncsyK+vbl
+         EqbzyFgSVhwobxYSWP34+xcxdQJtwBaohboIcAfKuql6mx3tAina26yYYiCxIQwiI6
+         R/VQ1pVBViVPg==
+Date:   Thu, 23 Jun 2022 20:53:35 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Guangbin Huang <huangguangbin2@huawei.com>
+Cc:     <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lipeng321@huawei.com>,
+        <chenhao288@hisilicon.com>
+Subject: Re: [PATCH] net: page_pool: optimize page pool page allocation in
+ NUMA scenario
+Message-ID: <20220623205335.483540a4@kernel.org>
+In-Reply-To: <20220622134202.7591-1-huangguangbin2@huawei.com>
+References: <20220622134202.7591-1-huangguangbin2@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1 1/2] of: base: populate of_root node if not set
-Content-Language: en-US
-From:   Frank Rowand <frowand.list@gmail.com>
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Lizhi Hou <lizhi.hou@xilinx.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-References: <20220623105044.152832-1-clement.leger@bootlin.com>
- <20220623105044.152832-2-clement.leger@bootlin.com>
- <ecf13de1-531f-b73b-b325-44ef78a3f818@gmail.com>
- <56822a64-f289-3b7d-2175-3669194587c9@gmail.com>
-In-Reply-To: <56822a64-f289-3b7d-2175-3669194587c9@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/22 21:01, Frank Rowand wrote:
-> On 6/23/22 19:15, Frank Rowand wrote:
->> Hi Clement,
->>
->> I said that I would send a patch to do this, but have failed to follow
->> through.  Sorry about that.
->>
->>
->> On 6/23/22 06:50, Clément Léger wrote:
->>> When enabling CONFIG_OF on a platform where of_root is not populated by
->>> firmware, we end up without a root node. In order to apply overlays and
->>> create subnodes of the root node, we need one. Create this root node
->>> by unflattening an empty builtin dtb with of_fdt_unflatten().
->>>
->>> Co-developed-by: Rob Herring <robh@kernel.org>
->>> Signed-off-by: Rob Herring <robh@kernel.org>
->>> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
->>> ---
->>>  drivers/of/Makefile       |  2 +-
->>>  drivers/of/base.c         | 18 ++++++++++++++++--
->>>  drivers/of/empty_root.dts |  6 ++++++
->>>  3 files changed, 23 insertions(+), 3 deletions(-)
->>>  create mode 100644 drivers/of/empty_root.dts
->>>
->>> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
->>> index e0360a44306e..ce56c8b95c83 100644
->>> --- a/drivers/of/Makefile
->>> +++ b/drivers/of/Makefile
->>> @@ -1,5 +1,5 @@
->>>  # SPDX-License-Identifier: GPL-2.0
->>> -obj-y = base.o device.o platform.o property.o
->>> +obj-y = base.o empty_root.dtb.o device.o platform.o property.o
->>>  obj-$(CONFIG_OF_KOBJ) += kobj.o
->>>  obj-$(CONFIG_OF_DYNAMIC) += dynamic.o
->>>  obj-$(CONFIG_OF_FLATTREE) += fdt.o
->>> diff --git a/drivers/of/base.c b/drivers/of/base.c
->>> index d4f98c8469ed..43e0f027a49c 100644
->>> --- a/drivers/of/base.c
->>> +++ b/drivers/of/base.c
->>> @@ -22,6 +22,7 @@
->>>  #include <linux/module.h>
->>>  #include <linux/of.h>
->>>  #include <linux/of_device.h>
->>> +#include <linux/of_fdt.h>
->>>  #include <linux/of_graph.h>
->>>  #include <linux/spinlock.h>
->>>  #include <linux/slab.h>
->>> @@ -163,6 +164,8 @@ void __of_phandle_cache_inv_entry(phandle handle)
->>>  		phandle_cache[handle_hash] = NULL;
->>>  }
->>>  
->>> +extern const char __dtb_empty_root_begin[];
->>> +
->>>  void __init of_core_init(void)
->>>  {
->>>  	struct device_node *np;
->>> @@ -176,6 +179,18 @@ void __init of_core_init(void)
->>>  		pr_err("failed to register existing nodes\n");
->>>  		return;
->>>  	}
->>> +
->>> +	if (!of_root) {
->>> +		void *dt;
->>> +		const unsigned long *fdt = (const unsigned long *)
->>> +							__dtb_empty_root_begin;
->>> +		dt = of_fdt_unflatten_tree(fdt, NULL, &of_root);
->>> +		if (!dt) {
->>> +			pr_err("Failed to setup empty root dt\n");
->>> +			return;
->>> +		}
->>> +	}
->>> +
->>>  	for_each_of_allnodes(np) {
->>>  		__of_attach_node_sysfs(np);
->>>  		if (np->phandle && !phandle_cache[of_phandle_cache_hash(np->phandle)])
->>> @@ -184,8 +199,7 @@ void __init of_core_init(void)
->>>  	mutex_unlock(&of_mutex);
->>>  
->>>  	/* Symlink in /proc as required by userspace ABI */
->>> -	if (of_root)
->>> -		proc_symlink("device-tree", NULL, "/sys/firmware/devicetree/base");
->>> +	proc_symlink("device-tree", NULL, "/sys/firmware/devicetree/base");
->>>  }
->>
->> This approach is adding an additional method of unflattening the tree.
->> I would prefer to consolidate in a single location.
->>
->> I have leveraged this patch series into a different patch series to
->> accomplish that.  I have boot tested with one configuration, but want
->> to test two more configurations before sending the new series.  It
->> should only take "a few minutes".
+On Wed, 22 Jun 2022 21:42:02 +0800 Guangbin Huang wrote:
+> From: Jie Wang <wangjie125@huawei.com>
 > 
-> "a few minutes" is taking longer than expected.  One of the devicetree
-> interrupt unittests is not giving the expected result for one of the
-> configurations I am checking.
+> Currently NIC packet receiving performance based on page pool deteriorates
+> occasionally. To analysis the causes of this problem page allocation stats
+> are collected. Here are the stats when NIC rx performance deteriorates:
 
-The test is ok.  The problem was unrelated asynchronous output to the
-console intermingled with test output.
-
-My suggested alternative patch series is at:
-
-   https://lore.kernel.org/r/20220624034327.2542112-1-frowand.list@gmail.com
-
--Frank
-
-> 
-> -Frank
-> 
->>
->> -Frank
->>
->>>  
->>>  static struct property *__of_find_property(const struct device_node *np,
->>> diff --git a/drivers/of/empty_root.dts b/drivers/of/empty_root.dts
->>> new file mode 100644
->>> index 000000000000..cf9e97a60f48
->>> --- /dev/null
->>> +++ b/drivers/of/empty_root.dts
->>> @@ -0,0 +1,6 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/dts-v1/;
->>> +
->>> +/ {
->>> +
->>> +};
->>
-> 
-
+Please repost this and CC the page pool maintainers.

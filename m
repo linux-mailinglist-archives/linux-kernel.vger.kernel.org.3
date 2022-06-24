@@ -2,112 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C58C5594F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5686559501
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiFXIEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
+        id S230346AbiFXIEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 04:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiFXIE2 (ORCPT
+        with ESMTP id S229587AbiFXIEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:04:28 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894596DB12
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:04:27 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id cf14so2300858edb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:04:27 -0700 (PDT)
+        Fri, 24 Jun 2022 04:04:50 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552516DB0D;
+        Fri, 24 Jun 2022 01:04:49 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id z7so2267681edm.13;
+        Fri, 24 Jun 2022 01:04:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=4OtMpzHKzt91qkm5V15gkjdA78bNtdhhU+jDtTaRt8Y=;
-        b=fYHxbPX9kMi6QwUH5r9LNDwsFslHQChYVUSoxHKqS/Sbczv6WsqcHg5LMjF1kCYhhr
-         vRGm0im6lsDWbXAJKv4sKfTccMFIr45np2W1U/CyUfs/1NFNwRrPMHmTUV8+SBqptfwI
-         NX8szonEbOKl/DNlTLpBRZ4aX4fWv0FNUsFEY9zvg/pct5z6R1DHQkFjrWLPq5bSwx9j
-         UyESn/oJRH4JabPxCnH7VWt/iz7En1csAUD/cV/6CtWKwuZRYZM+P4MfpkU6ONKwV7ff
-         tZU4bhM0RukM0tUnE0G+xx2tUba3uwJY3QjWMJ+gkin/6rg5N7DMYAd2Q1kBYrEFh4s2
-         k7vA==
+        bh=LhrZ1UxjIpVC2XBdksQBTmD7BAYYNmGWhWbEjzEkz2c=;
+        b=IT/2QY1S3wcM8FS/v0FfdNQ+N0HXcgQBGNh20MRJf8eVnqxcRW0P4dlyNLO+vVZ8g/
+         6Q+9dkqSDlXiGXgDpZQ0Bpt/FxnTiQwhmLrYF2pPF4xCysoOJkrd6xdjVCkn+Uvy+ffB
+         quJO025nVRDKuN9elrZ48yacmrwHG6j8fQ5ySbuBDjbc6A7DHjXpkjjTouvrDvdQmO8c
+         ms0eTCTSdv2gdgpHBUxImXnUGSIc33A3tu+afJmcDei235oxk6m1CWDn/CTQ5PlKsxAC
+         SPK5To3d1dYAUUDB5YpwfCNc5A+uFc9Q9nF0XhuNgx0cPr6s4OJUdGvNRl1Rtwlr7tA1
+         Xb0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=4OtMpzHKzt91qkm5V15gkjdA78bNtdhhU+jDtTaRt8Y=;
-        b=VtfYrIdbDrojvcaFcCc71y/S3xdvSP3voQ6D77NVkU/SrR4csKxqIVD+CI6nFRgq2Y
-         DCBGnLUmwdru9OLPJH3TBkktrhG9Yk7u1l9F0u/Ba8rS94l9Sr+O9AzioRd5aQ5G3OPq
-         /dXhxNmjI1lp7mTQQxQ1BlLopUkAlHexw7TDiUkJ58ZA7RxEsL4A41X/JS0gC6IU/iN6
-         mac3Ci8Yi2vDNayI4zQO2K9F7opA8NSj7rF7SVbcuAUD1RcZxy4ZrHk9FT07p+pockGp
-         rlfMBXU9u55QYS7OBSSpIdAktNo/j3zzZVk/iKeqmsHm7qmyRMlTldWTxEWWisjdbQ+c
-         5aIA==
-X-Gm-Message-State: AJIora+8Z/YiHNH3uG6GTZjFrzuEAHBVv2GksyO5eJQZvlpxs1j14wWf
-        5Bmw7/ZvwkvgwicZ99fj+t7fBA==
-X-Google-Smtp-Source: AGRyM1vO8srbTPpU08tP7uU1GPYZF7L70IU0e2vDNGf8P3wJz+25K67GBLB56/dBsIiBV+Kf80UloQ==
-X-Received: by 2002:a05:6402:254c:b0:435:c541:fc8d with SMTP id l12-20020a056402254c00b00435c541fc8dmr10378580edb.385.1656057866189;
-        Fri, 24 Jun 2022 01:04:26 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170906174600b00715705dd23asm684580eje.89.2022.06.24.01.04.24
+        bh=LhrZ1UxjIpVC2XBdksQBTmD7BAYYNmGWhWbEjzEkz2c=;
+        b=WAdPJ2s2YDQj9cpkVrMgQNYyyKfMg+u/8o6qGEQP2g/q5AfmRKIF+bH3xAio9iwLvu
+         P+T2ni4+f8/5dE0KeSkj7NkpexF8UN1a1uG87+Dlna2qyMInhNbDpDzrtjnTAmExYnIH
+         uiGxfOvb57fnfVMypMCCKzHN4RF1YTWPsU67hSX7EAmNTVYt9keFPiSX9c6GRbGsGskQ
+         y4J5IvigMicacsV5OCriD5KDaYEwdtPOkxx/Yz0CnZpkAzsd3HLC78uqM1jqdzruPyGi
+         znt7TKpYXeG3/zrDU9A8gHP87i+EpuaPcj9opNGzRRI42YU8PX9GKR69qNQab05qZzLB
+         Jttg==
+X-Gm-Message-State: AJIora89Ouod7WxOVkIVu/FF4nIO0WQkpxrZ2TWdikObafNoY4HONhat
+        sKmS6GAANl89N7Khj7SwH+WSIY1z9uw=
+X-Google-Smtp-Source: AGRyM1vntYWPcpiFR2W5uxDMzVDamojnDeNXHGRVhdRGjoQWJzpXxx+4TF3fYwBFNAdDWENhklW23w==
+X-Received: by 2002:aa7:d29a:0:b0:435:705f:1319 with SMTP id w26-20020aa7d29a000000b00435705f1319mr15758286edq.54.1656057887845;
+        Fri, 24 Jun 2022 01:04:47 -0700 (PDT)
+Received: from able.fritz.box (p57b0bd9f.dip0.t-ipconnect.de. [87.176.189.159])
+        by smtp.gmail.com with ESMTPSA id c19-20020a170906155300b006fea43db5c1sm697779ejd.21.2022.06.24.01.04.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 01:04:25 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL fixes] ARM: samsung: fixes for v5.19
-Date:   Fri, 24 Jun 2022 10:04:23 +0200
-Message-Id: <20220624080423.31427-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 24 Jun 2022 01:04:47 -0700 (PDT)
+From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
+        <ckoenig.leichtzumerken@gmail.com>
+X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        dri-devel@lists.freedesktop.org
+Cc:     mhocko@suse.com
+Subject: [RFC] Per file OOM-badness / RSS once more
+Date:   Fri, 24 Jun 2022 10:04:30 +0200
+Message-Id: <20220624080444.7619-1-christian.koenig@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello everyone,
 
-Two fixes for v5.19.
+To summarize the issue I'm trying to address here: Processes can allocate
+resources through a file descriptor without being held responsible for it.
 
-Best regards,
-Krzysztof
+I'm not explaining all the details again. See here for a more deeply
+description of the problem: https://lwn.net/ml/linux-kernel/20220531100007.174649-1-christian.koenig@amd.com/
+
+With this iteration I'm trying to address a bunch of the comments Michal Hocko
+(thanks a lot for that) gave as well as giving some new ideas.
+
+Changes made so far:
+1. Renamed the callback into file_rss(). This is at least a start to better
+   describe what this is all about. I've been going back and forth over the
+   naming here, if you have any better idea please speak up.
+
+2. Cleanups, e.g. now providing a helper function in the fs layer to sum up
+   all the pages allocated by the files in a file descriptor table.
+
+3. Using the actual number of allocated pages for the shmem implementation
+   instead of just the size. I also tried to ignore shmem files which are part
+   of tmpfs, cause that has a separate accounting/limitation approach.
+
+4. The OOM killer now prints the memory of the killed process including the per
+   file pages which makes the whole things much more comprehensible.
+
+5. I've added the per file pages to the different reports in RSS in procfs.
+   This has the interesting effect that tools like top suddenly give a much
+   more accurate overview of the memory use as well. This of course increases
+   the overhead of gathering those information quite a bit and I'm not sure how
+   feasible that is for up-streaming. On the other hand this once more clearly
+   shows that we need to do something about this issue.
+
+Another rather interesting observation is that multiple subsystems (shmem,
+tmpfs, ttm) came up with the same workaround of limiting the memory which can
+be allocated through them to 50% of the whole system memory. Unfortunately
+that isn't the same 50% and it doesn't apply everywhere, so you can still
+easily crash the box.
+
+Ideas and/or comments are really welcome.
+
+Thanks,
+Christian.
 
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-fixes-5.19
-
-for you to fetch changes up to c4c79525042a4a7df96b73477feaf232fe44ae81:
-
-  ARM: exynos: Fix refcount leak in exynos_map_pmu (2022-06-06 10:40:57 +0200)
-
-----------------------------------------------------------------
-Samsung fixes for v5.19
-
-Both fixes are for issues present before v5.19 merge window:
-1. Correct UART clocks on Exynos7885.  Although the initial, fixed
-   DTS commit is from v5.18, the issue will be exposed with a upcoming fix
-   to Exynos7885 clock driver, so we need to correct the DTS earlier.
-2. Fix theoretical OF node leak in Exynos machine code.
-
-----------------------------------------------------------------
-David Virag (1):
-      arm64: dts: exynos: Correct UART clocks on Exynos7885
-
-Miaoqian Lin (1):
-      ARM: exynos: Fix refcount leak in exynos_map_pmu
-
- arch/arm/mach-exynos/exynos.c              |  1 +
- arch/arm64/boot/dts/exynos/exynos7885.dtsi | 12 ++++++------
- 2 files changed, 7 insertions(+), 6 deletions(-)

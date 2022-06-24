@@ -2,101 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648675598AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 13:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BC75598B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 13:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiFXLmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 07:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
+        id S231300AbiFXLnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 07:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiFXLme (ORCPT
+        with ESMTP id S229932AbiFXLnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 07:42:34 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094467A1BF;
-        Fri, 24 Jun 2022 04:42:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 470E5CE2670;
-        Fri, 24 Jun 2022 11:42:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FC80C34114;
-        Fri, 24 Jun 2022 11:42:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656070949;
-        bh=A9EbR0TTckgQYks+j0SLebZoHLsX7+FVTH3QCZLBNLI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lfAalIbsPwoYEqi/eNoEEg1XzTA80iuuuHjDWGSr+GpUJkK/uLurfchn3GmDl+VqU
-         I5dzMOTCwocH0S4rK9pBaRu26LTcnt7NBRaiLQKNdT6LYS0d7P4wg9CqE+4ra4BHm6
-         Qbfzq1E8mIw8KEHX1VOPrYqTGJ9T8XW7+r7un5n1wTMyQzBekMq9/agKoRR3qunO/O
-         OGt2rl8mi+rHQ1bj3gl2UBO9PXRMuVJiHRunmSmRbk3kAgD1XZDW8cOP8J8DNpUgeY
-         u/4YoR0xOt9my1L/DSIl4JNJrsNi3+qhjQ0QXSpFNAgTmINbL9CyYwubXia8CFVtGm
-         GJ7A2EjvNT76w==
-Date:   Fri, 24 Jun 2022 12:42:23 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     madvenka@linux.microsoft.com, mark.rutland@arm.com,
-        jpoimboe@redhat.com, ardb@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v15 0/6] arm64: Reorganize the unwinder and implement
- stack trace reliability checks
-Message-ID: <YrWjH4H7KxLAqfph@sirena.org.uk>
-References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
- <20220617210717.27126-1-madvenka@linux.microsoft.com>
- <20220623173224.GB16966@willie-the-truck>
+        Fri, 24 Jun 2022 07:43:37 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415956B8E9;
+        Fri, 24 Jun 2022 04:43:36 -0700 (PDT)
+Received: from relayfre-01.paragon-software.com (unknown [172.30.72.12])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id D2D4A1D74;
+        Fri, 24 Jun 2022 11:42:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1656070962;
+        bh=jv8IdGOGdSV+GhBlmZH3D981qwEa6lnf2CV+RS8Qun8=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=cs2pRmj4hHeDGugH7QMgS4CAwyL7jmc1Zxf2L9ukSfkgcYMbT9DpQdBh14zZsJ+NP
+         o1Bs8GwodApcz+3hS3AKUxHLE/WfI5AekmkKisrr+16PXje5lCsM/uGzeOr5YPQ/4W
+         f7npjFKOURAJV59/V1t+steK9zkHjYNNuBltfGak=
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 2696321AE;
+        Fri, 24 Jun 2022 11:43:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1656071014;
+        bh=jv8IdGOGdSV+GhBlmZH3D981qwEa6lnf2CV+RS8Qun8=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=OO91RV3uS4o/8xpumPvG41UwwVp9JQ2SoTUPSNimzWvaOsYwKKwJcb3Xa5OWFzKJx
+         5DL87edX6S7KOVQIye0A/HaJIlLH3mZY1JzX8DE3ty3uLOHZ1efRBfaeo96bAQEeXM
+         JVdPv+/gp+vFnvzBnfWskEqKaohF7xt1b69rhF6I=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 24 Jun 2022 14:43:33 +0300
+Message-ID: <2e519232-6cc9-f9be-af78-c14d84c7f31f@paragon-software.com>
+Date:   Fri, 24 Jun 2022 14:43:33 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TK6aEfPqnhW4wFA2"
-Content-Disposition: inline
-In-Reply-To: <20220623173224.GB16966@willie-the-truck>
-X-Cookie: Help!  I'm trapped in a PDP 11/70!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: [PATCH 3/3] fs/ntfs3: extend ni_insert_nonresident to return inserted
+ ATTR_LIST_ENTRY
+Content-Language: en-US
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+To:     <ntfs3@lists.linux.dev>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+References: <f76c96bb-fdea-e1e5-5f47-c092af5fe556@paragon-software.com>
+In-Reply-To: <f76c96bb-fdea-e1e5-5f47-c092af5fe556@paragon-software.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fixes xfstest generic/300
+Fixes: 4534a70b7056 ("fs/ntfs3: Add headers and misc files")
 
---TK6aEfPqnhW4wFA2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+---
+  fs/ntfs3/attrib.c  | 35 +++++++++++++++++++++--------------
+  fs/ntfs3/frecord.c |  4 ++--
+  fs/ntfs3/index.c   |  2 +-
+  fs/ntfs3/ntfs_fs.h |  2 +-
+  4 files changed, 25 insertions(+), 18 deletions(-)
 
-On Thu, Jun 23, 2022 at 06:32:24PM +0100, Will Deacon wrote:
-> On Fri, Jun 17, 2022 at 04:07:11PM -0500, madvenka@linux.microsoft.com wrote:
+diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
+index 3bd51cf4d8bd..65a5f651a4a2 100644
+--- a/fs/ntfs3/attrib.c
++++ b/fs/ntfs3/attrib.c
+@@ -320,7 +320,7 @@ int attr_make_nonresident(struct ntfs_inode *ni, struct ATTRIB *attr,
+  
+  	err = ni_insert_nonresident(ni, attr_s->type, attr_name(attr_s),
+  				    attr_s->name_len, run, 0, alen,
+-				    attr_s->flags, &attr, NULL);
++				    attr_s->flags, &attr, NULL, NULL);
+  	if (err)
+  		goto out3;
+  
+@@ -637,7 +637,7 @@ int attr_set_size(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  		/* Insert new attribute segment. */
+  		err = ni_insert_nonresident(ni, type, name, name_len, run,
+  					    next_svcn, vcn - next_svcn,
+-					    attr_b->flags, &attr, &mi);
++					    attr_b->flags, &attr, &mi, NULL);
+  		if (err)
+  			goto out;
+  
+@@ -855,7 +855,7 @@ int attr_data_get_block(struct ntfs_inode *ni, CLST vcn, CLST clen, CLST *lcn,
+  		goto out;
+  	}
+  
+-	asize = le64_to_cpu(attr_b->nres.alloc_size) >> sbi->cluster_bits;
++	asize = le64_to_cpu(attr_b->nres.alloc_size) >> cluster_bits;
+  	if (vcn >= asize) {
+  		err = -EINVAL;
+  		goto out;
+@@ -1047,7 +1047,7 @@ int attr_data_get_block(struct ntfs_inode *ni, CLST vcn, CLST clen, CLST *lcn,
+  	if (evcn1 > next_svcn) {
+  		err = ni_insert_nonresident(ni, ATTR_DATA, NULL, 0, run,
+  					    next_svcn, evcn1 - next_svcn,
+-					    attr_b->flags, &attr, &mi);
++					    attr_b->flags, &attr, &mi, NULL);
+  		if (err)
+  			goto out;
+  	}
+@@ -1647,7 +1647,7 @@ int attr_allocate_frame(struct ntfs_inode *ni, CLST frame, size_t compr_size,
+  	if (evcn1 > next_svcn) {
+  		err = ni_insert_nonresident(ni, ATTR_DATA, NULL, 0, run,
+  					    next_svcn, evcn1 - next_svcn,
+-					    attr_b->flags, &attr, &mi);
++					    attr_b->flags, &attr, &mi, NULL);
+  		if (err)
+  			goto out;
+  	}
+@@ -1812,18 +1812,12 @@ int attr_collapse_range(struct ntfs_inode *ni, u64 vbo, u64 bytes)
+  				err = ni_insert_nonresident(
+  					ni, ATTR_DATA, NULL, 0, run, next_svcn,
+  					evcn1 - eat - next_svcn, a_flags, &attr,
+-					&mi);
++					&mi, &le);
+  				if (err)
+  					goto out;
+  
+  				/* Layout of records maybe changed. */
+  				attr_b = NULL;
+-				le = al_find_ex(ni, NULL, ATTR_DATA, NULL, 0,
+-						&next_svcn);
+-				if (!le) {
+-					err = -EINVAL;
+-					goto out;
+-				}
+  			}
+  
+  			/* Free all allocated memory. */
+@@ -1936,9 +1930,10 @@ int attr_punch_hole(struct ntfs_inode *ni, u64 vbo, u64 bytes, u32 *frame_size)
+  	struct ATTRIB *attr = NULL, *attr_b;
+  	struct ATTR_LIST_ENTRY *le, *le_b;
+  	struct mft_inode *mi, *mi_b;
+-	CLST svcn, evcn1, vcn, len, end, alen, dealloc;
++	CLST svcn, evcn1, vcn, len, end, alen, dealloc, next_svcn;
+  	u64 total_size, alloc_size;
+  	u32 mask;
++	__le16 a_flags;
+  
+  	if (!bytes)
+  		return 0;
+@@ -2001,6 +1996,7 @@ int attr_punch_hole(struct ntfs_inode *ni, u64 vbo, u64 bytes, u32 *frame_size)
+  
+  	svcn = le64_to_cpu(attr_b->nres.svcn);
+  	evcn1 = le64_to_cpu(attr_b->nres.evcn) + 1;
++	a_flags = attr_b->flags;
+  
+  	if (svcn <= vcn && vcn < evcn1) {
+  		attr = attr_b;
+@@ -2048,6 +2044,17 @@ int attr_punch_hole(struct ntfs_inode *ni, u64 vbo, u64 bytes, u32 *frame_size)
+  			err = mi_pack_runs(mi, attr, run, evcn1 - svcn);
+  			if (err)
+  				goto out;
++			next_svcn = le64_to_cpu(attr->nres.evcn) + 1;
++			if (next_svcn < evcn1) {
++				err = ni_insert_nonresident(ni, ATTR_DATA, NULL,
++							    0, run, next_svcn,
++							    evcn1 - next_svcn,
++							    a_flags, &attr, &mi,
++							    &le);
++				if (err)
++					goto out;
++				/* Layout of records maybe changed. */
++			}
+  		}
+  		/* Free all allocated memory. */
+  		run_truncate(run, 0);
+@@ -2248,7 +2255,7 @@ int attr_insert_range(struct ntfs_inode *ni, u64 vbo, u64 bytes)
+  	if (next_svcn < evcn1 + len) {
+  		err = ni_insert_nonresident(ni, ATTR_DATA, NULL, 0, run,
+  					    next_svcn, evcn1 + len - next_svcn,
+-					    a_flags, NULL, NULL);
++					    a_flags, NULL, NULL, NULL);
+  		if (err)
+  			goto out;
+  	}
+diff --git a/fs/ntfs3/frecord.c b/fs/ntfs3/frecord.c
+index 3576268ee0a1..64041152fd98 100644
+--- a/fs/ntfs3/frecord.c
++++ b/fs/ntfs3/frecord.c
+@@ -1406,7 +1406,7 @@ int ni_insert_nonresident(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  			  const __le16 *name, u8 name_len,
+  			  const struct runs_tree *run, CLST svcn, CLST len,
+  			  __le16 flags, struct ATTRIB **new_attr,
+-			  struct mft_inode **mi)
++			  struct mft_inode **mi, struct ATTR_LIST_ENTRY **le)
+  {
+  	int err;
+  	CLST plen;
+@@ -1439,7 +1439,7 @@ int ni_insert_nonresident(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  	}
+  
+  	err = ni_insert_attr(ni, type, name, name_len, asize, name_off, svcn,
+-			     &attr, mi, NULL);
++			     &attr, mi, le);
+  
+  	if (err)
+  		goto out;
+diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
+index 8468cca5d54d..803dc49269e4 100644
+--- a/fs/ntfs3/index.c
++++ b/fs/ntfs3/index.c
+@@ -1347,7 +1347,7 @@ static int indx_create_allocate(struct ntfs_index *indx, struct ntfs_inode *ni,
+  		goto out;
+  
+  	err = ni_insert_nonresident(ni, ATTR_ALLOC, in->name, in->name_len,
+-				    &run, 0, len, 0, &alloc, NULL);
++				    &run, 0, len, 0, &alloc, NULL, NULL);
+  	if (err)
+  		goto out1;
+  
+diff --git a/fs/ntfs3/ntfs_fs.h b/fs/ntfs3/ntfs_fs.h
+index 6e758ebdc011..1c504ef7dbe4 100644
+--- a/fs/ntfs3/ntfs_fs.h
++++ b/fs/ntfs3/ntfs_fs.h
+@@ -530,7 +530,7 @@ int ni_insert_nonresident(struct ntfs_inode *ni, enum ATTR_TYPE type,
+  			  const __le16 *name, u8 name_len,
+  			  const struct runs_tree *run, CLST svcn, CLST len,
+  			  __le16 flags, struct ATTRIB **new_attr,
+-			  struct mft_inode **mi);
++			  struct mft_inode **mi, struct ATTR_LIST_ENTRY **le);
+  int ni_insert_resident(struct ntfs_inode *ni, u32 data_size,
+  		       enum ATTR_TYPE type, const __le16 *name, u8 name_len,
+  		       struct ATTRIB **new_attr, struct mft_inode **mi,
+-- 
+2.36.1
 
-> > as HAVE_RELIABLE_STACKTRACE depends on STACK_VALIDATION which is not present
-> > yet. This patch will be added in the future once Objtool is enhanced to
-> > provide stack validation in some form.
 
-> Given that it's not at all obvious that we're going to end up using objtool
-> for arm64, does this patch series gain us anything in isolation?
-
-Having the reliability information seems like it should be useful in
-general even without doing live patching - we can use it to annotate
-stack traces to warn people about anything that might be suspect in
-there.  For live patching it's probably something we'll want regardless
-of the use of objtool, it's one more robustness check which always
-helps.
-
---TK6aEfPqnhW4wFA2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK1ox8ACgkQJNaLcl1U
-h9AEiQf/WqiaUGRvZs/gEhhSFRXD9HBwdbVf2Yd0sL2zEILXUI9Ld3PVgtxktJyV
-05a7Vrm2cj70mtTa9hgXijXG/TdpR1fdGVv+3fOe0PnH6yQQbywUrk/mk2HgmhqE
-56t0MyabelWk9fN2+WqqRtbdko0mCxNE9d/gjH+SaggSuqVEb6WyrwNkb0XA7XlG
-dtNaq76s0mkYqx4owIkSjQouuJeQsy+1Hn2bcbbNa2c7ra/1zL4KOT9cTrK0zDdD
-usmOBhDorWpVeUNkg35q3OoQ+bh4cyLaipMQGVl2wEtGz6ODyBDzGGumHxGZf9Tg
-Z/RjJXHtd4LShvPqKsS9Pzjdpr9V+A==
-=j8JN
------END PGP SIGNATURE-----
-
---TK6aEfPqnhW4wFA2--

@@ -2,452 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285CD55A124
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55CE555A128
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbiFXSfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 14:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S231228AbiFXSdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 14:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiFXSfD (ORCPT
+        with ESMTP id S229731AbiFXSdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 14:35:03 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DB180507
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:34:39 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25OIC9WF003270;
-        Fri, 24 Jun 2022 18:34:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=kH+1kjT4cgmT0yehjeLbCGLisp7vneRIpILXFLA6y2E=;
- b=bfUMTnOBle3FqTPbOVZ0INV8zJIWwPJmnI1VyzvTvcnTJUO2eOWVq7TzufXqn6+lDGEm
- dQFXkRBM0nKC0+R5y0BUvB6o77Q0wdIj2jKl42vw3xdhbO7xrgLO1wPyDMbtfPOzmIqv
- pplKBhNwI9+jQCRlfPhy2ELj1PI6Aj5e5tLuXBZnaTmyYOZFpk+Wu1V1ENziDhU/J/my
- KbXElFUbkvdOgIT143S3ToIvpTKPZB6Q80KJ4igc6eW85+HcMiQ1MLdPAsazNFDrETiC
- Iiz9s/LY2kWwH4ELvyrOb1wcMtnMweQj0ez1xhiV4ISm1At7b+4XPwEmn5/uZRQgw/5/ uA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gwj51rme1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jun 2022 18:34:16 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25OIRFw6021537;
-        Fri, 24 Jun 2022 18:34:15 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gwj51rmdb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jun 2022 18:34:15 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25OIKNZ9028865;
-        Fri, 24 Jun 2022 18:34:14 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3gs6b99ep2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jun 2022 18:34:13 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25OIYBx220775188
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Jun 2022 18:34:11 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 787525204E;
-        Fri, 24 Jun 2022 18:34:11 +0000 (GMT)
-Received: from li-c3569c4c-1ef8-11b2-a85c-ee139cda3133.ibm.com.com (unknown [9.43.0.85])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id D762C5204F;
-        Fri, 24 Jun 2022 18:34:07 +0000 (GMT)
-From:   Sathvika Vasireddy <sv@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     jpoimboe@redhat.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
-        christophe.leroy@csgroup.eu, mingo@redhat.com, rostedt@goodmis.org,
-        naveen.n.rao@linux.vnet.ibm.com, sv@linux.ibm.com, mbenes@suse.cz,
-        benh@kernel.crashing.org, paulus@samba.org
-Subject: [RFC PATCH v3 12/12] objtool/powerpc: Fix unannotated intra-function call warnings
-Date:   Sat, 25 Jun 2022 00:02:38 +0530
-Message-Id: <20220624183238.388144-13-sv@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220624183238.388144-1-sv@linux.ibm.com>
-References: <20220624183238.388144-1-sv@linux.ibm.com>
+        Fri, 24 Jun 2022 14:33:02 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344462CDD3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:33:00 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id jb13so2791532plb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:33:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oZ+PpXvy2HxH++/ByJ0VVMt+4yKLSRLx88VrFeNzIf8=;
+        b=nA5+j7K4V1TeMU2VczYYBNc4/mcWom0eUMDJWyRm33LxD1nD0Aeh7+Q2NUnmNdPtgl
+         UXKvgNFSq/DMeu0dC20Qas3Q5S3H/9+gnhsDKRwrY5dzq8IjNFsVb41QVkkNiXM0NlsO
+         v8jHwQ42PqHQoT25NHzmOhgKmEYBrjfqOjd/463jUTrlXrpxZzvKMVzVZ76yI/xYoLEj
+         lbikU+utia+4sMhmD8LZgJSbe63M47Oa9cRi1JWzb/YL6BnPs69iXaHbv8W+z4NtTAJF
+         WewoSwmZ9QMZDT0SPMwlNdwtMZ9EnEfcnPjJ6tF4gYlsfb4oa5Q8zK9nKJu7medf2SsL
+         IdDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oZ+PpXvy2HxH++/ByJ0VVMt+4yKLSRLx88VrFeNzIf8=;
+        b=C6Uu55cOTyGUARMOwr5ZcJQ9EvSMDxUSkZDrEhvNPivBZkyeVBrya26L2pm4mo07W1
+         2vLmqXt7l5pOK21H5J9O10jMq5zYfa+gk59uF23opeosfKMnJUG2odJtApwAIT6mVy09
+         iHl0AQ0j3pDZMpVlJaRgFvxJGE3bzns3+cNGU+KARkgeGbE9IQKoGHzzziBA5iHw95fx
+         gUgWyf7+wXfCu+P6vtGIMSvLHHBmq2DOm+JiKaGuRZW/amCeK6MbdiYvz2cN6SUIsNic
+         /RmqOTwVIFBAshkHWjG2jxHfew9urRNQEtiSVsAKImLl+S13tGCXVw3dPC+hli61xtyz
+         P7vA==
+X-Gm-Message-State: AJIora9wUapiBU+Oqw9SLntNBzPyhoDZ60QD/CWuxrK3GH8PjV3v1iRW
+        YgFb0lH6g6Y7W36besiztcF1TA==
+X-Google-Smtp-Source: AGRyM1vmADn1bRiiefpdVyhETEib+mO4UBD8Q29ysfnoIqn4shDh+D+q+ww6pK6n2M3sWQxY/pf99A==
+X-Received: by 2002:a17:90b:1115:b0:1ec:72f2:77df with SMTP id gi21-20020a17090b111500b001ec72f277dfmr239976pjb.105.1656095580017;
+        Fri, 24 Jun 2022 11:33:00 -0700 (PDT)
+Received: from google.com (55.212.185.35.bc.googleusercontent.com. [35.185.212.55])
+        by smtp.gmail.com with ESMTPSA id h6-20020a17090a3d0600b001eab99a42efsm2091467pjc.31.2022.06.24.11.32.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 11:32:58 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 11:32:55 -0700
+From:   Zach O'Keefe <zokeefe@google.com>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
+        shy828301@gmail.com, willy@infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/16] mm/huge_memory: use flush_pmd_tlb_range in
+ move_huge_pmd
+Message-ID: <YrYDVzT48IhLhwKQ@google.com>
+References: <20220622170627.19786-1-linmiaohe@huawei.com>
+ <20220622170627.19786-2-linmiaohe@huawei.com>
+ <YrQInzK5g/NJMmSA@FVFYT0MHHV2J.usts.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5LkonAIfC81wNT_8QOK3lAGrGcLJUL9j
-X-Proofpoint-GUID: aZAQpxxp0_e3zS-OLUd4YpQqxHqZv75Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-24_08,2022-06-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- mlxscore=0 phishscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
- priorityscore=1501 malwarescore=0 bulkscore=0 clxscore=1015
- mlxlogscore=986 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206240072
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrQInzK5g/NJMmSA@FVFYT0MHHV2J.usts.net>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-objtool throws unannotated intra-function call warnings
-in the following assembly files.
+On 23 Jun 14:30, Muchun Song wrote:
+> On Thu, Jun 23, 2022 at 01:06:12AM +0800, Miaohe Lin wrote:
+> > ARCHes with special requirements for evicting THP backing TLB entries can
+> > implement flush_pmd_tlb_range. Otherwise also, it can help optimize TLB
+> > flush in THP regime. Using flush_pmd_tlb_range to take advantage of this
+> > in move_huge_pmd.
+> > 
+> > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> 
+> LGTM.
+> 
+> Reviewed-by: Muchun Song <songmuchun@bytedace.com>
 
-arch/powerpc/kernel/head_64.o: warning: objtool: .text+0x358: unannotated intra-function call
-arch/powerpc/kernel/vector.o: warning: objtool: .text+0x53c: unannotated intra-function call
-arch/powerpc/kernel/entry_64.o: warning: objtool: .text+0x4: unannotated intra-function call
-arch/powerpc/kernel/misc_64.o: warning: objtool: .text+0x64: unannotated intra-function call
-arch/powerpc/kvm/book3s_hv_rmhandlers.o: warning: objtool: .text+0x60: unannotated intra-function call
-arch/powerpc/kvm/book3s_hv_interrupts.o: warning: objtool: .text+0x6c: unannotated intra-function call
-
-Remove a few of these warnings by putting ANNOTATE_INTRA_FUNCTION_CALL
-directive before the call. And, the rest by annotating those functions
-with SYM_FUNC_START_LOCAL() and SYM_FUNC_END() macros.
-
-Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
----
- arch/powerpc/kernel/entry_64.S          |  2 ++
- arch/powerpc/kernel/exceptions-64s.S    |  7 +++++--
- arch/powerpc/kernel/head_64.S           |  7 +++++--
- arch/powerpc/kernel/misc_64.S           |  4 +++-
- arch/powerpc/kernel/vector.S            |  4 +++-
- arch/powerpc/kvm/book3s_hv_interrupts.S |  4 +++-
- arch/powerpc/kvm/book3s_hv_rmhandlers.S | 25 ++++++++++++++++++-------
- 7 files changed, 39 insertions(+), 14 deletions(-)
-
-diff --git a/arch/powerpc/kernel/entry_64.S b/arch/powerpc/kernel/entry_64.S
-index 9581906b5ee9..11249cd6cfc5 100644
---- a/arch/powerpc/kernel/entry_64.S
-+++ b/arch/powerpc/kernel/entry_64.S
-@@ -14,6 +14,7 @@
-  *  code, and exception/interrupt return code for PowerPC.
-  */
- 
-+#include <linux/objtool.h>
- #include <linux/errno.h>
- #include <linux/err.h>
- #include <asm/cache.h>
-@@ -73,6 +74,7 @@ flush_branch_caches:
- 
- 	// Flush the link stack
- 	.rept 64
-+	ANNOTATE_INTRA_FUNCTION_CALL
- 	bl	.+4
- 	.endr
- 	b	1f
-diff --git a/arch/powerpc/kernel/exceptions-64s.S b/arch/powerpc/kernel/exceptions-64s.S
-index b66dd6f775a4..14ed17b8fe33 100644
---- a/arch/powerpc/kernel/exceptions-64s.S
-+++ b/arch/powerpc/kernel/exceptions-64s.S
-@@ -13,6 +13,7 @@
-  *
-  */
- 
-+#include <linux/linkage.h>
- #include <asm/hw_irq.h>
- #include <asm/exception-64s.h>
- #include <asm/ptrace.h>
-@@ -3075,7 +3076,7 @@ CLOSE_FIXED_SECTION(virt_trampolines);
- USE_TEXT_SECTION()
- 
- /* MSR[RI] should be clear because this uses SRR[01] */
--enable_machine_check:
-+SYM_FUNC_START_LOCAL(enable_machine_check)
- 	mflr	r0
- 	bcl	20,31,$+4
- 0:	mflr	r3
-@@ -3087,9 +3088,10 @@ enable_machine_check:
- 	RFI_TO_KERNEL
- 1:	mtlr	r0
- 	blr
-+SYM_FUNC_END(enable_machine_check)
- 
- /* MSR[RI] should be clear because this uses SRR[01] */
--disable_machine_check:
-+SYM_FUNC_START_LOCAL(disable_machine_check)
- 	mflr	r0
- 	bcl	20,31,$+4
- 0:	mflr	r3
-@@ -3102,3 +3104,4 @@ disable_machine_check:
- 	RFI_TO_KERNEL
- 1:	mtlr	r0
- 	blr
-+SYM_FUNC_END(disable_machine_check)
-diff --git a/arch/powerpc/kernel/head_64.S b/arch/powerpc/kernel/head_64.S
-index 5c5181e8d5f1..d5b01a15cb39 100644
---- a/arch/powerpc/kernel/head_64.S
-+++ b/arch/powerpc/kernel/head_64.S
-@@ -18,6 +18,7 @@
-  *  variants.
-  */
- 
-+#include <linux/linkage.h>
- #include <linux/threads.h>
- #include <linux/init.h>
- #include <asm/reg.h>
-@@ -465,7 +466,7 @@ generic_secondary_common_init:
-  * Assumes we're mapped EA == RA if the MMU is on.
-  */
- #ifdef CONFIG_PPC_BOOK3S
--__mmu_off:
-+SYM_FUNC_START_LOCAL(__mmu_off)
- 	mfmsr	r3
- 	andi.	r0,r3,MSR_IR|MSR_DR
- 	beqlr
-@@ -476,6 +477,7 @@ __mmu_off:
- 	sync
- 	rfid
- 	b	.	/* prevent speculative execution */
-+SYM_FUNC_END(__mmu_off)
- #endif
- 
- 
-@@ -869,7 +871,7 @@ _GLOBAL(start_secondary_resume)
- /*
-  * This subroutine clobbers r11 and r12
-  */
--enable_64b_mode:
-+SYM_FUNC_START_LOCAL(enable_64b_mode)
- 	mfmsr	r11			/* grab the current MSR */
- #ifdef CONFIG_PPC_BOOK3E
- 	oris	r11,r11,0x8000		/* CM bit set, we'll set ICM later */
-@@ -881,6 +883,7 @@ enable_64b_mode:
- 	isync
- #endif
- 	blr
-+SYM_FUNC_END(enable_64b_mode)
- 
- /*
-  * This puts the TOC pointer into r2, offset by 0x8000 (as expected
-diff --git a/arch/powerpc/kernel/misc_64.S b/arch/powerpc/kernel/misc_64.S
-index d38a019b38e1..372d3dae25af 100644
---- a/arch/powerpc/kernel/misc_64.S
-+++ b/arch/powerpc/kernel/misc_64.S
-@@ -9,6 +9,7 @@
-  * PPC64 updates by Dave Engebretsen (engebret@us.ibm.com)
-  */
- 
-+#include <linux/linkage.h>
- #include <linux/sys.h>
- #include <asm/unistd.h>
- #include <asm/errno.h>
-@@ -353,7 +354,7 @@ _GLOBAL(kexec_smp_wait)
-  *
-  * don't overwrite r3 here, it is live for kexec_wait above.
-  */
--real_mode:	/* assume normal blr return */
-+SYM_FUNC_START_LOCAL(real_mode)	/* assume normal blr return */
- #ifdef CONFIG_PPC_BOOK3E
- 	/* Create an identity mapping. */
- 	b	kexec_create_tlb
-@@ -370,6 +371,7 @@ real_mode:	/* assume normal blr return */
- 	mtspr	SPRN_SRR0,r11
- 	rfid
- #endif
-+SYM_FUNC_END(real_mode)
- 
- /*
-  * kexec_sequence(newstack, start, image, control, clear_all(),
-diff --git a/arch/powerpc/kernel/vector.S b/arch/powerpc/kernel/vector.S
-index 5cc24d8cce94..fb96aed2b5c3 100644
---- a/arch/powerpc/kernel/vector.S
-+++ b/arch/powerpc/kernel/vector.S
-@@ -9,6 +9,7 @@
- #include <asm/ptrace.h>
- #include <asm/export.h>
- #include <asm/asm-compat.h>
-+#include <linux/linkage.h>
- 
- /*
-  * Load state from memory into VMX registers including VSCR.
-@@ -186,7 +187,7 @@ fphalf:
-  * Internal routine to enable floating point and set FPSCR to 0.
-  * Don't call it from C; it doesn't use the normal calling convention.
-  */
--fpenable:
-+SYM_FUNC_START_LOCAL(fpenable)
- #ifdef CONFIG_PPC32
- 	stwu	r1,-64(r1)
- #else
-@@ -203,6 +204,7 @@ fpenable:
- 	mffs	fr31
- 	MTFSF_L(fr1)
- 	blr
-+SYM_FUNC_END(fpenable)
- 
- fpdisable:
- 	mtlr	r12
-diff --git a/arch/powerpc/kvm/book3s_hv_interrupts.S b/arch/powerpc/kvm/book3s_hv_interrupts.S
-index 59d89e4b154a..c0deeea7eef3 100644
---- a/arch/powerpc/kvm/book3s_hv_interrupts.S
-+++ b/arch/powerpc/kvm/book3s_hv_interrupts.S
-@@ -9,6 +9,7 @@
-  * Authors: Alexander Graf <agraf@suse.de>
-  */
- 
-+#include <linux/linkage.h>
- #include <asm/ppc_asm.h>
- #include <asm/kvm_asm.h>
- #include <asm/reg.h>
-@@ -107,7 +108,7 @@ END_FTR_SECTION_IFCLR(CPU_FTR_ARCH_207S)
- /*
-  * void kvmhv_save_host_pmu(void)
-  */
--kvmhv_save_host_pmu:
-+SYM_FUNC_START_LOCAL(kvmhv_save_host_pmu)
- BEGIN_FTR_SECTION
- 	/* Work around P8 PMAE bug */
- 	li	r3, -1
-@@ -154,3 +155,4 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
- 	stw	r8, HSTATE_PMC5(r13)
- 	stw	r9, HSTATE_PMC6(r13)
- 31:	blr
-+SYM_FUNC_END(kvmhv_save_host_pmu)
-diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-index d185dee26026..154fa428d98e 100644
---- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-+++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-@@ -29,6 +29,8 @@
- #include <asm/asm-compat.h>
- #include <asm/feature-fixups.h>
- #include <asm/cpuidle.h>
-+#include <linux/linkage.h>
-+#include <linux/objtool.h>
- 
- /* Values in HSTATE_NAPPING(r13) */
- #define NAPPING_CEDE	1
-@@ -1514,12 +1516,14 @@ kvm_flush_link_stack:
- 
- 	/* Flush the link stack. On Power8 it's up to 32 entries in size. */
- 	.rept 32
-+	ANNOTATE_INTRA_FUNCTION_CALL
- 	bl	.+4
- 	.endr
- 
- 	/* And on Power9 it's up to 64. */
- BEGIN_FTR_SECTION
- 	.rept 32
-+	ANNOTATE_INTRA_FUNCTION_CALL
- 	bl	.+4
- 	.endr
- END_FTR_SECTION_IFSET(CPU_FTR_ARCH_300)
-@@ -2360,7 +2364,7 @@ hmi_realmode:
-  * This routine calls kvmppc_read_intr, a C function, if an external
-  * interrupt is pending.
-  */
--kvmppc_check_wake_reason:
-+SYM_FUNC_START_LOCAL(kvmppc_check_wake_reason)
- 	mfspr	r6, SPRN_SRR1
- BEGIN_FTR_SECTION
- 	rlwinm	r6, r6, 45-31, 0xf	/* extract wake reason field (P8) */
-@@ -2429,6 +2433,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
- 	addi	r1, r1, PPC_MIN_STKFRM
- 	mtlr	r0
- 	blr
-+SYM_FUNC_END(kvmppc_check_wake_reason)
- 
- /*
-  * Save away FP, VMX and VSX registers.
-@@ -2436,7 +2441,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
-  * N.B. r30 and r31 are volatile across this function,
-  * thus it is not callable from C.
-  */
--kvmppc_save_fp:
-+SYM_FUNC_START_LOCAL(kvmppc_save_fp)
- 	mflr	r30
- 	mr	r31,r3
- 	mfmsr	r5
-@@ -2464,6 +2469,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
- 	stw	r6,VCPU_VRSAVE(r31)
- 	mtlr	r30
- 	blr
-+SYM_FUNC_END(kvmppc_save_fp)
- 
- /*
-  * Load up FP, VMX and VSX registers
-@@ -2471,7 +2477,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
-  * N.B. r30 and r31 are volatile across this function,
-  * thus it is not callable from C.
-  */
--kvmppc_load_fp:
-+SYM_FUNC_START_LOCAL(kvmppc_load_fp)
- 	mflr	r30
- 	mr	r31,r4
- 	mfmsr	r9
-@@ -2500,6 +2506,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ALTIVEC)
- 	mtlr	r30
- 	mr	r4,r31
- 	blr
-+SYM_FUNC_END(kvmppc_load_fp)
- 
- #ifdef CONFIG_PPC_TRANSACTIONAL_MEM
- /*
-@@ -2748,7 +2755,7 @@ kvmppc_bad_host_intr:
-  *   r9 has a vcpu pointer (in)
-  *   r0 is used as a scratch register
-  */
--kvmppc_msr_interrupt:
-+SYM_FUNC_START_LOCAL(kvmppc_msr_interrupt)
- 	rldicl	r0, r11, 64 - MSR_TS_S_LG, 62
- 	cmpwi	r0, 2 /* Check if we are in transactional state..  */
- 	ld	r11, VCPU_INTR_MSR(r9)
-@@ -2757,13 +2764,14 @@ kvmppc_msr_interrupt:
- 	li	r0, 1
- 1:	rldimi	r11, r0, MSR_TS_S_LG, 63 - MSR_TS_T_LG
- 	blr
-+SYM_FUNC_END(kvmppc_msr_interrupt)
- 
- /*
-  * void kvmhv_load_guest_pmu(struct kvm_vcpu *vcpu)
-  *
-  * Load up guest PMU state.  R3 points to the vcpu struct.
-  */
--kvmhv_load_guest_pmu:
-+SYM_FUNC_START_LOCAL(kvmhv_load_guest_pmu)
- 	mr	r4, r3
- 	mflr	r0
- 	li	r3, 1
-@@ -2813,13 +2821,14 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
- 	isync
- 	mtlr	r0
- 	blr
-+SYM_FUNC_END(kvmhv_load_guest_pmu)
- 
- /*
-  * void kvmhv_load_host_pmu(void)
-  *
-  * Reload host PMU state saved in the PACA by kvmhv_save_host_pmu.
-  */
--kvmhv_load_host_pmu:
-+SYM_FUNC_START_LOCAL(kvmhv_load_host_pmu)
- 	mflr	r0
- 	lbz	r4, PACA_PMCINUSE(r13) /* is the host using the PMU? */
- 	cmpwi	r4, 0
-@@ -2861,6 +2870,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
- 	isync
- 	mtlr	r0
- 23:	blr
-+SYM_FUNC_END(kvmhv_load_host_pmu)
- 
- /*
-  * void kvmhv_save_guest_pmu(struct kvm_vcpu *vcpu, bool pmu_in_use)
-@@ -2868,7 +2878,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
-  * Save guest PMU state into the vcpu struct.
-  * r3 = vcpu, r4 = full save flag (PMU in use flag set in VPA)
-  */
--kvmhv_save_guest_pmu:
-+SYM_FUNC_START_LOCAL(kvmhv_save_guest_pmu)
- 	mr	r9, r3
- 	mr	r8, r4
- BEGIN_FTR_SECTION
-@@ -2944,6 +2954,7 @@ BEGIN_FTR_SECTION
- 	mtspr	SPRN_MMCRS, r4
- END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
- 22:	blr
-+SYM_FUNC_END(kvmhv_save_guest_pmu)
- 
- /*
-  * This works around a hardware bug on POWER8E processors, where
--- 
-2.25.1
-
+Reviewed-by: Zach O'Keefe <zokeefe@google.com>

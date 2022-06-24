@@ -2,81 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6494B558F80
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 06:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BB1558F83
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 06:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiFXEKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 00:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
+        id S231151AbiFXEM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 00:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiFXEKO (ORCPT
+        with ESMTP id S229764AbiFXEM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 00:10:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2487C6808D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 21:10:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A98BB620D1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 04:10:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CF3BBC3411C;
-        Fri, 24 Jun 2022 04:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656043812;
-        bh=EBu6ckTNMwf8gEEouQT4wC2duA1lPbCyWbx4zFfY/r0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ikkV4lslhZAj1J8yHf7RZWuaGNqvg96EGWo61Fa8b605AQJww8caRpbZynV5q1kHk
-         mUoikyfjx3JDLHtgcoc8Us9bZ5P65q7KZqodmMU3AL2HcrHBAVeWiAyh3QXn+I3/HA
-         hDQwc+EPuENHsgp/1oWkplqLjgfNfnBM+E+sgH1Iu3bKG1CXhuwcXuAPF53P6UY5f6
-         w5IkWg9vVgjnRHqwe7BsHJpMaRxhmXRy/Pw+A5/gZNd1C6DJVYclHIzP1+oKwCRbG3
-         9q50nicEY9SdrDLjVztaCvkZND0qEcfw4lMqF1kZObdXuNYYi8vrOyOwgcD3+Rt474
-         /M6+gQi7CRZIg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B41FCE737F0;
-        Fri, 24 Jun 2022 04:10:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 24 Jun 2022 00:12:57 -0400
+Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B877668089;
+        Thu, 23 Jun 2022 21:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=E5epV
+        JPg/t9YUTy8EYdJ5qpvHm/ag92IRP9C9ezExQ8=; b=Eb/ySWxb4Bs7FHrHGaqRK
+        9ppG6dY+Lv+E02icvWdeAVVfLpMCGn6h0DqMR7r+lwOkGPmk6/F5e+LLzomKwZxj
+        or94OTFszkqwJRers8wF/4eOXz/bW/eCZelH231VX8XeobUVBNKNlb5tDlD6su61
+        Og3fKi/CkJdiR2hvp8AVhQ=
+Received: from localhost.localdomain (unknown [123.112.69.106])
+        by smtp4 (Coremail) with SMTP id HNxpCgDn7uejObViIy4HLA--.29322S4;
+        Fri, 24 Jun 2022 12:12:28 +0800 (CST)
+From:   Jianglei Nie <niejianglei2021@163.com>
+To:     aelior@marvell.com, skalluru@marvell.com, manishc@marvell.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianglei Nie <niejianglei2021@163.com>
+Subject: [PATCH] bnx2x: fix memory leak in bnx2x_tpa_stop()
+Date:   Fri, 24 Jun 2022 12:12:17 +0800
+Message-Id: <20220624041217.1805512-1-niejianglei2021@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] platform/chrome: wilco_ec: event: Fix typo in comment
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165604381273.31124.6187796699911998153.git-patchwork-notify@kernel.org>
-Date:   Fri, 24 Jun 2022 04:10:12 +0000
-References: <20220622061442.18242-1-jiangjian@cdjrlc.com>
-In-Reply-To: <20220622061442.18242-1-jiangjian@cdjrlc.com>
-To:     Jiang Jian <jiangjian@cdjrlc.com>
-Cc:     bleung@chromium.org, chrome-platform@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: HNxpCgDn7uejObViIy4HLA--.29322S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GFy7ZF4rtF1kWryxWFWrAFb_yoWkGwcEgw
+        n8Zr13Jr4DG39Fy34jkr4aq343tF90qrn3uFyagrZagr1DJr1UG3Wv9Fn5Xw17Wr48JFnx
+        Gryaqa4YvwnxKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRiYLvtUUUUU==
+X-Originating-IP: [123.112.69.106]
+X-CM-SenderInfo: xqlhyxxdqjzvrlsqjii6rwjhhfrp/1tbiFQwqjF5mLalVGwAAsN
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+bnx2x_tpa_stop() allocates a memory chunk from new_data with
+bnx2x_frag_alloc(). The new_data should be freed when some errors occur.
+But when "pad + len > fp->rx_buf_size" is true, bnx2x_tpa_stop() returns
+without releasing the new_data, which leads to a memory leak.
 
-This patch was applied to chrome-platform/linux.git (for-kernelci)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+We should free the new_data with bnx2x_frag_free() when "pad + len >
+fp->rx_buf_size" is true.
 
-On Wed, 22 Jun 2022 14:14:42 +0800 you wrote:
-> Drop the redundant word 'the'.
-> 
-> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
-> ---
->  drivers/platform/chrome/wilco_ec/event.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+---
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Here is the summary with links:
-  - platform/chrome: wilco_ec: event: Fix typo in comment
-    https://git.kernel.org/chrome-platform/c/3de7203115af
-
-You are awesome, thank you!
+diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+index 5729a5ab059d..4cbd3ba5acb9 100644
+--- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
++++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+@@ -789,6 +789,7 @@ static void bnx2x_tpa_stop(struct bnx2x *bp, struct bnx2x_fastpath *fp,
+ 			BNX2X_ERR("skb_put is about to fail...  pad %d  len %d  rx_buf_size %d\n",
+ 				  pad, len, fp->rx_buf_size);
+ 			bnx2x_panic();
++			bnx2x_frag_free(fp, new_data);
+ 			return;
+ 		}
+ #endif
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 

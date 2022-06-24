@@ -2,200 +2,562 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3775595E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F79E5596AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiFXI6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S232025AbiFXJ20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 05:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiFXI6A (ORCPT
+        with ESMTP id S231986AbiFXJ2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:58:00 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F3FFD8;
-        Fri, 24 Jun 2022 01:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656061079; x=1687597079;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=yeQrZJrXMWBUMR9vCpqaTH5T9SUmL0CpG6XsQUx1ILY=;
-  b=Ec7pN3E6z0BeCbX+jbsABfLzJGltvYgZtwkiCDCQtFVJ+uX+oCgoO5j/
-   Js16RJORclzaMwYxsV7SKw54JGu8W0ek4lES7NGVUAyvWo5KvPja1nBUm
-   xAVxnVDB1MeNJMPkazAkoPpeYfYoz7AHa6ZFmexdSbwmHtBOmC3qpAF3M
-   sdKHbwL8dCHMK7ugmY6aqiYV3yZwgMl/UoCh/UwuUgfdw9oechtdjYU6G
-   7lBrkBfFbLm+h/OV4AtmevdI8Oze8QPnKYj6IYpAvzJlcKq+BYsTDyK5J
-   mFaL1Ej2RDsXOxk6WYZ5aNejg4ZnkdRAmE6Qmt1kUAAMIDndUg9ExuEKN
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="269688492"
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="269688492"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 01:57:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="586510529"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by orsmga007.jf.intel.com with ESMTP; 24 Jun 2022 01:57:46 -0700
-Date:   Fri, 24 Jun 2022 16:54:26 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Andy Lutomirski <luto@kernel.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        mhocko@suse.com, "Nikunj A. Dadhania" <nikunj@amd.com>
-Subject: Re: [PATCH v6 4/8] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <20220624085426.GB2178308@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <20220519153713.819591-5-chao.p.peng@linux.intel.com>
- <8840b360-cdb2-244c-bfb6-9a0e7306c188@kernel.org>
- <YofeZps9YXgtP3f1@google.com>
- <20220623225949.kkdx6uwjlk2ec4iq@amd.com>
+        Fri, 24 Jun 2022 05:28:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AF91EAD2;
+        Fri, 24 Jun 2022 02:28:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE2B062095;
+        Fri, 24 Jun 2022 09:28:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3154C34114;
+        Fri, 24 Jun 2022 09:27:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656062880;
+        bh=C0uYnFRgGGrjy3PiU3f/Ru/C6QDqECnHj7AGp9a1S88=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hWGToQuaB2rQD34YC2A6dAfLblFKm/FEZ580TsHD8vmVbKJmKopHauqZXl0mFI//7
+         1NGGIqAOIhnx0yGEzpK404Ynt+ZW3YhU+2oomxbCGfN0obNRRdoiPjImv4H5EZazkg
+         UbGXCuZoJiYKiDUJO7NE4pzjmTOH7O5pOoo68NJCwp3NmpdxXol/R0tdMpJKXe3kPs
+         h8as7XgVF4eIZcIblVrBoFqVJbqfEL0+IM7k+DjJwtFg4vTTQD/gZxObjfbkAj82by
+         So8KwBMEJ1aMESkheTbPQxgfg6fsOTkXpuVbXLdqMlC6cMg4pC7fnNyVaNfulK2bkj
+         v6aqobazT7ECQ==
+Received: by pali.im (Postfix)
+        id BB5CD711; Fri, 24 Jun 2022 11:27:56 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Marek Behun <marek.behun@nic.cz>,
+        Josef Schlehofer <josef.schlehofer@nic.cz>
+Subject: [PATCH v2] powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers
+Date:   Fri, 24 Jun 2022 10:55:50 +0200
+Message-Id: <20220624085550.20570-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220511143712.22550-1-pali@kernel.org>
+References: <20220511143712.22550-1-pali@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623225949.kkdx6uwjlk2ec4iq@amd.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 05:59:49PM -0500, Michael Roth wrote:
-> On Fri, May 20, 2022 at 06:31:02PM +0000, Sean Christopherson wrote:
-> > On Fri, May 20, 2022, Andy Lutomirski wrote:
-> > > The alternative would be to have some kind of separate table or bitmap (part
-> > > of the memslot?) that tells KVM whether a GPA should map to the fd.
-> > > 
-> > > What do you all think?
-> > 
-> > My original proposal was to have expolicit shared vs. private memslots, and punch
-> > holes in KVM's memslots on conversion, but due to the way KVM (and userspace)
-> > handle memslot updates, conversions would be painfully slow.  That's how we ended
-> > up with the current propsoal.
-> > 
-> > But a dedicated KVM ioctl() to add/remove shared ranges would be easy to implement
-> > and wouldn't necessarily even need to interact with the memslots.  It could be a
-> > consumer of memslots, e.g. if we wanted to disallow registering regions without an
-> > associated memslot, but I think we'd want to avoid even that because things will
-> > get messy during memslot updates, e.g. if dirty logging is toggled or a shared
-> > memory region is temporarily removed then we wouldn't want to destroy the tracking.
-> > 
-> > I don't think we'd want to use a bitmap, e.g. for a well-behaved guest, XArray
-> > should be far more efficient.
-> > 
-> > One benefit to explicitly tracking this in KVM is that it might be useful for
-> > software-only protected VMs, e.g. KVM could mark a region in the XArray as "pending"
-> > based on guest hypercalls to share/unshare memory, and then complete the transaction
-> > when userspace invokes the ioctl() to complete the share/unshare.
-> 
-> Another upside to implementing a KVM ioctl is basically the reverse of the
-> discussion around avoiding double-allocations: *supporting* double-allocations.
-> 
-> One thing I noticed while testing SNP+UPM support is a fairly dramatic
-> slow-down with how it handles OVMF, which does some really nasty stuff
-> with DMA where it takes 1 or 2 pages and flips them between
-> shared/private on every transaction. Obviously that's not ideal and
-> should be fixed directly at some point, but it's something that exists in the
-> wild and might not be the only such instance where we need to deal with that
-> sort of usage pattern. 
-> 
-> With the current implementation, one option I had to address this was to
-> disable hole-punching in QEMU when doing shared->private conversions:
-> 
-> Boot time from 1GB guest:
->                                SNP:   32s
->                            SNP+UPM: 1m43s
->   SNP+UPM (disable shared discard): 1m08s
-> 
-> Of course, we don't have the option of disabling discard/hole-punching
-> for private memory to see if we get similar gains there, since that also
-> doubles as the interface for doing private->shared conversions.
+CZ.NIC Turris 1.0 and 1.1 are open source routers, they have dual-core
+PowerPC Freescale P2020 CPU and are based on Freescale P2020RDB-PC-A board.
+Hardware design is fully open source, all firmware and hardware design
+files are available at Turris project website:
 
-Private should be the same, minus time consumed for private memory, the
-data should be close to SNP case. You can't try that in current version
-due to we rely on the existence of the private page to tell a page is
-private.
+https://docs.turris.cz/hw/turris-1x/turris-1x/
+https://project.turris.cz/en/hardware.html
 
-> A separate
-> KVM ioctl to decouple these 2 things would allow for that, and allow for a
-> way for userspace to implement things like batched/lazy-discard of
-> previously-converted pages to deal with cases like these.
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+Changes in v2:
+* Sort all nodes by addresses
+* Fix i2c address for MCU and SPD/EEPROM PSWP
+---
+ arch/powerpc/boot/dts/turris1x.dts | 475 +++++++++++++++++++++++++++++
+ 1 file changed, 475 insertions(+)
+ create mode 100644 arch/powerpc/boot/dts/turris1x.dts
 
-The planned ioctl includes two responsibilities:
-  - Mark the range as private/shared
-  - Zap the existing SLPT mapping for the range
+diff --git a/arch/powerpc/boot/dts/turris1x.dts b/arch/powerpc/boot/dts/turris1x.dts
+new file mode 100644
+index 000000000000..c76b628cf026
+--- /dev/null
++++ b/arch/powerpc/boot/dts/turris1x.dts
+@@ -0,0 +1,475 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Turris 1.x Device Tree Source
++ *
++ * Copyright 2013 - 2022 CZ.NIC z.s.p.o. (http://www.nic.cz/)
++ *
++ * Pinout, Schematics and Altium hardware design files are open source
++ * and available at: https://docs.turris.cz/hw/turris-1x/turris-1x/
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/leds/common.h>
++/include/ "fsl/p2020si-pre.dtsi"
++
++/ {
++	model = "Turris 1.x";
++	compatible = "cznic,turris1x", "fsl,P2020RDB-PC"; /* fsl,P2020RDB-PC is required for booting Linux */
++
++	aliases {
++		ethernet0 = &enet0;
++		ethernet1 = &enet1;
++		ethernet2 = &enet2;
++		serial0 = &serial0;
++		serial1 = &serial1;
++		pci0 = &pci0;
++		pci1 = &pci1;
++		pci2 = &pci2;
++		spi0 = &spi0;
++	};
++
++	memory {
++		device_type = "memory";
++	};
++
++	soc: soc@ffe00000 {
++		ranges = <0x0 0x0 0xffe00000 0x00100000>;
++
++		i2c@3000 {
++			/* PCA9557PW GPIO controller for boot config */
++			gpio-controller@18 {
++				compatible = "nxp,pca9557";
++				label = "bootcfg";
++				reg = <0x18>;
++				#gpio-cells = <2>;
++				gpio-controller;
++				polarity = <0x00>;
++			};
++
++			/* STM32F030R8T6 MCU for power control */
++			power-control@2a {
++				/*
++				 * Turris Power Control firmware runs on STM32F0 MCU.
++				 * This firmware is open source and available at:
++				 * https://gitlab.nic.cz/turris/hw/turris_power_control
++				 */
++				reg = <0x2a>;
++			};
++
++			/* DDR3 SPD/EEPROM PSWP instruction */
++			eeprom@32 {
++				reg = <0x32>;
++			};
++
++			/* SA56004ED temperature control */
++			temperature-sensor@4c {
++				compatible = "nxp,sa56004";
++				reg = <0x4c>;
++				interrupt-parent = <&gpio>;
++				interrupts = <12 IRQ_TYPE_LEVEL_LOW>, /* GPIO12 - ALERT pin */
++					     <13 IRQ_TYPE_LEVEL_LOW>; /* GPIO13 - CRIT pin */
++			};
++
++			/* DDR3 SPD/EEPROM */
++			eeprom@52 {
++				compatible = "atmel,spd";
++				reg = <0x52>;
++			};
++
++			/* MCP79402-I/ST Protected EEPROM */
++			eeprom@57 {
++				reg = <0x57>;
++			};
++
++			/* ATSHA204-TH-DA-T crypto module */
++			crypto@64 {
++				compatible = "atmel,atsha204";
++				reg = <0x64>;
++			};
++
++			/* IDT6V49205BNLGI clock generator */
++			clock-generator@69 {
++				compatible = "idt,6v49205b";
++				reg = <0x69>;
++			};
++
++			/* MCP79402-I/ST RTC */
++			rtc@6f {
++				compatible = "microchip,mcp7940x";
++				reg = <0x6f>;
++				interrupt-parent = <&gpio>;
++				interrupts = <14 0>; /* GPIO14 - MFP pin */
++			};
++		};
++
++		/* SPI on connector P1 */
++		spi0: spi@7000 {
++		};
++
++		gpio: gpio-controller@fc00 {
++			#interrupt-cells = <2>;
++			interrupt-controller;
++		};
++
++		/* Connected to SMSC USB2412-DZK 2-Port USB 2.0 Hub Controller */
++		usb@22000 {
++			phy_type = "ulpi";
++			dr_mode = "host";
++		};
++
++		enet0: ethernet@24000 {
++			/* Connected to port 6 of QCA8337N-AL3C switch */
++			phy-connection-type = "rgmii-id";
++
++			fixed-link {
++				speed = <1000>;
++				full-duplex;
++			};
++		};
++
++		mdio@24520 {
++			/* KSZ9031RNXCA ethernet phy for WAN port */
++			phy: ethernet-phy@7 {
++				interrupts = <3 1 0 0>;
++				reg = <0x7>;
++			};
++
++			/* QCA8337N-AL3C switch with integrated ethernet PHYs for LAN ports */
++			switch@10 {
++				compatible = "qca,qca8337";
++				interrupts = <2 1 0 0>;
++				reg = <0x10>;
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						label = "cpu1";
++						ethernet = <&enet1>;
++						phy-mode = "rgmii-id";
++
++						fixed-link {
++							speed = <1000>;
++							full-duplex;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						label = "lan5";
++					};
++
++					port@2 {
++						reg = <2>;
++						label = "lan4";
++					};
++
++					port@3 {
++						reg = <3>;
++						label = "lan3";
++					};
++
++					port@4 {
++						reg = <4>;
++						label = "lan2";
++					};
++
++					port@5 {
++						reg = <5>;
++						label = "lan1";
++					};
++
++					port@6 {
++						reg = <6>;
++						label = "cpu0";
++						ethernet = <&enet0>;
++						phy-mode = "rgmii-id";
++
++						fixed-link {
++							speed = <1000>;
++							full-duplex;
++						};
++					};
++				};
++			};
++		};
++
++		ptp_clock@24e00 {
++			fsl,tclk-period = <5>;
++			fsl,tmr-prsc = <200>;
++			fsl,tmr-add = <0xcccccccd>;
++			fsl,tmr-fiper1 = <0x3b9ac9fb>;
++			fsl,tmr-fiper2 = <0x0001869b>;
++			fsl,max-adj = <249999999>;
++		};
++
++		enet1: ethernet@25000 {
++			/* Connected to port 0 of QCA8337N-AL3C switch */
++			phy-connection-type = "rgmii-id";
++
++			fixed-link {
++				speed = <1000>;
++				full-duplex;
++			};
++		};
++
++		mdio@25520 {
++			status = "disabled";
++		};
++
++		enet2: ethernet@26000 {
++			/* Connected to KSZ9031RNXCA ethernet phy (WAN port) */
++			label = "wan";
++			phy-handle = <&phy>;
++			phy-connection-type = "rgmii-id";
++		};
++
++		mdio@26520 {
++			status = "disabled";
++		};
++
++		sdhc@2e000 {
++			bus-width = <4>;
++			cd-gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
++		};
++	};
++
++	lbc: localbus@ffe05000 {
++		reg = <0 0xffe05000 0 0x1000>;
++
++		ranges = <0x0 0x0 0x0 0xef000000 0x01000000>, /* NOR */
++			 <0x1 0x0 0x0 0xff800000 0x00040000>, /* NAND */
++			 <0x3 0x0 0x0 0xffa00000 0x00020000>; /* CPLD */
++
++		/* S29GL128P90TFIR10 NOR */
++		nor@0,0 {
++			compatible = "cfi-flash";
++			reg = <0x0 0x0 0x01000000>;
++			bank-width = <2>;
++			device-width = <1>;
++
++			partitions {
++				compatible = "fixed-partitions";
++				#address-cells = <1>;
++				#size-cells = <1>;
++
++				partition@0 {
++					/* 128 kB for Device Tree Blob */
++					reg = <0x00000000 0x00020000>;
++					label = "dtb";
++				};
++
++				partition@20000 {
++					/* 1.7 MB for Rescue Linux Kernel Image */
++					reg = <0x00020000 0x001a0000>;
++					label = "rescue-kernel";
++				};
++
++				partition@1c0000 {
++					/* 1.5 MB for Rescue JFFS2 Root File System */
++					reg = <0x001c0000 0x00180000>;
++					label = "rescue-rootfs";
++				};
++
++				partition@340000 {
++					/* 11 MB for TAR.XZ Backup with content of NAND Root File System */
++					reg = <0x00340000 0x00b00000>;
++					label = "backup-rootfs";
++				};
++
++				partition@e40000 {
++					/* 768 kB for Certificates JFFS2 File System */
++					reg = <0x00e40000 0x000c0000>;
++					label = "certificates";
++				};
++
++				/* free unused space 0x00f00000-0x00f20000 */
++
++				partition@f20000 {
++					/* 128 kB for U-Boot Environment Variables */
++					reg = <0x00f20000 0x00020000>;
++					label = "u-boot-env";
++				};
++
++				partition@f40000 {
++					/* 768 kB for U-Boot Bootloader Image */
++					reg = <0x00f40000 0x000c0000>;
++					label = "u-boot";
++				};
++			};
++		};
++
++		/* MT29F2G08ABAEAWP:E NAND */
++		nand@1,0 {
++			compatible = "fsl,p2020-fcm-nand", "fsl,elbc-fcm-nand";
++			reg = <0x1 0x0 0x00040000>;
++			nand-ecc-mode = "soft";
++			nand-ecc-algo = "bch";
++
++			partitions {
++				compatible = "fixed-partitions";
++				#address-cells = <1>;
++				#size-cells = <1>;
++
++				partition@0 {
++					/* 256 MB for UBI with one volume: UBIFS Root File System */
++					reg = <0x00000000 0x10000000>;
++					label = "rootfs";
++				};
++			};
++		};
++
++		/* LCMXO1200C-3FTN256C FPGA */
++		cpld@3,0 {
++			/*
++			 * Turris CPLD firmware which runs on this Lattice FPGA,
++			 * is extended version of P1021RDB-PC CPLD v4.1 firmware.
++			 * It is backward compatible with its original version
++			 * and the only extension is support for Turris LEDs.
++			 * Turris CPLD firmware is open source and available at:
++			 * https://gitlab.nic.cz/turris/hw/turris_cpld/-/blob/master/CZ_NIC_Router_CPLD.v
++			 */
++			compatible = "cznic,turris1x-cpld", "fsl,p1021rdb-pc-cpld", "simple-bus";
++			reg = <0x3 0x0 0x30>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0x0 0x3 0x0 0x00020000>;
++
++			/* MAX6370KA+T watchdog */
++			watchdog@2 {
++				/*
++				 * CPLD firmware maps SET0, SET1 and SET2
++				 * input logic of MAX6370KA+T chip to CPLD
++				 * memory space at byte offset 0x2. WDI
++				 * input logic is outside of the CPLD and
++				 * connected via external GPIO.
++				 */
++				compatible = "maxim,max6370";
++				reg = <0x02 0x01>;
++				gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
++			};
++
++			led-controller@13 {
++				/*
++				 * LEDs are controlled by CPLD firmware.
++				 * All five LAN LEDs share common RGB settings
++				 * and so it is not possible to set different
++				 * colors on different LAN ports.
++				 */
++				compatible = "cznic,turris1x-leds";
++				reg = <0x13 0x1d>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				multi-led@0 {
++					reg = <0x0>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_WAN;
++				};
++
++				multi-led@1 {
++					reg = <0x1>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_LAN;
++					function-enumerator = <5>;
++				};
++
++				multi-led@2 {
++					reg = <0x2>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_LAN;
++					function-enumerator = <4>;
++				};
++
++				multi-led@3 {
++					reg = <0x3>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_LAN;
++					function-enumerator = <3>;
++				};
++
++				multi-led@4 {
++					reg = <0x4>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_LAN;
++					function-enumerator = <2>;
++				};
++
++				multi-led@5 {
++					reg = <0x5>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_LAN;
++					function-enumerator = <1>;
++				};
++
++				multi-led@6 {
++					reg = <0x6>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_WLAN;
++				};
++
++				multi-led@7 {
++					reg = <0x7>;
++					color = <LED_COLOR_ID_RGB>;
++					function = LED_FUNCTION_POWER;
++				};
++			};
++		};
++	};
++
++	pci2: pcie@ffe08000 {
++		/*
++		 * PCIe bus for on-board TUSB7340RKM USB 3.0 xHCI controller.
++		 * This xHCI controller is available only on Turris 1.1 boards.
++		 * Turris 1.0 boards have nothing connected to this PCIe bus,
++		 * so system would see only PCIe Root Port of this PCIe Root
++		 * Complex. TUSB7340RKM xHCI controller has four SuperSpeed
++		 * channels. Channel 0 is connected to the front USB 3.0 port,
++		 * channel 1 (but only USB 2.0 subset) to USB 2.0 pins on mPCIe
++		 * slot 1 (CN5), channels 2 and 3 to connector P600.
++		 *
++		 * P2020 PCIe Root Port uses 1MB of PCIe MEM and xHCI controller
++		 * uses 64kB + 8kB of PCIe MEM. No PCIe IO is used or required.
++		 * So allocate 2MB of PCIe MEM for this PCIe bus.
++		 */
++		reg = <0 0xffe08000 0 0x1000>;
++		ranges = <0x02000000 0x0 0xc0000000 0 0xc0000000 0x0 0x00200000>, /* MEM */
++			 <0x01000000 0x0 0x00000000 0 0xffc20000 0x0 0x00010000>; /* IO */
++
++		pcie@0 {
++			ranges;
++		};
++	};
++
++	pci1: pcie@ffe09000 {
++		/* PCIe bus on mPCIe slot 2 (CN6) for expansion mPCIe card */
++		reg = <0 0xffe09000 0 0x1000>;
++		ranges = <0x02000000 0x0 0xa0000000 0 0xa0000000 0x0 0x20000000>, /* MEM */
++			 <0x01000000 0x0 0x00000000 0 0xffc10000 0x0 0x00010000>; /* IO */
++
++		pcie@0 {
++			ranges;
++		};
++	};
++
++	pci0: pcie@ffe0a000 {
++		/*
++		 * PCIe bus on mPCIe slot 1 (CN5) for expansion mPCIe card.
++		 * Turris 1.1 boards have in this mPCIe slot additional USB 2.0
++		 * pins via channel 1 of TUSB7340RKM xHCI controller and also
++		 * additional SIM card slot, both for USB-based WWAN cards.
++		 */
++		reg = <0 0xffe0a000 0 0x1000>;
++		ranges = <0x02000000 0x0 0x80000000 0 0x80000000 0x0 0x20000000>, /* MEM */
++			 <0x01000000 0x0 0x00000000 0 0xffc00000 0x0 0x00010000>; /* IO */
++
++		pcie@0 {
++			ranges;
++		};
++	};
++};
++
++/include/ "fsl/p2020si-post.dtsi"
+-- 
+2.20.1
 
-Whether doing the hole-punching or not on the fd is unrelated to this
-ioctl, userspace has freedom to do that or not. Since we don't reply on
-the fact that private memoy should have been allocated, we can support
-lazy faulting and don't need explicit fallocate(). That means, whether
-the memory is discarded or not in the memory backing store is not
-required by KVM, but be a userspace option.
-
-> 
-> Another motivator for these separate ioctl is that, since we're considering
-> 'out-of-band' interactions with private memfd where userspace might
-> erroneously/inadvertently do things like double allocations, another thing it
-> might do is pre-allocating pages in the private memfd prior to associating
-> the memfd with a private memslot. Since the notifiers aren't registered until
-> that point, any associated callbacks that would normally need to be done as
-> part of those fallocate() notification would be missed unless we do something
-> like 'replay' all the notifications once the private memslot is registered and
-> associating with a memfile notifier. But that seems a bit ugly, and I'm not
-> sure how well that would work. This also seems to hint at this additional
-> 'conversion' state being something that should be owned and managed directly
-> by KVM rather than hooking into the allocations.
-
-Right, once we move the private/shared state into KVM then we don't rely
-on those callbacks so the 'replay' thing is unneeded. fallocate()
-notification is useless for sure, invalidate() is likely still needed,
-just like the invalidate for mmu_notifier to bump the mmu_seq and do the
-zap.
-
-> 
-> It would also nicely solve the question of how to handle in-place
-> encryption, since unlike userspace, KVM is perfectly capable of copying
-> data from shared->private prior to conversion / guest start, and
-> disallowing such things afterward. Would just need an extra flag basically.
-
-Agree it's possible to do additional copy during the conversion but I'm
-not so confident this is urgent and the right API. Currently TDX does
-not have this need. Maybe as the first step just add the conversion
-itself. Adding additional feature like this can always be possible
-whenever we are clear.
-
-Thanks,
-Chao

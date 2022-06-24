@@ -2,70 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0997355A2D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 22:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746BC55A2DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 22:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiFXUhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 16:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
+        id S231265AbiFXUiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 16:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiFXUhT (ORCPT
+        with ESMTP id S229757AbiFXUiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 16:37:19 -0400
-Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8083A828A3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=TPfs2QT7MjSlfibpr7aNRy/3mX4Ppd6HsikuuFFfOgI=;
-        b=mCmloxF5kRH23rbwRYtYSvI1Qe5ieH0ONv+zMRuknslxW0bEmwZkWsuxNUV+t8z+8fHAU0ydceyGI
-         tbaxH/rhESgEYCp/Qyh+UEBPi+TnrIc0Dk9yF0tLWR4GhzFF4Z8DpPkdHgRSwzUByWArNHvzbWYO69
-         RLMohu9CxvIraT3ZGAbYlBux5Blh7BFTjagAkufbaeL8PVEN1I9AJ8YSbbCpFdvrzV4Lep7skJIUKZ
-         sSe5xOu4pHgRtoDWEZU6JuzsBpSCpfPACwKVlkIVhYMq3IFsahUtGjCOqrKWOfTXLtzGOgP9Q+yu+6
-         6xz0ukIZfiSkmQq4jIQcuWA9PgDEBzA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=TPfs2QT7MjSlfibpr7aNRy/3mX4Ppd6HsikuuFFfOgI=;
-        b=uQqRZTYsBlWT5c/y5rNbmV/ZA4UFvzI9fVUADgwkkLVa/hw/lHbxRbe7ka969fcFsyxKbjCZq1aKq
-         rmfWta2Ag==
-X-HalOne-Cookie: c9bafe8a4ad68d7eda8a0eaf402083f9e04b9925
-X-HalOne-ID: 6f0a39d1-f3fd-11ec-8233-d0431ea8bb10
-Received: from mailproxy1.cst.dirpod4-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 6f0a39d1-f3fd-11ec-8233-d0431ea8bb10;
-        Fri, 24 Jun 2022 20:37:16 +0000 (UTC)
-Date:   Fri, 24 Jun 2022 22:37:14 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Joel Selvaraj <jo@jsfamily.in>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
+        Fri, 24 Jun 2022 16:38:01 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F26F1F610
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:37:58 -0700 (PDT)
+Received: from p57b77c73.dip0.t-ipconnect.de ([87.183.124.115] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o4q3s-0003j9-0C; Fri, 24 Jun 2022 22:37:52 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Doug Anderson <dianders@chromium.org>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hao Fang <fanghao11@huawei.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] Introduce EBBG FT8719 DRM panel driver
-Message-ID: <YrYgehpgkIQY0Fqt@ravnborg.org>
-References: <BY5PR02MB700961069804230B5AFC5E04D9DF9@BY5PR02MB7009.namprd02.prod.outlook.com>
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sandy Huang <hjc@rock-chips.com>,
+        Sean Paul <seanpaul@chromium.org>
+Subject: Re: [PATCH] drm/rockchip: vop: Don't crash for invalid duplicate_state()
+Date:   Fri, 24 Jun 2022 22:37:50 +0200
+Message-ID: <4134988.X513TT2pbd@phil>
+In-Reply-To: <CA+ASDXOzhoooDDJUWV7rKpz-7GkMR5v=3gKQt4XazTSgnY51WQ@mail.gmail.com>
+References: <20220617172623.1.I62db228170b1559ada60b8d3e1637e1688424926@changeid> <4196825.8hzESeGDPO@phil> <CA+ASDXOzhoooDDJUWV7rKpz-7GkMR5v=3gKQt4XazTSgnY51WQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BY5PR02MB700961069804230B5AFC5E04D9DF9@BY5PR02MB7009.namprd02.prod.outlook.com>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,40 +47,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joel,
+Am Freitag, 24. Juni 2022, 19:57:53 CEST schrieb Brian Norris:
+> On Fri, Jun 24, 2022 at 12:23 AM Heiko Stuebner <heiko@sntech.de> wrote:
+> > The interesting question would be, do we want some fixes tag for it?
+> 
+> I'm not aware of any currently-upstream code that will hit this [1].
+> I've hit it in out-of-tree code (or, code that I submitted to
+> dri-devel, but wasn't accepted as-is), and this is the "belt and
+> braces" part -- the primary fix is that we should avoid calling things
+> like drm_atomic_get_crtc_state() at inappropriate times.
+> 
+> So, is the "extra safety" check really something that should go to
+> -stable? (Because let's be honest, everything with a Fixes tag goes
+> there.) Maybe?
+> 
+> Anyway, if you want to "blame" anything, this commit actually dropped
+> the safety check:
+> 
+> 4e257d9eee23 drm/rockchip: get rid of rockchip_drm_crtc_mode_config
 
-On Wed, Jun 01, 2022 at 01:54:06PM +0530, Joel Selvaraj wrote:
-> Add bindings and DRM panel driver for EBBG FT8719 6.18" 2246x1080 DSI
-> video mode panel, which can be found on some Xiaomi Poco F1 phones.
-> The panel's backlight is managed through QCOM WLED driver.
-> 
-> The driver is built using linux-mdss-dsi-panel-driver-generator[1], and
-> additionally support for handling regulators and linking external
-> backlight is added.
-> 
-> [1] https://github.com/msm8916-mainline/linux-mdss-dsi-panel-driver-generator
-> 
-> Changes in v4: (Linus Walleij's Suggestion)
->  - Introduce mipi_dsi_dcs_write_seq macro in include/drm/drm_mipi_dsi.h
->  - Remove the driver specific dsi_dcs_write_seq macro
->  - Use the newly introduced mipi_dsi_dcs_write_seq macro instead
-> 
-> Changes in v3: (Mostly Linus Walleij's Suggestions)
->  - Removed ctx->prepared state variable as it's handled by the core
->  - Print error in dsi_dcs_write_seq macro if it fails to write
->  - Removed magic power on sequences as panel works fine without them
-> 
-> Changes in v2: (Krzysztof Kozlowski's Suggestions)
->  - dt-bindings: specify maxItems for reg
->  - dt-bindings: cleanup and simplify the panel properties
->  - dt-bindings: in example change "|+" to "|' and "dsi0" to "dsi"
-> 
-> Joel Selvaraj (4):
->   dt-bindings: vendor-prefixes: Add prefix for EBBG
->   dt-bindings: display: Add bindings for EBBG FT8719
->   drm/mipi-dsi: Introduce mipi_dsi_dcs_write_seq macro
->   drm/panel: introduce ebbg,ft8719 panel
+I tend to think, if we know that connection we should also include it :-) .
+I wouldn't include a cc-stable for the reason you mentioned, but to me
+it makes sense if someone reading the git history in the future can easily
+know that information - so it doesn't hurt :-) .
 
-All applied to drm-misc (drm-misc-next), thanks!
+So I'll add that when applying.
 
-	Sam
+Thanks for supplying the origin commit
+Heiko
+
+> 
+> Brian
+> 
+> [1] But I'm not omniscient. So maybe it's good to have anyway.
+> 
+
+
+
+

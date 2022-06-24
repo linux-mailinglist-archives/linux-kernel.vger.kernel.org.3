@@ -2,92 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CE555A4F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD55455A4F4
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbiFXXln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 19:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
+        id S231400AbiFXXly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 19:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiFXXll (ORCPT
+        with ESMTP id S231676AbiFXXls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 19:41:41 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A393489D33
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:41:40 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id jb13so3334541plb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:41:40 -0700 (PDT)
+        Fri, 24 Jun 2022 19:41:48 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560F18AC20
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:41:47 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id t16so6855563qvh.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:41:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3xnBvzrRmX/ejhmjRn6AoNfZ6p3RCpkOG+Vy08xprps=;
-        b=AS3DaGG61PYQBaU/p+BC2EOrkBhfu3MaqbJkNmutFIQKb6hE58NVV2T2HN5MPwWFKa
-         cRf7njThcQFyvGXySMvrsvwCo02+qfboGW1pVKbYwZ24zTxDlM4SdkOlaaDFVJvDXPIL
-         OetXbsRtBoPDnOt5HdCQ3Q5JqWpf8ZVwSOnb3+xYio8ZK4/NjtBacXonZ1fqjV8WXYXl
-         WU3NZOiVBo3AsoXU3X5dmZemrU+NDtUm4b9Yn4FBO/V9W87+Q3OJ5LZc/Nwe2iFLrDsE
-         ZinA615CpiS5kp60zPU5bVWNiOI19/qMTyJP5t7KTw/k98Pz4cOoPF8LyMsswOMQr1cy
-         oMiw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0P6eQAm8yfbzGQOwbFOIP8sRyPpctTkgP3jLRNGa25g=;
+        b=Hkv0SMFjsq6iqjyvogfBVeGzcKQJFhXGWKDHqeQ8TXbEP4f9U5WnCV+XvNnxNFVDcU
+         /c0nfyFdyxhdLP1R1L90HSH1xglpr5+vQHG8KuDT4JnsHM+TtGdB4RUx5MitinRRuyn9
+         4ohFAZAEl5dpcDH4mQY959YF+SFT44xm/lCvma+KV2XLG+Z7EuSk5qTQBQlXkDVPk1yE
+         o5YjzzRJyvyYwPJhV2n2vIC+ew5q6mmUbvSEsycehwO7Y8yhchCbGlXGDdNusL7CbA7U
+         iQIz9VZmxBKDQRwR4EJhjd7b3MGtcGdDO2JpB6ElmrJPgwNJGUPIKjmDIgmSfg/tYq0N
+         eXsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3xnBvzrRmX/ejhmjRn6AoNfZ6p3RCpkOG+Vy08xprps=;
-        b=lVpKbKdfBIsnJs3tvcbgLIcIRuAdB5wLmchBHi9UvhuM2VADlETjrl1wZ4JU62n9A6
-         rD1jCGjVcR8Fg2EvBwGiIMkMXvt+eHfthVf2UOGxJpk0CldBt3DrAHZHrav50nph4I0U
-         Q0pJ9rY4Fs7PIYPTYk0WAAwN/vZQgZkiNN5k15sCij1agvQCaabgQ+SH5vG6Qm1Pli5S
-         Y3cLXrwspoZdJfJSSZYdd5sXHQ2st/awiRHfjh/zyRnhBTmtdLgdMDBEbbPC9y5wh2Yv
-         3kqutMeNuaYUdCyi5hpkRmfg7x6ij/F9C9CPXyg52cTvgleEoDp7jTJul8UwlYp8SToe
-         Ke2w==
-X-Gm-Message-State: AJIora/8D0/LLMUqZxqrqN7eTxrlaTa1wJD8MaLwHmhjhHKF8wBYFsQP
-        DPKnXdMSTK7cgaKxISFJDtUZsg==
-X-Google-Smtp-Source: AGRyM1uzvJMxrnVztGfw3Vxr8c4HN/RJBw6KcIENR+surAs1biy9lt0CP8HFqlurE+rRWKy50934fQ==
-X-Received: by 2002:a17:902:d712:b0:167:757c:a6f4 with SMTP id w18-20020a170902d71200b00167757ca6f4mr1476590ply.5.1656114100011;
-        Fri, 24 Jun 2022 16:41:40 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170902c24200b0016a6130128bsm2352299plg.211.2022.06.24.16.41.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 16:41:39 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 23:41:34 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] KVM: x86/mmu: Add optimized helper to retrieve an
- SPTE's index
-Message-ID: <YrZLriNw1CElOKbz@google.com>
-References: <20220624213039.2872507-1-seanjc@google.com>
- <20220624213039.2872507-2-seanjc@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0P6eQAm8yfbzGQOwbFOIP8sRyPpctTkgP3jLRNGa25g=;
+        b=01j7sa74Q7WDEOgv+ky+b5LKMMwpWFSxfOPkJ2jQKGLIfTtBL2L4Q/wQ8LRJjyD3FE
+         EHa7DxqjNYmdK+Sq5n3KrNpjLqX9851frUD2wXoXaXVymbdRzl+/Z7oyByzdJIx/Z0WS
+         x5M+O0ooLTZvI7RqKSjLfO9HD8KmBBB9zm8sHLVLBPx6khaFRIDC9vcHKYcw05yawwi6
+         iLBvCBZgGUL+pQP0KEyHirra+XxP6x+FgW3pN9w2AG67gKpBToR+JaiMNqLDkJvOtpFC
+         KZKJkY551ClU9mVbf9d01B6F0bNfma296POm3jtpZ4UU1QApqh/HK2ufhXNqD3SGTDCe
+         VMew==
+X-Gm-Message-State: AJIora9fQNVMEHKj9j1c44NYu4h7MfOmRxMl3qFQLivRnSx84siJpGw+
+        L5qgkMXOdgiy2gY1xMMfVS8LzNLrzk5qkaTrP3+/3A==
+X-Google-Smtp-Source: AGRyM1vIglVtJt/Bk+NfkHI9IxCiD2EvLAJs/nbFNBpSC5OtT3KgUzbGGMH4eYyOqKu5mAR7rSSM0JvayilwIHFzS58=
+X-Received: by 2002:ad4:596d:0:b0:470:7f34:fa13 with SMTP id
+ eq13-20020ad4596d000000b004707f34fa13mr1362927qvb.55.1656114106473; Fri, 24
+ Jun 2022 16:41:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220624213039.2872507-2-seanjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com> <1656090912-18074-2-git-send-email-quic_khsieh@quicinc.com>
+In-Reply-To: <1656090912-18074-2-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 25 Jun 2022 02:41:35 +0300
+Message-ID: <CAA8EJpozw5r657SaohnFzNzg59sO41+Q2qJkcjxDmCNCPnVe0w@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] drm/msm/dp: move struc of msm_display_info to msm_drv.h
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 09:30:36PM +0000, Sean Christopherson wrote:
-> Add spte_index() to dedup all the code that calculates a SPTE's index
-> into its parent's page table and/or spt array.  Opportunistically tweak
-> the calculation to avoid pointer arithmetic, which is subtle (subtract in
-> 8-byte chunks) and less performant (requires the compiler to generate the
-> subtraction).
-> 
-> Suggested-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Fri, 24 Jun 2022 at 20:15, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>
+> With current implementation, communication between interface driver and
+> upper mdss encoder layer are implemented through function calls. This
+> increase code complexity. Since struct msm_display_info contains msm
+> generic display information, it can be expended to contains more useful
+> information, such as widebus and dcs, in future to serve as communication
+> channel purpose between interface driver and upper mdss encoder layer so
+> that existing function calls can be eliminated.
+> This patch more struct msm_display_info to msm_drv.h to be visible by
+> whole msm scope.
 
-Thanks for the cleanup. I did a git-grep to look for any other users to
-convert to spte_index() and didn't find any.
+NAK.
 
-Reviewed-by: David Matlack <dmatlack@google.com>
+The msm_display_info contains information used by (and useful to) DPU
+only, it is not 'msm generic' info. For this reason it has been moved
+from msm_drv.h to dpu_encoder.h inIn commit b7420739f112 ("drm/msm:
+move struct msm_display_info to dpu driver") . Neither mdp5 nor mdp4
+are going to use this structure.
+
+At some point I thought too that we might be able to create a set of
+data and functions to describe encoder backends (dsi, hdmi, dp). This
+has failed for me. After musing over the msm_drv.h part containing
+functions published by the backends, I could not end up with a set of
+them being good enough. The only common part seems to be the
+modeset_init, snapshot and (once DP gets the DSC interface)
+get_dsc_config. The rest is backend-specific.
+
+I would suggest returning to this topic if/once DSI gets wide bus
+support or DP starts using bonded interfaces. Before that I don't
+foresee that common data structure would simplify things rather than
+complicating them.
+
+>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h | 20 --------------------
+>  drivers/gpu/drm/msm/msm_drv.h               | 19 +++++++++++++++++++
+>  2 files changed, 19 insertions(+), 20 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> index 781d41c..6b604c5 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> @@ -19,26 +19,6 @@
+>  #define IDLE_TIMEOUT   (66 - 16/2)
+>
+>  /**
+> - * struct msm_display_info - defines display properties
+> - * @intf_type:          DRM_MODE_ENCODER_ type
+> - * @capabilities:       Bitmask of display flags
+> - * @num_of_h_tiles:     Number of horizontal tiles in case of split interface
+> - * @h_tile_instance:    Controller instance used per tile. Number of elements is
+> - *                      based on num_of_h_tiles
+> - * @is_te_using_watchdog_timer:  Boolean to indicate watchdog TE is
+> - *                              used instead of panel TE in cmd mode panels
+> - * @dsc:               DSC configuration data for DSC-enabled displays
+> - */
+> -struct msm_display_info {
+> -       int intf_type;
+> -       uint32_t capabilities;
+> -       uint32_t num_of_h_tiles;
+> -       uint32_t h_tile_instance[MAX_H_TILES_PER_DISPLAY];
+> -       bool is_te_using_watchdog_timer;
+> -       struct msm_display_dsc_config *dsc;
+> -};
+> -
+> -/**
+>   * dpu_encoder_assign_crtc - Link the encoder to the crtc it's assigned to
+>   * @encoder:   encoder pointer
+>   * @crtc:      crtc pointer
+> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+> index fdbaad5..f9c263b 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.h
+> +++ b/drivers/gpu/drm/msm/msm_drv.h
+> @@ -106,11 +106,30 @@ struct msm_drm_thread {
+>         struct kthread_worker *worker;
+>  };
+>
+> +<<<<<<< HEAD
+
+Not to mention that this patch is broken per se.
+
+>  /* DSC config */
+>  struct msm_display_dsc_config {
+>         struct drm_dsc_config *drm;
+>  };
+>
+> +/**
+> + * struct msm_display_info - defines display properties
+> + * @intf_type:          DRM_MODE_ENCODER_ type
+> + * @capabilities:       Bitmask of display flags
+> + * @num_of_h_tiles:     Number of horizontal tiles in case of split interface
+> + * @h_tile_instance:    Controller instance used per tile. Number of elements is
+> + *                      based on num_of_h_tiles
+> + * @is_te_using_watchdog_timer:  Boolean to indicate watchdog TE is
+> + *                              used instead of panel TE in cmd mode panels
+> + */
+> +struct msm_display_info {
+> +       int intf_type;
+> +       uint32_t capabilities;
+> +       uint32_t num_of_h_tiles;
+> +       uint32_t h_tile_instance[MAX_H_TILES_PER_DISPLAY];
+> +       bool is_te_using_watchdog_timer;
+> +};
+> +
+>  struct msm_drm_private {
+>
+>         struct drm_device *dev;
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
+--
+With best wishes
+Dmitry

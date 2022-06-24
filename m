@@ -2,175 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DF555942F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 09:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E4355943F
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 09:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiFXH2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 03:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
+        id S229840AbiFXHbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 03:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiFXH23 (ORCPT
+        with ESMTP id S229464AbiFXHbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 03:28:29 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E8527FCE;
-        Fri, 24 Jun 2022 00:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656055708; x=1687591708;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=8jsU1rwYjx0ZdhewYCgxwzh1sgTDUCTIf+ExHA3Cyg0=;
-  b=Y+UB+f/dGJ8cTYNdJWE+5HcJqR25k9qzFRCSQ8FrH4PAloapi7887NkU
-   ARu/JOsBv5Q3DPPG5bJQU/L5UTgoLLcDC004cTzYBVA42eMk2IBM91orI
-   yrfCdQEtqWTAvRzZ+dKLaM8HfD77WTU6pZRwqDi9pEchlXjwWQ3QDWXry
-   8=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 24 Jun 2022 00:28:27 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 24 Jun 2022 00:28:25 -0700
-X-QCInternal: smtphost
-Received: from hu-krichai-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.110.37])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 24 Jun 2022 12:58:07 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
-        id 655003D33; Fri, 24 Jun 2022 12:58:06 +0530 (+0530)
-From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
-To:     helgaas@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com,
-        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
-        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
-        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>
-Subject: [PATCH v1 2/2] PCI: qcom: Restrict pci transactions after pci suspend
-Date:   Fri, 24 Jun 2022 12:58:02 +0530
-Message-Id: <1656055682-18817-3-git-send-email-quic_krichai@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1656055682-18817-1-git-send-email-quic_krichai@quicinc.com>
-References: <1656055682-18817-1-git-send-email-quic_krichai@quicinc.com>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 24 Jun 2022 03:31:34 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243D869F9B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 00:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=YUOFk9b/9Pi1CdCvUNVXTceplFA6AUnlxbx60+B9dcw=; b=RJTk89S0PROMbL6UJk2GB9VH3Y
+        boeJy6Fj/P3iLWMgCWFlNP3yc/NKsj45HMoRB6NW4brd62BOJZ4x83+r70cNzXE8C5z51MD8iOFTe
+        Ul5fyyepJRjpetwqojKickySBiGksoqGJlzowtIzK2zR/rBThomoSBT5GQCtRmYuZzTkbMj1oC/kt
+        u1Kb9cke5RT3KWTV7TpFnCmmEAQdPdrGlKGltV3CimQXtsUgfl5gJL+mVr0cAwsW3fqhS3OXtz9jH
+        4PgH8xTBUqKAgqmgXYl9JOgYKEaUdJomU/8dUP4crr70QUcZdsS23aqMej5/pYesXrwoCwZfT4h8A
+        NFe9nn0Q==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o4dlQ-00C6VQ-E8; Fri, 24 Jun 2022 07:30:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6445C3002C1;
+        Fri, 24 Jun 2022 09:29:58 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4C88D29B3A655; Fri, 24 Jun 2022 09:29:58 +0200 (CEST)
+Date:   Fri, 24 Jun 2022 09:29:58 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     K Prateek Nayak <kprateek.nayak@amd.com>
+Cc:     Chen Yu <yu.c.chen@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Mel Gorman <mgorman@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Barry Song <21cnbao@gmail.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Len Brown <len.brown@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Tim Chen <tim.c.chen@intel.com>, linux-kernel@vger.kernel.org,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Mohini Narkhede <mohini.narkhede@intel.com>
+Subject: Re: [PATCH v4] sched/fair: Introduce SIS_UTIL to search idle CPU
+ based on sum of util_avg
+Message-ID: <YrVn9t2kLHB21uG1@hirez.programming.kicks-ass.net>
+References: <20220612163428.849378-1-yu.c.chen@intel.com>
+ <76c94a3b-6ca2-e0e2-c618-42b147d2737d@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <76c94a3b-6ca2-e0e2-c618-42b147d2737d@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the endpoint device state is D0 and irq's are not freed, then
-kernel try to mask interrupts by writing in to the vector
-table (for MSIX interrupts) and config space (for MSI's).
+On Wed, Jun 22, 2022 at 12:06:55PM +0530, K Prateek Nayak wrote:
+> Hello Chenyu,
+> 
+> I'm sorry for the delay. The testing took a while but below are
+> the results from testing on our system.
+> 
+> tl;dr
+> 
+> o We ran all the tests with with SIS_PROP disabled.
+> o tbench reaches close to saturation early with 256 clients.
+> o schbench shows improvements for low worker counts.
+> o All other benchmark results seem comparable to tip.
+>   We don't see any serious regressions with v4.
+> 
+> > @@ -61,6 +61,7 @@ SCHED_FEAT(TTWU_QUEUE, true)
+> >   * When doing wakeups, attempt to limit superfluous scans of the LLC domain.
+> >   */
+> >  SCHED_FEAT(SIS_PROP, true)
+> 
+> SIS_PROP was disabled in our testing as follows:
+> 
+> --
+> -SCHED_FEAT(SIS_PROP, true)
+> +SCHED_FEAT(SIS_PROP, false)
 
-These transactions are initiated after clocks are getting disabled
-as part of PM suspend call. Due to it, these transactions are
-resulting in un-clocked access and eventual to crashes.
+So how about I make this change.
 
-So added a logic in qcom driver to restrict the unclocked access.
-And updated the logic to check the link state before masking
-or unmasking the interrupts.
+> With v4 on the current tip, I don't see any need for
+> a special case for systems with smaller LLCs with
+> SIS_PROP disabled and SIS_UITL enable. Even SIS Efficiency
+> seems to be better with SIS_UTIL for hackbench.
+> 
+> Tested-by: K Prateek Nayak <kprateek.nayak@amd.com> 
 
-Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
----
- drivers/pci/controller/dwc/pcie-designware-host.c | 12 ++++++--
- drivers/pci/controller/dwc/pcie-qcom.c            | 35 +++++++++++++++++++++--
- 2 files changed, 43 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-index 2fa86f3..52ed865 100644
---- a/drivers/pci/controller/dwc/pcie-designware-host.c
-+++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-@@ -29,13 +29,21 @@ static void dw_msi_ack_irq(struct irq_data *d)
- 
- static void dw_msi_mask_irq(struct irq_data *d)
- {
--	pci_msi_mask_irq(d);
-+	struct pcie_port *pp = irq_data_get_irq_chip_data(d->parent_data);
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+
-+	if (dw_pcie_link_up(pci))
-+		pci_msi_mask_irq(d);
- 	irq_chip_mask_parent(d);
- }
- 
- static void dw_msi_unmask_irq(struct irq_data *d)
- {
--	pci_msi_unmask_irq(d);
-+	struct pcie_port *pp = irq_data_get_irq_chip_data(d->parent_data);
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+
-+	if (dw_pcie_link_up(pci))
-+		pci_msi_unmask_irq(d);
- 	irq_chip_unmask_parent(d);
- }
- 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index b3029ca..af05fa7 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1331,12 +1331,41 @@ static int qcom_pcie_disable_clks_2_7_0(struct qcom_pcie *pcie)
- 	return 0;
- }
- 
-+static u32 qcom_pcie_read_dbi(struct dw_pcie *pci, void __iomem *base,
-+				u32 reg, size_t size)
-+{
-+	struct qcom_pcie *pcie = to_qcom_pcie(pci);
-+	u32 val;
-+
-+	if (pcie->cfg->is_suspended)
-+		return PCIBIOS_BAD_REGISTER_NUMBER;
-+
-+	dw_pcie_read(base + reg, size, &val);
-+	return val;
-+}
-+
-+static void qcom_pcie_write_dbi(struct dw_pcie *pci, void __iomem *base,
-+					u32 reg, size_t size, u32 val)
-+{
-+	struct qcom_pcie *pcie = to_qcom_pcie(pci);
-+
-+	if (pcie->cfg->is_suspended)
-+		return;
-+
-+	dw_pcie_write(base + reg, size, val);
-+}
- 
- static int qcom_pcie_link_up(struct dw_pcie *pci)
- {
--	u16 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
--	u16 val = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
-+	struct qcom_pcie *pcie = to_qcom_pcie(pci);
-+	u16 offset;
-+	u16 val;
-+
-+	if (pcie->cfg->is_suspended)
-+		return false;
- 
-+	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-+	val = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
- 	return !!(val & PCI_EXP_LNKSTA_DLLLA);
- }
- 
-@@ -1580,6 +1609,8 @@ static const struct qcom_pcie_cfg sc7280_cfg = {
- static const struct dw_pcie_ops dw_pcie_ops = {
- 	.link_up = qcom_pcie_link_up,
- 	.start_link = qcom_pcie_start_link,
-+	.read_dbi = qcom_pcie_read_dbi,
-+	.write_dbi = qcom_pcie_write_dbi,
- };
- 
- static int qcom_pcie_probe(struct platform_device *pdev)
--- 
-2.7.4
-
+And apply this thing, lets see how it fares..

@@ -2,149 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F008255A0A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2756B55A0B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbiFXSKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 14:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
+        id S230473AbiFXSKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 14:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiFXSKU (ORCPT
+        with ESMTP id S229480AbiFXSKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 14:10:20 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073C349917
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:10:19 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id j21so5847326lfe.1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:10:18 -0700 (PDT)
+        Fri, 24 Jun 2022 14:10:37 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2566E60E32
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:10:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hcN3XwIcZstb9s64xvU12TX0znKfRFFze9XJS0Qbx3c=;
-        b=i388ivDFxBMUiQA7obdzFBcEsHyr2kSx+7nBsDjM07lnEAK/xcdqGFSUgzgUY2x5hz
-         DEXehsWQSvUsV1Imkd8PWGjk00nG59mSuOc1lCrJJBgRYyUpD1jYVMip2WU88Ju3wXQC
-         9mMUu5erd6kQecAreB6NiXoTvzd9EWpyT6+hFRSjep65bDfex49cbaRobzUMHHHZ0Z84
-         eXEGdW5cEkmpQdRIfZYO6ikD12SduftZiMeR9H+O6dCGKcrFYtydLGHlB5ozixdcHDZo
-         Sofuo2cji7slhGZ5UqgKB7QK/oxD3m0HAUfdsQDFVoue1IcLToG3jzOqCB83xL9+874H
-         Tl3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hcN3XwIcZstb9s64xvU12TX0znKfRFFze9XJS0Qbx3c=;
-        b=iO4Pqr4hS5BHra8UfcqKRuaOl5uWI4hWcBU2GCC44UlVznEDDvP0keHHB823li9pGj
-         knGyN2WXrEv1O+qKG5emfh02wtqEELhmJ7WlzJjjtfuja2dDKWwJ+OreIN3SPxnXiDgD
-         6r20j3FTdZT9ltijCwBu8FUwemYkcmF1omk9UxGr0FhZe023rPBkOhOfXG97WBZbXH04
-         WGPPzpKY8lT2aawqYwOM1FuiiovK4Rhz65QGRo9EsgGupOK0lxz5Ray7GEKxPnijSXZN
-         SPeiuDcqbQJybvIb9KbhWpgMeQgTs3ImjDgzYDhYdPR8qX4o5Khl8sE9VOsYlcUhfHCq
-         4NwQ==
-X-Gm-Message-State: AJIora8gsRmeuZ3pj++/F2UFHuwYaa8IPpUm4CVusGOunTDupowSgGGj
-        tOu3YnaLz3prJFvIb3qp71sMk/CXVjabc0gh+d1XaQ==
-X-Google-Smtp-Source: AGRyM1tdkubN4l5CrWuEurB1wstbops6ikfefa6G3OKJ5WraDCy19/A/YOyuGj3Y9SbrsN+Oqd+6FVxlMDlWtFoEghE=
-X-Received: by 2002:ac2:5974:0:b0:47f:92db:4480 with SMTP id
- h20-20020ac25974000000b0047f92db4480mr59927lfp.685.1656094217190; Fri, 24 Jun
- 2022 11:10:17 -0700 (PDT)
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=VNymKOoqcg3pGTMnfjGRMvDmuCkOCa01F2ZxFC/A6/w=;
+        b=W96F2JjHh8CDcsJSZvfKw5C4AGufkvTf+lF8ecT/ZguDNkCJCdIVF/3xcGS5qEXVtkVKA+clvSb0S
+         42vavh7CYg9GA9awDHJ9ZUcBaRdc0zunoMdqlPhe/wNWpr/tExfuiI0IXK9Kyk5TvlucCdPw3gg8XE
+         eFs7+Pgbbgp6uvmyp7I7MMJdr9THlvG5vj3w0JypQqGumcyxf41cgser+QdAF0wZ8XDzfQz8SzHJaY
+         vhv7P74zi1icGvbX2N9ISNw5L84gmWd0AOLdtXm57v+vtw9wfRYGIJUxmfvIYNdcBr0LHBUgs4XK0C
+         7p9ztRCzhQRwHFtzPrRyYVFRbpDey5A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=VNymKOoqcg3pGTMnfjGRMvDmuCkOCa01F2ZxFC/A6/w=;
+        b=1b5J72DSnPYK8nZWg70GlTAiNPwhCRsGn6Xj/QYy6JxRwSLhHbirlBE7WXSYi3R1NhtqiwNoZMBMG
+         dxYuiu9AQ==
+X-HalOne-Cookie: c7b4917d86e3993e0abb9103ff3df1cade167dbb
+X-HalOne-ID: ee825b54-f3e8-11ec-8233-d0431ea8bb10
+Received: from mailproxy2.cst.dirpod3-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id ee825b54-f3e8-11ec-8233-d0431ea8bb10;
+        Fri, 24 Jun 2022 18:10:30 +0000 (UTC)
+Date:   Fri, 24 Jun 2022 20:10:28 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     allen <allen.chen@ite.com.tw>
+Cc:     "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
+        David Airlie <airlied@linux.ie>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Pin-yen Lin <treapking@google.com>
+Subject: Re: [PATCH] drm/bridge: add it6505 driver read config from dt
+ property
+Message-ID: <YrX+FOAycejw8wV0@ravnborg.org>
+References: <20220623093154.52701-1-allen.chen@ite.com.tw>
 MIME-Version: 1.0
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <CAMkAt6osbEGBFrgn=y1=x4mDHC1aL40BwaW0NdGHF8qmWd7ktA@mail.gmail.com>
- <5af19000-4482-7eb9-f158-0a461891f087@intel.com> <CAA03e5F480=psSECDAkXQEvNKk3une-4dJV57Hde4z4MMzh=1A@mail.gmail.com>
- <e09dae40-d269-cfed-d048-3e62275c1bb7@intel.com> <CAA03e5HxiLkOUbOrsgbzVdAUNZvnnryuNcqrz1ZWECtWLwKMXA@mail.gmail.com>
- <1e7ad728-d796-c84d-b7ba-b96d8f9fcd0c@intel.com>
-In-Reply-To: <1e7ad728-d796-c84d-b7ba-b96d8f9fcd0c@intel.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Fri, 24 Jun 2022 12:10:05 -0600
-Message-ID: <CAMkAt6pzMSUuuA7Kc-sVEGw1FYpDoRrKs-dco++2rpqB219_ng@mail.gmail.com>
-Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted memory
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Marc Orr <marcorr@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo <marcelo.cerri@canonical.com>, tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        "the arch/x86 maintainers" <x86@kernel.org>, linux-mm@kvack.org,
-        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220623093154.52701-1-allen.chen@ite.com.tw>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 11:47 AM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 6/24/22 10:19, Marc Orr wrote:
-> >> Is this a matter of
-> >>
-> >>         can boot from a guest firmware that doesn't pre-validate all the
-> >>         guest memory?
-> >>
-> >> or
-> >>
-> >>         can boot from a guest firmware that doesn't pre-validate all the
-> >>         guest memory ... with access to all of that guest's RAM?
-> >>
-> >> In other words, are we talking about "fails to boot" or "can't see all
-> >> the RAM"?
-> > Ah... yeah, you're right, Dave -- I guess it's the latter. The guest
-> > won't have access to all of the memory that the customer is paying
-> > for. But that's still bad. If the customer buys a 96 GB VM and can
-> > only see 4GB because they're kernel doesn't have these patches they're
-> > going to be confused and frustrated.
->
-> They'll at least be a _bit_ less angry and frustrated than if they were
-> staring at a blank screen. ;)  But, yeah, I totally get the point.
+Hi allen.
 
-Ha! Well we do have that issue in some cases. If you try to run an SEV
-VM with an image that doesn't support SEV you will just get a blank
-serial screen. If we had something like this back then the FW could
-have surfaced a nice error to the user but that's history now.
+On Thu, Jun 23, 2022 at 05:31:54PM +0800, allen wrote:
+> From: allen chen <allen.chen@ite.com.tw>
+> 
+> add read max-lane and max-pixel-clock from dt property
+> 
+> Signed-off-by: Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
+Can you fix so your s-o-b mail and author mail matches?
+As it is now an error is flagged as they do not match.
 
->
-> How big is the window going to be where we have guests that can have
-> unaccepted memory, but don't have acceptance support?  For TDX, it's
-> looking like it'll probably _just_ be 5.19.  Is TDX on 5.19 in shape
-> that cloud providers can deploy it?  Or, is stuff like lack of
-> attestation a deal breaker?
+	Sam
 
-This is complicated because distros don't run upstream linux versions.
-If I understand correctly (I see some distro emails on here so please
-correct me) distros normally maintain forks which they backport things
-into. So I cannot answer this question. It is possible that a
-hypothetical distro backports only the SNP/TDX initial patches and
-doesn't take these for many releases.
-
-I am more familiar with SNP and it does have some attestation support
-in the first patch sets.
-
-Also I should have been more clear. I don't want to try and hold up
-this feature but instead discuss a future usability add-on feature.
-
->
->
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> ---
+>  drivers/gpu/drm/bridge/ite-it6505.c | 35 ++++++++++++++++++++++++++---
+>  1 file changed, 32 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
+> index 4b673c4792d77..c9121d4635a52 100644
+> --- a/drivers/gpu/drm/bridge/ite-it6505.c
+> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
+> @@ -436,6 +436,8 @@ struct it6505 {
+>  	bool powered;
+>  	bool hpd_state;
+>  	u32 afe_setting;
+> +	u32 max_dpi_pixel_clock;
+> +	u32 max_lane_count;
+>  	enum hdcp_state hdcp_status;
+>  	struct delayed_work hdcp_work;
+>  	struct work_struct hdcp_wait_ksv_list;
+> @@ -1466,7 +1468,8 @@ static void it6505_parse_link_capabilities(struct it6505 *it6505)
+>  	it6505->lane_count = link->num_lanes;
+>  	DRM_DEV_DEBUG_DRIVER(dev, "Sink support %d lanes training",
+>  			     it6505->lane_count);
+> -	it6505->lane_count = min_t(int, it6505->lane_count, MAX_LANE_COUNT);
+> +	it6505->lane_count = min_t(int, it6505->lane_count,
+> +				   it6505->max_lane_count);
+>  
+>  	it6505->branch_device = drm_dp_is_branch(it6505->dpcd);
+>  	DRM_DEV_DEBUG_DRIVER(dev, "Sink %sbranch device",
+> @@ -2895,7 +2898,7 @@ it6505_bridge_mode_valid(struct drm_bridge *bridge,
+>  	if (mode->flags & DRM_MODE_FLAG_INTERLACE)
+>  		return MODE_NO_INTERLACE;
+>  
+> -	if (mode->clock > DPI_PIXEL_CLK_MAX)
+> +	if (mode->clock > it6505->max_dpi_pixel_clock)
+>  		return MODE_CLOCK_HIGH;
+>  
+>  	it6505->video_info.clock = mode->clock;
+> @@ -3057,6 +3060,8 @@ static void it6505_parse_dt(struct it6505 *it6505)
+>  {
+>  	struct device *dev = &it6505->client->dev;
+>  	u32 *afe_setting = &it6505->afe_setting;
+> +	u32 *max_lane_count = &it6505->max_lane_count;
+> +	u32 *max_dpi_pixel_clock = &it6505->max_dpi_pixel_clock;
+>  
+>  	it6505->lane_swap_disabled =
+>  		device_property_read_bool(dev, "no-laneswap");
+> @@ -3072,7 +3077,31 @@ static void it6505_parse_dt(struct it6505 *it6505)
+>  	} else {
+>  		*afe_setting = 0;
+>  	}
+> -	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %d", *afe_setting);
+> +
+> +	if (device_property_read_u32(dev, "max-lane-count",
+> +				     max_lane_count) == 0) {
+> +		if (*max_lane_count > 4 || *max_lane_count == 3) {
+> +			dev_err(dev, "max lane count error, use default");
+> +			*max_lane_count = MAX_LANE_COUNT;
+> +		}
+> +	} else {
+> +		*max_lane_count = MAX_LANE_COUNT;
+> +	}
+> +
+> +	if (device_property_read_u32(dev, "max-dpi-pixel-clock",
+> +				     max_dpi_pixel_clock) == 0) {
+> +		if (*max_dpi_pixel_clock > 297000) {
+> +			dev_err(dev, "max pixel clock error, use default");
+> +			*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
+> +		}
+> +	} else {
+> +		*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
+> +	}
+> +
+> +	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %u, max_lane_count: %u",
+> +			     it6505->afe_setting, it6505->max_lane_count);
+> +	DRM_DEV_DEBUG_DRIVER(dev, "using max_dpi_pixel_clock: %u kHz",
+> +			     it6505->max_dpi_pixel_clock);
+>  }
+>  
+>  static ssize_t receive_timing_debugfs_show(struct file *file, char __user *buf,
+> -- 
+> 2.25.1

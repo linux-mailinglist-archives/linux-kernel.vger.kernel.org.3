@@ -2,99 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C446559655
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C20559697
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbiFXJUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 05:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
+        id S231946AbiFXJ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 05:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiFXJUP (ORCPT
+        with ESMTP id S231634AbiFXJ0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 05:20:15 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240FC680BB;
-        Fri, 24 Jun 2022 02:20:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656062415; x=1687598415;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=FH5MRkjexNSBtIFQJCSSojv/QFrWgGXcfNpOdTHtJRE=;
-  b=I8FDs6ug8UkpLg372J61PZDEK4dIaBIAdRiEU/0CwioWPIpfNXdFFsVn
-   xxi8Fj3mPMfo13SqgM4OjOSPnAUhYacJXFab6rxY4HJNi6rkX2YJTgS3P
-   hxzqI4F249QTbC3lHW7NQQvPRn/f+ArE2oG8xicgJ5tO8WEJoMj5m928o
-   c=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 24 Jun 2022 02:20:15 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 24 Jun 2022 02:20:13 -0700
-X-QCInternal: smtphost
-Received: from hu-krichai-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.110.37])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 24 Jun 2022 14:49:55 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
-        id 147913E69; Fri, 24 Jun 2022 14:49:55 +0530 (+0530)
-From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
-To:     helgaas@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com,
-        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
-        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
-        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
-        dmitry.baryshkov@linaro.org,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS)
-Subject: [PATCH v1 3/3] arm64: dts: qcom: sc7280: Add missing pcie clocks
-Date:   Fri, 24 Jun 2022 14:49:51 +0530
-Message-Id: <1656062391-14567-4-git-send-email-quic_krichai@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1656062391-14567-1-git-send-email-quic_krichai@quicinc.com>
-References: <1656062391-14567-1-git-send-email-quic_krichai@quicinc.com>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 24 Jun 2022 05:26:12 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECBD6F497;
+        Fri, 24 Jun 2022 02:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656062771; x=1687598771;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=E/GySULo37Ar3Xncr9YN3XGQnakEB5I73ayBapdgEJc=;
+  b=VS95e71fSoz8V/VRJTm4tLx2YXDorXkJTnnDmzWStUqD5jfo5t3FylaT
+   h+235GhKWPPG5v7dLH71wUQS2jrjnf79i60f+8SVS0GiQccsuQLsWxrX6
+   q59m3/6PbGpEpMS6G6XdUQeVd2XF90PaD89RlPyeI8AECwOYbbEhJrKlV
+   Uai5+WPhdIWkRDHLGLKXrSX9F+AdIL3o2DIIksdhB0CpUXiPqTzsO6M0i
+   j1QBg7ndW7pOQLwY/r+dPgf78vakOSiKaP1NBhsXtq1yJ7mddzn7Qz4YP
+   BSC/wJdxS7+ZQ+F5e5js7KkU7KQ4iGiU5PH53cbvcU5ewZK5n9hT/Kb0Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="261389178"
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="261389178"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 02:26:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="691454931"
+Received: from unknown (HELO localhost.localdomain.sh.intel.com) ([10.238.175.107])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Jun 2022 02:26:08 -0700
+From:   Tianfei Zhang <tianfei.zhang@intel.com>
+To:     yilun.xu@intel.com, lee.jones@linaro.org
+Cc:     hao.wu@intel.com, trix@redhat.com, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, russell.h.weight@intel.com,
+        matthew.gerlach@linux.intel.com,
+        Tianfei Zhang <tianfei.zhang@intel.com>
+Subject: [PATCH v3 0/3] add PMCI driver support
+Date:   Fri, 24 Jun 2022 05:22:26 -0400
+Message-Id: <20220624092229.45854-1-tianfei.zhang@intel.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing pcie clocks.
+PMCI(Platform Management Control Interface) is a software-visible
+interface, connected to card BMC which provided basic register
+access functionality from host to Card BMC. This pmci-bmc driver
+leverages the regmap APIs to support Intel specific Indirect
+Register Interface for register read/write on PMCI driver. 
 
-Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+This patchset adding a driver for the PMCI-base interface of Intel
+MAX10 BMC controller.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index e66fc67..a5ce095 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2043,6 +2043,8 @@
- 				 <&gcc GCC_PCIE_1_SLV_AXI_CLK>,
- 				 <&gcc GCC_PCIE_1_SLV_Q2A_AXI_CLK>,
- 				 <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>,
-+				 <&gcc GCC_AGGRE_NOC_PCIE_CENTER_SF_AXI_CLK>,
-+				 <&gcc GCC_AGGRE_NOC_PCIE_1_AXI_CLK>,
- 				 <&gcc GCC_DDRSS_PCIE_SF_CLK>;
- 
- 			clock-names = "pipe",
-@@ -2055,6 +2057,8 @@
- 				      "bus_slave",
- 				      "slave_q2a",
- 				      "tbu",
-+				      "aggre0",
-+				      "aggre1",
- 				      "ddrss_sf_tbu";
- 
- 			assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
+patch 1: use ddata for local variables which directly interacts with
+dev_get_drvdata()/dev_set_drvdata().
+patch 2: add a driver for PMCI.
+patch 3: introduce a new member in intel_m10bmc for the different
+base register address of MAX10 CSRs.
+
+v3:
+  - create a new intel-m10-bmc-pmci driver, and discard the bmc-core
+    file which adds in v2.
+  - create a new file for sysfs-driver-intel-m10-bmc-pmci ABI.
+  - remove the regmap_access_table
+  - introduce a new member "base" in intel_m10bmc for different base
+    register address.
+  - rebased on 5.19-rc3
+v2:
+  - use regmap APIs to support Intel specific Indirect Register Interface
+    on PMCI driver.
+  - fix compile warning reported by lkp.
+  - rebased on 5.19-rc2
+
+Tianfei Zhang (3):
+  mfd: intel-m10-bmc: rename the local variables
+  mfd: intel-m10-bmc: add PMCI driver
+  mfd: intel-m10-bmc: support different BMC base register address
+
+ .../testing/sysfs-driver-intel-m10-bmc-pmci   |  36 +++
+ drivers/mfd/Kconfig                           |  10 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/intel-m10-bmc-pmci.c              | 278 ++++++++++++++++++
+ drivers/mfd/intel-m10-bmc.c                   |  11 +-
+ include/linux/mfd/intel-m10-bmc.h             |  12 +-
+ 6 files changed, 342 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-pmci
+ create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
+
 -- 
-2.7.4
+2.26.2
 

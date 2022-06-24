@@ -2,40 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCCC55935A
+	by mail.lfdr.de (Postfix) with ESMTP id 0E44D559359
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiFXGZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 02:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
+        id S229469AbiFXGZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 02:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiFXGZe (ORCPT
+        with ESMTP id S229441AbiFXGZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 02:25:34 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8144F9FD
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:25:33 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VHFjIFX_1656051917;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VHFjIFX_1656051917)
-          by smtp.aliyun-inc.com;
-          Fri, 24 Jun 2022 14:25:28 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     harry.wentland@amd.com
-Cc:     sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] drm/amd/display: Use swap() instead of open coding it
-Date:   Fri, 24 Jun 2022 14:25:11 +0800
-Message-Id: <20220624062511.50532-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Fri, 24 Jun 2022 02:25:20 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650494F9E0;
+        Thu, 23 Jun 2022 23:25:20 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id a17so1272189pls.6;
+        Thu, 23 Jun 2022 23:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YzS6DEPqt3lHPSZZNgKFpPjyHQrp9ZFD5gLKipQgADQ=;
+        b=ldlfMmihFpyEyNLk9EveOKgKcvWKoGOxwobyUknq3LvuLaw2a+jnMEbmbIoIZtaF8O
+         O8V7HKonaKZWwESgR+UqQx4Ofjdix8p0C6wAKAPiJ9mdXbz5NRWouIiwCow+pkN0QPrk
+         bAJds845htlNu511f1gkeIIy6GtXtpVZQAfYxT1xVQGgSOWpQeN99J9Z/kX+psUkJgwP
+         0y11bFBVd83ef98m/bTy8mce/D7vmIFX+ICNpiGjmn9aD4EswVuosypYBNrDOTVErCaB
+         8Nvk/nMF1dajggwP5lvuAqaLQXR1GXLnV5tLZDtB4JJ1r1hPr+xvE6LILsEGSamXY0ZX
+         trMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YzS6DEPqt3lHPSZZNgKFpPjyHQrp9ZFD5gLKipQgADQ=;
+        b=O3wJqyRqv/fEsO6GvlVXtI3YhJCNzN56P3ikgluWbWHaMjlUq2HO5cFZ0Qj74c7SKi
+         VZSA+hJ6nruLoOzCJ73I0eU7ADe5F+50855C8E19rNvFutuScKYzZMifm2J44PIre+ry
+         JE05DbvXxhKVsEahm3OZzKbr9AmYP2n23iq4QyIXDvqb91hMMg7T0ncQ/7H3XX8hYvTi
+         Xmeqh4ujK5sFl9PYIU7Ewcp0kvvuhVhFAwGK4BPzncAwqXwVupZAKFs883dSoFRIMuG1
+         NlA0rdCOwGWp33wLAu5T+ov8Ip7DZ7fcuXD6J3thzol4UitQjQEn/cWu6Tm4RbyrGU/e
+         EGdg==
+X-Gm-Message-State: AJIora/Z2dKfoiJrwC2Lcyo8gxK3Frsq5a313SZY/MhzJW3TwgNhdoCx
+        Fv95ZuPgcnMmsdh0WJvB/rw=
+X-Google-Smtp-Source: AGRyM1thgI+CyzAM+KdY/bGmMul5M/V1mcgFSjjfRva8yMVO3W7abyn1Ry2ZWFlUXlV784O7kbFTSQ==
+X-Received: by 2002:a17:902:d905:b0:16a:2917:73dc with SMTP id c5-20020a170902d90500b0016a291773dcmr23306983plz.6.1656051919783;
+        Thu, 23 Jun 2022 23:25:19 -0700 (PDT)
+Received: from archdragon (dragonet.kaist.ac.kr. [143.248.133.220])
+        by smtp.gmail.com with ESMTPSA id a25-20020aa79719000000b0052551c1a413sm760337pfg.204.2022.06.23.23.25.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 23:25:19 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 15:25:15 +0900
+From:   "Dae R. Jeong" <threeearcat@gmail.com>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: KASAN: use-after-free Read in cfusbl_device_notify
+Message-ID: <YrVYywPFYiqWJo4a@archdragon>
+References: <YrVUujEka5jSXZvt@archdragon>
+ <CANn89iKLpGamedvzZjnhpNUUpPJ7ueiGo62DH0XM+omQvhr9HA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANn89iKLpGamedvzZjnhpNUUpPJ7ueiGo62DH0XM+omQvhr9HA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,44 +74,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This was found by coccicheck:
+On Fri, Jun 24, 2022 at 08:15:54AM +0200, Eric Dumazet wrote:
+> On Fri, Jun 24, 2022 at 8:08 AM Dae R. Jeong <threeearcat@gmail.com> wrote:
+> >
+> > Hello,
+> >
+> > We observed a crash "KASAN: use-after-free Read in cfusbl_device_notify" during fuzzing.
+> 
+> This is a known problem.
+> 
+> Some drivers do not like NETDEV_UNREGISTER being delivered multiple times.
+>
+> Make sure in your fuzzing to have NET_DEV_REFCNT_TRACKER=y
+> 
+> Thanks.
 
-./drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c:2959:30-31: WARNING opportunity for swap().
+Our config already have CONFIG_NET_DEV_REFCNT_TRACKER=y.
+Anyway, this UAF report seems not interesting.
 
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+Thank you for your quick reply.
 
-diff --git a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
-index 25791ed0559d..e832fec8d844 100644
---- a/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
-+++ b/drivers/gpu/drm/amd/display/dc/bios/bios_parser2.c
-@@ -2906,7 +2906,6 @@ static enum bp_result construct_integrated_info(
- 	struct atom_common_table_header *header;
- 	struct atom_data_revision revision;
- 
--	struct clock_voltage_caps temp = {0, 0};
- 	uint32_t i;
- 	uint32_t j;
- 
-@@ -2951,14 +2950,8 @@ static enum bp_result construct_integrated_info(
- 	for (i = 1; i < NUMBER_OF_DISP_CLK_VOLTAGE; ++i) {
- 		for (j = i; j > 0; --j) {
- 			if (info->disp_clk_voltage[j].max_supported_clk <
--				info->disp_clk_voltage[j-1].max_supported_clk
--				) {
--				/* swap j and j - 1*/
--				temp = info->disp_clk_voltage[j-1];
--				info->disp_clk_voltage[j-1] =
--					info->disp_clk_voltage[j];
--				info->disp_clk_voltage[j] = temp;
--			}
-+			    info->disp_clk_voltage[j-1].max_supported_clk)
-+				swap(info->disp_clk_voltage[j-1], info->disp_clk_voltage[j]);
- 		}
- 	}
- 
--- 
-2.20.1.7.g153144c
 
+Best regards,
+Dae R. Jeong.

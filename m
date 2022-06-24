@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FECC55A336
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0451555A339
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbiFXVCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 17:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S231984AbiFXVCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 17:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiFXVCH (ORCPT
+        with ESMTP id S231387AbiFXVCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 17:02:07 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA22552E79
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:02:06 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id ej4so5086540edb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:02:06 -0700 (PDT)
+        Fri, 24 Jun 2022 17:02:04 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F11E7A6D8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:02:03 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id r81-20020a1c4454000000b003a0297a61ddso2486494wma.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:02:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Or58d3ZkEn57TFqLS2gsXrc8iLHGrlKLbW8WGHYFJRc=;
-        b=hAWheESAndEXKAPbcUiqlEueWvXAeJOuFEGkSwpyB7xj3pkczS6kBS5vMNKLC+N4hl
-         fbhuEaZlkv9aPLOglB7zgD6r6ICdBm9a8yhU/IVxiTyr0mJTB3BqtymT1jMS0XFgybXq
-         Wef4CYmSGYRxPZYezK9LaBzQifGnobDAuguds=
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=bICz+32b/h7DCqXAyJl28t1XjDFQujGZ0o38fT2EYFg=;
+        b=JUjukhU6pk5h5dOSVHG43IEe28r72tdMsgbz7yI57KJCgLvJi1RSeL2EImY4NkneSy
+         yOvGtUWtyFsKRfXLexdbafWe9ND6SJwNUGlauCeTn4Mhp5a3wpNQIP80folGoYT/hj7z
+         NPvMHc5X/Wwnsk+h6KXdu525l424wIhH2AU1o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Or58d3ZkEn57TFqLS2gsXrc8iLHGrlKLbW8WGHYFJRc=;
-        b=sHwWrjJXKMx/+w3GZHsUtPHfIyor13KvkDNmRa3lkvqPO35utiHc+O+hHIH5qTYdE1
-         i3fWNyzfve+EWlIzkRBZwf+urL5FcSMa0eqNeVxO2a5i/qOTZUlO8stn2dNaPqL5v3Bl
-         xTS37uBoPvH0e6MliS+lymaFXwCjNAK2fy2DSa3fkMqsXgevnZ1DMVGP/RAHvl3nyNNo
-         /Unc2bcpo9jaMhcHUq/88udUqqjVNeEu0qEFoWTiDmC6rdNQvy1ZLkYM6KRX3c3X1Bfa
-         k8qPnz2T5nQtrIyHHnChmvf6D2c3sBPs5XbgXMyaZudaFBDmftVDK8QthBuzntVSwGhi
-         c40g==
-X-Gm-Message-State: AJIora/ltbhgX7U1yG6rtfXONYFaQbgpva58l5ITfMvykSIWA7QnFZ+h
-        7qm+++/e16Dy4PyKsGLBDSvNx1xwHxyslt37zP8=
-X-Google-Smtp-Source: AGRyM1uwkgPxndbEt7D8AHMIMyiQvD4GdIPvDw8QFYAx/8rCi6dsu7Phji5IKnkJVFbrCamxHCYfEw==
-X-Received: by 2002:a05:6402:5412:b0:435:5997:ccb5 with SMTP id ev18-20020a056402541200b004355997ccb5mr1201530edb.167.1656104525243;
-        Fri, 24 Jun 2022 14:02:05 -0700 (PDT)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id a21-20020a056402169500b004357063bf60sm2780376edv.41.2022.06.24.14.02.04
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 14:02:04 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id n1so4623698wrg.12
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:02:04 -0700 (PDT)
-X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id
- b13-20020adff90d000000b0020cde324d35mr874128wrr.583.1656104524155; Fri, 24
- Jun 2022 14:02:04 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=bICz+32b/h7DCqXAyJl28t1XjDFQujGZ0o38fT2EYFg=;
+        b=NMIv6r1BJz/Jb67PdRNxQ1WQW1TxbNvYVJILvZLXDRCealX3kDXgG88d7hmOuEENEi
+         CjFVuUTXFWN5yGvwIfwcCX0GEkmaHG7AUfF33ZNbUhXUBk8qMgBz75XXVrRPhCsL6Jpe
+         JK4zQLcrlQSOqR9YMB98Xgz9KH06GQM8jw1SudOh/PGVEY/3v4NU50jGqEaslmu+rv2M
+         sqDO/jk2r+ASXWBFDUvsxiHkH9qXTmQ6tsDuJ/cV9h6VBUqKJ1dNlszyHZ9ZmYcAvDUW
+         +iJzAAHQA8GC6l0UvFOMn4pZR4q/C0JH5DrXlEGfJseDVaGdBC7eHc+5X95f5vBH8aEw
+         OMjg==
+X-Gm-Message-State: AJIora8Wz7xUcoCqqE3AQyY8M/FAcSzvpWLKhzgF20vCGf2xE1ExKG73
+        Lyuom/eWX3j5lBoVdTDUjAm8eQ==
+X-Google-Smtp-Source: AGRyM1vxZuIG5ij+m0wtySp6Re7xAcWpIozIYKGYnfhWR+ZlCjWYodHNUrrSWGuxJPqHoIHvyjDzAA==
+X-Received: by 2002:a05:600c:286:b0:3a0:30f8:8a43 with SMTP id 6-20020a05600c028600b003a030f88a43mr1062338wmk.90.1656104521682;
+        Fri, 24 Jun 2022 14:02:01 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id y10-20020a1c4b0a000000b0039c587342d8sm8225190wma.3.2022.06.24.14.02.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 14:02:00 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 23:01:59 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch, jani.nikula@linux.intel.com,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH v3 3/3] drm/doc: Add KUnit documentation
+Message-ID: <YrYmR+aCdO3ldORB@phenom.ffwll.local>
+Mail-Followup-To: Javier Martinez Canillas <javierm@redhat.com>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@linux.ie, jani.nikula@linux.intel.com,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
+References: <20220613171738.111013-1-jose.exposito89@gmail.com>
+ <20220613171738.111013-4-jose.exposito89@gmail.com>
+ <c50e5c87-3198-08b7-1e32-d0959af1f296@redhat.com>
 MIME-Version: 1.0
-References: <20220624185612.35493-1-joebar@chromium.org>
-In-Reply-To: <20220624185612.35493-1-joebar@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 24 Jun 2022 14:01:52 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UbrdqXYaabK0YEyjX0zszxMkU72-4fc10zyPTs_oKG_w@mail.gmail.com>
-Message-ID: <CAD=FV=UbrdqXYaabK0YEyjX0zszxMkU72-4fc10zyPTs_oKG_w@mail.gmail.com>
-Subject: Re: [PATCH v11 0/5] arm64: dts: qcom: sc7180: Add five new
- trogdor-based boards
-To:     "Joseph S. Barrera III" <joebar@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c50e5c87-3198-08b7-1e32-d0959af1f296@redhat.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,65 +84,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jun 14, 2022 at 02:58:29PM +0200, Javier Martinez Canillas wrote:
+> Hello José,
+> 
+> On 6/13/22 19:17, José Expósito wrote:
+> 
+> [snip]
+> 
+> > +KUnit (Kernel unit testing framework) provides a common framework for unit tests
+> > +within the Linux kernel.
+> > +
+> 
+> I think that it will be useful to have a reference to the KUnit kernel doc here,
+> something like the following:
+> 
+> `KUnit <https://docs.kernel.org/dev-tools/kunit/index.html>`_ (Kernel Unit...
+> 
+> > +This section covers the specifics for the DRM subsystem. For general information
+> > +about KUnit, please refer to Documentation/dev-tools/kunit/start.rst.
+> > +
+> > +How to run the tests?
+> > +~~~~~~~~~~~~~~~~~~~~~
+> > +
+> > +In order to facilitate running the test suite, a configuration file is present
+> > +in ``drivers/gpu/drm/kunit/.kunitconfig``. It can be used by ``kunit.py`` as
+> > +follows:
+> > +
+> > +.. code-block:: bash
+> > +
+> > +	$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/kunit \
+> > +		--kconfig_add CONFIG_VIRTIO_UML=y \
+> > +		--kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=y
+> > +
+> > +.. note::
+> > +	The configuration included in ``.kunitconfig`` should be as generic as
+> > +	possible.
+> > +	``CONFIG_VIRTIO_UML`` and ``CONFIG_UML_PCI_OVER_VIRTIO`` are not
+> > +	included in it because they are only required for User Mode Linux.
+> > +
+> > +
+> 
+> Maybe also add something like this ?
+> 
+> For example, the following command can be used to run the test for x86_64:
+> 
+> 	$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/kunit \
+> 		--arch=x86_64
+> 
+> Regardless, the patch looks good to me:
+> 
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
-On Fri, Jun 24, 2022 at 11:57 AM Joseph S. Barrera III
-<joebar@chromium.org> wrote:
->
-> This series adds five new trogdor-based boards to upstream.
-> The patches should be applied *after* applying
-> https://lore.kernel.org/all/20220602190621.1646679-1-swboyd@chromium.org/
-> (arm64: dts: qcom: Remove duplicate sc7180-trogdor include on lazor/homestar)
->
-> The patches do *not* expect
-> https://lore.kernel.org/all/20220518172525.3319993-1-swboyd@chromium.org/
-> (sc7180-trogdor: Split out keyboard node and describe detachables)
-> to be applied.
->
-> The compatibles in this series are documented by Doug's series
-> https://lore.kernel.org/r/20220520143502.v4.5.Ie8713bc0377672ed8dd71189e66fc0b77226fb85@changeid
->
-> Changes in v11:
-> - Add 'include sc7180-trogdor.dtsi' to sc7180-trogdor-pazquel-* files.
-> - Add 'include sc7180-trogdor.dtsi' to sc7180-trogdor-kingoftown-* files.
-> - Restore 'include sc7180.dtsi' to sc7180-trogdor-ti-sn65dsi86.dtsi.
+Hey so since you have a bunch of patches merged into drm already but seem
+to lack drm-misc commit rights to push these yourself I think it's time to
+get those:
 
-I'm a bit baffled. Why did you add an include of "sc7180.dtsi" to
-sc7180-trogdor-ti-sn65dsi86.dtsi? Am I missing something? The way you
-have it will cause "sc7180.dtsi" to be included twice. For instance,
-let's look at "sc7180-trogdor-coachz-r3.dts". It has:
+https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#drm-misc
 
-#include "sc7180-trogdor-coachz.dtsi"
+And I guess Javier can help you with any questions you might have and make
+sure the request gets through by poking folks on #dri-devel irc?
 
-That will in turn cause these includes:
-
-#include "sc7180-trogdor.dtsi"
-#include "sc7180-trogdor-ti-sn65dsi86.dtsi"
-
-That will in turn do:
-
-/* From sc7180-trogdor.dtsi */
-#include <dt-bindings/gpio/gpio.h>
-#include <dt-bindings/input/gpio-keys.h>
-#include <dt-bindings/input/input.h>
-#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-#include <dt-bindings/sound/sc7180-lpass.h>
-
-#include "sc7180.dtsi"
-#include "pm6150.dtsi"
-#include "pm6150l.dtsi"
-
-/* From sc7180-trogdor-ti-sn65dsi86.dtsi */
-#include "sc7180.dtsi"
-#include <dt-bindings/gpio/gpio.h>
-
-...and, as you can see, "sc7180.dtsi" will get included twice. That
-will break things since it will undo some of the changes that
-sc7180-trogdor.dtsi did. ...and, in fact, I just tried putting your
-patches on an sc7180 device that uses the TI bridge chip and it,
-unsurprisingly, doesn't boot.
-
-If you just remove that one addition then I think we can finally be
-done with this series. I tried that and my device boots.
-
--Doug
+Cheers, Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

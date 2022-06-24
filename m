@@ -2,97 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012B85597DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DF05597D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiFXK3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 06:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
+        id S231319AbiFXKaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 06:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiFXK3g (ORCPT
+        with ESMTP id S229476AbiFXKaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 06:29:36 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAD97C518
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:29:35 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id i64so2186717pfc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=KatmNFegpiHa4XcFnF/ycDsax8Ii/xreUk8t49K2md4=;
-        b=aaB4GepycXY4qHK+rOH6fucojuXePHoKBEowfFS+oDZJaFBxnn2KUyBsIb5M7HaFGM
-         KTR2N4HLlP57VXQXi85kAZyNKUyfHk30Ny6PDlgCApycVDZHSUyFzOZ7SkFAFIIt5HcW
-         QTrE9DlJ/lybVdxWyL9m1Nm8x9hxzBgVUoeHQyX2Zv485tPkN93XcwwkObYXhwNcDMxt
-         uQs1ki/P7A7Wulr7VHCmtpda53NO0xnZmoPrU6iDTgRf5qA0CHawrVPGDCR5ohKqsxAC
-         QZ+Ax/oPgb0fJPG6/Fqw1iptxYQuythDCfpwKbDLMQoyPgvVxl04pi278TUfo1pIMH0u
-         vutQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=KatmNFegpiHa4XcFnF/ycDsax8Ii/xreUk8t49K2md4=;
-        b=KU3FptuDwJ+RyxSy2ueUTjXqa4nrrReBFYW2bfGkv62r4Tvej0ykhPnjAhssNeeYY9
-         O96bE42bdjhUElJhcSFw+J5qEnct9Zwji4Dio/kI+dtLuDKGe8EGfAUWOfra1Q34Waqt
-         B7/dhQFQDBuOIGZrRy3/w4Pv77D+qC1Ppwq3AG/nfkh9e4Xpr0t5NdsZfvLH0SOQM6fY
-         VyHfw19fwTtlow4C/+zhIK2ereTKSkT9kDpE0RXatZPSh4xGS3rKirkhsnhhjlrNMaZv
-         9gJygv4FaIoIcXH2Mp5i+kgf1JOtVEOHvimd3WQoxt68gQjYcKaxyPwX7TWNkyT5v9G6
-         eTLQ==
-X-Gm-Message-State: AJIora82yL48D02r4i41LRixPoyXgAcczuUDnB8IWmDM+YVAzUuFMWGy
-        st0d3d5fKg9E0qD7Tq7PswFE3Q==
-X-Google-Smtp-Source: AGRyM1uKAAQZaYk8U8ySGqwrKTZUdSq6BaGRIvxvarOfo5pOTr/Qxgw7qufyOu4fB677SeTEt0X5+g==
-X-Received: by 2002:a63:7448:0:b0:40c:7d4b:e7c6 with SMTP id e8-20020a637448000000b0040c7d4be7c6mr11415665pgn.140.1656066575139;
-        Fri, 24 Jun 2022 03:29:35 -0700 (PDT)
-Received: from n254-073-104.byted.org ([139.177.225.250])
-        by smtp.gmail.com with ESMTPSA id ay19-20020a056a00301300b0052527b01b61sm1343699pfb.145.2022.06.24.03.29.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 24 Jun 2022 03:29:34 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [External] PING: [PATCH] crypto: testmgr - fix version number of
- RSA tests
-From:   =?utf-8?B?5L2V56OK?= <helei.sig11@bytedance.com>
-In-Reply-To: <YrV7uo9E/5aegAny@gondor.apana.org.au>
-Date:   Fri, 24 Jun 2022 18:29:29 +0800
-Cc:     =?utf-8?B?5L2V56OK?= <helei.sig11@bytedance.com>,
-        davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pizhenwei@bytedance.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <062CAA76-7229-4E4F-A9A5-A2A9A47A1C61@bytedance.com>
-References: <20220615091317.36995-1-helei.sig11@bytedance.com>
- <0610F5ED-98B5-49AD-9D58-4D5960EFB3A8@bytedance.com>
- <YrV7uo9E/5aegAny@gondor.apana.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-X-Mailer: Apple Mail (2.3608.120.23.2.4)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 24 Jun 2022 06:30:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938B67C510;
+        Fri, 24 Jun 2022 03:30:01 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 86A1F66017FE;
+        Fri, 24 Jun 2022 11:29:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656066599;
+        bh=SVkicnIFIqfjKCBb/ZVvLtK5Me40EK4u1MWUbzwiT7A=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kViqkR7iC1Wp/5s4I82zUkb3ZSL5j/ZXPllVjTqXfaoZgzpbARUo44bVpE8dUmf+F
+         HhvVGqPvdkxs0jVyxFnCkfm7Mjm3ACrUDhKrRTyWAISOBsIPryGt4I1HLEx0cyrJcU
+         7XHE/NHd4gbEVrOR/Hgvs6GDrEjba1OBgEv5F+6OzHmvMIVzvoajaAC/WcfnFdsL31
+         43TkeqwUd7VzMNjLGJqfr6E3Zv6hmBcpiKyTa9wU5a206RrRCnNZeKEh6GLt5ldxXM
+         heB7c2yLTYuIqMgoWislASCK5/WsRYPCi/ws6nCR0JfeJBVDUABMU8h8a9npw7i5zx
+         T/Ms8a+QgTmVw==
+Message-ID: <c7f76e77-6fed-9876-e0b6-8471c0024a82@collabora.com>
+Date:   Fri, 24 Jun 2022 12:29:56 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v19 1/4] dt-binding: mediatek: add bindings for MediaTek
+ MDP3 components
+Content-Language: en-US
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        allen-kh.cheng@mediatek.com, xiandong.wang@mediatek.com,
+        randy.wu@mediatek.com, jason-jh.lin@mediatek.com,
+        roy-cw.yeh@mediatek.com, river.cheng@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        cellopoint.kai@gmail.com
+References: <20220624092359.11908-1-moudy.ho@mediatek.com>
+ <20220624092359.11908-2-moudy.ho@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220624092359.11908-2-moudy.ho@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 24/06/22 11:23, Moudy Ho ha scritto:
+> This patch adds DT binding documents for Media Data Path 3 (MDP3)
+> a unit in multimedia system combined with several components and
+> used for scaling and color format convert.
+> 
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-
-> On Jun 24, 2022, at 4:54 PM, Herbert Xu <herbert@gondor.apana.org.au> =
-wrote:
->=20
-> On Fri, Jun 24, 2022 at 09:53:02AM +0800, =E4=BD=95=E7=A3=8A wrote:
->> PING=EF=BC=81
->=20
-> Please resubmit.
->=20
-
-Thanks a lot for your reply, a new patch has been sent.
-By the way, why this patch needs to be resubmitted. Please let me know =
-if I have made any mistakes.
-
-> Thanks,
-> --=20
-> Email: Herbert Xu <herbert@gondor.apana.org.au>
-> Home Page: http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

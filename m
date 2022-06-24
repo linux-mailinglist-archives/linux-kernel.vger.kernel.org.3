@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C0555A46A
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFED55A46C
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbiFXWjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 18:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
+        id S231330AbiFXWll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 18:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiFXWjJ (ORCPT
+        with ESMTP id S229441AbiFXWlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 18:39:09 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D344987D60
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:39:08 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id h85so4128497iof.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:39:08 -0700 (PDT)
+        Fri, 24 Jun 2022 18:41:39 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FA287D60
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:41:38 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id p136so632590ybg.4
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:41:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XQQmKxN2h+LYjeKUM4BraK5L3IPF7+QlZ0l5spgkF9c=;
-        b=RVz59sDENa+U5x+NH96Lm8QiTDdGRBtyaA3ptChX3D4522O7bQk/BeJrjkBKD8dWgR
-         QVq1chg/0cKyERpIAIfDoqOqhI5iCXmlHSxUIdI2kBgE6UAHzwjtot7yfqWew6MGyjHG
-         ORCOYshhjEIF3A6r3zZs+KqYdc+hSGd5XsPwo=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PB2ou5T9HchfcMcQw7R0zS+RgHm7z0GH0PzcwmCwOgA=;
+        b=XQE4jOFcM4OBioX8gNb6neMZZtMx9ApUxsfIs+HvbW74PPckXr9kwQl3EPOlYYez6B
+         hJlk4uLOgUGW8gdUDBG9YVqB17VvMyYEkPvFl8nRwuScUFY362IVVVdErTsLlScS3cfY
+         ykm30jXlcihAE8MKVVS2Kq3xjw4J7+r8yi+0+KvlXisgFGvjb3ntL+P8eTwYho4AMSgC
+         mdBMrFgW0cc8jdW0r4MWZRBhiDZHNsQ2PizaT4z9wDWW1HHhjl16Jm0swyyHkDDQrq7f
+         j5e6kCtnNYFwpaFURhhxhidnhV9TKrtFD2f9Emuxk0b7CnGAlvswguw3CxV2lYtXDK+7
+         qo3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XQQmKxN2h+LYjeKUM4BraK5L3IPF7+QlZ0l5spgkF9c=;
-        b=lUwMr7ul9ciq0aOaaCgYdGhk894y8Lfc3Yhn0LXGIHSmAPaNJSFPc81JEFnkg4YP7W
-         basmnG2Zeziwhhna/HQp7HK9tlMkqSWioB9aqc4fA7t4i29tPkepwczWKwmnNN4R3Z3D
-         shHMANm5zglNd8RcgWHl6EIknBJKnp5gWd0uTwkZWoAnuy6MmgtcAyMzwAnl786cIlJV
-         4dj1b+nwbXFOwfMb/pqtwuCJfLAZq3lTT4zdym1EWDmgzMR5zAGsBdyljMfj58vjqGfi
-         vKIHyMw1LvOVg6pYKCWZgqKcD35/4yKUvVBHAS/WGPj3UkDpPKFCvbM0XJvZRBcS/urr
-         /0SA==
-X-Gm-Message-State: AJIora94Z+Z9pgHs4BawnHKBVal1J3FJMa9ySOv8CUjJUxmRpTsJ6bfu
-        /jo2OjLdUQye+mHp74gcWMhepw==
-X-Google-Smtp-Source: AGRyM1scnispmgLVpvQoOj+mIQ8GWh6Y9P7V+cn3cb8XyynRyySRajpPnvkEW6l5pRAc5JAUtma3rA==
-X-Received: by 2002:a6b:4e14:0:b0:674:f787:ccc9 with SMTP id c20-20020a6b4e14000000b00674f787ccc9mr598678iob.55.1656110348263;
-        Fri, 24 Jun 2022 15:39:08 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id bf3-20020a056602368300b00669b8999911sm1774814iob.15.2022.06.24.15.39.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 15:39:07 -0700 (PDT)
-Subject: Re: [PATCH v2] docs/kselftest: add more guidelines for adding new
- tests
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kernel@collabora.com, bagasdotme@gmail.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220521073651.4191910-1-usama.anjum@collabora.com>
- <e01f90a0-a3c7-c5fd-ae1f-197c6fec525e@collabora.com>
- <63fc263d-c06a-2974-298c-5da80322411a@linuxfoundation.org>
- <0e8ea624-3cf0-7c63-9b24-8c4109096d3d@collabora.com>
- <87letl3kqx.fsf@meer.lwn.net>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <4eb3c81c-a86c-4ca9-f553-caf3282f2d51@linuxfoundation.org>
-Date:   Fri, 24 Jun 2022 16:39:07 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PB2ou5T9HchfcMcQw7R0zS+RgHm7z0GH0PzcwmCwOgA=;
+        b=cU6L9ECJnSQh7z6UR8qKZzx1lZbU0hTFpw+T1wpWHiL0KEn3MYJhJRTEKXlcrlwxKK
+         JFDJFaqgJqhPOCOufct7+42UeFbOh3EjS6yruRR0X2KcTBbXPvfa9DXRE0Wo6OnUa5xb
+         7yYDI9VEsScZTBh8a8M+jx0xkKM2WNQL325LcrGRh0UbewA5g9De7rQGrhQMUVv1wNrA
+         /iHJeZGtwikOPJ3+u/mXvIL4VQE582PPqEUIkaT6HzHR2zD7thNQuS9HmeoG41b2od4k
+         Z7iY8sg//cfkvvvHRIlwwm2fkwWp0MQYK3bDg+p1eAIQtw91mcCcL5JZSiTUQjO3+F7x
+         /FIQ==
+X-Gm-Message-State: AJIora/HUdfaqH1aYd1jumthOf+JFU18A+pvywQENiJy9SAvu6to+h43
+        7zTgRoeptAdDYYSb6xNq2NyBtk3X9/xHF7XiSDkiwg==
+X-Google-Smtp-Source: AGRyM1suFoUyp8iP0uugs7apRhGmegOzspGU5ROEVYlnUJ87futz+tjoolWZtAcwx7H0aLXuGoC25oxOPEm00I6SOKY=
+X-Received: by 2002:a25:888a:0:b0:669:9661:912 with SMTP id
+ d10-20020a25888a000000b0066996610912mr1468060ybl.348.1656110497625; Fri, 24
+ Jun 2022 15:41:37 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <87letl3kqx.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220623000530.1194226-1-yosryahmed@google.com>
+ <YrQe5A+FXnbgOR1f@dhcp22.suse.cz> <CAJD7tkanavKpKrQr8-jA8pukgD7OY4eOwJRZufJ2NoThD12G+Q@mail.gmail.com>
+ <YrQ1o3CeaZWhm+h4@dhcp22.suse.cz> <CAJD7tkadsLOV7GMFAm+naX4Y1WpZ-4=NkAhAMxNw60iaRPWx=w@mail.gmail.com>
+ <YrSWruhPlJV1X9kp@dhcp22.suse.cz> <CALvZod6eLa1X1FJ2Qi6FXhFA-qBCP4mN2SB31MSgjj+g8hKo6Q@mail.gmail.com>
+ <YrSdFy3qYdG+rGR6@dhcp22.suse.cz> <CAJD7tkZNEtzJMDsLMHuNHkxFfurS37UuK=zFcPCkOkWfN-dbJQ@mail.gmail.com>
+ <CAJuCfpG6D1fhc4c_-0cL=rmXUbhdROSWsObYrZ7Mp4=+sBkT7Q@mail.gmail.com> <CAJD7tkY6Jg3+Pb95B0YAvHdgYKvKv_D8Tbc62hX5wzCmWUF6xQ@mail.gmail.com>
+In-Reply-To: <CAJD7tkY6Jg3+Pb95B0YAvHdgYKvKv_D8Tbc62hX5wzCmWUF6xQ@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 24 Jun 2022 15:41:26 -0700
+Message-ID: <CAJuCfpHYNZcT2DTB-=z1FGcsyqb5YjVz2HGavhkUbc7cbrkuuA@mail.gmail.com>
+Subject: Re: [PATCH] mm: vmpressure: don't count userspace-induced reclaim as
+ memory pressure
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>, Shakeel Butt <shakeelb@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,24 +84,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/22 1:49 PM, Jonathan Corbet wrote:
-> Muhammad Usama Anjum <usama.anjum@collabora.com> writes:
-> 
->> On 6/8/22 2:41 AM, Shuah Khan wrote:
->>>
->>> The change looks good to me. I am catching up on patch backlog after the
->>> merge window and vacation. I can take this through kselftest or if it
->>> goes through doc tree - here is my
->>>
->>> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
->>>
->> This patch hasn't been accepted yet.
-> 
-> I've applied it now, thanks.
-> 
+On Fri, Jun 24, 2022 at 3:14 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> On Fri, Jun 24, 2022 at 3:10 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Thu, Jun 23, 2022 at 10:26 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > >
+> > > On Thu, Jun 23, 2022 at 10:04 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > On Thu 23-06-22 09:42:43, Shakeel Butt wrote:
+> > > > > On Thu, Jun 23, 2022 at 9:37 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > > > >
+> > > > > > On Thu 23-06-22 09:22:35, Yosry Ahmed wrote:
+> > > > > > > On Thu, Jun 23, 2022 at 2:43 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > > > > > >
+> > > > > > > > On Thu 23-06-22 01:35:59, Yosry Ahmed wrote:
+> > > > > > [...]
+> > > > > > > > > In our internal version of memory.reclaim that we recently upstreamed,
+> > > > > > > > > we do not account vmpressure during proactive reclaim (similar to how
+> > > > > > > > > psi is handled upstream). We want to make sure this behavior also
+> > > > > > > > > exists in the upstream version so that consolidating them does not
+> > > > > > > > > break our users who rely on vmpressure and will start seeing increased
+> > > > > > > > > pressure due to proactive reclaim.
+> > > > > > > >
+> > > > > > > > These are good reasons to have this patch in your tree. But why is this
+> > > > > > > > patch benefitial for the upstream kernel? It clearly adds some code and
+> > > > > > > > some special casing which will add a maintenance overhead.
+> > > > > > >
+> > > > > > > It is not just Google, any existing vmpressure users will start seeing
+> > > > > > > false pressure notifications with memory.reclaim. The main goal of the
+> > > > > > > patch is to make sure memory.reclaim does not break pre-existing users
+> > > > > > > of vmpressure, and doing it in a way that is consistent with psi makes
+> > > > > > > sense.
+> > > > > >
+> > > > > > memory.reclaim is v2 only feature which doesn't have vmpressure
+> > > > > > interface. So I do not see how pre-existing users of the upstream kernel
+> > > > > > can see any breakage.
+> > > > > >
+> > > > >
+> > > > > Please note that vmpressure is still being used in v2 by the
+> > > > > networking layer (see mem_cgroup_under_socket_pressure()) for
+> > > > > detecting memory pressure.
+> > > >
+> > > > I have missed this. It is hidden quite good. I thought that v2 is
+> > > > completely vmpressure free. I have to admit that the effect of
+> > > > mem_cgroup_under_socket_pressure is not really clear to me. Not to
+> > > > mention whether it should or shouldn't be triggered for the user
+> > > > triggered memory reclaim. So this would really need some explanation.
+> > >
+> > > vmpressure was tied into socket pressure by 8e8ae645249b ("mm:
+> > > memcontrol: hook up vmpressure to socket pressure"). A quick look at
+> > > the commit log and the code suggests that this is used all over the
+> > > socket and tcp code to throttles the memory consumption of the
+> > > networking layer if we are under pressure.
+> > >
+> > > However, for proactive reclaim like memory.reclaim, the target is to
+> > > probe the memcg for cold memory. Reclaiming such memory should not
+> > > have a visible effect on the workload performance. I don't think that
+> > > any network throttling side effects are correct here.
+> >
+> > IIUC, this change is fixing two mechanisms during userspace-induced
+> > memory pressure:
+> > 1. psi accounting, which I think is not controversial and makes sense to me;
+> > 2. vmpressure signal, which is a "kinda" obsolete interface and might
+> > be viewed as controversial.
+> > I would suggest splitting the patch into two, first to fix psi
+> > accounting and second to fix vmpressure signal. This way the first one
+> > (probably the bigger of the two) can be reviewed and accepted easily
+> > while debates continue on the second one.
+>
+> This change should be NOP for psi. psi was already fixed by
+> e22c6ed90aa9 ("mm: memcontrol: don't count limit-setting reclaim
+> as memory pressure") by Johannes a while ago. This patch does the same
+> for vmpressure, but in a different way, as the same approach of
+> e22c6ed90aa9 cannot be used.
+>
+> The changes you are seeing in this patch for psi are basically
+> reverting e22c6ed90aa9 and using the newly introduced flag that
+> handles vmpressure to handle psi as well, to avoid having two separate
+> ways to address accounting memory pressure during userspace-induced
+> reclaim.
 
-Thank you Jon. Kind of slipped through my backlog.
+Ah, I see. Thanks for clarifying that.
 
-thanks,
--- Shuah
-
+>
+> >
+> > >
+> > > >
+> > > > > Though IMO we should deprecate vmpressure altogether.
+> > > >
+> > > > Yes it should be really limited to v1. But as I've said the effect on
+> > > > mem_cgroup_under_socket_pressure is not really clear to me. It really
+> > > > seems the v2 support has been introduced deliberately.
+> > > >
+> > > > --
+> > > > Michal Hocko
+> > > > SUSE Labs

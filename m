@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B24A559941
+	by mail.lfdr.de (Postfix) with ESMTP id 22864559940
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbiFXMLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 08:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
+        id S231775AbiFXMLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 08:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiFXMLM (ORCPT
+        with ESMTP id S230366AbiFXMLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 08:11:12 -0400
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF68010EB
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:11:11 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.186.194])
-        by andre.telenet-ops.be with bizsmtp
-        id n0Au270034C55Sk010AuK9; Fri, 24 Jun 2022 14:11:09 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1o4i9F-000gb5-7w; Fri, 24 Jun 2022 14:10:53 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1o4i9E-009n2N-Gy; Fri, 24 Jun 2022 14:10:52 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Liu Ying <victor.liu@nxp.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Marek Vasut <marex@denx.de>
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2] drm/bridge: imx: i.MX8 bridge drivers should depend on ARCH_MXC
-Date:   Fri, 24 Jun 2022 14:10:51 +0200
-Message-Id: <42c542b53a1c8027b23a045045fbb7b34479913d.1656072500.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Fri, 24 Jun 2022 08:11:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEB613D0F
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:11:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5648AB8286B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 12:11:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC866C34114;
+        Fri, 24 Jun 2022 12:11:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656072711;
+        bh=pc8UKkAsxy+drOm1cyl5G/M+G6/DZKYcpaz2NiSvhus=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WJFZhNsHRCx+tt7sQyaHgNTcYU/Bkf5NfV4m7tHwREnoX0WZWtLWu1pk0W5I81dKn
+         g93b2w2FBjHs8svq6rMNkFrr2QhcJJergMqYOIJSy7Lp9GZPQvFumuDA666kMehpty
+         syJJVFYU9YyV6454aIxMeom0ZXBartCRGvnMmq9/3mq8UkHdK24E61ltkyQPV1oiuv
+         pwii1BXXhy3WCYp+AN4EBjuMrhD4Rjs6v7BPuhi36nc7d/DbhwCxTAZRSu4g1FuEcI
+         Z06Sd65E63QVuSApVyzv9hbefV5kx03ZoaxpARCun73sy7jfQ/pMXTjOIcUBtf2yVw
+         ojv9qcYJjxOww==
+Date:   Fri, 24 Jun 2022 13:11:46 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 01/12] regmap-irq: Convert bool bitfields to unsigned
+ int
+Message-ID: <YrWqAqGUuy8Z0F3x@sirena.org.uk>
+References: <20220623211420.918875-1-aidanmacdonald.0x0@gmail.com>
+ <20220623211420.918875-2-aidanmacdonald.0x0@gmail.com>
+ <CAHp75VfTqTfMsrdqyqRj61JAAJ4a_h3rrFriY2d+rrqpVviy=w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="osEfMfwMbAxYt41i"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VfTqTfMsrdqyqRj61JAAJ4a_h3rrFriY2d+rrqpVviy=w@mail.gmail.com>
+X-Cookie: Help!  I'm trapped in a PDP 11/70!
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The various Freescale i.MX8 display bridges are only present on
-Freescale i.MX8 SoCs.  Hence add a dependency on ARCH_MXC, to prevent
-asking the user about these drivers when configuring a kernel without
-i.MX SoC support.
 
-Fixes: e60c4354840b2fe8 ("drm/bridge: imx: Add LDB support for i.MX8qm")
-Fixes: 3818715f62b42b5c ("drm/bridge: imx: Add LDB support for i.MX8qxp")
-Fixes: 96988a526c97cfbe ("drm/bridge: imx: Add i.MX8qxp pixel link to DPI support")
-Fixes: 1ec17c26bc06289d ("drm/bridge: imx: Add i.MX8qm/qxp display pixel link support")
-Fixes: 93e163a9e0392aca ("drm/bridge: imx: Add i.MX8qm/qxp pixel combiner support")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Liu Ying <victor.liu@nxp.com>
----
-v2:
-  - s/i.MX8MP/i.MX8/,
-  - Add Reviewed-by.
----
- drivers/gpu/drm/bridge/imx/Kconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+--osEfMfwMbAxYt41i
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/gpu/drm/bridge/imx/Kconfig b/drivers/gpu/drm/bridge/imx/Kconfig
-index 212a7b0e64fd8b5a..608f47f41bcd1c81 100644
---- a/drivers/gpu/drm/bridge/imx/Kconfig
-+++ b/drivers/gpu/drm/bridge/imx/Kconfig
-@@ -1,3 +1,5 @@
-+if ARCH_MXC || COMPILE_TEST
-+
- config DRM_IMX8QM_LDB
- 	tristate "Freescale i.MX8QM LVDS display bridge"
- 	depends on OF
-@@ -41,3 +43,5 @@ config DRM_IMX8QXP_PIXEL_LINK_TO_DPI
- 	help
- 	  Choose this to enable pixel link to display pixel interface(PXL2DPI)
- 	  found in Freescale i.MX8qxp processor.
-+
-+endif # ARCH_MXC || COMPILE_TEST
--- 
-2.25.1
+On Thu, Jun 23, 2022 at 11:26:10PM +0200, Andy Shevchenko wrote:
+> On Thu, Jun 23, 2022 at 11:13 PM Aidan MacDonald
 
+> > Use 'unsigned int' for bitfields for consistency with most other
+> > kernel code.
+
+> There is no point to convert the fields you are about to remove.
+
+> So, either don't touch them or make this patch closer to the end of the series.
+
+It costs us nothing to convert them, this isn't a difficult or hard to
+understand refactoring - the patch is fine the way it is.
+
+--osEfMfwMbAxYt41i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK1qgEACgkQJNaLcl1U
+h9DQIwf+JUtnYNjNB+6OTI9aVmigcYZIo5nLXj/pTVpyA8qZWNI2zC62X5FaXZNT
+KwQfbMYZ7GTc2r2P73Fl/5Lf+jdIgYGXLxQnY/ZRqm++erZuJ1fqI/a/e68CXVO8
+lB/3EKX9siLMfaDtuYcH6vlN6J0ZOjoOqBQpLyW4z/hrJrn9cFUtruyGgKraax+v
+ZdOwahlPCCbQdeKEitkd3IoVsR5c5tNXYHU8of82McniQWeJQ3vtUjGchASv6Wvg
+wvVBu/q+BmxfmPzOpMeHFtTPbdWvhg1C/cQ92vpw+CEn12Jk4uZTe0Sj1zVbESAZ
+lxWZY6Wk/xRUJder8cLX4ag2Boxidw==
+=RP1q
+-----END PGP SIGNATURE-----
+
+--osEfMfwMbAxYt41i--

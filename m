@@ -2,145 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803C7559634
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35B7559642
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbiFXJMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 05:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S230223AbiFXJOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 05:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbiFXJLt (ORCPT
+        with ESMTP id S229768AbiFXJOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 05:11:49 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C624F9C6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 02:11:43 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o4fLj-0000HT-Aa; Fri, 24 Jun 2022 11:11:35 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o4fLh-0000Rq-Py; Fri, 24 Jun 2022 11:11:33 +0200
-Date:   Fri, 24 Jun 2022 11:11:33 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Lukas Wunner <lukas@wunner.de>, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] net: phy: ax88772a: fix lost pause
- advertisement configuration
-Message-ID: <20220624091133.GA804@pengutronix.de>
-References: <20220624075558.3141464-1-o.rempel@pengutronix.de>
+        Fri, 24 Jun 2022 05:14:40 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2B54F1DA;
+        Fri, 24 Jun 2022 02:14:39 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1o4fOc-00Ai3g-DM; Fri, 24 Jun 2022 19:14:35 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 24 Jun 2022 17:14:34 +0800
+Date:   Fri, 24 Jun 2022 17:14:34 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        John Allen <john.allen@amd.com>, Rob Herring <robh@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH] crypto: ccp - Fix device IRQ counting by using
+ platform_irq_count()
+Message-ID: <YrWAen2cJvveBx+B@gondor.apana.org.au>
+References: <bf04adfd1dae519cb9377bcc7222089399690a22.1655147787.git.thomas.lendacky@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220624075558.3141464-1-o.rempel@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <bf04adfd1dae519cb9377bcc7222089399690a22.1655147787.git.thomas.lendacky@amd.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I forgot to add PHY maintainers. CCing Andrew and Heiner.
-
-On Fri, Jun 24, 2022 at 09:55:58AM +0200, Oleksij Rempel wrote:
-> In case of asix_ax88772a_link_change_notify() workaround, we run soft
-> reset which will automatically clear MII_ADVERTISE configuration. The
-> PHYlib framework do not know about changed configuration state of the
-> PHY, so we need to save and restore all needed configuration registers.
+On Mon, Jun 13, 2022 at 02:16:27PM -0500, Tom Lendacky wrote:
+> The ccp driver loops through the platform device resources array to get
+> the IRQ count for the device. With commit a1a2b7125e10 ("of/platform: Drop
+> static setup of IRQ resource from DT core"), the IRQ resources are no
+> longer stored in the platform device resource array. As a result, the IRQ
+> count is now always zero. This causes the driver to issue a second call to
+> platform_get_irq(), which fails if the IRQ count is really 1, causing the
+> loading of the driver to fail.
 > 
-> Fixes: dde258469257 ("net: usb/phy: asix: add support for ax88772A/C PHYs")
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Replace looping through the resources array to count the number of IRQs
+> with a call to platform_irq_count().
+> 
+> Fixes: a1a2b7125e10 ("of/platform: Drop static setup of IRQ resource from DT core")
+> Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
 > ---
->  drivers/net/phy/ax88796b.c | 37 ++++++++++++++++++++++++++++++++++++-
->  1 file changed, 36 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/phy/ax88796b.c b/drivers/net/phy/ax88796b.c
-> index 457896337505..6971d0196917 100644
-> --- a/drivers/net/phy/ax88796b.c
-> +++ b/drivers/net/phy/ax88796b.c
-> @@ -18,6 +18,11 @@ MODULE_DESCRIPTION("Asix PHY driver");
->  MODULE_AUTHOR("Michael Schmitz <schmitzmic@gmail.com>");
->  MODULE_LICENSE("GPL");
->  
-> +struct asix_context {
-> +	u16 bmcr;
-> +	u16 advertise;
-> +};
-> +
->  /**
->   * asix_soft_reset - software reset the PHY via BMCR_RESET bit
->   * @phydev: target phy_device struct
-> @@ -83,13 +88,43 @@ static int asix_ax88772a_read_status(struct phy_device *phydev)
->  	return 0;
->  }
->  
-> +/* save relevant PHY registers to private copy */
-> +static void asix_context_save(struct phy_device *phydev,
-> +			      struct asix_context *context)
-> +{
-> +	context->bmcr = phy_read(phydev, MII_BMCR);
-> +	context->advertise = phy_read(phydev, MII_ADVERTISE);
-> +}
-> +
-> +/* restore relevant PHY registers from private copy */
-> +static void asix_context_restore(struct phy_device *phydev,
-> +				 const struct asix_context *context)
-> +{
-> +	u16 bmcr = context->bmcr;
-> +
-> +	phy_write(phydev, MII_ADVERTISE, context->advertise);
-> +
-> +	/* after all settings are restored, restart autoneg */
-> +	if (phydev->autoneg == AUTONEG_ENABLE)
-> +		bmcr |= BMCR_ANRESTART;
-> +
-> +	phy_write(phydev, MII_BMCR, bmcr);
-> +}
-> +
->  static void asix_ax88772a_link_change_notify(struct phy_device *phydev)
->  {
->  	/* Reset PHY, otherwise MII_LPA will provide outdated information.
->  	 * This issue is reproducible only with some link partner PHYs
->  	 */
-> -	if (phydev->state == PHY_NOLINK && phydev->drv->soft_reset)
-> +	if (phydev->state == PHY_NOLINK && phydev->drv->soft_reset) {
-> +		struct asix_context context;
-> +
-> +		asix_context_save(phydev, &context);
-> +
->  		phydev->drv->soft_reset(phydev);
-> +
-> +		asix_context_restore(phydev, &context);
-> +	}
->  }
->  
->  static struct phy_driver asix_driver[] = {
-> -- 
-> 2.30.2
-> 
-> 
-> 
+>  drivers/crypto/ccp/sp-platform.c | 12 ++----------
+>  1 file changed, 2 insertions(+), 10 deletions(-)
 
+Patch applied.  Thanks.
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

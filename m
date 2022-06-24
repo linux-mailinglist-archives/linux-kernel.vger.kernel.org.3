@@ -2,112 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A0E55A4A9
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC15655A4B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbiFXXMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 19:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
+        id S231428AbiFXXNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 19:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbiFXXMu (ORCPT
+        with ESMTP id S229441AbiFXXNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 19:12:50 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A797C88B1C
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:12:49 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id v33-20020a4a9764000000b0035f814bb06eso749536ooi.11
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:12:49 -0700 (PDT)
+        Fri, 24 Jun 2022 19:13:17 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034A468012;
+        Fri, 24 Jun 2022 16:13:16 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 68so3681189pgb.10;
+        Fri, 24 Jun 2022 16:13:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc:content-transfer-encoding;
-        bh=yUaUlIMPAe3wvXnfRM5gi/o9kg0TXggL9B/IQ5XoR14=;
-        b=KmbtAF/HUwJQPL9R+/SHHlpK6bf5UsbrnR8kNiAgyPnzFI/NFDn2EEmjfpO3ZaRR3h
-         qbt49v0otRmZ6AbsFxHqo1zKUYVlJmKKByrLpQMbjyGDUlT/qdZKAqe2x8EawZN5IpYz
-         CuOXJGVE0gUAfSJWMAdJHk8IwzujuKLd2ejTo=
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=97W1aGnfJTsRH0sQeB3uyZG1FdhNBzAYORArQFFa5J8=;
+        b=WaQTACkscwQ+r10TsXLL2IDdBXO78KeBOqyPH1sEf7nHOfk/88AkzO/GRuWjF8cOvl
+         pTH2J7EM5+tcc/pM49YYi12tc9NsS3F+QVdPYtsF05j+fs9mW3Lu9BU6KLS+Ln+snonm
+         CQocnuVS6GgqZeivqXaouar2yFPS3ljolbxXEBV7DM2rqYg7mjOKYaRvsjZmNLFdMZKj
+         15jGbtn9phJS2OEikiiRPvLTd0H6zJcgsu5armedsY8pQhB7kLBENwsmkblXjD5m1chL
+         4DGKiqSV4Q1owDTwxj33HiY9FWQ0c8bzgzOGJ2410tnkODzTtLhY1QKxAMqOIpU4nMNs
+         vEdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=yUaUlIMPAe3wvXnfRM5gi/o9kg0TXggL9B/IQ5XoR14=;
-        b=DP6itGeB06snzEqN/3h105kkdxLTctOSWN7574vz4oy0quY9eRyHmOsWHFvO1OUQMw
-         m1/akcRuXiS1i0akMnJs99XUdolQG8hpj4dpJgI8/o6B7XN8eQylrkm/jAIbXQDBOsVg
-         rilp53+FsXbJiP2OQn3tLTAIqMPRar6jBj4mzA6/5vc1ZWOzbNgi5YQm52PdRQ0FUrUK
-         5DBjL+eMzFAdSg8UWr3VvR9yrOBAcyIF15U435LaKbxaSmrf+4kh4JlaONTIwZNHXd4o
-         vZDzRu5QdcDXfiSDOaT103ptDEfvMbdXKzeINGJA/w7unn0p4OfTG1s3nbcrHWetSCDj
-         qT+A==
-X-Gm-Message-State: AJIora8NZ8R90U3nKvX2JuaUrKcglNIX1V2zkn7Zw480mAQq1fcoxnxW
-        Er22dJBiXiSFYSEVmGzr6dwZCONJPxoBva2Wd9fb1Q==
-X-Google-Smtp-Source: AGRyM1u+zQwL2M2+LhjYYBJM+V6JwxPLfyNbwqTgSpF9LXZ+0EnlDVkdDj+tlkI7rGfOi4l5ouEEmbRFSndfkF/HJ3g=
-X-Received: by 2002:a4a:98a6:0:b0:41b:e04e:70ce with SMTP id
- a35-20020a4a98a6000000b0041be04e70cemr683244ooj.25.1656112369023; Fri, 24 Jun
- 2022 16:12:49 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 24 Jun 2022 16:12:48 -0700
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=97W1aGnfJTsRH0sQeB3uyZG1FdhNBzAYORArQFFa5J8=;
+        b=FP/brQVtddT5shmYM78NAH4t7+KcxnIp1k7K6SqqGIsMJ/a1LKnHhzTMZS+B7/zH5T
+         2bNUmSI8Tfitg0Y5tIq3HUIf/DAo4VgRhOhv37UIePy2Yos3cEZ8rf2Dkx8GiOtNvgX7
+         R5uQVgt+SawQeWslCVrgWQoflETYFbjljEYlNo/sWcbrpKDs/9+GeI1lM5TAk3KqLUSN
+         4YLUgFx0Liey4/Fuxl1ZzpdmXwy07AKXRl9ywlZx2JDiNp5YPP+xpq1WkWPmbJoxpveg
+         Hts5zpU7YD5PklDtRant3cSdPBGCP3XRbuR0mvprIPtYhSau3vIykOv0dLn+FRUYnj2S
+         zSZQ==
+X-Gm-Message-State: AJIora+Rhq56Ckycv9bSxUZHTUce2m3YSOx9XGateW4tkR0e46E9nALo
+        ZMXNnysfQRXSisiO84zzcYQ=
+X-Google-Smtp-Source: AGRyM1tRHHjEWu+SxmsXdStgAmXUbMstdEJ81AIJqaNRIFgHwUDeylo9SumsU2ECSZWng7xqzcvskw==
+X-Received: by 2002:a05:6a00:d9b:b0:525:6b81:4f14 with SMTP id bf27-20020a056a000d9b00b005256b814f14mr1554852pfb.38.1656112395401;
+        Fri, 24 Jun 2022 16:13:15 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:480:eeb0:3156:8fd:28f6])
+        by smtp.gmail.com with ESMTPSA id z19-20020aa78893000000b0050dc76281e0sm2242439pfe.186.2022.06.24.16.13.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 16:13:14 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        Hao Luo <haoluo@google.com>,
+        Milian Wolff <milian.wolff@kdab.com>, bpf@vger.kernel.org,
+        Blake Jones <blakejones@google.com>
+Subject: [PATCHSET 0/6] perf tools: A couple of fixes for perf record --off-cpu (v1)
+Date:   Fri, 24 Jun 2022 16:13:07 -0700
+Message-Id: <20220624231313.367909-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 MIME-Version: 1.0
-In-Reply-To: <326912ff-9771-0711-366d-79acd436908b@quicinc.com>
-References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com>
- <1656090912-18074-3-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n52RW+UFJ=hqMWjwR8qvEbww7QjzPW1nhL3Atd97QXAnYw@mail.gmail.com>
- <007ea4c9-9701-f4ab-3278-5d36bf2018c4@quicinc.com> <CAE-0n53kNCK0ajHfY2WQr5HEQZtZSBLnhfbTuZwaUNEOZhsKPg@mail.gmail.com>
- <fa7f8bf1-33cd-5515-0143-6596df2bd740@quicinc.com> <CAE-0n51g-EVsC-i9=sJV-ySa8VnE+yT7cg=b-TNMi9+3uBiOVA@mail.gmail.com>
- <326912ff-9771-0711-366d-79acd436908b@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 24 Jun 2022 16:12:48 -0700
-Message-ID: <CAE-0n51qrdrFtSr0vRwgYkMgSZfnzQuinaUROQsp30QoDchWQA@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] drm/msm/dp: decoupling dp->id out of dp
- controller_id at scxxxx_dp_cfg table
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dianders@chromium.org, dmitry.baryshkov@linaro.org,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-06-24 15:53:45)
->
-> MSM_DP_CONTROLLER_1 need to match to the index =3D 1 of sc7280_dp_cfg[] <=
-=3D=3D This is correct
->
-> The problem is sc7280_dp_cfg[] have two entries since eDP place at index
-> of MSM_DP_CONTROLLER_1.
->
-> but .num_desc =3D 1=C2=A0 <=3D=3D this said only have one entry at sc7280=
-_dp_cfg[]
-> table. Therefore eDP will never be found at for loop=C2=A0 at
-> _dpu_kms_initialize_displayport().
->
+Hello,
 
-Yes, but what else does the MSM_DP_CONTROLLER_1 need to match? Because
-the intention of the previous commit was to make it so the order of
-sc7280_dp_cfg couldn't be messed up and not match the
-MSM_DP_CONTROLLER_1 value that lives in sc7280_intf[].
+The first patch fixes a build error on old kernels which has
+task_struct->state field that is renamed to __state.  Actually I made
+a mistake when I wrote the code and assumed new kernel version.
 
->
-> Sorry, my mistake. it is not in drm_bridge_add.
->
-> It should be in dpu_encoder_init() of _dpu_kms_initialize_displayport().
->
-> can you make below changes (patch) to _dpu_kms_initialize_displayport().
->
+The second patch is to prevent invalid sample synthesize by
+disallowing unsupported sample types.
 
-Yes, I've made that change to try to understand the problem. I still
-don't understand, sadly. Does flipping the order of iteration through
-'priv->dp' somehow mean that the crtc that is assigned to the eDP
-connector is left unchanged? Whereas without registering the eDP encoder
-first means we have to change the crtc for the eDP encoder and that
-can't be done atomically?
+The rest of the series implements inheritance of offcpu events for the
+child processes.  Unlike perf events, BPF cannot know which task it
+should track except for ones set in a BPF map at the beginning.  Add
+another BPF program to the fork path and add the process id to the
+map if the parent is tracked.
+
+With this change, it can get the correct off-cpu events for child
+processes.  I've tested it with perf bench sched messaging which
+creates a lot of processes.
+
+  $ sudo perf record -e dummy --off-cpu -- perf bench sched messaging
+  # Running 'sched/messaging' benchmark:
+  # 20 sender and receiver processes per group
+  # 10 groups == 400 processes run
+
+       Total time: 0.196 [sec]
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.178 MB perf.data (851 samples) ]
+
+
+  $ sudo perf report --stat | grep -A1 offcpu
+  offcpu-time stats:
+            SAMPLE events:        851
+
+The benchmark passes messages by read/write and it creates off-cpu
+events.  With 400 processes, we can see more than 800 events.
+
+The child process tracking is also enabled when -p option is given.
+But -t option does NOT as it only cares about the specific threads.
+It may be different what perf_event does now, but I think it makes
+more sense.
+
+You can get it from 'perf/offcpu-child-v1' branch in my tree
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+
+Namhyung Kim (6):
+  perf offcpu: Fix a build failure on old kernels
+  perf offcpu: Accept allowed sample types only
+  perf offcpu: Check process id for the given workload
+  perf offcpu: Parse process id separately
+  perf offcpu: Track child processes
+  perf offcpu: Update offcpu test for child process
+
+ tools/perf/tests/shell/record_offcpu.sh | 57 ++++++++++++++++++++---
+ tools/perf/util/bpf_off_cpu.c           | 60 +++++++++++++++++++++++--
+ tools/perf/util/bpf_skel/off_cpu.bpf.c  | 58 +++++++++++++++++++++---
+ tools/perf/util/evsel.c                 |  9 ++++
+ tools/perf/util/off_cpu.h               |  9 ++++
+ 5 files changed, 176 insertions(+), 17 deletions(-)
+
+
+base-commit: 9886142c7a2226439c1e3f7d9b69f9c7094c3ef6
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+

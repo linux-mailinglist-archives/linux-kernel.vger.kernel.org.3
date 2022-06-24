@@ -2,185 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12090559F0D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A515C559F1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiFXRFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S231302AbiFXRFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiFXRFC (ORCPT
+        with ESMTP id S231296AbiFXRFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:05:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4EF547AFA
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656090299;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KK62XKGyEa6E4YYT4ZJYLjFwXtc5WXwxUo2tARPfqUM=;
-        b=fZ+/A07dY8HbTeTNHe/Uuz5M3qMLyQPZSr9gqAv09Lqpj07UVAaAC+t4lLJFAj7mhSVg3D
-        qxu/3jfIrzJ7yA00jmqGXWSd3tEiwt/WVEMsv/d91Iqj5w0/oBplbX0QDtOLXH16DY+kPy
-        I4axpUnlUcKz6QwmBw5cNlvMoXL36gE=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-363-hAtk3rsfNuaA6wFHKd4S6Q-1; Fri, 24 Jun 2022 13:04:57 -0400
-X-MC-Unique: hAtk3rsfNuaA6wFHKd4S6Q-1
-Received: by mail-ed1-f69.google.com with SMTP id v16-20020a056402349000b00435a1c942a9so2263616edc.15
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:04:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KK62XKGyEa6E4YYT4ZJYLjFwXtc5WXwxUo2tARPfqUM=;
-        b=wmnT8Qdzc1P3t3Vzuf+OFE8S3k2pUltuZsmEbWU5nDeYFNuxXBo0lHnj3G0MRdJCWK
-         C/dxY6CFd6VxOmgMgbjnWh3D//9HhpFtunoULpakOO+R5pWnBEuND70Si39LHWAuiTAA
-         0lRBP143cEk4g2QQiw2fuFM8HocpXfDEXrNsL6wioVS5oXO45hbvPwrtP7aT9gfDV7oP
-         pyFe+3Z47+RSNGIIhT20spugP+/VUyUD+QqST4jisesrzr2njKIwBWljWDCpuCw78qBP
-         Je6F9crVXXQmtS47hPJJjn6euAGE++ZlDcJL0bjnOyc6H5Kx+qB/HXA9WIm3vA6GCRF/
-         hNgw==
-X-Gm-Message-State: AJIora8o3zaEx9HzBv0IStQQomv8i/FpDyeF3p52MU/7cPMHwhfniKMU
-        m25lid7nM/DR2QvilaMHhGnuogKyfd3DOjj8wTkBeA9vt9fNtwM/dw7yxhfBLjNzgL3mpbgzaD7
-        24SXdAoZ4Xc+be9BE9C+6F5Wa
-X-Received: by 2002:a17:906:73c2:b0:722:e8d7:38c8 with SMTP id n2-20020a17090673c200b00722e8d738c8mr3396ejl.38.1656090296601;
-        Fri, 24 Jun 2022 10:04:56 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tU/4t3ngZCmdsa1sj30mGxFm1VpjcBlpSYFtcYCmv1VB/fUuahvt96DdG3sR3So8n8+ckVJQ==
-X-Received: by 2002:a17:906:73c2:b0:722:e8d7:38c8 with SMTP id n2-20020a17090673c200b00722e8d738c8mr3373ejl.38.1656090296355;
-        Fri, 24 Jun 2022 10:04:56 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id n7-20020a05640205c700b0043575ae2051sm2322613edx.62.2022.06.24.10.04.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 10:04:55 -0700 (PDT)
-Message-ID: <d1891527-1d22-f1c3-a1f6-b4a1a3f42051@redhat.com>
-Date:   Fri, 24 Jun 2022 19:04:53 +0200
+        Fri, 24 Jun 2022 13:05:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619CE47AFA;
+        Fri, 24 Jun 2022 10:05:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 240EDB82AC9;
+        Fri, 24 Jun 2022 17:05:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B3CC34114;
+        Fri, 24 Jun 2022 17:05:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656090302;
+        bh=MbqX8rKgD+Ws/WHFx5LKN0sbE4l2+titdRU45JIB7ME=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=LKky/z/orpGdVk9UNRtxOSKtSy4JQiRybsBGVb0bAyENo0LA3H7zkwXdQqwWRJ7uz
+         SRzBDrZ9So21+zGjg5/NaNG5CVnUdEWaowijEP4h+JTcBzPpl2rRKI8S1E8z913tm3
+         utomWpEEERtFwteoKZ2XCMd3SiV8w658mpu7sw30DWnKkYRHDL1gImdDeeI2OgZBts
+         RoGgeTdhpDKUQ8QcqJLT3I94EwyuSZ5QRpKkzhJuACevX8xIesqAiTIQahDP4KOW6p
+         f3B1/iCrUlW/onaZNCeKtIpJIqksHj0oMtMdJxac0+khaVNEuSsNMK+D5oaXeHIiR/
+         wi/bxm13Opcpg==
+Date:   Fri, 24 Jun 2022 12:05:01 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com,
+        quic_hemantk@quicinc.com, quic_nitegupt@quicinc.com,
+        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
+        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
+        dmitry.baryshkov@linaro.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Prasad Malisetty <pmaliset@codeaurora.org>
+Subject: Re: [PATCH v1 1/3] PCI: qcom: Add missing sc7280 clocks in PCIe
+ driver
+Message-ID: <20220624170501.GA1541553@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 00/17] Introducing AMD x2AVIC and hybrid-AVIC modes
-Content-Language: en-US
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     mlevitsk@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-References: <20220519102709.24125-1-suravee.suthikulpanit@amd.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220519102709.24125-1-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1656062391-14567-2-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/22 12:26, Suravee Suthikulpanit wrote:
-> Introducing support for AMD x2APIC virtualization. This feature is
-> indicated by the CPUID Fn8000_000A EDX[14], and it can be activated
-> by setting bit 31 (enable AVIC) and bit 30 (x2APIC mode) of VMCB
-> offset 60h.
-> 
-> With x2AVIC support, the guest local APIC can be fully virtualized in
-> both xAPIC and x2APIC modes, and the mode can be changed during runtime.
-> For example, when AVIC is enabled, the hypervisor set VMCB bit 31
-> to activate AVIC for each vCPU. Then, it keeps track of each vCPU's
-> APIC mode, and updates VMCB bit 30 to enable/disable x2APIC
-> virtualization mode accordingly.
-> 
-> Besides setting bit VMCB bit 30 and 31, for x2AVIC, kvm_amd driver needs
-> to disable interception for the x2APIC MSR range to allow AVIC hardware
-> to virtualize register accesses.
-> 
-> This series also introduce a partial APIC virtualization (hybrid-AVIC)
-> mode, where APIC register accesses are trapped (i.e. not virtualized
-> by hardware), but leverage AVIC doorbell for interrupt injection.
-> This eliminates need to disable x2APIC in the guest on system without
-> x2AVIC support. (Note: suggested by Maxim)
-> 
-> Testing for v5:
->    * Test partial AVIC mode by launching a VM with x2APIC mode
->    * Tested booting a Linux VM with x2APIC physical and logical modes upto 512 vCPUs.
->    * Test the following nested SVM test use cases:
-> 
->               L0     |    L1   |   L2
->         ----------------------------------
->                 AVIC |    APIC |    APIC
->                 AVIC |    APIC |  x2APIC
->          hybrid-AVIC |  x2APIC |    APIC
->          hybrid-AVIC |  x2APIC |  x2APIC
->               x2AVIC |    APIC |    APIC
->               x2AVIC |    APIC |  x2APIC
->               x2AVIC |  x2APIC |    APIC
->               x2AVIC |  x2APIC |  x2APIC
-> 
-> Changes from v5:
-> (https://lore.kernel.org/lkml/20220518162652.100493-1-suravee.suthikulpanit@amd.com/T/#t)
->    * Re-order patch 16 to 10
->    * Patch 11: Update commit message
-> 
-> Changes from v4:
-> (https://lore.kernel.org/lkml/20220508023930.12881-5-suravee.suthikulpanit@amd.com/T/)
->    * Patch  3: Move enum_avic_modes definition to svm.h
->    * Patch 10: Rename avic_set_x2apic_msr_interception to
->                svm_set_x2apic_msr_interception and move it to svm.c
->                to simplify the struct svm_direct_access_msrs declaration.
->    * Patch 16: New from Maxim
->    * Patch 17: New from Maxim
-> 
-> Best Regards,
-> Suravee
-> 
-> Maxim Levitsky (2):
->    KVM: x86: nSVM: always intercept x2apic msrs
->    KVM: x86: nSVM: optimize svm_set_x2apic_msr_interception
-> 
-> Suravee Suthikulpanit (15):
->    x86/cpufeatures: Introduce x2AVIC CPUID bit
->    KVM: x86: lapic: Rename [GET/SET]_APIC_DEST_FIELD to
->      [GET/SET]_XAPIC_DEST_FIELD
->    KVM: SVM: Detect X2APIC virtualization (x2AVIC) support
->    KVM: SVM: Update max number of vCPUs supported for x2AVIC mode
->    KVM: SVM: Update avic_kick_target_vcpus to support 32-bit APIC ID
->    KVM: SVM: Do not support updating APIC ID when in x2APIC mode
->    KVM: SVM: Adding support for configuring x2APIC MSRs interception
->    KVM: x86: Deactivate APICv on vCPU with APIC disabled
->    KVM: SVM: Refresh AVIC configuration when changing APIC mode
->    KVM: SVM: Introduce logic to (de)activate x2AVIC mode
->    KVM: SVM: Do not throw warning when calling avic_vcpu_load on a
->      running vcpu
->    KVM: SVM: Introduce hybrid-AVIC mode
->    KVM: x86: Warning APICv inconsistency only when vcpu APIC mode is
->      valid
->    KVM: SVM: Use target APIC ID to complete x2AVIC IRQs when possible
->    KVM: SVM: Add AVIC doorbell tracepoint
-> 
->   arch/x86/hyperv/hv_apic.c          |   2 +-
->   arch/x86/include/asm/apicdef.h     |   4 +-
->   arch/x86/include/asm/cpufeatures.h |   1 +
->   arch/x86/include/asm/kvm_host.h    |   1 -
->   arch/x86/include/asm/svm.h         |  16 ++-
->   arch/x86/kernel/apic/apic.c        |   2 +-
->   arch/x86/kernel/apic/ipi.c         |   2 +-
->   arch/x86/kvm/lapic.c               |   6 +-
->   arch/x86/kvm/svm/avic.c            | 178 ++++++++++++++++++++++++++---
->   arch/x86/kvm/svm/nested.c          |   5 +
->   arch/x86/kvm/svm/svm.c             |  75 ++++++++----
->   arch/x86/kvm/svm/svm.h             |  25 +++-
->   arch/x86/kvm/trace.h               |  18 +++
->   arch/x86/kvm/x86.c                 |   8 +-
->   14 files changed, 291 insertions(+), 52 deletions(-)
-> 
+[+cc Prasad, who added sc7280]
 
-I haven't quite finished reviewing this, but it passes both 
-kvm-unit-tests and selftests so I pushed it to kvm/queue.
+On Fri, Jun 24, 2022 at 02:49:49PM +0530, Krishna chaitanya chundru wrote:
+> Add missing clocks in the pcie driver.
 
-Paolo
+s/pcie/PCIe/ as in subject.  Also, please mention the names of the
+clocks here, too.
 
+Does this add new functionality, or did sc7280 just never work in the
+first place?
+
+If this fixes a problem, it's nice to mention the user-visible symptom
+in the commit log to make it easier to connect this fix with the
+problem.
+
+Looks like sc7280 was added by Prasad with b89ff410253d ("PCI: qcom:
+Replace ops with struct pcie_cfg in pcie match data"), and I assume it
+was tested at that time.
+
+If I had noticed, I would have asked that b89ff410253d be a strict
+conversion to struct qcom_pcie_cfg with no functional changes, with
+sc7280 support being added in a separate patch by itself.
+
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 2ea1375..a7202f0 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -1548,7 +1548,10 @@ static const struct qcom_pcie_cfg sm8450_pcie1_cfg = {
+>  static const struct qcom_pcie_cfg sc7280_cfg = {
+>  	.ops = &ops_1_9_0,
+>  	.has_tbu_clk = true,
+> +	.has_ddrss_sf_tbu_clk = true,
+>  	.pipe_clk_need_muxing = true,
+> +	.has_aggre0_clk = true,
+> +	.has_aggre1_clk = true,
+>  };
+>  
+>  static const struct qcom_pcie_cfg sc8180x_cfg = {
+> -- 
+> 2.7.4
+> 

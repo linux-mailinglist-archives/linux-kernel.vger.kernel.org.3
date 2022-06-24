@@ -2,56 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C81559F4C
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE0E559F44
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbiFXRJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
+        id S231890AbiFXRKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbiFXRJY (ORCPT
+        with ESMTP id S231833AbiFXRKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:09:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040F951E42;
-        Fri, 24 Jun 2022 10:09:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94DD76225C;
-        Fri, 24 Jun 2022 17:09:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CCEC34114;
-        Fri, 24 Jun 2022 17:09:22 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GRCkiDNj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656090561;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qEFxaXOpm47YuvNIIydx/V+Sc+BnS54ItZCrlbSUgmE=;
-        b=GRCkiDNjHvmlVq5o/W20lp1q4DRqpnzFVmV8PPMcKy7NWKh56uAQZGvwRJ/TiX7SAvb+Af
-        hJk7ARl+DvNfbYnJPgM1UeIph9ra9+QNhga1yLa0mqDOP1Ih5bDHgDQXhrq5TuCAS2ONLw
-        oZ7VwemFnwIU/foXGGkZqqEg4b5rPsw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 569f60d8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 24 Jun 2022 17:09:20 +0000 (UTC)
-Date:   Fri, 24 Jun 2022 19:09:17 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 3/6] fs: clear FMODE_LSEEK if no llseek function
-Message-ID: <YrXvvVtB0XIgnt0P@zx2c4.com>
-References: <20220624165631.2124632-1-Jason@zx2c4.com>
- <20220624165631.2124632-4-Jason@zx2c4.com>
- <YrXuk+zOt4xFRDMI@ZenIV>
+        Fri, 24 Jun 2022 13:10:01 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF42951E7E;
+        Fri, 24 Jun 2022 10:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656090600; x=1687626600;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bgbQFlCVdpCMNcHSrhnw0vtteZ74+vzwjmr94U9FKJs=;
+  b=eqKfB7CQnG4RNgSwzJIoVcZwNm2i1chrqdILFZOemMrsLUNW9Z4xODT9
+   flbWCJR+vsvBDSeXSeKCMf6Lw14iT203WAf+mJdTjy1ghADJqXy2u7OfX
+   dSU3HOYEBIEFznRzrClIsUByMdKFasv2FpDrlDdMsqOkEalKGlzoiEG78
+   ZYM9iD+IlDcld/oD35Waq8cJT0yN3FdUe/TrcJLe/n67loM0vf9KLY7i1
+   VCJqBZ8w/LQlpJrLwcXQZZMufBumG0swcYQFrIJNBLe8/5lEsDtYC7T1Q
+   YcBMWKjopM1OmpXcwXuN0kFXbpEs3JNyjO72xMdk2h/7sehHj3CP8FyqM
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="261468653"
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="261468653"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 10:10:00 -0700
+X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
+   d="scan'208";a="731398263"
+Received: from mdedeogl-mobl.amr.corp.intel.com (HELO [10.209.126.186]) ([10.209.126.186])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 10:09:59 -0700
+Message-ID: <e09dae40-d269-cfed-d048-3e62275c1bb7@intel.com>
+Date:   Fri, 24 Jun 2022 10:09:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YrXuk+zOt4xFRDMI@ZenIV>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
+ memory
+Content-Language: en-US
+To:     Marc Orr <marcorr@google.com>
+Cc:     Peter Gonda <pgonda@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo <marcelo.cerri@canonical.com>, tim.gardner@canonical.com,
+        Khalid ElMously <khalid.elmously@canonical.com>,
+        philip.cox@canonical.com,
+        the arch/x86 maintainers <x86@kernel.org>,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <CAMkAt6osbEGBFrgn=y1=x4mDHC1aL40BwaW0NdGHF8qmWd7ktA@mail.gmail.com>
+ <5af19000-4482-7eb9-f158-0a461891f087@intel.com>
+ <CAA03e5F480=psSECDAkXQEvNKk3une-4dJV57Hde4z4MMzh=1A@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAA03e5F480=psSECDAkXQEvNKk3une-4dJV57Hde4z4MMzh=1A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,36 +92,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Al,
+On 6/24/22 10:06, Marc Orr wrote:
+> I think Peter's point is a little more nuanced than that. Once lazy
+> accept goes into the guest firmware -- without the feature negotiation
+> that Peter is suggesting -- cloud providers now have a bookkeeping
+> problem. Which images have kernels that can boot from a guest firmware
+> that doesn't pre-validate all the guest memory?
 
-On Fri, Jun 24, 2022 at 06:04:19PM +0100, Al Viro wrote:
-> On Fri, Jun 24, 2022 at 06:56:28PM +0200, Jason A. Donenfeld wrote:
-> > This helps unify a longstanding wart where FMODE_LSEEK hasn't been
-> > uniformly unset when it should be.
-> > 
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> >  fs/file_table.c | 2 ++
-> >  fs/open.c       | 2 ++
-> >  2 files changed, 4 insertions(+)
-> > 
-> > diff --git a/fs/file_table.c b/fs/file_table.c
-> > index 5424e3a8df5f..15700b2e1b53 100644
-> > --- a/fs/file_table.c
-> > +++ b/fs/file_table.c
-> > @@ -241,6 +241,8 @@ static struct file *alloc_file(const struct path *path, int flags,
-> >  	if ((file->f_mode & FMODE_WRITE) &&
-> >  	     likely(fop->write || fop->write_iter))
-> >  		file->f_mode |= FMODE_CAN_WRITE;
-> > +	if ((file->f_mode & FMODE_LSEEK) && !file->f_op->llseek)
-> > +		file->f_mode &= ~FMODE_LSEEK;
-> 
-> 	Where would FMODE_LSEEK come from in this one?  ->f_mode is set
-> (in __alloc_file()) to OPEN_FMODE(flags); that does deal with FMODE_READ
-> and FMODE_WRITE, but FMODE_LSEEK will be clear...
+Hold on a sec though...
 
-From the `int flags` parameter of the function. That's an O flag not an
-F flag, though, so I assume you mean that it's impossible to get LSEEK
-there in practice? If so, I'll drop this hunk.
+Is this a matter of
 
-Jason
+	can boot from a guest firmware that doesn't pre-validate all the
+	guest memory?
+
+or
+
+	can boot from a guest firmware that doesn't pre-validate all the
+	guest memory ... with access to all of that guest's RAM?
+
+In other words, are we talking about "fails to boot" or "can't see all
+the RAM"?

@@ -2,121 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD351559A33
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD613559A36
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbiFXNNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 09:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
+        id S231469AbiFXNNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 09:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiFXNNG (ORCPT
+        with ESMTP id S232011AbiFXNNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 09:13:06 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DB3DEB5;
-        Fri, 24 Jun 2022 06:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656076371;
-        bh=mpgGbs0Th9qSc5wRx9aDtFvrJXSc6il6Q39uU61O9/Q=;
-        h=X-UI-Sender-Class:Date:To:References:Cc:From:Subject:In-Reply-To;
-        b=W13GLORQo4mFRzfAOT0zfMID4vv7W/3G/dTn33glJaBUfaqUwrhmDUOQbi6+RIuNl
-         tlko9DswKfBwn1DhdR911ql/t/KT9H2X+QeeWuHscPB/QcqIdicMf2knnUte82MKLi
-         heAAWaJ9GCp9KUD7v0mzJtV21hlaoFT1Mh0V1ULg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MlNtF-1nNNct0vS1-00lo3h; Fri, 24
- Jun 2022 15:12:51 +0200
-Message-ID: <b058e226-8a77-42bc-8c92-5bd23244e7da@gmx.com>
-Date:   Fri, 24 Jun 2022 21:12:44 +0800
+        Fri, 24 Jun 2022 09:13:14 -0400
+Received: from mail-sz.amlogic.com (mail-sz.amlogic.com [211.162.65.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306C211454;
+        Fri, 24 Jun 2022 06:13:09 -0700 (PDT)
+Received: from droid11-sz.amlogic.com (10.28.8.21) by mail-sz.amlogic.com
+ (10.28.11.5) with Microsoft SMTP Server id 15.1.2176.2; Fri, 24 Jun 2022
+ 21:13:00 +0800
+From:   Liang Yang <liang.yang@amlogic.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        <linux-mtd@lists.infradead.org>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v7 0/5] fix the meson NFC clock
+Date:   Fri, 24 Jun 2022 21:12:50 +0800
+Message-ID: <20220624131257.29906-1-liang.yang@amlogic.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-US
-To:     dsterba@suse.cz, Christoph Hellwig <hch@lst.de>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com, linux-btrfs@vger.kernel.org
-References: <20220624122334.80603-1-hch@lst.de>
- <20220624124913.GS20633@twin.jikos.cz>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: [PATCH] btrfs: remove btrfs_writepage_cow_fixup
-In-Reply-To: <20220624124913.GS20633@twin.jikos.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:jN5WovdcgKwQ7MC+rQehoNVujc6Vceol5Mpw4MjMm+kzk7LuLt8
- iQY5JSukD8cwWns0ier8wfJRmvaiKWzljF6hJ+fcPjE71Uwd7M5xhnKVh+NvqFqfcOV3vaJ
- xQeaMGhv3YUGfh2Y5xMQogOZu4yU5Zp8ZPihEfiJVuf/6ZJEmgNkKoAnxtdjU4Y5Py4LlF9
- 50BqUOXMbij7jSSowBE1w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ah5fHvL9uP8=:Mjl0wCGX/fo7MhMwzB+gHN
- pZe5V3uoDLqVzlj1v/z7VJ0slrMnXnXk/Pcc8MHxYcuni0m9vwNbGZVcD+SmWZyHAN9i+LBNw
- aTa0BlAHnE0ZZQQe5jmZDRslI8kifPlBESnXeOUtNb6gHxt3T6ZFlzzpFqFo4d4T5zSqNnrdB
- BlwgipCNE+LgwBGPyjB6xlRM4ClAfezTPlEt2sbIy3rsKs8lj0G/gvEwImETzD3Xu3lbHn1xf
- E5HvybpJil8aIB0VFwnCsQA9TEwAFeLRD6NciOc7mb8SdNLVUhq4zoQQ6hegY+yZ8mIV2C7NX
- f2SLujPLeIzciVCbr+ed/p6HjpKfKrNKm75eOpb7A5ovVf6+IMaV9SneHW4Vlfu7FPjd3z1/H
- DYXUxwQnoimhXQlAQD5CSv7tLN9JwJ3OBr3cyl80MGM0/n5d+qq03GQ6G1ZcXOlMyPkU+IArr
- +vWmFfMBIrURduly1LlOVkExg3A895QNFjtaD0sTdjd5oJKIP1v9tC1tfvAbOHRCZc+p69ZFH
- P7SMj7l9/8f0re1FKrjqQwYrB1prvzXz9tDof5Rn4l0tPoUCgR69gJaV77OG+trVusgO6MwWC
- hNnx3kWC/lHQym4CUPYk7D9OgvunEr9C6XgsgoD+BiWDA8ZIv7bpzjzI6X6gA3WCt02ensosx
- m3zUKVZw1XmPluXDFpT69x6b2dToXA9NJVzmOFBfdu4bixYV7ie5PKl2+G8E5USBgWLy4S/kC
- HVsLlQmFaZDM8PJTv1zwipENMBJWrS71jV8zCzOWzvtlpN+KTSw4Ph9D529RgPeQSRsgLnLNV
- eB8VrR+uLWprz5z0BRuRl1rRjZJizHbVuJ02In/ZJdil9+vZvdojP390uBLoahEtJ28njKn1Z
- BGtXqZaML0Gw2TcfP4u2EcswB+SKmtLEN9nj+NskGrkBylNCj/lFu9rmjX1c1dYwGX2di4JaL
- bxjy4ewYe7I3oqovQxYKIsVatHdI2xzVUQMc7Lp4hsk/drydTaytAmxwDr+4Beq5Q+sUX4W9a
- BCqtHd7w+PliTx0DVMKxoTi+OueJ6uL/tBE8ecsIgm8EItzmjzEKZN3kGJAGxdXWcHsVxK1dp
- 6mUjE3mOn8W6TYT3H8b+34eU4BbfJasVersxlxwpUqSDpfYkSj5ITjxRA==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.28.8.21]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+EMMC and NAND have the same clock control register named 'SD_EMMC_CLOCK'
+which is defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is
+the divider and bit6~7 is the mux for fix pll and xtal. At the beginning,
+a common MMC and NAND sub-clock was discussed and planed to be implemented
+as NFC clock provider, but now this series of patches of a common MMC and
+NAND sub-clock are never being accepted and the current binding was never
+valid. the reasons are:
+1. EMMC and NAND, which are mutually exclusive anyway
+2. coupling the EMMC and NAND.
+3. it seems that a common MMC and NAND sub-clock is over engineered.
+and let us see the link for more information:
+https://lore.kernel.org/all/20220121074508.42168-5-liang.yang@amlogic.com
+so The meson nfc can't work now, let us rework the clock.
 
+Changes since v6 [7]
+ - use COMMON_CLK instead of !HAVE_LEGACY_CLK
 
-On 2022/6/24 20:49, David Sterba wrote:
-> On Fri, Jun 24, 2022 at 02:23:34PM +0200, Christoph Hellwig wrote:
->> Since the page_mkwrite address space operation was added, starting with
->> commit 9637a5efd4fb ("[PATCH] add page_mkwrite() vm_operations method")
->> in 2006, the kernel does not just dirty random pages without telling
->> the file system.
->
-> It does and there's a history behind the fixup worker. tl;dr it can't be
-> removed, though every now and then somebody comes and tries to.
->
-> On s390 the page status is tracked in two places, hw and in memory and
-> this needs to be synchronized manually.
->
-> On x86_64 it's not a simple reason but it happens as well in some edge
-> case where the mappings get removed and dirty page is set deep in the
-> arch mm code.  We've been chasing it long time ago, I don't recall exact
-> details and it's been a painful experience.
->
-> If there's been any change on the s390 side or in arch/x86/mm code I
-> don't know but to be on the safe side, I strongly assume the fixup code
-> is needed unless proven otherwise.
+Changes since v5 [6]
+ - add change log for patch 3/5
+ - add patch 5/5 to fix the reporting error of test robot
 
-I'd say, if this can be a problem to btrfs, then all fs supporting COW
-should also be affected, and should have similar workaround.
+Changes since v4 [5]
+ - split the dt binding patch into two patches, one for fixing, 
+   clock, the other for coverting to yaml
+ - split the nfc driver patch into two patches, one for fixing 
+   clock, the other for refining the get nfc resource.
 
+Changes since v3 [4]
+ - use devm_platform_ioremap_resource_byname
+ - dt_binding_check for mtd/amlogic,meson-nand.yaml
 
-Furthermore, this means we can get a page dirtied without us knowing.
+Changes since v2 [3]
+ - use fw_name from dts, instead the wrong way using __clk_get_name
+ - reg resource size change to 0x800
+ - use reg-names
 
-This is a super big surprise to any fs, and should be properly
-documented, not just leaving some seemly dead and special code in some
-random fs.
+Changes since v1 [2]
+ - use clk_parent_data instead of parent_names
+ - define a reg resource instead of sd_emmc_c_clkc 
 
-Furthermore, I'm not sure even if handling this in a fs level is correct.
-This looks like more a MM problem to me then.
+[1] https://lore.kernel.org/r/20220106033130.37623-1-liang.yang@amlogic.com
+    https://lore.kernel.org/r/20220106032504.23310-1-liang.yang@amlogic.com
+[2] https://lore.kernel.org/all/20220217063346.21691-1-liang.yang@amlogic.com
+[3] https://lore.kernel.org/all/20220318124121.26117-1-liang.yang@amlogic.com
+[4] https://lore.kernel.org/all/20220402074921.13316-1-liang.yang@amlogic.com/
+[5] https://lore.kernel.org/all/20220513123404.48513-1-liang.yang@amlogic.com/
+[6] https://lore.kernel.org/all/20220607064731.13367-1-liang.yang@amlogic.com/
 
+Liang Yang (5):
+  dt-bindings: nand: meson: fix meson nfc clock
+  mtd: rawnand: meson: fix the clock
+  mtd: rawnand: meson: refine resource getting in probe
+  dt-bindings: nand: meson: convert txt to yaml
+  mtd: rawnand: meson: not support legacy clock
 
-I totally understand it's a pain to debug such lowlevel bug, but
-shouldn't we have a proper regression for it then?
+ .../bindings/mtd/amlogic,meson-nand.txt       | 60 -------------
+ .../bindings/mtd/amlogic,meson-nand.yaml      | 88 +++++++++++++++++++
+ drivers/mtd/nand/raw/Kconfig                  |  2 +-
+ drivers/mtd/nand/raw/meson_nand.c             | 86 +++++++++---------
+ 4 files changed, 131 insertions(+), 105 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
+ create mode 100644 Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml
 
-Instead of just keeping what we know works, I really want to handle this
-old case/bug in a more modern way.
+-- 
+2.34.1
 
-Thanks,
-Qu

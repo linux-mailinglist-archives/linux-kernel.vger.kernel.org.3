@@ -2,76 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F07559E75
+	by mail.lfdr.de (Postfix) with ESMTP id C8933559E77
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiFXQQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 12:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S231476AbiFXQTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 12:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231437AbiFXQQd (ORCPT
+        with ESMTP id S229598AbiFXQTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 12:16:33 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023BF4E39B
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:16:31 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id ej4so4158551edb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YocsH/SCIFBtqFkbbqYZ9NPO0UIAT3/bIxNj7wG+byE=;
-        b=yhdKSJLG78moAYzJ88cQkhH/Hj5st2xbcRGlEiwd0dUxqsNyyB7j3EJGWPeIUgohrw
-         vx7twc6VO4e5ryjWo8HD3Wu3vpxXVbeoTYKzYFhl08J0gKex+mXu/mgeNrrsAY3ZM6sW
-         ZfE/T+ddDwm97PYBRken2rgWFIfj9dppAXIhbg8rnqOqVtaG3CiBSc9R0JsymSKxPnik
-         LhyNphKCPMTtVlZR9LkrqwWVANaJlRr7W9oROdhI4bb/zRzCrRYifa76XKZKrZLMsWVq
-         fkJdb2ukyNt6MCxrdbgQjjU1n8bUBYQx7ortZngOVow2D1b81R6+zdK6bIUpkR2JpewG
-         W5Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YocsH/SCIFBtqFkbbqYZ9NPO0UIAT3/bIxNj7wG+byE=;
-        b=523FKKSn5z7Me8yfijK/oCwXZtTxj2KWm0FExGUwN18LjzakVVnm1gR6dxcbvryPiC
-         HgEfvdyHkLPKXk2aN1EQz8I9QHj+LJ3G0EvvfF0R3UHsd5dLqUORtgm/R5TmY28LRSR5
-         LyviGFpFOBY/YBhu8wZ8S45HB5T+rh6rgIL1kWoeVjCqq9yPAV5wpUpFN6i4zxJPrSqm
-         NueW/oal1ivPrNjmT644O8Ht6mwohc83AG6BWKC4PBDGY5rT+96OsRTAeRyowxj+1poG
-         IwW5hzhBWQppqHkeKCI4jFsetSvs0FRB1RpCgogK9CUuGvp6f2xkvI3i+XGrPnc7bYnv
-         HjWA==
-X-Gm-Message-State: AJIora837Ly//c6YVflGdtVhJrHDoc+8lkPuEJFf0XVa+GAv8iWfJPlh
-        dOGOF0CYvSgdTjymE6fBj10//fQodufqyg==
-X-Google-Smtp-Source: AGRyM1sRGlX6n9a00k4nlkcTq8GcVHrv/VdC8qA06SSsZy9JjDIaeQFaarDYrDBySHNlCTH2NeO2uA==
-X-Received: by 2002:a05:6402:4248:b0:435:9150:ccfb with SMTP id g8-20020a056402424800b004359150ccfbmr18736992edb.374.1656087389569;
-        Fri, 24 Jun 2022 09:16:29 -0700 (PDT)
-Received: from [192.168.0.237] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id k12-20020a17090666cc00b007041e969a8asm1350125ejp.97.2022.06.24.09.16.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 09:16:29 -0700 (PDT)
-Message-ID: <ddb0e946-c955-1404-c1cd-c2548f34ec35@linaro.org>
-Date:   Fri, 24 Jun 2022 18:16:27 +0200
+        Fri, 24 Jun 2022 12:19:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FD03C706;
+        Fri, 24 Jun 2022 09:19:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04336B82A3A;
+        Fri, 24 Jun 2022 16:19:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85A52C34114;
+        Fri, 24 Jun 2022 16:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656087577;
+        bh=GnA2DvgsL+gQNtgqEkQiuBzC52en4llzdKBJm8+xA+8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HBSCYA++i4drdNWk7WOxnlwBOuQciWAF6BO0ytM/YimhZTMCdBUQ8Udwp6qWqtvt+
+         o930I08vAlMr4o0cDKOSGwuoH8FIxmOzf169ZgPZrcXYDWoxR3jzaVc1Lwh7k7dOqb
+         ynaIvE1+yAHkBfMes2OOCHCMi4CHaFrnRLjW3zO5darGHGnaVmkCXO33ckdTk45A9T
+         eG9wQTbqpuup6X3Tr+9AOGqSd3mSUxnysYoA7Q+HMF2VOeKEkOmnkl7g4x94AWAK0l
+         dYeWUgquSpHuQTatsOqAATVnxsI07oxZnoHLOpclybqTr6ivaBfivGDHUmgikqUSp4
+         KhRYgek4rb74g==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id F24824096F; Fri, 24 Jun 2022 13:19:34 -0300 (-03)
+Date:   Fri, 24 Jun 2022 13:19:34 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ravi Bangoria <ravi.bangoria@amd.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>, rrichter@amd.com,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        James Clark <james.clark@arm.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>, like.xu.linux@gmail.com,
+        x86@kernel.org,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>, ananth.narayan@amd.com,
+        Kim Phillips <kim.phillips@amd.com>, santosh.shukla@amd.com
+Subject: Re: [PATCH v6 0/8] perf/amd: Zen4 IBS extensions support (tool
+ changes)
+Message-ID: <YrXkFii1Fme9e1AE@kernel.org>
+References: <20220604044519.594-1-ravi.bangoria@amd.com>
+ <CAM9d7ci9Th4Aye51G+X5F12BiDXTnffZdj-A+HGRfUX_nWuQdw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/4] dt-bindings: usb: typec: add bindings for stm32g0
- controller
-Content-Language: en-US
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>, robh+dt@kernel.org,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        amelie.delaunay@foss.st.com, alexandre.torgue@foss.st.com
-References: <20220624155413.399190-1-fabrice.gasnier@foss.st.com>
- <20220624155413.399190-2-fabrice.gasnier@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220624155413.399190-2-fabrice.gasnier@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM9d7ci9Th4Aye51G+X5F12BiDXTnffZdj-A+HGRfUX_nWuQdw@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,140 +73,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/06/2022 17:54, Fabrice Gasnier wrote:
-> This patch adds DT schema documentation for the STM32G0 Type-C controller.
+Em Mon, Jun 06, 2022 at 04:46:57PM -0700, Namhyung Kim escreveu:
+> On Fri, Jun 3, 2022 at 9:46 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+> > Ravi Bangoria (8):
+> >   perf record ibs: Warn about sampling period skew
+> >   perf tool: Parse pmu caps sysfs only once
+> >   perf headers: Pass "cpu" pmu name while printing caps
+> >   perf headers: Store pmu caps in an array of strings
+> >   perf headers: Record non-cpu pmu capabilities
+> >   perf/x86/ibs: Add new IBS register bits into header
+> >   perf tool ibs: Sync amd ibs header file
+> >   perf script ibs: Support new IBS bits in raw trace dump
+ 
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-No "This patch"
+Thanks, applied the series to perf/core, except for "[PATCH v6 6/8]
+perf/x86/ibs: Add new IBS register bits into header", that is outside
+tools/.
 
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+- Arnaldo
 
-> STM32G0 provides an integrated USB Type-C and power delivery interface.
-> It can be programmed with a firmware to handle UCSI protocol over I2C
-> interface. A GPIO is used as an interrupt line.
-> It may be used as a wakeup source, so use optional "wakeup-source" and
-> "power-domains" properties to support wakeup.
-> 
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> ---
->  .../bindings/usb/st,typec-stm32g0.yaml        | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml b/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
-> new file mode 100644
-> index 0000000000000..b2729bd015a1a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
-> @@ -0,0 +1,83 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/st,typec-stm32g0.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-
-No quotes.
-
-> +
-> +title: STMicroelectronics STM32G0 Type-C controller bindings
-
-s/bindings//
-
-> +
-> +description: |
-> +  The STM32G0 MCU can be programmed to control Type-C connector(s) through I2C
-> +  typically using the UCSI protocol over I2C, with a dedicated alert
-> +  (interrupt) pin.
-> +
-> +maintainers:
-> +  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: st,stm32g0-typec
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  connector:
-> +    type: object> +    allOf:
-> +      - $ref: ../connector/usb-connector.yaml#
-
-Full path, so /schemas/connector/...
-
-unevaluatedProperties: false
-
-> +
-> +  firmware-name:
-> +    description: |
-> +      Should contain the name of the default firmware image
-> +      file located on the firmware search path
-> +
-> +  wakeup-source: true
-> +  power-domains: true
-
-maxItems
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c5 {
-
-Just "i2c"
-
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      stm32g0@53 {
-
-Generic node name describing class of the device.
-
-> +        compatible = "st,stm32g0-typec";
-> +        reg = <0x53>;
-> +        /* Alert pin on GPIO PE12 */
-> +        interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
-> +        interrupt-parent = <&gpioe>;
-> +
-> +        /* Example with one type-C connector */
-> +        connector {
-> +          compatible = "usb-c-connector";
-> +          label = "USB-C";
-> +
-> +          port {
-
-This does not look like proper schema of connector.yaml.
-
-> +            con_usb_c_ep: endpoint {
-> +              remote-endpoint = <&usbotg_hs_ep>;
-> +            };
-> +          };
-> +        };
-> +      };
-> +    };
-> +
-> +    usbotg_hs {
-
-Generic node names, no underscores in node names.
-
-> +      usb-role-switch;
-> +      port {
-> +        usbotg_hs_ep: endpoint {
-> +          remote-endpoint = <&con_usb_c_ep>;
-> +        };
-> +      };
-> +    };
-> +...
-
-
-Best regards,
-Krzysztof

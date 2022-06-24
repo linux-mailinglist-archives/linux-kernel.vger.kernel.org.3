@@ -2,441 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DB4559B90
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CD6559B9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbiFXOdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 10:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S232512AbiFXOen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 10:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232308AbiFXOdh (ORCPT
+        with ESMTP id S232453AbiFXOek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 10:33:37 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7889247549
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:33:34 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id by38so2963407ljb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 07:33:34 -0700 (PDT)
+        Fri, 24 Jun 2022 10:34:40 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F32DF4E3BB;
+        Fri, 24 Jun 2022 07:34:33 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id DD2A316D7;
+        Fri, 24 Jun 2022 17:35:51 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com DD2A316D7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0yhMNVTfPgAiz+CgtIR9pHMpZQGSdtbAVl/2DeBNAqc=;
-        b=SjJEMzrWxAcKwc5YzGrav8NBQX276eeEeaWCtW3CaaxjO2ltEuVAL6sjneDt8mLwMn
-         G6omp21sIapg84ueYj+ecm4lMnl2oPZc8MrWyBu7vx5vt3yt77+RjCP//eeuR7ow53sn
-         VnnylV8XIzAoEQEuEz4hxs8qd3t0zqP4KQ9SzEQh0VCHd4ml8YA99OQxsqxV3YgqjJjL
-         aWusHu4Bphs1xWYY5SOgSPxmBo+MvIuc/HJDTXMRpWrdYBJWzuf/0vsMJWq14wpSeisJ
-         MnxOEE3UFKvBxX5t+eB5AQfzMwsQX0c/vbKbT//6/qzs6CLTB1B9hAzjiZz/YUrPRgCg
-         585A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0yhMNVTfPgAiz+CgtIR9pHMpZQGSdtbAVl/2DeBNAqc=;
-        b=ixSmUb+jKlvH/UMFW2y5073Cm2S++nA2cz2pH4I5Xe+AhStAxccy1OZTTMCJpoEc98
-         kIJfdJ6lvrS9b96wHFSjCm2cExa/9GT8BuDszjEJn3CMbA047YLlzN4Fp2MdKM1Nrh15
-         QC0J3dMNfbn3nA6Bx+jXmiuaSGGkH9qqyloxdK/jNalqVvO1fJgGMV9yS+mPJjHbfjEI
-         u0H5N6SWRzsAuzSb0g8zN5ZWD23R0s4chJsiPf/3g/CK1VCKAjym3P7SYGVuwd7F+Fpf
-         ruH8B4qBWxrboxxOzluHcgXwcRRDirnUx06UWDCcPk9klPoBMTf5IxJyo+ocJyJCd7VC
-         zTsQ==
-X-Gm-Message-State: AJIora9Z60Zr+o7Hb4x/KvYEY+rD86yATW33QWRMR6Mav6nZzfcbey6K
-        ukNyKn4Aw2kI8tcUl4jKA2ariKGufnv/PUMOiMzulQ==
-X-Google-Smtp-Source: AGRyM1vdiMmZacgjEGkkuIL1NK5wWJI4LMznvMCziB6kOQphLZLpwbEtJYE7oZ87HpYB93JjjWFeHHJ2h3V4164qP4I=
-X-Received: by 2002:a2e:2a43:0:b0:25a:84a9:921c with SMTP id
- q64-20020a2e2a43000000b0025a84a9921cmr7511271ljq.83.1656081212439; Fri, 24
- Jun 2022 07:33:32 -0700 (PDT)
+        d=baikalelectronics.ru; s=mail; t=1656081352;
+        bh=dl1pmMziOzXIj+32gBup2/UOO8PRGsVK8sv4CehJaxg=;
+        h=From:To:CC:Subject:Date:From;
+        b=YAxeTfTM5N0IO+xRE0CXDNoCqIoYcOXhVbzXQl6pAuY+XogslyaPaAc4Aw66KCGRi
+         qaod5paSBPCrpcPnucwz/5Q7gfAUI+GQWBjUR1sfj3S00Y0yrzghZsoel8H0hy2W4m
+         H2IgDzK8LDZb3gybJZARS1OBgMOpt3426l1MuVMQ=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 24 Jun 2022 17:34:32 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND v5 00/18] PCI: dwc: Various fixes and cleanups
+Date:   Fri, 24 Jun 2022 17:34:10 +0300
+Message-ID: <20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <cover.1655761627.git.ashish.kalra@amd.com> <fdf036c1e2fdf770da8238b31056206be08a7c1b.1655761627.git.ashish.kalra@amd.com>
-In-Reply-To: <fdf036c1e2fdf770da8238b31056206be08a7c1b.1655761627.git.ashish.kalra@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Fri, 24 Jun 2022 08:33:21 -0600
-Message-ID: <CAMkAt6o2cQPAAzYK31myzBQWckUSQWVOOV2+-5VpnTym-wN7sA@mail.gmail.com>
-Subject: Re: [PATCH Part2 v6 26/49] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_UPDATE command
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "Lendacky, Thomas" <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Alper Gun <alpergun@google.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>, jarkko@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 5:08 PM Ashish Kalra <Ashish.Kalra@amd.com> wrote:
->
-> From: Brijesh Singh <brijesh.singh@amd.com>
->
-> The KVM_SEV_SNP_LAUNCH_UPDATE command can be used to insert data into the
-> guest's memory. The data is encrypted with the cryptographic context
-> created with the KVM_SEV_SNP_LAUNCH_START.
->
-> In addition to the inserting data, it can insert a two special pages
-> into the guests memory: the secrets page and the CPUID page.
->
-> While terminating the guest, reclaim the guest pages added in the RMP
-> table. If the reclaim fails, then the page is no longer safe to be
-> released back to the system and leak them.
->
-> For more information see the SEV-SNP specification.
->
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  .../virt/kvm/x86/amd-memory-encryption.rst    |  29 +++
->  arch/x86/kvm/svm/sev.c                        | 187 ++++++++++++++++++
->  include/uapi/linux/kvm.h                      |  19 ++
->  3 files changed, 235 insertions(+)
->
-> diff --git a/Documentation/virt/kvm/x86/amd-memory-encryption.rst b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> index 878711f2dca6..62abd5c1f72b 100644
-> --- a/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> +++ b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-> @@ -486,6 +486,35 @@ Returns: 0 on success, -negative on error
->
->  See the SEV-SNP specification for further detail on the launch input.
->
-> +20. KVM_SNP_LAUNCH_UPDATE
-> +-------------------------
-> +
-> +The KVM_SNP_LAUNCH_UPDATE is used for encrypting a memory region. It also
-> +calculates a measurement of the memory contents. The measurement is a signature
-> +of the memory contents that can be sent to the guest owner as an attestation
-> +that the memory was encrypted correctly by the firmware.
-> +
-> +Parameters (in): struct  kvm_snp_launch_update
-> +
-> +Returns: 0 on success, -negative on error
-> +
-> +::
-> +
-> +        struct kvm_sev_snp_launch_update {
-> +                __u64 start_gfn;        /* Guest page number to start from. */
-> +                __u64 uaddr;            /* userspace address need to be encrypted */
-> +                __u32 len;              /* length of memory region */
-> +                __u8 imi_page;          /* 1 if memory is part of the IMI */
-> +                __u8 page_type;         /* page type */
-> +                __u8 vmpl3_perms;       /* VMPL3 permission mask */
-> +                __u8 vmpl2_perms;       /* VMPL2 permission mask */
-> +                __u8 vmpl1_perms;       /* VMPL1 permission mask */
-> +        };
-> +
-> +See the SEV-SNP spec for further details on how to build the VMPL permission
-> +mask and page type.
-> +
-> +
->  References
->  ==========
->
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 41b83aa6b5f4..b5f0707d7ed6 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -18,6 +18,7 @@
->  #include <linux/processor.h>
->  #include <linux/trace_events.h>
->  #include <linux/hugetlb.h>
-> +#include <linux/sev.h>
->
->  #include <asm/pkru.h>
->  #include <asm/trapnr.h>
-> @@ -233,6 +234,49 @@ static void sev_decommission(unsigned int handle)
->         sev_guest_decommission(&decommission, NULL);
->  }
->
-> +static inline void snp_leak_pages(u64 pfn, enum pg_level level)
-> +{
-> +       unsigned int npages = page_level_size(level) >> PAGE_SHIFT;
-> +
-> +       WARN(1, "psc failed pfn 0x%llx pages %d (leaking)\n", pfn, npages);
-> +
-> +       while (npages) {
-> +               memory_failure(pfn, 0);
-> +               dump_rmpentry(pfn);
-> +               npages--;
-> +               pfn++;
-> +       }
-> +}
+This patchset is a first one in the series created in the framework of
+my Baikal-T1 PCIe/eDMA-related work:
 
-Should this be deduplicated with the snp_leak_pages() in "crypto: ccp:
-Handle the legacy TMR allocation when SNP is enabled" ?
+[1: In-progress v5] PCI: dwc: Various fixes and cleanups
+Link: ---you are looking at it---
+[2: In-progress v3] PCI: dwc: Add hw version and dma-ranges support
+Link: https://lore.kernel.org/linux-pci/20220610084444.14549-1-Sergey.Semin@baikalelectronics.ru/
+[3: In-progress v3] PCI: dwc: Add generic resources and Baikal-T1 support
+Link: https://lore.kernel.org/linux-pci/20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru/
+[4: In-progress v3] dmaengine: dw-edma: Add RP/EP local DMA support
+Link: https://lore.kernel.org/linux-pci/20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru/
 
-> +
-> +static int snp_page_reclaim(u64 pfn)
-> +{
-> +       struct sev_data_snp_page_reclaim data = {0};
-> +       int err, rc;
-> +
-> +       data.paddr = __sme_set(pfn << PAGE_SHIFT);
-> +       rc = snp_guest_page_reclaim(&data, &err);
-> +       if (rc) {
-> +               /*
-> +                * If the reclaim failed, then page is no longer safe
-> +                * to use.
-> +                */
-> +               snp_leak_pages(pfn, PG_LEVEL_4K);
-> +       }
-> +
-> +       return rc;
-> +}
-> +
-> +static int host_rmp_make_shared(u64 pfn, enum pg_level level, bool leak)
-> +{
-> +       int rc;
-> +
-> +       rc = rmp_make_shared(pfn, level);
-> +       if (rc && leak)
-> +               snp_leak_pages(pfn, level);
-> +
-> +       return rc;
-> +}
-> +
->  static void sev_unbind_asid(struct kvm *kvm, unsigned int handle)
->  {
->         struct sev_data_deactivate deactivate;
-> @@ -1902,6 +1946,123 @@ static int snp_launch_start(struct kvm *kvm, struct kvm_sev_cmd *argp)
->         return rc;
->  }
->
-> +static bool is_hva_registered(struct kvm *kvm, hva_t hva, size_t len)
-> +{
-> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +       struct list_head *head = &sev->regions_list;
-> +       struct enc_region *i;
-> +
-> +       lockdep_assert_held(&kvm->lock);
-> +
-> +       list_for_each_entry(i, head, list) {
-> +               u64 start = i->uaddr;
-> +               u64 end = start + i->size;
-> +
-> +               if (start <= hva && end >= (hva + len))
-> +                       return true;
-> +       }
+Note it is very recommended to merge the patchsets in the same order as
+they are placed in the list above in order to prevent possible merge
+conflicts. Nothing prevents them from being reviewed synchronously though.
+Any tests are very welcome!
 
-Given that usersapce could load sev->regions_list with any # of any
-sized regions. Should we add a  cond_resched() like in
-sev_vm_destroy()?
+As it can be easily inferred from the patchset title, this series is about
+the DW PCIe Root Port/Endpoint driver fixes and the code cleanups, where
+fixes come before the cleanup patches. The patchset starts with adding the
+stop_link() platform-specific method invocation in case of the PCIe host
+probe procedure errors. It has been missing in the cleanup-on-error path
+of the DW PCIe Host initialization method. After that the unrolled CSRs
+layout is added to the iATU disable procedure. In third the disable iATU
+procedure is fixed to be called only for the internal ATU as being
+specific for the internal ATU implementation. Then the outbound iATU
+extended region setup procedure is fixed to have the INCREASE_REGION_SIZE
+flag set based on the limit-address - not the region size one. The last
+but not least the CDM-check enabling procedure is fixed to be independent
+from the non-related num_lanes field state.
 
-> +
-> +       return false;
-> +}
-> +
-> +static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +       struct sev_data_snp_launch_update data = {0};
-> +       struct kvm_sev_snp_launch_update params;
-> +       unsigned long npages, pfn, n = 0;
-> +       int *error = &argp->error;
-> +       struct page **inpages;
-> +       int ret, i, level;
-> +       u64 gfn;
-> +
-> +       if (!sev_snp_guest(kvm))
-> +               return -ENOTTY;
-> +
-> +       if (!sev->snp_context)
-> +               return -EINVAL;
-> +
-> +       if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data, sizeof(params)))
-> +               return -EFAULT;
-> +
-> +       /* Verify that the specified address range is registered. */
-> +       if (!is_hva_registered(kvm, params.uaddr, params.len))
-> +               return -EINVAL;
-> +
-> +       /*
-> +        * The userspace memory is already locked so technically we don't
-> +        * need to lock it again. Later part of the function needs to know
-> +        * pfn so call the sev_pin_memory() so that we can get the list of
-> +        * pages to iterate through.
-> +        */
-> +       inpages = sev_pin_memory(kvm, params.uaddr, params.len, &npages, 1);
-> +       if (!inpages)
-> +               return -ENOMEM;
-> +
-> +       /*
-> +        * Verify that all the pages are marked shared in the RMP table before
-> +        * going further. This is avoid the cases where the userspace may try
-> +        * updating the same page twice.
-> +        */
-> +       for (i = 0; i < npages; i++) {
-> +               if (snp_lookup_rmpentry(page_to_pfn(inpages[i]), &level) != 0) {
-> +                       sev_unpin_memory(kvm, inpages, npages);
-> +                       return -EFAULT;
-> +               }
-> +       }
-> +
-> +       gfn = params.start_gfn;
-> +       level = PG_LEVEL_4K;
-> +       data.gctx_paddr = __psp_pa(sev->snp_context);
-> +
-> +       for (i = 0; i < npages; i++) {
-> +               pfn = page_to_pfn(inpages[i]);
-> +
-> +               ret = rmp_make_private(pfn, gfn << PAGE_SHIFT, level, sev_get_asid(kvm), true);
-> +               if (ret) {
-> +                       ret = -EFAULT;
-> +                       goto e_unpin;
-> +               }
-> +
-> +               n++;
-> +               data.address = __sme_page_pa(inpages[i]);
-> +               data.page_size = X86_TO_RMP_PG_LEVEL(level);
-> +               data.page_type = params.page_type;
-> +               data.vmpl3_perms = params.vmpl3_perms;
-> +               data.vmpl2_perms = params.vmpl2_perms;
-> +               data.vmpl1_perms = params.vmpl1_perms;
-> +               ret = __sev_issue_cmd(argp->sev_fd, SEV_CMD_SNP_LAUNCH_UPDATE, &data, error);
-> +               if (ret) {
-> +                       /*
-> +                        * If the command failed then need to reclaim the page.
-> +                        */
-> +                       snp_page_reclaim(pfn);
-> +                       goto e_unpin;
-> +               }
-> +
-> +               gfn++;
-> +       }
-> +
-> +e_unpin:
-> +       /* Content of memory is updated, mark pages dirty */
-> +       for (i = 0; i < n; i++) {
+Afterwards there is a series of cleanups. It concerns the changes like
+adding braces to the multi-line if-else constructions, trailing new-lines
+to the print format-string, dropping unnecessary version checking, and
+various code simplifications and optimizations.
 
-Since |n| is not only a loop variable but actually carries the number
-of private pages over to e_unpin can we use a more descriptive name?
-How about something like 'nprivate_pages'?
+New features like adding two-level DT bindings abstraction, adding better
+structured IP-core version interface, adding iATU regions size detection
+and the PCIe regions verification procedure, adding dma-ranges support,
+introducing a set of generic platform clocks and resets and finally adding
+Baikal-T1 PCIe interface support will be submitted in the next part of the
+series.
 
-> +               set_page_dirty_lock(inpages[i]);
-> +               mark_page_accessed(inpages[i]);
-> +
-> +               /*
-> +                * If its an error, then update RMP entry to change page ownership
-> +                * to the hypervisor.
-> +                */
-> +               if (ret)
-> +                       host_rmp_make_shared(pfn, level, true);
-> +       }
-> +
-> +       /* Unlock the user pages */
-> +       sev_unpin_memory(kvm, inpages, npages);
-> +
-> +       return ret;
-> +}
-> +
->  int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->  {
->         struct kvm_sev_cmd sev_cmd;
-> @@ -1995,6 +2156,9 @@ int sev_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
->         case KVM_SEV_SNP_LAUNCH_START:
->                 r = snp_launch_start(kvm, &sev_cmd);
->                 break;
-> +       case KVM_SEV_SNP_LAUNCH_UPDATE:
-> +               r = snp_launch_update(kvm, &sev_cmd);
-> +               break;
->         default:
->                 r = -EINVAL;
->                 goto out;
-> @@ -2113,6 +2277,29 @@ find_enc_region(struct kvm *kvm, struct kvm_enc_region *range)
->  static void __unregister_enc_region_locked(struct kvm *kvm,
->                                            struct enc_region *region)
->  {
-> +       unsigned long i, pfn;
-> +       int level;
-> +
-> +       /*
-> +        * The guest memory pages are assigned in the RMP table. Unassign it
-> +        * before releasing the memory.
-> +        */
-> +       if (sev_snp_guest(kvm)) {
-> +               for (i = 0; i < region->npages; i++) {
-> +                       pfn = page_to_pfn(region->pages[i]);
-> +
-> +                       if (!snp_lookup_rmpentry(pfn, &level))
-> +                               continue;
-> +
-> +                       cond_resched();
-> +
-> +                       if (level > PG_LEVEL_4K)
-> +                               pfn &= ~(KVM_PAGES_PER_HPAGE(PG_LEVEL_2M) - 1);
-> +
-> +                       host_rmp_make_shared(pfn, level, true);
-> +               }
-> +       }
-> +
->         sev_unpin_memory(kvm, region->pages, region->npages);
->         list_del(&region->list);
->         kfree(region);
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 0cb119d66ae5..9b36b07414ea 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1813,6 +1813,7 @@ enum sev_cmd_id {
->         /* SNP specific commands */
->         KVM_SEV_SNP_INIT,
->         KVM_SEV_SNP_LAUNCH_START,
-> +       KVM_SEV_SNP_LAUNCH_UPDATE,
->
->         KVM_SEV_NR_MAX,
->  };
-> @@ -1929,6 +1930,24 @@ struct kvm_sev_snp_launch_start {
->         __u8 pad[6];
->  };
->
-> +#define KVM_SEV_SNP_PAGE_TYPE_NORMAL           0x1
-> +#define KVM_SEV_SNP_PAGE_TYPE_VMSA             0x2
-> +#define KVM_SEV_SNP_PAGE_TYPE_ZERO             0x3
-> +#define KVM_SEV_SNP_PAGE_TYPE_UNMEASURED       0x4
-> +#define KVM_SEV_SNP_PAGE_TYPE_SECRETS          0x5
-> +#define KVM_SEV_SNP_PAGE_TYPE_CPUID            0x6
-> +
-> +struct kvm_sev_snp_launch_update {
-> +       __u64 start_gfn;
-> +       __u64 uaddr;
-> +       __u32 len;
-> +       __u8 imi_page;
-> +       __u8 page_type;
-> +       __u8 vmpl3_perms;
-> +       __u8 vmpl2_perms;
-> +       __u8 vmpl1_perms;
-> +};
-> +
->  #define KVM_DEV_ASSIGN_ENABLE_IOMMU    (1 << 0)
->  #define KVM_DEV_ASSIGN_PCI_2_3         (1 << 1)
->  #define KVM_DEV_ASSIGN_MASK_INTX       (1 << 2)
-> --
-> 2.25.1
->
+Link: https://lore.kernel.org/linux-pci/20220324012524.16784-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Fix the end address of the example in the patch log with
+  the INCREASE_REGION_SIZE flag usage fixup. It should be
+  0x1000FFFF and not 0x0000FFFF (@Manivannan).
+- Add the cleanup-on-error path to the dw_pcie_ep_init() function.
+  (@Manivannan)
+
+Link: https://lore.kernel.org/linux-pci/20220503212300.30105-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- Convert region variable type to u32 in order to fix the implicit type
+  conversion peculiarity. (@kbot)
+- Rebase onto v5.18-rc6.
+
+Link: https://lore.kernel.org/linux-pci/20220517125058.18488-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v4:
+- Move the patch "PCI: dwc: Deallocate EPC memory on EP init error" to
+  being applied before the cleanup patches.
+- Add a new fixes patch: "PCI: dwc: Enable CDM-check independently from
+  the num_lanes value".
+- Add a new cleanup patch: "PCI: dwc: Organize local variables usage".
+- Add a new cleanup patch: "PCI: dwc: Re-use local pointer to the
+  resource data".
+- Add a new cleanup patch: "PCI: dwc: Add start_link/stop_link inliners".
+- Add a new cleanup patch: "PCI: dwc: Move io_cfg_atu_shared to the Root
+  Port descriptor".
+- Add a new cleanup patch: "PCI: dwc: Add dw_ prefix to the pcie_port
+  structure name".
+- Drop the patch "PCI: dwc: Don't use generic IO-ops for DBI-space
+  access". (@Rob)
+- Drop Manivannan tested tag from the changed patches.
+- Rebase onto v5.18.
+
+Link: https://lore.kernel.org/linux-pci/20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v5:
+- Just resend the series.
+- Rebase onto v5.19-rcX.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Jingoo Han <jingoohan1@gmail.com>
+Cc: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+Cc: "Krzysztof Wilczyński" <kw@linux.com>
+Cc: Frank Li <Frank.Li@nxp.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: linux-pci@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (18):
+  PCI: dwc: Stop link in the host init error and de-initialization
+  PCI: dwc: Add unroll iATU space support to the regions disable method
+  PCI: dwc: Disable outbound windows for controllers with iATU
+  PCI: dwc: Set INCREASE_REGION_SIZE flag based on limit address
+  PCI: dwc: Deallocate EPC memory on EP init error
+  PCI: dwc: Enable CDM-check independently from the num_lanes value
+  PCI: dwc: Add braces to the multi-line if-else statements
+  PCI: dwc: Add trailing new-line literals to the log messages
+  PCI: dwc: Discard IP-core version checking on unrolled iATU detection
+  PCI: dwc: Convert Link-up status method to using dw_pcie_readl_dbi()
+  PCI: dwc: Organize local variables usage
+  PCI: dwc: Re-use local pointer to the resource data
+  PCI: dwc: Add start_link/stop_link inliners
+  PCI: dwc: Move io_cfg_atu_shared to the Root Port descriptor
+  PCI: dwc: Add dw_ prefix to the pcie_port structure name
+  PCI: dwc-plat: Simplify the probe method return value handling
+  PCI: dwc-plat: Discard unused regmap pointer
+  PCI: dwc-plat: Drop dw_plat_pcie_of_match forward declaration
+
+ drivers/pci/controller/dwc/pci-dra7xx.c       |  12 +--
+ drivers/pci/controller/dwc/pci-exynos.c       |   6 +-
+ drivers/pci/controller/dwc/pci-imx6.c         |   6 +-
+ drivers/pci/controller/dwc/pci-keystone.c     |  20 ++--
+ .../pci/controller/dwc/pci-layerscape-ep.c    |  12 ---
+ drivers/pci/controller/dwc/pci-layerscape.c   |   2 +-
+ drivers/pci/controller/dwc/pci-meson.c        |   2 +-
+ drivers/pci/controller/dwc/pcie-al.c          |   6 +-
+ drivers/pci/controller/dwc/pcie-armada8k.c    |   4 +-
+ drivers/pci/controller/dwc/pcie-artpec6.c     |   4 +-
+ .../pci/controller/dwc/pcie-designware-ep.c   |  30 ++++--
+ .../pci/controller/dwc/pcie-designware-host.c | 102 ++++++++++--------
+ .../pci/controller/dwc/pcie-designware-plat.c |  25 ++---
+ drivers/pci/controller/dwc/pcie-designware.c  |  72 +++++++------
+ drivers/pci/controller/dwc/pcie-designware.h  |  46 +++++---
+ drivers/pci/controller/dwc/pcie-dw-rockchip.c |   4 +-
+ drivers/pci/controller/dwc/pcie-fu740.c       |   2 +-
+ drivers/pci/controller/dwc/pcie-histb.c       |  10 +-
+ drivers/pci/controller/dwc/pcie-intel-gw.c    |   6 +-
+ drivers/pci/controller/dwc/pcie-keembay.c     |   4 +-
+ drivers/pci/controller/dwc/pcie-kirin.c       |   2 +-
+ drivers/pci/controller/dwc/pcie-qcom.c        |   4 +-
+ drivers/pci/controller/dwc/pcie-spear13xx.c   |   6 +-
+ drivers/pci/controller/dwc/pcie-tegra194.c    |  22 ++--
+ drivers/pci/controller/dwc/pcie-uniphier.c    |  10 +-
+ drivers/pci/controller/dwc/pcie-visconti.c    |   6 +-
+ 26 files changed, 224 insertions(+), 201 deletions(-)
+
+-- 
+2.35.1
+

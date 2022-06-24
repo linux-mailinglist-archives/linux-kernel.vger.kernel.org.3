@@ -2,85 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCC155A211
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 21:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B948B55A234
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 21:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbiFXTrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 15:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
+        id S231467AbiFXTsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 15:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiFXTrl (ORCPT
+        with ESMTP id S229533AbiFXTsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 15:47:41 -0400
-Received: from mailrelay3-1.pub.mailoutpod1-cph3.one.com (mailrelay3-1.pub.mailoutpod1-cph3.one.com [46.30.210.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE478269A
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 12:47:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=01lx53oXEjHB12EIpfEWhdf0NHxjveCZJS34ykm30Ss=;
-        b=ZOWvTCZnvi8P2pj6UVgRVCSqgVRpbvGXApGsVxgHQ5/qAXyrUoigp18XhbkdprQA6qk+BR8Hk9CDs
-         Bi0mMt6j2BnCVI6XSwPnPZPfwj/fUnrs19UXvNsqdCHFJcUaTKSm2hiBGtIpa1gsYwFLPvKtkWIBO7
-         a+9MMP9yQ0cwPqET5UmWCieMyGBr3K+llVed06Jh3DvSR0UGJDSnO0bGbx7bQEQ5HDqZXtA7tWxJnK
-         Vw5cj4j6pb3HmGEl2GzLCpjKtwut3xkS0FZQEp2tVbVivFHEqpABKHqX7MKJwzWUpU7Z5Md0CXOlQA
-         9MseJX9bys8oB/z6OaNKO+2bEqnPs2g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=01lx53oXEjHB12EIpfEWhdf0NHxjveCZJS34ykm30Ss=;
-        b=6kcuP4B77m/2mVzBV51Mo1EuMCk9uDHHmhGlgk8oRrlw+w/fw7Gz6rrYEywGQEVr1b8HaKV3WukoA
-         IIoppC6CQ==
-X-HalOne-Cookie: a9df624f025a3f5ae97c156b21ee154a40fcede6
-X-HalOne-ID: 801ce267-f3f6-11ec-be7c-d0431ea8bb03
-Received: from mailproxy2.cst.dirpod3-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 801ce267-f3f6-11ec-be7c-d0431ea8bb03;
-        Fri, 24 Jun 2022 19:47:38 +0000 (UTC)
-Date:   Fri, 24 Jun 2022 21:47:36 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Stephen Kitt <steve@sk2.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2] drm: shmobile: Use backlight helper
-Message-ID: <YrYU2KEubtR+pmkO@ravnborg.org>
-References: <20220616170821.1348169-1-steve@sk2.org>
+        Fri, 24 Jun 2022 15:48:37 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1087A184;
+        Fri, 24 Jun 2022 12:48:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656100116; x=1687636116;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0E014tMEBmKUv8vgwUApz1bQxiczytPVlzeSP22jNd4=;
+  b=CSMU01QvYGDbgjxmbYu8fsAaS4TcT7jEKuXwMPIVDUmg+8D6ETOQ9BnI
+   dBayZE5RkUebyV2cT9seWqc6ESRKoH49Y9nWqWNxj0wBfv02zqePremHF
+   mH4DbKqU8WDGIEVvvMacQ0KihYVp8Iwd6z7GeWjFjoH46yEbosvOpmNlK
+   jQGWwiKHBSRqqlPjncxAMIP+97KrZRXlIHZpbv5r7xLljikn/7GtXS3Vk
+   LA12lFE4PnYXayjg6K3lYXYFvioI2bl/uVJhGngdB4gze9SiVKrdE56yw
+   /FUTcOwZ02EwajBLXaRwVHy0jRpAQxDQRroNjfzBIf8DXW9dL+xmT96BW
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="279841043"
+X-IronPort-AV: E=Sophos;i="5.92,220,1650956400"; 
+   d="scan'208";a="279841043"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 12:48:32 -0700
+X-IronPort-AV: E=Sophos;i="5.92,220,1650956400"; 
+   d="scan'208";a="731447076"
+Received: from mdedeogl-mobl.amr.corp.intel.com (HELO [10.209.126.186]) ([10.209.126.186])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 12:48:31 -0700
+Message-ID: <14e3d8cb-5e36-dc90-bfc8-b34a105749a3@intel.com>
+Date:   Fri, 24 Jun 2022 12:47:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616170821.1348169-1-steve@sk2.org>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 00/22] TDX host kernel support
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-acpi@vger.kernel.org, seanjc@google.com,
+        pbonzini@redhat.com, len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com, akpm@linux-foundation.org,
+        thomas.lendacky@amd.com, Tianyu.Lan@microsoft.com,
+        rdunlap@infradead.org, Jason@zx2c4.com, juri.lelli@redhat.com,
+        mark.rutland@arm.com, frederic@kernel.org, yuehaibing@huawei.com,
+        dongli.zhang@oracle.com
+References: <cover.1655894131.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <cover.1655894131.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 16, 2022 at 07:08:21PM +0200, Stephen Kitt wrote:
-> This started with work on the removal of backlight_properties'
-> deprecated fb_blank field, much of which can be taken care of by using
-> helper functions provided by backlight.h instead of directly accessing
-> fields in backlight_properties. This patch series doesn't involve
-> fb_blank, but it still seems useful to use helper functions where
-> appropriate.
-> 
-> Instead of retrieving the backlight brightness in struct
-> backlight_properties manually, and then checking whether the backlight
-> should be on at all, use backlight_get_brightness() which does all
-> this and insulates this from future changes.
-> 
-> Signed-off-by: Stephen Kitt <steve@sk2.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: dri-devel@lists.freedesktop.org
-Thanks, added to drm-misc (drm-misc-next)
+On 6/22/22 04:15, Kai Huang wrote:
+> Please kindly help to review, and I would appreciate reviewed-by or
+> acked-by tags if the patches look good to you.
 
-	Sam
+Serious question: Is *ANYONE* looking at these patches other than you
+and the maintainers?  I first saw this code (inside Intel) in early
+2020.  In that time, not a single review tag has been acquired?
+
+$ egrep -ic 'acked-by:|reviewed-by:' kais-patches.mbox
+0

@@ -2,156 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F57558C45
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 02:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE06558C4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 02:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbiFXAbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 20:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
+        id S229841AbiFXAfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 20:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiFXAbW (ORCPT
+        with ESMTP id S229523AbiFXAfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 20:31:22 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60895DC25
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:31:21 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id dw10-20020a17090b094a00b001ed00a16eb4so1259051pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:31:21 -0700 (PDT)
+        Thu, 23 Jun 2022 20:35:52 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CEA50025
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:35:50 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-318889e6a2cso9961587b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:35:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IOiiEzf2Owa8eEtkAWHI6gKx/+L0ogxrj4UywWa0Fvs=;
-        b=ZyMkz1B9QFJcuQz/QRPOneAkqYcC+jOpJBpbASB5peQZufT5/r5En2t3mYwdPkd3Lr
-         a2ftkjaXiXS4qkOmZ11BBMR5ZtHpcbFG8ikAcILytdEJ1oY/ONBcq0rGRUG5rl9k/1wp
-         rlCBJ2fLTN0Eh47nwHLen44taBjN741iYlvffjTKsd4+RawpXhvy55otTUQCobZjc+F4
-         8fJIMNnNLTMVBOIi/j3RsAMXyVmOLsjH4dnQ6uqt411oEOyrA/1nkxh5bg0LZ8uJzbiJ
-         CXp0WKHGuKk/ENCY4UIH50SiJJ27697p8b3DBegKh5E4YxR/zJkeed3FjUWjWo/17q9M
-         hyxQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GqKdT3dVONdSuBBoFT9llbrHAF11LL5zs6qAaSJnw/w=;
+        b=DOmwfh+l4paHrVi598zFcpncVKvD5cZolVFHUmhU26dHkCf9RHDN8mtTksrI35yPEE
+         qxEW2ZwVpBpoFQU83FVzKz+tGYTszD/1Ha7gD07Fi3zZirZUHcpKnY9+PQhJr670nc1t
+         R8H4Xk3YKrwNYBnptLsWAdnsNZe15MyMmJo6c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IOiiEzf2Owa8eEtkAWHI6gKx/+L0ogxrj4UywWa0Fvs=;
-        b=TRYN+RLJ0NTnz12hijnJdNjpFAbqyUjZEh4GGc3WPFDFutU9BX7npNEYCtlEZrL82C
-         4wap2oxE7U4fd0G4rk+aRPoz4SH6MJS9M/n+JmqZ4VuowFJdAtGRK8USCyYfrcA67hF5
-         zXoRdaXUiG5We4s7KzU8OutAJyMU+38OdeQmRQVmP5+Qx4XMQeuoG5BcLZRGweKNsNEw
-         FXPuuaUWyAuM0ByL8w9EEALi0tifEsy6FHzLUTu/DyrbQb8jYBO44zEGDSfkOYf+q51U
-         RqG8iDoTwZcqBzTeGM1FEojCaB3xbub1MHF3qpxznQbK/RQ8Tj8Ht0fRJ7wcOCQUqZGB
-         l7RQ==
-X-Gm-Message-State: AJIora+PnXOfPq+yKk9C+EKV83xR7rnB0lsgyCrEglmnLVEryjgW9kF5
-        5Z31OxRiZXw/AG5038azfrymvA==
-X-Google-Smtp-Source: AGRyM1vcGIva17Yiz9xNolPeazjHi8DWAZr4gphlJGqm2XezqABG60RkTIfMAjrt7dBawSc3HCB4pg==
-X-Received: by 2002:a17:90b:1d90:b0:1e8:5a98:d591 with SMTP id pf16-20020a17090b1d9000b001e85a98d591mr712610pjb.126.1656030680952;
-        Thu, 23 Jun 2022 17:31:20 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id y1-20020a17090a1f4100b001ec9f9fe028sm2536065pjy.46.2022.06.23.17.31.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 17:31:20 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 00:31:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v1 00/10] KVM: nVMX: Use vmcs_config for setting up
- nested VMX MSRs
-Message-ID: <YrUF1Zj35BYvXrB6@google.com>
-References: <20220622164432.194640-1-vkuznets@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GqKdT3dVONdSuBBoFT9llbrHAF11LL5zs6qAaSJnw/w=;
+        b=qM/F+oBGVWvQlYoy/NV5Fr6PWmdNf+Jie/E2NYRSHE2gGkiK+EFg0KX4nSNM0u4r81
+         QiAVoDPdkejAcz9H527yyrKiCAiQpuDBP7VIgS00VDlbNXQmgC8kz1UnpIvTgJ2POVSz
+         L5uYtqHjiHJSM71k0V9Z4la27v2LyUW1TUxL51NwZpF/F0LTfmExIAtuvotlHSb8p78U
+         kq27FMkPnDjCZFFjmEDrwDfj2VskcSLf6b417GAE68PH2ebAzreNrtCDW6ZKhGD0hBcd
+         hpTCZ+P5cVT97kk9i8AauBmhcqpV1grGLmEXnm9fJdE1Obko5WZkU9V9YwmWklAu4aWi
+         od0A==
+X-Gm-Message-State: AJIora9u/0rvGTNgM51RT7o0aD+rxOsxnCwRj96UXMYsTFty8xqqsjL6
+        4Efjxly9y+6RXPGqO//PFgWa7WohQXauco49fGCPzw==
+X-Google-Smtp-Source: AGRyM1uBKQD9wjAYkjimPhXgCBaHo8gzQ1Bc+eCZtFeFu3Q7JuDMn9jAp8dPvxrvC65xWxpjdYbs6bBm/flmffvN0yw=
+X-Received: by 2002:a81:38c2:0:b0:314:2ef4:4958 with SMTP id
+ f185-20020a8138c2000000b003142ef44958mr13528889ywa.432.1656030949187; Thu, 23
+ Jun 2022 17:35:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622164432.194640-1-vkuznets@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-2-pmalani@chromium.org> <CAE-0n51kcr3VGdR2Kf8j1JaBbLcCmWo9GYhhvkUQ4+jn2iEKLg@mail.gmail.com>
+ <CACeCKac4eL9++QwbDBKrVTpUzhes=WczqZfh+cFiVgoO4py4MQ@mail.gmail.com> <CAE-0n51E1TLMRNWnqiV-jU_qg15BF4D6A+0G1y1SRTu1zNs2Dg@mail.gmail.com>
+In-Reply-To: <CAE-0n51E1TLMRNWnqiV-jU_qg15BF4D6A+0G1y1SRTu1zNs2Dg@mail.gmail.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 23 Jun 2022 17:35:38 -0700
+Message-ID: <CACeCKacGZFY-_yn1R33OVcsdG47oqNTGBA43L5hrH2zyhK=cRw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022, Vitaly Kuznetsov wrote:
-> vmcs_config is a sanitized version of host VMX MSRs where some controls are
-> filtered out (e.g. when Enlightened VMCS is enabled, some know bugs are 
-> discovered, some inconsistencies in controls are detected,...) but
-> nested_vmx_setup_ctls_msrs() uses raw host MSRs instead. This may end up
-> in exposing undesired controls to L1. Switch to using vmcs_config instead.
-> 
-> RFC part: vmcs_config's sanitization now is a mix of "what can't be enabled"
-> and "what KVM doesn't want" and we need to separate these as for nested VMX
-> MSRs only the first category makes sense. This gives vmcs_config a slightly
-> different meaning "controls which can be (theoretically) used". An alternative
-> approach would be to store sanitized host MSRs values separately, sanitize
-> them and and use in nested_vmx_setup_ctls_msrs() but currently I don't see
-> any benefits. Comments welcome!
+On Thu, Jun 23, 2022 at 4:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Prashant Malani (2022-06-23 12:08:21)
+> > On Thu, Jun 23, 2022 at 11:30 AM Stephen Boyd <swboyd@chromium.org> wrote:
+> > >
+> > > Quoting Prashant Malani (2022-06-22 10:34:30)
+> > > > diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..78b0190c8543
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> > > > @@ -0,0 +1,74 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> [...]
+> > > > +  ports:
+> > > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > > +    description: OF graph binding modelling data lines to the Type-C switch.
+> > > > +
+> > > > +    properties:
+> > > > +      port@0:
+> > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > +        description: Link between the switch and a Type-C connector.
+> > >
+> > > Is there an update to the usb-c-connector binding to accept this port
+> > > connection?
+> >
+> > Not at this time. I don't think we should enforce that either.
+> > (Type-C data-lines could theoretically be routed through intermediate
+> > hardware like retimers/repeaters)
+>
+> I'm mostly wondering if having such a connection to the usb-c-connector,
+> or even through some retimer/repeater, would be sufficient to detect how
+> many type-c ports are connected to the device. If the type-c pin
+> assignments only support two or four lanes for DP then it seems like we
+> should describe the two lanes or four lanes as one graph endpoint
+> "output" and then have some 'data-lanes' property in case the DP lanes
+> are flipped while being sent to the retimer or usb-c-connector. This
+> would of course depend on the capability of the device, i.e. if it can
+> remap DP lanes or only has 2 lanes of DP, etc.
+>
+> > > > +  - |
+> > > > +    drm-bridge {
+> > > > +        usb-switch {
+> > > > +            compatible = "typec-switch";
+> > >
+> > > I still don't understand the subnode design here. usb-switch as a
+> > > container node indicates to me that this is a bus, but in earlier rounds
+> > > of this series it was stated this isn't a bus.
+> >
+> > I am not aware of this as a requirement. Can you please point me to the
+> > documentation that states this needs to be the case?
+>
+> I'm not aware of any documentation for the dos and don'ts here. Are
+> there any examples in the bindings directory that split up a device into
+> subnodes that isn't in bindings/mfd?
 
-I like the idea overall, even though it's a decent amount of churn.  It seems
-easier to maintain than separate paths for nested.  The alternative would be to
-add common helpers to adjust the baseline configurations, but I don't see any
-way to programmatically make that approach more robust.
+usb-c-connector [3] and its users is an example.
 
-An idea to further harden things.  Or: an excuse to extend macro shenanigans :-)
+>  I just know from experience that
+> any time I try to make a child node of an existing node that I'm
+> supposed to be describing a bus, unless I'm adding some sort of
+> exception node like a graph binding or an opp table. Typically a node
+> corresponds 1:1 with a device in the kernel. I'll defer to Rob for any
+> citations.
+>
+> >
+> > > Why doesn't it work to
+> > > merge everything inside usb-switch directly into the drm-bridge node?
+> >
+> > I attempted to explain the rationale in the previous version [1], but
+> > using a dedicated sub-node means the driver doesn't haven't to
+> > inspect individual ports to determine which of them need switches
+> > registered for them. If it sees a `typec-switch`, it registers a
+> > mode-switch and/or orientation-switch. IMO it simplifies the hardware
+> > device binding too.
+>
+> How is that any harder than hard-coding that detail into the driver
+> about which port and endpoint is possibly connected to the
+> usb-c-connector (or retimer)? All of that logic could be behind some API
+> that registers a typec-switch based on a graph port number that's passed
+> in, ala drm_of_find_panel_or_bridge()'s design.
 
-If we throw all of the "opt" and "min" lists into macros, e.g. KVM_REQUIRED_*
-and KVM_OPTIONAL_*, and then use those to define a KVM_KNOWN_* field, we can
-prevent using the mutators to set/clear unknown bits at runtime via BUILD_BUG_ON().
-The core builders, e.g. vmx_exec_control(), can still set unknown bits, i.e. set
-bits that aren't enumerated to L1, but that's easier to audit and this would catch
-regressions for the issues fixed in patches.
+If each driver has to do it (and the port specifics vary for each driver),
+it becomes an avoidable overhead for each of them.
+I prefer hard-coding such details if avoidable. I suppose both approaches
+require modifications to the binding and the driver code.
 
-It'll required making add_atomic_switch_msr_special() __always_inline (or just
-open code it), but that's not a big deal.
+>
+> Coming from a DT writer's perspective, I just want to go through the
+> list of output pins in the datasheet and match them up to the ports
+> binding for this device. If it's a pure DP bridge, where USB hardware
+> isn't an input or an output like the ITE chip, then I don't want to have
+> to describe a port graph binding for the case when it's connected to a
+> dp-connector (see dp-connector.yaml) in the top-level node and then have
+> to make an entirely different subnode for the usb-c-connector case with
+> a whole other set of graph ports.
 
-E.g. if we have
+This approach still allows for that, if the driver has any use for it
+(AFAICT these drivers don't).
+Iff that driver uses it, one can (optionally) route their output
+(top-level) ports through the
+"typec-switch" sub-node (and onwards as required).
+If it's being used in a "pure-DP" configuration, the "typec-switch" just
+goes away (the top level ports can be routed as desired by the driver).
+(Again, I must reiterate that neither this driver or the anx driver
+utilizes this)
 
-  #define KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL <blah blah blah>
-  #define KVM_OPTIONAL_CPU_BASED_VM_EXEC_CONTROL <blah blah blah>
+>
+> How would I even know which two differential pairs correspond to port0
+> or port1 in this binding in the ITE case?
 
-Then the builders for the controls shadows can do:
+Why do we need to know that? It doesn't affect this or the other
+driver or hardware's
+functioning in a perceivable way.
 
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index 286c88e285ea..5eb75822a09e 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -468,6 +468,8 @@ static inline u8 vmx_get_rvi(void)
- }
- 
- #define BUILD_CONTROLS_SHADOW(lname, uname, bits)                              \
-+#define KVM_KNOWN_ ## uname                                                    \
-+       (KVM_REQUIRED_ ## uname | KVM_OPTIONAL_ ## uname)                       \
- static inline void lname##_controls_set(struct vcpu_vmx *vmx, u##bits val)     \
- {                                                                              \
-        if (vmx->loaded_vmcs->controls_shadow.lname != val) {                   \
-@@ -485,10 +487,12 @@ static inline u##bits lname##_controls_get(struct vcpu_vmx *vmx)          \
- }                                                                              \
- static inline void lname##_controls_setbit(struct vcpu_vmx *vmx, u##bits val)  \
- {                                                                              \
-+       BUILD_BUG_ON(!(val & KVM_KNOWN_ ## uname));                             \
-        lname##_controls_set(vmx, lname##_controls_get(vmx) | val);             \
- }                                                                              \
- static inline void lname##_controls_clearbit(struct vcpu_vmx *vmx, u##bits val)        \
- {                                                                              \
-+       BUILD_BUG_ON(!(val & KVM_KNOWN_ ## uname));                             \
-        lname##_controls_set(vmx, lname##_controls_get(vmx) & ~val);            \
- }
- BUILD_CONTROLS_SHADOW(vm_entry, VM_ENTRY_CONTROLS, 32)
+> Ideally we make the graph
+> binding more strict for devices by enforcing that their graph ports
+> exist. Otherwise we're not fully describing the connections between
+> devices and our dtb checkers are going to let things through where the
+> driver most likely will fail because it can't figure out what to do,
+> e.g. display DP on 4 lanes or play some DP lane rerouting games to act
+> as a mux.
 
+How is the current binding enforcing this? The typec-switch binding
+as a first step ensures that the DT is connecting the hardware(anx,ite
+etc) to something
+that at least "claims" to be a Type-C switch.
 
+>
+> >
+> > It also maps with the internal block diagram for these hardware
+> > components (for ex. the anx7625 crosspoint switch is a separate
+> > sub-block within anx7625).
+>
+> We don't make DT bindings for sub-components like this very often. It
+> would make more sense to me to have a subnode if a typec switch was some
+> sort of off the shelf hard macro that the hardware engineer placed down
+> inside the IC that they delivered. Then we could have a completely
+> generic driver that binds to the generic binding that knows how to drive
+> the hardware, because it's an unchangeable hard macro with a well
+> defined programming interface.
+>
+> >
+> > [1] https://lore.kernel.org/linux-usb/CACeCKaeH6qTTdG_huC4yw0xxG8TYEOtfPW3tiVNwYs=P4QVPXg@mail.gmail.com/
+>
+> I looked at the fsa4480 driver and the device has a publicly available
+> datasheet[2]. That device is designed for "audio accessory mode" but I
+> guess it's being used to simply mux SBU lines? There isn't an upstream
+> user of the binding so far, but it also doesn't look like a complete
+> binding. I'd expect to see DN_L/R as a graph output connected to the
+> usb-c-connector and probably have a usb2.0 input port and a 'sound-dai'
+> property to represent the input audio path.
+>
+> Finally, simply connecting to the typec controller node isn't sufficient
+> because a typec controller can be controlling many usb-c-connectors so I
+> don't see how the graph binding would be able to figure out how many
+> usb-c-connectors are connected to a mux like device, unless we took the
+> approach of this patch.
 
-Handling the controls that are restricted to CONFIG_X86_64=y will be midly annoying,
-but adding a base set isn't too bad, e.g.
+It can follow the endpoint of the typec-switch port (the port parent
+of the remote
+end-point would be a 'usb-c-connector'). That is if the graph binding
+(I'm assuming you mean the switch device here) wants to figure this
+out in the first place.
 
-#define __KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL <blah blah blah>
-#ifdef CONFIG_X86_64
-#define KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL (__KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL | \
-						CPU_BASED_CR8_LOAD_EXITING |		   \
-						CPU_BASED_CR8_STORE_EXITING)
-#else
-#define KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL __KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL
-#endif
+> Is that why you're proposing this binding? To
+> avoid describing a graph binding in the usb-c-connector and effectively
+> "pushing" the port count up to the mux?
+
+No, that is not the intention behind this series. The
+'usb-c-connector' still needs the
+graph binding to the `typec-switch`. SBU, HS and SS lanes might have different
+muxes altogether (usb-c-connect has separate ports for SBU, HS and SS lanes)
+
+>
+> [2] https://www.onsemi.com/pdf/datasheet/fsa4480-d.pdf
+
+[3] https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/connector/usb-connector.yaml#L23

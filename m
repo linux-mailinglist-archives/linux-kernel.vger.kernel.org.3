@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41560559D48
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF01559D4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232504AbiFXP0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 11:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
+        id S232501AbiFXPZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 11:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbiFXP0t (ORCPT
+        with ESMTP id S229888AbiFXPZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 11:26:49 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D67515B1;
-        Fri, 24 Jun 2022 08:26:44 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 91C1A1BF20E;
-        Fri, 24 Jun 2022 15:26:42 +0000 (UTC)
+        Fri, 24 Jun 2022 11:25:54 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6403C2F657
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:25:53 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B6BC620004;
+        Fri, 24 Jun 2022 15:25:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656084403;
+        t=1656084351;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=wD+f6RoGESWUd50gh7hz7GMhaUjGtOMiPEM0xd+2bV0=;
-        b=cgY6IVNZI/ieXXDiDCYRs5umVd/6Ukdb3BWmr4gdPExgBMLGe3VOqnFnZ0hd2GtAhLRL20
-        l46SHG2lov1Bpg/q79ePfs2pN9NsPM873tK8xmHjrKQjH7HaO4P0tI2b4F6apBhdfkcWJW
-        StfaKubcvYfB6BVrD1BYL75Jhjy3U2rJTYFis866+9ilIqY+ESRVljAaElGmp7kQDYqw1f
-        5RH6LsoEq6EMjc/fmojJzV/ZKY9IICw85qze8XCcgLNqktd7uowXOBtbLmnxEAbLkf7avK
-        YXl0mkHXjJ9/ReWXv7ZhHrIBYG/iPX7HuywWW5OejJv2kZ1ABc+4Nv//Bxv9kA==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-Subject: [PATCH] MIPS: mscc: ocelot: enable FDMA usage
-Date:   Fri, 24 Jun 2022 17:25:48 +0200
-Message-Id: <20220624152548.128700-1-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.36.1
+         in-reply-to:in-reply-to:references:references;
+        bh=lwfYYK6u4o1n1w5hRcNpr/fPCrxiwGeW9LBOk78CwUs=;
+        b=E6TwoOgH6oLBbjUwlSVzTMsSRhHDDVLrF/MjPopPkLKySl49VFm+v2kPmjHWeqq82IlfnL
+        AxbyoR2+TXqCX6PouDbdC0lgiSKvU3J08/ZEJh45JwnTeX1oUsM7GGkY7/2OtGuu8gliUV
+        ZT+wf32O0OepL3SxAuI+s6ewPRy9m31YRgOELQgV+/qeyRPhgLhO1OsO5vqDI0LIQFroyM
+        4RIuFTzxWHyuiXHv9wusq2J9IhiDOFkPHi8O8Zdemu2GLd7Uy8LMUlInrzQUcF8OcGf/XH
+        dmB3N6lGF9ue/AFQdxiLQpd7GX+8w0jX1gnNjuelQSzv8TbkzuHqcgO4m68t2Q==
+Date:   Fri, 24 Jun 2022 17:25:50 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        airlied@linux.ie, daniel@ffwll.ch, mripard@kernel.org
+Subject: Re: [PATCH -next] drm/logicvc: add missing of_node_put() in
+ logicvc_layers_init()
+Message-ID: <YrXXfhu5oPrBMPfu@aptenodytes>
+References: <20220614112112.1537319-1-yangyingliang@huawei.com>
+ <YrXMAvuHJgls+wNM@aptenodytes>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="0EhK0iGba7yvNVPN"
+Content-Disposition: inline
+In-Reply-To: <YrXMAvuHJgls+wNM@aptenodytes>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -56,39 +54,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Enable FDMA usage by adding "fdma" resource in regs and interrupts.
+--0EhK0iGba7yvNVPN
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
- arch/mips/boot/dts/mscc/ocelot.dtsi | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Hi,
 
-diff --git a/arch/mips/boot/dts/mscc/ocelot.dtsi b/arch/mips/boot/dts/mscc/ocelot.dtsi
-index cfc219a72bdd..6bd8a1ad94da 100644
---- a/arch/mips/boot/dts/mscc/ocelot.dtsi
-+++ b/arch/mips/boot/dts/mscc/ocelot.dtsi
-@@ -136,13 +136,14 @@ switch@1010000 {
- 			      <0x1880000 0x10000>,
- 			      <0x1040000 0x10000>,
- 			      <0x1050000 0x10000>,
--			      <0x1060000 0x10000>;
-+			      <0x1060000 0x10000>,
-+			      <0x1a0 0x1c4>;
- 			reg-names = "sys", "rew", "qs", "ptp", "port0", "port1",
- 				    "port2", "port3", "port4", "port5", "port6",
- 				    "port7", "port8", "port9", "port10", "qsys",
--				    "ana", "s0", "s1", "s2";
--			interrupts = <18 21 22>;
--			interrupt-names = "ptp_rdy", "xtr", "inj";
-+				    "ana", "s0", "s1", "s2", "fdma";
-+			interrupts = <18 21 22 16>;
-+			interrupt-names = "ptp_rdy", "xtr", "inj", "fdma";
- 
- 			ethernet-ports {
- 				#address-cells = <1>;
--- 
-2.36.1
+On Fri 24 Jun 22, 16:36, Paul Kocialkowski wrote:
+> Hi Yang,
+>=20
+> On Tue 14 Jun 22, 19:21, Yang Yingliang wrote:
+> > The of_node_put() need be called in error path in logicvc_layers_init().
+> >=20
+> > Fixes: efeeaefe9be5 ("drm: Add support for the LogiCVC display controll=
+er")
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>=20
+> Thanks for the fix!
+>=20
+> Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
+Adapted this after Julia's patch: Only the put on layers_node is required
+on error condition.
+
+Pushed to drm-misc-next, thanks!
+
+Paul
+
+> > ---
+> >  drivers/gpu/drm/logicvc/logicvc_layer.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/gpu/drm/logicvc/logicvc_layer.c b/drivers/gpu/drm/=
+logicvc/logicvc_layer.c
+> > index bae1c7f99569..00a37563a6dc 100644
+> > --- a/drivers/gpu/drm/logicvc/logicvc_layer.c
+> > +++ b/drivers/gpu/drm/logicvc/logicvc_layer.c
+> > @@ -610,8 +610,11 @@ int logicvc_layers_init(struct logicvc_drm *logicv=
+c)
+> >  		}
+> > =20
+> >  		ret =3D logicvc_layer_init(logicvc, layer_node, index);
+> > -		if (ret)
+> > +		if (ret) {
+> > +			of_node_put(layer_node);
+> > +			of_node_put(layers_node);
+> >  			goto error;
+> > +		}
+> > =20
+> >  		of_node_put(layer_node);
+> >  	}
+> > --=20
+> > 2.25.1
+> >=20
+>=20
+> --=20
+> Paul Kocialkowski, Bootlin
+> Embedded Linux and kernel engineering
+> https://bootlin.com
+
+
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--0EhK0iGba7yvNVPN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmK1134ACgkQ3cLmz3+f
+v9HaKAf/fhFufCnpCSb1llOwW0dmC67J6rIH6AUXDIvY2dmdmHDRccI3+A2TR52Z
+LBtHpJr/6b0a4CLhLehpipLZ6xpVcC+jq5NcJyLV93q5S7HRzcfXL/Z5Xjd/Huhe
+GTZj80cvOwNUUK0tHaNohEgCLZnSsWGkuMiaEa3sb3GfSx+2ubLCTs/WSEgMPUMo
+uIW0UoTiw896SLmdvZV7TDufT2tQ0N1X1kyV/wFAjMJ2eiNJTN7j2+VXfeoHhTjf
+Ksqo1tswJ1jO+Dkfue2d+7TpzFUJpKv/IYzekrHp6gDfyHOC1oNd7kEwGjoNyl/b
+AVjoFDMv+4zvUzdsBArzQHF4WPHhDQ==
+=yqMU
+-----END PGP SIGNATURE-----
+
+--0EhK0iGba7yvNVPN--

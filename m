@@ -2,274 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BEA9558CC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 03:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DED558CCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 03:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiFXBYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 21:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
+        id S230512AbiFXBZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 21:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiFXBYP (ORCPT
+        with ESMTP id S230113AbiFXBZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 21:24:15 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64124522FD
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 18:24:14 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id l11so1983447ybu.13
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 18:24:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=10PmzWCyUBI5Vfce1rbhp0nN4ZOkA3OYApu3p4Z3wDQ=;
-        b=glXeRVHVfV8WrwBqJ/kMZnqq8X5UeIcwOsiFsj/kz7g3p9ZhnG8+7rYmkC4Ooh8CoD
-         H2ZxY3SNaBMWVW1hTeMEGJiRLySNetp6ZqokKzzuE+/3PiJro+eTVWkGtMnExLj35OJs
-         zcso9bW6vOY8KzWSW9Oetg7R7bOFMcqDtfmfY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=10PmzWCyUBI5Vfce1rbhp0nN4ZOkA3OYApu3p4Z3wDQ=;
-        b=lXYdV8SCbY1+ZKJnP8DpKdfu62uUS5j/Smn3ZeBoXwt7kt2DEEzcyRxcuRBTx9ZxAH
-         hwlwWaF9/o1ZzMqZdlY1SBt37bBXuIzDEszx245qbDLV79LZOdPmfpb3uZSkK0zlbHZC
-         CirRhckuvBJSTQYzWYMw7lGKL4DGdgiyOq+Z9TTkqZ1kfUofABvq11GkKwOlbFLW+bTz
-         YDQ3wOQgjOKIwXYqBzWtFDJDII6X5ebgq847Lo94gEAS/3MKC6JFeBKZTWwZxHt3pWOT
-         IXzxizJhCuKEIqva817hscLwNmWHR3SDs+3Z3RI/AbzR45qItIEhCWv2MiXWKhiFdiWa
-         WWRQ==
-X-Gm-Message-State: AJIora/k42cekCv0NHA2r5gbGnujBsV9LZPbsSHHSN6pV57R92LVAscr
-        ZQES/LQxfi6ciP2BpE0A+hn06tzNC3pVINigLPUliw==
-X-Google-Smtp-Source: AGRyM1uzGBk9nFl76gEcXxNwEdLIRcnWpYTQHhBodEuO9ylyG3VAyW/StyEf8ihoveC1W4ma6tvIzZhoSPWESvWOAUs=
-X-Received: by 2002:a25:f30b:0:b0:669:9f30:7c84 with SMTP id
- c11-20020a25f30b000000b006699f307c84mr9265199ybs.240.1656033853604; Thu, 23
- Jun 2022 18:24:13 -0700 (PDT)
+        Thu, 23 Jun 2022 21:25:05 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E297856779;
+        Thu, 23 Jun 2022 18:25:03 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LTfWp4wkTzkWXL;
+        Fri, 24 Jun 2022 09:23:18 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 24 Jun 2022 09:25:01 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 24 Jun
+ 2022 09:25:01 +0800
+Message-ID: <9217c85d-e39e-55b1-36c3-603d0c6203fd@huawei.com>
+Date:   Fri, 24 Jun 2022 09:24:54 +0800
 MIME-Version: 1.0
-References: <20220622173605.1168416-1-pmalani@chromium.org>
- <20220622173605.1168416-2-pmalani@chromium.org> <CAE-0n51kcr3VGdR2Kf8j1JaBbLcCmWo9GYhhvkUQ4+jn2iEKLg@mail.gmail.com>
- <CACeCKac4eL9++QwbDBKrVTpUzhes=WczqZfh+cFiVgoO4py4MQ@mail.gmail.com>
- <CAE-0n51E1TLMRNWnqiV-jU_qg15BF4D6A+0G1y1SRTu1zNs2Dg@mail.gmail.com> <CACeCKacGZFY-_yn1R33OVcsdG47oqNTGBA43L5hrH2zyhK=cRw@mail.gmail.com>
-In-Reply-To: <CACeCKacGZFY-_yn1R33OVcsdG47oqNTGBA43L5hrH2zyhK=cRw@mail.gmail.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 23 Jun 2022 18:24:02 -0700
-Message-ID: <CACeCKaessEPP+aPmwuF8C74hgOFQyc5YFJ_cWqLvQSzXLWaqVg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6 32/33] arm64: irq-gic: Replace unreachable() with
+ -EINVAL
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kbuild@vger.kernel.org>, <live-patching@vger.kernel.org>,
+        <jpoimboe@kernel.org>, <peterz@infradead.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <masahiroy@kernel.org>, <michal.lkml@markovi.net>,
+        <ndesaulniers@google.com>, <mark.rutland@arm.com>,
+        <pasha.tatashin@soleen.com>, <broonie@kernel.org>,
+        <rmk+kernel@armlinux.org.uk>, <madvenka@linux.microsoft.com>,
+        <christophe.leroy@csgroup.eu>, <daniel.thompson@linaro.org>
+References: <20220623014917.199563-1-chenzhongjin@huawei.com>
+ <20220623014917.199563-33-chenzhongjin@huawei.com>
+ <7d26e36686495866e0752e12c38f170e@kernel.org>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <7d26e36686495866e0752e12c38f170e@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 5:35 PM Prashant Malani <pmalani@chromium.org> wrote:
->
-> On Thu, Jun 23, 2022 at 4:14 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Quoting Prashant Malani (2022-06-23 12:08:21)
-> > > On Thu, Jun 23, 2022 at 11:30 AM Stephen Boyd <swboyd@chromium.org> wrote:
-> > > >
-> > > > Quoting Prashant Malani (2022-06-22 10:34:30)
-> > > > > diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> > > > > new file mode 100644
-> > > > > index 000000000000..78b0190c8543
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
-> > > > > @@ -0,0 +1,74 @@
-> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > > +%YAML 1.2
-> > [...]
-> > > > > +  ports:
-> > > > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > > > +    description: OF graph binding modelling data lines to the Type-C switch.
-> > > > > +
-> > > > > +    properties:
-> > > > > +      port@0:
-> > > > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > > > +        description: Link between the switch and a Type-C connector.
-> > > >
-> > > > Is there an update to the usb-c-connector binding to accept this port
-> > > > connection?
-> > >
-> > > Not at this time. I don't think we should enforce that either.
-> > > (Type-C data-lines could theoretically be routed through intermediate
-> > > hardware like retimers/repeaters)
-> >
-> > I'm mostly wondering if having such a connection to the usb-c-connector,
-> > or even through some retimer/repeater, would be sufficient to detect how
-> > many type-c ports are connected to the device. If the type-c pin
-> > assignments only support two or four lanes for DP then it seems like we
-> > should describe the two lanes or four lanes as one graph endpoint
-> > "output" and then have some 'data-lanes' property in case the DP lanes
-> > are flipped while being sent to the retimer or usb-c-connector. This
-> > would of course depend on the capability of the device, i.e. if it can
-> > remap DP lanes or only has 2 lanes of DP, etc.
-> >
-> > > > > +  - |
-> > > > > +    drm-bridge {
-> > > > > +        usb-switch {
-> > > > > +            compatible = "typec-switch";
-> > > >
-> > > > I still don't understand the subnode design here. usb-switch as a
-> > > > container node indicates to me that this is a bus, but in earlier rounds
-> > > > of this series it was stated this isn't a bus.
-> > >
-> > > I am not aware of this as a requirement. Can you please point me to the
-> > > documentation that states this needs to be the case?
-> >
-> > I'm not aware of any documentation for the dos and don'ts here. Are
-> > there any examples in the bindings directory that split up a device into
-> > subnodes that isn't in bindings/mfd?
->
-> usb-c-connector [3] and its users is an example.
->
-> >  I just know from experience that
-> > any time I try to make a child node of an existing node that I'm
-> > supposed to be describing a bus, unless I'm adding some sort of
-> > exception node like a graph binding or an opp table. Typically a node
-> > corresponds 1:1 with a device in the kernel. I'll defer to Rob for any
-> > citations.
-> >
-> > >
-> > > > Why doesn't it work to
-> > > > merge everything inside usb-switch directly into the drm-bridge node?
-> > >
-> > > I attempted to explain the rationale in the previous version [1], but
-> > > using a dedicated sub-node means the driver doesn't haven't to
-> > > inspect individual ports to determine which of them need switches
-> > > registered for them. If it sees a `typec-switch`, it registers a
-> > > mode-switch and/or orientation-switch. IMO it simplifies the hardware
-> > > device binding too.
-> >
-> > How is that any harder than hard-coding that detail into the driver
-> > about which port and endpoint is possibly connected to the
-> > usb-c-connector (or retimer)? All of that logic could be behind some API
-> > that registers a typec-switch based on a graph port number that's passed
-> > in, ala drm_of_find_panel_or_bridge()'s design.
->
-> If each driver has to do it (and the port specifics vary for each driver),
-> it becomes an avoidable overhead for each of them.
-> I prefer hard-coding such details if avoidable. I suppose both approaches
-Sorry, I meant "I prefer not hard-coding such details..."
+Hi,
 
-> require modifications to the binding and the driver code.
->
-> >
-> > Coming from a DT writer's perspective, I just want to go through the
-> > list of output pins in the datasheet and match them up to the ports
-> > binding for this device. If it's a pure DP bridge, where USB hardware
-> > isn't an input or an output like the ITE chip, then I don't want to have
-> > to describe a port graph binding for the case when it's connected to a
-> > dp-connector (see dp-connector.yaml) in the top-level node and then have
-> > to make an entirely different subnode for the usb-c-connector case with
-> > a whole other set of graph ports.
->
-> This approach still allows for that, if the driver has any use for it
-> (AFAICT these drivers don't).
-> Iff that driver uses it, one can (optionally) route their output
-> (top-level) ports through the
-> "typec-switch" sub-node (and onwards as required).
-> If it's being used in a "pure-DP" configuration, the "typec-switch" just
-> goes away (the top level ports can be routed as desired by the driver).
-> (Again, I must reiterate that neither this driver or the anx driver
-> utilizes this)
->
-> >
-> > How would I even know which two differential pairs correspond to port0
-> > or port1 in this binding in the ITE case?
->
-> Why do we need to know that? It doesn't affect this or the other
-> driver or hardware's
-> functioning in a perceivable way.
->
-> > Ideally we make the graph
-> > binding more strict for devices by enforcing that their graph ports
-> > exist. Otherwise we're not fully describing the connections between
-> > devices and our dtb checkers are going to let things through where the
-> > driver most likely will fail because it can't figure out what to do,
-> > e.g. display DP on 4 lanes or play some DP lane rerouting games to act
-> > as a mux.
->
-> How is the current binding enforcing this? The typec-switch binding
-> as a first step ensures that the DT is connecting the hardware(anx,ite
-> etc) to something
-> that at least "claims" to be a Type-C switch.
->
-> >
-> > >
-> > > It also maps with the internal block diagram for these hardware
-> > > components (for ex. the anx7625 crosspoint switch is a separate
-> > > sub-block within anx7625).
-> >
-> > We don't make DT bindings for sub-components like this very often. It
-> > would make more sense to me to have a subnode if a typec switch was some
-> > sort of off the shelf hard macro that the hardware engineer placed down
-> > inside the IC that they delivered. Then we could have a completely
-> > generic driver that binds to the generic binding that knows how to drive
-> > the hardware, because it's an unchangeable hard macro with a well
-> > defined programming interface.
-> >
-> > >
-> > > [1] https://lore.kernel.org/linux-usb/CACeCKaeH6qTTdG_huC4yw0xxG8TYEOtfPW3tiVNwYs=P4QVPXg@mail.gmail.com/
-> >
-> > I looked at the fsa4480 driver and the device has a publicly available
-> > datasheet[2]. That device is designed for "audio accessory mode" but I
-> > guess it's being used to simply mux SBU lines? There isn't an upstream
-> > user of the binding so far, but it also doesn't look like a complete
-> > binding. I'd expect to see DN_L/R as a graph output connected to the
-> > usb-c-connector and probably have a usb2.0 input port and a 'sound-dai'
-> > property to represent the input audio path.
-> >
-> > Finally, simply connecting to the typec controller node isn't sufficient
-> > because a typec controller can be controlling many usb-c-connectors so I
-> > don't see how the graph binding would be able to figure out how many
-> > usb-c-connectors are connected to a mux like device, unless we took the
-> > approach of this patch.
->
-> It can follow the endpoint of the typec-switch port (the port parent
-> of the remote
-> end-point would be a 'usb-c-connector'). That is if the graph binding
-> (I'm assuming you mean the switch device here) wants to figure this
-> out in the first place.
->
-> > Is that why you're proposing this binding? To
-> > avoid describing a graph binding in the usb-c-connector and effectively
-> > "pushing" the port count up to the mux?
->
-> No, that is not the intention behind this series. The
-> 'usb-c-connector' still needs the
-> graph binding to the `typec-switch`. SBU, HS and SS lanes might have different
-> muxes altogether (usb-c-connect has separate ports for SBU, HS and SS lanes)
->
-> >
-> > [2] https://www.onsemi.com/pdf/datasheet/fsa4480-d.pdf
->
-> [3] https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/connector/usb-connector.yaml#L23
+Thanks for your review and patient.
+
+On 2022/6/23 16:13, Marc Zyngier wrote:
+> On 2022-06-23 02:49, Chen Zhongjin wrote:
+>> Using unreachable() at default of switch generates an extra branch at
+>> end of the function, and compiler won't generate a ret to close this
+>> branch because it knows it's unreachable.
+>>
+>> If there's no instruction in this branch, compiler will generate a NOP,
+>> And it will confuse objtool to warn this NOP as a fall through branch.
+>>
+>> In fact these branches are actually unreachable, so we can replace
+>> unreachable() with returning a -EINVAL value.
+>>
+>> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+>> ---
+>>  arch/arm64/kvm/hyp/vgic-v3-sr.c | 7 +++----
+>>  drivers/irqchip/irq-gic-v3.c    | 2 +-
+>>  2 files changed, 4 insertions(+), 5 deletions(-)
+> 
+> Basic courtesy would have been to Cc the maintainers of this code.
+> 
+Sorry for that.
+
+I'll cc everyone next time.
+
+>>
+>> diff --git a/arch/arm64/kvm/hyp/vgic-v3-sr.c b/arch/arm64/kvm/hyp/vgic-v3-sr.c
+>> index 4fb419f7b8b6..f3cee92c3038 100644
+>> --- a/arch/arm64/kvm/hyp/vgic-v3-sr.c
+>> +++ b/arch/arm64/kvm/hyp/vgic-v3-sr.c
+>> @@ -6,7 +6,6 @@
+>>
+>>  #include <hyp/adjust_pc.h>
+>>
+>> -#include <linux/compiler.h>
+>>  #include <linux/irqchip/arm-gic-v3.h>
+>>  #include <linux/kvm_host.h>
+>>
+>> @@ -55,7 +54,7 @@ static u64 __gic_v3_get_lr(unsigned int lr)
+>>          return read_gicreg(ICH_LR15_EL2);
+>>      }
+>>
+>> -    unreachable();
+>> +    return -EINVAL;
+> 
+> NAK. That's absolutely *wrong*, and will hide future bugs.
+> Nothing checks for -EINVAL, and we *never* expect to
+> reach this, hence the perfectly valid annotation.
+> 
+> If something needs fixing, it probably is your tooling.
+> 
+>         M.
+
+You are right.
+
+Essentially, this is because objtool does not anticipate that the compiler will
+generate additional instructions when marking unreachable instructions.
+
+I'll fix this problem or add a specific check for this state.
+
+Best,
+Chen
+

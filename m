@@ -2,84 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7549559E19
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF4D559E43
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbiFXQEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 12:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
+        id S229994AbiFXQHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 12:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiFXQEx (ORCPT
+        with ESMTP id S230454AbiFXQHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 12:04:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16E872CE19
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:04:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656086692;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ln1Z2E1M7p8doCl1L1YnM9NdRf2Z0FbPrSaV1f2IMzE=;
-        b=E9V3fR12hLP99ec6uCVDDY6Qv/9q47k5/oi0uBKSbLntp45ibHXeI5NsTNeJPxnGZ1YxiQ
-        ArzM1axWsXdGxMQhhiIbWh1RAY2LzcEAdu1B/Y1/bAYwvhV1aelWE35Y8U53asnHXNW0yq
-        KBM/vZTDIDCWmtnHKuoktRaqR4Fkra8=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-202-HoyuuNK7MGudK1fRyO3puA-1; Fri, 24 Jun 2022 12:04:50 -0400
-X-MC-Unique: HoyuuNK7MGudK1fRyO3puA-1
-Received: by mail-il1-f198.google.com with SMTP id d1-20020a923601000000b002d93c039d9fso1661637ila.9
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:04:50 -0700 (PDT)
+        Fri, 24 Jun 2022 12:07:30 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F245534A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:07:27 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id d14so3206341pjs.3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:07:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rzqAuoWV3USzxHFuutQ3yIsWUpm5115CLajT1d2mIl4=;
+        b=IzUakGXSjYyU0QmuLqEXMF41x3FCabMgcH3I/JltyKtDc2K/e3mvUNIrCDSrs5WZ/w
+         SV8eQEljMWHF1SiJsMLP085Na4tfAziUNXW1XEyq2rl2tPzf6dxKfPDhZc0vFZ0+oVBF
+         YhPvp8bVBGN/DVmDTg/+/ZNLsPTKfmz/K7Qj0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=Ln1Z2E1M7p8doCl1L1YnM9NdRf2Z0FbPrSaV1f2IMzE=;
-        b=WmMoFjNOYgy0XEaeOqUiZ/c1zV+E4ZjEsGZ2pDhzo1YqdoVUWO4U8gTvnWcKYM0qa0
-         miTdQlfh/G19beH5uOE4AP2+5P8h1JTTyE5EOkkO3PHoDbZXAdEfE0ZMiFkd1GPMVxP1
-         4/h1EOhpd+F296K1BFYC7L+VEKccLo+KSe5CXGoqrWfYGqxdBdXY96HfG7vYRB54yly4
-         +XixB/k2ISEQ4UgjpacRFHpBV08OVsBZAvU62VqQYmF/6EcQIi9Zafxlao1Mu9rZu05m
-         ottJvx91wSnoj/stsrzNhxdw+nTbJNjyNrqkMskAzbfMWU0JX8j1l6ROwMGKusIGFW3C
-         MApw==
-X-Gm-Message-State: AJIora9VuFXraDTHTcQ9p+3yyUQag2RP5RiuqNxaFw1d3ZNzXq9tWdx0
-        j3gR196sBvRCyGGv0LmfR8nkkNaEIzcCnnVVX5hS+I1+yWo49OdqvAHyFn9yOCqLbOvYYaAozzw
-        WpluWJJsDoqRWXeGEfJ9Vdtn8
-X-Received: by 2002:a05:6638:300e:b0:335:c73c:3d25 with SMTP id r14-20020a056638300e00b00335c73c3d25mr8993396jak.77.1656086689942;
-        Fri, 24 Jun 2022 09:04:49 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tkLdQdoyXEGpgj4BclSWirmWj1t+0EzYv/auBwq1GquIs3qt+6zmVH3RnW4cPTN1eyU02Q0Q==
-X-Received: by 2002:a05:6638:300e:b0:335:c73c:3d25 with SMTP id r14-20020a056638300e00b00335c73c3d25mr8993376jak.77.1656086689538;
-        Fri, 24 Jun 2022 09:04:49 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id a30-20020a027a1e000000b00339c67df872sm1216387jac.129.2022.06.24.09.04.48
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rzqAuoWV3USzxHFuutQ3yIsWUpm5115CLajT1d2mIl4=;
+        b=oCs10JudKc3zsRiGiM1UWz6Rj5sVeuVxR0mW8Wo+3SBS+VSpHao8hxncN0DpD7RLZ2
+         1ORU2PLz3gwEsOdQKYahZyF0gUrQ/KseAtMNWf5D/JoM0HHZ5Xy5mw9E5eGi8e4OyhLZ
+         WFEi4gTchtLqnkBvrY/6Qb7bFwZtBQb/i9gPIDCXQ86zvKkWYcmdYdq7NwA7OXCuXDMg
+         vLAajCrLQTQFVu3gMw2ace2xzUtr2uHOzFlw1/awk1WfGGARwwfAKAL2pi8KNX9WG0QL
+         9Scn9yiTfbE/yKIBT8ZtIqcqaMnd3vZJ1Y4G7z15HrA1mFN1TAc7EiN3D3g2SCSU1AK8
+         ZNWA==
+X-Gm-Message-State: AJIora9PrBe7Vs/2AYzO0F14iADq8GzGRRSKHmyrdb4hn9IKYPK7i+gv
+        2f6F/I5emE3Bo/0LSiFpzdUPxg==
+X-Google-Smtp-Source: AGRyM1trnL+TCF4KBWZPd8kIHvY5gdVVEHSJskPgHg2yowNrFAgES8RtXJZZwey5Qo4Kp6v0Mt2pqw==
+X-Received: by 2002:a17:90b:1e06:b0:1ec:b396:7468 with SMTP id pg6-20020a17090b1e0600b001ecb3967468mr4975822pjb.63.1656086846991;
+        Fri, 24 Jun 2022 09:07:26 -0700 (PDT)
+Received: from 14b1b8af28dc ([203.220.223.63])
+        by smtp.gmail.com with ESMTPSA id i4-20020a17090332c400b0016a214e4afasm2024671plr.125.2022.06.24.09.07.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 09:04:49 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 10:04:47 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>, cohuck@redhat.com,
-        iommu@lists.linux.dev, iommu@lists.linux-foundation.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] vfio/type1: Simplify bus_type determination
-Message-ID: <20220624100447.4ec983fb.alex.williamson@redhat.com>
-In-Reply-To: <42679e49-4a04-4700-f420-f6ffe0f4b7d1@arm.com>
-References: <b1d13cade281a7d8acbfd0f6a33dcd086207952c.1655898523.git.robin.murphy@arm.com>
-        <20220622161721.469fc9eb.alex.williamson@redhat.com>
-        <68263bd7-4528-7acb-b11f-6b1c6c8c72ef@arm.com>
-        <20220623170044.1757267d.alex.williamson@redhat.com>
-        <20220624015030.GJ4147@nvidia.com>
-        <20220624081159.508baed3.alex.williamson@redhat.com>
-        <20220624141836.GS4147@nvidia.com>
-        <20220624082831.22de3d51.alex.williamson@redhat.com>
-        <42679e49-4a04-4700-f420-f6ffe0f4b7d1@arm.com>
-Organization: Red Hat
+        Fri, 24 Jun 2022 09:07:26 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 16:07:18 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 00/11] 5.18.7-rc1 review
+Message-ID: <20220624160718.GA2731020@14b1b8af28dc>
+References: <20220623164322.315085512@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220623164322.315085512@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,91 +71,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Jun 2022 16:12:55 +0100
-Robin Murphy <robin.murphy@arm.com> wrote:
-
-> On 2022-06-24 15:28, Alex Williamson wrote:
-> > On Fri, 24 Jun 2022 11:18:36 -0300
-> > Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >   
-> >> On Fri, Jun 24, 2022 at 08:11:59AM -0600, Alex Williamson wrote:  
-> >>> On Thu, 23 Jun 2022 22:50:30 -0300
-> >>> Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >>>      
-> >>>> On Thu, Jun 23, 2022 at 05:00:44PM -0600, Alex Williamson wrote:
-> >>>>      
-> >>>>>>>> +struct vfio_device *vfio_device_get_from_iommu(struct iommu_group *iommu_group)
-> >>>>>>>> +{
-> >>>>>>>> +	struct vfio_group *group = vfio_group_get_from_iommu(iommu_group);
-> >>>>>>>> +	struct vfio_device *device;  
-> >>>>>>>
-> >>>>>>> Check group for NULL.  
-> >>>>>>
-> >>>>>> OK - FWIW in context this should only ever make sense to call with an
-> >>>>>> iommu_group which has already been derived from a vfio_group, and I did
-> >>>>>> initially consider a check with a WARN_ON(), but then decided that the
-> >>>>>> unguarded dereference would be a sufficiently strong message. No problem
-> >>>>>> with bringing that back to make it more defensive if that's what you prefer.  
-> >>>>>
-> >>>>> A while down the road, that's a bit too much implicit knowledge of the
-> >>>>> intent and single purpose of this function just to simply avoid a test.  
-> >>>>
-> >>>> I think we should just pass the 'struct vfio_group *' into the
-> >>>> attach_group op and have this API take that type in and forget the
-> >>>> vfio_group_get_from_iommu().  
-> >>>
-> >>> That's essentially what I'm suggesting, the vfio_group is passed as an
-> >>> opaque pointer which type1 can use for a
-> >>> vfio_group_for_each_vfio_device() type call.  Thanks,  
-> >>
-> >> I don't want to add a whole vfio_group_for_each_vfio_device()
-> >> machinery that isn't actually needed by anything.. This is all
-> >> internal, we don't need to design more than exactly what is needed.
-> >>
-> >> At this point if we change the signature of the attach then we may as
-> >> well just pass in the representative vfio_device, that is probably
-> >> less LOC overall.  
-> > 
-> > That means that vfio core still needs to pick an arbitrary
-> > representative device, which I find in fundamental conflict to the
-> > nature of groups.  Type1 is the interface to the IOMMU API, if through
-> > the IOMMU API we can make an assumption that all devices within the
-> > group are equivalent for a given operation, that should be done in type1
-> > code, not in vfio core.  A for-each interface is commonplace and not
-> > significantly more code or design than already proposed.  Thanks,  
+On Thu, Jun 23, 2022 at 06:45:12PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.7 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> It also occurred to me this morning that there's another middle-ground 
-> option staring out from the call-wrapping notion I mentioned yesterday - 
-> while I'm not keen to provide it from the IOMMU API, there's absolutely 
-> no reason that VFIO couldn't just use the building blocks by itself, and 
-> in fact it works out almost absurdly simple:
-> 
-> static bool vfio_device_capable(struct device *dev, void *data)
-> {
-> 	return device_iommu_capable(dev, (enum iommu_cap)data);
-> }
-> 
-> bool vfio_group_capable(struct iommu_group *group, enum iommu_cap cap)
-> {
-> 	return iommu_group_for_each_dev(group, (void *)cap, vfio_device_capable);
-> }
-> 
-> and much the same for iommu_domain_alloc() once I get that far. The 
-> locking concern neatly disappears because we're no longer holding any 
-> bus or device pointer that can go stale. How does that seem as a 
-> compromise for now, looking forward to Jason's longer-term view of 
-> rearranging the attach_group process such that a vfio_device falls 
-> naturally to hand?
+> Responses should be made by Sat, 25 Jun 2022 16:43:11 +0000.
+> Anything received after that time might be too late.
 
-Yup, that seems like another way to do it, a slight iteration on the
-current bus_type flow, and also avoids any sort of arbitrary
-representative device being passed around as an API.
+Hi Greg,
 
-For clarity of the principle that all devices within the group should
-have the same capabilities, we could even further follow the existing
-bus_type and do a sanity test here at the same time, or perhaps simply
-stop after the first device to avoid the if-any-device-is-capable
-semantics implied above.  Thanks,
+5.18.7-rc1 tested.
 
-Alex
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
 
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
+
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi

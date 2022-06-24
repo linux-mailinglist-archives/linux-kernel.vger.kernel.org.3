@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F02559EE0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A97DF559EDE
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiFXQxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 12:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
+        id S230519AbiFXQyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 12:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiFXQxk (ORCPT
+        with ESMTP id S229912AbiFXQyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 12:53:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D182E4739D
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:53:39 -0700 (PDT)
+        Fri, 24 Jun 2022 12:54:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD39DF25
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:54:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 735BC6231F
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:53:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79927C3411C;
-        Fri, 24 Jun 2022 16:53:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E6BFB82AA1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:54:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90CAC34114;
+        Fri, 24 Jun 2022 16:54:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656089618;
-        bh=oOY756ivqAWkyi0wZqS905zKFdWvBVlqssZgNz5e0mY=;
+        s=k20201202; t=1656089641;
+        bh=9lEqeLT40158plhXSRZcQRrVf+apdmuV6yuCiV3QD4I=;
         h=From:To:Cc:Subject:Date:From;
-        b=TpSZ9hJ7QVa4bdxBmwtw5WqBn81AiCZscDsQBYgk14IaXGr2BIzdcmhUmexcNa6Ku
-         RztNIcaNl9ijSbLHVsVGrMNsAUk45Ak4zs1/S7oe1pOVKScxN6IgRTlTHjtFr8Izhd
-         WC7BwVKwAKaNuTAAx1fiLSUx8ar4zc/4hfPlA3HC4UWRnDzwcai+492UuHsYKnAblD
-         F8TzTSRmbgbKJQMpNPspG3S8WaNnuZ5L7Gb7gWtVBn/vLfk06WNODOQUIWOn5oosGc
-         1rWMg+1//yEYJHS/qMHLKEHsMa4P7ps97W6WWnlPRT2SMZ0ZswzqFsw51XdIy2OJLO
-         J12HPNlkHDybA==
+        b=acMag3TfFMzv4/fvxFLFGhJMJ0hco0ILy95bsFiLQ15+h7qCyh05yl37AANOpdpip
+         JsLNnB58+HyCKdb+Lj58PDc0lRsXQNBX76ZFtQA68MT2ji7QUHhXSp5YatcgoDsYRb
+         CWN2VICHF7sH9wHjxeCUREzznvMTx9jHUn9v9b5wBgLr6d+UF8XBXgPa9aEY2diNSn
+         NPuPxUBchgpmJ2gMeiQ+tIUARAD9rJmpHa2KMrjIQnv7c6oUpy1rSHhxf3flJbpCk8
+         J+wQZNzlnTUn19M3/wWmuTOk1kK1AbwpFfMfmG3OaOK5iHDJb7ihsHm8SgVQFqo40o
+         OeCZCjiwxHkuA==
 From:   Mark Brown <broonie@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] regmap fixes for v5.19-rc3
-Date:   Fri, 24 Jun 2022 17:53:28 +0100
-Message-Id: <20220624165338.79927C3411C@smtp.kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] regulator fixes for v5.19-rc3
+Date:   Fri, 24 Jun 2022 17:53:44 +0100
+Message-Id: <20220624165400.B90CAC34114@smtp.kernel.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,30 +55,20 @@ The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-fix-v5.19-rc3
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v5.19-rc3
 
-for you to fetch changes up to 3f05010f243be06478a9b11cfce0ce994f5a0890:
+for you to fetch changes up to 122e951eb8045338089b086c8bd9b0b9afb04a92:
 
-  regmap-irq: Fix offset/index mismatch in read_sub_irq_data() (2022-06-22 11:59:52 +0100)
-
-----------------------------------------------------------------
-regmap: Fixes for v5.19
-
-Two sets of fixes - one for things that were missed with the support for
-custom bulk I/O operations introduced in the last merge window, and
-another for some long standing issues with regmap-irq which affect a
-fairly small subset of devices.
+  regulator: qcom_smd: correct MP5496 ranges (2022-06-07 20:38:09 +0100)
 
 ----------------------------------------------------------------
-Aidan MacDonald (2):
-      regmap-irq: Fix a bug in regmap_irq_enable() for type_in_mask chips
-      regmap-irq: Fix offset/index mismatch in read_sub_irq_data()
+regulator: Fix for v5.19
 
-Javier Martinez Canillas (3):
-      regmap: Re-introduce bulk read support check in regmap_bulk_read()
-      regmap: Make regmap_noinc_read() return -ENOTSUPP if map->read isn't set
-      regmap: Wire up regmap_config provided bulk write in missed functions
+One fix for an incorrect device description for MP5496.
 
- drivers/base/regmap/regmap-irq.c |  8 +++++---
- drivers/base/regmap/regmap.c     | 15 ++++++++-------
- 2 files changed, 13 insertions(+), 10 deletions(-)
+----------------------------------------------------------------
+Robert Marko (1):
+      regulator: qcom_smd: correct MP5496 ranges
+
+ drivers/regulator/qcom_smd-regulator.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)

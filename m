@@ -2,143 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F47255986D
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 13:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB9A559877
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 13:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbiFXLWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 07:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
+        id S231144AbiFXLWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 07:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiFXLWG (ORCPT
+        with ESMTP id S231139AbiFXLWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 07:22:06 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8342079465;
-        Fri, 24 Jun 2022 04:22:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656069725; x=1687605725;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=TqMaSYDiPwgOdjjOGF2zwrDO0PbjQMwjiYFS1UhbBm8=;
-  b=YVEF//9tOZFfUAV97m8kEdPf0nsVz1FR/n50agr9aZjl/jTRk3rtl6jU
-   y2nMqoYF5s9s2G96gaOmiMrukfyXGcCuuRRDp4O8Iy3frU1RaT6hGYmYU
-   u6MsF9pbsDHkUepzYAPbTe3JAf+5ZPu0KkihJhCsfDrYGGRnHDZJRVU1l
-   NFHklGs2zrsMBKY/mDBxYSKAShYn4BesjhEovVwL9xxnysgiMoki6gkUj
-   e0sG0aGWx9LUcqf0qpuDwzJ7Vqzzxe+Rdv5CBkRm9V9cgjimf0P8SUnnh
-   MJ8zsHFvWanREunyzN9c0VxL4pGb41cmzg9BEDQxnWU5nRleuHiE6uC46
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="264019964"
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="264019964"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 04:22:05 -0700
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="835089568"
-Received: from jvrobert-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.99.67])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 04:22:01 -0700
-Message-ID: <951da5eeb4214521635602ce3564246ad49018f5.camel@intel.com>
-Subject: Re: [PATCH v5 04/22] x86/virt/tdx: Prevent ACPI CPU hotplug and
- ACPI memory hotplug
-From:   Kai Huang <kai.huang@intel.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
-        len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com, thomas.lendacky@amd.com,
-        Tianyu.Lan@microsoft.com
-Date:   Fri, 24 Jun 2022 23:21:59 +1200
-In-Reply-To: <20220624014112.GA15566@gao-cwp>
-References: <cover.1655894131.git.kai.huang@intel.com>
-         <3a1c9807d8c140bdd550cd5736664f86782cca64.1655894131.git.kai.huang@intel.com>
-         <20220624014112.GA15566@gao-cwp>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Fri, 24 Jun 2022 07:22:47 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9C5794FB
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 04:22:45 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id t5so4098217eje.1
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 04:22:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tgk54MZ41PYHuB/Q4rLG9CYyOFNJDlQyyrk8XZCCg1U=;
+        b=Oyq5vCrpAPNrAziFwKaF2lBkP2jNPRprPBFhuec6kn+YBvz5ss6Ytk/6xOrQO/eBwu
+         8UKDIPAUP6m6QKDwOkcCGfwGNqMMxj9Lv7iBjtxheUp1JumjXMSZ4zVxBlNGypmVpEqE
+         rkZQ2ZzxgmeGxcd64+Xm8PtvF/Gz27BFOwtrwgIu/RMjXfaTDMz9EPeA2d4u1lmmICyn
+         4KerevADvvaCxSCLcYbGGjd9pacaZOPd29c512UV7Arvp0wI01ZPoIHagcw9J526IEi1
+         /ltWhsiXxxeRXLwQk4upL1m46Xm4SElptteEJwp2Izm5+pob1ZNsb1mH67hFZj4mlfb4
+         sjAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tgk54MZ41PYHuB/Q4rLG9CYyOFNJDlQyyrk8XZCCg1U=;
+        b=LujbHh5nFm8svsguj++NqeJwCooSsHv2FvyTo2hOZe90U1KRlsWi21gvgoxwaiPHXZ
+         9QH9tVZfX5WJ9VvDhYQPH10s4HKBikE/FZsuksE1KeCVja0w76oMYBwpX/At7lw+Xp6S
+         EX7Z87HFXETKjd3nYTshMVDqGsCkw0EUUFzNfXYRBiKZ6nxnadNZBBR+YpnZ6/PiI9VA
+         lIY6JC4lG1Fxn6aXRuJaZ/OhSZ8vTJTnxDDMorgS5e2YwytofdymaaKCBeNtWKyVXXuH
+         BzAKbPRGZRJbOCCYBNOnDnKnIebqbTWYlHCwiLO1C3h4/2ietjNqCmvY9kmBO3tP1KFM
+         qyow==
+X-Gm-Message-State: AJIora+iUxdupRataQjQ6X+Ytjera3sde3RNwYZO1wPdtXylw/C32DTO
+        CRQPtNUEsigKybRknhTPAM4agw==
+X-Google-Smtp-Source: AGRyM1sYtcDa5bMUak2KZgL6+/Fc5vtdSfpUcIOTo5XhIbe5rtkcGY4Iq23VRgOKO7sKLDlaVq/HbA==
+X-Received: by 2002:a17:906:4c9a:b0:726:38df:6f6f with SMTP id q26-20020a1709064c9a00b0072638df6f6fmr495588eju.485.1656069764388;
+        Fri, 24 Jun 2022 04:22:44 -0700 (PDT)
+Received: from [192.168.0.235] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id g10-20020aa7dc4a000000b0043567edac3csm1795392edu.61.2022.06.24.04.22.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jun 2022 04:22:44 -0700 (PDT)
+Message-ID: <5cfb502d-951e-2b5a-aaec-a2ef4c71d5e0@linaro.org>
+Date:   Fri, 24 Jun 2022 13:22:42 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 04/14] dt-bindings: leds: Add Mediatek MT6370
+ flashlight
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de
+Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com
+References: <20220623115631.22209-1-peterwu.pub@gmail.com>
+ <20220623115631.22209-5-peterwu.pub@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220623115631.22209-5-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-24 at 09:41 +0800, Chao Gao wrote:
-> On Wed, Jun 22, 2022 at 11:16:07PM +1200, Kai Huang wrote:
-> > -static bool intel_cc_platform_has(enum cc_attr attr)
-> > +#ifdef CONFIG_INTEL_TDX_GUEST
-> > +static bool intel_tdx_guest_has(enum cc_attr attr)
-> > {
-> > 	switch (attr) {
-> > 	case CC_ATTR_GUEST_UNROLL_STRING_IO:
-> > @@ -28,6 +31,33 @@ static bool intel_cc_platform_has(enum cc_attr attr)
-> > 		return false;
-> > 	}
-> > }
-> > +#endif
-> > +
-> > +#ifdef CONFIG_INTEL_TDX_HOST
-> > +static bool intel_tdx_host_has(enum cc_attr attr)
-> > +{
-> > +	switch (attr) {
-> > +	case CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED:
-> > +	case CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED:
-> > +		return true;
-> > +	default:
-> > +		return false;
-> > +	}
-> > +}
-> > +#endif
-> > +
-> > +static bool intel_cc_platform_has(enum cc_attr attr)
-> > +{
-> > +#ifdef CONFIG_INTEL_TDX_GUEST
-> > +	if (boot_cpu_has(X86_FEATURE_TDX_GUEST))
-> > +		return intel_tdx_guest_has(attr);
-> > +#endif
-> > +#ifdef CONFIG_INTEL_TDX_HOST
-> > +	if (platform_tdx_enabled())
-> > +		return intel_tdx_host_has(attr);
-> > +#endif
-> > +	return false;
-> > +}
->=20
-> how about:
->=20
-> static bool intel_cc_platform_has(enum cc_attr attr)
-> {
-> 	switch (attr) {
-> 	/* attributes applied to TDX guest only */
-> 	case CC_ATTR_GUEST_UNROLL_STRING_IO:
-> 	...
-> 		return boot_cpu_has(X86_FEATURE_TDX_GUEST);
->=20
-> 	/* attributes applied to TDX host only */
-> 	case CC_ATTR_ACPI_CPU_HOTPLUG_DISABLED:
-> 	case CC_ATTR_ACPI_MEMORY_HOTPLUG_DISABLED:
-> 		return platform_tdx_enabled();
->=20
-> 	default:
-> 		return false;
-> 	}
-> }
->=20
-> so that we can get rid of #ifdef/endif.
-
-Personally I don't quite like this way.  To me having separate function for=
- host
-and guest is more clear and more flexible.  And I don't think having
-#ifdef/endif has any problem.  I would like to leave to maintainers.
-
---=20
-Thanks,
--Kai
+On 23/06/2022 13:56, ChiaEn Wu wrote:
+> From: Alice Chen <alice_chen@richtek.com>
+> 
+> Add Mediatek MT6370 flashlight binding documentation.
+> 
+> Signed-off-by: Alice Chen <alice_chen@richtek.com>
+> ---
 
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

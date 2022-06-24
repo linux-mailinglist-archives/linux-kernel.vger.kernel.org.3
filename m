@@ -2,120 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DBE55A45A
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EBB55A45D
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiFXW0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 18:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S231524AbiFXW23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 18:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiFXW0j (ORCPT
+        with ESMTP id S231388AbiFXW21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 18:26:39 -0400
-Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769A688945
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:26:35 -0700 (PDT)
-Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
-        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id E1CDF8029053
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 22:26:34 +0000 (UTC)
-Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
-        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 32AE610073850
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 22:26:34 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 4rl3oHclMNVEz4rl4otJvb; Fri, 24 Jun 2022 22:26:34 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=I5+g+Psg c=1 sm=1 tr=0 ts=62b63a1a
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=JPEYwPQDsx4A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=BDCG8O_D2SPVAq3EX74A:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=zEUVMjd6At/VaVcDdqGUbnb9HMrynB1KutbZgP3N6a0=; b=vyTiJrLyojw4tN3o/kOyb6enhj
-        6mKy76Uki/sZc5NF2O+2xGgmTPUHBlCg11Op61uCvSk1SH4ck/C7gXiuGrj5x124mRKl+K1Haxscw
-        EjkV1KNXkP6ZIbZeoAXVDBcckkjt2QzDiykyX253g39R1cSCYyGhYMkijO1/iT9cejxepEk8bROhR
-        Xe0N75/M/NQdyA0yBAnwe1CPEZe8TDEqDAVia/fQEZFr03UdJ5I1CPSHiAi0371MIIAxFu02uKNt/
-        uEwv+yjVq5tXkiFwZ7wd6cQBkgp/F+2uoN9J8El52qNC4ujChG2Qm9rQpk4bponZz1A8aWdHE0FUA
-        sgfuZ+Yg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:45616 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1o4rl2-00434m-JM;
-        Fri, 24 Jun 2022 16:26:32 -0600
-Subject: Re: [PATCH 5.15 0/9] 5.15.50-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220623164322.288837280@linuxfoundation.org>
-In-Reply-To: <20220623164322.288837280@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <8c1b80b5-b01e-e3e7-8a2f-5b8ba799d28c@w6rz.net>
-Date:   Fri, 24 Jun 2022 15:26:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 24 Jun 2022 18:28:27 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE721F2D2;
+        Fri, 24 Jun 2022 15:28:26 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id b7so4291401ljr.6;
+        Fri, 24 Jun 2022 15:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M6TdAKBeetFQMmcnXoWXDBN9CpxYrPuj3DRX2P2Szoo=;
+        b=Bgx80xNdrOeU9JzOMlCo3jmGu3eQEekyMqjaaQaYKMst/DnrKcGb0EE1upc7kKT8P4
+         K54FHhsRXWGYw/bc1J8YMZjeG/8AiSgtYmwnI6mfwkpdX3qvy9niezyBABlqVlTdDv03
+         SA+kUOtNjI2FmmvlsZORBRGSAkWAETIKpgqcYPA5tGdwxtl10+UD0RHwwxbFI3oVsb8c
+         liFraUMYDWhxgIHIm7mhId9Ea+cmAHr8yUX5fRN0NMwOQNKBipnBwBpuM10qkVNClQKS
+         oDA3vxhA6o1tuWr+qxufLUEBgxvZ5J1mdjVi5AQATam+lJabiaASH8u48UBhCA164Kip
+         pjkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M6TdAKBeetFQMmcnXoWXDBN9CpxYrPuj3DRX2P2Szoo=;
+        b=Nqe2zxQTA4Glblkoy28YIOkX5XJyDnl8z0JqTNmyzQDq070FbmUIO6htrPKUgTEnqX
+         gRJj8UaIyVxtZBta88jcDVMYfxVFMiz572zkqMoXEzejJ1XsgMB1ab+QngvgJy+gi3de
+         Y4Onrv2q6USEdy68W/SblSb6P0w7BpcSlscmORQ5XvC8kJXJIHMHw48xG+W1iAAtb1Ne
+         w02EvTVbJRNsZz0fs+8mU/K/l9o5MwZUmfUeSH+KfkASbMIisPSqops/N1QSZ0vf8r0R
+         YW9l2wUJe1Ubkt1iT27LfrQRpoeTDhmxgCmiyDjwhzgDhR5dHSzJ5h7WRS3EApLI3zXI
+         kVVg==
+X-Gm-Message-State: AJIora+gg/HOlqT5NNBdFvCoXlnTbwVmlBjjK5GiTZ8UiWP3f8A3UDgW
+        Nq5ude61rn5YubNNFgdtnK0=
+X-Google-Smtp-Source: AGRyM1ve4VS6aD8h/ThKo8NNZipID8rOImhCMDMlHauNTgrARt80UIm1/HNQbY9Ll1kMIrgffG9rkQ==
+X-Received: by 2002:a2e:91c4:0:b0:25a:7256:a7aa with SMTP id u4-20020a2e91c4000000b0025a7256a7aamr559661ljg.344.1656109704289;
+        Fri, 24 Jun 2022 15:28:24 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id o23-20020a05651205d700b0047f62762100sm553545lfo.138.2022.06.24.15.28.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 15:28:23 -0700 (PDT)
+Date:   Sat, 25 Jun 2022 01:28:21 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Vineet Gupta <vgupta@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-usb@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-snps-arc@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v9 1/5] arc: dts: Harmonize EHCI/OHCI DT nodes name
+Message-ID: <20220624222821.552zhh5yqqhdzmca@mobilestation>
+References: <20220624141622.7149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220624141622.7149-2-Sergey.Semin@baikalelectronics.ru>
+ <53402d57-ee3f-59b9-a8dc-59fa659f3662@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1o4rl2-00434m-JM
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:45616
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <53402d57-ee3f-59b9-a8dc-59fa659f3662@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/22 9:44 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.50 release.
-> There are 9 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 25 Jun 2022 16:43:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.50-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri, Jun 24, 2022 at 03:11:43PM -0700, Vineet Gupta wrote:
+> 
+> On 6/24/22 07:16, Serge Semin wrote:
+> > In accordance with the Generic EHCI/OHCI bindings the corresponding node
+> > name is suppose to comply with the Generic USB HCD DT schema, which
+> > requires the USB nodes to have the name acceptable by the regexp:
+> > "^usb(@.*)?"  . Make sure the "generic-ehci" and "generic-ohci"-compatible
+> > nodes are correctly named.
+> > 
+> > Signed-off-by: Serge Semin<Sergey.Semin@baikalelectronics.ru>
+> > Acked-by: Alexey Brodkin<abrodkin@synopsys.com>
+> > Acked-by: Krzysztof Kozlowski<krzk@kernel.org>
+> 
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+> This slipped thru cracks. Now on for-curr.
 
-Tested-by: Ron Economos <re@w6rz.net>
+Great! Thanks.
 
+-Sergey
+
+> 
+> Thx,
+> -Vineet

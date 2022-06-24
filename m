@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8A655A004
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C617559FDD
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbiFXRjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
+        id S232587AbiFXRjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbiFXRh4 (ORCPT
+        with ESMTP id S232267AbiFXRiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:37:56 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEAC6DB37
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:44 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dc7bdd666fso26872577b3.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:44 -0700 (PDT)
+        Fri, 24 Jun 2022 13:38:01 -0400
+Received: from mail-ua1-x94a.google.com (mail-ua1-x94a.google.com [IPv6:2607:f8b0:4864:20::94a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8753D6E78B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:45 -0700 (PDT)
+Received: by mail-ua1-x94a.google.com with SMTP id z7-20020ab05647000000b003793ef68061so1035728uaa.2
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=+v5vFcEkCeptJMisViVmMo9Bs1ZO+THs4heiTRIsd+o=;
-        b=NNXX2wgNjzsnd7NQe74D6jQQ3JbhNS1xVYTChLiQX5nqdIcnMSKpyyj3i3EvpGCsEm
-         RHq6youwXY0rUgRMsMTqDuY+7MTgv+Ntfb9USuGpLdovFk8QaUNnj/5hu4tOf0Mr8Ypa
-         tM+TcTpJN5YH+/RNf30TRecLDgM5H/Zp5MJnxEVgf0YteupwUS+Lg1C1mvGu3kxmJaAP
-         xgJKg9LuXjQrzoqn63vyXZqC4Ckt6dxdIBoGoTX+pIFxhc2k6bw9SxJVfy3KdgryLAmu
-         8iaVOe1LIhnXOC1SpxD4kIV9TfjqwXSaMv6b0r1/9KFQEay+2Tk+s5gsM4+trTfyjtP4
-         tSMw==
+        bh=SIBOH6opXUz/XwGM5Y6ya4CpHP7LmoYYYTh8F0m81no=;
+        b=Pbkkfo9sSsWByEA3MDQOtz+Q2704OLexkMuoEPgStT8U3UpSblQ3IEPUJoumDhRsCS
+         KF3OzIl1hpNYAOnJFSoAUINBxdMD3KyitvNSBwfbQwAIVinkxf2E5fS++Nptgx5omNHK
+         MhGNV51KMhOAPw8/F/4bz6597P0y0Tjf0Quez0cg4ldgJsyCR4bIHrUcoZUbXkNnkJTy
+         Y9FpzlIt/V/d7jDwUfIW+aYewo3REz+w4TXtV8Ubu/W8DxnbGVsCZKID9paL3I07nVHN
+         ibi7C91OOK5NPVkKxk8pfTxCZhen97wIWN591SFKIs0pk37m97cZ299uot1663T0JWat
+         EJYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=+v5vFcEkCeptJMisViVmMo9Bs1ZO+THs4heiTRIsd+o=;
-        b=TlRMTihQpXKV8+Are596oJW0TjHT/rcUziUppx3KlB6cRADZZ219m5MDFl6qlZncJP
-         q5QvFQF8AeYtgsG8I7BrhHpA/fkx+E9ST7v3v3dZRF7gVMOG31v2jBpSvwb3XaerCG3A
-         cxeXGjQLWEiKdzYBXBWTCp5vtY3sjC3upr9jPZt3kCpOcBxl85CE4ZCgQiJoIw8wEbe6
-         DvSA4OZ6LqMPYJuj4m7vyvUOwHFybxuGf3ek63bYyRUk9ZoTxNoxU7sNnGADw973fy1i
-         F/6upRw6KxBHRPTk5ft0lctaXPsU6UIR9VXS2xG/6k6jV9Ch3h5x85f8Vs5mbfYvk3fB
-         LmmQ==
-X-Gm-Message-State: AJIora+36zAvojn7jCdX3mWozWckcaymCa4SiSVPzaNFCCQde7kG5Bzs
-        1datimYXiCUwbi+ZDfpvC2tlYuhvfNzmrYVK
-X-Google-Smtp-Source: AGRyM1uKY4yvxaVhU0NJgxRylqUzzNHeETpBTfmI2EV5YsAV33yJ/2TcaSldBOT8fH//yUIflu07auIqQ61eftvT
+        bh=SIBOH6opXUz/XwGM5Y6ya4CpHP7LmoYYYTh8F0m81no=;
+        b=qvS6OtBijubS8v2ngaFhB+5jIF4ShAXD8SyOUIi0XhovLu9L+OD7EKb7PL2JGCVshH
+         xU1Bs/xrbdrgaURxxdUtRn7YA0pxGErpVjSO/F80WIm44zD3LxIa4qcShtgUt852xxDW
+         cBoSRJFulbMr015EPlj9Gz9cf6TskBq+7c6z6K5xRUx4AGklQoMVRZskeAWClR+k6F8B
+         UgKNn91UGm/Dujkzdsj8cruJZHyhfr3/mX6bW600OSxXHCSUDL1IH+8AFWwYrxoCKL/S
+         oJCchd1PcxWoHJ7lpiDi5arNnBD/PHOVAWXjZkrL9K9Dk+klLkS+UAnvYOvkHQlpF44O
+         1f+g==
+X-Gm-Message-State: AJIora/HFGS+95nWCQeo416g7++GXIESYBFuDVd3rdjWsctxXnL6xOi2
+        0b8htdzTelKxv3ka0MU267R2caXa78RxBJuc
+X-Google-Smtp-Source: AGRyM1vSDDKOe0+ex+JDy0gPJ7CNOXQ1Vy1CORyh/oXQDqJ/7aNJp/5naeafubXWqtHGG6rbV8KIUOgKlN+dxbOo
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a81:5e42:0:b0:31b:6254:1c2b with SMTP
- id s63-20020a815e42000000b0031b62541c2bmr3298ywb.35.1656092263238; Fri, 24
- Jun 2022 10:37:43 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 17:36:54 +0000
+ (user=jthoughton job=sendgmr) by 2002:a05:6102:d4:b0:356:1e42:b3d8 with SMTP
+ id u20-20020a05610200d400b003561e42b3d8mr1691552vsp.82.1656092264711; Fri, 24
+ Jun 2022 10:37:44 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 17:36:55 +0000
 In-Reply-To: <20220624173656.2033256-1-jthoughton@google.com>
-Message-Id: <20220624173656.2033256-25-jthoughton@google.com>
+Message-Id: <20220624173656.2033256-26-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20220624173656.2033256-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [RFC PATCH 24/26] arm64/hugetlb: add support for high-granularity mappings
+Subject: [RFC PATCH 25/26] selftests: add HugeTLB HGM to userfaultfd selftest
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -77,103 +77,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is included in this RFC to demonstrate how an architecture that
-doesn't use ARCH_WANT_GENERAL_HUGETLB can be updated to support HugeTLB
-high-granularity mappings: an architecture just needs to implement
-hugetlb_walk_to.
+It behaves just like the regular shared HugeTLB configuration, except
+that it uses 4K instead of hugepages.
+
+This doesn't test collapsing yet. I'll add a test for that for v1.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- arch/arm64/Kconfig          |  1 +
- arch/arm64/mm/hugetlbpage.c | 63 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 64 insertions(+)
+ tools/testing/selftests/vm/userfaultfd.c | 61 ++++++++++++++++++++----
+ 1 file changed, 51 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 1652a9800ebe..74108713a99a 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -99,6 +99,7 @@ config ARM64
- 	select ARCH_WANT_FRAME_POINTERS
- 	select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
- 	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-+	select ARCH_HAS_SPECIAL_HUGETLB_HGM
- 	select ARCH_WANT_LD_ORPHAN_WARN
- 	select ARCH_WANTS_NO_INSTR
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
-diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-index e2a5ec9fdc0d..1901818bed9d 100644
---- a/arch/arm64/mm/hugetlbpage.c
-+++ b/arch/arm64/mm/hugetlbpage.c
-@@ -281,6 +281,69 @@ void set_huge_swap_pte_at(struct mm_struct *mm, unsigned long addr,
- 		set_pte(ptep, pte);
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 0bdfc1955229..9cbb959519a6 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -64,7 +64,7 @@
+ 
+ #ifdef __NR_userfaultfd
+ 
+-static unsigned long nr_cpus, nr_pages, nr_pages_per_cpu, page_size;
++static unsigned long nr_cpus, nr_pages, nr_pages_per_cpu, page_size, hpage_size;
+ 
+ #define BOUNCE_RANDOM		(1<<0)
+ #define BOUNCE_RACINGFAULTS	(1<<1)
+@@ -72,9 +72,10 @@ static unsigned long nr_cpus, nr_pages, nr_pages_per_cpu, page_size;
+ #define BOUNCE_POLL		(1<<3)
+ static int bounces;
+ 
+-#define TEST_ANON	1
+-#define TEST_HUGETLB	2
+-#define TEST_SHMEM	3
++#define TEST_ANON		1
++#define TEST_HUGETLB		2
++#define TEST_HUGETLB_HGM	3
++#define TEST_SHMEM		4
+ static int test_type;
+ 
+ /* exercise the test_uffdio_*_eexist every ALARM_INTERVAL_SECS */
+@@ -85,6 +86,7 @@ static volatile bool test_uffdio_zeropage_eexist = true;
+ static bool test_uffdio_wp = true;
+ /* Whether to test uffd minor faults */
+ static bool test_uffdio_minor = false;
++static bool test_uffdio_copy = true;
+ 
+ static bool map_shared;
+ static int shm_fd;
+@@ -140,12 +142,17 @@ static void usage(void)
+ 	fprintf(stderr, "\nUsage: ./userfaultfd <test type> <MiB> <bounces> "
+ 		"[hugetlbfs_file]\n\n");
+ 	fprintf(stderr, "Supported <test type>: anon, hugetlb, "
+-		"hugetlb_shared, shmem\n\n");
++		"hugetlb_shared, hugetlb_shared_hgm, shmem\n\n");
+ 	fprintf(stderr, "Examples:\n\n");
+ 	fprintf(stderr, "%s", examples);
+ 	exit(1);
  }
  
-+int hugetlb_walk_to(struct mm_struct *mm, struct hugetlb_pte *hpte,
-+		    unsigned long addr, unsigned long sz, bool stop_at_none)
++static bool test_is_hugetlb(void)
 +{
-+	pgd_t *pgdp;
-+	p4d_t *p4dp;
-+	pte_t *ptep;
-+
-+	if (!hpte->ptep) {
-+		pgdp = pgd_offset(mm, addr);
-+		p4dp = p4d_offset(pgdp, addr);
-+		if (!p4dp)
-+			return -ENOMEM;
-+		hugetlb_pte_populate(hpte, (pte_t *)p4dp, P4D_SHIFT);
-+	}
-+
-+	while (hugetlb_pte_size(hpte) > sz &&
-+			!hugetlb_pte_present_leaf(hpte) &&
-+			!(stop_at_none && hugetlb_pte_none(hpte))) {
-+		if (hpte->shift == PMD_SHIFT) {
-+			unsigned long rounded_addr = sz == CONT_PTE_SIZE
-+						     ? addr & CONT_PTE_MASK
-+						     : addr;
-+
-+			ptep = pte_offset_kernel((pmd_t *)hpte->ptep,
-+						 rounded_addr);
-+			if (!ptep)
-+				return -ENOMEM;
-+			if (sz == CONT_PTE_SIZE)
-+				hpte->shift = CONT_PTE_SHIFT;
-+			else
-+				hpte->shift = pte_cont(*ptep) ? CONT_PTE_SHIFT
-+							      : PAGE_SHIFT;
-+			hpte->ptep = ptep;
-+		} else if (hpte->shift == PUD_SHIFT) {
-+			pud_t *pudp = (pud_t *)hpte->ptep;
-+
-+			ptep = (pte_t *)pmd_alloc(mm, pudp, addr);
-+
-+			if (!ptep)
-+				return -ENOMEM;
-+			if (sz == CONT_PMD_SIZE)
-+				hpte->shift = CONT_PMD_SHIFT;
-+			else
-+				hpte->shift = pte_cont(*ptep) ? CONT_PMD_SHIFT
-+							      : PMD_SHIFT;
-+			hpte->ptep = ptep;
-+		} else if (hpte->shift == P4D_SHIFT) {
-+			ptep = (pte_t *)pud_alloc(mm, (p4d_t *)hpte->ptep, addr);
-+			if (!ptep)
-+				return -ENOMEM;
-+			hpte->shift = PUD_SHIFT;
-+			hpte->ptep = ptep;
-+		} else
-+			/*
-+			 * This also catches the cases of CONT_PMD_SHIFT and
-+			 * CONT_PTE_SHIFT. Those PTEs should always be leaves.
-+			 */
-+			BUG();
-+	}
-+
-+	return 0;
++	return test_type == TEST_HUGETLB || test_type == TEST_HUGETLB_HGM;
 +}
 +
- pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
- 		      unsigned long addr, unsigned long sz)
+ #define _err(fmt, ...)						\
+ 	do {							\
+ 		int ret = errno;				\
+@@ -348,7 +355,7 @@ static struct uffd_test_ops *uffd_test_ops;
+ 
+ static inline uint64_t uffd_minor_feature(void)
  {
+-	if (test_type == TEST_HUGETLB && map_shared)
++	if (test_is_hugetlb() && map_shared)
+ 		return UFFD_FEATURE_MINOR_HUGETLBFS;
+ 	else if (test_type == TEST_SHMEM)
+ 		return UFFD_FEATURE_MINOR_SHMEM;
+@@ -360,7 +367,7 @@ static uint64_t get_expected_ioctls(uint64_t mode)
+ {
+ 	uint64_t ioctls = UFFD_API_RANGE_IOCTLS;
+ 
+-	if (test_type == TEST_HUGETLB)
++	if (test_is_hugetlb())
+ 		ioctls &= ~(1 << _UFFDIO_ZEROPAGE);
+ 
+ 	if (!((mode & UFFDIO_REGISTER_MODE_WP) && test_uffdio_wp))
+@@ -1116,6 +1123,12 @@ static int userfaultfd_events_test(void)
+ 	char c;
+ 	struct uffd_stats stats = { 0 };
+ 
++	if (!test_uffdio_copy) {
++		printf("Skipping userfaultfd events test "
++			"(test_uffdio_copy=false)\n");
++		return 0;
++	}
++
+ 	printf("testing events (fork, remap, remove): ");
+ 	fflush(stdout);
+ 
+@@ -1169,6 +1182,12 @@ static int userfaultfd_sig_test(void)
+ 	char c;
+ 	struct uffd_stats stats = { 0 };
+ 
++	if (!test_uffdio_copy) {
++		printf("Skipping userfaultfd signal test "
++			"(test_uffdio_copy=false)\n");
++		return 0;
++	}
++
+ 	printf("testing signal delivery: ");
+ 	fflush(stdout);
+ 
+@@ -1438,6 +1457,12 @@ static int userfaultfd_stress(void)
+ 	pthread_attr_init(&attr);
+ 	pthread_attr_setstacksize(&attr, 16*1024*1024);
+ 
++	if (!test_uffdio_copy) {
++		printf("Skipping userfaultfd stress test "
++			"(test_uffdio_copy=false)\n");
++		bounces = 0;
++	}
++
+ 	while (bounces--) {
+ 		printf("bounces: %d, mode:", bounces);
+ 		if (bounces & BOUNCE_RANDOM)
+@@ -1598,6 +1623,13 @@ static void set_test_type(const char *type)
+ 		uffd_test_ops = &hugetlb_uffd_test_ops;
+ 		/* Minor faults require shared hugetlb; only enable here. */
+ 		test_uffdio_minor = true;
++	} else if (!strcmp(type, "hugetlb_shared_hgm")) {
++		map_shared = true;
++		test_type = TEST_HUGETLB_HGM;
++		uffd_test_ops = &hugetlb_uffd_test_ops;
++		/* Minor faults require shared hugetlb; only enable here. */
++		test_uffdio_minor = true;
++		test_uffdio_copy = false;
+ 	} else if (!strcmp(type, "shmem")) {
+ 		map_shared = true;
+ 		test_type = TEST_SHMEM;
+@@ -1607,8 +1639,10 @@ static void set_test_type(const char *type)
+ 		err("Unknown test type: %s", type);
+ 	}
+ 
++	hpage_size = default_huge_page_size();
+ 	if (test_type == TEST_HUGETLB)
+-		page_size = default_huge_page_size();
++		// TEST_HUGETLB_HGM gets small pages.
++		page_size = hpage_size;
+ 	else
+ 		page_size = sysconf(_SC_PAGE_SIZE);
+ 
+@@ -1658,19 +1692,26 @@ int main(int argc, char **argv)
+ 	nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+ 	nr_pages_per_cpu = atol(argv[2]) * 1024*1024 / page_size /
+ 		nr_cpus;
++	if (test_type == TEST_HUGETLB_HGM)
++		/*
++		 * `page_size` refers to the page_size we can use in
++		 * UFFDIO_CONTINUE. We still need nr_pages to be appropriately
++		 * aligned, so align it here.
++		 */
++		nr_pages_per_cpu -= nr_pages_per_cpu % (hpage_size / page_size);
+ 	if (!nr_pages_per_cpu) {
+ 		_err("invalid MiB");
+ 		usage();
+ 	}
++	nr_pages = nr_pages_per_cpu * nr_cpus;
+ 
+ 	bounces = atoi(argv[3]);
+ 	if (bounces <= 0) {
+ 		_err("invalid bounces");
+ 		usage();
+ 	}
+-	nr_pages = nr_pages_per_cpu * nr_cpus;
+ 
+-	if (test_type == TEST_HUGETLB && map_shared) {
++	if (test_is_hugetlb() && map_shared) {
+ 		if (argc < 5)
+ 			usage();
+ 		huge_fd = open(argv[4], O_CREAT | O_RDWR, 0755);
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

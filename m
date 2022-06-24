@@ -2,52 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D16B559D00
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A475559D03
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbiFXPI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 11:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S232313AbiFXPJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 11:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231672AbiFXPIY (ORCPT
+        with ESMTP id S231672AbiFXPJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 11:08:24 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7323E0CB
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:08:22 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5DD7D200008;
-        Fri, 24 Jun 2022 15:08:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656083301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z6NSlrVRFRynl/P9uRgQINLcwfmlxyYneaSXB7ysLYI=;
-        b=Il3PR66ADF+iXcu0f6Y9QZbVVK0mLk607IPrgZ3yxISVfVlAZyhsbsHWmHgao2qboQBjgC
-        RbZwc0uDuaXiw+OiZwtEEQZpuN6jxg6IkYbuLAsoSiHqEy5cmZYQOMwniCui7B/Sc9fVTW
-        7h30PPUZby1ko42o3pwI7JOTTNL5Mbj4ikyANydgmg5cWmvBFHVE2q+hd1I3dRoUQcZmDy
-        lmV4Nxo78cL1GimRz4SCg2lDUAbUIBQ7x0U5zdt/SYNF7shGypnS//QufV/IZsYfriZ1dO
-        iTx2RD3NK5w0dIPDkOZ2tubNnHvLdi69LSRdinq8Nb8sZw3tbX2bp1VysKS8sw==
-Date:   Fri, 24 Jun 2022 17:08:19 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     kbuild-all@lists.01.org, lkp@intel.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm: fix device_node_continue.cocci warnings (fwd)
-Message-ID: <YrXTY77HjvNnuc1B@aptenodytes>
-References: <alpine.DEB.2.22.394.2206121300120.3447@hadrien>
+        Fri, 24 Jun 2022 11:09:49 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D31B4B1CD;
+        Fri, 24 Jun 2022 08:09:41 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25OEfnIU004966;
+        Fri, 24 Jun 2022 15:09:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=BNMEw2FCh/42/TTd/gAiREnkz/dO+iNB1RdK2H0KYhE=;
+ b=N7d+ZFa+CHZEf5Q8R8gR9Cxak8/vevyKj9pdZUHzIViTsnHIDD8DePj2pwThzwS94nci
+ FKygwf0OcJBZVQGtl80ZQb423dvP9FJWW7FD22tYbnefKrR9mqM8SdJATSEDWp+YHZCO
+ uqB+IapEsFbG1iWKE9eUZIIFEnTFHHm1nnc5bfvqKpbmBT2vHjasiOEpZbMbAEBNPnUK
+ RDmpS2dX0+Ffdxtogx7PuYKy5UxBOoJKeD++4JMHsCzWDRrl5qDbrxaBJjXF7bPQu2bL
+ 5U0TJ2LviNzg3yTyb+dL0ur5VsPdIJ016Ql8vMJQZu1YYSnI4tmf4GHHmYEOxbNx7jak mQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gwf8rgtv6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Jun 2022 15:09:41 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25OEgBoT005497;
+        Fri, 24 Jun 2022 15:09:40 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gwf8rgtru-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Jun 2022 15:09:40 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25OEoT5a021530;
+        Fri, 24 Jun 2022 15:09:36 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3gvuj7sjmb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 24 Jun 2022 15:09:36 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25OF9XHi20840796
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 Jun 2022 15:09:33 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5288952051;
+        Fri, 24 Jun 2022 15:09:33 +0000 (GMT)
+Received: from [9.171.40.178] (unknown [9.171.40.178])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B34215204E;
+        Fri, 24 Jun 2022 15:09:30 +0000 (GMT)
+Message-ID: <258450b3-e8e0-9868-4b38-1c39421cef05@linux.ibm.com>
+Date:   Fri, 24 Jun 2022 17:09:29 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wLn5nGH9z1X1MW5b"
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2206121300120.3447@hadrien>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v10 2/3] KVM: s390: guest support for topology function
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
+        seiden@linux.ibm.com, nrb@linux.ibm.com
+References: <20220620125437.37122-1-pmorel@linux.ibm.com>
+ <20220620125437.37122-3-pmorel@linux.ibm.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <20220620125437.37122-3-pmorel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Bvs2Vap4A2HKVEYiXtjjwjcHmXw4b5JU
+X-Proofpoint-GUID: P4_-43GJZ3SP3jYMwlfq9Fz4ZaS_gMI8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-24_07,2022-06-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ impostorscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 phishscore=0 priorityscore=1501 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206240058
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,98 +95,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---wLn5nGH9z1X1MW5b
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Julia,
-
-On Sun 12 Jun 22, 13:02, Julia Lawall wrote:
-> The of_node_put does not seem to be needed.  Note that there is none at
-> the preceeding continues.
-
-That looks like a correct fix, thanks!
-
-Paul
-=20
-> julia
->=20
-> ---------- Forwarded message ----------
-> Date: Sat, 11 Jun 2022 06:02:45 +0800
-> From: kernel test robot <lkp@intel.com>
-> To: kbuild@lists.01.org
-> Cc: lkp@intel.com, Julia Lawall <julia.lawall@lip6.fr>
-> Subject: [PATCH] drm: fix device_node_continue.cocci warnings
->=20
-> CC: kbuild-all@lists.01.org
-> BCC: lkp@intel.com
-> CC: Linux Memory Management List <linux-mm@kvack.org>
-> TO: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> CC: Maxime Ripard <mripard@kernel.org>
-> CC: David Airlie <airlied@linux.ie>
-> CC: Daniel Vetter <daniel@ffwll.ch>
-> CC: dri-devel@lists.freedesktop.org
-> CC: linux-kernel@vger.kernel.org
->=20
-> From: kernel test robot <lkp@intel.com>
->=20
-> drivers/gpu/drm/logicvc/logicvc_layer.c:616:2-13: ERROR: probable double =
-put.
->=20
->  Device node iterators put the previous value of the index variable, so an
->  explicit put causes a double put.
->=20
-> Generated by: scripts/coccinelle/iterators/device_node_continue.cocci
->=20
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: kernel test robot <lkp@intel.com>
+On 6/20/22 14:54, Pierre Morel wrote:
+> We report a topology change to the guest for any CPU hotplug.
+> 
+> The reporting to the guest is done using the Multiprocessor
+> Topology-Change-Report (MTCR) bit of the utility entry in the guest's
+> SCA which will be cleared during the interpretation of PTF.
+> 
+> On every vCPU creation we set the MCTR bit to let the guest know the
+> next time he uses the PTF with command 2 instruction that the
+> topology changed and that he should use the STSI(15.1.x) instruction
+> to get the topology details.
+> 
+> STSI(15.1.x) gives information on the CPU configuration topology.
+> Let's accept the interception of STSI with the function code 15 and
+> let the userland part of the hypervisor handle it when userland
+> support the CPU Topology facility.
+> 
+> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
 > ---
->=20
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
-it master
-> head:   6d0c806803170f120f8cb97b321de7bd89d3a791
-> commit: efeeaefe9be56e8ae5e5b4e9ff6d2275ec977ec5 [2027/2566] drm: Add sup=
-port for the LogiCVC display controller
-> :::::: branch date: 17 hours ago
-> :::::: commit date: 31 hours ago
->=20
-> Please take the patch only if it's a positive warning. Thanks!
->=20
->  drivers/gpu/drm/logicvc/logicvc_layer.c |    2 --
->  1 file changed, 2 deletions(-)
->=20
-> --- a/drivers/gpu/drm/logicvc/logicvc_layer.c
-> +++ b/drivers/gpu/drm/logicvc/logicvc_layer.c
-> @@ -612,8 +612,6 @@ int logicvc_layers_init(struct logicvc_d
->  		ret =3D logicvc_layer_init(logicvc, layer_node, index);
->  		if (ret)
->  			goto error;
-> -
-> -		of_node_put(layer_node);
->  	}
->=20
->  	of_node_put(layers_node);
+>  arch/s390/include/asm/kvm_host.h | 11 ++++++++---
+>  arch/s390/kvm/kvm-s390.c         | 27 ++++++++++++++++++++++++++-
+>  arch/s390/kvm/priv.c             | 15 +++++++++++----
+>  arch/s390/kvm/vsie.c             |  3 +++
+>  4 files changed, 48 insertions(+), 8 deletions(-)
+> 
+[...]
 
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 8fcb56141689..95b96019ca8e 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -1691,6 +1691,25 @@ static int kvm_s390_get_cpu_model(struct kvm *kvm, struct kvm_device_attr *attr)
+>  	return ret;
+>  }
+> 
+> +/**
+> + * kvm_s390_sca_set_mtcr
+> + * @kvm: guest KVM description
+> + *
+> + * Is only relevant if the topology facility is present,
+> + * the caller should check KVM facility 11
+> + *
+> + * Updates the Multiprocessor Topology-Change-Report to signal
+> + * the guest with a topology change.
+> + */
+> +static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
+> +{
+> +	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
+> +
+> +	ipte_lock(kvm);
 
---wLn5nGH9z1X1MW5b
-Content-Type: application/pgp-signature; name="signature.asc"
+Why do we need to take the ipte lock here and in patch 3?
 
------BEGIN PGP SIGNATURE-----
+> +	sca->utility |= SCA_UTILITY_MTCR;
+> +	ipte_unlock(kvm);
+> +}
 
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmK102MACgkQ3cLmz3+f
-v9H80wf+IWSsArK5aJYsP0w7K00FEbqtnEBvifJqcDGhGEgugYMyCDYVJI6Y29Qn
-EKexL7vlrZUIrHSz/XUXnucgUplWrIt1cr4l1IWSdypaYqONSIdnmVPGOxebhjTs
-UCJf7WtnFPLSndVLOhGvPa03MXG3c4LrZnLWMl+jWLHBEWeycRAFcIVV69veKb8e
-Cxm8OIh9SnqgXxv51JWJ3Gs+M38/vuCdWiaoSHqteHpa2b+8a6XeCgmoUgPhDLqk
-zdkNgSyomugvg/wBv0HsypWzO40/xb2c7bJ1qEV5oTxUCfkSeTH0MAHa8FD8jgN1
-0m5Ua77B7Yw0sZt09WkP+M/njhyHIw==
-=IADY
------END PGP SIGNATURE-----
-
---wLn5nGH9z1X1MW5b--
+[...]

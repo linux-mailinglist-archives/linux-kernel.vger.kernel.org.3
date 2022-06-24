@@ -2,59 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C92558EBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 05:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD693558EC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 05:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbiFXDF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 23:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
+        id S229912AbiFXDJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 23:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiFXDFX (ORCPT
+        with ESMTP id S229599AbiFXDJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 23:05:23 -0400
-Received: from ZXSHCAS2.zhaoxin.com (ZXSHCAS2.zhaoxin.com [210.0.225.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DBE33F;
-        Thu, 23 Jun 2022 20:05:17 -0700 (PDT)
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS2.zhaoxin.com
- (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Fri, 24 Jun
- 2022 11:05:15 +0800
-Received: from [10.32.56.37] (10.32.56.37) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.27; Fri, 24 Jun
- 2022 11:05:13 +0800
-Subject: Re: [PATCH V1] x86/cstate: Add Zhaoxin/Centaur ACPI Cx FFH MWAIT
- support
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
-        <LindaChai@zhaoxin.com>, <LeoLiu@zhaoxin.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-References: <0b583b7e-dcd3-be51-f367-1c12ac841d3f@zhaoxin.com>
- <ec121630-1ee5-1336-1ed4-04506f0c4129@intel.com>
-From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-Message-ID: <e4fd583f-dafd-e2b5-7880-f12684f3e252@zhaoxin.com>
-Date:   Fri, 24 Jun 2022 11:05:12 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 23 Jun 2022 23:09:07 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA4C313AE;
+        Thu, 23 Jun 2022 20:09:05 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LThsm5TPjz4xLT;
+        Fri, 24 Jun 2022 13:09:00 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1656040142;
+        bh=K++hI2FDkjV3G5478DzfpzmGcEObLlrEm0qg0VKmAH4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=JHX2Ao+4jSwUp4Lj3ajWxHaaPO+OTH7kx/LBQVq9vuerTA4WfbzY9j1VeA0zTZGbv
+         gcWkiP8DEDI6VrW7PNNv7SmUrjOTBHcGIoIKzsLffPV4aq49KcTKjF1roSxxvzMKok
+         tiRC1n0QTPGF7Bzel47PCPX+J+KSGmVd+Ui9HJ9soXKau2mD1hHEjSNxiyVVXLTlpF
+         lWYq24g9zZHP87qx2D4YMG9CXWdExUBszaJL74+t+p7QKOCh3XK7byz3HiuelNGnza
+         q1+9XMBDq6/VqO8NipT1I3rObNZs3VaiOK6VHqpdduGeZxQWDhaEsMY8ks7q4Vzsoi
+         lnyvRUex8xctA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Marek Behun <marek.behun@nic.cz>,
+        Josef Schlehofer <josef.schlehofer@nic.cz>
+Subject: Re: [PATCH] powerpc: dts: Add DTS file for CZ.NIC Turris 1.x routers
+In-Reply-To: <20220511143712.22550-1-pali@kernel.org>
+References: <20220511143712.22550-1-pali@kernel.org>
+Date:   Fri, 24 Jun 2022 13:08:59 +1000
+Message-ID: <877d5669mc.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-In-Reply-To: <ec121630-1ee5-1336-1ed4-04506f0c4129@intel.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.32.56.37]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,58 +55,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/6/2022 23:55, Dave Hansen wrote:
-> On 6/22/22 18:26, Tony W Wang-oc wrote:
->> Recent Zhaoxin/Centaur CPUs support X86_FEATURE_MWAIT that implies
->> the MONITOR/MWAIT instructions can be used for ACPI Cx state.
->> The BIOS declares Cx state in _CST object to use FFH on Zhaoxin/Centaur
->> systems. So let function ffh_cstate_init() support These CPUs too.
->>
->> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
->> ---
->>   arch/x86/kernel/acpi/cstate.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
->> index 7945eae..d4185e1 100644
->> --- a/arch/x86/kernel/acpi/cstate.c
->> +++ b/arch/x86/kernel/acpi/cstate.c
->> @@ -213,7 +213,9 @@ static int __init ffh_cstate_init(void)
->>
->>       if (c->x86_vendor != X86_VENDOR_INTEL &&
->>           c->x86_vendor != X86_VENDOR_AMD &&
->> -        c->x86_vendor != X86_VENDOR_HYGON)
->> +        c->x86_vendor != X86_VENDOR_HYGON &&
->> +        c->x86_vendor != X86_VENDOR_CENTAUR &&
->> +        c->x86_vendor != X86_VENDOR_ZHAOXIN)
->>           return -1;
-> 
-> Many of the changelogs that add new vendors here go on about particular
-> C states declared in the _CST object and contents of CPUID leaf 5.
-> 
-> Why do we even _have_ a vendor check here?  Shouldn't the code just be
-> going and doing the validation of the _CST object and CPUID that the
-> changelogs blather on about?
-> 
+Pali Roh=C3=A1r <pali@kernel.org> writes:
+> CZ.NIC Turris 1.0 and 1.1 are open source routers, they have dual-core
+> PowerPC Freescale P2020 CPU and are based on Freescale P2020RDB-PC-A boar=
+d.
+> Hardware design is fully open source, all firmware and hardware design
+> files are available at Turris project website:
+>
+> https://docs.turris.cz/hw/turris-1x/turris-1x/
+> https://project.turris.cz/en/hardware.html
+>
+> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
+> ---
+>  arch/powerpc/boot/dts/turris1x.dts | 470 +++++++++++++++++++++++++++++
+>  1 file changed, 470 insertions(+)
+>  create mode 100644 arch/powerpc/boot/dts/turris1x.dts
 
-Yes, agree!
+The headers say you Cc'ed this to the devicetree list, but I don't see
+it in the devicetree patchwork:
 
-Will change as below. Please help to check if it is OK. Thanks a lot.
-  static int __init ffh_cstate_init(void)
-  {
--       struct cpuinfo_x86 *c = &boot_cpu_data;
--
--       if (c->x86_vendor != X86_VENDOR_INTEL &&
--           c->x86_vendor != X86_VENDOR_AMD &&
--           c->x86_vendor != X86_VENDOR_HYGON)
-+       if (!boot_cpu_has(X86_FEATURE_MWAIT))
-                 return -1;
+  https://patchwork.ozlabs.org/project/devicetree-bindings/list/?state=3D*&=
+q=3Dturris&archive=3Dboth
 
-> Intel certainly made the original sin on this one (see 991528d7348), but
-> I hope _something_ changed in the 16 years since that patch went in.
-> .
-> 
+Which means it hasn't been run through Rob's CI scripts.
 
--- 
-Sincerely
-TonyWWang-oc
+Maybe try a resend?
+
+cheers

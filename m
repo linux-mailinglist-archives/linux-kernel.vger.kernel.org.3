@@ -2,146 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35989558FBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 06:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D4B558FF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 06:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiFXEXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 00:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
+        id S229621AbiFXE1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 00:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiFXEW4 (ORCPT
+        with ESMTP id S229441AbiFXE1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 00:22:56 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB933DB9
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 21:22:54 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-317741c86fdso13636747b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 21:22:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LrpVbauQhlY6sbHoa1+haYyof5/5LMZu+rrUVujXJmY=;
-        b=DVqUHWwjqfSyUrKEEmRQ3laXS5aZCV+h8P/IkyQC8m5k2r+n3tUMsOoQKXSoh9WRlI
-         m09tKWwK3GiflUWF0Dr20XIr6c7X7GVgN3HpaTX/FUe7X5ZdSfJ4ElUGmC7149/pIdQJ
-         9o0+iH8IHPVcRhmTCZQMzuuMazOytWvgsLgpPgHhvHqc3gB5h6ZXqeagU/N6bqv7xKHW
-         U5kAm0QEVu6jjxLZp8nNu53bqGtb1ImVP9XTBXqxr0HqrLOQoUvfXuq/KF0SsTK5lMEB
-         F8UaqHOrxK2yqpZS0IusbDmoUsv65akGOoFjouvrzFa14L3TLe/6MHJKyUHyZ6f5eNMe
-         WH8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LrpVbauQhlY6sbHoa1+haYyof5/5LMZu+rrUVujXJmY=;
-        b=nY4X5qL5T75EmD1DK53DqacBihhuFnv9oAx+BYu0Nx/GUwvs7LCma+MLbZei287Qmb
-         AEUCrEvDbuQcdOkuM6p/+cE2srCFRzZL4XwM9mCSTQ6BHtBVBJVNmOtT7H+p0/DmRJtw
-         quyLRlv6WbcbtNKkx2gYPp5fwQdkspHuSIA7mXIEkbcEoNsZHJpX6P+gqvFyhLEYbyeW
-         E1JVr4ajB5Qp2i1RY/1QyYeeuSFkLR1BiExuXfRc/4i+c9uJ38auFMQ1VJCqW7w0DfGa
-         Yn2v59SIsdTtrEhR+IqNgtD1MT9DbM9GyxvgPVwgrRh4MvSk66uou6LD/uO7VMBXTsh0
-         FocA==
-X-Gm-Message-State: AJIora/D9ADlPwT2kvokYtWE/N+XbqNsMKvoskyk1xV/pqcDUbBtJVv9
-        ARcz9ZR5UOaZZdALLu5sW0YIB+S5rZV1AHHX/1NZx2lgURs=
-X-Google-Smtp-Source: AGRyM1sL30OODStpdjLZ8dh2J46BQTAQn1IcN8JlLsvqWmybh46yRWiK6BObk+Guv/QOX5qo3870LRterozi/iWkdf0=
-X-Received: by 2002:a81:9b93:0:b0:317:8c9d:4c22 with SMTP id
- s141-20020a819b93000000b003178c9d4c22mr14652446ywg.278.1656044573688; Thu, 23
- Jun 2022 21:22:53 -0700 (PDT)
+        Fri, 24 Jun 2022 00:27:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B268D6808C
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 21:27:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 468A9620E3
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 04:27:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC198C34114;
+        Fri, 24 Jun 2022 04:27:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656044852;
+        bh=V15RsvX1+kM5FL7HzYFUlsvJt53ggBmFiKd/GuXmjCs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NmvU82paGPiRMAiacFz4FNJVJxeI1JbNtw1jbHoW5e3CVlH8tpmUdd6lv5BSwcdM1
+         v4uL9Z7gi4ooLx2Ipm3aBWYTsPLztS/myXB1ropefpunTGcqBnKgapgHR8Z7qNpNlm
+         CtAWngEOk9V9dqcka22jrMTwBN35I0NbNLic/7xIH46rzszA/U65ddirNeJx92VHb4
+         /F28tF9VLYMqgi/oZAwrTyK4Tk/CN5emI9bQkR3X7AoHtWD5GIAt7+F7/aE2Bxtxt0
+         /wQ8RzJWkoUSdHAEjCp57j6a422udJVCSevxb2JaSHjkTYDn7TLqN9dkFAUjOM+gkV
+         OxLqHRgK6hALw==
+Date:   Fri, 24 Jun 2022 09:57:28 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bard Liao <yung-chuan.liao@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        tiwai@suse.de, broonie@kernel.org, gregkh@linuxfoundation.org,
+        srinivas.kandagatla@linaro.org,
+        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+        bard.liao@intel.com, peter.ujfalusi@linux.intel.com,
+        ranjani.sridharan@linux.intel.com
+Subject: Re: [PATCH v2 1/2] soundwire: Intel: add trigger callback
+Message-ID: <YrU9MEAVQojxE5i4@matsya>
+References: <20220616011758.21155-1-yung-chuan.liao@linux.intel.com>
+ <20220616011758.21155-2-yung-chuan.liao@linux.intel.com>
 MIME-Version: 1.0
-References: <20220619150456.GB34471@xsang-OptiPlex-9020> <20220622172857.37db0d29@kernel.org>
- <CADvbK_csvmkKe46hT9792=+Qcjor2EvkkAnr--CJK3NGX-N9BQ@mail.gmail.com>
- <CADvbK_eQUmb942vC+bG+NRzM1ki1LiCydEDR1AezZ35Jvsdfnw@mail.gmail.com>
- <20220623185730.25b88096@kernel.org> <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
-In-Reply-To: <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 24 Jun 2022 06:22:42 +0200
-Message-ID: <CANn89iLZYGOjTFThvq-J678BtPtqsywwxFekt9XTcPxk_La8eg@mail.gmail.com>
-Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Xin Long <lucien.xin@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        network dev <netdev@vger.kernel.org>,
-        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        "Tang, Feng" <feng.tang@intel.com>, zhengjun.xing@linux.intel.com,
-        fengwei.yin@intel.com, Ying Xu <yinxu@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220616011758.21155-2-yung-chuan.liao@linux.intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 6:13 AM Eric Dumazet <edumazet@google.com> wrote:
->
-> On Fri, Jun 24, 2022 at 3:57 AM Jakub Kicinski <kuba@kernel.org> wrote:
-> >
-> > On Thu, 23 Jun 2022 18:50:07 -0400 Xin Long wrote:
-> > > From the perf data, we can see __sk_mem_reduce_allocated() is the one
-> > > using CPU the most more than before, and mem_cgroup APIs are also
-> > > called in this function. It means the mem cgroup must be enabled in
-> > > the test env, which may explain why I couldn't reproduce it.
-> > >
-> > > The Commit 4890b686f4 ("net: keep sk->sk_forward_alloc as small as
-> > > possible") uses sk_mem_reclaim(checking reclaimable >= PAGE_SIZE) to
-> > > reclaim the memory, which is *more frequent* to call
-> > > __sk_mem_reduce_allocated() than before (checking reclaimable >=
-> > > SK_RECLAIM_THRESHOLD). It might be cheap when
-> > > mem_cgroup_sockets_enabled is false, but I'm not sure if it's still
-> > > cheap when mem_cgroup_sockets_enabled is true.
-> > >
-> > > I think SCTP netperf could trigger this, as the CPU is the bottleneck
-> > > for SCTP netperf testing, which is more sensitive to the extra
-> > > function calls than TCP.
-> > >
-> > > Can we re-run this testing without mem cgroup enabled?
-> >
-> > FWIW I defer to Eric, thanks a lot for double checking the report
-> > and digging in!
->
-> I did tests with TCP + memcg and noticed a very small additional cost
-> in memcg functions,
-> because of suboptimal layout:
->
-> Extract of an internal Google bug, update from June 9th:
->
-> --------------------------------
-> I have noticed a minor false sharing to fetch (struct
-> mem_cgroup)->css.parent, at offset 0xc0,
-> because it shares the cache line containing struct mem_cgroup.memory,
-> at offset 0xd0
->
-> Ideally, memcg->socket_pressure and memcg->parent should sit in a read
-> mostly cache line.
-> -----------------------
->
-> But nothing that could explain a "-69.4% regression"
+On 16-06-22, 09:17, Bard Liao wrote:
+> When a pipeline is split into FE and BE parts, the BE pipeline may need to
+> be triggered separately in the BE trigger op. So add the trigger callback
+> in the link_res ops that will be invoked during BE DAI trigger.
+> 
+> Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+> Reviewed-by: Rander Wang <rander.wang@intel.com>
+> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> ---
+>  drivers/soundwire/intel.c           | 8 ++++++++
+>  include/linux/soundwire/sdw_intel.h | 1 +
+>  2 files changed, 9 insertions(+)
+> 
+> diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
+> index 505c5ef061e3..2e7c27d303b4 100644
+> --- a/drivers/soundwire/intel.c
+> +++ b/drivers/soundwire/intel.c
+> @@ -1004,9 +1004,17 @@ static int intel_trigger(struct snd_pcm_substream *substream, int cmd, struct sn
+>  {
+>  	struct sdw_cdns *cdns = snd_soc_dai_get_drvdata(dai);
+>  	struct sdw_intel *sdw = cdns_to_intel(cdns);
+> +	struct sdw_intel_link_res *res = sdw->link_res;
+>  	struct sdw_cdns_dma_data *dma;
+>  	int ret = 0;
+>  
+> +	/* The .trigger callback is used to send required IPC to audio
+> +	 * firmware. The .free_stream callback will still be called
+> +	 * by intel_free_stream() in the TRIGGER_SUSPEND case.
+> +	 */
 
-I guess the test now hits memcg limits more often, forcing expensive reclaim,
-and the memcg limits need some adjustments.
+we dont use this style multi-line comment, pls fix it to:
+        /*
+         * The .trigger callback is used to send required IPC to ..
+         * ...
+         */
 
-Overall, tests enabling memcg should probably need fine tuning, I will
-defer to Intel folks.
+with that fixed:
 
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
->
-> memcg has a very similar strategy of per-cpu reserves, with
-> MEMCG_CHARGE_BATCH being 32 pages per cpu.
->
-> It is not clear why SCTP with 10K writes would overflow this reserve constantly.
->
-> Presumably memcg experts will have to rework structure alignments to
-> make sure they can cope better
-> with more charge/uncharge operations, because we are not going back to
-> gigantic per-socket reserves,
-> this simply does not scale.
+> +	if (res->ops && res->ops->trigger)
+> +		res->ops->trigger(dai, cmd, substream->stream);
+> +
+>  	dma = snd_soc_dai_get_dma_data(dai, substream);
+>  	if (!dma) {
+>  		dev_err(dai->dev, "failed to get dma data in %s\n",
+> diff --git a/include/linux/soundwire/sdw_intel.h b/include/linux/soundwire/sdw_intel.h
+> index b5b489ea1aef..ec16ae49e6a4 100644
+> --- a/include/linux/soundwire/sdw_intel.h
+> +++ b/include/linux/soundwire/sdw_intel.h
+> @@ -121,6 +121,7 @@ struct sdw_intel_ops {
+>  			     struct sdw_intel_stream_params_data *params_data);
+>  	int (*free_stream)(struct device *dev,
+>  			   struct sdw_intel_stream_free_data *free_data);
+> +	int (*trigger)(struct snd_soc_dai *dai, int cmd, int stream);
+>  };
+>  
+>  /**
+> -- 
+> 2.17.1
+
+-- 
+~Vinod

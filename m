@@ -2,133 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B72F55A47F
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA26855A483
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231405AbiFXWxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 18:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
+        id S231518AbiFXWxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 18:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiFXWxb (ORCPT
+        with ESMTP id S230402AbiFXWxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 18:53:31 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597B443EF7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:53:30 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id o18so3294250plg.2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 15:53:30 -0700 (PDT)
+        Fri, 24 Jun 2022 18:53:50 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB0A45793;
+        Fri, 24 Jun 2022 15:53:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tVvmPFlVYh1eywyk8X/ZOhSRyJAUFIuskvR1LEIJ1vQ=;
-        b=s8He2MsJOXCaycrGX1mG1fxPyK0GY+qid/53Ua4JIpGXeMfcDd0DpeNADBbGJb0dxX
-         bZiMS/Li4XNAF466IkSip2+IKEZTgaafJ+UhHRLp9YCj3k4Z0YIhNKjTOvtbFoHbC67d
-         1KaAr6lnZjWTHOIswYWgxW4Ibmcarfa9HMDP8CMW76N6YEQ1Kd0EEaTAmM4o2iYvoWN6
-         YiE1gTDSV6xkD8QitprAPGpVCBl4M09SZw/7BBlD/Pvzih4JcxGNFxOH6/CCA8GJ/Dvt
-         Xsi8/LCcIKXN6IXFT4qthznVMO5+ArrnlP8cojvRXovuos9l7X0++8XfeJXVZqr0+vG8
-         tLiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tVvmPFlVYh1eywyk8X/ZOhSRyJAUFIuskvR1LEIJ1vQ=;
-        b=h3lJeZXUqz2ErIOxs5sxcaFUzNaP/Rk0DYfp7i3z8QXSy4KXJ+n6Ify/8wr6A1D2kj
-         A7AawAFYPsDlSYKs/OkjMdz5MIv1HHwTkrXHgpj480Y9gb6P17wsnc7ocTdjcq9ZmL53
-         yIgqK77DUNJgoXNzPvo7qhSrBpw7E85jaL+ruJHmJtdrZMKUmLm4lkaTPk9Myt3jkhY8
-         CHyQv38XoKyD08TTEPowkg28g1ZtmNuCKStbjWCxCb7CHTEk5XS6Q+SWY/cWlPFM3Akg
-         H8PDgknUdG8isefZ/QJ6DgFKZCyz9XjvPcPvz2Gvujxi072OzHgdux8AOTReZfk5aghF
-         Bu4Q==
-X-Gm-Message-State: AJIora+4PrFAdZe4QSvp+T2C1tAxxQYjdTCSRrG3GCAg7qiGWx/vQCq/
-        BKKGfMII3HZ4WkOxQJtsgNVZLg==
-X-Google-Smtp-Source: AGRyM1sikow0gG68DKTKWU8HtFkMlDC51Zl4CzpPGehlxEKYiexl56kpexQ5GM+J4tWOjs6aJ5EmFg==
-X-Received: by 2002:a17:902:6b8c:b0:168:fee5:884 with SMTP id p12-20020a1709026b8c00b00168fee50884mr1348279plk.105.1656111209721;
-        Fri, 24 Jun 2022 15:53:29 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id bj23-20020a056a00319700b0052584b69a50sm218842pfb.66.2022.06.24.15.53.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 15:53:29 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 22:53:25 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Lan Tianyu <Tianyu.Lan@microsoft.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/5] KVM: x86/mmu: Fix wrong gfn range of tlb flushing in
- kvm_set_pte_rmapp()
-Message-ID: <YrZAZXHJTsUp8yuP@google.com>
-References: <cover.1656039275.git.houwenlong.hwl@antgroup.com>
- <a92b4b56116f0f71ffceab2b4ff3c03f47fd468f.1656039275.git.houwenlong.hwl@antgroup.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656111228; x=1687647228;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TZOMCG67drrunYm+DJzfXcI4dQeWRX6/LkhF4yBxQWQ=;
+  b=vYWnQiKk6jhYNBOuCR2i0QMkAesFN9NsOHrBQ/3KXIgQksUmGI270Oxm
+   ygsPIG8RNW4Kp/sH6Y2RVms8kRNyKfC9A+xMHD12FYqw7BpS7Pnko5gKG
+   hyDceGpj4nktsQjVks5HmE6C10zT+0Q7/6A3qtd+2cG2MMbt4hOS6l/70
+   U=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 24 Jun 2022 15:53:48 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 15:53:47 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 24 Jun 2022 15:53:47 -0700
+Received: from [10.110.58.84] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 24 Jun
+ 2022 15:53:45 -0700
+Message-ID: <326912ff-9771-0711-366d-79acd436908b@quicinc.com>
+Date:   Fri, 24 Jun 2022 15:53:45 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a92b4b56116f0f71ffceab2b4ff3c03f47fd468f.1656039275.git.houwenlong.hwl@antgroup.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1 2/3] drm/msm/dp: decoupling dp->id out of dp
+ controller_id at scxxxx_dp_cfg table
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
+        <daniel@ffwll.ch>, <dianders@chromium.org>,
+        <dmitry.baryshkov@linaro.org>, <dri-devel@lists.freedesktop.org>,
+        <robdclark@gmail.com>, <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com>
+ <1656090912-18074-3-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n52RW+UFJ=hqMWjwR8qvEbww7QjzPW1nhL3Atd97QXAnYw@mail.gmail.com>
+ <007ea4c9-9701-f4ab-3278-5d36bf2018c4@quicinc.com>
+ <CAE-0n53kNCK0ajHfY2WQr5HEQZtZSBLnhfbTuZwaUNEOZhsKPg@mail.gmail.com>
+ <fa7f8bf1-33cd-5515-0143-6596df2bd740@quicinc.com>
+ <CAE-0n51g-EVsC-i9=sJV-ySa8VnE+yT7cg=b-TNMi9+3uBiOVA@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n51g-EVsC-i9=sJV-ySa8VnE+yT7cg=b-TNMi9+3uBiOVA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022, Hou Wenlong wrote:
-> When the spte of hupe page is dropped in kvm_set_pte_rmapp(),
-> the whole gfn range covered by the spte should be flushed.
-> However, rmap_walk_init_level() doesn't align down the gfn
-> for new level like tdp iterator does, then the gfn used in
-> kvm_set_pte_rmapp() is not the base gfn of huge page. And
-> the size of gfn range is wrong too for huge page. Since
-> the base gfn of huge page is more meaningful during the
-> rmap walking, so align down the gfn for new level and use
-> the correct size of huge page for tlb flushing in
-> kvm_set_pte_rmapp().
 
-It's also worth noting that kvm_set_pte_rmapp() is the other user of the rmap
-iterators that consumes @gfn, i.e. modifying iterator->gfn is safe-ish.
+On 6/24/2022 3:19 PM, Stephen Boyd wrote:
+> Quoting Kuogee Hsieh (2022-06-24 14:49:57)
+>> On 6/24/2022 2:40 PM, Stephen Boyd wrote:
+>>> Quoting Kuogee Hsieh (2022-06-24 14:17:50)
+>>>> On 6/24/2022 1:00 PM, Stephen Boyd wrote:
+>>>>> Quoting Kuogee Hsieh (2022-06-24 10:15:11)
+>>>>>> Current the index (dp->id) of DP descriptor table (scxxxx_dp_cfg[]) are tightly
+>>>>>> coupled with DP controller_id. This means DP use controller id 0 must be placed
+>>>>>> at first entry of DP descriptor table (scxxxx_dp_cfg[]). Otherwise the internal
+>>>>>> INTF will mismatch controller_id. This will cause controller kickoff wrong
+>>>>>> interface timing engine and cause dpu_encoder_phys_vid_wait_for_commit_done
+>>>>>> vblank timeout error.
+>>>>>>
+>>>>>> This patch add controller_id field into struct msm_dp_desc to break the tightly
+>>>>>> coupled relationship between index (dp->id) of DP descriptor table with DP
+>>>>>> controller_id.
+>>>>> Please no. This reverts the intention of commit bb3de286d992
+>>>>> ("drm/msm/dp: Support up to 3 DP controllers")
+>>>>>
+>>>>>        A new enum is introduced to document the connection between the
+>>>>>        instances referenced in the dpu_intf_cfg array and the controllers in
+>>>>>        the DP driver and sc7180 is updated.
+>>>>>
+>>>>> It sounds like the intent of that commit failed to make a strong enough
+>>>>> connection. Now it needs to match the INTF number as well? I can't
+>>>>> really figure out what is actually wrong, because this patch undoes that
+>>>>> intentional tight coupling. Is the next patch the important part that
+>>>>> flips the order of the two interfaces?
+>>>> The commit bb3de286d992have two problems,
+>>>>
+>>>> 1)  The below sc7280_dp_cfg will not work, if eDP use
+>>>> MSM_DP_CONTROLLER_2 instead of  MSM_DP_CONTROLLER_1
+>>> Why would we use three indices for an soc that only has two indices
+>>> possible? This is not a real problem?
+>> I do not what will happen at future, it may have more dp controller use
+>> late.
+>>
+>> at current soc, below table has only one eDP will not work either.
+>>
+>> static const struct msm_dp_config sc7280_dp_cfg = {
+>>            .descs = (const struct msm_dp_desc[]) {
+>>                    [MSM_DP_CONTROLLER_1] = { .io_start = 0x0aea0000,
+>> .connector_type = DRM_MODE_CONNECTOR_eDP, .wide_bus_en = true },
+>>
+>>            .num_descs = 1,
+> So the MSM_DP_CONTROLLER_* number needs to match what exactly?MSM
 
-> Fixes: c3134ce240eed ("KVM: Replace old tlb flush function with new one to flush a specified range.")
-> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index b8a1f5b46b9d..37bfc88ea212 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1427,7 +1427,7 @@ static bool kvm_set_pte_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
->  	}
->  
->  	if (need_flush && kvm_available_flush_tlb_with_range()) {
-> -		kvm_flush_remote_tlbs_with_address(kvm, gfn, 1);
-> +		kvm_flush_remote_tlbs_with_address(kvm, gfn, KVM_PAGES_PER_HPAGE(level));
->  		return false;
->  	}
->  
-> @@ -1455,7 +1455,7 @@ static void
->  rmap_walk_init_level(struct slot_rmap_walk_iterator *iterator, int level)
->  {
->  	iterator->level = level;
-> -	iterator->gfn = iterator->start_gfn;
-> +	iterator->gfn = iterator->start_gfn & -KVM_PAGES_PER_HPAGE(level);
+MSM_DP_CONTROLLER_1 need to match to the index = 1 of sc7280_dp_cfg[] <== This is correct
 
-Hrm, arguably this be done on start_gfn in slot_rmap_walk_init().  Having iter->gfn
-be less than iter->start_gfn will be odd.
+The problem is sc7280_dp_cfg[] have two entries since eDP place at index 
+of MSM_DP_CONTROLLER_1.
 
->  	iterator->rmap = gfn_to_rmap(iterator->gfn, level, iterator->slot);
->  	iterator->end_rmap = gfn_to_rmap(iterator->end_gfn, level, iterator->slot);
->  }
-> -- 
-> 2.31.1
-> 
+but .num_desc = 1  <== this said only have one entry at sc7280_dp_cfg[] 
+table. Therefore eDP will never be found at for loop  at 
+_dpu_kms_initialize_displayport().
+
+
+>
+>>>> since it have num_descs =2 but eDP is at index 2 (CONTROLLER_2) which
+>>>> never be reached.
+>>>>
+>>>> static const struct msm_dp_config sc7280_dp_cfg = {
+>>>>            .descs = (const struct msm_dp_desc[]) {
+>>>>                    [MSM_DP_CONTROLLER_2] = { .io_start = 0x0aea0000,
+>>>> .connector_type = DRM_MODE_CONNECTOR_eDP, .wide_bus_en = true },
+>>>>                    [MSM_DP_CONTROLLER_0] = { .io_start = 0x0ae90000,
+>>>> .connector_type = DRM_MODE_CONNECTOR_DisplayPort, .wide_bus_en = true },
+>>>>            },
+>>>>            .num_descs = 2,
+>>>> };
+>>>>
+>>>> 2)  DP always has index of 0 (dp->id = 0) and the first one to call
+>>>> msm_dp_modeset_init(). This make DP always place at head of bridge chain.
+>>> What does this mean? Are you talking about the list of bridges in drm
+>>> core, i.e. 'bridge_list'?
+>> yes,
+> I changed the drm_bridge_add() API and that doesn't make any difference.
+> The corruption is still seen. That would imply it is not the order of
+> the list of bridges.
+
+Sorry, my mistake. it is not in drm_bridge_add.
+
+It should be in dpu_encoder_init() of _dpu_kms_initialize_displayport().
+
+can you make below changes (patch) to _dpu_kms_initialize_displayport().
+
+kuogee: go backward for dp modeset_init
+
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c 
+b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+index 3a4da0d..b271a4b 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+@@ -611,9 +611,15 @@ static int _dpu_kms_initialize_displayport(struct 
+drm_device *dev,
+         struct drm_encoder *encoder = NULL;
+         struct msm_display_info info;
+         int rc;
+-       int i;
++       int i,num;
++
++       num = ARRAY_SIZE(priv->dp);
+
++#ifdef XXXX
+         for (i = 0; i < ARRAY_SIZE(priv->dp); i++) {
++#else
++       for (i = num - 1; i >= 0 ; i--) {
++#endif
+                 if (!priv->dp[i])
+                         continue;
+
+
+>
+> ---8<---
+> diff --git a/drivers/gpu/drm/drm_bridge.c b/drivers/gpu/drm/drm_bridge.c
+> index e275b4ca344b..e3518101b65e 100644
+> --- a/drivers/gpu/drm/drm_bridge.c
+> +++ b/drivers/gpu/drm/drm_bridge.c
+> @@ -165,7 +165,7 @@ void drm_bridge_add(struct drm_bridge *bridge)
+>   	mutex_init(&bridge->hpd_mutex);
+>
+>   	mutex_lock(&bridge_lock);
+> -	list_add_tail(&bridge->list, &bridge_list);
+> +	list_add(&bridge->list, &bridge_list);
+>   	mutex_unlock(&bridge_lock);
+>   }
+>   EXPORT_SYMBOL(drm_bridge_add);
+>
+>>>> At next patch eDP must be placed at head of bridge chain to fix eDP
+>>>> corruption issue. This is the purpose of this patch. I will revise the
+>>>> commit text.
+>>>>
+>>> Wouldn't that be "broken" again if we decided to change drm_bridge_add()
+>>> to add to the list head instead of list tail? Or if somehow
+>>> msm_dp_modeset_init() was called in a different order so that the DP
+>>> bridge was added before the eDP bridge?
+>> we have no control of drm_bridge_add().
+>>
+>> Since drm perform screen update following bridge chain sequentially, we
+>> have to make sure primary always update first.
+>>

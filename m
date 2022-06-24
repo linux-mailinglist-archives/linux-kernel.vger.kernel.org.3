@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3216C55A104
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCB955A13A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiFXSii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 14:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        id S230355AbiFXSip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 14:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231794AbiFXSiY (ORCPT
+        with ESMTP id S231300AbiFXSin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 14:38:24 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BBF7E002
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:38:23 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id u12so6373645eja.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QiP8VcEZQ30q3Pk2h5Gwsq7YGZeOh6yin9xVA7T6iaI=;
-        b=Q0xRVwsW6uojzuz7GmFCcljGvfW5k7ElXVA7lvUp3NBj47SwMwuuXv7+qvn2HcdJLO
-         UdXVgH1FThd5pleoQfjWrBJWa+YK42yeq+I6luoycW61OhF6AFcqiuRNAj1sPxtaYCFs
-         5B4QaxAYi/epISS4yFeWUbcKzQ3LhfCLhsyac=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QiP8VcEZQ30q3Pk2h5Gwsq7YGZeOh6yin9xVA7T6iaI=;
-        b=TL7DlWYK2mdAf/OC4m75QVxeiSpPVs5rJdsrWGWUW733wZHLridsmTCmLFSPY8HuaS
-         lPxJ6+051lqFatbHasyFjlk13EAGj3KWnouC8MKAfASqqKEQFarClOGlceiw8Fl70G+5
-         PsM3oGL6mVDVL/zEzFzEK+NWWHMWF+ZIYx9NgB/NLnE5wrkYHOmKy1r331ABBEHZz7T3
-         RfBWsGTWOHERXIO5Od5E+RryijDJ5Ua9CggW9XXLMwDVHalfldMvkp9sbahRGujCmX2T
-         oK8nYr7137rAb6HLi8T9TPeGJXDe3UQQNAuJUQSF3uUXLr7u9kU1m+Qy/1bltVPWZLMW
-         kk0w==
-X-Gm-Message-State: AJIora/O1DjdU2M1jXF5b0pGbbKhaNXDr1ua47rCIFkSL+5OAf3Lg6DX
-        vMM5uVXpCLEE6pszmcCdy6EWhWPHfVRv6S3v
-X-Google-Smtp-Source: AGRyM1t1Q0bsFxHlntlK+m/sJA8KLVSSE/EAtz2wlsDt+lHTRs5mMQaRhxPojYcIoJTDiWMhREg4hQ==
-X-Received: by 2002:a17:907:3d8a:b0:726:396d:1848 with SMTP id he10-20020a1709073d8a00b00726396d1848mr339595ejc.339.1656095901526;
-        Fri, 24 Jun 2022 11:38:21 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id f9-20020a17090660c900b007262a5e2204sm1517251ejk.153.2022.06.24.11.38.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 11:38:19 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so1991572wms.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:38:19 -0700 (PDT)
-X-Received: by 2002:a05:600c:681:b0:3a0:2da6:d173 with SMTP id
- a1-20020a05600c068100b003a02da6d173mr5308343wmn.68.1656095898877; Fri, 24 Jun
- 2022 11:38:18 -0700 (PDT)
+        Fri, 24 Jun 2022 14:38:43 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733E354BEC;
+        Fri, 24 Jun 2022 11:38:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656095922; x=1687631922;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=B9kU50pQRrH8ip6M39PDMdwIkR+/caDx8kDBNekEpWE=;
+  b=jjrYJi/4mhwFgPC21byaVdTjQOFHvOU3/wdSVWd6C8pDkTMPTvWlExiI
+   QIhQZxCXW4YYNp2uUZ7yo/XbrVWmPspJl47VwpYTuSmgeBPHAJGeCXTfW
+   nFlv26/FO7AHmbJ3JVNR8A68wbCz/BK40uwO/mtJgajAKeU4zBQCR2SmT
+   DS+k0yt0cq4+ZinndVzxLEmR3MiOHQSKmRxqQyXFnP53MUnzSZssHZjhU
+   tped6dmE92y9rQPXgibTOK9iLbtouY57gPCBvyEpDytgYMpIKcihOA4Fo
+   qt9ZAJV59wHCmKDX3x5CJPJdFxD4mZmJlPWiYKv9lDQL0zeikUBqa7yvD
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="278609698"
+X-IronPort-AV: E=Sophos;i="5.92,220,1650956400"; 
+   d="scan'208";a="278609698"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 11:38:42 -0700
+X-IronPort-AV: E=Sophos;i="5.92,220,1650956400"; 
+   d="scan'208";a="731426029"
+Received: from mdedeogl-mobl.amr.corp.intel.com (HELO [10.209.126.186]) ([10.209.126.186])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 11:38:41 -0700
+Message-ID: <069a062e-a4a6-09af-7b74-7f4929f2ec0b@intel.com>
+Date:   Fri, 24 Jun 2022 11:38:06 -0700
 MIME-Version: 1.0
-References: <CA+55aFz2sNBbZyg-_i8_Ldr2e8o9dfvdSfHHuRzVtP2VMAUWPg@mail.gmail.com>
- <CA+55aFyugRmHNV1BbhB_YHf3mgaiU6ND_KL8bu0PPEaRVNwWHg@mail.gmail.com>
-In-Reply-To: <CA+55aFyugRmHNV1BbhB_YHf3mgaiU6ND_KL8bu0PPEaRVNwWHg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 24 Jun 2022 11:38:02 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg5aP-0fr8Q8ekwGn6KMAtkQbiBYxtnAFhj5LXCCszckQ@mail.gmail.com>
-Message-ID: <CAHk-=wg5aP-0fr8Q8ekwGn6KMAtkQbiBYxtnAFhj5LXCCszckQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Kconfig: -O3 enablement
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Chris Down <chris@chrisdown.name>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, mikoxyzzz@gmail.com,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Oleksandr Natalenko <oleksandr@redhat.com>,
-        quic_eberman@quicinc.com, Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 07/22] x86/virt/tdx: Implement SEAMCALL function
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1655894131.git.kai.huang@intel.com>
+ <095e6bbc57b4470e1e9a9104059a5238c9775f00.1655894131.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <095e6bbc57b4470e1e9a9104059a5238c9775f00.1655894131.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Fri, Jun 24, 2022 at 11:29 AM Linus Torvalds <linus@linux-foundation.org> wrote:
+On 6/22/22 04:16, Kai Huang wrote:
+> SEAMCALL instruction causes #GP when SEAMRR isn't enabled, and #UD when
+> CPU is not in VMX operation.  The TDX_MODULE_CALL macro doesn't handle
+> SEAMCALL exceptions.  Leave to the caller to guarantee those conditions
+> before calling __seamcall().
 
-Bah. That was really me, just with a badly set up "reply through lore"
-setup, so with the wrong email address.
+I was trying to make the argument earlier that you don't need *ANY*
+detection for TDX, other than the ability to make a SEAMCALL.
+Basically, patch 01/22 could go away.
 
-That's what happens when you are
+You are right that:
 
- (a) incompetent
+	The TDX_MODULE_CALL macro doesn't handle SEAMCALL exceptions.
 
- (b) stopped getting the mailing lists as regular email because you
-think lore works so well
+But, it's also not hard to make it *able* to handle exceptions.
 
- (c) normally rely on being cc'd
-
-My apologies for the incompetence.
-
-                Linus
+So what does patch 01/22 buy us?  One EXTABLE entry?

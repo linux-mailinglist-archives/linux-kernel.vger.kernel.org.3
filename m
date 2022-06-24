@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17C255A4ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFD455A4EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 01:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbiFXXj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 19:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
+        id S231512AbiFXXkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 19:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiFXXj5 (ORCPT
+        with ESMTP id S229450AbiFXXkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 19:39:57 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B44C89D32
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:39:56 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id z7so2986738qko.8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:39:56 -0700 (PDT)
+        Fri, 24 Jun 2022 19:40:19 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAEC89D32
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:40:18 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u15so7615287ejc.10
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 16:40:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=y2pv8YOw7LoyOnTaoRSaYSE/K+AgHwp4S93jltd2ta4=;
-        b=RWvu/9BtyVhWJ4BEZH1HhUaocZB2WaT+pDmddvDyO3Uey8LzWrDmXYFK3ikFeHnmOT
-         huuTxnOW4ws1HNHe39aE/K+Ug7o9lij4HcA+av2ccc2R8rJIS6qbiitu5rlyHNEXabBV
-         lixZw0Qc7jn6jUnKszJPTPNlyDI7kwswCey8tRF/ozRvgeQuA8NlWA0x9uhTmn3Kgbhb
-         lxM9CPQ6B7qvyvGxx8wULXeF+DyT+t03EdDRBSWDa/JpYaf0Z0NmgbhPGck/TT946YlO
-         ufHKkU1NO2VgS9lEYxwEmDaQsD7ikd9eL++4EVz4InYogQZ19Xjl/9OA3IWR7VoGl3tJ
-         aOjg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ioGTNHXffZwnZ8I7y2BRheK/DbmuKIFCf1q9qCvNtRE=;
+        b=gPUgC1E8eC2BqehwvtcAgsVR+1S+BTJA9WU5iGYKvy4xUBKGEbcb3f5NG2dSVmkMaL
+         J0foMgTURbKIFnRnbsj58R+I8QxePawmLt5GxBwk1f3eIjfsRBUg4NwXldr7Z4hdTHmK
+         DW8NHmYIkHd1kfQEj9hJKqxrPZ7b7MkzZHdCE3f2Sng0BMeZR/jY00wCr2S2nJZoU9+X
+         tWk5Eg+ehQq4J9nyR34lLr7rj29iW/NtN/QvVXjd8UDCOZSv4IeImJK6NwKlIG3PA50Z
+         X3lu/4llQ5L9ifwgfVyYqfGMRPmC1sj3klUTNf/JkPvbivh59rMwhGMlmOVQtXFRaGLO
+         RytA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=y2pv8YOw7LoyOnTaoRSaYSE/K+AgHwp4S93jltd2ta4=;
-        b=Vjt0DGuGRJe0H3rnls28TOI7rNKv/7W4G17F7ZFLUbyu+116FBn0vDtk7q23MiwI5I
-         aqSCgt+ukojc2vJOF+txgqtR/Mi2ESTv7Hn/IAiLgwFqKu1fOS2ZHah9rvgo5U6c3QfW
-         12/xjdpBPCCWECMvVeJy4jxgfZqwGS0gn08KZfNwlYOK+fbZhp1HlWRKmuQzfq8DijO8
-         js6EDKiVh1Ke3kk+BaSrSS+R15zkXJrY8kRU9T9y+yUE67HgokecToxIxCLwGa6ULvvf
-         5Ce8EirALu5BTD09gaWH0jwpEuVmEL3GYCF8+mO2OdLlnLriH6Fz3aosZSKT6UfX2cgc
-         kSzQ==
-X-Gm-Message-State: AJIora8SLxsL6lLQzuxfF+S0ZxYZcviS4/T5XVzXn+ZWRUjAwi2KTlNi
-        E6jbI3qgDQDoD1t52yilV8jNnA==
-X-Google-Smtp-Source: AGRyM1sK4qOyKaZbIItE1duiEeEZCbnTPGEfQHKnqE7VPJVOFEKwmTQqSYeRYqwfx8ZhCfZso8zbxg==
-X-Received: by 2002:a05:620a:2552:b0:67b:32e2:2400 with SMTP id s18-20020a05620a255200b0067b32e22400mr1273453qko.768.1656113995455;
-        Fri, 24 Jun 2022 16:39:55 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id bq24-20020a05622a1c1800b00304e95ec0fbsm2151911qtb.89.2022.06.24.16.39.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 16:39:54 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1o4su2-001HtO-0I; Fri, 24 Jun 2022 20:39:54 -0300
-Date:   Fri, 24 Jun 2022 20:39:53 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-Cc:     Yanjun Zhu <yanjun.zhu@linux.dev>,
-        Haakon Bugge <haakon.bugge@oracle.com>,
-        Cheng Xu <chengyou@linux.alibaba.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 0/2] RDMA/rxe: Fix no completion event issue
-Message-ID: <20220624233953.GG23621@ziepe.ca>
-References: <20220516015329.445474-1-lizhijian@fujitsu.com>
- <fa9863f0-d42e-f114-5321-108dda270e27@fujitsu.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ioGTNHXffZwnZ8I7y2BRheK/DbmuKIFCf1q9qCvNtRE=;
+        b=IqhWGHhc7MwR4dyyttz7+fw1bFZdEHA33ytnpUb7Dycpu8Kj564XMG+ldPB2e3uJCt
+         m8L/dimn6Xflq97W+1ps/blH0DS7gD+yAT8jmA0h62gM7yVbIqB/mAXZW7O7/JxStKzn
+         I9L7d6C22qcpM9eCVmLeFMGMSlgVOQqB/6uhi8TjV19uwxbyitwo8KzujJXdcjT08oL0
+         ItRhVV8DikKZNUXuwfWVIYalnZ68JZr9hUyvgRPvafA4hjT0tZQtD9Xc19+Sz6amcQj2
+         yqD6O9zNRxW+54IyZ5R0o33ENIbHLMkR9L89AUGKMXlLCneTOfbWlAbpJe+/4Eii4fDr
+         NmgQ==
+X-Gm-Message-State: AJIora/XKr0WJ4G4boy4gbUukN404XmsBsl5oESK9NABNwEVEs8MyuBB
+        TYE6G7057hdkqz1a8D+uZmdk5d8sn8dWfBSiYyMz5A==
+X-Google-Smtp-Source: AGRyM1s4ws/aqxlJeM5cTpkwHOGmCVjfTOdh8yuqMaDTlT05PSaxFD6smAlqQyw8HO9CERa4VC023nFn6040NePICfw=
+X-Received: by 2002:a17:906:308f:b0:709:af33:9fa7 with SMTP id
+ 15-20020a170906308f00b00709af339fa7mr1347941ejv.369.1656114017449; Fri, 24
+ Jun 2022 16:40:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fa9863f0-d42e-f114-5321-108dda270e27@fujitsu.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220603195626.121922-1-dlatypov@google.com> <87pmix3ktq.fsf@meer.lwn.net>
+ <2c3399e9-4f4e-a71a-4030-e4e6d72b5d4e@linuxfoundation.org>
+ <8735ft3co5.fsf@meer.lwn.net> <96154234-7842-3bc9-d89f-eb20be40e6de@linuxfoundation.org>
+In-Reply-To: <96154234-7842-3bc9-d89f-eb20be40e6de@linuxfoundation.org>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Fri, 24 Jun 2022 16:40:06 -0700
+Message-ID: <CAGS_qxpQvftq2qiiaNhr5sAkJWgQhtB1CK2_ZeYASLYynWVHRA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] Documentation: kunit: remove duplicate kunit-tool.rst
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, brendanhiggins@google.com,
+        davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 08:32:40AM +0000, lizhijian@fujitsu.com wrote:
-> Hi Json & Yanjun
-> 
-> 
-> I know there are still a few regressions on RXE, but i do wish you
-> could take some time to review these *simple and bugfix* patches
-> They are not related to the regressions.
+On Fri, Jun 24, 2022 at 3:51 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 6/24/22 4:43 PM, Jonathan Corbet wrote:
+> > Shuah Khan <skhan@linuxfoundation.org> writes:
+> >
+> >>> So not that long ago these patches were going through Shuah...it seems
+> >>> that's not happening anymore?  I can pick up kunit docs patches,
+> >>> certainly.  I've taken the silence on these as assent and applied them.
+> >>>
+> >>
+> >> I am still taking ksefltest and kunit doc patches through my tree. I wait
+> >> for Brendan to ack at times. This one didn't show up in linux-kselftest
+> >> list it appears.
+> >>
+> >> If you cc linux-kselftest and I get an ack from Brendan, I will take this
+> >> through kselftest tree.
+> >
+> > As I said up above, I went ahead and applied them.  I can drop them
+> > again if you want to carry them, just let me know.
+> >
+>
+> Jon, yes please go ahead and drop this one. I will wait for Brendan
+> to ack it. Reduces confusion in the future. Very often, there is code
+> dependencies as well.
+>
+> Daniel, please don't skip kselftest list in the future.
 
-I would like someone familiar with rxe to ack the datapath changes - I
-have a very limited knowledge about rxe.
+Ack.
+I was hoping to avoid confusion about who should apply them; looks
+like it created more.
 
-If that is not forthcoming from others in the rxe community then I
-will accept confirmation directly from you that the pyverbs tests and
-the blktests scenarios have been run and pass for your changes.
+Just a note: this one has no code dependencies, so it can be applied
+whenever or wherever.
 
-Jason
+Daniel

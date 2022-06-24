@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B3C559ACA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFC6559AD1
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 16:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232199AbiFXN6u convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Jun 2022 09:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
+        id S232230AbiFXN75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 09:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbiFXN6r (ORCPT
+        with ESMTP id S230177AbiFXN7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 09:58:47 -0400
-Received: from mail3.swissbit.com (mail3.swissbit.com [176.95.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92CE4DF4C;
-        Fri, 24 Jun 2022 06:58:46 -0700 (PDT)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id EE26B462FA7;
-        Fri, 24 Jun 2022 15:58:44 +0200 (CEST)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id DCEF9462F67;
-        Fri, 24 Jun 2022 15:58:44 +0200 (CEST)
-X-TM-AS-ERS: 10.149.2.84-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
-        by mail3.swissbit.com (Postfix) with ESMTPS;
-        Fri, 24 Jun 2022 15:58:44 +0200 (CEST)
-Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex02.sbitdom.lan
- (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 24 Jun
- 2022 15:58:44 +0200
-Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex04.sbitdom.lan
- (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 24 Jun
- 2022 15:58:44 +0200
-Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
- sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
- 15.02.1118.009; Fri, 24 Jun 2022 15:58:44 +0200
-From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-To:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Avri Altman <Avri.Altman@wdc.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>
-Subject: Re: [PATCH] mmc: block: Add single read for 4k sector cards
-Thread-Topic: [PATCH] mmc: block: Add single read for 4k sector cards
-Thread-Index: AdiH0i+lOTiMmBAQQCyuCs385lDFyw==
-Date:   Fri, 24 Jun 2022 13:58:44 +0000
-Message-ID: <9e171c7ba27b4377872379f7e211715c@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.153.3.44]
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Fri, 24 Jun 2022 09:59:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFD34DF4A;
+        Fri, 24 Jun 2022 06:59:53 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7A0131F8BD;
+        Fri, 24 Jun 2022 13:59:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1656079192; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2w1L23+IbYV6NN1uakoMnM4Ln36dQ8vdC1Lu+6qgUGE=;
+        b=rnrxBaL9L5/alzpeiarh24yjJKETzL+5hZn/bNLXr9qnxJB4OputXmn+PQbI6yJrMHOWC1
+        J8yvQ3ooToFm+hyLDaXikq8rdGG9IAS8LNLT4TBOD3hSKY7HkpjmYw/nq2f526Yd+3cdoU
+        Pm/WnARFLWJ2zx0fP4apGU2OaGlE1oA=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E778F2C24C;
+        Fri, 24 Jun 2022 13:59:51 +0000 (UTC)
+Date:   Fri, 24 Jun 2022 15:59:51 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Vasily Averin <vvs@openvz.org>, kernel@openvz.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Cgroups <cgroups@vger.kernel.org>
+Subject: Re: [PATCH mm v5 0/9] memcg: accounting for objects allocated by
+ mkdir, cgroup
+Message-ID: <YrXDV7uPpmDigh3G@dhcp22.suse.cz>
+References: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
+ <0fe836b4-5c0f-0e32-d511-db816d359748@openvz.org>
+ <c516033f-a9e4-3485-26d9-a68afa694c1d@openvz.org>
+ <YrSP25ebDmXE+kPS@dhcp22.suse.cz>
+ <CALvZod4WsmrpfZtfnP4AmvtnkvBRngXXGyhM6+aQzkdfjsinAQ@mail.gmail.com>
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-26974.007
-X-TMASE-Result: 10-1.440300-10.000000
-X-TMASE-MatchedRID: xSJL/ht5SGDUL3YCMmnG4pTQgFTHgkhZ6FML6creK7lM+b8yxBqvAyTn
-        lmLOiwp22XHJ0L4jOITmn3xyPJAJoh2P280ZiGmR9k5nZzZVBSBHyz3bB5kG58bl1d1BOPY4A1/
-        8jb+tZ/Tiu4lpe6VcbrQeFj3sWOU1XHEPHmpuRH0TNCcUsR4xSWrz/G/ZSbVq+gtHj7OwNO2I9t
-        8DSRevIQUgC/isct8xoUq2kgYY6i9QN35Inoone6nVU1udGaNpw8g2HBNcF5k=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 7e22f89b-23e0-432a-8b9d-b6306215b4f0-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALvZod4WsmrpfZtfnP4AmvtnkvBRngXXGyhM6+aQzkdfjsinAQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,36 +65,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Anyone wanting to test this and does not have a way to disturb eMMC signals,
-use mmc-utils to disable 512B emulation and something along the lines of:
+On Thu 23-06-22 09:55:33, Shakeel Butt wrote:
+> On Thu, Jun 23, 2022 at 9:07 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Thu 23-06-22 18:03:31, Vasily Averin wrote:
+> > > Dear Michal,
+> > > do you still have any concerns about this patch set?
+> >
+> > Yes, I do not think we have concluded this to be really necessary. IIRC
+> > Roman would like to see lingering cgroups addressed in not-so-distant
+> > future (http://lkml.kernel.org/r/Ypd2DW7id4M3KJJW@carbon) and we already
+> > have a limit for the number of cgroups in the tree. So why should we
+> > chase after allocations that correspond the cgroups and somehow try to
+> > cap their number via the memory consumption. This looks like something
+> > that will get out of sync eventually and it also doesn't seem like the
+> > best control to me (comparing to an explicit limit to prevent runaways).
+> > --
+> 
+> Let me give a counter argument to that. On a system running multiple
+> workloads, how can the admin come up with a sensible limit for the
+> number of cgroups?
 
-diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-index 4b70cbfc6d5d..bc0b9241a00f 100644
---- a/drivers/mmc/core/core.c
-+++ b/drivers/mmc/core/core.c
-@@ -32,6 +32,8 @@
- #include <linux/mmc/sd.h>
- #include <linux/mmc/slot-gpio.h>
- 
-+#include <linux/sched/clock.h>
-+
- #define CREATE_TRACE_POINTS
- #include <trace/events/mmc.h>
- 
-@@ -141,6 +143,12 @@ void mmc_request_done(struct mmc_host *host, struct mmc_request *mrq)
- 	struct mmc_command *cmd = mrq->cmd;
- 	int err = cmd->error;
- 
-+	if (mrq->data && !mrq->data->error && mrq->data->flags & MMC_DATA_READ)
-+		if ((sched_clock() % 1000) == 0) {
-+			mrq->data->bytes_xfered = 0;
-+			mrq->data->error = -EILSEQ;
-+		}
-+
- 	/* Flag re-tuning needed on CRC errors */
- 	if (cmd->opcode != MMC_SEND_TUNING_BLOCK &&
- 	    cmd->opcode != MMC_SEND_TUNING_BLOCK_HS200 &&
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
-
+How is that any easier through memory consumption? Something that might
+change between kernel versions? Is it even possible to prevent from id
+depletion by the memory consumption? Any medium sized memcg can easily
+consume all the ids AFAICS.
+-- 
+Michal Hocko
+SUSE Labs

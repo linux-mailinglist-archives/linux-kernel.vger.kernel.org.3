@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6DF05597D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1B95597D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiFXKaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 06:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
+        id S231454AbiFXKaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 06:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiFXKaC (ORCPT
+        with ESMTP id S230196AbiFXKaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 06:30:02 -0400
+        Fri, 24 Jun 2022 06:30:03 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938B67C510;
-        Fri, 24 Jun 2022 03:30:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5847C518;
+        Fri, 24 Jun 2022 03:30:02 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 86A1F66017FE;
-        Fri, 24 Jun 2022 11:29:58 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6D26366017E1;
+        Fri, 24 Jun 2022 11:29:59 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656066599;
-        bh=SVkicnIFIqfjKCBb/ZVvLtK5Me40EK4u1MWUbzwiT7A=;
+        s=mail; t=1656066601;
+        bh=hKBlTlh6rJQp0/PqrIUPBQEzlcGlkHae7pIOm2+YUlo=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kViqkR7iC1Wp/5s4I82zUkb3ZSL5j/ZXPllVjTqXfaoZgzpbARUo44bVpE8dUmf+F
-         HhvVGqPvdkxs0jVyxFnCkfm7Mjm3ACrUDhKrRTyWAISOBsIPryGt4I1HLEx0cyrJcU
-         7XHE/NHd4gbEVrOR/Hgvs6GDrEjba1OBgEv5F+6OzHmvMIVzvoajaAC/WcfnFdsL31
-         43TkeqwUd7VzMNjLGJqfr6E3Zv6hmBcpiKyTa9wU5a206RrRCnNZeKEh6GLt5ldxXM
-         heB7c2yLTYuIqMgoWislASCK5/WsRYPCi/ws6nCR0JfeJBVDUABMU8h8a9npw7i5zx
-         T/Ms8a+QgTmVw==
-Message-ID: <c7f76e77-6fed-9876-e0b6-8471c0024a82@collabora.com>
-Date:   Fri, 24 Jun 2022 12:29:56 +0200
+        b=iYG3Nlzt+inCv41ww4oWe9xvhet5gZLdSI+PaSF1HwHO5txbqew+S5pL1N3BDoudr
+         OH/REp0e/Ko9kOQx4LhqttxGd+ZYJzXTQ4bkmljp8AZK1rQv92ASzG+x6TJMuiL2mZ
+         oxJUuf52ishxcC6x8emkjyn6iFRFyDjMpmiTtvh1G73HnHQi9aS/3SyNmOrRQAYV7r
+         wjHRgEdL2VY7s7REGv3bYgJluNLLEDg/1pPrpbB7+HGG0oiRByMFTCcoTddWplif3K
+         mj2yyT+ahLQrqOnr2E4VeW5zYOq1Bm6SqfaF9NxhQBgDOxvlqpJ6AFBN63OY88km6q
+         9HObPrJqpwNuA==
+Message-ID: <2c788189-275a-ac31-4f82-959c04e760e8@collabora.com>
+Date:   Fri, 24 Jun 2022 12:29:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v19 1/4] dt-binding: mediatek: add bindings for MediaTek
- MDP3 components
+Subject: Re: [PATCH v19 2/4] dt-binding: mediatek: add bindings for MediaTek
+ CCORR and WDMA
 Content-Language: en-US
 To:     Moudy Ho <moudy.ho@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -63,10 +63,10 @@ Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Project_Global_Chrome_Upstream_Group@mediatek.com,
         cellopoint.kai@gmail.com
 References: <20220624092359.11908-1-moudy.ho@mediatek.com>
- <20220624092359.11908-2-moudy.ho@mediatek.com>
+ <20220624092359.11908-3-moudy.ho@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220624092359.11908-2-moudy.ho@mediatek.com>
+In-Reply-To: <20220624092359.11908-3-moudy.ho@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,12 +80,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 24/06/22 11:23, Moudy Ho ha scritto:
-> This patch adds DT binding documents for Media Data Path 3 (MDP3)
-> a unit in multimedia system combined with several components and
-> used for scaling and color format convert.
+> This patch adds DT binding documentation for MediaTek's CCORR and
+> WDMA components.
+> These components exist in both MediaTek's Media Data Path 3(MDP3) and DRM,
+> and the bindings are placed under the folder "./soc/mediatek" to prevent
+> duplicate builds.
 > 
 > Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 > Reviewed-by: Rob Herring <robh@kernel.org>
+
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

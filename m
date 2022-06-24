@@ -2,471 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D3455A14F
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DE655A135
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbiFXSlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 14:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S231437AbiFXSk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 14:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiFXSlF (ORCPT
+        with ESMTP id S229476AbiFXSk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 14:41:05 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDFD81268;
-        Fri, 24 Jun 2022 11:41:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1656096057; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aP2GWjAY8tTeHxJL3lRG6JblOqVNcNfjxS45eRxJL50=;
-        b=SoaqmUIUdkihuZ0kA76Saf4Fu6K9/mb9blMKf9wEkAXWim9bO3BOPfmVuGucAKS2IV4vg6
-        Jazmi0j6qtB5eHKyLBTIGqCsZTBU0GXTmKhXIycWw2lYAYNt6Qprn+jaeIv2ej/Kp+IHfB
-        gFAMa6F1VNCU66ePtMtTHfMRnIpSkZo=
-Date:   Fri, 24 Jun 2022 19:40:47 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/2] MIPS: dts: correct gpio-keys names and properties
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rahul Bedarkar <rahulbedarkar89@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?iso-8859-9?b?QXL9bucg3E5BTA==?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Message-Id: <ZVVZDR.R2QT2GMTT9WS1@crapouillou.net>
-In-Reply-To: <20220624170740.66271-1-krzysztof.kozlowski@linaro.org>
-References: <20220624170740.66271-1-krzysztof.kozlowski@linaro.org>
+        Fri, 24 Jun 2022 14:40:57 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C43D7E007
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:40:57 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id jb13so2807472plb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 11:40:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ONsbNtaIj+2QckCbaSTtKTSn8S/ItxiojyAwz7e9USc=;
+        b=cYLbrnirigZc9e24pjc6GvP6fvS5I7GIHhuZ1xkZbJEKdHhli3jKq0oNtLOOrhTBii
+         OuuMg9jUcYJoVNn5/05AyqnRAXLvLN/sKPv9lJhLG0FMvvQtlPUMKtyCqXXHftUNKFzY
+         BVbgsvv65PYSJ6an2Z4KK0svZOO7TCReB+EiZZIrtw6dYh5znz721u4AXR9NhaSgw0Fc
+         co1zFzpLSe5ghj8fIWIVv8ZNRaZOJueRv2Cp3552VD+BxHdbaZ1N/bAEf7+Lg62JV0y1
+         19w2cBFP1vyb+JzfBOdaV9Ftv57XzBqScmgvEFpHR0jzj9Z/YEHn3HLrPZUtBy+dRxLi
+         8y8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ONsbNtaIj+2QckCbaSTtKTSn8S/ItxiojyAwz7e9USc=;
+        b=y/E5NOqVjN7KG6liOc53fbExtFIz7ox8dEHHqBWj8VSHFnClZ3zvh4F/RuVb4hwwTP
+         uKcCiqbe9qLWc03f7Wo6xIZxr+4POg41ihyjQUPR5P0eQM6oFDMn2mMNYxmfFXGmOoeu
+         hxZkPI9cbgPYJISD60U3Kz+jyiB7EDD7gaachQp3fOJQDWz5KYepk3E4GUdDE4gDV1Bj
+         zgsIR9AEBCx9q0olEWlPxiG3a5Y7ycCAMLaVsdUgOlGS439Tvvk1f6V2S6ksh4jGDdHV
+         wT2jksWSx1ls67yo4/ugg05nAOL3gS5g04AKwN9pRKGE7PGfh4dTwbUQJOqnkMoIsLuy
+         h8mQ==
+X-Gm-Message-State: AJIora8YyZt86+FgJH3Hpvu9H2IWXlTtj5dEeMtQ6DCDF/kEkRA5GEhQ
+        O5TWabKesAhuPFJL4xeRvGmzNPB8pcVDBw==
+X-Google-Smtp-Source: AGRyM1vGr/sif3V7DYQiRNsgTb/FtTyE8ZlsUKZjm/7O5khucthxuW043co6l+yxIPQnKACg5C44Vg==
+X-Received: by 2002:a17:902:8eca:b0:16a:285e:5878 with SMTP id x10-20020a1709028eca00b0016a285e5878mr425735plo.59.1656096056633;
+        Fri, 24 Jun 2022 11:40:56 -0700 (PDT)
+Received: from google.com (55.212.185.35.bc.googleusercontent.com. [35.185.212.55])
+        by smtp.gmail.com with ESMTPSA id t5-20020a17090abc4500b001ea629a431bsm2120609pjv.8.2022.06.24.11.40.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 11:40:55 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 11:40:51 -0700
+From:   Zach O'Keefe <zokeefe@google.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        akpm@linux-foundation.org, shy828301@gmail.com,
+        willy@infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/16] mm/huge_memory: access vm_page_prot with READ_ONCE
+ in remove_migration_pmd
+Message-ID: <YrYFM+xKu4Q7XJxz@google.com>
+References: <20220622170627.19786-1-linmiaohe@huawei.com>
+ <20220622170627.19786-3-linmiaohe@huawei.com>
+ <20220623031401.wdyt5ylin4aijzhh@box.shutemov.name>
+ <7ee4a597-d7cb-f387-5613-f51b17262745@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ee4a597-d7cb-f387-5613-f51b17262745@huawei.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On 23 Jun 20:03, Miaohe Lin wrote:
+> On 2022/6/23 11:14, Kirill A. Shutemov wrote:
+> > On Thu, Jun 23, 2022 at 01:06:13AM +0800, Miaohe Lin wrote:
+> >> vma->vm_page_prot is read lockless from the rmap_walk, it may be updated
+> >> concurrently. Using READ_ONCE to prevent the risk of reading intermediate
+> >> values.
+> > 
+> > Have you checked all other vm_page_prot reads that they hold mmap_lock?
+> 
+> I took a glance when I made this patch.
+> 
+> > 
+> > I think the right fix would be to provide a helper to read vm_page_prot
+> > which does READ_ONCE() and use it everywhere. This seems more sustainable.
+> > 
+> 
+> This patch is inspired from the below commit
+>   6d2329f8872f ("mm: vm_page_prot: update with WRITE_ONCE/READ_ONCE")
+> 
+> It changed all the places that need to use READ_ONCE. But remove_migration_pmd
+> is missed due to it's introduced later. It looks fine to add a helper to read
+> vm_page_prot which does READ_ONCE() but READ_ONCE is unneeded while under the
+> mmap_lock, so might it be a little overkill to add a helper because the helper
+> is used iff mmap_lock is not held?
+> 
+> Thanks.
 
-Le ven., juin 24 2022 at 19:07:39 +0200, Krzysztof Kozlowski=20
-<krzysztof.kozlowski@linaro.org> a =E9crit :
-> gpio-keys children do not use unit addresses.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->=20
-> ---
->=20
-> See:=20
-> https://lore.kernel.org/all/20220616005224.18391-1-krzysztof.kozlowski@li=
-naro.org/
-> ---
->  arch/mips/boot/dts/img/pistachio_marduk.dts   |  4 +--
->  arch/mips/boot/dts/ingenic/gcw0.dts           | 31=20
-> +++++++++----------
->  arch/mips/boot/dts/ingenic/rs90.dts           | 18 +++++------
->  arch/mips/boot/dts/pic32/pic32mzda_sk.dts     |  9 ++----
->  .../boot/dts/qca/ar9132_tl_wr1043nd_v1.dts    |  6 ++--
->  arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  4 +--
->  .../mips/boot/dts/qca/ar9331_dragino_ms14.dts |  6 ++--
->  arch/mips/boot/dts/qca/ar9331_omega.dts       |  4 +--
->  .../qca/ar9331_openembed_som9331_board.dts    |  4 +--
->  arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts   |  8 ++---
->  10 files changed, 37 insertions(+), 57 deletions(-)
->=20
-> diff --git a/arch/mips/boot/dts/img/pistachio_marduk.dts=20
-> b/arch/mips/boot/dts/img/pistachio_marduk.dts
-> index a8708783f04b..a8da2f992b1a 100644
-> --- a/arch/mips/boot/dts/img/pistachio_marduk.dts
-> +++ b/arch/mips/boot/dts/img/pistachio_marduk.dts
-> @@ -59,12 +59,12 @@ led-1 {
->=20
->  	keys {
->  		compatible =3D "gpio-keys";
-> -		button@1 {
-> +		button-1 {
->  			label =3D "Button 1";
->  			linux,code =3D <0x101>; /* BTN_1 */
->  			gpios =3D <&gpio3 6 GPIO_ACTIVE_LOW>;
->  		};
-> -		button@2 {
-> +		button-2 {
->  			label =3D "Button 2";
->  			linux,code =3D <0x102>; /* BTN_2 */
->  			gpios =3D <&gpio2 14 GPIO_ACTIVE_LOW>;
-> diff --git a/arch/mips/boot/dts/ingenic/gcw0.dts=20
-> b/arch/mips/boot/dts/ingenic/gcw0.dts
-> index 4abb0318416c..5d33f26fd28c 100644
-> --- a/arch/mips/boot/dts/ingenic/gcw0.dts
-> +++ b/arch/mips/boot/dts/ingenic/gcw0.dts
-> @@ -130,89 +130,86 @@ backlight: backlight {
->=20
->  	gpio-keys {
->  		compatible =3D "gpio-keys";
-> -		#address-cells =3D <1>;
-> -		#size-cells =3D <0>;
-
-Are you sure you can remove these?
-
-Looking at paragraph 2.3.5 of the DT spec, I would think they have to=20
-stay (although with #address-cells =3D <0>).
-
-Cheers,
--Paul
-
-> -
->  		autorepeat;
->=20
-> -		button@0 {
-> +		button-0 {
->  			label =3D "D-pad up";
->  			linux,code =3D <KEY_UP>;
->  			linux,can-disable;
->  			gpios =3D <&gpe 21 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		button@1 {
-> +		button-1 {
->  			label =3D "D-pad down";
->  			linux,code =3D <KEY_DOWN>;
->  			linux,can-disable;
->  			gpios =3D <&gpe 25 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		button@2 {
-> +		button-2 {
->  			label =3D "D-pad left";
->  			linux,code =3D <KEY_LEFT>;
->  			linux,can-disable;
->  			gpios =3D <&gpe 23 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		button@3 {
-> +		button-3 {
->  			label =3D "D-pad right";
->  			linux,code =3D <KEY_RIGHT>;
->  			linux,can-disable;
->  			gpios =3D <&gpe 24 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		button@4 {
-> +		button-4 {
->  			label =3D "Button A";
->  			linux,code =3D <KEY_LEFTCTRL>;
->  			linux,can-disable;
->  			gpios =3D <&gpe 29 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		button@5 {
-> +		button-5 {
->  			label =3D "Button B";
->  			linux,code =3D <KEY_LEFTALT>;
->  			linux,can-disable;
->  			gpios =3D <&gpe 20 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		button@6 {
-> +		button-6 {
->  			label =3D "Button Y";
->  			linux,code =3D <KEY_SPACE>;
->  			linux,can-disable;
->  			gpios =3D <&gpe 27 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		button@7 {
-> +		button-7 {
->  			label =3D "Button X";
->  			linux,code =3D <KEY_LEFTSHIFT>;
->  			linux,can-disable;
->  			gpios =3D <&gpe 28 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		button@8 {
-> +		button-8 {
->  			label =3D "Left shoulder button";
->  			linux,code =3D <KEY_TAB>;
->  			linux,can-disable;
->  			gpios =3D <&gpb 20 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		button@9 {
-> +		button-9 {
->  			label =3D "Right shoulder button";
->  			linux,code =3D <KEY_BACKSPACE>;
->  			linux,can-disable;
->  			gpios =3D <&gpe 26 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		button@10 {
-> +		button-10 {
->  			label =3D "Start button";
->  			linux,code =3D <KEY_ENTER>;
->  			linux,can-disable;
->  			gpios =3D <&gpb 21 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		button@11 {
-> +		button-11 {
->  			label =3D "Select button";
->  			linux,code =3D <KEY_ESC>;
->  			linux,can-disable;
-> @@ -223,7 +220,7 @@ button@11 {
->  			gpios =3D <&gpd 18 GPIO_ACTIVE_HIGH>;
->  		};
->=20
-> -		button@12 {
-> +		button-12 {
->  			label =3D "Power slider";
->  			linux,code =3D <KEY_POWER>;
->  			linux,can-disable;
-> @@ -231,7 +228,7 @@ button@12 {
->  			wakeup-source;
->  		};
->=20
-> -		button@13 {
-> +		button-13 {
->  			label =3D "Power hold";
->  			linux,code =3D <KEY_PAUSE>;
->  			linux,can-disable;
-> diff --git a/arch/mips/boot/dts/ingenic/rs90.dts=20
-> b/arch/mips/boot/dts/ingenic/rs90.dts
-> index 74fee7f01352..e8df70dd42bf 100644
-> --- a/arch/mips/boot/dts/ingenic/rs90.dts
-> +++ b/arch/mips/boot/dts/ingenic/rs90.dts
-> @@ -52,53 +52,51 @@ backlight: backlight {
->=20
->  	keys@0 {
->  		compatible =3D "gpio-keys";
-> -		#address-cells =3D <1>;
-> -		#size-cells =3D <0>;
->=20
-> -		key@0 {
-> +		key-0 {
->  			label =3D "D-pad up";
->  			linux,code =3D <KEY_UP>;
->  			gpios =3D <&gpc 10 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		key@1 {
-> +		key-1 {
->  			label =3D "D-pad down";
->  			linux,code =3D <KEY_DOWN>;
->  			gpios =3D <&gpc 11 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		key@2 {
-> +		key-2 {
->  			label =3D "D-pad left";
->  			linux,code =3D <KEY_LEFT>;
->  			gpios =3D <&gpb 31 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		key@3 {
-> +		key-3 {
->  			label =3D "D-pad right";
->  			linux,code =3D <KEY_RIGHT>;
->  			gpios =3D <&gpd 21 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		key@4 {
-> +		key-4 {
->  			label =3D "Button A";
->  			linux,code =3D <KEY_LEFTCTRL>;
->  			gpios =3D <&gpc 31 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		key@5 {
-> +		key-5 {
->  			label =3D "Button B";
->  			linux,code =3D <KEY_LEFTALT>;
->  			gpios =3D <&gpc 30 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		key@6 {
-> +		key-6 {
->  			label =3D "Right shoulder button";
->  			linux,code =3D <KEY_BACKSPACE>;
->  			gpios =3D <&gpc 12 GPIO_ACTIVE_LOW>;
->  			debounce-interval =3D <10>;
->  		};
->=20
-> -		key@7 {
-> +		key-7 {
->  			label =3D "Start button";
->  			linux,code =3D <KEY_ENTER>;
->  			gpios =3D <&gpd 17 GPIO_ACTIVE_LOW>;
-> diff --git a/arch/mips/boot/dts/pic32/pic32mzda_sk.dts=20
-> b/arch/mips/boot/dts/pic32/pic32mzda_sk.dts
-> index d7fa5d55dbf3..ab70637bbec5 100644
-> --- a/arch/mips/boot/dts/pic32/pic32mzda_sk.dts
-> +++ b/arch/mips/boot/dts/pic32/pic32mzda_sk.dts
-> @@ -52,22 +52,19 @@ keys0 {
->  		pinctrl-0 =3D <&user_buttons_s0>;
->  		pinctrl-names =3D "default";
->=20
-> -		#address-cells =3D <1>;
-> -		#size-cells =3D <0>;
-> -
-> -		button@sw1 {
-> +		button-1 {
->  			label =3D "ESC";
->  			linux,code =3D <1>;
->  			gpios =3D <&gpio1 12 0>;
->  		};
->=20
-> -		button@sw2 {
-> +		button-2 {
->  			label =3D "Home";
->  			linux,code =3D <102>;
->  			gpios =3D <&gpio1 13 0>;
->  		};
->=20
-> -		button@sw3 {
-> +		button-3 {
->  			label =3D "Menu";
->  			linux,code =3D <139>;
->  			gpios =3D <&gpio1 14 0>;
-> diff --git a/arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts=20
-> b/arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts
-> index 7fccf6357225..f3dff4009ab5 100644
-> --- a/arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts
-> +++ b/arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts
-> @@ -23,17 +23,15 @@ extosc: ref {
->=20
->  	gpio-keys {
->  		compatible =3D "gpio-keys";
-> -		#address-cells =3D <1>;
-> -		#size-cells =3D <0>;
->=20
-> -		button@0 {
-> +		button-0 {
->  			label =3D "reset";
->  			linux,code =3D <KEY_RESTART>;
->  			gpios =3D <&gpio 3 GPIO_ACTIVE_LOW>;
->  			debounce-interval =3D <60>;
->  		};
->=20
-> -		button@1 {
-> +		button-1 {
->  			label =3D "qss";
->  			linux,code =3D <KEY_WPS_BUTTON>;
->  			gpios =3D <&gpio 7 GPIO_ACTIVE_LOW>;
-> diff --git a/arch/mips/boot/dts/qca/ar9331_dpt_module.dts=20
-> b/arch/mips/boot/dts/qca/ar9331_dpt_module.dts
-> index 7695d326df11..c857cd22f7db 100644
-> --- a/arch/mips/boot/dts/qca/ar9331_dpt_module.dts
-> +++ b/arch/mips/boot/dts/qca/ar9331_dpt_module.dts
-> @@ -33,10 +33,8 @@ led-0 {
->=20
->  	gpio-keys {
->  		compatible =3D "gpio-keys";
-> -		#address-cells =3D <1>;
-> -		#size-cells =3D <0>;
->=20
-> -		button@0 {
-> +		button-0 {
->  			label =3D "reset";
->  			linux,code =3D <KEY_RESTART>;
->  			gpios =3D <&gpio 11 GPIO_ACTIVE_LOW>;
-> diff --git a/arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts=20
-> b/arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts
-> index d38aa73f1a2e..40e4c5da0e65 100644
-> --- a/arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts
-> +++ b/arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts
-> @@ -49,16 +49,14 @@ system {
->=20
->  	gpio-keys {
->  		compatible =3D "gpio-keys";
-> -		#address-cells =3D <1>;
-> -		#size-cells =3D <0>;
->=20
-> -		button@0 {
-> +		button-0 {
->  			label =3D "jumpstart";
->  			linux,code =3D <KEY_WPS_BUTTON>;
->  			gpios =3D <&gpio 11 GPIO_ACTIVE_LOW>;
->  		};
->=20
-> -		button@1 {
-> +		button-1 {
->  			label =3D "reset";
->  			linux,code =3D <KEY_RESTART>;
->  			gpios =3D <&gpio 12 GPIO_ACTIVE_LOW>;
-> diff --git a/arch/mips/boot/dts/qca/ar9331_omega.dts=20
-> b/arch/mips/boot/dts/qca/ar9331_omega.dts
-> index 11778abacf66..ed184d861d5f 100644
-> --- a/arch/mips/boot/dts/qca/ar9331_omega.dts
-> +++ b/arch/mips/boot/dts/qca/ar9331_omega.dts
-> @@ -31,10 +31,8 @@ system {
->=20
->  	gpio-keys {
->  		compatible =3D "gpio-keys";
-> -		#address-cells =3D <1>;
-> -		#size-cells =3D <0>;
->=20
-> -		button@0 {
-> +		button-0 {
->  			label =3D "reset";
->  			linux,code =3D <KEY_RESTART>;
->  			gpios =3D <&gpio 11 GPIO_ACTIVE_HIGH>;
-> diff --git=20
-> a/arch/mips/boot/dts/qca/ar9331_openembed_som9331_board.dts=20
-> b/arch/mips/boot/dts/qca/ar9331_openembed_som9331_board.dts
-> index e6622f8e8c2b..dc65ebd60bbc 100644
-> --- a/arch/mips/boot/dts/qca/ar9331_openembed_som9331_board.dts
-> +++ b/arch/mips/boot/dts/qca/ar9331_openembed_som9331_board.dts
-> @@ -33,10 +33,8 @@ led-0 {
->=20
->  	gpio-keys {
->  		compatible =3D "gpio-keys";
-> -		#address-cells =3D <1>;
-> -		#size-cells =3D <0>;
->=20
-> -		button@0 {
-> +		button-0 {
->  			label =3D "reset";
->  			linux,code =3D <KEY_RESTART>;
->  			gpios =3D <&gpio 11 GPIO_ACTIVE_HIGH>;
-> diff --git a/arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts=20
-> b/arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts
-> index c8290d36cfbe..5f424c2cd781 100644
-> --- a/arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts
-> +++ b/arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts
-> @@ -49,22 +49,20 @@ led3g {
->=20
->  	gpio-keys {
->  		compatible =3D "gpio-keys";
-> -		#address-cells =3D <1>;
-> -		#size-cells =3D <0>;
->=20
-> -		button@0 {
-> +		button-0 {
->  			label =3D "wps";
->  			linux,code =3D <KEY_WPS_BUTTON>;
->  			gpios =3D <&gpio 11 GPIO_ACTIVE_HIGH>;
->  		};
->=20
-> -		button@1 {
-> +		button-1 {
->  			label =3D "sw1";
->  			linux,code =3D <BTN_0>;
->  			gpios =3D <&gpio 18 GPIO_ACTIVE_HIGH>;
->  		};
->=20
-> -		button@2 {
-> +		button-2 {
->  			label =3D "sw2";
->  			linux,code =3D <BTN_1>;
->  			gpios =3D <&gpio 20 GPIO_ACTIVE_HIGH>;
-> --
-> 2.34.1
->=20
-
-
+IMO adding the READ_ONCE() as proposed in fine. Adding a helper to be called
+dependent on locking context still requires the caller / dev to know what the
+locking context is - so I don't think it provides much benefit.

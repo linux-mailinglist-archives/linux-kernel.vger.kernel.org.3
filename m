@@ -2,156 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD92558C40
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 02:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F57558C45
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 02:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbiFXA2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 20:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
+        id S231134AbiFXAbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 20:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbiFXA2M (ORCPT
+        with ESMTP id S229923AbiFXAbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 20:28:12 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7B01180D
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:28:09 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id e63so932872pgc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:28:09 -0700 (PDT)
+        Thu, 23 Jun 2022 20:31:22 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60895DC25
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:31:21 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id dw10-20020a17090b094a00b001ed00a16eb4so1259051pjb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 17:31:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=P4Yje83rZYDRwuL9uo9EpMh58B6jkiYDBp8jSKu+8xU=;
-        b=IUqbXQUyFPdxLRIJZ1sfcGFJ6lHDyH0SdlPGW96Ps+WO1W4m4JbAiwTZdMkKacl+MM
-         D5DjVbMguKKKfOEV6Yl7t72SfBwhAbK41aGj+mBhVLVvxmMIHEFzk4sjh5+rBvGALNqO
-         S8Gh5ygMb3xtpnxKqjFVqaOSvF9ykpbsXzfCOPU5EUZ0FlEC4iAXFhvTstnDtI1yLm+M
-         xr+F1GL0yzIohwkliEUKWoxjNr9v+ywYg/NrPryFnFrmULKs5kAeouQDX+51rEAxuH3s
-         ukYigjwuqbpal/SjKujJSmPK9uKTCEV6aWpTqgK24biQzsVZP6+UYL/wqYWc4g+StEYW
-         xi5w==
+        bh=IOiiEzf2Owa8eEtkAWHI6gKx/+L0ogxrj4UywWa0Fvs=;
+        b=ZyMkz1B9QFJcuQz/QRPOneAkqYcC+jOpJBpbASB5peQZufT5/r5En2t3mYwdPkd3Lr
+         a2ftkjaXiXS4qkOmZ11BBMR5ZtHpcbFG8ikAcILytdEJ1oY/ONBcq0rGRUG5rl9k/1wp
+         rlCBJ2fLTN0Eh47nwHLen44taBjN741iYlvffjTKsd4+RawpXhvy55otTUQCobZjc+F4
+         8fJIMNnNLTMVBOIi/j3RsAMXyVmOLsjH4dnQ6uqt411oEOyrA/1nkxh5bg0LZ8uJzbiJ
+         CXp0WKHGuKk/ENCY4UIH50SiJJ27697p8b3DBegKh5E4YxR/zJkeed3FjUWjWo/17q9M
+         hyxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=P4Yje83rZYDRwuL9uo9EpMh58B6jkiYDBp8jSKu+8xU=;
-        b=YsxQN55xaawp5IMpVdt/eos5jXFCHZEDw2GR+LJS++XKcIVaxJCi/b1ULbOHu+P+yK
-         bGQ/lPEPb5msQKEDth34qfltOmM1la7tktx6Iz/GNZMJv5PvRHgAH31ObsiAt+Qt/8nM
-         gPce2t0PHQW1yQCZl0Xt/xvVv/JBWg3kThzk264Usz1rCHDYdY4y1BQm548DTuYImFwW
-         HUbFQAzHxBlOtj4ki5/83vbNGNiOXtCz1O5+jHiXlnX+lmMbp8OWVePKImkmYYMQ9noA
-         n8kmS7ViEtgp+xgDYAPn6rVSdMfA5epiRBFHCeQu3a9CBjL8Emrup0q4H3mZ/+M2sGDp
-         sXpQ==
-X-Gm-Message-State: AJIora8tE7ShswYFj71uyQX6LoQNI4Yb6EtjxZFvh3G1a11B/cGxxVAh
-        eyBDfT80M7VjvViRPHirJ7kmcA==
-X-Google-Smtp-Source: AGRyM1s4tA8aTDDu3gGkINrxoWIx2aC28XlcSQwcSIGGo+MPKiMLb03umdr2bcjVfA21s3ZLy9ye1w==
-X-Received: by 2002:a63:7046:0:b0:40c:af8d:a6 with SMTP id a6-20020a637046000000b0040caf8d00a6mr9703157pgn.38.1656030488471;
-        Thu, 23 Jun 2022 17:28:08 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id s11-20020a170902a50b00b001620eb3a2d6sm374708plq.203.2022.06.23.17.28.07
+        bh=IOiiEzf2Owa8eEtkAWHI6gKx/+L0ogxrj4UywWa0Fvs=;
+        b=TRYN+RLJ0NTnz12hijnJdNjpFAbqyUjZEh4GGc3WPFDFutU9BX7npNEYCtlEZrL82C
+         4wap2oxE7U4fd0G4rk+aRPoz4SH6MJS9M/n+JmqZ4VuowFJdAtGRK8USCyYfrcA67hF5
+         zXoRdaXUiG5We4s7KzU8OutAJyMU+38OdeQmRQVmP5+Qx4XMQeuoG5BcLZRGweKNsNEw
+         FXPuuaUWyAuM0ByL8w9EEALi0tifEsy6FHzLUTu/DyrbQb8jYBO44zEGDSfkOYf+q51U
+         RqG8iDoTwZcqBzTeGM1FEojCaB3xbub1MHF3qpxznQbK/RQ8Tj8Ht0fRJ7wcOCQUqZGB
+         l7RQ==
+X-Gm-Message-State: AJIora+PnXOfPq+yKk9C+EKV83xR7rnB0lsgyCrEglmnLVEryjgW9kF5
+        5Z31OxRiZXw/AG5038azfrymvA==
+X-Google-Smtp-Source: AGRyM1vcGIva17Yiz9xNolPeazjHi8DWAZr4gphlJGqm2XezqABG60RkTIfMAjrt7dBawSc3HCB4pg==
+X-Received: by 2002:a17:90b:1d90:b0:1e8:5a98:d591 with SMTP id pf16-20020a17090b1d9000b001e85a98d591mr712610pjb.126.1656030680952;
+        Thu, 23 Jun 2022 17:31:20 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id y1-20020a17090a1f4100b001ec9f9fe028sm2536065pjy.46.2022.06.23.17.31.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 17:28:07 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 05:58:05 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 21/31] soc/tegra: Remove the call to
- devm_pm_opp_set_clkname()
-Message-ID: <20220624002805.anv62ufihdrncwus@vireshk-i7>
-References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <1e88b248352afe03cd3bf0e887b1f2be86b5afb5.1653564321.git.viresh.kumar@linaro.org>
- <12c085af-1202-95cf-e9ad-ddcfbdadf0d6@nvidia.com>
+        Thu, 23 Jun 2022 17:31:20 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 00:31:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v1 00/10] KVM: nVMX: Use vmcs_config for setting up
+ nested VMX MSRs
+Message-ID: <YrUF1Zj35BYvXrB6@google.com>
+References: <20220622164432.194640-1-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <12c085af-1202-95cf-e9ad-ddcfbdadf0d6@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220622164432.194640-1-vkuznets@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-06-22, 22:15, Jon Hunter wrote:
-> On 26/05/2022 12:42, Viresh Kumar wrote:
-> > diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
-> > index 32c346b72635..49a5360f4507 100644
-> > --- a/drivers/soc/tegra/common.c
-> > +++ b/drivers/soc/tegra/common.c
-> > @@ -108,12 +108,6 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
-> >   	u32 hw_version;
-> >   	int err;
-> > -	err = devm_pm_opp_set_clkname(dev, NULL);
-> > -	if (err) {
-> > -		dev_err(dev, "failed to set OPP clk: %d\n", err);
-> > -		return err;
-> > -	}
-> > -
-> >   	/* Tegra114+ doesn't support OPP yet */
-> >   	if (!of_machine_is_compatible("nvidia,tegra20") &&
-> >   	    !of_machine_is_compatible("nvidia,tegra30"))
+On Wed, Jun 22, 2022, Vitaly Kuznetsov wrote:
+> vmcs_config is a sanitized version of host VMX MSRs where some controls are
+> filtered out (e.g. when Enlightened VMCS is enabled, some know bugs are 
+> discovered, some inconsistencies in controls are detected,...) but
+> nested_vmx_setup_ctls_msrs() uses raw host MSRs instead. This may end up
+> in exposing undesired controls to L1. Switch to using vmcs_config instead.
 > 
-> 
-> This appears to be breaking a few Tegra drivers. For example, on Tegra210
-> Jetson TX1 I am seeing the following and the eMMC is no longer working ...
-> 
-> [    0.526729] sdhci-tegra 700b0600.mmc: dev_pm_opp_set_rate: device's opp table doesn't exist
-> [    0.526733] sdhci-tegra 700b0600.mmc: failed to set clk rate to 400000Hz: -19
-> [    0.528830] sdhci-tegra 700b0600.mmc: dev_pm_opp_set_rate: device's opp table doesn't exist
-> [    0.528833] sdhci-tegra 700b0600.mmc: failed to set clk rate to 400000Hz: -19
-> 
-> I have seen another instance of this on Jetson Xavier NX ...
-> 
-> [   12.301336] tegra-pwm 32d0000.pwm: dev_pm_opp_set_rate: device's opp table doesn't exist
-> [   12.301350] tegra-pwm 32d0000.pwm: Failed to set max frequency: -19
-> 
-> Bisect is point to this commit and so something is not working as
-> expected.
+> RFC part: vmcs_config's sanitization now is a mix of "what can't be enabled"
+> and "what KVM doesn't want" and we need to separate these as for nested VMX
+> MSRs only the first category makes sense. This gives vmcs_config a slightly
+> different meaning "controls which can be (theoretically) used". An alternative
+> approach would be to store sanitized host MSRs values separately, sanitize
+> them and and use in nested_vmx_setup_ctls_msrs() but currently I don't see
+> any benefits. Comments welcome!
 
-Thanks again Jon.
+I like the idea overall, even though it's a decent amount of churn.  It seems
+easier to maintain than separate paths for nested.  The alternative would be to
+add common helpers to adjust the baseline configurations, but I don't see any
+way to programmatically make that approach more robust.
 
-This is what happens when the special code doesn't have a comment
-attached with it. Neither the reviewer, nor the author remember why
-the special piece was required :)
+An idea to further harden things.  Or: an excuse to extend macro shenanigans :-)
 
-I had to go through the whole sequence, along with DT to understand
-what might have broken this stuff :)
+If we throw all of the "opt" and "min" lists into macros, e.g. KVM_REQUIRED_*
+and KVM_OPTIONAL_*, and then use those to define a KVM_KNOWN_* field, we can
+prevent using the mutators to set/clear unknown bits at runtime via BUILD_BUG_ON().
+The core builders, e.g. vmx_exec_control(), can still set unknown bits, i.e. set
+bits that aren't enumerated to L1, but that's easier to audit and this would catch
+regressions for the issues fixed in patches.
 
-I will drop this patch and add this comment in its place:
+It'll required making add_atomic_switch_msr_special() __always_inline (or just
+open code it), but that's not a big deal.
 
-diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
-index 32c346b72635..9f3fdeb1a11c 100644
---- a/drivers/soc/tegra/common.c
-+++ b/drivers/soc/tegra/common.c
-@@ -108,6 +108,13 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
-        u32 hw_version;
-        int err;
+E.g. if we have
 
-+       /*
-+        * For some devices we don't have any OPP table in the DT, and in order
-+        * to use the same code path for all the devices, we create a dummy OPP
-+        * table for them via this call. The dummy OPP table is only capable of
-+        * doing clk_set_rate() on invocation of dev_pm_opp_set_rate() and
-+        * doesn't provide any other functionality.
-+        */
-        err = devm_pm_opp_set_clkname(dev, NULL);
-        if (err) {
-                dev_err(dev, "failed to set OPP clk: %d\n", err);
+  #define KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL <blah blah blah>
+  #define KVM_OPTIONAL_CPU_BASED_VM_EXEC_CONTROL <blah blah blah>
+
+Then the builders for the controls shadows can do:
+
+diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+index 286c88e285ea..5eb75822a09e 100644
+--- a/arch/x86/kvm/vmx/vmx.h
++++ b/arch/x86/kvm/vmx/vmx.h
+@@ -468,6 +468,8 @@ static inline u8 vmx_get_rvi(void)
+ }
+ 
+ #define BUILD_CONTROLS_SHADOW(lname, uname, bits)                              \
++#define KVM_KNOWN_ ## uname                                                    \
++       (KVM_REQUIRED_ ## uname | KVM_OPTIONAL_ ## uname)                       \
+ static inline void lname##_controls_set(struct vcpu_vmx *vmx, u##bits val)     \
+ {                                                                              \
+        if (vmx->loaded_vmcs->controls_shadow.lname != val) {                   \
+@@ -485,10 +487,12 @@ static inline u##bits lname##_controls_get(struct vcpu_vmx *vmx)          \
+ }                                                                              \
+ static inline void lname##_controls_setbit(struct vcpu_vmx *vmx, u##bits val)  \
+ {                                                                              \
++       BUILD_BUG_ON(!(val & KVM_KNOWN_ ## uname));                             \
+        lname##_controls_set(vmx, lname##_controls_get(vmx) | val);             \
+ }                                                                              \
+ static inline void lname##_controls_clearbit(struct vcpu_vmx *vmx, u##bits val)        \
+ {                                                                              \
++       BUILD_BUG_ON(!(val & KVM_KNOWN_ ## uname));                             \
+        lname##_controls_set(vmx, lname##_controls_get(vmx) & ~val);            \
+ }
+ BUILD_CONTROLS_SHADOW(vm_entry, VM_ENTRY_CONTROLS, 32)
 
 
-Though there will still be a problem here with my changes, we don't
-accept NULL clkname anymore for the set-clkname API. And tegra does
-this to pick the first clock available in DT (at index 0) I think.
-Other drivers (mostly qcom) who need such dummy OPP table, provide a
-real clock name instead. Will it be possible to pass that here somehow
-?
 
--- 
-viresh
+Handling the controls that are restricted to CONFIG_X86_64=y will be midly annoying,
+but adding a base set isn't too bad, e.g.
+
+#define __KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL <blah blah blah>
+#ifdef CONFIG_X86_64
+#define KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL (__KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL | \
+						CPU_BASED_CR8_LOAD_EXITING |		   \
+						CPU_BASED_CR8_STORE_EXITING)
+#else
+#define KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL __KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL
+#endif

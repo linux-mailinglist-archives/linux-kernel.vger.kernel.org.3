@@ -2,112 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE95755A359
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21DC55A366
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiFXVMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 17:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
+        id S230366AbiFXVSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 17:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiFXVMw (ORCPT
+        with ESMTP id S230423AbiFXVSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 17:12:52 -0400
-Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F60A85D33
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:12:51 -0700 (PDT)
-Received: from mail (mail.baikal.int [192.168.51.25])
-        by mail.baikalelectronics.com (Postfix) with ESMTP id 3DB9B16CF;
-        Sat, 25 Jun 2022 00:14:10 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 3DB9B16CF
+        Fri, 24 Jun 2022 17:18:05 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4971063DF
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:18:02 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id u12so7115453eja.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:18:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1656105250;
-        bh=EVjSlxO14l8e2kikyRC3XsnI7trVHKvpd6yQROJjrNI=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=OqoNP7o33DjMdg1MucEEQUwgO9V3dACdAmJyRQbS+NuVHdtSDOuq13cZEWPkYVlH/
-         igxFCz/JO/zZmRkmIv+nmS8aGWmoC8CsfuLqQa7qutxYhe9T9LEjzEvX956FVbyX1p
-         yfUdmUj5hT/lbK92Pgb3njIYOPJzP56Xbb5YCW64=
-Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 25 Jun 2022 00:12:49 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        <soc@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v3 2/2] bus: bt1-axi: Don't print error on -EPROBE_DEFER
-Date:   Sat, 25 Jun 2022 00:12:33 +0300
-Message-ID: <20220624211233.7529-2-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220624211233.7529-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220624211233.7529-1-Sergey.Semin@baikalelectronics.ru>
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kOvhoEpSE/InAZniXEti7vxsLeyf1a5ZFLlDrYfEPAA=;
+        b=M1hPxnJUFy/KS9mddV1ZPCrOTUCJOFrbdOpyi7j0ftrXkyhBEEnYliwfUMRIJpc302
+         UerGSaJuJ0U+ZQOOBbu9YnTTWBPqzn6BGm20kcHK021zUKyUQcLbeROv76yKvkCA4wL5
+         TKPV/NeXPSFred9jnh+TebuOPhqPca6DgiiGGp4t7notg/0HrutadjdFHCaRzrR60/SS
+         kEf+UPdtfuMWWyAGy3sWvPgk2BDAIWToAkVEoiSpYe94Nv1jd3nvOoAgAb/ln/G4XSiC
+         GAFPYKei8IcLsfKWZvc/9gQfNai9RmMKWnJqWlZq+QZRlzREX3RhLKN999kWcpZY7b77
+         80Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kOvhoEpSE/InAZniXEti7vxsLeyf1a5ZFLlDrYfEPAA=;
+        b=ahOeQ0ESiNX3lNbIdT0S3oBwbm0kEytPDHik+7ZSZ9aGuAkvHtQc9eKG5cOLxqwd53
+         9m1VmyvmMeKIJAon2FIXgmYqTS4H/wmO3UcuWrYwo8/MzIfm2+bR+wpFDqYxgtS6fa7p
+         ABhtpxVQmSK+fA97D2REAHoNQGE26UOTjrq8oyO0CHhonKgD1KW1KFLlbotUxmS1+A5z
+         2RfcOf3/susUrUm6aUJQVXv4bB7YuAde9E5Un5MmNO8+cc7L3T9iPMet+3lh8hVCWhVG
+         vaxBrNyapQ+OWC3LbESYUu8xhV2aeRlBwZ3wJXTEp+1OP3k3omp3/JneUSg/UA7tRhXI
+         8rTw==
+X-Gm-Message-State: AJIora+v64z1SJFETZGdA6jm2eWGXMIHhAaHFWYD90OUrxEYZwbaiv3n
+        fzqOp+1f5XXXATQZ+UI70X+OIgcFoHsq18BUXKB5jQ==
+X-Google-Smtp-Source: AGRyM1sSg7LIinwzTB+qnSxgsQphAXAb9tAoVzunteBdzvrsgIwf9MXdDqBKLlkpEVBLtUpHvFPPJdLDYUqh2lPKgqo=
+X-Received: by 2002:a17:907:d25:b0:711:ea61:63aa with SMTP id
+ gn37-20020a1709070d2500b00711ea6163aamr992776ejc.584.1656105480525; Fri, 24
+ Jun 2022 14:18:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CABdmKX3ZV6-u-oLvW_wWavAMBfrsZ=C_rCgK_Uz4VjxcRvRFew@mail.gmail.com>
+ <81026ef07c1ce20f8673b75b17bab79a2b39c548.camel@ndufresne.ca>
+ <CABdmKX2LxZ6zZR=fhXfnuWCB2BR+gzDd1-t1DD2A2XP24wvuGQ@mail.gmail.com>
+ <Yn6DpUsoSz1/15Kc@slm.duckdns.org> <CABdmKX1xvm87WMEDkMc9Aye46E4zv1-scenwgaRxHesrOCsaYg@mail.gmail.com>
+ <YodHjYlMx1XGtM2+@slm.duckdns.org> <CABdmKX2Ok023rN1drQgXVZLKUO_DVYrzmEamCgMMu6BPO67yhQ@mail.gmail.com>
+ <CABdmKX0WV8VWgeafVGJ++nJ4xsJD7Wpz=3KX=BW1du=huttfvw@mail.gmail.com>
+ <YrYbwu0iIAJJGXVg@phenom.ffwll.local> <CANDhNCqGjaq-SFvWwkqnEFj4tJcRqCYupZ03wLyCexqTH5MqMg@mail.gmail.com>
+ <YrYgWCTtZqfvCt5D@phenom.ffwll.local>
+In-Reply-To: <YrYgWCTtZqfvCt5D@phenom.ffwll.local>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Fri, 24 Jun 2022 14:17:49 -0700
+Message-ID: <CABdmKX0bJDLwK7JEDGVb=KHtoVbZgnXYr8UE5eUpLYuAyiWwyw@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] Proposal for a GPU cgroup controller
+To:     John Stultz <jstultz@google.com>,
+        "T.J. Mercier" <tjmercier@google.com>, Tejun Heo <tj@kernel.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kernel-team@android.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org
+Cc:     Daniel Vetter <daniel@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Baikal-T1 AXI bus driver correctly handles the deferred probe
-situation, but still pollutes the system log with a misleading error
-message. Let's fix that by using the dev_err_probe() method to print the
-log message in case of the clocks/resets request errors.
+On Fri, Jun 24, 2022 at 1:36 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Fri, Jun 24, 2022 at 01:32:45PM -0700, John Stultz wrote:
+> > On Fri, Jun 24, 2022 at 1:17 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > >
+> > > On Wed, Jun 15, 2022 at 10:31:21AM -0700, T.J. Mercier wrote:
+> > > > On Fri, May 20, 2022 at 9:25 AM T.J. Mercier <tjmercier@google.com> wrote:
+> > > > >
+> > > > > On Fri, May 20, 2022 at 12:47 AM Tejun Heo <tj@kernel.org> wrote:
+> > > > > >
+> > > > > > Hello,
+> > > > > >
+> > > > > > On Tue, May 17, 2022 at 04:30:29PM -0700, T.J. Mercier wrote:
+> > > > > > > Thanks for your suggestion. This almost works. "dmabuf" as a key could
+> > > > > > > work, but I'd actually like to account for each heap. Since heaps can
+> > > > > > > be dynamically added, I can't accommodate every potential heap name by
+> > > > > > > hardcoding registrations in the misc controller.
+> > > > > >
+> > > > > > On its own, that's a pretty weak reason to be adding a separate gpu
+> > > > > > controller especially given that it doesn't really seem to be one with
+> > > > > > proper abstractions for gpu resources. We don't want to keep adding random
+> > > > > > keys to misc controller but can definitely add limited flexibility. What
+> > > > > > kind of keys do you need?
+> > > > > >
+> > > > > Well the dmabuf-from-heaps component of this is the initial use case.
+> > > > > I was envisioning we'd have additional keys as discussed here:
+> > > > > https://lore.kernel.org/lkml/20220328035951.1817417-1-tjmercier@google.com/T/#m82e5fe9d8674bb60160701e52dae4356fea2ddfa
+> > > > > So we'd end up with a well-defined core set of keys like "system", and
+> > > > > then drivers would be free to use their own keys for their own unique
+> > > > > purposes which could be complementary or orthogonal to the core set.
+> > > > > Yesterday I was talking with someone who is interested in limiting gpu
+> > > > > cores and bus IDs in addition to gpu memory. How to define core keys
+> > > > > is the part where it looks like there's trouble.
+> > > > >
+> > > > > For my use case it would be sufficient to have current and maximum
+> > > > > values for an arbitrary number of keys - one per heap. So the only
+> > > > > part missing from the misc controller (for my use case) is the ability
+> > > > > to register a new key at runtime as heaps are added. Instead of
+> > > > > keeping track of resources with enum misc_res_type, requesting a
+> > > > > resource handle/ID from the misc controller at runtime is what I think
+> > > > > would be required instead.
+> > > > >
+> > > > Quick update: I'm going to make an attempt to modify the misc
+> > > > controller to support a limited amount of dynamic resource
+> > > > registration/tracking in place of the new controller in this series.
+> > > >
+> > > > Thanks everyone for the feedback.
+> > >
+> > > Somehow I missed this entire chain here.
+> > >
+> > > I'm not a fan, because I'm kinda hoping we could finally unify gpu memory
+> > > account. Atm everyone just adds their one-off solution in a random corner:
+> > > - total tracking in misc cgroup controller
+> > > - dma-buf sysfs files (except apparently too slow so it'll get deleted
+> > >   again)
+> > > - random other stuff on open device files os OOM killer can see it
+> > >
+> > > This doesn't look good.
+> >
+> > But I also think one could see it as "gpu memory" is the drm subsystem
+> > doing the same thing (in that it's artificially narrow to gpus). It
+> > seems we need something to account for buffers allocated by drivers,
+> > no matter which subsystem it was in (drm, v4l2, or networking or
+> > whatever).
+>
+> This is what the gpucg was. It wasn't called the dmabuf cg because we want
+> to account also memory of other types (e.g. drm gem buffer objects which
+> aren't exported), and I guess people didn't dare call it an xpu.
+>
+> But this was absolutely for a lot more than just "gpu drivers in drm".
+> Better names welcome.
+> -Daniel
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+From an API perspective the two approaches (misc vs GPU) seem similar
+to me. Someone comes up with a name of a resource they want to track,
+and it's added as a key in a cgroup interface file as drivers register
+and perform accounting on that resource. Considering just the naming,
+what do you see as the appeal of a controller named GPU/XPU vs one
+named Misc? Folks seem to have assumptions about the type of resources
+a "GPU" controller should be tracking, and potentially also how
+different resources are grouped under a single resource name. So is
+your thought that non-graphics related accounting of the same sort
+should be using a differently named controller, even if that
+controller could have the same implementation?
 
----
+My thought is that the resource names should be as specific as
+possible to allow fine-grained accounting, and leave any grouping of
+resources to userspace. We can do that under any controller. If you'd
+like to see a separate controller for graphics related stuff... well
+that's what I was aiming for with the GPU cgroup controller. It's just
+that dmabufs from heaps are the first use-case wired up.
 
-Link: https://lore.kernel.org/lkml/20220610080103.10689-1-Sergey.Semin@baikalelectronics.ru/
-Changelog v2:
-- Use the dev_err_probe() return value as the return status of the
-  corresponding method. (@Philipp)
-
-Link: https://lore.kernel.org/lkml/20220610104030.28399-2-Sergey.Semin@baikalelectronics.ru/
-Changelog v3:
-- Just resend.
-- Rebase onto the kernel v5.19-rcX.
----
- drivers/bus/bt1-axi.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/bus/bt1-axi.c b/drivers/bus/bt1-axi.c
-index e7a6744acc7b..70e49a6e5374 100644
---- a/drivers/bus/bt1-axi.c
-+++ b/drivers/bus/bt1-axi.c
-@@ -135,10 +135,9 @@ static int bt1_axi_request_rst(struct bt1_axi *axi)
- 	int ret;
- 
- 	axi->arst = devm_reset_control_get_optional_exclusive(axi->dev, "arst");
--	if (IS_ERR(axi->arst)) {
--		dev_warn(axi->dev, "Couldn't get reset control line\n");
--		return PTR_ERR(axi->arst);
--	}
-+	if (IS_ERR(axi->arst))
-+		return dev_err_probe(axi->dev, PTR_ERR(axi->arst),
-+				     "Couldn't get reset control line\n");
- 
- 	ret = reset_control_deassert(axi->arst);
- 	if (ret)
-@@ -159,10 +158,9 @@ static int bt1_axi_request_clk(struct bt1_axi *axi)
- 	int ret;
- 
- 	axi->aclk = devm_clk_get(axi->dev, "aclk");
--	if (IS_ERR(axi->aclk)) {
--		dev_err(axi->dev, "Couldn't get AXI Interconnect clock\n");
--		return PTR_ERR(axi->aclk);
--	}
-+	if (IS_ERR(axi->aclk))
-+		return dev_err_probe(axi->dev, PTR_ERR(axi->aclk),
-+				     "Couldn't get AXI Interconnect clock\n");
- 
- 	ret = clk_prepare_enable(axi->aclk);
- 	if (ret) {
--- 
-2.35.1
-
+I haven't put much time into the misc controller effort yet, and I'd
+still be happy to see the GPU controller accepted if we can agree
+about how it'd be used going forward. Daniel, I think you're in a
+great position to comment about this. :) If there's a place where the
+implementation is missing the mark, then let's change it. Are the
+controller and resource naming the only issues?

@@ -2,58 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C81455A014
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B00655A009
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbiFXR1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:27:37 -0400
+        id S232437AbiFXR1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:27:40 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbiFXR0z (ORCPT
+        with ESMTP id S229595AbiFXR0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:26:55 -0400
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A821B34650;
-        Fri, 24 Jun 2022 10:26:52 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id a16so1918127ilr.6;
-        Fri, 24 Jun 2022 10:26:52 -0700 (PDT)
+        Fri, 24 Jun 2022 13:26:40 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26892BE6;
+        Fri, 24 Jun 2022 10:26:39 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id s17so3378785iob.7;
+        Fri, 24 Jun 2022 10:26:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=Hcu9Y5I2TimI6GlhyMhgQe9uEC4LVq7xIAa/nAEPBC8=;
-        b=Ks9Kxud5Ef+I3tMy+o1ZwmojUgWitXjhm+aOI+TAM+04nwtxS5Y4ixfMDKV45zMDMl
-         xNr1C+I4tmkK2aqyAf87mcOULKZoq/ZX+XVgrrHr79686T5Id6dKPPAJQEhY2saPyaT0
-         Eh4KnkR0cjXYld71EopeDXFBiXWEzxKQ1GQou6rUu7UkJx86rkRFnT7f5cWwGyS/adKS
-         8a8mJwS9Z89/1ewYgwN+LPvw0nSLJG3FqhEYsIU+FCOJ8Db48beet0FsB5bLV/GnQuaS
-         VNqFZUUf+HcYiqUzeZc4FpzVnq8TfTQgw358aMvjRadnfv39OXfqAaKqlGaY6k9HuL+7
-         BmUg==
-X-Gm-Message-State: AJIora9rzcVhj4Zz/mVgjnyCbuBakjjT1gUQ3I71b7tklDn+Q1JyVQjq
-        p/Aw5+PyuA7RuZi/2HLdRw==
-X-Google-Smtp-Source: AGRyM1vzAHHR7MUdvcHbYB9plvLeB5pijXtWczq677bgA2sQBUma/I2wqLWx2WXMYorxt26CDMLDSg==
-X-Received: by 2002:a92:a041:0:b0:2d7:7935:effa with SMTP id b1-20020a92a041000000b002d77935effamr44849ilm.222.1656091611881;
-        Fri, 24 Jun 2022 10:26:51 -0700 (PDT)
+        bh=92QKbH/mPXhxHIYJf1fLlrKB6WxLUvpdcDo1o4OtEnM=;
+        b=nkLqdtay6VGjJqffHvqtqksKSKVkBilY1c1m5KAlQMy8AJo7DT/wTGSiN7+Hvhm6OZ
+         5NK5dApuZdhWE7sD7gmiuW8mnZNgcBVUWr08Y2QT5VUkWgLZWrdwwqNJFe3KLCMcVDiy
+         OQkBVynzJVclFSBAvtlpFjkdTFkU7nBi+RExRN7qf2SF4KNAnAp6m35rcdlw3XWHjg0O
+         jyaGn8aX9MWabkgmH4krflJGpABcTYGkLvT9Ff1Cn7vmFykm0oh3DpTKayQDOu7LFBY1
+         KBdZbUaiR+/9Mg6TXWzJbqbh+o2F5a/G524sZ1RjL+AJcIYtJGIsyIPiLUmvaUnoWf/K
+         cWTA==
+X-Gm-Message-State: AJIora/T87xyD3LzBX1ATxDZL4VjYTWfmf/6ffZkthaxIq5ZiERfn/8E
+        aw/Pd2wwO9Z6XxwV5t2hItwyaxa/og==
+X-Google-Smtp-Source: AGRyM1s8SzrwSpGacP/r2ARwl+tUdS8WymnOz9QJv44qHprtsvHiQ9e/7OSdNfiAyfKqtnqiAMvqmw==
+X-Received: by 2002:a02:90ce:0:b0:32e:e2ce:b17c with SMTP id c14-20020a0290ce000000b0032ee2ceb17cmr153954jag.268.1656091599142;
+        Fri, 24 Jun 2022 10:26:39 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id s12-20020a92d90c000000b002d92c91da91sm1344610iln.77.2022.06.24.10.26.50
+        by smtp.gmail.com with ESMTPSA id u10-20020a92da8a000000b002d925059ba6sm1354817iln.87.2022.06.24.10.26.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 10:26:51 -0700 (PDT)
-Received: (nullmailer pid 146334 invoked by uid 1000);
+        Fri, 24 Jun 2022 10:26:38 -0700 (PDT)
+Received: (nullmailer pid 146342 invoked by uid 1000);
         Fri, 24 Jun 2022 17:26:34 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Sricharan R <quic_srichara@quicinc.com>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        agross@kernel.org, quic_varada@quicinc.com,
-        linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, p.zabel@pengutronix.de
-In-Reply-To: <20220621161126.15883-5-quic_srichara@quicinc.com>
-References: <20220621161126.15883-1-quic_srichara@quicinc.com> <20220621161126.15883-5-quic_srichara@quicinc.com>
-Subject: Re: [PATCH V2 4/8] dt-bindings: pinctrl: qcom: Add ipq5018 pinctrl bindings
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
+        wenst@chromium.org, p.zabel@pengutronix.de,
+        chun-jie.chen@mediatek.com, matthias.bgg@gmail.com,
+        sboyd@kernel.org, konrad.dybcio@somainline.org,
+        linux-clk@vger.kernel.org, fparent@baylibre.com,
+        phone-devel@vger.kernel.org, robh+dt@kernel.org,
+        y.oudjana@protonmail.com, rex-bc.chen@mediatek.com,
+        martin.botka@somainline.org, marijn.suijten@somainline.org,
+        sam.shih@mediatek.com, kernel@collabora.com,
+        mturquette@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        ikjn@chromium.org, krzysztof.kozlowski+dt@linaro.org,
+        weiyi.lu@mediatek.com, miles.chen@mediatek.com, ck.hu@mediatek.com,
+        linux-mediatek@lists.infradead.org, jason-jh.lin@mediatek.com,
+        ~postmarketos/upstreaming@lists.sr.ht, bgolaszewski@baylibre.com,
+        paul.bouchara@somainline.org, devicetree@vger.kernel.org
+In-Reply-To: <20220624093525.243077-5-angelogioacchino.delregno@collabora.com>
+References: <20220624093525.243077-1-angelogioacchino.delregno@collabora.com> <20220624093525.243077-5-angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v3 4/7] dt-bindings: clock: mediatek: Add clock driver bindings for MT6795
 Date:   Fri, 24 Jun 2022 11:26:34 -0600
-Message-Id: <1656091594.356132.146333.nullmailer@robh.at.kernel.org>
+Message-Id: <1656091594.386709.146341.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -65,48 +73,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022 21:41:22 +0530, Sricharan R wrote:
-> From: Varadarajan Narayanan <quic_varada@quicinc.com>
+On Fri, 24 Jun 2022 11:35:22 +0200, AngeloGioacchino Del Regno wrote:
+> Add the bindings for the clock drivers of the MediaTek Helio X10
+> MT6795 SoC.
 > 
-> Add device tree binding Documentation details for ipq5018
-> pinctrl driver.
-> 
-> Co-developed-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
-> Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
-> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
-> Signed-off-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
->  .../pinctrl/qcom,ipq5018-pinctrl.yaml         | 145 ++++++++++++++++++
->  1 file changed, 145 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml
+>  .../bindings/clock/mediatek,mt6795-clock.yaml | 66 +++++++++++++++++
+>  .../clock/mediatek,mt6795-sys-clock.yaml      | 74 +++++++++++++++++++
+>  2 files changed, 140 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt6795-clock.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:72:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:73:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:74:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:75:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:76:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:77:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:78:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:79:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:80:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:81:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:82:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:83:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:84:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:85:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:86:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:87:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:88:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:89:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-pinctrl.yaml:90:11: [warning] wrong indentation: expected 16 but found 10 (indentation)
 
 dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.example.dtb: power-controller@10001000: '#power-domain-cells' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/power-domain.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.example.dtb: power-controller@10003000: '#power-domain-cells' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/power-domain.yaml
 
 doc reference errors (make refcheckdocs):
 

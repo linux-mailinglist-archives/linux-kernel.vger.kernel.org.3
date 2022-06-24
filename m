@@ -2,106 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A406955A344
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B2355A347
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbiFXVFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 17:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37728 "EHLO
+        id S231843AbiFXVHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 17:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiFXVFm (ORCPT
+        with ESMTP id S231654AbiFXVG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 17:05:42 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57B27FD04
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:05:40 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id g39-20020a05600c4ca700b003a03ac7d540so1268131wmp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 14:05:40 -0700 (PDT)
+        Fri, 24 Jun 2022 17:06:59 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4A2185797;
+        Fri, 24 Jun 2022 14:06:44 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id D969116CC;
+        Sat, 25 Jun 2022 00:07:59 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com D969116CC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4FBq55ALNoB8I9/Jp2eahFZ3TVuZO8zAHamAFfwJTA4=;
-        b=jtNLzbazAZ3Ty+PCe4NJUDW5r9cbkHlRd8h2mbV7+waX1Tx9erQtwlu2e8BUxesIDH
-         SpaHCfUHUYE9Gcjqbo0B/IDMs/JrP3lo3//ZjLcKnRD7/2NuKlxlUOPrugPQ8PeHKwme
-         wzVoLofv+/w69KJivy77K+FdWGQ9xTFTuR8C0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=4FBq55ALNoB8I9/Jp2eahFZ3TVuZO8zAHamAFfwJTA4=;
-        b=abfeze31CuMyQoiVur6Djj4cJ1QdkVHQ5t7DOeX6nVrXThIBY7b5QA5DoM5WQWEDZV
-         eloz0jMnKqh6RESLXlBtPPw6GaN0mUf0Y0uzSkLj1hVOJiukj9xiUQcqjWjmotVmj+Ja
-         EgiXrySzhN++MvPODiLlyfHmVRInLGvWivbK971a9lLdXAR3wVCpMseB+uEdR29IKo2K
-         toS+8jH668Pw84WEMlKXA9s3+DQpU2RTUJWVgH1J480j4a5mgekvRtYSFCyA5UGJeAlC
-         mon5f/PA0Yx6rd5/buza7jcOyJIJZrxHpZWy+XqdMhW8VyT6GKfbhC8ZprSW/+fpNm2z
-         Xl3A==
-X-Gm-Message-State: AJIora/zapPR4NcLzaFdV7IMBmMJsCBazJ1pgjMWPtbeA5NQGAmdZRPM
-        lbcOmo2E6UYdHU8ntOIvmkYNQQ==
-X-Google-Smtp-Source: AGRyM1s3Pl4EVQvFKsoBwid6w18frt80sinR1W0DhYBmiX4lMtmHCpKONBuPPCGUsGyEmAfWWb+3qw==
-X-Received: by 2002:a05:600c:3553:b0:39c:63a3:f54a with SMTP id i19-20020a05600c355300b0039c63a3f54amr989149wmq.61.1656104739492;
-        Fri, 24 Jun 2022 14:05:39 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id i6-20020a05600c354600b003974a00697esm8995188wmq.38.2022.06.24.14.05.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 14:05:39 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 23:05:37 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-kernel@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Subject: Re: Please add another drm/msm tree to the linux-next
-Message-ID: <YrYnIY2s2Nj5C66N@phenom.ffwll.local>
-Mail-Followup-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>, linux-next@vger.kernel.org,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-kernel@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>
-References: <5dbc0159-cb33-db5b-20cc-05f3027af15e@linaro.org>
+        d=baikalelectronics.ru; s=mail; t=1656104880;
+        bh=AQ9cVhH28ibWIJ71leU3acpoUyEPQOPDWXZEPyFlp7k=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
+        b=ZOTFESwnyYYXTTlxnltvttHCrpDkZ+gM62/MylYrnld75ppQszb+xmFKTKBxhp051
+         BJiv2FZltkXIHmW3pdEVagToIFs9gaJZ2VeLV5hbIdpz573kVX2NfhkadnFkOe8O3A
+         x5NRG+2w3wjHaNQyHyXrbOaapqK/Gi2mCN02oIE4=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 25 Jun 2022 00:06:37 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND v2] spi: dw: Add deferred DMA-channels setup support
+Date:   Sat, 25 Jun 2022 00:06:23 +0300
+Message-ID: <20220624210623.6383-1-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5dbc0159-cb33-db5b-20cc-05f3027af15e@linaro.org>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 05:19:42PM +0300, Dmitry Baryshkov wrote:
-> Hi Stephen,
-> 
-> I would appreciate if you could add
-> 
-> https://gitlab.freedesktop.org/lumag/msm.git msm-next-lumag
-> 
-> to the linux-next tree.
-> 
-> This tree is a part of drm/msm maintenance structure. As a co-maintainer I
-> collect and test display patches, while Rob concenctrates on GPU part of the
-> driver. Later during the release cycle these patchesare pulled by Rob Clark
-> directly into msm-next.
-> 
-> During last cycle Rob suggested adding this tree to the linux-next effort,
-> so that the patches receive better integration testing during the Linux
-> development cycle.
+Currently if the source DMA device isn't ready to provide the channels
+capable of the SPI DMA transfers, the DW SSI controller will be registered
+with no DMA support. It isn't right since all what the driver needs to do
+is to postpone the probe procedure until the DMA device is ready. Let's
+fix that in the framework of the DWC SSI generic DMA implementation. First
+we need to use the dma_request_chan() method instead of the
+dma_request_slave_channel() function, because the later one is deprecated
+and most importantly doesn't return the failure cause but the
+NULL-pointer. Second we need to stop the DW SSI controller probe procedure
+if the -EPROBE_DEFER error is returned on the DMA initialization. The
+procedure will resume later when the channels are ready to be requested.
 
-Have you guys thought of group maintainering? Single point of failure
-trees freak me out a bit, it tends to build silos pretty hard. Simplest
-path is to just toss it all into drm-misc, but at least have one tree for
-your driver. Building new single maintainer silos after I've run around
-for years collecting them all is rather meh.
--Daniel
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+---
+
+Link: https://lore.kernel.org/linux-spi/20220610075006.10025-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Just resend.
+- Rebase onto the kernel v5.19-rcX.
+---
+ drivers/spi/spi-dw-core.c |  5 ++++-
+ drivers/spi/spi-dw-dma.c  | 25 ++++++++++++++++++-------
+ 2 files changed, 22 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+index ecea471ff42c..911ea9bddbee 100644
+--- a/drivers/spi/spi-dw-core.c
++++ b/drivers/spi/spi-dw-core.c
+@@ -942,7 +942,9 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 
+ 	if (dws->dma_ops && dws->dma_ops->dma_init) {
+ 		ret = dws->dma_ops->dma_init(dev, dws);
+-		if (ret) {
++		if (ret == -EPROBE_DEFER) {
++			goto err_free_irq;
++		} else if (ret) {
+ 			dev_warn(dev, "DMA init failed\n");
+ 		} else {
+ 			master->can_dma = dws->dma_ops->can_dma;
+@@ -963,6 +965,7 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ 	if (dws->dma_ops && dws->dma_ops->dma_exit)
+ 		dws->dma_ops->dma_exit(dws);
+ 	dw_spi_enable_chip(dws, 0);
++err_free_irq:
+ 	free_irq(dws->irq, master);
+ err_free_master:
+ 	spi_controller_put(master);
+diff --git a/drivers/spi/spi-dw-dma.c b/drivers/spi/spi-dw-dma.c
+index 63e5260100ec..1322b8cce5b7 100644
+--- a/drivers/spi/spi-dw-dma.c
++++ b/drivers/spi/spi-dw-dma.c
+@@ -139,15 +139,20 @@ static int dw_spi_dma_init_mfld(struct device *dev, struct dw_spi *dws)
+ 
+ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+ {
+-	dws->rxchan = dma_request_slave_channel(dev, "rx");
+-	if (!dws->rxchan)
+-		return -ENODEV;
++	int ret;
+ 
+-	dws->txchan = dma_request_slave_channel(dev, "tx");
+-	if (!dws->txchan) {
+-		dma_release_channel(dws->rxchan);
++	dws->rxchan = dma_request_chan(dev, "rx");
++	if (IS_ERR(dws->rxchan)) {
++		ret = PTR_ERR(dws->rxchan);
+ 		dws->rxchan = NULL;
+-		return -ENODEV;
++		goto err_exit;
++	}
++
++	dws->txchan = dma_request_chan(dev, "tx");
++	if (IS_ERR(dws->txchan)) {
++		ret = PTR_ERR(dws->txchan);
++		dws->txchan = NULL;
++		goto free_rxchan;
+ 	}
+ 
+ 	dws->master->dma_rx = dws->rxchan;
+@@ -160,6 +165,12 @@ static int dw_spi_dma_init_generic(struct device *dev, struct dw_spi *dws)
+ 	dw_spi_dma_sg_burst_init(dws);
+ 
+ 	return 0;
++
++free_rxchan:
++	dma_release_channel(dws->rxchan);
++	dws->rxchan = NULL;
++err_exit:
++	return ret;
+ }
+ 
+ static void dw_spi_dma_exit(struct dw_spi *dws)
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.35.1
+

@@ -2,98 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7AA55A441
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B17D55A451
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 00:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbiFXWPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 18:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
+        id S231707AbiFXWTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 18:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiFXWPe (ORCPT
+        with ESMTP id S229757AbiFXWTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 18:15:34 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20C138858F;
-        Fri, 24 Jun 2022 15:15:33 -0700 (PDT)
-Received: from [192.168.254.32] (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0682620C7943;
-        Fri, 24 Jun 2022 15:15:31 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0682620C7943
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1656108932;
-        bh=hAvoj8jjZe3egtsndVQDOBocwQja3xej+5CD+Ld/09U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AIM3UBtfsqGjo5ImQw5cmqOAgxzr7cv8le3OqzCp3cdmlFqMIbKU99rUajFZ5jc0k
-         2OV8HIVuJSX5C3BqpvV4foKGinW2GXmWmyoOFI9UwrnCAC+BlzFDL0KdXfqN1hZJhZ
-         EfnKBYEr12ZFYR4Uzb75eook4yQ4dvvKKYNCzFxk=
-Message-ID: <3180d0d3-2a92-13cd-2342-39b8400e3306@linux.microsoft.com>
-Date:   Fri, 24 Jun 2022 17:15:31 -0500
+        Fri, 24 Jun 2022 18:19:02 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E88585D16;
+        Fri, 24 Jun 2022 15:18:58 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id fd6so5300702edb.5;
+        Fri, 24 Jun 2022 15:18:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ulIt/Igd8gDLR6TWT3Hlfca+jdris+ZEDB86QcOsJGw=;
+        b=CO8BiD4fs3OYUDtRl7xvny/phW+PwBlQGwIYDps/YPmCV3QOSxe/vbQwAnjHmAxkL4
+         VlWUMC9JYKGIgTacugRHWlDpn3QNtHI7cLgXWKdeYhsKIi7YMYOPo2fBwfLzKMxH5WvC
+         OKcfMcWTl2077iOMzlXpZrBlfhXuReA+geB5VSA3xcDzIziOtczjTalyolLiqjUZaRbR
+         rzlPDQpZF6l5s9uACs0IqQ9mUvuyyJ29J3UYnRjP4liHAl4l85XGibx4W27cqvFbreol
+         zSzbQ9suXdgcIqWeKvzNW/Uaye9GJ5xHlrDKYL6HZyIH8M+AM1dFMpSAcWaKClAf/dRF
+         XTHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ulIt/Igd8gDLR6TWT3Hlfca+jdris+ZEDB86QcOsJGw=;
+        b=bcdrVwNw1u01ZJQSJX/4fi+B4fCen7UpFCku6ndytJju6oftlp0NuZ90iBIYIzI9wO
+         Vhw+mpqm7EPE2AEek9LAOH9Zy8Yn8Fh+NKn22oL3C97oP4+LGZtpj5m4j0nNHCC6wAY+
+         OgGKOo8xqBFeb97dCReBhOUVhvAaPkgX7L/il8E+Wnns8fmyp3U5kEMXKwVTvpa95VBs
+         Zll5l/y11VLqSJUutjHjC6MbpiLgZvyJQQhMtlTfB/JYugfCgLxim3c1Gpzs/nIj6osO
+         SFhPwDcNmsw8G1/tmNyCzxPal81OR1XpFlWcfZRub86c4qZDZT3CAr+h3mcWXx5um22B
+         L7xA==
+X-Gm-Message-State: AJIora+80S2e5a73F40UJPtDfnjtbWjLlwc3YWpa3JNyZ2OocjGpGqql
+        pbI0onlGX6wNWfIBFtNdj3KmUY9F6oL1yFXuD98=
+X-Google-Smtp-Source: AGRyM1tnJoQudUlMTxFEjBDPNW+JIoG2Yj25BxvcmRcoFLK8C8K5ObZOeaMQ1fWn73jOf8qD+LVl2nMfEIRxZPjGn5M=
+X-Received: by 2002:a05:6402:3514:b0:435:f24a:fbad with SMTP id
+ b20-20020a056402351400b00435f24afbadmr1530472edd.311.1656109137035; Fri, 24
+ Jun 2022 15:18:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v15 0/6] arm64: Reorganize the unwinder and implement
- stack trace reliability checks
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>
-Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, jamorris@linux.microsoft.com,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
- <20220617210717.27126-1-madvenka@linux.microsoft.com>
- <20220623173224.GB16966@willie-the-truck> <YrWjH4H7KxLAqfph@sirena.org.uk>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <YrWjH4H7KxLAqfph@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1656089118-577-1-git-send-email-alan.maguire@oracle.com> <1656089118-577-2-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1656089118-577-2-git-send-email-alan.maguire@oracle.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 24 Jun 2022 15:18:45 -0700
+Message-ID: <CAEf4BzaigeecrZi9QSxR5o6afY0GPdF5v7yFjZ_Ft_wikF9rMA@mail.gmail.com>
+Subject: Re: [RFC bpf-next 1/2] bpf: add a kallsyms BPF iterator
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, void@manifault.com,
+        swboyd@chromium.org, Nick Desaulniers <ndesaulniers@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 24, 2022 at 9:45 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> add a "kallsyms" iterator which provides access to a "struct kallsym_iter"
+> for each symbol.  Intent is to support more flexible symbol parsing
+> as discussed in [1].
+>
+> [1] https://lore.kernel.org/all/YjRPZj6Z8vuLeEZo@krava/
+>
+> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  kernel/kallsyms.c | 93 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index fbdf8d3..ffaf464 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -30,6 +30,7 @@
+>  #include <linux/module.h>
+>  #include <linux/kernel.h>
+>  #include <linux/bsearch.h>
+> +#include <linux/btf_ids.h>
+>
+>  /*
+>   * These will be re-linked against their real values
+> @@ -799,6 +800,95 @@ static int s_show(struct seq_file *m, void *p)
+>         .show = s_show
+>  };
+>
+> +#ifdef CONFIG_BPF_SYSCALL
+> +
+> +struct bpf_iter__kallsyms {
 
+So I know this is derived from /proc/kallsyms, but for BPF iterators
+we have a singular name convention (e.g., iter/task and
+iter/task_vma), which makes sense because we call BPF program for each
+individual item. So here it seems like "iter/ksym" would make good
+sense?
 
-On 6/24/22 06:42, Mark Brown wrote:
-> On Thu, Jun 23, 2022 at 06:32:24PM +0100, Will Deacon wrote:
->> On Fri, Jun 17, 2022 at 04:07:11PM -0500, madvenka@linux.microsoft.com wrote:
-> 
->>> as HAVE_RELIABLE_STACKTRACE depends on STACK_VALIDATION which is not present
->>> yet. This patch will be added in the future once Objtool is enhanced to
->>> provide stack validation in some form.
-> 
->> Given that it's not at all obvious that we're going to end up using objtool
->> for arm64, does this patch series gain us anything in isolation?
-> 
-> Having the reliability information seems like it should be useful in
-> general even without doing live patching - we can use it to annotate
-> stack traces to warn people about anything that might be suspect in
-> there.  For live patching it's probably something we'll want regardless
-> of the use of objtool, it's one more robustness check which always
-> helps.
+> +       __bpf_md_ptr(struct bpf_iter_meta *, meta);
+> +       __bpf_md_ptr(struct kallsym_iter *, kallsym_iter);
 
-Hi Mark, Will,
+nit: can we call this field just "ksym"?
 
-Your comments got me to thinking about the Objtool patch series I have sent earlier.
+> +};
+> +
+> +static int s_prog_seq_show(struct seq_file *m, bool in_stop)
+> +{
+> +       struct bpf_iter__kallsyms ctx;
+> +       struct bpf_iter_meta meta;
+> +       struct bpf_prog *prog;
+> +
+> +       meta.seq = m;
+> +       prog = bpf_iter_get_info(&meta, in_stop);
+> +       if (!prog)
+> +               return 0;
+> +
+> +       ctx.meta = &meta;
+> +       ctx.kallsym_iter = m ? m->private : NULL;
+> +       return bpf_iter_run_prog(prog, &ctx);
+> +}
+> +
+> +static int bpf_iter_s_seq_show(struct seq_file *m, void *p)
 
-Since the general feeling is that Objtool is unlikely to be our path to livepatch on ARM64, I think that I can implement what I want in a simpler way as a kernel-only solution. The kernel already has a decoder. I don't need
-to provide one. In the kernel-only solution, I don't have to worry about relocations, alternatives, etc, etc.
+stupid question, but what does "_s_" part stand for? Is it for "sym"?
+If yes, maybe then "bpf_iter_ksym_seq_show"?
 
-The number of patches would be about half of the original series with simpler code in many of the patches.
+> +{
+> +       return s_prog_seq_show(m, false);
+> +}
+> +
 
-The amount of memory consumed by the CFI entries will most likely be just a fraction of the original series.
+[...]
 
-I will investigate this. If it works and turns out to be a lot simpler, I will send this as v3 of the livepatch
-patch series. Also, if this works, we can replace the various reliability checks with just a single fp validation
-check in the unwinder.
+> +static struct bpf_iter_reg kallsyms_iter_reg_info = {
+> +       .target                 = "kallsyms",
+> +       .ctx_arg_info_size      = 1,
+> +       .ctx_arg_info           = {
+> +               { offsetof(struct bpf_iter__kallsyms, kallsym_iter),
+> +                 PTR_TO_BTF_ID_OR_NULL },
+> +       },
+> +       .seq_info               = &kallsyms_iter_seq_info,
+> +};
+> +
+> +BTF_ID_LIST(btf_kallsym_iter_id)
+> +BTF_ID(struct, kallsym_iter)
+> +
+> +static void __init bpf_kallsyms_iter_register(void)
+> +{
+> +       kallsyms_iter_reg_info.ctx_arg_info[0].btf_id = *btf_kallsym_iter_id;
+> +       if (bpf_iter_reg_target(&kallsyms_iter_reg_info))
+> +               pr_warn("Warning: could not register bpf kallsyms iterator\n");
+> +}
+> +
+> +#endif /* CONFIG_PROC_FS */
 
-Thanks for the input.
+Is there any reason to depend on CONFIG_PROC_FS for BPF iterator?
+Seems like kernel/kallsyms.c itself is only depending on
+CONFIG_KALLSYMS? So why adding unnecessary dependency?
 
-Madhavan
-
+> +
+> +#endif /* CONFIG_BPF_SYSCALL */
+> +
+>  static inline int kallsyms_for_perf(void)
+>  {
+>  #ifdef CONFIG_PERF_EVENTS
+> @@ -885,6 +975,9 @@ const char *kdb_walk_kallsyms(loff_t *pos)
+>  static int __init kallsyms_init(void)
+>  {
+>         proc_create("kallsyms", 0444, NULL, &kallsyms_proc_ops);
+> +#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
+> +       bpf_kallsyms_iter_register();
+> +#endif
+>         return 0;
+>  }
+>  device_initcall(kallsyms_init);
+> --
+> 1.8.3.1
+>

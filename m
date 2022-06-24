@@ -2,114 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BABA559741
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B5E559740
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbiFXKAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 06:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S230481AbiFXKBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 06:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiFXKAd (ORCPT
+        with ESMTP id S229872AbiFXKBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 06:00:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0325169FA2;
-        Fri, 24 Jun 2022 03:00:32 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C668C66017FF;
-        Fri, 24 Jun 2022 11:00:29 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656064830;
-        bh=J0LbHH8P+ASApYmsYhsNx95/wSGxhHDFIBcm2kP0y+o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZYner7Ocf1klmF+QAW3PT0bFy8OFw8nogLlK/7RDiguhlqtOm6nM6gvJZZOhdmk6L
-         9y2sODvA3BwCpoahueUJiexAzIhljBUipbriNf2HESs9ZhAv4RAzx3Hsd5Q2w0kald
-         A43BbKALW+Gq/qsjDwsX6g6gnXfEauPNcWk0pqMzzwWHeECJ0GRXFYYNaM2kgygFwP
-         f2WSBQCS7u+nXOPQ+eAL5P7oppWxAeTD0xgGUISi8dqIxIvBATFIAaI+/UkBg31U1s
-         nHirbnM2YGa/DTn1up3HJa0KTfokhkb7TA7apZbSLp/UKAUJ7+i+VktlkMfc6kNeOx
-         LT512uLGkRpbQ==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     yong.wu@mediatek.com
-Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v4 3/3] iommu/mediatek: Add support for MT6795 Helio X10 M4Us
-Date:   Fri, 24 Jun 2022 12:00:16 +0200
-Message-Id: <20220624100016.246442-4-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220624100016.246442-1-angelogioacchino.delregno@collabora.com>
-References: <20220624100016.246442-1-angelogioacchino.delregno@collabora.com>
+        Fri, 24 Jun 2022 06:01:40 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF41B7A1A1;
+        Fri, 24 Jun 2022 03:01:39 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3178ea840easo19298757b3.13;
+        Fri, 24 Jun 2022 03:01:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WIvuhv2O2LJCEA/cN0nPJqVqA1J4nPDoUe8QnZLZj2o=;
+        b=OanFfdyuKWF/daWLttmMlN7K0lRksfwYbjOsxSKcHo34GCUcbPBriX5mcqX8lLgrog
+         8Ptx1jfKsJY0bB7uGBoWlYtGGu4nC1+GVlG/m0Pck2Wvm6Rwyadt01y+fUxnUdxodFD1
+         GFPSAjSKnKV0IluZSwSLEwFHrLFsclN6mGg4Aizheu7R29WvVsteR32S86H+xPZQ9IAk
+         shfRsHsiL6cGYE+ydspOeHaia/esEdz46UL3kvYHPbc2cwzVlm7kc0sK6Zs7TNbihsNg
+         FNr9gvBxhLU8gXS5OjhqS3rggnw91+1tg4pu5g9cYg3fyPGJsyU2DdhcDyD+zbSBn2+4
+         Nj7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WIvuhv2O2LJCEA/cN0nPJqVqA1J4nPDoUe8QnZLZj2o=;
+        b=RhUkS6KrTw1Icy4UdsgBcJGErROmyLvynwbynSWU9RcewG2TpoV/CrXN+upet5kzsp
+         PQuBnKWPFQ4iDwnGu1iIyRtJc9Q8m1MjTULcbgUUcj/AomDBl6YtdRQ7HrWh0PMN5/qw
+         gr1l7YVZXLuFjcVmZC8ptO3v9kbakWhk+66YaDU/Kru6cN/G5Qbjnq2B5by0KuZ00THL
+         gh9nMno4HmXxTa+glVxh+UY+Mgx7ugaSM/BCmLKR00Afne3AnF1DFy5zS/kk5yzYHYSG
+         ep35dT5H8sc7t//LK1b/vYA2ZNDN/LOw8Z8W/wQuAuF/Rdg14aIbp9nkH9o2ecg9dwLR
+         blcQ==
+X-Gm-Message-State: AJIora89i57912md6/aVtpiJx7UBUddXVOsiNFMvZIUwLSQqxkqK+A6u
+        4frNslTYk4CoKnRLwEgEJyHEVO+6ObICIufrOt0=
+X-Google-Smtp-Source: AGRyM1uZqW7BeQR39fipb9XeJooEfmtD6YpdpSLjgsLZ1D0uhV9s/Y+ZgP2nYziC4BGU2b9eW/L214EfjspICcNXG1s=
+X-Received: by 2002:a81:600a:0:b0:318:81bc:e928 with SMTP id
+ u10-20020a81600a000000b0031881bce928mr6392488ywb.119.1656064898995; Fri, 24
+ Jun 2022 03:01:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220524172214.5104-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220524172214.5104-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdVos-hVhGar91oBvZaCOLfjdsNR7vRGnX-KuNt0UX3xWQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdVos-hVhGar91oBvZaCOLfjdsNR7vRGnX-KuNt0UX3xWQ@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 24 Jun 2022 11:01:12 +0100
+Message-ID: <CA+V-a8vDF-GwfqgerWFNOrKGukdYk52OrcbprJv-=9J-M4VbUA@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/2] dt-bindings: interrupt-controller: sifive,plic:
+ Document Renesas RZ/Five SoC
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the M4Us found in the MT6795 Helio X10 SoC.
+Hi Geert,
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Yong Wu <yong.wu@mediatek.com>
----
- drivers/iommu/mtk_iommu.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Thank you for the review.
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index 63df612cf2e0..82eba647c183 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -158,6 +158,7 @@
- enum mtk_iommu_plat {
- 	M4U_MT2712,
- 	M4U_MT6779,
-+	M4U_MT6795,
- 	M4U_MT8167,
- 	M4U_MT8173,
- 	M4U_MT8183,
-@@ -1419,6 +1420,19 @@ static const struct mtk_iommu_plat_data mt6779_data = {
- 	.larbid_remap  = {{0}, {1}, {2}, {3}, {5}, {7, 8}, {10}, {9}},
- };
- 
-+static const struct mtk_iommu_plat_data mt6795_data = {
-+	.m4u_plat     = M4U_MT6795,
-+	.flags	      = HAS_4GB_MODE | HAS_BCLK | RESET_AXI |
-+			HAS_LEGACY_IVRP_PADDR | MTK_IOMMU_TYPE_MM |
-+			TF_PORT_TO_ADDR_MT8173,
-+	.inv_sel_reg  = REG_MMU_INV_SEL_GEN1,
-+	.banks_num    = 1,
-+	.banks_enable = {true},
-+	.iova_region  = single_domain,
-+	.iova_region_nr = ARRAY_SIZE(single_domain),
-+	.larbid_remap = {{0}, {1}, {2}, {3}, {4}}, /* Linear mapping. */
-+};
-+
- static const struct mtk_iommu_plat_data mt8167_data = {
- 	.m4u_plat     = M4U_MT8167,
- 	.flags        = RESET_AXI | HAS_LEGACY_IVRP_PADDR | MTK_IOMMU_TYPE_MM,
-@@ -1531,6 +1545,7 @@ static const struct mtk_iommu_plat_data mt8195_data_vpp = {
- static const struct of_device_id mtk_iommu_of_ids[] = {
- 	{ .compatible = "mediatek,mt2712-m4u", .data = &mt2712_data},
- 	{ .compatible = "mediatek,mt6779-m4u", .data = &mt6779_data},
-+	{ .compatible = "mediatek,mt6795-m4u", .data = &mt6795_data},
- 	{ .compatible = "mediatek,mt8167-m4u", .data = &mt8167_data},
- 	{ .compatible = "mediatek,mt8173-m4u", .data = &mt8173_data},
- 	{ .compatible = "mediatek,mt8183-m4u", .data = &mt8183_data},
--- 
-2.35.1
+On Thu, Jun 9, 2022 at 10:42 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Tue, May 24, 2022 at 7:22 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > Document Renesas RZ/Five (R9A07G043) SoC.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Thanks for your patch!
+>
+> > --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+> > +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+> > @@ -28,7 +28,10 @@ description:
+> >
+> >    While the PLIC supports both edge-triggered and level-triggered interrupts,
+> >    interrupt handlers are oblivious to this distinction and therefore it is not
+> > -  specified in the PLIC device-tree binding.
+> > +  specified in the PLIC device-tree binding for SiFive PLIC (and similar PLIC's),
+> > +  but for the Renesas RZ/Five Soc (AX45MP AndesCore) which has NCEPLIC100 we need
+> > +  to specify the interrupt type as the flow for EDGE interrupts is different
+> > +  compared to LEVEL interrupts.
+> >
+> >    While the RISC-V ISA doesn't specify a memory layout for the PLIC, the
+> >    "sifive,plic-1.0.0" device is a concrete implementation of the PLIC that
+> > @@ -57,6 +60,7 @@ properties:
+> >            - enum:
+> >                - allwinner,sun20i-d1-plic
+> >            - const: thead,c900-plic
+> > +      - const: renesas-r9a07g043-plic
+>
+> renesas,r9a07g043-plic
+>
+Agreed.
 
+> >
+> >    reg:
+> >      maxItems: 1
+> > @@ -64,8 +68,7 @@ properties:
+> >    '#address-cells':
+> >      const: 0
+> >
+> > -  '#interrupt-cells':
+> > -    const: 1
+> > +  '#interrupt-cells': true
+> >
+> >    interrupt-controller: true
+> >
+> > @@ -91,6 +94,35 @@ required:
+> >    - interrupts-extended
+> >    - riscv,ndev
+> >
+> > +if:
+> > +  properties:
+> > +    compatible:
+> > +      contains:
+> > +        const: renesas-r9a07g043-plic
+>
+> renesas,r9a07g043-plic
+>
+ditto.
+
+Cheers,
+Prabhakar

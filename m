@@ -2,196 +2,480 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F8B559A78
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3232B559A87
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 15:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbiFXNjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 09:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S232048AbiFXNlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 09:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiFXNjF (ORCPT
+        with ESMTP id S229830AbiFXNlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 09:39:05 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2051.outbound.protection.outlook.com [40.107.102.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1508F11157;
-        Fri, 24 Jun 2022 06:39:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LPJcIudzmy7WuHbPCxv1xjLge1nJ3kASwLwX0LlBhtgFFkHKDquWWm+t2NJ72jAc+GoEPHMN4JDi1SLaTVX+eE2Mi/pMYNVwTbriVMTSKklUiStsZvOFeA2UC9g6Opo/hDpyTX8crspDzYN8tCiCgvFxeLJIcD8y06aAbjSxUam5EjnILc3HX73Ub/U6cIHAABg5uyWGr2U3DwZpe5M6CKvkcW5BEXpHHPjVhVcHFSSnsU13VBlunVe+ZQd4nQtukMjgcxW8OARCZhKYFnr5aAXU+1YMZtRT+CuaP5Seje06kh1HIa7mjHqB1kNEiCeArL8ccyDrbR0QjhZO5qJWWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vGlYcA07qLgF37l7X+9ZycBJcLp8VxO3IktFM1G+R88=;
- b=L0eoSs3hKbeHxo3AnDijBm6HpprdY65tTyUeupJlK4/Rh3ZhO7GbbElJdu07AzNZJqaqNlSddOIEWh5Do9jMb3PRnJT4ZGf5GbWGsnVo5tDuWxACVS5d9xxmDGn41a0/rQRw36WWJhwDnQWyuVsvXigoMGMs+CrV8KSWyaTis+hjIyNRZb2PLKu302iRALgPRuzUkSRxNFJutl1kkVHk6fObh0NipaRctmJZgjrgXP7JW9onjrox1RsV9upIRAWNG36J419qx8OIEc0P3U26QX2XkjBzm0349m6QFZ0XMpbq5A8CKYGKFfqY/xMA1xPfhRFMUk/YjDG5A5qphVGw0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vGlYcA07qLgF37l7X+9ZycBJcLp8VxO3IktFM1G+R88=;
- b=hh7rxL723jAu8O3FsFQVtXVvK/3jO18cvGVrTqx8yVn1NS/jJhKpJrr6Kwy516moz95PLbeXOVwULyD2LUA13Yfa9PSDE3evCLAz6NyWHcmLcd0M13C5jQplgY/yZ6MhQNIhQBZL+NRSID8gt7GwV4+idJr07rnPSEqy1CFnOtACoP/07tzuddPga5IJecHMILjeYb+gxgjND2voE+7hHrFzVmO/0KsujEv7YC8v5mldHecD4qhW5pYJXys1lXc3vd5s/xZOyDBxgkH7BaDlQfUbu6qoz3tCruMkd8b2jS33Kr41xaha8quZ+pY9c0kLJrmhpbUbnjOH/5mTI5m6SA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MN2PR12MB4173.namprd12.prod.outlook.com (2603:10b6:208:1d8::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Fri, 24 Jun
- 2022 13:39:01 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5373.016; Fri, 24 Jun 2022
- 13:39:01 +0000
-Date:   Fri, 24 Jun 2022 10:39:00 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     nobuhiro1.iwamatsu@toshiba.co.jp
-Cc:     baolu.lu@linux.intel.com, joro@8bytes.org, will@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        yuji2.ishikawa@toshiba.co.jp, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/3] iommu: Add Visconti5 IOMMU driver
-Message-ID: <20220624133900.GN4147@nvidia.com>
-References: <20220525013147.2215355-1-nobuhiro1.iwamatsu@toshiba.co.jp>
- <20220525013147.2215355-2-nobuhiro1.iwamatsu@toshiba.co.jp>
- <63369db0-cf7f-aa53-bf9f-de2b0b2289ac@linux.intel.com>
- <20220525182644.GF1343366@nvidia.com>
- <TYWPR01MB9420F74E27D8513CD2C2D27592B09@TYWPR01MB9420.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYWPR01MB9420F74E27D8513CD2C2D27592B09@TYWPR01MB9420.jpnprd01.prod.outlook.com>
-X-ClientProxiedBy: MN2PR01CA0041.prod.exchangelabs.com (2603:10b6:208:23f::10)
- To MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+        Fri, 24 Jun 2022 09:41:07 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99E91838C;
+        Fri, 24 Jun 2022 06:41:05 -0700 (PDT)
+X-UUID: be9463bb64ba4222aa2a60dad2c977dd-20220624
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:5408aefd-4fd5-4dd2-a207-3e6057eec195,OB:0,LO
+        B:20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-INFO: VERSION:1.1.6,REQID:5408aefd-4fd5-4dd2-a207-3e6057eec195,OB:0,LOB:
+        20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:6a4f7ed8-850a-491d-a127-60d9309b2b3e,C
+        OID:58ca2a026233,Recheck:0,SF:28|17|19|48,TC:nil,Content:-5,EDM:-3,IP:nil,
+        URL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: be9463bb64ba4222aa2a60dad2c977dd-20220624
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <guodong.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2043673483; Fri, 24 Jun 2022 21:41:00 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 24 Jun 2022 21:40:59 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 24 Jun 2022 21:40:58 +0800
+Message-ID: <2219b4523d9c52778610395de191c634dfe1801e.camel@mediatek.com>
+Subject: Re: [PATCH v1 3/4] pinctrl: mediatek: add rsel setting on mt8192
+From:   Guodong Liu <guodong.liu@mediatek.com>
+To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
+CC:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 24 Jun 2022 21:40:58 +0800
+In-Reply-To: <20220609184716.mlu5j3m5i6jdraw4@notapiano>
+References: <20220608053909.1252-1-guodong.liu@mediatek.com>
+         <20220608053909.1252-4-guodong.liu@mediatek.com>
+         <20220609184716.mlu5j3m5i6jdraw4@notapiano>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ca0ad465-9239-4653-9e01-08da55e6e5ca
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4173:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QFOWHI+7M3d0wLEPtiJbY/Vo9v2vXiGnPWRbVsZYCdHZ9Aqw+jDAmliiM1epuEEvpmnbBq5yTenLJfaAGMioIrHEOX3s0cXLHqHPhDOsJHTh0aH5R/S8SyCcDXRZuvKAu5Rfv1w7/qKXX8zmRl0x+U9rPq3ueXv6evo73vClsb8AfLszDZZSoPmvqBAK9Gpj+InJTfc87HKMr+/subOyBDcWiK1NT6j3uPNkrnc+KYU2DDofHEUlTP4wpSO17v3FofXx9sXxYp6RJBGdDAu4qVW3W9ufmfweOHzLybnVIwNdqd6N2WWukpIijtGXP9iJedlAWGQc21Mq0sIwiBKmplIi4Zh87EIWqnByb/gdTG7R8Z+2rpn+G/XU8PafESbKK09dTriy26f6Z3HsUGfjpK8f0ILNSaxQnhIdWghMRkslCxyHq2BVC+Skv/MdcAXfz18MH4vmqHCRkWcwXLTgMKd6C7qAwFFpEGAM+QqxKBu9jlRFdX61tjZ4eoLRRdmfXyyKiJwu2qbJPkyfmBQwC83WD9R1J+u6VMmjeWQr34csFEcw0pnQNL07flzPKYqns8UgtT/VB8m2HUcRWk+OR9JWquYn1OdZdwYlXexSOReVJFTZQ2IW/BLQ0o/4qBRbaTisfcEN2D3P1uJiGSKxRGb/Ph4Pv2qlFtGOxFFSt45+czErZydArumrDxXiaGg2b5XCnfDHp0Z0SbbSAL3lnKSRkC0zw4STm6kYT/Z3RUBYi/mn+ndgxqSdRAhfGYB1
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(39860400002)(346002)(376002)(396003)(83380400001)(316002)(33656002)(478600001)(8676002)(6506007)(34206002)(2616005)(8936002)(6512007)(53546011)(26005)(41300700001)(66946007)(1076003)(186003)(66476007)(4326008)(66556008)(2906002)(5660300002)(38100700002)(36756003)(86362001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a05LUGIrZFZncnJwR1Z1Y1JSK0NvMDc1b1N3YVJBSGpzTUVUVFJBdWVBQ1Jm?=
- =?utf-8?B?bEhUSDFJR25HTUFlelhIOVFULzBRZDBRZzZsUVJoTHRaZFIwa3ZCM0tncWlo?=
- =?utf-8?B?QmczMFN1ZkRkK3ZSaFFRQ09IZi82TkVrbHFhNUpyZVFwUWlCbWxiek5JQVp2?=
- =?utf-8?B?N3pDYTdwY1l1Q3FiWWdmWWE0SEtQUHE3UXR5bEl4MWN2cDV0S1ZGNUVhbHJG?=
- =?utf-8?B?UzB6TTlNUkFubkFyRDR2a29nRUR6T0s4eTJQV0dZUXZpSHJGRDZOc1J1N3p5?=
- =?utf-8?B?QTVMallQZnIxMDB3Rm44dzIvbUs2R09Yd2U2UkRmbXovNG9ZQW9aR1lFakVI?=
- =?utf-8?B?MWthTndkdGlGNXV5OVJJdGZHYnRlVStXWUxDRTBFMzM1Y01ZT292UHdPdTRH?=
- =?utf-8?B?WWRHMVN1Vmg4a3FwZFMxVzVQNEVHZUVTVW82c21LaGZFSWNhK2Fma2VQM1h3?=
- =?utf-8?B?cmNvTWhrTExqN2NYYVk4VVJwUTZFSGlHNC9GVklQQUZiZ1dmS2NheU1Pclk1?=
- =?utf-8?B?LytNVUwzQ0NHSGd2c3ZVOE53ZHZNVk43Q1B6V2k1VWJwVFR4ampkbFMyenJ3?=
- =?utf-8?B?aUF1NzRqWlNFTnliUGFjNUE4VmM4c0VuV00rTVJJOXlRb09Fd28ydHBxQld6?=
- =?utf-8?B?RG13WThxdjd1S2RVT1lHV0lEazNpeGhGM0lINGJiMU5xS2t1Uk5qZzBjYTJj?=
- =?utf-8?B?MDFYWVdER2RGL3p4Wjl3bVE0a1hoRlhLSnI0L3FwV1hnMHlOcWY4d3hLQngx?=
- =?utf-8?B?RFAwN0s0NnZNMUVzS3NLVlpRYU0yNk1sNFUwa3JpYTI0UVl6Rit1WFgwazdE?=
- =?utf-8?B?RkEvSWIzb3VMNUh3ZnUrc3dadmNEdnAvR01OandrL2NhUjNIZzJBZlI5VEJp?=
- =?utf-8?B?TDJOeHIrVTFRaGl2M3Ywak5PdnlDdlhraFlpaWdrSVNsS0dqYStXQzNjT001?=
- =?utf-8?B?ZGkyQzdZRXF4YllzRnk1ZjB2K2dNOFFNTVQ2L2V5SlM3RnlaL2g5Z3BRTml3?=
- =?utf-8?B?bFptajRUVHUrWXJENUtpYmFobFVmWEhYSGdHNUVRQzBCZUVLcHRNVkhpYm9i?=
- =?utf-8?B?WmxtSk1td1VuT0djZDdNWUViT3d2S1NGR1pxRDZHbThCYitkNGxBckxYQTI0?=
- =?utf-8?B?Z2tGdlkyRks5T1JrV0thQ0h6ZGVOeXJHaEpyR3h0Ly9sdXNFY05iczUvUXls?=
- =?utf-8?B?YkpyNFhCVEJNL2pXNHJxcEpYY3RkdnJIajhaMFlPdXFyMm9iaHlNak4wdUNr?=
- =?utf-8?B?OFJPdkd4cmFWVk8ySS9oajNJa1UxTmpPekgvSk1WTVF4WnhVZDU3dEkxUEE3?=
- =?utf-8?B?eDYySXBXeDhVUWd5NUwyNTY4enlHSDF0bTlRQ3pDS0J1WmVKZ1Q4ZFFURXVU?=
- =?utf-8?B?c1VzWDMxejk3N2owTnZrNFh6YVFRYXNSTE00bmJhSDVVQ2hLWjVaUTcyY2t0?=
- =?utf-8?B?VjlsaG52T2xBNU5sZ2huakg3cHVJUGFObVRvdGxCOE0wTmlieTR2QmMvUUFZ?=
- =?utf-8?B?ZjFYMjlCZ1c4M3JLa2VlbFAyd0tzKzYrZ2RmYU1qQmd0SUVSWFc5MXltcFYz?=
- =?utf-8?B?dGlTV0RxdFpFOVJ6bUMwYlk0OUMvemRLRmIzK2lKNzVVUmlmSUZwdGRRb29U?=
- =?utf-8?B?eU4zZ3Y1V3Q2M0N1clQvZnZxeE9zclhlb0g3aWdpRVJDZVpSU3ZFYm41K0hK?=
- =?utf-8?B?RUxDNEg5Q0V5T1p6c1pGVEZKNmlJZm1rdzEybjM5WkdiVUgrZE9QN2lyeU51?=
- =?utf-8?B?ajhMR0hxSmNVQnNjam9kWVl3K250czZZclNHenBPSGZvMTRCSjFCU1hwalpm?=
- =?utf-8?B?S0JuMnJDanZUVi9ZUThwOGVWMWt6TTBidHlPdUZqNE5NcTVKeFNpMkJOQUFh?=
- =?utf-8?B?OTRBN21BZGdIRmF0ZU9RRXNGdXVJN1J2eCtSaDJKa0FSSkxCNnViUHorTXdw?=
- =?utf-8?B?UnZUOXhadDhYM0FUeS9Td0dHdVRjWTczK2U1WUhyc0VRUnRJT2pEenpPN2li?=
- =?utf-8?B?bDlVcXJLZDZEWFFveDRRNGpvdC9KcU5MZzc4Lyt2bjYybEZrYnFjUjFzVnp2?=
- =?utf-8?B?cXpCenNhUjFzZUhiT3pqb1NqY0VWS1NMRDVoSjRjaEdKaFVuNVl5VUg4WEJI?=
- =?utf-8?Q?41NHhE0RXbkl61xxE3Ht+Grww?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca0ad465-9239-4653-9e01-08da55e6e5ca
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2022 13:39:01.4477
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bILEbS/3yVcqfPlcosz1W5e1w+YmP2yGSRzqXG8pq4JmCe0aJnV0QdiR83iMLTMM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4173
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 05:49:13AM +0000, nobuhiro1.iwamatsu@toshiba.co.jp wrote:
-> Hi,
-> 
-> Thanks for your review.
-> 
-> > -----Original Message-----
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> > Sent: Thursday, May 26, 2022 3:27 AM
-> > To: Baolu Lu <baolu.lu@linux.intel.com>
-> > Cc: iwamatsu nobuhiro(岩松 信洋 □ＳＷＣ◯ＡＣＴ)
-> > <nobuhiro1.iwamatsu@toshiba.co.jp>; Joerg Roedel <joro@8bytes.org>; Will
-> > Deacon <will@kernel.org>; Rob Herring <robh+dt@kernel.org>;
-> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > iommu@lists.linux-foundation.org; ishikawa yuji(石川 悠司 ○ＲＤＣ□ＡＩＴ
-> > Ｃ○ＥＡ開) <yuji2.ishikawa@toshiba.co.jp>;
-> > linux-arm-kernel@lists.infradead.org
-> > Subject: Re: [PATCH 1/3] iommu: Add Visconti5 IOMMU driver
-> > 
-> > On Wed, May 25, 2022 at 02:26:37PM +0800, Baolu Lu wrote:
-> > > On 2022/5/25 09:31, Nobuhiro Iwamatsu wrote:
-> > > > +static const struct iommu_ops visconti_atu_ops = {
-> > > > +	.domain_alloc = visconti_atu_domain_alloc,
-> > > > +	.probe_device = visconti_atu_probe_device,
-> > > > +	.release_device = visconti_atu_release_device,
-> > > > +	.device_group = generic_device_group,
-> > > > +	.of_xlate = visconti_atu_of_xlate,
-> > > > +	.pgsize_bitmap = ATU_IOMMU_PGSIZE_BITMAP,
-> > > > +	.default_domain_ops = &(const struct iommu_domain_ops) {
-> > > > +		.attach_dev = visconti_atu_attach_device,
-> > > > +		.detach_dev = visconti_atu_detach_device,
-> > >
-> > > The detach_dev callback is about to be deprecated. The new drivers
-> > > should implement the default domain and blocking domain instead.
-> > 
-> > Yes please, new drivers need to use default_domains.
-> > 
-> > It is very strange that visconti_atu_detach_device() does nothing.  It is not
-> > required that a domain is fully unmapped before being destructed, I think
-> > detach should set ATU_AT_EN to 0.
-> 
-> I see, I rethink implementation.
-> 
-> > 
-> > What behavior does the HW have when ATU_AT_ENTRY_EN == 0? If DMA is
-> > rejected then this driver should have a IOMMU_DOMAIN_BLOCKING and
-> > return that from ops->def_domain_type().
-> 
-> If ATU_AT_ENTRY_EN is 0, nothing happens. It does not work with IOMMU,
-> it works with the memory space set in device tree.
+-----Original Message-----
+From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+To: Guodong Liu <guodong.liu@mediatek.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Rob Herring <
+robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, Sean
+Wang <sean.wang@kernel.org>, Sean Wang <sean.wang@mediatek.com>,
+Zhiyong Tao <zhiyong.tao@mediatek.com>, linux-gpio@vger.kernel.org, 
+devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, 
+Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v1 3/4] pinctrl: mediatek: add rsel setting on
+mt8192
+Date: Thu, 9 Jun 2022 14:47:16 -0400
 
-So that would be an assignment to DOMAIN_IDENTITY
+Hi Guodong,
 
-> > I'm feeling like these "special" drivers need some kind of handshake with their
-> > only users because they don't work with things like VFIO..
+thank you for the patch. Please see some suggestions below.
+
+On Wed, Jun 08, 2022 at 01:39:08PM +0800, Guodong Liu wrote:
+> I2C pins's resistance value can be controlled by rsel register.
+> This patch provides rsel (resistance selection) setting on mt8192
+
+Please mention that you're also adding the pull_type array in this
+commit,
+something like: "Also add the missing pull type array for mt8192 to
+document the
+pull type of each pin and prevent invalid pull type settings".
+
+will fix it in next version,thanks!
 > 
-> Since the devices that utilize this IOMMU function are fixed, I do
-> not think that a special handshake is required.  Could you you tell
-> me where you thought you needed a handshake?
+> Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
+> ---
+>  drivers/pinctrl/mediatek/pinctrl-mt8192.c | 204 ++++++++++++++----
+> ----
+>  1 file changed, 134 insertions(+), 70 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-mt8192.c
+> b/drivers/pinctrl/mediatek/pinctrl-mt8192.c
+> index d11ff5519e1e..1486c141ee8c 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-mt8192.c
+> +++ b/drivers/pinctrl/mediatek/pinctrl-mt8192.c
+> @@ -1285,73 +1285,140 @@ static const struct mtk_pin_field_calc
+> mt8192_pin_drv_adv_range[] = {
+>  	PIN_FIELD_BASE(205, 205, 8, 0x0010, 0x10, 6, 3),
+>  };
+>  
+> -static const struct mtk_pin_field_calc mt8192_pin_e1e0en_range[] = {
+> -	PIN_FIELD_BASE(118, 118, 4, 0x0040, 0x10, 0, 1),
+> -	PIN_FIELD_BASE(119, 119, 4, 0x0040, 0x10, 18, 1),
+> -	PIN_FIELD_BASE(120, 120, 4, 0x0040, 0x10, 15, 1),
+> -	PIN_FIELD_BASE(121, 121, 4, 0x0050, 0x10, 3, 1),
+> -	PIN_FIELD_BASE(122, 122, 4, 0x0040, 0x10, 12, 1),
+> -	PIN_FIELD_BASE(123, 123, 4, 0x0050, 0x10, 0, 1),
+> -	PIN_FIELD_BASE(124, 124, 4, 0x0040, 0x10, 9, 1),
+> -	PIN_FIELD_BASE(125, 125, 4, 0x0040, 0x10, 27, 1),
+> -	PIN_FIELD_BASE(139, 139, 4, 0x0040, 0x10, 6, 1),
+> -	PIN_FIELD_BASE(140, 140, 4, 0x0040, 0x10, 24, 1),
+> -	PIN_FIELD_BASE(141, 141, 4, 0x0040, 0x10, 3, 1),
+> -	PIN_FIELD_BASE(142, 142, 4, 0x0040, 0x10, 21, 1),
+> -	PIN_FIELD_BASE(160, 160, 7, 0x0030, 0x10, 0, 1),
+> -	PIN_FIELD_BASE(161, 161, 7, 0x0030, 0x10, 3, 1),
+> -	PIN_FIELD_BASE(200, 200, 8, 0x0010, 0x10, 3, 1),
+> -	PIN_FIELD_BASE(201, 201, 8, 0x0010, 0x10, 9, 1),
+> -	PIN_FIELD_BASE(202, 202, 5, 0x0020, 0x10, 0, 1),
+> -	PIN_FIELD_BASE(203, 203, 5, 0x0020, 0x10, 3, 1),
+> -	PIN_FIELD_BASE(204, 204, 8, 0x0010, 0x10, 0, 1),
+> -	PIN_FIELD_BASE(205, 205, 8, 0x0010, 0x10, 6, 1),
 
-In this case the iommu driver is so limited that it will not work with
-VFIO - it is only ment to be used with the fixed drivers that are
-paired with it.
+You're dropping E1, E0, and EN arrays here, but these were used by the
+original
+advanced drive configuration, so they should've been dropped in the
+previous
+patch, not in this one.
 
-Ideally we'd prevent VFIO from connecting and only allow drivers that
-know the limitations of the IOMMU to use the unmanaged domain.
+will fix it in next version,thanks!
+> +static const struct mtk_pin_field_calc mt8192_pin_rsel_range[] = {
+> +	PIN_FIELD_BASE(118, 118, 4, 0x00e0, 0x10, 0, 2),
+> +	PIN_FIELD_BASE(119, 119, 4, 0x00e0, 0x10, 12, 2),
+> +	PIN_FIELD_BASE(120, 120, 4, 0x00e0, 0x10, 10, 2),
+> +	PIN_FIELD_BASE(121, 121, 4, 0x00e0, 0x10, 22, 2),
+> +	PIN_FIELD_BASE(122, 122, 4, 0x00e0, 0x10, 8, 2),
+> +	PIN_FIELD_BASE(123, 123, 4, 0x00e0, 0x10, 20, 2),
+> +	PIN_FIELD_BASE(124, 124, 4, 0x00e0, 0x10, 6, 2),
+> +	PIN_FIELD_BASE(125, 125, 4, 0x00e0, 0x10, 18, 2),
+> +	PIN_FIELD_BASE(139, 139, 4, 0x00e0, 0x10, 4, 2),
+> +	PIN_FIELD_BASE(140, 140, 4, 0x00e0, 0x10, 16, 2),
+> +	PIN_FIELD_BASE(141, 141, 4, 0x00e0, 0x10, 2, 2),
+> +	PIN_FIELD_BASE(142, 142, 4, 0x00e0, 0x10, 14, 2),
+> +	PIN_FIELD_BASE(160, 160, 7, 0x00f0, 0x10, 0, 2),
+> +	PIN_FIELD_BASE(161, 161, 7, 0x00f0, 0x10, 2, 2),
+> +	PIN_FIELD_BASE(200, 200, 8, 0x0070, 0x10, 2, 2),
+> +	PIN_FIELD_BASE(201, 201, 8, 0x0070, 0x10, 6, 2),
+> +	PIN_FIELD_BASE(202, 202, 5, 0x0070, 0x10, 0, 2),
+> +	PIN_FIELD_BASE(203, 203, 5, 0x0070, 0x10, 2, 2),
+> +	PIN_FIELD_BASE(204, 204, 8, 0x0070, 0x10, 0, 2),
+> +	PIN_FIELD_BASE(205, 205, 8, 0x0070, 0x10, 4, 2),
+>  };
+>  
+> -static const struct mtk_pin_field_calc mt8192_pin_e0_range[] = {
+> -	PIN_FIELD_BASE(118, 118, 4, 0x0040, 0x10, 1, 1),
+> -	PIN_FIELD_BASE(119, 119, 4, 0x0040, 0x10, 19, 1),
+> -	PIN_FIELD_BASE(120, 120, 4, 0x0040, 0x10, 16, 1),
+> -	PIN_FIELD_BASE(121, 121, 4, 0x0050, 0x10, 4, 1),
+> -	PIN_FIELD_BASE(122, 122, 4, 0x0040, 0x10, 13, 1),
+> -	PIN_FIELD_BASE(123, 123, 4, 0x0050, 0x10, 1, 1),
+> -	PIN_FIELD_BASE(124, 124, 4, 0x0040, 0x10, 10, 1),
+> -	PIN_FIELD_BASE(125, 125, 4, 0x0040, 0x10, 28, 1),
+> -	PIN_FIELD_BASE(139, 139, 4, 0x0040, 0x10, 7, 1),
+> -	PIN_FIELD_BASE(140, 140, 4, 0x0040, 0x10, 25, 1),
+> -	PIN_FIELD_BASE(141, 141, 4, 0x0040, 0x10, 4, 1),
+> -	PIN_FIELD_BASE(142, 142, 4, 0x0040, 0x10, 22, 1),
+> -	PIN_FIELD_BASE(160, 160, 7, 0x0030, 0x10, 1, 1),
+> -	PIN_FIELD_BASE(161, 161, 7, 0x0030, 0x10, 4, 1),
+> -	PIN_FIELD_BASE(200, 200, 8, 0x0010, 0x10, 4, 1),
+> -	PIN_FIELD_BASE(201, 201, 8, 0x0010, 0x10, 10, 1),
+> -	PIN_FIELD_BASE(202, 202, 5, 0x0020, 0x10, 1, 1),
+> -	PIN_FIELD_BASE(203, 203, 5, 0x0020, 0x10, 4, 1),
+> -	PIN_FIELD_BASE(204, 204, 8, 0x0010, 0x10, 1, 1),
+> -	PIN_FIELD_BASE(205, 205, 8, 0x0010, 0x10, 7, 1),
+> -};
+> -
+> -static const struct mtk_pin_field_calc mt8192_pin_e1_range[] = {
+> -	PIN_FIELD_BASE(118, 118, 4, 0x0040, 0x10, 2, 1),
+> -	PIN_FIELD_BASE(119, 119, 4, 0x0040, 0x10, 20, 1),
+> -	PIN_FIELD_BASE(120, 120, 4, 0x0040, 0x10, 17, 1),
+> -	PIN_FIELD_BASE(121, 121, 4, 0x0050, 0x10, 5, 1),
+> -	PIN_FIELD_BASE(122, 122, 4, 0x0040, 0x10, 14, 1),
+> -	PIN_FIELD_BASE(123, 123, 4, 0x0050, 0x10, 2, 1),
+> -	PIN_FIELD_BASE(124, 124, 4, 0x0040, 0x10, 11, 1),
+> -	PIN_FIELD_BASE(125, 125, 4, 0x0040, 0x10, 29, 1),
+> -	PIN_FIELD_BASE(139, 139, 4, 0x0040, 0x10, 8, 1),
+> -	PIN_FIELD_BASE(140, 140, 4, 0x0040, 0x10, 26, 1),
+> -	PIN_FIELD_BASE(141, 141, 4, 0x0040, 0x10, 5, 1),
+> -	PIN_FIELD_BASE(142, 142, 4, 0x0040, 0x10, 23, 1),
+> -	PIN_FIELD_BASE(160, 160, 7, 0x0030, 0x10, 2, 1),
+> -	PIN_FIELD_BASE(161, 161, 7, 0x0030, 0x10, 5, 1),
+> -	PIN_FIELD_BASE(200, 200, 8, 0x0010, 0x10, 5, 1),
+> -	PIN_FIELD_BASE(201, 201, 8, 0x0010, 0x10, 11, 1),
+> -	PIN_FIELD_BASE(202, 202, 5, 0x0020, 0x10, 2, 1),
+> -	PIN_FIELD_BASE(203, 203, 5, 0x0020, 0x10, 5, 1),
+> -	PIN_FIELD_BASE(204, 204, 8, 0x0010, 0x10, 2, 1),
+> -	PIN_FIELD_BASE(205, 205, 8, 0x0010, 0x10, 8, 1),
+> +static const unsigned int mt8192_pull_type[] = {
+> +	MTK_PULL_PU_PD_TYPE,/*0*/		MTK_PULL_PU_PD_TYPE,/*1*/
+> +	MTK_PULL_PU_PD_TYPE,/*2*/		MTK_PULL_PU_PD_TYPE,/*3*/
+> +	MTK_PULL_PU_PD_TYPE,/*4*/		MTK_PULL_PU_PD_TYPE,/*5*/
+> +	MTK_PULL_PU_PD_TYPE,/*6*/		MTK_PULL_PU_PD_TYPE,/*7*/
+> +	MTK_PULL_PU_PD_TYPE,/*8*/		MTK_PULL_PU_PD_TYPE,/*9*/
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*10*/	MTK_PULL_PUPD_R1R0_TYPE,/*11*
+> /
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*12*/	MTK_PULL_PUPD_R1R0_TYPE,/*13*
+> /
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*14*/	MTK_PULL_PUPD_R1R0_TYPE,/*15*
+> /
+> +	MTK_PULL_PU_PD_TYPE,/*16*/		MTK_PULL_PU_PD_TYPE,/
+> *17*/
+> +	MTK_PULL_PU_PD_TYPE,/*18*/		MTK_PULL_PU_PD_TYPE,/
+> *19*/
+> +	MTK_PULL_PU_PD_TYPE,/*20*/		MTK_PULL_PU_PD_TYPE,/
+> *21*/
+> +	MTK_PULL_PU_PD_TYPE,/*22*/		MTK_PULL_PU_PD_TYPE,/
+> *23*/
+> +	MTK_PULL_PU_PD_TYPE,/*24*/		MTK_PULL_PU_PD_TYPE,/
+> *25*/
+> +	MTK_PULL_PU_PD_TYPE,/*26*/		MTK_PULL_PU_PD_TYPE,/
+> *27*/
+> +	MTK_PULL_PU_PD_TYPE,/*28*/		MTK_PULL_PU_PD_TYPE,/
+> *29*/
+> +	MTK_PULL_PU_PD_TYPE,/*30*/		MTK_PULL_PU_PD_TYPE,/
+> *31*/
+> +	MTK_PULL_PU_PD_TYPE,/*32*/		MTK_PULL_PU_PD_TYPE,/
+> *33*/
+> +	MTK_PULL_PU_PD_TYPE,/*34*/		MTK_PULL_PU_PD_TYPE,/
+> *35*/
+> +	MTK_PULL_PU_PD_TYPE,/*36*/		MTK_PULL_PU_PD_TYPE,/
+> *37*/
+> +	MTK_PULL_PU_PD_TYPE,/*38*/		MTK_PULL_PU_PD_TYPE,/
+> *39*/
+> +	MTK_PULL_PU_PD_TYPE,/*40*/		MTK_PULL_PU_PD_TYPE,/
+> *41*/
+> +	MTK_PULL_PU_PD_TYPE,/*42*/		MTK_PULL_PU_PD_TYPE,/
+> *43*/
+> +	MTK_PULL_PU_PD_TYPE,/*44*/		MTK_PULL_PUPD_R1R0_TY
+> PE,/*45*/
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*46*/	MTK_PULL_PUPD_R1R0_TYPE,/*47*
+> /
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*48*/	MTK_PULL_PUPD_R1R0_TYPE,/*49*
+> /
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*50*/	MTK_PULL_PUPD_R1R0_TYPE,/*51*
+> /
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*52*/	MTK_PULL_PUPD_R1R0_TYPE,/*53*
+> /
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*54*/	MTK_PULL_PUPD_R1R0_TYPE,/*55*
+> /
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*56*/	MTK_PULL_PU_PD_TYPE,/*57*/
+> +	MTK_PULL_PU_PD_TYPE,/*58*/		MTK_PULL_PU_PD_TYPE,/
+> *59*/
+> +	MTK_PULL_PU_PD_TYPE,/*60*/		MTK_PULL_PU_PD_TYPE,/
+> *61*/
+> +	MTK_PULL_PU_PD_TYPE,/*62*/		MTK_PULL_PU_PD_TYPE,/
+> *63*/
+> +	MTK_PULL_PU_PD_TYPE,/*64*/		MTK_PULL_PU_PD_TYPE,/
+> *65*/
+> +	MTK_PULL_PU_PD_TYPE,/*66*/		MTK_PULL_PU_PD_TYPE,/
+> *67*/
+> +	MTK_PULL_PU_PD_TYPE,/*68*/		MTK_PULL_PU_PD_TYPE,/
+> *69*/
+> +	MTK_PULL_PU_PD_TYPE,/*70*/		MTK_PULL_PU_PD_TYPE,/
+> *71*/
+> +	MTK_PULL_PU_PD_TYPE,/*72*/		MTK_PULL_PU_PD_TYPE,/
+> *73*/
+> +	MTK_PULL_PU_PD_TYPE,/*74*/		MTK_PULL_PU_PD_TYPE,/
+> *75*/
+> +	MTK_PULL_PU_PD_TYPE,/*76*/		MTK_PULL_PU_PD_TYPE,/
+> *77*/
+> +	MTK_PULL_PU_PD_TYPE,/*78*/		MTK_PULL_PU_PD_TYPE,/
+> *79*/
+> +	MTK_PULL_PU_PD_TYPE,/*80*/		MTK_PULL_PU_PD_TYPE,/
+> *81*/
+> +	MTK_PULL_PU_PD_TYPE,/*82*/		MTK_PULL_PU_PD_TYPE,/
+> *83*/
+> +	MTK_PULL_PU_PD_TYPE,/*84*/		MTK_PULL_PU_PD_TYPE,/
+> *85*/
+> +	MTK_PULL_PU_PD_TYPE,/*86*/		MTK_PULL_PU_PD_TYPE,/
+> *87*/
+> +	MTK_PULL_PU_PD_TYPE,/*88*/		MTK_PULL_PU_PD_TYPE,/
+> *89*/
+> +	MTK_PULL_PU_PD_TYPE,/*90*/		MTK_PULL_PU_PD_TYPE,/
+> *91*/
+> +	MTK_PULL_PU_PD_TYPE,/*92*/		MTK_PULL_PU_PD_TYPE,/
+> *93*/
+> +	MTK_PULL_PU_PD_TYPE,/*94*/		MTK_PULL_PU_PD_TYPE,/
+> *95*/
+> +	MTK_PULL_PU_PD_TYPE,/*96*/		MTK_PULL_PU_PD_TYPE,/
+> *97*/
+> +	MTK_PULL_PU_PD_TYPE,/*98*/		MTK_PULL_PU_PD_TYPE,/
+> *99*/
+> +	MTK_PULL_PU_PD_TYPE,/*100*/		MTK_PULL_PU_PD_TYPE,/
+> *101*/
+> +	MTK_PULL_PU_PD_TYPE,/*102*/		MTK_PULL_PU_PD_TYPE,/
+> *103*/
+> +	MTK_PULL_PU_PD_TYPE,/*104*/		MTK_PULL_PU_PD_TYPE,/
+> *105*/
+> +	MTK_PULL_PU_PD_TYPE,/*106*/		MTK_PULL_PU_PD_TYPE,/
+> *107*/
+> +	MTK_PULL_PU_PD_TYPE,/*108*/		MTK_PULL_PU_PD_TYPE,/
+> *109*/
+> +	MTK_PULL_PU_PD_TYPE,/*110*/		MTK_PULL_PU_PD_TYPE,/
+> *111*/
+> +	MTK_PULL_PU_PD_TYPE,/*112*/		MTK_PULL_PU_PD_TYPE,/
+> *113*/
+> +	MTK_PULL_PU_PD_TYPE,/*114*/		MTK_PULL_PU_PD_TYPE,/
+> *115*/
+> +	MTK_PULL_PU_PD_TYPE,/*116*/		MTK_PULL_PU_PD_TYPE,/
+> *117*/
+> +	MTK_PULL_PU_PD_RSEL_TYPE,/*118*/	MTK_PULL_PU_PD_RSEL_TYPE,/*11
+> 9*/
+> +	MTK_PULL_PU_PD_RSEL_TYPE,/*120*/	MTK_PULL_PU_PD_RSEL_TYPE,/*12
+> 1*/
+> +	MTK_PULL_PU_PD_RSEL_TYPE,/*122*/	MTK_PULL_PU_PD_RSEL_TYPE,/*12
+> 3*/
+> +	MTK_PULL_PU_PD_RSEL_TYPE,/*124*/	MTK_PULL_PU_PD_RSEL_TYPE,/*12
+> 5*/
+> +	MTK_PULL_PU_PD_TYPE,/*126*/		MTK_PULL_PU_PD_TYPE,/
+> *127*/
+> +	MTK_PULL_PU_PD_TYPE,/*128*/		MTK_PULL_PU_PD_TYPE,/
+> *129*/
+> +	MTK_PULL_PU_PD_TYPE,/*130*/		MTK_PULL_PU_PD_TYPE,/
+> *131*/
+> +	MTK_PULL_PU_PD_TYPE,/*132*/		MTK_PULL_PU_PD_TYPE,/
+> *133*/
+> +	MTK_PULL_PU_PD_TYPE,/*134*/		MTK_PULL_PU_PD_TYPE,/
+> *135*/
+> +	MTK_PULL_PU_PD_TYPE,/*136*/		MTK_PULL_PU_PD_TYPE,/
+> *137*/
+> +	MTK_PULL_PU_PD_TYPE,/*138*/		MTK_PULL_PU_PD_RSEL_T
+> YPE,/*139*/
+> +	MTK_PULL_PU_PD_RSEL_TYPE,/*140*/	MTK_PULL_PU_PD_RSEL_TYPE,/*14
+> 1*/
+> +	MTK_PULL_PU_PD_RSEL_TYPE,/*142*/	MTK_PULL_PU_PD_TYPE,/*143*/
+> +	MTK_PULL_PU_PD_TYPE,/*144*/		MTK_PULL_PU_PD_TYPE,/
+> *145*/
+> +	MTK_PULL_PU_PD_TYPE,/*146*/		MTK_PULL_PU_PD_TYPE,/
+> *147*/
+> +	MTK_PULL_PU_PD_TYPE,/*148*/		MTK_PULL_PU_PD_TYPE,/
+> *149*/
+> +	MTK_PULL_PU_PD_TYPE,/*150*/		MTK_PULL_PU_PD_TYPE,/
+> *151*/
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*152*/	MTK_PULL_PUPD_R1R0_TYPE,/*153
+> */
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*154*/	MTK_PULL_PUPD_R1R0_TYPE,/*155
+> */
+> +	MTK_PULL_PU_PD_TYPE,/*156*/		MTK_PULL_PU_PD_TYPE,/
+> *157*/
+> +	MTK_PULL_PU_PD_TYPE,/*158*/		MTK_PULL_PU_PD_TYPE,/
+> *159*/
+> +	MTK_PULL_PU_PD_RSEL_TYPE,/*160*/	MTK_PULL_PU_PD_RSEL_TYPE,/*16
+> 1*/
+> +	MTK_PULL_PU_PD_TYPE,/*162*/		MTK_PULL_PU_PD_TYPE,/
+> *163*/
+> +	MTK_PULL_PU_PD_TYPE,/*164*/		MTK_PULL_PU_PD_TYPE,/
+> *165*/
+> +	MTK_PULL_PU_PD_TYPE,/*166*/		MTK_PULL_PU_PD_TYPE,/
+> *167*/
+> +	MTK_PULL_PU_PD_TYPE,/*168*/		MTK_PULL_PU_PD_TYPE,/
+> *169*/
+> +	MTK_PULL_PU_PD_TYPE,/*170*/		MTK_PULL_PU_PD_TYPE,/
+> *171*/
+> +	MTK_PULL_PU_PD_TYPE,/*172*/		MTK_PULL_PU_PD_TYPE,/
+> *173*/
+> +	MTK_PULL_PU_PD_TYPE,/*174*/		MTK_PULL_PU_PD_TYPE,/
+> *175*/
+> +	MTK_PULL_PU_PD_TYPE,/*176*/		MTK_PULL_PU_PD_TYPE,/
+> *177*/
+> +	MTK_PULL_PU_PD_TYPE,/*178*/		MTK_PULL_PU_PD_TYPE,/
+> *179*/
+> +	MTK_PULL_PU_PD_TYPE,/*180*/		MTK_PULL_PU_PD_TYPE,/
+> *181*/
+> +	MTK_PULL_PU_PD_TYPE,/*182*/		MTK_PULL_PUPD_R1R0_TY
+> PE,/*183*/
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*184*/	MTK_PULL_PUPD_R1R0_TYPE,/*185
+> */
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*186*/	MTK_PULL_PUPD_R1R0_TYPE,/*187
+> */
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*188*/	MTK_PULL_PUPD_R1R0_TYPE,/*189
+> */
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*190*/	MTK_PULL_PUPD_R1R0_TYPE,/*191
+> */
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*192*/	MTK_PULL_PUPD_R1R0_TYPE,/*193
+> */
+> +	MTK_PULL_PUPD_R1R0_TYPE,/*194*/	MTK_PULL_PU_PD_TYPE,/*195*/
+> +	MTK_PULL_PU_PD_TYPE,/*196*/		MTK_PULL_PU_PD_TYPE,/
+> *197*/
+> +	MTK_PULL_PU_PD_TYPE,/*198*/		MTK_PULL_PU_PD_TYPE,/
+> *199*/
+> +	MTK_PULL_PU_PD_RSEL_TYPE,/*200*/	MTK_PULL_PU_PD_RSEL_TYPE,/*20
+> 1*/
+> +	MTK_PULL_PU_PD_RSEL_TYPE,/*202*/	MTK_PULL_PU_PD_RSEL_TYPE,/*20
+> 3*/
+> +	MTK_PULL_PU_PD_RSEL_TYPE,/*204*/	MTK_PULL_PU_PD_RSEL_TYPE,/*20
+> 5*/
+> +	MTK_PULL_PU_PD_TYPE,/*206*/		MTK_PULL_PU_PD_TYPE,/
+> *207*/
+> +	MTK_PULL_PU_PD_TYPE,/*208*/		MTK_PULL_PU_PD_TYPE,/
+> *209*/
+> +	MTK_PULL_PU_PD_TYPE,/*210*/		MTK_PULL_PU_PD_TYPE,/
+> *211*/
+> +	MTK_PULL_PU_PD_TYPE,/*212*/		MTK_PULL_PU_PD_TYPE,/
+> *213*/
+> +	MTK_PULL_PU_PD_TYPE,/*214*/		MTK_PULL_PU_PD_TYPE,/
+> *215*/
+> +	MTK_PULL_PU_PD_TYPE,/*216*/		MTK_PULL_PU_PD_TYPE,/
+> *217*/
+> +	MTK_PULL_PU_PD_TYPE,/*218*/		MTK_PULL_PU_PD_TYPE,/
+> *219*/
+>  };
+>  
+>  
+> @@ -1381,10 +1448,8 @@ static const struct mtk_pin_reg_calc
+> mt8192_reg_cals[PINCTRL_PIN_REG_MAX] = {
+>  	[PINCTRL_PIN_REG_PUPD] = MTK_RANGE(mt8192_pin_pupd_range),
+>  	[PINCTRL_PIN_REG_R0] = MTK_RANGE(mt8192_pin_r0_range),
+>  	[PINCTRL_PIN_REG_R1] = MTK_RANGE(mt8192_pin_r1_range),
+> -	[PINCTRL_PIN_REG_DRV_EN] = MTK_RANGE(mt8192_pin_e1e0en_range),
+> -	[PINCTRL_PIN_REG_DRV_E0] = MTK_RANGE(mt8192_pin_e0_range),
+>  	[PINCTRL_PIN_REG_DRV_ADV]	=
+> MTK_RANGE(mt8192_pin_drv_adv_range),
+> -	[PINCTRL_PIN_REG_DRV_E1] = MTK_RANGE(mt8192_pin_e1_range),
+> +	[PINCTRL_PIN_REG_RSEL]	= MTK_RANGE(mt8192_pin_rsel_range),
+>  };
+>  
+>  static const struct mtk_pin_soc mt8192_data = {
+> @@ -1394,6 +1459,7 @@ static const struct mtk_pin_soc mt8192_data = {
+>  	.ngrps = ARRAY_SIZE(mtk_pins_mt8192),
+>  	.base_names = mt8192_pinctrl_register_base_names,
+>  	.nbase_names = ARRAY_SIZE(mt8192_pinctrl_register_base_names),
+> +	.pull_type = mt8192_pull_type,
+>  	.eint_hw = &mt8192_eint_hw,
+>  	.nfuncs = 8,
+>  	.gpio_m = 0,
+> @@ -1401,8 +1467,6 @@ static const struct mtk_pin_soc mt8192_data = {
+>  	.bias_get_combo = mtk_pinconf_bias_get_combo,
+>  	.drive_set	= mtk_pinconf_drive_set_rev1,
+>  	.drive_get	= mtk_pinconf_drive_get_rev1,
+> -	.adv_pull_get = mtk_pinconf_adv_pull_get,
+> -	.adv_pull_set = mtk_pinconf_adv_pull_set,
 
-Jason
+I understand you're dropping this because the bias_combo getter/setters
+already
+handle all cases, but still this isn't really related to adding rsel,
+so I think
+it'd make more sense in a separate commit. At the very least it should
+be
+mentioned in the commit message.
+
+will fix it in next version,thanks!
+
+Thanks,
+Nícolas
+
+>  	.adv_drive_get	= mtk_pinconf_adv_drive_get_raw,
+>  	.adv_drive_set	= mtk_pinconf_adv_drive_set_raw,
+>  };
+> -- 
+> 2.25.5
+> 
+

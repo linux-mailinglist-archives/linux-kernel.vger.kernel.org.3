@@ -2,57 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C095597BD
+	by mail.lfdr.de (Postfix) with ESMTP id 506CA5597BE
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbiFXKVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 06:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
+        id S230417AbiFXKVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 06:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbiFXKVj (ORCPT
+        with ESMTP id S229889AbiFXKVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 06:21:39 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746AA7C503;
-        Fri, 24 Jun 2022 03:21:34 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 24 Jun 2022 06:21:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC57F7C502
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:21:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1CE1F66017E1;
-        Fri, 24 Jun 2022 11:21:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656066093;
-        bh=XiQqaDDVsr9ct3XTN5uUy3VFBouJw2oayLQC2BD4/ig=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=B5+Qof2yy7qYYHlV/E/zYtNZe9KOOGts0UL40hc5pHask88etXUGsINGHgCieqMcR
-         AwODsgtze+9SM0LRZgskDgBWfDJIYbP4iGXlTWHpoV3KTVtkCpVsSw9nc0cdAz2Bhv
-         XFFAAzQ+OO2DDPIuBMa2k+ZvSyLmzR6esYY+r0GqDrnK+h3N53uVw+V/HLcsOr5PlL
-         LcAuPwJK8wlHvz9Pt6Hz3GatnFdLsjGtzn1ie40TwLmB17LL0GviBJ/GH0XWUAXUO6
-         kpnW13gwDPutFDHN4o293k04vXkbW0xQuQR+mH32ICYQmgy+I2ChtOy5oZ0Y59hN+I
-         wIdGa+eZ2VcDQ==
-Message-ID: <cb36b4a2-86b0-630c-8012-d1df1b0a42de@collabora.com>
-Date:   Fri, 24 Jun 2022 12:21:30 +0200
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A740721982;
+        Fri, 24 Jun 2022 10:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1656066092; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2o//5RsBBP4Q3Y91eiwaePN5wmGbpiIFxxYpkXu0ZYE=;
+        b=O4tm8iaMwSHu7ldBuiOY3Elnh25wFyZ7CO1Np57zyckcwbNLwUjGFIfBe47zwAUB8KGjed
+        BM+UX85MO9dLfcnS0r7gBEhxEAeTWifOrYCZ8VnHSdYxk6shATkvn4CrKt5yCo1YGaz56t
+        1wOQkxQ+fHRsZ2e7NveJ5q67TCOjW0Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1656066092;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2o//5RsBBP4Q3Y91eiwaePN5wmGbpiIFxxYpkXu0ZYE=;
+        b=g3osGxy0Z3so5e0NMyBNVREKmUrFXe4Bc1ptB8YZmasy9nWMFNoJWl9XKORLjHxtPrXOIP
+        7n3ksU1XW+E8SwCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6EBD413ACA;
+        Fri, 24 Jun 2022 10:21:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id K3NaGSyQtWKSJAAAMHmgww
+        (envelope-from <jroedel@suse.de>); Fri, 24 Jun 2022 10:21:32 +0000
+Date:   Fri, 24 Jun 2022 12:21:31 +0200
+From:   Joerg Roedel <jroedel@suse.de>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org, iommu@lists.linux.dev
+Subject: Re: [PATCH] MAINTAINERS: Add new IOMMU development mailing list
+Message-ID: <YrWQK32lXdyzVheR@suse.de>
+References: <20220622082601.31678-1-joro@8bytes.org>
+ <YrVZ7g3AKzoI0uMG@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/7] MediaTek Helio X10 MT6795 - MT6331/6332 PMIC Wrapper
-Content-Language: en-US
-To:     lee.jones@linaro.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, zhiyong.tao@mediatek.com,
-        henryc.chen@mediatek.com, johnson.wang@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220520124039.228314-1-angelogioacchino.delregno@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220520124039.228314-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YrVZ7g3AKzoI0uMG@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,47 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/05/22 14:40, AngeloGioacchino Del Regno ha scritto:
-> In an effort to give some love to the apparently forgotten MT6795 SoC,
-> I am upstreaming more components that are necessary to support platforms
-> powered by this one apart from a simple boot to serial console.
-> 
-> This series introduces support in the PMIC Wrapper for a different PMIC
-> topology, which is commonly found on smartphone boards, using one main
-> PMIC and one Companion PMIC;
-> be aware that this kind of topology is not *specific to* the Helio X10
-> SoC, but common across many kinds of MediaTek smartphone oriented SoCs
-> and board designs.
-> 
-> That said, support for the PMIC combo MT6331+MT6332 is provided in this
-> series in a form that will be able to initialize the PMICs with crypto
-> and DualIO but nothing else: these PMICs are very featureful, so I have
-> decided to add this support in more than just one step, as there will
-> be multiple patches for multiple different subsystems (..it's a mfd!..).
-> 
-> Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
-> 
-> AngeloGioacchino Del Regno (7):
->    soc: mediatek: pwrap: Move PMIC read test sequence in function
->    soc: mediatek: pwrap: Add kerneldoc for struct pwrap_slv_type
->    soc: mediatek: mtk-pmic-wrap: Add support for companion PMICs
->    dt-bindings: mfd: Add compatible for MT6331 PMIC
->    soc: mediatek: mtk-pmic-wrap: Add support for MT6331 w/ MT6332
->      companion
->    dt-bindings: mediatek: pwrap: Add a compatible for MT6795 Helio X10
->    soc: mediatek: pwrap: Add support for MT6795 Helio X10
-> 
->   .../devicetree/bindings/mfd/mt6397.txt        |   1 +
->   .../bindings/soc/mediatek/pwrap.txt           |   1 +
->   drivers/soc/mediatek/mtk-pmic-wrap.c          | 287 ++++++++++++++++--
->   3 files changed, 263 insertions(+), 26 deletions(-)
-> 
+On Thu, Jun 23, 2022 at 11:30:06PM -0700, Christoph Hellwig wrote:
+> iommu@lists.linux-foundation.org is also listed for various other
+> MAINTAINERS entries.  Can you please send a list to update all of them
+> to Linus ASAP, including for 5.19 and -stable?
 
+Right, will do, thanks for the heads-up.
 
-Matthias, please, can you check this series?
+-- 
+Jörg Rödel
+jroedel@suse.de
 
-This doesn't depend on any other series that I've sent and besides that,
-Lee has acked the actual MFD PMIC code, so this should be good to go.
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5
+90409 Nürnberg
+Germany
+ 
+(HRB 36809, AG Nürnberg)
+Geschäftsführer: Ivo Totev
 
-Thanks,
-Angelo

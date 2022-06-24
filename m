@@ -2,112 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE87559804
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365B5559805
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbiFXKj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 06:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
+        id S230490AbiFXKkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 06:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiFXKjx (ORCPT
+        with ESMTP id S229902AbiFXKkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 06:39:53 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528BC7C522;
-        Fri, 24 Jun 2022 03:39:52 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id v14so2565836wra.5;
-        Fri, 24 Jun 2022 03:39:52 -0700 (PDT)
+        Fri, 24 Jun 2022 06:40:19 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379BE7C85F
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:40:17 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id w20so3710539lfa.11
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:40:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=a50Wd0uYN/FqbUAxGD2tCKD+dkhWmh195FinYbW4Eu0=;
-        b=K8uSReNZC84GNYbaYitytYru8m6tLm8sCiBElyCoOshGf9UDckIZFUmL8FN9OzNEkW
-         BwwLzIY1q3BcZaWUHGL1K6HZTuqrov9WMc7baPcqbiWHhwmu0QF82QiAcA5eXzMc3oAY
-         rdYlDs7DJY7QEviuV3KtJun0gXpRtUpwTgw+mFBpZleO7PQpMUbCuDwnIt81g/CjNHHU
-         wYBw4fo5QjY3KcCk8Fb5NK9NFkk+4NCDEZXtGwsmuM5JITzhMhXKbE0PK6f4sUBPxOe5
-         3wBB3rKttBW2imWzHENfIad+qn11inFFg9L1MC84Ss4RbbjHr+WzYvN74pOSBQKs0ZH6
-         jLlw==
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AJmnLzRfv3CKjpAFSm8w5uUX4zkxlzpS9NJDok/nCk8=;
+        b=7HedpVdtZRLHDg268+oLo/eUh38UD497b1xuP0kyTrOApUY9ey+kT8c0TnmBPY+t9U
+         mL3HMOpxmxQIYWukMfePC89vZe9yHBTYZIR98SC8JnF5PNc4ICv87ZpVlu0TxWY8d45R
+         d9z0Mgc5yU0iDhbJBhLbs8Baz9W25uKdFESjuRdahXy0c+L74oYBwxW/vkQdtCl/Zp2b
+         o7Ofb3Rb/6lKL6zcj87m09gmw0mAbgTtb4y8Hd8FQfwViCQZAfDmOdf8Vt7L2w/ctbFt
+         osjhl7TXYXzxDD/VddKOpv5+aF5y9/2rtyKZkQcDfn86chNYao3fOf/kYoH3POPiDcmI
+         cuLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a50Wd0uYN/FqbUAxGD2tCKD+dkhWmh195FinYbW4Eu0=;
-        b=17hMDUAj7P2O4RufXNQEc5TbCRwID4g1NvMIsldcboC6xI4Kcht/fcm9VDDrkYkby7
-         EKUzXxVqJhexwFZUTsuRIzDVBGtbSGIYKEY3Sv8QbP1k8BiHpXJYroayK+Fnz/L/VMZp
-         FWdsVbYxj9n+ibGD97EEXli9n8uwfODvCdQGo7yNjRg87abvotE4Hc2Mx4y5bcIKtf/0
-         7+298LXUc/m+p19Aya8Yqv6vj/XYIsl5DVhpta44s7sGFjPrBvsi5Ro5cMODkjUJVhhq
-         ph3VAHWlY1yJp13tORI0//0WtAabWb+j4+S0SiWmaX770NJ9eJpeYOONE6xGe81fwil+
-         B90w==
-X-Gm-Message-State: AJIora+5earPBwYq6y3SLChN2RFqNA6xX89xf7aHNaLO+Kl4JXnrKt9d
-        PaB53rOC4gFnOuSuPPpBZc3vEiuuUcE=
-X-Google-Smtp-Source: AGRyM1vKe+vfOAE1I6+Kb+Im852URkv9+y4ZMl6A9ckvQYGT0J/7Y5hA7H0xvjZRPu5NI0sXoRBJug==
-X-Received: by 2002:a05:6000:607:b0:21b:855f:c6d4 with SMTP id bn7-20020a056000060700b0021b855fc6d4mr12664533wrb.158.1656067190778;
-        Fri, 24 Jun 2022 03:39:50 -0700 (PDT)
-Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
-        by smtp.gmail.com with ESMTPSA id x13-20020a05600c21cd00b0039c96b97359sm2278193wmj.37.2022.06.24.03.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 03:39:50 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 11:39:48 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.18 00/11] 5.18.7-rc1 review
-Message-ID: <YrWUdK8iElsT+gp4@debian>
-References: <20220623164322.315085512@linuxfoundation.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AJmnLzRfv3CKjpAFSm8w5uUX4zkxlzpS9NJDok/nCk8=;
+        b=LZexuOqFGhd+gxMqELM1ZBd/tOBVPww0fLLKM4FdvrsATAwGOC4NTE9RMT4f86q5ir
+         WP/EJLz/HZ+GgXhkX0gSmmtFCTCTb9eV77E8AjWLDTOW9ss3Fz2jiZ60ynyeu1X+THkq
+         0JiDK99qujdfB29daA656kPAJyN2Y5XcsDw8n+KzMnP2HaP40O7PvXbjmsqYjKRFDzRs
+         SZp9NPHSJEhBUB/Z8p21xMzPLvLnhh9oDmyPqVZBsdePrs8u4+7oGjlE8JPJumC1deKs
+         OgsWQnbR2r2LgR6LMmYuuPkWSuH3vXSfJsFA9vN7qNhyaSwcc94K/BOwQ6ftdytAB7dt
+         /8TA==
+X-Gm-Message-State: AJIora8FkPFMn1KlnbSwQ7C7TmOzwUXzrF6VkwrgWrzQNxUDwoaByjkL
+        Orm3iprKy8Qisu5rtTz632/2yQ==
+X-Google-Smtp-Source: AGRyM1spY9eC2EEhD934ao3bTtj+9AIG31KaKJxVQ5yli2D+p9LF1XUzqtEEzlNZUQyOCZEGB0y6hQ==
+X-Received: by 2002:a19:dc0f:0:b0:47f:1b37:8d8a with SMTP id t15-20020a19dc0f000000b0047f1b378d8amr8422183lfg.12.1656067215555;
+        Fri, 24 Jun 2022 03:40:15 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.129])
+        by smtp.gmail.com with ESMTPSA id bq26-20020a056512151a00b0047976e7388bsm311119lfb.81.2022.06.24.03.40.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jun 2022 03:40:15 -0700 (PDT)
+Message-ID: <0f8146e3-5865-b7e6-6728-5baada375cf2@openvz.org>
+Date:   Fri, 24 Jun 2022 13:40:14 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623164322.315085512@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH mm v5 0/9] memcg: accounting for objects allocated by
+ mkdir, cgroup
+Content-Language: en-US
+To:     Shakeel Butt <shakeelb@google.com>, Michal Hocko <mhocko@suse.com>
+Cc:     kernel@openvz.org, Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Cgroups <cgroups@vger.kernel.org>
+References: <4e685057-b07d-745d-fdaa-1a6a5a681060@openvz.org>
+ <0fe836b4-5c0f-0e32-d511-db816d359748@openvz.org>
+ <c516033f-a9e4-3485-26d9-a68afa694c1d@openvz.org>
+ <YrSP25ebDmXE+kPS@dhcp22.suse.cz>
+ <CALvZod4WsmrpfZtfnP4AmvtnkvBRngXXGyhM6+aQzkdfjsinAQ@mail.gmail.com>
+From:   Vasily Averin <vvs@openvz.org>
+In-Reply-To: <CALvZod4WsmrpfZtfnP4AmvtnkvBRngXXGyhM6+aQzkdfjsinAQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Thu, Jun 23, 2022 at 06:45:12PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.7 release.
-> There are 11 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 6/23/22 19:55, Shakeel Butt wrote:
+> On Thu, Jun 23, 2022 at 9:07 AM Michal Hocko <mhocko@suse.com> wrote:
+>>
+>> On Thu 23-06-22 18:03:31, Vasily Averin wrote:
+>>> Dear Michal,
+>>> do you still have any concerns about this patch set?
+>>
+>> Yes, I do not think we have concluded this to be really necessary. IIRC
+>> Roman would like to see lingering cgroups addressed in not-so-distant
+>> future (http://lkml.kernel.org/r/Ypd2DW7id4M3KJJW@carbon) and we already
+>> have a limit for the number of cgroups in the tree. So why should we
+>> chase after allocations that correspond the cgroups and somehow try to
+>> cap their number via the memory consumption. This looks like something
+>> that will get out of sync eventually and it also doesn't seem like the
+>> best control to me (comparing to an explicit limit to prevent runaways).
+>> --
 > 
-> Responses should be made by Sat, 25 Jun 2022 16:43:11 +0000.
-> Anything received after that time might be too late.
+> Let me give a counter argument to that. On a system running multiple
+> workloads, how can the admin come up with a sensible limit for the
+> number of cgroups? There will definitely be jobs that require much
+> more number of sub-cgroups. Asking the admins to dynamically tune
+> another tuneable is just asking for more complications. At the end all
+> the users would just set it to max.
+> 
+> I would recommend to see the commit ac7b79fd190b ("inotify, memcg:
+> account inotify instances to kmemcg") where there is already a sysctl
+> (inotify/max_user_instances) to limit the number of instances but
+> there was no sensible way to set that limit on a multi-tenant system.
 
-Build test (gcc version 12.1.1 20220621):
-mips: 59 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+I've found that MEM_CGROUP_ID_MAX limits memory cgroups only. Other types
+of cgroups do not have similar restrictions. Yes, we can set some per-container 
+limit for all cgroups, but to me it looks like workaround while
+proper memory accounting looks like real solution.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+Btw could you please explain why memory cgroups have MEM_CGROUP_ID_MAX limit
+Why it is required at all and why it was set to USHRT_MAX? I believe that
+in the future it may be really reachable:
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1382
-[2]. https://openqa.qa.codethink.co.uk/tests/1387
-[3]. https://openqa.qa.codethink.co.uk/tests/1390
+Let's set up per-container cgroup limit to some small numbers, 
+for example to 512 as OpenVz doing right now. On real node with 300
+containers we can easily get 100*300 = 30000 cgroups, and consume ~3Gb memory, 
+without any misuse. I think it is too much to ignore its accounting.
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+Thank you,
+	Vasily Averin

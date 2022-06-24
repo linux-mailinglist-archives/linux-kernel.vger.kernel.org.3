@@ -2,185 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AE955A277
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 22:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE0555A285
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 22:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbiFXURi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 16:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        id S231383AbiFXUV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 16:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiFXURh (ORCPT
+        with ESMTP id S229912AbiFXUV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 16:17:37 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2088.outbound.protection.outlook.com [40.107.212.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E77D823B0;
-        Fri, 24 Jun 2022 13:17:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m4mQuEwrL7V4tT0SwKL4XLyidHSr/GsdaKa9iCJfZr/QH/fHdY+IuPvR6TXLGYiVfn6IZpnI9uDf1ZtgpVzdqIFHuRbkZfjdEJocDlp8o/fHq2sfbQCFAp4bJGvTzuvfCSiDszLKvQXhHTCBT6I9er4UZRgwfNALzCFUavg3YkM3K4V+AtnVJfWO1sIdcqS61Gj66NYXNfUdYeB+90S4mY6hGzJmwe4v1l0/0U7TZyPWR1WCvF2HY6X4VLkFt4Kz0knAvtA7KgEA92VIo6719a8EURCLGlGkcf+tKbXpy48k66THJxMaIobihUaFk8r7BK1UiC2M/bIHTESZ58zQqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mHJKSTmb0JocfdJgnT1iUZ89kEOKKuOPceCp9F7l7U4=;
- b=F01Z5ujUYzFKcpsYzySfn5k+mKO2MAPS566rG7aH/EjqqOYI4QIY/YYQW2NhbDMtlUU0XH/2sy7pD7BykdC06zn1SvozZKoby8+rYIfWuyq/4xMNo+2PYsjVIo58SyGE3GlXmMnT+o2hV2ZyfUtsN80RszDcCjAfAV9kJqzQsCmLgXN5Q6Kbxm9vnlmUIrYj+x8jwEviQiB1ElwWux7kH24xPZIwrAIT5JxTYIZdaNaoq23skXdT7HhbGRE52ynEz1+n3IZ0xtNVmA4g6bMYVxykE0PQfYe8BVAnxlebjgQ/m6pa/1ozNTtGhG/YZ8ZLtyTLZcA8DRgGNAXdJi/Aig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mHJKSTmb0JocfdJgnT1iUZ89kEOKKuOPceCp9F7l7U4=;
- b=hFwyMZXUUJCrI3a2/RzkyhyFSQm4P7WgYqMdDezUOJYQeQYTdkU64On9dPmyM64c4s/5fzaOUu/Vpj8F1k+AEURezrbClrdTzVj6s84h7RDHtcBjLAARO8P0izPlo8rkCtc5j9b2jmf9Walz+LeVpKlprL0vHAo1FkghyoZ7jEUGq8sSY2RIy8IsYQ++tAwZBFyEkjEfKZJ5z3q8ppmuOVD6yI9Wbkas4V8ZOBKILbg9Jv3Csh5xiJctO3jNk1kNpzFzIlsRxIgr2/zMmb+Y1Ij84Oe+BItwJXnEbnCGbFcdJtfqZipivbKmYCgljNzIL2DXTEvG1/nKL9ki28Elmg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MWHPR1201MB0062.namprd12.prod.outlook.com (2603:10b6:301:54::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Fri, 24 Jun
- 2022 20:17:34 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ac35:7c4b:3282:abfb%3]) with mapi id 15.20.5373.016; Fri, 24 Jun 2022
- 20:17:34 +0000
-Date:   Fri, 24 Jun 2022 17:17:33 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Mark Zhang <markzhang@nvidia.com>
-Cc:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, leon@kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] RDMA/cm: fix cond_no_effect.cocci warnings
-Message-ID: <20220624201733.GA284068@nvidia.com>
-References: <20220610094530.28950-1-jiapeng.chong@linux.alibaba.com>
- <e187af34-d0a8-55ed-cc21-d88845ec1eb5@nvidia.com>
+        Fri, 24 Jun 2022 16:21:57 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86B881A2B
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:21:56 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id g26so6894126ejb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 13:21:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aI/Wm30z63oEYhq+jLGxZI/tPMnn/tbFlzZ2xbhv+F4=;
+        b=DSfCIl93ErkZQTmodLqWf6MxjRIpF1ZnQis6V2AmfYLHN/rGtlxKfpfQusYdU3/UoQ
+         cGZ9t8NGw8N1UESLaZQtt9KE8BCcJRvCrZjHW4cY3x/vspkpF+H+OZ9YyYSAm/sR4To9
+         S80AKWsZyDrPVwQDWYceohfI1JDJJuzPD7o2I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=aI/Wm30z63oEYhq+jLGxZI/tPMnn/tbFlzZ2xbhv+F4=;
+        b=U8b5ex2EvEEHj1zJXKG+OGSfpsNjH/TuLnwBYcXTqxJ7RIJUsxEwnLOVQFH8T4My4U
+         SwJoZcwILqvABmqnKvqQ/67Pq34q7PWNk4COarNiKQhwgmhkUDZ5HnbDEwKhueCCN2NR
+         bxBjbqmGs/KF8fojnTFF62UBntZL7ub3N7OJ+GWjImx08lJ5nuqYZ6RY/PxH/lxciCtI
+         ZQPHuYeakfmSXTRBAkwZ8uNO24TpDRsRboiq7Y+gW5Oo/ftJgsNE2V06rMqtNN3Lu6SN
+         Bkg1PfN1bq6K9tDis/wR4Kj1+jv5+1fTENFAXRhgUuuzpK9W3ljqT0WzyISgdL5JKjcj
+         wO7A==
+X-Gm-Message-State: AJIora+/e22pcmvL+9oeiaDudYWD0wg2ObyrwZrVLhUk5ORZ6wyZPRC4
+        G4cM80suyOdMWikl1RrHj56wJA==
+X-Google-Smtp-Source: AGRyM1vMLazEoSIRdqrX8zCM+3y9xklBh+nj+P3ouSsHUhI81GOe3I6uIj9foVrhcJrq+L6LjvY0lQ==
+X-Received: by 2002:a17:906:72d1:b0:722:e714:e9ff with SMTP id m17-20020a17090672d100b00722e714e9ffmr758067ejl.748.1656102115311;
+        Fri, 24 Jun 2022 13:21:55 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id y22-20020a170906559600b00722e7919835sm1623844ejp.111.2022.06.24.13.21.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 13:21:54 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 22:21:52 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, kernel@collabora.com
+Subject: Re: [PATCH v6 17/22] drm/shmem-helper: Add generic memory shrinker
+Message-ID: <YrYc4IUHJWSbC6AX@phenom.ffwll.local>
+Mail-Followup-To: Rob Clark <robdclark@gmail.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>, Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>, Qiang Yu <yuq825@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Dmitry Osipenko <digetx@gmail.com>, linux-tegra@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        kernel@collabora.com
+References: <20220526235040.678984-1-dmitry.osipenko@collabora.com>
+ <20220526235040.678984-18-dmitry.osipenko@collabora.com>
+ <CAF6AEGt61t2truYDCxm17hqUPV-UdEdHjLs+6vmj5RPoPuVBYg@mail.gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e187af34-d0a8-55ed-cc21-d88845ec1eb5@nvidia.com>
-X-ClientProxiedBy: BL1PR13CA0434.namprd13.prod.outlook.com
- (2603:10b6:208:2c3::19) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1265c336-b26a-420a-2539-08da561e9307
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB0062:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: glCt6IQu3rXijD1RB5In7SSjh9p8iRPeIcQPV/NSjNWUVJFqYe8q0Jch8nb7VrQqbGGm/yT1o6SSMZ1FBcC5etvYWVVIpXDvPuvo260/48GqL6Yz6exuS021D6f4hdxbX/OcCLwGjLxi8TwWA7nUK1P+YjJ5XaLUHUgE35UFUwpPQwNBb1hKqYmxly2wNpcs6hFtcD0nVGrmzodHKD2JgvYrQXW1RVpcKVUnQTSjTEeltqIoCnhHiqRU3zLByE0SG+CgfcO4WAlwiXXDGFOqpdHzPd+FKQN0SBeaXfXnm/h07UqLDvZO67s2qLhvii9wKPD2sFiTZhcfIcnaJGZrMEuWqGPHD2jyhiRtZzKmDsWw8Ru1il5gyBtSaGFdiRmwhHHcYGjQQi4YmoTiPAZhkd+DDxeNXd4iQPF7p+rCYtdm0cE2h1/GRD6+wXevD2wqa+Z+1K+7cM7YwUST1CujIHo0mE6AeGwZHaiZFakDzEEwaQIyyl5kiQ1LWu0fp3QV3TrRdp+QlXCrq96Dg/J/4zLypUwfeEpy5rw0RL/XHGocKdFidgSVXvHdSHl/x4kUaiunJKixD4UecYqDkpp9XGxbCvBKOV6Z6gGCvxfg616XFEYteQTqDNT4rlpW0ppFa8SIivEkMcNqLDtxPkYmSwjVPLPsw2FwfYJsXMQzIfHU1isA0HKbxihLax/sPCijUee/kPxnRVStQFjx6aF35XAbX4H8qxJeM/wtiaTYhjjv0K22ZpmYqfyZ0uDJo4mv3KQ3ky4SUH7vYC8dpHyedmFrLMQwAs1Uv1Uc0Miw8/A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(396003)(39860400002)(376002)(346002)(83380400001)(478600001)(38100700002)(6486002)(186003)(2906002)(33656002)(5660300002)(36756003)(6512007)(6636002)(66556008)(316002)(8936002)(86362001)(41300700001)(66946007)(4326008)(8676002)(1076003)(2616005)(6862004)(66476007)(54906003)(53546011)(6506007)(37006003)(26005)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8SpWjDHCYiIFm7KVsLTISqwVOTTrhCHltJXXZgkfi2FMV+z0dLNFiXq1nK0x?=
- =?us-ascii?Q?6dKvCkCz0RkvOvc3WkUd21dxSa7b3lV0aF0L2X3eG8rU3mcEJdSBzdSsGOTh?=
- =?us-ascii?Q?qEsPEwPoRICGbWWFWt88Vx89qKUFxT7EtfLZZxtPw+5y8C34fgHENcjDXtqB?=
- =?us-ascii?Q?CrvyZaDK81xRBxbK6u14WlIqs+NTrU90Tb5bYVLzkjtbmLAuEgm5e2io9Y0c?=
- =?us-ascii?Q?Uv5wT86ybSfoaWkqG3VVxPNDykKIxDjuoD4CAqQJe4BDIPmHYQ069UBMUO+I?=
- =?us-ascii?Q?a2pL3tRZZ83KtR7DOu1bt4OQUlet/sW65naZzYnsGZoqLt3O/eb9v0skXY5g?=
- =?us-ascii?Q?QRn8FDvzCyFLSUUzD8rxH+bi71+c9BqlkWRKKGnIKNI1wzfIoUJbZXZhkLc8?=
- =?us-ascii?Q?FRynrkUXXlWy+zYzTN8TFTJ5T3GrTGXWalmfupOLcceDGO999BS3aclyF6BA?=
- =?us-ascii?Q?CQYmBbnu0O/m8Tw3JAB0OP++mhXS6rfsFtnFyFsnYcCQRFn9OJWZSKUi6+Xl?=
- =?us-ascii?Q?V7eOFUAaKNuw95DpvyHhdzA+1cd1B/zltkjbEnLhWuBsHdhjRAewCWlTu+VD?=
- =?us-ascii?Q?5aal4pSy8Zv+pRH/9+/ChFUzbiL5ZDRq2bDDQ4OK2+/uj2ZBNah++5RlAwnr?=
- =?us-ascii?Q?xIhqF+moqSNVHKMHGNNgqD/LoN+QT7/Ec+LOCe4+7Sh9b5lu06cdXrtV+fh/?=
- =?us-ascii?Q?7gl4dxJZJeCZAteIkRfiYEk2sfGZZVV1F3BDQ1ZDfGm3fVZxaKgrESctv0DB?=
- =?us-ascii?Q?vQcNEZ30UBs0QMDckNb/so6dGeaSVg2jY5ro4t2uCTtyU4vdT77XsHk2ZuJ2?=
- =?us-ascii?Q?P0Qp5kYIKBgsrFVhKshzLIsXkVIopXJFp3fbNf4LV79m6Hb7eM3YLM9Irb6b?=
- =?us-ascii?Q?vAS9N5JKvvwaKis5BlA3TAGz7dGoHxpbgiBisou20tnFwi0i0xgNcy2/foRQ?=
- =?us-ascii?Q?ixn7JXh90Ze9geqUv1km7VxEwpC3Yzh1HkImgUAj8v8MPAExXnCBsB9yy8/c?=
- =?us-ascii?Q?nCBHbGapdUff6ETROTc0epPlCSZYsuBcJNve6IfSh5fU9I3ZGlCyFcTTrYb7?=
- =?us-ascii?Q?sWhhR3A2iEGVXyqegFU/2k8Y3SNY49axD29aXzTt7P7WSa22iS4YzC1TT3W9?=
- =?us-ascii?Q?VW54UbUX/rQuVMMwiiSJqvXGv8hkMwuiiMyuV+ZAaU4KyOBwg+C9Fe+D++HY?=
- =?us-ascii?Q?R/G9+t9hiCBAl00CgnLG5qmhEwft8E1zboDUe6iE2uRIyX8oWCuC8r9+S7Oi?=
- =?us-ascii?Q?WN3PPh4Lqh65mKllb5zTjykR/0whPOVPcdsDCgXkTwm4IAl8E2KfsY+zC6Rt?=
- =?us-ascii?Q?9AagEUfeoIwA5zBJdUZPDbYZE0xcWUPJdbgBqMXnKOXSx/VKaw14OSkKzkyL?=
- =?us-ascii?Q?KcG5eb054e/fg8G+ksBrl6sTi9TdizxbFofjOyXd1Cs7w6d2s/TcGrZkC4WM?=
- =?us-ascii?Q?N+spfjngvJL7KIyCYIHJOqV+TMvgISniLuh78JB8ut0cVzlb/B1ZfvZaoq2Z?=
- =?us-ascii?Q?Bjim39NwikRsbSGjr7dTMMbO0mKPzwXvN/pm2LxfVpIOU6UFseqSXqz/qv6j?=
- =?us-ascii?Q?bJB8HSk8fWP+NvnIqaHp9TeLHeMJ//ywtl/iMjVw?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1265c336-b26a-420a-2539-08da561e9307
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2022 20:17:34.3803
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: v0Dqmr58Twx/41X+7vfXgb6zTDC2sM0+/oldZlJXIIX4Nr6xf+ZK5KZa+OGxAu1J
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0062
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAF6AEGt61t2truYDCxm17hqUPV-UdEdHjLs+6vmj5RPoPuVBYg@mail.gmail.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 09:19:14AM +0800, Mark Zhang wrote:
-> On 6/10/2022 5:45 PM, Jiapeng Chong wrote:
-> > This was found by coccicheck:
-> > 
-> > ./drivers/infiniband/core/cm.c:685:7-9: WARNING: possible condition with no effect (if == else).
-> > 
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> > ---
-> >   drivers/infiniband/core/cm.c | 9 ++-------
-> >   1 file changed, 2 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/infiniband/core/cm.c b/drivers/infiniband/core/cm.c
-> > index 1c107d6d03b9..bb6a2b6b9657 100644
-> > --- a/drivers/infiniband/core/cm.c
-> > +++ b/drivers/infiniband/core/cm.c
-> > @@ -676,14 +676,9 @@ static struct cm_id_private *cm_find_listen(struct ib_device *device,
-> >   			refcount_inc(&cm_id_priv->refcount);
-> >   			return cm_id_priv;
-> >   		}
-> > -		if (device < cm_id_priv->id.device)
-> > +		if (device < cm_id_priv->id.device ||
-> > +		    be64_lt(service_id, cm_id_priv->id.service_id))
-> >   			node = node->rb_left;
-> > -		else if (device > cm_id_priv->id.device)
-> > -			node = node->rb_right;
-> > -		else if (be64_lt(service_id, cm_id_priv->id.service_id))
-> > -			node = node->rb_left;
-> > -		else if (be64_gt(service_id, cm_id_priv->id.service_id))
-> > -			node = node->rb_right;
-> >   		else
-> >   			node = node->rb_right;
-> >   	}
+On Sun, Jun 19, 2022 at 10:53:03AM -0700, Rob Clark wrote:
+> On Thu, May 26, 2022 at 4:55 PM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+> > +       mutex_unlock(&gem_shrinker->lock);
 > 
-> Not sure if the fix is correct, e.g. with this condition:
->   device > cm_id_priv->id.device &&
->   be64_lt(service_id, cm_id_priv->id.service_id)
+> As I mentioned on other thread, count_objects, being approximate but
+> lockless and fast is the important thing.  Otherwise when you start
+> hitting the shrinker on many threads, you end up serializing them all,
+> even if you have no pages to return to the system at that point.
+
+Yeah agreed, seems like I was wrong here :-) Atomic counter or something
+would also be in link the the lru_list stuff.
+
+It would be to record this in the kerneldoc for the shrinker structure
+though, to make sure this is all understood.
+
+> > +               /* prevent racing with the dma-buf importing/exporting */
+> > +               if (!mutex_trylock(&gem_shrinker->dev->object_name_lock)) {
+> > +                       *lock_contention |= true;
+> > +                       goto resv_unlock;
+> > +               }
 > 
-> The original code gets rb_right but this fix gets rb_left. Maybe the warning
-> is complain about this:
-> 	...
-> 	else if (be64_gt(service_id, cm_id_priv->id.service_id))
-> 		node = node->rb_right;
-> 	else
-> 		node = node->rb_right;
-> 
-> Besides cm_insert_listen() has same logic.
+> I'm not sure this is a good idea to serialize on object_name_lock.
+> Purgeable buffers should never be shared (imported or exported).  So
+> at best you are avoiding evicting and immediately swapping back in, in
+> a rare case, at the cost of serializing multiple threads trying to
+> reclaim pages in parallel.
 
-Yes, this is a standard pattern for walking tree with priority, we
-should not obfuscate it.
-
-The final else means 'equal' and the first if should ideally be placed
-there
-
-However this function is complicated by the use of the service_mask
-for equality checking, and it doesn't even work right if the
-service_mask is not -1.
-
-If someone wants to clean this then please go through and eliminate
-service_mask completely. From what I can see its value is always -1.
-Three patches:
- - Remove the service_mask parameter from ib_cm_listen(), all callers
-   use 0
- - Remove the service_mask parameter from cm_init_listen(), all
-   callers use 0. Inspect and remove cm_id_priv->id.service_mask,
-   it is the constant value  ~cpu_to_be64(0) which is a NOP when &'d
- - Move the test at the top of cm_find_listen() into the final else
-
-Jason
+Yeah this sounds really bad. Plus this is a per-device lock, and doing
+those with trylock means the shrinker will fail to find shrinkable memory
+way too often. We need to engineer this out somehow.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,48 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933B955A3E0
+	by mail.lfdr.de (Postfix) with ESMTP id DCB6A55A3E1
 	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 23:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiFXVso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 17:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
+        id S231253AbiFXVsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 17:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiFXVsn (ORCPT
+        with ESMTP id S229450AbiFXVst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 17:48:43 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2DD87B45;
-        Fri, 24 Jun 2022 14:48:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=KhLvdR8dqxxIHtQYXldm6IaigMgkt/y4dE8JBmBcxGo=; b=htS2TKEgga3eo+9gBpqrPPMBx2
-        //IySGvrywnil/LYXWSwWTMvSRQrO5yaDYuqZ2HiwcFW+gmcxyjZh/cAwFv8IE2h11QyGA21zvQHf
-        XhcJH8xZH4MxJfQocXOFZMQcb+gQhtSLBM2HMoxUfQA5lEBpYlgUKMfMMisDEJzzPwzGR+vysZyFX
-        izF+a1UFpgmKnIH607hQm90kvSg/x2rpHCu5QTR0Rt+R70MnRzhMWSUCUbS8tt0hcKeFa9ifu+WQc
-        IUeYdqs8yCKhOLD4gD+mM+RG2f424ysoNEurVUzbg9j7yvU3uDjNMxSg/MPPPe+I5OfXtD3bXpM0h
-        ZBosvAgA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o4rAO-0044uS-3s;
-        Fri, 24 Jun 2022 21:48:40 +0000
-Date:   Fri, 24 Jun 2022 22:48:40 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 2/6] fs: do not set no_llseek in fops
-Message-ID: <YrYxOC5dgCKBHwVE@ZenIV>
-References: <20220624165631.2124632-1-Jason@zx2c4.com>
- <20220624165631.2124632-3-Jason@zx2c4.com>
+        Fri, 24 Jun 2022 17:48:49 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DA087B56;
+        Fri, 24 Jun 2022 14:48:48 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id l6so3157291plg.11;
+        Fri, 24 Jun 2022 14:48:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cqDPhxwA+fQ6/Q7mForQQgzL/CTmM3l1w6GHFMlWWsc=;
+        b=idPiRHTllzehnm0hBLvbknV90TBlRCI3c1TtxVG/gaKR2nNgm3JfmmZAiRD7u6Gmvv
+         GLEZMjHof5cqw0cLzxJ+EwaJcQYFDqL67+UNL8OhhaNiFOUWX4TV+gEBvoKGNajseXy8
+         C5hxZHwJmUKIAvsfzZKA/MBarPp1PVHvpDOav6ClmknikR7eyzNIJb94/4KoHA6mtjVD
+         zyFvcYeUbyffIsmjJ5lduQeuZAixF2NdSJqqkDsMh9ldm0wjgHMcJLq4DPrYNraxSbxI
+         YIAS/TfOvN/cgqG0RYGdycW9V++aWely890/u4gWag80dtKHuVR9gHOmHxZMoyGF4RVl
+         bkug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cqDPhxwA+fQ6/Q7mForQQgzL/CTmM3l1w6GHFMlWWsc=;
+        b=QNfBbjLBqhj5nGgJqvSHig1GSHnpxS3eEMfgRuhbTFldqPQQQ/A59ulUiVCujmd3JJ
+         9yJSNuJMARdYaM+dQ4Ww8U+df7ES9nD0bbAyGD6l2n2CYYxG1kVYckMGuGrucgmR0UIF
+         46Ha+45aTPJodq0B9zEUWqKZDi2Q/jFm7CATuxgMSL5LIWOGY3b/Q9j76j/WfLfeMMmV
+         5M7A6OfaYwPw+ENIzj2qD++ieWDofypjDApfeSMNtpMadj78VvtVVt9eWPax/TLBueYt
+         H8bmiinCaUdxCR+606HuRoe0fgS2nE4f/VtU/NELkiNTaiG7FoYK5rhbAOUeoQwoqJMk
+         oz/A==
+X-Gm-Message-State: AJIora9DvN9GyvqN5OQPtS9SBi6+PjsKC0UD1Q3HZxSc9Q9yFLdqhdIJ
+        LviIUkxOHyM2KaA93ZE9NUg=
+X-Google-Smtp-Source: AGRyM1ul7wBE/s4SS69T9P+A3QQIyfZjNS2MajPSGhmiMqFnHhZ7UgSN4pzjQ7PhP0oJrQxIvb6Fvw==
+X-Received: by 2002:a17:902:f10b:b0:16a:198f:bedb with SMTP id e11-20020a170902f10b00b0016a198fbedbmr1266563plb.16.1656107327939;
+        Fri, 24 Jun 2022 14:48:47 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id l189-20020a6225c6000000b005255263a864sm2204718pfl.169.2022.06.24.14.48.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jun 2022 14:48:47 -0700 (PDT)
+Message-ID: <c051ba46-8fdd-0990-ce76-0fbc7647f320@gmail.com>
+Date:   Sat, 25 Jun 2022 06:48:43 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220624165631.2124632-3-Jason@zx2c4.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 0/5] docs/doc-guide: Sphinx related updates
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>
+References: <dccb5233-7f4f-1be6-d1f4-bbe9f42f88e0@gmail.com>
+ <87h7493kaj.fsf@meer.lwn.net>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <87h7493kaj.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,43 +78,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 06:56:27PM +0200, Jason A. Donenfeld wrote:
-> vfs_llseek already does something with this, and it makes it difficult
-> to distinguish between llseek being supported and not.
+[+CC: Jani]
+Jonathan Corbet wrote:
+> Akira Yokosawa <akiyks@gmail.com> writes:
+> 
+>> Hi all,
+>>
+>> This small set of patches fill in a couple of missing info and update
+>> outdated guidelines in doc-guide/sphinx.rst.
+> 
+> I've applied patches 1 and 5; I'm not quite sure where we stand with the
+> others...
 
-How about something along the lines of
+Yeah, I've got lost after seeing all those different views on RFC 3/5.
 
-===
-struct file_operations ->llseek() method gets called only in two places:
-vfs_llseek() and dump_skip().  Both treat NULL and no_llseek as
-equivalent.
+I'll post v2 of 2/5 as a single patch soon.
 
-The value of ->llseek is also examined in __full_proxy_fops_init() and
-ovl_copy_up_data().  For the former we could as well treat no_llseek
-as NULL; no need to do a proxy wrapper around the function that fails
-with -ESPIPE without so much as looking at its arguments.
-Same for the latter - there no_llseek would end up with skip_hole
-set true until the first time we look at it.  At that point we
-call vfs_llseek(), observe that it has failed (-ESPIPE), shrug and
-set skip_hole false.  Might as well have done that from the very
-beginning.
+        Thanks, Akira
 
-	In other words, any place where .llseek is set to no_llseek
-could just as well set it to NULL.
-===
-
-for commit message?
-
-Next commit would remove the checks for no_llseek and have vfs_llseek()
-just do
-        if (file->f_mode & FMODE_LSEEK) {
-		if (file->f_op->llseek)
-			return file->f_op->llseek(file, offset, whence);
-	}
-	return -ESPIPE;
-and kill no_llseek() off.  And once you have guaranteed that FMODE_LSEEK
-is never set with NULL ->llseek, vfs_llseek() gets trimmed in obvious
-way and tests in dump_skip() and ovl_copy_up_data() would become simply
-file->f_mode & FMODE_LSEEK - no need to check ->f_op->llseek there
-after that.  At the same time dump_skip() could switch to calling
-vfs_llseek() instead of direct method call...
+> 
+> Thanks,
+> 
+> jon

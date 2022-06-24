@@ -2,73 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A7A559EDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7753D559EE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 18:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbiFXQwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 12:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
+        id S230310AbiFXQwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 12:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbiFXQwg (ORCPT
+        with ESMTP id S230195AbiFXQwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 12:52:36 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6D660C63
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:52:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656089555; x=1687625555;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0T/L9iR4nPCz40S3x4N7yZLx2Z/5idB9iH2qm693SHA=;
-  b=YwyFD06H+V8M616q8IwEgqG01QAnZaTbwq2q6yIPYUFs9OR8s2XgLpVf
-   5uJpXdBYDogz0+7sbk7Gjs4eM7qZ0sNaq6yNIFaZeULXo6MjSMczZz3Qg
-   Smsop0+m5N/1MmtZmRFwXipG50U7BKKnHdpbTSAIcqGsq6n98hPU0Ihqv
-   CJLrndAqVy7EJSaBtuWS+s15RjsvOh/T5Q5N5vxrhhdVgCFlPPbt+9iVl
-   RSLP3lM0MwJ38tVoiuF4RoulkKHeTGcRbk3kC0fHlKZtCPNgD7YwIQWXA
-   EfdzkMWfIzCIeKrR1DdNMpZsZjMPW+oWj/o89Qsw4/k18ANIkdLBRuCPH
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="264084626"
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="264084626"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 09:52:34 -0700
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="731392046"
-Received: from mdedeogl-mobl.amr.corp.intel.com (HELO [10.209.126.186]) ([10.209.126.186])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 09:52:33 -0700
-Message-ID: <0f6bedbb-14cc-bf93-5d9f-bfd2c49dc7b2@intel.com>
-Date:   Fri, 24 Jun 2022 09:51:59 -0700
+        Fri, 24 Jun 2022 12:52:11 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767B05D11F
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:52:10 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id u25-20020a6b4919000000b006729aaa1b68so1594632iob.21
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 09:52:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=7laY+YapTNxHLhjPKoixAYq3rvzY3OY5G730WimWRKo=;
+        b=Ci9QB3FMlPQcdKDY7cbOK+an7KXLlM5lMB4BevZ80Cy/aopHIG5YVKTzLrzaPjvLBc
+         u3Kv2qK1TgaueGT/g/IbXHBK7TPe7bOpV/6qhlw4IlPdvUK3SdIKeEP2F9lQi5+fAOcv
+         LMuzTvG+6m3zukgDSNTiPrqymUKrdCe9fYYUGnhi0W7fCNFQT+iVW6arp6J8tLQCkM7n
+         iHSANhu20s7NqARiV0E0ZGq/ZHFjCrpe+R53TUZhl7pAUU/iNMsFH0to/w3/SYaAUcmJ
+         rqOjIUPg0LnGBpad3SIUfGfQiVPOmhzShCYbC/BxT8eJrYXBA1BKrcP9RaxqHYQVTMr1
+         z3tw==
+X-Gm-Message-State: AJIora+97NX5IqzeNEON9AxJEYO6CBuixttd0TCVlLQ/e4FDb/HT0kKJ
+        OBpzof1sl1r7o/GwKANjbq/64QZSWIzqXSPyfnfVM2HTMTnp
+X-Google-Smtp-Source: AGRyM1tUozuZyqhd9mZ4jM0w9vBsJgTJlUfa4IBZoGbq2M/w9BAL2SO/6v2moL2S1ash0uaWppknaHUGsxDTDPNzRt9/JUXkXMke
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v8 1/5] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220609025220.2615197-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220609025220.2615197-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:1607:b0:2d1:e622:3f0a with SMTP id
+ t7-20020a056e02160700b002d1e6223f0amr8823789ilu.287.1656089529920; Fri, 24
+ Jun 2022 09:52:09 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 09:52:09 -0700
+In-Reply-To: <20220624124418.684-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000025b68905e23464c2@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in free_netdev (3)
+From:   syzbot <syzbot+b75c138e9286ac742647@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,117 +55,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 19:52, Kuppuswamy Sathyanarayanan wrote:
-> TDREPORT can only be verified on local platform as the MAC key is bound
-> to the platform. To support remote verification of the TDREPORT, TDX
-> leverages Intel SGX Quote Enclave (QE) to verify the TDREPORT locally
-> and convert it to a remote verifiable Quote.
-> 
-> After getting the TDREPORT, the second step of the attestation process
-> is to send it to the QE to generate the Quote. TDX doesn't support SGX
-> inside the TD, so the QE can be deployed in the host, or in another
-> legacy VM with SGX support. How to send the TDREPORT to QE and receive
-> the Quote is implementation and deployment specific.
+Hello,
 
-On high-level comment: this whole series is quite agnostic about what is
-actually attested.  On some level, I guess it doesn't matter.  But, it
-makes me a bit uneasy.  There needs to be at least *some* kind of claim
-about that somewhere, preferably a sentence in the cover letter and
-sentence or two here.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: use-after-free Read in free_netdev
 
-Second, how can someone test this code?  It appears that they need to
-assemble a veritable Rube Goldberg machine.  The least we could do is
-have a selftest that just calls the ioctl() and makes sure that
-something halfway sane comes out of it.
+netlink: 20 bytes leftover after parsing attributes in process `syz-executor.0'.
+==================================================================
+BUG: KASAN: use-after-free in free_netdev+0x58c/0x620 net/core/dev.c:10704
+Read of size 8 at addr ffff88807c16c738 by task syz-executor.0/4086
 
-> In such
-> case, since REPORTDATA is a secret, using sysfs to share it is insecure
-> compared to sending it via IOCTL.
+CPU: 0 PID: 4086 Comm: syz-executor.0 Not tainted 5.19.0-rc2-syzkaller-00103-gb4a028c4d031-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ free_netdev+0x58c/0x620 net/core/dev.c:10704
+ netdev_run_todo+0xb48/0x10f0 net/core/dev.c:10356
+ rtnl_unlock net/core/rtnetlink.c:147 [inline]
+ rtnetlink_rcv_msg+0x447/0xc90 net/core/rtnetlink.c:6090
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x6eb/0x810 net/socket.c:2492
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2546
+ __sys_sendmsg net/socket.c:2575 [inline]
+ __do_sys_sendmsg net/socket.c:2584 [inline]
+ __se_sys_sendmsg net/socket.c:2582 [inline]
+ __x64_sys_sendmsg+0x132/0x220 net/socket.c:2582
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f974fe89109
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f97510d9168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f974ff9bf60 RCX: 00007f974fe89109
+RDX: 0000000000000000 RSI: 0000000020000180 RDI: 0000000000000004
+RBP: 00007f974fee305d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffcf73272af R14: 00007f97510d9300 R15: 0000000000022000
+ </TASK>
 
-Huh?  How is sysfs "insecure"?
+Allocated by task 4086:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
+ kmalloc include/linux/slab.h:605 [inline]
+ sk_prot_alloc+0x110/0x290 net/core/sock.c:1975
+ sk_alloc+0x36/0x770 net/core/sock.c:2028
+ tun_chr_open+0x7b/0x540 drivers/net/tun.c:3415
+ misc_open+0x376/0x4a0 drivers/char/misc.c:143
+ chrdev_open+0x266/0x770 fs/char_dev.c:414
+ do_dentry_open+0x4a1/0x11f0 fs/open.c:848
+ do_open fs/namei.c:3520 [inline]
+ path_openat+0x1c71/0x2910 fs/namei.c:3653
+ do_filp_open+0x1aa/0x400 fs/namei.c:3680
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1278
+ do_sys_open fs/open.c:1294 [inline]
+ __do_sys_openat fs/open.c:1310 [inline]
+ __se_sys_openat fs/open.c:1305 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1305
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-> +	/*
-> +	 * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
-> +	 *
-> +	 * Get the TDREPORT using REPORTDATA as input. Refer to
-> +	 * section 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0
-> +	 * Specification for detailed information.
-> +	 */
-> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
-> +				virt_to_phys(reportdata), 0, 0, NULL);
+Freed by task 4087:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:366 [inline]
+ ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:328
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ slab_free_hook mm/slub.c:1727 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1753
+ slab_free mm/slub.c:3507 [inline]
+ kfree+0xd6/0x4d0 mm/slub.c:4555
+ sk_prot_free net/core/sock.c:2011 [inline]
+ __sk_destruct+0x5e5/0x710 net/core/sock.c:2097
+ sk_destruct net/core/sock.c:2112 [inline]
+ __sk_free+0x1a4/0x4a0 net/core/sock.c:2123
+ sk_free+0x78/0xa0 net/core/sock.c:2134
+ sock_put include/net/sock.h:1927 [inline]
+ __tun_detach+0xdb7/0x13e0 drivers/net/tun.c:681
+ tun_detach drivers/net/tun.c:693 [inline]
+ tun_chr_close+0x15c/0x180 drivers/net/tun.c:3451
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-One of those 0's is a "Report sub type".  Those bits in the module call
-are presumably because it won't *always* be zero.  But, if there's ever
-a new report type, we'll need another user/kernel ABI.  That doesn't
-seem great.
+The buggy address belongs to the object at ffff88807c16c000
+ which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 1848 bytes inside of
+ 4096-byte region [ffff88807c16c000, ffff88807c16d000)
 
-The TDX module spec doesn't even give a name to "sub report type 0".
-That is not super helpful for deciding what it *means*.
+The buggy address belongs to the physical page:
+page:ffffea0001f05a00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7c168
+head:ffffea0001f05a00 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffffea0001f08a00 dead000000000003 ffff888011842140
+raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d2040(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 3727, tgid 3727 (dhcpcd-run-hook), ts 52036499638, free_ts 52020109867
+ prep_new_page mm/page_alloc.c:2456 [inline]
+ get_page_from_freelist+0x1290/0x3b70 mm/page_alloc.c:4198
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5426
+ alloc_pages+0x1aa/0x310 mm/mempolicy.c:2272
+ alloc_slab_page mm/slub.c:1797 [inline]
+ allocate_slab+0x26c/0x3c0 mm/slub.c:1942
+ new_slab mm/slub.c:2002 [inline]
+ ___slab_alloc+0x985/0xd90 mm/slub.c:3002
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3089
+ slab_alloc_node mm/slub.c:3180 [inline]
+ slab_alloc mm/slub.c:3222 [inline]
+ __kmalloc+0x318/0x350 mm/slub.c:4413
+ kmalloc include/linux/slab.h:605 [inline]
+ tomoyo_realpath_from_path+0xc3/0x620 security/tomoyo/realpath.c:254
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_check_open_permission+0x272/0x380 security/tomoyo/file.c:771
+ tomoyo_file_open security/tomoyo/tomoyo.c:320 [inline]
+ tomoyo_file_open+0x9d/0xc0 security/tomoyo/tomoyo.c:315
+ security_file_open+0x45/0xb0 security/security.c:1645
+ do_dentry_open+0x349/0x11f0 fs/open.c:835
+ do_open fs/namei.c:3520 [inline]
+ path_openat+0x1c71/0x2910 fs/namei.c:3653
+ do_filp_open+0x1aa/0x400 fs/namei.c:3680
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1278
+ do_sys_open fs/open.c:1294 [inline]
+ __do_sys_openat fs/open.c:1310 [inline]
+ __se_sys_openat fs/open.c:1305 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1305
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1371 [inline]
+ free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1421
+ free_unref_page_prepare mm/page_alloc.c:3343 [inline]
+ free_unref_page+0x19/0x6a0 mm/page_alloc.c:3438
+ qlink_free mm/kasan/quarantine.c:168 [inline]
+ qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:446
+ kasan_slab_alloc include/linux/kasan.h:224 [inline]
+ slab_post_alloc_hook mm/slab.h:750 [inline]
+ slab_alloc_node mm/slub.c:3214 [inline]
+ kmem_cache_alloc_node+0x255/0x3f0 mm/slub.c:3264
+ __alloc_skb+0x215/0x340 net/core/skbuff.c:414
+ alloc_skb include/linux/skbuff.h:1426 [inline]
+ netlink_alloc_large_skb net/netlink/af_netlink.c:1191 [inline]
+ netlink_sendmsg+0x9a2/0xe10 net/netlink/af_netlink.c:1896
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ __sys_sendto+0x21a/0x320 net/socket.c:2119
+ __do_sys_sendto net/socket.c:2131 [inline]
+ __se_sys_sendto net/socket.c:2127 [inline]
+ __x64_sys_sendto+0xdd/0x1b0 net/socket.c:2127
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-Right now, the entire ABI is basically:
+Memory state around the buggy address:
+ ffff88807c16c600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807c16c680: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff88807c16c700: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                        ^
+ ffff88807c16c780: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807c16c800: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
-	ret = ioctl(TDX_GET_REPORT, &buffer);
 
-That _implies_ a ton of stuff:
+Tested on:
 
-	1. report sub type 0
-	2. a specific input length REPORTDATA
-	3. a specific output length
+commit:         b4a028c4 ipv4: ping: fix bind address validity check
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=106d80c0080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=70e1a4d352a3c6ae
+dashboard link: https://syzkaller.appspot.com/bug?extid=b75c138e9286ac742647
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=17f803f8080000
 
-I don't want to over-engineer this thing, but it would make a lot of
-sense to me to feed the ioctl() with something like this:
-
-struct tdx_report
-{
-	u8 report_sub_type;
-	u64 report_input_data;
-	u64 report_input_data_len;
-
-	u64 report_output_data;
-	u64 report_output_data_len;
-}
-
-That makes *everything* explicit.  It makes it utterly clear what goes
-where, *AND* it makes userspace declare it.
-
-But, you have:
-
-> +/**
-> + * struct tdx_report_req: Get TDREPORT using REPORTDATA as input.
-> + *
-> + * @reportdata : User-defined 64-Byte REPORTDATA to be included into
-> + *		 TDREPORT. Typically it can be some nonce provided by
-> + *		 attestation service, so the generated TDREPORT can be
-> + *		 uniquely verified.
-> + * @tdreport   : TDREPORT output from TDCALL[TDG.MR.REPORT] of size
-> + *		 TDX_REPORT_LEN.
-> + *
-> + * Used in TDX_CMD_GET_REPORT IOCTL request.
-> + */
-> +struct tdx_report_req {
-> +	union {
-> +		__u8 reportdata[TDX_REPORTDATA_LEN];
-> +		__u8 tdreport[TDX_REPORT_LEN];
-> +	};
-> +};
-> +
-
-and a bunch of code copying in and out of this structure:
-
-> +static long tdx_get_report(void __user *argp)
-> +{
-> +	void *reportdata = NULL, *tdreport = NULL;
-...
-> +	/* Copy REPORTDATA from the user buffer */
-> +	if (copy_from_user(reportdata, argp, TDX_REPORTDATA_LEN)) {
-> +		ret = -EFAULT;
-> +		goto out;
-> +	}
-
-But none of that code even bothers to *use* the structure!
-
-What's with the union?  Are you really just trying to save 64 bytes of
-space?  Is that worth it?
-
-How many of these "drivers" are we going to need which are thinly veiled
-ioctl()s that are only TDX module call wrappers?

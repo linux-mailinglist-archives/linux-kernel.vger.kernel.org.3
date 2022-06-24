@@ -2,95 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFAE558CBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 03:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7665558CD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 03:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiFXBTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 23 Jun 2022 21:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S230482AbiFXB0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 23 Jun 2022 21:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbiFXBS7 (ORCPT
+        with ESMTP id S229553AbiFXB0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 23 Jun 2022 21:18:59 -0400
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06C8D60C4B;
-        Thu, 23 Jun 2022 18:18:51 -0700 (PDT)
-IronPort-Data: =?us-ascii?q?A9a23=3ApbAfHaljoqFHtTYw4PSAE1Do5gxsJERdPkR7XQ2?=
- =?us-ascii?q?eYbTBsI5bp2EAnTMaW2iEOK6DZTH3L9kiYNu+oRhV6JXdmINnTgM/+CA2RRqmi?=
- =?us-ascii?q?+KfW43BcR2Y0wB+jyH7ZBs+qZ1YM7EsFehsJpPnjkrrYuiJQUVUj/nSHOKmULe?=
- =?us-ascii?q?cY0ideCc/IMsfoUM68wIGqt4w6TSJK1vlVeLa+6UzCnf8s9JHGj58B5a4lf9al?=
- =?us-ascii?q?K+aVAX0EbAJTasjUFf2zxH5BX+ETE27ByOQroJ8RoZWSwtfpYxV8F81/z91Yj+?=
- =?us-ascii?q?kur39NEMXQL/OJhXIgX1TM0SgqkEa4HVsjeBgb7xBAatUo2zhc9RZzNRftZ2yS?=
- =?us-ascii?q?A4vFqPRmuUBSAQeGCZ7VUFD0OadfCbj75POkyUqdFOpmZ2CFnoeP4Aa8M5zAGd?=
- =?us-ascii?q?T5boZIjVLZReG78qzyainS+8qnsk/IdPwMYU3vWtpxjXUS/0hRPjrR6TM+M8d3?=
- =?us-ascii?q?zoqgM1KNejRatBfajd1ahnEJRpVNT8/DJM4gfftnXLkchVGp1+P46k6+W7eyEp?=
- =?us-ascii?q?2yreFDTZ/UrRmXu0MxgDB+D2ApD+/X3kn2BWk4WLt2hqRaiXnxEsXgL4vKYA?=
- =?us-ascii?q?=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3A5LRtAat2LEvGqXJKbbGtEzcB7skDntV00zEX?=
- =?us-ascii?q?/kB9WHVpmszxra6TdZMgpHvJYVcqKRYdcL+7WJVoLUmxyXcX2/h1AV7BZniEhI?=
- =?us-ascii?q?LAFugLhuGO/9SKIUzDH4BmupuIC5IOauEYE2IK9vrS0U2pFco62tmb/OSNjefa?=
- =?us-ascii?q?9X1kSgZncMhbnn5EIzfeAktrXxNHGJZ8MJKd4/BMrz2mdW9SQd+8AhA+LpD+ju?=
- =?us-ascii?q?yOhJT7egQHGhJizAGPiAmj4Ln8HwPd/jp2aUIo/Ysf?=
-X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
-   d="scan'208";a="125646754"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 24 Jun 2022 09:18:51 +0800
-Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
-        by cn.fujitsu.com (Postfix) with ESMTP id CDBF54D1719F;
-        Fri, 24 Jun 2022 09:18:48 +0800 (CST)
-Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Fri, 24 Jun 2022 09:18:48 +0800
-Received: from localhost.localdomain (10.167.225.141) by
- G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Fri, 24 Jun 2022 09:18:48 +0800
-From:   Li Zhijian <lizhijian@fujitsu.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Li Zhijian <lizhijian@fujitsu.com>
-Subject: [PATCH] scsi: Enlarge log buffer length to 256
-Date:   Fri, 24 Jun 2022 09:25:42 +0800
-Message-ID: <20220624012542.1384858-1-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 23 Jun 2022 21:26:44 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9872F609F4;
+        Thu, 23 Jun 2022 18:26:42 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LTfZG4zZ2zkWl1;
+        Fri, 24 Jun 2022 09:25:26 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 24 Jun 2022 09:26:40 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 24 Jun 2022 09:26:39 +0800
+Subject: Re: [PATCH -next v10 3/4] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+To:     Paolo Valente <paolo.valente@linaro.org>
+CC:     Jan Kara <jack@suse.cz>, <cgroups@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220610021701.2347602-1-yukuai3@huawei.com>
+ <20220610021701.2347602-4-yukuai3@huawei.com>
+ <27F2DF19-7CC6-42C5-8CEB-43583EB4AE46@linaro.org>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <48edcfc1-030d-f78e-ee88-2a9a8cc467ac@huawei.com>
+Date:   Fri, 24 Jun 2022 09:26:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: CDBF54D1719F.AF85B
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <27F2DF19-7CC6-42C5-8CEB-43583EB4AE46@linaro.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-scsi_report_sense() is possble to print messages exceeding 128 bytes:
-[  475.156955] sd 9:0:0:0: Warning! Received an indication that the LUN assignments on this target have changed. The Linux SCSI layer does not automatical
+ÔÚ 2022/06/23 23:32, Paolo Valente Ð´µÀ:
+> Sorry for the delay.
+> 
+>> Il giorno 10 giu 2022, alle ore 04:17, Yu Kuai <yukuai3@huawei.com> ha scritto:
+>>
+>> Currently, bfq can't handle sync io concurrently as long as they
+>> are not issued from root group. This is because
+>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+>> bfq_asymmetric_scenario().
+>>
+>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
+>>
+>> Before this patch:
+>> 1) root group will never be counted.
+>> 2) Count if bfqg or it's child bfqgs have pending requests.
+>> 3) Don't count if bfqg and it's child bfqgs complete all the requests.
+>>
+>> After this patch:
+>> 1) root group is counted.
+>> 2) Count if bfqg have pending requests.
+>> 3) Don't count if bfqg complete all the requests.
+>>
+>> With this change, the occasion that only one group is activated can be
+>> detected, and next patch will support concurrent sync io in the
+>> occasion.
+>>
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> Reviewed-by: Jan Kara <jack@suse.cz>
+>> ---
+>> block/bfq-iosched.c | 42 ------------------------------------------
+>> block/bfq-iosched.h | 18 +++++++++---------
+>> block/bfq-wf2q.c    | 19 ++++---------------
+>> 3 files changed, 13 insertions(+), 66 deletions(-)
+>>
+>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+>> index 0ec21018daba..03b04892440c 100644
+>> --- a/block/bfq-iosched.c
+>> +++ b/block/bfq-iosched.c
+>> @@ -970,48 +970,6 @@ void __bfq_weights_tree_remove(struct bfq_data *bfqd,
+>> void bfq_weights_tree_remove(struct bfq_data *bfqd,
+>> 			     struct bfq_queue *bfqq)
+>> {
+>> -	struct bfq_entity *entity = bfqq->entity.parent;
+>> -
+>> -	for_each_entity(entity) {
+>> -		struct bfq_sched_data *sd = entity->my_sched_data;
+>> -
+>> -		if (sd->next_in_service || sd->in_service_entity) {
+>> -			/*
+>> -			 * entity is still active, because either
+>> -			 * next_in_service or in_service_entity is not
+>> -			 * NULL (see the comments on the definition of
+>> -			 * next_in_service for details on why
+>> -			 * in_service_entity must be checked too).
+>> -			 *
+>> -			 * As a consequence, its parent entities are
+>> -			 * active as well, and thus this loop must
+>> -			 * stop here.
+>> -			 */
+>> -			break;
+>> -		}
+>> -
+>> -		/*
+>> -		 * The decrement of num_groups_with_pending_reqs is
+>> -		 * not performed immediately upon the deactivation of
+>> -		 * entity, but it is delayed to when it also happens
+>> -		 * that the first leaf descendant bfqq of entity gets
+>> -		 * all its pending requests completed. The following
+>> -		 * instructions perform this delayed decrement, if
+>> -		 * needed. See the comments on
+>> -		 * num_groups_with_pending_reqs for details.
+>> -		 */
+>> -		if (entity->in_groups_with_pending_reqs) {
+>> -			entity->in_groups_with_pending_reqs = false;
+>> -			bfqd->num_groups_with_pending_reqs--;
+>> -		}
+>> -	}
+> 
+> With this part removed, I'm missing how you handle the following
+> sequence of events:
+> 1.  a queue Q becomes non busy but still has dispatched requests, so
+> it must not be removed from the counter of queues with pending reqs
+> yet
+> 2.  the last request of Q is completed with Q being still idle (non
+> busy).  At this point Q must be removed from the counter.  It seems to
+> me that this case is not handled any longer
+> 
+Hi, Paolo
 
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
----
- drivers/scsi/scsi_logging.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+1) At first, patch 1 support to track if bfqq has pending requests, it's
+done by setting the flag 'entity->in_groups_with_pending_reqs' when the
+first request is inserted to bfqq, and it's cleared when the last
+request is completed.
 
-diff --git a/drivers/scsi/scsi_logging.c b/drivers/scsi/scsi_logging.c
-index b02af340c2d3..edc3fe8c7e0f 100644
---- a/drivers/scsi/scsi_logging.c
-+++ b/drivers/scsi/scsi_logging.c
-@@ -17,7 +17,7 @@
- 
- static char *scsi_log_reserve_buffer(size_t *len)
- {
--	*len = 128;
-+	*len = 256;
- 	return kmalloc(*len, GFP_ATOMIC);
- }
- 
--- 
-2.31.1
+2) Then, patch 2 add a counter in bfqg: how many bfqqs have pending
+requests, which is updated while tracking if bfqq has pending requests.
 
+3) Finally, patch 3 tracks 'num_groups_with_pending_reqs' based on the
+new counter in patch 2:
+  - if the counter(how many bfqqs have pending requests) increased from 0
+    to 0, increase 'num_groups_with_pending_reqs'.
+  - if the counter is decreased from 1 to 0, decrease
+    'num_groups_with_pending_reqs'
 
+> Additional comment: if your changes do not cpus the problem above,
+> then this function only invokes __bfq_weights_tree_remove.  So what's
+> the point in keeping this function)
 
+If this patchset is applied, there are following cleanup patches to
+remove this function.
+
+multiple cleanup patches for bfq:
+https://lore.kernel.org/all/20220528095958.270455-1-yukuai3@huawei.com/
+> 
+>> -
+>> -	/*
+>> -	 * Next function is invoked last, because it causes bfqq to be
+>> -	 * freed if the following holds: bfqq is not in service and
+>> -	 * has no dispatched request. DO NOT use bfqq after the next
+>> -	 * function invocation.
+>> -	 */
+> 
+> I would really love it if you leave this comment.  I added it after
+> suffering a lot for a nasty UAF.  Of course the first sentence may
+> need to be adjusted if the code that precedes it is to be removed.
+> 
+
+Same as above, if this patch is applied, this function will be gone.
+
+Thanks,
+Kuai
+> Thanks,
+> Paolo
+> 
+> 
+>> 	__bfq_weights_tree_remove(bfqd, bfqq,
+>> 				  &bfqd->queue_weights_tree);
+>> }
+>> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+>> index de2446a9b7ab..f0fce94583e4 100644
+>> --- a/block/bfq-iosched.h
+>> +++ b/block/bfq-iosched.h
+>> @@ -496,27 +496,27 @@ struct bfq_data {
+>> 	struct rb_root_cached queue_weights_tree;
+>>
+>> 	/*
+>> -	 * Number of groups with at least one descendant process that
+>> +	 * Number of groups with at least one process that
+>> 	 * has at least one request waiting for completion. Note that
+>> 	 * this accounts for also requests already dispatched, but not
+>> 	 * yet completed. Therefore this number of groups may differ
+>> 	 * (be larger) than the number of active groups, as a group is
+>> 	 * considered active only if its corresponding entity has
+>> -	 * descendant queues with at least one request queued. This
+>> +	 * queues with at least one request queued. This
+>> 	 * number is used to decide whether a scenario is symmetric.
+>> 	 * For a detailed explanation see comments on the computation
+>> 	 * of the variable asymmetric_scenario in the function
+>> 	 * bfq_better_to_idle().
+>> 	 *
+>> 	 * However, it is hard to compute this number exactly, for
+>> -	 * groups with multiple descendant processes. Consider a group
+>> -	 * that is inactive, i.e., that has no descendant process with
+>> +	 * groups with multiple processes. Consider a group
+>> +	 * that is inactive, i.e., that has no process with
+>> 	 * pending I/O inside BFQ queues. Then suppose that
+>> 	 * num_groups_with_pending_reqs is still accounting for this
+>> -	 * group, because the group has descendant processes with some
+>> +	 * group, because the group has processes with some
+>> 	 * I/O request still in flight. num_groups_with_pending_reqs
+>> 	 * should be decremented when the in-flight request of the
+>> -	 * last descendant process is finally completed (assuming that
+>> +	 * last process is finally completed (assuming that
+>> 	 * nothing else has changed for the group in the meantime, in
+>> 	 * terms of composition of the group and active/inactive state of child
+>> 	 * groups and processes). To accomplish this, an additional
+>> @@ -525,7 +525,7 @@ struct bfq_data {
+>> 	 * we resort to the following tradeoff between simplicity and
+>> 	 * accuracy: for an inactive group that is still counted in
+>> 	 * num_groups_with_pending_reqs, we decrement
+>> -	 * num_groups_with_pending_reqs when the first descendant
+>> +	 * num_groups_with_pending_reqs when the first
+>> 	 * process of the group remains with no request waiting for
+>> 	 * completion.
+>> 	 *
+>> @@ -533,12 +533,12 @@ struct bfq_data {
+>> 	 * carefulness: to avoid multiple decrements, we flag a group,
+>> 	 * more precisely an entity representing a group, as still
+>> 	 * counted in num_groups_with_pending_reqs when it becomes
+>> -	 * inactive. Then, when the first descendant queue of the
+>> +	 * inactive. Then, when the first queue of the
+>> 	 * entity remains with no request waiting for completion,
+>> 	 * num_groups_with_pending_reqs is decremented, and this flag
+>> 	 * is reset. After this flag is reset for the entity,
+>> 	 * num_groups_with_pending_reqs won't be decremented any
+>> -	 * longer in case a new descendant queue of the entity remains
+>> +	 * longer in case a new queue of the entity remains
+>> 	 * with no request waiting for completion.
+>> 	 */
+>> 	unsigned int num_groups_with_pending_reqs;
+>> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+>> index 6f36f3fe5cc8..9c2842bedf97 100644
+>> --- a/block/bfq-wf2q.c
+>> +++ b/block/bfq-wf2q.c
+>> @@ -984,19 +984,6 @@ static void __bfq_activate_entity(struct bfq_entity *entity,
+>> 		entity->on_st_or_in_serv = true;
+>> 	}
+>>
+>> -#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>> -	if (!bfq_entity_to_bfqq(entity)) { /* bfq_group */
+>> -		struct bfq_group *bfqg =
+>> -			container_of(entity, struct bfq_group, entity);
+>> -		struct bfq_data *bfqd = bfqg->bfqd;
+>> -
+>> -		if (!entity->in_groups_with_pending_reqs) {
+>> -			entity->in_groups_with_pending_reqs = true;
+>> -			bfqd->num_groups_with_pending_reqs++;
+>> -		}
+>> -	}
+>> -#endif
+>> -
+>> 	bfq_update_fin_time_enqueue(entity, st, backshifted);
+>> }
+>>
+>> @@ -1654,7 +1641,8 @@ void bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+>> 	if (!entity->in_groups_with_pending_reqs) {
+>> 		entity->in_groups_with_pending_reqs = true;
+>> #ifdef CONFIG_BFQ_GROUP_IOSCHED
+>> -		bfqq_group(bfqq)->num_queues_with_pending_reqs++;
+>> +		if (!(bfqq_group(bfqq)->num_queues_with_pending_reqs++))
+>> +			bfqq->bfqd->num_groups_with_pending_reqs++;
+>> #endif
+>> 	}
+>> }
+>> @@ -1666,7 +1654,8 @@ void bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+>> 	if (entity->in_groups_with_pending_reqs) {
+>> 		entity->in_groups_with_pending_reqs = false;
+>> #ifdef CONFIG_BFQ_GROUP_IOSCHED
+>> -		bfqq_group(bfqq)->num_queues_with_pending_reqs--;
+>> +		if (!(--bfqq_group(bfqq)->num_queues_with_pending_reqs))
+>> +			bfqq->bfqd->num_groups_with_pending_reqs--;
+>> #endif
+>> 	}
+>> }
+>> -- 
+>> 2.31.1
+>>
+> 
+> .
+> 

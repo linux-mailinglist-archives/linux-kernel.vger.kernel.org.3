@@ -2,153 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD703559301
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF90855930E
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiFXGGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 02:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
+        id S230301AbiFXGIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 02:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiFXGGM (ORCPT
+        with ESMTP id S229641AbiFXGIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 02:06:12 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C0B45796
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:06:12 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id n10so1286087plp.0
-        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:06:12 -0700 (PDT)
+        Fri, 24 Jun 2022 02:08:07 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F6BDFDA
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:08:05 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id r3so2838628ybr.6
+        for <linux-kernel@vger.kernel.org>; Thu, 23 Jun 2022 23:08:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=59X2Y/lmawDJzmXwQWp9mJFaRGi+BKzpUp2IksdQUqM=;
-        b=OnJXKxUvdaQmcj7PIEfMQNOZQNQrgxlyqFN9pCLtIv2JPQFwKTqbYue+ASHmg7LJHy
-         BLqF6T9A3bZliGYY2FuNcbcMjUFDn1Ukxn/AKAalmbGHX/lN6MWAFZ6lZI6E1JSsxi8w
-         ImtOP5ZnM+BJORSm9xxUjoCkhdO50ENI5Ma8o=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SeaKrMM2DGf9AmKtqHuEPGi8mQgc3169/28hZsaIXsU=;
+        b=FqiQk1iwQhSOXqbIhgVqSjXUfZlndtlBhMmS3D2jY6aNk61b+pcUKRo2ByWWbfcn6g
+         8X+pd75XhEdBKwAdwg+alHdpfKkV43RstivYkdaY/WlCeljzGFN2LKxz9cDqpvJ1vpPZ
+         aIPQMNcoLoHdyUMr+VcjSHUisnUSwFJkjg9tNvVR1ORlao3PzRO0ovn7NTponI3t9vXl
+         tg2ddeMBpINdPGMnBEQLUuloASNfsn3mg0iymryzg7WWRzL9+xdZbxu6/LoaLNP+8P9i
+         dC/SKDmyeAehjCmCvWYSUSEZv2xgCYyIOxMZIemDJX2tXHPrPJdcx7UAIJOmJo3UeP9f
+         LpFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=59X2Y/lmawDJzmXwQWp9mJFaRGi+BKzpUp2IksdQUqM=;
-        b=NwEfm/qQQ0iXbyLQ93kai0DCrYqA79qRmwai9/QDDhy9BZNZBZkzyHQwjjYYlMZ3CN
-         A0ugLiHY60KOeIu51F7g++MiFXaGhMXwS/4Bc+ahgYi1++SF3Fg7xVh1pV/wbg0KOPrN
-         EtezVKGL7zE+EqeDhtIH+m+YdxJJVZKBF9K3Xz+JBnjzAQSauD/cTkjnEhVEBQ7MW5nr
-         5S9/bibQ4tg00elE5AQBqxg0pXYQi9RO3J1vbRrqOmj7283SO5f3MDefCCWIyyGg42DH
-         oZ/Qkx0tvpmORJ8ESKwO9ELmXV3BDxGQw3raude1rSGLD34NPG9kmGl/WL+SxDgVARvS
-         PLag==
-X-Gm-Message-State: AJIora+XcMm3mW6YYsXmcSUbJebAW9aQGDvLAtoev6b/dwhnr7BM79dH
-        eNGThnl3NGlfnMj93eVX302T2jPvSLbrVg==
-X-Google-Smtp-Source: AGRyM1tFIpPGmWtk1MlqL9vrcPT41S0nFC9urfAPlwORV2qpEJeMO3V45pNMPosGn/lLjhDHolVF8A==
-X-Received: by 2002:a17:902:74c7:b0:16a:1be3:b7f2 with SMTP id f7-20020a17090274c700b0016a1be3b7f2mr27150781plt.42.1656050771473;
-        Thu, 23 Jun 2022 23:06:11 -0700 (PDT)
-Received: from senozhatsky.kddi.com ([240f:75:7537:3187:421d:f075:63ad:7026])
-        by smtp.gmail.com with ESMTPSA id k7-20020a170902694700b0016511314b94sm850765plt.159.2022.06.23.23.06.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 23:06:11 -0700 (PDT)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>
-Cc:     Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCH v2] zram: do not lookup algorithm in backends table
-Date:   Fri, 24 Jun 2022 15:06:06 +0900
-Message-Id: <20220624060606.1014474-1-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SeaKrMM2DGf9AmKtqHuEPGi8mQgc3169/28hZsaIXsU=;
+        b=qadbAO/psIi6DDpxpCm+01yev3bJZLHSOPw84wOy153JkfwKwBMnBo2qvG/fl2WAsd
+         3W+f2a6mRbdRx7vgPwf79v1M9hep/pWis25NHq1srOWQtrjair8npHLlXuututlLKb88
+         or6hHFXqsCWjP2UgOPnAXxhGIWDw1w/dkWxQeZ8No9LLXoIQ1E5mXg2dtGnrMJLrtb85
+         0S5b5Lx1FMi7VQvaa5BgcQYsrTNtJJYHd18fRaovAtjE+n2dyFfU/R3gbWm3fM0zADkW
+         6WEUErNVbvIpD8wXorxR61Di3bZo4yaVJFAVFAD5BjKfjwLmECVMgg9JLHjhG4Rv9Bzk
+         RZMA==
+X-Gm-Message-State: AJIora9l7ad7BAoG431qXHLLMUPOHQMxPdHNSErI0CB4KgdAThEWy2z6
+        q7J07PtjDrc9wvkpexdLrS+fJyYGKOE1Y0SOGDW+KQ==
+X-Google-Smtp-Source: AGRyM1slb9bCxz7eLioJNPBNzDFAyfhH0Oa34pXwYuxwl4FMz+2hZHqAadj2IjKe9S3LUAuLPMF+yyknHn7GLi11iqU=
+X-Received: by 2002:a25:8181:0:b0:668:c835:eb7c with SMTP id
+ p1-20020a258181000000b00668c835eb7cmr13491867ybk.598.1656050884788; Thu, 23
+ Jun 2022 23:08:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220619150456.GB34471@xsang-OptiPlex-9020> <20220622172857.37db0d29@kernel.org>
+ <CADvbK_csvmkKe46hT9792=+Qcjor2EvkkAnr--CJK3NGX-N9BQ@mail.gmail.com>
+ <CADvbK_eQUmb942vC+bG+NRzM1ki1LiCydEDR1AezZ35Jvsdfnw@mail.gmail.com>
+ <20220623185730.25b88096@kernel.org> <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
+ <20220624051351.GA72171@shbuild999.sh.intel.com> <CANn89iLwwN7hRsJD_skbcRNY9sBtPh1fhULKco5wosx_i4x6gg@mail.gmail.com>
+ <20220624060053.GD79500@shbuild999.sh.intel.com>
+In-Reply-To: <20220624060053.GD79500@shbuild999.sh.intel.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 24 Jun 2022 08:07:53 +0200
+Message-ID: <CANn89i+rniKCC-ZiCvJ7KRtnxgYx-=xFVTOYU1E0h2nhLhn39w@mail.gmail.com>
+Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        network dev <netdev@vger.kernel.org>,
+        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com,
+        Ying Xu <yinxu@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Always use crypto_has_comp() so that crypto can lookup module,
-call usermodhelper to load the modules, wait for usermodhelper
-to finish and so on. Otherwise crypto will do all of these steps
-under CPU hot-plug lock and this looks like too much stuff to
-handle under the CPU hot-plug lock. Besides this can end up in
-a deadlock when usermodhelper triggers a code path that attempts
-to lock the CPU hot-plug lock, that zram already holds.
+On Fri, Jun 24, 2022 at 8:01 AM Feng Tang <feng.tang@intel.com> wrote:
+>
+> On Fri, Jun 24, 2022 at 07:45:00AM +0200, Eric Dumazet wrote:
+> > On Fri, Jun 24, 2022 at 7:14 AM Feng Tang <feng.tang@intel.com> wrote:
+> > >
+> > > Hi Eric,
+> > >
+> > > On Fri, Jun 24, 2022 at 06:13:51AM +0200, Eric Dumazet wrote:
+> > > > On Fri, Jun 24, 2022 at 3:57 AM Jakub Kicinski <kuba@kernel.org> wrote:
+> > > > >
+> > > > > On Thu, 23 Jun 2022 18:50:07 -0400 Xin Long wrote:
+> > > > > > From the perf data, we can see __sk_mem_reduce_allocated() is the one
+> > > > > > using CPU the most more than before, and mem_cgroup APIs are also
+> > > > > > called in this function. It means the mem cgroup must be enabled in
+> > > > > > the test env, which may explain why I couldn't reproduce it.
+> > > > > >
+> > > > > > The Commit 4890b686f4 ("net: keep sk->sk_forward_alloc as small as
+> > > > > > possible") uses sk_mem_reclaim(checking reclaimable >= PAGE_SIZE) to
+> > > > > > reclaim the memory, which is *more frequent* to call
+> > > > > > __sk_mem_reduce_allocated() than before (checking reclaimable >=
+> > > > > > SK_RECLAIM_THRESHOLD). It might be cheap when
+> > > > > > mem_cgroup_sockets_enabled is false, but I'm not sure if it's still
+> > > > > > cheap when mem_cgroup_sockets_enabled is true.
+> > > > > >
+> > > > > > I think SCTP netperf could trigger this, as the CPU is the bottleneck
+> > > > > > for SCTP netperf testing, which is more sensitive to the extra
+> > > > > > function calls than TCP.
+> > > > > >
+> > > > > > Can we re-run this testing without mem cgroup enabled?
+> > > > >
+> > > > > FWIW I defer to Eric, thanks a lot for double checking the report
+> > > > > and digging in!
+> > > >
+> > > > I did tests with TCP + memcg and noticed a very small additional cost
+> > > > in memcg functions,
+> > > > because of suboptimal layout:
+> > > >
+> > > > Extract of an internal Google bug, update from June 9th:
+> > > >
+> > > > --------------------------------
+> > > > I have noticed a minor false sharing to fetch (struct
+> > > > mem_cgroup)->css.parent, at offset 0xc0,
+> > > > because it shares the cache line containing struct mem_cgroup.memory,
+> > > > at offset 0xd0
+> > > >
+> > > > Ideally, memcg->socket_pressure and memcg->parent should sit in a read
+> > > > mostly cache line.
+> > > > -----------------------
+> > > >
+> > > > But nothing that could explain a "-69.4% regression"
+> > >
+> > > We can double check that.
+> > >
+> > > > memcg has a very similar strategy of per-cpu reserves, with
+> > > > MEMCG_CHARGE_BATCH being 32 pages per cpu.
+> > >
+> > > We have proposed patch to increase the batch numer for stats
+> > > update, which was not accepted as it hurts the accuracy and
+> > > the data is used by many tools.
+> > >
+> > > > It is not clear why SCTP with 10K writes would overflow this reserve constantly.
+> > > >
+> > > > Presumably memcg experts will have to rework structure alignments to
+> > > > make sure they can cope better
+> > > > with more charge/uncharge operations, because we are not going back to
+> > > > gigantic per-socket reserves,
+> > > > this simply does not scale.
+> > >
+> > > Yes, the memcg statitics and charge/unchage update is very sensitive
+> > > with the data alignemnt layout, and can easily trigger peformance
+> > > changes, as we've seen quite some similar cases in the past several
+> > > years.
+> > >
+> > > One pattern we've seen is, even if a memcg stats updating or charge
+> > > function only takes about 2%~3% of the CPU cycles in perf-profile data,
+> > > once it got affected, the peformance change could be amplified to up to
+> > > 60% or more.
+> > >
+> >
+> > Reorganizing "struct mem_cgroup" to put "struct page_counter memory"
+> > in a separate cache line would be beneficial.
+>
+> That may help.
+>
+> And I also want to say the benchmarks(especially micro one) are very
+> sensitive to the layout of mem_cgroup. As the 'page_counter' is 112
+> bytes in size, I recently made a patch to make it cacheline aligned
+> (take 2 cachelines), which improved some hackbench/netperf test
+> cases, but caused huge (49%) drop for some vm-scalability tests.
+>
+> > Many low hanging fruits, assuming nobody will use __randomize_layout on it ;)
+> >
+> > Also some fields are written even if their value is not changed.
+> >
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index abec50f31fe64100f4be5b029c7161b3a6077a74..53d9c1e581e78303ef73942e2b34338567987b74
+> > 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -7037,10 +7037,12 @@ bool mem_cgroup_charge_skmem(struct mem_cgroup
+> > *memcg, unsigned int nr_pages,
+> >                 struct page_counter *fail;
+> >
+> >                 if (page_counter_try_charge(&memcg->tcpmem, nr_pages, &fail)) {
+> > -                       memcg->tcpmem_pressure = 0;
+> > +                       if (READ_ONCE(memcg->tcpmem_pressure))
+> > +                               WRITE_ONCE(memcg->tcpmem_pressure, 0);
+> >                         return true;
+> >                 }
+> > -               memcg->tcpmem_pressure = 1;
+> > +               if (!READ_ONCE(memcg->tcpmem_pressure))
+> > +                       WRITE_ONCE(memcg->tcpmem_pressure, 1);
+> >                 if (gfp_mask & __GFP_NOFAIL) {
+> >                         page_counter_charge(&memcg->tcpmem, nr_pages);
+> >                         return true;
+>
+> I will also try this patch, which may take some time.
 
-An example of such deadlock:
+Note that applications can opt-in reserving memory for one socket,
+using SO_RESERVE_MEM
 
-- path A. zram grabs CPU hot-plug lock, execs /sbin/modprobe from crypto
-  and waits for modprobe to finish
-
-disksize_store
- zcomp_create
-  __cpuhp_state_add_instance
-   __cpuhp_state_add_instance_cpuslocked
-    zcomp_cpu_up_prepare
-     crypto_alloc_base
-      crypto_alg_mod_lookup
-       call_usermodehelper_exec
-        wait_for_completion_killable
-         do_wait_for_common
-          schedule
-
-- path B. async work kthread that brings in scsi device. It wants to
-  register CPUHP states at some point, and it needs the CPU hot-plug
-  lock for that, which is owned by zram.
-
-async_run_entry_fn
- scsi_probe_and_add_lun
-  scsi_mq_alloc_queue
-   blk_mq_init_queue
-    blk_mq_init_allocated_queue
-     blk_mq_realloc_hw_ctxs
-      __cpuhp_state_add_instance
-       __cpuhp_state_add_instance_cpuslocked
-        mutex_lock
-         schedule
-
-- path C. modprobe sleeps, waiting for all aync works to finish.
-
-load_module
- do_init_module
-  async_synchronize_full
-   async_synchronize_cookie_domain
-    schedule
-
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- drivers/block/zram/zcomp.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/block/zram/zcomp.c b/drivers/block/zram/zcomp.c
-index 052aa3f65514..0916de952e09 100644
---- a/drivers/block/zram/zcomp.c
-+++ b/drivers/block/zram/zcomp.c
-@@ -63,12 +63,6 @@ static int zcomp_strm_init(struct zcomp_strm *zstrm, struct zcomp *comp)
- 
- bool zcomp_available_algorithm(const char *comp)
- {
--	int i;
--
--	i = sysfs_match_string(backends, comp);
--	if (i >= 0)
--		return true;
--
- 	/*
- 	 * Crypto does not ignore a trailing new line symbol,
- 	 * so make sure you don't supply a string containing
-@@ -217,6 +211,11 @@ struct zcomp *zcomp_create(const char *compress)
- 	struct zcomp *comp;
- 	int error;
- 
-+	/*
-+	 * Crypto API will execute /sbin/modprobe if the compression module
-+	 * is not loaded yet. We must do it here, otherwise we are about to
-+	 * call /sbin/modprobe under CPU hot-plug lock.
-+	 */
- 	if (!zcomp_available_algorithm(compress))
- 		return ERR_PTR(-EINVAL);
- 
--- 
-2.37.0.rc0.104.g0611611a94-goog
-
+This can be used for jobs with a controlled number of sockets, as this
+will avoid many charge/uncharge operations.

@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057F7559F87
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64830559F85
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 19:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbiFXRTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40040 "EHLO
+        id S232152AbiFXRTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232136AbiFXRS4 (ORCPT
+        with ESMTP id S232111AbiFXRSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:18:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D4AE49B72
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:18:54 -0700 (PDT)
+        Fri, 24 Jun 2022 13:18:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1BB74ECD9
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:18:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656091133;
+        s=mimecast20190719; t=1656091131;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1hrqZhznmf7in1ihxZqdR3dERc2u3SLv+rWTvwfVqKo=;
-        b=BFrbNP7NHzglPAbdlsb1XL2zDCg9a6VsHPV3eNBNGTvcJh//qKNCT29Pd5w+p2NeBFEO/n
-        Tnc5CjlR+7q5R15uvHE3yIGbpBQR7jvhMplAYVK8VJw2+4tUO+wCUxkADBbf6uJK7kJt4i
-        Jk0VFCYQ9ldNJV87Y4QAdgUuNlkm0Kg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Fg5ajEwsaDOi0mRWYQQiQq63ErgdP2nROPRnrIqW490=;
+        b=DfjEY49OucQywoMQe6S2qaUqLMmlR0gdi3RRsQtaaeAJKvFqBDSI6ubji4rx1W+XcfSB0A
+        G2z0qoJ3zJ/vHO8VrehDNB3kZ/vdyeEaQU4GRqFdIKpa8RRWR9zzUDR+sby+YCUWv6BSb6
+        kS+g8Xx7CTte6xRI3e5Dx/6GlmG5quY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-203-xDrcKZkpNrW1sS-BI2gNnQ-1; Fri, 24 Jun 2022 13:18:49 -0400
-X-MC-Unique: xDrcKZkpNrW1sS-BI2gNnQ-1
+ us-mta-498-gbrX7sijMUqUT3oXtBPjnA-1; Fri, 24 Jun 2022 13:18:50 -0400
+X-MC-Unique: gbrX7sijMUqUT3oXtBPjnA-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9472E81D9DA;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B36F72919EC2;
         Fri, 24 Jun 2022 17:18:49 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7B040492C3B;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9C2A7492C3B;
         Fri, 24 Jun 2022 17:18:49 +0000 (UTC)
 From:   Paolo Bonzini <pbonzini@redhat.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH v2 4/8] KVM: x86: move all vcpu->arch.pio* setup in emulator_pio_in_out()
-Date:   Fri, 24 Jun 2022 13:18:44 -0400
-Message-Id: <20220624171848.2801602-5-pbonzini@redhat.com>
+Subject: [PATCH v2 5/8] KVM: x86: wean in-kernel PIO from vcpu->arch.pio*
+Date:   Fri, 24 Jun 2022 13:18:45 -0400
+Message-Id: <20220624171848.2801602-6-pbonzini@redhat.com>
 In-Reply-To: <20220624171848.2801602-1-pbonzini@redhat.com>
 References: <20220624171848.2801602-1-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,92 +59,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For now, this is basically an excuse to add back the void* argument to
-the function, while removing some knowledge of vcpu->arch.pio* from
-its callers.  The WARN that vcpu->arch.pio.count is zero is also
-extended to OUT operations.
+Make emulator_pio_in_out operate directly on the provided buffer
+as long as PIO is handled inside KVM.
 
-The vcpu->arch.pio* fields still need to be filled even when the PIO is
-handled in-kernel as __emulator_pio_in() is always followed by
-complete_emulator_pio_in().  But after fixing that, it will be possible to
-to only populate the vcpu->arch.pio* fields on userspace exits.
+For input operations, this means that, in the case of in-kernel
+PIO, __emulator_pio_in() does not have to be always followed
+by complete_emulator_pio_in().  This affects emulator_pio_in() and
+kvm_sev_es_ins(); for the latter, that is why the call moves from
+advance_sev_es_emulated_ins() to complete_sev_es_emulated_ins().
 
-No functional change intended.
+For output, it means that vcpu->pio.count is never set unnecessarily
+and there is no need to clear it; but also vcpu->pio.size must not
+be used in kvm_sev_es_outs(), because it will not be updated for
+in-kernel OUT.
 
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
- arch/x86/kvm/trace.h |  2 +-
- arch/x86/kvm/x86.c   | 21 +++++++++++++--------
- 2 files changed, 14 insertions(+), 9 deletions(-)
+ arch/x86/kvm/x86.c | 73 ++++++++++++++++++++--------------------------
+ 1 file changed, 32 insertions(+), 41 deletions(-)
 
-diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
-index bc85622e28b2..2120d7c060a9 100644
---- a/arch/x86/kvm/trace.h
-+++ b/arch/x86/kvm/trace.h
-@@ -154,7 +154,7 @@ TRACE_EVENT(kvm_xen_hypercall,
- 
- TRACE_EVENT(kvm_pio,
- 	TP_PROTO(unsigned int rw, unsigned int port, unsigned int size,
--		 unsigned int count, void *data),
-+		 unsigned int count, const void *data),
- 	TP_ARGS(rw, port, size, count, data),
- 
- 	TP_STRUCT__entry(
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 5a56d39bd81f..368d0d4d56ff 100644
+index 368d0d4d56ff..716ae5c92687 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -7576,17 +7576,25 @@ static int emulator_cmpxchg_emulated(struct x86_emulate_ctxt *ctxt,
- }
- 
- static int emulator_pio_in_out(struct kvm_vcpu *vcpu, int size,
--			       unsigned short port,
-+			       unsigned short port, void *data,
- 			       unsigned int count, bool in)
- {
--	void *data = vcpu->arch.pio_data;
- 	unsigned i;
+@@ -7583,19 +7583,6 @@ static int emulator_pio_in_out(struct kvm_vcpu *vcpu, int size,
  	int r;
  
-+	WARN_ON_ONCE(vcpu->arch.pio.count);
- 	vcpu->arch.pio.port = port;
- 	vcpu->arch.pio.in = in;
- 	vcpu->arch.pio.count = count;
- 	vcpu->arch.pio.size = size;
-+	if (in) {
-+		/* The buffer is only used in complete_emulator_pio_in().  */
-+		WARN_ON(data);
-+		memset(vcpu->arch.pio_data, 0, size * count);
-+	} else {
-+		memcpy(vcpu->arch.pio_data, data, size * count);
-+	}
-+	data = vcpu->arch.pio_data;
- 
+ 	WARN_ON_ONCE(vcpu->arch.pio.count);
+-	vcpu->arch.pio.port = port;
+-	vcpu->arch.pio.in = in;
+-	vcpu->arch.pio.count = count;
+-	vcpu->arch.pio.size = size;
+-	if (in) {
+-		/* The buffer is only used in complete_emulator_pio_in().  */
+-		WARN_ON(data);
+-		memset(vcpu->arch.pio_data, 0, size * count);
+-	} else {
+-		memcpy(vcpu->arch.pio_data, data, size * count);
+-	}
+-	data = vcpu->arch.pio_data;
+-
  	for (i = 0; i < count; i++) {
  		if (in)
-@@ -7623,9 +7631,7 @@ static int emulator_pio_in_out(struct kvm_vcpu *vcpu, int size,
+ 			r = kvm_io_bus_read(vcpu, KVM_PIO_BUS, port, size, data);
+@@ -7608,9 +7595,10 @@ static int emulator_pio_in_out(struct kvm_vcpu *vcpu, int size,
+ 
+ 			/*
+ 			 * Userspace must have unregistered the device while PIO
+-			 * was running.  Drop writes / read as 0 (the buffer
+-			 * was zeroed in __emulator_pio_in).
++			 * was running.  Drop writes / read as 0.
+ 			 */
++			if (in)
++				memset(data, 0, size * (count - i));
+ 			break;
+ 		}
+ 
+@@ -7619,6 +7607,16 @@ static int emulator_pio_in_out(struct kvm_vcpu *vcpu, int size,
+ 	return 1;
+ 
+ userspace_io:
++	vcpu->arch.pio.port = port;
++	vcpu->arch.pio.in = in;
++	vcpu->arch.pio.count = count;
++	vcpu->arch.pio.size = size;
++
++	if (in)
++		memset(vcpu->arch.pio_data, 0, size * count);
++	else
++		memcpy(vcpu->arch.pio_data, data, size * count);
++
+ 	vcpu->run->exit_reason = KVM_EXIT_IO;
+ 	vcpu->run->io.direction = in ? KVM_EXIT_IO_IN : KVM_EXIT_IO_OUT;
+ 	vcpu->run->io.size = size;
+@@ -7629,15 +7627,19 @@ static int emulator_pio_in_out(struct kvm_vcpu *vcpu, int size,
+ }
+ 
  static int __emulator_pio_in(struct kvm_vcpu *vcpu, int size,
- 			     unsigned short port, unsigned int count)
+-			     unsigned short port, unsigned int count)
++			     unsigned short port, void *val, unsigned int count)
  {
--	WARN_ON(vcpu->arch.pio.count);
--	memset(vcpu->arch.pio_data, 0, size * count);
--	return emulator_pio_in_out(vcpu, size, port, count, true);
-+	return emulator_pio_in_out(vcpu, size, port, NULL, count, true);
+-	return emulator_pio_in_out(vcpu, size, port, NULL, count, true);
++	int r = emulator_pio_in_out(vcpu, size, port, val, count, true);
++	if (r)
++		trace_kvm_pio(KVM_PIO_IN, port, size, count, val);
++
++	return r;
  }
  
  static void complete_emulator_pio_in(struct kvm_vcpu *vcpu, void *val)
-@@ -7674,9 +7680,8 @@ static int emulator_pio_out(struct kvm_vcpu *vcpu, int size,
  {
- 	int ret;
+ 	int size = vcpu->arch.pio.size;
+-	unsigned count = vcpu->arch.pio.count;
++	unsigned int count = vcpu->arch.pio.count;
+ 	memcpy(val, vcpu->arch.pio_data, size * count);
+ 	trace_kvm_pio(KVM_PIO_IN, vcpu->arch.pio.port, size, count, vcpu->arch.pio_data);
+ 	vcpu->arch.pio.count = 0;
+@@ -7654,16 +7656,11 @@ static int emulator_pio_in(struct kvm_vcpu *vcpu, int size,
+ 		 * shenanigans as KVM doesn't support modifying the rep count,
+ 		 * and the emulator ensures @count doesn't overflow the buffer.
+ 		 */
+-	} else {
+-		int r = __emulator_pio_in(vcpu, size, port, count);
+-		if (!r)
+-			return r;
+-
+-		/* Results already available, fall through.  */
++		complete_emulator_pio_in(vcpu, val);
++		return 1;
+ 	}
  
--	memcpy(vcpu->arch.pio_data, val, size * count);
--	trace_kvm_pio(KVM_PIO_OUT, port, size, count, vcpu->arch.pio_data);
--	ret = emulator_pio_in_out(vcpu, size, port, count, false);
-+	trace_kvm_pio(KVM_PIO_OUT, port, size, count, val);
-+	ret = emulator_pio_in_out(vcpu, size, port, (void *)val, count, false);
- 	if (ret)
-                 vcpu->arch.pio.count = 0;
+-	complete_emulator_pio_in(vcpu, val);
+-	return 1;
++	return __emulator_pio_in(vcpu, size, port, val, count);
+ }
  
+ static int emulator_pio_in_emulated(struct x86_emulate_ctxt *ctxt,
+@@ -7678,14 +7675,8 @@ static int emulator_pio_out(struct kvm_vcpu *vcpu, int size,
+ 			    unsigned short port, const void *val,
+ 			    unsigned int count)
+ {
+-	int ret;
+-
+ 	trace_kvm_pio(KVM_PIO_OUT, port, size, count, val);
+-	ret = emulator_pio_in_out(vcpu, size, port, (void *)val, count, false);
+-	if (ret)
+-                vcpu->arch.pio.count = 0;
+-
+-        return ret;
++	return emulator_pio_in_out(vcpu, size, port, (void *)val, count, false);
+ }
+ 
+ static int emulator_pio_out_emulated(struct x86_emulate_ctxt *ctxt,
+@@ -13245,7 +13236,7 @@ static int kvm_sev_es_outs(struct kvm_vcpu *vcpu, unsigned int size,
+ 
+ 		/* memcpy done already by emulator_pio_out.  */
+ 		vcpu->arch.sev_pio_count -= count;
+-		vcpu->arch.sev_pio_data += count * vcpu->arch.pio.size;
++		vcpu->arch.sev_pio_data += count * size;
+ 		if (!ret)
+ 			break;
+ 
+@@ -13261,20 +13252,20 @@ static int kvm_sev_es_outs(struct kvm_vcpu *vcpu, unsigned int size,
+ static int kvm_sev_es_ins(struct kvm_vcpu *vcpu, unsigned int size,
+ 			  unsigned int port);
+ 
+-static void advance_sev_es_emulated_ins(struct kvm_vcpu *vcpu)
++static void advance_sev_es_emulated_ins(struct kvm_vcpu *vcpu, unsigned count, int size)
+ {
+-	unsigned count = vcpu->arch.pio.count;
+-	complete_emulator_pio_in(vcpu, vcpu->arch.sev_pio_data);
+ 	vcpu->arch.sev_pio_count -= count;
+-	vcpu->arch.sev_pio_data += count * vcpu->arch.pio.size;
++	vcpu->arch.sev_pio_data += count * size;
+ }
+ 
+ static int complete_sev_es_emulated_ins(struct kvm_vcpu *vcpu)
+ {
++	unsigned count = vcpu->arch.pio.count;
+ 	int size = vcpu->arch.pio.size;
+ 	int port = vcpu->arch.pio.port;
+ 
+-	advance_sev_es_emulated_ins(vcpu);
++	complete_emulator_pio_in(vcpu, vcpu->arch.sev_pio_data);
++	advance_sev_es_emulated_ins(vcpu, count, size);
+ 	if (vcpu->arch.sev_pio_count)
+ 		return kvm_sev_es_ins(vcpu, size, port);
+ 	return 1;
+@@ -13286,11 +13277,11 @@ static int kvm_sev_es_ins(struct kvm_vcpu *vcpu, unsigned int size,
+ 	for (;;) {
+ 		unsigned int count =
+ 			min_t(unsigned int, PAGE_SIZE / size, vcpu->arch.sev_pio_count);
+-		if (!__emulator_pio_in(vcpu, size, port, count))
++		if (!__emulator_pio_in(vcpu, size, port, vcpu->arch.sev_pio_data, count))
+ 			break;
+ 
+ 		/* Emulation done by the kernel.  */
+-		advance_sev_es_emulated_ins(vcpu);
++		advance_sev_es_emulated_ins(vcpu, count, size);
+ 		if (!vcpu->arch.sev_pio_count)
+ 			return 1;
+ 	}
 -- 
 2.31.1
 

@@ -2,196 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6029F5597F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4ED75597FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 12:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiFXKfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 06:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
+        id S231508AbiFXKgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 06:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbiFXKfc (ORCPT
+        with ESMTP id S230187AbiFXKgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 06:35:32 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DF17C845
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:35:28 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ge10so3804033ejb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 03:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GeySHEpfB0/asXQLszsfiLjDcMnpUMVH0jqVoWkX/7o=;
-        b=uZ1wC8VHxURHrghX2//skAqQ30um2Rme3cIPNULf/p3DBJwzdeGZCHn64BbW1bwOoh
-         MK7I4FRm4lPVfnOutTChG+9M+lYc4y4yEjHQmcsNNibkepmTc5kqbxTtx/VHfIwqpSFA
-         A7a2fOZ7cvl48zaPYnFMhKsgQgSk6uKOAABQ6m5HcNHn+pYfMPqsOfrhh43gWvLbEKIG
-         AMwez5zF4oib8KlCHUoPbdzUVBf2Mmj6iqKOZO4I2HmkzMfM5iXV86deY5+S7vEL+BT9
-         wv3F9Puov/5GuHxXic5VvIIGs7RASkq12ilmGiKxF+k5qkfHOarvRWT8G3ev/yK3xUvF
-         FD0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GeySHEpfB0/asXQLszsfiLjDcMnpUMVH0jqVoWkX/7o=;
-        b=DIcxASMFHnZtMgQlUjxkH0/O6vYlnjO+WLluSIa0noQ2KZ+BlW13YsfoO40xDG7Ho8
-         EN28q86FIAGEdbZbJ8AVDH11pE3PofLP86KlC9MIvhU9WLbrHOodQMi6wMzFulh+XlJC
-         4SFaFEB3RkRItc35StefVROD3DRd974n7ZOFXKiSwZWp3xhmk1J4OrYwrblLs6y8NQgO
-         WQtm3XhC0zcaPmKqw61UyLWqM8woDI3ZWC9WtvKI07O4Wrg8gSrccrSEN6VmdtJwKkj2
-         983VMXEWIs+lVP1BkBw9+4rbHH4C600GaM6ReEF6AUVYGVBTXHlUV4Nw1JjswNnlj1KM
-         3Uhg==
-X-Gm-Message-State: AJIora+bzKMCAwq8yhtWCZVZ8VmnomLLnJZZHn7/aLs/ubvCrmHH9rR6
-        +hTE7VhPYSuNgmFICPP0jig5oA==
-X-Google-Smtp-Source: AGRyM1sqyv+H/bBGuPYg4PIFRLo9cOE04f0nH/20g7zmKiDRIOyqtdjIViwQXday1ZlmdpGjP7k8OA==
-X-Received: by 2002:a17:907:1694:b0:716:14a4:fba with SMTP id hc20-20020a170907169400b0071614a40fbamr13073900ejc.290.1656066926720;
-        Fri, 24 Jun 2022 03:35:26 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q21-20020aa7cc15000000b0042617ba638esm1683916edt.24.2022.06.24.03.35.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 03:35:25 -0700 (PDT)
-Message-ID: <aec8ecdb-7c76-1261-216b-b40e450d1bf8@linaro.org>
-Date:   Fri, 24 Jun 2022 12:35:23 +0200
+        Fri, 24 Jun 2022 06:36:09 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00117C844;
+        Fri, 24 Jun 2022 03:36:00 -0700 (PDT)
+X-UUID: df7b175fa89346cd93722cc325d9a2de-20220624
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:ae2831ad-169e-48d6-a70a-39fa0ed6540b,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:8ecdf52d-1756-4fa3-be7f-474a6e4be921,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: df7b175fa89346cd93722cc325d9a2de-20220624
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1111625506; Fri, 24 Jun 2022 18:35:53 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 24 Jun 2022 18:35:51 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 24 Jun 2022 18:35:50 +0800
+Message-ID: <19cfb1b85a347c70c6b0937bbbca4a176a724454.camel@mediatek.com>
+Subject: Re: [PATCH v3 1/5] iommu: Return -EMEDIUMTYPE for incompatible
+ domain and device/group
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Baolu Lu <baolu.lu@linux.intel.com>
+CC:     "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "jordan@cosmicpenguin.net" <jordan@cosmicpenguin.net>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "alyssa@rosenzweig.io" <alyssa@rosenzweig.io>,
+        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "zhang.lyra@gmail.com" <zhang.lyra@gmail.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "yangyingliang@huawei.com" <yangyingliang@huawei.com>,
+        "orsonzhai@gmail.com" <orsonzhai@gmail.com>,
+        "gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "marcan@marcan.st" <marcan@marcan.st>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>
+Date:   Fri, 24 Jun 2022 18:35:49 +0800
+In-Reply-To: <BN9PR11MB527629DEF740C909A7B7BEB38CB49@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220623200029.26007-1-nicolinc@nvidia.com>
+         <20220623200029.26007-2-nicolinc@nvidia.com>
+         <270eec00-8aee-2288-4069-d604e6da2925@linux.intel.com>
+         <YrUk8IINqDEZLfIa@Asurada-Nvidia>
+         <8a5e9c81ab1487154828af3ca21e62e39bcce18c.camel@mediatek.com>
+         <BN9PR11MB527629DEF740C909A7B7BEB38CB49@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 03/14] dt-bindings: leds: mt6370: Add Mediatek mt6370
- current sink type LED indicator
-Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de
-Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
-        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com
-References: <20220623115631.22209-1-peterwu.pub@gmail.com>
- <20220623115631.22209-4-peterwu.pub@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220623115631.22209-4-peterwu.pub@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/2022 13:56, ChiaEn Wu wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
+On Fri, 2022-06-24 at 06:16 +0000, Tian, Kevin wrote:
+> > From: Yong Wu
+> > Sent: Friday, June 24, 2022 1:39 PM
+> > 
+> > On Thu, 2022-06-23 at 19:44 -0700, Nicolin Chen wrote:
+> > > On Fri, Jun 24, 2022 at 09:35:49AM +0800, Baolu Lu wrote:
+> > > > External email: Use caution opening links or attachments
+> > > > 
+> > > > 
+> > > > On 2022/6/24 04:00, Nicolin Chen wrote:
+> > > > > diff --git a/drivers/iommu/mtk_iommu_v1.c
+> > > > > b/drivers/iommu/mtk_iommu_v1.c
+> > > > > index e1cb51b9866c..5386d889429d 100644
+> > > > > --- a/drivers/iommu/mtk_iommu_v1.c
+> > > > > +++ b/drivers/iommu/mtk_iommu_v1.c
+> > > > > @@ -304,7 +304,7 @@ static int
+> > > > > mtk_iommu_v1_attach_device(struct
+> > > > > iommu_domain *domain, struct device
+> > > > >       /* Only allow the domain created internally. */
+> > > > >       mtk_mapping = data->mapping;
+> > > > >       if (mtk_mapping->domain != domain)
+> > > > > -             return 0;
+> > > > > +             return -EMEDIUMTYPE;
+> > > > > 
+> > > > >       if (!data->m4u_dom) {
+> > > > >               data->m4u_dom = dom;
+> > > > 
+> > > > This change looks odd. It turns the return value from success
+> > > > to
+> > > > failure. Is it a bug? If so, it should go through a separated
+> > > > fix
+> > > > patch.
+> > 
+> > Thanks for the review:)
+> > 
+> > > 
+> > > Makes sense.
+> > > 
+> > > I read the commit log of the original change:
+> > > 
+> > 
+> > https://lore.kernel.org/r/1589530123-30240-1-git-send-email-
+> > yong.wu@mediatek.com
+> > > 
+> > > It doesn't seem to allow devices to get attached to different
+> > > domains other than the shared mapping->domain, created in the
+> > > in the mtk_iommu_probe_device(). So it looks like returning 0
+> > > is intentional. Though I am still very confused by this return
+> > > value here, I doubt it has ever been used in a VFIO context.
+> > 
+> > It's not used in VFIO context. "return 0" just satisfy the iommu
+> > framework to go ahead. and yes, here we only allow the shared
+> > "mapping-
+> > > domain" (All the devices share a domain created internally).
+> > 
+> > thus I think we should still keep "return 0" here.
+> > 
 > 
-> Add Mediatek mt6370 current sink type LED indicator binding documentation.
-> 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
-> 
-> v3
-> - Use leds-class-multicolor.yaml instead of common.yaml.
-> - Split multi-led and led node.
-> - Add subdevice "led" in "multi-led".
-> ---
->  .../bindings/leds/mediatek,mt6370-indicator.yaml   | 77 ++++++++++++++++++++++
->  1 file changed, 77 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml b/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
-> new file mode 100644
-> index 0000000..45030f3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/mediatek,mt6370-indicator.yaml
-> @@ -0,0 +1,77 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/leds/mediatek,mt6370-indicator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: LED driver for MT6370 PMIC from MediaTek Integrated.
-> +
-> +maintainers:
-> +  - Alice Chen <alice_chen@richtek.com>
-> +
-> +description: |
-> +  This module is part of the MT6370 MFD device.
-> +  Add MT6370 LED driver include 4-channel RGB LED support Register/PWM/Breath Mode
-> +
-> +allOf:
-> +  - $ref: leds-class-multicolor.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt6370-indicator
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +patternProperties:
-> +  "^multi-led@[0-3]$":
-> +    type: object
+> What prevent this driver from being used in VFIO context?
 
-Here as well unevaluatedProperties:false (on the type level)
+Nothing prevent this. Just I didn't test. mtk_iommu_v1.c only is used
+in mt2701 and there is no VFIO scenario. I'm not sure if it supports
+VFIO. (mtk_iommu.c support VFIO.)
 
-> +
-> +    properties:
-> +      reg:
-> +        enum: [0, 1, 2, 3]
-> +
-> +      "#address-cells":
-> +        const: 1
-> +
-> +      "#size-cells":
-> +        const: 0
-> +
-> +    patternProperties:
-> +      "^led@[0-2]$":
-> +        type: object
-> +        $ref: common.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        required:
-> +          - reg
-> +          - color
-> +
-> +    required:
-> +      - reg
-> +      - color
-> +      - "#address-cells"
-> +      - "#size-cells"
-> +
-> +  "^led@[0-3]$":
-> +    type: object
-> +    $ref: common.yaml#
-> +    unevaluatedProperties: false
-> +
-> +    properties:
-> +      reg:
-> +        enum: [0, 1, 2, 3]
-> +
-> +    required:
-> +      - reg
-> +      - color
-> +
-> +required:
-> +  - compatible
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +
-> +additionalProperties: false
+> and why would we want to go ahead when an obvious error occurs
+> i.e. when a device is attached to an unexpected domain?
 
+The iommu flow in this file always is a bit odd as we need share iommu
+domain in ARM32. As I tested before in the above link, "The iommu
+framework will create a iommu domain for each a device.", therefore we
+have to *workaround* in this file.
 
-Best regards,
-Krzysztof
+And this was expected to be fixed by:
+
+https://lore.kernel.org/linux-iommu/cover.1597931875.git.robin.murphy@arm.com/
+
+sorry, I don't know its current status.
+
+Thanks.
+

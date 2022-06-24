@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C31559531
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6FB5594E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiFXISr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39678 "EHLO
+        id S231688AbiFXIGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 04:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231452AbiFXISh (ORCPT
+        with ESMTP id S231268AbiFXIGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:18:37 -0400
-Received: from mail.greatagencyonline.pl (mail.greatagencyonline.pl [89.40.125.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215C46E7A1
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:18:36 -0700 (PDT)
-Received: by mail.greatagencyonline.pl (Postfix, from userid 1001)
-        id 753A2A6321; Fri, 24 Jun 2022 09:06:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=greatagencyonline.pl;
-        s=mail; t=1656058048;
-        bh=ksvwLPFdjL017OLwir5xHXy3Vmrj/5fhZ5DwBI62qzc=;
-        h=Date:From:To:Subject:From;
-        b=ll1mTG+h29gh3apszQZruTXwKEond2gwQ7z5x1/f2r1wMUHfxboJd+3KsDTGacqqy
-         COx7+etKjNQrY9CXRG5VjyLmAIV5pBHs2qPSVC1VpRE7yul38VuYwT3/cJPR4tqa4n
-         JFf6k2oDbKKExDgvfa1hmfpB5bLQCU3jBHIBx0DoksC4TN1bAzYxeaqhscGghIzjxY
-         ykAf52YsdBUtcihr+YJJf5VhkdLc9Kxs9GywKIn0U3Gwg4mNrG8qEz7W2Q2DKSwAzl
-         /driWRPPDkmJavLyPsGgiali69SIDuiEziaJIJtbR86NVRB12u70A7cpvgouYox4zE
-         5oYQnJOtc/04g==
-Received: by mail.greatagencyonline.pl for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:05:17 GMT
-Message-ID: <20220624074502-0.1.4o.1flib.0.5hpnfh2xdw@greatagencyonline.pl>
-Date:   Fri, 24 Jun 2022 08:05:17 GMT
-From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= 
-        <mikolaj.rudzik@greatagencyonline.pl>
-To:     <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
-X-Mailer: mail.greatagencyonline.pl
+        Fri, 24 Jun 2022 04:06:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 050A374E71
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:05:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656057943;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=cpTVcivxQYlw34vR4UsX5en4XWzp55XZiHJpLQUr5MCvwMyLRCpnDK6Udma6TY0W4lWCf3
+        I2ERFitJXDM9Gm2HM6oviKTgHhCy3MkKtmsqI0Hy2s75S/bipouKqTebTWW0jSHLa3pOkJ
+        5A4mdx8WpwvNYqDheBGp+r55wlmNW1k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-263-Qyj2W5XcPpqFURNIJGTQaw-1; Fri, 24 Jun 2022 04:05:41 -0400
+X-MC-Unique: Qyj2W5XcPpqFURNIJGTQaw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F39FC101E167;
+        Fri, 24 Jun 2022 08:05:40 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C22012166B26;
+        Fri, 24 Jun 2022 08:05:40 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Shuah Khan <shuah@kernel.org>, Gao Chao <chao.gao@intel.com>,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: selftest: Enhance handling WRMSR ICR register in x2APIC mode
+Date:   Fri, 24 Jun 2022 04:05:35 -0400
+Message-Id: <20220624080535.2720845-1-pbonzini@redhat.com>
+In-Reply-To: <20220623094511.26066-1-guang.zeng@intel.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Queued, thanks.
 
-chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
-skania nowych zlece=C5=84 ze strony www.
-
-Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
-, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
-=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
-jonowania strony w Google.
-
-Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
+Paolo
 
 
-Pozdrawiam,
-Miko=C5=82aj Rudzik

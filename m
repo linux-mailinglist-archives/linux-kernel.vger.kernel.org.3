@@ -2,107 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92120559D07
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FE2559D0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 17:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbiFXPKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 11:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S232395AbiFXPLa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 24 Jun 2022 11:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231672AbiFXPKj (ORCPT
+        with ESMTP id S231672AbiFXPL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 11:10:39 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA24A4CD5E
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:10:38 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id cs6so4958814qvb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Q8sNieh9omUOFpJ9ZXsO4kHaUMQjD/qsybFxiiVOJ6Y=;
-        b=Q3+owTKaaiY95Skera0W9ThGSkFBEHovF0Wb86AiuP84qrKYeXyhmGTyvL4ossuTD1
-         eDE6AFyU710Q6RGi6+B9SwEUM+UqsRTuWjy0C1PDKkCqvFwaz7GBFp/gGqjsnaE6wsZT
-         04vTMi8v7HpXKtbPGYhoixCshDTasxIo3hHZxBd3w5MKzlx0Ea63EYwepWfKj2FKhkGc
-         77xVcSvcRQMq2Gil0h8hGm5YTEs0AIZh8Uq7JzVpDAkbgpdbxrMFAT75YUC3EvVNh9P9
-         OwrbEurHgFIEa+cbftGBWcP3jkJkQ3lS5P50ViliXl7Cu175iI57DmA4U7togTTeJg+u
-         peBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q8sNieh9omUOFpJ9ZXsO4kHaUMQjD/qsybFxiiVOJ6Y=;
-        b=DovCWOqEpMQOJKnQXdEmjBvlI4dIPdfKh7oZM51WllrGPMaPTpV1NKTvagyf9ALKi2
-         GvkvbsZkioAaw+85vXTQBKX+5BWKy8aZjpNe9exOP0+zJvfK5AdDUJ2aOg9AKOUpsVnq
-         K90+iECUTVAHarXtMaKkDl+KDxiop+qePVpyMIV87LlTDoKrmLvXG+Um2ft/eXNUeBg0
-         4SfX9XbNebPrYK6pnihIXb1qXC+Aj7HjDi+4+M0I6vmJF7s+ykRnEw8+4GL9qA/QFcxb
-         2YnOwkQ+68Dtmn4ubyUs90fvxf/6HTsqwkyhdMoGT1avqJL9euFhd6lxB9kr4Xp3Hd0Y
-         NCWg==
-X-Gm-Message-State: AJIora9TNzpzRyXRtlegmpZLt69yEtzj4bXTlXhhavCVhyYL75rlzsi0
-        kwwjjhd8G+SV/Y28/obY9qurEbUTxOI=
-X-Google-Smtp-Source: AGRyM1tD490H2+j7yCVy077p+d+//6jZtAg14l2p9bZTwQCh2G46l2/lVMGSQ7jDiAeIxEzIZRGOxw==
-X-Received: by 2002:a05:622a:1b9f:b0:317:6815:a902 with SMTP id bp31-20020a05622a1b9f00b003176815a902mr8551085qtb.35.1656083437857;
-        Fri, 24 Jun 2022 08:10:37 -0700 (PDT)
-Received: from localhost ([2601:c4:c432:5:a356:5d56:1ffb:9cf5])
-        by smtp.gmail.com with ESMTPSA id c4-20020a05620a268400b006aee03a95dfsm1895637qkp.124.2022.06.24.08.10.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 08:10:36 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 08:10:38 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Qu Wenruo <wqu@suse.com>
-Cc:     linux-kernel@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk
-Subject: Re: [PATCH] lib: bitmap: fix the duplicated comments on
- bitmap_to_arr64()
-Message-ID: <YrXT7j62m9MjF93K@yury-laptop>
-References: <0d85e1dbad52ad7fb5787c4432bdb36cbd24f632.1656063005.git.wqu@suse.com>
+        Fri, 24 Jun 2022 11:11:27 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2588E4CD7F
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:11:25 -0700 (PDT)
+Received: from mail-yb1-f176.google.com ([209.85.219.176]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N1Oft-1ngfqK3s4p-012niI for <linux-kernel@vger.kernel.org>; Fri, 24 Jun
+ 2022 17:11:24 +0200
+Received: by mail-yb1-f176.google.com with SMTP id d5so5000799yba.5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 08:11:23 -0700 (PDT)
+X-Gm-Message-State: AJIora+xZouIQgJlXCJt6C8QmN9QLyfmR9yGjUtFRkA+2fUgxzAseTnO
+        EPHTHWo4D6DyYeYJEDUqmrYDHxcDPdidWfD/Ghk=
+X-Google-Smtp-Source: AGRyM1vJJnhlcyd7ZSZrixr3FMT9677Grp/rNK0TzdIxtZ3Z0+OUPG5WXg1A6g8fJkwRsaVEZy+JKkarEpgkYASSVk4=
+X-Received: by 2002:a25:9f87:0:b0:669:4345:a8c0 with SMTP id
+ u7-20020a259f87000000b006694345a8c0mr15555982ybq.472.1656083482781; Fri, 24
+ Jun 2022 08:11:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d85e1dbad52ad7fb5787c4432bdb36cbd24f632.1656063005.git.wqu@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220605075841.19929-1-linmq006@gmail.com> <m3wnd76ako.fsf@t19.piap.pl>
+In-Reply-To: <m3wnd76ako.fsf@t19.piap.pl>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 24 Jun 2022 17:11:06 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3dDJrPPM6gRc+s7OQStphWdvWRdcELtNBXSzvd+gxoLw@mail.gmail.com>
+Message-ID: <CAK8P3a3dDJrPPM6gRc+s7OQStphWdvWRdcELtNBXSzvd+gxoLw@mail.gmail.com>
+Subject: Re: [PATCH] ARM: cns3xxx: Fix refcount leak in cns3xxx_init
+To:     =?UTF-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+Cc:     Miaoqian Lin <linmq006@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:n5MdKEkkXMtSOTgpnCbms+npJ8lvJY407XvU7TA1qF8g1iVn6N8
+ L4R5ILDoOjNhCC818KJPhZlk3uSJWi0NyBHWsOd+ORkLliTib7hInjrqTAlxe4weXMsySB0
+ GpdD/vmUD3jotPL16aTRlTKB20QhBAYjgklq//L6qg+C3vKrFllgd3nf831kUfEJs8kPr3X
+ xI4uUbcIxZi6RKB3iPUBA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DaDFQRbkddw=:iRyVpdIvaPcMifQWf/V16x
+ tNXUWZFwK9HB6guS2imJ+ZzASCa8AlLsg6ct5wPIwte6LGTYaBM/5HhzueBgUEApWwpQRF1wN
+ h0uL1B+puZVsJjDyqfL5uGzxFdUr4RudSZfZUyxuanD4BBdKTPWsnieyuB0gLbepaFKewMxnQ
+ R2lQzKmfs14OAN1703EUiGuj50PD3xir7F/q/s/mN3ROeyVQolTSc1iKnDqpuo8xXbY+3UGQ4
+ FCAj7fL2AB9NF9eUMerCui2HhUBmuL+n+ydUu0JGUBoDDT1N8Pm4s7hGya1ertS5qMCVn02ju
+ rhpNfbK2iw1v5p0I27UUj5N5YjmKDr+MxIVteEfifR3soAd0mqoLch5az4ERhuWrIAnMQENAv
+ 6aVQqR8OraT8wG84h8eNv8wRHMG9GzOaXNrpGw1hVIR0LFyWfQmAPaZ0sfpTHdlEuV5gvYBUO
+ KR1vJ/4aFzfMR08Oxk/7n+jQvfr57/RVfQ/+A0Mrc+8L/TBgJ1tbR+ukDq6EP4nCeJ23ZfeoB
+ Er79jVhYwZ5rwJBdZ5dH4H5qfp5JuJfRmbQspDDII8kVtyOovGH4biOkcAXt5vLKcv7zx4XGK
+ 909ovtfbbewNllEqyw7RvbZAKG/tZPIVbVMrnS09D+NhpdeafI4KiPQKaMwBs8CC3SrPVh9TM
+ I1VadikK8/zcLS5kfcpgUwwHB8mO9O+rbp3DUpE2kMHA7QA0vXv2dZm8icmVIupiu47yx8gDT
+ yExTsjNNwlGPbb9THIUk5xjj+aHcYrqVv7yHQA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 05:31:47PM +0800, Qu Wenruo wrote:
-> Thanks to the recent commit 0a97953fd221 ("lib: add
-> bitmap_{from,to}_arr64") now we can directly convert a U64 value into a
-> bitmap and vice verse.
-> 
-> However when checking the header there is duplicated helper for
-> bitmap_to_arr64(), but no bitmap_from_arr64().
-> 
-> Just fix the copy-n-paste error.
+On Thu, Jun 23, 2022 at 10:36 AM Krzysztof Hałasa <khalasa@piap.pl> wrote:
+>
+> Miaoqian Lin <linmq006@gmail.com> writes:
+>
+> > of_find_compatible_node() returns a node pointer with refcount
+> > incremented, we should use of_node_put() on it when done.
+> > Add missing of_node_put() to avoid refcount leak.
+> >
+> > Fixes: 415f59142d9d ("ARM: cns3xxx: initial DT support")
+> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+>
+> Acked-by: Krzysztof Halasa <khalasa@piap.pl>
+>
+> Arnd, I guess you are in the best position to pick this patch up?
+> Thanks to both of you.
 
-I spotted it as well, but you're the first. :-) Thanks.
-Applied in bitmap-for-next.
+Done now, thanks!
 
-> Signed-off-by: Qu Wenruo <wqu@suse.com>
-> ---
->  include/linux/bitmap.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
-> index 2e6cd5681040..f091a1664bf1 100644
-> --- a/include/linux/bitmap.h
-> +++ b/include/linux/bitmap.h
-> @@ -71,9 +71,9 @@ struct device;
->   *  bitmap_release_region(bitmap, pos, order)   Free specified bit region
->   *  bitmap_allocate_region(bitmap, pos, order)  Allocate specified bit region
->   *  bitmap_from_arr32(dst, buf, nbits)          Copy nbits from u32[] buf to dst
-> + *  bitmap_from_arr64(dst, buf, nbits)          Copy nbits from u64[] buf to dst
->   *  bitmap_to_arr32(buf, src, nbits)            Copy nbits from buf to u32[] dst
->   *  bitmap_to_arr64(buf, src, nbits)            Copy nbits from buf to u64[] dst
-> - *  bitmap_to_arr64(buf, src, nbits)            Copy nbits from buf to u64[] dst
->   *  bitmap_get_value8(map, start)               Get 8bit value from map at start
->   *  bitmap_set_value8(map, value, start)        Set 8bit value to map at start
->   *
-> -- 
-> 2.36.1
+        Arnd

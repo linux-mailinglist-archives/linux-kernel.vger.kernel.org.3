@@ -2,57 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF9755A04A
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A20A559FE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbiFXR1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
+        id S232504AbiFXR1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbiFXR0z (ORCPT
+        with ESMTP id S230160AbiFXR0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:26:55 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89ADDBA6;
-        Fri, 24 Jun 2022 10:26:54 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id y18so3401356iof.2;
-        Fri, 24 Jun 2022 10:26:54 -0700 (PDT)
+        Fri, 24 Jun 2022 13:26:47 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE37B15731;
+        Fri, 24 Jun 2022 10:26:43 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id p13so1958902ilq.0;
+        Fri, 24 Jun 2022 10:26:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=W9o9Q8p3oMHAVX7O1A1F5sZAeGnXCxQ/vXrDDAt7Do8=;
-        b=K9u/urnLXEihK8n9xBDGUK+3+AiBADxPbru6i8JVJS0lMyQrGgr8w6WNbRwfZFFFSq
-         4hQbqWh27mpyjP/p2GtFuTeo9yEp9MS6V8pxIQR9H2yZoXnMgXV4KlzWHj4b9l9UtlGO
-         N/4PR1jw/fJpa9g+3wbFvtCYiXm45ydR/G/3Cu3lteTxVSOxr6oQQYmrcsuYe2KdwOCp
-         IVV3SEutDZR/ZG8arGyr8K86zg0inal0H8CTwnSnfYiXdBa5Hi6b5OpbR2DLhRXnar5v
-         QsDTbaxMhfIy7u4usKNPgaCjMmUeizxq9MTzMCjDF5oQSp/aQ4ik/GXUCoKLi794DP/z
-         bvXw==
-X-Gm-Message-State: AJIora/hUVyeeyZcS5BaEIF4ggA7MJVFi8tdJVa9jazOgSeKP01DG6hg
-        axXkiiwcbPFsaaumx4YLrg==
-X-Google-Smtp-Source: AGRyM1sVEh8rq+3905/IcPFgRU7Fy1TLeRbAXiXeOp+CmyUaFz0EH/Vzb8EIUR4m9bvLyRLCKVigUw==
-X-Received: by 2002:a05:6638:31c2:b0:335:dd22:83ec with SMTP id n2-20020a05663831c200b00335dd2283ecmr164947jav.88.1656091613790;
-        Fri, 24 Jun 2022 10:26:53 -0700 (PDT)
+        bh=pG44rlutVz8or+Ka4stYxBDxJcy/zH2ZBfdoozeWmIQ=;
+        b=h0yMMxQs212+R43sXJ+SFDT8t878vKvXYnXGy0J7kq+U5bWCKjr12zuNxCUQ1NENH7
+         f4GjjLvPo6kDu+Wy5nG91pTHx09mdQc0uOQ1c9ft8JRxO1HX9pGxK0rGB6417NxgHumb
+         ZK/veQhl5D/1at20RoZdq/DdMe8dhkF3xWQlmevWcrfX7Cko9dEUjIXibYgStshCPSUZ
+         upfHbKBvsZiPrvBtSTZ/T0wfCLFlWuZg0i7wDZP12X/W4txO+LoR33mXxWI5oU1gMnaf
+         DuJSSmQY9J4ClZG2E833u/FvumlAH5iyZErdyU9MoljWtuLCdYuyLQpFv5MuyCJKmpCX
+         9P+g==
+X-Gm-Message-State: AJIora8p6MIoWPGfYdpkNaXhf+tYqHmg5XC7+VyWuO6LgSMg0lvXrzeh
+        EHLZ5BTmE6Fgma4l3F2hJQ==
+X-Google-Smtp-Source: AGRyM1sp8qJgtkAHwQ7xSchoyFjcFRtWdFDawd+7XUChsAzX5klGJTS7YDEzNpsD5lqJ/34v5mQAFg==
+X-Received: by 2002:a05:6e02:16cc:b0:2da:63c7:257e with SMTP id 12-20020a056e0216cc00b002da63c7257emr25166ilx.285.1656091602736;
+        Fri, 24 Jun 2022 10:26:42 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id h22-20020a022b16000000b00339d10e9d22sm1308243jaa.111.2022.06.24.10.26.52
+        by smtp.gmail.com with ESMTPSA id z6-20020a05660217c600b006692192baf7sm1495029iox.25.2022.06.24.10.26.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 10:26:53 -0700 (PDT)
-Received: (nullmailer pid 146332 invoked by uid 1000);
+        Fri, 24 Jun 2022 10:26:42 -0700 (PDT)
+Received: (nullmailer pid 146336 invoked by uid 1000);
         Fri, 24 Jun 2022 17:26:34 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Mikko Perttunen <cyndis@kapsi.fi>
-Cc:     devicetree@vger.kernel.org, robin.murphy@arm.com, joro@8bytes.org,
-        iommu@lists.linux-foundation.org,
-        Thierry Reding <treding@nvidia.com>, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jonathanh@nvidia.com,
-        will@kernel.org, krzysztof.kozlowski@canonical.com,
-        dri-devel@lists.freedesktop.org, thierry.reding@gmail.com
-In-Reply-To: <20220621151022.1416300-3-cyndis@kapsi.fi>
-References: <20220621151022.1416300-1-cyndis@kapsi.fi> <20220621151022.1416300-3-cyndis@kapsi.fi>
-Subject: Re: [PATCH v6 02/10] dt-bindings: display: tegra: Convert to json-schema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Kumar Gala <galak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+In-Reply-To: <20220623105401.168122-2-krzysztof.kozlowski@linaro.org>
+References: <20220623105401.168122-1-krzysztof.kozlowski@linaro.org> <20220623105401.168122-2-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4 1/3] dt-bindings: arm: qcom: document qcom,msm-id and qcom,board-id
 Date:   Fri, 24 Jun 2022 11:26:34 -0600
-Message-Id: <1656091594.348474.146331.nullmailer@robh.at.kernel.org>
+Message-Id: <1656091594.364332.146335.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -64,63 +69,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Jun 2022 18:10:14 +0300, Mikko Perttunen wrote:
-> From: Thierry Reding <treding@nvidia.com>
+On Thu, 23 Jun 2022 12:53:59 +0200, Krzysztof Kozlowski wrote:
+> The top level qcom,msm-id and qcom,board-id properties are utilized by
+> bootloaders on Qualcomm MSM platforms to determine which device tree
+> should be used and passed to the kernel.
 > 
-> Convert the Tegra host1x controller bindings from the free-form text
-> format to json-schema.
+> The commit b32e592d3c28 ("devicetree: bindings: Document qcom board
+> compatible format") from 2015 was a consensus during discussion about
+> upstreaming qcom,msm-id and qcom,board-id fields.  There are however still
+> problems with that consensus:
+> 1. It was reached 7 years ago but it turned out its implementation did
+>    not reach all possible products.
 > 
-> This also adds the missing display-hub DT bindings that were not
-> previously documented.
+> 2. Initially additional tool (dtbTool) was needed for parsing these
+>    fields to create a QCDT image consisting of multiple DTBs, later the
+>    bootloaders were improved and they use these qcom,msm-id and
+>    qcom,board-id properties directly.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> 3. Extracting relevant information from the board compatible requires
+>    this additional tool (dtbTool), which makes the build process more
+>    complicated and not easily reproducible (DTBs are modified after the
+>    kernel build).
+> 
+> 4. Some versions of Qualcomm bootloaders expect these properties even
+>    when booting with a single DTB.  The community is stuck with these
+>    bootloaders thus they require properties in the DTBs.
+> 
+> Since several upstreamed Qualcomm SoC-based boards require these
+> properties to properly boot and the properties are reportedly used by
+> bootloaders, document them.
+> 
+> Link: https://lore.kernel.org/r/a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org/
+> Co-developed-by: Kumar Gala <galak@codeaurora.org>
+> Signed-off-by: Kumar Gala <galak@codeaurora.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->  .../display/tegra/nvidia,tegra114-mipi.txt    |  41 --
->  .../display/tegra/nvidia,tegra114-mipi.yaml   |  74 ++
->  .../display/tegra/nvidia,tegra124-dpaux.yaml  | 149 ++++
->  .../display/tegra/nvidia,tegra124-sor.yaml    | 206 ++++++
->  .../display/tegra/nvidia,tegra124-vic.yaml    |  71 ++
->  .../display/tegra/nvidia,tegra186-dc.yaml     |  85 +++
->  .../tegra/nvidia,tegra186-display.yaml        | 310 ++++++++
->  .../tegra/nvidia,tegra186-dsi-padctl.yaml     |  45 ++
->  .../display/tegra/nvidia,tegra20-dc.yaml      | 181 +++++
->  .../display/tegra/nvidia,tegra20-dsi.yaml     | 159 +++++
->  .../display/tegra/nvidia,tegra20-epp.yaml     |  70 ++
->  .../display/tegra/nvidia,tegra20-gr2d.yaml    |  73 ++
->  .../display/tegra/nvidia,tegra20-gr3d.yaml    | 214 ++++++
->  .../display/tegra/nvidia,tegra20-hdmi.yaml    | 126 ++++
->  .../display/tegra/nvidia,tegra20-host1x.txt   | 675 ------------------
->  .../display/tegra/nvidia,tegra20-host1x.yaml  | 347 +++++++++
->  .../display/tegra/nvidia,tegra20-isp.yaml     |  67 ++
->  .../display/tegra/nvidia,tegra20-mpe.yaml     |  73 ++
->  .../display/tegra/nvidia,tegra20-tvo.yaml     |  58 ++
->  .../display/tegra/nvidia,tegra20-vi.yaml      | 163 +++++
->  .../display/tegra/nvidia,tegra210-csi.yaml    |  52 ++
->  .../pinctrl/nvidia,tegra124-dpaux-padctl.txt  |  59 --
->  22 files changed, 2523 insertions(+), 775 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-mipi.txt
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra114-mipi.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-dpaux.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-sor.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-vic.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dc.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-display.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra186-dsi-padctl.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dc.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-epp.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-isp.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-tvo.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/tegra/nvidia,tegra210-csi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/nvidia,tegra124-dpaux-padctl.txt
+>  .../devicetree/bindings/arm/qcom.yaml         | 121 +++++++++++++++
+>  include/dt-bindings/arm/qcom,ids.h            | 146 ++++++++++++++++++
+>  2 files changed, 267 insertions(+)
+>  create mode 100644 include/dt-bindings/arm/qcom,ids.h
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -129,31 +117,35 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-sor.yaml: allOf:1:if:not:properties: {'contains': {'const': 'nvidia,panel'}} should not be valid under {'$ref': '#/definitions/sub-schemas'}
-	hint: A json-schema keyword was found instead of a DT property name.
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/qcom.yaml: properties:qcom,board-id:items: 'oneOf' conditional failed, one must be fixed:
+	{'oneOf': [{'maxItems': 2, 'items': [{'description': 'Board ID consisting of three bitfields::\n  - bits 31-24 - Unused\n  - bits 23-16 - Platform Version Major\n  - bits 15-8  - Platform Version Minor\n  - bits 7-0   - Platform Type\nPlatform Type field is an exact match value.  The\nPlatform Major/Minor field is a best match.  The bootloader will\nlook for the closest possible match.\n'}, {'description': 'Subtype ID unique to a Platform Type/Chipset ID.  For a given\nPlatform Type, there will typically only be a single board and the\nsubtype_id will be 0.  However in some cases board variants may\nneed to be distinguished by different subtype_id values.\n'}]}, {'minItems': 4, 'items': [{'const': 8}, {'const': 0}, {'description': 'OnePlus board ID'}, {'description': 'OnePlus subtype ID'}]}]} is not of type 'array'
+	{'maxItems': 2, 'items': [{'description': 'Board ID consisting of three bitfields::\n  - bits 31-24 - Unused\n  - bits 23-16 - Platform Version Major\n  - bits 15-8  - Platform Version Minor\n  - bits 7-0   - Platform Type\nPlatform Type field is an exact match value.  The\nPlatform Major/Minor field is a best match.  The bootloader will\nlook for the closest possible match.\n'}, {'description': 'Subtype ID unique to a Platform Type/Chipset ID.  For a given\nPlatform Type, there will typically only be a single board and the\nsubtype_id will be 0.  However in some cases board variants may\nneed to be distinguished by different subtype_id values.\n'}]} should not be valid under {'required': ['maxItems']}
+		hint: "maxItems" is not needed with an "items" list
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/qcom.yaml: properties:qcom,board-id:items:oneOf:1: 'oneOf' conditional failed, one must be fixed:
+		[{'const': 8}, {'const': 0}, {'description': 'OnePlus board ID'}, {'description': 'OnePlus subtype ID'}] is too long
+		[{'const': 8}, {'const': 0}, {'description': 'OnePlus board ID'}, {'description': 'OnePlus subtype ID'}] is too short
+		False schema does not allow 4
+		1 was expected
+		4 is greater than the maximum of 2
+		4 is greater than the maximum of 3
+		hint: "minItems" is only needed if less than the "items" list length
+		from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/qcom.yaml: properties:qcom,board-id:items:oneOf:1: 'oneOf' conditional failed, one must be fixed:
+		[{'const': 8}, {'const': 0}, {'description': 'OnePlus board ID'}, {'description': 'OnePlus subtype ID'}] is too long
+		[{'const': 8}, {'const': 0}, {'description': 'OnePlus board ID'}, {'description': 'OnePlus subtype ID'}] is too short
+		False schema does not allow 4
+		1 was expected
+		4 is greater than the maximum of 2
+		4 is greater than the maximum of 3
+		hint: "minItems" is only needed if less than the "items" list length
+		from schema $id: http://devicetree.org/meta-schemas/items.yaml#
 	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-sor.yaml: ignoring, error in schema: allOf: 1: if: not: properties
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.example.dtb: gr3d@54180000: resets: [[4294967295, 24]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.example.dtb: gr3d@54180000: reset-names: ['3d'] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.example.dtb: gr2d@54140000: resets: [[4294967295, 21]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.example.dtb: gr2d@54140000: reset-names: ['2d'] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.example.dtb: gr3d@54180000: resets: [[4294967295, 24]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.example.dtb: gr3d@54180000: reset-names: ['3d'] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml
-Documentation/devicetree/bindings/display/tegra/nvidia,tegra124-sor.example.dtb:0:0: /example-0/sor@54540000: failed to match any schema with compatible: ['nvidia,tegra210-sor']
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.example.dtb: gr2d@54140000: resets: [[4294967295, 21]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.example.dtb: gr2d@54140000: reset-names: ['2d'] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/qcom.yaml: ignoring, error in schema: properties: qcom,board-id: items
+Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb:0:0: /: failed to match any schema with compatible: ['arrow,apq8096-db820c', 'qcom,apq8096-sbc', 'qcom,apq8096']
+Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb:0:0: /: failed to match any schema with compatible: ['arrow,apq8096-db820c', 'qcom,apq8096-sbc', 'qcom,apq8096']
+Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.example.dtb:0:0: /: failed to match any schema with compatible: ['arrow,apq8096-db820c', 'qcom,apq8096-sbc', 'qcom,apq8096']
 
 doc reference errors (make refcheckdocs):
-MAINTAINERS: Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
-MAINTAINERS: Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
 
 See https://patchwork.ozlabs.org/patch/
 

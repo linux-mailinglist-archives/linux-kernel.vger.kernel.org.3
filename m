@@ -2,61 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFC35599FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D1A5599FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 14:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbiFXM4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 08:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
+        id S232070AbiFXM7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 08:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiFXM43 (ORCPT
+        with ESMTP id S232021AbiFXM7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 08:56:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FAD4FC72
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:56:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19786B827FC
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 12:56:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DB73C34114;
-        Fri, 24 Jun 2022 12:56:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656075386;
-        bh=oZgB5FkUoIrYN0GL94UFDfxuPMTD6+aI5GADFEjgS6I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oG2ZzXI7n/1R/rvuGgy+nU4KYxTjAuSE2ICfmp8EfPCvBHCKkTdZl4yb68zdGao5J
-         bIcXglaownmzcAJUo5wQz1QoPq2OsmFfpWbg/CaeVD5pBXycqcGplfc2FyCuM2EJq8
-         QUl/6VClaal5aeBDtYDM22s1I1FkdHTTNYZnzAnVP4D2UJ+B1zvlYaeLhdzbmqA0ya
-         mTuST7dsAV9cXiyXjguwCQBVvvJc3cArCCBipuJX+s/Ruhv2QnD6QhKFIIDJMvSiwc
-         RrJSSC+Ai4wsKDseSAgaI+XP67OGoXnbzChtq9HhPJs0Iv+r6StFHCD5eTdvj28AsZ
-         wKqKW3NqlYFiA==
-Date:   Fri, 24 Jun 2022 13:56:22 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 01/12] regmap-irq: Convert bool bitfields to unsigned
- int
-Message-ID: <YrW0dlXWhOo+a0sf@sirena.org.uk>
-References: <20220623211420.918875-1-aidanmacdonald.0x0@gmail.com>
- <20220623211420.918875-2-aidanmacdonald.0x0@gmail.com>
- <CAHp75VfTqTfMsrdqyqRj61JAAJ4a_h3rrFriY2d+rrqpVviy=w@mail.gmail.com>
- <YrWqAqGUuy8Z0F3x@sirena.org.uk>
- <4937c0cc9dbc9d06cb626465bd37cbcf76c80a0b.camel@perches.com>
+        Fri, 24 Jun 2022 08:59:16 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9B152525
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 05:59:14 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o4itu-00076I-Du; Fri, 24 Jun 2022 14:59:06 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o4itr-002Qlj-07; Fri, 24 Jun 2022 14:59:04 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1o4itr-00H4PX-Lw; Fri, 24 Jun 2022 14:59:03 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>, UNGLinuxDriver@microchip.com
+Subject: [PATCH net-next v1 1/3] net: dsa: add get_pause_stats support
+Date:   Fri, 24 Jun 2022 14:59:00 +0200
+Message-Id: <20220624125902.4068436-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="s9R9sZfMsAeA9ZxE"
-Content-Disposition: inline
-In-Reply-To: <4937c0cc9dbc9d06cb626465bd37cbcf76c80a0b.camel@perches.com>
-X-Cookie: Help!  I'm trapped in a PDP 11/70!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,42 +59,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support for pause stats
 
---s9R9sZfMsAeA9ZxE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ include/net/dsa.h |  2 ++
+ net/dsa/slave.c   | 11 +++++++++++
+ 2 files changed, 13 insertions(+)
 
-On Fri, Jun 24, 2022 at 05:46:10AM -0700, Joe Perches wrote:
-> On Fri, 2022-06-24 at 13:11 +0100, Mark Brown wrote:
-> > On Thu, Jun 23, 2022 at 11:26:10PM +0200, Andy Shevchenko wrote:
+diff --git a/include/net/dsa.h b/include/net/dsa.h
+index 14f07275852b..c8d7696cb2bf 100644
+--- a/include/net/dsa.h
++++ b/include/net/dsa.h
+@@ -890,6 +890,8 @@ struct dsa_switch_ops {
+ 				      struct ethtool_eth_ctrl_stats *ctrl_stats);
+ 	void	(*get_stats64)(struct dsa_switch *ds, int port,
+ 				   struct rtnl_link_stats64 *s);
++	void	(*get_pause_stats)(struct dsa_switch *ds, int port,
++				   struct ethtool_pause_stats *pause_stats);
+ 	void	(*self_test)(struct dsa_switch *ds, int port,
+ 			     struct ethtool_test *etest, u64 *data);
+ 
+diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+index 2e1ac638d135..b2710ee46644 100644
+--- a/net/dsa/slave.c
++++ b/net/dsa/slave.c
+@@ -1097,6 +1097,16 @@ static int dsa_slave_set_link_ksettings(struct net_device *dev,
+ 	return phylink_ethtool_ksettings_set(dp->pl, cmd);
+ }
+ 
++static void dsa_slave_get_pause_stats(struct net_device *dev,
++				  struct ethtool_pause_stats *pause_stats)
++{
++	struct dsa_port *dp = dsa_slave_to_port(dev);
++	struct dsa_switch *ds = dp->ds;
++
++	if (ds->ops->get_pause_stats)
++		ds->ops->get_pause_stats(ds, dp->index, pause_stats);
++}
++
+ static void dsa_slave_get_pauseparam(struct net_device *dev,
+ 				     struct ethtool_pauseparam *pause)
+ {
+@@ -2087,6 +2097,7 @@ static const struct ethtool_ops dsa_slave_ethtool_ops = {
+ 	.get_eee		= dsa_slave_get_eee,
+ 	.get_link_ksettings	= dsa_slave_get_link_ksettings,
+ 	.set_link_ksettings	= dsa_slave_set_link_ksettings,
++	.get_pause_stats	= dsa_slave_get_pause_stats,
+ 	.get_pauseparam		= dsa_slave_get_pauseparam,
+ 	.set_pauseparam		= dsa_slave_set_pauseparam,
+ 	.get_rxnfc		= dsa_slave_get_rxnfc,
+-- 
+2.30.2
 
-> > > There is no point to convert the fields you are about to remove.
-> >=20
-> > > So, either don't touch them or make this patch closer to the end of t=
-he series.
-
-> > It costs us nothing to convert them, this isn't a difficult or hard to
-> > understand refactoring - the patch is fine the way it is.
-
-> Modulo the defects that might be introduced if an overflow occurs.
-
-This won't be an issue if the fields are removed which was what Andy was
-complaining about.
-
---s9R9sZfMsAeA9ZxE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK1tHUACgkQJNaLcl1U
-h9AeNQf/Wi7SpXxxRgHHg80reef4GhdJlgfwJefIGf4Soq0Sj4UloPvW9AmGxCOQ
-HQXa4OW03BmAX+7q9nSb9re+lpGmlWSwoZJx2JaJUrvKCWsOT/BZDx0958B3L4UR
-+gCm6ktBfNk50D171mV4PRUckD65qwO+QLh15gcxFSqYq1ZmMElXdFdKhXjL29Xh
-Jv6CcPrvYBqAZRc90PRD/nO5ikYobUrx9QMnRIO6KFeKMspugXk7O4ofAtOGmvv/
-jaDViIxSvxV5DF0q0MK1H5R5DxtQWCzYBfG636bXvHfu6vfrf80aInRT5cmMR6Z1
-3ujqMKEMiodj6RH9YELf1Ku1zVrGDA==
-=Cha1
------END PGP SIGNATURE-----
-
---s9R9sZfMsAeA9ZxE--

@@ -2,157 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D22559483
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C58C5594F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiFXID7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
+        id S229669AbiFXIEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 04:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiFXIDu (ORCPT
+        with ESMTP id S230320AbiFXIE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:03:50 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FB26B8FC
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:03:47 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id o18so1474495plg.2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:03:47 -0700 (PDT)
+        Fri, 24 Jun 2022 04:04:28 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894596DB12
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:04:27 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id cf14so2300858edb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:04:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=s/aQkZT/+2YcvxV9aXxlZHqNRowREfHb6F3Nptk8s7o=;
-        b=WhFGELdR/RtberGg47WTsERtwgZ9s5MslETlO9JE75M3s1+glUPLMpUnejl3c5px2D
-         5QyuxWW2zAm2YD3ZkpOsjjoxZebMTOGuO8jIDzsg5rfrM+iLKHY70KgWdB2rLoxawTtq
-         ue+RchUgEmZJ3S5t7mrddkmjodTw30lN2kFhtfiMz8qXceCH8ah+QWuxnhv3gIsiXfC4
-         AAStOBtmWtU5nXN/gJPLdsCDRCb3tZtLgmcRD9SYetXjd+bf43lHYxjKS0IfZ12BSxGq
-         Tm26xqgFKQBo5/jvvomJM3l11g7UMmFQhxKnDJnj9nqcFS738XZcvT9EyyN7kN6es61x
-         28hA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4OtMpzHKzt91qkm5V15gkjdA78bNtdhhU+jDtTaRt8Y=;
+        b=fYHxbPX9kMi6QwUH5r9LNDwsFslHQChYVUSoxHKqS/Sbczv6WsqcHg5LMjF1kCYhhr
+         vRGm0im6lsDWbXAJKv4sKfTccMFIr45np2W1U/CyUfs/1NFNwRrPMHmTUV8+SBqptfwI
+         NX8szonEbOKl/DNlTLpBRZ4aX4fWv0FNUsFEY9zvg/pct5z6R1DHQkFjrWLPq5bSwx9j
+         UyESn/oJRH4JabPxCnH7VWt/iz7En1csAUD/cV/6CtWKwuZRYZM+P4MfpkU6ONKwV7ff
+         tZU4bhM0RukM0tUnE0G+xx2tUba3uwJY3QjWMJ+gkin/6rg5N7DMYAd2Q1kBYrEFh4s2
+         k7vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=s/aQkZT/+2YcvxV9aXxlZHqNRowREfHb6F3Nptk8s7o=;
-        b=5sK0bPglaT/06qT4bq4MZ5hjMNxITnVhYQm3IW1O5K63YIT1XtPdi0syuPymbmquzJ
-         Arv5rDnZfzqnmN8RnbOBKURh+yjaVdeVvTxm7FgWtj17oVC6bM85/s7Cv1NnQpNlpYSG
-         4kadcddTtntbrYgsVV0dKAAelvuTsjnbNFfIxF9cER/2hVhUvjrOpRFSZnORfMBE8Sg6
-         ZG7xc6avlss5cxMtkhWO9SC9teVlKnOt/8s46bz59YJ5IhF3pVfQc/HH2EcYg4BOfXmL
-         w9RFpiL4m4BkMq6gsxaHXJobNP1xV9Dp37xb1DmCYfXjLL5kzAVhiJaln5Al3QG6NhhE
-         tD3g==
-X-Gm-Message-State: AJIora/tLU+gj/TZUenLN2ff/8wGrsUsOdCOl+gBTfaz9pSV7OSaEExP
-        c4LJcKz2pQIjv3AM+AtQ3oeRFQ==
-X-Google-Smtp-Source: AGRyM1tvcvz9tpwEpWJiZAV/av7x9hQWUyoitwq7CE0hDgBShRrgeY97PjrKG7XJAFAr/1witvlPXg==
-X-Received: by 2002:a17:90b:224a:b0:1ec:d128:a82d with SMTP id hk10-20020a17090b224a00b001ecd128a82dmr2643657pjb.3.1656057826594;
-        Fri, 24 Jun 2022 01:03:46 -0700 (PDT)
-Received: from localhost ([139.177.225.231])
-        by smtp.gmail.com with ESMTPSA id z29-20020a63191d000000b0040c9774b332sm927606pgl.48.2022.06.24.01.03.45
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4OtMpzHKzt91qkm5V15gkjdA78bNtdhhU+jDtTaRt8Y=;
+        b=VtfYrIdbDrojvcaFcCc71y/S3xdvSP3voQ6D77NVkU/SrR4csKxqIVD+CI6nFRgq2Y
+         DCBGnLUmwdru9OLPJH3TBkktrhG9Yk7u1l9F0u/Ba8rS94l9Sr+O9AzioRd5aQ5G3OPq
+         /dXhxNmjI1lp7mTQQxQ1BlLopUkAlHexw7TDiUkJ58ZA7RxEsL4A41X/JS0gC6IU/iN6
+         mac3Ci8Yi2vDNayI4zQO2K9F7opA8NSj7rF7SVbcuAUD1RcZxy4ZrHk9FT07p+pockGp
+         rlfMBXU9u55QYS7OBSSpIdAktNo/j3zzZVk/iKeqmsHm7qmyRMlTldWTxEWWisjdbQ+c
+         5aIA==
+X-Gm-Message-State: AJIora+8Z/YiHNH3uG6GTZjFrzuEAHBVv2GksyO5eJQZvlpxs1j14wWf
+        5Bmw7/ZvwkvgwicZ99fj+t7fBA==
+X-Google-Smtp-Source: AGRyM1vO8srbTPpU08tP7uU1GPYZF7L70IU0e2vDNGf8P3wJz+25K67GBLB56/dBsIiBV+Kf80UloQ==
+X-Received: by 2002:a05:6402:254c:b0:435:c541:fc8d with SMTP id l12-20020a056402254c00b00435c541fc8dmr10378580edb.385.1656057866189;
+        Fri, 24 Jun 2022 01:04:26 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d6-20020a170906174600b00715705dd23asm684580eje.89.2022.06.24.01.04.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 01:03:46 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 16:03:42 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Naoya Horiguchi <nao.horiguchi@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH v2 1/9] mm/hugetlb: remove checking hstate_is_gigantic()
- in return_unused_surplus_pages()
-Message-ID: <YrVv3gKMxbu/dwCs@FVFYT0MHHV2J.usts.net>
-References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
- <20220623235153.2623702-2-naoya.horiguchi@linux.dev>
- <0b69e3ef-0123-4575-b68d-4d9b2067aa0e@huawei.com>
+        Fri, 24 Jun 2022 01:04:25 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL fixes] ARM: samsung: fixes for v5.19
+Date:   Fri, 24 Jun 2022 10:04:23 +0200
+Message-Id: <20220624080423.31427-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0b69e3ef-0123-4575-b68d-4d9b2067aa0e@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 10:25:48AM +0800, Miaohe Lin wrote:
-> On 2022/6/24 7:51, Naoya Horiguchi wrote:
-> > From: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> > 
-> > I found a weird state of 1GB hugepage pool, caused by the following
-> > procedure:
-> > 
-> >   - run a process reserving all free 1GB hugepages,
-> >   - shrink free 1GB hugepage pool to zero (i.e. writing 0 to
-> >     /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages), then
-> >   - kill the reserving process.
-> > 
-> > , then all the hugepages are free *and* surplus at the same time.
-> > 
-> >   $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
-> >   3
-> >   $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/free_hugepages
-> >   3
-> >   $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/resv_hugepages
-> >   0
-> >   $ cat /sys/kernel/mm/hugepages/hugepages-1048576kB/surplus_hugepages
-> >   3
-> > 
-> > This state is resolved by reserving and allocating the pages then
-> > freeing them again, so this seems not to result in serious problem.
-> > But it's a little surprizing (shrinking pool suddenly fails).
-> > 
-> > This behavior is caused by hstate_is_gigantic() check in
-> > return_unused_surplus_pages(). This was introduced so long ago in 2008
-> > by commit aa888a74977a ("hugetlb: support larger than MAX_ORDER"), and
-> > it seems to me that this check is no longer unnecessary. Let's remove it.
-> 
-> s/unnecessary/necessary/
-> 
-> > 
-> > Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> > ---
-> >  mm/hugetlb.c | 4 ----
-> >  1 file changed, 4 deletions(-)
-> > 
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index a57e1be41401..c538278170a2 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -2432,10 +2432,6 @@ static void return_unused_surplus_pages(struct hstate *h,
-> >  	/* Uncommit the reservation */
-> >  	h->resv_huge_pages -= unused_resv_pages;
-> >  
-> > -	/* Cannot return gigantic pages currently */
-> > -	if (hstate_is_gigantic(h))
-> > -		goto out;
-> > -
-> 
-> IIUC it might be better to do the below check:
-> 	/*
-> 	 * Cannot return gigantic pages currently if runtime gigantic page
-> 	 * allocation is not supported.
-> 	 */
-> 	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
-> 		goto out;
->
+Hi,
 
-The change looks good to me. However, the comments above is unnecessary
-since gigantic_page_runtime_supported() is straightforward.
+Two fixes for v5.19.
 
-Thanks.
- 
-> But I might be miss something.
-> 
-> Thanks.
-> 
-> >  	/*
-> >  	 * Part (or even all) of the reservation could have been backed
-> >  	 * by pre-allocated pages. Only free surplus pages.
-> > 
-> 
-> 
+Best regards,
+Krzysztof
+
+
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-fixes-5.19
+
+for you to fetch changes up to c4c79525042a4a7df96b73477feaf232fe44ae81:
+
+  ARM: exynos: Fix refcount leak in exynos_map_pmu (2022-06-06 10:40:57 +0200)
+
+----------------------------------------------------------------
+Samsung fixes for v5.19
+
+Both fixes are for issues present before v5.19 merge window:
+1. Correct UART clocks on Exynos7885.  Although the initial, fixed
+   DTS commit is from v5.18, the issue will be exposed with a upcoming fix
+   to Exynos7885 clock driver, so we need to correct the DTS earlier.
+2. Fix theoretical OF node leak in Exynos machine code.
+
+----------------------------------------------------------------
+David Virag (1):
+      arm64: dts: exynos: Correct UART clocks on Exynos7885
+
+Miaoqian Lin (1):
+      ARM: exynos: Fix refcount leak in exynos_map_pmu
+
+ arch/arm/mach-exynos/exynos.c              |  1 +
+ arch/arm64/boot/dts/exynos/exynos7885.dtsi | 12 ++++++------
+ 2 files changed, 7 insertions(+), 6 deletions(-)

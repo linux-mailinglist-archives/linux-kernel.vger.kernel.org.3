@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C33C55A055
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7094559FEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 20:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbiFXRi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 13:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
+        id S232296AbiFXRjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 13:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbiFXRhj (ORCPT
+        with ESMTP id S232163AbiFXRhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 13:37:39 -0400
-Received: from mail-vk1-xa4a.google.com (mail-vk1-xa4a.google.com [IPv6:2607:f8b0:4864:20::a4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBA7609EF
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:37 -0700 (PDT)
-Received: by mail-vk1-xa4a.google.com with SMTP id p185-20020a1fd8c2000000b0036c453f2ea4so918259vkg.18
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:37 -0700 (PDT)
+        Fri, 24 Jun 2022 13:37:48 -0400
+Received: from mail-ua1-x949.google.com (mail-ua1-x949.google.com [IPv6:2607:f8b0:4864:20::949])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8445869FA5
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:38 -0700 (PDT)
+Received: by mail-ua1-x949.google.com with SMTP id j15-20020ab0644f000000b00368bac468ceso1007918uap.17
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 10:37:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=BEnHzeA8IqLcgv72Sg9jh80/umPdhd6MjUiQ8hqfSFI=;
-        b=GdzVxrX7wkYjgErfDdqCIkYSvWPbbIDKSxW5Wzna9kLimEZLIF7v/kjfzJ0/MJJI8C
-         Nan7vqP8mjs7qbiftpzOotx0G0VhhFdl+a3xoAwOSm1ekZLV4zffUeKakFvQsIpRI1Zt
-         tqdgg1fUIcbUxn4sKjY6xnWu7yiFtN8U8XUowuMeteG3pczq9XwOEfTu1w4q9aFihIch
-         Gea+lKdHnWOnA7lB1uuW7+Uv8ZFug+g0pv2kbNnErXzZs6E84L9Efj3yIVwEZKkFg8tY
-         dzRXPhe7pxjxGRQKU8w+ukahEWnGGDq1tUSkIQMfu89Z2YI4CkLnSQBu54xqTuD+UzJw
-         axPA==
+        bh=eidAN3wZMLr6mteQRN/ZtvQWu3ENTPRsJrFQKIye6Xw=;
+        b=ifSq4WGIJ2MCNV5i5c6CLm1k1Z7n2P0GnMgBr+kmdUIdSKCtXRvtwj81oWCo0YoMrQ
+         IcDr8n7yQfUrrSxAkN1YXwEqM5IfWAKR1PNsnVeRNVm2rrNwgsnyKXFCZPsKFz18eJJi
+         AjC4fr/5aG8LaYEcmLNbETyNpFrp12C+EhOfYQCwYxaqx8OG+RRnBg3h+rYInBsaXiGS
+         KRXgjFMiQk5PwqNRHbBuU728wz+WYRDzZh3FNG4M1JnAhfkHDi44T6MgrmY0SGp9Cbs2
+         7hO2DcqZyx877IoqKOW+5z0GVcwNVXUbeq0rR28lZa597DKuk/BcTnZ/dqDW4zwXaf5J
+         ajig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=BEnHzeA8IqLcgv72Sg9jh80/umPdhd6MjUiQ8hqfSFI=;
-        b=zswNRVVii+Ivh856yVvn3FXk7aHAeHn+zRNgwzIfxc2WH7pxKDZ90DnbPJG6X87rZ7
-         QMAresIAVgX8mPFyqnBm+ImGk9qN4oMhilEdxlH1ZGqsxHHcgI4uPK6brTccivBkHXrF
-         pX0/FgHUNTwapYGytYkZp2S2r3f8IJY+5PdqwqsdI2PGm+vxp1zO23qrqEuIz6WQsull
-         +RZgddL2Nz95IUqIW5/XNzmB9f8SghQBkPhNlRvxw9JsfWmM3KhwFgmkElce0mJnm5E6
-         TqAkN7RmhbjB6MwEMe/JSXnbhIxs6N5F/5IILkbTo/v9A5YR6DjbByKVyf7QwS6Q7l6Q
-         OZUA==
-X-Gm-Message-State: AJIora/aWDEezu47cZCrRm8ulVED4msV3qdiyVkzD24BxOaklZNRppr3
-        K6wL36J+WRKpdJVPhi2KU9KGLSz5MM3H2wfk
-X-Google-Smtp-Source: AGRyM1uf1g766JLfRQ4yT/c5CHXe9SFwBo1833UUdGMaiNufztGVkND1yyG58uFyUB+Rm94Hkh8sbhU0SS7vep8r
+        bh=eidAN3wZMLr6mteQRN/ZtvQWu3ENTPRsJrFQKIye6Xw=;
+        b=ESkuC3L3Uyaz2YVYZczuDq5ZkTxXVEMK+AhpzX+W3zUSwfg964vnasycVdliqsLP6o
+         YWvvC3AHe5zsKS64ge75Cqra7Zoi+I0OaixNtKJSbauxi1Q7UDrXd1fNTApKF2ZAl4nf
+         H6NW7ZcD4rSCy3pM6nEaU5T0O19yLdHOL+bovl7J/Nn40d3MP73IaC/Ss+kKM1rxV+KU
+         Ri1jT7Ekl1hbeiyOXPGtSkQM9wQ2Uo0BTtcdZxoK4j4rUkjZNzQcDfAOUysZ3KpqmcXh
+         fabRy/IUw4PNSjRz6zqZMCJKi8vrLP+cRLj71/tb7f/QVXW2ZFTVE6Omt4Sj4Gqxx/Rw
+         pPeA==
+X-Gm-Message-State: AJIora8jIq9+FQu+ZbqzHUCNYUdpRNpD7XLAfxzt3eKxl7zz6c/WrkTU
+        FN1kBmLnzxOY2KE/ztwX5yi9PEZidimLMxbY
+X-Google-Smtp-Source: AGRyM1vWVTZJ5pVWjn7x2PEWVIBLimy1j0CTpYliO/gy+6d80cSvRPXbRG7kYQht6u2HA8oY0zQFqOyEJ9POXahm
 X-Received: from jthoughton.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:2a4f])
- (user=jthoughton job=sendgmr) by 2002:a1f:3456:0:b0:368:ca4e:1bd1 with SMTP
- id b83-20020a1f3456000000b00368ca4e1bd1mr4581vka.36.1656092256495; Fri, 24
- Jun 2022 10:37:36 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 17:36:49 +0000
+ (user=jthoughton job=sendgmr) by 2002:a67:5c41:0:b0:356:20ab:2f29 with SMTP
+ id q62-20020a675c41000000b0035620ab2f29mr1454923vsb.63.1656092257795; Fri, 24
+ Jun 2022 10:37:37 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 17:36:50 +0000
 In-Reply-To: <20220624173656.2033256-1-jthoughton@google.com>
-Message-Id: <20220624173656.2033256-20-jthoughton@google.com>
+Message-Id: <20220624173656.2033256-21-jthoughton@google.com>
 Mime-Version: 1.0
 References: <20220624173656.2033256-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [RFC PATCH 19/26] hugetlb: add HGM support for copy_hugetlb_page_range
+Subject: [RFC PATCH 20/26] hugetlb: add support for high-granularity UFFDIO_CONTINUE
 From:   James Houghton <jthoughton@google.com>
 To:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -77,183 +77,351 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows fork() to work with high-granularity mappings. The page
-table structure is copied such that partially mapped regions will remain
-partially mapped in the same way for the new process.
+The changes here are very similar to the changes made to
+hugetlb_no_page, where we do a high-granularity page table walk and
+do accounting slightly differently because we are mapping only a piece
+of a page.
 
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- mm/hugetlb.c | 74 +++++++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 59 insertions(+), 15 deletions(-)
+ fs/userfaultfd.c        |  3 +++
+ include/linux/hugetlb.h |  6 +++--
+ mm/hugetlb.c            | 54 +++++++++++++++++++++-----------------
+ mm/userfaultfd.c        | 57 +++++++++++++++++++++++++++++++----------
+ 4 files changed, 82 insertions(+), 38 deletions(-)
 
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index e943370107d0..77c1b8a7d0b9 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -245,6 +245,9 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
+ 	if (!ptep)
+ 		goto out;
+ 
++	if (hugetlb_hgm_enabled(vma))
++		goto out;
++
+ 	ret = false;
+ 	pte = huge_ptep_get(ptep);
+ 
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index ac4ac8fbd901..c207b1ac6195 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -221,13 +221,15 @@ unsigned long hugetlb_total_pages(void);
+ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 			unsigned long address, unsigned int flags);
+ #ifdef CONFIG_USERFAULTFD
+-int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm, pte_t *dst_pte,
++int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
++				struct hugetlb_pte *dst_hpte,
+ 				struct vm_area_struct *dst_vma,
+ 				unsigned long dst_addr,
+ 				unsigned long src_addr,
+ 				enum mcopy_atomic_mode mode,
+ 				struct page **pagep,
+-				bool wp_copy);
++				bool wp_copy,
++				bool new_mapping);
+ #endif /* CONFIG_USERFAULTFD */
+ bool hugetlb_reserve_pages(struct inode *inode, long from, long to,
+ 						struct vm_area_struct *vma,
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index aadfcee947cf..0ec2f231524e 100644
+index 0ec2f231524e..09fa57599233 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -4851,7 +4851,8 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 			    struct vm_area_struct *src_vma)
+@@ -5808,6 +5808,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 		vma_end_reservation(h, vma, haddr);
+ 	}
+ 
++	/* This lock will get pretty expensive at 4K. */
+ 	ptl = hugetlb_pte_lock(mm, hpte);
+ 	ret = 0;
+ 	/* If pte changed from under us, retry */
+@@ -6098,24 +6099,26 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+  * modifications for huge pages.
+  */
+ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+-			    pte_t *dst_pte,
++			    struct hugetlb_pte *dst_hpte,
+ 			    struct vm_area_struct *dst_vma,
+ 			    unsigned long dst_addr,
+ 			    unsigned long src_addr,
+ 			    enum mcopy_atomic_mode mode,
+ 			    struct page **pagep,
+-			    bool wp_copy)
++			    bool wp_copy,
++			    bool new_mapping)
  {
- 	pte_t *src_pte, *dst_pte, entry, dst_entry;
--	struct page *ptepage;
-+	struct hugetlb_pte src_hpte, dst_hpte;
-+	struct page *ptepage, *hpage;
- 	unsigned long addr;
- 	bool cow = is_cow_mapping(src_vma->vm_flags);
- 	struct hstate *h = hstate_vma(src_vma);
-@@ -4878,17 +4879,44 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 		i_mmap_lock_read(mapping);
- 	}
+ 	bool is_continue = (mode == MCOPY_ATOMIC_CONTINUE);
+ 	struct hstate *h = hstate_vma(dst_vma);
+ 	struct address_space *mapping = dst_vma->vm_file->f_mapping;
++	unsigned long haddr = dst_addr & huge_page_mask(h);
+ 	pgoff_t idx = vma_hugecache_offset(h, dst_vma, dst_addr);
+ 	unsigned long size;
+ 	int vm_shared = dst_vma->vm_flags & VM_SHARED;
+ 	pte_t _dst_pte;
+ 	spinlock_t *ptl;
+ 	int ret = -ENOMEM;
+-	struct page *page;
++	struct page *page, *subpage;
+ 	int writable;
+ 	bool page_in_pagecache = false;
  
--	for (addr = src_vma->vm_start; addr < src_vma->vm_end; addr += sz) {
-+	addr = src_vma->vm_start;
-+	while (addr < src_vma->vm_end) {
- 		spinlock_t *src_ptl, *dst_ptl;
-+		unsigned long hpte_sz;
- 		src_pte = huge_pte_offset(src, addr, sz);
--		if (!src_pte)
-+		if (!src_pte) {
-+			addr += sz;
- 			continue;
-+		}
- 		dst_pte = huge_pte_alloc(dst, dst_vma, addr, sz);
- 		if (!dst_pte) {
- 			ret = -ENOMEM;
- 			break;
- 		}
- 
-+		hugetlb_pte_populate(&src_hpte, src_pte, huge_page_shift(h));
-+		hugetlb_pte_populate(&dst_hpte, dst_pte, huge_page_shift(h));
-+
-+		if (hugetlb_hgm_enabled(src_vma)) {
-+			BUG_ON(!hugetlb_hgm_enabled(dst_vma));
-+			ret = hugetlb_walk_to(src, &src_hpte, addr,
-+					      PAGE_SIZE, /*stop_at_none=*/true);
-+			if (ret)
-+				break;
-+			ret = huge_pte_alloc_high_granularity(
-+					&dst_hpte, dst, dst_vma, addr,
-+					hugetlb_pte_shift(&src_hpte),
-+					HUGETLB_SPLIT_NONE,
-+					/*write_locked=*/false);
-+			if (ret)
-+				break;
-+
-+			src_pte = src_hpte.ptep;
-+			dst_pte = dst_hpte.ptep;
-+		}
-+
-+		hpte_sz = hugetlb_pte_size(&src_hpte);
-+
- 		/*
- 		 * If the pagetables are shared don't copy or take references.
- 		 * dst_pte == src_pte is the common case of src/dest sharing.
-@@ -4899,16 +4927,19 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 		 * after taking the lock below.
+@@ -6130,12 +6133,12 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 		 * a non-missing case. Return -EEXIST.
  		 */
- 		dst_entry = huge_ptep_get(dst_pte);
--		if ((dst_pte == src_pte) || !huge_pte_none(dst_entry))
-+		if ((dst_pte == src_pte) || !hugetlb_pte_none(&dst_hpte)) {
-+			addr += hugetlb_pte_size(&src_hpte);
- 			continue;
-+		}
- 
--		dst_ptl = huge_pte_lock(h, dst, dst_pte);
--		src_ptl = huge_pte_lockptr(huge_page_shift(h), src, src_pte);
-+		dst_ptl = hugetlb_pte_lock(dst, &dst_hpte);
-+		src_ptl = hugetlb_pte_lockptr(src, &src_hpte);
- 		spin_lock_nested(src_ptl, SINGLE_DEPTH_NESTING);
- 		entry = huge_ptep_get(src_pte);
- 		dst_entry = huge_ptep_get(dst_pte);
- again:
--		if (huge_pte_none(entry) || !huge_pte_none(dst_entry)) {
-+		if (hugetlb_pte_none(&src_hpte) ||
-+		    !hugetlb_pte_none(&dst_hpte)) {
- 			/*
- 			 * Skip if src entry none.  Also, skip in the
- 			 * unlikely case dst entry !none as this implies
-@@ -4931,11 +4962,12 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 				if (userfaultfd_wp(src_vma) && uffd_wp)
- 					entry = huge_pte_mkuffd_wp(entry);
- 				set_huge_swap_pte_at(src, addr, src_pte,
--						     entry, sz);
-+						     entry, hpte_sz);
- 			}
- 			if (!userfaultfd_wp(dst_vma) && uffd_wp)
- 				entry = huge_pte_clear_uffd_wp(entry);
--			set_huge_swap_pte_at(dst, addr, dst_pte, entry, sz);
-+			set_huge_swap_pte_at(dst, addr, dst_pte, entry,
-+					     hpte_sz);
- 		} else if (unlikely(is_pte_marker(entry))) {
- 			/*
- 			 * We copy the pte marker only if the dst vma has
-@@ -4946,7 +4978,8 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 		} else {
- 			entry = huge_ptep_get(src_pte);
- 			ptepage = pte_page(entry);
--			get_page(ptepage);
-+			hpage = compound_head(ptepage);
-+			get_page(hpage);
- 
- 			/*
- 			 * Failing to duplicate the anon rmap is a rare case
-@@ -4959,9 +4992,16 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 			 * sleep during the process.
- 			 */
- 			if (!PageAnon(ptepage)) {
--				page_dup_file_rmap(ptepage, true);
-+				/* Only dup_rmap once for a page */
-+				if (IS_ALIGNED(addr, sz))
-+					page_dup_file_rmap(hpage, true);
- 			} else if (page_try_dup_anon_rmap(ptepage, true,
- 							  src_vma)) {
-+				if (hugetlb_hgm_enabled(src_vma)) {
-+					ret = -EINVAL;
-+					break;
-+				}
-+				BUG_ON(!IS_ALIGNED(addr, hugetlb_pte_size(&src_hpte)));
- 				pte_t src_pte_old = entry;
- 				struct page *new;
- 
-@@ -4970,13 +5010,13 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 				/* Do not use reserve as it's private owned */
- 				new = alloc_huge_page(dst_vma, addr, 1);
- 				if (IS_ERR(new)) {
--					put_page(ptepage);
-+					put_page(hpage);
- 					ret = PTR_ERR(new);
- 					break;
- 				}
--				copy_user_huge_page(new, ptepage, addr, dst_vma,
-+				copy_user_huge_page(new, hpage, addr, dst_vma,
- 						    npages);
--				put_page(ptepage);
-+				put_page(hpage);
- 
- 				/* Install the new huge page if src pte stable */
- 				dst_ptl = huge_pte_lock(h, dst, dst_pte);
-@@ -4994,6 +5034,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 				hugetlb_install_page(dst_vma, dst_pte, addr, new);
- 				spin_unlock(src_ptl);
- 				spin_unlock(dst_ptl);
-+				addr += hugetlb_pte_size(&src_hpte);
- 				continue;
- 			}
- 
-@@ -5010,10 +5051,13 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 			}
- 
- 			set_huge_pte_at(dst, addr, dst_pte, entry);
--			hugetlb_count_add(npages, dst);
-+			hugetlb_count_add(
-+					hugetlb_pte_size(&dst_hpte) / PAGE_SIZE,
-+					dst);
+ 		if (vm_shared &&
+-		    hugetlbfs_pagecache_present(h, dst_vma, dst_addr)) {
++		    hugetlbfs_pagecache_present(h, dst_vma, haddr)) {
+ 			ret = -EEXIST;
+ 			goto out;
  		}
- 		spin_unlock(src_ptl);
- 		spin_unlock(dst_ptl);
-+		addr += hugetlb_pte_size(&src_hpte);
+ 
+-		page = alloc_huge_page(dst_vma, dst_addr, 0);
++		page = alloc_huge_page(dst_vma, haddr, 0);
+ 		if (IS_ERR(page)) {
+ 			ret = -ENOMEM;
+ 			goto out;
+@@ -6151,13 +6154,13 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 			/* Free the allocated page which may have
+ 			 * consumed a reservation.
+ 			 */
+-			restore_reserve_on_error(h, dst_vma, dst_addr, page);
++			restore_reserve_on_error(h, dst_vma, haddr, page);
+ 			put_page(page);
+ 
+ 			/* Allocate a temporary page to hold the copied
+ 			 * contents.
+ 			 */
+-			page = alloc_huge_page_vma(h, dst_vma, dst_addr);
++			page = alloc_huge_page_vma(h, dst_vma, haddr);
+ 			if (!page) {
+ 				ret = -ENOMEM;
+ 				goto out;
+@@ -6171,14 +6174,14 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 		}
+ 	} else {
+ 		if (vm_shared &&
+-		    hugetlbfs_pagecache_present(h, dst_vma, dst_addr)) {
++		    hugetlbfs_pagecache_present(h, dst_vma, haddr)) {
+ 			put_page(*pagep);
+ 			ret = -EEXIST;
+ 			*pagep = NULL;
+ 			goto out;
+ 		}
+ 
+-		page = alloc_huge_page(dst_vma, dst_addr, 0);
++		page = alloc_huge_page(dst_vma, haddr, 0);
+ 		if (IS_ERR(page)) {
+ 			ret = -ENOMEM;
+ 			*pagep = NULL;
+@@ -6216,8 +6219,7 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 		page_in_pagecache = true;
  	}
  
- 	if (cow) {
+-	ptl = huge_pte_lockptr(huge_page_shift(h), dst_mm, dst_pte);
+-	spin_lock(ptl);
++	ptl = hugetlb_pte_lock(dst_mm, dst_hpte);
+ 
+ 	/*
+ 	 * Recheck the i_size after holding PT lock to make sure not
+@@ -6239,14 +6241,16 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 	 * registered, we firstly wr-protect a none pte which has no page cache
+ 	 * page backing it, then access the page.
+ 	 */
+-	if (!huge_pte_none_mostly(huge_ptep_get(dst_pte)))
++	if (!hugetlb_pte_none_mostly(dst_hpte))
+ 		goto out_release_unlock;
+ 
+-	if (vm_shared) {
+-		page_dup_file_rmap(page, true);
+-	} else {
+-		ClearHPageRestoreReserve(page);
+-		hugepage_add_new_anon_rmap(page, dst_vma, dst_addr);
++	if (new_mapping) {
++		if (vm_shared) {
++			page_dup_file_rmap(page, true);
++		} else {
++			ClearHPageRestoreReserve(page);
++			hugepage_add_new_anon_rmap(page, dst_vma, haddr);
++		}
+ 	}
+ 
+ 	/*
+@@ -6258,7 +6262,11 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 	else
+ 		writable = dst_vma->vm_flags & VM_WRITE;
+ 
+-	_dst_pte = make_huge_pte(dst_vma, page, writable);
++	subpage = hugetlb_find_subpage(h, page, dst_addr);
++	if (subpage != page)
++		BUG_ON(!hugetlb_hgm_enabled(dst_vma));
++
++	_dst_pte = make_huge_pte(dst_vma, subpage, writable);
+ 	/*
+ 	 * Always mark UFFDIO_COPY page dirty; note that this may not be
+ 	 * extremely important for hugetlbfs for now since swapping is not
+@@ -6271,14 +6279,14 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 	if (wp_copy)
+ 		_dst_pte = huge_pte_mkuffd_wp(_dst_pte);
+ 
+-	set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
++	set_huge_pte_at(dst_mm, dst_addr, dst_hpte->ptep, _dst_pte);
+ 
+-	(void)huge_ptep_set_access_flags(dst_vma, dst_addr, dst_pte, _dst_pte,
+-					dst_vma->vm_flags & VM_WRITE);
+-	hugetlb_count_add(pages_per_huge_page(h), dst_mm);
++	(void)huge_ptep_set_access_flags(dst_vma, dst_addr, dst_hpte->ptep,
++			_dst_pte, dst_vma->vm_flags & VM_WRITE);
++	hugetlb_count_add(hugetlb_pte_size(dst_hpte) / PAGE_SIZE, dst_mm);
+ 
+ 	/* No need to invalidate - it was non-present before */
+-	update_mmu_cache(dst_vma, dst_addr, dst_pte);
++	update_mmu_cache(dst_vma, dst_addr, dst_hpte->ptep);
+ 
+ 	spin_unlock(ptl);
+ 	if (!is_continue)
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 4f4892a5f767..ee40d98068bf 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -310,14 +310,16 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ {
+ 	int vm_shared = dst_vma->vm_flags & VM_SHARED;
+ 	ssize_t err;
+-	pte_t *dst_pte;
+ 	unsigned long src_addr, dst_addr;
+ 	long copied;
+ 	struct page *page;
+-	unsigned long vma_hpagesize;
++	unsigned long vma_hpagesize, vma_altpagesize;
+ 	pgoff_t idx;
+ 	u32 hash;
+ 	struct address_space *mapping;
++	bool use_hgm = hugetlb_hgm_enabled(dst_vma) &&
++		mode == MCOPY_ATOMIC_CONTINUE;
++	struct hstate *h = hstate_vma(dst_vma);
+ 
+ 	/*
+ 	 * There is no default zero huge page for all huge page sizes as
+@@ -335,12 +337,16 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 	copied = 0;
+ 	page = NULL;
+ 	vma_hpagesize = vma_kernel_pagesize(dst_vma);
++	if (use_hgm)
++		vma_altpagesize = PAGE_SIZE;
++	else
++		vma_altpagesize = vma_hpagesize;
+ 
+ 	/*
+ 	 * Validate alignment based on huge page size
+ 	 */
+ 	err = -EINVAL;
+-	if (dst_start & (vma_hpagesize - 1) || len & (vma_hpagesize - 1))
++	if (dst_start & (vma_altpagesize - 1) || len & (vma_altpagesize - 1))
+ 		goto out_unlock;
+ 
+ retry:
+@@ -361,6 +367,8 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 		vm_shared = dst_vma->vm_flags & VM_SHARED;
+ 	}
+ 
++	BUG_ON(!vm_shared && use_hgm);
++
+ 	/*
+ 	 * If not shared, ensure the dst_vma has a anon_vma.
+ 	 */
+@@ -371,11 +379,13 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 	}
+ 
+ 	while (src_addr < src_start + len) {
++		struct hugetlb_pte hpte;
++		bool new_mapping;
+ 		BUG_ON(dst_addr >= dst_start + len);
+ 
+ 		/*
+ 		 * Serialize via i_mmap_rwsem and hugetlb_fault_mutex.
+-		 * i_mmap_rwsem ensures the dst_pte remains valid even
++		 * i_mmap_rwsem ensures the hpte.ptep remains valid even
+ 		 * in the case of shared pmds.  fault mutex prevents
+ 		 * races with other faulting threads.
+ 		 */
+@@ -383,27 +393,47 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 		i_mmap_lock_read(mapping);
+ 		idx = linear_page_index(dst_vma, dst_addr);
+ 		hash = hugetlb_fault_mutex_hash(mapping, idx);
++		/* This lock will get expensive at 4K. */
+ 		mutex_lock(&hugetlb_fault_mutex_table[hash]);
+ 
+-		err = -ENOMEM;
+-		dst_pte = huge_pte_alloc(dst_mm, dst_vma, dst_addr, vma_hpagesize);
+-		if (!dst_pte) {
++		err = 0;
++
++		pte_t *ptep = huge_pte_alloc(dst_mm, dst_vma, dst_addr,
++					     vma_hpagesize);
++		if (!ptep)
++			err = -ENOMEM;
++		else {
++			hugetlb_pte_populate(&hpte, ptep,
++					huge_page_shift(h));
++			/*
++			 * If the hstate-level PTE is not none, then a mapping
++			 * was previously established.
++			 * The per-hpage mutex prevents double-counting.
++			 */
++			new_mapping = hugetlb_pte_none(&hpte);
++			if (use_hgm)
++				err = hugetlb_alloc_largest_pte(&hpte, dst_mm, dst_vma,
++								dst_addr,
++								dst_start + len);
++		}
++
++		if (err) {
+ 			mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+ 			i_mmap_unlock_read(mapping);
+ 			goto out_unlock;
+ 		}
+ 
+ 		if (mode != MCOPY_ATOMIC_CONTINUE &&
+-		    !huge_pte_none_mostly(huge_ptep_get(dst_pte))) {
++		    !hugetlb_pte_none_mostly(&hpte)) {
+ 			err = -EEXIST;
+ 			mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+ 			i_mmap_unlock_read(mapping);
+ 			goto out_unlock;
+ 		}
+ 
+-		err = hugetlb_mcopy_atomic_pte(dst_mm, dst_pte, dst_vma,
++		err = hugetlb_mcopy_atomic_pte(dst_mm, &hpte, dst_vma,
+ 					       dst_addr, src_addr, mode, &page,
+-					       wp_copy);
++					       wp_copy, new_mapping);
+ 
+ 		mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+ 		i_mmap_unlock_read(mapping);
+@@ -413,6 +443,7 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 		if (unlikely(err == -ENOENT)) {
+ 			mmap_read_unlock(dst_mm);
+ 			BUG_ON(!page);
++			BUG_ON(hpte.shift != huge_page_shift(h));
+ 
+ 			err = copy_huge_page_from_user(page,
+ 						(const void __user *)src_addr,
+@@ -430,9 +461,9 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
+ 			BUG_ON(page);
+ 
+ 		if (!err) {
+-			dst_addr += vma_hpagesize;
+-			src_addr += vma_hpagesize;
+-			copied += vma_hpagesize;
++			dst_addr += hugetlb_pte_size(&hpte);
++			src_addr += hugetlb_pte_size(&hpte);
++			copied += hugetlb_pte_size(&hpte);
+ 
+ 			if (fatal_signal_pending(current))
+ 				err = -EINTR;
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 

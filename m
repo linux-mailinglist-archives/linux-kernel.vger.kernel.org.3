@@ -2,63 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75AB4559546
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C6B559556
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 10:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiFXIWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 04:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S230222AbiFXIXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 04:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiFXIWv (ORCPT
+        with ESMTP id S229728AbiFXIXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 04:22:51 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E66F6F798
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:22:50 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3177f4ce3e2so17642397b3.5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 01:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YYavTSJXzFboA12o1aNqK0Bgv6HNDxoV1o12UwGCEiE=;
-        b=uESqRE1SxN4Jbk1e+RGoElruHmMUOFO8NXK/Lko5vIW8BeMSdDfIU3eZmgRlWVioaq
-         gagdoIdU0pHlN3wywBLtzlWPdgJ8fsLyyNus8s2EoF0YYTXv9gAD5RtVH7Coio33vH+i
-         dLGTugGLEY6Svxu4CCWOPrB/6jnYt7ixOKAAxRnYSLvvTJJC5li89RIUg7ps3IU9IyC1
-         hoycvrG9jlZvL+J6GDMSrJ51R8vm2M3PrPurq8yOvMBi0iC/f4DUJiOmMpWaSrhaYG4H
-         JxfwjUUWVk0wplShsQ2LzujtCja85gsNXrtgnvnYpXZVFvn1NnjvzO37ds1bZ0WbzPtG
-         tfnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YYavTSJXzFboA12o1aNqK0Bgv6HNDxoV1o12UwGCEiE=;
-        b=BPnCyNWOSzWQ53PXxYu4rPjVVjYs3sZEQky6MkcwZK5DpX4qyWhF9rESnYD9uFw5j4
-         iLUmKZ45n3q/F1G7VrFuj9OUApj49c52QcecORS9aZ0ECbXMoNtIYd9lwsUa1Y+gcZb/
-         Xo5hmh6Yf8bRRlQBuIQCTOAoPNMPrZpl7YufyDzrdkroBNKKwFoiZR+JMbdO9kajJIB4
-         IcIE3GwGwha5D62fYDsJ8/R6uT9FGoemQEIMj2Won8aBd5njvbb+pXFdjn0mkJNsw9+k
-         l5Rc61/3nYPUac35JKSO+8iKDQV1s1Hl5gmjf+SwDhmJ9tpnDsilJUK54aO3h9dHDco8
-         mbnA==
-X-Gm-Message-State: AJIora8UAnheSZ9xP6xuzkAu4URJ7+1V4aJ/q9Y4dyxQX1LFWm/KqfrQ
-        QjNG5er6JwqGlwNZqkHzLoQmHL65WNn3LKFcUtdSAg==
-X-Google-Smtp-Source: AGRyM1s89liEcGvSgNisA5MFGA+M/Col76feL0scmL8S48V5UjieiuwlluuvIIuf8J2NNtTy6+kbwv4Lwf2gFz8CX1I=
-X-Received: by 2002:a81:6357:0:b0:30f:dbe5:b8ff with SMTP id
- x84-20020a816357000000b0030fdbe5b8ffmr15440103ywb.67.1656058969618; Fri, 24
- Jun 2022 01:22:49 -0700 (PDT)
+        Fri, 24 Jun 2022 04:23:45 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8F26E7AE;
+        Fri, 24 Jun 2022 01:23:44 -0700 (PDT)
+X-UUID: b2af7c6d25b74b6488e81bda73749612-20220624
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:a81aaf1c-c69c-4546-8224-396a5b2e7548,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:b14ad71,CLOUDID:e64178d8-850a-491d-a127-60d9309b2b3e,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: b2af7c6d25b74b6488e81bda73749612-20220624
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 682059985; Fri, 24 Jun 2022 16:23:39 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 24 Jun 2022 16:23:38 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 24 Jun 2022 16:23:37 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 24 Jun 2022 16:23:36 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        "Tiffany Lin" <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <nicolas.dufresne@collabora.com>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Maoguang Meng <maoguang.meng@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Irui Wang <irui.wang@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v4, 0/8] Support H264 multi-core encoder on MT8195
+Date:   Fri, 24 Jun 2022 16:23:27 +0800
+Message-ID: <20220624082335.10165-1-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <BYAPR02MB4488F89EC5DB73D1FEAE9B4594B59@BYAPR02MB4488.namprd02.prod.outlook.com>
-In-Reply-To: <BYAPR02MB4488F89EC5DB73D1FEAE9B4594B59@BYAPR02MB4488.namprd02.prod.outlook.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 24 Jun 2022 10:22:38 +0200
-Message-ID: <CAKfTPtA7wJBROfRkSQV7FzWaWqoaQjSO7iyqBt6AgGsv2OsNSw@mail.gmail.com>
-Subject: Re: Perf regression from scheduler load_balance rework in 5.5?
-To:     David Chen <david.chen@nutanix.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,57 +78,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Jun 2022 at 21:50, David Chen <david.chen@nutanix.com> wrote:
->
-> Hi,
->
-> I'm working on upgrading our kernel from 4.14 to 5.10
-> However, I'm seeing performance regression when doing rand read from windows client through smbd
-> with a well cached file.
->
-> One thing I noticed is that on the new kernel, the smbd thread doing socket I/O tends to stay on
-> the same cpu core as the net_rx softirq, where as in the old kernel it tends to be moved around
-> more randomly. And when they are on the same cpu, it tends to saturate the cpu more and causes
-> performance to drop.
->
-> For example, here's the duration (ns) the thread spend on each cpu I captured using bpftrace
-> On 4.14:
-> @cputime[7]: 20741458382
-> @cputime[0]: 25219285005
-> @cputime[6]: 30892418441
-> @cputime[5]: 31032404613
-> @cputime[3]: 33511324691
-> @cputime[1]: 35564174562
-> @cputime[4]: 39313421965
-> @cputime[2]: 55779811909 (net_rx cpu)
->
-> On 5.10:
-> @cputime[3]: 2150554823
-> @cputime[5]: 3294276626
-> @cputime[7]: 4277890448
-> @cputime[4]: 5094586003
-> @cputime[1]: 6058168291
-> @cputime[0]: 14688093441
-> @cputime[6]: 17578229533
-> @cputime[2]: 223473400411 (net_rx cpu)
->
-> I also tried setting the cpu affinity of the smbd thread away from the net_rx cpu and indeed that
-> seems to bring the perf on par with old kernel.
->
-> I noticed that there's scheduler load_balance rework in 5.5, so I did the test on 5.4 and 5.5 and
-> it did show the behavior changed between 5.4 and 5.5.
+MT8195 has two H264 encoder hardware, named core0 and core1, this two
+cores can encode two input frames separately at the same time to achieve
+higher performance.
 
-Have you tested v5.18 ? several improvements happened since v5.5
+This series of patches are used to enable the two H264 encoder cores,
+the difference between encoding process before and after enable two
+cores is just like as below:
 
->
-> Anyone know how to work around this?
+As-Is: Synchronous
+V4L2_VIDIOC_QBUF#0 --> device_run(triger encoder) --> wait encoder IRQ
+-->
+encoding done with result --> job_finish
+V4l2_VIDIOC_QBUF#1 --> device_run(triger encoder) --> wait encoder IRQ
+-->
+encoding done with result --> job_finish
+...
+To-Be: Asynchronous
+V4L2_VIDIOC_QBUF#0 --> device_run(triger encoder) --> job_finish
+..V4l2_VIDIOC_QBUF#1 --> device_run(triger encoder) --> job_finish
+(venc core0 may encode done here, done the encoding result to client)
+V4L2_VIDIOC_QBUF#2 --> device_run(triger encoder) --> job_finish.
 
-Have you enabled IRQ_TIME_ACCOUNTING ?
+---
+changes compared with v3:
+- rebase to the newer linux media stage.
+- add a capability to indicate scp firmware support multi-core.
+- probe core0 as main device, core1 as sub-device.
 
-When the time spent under interrupt becomes significant, scheduler
-migrate task on another cpu
+changes compared with v2:
+- update venc core dt-bindings, add two new properties for current
+  usage.
+- parse venc multi_core mode from device tree.
+- rebase to the newer linux media stage.
 
-Vincent
->
-> Thanks,
-> David
+changes compared with v1:
+- of_platform_populate was used in place of the component framework.
+- new yaml file for venc cores.
+- some modifications for patch v1's review comments.
+---
+
+Irui Wang (8):
+  dt-bindings: media: mediatek: vcodec: Adds encoder cores dt-bindings
+    for mt8195
+  media: mediatek: vcodec: Enable venc dual core usage
+  media: mediatek: vcodec: Refactor venc power manage function
+  media: mediatek: vcodec: Add more extra processing for multi-core
+    encoding
+  media: mediatek: vcodec: Add venc power on/off function
+  media: mediatek: vcodec: Refactor encoder clock on/off function
+  media: mediatek: vcodec: Add multi-core encoding process
+  media: mediatek: vcodec: Return encoding result in asynchronous mode
+
+ .../media/mediatek,vcodec-encoder-core.yaml   | 225 ++++++++++++++++++
+ .../media/mediatek,vcodec-encoder.yaml        |   1 -
+ .../media/platform/mediatek/vcodec/Makefile   |   4 +-
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  28 ++-
+ .../platform/mediatek/vcodec/mtk_vcodec_enc.c | 113 ++++++---
+ .../platform/mediatek/vcodec/mtk_vcodec_enc.h |  11 +-
+ .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |  48 +++-
+ .../mediatek/vcodec/mtk_vcodec_enc_hw.c       | 159 +++++++++++++
+ .../mediatek/vcodec/mtk_vcodec_enc_hw.h       |  34 +++
+ .../mediatek/vcodec/mtk_vcodec_enc_pm.c       | 177 ++++++++++++--
+ .../mediatek/vcodec/mtk_vcodec_enc_pm.h       |   9 +-
+ .../mediatek/vcodec/mtk_vcodec_util.c         |  19 ++
+ .../mediatek/vcodec/mtk_vcodec_util.h         |   3 +
+ .../mediatek/vcodec/venc/venc_h264_if.c       | 207 +++++++++++++---
+ .../mediatek/vcodec/venc/venc_vp8_if.c        |   3 +-
+ .../platform/mediatek/vcodec/venc_drv_if.c    |  75 ++++--
+ .../platform/mediatek/vcodec/venc_drv_if.h    |   6 +
+ .../platform/mediatek/vcodec/venc_vpu_if.c    |   9 +-
+ .../platform/mediatek/vcodec/venc_vpu_if.h    |   3 +-
+ 19 files changed, 1015 insertions(+), 119 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,vcodec-encoder-core.yaml
+ create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_hw.c
+ create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_hw.h
+
+-- 
+2.18.0
+

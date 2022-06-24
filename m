@@ -2,84 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDC65596FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86075596FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 11:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiFXJqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 05:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
+        id S230075AbiFXJpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 05:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiFXJp6 (ORCPT
+        with ESMTP id S229480AbiFXJpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 05:45:58 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9067944D;
-        Fri, 24 Jun 2022 02:45:57 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25O9jYIj016475;
-        Fri, 24 Jun 2022 04:45:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1656063934;
-        bh=B8SVjvn+gd7EPS39dpx54f1mSMIvRyM+qbUkTMxyk14=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Hi5Tb60WqxLPb8VCkEoBjlP9wQXG4r4Z2yHHx8lGevxGEoyHzKN6/Zr0vrg7/zCqb
-         bV0G+OZJQqJHOvWqbOM0D48ScCvm8G5XdmY5KR1ralFJ303YLUvG4fzxrki/tS9YJI
-         d+g7vwE5jcrLl/v6N/Nt2Ca16WN5/gkRlz402/jw=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25O9jYFN072653
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 24 Jun 2022 04:45:34 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 24
- Jun 2022 04:45:34 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 24 Jun 2022 04:45:34 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25O9jXDc126159;
-        Fri, 24 Jun 2022 04:45:34 -0500
-Date:   Fri, 24 Jun 2022 15:15:33 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Rahul T R <r-ravikumar@ti.com>
-CC:     <linux-phy@lists.infradead.org>, <kishon@ti.com>,
-        <vkoul@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <tomi.valkeinen@ideasonboard.com>,
-        <laurent.pinchart@ideasonboard.com>,
-        <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
-        <sjakhade@cadence.com>, <mparab@cadence.com>,
-        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
-        <lee.jones@linaro.org>
-Subject: Re: [PATCH v4 3/3] phy: cdns-dphy: Add support for DPHY TX on J721e
-Message-ID: <20220624094533.gtlebzbb5xsak4u7@ti.com>
-References: <20220623125433.18467-1-r-ravikumar@ti.com>
- <20220623125433.18467-4-r-ravikumar@ti.com>
+        Fri, 24 Jun 2022 05:45:50 -0400
+Received: from out199-9.us.a.mail.aliyun.com (out199-9.us.a.mail.aliyun.com [47.90.199.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2C379452
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 02:45:48 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R311e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VHGe-V2_1656063944;
+Received: from 30.97.49.29(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VHGe-V2_1656063944)
+          by smtp.aliyun-inc.com;
+          Fri, 24 Jun 2022 17:45:44 +0800
+Message-ID: <f2e1ea63-d0ca-7a80-fc16-90622ef2017d@linux.alibaba.com>
+Date:   Fri, 24 Jun 2022 17:45:50 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220623125433.18467-4-r-ravikumar@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 4/7] migrate_pages(): fix failure counting for THP
+ subpages retrying
+To:     Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>
+References: <20220624025309.1033400-1-ying.huang@intel.com>
+ <20220624025309.1033400-5-ying.huang@intel.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220624025309.1033400-5-ying.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/06/22 06:24PM, Rahul T R wrote:
-> Add support new compatible for dphy-tx on j721e
-> and implement dphy ops required.
+
+
+On 6/24/2022 10:53 AM, Huang Ying wrote:
+> If THP is failed to be migrated for -ENOSYS and -ENOMEM, the THP will
+> be split into thp_split_pages, and after other pages are migrated,
+> pages in thp_split_pages will be migrated with no_subpage_counting ==
+> true, because its failure have been counted already.  If some pages in
+> thp_split_pages are retried during migration, we should not count
+> their failure if no_subpage_counting == true too.  This is done this
+> patch to fix the failure counting for THP subpages retrying.
+
+Good catch. Totally agree with you. It seems we can move the condition 
+into -EAGAIN case like other cases did?
+
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 1ece23d80bc4..491c2d07402b 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -1463,7 +1463,7 @@ int migrate_pages(struct list_head *from, 
+new_page_t get_new_page,
+                         case -EAGAIN:
+                                 if (is_thp)
+                                         thp_retry++;
+-                               else
++                               else if (!no_subpage_counting)
+                                         retry++;
+                                 break;
+
+Anyway this patch looks good to me.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+
 > 
-> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
-
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Fixes: 5984fabb6e82 ("mm: move_pages: report the number of non-attempted pages")
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> --- >   mm/migrate.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 542533e4e3cf..61dab3025a1d 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1477,7 +1477,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   			}
+>   		}
+>   	}
+> -	nr_failed += retry;
+> +	if (!no_subpage_counting)
+> +		nr_failed += retry;
+>   	nr_thp_failed += thp_retry;
+>   	/*
+>   	 * Try to migrate subpages of fail-to-migrate THPs, no nr_failed

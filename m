@@ -2,99 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF675593C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60EF05593CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 24 Jun 2022 08:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbiFXGzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 02:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
+        id S230410AbiFXG4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 02:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiFXGzA (ORCPT
+        with ESMTP id S229584AbiFXG4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 02:55:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B233E647B3;
-        Thu, 23 Jun 2022 23:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656053698; x=1687589698;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tUfVqitwWT7IxzeayDpvJgY6hbjhnF7E+9OjmKkDvuQ=;
-  b=mmSl9+d2R0cECE6J1bL3MsWVCCEXJwQ7EdEttenExaN3lyFREPQ5HZea
-   mvErxmIUHzlRNNGCsSQUEqF8n8GOPm0RF97iOfCb5q8IecHd9uJerHjwq
-   d945tzF+hplaAefjfEVDP9keXPjEvWAtPu5+FoAVDqb7nPn5xQH3DGlP6
-   Fyj31x9+Z/oHFSpEz5uS2/2zXyW71QFZaHbe4PeD5oTB7njaksYCkAjpk
-   7rtlIMfJ7AVz46Ku9tPM96PsUDeLFGlJ0KTOtLfHvGeXWZYh7RH43lElN
-   bjYKXFUbvnDgXSSY1P9VVDo0gzjbzogZfjPAsa3rRrm3AbDuQKYi2iJ0N
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="344932337"
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="344932337"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 23:54:58 -0700
-X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="915563576"
-Received: from rwang105-mobl4.ccr.corp.intel.com (HELO [10.249.168.100]) ([10.249.168.100])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 23:54:55 -0700
-Message-ID: <b8a7ab77-935d-459c-7f65-628fcf828fad@linux.intel.com>
-Date:   Fri, 24 Jun 2022 14:54:53 +0800
+        Fri, 24 Jun 2022 02:56:24 -0400
+Received: from smtpbg.qq.com (smtpbg139.qq.com [175.27.65.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DF467E7B;
+        Thu, 23 Jun 2022 23:56:14 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1656053768tajouao1
+Received: from localhost.localdomain ( [106.117.98.174])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 24 Jun 2022 14:55:57 +0800 (CST)
+X-QQ-SSF: 01000000008000D0J000B00A0000000
+X-QQ-FEAT: XsF3eVhiq7U8XfmM4kWbg2/cZ+sfPRY04bOfzSdlPFjczFxgqbfNIbe0gbMxq
+        YuYh+tIxnrswYTsmpqbV3e72+kiCOCSfsrGJgMnDP68bByr1Vd6sPzoQ7P+qixpq5EaD7e7
+        YTefdnQ9T4rm7L57IfcfS0Hjdzzm57OhpUYBnxi/vFcddKLDXPvkV4xWWYMaPrOMoLCO6Je
+        eAPJSC5h2o2Z6RnttgKgq44gTcU2U4Yp84mj+9jdoqWrWy/7XDUWQsx3JZzi90wtsK749wV
+        1wo9INUzEWeyREjk7i1bYcvp8yxgUOsDUmWY9aPISP/KueWQjHNmpoJNsU9xOPR/xl1e5so
+        8JEwC2o
+X-QQ-GoodBg: 0
+From:   Xiang wangx <wangxiang@cdjrlc.com>
+To:     trenn@suse.com
+Cc:     shuah@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xiang wangx <wangxiang@cdjrlc.com>
+Subject: [PATCH] cpupower: Fix typo in comment
+Date:   Fri, 24 Jun 2022 14:55:55 +0800
+Message-Id: <20220624065555.33345-1-wangxiang@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Chenyi Qiang <chenyi.qiang@intel.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] iommu/vt-d: Fix RID2PASID setup/teardown failure
-Content-Language: en-US
-To:     Ethan Zhao <haifeng.zhao@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>
-References: <20220623065720.727849-1-baolu.lu@linux.intel.com>
- <eb2257b1-1213-1001-74bd-085af5d50dad@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <eb2257b1-1213-1001-74bd-085af5d50dad@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/24 14:02, Ethan Zhao wrote:
-> 在 2022/6/23 14:57, Lu Baolu 写道:
->> The IOMMU driver shares the pasid table for PCI alias devices. When the
->> RID2PASID entry of the shared pasid table has been filled by the first
->> device, the subsequent device will encounter the "DMAR: Setup RID2PASID
->> failed" failure as the pasid entry has already been marked as present.
->> As the result, the IOMMU probing process will be aborted.
->>
->> On the contrary, when any alias device is hot-removed from the system,
->> for example, by writing to /sys/bus/pci/devices/.../remove, the shared
->> RID2PASID will be cleared without any notifications to other devices.
->> As the result, any DMAs from those rest devices are blocked.
->>
->> Sharing pasid table among PCI alias devices could save two memory pages
->> for devices underneath the PCIe-to-PCI bridges. Anyway, considering that
->> those devices are rare on modern platforms that support VT-d in scalable
->> mode and the saved memory is negligible, it's reasonable to remove this
->> part of immature code to make the driver feasible and stable.
-> In my understanding, thus cleanning will make the pasid table become
-> per-dev datastructure whatever the dev is pci-alias or not, and the
-> pasid_pte_is_present(pte)will only check against every pci-alias' own
-> private pasid table,the setup stagewouldn't break, so does the
-> detach/release path, and little value to code otherreference counter
-> like complex implenmataion, looks good to me !
+Delete the redundant word 'cpu'.
 
-Thanks! Can I add a Reviewd-by from you?
+Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
+---
+ tools/power/cpupower/bench/system.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-baolu
+diff --git a/tools/power/cpupower/bench/system.c b/tools/power/cpupower/bench/system.c
+index 40f3679e70b5..eb79dd9ac670 100644
+--- a/tools/power/cpupower/bench/system.c
++++ b/tools/power/cpupower/bench/system.c
+@@ -37,7 +37,7 @@ long long int get_time()
+  * sets the cpufreq governor
+  *
+  * @param governor cpufreq governor name
+- * @param cpu cpu for which the governor should be set
++ * @param cpu for which the governor should be set
+  *
+  * @retval 0 on success
+  * @retval -1 when failed
+-- 
+2.36.1
+

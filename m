@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9399C55ACDC
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 00:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CC755ACDF
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 00:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbiFYWNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 18:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        id S233398AbiFYWP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 18:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbiFYWNp (ORCPT
+        with ESMTP id S230246AbiFYWPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 18:13:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A23EA12AC4
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 15:13:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656195221;
+        Sat, 25 Jun 2022 18:15:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6031A12D05;
+        Sat, 25 Jun 2022 15:15:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E83EA60F21;
+        Sat, 25 Jun 2022 22:15:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E76C3411C;
+        Sat, 25 Jun 2022 22:15:22 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QIh8RFGw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656195320;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=EbUPVrACrb5JazdoYAtaL55Q+DwnisM87pnjpaJYU4A=;
-        b=YrF7FPxtsJ9uF2tAGkZkj2Mqyr+HZmWLOvH/kJ93RzK7h6XVhRzrRQ0Tfcykkq6bO7ght8
-        DT2L+wjo3DhGjb97V6iA9W3oldrrjJwfVSXpPGYJWdMeaQADk2j6He3YMfbihN6hPS71Zt
-        w0mQeb+yEX4HOSmofdyxDgO5fnEPrTw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-29-J8IwCBHWONOMi9ZOj-iueQ-1; Sat, 25 Jun 2022 18:13:37 -0400
-X-MC-Unique: J8IwCBHWONOMi9ZOj-iueQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 76CD3811E75;
-        Sat, 25 Jun 2022 22:13:37 +0000 (UTC)
-Received: from cantor.redhat.com (unknown [10.2.16.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B93731121314;
-        Sat, 25 Jun 2022 22:13:36 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     dmaengine@vger.kernel.org
-Cc:     Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        Dave Jiang <dave.jiang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH] dmaengine: idxd: Only call idxd_enable_system_pasid if succeeded in enabling SVA feature
-Date:   Sat, 25 Jun 2022 15:13:33 -0700
-Message-Id: <20220625221333.214589-1-jsnitsel@redhat.com>
+         in-reply-to:in-reply-to:references:references;
+        bh=H29Ca5HvHKasX7h8uewLZ03V0uGq8al7k3+cuMznERA=;
+        b=QIh8RFGw9o2XaCCRhaeLfJiL6lnWV0SUNIEDhho3Lcc8y02qO8MKBMvcpH2Sx4q7hNnyie
+        fYPX2dKoiLJS4+9QGihtEOPvQ4eg31AnbMw9KCTfOu6aaBZ+4/0XpeJ/DXJoG1QaqgtLFA
+        xnKtZrA2jubO9nuFWvA6LuM6ptS0Gs8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 197cef61 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 25 Jun 2022 22:15:20 +0000 (UTC)
+Date:   Sun, 26 Jun 2022 00:15:18 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Steve French <stfrench@microsoft.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2 1/8] ksmbd: use vfs_llseek instead of dereferencing
+ NULL
+Message-ID: <YreI9h957ZWv99OR@zx2c4.com>
+References: <20220625110115.39956-1-Jason@zx2c4.com>
+ <20220625110115.39956-2-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220625110115.39956-2-Jason@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iommu_sva_bind_device requires that iommu_dev_enable_feature has been
-previously called with IOMMU_DEV_FEAT_SVA, and succeeded. Without this
-it is possible to run into a situation where you will dereference a
-null pointer if the intel_iommu driver is not enabled.
+Hi Steve,
 
-Note: checkpatch didn't like the suggested addition of braces for the
-      first arm of the "if (idxd_enable_system_pasid)" block.
+On Sat, Jun 25, 2022 at 01:01:08PM +0200, Jason A. Donenfeld wrote:
+> By not checking whether llseek is NULL, this might jump to NULL. Also,
+> it doesn't check FMODE_LSEEK. Fix this by using vfs_llseek(), which
+> always does the right thing.
+> 
+> Fixes: f44158485826 ("cifsd: add file operations")
+> Cc: stable@vger.kernel.org
+> Cc: linux-cifs@vger.kernel.org
+> Cc: Steve French <stfrench@microsoft.com>
+> Cc: Ronnie Sahlberg <lsahlber@redhat.com>
+> Cc: Hyunchul Lee <hyc.lee@gmail.com>
+> Cc: Sergey Senozhatsky <sergey.senozhatsky@gmail.com>
+> Reviewed-by: Namjae Jeon <linkinjeon@kernel.org>
+> Acked-by: Al Viro <viro@zeniv.linux.org.uk>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Fixes: 42a1b73852c4 ("dmaengine: idxd: Separate user and kernel pasid enabling")
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
- drivers/dma/idxd/init.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+This commit has been reviewed by Namjae and acked by Al. The rest of the
+commits in this series are likely -next material for Al to take in his
+vfs tree, but this first one here is something you might consider taking
+as a somewhat important bug fix for 5.19. I marked it for stable@ and
+such as well. Your call -- you can punt it to Al's -next branch with the
+rest of the series if you want -- but I think this patch is a bit unlike
+the others. This occurred to me when I saw you sent some cifs fixes in
+earlier this evening.
 
-diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
-index 355fb3ef4cbf..5b49fd5c1e25 100644
---- a/drivers/dma/idxd/init.c
-+++ b/drivers/dma/idxd/init.c
-@@ -514,13 +514,14 @@ static int idxd_probe(struct idxd_device *idxd)
- 	if (IS_ENABLED(CONFIG_INTEL_IDXD_SVM) && sva) {
- 		if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA))
- 			dev_warn(dev, "Unable to turn on user SVA feature.\n");
--		else
-+		else {
- 			set_bit(IDXD_FLAG_USER_PASID_ENABLED, &idxd->flags);
- 
--		if (idxd_enable_system_pasid(idxd))
--			dev_warn(dev, "No in-kernel DMA with PASID.\n");
--		else
--			set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
-+			if (idxd_enable_system_pasid(idxd))
-+				dev_warn(dev, "No in-kernel DMA with PASID.\n");
-+			else
-+				set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
-+		}
- 	} else if (!sva) {
- 		dev_warn(dev, "User forced SVA off via module param.\n");
- 	}
--- 
-2.36.1
-
+Jason

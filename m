@@ -2,114 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8841D55AD9E
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 01:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCAA55ADAD
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 01:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbiFYXtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 19:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33932 "EHLO
+        id S233652AbiFYX7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 19:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbiFYXtB (ORCPT
+        with ESMTP id S231234AbiFYX7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 19:49:01 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A248213E22
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:48:58 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id ej4so8221644edb.7
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:48:58 -0700 (PDT)
+        Sat, 25 Jun 2022 19:59:09 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8585D13DF3
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:59:07 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id c1so9917457qvi.11
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:59:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hAI6KmvKAAtQ1Qu3VP1eVgrrocL1S7m79Jvw8A7f7Lo=;
-        b=PgO7KS6MC+Z+/fQPY5/ekehrEKs2tWTPDiZ6fbahHq2CcFdYYrNb3LmEzaHr2pg6em
-         lBfhGotW2sXJeWk58SB8+ipIxNwdNNoYdF67jlzZl69g5yEzEE8HunGgp6GEnEVOwtjD
-         fboWRDYvU934IAsFFz3RdWNQWJaGYuQzzWqq8=
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OIkvZSCfU1CjrPejBudrIGntnY32egXHLdKIcmmN0pg=;
+        b=duH504ulYOnzBaVTLyLo1maWRZER3UvuJOkl8g0W5A7EYWwmU7JLyVVOeVm/mzY6jz
+         wEQqHqotXWBM9p2+EAvrZPlBnGf0wIXCNnyoHFxr5zjGsKVcLPXHkfQVwIGTrVZFfHJg
+         E4e8lZiIn8rsAZTGPhWBTHBxWkOp5DngPB1Az8BgpizpK4wZTN68kKTCIq1n4SCn6Y5V
+         56K05ugA1OyB3vJpg7045S8yLgufcX3ypvS9ZGEs793kJzwt2Pp/5EpQpLRLJ0SmkWOO
+         9J5MhDH6Dt3+awMXHKsUxbuCGMHLj/OPr3AwVMHf2ZWmG4UVE5Y1CWHYNDj00yZt0DW0
+         kIiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hAI6KmvKAAtQ1Qu3VP1eVgrrocL1S7m79Jvw8A7f7Lo=;
-        b=iwIF2te7ZprCOs4g1loTPoXRO5ZDYenIfMaCZy/2XskfQb2F5zs2MoNdwKA5xwwgRB
-         eR5XhNGEIi/H2PTOcWFa3x/TzwZ1pMu2pcjWRu5WZznjrg5NBpQjbv9xdhfPr+QojQwh
-         0lyUz19zC7NpD2IlHImntt58p50wyCpWLIMhIEzAlOz6xcCDgfoIXUPwA8r3kd6aenmG
-         cOBJzwK9fKWgDcNWnVHd2bEXHn6bMbDEJko71ULx05AE+Rpum+pzre8f0/1PUTN5n0Vy
-         GfWxOcxSz+8aIIB+jpRMSPipWRtDhUQDKFg/gM1tWJ4LdFzGpZo5v/IjJP+pHisZ3tRK
-         fFOg==
-X-Gm-Message-State: AJIora/c7iIpd2fvLk36NgpD5aaExYYSX1nMQK9Jr9J0jjAf8wbP9/kn
-        b4HpIDGQ58IRmwnRi5sv+W53UYsnvXAplxUk
-X-Google-Smtp-Source: AGRyM1vXuN0/Mc35gqXRI+lSwV9Tx48KpGXEaaOMOYJ8HqldAB5Nqf70nhTRn0NBfA9FL0Wca0uJsA==
-X-Received: by 2002:a50:fb9a:0:b0:435:6c0e:3342 with SMTP id e26-20020a50fb9a000000b004356c0e3342mr8050796edq.337.1656200936899;
-        Sat, 25 Jun 2022 16:48:56 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id w2-20020a170906384200b00722f8d02928sm3168339ejc.174.2022.06.25.16.48.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Jun 2022 16:48:55 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id s1so7930259wra.9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:48:55 -0700 (PDT)
-X-Received: by 2002:a05:6000:1148:b0:21b:a4b2:ccd3 with SMTP id
- d8-20020a056000114800b0021ba4b2ccd3mr5648811wrx.193.1656200934779; Sat, 25
- Jun 2022 16:48:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220622140853.31383-1-pmladek@suse.com> <YraWWl+Go17uPOgR@mtj.duckdns.org>
- <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
- <874k0863x8.fsf@email.froward.int.ebiederm.org> <CAHk-=wgTG2K3erROP19320zBN6BHVf0hRfXGdawkGR4gzrJN6w@mail.gmail.com>
- <CAHk-=whLsaRKaFKS0UffeCYYCVyP0bbiB4BTYTaXtScgu6R9yA@mail.gmail.com>
- <87pmiw1fy6.fsf@email.froward.int.ebiederm.org> <CAHk-=wiutNT47oNhyk_WvMj2qp4pehYFptXCUzW=u_2STLQiww@mail.gmail.com>
-In-Reply-To: <CAHk-=wiutNT47oNhyk_WvMj2qp4pehYFptXCUzW=u_2STLQiww@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 25 Jun 2022 16:48:38 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whX_=BNZ4kVEAu2NV3CMnhwsuYTyE65FQXUMx8VPNOAOA@mail.gmail.com>
-Message-ID: <CAHk-=whX_=BNZ4kVEAu2NV3CMnhwsuYTyE65FQXUMx8VPNOAOA@mail.gmail.com>
-Subject: Re: re. Spurious wakeup on a newly created kthread
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OIkvZSCfU1CjrPejBudrIGntnY32egXHLdKIcmmN0pg=;
+        b=xh3SGDIof93z/dkPKavtQCSKTOg2pgU9TVOxRVHVFETFKbSFBgidf5/nYqN3oUbPsP
+         j/XFSO5Mzq1OrAr2B+McGeSSW1BgWEMxctSWpsrnOc3/UCNwtq8M4TfcKn9k/yq/bNm6
+         dwB1ZhDwgeGA8UvXsoddjLopSvAylWi6xyJ4YjlruOBpD3lS+76aQcu3sfCYA6Im8tVo
+         pHfGTRe/IgEGKT6NZzcqKVxxgaqOiKACuoL3BqsyBMhJJhDl86kW0T9bRKU99yNQ+tfm
+         1Fnc9lLXCCxIaD6zhgHLBUVJxrgNpoy30eX2M4hM9XuGi1fYQAZVHdlj+A5GQqcUbN/E
+         Y4wA==
+X-Gm-Message-State: AJIora+KGjUeUvna+Gmx8QkwMZvXDK65YQkQ+aqCwi5sVJ2UJ+jHEpLU
+        Cf4k1Z64bNm6K3nki9mxGhx+9Q==
+X-Google-Smtp-Source: AGRyM1vkSR+fkkuzlMpkZs/yPAV/CYQBTRY/CutcwMiNTqboWAwrJeP6fXDvYF6KEeySkwQaI+gI6w==
+X-Received: by 2002:a05:622a:13c8:b0:317:7862:6b45 with SMTP id p8-20020a05622a13c800b0031778626b45mr4688676qtk.266.1656201546699;
+        Sat, 25 Jun 2022 16:59:06 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id l2-20020a05620a28c200b006a6cadd89efsm5717888qkp.82.2022.06.25.16.59.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Jun 2022 16:59:05 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1o5Fg8-001ry7-9l; Sat, 25 Jun 2022 20:59:04 -0300
+Date:   Sat, 25 Jun 2022 20:59:04 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 1/4] mm/gup: Add FOLL_INTERRUPTIBLE
+Message-ID: <20220625235904.GK23621@ziepe.ca>
+References: <20220622213656.81546-1-peterx@redhat.com>
+ <20220622213656.81546-2-peterx@redhat.com>
+ <20220625003554.GJ23621@ziepe.ca>
+ <YrZjeEv1Z2IDMwgy@xz-m1.local>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrZjeEv1Z2IDMwgy@xz-m1.local>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 4:43 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> I wonder if we could basically get rid of every use of 'current' in
-> kernel/fork.c with just a task pointer that is passed in, and then for
-> kernel threads pass in 'init_task'.
+On Fri, Jun 24, 2022 at 09:23:04PM -0400, Peter Xu wrote:
+> If to go back to the original question with a shorter answer: if the ioctl
+> context that GUP upon a page that will never be with a uffd context, then
+> it's probably not gonna help at all.. at least not before we use
+> FAULT_FLAG_INTERRUPTIBLE outside uffd page fault handling.
 
-That might even help code generation. Instead of doing the 'look up
-current' all the time, just having the parent task as an argument
-might actually simplify things.
+I think I would be more interested in this if it could abort a swap
+in, for instance. Doesn't this happen if it flows the interruptible
+flag into the VMA's fault handler?
 
-We historically used to do those kinds of things exactly because it
-helps generate better code (particularly with inline functions, and
-things like 'exit' that calls many different things), but have mostly
-avoided it because 'current' may generate some small asm snippet all
-the time, but it clarifies the "it can't be a random thread" and
-locking issues.
-
-But if it's always 'current or init_task', we don't have many locking issues.
-
-Of course, there might be some reason not to want to use init_task
-because it is _so_ special, and so parenting to something silly like
-kthreadd ends up being simpler. But..
-
-Anyway, the whole "don't wake up thread until it's all done" is a
-separate and independent issue from the "odd use of kthreadd" issue.
-
-          Linus
+Jason

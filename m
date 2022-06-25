@@ -2,200 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0035555A609
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 04:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CEF855A613
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 04:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbiFYCXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 22:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S231602AbiFYC2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 22:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiFYCXc (ORCPT
+        with ESMTP id S231438AbiFYC2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 22:23:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 098D92ED61
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 19:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656123809;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gCWKjmH3S606alzAuT30BfDYuE+xUjQ3Ss4cIJMJC04=;
-        b=DKQA2fU+bl8hiiFCY6LH6z7O/ACKkKfvLNsgKvDxqY3ZGuhdgUZGfiMU7qg4LSo0PKjpLf
-        2TeKeKgnCoScWXGO7AgO8k5ar43cuEA4jf0E7XbPIJ2itCOCDiLQbTAJFUC+ExkNMHGG2U
-        QBRV1rcSMYvyrG2Mq9/OCbIUL83KD8E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-410-5-KqqrD0O9OjxJXyysP5UQ-1; Fri, 24 Jun 2022 22:23:25 -0400
-X-MC-Unique: 5-KqqrD0O9OjxJXyysP5UQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F1048F40C5;
-        Sat, 25 Jun 2022 02:23:25 +0000 (UTC)
-Received: from [10.22.8.37] (unknown [10.22.8.37])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 663E81121314;
-        Sat, 25 Jun 2022 02:23:24 +0000 (UTC)
-Message-ID: <f2cbe809-4337-bf9b-d003-7e47ff893248@redhat.com>
-Date:   Fri, 24 Jun 2022 22:23:23 -0400
+        Fri, 24 Jun 2022 22:28:09 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6876658D
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 19:28:07 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 184so3944847pga.12
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 19:28:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e0KZ4pSV9Pz4I9RocveqdgJZcOs2Lx4VgN1fPL0oZg4=;
+        b=hGvQveNSOI6QKIeySuo4v47HX4FTj4hkSGUFWbMSehWCa9F9gpqwLvMyoCNgltOSZy
+         18ODnekVRLVCADMtgKqcDYM3nCJe6fij2VRwQhuJGL2GtmlcnvHk+wQ7BkIALe4It6N+
+         LFUowIFp+m649XB5ainNrYE8ZZQVM1ejF7xmM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e0KZ4pSV9Pz4I9RocveqdgJZcOs2Lx4VgN1fPL0oZg4=;
+        b=8R0x4yF/oJE160lBYAyuWC/mshih21zkN6tci57Yq6iVJ6tdOxMUEYflLh4JXeWPrB
+         OdvcEhlLjex369N9rVg26hUz6V6BeNDcGmy4B+ggrz2fgwXuBg0kfNmqolfQAxD5wqKz
+         KkSX8MPGTs3P4Msrp1PWyzdhSzswC53ZF5oKuLVDLz0NLrRRrq8znTpajozq8hDcJMy6
+         o5LA3RCcvkhLCRDU1uY/kTxZ06xiULkh4+sA1uh/alDlCM+3P1iaTAwLxkJajKLLNJSH
+         /tDrC9w152RldtmR1qxLOLZ6Zgn+5aTQ59I9KDGetkX/fAkvB7VDVMs4YMqQTl4ysWbS
+         qvxg==
+X-Gm-Message-State: AJIora+3INs8qDxHx90EdkYqjxst9rCq8MKNi8mv/vRSPT2E5wz4r6oJ
+        cT2h1h9DtvFHSgthWlPpPFfKFD9rs1/apA==
+X-Google-Smtp-Source: AGRyM1tr4Q/7wjlN61u7kg3rDxbkGGiiklXgznHKI+DLKjFY82VlUuDvmlBWjo3iJc/dwOrOm532CA==
+X-Received: by 2002:aa7:91d3:0:b0:525:1f61:dacf with SMTP id z19-20020aa791d3000000b005251f61dacfmr2267840pfa.40.1656124086235;
+        Fri, 24 Jun 2022 19:28:06 -0700 (PDT)
+Received: from joebar-glaptop.lan (c-71-202-34-56.hsd1.ca.comcast.net. [71.202.34.56])
+        by smtp.gmail.com with ESMTPSA id r20-20020a170902c7d400b001678898ad06sm2463928pla.47.2022.06.24.19.28.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 19:28:05 -0700 (PDT)
+From:   "Joseph S. Barrera III" <joebar@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Alexandru M Stan <amstan@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v13 0/5] arm64: dts: qcom: sc7180: Add five new trogdor-based boards
+Date:   Fri, 24 Jun 2022 19:27:11 -0700
+Message-Id: <20220625022716.683664-1-joebar@chromium.org>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] locking/rtmutex: Limit # of lock stealing for non-RT
- waiters
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mike Stowell <mstowell@redhat.com>
-References: <20220621193641.609712-1-longman@redhat.com>
- <YrRriHsAdxPwEnWW@linutronix.de>
- <be4db8af-7855-1f54-c2f2-947577b71f94@redhat.com>
- <YrVczgIdWoOpVX1D@linutronix.de>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YrVczgIdWoOpVX1D@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/22 02:42, Sebastian Andrzej Siewior wrote:
-> On 2022-06-23 10:41:17 [-0400], Waiman Long wrote:
->> On 6/23/22 09:32, Sebastian Andrzej Siewior wrote:
->>> Do you have more insight on how this was tested/ created? Based on that,
->>> systemd and a random kworker waited on a lock for more than 10 minutes.
->> The hang happens when our QE team run thier kernel tier 1 test which, I
->> think, lasts several hours. The hang happens in some runs but not all of
->> them. So it is kind of opportunistic. Mike should be able to provide a
->> better idea about frequency and so on.
-> So we talk here about 64+ CPU or more than that?
+This series adds five new trogdor-based boards to upstream.
+The patches should be applied *after* applying
+https://lore.kernel.org/all/20220602190621.1646679-1-swboyd@chromium.org/
+(arm64: dts: qcom: Remove duplicate sc7180-trogdor include on lazor/homestar)
 
-The bug report that I saw showed 2 hangs in two different one-socket 
-4-core 8-thread systems. So they are not 64+ cpus. Of course, the more 
-cpus that we have, the more chance we will get into trouble.
+The patches do *not* expect
+https://lore.kernel.org/all/20220518172525.3319993-1-swboyd@chromium.org/
+(sc7180-trogdor: Split out keyboard node and describe detachables)
+to be applied.
 
+The compatibles in this series are documented by Doug's series
+https://lore.kernel.org/r/20220520143502.v4.5.Ie8713bc0377672ed8dd71189e66fc0b77226fb85@changeid
 
->
->>> I added a trace-printk each time a non-RT waiter got the lock stolen,
->>> kicked a kernel build and a package upgrade and took a look at the stats
->>> an hour later:
->>> - sh got its lock stolen 3416 times. I didn't lock the pid so I can't
->>>     look back and check how long it waited since the first time.
->>> - the median average of stolen locks is 173.
->> Maybe we should also more lock stealing per waiter than the 10 that I used
->> in the patch. I am open to suggestion to what is a good value to use.
-> I have no idea either. I just looked at a run to see what the number
-> actually are. I have no numbers in terms of performance. So what most
-> likely happens is that on an unlock operation the waiter gets a wake-up
-> but before he gets a chance to acquire the lock, it is already taken and
-> he goes back to sleep again. While this looks painful it might be better
-> performance wise because the other task was able to acquire the lock
-> without waiting. But then it is not fair and this happens.
-> One thing that I'm curious about is, what lock is it (one or two global
-> hot spots or many). And how to benchmark this…
+Version 9 included many corrections to the series change descriptions,
+based on fetching earlier versions of the series and diffing each patch.
 
-The hang can happen in different places. Like
+Changes in v13:
+- Remove 'include sc7180-trogdor.dtsi' in sc7180-trogdor-ti-sn65dsi86.dtsi.
+- Add compile-time test for duplicate include in sc7180-trogdor.dtsi.
 
-[ 1873.205398] INFO: task pool-restraintd:122206 blocked for more than 
-622 seconds.
-[ 1873.205400]       Tainted: G        W  OE  X --------- --- 
-5.14.0-104.rt21.104.el9.x86_64 #1
-[ 1873.205401] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" 
-disables this message.
-[ 1873.205402] task:pool-restraintd state:D stack:    0 pid:122206 
-ppid:     1 flags:0x00000000
-[ 1873.205405] Call Trace:
-[ 1873.205407]  __schedule+0x21c/0x5b0
-[ 1873.205410]  ? migrate_enable+0xcd/0x140
-[ 1873.205413]  schedule+0x46/0xc0
-[ 1873.205415]  rt_mutex_slowlock_block.constprop.0+0x30/0x150
-[ 1873.205418]  __rt_mutex_slowlock.constprop.0+0x6b/0xe0
-[ 1873.205421]  __rwbase_read_lock+0x9c/0xe0
-[ 1873.205425]  do_madvise+0x109/0x9c0
-[ 1873.205429]  ? syscall_exit_to_user_mode+0x12/0x30
-[ 1873.205432]  ? do_syscall_64+0x69/0x80
-[ 1873.205434]  __x64_sys_madvise+0x28/0x30
-[ 1873.205436]  do_syscall_64+0x5c/0x80
-[ 1873.205438]  ? fpregs_restore_userregs+0x53/0x100
-[ 1873.205442]  ? exit_to_user_mode_prepare+0xda/0xe0
-[ 1873.205445]  ? syscall_exit_to_user_mode+0x12/0x30
-[ 1873.205447]  ? do_syscall_64+0x69/0x80
-[ 1873.205449]  ? do_syscall_64+0x69/0x80
-[ 1873.205452]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[ 1873.205455] RIP: 0033:0x7f35f5a93f5b
-[ 1873.205457] RSP: 002b:00007f35f4a48e18 EFLAGS: 00000206 ORIG_RAX: 
-000000000000001c
-[ 1873.205460] RAX: ffffffffffffffda RBX: 00007f35f4a49640 RCX: 
-00007f35f5a93f5b
-[ 1873.205461] RDX: 0000000000000004 RSI: 00000000007fb000 RDI: 
-00007f35f4249000
-[ 1873.205463] RBP: 00007f35f4249000 R08: 00007f35ec0026c0 R09: 
-0000000000000005
-[ 1873.205464] R10: 0000000000000008 R11: 0000000000000206 R12: 
-00007f35f4a49640
-[ 1873.205466] R13: 0000000000000000 R14: 00007f35f5af4560 R15: 
-0000000000000000
+Changes in v12:
+- Replace 'include sc7180.dtsi' with 'include sc7180-trogdor.dtsi'
+  in sc7180-trogdor-ti-sn65dsi86.dtsi.
 
-or
+Changes in v11:
+- Add 'include sc7180-trogdor.dtsi' to sc7180-trogdor-pazquel-* files.
+- Restore 'include sc7180.dtsi' to sc7180-trogdor-ti-sn65dsi86.dtsi.
+- Add 'include sc7180-trogdor.dtsi' to sc7180-trogdor-kingoftown-* files.
 
-[ 1872.559562] INFO: task auditd:926 blocked for more than 622 seconds.
-[ 1872.559563]       Tainted: G        W        --------- --- 
-5.14.0-103.rt21.103.el9.x86_64 #1
-[ 1872.559563] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" 
-disables this message.
-[ 1872.559564] task:auditd          state:D stack:    0 pid:  926 
-ppid:     1 flags:0x00000000
-[ 1872.559565] Call Trace:
-[ 1872.559566]  __schedule+0x21c/0x5b0
-[ 1872.559568]  schedule+0x46/0xc0
-[ 1872.559569]  rt_mutex_slowlock_block.constprop.0+0x30/0x150
-[ 1872.559570]  __rt_mutex_slowlock.constprop.0+0x6b/0xe0
-[ 1872.559572]  __rwbase_read_lock+0x9c/0xe0
-[ 1872.559574]  xlog_cil_commit+0x30/0x190 [xfs]
-[ 1872.559631]  __xfs_trans_commit+0xb0/0x320 [xfs]
-[ 1872.559686]  xfs_vn_update_time+0x12c/0x240 [xfs]
-[ 1872.559741]  file_update_time+0xea/0x140
-[ 1872.559744]  ? rwbase_write_lock+0xde/0x1b0
-[ 1872.559746]  xfs_file_write_checks+0x247/0x310 [xfs]
-[ 1872.559799]  xfs_file_buffered_write+0x76/0x2c0 [xfs]
-[ 1872.559852]  ? update_load_avg+0x80/0x7d0
-[ 1872.559855]  new_sync_write+0x11f/0x1b0
-[ 1872.559858]  vfs_write+0x25a/0x2f0
-[ 1872.559860]  ksys_write+0x65/0xe0
-[ 1872.559862]  do_syscall_64+0x5c/0x80
-[ 1872.559864]  ? fpregs_restore_userregs+0x12/0x100
-[ 1872.559866]  ? exit_to_user_mode_prepare+0xda/0xe0
-[ 1872.559868]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[ 1872.559870] RIP: 0033:0x7f4bf7545d9f
-[ 1872.559872] RSP: 002b:00007ffce95c2920 EFLAGS: 00000293 ORIG_RAX: 
-0000000000000001
-[ 1872.559874] RAX: ffffffffffffffda RBX: 0000000000000111 RCX: 
-00007f4bf7545d9f
-[ 1872.559874] RDX: 0000000000000111 RSI: 0000559015de18f0 RDI: 
-0000000000000005
-[ 1872.559875] RBP: 0000559015de18f0 R08: 0000000000000000 R09: 
-00007f4bf75b74e0
-[ 1872.559876] R10: 00007f4bf75b73e0 R11: 0000000000000293 R12: 
-0000000000000111
-[ 1872.559877] R13: 0000559015dd9310 R14: 0000000000000111 R15: 
-00007f4bf75fb9e0
+Changes in v10:
+- Remove 'include sc7180.dtsi' from *all* sc7180-trogdor-pazquel* files.
+- Move "okay" for ap_tp_i2c to proper location.
+- Remove 'include sc7180.dtsi' from *all* sc7180-trogdor-kingoftown* files.
 
-Since it is causing 25-50% of our test jobs to fail, we really want to 
-get it fixed ASAP.
+Changes in v9:
+- Restore two lines accidentally removed from ap_sar_sensor.
+- Simplify trackpad enabling (51d30402be75).
+- Simplify trackpad enabling (51d30402be75).
 
-Regards,
-Longman
+Changes in v8:
+- Incorporate the deletion of the usb_c1 node from 9f9fb70a7294.
+
+Changes in v7:
+- Restore changes requested by Doug.
+- Restore changes requested by Doug.
+- Only include sc7180.dtsi in sc7180-trogdor.dtsi (19794489fa24).
+- Simplify spi0/spi6 labeling (d277cab7afc7).
+- Simplify trackpad enabling (51d30402be75).
+- Restore mrbland patch.
+- Only include sc7180.dtsi in sc7180-trogdor.dtsi (19794489fa24).
+- Simplify spi0/spi6 labeling (d277cab7afc7).
+- Simplify trackpad enabling (51d30402be75).
+- Only include sc7180.dtsi in sc7180-trogdor.dtsi (19794489fa24).
+- Simplify spi0/spi6 labeling (d277cab7afc7).
+- Remove #include of <arm/cros-ec-keyboard.dtsi>.
+- Accidentally removed two lines from ap_sar_sensor.
+- Simplify spi0/spi6 labeling (d277cab7afc7).
+- Remove #include of <arm/cros-ec-keyboard.dtsi>.
+
+Changes in v6:
+- Only include sc7180.dtsi in sc7180-trogdor.dtsi (19794489fa24).
+- Simplify spi0/spi6 labeling (d277cab7afc7).
+- Simplify trackpad enabling (51d30402be75).
+- Accidentally deleted changes requested by Doug.
+- Accidentally deleted changes requested by Doug.
+- Remove mrbland patch.
+- Copy changes to ap_sar_sensor from v5.4.
+- Add #include of <arm/cros-ec-keyboard.dtsi>.
+- Add #include of <arm/cros-ec-keyboard.dtsi> from v5.4.
+
+Changes in v5:
+- Replaced _ in node name with -
+- Ordered nodes by name
+- Remove extra newline
+- Add comment that compatible will be filled in per-board
+- Replace _ in node name with -
+- Order nodes by name.
+- Add comment that compatible will be filled in per-board.
+
+Changes in v4:
+- Cleaned up rt5682s files
+- Restored camcc definition
+- Added missing version history
+- Add missing version history
+- Add missing version history
+- Fix description (no downstream bits removed).
+- Add missing version history.
+- Fix description (no downstream bits removed).
+- Add missing version history.
+
+Changes in v3:
+- Removed camcc definition
+- First inclusion in this series
+- First inclusion in series.
+
+Changes in v2:
+- Word wrapped patch description.
+- Removed "Author" from patch description.
+- Fixed whitespace around "en_pp3300_dx_edp"
+- Add word wrapping to patch description.
+- Remove "Author" from patch description.
+- Fix whitespace around "en_pp3300_dx_edp".
+- First inclusion in series.
+
+Joseph S. Barrera III (5):
+  arm64: dts: qcom: sc7180: Add wormdingler dts files
+  arm64: dts: qcom: sc7180: Add quackingstick dts files
+  arm64: dts: qcom: sc7180: Add mrbland dts files
+  arm64: dts: qcom: sc7180: Add pazquel dts files
+  arm64: dts: qcom: sc7180: Add kingoftown dts files
+
+ arch/arm64/boot/dts/qcom/Makefile             |  18 +
+ .../dts/qcom/sc7180-trogdor-kingoftown-r0.dts |  44 ++
+ .../dts/qcom/sc7180-trogdor-kingoftown-r1.dts |  17 +
+ .../dts/qcom/sc7180-trogdor-kingoftown.dtsi   | 225 ++++++++++
+ .../qcom/sc7180-trogdor-mrbland-rev0-auo.dts  |  22 +
+ .../qcom/sc7180-trogdor-mrbland-rev0-boe.dts  |  22 +
+ .../dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi |  53 +++
+ .../qcom/sc7180-trogdor-mrbland-rev1-auo.dts  |  22 +
+ .../qcom/sc7180-trogdor-mrbland-rev1-boe.dts  |  24 ++
+ .../boot/dts/qcom/sc7180-trogdor-mrbland.dtsi | 344 +++++++++++++++
+ .../sc7180-trogdor-pazquel-lte-parade.dts     |  22 +
+ .../qcom/sc7180-trogdor-pazquel-lte-ti.dts    |  22 +
+ .../qcom/sc7180-trogdor-pazquel-parade.dts    |  17 +
+ .../dts/qcom/sc7180-trogdor-pazquel-ti.dts    |  17 +
+ .../boot/dts/qcom/sc7180-trogdor-pazquel.dtsi | 221 ++++++++++
+ .../sc7180-trogdor-quackingstick-r0-lte.dts   |  38 ++
+ .../qcom/sc7180-trogdor-quackingstick-r0.dts  |  26 ++
+ .../qcom/sc7180-trogdor-quackingstick.dtsi    | 318 ++++++++++++++
+ .../sc7180-trogdor-wormdingler-rev0-boe.dts   |  22 +
+ .../sc7180-trogdor-wormdingler-rev0-inx.dts   |  22 +
+ .../qcom/sc7180-trogdor-wormdingler-rev0.dtsi |  53 +++
+ ...0-trogdor-wormdingler-rev1-boe-rt5682s.dts |  29 ++
+ .../sc7180-trogdor-wormdingler-rev1-boe.dts   |  28 ++
+ ...0-trogdor-wormdingler-rev1-inx-rt5682s.dts |  29 ++
+ .../sc7180-trogdor-wormdingler-rev1-inx.dts   |  22 +
+ .../dts/qcom/sc7180-trogdor-wormdingler.dtsi  | 408 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |   6 +
+ 27 files changed, 2091 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r0.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown-r1.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-kingoftown.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-auo.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0-boe.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-auo.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland-rev1-boe.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-mrbland.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-parade.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-lte-ti.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-parade.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel-ti.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick-r0-lte.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick-r0.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-boe.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0-inx.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev0.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-boe.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler-rev1-inx.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
+
+-- 
+2.31.0
 

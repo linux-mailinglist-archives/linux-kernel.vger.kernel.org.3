@@ -2,139 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D6155AA7C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F3155AA7E
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233094AbiFYN2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 09:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
+        id S233106AbiFYN3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 09:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbiFYN2s (ORCPT
+        with ESMTP id S233096AbiFYN3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 09:28:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A763FEE01
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 06:28:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656163725;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ave09IOGGsVI7o5wbNdPR+5oXfThrVBWl1Nc/iKMVrU=;
-        b=Hq7RmT+v+Pdh0cS8qfkDg6Dn2Dg4yNsaPF0rjJ95rDeBvSy0M4RwYdRJ2WwZTHvvzhoB/p
-        g1oMwnyXxvI6NgqVA5JMsLRPBpd9xw5963i3K6KHMQ8jsUXxumDgSZZjkAOsVkY1O7t8ek
-        vmGQTRCYbkXqX5tsiCE0BP+OaCiVUBw=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-428-0V2-pV4mPjiFk5l0fxUb4A-1; Sat, 25 Jun 2022 09:28:44 -0400
-X-MC-Unique: 0V2-pV4mPjiFk5l0fxUb4A-1
-Received: by mail-qv1-f72.google.com with SMTP id g29-20020a0caadd000000b004702ed3c3f5so5224704qvb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 06:28:44 -0700 (PDT)
+        Sat, 25 Jun 2022 09:29:09 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0892CE031
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 06:29:08 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id g9-20020a056e020d0900b002d958b2a86dso3356781ilj.14
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 06:29:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Ave09IOGGsVI7o5wbNdPR+5oXfThrVBWl1Nc/iKMVrU=;
-        b=MSjSdEGxKEn8TV9iHIjbFnH5SAbBfvxkaL3+vcLuQhjb9uSD0oe1IukUJZx3+L5+xv
-         j375yp6hisVrRu5xMWVU326xNdMgEiJC3RgLBKt+5I4QUrPZcB8t1J/8+Iuy4bMWJRlV
-         haD/dV6kmXLxVUKjumQLD9Ynhe/W5kBq05LNZvowG5MzetfIdwGCsEaE2NpgcEYI+PnI
-         AFa6KuDdePk0k7SCvzTF6v3XUXJt0x5ojTMmejtxgT2k6yqKGVxD3BZteTa42F0xxB54
-         bpUKYo6hVDMqdNVv4qEbtFwX4tb4FrjwkijaBxnQ7IwhAr7fcn+qft2cNrWWwwuI86aZ
-         X7iQ==
-X-Gm-Message-State: AJIora9DiH2B8uujaL0QeWIqeqeNMIGB3Qpry98fKrl/W9fm71U72zUO
-        APz0r+2a2qbK0uROh/XCKmmO4roAbeaNvVE5S5+zEi/G33aYXKzV9uTBjKfs3ZidEcN+qmxcn/K
-        aY+lUZIo5UZekVHpDVFvX4ryw
-X-Received: by 2002:a05:620a:2807:b0:6a6:6ef1:fb9d with SMTP id f7-20020a05620a280700b006a66ef1fb9dmr2799992qkp.146.1656163723887;
-        Sat, 25 Jun 2022 06:28:43 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1umbOvkFH9zj98Ct7hnUPOcZ2hUgG9SnzFk1TnguB9l5RkrhwcTMbjtoBbjwby/Vu7lLH0CIw==
-X-Received: by 2002:a05:620a:2807:b0:6a6:6ef1:fb9d with SMTP id f7-20020a05620a280700b006a66ef1fb9dmr2799976qkp.146.1656163723628;
-        Sat, 25 Jun 2022 06:28:43 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id l14-20020ac8148e000000b002f9399ccefasm3289481qtj.34.2022.06.25.06.28.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Jun 2022 06:28:43 -0700 (PDT)
-Subject: Re: [PATCH v3 1/3] mfd: intel-m10-bmc: rename the local variables
-To:     Tianfei Zhang <tianfei.zhang@intel.com>, yilun.xu@intel.com,
-        lee.jones@linaro.org
-Cc:     hao.wu@intel.com, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, russell.h.weight@intel.com,
-        matthew.gerlach@linux.intel.com
-References: <20220624092229.45854-1-tianfei.zhang@intel.com>
- <20220624092229.45854-2-tianfei.zhang@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <e6e5547e-d4d4-03a5-43cd-90922f9d1959@redhat.com>
-Date:   Sat, 25 Jun 2022 06:28:40 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=x+Epx1coOg/vJnEueBwxobePEmc4y9ljKo+ccErekWo=;
+        b=iW/z44Wm+smZfJk2bpWJgUSViU2eom9WKrJou1JxszuYMtQj8wDkjrLxuSw673kQCH
+         RWQGI9UqKfrqDv6DHNOb7tccal1eWnxeXT8K2VKLxljfAPLhoCaoZ5pBq8ok6tvjaHPJ
+         3Zof2i4PAN9ANiiuTQzFKnBVXXjQ45S7jxMuwX0pBjEmch7QewPJ2A3hGfFlnIoJB8MP
+         veP68tyTT/mVkuu1Szdk9RjvbME66YV79ZL8lG2GCF/CbDY3uCOe+lodfwqO6poB2LUj
+         tsjC/kKeo4CnvPP+u6P+oj5QYr29mpFwj48q+pDuCxErDw+LFVvSgeSZQ+czEjeE0vKx
+         RrLw==
+X-Gm-Message-State: AJIora+0SJIrTv8PhJfklnzllTPaljwZxVwel/ZYCNi5OLxPWXIMOiJA
+        RG8n3MQbWZgAjoG3Vxm3bJhKnTiaTltOxUA3ueFFTmCRHTGg
+X-Google-Smtp-Source: AGRyM1sTmCr+DrWgD/fOg8RTQ/5jBSZ7rWCNzVIBGQoba1+RjWtnF9B0vPl7lMHktjSrviXDU8gtxiPgjs1RJk7g+EiJRRyAROd6
 MIME-Version: 1.0
-In-Reply-To: <20220624092229.45854-2-tianfei.zhang@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:24c7:b0:331:f0ae:3a17 with SMTP id
+ y7-20020a05663824c700b00331f0ae3a17mr2521427jat.238.1656163747376; Sat, 25
+ Jun 2022 06:29:07 -0700 (PDT)
+Date:   Sat, 25 Jun 2022 06:29:07 -0700
+In-Reply-To: <00000000000073aa8605e1df6ab9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000da315705e245abfa@google.com>
+Subject: Re: [syzbot] general protection fault in do_mpage_readpage
+From:   syzbot <syzbot+dbbd022e608bb122cf4e@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has bisected this issue to:
 
-On 6/24/22 2:22 AM, Tianfei Zhang wrote:
-> It had better use ddata for local variables which
-> directly interacts with dev_get_drvdata()/dev_set_drvdata().
+commit 4c27dc762d7b60fa23c6eab2309ca6fc625588dd
+Author: Matthew Wilcox (Oracle) <willy@infradead.org>
+Date:   Sat Jun 11 02:58:24 2022 +0000
 
-This is a cleanup, not related to the patchset, it should be split from 
-the patchset.
+    mpage: Convert do_mpage_readpage() to use a folio
 
-Tom
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16d2a888080000
+start commit:   34d1d36073ea Add linux-next specific files for 20220621
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=15d2a888080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=11d2a888080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b24b62d1c051cfc8
+dashboard link: https://syzkaller.appspot.com/bug?extid=dbbd022e608bb122cf4e
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1216c174080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14362fd8080000
 
->
-> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> ---
->   drivers/mfd/intel-m10-bmc.c | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
-> index 8db3bcf5fccc..7e521df29c72 100644
-> --- a/drivers/mfd/intel-m10-bmc.c
-> +++ b/drivers/mfd/intel-m10-bmc.c
-> @@ -86,15 +86,15 @@ static DEVICE_ATTR_RO(bmcfw_version);
->   static ssize_t mac_address_show(struct device *dev,
->   				struct device_attribute *attr, char *buf)
->   {
-> -	struct intel_m10bmc *max10 = dev_get_drvdata(dev);
-> +	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
->   	unsigned int macaddr_low, macaddr_high;
->   	int ret;
->   
-> -	ret = m10bmc_sys_read(max10, M10BMC_MAC_LOW, &macaddr_low);
-> +	ret = m10bmc_sys_read(ddata, M10BMC_MAC_LOW, &macaddr_low);
->   	if (ret)
->   		return ret;
->   
-> -	ret = m10bmc_sys_read(max10, M10BMC_MAC_HIGH, &macaddr_high);
-> +	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
->   	if (ret)
->   		return ret;
->   
-> @@ -111,11 +111,11 @@ static DEVICE_ATTR_RO(mac_address);
->   static ssize_t mac_count_show(struct device *dev,
->   			      struct device_attribute *attr, char *buf)
->   {
-> -	struct intel_m10bmc *max10 = dev_get_drvdata(dev);
-> +	struct intel_m10bmc *ddata = dev_get_drvdata(dev);
->   	unsigned int macaddr_high;
->   	int ret;
->   
-> -	ret = m10bmc_sys_read(max10, M10BMC_MAC_HIGH, &macaddr_high);
-> +	ret = m10bmc_sys_read(ddata, M10BMC_MAC_HIGH, &macaddr_high);
->   	if (ret)
->   		return ret;
->   
+Reported-by: syzbot+dbbd022e608bb122cf4e@syzkaller.appspotmail.com
+Fixes: 4c27dc762d7b ("mpage: Convert do_mpage_readpage() to use a folio")
 
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

@@ -2,120 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F41E55AB0B
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 16:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCB555AB0E
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 16:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbiFYOlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 10:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S232878AbiFYOmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 10:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbiFYOlL (ORCPT
+        with ESMTP id S232509AbiFYOl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 10:41:11 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C553A1A3;
-        Sat, 25 Jun 2022 07:41:09 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id cw10so10304645ejb.3;
-        Sat, 25 Jun 2022 07:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1HzW1IrxtxLnfOkRiTY/Z3Afa6/8aaGWZ9dIAJbG2Nk=;
-        b=R3+UDhDCGX4rc58cacrJwlaS7YBXY12lSKcE40nLJhiTgo2O2pWvKnmBBVnAeHaHB+
-         mrO8Tu9kGNcKiO05FclIWt1NPKIdqgZ+m+CU/fWj+3WGIogre1ZFn/fsrGyc//2f2bKs
-         U7YbsxS+p+punYMSmrZkq4Cq02FxbKah6YuARjfTx0fn95Sd3hd+/+PWssrstaZmYE+M
-         hylGJV5UufUDg7h2w4/QKQtgbX7AIcjUV62GkPyb3MJxfh0uPnLdVMeMaGyYnp0RdTyU
-         MsbJBhVLNNsrUokQ/K6Tp2rQufqBIDZJcHczB2wqxE88L7St/zc2ZjzV4F1H63UU5NkT
-         YzwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1HzW1IrxtxLnfOkRiTY/Z3Afa6/8aaGWZ9dIAJbG2Nk=;
-        b=NBvACxsDp62GH/uuo6BrhgtZMKi2QHRF+QPg8gQria7Ikc6Dl+qaNg8qWGmbi0SOd5
-         QKwhnyo8lPS7XshAB3ZAI4HwjXQJHRBBNYcih8AdvGRQ3YtkrmmDIAWdXGcOSCiCq3Jy
-         BVvcOP0qOo1dzUvUV4PzS1KVRWn2DvH007IV8wzOz9UoRYZnS1YTXU8jMWoSpW1GaxuN
-         EHS0d7JiJ0/ANf2TXHvtb/XyvIDv9zTOZJxk8z2GFSTbHOQqDMRJE4998lgQTuvnicLa
-         QOMSRXk/R3mxqLuGavR5U9xWtZUVjTUYzDtStHhV38BIvXhqqZA9th09N9w20fhzknFU
-         Ae5w==
-X-Gm-Message-State: AJIora8oMmTSsdtp75xVkpNgU5/9IQ3lmJ/O4X++uqe4PEZigWKt+tlD
-        KBvWZeBc/3Bs0c1ZaDPw9Yc=
-X-Google-Smtp-Source: AGRyM1vCGcLpPTTUrdXyFGNwK+QTNn9TSbEcT1j8rWJnoLHXAOTR9tld7lqxnxZ7Bm/8j9D7VzWafA==
-X-Received: by 2002:a17:906:2bda:b0:726:3b59:3ea9 with SMTP id n26-20020a1709062bda00b007263b593ea9mr4094197ejg.43.1656168068221;
-        Sat, 25 Jun 2022 07:41:08 -0700 (PDT)
-Received: from opensuse.localnet (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
-        by smtp.gmail.com with ESMTPSA id g4-20020a17090669c400b006fe9f9d0938sm2731821ejs.175.2022.06.25.07.41.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 07:41:06 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>,
-        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH] btrfs: Convert zlib_compress_pages() to use kmap_local_page()
-Date:   Sat, 25 Jun 2022 16:41:04 +0200
-Message-ID: <3110135.5fSG56mABF@opensuse>
-In-Reply-To: <20220618092752.25153-1-fmdefrancesco@gmail.com>
-References: <20220618092752.25153-1-fmdefrancesco@gmail.com>
+        Sat, 25 Jun 2022 10:41:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4064D1A3;
+        Sat, 25 Jun 2022 07:41:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 39CAACE0B2B;
+        Sat, 25 Jun 2022 14:41:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDCDBC3411C;
+        Sat, 25 Jun 2022 14:41:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656168114;
+        bh=fvytuOzKz8+Hgfrzl0n5EyY1atFGuwiHQUBiCMoc5as=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TKEEW+sQ7qjwGRKjbL+FrecAmKbTkHP5YHbBA7WBLQhP2IUYjgy1EF0ftl/v9FXB8
+         yWHOMR8iPEnm1tAPMExdGIBgnh1FwVzXAjXtTXByx1+yjyDc0XYYT2XYNpImv3cWGt
+         cCREzkFQcwa9xIzNeMRM+gokyEtn6ie4cZ5/zCYQ=
+Date:   Sat, 25 Jun 2022 16:41:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 5.19-rc4
+Message-ID: <YrcerztKA0mJxjVh@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On sabato 18 giugno 2022 11:27:52 CEST Fabio M. De Francesco wrote:
-> The use of kmap() is being deprecated in favor of kmap_local_page(). With
-> kmap_local_page(), the mapping is per thread, CPU local and not globally
-> visible.
-> 
-> Therefore, use kmap_local_page() / kunmap_local() in 
-zlib_compress_pages()
-> because in this function the mappings are per thread and are not visible
-> in other contexts.
-> 
-> Tested with xfstests on QEMU + KVM 32-bit VM with 4GB of RAM and
-> HIGHMEM64G enabled. This patch passes 26/26 tests of group "compress".
-> 
-> Cc: Qu Wenruo <wqu@suse.com>
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
-> 
-> This patch builds only on top of
-> "[PATCH] btrfs: zlib: refactor how we prepare the input buffer" by Qu 
-Wenruo".
-> https://lore.kernel.org/linux-btrfs/
-d0bfc791b5509df7b9ad44e41ada197d1b3149b3.1655519730.git.wqu@suse.com/
-> 
+The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
 
-I've seen that Qu sent a v2 of the above patch. However David thinks that 
-it is better not to map pages allocated in zlib.c for output (out_page) 
-since they cannot come from highmem because of "alloc_page(GFP_NOFS);".
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
 
-@David:
+are available in the Git repository at:
 
-I suppose that, since it builds _only_ on top of the refactor submitted by 
-Qu, I'll have to wait and see what you decide. 
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc4
 
-If you don't want kmap_local_page() and prefer using page_address() on 
-"out_page", please drop this patch and let me know, so that I can send a 
-new patch which will be in accordance to your preference.
+for you to fetch changes up to b24346a240b36cfc4df194d145463874985aa29b:
 
-Thanks,
+  usb: chipidea: udc: check request status before setting device address (2022-06-24 13:45:23 +0200)
 
-Fabio
+----------------------------------------------------------------
+USB driver fixes for 5.19-rc4
 
+Here are some small USB driver fixes and new device ids for 5.19-rc4 for
+a few small reported issues.  They include:
+	- new usb-serial driver ids
+	- MAINTAINERS file update to properly catch the USB dts files
+	- dt-bindings fixes for reported build warnings
+	- xhci driver fixes for reported problems
+	- typec Kconfig dependancy fix
+	- raw_gadget fuzzing fixes found by syzbot
+	- chipidea driver bugfix
+	- usb gadget uvc bugfix
 
+All of these have been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alan Stern (2):
+      usb: gadget: Fix non-unique driver names in raw-gadget driver
+      USB: gadget: Fix double-free bug in raw_gadget driver
+
+Andy Shevchenko (1):
+      usb: typec: wcove: Drop wrong dependency to INTEL_SOC_PMIC
+
+Carlo Lobrano (1):
+      USB: serial: option: add Telit LE910Cx 0x1250 composition
+
+Dan Vacura (1):
+      usb: gadget: uvc: fix list double add in uvcg_video_pump
+
+Geert Uytterhoeven (2):
+      dt-bindings: usb: ohci: Increase the number of PHYs
+      dt-bindings: usb: ehci: Increase the number of PHYs
+
+Greg Kroah-Hartman (1):
+      Merge tag 'usb-serial-5.19-rc4' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+
+Hongyu Xie (1):
+      xhci: Keep interrupt disabled in initialization until host is running.
+
+Johan Hovold (1):
+      USB: serial: pl2303: add support for more HXN (G) types
+
+Lukas Bulwahn (1):
+      MAINTAINERS: add include/dt-bindings/usb to USB SUBSYSTEM
+
+Macpaul Lin (1):
+      USB: serial: option: add Quectel RM500K module support
+
+Mathias Nyman (1):
+      xhci: turn off port power in shutdown
+
+Tanveer Alam (1):
+      xhci-pci: Allow host runtime PM as default for Intel Raptor Lake xHCI
+
+Utkarsh Patel (1):
+      xhci-pci: Allow host runtime PM as default for Intel Meteor Lake xHCI
+
+Xu Yang (1):
+      usb: chipidea: udc: check request status before setting device address
+
+Yonglin Tan (1):
+      USB: serial: option: add Quectel EM05-G modem
+
+ .../devicetree/bindings/usb/generic-ehci.yaml      |  3 +-
+ .../devicetree/bindings/usb/generic-ohci.yaml      |  3 +-
+ MAINTAINERS                                        |  1 +
+ drivers/usb/chipidea/udc.c                         |  3 ++
+ drivers/usb/gadget/function/uvc_video.c            |  3 ++
+ drivers/usb/gadget/legacy/raw_gadget.c             | 63 ++++++++++++++++------
+ drivers/usb/host/xhci-hub.c                        |  2 +-
+ drivers/usb/host/xhci-pci.c                        |  6 ++-
+ drivers/usb/host/xhci.c                            | 50 +++++++++++------
+ drivers/usb/host/xhci.h                            |  2 +
+ drivers/usb/serial/option.c                        |  6 +++
+ drivers/usb/serial/pl2303.c                        | 29 +++++-----
+ drivers/usb/typec/tcpm/Kconfig                     |  1 -
+ 13 files changed, 124 insertions(+), 48 deletions(-)

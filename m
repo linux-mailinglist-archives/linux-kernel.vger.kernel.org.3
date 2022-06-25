@@ -2,200 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B59F55AAAC
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6D455AAAA
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbiFYNxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 09:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        id S233191AbiFYNxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 09:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233194AbiFYNxd (ORCPT
+        with ESMTP id S233161AbiFYNxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 09:53:33 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629BA101E1
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 06:53:32 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id c65so7070737edf.4
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 06:53:32 -0700 (PDT)
+        Sat, 25 Jun 2022 09:53:31 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BB5E0FA
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 06:53:30 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 23so4934936pgc.8
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 06:53:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PlnmS3frLfts4lN6mux0s5tjQ529vDFTw9G/utyKOLc=;
-        b=QoEbCPuiaybxD9vKnJxJ/OJcico0ecxhqrFPj8xcBa73OLiOAszuAu983vNRjesdoi
-         mhuqvdgj4tcKrctX6u8Kc+6SYX8dfMsMriQc3zW+gRANolixXnj2H22fqHfzhn6wbb02
-         HNMUe09HsIGGS8COFHRaJR9KRHCCL+gfSB38BrQ7a4YbejZd694v1jpslFQf1Ln2cAGB
-         0YZNfNsMUQs2Nvx21sYNhRHVLatnmIVsbelwc0lRR4Vvtf10H96m0dJ83VMKlwKbqRl3
-         gQMbyBate3ax2U4z0bzXqrOOh6xCT0bONVPs2u3/qIjjFwjuLzTYAfgf/e8l9J8Nobv0
-         xVlA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ssSG9NDaz5ZbJzVFSE1tuGr3e4HO/pxxMdMPP20OtO0=;
+        b=TL+K1YseN25fcSGqq1Qwlw2Sd8g0IvOXwpW29JCwIuShvRjOlkGNOolHJs7/TcdaiQ
+         cufEbEO8ELC75aOOOINMDCXBxTb67TT2x/cI6vIyDxQLJxSu+eP/k6T1bbOxlWbyAb21
+         TpqdLzbKdUGJf0/kdsyTY+JZcb73LvrIftABHj9NDwZEBx5cjG7zSY7ClFWOSrGv87y2
+         NolSF0DxRTEKjnfD1nRfxafjawPIV7ZFoNqMq9ksr09uUf5kixbwW4MlOFh/Jmy5RWEi
+         nfVVO0cXu1953vCC6MqM2rRZ5CYWBL98Pm2VH2/8PZMyjUfrtaXQBQNk5EJuwjRgqZ1x
+         5nag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PlnmS3frLfts4lN6mux0s5tjQ529vDFTw9G/utyKOLc=;
-        b=Wm7SCB6ltV9GDDrL2X7opWYztZ5AJ1Z0vrTTSt225MGxVPecUndYfDtvNPzHlFLuK6
-         PqcCGqI65+RIfqxijTezqwwZtMa+olx9msZSaUHmL2s5CnBTWHw8gK+txgzLHsmkIYTq
-         lIfj3y+MACVAlJ32PTVmEnazZhQeDrNRSigaP6a2XO/A2SyRaN7TlUwH8PTzEXmhbDif
-         AHuseCKuYeGXD/Fub+CGRVMl74g3Ub9NKGBQbK+GCjrgVgTwjBgZL5aqzlVWSm3kYrkt
-         A8Z9gfM32xtYjai0BtdUPekjBT6+8CHeZrA12uMrI7+q9H1/0si1sGMXQ6ylNEl1K3Fj
-         USRQ==
-X-Gm-Message-State: AJIora/3Iw6/GI9lW+B+MoxxGqpAeeyQ2qYfDh/q+QtjsgQF2CsF85fW
-        B2VaJ4ItBBlZh6ie4Ag/Ck91aIxO5b8WN23t5qBx1g==
-X-Google-Smtp-Source: AGRyM1tk7lYHdyaf5uKBTwTbZaP8Ldp9jV7HNokyMHx7y3dvVaHlZvkzUQlTKkZlNEYBDyHOFarjG/rSaIKsisECPJI=
-X-Received: by 2002:a05:6402:50f:b0:435:7996:e90f with SMTP id
- m15-20020a056402050f00b004357996e90fmr5160813edv.110.1656165210770; Sat, 25
- Jun 2022 06:53:30 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ssSG9NDaz5ZbJzVFSE1tuGr3e4HO/pxxMdMPP20OtO0=;
+        b=sMy1f4P0Z0lsBOkqt34XWNsXq7Spqo0OM7URoi/yXpdoM16+ukj5QictxndiRRLFY2
+         2rL4vWdBav3jDjoo95W/+mLPtjgplUW1WJsZAfk3d5ebaPjOHnnw4U14hDfYxfZGioNy
+         KVb7uaVE3ed2r11P3YkvUI+3iN2/hbVPw7te7+CogefMSY7cXM7azxoOhAjHB+AFG3Oq
+         em24vN8LVlqJ9OnUbtdkMFql3fpdJacazZNwS4fbGgP2CeYZqZalAv3WjbWJYG73OGLt
+         DC4v21vR406vuXarNNMHiOIWbeuY4ew6cXyHLtvj3Uk7I8cKdTt2RsD1n2j6j3uSrvAa
+         TsNQ==
+X-Gm-Message-State: AJIora+c7eyB3EspxkmmR/Sk1DleOn3Z4F+TApyFjnyGypcTzfuFlmJB
+        0nNkZU02633Mx112Oh4hAqWmBqjjxAx87NbO
+X-Google-Smtp-Source: AGRyM1v28COo6h6W3qeUrtuekHe3A2GZFl5WCroiVF54Hr7iP5K3rcffXTRT6E+cGy//Q/5GbK2BKA==
+X-Received: by 2002:a63:3606:0:b0:40d:677:8815 with SMTP id d6-20020a633606000000b0040d06778815mr3870366pga.212.1656165209959;
+        Sat, 25 Jun 2022 06:53:29 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.231])
+        by smtp.gmail.com with ESMTPSA id k64-20020a17090a14c600b001eb162ffaa3sm3600119pja.25.2022.06.25.06.53.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Jun 2022 06:53:29 -0700 (PDT)
+From:   wuchi <wuchi.zero@gmail.com>
+To:     willy@infradead.org, rdunlap@infradead.org,
+        akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] lib/radix-tree: Remove unused argument of insert_entries
+Date:   Sat, 25 Jun 2022 21:53:24 +0800
+Message-Id: <20220625135324.72574-1-wuchi.zero@gmail.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-References: <20220623164344.053938039@linuxfoundation.org>
-In-Reply-To: <20220623164344.053938039@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 25 Jun 2022 19:23:19 +0530
-Message-ID: <CA+G9fYuGmGKz0y8LV=LEfs00L98FDDOgRrvm-jS_5+JzgS-yOQ@mail.gmail.com>
-Subject: Re: [PATCH 4.9 000/264] 4.9.320-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Jun 2022 at 22:17, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.320 release.
-> There are 264 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 25 Jun 2022 16:43:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.9.320-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Function insert_entries doesn't use the 'bool replace' argument,
+and the function is only used locally, remove the argument.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+The historical context of the unused argument is as follow:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+2: commit <3a08cd52c37c79> (radix tree: Remove multiorder support)
+  Remove the code related to macro CONFIG_RADIX_TREE_MULTIORDER
+to convert to the xArray.
+  Without the macro, there is no need to retain the argument.
 
-## Build
-* kernel: 4.9.320-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.9.y
-* git commit: 00d9858d20e4c4b5988b85df09c79010e037e456
-* git describe: v4.9.319-265-g00d9858d20e4
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
-19-265-g00d9858d20e4
+1: commit <175542f575723e> (radix-tree: add radix_tree_join)
+  Add insert_entries(..., bool replace) function, depending on the
+macro CONFIG_RADIX_TREE_MULTIORDER definition, the implementation
+is different. Notice that the implementation without the macro doesn't
+use the argument.
 
-## Test Regressions (compared to v4.9.319-251-g5de156af25f6)
-No test regressions found.
+[Matthew Wilcox: add historical context for argument]
 
-## Metric Regressions (compared to v4.9.319-251-g5de156af25f6)
-No metric regressions found.
+Signed-off-by: wuchi <wuchi.zero@gmail.com>
+---
+ lib/radix-tree.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-## Test Fixes (compared to v4.9.319-251-g5de156af25f6)
-No test fixes found.
+diff --git a/lib/radix-tree.c b/lib/radix-tree.c
+index b3afafe46fff..3c78e1e8b2ad 100644
+--- a/lib/radix-tree.c
++++ b/lib/radix-tree.c
+@@ -677,7 +677,7 @@ static void radix_tree_free_nodes(struct radix_tree_node *node)
+ }
+ 
+ static inline int insert_entries(struct radix_tree_node *node,
+-		void __rcu **slot, void *item, bool replace)
++		void __rcu **slot, void *item)
+ {
+ 	if (*slot)
+ 		return -EEXIST;
+@@ -711,7 +711,7 @@ int radix_tree_insert(struct radix_tree_root *root, unsigned long index,
+ 	if (error)
+ 		return error;
+ 
+-	error = insert_entries(node, slot, item, false);
++	error = insert_entries(node, slot, item);
+ 	if (error < 0)
+ 		return error;
+ 
+-- 
+2.20.1
 
-## Metric Fixes (compared to v4.9.319-251-g5de156af25f6)
-No metric fixes found.
-
-## Test result summary
-total: 104551, pass: 91428, fail: 204, skip: 11519, xfail: 1400
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 261 total, 255 passed, 6 failed
-* arm64: 50 total, 39 passed, 11 failed
-* i386: 27 total, 23 passed, 4 failed
-* mips: 22 total, 22 passed, 0 failed
-* parisc: 12 total, 0 passed, 12 failed
-* powerpc: 36 total, 16 passed, 20 failed
-* s390: 12 total, 9 passed, 3 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 46 total, 44 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-cap_bounds-tests
-* ltp-commands
-* ltp-commands-tests
-* ltp-containers
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps
-* ltp-filecaps-tests
-* ltp-fs
-* ltp-fs-tests
-* ltp-fs_bind
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple
-* ltp-fs_perms_simple-tests
-* ltp-fsx
-* ltp-fsx-tests
-* ltp-hugetlb
-* ltp-hugetlb-tests
-* ltp-io
-* ltp-io-tests
-* ltp-ipc
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-pty-tests
-* ltp-sched
-* ltp-sched-tests
-* ltp-securebits
-* ltp-securebits-tests
-* ltp-smoke
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

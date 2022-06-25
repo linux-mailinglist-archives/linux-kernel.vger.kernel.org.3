@@ -2,73 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BB655A5EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 03:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9C455A5F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 03:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiFYBxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 21:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S231676AbiFYB5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 21:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbiFYBxK (ORCPT
+        with ESMTP id S229520AbiFYB5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 21:53:10 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD00822BC0
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 18:53:09 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id 3-20020a056e0220c300b002d3d7ebdfdeso2590687ilq.16
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 18:53:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=GtGyCwocl0Yp8tVlP9BXhAQlgSd3iI9ATo+V/AeC5gg=;
-        b=H+lmSJoWq/Im5O63kahSOV1DcJ1aR4wH0Q01pZQsi89UpzZviN3EJvhuJvr8AoYmES
-         pjf2u0hFnydlL71XnT5eD3cFLfY2XdGg2PzCedt/HqTBvkr76LLCAjqnXONIE2TK2IAj
-         f7ixJKONjQfR3ZtO1HVJVvnjbMevJ5EBYDC9AGhHkpiwEdWfaR78MdchNEMT6xVP0It6
-         MSiIxITSI00uzBB2FI46gGyqvrVJTzGgAKqniU/0Yb5XlaSjpBjONsNtBGDVGu4ZepfT
-         D0S8lF+YadcYdIQCPbrePpc+yAn7UHfUy5NvQbC7VqsEVIkWIXtYPbxqqF9qWdVFv/YA
-         dYmQ==
-X-Gm-Message-State: AJIora+yd86BfHbLK5wSrWT5dkRgz8cvfmMS9XoPGJbNEqLPcOTSHhjs
-        xqbkuNCISWUVKsp5C+PyKfXrWAnWogJ51eq3sw31L4sJ3LAk
-X-Google-Smtp-Source: AGRyM1vCuOH7osTjkET3EpP/lgx/hPHI2xJ7gxMA1L9hrWwn/2kKC25W0hxATcCxtgqi9R1x5QR2B1ZAFGmjLZt1TwAN96O05JX6
+        Fri, 24 Jun 2022 21:57:17 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5414D51E52;
+        Fri, 24 Jun 2022 18:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656122236; x=1687658236;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9SWAe/gPW+o7A+E1CI50enYZzx1mTK47iGojpYjytnY=;
+  b=t+liYEIzwGFFHJzGQxuTNgE4CzrwRN9vMkoftEGrvrGBR96DdhIGs7pf
+   HakHBtg0H0x5KKOOBbnwzwN5D+X5z9J0dMgVkIQ0v7m5iLGOvZ7MNz76K
+   VgIYwEabEZnKXVFHZyp3XvD7FxQ21pMQRc0sp+96hbmThx03CfaDU27LU
+   U=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Jun 2022 18:57:16 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 18:57:15 -0700
+Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 24 Jun
+ 2022 18:57:15 -0700
+Date:   Fri, 24 Jun 2022 18:57:14 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Robert Marko <robimarko@gmail.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: firmware: qcom-scm: convert to dtschema
+Message-ID: <20220625015714.GA6675@quicinc.com>
+References: <20220623182542.1116677-1-robimarko@gmail.com>
+ <20220624010103.GA23758@quicinc.com>
+ <CAOX2RU7yKuV4i_9YRs9fx2DTTvAndWFFw3cYtQ3qFk9m1zZJVg@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:16c2:b0:332:3901:d8b7 with SMTP id
- g2-20020a05663816c200b003323901d8b7mr1235438jat.73.1656121989315; Fri, 24 Jun
- 2022 18:53:09 -0700 (PDT)
-Date:   Fri, 24 Jun 2022 18:53:09 -0700
-In-Reply-To: <20220624230752.745-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e0c4ce05e23bf2bc@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in free_netdev (3)
-From:   syzbot <syzbot+b75c138e9286ac742647@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAOX2RU7yKuV4i_9YRs9fx2DTTvAndWFFw3cYtQ3qFk9m1zZJVg@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Jun 24 2022 10:50, Robert Marko wrote:
+> On Fri, 24 Jun 2022 at 03:01, Guru Das Srinagesh <quic_gurus@quicinc.com> wrote:
+> >
+> > On Thu, Jun 23, 2022 at 08:25:42PM +0200, Robert Marko wrote:
+> >
+> > > +
+> > > +description: |
+> > ...
+> > > +
+> > > +  '#reset-cells':
+> > > +    const: 1
+> >
+> > This isn't part of the original file - could you please explain why this is
+> > being added?
+> 
+> Yes, its not part of the original file, however I noticed that a lot of SCM
+> nodes were adding #reset-cells, and upon looking at the SCM code its
+> clear that it is being registered as a reset controller so #reset-cells are
+> appropriate.
+> 
+> However, since its not really being used via phandles #reset-cells did
+> not really matter, hence why I did not add them to be required,
+> this is something that DT guys can probably clarify.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Makes sense, ACK.
 
-Reported-and-tested-by: syzbot+b75c138e9286ac742647@syzkaller.appspotmail.com
+Thank you.
 
-Tested on:
-
-commit:         b4a028c4 ipv4: ping: fix bind address validity check
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=15fe514bf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=70e1a4d352a3c6ae
-dashboard link: https://syzkaller.appspot.com/bug?extid=b75c138e9286ac742647
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=175c6e37f00000
-
-Note: testing is done by a robot and is best-effort only.
+Guru Das.

@@ -2,140 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23C755A71C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 07:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B9C55A738
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 07:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiFYFAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 01:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
+        id S230025AbiFYFKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 01:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiFYFAR (ORCPT
+        with ESMTP id S231537AbiFYFKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 01:00:17 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BE3427E2
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 22:00:16 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id p31so7471188qvp.5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 22:00:16 -0700 (PDT)
+        Sat, 25 Jun 2022 01:10:43 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CC84831A
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 22:10:40 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id c10-20020a251c0a000000b00669b463d2e1so3813629ybc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 22:10:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1qrPonAVKPhMOTfPeMHYE23I+GZiCtHV4xsHgdJefdw=;
-        b=bUPjir8aIntIGdVzOv1x4cfMK3ebucUwYSG+JagWwih0jk1LtX3Ct3DpErZJDWTqqS
-         ECYsTlvJl5fIBKjO8X0IbrSj9KBaNSEzu1fl1wk4Sj9QGmaNNfAP7dAEQz0JfIrRjH1H
-         WmI1/khrtmVjD2x5Zf/8YWwz7hmz09DUvJJMQRQqk/xV1gpZ6+zVsI0Wv0IKRJ0yZb1Y
-         MT69Ip0GqOTUuHtWmtuQQ/Bs8Ej40Dlu7HdUWV0QePescCZZRTdDoPKE3IeU+CC2sg57
-         4soOJf/J7R3idi7mmzJbRCJwRvUUX3G6AQ16LZw5WbLvEtBSZfXMpMYiESKYIJeIwRx1
-         YDzA==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=w4sImYlkO8ijtHtHqXjuNpZj0tKuVZDrJNUstUmHo0Y=;
+        b=EqD8y2+aOVUkTGcq5ZUmSJSlcNdi0/42WaEgggkl5B3OgbsWkhjLvSidKJ/JJ0Ii8D
+         n5a4Jh42vH8vTZ+mrg+TgQiYpMZMV5Wwr7Ontt6SKvDFTSV2uVH5HifBJwaRiN+Mta7o
+         R5UWn0iyCaAL68/7Educg/KLDyigRQWkyUnoluYUe7nfxYLaByKZUDwGF46yZEtAKhbG
+         8UsVYqpRwR/p+mL+pPSwt9lVlTi4ocx+NI0DRkaxQZ5aSTH7oaa9h7Btr1uOipe43x6N
+         IqIiTq7UsvFiUg2NM3r57zmp1YW3HI30VyzT2gakok84AaaSUhD3aDEahzIZwKyBUfhd
+         4f/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=1qrPonAVKPhMOTfPeMHYE23I+GZiCtHV4xsHgdJefdw=;
-        b=KZfVu8vWWO4ryLeIIA5BGRFEp7ucrLicmRoTKt9G/dsmkBfYJnH9JTwuzgidq4ZCoy
-         SqueOsMav5V4MrfR9/CJa68I1EJiz70x2VCNdg99JWZ6XP+2lLeHEPPcmyA7me+b/Tp8
-         aSPnDlFQznU3hpP6cwQQyERWFvfN10hW8NPL25vWEsO+1eq0lUQS+BCPfbA4O2yOFMUM
-         tMZPF8fvDO/iP1cz+vpeRefTnZOJbFAMp6sitfo6O+pGCRBsN64XSgmhnfp7Ud4E12fN
-         u2HwCQFQARajC8EZn7MiZzC2QDQXJkHRzUIHEPoiwNqi0PXTu9BoUxyAiLqFGx1nwv5v
-         pygg==
-X-Gm-Message-State: AJIora8e+PmddUtVyqa6ziU/ydbkSxGLUhvjhCfZSs3CuEiUFz22lNeE
-        l0VmKmBsE/kXXscsH7c/vTNj2yLKH2VK5/nZ
-X-Google-Smtp-Source: AGRyM1u1Uzh31MvFfeN4c7hdu9L2ofTAdT1lhO272q2x+ykzjD9rY3Pvu3EvDFKl6O1Z3+We+94N4w==
-X-Received: by 2002:ac8:5793:0:b0:304:ffe3:d3c5 with SMTP id v19-20020ac85793000000b00304ffe3d3c5mr2020051qta.460.1656133215365;
-        Fri, 24 Jun 2022 22:00:15 -0700 (PDT)
-Received: from localhost ([2600:380:526b:c476:2748:efa5:4652:607d])
-        by smtp.gmail.com with ESMTPSA id l2-20020a05620a28c200b006a6cadd89efsm3787141qkp.82.2022.06.24.22.00.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 22:00:14 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sat, 25 Jun 2022 14:00:10 +0900
-From:   Tejun Heo <tj@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Hocko <mhocko@suse.com>, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: re. Spurious wakeup on a newly created kthread
-Message-ID: <YraWWl+Go17uPOgR@mtj.duckdns.org>
-References: <20220622140853.31383-1-pmladek@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622140853.31383-1-pmladek@suse.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=w4sImYlkO8ijtHtHqXjuNpZj0tKuVZDrJNUstUmHo0Y=;
+        b=fvjoUEwgojhlCtUR5N25uqpfA9YvwvCM9eca8boqPjeRXLTYKdjIViyv8rtQsM5bKF
+         Wtfnc6CI5Wdh2J+Z4tz1AbYVL9qrxyzWCXNUEOAeKz/vab1bPF+Y5jqYcPA8gYzWY6eJ
+         MnJqP1SEozoa3zUU7sr3nYPNT40Z4mAXrRih0xIwfjWzSF3jjpXpDThR9Vk1EO3t7S5e
+         BZhKNcd/CeyhdIaTUOraLduGEHqpGVuA42lYMyWKKOYM8/4dHpXtcx3SDzweJHgTqGst
+         ti2XDAodmYHtzUr4H8ULsJ9S+oifWc2gq1ZP1Ce8BwO20+tBo1z5OoTPQ2KiwesAUYyD
+         aNmw==
+X-Gm-Message-State: AJIora9ZbVpdQNNznH+Jj9f/n1SwO0rg4ivINYwOipkQC5pJtHkiI64z
+        ftvMcUYysVPqM9T7Lv4GgJWSaa5iJjBnLg==
+X-Google-Smtp-Source: AGRyM1un+sBPc/7wBD+YQSQ7XAND66LYZk9RBj7rFNjc67YShu92PiqgyBy4jeaAtiwe0X78yPXPHI8EK15Tmw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a81:7cd6:0:b0:317:b6a2:6f15 with SMTP id
+ x205-20020a817cd6000000b00317b6a26f15mr2708816ywc.234.1656133839830; Fri, 24
+ Jun 2022 22:10:39 -0700 (PDT)
+Date:   Sat, 25 Jun 2022 13:08:34 +0800
+Message-Id: <20220625050838.1618469-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v3 0/5] Rework KUnit test execution in modules
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andra Paraschiv <andraprs@amazon.com>,
+        Longpeng <longpeng2@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "=?UTF-8?q?Ma=C3=ADra=20Canal?=" <maira.canal@usp.br>,
+        linux-mmc@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-modules@vger.kernel.org,
+        Matt Johnston <matt@codeconstruct.com.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This patch series makes two changes to how KUnit test suites are stored
+and executed:
+- The .kunit_test_suites section is now used for tests in modules (in
+  lieu of a module_init funciton), as well as for built-in tests. The
+  module loader will now trigger test execution. This frees up the
+  module_init function for other uses.
+- Instead of storing an array of arrays of suites, have the
+  kunit_test_suite() and kunit_test_suites() macros append to one global
+  (or per-module) list of test suites. This removes a needless layer of
+  indirection, and removes the need to NULL-terminate suite_sets.
 
-cc'ing random assortment of ppl who touched kernel/kthread.c and
-others who would know better.
+The upshot of this is that it should now be possible to use the
+kunit_test_suite() and kunit_test_suites() macros to register test
+suites even from within modules which otherwise had module_init
+functions. This was proving to be quite a common issue, resulting in
+several modules calling into KUnit's private suite execution functions
+to run their tests (often introducing incompatibilities with the KUnit
+tooling).
 
-So, Petr debugged a NULL deref in workqueue code to a spurious wakeup
-on a newly created kthread. The abbreviated patch description follows.
-The original message is at
+This series also fixes the thunderbolt, nitro_enclaves, and
+sdhci-of-aspeed tests to use kunit_test_suite() now that it works. This
+is required, as otherwise the first two patches may break these tests
+entirely.
 
-  http://lkml.kernel.org/r/20220622140853.31383-1-pmladek@suse.com
+Huge thanks to Jeremy Kerr, who designed and implemented the module
+loader changes, and to Daniel Latypov for pushing the simplification of
+the nested arrays in .kunit_test_suites.
 
-On Wed, Jun 22, 2022 at 04:08:53PM +0200, Petr Mladek wrote:
-> A system crashed with the following BUG() report:
-> 
->   [115147.050484] BUG: kernel NULL pointer dereference, address: 0000000000000000
-...
->   [115147.050524] Call Trace:
->   [115147.050533]  worker_thread+0xb4/0x3c0
->   [115147.050540]  kthread+0x152/0x170
->   [115147.050544]  ret_from_fork+0x35/0x40
-> 
-> Further debugging shown that the worker thread was woken
-> before worker_attach_to_pool() finished in create_worker().
-> 
-> Any kthread is supposed to stay in TASK_UNINTERRUPTIBLE sleep
-> until it is explicitly woken. But a spurious wakeup might
-> break this expectation.
-> 
-> As a result, worker_thread() might read worker->pool before
-> it was set in worker create_worker() by worker_attach_to_pool().
-> Also manage_workers() might want to create yet another worker
-> before worker->pool->nr_workers is updated. It is a kind off
-> a chicken & egg problem.
+I've tested this series both with builtin tests on a number of
+architectures, and with modules on x86_64, and it seems good-to-go to
+me. More testing (particularly of modules) with more interesting setups
+never hurts, though!
 
-tl;dr is that the worker creation code expects a newly created worker
-kthread to sit tight until the creator finishes setting up stuff and
-sends the initial wakeup. However, something, which wasn't identified
-in the report (Petr, it'd be great if you can find out who did the
-wakeup), wakes up the new kthread before the creation path is done
-with init which causes the new kthread to try to deref a NULL pointer.
+Cheers,
+-- David
 
-Petr fixed the problem by adding an extra handshake step so that the
-new kthread explicitly waits for the creation path, which is fine, but
-the picture isn't making sense to me.
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20220621085345.603820-1-davidgow@google.com/
+- Add various Reviewed-by and Acked-by tags.
+- Fix the Kconfig for thunderbolt to not allow USB4=y and KUNIT=m with
+  tests enabled.
+- Clean up the sdhci-of-aspeed init a bit more (Thanks Daniel)
 
-* Are spurious wakeups allowed? The way that we do set_current_state()
-  in every iteration in wait_event() seems to suggest that we expect
-  someone to spuriously flip task state to RUNNING.
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20220618090310.1174932-1-davidgow@google.com/
+- Fix a compile issue when CONFIG_KUNIT=m (Thanks Christophe)
+- No longer NULL-terminate suite_sets.
+- Move the thunderbird Kconfig to the correct patch (Thanks Andra)
+- Add all the Tested-by and Acked-by tags.
 
-* However, if we're to expect spurious wakeups for anybody anytime,
-  why does a newly created kthread bother with
-  schedule_preempt_disabled() in kernel/kthread.c::kthread() at all?
-  It can't guarantee anything and all it does is masking subtle bugs.
+---
+Daniel Latypov (1):
 
-What am I missing here?
+Daniel Latypov (1):
+  kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites
 
-Thanks.
+David Gow (3):
+  thunderbolt: test: Use kunit_test_suite() macro
+  nitro_enclaves: test: Use kunit_test_suite() macro
+  mmc: sdhci-of-aspeed: test: Use kunit_test_suite() macro
+
+Jeremy Kerr (1):
+  kunit: unify module and builtin suite definitions
+
+ drivers/mmc/host/Kconfig                      |   5 +-
+ drivers/mmc/host/sdhci-of-aspeed-test.c       |   8 +-
+ drivers/mmc/host/sdhci-of-aspeed.c            |  34 +----
+ drivers/thunderbolt/Kconfig                   |   6 +-
+ drivers/thunderbolt/domain.c                  |   3 -
+ drivers/thunderbolt/tb.h                      |   8 -
+ drivers/thunderbolt/test.c                    |  12 +-
+ drivers/virt/nitro_enclaves/Kconfig           |   5 +-
+ drivers/virt/nitro_enclaves/ne_misc_dev.c     |  27 ----
+ .../virt/nitro_enclaves/ne_misc_dev_test.c    |   5 +-
+ include/kunit/test.h                          |  60 ++------
+ include/linux/module.h                        |   5 +
+ kernel/module/main.c                          |   6 +
+ lib/kunit/executor.c                          | 115 ++++----------
+ lib/kunit/executor_test.c                     | 144 +++++-------------
+ lib/kunit/test.c                              |  54 ++++++-
+ 16 files changed, 154 insertions(+), 343 deletions(-)
 
 -- 
-tejun
+2.37.0.rc0.161.g10f37bed90-goog
+

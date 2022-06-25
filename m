@@ -2,79 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A500655A6AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 05:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF82955A6C6
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 06:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiFYDoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 23:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
+        id S229970AbiFYEFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 00:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiFYDn6 (ORCPT
+        with ESMTP id S231300AbiFYEE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 23:43:58 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F323A714;
-        Fri, 24 Jun 2022 20:43:57 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id z14so4122985pgh.0;
-        Fri, 24 Jun 2022 20:43:57 -0700 (PDT)
+        Sat, 25 Jun 2022 00:04:59 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B6AB7D3;
+        Fri, 24 Jun 2022 21:04:58 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id h192so4113735pgc.4;
+        Fri, 24 Jun 2022 21:04:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=X5w+HulnPF/zYNAZP+7heB8iRi4bWtMYa0BgC6LI980=;
-        b=MIMRFLPvYoCjp3vHj9M/tcq6z2v0vvxF+BWZJ2pBS+7v96r4rDphe+74ewa8VC3xHC
-         a4Qz/tkob29rqXLA93/0PwEKkKM/kSOkcfSMx5LeS3i4vRu6s+vuvz2JPKpz05risorz
-         m527DHCPBQ0+hDrSgezHccFuMbHWGsnnqujbvEd2hTt0IiuTDLmBWSu/ATS17+pYy+AU
-         XsuQgv3Us/R771NJodYn+p1qupP4bwgYnH3WZ8Pr09D8IsZe3TJD3hAL9JZe6Cv3hqnA
-         KflZjcXuIJ+pGAu4Pi7GUCiQxJ1TWC7RonKeJspQKo40Y/JdHs4xrHEyLxu2sS1rOVmV
-         zAPA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WBt/btUb8fidp7Od3hgblEREGwTCWyy1gmQjOCfY3fU=;
+        b=U/9jOhfyin/xPm7/lhb3QQD5hUeqWoso3ZUE4nrDpj+uCxrVZoUa6Nd3Ck/My6d0yi
+         uppYCT29YGR4+ED265rzl5CvHaPa9jAGrevS8NrjQCL2swa/6jIuJFW7ijxN5Kwk3kBm
+         JV3zRaXX17ljjVxLWEmEYneBMjkOzcbgPwAATblJGSLPQW9zrru3NcHlbevjvxhjXf2X
+         4fZUXrqKoxs5SGRwhMih22jCYG6mLHxDBQ9QA+V/Ap/ZmZMWhJBLgf3cIDLH/WvFpZqO
+         6XUFzNOC5pd+9LH1sxuFUCYfWolIKgEMvYZ3auh92ECWjOyrr+qjV1d2Dawwr5UE8zHy
+         fSYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=X5w+HulnPF/zYNAZP+7heB8iRi4bWtMYa0BgC6LI980=;
-        b=oYEuP5QV05OfvrRFSLwdJ6f5QDhe74Z+K6U74ELuhFu00SuDgWErTfmVLhhzTP61E0
-         fGaXe9PaHQwybOQCkcv7mAn1fguS+eC2+bdt5lSK1w6Gtrjnl5bU7ZCVLGJ4aZGcPNWk
-         GPnA0Rjp00cIDdHPVezG81J6cXjGTacDRcWyPHIUBpsoCa8lg5KsijGuYk1AcTk89+FE
-         3ftGZlq6f2EUB3czUZojKiIyIlDS6ATqr1wUWWx5s521SqoBAoqPh7T/oFMi+/MTmN+R
-         bxY9UsHTC6CyWTuMkoH1zUBJ7FI9hE/tP5aH/MViZYylDxc6xVMI8X9MS9NbeG3GCfxP
-         Gdwg==
-X-Gm-Message-State: AJIora82mnIy7b8qRqPIUBbSxrodJpkXw70FWinTRhnS6DmykBi5bmZX
-        588N6mymS97iqaUqPrHRvfjJVU156Je5yA==
-X-Google-Smtp-Source: AGRyM1tQ4LCSGO+IvrOaFJxQpxEnKwFvzaMq7DarqdJKFKHl6rLWGiiscIOd6PTlig3YQod1p360bg==
-X-Received: by 2002:a65:6e04:0:b0:40d:26eb:8225 with SMTP id bd4-20020a656e04000000b0040d26eb8225mr1995550pgb.138.1656128637083;
-        Fri, 24 Jun 2022 20:43:57 -0700 (PDT)
-Received: from ?IPV6:2600:8802:b00:4a48:edae:5ad3:3d10:1075? ([2600:8802:b00:4a48:edae:5ad3:3d10:1075])
-        by smtp.gmail.com with ESMTPSA id p15-20020a17090a348f00b001ecc616c9f3sm4725345pjb.21.2022.06.24.20.43.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 20:43:55 -0700 (PDT)
-Message-ID: <903a2ac9-64e6-e4d0-a0e7-6160284e6b3e@gmail.com>
-Date:   Fri, 24 Jun 2022 20:43:54 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WBt/btUb8fidp7Od3hgblEREGwTCWyy1gmQjOCfY3fU=;
+        b=JlHATJqtj6UdYHVGZ3CXdT+D7fwYr68iu2Qjj4caqKs2kusi0GO+PewAE7ZSSW6j0A
+         gM6IutqEb8xXS7Ea3QEY2Cm+rAn7fl/JT/HM3VFBuvipltzTJe94IFeeA0FGtZww++IB
+         uabcFiTF9n/hvnCLf2vhTQuhushhCJ0cpD+G8nArzqIdshVqvhkPTSXWVp0ZByDzi5Zg
+         SSD4RSUiJuWU0j/yDei7k9FaHxw9NM2bqDzOHSKb+O3xDoYPdTXEdqyJR6QkKvIKuSSn
+         989EveowvJ8YlFPzT/D45w0rEiKAolRaqu7FyYpqZ5B9irT5fgqsiaXAqM762bbP2MZj
+         8Kzw==
+X-Gm-Message-State: AJIora+whcGAISbWTdpT/3NY0fjUo89XspbU4H+HMcr18OkcsDI3JtFr
+        A6pbBqnU92qt9CslA6XrRFl2F2HH4kqsCA==
+X-Google-Smtp-Source: AGRyM1vLmqY6wDucr+TwoJMOmf3PJcPGDXbsAVQaOC2Ok2+1xpNGLbPuxQdolETx+44LH2D87vYqmw==
+X-Received: by 2002:a63:44:0:b0:40c:9f98:a172 with SMTP id 65-20020a630044000000b0040c9f98a172mr1947422pga.65.1656129897973;
+        Fri, 24 Jun 2022 21:04:57 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id n1-20020a170902e54100b00168adae4eb2sm2579898plf.262.2022.06.24.21.04.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 21:04:57 -0700 (PDT)
+Date:   Sat, 25 Jun 2022 13:04:55 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, linux-ia64@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Jonas Bonn <jonas@southpole.se>,
+        linux-s390@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        x86@kernel.org, christophe.leroy@csgroup.eu, hch@infradead.org,
+        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-um@lists.infradead.org, linux-m68k@lists.linux-m68k.org,
+        openrisc@lists.librecores.org,
+        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-alpha@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH V4 10/26] openrisc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Message-ID: <YraJZ7OahapN5Y6z@antec>
+References: <20220624044339.1533882-1-anshuman.khandual@arm.com>
+ <20220624044339.1533882-11-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/2] arm64: dts: broadcom: align SPI NOR node name with
- dtschema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Scott Branden <sbranden@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ray Jui <rjui@broadcom.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com
-References: <20220407143211.295271-1-krzysztof.kozlowski@linaro.org>
- <20220407143211.295271-2-krzysztof.kozlowski@linaro.org>
- <20220407185710.2576287-1-f.fainelli@gmail.com>
- <2079f567-ff8f-5790-cba7-837c311e5fce@linaro.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <2079f567-ff8f-5790-cba7-837c311e5fce@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624044339.1533882-11-anshuman.khandual@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,25 +82,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/20/2022 1:52 AM, Krzysztof Kozlowski wrote:
-> On 07/04/2022 20:57, Florian Fainelli wrote:
->> On Thu,  7 Apr 2022 16:32:11 +0200, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->>> The node names should be generic and SPI NOR dtschema expects "flash".
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->>
->> Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
+On Fri, Jun 24, 2022 at 10:13:23AM +0530, Anshuman Khandual wrote:
+> This enables ARCH_HAS_VM_GET_PAGE_PROT on the platform and exports standard
+> vm_get_page_prot() implementation via DECLARE_VM_GET_PAGE_PROT, which looks
+> up a private and static protection_map[] array. Subsequently all __SXXX and
+> __PXXX macros can be dropped which are no longer needed.
 > 
-> Thanks Florian. It seems that patch is still not in linux-next. Is your
-> tree included in the linux-next?
+> Cc: Jonas Bonn <jonas@southpole.se>
+> Cc: openrisc@lists.librecores.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  arch/openrisc/Kconfig               |  1 +
+>  arch/openrisc/include/asm/pgtable.h | 18 ------------------
+>  arch/openrisc/mm/init.c             | 20 ++++++++++++++++++++
+>  3 files changed, 21 insertions(+), 18 deletions(-)
+> 
+> diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
+> index e814df4c483c..fe0dfb50eb86 100644
+> --- a/arch/openrisc/Kconfig
+> +++ b/arch/openrisc/Kconfig
+> @@ -10,6 +10,7 @@ config OPENRISC
+>  	select ARCH_HAS_DMA_SET_UNCACHED
+>  	select ARCH_HAS_DMA_CLEAR_UNCACHED
+>  	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+> +	select ARCH_HAS_VM_GET_PAGE_PROT
+>  	select COMMON_CLK
+>  	select OF
+>  	select OF_EARLY_FLATTREE
+> diff --git a/arch/openrisc/include/asm/pgtable.h b/arch/openrisc/include/asm/pgtable.h
+> index c3abbf71e09f..dcae8aea132f 100644
+> --- a/arch/openrisc/include/asm/pgtable.h
+> +++ b/arch/openrisc/include/asm/pgtable.h
+> @@ -176,24 +176,6 @@ extern void paging_init(void);
+>  	__pgprot(_PAGE_ALL | _PAGE_SRE | _PAGE_SWE \
+>  		 | _PAGE_SHARED | _PAGE_DIRTY | _PAGE_EXEC | _PAGE_CI)
+>  
+> -#define __P000	PAGE_NONE
+> -#define __P001	PAGE_READONLY_X
+> -#define __P010	PAGE_COPY
+> -#define __P011	PAGE_COPY_X
+> -#define __P100	PAGE_READONLY
+> -#define __P101	PAGE_READONLY_X
+> -#define __P110	PAGE_COPY
+> -#define __P111	PAGE_COPY_X
+> -
+> -#define __S000	PAGE_NONE
+> -#define __S001	PAGE_READONLY_X
+> -#define __S010	PAGE_SHARED
+> -#define __S011	PAGE_SHARED_X
+> -#define __S100	PAGE_READONLY
+> -#define __S101	PAGE_READONLY_X
+> -#define __S110	PAGE_SHARED
+> -#define __S111	PAGE_SHARED_X
+> -
+>  /* zero page used for uninitialized stuff */
+>  extern unsigned long empty_zero_page[2048];
+>  #define ZERO_PAGE(vaddr) (virt_to_page(empty_zero_page))
+> diff --git a/arch/openrisc/mm/init.c b/arch/openrisc/mm/init.c
+> index 3a021ab6f1ae..a654b9dcba91 100644
+> --- a/arch/openrisc/mm/init.c
+> +++ b/arch/openrisc/mm/init.c
+> @@ -208,3 +208,23 @@ void __init mem_init(void)
+>  	mem_init_done = 1;
+>  	return;
+>  }
+> +
+> +static pgprot_t protection_map[16] __ro_after_init = {
+> +	[VM_NONE]					= PAGE_NONE,
+> +	[VM_READ]					= PAGE_READONLY_X,
+> +	[VM_WRITE]					= PAGE_COPY,
+> +	[VM_WRITE | VM_READ]				= PAGE_COPY_X,
+> +	[VM_EXEC]					= PAGE_READONLY,
+> +	[VM_EXEC | VM_READ]				= PAGE_READONLY_X,
+> +	[VM_EXEC | VM_WRITE]				= PAGE_COPY,
+> +	[VM_EXEC | VM_WRITE | VM_READ]			= PAGE_COPY_X,
+> +	[VM_SHARED]					= PAGE_NONE,
+> +	[VM_SHARED | VM_READ]				= PAGE_READONLY_X,
+> +	[VM_SHARED | VM_WRITE]				= PAGE_SHARED,
+> +	[VM_SHARED | VM_WRITE | VM_READ]		= PAGE_SHARED_X,
+> +	[VM_SHARED | VM_EXEC]				= PAGE_READONLY,
+> +	[VM_SHARED | VM_EXEC | VM_READ]			= PAGE_READONLY_X,
+> +	[VM_SHARED | VM_EXEC | VM_WRITE]		= PAGE_SHARED,
+> +	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= PAGE_SHARED_X
+> +};
+> +DECLARE_VM_GET_PAGE_PROT
 
-Somehow I missed the email of yours, sorry about that. linux-next is now 
-tracking our "fixes" and "next" branches which are the aggregate 
-branches that merge all of the other branches that I used for maintenance:
+Looks good.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=8aeec38e054da2bcc8201f7fd511e22fa73dc4cf
--- 
-Florian
+Acked-by: Stafford Horne <shorne@gmail.com>
+

@@ -2,71 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFC055A58C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 02:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB8855A590
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 02:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbiFYAca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 20:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S231545AbiFYAf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 20:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiFYAc3 (ORCPT
+        with ESMTP id S229530AbiFYAf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 20:32:29 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C5F6DB14;
-        Fri, 24 Jun 2022 17:32:28 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1o4tip-00Ayy3-5Z; Sat, 25 Jun 2022 10:32:24 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Sat, 25 Jun 2022 08:32:23 +0800
-Date:   Sat, 25 Jun 2022 08:32:23 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     =?utf-8?B?5L2V56OK?= <helei.sig11@bytedance.com>
-Cc:     davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pizhenwei@bytedance.com
-Subject: Re: [External] PING: [PATCH] crypto: testmgr - fix version number of
- RSA tests
-Message-ID: <YrZXly80TZhO6lBE@gondor.apana.org.au>
-References: <20220615091317.36995-1-helei.sig11@bytedance.com>
- <0610F5ED-98B5-49AD-9D58-4D5960EFB3A8@bytedance.com>
- <YrV7uo9E/5aegAny@gondor.apana.org.au>
- <062CAA76-7229-4E4F-A9A5-A2A9A47A1C61@bytedance.com>
+        Fri, 24 Jun 2022 20:35:57 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601AD6DB23
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 17:35:56 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id n15so6872761qvh.12
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 17:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NM0GgLb9K/faELYgxhv94xXavXWp8l4qd5OqY1giIjw=;
+        b=U69OIV7CgPSGtm8OqOm28OWNbN1YRWzwmy/hcEHCQGaZhd1y9dxB1CdsEQfGzSsAin
+         Orp+V/IpbecyMh2Bzikox1ViXds4pJms6PXjq8af4g5e3WIGmYC/OjyQCM+G61m0cDd+
+         QmtmnQR+oO2kccH/K0fLbbyptLFGbbubd4rKz0g62V2faqm19zOb9oCiW4pXEr/vjxQv
+         iCU4Lcbrcv/RgW4CFzF5lA2cSnwDrvRYuINo+95BIStrIK6Vjncvibg/svSQwSW4gskf
+         2jzpzUCrpGkc9CzTQxcBsJDevFN9XC6qciUNraNguv21OfdSduVb8u+bWAuSCWj5/9ob
+         khOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NM0GgLb9K/faELYgxhv94xXavXWp8l4qd5OqY1giIjw=;
+        b=4eZEc0MJh4kR3ZqPMgl8ilsQUTpsntyQesTm2vnb3fD/W3Q1jsY5ze1bp/1xdlwywe
+         SDV86K8oMHMmrS0y62IGVns6dZ6N0D/ocK/XUkKlSbKiM32QLTTDlKkY5TJ3+oOhuoeQ
+         eefAUfS9nCfcBFAj5B5o9cCx3pUisUDlFtf7KeIXa38Lu8uwhcDaOx5cyRo3clUPy+5/
+         ina8Ck5fR46QqkL3iTNRSgKuyoHjXdnh2L54oarS0XXRyyHm5EfmfrrIvSr9m02h9DNN
+         wnWNIKurQVGwHkZOZQ9KtiBuMQBwtNkf5Fm554Zmuwtpekp8BdCK1dX6VnAr0fp+1XSs
+         2NbA==
+X-Gm-Message-State: AJIora8h/meKaWPwKMEx8aftJmaHYxFUD4N0AxtZBKj/mk+keITmE6Vs
+        3+Ef8F1oMMd11FZVsSikFueGbQ==
+X-Google-Smtp-Source: AGRyM1tfYT/2a5qKqWVRQYrtWwn+8o/oCCmUXnhNTKR8+fV1gFV92jB4at1BOe2NSslr9MM375OOIA==
+X-Received: by 2002:ad4:5c68:0:b0:470:52b5:c85c with SMTP id i8-20020ad45c68000000b0047052b5c85cmr1538212qvh.3.1656117355520;
+        Fri, 24 Jun 2022 17:35:55 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id bq11-20020a05620a468b00b006a700aad48bsm2977173qkb.91.2022.06.24.17.35.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 17:35:54 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1o4tmE-001Izr-B3; Fri, 24 Jun 2022 21:35:54 -0300
+Date:   Fri, 24 Jun 2022 21:35:54 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 1/4] mm/gup: Add FOLL_INTERRUPTIBLE
+Message-ID: <20220625003554.GJ23621@ziepe.ca>
+References: <20220622213656.81546-1-peterx@redhat.com>
+ <20220622213656.81546-2-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <062CAA76-7229-4E4F-A9A5-A2A9A47A1C61@bytedance.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220622213656.81546-2-peterx@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 06:29:29PM +0800, 何磊 wrote:
+On Wed, Jun 22, 2022 at 05:36:53PM -0400, Peter Xu wrote:
+> We have had FAULT_FLAG_INTERRUPTIBLE but it was never applied to GUPs.  One
+> issue with it is that not all GUP paths are able to handle signal delivers
+> besides SIGKILL.
 > 
+> That's not ideal for the GUP users who are actually able to handle these
+> cases, like KVM.
 > 
-> > On Jun 24, 2022, at 4:54 PM, Herbert Xu <herbert@gondor.apana.org.au> wrote:
-> > 
-> > On Fri, Jun 24, 2022 at 09:53:02AM +0800, 何磊 wrote:
-> >> PING！
-> > 
-> > Please resubmit.
-> > 
+> KVM uses GUP extensively on faulting guest pages, during which we've got
+> existing infrastructures to retry a page fault at a later time.  Allowing
+> the GUP to be interrupted by generic signals can make KVM related threads
+> to be more responsive.  For examples:
 > 
-> Thanks a lot for your reply, a new patch has been sent.
-> By the way, why this patch needs to be resubmitted. Please let me know if I have made any mistakes.
+>   (1) SIGUSR1: which QEMU/KVM uses to deliver an inter-process IPI,
+>       e.g. when the admin issues a vm_stop QMP command, SIGUSR1 can be
+>       generated to kick the vcpus out of kernel context immediately,
+> 
+>   (2) SIGINT: which can be used with interactive hypervisor users to stop a
+>       virtual machine with Ctrl-C without any delays/hangs,
+> 
+>   (3) SIGTRAP: which grants GDB capability even during page faults that are
+>       stuck for a long time.
+> 
+> Normally hypervisor will be able to receive these signals properly, but not
+> if we're stuck in a GUP for a long time for whatever reason.  It happens
+> easily with a stucked postcopy migration when e.g. a network temp failure
+> happens, then some vcpu threads can hang death waiting for the pages.  With
+> the new FOLL_INTERRUPTIBLE, we can allow GUP users like KVM to selectively
+> enable the ability to trap these signals.
 
-You first sent a subsequent version that superceded the
-original patch.  That subsequent patch was then dismissed because
-you replied in the thread saying that it needed changes.
+Can you talk abit about what is required to use this new interface
+correctly?
 
-Please be more careful in how you send patches and thread them.
+Lots of GUP callers are in simple system call contexts (like ioctl),
+can/should they set this flag and if so what else do they need to do?
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Thanks,
+Jason

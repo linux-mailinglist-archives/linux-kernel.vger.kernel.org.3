@@ -2,177 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6802355AC47
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 22:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F9555AC4B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 22:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233353AbiFYUBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 16:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S233344AbiFYUCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 16:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbiFYUBm (ORCPT
+        with ESMTP id S233374AbiFYUCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 16:01:42 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4771C14095
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 13:01:41 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id z19so7776618edb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 13:01:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eLUkWe3N3ho8cfTa3t+ONCUq2y/Cga4VTVfEgbT2d1U=;
-        b=I2f9aiJ4WaR57Hl9e0IVnNn9g3MVdrAIgnzqHEx1MDg/UGlaNcpuj4OyVgpYP1pkl6
-         4LgzUHyXA2VC/pIMRlodhwg34bqqqqkjlpXA9EJU0H2ksIKBr09Rb/T/avrwUeKAKZcV
-         1o1+wQbjaw4HRM4VcoSsMo4ZAGRHcK+Nj4Z45cLKt58jrkBMH9BORte9KoVksmw6ptkJ
-         XEO0wzI1igrcB1la/uawH7JovJkaIj/oBgy7tl5FlInlVMYpTOasxUKyINVBJVGgApmK
-         Z513MT9xSUTHEyHNmd4wUtQVJf1/l108ht7zb6MihdORGAjzV/G8MrKyRVzYMauqxrL5
-         mciA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eLUkWe3N3ho8cfTa3t+ONCUq2y/Cga4VTVfEgbT2d1U=;
-        b=STG4HVbHT+cnmDb+aZWZ80xee7CcRej3C4hTjcpSunUK3t5TuQRdAv0o3Ixmg9Nb5A
-         xGA7IG3puqxoRCccjfcrUQYmDxRKkVuC3yVsYEzICyQQFCGGzEaHpeoEL9N8vRuq39za
-         F6L3EeQbaF2u8kiav+wRvwt5Ej+KrN512DXzdyf0e9RdMMv3Ne6vzttjGroz0uEMXrn7
-         yIBUzniat4g2Hn01qt9K33Pcw+MozTVVjI59n9Sz/xGPHwAcwk/DogS37jAFMOtz/gsD
-         JjAVnnIHJenKaa1XJ/ZiH/y/JJfRfVYmf1GE94efrv6dAP0yAytrTxdEER043WyaA8R8
-         bd+w==
-X-Gm-Message-State: AJIora9VIsQBrNAtMeXFuAQRrQ6ycY5Cbl6Qds5xi02yANtYn62CZza+
-        C9Ba/TPrrJv2JySpMAWchYlw8w==
-X-Google-Smtp-Source: AGRyM1sknHsOi2FQ+azTJL4HGK/J1vfpZw0VDY8r98cQEG7zXxJxXdhGXAKaEoTZ33YbJW1joA6xWQ==
-X-Received: by 2002:a50:fc90:0:b0:435:6b30:f1b0 with SMTP id f16-20020a50fc90000000b004356b30f1b0mr6885798edq.423.1656187299784;
-        Sat, 25 Jun 2022 13:01:39 -0700 (PDT)
-Received: from [192.168.0.239] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id a7-20020a056402236700b0043570d96d25sm4522957eda.95.2022.06.25.13.01.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Jun 2022 13:01:39 -0700 (PDT)
-Message-ID: <59c043a4-dd40-1f6b-69d2-bc32b970e874@linaro.org>
-Date:   Sat, 25 Jun 2022 22:01:38 +0200
+        Sat, 25 Jun 2022 16:02:31 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DD6140A6
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 13:02:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656187350; x=1687723350;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kjDSb+MHDS7UHHDHrCopoQzl0kLxOnHTS/Sxp5Ajj/U=;
+  b=mcp81u4cenH6rf6ZbzXv0y0jGcjQ+gfFW2AoR1iiL68RataVx/5ZJfW0
+   pCq5zU3u1qEp7TwBu2aynqRVWC+ODtv9qaIYGZD+PcRTXzvZXn+p2b/Rb
+   piiF1h7So0qt4siUZYV5OIvD815nLqX9+rjEjBLoD/tirfv2xHF8cUS5j
+   FI9SvytGKfGudaOBeGeDmd4NsQYB0fAnyKbKz6xNAc837+Q+m8bi8vUbv
+   4Y6/YP4a3kKPz2wYI00sr98VIAyoQi2q/tcM7nFwdGv/WB2sX8FsELh/b
+   Pzjb+2aCufHSiGDofFuaR6/8xyt4QOR3r7yqNqApl1F3RwSSJcPV/E44v
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10389"; a="269957030"
+X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
+   d="scan'208";a="269957030"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 13:02:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
+   d="scan'208";a="539641505"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 25 Jun 2022 13:02:28 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o5BzA-0006FH-2j;
+        Sat, 25 Jun 2022 20:02:28 +0000
+Date:   Sun, 26 Jun 2022 04:02:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 7089155b2877a54e33d4ab21eb68c28568aea2fe
+Message-ID: <62b769bb.n1i4MA3w6xyjr0to%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] dt-bindings: interrupt-controller: sifive,plic:
- Document Renesas RZ/Five SoC
-Content-Language: en-US
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220624180311.3007-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220624180311.3007-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220624180311.3007-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/06/2022 20:03, Lad Prabhakar wrote:
-> Document Renesas RZ/Five (R9A07G043) SoC.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> RFC->v1:
-> * Fixed Review comments pointed by Geert and Rob
-> ---
->  .../sifive,plic-1.0.0.yaml                    | 40 +++++++++++++++++--
->  1 file changed, 36 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> index 27092c6a86c4..5eebe0b01b4d 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> @@ -28,7 +28,10 @@ description:
->  
->    While the PLIC supports both edge-triggered and level-triggered interrupts,
->    interrupt handlers are oblivious to this distinction and therefore it is not
-> -  specified in the PLIC device-tree binding.
-> +  specified in the PLIC device-tree binding for SiFive PLIC (and similar PLIC's),
-> +  but for the Renesas RZ/Five Soc (AX45MP AndesCore) which has NCEPLIC100 we need
-> +  to specify the interrupt type as the flow for EDGE interrupts is different
-> +  compared to LEVEL interrupts.
->  
->    While the RISC-V ISA doesn't specify a memory layout for the PLIC, the
->    "sifive,plic-1.0.0" device is a concrete implementation of the PLIC that
-> @@ -57,6 +60,7 @@ properties:
->            - enum:
->                - allwinner,sun20i-d1-plic
->            - const: thead,c900-plic
-> +      - const: renesas,r9a07g043-plic
->  
->    reg:
->      maxItems: 1
-> @@ -64,8 +68,7 @@ properties:
->    '#address-cells':
->      const: 0
->  
-> -  '#interrupt-cells':
-> -    const: 1
-> +  '#interrupt-cells': true
->  
->    interrupt-controller: true
->  
-> @@ -91,7 +94,36 @@ required:
->    - interrupts-extended
->    - riscv,ndev
->  
-> -additionalProperties: false
-> +if:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 7089155b2877a54e33d4ab21eb68c28568aea2fe  Merge branch into tip/master: 'x86/vmware'
 
-Make it inside allOf. Avoids further indentation change on next variant.
+elapsed time: 724m
 
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: renesas,r9a07g043-plic
-> +then:
-> +  properties:
-> +    clocks:
-> +      maxItems: 1
-> +
-> +    resets:
-> +      maxItems: 1
-> +
-> +    power-domains:
-> +      maxItems: 1
-> +
-> +    '#interrupt-cells':
-> +      const: 2
-> +
-> +  required:
-> +    - clocks
-> +    - resets
-> +    - power-domains
-> +
-> +else:
-> +  properties:
-> +    '#interrupt-cells':
-> +      const: 1
-> +
-> +unevaluatedProperties: false
+configs tested: 52
+configs skipped: 2
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-This does not look correct, why changing additional->unevaluated here?
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+alpha                            allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+i386                                defconfig
+i386                             allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a015
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+riscv                randconfig-r042-20220625
+s390                 randconfig-r044-20220625
+arc                  randconfig-r043-20220625
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
 
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+hexagon              randconfig-r041-20220625
+hexagon              randconfig-r045-20220625
 
-Best regards,
-Krzysztof
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

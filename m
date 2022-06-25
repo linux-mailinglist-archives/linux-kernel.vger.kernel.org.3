@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50E255AB3C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 17:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D9055AB40
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 17:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233053AbiFYPMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 11:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42254 "EHLO
+        id S233061AbiFYPQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 11:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232952AbiFYPMG (ORCPT
+        with ESMTP id S232952AbiFYPQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 11:12:06 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77A613EA6;
-        Sat, 25 Jun 2022 08:12:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=dKTkwKojcLQzO4HZicW5lV577VlQCVPv8wgQNnjwa2A=; b=UeTQSq521AV81Bphy5XLseEV/S
-        au3XmyaHmrSDSIcqBAB9k/VajVy3z12inr3Hs+20Z++0uKGvRH7dpnbg3d0E/oXzAnyvL7CaTwF5C
-        9JXf8hk8mmJRiB2q7iWWMo/CXbEkVAT0IJee3MntbrOhHnTN4u5z4EHzjVcrsNcBTXSEGaHavK5C9
-        d6R74bzIyG0APru5yLJnTkJLmgQgRliRwSsoDZvI8EtA85zrMizNkNmHV3HnLgkos92wxSRREtgoX
-        4qv8phY72ve9CD4euWtfoaYdzMGQh52z0ZUZhfbqVMeGMbymTLq07TqlPCDcIrGPKPsdngymJoy11
-        +2xrRa2g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o57S6-006UD6-8t; Sat, 25 Jun 2022 15:12:02 +0000
-Message-ID: <4c403239-3c71-4ab9-2168-f7e9d77008b2@infradead.org>
-Date:   Sat, 25 Jun 2022 08:12:00 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] Documentation: kunit: eliminate code-block warnings
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, Harinder Singh <sharinder@google.com>,
-        Tim Bird <tim.bird@sony.com>
-References: <20220401024707.10550-1-rdunlap@infradead.org>
- <87fsjt50c8.fsf@meer.lwn.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <87fsjt50c8.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 25 Jun 2022 11:16:00 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD501225;
+        Sat, 25 Jun 2022 08:15:57 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R781e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VHLPCjX_1656170121;
+Received: from localhost(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VHLPCjX_1656170121)
+          by smtp.aliyun-inc.com;
+          Sat, 25 Jun 2022 23:15:51 +0800
+From:   Liu Song <liusong@linux.alibaba.com>
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] blk-mq: blk_mq_tag_busy is no need to return a value
+Date:   Sat, 25 Jun 2022 23:15:21 +0800
+Message-Id: <1656170121-1619-1-git-send-email-liusong@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Liu Song <liusong@linux.alibaba.com>
 
+Currently "blk_mq_tag_busy" return value has no effect, so adjust it.
+Some code implementations have also been adjusted to enhance
+readability.
 
-On 6/24/22 12:27, Jonathan Corbet wrote:
-> Randy Dunlap <rdunlap@infradead.org> writes:
-> 
->> Fix Sphinx complaints about code-block directive missing an argument.
->> For start.rst, add "none" since that is already heavily used in that
->> file. For run_wrapper.rst, use the simpler "::" literal block instead.
-> 
-> [Sorry that this fell through the cracks; I'm never quite sure who is
-> going to handle kunit patches]
-> 
->> dev-tools/kunit/start.rst:83: WARNING: Error in "code-block" directive:
->> 1 argument(s) required, 0 supplied.
->>
->> dev-tools/kunit/run_wrapper.rst:17: WARNING: Error in "code-block" directive:
->> 1 argument(s) required, 0 supplied.
-> 
-> So which version of Sphinx are you using?  The language argument became
-> optional in 2.0, so you'd need to be running something pretty ancient to
-> see this.
-> 
-> Ah, I see 1.8.5 in your later message...how wedded are you to that
-> version?
+Signed-off-by: Liu Song <liusong@linux.alibaba.com>
+---
+ block/blk-mq-tag.c | 18 +++++++-----------
+ block/blk-mq-tag.h | 10 ++++------
+ 2 files changed, 11 insertions(+), 17 deletions(-)
 
-It's what ships with OpenSuse Leap 15.3, which I have been using for quite
-a long time.
-
-I see that there is now OpenSuse Leap 15.4, so I could upgrade to that,
-but I don't know what version on Sphinx it uses.
-
-> Ostensibly we support back to 1.7, so I guess we should stick by its
-> rules.  But the better solution, I think, is to raise our minimum
-> version; I think I'll look into that shortly.
-> 
-
->>  
->>  Run command:
->>  
->> -.. code-block::
->> +::
-> 
-> A much nicer fix for these would have been just:
-> 
->   Run command::
-
-Yeah, that is nicer.
-
-> 
-> Oh well, I've applied it.
-
-thanks.
-
+diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
+index 2dcd738..3cfffef 100644
+--- a/block/blk-mq-tag.c
++++ b/block/blk-mq-tag.c
+@@ -37,29 +37,25 @@ static void blk_mq_update_wake_batch(struct blk_mq_tags *tags,
+  * to get tag when first time, the other shared-tag users could reserve
+  * budget for it.
+  */
+-bool __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
++void __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
+ {
+ 	unsigned int users;
+ 
+ 	if (blk_mq_is_shared_tags(hctx->flags)) {
+ 		struct request_queue *q = hctx->queue;
+ 
+-		if (test_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags) ||
+-		    test_and_set_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags)) {
+-			return true;
+-		}
++		if (test_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags))
++			return;
++		set_bit(QUEUE_FLAG_HCTX_ACTIVE, &q->queue_flags);
+ 	} else {
+-		if (test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state) ||
+-		    test_and_set_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state)) {
+-			return true;
+-		}
++		if (test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
++			return;
++		set_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state);
+ 	}
+ 
+ 	users = atomic_inc_return(&hctx->tags->active_queues);
+ 
+ 	blk_mq_update_wake_batch(hctx->tags, users);
+-
+-	return true;
+ }
+ 
+ /*
+diff --git a/block/blk-mq-tag.h b/block/blk-mq-tag.h
+index 5668e28..91ff37e 100644
+--- a/block/blk-mq-tag.h
++++ b/block/blk-mq-tag.h
+@@ -47,15 +47,13 @@ enum {
+ 	BLK_MQ_TAG_MAX		= BLK_MQ_NO_TAG - 1,
+ };
+ 
+-extern bool __blk_mq_tag_busy(struct blk_mq_hw_ctx *);
++extern void __blk_mq_tag_busy(struct blk_mq_hw_ctx *);
+ extern void __blk_mq_tag_idle(struct blk_mq_hw_ctx *);
+ 
+-static inline bool blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
++static inline void blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
+ {
+-	if (!(hctx->flags & BLK_MQ_F_TAG_QUEUE_SHARED))
+-		return false;
+-
+-	return __blk_mq_tag_busy(hctx);
++	if (hctx->flags & BLK_MQ_F_TAG_QUEUE_SHARED)
++		__blk_mq_tag_busy(hctx);
+ }
+ 
+ static inline void blk_mq_tag_idle(struct blk_mq_hw_ctx *hctx)
 -- 
-~Randy
+1.8.3.1
+

@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E161355A8A9
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1172355A8B0
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232376AbiFYKQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 06:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
+        id S232342AbiFYKSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 06:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbiFYKQN (ORCPT
+        with ESMTP id S230401AbiFYKSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 06:16:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2803F205D3;
-        Sat, 25 Jun 2022 03:16:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0DCC61043;
-        Sat, 25 Jun 2022 10:16:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75CF5C3411C;
-        Sat, 25 Jun 2022 10:16:08 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [GIT PULL] LoongArch fixes for v5.19-rc4
-Date:   Sat, 25 Jun 2022 18:17:20 +0800
-Message-Id: <20220625101720.3837334-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        Sat, 25 Jun 2022 06:18:50 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502AB3135E;
+        Sat, 25 Jun 2022 03:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656152330; x=1687688330;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=gJbqmWGSWc7kbnlUxtaPxL9OQGLKwA2qsDHVxSO8y60=;
+  b=BaLy4/+KpDb2uZrMNhOqQ+PdUT/aauLwoXyzGgRRKZAecOnnjLmCNrT/
+   ROYjkp4OznPrYrRe/jB+b7hTlEuKerOijA753X9QXUjyawVFFWS7QS0dr
+   hnf3VaTlmtw15AmjwRbtdNs5wL8NoBFgVLa8iqpBvmFlAEWTIGx3HjnQX
+   RAgf61EUlsZlZb2/p0PerILQaCS1kC9+9WgN0oJg9kZ8QQbHwvWvjUM+2
+   /5TGRjtA72OMbyA+Kduxck7TdAbyV+EdUqRi6YMQnTn5pu01T0WYPrpWj
+   lDw76ZJXbqryeQHL5BmIK2d46tgUtDuuKE5iDopJlp7MSY0QEG6OAERHy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="345175299"
+X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
+   d="scan'208";a="345175299"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 03:18:48 -0700
+X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
+   d="scan'208";a="645650027"
+Received: from selvaku-mobl.ger.corp.intel.com ([10.252.60.244])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 03:18:45 -0700
+Date:   Sat, 25 Jun 2022 13:18:43 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        vz@mleia.com, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, lukas@wunner.de,
+        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: Re: [PATCH 8/8] serial: 8250: lpc18xx: Remove redundant sanity check
+ for RS485 flags
+In-Reply-To: <20220622154659.8710-9-LinoSanfilippo@gmx.de>
+Message-ID: <56f9df76-5514-2aa8-54cc-f0589023fe2@linux.intel.com>
+References: <20220622154659.8710-1-LinoSanfilippo@gmx.de> <20220622154659.8710-9-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1795890806-1656152328=:1653"
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
+--8323329-1795890806-1656152328=:1653
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-are available in the Git repository at:
+On Wed, 22 Jun 2022, Lino Sanfilippo wrote:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-5.19-3
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> 
+> Before the drivers rs485_config() function is called the serial core
+> already ensures that only one of both options RTS on send or RTS after send
+> is set. So remove the concerning sanity check in the driver function to
+> avoid redundancy.
+> 
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 
-for you to fetch changes up to ea18d434781105ce61ff3ef7f74c9e51812f0580:
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-  LoongArch: Make compute_return_era() return void (2022-06-25 18:06:07 +0800)
+-- 
+ i.
 
-----------------------------------------------------------------
-LoongArch fixes for v5.19-rc4
-
-Some bug fixes and a trivial cleanup.
-----------------------------------------------------------------
-Huacai Chen (4):
-      LoongArch: Fix the !THP build
-      LoongArch: Fix the _stext symbol address
-      LoongArch: Fix sleeping in atomic context in setup_tlb_handler()
-      LoongArch: Fix EENTRY/MERRENTRY setting in setup_tlb_handler()
-
-Tiezhu Yang (2):
-      LoongArch: Fix wrong fpu version
-      LoongArch: Make compute_return_era() return void
-
- arch/loongarch/include/asm/branch.h  |  3 +--
- arch/loongarch/include/asm/pgtable.h | 10 +++++-----
- arch/loongarch/kernel/cpu-probe.c    |  2 +-
- arch/loongarch/kernel/head.S         |  2 --
- arch/loongarch/kernel/traps.c        |  3 +--
- arch/loongarch/kernel/vmlinux.lds.S  |  1 +
- arch/loongarch/mm/tlb.c              |  7 ++++---
- 7 files changed, 13 insertions(+), 15 deletions(-)
+--8323329-1795890806-1656152328=:1653--

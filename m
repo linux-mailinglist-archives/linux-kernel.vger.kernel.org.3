@@ -2,109 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4947A55AB82
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 18:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 045B655AB88
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 18:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233291AbiFYQIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 12:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
+        id S233304AbiFYQJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 12:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233257AbiFYQIq (ORCPT
+        with ESMTP id S233244AbiFYQJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 12:08:46 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F3A11C13;
-        Sat, 25 Jun 2022 09:08:42 -0700 (PDT)
-Received: from [192.168.100.1] ([82.142.8.70]) by mrelayeu.kundenserver.de
- (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1MDykM-1nvCiY21HI-009u7Q; Sat, 25 Jun 2022 18:08:38 +0200
-Message-ID: <512bdf97-5468-e2d2-75bd-24107aaf8a34@vivier.eu>
-Date:   Sat, 25 Jun 2022 18:08:37 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] m68k: virt: pass RNG seed via bootinfo block
-Content-Language: fr
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>, geert@linux-m68k.org,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-References: <20220625153841.143928-1-Jason@zx2c4.com>
-From:   Laurent Vivier <laurent@vivier.eu>
-In-Reply-To: <20220625153841.143928-1-Jason@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:KNWZiu1ukqEzAce7MwcSCmmFI0pnOOc8l+k87+T6c9xfCBk/Orz
- USKTSf35nfLUSjST2Ynfi7p10EEmAjVdLi5bk9+MDluRHjrpMLUATrLNlQ2OnnClL9anCo0
- 5gPpqQng+fWB9lPYblQDI3mIHl9lXRp+V5WQGbxf+4YS2CjNl3RynSJSJt/OsDcV4KnfLTm
- HH0uPCtF8UDmNvVrf05+Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dqbI77Xgor4=:2PeAc6SwiCBNLL2uasPH0x
- pg5+F9TkN3WZRKFs+DUMXfWb7/4e0Sz4nnp7QDBNUEPaS5fGiWQT5a2KrYo6MWgGLJ1xMgDoJ
- TjKPqaK6hzIr9gBi26kGkgoHB3wQaF3vmfz99HyUkf2J21oD7ep9/66IOA4SI8sk6Mlg5np7b
- 1KhxG1C4pBKpOz27aL05c+oZqKp56eijJw1IO/UBKPt8lFUexKKhW4c7I3pO4zFCjshU3VSPe
- oAFj7LAgtEgwjRrhI1UdYXxkAjt0uTN1BZPc6CdAcg52CP6g/39q+pmWhSxs2y2cwSYXMU+iQ
- RS5T4Dal+HQQ4joSgVIjKxuA+G8IMuG+P427xeITig3X+syXaQWFb4AD4Z8oq8okNoeJr8xMX
- rx+U3i1yAdt0HiPhhVOeDaG29RSzN3sFgr4QJ3a6KflFd0OW05wVNVn7Rapb/YoqtXTRJHt/e
- /Qa4XJn0P55J3wtS3eP71Nk3+FPEu7pQ5gfgKjLCQcZ4S2tkqM2IbJZjhKKYMK0qr+Z4IwAI0
- YzoP948e9heOxg6Ij9zrNHJBNO9WYhhhJ5XhL/YrXXDYomc0ZioCvmjypogEajPOaSmFEe4BF
- qxcuJXjRFUj89mdmaGX5PATx3Tsigk4CEnqGcx5i8gKbOfxT9TDH5VoOEIHOve0WcYULemzEL
- OpRkyVUcX4UxzrcydauRhTrqIguxoanRyrjJA6VpDCmjuHYV6aDOQnMZmVZb1EDa/7egVuaBy
- 320PN51PveN7RMU1zwuDCJzUkF3vua0s1shLBQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 25 Jun 2022 12:09:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A133E11C13;
+        Sat, 25 Jun 2022 09:09:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 638F8B80BFA;
+        Sat, 25 Jun 2022 16:09:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A36FC3411C;
+        Sat, 25 Jun 2022 16:09:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656173383;
+        bh=zeQJlckF+GQVuKDzuLhjpGZA1Gm7C6kzkQw+hlgHt/8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WwTGWO7YdqG4nEqUw1EAmJ1/Luabn1ghQTVNWZAuLNakAcS2xWsvX//5xwWZ0OEKL
+         7+4Gw+LYqrdP6mRf0JLzm/Nypwt21YFIhnwxwQvT7tpS7WtoYzu29aM+4E8w/sNhNt
+         5Yq+ASIM6etEvPlQEqUZBwsW3hbrab2crzZ6z4RRG+wxIsx20Ft5qjxlONXkchpScW
+         Bb+icgXKiK56qy0K7yMwif2NmUPu+JtoMRNo/62grI6N2IHMXVBf1X5YQ9gjzM88cA
+         EKIMHLDPdSIGIkLI1cVhoEoR+deEyrjKzvvyYgCt+DLxRcZ7vq0NpcRnxz8zNXnT3H
+         w7PZqJfL102pg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o58Ls-0035Sf-TC;
+        Sat, 25 Jun 2022 17:09:41 +0100
+Date:   Sat, 25 Jun 2022 17:09:46 +0100
+Message-ID: <87y1xkencl.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v5 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller driver
+In-Reply-To: <CA+V-a8td93QOCC8cHLEPaba-hnX2gjydmKTbaCrF+zgH7hH8Jg@mail.gmail.com>
+References: <20220523174238.28942-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <20220523174238.28942-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <871qvdf5tb.wl-maz@kernel.org>
+        <CA+V-a8veE6-4C+9kyTNxqsf0jB5xCGhcHncTSM3ejDzBAfz=Bw@mail.gmail.com>
+        <87fsjt2bep.wl-maz@kernel.org>
+        <CA+V-a8td93QOCC8cHLEPaba-hnX2gjydmKTbaCrF+zgH7hH8Jg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.csengg@gmail.com, prabhakar.mahadev-lad.rj@bp.renesas.com, geert+renesas@glider.be, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com, jonathanh@nvidia.com, bjorn.andersson@linaro.org, agross@kernel.org, p.zabel@pengutronix.de, andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, phil.edworthy@renesas.com, biju.das.jz@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 25/06/2022 à 17:38, Jason A. Donenfeld a écrit :
-> Other virt VMs can pass RNG seeds via the "rng-seed" device tree
-> property or via UEFI, but m68k doesn't have either. Instead it has its
-> own bootinfo protocol. So this commit adds support for receiving a RNG
-> seed from it, which will be used at the earliest possible time in boot,
-> just like device tree.
+On Sat, 25 Jun 2022 13:48:08 +0100,
+"Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
 > 
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->   arch/m68k/include/uapi/asm/bootinfo-virt.h | 1 +
->   arch/m68k/virt/config.c                    | 4 ++++
->   2 files changed, 5 insertions(+)
+> Hi Marc,
 > 
-> diff --git a/arch/m68k/include/uapi/asm/bootinfo-virt.h b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-> index e4db7e2213ab..7c3044acdf4a 100644
-> --- a/arch/m68k/include/uapi/asm/bootinfo-virt.h
-> +++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-> @@ -12,6 +12,7 @@
->   #define BI_VIRT_GF_TTY_BASE	0x8003
->   #define BI_VIRT_VIRTIO_BASE	0x8004
->   #define BI_VIRT_CTRL_BASE	0x8005
-> +#define BI_VIRT_RNG_SEED	0x8006
->   
->   #define VIRT_BOOTI_VERSION	MK_BI_VERSION(2, 0)
->   
-> diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
-> index 632ba200ad42..ad71af8273ec 100644
-> --- a/arch/m68k/virt/config.c
-> +++ b/arch/m68k/virt/config.c
-> @@ -2,6 +2,7 @@
->   
->   #include <linux/reboot.h>
->   #include <linux/serial_core.h>
-> +#include <linux/random.h>
->   #include <clocksource/timer-goldfish.h>
->   
->   #include <asm/bootinfo.h>
-> @@ -92,6 +93,9 @@ int __init virt_parse_bootinfo(const struct bi_record *record)
->   		data += 4;
->   		virt_bi_data.virtio.irq = be32_to_cpup(data);
->   		break;
-> +	case BI_VIRT_RNG_SEED:
-> +		add_bootloader_randomness(data + 4, be32_to_cpup(data));
+> On Sat, Jun 25, 2022 at 1:08 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Sat, 25 Jun 2022 11:54:44 +0100,
+> > "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+> > >
+> > > Hi Marc,
+> > >
+> > > Thank you for the review.
+> > >
+> > > On Sat, Jun 25, 2022 at 10:30 AM Marc Zyngier <maz@kernel.org> wrote:
+> > > >
+> > > > On Mon, 23 May 2022 18:42:35 +0100,
+> > > > Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > > > >
+> >
+> > [...]
+> >
+> > > > > +static int rzg2l_irqc_alloc(struct irq_domain *domain, unsigned int virq,
+> > > > > +                         unsigned int nr_irqs, void *arg)
+> > > > > +{
+> > > > > +     struct rzg2l_irqc_priv *priv = domain->host_data;
+> > > > > +     unsigned long *chip_data = NULL;
+> > > >
+> > > > Why the init to NULL?
+> > > >
+> > > Can be dropped.
+> > >
+> > > > > +     struct irq_fwspec spec;
+> > > > > +     irq_hw_number_t hwirq;
+> > > > > +     int tint = -EINVAL;
+> > > > > +     unsigned int type;
+> > > > > +     unsigned int i;
+> > > > > +     int ret;
+> > > > > +
+> > > > > +     ret = irq_domain_translate_twocell(domain, arg, &hwirq, &type);
+> > > > > +     if (ret)
+> > > > > +             return ret;
+> > > > > +
+> > > > > +     /*
+> > > > > +      * For TINT interrupts ie where pinctrl driver is child of irqc domain
+> > > > > +      * the hwirq and TINT are encoded in fwspec->param[0].
+> > > > > +      * hwirq for TINT range from 9-40, hwirq is embedded 0-15 bits and TINT
+> > > > > +      * from 16-31 bits. TINT from the pinctrl driver needs to be programmed
+> > > > > +      * in IRQC registers to enable a given gpio pin as interrupt.
+> > > > > +      */
+> > > > > +     if (hwirq > IRQC_IRQ_COUNT) {
+> > > > > +             tint = TINT_EXTRACT_GPIOINT(hwirq);
+> > > > > +             hwirq = TINT_EXTRACT_HWIRQ(hwirq);
+> > > > > +
+> > > > > +             if (hwirq < IRQC_TINT_START)
+> > > > > +                     return -EINVAL;
+> > > > > +     }
+> > > > > +
+> > > > > +     if (hwirq > (IRQC_NUM_IRQ - 1))
+> > > > > +             return -EINVAL;
+> > > > > +
+> > > > > +     chip_data = kzalloc(sizeof(*chip_data), GFP_KERNEL);
+> > > >
+> > > > Are we really allocating an unsigned long for something that already
+> > > > fits in something that is pointer-sized?
+> > > >
+> > > I think I received some feedback to use unsigned long.  Let me know
+> > > what you want me to use here.
+> >
+> > I think this is just a waste of memory, but I don't really care.
+> >
+> Is there any better way I can handle it?
 
-In fact, why don't you use the record->size to get the size of the buffer?
+How about (shock, horror) a cast?
 
-It seems useless to encode twice the length of the buffer, the second time on a 32bit while the 
-length cannot exceed a 16bit value.
+> 
+> > >
+> > > > > +     if (!chip_data)
+> > > > > +             return -ENOMEM;
+> > > > > +     *chip_data = tint;
+> > > >
+> > > > So here, *chip_data can be set to -EINVAL if hwirq <= IRQC_IRQ_COUNT?
+> > > > This can't be right.
+> > > >
+> > > Yes *chip_data can be -EINVAL. IRQC block handles IRQ0-7 and
+> > > GPIOINT0-122. So the -EINVAL here is for IRQ0-7 case were dont
+> > > required the chip data in the call backs hence -EINVAL, Whereas for
+> > > GPIOINT0-122 we need chip_data in the callbacks as this value needs to
+> > > be programmed in the hardware registers.
+> >
+> > I can't see anything that checks it (let alone the difference in
+> > types). And if it isn't checked, this means that the allocation is
+> > pointless.
+> >
+> There are checks for example below:
+> 
+> static void rzg2l_irqc_irq_enable(struct irq_data *d)
+> {
+>     unsigned int hw_irq = irqd_to_hwirq(d);
+> 
+>     if (hw_irq >= IRQC_TINT_START && hw_irq < IRQC_NUM_IRQ) {
+>         struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
+>         unsigned long chip_data = *(unsigned long *)d->chip_data;
+>         u32 offset = hw_irq - IRQC_TINT_START;
+>         u32 tssr_offset = TSSR_OFFSET(offset);
+>         u8 tssr_index = TSSR_INDEX(offset);
+>         u32 reg;
+> 
+>         raw_spin_lock(&priv->lock);
+>         reg = readl_relaxed(priv->base + TSSR(tssr_index));
+>         reg |= (TIEN | chip_data) << TSSEL_SHIFT(tssr_offset);
+>         writel_relaxed(reg, priv->base + TSSR(tssr_index));
+>         raw_spin_unlock(&priv->lock);
+>     }
+>     irq_chip_enable_parent(d);
+> }
+> 
+> This check hw_irq >= IRQC_TINT_START && hw_irq < IRQC_NUM_IRQ here
+> would mean its GPIOINT0-122 and then the chip data will be used.
 
-Thanks,
-Laurent
+That doesn't check the content of chip_data if outside of this
+condition. Nonetheless, you allocate an unsigned long to store
+-EINVAL. Not only this is a pointless allocation, but you use it to
+store something that you never retrieve the first place. Don't you see
+the problem?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

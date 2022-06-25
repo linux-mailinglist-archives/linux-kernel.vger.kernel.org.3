@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF7055AA3C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 14:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B699555AA3E
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 14:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232894AbiFYM4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 08:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46118 "EHLO
+        id S232915AbiFYM4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 08:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbiFYM4e (ORCPT
+        with ESMTP id S232881AbiFYM4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 08:56:34 -0400
+        Sat, 25 Jun 2022 08:56:37 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E7618362
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 05:56:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854AB1836D
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 05:56:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656161793; x=1687697793;
+  t=1656161796; x=1687697796;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=xrUhPovyVpzQVk4gf4IQBAjF6Pmgk0B0rsPwQtugD/8=;
-  b=n7QziLnrI2Db6pDDqff/q0A2MhUQI686HY8kZPvAR6p5EJUovItgghCo
-   BxHA59Uk3TIn8Id1ShoDTorxqafJVQkbl2UUr+3QetP7+G1/6g8vsBv/5
-   IV/oiLBt+rIjfM38ilskUjae5BMB1mUrXe9DhrLhA5sfcHFzLUOjW7P4X
-   Zm7yhDajbaotsM2LvyQCl4Ti2rrYeQPWjMVlzNUUl5HuPLRQPxMDeN3o2
-   P8Jby5CJgDpCRKI58/YkufTAlnhd6CfebRKMZqAu8Er644vLz89mLbU3f
-   7GR8CahlfwYKPHSr1avM8CPWFLL2QU4QZk/vbw5eGUjW7iO9vzp8r/G/n
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="278727945"
+  bh=k2v7g+9a3285H4d+1+ZkMtPg9131on/0l+jEzg72A3Y=;
+  b=WEvJGFbZ/9ee7aUSpuOjJiO7nCQxA5Jl7OQ3cA/0IXd44qqIeo/CoHqT
+   uPeIFDtV2sLhtzWZTLz9Mzo/bp+upcDlu1/GDtynCgmn+DBbaxfn+HH5O
+   RubWGEzuoT2kT6IOSWhLKqajzTq+2qSPZmX7iw7B3q/kh5nMEGlk+rlzf
+   E4lV//5PZCLv3FQDFwoceTFeEBY9H1xIYQAhcvDqe5TfJvX9Ofs43+vdT
+   Gz9LYP/qlhair74Fp1+FmwW00TsOysmFTMIucf7VMJFA45kIzUz2p3+fG
+   5IWQpX25YUbOI751vEh0tL7v0xCGRVWVtx9taiu1+/9DfK7fmCqDMK1lr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="278727960"
 X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
-   d="scan'208";a="278727945"
+   d="scan'208";a="278727960"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 05:56:33 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 05:56:36 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
-   d="scan'208";a="586890354"
+   d="scan'208";a="586890361"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga007.jf.intel.com with ESMTP; 25 Jun 2022 05:56:30 -0700
+  by orsmga007.jf.intel.com with ESMTP; 25 Jun 2022 05:56:33 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Steve Wahl <steve.wahl@hpe.com>,
         Kevin Tian <kevin.tian@intel.com>
@@ -48,9 +48,9 @@ Cc:     David Woodhouse <dwmw2@infradead.org>,
         Russ Anderson <russ.anderson@hpe.com>, iommu@lists.linux.dev,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v1 1/6] iommu/vt-d: Remove unused domain_get_iommu()
-Date:   Sat, 25 Jun 2022 20:51:59 +0800
-Message-Id: <20220625125204.2199437-2-baolu.lu@linux.intel.com>
+Subject: [PATCH v1 2/6] iommu/vt-d: Use IDA interface to manage iommu sequence id
+Date:   Sat, 25 Jun 2022 20:52:00 +0800
+Message-Id: <20220625125204.2199437-3-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220625125204.2199437-1-baolu.lu@linux.intel.com>
 References: <20220625125204.2199437-1-baolu.lu@linux.intel.com>
@@ -66,55 +66,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is not used anywhere. Remove it to avoid dead code.
+Switch dmar unit sequence id allocation and release from bitmap to IDA
+interface.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/intel/iommu.h |  1 -
- drivers/iommu/intel/iommu.c | 18 ------------------
- 2 files changed, 19 deletions(-)
+ drivers/iommu/intel/dmar.c | 33 +++++++--------------------------
+ 1 file changed, 7 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index df64d3d9c49a..56e0d8cd2102 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -725,7 +725,6 @@ extern int dmar_ir_support(void);
+diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
+index 2a5e0f91e647..bf43889b9d2a 100644
+--- a/drivers/iommu/intel/dmar.c
++++ b/drivers/iommu/intel/dmar.c
+@@ -60,7 +60,7 @@ LIST_HEAD(dmar_drhd_units);
  
- void *alloc_pgtable_page(int node);
- void free_pgtable_page(void *vaddr);
--struct intel_iommu *domain_get_iommu(struct dmar_domain *domain);
- void iommu_flush_write_buffer(struct intel_iommu *iommu);
- int intel_iommu_enable_pasid(struct intel_iommu *iommu, struct device *dev);
- struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn);
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index da6cfea0f0d6..781e060352e6 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -445,24 +445,6 @@ int iommu_calculate_agaw(struct intel_iommu *iommu)
- 	return __iommu_calculate_agaw(iommu, DEFAULT_DOMAIN_ADDRESS_WIDTH);
+ struct acpi_table_header * __initdata dmar_tbl;
+ static int dmar_dev_scope_status = 1;
+-static unsigned long dmar_seq_ids[BITS_TO_LONGS(DMAR_UNITS_SUPPORTED)];
++static DEFINE_IDA(dmar_seq_ids);
+ 
+ static int alloc_iommu(struct dmar_drhd_unit *drhd);
+ static void free_iommu(struct intel_iommu *iommu);
+@@ -1023,28 +1023,6 @@ static int map_iommu(struct intel_iommu *iommu, u64 phys_addr)
+ 	return err;
  }
  
--/* This functionin only returns single iommu in a domain */
--struct intel_iommu *domain_get_iommu(struct dmar_domain *domain)
+-static int dmar_alloc_seq_id(struct intel_iommu *iommu)
 -{
--	int iommu_id;
+-	iommu->seq_id = find_first_zero_bit(dmar_seq_ids,
+-					    DMAR_UNITS_SUPPORTED);
+-	if (iommu->seq_id >= DMAR_UNITS_SUPPORTED) {
+-		iommu->seq_id = -1;
+-	} else {
+-		set_bit(iommu->seq_id, dmar_seq_ids);
+-		sprintf(iommu->name, "dmar%d", iommu->seq_id);
+-	}
 -
--	/* si_domain and vm domain should not get here. */
--	if (WARN_ON(!iommu_is_dma_domain(&domain->domain)))
--		return NULL;
--
--	for_each_domain_iommu(iommu_id, domain)
--		break;
--
--	if (iommu_id < 0 || iommu_id >= g_num_of_iommus)
--		return NULL;
--
--	return g_iommus[iommu_id];
+-	return iommu->seq_id;
 -}
 -
- static inline bool iommu_paging_structure_coherency(struct intel_iommu *iommu)
+-static void dmar_free_seq_id(struct intel_iommu *iommu)
+-{
+-	if (iommu->seq_id >= 0) {
+-		clear_bit(iommu->seq_id, dmar_seq_ids);
+-		iommu->seq_id = -1;
+-	}
+-}
+-
+ static int alloc_iommu(struct dmar_drhd_unit *drhd)
  {
- 	return sm_supported(iommu) ?
+ 	struct intel_iommu *iommu;
+@@ -1062,11 +1040,14 @@ static int alloc_iommu(struct dmar_drhd_unit *drhd)
+ 	if (!iommu)
+ 		return -ENOMEM;
+ 
+-	if (dmar_alloc_seq_id(iommu) < 0) {
++	iommu->seq_id = ida_alloc_range(&dmar_seq_ids, 0,
++					DMAR_UNITS_SUPPORTED, GFP_KERNEL);
++	if (iommu->seq_id < 0) {
+ 		pr_err("Failed to allocate seq_id\n");
+ 		err = -ENOSPC;
+ 		goto error;
+ 	}
++	sprintf(iommu->name, "dmar%d", iommu->seq_id);
+ 
+ 	err = map_iommu(iommu, drhd->reg_base_addr);
+ 	if (err) {
+@@ -1150,7 +1131,7 @@ static int alloc_iommu(struct dmar_drhd_unit *drhd)
+ err_unmap:
+ 	unmap_iommu(iommu);
+ error_free_seq_id:
+-	dmar_free_seq_id(iommu);
++	ida_free(&dmar_seq_ids, iommu->seq_id);
+ error:
+ 	kfree(iommu);
+ 	return err;
+@@ -1183,7 +1164,7 @@ static void free_iommu(struct intel_iommu *iommu)
+ 	if (iommu->reg)
+ 		unmap_iommu(iommu);
+ 
+-	dmar_free_seq_id(iommu);
++	ida_free(&dmar_seq_ids, iommu->seq_id);
+ 	kfree(iommu);
+ }
+ 
 -- 
 2.25.1
 

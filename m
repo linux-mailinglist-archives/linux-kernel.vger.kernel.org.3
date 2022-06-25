@@ -2,132 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6CE55A947
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 13:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0EB55A943
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 13:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232575AbiFYLRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 07:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
+        id S232861AbiFYLHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 07:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbiFYLRZ (ORCPT
+        with ESMTP id S232801AbiFYLHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 07:17:25 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CCD31DDD
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 04:17:23 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-31772f8495fso46344557b3.4
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 04:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uiCn1wFahqAtSkOl35HmuzXqqUxjUEsg3PyPjnfHW9E=;
-        b=3iCOnxC63zzWpEYXppJeaYfZNRtna889N688tU51Fz05zWDXd5qsW086aNb9+MwdJv
-         O9EyqixJTnJa8+XS33NPHFlTPra87Yh3ffe2oDLnQiJLBi2R3Vd38kWvw9iGVRTv92+3
-         LCEa3bFWRvLtfE/G8Hwknjj9IHh3hswmvsfFnbDG296N5regN/oIcPmqNRjlFXUARSIe
-         kj9Q7PaPTaG5bVoYZbf8DHg0J/oRGOwIXWfNGVQmoFx98yuwo48VgRe3N2GRGx4KedLq
-         ZcsbEmXYQaQF4cRtK7tpUvGlk1uXjKwda6GoKRmyLyoHRGI0fHKUsy2xipFdKbzqWmfa
-         /QrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uiCn1wFahqAtSkOl35HmuzXqqUxjUEsg3PyPjnfHW9E=;
-        b=7Zz8Firftd+bQ3wPKvnPiH5T+WldFA29KwBeDqf6ga0PHyuWjBXfLFn9ur4C188U/n
-         NjpZSp7vbEuO4hze0u4KEnT+G615axGSoG8YIt8VujXLjTnx+ZARNRY7SYofidkFpbvE
-         mHqkO4v4bdZcXyxDfGdpMce4CV6T9nfAqS/G8bgHZKDmU0SfSzEZwYoV7BaBlR8XCc4H
-         jRRZ8MgT4TPgMXBFcU8o5ttvJLlJ8iKrEbDsjhWLX7chZWgIJ7Liat45WgLWb5swQqZn
-         QCY4a7YnVbGhyw3cV50q6DsZSVijovhMxqLhTzzvMha7R/R2FN7pVDLmGnGiar2p/RF1
-         aOEQ==
-X-Gm-Message-State: AJIora82FUvxMYLs8xz+bmCKjqrzg3DCMDoIx5NULXvXrlWBx5dnyn8S
-        TU6tQimSXrDGnL4jwy4LGnOsKN3p6EIs6y24uyX2KQ==
-X-Google-Smtp-Source: AGRyM1uoUJNV+pWkUKZPyqoYjVU92W2AXcs0+oJA8ZTI80Wfq+v4vJ2sRUr54xc0spYE3wbFPeNslZTmLW60JMAY1vM=
-X-Received: by 2002:a81:830b:0:b0:317:b41e:9e49 with SMTP id
- t11-20020a81830b000000b00317b41e9e49mr3977250ywf.458.1656155843079; Sat, 25
- Jun 2022 04:17:23 -0700 (PDT)
+        Sat, 25 Jun 2022 07:07:41 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDFA344C4;
+        Sat, 25 Jun 2022 04:07:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 15BEACE0B02;
+        Sat, 25 Jun 2022 11:07:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43DD1C341C7;
+        Sat, 25 Jun 2022 11:07:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656155256;
+        bh=rr4kKRfEEwrsfzQYp1zAY1a97o4UrXD52+rh79sxy/o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vGXAky8ojeOmMZQ/stXpW4Xg6oYsma4FrVAqJMojT6PjSTyL3LkVw86MqnCJ1qvqj
+         qdsqKllbwFP7UsciSXp0f8jtdlmnnIdbcUt1xKtZldlsO42ePQuzM+PCHiG11mV3Vy
+         A4QfwySQoa46pQtxtiQXSIdni+hwbgeHUkBYoKhRvOn5Gw3FqfIQ56IWHVQoB6xFcQ
+         Hs9Bzaj9V3JM7tlAesUvInXkIkXjvt34CPhbpuxrs/k88VmT/4kKIVl483HRaMl5Q/
+         c+hJRPg7NzPm0uhfkBHnndQJvfOCkBcn6eBGPyA1LBbpKqDI5ET05IMY1kTEc1g84Q
+         eJc1cfbQuOTew==
+Date:   Sat, 25 Jun 2022 12:17:05 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Joe Simmons-Talbott <joetalbott@gmail.com>
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: Don't use bare "unsigned"
+Message-ID: <20220625121705.42063d6a@jic23-huawei>
+In-Reply-To: <20220624021806.1010962-1-joetalbott@gmail.com>
+References: <20220624021806.1010962-1-joetalbott@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220625080423.2797-1-chenfeiyang@loongson.cn>
- <CAMZfGtWT7oPq6bD_fRn2gVNX8Lj3=ev21EAoaCCPeq-P_NYF0g@mail.gmail.com> <CAAhV-H5K9LG5P6WYJ+64-fi+s=TZbbJQG9E0vHJwOf9Pai5z4w@mail.gmail.com>
-In-Reply-To: <CAAhV-H5K9LG5P6WYJ+64-fi+s=TZbbJQG9E0vHJwOf9Pai5z4w@mail.gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Sat, 25 Jun 2022 19:16:46 +0800
-Message-ID: <CAMZfGtVq0VwMETGdzAXLkjes8W0gVBw=r0Xk5rpPnhe7x6tRiw@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH] page-flags.h: Fix a missing header include
- of static_keys.h
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Feiyang Chen <chris.chenfeiyang@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux- stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 5:04 PM Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> Hi, Muchun,
->
-> On Sat, Jun 25, 2022 at 4:50 PM Muchun Song <songmuchun@bytedance.com> wrote:
-> >
-> > On Sat, Jun 25, 2022 at 4:04 PM Feiyang Chen
-> > <chris.chenfeiyang@gmail.com> wrote:
-> > >
-> > > The page-flags.h header relies on static keys since commit
-> > > a6b40850c442bf ("mm: hugetlb: replace hugetlb_free_vmemmap_enabled
-> > > with a static_key"), so make sure to include the header to avoid
-> > > compilation errors.
-> > >
-> > > Fixes: a6b40850c442bf ("mm: hugetlb: replace hugetlb_free_vmemmap_enabled with a static_key")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> > > ---
-> > >  include/linux/page-flags.h | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> > > index e66f7aa3191d..147b336c7a35 100644
-> > > --- a/include/linux/page-flags.h
-> > > +++ b/include/linux/page-flags.h
-> > > @@ -11,6 +11,7 @@
-> > >  #include <linux/mmdebug.h>
-> > >  #ifndef __GENERATING_BOUNDS_H
-> > >  #include <linux/mm_types.h>
-> > > +#include <linux/static_key.h>
-> >
-> > I did not include this. The change makes sense to me. But I am
-> > curious what configs cause the compiling error. Would you mind
-> > sharing the config with us?
-> We found this problem when we add
-> ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to LoongArch. Since this isn't
+On Thu, 23 Jun 2022 22:18:06 -0400
+Joe Simmons-Talbott <joetalbott@gmail.com> wrote:
 
-Good news to me. I would love to hear more archs support for HVO (HugeTLB
-Vmemmap Optimization).
+> Use "unsigned int" rather than bare "unsigned". Reported by checkpatch.pl.
+> 
+> Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>
 
-> upstream yet, we cannot give such a config now (the default config of
-> X86 and ARM64 is just OK).
+I've always wondered when someone would get around to tidying this up.
+Never seemed worth the effort to do it myself :)
 
-All right. In this case, the "Cc: stable@vger.kernel.org" is unnecessary.
+Anyhow, thanks.  Applied to the togreg branch of iio.git.
 
-Thanks.
->
-> Huacai
-> >
-> > Thanks.
-> >
-> > >  #include <generated/bounds.h>
-> > >  #endif /* !__GENERATING_BOUNDS_H */
-> > >
-> > > --
-> > > 2.27.0
-> > >
-> >
+Thanks,
+
+Jonathan
+
+> ---
+>  drivers/iio/industrialio-buffer.c     | 10 +++++-----
+>  drivers/iio/industrialio-core.c       |  4 ++--
+>  drivers/iio/industrialio-sw-device.c  |  2 +-
+>  drivers/iio/industrialio-sw-trigger.c |  2 +-
+>  4 files changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
+> index b078eb2f3c9d..513a34a0b593 100644
+> --- a/drivers/iio/industrialio-buffer.c
+> +++ b/drivers/iio/industrialio-buffer.c
+> @@ -705,7 +705,7 @@ static unsigned int iio_storage_bytes_for_timestamp(struct iio_dev *indio_dev)
+>  static int iio_compute_scan_bytes(struct iio_dev *indio_dev,
+>  				const unsigned long *mask, bool timestamp)
+>  {
+> -	unsigned bytes = 0;
+> +	unsigned int bytes = 0;
+>  	int length, i, largest = 0;
+>  
+>  	/* How much space will the demuxed element take? */
+> @@ -934,9 +934,9 @@ static int iio_verify_update(struct iio_dev *indio_dev,
+>   * @l:		list head used for management
+>   */
+>  struct iio_demux_table {
+> -	unsigned from;
+> -	unsigned to;
+> -	unsigned length;
+> +	unsigned int from;
+> +	unsigned int to;
+> +	unsigned int length;
+>  	struct list_head l;
+>  };
+>  
+> @@ -974,7 +974,7 @@ static int iio_buffer_update_demux(struct iio_dev *indio_dev,
+>  				   struct iio_buffer *buffer)
+>  {
+>  	int ret, in_ind = -1, out_ind, length;
+> -	unsigned in_loc = 0, out_loc = 0;
+> +	unsigned int in_loc = 0, out_loc = 0;
+>  	struct iio_demux_table *p = NULL;
+>  
+>  	/* Clear out any old demux */
+> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+> index e1ed44dec2ab..ca28f76b8f40 100644
+> --- a/drivers/iio/industrialio-core.c
+> +++ b/drivers/iio/industrialio-core.c
+> @@ -384,7 +384,7 @@ static ssize_t iio_debugfs_read_reg(struct file *file, char __user *userbuf,
+>  {
+>  	struct iio_dev *indio_dev = file->private_data;
+>  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
+> -	unsigned val = 0;
+> +	unsigned int val = 0;
+>  	int ret;
+>  
+>  	if (*ppos > 0)
+> @@ -414,7 +414,7 @@ static ssize_t iio_debugfs_write_reg(struct file *file,
+>  {
+>  	struct iio_dev *indio_dev = file->private_data;
+>  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
+> -	unsigned reg, val;
+> +	unsigned int reg, val;
+>  	char buf[80];
+>  	int ret;
+>  
+> diff --git a/drivers/iio/industrialio-sw-device.c b/drivers/iio/industrialio-sw-device.c
+> index 49f775f16ad5..cdaf30a3f233 100644
+> --- a/drivers/iio/industrialio-sw-device.c
+> +++ b/drivers/iio/industrialio-sw-device.c
+> @@ -27,7 +27,7 @@ static DEFINE_MUTEX(iio_device_types_lock);
+>  
+>  static
+>  struct iio_sw_device_type *__iio_find_sw_device_type(const char *name,
+> -						     unsigned len)
+> +						     unsigned int len)
+>  {
+>  	struct iio_sw_device_type *d = NULL, *iter;
+>  
+> diff --git a/drivers/iio/industrialio-sw-trigger.c b/drivers/iio/industrialio-sw-trigger.c
+> index 9ae793a70b8b..994f03a71520 100644
+> --- a/drivers/iio/industrialio-sw-trigger.c
+> +++ b/drivers/iio/industrialio-sw-trigger.c
+> @@ -27,7 +27,7 @@ static DEFINE_MUTEX(iio_trigger_types_lock);
+>  
+>  static
+>  struct iio_sw_trigger_type *__iio_find_sw_trigger_type(const char *name,
+> -						       unsigned len)
+> +						       unsigned int len)
+>  {
+>  	struct iio_sw_trigger_type *t = NULL, *iter;
+>  
+

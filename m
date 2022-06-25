@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44AF455A5A2
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 02:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBEC55A5AA
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 02:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiFYArO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 20:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55098 "EHLO
+        id S231255AbiFYAyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 20:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbiFYArM (ORCPT
+        with ESMTP id S229757AbiFYAy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 20:47:12 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE549792A3
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 17:47:11 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id b125so3024765qkg.11
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 17:47:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oKczyqyJVXbwPP+eN8sAth8R0lhAg6AZnihqaYYUBRA=;
-        b=RugWSFqunQ09plkfj1ThuMovNx8NR85FBmWxOQnjmCKgfHgQEmmnP60305jkJsdndI
-         HkQI9u8W895QQbso6DdkTclFUERlmrT83EaiqnV94vasxjcMmdiac4GwL2yZwViAwk/v
-         HHz26Gq5Fqu8G+Tp5CIMzXBJmJPAWeiIPA1YpFSp77gMOprozrILol5W4VVxRViw/4Ii
-         rGTOquoPSkEyt4kt7G6LtMGCAPuu+TqpBwT7F/P57CcEiAgx18H6Lpr6WCAxL4mDoBUd
-         qO7qFUx8434SYKqXEUZpRkUGH1RSozh8tFSqUoGIt1EMveGd1LBmyKsFaviNWvosUsid
-         VqyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oKczyqyJVXbwPP+eN8sAth8R0lhAg6AZnihqaYYUBRA=;
-        b=PtTPkDLIUjG/fPa10W0nv77STElJVThbP4TazmtNNPIIj6w0TUIh6RF6Tjn4/D7qU1
-         E+fJ8pPvZpGAMIBmYRB17cK6InKiFhSvwveJ4QHbFhPMMzfPef+9u3FEPmCdTBisuHnu
-         beVQWFs6nvzKugDuopEOVH8YoRVkkqW8DY+Eiqks6qxWOsxR8OyxRerNKag746s9jrbU
-         1ogFkPWoQta4vqbTuQXBqdETFkdUJ9EyUsuQnoeyNBNgwljb8ZtefxUeOU7RFOLtE9wT
-         Yu4BcVS3lSTN0Bp3CeP92o5ei6pMfxF5wM2/9wY7g251k0Gl3Pi76SxJ2/DL3xTDpsK6
-         ro+g==
-X-Gm-Message-State: AJIora8NvZSnNpSRmbVCt4CYpHlTlWNNKcF5bwkN2mfrqWUiTHeahJaY
-        b+ouxLAMgyMYkUMsXPgWrfzG3TKjma1kTc/RDbpkWw==
-X-Google-Smtp-Source: AGRyM1vQ1vDDBzdPJoGeWwsffL+nmSpD3bXYcuiqaJJ3hxzqY/MRBObekDuzlqII+ZoMkbx+3P9PZsnLsBcCxWn/v34=
-X-Received: by 2002:ae9:ed56:0:b0:6ae:f7cf:7f5c with SMTP id
- c83-20020ae9ed56000000b006aef7cf7f5cmr1475378qkg.59.1656118030003; Fri, 24
- Jun 2022 17:47:10 -0700 (PDT)
+        Fri, 24 Jun 2022 20:54:28 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740CE5001A;
+        Fri, 24 Jun 2022 17:54:26 -0700 (PDT)
+X-UUID: 780357f6997c455fb5477ca2b5b98988-20220625
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:de213be8-96b4-4f51-8d3f-3c2a1c709920,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:70
+X-CID-INFO: VERSION:1.1.6,REQID:de213be8-96b4-4f51-8d3f-3c2a1c709920,OB:0,LOB:
+        0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:70
+X-CID-META: VersionHash:b14ad71,CLOUDID:99a476ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:4ca74c2c1c80,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 780357f6997c455fb5477ca2b5b98988-20220625
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1674105141; Sat, 25 Jun 2022 08:54:19 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 25 Jun 2022 08:54:18 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 25 Jun 2022 08:54:18 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Sat, 25 Jun 2022 08:54:18 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <peterwu.pub@gmail.com>
+CC:     <alice_chen@richtek.com>, <broonie@kernel.org>,
+        <chiaen_wu@richtek.com>, <chunfeng.yun@mediatek.com>,
+        <cy_huang@richtek.com>, <daniel.thompson@linaro.org>,
+        <deller@gmx.de>, <devicetree@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <gregkh@linuxfoundation.org>,
+        <heikki.krogerus@linux.intel.com>, <jic23@kernel.org>,
+        <jingoohan1@gmail.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <lars@metafoo.de>, <lee.jones@linaro.org>, <lgirdwood@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux@roeck-us.net>,
+        <matthias.bgg@gmail.com>, <pavel@ucw.cz>, <robh+dt@kernel.org>,
+        <sre@kernel.org>, <szunichen@gmail.com>
+Subject: Re: [PATCH v3 02/14] dt-bindings: power: supply: Add Mediatek MT6370 Charger
+Date:   Sat, 25 Jun 2022 08:54:18 +0800
+Message-ID: <20220625005418.7565-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220623115631.22209-3-peterwu.pub@gmail.com>
+References: <20220623115631.22209-3-peterwu.pub@gmail.com>
 MIME-Version: 1.0
-References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com>
- <1656090912-18074-3-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n52RW+UFJ=hqMWjwR8qvEbww7QjzPW1nhL3Atd97QXAnYw@mail.gmail.com>
- <007ea4c9-9701-f4ab-3278-5d36bf2018c4@quicinc.com> <CAE-0n53kNCK0ajHfY2WQr5HEQZtZSBLnhfbTuZwaUNEOZhsKPg@mail.gmail.com>
- <fa7f8bf1-33cd-5515-0143-6596df2bd740@quicinc.com> <CAE-0n51g-EVsC-i9=sJV-ySa8VnE+yT7cg=b-TNMi9+3uBiOVA@mail.gmail.com>
- <326912ff-9771-0711-366d-79acd436908b@quicinc.com> <CAE-0n51qrdrFtSr0vRwgYkMgSZfnzQuinaUROQsp30QoDchWQA@mail.gmail.com>
- <0ff3d6a3-dc5c-7c77-f8a1-6c4f6c1a3215@quicinc.com> <CAE-0n515hMKqQ+Vj1Sg54PpwkbWMYJ77QN+y+KZNBWymjhpWKw@mail.gmail.com>
- <66ff4642-f268-f5b0-7e28-b196368c508a@quicinc.com> <5cf094cf-343a-82d7-91c4-1284683f9748@quicinc.com>
- <CAA8EJprqq=vxXT2DmEWii_Ajx2UbkHRexPTT58xFcWkBa_D5hA@mail.gmail.com>
- <26263c16-8cbc-ccca-6081-7eba14635d73@quicinc.com> <CAA8EJpqEoXXA=eKGHRGuQ3VOHnmEShY8u_SMZ6WFWORCFhFcrw@mail.gmail.com>
- <8445f93a-00f0-64af-5650-07f2bc487742@quicinc.com> <CAA8EJpqB2KPyvFehK9WRGgiVnqvD24cz5BcHsw8a5PQ2Vs1oKA@mail.gmail.com>
-In-Reply-To: <CAA8EJpqB2KPyvFehK9WRGgiVnqvD24cz5BcHsw8a5PQ2Vs1oKA@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 25 Jun 2022 03:46:58 +0300
-Message-ID: <CAA8EJppZdyutyNBG+OFinickQoDxg0i4GwbaNQubo_LSRWNh4w@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] drm/msm/dp: decoupling dp->id out of dp
- controller_id at scxxxx_dp_cfg table
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dianders@chromium.org, dri-devel@lists.freedesktop.org,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org,
-        quic_aravindh@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,30 +76,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Jun 2022 at 03:28, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Sat, 25 Jun 2022 at 03:23, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
-> > On 6/24/2022 5:21 PM, Dmitry Baryshkov wrote:
-> > > On Sat, 25 Jun 2022 at 03:19, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
-> > >> How can I have eDP call dpu_encoder_init() before DP calls with
-> > >> _dpu_kms_initialize_displayport()?
-> > > Why do you want to do it? They are two different encoders.
-> >
-> > eDP is primary display which in normal case should be bring up first if
-> > DP is also presented.
->
-> I do not like the concept of primary display. It is the user, who must
-> decide which display is primary to him. I have seen people using just
-> external monitors and ignoring built-in eDP completely.
->
-> Also, why does the bring up order matters here? What do you gain by
-> bringing up eDP before the DP?
+Hi ChiaEn,
 
-I should probably rephrase my question to be more clear. How does
-changing the order of DP vs eDP bringup help you 'to fix screen
-corruption'.
+> Add Mediatek MT6370 Charger binding documentation.
 
--- 
-With best wishes
-Dmitry
+s/Mediatek/MediaTek/
+
+Would you mind fix that for the series?
+
+cheers,
+Miles
+
+> 
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+> 
+> v3
+> - Add items and remove maxItems of io-channels
+> - Add io-channel-names and describe each item
+> - Add "unevaluatedProperties: false" in "usb-otg-vbus-regulator"
+> - Rename "enable-gpio" to "enable-gpios" in "usb-otg-vbus-regulator"
+> ---
+>  .../power/supply/mediatek,mt6370-charger.yaml      | 87 ++++++++++++++++++++++
+>  1 file changed, 87 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> new file mode 100644
+> index 0000000..f138db6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/mediatek,mt6370-charger.yaml
+> @@ -0,0 +1,87 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/mediatek,mt6370-charger.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek MT6370 Battery Charger
+> +
+> +maintainers:
+> +  - ChiaEn Wu <chiaen_wu@richtek.com>
+> +
+> +description: |
+> +  This module is part of the MT6370 MFD device.
+> +  Provides Battery Charger, Boost for OTG devices and BC1.2 detection.
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt6370-charger
+> +
+> +  interrupts:
+> +    description: |
+> +      Specify what irqs are needed to be handled by MT6370 Charger driver. IRQ
+> +      "MT6370_IRQ_CHG_MIVR", "MT6370_IRQ_ATTACH" and "MT6370_IRQ_OVPCTRL_UVP_D"
+> +      are required.
+> +    items:
+> +      - description: BC1.2 done irq
+> +      - description: usb plug in irq
+> +      - description: mivr irq
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: attach_i
+> +      - const: uvp_d_evt
+> +      - const: mivr
+> +
+> +  io-channels:
+> +    description: |
+> +      Use ADC channel to read VBUS, IBUS, IBAT, etc., info.
+> +    minItems: 1
+> +    items:
+> +      - description: |
+> +          VBUS voltage with lower accuracy (+-75mV) but higher measure
+> +          range (1~22V)
+> +      - description: |
+> +          VBUS voltage with higher accuracy (+-30mV) but lower measure
+> +          range (1~9.76V)
+> +      - description: the main system input voltage
+> +      - description: battery voltage
+> +      - description: battery temperature-sense input voltage
+> +      - description: IBUS current (required)
+> +      - description: battery current
+> +      - description: |
+> +          regulated output voltage to supply for the PWM low-side gate driver
+> +          and the bootstrap capacitor
+> +      - description: IC junction temperature
+> +
+> +  io-channel-names:
+> +    items:
+> +      - const: vbusdiv5
+> +      - const: vbusdiv2
+> +      - const: vsys
+> +      - const: vbat
+> +      - const: ts_bat
+> +      - const: ibus
+> +      - const: ibat
+> +      - const: chg_vddp
+> +      - const: temp_jc
+> +
+> +  usb-otg-vbus-regulator:
+> +    type: object
+> +    description: OTG boost regulator.
+> +    unevaluatedProperties: false
+> +    $ref: /schemas/regulator/regulator.yaml#
+> +
+> +    properties:
+> +      enable-gpios:
+> +        maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - interrupts
+> +  - interrupt-names
+> +  - io-channels
+> +
+> +additionalProperties: false
+> +
+> +...
+> -- 
+> 2.7.4
+> 
+> 

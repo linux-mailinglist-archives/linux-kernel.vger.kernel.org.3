@@ -2,182 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB0255AB89
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 18:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD2D55AB7A
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 18:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233313AbiFYQKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 12:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
+        id S233163AbiFYQCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 12:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233173AbiFYQKO (ORCPT
+        with ESMTP id S229492AbiFYQCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 12:10:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEB614D2E;
-        Sat, 25 Jun 2022 09:10:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AD2AB80139;
-        Sat, 25 Jun 2022 16:10:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD3AC3411C;
-        Sat, 25 Jun 2022 16:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656173410;
-        bh=QSWAyUdJzasHKF1Z9c5060hPLNcWPmd3x4OaL74W4HY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MPIF5FvG7m9c6/e3wnewrLU1ha4RtardAl1QUwVJUrAGCelDOO2XeOxmdvJKLf9gI
-         Q5sflhfn0uXwoIhhaxnoALf7a5Pct27xYqtWxTQT0AJ8TLDfyU7LtWrCVxzjJCTZG3
-         xszxQR91hOMUYOmfpfce7rscmQ59SxHI0Vt1rqcQuOcOLvUhai6++e6i4s5wDh+VH5
-         H6P5u+uc74ixbvi4ajD9Ywb74N9fcWXh9jStjYFDHxQBT5PMqPhZ3YSrjxB/x932op
-         Z5C+Q8ijvad9s2Ou+O8QjkKuiOi/1Je5ujHesnHko5VAHubhWajJft+S/lDV7yFCn2
-         1/uh6zFgE4vTQ==
-Date:   Sun, 26 Jun 2022 01:10:06 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Jeff Xie <xiehuan09@gmail.com>
-Cc:     rostedt@goodmis.org, mingo@redhat.com, mhiramat@kernel.org,
-        zanussi@kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v12 4/4] trace/objtrace: Add documentation for objtrace
-Message-Id: <20220626011006.22572fbabcac5c8494e09f13@kernel.org>
-In-Reply-To: <20220606160943.663180-5-xiehuan09@gmail.com>
-References: <20220606160943.663180-1-xiehuan09@gmail.com>
-        <20220606160943.663180-5-xiehuan09@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 25 Jun 2022 12:02:45 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A821580B;
+        Sat, 25 Jun 2022 09:02:43 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LVdxR4HYyzhXY5;
+        Sun, 26 Jun 2022 00:00:27 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 26 Jun
+ 2022 00:02:38 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        James Morse <james.morse@arm.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH bpf-next v6 0/4] bpf trampoline for arm64
+Date:   Sat, 25 Jun 2022 12:12:51 -0400
+Message-ID: <20220625161255.547944-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeff,
+This patchset introduces bpf trampoline on arm64. A bpf trampoline converts
+native calling convention to bpf calling convention and is used to implement
+various bpf features, such as fentry, fexit, fmod_ret and struct_ops.
 
-OK, this looks good to me.
+The trampoline introduced does essentially the same thing as the bpf
+trampoline does on x86.
 
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Tested on raspberry pi 4b and qemu:
 
-And just a note that please add 'Documentation:' tag to the title
-and Cc to linux-doc@vger.kernel.org and Jonathan Corbet too since
-this is a patch for the Documentation/*.
+ #18 /1     bpf_tcp_ca/dctcp:OK
+ #18 /2     bpf_tcp_ca/cubic:OK
+ #18 /3     bpf_tcp_ca/invalid_license:OK
+ #18 /4     bpf_tcp_ca/dctcp_fallback:OK
+ #18 /5     bpf_tcp_ca/rel_setsockopt:OK
+ #18        bpf_tcp_ca:OK
+ #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
+ #51 /2     dummy_st_ops/dummy_init_ret_value:OK
+ #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
+ #51 /4     dummy_st_ops/dummy_multiple_args:OK
+ #51        dummy_st_ops:OK
+ #57 /1     fexit_bpf2bpf/target_no_callees:OK
+ #57 /2     fexit_bpf2bpf/target_yes_callees:OK
+ #57 /3     fexit_bpf2bpf/func_replace:OK
+ #57 /4     fexit_bpf2bpf/func_replace_verify:OK
+ #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
+ #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
+ #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
+ #57 /8     fexit_bpf2bpf/func_replace_multi:OK
+ #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
+ #57        fexit_bpf2bpf:OK
+ #237       xdp_bpf2bpf:OK
 
-Thank you,
+v6:
+- Since Mark is refactoring arm64 ftrace to support long jump and reduce the
+  ftrace trampoline overhead, it's not clear how we'll attach bpf trampoline
+  to regular kernel functions, so remove ftrace related patches for now.
+- Add long jump support for attaching bpf trampoline to bpf prog, since bpf
+  trampoline and bpf prog are allocated via vmalloc, there is chance the
+  distance exceeds the max branch range.
+- Collect ACK/Review-by, not sure if the ACK and Review-bys for bpf_arch_text_poke()
+  should be kept, since the changes to it is not trivial
+- Update some commit messages and comments
 
-On Tue,  7 Jun 2022 00:09:43 +0800
-Jeff Xie <xiehuan09@gmail.com> wrote:
+v5: https://lore.kernel.org/bpf/20220518131638.3401509-1-xukuohai@huawei.com/
+- As Alexei suggested, remove is_valid_bpf_tramp_flags()
 
-> Added documentation explaining how to use objtrace trigger to get the value
-> of the object.
-> 
-> Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
-> ---
->  Documentation/trace/events.rst | 83 ++++++++++++++++++++++++++++++++++
->  1 file changed, 83 insertions(+)
-> 
-> diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
-> index c47f381d0c00..0dc475160133 100644
-> --- a/Documentation/trace/events.rst
-> +++ b/Documentation/trace/events.rst
-> @@ -546,6 +546,89 @@ The following commands are supported:
->  
->    See Documentation/trace/histogram.rst for details and examples.
->  
-> +- objtrace
-> +
-> +  This command provides a way to get the value of any object, The object
-> +  can be obtained from the dynamic event(kprobe_event/uprobe_event) or the
-> +  static event(tracepoint).
-> +
-> +  Usage:
-> +  When using the kprobe event, only need to set the objtrace(a new trigger),
-> +  we can get the value of the object. The object is from the setting of the
-> +  kprobe event.
-> +
-> +  For example:
-> +  For the function bio_add_page():
-> +
-> +  int bio_add_page(struct bio *bio, struct page *page,
-> +	unsigned int len, unsigned int offset)
-> +
-> +  Firstly, we can set the base of the object, thus the first string "arg1"
-> +  stands for the value of the first parameter of this function bio_add_gage(),
-> +
-> +  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-> +
-> +  Secondly, we can get the value dynamically based on above object.
-> +
-> +  find the offset of the bi_size in struct bio:
-> +  $ gdb vmlinux
-> +  (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
-> +  $1 = (unsigned int *) 0x28
-> +
-> +  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
-> +	p_bio_add_page_0/trigger
-> +
-> +  # cd /sys/kernel/debug/tracing/
-> +  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-> +  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
-> +
-> +  # du -sh /test.txt
-> +  12.0K   /test.txt
-> +
-> +  # cat  /test.txt > /dev/null
-> +  # cat ./trace
-> +  # tracer: nop
-> +  #
-> +  # entries-in-buffer/entries-written: 128/128   #P:4
-> +  #
-> +  #                                _-----=> irqs-off/BH-disabled
-> +  #                               / _----=> need-resched
-> +  #                              | / _---=> hardirq/softirq
-> +  #                              || / _--=> preempt-depth
-> +  #                              ||| / _-=> migrate-disable
-> +  #                              |||| /     delay
-> +  #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> +  #              | |         |   |||||     |         |
-> +               cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-> +               cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-> +               cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
-> +               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-> +               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-> +               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
-> +               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-> +               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-> +               cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +            <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +             ...
-> +
->  7. In-kernel trace event API
->  ============================
->  
-> -- 
-> 2.25.1
-> 
+v4: https://lore.kernel.org/bpf/20220517071838.3366093-1-xukuohai@huawei.com/
+- Run the test cases on raspberry pi 4b
+- Rebase and add cookie to trampoline
+- As Steve suggested, move trace_direct_tramp() back to entry-ftrace.S to
+  avoid messing up generic code with architecture specific code
+- As Jakub suggested, merge patch 4 and patch 5 of v3 to provide full function
+  in one patch
+- As Mark suggested, add a comment for the use of aarch64_insn_patch_text_nosync()
+- Do not generate trampoline for long jump to avoid triggering ftrace_bug
+- Round stack size to multiples of 16B to avoid SPAlignmentFault
+- Use callee saved register x20 to reduce the use of mov_i64
+- Add missing BTI J instructions
+- Trivial spelling and code style fixes
 
+v3: https://lore.kernel.org/bpf/20220424154028.1698685-1-xukuohai@huawei.com/
+- Append test results for bpf_tcp_ca, dummy_st_ops, fexit_bpf2bpf,
+  xdp_bpf2bpf
+- Support to poke bpf progs
+- Fix return value of arch_prepare_bpf_trampoline() to the total number
+  of bytes instead of number of instructions 
+- Do not check whether CONFIG_DYNAMIC_FTRACE_WITH_REGS is enabled in
+  arch_prepare_bpf_trampoline, since the trampoline may be hooked to a bpf
+  prog
+- Restrict bpf_arch_text_poke() to poke bpf text only, as kernel functions
+  are poked by ftrace
+- Rewrite trace_direct_tramp() in inline assembly in trace_selftest.c
+  to avoid messing entry-ftrace.S
+- isolate arch_ftrace_set_direct_caller() with macro
+  CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS to avoid compile error
+  when this macro is disabled
+- Some trivial code sytle fixes
+
+v2: https://lore.kernel.org/bpf/20220414162220.1985095-1-xukuohai@huawei.com/
+- Add Song's ACK
+- Change the multi-line comment in is_valid_bpf_tramp_flags() into net
+  style (patch 3)
+- Fix a deadloop issue in ftrace selftest (patch 2)
+- Replace pt_regs->x0 with pt_regs->orig_x0 in patch 1 commit message 
+- Replace "bpf trampoline" with "custom trampoline" in patch 1, as
+  ftrace direct call is not only used by bpf trampoline.
+
+v1: https://lore.kernel.org/bpf/20220413054959.1053668-1-xukuohai@huawei.com/
+
+Xu Kuohai (4):
+  bpf: Remove is_valid_bpf_tramp_flags()
+  arm64: Add LDR (literal) instruction
+  bpf, arm64: Impelment bpf_arch_text_poke() for arm64
+  bpf, arm64: bpf trampoline for arm64
+
+ arch/arm64/include/asm/insn.h |   3 +
+ arch/arm64/lib/insn.c         |  30 +-
+ arch/arm64/net/bpf_jit.h      |   7 +
+ arch/arm64/net/bpf_jit_comp.c | 717 +++++++++++++++++++++++++++++++++-
+ arch/x86/net/bpf_jit_comp.c   |  20 -
+ kernel/bpf/bpf_struct_ops.c   |   3 +
+ kernel/bpf/trampoline.c       |   3 +
+ 7 files changed, 742 insertions(+), 41 deletions(-)
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.30.2
+

@@ -2,66 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B1555ABFF
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 21:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141A755AC16
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 21:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233227AbiFYS2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 14:28:47 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:34108 "EHLO
-        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbiFYS2p (ORCPT
+        id S233328AbiFYSaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 14:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233288AbiFYSaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 14:28:45 -0400
-Received: from [172.19.1.40] (not.afront.org [50.126.75.182])
-        by mail.monkeyblade.net (Postfix) with ESMTPSA id C48B9837F000;
-        Sat, 25 Jun 2022 11:28:44 -0700 (PDT)
-Message-ID: <0bf1d366-348c-0f91-8f0a-fc9cc6228783@kernel.org>
-Date:   Sat, 25 Jun 2022 11:28:42 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: possible trace_printk() bug in v5.19-rc1
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Chuck Lever III <chuck.lever@oracle.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <F6C267B0-83EA-4151-A4EC-44482AC52C59@oracle.com>
- <20220616113400.15335d91@gandalf.local.home>
- <E309A098-DA06-490D-A75C-E6295C2987B9@oracle.com>
- <20220617155019.373adda7@gandalf.local.home>
- <3BAD2CD9-3A34-4140-A28C-0FE798B83C41@oracle.com>
- <355D2478-33D3-4046-8422-E512F42C51BC@oracle.com>
- <20220624190819.59df11d3@rorschach.local.home>
- <3EB14A14-767B-4B66-9B28-97DDE7EECFD2@oracle.com>
- <20220625134552.08c1a23a@rorschach.local.home>
-From:   John 'Warthog9' Hawley <warthog9@kernel.org>
-In-Reply-To: <20220625134552.08c1a23a@rorschach.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Sat, 25 Jun 2022 11:28:45 -0700 (PDT)
+        Sat, 25 Jun 2022 14:30:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F57212A99;
+        Sat, 25 Jun 2022 11:30:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2A7560ABE;
+        Sat, 25 Jun 2022 18:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 97EA1C341C6;
+        Sat, 25 Jun 2022 18:30:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656181805;
+        bh=mr0EPKWftMUQBZ3R8JQHBFfDl2BQOUehCprlVi9OPb4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Jsy8Pv0YYv/jdvAUG/VlzteKZjDnqjW1reyQXDfklV3td7w42hZCXIvtahTNz02pq
+         rva9QEAfOzXobY9wIg8EvS3JTC8haIDi1XMzrLc2S18zT/CKcyqBvRZRpr4PHFyarM
+         ci4COQKPhMEfn1aKfzOh8Xyt6JdsFFlg1EcUl4k4KZo+hRmHYsJERd6umYvWUztU3K
+         ogzZOdFQO1M12WNo+A9q93umID0X6QyadXqzx7VYQGXkZ+Aml27vUSQHwGzPKfjqR9
+         WGsnSNd0vhUas/5GErnvqjjL+7/wFoT7R0wT+Ddy1IushxZAX0QG2FjFuiifYL3XOE
+         Vzo2KV1yTYm9w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 809FBE7386C;
+        Sat, 25 Jun 2022 18:30:05 +0000 (UTC)
+Subject: Re: [GIT PULL] USB driver fixes for 5.19-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YrcerztKA0mJxjVh@kroah.com>
+References: <YrcerztKA0mJxjVh@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YrcerztKA0mJxjVh@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc4
+X-PR-Tracked-Commit-Id: b24346a240b36cfc4df194d145463874985aa29b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c24eb8d6a5b2da4cbef6a053f58ea9818c6dd659
+Message-Id: <165618180549.26648.2841966637601024152.pr-tracker-bot@kernel.org>
+Date:   Sat, 25 Jun 2022 18:30:05 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pull request you sent on Sat, 25 Jun 2022 16:41:51 +0200:
 
-On 6/25/2022 10:45 AM, Steven Rostedt wrote:
-> On Sat, 25 Jun 2022 17:15:07 +0000
-> Chuck Lever III <chuck.lever@oracle.com> wrote:
-> 
->> [root@manet ~]# cat /etc/redhat-release
->> Fedora release 35 (Thirty Five)
->> [root@manet ~]# trace-cmd version
->>
->> trace-cmd version 2.9.2 (not-a-git-repo)
-> 
-> Ug, that's very old. Fedora should be shipping 3.1.1 soon.
-> 
-> Right John? ;-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.19-rc4
 
-I've got 3.0.2 in there right now (~3mo old) and I've started the builds 
-on the latest tags (REALLY need to automate this!), probably have latest 
-tags built/packaged by tonight.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c24eb8d6a5b2da4cbef6a053f58ea9818c6dd659
 
-https://copr.fedorainfracloud.org/coprs/warthog9/tracing/
+Thank you!
 
-- John "Warthog9" Hawley
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,177 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFD755AB67
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 17:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD3F55AB9B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 18:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233079AbiFYP7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 11:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
+        id S233150AbiFYQiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 12:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiFYP7A (ORCPT
+        with ESMTP id S232889AbiFYQiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 11:59:00 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9D514D2E;
-        Sat, 25 Jun 2022 08:58:58 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LVdtv6Gt7zDsK4;
-        Sat, 25 Jun 2022 23:58:15 +0800 (CST)
-Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 25 Jun
- 2022 23:58:51 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        James Morse <james.morse@arm.com>,
-        Hou Tao <houtao1@huawei.com>,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH bpf-next v6 0/5] bpf trampoline for arm64
-Date:   Sat, 25 Jun 2022 12:08:30 -0400
-Message-ID: <20220625160834.547456-1-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.30.2
+        Sat, 25 Jun 2022 12:38:12 -0400
+X-Greylist: delayed 4198 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 25 Jun 2022 09:38:10 PDT
+Received: from 16.mo584.mail-out.ovh.net (16.mo584.mail-out.ovh.net [188.165.55.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55031A444
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 09:38:08 -0700 (PDT)
+Received: from player760.ha.ovh.net (unknown [10.111.172.45])
+        by mo584.mail-out.ovh.net (Postfix) with ESMTP id C414B209A0
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 15:22:56 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player760.ha.ovh.net (Postfix) with ESMTPSA id 114742BF81CAC;
+        Sat, 25 Jun 2022 15:22:52 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-100R003f7620af6-7b52-4906-bc6a-9af872b4aa46,
+                    6AC0142EC25AD3FE2D0BC2776DBD8C4E282FD61D) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+Date:   Sat, 25 Jun 2022 17:22:45 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] docs: admin-guide/sysctl: escape % symbols
+Message-ID: <20220625172245.15d0ae7b@heffalump.sk2.org>
+In-Reply-To: <871qvd6fq2.fsf@meer.lwn.net>
+References: <20220624110230.595740-1-steve@sk2.org>
+        <871qvd6fq2.fsf@meer.lwn.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.197]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Pe0R7RzTtKL/6ALA3/RL0CV";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Ovh-Tracer-Id: 2904821760775325318
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudeguddgkeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfofggtgesghdtreerredtvdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepfeffgefhgfeuueeffeejieefieefgfefffethfdtudegvdejueelhffhfeegjeeinecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeeitddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehkeeg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset introduces bpf trampoline on arm64. A bpf trampoline converts
-native calling convention to bpf calling convention and is used to implement
-various bpf features, such as fentry, fexit, fmod_ret and struct_ops.
+--Sig_/Pe0R7RzTtKL/6ALA3/RL0CV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The trampoline introduced does essentially the same thing as the bpf
-trampoline does on x86.
+On Fri, 24 Jun 2022 13:09:25 -0600, Jonathan Corbet <corbet@lwn.net> wrote:
+> Stephen Kitt <steve@sk2.org> writes:
+> > % symbols need to be escaped to render correctly here, do so.
+> >
+> > Signed-off-by: Stephen Kitt <steve@sk2.org>
+> > ---
+> >  Documentation/admin-guide/sysctl/kernel.rst | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/admin-guide/sysctl/kernel.rst
+> > b/Documentation/admin-guide/sysctl/kernel.rst index
+> > ddccd1077462..079a51ed88a9 100644 ---
+> > a/Documentation/admin-guide/sysctl/kernel.rst +++
+> > b/Documentation/admin-guide/sysctl/kernel.rst @@ -38,8 +38,8 @@ acct
+> > =20
+> >  If BSD-style process accounting is enabled these values control
+> >  its behaviour. If free space on filesystem where the log lives
+> > -goes below ``lowwater``% accounting suspends. If free space gets
+> > -above ``highwater``% accounting resumes. ``frequency`` determines
+> > +goes below ``lowwater``\% accounting suspends. If free space gets
+> > +above ``highwater``\% accounting resumes. ``frequency`` determines
+> >  how often do we check the amount of free space (value is in
+> >  seconds). Default: =20
+>=20
+> Interesting...I had to go digging into why this is, because "%" isn't
+> really special for RST.  The real problem is that ``literal`` markup
+> needs to have word separators around it, and the recommended solution is
+> to use "\ " instead.
+>=20
+> So I'll apply this, but tweak the changelog and add the extra spaces.
 
-Tested on raspberry pi 4b and qemu:
+Ah yes, thanks for looking into this!
 
- #18 /1     bpf_tcp_ca/dctcp:OK
- #18 /2     bpf_tcp_ca/cubic:OK
- #18 /3     bpf_tcp_ca/invalid_license:OK
- #18 /4     bpf_tcp_ca/dctcp_fallback:OK
- #18 /5     bpf_tcp_ca/rel_setsockopt:OK
- #18        bpf_tcp_ca:OK
- #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
- #51 /2     dummy_st_ops/dummy_init_ret_value:OK
- #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
- #51 /4     dummy_st_ops/dummy_multiple_args:OK
- #51        dummy_st_ops:OK
- #57 /1     fexit_bpf2bpf/target_no_callees:OK
- #57 /2     fexit_bpf2bpf/target_yes_callees:OK
- #57 /3     fexit_bpf2bpf/func_replace:OK
- #57 /4     fexit_bpf2bpf/func_replace_verify:OK
- #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
- #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
- #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
- #57 /8     fexit_bpf2bpf/func_replace_multi:OK
- #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
- #57        fexit_bpf2bpf:OK
- #237       xdp_bpf2bpf:OK
+Regards,
 
-v6:
-- Since Mark is refactoring arm64 ftrace to support long jump and reduce the
-  ftrace trampoline overhead, it's not clear how we'll attach bpf trampoline
-  to regular kernel functions, so remove ftrace related patches for now.
-- Add long jump support for attaching bpf trampoline to bpf prog, since bpf
-  trampoline and bpf prog are allocated via vmalloc, there is chance the
-  distance exceeds the max branch range.
-- Collect ACK/Review-by, not sure if the ACK and Review-bys for bpf_arch_text_poke()
-  should be kept, since the changes to it is not trivial
-- Update some commit messages and comments
+Stephen
 
-v5: https://lore.kernel.org/bpf/20220518131638.3401509-1-xukuohai@huawei.com/
-- As Alexei suggested, remove is_valid_bpf_tramp_flags()
+--Sig_/Pe0R7RzTtKL/6ALA3/RL0CV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-v4: https://lore.kernel.org/bpf/20220517071838.3366093-1-xukuohai@huawei.com/
-- Run the test cases on raspberry pi 4b
-- Rebase and add cookie to trampoline
-- As Steve suggested, move trace_direct_tramp() back to entry-ftrace.S to
-  avoid messing up generic code with architecture specific code
-- As Jakub suggested, merge patch 4 and patch 5 of v3 to provide full function
-  in one patch
-- As Mark suggested, add a comment for the use of aarch64_insn_patch_text_nosync()
-- Do not generate trampoline for long jump to avoid triggering ftrace_bug
-- Round stack size to multiples of 16B to avoid SPAlignmentFault
-- Use callee saved register x20 to reduce the use of mov_i64
-- Add missing BTI J instructions
-- Trivial spelling and code style fixes
+-----BEGIN PGP SIGNATURE-----
 
-v3: https://lore.kernel.org/bpf/20220424154028.1698685-1-xukuohai@huawei.com/
-- Append test results for bpf_tcp_ca, dummy_st_ops, fexit_bpf2bpf,
-  xdp_bpf2bpf
-- Support to poke bpf progs
-- Fix return value of arch_prepare_bpf_trampoline() to the total number
-  of bytes instead of number of instructions 
-- Do not check whether CONFIG_DYNAMIC_FTRACE_WITH_REGS is enabled in
-  arch_prepare_bpf_trampoline, since the trampoline may be hooked to a bpf
-  prog
-- Restrict bpf_arch_text_poke() to poke bpf text only, as kernel functions
-  are poked by ftrace
-- Rewrite trace_direct_tramp() in inline assembly in trace_selftest.c
-  to avoid messing entry-ftrace.S
-- isolate arch_ftrace_set_direct_caller() with macro
-  CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS to avoid compile error
-  when this macro is disabled
-- Some trivial code sytle fixes
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAmK3KEUACgkQgNMC9Yht
+g5z18Q/9ERonRuANlr+e7Zjg4opVcYZC+lOypAfauXJvP6DGiXqF4bOOgUezE7ns
+EGtHKyKm2HWIwnrdu1WdkHl5RcLsGLrcBRrTWSEqABXauv0zHSM8cdqNosfBaz/g
+WgZA41bc7VzBL/70gjwPXqV9OYS/03Vq+TLPznQ/mw0PEdFIQTaR+7Y9AL61r1Tw
+NUNkNMb65jPmyeNDdAhLXtvRn3JHibEPAq9kpc4QNejCN/1Yu2Q0OPxeEppEUXZA
+1JRGttDrRjAxMeWYiSJc9iaVc20qLMdcy79mugBbd5vGqVzPBT0Je4sEkHrTJvtn
+8oP+sr77/nCiGp8ZrzqJEszdJUd/SclMz8MiDQvq/ls023feuGwUm5wdX6WY2k2r
+aPIdH2JPG7h6b2Rh2SEtF7um4KB3pbQr+wqj2PlYOSV7x20lSwCpZ5rOWgpn6FhI
+UMdbeYDZKN0ptpd0gOuwvgk5E3G5mFzovRTE0QbNRiI906Xw1ceiR1qlzfHKtgec
+8pygx+p/nftHWg7Zsg/KckA3iS8F/64nsJ+e1Q1Y4dnjZI+jUxiij3IGO8Njqe+t
+963mF+/GdecjtObLsgX2b46Wl1GCMCzXSlTULrzLrSL6wr3d/5pqohI/wJRzsPSd
+qJpWgAYlEWMvRi/dbubIBHJ2hF8xjhEonVthUbrb4UiZYJvdtqs=
+=ADlL
+-----END PGP SIGNATURE-----
 
-v2: https://lore.kernel.org/bpf/20220414162220.1985095-1-xukuohai@huawei.com/
-- Add Song's ACK
-- Change the multi-line comment in is_valid_bpf_tramp_flags() into net
-  style (patch 3)
-- Fix a deadloop issue in ftrace selftest (patch 2)
-- Replace pt_regs->x0 with pt_regs->orig_x0 in patch 1 commit message 
-- Replace "bpf trampoline" with "custom trampoline" in patch 1, as
-  ftrace direct call is not only used by bpf trampoline.
-
-v1: https://lore.kernel.org/bpf/20220413054959.1053668-1-xukuohai@huawei.com/
-
-Xu Kuohai (4):
-  bpf: Remove is_valid_bpf_tramp_flags()
-  arm64: Add LDR (literal) instruction
-  bpf, arm64: Impelment bpf_arch_text_poke() for arm64
-  bpf, arm64: bpf trampoline for arm64
-
- arch/arm64/include/asm/insn.h |   3 +
- arch/arm64/lib/insn.c         |  30 +-
- arch/arm64/net/bpf_jit.h      |   7 +
- arch/arm64/net/bpf_jit_comp.c | 717 +++++++++++++++++++++++++++++++++-
- arch/x86/net/bpf_jit_comp.c   |  20 -
- kernel/bpf/bpf_struct_ops.c   |   3 +
- kernel/bpf/trampoline.c       |   3 +
- 7 files changed, 742 insertions(+), 41 deletions(-)
-
--- 
-2.30.2
-
+--Sig_/Pe0R7RzTtKL/6ALA3/RL0CV--

@@ -2,115 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A967455A662
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 05:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D03A55A6A8
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 05:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbiFYD2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 23:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S231969AbiFYDcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 23:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiFYD2m (ORCPT
+        with ESMTP id S229520AbiFYDcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 23:28:42 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D632F3DA7A;
-        Fri, 24 Jun 2022 20:28:41 -0700 (PDT)
-Received: from [192.168.86.247] (23-119-123-228.lightspeed.sntcca.sbcglobal.net [23.119.123.228])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7234E20C7956;
-        Fri, 24 Jun 2022 20:28:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7234E20C7956
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1656127721;
-        bh=JQrEV25Qq2xdPblGSoG19vTOK76ID9Ode4ej2R5wAh8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OspP72b4TUDmYtGZoMOvxPICki6wwW3eHAaAo/JIHK4PRJagLc+N0v38EbMeQQMHE
-         GQmbi9VPrzmjZCQgEKjbZsfSqFXD6mjNCv52DKX+35DahzdvBxkqCAPz007w9QwIYP
-         Ov8ZnP1gQaUxChSEwjmi+22z47+4jZ4M51gTFSp4=
-Message-ID: <3dde4d8e-5f97-dc07-1763-981942d23f12@linux.microsoft.com>
-Date:   Fri, 24 Jun 2022 20:28:39 -0700
+        Fri, 24 Jun 2022 23:32:10 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8133EA9D
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 20:32:08 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LVKKG1jXRzDsQD;
+        Sat, 25 Jun 2022 11:31:30 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 25 Jun 2022 11:32:05 +0800
+Subject: Re: [PATCH 03/16] mm/huge_memory: fix comment of
+ __pud_trans_huge_lock
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <akpm@linux-foundation.org>, <shy828301@gmail.com>,
+        <zokeefe@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220622170627.19786-1-linmiaohe@huawei.com>
+ <20220622170627.19786-4-linmiaohe@huawei.com>
+ <YrYI1Dxk7lhZqEVp@casper.infradead.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <d7bb994e-83b7-2fcf-af1d-e88190995400@huawei.com>
+Date:   Sat, 25 Jun 2022 11:32:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 0/5] Add Aspeed crypto driver for hardware acceleration
+In-Reply-To: <YrYI1Dxk7lhZqEVp@casper.infradead.org>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Dhananjay Phadke <dhphadke@microsoft.com>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        BMC-SW@aspeedtech.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220624090827.3909179-1-neal_liu@aspeedtech.com>
-From:   Dhananjay Phadke <dphadke@linux.microsoft.com>
-In-Reply-To: <20220624090827.3909179-1-neal_liu@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neal,
+On 2022/6/25 2:56, Matthew Wilcox wrote:
+> On Thu, Jun 23, 2022 at 01:06:14AM +0800, Miaohe Lin wrote:
+>> __pud_trans_huge_lock returns page table lock pointer if a given pud maps
+>> a thp instead of 'true' since introduced. Fix corresponding comments.
+> 
+> I think the comments here are rather wasted.  I think this comment
+> should be moved to pud_trans_huge_lock() and turned into kernel-doc
+> format.
 
-On 6/24/2022 2:08 AM, Neal Liu wrote:
-> Aspeed Hash and Crypto Engine (HACE) is designed to accelerate the
-> throughput of hash data digest, encryption and decryption.
-> 
-> These patches aim to add Aspeed hash & crypto driver support.
-> The hash & crypto driver also pass the run-time self tests that
-> take place at algorithm registration.
-> 
-> Tested-by below configs:
-> - CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
-> - CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y
-> - CONFIG_DMA_API_DEBUG=y
-> - CONFIG_DMA_API_DEBUG_SG=y
-> - CONFIG_CPU_BIG_ENDIAN=y
-> 
-> Change since v3:
-> - Use dmam_alloc_coherent() instead to manage dma_alloc_coherent().
-> - Add more error handler of dma_prepare() & crypto_engine_start().
-> 
-> Change since v2:
-> - Fix endianness issue. Tested on both little endian & big endian
->    system.
-> - Use common crypto hardware engine for enqueue & dequeue requests.
-> - Use pre-defined IVs for SHA-family.
-> - Revise error handler flow.
-> - Fix sorts of coding style problems.
-> 
-> Change since v1:
-> - Add more error handlers, including DMA memory allocate/free, DMA
->    map/unmap, clock enable/disable, etc.
-> - Fix check dma_map error for config DMA_API_DEBUG.
-> - Fix dt-binding doc & dts node naming.
-> 
-> 
-> Neal Liu (5):
->    crypto: aspeed: Add HACE hash driver
->    dt-bindings: clock: Add AST2600 HACE reset definition
->    ARM: dts: aspeed: Add HACE device controller node
->    dt-bindings: crypto: add documentation for aspeed hace
->    crypto: aspeed: add HACE crypto driver
+Do you mean something like below? If so, __pmd_trans_huge_lock might need to do the
+similar work?
 
-The driver claims compatible with aspeed,ast2500-hace, but there's no
-equivalent g5 DTS change (patch 3/5) or reset definition (patch 2/5) in
-aspeed-clock.h? Either drop ast2500 compatible from this patch series or 
-fix these.
+diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+index ae3d8e2fd9e2..b73fe864de13 100644
+--- a/include/linux/huge_mm.h
++++ b/include/linux/huge_mm.h
+@@ -238,6 +238,12 @@ static inline spinlock_t *pmd_trans_huge_lock(pmd_t *pmd,
+        else
+                return NULL;
+ }
++/**
++ * Returns true if a given pud maps a thp, false otherwise.
++ *
++ * Note that if it returns true, this routine returns without unlocking page
++ * table lock. So callers must unlock it.
++ */
+ static inline spinlock_t *pud_trans_huge_lock(pud_t *pud,
+                struct vm_area_struct *vma)
+ {
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index eb2e4ecb76aa..ae4c2116be07 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2006,12 +2006,6 @@ spinlock_t *__pmd_trans_huge_lock(pmd_t *pmd, struct vm_area_struct *vma)
+        return NULL;
+ }
 
-Thanks,
-Dhananjay
+-/*
+- * Returns true if a given pud maps a thp, false otherwise.
+- *
+- * Note that if it returns true, this routine returns without unlocking page
+- * table lock. So callers must unlock it.
+- */
+ spinlock_t *__pud_trans_huge_lock(pud_t *pud, struct vm_area_struct *vma)
+ {
+        spinlock_t *ptl;
+
+Thanks!
+> 
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  mm/huge_memory.c | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>> index 83fb6c3442ff..a26580da8011 100644
+>> --- a/mm/huge_memory.c
+>> +++ b/mm/huge_memory.c
+>> @@ -1903,10 +1903,10 @@ spinlock_t *__pmd_trans_huge_lock(pmd_t *pmd, struct vm_area_struct *vma)
+>>  }
+>>  
+>>  /*
+>> - * Returns true if a given pud maps a thp, false otherwise.
+>> + * Returns page table lock pointer if a given pud maps a thp, NULL otherwise.
+>>   *
+>> - * Note that if it returns true, this routine returns without unlocking page
+>> - * table lock. So callers must unlock it.
+>> + * Note that if it returns page table lock pointe, this routine returns without
+>> + * unlocking page table lock. So callers must unlock it.
+>>   */
+>>  spinlock_t *__pud_trans_huge_lock(pud_t *pud, struct vm_area_struct *vma)
+>>  {
+>> -- 
+>> 2.23.0
+>>
+> 
+> .
+> 
+

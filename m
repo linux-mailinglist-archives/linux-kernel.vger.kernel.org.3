@@ -2,59 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E6155AA52
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AAB355AA57
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbiFYNHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 09:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55496 "EHLO
+        id S233010AbiFYNKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 09:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbiFYNHt (ORCPT
+        with ESMTP id S231982AbiFYNKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 09:07:49 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1861CFFD;
-        Sat, 25 Jun 2022 06:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7u6xQCmDQPyPVMk+dsNlnkmpa5+oPFDuRd2hFSFH4Ok=; b=z12Js+i0dzj7rL8Nr5PC+Iqxhi
-        NImcGYLW/4fBudL/nfCThERdDdWiPGrj+wOtI11u4CKR1DQIoIBT8+voxFUA0gng8killVhRf1KXC
-        XVyU459RwiJJunYonuGtp3J3gMoVT3G7xoL0XMdcqxTbb98bIXBYOfOpq/Bw1pGA+hUxwFZ217xox
-        ogAfsYirWfx4b1BCnB1gESszcJcy43KPuoj+z6HMNqvHCZG2D5reXFJuJPNRlP77dhqEPlxz6Wgbu
-        xhzRnTO0h6s03m43frCGalkmvLzxrYphOlIAypVwSLceSCXBZ5L5jLCZ+xKj9R8W/3cp8iBJi5RWc
-        rIV9bN2A==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o55Vp-0067SI-Vo; Sat, 25 Jun 2022 13:07:46 +0000
-Date:   Sat, 25 Jun 2022 06:07:45 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 3/8] fs: clear or set FMODE_LSEEK based on llseek
- function
-Message-ID: <YrcIoaluGx+2TzfM@infradead.org>
-References: <20220625110115.39956-1-Jason@zx2c4.com>
- <20220625110115.39956-4-Jason@zx2c4.com>
+        Sat, 25 Jun 2022 09:10:12 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D771C5F55;
+        Sat, 25 Jun 2022 06:10:10 -0700 (PDT)
+Received: from zn.tnic (p200300ea97465768329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:5768:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EEC151EC04DF;
+        Sat, 25 Jun 2022 15:10:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1656162605;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=370Qrppx8dskofbXGy4yS6jqi4CEYDJ1COeJ2ndjgf0=;
+        b=Yra84RmFjzXKqL6LqAmF4LFDULEf7dL2ikZ4PO/9h9Q2HoVLv8N5EMkC0zWpmBGgQmcb+T
+        RAp4aovPH2cNLOyIHVKPDd/yEu45QzfDc+hAtoJGodnTHfGYECQfBV/MCNk2aBoIUOKMkE
+        B6lzLdv4BrKUPbxcwh83YeTpUzNSr+A=
+Date:   Sat, 25 Jun 2022 15:10:00 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: Re: [PATCH v5] x86/mce: Check for writes ignored in MCA_STATUS
+ register
+Message-ID: <YrcJKOUSJsmodo70@zn.tnic>
+References: <20220610192515.98540-1-Smita.KoralahalliChannabasappa@amd.com>
+ <YrNRYJx0CNDNj3oX@zn.tnic>
+ <d3f554b8-4fc5-efe8-1ca2-aa95c7e76eb8@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220625110115.39956-4-Jason@zx2c4.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <d3f554b8-4fc5-efe8-1ca2-aa95c7e76eb8@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 01:01:10PM +0200, Jason A. Donenfeld wrote:
-> This helps unify a longstanding wart where FMODE_LSEEK hasn't been
-> uniformly unset when it should be.
+On Fri, Jun 24, 2022 at 03:34:42PM -0700, Smita Koralahalli wrote:
+> The wrmsrl_safe() doesn't throw an error here.
+> I think we need to read back the written value and check for it whatsoever.
+> What do you think?
 
-I think we could just remove FMODE_LSEEK after the previous patch
-as we can just check for the presence of a ->llseek method instead.
+Ah, that's the write-ignored thing. Not the #GP-generating thing when
+McStatusWrEn=0.
+
+Sorry, I got confused.
+
+Can you pls change that part back to reading the previously written
+value and send me a tested version?
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,55 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5FB55A9A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 14:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8FE55A9CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 14:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232698AbiFYL5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 07:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S232832AbiFYMIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 08:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbiFYL5L (ORCPT
+        with ESMTP id S232170AbiFYMIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 07:57:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4155527FD2;
-        Sat, 25 Jun 2022 04:57:10 -0700 (PDT)
+        Sat, 25 Jun 2022 08:08:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B232BB13;
+        Sat, 25 Jun 2022 05:08:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2E17611BC;
-        Sat, 25 Jun 2022 11:57:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91D3C3411C;
-        Sat, 25 Jun 2022 11:57:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69751B807E5;
+        Sat, 25 Jun 2022 12:08:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02FC6C3411C;
+        Sat, 25 Jun 2022 12:08:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656158229;
-        bh=Jh+t8pyQkjetLG1QIFJX8UAzx2DiAOj2gLxy8XB7H/A=;
+        s=k20201202; t=1656158913;
+        bh=veiT+bMUWyUEWmup47z/D8oPLnmA4xLJ1PTrTZlDMjI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=snNV/G4kd+r8meYshIqn89rxH2c7R66yMKy91Y5dd9j+sMcV0lE1dHxDH+OIUTuQP
-         o4fL6KjTU/vORqLYLfRNrvyZPQaJpjJv9+8oT9XD4PBBPJ2QvxWFmzfVtgXhe7592H
-         muidqJurcd/jwTOGf+ixC/jdeFCKIBE3F+F+J8wJk81wCSV6aMJWS1fzq5dsx1yGHf
-         Pwoso3fQyXCwZMoFwrSrIRb7Ylo+/tFIQsi2/MKv6yJKbY26RgpU5HZjlG4iGns3f9
-         gNzBBri3j7ZU+OYgb3jvl4Md3TTQJFns2yh9WbCdlTL5n7gggVHZswRwGMLLKEtJz8
-         +GC2s+dFw84iA==
-Date:   Sat, 25 Jun 2022 13:06:37 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc:     Kent Gustavsson <kent@minoris.se>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+        b=eGnBk1IoovvYB98tc+QSKAtfs/XrLk2tGbL96bEAi7vPBeW91kDHZxEUCcKPO6vr3
+         dJoRoeSNz0eO+zLj+Zh1n1YsHmy0YPxcCot8c2i4shcvHGu0ITKsZ8I+Vt/CRK1Vl/
+         YxYs7bO5moVbfqFO6/VRiIWtrKfH61NYBd1yHqS0jB2d8U4MOMaB3X/BEJbhnibiFc
+         YSisD9M7cXTWfPMv36P//LQnQuLII3cAoEqpQCwRA93EOmRyiyosFSdjQM+JEIymjp
+         cWgUMQFmIKHZTNB1ZX1GL8KFst3ilKfQ86fuoDTVv2EOwShDj/lugQ5avom8rKeF+h
+         FWjk3jxwaS9Tg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o54aU-0033vB-Jn;
+        Sat, 25 Jun 2022 13:08:30 +0100
+Date:   Sat, 25 Jun 2022 13:08:30 +0100
+Message-ID: <87fsjt2bep.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH v2 04/10] iio: adc: mcp3911: add support for interrupts
-Message-ID: <20220625130637.223180f2@jic23-huawei>
-In-Reply-To: <20220625125652.2f988964@jic23-huawei>
-References: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
-        <20220625103853.2470346-4-marcus.folkesson@gmail.com>
-        <20220625125652.2f988964@jic23-huawei>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v5 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller driver
+In-Reply-To: <CA+V-a8veE6-4C+9kyTNxqsf0jB5xCGhcHncTSM3ejDzBAfz=Bw@mail.gmail.com>
+References: <20220523174238.28942-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <20220523174238.28942-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <871qvdf5tb.wl-maz@kernel.org>
+        <CA+V-a8veE6-4C+9kyTNxqsf0jB5xCGhcHncTSM3ejDzBAfz=Bw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.csengg@gmail.com, prabhakar.mahadev-lad.rj@bp.renesas.com, geert+renesas@glider.be, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com, jonathanh@nvidia.com, bjorn.andersson@linaro.org, agross@kernel.org, p.zabel@pengutronix.de, andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, phil.edworthy@renesas.com, biju.das.jz@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,58 +89,251 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 25 Jun 2022 11:54:44 +0100,
+"Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+>=20
+> Hi Marc,
+>=20
+> Thank you for the review.
+>=20
+> On Sat, Jun 25, 2022 at 10:30 AM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Mon, 23 May 2022 18:42:35 +0100,
+> > Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > >
 
-...
+[...]
 
-> >  static int mcp3911_probe(struct spi_device *spi)
-> >  {
-> >  	struct iio_dev *indio_dev;
-> > @@ -352,6 +382,15 @@ static int mcp3911_probe(struct spi_device *spi)
-> >  	if (ret)
-> >  		goto clk_disable;
-> >  
-> > +	if (device_property_read_bool(&adc->spi->dev, "microchip,data-ready-hiz"))
-> > +		ret = mcp3911_update(adc, MCP3911_REG_STATUSCOM, MCP3911_STATUSCOM_DRHIZ,
-> > +				0, 2);
-> > +	else
-> > +		ret = mcp3911_update(adc, MCP3911_REG_STATUSCOM, MCP3911_STATUSCOM_DRHIZ,
-> > +				MCP3911_STATUSCOM_DRHIZ, 2);
-> > +	if (ret < 0)
-> > +		goto clk_disable;
-> > +
-> >  	indio_dev->name = spi_get_device_id(spi)->name;
-> >  	indio_dev->modes = INDIO_DIRECT_MODE | INDIO_BUFFER_TRIGGERED;
-> >  	indio_dev->info = &mcp3911_info;
-> > @@ -362,6 +401,32 @@ static int mcp3911_probe(struct spi_device *spi)
-> >  
-> >  	mutex_init(&adc->lock);
-> >  
-> > +	if (spi->irq > 0) {
-> > +		adc->trig = devm_iio_trigger_alloc(&spi->dev, "%s-dev%d",
-> > +				indio_dev->name,
-> > +				iio_device_id(indio_dev));
-> > +		if (!adc->trig)
-> > +			goto clk_disable;  
-> You definitely want to use devm managed cleanup for these.
-> 
-> There is a patch set that adds these as standard functions, but I haven't
-> yet seen it being picked up for this cycle (reviews have been slow coming).
-> 
-> https://lore.kernel.org/all/20220520075737.758761-1-u.kleine-koenig@pengutronix.de/
+> > > +static int rzg2l_irqc_alloc(struct irq_domain *domain, unsigned int =
+virq,
+> > > +                         unsigned int nr_irqs, void *arg)
+> > > +{
+> > > +     struct rzg2l_irqc_priv *priv =3D domain->host_data;
+> > > +     unsigned long *chip_data =3D NULL;
+> >
+> > Why the init to NULL?
+> >
+> Can be dropped.
+>=20
+> > > +     struct irq_fwspec spec;
+> > > +     irq_hw_number_t hwirq;
+> > > +     int tint =3D -EINVAL;
+> > > +     unsigned int type;
+> > > +     unsigned int i;
+> > > +     int ret;
+> > > +
+> > > +     ret =3D irq_domain_translate_twocell(domain, arg, &hwirq, &type=
+);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     /*
+> > > +      * For TINT interrupts ie where pinctrl driver is child of irqc=
+ domain
+> > > +      * the hwirq and TINT are encoded in fwspec->param[0].
+> > > +      * hwirq for TINT range from 9-40, hwirq is embedded 0-15 bits =
+and TINT
+> > > +      * from 16-31 bits. TINT from the pinctrl driver needs to be pr=
+ogrammed
+> > > +      * in IRQC registers to enable a given gpio pin as interrupt.
+> > > +      */
+> > > +     if (hwirq > IRQC_IRQ_COUNT) {
+> > > +             tint =3D TINT_EXTRACT_GPIOINT(hwirq);
+> > > +             hwirq =3D TINT_EXTRACT_HWIRQ(hwirq);
+> > > +
+> > > +             if (hwirq < IRQC_TINT_START)
+> > > +                     return -EINVAL;
+> > > +     }
+> > > +
+> > > +     if (hwirq > (IRQC_NUM_IRQ - 1))
+> > > +             return -EINVAL;
+> > > +
+> > > +     chip_data =3D kzalloc(sizeof(*chip_data), GFP_KERNEL);
+> >
+> > Are we really allocating an unsigned long for something that already
+> > fits in something that is pointer-sized?
+> >
+> I think I received some feedback to use unsigned long.  Let me know
+> what you want me to use here.
 
-Ah, elsewhere in my unread email was a thread that says it's in clk-next so
-will be in the next merge window.  I haven't confirmed, but looks like Stephen
-put up an immutable branch so I could pull it into the IIO togreg branch if you
-want to transition directly to that new code. @Stephen, would you be fine
-with me pulling your clk-devm-enable branch into IIO (with the fix which
-got posted earlier in the week presumably also going on that branch when
-you push out?)
+I think this is just a waste of memory, but I don't really care.
 
-Thanks,
+>=20
+> > > +     if (!chip_data)
+> > > +             return -ENOMEM;
+> > > +     *chip_data =3D tint;
+> >
+> > So here, *chip_data can be set to -EINVAL if hwirq <=3D IRQC_IRQ_COUNT?
+> > This can't be right.
+> >
+> Yes *chip_data can be -EINVAL. IRQC block handles IRQ0-7 and
+> GPIOINT0-122. So the -EINVAL here is for IRQ0-7 case were dont
+> required the chip data in the call backs hence -EINVAL, Whereas for
+> GPIOINT0-122 we need chip_data in the callbacks as this value needs to
+> be programmed in the hardware registers.
 
-Jonathan
+I can't see anything that checks it (let alone the difference in
+types). And if it isn't checked, this means that the allocation is
+pointless.
 
+>=20
+> > > +
+> > > +     ret =3D irq_domain_set_hwirq_and_chip(domain, virq, hwirq, &irq=
+c_chip,
+> > > +                                         chip_data);
+> > > +     if (ret) {
+> > > +             kfree(chip_data);
+> > > +             return ret;
+> > > +     }
+> > > +
+> > > +     spec.fwnode =3D domain->parent->fwnode;
+> > > +     spec.param_count =3D priv->map[hwirq].args_count;
+> > > +     for (i =3D 0; i < spec.param_count; i++)
+> > > +             spec.param[i] =3D priv->map[hwirq].args[i];
+> >
+> > Why isn't that simply:
+> >
+> >         spec =3D priv->map[hwirq];
+> >
+> spec is of type =E2=80=98struct irq_fwspec=E2=80=99 and map is of type =
+=E2=80=98struct of_phandle_args=E2=80=99.
+>=20
+> > as this really is the interrupt you want to map to?
+> >
+> Yes.
+>=20
+> > > +
+> > > +     ret =3D irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, &sp=
+ec);
+> >
+> > or even better:
+> >
+> >         ret =3D irq_domain_alloc_irqs_parent(domain, virq, nr_irqs,
+> >                                            &priv->map[hwirq]);
+> >
+> Does not work as map is of type =E2=80=98struct of_phandle_args=E2=80=99.
 
+Which begs the question: why don't you convert it to an irq_fwspec the
+first place and be done with it?
 
-> 
-> In meantime role your own with devm_add_action_or_reset()
+>=20
+> > > +     if (ret)
+> > > +             kfree(chip_data);
+> > > +
+> > > +     return ret;
+> > > +}
+> > > +
+> > > +static void rzg2l_irqc_domain_free(struct irq_domain *domain, unsign=
+ed int virq,
+> > > +                                unsigned int nr_irqs)
+> > > +{
+> > > +     struct irq_data *d;
+> > > +
+> > > +     d =3D irq_domain_get_irq_data(domain, virq);
+> > > +     if (d)
+> > > +             kfree(d->chip_data);
+> > > +
+> > > +     irq_domain_free_irqs_common(domain, virq, nr_irqs);
+> > > +}
+> > > +
+> > > +static const struct irq_domain_ops rzg2l_irqc_domain_ops =3D {
+> > > +     .alloc =3D rzg2l_irqc_alloc,
+> > > +     .free =3D rzg2l_irqc_domain_free,
+> > > +     .translate =3D irq_domain_translate_twocell,
+> > > +};
+> > > +
+> > > +static int rzg2l_irqc_parse_map(struct rzg2l_irqc_priv *priv,
+> > > +                             struct device_node *np)
+
+nit: this function could afford being renamed to something more
+correct. It really doesn't map anything, only retrieves the output
+interrupts.
+
+> > > +{
+> > > +     unsigned int i;
+> > > +     int ret;
+> > > +
+> > > +     for (i =3D 0; i < IRQC_NUM_IRQ; i++) {
+> > > +             ret =3D of_irq_parse_one(np, i, &priv->map[i]);
+
+Make map an array of irq_fwspec, and use of_phandle_args_to_fwspec()
+for the conversion.
+
+> > > +             if (ret)
+> > > +                     return ret;
+> > > +     }
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static int rzg2l_irqc_init(struct device_node *node, struct device_n=
+ode *parent)
+> > > +{
+> > > +     struct irq_domain *irq_domain, *parent_domain;
+> > > +     struct platform_device *pdev;
+> > > +     struct reset_control *resetn;
+> > > +     struct rzg2l_irqc_priv *priv;
+> > > +     int ret;
+> > > +
+> > > +     pdev =3D of_find_device_by_node(node);
+> > > +     if (!pdev)
+> > > +             return -ENODEV;
+> > > +
+> > > +     parent_domain =3D irq_find_host(parent);
+> > > +     if (!parent_domain) {
+> > > +             dev_err(&pdev->dev, "cannot find parent domain\n");
+> > > +             return -ENODEV;
+> > > +     }
+> > > +
+> > > +     priv =3D devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> > > +     if (!priv)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     priv->base =3D devm_of_iomap(&pdev->dev, pdev->dev.of_node, 0, =
+NULL);
+> > > +     if (IS_ERR(priv->base))
+> > > +             return PTR_ERR(priv->base);
+> > > +
+> > > +     ret =3D rzg2l_irqc_parse_map(priv, node);
+> > > +     if (ret) {
+> > > +             dev_err(&pdev->dev, "cannot parse interrupts: %d\n", re=
+t);
+> > > +             return ret;
+> > > +     }
+> > > +
+> > > +     resetn =3D devm_reset_control_get_exclusive_by_index(&pdev->dev=
+, 0);
+> > > +     if (IS_ERR(resetn))
+> > > +             return IS_ERR(resetn);
+> > > +
+> > > +     ret =3D reset_control_deassert(resetn);
+> > > +     if (ret) {
+> > > +             dev_err(&pdev->dev, "failed to deassert resetn pin, %d\=
+n", ret);
+> > > +             return ret;
+> > > +     }
+> > > +
+> > > +     pm_runtime_enable(&pdev->dev);
+> > > +     ret =3D pm_runtime_resume_and_get(&pdev->dev);
+> > > +     if (ret < 0) {
+> > > +             dev_err(&pdev->dev, "pm_runtime_resume_and_get failed: =
+%d\n", ret);
+> > > +             goto pm_disable;
+> > > +     }
+> >
+> > If using runtime PM, why isn't the core IRQ code made aware of this
+> > dependency by registering the device with irq_domain_set_pm_device()
+> > instead of leaving it enabled forever?
+> >
+> Ouch will add irq_domain_set_pm_device() below.
+
+You'll need a bit more than that. You'll either need to take a PM
+reference on each alloc, or improve irq_chip_pm_{get,put}() to talk
+the hierarchy.
+
+That's probably a separate patch.
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

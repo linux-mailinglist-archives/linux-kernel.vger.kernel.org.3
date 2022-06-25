@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F4E55A563
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 02:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F6555A567
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 02:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbiFYAQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 20:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
+        id S231497AbiFYASE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 20:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiFYAQN (ORCPT
+        with ESMTP id S230487AbiFYASA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 20:16:13 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CB748320
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 17:16:11 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id w6so3861089pfw.5
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 17:16:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5AtCjtMCl+cNMMkHTOz3YEphHVK0Ino+vMPvSCaV+v0=;
-        b=k9Uze/489rwgRuE4kj0oFyxL9KvB/x4raQ6LUO0G89lGETZSUOIRHW5G5d7NGBYC6E
-         dtpK+4ceOET3mNXfchYc7P1FFgwB2OxQMjLirlEaa7U3TXyJ5+RZKvtaGhPfDGZdGcD3
-         epCiDPyGczEqDfytW13+GVP5z1trr9j6k3fbCzDNy4tAWQ8RYWXOElRAAxe0HSqd7zYH
-         JoBttswyv6sN4eGa73FboHIWrfj26hiji66SAF9JP0YmBIWyrOWAp5NVTJksBZsTSiyf
-         g65pFRepDqa0I1p5g5ozewFjzjKnHUhB5nX1ToNTnjNcBzQu99tuP+RBrrN32K/b5+RF
-         TxXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5AtCjtMCl+cNMMkHTOz3YEphHVK0Ino+vMPvSCaV+v0=;
-        b=ywgeUGDIL9Fs/juvw/d2d7KDp5n0uDsbBMR38J+mfPF1uaKYm0Ir3xwKGI0+ETPrak
-         2FhTmfaHCxjI/GNJNcZbhB9Idab3X+mxfldNmLutpT9a8/adMscxLk/bufOPwvO40HCS
-         H0T0Zqe7VVvB/vr/Z/FqwTWwbt5NX8iVfhI9iN3DgOHO+OUiRhfvyx46ZID1cEHe67dE
-         AOSHifKeDxECn+Lol7mA2o3I2nya/7hRvvlXoNT7SJWh+uA9doCc4xnV+5ICdp3elO4v
-         iTGRbdsvyfuyW48I7+hoexNfdu4sJIj4r5UzPpMeOAuc5KKhE71aeLbuq8Ewv57pfYcQ
-         svHw==
-X-Gm-Message-State: AJIora8IM8JB1hXByr41w2loIHTmZCXDJoZfzBiEzL056BMVlnN2Eq0v
-        Q9UYNYCfoQpb4aak2nlkKSLLdg==
-X-Google-Smtp-Source: AGRyM1vH/cHF+pfBs7Ks90bQw4lCq44ffDUDQ8soA5ZqNOWhnaNGuB4Fv7S8u/Qx0J5xS+txpzGgVw==
-X-Received: by 2002:a63:6942:0:b0:40d:b8a:c55f with SMTP id e63-20020a636942000000b0040d0b8ac55fmr1255019pgc.542.1656116170981;
-        Fri, 24 Jun 2022 17:16:10 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id q1-20020a170902a3c100b001675991fb7fsm2373623plb.55.2022.06.24.17.16.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 17:16:10 -0700 (PDT)
-Date:   Sat, 25 Jun 2022 00:16:05 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peter Xu <peterx@redhat.com>
-Subject: Re: [PATCH 2/4] KVM: x86/mmu: Defer "full" MMU setup until after
- vendor hardware_setup()
-Message-ID: <YrZTxZm4kq0rXcKQ@google.com>
-References: <20220624232735.3090056-1-seanjc@google.com>
- <20220624232735.3090056-3-seanjc@google.com>
+        Fri, 24 Jun 2022 20:18:00 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137EDE3C;
+        Fri, 24 Jun 2022 17:17:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1656116271;
+        bh=cLxJQWmf88S/+nPbJ0VZCgg17GshktmH/0yWyalFWok=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Zbdo2DGOiEsR1LZq47TDGCUixYgGYZ4aKdejmEjlj8dfsy4JW8dNx2kWXLh46su02
+         g/X+niRp/B8q+PmWiWfGzcmCId+M0wlCy9j9Py8sZh0Ja4Y/XmHa6mzjMnNqJ+Q4cC
+         J+RgJSfEslFpIZqgbf4Smg0mP5oczPQCx8Vhfkcs=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([188.155.157.251]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MSbxD-1oG8yU2sZd-00SsEa; Sat, 25 Jun 2022 02:17:51 +0200
+From:   Lucien Buchmann <lucien.buchmann@gmx.net>
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Lucien Buchmann <lucien.buchmann@gmx.net>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: serial: ftdi_sio: add Belimo PCI ids
+Date:   Sat, 25 Jun 2022 02:17:44 +0200
+Message-Id: <20220625001744.28055-1-lucien.buchmann@gmx.net>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220624232735.3090056-3-seanjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:bkB1zQGWN1TVByc871uAGQHgqnMq+K+r4ZScWjOTwZNQHmqRybR
+ JFp126jABfvPfFobmCvPXaDwk32cSZNzFWE5tGCI1PMpK4TQi+Gv/+srJKpcET9B6X2RaxJ
+ 0aPbbcgRrDYUcZWvS4NYC0xEtTNGEqpKuTpsdZX+No4AN/sIbFR2RSyyETO9tlIP19BdMcn
+ 2NEJEeyD1lSeYAq9S3aVw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vTQGQqjWfco=:G4Y3B1Zl/H+xNEkDoohsIX
+ Lg9KyxMBAYwc5HrtfCp0wgAZVLjwFdAcrI0jNRtnHtu68LtimhtGaRf/X/lejr97RPeN12mpI
+ zdjstke0CxuYtFdg/xiFIQLju8jLdstAKwC0ykqv1Vaaxkqd25tdDhTmM6C+DYUT38dmfqdrh
+ Q1p7g0th2X7nDNFL5QGCZqgJQpgmhU3W1bLru6lZhuuBlHT9nlYGxIQHXL20sKWgYx1j2+F0k
+ TAd09735zevv5B+sk0ay8QPNuOTwE4DK0S9sfTdXHjx41SqIy3jHZyD4KA1wsF3caeSTWN7B/
+ ZnZNcKUSLPPJQc/+0Cji2Vd+hkKvv8z0qD67DBWYGRDB4UGxkMW693PocSQaZmwTsOV7VisLU
+ bXg+OHXFygdLYu3fYMdsjJsE8gDr5BjRsehBL0gMlXewTa+GRUmF69mGFggUU/QFkqLnwsk9U
+ xism02LZnnJAlxqbLmpOUm9Qz4MTRn32v2thzNXN8F44xrcML9q3gOz//ElT3Laj5qRqpBn1V
+ YPZwyUJL2v/qTUFOXsKI/dCXeC1cDgRCWbh98ZRxlggQqjjJzNw39L5cyHMsJ5YInHW+y8a58
+ uodkxu4COjN2cZeESBypcGVi2AQxzo5YVMZ0qh68UtEm3uvQVUJXr7CoY5RGV5Yzfncm4Bpjo
+ I3r9jPoYgdeQaMTbFGlVIBWVkwhMsgNdwPe9pRWkKDHosM7xrqDvEdUIbL99xZfQTn7iYG2TT
+ QgmhtN6bqo/v9nw3e6k9BUdi7S1cfXdTVNzjbPLZxbGaofv0ybC3AmmnqVV1mPcLqLe0Vbcti
+ i+vY2QjCyqUWUuDOgdTP02KhlGeBe4rrBm5e9T0CspwFcn/bybV9cVVvnkJ/NpRu2sdsO4JES
+ yTQeOxxdyV9l/ubj79ZSACL3p+6Yjc4Tv4996f70VSKONLLU+dAACtHBa92Yc4E3ep4KEvxbD
+ MiJhBQlbwgW4QxUzohU+XfrSu5tSSIMjzWMq3qmFIuOyRXmt5hx2xPaG8czzre0XxU0HEKmCP
+ lQOKCQeTtsz+MGfLjL7cNsrYvGyYyu8F7hXVkxKBvodd9FmaM3/GXlh920/eMzACGIMRko4/c
+ O6f1JptiDzFri3Y1VWl3tBYQgXvboWHYgA9skEJrgG/NzWYexnP9sggew==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,56 +68,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 11:27:33PM +0000, Sean Christopherson wrote:
-> Defer MMU setup, and in particular allocation of pte_list_desc_cache,
-> until after the vendor's hardware_setup() has run, i.e. until after the
-> MMU has been configured by vendor code.  This will allow a future commit
-> to dynamically size pte_list_desc's array of sptes based on whether or
-> not KVM is using TDP.
-> 
-> Alternatively, the setup could be done in kvm_configure_mmu(), but that
-> would require vendor code to call e.g. kvm_unconfigure_mmu() in teardown
-> and error paths, i.e. doesn't actually save code and is arguably uglier.
-> 
-> Note, keep the reset of PTE masks where it is to ensure that the masks
-> are reset before the vendor's hardware_setup() runs, i.e. before the
-> vendor code has a chance to manipulate the masks, e.g. VMX modifies masks
-> even before calling kvm_configure_mmu().
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-[...]
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 17ac30b9e22c..ceb81e04aea3 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -6673,10 +6673,8 @@ void kvm_mmu_x86_module_init(void)
->   * loaded as many of the masks/values may be modified by VMX or SVM, i.e. need
->   * to be reset when a potentially different vendor module is loaded.
->   */
-> -int kvm_mmu_vendor_module_init(void)
-> +void kvm_mmu_vendor_module_init(void)
->  {
-> -	int ret = -ENOMEM;
-> -
->  	/*
->  	 * MMU roles use union aliasing which is, generally speaking, an
->  	 * undefined behavior. However, we supposedly know how compilers behave
-> @@ -6687,7 +6685,13 @@ int kvm_mmu_vendor_module_init(void)
->  	BUILD_BUG_ON(sizeof(union kvm_mmu_extended_role) != sizeof(u32));
->  	BUILD_BUG_ON(sizeof(union kvm_cpu_role) != sizeof(u64));
->  
-> +	/* Reset the PTE masks before the vendor module's hardware setup. */
->  	kvm_mmu_reset_all_pte_masks();
-> +}
-> +
-> +int kvm_mmu_hardware_setup(void)
-> +{
+Those two product ids are known.
 
-Instead of putting this code in a new function and calling it after
-hardware_setup(), we could put it in kvm_configure_mmu().
+Signed-off-by: Lucien Buchmann <lucien.buchmann@gmx.net>
+=2D--
+ drivers/usb/serial/ftdi_sio.c     | 3 +++
+ drivers/usb/serial/ftdi_sio_ids.h | 6 ++++++
+ 2 files changed, 9 insertions(+)
 
-This will result in a larger patch diff, but has it eliminates a subtle
-and non-trivial-to-verify dependency ordering between
-kvm_configure_mmu() and kvm_mmu_hardware_setup() and it will co-locate
-the initialization of nr_sptes_per_pte_list and the code that uses it to
-create pte_list_desc_cache in a single function.
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index b440d338a895..d5a3986dfee7 100644
+=2D-- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1023,6 +1023,9 @@ static const struct usb_device_id id_table_combined[=
+] =3D {
+ 	{ USB_DEVICE(FTDI_VID, CHETCO_SEASMART_DISPLAY_PID) },
+ 	{ USB_DEVICE(FTDI_VID, CHETCO_SEASMART_LITE_PID) },
+ 	{ USB_DEVICE(FTDI_VID, CHETCO_SEASMART_ANALOG_PID) },
++	/* Belimo Automation devices */
++	{ USB_DEVICE(FTDI_VID, BELIMO_ZTH_PID) },
++	{ USB_DEVICE(FTDI_VID, BELIMO_ZIP_PID) },
+ 	/* ICP DAS I-756xU devices */
+ 	{ USB_DEVICE(ICPDAS_VID, ICPDAS_I7560U_PID) },
+ 	{ USB_DEVICE(ICPDAS_VID, ICPDAS_I7561U_PID) },
+diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_s=
+io_ids.h
+index d1a9564697a4..4e92c165c86b 100644
+=2D-- a/drivers/usb/serial/ftdi_sio_ids.h
++++ b/drivers/usb/serial/ftdi_sio_ids.h
+@@ -1568,6 +1568,12 @@
+ #define CHETCO_SEASMART_LITE_PID	0xA5AE /* SeaSmart Lite USB Adapter */
+ #define CHETCO_SEASMART_ANALOG_PID	0xA5AF /* SeaSmart Analog Adapter */
+
++/*
++ * Belimo Automation
++ */
++#define BELIMO_ZTH_PID			0x8050
++#define BELIMO_ZIP_PID			0xC811
++
+ /*
+  * Unjo AB
+  */
+=2D-
+2.36.0
+

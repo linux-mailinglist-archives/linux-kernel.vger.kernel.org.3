@@ -2,77 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B30055AD50
+	by mail.lfdr.de (Postfix) with ESMTP id 7416555AD51
 	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 01:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233732AbiFYXBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 19:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
+        id S233746AbiFYXB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 19:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbiFYXBL (ORCPT
+        with ESMTP id S233537AbiFYXB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 19:01:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB16614032
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:01:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E08760F6C
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 23:01:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12B16C3411C;
-        Sat, 25 Jun 2022 23:01:07 +0000 (UTC)
-Date:   Sat, 25 Jun 2022 19:01:05 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        John 'Warthog9' Hawley <warthog9@kernel.org>
-Subject: Re: possible trace_printk() bug in v5.19-rc1
-Message-ID: <20220625190105.750bbb0a@rorschach.local.home>
-In-Reply-To: <AD7B3406-C1A3-4AC0-BFD5-C7DF7E449478@oracle.com>
-References: <F6C267B0-83EA-4151-A4EC-44482AC52C59@oracle.com>
-        <20220616113400.15335d91@gandalf.local.home>
-        <E309A098-DA06-490D-A75C-E6295C2987B9@oracle.com>
-        <20220617155019.373adda7@gandalf.local.home>
-        <3BAD2CD9-3A34-4140-A28C-0FE798B83C41@oracle.com>
-        <355D2478-33D3-4046-8422-E512F42C51BC@oracle.com>
-        <20220624190819.59df11d3@rorschach.local.home>
-        <3EB14A14-767B-4B66-9B28-97DDE7EECFD2@oracle.com>
-        <20220625134552.08c1a23a@rorschach.local.home>
-        <AD7B3406-C1A3-4AC0-BFD5-C7DF7E449478@oracle.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sat, 25 Jun 2022 19:01:26 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7343714081
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:01:25 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id x184so7830448ybg.12
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:01:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PwbpiGb/oD8HIRJr2SFQWUk8LsGUtaqCnJOZxvy/+o0=;
+        b=V+yhpskio4hPlK8rjes/emBa2rjzvau3LUHIdAcBCJR3RO0/NLbqI+anJji3SQxOw2
+         BBC4fMCRVdvY/C8a2G9acKeUAA9YUUPl0g+XM9HYbISGUVd4DXW3exEv55z7lYSoAvZJ
+         VErONOGzTxFaFuSao0Sl+II4MZ3yUIUJe2l+3E82zPfBUpU1mSMQgOCA+/CU/XGk64du
+         YWjVA7s7a2/s6unqh1LdglB1GXPMwlAqkpYjqG5yfd/+koPvJ9YudXhB/DwdJevQh2Qn
+         S01GSqJBKvOG4PCHQ3EL4oxrL5tyUhDQ7Lo6iMotnR9SQV3e+Bhk/4ua8YXcB08cLyu/
+         fjyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PwbpiGb/oD8HIRJr2SFQWUk8LsGUtaqCnJOZxvy/+o0=;
+        b=4TW+jkVtx9CwsWLB5b27xpuiho3fEjuHSZOn6cIyiNmx2C4jN1w6URSQUA5mabXzYt
+         QzcsWLj/uIRTtkQXZF0sTGDX/244aj+0tfAtez1N6yUoq0++A7qs6Ix2507jiFckfTfi
+         qRE/SCPfjMFLgy+MxClbyTyRyCY1zw/oOcp2kwFt0FMu00LLYOYbt8dcjXc3VpAzz1p2
+         4R0/99oVxOjnqZ269mAH+Q263tThIVuVFrAgyp97BaJ4xfwY2rhMMG6AMUhWF3fw/l2X
+         YvgIGRfZL8onrN/Eh4Cpo00SbonTsOch4gtCmWExpv+sKI1ABsQBbK28709fVYvBB7t4
+         2Qog==
+X-Gm-Message-State: AJIora/Qi4hVViLIer1E3b/Kco5sAoXurkPBH6k2rsjFU3RtshRjXp6Y
+        v9Zo1Ci8frlPAdLpDFPZuIB4IQng0fIp3PaljTmbBw==
+X-Google-Smtp-Source: AGRyM1ugdsOA7x4YN7zvSVE7L9XjNnzE//OLJLQO6gD+BWDuV1BmbFIqcseR3ErrjUKM40mN4Ppck9IVQDTKfo2rGEY=
+X-Received: by 2002:a25:8403:0:b0:66c:a405:a01e with SMTP id
+ u3-20020a258403000000b0066ca405a01emr490833ybk.369.1656198084729; Sat, 25 Jun
+ 2022 16:01:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220613122955.20714-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220613122955.20714-1-lukas.bulwahn@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 26 Jun 2022 01:01:13 +0200
+Message-ID: <CACRpkdZhzxxnqGrTkcekky5BCmHWegNMeTOKf-bafNb1A0DZYw@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: add include/dt-bindings/pinctrl to PIN
+ CONTROL SUBSYSTEM
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Jun 2022 18:50:30 +0000
-Chuck Lever III <chuck.lever@oracle.com> wrote:
+On Mon, Jun 13, 2022 at 2:30 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 
-> > On Jun 25, 2022, at 1:45 PM, Steven Rostedt <rostedt@goodmis.org> wrote:
-> > 
-> > On Sat, 25 Jun 2022 17:15:07 +0000
-> > Chuck Lever III <chuck.lever@oracle.com> wrote:
-> >   
-> >> [root@manet ~]# cat /etc/redhat-release 
-> >> Fedora release 35 (Thirty Five)
-> >> [root@manet ~]# trace-cmd version
-> >> 
-> >> trace-cmd version 2.9.2 (not-a-git-repo)  
-> > 
-> > Ug, that's very old. Fedora should be shipping 3.1.1 soon.  
-> 
-> Right -- this version doesn't recognize get_sockaddr either.
-> 
+> Maintainers of the directory Documentation/devicetree/bindings/pinctrl
+> are also the maintainers of the corresponding directory
+> include/dt-bindings/pinctrl.
+>
+> Add the file entry for include/dt-bindings/pinctrl to the appropriate
+> section in MAINTAINERS.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+> Linus, please pick this MAINTAINERS addition to your section.
 
-That would be libtraceevent that would do that. What version do you
-have installed?
+OK then, challenge accepted, patch applied.
 
--- Steve
+Yours,
+Linus Walleij

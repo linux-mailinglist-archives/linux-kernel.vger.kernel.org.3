@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C2B55ABDF
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 20:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A130355ABE1
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 20:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233131AbiFYSA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 14:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
+        id S233140AbiFYSJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 14:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbiFYSAZ (ORCPT
+        with ESMTP id S231311AbiFYSJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 14:00:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3167A1402B;
-        Sat, 25 Jun 2022 11:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656180024; x=1687716024;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8tYjHyY4Ax6Joz9chEzUSENBJB8v9lRCTyqfGbwzEPE=;
-  b=E0Ovwxg/VuoRlOY9RDpAsVDK6ynACT02DDFyYDQ+5sH5UXylWdW0fA8s
-   RJm18zmj2g8+DlpR6kaXaw7837EYoaBuxLYb/gJvlWKK6pVfp3l0PBe6D
-   RsdLPB+WmV9CdgKYo5ORYyIvlERcFV5JkouH7UgK20jrwSfxNIC2/2FfS
-   eRWN0ipJIoJKixY+Ws+14UrrTwlCGsmS2YGaT9m5/367heJ7gvbtz+gck
-   VahMe+wU0xxpIFFlcpVREd8ocSmST0cqHrbgoq1OHMjTowVKt1bNxlJnc
-   zLLqd2sb1kQZXEx1Vp56rD+61eaJ1HuOtzxZNQ5JGiqsJmRLZxMhuPUFA
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10389"; a="345211995"
-X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
-   d="scan'208";a="345211995"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 11:00:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
-   d="scan'208";a="616307820"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Jun 2022 11:00:21 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o5A4y-000667-OO;
-        Sat, 25 Jun 2022 18:00:20 +0000
-Date:   Sun, 26 Jun 2022 01:59:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] iio: pressure: bmp280: Add support for BMP380 sensor
- family
-Message-ID: <202206260111.QN0oWihy-lkp@intel.com>
-References: <20220625150921.47769-1-ang.iglesiasg@gmail.com>
+        Sat, 25 Jun 2022 14:09:54 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204C91408A
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 11:09:53 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3178acf2a92so51789447b3.6
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 11:09:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VaKpVqy51ezhyEqiWnN1EhPkd8AgPGvHiCVI0qsTW9U=;
+        b=DXMUKF/LFsjrp1HGM3xK1pDytRU2+NbeWJx74hVFJr+pseb0uenbJST9xc2Aoa3nKP
+         NzdJR4xll8W8hEc0J0hYTWRBw/GCsoeBR1teDmqfMDweS1RMqP3rhkIZKQF2PkPqpvUg
+         dtUrjzZCWaCj4AhtBjjgCdVckq1k82VERWGI0zzprRSD+CaFdugthSNhLpqjMj+/Qt01
+         P8yJ2A/bitADoOcZT6om8gkVU6/EfCw4lThMwACvOOFiiXd7q930kdsowwpHMVlcLcZ1
+         rHIEX/o7r0l+KjfzlFKNfSD/APRNJTDJyhYTHy6sUdyMtaTA2qL5PjFKXqEDEL+dYl6C
+         yV7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VaKpVqy51ezhyEqiWnN1EhPkd8AgPGvHiCVI0qsTW9U=;
+        b=uQuE7S9x+6k652GuqTrbVsDFMOdfJR8nCr6YCqtzJFCcgCyfg6rT5Yl0773jEEhF5S
+         dXAILndHSdz1ZBpvqGCEZIZ5Rn5p4o11G2AHxO+10zw4//EazSh7ksunwBlwj6nyYmKf
+         J5qzK9+Y42Kor4xV+Vr4qhcb3d4RXC2j+BJn2Ksz0O5oWWMWwVvA8HduG53msEBwaonD
+         KKHn/Hzy2mgdXip6WbaA172XLtgDYr5lzvN4uhVOECn3jP4As6IygG68eYDHj3CB5qYm
+         o+eIzzd/FgCfTCMq8TuH3RsIb6P6SfS62IbY6w0NBmYhAH2JYf3tVMmcaAAK7sS9da6k
+         3hnA==
+X-Gm-Message-State: AJIora8CPMu43A4yn5UkoRvDMNTvdInaQ4tJmWe9e7RNex1h55F4mhl1
+        YMr522B/prq5Gh3B/+DFG5JelNDfY01lLk9gWvRN2A==
+X-Google-Smtp-Source: AGRyM1tSxzy+2SU7GX1N7kFiZRHGEsPFix8HC0KjDV/Ix0c0NXllmX30WW/q7/UvSFn6yXkmGiME7OXWPONI7GJZqBg=
+X-Received: by 2002:a81:6587:0:b0:318:38c2:2fb1 with SMTP id
+ z129-20020a816587000000b0031838c22fb1mr5689751ywb.118.1656180592325; Sat, 25
+ Jun 2022 11:09:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220625150921.47769-1-ang.iglesiasg@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <CAGETcx8z4dn1j05Za6nfDeC3v4r1yo30Nqu=1K2BEsvLcqqybQ@mail.gmail.com>
+ <CACRpkdaXJh_Qc-DuD7SFsZPM9GBMUgnoufcFKsy3BPUYFHMHWQ@mail.gmail.com> <CAGETcx-io_5tVbRBfuB-qOwm4tV0A5FR82Q21Z1dJcLbAOkd=A@mail.gmail.com>
+In-Reply-To: <CAGETcx-io_5tVbRBfuB-qOwm4tV0A5FR82Q21Z1dJcLbAOkd=A@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 25 Jun 2022 20:09:39 +0200
+Message-ID: <CACRpkdb1-F1CP0AAbS5FHoDRFdX-bS2m0NOfQm9nVcery+cW4Q@mail.gmail.com>
+Subject: Re: Default async probing for DT based systems
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kevin Hilman <khilman@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,118 +78,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angel,
+On Fri, Jun 17, 2022 at 8:01 PM Saravana Kannan <saravanak@google.com> wrote:
+> On Fri, Jun 17, 2022 at 1:21 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > On Thu, Jun 16, 2022 at 5:25 AM Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > > Since fw_devlink=on is the default behavior and fw_devlink understands
+> > > approximately 24 DT bindings,
+> >
+> > How can I see which these are, in the kernel tree?
+>
+> device/of/property.c has an array of these binding handling functions
+> in of_supplier_bindings[].
+>
+> Most of the functions there are created using DEFINE_SIMPLE_PROP() or
+> DEFINE_SUFFIX_PROP() that's also in the same file.
 
-Thank you for the patch! Yet something to improve:
+Thanks!
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on robh/for-next linus/master v5.19-rc3 next-20220624]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+We already have some device links in pin control, it's an opt-in for
+drivers, used e.g in drivers/pinctrl/stm32/pinctrl-stm32.c
+where you see
+pctl->pctl_desc.link_consumers = true;
+how does that
+play with this? Double device links at different levels?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Angel-Iglesias/dt-bindings-iio-pressure-bmp085-Add-BMP380-compatible-string/20220625-231424
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: i386-randconfig-a002
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 42a7ddb428c999229491b0effbb1a4059149fba8)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/56e3f8aecddacdbe204fbe5e28032ef2befae647
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Angel-Iglesias/dt-bindings-iio-pressure-bmp085-Add-BMP380-compatible-string/20220625-231424
-        git checkout 56e3f8aecddacdbe204fbe5e28032ef2befae647
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+I had a patch to just enforce device links on all pinctrl resources,
+but it seemed over the top:
+https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/commit/?h=consumer-link-enforce&id=73441cf773ed91bff0e7f66614d391b2514188bf
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>, old ones prefixed by <<):
-
->> drivers/iio/pressure/bmp280-core.c:1000:10: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
-if (tmp && BMP380_ERR_CONF_MASK) {
-^  ~~~~~~~~~~~~~~~~~~~~
-drivers/iio/pressure/bmp280-core.c:1000:10: note: use '&' for a bitwise operation
-if (tmp && BMP380_ERR_CONF_MASK) {
-^~
-&
-drivers/iio/pressure/bmp280-core.c:1000:10: note: remove constant to silence this warning
-if (tmp && BMP380_ERR_CONF_MASK) {
-~^~~~~~~~~~~~~~~~~~~~~~~
-1 warning generated.
---
->> ERROR: modpost: "__divdi3" [drivers/iio/pressure/bmp280.ko] undefined!
-
-
-vim +1000 drivers/iio/pressure/bmp280-core.c
-
-   945	
-   946	static int bmp380_chip_config(struct bmp280_data *data)
-   947	{
-   948		u8 osrs;
-   949		unsigned int tmp;
-   950		int ret;
-   951	
-   952		/* configure power control register */
-   953		ret = regmap_write_bits(data->regmap, BMP380_REG_POWER_CONTROL,
-   954					BMP380_CTRL_SENSORS_MASK |
-   955					BMP380_MODE_MASK,
-   956					BMP380_CTRL_SENSORS_PRESS_EN |
-   957					BMP380_CTRL_SENSORS_TEMP_EN |
-   958					BMP380_MODE_NORMAL);
-   959		if (ret < 0) {
-   960			dev_err(data->dev,
-   961				"failed to write operation control register\n");
-   962			return ret;
-   963		}
-   964	
-   965		/* configure oversampling */
-   966		osrs = BMP380_OSRS_TEMP_X(data->oversampling_temp) |
-   967					BMP380_OSRS_PRESS_X(data->oversampling_press);
-   968	
-   969		ret = regmap_write_bits(data->regmap, BMP380_REG_OSR,
-   970					BMP380_OSRS_TEMP_MASK | BMP380_OSRS_PRESS_MASK,
-   971					osrs);
-   972		if (ret < 0) {
-   973			dev_err(data->dev, "failed to write oversampling register\n");
-   974			return ret;
-   975		}
-   976	
-   977		/* configure output data rate */
-   978		ret = regmap_write_bits(data->regmap, BMP380_REG_ODR,
-   979					BMP380_ODRS_MASK, BMP380_ODRS_50HZ);
-   980		if (ret < 0) {
-   981			dev_err(data->dev, "failed to write ODR selection register\n");
-   982			return ret;
-   983		}
-   984	
-   985		/* set filter data */
-   986		ret = regmap_update_bits(data->regmap, BMP380_REG_CONFIG,
-   987					BMP380_FILTER_MASK, BMP380_FILTER_3X);
-   988		if (ret < 0) {
-   989			dev_err(data->dev, "failed to write config register\n");
-   990			return ret;
-   991		}
-   992	
-   993		/* check config error flag */
-   994		ret = regmap_read(data->regmap, BMP380_REG_ERROR, &tmp);
-   995		if (ret < 0) {
-   996			dev_err(data->dev,
-   997				"failed to read error register\n");
-   998			return ret;
-   999		}
-> 1000		if (tmp && BMP380_ERR_CONF_MASK) {
-  1001			dev_warn(data->dev,
-  1002				 "sensor flagged configuration as incompatible\n");
-  1003			ret = -EINVAL;
-  1004		}
-  1005	
-  1006		return ret;
-  1007	}
-  1008	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yours,
+Linus Walleij

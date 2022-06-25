@@ -2,107 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E137755AB62
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 17:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE0E55AB68
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 17:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbiFYPve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 11:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
+        id S233044AbiFYP6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 11:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiFYPvb (ORCPT
+        with ESMTP id S229516AbiFYP6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 11:51:31 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAD016597;
-        Sat, 25 Jun 2022 08:51:27 -0700 (PDT)
-Received: from [192.168.100.1] ([82.142.8.70]) by mrelayeu.kundenserver.de
- (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1Ma1sQ-1o8TYO2sJI-00VzSn; Sat, 25 Jun 2022 17:51:24 +0200
-Message-ID: <2ef8eb4f-5ef6-5de1-9f42-3430ad3f1b7c@vivier.eu>
-Date:   Sat, 25 Jun 2022 17:51:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] m68k: virt: pass RNG seed via bootinfo block
-Content-Language: fr
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>, geert@linux-m68k.org,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-References: <20220625153841.143928-1-Jason@zx2c4.com>
-From:   Laurent Vivier <laurent@vivier.eu>
-In-Reply-To: <20220625153841.143928-1-Jason@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:4r1yxypdNmR+o3p9w42sYOpK5rc0j4YdOC+Q2h8qGKpBzjOQ6WC
- uh6zVeN9+GHsLkoOtJGy1KFOwLk7HpRMPkkfHC/Mdt7bmYJZU8s/Rsi9M8vLQGTfUhEUGH/
- dUmEIK2ikIAmUoej0xMSNijJkpnEcRehHk6NLMbR3l+J4wRPpiEFmlNaDa0oFfi2gquXqgz
- ItXtcVfF0s5Bknj1xBayw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Z2x8sN76nes=:aTdghihhRuySMM1AjQQwyd
- 2RmSkuYi1hbgfLYzs5acTyyXawtJ/efw0vPJ7WPo4LrfK5OJFyfQG4A6CD0EPpyzSRc+e4xlC
- wb36o14yvJplYixzFJgeX0Dhs5v8DXX7RUEv92VqCODqfPYpVjTN7+o0LLAPNOKkl8ezUSAqH
- lsjkksQ/6RsSw67IgsXAt0pqUcrmsVpSE/0Ha4oJJuPOImbz/6GcqJmsYHM/Llh0XkenRP1Dd
- JLhQZeZEpfK71Zu3qogk/fC6zHaFQpVtr6NbrUmeETSLYYucsWsnXISwkyigTYAOc/ag0erzi
- 1gPP1Ow6N4dxMQUHrzpr1pPBA76I8e/fkTEChROshKLYFCTzLVeS46hNdpZANTSKUn9D2Otag
- UQGAf6v9ydXKLdwhzbbdkZgGpVCld1NCMRAFVFTwBT9Q4DUkYsnYImEi+6jCs60TbhGQXCaoy
- +5g2eRqQNm7HLoi7pyyew0EQCwMK5cMv/e4jzpPKXSzETsQxPJB9Yu+95LuaE/y+o+dje1At+
- YqVjJjwJW0xZSXZ/NYz+lYyBv7q0YZfkGlVBrJp0AhRUlk937WzWGmiHUrrR0bVAK4KFU+rVC
- cX8ZiBhdOSdCThOGd857LHV7gOS63QoPPbpJqF/9nfMV8iVDX0B8phBnEvAN8bG/LfO0rWsiY
- fD2umc5z2LMgmVoMp6yZWR8rQ09cNAr95KKEVz5M5eRh5oGU6cbTche4ioGHOTw1xW72m6ZcH
- 2rSGOxp/HiN5jRIycm/omapaSXpTfBJoWlwIvw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 25 Jun 2022 11:58:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C7814D2E
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 08:58:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1FFCB80B79
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 15:58:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B0BC3411C;
+        Sat, 25 Jun 2022 15:58:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656172708;
+        bh=C+wj1L5F+qIizsR/TtI4W39GU6Of2nP/P3g/quQ+aPI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=V//YY+4JnyBjWx4SK6Ye6mmHSW3X1zsubngbcBT3wtcACUCUDIholl5vmxRZw5+Vx
+         70eYcLrEnpm4LLTWNBJfptW2KaXZn4XJ1/jUN3DSj+3v0OsyvAfMY8v6iDM/ZVxeGD
+         ZBdeYUoOcirwtTGmqtmD3xbxmDlVJ3DjDAUBhVtG6POrB9kmXIA92RYXyycObJu7zn
+         TkfBw3LJRpzj4i6/Z3KWT7EutSUER46oiV6V3hiXxFINSY2m0qiyr81CXaGMn3t9v5
+         yPYd0fLB2qEv8OZZBvBlaBCC0qCXcNcWrSWvzuEQOPo3/4fT0DZ9xZGHJQb3rGyMuE
+         7m5yt3jwqU3WQ==
+Date:   Sun, 26 Jun 2022 00:58:24 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     rostedt@goodmis.org, mingo@redhat.com, mhiramat@kernel.org,
+        zanussi@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 2/4] trace/objtrace: Get the value of the object
+Message-Id: <20220626005824.cabbfe7d77baf3aa64ca7669@kernel.org>
+In-Reply-To: <20220606160943.663180-3-xiehuan09@gmail.com>
+References: <20220606160943.663180-1-xiehuan09@gmail.com>
+        <20220606160943.663180-3-xiehuan09@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 25/06/2022 à 17:38, Jason A. Donenfeld a écrit :
-> Other virt VMs can pass RNG seeds via the "rng-seed" device tree
-> property or via UEFI, but m68k doesn't have either. Instead it has its
-> own bootinfo protocol. So this commit adds support for receiving a RNG
-> seed from it, which will be used at the earliest possible time in boot,
-> just like device tree.
-> 
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->   arch/m68k/include/uapi/asm/bootinfo-virt.h | 1 +
->   arch/m68k/virt/config.c                    | 4 ++++
->   2 files changed, 5 insertions(+)
-> 
-> diff --git a/arch/m68k/include/uapi/asm/bootinfo-virt.h b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-> index e4db7e2213ab..7c3044acdf4a 100644
-> --- a/arch/m68k/include/uapi/asm/bootinfo-virt.h
-> +++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-> @@ -12,6 +12,7 @@
->   #define BI_VIRT_GF_TTY_BASE	0x8003
->   #define BI_VIRT_VIRTIO_BASE	0x8004
->   #define BI_VIRT_CTRL_BASE	0x8005
-> +#define BI_VIRT_RNG_SEED	0x8006
->   
->   #define VIRT_BOOTI_VERSION	MK_BI_VERSION(2, 0)
->   
-> diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
-> index 632ba200ad42..ad71af8273ec 100644
-> --- a/arch/m68k/virt/config.c
-> +++ b/arch/m68k/virt/config.c
-> @@ -2,6 +2,7 @@
->   
->   #include <linux/reboot.h>
->   #include <linux/serial_core.h>
-> +#include <linux/random.h>
->   #include <clocksource/timer-goldfish.h>
->   
->   #include <asm/bootinfo.h>
-> @@ -92,6 +93,9 @@ int __init virt_parse_bootinfo(const struct bi_record *record)
->   		data += 4;
->   		virt_bi_data.virtio.irq = be32_to_cpup(data);
->   		break;
-> +	case BI_VIRT_RNG_SEED:
-> +		add_bootloader_randomness(data + 4, be32_to_cpup(data));
-> +		break;
->   	default:
->   		unknown = 1;
->   		break;
+Hi,
 
-Reviewed-by: Laurent Vivier <laurent@vivier.eu>
+On Tue,  7 Jun 2022 00:09:41 +0800
+Jeff Xie <xiehuan09@gmail.com> wrote:
+
+> @@ -176,9 +275,27 @@ trace_object_trigger(struct event_trigger_data *data,
+>  
+>  	field = obj_data->field;
+>  	memcpy(&obj, rec + field->offset, sizeof(obj));
+> -	set_trace_object(obj, tr);
+> +	/* set the offset from the special object and the type size of the value*/
+> +	set_trace_object(obj, obj_data->obj_offset,
+> +			obj_data->obj_value_type_size, tr);
+>  }
+>  
+> +static const struct objtrace_fetch_type objtrace_fetch_types[] = {
+> +	{"u8", 1},
+> +	{"s8", 1},
+> +	{"x8", 1},
+> +	{"u16", 2},
+> +	{"s16", 2},
+> +	{"x16", 2},
+> +	{"u32", 4},
+> +	{"s32", 4},
+> +	{"x32", 4},
+> +	{"u64", 8},
+> +	{"s64", 8},
+> +	{"x64", 8},
+> +	{NULL, 0},
+> +};
+
+As I said before, please use only 'uX' types at this moment,
+since the objtrace event doesn't show the value with sign.
+This means it only supports 'uX'. 
+
+Thank you,
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

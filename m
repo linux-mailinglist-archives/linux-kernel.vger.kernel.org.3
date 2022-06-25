@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D2F55A54C
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 02:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A285F55A55A
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 02:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbiFYANH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 20:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S232132AbiFYAN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 20:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiFYANG (ORCPT
+        with ESMTP id S232055AbiFYANi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 20:13:06 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219E9B866
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 17:13:06 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id o43so6900147qvo.4
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 17:13:06 -0700 (PDT)
+        Fri, 24 Jun 2022 20:13:38 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2852ED42
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 17:13:36 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id cu16so6876129qvb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 17:13:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+zgAHdqbW6KkxfirWh5m0boNH0Y6RXgaT47LaNHIE6s=;
-        b=DVIjgeM5e5IxUFbVXZ7bgClbz5kfHXGvHXEg2J3j1BQd6oPPHRoewezWMdHbNFicJ2
-         e88e2BFNzXDV37YHXmXCkVZ8MSZynmhSNdYhhX27BUG5Sv0V13MLWDtWVjaDI7tP4ZIV
-         wUUpA7Nqf5AVDpycjUx5jjljv7kK0PZZj+WblkbWltwp9EJJGdAFrdXwS8EbEqhL7IcE
-         GG4nTIuwZPLNIA3MQxPKlazpGmrlhY26HgvE07OM0dSC/zWljIjNtEQVaWF8pWhBjRMw
-         d8jR8emTGFIO8TphCmMEppdJirurBjsHWFxc61kaA8Ox6IwpINQXlr7sqntF23mHQ99z
-         2w+g==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vFVKp+DIpzgb4hUKHdKfLQTpwjibehhe/edtSOh7+n8=;
+        b=zaRjLUy3jhfIOSxy6FZPbYqI+7Xgb6YLibXNuwYQ5A8bs8atdxDU88en2htNoOlEIz
+         gRqyMO2J2Na5Gnlxg3Xwi93BBLh6OrvxUfvf2GLLkwJ6KQvjHxZ2vYKGefI41L5Tqw0y
+         paLSbUXLHWvIXOyhFa6sbfqdQNYBSd5qsTZLJAMe+pg65U5hcaMiY9WS/VRDdicTEg81
+         KJhnBaRNPkGoFN4KomnvytXOTVUPtwez+AoFbf3fywep+MntFmQyPnveLKIVZKXHVyWU
+         Qxe0ykMA6rLm6e0m3CM2bvT4GXbe2KujuaCFHRyyrWNDFn229olscomTDsArRwNxaKnP
+         SSDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+zgAHdqbW6KkxfirWh5m0boNH0Y6RXgaT47LaNHIE6s=;
-        b=Txqg40dHIfr5yRyWBSV90s8H3+8SDmtezmY5F+5rNUTWEIeKnFf9w6Ib90rE784RLC
-         QdhTjiWcCX+rR9sKUZpy+EFXRW6AOGJpxxv+GLujljsQSnx0ipp1zvkZIOK/TdVqqppI
-         bCVDk999qiqiwO+bHfmyUuT/VfY723K0iw7uGFlsZYXCwGuV/ONMLQ9Y8s6iJWG0tnZ9
-         PvoHDuY1dP6dFh36LEv6v9hhflDAd/rH368gDjrBl4oLVIuknON4+M0ZfGq8yOh/FNKQ
-         KOabdv370B9eM8GuGGDjWx2NAjwl6jhqwwNUCAF1Q9lQtZZhp/OzXuN+p9WGxDVkO+JV
-         IfBA==
-X-Gm-Message-State: AJIora/aNfJoo683PZAKFGlEWZLuNFiHr8DIPS6B1hT0iarnHpBX3fRi
-        FFbP24JQggUxb2STilKz8UQhHQ==
-X-Google-Smtp-Source: AGRyM1tKAa61VnKF0qvWQse8/IPmP8YMv7v4wf/kj3KckZaMtp7TSh1O9Io45lQMqyoNxO2rydvc7Q==
-X-Received: by 2002:a05:622a:1884:b0:304:f534:cfe5 with SMTP id v4-20020a05622a188400b00304f534cfe5mr1433458qtc.544.1656115985828;
-        Fri, 24 Jun 2022 17:13:05 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id u3-20020a05620a454300b006aef6a244a4sm3108346qkp.129.2022.06.24.17.13.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 17:13:05 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1o4tQ8-001Idy-Qd; Fri, 24 Jun 2022 21:13:04 -0300
-Date:   Fri, 24 Jun 2022 21:13:04 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     lizhe.67@bytedance.com
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lizefan.x@bytedance.com
-Subject: Re: [RFC] vfio: remove useless judgement
-Message-ID: <20220625001304.GI23621@ziepe.ca>
-References: <20220623115603.22288-1-lizhe.67@bytedance.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vFVKp+DIpzgb4hUKHdKfLQTpwjibehhe/edtSOh7+n8=;
+        b=z/oEopGU61pkzX0dooA67PXmuoHY1x8bTxzf17XrIhdgmCxg7D0+1ykkIMFlOYSYf5
+         q7QFQqhfnlnJXAhfGhpjY21BHf4rBwxJJ6pe/rGxCjuQW0W61ywyxkysLxBQf1webBDj
+         61nLCwLMRE98QVGaOskYl5gTgWqeskgbuz8yaql/d/o61mR5c7atJWXrbrReiG57m6bI
+         +lTlvKkEMsKz+AekY+VvQXzI99eulaidxG0fruJmRgHGCoEQeX3wGst3j8pGoPLdy/Tb
+         gIi5EdAgwJJqaxst+eOD+KkOs9D2L7kkVT1yQoyt6IR2RvfzYhEtKa4yTk9rJjXv85T4
+         cpKQ==
+X-Gm-Message-State: AJIora/mQOvKrN33QP7rUXwkZyb/hO5y/YCvEb8zlc3pRhQ0keJBay2Y
+        QAeKpWUWpbtGS1ElEMGmZpeGrbllC7+wwBeMDbzwrQ==
+X-Google-Smtp-Source: AGRyM1uJYAGMPzovKAZ1R22Ezl34Pn7ac31FoRY4+69xihwkidiDi9wThNin4zqhrvUnvGbwnDRcrnPV2023K7t8ayU=
+X-Received: by 2002:a05:6214:d66:b0:470:4528:bbd5 with SMTP id
+ 6-20020a0562140d6600b004704528bbd5mr1383493qvs.73.1656116016045; Fri, 24 Jun
+ 2022 17:13:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623115603.22288-1-lizhe.67@bytedance.com>
+References: <20220624010703.541191-1-sunliming@kylinos.cn>
+In-Reply-To: <20220624010703.541191-1-sunliming@kylinos.cn>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 25 Jun 2022 03:13:25 +0300
+Message-ID: <CAA8EJprfCV259z_MWUN1yYRkAaPOJcpoZDcKiwKHwTdWaPeyww@mail.gmail.com>
+Subject: Re: [PATCH RESEND] drm/msm/dpu: Fix variable dereferenced before check
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     quic_abhinavk@quicinc.com, robdclark@gmail.com,
+        linux-kernel@vger.kernel.org, freedreno@lists.freedesktop.org,
+        kelulanainsley@gmail.com, dan.carpenter@oracle.com,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -73,31 +68,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 07:56:03PM +0800, lizhe.67@bytedance.com wrote:
-> From: Li Zhe <lizhe.67@bytedance.com>
-> 
-> In function vfio_dma_do_unmap(), we currently prevent process to unmap
-> vfio dma region whose mm_struct is different from the vfio_dma->task.
-> In our virtual machine scenario which is using kvm and qemu, this
-> judgement stops us from liveupgrading our qemu, which uses fork() &&
-> exec() to load the new binary but the new process cannot do the
-> VFIO_IOMMU_UNMAP_DMA action during vm exit because of this judgement.
-> 
-> This judgement is added in commit 8f0d5bb95f76 ("vfio iommu type1: Add
-> task structure to vfio_dma") for the security reason. But it seems that
-> no other task who has no family relationship with old and new process
-> can get the same vfio_dma struct here for the reason of resource
-> isolation. So this patch delete it.
-> 
-> Signed-off-by: Li Zhe <lizhe.67@bytedance.com>
-> ---
->  drivers/vfio/vfio_iommu_type1.c | 6 ------
->  1 file changed, 6 deletions(-)
+On Fri, 24 Jun 2022 at 04:07, sunliming <sunliming@kylinos.cn> wrote:
+>
+> Fixes the following smatch warning:
+>
+> drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:261
+> dpu_encoder_phys_wb_atomic_check() warn: variable dereferenced before check 'conn_state'
+>
+> Fixes: d7d0e73f7de3 ("drm/msm/dpu: introduce the dpu_encoder_phys_* for writeback")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 
-I'm inclined to agree with this reasoning and deliberately did not
-include a similar check in iommufd. Any process with access to the
-container FD should be able to manipulate the IOVA space.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Jason
+-- 
+With best wishes
+Dmitry

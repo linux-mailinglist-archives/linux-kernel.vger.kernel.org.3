@@ -2,99 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D7255A840
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 11:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A890F55A843
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 11:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbiFYJFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 05:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S231527AbiFYIuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 04:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232418AbiFYJFQ (ORCPT
+        with ESMTP id S229722AbiFYIuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 05:05:16 -0400
-Received: from sender4-op-o11.zoho.com (sender4-op-o11.zoho.com [136.143.188.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E6E340FF
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 02:05:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1656147009; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=bckmVqAIFAQNFCUWf9zkVWIKa0qmv+89FpiYMjpbhBlmnKbmeBDKJAuE5vw5IqpGH/UmV61atpzKfOoxKw+awseHSKfl1hQLW4+ADpqpDK61LCoD3obq6tHDegeDeFy4kDpFTJZRjMX5EnVrn9OMCFd+vmgYQOxR5fC+leVPiTY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1656147009; h=Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=4UMGpmnDr90V/zwk67wYZZmzKHcnh/fQWLLmg0NOGYU=; 
-        b=VPw5vwLan2WwXsFO2ylcyH2UswZMYEGl8+axbs2DFzo8JW4CLbgOK3iaMvuMUSrtV3d3h6qz8G57mionxpQYMSHAPJUpRCSR0VDeycCLW7Fs/2jKeOL1bScXqtNBLzQTHjC8RbuRIhOZsD6RPasFzYed/q0mjDaz/SLpBDZkZEA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=gvisoc.com;
-        spf=pass  smtp.mailfrom=gabriel@gvisoc.com;
-        dmarc=pass header.from=<gabriel@gvisoc.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1656147009;
-        s=zoho; d=gvisoc.com; i=gabriel@gvisoc.com;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-        bh=4UMGpmnDr90V/zwk67wYZZmzKHcnh/fQWLLmg0NOGYU=;
-        b=EFUkmV8grgPqSVH5Dh2CRmTdnNYqeNVWx3VD+W3HLJWLe/REroZ7IOvSr+OOtWG3
-        2O/xMck3LO8Q6gq0W5Yf78He0JxZyr3gRZMwXNmQCLZ+Ef/mH/G/dqPV2n2foAb5oHw
-        IjsPOOVrRzHMfn6tZz2LoAYtMUiDcKlnJEY5R9sU=
-Received: from localhost (124-171-144-237.tpgi.com.au [124.171.144.237]) by mx.zohomail.com
-        with SMTPS id 1656147007457304.1853474145885; Sat, 25 Jun 2022 01:50:07 -0700 (PDT)
-From:   Gabriel Viso Carrera <gabriel@gvisoc.com>
-To:     andreas.noever@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Gabriel Viso Carrera <gabriel@gvisoc.com>
-Subject: [PATCH 3/3] staging: Thunderbolt: ctl.c: Fixed comment coding style issues
-Date:   Sat, 25 Jun 2022 18:49:13 +1000
-Message-Id: <20220625084913.603556-4-gabriel@gvisoc.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220625084913.603556-1-gabriel@gvisoc.com>
-References: <20220625084913.603556-1-gabriel@gvisoc.com>
+        Sat, 25 Jun 2022 04:50:10 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553B44199C
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 01:50:09 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id i7so8288834ybe.11
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 01:50:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Lv+FkxyjS/NQutVt+wfhAcydFycem3hgLi5V9K9eRHk=;
+        b=GGomJks9se9aRiZPrnkaj+MkjtDXB1AjbcDjtd3FmKDbYRq4vLEPEOhYeF5hQEnjgh
+         gA8G8WYzomc85KEh/80ZbS7xExwFawZI7RKx86EBTuGP4dfRxZGX55DPn6ddeZK01JjK
+         N4FFpMLT9gYc9+D1Q5KPkgLzWIReIzC5Qbk1AKzvaozPtSn/CSX5v1gkp0dsyDh5QTEd
+         BXkfqoh9+ehFJbtK9qB3lELaUT7wo38zRYzEoNWNgEsYNJHyxf40uUPa7ej4nWExmxa0
+         /cZ2DXgUtW/HfuBs84ZXI3cagF2y95zgzu+rjIEJp0pCsoO4LByk6BdZ9yP6zbjYuHJd
+         nqCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Lv+FkxyjS/NQutVt+wfhAcydFycem3hgLi5V9K9eRHk=;
+        b=Dtcjx1Mr3Eee88sb3KvHCyfQK9A5wK6NU23953V690RHO6RFOOIPix9xnZTEVYEoLb
+         dGnYR/GgQvPoFKT3q4SY16zCZ79Ketghz89ehxmjcmr4mkq9emsuqHVnpfMHXa789tAT
+         aHRxHD+M22hHEeH6KM55C9I9CyXdS+NKDR5pjwfT4Vk8H/bgHLv0W/ebGtbUJz7bL1yg
+         qbZuIc2t5+mnvRmMV1gacISln8/xJLJlfrtHmNMn1FIqL7keL2s+Y/nO+RyIVAwF/u0U
+         ZWPIHd02elmPc5rfkvKcQ1YDdIUebTrDTGu+qawfGVvR9G4UQ92IutGBJvj/zf5fZpcZ
+         0fTg==
+X-Gm-Message-State: AJIora+iNj3I0/yPu5kWNmqBJNWlaMeJAlU0at0puhMapsJ6QIrdkj+y
+        6Bjq3NEF15Pe1sImZgYFIqbziTdyPR2husReZq/FKg==
+X-Google-Smtp-Source: AGRyM1t8TNJw3d/FU1nQTEhu7gjwWTgPUcz4RF4GIPzinVn8gHVuDfr/lmPi+A18Q8e4Qqw7s9zc1LBos/hD2hoGkeU=
+X-Received: by 2002:a25:3288:0:b0:66c:8a91:74bb with SMTP id
+ y130-20020a253288000000b0066c8a9174bbmr2096560yby.89.1656147008595; Sat, 25
+ Jun 2022 01:50:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220625080423.2797-1-chenfeiyang@loongson.cn>
+In-Reply-To: <20220625080423.2797-1-chenfeiyang@loongson.cn>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Sat, 25 Jun 2022 16:49:32 +0800
+Message-ID: <CAMZfGtWT7oPq6bD_fRn2gVNX8Lj3=ev21EAoaCCPeq-P_NYF0g@mail.gmail.com>
+Subject: Re: [PATCH] page-flags.h: Fix a missing header include of static_keys.h
+To:     Feiyang Chen <chris.chenfeiyang@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Feiyang Chen <chenfeiyang@loongson.cn>, chenhuacai@kernel.org,
+        loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux- stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed a couple of comment aligment & formatting coding style issues.
+On Sat, Jun 25, 2022 at 4:04 PM Feiyang Chen
+<chris.chenfeiyang@gmail.com> wrote:
+>
+> The page-flags.h header relies on static keys since commit
+> a6b40850c442bf ("mm: hugetlb: replace hugetlb_free_vmemmap_enabled
+> with a static_key"), so make sure to include the header to avoid
+> compilation errors.
+>
+> Fixes: a6b40850c442bf ("mm: hugetlb: replace hugetlb_free_vmemmap_enabled with a static_key")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> ---
+>  include/linux/page-flags.h | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> index e66f7aa3191d..147b336c7a35 100644
+> --- a/include/linux/page-flags.h
+> +++ b/include/linux/page-flags.h
+> @@ -11,6 +11,7 @@
+>  #include <linux/mmdebug.h>
+>  #ifndef __GENERATING_BOUNDS_H
+>  #include <linux/mm_types.h>
+> +#include <linux/static_key.h>
 
-Signed-off-by: Gabriel Viso Carrera <gabriel@gvisoc.com>
----
- drivers/thunderbolt/ctl.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+I did not include this. The change makes sense to me. But I am
+curious what configs cause the compiling error. Would you mind
+sharing the config with us?
 
-diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
-index 6c973fdf7b36..5c6c62867b9c 100644
---- a/drivers/thunderbolt/ctl.c
-+++ b/drivers/thunderbolt/ctl.c
-@@ -276,7 +276,8 @@ static void tb_cfg_print_error(struct tb_ctl *ctl,
- 	switch (res->tb_error) {
- 	case TB_CFG_ERROR_PORT_NOT_CONNECTED:
- 		/* Port is not connected. This can happen during surprise
--		 * removal. Do not warn. */
-+		 * removal. Do not warn.
-+		 */
- 		return;
- 	case TB_CFG_ERROR_INVALID_CONFIG_SPACE:
- 		/*
-@@ -402,11 +403,11 @@ static bool tb_ctl_handle_event(struct tb_ctl *ctl, enum tb_cfg_pkg_type type,
- static void tb_ctl_rx_submit(struct ctl_pkg *pkg)
- {
- 	tb_ring_rx(pkg->ctl->rx, &pkg->frame); /*
--					     * We ignore failures during stop.
--					     * All rx packets are referenced
--					     * from ctl->rx_packets, so we do
--					     * not loose them.
--					     */
-+						* We ignore failures during stop.
-+						* All rx packets are referenced
-+						* from ctl->rx_packets, so we do
-+						* not loose them.
-+						*/
- }
- 
- static int tb_async_error(const struct ctl_pkg *pkg)
--- 
-2.36.1
+Thanks.
 
+>  #include <generated/bounds.h>
+>  #endif /* !__GENERATING_BOUNDS_H */
+>
+> --
+> 2.27.0
+>

@@ -2,116 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C2055A94F
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 13:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E405455A982
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 13:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232627AbiFYLUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 07:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46976 "EHLO
+        id S232696AbiFYLiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 07:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbiFYLUI (ORCPT
+        with ESMTP id S232653AbiFYLiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 07:20:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD29D2559B;
-        Sat, 25 Jun 2022 04:20:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7001DB80682;
-        Sat, 25 Jun 2022 11:20:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D28C3411C;
-        Sat, 25 Jun 2022 11:20:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656156005;
-        bh=tCAPE4B05AcXTXEs+jS/COSV5ldCKgSHLwp9pTpZBow=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uvGzDHNswO5rwpyKU23bhGleMde8GKR6wV4zmwYw9EhGRuSJc1i/OhEYBRsdP/Oiw
-         M7HLUWSboDiwdfUwhtRUWmEK3MuvQpHC3wdtDrFchXFPzmVNlo5tSYZS8K4DwHLx4Y
-         MnULGIUzNkPw+8NzLj9B5tUIjksgab+Wdw6kCfsa9uDh3NP089rrTVot1/B66n1l20
-         WWnFxJpns6EflhVra92U37oRq94sYJiPiG12bOHyAG3QPHz32xSlNF7ESwHt05Pmex
-         SZAxKaCFfdp9AP/r9fmXK3pC9e93vGgWb1eHAW8UqKU6aqGoHvTz/ovm8ivAgGUerD
-         gdaSaNdcsthVQ==
-Date:   Sat, 25 Jun 2022 12:29:31 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc:     Kent Gustavsson <kent@minoris.se>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] iio: adc: mcp3911: correct
- "microchip,device-addr" property
-Message-ID: <20220625122931.38a8001b@jic23-huawei>
-In-Reply-To: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
-References: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 25 Jun 2022 07:38:05 -0400
+Received: from 10.mo552.mail-out.ovh.net (10.mo552.mail-out.ovh.net [87.98.187.244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394A311C1E
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 04:38:01 -0700 (PDT)
+Received: from mxplan5.mail.ovh.net (unknown [10.109.143.118])
+        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 2B89624A8F;
+        Sat, 25 Jun 2022 11:29:37 +0000 (UTC)
+Received: from kaod.org (37.59.142.107) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Sat, 25 Jun
+ 2022 13:29:36 +0200
+Authentication-Results: garm.ovh; auth=pass (GARM-107S001e52cdebf-f225-43ef-b594-73954c12a390,
+                    4F3A6162F3CBF85AFED954EB26FB80209C915413) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <d48bcb6b-41f7-8243-6094-cf80beffe68a@kaod.org>
+Date:   Sat, 25 Jun 2022 13:29:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] powerpc/xive: Fix some incorrect memory allocation
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>
+References: <2ebb28e9de76d35b75c137f9944c2dfd893d34fa.1656150559.git.christophe.jaillet@wanadoo.fr>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <2ebb28e9de76d35b75c137f9944c2dfd893d34fa.1656150559.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [37.59.142.107]
+X-ClientProxiedBy: DAG6EX2.mxp5.local (172.16.2.52) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 8095d44e-4afb-4333-bd47-84e426c9d3f6
+X-Ovh-Tracer-Id: 17411197634755070825
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudeguddggedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthejredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeeifeehtdevfeeuhfelheekkeefieeivdfhgeevueeijeetjeekueeggedujeeiieenucffohhmrghinhepohiilhgrsghsrdhorhhgnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrddutdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugihpphgtqdguvghvsehlihhsthhsrdhoiihlrggsshdrohhrghdpoffvtefjohhsthepmhhoheehvd
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Jun 2022 12:38:44 +0200
-Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
+Hello Christophe,
 
-> Go for the right property name that is documented in the bindings.
+On 6/25/22 11:49, Christophe JAILLET wrote:
+> 'xibm->count' really looks like a number of bits (see how it is used in
+> __xive_irq_bitmap_alloc()), so use the bitmap API to allocate and free this
+> bitmap.
 > 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Hi Marcus,
+> This improves semantic and potentially avoids some over memory allocation.
 
-Series with more than 1 or 2 patches should always have a cover letter
-(git format-patch --cover-letter) to provide some overview information
-and allow for general comments on the series.
+This is correct and
+  
+> Fixes: eac1e731b59e ("powerpc/xive: guest exploitation of the XIVE interrupt controller")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> I don't cross compile, so this patch is NOT compile-tested.
 
-Also, whilst I know you are keen to move forwards quickly it is usually
-a good idea to give more than 2 days for all reviews to come in on a series
-and discussion of any questions to finish.
 
-For instance, I just replied to your question to Andy on patch 2 and
-that basically says your patch 2 in v2 is taking the wrong approach.
-If you'd waited a few more days you'd have save on the noise by resolving
-that before sending more patches.
+Nathan provided a fix for it already :
+
+  http://patchwork.ozlabs.org/project/linuxppc-dev/patch/20220623182509.3985625-1-nathanl@linux.ibm.com/
 
 Thanks,
 
-Jonathan
-
+C.
 
 > ---
+>   arch/powerpc/sysdev/xive/spapr.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Notes:
->     v2:
->         - Fallback to "device-addr" due to compatibility (Andy Shevchenko)
-> 
->  drivers/iio/adc/mcp3911.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
-> index 1cb4590fe412..c5a0f19d7834 100644
-> --- a/drivers/iio/adc/mcp3911.c
-> +++ b/drivers/iio/adc/mcp3911.c
-> @@ -208,7 +208,13 @@ static int mcp3911_config(struct mcp3911 *adc)
->  	u32 configreg;
->  	int ret;
->  
-> -	device_property_read_u32(dev, "device-addr", &adc->dev_addr);
-> +	ret = device_property_read_u32(dev, "microchip,device-addr", &adc->dev_addr);
-> +
-> +	/* Fallback to "device-addr" due to historical mismatch between
-> +	 * dt-bindings and implementation
-> +	 */
-> +	if (ret)
-> +		device_property_read_u32(dev, "device-addr", &adc->dev_addr);
->  	if (adc->dev_addr > 3) {
->  		dev_err(&adc->spi->dev,
->  			"invalid device address (%i). Must be in range 0-3.\n",
+> diff --git a/arch/powerpc/sysdev/xive/spapr.c b/arch/powerpc/sysdev/xive/spapr.c
+> index 7d5128676e83..fdbebb14b7de 100644
+> --- a/arch/powerpc/sysdev/xive/spapr.c
+> +++ b/arch/powerpc/sysdev/xive/spapr.c
+> @@ -57,7 +57,7 @@ static int __init xive_irq_bitmap_add(int base, int count)
+>   	spin_lock_init(&xibm->lock);
+>   	xibm->base = base;
+>   	xibm->count = count;
+> -	xibm->bitmap = kzalloc(xibm->count, GFP_KERNEL);
+> +	xibm->bitmap = bitmap_zalloc(xibm->count, GFP_KERNEL);
+>   	if (!xibm->bitmap) {
+>   		kfree(xibm);
+>   		return -ENOMEM;
+> @@ -75,7 +75,7 @@ static void xive_irq_bitmap_remove_all(void)
+>   
+>   	list_for_each_entry_safe(xibm, tmp, &xive_irq_bitmaps, list) {
+>   		list_del(&xibm->list);
+> -		kfree(xibm->bitmap);
+> +		bitmap_free(xibm->bitmap);
+>   		kfree(xibm);
+>   	}
+>   }
 

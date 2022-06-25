@@ -2,67 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F89555A798
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 08:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E718955A7A0
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 09:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbiFYGz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 02:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
+        id S232193AbiFYHBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 03:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiFYGz6 (ORCPT
+        with ESMTP id S229931AbiFYHBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 02:55:58 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C87533894;
-        Fri, 24 Jun 2022 23:55:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656140157; x=1687676157;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=poeOEVSwFsnPPItQDhctxXmjBDmKz8AqGusvT0jvZzQ=;
-  b=CXnLf7833CxXVOm769/A4CyV2zJM1OUkSEl6Wz6O2mzGWxUJRTAynMt0
-   cO3c9SF7DpJziBwAm91OzkW8uTLmD2bHF+KPXrD8VtPbLWS3CDnMfCjaS
-   MgfRbsfLts9iv/ECfzB8QGp7otMO229qa9WBYMEspFYeCZkNFCm0UFslZ
-   Vb616dZw8RVXPbb/xcVldJUvk8wLctzkbd7Oahvw7z09UivNU6onEXcvQ
-   +QDyD8VkGpCjklSyoCJ5tZCyZNnbfLdQ1Nz24CcaU2ad48ijIriUlHzh5
-   E/FHQsbOqBUsfbYq2RHJCb/1bKWK2BAwrQ1wd9h97lGloPW/zaVrXbkFh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="345159659"
-X-IronPort-AV: E=Sophos;i="5.92,221,1650956400"; 
-   d="scan'208";a="345159659"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 23:55:56 -0700
-X-IronPort-AV: E=Sophos;i="5.92,221,1650956400"; 
-   d="scan'208";a="645603905"
-Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.249.169.7]) ([10.249.169.7])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 23:55:54 -0700
-Message-ID: <e1a24380-ecfb-84d9-0122-5d52aa92f31b@intel.com>
-Date:   Sat, 25 Jun 2022 14:55:51 +0800
+        Sat, 25 Jun 2022 03:01:44 -0400
+Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15AF3B017;
+        Sat, 25 Jun 2022 00:01:38 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1656140281tfn23rvm
+Received: from localhost.localdomain ( [125.70.163.206])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 25 Jun 2022 14:57:52 +0800 (CST)
+X-QQ-SSF: 0100000000200060C000B00A0000000
+X-QQ-FEAT: 1al0Ay5k4U2FR0xO7QR1V1Kx7il9HmmVfumTeYjAEbadHYwzh5+ONdTARfONR
+        nj/NPuzPsyLyolfryzoTV5VTxWCYILJgHMzna3p8YVo2YHT0IY9WTTtgfE25XX1CtG5OREW
+        Ma0XUSxkKstuzPXNxK1JzXMMg3vl4TXwley/M7PNct7jK/0MxqEK0Y6TRLrBw0iqFFN+xTK
+        +4rTEKaw+pvVYkUEW+cMVvM58M6JHI4TDxwBZljVMpEeqUi960h6vkRr5g6VXRbMWvy5UUD
+        Ww57suRZ1hXt9EOfmGtSCnQvItqIwFOsGOMMy26OOHVmwSHhuHJsdwJVp5Z2GQw9BrpcRdQ
+        3XiiHyjMtSWw+YBxf0=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     mark.einon@gmail.com, jgg@ziepe.ca, arnd@arndb.de,
+        christophe.jaillet@wanadoo.fr, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] agere:fix repeated words in comments
+Date:   Sat, 25 Jun 2022 14:57:45 +0800
+Message-Id: <20220625065745.61464-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 16/19] KVM: x86: Enable CET virtualization for VMX and
- advertise CET to userspace
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-References: <20220616084643.19564-1-weijiang.yang@intel.com>
- <20220616084643.19564-17-weijiang.yang@intel.com>
- <YqsM9VkQ4cTSJ4Ct@worktop.programming.kicks-ass.net>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <YqsM9VkQ4cTSJ4Ct@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,32 +50,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Delete the redundant word 'the'.
 
-On 6/16/2022 6:59 PM, Peter Zijlstra wrote:
-> On Thu, Jun 16, 2022 at 04:46:40AM -0400, Yang Weijiang wrote:
->> Set the feature bits so that CET capabilities can be seen in guest via
->> CPUID enumeration. Add CR4.CET bit support in order to allow guest set CET
->> master control bit(CR4.CET).
->>
->> Disable KVM CET feature if unrestricted_guest is unsupported/disabled as
->> KVM does not support emulating CET.
->>
->> Don't expose CET feature if dependent CET bits are cleared in host XSS,
->> or if XSAVES isn't supported.  Updating the CET features in common x86 is
->> a little ugly, but there is no clean solution without risking breakage of
->> SVM if SVM hardware ever gains support for CET, e.g. moving everything to
->> common x86 would prematurely expose CET on SVM.  The alternative is to
->> put all the logic in VMX, but that means rereading host_xss in VMX and
->> duplicating the XSAVES check across VMX and SVM.
-> Doesn't Zen3 already have SHSTK ?
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/net/ethernet/agere/et131x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- From what I read, AMD only supports SHSTK now, IBT is not available. Given
-
-possible implementation difference and the enabling code in vmx is shared by
-
-SHSTK and IBT, I'd like to keep guest CET enabling code specific to vmx 
-now.
-
-In the future, part of the code could be hoisted to x86 common to 
-support both.
+diff --git a/drivers/net/ethernet/agere/et131x.c b/drivers/net/ethernet/agere/et131x.c
+index fbf4588994ac..d19d1579c415 100644
+--- a/drivers/net/ethernet/agere/et131x.c
++++ b/drivers/net/ethernet/agere/et131x.c
+@@ -1106,7 +1106,7 @@ static void et1310_config_rxmac_regs(struct et131x_adapter *adapter)
+ 	writel(0, &rxmac->mif_ctrl);
+ 	writel(0, &rxmac->space_avail);
+ 
+-	/* Initialize the the mif_ctrl register
++	/* Initialize the mif_ctrl register
+ 	 * bit 3:  Receive code error. One or more nibbles were signaled as
+ 	 *	   errors  during the reception of the packet.  Clear this
+ 	 *	   bit in Gigabit, set it in 100Mbit.  This was derived
+-- 
+2.36.1
 

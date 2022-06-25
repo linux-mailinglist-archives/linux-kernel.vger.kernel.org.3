@@ -2,70 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCB555AC46
+	by mail.lfdr.de (Postfix) with ESMTP id 6802355AC47
 	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 22:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbiFYUAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 16:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        id S233353AbiFYUBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 16:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbiFYUAn (ORCPT
+        with ESMTP id S233344AbiFYUBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 16:00:43 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8064B7EF
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 13:00:39 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-101ab23ff3fso8194431fac.1
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 13:00:39 -0700 (PDT)
+        Sat, 25 Jun 2022 16:01:42 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4771C14095
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 13:01:41 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z19so7776618edb.11
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 13:01:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GoHTL5pc7929tKgNPXg2nW2kzENqcme0/+lvG0VCiB8=;
-        b=P9/d2vqi0S4nDX0/Q7iwQJQXtcSWzOF+75qBFEQXnxYG012L7l7Y6rZtrqpnV8sn/H
-         g6rkxGsOBdw13y9r9b2vdilnR5zuwrJOXtyxuvDPJzKEf0Lbq+ZBVoAyKOKdkC/cB4XA
-         62sQOQ5g6gDJMRDKtabVKkCKdTOvHdHeGBsPV9KIPRaS27ikp7AkPtt0Iup0UrRyTAx4
-         Sm+rnL8iYjCrhJmFosCSClpgwoO51DrA9dEU3vmnEzFAZpUGk2Usoy/yg9y1Pe0Sf3qH
-         wpM6zJpivs+tmMMYDJ1iK2sapz3k1ejoqNaNhp9r3IcEcRy66Hq93qfnhpX+EDBbrlS3
-         XqHA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eLUkWe3N3ho8cfTa3t+ONCUq2y/Cga4VTVfEgbT2d1U=;
+        b=I2f9aiJ4WaR57Hl9e0IVnNn9g3MVdrAIgnzqHEx1MDg/UGlaNcpuj4OyVgpYP1pkl6
+         4LgzUHyXA2VC/pIMRlodhwg34bqqqqkjlpXA9EJU0H2ksIKBr09Rb/T/avrwUeKAKZcV
+         1o1+wQbjaw4HRM4VcoSsMo4ZAGRHcK+Nj4Z45cLKt58jrkBMH9BORte9KoVksmw6ptkJ
+         XEO0wzI1igrcB1la/uawH7JovJkaIj/oBgy7tl5FlInlVMYpTOasxUKyINVBJVGgApmK
+         Z513MT9xSUTHEyHNmd4wUtQVJf1/l108ht7zb6MihdORGAjzV/G8MrKyRVzYMauqxrL5
+         mciA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GoHTL5pc7929tKgNPXg2nW2kzENqcme0/+lvG0VCiB8=;
-        b=1+XjYQu8wTz1WNMVCSt544zgJih4w0mokkN4mT7Ku5xe1rsSvg7oUT4UzBm3mIyblc
-         1owvHJiqUUZT0hyQ3T1uW2O8HfiNJo7TBynXM5EJ6zlTzewbYp29I/RQXSVfDn70BApU
-         xR5HOLqGH3XviYet3ld4cUx8aO2/eySO/VvH9lyX+V+jD1OwapGoxlwhJnXAbWQ3BDgt
-         5srEBrLH0ilJS2wVEW8w4yP3LxLJz7SKDx9DJZ54crUfrNnYnenzUcet9QShu9ZfXxsZ
-         NJXWLZtRjJfmjeFGBuaBJe5P86KwZoi+XyhrxQSqYk7689nTKOCo24Zg/9jS8Qohf5gr
-         CTTQ==
-X-Gm-Message-State: AJIora8Ei6/sQbLSG/dIVSeJfDGxozOdtDlG3PJ9czQ4P4KhwjPn5Prx
-        XiG1f3DVy7N+e+dgiRmn0vUvV3zyVG08iQ==
-X-Google-Smtp-Source: AGRyM1uS2g0J6WOPaAL2iqi0XdzNdGYJ9SATCQGmKDYOVVcrz9/DIH+EaNp3mGkr0Upk6fjqJEr4MQ==
-X-Received: by 2002:a05:6870:3920:b0:101:d628:b053 with SMTP id b32-20020a056870392000b00101d628b053mr6084774oap.111.1656187239166;
-        Sat, 25 Jun 2022 13:00:39 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id y21-20020a056870419500b000f3321caa73sm4160632oac.16.2022.06.25.13.00.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 13:00:38 -0700 (PDT)
-Date:   Sat, 25 Jun 2022 15:00:36 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, Alex Elder <elder@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Subject: Re: [PATCH] clk: qcom: rpmh: Add note about sleep/wake state for BCMs
-Message-ID: <YrdpZHbsJ+2m/fI+@builder.lan>
-References: <20220517190949.2922197-1-swboyd@chromium.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eLUkWe3N3ho8cfTa3t+ONCUq2y/Cga4VTVfEgbT2d1U=;
+        b=STG4HVbHT+cnmDb+aZWZ80xee7CcRej3C4hTjcpSunUK3t5TuQRdAv0o3Ixmg9Nb5A
+         xGA7IG3puqxoRCccjfcrUQYmDxRKkVuC3yVsYEzICyQQFCGGzEaHpeoEL9N8vRuq39za
+         F6L3EeQbaF2u8kiav+wRvwt5Ej+KrN512DXzdyf0e9RdMMv3Ne6vzttjGroz0uEMXrn7
+         yIBUzniat4g2Hn01qt9K33Pcw+MozTVVjI59n9Sz/xGPHwAcwk/DogS37jAFMOtz/gsD
+         JjAVnnIHJenKaa1XJ/ZiH/y/JJfRfVYmf1GE94efrv6dAP0yAytrTxdEER043WyaA8R8
+         bd+w==
+X-Gm-Message-State: AJIora9VIsQBrNAtMeXFuAQRrQ6ycY5Cbl6Qds5xi02yANtYn62CZza+
+        C9Ba/TPrrJv2JySpMAWchYlw8w==
+X-Google-Smtp-Source: AGRyM1sknHsOi2FQ+azTJL4HGK/J1vfpZw0VDY8r98cQEG7zXxJxXdhGXAKaEoTZ33YbJW1joA6xWQ==
+X-Received: by 2002:a50:fc90:0:b0:435:6b30:f1b0 with SMTP id f16-20020a50fc90000000b004356b30f1b0mr6885798edq.423.1656187299784;
+        Sat, 25 Jun 2022 13:01:39 -0700 (PDT)
+Received: from [192.168.0.239] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id a7-20020a056402236700b0043570d96d25sm4522957eda.95.2022.06.25.13.01.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Jun 2022 13:01:39 -0700 (PDT)
+Message-ID: <59c043a4-dd40-1f6b-69d2-bc32b970e874@linaro.org>
+Date:   Sat, 25 Jun 2022 22:01:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517190949.2922197-1-swboyd@chromium.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] dt-bindings: interrupt-controller: sifive,plic:
+ Document Renesas RZ/Five SoC
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220624180311.3007-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220624180311.3007-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220624180311.3007-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,44 +86,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 17 May 14:09 CDT 2022, Stephen Boyd wrote:
-
-> The sleep/wake state doesn't need to be set here because of specific
-> RPMh behavior that carries over the active state when sleep/wake state
-> hasn't been modified. Add a note to the code so we aren't tempted to set
-> the sleep/wake states.
+On 24/06/2022 20:03, Lad Prabhakar wrote:
+> Document Renesas RZ/Five (R9A07G043) SoC.
 > 
-> Cc: Alex Elder <elder@linaro.org>
-> Cc: Taniya Das <quic_tdas@quicinc.com>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
+> RFC->v1:
+> * Fixed Review comments pointed by Geert and Rob
+> ---
+>  .../sifive,plic-1.0.0.yaml                    | 40 +++++++++++++++++--
+>  1 file changed, 36 insertions(+), 4 deletions(-)
 > 
-> This superseedes a previous patch[1] I sent that tried to fix this.
-> 
->  drivers/clk/qcom/clk-rpmh.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-> index aed907982344..c07cab6905cb 100644
-> --- a/drivers/clk/qcom/clk-rpmh.c
-> +++ b/drivers/clk/qcom/clk-rpmh.c
-> @@ -274,6 +274,11 @@ static int clk_rpmh_bcm_send_cmd(struct clk_rpmh *c, bool enable)
->  		cmd.addr = c->res_addr;
->  		cmd.data = BCM_TCS_CMD(1, enable, 0, cmd_state);
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+> index 27092c6a86c4..5eebe0b01b4d 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+> @@ -28,7 +28,10 @@ description:
 >  
-> +		/*
-> +		 * Send only an active only state request. RPMh continues to
-> +		 * use the active state when we're in sleep/wake state as long
-> +		 * as the sleep/wake state has never been set.
-> +		 */
->  		ret = clk_rpmh_send(c, RPMH_ACTIVE_ONLY_STATE, &cmd, enable);
->  		if (ret) {
->  			dev_err(c->dev, "set active state of %s failed: (%d)\n",
-> 
-> base-commit: 42226c989789d8da4af1de0c31070c96726d990c
-> -- 
-> https://chromeos.dev
-> [1] https://lore.kernel.org/r/20220412194505.614002-1-swboyd@chromium.org
+>    While the PLIC supports both edge-triggered and level-triggered interrupts,
+>    interrupt handlers are oblivious to this distinction and therefore it is not
+> -  specified in the PLIC device-tree binding.
+> +  specified in the PLIC device-tree binding for SiFive PLIC (and similar PLIC's),
+> +  but for the Renesas RZ/Five Soc (AX45MP AndesCore) which has NCEPLIC100 we need
+> +  to specify the interrupt type as the flow for EDGE interrupts is different
+> +  compared to LEVEL interrupts.
+>  
+>    While the RISC-V ISA doesn't specify a memory layout for the PLIC, the
+>    "sifive,plic-1.0.0" device is a concrete implementation of the PLIC that
+> @@ -57,6 +60,7 @@ properties:
+>            - enum:
+>                - allwinner,sun20i-d1-plic
+>            - const: thead,c900-plic
+> +      - const: renesas,r9a07g043-plic
+>  
+>    reg:
+>      maxItems: 1
+> @@ -64,8 +68,7 @@ properties:
+>    '#address-cells':
+>      const: 0
+>  
+> -  '#interrupt-cells':
+> -    const: 1
+> +  '#interrupt-cells': true
+>  
+>    interrupt-controller: true
+>  
+> @@ -91,7 +94,36 @@ required:
+>    - interrupts-extended
+>    - riscv,ndev
+>  
+> -additionalProperties: false
+> +if:
+
+Make it inside allOf. Avoids further indentation change on next variant.
+
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: renesas,r9a07g043-plic
+> +then:
+> +  properties:
+> +    clocks:
+> +      maxItems: 1
+> +
+> +    resets:
+> +      maxItems: 1
+> +
+> +    power-domains:
+> +      maxItems: 1
+> +
+> +    '#interrupt-cells':
+> +      const: 2
+> +
+> +  required:
+> +    - clocks
+> +    - resets
+> +    - power-domains
+> +
+> +else:
+> +  properties:
+> +    '#interrupt-cells':
+> +      const: 1
+> +
+> +unevaluatedProperties: false
+
+
+This does not look correct, why changing additional->unevaluated here?
+
+
+Best regards,
+Krzysztof

@@ -2,96 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0079555A7C8
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 09:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E365555A7CB
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 09:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbiFYHkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 03:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
+        id S231926AbiFYHo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 03:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbiFYHki (ORCPT
+        with ESMTP id S229722AbiFYHoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 03:40:38 -0400
-Received: from smtp.smtpout.orange.fr (smtp06.smtpout.orange.fr [80.12.242.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE0A4579A
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 00:40:36 -0700 (PDT)
-Received: from pop-os.home ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 50PBoAAE5xzw250PBoeVPs; Sat, 25 Jun 2022 09:40:34 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 25 Jun 2022 09:40:34 +0200
-X-ME-IP: 90.11.190.129
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-sh@vger.kernel.org
-Subject: [PATCH] sh: sq: Use the bitmap API when applicable
-Date:   Sat, 25 Jun 2022 09:40:31 +0200
-Message-Id: <521788e22ad8f7a5058c154f068b061525321841.1656142814.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 25 Jun 2022 03:44:55 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953F247072;
+        Sat, 25 Jun 2022 00:44:52 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LVQw644yYzkWnn;
+        Sat, 25 Jun 2022 15:43:34 +0800 (CST)
+Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 25 Jun 2022 15:44:50 +0800
+Received: from localhost.localdomain (10.67.165.2) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 25 Jun 2022 15:44:49 +0800
+From:   Jie Hai <haijie1@huawei.com>
+To:     <vkoul@kernel.org>, <wangzhou1@hisilicon.com>
+CC:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/8] dmaengine: hisilicon: Add support for hisi dma driver
+Date:   Sat, 25 Jun 2022 15:44:14 +0800
+Message-ID: <20220625074422.3479591-1-haijie1@huawei.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.2]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using the bitmap API is less verbose than hand writing them.
-It also improves the semantic.
+The HiSilicon IP08 and HiSilicon IP09 are DMA iEPs, they share the
+same pci device id but different pci revision and register layouts.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-I don't cross compile, so this patch is NOT compile-tested.
----
- arch/sh/kernel/cpu/sh4/sq.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+The original version supports HiSilicon IP08 but not HiSilicon IP09.
+This series support DMA driver for HIP08 and HIP09:
 
-diff --git a/arch/sh/kernel/cpu/sh4/sq.c b/arch/sh/kernel/cpu/sh4/sq.c
-index a76b94e41e91..c3101427d9a9 100644
---- a/arch/sh/kernel/cpu/sh4/sq.c
-+++ b/arch/sh/kernel/cpu/sh4/sq.c
-@@ -372,7 +372,6 @@ static struct subsys_interface sq_interface = {
- static int __init sq_api_init(void)
- {
- 	unsigned int nr_pages = 0x04000000 >> PAGE_SHIFT;
--	unsigned int size = (nr_pages + (BITS_PER_LONG - 1)) / BITS_PER_LONG;
- 	int ret = -ENOMEM;
- 
- 	printk(KERN_NOTICE "sq: Registering store queue API.\n");
-@@ -382,7 +381,7 @@ static int __init sq_api_init(void)
- 	if (unlikely(!sq_cache))
- 		return ret;
- 
--	sq_bitmap = kzalloc(size, GFP_KERNEL);
-+	sq_bitmap = bitmap_zalloc(nr_pages, GFP_KERNEL);
- 	if (unlikely(!sq_bitmap))
- 		goto out;
- 
-@@ -393,7 +392,7 @@ static int __init sq_api_init(void)
- 	return 0;
- 
- out:
--	kfree(sq_bitmap);
-+	bitmap_free(sq_bitmap);
- 	kmem_cache_destroy(sq_cache);
- 
- 	return ret;
-@@ -402,7 +401,7 @@ static int __init sq_api_init(void)
- static void __exit sq_api_exit(void)
- {
- 	subsys_interface_unregister(&sq_interface);
--	kfree(sq_bitmap);
-+	bitmap_free(sq_bitmap);
- 	kmem_cache_destroy(sq_cache);
- }
- 
+1. Fix bugs for HIP08 DMA driver
+	- Disable hardware channels when driver detached
+	- Update cq_head whenever accessed it
+	- Support multi-thread for one DMA channel
+2. Use macros instead of magic number
+3. Add support for HIP09 DMA driver
+4. Add debugfs for HIP08 and HIP09 DMA driver
+5. Add myself as maintainer of hisi_dma.c
+
+Jie Hai (8):
+  dmaengine: hisilicon: Disable channels when unregister hisi_dma
+  dmaengine: hisilicon: Fix CQ head update
+  dmaengine: hisilicon: Add multi-thread support for a DMA channel
+  dmaengine: hisilicon: Use macros instead of magic number
+  dmaengine: hisilicon: Adapt DMA driver to HiSilicon IP09
+  dmaengine: hisilicon: Add dfx feature for hisi dma driver
+  Documentation: Add debugfs doc for hisi_dma
+  MAINTAINERS: Add debugfs files and maintainer for hisi_dma
+
+ Documentation/ABI/testing/debugfs-hisi-dma |   9 +
+ MAINTAINERS                                |   2 +
+ drivers/dma/hisi_dma.c                     | 733 ++++++++++++++++++---
+ 3 files changed, 648 insertions(+), 96 deletions(-)
+ create mode 100644 Documentation/ABI/testing/debugfs-hisi-dma
+
 -- 
-2.34.1
+2.33.0
 

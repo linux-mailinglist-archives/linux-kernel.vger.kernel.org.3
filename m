@@ -2,48 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CFF55AA56
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F46955AA6B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233001AbiFYNKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 09:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
+        id S233035AbiFYNSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 09:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbiFYNKE (ORCPT
+        with ESMTP id S233032AbiFYNSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 09:10:04 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF18A5F55;
-        Sat, 25 Jun 2022 06:10:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=nw24XXZnXVM2CczTxTtCDu7i5NW03WPL24qA7zFmQOU=; b=pxoYScQgHTX20njZz8ukZ/3Ddk
-        GQeWwV4erOpLikcwHRhbrIUeCBoSxNdLconnWiktYP8EMVPEt9s3j43yyv/9mqNhcGq/sdaAKwAgx
-        XT+croLLlujfhIGBQdlZV0TKDnpiLbqVtmWVHwmfRFlwnc8/NDKXfGJrvdJukmrjvPEST0LrSRGG8
-        U7wrhj3+B+KHEQM/p2a9xLa4OI6zQkLd1fbhXo7TNigKBwP6x1klZmexGbm1rL2T6w8+Oqso3TBjl
-        +m7bu0bo9CNUsrXl6z76d8j3pg7XTRHsCeUM5dgdkB46HOszbKRF1RfKFkunly/bV1lfIkuL7eWOx
-        XFTHDn4A==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o55Y2-0067pL-9w; Sat, 25 Jun 2022 13:10:02 +0000
-Date:   Sat, 25 Jun 2022 06:10:02 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 6/8] fs: remove no_llseek
-Message-ID: <YrcJKtZQLDvRgX7P@infradead.org>
-References: <20220625110115.39956-1-Jason@zx2c4.com>
- <20220625110115.39956-7-Jason@zx2c4.com>
+        Sat, 25 Jun 2022 09:18:38 -0400
+Received: from mail.meizu.com (unknown [14.29.68.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5881EAD8
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 06:18:34 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
+ (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Sat, 25 Jun
+ 2022 21:18:34 +0800
+Received: from localhost.localdomain (172.16.255.36) by
+ IT-EXMB-1-125.meizu.com (172.16.1.125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Sat, 25 Jun 2022 21:18:31 +0800
+From:   Even <chenyuwen1@meizu.com>
+To:     <xiang@kernel.org>
+CC:     <chao@kernel.org>, <linux-erofs@lists.ozlabs.org>,
+        <linux-kernel@vger.kernel.org>, Even <chenyuwen1@meizu.com>
+Subject: [PATCH] erofs: Wake up all waiters after z_erofs_lzma_head ready.
+Date:   Sat, 25 Jun 2022 21:18:09 +0800
+Message-ID: <20220625131809.6081-1-chenyuwen1@meizu.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220625110115.39956-7-Jason@zx2c4.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.16.255.36]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,22 +45,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 01:01:13PM +0200, Jason A. Donenfeld wrote:
-> Now that all callers of ->llseek are going through vfs_llseek(), we
-> don't gain anything by keeping no_llseek around. Nothing compares it or
-> calls it.
+When the user mounts the erofs second times, the decompression thread
+may hung. The problem happens due to a sequence of steps like the
+following:
 
-Shouldn't this and the checks for no_llseek simply be merged into patch
-2?
+1) Task A called z_erofs_load_lzma_config which obtain all of the node
+   from the z_erofs_lzma_head.
 
-> +	if ((file->f_mode & FMODE_LSEEK) && file->f_op->llseek)
-> +		return file->f_op->llseek(file, offset, whence);
-> +	return -ESPIPE;
+2) At this time, task B called the z_erofs_lzma_decompress and wanted to
+   get a node. But the z_erofs_lzma_head was empty, the Task B had to
+   sleep.
 
-No function change, but in general checking for the error condition
-in the branch tends to be more readable.  i.e.:
+3) Task A release nodes and push nodes into the z_erofs_lzma_head. But
+   task B was still sleeping.
 
-	if (!(file->f_mode & FMODE_LSEEK) || !file->f_op->llseek)
-		return -ESPIPE;
-	return file->f_op->llseek(file, offset, whence);
+One example report when the hung happens:
+task:kworker/u3:1 state:D stack:14384 pid: 86 ppid: 2 flags:0x00004000
+Workqueue: erofs_unzipd z_erofs_decompressqueue_work
+Call Trace:
+ <TASK>
+ __schedule+0x281/0x760
+ schedule+0x49/0xb0
+ z_erofs_lzma_decompress+0x4bc/0x580
+ ? cpu_core_flags+0x10/0x10
+ z_erofs_decompress_pcluster+0x49b/0xba0
+ ? __update_load_avg_se+0x2b0/0x330
+ ? __update_load_avg_se+0x2b0/0x330
+ ? update_load_avg+0x5f/0x690
+ ? update_load_avg+0x5f/0x690
+ ? set_next_entity+0xbd/0x110
+ ? _raw_spin_unlock+0xd/0x20
+ z_erofs_decompress_queue.isra.0+0x2e/0x50
+ z_erofs_decompressqueue_work+0x30/0x60
+ process_one_work+0x1d3/0x3a0
+ worker_thread+0x45/0x3a0
+ ? process_one_work+0x3a0/0x3a0
+ kthread+0xe2/0x110
+ ? kthread_complete_and_exit+0x20/0x20
+ ret_from_fork+0x22/0x30
+ </TASK>
+
+Signed-off-by: Even <chenyuwen1@meizu.com>
+---
+ fs/erofs/decompressor_lzma.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fs/erofs/decompressor_lzma.c b/fs/erofs/decompressor_lzma.c
+index 05a3063cf2bc..5e59b3f523eb 100644
+--- a/fs/erofs/decompressor_lzma.c
++++ b/fs/erofs/decompressor_lzma.c
+@@ -143,6 +143,7 @@ int z_erofs_load_lzma_config(struct super_block *sb,
+ 	DBG_BUGON(z_erofs_lzma_head);
+ 	z_erofs_lzma_head = head;
+ 	spin_unlock(&z_erofs_lzma_lock);
++	wake_up_all(&z_erofs_lzma_wq);
+ 
+ 	z_erofs_lzma_max_dictsize = dict_size;
+ 	mutex_unlock(&lzma_resize_mutex);
+-- 
+2.25.1
 

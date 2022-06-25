@@ -2,101 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B23D55A9ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 14:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A561E55A9AB
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 14:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbiFYMPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 08:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
+        id S232824AbiFYMHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 08:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232499AbiFYMPP (ORCPT
+        with ESMTP id S232912AbiFYMHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 08:15:15 -0400
-X-Greylist: delayed 273 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 25 Jun 2022 05:15:13 PDT
-Received: from mail2.sp2max.com.br (mail2.sp2max.com.br [138.185.4.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A86B92CC9B;
-        Sat, 25 Jun 2022 05:15:13 -0700 (PDT)
-Received: from fedora.. (unknown [190.245.244.131])
-        (Authenticated sender: pablo@fliagreco.com.ar)
-        by mail2.sp2max.com.br (Postfix) with ESMTPSA id D23157B092A;
-        Sat, 25 Jun 2022 09:15:08 -0300 (-03)
-From:   Pablo Greco <pgreco@centosproject.org>
-Cc:     Pablo Greco <pgreco@centosproject.org>, stable@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] nvme-pci: add NVME_QUIRK_BOGUS_NID for ADATA XPG SX6000LNP (AKA SPECTRIX S40G)
-Date:   Sat, 25 Jun 2022 09:15:02 -0300
-Message-Id: <20220625121502.9092-1-pgreco@centosproject.org>
-X-Mailer: git-send-email 2.36.1
+        Sat, 25 Jun 2022 08:07:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3EF2F3A3;
+        Sat, 25 Jun 2022 05:07:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A4A3B807E5;
+        Sat, 25 Jun 2022 12:07:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 095DCC3411C;
+        Sat, 25 Jun 2022 12:06:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656158822;
+        bh=c/HExtt6iaHl6sZUIMWUGS2K9JmTJCeHiuTbLSzYhQk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=k5APQKQyhSShlihnRr0Ao+2uqzxkLufCeEM59SRoI5ebWumF/ef0kzcxv6sj98/VQ
+         TbZZ8tCRjnsFim+eLwR2iz0Udl66BPD6itDjNEHo/mAyskg4dk3uOGN6v8YDk3atUe
+         AoB6gyD1AmmnO/dZJ9XdocPloFfsX3nmw6dC34S7yXC8UqfBqBqbgMHndJHpwfR3vy
+         2vGncEAQ5aSYtKzXY6BIuTyPRwg2ix1DJmqGryTxJZ6i5YikMYPO1JJsSmI309XCF+
+         rzBBZmXFnLUwJnH0nqsLKwwFHfdoBvpXAphMJoKEuVfruVrRew+uR6C0njRPAFWptj
+         1RtooT9ogW/bQ==
+Date:   Sat, 25 Jun 2022 13:16:29 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Kent Gustavsson <kent@minoris.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 07/10] iio: adc: mcp3911: use correct formula for AD
+ conversion
+Message-ID: <20220625131629.16c226a5@jic23-huawei>
+In-Reply-To: <20220625103853.2470346-7-marcus.folkesson@gmail.com>
+References: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
+        <20220625103853.2470346-7-marcus.folkesson@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SP2Max-MailScanner-Information: Please contact the ISP for more information
-X-SP2Max-MailScanner-ID: D23157B092A.A1B74
-X-SP2Max-MailScanner: Sem Virus encontrado
-X-SP2Max-MailScanner-SpamCheck: nao spam, SpamAssassin (cached, escore=-2.91,
-        requerido 6, autolearn=not spam, ALL_TRUSTED -1.00, BAYES_00 -1.90,
-        T_SCC_BODY_TEXT_LINE -0.01)
-X-SP2Max-MailScanner-From: pgreco@centosproject.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ADATA XPG SPECTRIX S40G drives report bogus eui64 values that appear to
-be the same across drives in one system. Quirk them out so they are
-not marked as "non globally unique" duplicates.
+On Sat, 25 Jun 2022 12:38:50 +0200
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-Before:
-[    2.258919] nvme nvme1: pci function 0000:06:00.0
-[    2.264898] nvme nvme2: pci function 0000:05:00.0
-[    2.323235] nvme nvme1: failed to set APST feature (2)
-[    2.326153] nvme nvme2: failed to set APST feature (2)
-[    2.333935] nvme nvme1: allocated 64 MiB host memory buffer.
-[    2.336492] nvme nvme2: allocated 64 MiB host memory buffer.
-[    2.339611] nvme nvme1: 7/0/0 default/read/poll queues
-[    2.341805] nvme nvme2: 7/0/0 default/read/poll queues
-[    2.346114]  nvme1n1: p1
-[    2.347197] nvme nvme2: globally duplicate IDs for nsid 1
-After:
-[    2.427715] nvme nvme1: pci function 0000:06:00.0
-[    2.427771] nvme nvme2: pci function 0000:05:00.0
-[    2.488154] nvme nvme2: failed to set APST feature (2)
-[    2.489895] nvme nvme1: failed to set APST feature (2)
-[    2.498773] nvme nvme2: allocated 64 MiB host memory buffer.
-[    2.500587] nvme nvme1: allocated 64 MiB host memory buffer.
-[    2.504113] nvme nvme2: 7/0/0 default/read/poll queues
-[    2.507026] nvme nvme1: 7/0/0 default/read/poll queues
-[    2.509467] nvme nvme2: Ignoring bogus Namespace Identifiers
-[    2.512804] nvme nvme1: Ignoring bogus Namespace Identifiers
-[    2.513698]  nvme1n1: p1
+> The ADC conversion is actually not rail-to-rail but with a factor 1.5.
+> Make use of this factor when calculating actual voltage.
+> 
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 
-Signed-off-by: Pablo Greco <pgreco@centosproject.org>
-Cc: <stable@vger.kernel.org>
----
- drivers/nvme/host/pci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Fixes tag?  Also, fixes should be at the beginning of the patch set
+to make it easier to backport them to stable kernels etc.
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index d7b24ee17285..c9ebe6072498 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3470,7 +3470,8 @@ static const struct pci_device_id nvme_id_table[] = {
- 		.driver_data = NVME_QUIRK_NO_NS_DESC_LIST |
- 				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
- 	{ PCI_DEVICE(0x10ec, 0x5762),   /* ADATA SX6000LNP */
--		.driver_data = NVME_QUIRK_IGNORE_DEV_SUBNQN, },
-+		.driver_data = NVME_QUIRK_IGNORE_DEV_SUBNQN |
-+				NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x1cc1, 0x8201),   /* ADATA SX8200PNP 512GB */
- 		.driver_data = NVME_QUIRK_NO_DEEPEST_PS |
- 				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
--- 
-2.36.1
+Otherwise looks good to me.
+
+Thanks,
+
+Jonathan
+
+
+> ---
+> 
+> Notes:
+>     v2:
+>         - No changes
+> 
+>  drivers/iio/adc/mcp3911.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
+> index 1469c12ebbb2..ede1ad97ed4d 100644
+> --- a/drivers/iio/adc/mcp3911.c
+> +++ b/drivers/iio/adc/mcp3911.c
+> @@ -48,8 +48,8 @@
+>  #define MCP3911_CHANNEL(x)		(MCP3911_REG_CHANNEL0 + x * 3)
+>  #define MCP3911_OFFCAL(x)		(MCP3911_REG_OFFCAL_CH0 + x * 6)
+>  
+> -/* Internal voltage reference in uV */
+> -#define MCP3911_INT_VREF_UV		1200000
+> +/* Internal voltage reference in mV */
+> +#define MCP3911_INT_VREF_MV		1200
+>  
+>  #define MCP3911_REG_READ(reg, id)	((((reg) << 1) | ((id) << 5) | (1 << 0)) & 0xff)
+>  #define MCP3911_REG_WRITE(reg, id)	((((reg) << 1) | ((id) << 5) | (0 << 0)) & 0xff)
+> @@ -178,11 +178,18 @@ static int mcp3911_read_raw(struct iio_dev *indio_dev,
+>  
+>  			*val = ret / 1000;
+>  		} else {
+> -			*val = MCP3911_INT_VREF_UV;
+> +			*val = MCP3911_INT_VREF_MV;
+>  		}
+>  
+> -		*val2 = 24;
+> -		ret = IIO_VAL_FRACTIONAL_LOG2;
+> +		/*
+> +		 * For 24bit Conversion
+> +		 * Raw = ((Voltage)/(Vref) * 2^23 * Gain * 1.5
+> +		 * Voltage = Raw * (Vref)/(2^23 * Gain * 1.5)
+> +		 */
+> +
+> +		/* val2 = (2^23 * 1.5) */
+> +		*val2 = 12582912;
+> +		ret = IIO_VAL_FRACTIONAL;
+>  		break;
+>  	}
+>  
 

@@ -2,101 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39F755AAAD
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C015D55AABD
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 16:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233193AbiFYNzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 09:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S233181AbiFYOA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 10:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbiFYNzN (ORCPT
+        with ESMTP id S232972AbiFYOA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 09:55:13 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CAE912ACB;
-        Sat, 25 Jun 2022 06:55:12 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so8207440pjl.5;
-        Sat, 25 Jun 2022 06:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rq85kfN+kIsKSpiVIlYRgY/oRH6pyH6elOkY0pr17X8=;
-        b=hgfxS3V4J1iXv9Nrh0fcvKWIa/amBW6X3fvUiBLLphkpMJt9wcgDSWULqm7GP/0GaP
-         6aSfy+jSCZ9j4WZexZhFObM3rwxX5lPJsFFZN076vmGQmL5F6VIzmzoUAY8rY6KRMSjv
-         R6ZhugXIa6LdfrPlfK9JaOa2U5bXh812sAwaUmgup8SDolYUTYEo+70VZvtcrFnSuFxi
-         04ypGDWM//+TRLLtFoEyutvFarER9RIv67xr7XYhJR1OgU+hLOJ0DxkN7EHu9Um5lj4r
-         KISANjryYyHsprldO94mdBahgWp9ATn+ceH0x3vcFmnINanU50nMhQKDvWs4Phh9vN1z
-         vACA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rq85kfN+kIsKSpiVIlYRgY/oRH6pyH6elOkY0pr17X8=;
-        b=c3BqLgFuxZZMw9oiFdXnxOq94AIpSgYY+Uq/0Q9+iyQu48R73HEQw0SdauQLRE2uPp
-         l8t9xoBerbSeeFwWeAgtVYRxaUx/RPuTIwduZ/fcMIfSSiTNI7u4hDTTG3VBSkSsZv/t
-         u3tVNNeo04X+wOcA3bEOCC36Oo37sCpsHhCm4NUOyY/MQoX+Kn9JonAa1+fzwVcq5E/b
-         43pHqipRCzes0+ufSjx9m5G/UKvTtqdesGerN3vaOXaa/pknTTNY+xY4SD19MwZ5kD2i
-         f31EAAuD8fBAVeEgc4/3IQ8CRFmSMqLApfV15c0MkCCbiOtUUDXauctbNaTcJUJQnbxF
-         5GuQ==
-X-Gm-Message-State: AJIora+pbcv8zYS//Ob9o9VRZFPxb2ZpETPkGAoJmMXmQ80q/w0v9w3M
-        ffP4dUwDG8bUUVBILO0yVwM56TA2k2nj588P
-X-Google-Smtp-Source: AGRyM1tHN1gbZ2yVQGHra6qT4FiOfTNe6GbslEsaiCOvnvsi/mWa+4LCop/8sCB+fYivYjFqNJC8HQ==
-X-Received: by 2002:a17:90b:3a8f:b0:1ec:93d4:f955 with SMTP id om15-20020a17090b3a8f00b001ec93d4f955mr9909343pjb.23.1656165311419;
-        Sat, 25 Jun 2022 06:55:11 -0700 (PDT)
-Received: from fedora.. ([2409:4042:261d:8029:35f0:415b:b9b4:3fcb])
-        by smtp.gmail.com with ESMTPSA id a4-20020a170902710400b00162037fbb68sm3708733pll.215.2022.06.25.06.55.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 06:55:10 -0700 (PDT)
-From:   Gautam <gautammenghani201@gmail.com>
-To:     shuah@kernel.org, brauner@kernel.org, keescook@chromium.org
-Cc:     Gautam <gautammenghani201@gmail.com>, kafai@fb.com,
-        songliubraving@fb.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: [PATCH] kselftests: Enable the echo command to print newlines in Makefile
-Date:   Sat, 25 Jun 2022 19:24:55 +0530
-Message-Id: <20220625135455.167939-1-gautammenghani201@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Sat, 25 Jun 2022 10:00:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DAB140D4;
+        Sat, 25 Jun 2022 07:00:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A17EB80B6B;
+        Sat, 25 Jun 2022 14:00:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF5AC341CE;
+        Sat, 25 Jun 2022 14:00:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656165655;
+        bh=t0wqaEAT95jEcBs2WtJA4yI32Lyw6AFlDCsfOkURjBQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=X7B5q0c0Uu45axRdIIdqONUp8xe31CsWk8rAdtzewJSzXiG3U+ZycUR656QG66wwO
+         R8F0sMbPq802x0A2Offa8z/kuG4SE3a2CtLarots+FdC/ioTAqpllmhiF0Tm6Fl3v7
+         GOzVsCrzr4V4htbYUwm78LoWPmJFlfJ0RAksTwJ8aDrjx2oOlTvRImv6UwWaHuiD4i
+         vcE++RPrNFNMOrrQDXjV7GW5TWkiuWTLK+VTsfaJcCiagewkcDgJq5Ea1qJdkbH7E+
+         Qbdk+lyDm2FsidRYW5T88il7xpU6hw7T5lEpDBd/+AdoNH4/ZpO0Pbplem+3k5kZHj
+         gF4X97q/LyPcQ==
+Received: by mail-vs1-f46.google.com with SMTP id o190so4855830vsc.5;
+        Sat, 25 Jun 2022 07:00:55 -0700 (PDT)
+X-Gm-Message-State: AJIora808WSI7zjLqPZM1npz0IX6PEaebhsYqaEjyaqC/Nat+J6KextC
+        JnrXj/oU1xVan7nEEsprumSpYd0APWXQR4gSYEo=
+X-Google-Smtp-Source: AGRyM1tifc9J0S1N4mqgBfibJ6KQ39UMSRNc3CynbAEj61eOx7fHO87FxOw8W9F9Sk2ELboBFgtduKSv66mU1Ha0xxs=
+X-Received: by 2002:a67:7347:0:b0:354:3f46:21ec with SMTP id
+ o68-20020a677347000000b003543f4621ecmr1331348vsc.70.1656165653567; Sat, 25
+ Jun 2022 07:00:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220625080423.2797-1-chenfeiyang@loongson.cn>
+ <CAMZfGtWT7oPq6bD_fRn2gVNX8Lj3=ev21EAoaCCPeq-P_NYF0g@mail.gmail.com>
+ <CAAhV-H5K9LG5P6WYJ+64-fi+s=TZbbJQG9E0vHJwOf9Pai5z4w@mail.gmail.com> <CAMZfGtVq0VwMETGdzAXLkjes8W0gVBw=r0Xk5rpPnhe7x6tRiw@mail.gmail.com>
+In-Reply-To: <CAMZfGtVq0VwMETGdzAXLkjes8W0gVBw=r0Xk5rpPnhe7x6tRiw@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 25 Jun 2022 22:00:43 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4T3ixOWB67XOij3P1xvM+_BUu+THLGtx-VvrCYUgjZyw@mail.gmail.com>
+Message-ID: <CAAhV-H4T3ixOWB67XOij3P1xvM+_BUu+THLGtx-VvrCYUgjZyw@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH] page-flags.h: Fix a missing header include
+ of static_keys.h
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Feiyang Chen <chris.chenfeiyang@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux- stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the install section of the main Makefile of kselftests, the echo
-command is used with -n flag, which disables the printing of new line
-due to which the output contains "\n" chars as follows:
+Hi, Muchun,
 
-  Emit Tests for alsa\nSkipping non-existent dir: arm64
-  Emit Tests for breakpoints\nEmit Tests for capabilities\n
+On Sat, Jun 25, 2022 at 7:17 PM Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> On Sat, Jun 25, 2022 at 5:04 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> >
+> > Hi, Muchun,
+> >
+> > On Sat, Jun 25, 2022 at 4:50 PM Muchun Song <songmuchun@bytedance.com> wrote:
+> > >
+> > > On Sat, Jun 25, 2022 at 4:04 PM Feiyang Chen
+> > > <chris.chenfeiyang@gmail.com> wrote:
+> > > >
+> > > > The page-flags.h header relies on static keys since commit
+> > > > a6b40850c442bf ("mm: hugetlb: replace hugetlb_free_vmemmap_enabled
+> > > > with a static_key"), so make sure to include the header to avoid
+> > > > compilation errors.
+> > > >
+> > > > Fixes: a6b40850c442bf ("mm: hugetlb: replace hugetlb_free_vmemmap_enabled with a static_key")
+> > > > Cc: stable@vger.kernel.org
+> > > > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> > > > ---
+> > > >  include/linux/page-flags.h | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> > > > index e66f7aa3191d..147b336c7a35 100644
+> > > > --- a/include/linux/page-flags.h
+> > > > +++ b/include/linux/page-flags.h
+> > > > @@ -11,6 +11,7 @@
+> > > >  #include <linux/mmdebug.h>
+> > > >  #ifndef __GENERATING_BOUNDS_H
+> > > >  #include <linux/mm_types.h>
+> > > > +#include <linux/static_key.h>
+> > >
+> > > I did not include this. The change makes sense to me. But I am
+> > > curious what configs cause the compiling error. Would you mind
+> > > sharing the config with us?
+> > We found this problem when we add
+> > ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to LoongArch. Since this isn't
+>
+> Good news to me. I would love to hear more archs support for HVO (HugeTLB
+> Vmemmap Optimization).
+>
+> > upstream yet, we cannot give such a config now (the default config of
+> > X86 and ARM64 is just OK).
+>
+> All right. In this case, the "Cc: stable@vger.kernel.org" is unnecessary.
+Maybe make randconfig will have problems on X86/ARM64, so backporting
+to 5.18 seems reasonable.
 
-This patch fixes the above bug by using the -e flag.
-
-Signed-off-by: Gautam <gautammenghani201@gmail.com>
----
- tools/testing/selftests/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index de11992dc577..52e31437f1a3 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -253,7 +253,7 @@ ifdef INSTALL_PATH
- 	for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
--		echo -n "Emit Tests for $$TARGET\n"; \
-+		echo -ne "Emit Tests for $$TARGET\n"; \
- 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
- 			-C $$TARGET emit_tests >> $(TEST_LIST); \
- 	done;
--- 
-2.36.1
-
+Huacai
+>
+> Thanks.
+> >
+> > Huacai
+> > >
+> > > Thanks.
+> > >
+> > > >  #include <generated/bounds.h>
+> > > >  #endif /* !__GENERATING_BOUNDS_H */
+> > > >
+> > > > --
+> > > > 2.27.0
+> > > >
+> > >

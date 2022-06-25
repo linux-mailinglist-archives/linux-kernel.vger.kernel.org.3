@@ -2,284 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2315E55A89E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBB855A8A3
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbiFYJkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 05:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S232363AbiFYJmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 05:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbiFYJkE (ORCPT
+        with ESMTP id S231768AbiFYJmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 05:40:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41D235AA8;
-        Sat, 25 Jun 2022 02:40:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FB3DB80315;
-        Sat, 25 Jun 2022 09:40:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB54AC3411C;
-        Sat, 25 Jun 2022 09:39:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656150000;
-        bh=W8aNcm+QVE6ieO2OeUXQb2GCh5eqOLJo1sWOd6/UWC4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=X5/FubI/t3ncQJVzq7/D1pNHYmPPx5JqN8DHxEeRRe7g8WmXzMjM7r2hx1s8qKpih
-         nWzex8LbW0BG00uiFIGKRQoLEHSODZmjxjVtuvqN8k6tx6LYHvLPB1f0BFvjbS+vDr
-         1p/HTzRxRJr4q/REk6F/ie+cu5jlys+I0VCSmrG/ufAa4MQ+KUvRmiXm/26CYdHTMg
-         2pQ3/83nYAj5TSQIYP3ZuxmffFcda4jMzRVhuRLRLKi+pdRa42873c+59ETI2a/Xka
-         6bFCT3hgBYpEh+sNlSbATIhEhrx5lYZv88mgmIZQlp1PiFDtqtybtS+Asgzth3899A
-         y+tgT+4MFO14Q==
-From:   guoren@kernel.org
-To:     palmer@rivosinc.com, arnd@arndb.de, parri.andrea@gmail.com,
-        dlustig@nvidia.com
-Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Subject: [PATCH] riscv: atomic: Clean up unnecessary acquire and release definitions
-Date:   Sat, 25 Jun 2022 05:39:45 -0400
-Message-Id: <20220625093945.423974-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Sat, 25 Jun 2022 05:42:23 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382F336148
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 02:42:22 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LVTXQ3Ym2zDsSD;
+        Sat, 25 Jun 2022 17:41:42 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 25 Jun 2022 17:42:18 +0800
+Subject: Re: [PATCH v2 3/9] mm/hugetlb: make pud_huge() and huge_pud() aware
+ of non-present pud entry
+To:     Naoya Horiguchi <nao.horiguchi@gmail.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
+ <20220623235153.2623702-4-naoya.horiguchi@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <098b5a5c-2c05-4e22-b1ba-81f858391cd6@huawei.com>
+Date:   Sat, 25 Jun 2022 17:42:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220623235153.2623702-4-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On 2022/6/24 7:51, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> 
+> follow_pud_mask() does not support non-present pud entry now.  As long as
+> I tested on x86_64 server, follow_pud_mask() still simply returns
+> no_page_table() for non-present_pud_entry() due to pud_bad(), so no severe
+> user-visible effect should happen.  But generally we should call
+> follow_huge_pud() for non-present pud entry for 1GB hugetlb page.
+> 
+> Update pud_huge() and huge_pud() to handle non-present pud entries.  The
+> changes are similar to previous works for pud entries commit e66f17ff7177
+> ("mm/hugetlb: take page table lock in follow_huge_pmd()") and commit
+> cbef8478bee5 ("mm/hugetlb: pmd_huge() returns true for non-present hugepage").
+> 
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> ---
+>  arch/x86/mm/hugetlbpage.c |  3 ++-
+>  mm/hugetlb.c              | 26 +++++++++++++++++++++++++-
+>  2 files changed, 27 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
+> index a0d023cb4292..5fb86fb49ba8 100644
+> --- a/arch/x86/mm/hugetlbpage.c
+> +++ b/arch/x86/mm/hugetlbpage.c
+> @@ -70,7 +70,8 @@ int pmd_huge(pmd_t pmd)
+>  
 
-Clean up unnecessary xchg_acquire, xchg_release, and cmpxchg_release
-custom definitions, because the generic implementation is the same as
-the riscv custom implementation.
+No strong opinion but a comment similar to pmd_huge might be better?
 
-Before the patch:
-000000000000024e <.LBB238>:
-                ops = xchg_acquire(pending_ipis, 0);
- 24e:   089937af                amoswap.d       a5,s1,(s2)
- 252:   0230000f                fence   r,rw
+/*
+ * pmd_huge() returns 1 if @pmd is hugetlb related entry, that is normal
+ * hugetlb entry or non-present (migration or hwpoisoned) hugetlb entry.
+ * Otherwise, returns 0.
+ */
 
-0000000000000256 <.LBB243>:
-                ops = xchg_release(pending_ipis, 0);
- 256:   0310000f                fence   rw,w
- 25a:   089934af                amoswap.d       s1,s1,(s2)
+>  int pud_huge(pud_t pud)
+>  {
+> -	return !!(pud_val(pud) & _PAGE_PSE);
+> +	return !pud_none(pud) &&
+> +		(pud_val(pud) & (_PAGE_PRESENT|_PAGE_PSE)) != _PAGE_PRESENT;
+>  }
+>  #endif
+>  
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index f59f43c06601..b7ae5f73f3b2 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6946,10 +6946,34 @@ struct page * __weak
+>  follow_huge_pud(struct mm_struct *mm, unsigned long address,
+>  		pud_t *pud, int flags)
+>  {
+> +	struct page *page = NULL;
+> +	spinlock_t *ptl;
+> +	pte_t pte;
+> +
+>  	if (flags & (FOLL_GET | FOLL_PIN))
+>  		return NULL;
 
-After the patch:
-000000000000026e <.LBB245>:
-                ops = xchg_acquire(pending_ipis, 0);
- 26e:   089937af                amoswap.d       a5,s1,(s2)
+Should the above check be modified? It seems the below try_grab_page might not grab the page as
+expected (as Mike pointed out). Or the extra page refcnt is unneeded?
 
-0000000000000272 <.LBE247>:
- 272:   0230000f                fence   r,rw
+>  
+> -	return pte_page(*(pte_t *)pud) + ((address & ~PUD_MASK) >> PAGE_SHIFT);
+> +retry:
+> +	ptl = huge_pte_lock(hstate_sizelog(PUD_SHIFT), mm, (pte_t *)pud);
+> +	if (!pud_huge(*pud))
+> +		goto out;
+> +	pte = huge_ptep_get((pte_t *)pud);
+> +	if (pte_present(pte)) {
+> +		page = pud_page(*pud) + ((address & ~PUD_MASK) >> PAGE_SHIFT);
+> +		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
+> +			page = NULL;
+> +			goto out;
+> +		}
+> +	} else {
+> +		if (is_hugetlb_entry_migration(pte)) {
+> +			spin_unlock(ptl);
+> +			__migration_entry_wait(mm, (pte_t *)pud, ptl);
+> +			goto retry;
+> +		}
 
-0000000000000276 <.LBB249>:
-                ops = xchg_release(pending_ipis, 0);
- 276:   0310000f                fence   rw,w
+Again. No strong opinion but a comment similar to follow_huge_pmd might be better?
 
-000000000000027a <.LBB251>:
- 27a:   089934af                amoswap.d       s1,s1,(s2)
+/*
+ * hwpoisoned entry is treated as no_page_table in
+ * follow_page_mask().
+ */
 
-Only cmpxchg_acquire is necessary (It prevents unnecessary acquire
-ordering when the value from lr is different from old).
+Thanks!
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
----
- arch/riscv/include/asm/atomic.h  |  19 -----
- arch/riscv/include/asm/cmpxchg.h | 116 -------------------------------
- 2 files changed, 135 deletions(-)
-
-diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
-index 0dfe9d857a76..83636320ba95 100644
---- a/arch/riscv/include/asm/atomic.h
-+++ b/arch/riscv/include/asm/atomic.h
-@@ -249,16 +249,6 @@ c_t arch_atomic##prefix##_xchg_relaxed(atomic##prefix##_t *v, c_t n)	\
- 	return __xchg_relaxed(&(v->counter), n, size);			\
- }									\
- static __always_inline							\
--c_t arch_atomic##prefix##_xchg_acquire(atomic##prefix##_t *v, c_t n)	\
--{									\
--	return __xchg_acquire(&(v->counter), n, size);			\
--}									\
--static __always_inline							\
--c_t arch_atomic##prefix##_xchg_release(atomic##prefix##_t *v, c_t n)	\
--{									\
--	return __xchg_release(&(v->counter), n, size);			\
--}									\
--static __always_inline							\
- c_t arch_atomic##prefix##_xchg(atomic##prefix##_t *v, c_t n)		\
- {									\
- 	return __xchg(&(v->counter), n, size);				\
-@@ -276,12 +266,6 @@ c_t arch_atomic##prefix##_cmpxchg_acquire(atomic##prefix##_t *v,	\
- 	return __cmpxchg_acquire(&(v->counter), o, n, size);		\
- }									\
- static __always_inline							\
--c_t arch_atomic##prefix##_cmpxchg_release(atomic##prefix##_t *v,	\
--				     c_t o, c_t n)			\
--{									\
--	return __cmpxchg_release(&(v->counter), o, n, size);		\
--}									\
--static __always_inline							\
- c_t arch_atomic##prefix##_cmpxchg(atomic##prefix##_t *v, c_t o, c_t n)	\
- {									\
- 	return __cmpxchg(&(v->counter), o, n, size);			\
-@@ -299,12 +283,9 @@ c_t arch_atomic##prefix##_cmpxchg(atomic##prefix##_t *v, c_t o, c_t n)	\
- ATOMIC_OPS()
- 
- #define arch_atomic_xchg_relaxed	arch_atomic_xchg_relaxed
--#define arch_atomic_xchg_acquire	arch_atomic_xchg_acquire
--#define arch_atomic_xchg_release	arch_atomic_xchg_release
- #define arch_atomic_xchg		arch_atomic_xchg
- #define arch_atomic_cmpxchg_relaxed	arch_atomic_cmpxchg_relaxed
- #define arch_atomic_cmpxchg_acquire	arch_atomic_cmpxchg_acquire
--#define arch_atomic_cmpxchg_release	arch_atomic_cmpxchg_release
- #define arch_atomic_cmpxchg		arch_atomic_cmpxchg
- 
- #undef ATOMIC_OPS
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 12debce235e5..67ab6375b650 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -44,76 +44,6 @@
- 					    _x_, sizeof(*(ptr)));	\
- })
- 
--#define __xchg_acquire(ptr, new, size)					\
--({									\
--	__typeof__(ptr) __ptr = (ptr);					\
--	__typeof__(new) __new = (new);					\
--	__typeof__(*(ptr)) __ret;					\
--	switch (size) {							\
--	case 4:								\
--		__asm__ __volatile__ (					\
--			"	amoswap.w %0, %2, %1\n"			\
--			RISCV_ACQUIRE_BARRIER				\
--			: "=r" (__ret), "+A" (*__ptr)			\
--			: "r" (__new)					\
--			: "memory");					\
--		break;							\
--	case 8:								\
--		__asm__ __volatile__ (					\
--			"	amoswap.d %0, %2, %1\n"			\
--			RISCV_ACQUIRE_BARRIER				\
--			: "=r" (__ret), "+A" (*__ptr)			\
--			: "r" (__new)					\
--			: "memory");					\
--		break;							\
--	default:							\
--		BUILD_BUG();						\
--	}								\
--	__ret;								\
--})
--
--#define arch_xchg_acquire(ptr, x)					\
--({									\
--	__typeof__(*(ptr)) _x_ = (x);					\
--	(__typeof__(*(ptr))) __xchg_acquire((ptr),			\
--					    _x_, sizeof(*(ptr)));	\
--})
--
--#define __xchg_release(ptr, new, size)					\
--({									\
--	__typeof__(ptr) __ptr = (ptr);					\
--	__typeof__(new) __new = (new);					\
--	__typeof__(*(ptr)) __ret;					\
--	switch (size) {							\
--	case 4:								\
--		__asm__ __volatile__ (					\
--			RISCV_RELEASE_BARRIER				\
--			"	amoswap.w %0, %2, %1\n"			\
--			: "=r" (__ret), "+A" (*__ptr)			\
--			: "r" (__new)					\
--			: "memory");					\
--		break;							\
--	case 8:								\
--		__asm__ __volatile__ (					\
--			RISCV_RELEASE_BARRIER				\
--			"	amoswap.d %0, %2, %1\n"			\
--			: "=r" (__ret), "+A" (*__ptr)			\
--			: "r" (__new)					\
--			: "memory");					\
--		break;							\
--	default:							\
--		BUILD_BUG();						\
--	}								\
--	__ret;								\
--})
--
--#define arch_xchg_release(ptr, x)					\
--({									\
--	__typeof__(*(ptr)) _x_ = (x);					\
--	(__typeof__(*(ptr))) __xchg_release((ptr),			\
--					    _x_, sizeof(*(ptr)));	\
--})
--
- #define __xchg(ptr, new, size)						\
- ({									\
- 	__typeof__(ptr) __ptr = (ptr);					\
-@@ -253,52 +183,6 @@
- 					_o_, _n_, sizeof(*(ptr)));	\
- })
- 
--#define __cmpxchg_release(ptr, old, new, size)				\
--({									\
--	__typeof__(ptr) __ptr = (ptr);					\
--	__typeof__(*(ptr)) __old = (old);				\
--	__typeof__(*(ptr)) __new = (new);				\
--	__typeof__(*(ptr)) __ret;					\
--	register unsigned int __rc;					\
--	switch (size) {							\
--	case 4:								\
--		__asm__ __volatile__ (					\
--			RISCV_RELEASE_BARRIER				\
--			"0:	lr.w %0, %2\n"				\
--			"	bne  %0, %z3, 1f\n"			\
--			"	sc.w %1, %z4, %2\n"			\
--			"	bnez %1, 0b\n"				\
--			"1:\n"						\
--			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
--			: "rJ" ((long)__old), "rJ" (__new)		\
--			: "memory");					\
--		break;							\
--	case 8:								\
--		__asm__ __volatile__ (					\
--			RISCV_RELEASE_BARRIER				\
--			"0:	lr.d %0, %2\n"				\
--			"	bne %0, %z3, 1f\n"			\
--			"	sc.d %1, %z4, %2\n"			\
--			"	bnez %1, 0b\n"				\
--			"1:\n"						\
--			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
--			: "rJ" (__old), "rJ" (__new)			\
--			: "memory");					\
--		break;							\
--	default:							\
--		BUILD_BUG();						\
--	}								\
--	__ret;								\
--})
--
--#define arch_cmpxchg_release(ptr, o, n)					\
--({									\
--	__typeof__(*(ptr)) _o_ = (o);					\
--	__typeof__(*(ptr)) _n_ = (n);					\
--	(__typeof__(*(ptr))) __cmpxchg_release((ptr),			\
--					_o_, _n_, sizeof(*(ptr)));	\
--})
--
- #define __cmpxchg(ptr, old, new, size)					\
- ({									\
- 	__typeof__(ptr) __ptr = (ptr);					\
--- 
-2.36.1
+> +	}
+> +out:
+> +	spin_unlock(ptl);
+> +	return page;
+>  }
+>  
+>  struct page * __weak
+> 
 

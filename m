@@ -2,119 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D931955AD97
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 01:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF2F55AD9B
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 01:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233576AbiFYXgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 19:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
+        id S233634AbiFYXlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 19:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbiFYXgQ (ORCPT
+        with ESMTP id S233365AbiFYXl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 19:36:16 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39E313D26
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:36:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656200161;
-        bh=XV2Ej1IiM47JIIlEx5yn8yUeRbuQU6JT9jLZlqkHh3g=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=JCr9yx3J7KJKDZ9jaSQrwjydI93pVGGsxYaOJHEMoDRW+nG5clVcqnhDfyKQMl7vh
-         6Nf3BoI8OKSgucckJmIVolhVMU+Fu/Q/FiFhA1GphDh9TVHnQZN9VGEiAdM51wwstP
-         l8AxiBcmA2KystUSpjuFxuL+LuP3bDkb7HUKzaRs=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.162.44]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MC34X-1nxIh208Cb-00CTSR; Sun, 26
- Jun 2022 01:36:01 +0200
-Message-ID: <4b60d5c1-cc56-aebd-955e-c1d5725bb646@gmx.de>
-Date:   Sun, 26 Jun 2022 01:35:32 +0200
+        Sat, 25 Jun 2022 19:41:29 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BFFF5BD
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:41:28 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:40444)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o5FP5-00H1OY-Is; Sat, 25 Jun 2022 17:41:27 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:57606 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o5FP4-00AUwT-FE; Sat, 25 Jun 2022 17:41:27 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>
+References: <20220622140853.31383-1-pmladek@suse.com>
+        <YraWWl+Go17uPOgR@mtj.duckdns.org>
+        <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
+        <874k0863x8.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=wgTG2K3erROP19320zBN6BHVf0hRfXGdawkGR4gzrJN6w@mail.gmail.com>
+        <CAHk-=whLsaRKaFKS0UffeCYYCVyP0bbiB4BTYTaXtScgu6R9yA@mail.gmail.com>
+        <87pmiw1fy6.fsf@email.froward.int.ebiederm.org>
+Date:   Sat, 25 Jun 2022 18:41:19 -0500
+In-Reply-To: <87pmiw1fy6.fsf@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Sat, 25 Jun 2022 18:28:01 -0500")
+Message-ID: <87a6a01fc0.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [linux-stable-rc:linux-5.15.y 6925/7971]
- drivers/video/console/sticore.c:1132:5: error: redefinition of
- 'fb_is_primary_device'
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <202206250202.k6n6Wsy4-lkp@intel.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <202206250202.k6n6Wsy4-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:rBZRZoTf2XnPrOxlXmMOQmMDxt7dR2VeqCndsfK1C3o6/rycDCR
- ERZ/f2O7eME9bc8FLkQf7mzXtf7QqFNnHei4BdTgOgHEVZ+DMUqhAskTVLXNlRSSXpLCxsc
- GC1XerKqDBYeSlXQ3MsWQJjysEnQo069S2lDOzV9qzUTgoU4J17xZ7tcDEB0Mc52f/DX5is
- pnFpMH7hZqIJMlYf1M+8A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JHJdve1h4kw=:OF+oOVybvj/8/6gOE8T1kC
- yQETybJbu3QscSP1l6jjyr16D0CRXGHK8BmaZTfufvUWK273UM6mf8rETYIBQ4qwsyWCTyJDt
- cnLicn8z9zPwP1+dhEfcjvZ7fQkGhc+5+wIU7z7EoQA3rrkNzQhISEwGKStS33PL39MxtV/hN
- WFwanl8XmLfLoMsriwDjL7GWoKbq9AgoAZ0bvKaV33N3MzNdkxV0EA0JICf7zzdPIF1jpT4+l
- 9OBhZxB7m7OAgxpTFWZsfvb27ndjWySFpLsN0LH15AopGhNhhGjUMj9etSHutaB8wP2sqJslQ
- Z/4uexDYm2yPFV8sZJ3PLW8eZfXeFrDhQd4P7OV2Sazaw2gf2wQOFx1z/AZdUPg+CsGA//2r+
- X3DXgWZLWb7Kme0BFeZS8Ly0/NecmO+oF/dtjrCbNaREtb8ru/G4N2nHLr8EM3WN+5zZvDFSt
- pnK6c4Lf4WzW1o2rr2ocWcLCL9nIF0egBFyDSxyeYrTxkNaB9AeHHCfpmWVYncWM83e6ny83q
- CfqKu0RZCgg1G1K2wGspo1VlQ6/hC4WDqiUHmDhXmehQz7ZfdQbVD+NLiTs96gbUd8j3ly12/
- LtM+RzfaGX7bRVgT8LR8r4/YxBcjtuIcg+BUG/8oS9ofzgX/uWs9vwQoMYBdiQqMIpSuAgNjH
- xMzwqianQYhYyj9SfgWVJ0vCZy+ZqiBjA11FYSRDB970hkHDmUj+yK0drRJL1LpOUUTr1B5Fq
- lRqinjJnpj6qB1MUoEnfsQztpplJQik5g8/N3bXpeBb15/unxS3J8x2galhUWmfGKjF8XCB4N
- gvAflc3O5ZSbTDzLWwJIEWlh5aLsyOrm4A0R7V2QRKJZ1t/O2G+9qStDij5o+zW5OBVM7NTTh
- w7hQaM6rhGU3vMPXRWDADUY3GOygrioqqSevnS7xDcpImrvSfTFK7ntqyl7RFcenz6H61pxA9
- EqgRB6KnaS+8WzBuF1AGlytdOP8i6XXXu7ITMJECUVqLkjXWX5mZKCJNtkP+PyMc/5FhqC9r2
- vhk1CIV5uoP2TVrovjCtIwskhryFXvNaGuNAJxz3dAQqjDt4kh5JMSP5zJkBcjbvPkWJ1SQ/+
- BtuIw0+ul/dSyQ7tyMZKtMfPQf9tBxuNQHocaXcS1b9AkVW4g9tuVNtzA==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1o5FP4-00AUwT-FE;;;mid=<87a6a01fc0.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19+nfYuM5QkUmmMWqKPyESId/ALYZsS/kc=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 512 ms - load_scoreonly_sql: 0.13 (0.0%),
+        signal_user_changed: 12 (2.3%), b_tie_ro: 10 (1.9%), parse: 1.00
+        (0.2%), extract_message_metadata: 16 (3.1%), get_uri_detail_list: 2.1
+        (0.4%), tests_pri_-1000: 25 (4.9%), tests_pri_-950: 1.26 (0.2%),
+        tests_pri_-900: 1.18 (0.2%), tests_pri_-90: 112 (22.0%), check_bayes:
+        111 (21.6%), b_tokenize: 9 (1.8%), b_tok_get_all: 9 (1.8%),
+        b_comp_prob: 3.3 (0.7%), b_tok_touch_all: 85 (16.5%), b_finish: 0.98
+        (0.2%), tests_pri_0: 329 (64.4%), check_dkim_signature: 0.76 (0.1%),
+        check_dkim_adsp: 2.9 (0.6%), poll_dns_idle: 1.04 (0.2%), tests_pri_10:
+        2.1 (0.4%), tests_pri_500: 9 (1.8%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: re. Spurious wakeup on a newly created kthread
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/25/22 04:58, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-sta=
-ble-rc.git linux-5.15.y
-> head:   add0aacf730e0bba8de6382b896a9a55b022cb59
-> commit: 8b8fe78cae1d09229f544f4129b8c87ca7a8f367 [6925/7971] parisc/stif=
-b: Implement fb_is_primary_device()
-> config: parisc-buildonly-randconfig-r006-20220624
-> compiler: hppa-linux-gcc (GCC) 11.3.0
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sb=
-in/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-s=
-table-rc.git/commit/?id=3D8b8fe78cae1d09229f544f4129b8c87ca7a8f367
->         git remote add linux-stable-rc https://git.kernel.org/pub/scm/li=
-nux/kernel/git/stable/linux-stable-rc.git
->         git fetch --no-tags linux-stable-rc linux-5.15.y
->         git checkout 8b8fe78cae1d09229f544f4129b8c87ca7a8f367
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.3.0 make.cr=
-oss W=3D1 O=3Dbuild_dir ARCH=3Dparisc SHELL=3D/bin/bash drivers/video/cons=
-ole/
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
->>> drivers/video/console/sticore.c:1132:5: error: redefinition of 'fb_is_=
-primary_device'
->     1132 | int fb_is_primary_device(struct fb_info *info)
->          |     ^~~~~~~~~~~~~~~~~~~~
->    In file included from drivers/video/console/sticore.c:33:
->    arch/parisc/include/asm/fb.h:18:19: note: previous definition of 'fb_=
-is_primary_device' with type 'int(struct fb_info *)'
->       18 | static inline int fb_is_primary_device(struct fb_info *info)
->          |                   ^~~~~~~~~~~~~~~~~~~~
->
+"Eric W. Biederman" <ebiederm@xmission.com> writes:
 
-I've queued up a fix for this in my for-next tree. It will reach v5.10+ at=
- some point...
+> Linus Torvalds <torvalds@linux-foundation.org> writes:
+>
+>> On Sat, Jun 25, 2022 at 11:25 AM Linus Torvalds
+>> <torvalds@linux-foundation.org> wrote:
+>>>
+>>> And that's not at all what the kthread code wants. It wants to set
+>>> affinity masks, it wants to create a name for the thread, it wants to
+>>> do all those other things.
+>>>
+>>> That code really wants to just do copy_process().
+>>
+>> Honestly, I think kernel/kthread.c should be almost rewritten from scratch.
+>>
+>> I do not understand why it does all those odd keventd games at all,
+>> and why kthread_create_info exists in the first place.
+>
+> I presume you mean kthreadd games?
+>
+>> Why does kthread_create() not just create the thread directly itself,
+>> and instead does that odd queue it onto a work function?
+>>
+>> Some of that goes back to before the git history, and very little of
+>> it seems to make any sense. It's as if the code is meant to be able to
+>> run from interrupt context, but that can't be it: it's literally doing
+>> a GFP_KERNEL kmalloc, it's doing spin-locks without irq safety etc.
+>>
+>> So why is it calling kthreadd_task() to create the thread? Purely for
+>> some crazy odd "make that the parent" reason?
+>>
+>> I dunno.  The code is odd, unexplained, looks buggy, and most fo the
+>> reasons are probably entirely historical.
+>
+> I can explain why kthreadd exists and why it creates the threads.
+>
+> Very long ago in the context of random userspace processes people would
+> use kernel_thread to create threads and a helper function that I think
+> was called something like kernel_daemonize to scrub the userspace bits
+> off.
+>
+> It was an unending sources of problems as the scrub was never complete
+> nor correct.
+>
+> So with the introduction of kthreadd the kernel threads were moved
+> out of the userspace process tree, and userspace stopped being able to
+> influence the kernel threads.
+>
+> AKA instead of doing the equivalent of a suid exec the code started
+> going the equivalent sshing into the local box.
+>
+> We *need* to preserve that kind of separation.
+>
+> I want to say that all that is required is that copy_process copies
+> from kthreadd.  Unfortunately that means that it needs to be kthreadd
+> doing the work, as copy_process does always copies from current.  It
+> would take quite a bit of work to untangle that mess.
+>
+> It does appear possible to write a parallel function to copy_process
+> that is used only for creating kernel threads, and can streamline itself
+> because it knows it is creating kernel threads.
+>
+> Short of that the code needs to keep routing through kthreadd.
+>
+> Using create_io_thread or a dedicated wrapper around copy_process
+> certainly looks like it could simplify some of kthread creation.
 
-Helge
+Hmm.  Looking at kthread() I completely agree that kernel_thread() has
+the wrong set of semantics and we really could benefit from never waking
+the fledgling kernel thread in the first place.
+
+Eric

@@ -2,141 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F1255AB4A
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 17:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B713A55AB52
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 17:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233090AbiFYPah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 11:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50910 "EHLO
+        id S233117AbiFYPe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 11:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233003AbiFYPae (ORCPT
+        with ESMTP id S233065AbiFYPez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 11:30:34 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2EB15820;
-        Sat, 25 Jun 2022 08:30:33 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id m184so2846396wme.1;
-        Sat, 25 Jun 2022 08:30:33 -0700 (PDT)
+        Sat, 25 Jun 2022 11:34:55 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B61DF48;
+        Sat, 25 Jun 2022 08:34:54 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id i8-20020a17090aee8800b001ecc929d14dso7500432pjz.0;
+        Sat, 25 Jun 2022 08:34:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=YJMG2xSKeKo8ovUlFDGAmK9lJxFqvsUKe5ouW/ZiPXQ=;
-        b=B/Q7k/xTLmPZGpnd9T3Ix0mxJZqrQuN2NZlEG30Lx3HgX+lQYSSglKik60CZdo6Njr
-         94Sc/afjuGNi9c6D7/rRPzDjLujW2tfKi1PpiLHUU77TPuEaaIILc5xm97CHBVgRQDNy
-         EXJZftk4H9rFOB2SWIWz33EUOdsrQslM5ZGoXttecLpEjR9SUQQefZ8ahJ8dGkbmwIpc
-         w0L26GE4tewY7HLZAjKK6p/mjKpl9kglC3JRa5G5tcNFFkzhytHNEDbbWFSNieUkgbxA
-         wMDzUbIg7gW6U8Wr0uZFZHZFBPKEPURc6ykWhymDfWhBrXAfd9JB3S1wyaSC9c4qEkwz
-         G5+Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FhikbhadDQ0rX9caD2bvCSuXqnUHt6OCEuRHo6pJkvA=;
+        b=fIXNCPCRvCTu0lOgEh4HFQea67b2Jj2R1K+2555bdlcq4Ka1gXG9Jm8ynFsm7+ilLW
+         XRUm8/pMJUAq9h1G2AjrCTsAKXczSJBlKoQRihOYSk60y4ipilOwcOA8R+cMf7+vXJby
+         seMiyL9Xb/Wg8TfMkmI57kc2/ViJ7ka2ySl8cC/oANRIJZQLR5RiUSA0/ugDJ1K9ZYaA
+         5MwLSOwOYR+RWZcTqro9aMki4SYkIbPMbBR0DUuiNtCSSKAbRGqXb4PhUcD32PIv7GWm
+         BAM8+keXZKnzHNhwR9RjXm5gM/sRYjnH1Lhm+MhKIuRUi5YfCbdvxQol7MVlvtO+xvPv
+         u+AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=YJMG2xSKeKo8ovUlFDGAmK9lJxFqvsUKe5ouW/ZiPXQ=;
-        b=KJhM9QWSZ/WShNa0eDp/gESLy+9U5GLJmtzIuf79O0yV/ktGK9lzMP4dj0mskpM7ST
-         kWEP9c7YoNUS2NKoaYgWIqaFcu1Y7FoogIXMPsaG/8pEoqGDAI28lDthnvbWk4XAU165
-         5tBCaoP2PPMjh5ReH/cGdNCze3MoOxq4/9gnUWRmvU2g7wh8LcmrD0GvaCRD71nyYPuy
-         G5E/Gh5m0ilM8+eGklfm8tnXhtQoWl6mypOkKYlAWMKWSp46BxMiQlXTLHz5l3GNyUYz
-         i7IgvbvD9T0CqR8OqaHK6HiGK24c9eCN5Hjurh8Rm9cRg2vB8bkDug5hp6brJn3abDUq
-         YlMw==
-X-Gm-Message-State: AJIora8RSwgMqJ70fUnyxAT5u6l4f2Ij5iCm8r3LCacpD8GZ4TNPnVIQ
-        2fDVpHfRGrPayupoUBjVRrY=
-X-Google-Smtp-Source: AGRyM1v6olA3B0DyG292O/IxgHf1HD8MEu4dCykW2mUaVUkX+Aig2YjSVTyITO5BwbFSzGFbUXi+Qg==
-X-Received: by 2002:a05:600c:58a:b0:39c:80ed:68be with SMTP id o10-20020a05600c058a00b0039c80ed68bemr5024339wmd.150.1656171032193;
-        Sat, 25 Jun 2022 08:30:32 -0700 (PDT)
-Received: from elementary ([94.73.36.128])
-        by smtp.gmail.com with ESMTPSA id l14-20020a05600c4f0e00b003942a244f40sm11217734wmq.25.2022.06.25.08.30.31
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FhikbhadDQ0rX9caD2bvCSuXqnUHt6OCEuRHo6pJkvA=;
+        b=ryolrr/4RqZ4BQHn1qdT+dtiGRJx57o1PtQu7luHZUYFTFWWAMwvex9OdqEWJkYsl6
+         gxG7NkywSmWBlgdwmEA1bNFIg8GbgP6pVpxToU8EKi4MNWha97qyV5QjiLbFAGrF+F6e
+         Za3Ix5G/kKqCloLAJQW8wKjRdA5gzS0jRWSFkdSKL16Apq8mJBgxkULzbIZb1Yx8eBiT
+         DGkMz9hKazMZqtoKk412d4UKgBIP8Gs/PtMU3IeezbYXVUcaMeWekO+H1gcBFIvgG7g/
+         Q55UqefZukfJIJNJal5qqtbcust6wInZz27XQXwxyLyn8FdrMnGcsk/D3P1U8Cm+1TEv
+         p82w==
+X-Gm-Message-State: AJIora+L1dxsNvJfg1kGeTeLjU7l18no8/7cUCaD53Y8mH+2prk69t6v
+        pt/FkkanWe96ZbYR2dQxF+wzNj05P6HriBvrNuI=
+X-Google-Smtp-Source: AGRyM1tavCXlDm4hg0O97qPWPbGoHwIuq/p+xNf5aGqhFOas5qGzsQOJBxgxITW53VJY1WumlbstGQ==
+X-Received: by 2002:a17:902:6946:b0:167:8ff3:1608 with SMTP id k6-20020a170902694600b001678ff31608mr5010136plt.116.1656171293921;
+        Sat, 25 Jun 2022 08:34:53 -0700 (PDT)
+Received: from computer.. ([111.43.251.41])
+        by smtp.gmail.com with ESMTPSA id e17-20020a170902d39100b0016a3db5d608sm3852904pld.289.2022.06.25.08.34.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 08:30:31 -0700 (PDT)
-Date:   Sat, 25 Jun 2022 17:30:30 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Stefan Berzl <stefanberzl@gmail.com>
-Cc:     Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
-        spbnick@gmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hid: Add support for the xp-pen deco mini7 tablet
-Message-ID: <20220625153030.GB4820@elementary>
-References: <85312611-797f-2dd2-f864-f7c13cb889f9@gmail.com>
- <nycvar.YFH.7.76.2206091058530.14340@cbobk.fhfr.pm>
- <c856a79c-1d42-6af5-0ff3-589688701fc0@gmail.com>
- <20220623175116.GA4757@elementary>
- <3f37e3fa-1b7d-1dbb-327c-69a4e96bdcdc@gmail.com>
+        Sat, 25 Jun 2022 08:34:53 -0700 (PDT)
+From:   Zixuan Tan <tanzixuangg@gmail.com>
+X-Google-Original-From: Zixuan Tan <tanzixuan.me@gmail.com>
+To:     terrelln@fb.com
+Cc:     Zixuan Tan <tanzixuan.me@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH] perf build: Suppress openssl v3 deprecation warnings in libcrypto feature test
+Date:   Sat, 25 Jun 2022 23:34:38 +0800
+Message-Id: <20220625153439.513559-1-tanzixuan.me@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3f37e3fa-1b7d-1dbb-327c-69a4e96bdcdc@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 12:24:09AM +0200, Stefan Berzl wrote:
-> On 23/06/2022 19:51, José Expósito wrote:
-> > At the moment, there are only HID descriptors for the frame and the pen
-> > so, if your tablet is creating a touch ring device, something is not
-> > working as expected.
-> > 
-> > Running "sudo libinput record" should display only the frame and the
-> > pen. Does it show something different in your case?
-> > 
-> > 	$ sudo libinput record
-> > 	[...]
-> > 	/dev/input/event21:	Hanvon Ugee Technology Co.,Ltd Deco L
-> > 	/dev/input/event22:	Hanvon Ugee Technology Co.,Ltd Deco L Pad
-> 
-> This is certainly true for the newer xppen devices we are working on. 
-> However, while waiting for the xppen stuff to gain support, I bought a
-> tablet  that's already supported, the Gaomon S620. Executing libinput 
-> record or any other command that lists the devices, like evemu-describe, 
-> gives:
-> 
-> /dev/input/event15: GAOMON Gaomon Tablet
-> /dev/input/event16: GAOMON Gaomon Tablet Pad
-> /dev/input/event17: GAOMON Gaomon Tablet Touch Strip
-> /dev/input/event18: GAOMON Gaomon Tablet Dial
+With OpenSSL v3 installed, the libcrypto feature check fails as it use the
+deprecated MD5_* API (and is compiled with -Werror). The error message is
+as follows.
 
-Ah OK, I though you were talking about the XP-PEN device. I don't know why
-those extra event nodes are created, sorry.
+$ make tools/perf
+```
+Makefile.config:778: No libcrypto.h found, disables jitted code injection,
+please install openssl-devel or libssl-dev
+
+Auto-detecting system features:
+...                         dwarf: [ on  ]
+...            dwarf_getlocations: [ on  ]
+...                         glibc: [ on  ]
+...                        libbfd: [ on  ]
+...                libbfd-buildid: [ on  ]
+...                        libcap: [ on  ]
+...                        libelf: [ on  ]
+...                       libnuma: [ on  ]
+...        numa_num_possible_cpus: [ on  ]
+...                       libperl: [ on  ]
+...                     libpython: [ on  ]
+...                     libcrypto: [ OFF ]
+...                     libunwind: [ on  ]
+...            libdw-dwarf-unwind: [ on  ]
+...                          zlib: [ on  ]
+...                          lzma: [ on  ]
+...                     get_cpuid: [ on  ]
+...                           bpf: [ on  ]
+...                        libaio: [ on  ]
+...                       libzstd: [ on  ]
+...        disassembler-four-args: [ on  ]
+```
+
+This is very confusing because the suggested library (on my Ubuntu 20.04
+it is libssl-dev) is already installed. As the test only checks for the
+presence of libcrypto, this commit suppresses the deprecation warning to
+allow the test to pass.
+
+Signed-off-by: Zixuan Tan <tanzixuan.me@gmail.com>
+---
+ tools/build/feature/test-libcrypto.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/build/feature/test-libcrypto.c b/tools/build/feature/test-libcrypto.c
+index a98174e0569c..31afff093d0b 100644
+--- a/tools/build/feature/test-libcrypto.c
++++ b/tools/build/feature/test-libcrypto.c
+@@ -2,6 +2,12 @@
+ #include <openssl/sha.h>
+ #include <openssl/md5.h>
  
-> >> There is however one caveat that seems to be unique to the mini7, which 
-> >> is the ack packet that is sent when switching to the vendor defined 
-> >> usage. It doesn't do much though, as currently it gets interpreted as a 
-> >> pen report and since it doesn't have useful values, causes the cursor to 
-> >> go to the top left screen position. Since the ack packet is only sent 
-> >> once, it ought to be of little consequence.
-> >>
-> >> I would of course fix this, but I don't really know what's the preferred 
-> >> way. One can obviously simply set up an urb to catch this, but it would 
-> >> have to be a special corner case for the mini 7, as José assures me that 
-> >> none of his tablets display similar behavior. Is this acceptable?
-> > 
-> > My tablets also send an ACK packet, but in my case it does not have any
-> > visible effects. Maybe it is related to the DE environment used. I
-> > tested it on elementary OS (Ubuntu) and Fedora 36, in both cases the
-> > ACK is ignored... But catching it is fine, we can include the code you
-> > suggest.
-> 
-> Can the contents maybe differ?
-> 
-> This is the ack the mini 7 gives me:
-> 02 b1 04 00 00 00 00 00 00 00 00 00
-> 
-> While this is a button:
-> 02 f0 00 00 00 00 00 00 00 00 00 00
-> 
-> And here we have pen movement:
-> 02 a1 59 23 ef 32 b8 0e 00 00 00 00
++/*
++ * The MD5_* API have been deprecated since OpenSSL 3.0, which causes the
++ * feature test to fail silently. This is a workaround.
++ */
++#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
++
+ int main(void)
+ {
+ 	MD5_CTX context;
+-- 
+2.34.1
 
-Yes, the contents are different. My ACK does not contain the last 2 bytes.
-As mentioned in my previous email, I think that because the ACK of your
-tablet matches the size of a pen report and starts with 02 it is handled as
-a pen report.
-
-Jose

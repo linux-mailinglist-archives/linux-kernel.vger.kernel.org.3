@@ -2,139 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF27655ABB2
+	by mail.lfdr.de (Postfix) with ESMTP id 97C7F55ABB1
 	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 19:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233223AbiFYRE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 13:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S233252AbiFYRFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 13:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiFYREz (ORCPT
+        with ESMTP id S233226AbiFYRFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 13:04:55 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC06414020;
-        Sat, 25 Jun 2022 10:04:54 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:41708)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o59DJ-008ljH-LL; Sat, 25 Jun 2022 11:04:53 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:57554 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o59DI-009wBm-Ke; Sat, 25 Jun 2022 11:04:53 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        linux-rt-users@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <jlelli@redhat.com>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vivek Goyal <vgoyal@redhat.com>
-References: <20220620111520.1039685-1-vschneid@redhat.com>
-Date:   Sat, 25 Jun 2022 12:04:46 -0500
-In-Reply-To: <20220620111520.1039685-1-vschneid@redhat.com> (Valentin
-        Schneider's message of "Mon, 20 Jun 2022 12:15:20 +0100")
-Message-ID: <87r13c7jyp.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sat, 25 Jun 2022 13:05:34 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0D415A1C;
+        Sat, 25 Jun 2022 10:05:33 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 93-20020a9d02e6000000b0060c252ee7a4so4210221otl.13;
+        Sat, 25 Jun 2022 10:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7H5SaYzv2eC4qn7QVIEB3Nk4jIz7zk3QKC77y/SmGCc=;
+        b=PFQA8zKEBn+igmT4Fu1/pNnWCTfpaSL8OvfqluOElWHkZih788+XHnlr6wVt0uh/N5
+         eCqSKeGUWbOL+WodDR5s34znFQOjK9V6P2CnHNAT3OuCN/Iytc5IJulpCe26mnrrmIsn
+         gdDZ4Jb2ALLyTMfbZkluEnF306BhT4RRg0o59x+tiGeuw57jmWM9LzuPZRc4WKbDivEI
+         WexCqhrp0MW7o3nq6/+9bV6lGPNUpWJxrJmpFq3qKeshDf8mU7+Pl0JjP2+6KqhNXqMD
+         fFrOQ460vEdd/ThPd4DKofCwCf+aWSt+dhZHqsnEM5wACgQ7SeBEMpgp/1CSqpeXpevt
+         09YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7H5SaYzv2eC4qn7QVIEB3Nk4jIz7zk3QKC77y/SmGCc=;
+        b=bCQJkYIM2N+kPeIhv7yWyxylZrqH8NjRLtcM4G3HiJmoUVNDit8gkusmjoK6M3E3O6
+         rAoCJcqp4ri90+jPwydAyuDQXvpF4aDtLgERpPIrmJQNBN29Gu4G/1pc4Mf7EtlcolBI
+         7oquucBD+UudCY7nEQ7qcKidKkhDvVAXBEl6GZutWIGehmHXCjoAZ7ozdzKwRkBo8DDn
+         i34/l8g1XtMqNYJiqjfFu6DwgNWU1Ham+vTACA7wo1Zeu5Qsvw4ZGxCW2hqLXgsTET/f
+         QECzo61nCmx6prZC5MEB8g5P3s2GZU+ZlExQI3lp3Tpd3wAtHY7BlR/oDtH0OGEhJ4/4
+         25+Q==
+X-Gm-Message-State: AJIora9nZwgea9y1/Q8wTAxdiGSscTkxJt4cQ5KkldpM82FGVDRCccsM
+        0VmXRnF72Q2zoj1OGy1VVtZaMWvJjx4RbGkYb+4=
+X-Google-Smtp-Source: AGRyM1s+2CDw35sNXG+k+BeeSLuZ2+XvjSvgnJF6bOiWrH4ZyiipT1Fu03c+Wg/bd1jGN/8UbDPnhfatuRXn62NpBmQ=
+X-Received: by 2002:a9d:4c85:0:b0:616:baf1:4307 with SMTP id
+ m5-20020a9d4c85000000b00616baf14307mr1729295otf.381.1656176732601; Sat, 25
+ Jun 2022 10:05:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1o59DI-009wBm-Ke;;;mid=<87r13c7jyp.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18w4luJIoAO0o2bnltbvBhRK+Y2TiFzlm0=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220606160943.663180-1-xiehuan09@gmail.com> <20220606160943.663180-4-xiehuan09@gmail.com>
+ <20220626010331.f2be529cfb52706d58bbdc2f@kernel.org>
+In-Reply-To: <20220626010331.f2be529cfb52706d58bbdc2f@kernel.org>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Sun, 26 Jun 2022 01:05:20 +0800
+Message-ID: <CAEr6+EB2_nfpZW00_4pDcvhqpO9abEPZNA5m8pU6DmNWPRKjEQ@mail.gmail.com>
+Subject: Re: [PATCH v12 3/4] trace/objtrace: Add testcases for objtrace
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Valentin Schneider <vschneid@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 463 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 12 (2.6%), b_tie_ro: 10 (2.2%), parse: 1.02
-        (0.2%), extract_message_metadata: 4.2 (0.9%), get_uri_detail_list:
-        1.79 (0.4%), tests_pri_-1000: 4.3 (0.9%), tests_pri_-950: 1.28 (0.3%),
-        tests_pri_-900: 1.09 (0.2%), tests_pri_-90: 73 (15.7%), check_bayes:
-        71 (15.4%), b_tokenize: 9 (1.9%), b_tok_get_all: 9 (2.0%),
-        b_comp_prob: 2.9 (0.6%), b_tok_touch_all: 46 (9.9%), b_finish: 1.14
-        (0.2%), tests_pri_0: 340 (73.4%), check_dkim_signature: 1.02 (0.2%),
-        check_dkim_adsp: 4.6 (1.0%), poll_dns_idle: 1.03 (0.2%), tests_pri_10:
-        2.3 (0.5%), tests_pri_500: 14 (3.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2] panic, kexec: Make __crash_kexec() NMI safe
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Valentin Schneider <vschneid@redhat.com> writes:
+Hi Masami,
 
-> Attempting to get a crash dump out of a debug PREEMPT_RT kernel via an NMI
-> panic() doesn't work. The cause of that lies in the PREEMPT_RT definition
-> of mutex_trylock():
+On Sun, Jun 26, 2022 at 12:03 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
 >
-> 	if (IS_ENABLED(CONFIG_DEBUG_RT_MUTEXES) && WARN_ON_ONCE(!in_task()))
-> 		return 0;
+> Hi,
 >
-> This prevents an NMI panic() from executing the main body of
-> __crash_kexec() which does the actual kexec into the kdump kernel.
-> The warning and return are explained by:
+> This looks good to me (and I tested).
 >
->   6ce47fd961fa ("rtmutex: Warn if trylock is called from hard/softirq context")
->   [...]
->   The reasons for this are:
+> Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 >
->       1) There is a potential deadlock in the slowpath
->
->       2) Another cpu which blocks on the rtmutex will boost the task
-> 	 which allegedly locked the rtmutex, but that cannot work
-> 	 because the hard/softirq context borrows the task context.
->
-> Furthermore, grabbing the lock isn't NMI safe, so do away with it and
-> use an atomic variable to serialize reads vs writes of
-> kexec_crash_image.
->
-> Tested by triggering NMI panics via:
->
->   $ echo 1 > /proc/sys/kernel/panic_on_unrecovered_nmi
->   $ echo 1 > /proc/sys/kernel/unknown_nmi_panic
->   $ echo 1 > /proc/sys/kernel/panic
->
->   $ ipmitool power diag
->
-> Fixes: 6ce47fd961fa ("rtmutex: Warn if trylock is called from hard/softirq context")
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> BTW, please use 'selftests/ftrace:' tag instead of (or in addition to)
+> 'trace/objtrace:' for the ftracetest patch. And please Cc to
+> linux-kselftest@vger.kernel.org and Shuah Khan.
 
-I am not particularly fond of this patch as it adds more complexity than
-is necessary to solve the problem.
+Thanks for the reminder, I will do it like this in my next version.
 
-Calling a spade a spade PREEMPT_RT's mutex_trylock implementation is
-broken as it can not support the use cases of an ordinary mutex_trylock.
-I have not seen (possibly I skimmed too quickly) anywhere in the
-discussion why PREEMPT_RT is not being fixed.  Looking at the code
-there is enough going on in try_to_take_rt_mutex that I can imagine
-that some part of that code is not nmi safe.  So I can believe
-PREEMPT_RT may be unfix-ably broken.
+> Thank you,
+>
+> On Tue,  7 Jun 2022 00:09:42 +0800
+> Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> > Add a series of testcases to illustrate correct and incorrect usage of
+> > objtrace trigger.
+> >
+> > Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
+> > ---
+> >  .../ftrace/test.d/trigger/trigger-objtrace.tc | 41 +++++++++++++++++++
+> >  1 file changed, 41 insertions(+)
+> >  create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
+> >
+> > diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
+> > new file mode 100644
+> > index 000000000000..d894442b6a30
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
+> > @@ -0,0 +1,41 @@
+> > +#!/bin/sh
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +# description: event trigger - test objtrace-trigger
+> > +# requires: kprobe_events "objtrace":README
+> > +
+> > +fail() { #msg
+> > +    echo $1
+> > +    exit_fail
+> > +}
+> > +
+> > +echo 'p bio_add_page arg1=$arg1 arg2=$arg2' > kprobe_events
+> > +
+> > +FEATURE=`grep objtrace events/kprobes/p_bio_add_page_0/trigger`
+> > +if [ -z "$FEATURE" ]; then
+> > +    echo "objtrace trigger is not supported"
+> > +    exit_unsupported
+> > +fi
+> > +
+> > +echo "Test objtrace trigger"
+> > +echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > \
+> > +     events/kprobes/p_bio_add_page_0/trigger
+> > +if [ -z $? ]; then
+> > +     fail "objtrace trigger syntax error"
+> > +fi
+> > +
+> > +echo "Test objtrace semantic errors"
+> > +
+> > +# Being lack of objtrace command
+> > +! echo 'objtrace:arg1,0x28:u32:1' > events/kprobes/p_bio_add_page_0/trigger
+> > +# Bad parameter name
+> > +! echo 'objtrace:add:argx:u32:1' > events/kprobes/p_bio_add_page_0/trigger
+> > +# The parameter existed on event
+> > +! echo 'objtrace:add:arg2:u32:1' > events/kprobes/p_bio_add_page_0/trigger
+> > +
+> > +echo "reset objtrace trigger"
+> > +
+> > +echo '!objtrace:add:arg1,0x28:u32' > \
+> > +     events/kprobes/p_bio_add_page_0/trigger
+> > +echo '-:p_bio_add_page_0' >> ./kprobe_events
+> > +
+> > +exit 0
+> > --
+> > 2.25.1
+> >
+>
+>
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-
-At this point I recommend going back to being ``unconventional'' with
-the kexec locking and effectively reverting commit 8c5a1cf0ad3a ("kexec:
-use a mutex for locking rather than xchg()").
-
-That would also mean that we don't have to worry about the lockdep code
-doing something weird in the future and breaking kexec.
-
-Your change starting to is atomic_cmpxchng is most halfway to a revert
-of commit 8c5a1cf0ad3a ("kexec: use a mutex for locking rather than
-xchg()").  So we might as well go the whole way and just document that
-the kexec on panic code can not use conventional kernel locking
-primitives and has to dig deep and build it's own.  At which point it
-makes no sense for the rest of the kexec code to use anything different.
-
-Eric
+Thanks,
+JeffXie

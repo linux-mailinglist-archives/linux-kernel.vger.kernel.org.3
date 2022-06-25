@@ -2,221 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045B655AB88
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB0255AB89
 	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 18:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbiFYQJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 12:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
+        id S233313AbiFYQKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 12:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233244AbiFYQJq (ORCPT
+        with ESMTP id S233173AbiFYQKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 12:09:46 -0400
+        Sat, 25 Jun 2022 12:10:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A133E11C13;
-        Sat, 25 Jun 2022 09:09:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEB614D2E;
+        Sat, 25 Jun 2022 09:10:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 638F8B80BFA;
-        Sat, 25 Jun 2022 16:09:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A36FC3411C;
-        Sat, 25 Jun 2022 16:09:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0AD2AB80139;
+        Sat, 25 Jun 2022 16:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD3AC3411C;
+        Sat, 25 Jun 2022 16:10:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656173383;
-        bh=zeQJlckF+GQVuKDzuLhjpGZA1Gm7C6kzkQw+hlgHt/8=;
+        s=k20201202; t=1656173410;
+        bh=QSWAyUdJzasHKF1Z9c5060hPLNcWPmd3x4OaL74W4HY=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WwTGWO7YdqG4nEqUw1EAmJ1/Luabn1ghQTVNWZAuLNakAcS2xWsvX//5xwWZ0OEKL
-         7+4Gw+LYqrdP6mRf0JLzm/Nypwt21YFIhnwxwQvT7tpS7WtoYzu29aM+4E8w/sNhNt
-         5Yq+ASIM6etEvPlQEqUZBwsW3hbrab2crzZ6z4RRG+wxIsx20Ft5qjxlONXkchpScW
-         Bb+icgXKiK56qy0K7yMwif2NmUPu+JtoMRNo/62grI6N2IHMXVBf1X5YQ9gjzM88cA
-         EKIMHLDPdSIGIkLI1cVhoEoR+deEyrjKzvvyYgCt+DLxRcZ7vq0NpcRnxz8zNXnT3H
-         w7PZqJfL102pg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1o58Ls-0035Sf-TC;
-        Sat, 25 Jun 2022 17:09:41 +0100
-Date:   Sat, 25 Jun 2022 17:09:46 +0100
-Message-ID: <87y1xkencl.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH v5 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller driver
-In-Reply-To: <CA+V-a8td93QOCC8cHLEPaba-hnX2gjydmKTbaCrF+zgH7hH8Jg@mail.gmail.com>
-References: <20220523174238.28942-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-        <20220523174238.28942-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-        <871qvdf5tb.wl-maz@kernel.org>
-        <CA+V-a8veE6-4C+9kyTNxqsf0jB5xCGhcHncTSM3ejDzBAfz=Bw@mail.gmail.com>
-        <87fsjt2bep.wl-maz@kernel.org>
-        <CA+V-a8td93QOCC8cHLEPaba-hnX2gjydmKTbaCrF+zgH7hH8Jg@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+        b=MPIF5FvG7m9c6/e3wnewrLU1ha4RtardAl1QUwVJUrAGCelDOO2XeOxmdvJKLf9gI
+         Q5sflhfn0uXwoIhhaxnoALf7a5Pct27xYqtWxTQT0AJ8TLDfyU7LtWrCVxzjJCTZG3
+         xszxQR91hOMUYOmfpfce7rscmQ59SxHI0Vt1rqcQuOcOLvUhai6++e6i4s5wDh+VH5
+         H6P5u+uc74ixbvi4ajD9Ywb74N9fcWXh9jStjYFDHxQBT5PMqPhZ3YSrjxB/x932op
+         Z5C+Q8ijvad9s2Ou+O8QjkKuiOi/1Je5ujHesnHko5VAHubhWajJft+S/lDV7yFCn2
+         1/uh6zFgE4vTQ==
+Date:   Sun, 26 Jun 2022 01:10:06 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     rostedt@goodmis.org, mingo@redhat.com, mhiramat@kernel.org,
+        zanussi@kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v12 4/4] trace/objtrace: Add documentation for objtrace
+Message-Id: <20220626011006.22572fbabcac5c8494e09f13@kernel.org>
+In-Reply-To: <20220606160943.663180-5-xiehuan09@gmail.com>
+References: <20220606160943.663180-1-xiehuan09@gmail.com>
+        <20220606160943.663180-5-xiehuan09@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: prabhakar.csengg@gmail.com, prabhakar.mahadev-lad.rj@bp.renesas.com, geert+renesas@glider.be, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com, jonathanh@nvidia.com, bjorn.andersson@linaro.org, agross@kernel.org, p.zabel@pengutronix.de, andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, phil.edworthy@renesas.com, biju.das.jz@bp.renesas.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Jun 2022 13:48:08 +0100,
-"Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
-> 
-> Hi Marc,
-> 
-> On Sat, Jun 25, 2022 at 1:08 PM Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > On Sat, 25 Jun 2022 11:54:44 +0100,
-> > "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
-> > >
-> > > Hi Marc,
-> > >
-> > > Thank you for the review.
-> > >
-> > > On Sat, Jun 25, 2022 at 10:30 AM Marc Zyngier <maz@kernel.org> wrote:
-> > > >
-> > > > On Mon, 23 May 2022 18:42:35 +0100,
-> > > > Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > > >
-> >
-> > [...]
-> >
-> > > > > +static int rzg2l_irqc_alloc(struct irq_domain *domain, unsigned int virq,
-> > > > > +                         unsigned int nr_irqs, void *arg)
-> > > > > +{
-> > > > > +     struct rzg2l_irqc_priv *priv = domain->host_data;
-> > > > > +     unsigned long *chip_data = NULL;
-> > > >
-> > > > Why the init to NULL?
-> > > >
-> > > Can be dropped.
-> > >
-> > > > > +     struct irq_fwspec spec;
-> > > > > +     irq_hw_number_t hwirq;
-> > > > > +     int tint = -EINVAL;
-> > > > > +     unsigned int type;
-> > > > > +     unsigned int i;
-> > > > > +     int ret;
-> > > > > +
-> > > > > +     ret = irq_domain_translate_twocell(domain, arg, &hwirq, &type);
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > > > +     /*
-> > > > > +      * For TINT interrupts ie where pinctrl driver is child of irqc domain
-> > > > > +      * the hwirq and TINT are encoded in fwspec->param[0].
-> > > > > +      * hwirq for TINT range from 9-40, hwirq is embedded 0-15 bits and TINT
-> > > > > +      * from 16-31 bits. TINT from the pinctrl driver needs to be programmed
-> > > > > +      * in IRQC registers to enable a given gpio pin as interrupt.
-> > > > > +      */
-> > > > > +     if (hwirq > IRQC_IRQ_COUNT) {
-> > > > > +             tint = TINT_EXTRACT_GPIOINT(hwirq);
-> > > > > +             hwirq = TINT_EXTRACT_HWIRQ(hwirq);
-> > > > > +
-> > > > > +             if (hwirq < IRQC_TINT_START)
-> > > > > +                     return -EINVAL;
-> > > > > +     }
-> > > > > +
-> > > > > +     if (hwirq > (IRQC_NUM_IRQ - 1))
-> > > > > +             return -EINVAL;
-> > > > > +
-> > > > > +     chip_data = kzalloc(sizeof(*chip_data), GFP_KERNEL);
-> > > >
-> > > > Are we really allocating an unsigned long for something that already
-> > > > fits in something that is pointer-sized?
-> > > >
-> > > I think I received some feedback to use unsigned long.  Let me know
-> > > what you want me to use here.
-> >
-> > I think this is just a waste of memory, but I don't really care.
-> >
-> Is there any better way I can handle it?
+Hi Jeff,
 
-How about (shock, horror) a cast?
+OK, this looks good to me.
 
-> 
-> > >
-> > > > > +     if (!chip_data)
-> > > > > +             return -ENOMEM;
-> > > > > +     *chip_data = tint;
-> > > >
-> > > > So here, *chip_data can be set to -EINVAL if hwirq <= IRQC_IRQ_COUNT?
-> > > > This can't be right.
-> > > >
-> > > Yes *chip_data can be -EINVAL. IRQC block handles IRQ0-7 and
-> > > GPIOINT0-122. So the -EINVAL here is for IRQ0-7 case were dont
-> > > required the chip data in the call backs hence -EINVAL, Whereas for
-> > > GPIOINT0-122 we need chip_data in the callbacks as this value needs to
-> > > be programmed in the hardware registers.
-> >
-> > I can't see anything that checks it (let alone the difference in
-> > types). And if it isn't checked, this means that the allocation is
-> > pointless.
-> >
-> There are checks for example below:
-> 
-> static void rzg2l_irqc_irq_enable(struct irq_data *d)
-> {
->     unsigned int hw_irq = irqd_to_hwirq(d);
-> 
->     if (hw_irq >= IRQC_TINT_START && hw_irq < IRQC_NUM_IRQ) {
->         struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
->         unsigned long chip_data = *(unsigned long *)d->chip_data;
->         u32 offset = hw_irq - IRQC_TINT_START;
->         u32 tssr_offset = TSSR_OFFSET(offset);
->         u8 tssr_index = TSSR_INDEX(offset);
->         u32 reg;
-> 
->         raw_spin_lock(&priv->lock);
->         reg = readl_relaxed(priv->base + TSSR(tssr_index));
->         reg |= (TIEN | chip_data) << TSSEL_SHIFT(tssr_offset);
->         writel_relaxed(reg, priv->base + TSSR(tssr_index));
->         raw_spin_unlock(&priv->lock);
->     }
->     irq_chip_enable_parent(d);
-> }
-> 
-> This check hw_irq >= IRQC_TINT_START && hw_irq < IRQC_NUM_IRQ here
-> would mean its GPIOINT0-122 and then the chip data will be used.
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-That doesn't check the content of chip_data if outside of this
-condition. Nonetheless, you allocate an unsigned long to store
--EINVAL. Not only this is a pointless allocation, but you use it to
-store something that you never retrieve the first place. Don't you see
-the problem?
+And just a note that please add 'Documentation:' tag to the title
+and Cc to linux-doc@vger.kernel.org and Jonathan Corbet too since
+this is a patch for the Documentation/*.
 
-	M.
+Thank you,
+
+On Tue,  7 Jun 2022 00:09:43 +0800
+Jeff Xie <xiehuan09@gmail.com> wrote:
+
+> Added documentation explaining how to use objtrace trigger to get the value
+> of the object.
+> 
+> Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
+> ---
+>  Documentation/trace/events.rst | 83 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+> 
+> diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
+> index c47f381d0c00..0dc475160133 100644
+> --- a/Documentation/trace/events.rst
+> +++ b/Documentation/trace/events.rst
+> @@ -546,6 +546,89 @@ The following commands are supported:
+>  
+>    See Documentation/trace/histogram.rst for details and examples.
+>  
+> +- objtrace
+> +
+> +  This command provides a way to get the value of any object, The object
+> +  can be obtained from the dynamic event(kprobe_event/uprobe_event) or the
+> +  static event(tracepoint).
+> +
+> +  Usage:
+> +  When using the kprobe event, only need to set the objtrace(a new trigger),
+> +  we can get the value of the object. The object is from the setting of the
+> +  kprobe event.
+> +
+> +  For example:
+> +  For the function bio_add_page():
+> +
+> +  int bio_add_page(struct bio *bio, struct page *page,
+> +	unsigned int len, unsigned int offset)
+> +
+> +  Firstly, we can set the base of the object, thus the first string "arg1"
+> +  stands for the value of the first parameter of this function bio_add_gage(),
+> +
+> +  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+> +
+> +  Secondly, we can get the value dynamically based on above object.
+> +
+> +  find the offset of the bi_size in struct bio:
+> +  $ gdb vmlinux
+> +  (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
+> +  $1 = (unsigned int *) 0x28
+> +
+> +  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
+> +	p_bio_add_page_0/trigger
+> +
+> +  # cd /sys/kernel/debug/tracing/
+> +  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+> +  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
+> +
+> +  # du -sh /test.txt
+> +  12.0K   /test.txt
+> +
+> +  # cat  /test.txt > /dev/null
+> +  # cat ./trace
+> +  # tracer: nop
+> +  #
+> +  # entries-in-buffer/entries-written: 128/128   #P:4
+> +  #
+> +  #                                _-----=> irqs-off/BH-disabled
+> +  #                               / _----=> need-resched
+> +  #                              | / _---=> hardirq/softirq
+> +  #                              || / _--=> preempt-depth
+> +  #                              ||| / _-=> migrate-disable
+> +  #                              |||| /     delay
+> +  #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> +  #              | |         |   |||||     |         |
+> +               cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+> +               cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+> +               cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
+> +               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+> +               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+> +               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
+> +               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
+> +               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
+> +               cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> +            <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +             ...
+> +
+>  7. In-kernel trace event API
+>  ============================
+>  
+> -- 
+> 2.25.1
+> 
+
 
 -- 
-Without deviation from the norm, progress is not possible.
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

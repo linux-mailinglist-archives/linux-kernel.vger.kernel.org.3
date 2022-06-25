@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB1455ABBF
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 19:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CAC55ABC3
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 19:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233305AbiFYR0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 13:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
+        id S233213AbiFYRgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 13:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231904AbiFYR0L (ORCPT
+        with ESMTP id S231904AbiFYRgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 13:26:11 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176D813CDC
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 10:26:09 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id s20-20020a056830439400b0060c3e43b548so4256363otv.7
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 10:26:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qdOBIdyq2W/XPrbuZUOS3HZJhZlnWjio9PK1s5ldH9w=;
-        b=hZQq/Xzg9/2t0QmYfD8eMd0ERp/kboN8Hrh/uFMKSsFkqUeGOdhQ+igDNE6eJdOmco
-         P9xNfHOUqyIESA/tO88I91Z32GnfGZtlejdUcw0AIu0arbKJNpXuK+FBaOwnkn5dyYB/
-         KZZ43SiuwyDICkH7ESSA/X+dsq84i4/h4zEdk=
+        Sat, 25 Jun 2022 13:36:16 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F8E13E82
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 10:36:15 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id p12-20020a056e02144c00b002d196a4d73eso3570652ilo.18
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 10:36:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qdOBIdyq2W/XPrbuZUOS3HZJhZlnWjio9PK1s5ldH9w=;
-        b=Y1ZP6SmlkpvvrPukhn/Q2aDQlzbUTCgdQirJi6ahawkjRBcgVDRyqmmZssyVLYmBtk
-         Z7MYbVATlM6euuNpOwz1sbrlba9WJ995MFzxYkVD+HL1aVG7URs/tHClq3LYnihYm3hl
-         YkgCMjDyQIbUCo8VYW+sfdswOd/zrCx9EiI42D8Gn3VE1F/hsPkCNQJxhtRZ+vbGYgnM
-         gElpI+5DUkukPFvBqVAEz2BvJSit3mJC1Yr/37AYoVOswDLUeB2KEhov8UYF8J+hhmqb
-         smv7twVHM0UJ7SLbGjwX9Zv2OgRWrbTi4uZvMT6lZcAt9vbAywt77KCGh9vg8FMpDsud
-         uYYw==
-X-Gm-Message-State: AJIora9kqmKzNjzeZH7R/Aut1QG2+0rGyDi4Hq/l0NZl2yj5Kciow3yU
-        v3IIzX5lyQDyupQWShVruzUQCjSMLNWrcU5b5SUJ8w==
-X-Google-Smtp-Source: AGRyM1v90/YxbmcOktrcWS9DxeWQq808SQa98paCZc/w/xSNEY7prmP71nEBVIMEduTLyuJ+K7GzD2U7EYl6DmFCMRo=
-X-Received: by 2002:a9d:178:0:b0:616:a150:dbae with SMTP id
- 111-20020a9d0178000000b00616a150dbaemr2407570otu.321.1656177968486; Sat, 25
- Jun 2022 10:26:08 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=eIfDnU1wcUJrSBEaf37xz6SytaNvtLOO27LtM0eI0Gs=;
+        b=byDX086q+wHSexzVNphiRsN8W9EyUoPdny+bvBTeqHJmHGWeoSXOj+Tv3C2rfeoMLZ
+         qSDa4Zn9ApApeBBdxLcNnitDk33Xu6lq0nBF6JyUWn8ohEf/1vhR0jtDu/VJaxuH3j+V
+         RDLurUVq4rAeNzAzW/kgNzz2yWXSV5IfpaJGoU5nGbb+arQoR/xRXEk6CdWqf1yrULcR
+         4wZfwyyqT4Pi6dI+PAtJWqgF/n40LDqmo7n2M65fEWU/xqUFo26Fhi9CJqYksNAHXZ04
+         7tRTMPqECkxa8C0rWHRldCJ+uoAY2QvMCyX6mm9HlmWFNgR9PQ7emYc8ZRDjsj6hfKWA
+         7hxg==
+X-Gm-Message-State: AJIora9dYfZh7pIIOU2WrKu4/qJkr00Hw1A06p+r1lW9Og/ovkgxt+Oq
+        EkUCralYk1uJdD51yIVytFB4WFi910Bkrbpw4xbclmz70wmN
+X-Google-Smtp-Source: AGRyM1udwQL0V8PZ11Qo/u3lqs2CTyzF5RqHEo+jbRAx1S9MRnSO24DLB+i8Wp0nZ4Rx9OHKkykykv0Ech5RP/SYT0J7PtJfyWHf
 MIME-Version: 1.0
-References: <85a6nq45uh.fsf@linux.intel.com> <20220620094907.4101274-1-maciej.kwapulinski@linux.intel.com>
-In-Reply-To: <20220620094907.4101274-1-maciej.kwapulinski@linux.intel.com>
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Sat, 25 Jun 2022 19:25:57 +0200
-Message-ID: <CAKMK7uFvU3fvx4D2UGdJypc=GGq42zM_9HKgXUM2cu0zPk-WOQ@mail.gmail.com>
-Subject: Re: [PATCH v3 00/14] Driver of Intel(R) Gaussian & Neural Accelerator
-To:     maciej.kwapulinski@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, andy.shevchenko@gmail.com,
-        arnd@arndb.de, corbet@lwn.net, derek.kiernan@xilinx.com,
-        dragan.cvetic@xilinx.com, guy.zadicario@intel.com,
-        linus.walleij@linaro.org, olof@lixom.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
+X-Received: by 2002:a05:6e02:17c7:b0:2d9:4170:9e80 with SMTP id
+ z7-20020a056e0217c700b002d941709e80mr2600547ilu.26.1656178574903; Sat, 25 Jun
+ 2022 10:36:14 -0700 (PDT)
+Date:   Sat, 25 Jun 2022 10:36:14 -0700
+In-Reply-To: <0000000000003189f305e19f5d3e@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a4531805e2491f77@google.com>
+Subject: Re: [syzbot] KASAN: null-ptr-deref Read in hugepage_vma_check
+From:   syzbot <syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, shy828301@gmail.com,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org,
+        zokeefe@google.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,34 +57,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022 at 11:51, <maciej.kwapulinski@linux.intel.com> wrote:
-> On Wed, 16 Jun 2021 09:38:14 +0200, Maciej Kwapulinski wrote:
-> > after consulting, we will try to share api and some kernel code
-> > between the two drivers.
->
-> We prepared a prototype work based on Daniel Vetter=E2=80=99s invitation =
-to
-> evaluate DRM framework as prospective fit.
->
-> Early results look quite promising. Effective leverage of DRM framework f=
-or
-> non GPU driver has been achieved. GNA driver source code turned out to ha=
-ve
-> been simplified by offloading some areas (device management + memory
-> regions management).
->
-> As a result, GNA driver source code size has been reduced by 15% (420
-> lines). DRM Framework complexity has not been an issue so far.
+syzbot has bisected this issue to:
 
-Nice.
+commit 0a44ebaaa3f3ecfacd2744467957882eabd92cec
+Author: Yang Shi <shy828301@gmail.com>
+Date:   Thu Jun 16 17:48:37 2022 +0000
 
-> Plan for next step is to publish code to dri-devel ML.
-> Please share your thoughts.
+    mm: thp: kill transparent_hugepage_active()
 
-Sounds like solid progress and looking forward for some patches!
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=166ba760080000
+start commit:   34d1d36073ea Add linux-next specific files for 20220621
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=156ba760080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=116ba760080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b24b62d1c051cfc8
+dashboard link: https://syzkaller.appspot.com/bug?extid=4d875b4d2e2b60bae9b4
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14097a3ff00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1466c63ff00000
 
-Cheers, Daniel
---=20
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Reported-by: syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com
+Fixes: 0a44ebaaa3f3 ("mm: thp: kill transparent_hugepage_active()")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

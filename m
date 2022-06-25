@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F283455AD37
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 00:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7306255AD38
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 00:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233673AbiFYWza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 18:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
+        id S233679AbiFYWzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 18:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233631AbiFYWzU (ORCPT
+        with ESMTP id S233650AbiFYWz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 18:55:20 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E1A13F44;
-        Sat, 25 Jun 2022 15:55:19 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id p3-20020a17090a428300b001ec865eb4a2so8926766pjg.3;
-        Sat, 25 Jun 2022 15:55:19 -0700 (PDT)
+        Sat, 25 Jun 2022 18:55:26 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D8E13F4E;
+        Sat, 25 Jun 2022 15:55:21 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 23so5659169pgc.8;
+        Sat, 25 Jun 2022 15:55:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4TbOfcqFkaHon89dsPDId7NNakdXJT5mDYYEM5ZbQu4=;
-        b=OtlXdIyCatO6hpkm68NAcRAAkLob4BqDXO2VG+gqvKveiJRLF2weU9Qlo345JB2koH
-         wZ754wNLdLlnBld88Ud+MZ09X6ILvBBDS6Tsvit2AhF0ymXs8h71ayrHvaAsBlDpuyxd
-         1uALrZclRfRKV0ECe/WesAG+7HK+zetifiDB02KTm7DRrAqsTf6f9suPqaLg4ctCuGLR
-         vgm4s+RHGq/H6kKrvZzt5XOvilqUBmqRrVY/NqbsNtLoJEYtlr6YQ5LRpvxQ/QiFgSar
-         7VTfiVhE4g9dxb7GagTDT1HynHPx6oOEbJq6qyw6zn6EhtmcdZZBPenkwew3YwffhVCW
-         9GdA==
+        bh=UVam+OtTXmVRJOOFcNCglGVq9lRc/LFnzlVeuJ/h90Y=;
+        b=IAhdRKg3wq32mnlusa8itT5j46bSw9XZvICjmv6qzqx3ihb0k18YtsvJ9pv5AnYsiE
+         upVCMq8I+5PAKNimjSpuQ6XPiQG3N9qa7mAeRGB9s7CwnE3DoviY27XD5sqvfDHZ4Nkf
+         zVMujpzshIWAFBlYTYrFc9q56eHrdNx45XKwEh/ahh+bZvVdIDIbjcHuDy2peQvuPlif
+         Z5m9OrjQ0btB+MMpt1MCjnqtxlrKg6Xnw+MoZkJgW49rmB3n1jaG9fmilTU3knT+roFv
+         Vn4uBH52BfUb9YXg56XqC+dchDK57hQ/d/+q43gaAktx4gHxTdxhpQtHoodt0X0TM+ZC
+         cZwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4TbOfcqFkaHon89dsPDId7NNakdXJT5mDYYEM5ZbQu4=;
-        b=lGXQiAJwLRoWX/MfIfLCOF6TK4V1ZsNVLkL46Ar3HtlwHbXnZ9ISuKYCLmNwe3M58u
-         eDUXeVHxaKjMHW2ywTDQK3Vl7RLmCLfj789w8CYpx+uBKyW5ALYxPlph0/AN2aLsVUyg
-         6BGBkhkAdk+SfgaQLoOrmXIZjM5ThO6J3C1hHrJzfQk9FZNMW3uH7HbVtSpSEM5/eNry
-         h+dnJHZL4casosGr+mTVV0nYfXSKDY+6Ib41pmKnzxMjfUce0x+Cq0d1pglGUJFLpVh/
-         ixiLrLpA0dlF2deXqMt8uFcwMGqOXQwFbu/jMVQ/szkMoFVU28Q4D+KRoHGNzdroEQdQ
-         nJYQ==
-X-Gm-Message-State: AJIora+6dctcLkSLyOhVd6m/QiF7693cha5a4pXxXm8MMfdeUolHlgQ8
-        bB1PkF4fG4i64m32ZymXS3B7uz257Gc=
-X-Google-Smtp-Source: AGRyM1uf6rORMtCQCRHJkiXjJZLzVLkeznHqyt6UGg+Lo81Wba1/QNXRY5pAiUWaRrQRJzFSghWYFQ==
-X-Received: by 2002:a17:902:7582:b0:16a:307a:5965 with SMTP id j2-20020a170902758200b0016a307a5965mr6356726pll.159.1656197719209;
-        Sat, 25 Jun 2022 15:55:19 -0700 (PDT)
+        bh=UVam+OtTXmVRJOOFcNCglGVq9lRc/LFnzlVeuJ/h90Y=;
+        b=YoKduwH0Xeowvr1ZHoLPmXYvkmBj8de+I5A8evqnLiG2mYcH8kqijdWztgumcggU4k
+         wN1Y4sCljioxFQhoWbCR86EvHdKMy5K1rgBhJ4WswK6u/vOyH8a9dlR9T3P7COBeNoDC
+         rLH8GI9Pa7DWbB1VboybdbOea7CS0QvKjobwFBZ7WCHlGNNXOW6SX71nKLDTlKzzzSlI
+         dPuuU21ecL2Up9QOVx+dD7TcoG26tQlStoV7ke5KzxpgqbNTivAHj/YN9k+K5wdBIaK8
+         42UFSMp2GzUwin6CKkdiUKLscjegj7/dIGZojT37e2qN1iClOeB6F2rcnxyt1zd6AhCR
+         tRBg==
+X-Gm-Message-State: AJIora+v1Ti8foT3Hc+bj751C31KW6ewGVJJnnQ/C3aNFvXJXgybyq85
+        ytncQbpOdt9H45hLZsNiNV4=
+X-Google-Smtp-Source: AGRyM1vJfS4+n8zLuln5hMJjECb+kROUTmxBGlhggzcyYs1vAP2R+nd5a1cbQBRWp0l+C057exRgnQ==
+X-Received: by 2002:a05:6a00:234f:b0:525:1f7c:f2bf with SMTP id j15-20020a056a00234f00b005251f7cf2bfmr6603024pfj.14.1656197721362;
+        Sat, 25 Jun 2022 15:55:21 -0700 (PDT)
 Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
-        by smtp.gmail.com with ESMTPSA id bh2-20020a056a02020200b0040d2aea1643sm3962619pgb.29.2022.06.25.15.55.17
+        by smtp.gmail.com with ESMTPSA id n24-20020a170902969800b0016a034ae481sm4197148plp.176.2022.06.25.15.55.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 15:55:18 -0700 (PDT)
+        Sat, 25 Jun 2022 15:55:20 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
@@ -58,9 +58,9 @@ Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 08/15] drm/msm/gem: Rename to pin/unpin_pages
-Date:   Sat, 25 Jun 2022 15:54:43 -0700
-Message-Id: <20220625225454.81039-9-robdclark@gmail.com>
+Subject: [PATCH 09/15] drm/msm/gem: Consolidate pin/unpin paths
+Date:   Sat, 25 Jun 2022 15:54:44 -0700
+Message-Id: <20220625225454.81039-10-robdclark@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220625225454.81039-1-robdclark@gmail.com>
 References: <20220625225454.81039-1-robdclark@gmail.com>
@@ -78,98 +78,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Since that is what these fxns actually do.. they are getting *pinned*
-pages (as opposed to cases where we need pages, but don't need them
-pinned, like CPU mappings).
+Avoid having multiple spots where we increment/decrement pin_count (and
+associated LRU updating)
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/gpu/drm/msm/msm_gem.c       | 18 +++++++++++++-----
- drivers/gpu/drm/msm/msm_gem.h       |  4 ++--
- drivers/gpu/drm/msm/msm_gem_prime.c |  4 ++--
- 3 files changed, 17 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/msm/msm_gem.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-index 97467364dc0a..3da64c7f65a2 100644
+index 3da64c7f65a2..407b18a24dc4 100644
 --- a/drivers/gpu/drm/msm/msm_gem.c
 +++ b/drivers/gpu/drm/msm/msm_gem.c
-@@ -177,30 +177,38 @@ static void put_pages(struct drm_gem_object *obj)
- 	}
- }
- 
--struct page **msm_gem_get_pages(struct drm_gem_object *obj)
-+static struct page **msm_gem_pin_pages_locked(struct drm_gem_object *obj)
- {
- 	struct msm_gem_object *msm_obj = to_msm_bo(obj);
- 	struct page **p;
- 
--	msm_gem_lock(obj);
-+	GEM_WARN_ON(!msm_gem_is_locked(obj));
- 
- 	if (GEM_WARN_ON(msm_obj->madv != MSM_MADV_WILLNEED)) {
--		msm_gem_unlock(obj);
- 		return ERR_PTR(-EBUSY);
- 	}
+@@ -190,7 +190,7 @@ static struct page **msm_gem_pin_pages_locked(struct drm_gem_object *obj)
  
  	p = get_pages(obj);
--
  	if (!IS_ERR(p)) {
- 		msm_obj->pin_count++;
+-		msm_obj->pin_count++;
++		to_msm_bo(obj)->pin_count++;
  		update_lru(obj);
  	}
  
-+	return p;
-+}
-+
-+struct page **msm_gem_pin_pages(struct drm_gem_object *obj)
-+{
-+	struct page **p;
-+
-+	msm_gem_lock(obj);
-+	p = msm_gem_pin_pages_locked(obj);
- 	msm_gem_unlock(obj);
-+
- 	return p;
- }
- 
--void msm_gem_put_pages(struct drm_gem_object *obj)
-+void msm_gem_unpin_pages(struct drm_gem_object *obj)
- {
+@@ -213,9 +213,7 @@ void msm_gem_unpin_pages(struct drm_gem_object *obj)
  	struct msm_gem_object *msm_obj = to_msm_bo(obj);
  
-diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
-index 0ab0dc4f8c25..6fe521ccda45 100644
---- a/drivers/gpu/drm/msm/msm_gem.h
-+++ b/drivers/gpu/drm/msm/msm_gem.h
-@@ -159,8 +159,8 @@ int msm_gem_get_and_pin_iova(struct drm_gem_object *obj,
- 		struct msm_gem_address_space *aspace, uint64_t *iova);
- void msm_gem_unpin_iova(struct drm_gem_object *obj,
- 		struct msm_gem_address_space *aspace);
--struct page **msm_gem_get_pages(struct drm_gem_object *obj);
--void msm_gem_put_pages(struct drm_gem_object *obj);
-+struct page **msm_gem_pin_pages(struct drm_gem_object *obj);
-+void msm_gem_unpin_pages(struct drm_gem_object *obj);
- int msm_gem_dumb_create(struct drm_file *file, struct drm_device *dev,
- 		struct drm_mode_create_dumb *args);
- int msm_gem_dumb_map_offset(struct drm_file *file, struct drm_device *dev,
-diff --git a/drivers/gpu/drm/msm/msm_gem_prime.c b/drivers/gpu/drm/msm/msm_gem_prime.c
-index dcc8a573bc76..c1d91863df05 100644
---- a/drivers/gpu/drm/msm/msm_gem_prime.c
-+++ b/drivers/gpu/drm/msm/msm_gem_prime.c
-@@ -63,12 +63,12 @@ struct drm_gem_object *msm_gem_prime_import_sg_table(struct drm_device *dev,
- int msm_gem_prime_pin(struct drm_gem_object *obj)
- {
- 	if (!obj->import_attach)
--		msm_gem_get_pages(obj);
-+		msm_gem_pin_pages(obj);
- 	return 0;
+ 	msm_gem_lock(obj);
+-	msm_obj->pin_count--;
+-	GEM_WARN_ON(msm_obj->pin_count < 0);
+-	update_lru(obj);
++	msm_gem_unpin_locked(obj);
+ 	msm_gem_unlock(obj);
  }
  
- void msm_gem_prime_unpin(struct drm_gem_object *obj)
- {
- 	if (!obj->import_attach)
--		msm_gem_put_pages(obj);
-+		msm_gem_unpin_pages(obj);
+@@ -436,14 +434,13 @@ int msm_gem_pin_vma_locked(struct drm_gem_object *obj, struct msm_gem_vma *vma)
+ 	if (GEM_WARN_ON(msm_obj->madv != MSM_MADV_WILLNEED))
+ 		return -EBUSY;
+ 
+-	pages = get_pages(obj);
++	pages = msm_gem_pin_pages_locked(obj);
+ 	if (IS_ERR(pages))
+ 		return PTR_ERR(pages);
+ 
+ 	ret = msm_gem_map_vma(vma->aspace, vma, prot, msm_obj->sgt, obj->size);
+-
+-	if (!ret)
+-		msm_obj->pin_count++;
++	if (ret)
++		msm_gem_unpin_locked(obj);
+ 
+ 	return ret;
  }
 -- 
 2.36.1

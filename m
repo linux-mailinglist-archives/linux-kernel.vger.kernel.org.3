@@ -2,79 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA6855A65D
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 05:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0BE55A66B
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 05:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232430AbiFYDBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 23:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
+        id S232403AbiFYDA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 23:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232267AbiFYDAG (ORCPT
+        with ESMTP id S232207AbiFYDAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 23:00:06 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71BE69999
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 19:59:53 -0700 (PDT)
+        Fri, 24 Jun 2022 23:00:05 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215C16926F;
+        Fri, 24 Jun 2022 19:59:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656125993; x=1687661993;
+  t=1656125991; x=1687661991;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=T3fjH6VoSy8CrZwf4Hs0EkM8UTerVewNz91w2zlP2WA=;
-  b=jsmi+36FDKBOzvu3oVCoOuIsinek62dTVhotarLV20kEe4l/u/zBLf0c
-   5nFZzdSf2Uft8RzWeP75dHZDTz6wk3LWcYgi7111A/BYEiOX8vcuEzU7P
-   95A/jWNF9IW/j3Kz2otIWJTPrlX0tFmuSd+YvPH68BuHROrS5E1C//S8A
-   RkuBph2ULCXGm6uIrGbWF3XeW9dMicIjrZUc3PZT6HDC055KtRwB0BoZs
-   bnpuP5qlbtJYEB/FZpE0XOo2McVB3CjNeTU7jMnPVrdbMYUH54VxOvTKQ
-   8ZZobMgSaE8FMlDstmxnGebpMlcw6r5AmGzYKdDra8EnBJtK5C0dNyT2F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="264182986"
+  bh=iiIJzZuJRIMAUCeKFrXN8tfT+S6LeyZITD0X3eDmUqY=;
+  b=mbcIogsoBfLNhK52Gf7i8UgJpLPx8oxFZvcLz+3T1PcQs2mjlPmwoEXa
+   FcNtBjjHAdKwmjQzBhuQslyCuzEy21IyGse9URltA+BZGvtaOEQyw0uet
+   3hT7vyOroTDnlmmaDvLIoowu6ytsFEXMexlxo+ZMhjlkmm90Oj7XVg4gr
+   EJeGaRbt5GVvd2OoVTs82GFg63bYQIyNkS2ikD50KkJLemNxuLu8momn1
+   XPXMS70+pTf5zvKeO0EmZh/3Sfd7PsWK7FHNqpIMw4DGtkDp+9suc8+qU
+   tbbYOvbyNKzYZ7D0f6+CKYpON2Qv7CvwHc9GiKmLKmUCPMGKccBOLSkii
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="282227864"
 X-IronPort-AV: E=Sophos;i="5.92,221,1650956400"; 
-   d="scan'208";a="264182986"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 19:59:52 -0700
+   d="scan'208";a="282227864"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 19:59:50 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,221,1650956400"; 
-   d="scan'208";a="731555625"
+   d="scan'208";a="539484703"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jun 2022 19:59:47 -0700
+  by orsmga003.jf.intel.com with ESMTP; 24 Jun 2022 19:59:47 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o4w1S-0005FQ-Cc;
+        id 1o4w1S-0005Fa-Fu;
         Sat, 25 Jun 2022 02:59:46 +0000
-Date:   Sat, 25 Jun 2022 10:59:42 +0800
+Date:   Sat, 25 Jun 2022 10:59:43 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        broonie@kernel.org, alsa-devel@alsa-project.org
-Cc:     kbuild-all@lists.01.org, Sunil-kumar.Dommati@amd.com,
-        open list <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        venkataprasad.potturu@amd.com, Meng Tang <tangmeng@uniontech.com>,
-        Basavaraj.Hiregoudar@amd.com, Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        Vijendar.Mukunda@amd.com,
-        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Dan Carpenter <error27@gmail.com>,
-        Syed Saba kareem <ssabakar@amd.com>
-Subject: Re: [PATCH 3/3] ASoC: amd: acp: Add legacy audio driver support for
- Rembrandt platform
-Message-ID: <202206250650.DKkqPR4A-lkp@intel.com>
-References: <20220624194821.287462-4-Vsujithkumar.Reddy@amd.com>
+To:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     kbuild-all@lists.01.org, Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maximilian Luz <luzmaximilian@gmail.com>
+Subject: Re: [PATCH 2/4] platform/surface: Add KIP/POS tablet-mode switch
+ driver
+Message-ID: <202206250711.yKiwV8qa-lkp@intel.com>
+References: <20220624183642.910893-3-luzmaximilian@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="Tl7ePdysymU/YpCh"
+Content-Type: multipart/mixed; boundary="ThKjm7kWel0cFzMO"
 Content-Disposition: inline
-In-Reply-To: <20220624194821.287462-4-Vsujithkumar.Reddy@amd.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UPPERCASE_75_100 autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220624183642.910893-3-luzmaximilian@gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,UPPERCASE_75_100
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,107 +68,217 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---Tl7ePdysymU/YpCh
+--ThKjm7kWel0cFzMO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi sujith,
+Hi Maximilian,
 
-Thank you for the patch! Perhaps something to improve:
+I love your patch! Yet something to improve:
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on next-20220624]
-[cannot apply to linus/master v5.19-rc3]
+[auto build test ERROR on next-20220624]
+[cannot apply to linus/master platform-drivers-x86/for-next v5.19-rc3 v5.19-rc2 v5.19-rc1 v5.19-rc3]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/V-sujith-kumar-Reddy/ADD-legacy-audio-driver-support-for-rembrandt/20220625-035009
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+url:    https://github.com/intel-lab-lkp/linux/commits/Maximilian-Luz/platform-surface-Add-support-for-tablet-mode-switch-via-Surface-Aggregator-Module/20220625-023751
+base:    2f9cb3d3bd73fc2225d66aa8fcffb632ed3eb235
 config: i386-allyesconfig
 compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
 reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/32f53f63fb2ba0bbf7e8e145879a7340f28ebfbd
+        # https://github.com/intel-lab-lkp/linux/commit/190ffdd2194f4c5a5110d6a08f303c47e2da31ba
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review V-sujith-kumar-Reddy/ADD-legacy-audio-driver-support-for-rembrandt/20220625-035009
-        git checkout 32f53f63fb2ba0bbf7e8e145879a7340f28ebfbd
+        git fetch --no-tags linux-review Maximilian-Luz/platform-surface-Add-support-for-tablet-mode-switch-via-Surface-Aggregator-Module/20220625-023751
+        git checkout 190ffdd2194f4c5a5110d6a08f303c47e2da31ba
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/amd/acp/
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> sound/soc/amd/acp/acp-rembrandt.c:264:5: warning: no previous prototype for 'rmb_acp_init' [-Wmissing-prototypes]
-     264 | int rmb_acp_init(void __iomem *base)
-         |     ^~~~~~~~~~~~
->> sound/soc/amd/acp/acp-rembrandt.c:286:5: warning: no previous prototype for 'rmb_acp_deinit' [-Wmissing-prototypes]
-     286 | int rmb_acp_deinit(void __iomem *base)
-         |     ^~~~~~~~~~~~~~
+   drivers/platform/surface/surface_aggregator_tabletsw.c: In function 'ssam_pos_get_sources_list':
+>> drivers/platform/surface/surface_aggregator_tabletsw.c:373:32: error: 'SSAM_SSH_TC_POS' undeclared (first use in this function); did you mean 'SSAM_SSH_TC_PoM'?
+     373 |         rqst.target_category = SSAM_SSH_TC_POS;
+         |                                ^~~~~~~~~~~~~~~
+         |                                SSAM_SSH_TC_PoM
+   drivers/platform/surface/surface_aggregator_tabletsw.c:373:32: note: each undeclared identifier is reported only once for each function it appears in
+   In file included from drivers/platform/surface/surface_aggregator_tabletsw.c:15:
+   drivers/platform/surface/surface_aggregator_tabletsw.c: In function '__ssam_pos_get_posture_for_source':
+   drivers/platform/surface/surface_aggregator_tabletsw.c:432:28: error: 'SSAM_SSH_TC_POS' undeclared (first use in this function); did you mean 'SSAM_SSH_TC_PoM'?
+     432 |         .target_category = SSAM_SSH_TC_POS,
+         |                            ^~~~~~~~~~~~~~~
+   include/linux/surface_aggregator/controller.h:500:72: note: in definition of macro 'SSAM_DEFINE_SYNC_REQUEST_WR'
+     500 |                 struct ssam_request_spec s = (struct ssam_request_spec)spec;    \
+         |                                                                        ^~~~
+   drivers/platform/surface/surface_aggregator_tabletsw.c: At top level:
+>> drivers/platform/surface/surface_aggregator_tabletsw.c:502:44: error: 'SSAM_SSH_TC_POS' undeclared here (not in a function); did you mean 'SSAM_SSH_TC_PoM'?
+     502 |                         .target_category = SSAM_SSH_TC_POS,
+         |                                            ^~~~~~~~~~~~~~~
+         |                                            SSAM_SSH_TC_PoM
 
 
-vim +/rmb_acp_init +264 sound/soc/amd/acp/acp-rembrandt.c
+vim +373 drivers/platform/surface/surface_aggregator_tabletsw.c
 
-   263	
- > 264	int rmb_acp_init(void __iomem *base)
-   265	{
-   266		int ret;
-   267	
-   268		/* power on */
-   269		ret = acp6x_power_on(base);
-   270		if (ret) {
-   271			pr_err("ACP power on failed\n");
-   272			return ret;
-   273		}
-   274		writel(0x01, base + ACP_CONTROL);
-   275	
-   276		/* Reset */
-   277		ret = acp6x_reset(base);
-   278		if (ret) {
-   279			pr_err("ACP reset failed\n");
-   280			return ret;
-   281		}
-   282	
-   283		return 0;
-   284	}
-   285	
- > 286	int rmb_acp_deinit(void __iomem *base)
-   287	{
-   288		int ret = 0;
-   289	
-   290		/* Reset */
-   291		ret = acp6x_reset(base);
-   292		if (ret) {
-   293			pr_err("ACP reset failed\n");
-   294			return ret;
-   295		}
-   296	
-   297		writel(0x00, base + ACP_CONTROL);
-   298	
-   299		/* power off */
-   300		ret = acp6x_power_off(base);
-   301		if (ret) {
-   302			pr_err("ACP power off failed\n");
-   303			return ret;
-   304		}
-   305	
-   306		return 0;
-   307	}
-   308	
+   366	
+   367	static int ssam_pos_get_sources_list(struct ssam_tablet_sw *sw, struct ssam_sources_list *sources)
+   368	{
+   369		struct ssam_request rqst;
+   370		struct ssam_response rsp;
+   371		int status;
+   372	
+ > 373		rqst.target_category = SSAM_SSH_TC_POS;
+   374		rqst.target_id = 0x01;
+   375		rqst.command_id = 0x01;
+   376		rqst.instance_id = 0x00;
+   377		rqst.flags = SSAM_REQUEST_HAS_RESPONSE;
+   378		rqst.length = 0;
+   379		rqst.payload = NULL;
+   380	
+   381		rsp.capacity = sizeof(*sources);
+   382		rsp.length = 0;
+   383		rsp.pointer = (u8 *)sources;
+   384	
+   385		status = ssam_retry(ssam_request_sync_onstack, sw->sdev->ctrl, &rqst, &rsp, 0);
+   386		if (status)
+   387			return status;
+   388	
+   389		/* We need at least the 'sources->count' field. */
+   390		if (rsp.length < sizeof(__le32)) {
+   391			dev_err(&sw->sdev->dev, "received source list response is too small\n");
+   392			return -EPROTO;
+   393		}
+   394	
+   395		/* Make sure 'sources->count' matches with the response length. */
+   396		if (get_unaligned_le32(&sources->count) * sizeof(__le32) + sizeof(__le32) != rsp.length) {
+   397			dev_err(&sw->sdev->dev, "mismatch between number of sources and response size\n");
+   398			return -EPROTO;
+   399		}
+   400	
+   401		return 0;
+   402	}
+   403	
+   404	static int ssam_pos_get_source(struct ssam_tablet_sw *sw, u32 *source_id)
+   405	{
+   406		struct ssam_sources_list sources = {};
+   407		int status;
+   408	
+   409		status = ssam_pos_get_sources_list(sw, &sources);
+   410		if (status)
+   411			return status;
+   412	
+   413		if (sources.count == 0) {
+   414			dev_err(&sw->sdev->dev, "no posture sources found\n");
+   415			return -ENODEV;
+   416		}
+   417	
+   418		/*
+   419		 * We currently don't know what to do with more than one posture
+   420		 * source. At the moment, only one source seems to be used/provided.
+   421		 * The WARN_ON() here should hopefully let us know quickly once there
+   422		 * is a device that provides multiple sources, at which point we can
+   423		 * then try to figure out how to handle them.
+   424		 */
+   425		WARN_ON(sources.count > 1);
+   426	
+   427		*source_id = get_unaligned_le32(&sources.id[0]);
+   428		return 0;
+   429	}
+   430	
+   431	SSAM_DEFINE_SYNC_REQUEST_WR(__ssam_pos_get_posture_for_source, __le32, __le32, {
+   432		.target_category = SSAM_SSH_TC_POS,
+   433		.target_id       = 0x01,
+   434		.command_id      = 0x02,
+   435		.instance_id     = 0x00,
+   436	});
+   437	
+   438	static int ssam_pos_get_posture_for_source(struct ssam_tablet_sw *sw, u32 source_id, u32 *posture)
+   439	{
+   440		__le32 source_le = cpu_to_le32(source_id);
+   441		__le32 rspval_le = 0;
+   442		int status;
+   443	
+   444		status = ssam_retry(__ssam_pos_get_posture_for_source, sw->sdev->ctrl,
+   445				    &source_le, &rspval_le);
+   446		if (status)
+   447			return status;
+   448	
+   449		*posture = le32_to_cpu(rspval_le);
+   450		return 0;
+   451	}
+   452	
+   453	static int ssam_pos_get_posture(struct ssam_tablet_sw *sw, u32 *state)
+   454	{
+   455		u32 source_id;
+   456		int status;
+   457	
+   458		status = ssam_pos_get_source(sw, &source_id);
+   459		if (status) {
+   460			dev_err(&sw->sdev->dev, "failed to get posture source ID: %d\n", status);
+   461			return status;
+   462		}
+   463	
+   464		status = ssam_pos_get_posture_for_source(sw, source_id, state);
+   465		if (status) {
+   466			dev_err(&sw->sdev->dev, "failed to get posture value for source %u: %d\n",
+   467				source_id, status);
+   468			return status;
+   469		}
+   470	
+   471		return 0;
+   472	}
+   473	
+   474	static u32 ssam_pos_sw_notif(struct ssam_event_notifier *nf, const struct ssam_event *event)
+   475	{
+   476		struct ssam_tablet_sw *sw = container_of(nf, struct ssam_tablet_sw, notif);
+   477	
+   478		if (event->command_id != SSAM_EVENT_POS_CID_POSTURE_CHANGED)
+   479			return 0;	/* Return "unhandled". */
+   480	
+   481		if (event->length != sizeof(__le32) * 3)
+   482			dev_warn(&sw->sdev->dev, "unexpected payload size: %u\n", event->length);
+   483	
+   484		schedule_work(&sw->update_work);
+   485		return SSAM_NOTIF_HANDLED;
+   486	}
+   487	
+   488	static const struct ssam_tablet_sw_desc ssam_pos_sw_desc = {
+   489		.dev = {
+   490			.name = "Microsoft Surface POS Tablet Mode Switch",
+   491			.phys = "ssam/01:26:01:00:01/input0",
+   492		},
+   493		.ops = {
+   494			.notify = ssam_pos_sw_notif,
+   495			.get_state = ssam_pos_get_posture,
+   496			.state_name = ssam_pos_state_name,
+   497			.state_is_tablet_mode = ssam_pos_state_is_tablet_mode,
+   498		},
+   499		.event = {
+   500			.reg = SSAM_EVENT_REGISTRY_SAM,
+   501			.id = {
+ > 502				.target_category = SSAM_SSH_TC_POS,
+   503				.instance = 0,
+   504			},
+   505			.mask = SSAM_EVENT_MASK_TARGET,
+   506		},
+   507	};
+   508	
+   509	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---Tl7ePdysymU/YpCh
+--ThKjm7kWel0cFzMO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/i386 5.19.0-rc1 Kernel Configuration
+# Linux/i386 5.19.0-rc3 Kernel Configuration
 #
 CONFIG_CC_VERSION_TEXT="gcc-11 (Debian 11.3.0-3) 11.3.0"
 CONFIG_CC_IS_GCC=y
@@ -193,6 +289,7 @@ CONFIG_AS_VERSION=23800
 CONFIG_LD_IS_BFD=y
 CONFIG_LD_VERSION=23800
 CONFIG_LLD_VERSION=0
+CONFIG_RUST_IS_AVAILABLE=y
 CONFIG_CC_CAN_LINK=y
 CONFIG_CC_CAN_LINK_STATIC=y
 CONFIG_CC_HAS_ASM_GOTO=y
@@ -277,6 +374,8 @@ CONFIG_GENERIC_CMOS_UPDATE=y
 CONFIG_HAVE_POSIX_CPU_TIMERS_TASK_WORK=y
 CONFIG_POSIX_CPU_TIMERS_TASK_WORK=y
 CONFIG_TIME_KUNIT_TEST=y
+CONFIG_CONTEXT_TRACKING=y
+CONFIG_CONTEXT_TRACKING_IDLE=y
 
 #
 # Timers subsystem
@@ -356,6 +455,8 @@ CONFIG_RCU_BOOST=y
 CONFIG_RCU_BOOST_DELAY=500
 CONFIG_RCU_EXP_KTHREAD=y
 CONFIG_RCU_NOCB_CPU=y
+CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y
+CONFIG_RCU_NOCB_CPU_CB_BOOST=y
 CONFIG_TASKS_TRACE_RCU_READ_MB=y
 # end of RCU Subsystem
 
@@ -378,6 +479,7 @@ CONFIG_UCLAMP_BUCKETS_COUNT=5
 
 CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH=y
 CONFIG_CC_IMPLICIT_FALLTHROUGH="-Wimplicit-fallthrough=5"
+CONFIG_GCC12_NO_ARRAY_BOUNDS=y
 CONFIG_CGROUPS=y
 CONFIG_PAGE_COUNTER=y
 CONFIG_MEMCG=y
@@ -1289,6 +1391,7 @@ CONFIG_DAMON_SYSFS=y
 CONFIG_DAMON_DBGFS=y
 CONFIG_DAMON_DBGFS_KUNIT_TEST=y
 CONFIG_DAMON_RECLAIM=y
+CONFIG_DAMON_LRU_SORT=y
 # end of Data Access Monitoring
 # end of Memory Management options
 
@@ -2485,6 +2588,7 @@ CONFIG_PCI_ENDPOINT=y
 CONFIG_PCI_ENDPOINT_CONFIGFS=y
 CONFIG_PCI_EPF_TEST=y
 CONFIG_PCI_EPF_NTB=y
+CONFIG_PCI_EPF_VNTB=y
 # end of PCI Endpoint
 
 #
@@ -5218,6 +5322,7 @@ CONFIG_SPI_INTEL_PLATFORM=y
 CONFIG_SPI_LM70_LLP=y
 CONFIG_SPI_FSL_LIB=y
 CONFIG_SPI_FSL_SPI=y
+CONFIG_SPI_MICROCHIP_CORE=y
 CONFIG_SPI_LANTIQ_SSC=y
 CONFIG_SPI_OC_TINY=y
 CONFIG_SPI_PXA2XX=y
@@ -5657,7 +5762,6 @@ CONFIG_SENSORS_ABITUGURU3=y
 CONFIG_SENSORS_AD7314=y
 CONFIG_SENSORS_AD7414=y
 CONFIG_SENSORS_AD7418=y
-CONFIG_SENSORS_ADM1021=y
 CONFIG_SENSORS_ADM1025=y
 CONFIG_SENSORS_ADM1026=y
 CONFIG_SENSORS_ADM1029=y
@@ -5739,7 +5843,6 @@ CONFIG_SENSORS_MAX31730=y
 CONFIG_SENSORS_MAX6620=y
 CONFIG_SENSORS_MAX6621=y
 CONFIG_SENSORS_MAX6639=y
-CONFIG_SENSORS_MAX6642=y
 CONFIG_SENSORS_MAX6650=y
 CONFIG_SENSORS_MAX6697=y
 CONFIG_SENSORS_MAX31790=y
@@ -5801,6 +5904,7 @@ CONFIG_SENSORS_IRPS5401=y
 CONFIG_SENSORS_ISL68137=y
 CONFIG_SENSORS_LM25066=y
 CONFIG_SENSORS_LM25066_REGULATOR=y
+CONFIG_SENSORS_LT7182S=y
 CONFIG_SENSORS_LTC2978=y
 CONFIG_SENSORS_LTC2978_REGULATOR=y
 CONFIG_SENSORS_LTC3815=y
@@ -6580,7 +6684,6 @@ CONFIG_USB_PWC=y
 CONFIG_USB_PWC_DEBUG=y
 CONFIG_USB_PWC_INPUT_EVDEV=y
 CONFIG_USB_S2255=y
-CONFIG_USB_STKWEBCAM=y
 CONFIG_VIDEO_USBTV=y
 CONFIG_USB_VIDEO_CLASS=y
 CONFIG_USB_VIDEO_CLASS_INPUT_EVDEV=y
@@ -7610,7 +7713,6 @@ CONFIG_DRM_CHIPONE_ICN6211=y
 CONFIG_DRM_CHRONTEL_CH7033=y
 CONFIG_DRM_CROS_EC_ANX7688=y
 CONFIG_DRM_DISPLAY_CONNECTOR=y
-CONFIG_DRM_FSL_LDB=y
 CONFIG_DRM_ITE_IT6505=y
 CONFIG_DRM_LONTIUM_LT8912B=y
 CONFIG_DRM_LONTIUM_LT9211=y
@@ -7633,6 +7735,7 @@ CONFIG_DRM_TOSHIBA_TC358764=y
 CONFIG_DRM_TOSHIBA_TC358767=y
 CONFIG_DRM_TOSHIBA_TC358768=y
 CONFIG_DRM_TOSHIBA_TC358775=y
+CONFIG_DRM_TI_DLPC3433=y
 CONFIG_DRM_TI_TFP410=y
 CONFIG_DRM_TI_SN65DSI83=y
 CONFIG_DRM_TI_SN65DSI86=y
@@ -7645,6 +7748,10 @@ CONFIG_DRM_I2C_ADV7511=y
 CONFIG_DRM_I2C_ADV7511_AUDIO=y
 CONFIG_DRM_I2C_ADV7511_CEC=y
 CONFIG_DRM_CDNS_MHDP8546=y
+CONFIG_DRM_IMX8QM_LDB=y
+CONFIG_DRM_IMX8QXP_LDB=y
+CONFIG_DRM_IMX8QXP_PIXEL_COMBINER=y
+CONFIG_DRM_IMX8QXP_PIXEL_LINK_TO_DPI=y
 CONFIG_DRM_DW_HDMI=y
 CONFIG_DRM_DW_HDMI_AHB_AUDIO=y
 CONFIG_DRM_DW_HDMI_I2S_AUDIO=y
@@ -7654,6 +7761,7 @@ CONFIG_DRM_DW_HDMI_CEC=y
 
 CONFIG_DRM_ETNAVIV=y
 CONFIG_DRM_ETNAVIV_THERMAL=y
+CONFIG_DRM_LOGICVC=y
 CONFIG_DRM_MXS=y
 CONFIG_DRM_MXSFB=y
 CONFIG_DRM_ARCPGU=y
@@ -7912,10 +8020,12 @@ CONFIG_SND_SUPPORT_OLD_API=y
 CONFIG_SND_PROC_FS=y
 CONFIG_SND_VERBOSE_PROCFS=y
 CONFIG_SND_VERBOSE_PRINTK=y
+CONFIG_SND_CTL_FAST_LOOKUP=y
 CONFIG_SND_DEBUG=y
 CONFIG_SND_DEBUG_VERBOSE=y
 CONFIG_SND_PCM_XRUN_DEBUG=y
-CONFIG_SND_CTL_VALIDATION=y
+CONFIG_SND_CTL_INPUT_VALIDATION=y
+CONFIG_SND_CTL_DEBUG=y
 CONFIG_SND_JACK_INJECTION_DEBUG=y
 CONFIG_SND_VMASTER=y
 CONFIG_SND_DMA_SGBUF=y
@@ -8170,7 +8280,6 @@ CONFIG_SND_SOC_AMD_ACP_I2S=y
 CONFIG_SND_SOC_AMD_ACP_PCM=y
 CONFIG_SND_SOC_AMD_ACP_PCI=y
 CONFIG_SND_AMD_ASOC_RENOIR=y
-CONFIG_SND_AMD_ASOC_REMBRANDT=y
 CONFIG_SND_SOC_AMD_MACH_COMMON=y
 CONFIG_SND_SOC_AMD_LEGACY_MACH=y
 CONFIG_SND_SOC_AMD_SOF_MACH=y
@@ -8767,6 +8876,7 @@ CONFIG_HID_SENSOR_HUB=y
 CONFIG_HID_SENSOR_CUSTOM_SENSOR=y
 CONFIG_HID_ALPS=y
 CONFIG_HID_MCP2221=y
+CONFIG_HID_KUNIT_TEST=y
 # end of Special HID drivers
 
 #
@@ -8782,6 +8892,7 @@ CONFIG_USB_HIDDEV=y
 #
 CONFIG_I2C_HID_ACPI=y
 CONFIG_I2C_HID_OF=y
+CONFIG_I2C_HID_OF_ELAN=y
 CONFIG_I2C_HID_OF_GOODIX=y
 # end of I2C HID support
 
@@ -9460,15 +9571,15 @@ CONFIG_INFINIBAND_USER_MEM=y
 CONFIG_INFINIBAND_ON_DEMAND_PAGING=y
 CONFIG_INFINIBAND_ADDR_TRANS=y
 CONFIG_INFINIBAND_ADDR_TRANS_CONFIGFS=y
-CONFIG_INFINIBAND_MTHCA=y
-CONFIG_INFINIBAND_MTHCA_DEBUG=y
 CONFIG_INFINIBAND_CXGB4=y
 CONFIG_INFINIBAND_IRDMA=y
 CONFIG_MLX4_INFINIBAND=y
 CONFIG_MLX5_INFINIBAND=y
+CONFIG_INFINIBAND_MTHCA=y
+CONFIG_INFINIBAND_MTHCA_DEBUG=y
 CONFIG_INFINIBAND_OCRDMA=y
-CONFIG_INFINIBAND_VMWARE_PVRDMA=y
 CONFIG_INFINIBAND_USNIC=y
+CONFIG_INFINIBAND_VMWARE_PVRDMA=y
 CONFIG_INFINIBAND_IPOIB=y
 CONFIG_INFINIBAND_IPOIB_CM=y
 CONFIG_INFINIBAND_IPOIB_DEBUG=y
@@ -9950,7 +10061,6 @@ CONFIG_COMEDI_TESTS_EXAMPLE=y
 CONFIG_COMEDI_TESTS_NI_ROUTES=y
 CONFIG_STAGING=y
 CONFIG_PRISM2_USB=y
-CONFIG_FB_OLPC_DCON=y
 CONFIG_RTL8192U=m
 CONFIG_RTLLIB=m
 CONFIG_RTLLIB_CRYPTO_CCMP=m
@@ -10036,7 +10146,14 @@ CONFIG_VIDEO_ATOMISP_GC0310=y
 CONFIG_VIDEO_ATOMISP_OV2680=y
 CONFIG_VIDEO_ATOMISP_OV5693=y
 CONFIG_VIDEO_ATOMISP_LM3554=y
+CONFIG_DVB_AV7110_IR=y
+CONFIG_DVB_AV7110=y
+CONFIG_DVB_AV7110_OSD=y
+CONFIG_DVB_BUDGET_PATCH=y
+CONFIG_DVB_SP8870=y
+CONFIG_VIDEO_IPU3_IMGU=y
 CONFIG_VIDEO_MAX96712=y
+CONFIG_VIDEO_STKWEBCAM=y
 CONFIG_VIDEO_ZORAN=y
 CONFIG_VIDEO_ZORAN_DC30=y
 CONFIG_VIDEO_ZORAN_ZR36060=y
@@ -10045,12 +10162,6 @@ CONFIG_VIDEO_ZORAN_DC10=y
 CONFIG_VIDEO_ZORAN_LML33=y
 CONFIG_VIDEO_ZORAN_LML33R10=y
 CONFIG_VIDEO_ZORAN_AVS6EYES=y
-CONFIG_VIDEO_IPU3_IMGU=y
-CONFIG_DVB_AV7110_IR=y
-CONFIG_DVB_AV7110=y
-CONFIG_DVB_AV7110_OSD=y
-CONFIG_DVB_BUDGET_PATCH=y
-CONFIG_DVB_SP8870=y
 CONFIG_STAGING_BOARD=y
 CONFIG_LTE_GDM724X=m
 CONFIG_FIREWIRE_SERIAL=y
@@ -10121,6 +10232,13 @@ CONFIG_HMS_ANYBUSS_BUS=y
 CONFIG_ARCX_ANYBUS_CONTROLLER=y
 CONFIG_HMS_PROFINET=y
 CONFIG_QLGE=y
+CONFIG_VME_BUS=y
+
+#
+# VME Bridge Drivers
+#
+CONFIG_VME_TSI148=y
+CONFIG_VME_FAKE=y
 
 #
 # VME Device Drivers
@@ -10243,7 +10361,6 @@ CONFIG_INTEL_SCU_WDT=y
 CONFIG_INTEL_SCU_IPC_UTIL=y
 CONFIG_SIEMENS_SIMATIC_IPC=y
 CONFIG_WINMATE_FM07_KEYS=y
-CONFIG_PMC_ATOM=y
 CONFIG_GOLDFISH_PIPE=y
 CONFIG_CHROME_PLATFORMS=y
 CONFIG_CHROMEOS_ACPI=y
@@ -10271,6 +10388,8 @@ CONFIG_WILCO_EC=y
 CONFIG_WILCO_EC_DEBUGFS=y
 CONFIG_WILCO_EC_EVENTS=y
 CONFIG_WILCO_EC_TELEMETRY=y
+CONFIG_CROS_KUNIT=y
+CONFIG_CROS_EC_PROTO_KUNIT_TEST=y
 CONFIG_MELLANOX_PLATFORM=y
 CONFIG_MLXREG_HOTPLUG=y
 CONFIG_MLXREG_IO=y
@@ -10283,6 +10402,7 @@ CONFIG_SURFACE_3_POWER_OPREGION=y
 CONFIG_SURFACE_ACPI_NOTIFY=y
 CONFIG_SURFACE_AGGREGATOR_CDEV=y
 CONFIG_SURFACE_AGGREGATOR_REGISTRY=y
+CONFIG_SURFACE_AGGREGATOR_TABLET_SWITCH=y
 CONFIG_SURFACE_DTX=y
 CONFIG_SURFACE_GPE=y
 CONFIG_SURFACE_HOTPLUG=y
@@ -10483,8 +10603,6 @@ CONFIG_EXTCON_USB_GPIO=y
 CONFIG_EXTCON_USBC_CROS_EC=y
 CONFIG_EXTCON_USBC_TUSB320=y
 CONFIG_MEMORY=y
-CONFIG_OMAP_GPMC=y
-CONFIG_OMAP_GPMC_DEBUG=y
 CONFIG_FPGA_DFL_EMIF=y
 CONFIG_IIO=y
 CONFIG_IIO_BUFFER=y
@@ -10984,6 +11102,7 @@ CONFIG_HID_SENSOR_INCLINOMETER_3D=y
 CONFIG_HID_SENSOR_DEVICE_ROTATION=y
 # end of Inclinometer sensors
 
+CONFIG_IIO_RESCALE_KUNIT_TEST=y
 CONFIG_IIO_TEST_FORMAT=y
 
 #
@@ -11116,19 +11235,6 @@ CONFIG_NTB_TOOL=y
 CONFIG_NTB_PERF=y
 CONFIG_NTB_MSI_TEST=y
 CONFIG_NTB_TRANSPORT=y
-CONFIG_VME_BUS=y
-
-#
-# VME Bridge Drivers
-#
-CONFIG_VME_CA91CX42=y
-CONFIG_VME_TSI148=y
-CONFIG_VME_FAKE=y
-
-#
-# VME Board Drivers
-#
-CONFIG_VMIVME_7805=y
 CONFIG_PWM=y
 CONFIG_PWM_SYSFS=y
 CONFIG_PWM_DEBUG=y
@@ -11157,6 +11263,7 @@ CONFIG_PWM_XILINX=y
 CONFIG_IRQCHIP=y
 CONFIG_AL_FIC=y
 CONFIG_MADERA_IRQ=y
+CONFIG_XILINX_INTC=y
 # end of IRQ chip support
 
 CONFIG_IPACK_BUS=y
@@ -11282,6 +11389,8 @@ CONFIG_FPGA_DFL_FME_REGION=y
 CONFIG_FPGA_DFL_AFU=y
 CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000=y
 CONFIG_FPGA_DFL_PCI=y
+CONFIG_FPGA_M10_BMC_SEC_UPDATE=y
+CONFIG_FPGA_MGR_MICROCHIP_SPI=y
 CONFIG_FSI=y
 CONFIG_FSI_NEW_DEV_NODE=y
 CONFIG_FSI_MASTER_GPIO=y
@@ -11789,11 +11898,14 @@ CONFIG_SECURITY_TOMOYO_MAX_AUDIT_LOG=1024
 CONFIG_SECURITY_TOMOYO_OMIT_USERSPACE_LOADER=y
 CONFIG_SECURITY_TOMOYO_INSECURE_BUILTIN_SETTING=y
 CONFIG_SECURITY_APPARMOR=y
-CONFIG_SECURITY_APPARMOR_HASH=y
-CONFIG_SECURITY_APPARMOR_HASH_DEFAULT=y
 CONFIG_SECURITY_APPARMOR_DEBUG=y
 CONFIG_SECURITY_APPARMOR_DEBUG_ASSERTS=y
 CONFIG_SECURITY_APPARMOR_DEBUG_MESSAGES=y
+CONFIG_SECURITY_APPARMOR_INTROSPECT_POLICY=y
+CONFIG_SECURITY_APPARMOR_HASH=y
+CONFIG_SECURITY_APPARMOR_HASH_DEFAULT=y
+CONFIG_SECURITY_APPARMOR_EXPORT_BINARY=y
+CONFIG_SECURITY_APPARMOR_PARANOID_LOAD=y
 CONFIG_SECURITY_APPARMOR_KUNIT_TEST=y
 CONFIG_SECURITY_LOADPIN=y
 CONFIG_SECURITY_LOADPIN_ENFORCE=y
@@ -11965,10 +12077,12 @@ CONFIG_CRYPTO_ECB=y
 CONFIG_CRYPTO_LRW=y
 CONFIG_CRYPTO_OFB=y
 CONFIG_CRYPTO_PCBC=y
+CONFIG_CRYPTO_XCTR=y
 CONFIG_CRYPTO_XTS=y
 CONFIG_CRYPTO_KEYWRAP=y
 CONFIG_CRYPTO_NHPOLY1305=y
 CONFIG_CRYPTO_ADIANTUM=y
+CONFIG_CRYPTO_HCTR2=y
 CONFIG_CRYPTO_ESSIV=y
 
 #
@@ -11988,10 +12102,10 @@ CONFIG_CRYPTO_CRC32=y
 CONFIG_CRYPTO_CRC32_PCLMUL=y
 CONFIG_CRYPTO_XXHASH=y
 CONFIG_CRYPTO_BLAKE2B=y
-CONFIG_CRYPTO_BLAKE2S=y
 CONFIG_CRYPTO_CRCT10DIF=y
 CONFIG_CRYPTO_CRC64_ROCKSOFT=y
 CONFIG_CRYPTO_GHASH=y
+CONFIG_CRYPTO_POLYVAL=y
 CONFIG_CRYPTO_POLY1305=y
 CONFIG_CRYPTO_MD4=y
 CONFIG_CRYPTO_MD5=y
@@ -12100,6 +12214,7 @@ CONFIG_PKCS8_PRIVATE_KEY_PARSER=y
 CONFIG_PKCS7_MESSAGE_PARSER=y
 CONFIG_PKCS7_TEST_KEY=y
 CONFIG_SIGNED_PE_FILE_VERIFICATION=y
+CONFIG_FIPS_SIGNATURE_SELFTEST=y
 
 #
 # Certificates for signature checking
@@ -12158,6 +12273,7 @@ CONFIG_CRYPTO_LIB_CHACHA20POLY1305=y
 CONFIG_CRYPTO_LIB_SHA256=y
 # end of Crypto library routines
 
+CONFIG_LIB_MEMNEQ=y
 CONFIG_CRC_CCITT=y
 CONFIG_CRC16=y
 CONFIG_CRC_T10DIF=y
@@ -12284,7 +12400,6 @@ CONFIG_SG_POOL=y
 CONFIG_ARCH_STACKWALK=y
 CONFIG_STACKDEPOT=y
 CONFIG_STACKDEPOT_ALWAYS_INIT=y
-CONFIG_STACK_HASH_ORDER=20
 CONFIG_REF_TRACKER=y
 CONFIG_SBITMAP=y
 CONFIG_PARMAN=y
@@ -12409,6 +12524,7 @@ CONFIG_DEBUG_OBJECTS_WORK=y
 CONFIG_DEBUG_OBJECTS_RCU_HEAD=y
 CONFIG_DEBUG_OBJECTS_PERCPU_COUNTER=y
 CONFIG_DEBUG_OBJECTS_ENABLE_DEFAULT=1
+CONFIG_SHRINKER_DEBUG=y
 CONFIG_HAVE_DEBUG_KMEMLEAK=y
 CONFIG_DEBUG_KMEMLEAK=y
 CONFIG_DEBUG_KMEMLEAK_MEM_POOL_SIZE=16000
@@ -12419,7 +12535,7 @@ CONFIG_DEBUG_STACK_USAGE=y
 CONFIG_SCHED_STACK_END_CHECK=y
 CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE=y
 CONFIG_DEBUG_VM=y
-CONFIG_DEBUG_VM_VMACACHE=y
+CONFIG_DEBUG_VM_MAPLE_TREE=y
 CONFIG_DEBUG_VM_RB=y
 CONFIG_DEBUG_VM_PGFLAGS=y
 CONFIG_DEBUG_VM_PGTABLE=y
@@ -12520,6 +12636,7 @@ CONFIG_DEBUG_PLIST=y
 CONFIG_DEBUG_SG=y
 CONFIG_DEBUG_NOTIFIERS=y
 CONFIG_BUG_ON_DATA_CORRUPTION=y
+CONFIG_DEBUG_MAPLE_TREE=y
 # end of Debug kernel data structures
 
 CONFIG_DEBUG_CREDENTIALS=y
@@ -12779,6 +12896,11 @@ CONFIG_ARCH_USE_MEMTEST=y
 CONFIG_MEMTEST=y
 CONFIG_HYPERV_TESTING=y
 # end of Kernel Testing and Coverage
+
+#
+# Rust hacking
+#
+# end of Rust hacking
 # end of Kernel hacking
 
---Tl7ePdysymU/YpCh--
+--ThKjm7kWel0cFzMO--

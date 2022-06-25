@@ -2,228 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118C955A6AD
+	by mail.lfdr.de (Postfix) with ESMTP id A500655A6AF
 	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 05:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbiFYDnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 23:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
+        id S230346AbiFYDoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 23:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiFYDnN (ORCPT
+        with ESMTP id S231220AbiFYDn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 23:43:13 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C4713F62;
-        Fri, 24 Jun 2022 20:43:05 -0700 (PDT)
-X-UUID: d3528aa41f1e4062b45d413fc9c3860d-20220625
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:b31e0792-f028-4a94-85fa-ad233c9808bf,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:50
-X-CID-INFO: VERSION:1.1.6,REQID:b31e0792-f028-4a94-85fa-ad233c9808bf,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:50
-X-CID-META: VersionHash:b14ad71,CLOUDID:e65378ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:03d3e511f511,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: d3528aa41f1e4062b45d413fc9c3860d-20220625
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 783343857; Sat, 25 Jun 2022 11:42:59 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Sat, 25 Jun 2022 11:42:58 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 25 Jun 2022 11:42:57 +0800
-Message-ID: <4efb47b5323891c72dd0341f911ced74f39bfb07.camel@mediatek.com>
-Subject: Re: [PATCH] usb: gadget: f_uac1: add IAD descriptor
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
-        "Julian Scheel" <julian@jusst.de>, xin lin <xin.lin@mediatek.com>,
-        Yunhao Tian <t123yh.xyz@gmail.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Date:   Sat, 25 Jun 2022 11:42:57 +0800
-In-Reply-To: <YrWif4oeelZrctmr@kroah.com>
-References: <20220622085757.23437-1-chunfeng.yun@mediatek.com>
-         <YrWif4oeelZrctmr@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 24 Jun 2022 23:43:58 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F323A714;
+        Fri, 24 Jun 2022 20:43:57 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id z14so4122985pgh.0;
+        Fri, 24 Jun 2022 20:43:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=X5w+HulnPF/zYNAZP+7heB8iRi4bWtMYa0BgC6LI980=;
+        b=MIMRFLPvYoCjp3vHj9M/tcq6z2v0vvxF+BWZJ2pBS+7v96r4rDphe+74ewa8VC3xHC
+         a4Qz/tkob29rqXLA93/0PwEKkKM/kSOkcfSMx5LeS3i4vRu6s+vuvz2JPKpz05risorz
+         m527DHCPBQ0+hDrSgezHccFuMbHWGsnnqujbvEd2hTt0IiuTDLmBWSu/ATS17+pYy+AU
+         XsuQgv3Us/R771NJodYn+p1qupP4bwgYnH3WZ8Pr09D8IsZe3TJD3hAL9JZe6Cv3hqnA
+         KflZjcXuIJ+pGAu4Pi7GUCiQxJ1TWC7RonKeJspQKo40Y/JdHs4xrHEyLxu2sS1rOVmV
+         zAPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=X5w+HulnPF/zYNAZP+7heB8iRi4bWtMYa0BgC6LI980=;
+        b=oYEuP5QV05OfvrRFSLwdJ6f5QDhe74Z+K6U74ELuhFu00SuDgWErTfmVLhhzTP61E0
+         fGaXe9PaHQwybOQCkcv7mAn1fguS+eC2+bdt5lSK1w6Gtrjnl5bU7ZCVLGJ4aZGcPNWk
+         GPnA0Rjp00cIDdHPVezG81J6cXjGTacDRcWyPHIUBpsoCa8lg5KsijGuYk1AcTk89+FE
+         3ftGZlq6f2EUB3czUZojKiIyIlDS6ATqr1wUWWx5s521SqoBAoqPh7T/oFMi+/MTmN+R
+         bxY9UsHTC6CyWTuMkoH1zUBJ7FI9hE/tP5aH/MViZYylDxc6xVMI8X9MS9NbeG3GCfxP
+         Gdwg==
+X-Gm-Message-State: AJIora82mnIy7b8qRqPIUBbSxrodJpkXw70FWinTRhnS6DmykBi5bmZX
+        588N6mymS97iqaUqPrHRvfjJVU156Je5yA==
+X-Google-Smtp-Source: AGRyM1tQ4LCSGO+IvrOaFJxQpxEnKwFvzaMq7DarqdJKFKHl6rLWGiiscIOd6PTlig3YQod1p360bg==
+X-Received: by 2002:a65:6e04:0:b0:40d:26eb:8225 with SMTP id bd4-20020a656e04000000b0040d26eb8225mr1995550pgb.138.1656128637083;
+        Fri, 24 Jun 2022 20:43:57 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:edae:5ad3:3d10:1075? ([2600:8802:b00:4a48:edae:5ad3:3d10:1075])
+        by smtp.gmail.com with ESMTPSA id p15-20020a17090a348f00b001ecc616c9f3sm4725345pjb.21.2022.06.24.20.43.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jun 2022 20:43:55 -0700 (PDT)
+Message-ID: <903a2ac9-64e6-e4d0-a0e7-6160284e6b3e@gmail.com>
+Date:   Fri, 24 Jun 2022 20:43:54 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/2] arm64: dts: broadcom: align SPI NOR node name with
+ dtschema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Scott Branden <sbranden@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ray Jui <rjui@broadcom.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com
+References: <20220407143211.295271-1-krzysztof.kozlowski@linaro.org>
+ <20220407143211.295271-2-krzysztof.kozlowski@linaro.org>
+ <20220407185710.2576287-1-f.fainelli@gmail.com>
+ <2079f567-ff8f-5790-cba7-837c311e5fce@linaro.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <2079f567-ff8f-5790-cba7-837c311e5fce@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-24 at 13:39 +0200, Greg Kroah-Hartman wrote:
-> On Wed, Jun 22, 2022 at 04:57:57PM +0800, Chunfeng Yun wrote:
-> > From: xin lin <xin.lin@mediatek.com>
-> > 
-> > Win10 can not enumerate composite device of UVC+UAC1+ADB without
-> > IAD descriptor
-> > in uac1.0, so add it.
-> 
-> I do not know what this means at all, sorry.  Can you please provide
-> a
-> better changelog text that describes what all of this is in more
-> detail?
-Ok, will add it in next version
 
-> 
-> 
-> 
-> > 
-> > Signed-off-by: xin lin <xin.lin@mediatek.com>
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > ---
-> >  drivers/usb/gadget/function/f_uac1.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_uac1.c
-> > b/drivers/usb/gadget/function/f_uac1.c
-> > index 6f0e1d803dc2..8390207bc513 100644
-> > --- a/drivers/usb/gadget/function/f_uac1.c
-> > +++ b/drivers/usb/gadget/function/f_uac1.c
-> > @@ -71,6 +71,17 @@ static inline struct f_uac1_opts
-> > *g_audio_to_uac1_opts(struct g_audio *audio)
-> >   * ALSA_Playback -> IT_3 -> OT_4 -> USB-IN
-> >   */
-> >  
-> > +static struct usb_interface_assoc_descriptor iad_desc = {
-> > +	.bLength = sizeof(iad_desc),
-> > +	.bDescriptorType = USB_DT_INTERFACE_ASSOCIATION,
-> > +
-> > +	.bFirstInterface = 0,
-> > +	.bInterfaceCount = 3,
-> > +	.bFunctionClass = USB_CLASS_AUDIO,
-> > +	.bFunctionSubClass = 0,
-> > +	.bFunctionProtocol = UAC_VERSION_1,
-> > +};
-> > +
-> >  /* B.3.1  Standard AC Interface Descriptor */
-> >  static struct usb_interface_descriptor ac_interface_desc = {
-> >  	.bLength =		USB_DT_INTERFACE_SIZE,
-> > @@ -259,6 +270,7 @@ static struct uac_iso_endpoint_descriptor
-> > as_iso_in_desc = {
-> >  };
-> >  
-> >  static struct usb_descriptor_header *f_audio_desc[] = {
-> > +	(struct usb_descriptor_header *)&iad_desc,
-> 
-> Why put this first?  Is that a requirement?
-Yes, it's a requirement,
-Interface Association Descriptor ECN:
-"An interface association descriptor must be located before the set of
-interface descriptors (including all alternate settings) for the
-interfaces it associates."
 
+On 4/20/2022 1:52 AM, Krzysztof Kozlowski wrote:
+> On 07/04/2022 20:57, Florian Fainelli wrote:
+>> On Thu,  7 Apr 2022 16:32:11 +0200, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>>> The node names should be generic and SPI NOR dtschema expects "flash".
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>
+>> Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
 > 
-> >  	(struct usb_descriptor_header *)&ac_interface_desc,
-> >  	(struct usb_descriptor_header *)&ac_header_desc,
-> >  
-> > @@ -293,6 +305,7 @@ static struct usb_descriptor_header
-> > *f_audio_desc[] = {
-> >  };
-> >  
-> >  enum {
-> > +	STR_ASSOC,
-> 
-> Again, why first?
-follow uac2 driver
-> 
-> >  	STR_AC_IF,
-> >  	STR_USB_OUT_IT,
-> >  	STR_USB_OUT_IT_CH_NAMES,
-> > @@ -310,6 +323,7 @@ enum {
-> >  
-> >  static struct usb_string strings_uac1[] = {
-> >  	/* [STR_AC_IF].s = DYNAMIC, */
-> > +	[STR_ASSOC].s = "Source/Sink",
-> >  	[STR_USB_OUT_IT].s = "Playback Input terminal",
-> >  	[STR_USB_OUT_IT_CH_NAMES].s = "Playback Channels",
-> >  	[STR_IO_OUT_OT].s = "Playback Output terminal",
-> > @@ -1058,6 +1072,7 @@ static void setup_descriptor(struct
-> > f_uac1_opts *opts)
-> >  	as_out_header_desc.bTerminalLink = usb_out_it_desc.bTerminalID;
-> >  	as_in_header_desc.bTerminalLink = usb_in_ot_desc.bTerminalID;
-> >  
-> > +	iad_desc.bInterfaceCount = 1;
-> 
-> Why this change?
-FS, HS may be different, count up them again.
+> Thanks Florian. It seems that patch is still not in linux-next. Is your
+> tree included in the linux-next?
 
-> 
-> 
-> >  	ac_header_desc->wTotalLength = cpu_to_le16(ac_header_desc-
-> > >bLength);
-> >  
-> >  	if (EPIN_EN(opts)) {
-> > @@ -1068,6 +1083,7 @@ static void setup_descriptor(struct
-> > f_uac1_opts *opts)
-> >  		if (FUIN_EN(opts))
-> >  			len += in_feature_unit_desc->bLength;
-> >  		ac_header_desc->wTotalLength = cpu_to_le16(len);
-> > +		iad_desc.bInterfaceCount++;
-> >  	}
-> >  	if (EPOUT_EN(opts)) {
-> >  		u16 len = le16_to_cpu(ac_header_desc->wTotalLength);
-> > @@ -1077,9 +1093,11 @@ static void setup_descriptor(struct
-> > f_uac1_opts *opts)
-> >  		if (FUOUT_EN(opts))
-> >  			len += out_feature_unit_desc->bLength;
-> >  		ac_header_desc->wTotalLength = cpu_to_le16(len);
-> > +		iad_desc.bInterfaceCount++;
-> >  	}
-> >  
-> >  	i = 0;
-> > +	f_audio_desc[i++] = USBDHDR(&iad_desc);
-> 
-> Again, why first?
-It is a requirement as ECN says.
+Somehow I missed the email of yours, sorry about that. linux-next is now 
+tracking our "fixes" and "next" branches which are the aggregate 
+branches that merge all of the other branches that I used for maintenance:
 
-> 
-> >  	f_audio_desc[i++] = USBDHDR(&ac_interface_desc);
-> >  	f_audio_desc[i++] = USBDHDR(ac_header_desc);
-> >  
-> > @@ -1217,6 +1235,7 @@ static int f_audio_bind(struct
-> > usb_configuration *c, struct usb_function *f)
-> >  		}
-> >  	}
-> >  
-> > +	iad_desc.iFunction = us[STR_ASSOC].id;
-> >  	ac_interface_desc.iInterface = us[STR_AC_IF].id;
-> >  	usb_out_it_desc.iTerminal = us[STR_USB_OUT_IT].id;
-> >  	usb_out_it_desc.iChannelNames = us[STR_USB_OUT_IT_CH_NAMES].id;
-> > @@ -1302,6 +1321,8 @@ static int f_audio_bind(struct
-> > usb_configuration *c, struct usb_function *f)
-> >  	status = usb_interface_id(c, f);
-> >  	if (status < 0)
-> >  		goto err_free_fu;
-> > +
-> > +	iad_desc.bFirstInterface = status;
-> 
-> Shouldn't this be needed without your change?
-Need update, it's not always 0.
-
-Thanks a lot
-
-> 
-> thanks,
-> 
-> greg k-h
-
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=8aeec38e054da2bcc8201f7fd511e22fa73dc4cf
+-- 
+Florian

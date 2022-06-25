@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C72855AD5B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 01:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718C455AD5D
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 01:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233599AbiFYXGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 19:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        id S233722AbiFYXJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 19:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbiFYXGq (ORCPT
+        with ESMTP id S233502AbiFYXJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 19:06:46 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8492114096
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:06:43 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3176b6ed923so54621837b3.11
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:06:43 -0700 (PDT)
+        Sat, 25 Jun 2022 19:09:05 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAA014082
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:09:05 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-31772f8495fso54957497b3.4
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:09:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+pHW+8BgeYr33HXAIkqALey4HRl25+7F+mqKkIF73lI=;
-        b=OyZJ8EhnQ3k/JzGhjvLf/pMPtpcd9SZRT3ncEi3wzhHrGQ1lSMjKRUpTbAiq5AvxLQ
-         /VflYEpdayhpXR+MVutbT/z9jK9CmZu1myzj73D85E2WqmdoAYOu3iUxN2Z3XVmoIPWZ
-         T7Pe7XhNljqA1UwOGbTo3OgRV9nm1DiGHtbCx95Q4kADDu6RfYLai/Fu/l+/skVEJKoO
-         fuUfAWdBukc5hdhFe8pubZC6qTz1reuvHc5YbdbUgVP+dWavsAVSYzKsYOcecJLwx2Ah
-         qDApmCg5bJS/05fUq3BDhHDps4j0b7lRoxVl1Q1j77vRGvFe/Qa2wlgurSo+7rJ69+Bn
-         EajA==
+        bh=O1MXmkDUiw43Z0PqWiIuKVcX086I1aXIxpAimItsCgY=;
+        b=qWk6cykw70SFCMI1O1BJLkjsV2zHzeUjcAQBEcUV4R2KGQbs+yjeFhy2GdZHWI6iOp
+         dDseFJGmwis0XO7PUzbwGTBccukj2fwzTM3BMgUOhSi4c/8m6bIjLIbXJ0HjOMPerdsq
+         FLOuMMpa3siHqfcF02E6ty3uPtSgtDg+uAjXD+SIEQORJPjX1kpcxFHH9Z4hzlZgzYOG
+         9h+XfDLl5YDcNMx5PsbrWufrd2wDsStKZfoRDceYzTvObDIrtV6I+dxq0BoAQVvkD0cY
+         +XdZQ0CnUoDKMNQVUgdNMsaalHsJc/F+x/pWHOzP4CqpBWtO7o07rK1woQj+O/mEVwnO
+         q68w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+pHW+8BgeYr33HXAIkqALey4HRl25+7F+mqKkIF73lI=;
-        b=rJJyJ2Tn+IEBmH/AxXobVwPC/NQDyTA16y+bnT1D+NR+ZniI6ETe6Vbe2jrg2t/FxU
-         QSzyVxszbmP0l64mV+HQ9LF3kV6lcG8jDv2w5nEeEA82E7csx3HkQw7QnFsNs1zNe3iw
-         MLxyhJdHWqjVCyh0VaxAsF7ZMgdOMI1JrmG6CVbnCvsmOgmPcLUY6V7V87G33Gx1xx+L
-         hnloM83orMganxVlcDKejKH2y+gmNEzRvOXN6Ii6dBfimjRugv+sL8vWIDek1gmKw30H
-         toR07Y/0unXKdM2l06c1uo3+rOC+tiBpCuoN6e3nSvLdFq303QFq/9HAylvsUs+2DalH
-         hBNw==
-X-Gm-Message-State: AJIora/cWJuVNQ9GhoVqoJ4qDIeL4ZhiXLU/7Y3aozERKQbGFd8ipMPM
-        Ee05Rn6hILG6TKxGCZqhE4MdSkqwhg+obnxn5YIjbNfio18=
-X-Google-Smtp-Source: AGRyM1sPLO6FrhlQmmjU07VEXOAI6hRlCO21a4yWfilP3YXKpw0ZTG2xPM+drXuU5w/0zlYyo3JtFUnBRs1lEQUzBS8=
-X-Received: by 2002:a0d:e20a:0:b0:317:ce36:a3a0 with SMTP id
- l10-20020a0de20a000000b00317ce36a3a0mr6883637ywe.448.1656198402820; Sat, 25
- Jun 2022 16:06:42 -0700 (PDT)
+        bh=O1MXmkDUiw43Z0PqWiIuKVcX086I1aXIxpAimItsCgY=;
+        b=IEUHYhqUb6OakfEQH1ANx+nZUywbLxuvYvIghnW/tKoglK9eG7/FpK6+aRubPH0TpP
+         mysE/c6xm+R8YQKBgRb4mNXDXH+XlO+qhf/QO+HIpgNJv4NCBgFyqpg3XrKpOstd3VCw
+         m1ScR6HVsRrpK6ZD6UDkiFSZEbmrBmW7vjIT2oh1sihs8DM0X0zRSdHft/4uyTiTz4X3
+         90WsrHPTUbew+6NR3aQGwkAeRqvJ+Wf1+sQQK8UUJRmZJ+CBogb14PaVZ0Qc5mZQ/N3s
+         aV53HhSfghy2B03D+xDWKZwCUm9S0cSYOIfbXxAZbe2NuyWzhDZAV/WszXfztMU+kyu+
+         LEAw==
+X-Gm-Message-State: AJIora/78n2Pzb4UnHjy8Dq4Utt8Z7h544+h4VltuJG2P1fEw9f9phKH
+        BSYg1rTMbSFFxrA3VYwPBolzZQUsCrBKCsWspz7OgQ==
+X-Google-Smtp-Source: AGRyM1vNlNLKL1bICHSuct3T11AvYCz+HnuVKjSdzzMyBs6oIijdhnwpbjJqdXi5QptR/DL/iDDg26IyU761Rnutypk=
+X-Received: by 2002:a0d:cc54:0:b0:317:752c:bcf3 with SMTP id
+ o81-20020a0dcc54000000b00317752cbcf3mr6763435ywd.437.1656198544324; Sat, 25
+ Jun 2022 16:09:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220615082940.3960612-1-windhl@126.com>
-In-Reply-To: <20220615082940.3960612-1-windhl@126.com>
+References: <20220615104921.1390138-1-patrick.rudolph@9elements.com> <20220615104921.1390138-3-patrick.rudolph@9elements.com>
+In-Reply-To: <20220615104921.1390138-3-patrick.rudolph@9elements.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 26 Jun 2022 01:06:31 +0200
-Message-ID: <CACRpkdaLPcVHUQL1d7e797vN_WRi0kbnLtfTa9Fnp1id3anjfw@mail.gmail.com>
-Subject: Re: [PATCH] drivers: clk: Add missing of_node_put() in clk-nomadik.c
-To:     heliang <windhl@126.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Sun, 26 Jun 2022 01:08:53 +0200
+Message-ID: <CACRpkdakd1T9FFfjbSpLnCmOQM-HVLy+UTJBKkpphyDVmZt6yg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] pinctrl: Add Cypress cy8c95x0 support
+To:     Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,15 +66,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 10:30 AM heliang <windhl@126.com> wrote:
+On Wed, Jun 15, 2022 at 12:50 PM Patrick Rudolph
+<patrick.rudolph@9elements.com> wrote:
 
-> In nomadik_src_init, of_find_matching_node() return a node pointer
-> with refcount incremented. We should use of_node_put() in fail path
-> or when it is not used anymore.
+> Add support for cypress I2C GPIO expanders cy8c9520, cy8c9540 and
+> cy8c9560. The GPIO expanders feature a PWM mode, thus add it as
+> pinctrl driver.
 >
-> Signed-off-by: heliang <windhl@126.com>
+> The chip features multiple drive modes for each pin when configured
+> as output and multiple bias settings when configured as input.
+>
+> Tested all three components and verified that all functionality
+> is fully working.
+>
+> Datasheet: https://www.cypress.com/file/37971/download
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Naresh Solanki <naresh.solanki@9elements.com>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Looks good to me, I see there are still some comments on the bindings,
+once that is fixed this is good to go.
 
 Yours,
 Linus Walleij

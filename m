@@ -2,140 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFAC55A85E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 11:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7853755A860
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 11:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbiFYJEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 05:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
+        id S232372AbiFYJEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 05:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiFYJEI (ORCPT
+        with ESMTP id S231934AbiFYJEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 05:04:08 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791B231374;
-        Sat, 25 Jun 2022 02:04:05 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 184so4490306pga.12;
-        Sat, 25 Jun 2022 02:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PxyMneeFLZ1Him14wA/vaqAtLh6smrx5mXTdl7jbmeM=;
-        b=eRu2Ta4mZyZ7borRVGbN1C1efQXR+klT/iliBLQtfzujyuP5iIl8xotq8DV1BMZq0Q
-         B38m7L/JutSdFDHhM0DKpFiBoYebjt13Ikcwl2aWjOeau/wTXVrjjDGe3exTJxqwwesY
-         WLyh9MDasoEDd+jm6MOFsYNoz/vYArosduWEVW7KjtLliagDRoVMRRII3Pen5ZpnolPk
-         pdsW4ACN9f8PrVK5nJU6GR5pM165kVo5KOZgrS8RTQohmVCpPq6KX59bHcWo4352BNtJ
-         HmpRL9TdC3sVXS20e977a9dDwh0EEO+5RLgGwsq5px3wPN80XOJ5JAU8NhDkRoP0NU3b
-         YLWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PxyMneeFLZ1Him14wA/vaqAtLh6smrx5mXTdl7jbmeM=;
-        b=UNNw/pKhKVoRs3Ieuq+d7ceOxuNNHbeCoBFK7xx9H8BBP+ByFeNS4bNw/az9caAsi6
-         rKbZg55nG+qUMlPntrspGmNL2ceW7BfL2k0D1u6KRneM8CDMiFWGby8VzWbDmjs2epoI
-         lUt7y9Ea9C10THP5BSdxXYEI8jpOrzt8gBWb8NvqCk1V3/V/dDQB/89a92lYipGk4m1J
-         yO6f1CgdLpFRihLoINQPIE6IQQU2hn8Y9TzJBZfEFeKQ73myfMgpD5eTpKh03ABZKira
-         n9kckFFbR4jJ1LjJeBvFr96nPrN2EyatDJoNdCVQyLnbLf2PnD3BgM90Ung4XkVxPB2W
-         ibdw==
-X-Gm-Message-State: AJIora8Nn4hhgh/LVrkFCdK+GiV0CDRFw9m9TXDzb8CUpOflRs6w3joh
-        QBiqmZ0NJxBTptp23wr2PC5QzJCCSd47bw==
-X-Google-Smtp-Source: AGRyM1uAw3KjZ1St9BZsASG20Q7hiSOWE/GnoUyPQgT5ZJyzutxL4AHeYm+O2bpMjAxP50ac2mNNnQ==
-X-Received: by 2002:a63:ff0c:0:b0:3fd:29dd:c478 with SMTP id k12-20020a63ff0c000000b003fd29ddc478mr2849728pgi.291.1656147844935;
-        Sat, 25 Jun 2022 02:04:04 -0700 (PDT)
-Received: from ZEN.. ([23.225.169.79])
-        by smtp.googlemail.com with ESMTPSA id t13-20020a17090340cd00b00166496ba268sm3130433pld.285.2022.06.25.02.04.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 02:04:04 -0700 (PDT)
-From:   xhe <xw897002528@gmail.com>
-Cc:     xw897002528@gmail.com, Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4] Bluetooth: btusb: Add a new VID/PID 0489/e0e2 for MT7922
-Date:   Sat, 25 Jun 2022 17:03:57 +0800
-Message-Id: <20220625090358.9373-1-xw897002528@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        Sat, 25 Jun 2022 05:04:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC66E33E06;
+        Sat, 25 Jun 2022 02:04:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D39DB8123D;
+        Sat, 25 Jun 2022 09:04:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2934CC36AEA;
+        Sat, 25 Jun 2022 09:04:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656147882;
+        bh=d1m4ViZsUEwStF52CXPdQ9iCbz67N/mVOzUvE7P5wcw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tWDHnfEZx3QkxTH3f5U99sMoIvQNLix0IJC3qrVIHPB3LtrfqVkeLo536RMlO1nX2
+         +Zabn6PkNK2NitORIlQENHi7oVs169Ukh+JWLU+KUspJyrPdVMDh55KEsKzoNMwo19
+         II3+rohbnpBr34zHgbJElz449MY5eHORDiw89iwKvfC1LTP32yZAMV60SnKbFV1ZSL
+         S1tJWHQ4Wk/xcmGgcHuIiuwxbmiTMdzqUlFhblv3jxSnHArza6Ga46gNXqboW1fRnd
+         X1qWUuhF2YW95iBfWvQP2T+51fUdhFBFJBtt6wjONoPRTXDGLoMgCwtzfqEfF9XJZF
+         HA17ncpGUVN0A==
+Received: by mail-vk1-f178.google.com with SMTP id b4so2248343vkh.6;
+        Sat, 25 Jun 2022 02:04:42 -0700 (PDT)
+X-Gm-Message-State: AJIora/tzVJWrE++TIUSOkGpiwyJw3j2Gvd81aWmCiHgg/bS7bdKSMXb
+        /9693EHj40y0UJQUQ9GFWgqT4Yd0whOuRpwZot4=
+X-Google-Smtp-Source: AGRyM1uJK+hFV1788av5WDmrYXC8l5SBL9TOTOr7dxCRSj9z5BhWbOhQj1/NWCoCyOaSvuBXPif8Z3VMPiFIkHM61ZI=
+X-Received: by 2002:a05:6122:13ab:b0:36c:65f:ea30 with SMTP id
+ n11-20020a05612213ab00b0036c065fea30mr943426vkp.37.1656147881167; Sat, 25 Jun
+ 2022 02:04:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220625080423.2797-1-chenfeiyang@loongson.cn> <CAMZfGtWT7oPq6bD_fRn2gVNX8Lj3=ev21EAoaCCPeq-P_NYF0g@mail.gmail.com>
+In-Reply-To: <CAMZfGtWT7oPq6bD_fRn2gVNX8Lj3=ev21EAoaCCPeq-P_NYF0g@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 25 Jun 2022 17:04:28 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5K9LG5P6WYJ+64-fi+s=TZbbJQG9E0vHJwOf9Pai5z4w@mail.gmail.com>
+Message-ID: <CAAhV-H5K9LG5P6WYJ+64-fi+s=TZbbJQG9E0vHJwOf9Pai5z4w@mail.gmail.com>
+Subject: Re: [PATCH] page-flags.h: Fix a missing header include of static_keys.h
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Feiyang Chen <chris.chenfeiyang@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux- stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: He Wang <xw897002528@gmail.com>
+Hi, Muchun,
 
-Add VID/PID 0489:e0e2 for MediaTek MT7922 Bluetooth chip. Found and
-tested with Asus UM5302TA.
+On Sat, Jun 25, 2022 at 4:50 PM Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> On Sat, Jun 25, 2022 at 4:04 PM Feiyang Chen
+> <chris.chenfeiyang@gmail.com> wrote:
+> >
+> > The page-flags.h header relies on static keys since commit
+> > a6b40850c442bf ("mm: hugetlb: replace hugetlb_free_vmemmap_enabled
+> > with a static_key"), so make sure to include the header to avoid
+> > compilation errors.
+> >
+> > Fixes: a6b40850c442bf ("mm: hugetlb: replace hugetlb_free_vmemmap_enabled with a static_key")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> > ---
+> >  include/linux/page-flags.h | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> > index e66f7aa3191d..147b336c7a35 100644
+> > --- a/include/linux/page-flags.h
+> > +++ b/include/linux/page-flags.h
+> > @@ -11,6 +11,7 @@
+> >  #include <linux/mmdebug.h>
+> >  #ifndef __GENERATING_BOUNDS_H
+> >  #include <linux/mm_types.h>
+> > +#include <linux/static_key.h>
+>
+> I did not include this. The change makes sense to me. But I am
+> curious what configs cause the compiling error. Would you mind
+> sharing the config with us?
+We found this problem when we add
+ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to LoongArch. Since this isn't
+upstream yet, we cannot give such a config now (the default config of
+X86 and ARM64 is just OK).
 
-From /sys/kernel/debug/usb/devices:
-
-T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=0489 ProdID=e0e2 Rev= 1.00
-S:  Manufacturer=MediaTek Inc.
-S:  Product=Wireless_Device
-S:  SerialNumber=000000000
-C:* #Ifs= 3 Cfg#= 1 Atr=e0 MxPwr=100mA
-A:  FirstIf#= 0 IfCount= 3 Cls=e0(wlcon) Sub=01 Prot=01
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=125us
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=8a(I) Atr=03(Int.) MxPS=  64 Ivl=125us
-E:  Ad=0a(O) Atr=03(Int.) MxPS=  64 Ivl=125us
-I:  If#= 2 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=8a(I) Atr=03(Int.) MxPS= 512 Ivl=125us
-E:  Ad=0a(O) Atr=03(Int.) MxPS= 512 Ivl=125us
-
-Signed-off-by: He Wang <xw897002528@gmail.com>
----
- drivers/bluetooth/btusb.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index fb1a67189412..23ff919d7768 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -480,6 +480,9 @@ static const struct usb_device_id blacklist_table[] = {
- 	{ USB_DEVICE(0x13d3, 0x3568), .driver_info = BTUSB_MEDIATEK |
- 						     BTUSB_WIDEBAND_SPEECH |
- 						     BTUSB_VALID_LE_STATES },
-+	{ USB_DEVICE(0x0489, 0xe0e2), .driver_info = BTUSB_MEDIATEK |
-+						     BTUSB_WIDEBAND_SPEECH |
-+						     BTUSB_VALID_LE_STATES },
- 
- 	/* Additional Realtek 8723AE Bluetooth devices */
- 	{ USB_DEVICE(0x0930, 0x021d), .driver_info = BTUSB_REALTEK },
--- 
-2.33.0
-
+Huacai
+>
+> Thanks.
+>
+> >  #include <generated/bounds.h>
+> >  #endif /* !__GENERATING_BOUNDS_H */
+> >
+> > --
+> > 2.27.0
+> >
+>

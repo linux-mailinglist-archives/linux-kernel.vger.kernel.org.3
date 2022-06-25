@@ -2,109 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD1755A80E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 10:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3209A55A810
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 10:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbiFYIQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 04:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S232220AbiFYIXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 04:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiFYIQh (ORCPT
+        with ESMTP id S231923AbiFYIXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 04:16:37 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC62132EF9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 01:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=5V6BSymDH1McbiKZ/xluLb/pdnkM
-        F+FkNit2fs4ZrCs=; b=WXjMsMmmRB5XqQ29xvQymoPX/rAdcvQEn00DGBnJyW+D
-        uJpC6K414X9MPgRp8firZYv612qqVJPsp5ksBnWUrLiK4gwozK0G0CUkc1VcaQ8D
-        wSonuzG1g4uQ7jD5NOYVmA+zAWHN1vrPJHDXxx5npDFrfBbUS3IFVWkAhArTH1s=
-Received: (qmail 1730526 invoked from network); 25 Jun 2022 10:16:34 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 25 Jun 2022 10:16:34 +0200
-X-UD-Smtp-Session: l3s3148p1@iT4LTkHiT7wucq2i
-Date:   Sat, 25 Jun 2022 10:16:33 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Pavel Machek <pavel@denx.de>, linux-mmc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH v3 2/2] mmc: renesas_sdhi: Fix typo's
-Message-ID: <YrbEYbLkE4pk+oh0@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Pavel Machek <pavel@denx.de>, linux-mmc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220624181438.4355-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220624181438.4355-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Sat, 25 Jun 2022 04:23:14 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED91D12779;
+        Sat, 25 Jun 2022 01:23:13 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id h23so9038469ejj.12;
+        Sat, 25 Jun 2022 01:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=65Q8k0imOaRF9rnJ5hHPlshRRUlGLNdbW9j4sF8Q/TM=;
+        b=gUrn5r9Ph5LUVGtYTQdBY1IPrbtqC4eI1AIe2Rcu36DehVXdSc9vK2mj15KJQoF0H9
+         BvzWfuln4jPQOvwi1Z7V/gWK6fZ0adi9mbxrNSTyqhFexhMYLp1o39DSmzlHr+vhqwuC
+         sWKaUx66LLkPgAWAMW7+jE8dhpXfIWzusfTWidKzsFHuJA5qwvXAA0Auy2qvSnayi/zO
+         qaBLBQlgfFfK6heIBC6osC1iuxmD/3wCd67Camj7Xj78M3EMHbGTX0MaRKy3/DfE+rB8
+         O3Xb2BiuSTAIcba9DNCKPFluZoPDwymXjZddAddpaX86fLqHKtXERZmnft4v6j9M0ML+
+         dzzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=65Q8k0imOaRF9rnJ5hHPlshRRUlGLNdbW9j4sF8Q/TM=;
+        b=WhDVKsgF+KlsOIkrbVfFtdRVmask9aDHkNTtwmnQ1cnGC2BKyurwZ6BEoLnV9mhVrt
+         5XEx1Jb8FKZXGbh45eHbnfTGO8Q58YxV42wsTxQAcBv06NCq7Vv0ENuX0/CdPM0+kb2k
+         qmVjOux6Kr83XELN8ML6GPKs1y72uXfdpoXrFL9mx8IS9CNclIuTBd2I2BuwG8dkpvjA
+         NvGQusmBpt+q2xanXf60wna/NU08vWDXR3UdMKnQB/QRfz5pIc0I5KQSev123zToIIna
+         DRtzdhXeqoLwiD6YdxsTptMsGj1vCsoYfxu8DlRX90E5cjBek0gWeYpwXAFw4nG8n9wP
+         8ugw==
+X-Gm-Message-State: AJIora+GuNp6vtN4NOu+Nu1vcpGo5hpqsKFIEZuJk3zzYvT+j5UZY6RK
+        sWhbdGIPmrpOeJPztMHDLdylQY7KNLNG/0FSlekwAOKer9S42g==
+X-Google-Smtp-Source: AGRyM1vkYSWMUMHcrjnAB2zpsWLfkrs1qjSoyzng3NZUT/lgWgNtuFB9Hi+RMZ/8r6iW43Fk01yMR4s2n/+cG09CES4=
+X-Received: by 2002:a17:907:eab:b0:70f:599c:c730 with SMTP id
+ ho43-20020a1709070eab00b0070f599cc730mr2762650ejc.362.1656145392365; Sat, 25
+ Jun 2022 01:23:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3FbAJhIAQpuHUDQY"
-Content-Disposition: inline
-In-Reply-To: <20220624181438.4355-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220621073233.53776-1-nashuiliang@gmail.com> <CAEf4BzZmZjF62GzwQ2D7Sarhfha+Uc1g+TKPszZJ60jTMb0dbA@mail.gmail.com>
+In-Reply-To: <CAEf4BzZmZjF62GzwQ2D7Sarhfha+Uc1g+TKPszZJ60jTMb0dbA@mail.gmail.com>
+From:   Chuang W <nashuiliang@gmail.com>
+Date:   Sat, 25 Jun 2022 16:23:01 +0800
+Message-ID: <CACueBy6Ufi_jY9DcD_cTntPFxPe_6fOOqt5Ms-gg-ZcjDGE-CA@mail.gmail.com>
+Subject: Re: [PATCH v2] libbpf: Cleanup the kprobe_event on failed add_kprobe_event_legacy()
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jingren Zhou <zhoujingren@didiglobal.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Andrii,
 
---3FbAJhIAQpuHUDQY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Oh, yes. I verified that when bpf_program__attach_kprobe_opts() fails,
+the kprobe_event did not clean up.
+I will resubmit V3 soon, and fix it.
 
-On Fri, Jun 24, 2022 at 07:14:38PM +0100, Lad Prabhakar wrote:
-> Fix typo's,
-> * difference -> different
-> * alignment -> aligned
->=20
-> While at it updated the comment to make it clear that Renesas SDHI DMAC
-> needs buffers to be 128-byte aligned.
->=20
-> Reported-by: Pavel Machek <pavel@denx.de>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thanks.
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Thank you!
-
-
---3FbAJhIAQpuHUDQY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmK2xGEACgkQFA3kzBSg
-KbZN/Q/+NTB0ZETpR6A8plpIQaeCyq4O3v6ODzQvcoeRb1fg/ME1/C+1um++EUvm
-voqBAzePAcnHzQ7RasVYaNFM/Tdm1uHpkzaYz0Fpow6wknmaC3rSGO/Vx/0igpJ3
-KTsSXEVhvuv7po0ruuIhxqm3CAxPMwOi1owFFtHl77QY5/igRiaAH2aEQUKh2cWM
-EmlvF9b7g65swIgkZTaWY2s20+vGsQnVAKWDJxX4ayb2RXLTw2H4g/jNjR+tLXU2
-ooj4sqrGyees7jYqdYyENZI9odLnD3HK2+ulqsnE03aI9htLwa/5pK+x6/mgsDSs
-4/S3EeXCZ4cqvADCe6LAoz6x9gmoEEd/0YMqqfTFwuEEMwlxSQ0ptYTIsePuHAi/
-xjxLRX/2LNDKTDAY2ID7kcUK2SJN16gZ7FMsptDc1p8WG+TIMXw9MXuWZcOsL7uP
-fITP4M+QS77LF+I2fQMISfQtfaQ0h76I6+o4yW3ncgooptKdh4TIx23g2lIKZCwF
-c8dS90YG5H/YZf8UuI+oaVwgWFLNGs7zODTpB07ikhTTBgDV23PulPWgr50k1m2Y
-HN2yngTjjuJBxp1eMQZSo1tQZ8FvYxbxd/FMeWL3u2f2rONO/EGiQptVDPc27cCR
-B6dBLP0UzjXkX83M8n/19A5qV46bBzwPXIBvb/4cS5YrSespx4U=
-=oXPX
------END PGP SIGNATURE-----
-
---3FbAJhIAQpuHUDQY--
+On Thu, Jun 23, 2022 at 12:03 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Tue, Jun 21, 2022 at 12:32 AM Chuang W <nashuiliang@gmail.com> wrote:
+> >
+> > Before the 0bc11ed5ab60 commit ("kprobes: Allow kprobes coexist with
+> > livepatch"), in a scenario where livepatch and kprobe coexist on the
+> > same function entry, the creation of kprobe_event using
+> > add_kprobe_event_legacy() will be successful, at the same time as a
+> > trace event (e.g. /debugfs/tracing/events/kprobe/XX) will exist, but
+> > perf_event_open() will return an error because both livepatch and kprobe
+> > use FTRACE_OPS_FL_IPMODIFY.
+> >
+> > With this patch, whenever an error is returned after
+> > add_kprobe_event_legacy(), this ensures that the created kprobe_event is
+> > cleaned.
+> >
+> > Signed-off-by: Chuang W <nashuiliang@gmail.com>
+> > Signed-off-by: Jingren Zhou <zhoujingren@didiglobal.com>
+> > ---
+>
+> This part is good, but I think there are few error paths in
+> bpf_program__attach_kprobe_opts() itself that would need to call
+> remove_kprobe_event_legacy() explicitly as well, no?
+>
+> >  tools/lib/bpf/libbpf.c | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 0781fae58a06..d0a36350e22a 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -10809,10 +10809,11 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
+> >         }
+> >         type = determine_kprobe_perf_type_legacy(probe_name, retprobe);
+> >         if (type < 0) {
+> > +               err = type;
+> >                 pr_warn("failed to determine legacy kprobe event id for '%s+0x%zx': %s\n",
+> >                         kfunc_name, offset,
+> > -                       libbpf_strerror_r(type, errmsg, sizeof(errmsg)));
+> > -               return type;
+> > +                       libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
+> > +               goto clear_kprobe_event;
+> >         }
+> >         attr.size = sizeof(attr);
+> >         attr.config = type;
+> > @@ -10826,9 +10827,14 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
+> >                 err = -errno;
+> >                 pr_warn("legacy kprobe perf_event_open() failed: %s\n",
+> >                         libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
+> > -               return err;
+> > +               goto clear_kprobe_event;
+> >         }
+> >         return pfd;
+> > +
+> > +clear_kprobe_event:
+> > +       /* Clear the newly added kprobe_event */
+> > +       remove_kprobe_event_legacy(probe_name, retprobe);
+> > +       return err;
+> >  }
+> >
+> >  struct bpf_link *
+> > --
+> > 2.34.1
+> >

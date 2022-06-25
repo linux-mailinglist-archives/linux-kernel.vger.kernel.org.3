@@ -2,66 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F6055A604
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 04:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EA755A5FB
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 04:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbiFYCLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 22:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41780 "EHLO
+        id S230220AbiFYCF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 22:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiFYCLP (ORCPT
+        with ESMTP id S229450AbiFYCF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 22:11:15 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378FB522C8
-        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 19:11:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656123074; x=1687659074;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PA+NlwtwluPHOiMrJMO876oPMfHwLC1uX43agZsOREk=;
-  b=YOg2bZb9MHfF68nxam2iJlONpfVk7b1HNzXAw2v4mRCt5NhJee+0hXzW
-   IltNsD6pC1zBXt1c9bMPiCSZ9q+a+RxyOInwIoW1MJzg884KOmePJZu2i
-   fYVYl8CEvvy541Dx+Q5qMMJ83Ow71OA0Z8+XpoBled676QhL6xKsTQyLo
-   Y=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 24 Jun 2022 19:11:14 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 19:11:13 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 24 Jun 2022 19:11:12 -0700
-Received: from [10.111.168.196] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 24 Jun
- 2022 19:11:10 -0700
-Message-ID: <dbc47ebe-ee03-8e3e-ed0d-b7ab299582d1@quicinc.com>
-Date:   Fri, 24 Jun 2022 19:11:08 -0700
+        Fri, 24 Jun 2022 22:05:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465C14F444;
+        Fri, 24 Jun 2022 19:05:57 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LVHNc1JYdzkWpR;
+        Sat, 25 Jun 2022 10:04:16 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 25 Jun 2022 10:05:14 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 25 Jun
+ 2022 10:05:14 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>
+CC:     <Frank.Li@nxp.com>, <jdmason@kudzu.us>, <kishon@ti.com>,
+        <lpieralisi@kernel.org>, <kw@linux.com>, <bhelgaas@google.com>
+Subject: [PATCH -next v2] PCI: endpoint: pci-epf-vntb: fix error handle in epf_ntb_mw_bar_init()
+Date:   Sat, 25 Jun 2022 10:15:16 +0800
+Message-ID: <20220625021516.431473-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dp: Remove encoder pointer from struct msm_dp
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
-        Sean Paul <sean@poorly.run>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-References: <20220625002811.3225344-1-swboyd@chromium.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220625002811.3225344-1-swboyd@chromium.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,100 +50,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In error case of epf_ntb_mw_bar_init(), memory window BARs should be
+cleared, so add 'num_mws' parameter in epf_ntb_mw_bar_clear() and
+calling it in error path to clear the BARs. Also add missing error
+code when pci_epc_mem_alloc_addr() fails.
 
+Fixes: ff32fac00d97 ("NTB: EPF: support NTB transfer between PCI RC and EP connection")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+v2:
+  add error label err_set_bar and move pci_epc_clear_bar() to it
+---
+ drivers/pci/endpoint/functions/pci-epf-vntb.c | 20 ++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-On 6/24/2022 5:28 PM, Stephen Boyd wrote:
-> We don't need to stash the encoder here. Instead we can simply pass it
-> around as an argument.
-> 
-> Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/dp/dp_display.c | 4 +---
->   drivers/gpu/drm/msm/dp/dp_display.h | 1 -
->   drivers/gpu/drm/msm/dp/dp_drm.c     | 8 ++++----
->   drivers/gpu/drm/msm/dp/dp_drm.h     | 2 +-
->   4 files changed, 6 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index da5c03a8cc4c..798fd5398b48 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1621,8 +1621,6 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
->   		return ret;
->   	}
->   
-> -	dp_display->encoder = encoder;
-> -
->   	ret = dp_display_get_next_bridge(dp_display);
->   	if (ret)
->   		return ret;
-> @@ -1638,7 +1636,7 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
->   
->   	priv->bridges[priv->num_bridges++] = dp_display->bridge;
->   
-> -	dp_display->connector = dp_drm_connector_init(dp_display);
-> +	dp_display->connector = dp_drm_connector_init(dp_display, encoder);
->   	if (IS_ERR(dp_display->connector)) {
->   		ret = PTR_ERR(dp_display->connector);
->   		DRM_DEV_ERROR(dev->dev,
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
-> index 4f9fe4d7610b..dcedf021f7fe 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.h
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
-> @@ -15,7 +15,6 @@ struct msm_dp {
->   	struct device *codec_dev;
->   	struct drm_bridge *bridge;
->   	struct drm_connector *connector;
-> -	struct drm_encoder *encoder;
->   	struct drm_bridge *next_bridge;
->   	bool is_connected;
->   	bool audio_enabled;
-> diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-> index 62d58b9c4647..6df25f7662e7 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_drm.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-> @@ -116,7 +116,7 @@ struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *
->   	}
->   
->   	if (dp_display->next_bridge) {
-> -		rc = drm_bridge_attach(dp_display->encoder,
-> +		rc = drm_bridge_attach(encoder,
->   					dp_display->next_bridge, bridge,
->   					DRM_BRIDGE_ATTACH_NO_CONNECTOR);
->   		if (rc < 0) {
-> @@ -130,15 +130,15 @@ struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *
->   }
->   
->   /* connector initialization */
-> -struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
-> +struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display, struct drm_encoder *encoder)
->   {
->   	struct drm_connector *connector = NULL;
->   
-> -	connector = drm_bridge_connector_init(dp_display->drm_dev, dp_display->encoder);
-> +	connector = drm_bridge_connector_init(dp_display->drm_dev, encoder);
->   	if (IS_ERR(connector))
->   		return connector;
->   
-> -	drm_connector_attach_encoder(connector, dp_display->encoder);
-> +	drm_connector_attach_encoder(connector, encoder);
->   
->   	return connector;
->   }
-> diff --git a/drivers/gpu/drm/msm/dp/dp_drm.h b/drivers/gpu/drm/msm/dp/dp_drm.h
-> index f4b1ed1e24f7..82035dbb0578 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_drm.h
-> +++ b/drivers/gpu/drm/msm/dp/dp_drm.h
-> @@ -19,7 +19,7 @@ struct msm_dp_bridge {
->   
->   #define to_dp_bridge(x)     container_of((x), struct msm_dp_bridge, bridge)
->   
-> -struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display);
-> +struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display, struct drm_encoder *encoder);
->   struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
->   			struct drm_encoder *encoder);
->   
-> 
-> base-commit: 24df12013853ac59c52cc726e9cbe51e38d09eda
+diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+index ebf7e243eefa..ee9fee167d48 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
++++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+@@ -567,6 +567,8 @@ static int epf_ntb_db_bar_init(struct epf_ntb *ntb)
+ 	return -1;
+ }
+ 
++static void epf_ntb_mw_bar_clear(struct epf_ntb *ntb, int num_mws);
++
+ /**
+  * epf_ntb_db_bar_clear() - Clear doorbell BAR and free memory
+  *   allocated in peers outbound address space
+@@ -625,13 +627,21 @@ static int epf_ntb_mw_bar_init(struct epf_ntb *ntb)
+ 							      &ntb->vpci_mw_phy[i],
+ 							      size);
+ 		if (!ntb->vpci_mw_addr[i]) {
++			ret = -ENOMEM;
+ 			dev_err(dev, "Failed to allocate source address\n");
+-			goto err_alloc_mem;
++			goto err_set_bar;
+ 		}
+ 	}
+ 
+ 	return ret;
++
++err_set_bar:
++	pci_epc_clear_bar(ntb->epf->epc,
++			  ntb->epf->func_no,
++			  ntb->epf->vfunc_no,
++			  &ntb->epf->bar[barno]);
+ err_alloc_mem:
++	epf_ntb_mw_bar_clear(ntb, i);
+ 	return ret;
+ }
+ 
+@@ -640,12 +650,12 @@ static int epf_ntb_mw_bar_init(struct epf_ntb *ntb)
+  * @ntb: NTB device that facilitates communication between HOST and vHOST
+  *
+  */
+-static void epf_ntb_mw_bar_clear(struct epf_ntb *ntb)
++static void epf_ntb_mw_bar_clear(struct epf_ntb *ntb, int num_mws)
+ {
+ 	enum pci_barno barno;
+ 	int i;
+ 
+-	for (i = 0; i < ntb->num_mws; i++) {
++	for (i = 0; i < num_mws; i++) {
+ 		barno = ntb->epf_ntb_bar[BAR_MW0 + i];
+ 		pci_epc_clear_bar(ntb->epf->epc,
+ 				  ntb->epf->func_no,
+@@ -774,7 +784,7 @@ static int epf_ntb_epc_init(struct epf_ntb *ntb)
+ 	return 0;
+ 
+ err_write_header:
+-	epf_ntb_mw_bar_clear(ntb);
++	epf_ntb_mw_bar_clear(ntb, ntb->num_mws);
+ err_mw_bar_init:
+ 	epf_ntb_db_bar_clear(ntb);
+ err_db_bar_init:
+@@ -794,7 +804,7 @@ static int epf_ntb_epc_init(struct epf_ntb *ntb)
+ static void epf_ntb_epc_cleanup(struct epf_ntb *ntb)
+ {
+ 	epf_ntb_db_bar_clear(ntb);
+-	epf_ntb_mw_bar_clear(ntb);
++	epf_ntb_mw_bar_clear(ntb, ntb->num_mws);
+ }
+ 
+ #define EPF_NTB_R(_name)						\
+-- 
+2.25.1
+

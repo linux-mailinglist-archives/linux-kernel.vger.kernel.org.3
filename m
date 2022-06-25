@@ -2,113 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EE555AC37
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 21:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C1C55AC39
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 21:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233320AbiFYTw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 15:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
+        id S233333AbiFYT6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 15:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbiFYTw6 (ORCPT
+        with ESMTP id S233302AbiFYT6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 15:52:58 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEDEDA9;
-        Sat, 25 Jun 2022 12:52:57 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id p3-20020a17090a428300b001ec865eb4a2so8700516pjg.3;
-        Sat, 25 Jun 2022 12:52:57 -0700 (PDT)
+        Sat, 25 Jun 2022 15:58:13 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A605A6170
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 12:58:11 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id fd6so7815279edb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 12:58:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LBICSrZ7ZTWE0aGK5zqnffAevM2FyYaErZq8jVNzZXA=;
-        b=QMQzLC22KyQXzmmmmZz6u5dIeDl23a/ENie1aFh9995ukEC0MzKuKszLQl+8mcAwh7
-         YPKbC09oROeAK125AYXWnHmXsgWRoXfx+hOnTgmX8IlzsG8fzyxSysbZDzzzIi7PNqlE
-         ZMtA6mW04ey2gLGM024Tb1B3yrV0jH6nb1RWXbSzfyPvEN7V2fkwrVYgLJk82PjCmMSe
-         fynTwVvBKtSrzi+F4ReP+VRyL1jzCvXsVAPVWKBkPB/nJskPURhNwm+WaM3WuhXNfECo
-         M/PaGWCraxwncSPxHxZyoFxMQ0wpSdqvjl27d7uUiF3ZZHK0dh5oEHkOpuNkhzzjRdYa
-         +u/A==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6OYSGRWE6FiNYEJq4CnoTkXsE+VZfA15rUqtVgbhIaM=;
+        b=pI9zO9494ah2JfX794h4yCpf3NSPANue/0Oj68Ks/XZG1Pa1gD0fmd5n0kAkT64bha
+         ZUINPjhPAk8L8QQyR7p26pAPWFnXGLcD0Jfa0gVYuhTnbx22TCS/8bF/sEtG4RG4EEty
+         Xd5Hzph1eggOtuK4tUg6//XPa2po/nu/Ok9Qhs3BJAMDS+Djj6AAXXwZR/4e6NPhZUbg
+         yRu+OAZRYnO8INkVa6uDQsMyO0Yhx5Ih9j4Nl7UlCmkE3E2tlS/leXrnW0TVNpLFuERJ
+         XkX8PGW1egQ10tdmuFgdXKxhg10I4BfI/dX+CR241pY4KvhInus8putiCrRRfJzp/gST
+         fr8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LBICSrZ7ZTWE0aGK5zqnffAevM2FyYaErZq8jVNzZXA=;
-        b=wD/AoMr2RVaIsVlBLjLZ3kUC+1XiLDSKfNqjQQeUhMEpkcoaEW6h35h6G1uYdF3NK3
-         iOfiyuTyfK08jpjXqAaVTzGbj4hLQoGTLuaQFMxMAYc8B+CyuoAqfpMlzPftVGrP3nYe
-         BRMeRfHpfGMcM0xSNlofj9ae7g5Dj6qAGK7J8Z6GnWdLbiSF0HOpKbnmjY6FAfoZ2nG+
-         xCO6xDqAU3336ycy3PgZOEcDe43NmSw9CHQTuRZb6b73oGhA+kF4KsA+dz1406DOyXki
-         uf+Sq7i2tyEKG3PhxJ2fUiL0kGSLZ09laqOYOYMokK2+qsxO52/MfpBPrfkfnnPrni4m
-         FLdQ==
-X-Gm-Message-State: AJIora/A47Wx8Tf/UBp3vclys9ZtFjyR6R8/KrPoMEj9Zq41WXisXdPm
-        x5+W+57dTE7EYHFyFsvnsMk=
-X-Google-Smtp-Source: AGRyM1syOXb9wi5OVYdsvYAFPIYyai2W+N5NrJh+uFS3ivN1hfO6l7MW6BEDR/COeMHTur99obiNcQ==
-X-Received: by 2002:a17:902:b083:b0:16a:2ce3:ffe6 with SMTP id p3-20020a170902b08300b0016a2ce3ffe6mr5703160plr.151.1656186776808;
-        Sat, 25 Jun 2022 12:52:56 -0700 (PDT)
-Received: from fedora.. ([2409:4042:261d:8029:35f0:415b:b9b4:3fcb])
-        by smtp.gmail.com with ESMTPSA id c12-20020a624e0c000000b005258df61ceesm1335163pfb.90.2022.06.25.12.52.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 12:52:55 -0700 (PDT)
-From:   Gautam <gautammenghani201@gmail.com>
-To:     sj@kernel.org, shuah@kernel.org
-Cc:     Gautam <gautammenghani201@gmail.com>, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] kselftests/damon: add support for cases where debugfs cannot be read
-Date:   Sun, 26 Jun 2022 01:22:45 +0530
-Message-Id: <20220625195245.4368-1-gautammenghani201@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220625185501.85168-1-sj@kernel.org>
-References: <20220625185501.85168-1-sj@kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6OYSGRWE6FiNYEJq4CnoTkXsE+VZfA15rUqtVgbhIaM=;
+        b=luFbUh0dWl6RirHR7E6rRmrs2G+qRBnOduOxlMBMN0pyCMF9WailREzU6tMrhomA5R
+         JMIih9FsKb7/CS7iaLasnPDrnjv4NNvuRkrpXegW2OhlIaKN9vDFJXH81MKIN9ngfNRg
+         gzY6T4UUCvcla8CAW5gjTwtzb/oUIOcHli4iRL3i1EhOkbpD2xX5zHFsKcTjWKZEqIob
+         NP4XG7MK3dXMwjBOh04UconCp2KJT/Ne5k/CVZ2+LM6xzMWbX0IMm/qvZjXxdziyLAlG
+         7yS4/zhqL+SXm54FIwrGycTphCQAAo8I7aD5Jn1O1Nlh4y65K+3sq7noctE+NdXeMbMb
+         KCSQ==
+X-Gm-Message-State: AJIora8t2I24/jFTDGcRx8Jqh5CFBazxJp5WaZwD4JB96O0cXVbpeMdu
+        dT5EIzRmK1zppkigfd2CBGKVwA==
+X-Google-Smtp-Source: AGRyM1vPCotBygRwDE42Qng9nZ0Zryg+aZrbL44lLPrBOHgnnnMslwk52LUPs3mmcexth6LAcd1Rew==
+X-Received: by 2002:aa7:c486:0:b0:435:5d50:ab39 with SMTP id m6-20020aa7c486000000b004355d50ab39mr7004006edq.104.1656187090221;
+        Sat, 25 Jun 2022 12:58:10 -0700 (PDT)
+Received: from [192.168.0.239] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d3-20020a1709063ec300b0072629cbf1efsm2943546ejj.119.2022.06.25.12.58.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Jun 2022 12:58:09 -0700 (PDT)
+Message-ID: <89b6a40b-eb6b-eba5-78c3-6b5f35bed717@linaro.org>
+Date:   Sat, 25 Jun 2022 21:58:08 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/2] MIPS: dts: correct gpio-keys names and properties
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Rahul Bedarkar <rahulbedarkar89@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220624170740.66271-1-krzysztof.kozlowski@linaro.org>
+ <ZVVZDR.R2QT2GMTT9WS1@crapouillou.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZVVZDR.R2QT2GMTT9WS1@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel is in lockdown mode when secureboot is enabled and hence
-debugfs cannot be used. Add support for this and other general cases 
-where debugfs cannot be read and communicate the same to the user before
-running tests.
+On 24/06/2022 20:40, Paul Cercueil wrote:
+> Hi Krzysztof,
+> 
+> Le ven., juin 24 2022 at 19:07:39 +0200, Krzysztof Kozlowski 
+> <krzysztof.kozlowski@linaro.org> a écrit :
+>> gpio-keys children do not use unit addresses.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> ---
+>>
+>> See: 
+>> https://lore.kernel.org/all/20220616005224.18391-1-krzysztof.kozlowski@linaro.org/
+>> ---
+>>  arch/mips/boot/dts/img/pistachio_marduk.dts   |  4 +--
+>>  arch/mips/boot/dts/ingenic/gcw0.dts           | 31 
+>> +++++++++----------
+>>  arch/mips/boot/dts/ingenic/rs90.dts           | 18 +++++------
+>>  arch/mips/boot/dts/pic32/pic32mzda_sk.dts     |  9 ++----
+>>  .../boot/dts/qca/ar9132_tl_wr1043nd_v1.dts    |  6 ++--
+>>  arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  4 +--
+>>  .../mips/boot/dts/qca/ar9331_dragino_ms14.dts |  6 ++--
+>>  arch/mips/boot/dts/qca/ar9331_omega.dts       |  4 +--
+>>  .../qca/ar9331_openembed_som9331_board.dts    |  4 +--
+>>  arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts   |  8 ++---
+>>  10 files changed, 37 insertions(+), 57 deletions(-)
+>>
+>> diff --git a/arch/mips/boot/dts/img/pistachio_marduk.dts 
+>> b/arch/mips/boot/dts/img/pistachio_marduk.dts
+>> index a8708783f04b..a8da2f992b1a 100644
+>> --- a/arch/mips/boot/dts/img/pistachio_marduk.dts
+>> +++ b/arch/mips/boot/dts/img/pistachio_marduk.dts
+>> @@ -59,12 +59,12 @@ led-1 {
+>>
+>>  	keys {
+>>  		compatible = "gpio-keys";
+>> -		button@1 {
+>> +		button-1 {
+>>  			label = "Button 1";
+>>  			linux,code = <0x101>; /* BTN_1 */
+>>  			gpios = <&gpio3 6 GPIO_ACTIVE_LOW>;
+>>  		};
+>> -		button@2 {
+>> +		button-2 {
+>>  			label = "Button 2";
+>>  			linux,code = <0x102>; /* BTN_2 */
+>>  			gpios = <&gpio2 14 GPIO_ACTIVE_LOW>;
+>> diff --git a/arch/mips/boot/dts/ingenic/gcw0.dts 
+>> b/arch/mips/boot/dts/ingenic/gcw0.dts
+>> index 4abb0318416c..5d33f26fd28c 100644
+>> --- a/arch/mips/boot/dts/ingenic/gcw0.dts
+>> +++ b/arch/mips/boot/dts/ingenic/gcw0.dts
+>> @@ -130,89 +130,86 @@ backlight: backlight {
+>>
+>>  	gpio-keys {
+>>  		compatible = "gpio-keys";
+>> -		#address-cells = <1>;
+>> -		#size-cells = <0>;
+> 
+> Are you sure you can remove these?
 
-Signed-off-by: Gautam <gautammenghani201@gmail.com>
----
-Changes in v2:
-1. Modify the error message to account for general cases.
-2. Change the return code so that the test is skipped.
+Yes, from DT spec point of view, DT bindings and Linux implementation.
+However this particular change was not tested, except building.
 
-Changes in v3:
-1. Change the name of variable holding the error message.
+> 
+> Looking at paragraph 2.3.5 of the DT spec, I would think they have to 
+> stay (although with #address-cells = <0>).
 
-Changes in v4:
-1. Correct the mode of the source file.
+The paragraph 2.3.5 says nothing about regular properties (which can be
+also child nodes). It says about children of a bus, right? It's not
+related here, it's not a bus.
 
- tools/testing/selftests/damon/_chk_dependency.sh | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Second, why exactly this one gpio-keys node is different than all other
+gpio-keys everywhere and than bindings? Why this one has to be
+incompatible/wrong according to bindings (which do not allow
+address-cells and nodes with unit addresses)?
 
-diff --git a/tools/testing/selftests/damon/_chk_dependency.sh b/tools/testing/selftests/damon/_chk_dependency.sh
-index 0189db81550b..0328ac0b5a5e 100644
---- a/tools/testing/selftests/damon/_chk_dependency.sh
-+++ b/tools/testing/selftests/damon/_chk_dependency.sh
-@@ -26,3 +26,13 @@ do
- 		exit 1
- 	fi
- done
-+
-+permission_error="Operation not permitted"
-+for f in attrs target_ids monitor_on
-+do
-+	status=$( cat "$DBGFS/$f" 2>&1 )
-+	if [ "${status#*$permission_error}" != "$status" ]; then
-+		echo "Permission for reading $DBGFS/$f denied; maybe secureboot enabled?"
-+		exit $ksft_skip
-+	fi
-+done
--- 
-2.36.1
 
+Best regards,
+Krzysztof

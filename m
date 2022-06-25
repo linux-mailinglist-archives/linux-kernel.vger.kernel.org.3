@@ -2,153 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF2F55AD9B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 01:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F0555AD9A
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 01:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbiFYXlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 19:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S233563AbiFYXlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 19:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbiFYXl3 (ORCPT
+        with ESMTP id S233648AbiFYXll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 19:41:29 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BFFF5BD
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:41:28 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:40444)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o5FP5-00H1OY-Is; Sat, 25 Jun 2022 17:41:27 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:57606 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o5FP4-00AUwT-FE; Sat, 25 Jun 2022 17:41:27 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>
-References: <20220622140853.31383-1-pmladek@suse.com>
-        <YraWWl+Go17uPOgR@mtj.duckdns.org>
-        <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
-        <874k0863x8.fsf@email.froward.int.ebiederm.org>
-        <CAHk-=wgTG2K3erROP19320zBN6BHVf0hRfXGdawkGR4gzrJN6w@mail.gmail.com>
-        <CAHk-=whLsaRKaFKS0UffeCYYCVyP0bbiB4BTYTaXtScgu6R9yA@mail.gmail.com>
-        <87pmiw1fy6.fsf@email.froward.int.ebiederm.org>
-Date:   Sat, 25 Jun 2022 18:41:19 -0500
-In-Reply-To: <87pmiw1fy6.fsf@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Sat, 25 Jun 2022 18:28:01 -0500")
-Message-ID: <87a6a01fc0.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sat, 25 Jun 2022 19:41:41 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CD1F5BD
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:41:40 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id n1so7906677wrg.12
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:41:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=oeG9/MntnZxSW3F+UM6mF8G+txKDXFuaJCmjLujAElc=;
+        b=HaRf6j/uNXx/YH7QCUTXbYfh3VY6fgsQ2PAnux8JobTpuDQp6Z4OvKpkdV6x+x5SfL
+         9FGy0B0q/hGis4jguc1W3oR65teZL7ZIly9WWe90pt6IdcvaYekqJiALPl7HxH+IX/3/
+         vl30EG6OwM6BSH3k4y7Wh4g8TwM/J4k6XEe9wvPX4Tag63W5918deErqQ3Nk7Cg/TZpg
+         cOEVlBusPkhMzBItrQZuoD7zGWyg0IQaTG18ijMCtk/QWVoyN4vt6dCFZOG7RpCE0hbs
+         YUDF9dETOaGK4LHMtbE89DB/bOGM4SPxpwSLxr4SQOg+zVynUCGajMml2C44jMjUye1C
+         9IYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=oeG9/MntnZxSW3F+UM6mF8G+txKDXFuaJCmjLujAElc=;
+        b=HK/z9FqeJZ4v1WZJw9c6U4lkppeM8DoESzpOczy7h4Gpxf+yblxn7GfUy7+ekcdoKk
+         wDbNcb1WDeggXy7Aw8PHkT0L7qMgxiE1HT0JmgrBwncDNc5/E1sjL3NZuLz8vqYelu9A
+         J+Nv9hM5czYT8vTXeSvzttjgGRsS9LvU6hiLEiiA8CFaT33kE2+PXMMHWS3h4oT9uGWR
+         QGKCM4Ke/zxpYpiNjIuVtLcJAplGi7kcCcKvLWUgxBpc7wdN3birMTWdJsyIA07Dn9kU
+         TpSVOKlaIwXMEV1UcVDNeIByl8lOEz0YiWDwgDhCjbFRzJgWEqTgrq7LHEZpmg1FyiN2
+         /urw==
+X-Gm-Message-State: AJIora9UO6mJo2di0hAD/ISgb9KZlGUn4r6HF4PkmbK/g129yGMP9MZG
+        cpdghQALr2Zq1FSETbtzWps+kxAJ2WcrPsYaffc=
+X-Google-Smtp-Source: AGRyM1u+85lhVdNYy56saUgp3RbXP8mvBjbDQG24foRRxL0M72w8TyhCrNvSdD0UEJDKhxkUUamcYlRuRlI9mZA0rDE=
+X-Received: by 2002:a05:6000:71e:b0:21b:adf2:c9ab with SMTP id
+ bs30-20020a056000071e00b0021badf2c9abmr5700404wrb.153.1656200499169; Sat, 25
+ Jun 2022 16:41:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1o5FP4-00AUwT-FE;;;mid=<87a6a01fc0.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX19+nfYuM5QkUmmMWqKPyESId/ALYZsS/kc=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Received: by 2002:a1c:540f:0:0:0:0:0 with HTTP; Sat, 25 Jun 2022 16:41:38
+ -0700 (PDT)
+From:   Mr Cheng Lee <leedasha710@gmail.com>
+Date:   Sun, 26 Jun 2022 01:41:38 +0200
+Message-ID: <CACy=aTMSJKBsP0-W0u7om-QSybZn8d+zMYym3ZC43A6-ZdzMjQ@mail.gmail.com>
+Subject: GREETINGS,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,HK_SCAM,LOTS_OF_MONEY,
+        MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,
+        URG_BIZ autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:436 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [leedasha710[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [leedasha710[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 HK_SCAM No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.6 URG_BIZ Contains urgent matter
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 512 ms - load_scoreonly_sql: 0.13 (0.0%),
-        signal_user_changed: 12 (2.3%), b_tie_ro: 10 (1.9%), parse: 1.00
-        (0.2%), extract_message_metadata: 16 (3.1%), get_uri_detail_list: 2.1
-        (0.4%), tests_pri_-1000: 25 (4.9%), tests_pri_-950: 1.26 (0.2%),
-        tests_pri_-900: 1.18 (0.2%), tests_pri_-90: 112 (22.0%), check_bayes:
-        111 (21.6%), b_tokenize: 9 (1.8%), b_tok_get_all: 9 (1.8%),
-        b_comp_prob: 3.3 (0.7%), b_tok_touch_all: 85 (16.5%), b_finish: 0.98
-        (0.2%), tests_pri_0: 329 (64.4%), check_dkim_signature: 0.76 (0.1%),
-        check_dkim_adsp: 2.9 (0.6%), poll_dns_idle: 1.04 (0.2%), tests_pri_10:
-        2.1 (0.4%), tests_pri_500: 9 (1.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: re. Spurious wakeup on a newly created kthread
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Eric W. Biederman" <ebiederm@xmission.com> writes:
+Greetings,
 
-> Linus Torvalds <torvalds@linux-foundation.org> writes:
->
->> On Sat, Jun 25, 2022 at 11:25 AM Linus Torvalds
->> <torvalds@linux-foundation.org> wrote:
->>>
->>> And that's not at all what the kthread code wants. It wants to set
->>> affinity masks, it wants to create a name for the thread, it wants to
->>> do all those other things.
->>>
->>> That code really wants to just do copy_process().
->>
->> Honestly, I think kernel/kthread.c should be almost rewritten from scratch.
->>
->> I do not understand why it does all those odd keventd games at all,
->> and why kthread_create_info exists in the first place.
->
-> I presume you mean kthreadd games?
->
->> Why does kthread_create() not just create the thread directly itself,
->> and instead does that odd queue it onto a work function?
->>
->> Some of that goes back to before the git history, and very little of
->> it seems to make any sense. It's as if the code is meant to be able to
->> run from interrupt context, but that can't be it: it's literally doing
->> a GFP_KERNEL kmalloc, it's doing spin-locks without irq safety etc.
->>
->> So why is it calling kthreadd_task() to create the thread? Purely for
->> some crazy odd "make that the parent" reason?
->>
->> I dunno.  The code is odd, unexplained, looks buggy, and most fo the
->> reasons are probably entirely historical.
->
-> I can explain why kthreadd exists and why it creates the threads.
->
-> Very long ago in the context of random userspace processes people would
-> use kernel_thread to create threads and a helper function that I think
-> was called something like kernel_daemonize to scrub the userspace bits
-> off.
->
-> It was an unending sources of problems as the scrub was never complete
-> nor correct.
->
-> So with the introduction of kthreadd the kernel threads were moved
-> out of the userspace process tree, and userspace stopped being able to
-> influence the kernel threads.
->
-> AKA instead of doing the equivalent of a suid exec the code started
-> going the equivalent sshing into the local box.
->
-> We *need* to preserve that kind of separation.
->
-> I want to say that all that is required is that copy_process copies
-> from kthreadd.  Unfortunately that means that it needs to be kthreadd
-> doing the work, as copy_process does always copies from current.  It
-> would take quite a bit of work to untangle that mess.
->
-> It does appear possible to write a parallel function to copy_process
-> that is used only for creating kernel threads, and can streamline itself
-> because it knows it is creating kernel threads.
->
-> Short of that the code needs to keep routing through kthreadd.
->
-> Using create_io_thread or a dedicated wrapper around copy_process
-> certainly looks like it could simplify some of kthread creation.
+Assalam alaikum,
+I have a proposal for you, however is not mandatory nor will I in any
+manner compel you to honor against your will. I am Mr Cheng Lee,
+partnership with former executive director of Arab Tunisian Bank here
+in Tunisia;
+I retired A year and 7 months ago after putting in 28 years of
+meticulous service. During my days with Arab Tunisian Bank, I was the
+personal account officer and one of the financial advisers to Mr. Zine
+Al-Abidine Ben Ali the past Tunisian President in self exile at Saudi
+Arabia. During his tryer period he instructed me to move all his
+investment in my care which consists of US$115M and 767KG of gold out
+of the Gulf States for safe keeping; and that I successfully did by
+moving US$50M to Madrid Spain, US$50M to Dubai United Arab Emirate,
+US$15M to Burkina Faso and the 767KG of gold to Accra Ghana in West
+Africa as an anonymous deposits, so that the funds will in no way to
+be traced to him. He has instructed me to find an investor who would
+stand as the beneficiary of the fund and the gold; and claim it for
+further investment.
 
-Hmm.  Looking at kthread() I completely agree that kernel_thread() has
-the wrong set of semantics and we really could benefit from never waking
-the fledgling kernel thread in the first place.
+Consequent upon the above, my proposal is that I would like you as a
+foreigner to stand in as the beneficiary of this fund and the gold
+which I have successfully moved outside the country and provide an
+account overseas where this said fund will be transferred into. It is
+a careful network and my voluntary retirement from the Arab Tunisian
+Bank is to ensure a hitch-free operation as all modalities for you to
+stand as beneficiary and owner of the deposits has been perfected by
+me. Mr. Zine al-Abidine Ben Ali will offer you 20% of the total
+investment if you can be the investor and claim this deposits in Spain
+and Burkina Faso as the beneficiary.
 
-Eric
+
+Now my questions are:-
+
+1. Can you handle this transaction?
+2. Can I give you this trust?
+
+Consider this and get back to me as soon as possible so that I can
+give you more details regarding this transaction. Finally, it is my
+humble request that the information as contained herein be accorded
+the necessary attention, urgency as well as the secrecy it deserves
+I expect your urgent response if you can handle this project.
+
+Respectfully yours,
+From:Mr Cheng Lee.

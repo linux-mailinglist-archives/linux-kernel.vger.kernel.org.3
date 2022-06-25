@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C04355A773
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 08:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8465E55A774
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 08:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbiFYGPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 02:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S231913AbiFYGVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 02:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiFYGPQ (ORCPT
+        with ESMTP id S229529AbiFYGU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 02:15:16 -0400
-Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CD223BDE;
-        Fri, 24 Jun 2022 23:15:08 -0700 (PDT)
-X-QQ-mid: bizesmtp67t1656137557ta5j49cz
-Received: from localhost.localdomain ( [125.70.163.206])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 25 Jun 2022 14:12:33 +0800 (CST)
-X-QQ-SSF: 0100000000200060C000B00A0000000
-X-QQ-FEAT: 5YkfsBQ8D0+vbSD9zBIbuoYWBuaBF83kmkiAHr32HjlVrGdqFT46BmopDE9ua
-        uLjJj+B6jDDcQkxHW7bgV1WXSW2mWKBVoWbtfmzLUEHF+oTnr1hSib1J0xC1jLEhB1nOuYX
-        Va7y154Y5pbwxF0sY8iG7apOz4Ohms4htUKLH41WkCvoHJBYbkWvGwVsHtzC1693dAhkFiW
-        OOFaActADNPmw7OlySmTSB3sDl42LPbyY80F5YVOJuUGvHpccs6iE5gd4pl0gdubmYf0vZi
-        kwY47Ed9vGpzdIn/DcvCsdlkKnDcdShG5mWoY5OOJBlanRyktjlfC38OE=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] sfc: fix repeated words in comments
-Date:   Sat, 25 Jun 2022 14:12:23 +0800
-Message-Id: <20220625061223.50510-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Sat, 25 Jun 2022 02:20:59 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958C3BC9E;
+        Fri, 24 Jun 2022 23:20:58 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LVP2j2DR7zkWXD;
+        Sat, 25 Jun 2022 14:19:09 +0800 (CST)
+Received: from ubuntu1604.huawei.com (10.67.174.160) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 25 Jun 2022 14:20:54 +0800
+From:   Xiang Yang <xiangyang3@huawei.com>
+To:     <hannes@cmpxchg.org>, <mhocko@kernel.org>,
+        <roman.gushchin@linux.dev>, <shakeelb@google.com>,
+        <songmuchun@bytedance.com>, <akpm@linux-foundation.org>
+CC:     <cgroups@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <xiangyang3@huawei.com>
+Subject: [PATCH -next] mm/memcontrol.c: replace cgroup_memory_nokmem with mem_cgroup_kmem_disabled()
+Date:   Sat, 25 Jun 2022 14:18:44 +0800
+Message-ID: <20220625061844.226764-1-xiangyang3@huawei.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.160]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,65 +48,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'set'.
-Delete the redundant word 'a'.
-Delete the redundant word 'in'.
-Found the same error as before.
+mem_cgroup_kmem_disabled() checks whether the kmem accounting is off.
+Therefore, replace cgroup_memory_nokmem with mem_cgroup_kmem_disabled(),
+which is the same work in percpu.c and slab_common.c.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+Signed-off-by: Xiang Yang <xiangyang3@huawei.com>
 ---
- drivers/net/ethernet/sfc/mcdi_pcol.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ mm/memcontrol.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/mcdi_pcol.h b/drivers/net/ethernet/sfc/mcdi_pcol.h
-index ff617b1b38d3..7984f6f84a3c 100644
---- a/drivers/net/ethernet/sfc/mcdi_pcol.h
-+++ b/drivers/net/ethernet/sfc/mcdi_pcol.h
-@@ -274,7 +274,7 @@
-  * MC_CMD_WORKAROUND_BUG26807.
-  * May also returned for other operations such as sub-variant switching. */
- #define MC_CMD_ERR_FILTERS_PRESENT 0x1014
--/* The clock whose frequency you've attempted to set set
-+/* The clock whose frequency you've attempted to set
-  * doesn't exist on this NIC */
- #define MC_CMD_ERR_NO_CLOCK 0x1015
- /* Returned by MC_CMD_TESTASSERT if the action that should
-@@ -7782,7 +7782,7 @@
-  * large number (253) it is not anticipated that this will be needed in the
-  * near future, so can currently be ignored.
-  *
-- * On Riverhead this command is implemented as a a wrapper for `list` in the
-+ * On Riverhead this command is implemented as a wrapper for `list` in the
-  * sensor_query SPHINX service.
-  */
- #define MC_CMD_DYNAMIC_SENSORS_LIST 0x66
-@@ -7827,7 +7827,7 @@
-  * update is in progress, and effectively means the set of usable sensors is
-  * the intersection between the sets of sensors known to the driver and the MC.
-  *
-- * On Riverhead this command is implemented as a a wrapper for
-+ * On Riverhead this command is implemented as a wrapper for
-  * `get_descriptions` in the sensor_query SPHINX service.
-  */
- #define MC_CMD_DYNAMIC_SENSORS_GET_DESCRIPTIONS 0x67
-@@ -7876,7 +7876,7 @@
-  * update is in progress, and effectively means the set of usable sensors is
-  * the intersection between the sets of sensors known to the driver and the MC.
-  *
-- * On Riverhead this command is implemented as a a wrapper for `get_readings`
-+ * On Riverhead this command is implemented as a wrapper for `get_readings`
-  * in the sensor_query SPHINX service.
-  */
- #define MC_CMD_DYNAMIC_SENSORS_GET_READINGS 0x68
-@@ -19322,7 +19322,7 @@
-  * TLV_PORT_MODE_*). A superset of MC_CMD_GET_PORT_MODES_OUT/MODES that
-  * contains all modes implemented in firmware for a particular board. Modes
-  * listed in MODES are considered production modes and should be exposed in
-- * userland tools. Modes listed in in ENGINEERING_MODES, but not in MODES
-+ * userland tools. Modes listed in ENGINEERING_MODES, but not in MODES
-  * should be considered hidden (not to be exposed in userland tools) and for
-  * engineering use only. There are no other semantic differences and any mode
-  * listed in either MODES or ENGINEERING_MODES can be set on the board.
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 85adc43c5a25..4672c9ddd188 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -3815,7 +3815,7 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
+ #ifdef CONFIG_MEMCG_KMEM
+ static int memcg_online_kmem(struct mem_cgroup *memcg)
+ {
+-	if (cgroup_memory_nokmem)
++	if (mem_cgroup_kmem_disabled())
+ 		return 0;
+ 
+ 	if (unlikely(mem_cgroup_is_root(memcg)))
+@@ -3830,7 +3830,7 @@ static int memcg_online_kmem(struct mem_cgroup *memcg)
+ 
+ static void memcg_offline_kmem(struct mem_cgroup *memcg)
+ {
+-	if (cgroup_memory_nokmem)
++	if (mem_cgroup_kmem_disabled())
+ 		return;
+ 
+ 	if (unlikely(mem_cgroup_is_root(memcg)))
 -- 
-2.36.1
+2.22.0
 

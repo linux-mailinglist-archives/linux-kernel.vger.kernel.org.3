@@ -2,134 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F9555AC4B
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 22:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5DF55AC4A
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 22:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233344AbiFYUCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 16:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
+        id S233368AbiFYUCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 16:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233374AbiFYUCb (ORCPT
+        with ESMTP id S233344AbiFYUCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 16:02:31 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DD6140A6
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 13:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656187350; x=1687723350;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kjDSb+MHDS7UHHDHrCopoQzl0kLxOnHTS/Sxp5Ajj/U=;
-  b=mcp81u4cenH6rf6ZbzXv0y0jGcjQ+gfFW2AoR1iiL68RataVx/5ZJfW0
-   pCq5zU3u1qEp7TwBu2aynqRVWC+ODtv9qaIYGZD+PcRTXzvZXn+p2b/Rb
-   piiF1h7So0qt4siUZYV5OIvD815nLqX9+rjEjBLoD/tirfv2xHF8cUS5j
-   FI9SvytGKfGudaOBeGeDmd4NsQYB0fAnyKbKz6xNAc837+Q+m8bi8vUbv
-   4Y6/YP4a3kKPz2wYI00sr98VIAyoQi2q/tcM7nFwdGv/WB2sX8FsELh/b
-   Pzjb+2aCufHSiGDofFuaR6/8xyt4QOR3r7yqNqApl1F3RwSSJcPV/E44v
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10389"; a="269957030"
-X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
-   d="scan'208";a="269957030"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 13:02:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
-   d="scan'208";a="539641505"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 25 Jun 2022 13:02:28 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o5BzA-0006FH-2j;
-        Sat, 25 Jun 2022 20:02:28 +0000
-Date:   Sun, 26 Jun 2022 04:02:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 7089155b2877a54e33d4ab21eb68c28568aea2fe
-Message-ID: <62b769bb.n1i4MA3w6xyjr0to%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 25 Jun 2022 16:02:20 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D341409B
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 13:02:17 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z11so7799854edp.9
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 13:02:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1bmdRkXG+0/AIBMbyim+OI6ERPwZh/R6bN2wBhDiCzs=;
+        b=MdzmWirl9RPLK6JbbFIvcXwtfJYvNpIxa2PhADzzCqayJohcez0VKgNKY2NFCpiK9t
+         0dn3owMLneYrqlP8r/h+rQ0iW8fVcI4vpiu+1DIgyrIRC/YlCCCRtTmjlk+HWftMnr7/
+         Pkui+RdRmfR6bPoJAxrdyK0+SOfwawJ8UUL677ndk+D5uguf6esNaJbF5vKpO2VBGi9l
+         e6lSqtgy2+OW1dwvkk0AG5QsvxXAKbCqIoBiQ0liZEnX9yxb9S0FcqJqJOu6B4ZN/PIY
+         N+nlBpFONm02H1PHkx7w43WYgm7gTlhHd/x7+HDXvKF2aIzg0hBTXdRz6uWGpxVqp/Gp
+         lObg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1bmdRkXG+0/AIBMbyim+OI6ERPwZh/R6bN2wBhDiCzs=;
+        b=I0jUMWKTxhYomdat8+dTjljbFoU8Kp9aOEtBJHK8eJYwYNl8HPchTLMgk9hpi7hJDW
+         8J3+P7GSpAM7mh38B/bDNYtCDeuuQIBUNSca0oVdxVNRXNavt3rDh7bCe3ack56AkxA8
+         d8/x0UUdI+7KxVhMX8asDm1RmX2+aViyP1A/9iv5YlLRFApgTEtZuFuwZhHESnzrsA5b
+         KmP9/DamJKfidwneo5eZ4Kvlvd33a/DMfgTM38/HXj2iReOjv9HPepUXTjkSlC3SBUgj
+         yhGTuFYwu+QxLyBdlPDHcL0rI0jjsePCGiP3wzPAA3O2zBO9/XlalpiTO6m+mZGzMNtn
+         t+IA==
+X-Gm-Message-State: AJIora+PNTAj2/AufM9p44D3k/drREVwkUygkP1RgB5CKUT4G7vFnjcq
+        JuLcpl8TUAGZgLnsv5QGy/WP7g==
+X-Google-Smtp-Source: AGRyM1u5yMoMZjVAqKv8jMqvQrKeHcZlmX5jqYX6/XCwbR1gbABZgWSOxeFos0qTuvbHbYOzaq+Uug==
+X-Received: by 2002:a05:6402:2047:b0:435:67e0:44fe with SMTP id bc7-20020a056402204700b0043567e044femr6825367edb.360.1656187336156;
+        Sat, 25 Jun 2022 13:02:16 -0700 (PDT)
+Received: from [192.168.0.239] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d6-20020a170906174600b00715705dd23asm2966416eje.89.2022.06.25.13.02.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Jun 2022 13:02:15 -0700 (PDT)
+Message-ID: <d6e313ef-511b-1cfa-037c-5e6cd28d754e@linaro.org>
+Date:   Sat, 25 Jun 2022 22:02:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/3] dt-bindings: iio: pressure: bmp085: Add BMP380
+ compatible string
+Content-Language: en-US
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andreas Klinger <ak@it-klinger.de>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220625150811.47292-1-ang.iglesiasg@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220625150811.47292-1-ang.iglesiasg@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 7089155b2877a54e33d4ab21eb68c28568aea2fe  Merge branch into tip/master: 'x86/vmware'
+On 25/06/2022 17:08, Angel Iglesias wrote:
+> Add bosch,bmp380 compatible string for the new family of sensors.
+> This family includes the BMP380, BMP384 and BMP388. The register map
+> in this family changes substantially and introduces new features
+> but core concepts and operations carryover from the previous iterations
+> 
+> Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
 
-elapsed time: 724m
 
-configs tested: 52
-configs skipped: 2
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-i386                                defconfig
-i386                             allyesconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-riscv                randconfig-r042-20220625
-s390                 randconfig-r044-20220625
-arc                  randconfig-r043-20220625
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-hexagon              randconfig-r041-20220625
-hexagon              randconfig-r045-20220625
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

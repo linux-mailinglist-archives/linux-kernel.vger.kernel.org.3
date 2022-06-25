@@ -2,218 +2,380 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB65855A9FF
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 14:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D1355AA1A
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 14:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbiFYMiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 08:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
+        id S232921AbiFYMsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 08:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbiFYMiK (ORCPT
+        with ESMTP id S232620AbiFYMsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 08:38:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3594015FC6;
-        Sat, 25 Jun 2022 05:38:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB37861203;
-        Sat, 25 Jun 2022 12:38:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5EBAC3411C;
-        Sat, 25 Jun 2022 12:38:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656160687;
-        bh=BI0iF/XEbEx3iB4dR5ueuZ7PpNJ4Qxsj8axGKnWS2hc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=g9IZZU8/xwty1eYersDGG7MGq15JwH1SfVqgKH7oU3EFQI6lY1rPlwoHR7x7KVCMU
-         Yhw64blJw1YsDflzBs4sV8NeiklZVizhxTZoehyauK3+VUJWtKvPlYcNBDMQ42jMdD
-         7OZ0p2u+s13m+6o4F/BXcbNgootSg73RkG9aUpPhUgu1yrCtLheF+7cVZaygL9KTmU
-         /PX5zTpuMVRly5UZ0/TFZa1jF8H7aMR75+5bnw03LDgTBIb4mrqKQLDxhv1VUrxqwr
-         6vakD1hmZI4/i2KlKUInsHldtHiDT/nGk+lb7YFySONGGZtAN4S+Vy69/DY5HPzzPS
-         uXmpJrV5NqgiA==
-Date:   Sat, 25 Jun 2022 13:47:35 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc:     Kent Gustavsson <kent@minoris.se>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+        Sat, 25 Jun 2022 08:48:36 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC2017599;
+        Sat, 25 Jun 2022 05:48:34 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-318889e6a2cso47323797b3.1;
+        Sat, 25 Jun 2022 05:48:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=pSrQucjneBEV33bL8EXRjpcp4KUNHnVHmvxgy91j5E4=;
+        b=nQe3v9bDh0mj1Mf+c6S9DzsJrObqOLc2Ttel/m/3Prj621ZfV8zXx2qDJ+fcBdGuTm
+         Aqt/FyuUccjpbtt6eNx/TEJILdD0hXuZadtOkhhutyv2SMvArmsTBpEDz01DRJpNA7vE
+         gC27YANgyt6btKpdX+QYWgQ20ZJo7GmwVWlfXR73KA57Qv/ZhBDy6+I75TV1EXy43gJN
+         x1Md+KR/WiWva29n/vOg+Y6poLqCAtJ0H9xuYzdxV7BLBBSdHRg27Dy2emFyMSbwyeaG
+         IHR2rmtVONP1UxSEJQoKyUnAqFdJqZbRDdkzswgomMTTq4PGn94MYwQ8piTkX8Zro67a
+         YM8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pSrQucjneBEV33bL8EXRjpcp4KUNHnVHmvxgy91j5E4=;
+        b=na0v1rE4Z1F8jT9DRywgtb/rKeaSAqtpmqnFfdVJGbaR/txuruP1J7c+7bJaP2PX+n
+         ygIZz6ayNaymx9EgLXeSz9Ojq6pA5M0MCVjbZT6jTzIr9iRQaCx67HJ7ZqB2UGacvK5Q
+         cjz822TDGL5AtTCgYyhMIqad6e2r2nY1hajoLVqd5ci2dz0ClhXKP9/d8dsFlm7Et3y8
+         myXusCTRVeLmw8/0drNjdDqeE1JdfzEdS25yqkOB0iqd/BlPBNicUGhlzPw7acQG42kR
+         ggq9umLCZrTkf5rDhJ1Wt3kHnVFkxGH2MXPQ0nPn6UizyMK861OKGIwcgKRPl9/8iVlq
+         bYVQ==
+X-Gm-Message-State: AJIora+Zbd8n/GRDe9/HnQQ38pIH3c7y6yoFCg0CGIaUs3EuZXP/HKuz
+        GFmRUNJJhz2Y5wVmaU8qdAe7ygrlJKQqaiwNVhM=
+X-Google-Smtp-Source: AGRyM1t8gI4m0LMlEovcOlP6DZZoYOUUgB9mdswUgzi89OfMZcaSeLehwbVOejFPsnc2W5qQjVbawYjJtN8Is8LMLGw=
+X-Received: by 2002:a0d:cb13:0:b0:318:39b9:89fc with SMTP id
+ n19-20020a0dcb13000000b0031839b989fcmr4603440ywd.413.1656161314148; Sat, 25
+ Jun 2022 05:48:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220523174238.28942-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220523174238.28942-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <871qvdf5tb.wl-maz@kernel.org> <CA+V-a8veE6-4C+9kyTNxqsf0jB5xCGhcHncTSM3ejDzBAfz=Bw@mail.gmail.com>
+ <87fsjt2bep.wl-maz@kernel.org>
+In-Reply-To: <87fsjt2bep.wl-maz@kernel.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Sat, 25 Jun 2022 13:48:08 +0100
+Message-ID: <CA+V-a8td93QOCC8cHLEPaba-hnX2gjydmKTbaCrF+zgH7hH8Jg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/5] irqchip: Add RZ/G2L IA55 Interrupt Controller driver
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 08/10] iio: adc: mcp3911: add support for phase
-Message-ID: <20220625134735.6726544a@jic23-huawei>
-In-Reply-To: <20220625103853.2470346-8-marcus.folkesson@gmail.com>
-References: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
-        <20220625103853.2470346-8-marcus.folkesson@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Jun 2022 12:38:51 +0200
-Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
+Hi Marc,
 
-> The MCP3911 incorporates a phase delay generator,
-> which ensures that the two ADCs are converting the
-> inputs with a fixed delay between them.
-> Expose it to userspace.
-> 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+On Sat, Jun 25, 2022 at 1:08 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Sat, 25 Jun 2022 11:54:44 +0100,
+> "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+> >
+> > Hi Marc,
+> >
+> > Thank you for the review.
+> >
+> > On Sat, Jun 25, 2022 at 10:30 AM Marc Zyngier <maz@kernel.org> wrote:
+> > >
+> > > On Mon, 23 May 2022 18:42:35 +0100,
+> > > Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > > >
+>
+> [...]
+>
+> > > > +static int rzg2l_irqc_alloc(struct irq_domain *domain, unsigned in=
+t virq,
+> > > > +                         unsigned int nr_irqs, void *arg)
+> > > > +{
+> > > > +     struct rzg2l_irqc_priv *priv =3D domain->host_data;
+> > > > +     unsigned long *chip_data =3D NULL;
+> > >
+> > > Why the init to NULL?
+> > >
+> > Can be dropped.
+> >
+> > > > +     struct irq_fwspec spec;
+> > > > +     irq_hw_number_t hwirq;
+> > > > +     int tint =3D -EINVAL;
+> > > > +     unsigned int type;
+> > > > +     unsigned int i;
+> > > > +     int ret;
+> > > > +
+> > > > +     ret =3D irq_domain_translate_twocell(domain, arg, &hwirq, &ty=
+pe);
+> > > > +     if (ret)
+> > > > +             return ret;
+> > > > +
+> > > > +     /*
+> > > > +      * For TINT interrupts ie where pinctrl driver is child of ir=
+qc domain
+> > > > +      * the hwirq and TINT are encoded in fwspec->param[0].
+> > > > +      * hwirq for TINT range from 9-40, hwirq is embedded 0-15 bit=
+s and TINT
+> > > > +      * from 16-31 bits. TINT from the pinctrl driver needs to be =
+programmed
+> > > > +      * in IRQC registers to enable a given gpio pin as interrupt.
+> > > > +      */
+> > > > +     if (hwirq > IRQC_IRQ_COUNT) {
+> > > > +             tint =3D TINT_EXTRACT_GPIOINT(hwirq);
+> > > > +             hwirq =3D TINT_EXTRACT_HWIRQ(hwirq);
+> > > > +
+> > > > +             if (hwirq < IRQC_TINT_START)
+> > > > +                     return -EINVAL;
+> > > > +     }
+> > > > +
+> > > > +     if (hwirq > (IRQC_NUM_IRQ - 1))
+> > > > +             return -EINVAL;
+> > > > +
+> > > > +     chip_data =3D kzalloc(sizeof(*chip_data), GFP_KERNEL);
+> > >
+> > > Are we really allocating an unsigned long for something that already
+> > > fits in something that is pointer-sized?
+> > >
+> > I think I received some feedback to use unsigned long.  Let me know
+> > what you want me to use here.
+>
+> I think this is just a waste of memory, but I don't really care.
+>
+Is there any better way I can handle it?
 
-Until now I think we've only had the phase modifier for output channels.
-So at minimum need to add documentation for it in
-Documentation/ABI/testing/sysfs-bus-iio
+> >
+> > > > +     if (!chip_data)
+> > > > +             return -ENOMEM;
+> > > > +     *chip_data =3D tint;
+> > >
+> > > So here, *chip_data can be set to -EINVAL if hwirq <=3D IRQC_IRQ_COUN=
+T?
+> > > This can't be right.
+> > >
+> > Yes *chip_data can be -EINVAL. IRQC block handles IRQ0-7 and
+> > GPIOINT0-122. So the -EINVAL here is for IRQ0-7 case were dont
+> > required the chip data in the call backs hence -EINVAL, Whereas for
+> > GPIOINT0-122 we need chip_data in the callbacks as this value needs to
+> > be programmed in the hardware registers.
+>
+> I can't see anything that checks it (let alone the difference in
+> types). And if it isn't checked, this means that the allocation is
+> pointless.
+>
+There are checks for example below:
 
-However, the snag is that it's defined in terms of radians.
-The usecase here assumes that the sensor is measuring some sort of
-wave form, but unfortunately we don't know what that is - hence
-the setting is in terms of clock delay.
+static void rzg2l_irqc_irq_enable(struct irq_data *d)
+{
+    unsigned int hw_irq =3D irqd_to_hwirq(d);
 
-As such, though the datasheet calls if phase, I think that is
-stretching the meaning too far in the IIO ABI. We probably need
-something new.  
+    if (hw_irq >=3D IRQC_TINT_START && hw_irq < IRQC_NUM_IRQ) {
+        struct rzg2l_irqc_priv *priv =3D irq_data_to_priv(d);
+        unsigned long chip_data =3D *(unsigned long *)d->chip_data;
+        u32 offset =3D hw_irq - IRQC_TINT_START;
+        u32 tssr_offset =3D TSSR_OFFSET(offset);
+        u8 tssr_index =3D TSSR_INDEX(offset);
+        u32 reg;
 
-Years ago, for devices that are actually a single ADC and a MUX
-where we pretend in IIO that the channels are sampled synchronously
-we talked about provided the timing delay information to userspace.
-Nothing ever came of it, but that is effectively the same concept
-as you have here.
+        raw_spin_lock(&priv->lock);
+        reg =3D readl_relaxed(priv->base + TSSR(tssr_index));
+        reg |=3D (TIEN | chip_data) << TSSEL_SHIFT(tssr_offset);
+        writel_relaxed(reg, priv->base + TSSR(tssr_index));
+        raw_spin_unlock(&priv->lock);
+    }
+    irq_chip_enable_parent(d);
+}
 
-So, it's a time measurement so units will need to be seconds -
-userspace has no idea of the clk speed of a device. For two channels
-the relationship is straight forward, but I wonder for 3 channel devices
-how we would handle it.  The two different sources of this delay might
-lead to different controls being optimal.
+This check hw_irq >=3D IRQC_TINT_START && hw_irq < IRQC_NUM_IRQ here
+would mean its GPIOINT0-122 and then the chip data will be used.
 
-Naming wise, perhaps samplingdelay?
+> >
+> > > > +
+> > > > +     ret =3D irq_domain_set_hwirq_and_chip(domain, virq, hwirq, &i=
+rqc_chip,
+> > > > +                                         chip_data);
+> > > > +     if (ret) {
+> > > > +             kfree(chip_data);
+> > > > +             return ret;
+> > > > +     }
+> > > > +
+> > > > +     spec.fwnode =3D domain->parent->fwnode;
+> > > > +     spec.param_count =3D priv->map[hwirq].args_count;
+> > > > +     for (i =3D 0; i < spec.param_count; i++)
+> > > > +             spec.param[i] =3D priv->map[hwirq].args[i];
+> > >
+> > > Why isn't that simply:
+> > >
+> > >         spec =3D priv->map[hwirq];
+> > >
+> > spec is of type =E2=80=98struct irq_fwspec=E2=80=99 and map is of type =
+=E2=80=98struct of_phandle_args=E2=80=99.
+> >
+> > > as this really is the interrupt you want to map to?
+> > >
+> > Yes.
+> >
+> > > > +
+> > > > +     ret =3D irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, &=
+spec);
+> > >
+> > > or even better:
+> > >
+> > >         ret =3D irq_domain_alloc_irqs_parent(domain, virq, nr_irqs,
+> > >                                            &priv->map[hwirq]);
+> > >
+> > Does not work as map is of type =E2=80=98struct of_phandle_args=E2=80=
+=99.
+>
+> Which begs the question: why don't you convert it to an irq_fwspec the
+> first place and be done with it?
+>
+Right..
+> >
+> > > > +     if (ret)
+> > > > +             kfree(chip_data);
+> > > > +
+> > > > +     return ret;
+> > > > +}
+> > > > +
+> > > > +static void rzg2l_irqc_domain_free(struct irq_domain *domain, unsi=
+gned int virq,
+> > > > +                                unsigned int nr_irqs)
+> > > > +{
+> > > > +     struct irq_data *d;
+> > > > +
+> > > > +     d =3D irq_domain_get_irq_data(domain, virq);
+> > > > +     if (d)
+> > > > +             kfree(d->chip_data);
+> > > > +
+> > > > +     irq_domain_free_irqs_common(domain, virq, nr_irqs);
+> > > > +}
+> > > > +
+> > > > +static const struct irq_domain_ops rzg2l_irqc_domain_ops =3D {
+> > > > +     .alloc =3D rzg2l_irqc_alloc,
+> > > > +     .free =3D rzg2l_irqc_domain_free,
+> > > > +     .translate =3D irq_domain_translate_twocell,
+> > > > +};
+> > > > +
+> > > > +static int rzg2l_irqc_parse_map(struct rzg2l_irqc_priv *priv,
+> > > > +                             struct device_node *np)
+>
+> nit: this function could afford being renamed to something more
+> correct. It really doesn't map anything, only retrieves the output
+> interrupts.
+>
+Sure will do.
 
-If you have actual ADCs that operate independently then relationship to
-a base reference point will be independent. 
-So for a 3 channel device you'd have
+> > > > +{
+> > > > +     unsigned int i;
+> > > > +     int ret;
+> > > > +
+> > > > +     for (i =3D 0; i < IRQC_NUM_IRQ; i++) {
+> > > > +             ret =3D of_irq_parse_one(np, i, &priv->map[i]);
+>
+> Make map an array of irq_fwspec, and use of_phandle_args_to_fwspec()
+> for the conversion.
+>
+... Good point, will do.
 
-in_voltage0_samplingdelay  0
-in_voltage1_samplingdelay  Phase register 1 code / DMCLK
-in_voltage2_samplingdelay  Phase register 2 code / DMCLK
+> > > > +             if (ret)
+> > > > +                     return ret;
+> > > > +     }
+> > > > +
+> > > > +     return 0;
+> > > > +}
+> > > > +
+> > > > +static int rzg2l_irqc_init(struct device_node *node, struct device=
+_node *parent)
+> > > > +{
+> > > > +     struct irq_domain *irq_domain, *parent_domain;
+> > > > +     struct platform_device *pdev;
+> > > > +     struct reset_control *resetn;
+> > > > +     struct rzg2l_irqc_priv *priv;
+> > > > +     int ret;
+> > > > +
+> > > > +     pdev =3D of_find_device_by_node(node);
+> > > > +     if (!pdev)
+> > > > +             return -ENODEV;
+> > > > +
+> > > > +     parent_domain =3D irq_find_host(parent);
+> > > > +     if (!parent_domain) {
+> > > > +             dev_err(&pdev->dev, "cannot find parent domain\n");
+> > > > +             return -ENODEV;
+> > > > +     }
+> > > > +
+> > > > +     priv =3D devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> > > > +     if (!priv)
+> > > > +             return -ENOMEM;
+> > > > +
+> > > > +     priv->base =3D devm_of_iomap(&pdev->dev, pdev->dev.of_node, 0=
+, NULL);
+> > > > +     if (IS_ERR(priv->base))
+> > > > +             return PTR_ERR(priv->base);
+> > > > +
+> > > > +     ret =3D rzg2l_irqc_parse_map(priv, node);
+> > > > +     if (ret) {
+> > > > +             dev_err(&pdev->dev, "cannot parse interrupts: %d\n", =
+ret);
+> > > > +             return ret;
+> > > > +     }
+> > > > +
+> > > > +     resetn =3D devm_reset_control_get_exclusive_by_index(&pdev->d=
+ev, 0);
+> > > > +     if (IS_ERR(resetn))
+> > > > +             return IS_ERR(resetn);
+> > > > +
+> > > > +     ret =3D reset_control_deassert(resetn);
+> > > > +     if (ret) {
+> > > > +             dev_err(&pdev->dev, "failed to deassert resetn pin, %=
+d\n", ret);
+> > > > +             return ret;
+> > > > +     }
+> > > > +
+> > > > +     pm_runtime_enable(&pdev->dev);
+> > > > +     ret =3D pm_runtime_resume_and_get(&pdev->dev);
+> > > > +     if (ret < 0) {
+> > > > +             dev_err(&pdev->dev, "pm_runtime_resume_and_get failed=
+: %d\n", ret);
+> > > > +             goto pm_disable;
+> > > > +     }
+> > >
+> > > If using runtime PM, why isn't the core IRQ code made aware of this
+> > > dependency by registering the device with irq_domain_set_pm_device()
+> > > instead of leaving it enabled forever?
+> > >
+> > Ouch will add irq_domain_set_pm_device() below.
+>
+> You'll need a bit more than that. You'll either need to take a PM
+> reference on each alloc, or improve irq_chip_pm_{get,put}() to talk
+> the hierarchy.
+>
+Aha I see.
 
-But for a device that is a mux in front of one actual ADC
-then the timing is likely to be relative to previous channel
-Hence if all turned on...
-
-in_voltage0_samplingdelay  0
-in_voltage1_samplingdelay  Phase register 1 code / DMCLK
-in_voltage2_samplingdelay  Phase register 2 code + Phase register 1 code / DMCLK
-
-If only 0 and 2 enabled.
-
-in_voltage0_samplingdelay  0
-in_voltage2_samplingdelay  Phase register X code
-
-However we can probably just make that problem for the driver. Sometimes
-we'll have to reject or approximate particular combinations of enabled channels
-and requested delays. 
-One corner case that is nasty will be if there is just one controllable delay.
-In that case it would seem natural to have just one attribute, but the delay
-would be cumulative across multiple enabled channels.  For that I think
-we'd just need different ABI.
-
-in_voltage_intersampledelay  maybe?  With two channels the various options
-would all work but we should think ahead...
-
-There is another complexity. These values apply to the buffered data, not
-otherwise. Moving them into bufferX/ would nicely associate them with the
-enabled channels and make it more obvious that there is a coupling there
-
-However, it is more complex to add attributes to the buffers..
-If we think that is the right way to go for ABI it wouldn't be too hard to
-add to the core - but will need a new callback.
-
-So my gut feeling is that this should be
-
-bufferX/in_voltage0_samplingdelay 0
-bufferX/in_voltage1_samplingdelay Phase register 1 code / DMCLK seconds
-but it is a rather nasty layering violation.
-
-That will require us adding a new callback read_scan_el_raw() and appropriate
-enum etc.
-
-Things will get more complex for 3 channel deviceson multibuffer devices or when there are in
-kernel consumers (as those may effect the enabled channels but aren't visible in
-bufferX).  However, I don't see it being that likely we'll get that combination
-of features any time soon (famous last words!)
-
-Gut feeling is that adding this feature (and discussion of ABI) will
-take a while, but it shouldn't block picking up the rest of the series
-in the meantime.
-
-Jonathan
+> That's probably a separate patch.
+>
+Agreed will make it a separate patch, once the driver gets in.
 
 
-> ---
-> 
-> Notes:
->     v2:
->         - Fix formatting (Andy Schevchenko)
-> 
->  drivers/iio/adc/mcp3911.c | 24 +++++++++++++++++++++++-
->  1 file changed, 23 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
-> index ede1ad97ed4d..a0609d7663e1 100644
-> --- a/drivers/iio/adc/mcp3911.c
-> +++ b/drivers/iio/adc/mcp3911.c
-> @@ -155,6 +155,17 @@ static int mcp3911_read_raw(struct iio_dev *indio_dev,
->  
->  		ret = IIO_VAL_INT;
->  		break;
-> +
-> +	case IIO_CHAN_INFO_PHASE:
-> +		ret = mcp3911_read(adc,
-> +				   MCP3911_REG_PHASE, val, 2);
-> +		if (ret)
-> +			goto out;
-> +
-> +		*val = sign_extend32(*val, 12);
-> +		ret = IIO_VAL_INT;
-> +		break;
-> +
->  	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
->  		ret = mcp3911_read(adc,
->  				MCP3911_REG_CONFIG, val, 2);
-> @@ -225,6 +236,15 @@ static int mcp3911_write_raw(struct iio_dev *indio_dev,
->  				MCP3911_STATUSCOM_EN_OFFCAL, 2);
->  		break;
->  
-> +	case IIO_CHAN_INFO_PHASE:
-> +		if (val2 != 0 || val > 0xfff) {
-> +			ret = -EINVAL;
-> +			goto out;
-> +		}
-> +
-> +		/* Write phase */
-> +		ret = mcp3911_write(adc, MCP3911_REG_PHASE, val, 2);
-> +		break;
->  	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
->  		for (int i = 0; i < sizeof(mcp3911_osr_table); i++) {
->  			if (val == mcp3911_osr_table[i]) {
-> @@ -248,7 +268,9 @@ static int mcp3911_write_raw(struct iio_dev *indio_dev,
->  		.channel = idx,					\
->  		.scan_index = idx,				\
->  		.scan_index = idx,				\
-> -		.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO), \
-> +		.info_mask_shared_by_type =			\
-> +			BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO)|	\
-> +			BIT(IIO_CHAN_INFO_PHASE),		\
->  		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |	\
->  			BIT(IIO_CHAN_INFO_OFFSET) |		\
->  			BIT(IIO_CHAN_INFO_SCALE),		\
-
+Cheers,
+Prabhakar

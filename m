@@ -2,72 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAC755A8D0
+	by mail.lfdr.de (Postfix) with ESMTP id D2B1155A8D2
 	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbiFYKYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 06:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S232367AbiFYKZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 06:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbiFYKYE (ORCPT
+        with ESMTP id S232383AbiFYKZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 06:24:04 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6B613DFA
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 03:24:01 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id b7so5479005ljr.6
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 03:24:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=lkx9shy389bjUkUVzL/gjZ86apFk2k0QZbOelmBX0OE=;
-        b=hLKCRtDbLgCgk8Pp0iktJW+6iq5Emts2wgNo2ytOVYoOS0e984gxy9uLGqk87mWCrH
-         q2Eg0gOVNhtNZY7rLBpyJNOvwuLFPnb01OFQ2Bnq3ppCQb+mgWNYaXRqFUc2OpcmThuJ
-         n5LXojZljF1gypIth1ijbeJtIy/YHEjdzKii9mhQ9ocEz4/MMKNNwZ6fwBr0IFKEHVCY
-         SYHE8bHrSC5qHhWmdna7aMx5jTkze4v+Zn+nXHR/cF98UDmlOq1QQWQMyWsNMy/BvEqQ
-         ZvCf/R1S1reelMnWwaLrfsEs9qim4lA5S+1INWfr2vrFMKgkltAcR93fnFhnwBw9Qmzt
-         8zww==
+        Sat, 25 Jun 2022 06:25:24 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1CA22501
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 03:25:23 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id x5-20020a923005000000b002d1a91c4d13so3179025ile.4
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 03:25:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=lkx9shy389bjUkUVzL/gjZ86apFk2k0QZbOelmBX0OE=;
-        b=P/ULlTdntAi/mODMrZCVC/FjGXgf0a/n1d6QZQfjILjBPITKyw+brluLnOmojGy8Eq
-         fEws452gJRM3j5oDN7huWZ8/CLa0JGROHce9iYfovh/fIi3RxFGoZOwKhKFSmrM83WCX
-         1vzcJtCK4ogC+AYg0Zzn9B84fZ4oi1/H4ckSAX5REhQqR+i0cTGLazDLI2j3iSCI0Ojs
-         vprx4vsUgIovbPL0pkkgzQxhx07vry8fsl3HKPyB5VVjzKCvwKXWMjCdSfzC9WyMJrcP
-         yfvjUpznKK7bmV2JYyab4kz02hybODi2C1RtGxKvkMSVKm/fCo9ILlsOFEmpKWEPjupi
-         3DHw==
-X-Gm-Message-State: AJIora/0pZnMKZMx8LPBbR6Sye7xPEoQzGQDjM/ZWo64OUmk7nDZRT41
-        XwIVv4Tc5wQQw7Ycm/92AaloBNDZkF9qFUscdmU=
-X-Google-Smtp-Source: AGRyM1t8f87V6I5aKnUbC8/CNEpqL8V1bx+rAU5ciw/LmM5hiAEDmGSwRu3KEeCObb/2I2ASbNVqMycNl+zDO9BHPt4=
-X-Received: by 2002:a05:651c:1617:b0:25a:9e88:af82 with SMTP id
- f23-20020a05651c161700b0025a9e88af82mr1580624ljq.106.1656152640120; Sat, 25
- Jun 2022 03:24:00 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=PpTw+0pR7d6KHpWzvUOwmUS7vIoJqaATGHEMY/gsX2A=;
+        b=0xzhvWQuo97vsisIk+cf2SeNXIH7PJ5FUIYfpDgWaGqh2HAVyTQtZHj10m+bS7VRAf
+         QGQPR/oMwDvs59doumDNcUFXzT+mqAGdGw4zNQEfrFILMgANkGzr4XnN9uCE/69CEqD2
+         CkAIyNSLnvNQGu9lB3uT6OCDw2VY1Rjy2UIqG6MzO6ChsH/61OT+Ui6QYshpFLgQ33hE
+         dc0fY37qQbHWkKVMdKxxAVgeBlkvzN6y9JlWZH1kM7+GfRbQXIPow+kp8HB9e9JHI6Pa
+         Gb2MzRz3nJM9y2OSu9ZD9/0NoSaso5ov+P3eGW2Ygh59ofjjZSO5z8Thbo0+imntGeir
+         d1IA==
+X-Gm-Message-State: AJIora8PV/TeXPC7Ef2u185EZX6juhZN8O+NFifPGe+zjltEly11kAZS
+        2xrNkPMIUGyMFfVtkt3bR3eopGGoIV0C364EYqEDCP4gD/AD
+X-Google-Smtp-Source: AGRyM1vyuTnNG1op68acyHfJlLSr34YHYTrvAEpZwGi6Cbef/aP1GrA3CCCBKweTEXTj6eEY5/aDNdEA2+u9dTrnUMthPogUPw/n
 MIME-Version: 1.0
-Received: by 2002:a05:6504:3096:0:0:0:0 with HTTP; Sat, 25 Jun 2022 03:23:59
- -0700 (PDT)
-Reply-To: zjianxin700@gmail.com
-From:   Zong Jianxin <johnsonchesaina@gmail.com>
-Date:   Sat, 25 Jun 2022 03:23:59 -0700
-Message-ID: <CA+Q_prH_uWweR_THagbPk0fM+Ezff6NeH4Cf7RZWhHgyQJ6Enw@mail.gmail.com>
-Subject: Hello!!
-To:     undisclosed-recipients:;
+X-Received: by 2002:a6b:ed15:0:b0:674:f8eb:a373 with SMTP id
+ n21-20020a6bed15000000b00674f8eba373mr1734128iog.37.1656152722465; Sat, 25
+ Jun 2022 03:25:22 -0700 (PDT)
+Date:   Sat, 25 Jun 2022 03:25:22 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b76c8005e2431a11@google.com>
+Subject: [syzbot] WARNING in cfg80211_ch_switch_notify
+From:   syzbot <syzbot+90d912872157e63589e4@syzkaller.appspotmail.com>
+To:     SHA-cyfmac-dev-list@infineon.com, ajay.kathat@microchip.com,
+        amitkarwar@gmail.com, aspriel@gmail.com,
+        brcm80211-dev-list.pdl@broadcom.com, claudiu.beznea@microchip.com,
+        davem@davemloft.net, edumazet@google.com, fabioaiuto83@gmail.com,
+        franky.lin@broadcom.com, ganapathi017@gmail.com,
+        geomatsi@gmail.com, gregkh@linuxfoundation.org,
+        hante.meuleman@broadcom.com, hdegoede@redhat.com,
+        huxinming820@gmail.com, imitsyanko@quantenna.com,
+        jagathjog1996@gmail.com, johannes.berg@intel.com,
+        johannes@sipsolutions.net, kuba@kernel.org, kvalo@kernel.org,
+        libertas-dev@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-wireless@vger.kernel.org,
+        loic.poulain@linaro.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        prestwoj@gmail.com, sharvari.harisangam@nxp.com, smoch@web.de,
+        syzkaller-bugs@googlegroups.com, ye.guojin@zte.com.cn
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Did you receive my previous email? I have a Profitable deal for you.
+Hello,
 
-Thanks
-Zong Jianxin
+syzbot found the following issue on:
+
+HEAD commit:    34d1d36073ea Add linux-next specific files for 20220621
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=175aca1ff00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b24b62d1c051cfc8
+dashboard link: https://syzkaller.appspot.com/bug?extid=90d912872157e63589e4
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15a50e1ff00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=104b1cc4080000
+
+The issue was bisected to:
+
+commit 7b0a0e3c3a88260b6fcb017e49f198463aa62ed1
+Author: Johannes Berg <johannes.berg@intel.com>
+Date:   Thu Apr 14 14:50:57 2022 +0000
+
+    wifi: cfg80211: do some rework towards MLO link APIs
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=177e008ff00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=14fe008ff00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=10fe008ff00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+90d912872157e63589e4@syzkaller.appspotmail.com
+Fixes: 7b0a0e3c3a88 ("wifi: cfg80211: do some rework towards MLO link APIs")
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 1021 at net/wireless/nl80211.c:18562 cfg80211_ch_switch_notify+0x3b7/0x8a0 net/wireless/nl80211.c:18562
+Modules linked in:
+CPU: 1 PID: 1021 Comm: kworker/u4:5 Not tainted 5.19.0-rc3-next-20220621-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: phy4 ieee80211_csa_finalize_work
+
+RIP: 0010:cfg80211_ch_switch_notify+0x3b7/0x8a0 net/wireless/nl80211.c:18562
+Code: fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 d2 04 00 00 49 8b 14 24 44 89 ee 48 89 ef e8 33 fa fb ff e9 44 ff ff ff e8 e9 78 cc f8 <0f> 0b e9 38 ff ff ff e8 dd 78 cc f8 48 8d bd f8 04 00 00 48 ba 00
+RSP: 0018:ffffc90004dcfc60 EFLAGS: 00010293
+
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff88801eea57c0 RSI: ffffffff88ae4467 RDI: 0000000000000005
+RBP: ffff88801f004c90 R08: 0000000000000005 R09: 0000000000000009
+R10: 0000000000000001 R11: 0000000000000010 R12: ffff88801f006458
+R13: 0000000000000000 R14: ffff88801f004000 R15: ffff888021d90000
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000021000000 CR3: 000000000ba8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __ieee80211_csa_finalize+0x738/0xc90 net/mac80211/cfg.c:3432
+ ieee80211_csa_finalize net/mac80211/cfg.c:3439 [inline]
+ ieee80211_csa_finalize_work+0x131/0x170 net/mac80211/cfg.c:3464
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,83 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359F555A855
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 11:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9384555A85D
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 11:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbiFYI6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 04:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
+        id S232326AbiFYJDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 05:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiFYI6q (ORCPT
+        with ESMTP id S230268AbiFYJDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 04:58:46 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACFD2CE1A
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 01:58:45 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id d14so4811871pjs.3
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 01:58:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yBLfi92gAlfWDayXHgzw4YwyIEMK5sbZZcp3v3R4WvY=;
-        b=vWECR4lLdOmckfTvOtrYhFODIrM4aq0XBkbDVkccpRjJ3+cMeUvXRYavTTP+yfUnbX
-         w6+J8m/kcwHkSZzmeu90jyJ4IHHBP0StpdY3RIXtbqNihYBxZAT27XARGx07UqgXeU3y
-         01EYfl9HNI/lphnYRGJjUaO46ig2ViHWHtRFePaayXwsyi8aoJCj72pwSANRc1WThHL1
-         tmtUkNuzPsKLzhrXfUX7uXSPKmb3opDWoWCq8GFZe3XYLVPj4P86uCXjA1fiZoOMC3kA
-         g8mg9T5IRuUlgBoPJ7tT/uIOH458e1rOQLqTqaGGZ9RSmZ07ahQTQbgL0xbfqf4bvYR8
-         FB5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yBLfi92gAlfWDayXHgzw4YwyIEMK5sbZZcp3v3R4WvY=;
-        b=iuHSSLw1Nqj9kEZKLl6ka3A7n6c7OeJXoIVCo0eYewryuRHViv50Qc26TFfKnVjuqQ
-         /QWn/S5y4MPDWZH226WXjCpZsApFvLAn/QkMqFgeZwk9jkYe9OCZ4MwBF1HL++9ilu/5
-         poyyZuUVxad/Sc3KtStrDU3Il7WtP3Mjvu0cE9bcl+GS9wtyKv4BexcKd3qMQpm5Y8BH
-         GSm5vXigV87YEc/ixgKfl7QeKi6MfbldLSLHKIS4qhsh7v0IBnNriJbHJoOe7xO0wwbS
-         73LNNu/D1DbHVTR6iF5vkde9M4CSmuG3eNT2WUlUr1QMg1UUn1ERzhIu3QM7Z36d2YQn
-         YvMQ==
-X-Gm-Message-State: AJIora+2GhpLsBSWIFiUGQxEPrDla5sWm8MJ3tGi4ERkOacYhabp7hW8
-        YD3i2Armksp+T+FROnN+Yr+vsQ==
-X-Google-Smtp-Source: AGRyM1sYJQcyA2mxkXzZ9zdfOKE7155NN545ntISrtYfLfZWk2r2d66rK3coFs1+Gxw1q5DvzPxpBQ==
-X-Received: by 2002:a17:90a:bf86:b0:1ec:cc6d:c0f with SMTP id d6-20020a17090abf8600b001eccc6d0c0fmr3451167pjs.202.1656147524621;
-        Sat, 25 Jun 2022 01:58:44 -0700 (PDT)
-Received: from localhost ([2408:8207:18da:2310:c80d:fa4f:de4d:bed5])
-        by smtp.gmail.com with ESMTPSA id e14-20020a170902ef4e00b0016a275623c1sm3157808plx.219.2022.06.25.01.58.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 01:58:44 -0700 (PDT)
-Date:   Sat, 25 Jun 2022 16:58:38 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Xiang Yang <xiangyang3@huawei.com>
-Cc:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
-        shakeelb@google.com, akpm@linux-foundation.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] mm/memcontrol.c: replace cgroup_memory_nokmem with
- mem_cgroup_kmem_disabled()
-Message-ID: <YrbOPktTSb00DvYw@FVFYT0MHHV2J.usts.net>
-References: <20220625061844.226764-1-xiangyang3@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220625061844.226764-1-xiangyang3@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 25 Jun 2022 05:03:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8328A30F43;
+        Sat, 25 Jun 2022 02:03:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F84260C62;
+        Sat, 25 Jun 2022 09:03:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283C8C341C7;
+        Sat, 25 Jun 2022 09:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656147827;
+        bh=oEBOr5nihwu0e5C08ofN61Rn4yRRvUL8uiYvbyfu/aU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GHR5jvNlT9kroKwU5IEA3i/s0quzy+bpY4LobmUUj+72TZVQAHn8F4OyjMmxZ21nI
+         OHYReAhUW44IS2IzPU5V2bt/dkIXYoOOqa/zBJ6mqxkwTjPGy8dQ+w0ukwsgOWAS9G
+         GYKkWQUCryBxWbAYlB6HNB8mE2zp0TLTGM3mlqpohVJxGLMDTjVYn/r/pgFyDy80nc
+         FOeMb9dvof0SK3kJsRD8LzoTsIMiYZppkTVuzMl+rXwRnzgItrllQuzrEZXYw/eXD0
+         z4a+4AZOPJgsE4bLDSzOmsJdfeuaEDpGbKmxqU0ua8n5bQZpRhuwzp7PqxzTkaXUXI
+         gnjnF5rw0szXg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o51gz-0032Mt-Cz;
+        Sat, 25 Jun 2022 10:03:44 +0100
+Date:   Sat, 25 Jun 2022 10:03:06 +0100
+Message-ID: <8735ftf73p.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH 2/2] irqchip/sifive-plic: Add support for Renesas RZ/Five SoC
+In-Reply-To: <20220624180311.3007-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220624180311.3007-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <20220624180311.3007-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.mahadev-lad.rj@bp.renesas.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, sagar.kadam@sifive.com, palmer@dabbelt.com, paul.walmsley@sifive.com, linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, geert+renesas@glider.be, linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, prabhakar.csengg@gmail.com, biju.das.jz@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 02:18:44PM +0800, Xiang Yang wrote:
-> mem_cgroup_kmem_disabled() checks whether the kmem accounting is off.
-> Therefore, replace cgroup_memory_nokmem with mem_cgroup_kmem_disabled(),
-> which is the same work in percpu.c and slab_common.c.
+On Fri, 24 Jun 2022 19:03:11 +0100,
+Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 > 
-> Signed-off-by: Xiang Yang <xiangyang3@huawei.com>
+> The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
+> NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
+> case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
+> edge until the previous completion message has been received and
+> NCEPLIC100 doesn't support pending interrupt counter, hence losing the
+> interrupts if not acknowledged in time.
+> 
+> So the workaround for edge-triggered interrupts to be handled correctly
+> and without losing is that it needs to be acknowledged first and then
+> handler must be run so that we don't miss on the next edge-triggered
+> interrupt.
+> 
+> This patch adds a new compatible string for Renesas RZ/Five SoC and
+> changes the chained interrupt haindler for RZ/Five SoC.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> RFC-->v1:
+> * Fixed review comments pointed by Geert
+> * Dropped handle_fasteoi_ack_irq support as for the PLIC we need to
+> claim the interrupt by reading the register and then acknowledge it.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Why? This is exactly what the fasteoi_ack flow gives you, and your
+initial patch was much better that this one in that regard.
 
-Thanks.
+> * Add a new chained handler for RZ/Five SoC.
+> ---
+>  drivers/irqchip/irq-sifive-plic.c | 95 +++++++++++++++++++++++++++++--
+>  1 file changed, 91 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+> index 173446cc9204..f53dff49e122 100644
+> --- a/drivers/irqchip/irq-sifive-plic.c
+> +++ b/drivers/irqchip/irq-sifive-plic.c
+> @@ -60,10 +60,13 @@
+>  #define	PLIC_DISABLE_THRESHOLD		0x7
+>  #define	PLIC_ENABLE_THRESHOLD		0
+>  
+> +#define PLIC_INTERRUPT_CELL_SIZE2	2
+> +
+>  struct plic_priv {
+>  	struct cpumask lmask;
+>  	struct irq_domain *irqdomain;
+>  	void __iomem *regs;
+> +	u32 intsize;
+>  };
+>  
+>  struct plic_handler {
+> @@ -163,7 +166,7 @@ static int plic_set_affinity(struct irq_data *d,
+>  }
+>  #endif
+>  
+> -static void plic_irq_eoi(struct irq_data *d)
+> +static void plic_irq_ack(struct irq_data *d)
+>  {
+>  	struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+>  
+> @@ -176,6 +179,23 @@ static void plic_irq_eoi(struct irq_data *d)
+>  	}
+>  }
+>  
+> +static void plic_irq_eoi(struct irq_data *d)
+> +{
+> +	struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+> +	unsigned int irq = irq_find_mapping(handler->priv->irqdomain, d->hwirq);
+> +
+> +	/*
+> +	 * For Renesas RZ/Five (R9A07G043) SoC if the interrupt type is
+> +	 * IRQ_TYPE_EDGE_RISING we have already acknowledged it in the
+> +	 * handler.
+> +	 */
+> +	if (handler->priv->intsize == PLIC_INTERRUPT_CELL_SIZE2 &&
+
+This costs you an extra two reads on the fast path, which is an
+unnecessary overhead for existing systems that do not suffer from this
+problem. Consider turning it into a static key.
+
+Also, blindly renaming  plic_irq_eoi() to ack() is extremely
+confusing. I really think you should have your own callbacks instead
+of making a mess of the existing one.
+
+> +	    (irq_get_trigger_type(irq) & IRQ_TYPE_EDGE_RISING))
+> +		return;
+> +
+> +	plic_irq_ack(d);
+> +}
+> +
+>  static const struct irq_chip plic_chip = {
+>  	.name		= "SiFive PLIC",
+>  	.irq_mask	= plic_irq_mask,
+> @@ -198,6 +218,19 @@ static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
+>  	return 0;
+>  }
+>  
+> +static int plic_irq_domain_translate(struct irq_domain *d,
+> +				     struct irq_fwspec *fwspec,
+> +				     unsigned long *hwirq,
+> +				     unsigned int *type)
+> +{
+> +	struct plic_priv *priv = d->host_data;
+> +
+> +	if (priv->intsize == PLIC_INTERRUPT_CELL_SIZE2)
+> +		return irq_domain_translate_twocell(d, fwspec, hwirq, type);
+> +
+> +	return irq_domain_translate_onecell(d, fwspec, hwirq, type);
+> +}
+> +
+>  static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>  				 unsigned int nr_irqs, void *arg)
+>  {
+> @@ -206,7 +239,7 @@ static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>  	unsigned int type;
+>  	struct irq_fwspec *fwspec = arg;
+>  
+> -	ret = irq_domain_translate_onecell(domain, fwspec, &hwirq, &type);
+> +	ret = plic_irq_domain_translate(domain, fwspec, &hwirq, &type);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -220,11 +253,55 @@ static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>  }
+>  
+>  static const struct irq_domain_ops plic_irqdomain_ops = {
+> -	.translate	= irq_domain_translate_onecell,
+> +	.translate	= plic_irq_domain_translate,
+>  	.alloc		= plic_irq_domain_alloc,
+>  	.free		= irq_domain_free_irqs_top,
+>  };
+>  
+> +/*
+> + * On Renesas RZ/Five (R9A07G043) SoC IRQ_TYPE_LEVEL_HIGH and
+> + * IRQ_TYPE_EDGE_RISING interrupts are the supported interrupt types.
+> + * If the global interrupt source was edge-triggered NCEPLIC100 (PLIC
+> + * core on Renesas RZ/Five SoC) ignores next edge interrupts until the
+> + * previous completion message is received. NCEPLIC100 on Renesas RZ/Five
+> + * SoC doesn't stack the pending interrupts so in case there is a delay
+> + * in handling the IRQ_TYPE_EDGE_RISING interrupt we lose the subsequent
+> + * interrupts. The workaround for IRQ_TYPE_EDGE_RISING interrupt is to
+> + * first we have to claim the interrupt by reading the claim register,
+> + * then quickly issue an complete interrupt by writing the source ID
+> + * register back to the claim  register and then later run the handler.
+> + */
+> +static void renesas_rzfive_plic_handle_irq(struct irq_desc *desc)
+> +{
+> +	struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
+> +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +	void __iomem *claim = handler->hart_base + CONTEXT_CLAIM;
+> +	irq_hw_number_t hwirq;
+> +	unsigned int irq;
+> +	int err;
+> +
+> +	WARN_ON_ONCE(!handler->present);
+> +
+> +	chained_irq_enter(chip, desc);
+> +
+> +	while ((hwirq = readl(claim))) {
+> +		irq = irq_find_mapping(handler->priv->irqdomain, hwirq);
+> +		if (!irq) {
+> +			pr_warn_ratelimited("can't find mapping for hwirq %lu\n", hwirq);
+> +			break;
+> +		}
+> +
+> +		if (irq_get_trigger_type(irq) & IRQ_TYPE_EDGE_RISING)
+> +			plic_irq_ack(irq_get_irq_data(irq));
+> +
+> +		err = generic_handle_irq(irq);
+
+No. We're not going back to this sort of constructs. Using the
+fasteoi_ack flow should work if properly configured. Also, looking up
+the interrupt *four* times in various tables/trees is not exactly the
+sort of things I want to see for a driver written in this century.
+
+Please explain why fasteoi_ack doesn't work. It really should work out
+of the box (I asked you to look into debugfs last time, but didn't ear
+anything from you on the subject). And if something is broken, let's
+fix it. But none of the above, please.
+
+> +		if (err)
+> +			pr_warn_ratelimited("error handling irq %u\n", irq);
+> +	}
+> +
+> +	chained_irq_exit(chip, desc);
+> +}
+> +
+>  /*
+>   * Handling an interrupt is a two-step process: first you claim the interrupt
+>   * by reading the claim register, then you complete the interrupt by writing
+> @@ -288,11 +365,20 @@ static int __init plic_init(struct device_node *node,
+>  	u32 nr_irqs;
+>  	struct plic_priv *priv;
+>  	struct plic_handler *handler;
+> +	irq_flow_handler_t plic_chanined_handler;
+>  
+>  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+>  		return -ENOMEM;
+>  
+> +	if (of_property_read_u32(node, "#interrupt-cells", &priv->intsize))
+> +		return -EINVAL;
+> +
+> +	if (priv->intsize == PLIC_INTERRUPT_CELL_SIZE2)
+
+Please gate this on the compatible string, not on the number of cells.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

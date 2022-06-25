@@ -2,66 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCDA55AA80
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CA155AA82
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233118AbiFYN3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 09:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S233129AbiFYNaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 09:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbiFYN3P (ORCPT
+        with ESMTP id S233114AbiFYNaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 09:29:15 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED92111C0E;
-        Sat, 25 Jun 2022 06:29:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VMebA8yQeVZMRzdvMUNABTQuSHPkN19xCjkasWh2T7k=; b=qt2Yb1342EoIxvnP4N/gNFPjwM
-        OtBV4RKU8ehY9J0ju8f2CPM9ijg6TaJJxlVBSs6mAnx+SJ5uHavxkDLA0Fm0WmU0BrV9W8tg9e3kk
-        WTT5DxC4zR1PUfzXXnENYo9IPaQQAEh5KvuD/gB2R1edFEeN+VbmQIcfhRCbWV3QGIkYZHS9Zbav1
-        BXQDpEikupoaKMNlKDBvc7b8hPR3x3EZSjjGNclHgI03YGbR20haDmDrzlYXXlYPzj9qfm0GkUBWg
-        EYjy1ef6Q6vwvYzQ26EpXKxt5OhUWI9YNINbOXQFwp7f8EGotCTNSUXMvXXNVEF9YiCumSQfj6AIA
-        HqrEtv8w==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o55qX-004Kaw-Mg;
-        Sat, 25 Jun 2022 13:29:09 +0000
-Date:   Sat, 25 Jun 2022 14:29:09 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 3/8] fs: clear or set FMODE_LSEEK based on llseek
- function
-Message-ID: <YrcNpdJmyFU+Up1n@ZenIV>
-References: <20220625110115.39956-1-Jason@zx2c4.com>
- <20220625110115.39956-4-Jason@zx2c4.com>
- <YrcIoaluGx+2TzfM@infradead.org>
+        Sat, 25 Jun 2022 09:30:10 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48991145D
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 06:30:09 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id e40so7042029eda.2
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 06:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iTnUk3tlSD5g6S5C+WLw8gY5BOAyXktdvyU9ZJ/9+5k=;
+        b=hHVcjb60Z3OquJI8ZQ8LecR5U8CGQVjgZEalXcUFN/kqmjuC2hfQfNtFWd/j0Ubhgv
+         XZU/A4AyBvG4flFG1V+0vrAvwyoO2DpSH7PJl/+nMljE+IaNSaQMukcWLvp+8vL4eRNI
+         uWAF47elndqR/rKf6JpWosZpjnGKKwtKUVC587DYSeiOITP4y/uzk3AUS10tyzwe5WhF
+         BhTbcbWA8a/Gt1f8ieJ1gGU8kRbpNng1VkwiNMsKeLzJ0Jl9zehUPJKrvshOseMwghuj
+         k2ZjCAIq78gFG0qzFfQ5SsYa37UmdgAgP8IxYM6+s3EO9P/ZFjyjezp51KGmyAALPtlM
+         y1vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iTnUk3tlSD5g6S5C+WLw8gY5BOAyXktdvyU9ZJ/9+5k=;
+        b=wBdAzINne5no4fDW001mzhqtrcr6YSTLjqaEnL8wdW/cKysR1tSIkeFM7uAhskFMaW
+         wzOXLwkW94y7WATa28gAP1qp23qLnD3mo+Yjhz8d6P7bQG5N5xnfNNNw522NUGp5qWwS
+         U5z7ZQnbmYH56e5sALoH4IUf0iDlRv+pIyKl4xOrPSrMbzKwZTF7+2YrosVn0bdtnD/P
+         LY5Xf45/m1hODK1gLtWZQzz4TXwPBCsUQSbDIRqN/aDd5kiS/NdpyliRlR1WwxuN/oYA
+         4Zmbf6dHjxtox+T+qIPCOWzj9GYr3JSc7EZXg0ZjuXhXqWK/Vc6WFX2cOqkYb4gRJeFV
+         6E7w==
+X-Gm-Message-State: AJIora9difyDtQvkE8VdKCkESh9u28HSkQ087oAj83vAm1ViPE7rjfTM
+        7NBOfoq+Uq/PUBv3sk8TAMC3XYT/lh8iQETevJS1eg==
+X-Google-Smtp-Source: AGRyM1tnungB/nyPyifCtd2guTjt6ergSboKn3H/iuJVbwI6R32i69otIxTEegIbhLWuR5TtmkUJlagMTXrYroT59AI=
+X-Received: by 2002:a05:6402:3591:b0:436:c109:1fa7 with SMTP id
+ y17-20020a056402359100b00436c1091fa7mr5020464edc.208.1656163808252; Sat, 25
+ Jun 2022 06:30:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrcIoaluGx+2TzfM@infradead.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220623164322.288837280@linuxfoundation.org>
+In-Reply-To: <20220623164322.288837280@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 25 Jun 2022 18:59:57 +0530
+Message-ID: <CA+G9fYue1yjXmRmaSRcURRORLLun-ykH=COFtCt7+sa1wwgEYg@mail.gmail.com>
+Subject: Re: [PATCH 5.15 0/9] 5.15.50-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 06:07:45AM -0700, Christoph Hellwig wrote:
-> On Sat, Jun 25, 2022 at 01:01:10PM +0200, Jason A. Donenfeld wrote:
-> > This helps unify a longstanding wart where FMODE_LSEEK hasn't been
-> > uniformly unset when it should be.
-> 
-> I think we could just remove FMODE_LSEEK after the previous patch
-> as we can just check for the presence of a ->llseek method instead.
+On Thu, 23 Jun 2022 at 22:42, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.50 release.
+> There are 9 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 25 Jun 2022 16:43:11 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.50-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I wouldn't bet on that - as it is, an ->open() instance can decide
-in some cases to clear FMODE_LSEEK, despite having file_operations
-with non-NULL ->llseek.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.15.50-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: add0aacf730e0bba8de6382b896a9a55b022cb59
+* git describe: v5.15.48-116-gadd0aacf730e
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.48-116-gadd0aacf730e
+
+## Test Regressions (compared to v5.15.48-107-g3797b8fe6025)
+No test regressions found.
+
+## Metric Regressions (compared to v5.15.48-107-g3797b8fe6025)
+No metric regressions found.
+
+## Test Fixes (compared to v5.15.48-107-g3797b8fe6025)
+No test fixes found.
+
+## Metric Fixes (compared to v5.15.48-107-g3797b8fe6025)
+No metric fixes found.
+
+## Test result summary
+total: 131039, pass: 117719, fail: 417, skip: 12312, xfail: 591
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 314 total, 314 passed, 0 failed
+* arm64: 58 total, 58 passed, 0 failed
+* i386: 52 total, 49 passed, 3 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* riscv: 22 total, 22 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 55 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

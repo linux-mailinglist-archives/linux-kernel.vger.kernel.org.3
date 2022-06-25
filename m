@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE2355A8BC
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5E755A8C8
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbiFYJo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 05:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
+        id S232357AbiFYJrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 05:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbiFYJoz (ORCPT
+        with ESMTP id S230268AbiFYJrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 05:44:55 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D92036B47
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 02:44:54 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VHKrxCi_1656150289;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VHKrxCi_1656150289)
-          by smtp.aliyun-inc.com;
-          Sat, 25 Jun 2022 17:44:50 +0800
-Date:   Sat, 25 Jun 2022 17:44:48 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Even <cheny_wen@126.com>
-Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Even <chenyuwen1@meizu.com>
-Subject: Re: [PATCH] erofs: Wake up all waiters after z_erofs_lzma_head ready.
-Message-ID: <YrbZEIxC62XjVBwL@B-P7TQMD6M-0146.local>
-References: <20220625085738.12834-1-cheny_wen@126.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220625085738.12834-1-cheny_wen@126.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 25 Jun 2022 05:47:22 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3413236B66
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 02:47:20 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id DF9D25C00CF;
+        Sat, 25 Jun 2022 05:47:16 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Sat, 25 Jun 2022 05:47:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1656150436; x=1656236836; bh=qj
+        f20KoyChVLktnw9DywcXDnz700MXbIf9pHL6t8wng=; b=AOAsWZuUQVsGNsqkzV
+        5GmH2M8o3ozzKQlk5S90/7WbA/QhaemvRUBX7cRTtTqE+1gUjbkXg+5QLaOwY1tP
+        gTjZUK8QrjB1zRpGRQGlnS97TvxVGBbhX0NC9GpEyLlp+ghVgdSz9FaDhmMafNss
+        n5y0aMs1MdFPKYBTfEXxUvuZ1S2ZNyS/rirwOHW4ZC+3yeiPSI4wfHfXKyYqIiIj
+        C6nTKTJ7H7BKiy0n3nOxUOYeMZSEaOd16/eSY2y8ffSbcQ/A6edvPsHN9aGu4R0W
+        Nxhrea+96r1APOglxU5wZeFx7NgM206KJOm1q0Klv01WMJhzyMciW2oume7E+8aj
+        +Wxg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1656150436; x=1656236836; bh=qjf20KoyChVLktnw9DywcXDnz700
+        MXbIf9pHL6t8wng=; b=fKt0XlHHI3O4pxz++cesW88EhBHhocPc9pxSnPjHoBty
+        8Utkb6sa26hm62OZahjRPGr04uS3GFEoj+rZu2T35ZcjcT5rZ/T4Qri4ujj4dPsk
+        n/N87r7AX2+PrZp5QIs3MbWabsv7ytYjOXo15qJCVvWy/9JTr2Be11vsjQn4R4UH
+        rw5oO+kb1oman8j2XR/k+amLh9vfwPG6X8+IoqtYNPgfupqXloKhqYTtsvHVz+kh
+        JPcuHt4/MbfYksPYqila2UEFS7RbuC/zOTLCVGO1afnyQ27bDzhqy5iyN0bfkEj6
+        A3gf8QSixsUwak6jZay7tiVonhxDMqBcXNd7e3uTVw==
+X-ME-Sender: <xms:o9m2YkL6zr7Z2ma3bXLXQkdQmE0bOEZytF0BDtMAD7vL-MIshIxaaA>
+    <xme:o9m2YkL2xWsgi_i8vI7S_LhxqLRDVAyhNljJe4_twPcxz0OPHewsnWtYz8FplncBl
+    rhCTKKAqXEltj6rd5Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeguddgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufhv
+    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
+    grthhtvghrnhepleevgfegffehvedtieevhfekheeftedtjeetudevieehveevieelgffh
+    ieevieeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:o9m2Ykt-wfYS8NNRzdeelhL-glIEjlBW17MKO3HuIIcHQvdYMW8gmA>
+    <xmx:o9m2YhaU4aMG4aY71yl12baOEaLGkRTqmmuXNik1qjV3VAOLbTmNnA>
+    <xmx:o9m2YraVo0absSBgOWmv0ehiNdpCwv04K-LDgJZlUFmtXRSzJxA6XQ>
+    <xmx:pNm2YnFOzr3PpkuJX4e5H2IPWE39Q0mh8qBSReXOvh4qvmd_IlY-1g>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DA783A6007C; Sat, 25 Jun 2022 05:47:15 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-713-g1f035dc716-fm-20220617.001-g1f035dc7
+Mime-Version: 1.0
+Message-Id: <e874d1f9-912e-487e-bd8c-e227067c00ca@www.fastmail.com>
+In-Reply-To: <20220625075950.GA22592@lst.de>
+References: <202206251551.PTd0wn6d-lkp@intel.com>
+ <20220625075950.GA22592@lst.de>
+Date:   Sat, 25 Jun 2022 11:46:55 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "hch@lst.de" <hch@lst.de>, "kernel test robot" <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Hector Martin" <marcan@marcan.st>, "Arnd Bergmann" <arnd@arndb.de>
+Subject: Re: [asahilinux:bits/050-nvme 6/9] drivers/nvme/host/apple.c:291:19: sparse:
+ sparse: incorrect type in assignment (different base types)
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, Jun 25, 2022, at 09:59, Christoph Hellwig wrote:
+> Sven, can you send a patch to use the proper __le types?  We really
+> prefer the nvme code to no have any sparse warnings.
 
-On Sat, Jun 25, 2022 at 04:57:38PM +0800, Even wrote:
-> From: Even <chenyuwen1@meizu.com>
-> 
-> When the user mounts the erofs second times, the decompression thread
-> may hung. The problem happens due to a sequence of steps like the
-> following:
-> 
-> 1) Task A called z_erofs_load_lzma_config which obtain all of the node
->    from the z_erofs_lzma_head.
-> 
-> 2) At this time, task B called the z_erofs_lzma_decompress and wanted to
->    get a node. But the z_erofs_lzma_head was empty, the Task B had to
->    sleep.
-> 
-> 3) Task A release nodes and push nodes into the z_erofs_lzma_head. But
->    task B was still sleeping.
-> 
-> One example report when the hung happens:
-> task:kworker/u3:1 state:D stack:14384 pid: 86 ppid: 2 flags:0x00004000
-> Workqueue: erofs_unzipd z_erofs_decompressqueue_work
-> Call Trace:
->  <TASK>
->  __schedule+0x281/0x760
->  schedule+0x49/0xb0
->  z_erofs_lzma_decompress+0x4bc/0x580
->  ? cpu_core_flags+0x10/0x10
->  z_erofs_decompress_pcluster+0x49b/0xba0
->  ? __update_load_avg_se+0x2b0/0x330
->  ? __update_load_avg_se+0x2b0/0x330
->  ? update_load_avg+0x5f/0x690
->  ? update_load_avg+0x5f/0x690
->  ? set_next_entity+0xbd/0x110
->  ? _raw_spin_unlock+0xd/0x20
->  z_erofs_decompress_queue.isra.0+0x2e/0x50
->  z_erofs_decompressqueue_work+0x30/0x60
->  process_one_work+0x1d3/0x3a0
->  worker_thread+0x45/0x3a0
->  ? process_one_work+0x3a0/0x3a0
->  kthread+0xe2/0x110
->  ? kthread_complete_and_exit+0x20/0x20
->  ret_from_fork+0x22/0x30
->  </TASK>
-> 
-> Signed-off-by: Even <chenyuwen1@meizu.com>
+Arnd already fixed this with 7ad7ab90368 after the commits hit the soc tree
+(and before I even had a chance to look at it).
+This mail just came from our downstream tree that's still stuck at 5.18.
 
-Thanks a lot for catching this!
 
-The patch itself looks good, but could you use your real name to sign
-off the patch and resend a version? see,
-https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#developer-s-certificate-of-origin-1-1
-
-Otherwise it looks good to me,
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-
-Thanks,
-Gao Xiang
+Sven
+ 

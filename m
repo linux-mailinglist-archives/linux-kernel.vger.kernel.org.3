@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 346BD55A8E5
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADC655A8EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbiFYKhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 06:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
+        id S232553AbiFYKhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 06:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiFYKhX (ORCPT
+        with ESMTP id S232450AbiFYKhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 06:37:23 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDB42A266;
-        Sat, 25 Jun 2022 03:37:22 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id x3so8601745lfd.2;
-        Sat, 25 Jun 2022 03:37:22 -0700 (PDT)
+        Sat, 25 Jun 2022 06:37:25 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC4C2A255;
+        Sat, 25 Jun 2022 03:37:24 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id b7so5502910ljr.6;
+        Sat, 25 Jun 2022 03:37:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DtWFlPGPjVSnMZ4erXWfPBR06ujhnTCZkKaRKoERWf8=;
-        b=ESfRLf2NxNJFMdlALFjxdqvR7bhoTehmwJUioSfvKlzNvcfPuBDB0NzKCDQPMTFXsI
-         r7NnOspg0cJuUqiHK4Eq4ujdBf36irns9HbK283iiaMR8mWZ/9Y2U0BFTvBhp4kgB7hG
-         oHoGEZLse/dRvEeOm9RFLY6UeXhdUyDNeX0iyEMHBjnheaFK+a6oLe/79ABGOyWZ9eqT
-         fobidA5ee7nXT3QPIxvgjUVpsDDDhWQWLS7g6BvfRCEFHPWbnG2BQ0RNBueR5mOBf72Y
-         xe2Mn33qjwB6cMeZVBUxHrHAcY5dr/HH8iFuzTuNi/LR3BBxKuS06BQO3kxDVz0O6VLq
-         AxGA==
+        bh=dAG25Y0XDP+Vyl6v8IvvJ8qg+yJ22TMKtj4bJENIGag=;
+        b=qyyd1hNVs9W6aOFx1mXF6ugcyEG5nGiKV2mRDOcgdantgIipD4tT0inbu5TU4lg3ga
+         dLRkQVjcDHVMzDhLDqr3wnf0C9TP6swb8tfyXBthJ+wqb57pUbb5qB8kiB8lfdBJAtVi
+         KZXFsgrT0bLFsbGyCn0C1ZQPr4CiaAZqnVuyLzMEbb9eQ/Efn/3a353wEHcd+0ptTmjC
+         KCqAxXJSzSm5sWW8v0tSuT59JcHwaB+wSBNSXUXvndmuSYjAfdol5d0onqn38AKLPzne
+         CqtnkOY8rDzgU5xhepo8XLaGhbqgKP7yViPWpGvnWuLn8+z3mHkb2RSVcXIdVy+mtsRc
+         WYVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DtWFlPGPjVSnMZ4erXWfPBR06ujhnTCZkKaRKoERWf8=;
-        b=GfohkBpBe9seqcoFrbOgxN10SVRlfar5yteVDyzhn+mJEj8rrpZ6dQsxSn4sshjxvY
-         D4c/LZ4gxZFaLYGPDUNbyU1dgukfgPmt05PvygXE3wcNe7jfb5hgseeGruy3bsxHvROo
-         LsyI2nrEcIeUL+XqCK/bfNmToj4T2NrSmsNUiOU4oLQJbIs89MsSpZIOXFfHbwKKGnQF
-         qprmtUDEvzlBdJUPHjfuJFtcuYNFrIHrnsENhPFrXYVoEap5+SPhfRW/NAwhhWmEO3AB
-         lJTbDU35JoYDtZeBurjzlWNKauBflCdJCP0+lLlxvr25CG4yF3uSwok/4C8HYJZDSh+S
-         GrFQ==
-X-Gm-Message-State: AJIora9yYWmzXX+9NRHXsfmNV+9Dq4LD96uw3GFjAtssDcrM/aCJLpin
-        EBtPbYfkyPAr1oOUXiK/4x8=
-X-Google-Smtp-Source: AGRyM1taTAUzfY2cDEMMbKMHGCLHGiW+1rnUMl9L6SKviO8I/PYa0Jfa/5qCwqpggp3clA+i+MFLuQ==
-X-Received: by 2002:a05:6512:6d0:b0:47c:6082:9ca3 with SMTP id u16-20020a05651206d000b0047c60829ca3mr2225636lff.353.1656153440266;
-        Sat, 25 Jun 2022 03:37:20 -0700 (PDT)
+        bh=dAG25Y0XDP+Vyl6v8IvvJ8qg+yJ22TMKtj4bJENIGag=;
+        b=YlId+eyteZRIknu6/pxa8htuxxjNQ2BebwEpJHSOg6Q6tBhqb8GA+J76UMGWXEiDsV
+         3A0r1zq3ZZdjvZfGH8fcIcc2e13xIgRfxKiGAcnotel9yz80N6tNgCoIjSchxZmycXHI
+         JctqpUTUmJb1qnjYpr+mF29Rj1t3TFpUZatFVal7QW4zs4eYPIhztXfZ1SUH18/1880k
+         914R8yVz70JWqWQo9olojpQz7zXt54XrxHZ9L1K+XTBnHwWNmfMSR2ecMrft2kGG6vRf
+         13XhfETU/poNr9h4nSojHjvgoClaXUKbKOGIfQLBsa+dWrZZMdftwaHIYra2JSIPTK/n
+         aJZQ==
+X-Gm-Message-State: AJIora9cCVcqOOEVJqryUQ80XqCdaIigLgKoIWYpZvxUiMO7Mc5ZOlr4
+        MXAOqB5hSh/+wu+YADDZZ/0=
+X-Google-Smtp-Source: AGRyM1uSv2ouCH1ZnIH4pAJZVYt/5kxrZQTwJzqiXE/kpWP7FATFYQIi3QsAfAt558H/pMn/PuiVrw==
+X-Received: by 2002:a05:651c:1695:b0:25a:6e09:cf37 with SMTP id bd21-20020a05651c169500b0025a6e09cf37mr1614809ljb.19.1656153442886;
+        Sat, 25 Jun 2022 03:37:22 -0700 (PDT)
 Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id z8-20020ac25de8000000b0047ac01fc644sm809115lfq.44.2022.06.25.03.37.18
+        by smtp.gmail.com with ESMTPSA id z8-20020ac25de8000000b0047ac01fc644sm809115lfq.44.2022.06.25.03.37.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 03:37:19 -0700 (PDT)
+        Sat, 25 Jun 2022 03:37:21 -0700 (PDT)
 From:   Marcus Folkesson <marcus.folkesson@gmail.com>
 To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
         Kent Gustavsson <kent@minoris.se>,
@@ -57,9 +57,9 @@ To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 03/10] iio: adc: mcp3911: add support for buffers
-Date:   Sat, 25 Jun 2022 12:38:46 +0200
-Message-Id: <20220625103853.2470346-3-marcus.folkesson@gmail.com>
+Subject: [PATCH v2 04/10] iio: adc: mcp3911: add support for interrupts
+Date:   Sat, 25 Jun 2022 12:38:47 +0200
+Message-Id: <20220625103853.2470346-4-marcus.folkesson@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
 References: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
@@ -75,125 +75,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for buffers to make the driver fit for more usecases.
+Make it possible to read values upon interrupts.
+Configure Data Ready Signal Output Pin to either HiZ or push-pull and
+use it as interrupt source.
 
 Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
 
 Notes:
     v2:
-        - No changes
+        - Removed blank lines (Andy Shevchenko)
+        - Removed dr_hiz variable (Andy Shevchenko)
 
- drivers/iio/adc/mcp3911.c | 58 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 57 insertions(+), 1 deletion(-)
+ drivers/iio/adc/mcp3911.c | 65 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
 diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
-index 25a235cce56c..2a4bf374f140 100644
+index 2a4bf374f140..f4ee0c27c2ab 100644
 --- a/drivers/iio/adc/mcp3911.c
 +++ b/drivers/iio/adc/mcp3911.c
-@@ -9,6 +9,10 @@
- #include <linux/delay.h>
- #include <linux/err.h>
- #include <linux/iio/iio.h>
-+#include <linux/iio/buffer.h>
-+#include <linux/iio/triggered_buffer.h>
-+#include <linux/iio/trigger_consumer.h>
-+#include <linux/iio/trigger.h>
- #include <linux/module.h>
- #include <linux/mod_devicetable.h>
- #include <linux/property.h>
-@@ -54,6 +58,10 @@ struct mcp3911 {
+@@ -26,6 +26,7 @@
+ #define MCP3911_REG_GAIN		0x09
+ 
+ #define MCP3911_REG_STATUSCOM		0x0a
++#define MCP3911_STATUSCOM_DRHIZ         BIT(12)
+ #define MCP3911_STATUSCOM_CH1_24WIDTH	BIT(4)
+ #define MCP3911_STATUSCOM_CH0_24WIDTH	BIT(3)
+ #define MCP3911_STATUSCOM_EN_OFFCAL	BIT(2)
+@@ -58,6 +59,7 @@ struct mcp3911 {
  	struct regulator *vref;
  	struct clk *clki;
  	u32 dev_addr;
-+	struct {
-+		u32 channels[2];
-+		s64 ts __aligned(8);
-+	} scan;
++	struct iio_trigger *trig;
+ 	struct {
+ 		u32 channels[2];
+ 		s64 ts __aligned(8);
+@@ -252,6 +254,17 @@ static const struct iio_info mcp3911_info = {
+ 	.write_raw = mcp3911_write_raw,
  };
  
- static int mcp3911_read(struct mcp3911 *adc, u8 reg, u32 *val, u8 len)
-@@ -187,16 +195,58 @@ static int mcp3911_write_raw(struct iio_dev *indio_dev,
- 		.type = IIO_VOLTAGE,				\
- 		.indexed = 1,					\
- 		.channel = idx,					\
-+		.scan_index = idx,				\
- 		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |	\
- 			BIT(IIO_CHAN_INFO_OFFSET) |		\
- 			BIT(IIO_CHAN_INFO_SCALE),		\
-+		.scan_type = {					\
-+			.sign = 's',				\
-+			.realbits = 24,				\
-+			.storagebits = 32,			\
-+		},						\
- }
- 
- static const struct iio_chan_spec mcp3911_channels[] = {
- 	MCP3911_CHAN(0),
- 	MCP3911_CHAN(1),
-+	IIO_CHAN_SOFT_TIMESTAMP(2),
- };
- 
-+static irqreturn_t mcp3911_trigger_handler(int irq, void *p)
++static irqreturn_t mcp3911_interrupt(int irq, void *dev_id)
 +{
-+	struct iio_poll_func *pf = p;
-+	struct iio_dev *indio_dev = pf->indio_dev;
++	struct iio_dev *indio_dev = dev_id;
 +	struct mcp3911 *adc = iio_priv(indio_dev);
-+	int scan_index;
-+	int i = 0;
-+	u32 val;
 +
-+	mutex_lock(&adc->lock);
-+	for_each_set_bit(scan_index, indio_dev->active_scan_mask,
-+			indio_dev->masklength) {
-+		const struct iio_chan_spec *scan_chan =
-+			&indio_dev->channels[scan_index];
-+		int ret = mcp3911_read(adc,
-+				MCP3911_CHANNEL(scan_chan->channel), &val, 3);
-+
-+		if (ret < 0) {
-+			dev_warn(&adc->spi->dev,
-+					"failed to get conversion data\n");
-+			goto out;
-+		}
-+
-+		adc->scan.channels[i] = val;
-+		i++;
-+	}
-+	iio_push_to_buffers_with_timestamp(indio_dev, &adc->scan,
-+			iio_get_time_ns(indio_dev));
-+out:
-+	mutex_unlock(&adc->lock);
-+	iio_trigger_notify_done(indio_dev->trig);
++	if (iio_buffer_enabled(indio_dev))
++		iio_trigger_poll(adc->trig);
 +
 +	return IRQ_HANDLED;
++};
++
+ static int mcp3911_config(struct mcp3911 *adc)
+ {
+ 	struct device *dev = &adc->spi->dev;
+@@ -298,6 +311,23 @@ static int mcp3911_config(struct mcp3911 *adc)
+ 	return  mcp3911_write(adc, MCP3911_REG_CONFIG, configreg, 2);
+ }
+ 
++static int mcp3911_set_trigger_state(struct iio_trigger *trig, bool enable)
++{
++	struct mcp3911 *adc = iio_trigger_get_drvdata(trig);
++
++	if (enable)
++		enable_irq(adc->spi->irq);
++	else
++		disable_irq(adc->spi->irq);
++
++	return 0;
 +}
 +
- static const struct iio_info mcp3911_info = {
- 	.read_raw = mcp3911_read_raw,
- 	.write_raw = mcp3911_write_raw,
-@@ -303,7 +353,7 @@ static int mcp3911_probe(struct spi_device *spi)
++static const struct iio_trigger_ops mcp3911_trigger_ops = {
++	.validate_device = iio_trigger_validate_own_device,
++	.set_trigger_state = mcp3911_set_trigger_state,
++};
++
+ static int mcp3911_probe(struct spi_device *spi)
+ {
+ 	struct iio_dev *indio_dev;
+@@ -352,6 +382,15 @@ static int mcp3911_probe(struct spi_device *spi)
+ 	if (ret)
  		goto clk_disable;
  
++	if (device_property_read_bool(&adc->spi->dev, "microchip,data-ready-hiz"))
++		ret = mcp3911_update(adc, MCP3911_REG_STATUSCOM, MCP3911_STATUSCOM_DRHIZ,
++				0, 2);
++	else
++		ret = mcp3911_update(adc, MCP3911_REG_STATUSCOM, MCP3911_STATUSCOM_DRHIZ,
++				MCP3911_STATUSCOM_DRHIZ, 2);
++	if (ret < 0)
++		goto clk_disable;
++
  	indio_dev->name = spi_get_device_id(spi)->name;
--	indio_dev->modes = INDIO_DIRECT_MODE;
-+	indio_dev->modes = INDIO_DIRECT_MODE | INDIO_BUFFER_TRIGGERED;
+ 	indio_dev->modes = INDIO_DIRECT_MODE | INDIO_BUFFER_TRIGGERED;
  	indio_dev->info = &mcp3911_info;
- 	spi_set_drvdata(spi, indio_dev);
- 
-@@ -312,6 +362,12 @@ static int mcp3911_probe(struct spi_device *spi)
+@@ -362,6 +401,32 @@ static int mcp3911_probe(struct spi_device *spi)
  
  	mutex_init(&adc->lock);
  
-+	ret = devm_iio_triggered_buffer_setup(&spi->dev, indio_dev,
-+			NULL,
-+			mcp3911_trigger_handler, NULL);
-+	if (ret)
-+		goto clk_disable;
++	if (spi->irq > 0) {
++		adc->trig = devm_iio_trigger_alloc(&spi->dev, "%s-dev%d",
++				indio_dev->name,
++				iio_device_id(indio_dev));
++		if (!adc->trig)
++			goto clk_disable;
 +
- 	ret = devm_iio_device_register(&adc->spi->dev, indio_dev);
- 	if (ret)
- 		goto clk_disable;
++		adc->trig->ops = &mcp3911_trigger_ops;
++		iio_trigger_set_drvdata(adc->trig, adc);
++		ret = devm_iio_trigger_register(&spi->dev, adc->trig);
++		if (ret)
++			goto clk_disable;
++
++		/*
++		 * The device generates interrupts as long as it is powered up.
++		 * Some platforms might not allow the option to power it down so
++		 * don't enable the interrupt to avoid extra load on the system
++		 */
++		ret = devm_request_irq(&spi->dev, spi->irq,
++				&mcp3911_interrupt,
++				IRQF_TRIGGER_FALLING | IRQF_NO_AUTOEN | IRQF_ONESHOT,
++				indio_dev->name, indio_dev);
++		if (ret)
++			goto clk_disable;
++	}
++
+ 	ret = devm_iio_triggered_buffer_setup(&spi->dev, indio_dev,
+ 			NULL,
+ 			mcp3911_trigger_handler, NULL);
 -- 
 2.36.1
 

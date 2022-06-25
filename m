@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A890F55A843
+	by mail.lfdr.de (Postfix) with ESMTP id 17EA755A841
 	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 11:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbiFYIuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 04:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S232207AbiFYIvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 04:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiFYIuK (ORCPT
+        with ESMTP id S229722AbiFYIvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 04:50:10 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553B44199C
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 01:50:09 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id i7so8288834ybe.11
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 01:50:09 -0700 (PDT)
+        Sat, 25 Jun 2022 04:51:01 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFA9419A4;
+        Sat, 25 Jun 2022 01:51:00 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id c137so3512338qkg.5;
+        Sat, 25 Jun 2022 01:51:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Lv+FkxyjS/NQutVt+wfhAcydFycem3hgLi5V9K9eRHk=;
-        b=GGomJks9se9aRiZPrnkaj+MkjtDXB1AjbcDjtd3FmKDbYRq4vLEPEOhYeF5hQEnjgh
-         gA8G8WYzomc85KEh/80ZbS7xExwFawZI7RKx86EBTuGP4dfRxZGX55DPn6ddeZK01JjK
-         N4FFpMLT9gYc9+D1Q5KPkgLzWIReIzC5Qbk1AKzvaozPtSn/CSX5v1gkp0dsyDh5QTEd
-         BXkfqoh9+ehFJbtK9qB3lELaUT7wo38zRYzEoNWNgEsYNJHyxf40uUPa7ej4nWExmxa0
-         /cZ2DXgUtW/HfuBs84ZXI3cagF2y95zgzu+rjIEJp0pCsoO4LByk6BdZ9yP6zbjYuHJd
-         nqCQ==
+        bh=Gr7rHwj4uZV2BrO1OagJPPNTulCd6lAi4kIBjcgZsYk=;
+        b=RF3hzoPNG9vTghwo8Zhz+k+WmE8fn0+6kzxobSF7lZMuwexuhuRa4uU2HdfatbuaO3
+         2X6IGckFsgx2jz4VSCheJLkCw9P1qKxdC/cHZAUSVJ+L2ENfSr0LMqSdRFXYW3Cb7Rq7
+         7/KSMpCA4pNOoG+om3o1xSWkRXQKhx0MqNLR5K+907lHBFWDA5QkYOC4SooA7vlv3/hw
+         tx0DDk3CLG7zxrA/zKdfcrMthH8tksK1ywdTBr/Vp/FaTlxDTz6/IY2qHGR3Idim7q4A
+         ULUywPAFVUvF8zqlgYg6Amewifo6H6ugiwbYB3U/oWahF/yrU0nZdqekEDa/irM82vhz
+         eL3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Lv+FkxyjS/NQutVt+wfhAcydFycem3hgLi5V9K9eRHk=;
-        b=Dtcjx1Mr3Eee88sb3KvHCyfQK9A5wK6NU23953V690RHO6RFOOIPix9xnZTEVYEoLb
-         dGnYR/GgQvPoFKT3q4SY16zCZ79Ketghz89ehxmjcmr4mkq9emsuqHVnpfMHXa789tAT
-         aHRxHD+M22hHEeH6KM55C9I9CyXdS+NKDR5pjwfT4Vk8H/bgHLv0W/ebGtbUJz7bL1yg
-         qbZuIc2t5+mnvRmMV1gacISln8/xJLJlfrtHmNMn1FIqL7keL2s+Y/nO+RyIVAwF/u0U
-         ZWPIHd02elmPc5rfkvKcQ1YDdIUebTrDTGu+qawfGVvR9G4UQ92IutGBJvj/zf5fZpcZ
-         0fTg==
-X-Gm-Message-State: AJIora+iNj3I0/yPu5kWNmqBJNWlaMeJAlU0at0puhMapsJ6QIrdkj+y
-        6Bjq3NEF15Pe1sImZgYFIqbziTdyPR2husReZq/FKg==
-X-Google-Smtp-Source: AGRyM1t8TNJw3d/FU1nQTEhu7gjwWTgPUcz4RF4GIPzinVn8gHVuDfr/lmPi+A18Q8e4Qqw7s9zc1LBos/hD2hoGkeU=
-X-Received: by 2002:a25:3288:0:b0:66c:8a91:74bb with SMTP id
- y130-20020a253288000000b0066c8a9174bbmr2096560yby.89.1656147008595; Sat, 25
- Jun 2022 01:50:08 -0700 (PDT)
+        bh=Gr7rHwj4uZV2BrO1OagJPPNTulCd6lAi4kIBjcgZsYk=;
+        b=Q+4gf93dDVMOz0Mlgpy5P/b1WdtsQRl0mqoN79N5bn0rlnKP1nv/OP/7aoGaKHZjkH
+         LuSnuyIbnWXX7utqyStNj/c9/PGVCYf/yn18Javb3uiB6DWw5wpYSfsAhn2Ln5kZ1SHe
+         /9ukUZEXaaqo6A6N5uVAdBiTyRJ6UN4k+AojJ+lxN58YirLBcXkZtJxc0HkerwmV1bwn
+         kyqqCOEB9wpZDDpH1YSOlu5r+LFn//TeBg5xgQdKNbGQsLWtAwMbPiG61/GdNlqqc0RY
+         bR7yEX9r/g89WLvC2NOYs9L60JSaPVUMVCXOYH/eW51EZ70D/wWaCVH8hCEHtbAjXkmu
+         9bbQ==
+X-Gm-Message-State: AJIora9DqJ34dlYEVdx9tY17Bn0wXbZsD4VxSwcPHKtbm2kiafGVx0VK
+        OAXNgzGDCX61W6631smyTDIR3BYb1UQK1pMIxMQ=
+X-Google-Smtp-Source: AGRyM1vnMR2wmyHZ82Hm11vMWcd0aHa0cK911PF15+gzrd3hKdZXPTKZj8n6Rj+ksDElGT+sDKNwTHx7h462FXBGNoU=
+X-Received: by 2002:a05:620a:2450:b0:6a6:d264:2b88 with SMTP id
+ h16-20020a05620a245000b006a6d2642b88mr2100874qkn.25.1656147060016; Sat, 25
+ Jun 2022 01:51:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220625080423.2797-1-chenfeiyang@loongson.cn>
-In-Reply-To: <20220625080423.2797-1-chenfeiyang@loongson.cn>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Sat, 25 Jun 2022 16:49:32 +0800
-Message-ID: <CAMZfGtWT7oPq6bD_fRn2gVNX8Lj3=ev21EAoaCCPeq-P_NYF0g@mail.gmail.com>
-Subject: Re: [PATCH] page-flags.h: Fix a missing header include of static_keys.h
-To:     Feiyang Chen <chris.chenfeiyang@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Feiyang Chen <chenfeiyang@loongson.cn>, chenhuacai@kernel.org,
-        loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux- stable <stable@vger.kernel.org>
+References: <20220623182542.1116677-1-robimarko@gmail.com> <26cdc24c-e0e8-1059-f6ca-11c08615eeca@linaro.org>
+In-Reply-To: <26cdc24c-e0e8-1059-f6ca-11c08615eeca@linaro.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Sat, 25 Jun 2022 10:50:49 +0200
+Message-ID: <CAOX2RU7aEaBt_PYS2UA6BES+dJgx4n2QPHJ6yWYWZuTt2SLXoA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: firmware: qcom-scm: convert to dtschema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        David Heidelberg <david@ixit.cz>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 4:04 PM Feiyang Chen
-<chris.chenfeiyang@gmail.com> wrote:
+On Fri, 24 Jun 2022 at 11:52, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> The page-flags.h header relies on static keys since commit
-> a6b40850c442bf ("mm: hugetlb: replace hugetlb_free_vmemmap_enabled
-> with a static_key"), so make sure to include the header to avoid
-> compilation errors.
+> On 23/06/2022 20:25, Robert Marko wrote:
+> > Convert bindings for Qualcomm SCM to dtschema.
+> >
+> > SoC compatibles that were used, but not documented were added.
+> >
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
 >
-> Fixes: a6b40850c442bf ("mm: hugetlb: replace hugetlb_free_vmemmap_enabled with a static_key")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> ---
->  include/linux/page-flags.h | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> index e66f7aa3191d..147b336c7a35 100644
-> --- a/include/linux/page-flags.h
-> +++ b/include/linux/page-flags.h
-> @@ -11,6 +11,7 @@
->  #include <linux/mmdebug.h>
->  #ifndef __GENERATING_BOUNDS_H
->  #include <linux/mm_types.h>
-> +#include <linux/static_key.h>
+> This was already submitted:
+> https://lore.kernel.org/all/20211218194038.26913-1-david@ixit.cz/
 
-I did not include this. The change makes sense to me. But I am
-curious what configs cause the compiling error. Would you mind
-sharing the config with us?
+Hi Krzysztof,
+I was not aware there was already a version sent, just used linux-next
+as the base
+and it wasn't there so I assumed, will search through the archives next time.
 
-Thanks.
+Anyway, that attempt looks abandoned.
 
->  #include <generated/bounds.h>
->  #endif /* !__GENERATING_BOUNDS_H */
+Regards,
+Robert
 >
-> --
-> 2.27.0
+> David,
+> Do you intend to work on the bindings you submitted before? There are
+> several pending on your side (things to be fixed), so I am not sure if
+> work is abandoned or just waiting.
 >
+> Best regards,
+> Krzysztof

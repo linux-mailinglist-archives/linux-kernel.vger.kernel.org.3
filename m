@@ -2,49 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4C355AA6E
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CF455AA72
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbiFYNTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 09:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
+        id S233071AbiFYNUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 09:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbiFYNTd (ORCPT
+        with ESMTP id S232620AbiFYNUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 09:19:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670D21F2CB;
-        Sat, 25 Jun 2022 06:19:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 043E6B80959;
-        Sat, 25 Jun 2022 13:19:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D0E3C3411C;
-        Sat, 25 Jun 2022 13:19:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656163169;
-        bh=9uU47fPxaF3rU6eJH8h5dJYn64BWxODSdTXUHvvdM1w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iypJwh2kf3Z5f9WdSjnQAjlHlmQgh4v9dtGV5UJbJiM8nIIA1HfsFWHCOnqZyaRXR
-         639h4MUU6YUK/4Yv/AXqvZLhID8XE6HfgtnJDf+VXXLZH1J3nAbRN5dvOXY8TF9lPS
-         OK+pkWuaXd5542F/3tJ240z5fGw0o7YipTo1U6UA=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Cc:     lwn@lwn.net, jslaby@suse.cz,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: Linux 5.4.201
-Date:   Sat, 25 Jun 2022 15:19:17 +0200
-Message-Id: <16561631565145@kroah.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <1656163156109178@kroah.com>
-References: <1656163156109178@kroah.com>
+        Sat, 25 Jun 2022 09:20:13 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58CB20185
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 06:20:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656163211; x=1687699211;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=E+g1LfATPd0ZspZntzH4NSUypF/JsTen+sy1/xUT8wk=;
+  b=U+DUwXVSJb7emDnfxO4r/KmcvXhL5l2EPqwV9Tkt6zLr1qH6WfB81SoX
+   rlWB0RlKh4WrHrdYj5LCJlxSjtzXU0ioeat2qpCgKcSbHj+yzs7LaTlUk
+   HvBtYSJrCtfP0NuVRkAAbHk0fuoFNCRu3t8U3YUvjkG7exBoAQqBMQEA3
+   RrvAoVf90RPqqoGNdFuCw0qZf/KYL/svT+Rx1bU7S0Ajna7PbDLhPingr
+   t/WOrlgUoQb23PyrZ/zCWlv81C9NZl6zz1hxnOHKOP/AQgIN2nKvgKZi7
+   4ugpmj/zG3AuDoaiUOIumuodIlX9sHmk0FJ/3ATRPUhpNUWvtgopseh+z
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10388"; a="281228881"
+X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
+   d="scan'208";a="281228881"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 06:20:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,222,1650956400"; 
+   d="scan'208";a="716521170"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 25 Jun 2022 06:20:08 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o55hn-0005ml-Vy;
+        Sat, 25 Jun 2022 13:20:07 +0000
+Date:   Sat, 25 Jun 2022 21:19:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tong Tiangen <tongtiangen@huawei.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>
+Subject: mm/page_table_check.c:148:6: error: call to undeclared function
+ 'pte_user_accessible_page'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202206252135.7VbdJEIx-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,434 +66,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-index 23f27fe78e37..c41eb6108103 100644
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -72,7 +72,7 @@ hwmon_device_register_with_info is the most comprehensive and preferred means
- to register a hardware monitoring device. It creates the standard sysfs
- attributes in the hardware monitoring core, letting the driver focus on reading
- from and writing to the chip instead of having to bother with sysfs attributes.
--The parent device parameter as well as the chip parameter must not be NULL. Its
-+The parent device parameter cannot be NULL with non-NULL chip info. Its
- parameters are described in more detail below.
- 
- devm_hwmon_device_register_with_info is similar to
-diff --git a/Makefile b/Makefile
-index 32da9117e9d7..75be5870cc55 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- VERSION = 5
- PATCHLEVEL = 4
--SUBLEVEL = 200
-+SUBLEVEL = 201
- EXTRAVERSION =
- NAME = Kleptomaniac Octopus
- 
-diff --git a/arch/arm64/mm/cache.S b/arch/arm64/mm/cache.S
-index db767b072601..7b054c67acd8 100644
---- a/arch/arm64/mm/cache.S
-+++ b/arch/arm64/mm/cache.S
-@@ -228,8 +228,6 @@ ENDPIPROC(__dma_flush_area)
-  *	- dir	- DMA direction
-  */
- ENTRY(__dma_map_area)
--	cmp	w2, #DMA_FROM_DEVICE
--	b.eq	__dma_inv_area
- 	b	__dma_clean_area
- ENDPIPROC(__dma_map_area)
- 
-diff --git a/arch/s390/mm/pgtable.c b/arch/s390/mm/pgtable.c
-index 4438c00acb65..28ca07360e97 100644
---- a/arch/s390/mm/pgtable.c
-+++ b/arch/s390/mm/pgtable.c
-@@ -716,7 +716,7 @@ void ptep_zap_key(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
- 	pgste_val(pgste) |= PGSTE_GR_BIT | PGSTE_GC_BIT;
- 	ptev = pte_val(*ptep);
- 	if (!(ptev & _PAGE_INVALID) && (ptev & _PAGE_WRITE))
--		page_set_storage_key(ptev & PAGE_MASK, PAGE_DEFAULT_KEY, 1);
-+		page_set_storage_key(ptev & PAGE_MASK, PAGE_DEFAULT_KEY, 0);
- 	pgste_set_unlock(ptep, pgste);
- 	preempt_enable();
- }
-diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-index c73b93b9bb87..a2175394cd25 100644
---- a/drivers/hwmon/hwmon.c
-+++ b/drivers/hwmon/hwmon.c
-@@ -715,12 +715,11 @@ EXPORT_SYMBOL_GPL(hwmon_device_register_with_groups);
- 
- /**
-  * hwmon_device_register_with_info - register w/ hwmon
-- * @dev: the parent device (mandatory)
-- * @name: hwmon name attribute (mandatory)
-- * @drvdata: driver data to attach to created device (optional)
-- * @chip: pointer to hwmon chip information (mandatory)
-+ * @dev: the parent device
-+ * @name: hwmon name attribute
-+ * @drvdata: driver data to attach to created device
-+ * @chip: pointer to hwmon chip information
-  * @extra_groups: pointer to list of additional non-standard attribute groups
-- *	(optional)
-  *
-  * hwmon_device_unregister() must be called when the device is no
-  * longer needed.
-@@ -733,10 +732,13 @@ hwmon_device_register_with_info(struct device *dev, const char *name,
- 				const struct hwmon_chip_info *chip,
- 				const struct attribute_group **extra_groups)
- {
--	if (!dev || !name || !chip)
-+	if (!name)
-+		return ERR_PTR(-EINVAL);
-+
-+	if (chip && (!chip->ops || !chip->ops->is_visible || !chip->info))
- 		return ERR_PTR(-EINVAL);
- 
--	if (!chip->ops || !chip->ops->is_visible || !chip->info)
-+	if (chip && !dev)
- 		return ERR_PTR(-EINVAL);
- 
- 	return __hwmon_device_register(dev, name, drvdata, chip, extra_groups);
-diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
-index 06b382304d92..81bc36a43b32 100644
---- a/drivers/md/dm-table.c
-+++ b/drivers/md/dm-table.c
-@@ -872,8 +872,7 @@ EXPORT_SYMBOL(dm_consume_args);
- static bool __table_type_bio_based(enum dm_queue_mode table_type)
- {
- 	return (table_type == DM_TYPE_BIO_BASED ||
--		table_type == DM_TYPE_DAX_BIO_BASED ||
--		table_type == DM_TYPE_NVME_BIO_BASED);
-+		table_type == DM_TYPE_DAX_BIO_BASED);
- }
- 
- static bool __table_type_request_based(enum dm_queue_mode table_type)
-@@ -929,8 +928,6 @@ bool dm_table_supports_dax(struct dm_table *t,
- 	return true;
- }
- 
--static bool dm_table_does_not_support_partial_completion(struct dm_table *t);
--
- static int device_is_rq_stackable(struct dm_target *ti, struct dm_dev *dev,
- 				  sector_t start, sector_t len, void *data)
- {
-@@ -960,7 +957,6 @@ static int dm_table_determine_type(struct dm_table *t)
- 			goto verify_bio_based;
- 		}
- 		BUG_ON(t->type == DM_TYPE_DAX_BIO_BASED);
--		BUG_ON(t->type == DM_TYPE_NVME_BIO_BASED);
- 		goto verify_rq_based;
- 	}
- 
-@@ -999,15 +995,6 @@ static int dm_table_determine_type(struct dm_table *t)
- 		if (dm_table_supports_dax(t, device_not_dax_capable, &page_size) ||
- 		    (list_empty(devices) && live_md_type == DM_TYPE_DAX_BIO_BASED)) {
- 			t->type = DM_TYPE_DAX_BIO_BASED;
--		} else {
--			/* Check if upgrading to NVMe bio-based is valid or required */
--			tgt = dm_table_get_immutable_target(t);
--			if (tgt && !tgt->max_io_len && dm_table_does_not_support_partial_completion(t)) {
--				t->type = DM_TYPE_NVME_BIO_BASED;
--				goto verify_rq_based; /* must be stacked directly on NVMe (blk-mq) */
--			} else if (list_empty(devices) && live_md_type == DM_TYPE_NVME_BIO_BASED) {
--				t->type = DM_TYPE_NVME_BIO_BASED;
--			}
- 		}
- 		return 0;
- 	}
-@@ -1024,8 +1011,7 @@ static int dm_table_determine_type(struct dm_table *t)
- 	 * (e.g. request completion process for partial completion.)
- 	 */
- 	if (t->num_targets > 1) {
--		DMERR("%s DM doesn't support multiple targets",
--		      t->type == DM_TYPE_NVME_BIO_BASED ? "nvme bio-based" : "request-based");
-+		DMERR("request-based DM doesn't support multiple targets");
- 		return -EINVAL;
- 	}
- 
-@@ -1714,20 +1700,6 @@ static int device_is_not_random(struct dm_target *ti, struct dm_dev *dev,
- 	return q && !blk_queue_add_random(q);
- }
- 
--static int device_is_partial_completion(struct dm_target *ti, struct dm_dev *dev,
--					sector_t start, sector_t len, void *data)
--{
--	char b[BDEVNAME_SIZE];
--
--	/* For now, NVMe devices are the only devices of this class */
--	return (strncmp(bdevname(dev->bdev, b), "nvme", 4) != 0);
--}
--
--static bool dm_table_does_not_support_partial_completion(struct dm_table *t)
--{
--	return !dm_table_any_dev_attr(t, device_is_partial_completion, NULL);
--}
--
- static int device_not_write_same_capable(struct dm_target *ti, struct dm_dev *dev,
- 					 sector_t start, sector_t len, void *data)
- {
-diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-index 37b8bb4d80f0..77e28f77c59f 100644
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -1000,7 +1000,7 @@ static void clone_endio(struct bio *bio)
- 	struct mapped_device *md = tio->io->md;
- 	dm_endio_fn endio = tio->ti->type->end_io;
- 
--	if (unlikely(error == BLK_STS_TARGET) && md->type != DM_TYPE_NVME_BIO_BASED) {
-+	if (unlikely(error == BLK_STS_TARGET)) {
- 		if (bio_op(bio) == REQ_OP_DISCARD &&
- 		    !bio->bi_disk->queue->limits.max_discard_sectors)
- 			disable_discard(md);
-@@ -1325,7 +1325,6 @@ static blk_qc_t __map_bio(struct dm_target_io *tio)
- 	sector = clone->bi_iter.bi_sector;
- 
- 	if (unlikely(swap_bios_limit(ti, clone))) {
--		struct mapped_device *md = io->md;
- 		int latch = get_swap_bios();
- 		if (unlikely(latch != md->swap_bios))
- 			__set_swap_bios_limit(md, latch);
-@@ -1340,24 +1339,17 @@ static blk_qc_t __map_bio(struct dm_target_io *tio)
- 		/* the bio has been remapped so dispatch it */
- 		trace_block_bio_remap(clone->bi_disk->queue, clone,
- 				      bio_dev(io->orig_bio), sector);
--		if (md->type == DM_TYPE_NVME_BIO_BASED)
--			ret = direct_make_request(clone);
--		else
--			ret = generic_make_request(clone);
-+		ret = generic_make_request(clone);
- 		break;
- 	case DM_MAPIO_KILL:
--		if (unlikely(swap_bios_limit(ti, clone))) {
--			struct mapped_device *md = io->md;
-+		if (unlikely(swap_bios_limit(ti, clone)))
- 			up(&md->swap_bios_semaphore);
--		}
- 		free_tio(tio);
- 		dec_pending(io, BLK_STS_IOERR);
- 		break;
- 	case DM_MAPIO_REQUEUE:
--		if (unlikely(swap_bios_limit(ti, clone))) {
--			struct mapped_device *md = io->md;
-+		if (unlikely(swap_bios_limit(ti, clone)))
- 			up(&md->swap_bios_semaphore);
--		}
- 		free_tio(tio);
- 		dec_pending(io, BLK_STS_DM_REQUEUE);
- 		break;
-@@ -1732,51 +1724,6 @@ static blk_qc_t __split_and_process_bio(struct mapped_device *md,
- 	return ret;
- }
- 
--/*
-- * Optimized variant of __split_and_process_bio that leverages the
-- * fact that targets that use it do _not_ have a need to split bios.
-- */
--static blk_qc_t __process_bio(struct mapped_device *md, struct dm_table *map,
--			      struct bio *bio, struct dm_target *ti)
--{
--	struct clone_info ci;
--	blk_qc_t ret = BLK_QC_T_NONE;
--	int error = 0;
--
--	init_clone_info(&ci, md, map, bio);
--
--	if (bio->bi_opf & REQ_PREFLUSH) {
--		struct bio flush_bio;
--
--		/*
--		 * Use an on-stack bio for this, it's safe since we don't
--		 * need to reference it after submit. It's just used as
--		 * the basis for the clone(s).
--		 */
--		bio_init(&flush_bio, NULL, 0);
--		flush_bio.bi_opf = REQ_OP_WRITE | REQ_PREFLUSH | REQ_SYNC;
--		ci.bio = &flush_bio;
--		ci.sector_count = 0;
--		error = __send_empty_flush(&ci);
--		bio_uninit(ci.bio);
--		/* dec_pending submits any data associated with flush */
--	} else {
--		struct dm_target_io *tio;
--
--		ci.bio = bio;
--		ci.sector_count = bio_sectors(bio);
--		if (__process_abnormal_io(&ci, ti, &error))
--			goto out;
--
--		tio = alloc_tio(&ci, ti, 0, GFP_NOIO);
--		ret = __clone_and_map_simple_bio(&ci, tio, NULL);
--	}
--out:
--	/* drop the extra reference count */
--	dec_pending(ci.io, errno_to_blk_status(error));
--	return ret;
--}
--
- static blk_qc_t dm_process_bio(struct mapped_device *md,
- 			       struct dm_table *map, struct bio *bio)
- {
-@@ -1807,8 +1754,6 @@ static blk_qc_t dm_process_bio(struct mapped_device *md,
- 		/* regular IO is split by __split_and_process_bio */
- 	}
- 
--	if (dm_get_md_type(md) == DM_TYPE_NVME_BIO_BASED)
--		return __process_bio(md, map, bio, ti);
- 	return __split_and_process_bio(md, map, bio);
- }
- 
-@@ -2200,12 +2145,10 @@ static struct dm_table *__bind(struct mapped_device *md, struct dm_table *t,
- 	if (request_based)
- 		dm_stop_queue(q);
- 
--	if (request_based || md->type == DM_TYPE_NVME_BIO_BASED) {
-+	if (request_based) {
- 		/*
--		 * Leverage the fact that request-based DM targets and
--		 * NVMe bio based targets are immutable singletons
--		 * - used to optimize both dm_request_fn and dm_mq_queue_rq;
--		 *   and __process_bio.
-+		 * Leverage the fact that request-based DM targets are
-+		 * immutable singletons - used to optimize dm_mq_queue_rq.
- 		 */
- 		md->immutable_target = dm_table_get_immutable_target(t);
- 	}
-@@ -2334,7 +2277,6 @@ int dm_setup_md_queue(struct mapped_device *md, struct dm_table *t)
- 		break;
- 	case DM_TYPE_BIO_BASED:
- 	case DM_TYPE_DAX_BIO_BASED:
--	case DM_TYPE_NVME_BIO_BASED:
- 		dm_init_congested_fn(md);
- 		break;
- 	case DM_TYPE_NONE:
-@@ -3070,7 +3012,6 @@ struct dm_md_mempools *dm_alloc_md_mempools(struct mapped_device *md, enum dm_qu
- 	switch (type) {
- 	case DM_TYPE_BIO_BASED:
- 	case DM_TYPE_DAX_BIO_BASED:
--	case DM_TYPE_NVME_BIO_BASED:
- 		pool_size = max(dm_get_reserved_bio_based_ios(), min_pool_size);
- 		front_pad = roundup(per_io_data_size, __alignof__(struct dm_target_io)) + offsetof(struct dm_target_io, clone);
- 		io_front_pad = roundup(front_pad,  __alignof__(struct dm_io)) + offsetof(struct dm_io, tio);
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 271bd08f4a25..3f053b11e2ce 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -772,9 +772,13 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
- 	dev->qmult = qmult;
- 	snprintf(net->name, sizeof(net->name), "%s%%d", netname);
- 
--	if (get_ether_addr(dev_addr, net->dev_addr))
-+	if (get_ether_addr(dev_addr, net->dev_addr)) {
-+		net->addr_assign_type = NET_ADDR_RANDOM;
- 		dev_warn(&g->dev,
- 			"using random %s ethernet address\n", "self");
-+	} else {
-+		net->addr_assign_type = NET_ADDR_SET;
-+	}
- 	if (get_ether_addr(host_addr, dev->host_mac))
- 		dev_warn(&g->dev,
- 			"using random %s ethernet address\n", "host");
-@@ -831,6 +835,9 @@ struct net_device *gether_setup_name_default(const char *netname)
- 	INIT_LIST_HEAD(&dev->tx_reqs);
- 	INIT_LIST_HEAD(&dev->rx_reqs);
- 
-+	/* by default we always have a random MAC address */
-+	net->addr_assign_type = NET_ADDR_RANDOM;
-+
- 	skb_queue_head_init(&dev->rx_frames);
- 
- 	/* network device setup */
-@@ -868,7 +875,6 @@ int gether_register_netdev(struct net_device *net)
- 	g = dev->gadget;
- 
- 	memcpy(net->dev_addr, dev->dev_mac, ETH_ALEN);
--	net->addr_assign_type = NET_ADDR_RANDOM;
- 
- 	status = register_netdev(net);
- 	if (status < 0) {
-@@ -908,6 +914,7 @@ int gether_set_dev_addr(struct net_device *net, const char *dev_addr)
- 	if (get_ether_addr(dev_addr, new_addr))
- 		return -EINVAL;
- 	memcpy(dev->dev_mac, new_addr, ETH_ALEN);
-+	net->addr_assign_type = NET_ADDR_SET;
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(gether_set_dev_addr);
-diff --git a/include/linux/device-mapper.h b/include/linux/device-mapper.h
-index a53d7d2c2d95..60631f3abddb 100644
---- a/include/linux/device-mapper.h
-+++ b/include/linux/device-mapper.h
-@@ -28,7 +28,6 @@ enum dm_queue_mode {
- 	DM_TYPE_BIO_BASED	 = 1,
- 	DM_TYPE_REQUEST_BASED	 = 2,
- 	DM_TYPE_DAX_BIO_BASED	 = 3,
--	DM_TYPE_NVME_BIO_BASED	 = 4,
- };
- 
- typedef enum { STATUSTYPE_INFO, STATUSTYPE_TABLE } status_type_t;
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index 959f4f0c8546..d9bee15e36a5 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -675,12 +675,14 @@ EXPORT_SYMBOL_GPL(inet_unhash);
-  * Note that we use 32bit integers (vs RFC 'short integers')
-  * because 2^16 is not a multiple of num_ephemeral and this
-  * property might be used by clever attacker.
-- * RFC claims using TABLE_LENGTH=10 buckets gives an improvement,
-- * we use 256 instead to really give more isolation and
-- * privacy, this only consumes 1 KB of kernel memory.
-+ * RFC claims using TABLE_LENGTH=10 buckets gives an improvement, though
-+ * attacks were since demonstrated, thus we use 65536 instead to really
-+ * give more isolation and privacy, at the expense of 256kB of kernel
-+ * memory.
-  */
--#define INET_TABLE_PERTURB_SHIFT 8
--static u32 table_perturb[1 << INET_TABLE_PERTURB_SHIFT];
-+#define INET_TABLE_PERTURB_SHIFT 16
-+#define INET_TABLE_PERTURB_SIZE (1 << INET_TABLE_PERTURB_SHIFT)
-+static u32 *table_perturb;
- 
- int __inet_hash_connect(struct inet_timewait_death_row *death_row,
- 		struct sock *sk, u64 port_offset,
-@@ -723,10 +725,11 @@ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
- 	if (likely(remaining > 1))
- 		remaining &= ~1U;
- 
--	net_get_random_once(table_perturb, sizeof(table_perturb));
--	index = hash_32(port_offset, INET_TABLE_PERTURB_SHIFT);
-+	net_get_random_once(table_perturb,
-+			    INET_TABLE_PERTURB_SIZE * sizeof(*table_perturb));
-+	index = port_offset & (INET_TABLE_PERTURB_SIZE - 1);
- 
--	offset = READ_ONCE(table_perturb[index]) + port_offset;
-+	offset = READ_ONCE(table_perturb[index]) + (port_offset >> 32);
- 	offset %= remaining;
- 
- 	/* In first pass we try ports of @low parity.
-@@ -782,6 +785,12 @@ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
- 	return -EADDRNOTAVAIL;
- 
- ok:
-+	/* Here we want to add a little bit of randomness to the next source
-+	 * port that will be chosen. We use a max() with a random here so that
-+	 * on low contention the randomness is maximal and on high contention
-+	 * it may be inexistent.
-+	 */
-+	i = max_t(int, i, (prandom_u32() & 7) * 2);
- 	WRITE_ONCE(table_perturb[index], READ_ONCE(table_perturb[index]) + i + 2);
- 
- 	/* Head lock still held and bh's disabled */
-@@ -855,6 +864,12 @@ void __init inet_hashinfo2_init(struct inet_hashinfo *h, const char *name,
- 					    low_limit,
- 					    high_limit);
- 	init_hashinfo_lhash2(h);
-+
-+	/* this one is used for source ports of outgoing connections */
-+	table_perturb = kmalloc_array(INET_TABLE_PERTURB_SIZE,
-+				      sizeof(*table_perturb), GFP_KERNEL);
-+	if (!table_perturb)
-+		panic("TCP: failed to alloc table_perturb");
- }
- 
- int inet_hashinfo2_init_mod(struct inet_hashinfo *h)
+Hi Tong,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8c23f235a6a8ae43abea215812eb9d8cf4dd165e
+commit: 3fee229a8eb936b96933c6b2cd02d2e87a4cc997 riscv/mm: enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
+date:   6 weeks ago
+config: riscv-randconfig-r003-20220625
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 42a7ddb428c999229491b0effbb1a4059149fba8)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3fee229a8eb936b96933c6b2cd02d2e87a4cc997
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3fee229a8eb936b96933c6b2cd02d2e87a4cc997
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> mm/page_table_check.c:148:6: error: call to undeclared function 'pte_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (pte_user_accessible_page(pte)) {
+               ^
+>> mm/page_table_check.c:149:36: error: call to undeclared function 'pte_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page_table_check_clear(mm, addr, pte_pfn(pte),
+                                                    ^
+>> mm/page_table_check.c:161:6: error: call to undeclared function 'pmd_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (pmd_user_accessible_page(pmd)) {
+               ^
+>> mm/page_table_check.c:162:36: error: call to undeclared function 'pmd_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page_table_check_clear(mm, addr, pmd_pfn(pmd),
+                                                    ^
+   mm/page_table_check.c:162:36: note: did you mean '_pmd_pfn'?
+   arch/riscv/include/asm/pgtable-64.h:144:29: note: '_pmd_pfn' declared here
+   static inline unsigned long _pmd_pfn(pmd_t pmd)
+                               ^
+>> mm/page_table_check.c:174:6: error: call to undeclared function 'pud_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (pud_user_accessible_page(pud)) {
+               ^
+>> mm/page_table_check.c:175:36: error: call to undeclared function 'pud_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page_table_check_clear(mm, addr, pud_pfn(pud),
+                                                    ^
+   mm/page_table_check.c:175:36: note: did you mean '_pud_pfn'?
+   arch/riscv/include/asm/pgtable-64.h:104:29: note: '_pud_pfn' declared here
+   static inline unsigned long _pud_pfn(pud_t pud)
+                               ^
+   mm/page_table_check.c:188:6: error: call to undeclared function 'pte_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (pte_user_accessible_page(pte)) {
+               ^
+   mm/page_table_check.c:189:34: error: call to undeclared function 'pte_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page_table_check_set(mm, addr, pte_pfn(pte),
+                                                  ^
+>> mm/page_table_check.c:191:10: error: call to undeclared function 'pte_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                        pte_write(pte));
+                                        ^
+   mm/page_table_check.c:203:6: error: call to undeclared function 'pmd_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (pmd_user_accessible_page(pmd)) {
+               ^
+   mm/page_table_check.c:204:34: error: call to undeclared function 'pmd_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page_table_check_set(mm, addr, pmd_pfn(pmd),
+                                                  ^
+>> mm/page_table_check.c:206:10: error: call to undeclared function 'pmd_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                        pmd_write(pmd));
+                                        ^
+   mm/page_table_check.c:218:6: error: call to undeclared function 'pud_user_accessible_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (pud_user_accessible_page(pud)) {
+               ^
+   mm/page_table_check.c:219:34: error: call to undeclared function 'pud_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   page_table_check_set(mm, addr, pud_pfn(pud),
+                                                  ^
+>> mm/page_table_check.c:221:10: error: call to undeclared function 'pud_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                        pud_write(pud));
+                                        ^
+   mm/page_table_check.c:221:10: note: did you mean 'up_write'?
+   include/linux/rwsem.h:202:13: note: 'up_write' declared here
+   extern void up_write(struct rw_semaphore *sem);
+               ^
+>> mm/page_table_check.c:233:7: error: call to undeclared function 'pmd_bad'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (!pmd_bad(pmd) && !pmd_leaf(pmd)) {
+                ^
+>> mm/page_table_check.c:234:17: error: call to undeclared function 'pte_offset_map'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   pte_t *ptep = pte_offset_map(&pmd, addr);
+                                 ^
+   mm/page_table_check.c:234:10: warning: incompatible integer to pointer conversion initializing 'pte_t *' with an expression of type 'int' [-Wint-conversion]
+                   pte_t *ptep = pte_offset_map(&pmd, addr);
+                          ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> mm/page_table_check.c:237:3: error: call to undeclared function 'pte_unmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   pte_unmap(ptep);
+                   ^
+   mm/page_table_check.c:237:3: note: did you mean 'pte_devmap'?
+   include/linux/mm.h:2113:19: note: 'pte_devmap' declared here
+   static inline int pte_devmap(pte_t pte)
+                     ^
+>> mm/page_table_check.c:238:19: error: use of undeclared identifier 'PTRS_PER_PTE'
+                   for (i = 0; i < PTRS_PER_PTE; i++) {
+                                   ^
+   1 warning and 19 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_TTM
+   Depends on HAS_IOMEM && DRM && MMU
+   Selected by
+   - DRM_TTM_HELPER && HAS_IOMEM && DRM
+   - DRM_HISI_HIBMC && HAS_IOMEM && DRM && PCI && (ARM64 || COMPILE_TEST
+
+
+vim +/pte_user_accessible_page +148 mm/page_table_check.c
+
+df4e817b710809 Pasha Tatashin 2022-01-14  141  
+df4e817b710809 Pasha Tatashin 2022-01-14  142  void __page_table_check_pte_clear(struct mm_struct *mm, unsigned long addr,
+df4e817b710809 Pasha Tatashin 2022-01-14  143  				  pte_t pte)
+df4e817b710809 Pasha Tatashin 2022-01-14  144  {
+df4e817b710809 Pasha Tatashin 2022-01-14  145  	if (&init_mm == mm)
+df4e817b710809 Pasha Tatashin 2022-01-14  146  		return;
+df4e817b710809 Pasha Tatashin 2022-01-14  147  
+df4e817b710809 Pasha Tatashin 2022-01-14 @148  	if (pte_user_accessible_page(pte)) {
+df4e817b710809 Pasha Tatashin 2022-01-14 @149  		page_table_check_clear(mm, addr, pte_pfn(pte),
+df4e817b710809 Pasha Tatashin 2022-01-14  150  				       PAGE_SIZE >> PAGE_SHIFT);
+df4e817b710809 Pasha Tatashin 2022-01-14  151  	}
+df4e817b710809 Pasha Tatashin 2022-01-14  152  }
+df4e817b710809 Pasha Tatashin 2022-01-14  153  EXPORT_SYMBOL(__page_table_check_pte_clear);
+df4e817b710809 Pasha Tatashin 2022-01-14  154  
+df4e817b710809 Pasha Tatashin 2022-01-14  155  void __page_table_check_pmd_clear(struct mm_struct *mm, unsigned long addr,
+df4e817b710809 Pasha Tatashin 2022-01-14  156  				  pmd_t pmd)
+df4e817b710809 Pasha Tatashin 2022-01-14  157  {
+df4e817b710809 Pasha Tatashin 2022-01-14  158  	if (&init_mm == mm)
+df4e817b710809 Pasha Tatashin 2022-01-14  159  		return;
+df4e817b710809 Pasha Tatashin 2022-01-14  160  
+df4e817b710809 Pasha Tatashin 2022-01-14 @161  	if (pmd_user_accessible_page(pmd)) {
+df4e817b710809 Pasha Tatashin 2022-01-14 @162  		page_table_check_clear(mm, addr, pmd_pfn(pmd),
+92fb05242a1b1e Tong Tiangen   2022-05-12  163  				       PMD_SIZE >> PAGE_SHIFT);
+df4e817b710809 Pasha Tatashin 2022-01-14  164  	}
+df4e817b710809 Pasha Tatashin 2022-01-14  165  }
+df4e817b710809 Pasha Tatashin 2022-01-14  166  EXPORT_SYMBOL(__page_table_check_pmd_clear);
+df4e817b710809 Pasha Tatashin 2022-01-14  167  
+df4e817b710809 Pasha Tatashin 2022-01-14  168  void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
+df4e817b710809 Pasha Tatashin 2022-01-14  169  				  pud_t pud)
+df4e817b710809 Pasha Tatashin 2022-01-14  170  {
+df4e817b710809 Pasha Tatashin 2022-01-14  171  	if (&init_mm == mm)
+df4e817b710809 Pasha Tatashin 2022-01-14  172  		return;
+df4e817b710809 Pasha Tatashin 2022-01-14  173  
+df4e817b710809 Pasha Tatashin 2022-01-14 @174  	if (pud_user_accessible_page(pud)) {
+df4e817b710809 Pasha Tatashin 2022-01-14 @175  		page_table_check_clear(mm, addr, pud_pfn(pud),
+92fb05242a1b1e Tong Tiangen   2022-05-12  176  				       PUD_SIZE >> PAGE_SHIFT);
+df4e817b710809 Pasha Tatashin 2022-01-14  177  	}
+df4e817b710809 Pasha Tatashin 2022-01-14  178  }
+df4e817b710809 Pasha Tatashin 2022-01-14  179  EXPORT_SYMBOL(__page_table_check_pud_clear);
+df4e817b710809 Pasha Tatashin 2022-01-14  180  
+df4e817b710809 Pasha Tatashin 2022-01-14  181  void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
+df4e817b710809 Pasha Tatashin 2022-01-14  182  				pte_t *ptep, pte_t pte)
+df4e817b710809 Pasha Tatashin 2022-01-14  183  {
+df4e817b710809 Pasha Tatashin 2022-01-14  184  	if (&init_mm == mm)
+df4e817b710809 Pasha Tatashin 2022-01-14  185  		return;
+df4e817b710809 Pasha Tatashin 2022-01-14  186  
+64d8b9e14512ce Pasha Tatashin 2022-02-03  187  	__page_table_check_pte_clear(mm, addr, *ptep);
+df4e817b710809 Pasha Tatashin 2022-01-14  188  	if (pte_user_accessible_page(pte)) {
+df4e817b710809 Pasha Tatashin 2022-01-14  189  		page_table_check_set(mm, addr, pte_pfn(pte),
+df4e817b710809 Pasha Tatashin 2022-01-14  190  				     PAGE_SIZE >> PAGE_SHIFT,
+df4e817b710809 Pasha Tatashin 2022-01-14 @191  				     pte_write(pte));
+df4e817b710809 Pasha Tatashin 2022-01-14  192  	}
+df4e817b710809 Pasha Tatashin 2022-01-14  193  }
+df4e817b710809 Pasha Tatashin 2022-01-14  194  EXPORT_SYMBOL(__page_table_check_pte_set);
+df4e817b710809 Pasha Tatashin 2022-01-14  195  
+df4e817b710809 Pasha Tatashin 2022-01-14  196  void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
+df4e817b710809 Pasha Tatashin 2022-01-14  197  				pmd_t *pmdp, pmd_t pmd)
+df4e817b710809 Pasha Tatashin 2022-01-14  198  {
+df4e817b710809 Pasha Tatashin 2022-01-14  199  	if (&init_mm == mm)
+df4e817b710809 Pasha Tatashin 2022-01-14  200  		return;
+df4e817b710809 Pasha Tatashin 2022-01-14  201  
+64d8b9e14512ce Pasha Tatashin 2022-02-03  202  	__page_table_check_pmd_clear(mm, addr, *pmdp);
+df4e817b710809 Pasha Tatashin 2022-01-14  203  	if (pmd_user_accessible_page(pmd)) {
+df4e817b710809 Pasha Tatashin 2022-01-14  204  		page_table_check_set(mm, addr, pmd_pfn(pmd),
+92fb05242a1b1e Tong Tiangen   2022-05-12  205  				     PMD_SIZE >> PAGE_SHIFT,
+df4e817b710809 Pasha Tatashin 2022-01-14 @206  				     pmd_write(pmd));
+df4e817b710809 Pasha Tatashin 2022-01-14  207  	}
+df4e817b710809 Pasha Tatashin 2022-01-14  208  }
+df4e817b710809 Pasha Tatashin 2022-01-14  209  EXPORT_SYMBOL(__page_table_check_pmd_set);
+df4e817b710809 Pasha Tatashin 2022-01-14  210  
+df4e817b710809 Pasha Tatashin 2022-01-14  211  void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
+df4e817b710809 Pasha Tatashin 2022-01-14  212  				pud_t *pudp, pud_t pud)
+df4e817b710809 Pasha Tatashin 2022-01-14  213  {
+df4e817b710809 Pasha Tatashin 2022-01-14  214  	if (&init_mm == mm)
+df4e817b710809 Pasha Tatashin 2022-01-14  215  		return;
+df4e817b710809 Pasha Tatashin 2022-01-14  216  
+64d8b9e14512ce Pasha Tatashin 2022-02-03  217  	__page_table_check_pud_clear(mm, addr, *pudp);
+df4e817b710809 Pasha Tatashin 2022-01-14  218  	if (pud_user_accessible_page(pud)) {
+df4e817b710809 Pasha Tatashin 2022-01-14  219  		page_table_check_set(mm, addr, pud_pfn(pud),
+92fb05242a1b1e Tong Tiangen   2022-05-12  220  				     PUD_SIZE >> PAGE_SHIFT,
+df4e817b710809 Pasha Tatashin 2022-01-14 @221  				     pud_write(pud));
+df4e817b710809 Pasha Tatashin 2022-01-14  222  	}
+df4e817b710809 Pasha Tatashin 2022-01-14  223  }
+df4e817b710809 Pasha Tatashin 2022-01-14  224  EXPORT_SYMBOL(__page_table_check_pud_set);
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  225  
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  226  void __page_table_check_pte_clear_range(struct mm_struct *mm,
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  227  					unsigned long addr,
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  228  					pmd_t pmd)
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  229  {
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  230  	if (&init_mm == mm)
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  231  		return;
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  232  
+80110bbfbba6f0 Pasha Tatashin 2022-02-03 @233  	if (!pmd_bad(pmd) && !pmd_leaf(pmd)) {
+80110bbfbba6f0 Pasha Tatashin 2022-02-03 @234  		pte_t *ptep = pte_offset_map(&pmd, addr);
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  235  		unsigned long i;
+80110bbfbba6f0 Pasha Tatashin 2022-02-03  236  
+80110bbfbba6f0 Pasha Tatashin 2022-02-03 @237  		pte_unmap(ptep);
+80110bbfbba6f0 Pasha Tatashin 2022-02-03 @238  		for (i = 0; i < PTRS_PER_PTE; i++) {
+
+:::::: The code at line 148 was first introduced by commit
+:::::: df4e817b710809425d899340dbfa8504a3ca4ba5 mm: page table check
+
+:::::: TO: Pasha Tatashin <pasha.tatashin@soleen.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,318 +2,418 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8FC55A8B2
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A6955A8A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbiFYJzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 05:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51092 "EHLO
+        id S232511AbiFYJyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 05:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbiFYJzN (ORCPT
+        with ESMTP id S232115AbiFYJyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 05:55:13 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74ECC338A2;
-        Sat, 25 Jun 2022 02:55:12 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id p7so7105268ybm.7;
-        Sat, 25 Jun 2022 02:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z5SGBBRtvDDw9v0PZXVt8Gwutt86lOTCl5Ukr3glNCU=;
-        b=OyHZ+T0/I6uNQH5NIAmPAwPj0fjMXHzKAeAZPN8/6Ac970Xke6oIlqS79gFjhDIv5K
-         jpJa2b3FxRkXpOX5Lpmt0RP1PP51wr2Hv5Ow3cLZwNHAr1hPqXVmiJ3T5Smvb/6VqHcY
-         JdpcVLXvRdfat6mzPeOqwpeCdwEY9d3e1fAhXf5e0YjvYzhu3ZL5V/doVcZKyU/6vaUR
-         yz8qlmaVXBtIoOIU/rnkTJgCrI5FbJLnxadKgCMEdMwGUHUa+TYtWc8ZnYAP4d/6ckvD
-         Eg4nXSOAlkh0Q1UmXrv9dAeAcPm4OzZUslNTZQQBgChqT1rodwLbAS82Isk+99Uo+cMb
-         hn3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z5SGBBRtvDDw9v0PZXVt8Gwutt86lOTCl5Ukr3glNCU=;
-        b=VExMX3qR23HtFCOdM5I6lkvvpvT9XGKA0MV2ToD5G5MBa9JU+XEeYbrIAGxo/65NwN
-         t2QDtj5LrAYUKEtd+E3IPfMBdjTj7nAZrIC3ogtgo9G0s2Nz6lbBo4pQWKEJ4JCyLbmy
-         bHRpIrbn4wonF5sSFXKdkZxakq5XjPQxUs9kXZqEgwsp8doSbaPHiOloQxaoC5jw/NyT
-         /orgpu6v279UhdhldCWUJgSK32PvmDc4qaGzrCh8zMe3PEAI2CZYzCeLVEQPyGI5hHQU
-         qF2xS4/mZ5jAXhx6HUiSj7PX4BwpemvLaUg/QgZhOnXEGjloWHLrvmWi9A8SlT8igsK1
-         +xaw==
-X-Gm-Message-State: AJIora/Fu9r7TUS17GdgEyIWnzvCvpgsydoktvlqlsqcDr9xin1dLr3g
-        8pjGHA0CKYHnq35Xe3pF8HT7f3rgxp36XjV2IW8=
-X-Google-Smtp-Source: AGRyM1sSf7pxbaBz+XGvqwZjDETlB0fXORYharWW6zKWf8qLVOyJLCJ/oYS60aaeI6cnDlVpfqjVdnGXgRJ+C/sczqw=
-X-Received: by 2002:a25:380a:0:b0:668:a62e:de85 with SMTP id
- f10-20020a25380a000000b00668a62ede85mr3595377yba.218.1656150911591; Sat, 25
- Jun 2022 02:55:11 -0700 (PDT)
+        Sat, 25 Jun 2022 05:54:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C520A31DFC;
+        Sat, 25 Jun 2022 02:54:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2716B61005;
+        Sat, 25 Jun 2022 09:54:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76CD8C3411C;
+        Sat, 25 Jun 2022 09:53:56 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH 1/3] MIPS&LoongArch: Adjust prototypes of p?d_init()
+Date:   Sat, 25 Jun 2022 17:54:57 +0800
+Message-Id: <20220625095459.3786827-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220624180311.3007-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220624180311.3007-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <8735ftf73p.wl-maz@kernel.org>
-In-Reply-To: <8735ftf73p.wl-maz@kernel.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sat, 25 Jun 2022 10:54:44 +0100
-Message-ID: <CA+V-a8ukQsotuWLm6_qR79qO9n_Ffo2e79AitC_=53ocsjZtzA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] irqchip/sifive-plic: Add support for Renesas RZ/Five SoC
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+From: Feiyang Chen <chenfeiyang@loongson.cn>
 
-Thank you for the review.
+We are preparing to add sparse vmemmap support to LoongArch. MIPS and
+LoongArch need to call pgd_init()/pud_init()/pmd_init() when populating
+page tables, so adjust their prototypes to make generic helpers can call
+them.
 
-On Sat, Jun 25, 2022 at 10:03 AM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Fri, 24 Jun 2022 19:03:11 +0100,
-> Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >
-> > The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
-> > NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
-> > case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
-> > edge until the previous completion message has been received and
-> > NCEPLIC100 doesn't support pending interrupt counter, hence losing the
-> > interrupts if not acknowledged in time.
-> >
-> > So the workaround for edge-triggered interrupts to be handled correctly
-> > and without losing is that it needs to be acknowledged first and then
-> > handler must be run so that we don't miss on the next edge-triggered
-> > interrupt.
-> >
-> > This patch adds a new compatible string for Renesas RZ/Five SoC and
-> > changes the chained interrupt haindler for RZ/Five SoC.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > RFC-->v1:
-> > * Fixed review comments pointed by Geert
-> > * Dropped handle_fasteoi_ack_irq support as for the PLIC we need to
-> > claim the interrupt by reading the register and then acknowledge it.
->
-> Why? This is exactly what the fasteoi_ack flow gives you, and your
-> initial patch was much better that this one in that regard.
->
-> > * Add a new chained handler for RZ/Five SoC.
-> > ---
-> >  drivers/irqchip/irq-sifive-plic.c | 95 +++++++++++++++++++++++++++++--
-> >  1 file changed, 91 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
-> > index 173446cc9204..f53dff49e122 100644
-> > --- a/drivers/irqchip/irq-sifive-plic.c
-> > +++ b/drivers/irqchip/irq-sifive-plic.c
-> > @@ -60,10 +60,13 @@
-> >  #define      PLIC_DISABLE_THRESHOLD          0x7
-> >  #define      PLIC_ENABLE_THRESHOLD           0
-> >
-> > +#define PLIC_INTERRUPT_CELL_SIZE2    2
-> > +
-> >  struct plic_priv {
-> >       struct cpumask lmask;
-> >       struct irq_domain *irqdomain;
-> >       void __iomem *regs;
-> > +     u32 intsize;
-> >  };
-> >
-> >  struct plic_handler {
-> > @@ -163,7 +166,7 @@ static int plic_set_affinity(struct irq_data *d,
-> >  }
-> >  #endif
-> >
-> > -static void plic_irq_eoi(struct irq_data *d)
-> > +static void plic_irq_ack(struct irq_data *d)
-> >  {
-> >       struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
-> >
-> > @@ -176,6 +179,23 @@ static void plic_irq_eoi(struct irq_data *d)
-> >       }
-> >  }
-> >
-> > +static void plic_irq_eoi(struct irq_data *d)
-> > +{
-> > +     struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
-> > +     unsigned int irq = irq_find_mapping(handler->priv->irqdomain, d->hwirq);
-> > +
-> > +     /*
-> > +      * For Renesas RZ/Five (R9A07G043) SoC if the interrupt type is
-> > +      * IRQ_TYPE_EDGE_RISING we have already acknowledged it in the
-> > +      * handler.
-> > +      */
-> > +     if (handler->priv->intsize == PLIC_INTERRUPT_CELL_SIZE2 &&
->
-> This costs you an extra two reads on the fast path, which is an
-> unnecessary overhead for existing systems that do not suffer from this
-> problem. Consider turning it into a static key.
->
-Sorry, by static key what did you mean?
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+---
+ arch/loongarch/include/asm/pgalloc.h | 13 ++-----------
+ arch/loongarch/include/asm/pgtable.h |  8 ++++----
+ arch/loongarch/kernel/numa.c         |  4 ++--
+ arch/loongarch/mm/pgtable.c          | 23 +++++++++++++----------
+ arch/mips/include/asm/pgalloc.h      |  8 ++++----
+ arch/mips/include/asm/pgtable-64.h   |  8 ++++----
+ arch/mips/kvm/mmu.c                  |  3 +--
+ arch/mips/mm/pgtable-32.c            | 10 +++++-----
+ arch/mips/mm/pgtable-64.c            | 18 ++++++++++--------
+ arch/mips/mm/pgtable.c               |  2 +-
+ 10 files changed, 46 insertions(+), 51 deletions(-)
 
-> Also, blindly renaming  plic_irq_eoi() to ack() is extremely
-> confusing. I really think you should have your own callbacks instead
-> of making a mess of the existing one.
->
-Ok will do.
+diff --git a/arch/loongarch/include/asm/pgalloc.h b/arch/loongarch/include/asm/pgalloc.h
+index b0a57b25c131..6a492d7aeeec 100644
+--- a/arch/loongarch/include/asm/pgalloc.h
++++ b/arch/loongarch/include/asm/pgalloc.h
+@@ -42,15 +42,6 @@ static inline void p4d_populate(struct mm_struct *mm, p4d_t *p4d, pud_t *pud)
+ 
+ extern void pagetable_init(void);
+ 
+-/*
+- * Initialize a new pmd table with invalid pointers.
+- */
+-extern void pmd_init(unsigned long page, unsigned long pagetable);
+-
+-/*
+- * Initialize a new pgd / pmd table with invalid pointers.
+- */
+-extern void pgd_init(unsigned long page);
+ extern pgd_t *pgd_alloc(struct mm_struct *mm);
+ 
+ #define __pte_free_tlb(tlb, pte, address)			\
+@@ -76,7 +67,7 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
+ 	}
+ 
+ 	pmd = (pmd_t *)page_address(pg);
+-	pmd_init((unsigned long)pmd, (unsigned long)invalid_pte_table);
++	pmd_init(pmd);
+ 	return pmd;
+ }
+ 
+@@ -92,7 +83,7 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
+ 
+ 	pud = (pud_t *) __get_free_pages(GFP_KERNEL, PUD_ORDER);
+ 	if (pud)
+-		pud_init((unsigned long)pud, (unsigned long)invalid_pmd_table);
++		pud_init(pud);
+ 	return pud;
+ }
+ 
+diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
+index d9e86cfa53e2..9c811c3f7572 100644
+--- a/arch/loongarch/include/asm/pgtable.h
++++ b/arch/loongarch/include/asm/pgtable.h
+@@ -243,11 +243,11 @@ extern void set_pmd_at(struct mm_struct *mm, unsigned long addr, pmd_t *pmdp, pm
+ #define pfn_pmd(pfn, prot)	__pmd(((pfn) << _PFN_SHIFT) | pgprot_val(prot))
+ 
+ /*
+- * Initialize a new pgd / pmd table with invalid pointers.
++ * Initialize a new pgd / pud / pmd table with invalid pointers.
+  */
+-extern void pgd_init(unsigned long page);
+-extern void pud_init(unsigned long page, unsigned long pagetable);
+-extern void pmd_init(unsigned long page, unsigned long pagetable);
++extern void pgd_init(void *addr);
++extern void pud_init(void *addr);
++extern void pmd_init(void *addr);
+ 
+ /*
+  * Non-present pages:  high 40 bits are offset, next 8 bits type,
+diff --git a/arch/loongarch/kernel/numa.c b/arch/loongarch/kernel/numa.c
+index a76f547a5aa3..839ce601f220 100644
+--- a/arch/loongarch/kernel/numa.c
++++ b/arch/loongarch/kernel/numa.c
+@@ -78,7 +78,7 @@ void __init pcpu_populate_pte(unsigned long addr)
+ 		new = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+ 		pgd_populate(&init_mm, pgd, new);
+ #ifndef __PAGETABLE_PUD_FOLDED
+-		pud_init((unsigned long)new, (unsigned long)invalid_pmd_table);
++		pud_init(new);
+ #endif
+ 	}
+ 
+@@ -89,7 +89,7 @@ void __init pcpu_populate_pte(unsigned long addr)
+ 		new = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+ 		pud_populate(&init_mm, pud, new);
+ #ifndef __PAGETABLE_PMD_FOLDED
+-		pmd_init((unsigned long)new, (unsigned long)invalid_pte_table);
++		pmd_init(new);
+ #endif
+ 	}
+ 
+diff --git a/arch/loongarch/mm/pgtable.c b/arch/loongarch/mm/pgtable.c
+index 0569647152e9..e79cc41acac5 100644
+--- a/arch/loongarch/mm/pgtable.c
++++ b/arch/loongarch/mm/pgtable.c
+@@ -16,7 +16,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
+ 	ret = (pgd_t *) __get_free_pages(GFP_KERNEL, PGD_ORDER);
+ 	if (ret) {
+ 		init = pgd_offset(&init_mm, 0UL);
+-		pgd_init((unsigned long)ret);
++		pgd_init(ret);
+ 		memcpy(ret + USER_PTRS_PER_PGD, init + USER_PTRS_PER_PGD,
+ 		       (PTRS_PER_PGD - USER_PTRS_PER_PGD) * sizeof(pgd_t));
+ 	}
+@@ -25,7 +25,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
+ }
+ EXPORT_SYMBOL_GPL(pgd_alloc);
+ 
+-void pgd_init(unsigned long page)
++void pgd_init(void *addr)
+ {
+ 	unsigned long *p, *end;
+ 	unsigned long entry;
+@@ -38,7 +38,7 @@ void pgd_init(unsigned long page)
+ 	entry = (unsigned long)invalid_pte_table;
+ #endif
+ 
+-	p = (unsigned long *) page;
++	p = (unsigned long *)addr;
+ 	end = p + PTRS_PER_PGD;
+ 
+ 	do {
+@@ -56,11 +56,12 @@ void pgd_init(unsigned long page)
+ EXPORT_SYMBOL_GPL(pgd_init);
+ 
+ #ifndef __PAGETABLE_PMD_FOLDED
+-void pmd_init(unsigned long addr, unsigned long pagetable)
++void pmd_init(void *addr)
+ {
+ 	unsigned long *p, *end;
++	unsigned long pagetable = (unsigned long)invalid_pte_table;
+ 
+-	p = (unsigned long *) addr;
++	p = (unsigned long *)addr;
+ 	end = p + PTRS_PER_PMD;
+ 
+ 	do {
+@@ -79,9 +80,10 @@ EXPORT_SYMBOL_GPL(pmd_init);
+ #endif
+ 
+ #ifndef __PAGETABLE_PUD_FOLDED
+-void pud_init(unsigned long addr, unsigned long pagetable)
++void pud_init(void *addr)
+ {
+ 	unsigned long *p, *end;
++	unsigned long pagetable = (unsigned long)invalid_pmd_table;
+ 
+ 	p = (unsigned long *)addr;
+ 	end = p + PTRS_PER_PUD;
+@@ -98,6 +100,7 @@ void pud_init(unsigned long addr, unsigned long pagetable)
+ 		p[-1] = pagetable;
+ 	} while (p != end);
+ }
++EXPORT_SYMBOL_GPL(pud_init);
+ #endif
+ 
+ pmd_t mk_pmd(struct page *page, pgprot_t prot)
+@@ -119,12 +122,12 @@ void set_pmd_at(struct mm_struct *mm, unsigned long addr,
+ void __init pagetable_init(void)
+ {
+ 	/* Initialize the entire pgd.  */
+-	pgd_init((unsigned long)swapper_pg_dir);
+-	pgd_init((unsigned long)invalid_pg_dir);
++	pgd_init(swapper_pg_dir);
++	pgd_init(invalid_pg_dir);
+ #ifndef __PAGETABLE_PUD_FOLDED
+-	pud_init((unsigned long)invalid_pud_table, (unsigned long)invalid_pmd_table);
++	pud_init(invalid_pud_table);
+ #endif
+ #ifndef __PAGETABLE_PMD_FOLDED
+-	pmd_init((unsigned long)invalid_pmd_table, (unsigned long)invalid_pte_table);
++	pmd_init(invalid_pmd_table);
+ #endif
+ }
+diff --git a/arch/mips/include/asm/pgalloc.h b/arch/mips/include/asm/pgalloc.h
+index 867e9c3db76e..9f7d117c5ebf 100644
+--- a/arch/mips/include/asm/pgalloc.h
++++ b/arch/mips/include/asm/pgalloc.h
+@@ -33,7 +33,7 @@ static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd,
+ /*
+  * Initialize a new pmd table with invalid pointers.
+  */
+-extern void pmd_init(unsigned long page, unsigned long pagetable);
++extern void pmd_init(void *addr);
+ 
+ #ifndef __PAGETABLE_PMD_FOLDED
+ 
+@@ -44,9 +44,9 @@ static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
+ #endif
+ 
+ /*
+- * Initialize a new pgd / pmd table with invalid pointers.
++ * Initialize a new pgd table with invalid pointers.
+  */
+-extern void pgd_init(unsigned long page);
++extern void pgd_init(void *addr);
+ extern pgd_t *pgd_alloc(struct mm_struct *mm);
+ 
+ static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
+@@ -77,7 +77,7 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
+ 	}
+ 
+ 	pmd = (pmd_t *)page_address(pg);
+-	pmd_init((unsigned long)pmd, (unsigned long)invalid_pte_table);
++	pmd_init(pmd);
+ 	return pmd;
+ }
+ 
+diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
+index 41921acdc9d8..8ac76bbb4b38 100644
+--- a/arch/mips/include/asm/pgtable-64.h
++++ b/arch/mips/include/asm/pgtable-64.h
+@@ -323,11 +323,11 @@ static inline pmd_t *pud_pgtable(pud_t pud)
+ #endif
+ 
+ /*
+- * Initialize a new pgd / pmd table with invalid pointers.
++ * Initialize a new pgd / pud / pmd table with invalid pointers.
+  */
+-extern void pgd_init(unsigned long page);
+-extern void pud_init(unsigned long page, unsigned long pagetable);
+-extern void pmd_init(unsigned long page, unsigned long pagetable);
++extern void pgd_init(void *addr);
++extern void pud_init(void *addr);
++extern void pmd_init(void *addr);
+ 
+ /*
+  * Non-present pages:  high 40 bits are offset, next 8 bits type,
+diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
+index 1bfd1b501d82..cb10a92ad3ae 100644
+--- a/arch/mips/kvm/mmu.c
++++ b/arch/mips/kvm/mmu.c
+@@ -122,8 +122,7 @@ static pte_t *kvm_mips_walk_pgd(pgd_t *pgd, struct kvm_mmu_memory_cache *cache,
+ 		if (!cache)
+ 			return NULL;
+ 		new_pmd = kvm_mmu_memory_cache_alloc(cache);
+-		pmd_init((unsigned long)new_pmd,
+-			 (unsigned long)invalid_pte_table);
++		pmd_init(new_pmd);
+ 		pud_populate(NULL, pud, new_pmd);
+ 	}
+ 	pmd = pmd_offset(pud, addr);
+diff --git a/arch/mips/mm/pgtable-32.c b/arch/mips/mm/pgtable-32.c
+index 61891af25019..88819a21d97e 100644
+--- a/arch/mips/mm/pgtable-32.c
++++ b/arch/mips/mm/pgtable-32.c
+@@ -13,9 +13,9 @@
+ #include <asm/pgalloc.h>
+ #include <asm/tlbflush.h>
+ 
+-void pgd_init(unsigned long page)
++void pgd_init(void *addr)
+ {
+-	unsigned long *p = (unsigned long *) page;
++	unsigned long *p = (unsigned long *)addr;
+ 	int i;
+ 
+ 	for (i = 0; i < USER_PTRS_PER_PGD; i+=8) {
+@@ -61,9 +61,9 @@ void __init pagetable_init(void)
+ #endif
+ 
+ 	/* Initialize the entire pgd.  */
+-	pgd_init((unsigned long)swapper_pg_dir);
+-	pgd_init((unsigned long)swapper_pg_dir
+-		 + sizeof(pgd_t) * USER_PTRS_PER_PGD);
++	pgd_init(swapper_pg_dir);
++	pgd_init((void *)((unsigned long)swapper_pg_dir
++		 + sizeof(pgd_t) * USER_PTRS_PER_PGD));
+ 
+ 	pgd_base = swapper_pg_dir;
+ 
+diff --git a/arch/mips/mm/pgtable-64.c b/arch/mips/mm/pgtable-64.c
+index 7536f7804c44..b4386a0e2ef8 100644
+--- a/arch/mips/mm/pgtable-64.c
++++ b/arch/mips/mm/pgtable-64.c
+@@ -13,7 +13,7 @@
+ #include <asm/pgalloc.h>
+ #include <asm/tlbflush.h>
+ 
+-void pgd_init(unsigned long page)
++void pgd_init(void *addr)
+ {
+ 	unsigned long *p, *end;
+ 	unsigned long entry;
+@@ -26,7 +26,7 @@ void pgd_init(unsigned long page)
+ 	entry = (unsigned long)invalid_pte_table;
+ #endif
+ 
+-	p = (unsigned long *) page;
++	p = (unsigned long *) addr;
+ 	end = p + PTRS_PER_PGD;
+ 
+ 	do {
+@@ -43,11 +43,12 @@ void pgd_init(unsigned long page)
+ }
+ 
+ #ifndef __PAGETABLE_PMD_FOLDED
+-void pmd_init(unsigned long addr, unsigned long pagetable)
++void pmd_init(void *addr)
+ {
+ 	unsigned long *p, *end;
++	unsigned long pagetable = (unsigned long)invalid_pte_table;
+ 
+-	p = (unsigned long *) addr;
++	p = (unsigned long *)addr;
+ 	end = p + PTRS_PER_PMD;
+ 
+ 	do {
+@@ -66,9 +67,10 @@ EXPORT_SYMBOL_GPL(pmd_init);
+ #endif
+ 
+ #ifndef __PAGETABLE_PUD_FOLDED
+-void pud_init(unsigned long addr, unsigned long pagetable)
++void pud_init(void *addr)
+ {
+ 	unsigned long *p, *end;
++	unsigned long pagetable = (unsigned long)invalid_pmd_table;
+ 
+ 	p = (unsigned long *)addr;
+ 	end = p + PTRS_PER_PUD;
+@@ -108,12 +110,12 @@ void __init pagetable_init(void)
+ 	pgd_t *pgd_base;
+ 
+ 	/* Initialize the entire pgd.  */
+-	pgd_init((unsigned long)swapper_pg_dir);
++	pgd_init(swapper_pg_dir);
+ #ifndef __PAGETABLE_PUD_FOLDED
+-	pud_init((unsigned long)invalid_pud_table, (unsigned long)invalid_pmd_table);
++	pud_init(invalid_pud_table);
+ #endif
+ #ifndef __PAGETABLE_PMD_FOLDED
+-	pmd_init((unsigned long)invalid_pmd_table, (unsigned long)invalid_pte_table);
++	pmd_init(invalid_pmd_table);
+ #endif
+ 	pgd_base = swapper_pg_dir;
+ 	/*
+diff --git a/arch/mips/mm/pgtable.c b/arch/mips/mm/pgtable.c
+index 05560b042d82..98e5e880927a 100644
+--- a/arch/mips/mm/pgtable.c
++++ b/arch/mips/mm/pgtable.c
+@@ -15,7 +15,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
+ 	ret = (pgd_t *) __get_free_pages(GFP_KERNEL, PGD_ORDER);
+ 	if (ret) {
+ 		init = pgd_offset(&init_mm, 0UL);
+-		pgd_init((unsigned long)ret);
++		pgd_init(ret);
+ 		memcpy(ret + USER_PTRS_PER_PGD, init + USER_PTRS_PER_PGD,
+ 		       (PTRS_PER_PGD - USER_PTRS_PER_PGD) * sizeof(pgd_t));
+ 	}
+-- 
+2.27.0
 
-> > +         (irq_get_trigger_type(irq) & IRQ_TYPE_EDGE_RISING))
-> > +             return;
-> > +
-> > +     plic_irq_ack(d);
-> > +}
-> > +
-> >  static const struct irq_chip plic_chip = {
-> >       .name           = "SiFive PLIC",
-> >       .irq_mask       = plic_irq_mask,
-> > @@ -198,6 +218,19 @@ static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
-> >       return 0;
-> >  }
-> >
-> > +static int plic_irq_domain_translate(struct irq_domain *d,
-> > +                                  struct irq_fwspec *fwspec,
-> > +                                  unsigned long *hwirq,
-> > +                                  unsigned int *type)
-> > +{
-> > +     struct plic_priv *priv = d->host_data;
-> > +
-> > +     if (priv->intsize == PLIC_INTERRUPT_CELL_SIZE2)
-> > +             return irq_domain_translate_twocell(d, fwspec, hwirq, type);
-> > +
-> > +     return irq_domain_translate_onecell(d, fwspec, hwirq, type);
-> > +}
-> > +
-> >  static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
-> >                                unsigned int nr_irqs, void *arg)
-> >  {
-> > @@ -206,7 +239,7 @@ static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
-> >       unsigned int type;
-> >       struct irq_fwspec *fwspec = arg;
-> >
-> > -     ret = irq_domain_translate_onecell(domain, fwspec, &hwirq, &type);
-> > +     ret = plic_irq_domain_translate(domain, fwspec, &hwirq, &type);
-> >       if (ret)
-> >               return ret;
-> >
-> > @@ -220,11 +253,55 @@ static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
-> >  }
-> >
-> >  static const struct irq_domain_ops plic_irqdomain_ops = {
-> > -     .translate      = irq_domain_translate_onecell,
-> > +     .translate      = plic_irq_domain_translate,
-> >       .alloc          = plic_irq_domain_alloc,
-> >       .free           = irq_domain_free_irqs_top,
-> >  };
-> >
-> > +/*
-> > + * On Renesas RZ/Five (R9A07G043) SoC IRQ_TYPE_LEVEL_HIGH and
-> > + * IRQ_TYPE_EDGE_RISING interrupts are the supported interrupt types.
-> > + * If the global interrupt source was edge-triggered NCEPLIC100 (PLIC
-> > + * core on Renesas RZ/Five SoC) ignores next edge interrupts until the
-> > + * previous completion message is received. NCEPLIC100 on Renesas RZ/Five
-> > + * SoC doesn't stack the pending interrupts so in case there is a delay
-> > + * in handling the IRQ_TYPE_EDGE_RISING interrupt we lose the subsequent
-> > + * interrupts. The workaround for IRQ_TYPE_EDGE_RISING interrupt is to
-> > + * first we have to claim the interrupt by reading the claim register,
-> > + * then quickly issue an complete interrupt by writing the source ID
-> > + * register back to the claim  register and then later run the handler.
-> > + */
-> > +static void renesas_rzfive_plic_handle_irq(struct irq_desc *desc)
-> > +{
-> > +     struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
-> > +     struct irq_chip *chip = irq_desc_get_chip(desc);
-> > +     void __iomem *claim = handler->hart_base + CONTEXT_CLAIM;
-> > +     irq_hw_number_t hwirq;
-> > +     unsigned int irq;
-> > +     int err;
-> > +
-> > +     WARN_ON_ONCE(!handler->present);
-> > +
-> > +     chained_irq_enter(chip, desc);
-> > +
-> > +     while ((hwirq = readl(claim))) {
-> > +             irq = irq_find_mapping(handler->priv->irqdomain, hwirq);
-> > +             if (!irq) {
-> > +                     pr_warn_ratelimited("can't find mapping for hwirq %lu\n", hwirq);
-> > +                     break;
-> > +             }
-> > +
-> > +             if (irq_get_trigger_type(irq) & IRQ_TYPE_EDGE_RISING)
-> > +                     plic_irq_ack(irq_get_irq_data(irq));
-> > +
-> > +             err = generic_handle_irq(irq);
->
-> No. We're not going back to this sort of constructs. Using the
-> fasteoi_ack flow should work if properly configured. Also, looking up
-> the interrupt *four* times in various tables/trees is not exactly the
-> sort of things I want to see for a driver written in this century.
->
-> Please explain why fasteoi_ack doesn't work. It really should work out
-> of the box (I asked you to look into debugfs last time, but didn't ear
-> anything from you on the subject). And if something is broken, let's
-> fix it. But none of the above, please.
->
-Handling an interrupt is a two-step process [0] first you claim the
-interrupt by reading the claim register, then you complete the
-interrupt by writing that source ID back to the same claim register.
-
-Now if we go with fasteoi_ack flow this wont fit as we are first
-writing into the claim register (Interrupt completion) and then in the
-chained handler we are reading the claim register (claim the
-interrupt) and then run the handler (which my RFC patch did).
-
-With this patch I make sure we follow [0] for LEVEL interrupt and and
-for EDGE we first claim then issue interrupt completion if EDGE
-interrupt and then later run the handler (due to the core issue).
-
-Let me know if my understanding is wrong here.
-
-[0] https://github.com/riscv/riscv-plic-spec/blob/master/riscv-plic.adoc#interrupt-flow
-
-> > +             if (err)
-> > +                     pr_warn_ratelimited("error handling irq %u\n", irq);
-> > +     }
-> > +
-> > +     chained_irq_exit(chip, desc);
-> > +}
-> > +
-> >  /*
-> >   * Handling an interrupt is a two-step process: first you claim the interrupt
-> >   * by reading the claim register, then you complete the interrupt by writing
-> > @@ -288,11 +365,20 @@ static int __init plic_init(struct device_node *node,
-> >       u32 nr_irqs;
-> >       struct plic_priv *priv;
-> >       struct plic_handler *handler;
-> > +     irq_flow_handler_t plic_chanined_handler;
-> >
-> >       priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-> >       if (!priv)
-> >               return -ENOMEM;
-> >
-> > +     if (of_property_read_u32(node, "#interrupt-cells", &priv->intsize))
-> > +             return -EINVAL;
-> > +
-> > +     if (priv->intsize == PLIC_INTERRUPT_CELL_SIZE2)
->
-> Please gate this on the compatible string, not on the number of cells.
->
-Sure will do.
-
-Cheers,
-Prabhakar

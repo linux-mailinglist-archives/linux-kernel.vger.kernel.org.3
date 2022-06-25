@@ -2,83 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD9D55A7A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 09:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA9D55A7A7
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 09:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbiFYHEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 03:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
+        id S232215AbiFYHJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 03:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbiFYHD7 (ORCPT
+        with ESMTP id S232118AbiFYHJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 03:03:59 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24919338AE
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 00:03:59 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id d14so4664506pjs.3
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 00:03:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=jE0JLsfEdPpE7rbsOBNLVDtif/ZpFdFdV55NgbKwOcE=;
-        b=mdu71h/Qe/E3FurnyjYKHrigRQYjVO+zqpBWm+CLGe0uCHXEDOJGCJA6w60QHw/51y
-         g+amuJDsfd73nui8vAsEC2hK8Yjn6ADXYQqS1KGZGEjGYFYRBrigNBFBWF4zwftdKhqe
-         F9c+gm1w4XJ1Qc1voBHOVRliz5iW7+ioc7L3n4+wB4OBza887RYSchIaDbQAct86xGAt
-         +jZxa0Gt5MOgCC9hc1Fyd8nOjo0tcIKOezceZO5OzM5tvxjCD71m8SW70kH0e4hR6DSH
-         Xp1Q+sKtG+roh70EHMdyU0UTcJ5aR/9pgpnUZdPQbDHY+c+k69zOY5SeAbT2xa2ZRkV0
-         LuJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=jE0JLsfEdPpE7rbsOBNLVDtif/ZpFdFdV55NgbKwOcE=;
-        b=0WxhySN9daKKU2lwGPLuMMdmulDF/CvONrOhVY3fHmzikkGcY7CU2N5+8P9FFN5YP5
-         zxbM4YBKEXSv2HTy8D/Aa7hK80+3iWzpgvDIkRDC74zZnVBtOnQm9PGjdwcL52yLonTL
-         X4YmkkACoHhaCNoLy76N1JfpJv8tQP258Cw9lnX5C2RbZ64YCC6oiOhpkFlFj4hPq1dX
-         tKxw1yNsUeUBpPt/0rBcDY0UA0UiT8UipB8/KqBoNnhDeVyaQDUE2zyb3dI31+XR3cCt
-         ByWb/7ccEK0LH5kSj3QbThDYpXMxrCfpaKOxKnfJqy0LaaqIA1RhnfUqGbEwQrKFWZsg
-         q1Ew==
-X-Gm-Message-State: AJIora9SMXXnWafvLRw0bTg+F7kDcs2kGf3xYMckz4aiN+ipJOoC0ZFI
-        GbdraHreLHCCJ4TbA6GD+5uVY6FF/ymFohDDQPo=
-X-Google-Smtp-Source: AGRyM1vhgbcLg84tHKYETHBUMh5oFKlHaZr6FgIiU+VPQKFX+Ko7BZKFzP4dY96CDqpj8177HTfJKCFS3OuWuuG3h4c=
-X-Received: by 2002:a17:902:c2c6:b0:168:ddc7:6575 with SMTP id
- c6-20020a170902c2c600b00168ddc76575mr3097139pla.71.1656140638282; Sat, 25 Jun
- 2022 00:03:58 -0700 (PDT)
+        Sat, 25 Jun 2022 03:09:13 -0400
+Received: from smtpbg.qq.com (smtpbg138.qq.com [106.55.201.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DA1220F6;
+        Sat, 25 Jun 2022 00:09:08 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1656140813t2579wch
+Received: from localhost.localdomain ( [125.70.163.206])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 25 Jun 2022 15:06:39 +0800 (CST)
+X-QQ-SSF: 0100000000200060C000B00A0000000
+X-QQ-FEAT: 3u0oYPVhaeOCQ9MuS67mRqj+E/BEgpxpnesZL5zezAs7/KWq6nXpfPisKurFE
+        DcM1SfSaw7hFtPuz8DPgWOO13RyYpkZsJ5tiI/58LH5wIVYt31VTuBJndxcGG4T/bMZE+iW
+        fFydsH4HvORGxWzbkGgHDdhGbfDKWmk55P7fBjMXc/i86W/qXb7poIvPENPPqOQD+27ko2N
+        MYSsE8ee+rwGrmKNJCGC/3fWzYiCt6bPS1DnVdaFBlXga9jr1G7+eem9BbYrxS1qRMnRm6l
+        IB+AhpYsR23QVW4gU68mCxzYegADrH5kAT6jJPOv9oCidO4qHtg5ecIt41010rv1vylotwC
+        ojmEh8yVPgdjV35jSw=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     thomas.lendacky@amd.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] amd/xgbe: fix repeated words in comments
+Date:   Sat, 25 Jun 2022 15:06:33 +0800
+Message-Id: <20220625070633.64982-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Sender: natodtoday@gmail.com
-Received: by 2002:a05:7022:2190:b0:41:e49a:3a35 with HTTP; Sat, 25 Jun 2022
- 00:03:57 -0700 (PDT)
-From:   "Mrs Yu. Ging Yunnan" <yunnanmrsyuging@gmail.com>
-Date:   Sat, 25 Jun 2022 07:03:57 +0000
-X-Google-Sender-Auth: dlgCu7qQUJwX5nuM7tyw4eRG_Oo
-Message-ID: <CANfVWTTY0D04sV8wrffpJXN8rvFf_rMeyOThUJ=3V4nW50rDsA@mail.gmail.com>
-Subject: hello dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_SCAM,
-        LOTS_OF_MONEY,MILLION_USD,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hello dear
-I am Mrs Yu. Ging Yunnan, and i have Covid-19 and the doctor said I
-will not survive it because all vaccines has been given to me but to
-no avian, am a China woman but I base here in France because am
-married here and I have no child for my late husband and now am a
-widow. My reason of communicating you is that i have $9.2million USD
-which was deposited in BNP Paribas Bank here in France by my late
-husband which  am the next of  kin to and I want you to stand as the
-beneficiary for the claim now that am about to end my race according
-to my doctor.I will want you to use the fund to build an orphanage
-home in my name there in   country, please kindly reply to this
-message urgently if willing to handle this project. God bless you and
-i wait your swift response asap.
-Yours fairly friend,
-Mrs Yu. Ging Yunnan.
+Delete the redundant word 'use'.
+
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/net/ethernet/amd/xgbe/xgbe.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/amd/xgbe/xgbe.h b/drivers/net/ethernet/amd/xgbe/xgbe.h
+index d9547552ceef..b875c430222e 100644
+--- a/drivers/net/ethernet/amd/xgbe/xgbe.h
++++ b/drivers/net/ethernet/amd/xgbe/xgbe.h
+@@ -417,7 +417,7 @@ struct xgbe_rx_ring_data {
+ 
+ /* Structure used to hold information related to the descriptor
+  * and the packet associated with the descriptor (always use
+- * use the XGBE_GET_DESC_DATA macro to access this data from the ring)
++ * the XGBE_GET_DESC_DATA macro to access this data from the ring)
+  */
+ struct xgbe_ring_data {
+ 	struct xgbe_ring_desc *rdesc;	/* Virtual address of descriptor */
+-- 
+2.36.1
+

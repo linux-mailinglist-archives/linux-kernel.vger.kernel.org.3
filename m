@@ -2,120 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2608055AA42
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 14:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A97F55AA48
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 15:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232976AbiFYM6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 08:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
+        id S232988AbiFYNAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 09:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232967AbiFYM6J (ORCPT
+        with ESMTP id S232912AbiFYNAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 08:58:09 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1028C625F;
-        Sat, 25 Jun 2022 05:58:06 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id k129so1304354wme.0;
-        Sat, 25 Jun 2022 05:58:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VXxqGfTAwGEoTKZZyS43XiyUfLIB6wj1VPi8Dio+1sw=;
-        b=i0KZIZ5BeV52JH2+V/f/W88LMsESh7sFUqS3QGdl6Nv8BDDyvPOZ66et76mLnGcHKP
-         yPwxSmzdEI3sKZbKqtH8rD6DUb8nf1ayr8gPU5a7l+XIjj/FQbg3RiTJHQxVug/74JVs
-         K6Sky/yoIlIjH++SQvGdAJEEvkS2JvzLuVhEh/XE8g2o2enS0Wnut1QQUaefPSRaMGqn
-         PvUlamnUv9peOOi/LdyTG4VFjT6/jEfdiyu9N7k8cWlsktrh1a1xWH9KMlo6oRIlMkpA
-         b+Hur4jIq8D9OQ9+UpEw9c8Op7Wa/G0HOnDgPRZf2BFw5cEjtfMDYwgwyrn0oYZxbcro
-         Qlzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VXxqGfTAwGEoTKZZyS43XiyUfLIB6wj1VPi8Dio+1sw=;
-        b=0CRW+ow3Q+iP3wkyOv/rnfFl9xy/HYEIdVnGBeKyoWLc/jM77omRKk3TtukONb9Hje
-         SJlHPMmyq+MAEXzm2AJGEefTmFx34Bel2LMu6335BlveMAZjU6TR645I1Nq2LCVJ+Mx+
-         uy8G1mV+r37KzcrBQzkOsr5EQ8i/vF7aI1wDzwqxoxLUwztFllNt/2fDzw9J72KSuiI5
-         VbJgjLMqNMHnT0JbwQA1wi0h6GxOJ3jWTKXhSQIObqvDQaTsmW/zj1ejwELuAP/ZmZdt
-         84m3WXAIBs2dYty3J2FoSPajJYgVrOJSMUIbVD/4IXaOXTuXCydXpRoGbA++wJCSc2ze
-         Dznw==
-X-Gm-Message-State: AJIora+JQBMkrppq7cS1wZmyg7K0fVdXE4ZivBkBd+6s4vkmYFpGaV/Z
-        N1XcqZHkmMMADNzWnEzEP0U3R8NKREg=
-X-Google-Smtp-Source: AGRyM1v9OJRatM7bnhugR4L68+iGuv+FKrbQzDBZAhmL49d9Yp0JEJpDz0Qy5fbigyVorvlmFi8UTg==
-X-Received: by 2002:a1c:4e03:0:b0:39c:5bbc:e0d2 with SMTP id g3-20020a1c4e03000000b0039c5bbce0d2mr8989750wmh.184.1656161884598;
-        Sat, 25 Jun 2022 05:58:04 -0700 (PDT)
-Received: from [192.168.2.202] (pd9e5a322.dip0.t-ipconnect.de. [217.229.163.34])
-        by smtp.gmail.com with ESMTPSA id n13-20020a05600c4f8d00b003971fc23185sm11099799wmq.20.2022.06.25.05.58.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Jun 2022 05:58:04 -0700 (PDT)
-Message-ID: <e03bd763-a7a8-cb7c-6fc6-6001f2496729@gmail.com>
-Date:   Sat, 25 Jun 2022 14:58:02 +0200
+        Sat, 25 Jun 2022 09:00:13 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64D111163;
+        Sat, 25 Jun 2022 06:00:12 -0700 (PDT)
+Message-ID: <3ee9e8d1-01dc-0936-efde-b07482a5e785@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1656162010;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zAt4rLrvNcaq27+5fdC96DdrqkdI6Xy/AK+vU9KiLnA=;
+        b=fyzCPYhQEJKWDjOUf7aWvbsrpflNxyl9ZdMAKtH78GmKDJUX5SCNHydxTNxEkBpK/VQJ6q
+        ZLBfQagO1PxTHvUCvc96tFPOOFgu9mWRjZqnetAYaSNCp7R0K7C2s2iTkcqr8/vaQ6od2R
+        mJoeAB/Ox84Rz7ihJV5aB8mVTaGw6CQ=
+Date:   Sat, 25 Jun 2022 20:59:54 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/4] platform/surface: Add KIP/POS tablet-mode switch
- driver
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     kbuild-all@lists.01.org, Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220624183642.910893-3-luzmaximilian@gmail.com>
- <202206250711.yKiwV8qa-lkp@intel.com>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <202206250711.yKiwV8qa-lkp@intel.com>
+Subject: Re: [PATCH v3 0/2] RDMA/rxe: Fix no completion event issue
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Haakon Bugge <haakon.bugge@oracle.com>,
+        Cheng Xu <chengyou@linux.alibaba.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220516015329.445474-1-lizhijian@fujitsu.com>
+ <fa9863f0-d42e-f114-5321-108dda270e27@fujitsu.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Yanjun Zhu <yanjun.zhu@linux.dev>
+In-Reply-To: <fa9863f0-d42e-f114-5321-108dda270e27@fujitsu.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/25/22 04:59, kernel test robot wrote:
-> Hi Maximilian,
-> 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on next-20220624]
-> [cannot apply to linus/master platform-drivers-x86/for-next v5.19-rc3 v5.19-rc2 v5.19-rc1 v5.19-rc3]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Maximilian-Luz/platform-surface-Add-support-for-tablet-mode-switch-via-Surface-Aggregator-Module/20220625-023751
-> base:    2f9cb3d3bd73fc2225d66aa8fcffb632ed3eb235
-> config: i386-allyesconfig
-> compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-> reproduce (this is a W=1 build):
->          # https://github.com/intel-lab-lkp/linux/commit/190ffdd2194f4c5a5110d6a08f303c47e2da31ba
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Maximilian-Luz/platform-surface-Add-support-for-tablet-mode-switch-via-Surface-Aggregator-Module/20220625-023751
->          git checkout 190ffdd2194f4c5a5110d6a08f303c47e2da31ba
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->     drivers/platform/surface/surface_aggregator_tabletsw.c: In function 'ssam_pos_get_sources_list':
->>> drivers/platform/surface/surface_aggregator_tabletsw.c:373:32: error: 'SSAM_SSH_TC_POS' undeclared (first use in this function); did you mean 'SSAM_SSH_TC_PoM'?
->       373 |         rqst.target_category = SSAM_SSH_TC_POS;
->           |                                ^~~~~~~~~~~~~~~
->           |                                SSAM_SSH_TC_PoM
 
-Ah, I forgot to mention. This depends on "platform/surface: aggregator:
-Reserve more event- and target-categories" which is already in
-pdx86/review-hans as commit e244a46a529a. That commit adds the
-`SSAM_SSH_TC_POS` symbol, so with it, this patch should compile.
+在 2022/6/7 16:32, lizhijian@fujitsu.com 写道:
+> Hi Json & Yanjun
+>
+>
+> I know there are still a few regressions on RXE, but i do wish you could take some time to review these *simple and bugfix* patches
+> They are not related to the regressions.
 
-Regards,
-Max
+Now there are some problems from Redhat and other Linux Vendors.
+
+We had better focus on these problems.
+
+Zhu Yanjun
+
+>
+>
+> Thanks
+> Zhijian
+>
+>
+> On 16/05/2022 09:53, Li Zhijian wrote:
+>> Since RXE always posts RDMA_WRITE successfully, it's observed that
+>> no more completion occurs after a few incorrect posts. Actually, it
+>> will block the polling. we can easily reproduce it by the below pattern.
+>>
+>> a. post correct RDMA_WRITE
+>> b. poll completion event
+>> while true {
+>>     c. post incorrect RDMA_WRITE(wrong rkey for example)
+>>     d. poll completion event <<<< block after 2 incorrect RDMA_WRITE posts
+>> }
+>>
+>>
+>> Li Zhijian (2):
+>>     RDMA/rxe: Update wqe_index for each wqe error completion
+>>     RDMA/rxe: Generate error completion for error requester QP state
+>>
+>>    drivers/infiniband/sw/rxe/rxe_req.c | 12 +++++++++++-
+>>    1 file changed, 11 insertions(+), 1 deletion(-)
+>>

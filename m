@@ -2,199 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E8055A7BB
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 09:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8D155A7C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 09:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbiFYH12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 03:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S231995AbiFYHhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 03:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232152AbiFYH1Y (ORCPT
+        with ESMTP id S231564AbiFYHhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 03:27:24 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A702248FB
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 00:27:23 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id d129so4370158pgc.9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 00:27:23 -0700 (PDT)
+        Sat, 25 Jun 2022 03:37:15 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732593FBE8;
+        Sat, 25 Jun 2022 00:37:14 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id q4so7741009qvq.8;
+        Sat, 25 Jun 2022 00:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nyw+kIA5BAs/IWrKxn3GKDGPvGzat8nDAzo2DBLLfVQ=;
-        b=aq1pS+VS92o4g/aCPqmlXhWuoghY8Hg8a9wHtnBXdaFpXnCeZnkV0KqZyiKnjCsIb3
-         9gNkp2wNm7+RaKaYmMOpoAOtqsnH72MjEwcBmZPQupfjAZZHWUliHn1lKAXGJENOg7vT
-         27wzF/acS30lNTC0dN6dSQtawZTucvqdL+VDJoZ1NpmhzFcbN+iZzXiOJkPna4hq1Fmc
-         OfsTi8gTPfuyH5l87FNoyQy7UhbvN4nlp3QreV732iSIPuE0OGBxnacGUqHWpJnzrWuk
-         hwPg24qhE4eMBjjU6Z+uGRyWanf+NQHCgKNf9pVepyIZdrMQ/la6fIf26s0fVjK07gZC
-         9PHQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n076zfNtrFt4ClI+VpxbjGuUJqmrwLV6wB/3U1mSuGo=;
+        b=BmMdfS+7eSR1K4fQrgjpu2zcV9MKpoAOS/jKT6x+fcTlvDFw7STH8vfDI9Iskd4Z6u
+         eyy/g2WQQtYe/4hXxuxmYqdJL3ldSQum9pCiysx+SKn62FBKNzdi68fQjNdOHcAfvKcp
+         dg4MRNztUJISwwePtxRfoaZ2z97Eus7oXJXIO5wovQlqshKtQyBAtq7CENoVLz+cJqzh
+         N6+hwxLmZpSMh0jEOEBOzS7sDNW1DrPzVDTDJvvaPr66ClqrrwNKfWWZVkRHScivimbj
+         DrGQgUGIvCtgfeH/jGFwLJ32T1xCTcSVaJjDQ5IQeuAMSnPOydqy44L/ntr4HCyx1y6P
+         OtQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=nyw+kIA5BAs/IWrKxn3GKDGPvGzat8nDAzo2DBLLfVQ=;
-        b=FHAjMKpA3jNHd9utSCdMj1CniVN81y5P+3W1A1ItrmXsMZ2KihQnVWfTZx5aHiZXjc
-         I8c5hOWbO9dtcIC7VuQeXUxc/mbKqP5AGfsPRbc/1sUwUkZAtiRrEX7Dui9V9LuqqT/K
-         ZKvPYghE8iWMwjGwTyIV40eYU6rO4rh+/XO6o67QRoaeKnxhAlINPtGwLE+a4EaxTqWX
-         3Cvpp/pshCHCzlACmOTR3CfVc6BbTFLDOlSfsmXo9/Yw1tqunyoW2/T9VYY518vJ+dog
-         uzT68+bI/K1dcnaByp0gjvvhGF8As+ihHphwzSfy0P+Rm7PryhyLmc0QxkCwgjUt4wNJ
-         4n3A==
-X-Gm-Message-State: AJIora9VMwO7vnupKf2M9n8GDpjUNnDLrVKZ9KJCHg22MOsGMDUGfGOr
-        60c31b7fg+6M13Zf5Vj3F3Q=
-X-Google-Smtp-Source: AGRyM1tQE2K31P0vhbMCKlpE2xqSND3nR66pHyTbWbXsTrAlSBTdFLo76RLbe6NrsxdMfeRUZXBAlw==
-X-Received: by 2002:a05:6a00:198a:b0:525:8b3a:8965 with SMTP id d10-20020a056a00198a00b005258b3a8965mr959794pfl.20.1656142042619;
-        Sat, 25 Jun 2022 00:27:22 -0700 (PDT)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id o12-20020a17090a5b0c00b001e29ddf9f4fsm2973821pji.3.2022.06.25.00.27.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 00:27:22 -0700 (PDT)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Joe Perches <joe@perches.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [RESEND PATCH v4 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant expressions
-Date:   Sat, 25 Jun 2022 16:26:45 +0900
-Message-Id: <20220625072645.251828-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220625072645.251828-1-mailhol.vincent@wanadoo.fr>
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220625072645.251828-1-mailhol.vincent@wanadoo.fr>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n076zfNtrFt4ClI+VpxbjGuUJqmrwLV6wB/3U1mSuGo=;
+        b=QafUkt3DqFK+kl7VhlV/jb132n7qv0TonUnvyjpLf7aud48PlqHMZSrgTUYkY6O6gf
+         nwpa34jPEVF5b6/7uBvWXuRMJQ85S322+WOIjBIkgS3A6zKRlmIDImrGWwrYYocwipIv
+         cF+Awh6CRIKm0QyShvO5M9pUuiSv1Y/Tc0JDhdoyPIav+EXpQYCehzBowvMbVKOs0+kp
+         SwWgltXBtE7e1TvloASj7escsn6w7qUrjvabHvueTmEugK2B7SwAqqAODB4RxX6Tl3RJ
+         H6TSDwT7/egeLgAcHInbbI6waUIi3cCTy92+AXhowBeiiGGPXswWcUP/s2Z+TLXTcKbe
+         o63A==
+X-Gm-Message-State: AJIora8In38s5kxS+tDmM+xUWDYaY5j/ytDcoL4pLvVqhIWR51NCoro1
+        LqgprhFAD+J+6WKrFzs57OLM4nCE8S4/jtBYUK4JszE8BOU=
+X-Google-Smtp-Source: AGRyM1sEYGHWEIW7bganmQ8aPPlyneCzmFMt+8uGbMt70k8oDNPkmPyv7GKLue2Rt1ddCHnCrUd+meclsHD7GDzDGOM=
+X-Received: by 2002:a05:6214:248b:b0:470:4ef5:7159 with SMTP id
+ gi11-20020a056214248b00b004704ef57159mr2231107qvb.48.1656142633541; Sat, 25
+ Jun 2022 00:37:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220624154552.2736417-1-pbonzini@redhat.com>
+In-Reply-To: <20220624154552.2736417-1-pbonzini@redhat.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Sat, 25 Jun 2022 09:37:19 +0200
+Message-ID: <CAFULd4byUDS6U527qLuh78KmvM2OWbtappDfxLSiT_iMUz8Ghw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: nVMX: clean up posted interrupt descriptor try_cmpxchg
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
-is equivalent to (unsigned long)__builtin_ctzl(~x). Because
-__builting_ctzl() returns an int, a cast to (unsigned long) is
-necessary to avoid potential warnings on implicit casts.
+On Fri, Jun 24, 2022 at 5:45 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> Rely on try_cmpxchg64 for re-reading the PID on failure, using READ_ONCE
+> only right before the first iteration.
+>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/posted_intr.c | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
+> index 73f60aa480fe..1b56c5e5c9fb 100644
+> --- a/arch/x86/kvm/vmx/posted_intr.c
+> +++ b/arch/x86/kvm/vmx/posted_intr.c
+> @@ -34,7 +34,7 @@ static inline struct pi_desc *vcpu_to_pi_desc(struct kvm_vcpu *vcpu)
+>         return &(to_vmx(vcpu)->pi_desc);
+>  }
+>
+> -static int pi_try_set_control(struct pi_desc *pi_desc, u64 old, u64 new)
+> +static int pi_try_set_control(struct pi_desc *pi_desc, u64 *pold, u64 new)
+>  {
+>         /*
+>          * PID.ON can be set at any time by a different vCPU or by hardware,
+> @@ -42,7 +42,7 @@ static int pi_try_set_control(struct pi_desc *pi_desc, u64 old, u64 new)
+>          * update must be retried with a fresh snapshot an ON change causes
+>          * the cmpxchg to fail.
+>          */
+> -       if (!try_cmpxchg64(&pi_desc->control, &old, new))
+> +       if (!try_cmpxchg64(&pi_desc->control, pold, new))
+>                 return -EBUSY;
+>
+>         return 0;
+> @@ -96,8 +96,9 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
+>         if (!x2apic_mode)
+>                 dest = (dest << 8) & 0xFF00;
+>
+> +       old.control = READ_ONCE(pi_desc->control);
+>         do {
+> -               old.control = new.control = READ_ONCE(pi_desc->control);
+> +               new.control = old.control;
+>
+>                 /*
+>                  * Clear SN (as above) and refresh the destination APIC ID to
+> @@ -111,7 +112,7 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
+>                  * descriptor was modified on "put" to use the wakeup vector.
+>                  */
+>                 new.nv = POSTED_INTR_VECTOR;
+> -       } while (pi_try_set_control(pi_desc, old.control, new.control));
+> +       } while (pi_try_set_control(pi_desc, &old.control, new.control));
+>
+>         local_irq_restore(flags);
+>
+> @@ -156,12 +157,12 @@ static void pi_enable_wakeup_handler(struct kvm_vcpu *vcpu)
+>
+>         WARN(pi_desc->sn, "PI descriptor SN field set before blocking");
+>
+> +       old.control = READ_ONCE(pi_desc->control);
+>         do {
+> -               old.control = new.control = READ_ONCE(pi_desc->control);
+> -
+>                 /* set 'NV' to 'wakeup vector' */
+> +               new.control = old.control;
 
-For x86_64, the current __ffs() and ffz() implementations do not
-produce optimized code when called with a constant expression. On the
-contrary, the __builtin_ctzl() gets simplified into a single
-instruction.
+This assignment should be above the comment, similar to vmx_vcpu_pi_load.
 
-However, for non constant expressions, the __ffs() and ffz() asm
-versions of the kernel remains slightly better than the code produced
-by GCC (it produces a useless instruction to clear eax).
-
-This patch uses the __builtin_constant_p() to select between the
-kernel's __ffs()/ffz() and the __builtin_ctzl() depending on whether
-the argument is constant or not.
-
-** Statistics **
-
-On a allyesconfig, before applying this patch...:
-
-| $ objdump -d vmlinux.o | grep tzcnt | wc -l
-| 3607
-
-...and after:
-
-| $ objdump -d vmlinux.o | grep tzcnt | wc -l
-| 2600
-
-So, roughly 27.9% of the calls to either __ffs() or ffz() were using
-constant expressions and could be optimized out.
-
-(tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
-
-Note: on x86_64, the asm bsf instruction produces tzcnt when used with
-the ret prefix (which is why we grep tzcnt instead of bsf in above
-benchmark). c.f. [1]
-
-[1] commit e26a44a2d618 ("x86: Use REP BSF unconditionally")
-http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- arch/x86/include/asm/bitops.h | 38 ++++++++++++++++++++++-------------
- 1 file changed, 24 insertions(+), 14 deletions(-)
-
-diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index 6ed979547086..f88c55b8b37c 100644
---- a/arch/x86/include/asm/bitops.h
-+++ b/arch/x86/include/asm/bitops.h
-@@ -224,13 +224,7 @@ static __always_inline bool variable_test_bit(long nr, volatile const unsigned l
- 	 ? constant_test_bit((nr), (addr))	\
- 	 : variable_test_bit((nr), (addr)))
- 
--/**
-- * __ffs - find first set bit in word
-- * @word: The word to search
-- *
-- * Undefined if no bit exists, so code should check against 0 first.
-- */
--static __always_inline unsigned long __ffs(unsigned long word)
-+static __always_inline unsigned long variable___ffs(unsigned long word)
- {
- 	asm("rep; bsf %1,%0"
- 		: "=r" (word)
-@@ -238,13 +232,18 @@ static __always_inline unsigned long __ffs(unsigned long word)
- 	return word;
- }
- 
--/**
-- * ffz - find first zero bit in word
-- * @word: The word to search
-- *
-- * Undefined if no zero exists, so code should check against ~0UL first.
-- */
--static __always_inline unsigned long ffz(unsigned long word)
-+/**
-+ * __ffs - find first set bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no bit exists, so code should check against 0 first.
-+ */
-+#define __ffs(word)				\
-+	(__builtin_constant_p(word) ?		\
-+	 (unsigned long)__builtin_ctzl(word) :	\
-+	 variable___ffs(word))
-+
-+static __always_inline unsigned long variable_ffz(unsigned long word)
- {
- 	asm("rep; bsf %1,%0"
- 		: "=r" (word)
-@@ -252,6 +251,17 @@ static __always_inline unsigned long ffz(unsigned long word)
- 	return word;
- }
- 
-+/**
-+ * ffz - find first zero bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no zero exists, so code should check against ~0UL first.
-+ */
-+#define ffz(word)				\
-+	(__builtin_constant_p(word) ?		\
-+	 (unsigned long)__builtin_ctzl(~word) :	\
-+	 variable_ffz(word))
-+
- /*
-  * __fls: find last set bit in word
-  * @word: The word to search
--- 
-2.35.1
-
+Uros.
+>                 new.nv = POSTED_INTR_WAKEUP_VECTOR;
+> -       } while (pi_try_set_control(pi_desc, old.control, new.control));
+> +       } while (pi_try_set_control(pi_desc, &old.control, new.control));
+>
+>         /*
+>          * Send a wakeup IPI to this CPU if an interrupt may have been posted
+> --
+> 2.31.1
+>

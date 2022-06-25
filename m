@@ -2,117 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732EC55A76A
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 08:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2A355A76D
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 08:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbiFYFsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 01:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
+        id S231537AbiFYF4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 01:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbiFYFsS (ORCPT
+        with ESMTP id S230077AbiFYF4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 01:48:18 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A171E205DD;
-        Fri, 24 Jun 2022 22:48:17 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-fb6b4da1dfso6505201fac.4;
-        Fri, 24 Jun 2022 22:48:17 -0700 (PDT)
+        Sat, 25 Jun 2022 01:56:41 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9FA3CFE8;
+        Fri, 24 Jun 2022 22:56:40 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id r66so4269117pgr.2;
+        Fri, 24 Jun 2022 22:56:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IfTILB5eXlDVPgIJdz9bz3GF6bYR+K+qjiBY2DrpT28=;
-        b=FMtMByBRhEeA6z4IgZ2QYocc2mM7IA0qRZt3haGjxsZRhulnUDhs8XgvO0vW7rRNqo
-         lt8BnqtjbNLHEkEvBefK011Is8LdkZXz6keQ6n53UM1o1yd6omTMWY3xapSAUMeZKHhv
-         sNtmQCr5atKnqX9CYOUmS1v+3N86swIvStNwrnIj9L1SlwDxDcpz/t2iM0Ri1rare7/S
-         gGQu73aF+tW5eFJ5VaS8Qv173iCWWbrkEZKGw4jag/exQl8iNUiGe+WchSXW/NBVR2om
-         6mBnEfH9vn3KMUw7RISSIgolw36vhsFBvGxcVtLBPNqRt3NwgcHP2b4U5n0ohMUl09u8
-         ZD3g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=vI5/9tMSai6sEiMDgKYG4Cvt0bVWGX78NMg6buGrxMs=;
+        b=Cys8IzXQH2MsSDgOyFJyh/9lRs7A21k6srYNuYr+moHfExJYKc4YcjSS/HGLsodV/X
+         S1FA/sgVFnsOOsM0u0eI3sjcC6S8oEc+kmNqh7d5IAp4k5IrsZA1kYWt51VD9dP/vDsK
+         gqk6YJI06Nm9hW8YH7Sf9aQUzZ7VwtH5RJ4RMentQgNzpLnEjUkvdJg8IOzVO1DtocvG
+         AHgK2mTkIhtLlcZKBAa/58Yz1B7ULNX64b8279Kz08273WgKauMGIMXwWBkyHaZALXtM
+         oCUbOHIDA8UPQniqAdH6zBRf5aXRLg23/PJyL5+dQJ5X3foUJ6/ja7AigwNVJP3YqiAU
+         0m/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IfTILB5eXlDVPgIJdz9bz3GF6bYR+K+qjiBY2DrpT28=;
-        b=Uslf5RoAWSWSyOp98+//Itic3bVzUR2L00S++BDcb4QE8Ce6Puuh2zeDC9RAj4m//J
-         Q4WjFT0daMyBUTl+KB10MJhqJ4g5IK2GDRgZNt2OFLbIYj0BHnsIUnP/yRdF3uL+UPoP
-         rd/XTfvtEaW6ld1j/5LZh2ZGVtZox1EzXGS54gxhAGnIfm0tzktyV6gN/S7k8kbMAWOS
-         vxdJgdFxKnUJhBzsDW6Ck8WwVU/mgs0upFZF6yjnVR6wfzfXKFxciFquQ/LSc0ncp2iU
-         DbsIaqr9bvrMzF2NSBmHLPMkVAxei3QKdWObEMEqV6dl6j24yOd7ZntTSL/I8XuGRKl2
-         T8ug==
-X-Gm-Message-State: AJIora8JbkvQT3U5EH4w1gRoQSHr2V3r6e5cP3Aa9NDcXzMgPZ9H+cEk
-        PA9CspnKUPwdRkf+ahaN3wYyABgCUfgkBsTzIPw=
-X-Google-Smtp-Source: AGRyM1t46n1N/R96oZMiwsy+lj1hF+OXTMt6pNIqCGQoHtjIP9Xik43ybKXp2Cb+Smogmt+IYFfxEpKJDFWri9wo86M=
-X-Received: by 2002:a05:6870:f618:b0:f3:cb8:91b with SMTP id
- ek24-20020a056870f61800b000f30cb8091bmr4092815oab.265.1656136096965; Fri, 24
- Jun 2022 22:48:16 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=vI5/9tMSai6sEiMDgKYG4Cvt0bVWGX78NMg6buGrxMs=;
+        b=TanUy0+rY3mLW2aNlDZLF096j6YS6M3mEeWJp1Y5gRTVMff8mtWljmZ/Zxw6COvTlr
+         /1FoTHDRgZ+nbgIokBFK3Tum9kGdZjGo2kzJh71YnTJI4wQrqjI4SzXieZTSlRqd/bo5
+         w38DqLSQ3c6FYpiefdd/UgwY0Y9j3SEnA32PhctYyI961TAu8sJ5uT+pb8GT0u5wEE3j
+         +K7s3ZCregrSOTEmXACU6QTYBpxKKT6l5ElMUWgyEl5A/7+jnm2Fl/CWQQN//NF28rBk
+         TpS18fHpWxzYh1ESyQWRGvEkgJlGvB6t/tTsmfa6m6iGf7J/r9uykQSDEdIa6bcVo+wp
+         kZJA==
+X-Gm-Message-State: AJIora+f/PD6IuU8hdIP51obY3DSJ3XQzV3HgksXnAVMJa4kzOoM0E2c
+        Boldw4JCZqZ5yLJC6Y/9aS4=
+X-Google-Smtp-Source: AGRyM1tKbanRfe8gCWw87yykbSIujh994LuikAhfSQmYN3gdd9dkDRc5leilpUgWiJlPqP+hGlrqlQ==
+X-Received: by 2002:a63:a70d:0:b0:40c:a1e3:23c2 with SMTP id d13-20020a63a70d000000b0040ca1e323c2mr2301813pgf.84.1656136599769;
+        Fri, 24 Jun 2022 22:56:39 -0700 (PDT)
+Received: from fedora.. ([103.230.148.186])
+        by smtp.gmail.com with ESMTPSA id x20-20020aa79574000000b0050dc7628183sm2819997pfq.93.2022.06.24.22.56.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jun 2022 22:56:39 -0700 (PDT)
+From:   Gautam <gautammenghani201@gmail.com>
+To:     sj@kernel.org, shuah@kernel.org
+Cc:     Gautam <gautammenghani201@gmail.com>, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] kselftests/damon: add support for cases where debugfs cannot be read
+Date:   Sat, 25 Jun 2022 11:26:08 +0530
+Message-Id: <20220625055608.12812-1-gautammenghani201@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220624202921.80867-1-sj@kernel.org>
+References: <20220624202921.80867-1-sj@kernel.org>
 MIME-Version: 1.0
-References: <20220624081254.1251316-1-zys.zljxml@gmail.com> <ad7673eb-ff0d-ce39-e05d-6af3be5ac68c@kernel.org>
-In-Reply-To: <ad7673eb-ff0d-ce39-e05d-6af3be5ac68c@kernel.org>
-From:   Katrin Jo <zys.zljxml@gmail.com>
-Date:   Sat, 25 Jun 2022 13:48:06 +0800
-Message-ID: <CAOaDN_S=TyNPTcVrcx9SLLtqrMLbkV31TRQJB4GKKyQCFReKOQ@mail.gmail.com>
-Subject: Re: [PATCH] ipv6/sit: fix ipip6_tunnel_get_prl when memory allocation fails
-To:     David Ahern <dsahern@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        yoshfuji@linux-ipv6.org, kuba@kernel.org, davem@davemloft.net,
-        Eric Dumazet <edumazet@google.com>, eric.dumazet@gmail.com,
-        pabeni@redhat.com, katrinzhou <katrinzhou@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 11:12 PM David Ahern <dsahern@kernel.org> wrote:
->
-> On 6/24/22 2:12 AM, zys.zljxml@gmail.com wrote:
-> > diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-> > index c0b138c20992..4fb84c0b30be 100644
-> > --- a/net/ipv6/sit.c
-> > +++ b/net/ipv6/sit.c
-> > @@ -323,8 +323,6 @@ static int ipip6_tunnel_get_prl(struct net_device *dev, struct ip_tunnel_prl __u
-> >               kcalloc(cmax, sizeof(*kp), GFP_KERNEL_ACCOUNT | __GFP_NOWARN) :
-> >               NULL;
-> >
-> > -     rcu_read_lock();
-> > -
-> >       ca = min(t->prl_count, cmax);
-> >
-> >       if (!kp) {
-> > @@ -337,11 +335,12 @@ static int ipip6_tunnel_get_prl(struct net_device *dev, struct ip_tunnel_prl __u
-> >                                             __GFP_NOWARN);
-> >               if (!kp) {
-> >                       ret = -ENOMEM;
-> > -                     goto out;
-> > +                     goto err;
-> >               }
-> >       }
-> >
-> >       c = 0;
-> > +     rcu_read_lock();
-> >       for_each_prl_rcu(t->prl) {
-> >               if (c >= cmax)
-> >                       break;
-> > @@ -362,7 +361,7 @@ static int ipip6_tunnel_get_prl(struct net_device *dev, struct ip_tunnel_prl __u
-> >               ret = -EFAULT;
-> >
-> >       kfree(kp);
-> > -
-> > +err:
-> >       return ret;
-> >  }
-> >
->
-> 'out' label is no longer used and should be removed.
+The kernel is in lockdown mode when secureboot is enabled and hence
+debugfs cannot be used. Add support for this and other general cases 
+where debugfs cannot be read and communicate the same to the user before
+running tests.
 
-Thanks for reviewing! I sent the V2 patch, modified according to your
-suggestion.
-The label is removed, and I still use the label "out" instead of "err".
+Signed-off-by: Gautam <gautammenghani201@gmail.com>
+---
+Changes in v2:
+1. Modify the error message to account for general cases.
+2. Change the return code so that the test is skipped.
 
-Best Regards,
-Katrin
+ tools/testing/selftests/damon/_chk_dependency.sh | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+ mode change 100644 => 100755 tools/testing/selftests/damon/_chk_dependency.sh
+
+diff --git a/tools/testing/selftests/damon/_chk_dependency.sh b/tools/testing/selftests/damon/_chk_dependency.sh
+old mode 100644
+new mode 100755
+index 0189db81550b..aae7ff8c2080
+--- a/tools/testing/selftests/damon/_chk_dependency.sh
++++ b/tools/testing/selftests/damon/_chk_dependency.sh
+@@ -26,3 +26,13 @@ do
+ 		exit 1
+ 	fi
+ done
++
++secureboot_error="Operation not permitted"
++for f in attrs target_ids monitor_on
++do
++	status=$( cat "$DBGFS/$f" 2>&1 )
++	if [ "${status#*$secureboot_error}" != "$status" ]; then
++		echo "Permission for reading $DBGFS/$f denied; maybe secureboot enabled?"
++		exit $ksft_skip
++	fi
++done
+-- 
+2.36.1
+

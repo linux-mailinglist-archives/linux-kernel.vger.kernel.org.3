@@ -2,90 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F4755AD4E
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 00:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B30055AD50
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 01:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233712AbiFYW7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 18:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S233732AbiFYXBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 19:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233295AbiFYW72 (ORCPT
+        with ESMTP id S233604AbiFYXBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 18:59:28 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95C713FA9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 15:59:26 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3176d94c236so55014277b3.3
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 15:59:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Kz4CQpOKhPTyDsa60xKPIiVM3jnSyd80mVmcmJIhuHQ=;
-        b=f0R0dNNfG+cy3gFp7wt9apjvTZnUDWzypyV4qpxTt0EYhTusE7dczqOjHtdnJ6vezN
-         zHCYjY76OuU7+5Kurfz9oaZcDHK4a3uwUh3eDulaNbh8hB6891r6dpwGNRRrYLaL0rGI
-         lXHEoGEl0PVXK+UANPXZuirl60K+W2t2Kir2E6bca3VxQvvETRSmzmqghmbYWZRf2c+O
-         qQ7Uwvryau8aALkvZtL19zhwrXOxRQuMK4ocOgSBgDpdEydMdiCLF+mETnI5hsInX+0a
-         9Jd7mhj/C6OsaaKO0Au+5T+hKmp/3hxrDjcU/5FKa/Ui/MGI9jYcSPGrFadHuCt/y8Bb
-         VoKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Kz4CQpOKhPTyDsa60xKPIiVM3jnSyd80mVmcmJIhuHQ=;
-        b=qXo7sh5WXZ+qa1J5rv+qj8Do2lhj2JC80C91klER6+BYM1+dULuQKHyfECD22iw+So
-         JwXpFNf/z6VVAZ0jIdqhD7F50sHkdWmeY9TkkEiFx9aXG7OOZ5xIuKVfDVYl7Z9WE2Or
-         LqM4axnGf3IJwuzaDzrMdxq5Oe/rjWyWw8fS661js3/3UwRspfzk4t23WZ6qQ7quNlH6
-         hQR/rUtAiVpF67YPcKsat1reb239o+5EcHYlJPafgZu+gB49cqVV0HRVcjuHXrYXpJbk
-         XDvXtPQen9So6hmMLNTpcV1Pif+QLdC3p5IrfSoARqtjxmL5vgqdWGoyOGvL3+4QLVdH
-         +qSg==
-X-Gm-Message-State: AJIora9MnLGxDuS277CNpHzh/v2HB+If+Md3gdFdz5QZxA6RAhTzUyl/
-        hJmLNrgjceVoDTXiYiLGG95buJOuwk96JWox/pAebw==
-X-Google-Smtp-Source: AGRyM1uosYwxlq64LUlIuBLDzEOZIVCn/f27F5vp117PBBS+sA4ZCR/UdMd9wStyWymJXop43cXKJFCZnY1Vqnm0CGM=
-X-Received: by 2002:a0d:eace:0:b0:317:87ac:b3a8 with SMTP id
- t197-20020a0deace000000b0031787acb3a8mr6860068ywe.126.1656197966000; Sat, 25
- Jun 2022 15:59:26 -0700 (PDT)
+        Sat, 25 Jun 2022 19:01:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB16614032
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:01:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E08760F6C
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 23:01:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12B16C3411C;
+        Sat, 25 Jun 2022 23:01:07 +0000 (UTC)
+Date:   Sat, 25 Jun 2022 19:01:05 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        John 'Warthog9' Hawley <warthog9@kernel.org>
+Subject: Re: possible trace_printk() bug in v5.19-rc1
+Message-ID: <20220625190105.750bbb0a@rorschach.local.home>
+In-Reply-To: <AD7B3406-C1A3-4AC0-BFD5-C7DF7E449478@oracle.com>
+References: <F6C267B0-83EA-4151-A4EC-44482AC52C59@oracle.com>
+        <20220616113400.15335d91@gandalf.local.home>
+        <E309A098-DA06-490D-A75C-E6295C2987B9@oracle.com>
+        <20220617155019.373adda7@gandalf.local.home>
+        <3BAD2CD9-3A34-4140-A28C-0FE798B83C41@oracle.com>
+        <355D2478-33D3-4046-8422-E512F42C51BC@oracle.com>
+        <20220624190819.59df11d3@rorschach.local.home>
+        <3EB14A14-767B-4B66-9B28-97DDE7EECFD2@oracle.com>
+        <20220625134552.08c1a23a@rorschach.local.home>
+        <AD7B3406-C1A3-4AC0-BFD5-C7DF7E449478@oracle.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220427144620.9105-1-pmalgujar@marvell.com> <20220427144620.9105-3-pmalgujar@marvell.com>
- <CACRpkdaqeTs-jHPBmtdiz+LdMM0pz0zqt4diX=e+YpgaGr0Jbw@mail.gmail.com>
- <20220603090618.GA27121@Dell2s-9> <CACRpkdaOd0-k_mt0ZrKT-DbVc3f0b5uXXmXpBNH=hq3BGCB+vQ@mail.gmail.com>
- <20220613080452.GA1884@Dell2s-9>
-In-Reply-To: <20220613080452.GA1884@Dell2s-9>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 26 Jun 2022 00:59:14 +0200
-Message-ID: <CACRpkdY-+D1tkNJoWLpQH9-2AcE1xb546eJx5Nuq+Tw3WKj6mw@mail.gmail.com>
-Subject: Re: [PATCH 2/5] dt-bindings: gpio: gpio-thunderx: Describe pin-cfg option
-To:     Piyush Malgujar <pmalgujar@marvell.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rric@kernel.org,
-        cchavva@marvell.com, wsadowski@marvell.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 10:04 AM Piyush Malgujar <pmalgujar@marvell.com> wrote:
+On Sat, 25 Jun 2022 18:50:30 +0000
+Chuck Lever III <chuck.lever@oracle.com> wrote:
 
-> Thanks for the reply.
-> But as in this case, we expect a 32 bit reg value via DTS for this driver
-> only from user with internal understanding of marvell soc and this reg bit
-> value can have many different combinations as the register fields can vary
-> for different marvell SoCs.
-> This patch just reads the reg value from DTS and writes it to the register.
+> > On Jun 25, 2022, at 1:45 PM, Steven Rostedt <rostedt@goodmis.org> wrote:
+> > 
+> > On Sat, 25 Jun 2022 17:15:07 +0000
+> > Chuck Lever III <chuck.lever@oracle.com> wrote:
+> >   
+> >> [root@manet ~]# cat /etc/redhat-release 
+> >> Fedora release 35 (Thirty Five)
+> >> [root@manet ~]# trace-cmd version
+> >> 
+> >> trace-cmd version 2.9.2 (not-a-git-repo)  
+> > 
+> > Ug, that's very old. Fedora should be shipping 3.1.1 soon.  
+> 
+> Right -- this version doesn't recognize get_sockaddr either.
+> 
 
-I understand that this is convenient but it does not use the right kernel
-abstractions and it does not use device tree bindings the right way
-either.
+That would be libtraceevent that would do that. What version do you
+have installed?
 
-Rewrite the patches using definitions and fine control and move away
-from magic numbers to be poked into registers.
-
-Yours,
-Linus Walleij
+-- Steve

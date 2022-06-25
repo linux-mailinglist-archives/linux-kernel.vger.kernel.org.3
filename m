@@ -2,106 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BFE55A5C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 03:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F1855A5BD
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 03:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiFYBPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 24 Jun 2022 21:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
+        id S230490AbiFYBQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 24 Jun 2022 21:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiFYBPt (ORCPT
+        with ESMTP id S229450AbiFYBQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 24 Jun 2022 21:15:49 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FB03ED2C;
-        Fri, 24 Jun 2022 18:15:48 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id t21so3966927pfq.1;
-        Fri, 24 Jun 2022 18:15:48 -0700 (PDT)
+        Fri, 24 Jun 2022 21:16:05 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4AD40A19;
+        Fri, 24 Jun 2022 18:16:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mddgUzjjMvwn6t+jkp7452qXuMD9uxs9pKqRGpWnzls=;
-        b=MFL75ZqSwniQVJ/Tg712PAfFoFZvNdUvvD/hHpnQShNFY/kvSnWnwMdGXuyFf6363F
-         InG8hiCJoMElYT0AYLFk9kwgttuBvSDgybhQeiOQSCJKXX7iV9NMaIVeA5V9HKkFeyQi
-         D0pv5Lh1cd1gjsl3hfadEOgKyegWuS6L4pjyOtchRD5G9RUb13fE+AayBbCz7dHeQ5ij
-         uDeIqmpxmzTFTUuU+wOTF4t+Z39oVUZh8SbygfhA9E5qr/MauwsO8C2xNOkzSUls3mnD
-         vdAhHP+ZGW5AWfuw6h3b3c4IyhkmWRsf0OR7t7/VRE3UVfFSEnuj/z6yN4gDae0XzvgM
-         KMsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mddgUzjjMvwn6t+jkp7452qXuMD9uxs9pKqRGpWnzls=;
-        b=Xx1C5wc9CAHLyRPp3h/8HT0uq1n4DXhx3fAg049UgsHbL6q1ie41LV0VVYE+6CFhqx
-         ZXvHz+1RiPu8+vBYrCgWGvuYYNvzJRc4qmO1N2ODyXJKiMBCAPe7Q1V1qBQRxnZNGSzt
-         m03wLfbSaMd2Pv3vA98/HAnQGaiHFhaClP2fkovRX2bPVvJgR28ez/MIl6IAtPY1HUK+
-         jxx2mo4+OOH+zcUJBCKLqEMr9bU54stup6zaGfGO+sgFPb694I5wL2HXWqpqCLhhE0QL
-         8wpjmCsCOUZPYu4IUGEjW9Sz/0ER/xvO/TPBt0GYkd+vYC6qKsdOZdBiEZ9ju4kdDumj
-         BTNQ==
-X-Gm-Message-State: AJIora/KfeoevwP8tngjw4Qqq8rd2tQKtMZIhjtd825kBGPKOfm44o4J
-        yUlU+vUqg87Bb5QDwMYd0eQ=
-X-Google-Smtp-Source: AGRyM1tyD3JHAlSkBQre22ZgvMm1Os5Ag+84SUDLVbeBfB3j6RW5jvPKEfdDHIPvu+CHWDALZaL72A==
-X-Received: by 2002:a63:6b08:0:b0:3fd:1b8e:3932 with SMTP id g8-20020a636b08000000b003fd1b8e3932mr1481851pgc.552.1656119747744;
-        Fri, 24 Jun 2022 18:15:47 -0700 (PDT)
-Received: from [192.168.43.80] (subs09a-223-255-225-71.three.co.id. [223.255.225.71])
-        by smtp.gmail.com with ESMTPSA id d76-20020a621d4f000000b005255151e248sm2433430pfd.174.2022.06.24.18.15.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 18:15:47 -0700 (PDT)
-Message-ID: <241393bf-1fd3-ab25-867b-7132d7590aa8@gmail.com>
-Date:   Sat, 25 Jun 2022 08:15:43 +0700
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656119764; x=1687655764;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=uua8kxPJXfOueiekdB2Tgio7+vOKfLeb4cJSDLh9XaA=;
+  b=NpEP0gfnbj8eiLKcYge27K0r2wzCy3iJQb8muaea144jXi9EOzMc40G5
+   WS3bQUEHLgU51WPqqin2spVX2SueImuWg/GFCOYGbnQNVSDN5hPeEhtGu
+   dL1bp3sCC+8PnotH3iGD3CFrI5RsVrkwD9rv3cWFjAtv0iILP3rYkFqYb
+   M=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 24 Jun 2022 18:16:04 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 18:16:03 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 24 Jun 2022 18:16:03 -0700
+Received: from [10.111.168.196] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 24 Jun
+ 2022 18:15:59 -0700
+Message-ID: <3b3ae4d6-ec49-6c1e-ece7-ef49adb2f85c@quicinc.com>
+Date:   Fri, 24 Jun 2022 18:15:57 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] media: docs: Modify the section of User xattr
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v1 2/3] drm/msm/dp: decoupling dp->id out of dp
+ controller_id at scxxxx_dp_cfg table
 Content-Language: en-US
-To:     Deming Wang <wangdeming@inspur.com>, miklos@szeredi.hu,
-        corbet@lwn.net
-Cc:     linux-unionfs@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220624014605.2007-1-wangdeming@inspur.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220624014605.2007-1-wangdeming@inspur.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>, <agross@kernel.org>,
+        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
+        <daniel@ffwll.ch>, <dianders@chromium.org>,
+        <dmitry.baryshkov@linaro.org>, <dri-devel@lists.freedesktop.org>,
+        <robdclark@gmail.com>, <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_aravindh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com>
+ <fa7f8bf1-33cd-5515-0143-6596df2bd740@quicinc.com>
+ <CAE-0n51g-EVsC-i9=sJV-ySa8VnE+yT7cg=b-TNMi9+3uBiOVA@mail.gmail.com>
+ <326912ff-9771-0711-366d-79acd436908b@quicinc.com>
+ <CAE-0n51qrdrFtSr0vRwgYkMgSZfnzQuinaUROQsp30QoDchWQA@mail.gmail.com>
+ <0ff3d6a3-dc5c-7c77-f8a1-6c4f6c1a3215@quicinc.com>
+ <CAE-0n515hMKqQ+Vj1Sg54PpwkbWMYJ77QN+y+KZNBWymjhpWKw@mail.gmail.com>
+ <66ff4642-f268-f5b0-7e28-b196368c508a@quicinc.com>
+ <5cf094cf-343a-82d7-91c4-1284683f9748@quicinc.com>
+ <CAE-0n51PiVo042oj8JrAxNTytmAoQx0kdqs_iCDffXa1+iur1A@mail.gmail.com>
+ <CAE-0n50Qq2_eayXAUMzU29wKkpa6JZTG6J1dthUY1Y9tAjy_2Q@mail.gmail.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <CAE-0n50Qq2_eayXAUMzU29wKkpa6JZTG6J1dthUY1Y9tAjy_2Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/22 08:46, Deming Wang wrote:
-> Delete duplicate words of "the".
+
+
+On 6/24/2022 5:23 PM, Stephen Boyd wrote:
+> Quoting Stephen Boyd (2022-06-24 17:11:01)
+>> Quoting Abhinav Kumar (2022-06-24 17:03:37)
+>>>
+>>> So let me try to explain this as this is what i understood from the
+>>> patch and how kuogee explained me.
+>>>
+>>> The ordering of the array still matters here and thats what he is trying
+>>> to address with the second change.
+>>
+>> The order of the array should not matter. That's the problem.
 > 
+> It seems like somewhere else the order of the array matters, presumably
+> while setting up encoders?
+> 
+>>
+>>>
+>>> So as per him, he tried to swap the order of entries like below and that
+>>> did not work and that is incorrect behavior because he still retained
+>>> the MSM_DP_CONTROLLER_x field for the table like below:
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c
+>>> b/drivers/gpu/drm/msm/dp/dp_display.c
+>>> index dcd80c8a794c..7816e82452ca 100644
+>>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>>> @@ -140,8 +140,8 @@ static const struct msm_dp_config sc7180_dp_cfg = {
+>>>
+>>>    static const struct msm_dp_config sc7280_dp_cfg = {
+>>>           .descs = (const struct msm_dp_desc[]) {
+>>> -               [MSM_DP_CONTROLLER_0] = { .io_start = 0x0ae90000,
+>>> .connector_type = DRM_MODE_CONNECTOR_DisplayPort, .wide_bus_en = true },
+>>>                   [MSM_DP_CONTROLLER_1] = { .io_start = 0x0aea0000,
+>>> .connector_type = DRM_MODE_CONNECTOR_eDP, .wide_bus_en = true },
+>>> +               [MSM_DP_CONTROLLER_0] = { .io_start = 0x0ae90000,
+>>> .connector_type = DRM_MODE_CONNECTOR_DisplayPort, .wide_bus_en = true },
+>>>           },
+>>>           .num_descs = 2,
+>>>    };
+>>>
+>>>
+>>> The reason order is important is because  in this function below, even
+>>> though it matches the address to find which one to use it loops through
+>>> the array and so the value of *id will change depending on which one is
+>>> located where.
+>>>
+>>> static const struct msm_dp_desc *dp_display_get_desc(struct
+>>> platform_device *pdev,
+>>>                                unsigned int *id)
+>>
+>> Thanks! We should fix this function to not overwrite the id.
+>>
+> 
+> Ah nevermind. I mixed up dp->id and h_tile_instance thinking one was
+> overwriting the other but that doesn't make any sense.
 
-I think "Modify something" isn't clear subject, because reviewers
-don't know at glance the logical change this patch is doing other
-than actually reading the diff below.
+Yes, I also misunderstood one point.
 
-For the patch message, what about "Remove duplicate the"?
+Even if we re-order like above, we are still retaining the index 
+correctly so that will still work.
 
-In this case of trivial patch, it's OK to have the patch message
-same as the subject, if the message can't be described more
-concise but clearer.
+I checked with kuogee again now, he mentioned he needs this only for 
+patch 3.
 
-> @@ -607,7 +607,7 @@ can be removed.
->  User xattr
->  ----------
->  
-> -The the "-o userxattr" mount option forces overlayfs to use the
-> +The "-o userxattr" mount option forces overlayfs to use the
->  "user.overlay." xattr namespace instead of "trusted.overlay.".  This is
->  useful for unprivileged mounting of overlayfs.
->  
+He is not sure of the root-cause of why turning ON the first display 
+fixes the issue . I think that needs to be debugged correctly to answers 
+questions posted by you / Dmitry. Lets hold on these patches till we 
+have the answers.
 
-The diff looks OK.
 
-Thanks.
 
--- 
-An old man doll... just what I always wanted! - Clara
+

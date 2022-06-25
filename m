@@ -2,84 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5A555A8AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2315E55A89E
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 12:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232609AbiFYJiD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 25 Jun 2022 05:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        id S232272AbiFYJkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 05:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232593AbiFYJiB (ORCPT
+        with ESMTP id S231768AbiFYJkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 05:38:01 -0400
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5E96343
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 02:37:59 -0700 (PDT)
-Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id 4879D602A3;
-        Sat, 25 Jun 2022 09:37:58 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf16.hostedemail.com (Postfix) with ESMTPA id 5D37020013;
-        Sat, 25 Jun 2022 09:37:56 +0000 (UTC)
-Message-ID: <1a35d3bdf6adde4f21e7c1401f3a2aba64367eb0.camel@perches.com>
-Subject: Re: [PATCH 3/3] staging: Thunderbolt: ctl.c: Fixed comment coding
- style issues
-From:   Joe Perches <joe@perches.com>
-To:     Gabriel Viso Carrera <gabriel@gvisoc.com>, andreas.noever@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sat, 25 Jun 2022 02:37:54 -0700
-In-Reply-To: <20220625084913.603556-4-gabriel@gvisoc.com>
-References: <20220625084913.603556-1-gabriel@gvisoc.com>
-         <20220625084913.603556-4-gabriel@gvisoc.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Sat, 25 Jun 2022 05:40:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41D235AA8;
+        Sat, 25 Jun 2022 02:40:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FB3DB80315;
+        Sat, 25 Jun 2022 09:40:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB54AC3411C;
+        Sat, 25 Jun 2022 09:39:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656150000;
+        bh=W8aNcm+QVE6ieO2OeUXQb2GCh5eqOLJo1sWOd6/UWC4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=X5/FubI/t3ncQJVzq7/D1pNHYmPPx5JqN8DHxEeRRe7g8WmXzMjM7r2hx1s8qKpih
+         nWzex8LbW0BG00uiFIGKRQoLEHSODZmjxjVtuvqN8k6tx6LYHvLPB1f0BFvjbS+vDr
+         1p/HTzRxRJr4q/REk6F/ie+cu5jlys+I0VCSmrG/ufAa4MQ+KUvRmiXm/26CYdHTMg
+         2pQ3/83nYAj5TSQIYP3ZuxmffFcda4jMzRVhuRLRLKi+pdRa42873c+59ETI2a/Xka
+         6bFCT3hgBYpEh+sNlSbATIhEhrx5lYZv88mgmIZQlp1PiFDtqtybtS+Asgzth3899A
+         y+tgT+4MFO14Q==
+From:   guoren@kernel.org
+To:     palmer@rivosinc.com, arnd@arndb.de, parri.andrea@gmail.com,
+        dlustig@nvidia.com
+Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Subject: [PATCH] riscv: atomic: Clean up unnecessary acquire and release definitions
+Date:   Sat, 25 Jun 2022 05:39:45 -0400
+Message-Id: <20220625093945.423974-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Stat-Signature: cadce61gy87epicgpcnxk4uyk16i6br6
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 5D37020013
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/qRBMMKsrDRTv8po7b2EkokCBtOlc91is=
-X-HE-Tag: 1656149876-587466
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-06-25 at 18:49 +1000, Gabriel Viso Carrera wrote:
-> Fixed a couple of comment aligment & formatting coding style issues.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-trivia:
+Clean up unnecessary xchg_acquire, xchg_release, and cmpxchg_release
+custom definitions, because the generic implementation is the same as
+the riscv custom implementation.
 
-> diff --git a/drivers/thunderbolt/ctl.c b/drivers/thunderbolt/ctl.c
-[]
-> @@ -402,11 +403,11 @@ static bool tb_ctl_handle_event(struct tb_ctl *ctl, enum tb_cfg_pkg_type type,
->  static void tb_ctl_rx_submit(struct ctl_pkg *pkg)
->  {
->  	tb_ring_rx(pkg->ctl->rx, &pkg->frame); /*
-> -					     * We ignore failures during stop.
-> -					     * All rx packets are referenced
-> -					     * from ctl->rx_packets, so we do
-> -					     * not loose them.
-> -					     */
-> +						* We ignore failures during stop.
-> +						* All rx packets are referenced
-> +						* from ctl->rx_packets, so we do
-> +						* not loose them.
-> +						*/
+Before the patch:
+000000000000024e <.LBB238>:
+                ops = xchg_acquire(pending_ipis, 0);
+ 24e:   089937af                amoswap.d       a5,s1,(s2)
+ 252:   0230000f                fence   r,rw
 
-I'd indent this only 1 level and put it before the call
-(and fix the loose/lose typo)
+0000000000000256 <.LBB243>:
+                ops = xchg_release(pending_ipis, 0);
+ 256:   0310000f                fence   rw,w
+ 25a:   089934af                amoswap.d       s1,s1,(s2)
 
-{
-	/* We ignore failures during stop.
-	 * All rx packets are referenced from ctl->rx_packets,
-	 * so we do not lose them.
-	 */
-	tb_ring_rx(pkg->ctl->rx, &pkg->frame);
-}
+After the patch:
+000000000000026e <.LBB245>:
+                ops = xchg_acquire(pending_ipis, 0);
+ 26e:   089937af                amoswap.d       a5,s1,(s2)
+
+0000000000000272 <.LBE247>:
+ 272:   0230000f                fence   r,rw
+
+0000000000000276 <.LBB249>:
+                ops = xchg_release(pending_ipis, 0);
+ 276:   0310000f                fence   rw,w
+
+000000000000027a <.LBB251>:
+ 27a:   089934af                amoswap.d       s1,s1,(s2)
+
+Only cmpxchg_acquire is necessary (It prevents unnecessary acquire
+ordering when the value from lr is different from old).
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+---
+ arch/riscv/include/asm/atomic.h  |  19 -----
+ arch/riscv/include/asm/cmpxchg.h | 116 -------------------------------
+ 2 files changed, 135 deletions(-)
+
+diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+index 0dfe9d857a76..83636320ba95 100644
+--- a/arch/riscv/include/asm/atomic.h
++++ b/arch/riscv/include/asm/atomic.h
+@@ -249,16 +249,6 @@ c_t arch_atomic##prefix##_xchg_relaxed(atomic##prefix##_t *v, c_t n)	\
+ 	return __xchg_relaxed(&(v->counter), n, size);			\
+ }									\
+ static __always_inline							\
+-c_t arch_atomic##prefix##_xchg_acquire(atomic##prefix##_t *v, c_t n)	\
+-{									\
+-	return __xchg_acquire(&(v->counter), n, size);			\
+-}									\
+-static __always_inline							\
+-c_t arch_atomic##prefix##_xchg_release(atomic##prefix##_t *v, c_t n)	\
+-{									\
+-	return __xchg_release(&(v->counter), n, size);			\
+-}									\
+-static __always_inline							\
+ c_t arch_atomic##prefix##_xchg(atomic##prefix##_t *v, c_t n)		\
+ {									\
+ 	return __xchg(&(v->counter), n, size);				\
+@@ -276,12 +266,6 @@ c_t arch_atomic##prefix##_cmpxchg_acquire(atomic##prefix##_t *v,	\
+ 	return __cmpxchg_acquire(&(v->counter), o, n, size);		\
+ }									\
+ static __always_inline							\
+-c_t arch_atomic##prefix##_cmpxchg_release(atomic##prefix##_t *v,	\
+-				     c_t o, c_t n)			\
+-{									\
+-	return __cmpxchg_release(&(v->counter), o, n, size);		\
+-}									\
+-static __always_inline							\
+ c_t arch_atomic##prefix##_cmpxchg(atomic##prefix##_t *v, c_t o, c_t n)	\
+ {									\
+ 	return __cmpxchg(&(v->counter), o, n, size);			\
+@@ -299,12 +283,9 @@ c_t arch_atomic##prefix##_cmpxchg(atomic##prefix##_t *v, c_t o, c_t n)	\
+ ATOMIC_OPS()
+ 
+ #define arch_atomic_xchg_relaxed	arch_atomic_xchg_relaxed
+-#define arch_atomic_xchg_acquire	arch_atomic_xchg_acquire
+-#define arch_atomic_xchg_release	arch_atomic_xchg_release
+ #define arch_atomic_xchg		arch_atomic_xchg
+ #define arch_atomic_cmpxchg_relaxed	arch_atomic_cmpxchg_relaxed
+ #define arch_atomic_cmpxchg_acquire	arch_atomic_cmpxchg_acquire
+-#define arch_atomic_cmpxchg_release	arch_atomic_cmpxchg_release
+ #define arch_atomic_cmpxchg		arch_atomic_cmpxchg
+ 
+ #undef ATOMIC_OPS
+diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+index 12debce235e5..67ab6375b650 100644
+--- a/arch/riscv/include/asm/cmpxchg.h
++++ b/arch/riscv/include/asm/cmpxchg.h
+@@ -44,76 +44,6 @@
+ 					    _x_, sizeof(*(ptr)));	\
+ })
+ 
+-#define __xchg_acquire(ptr, new, size)					\
+-({									\
+-	__typeof__(ptr) __ptr = (ptr);					\
+-	__typeof__(new) __new = (new);					\
+-	__typeof__(*(ptr)) __ret;					\
+-	switch (size) {							\
+-	case 4:								\
+-		__asm__ __volatile__ (					\
+-			"	amoswap.w %0, %2, %1\n"			\
+-			RISCV_ACQUIRE_BARRIER				\
+-			: "=r" (__ret), "+A" (*__ptr)			\
+-			: "r" (__new)					\
+-			: "memory");					\
+-		break;							\
+-	case 8:								\
+-		__asm__ __volatile__ (					\
+-			"	amoswap.d %0, %2, %1\n"			\
+-			RISCV_ACQUIRE_BARRIER				\
+-			: "=r" (__ret), "+A" (*__ptr)			\
+-			: "r" (__new)					\
+-			: "memory");					\
+-		break;							\
+-	default:							\
+-		BUILD_BUG();						\
+-	}								\
+-	__ret;								\
+-})
+-
+-#define arch_xchg_acquire(ptr, x)					\
+-({									\
+-	__typeof__(*(ptr)) _x_ = (x);					\
+-	(__typeof__(*(ptr))) __xchg_acquire((ptr),			\
+-					    _x_, sizeof(*(ptr)));	\
+-})
+-
+-#define __xchg_release(ptr, new, size)					\
+-({									\
+-	__typeof__(ptr) __ptr = (ptr);					\
+-	__typeof__(new) __new = (new);					\
+-	__typeof__(*(ptr)) __ret;					\
+-	switch (size) {							\
+-	case 4:								\
+-		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"	amoswap.w %0, %2, %1\n"			\
+-			: "=r" (__ret), "+A" (*__ptr)			\
+-			: "r" (__new)					\
+-			: "memory");					\
+-		break;							\
+-	case 8:								\
+-		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"	amoswap.d %0, %2, %1\n"			\
+-			: "=r" (__ret), "+A" (*__ptr)			\
+-			: "r" (__new)					\
+-			: "memory");					\
+-		break;							\
+-	default:							\
+-		BUILD_BUG();						\
+-	}								\
+-	__ret;								\
+-})
+-
+-#define arch_xchg_release(ptr, x)					\
+-({									\
+-	__typeof__(*(ptr)) _x_ = (x);					\
+-	(__typeof__(*(ptr))) __xchg_release((ptr),			\
+-					    _x_, sizeof(*(ptr)));	\
+-})
+-
+ #define __xchg(ptr, new, size)						\
+ ({									\
+ 	__typeof__(ptr) __ptr = (ptr);					\
+@@ -253,52 +183,6 @@
+ 					_o_, _n_, sizeof(*(ptr)));	\
+ })
+ 
+-#define __cmpxchg_release(ptr, old, new, size)				\
+-({									\
+-	__typeof__(ptr) __ptr = (ptr);					\
+-	__typeof__(*(ptr)) __old = (old);				\
+-	__typeof__(*(ptr)) __new = (new);				\
+-	__typeof__(*(ptr)) __ret;					\
+-	register unsigned int __rc;					\
+-	switch (size) {							\
+-	case 4:								\
+-		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"0:	lr.w %0, %2\n"				\
+-			"	bne  %0, %z3, 1f\n"			\
+-			"	sc.w %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" ((long)__old), "rJ" (__new)		\
+-			: "memory");					\
+-		break;							\
+-	case 8:								\
+-		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"0:	lr.d %0, %2\n"				\
+-			"	bne %0, %z3, 1f\n"			\
+-			"	sc.d %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" (__old), "rJ" (__new)			\
+-			: "memory");					\
+-		break;							\
+-	default:							\
+-		BUILD_BUG();						\
+-	}								\
+-	__ret;								\
+-})
+-
+-#define arch_cmpxchg_release(ptr, o, n)					\
+-({									\
+-	__typeof__(*(ptr)) _o_ = (o);					\
+-	__typeof__(*(ptr)) _n_ = (n);					\
+-	(__typeof__(*(ptr))) __cmpxchg_release((ptr),			\
+-					_o_, _n_, sizeof(*(ptr)));	\
+-})
+-
+ #define __cmpxchg(ptr, old, new, size)					\
+ ({									\
+ 	__typeof__(ptr) __ptr = (ptr);					\
+-- 
+2.36.1
 

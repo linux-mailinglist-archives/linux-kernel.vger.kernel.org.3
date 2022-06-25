@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0113755A940
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 13:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71CF55A94A
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 13:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232572AbiFYLPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 07:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
+        id S232634AbiFYLRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 07:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbiFYLPG (ORCPT
+        with ESMTP id S232582AbiFYLR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 07:15:06 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E801E31396;
-        Sat, 25 Jun 2022 04:15:05 -0700 (PDT)
+        Sat, 25 Jun 2022 07:17:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1527431DDA;
+        Sat, 25 Jun 2022 04:17:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5972DCE09F9;
-        Sat, 25 Jun 2022 11:15:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 672ADC3411C;
-        Sat, 25 Jun 2022 11:15:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA908B80819;
+        Sat, 25 Jun 2022 11:17:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F47CC3411C;
+        Sat, 25 Jun 2022 11:17:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656155702;
-        bh=BwsbxnbNM5PkdhDastKNPu200JUqaXIgWWRTtFwzuWw=;
+        s=k20201202; t=1656155843;
+        bh=GF6if4jUJ+aAJLP7XEcfUSKNX9PxvOUmXSZ+E+xD8Hs=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VxeM7/t/m2Dkt3jRetXDo9gfqSh5vIs0Tu4somfmonxhmEIUJ6R5ztCOZpYcXFo72
-         3BLlewzQcOoGPTp4mfq7Yd9yPzckXkR2yfSAPs4TQFgHiSHIwdj8X2/kCYZgu33jFE
-         c+CxiYF25nfybPwVoRxc9JNbRHRrmVZAvBwov3pYKTf8Nr4hfWO5+/FZEPKcpberYB
-         2bUlsI38osBT3Z12MDixWFNCBkCo8+z6TDpgqdTR1jReWIDKV2+Oz/EMvUnaUOguQk
-         sSbenumiXt83hA8GLz1eeY0xTRz8hbh+nYqURs1gvINd6f0QFjbDXA5LNa1m5qFeNB
-         /YcWhxPqjInEQ==
-Date:   Sat, 25 Jun 2022 12:24:29 +0100
+        b=lczjRbs5+wi5/JjTDP2VbccjDnAMlU4wDQENHHvk/WJ7SIIg+rFRYpjy+93ff6DPh
+         QRUTIrqOkV6yKLW2mFgwoxwdeaSi3iklgSNcJL/tFtzW7fwndv6LmtMcl+T0/0VAxj
+         dMWVZX7wO8d4rXgLvBMMvh4UkT0gjdMgko+USK4iZrUmaNgTMbCbTst0eAE8jUyLph
+         9ASToC4GGdnarbanj3F6czR2nLSaJVQWu4q7I/D70k39QcST+vxiSsgVN2iYHHVHqt
+         me8If28e7lBLLn9MYsTe2f1M/rgqjO8CKvRGRiJOkgpM/My2ZjMiGGAlX2Gt+Hvp9J
+         Q7tzYhxQySxZg==
+Date:   Sat, 25 Jun 2022 12:26:50 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Marcus Folkesson <marcus.folkesson@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Kent Gustavsson <kent@minoris.se>,
+Cc:     Kent Gustavsson <kent@minoris.se>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 02/10] iio: adc: mcp3911: use resource-managed version
- of iio_device_register
-Message-ID: <20220625122429.14e98106@jic23-huawei>
-In-Reply-To: <YrVZwAqmE0QmibQY@gmail.com>
-References: <20220623170844.2189814-1-marcus.folkesson@gmail.com>
-        <20220623170844.2189814-2-marcus.folkesson@gmail.com>
-        <CAHp75VcYk9PjQ=3ZPB1f=uQ-1GYKnvV-wsu+-z1z81W_ZHCqrw@mail.gmail.com>
-        <YrVZwAqmE0QmibQY@gmail.com>
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 01/10] iio: adc: mcp3911: correct
+ "microchip,device-addr" property
+Message-ID: <20220625122650.099fbba1@jic23-huawei>
+In-Reply-To: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
+References: <20220625103853.2470346-1-marcus.folkesson@gmail.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -65,72 +60,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Jun 2022 08:29:20 +0200
+On Sat, 25 Jun 2022 12:38:44 +0200
 Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-> Thank you for your comments (all of them) Andy!
+> Go for the right property name that is documented in the bindings.
 > 
-> On Thu, Jun 23, 2022 at 09:01:59PM +0200, Andy Shevchenko wrote:
-> > On Thu, Jun 23, 2022 at 7:40 PM Marcus Folkesson
-> > <marcus.folkesson@gmail.com> wrote:  
-> > >
-> > > Keep using managed resources as much as possible.  
-> > 
-> > You may not mix devm_ and non-devm_ API calls like this.
-> > So, you rule of thumb that goto is most of the time wrong after devm_ call.  
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+
+Need a fixes tag so we know how far to back port this.
+
+> ---
 > 
-> Can you please confirm that clocks and regulators are disabled when the
-> resources are handed back?
-> I cannot see where when I'm trying to follow the code.
-Andy isn't arguing that the goto is wrong but rather that you cannot
-in general safely use devm_* calls if their failure leads to having to
-do any cleanup.  The reason is the ordering is hard to reason about. Sometimes
-it's safe, but often enough causes problems that we basically refuse to think
-hard enough to figure out if it is.  Hence basic rule is don't do it.
-
-The issue is this.
-probe() {
-
-	non_devm_call_1();
-	ret = devm_call_2()
-	if (ret)
-		goto err;
-
-	return 0;
-err:
-	unwind_non_devm_call_1()
-}
-
-remove() {
-	unwind_non_devm_call_1()
-}
-
-remove or error path should unwind in opposite order of what happens in probe.
-On the rare occasion where that isn't the right choice, there should be very
-clear comments to say why.
-
-Order is
-
-remove() -> unwind_non_devm_call_1()
-devm_managed_cleanup() -> unwind_devm_call_2()
-
-Whereas should be
-
-remove()-> unwind_call_2() then unwind_call_1()
-
-
-There are two ways to solve this.  Either only use devm for those
-elements in probe() that happen before the first thing you need to
-unwind manually or make everything devm managed (it unwinds in reverse
-order of setup) devm_add_action_or_reset() allows you to use your
-own devm_ managed callbacks if there isn't a standard one available.
-
-Jonathan
-
-
-
-
+> Notes:
+>     v2:
+>         - Fallback to "device-addr" due to compatibility (Andy Shevchenko)
 > 
-> Best regards
-> Marcus Folkesson
+>  drivers/iio/adc/mcp3911.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/adc/mcp3911.c b/drivers/iio/adc/mcp3911.c
+> index 1cb4590fe412..c5a0f19d7834 100644
+> --- a/drivers/iio/adc/mcp3911.c
+> +++ b/drivers/iio/adc/mcp3911.c
+> @@ -208,7 +208,13 @@ static int mcp3911_config(struct mcp3911 *adc)
+>  	u32 configreg;
+>  	int ret;
+>  
+> -	device_property_read_u32(dev, "device-addr", &adc->dev_addr);
+> +	ret = device_property_read_u32(dev, "microchip,device-addr", &adc->dev_addr);
+> +
+> +	/* Fallback to "device-addr" due to historical mismatch between
+Multiline comment syntax should be
+
+	/*
+	 * Fallabck to "...
+	 * dt-...
+`	 */
+
+> +	 * dt-bindings and implementation
+> +	 */
+> +	if (ret)
+> +		device_property_read_u32(dev, "device-addr", &adc->dev_addr);
+>  	if (adc->dev_addr > 3) {
+>  		dev_err(&adc->spi->dev,
+>  			"invalid device address (%i). Must be in range 0-3.\n",
 

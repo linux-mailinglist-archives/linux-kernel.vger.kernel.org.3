@@ -2,65 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE5355ACBD
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 23:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7737155ACC9
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 23:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbiFYV1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 17:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
+        id S233469AbiFYVix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 17:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233295AbiFYV1Q (ORCPT
+        with ESMTP id S230116AbiFYViw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 17:27:16 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF3213E02
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 14:27:15 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id b125so4451137qkg.11
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 14:27:15 -0700 (PDT)
+        Sat, 25 Jun 2022 17:38:52 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C6613DFB;
+        Sat, 25 Jun 2022 14:38:51 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id b5so2781756vkp.4;
+        Sat, 25 Jun 2022 14:38:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S8QPR7010o3+lSeTdoHVBPsXg7K50OfJRqwfALm+B8Y=;
-        b=EuwnwbchhSMoZBWIKc/x9m5O2fkTFhYTIHK0kIussP9tG64+1y9Y0/2Dppi5Fo9EdV
-         dmmp153kQiz+ZpNvC/LBYNdTA66I7BF5QTtRS2mI/pqKblP9W4DAgJPEMezWTJYOARSa
-         7XeABi9J7KgqlehGMrX6LFZsEn0uPJNx8iXoum5k0FB95lUqdNbs1TgSeKAb9G52NUSP
-         bEXy48i+uA1zupC2PHhnha1Z/dVjNJ9wUhuEaq2PWhpD8cDwc5kgK9e4fO8SLctnh+yN
-         U7xR70Xp/FlOtslyLMFNTvUNILDZw7+kbs+YYAdPeBH5Hr9tuiwtrYO0nLJ6ri/rhIMo
-         A5ZA==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=BbwHVtDC3wfcy6qW4/JHuwflwwFO4Gor8K2bRgHCz+8=;
+        b=S1MmapeV/AyncM6GanNSYWXsaV4c0+KCrMjMK+C2iOhSN9FT0RJEr3FRKge83XEyhu
+         a8qDLOSi3NV6SM3C7vLJKwJSlvXassSK5VDPy6/l+wB1l9Rk1GN3rdCYBdQPVQIX7vR4
+         9ra7p/UEs+0ivkazpQQa3eeJ0+yRVHmx33Kk7rmF5Hd5V8xANCVMGjntJ3Qa9WUdtvGj
+         VlV9i4E90if2tsQozbMB3kk+XD3l8d0NeUnCXnBI+Ttrw+n6oNjl9AS1LKF0UITWzeD8
+         wqvrbS32eihR5CDVXP3ufvalr4Vzz4z303vVdNkmib+J9qTql9k1xt0krkpmSg3feRDv
+         ZcQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=S8QPR7010o3+lSeTdoHVBPsXg7K50OfJRqwfALm+B8Y=;
-        b=rAuiVJpVeiDQ2JiMqMMw9Ux67Hm5TWQWSYJ8ClWj2PiR3x5m5xJyGF2gsfOhCtl3+H
-         gwf3YOZTg5TnbqcGAtIC1LE2qMKE9Bc/bvT4AIjrC75AYoRdVTQG/wFHZRFnp2P0tYUV
-         JAUqN02qwf+OCphMDIcs1/jd/CG3Axc2LKzBPy7ZO4H5+FLta84mBAFIoxPe6zSLl2sy
-         WIdXZ7Bkjjm2ivrUS9t67C+aWEoIepoWrqpoPVv4CQW1+94p4yEvuWHLwE3qQthbY8O1
-         v4eDuJN2cQcKlJOekGLREw8jtMInT06/HA9Rg6xugbphWbIphcvt1AX8K94wHaFV/vCk
-         FQUg==
-X-Gm-Message-State: AJIora+4oYGA0nqONan5xueMXCiukdDMnW/R7REYk3LTXG7j/pGdBL1C
-        kPxph6uUDgZ3sSy1EnHeuruc3s+9taO80w==
-X-Google-Smtp-Source: AGRyM1s4h1N3WWL57e5l+pcg+OjgEgNSB9UE+Z/gTHHHREPG/QUu8JCNL/rEMqQrEbQf4v2vzU9l4g==
-X-Received: by 2002:a05:620a:24c7:b0:6a7:2d03:2de3 with SMTP id m7-20020a05620a24c700b006a72d032de3mr3996238qkn.134.1656192434519;
-        Sat, 25 Jun 2022 14:27:14 -0700 (PDT)
-Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id m22-20020a05620a291600b006aef641865esm4834601qkp.128.2022.06.25.14.27.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 14:27:14 -0700 (PDT)
-From:   Peter Geis <pgwipeout@gmail.com>
-To:     Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Peter Geis <pgwipeout@gmail.com>, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] phy: rockchip-inno-usb2: Prevent incorrect error on probe
-Date:   Sat, 25 Jun 2022 17:27:11 -0400
-Message-Id: <20220625212711.558495-1-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=BbwHVtDC3wfcy6qW4/JHuwflwwFO4Gor8K2bRgHCz+8=;
+        b=y7dOvikfkKny4cT8/X8UwpcTqJB78lY7zUu4ufm2kcSLTOerM/wQ1RWLsrc8NDAHlB
+         QO6LeLnDWR/l4+EjTjIeco3IjzfLqUPTBfFYQ550A3PICGBWgaazyMZmvpoFnn6xqPBN
+         I3T1Y6q53B+51iOpTqEPRlxUDIZuMpZATLzNl6ECAT/KFrHBid4bS993R+xcN5vw+8LB
+         SnvGrN/NiMbGt3AS2bxFQo/HlbVfptFZR8XAvrQVspblxry22BHUCCCOykQj0Lg6usqC
+         0urukCz5OtwsQvS7TAX+dIknfJyJQWqjNQBtUvjTfO0Yx6sDivwVLra3DOutvSJFVL0z
+         ZGRg==
+X-Gm-Message-State: AJIora8P/NyVsrGwipMWJFID4ugeiuNYUxI/wZ1FcIqtI6Qc+QKwcXRZ
+        y3p7A702ejZjnT0ChrWJYHZAiMUuDUhWJhXYwvOF8mdTtrg=
+X-Google-Smtp-Source: AGRyM1sMucNe20GAaizEts0fYD+M0OX29pCgrJnJIuZ9Z6eQVW8kfJG/4Sh2mibm9kA1xHjw7+cJDK8jKatyDxP4noE=
+X-Received: by 2002:a1f:45d2:0:b0:36b:fa17:d542 with SMTP id
+ s201-20020a1f45d2000000b0036bfa17d542mr2093543vka.4.1656193130687; Sat, 25
+ Jun 2022 14:38:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 25 Jun 2022 16:38:40 -0500
+Message-ID: <CAH2r5muuxg3iDXMkcasnRoCfi8WeE1i3Y=GTgBB8qMQShFppdQ@mail.gmail.com>
+Subject: [GIT PULL] SMB3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,28 +62,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a phy supply is designated but isn't available at probe time, an
-EPROBE_DEFER is returned. Use dev_err_probe to prevent this from
-incorrectly printing during boot.
+Please pull the following changes since commit
+a111daf0c53ae91e71fd2bfe7497862d14132e3e:
 
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
----
- drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
 
-diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-index 6e44069617df..706a2263b0b2 100644
---- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-+++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-@@ -1289,7 +1289,7 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
- 
- 		phy = devm_phy_create(dev, child_np, &rockchip_usb2phy_ops);
- 		if (IS_ERR(phy)) {
--			dev_err(dev, "failed to create phy\n");
-+			dev_err_probe(dev, PTR_ERR(phy), "failed to create phy\n");
- 			ret = PTR_ERR(phy);
- 			goto put_child;
- 		}
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.19-rc3-smb3-client-fixes
+
+for you to fetch changes up to af3a6d1018f02c6dc8388f1f3785a559c7ab5961:
+
+  cifs: update cifs_ses::ip_addr after failover (2022-06-24 13:34:28 -0500)
+
+----------------------------------------------------------------
+7 SMB3 fixes, addressing important multichannel, reconnect issues.
+Multichannel mounts when the server network interfaces changed, or
+ip addresses changed, uncovered problems, especially in reconnect, but
+the patches for this were held up until recently due to some lock conflicts
+that are now addressed.   Included in this set of fixes:
+
+- 3 fixes relating to multichannel reconnect, dynamically adjusting the list of
+server interfaces to avoid problems during reconnect
+- a lock conflict fix related to the above
+- 2 important fixes for negotiate on secondary channels (null netname can
+unintentionally cause multichannel to be disabled to some servers)
+- a reconnect fix (reporting incorrect IP address in some cases)
+
+----------------------------------------------------------------
+Paulo Alcantara (1):
+      cifs: update cifs_ses::ip_addr after failover
+
+Shyam Prasad N (5):
+      smb3: use netname when available on secondary channels
+      cifs: change iface_list from array to sorted linked list
+      cifs: during reconnect, update interface if necessary
+      cifs: periodically query network interfaces from server
+      cifs: avoid deadlocks while updating iface
+
+Steve French (1):
+      smb3: fix empty netname context on secondary channels
+
+ fs/cifs/cifs_debug.c |  12 ++--
+ fs/cifs/cifsglob.h   |  58 ++++++++++++++++-
+ fs/cifs/cifsproto.h  |   7 +++
+ fs/cifs/connect.c    |  59 ++++++++++++++++--
+ fs/cifs/misc.c       |   9 ++-
+ fs/cifs/sess.c       | 166 +++++++++++++++++++++++++++++++++++++-----------
+ fs/cifs/smb2ops.c    | 173 +++++++++++++++++++++++++++------------------------
+ fs/cifs/smb2pdu.c    |  21 +++++--
+ 8 files changed, 366 insertions(+), 139 deletions(-)
+
 -- 
-2.25.1
+Thanks,
 
+Steve

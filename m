@@ -2,132 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993E855A936
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 13:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6CE55A947
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 13:19:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbiFYLFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 07:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
+        id S232575AbiFYLRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 07:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232745AbiFYLFh (ORCPT
+        with ESMTP id S232490AbiFYLRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 07:05:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEF433E10;
-        Sat, 25 Jun 2022 04:05:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96A0AB80818;
-        Sat, 25 Jun 2022 11:05:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73ED9C3411C;
-        Sat, 25 Jun 2022 11:05:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656155134;
-        bh=Nuw7iA5FbucHB8v39wnH93gwIuOj7VzTuulMPNJqA5o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GcSQpLPQ4oGSvFUme/HNaaSM6PxUuxczPISdCPhdNIjRdfZp0Q+hSlC7NE0JGTZ1x
-         KoasdYfUMv/1j15hr1r8FbtVURGZUw9+PwVU1iwxxQmbcUdyUajfRBS//gZe2Vpl4i
-         qvIfLg75CVtp2gzu9EWk6JYjcjcSOmcA2+56OjQ46ntSH+Nkhn6gfuYUnjWRewuA0V
-         o3gOE1GZ1gCrVb8aemjlMGwBWbj2Gibz+KTu3Md3qGptUdVzXAnVflCL6RqvD6uIxP
-         QwmeGhSwbrfBNIUimapylSOBXwMRoiqubJ+VSzjxKuxCUk26GROmnWVf3C4IDDiQGE
-         xSLOU4/wdiQZQ==
-Date:   Sat, 25 Jun 2022 12:15:00 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Kory Maincent <kory.maincent@bootlin.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, Lars-Peter Clausen <lars@metafoo.de>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH 1/2] iio: dac: mcp4922: add support to mcp4921
-Message-ID: <20220625121500.4dc35578@jic23-huawei>
-In-Reply-To: <20220624095619.1415614-1-kory.maincent@bootlin.com>
-References: <20220624095619.1415614-1-kory.maincent@bootlin.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 25 Jun 2022 07:17:25 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CCD31DDD
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 04:17:23 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-31772f8495fso46344557b3.4
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 04:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uiCn1wFahqAtSkOl35HmuzXqqUxjUEsg3PyPjnfHW9E=;
+        b=3iCOnxC63zzWpEYXppJeaYfZNRtna889N688tU51Fz05zWDXd5qsW086aNb9+MwdJv
+         O9EyqixJTnJa8+XS33NPHFlTPra87Yh3ffe2oDLnQiJLBi2R3Vd38kWvw9iGVRTv92+3
+         LCEa3bFWRvLtfE/G8Hwknjj9IHh3hswmvsfFnbDG296N5regN/oIcPmqNRjlFXUARSIe
+         kj9Q7PaPTaG5bVoYZbf8DHg0J/oRGOwIXWfNGVQmoFx98yuwo48VgRe3N2GRGx4KedLq
+         ZcsbEmXYQaQF4cRtK7tpUvGlk1uXjKwda6GoKRmyLyoHRGI0fHKUsy2xipFdKbzqWmfa
+         /QrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uiCn1wFahqAtSkOl35HmuzXqqUxjUEsg3PyPjnfHW9E=;
+        b=7Zz8Firftd+bQ3wPKvnPiH5T+WldFA29KwBeDqf6ga0PHyuWjBXfLFn9ur4C188U/n
+         NjpZSp7vbEuO4hze0u4KEnT+G615axGSoG8YIt8VujXLjTnx+ZARNRY7SYofidkFpbvE
+         mHqkO4v4bdZcXyxDfGdpMce4CV6T9nfAqS/G8bgHZKDmU0SfSzEZwYoV7BaBlR8XCc4H
+         jRRZ8MgT4TPgMXBFcU8o5ttvJLlJ8iKrEbDsjhWLX7chZWgIJ7Liat45WgLWb5swQqZn
+         QCY4a7YnVbGhyw3cV50q6DsZSVijovhMxqLhTzzvMha7R/R2FN7pVDLmGnGiar2p/RF1
+         aOEQ==
+X-Gm-Message-State: AJIora82FUvxMYLs8xz+bmCKjqrzg3DCMDoIx5NULXvXrlWBx5dnyn8S
+        TU6tQimSXrDGnL4jwy4LGnOsKN3p6EIs6y24uyX2KQ==
+X-Google-Smtp-Source: AGRyM1uoUJNV+pWkUKZPyqoYjVU92W2AXcs0+oJA8ZTI80Wfq+v4vJ2sRUr54xc0spYE3wbFPeNslZTmLW60JMAY1vM=
+X-Received: by 2002:a81:830b:0:b0:317:b41e:9e49 with SMTP id
+ t11-20020a81830b000000b00317b41e9e49mr3977250ywf.458.1656155843079; Sat, 25
+ Jun 2022 04:17:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220625080423.2797-1-chenfeiyang@loongson.cn>
+ <CAMZfGtWT7oPq6bD_fRn2gVNX8Lj3=ev21EAoaCCPeq-P_NYF0g@mail.gmail.com> <CAAhV-H5K9LG5P6WYJ+64-fi+s=TZbbJQG9E0vHJwOf9Pai5z4w@mail.gmail.com>
+In-Reply-To: <CAAhV-H5K9LG5P6WYJ+64-fi+s=TZbbJQG9E0vHJwOf9Pai5z4w@mail.gmail.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Sat, 25 Jun 2022 19:16:46 +0800
+Message-ID: <CAMZfGtVq0VwMETGdzAXLkjes8W0gVBw=r0Xk5rpPnhe7x6tRiw@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH] page-flags.h: Fix a missing header include
+ of static_keys.h
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Feiyang Chen <chris.chenfeiyang@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux- stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Jun 2022 11:56:17 +0200
-Kory Maincent <kory.maincent@bootlin.com> wrote:
+On Sat, Jun 25, 2022 at 5:04 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+>
+> Hi, Muchun,
+>
+> On Sat, Jun 25, 2022 at 4:50 PM Muchun Song <songmuchun@bytedance.com> wrote:
+> >
+> > On Sat, Jun 25, 2022 at 4:04 PM Feiyang Chen
+> > <chris.chenfeiyang@gmail.com> wrote:
+> > >
+> > > The page-flags.h header relies on static keys since commit
+> > > a6b40850c442bf ("mm: hugetlb: replace hugetlb_free_vmemmap_enabled
+> > > with a static_key"), so make sure to include the header to avoid
+> > > compilation errors.
+> > >
+> > > Fixes: a6b40850c442bf ("mm: hugetlb: replace hugetlb_free_vmemmap_enabled with a static_key")
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> > > ---
+> > >  include/linux/page-flags.h | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> > > index e66f7aa3191d..147b336c7a35 100644
+> > > --- a/include/linux/page-flags.h
+> > > +++ b/include/linux/page-flags.h
+> > > @@ -11,6 +11,7 @@
+> > >  #include <linux/mmdebug.h>
+> > >  #ifndef __GENERATING_BOUNDS_H
+> > >  #include <linux/mm_types.h>
+> > > +#include <linux/static_key.h>
+> >
+> > I did not include this. The change makes sense to me. But I am
+> > curious what configs cause the compiling error. Would you mind
+> > sharing the config with us?
+> We found this problem when we add
+> ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to LoongArch. Since this isn't
 
-> Add support to mcp4921 which has only one output channel.
-> 
-> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Good news to me. I would love to hear more archs support for HVO (HugeTLB
+Vmemmap Optimization).
 
-Obviously not been on the list long, but as it 'seems' totally trivial
-and has already gottten some review I'll queue it up now anyway.
+> upstream yet, we cannot give such a config now (the default config of
+> X86 and ARM64 is just OK).
 
-Series applied to the togreg branch of iio.git.
+All right. In this case, the "Cc: stable@vger.kernel.org" is unnecessary.
 
-Thanks,
-
-Jonathan
-
-> ---
->  drivers/iio/dac/mcp4922.c | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/iio/dac/mcp4922.c b/drivers/iio/dac/mcp4922.c
-> index cb9e60e71b91..0d41c0f25515 100644
-> --- a/drivers/iio/dac/mcp4922.c
-> +++ b/drivers/iio/dac/mcp4922.c
-> @@ -17,10 +17,12 @@
->  #include <linux/bitops.h>
->  
->  #define MCP4922_NUM_CHANNELS	2
-> +#define MCP4921_NUM_CHANNELS	1
->  
->  enum mcp4922_supported_device_ids {
->  	ID_MCP4902,
->  	ID_MCP4912,
-> +	ID_MCP4921,
->  	ID_MCP4922,
->  };
->  
-> @@ -105,9 +107,10 @@ static int mcp4922_write_raw(struct iio_dev *indio_dev,
->  	}
->  }
->  
-> -static const struct iio_chan_spec mcp4922_channels[3][MCP4922_NUM_CHANNELS] = {
-> +static const struct iio_chan_spec mcp4922_channels[4][MCP4922_NUM_CHANNELS] = {
->  	[ID_MCP4902] = { MCP4922_CHAN(0, 8),	MCP4922_CHAN(1, 8) },
->  	[ID_MCP4912] = { MCP4922_CHAN(0, 10),	MCP4922_CHAN(1, 10) },
-> +	[ID_MCP4921] = { MCP4922_CHAN(0, 12),	{} },
->  	[ID_MCP4922] = { MCP4922_CHAN(0, 12),	MCP4922_CHAN(1, 12) },
->  };
->  
-> @@ -154,7 +157,10 @@ static int mcp4922_probe(struct spi_device *spi)
->  	indio_dev->info = &mcp4922_info;
->  	indio_dev->modes = INDIO_DIRECT_MODE;
->  	indio_dev->channels = mcp4922_channels[id->driver_data];
-> -	indio_dev->num_channels = MCP4922_NUM_CHANNELS;
-> +	if (id->driver_data == ID_MCP4921)
-> +		indio_dev->num_channels = MCP4921_NUM_CHANNELS;
-> +	else
-> +		indio_dev->num_channels = MCP4922_NUM_CHANNELS;
->  	indio_dev->name = id->name;
->  
->  	ret = iio_device_register(indio_dev);
-> @@ -185,6 +191,7 @@ static void mcp4922_remove(struct spi_device *spi)
->  static const struct spi_device_id mcp4922_id[] = {
->  	{"mcp4902", ID_MCP4902},
->  	{"mcp4912", ID_MCP4912},
-> +	{"mcp4921", ID_MCP4921},
->  	{"mcp4922", ID_MCP4922},
->  	{}
->  };
-
+Thanks.
+>
+> Huacai
+> >
+> > Thanks.
+> >
+> > >  #include <generated/bounds.h>
+> > >  #endif /* !__GENERATING_BOUNDS_H */
+> > >
+> > > --
+> > > 2.27.0
+> > >
+> >

@@ -2,45 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0EB55A943
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 13:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0113755A940
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 13:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbiFYLHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 07:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
+        id S232572AbiFYLPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 07:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232801AbiFYLHl (ORCPT
+        with ESMTP id S232141AbiFYLPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 07:07:41 -0400
+        Sat, 25 Jun 2022 07:15:06 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDFA344C4;
-        Sat, 25 Jun 2022 04:07:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E801E31396;
+        Sat, 25 Jun 2022 04:15:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 15BEACE0B02;
-        Sat, 25 Jun 2022 11:07:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43DD1C341C7;
-        Sat, 25 Jun 2022 11:07:35 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5972DCE09F9;
+        Sat, 25 Jun 2022 11:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 672ADC3411C;
+        Sat, 25 Jun 2022 11:15:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656155256;
-        bh=rr4kKRfEEwrsfzQYp1zAY1a97o4UrXD52+rh79sxy/o=;
+        s=k20201202; t=1656155702;
+        bh=BwsbxnbNM5PkdhDastKNPu200JUqaXIgWWRTtFwzuWw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vGXAky8ojeOmMZQ/stXpW4Xg6oYsma4FrVAqJMojT6PjSTyL3LkVw86MqnCJ1qvqj
-         qdsqKllbwFP7UsciSXp0f8jtdlmnnIdbcUt1xKtZldlsO42ePQuzM+PCHiG11mV3Vy
-         A4QfwySQoa46pQtxtiQXSIdni+hwbgeHUkBYoKhRvOn5Gw3FqfIQ56IWHVQoB6xFcQ
-         Hs9Bzaj9V3JM7tlAesUvInXkIkXjvt34CPhbpuxrs/k88VmT/4kKIVl483HRaMl5Q/
-         c+hJRPg7NzPm0uhfkBHnndQJvfOCkBcn6eBGPyA1LBbpKqDI5ET05IMY1kTEc1g84Q
-         eJc1cfbQuOTew==
-Date:   Sat, 25 Jun 2022 12:17:05 +0100
+        b=VxeM7/t/m2Dkt3jRetXDo9gfqSh5vIs0Tu4somfmonxhmEIUJ6R5ztCOZpYcXFo72
+         3BLlewzQcOoGPTp4mfq7Yd9yPzckXkR2yfSAPs4TQFgHiSHIwdj8X2/kCYZgu33jFE
+         c+CxiYF25nfybPwVoRxc9JNbRHRrmVZAvBwov3pYKTf8Nr4hfWO5+/FZEPKcpberYB
+         2bUlsI38osBT3Z12MDixWFNCBkCo8+z6TDpgqdTR1jReWIDKV2+Oz/EMvUnaUOguQk
+         sSbenumiXt83hA8GLz1eeY0xTRz8hbh+nYqURs1gvINd6f0QFjbDXA5LNa1m5qFeNB
+         /YcWhxPqjInEQ==
+Date:   Sat, 25 Jun 2022 12:24:29 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Joe Simmons-Talbott <joetalbott@gmail.com>
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: Don't use bare "unsigned"
-Message-ID: <20220625121705.42063d6a@jic23-huawei>
-In-Reply-To: <20220624021806.1010962-1-joetalbott@gmail.com>
-References: <20220624021806.1010962-1-joetalbott@gmail.com>
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Kent Gustavsson <kent@minoris.se>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 02/10] iio: adc: mcp3911: use resource-managed version
+ of iio_device_register
+Message-ID: <20220625122429.14e98106@jic23-huawei>
+In-Reply-To: <YrVZwAqmE0QmibQY@gmail.com>
+References: <20220623170844.2189814-1-marcus.folkesson@gmail.com>
+        <20220623170844.2189814-2-marcus.folkesson@gmail.com>
+        <CAHp75VcYk9PjQ=3ZPB1f=uQ-1GYKnvV-wsu+-z1z81W_ZHCqrw@mail.gmail.com>
+        <YrVZwAqmE0QmibQY@gmail.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -55,110 +65,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Jun 2022 22:18:06 -0400
-Joe Simmons-Talbott <joetalbott@gmail.com> wrote:
+On Fri, 24 Jun 2022 08:29:20 +0200
+Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
 
-> Use "unsigned int" rather than bare "unsigned". Reported by checkpatch.pl.
+> Thank you for your comments (all of them) Andy!
 > 
-> Signed-off-by: Joe Simmons-Talbott <joetalbott@gmail.com>
+> On Thu, Jun 23, 2022 at 09:01:59PM +0200, Andy Shevchenko wrote:
+> > On Thu, Jun 23, 2022 at 7:40 PM Marcus Folkesson
+> > <marcus.folkesson@gmail.com> wrote:  
+> > >
+> > > Keep using managed resources as much as possible.  
+> > 
+> > You may not mix devm_ and non-devm_ API calls like this.
+> > So, you rule of thumb that goto is most of the time wrong after devm_ call.  
+> 
+> Can you please confirm that clocks and regulators are disabled when the
+> resources are handed back?
+> I cannot see where when I'm trying to follow the code.
+Andy isn't arguing that the goto is wrong but rather that you cannot
+in general safely use devm_* calls if their failure leads to having to
+do any cleanup.  The reason is the ordering is hard to reason about. Sometimes
+it's safe, but often enough causes problems that we basically refuse to think
+hard enough to figure out if it is.  Hence basic rule is don't do it.
 
-I've always wondered when someone would get around to tidying this up.
-Never seemed worth the effort to do it myself :)
+The issue is this.
+probe() {
 
-Anyhow, thanks.  Applied to the togreg branch of iio.git.
+	non_devm_call_1();
+	ret = devm_call_2()
+	if (ret)
+		goto err;
 
-Thanks,
+	return 0;
+err:
+	unwind_non_devm_call_1()
+}
+
+remove() {
+	unwind_non_devm_call_1()
+}
+
+remove or error path should unwind in opposite order of what happens in probe.
+On the rare occasion where that isn't the right choice, there should be very
+clear comments to say why.
+
+Order is
+
+remove() -> unwind_non_devm_call_1()
+devm_managed_cleanup() -> unwind_devm_call_2()
+
+Whereas should be
+
+remove()-> unwind_call_2() then unwind_call_1()
+
+
+There are two ways to solve this.  Either only use devm for those
+elements in probe() that happen before the first thing you need to
+unwind manually or make everything devm managed (it unwinds in reverse
+order of setup) devm_add_action_or_reset() allows you to use your
+own devm_ managed callbacks if there isn't a standard one available.
 
 Jonathan
 
-> ---
->  drivers/iio/industrialio-buffer.c     | 10 +++++-----
->  drivers/iio/industrialio-core.c       |  4 ++--
->  drivers/iio/industrialio-sw-device.c  |  2 +-
->  drivers/iio/industrialio-sw-trigger.c |  2 +-
->  4 files changed, 9 insertions(+), 9 deletions(-)
+
+
+
 > 
-> diff --git a/drivers/iio/industrialio-buffer.c b/drivers/iio/industrialio-buffer.c
-> index b078eb2f3c9d..513a34a0b593 100644
-> --- a/drivers/iio/industrialio-buffer.c
-> +++ b/drivers/iio/industrialio-buffer.c
-> @@ -705,7 +705,7 @@ static unsigned int iio_storage_bytes_for_timestamp(struct iio_dev *indio_dev)
->  static int iio_compute_scan_bytes(struct iio_dev *indio_dev,
->  				const unsigned long *mask, bool timestamp)
->  {
-> -	unsigned bytes = 0;
-> +	unsigned int bytes = 0;
->  	int length, i, largest = 0;
->  
->  	/* How much space will the demuxed element take? */
-> @@ -934,9 +934,9 @@ static int iio_verify_update(struct iio_dev *indio_dev,
->   * @l:		list head used for management
->   */
->  struct iio_demux_table {
-> -	unsigned from;
-> -	unsigned to;
-> -	unsigned length;
-> +	unsigned int from;
-> +	unsigned int to;
-> +	unsigned int length;
->  	struct list_head l;
->  };
->  
-> @@ -974,7 +974,7 @@ static int iio_buffer_update_demux(struct iio_dev *indio_dev,
->  				   struct iio_buffer *buffer)
->  {
->  	int ret, in_ind = -1, out_ind, length;
-> -	unsigned in_loc = 0, out_loc = 0;
-> +	unsigned int in_loc = 0, out_loc = 0;
->  	struct iio_demux_table *p = NULL;
->  
->  	/* Clear out any old demux */
-> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
-> index e1ed44dec2ab..ca28f76b8f40 100644
-> --- a/drivers/iio/industrialio-core.c
-> +++ b/drivers/iio/industrialio-core.c
-> @@ -384,7 +384,7 @@ static ssize_t iio_debugfs_read_reg(struct file *file, char __user *userbuf,
->  {
->  	struct iio_dev *indio_dev = file->private_data;
->  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
-> -	unsigned val = 0;
-> +	unsigned int val = 0;
->  	int ret;
->  
->  	if (*ppos > 0)
-> @@ -414,7 +414,7 @@ static ssize_t iio_debugfs_write_reg(struct file *file,
->  {
->  	struct iio_dev *indio_dev = file->private_data;
->  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
-> -	unsigned reg, val;
-> +	unsigned int reg, val;
->  	char buf[80];
->  	int ret;
->  
-> diff --git a/drivers/iio/industrialio-sw-device.c b/drivers/iio/industrialio-sw-device.c
-> index 49f775f16ad5..cdaf30a3f233 100644
-> --- a/drivers/iio/industrialio-sw-device.c
-> +++ b/drivers/iio/industrialio-sw-device.c
-> @@ -27,7 +27,7 @@ static DEFINE_MUTEX(iio_device_types_lock);
->  
->  static
->  struct iio_sw_device_type *__iio_find_sw_device_type(const char *name,
-> -						     unsigned len)
-> +						     unsigned int len)
->  {
->  	struct iio_sw_device_type *d = NULL, *iter;
->  
-> diff --git a/drivers/iio/industrialio-sw-trigger.c b/drivers/iio/industrialio-sw-trigger.c
-> index 9ae793a70b8b..994f03a71520 100644
-> --- a/drivers/iio/industrialio-sw-trigger.c
-> +++ b/drivers/iio/industrialio-sw-trigger.c
-> @@ -27,7 +27,7 @@ static DEFINE_MUTEX(iio_trigger_types_lock);
->  
->  static
->  struct iio_sw_trigger_type *__iio_find_sw_trigger_type(const char *name,
-> -						       unsigned len)
-> +						       unsigned int len)
->  {
->  	struct iio_sw_trigger_type *t = NULL, *iter;
->  
+> Best regards
+> Marcus Folkesson
 

@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D18155A6D9
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 06:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D13755A713
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 06:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbiFYEUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 00:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
+        id S229633AbiFYEck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 00:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiFYEUo (ORCPT
+        with ESMTP id S229520AbiFYEci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 00:20:44 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF6653A73;
-        Fri, 24 Jun 2022 21:20:36 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id k10so3246570qke.9;
-        Fri, 24 Jun 2022 21:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=09kC7FfVcnhB78+kO9zvMGD0GWsTE99dXTGFN0iLY20=;
-        b=lywM/YVuz2jiVdYhpE1DqEg7TT9H9+k1wZz9fS2lHRyGm3YUVbPQJjGT+t2fy4104y
-         NCqeFYz2ODM1tIEnpXnd9f3DF0Ml89IVYPA86PVi7A84TMgKYiDUBp/IulGgETO7JhIU
-         FOz/x8e5SZL4I1d7H9TvmGzoXl6zyXeHlF9ZmD7z0/6o9p5n/PeRYUZifTNz+dXB0x4r
-         43ATRPnwIJ6L4ET+59ROCF1/f8DHmnXAzaDnSMQhGYZOdS1b7OjX4SUaoO0x1V3dGMd0
-         D6/0/vaHCV3s0hvFjiYaqJknoaAY/XcQ0c/RWU3v8nyDjHm+jhBUvzMAeBYopx18bff0
-         yQ2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=09kC7FfVcnhB78+kO9zvMGD0GWsTE99dXTGFN0iLY20=;
-        b=MVmP7Dz687jecpbfo5TXudMQkGhPzGMt6/hruUNW6w+D47TNUERm2f1QPL44shANdT
-         3xXySOVMjIh3s+IJyFxP8i0oPK7GKp6peC2ZDt+KBLa/MW2cFoFIzs7bWKaNa18NaDVs
-         s4r19MRHp2mUiqFdkRkcAH9Yj+WmYG3Ble3EJvejV3vkDi5EC0SYxMZYCDnXDPmq1vFd
-         pBj9UkAIAFMmt1YeTUjdUSy2cNbFkMqOQ1xmhDev8tc6HAbSl/mXeTEg8cvR3R/uT6lu
-         87MrX021KHzfC/PeGa86K5oUtI/i6KDylnz4hpBfx2suuCUQoduXONK9FVH18IcdbL2L
-         Otdg==
-X-Gm-Message-State: AJIora8GBwYwdszUtNUyijeKh20opBelISQuTo+L0u0ikn+bMNxtKbHU
-        TsUC6Np+CRJF/ZWRzRUCA28=
-X-Google-Smtp-Source: AGRyM1uBauqAoinXn9LHijwesf0dZzH3cK/q9s7IxtilZhpP2KhdwMrSdnV+uIUC3EOR+953gPCzlw==
-X-Received: by 2002:a05:620a:28ca:b0:6a7:c27:eab2 with SMTP id l10-20020a05620a28ca00b006a70c27eab2mr1771143qkp.431.1656130835859;
-        Fri, 24 Jun 2022 21:20:35 -0700 (PDT)
-Received: from localhost ([2600:380:5224:f7e5:15cd:bf15:6146:ee5c])
-        by smtp.gmail.com with ESMTPSA id s24-20020ac85ed8000000b00317c519be8bsm2610592qtx.66.2022.06.24.21.20.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 21:20:35 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sat, 25 Jun 2022 13:20:30 +0900
-From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [RFC PATCH] cpuset: Allow setscheduler regardless of manipulated
- task
-Message-ID: <YraNDoxU9IZaP3RV@mtj.duckdns.org>
-References: <20220623124944.2753-1-mkoutny@suse.com>
+        Sat, 25 Jun 2022 00:32:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D07F4DF69;
+        Fri, 24 Jun 2022 21:32:37 -0700 (PDT)
+Received: from [192.168.10.5] (unknown [39.45.253.181])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BCCAD6601811;
+        Sat, 25 Jun 2022 05:32:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656131555;
+        bh=0bJ0WTsjXAzIthDQKAnCzdLh+ZGj1p0umyUumYFMZEE=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=lLREcU27lpNxQCD0L3lvQm5jvlyMV1piiJWi5JHI3iL46Sym5LzL6NDnapC3KqVFl
+         1vAGNq7OdNf6IQ6G2qfpzCPJkv29NZo54kJR245DR6HSJR35Ri38l5lbo9jpIi3Iyk
+         mWqt5OCVWur62RsTtAY+d+cZRhClFKOU6qBI+MbUOak9VYYmUEg662woyHPwRJovag
+         ag0Rjwb065JlPSiyR6EfqdWc3LhmzvREYSUn0e4vus3IWIS0reknCHp6bjWDzQjND5
+         syQ9Hu5DDUScB9NzU1aM5EULlzciXhIHMA6nTtIxxucQ6Jo4Ze2FTLeCtRbiKLumGn
+         V8S59VPM9AKTQ==
+Message-ID: <272c88a5-95ec-de7f-7069-09921d2518d3@collabora.com>
+Date:   Sat, 25 Jun 2022 09:32:29 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220623124944.2753-1-mkoutny@suse.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Cc:     usama.anjum@collabora.com, kernel@collabora.com,
+        bagasdotme@gmail.com, linux-kselftest@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v2] docs/kselftest: add more guidelines for adding new
+ tests
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>
+References: <20220521073651.4191910-1-usama.anjum@collabora.com>
+ <e01f90a0-a3c7-c5fd-ae1f-197c6fec525e@collabora.com>
+ <63fc263d-c06a-2974-298c-5da80322411a@linuxfoundation.org>
+ <0e8ea624-3cf0-7c63-9b24-8c4109096d3d@collabora.com>
+ <87letl3kqx.fsf@meer.lwn.net>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <87letl3kqx.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,38 +65,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-On Thu, Jun 23, 2022 at 02:49:44PM +0200, Michal Koutný wrote:
-> 1) The unified hierarchy attachment behavior -- is that the
->    right/consented model that migrated objects don't matter?
 
-Yes.
-
-> 2) If 1) is true, have I missed any danger in allowing cpuset'ing a
->    possibly privileged processes?
-
-Given that the someone who has write perm on the cgroup or its
-ancestors are allowed to change cpuset config itself, I have a hard
-time imagining that check being all that useful as a security
-mechanism.
-
-> 2.2) cpuset may be in v2 mode even on v1 hierarchy with different
->    migration control rules (but checking migratee's creds in v1
->    eliminates effect of this patch).
-
-Yeah, it should be fine to apply the change only to v2.
-
-> 3) Alternative approach would be to allow cpuset migrations only when
->    nothing effectively changes (which is the case for parent->child
->    migration upon controller enablement).
+On 6/25/22 12:49 AM, Jonathan Corbet wrote:
+> Muhammad Usama Anjum <usama.anjum@collabora.com> writes:
 > 
-> 4) This is just idea draft, not tested in the real case.
+>> On 6/8/22 2:41 AM, Shuah Khan wrote:
+>>>
+>>> The change looks good to me. I am catching up on patch backlog after the
+>>> merge window and vacation. I can take this through kselftest or if it
+>>> goes through doc tree - here is my
+>>>
+>>> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+>>>
+>> This patch hasn't been accepted yet.
+> 
+> I've applied it now, thanks.
+Thanks,
 
-Unless I'm missing something obvious, I don't see a reason to keep the
-check, so please feel free to test and send a SOB'd patch.
-
-Thanks.
+> 
+> jon
 
 -- 
-tejun
+Muhammad Usama Anjum

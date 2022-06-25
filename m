@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51A155A77F
-	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 08:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2964955A780
+	for <lists+linux-kernel@lfdr.de>; Sat, 25 Jun 2022 08:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbiFYGeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 02:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S231970AbiFYGdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 02:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiFYGeT (ORCPT
+        with ESMTP id S229529AbiFYGdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 02:34:19 -0400
-Received: from smtpbg.qq.com (smtpbg136.qq.com [106.55.201.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605874AE17;
-        Fri, 24 Jun 2022 23:34:13 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1656138771t2lklo41
-Received: from localhost.localdomain ( [125.70.163.206])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 25 Jun 2022 14:32:46 +0800 (CST)
-X-QQ-SSF: 0100000000200060C000B00A0000000
-X-QQ-FEAT: 1al0Ay5k4U33JnV8rDMg3BQWJQWbjLIB8QGOwWLbU8NxsKzwo+DU+81Bh00Z7
-        4D2RLZMt8/HCc+ofeYwuYGOE9MwGCsqKBAwOlfoEaZ2dYvUrPytFPnHZ+RwNObeEcK2xEgj
-        OdowCqUh8WugBM3fjuHlyMkYVQcXf3AmbR1GrseHsLGbZodl96NjSLvXqSZh3SptwUCQa7i
-        PVu1EZb1OhzuBCUoMEU59g0p2Vd88qEsedGIzn7zMhk4wiawhmmxWCQuBjSGK8yJFs5MD9T
-        bYYqSBXEj3aOHfaNBgIkIWSIxruemGjTQVeClkSjo0lRO5CVkQ5nxd1JsL0/ub4UU0f+NTd
-        kxwxLdpVDbFXqH26hk=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] sfc:falcon: fix repeated words in comments
-Date:   Sat, 25 Jun 2022 14:32:40 +0800
-Message-Id: <20220625063240.55133-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Sat, 25 Jun 2022 02:33:19 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC7963BC
+        for <linux-kernel@vger.kernel.org>; Fri, 24 Jun 2022 23:33:18 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LVPJR5kDgzhXZ5;
+        Sat, 25 Jun 2022 14:31:03 +0800 (CST)
+Received: from kwepemm600012.china.huawei.com (7.193.23.74) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 25 Jun 2022 14:33:14 +0800
+Received: from [10.67.109.57] (10.67.109.57) by kwepemm600012.china.huawei.com
+ (7.193.23.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 25 Jun
+ 2022 14:33:14 +0800
+To:     <srikar@linux.vnet.ibm.com>
+CC:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        "open list:SCHEDULER" <linux-kernel@vger.kernel.org>
+From:   "guanjing (D)" <guanjing6@huawei.com>
+Subject: Fwd: Question about how to fix numabalancing to work with isolated
+ cpus?
+Message-ID: <ccd220cd-fbca-ad8a-c290-e812c4850e2f@huawei.com>
+Date:   Sat, 25 Jun 2022 14:33:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.109.57]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600012.china.huawei.com (7.193.23.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,26 +55,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'in'.
+Hi,
+     I notice a problem that you guys discussed in the link below:
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/net/ethernet/sfc/falcon/bitfield.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+     https://lore.kernel.org/all/1491464210.4718.82.camel@gmx.de/T/
+     "The isolated cpus are part of the cpus allowed list. In the above 
+case,
+      numabalancing ends up scheduling some of these tasks on isolated 
+cpus. "
 
-diff --git a/drivers/net/ethernet/sfc/falcon/bitfield.h b/drivers/net/ethernet/sfc/falcon/bitfield.h
-index 5eb178d0c149..78537a53009e 100644
---- a/drivers/net/ethernet/sfc/falcon/bitfield.h
-+++ b/drivers/net/ethernet/sfc/falcon/bitfield.h
-@@ -117,7 +117,7 @@ typedef union ef4_oword {
-  *
-  *   ( element ) << 4
-  *
-- * The result will contain the relevant bits filled in in the range
-+ * The result will contain the relevant bits filled in the range
-  * [0,high-low), with garbage in bits [high-low+1,...).
-  */
- #define EF4_EXTRACT_NATIVE(native_element, min, max, low, high)		\
--- 
-2.36.1
+     I wonder if we're going to fix this eventually?
+
+Thanks,
+Guan Jing
 

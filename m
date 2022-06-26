@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED3D55B117
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE4A55B126
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234195AbiFZKUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 06:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S234189AbiFZK3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 06:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232828AbiFZKUa (ORCPT
+        with ESMTP id S230287AbiFZK3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 06:20:30 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E94312610
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:20:27 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id c65so9239405edf.4
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:20:27 -0700 (PDT)
+        Sun, 26 Jun 2022 06:29:00 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A6611C2D
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:28:59 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id h23so13255872ejj.12
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:28:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=scylladb.com; s=google;
+        d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=zy1Ih5xnZLYR31pscqnLVprtiUwTUenQdef+MWxKKMA=;
-        b=oBfck6+XscL2VeZ+MF8T02/Q0GkUoM1jN27mDG9zEwpHpTEFhiBjXDUOLSiVvUMvGM
-         2sicpmI3J24iRKAA/5RxJuX+VnPWJOq0n/0CFMTZwa0ERpZlFUFFpw22CJ5BPYHwH0NF
-         xzEehUBouX/IGDTkYFQ5Ev+S6CtOjASt8p1uYEBuekmHqcuo9NYiLJuBQ11SgTbV+s4Q
-         h+eTO5wsRZUjz6KnScQnB5ClLMK88d5eMfaRvO0FBf2N/bHMRc5rTU2sCUNWnro6M8G+
-         X6ErBcZ5i27Gmfz0rtcLWgvjPPhKS2RKwPNQrtAxFkITjgYwLdz6VFt3v67paBWA0AQH
-         wxMw==
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=UryUvcXWPpBXfvIflu4cxT9Q9H+kMYtJGeIQndtNQSc=;
+        b=J9tW/hh8Vxxadht/p2/HAMoeJuD8BWvbcQU5buW1oPKBF4wwnwGo/ZM3n8OW6CQXuD
+         5mjg0BBbRFeYvbBBswoKiH8Nbz81NRywcdfXpQYOxtZLI1dT8LzI4cFstgjEiZJhz8VM
+         driBZpRUvCocFX4X+8w8SS5DlKb/V8wHXD+128Tu9R8bCYuJ8Z/BPKyw8gv//AwYV9/G
+         PPhsFg1QKpoAYqdaJVlzvI0T3S9gfR4fwWSd5Us7/0luZ357gQTHlBtZFBOJ7J8YJ+Dr
+         fL3wNWwKTak0D+5iZ9XIr1LkoaOR8IHORl3UPQy5QiDc4PoVTaMiT3IuhuLbBuZOnbvF
+         6m4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=zy1Ih5xnZLYR31pscqnLVprtiUwTUenQdef+MWxKKMA=;
-        b=AXYgQ/6BxhCXru3UDltQ46brJqdsnG+c+1Xk3SFNZ3uNm13NV0kA6qHXN4HaG6J6+I
-         lBEKPpSowuBqnp338VSQYMLKAw2MupZKH7zomRtKtg5vNgZ3yu7Dr3GRo566zfjaMT3V
-         At5KMcj7FDlKriPbZrZVabk2Dp4Pp3Na7giDTBqWNwAORJxrcO+hrVQveLot6zMJTlJZ
-         RIvpSqZN5aIhbdRrovILO7SCYLuTJV1r+H6Kisye5VCYAl028ApFKeV8FM6xoEf19YM+
-         LjUAzpGesvR5P9MKBRAA/SVHm1+q6hXJRk2uzPQIt35zbi7PgwS99BmcQ7iPwLBqwo/m
-         28lA==
-X-Gm-Message-State: AJIora/wxEikpfAgYQ4+m31UIRX6yWN8DK7cVMQYWMoT0DQ+t4FYr04h
-        l5M1m1FI7gYR943w3WHKQpen0A==
-X-Google-Smtp-Source: AGRyM1tv3WbUrJipd2xn/7Heq9RfOQOWLVedSKXLcrr95zGLiEg/pzWHi319OrG4Zqw5VAKidmbPoA==
-X-Received: by 2002:a05:6402:26d5:b0:435:aba2:9495 with SMTP id x21-20020a05640226d500b00435aba29495mr10073740edd.133.1656238825841;
-        Sun, 26 Jun 2022 03:20:25 -0700 (PDT)
-Received: from [10.0.0.1] (system.cloudius-systems.com. [199.203.229.89])
-        by smtp.gmail.com with ESMTPSA id c4-20020a170906340400b0070abf371274sm3634422ejb.136.2022.06.26.03.20.23
+        bh=UryUvcXWPpBXfvIflu4cxT9Q9H+kMYtJGeIQndtNQSc=;
+        b=C3XlVkIFsjB6AVlbweHQicCXKn1QBLHqmt7EoXNuMEy5lwLLg2FO1fAV9PYJGHBRV6
+         jPJespnzXMoKiAGKfD/c9dtrEtyiD+XlQ0fDezncKiyy3Qpcc4tIrt2Sci69Y5VsNMqG
+         AoAG7+trDNQY13L/um7Hc7lyWN6sbXwrgGA65q07dscjGh0c7g9o59pSMYoNPkx8WUNi
+         2FBriN/8/RCwPMtEDDYTiXDpdNN+/2QAZWGGF+fUXIDcuB6pXvYS0FeOn6iuDYlV1WlW
+         D3PnUX5Qyvi+YzPNgcZHZqpI0XMG2H31QhmnqtjXBaZUrGZKkuynSeMb/YLy9/jXuZ8K
+         vpSQ==
+X-Gm-Message-State: AJIora8F1lqYCO9Tfpu3zE8NnIe6v6tS0X0If/y2QDxqMEGziww0PyZ3
+        tCOXLUYDvXYNYJc8O2J81ISPAQ==
+X-Google-Smtp-Source: AGRyM1sblJgmEXbxMeGf+RD2dHMi4zVazxPkN9rudj8RaT/bHUJavjCmx8LIYG68F1Q3UPK3+2Rsgg==
+X-Received: by 2002:a17:906:7303:b0:722:f008:2970 with SMTP id di3-20020a170906730300b00722f0082970mr7234670ejc.491.1656239337624;
+        Sun, 26 Jun 2022 03:28:57 -0700 (PDT)
+Received: from [192.168.0.239] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id x10-20020a170906298a00b00705cd37fd5asm3637815eje.72.2022.06.26.03.28.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 03:20:25 -0700 (PDT)
-Message-ID: <23067de5-7955-7f58-f8ad-70a812602ac8@scylladb.com>
-Date:   Sun, 26 Jun 2022 13:20:22 +0300
+        Sun, 26 Jun 2022 03:28:57 -0700 (PDT)
+Message-ID: <ec660b83-998e-3a53-ce17-8f7d9d8728cc@linaro.org>
+Date:   Sun, 26 Jun 2022 12:28:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v3 1/8] statx: add direct I/O alignment information
+Subject: Re: [PATCH v3 04/40] dt-bindings: pinctrl: nuvoton,wpcm450-pinctrl:
+ align key node name
 Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
-References: <20220616201506.124209-1-ebiggers@kernel.org>
- <20220616201506.124209-2-ebiggers@kernel.org>
- <6c06b2d4-2d96-c4a6-7aca-5147a91e7cf2@scylladb.com>
- <YrgOUw6YM2c6k59U@infradead.org>
-From:   Avi Kivity <avi@scylladb.com>
-Organization: ScyllaDB
-In-Reply-To: <YrgOUw6YM2c6k59U@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+ <20220616005333.18491-4-krzysztof.kozlowski@linaro.org>
+ <CACRpkdYVPeEtKKA9xdiSAP6oJrX5eAKoOVaLnrELTv_ZQOEMUw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CACRpkdYVPeEtKKA9xdiSAP6oJrX5eAKoOVaLnrELTv_ZQOEMUw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,62 +82,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 26/06/2022 10.44, Christoph Hellwig wrote:
-> On Sun, Jun 19, 2022 at 02:30:47PM +0300, Avi Kivity wrote:
->>> * stx_dio_offset_align: the alignment (in bytes) required for file
->>>     offsets and I/O segment lengths for DIO, or 0 if DIO is not supported
->>>     on the file.  This will only be nonzero if stx_dio_mem_align is
->>>     nonzero, and vice versa.
+On 26/06/2022 01:28, Linus Walleij wrote:
+> On Thu, Jun 16, 2022 at 2:54 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> 
+>> gpio-keys schema requires keys to have more generic name.
 >>
->> If you consider AIO, this is actually three alignments:
->>
->> 1. offset alignment for reads (sector size in XFS)
->>
->> 2. offset alignment for overwrites (sector size in XFS since ed1128c2d0c87e,
->> block size earlier)
->>
->> 3. offset alignment for appending writes (block size)
->>
->>
->> This is critical for linux-aio since violation of these alignments will
->> stall the io_submit system call. Perhaps io_uring handles it better by
->> bouncing to a workqueue, but there is a significant performance and latency
->> penalty for that.
-> I think you are mixing things up here.
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> OK, do you want me to apply this one patch to the pinctrl tree or
+> will you collect a series?
+
+I would prefer if you picked it up. I am not aware of any conflicts.
+
+I am picking up only some left-overs and in general better if the
+subsystem maintainer takes these.
 
 
-Yes.
-
-
-> We actually have two limits that
-> matter:
->
->   a) the hard limit, which if violated will return an error.
->      This has been sector size for all common file systems for years,
->      but can be bigger than that with fscrypt in the game (which
->      triggered this series)
->   b) an optimal write size, which can be done asynchronous and
->      without exclusive locking.
->      This is what your cases 2) and 3) above refer to.
->
-> Exposting this additional optimal performance size might be a good idea
-> in addition to what is proposed here, even if matters a little less
-> with io_uring.  But I'm not sure I'd additional split it into append
-> vs overwrite vs hole filling but just round up to the maximum of those.
-
-
-Rounding up will penalize database workloads, with and without io_uring. 
-Database commit logs are characterized by frequent small writes. Telling 
-the database to round up to 4k vs 512 bytes means large write 
-amplification. The disk probably won't care (or maybe it will - it will 
-also have to generate more erase blocks), but the database will run out 
-of commitlog space much sooner and will have to compensate in expensive 
-ways.
-
-
-Of course, people that care can continue to use internal filesystem 
-knowledge, and maybe there are few enough of those that the API can 
-choose to ignore them.
-
-
+Best regards,
+Krzysztof

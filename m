@@ -2,91 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0817E55B09A
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A12555B0DA
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234268AbiFZJLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 05:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S234330AbiFZJOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 05:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234140AbiFZJLP (ORCPT
+        with ESMTP id S234305AbiFZJOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 05:11:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991D512AAD;
-        Sun, 26 Jun 2022 02:11:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A12EB80D32;
-        Sun, 26 Jun 2022 09:11:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD474C385A2;
-        Sun, 26 Jun 2022 09:11:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656234670;
-        bh=OtvtjDh4zRBG+WkPlpA082IB/8hqoRflSYipxG8ajqs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oRQ6Nx4tCmAP9guKVYQ40FXluSIJjnaHRPWTLgfRaCMYHfTdH7ImEu9izUuu9/Vgj
-         CW/+thD7Cgz6Fi1VUJQv6cCyKCbIT5DlZ3GqY5bJgJhJl/kQ1XkgWbnzKxe9BWAesf
-         oUlxEpbqnldu3BKD4aw1Vc0jTBSBIaQCTQhTO2VGDeaecDmCTv/v0xglGKRCuYjHRl
-         iohUMDIskj/8ZxhKEFYcod9u1TYxtr/27hrnSW4hZib8mJ/KGc7leVfYw31cZH+UFc
-         EeKCbnseFT/lUSbBaz/RJ9Hu0m2WVckDdnnv4w1Ne50SD57eUmCTUyl8TjdDcL8Z1M
-         a3Ka6bD49Hv7Q==
-Received: from mchehab by mail.kernel.org with local (Exim 4.95)
-        (envelope-from <mchehab@kernel.org>)
-        id 1o5OIO-001cpN-84;
-        Sun, 26 Jun 2022 10:11:08 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 20/20] MAINTAINERS: fix cross references to mfd/dlg,da9063.yaml
-Date:   Sun, 26 Jun 2022 10:11:06 +0100
-Message-Id: <813bdc2f54663572a976bccdcafae2d463259fa0.1656234456.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1656234456.git.mchehab@kernel.org>
-References: <cover.1656234456.git.mchehab@kernel.org>
+        Sun, 26 Jun 2022 05:14:50 -0400
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D353E56;
+        Sun, 26 Jun 2022 02:14:48 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id b125so5005973qkg.11;
+        Sun, 26 Jun 2022 02:14:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jbPraZXafoS9hoTYKTZ34AOWnSsSx8JmOQi+FZJXy5o=;
+        b=7805PzomCq7irGRYCGTH0DbQJ7yVnuoNMTEcvXHbvQcGWoZQbVN7fEKsPhmNnyMZxp
+         JBX2c9pZGuNfZreubKg3tyCOvTMdNEbI+YrEs/wIupOnyvtzsghOgU9m8akp8nx5hoWW
+         RtVf8ylVQgnAM1ntSN/UgnGE3+syYLc//IH/UaBhxMigqvRiC13cPhRIDNcw319NiPk8
+         Zi27fjzItyr/cjLVSWugL9W3wGCc0YE+vrWbZ+1NUTA0znl0azeasXiasf2vakxLqL4Z
+         gKx4wUO0ZL5qHt4MtMfLz1pL5Lsk43LCt0J7hbcobtsxK69w6re2hdrX9FNfjUcwH0p6
+         3MSQ==
+X-Gm-Message-State: AJIora/FgzCs1SPssKC5mivdIXrbUzzBV9/PV9LPBFqKq1/VW3xURnJ8
+        H1n2W02k6DjHsIq/mpz+tSVVnHsvjsUMxA==
+X-Google-Smtp-Source: AGRyM1uD91pSXgG6pa19BRUmEZPCsvKJEdw3NaYit4C9PLiRW6MyvdMCHwpONNxrPkT+Fz7sA1wxsQ==
+X-Received: by 2002:a05:620a:4712:b0:6a7:304f:89c2 with SMTP id bs18-20020a05620a471200b006a7304f89c2mr4950769qkb.46.1656234887485;
+        Sun, 26 Jun 2022 02:14:47 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id g18-20020a37e212000000b006a691904891sm5620392qki.16.2022.06.26.02.14.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Jun 2022 02:14:47 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id i7so11812211ybe.11;
+        Sun, 26 Jun 2022 02:14:47 -0700 (PDT)
+X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
+ s14-20020a056902120e00b006346f296b84mr7820984ybu.604.1656234886883; Sun, 26
+ Jun 2022 02:14:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1656234456.git.mchehab@kernel.org> <d6e3482ed622b6953db69cddb70f20c55c96e4da.1656234456.git.mchehab@kernel.org>
+In-Reply-To: <d6e3482ed622b6953db69cddb70f20c55c96e4da.1656234456.git.mchehab@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 26 Jun 2022 11:14:35 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXu_v28veaFva_VSKMKWjCYSosSr6pGpj5W3kj-MXfzsg@mail.gmail.com>
+Message-ID: <CAMuHMdXu_v28veaFva_VSKMKWjCYSosSr6pGpj5W3kj-MXfzsg@mail.gmail.com>
+Subject: Re: [PATCH v2 16/20] arch: m68k: q40: README: drop references to IDE driver
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Finn Thain <fthain@linux-m68k.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The entry forgot to add "dlg," to the file pattern.
+On Sun, Jun 26, 2022 at 11:11 AM Mauro Carvalho Chehab
+<mchehab@kernel.org> wrote:
+> Since IDE support was deleted by Christoph Hellwig <hch@lst.de>,
+> Jun 16 2021, drop the left-over from README file, updating the
+> documentation to point to ata/pata_falcon.c.
+>
+> Fixes: 44b1fbc0f5f3 ("m68k/q40: Replace q40ide driver with pata_falcon and falconide")
+> Fixes: b7fb14d3ac63 ("ide: remove the legacy ide driver")
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-Fixes: 441613662db7 ("dt-bindings: mfd: Convert da9063 to yaml")
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1656234456.git.mchehab@kernel.org/
+Gr{oetje,eeting}s,
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+                        Geert
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cd3f4964c14a..6acae3a340cb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5886,7 +5886,7 @@ W:	http://www.dialog-semiconductor.com/products
- F:	Documentation/devicetree/bindings/input/da90??-onkey.txt
- F:	Documentation/devicetree/bindings/input/dlg,da72??.txt
- F:	Documentation/devicetree/bindings/mfd/da90*.txt
--F:	Documentation/devicetree/bindings/mfd/da90*.yaml
-+F:	Documentation/devicetree/bindings/mfd/dlg,da90*.yaml
- F:	Documentation/devicetree/bindings/regulator/dlg,da9*.yaml
- F:	Documentation/devicetree/bindings/regulator/da92*.txt
- F:	Documentation/devicetree/bindings/regulator/slg51000.txt
--- 
-2.36.1
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

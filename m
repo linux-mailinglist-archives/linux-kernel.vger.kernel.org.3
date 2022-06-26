@@ -2,93 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC6255B3DD
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 21:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F5855B3E7
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 21:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbiFZTvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 15:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S231901AbiFZTxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 15:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiFZTvM (ORCPT
+        with ESMTP id S231773AbiFZTxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 15:51:12 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FB12BD
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 12:51:11 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id eo8so10406851edb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 12:51:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=K0lQdmcK0/9nFRSw74vjTtekH+ms1WPGE7ZqayvvKrw=;
-        b=gOAuwtj5y3iNhfNmc4kq2lxsDNQizfMwaOcLup7QDRcXKe2yJTygk5AwLcFNEaL1LQ
-         AXFi+2eV1wc5qW6hahCf43BG92NKkPFJgUJGKcEHz0+s1+lTOlDjWIgxDjaD7Rlsr5Jh
-         /O0yr221KZRAxv9td3SsO2rn5Uk0i3rdIvkvHoLImH91zfJ/vOuC7c2loyAwvhZCxbRX
-         vGQKgfTkIf0AQg3YSyS2Bnpfpi+IxEi3HPdqAUNHxBYBY/z1oXCEn8Z9YWINVUSLTUi8
-         JKb+bmO1V9yxP67adKC398pjjN2ZQXt6x+Gg6c04Nk+1HfO5I2NTD4E1i2gQ/0+mSXp2
-         aM8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=K0lQdmcK0/9nFRSw74vjTtekH+ms1WPGE7ZqayvvKrw=;
-        b=RtKAgGkYDTiVrBGNb2pqIMQPuQBd1pZFj0/4cXDklYoBWo91DwV1FjkVQjURHIVJBD
-         X//qWSHumDsL4/1AtKiAhMOAJBWKlN1zilW/dsnEfqhjJTeUvBJXtzRsYL/18i891WW4
-         xBz1MedECdiwyTcNKHL9RthN4KKm3KDkfYWacWPseqQE36k+SOaGsZ/yJAXjSIU07xyt
-         sQWW7JlrEGRGOa5wU8LK70vueMXRzNDH/u5fxNt2sbpldgjz6K2Qe26ntqRfKMYELLNT
-         1JX88Kt4QHSv9xSKgB/R7ouESYLKn60BNcztFK/PxsQTLRcz4u2m8zh4dzyccOuJneh4
-         hU3g==
-X-Gm-Message-State: AJIora+U2/+9wX4SfnIZgE2gbkSYANd8su/XO/4UDumRamhTijMBbTJY
-        zuFpwJpDZ/HvHFgtzUZLzk902g==
-X-Google-Smtp-Source: AGRyM1tEx41yN++6Cu+uoOjmxRjJkWJg8uh3EG/OzjcE5cdPH/2X/1yA2bgVX/lCqTiHYMUETGMkIA==
-X-Received: by 2002:a05:6402:2812:b0:437:6235:adbe with SMTP id h18-20020a056402281200b004376235adbemr12573023ede.416.1656273070059;
-        Sun, 26 Jun 2022 12:51:10 -0700 (PDT)
-Received: from [192.168.0.244] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id k10-20020a170906970a00b006fea59ef3a5sm4151835ejx.32.2022.06.26.12.51.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 12:51:08 -0700 (PDT)
-Message-ID: <3c28bc43-4994-8e12-25f4-32b723e6e7ac@linaro.org>
-Date:   Sun, 26 Jun 2022 21:51:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/2] NFC: nxp-nci: Don't issue a zero length
- i2c_master_read()
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>,
-        Charles Gorand <charles.gorand@effinnov.com>
-Cc:     =?UTF-8?Q?Cl=c3=a9ment_Perrochaud?= <clement.perrochaud@nxp.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220626194243.4059870-1-michael@walle.cc>
- <20220626194243.4059870-2-michael@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220626194243.4059870-2-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8
+        Sun, 26 Jun 2022 15:53:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D470D2DEC;
+        Sun, 26 Jun 2022 12:53:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70D7E60F61;
+        Sun, 26 Jun 2022 19:53:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B45C2C34114;
+        Sun, 26 Jun 2022 19:53:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1656273191;
+        bh=fQxNqVstwuBn24c+h85YTkf5W1h3U4M1Ef+uG6u/uIM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GtPgm4VjwOp36rF/hm4BgwW2aFUGbHejNWMiZiJvdpG/VPZD76qatnbaBOAtG7VI2
+         WfrquuwSoX5eTV2VBwcZJUAmGMDZd7rM7vY+j4eQ08Os28US44vCKlk7DBUVvSCGw+
+         66O2tZdbFmZ3P4omaDLgJ13fYgYcUlmB+c85tEOA=
+Date:   Sun, 26 Jun 2022 12:53:10 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org
+Subject: [GIT PULL] hotfixes for 5.19-rcX
+Message-Id: <20220626125310.83a3f4bb1b38bf9408d7c42c@linux-foundation.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/06/2022 21:42, Michael Walle wrote:
-> There are packets which doesn't have a payload. In that case, the second
-> i2c_master_read() will have a zero length. But because the NFC
-> controller doesn't have any data left, it will NACK the I2C read and
-> -ENXIO will be returned. In case there is no payload, just skip the
-> second i2c master read.
-> 
-> Fixes: 6be88670fc59 ("NFC: nxp-nci_i2c: Add I2C support to NXP NCI driver")
-> Signed-off-by: Michael Walle <michael@walle.cc>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Linus,
 
+please merge this batch of hotfixes.
 
-Best regards,
-Krzysztof
+The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
+
+  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2022-06-26
+
+for you to fetch changes up to e67679cc4264cf9b318af4e8616eaa2a7565db1f:
+
+  mailmap: add entry for Christian Marangi (2022-06-16 19:11:32 -0700)
+
+----------------------------------------------------------------
+Minor things, mainly - mailmap updates, MAINTAINERS updates, etc.
+
+Fixes for post-5.18 changes:
+
+- fix for a damon boot hang, from SeongJae
+
+- fix for a kfence warning splat, from Jason Donenfeld
+
+- fix for zero-pfn pinning, from Alex Williamson
+
+- fix for fallocate hole punch clearing, from Mike Kravetz
+
+Fixes pre-5.18 material:
+
+- fix for a performance regression, from Marcelo
+
+- fix for a hwpoisining BUG from zhenwei pi
+
+----------------------------------------------------------------
+Abel Vesa (1):
+      MAINTAINERS: update Abel Vesa's email
+
+Alex Williamson (1):
+      mm: re-allow pinning of zero pfns
+
+Andrew Morton (1):
+      MAINTAINERS: update MM tree references
+
+Christian Marangi (1):
+      mailmap: add entry for Christian Marangi
+
+David Hildenbrand (1):
+      MAINTAINERS: add MEMORY HOT(UN)PLUG section and add David as reviewer
+
+Huacai Chen (1):
+      MAINTAINERS: add maillist information for LoongArch
+
+Jarkko Sakkinen (1):
+      mailmap: add alias for jarkko@profian.com
+
+Jason A. Donenfeld (1):
+      mm/kfence: select random number before taking raw lock
+
+Marcelo Tosatti (1):
+      mm: lru_cache_disable: use synchronize_rcu_expedited
+
+Miaohe Lin (1):
+      MAINTAINERS: add Miaohe Lin as a memory-failure reviewer
+
+Mike Kravetz (1):
+      hugetlbfs: zero partial pages during fallocate hole punch
+
+Petr Mladek (1):
+      kthread: make it clear that kthread_create_on_node() might be terminated by any fatal signal
+
+SeongJae Park (1):
+      mm/damon/reclaim: schedule 'damon_reclaim_timer' only after 'system_wq' is initialized
+
+Yang Li (1):
+      mm/page_isolation.c: fix one kernel-doc comment
+
+Yang Yang (1):
+      mm: memcontrol: reference to tools/cgroup/memcg_slabinfo.py
+
+zhenwei pi (1):
+      mm/memory-failure: disable unpoison once hw error happens
+
+ .mailmap                      |  4 +++
+ Documentation/vm/hwpoison.rst |  3 +-
+ MAINTAINERS                   | 21 ++++++++++---
+ drivers/base/memory.c         |  2 +-
+ fs/hugetlbfs/inode.c          | 68 +++++++++++++++++++++++++++++++++----------
+ include/linux/mm.h            |  3 +-
+ kernel/kthread.c              | 14 ++++-----
+ mm/damon/reclaim.c            |  8 +++++
+ mm/hwpoison-inject.c          |  2 +-
+ mm/kfence/core.c              |  7 +++--
+ mm/madvise.c                  |  2 +-
+ mm/memcontrol.c               |  2 +-
+ mm/memory-failure.c           | 12 ++++++++
+ mm/page_isolation.c           |  2 ++
+ mm/swap.c                     |  2 +-
+ 15 files changed, 117 insertions(+), 35 deletions(-)
+

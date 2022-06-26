@@ -2,120 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1577B55AEF9
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 06:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B227C55AEFB
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 06:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbiFZEon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 00:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S233968AbiFZEpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 00:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233909AbiFZEok (ORCPT
+        with ESMTP id S233773AbiFZEpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 00:44:40 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AEF13E32;
-        Sat, 25 Jun 2022 21:44:39 -0700 (PDT)
-X-UUID: 2ceb064edde3461ab5cf8a6eafa52110-20220626
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:382c677b-88c6-423a-a3b1-731e35d78379,OB:20,L
-        OB:20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:45
-X-CID-INFO: VERSION:1.1.6,REQID:382c677b-88c6-423a-a3b1-731e35d78379,OB:20,LOB
-        :20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-META: VersionHash:b14ad71,CLOUDID:c64283ea-f7af-4e69-92ee-0fd74a0c286c,C
-        OID:dbdc9b4de735,Recheck:0,SF:28|17|19|48,TC:nil,Content:-5,EDM:-3,IP:nil,
-        URL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 2ceb064edde3461ab5cf8a6eafa52110-20220626
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <guodong.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 477535433; Sun, 26 Jun 2022 12:44:33 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Sun, 26 Jun 2022 12:44:32 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sun, 26 Jun 2022 12:44:31 +0800
-Message-ID: <1f0e594b7c10f0937f9e676c3ba2ccfe401951d9.camel@mediatek.com>
-Subject: Re: [PATCH v2 4/5] pinctrl: mediatek: dropping original advanced
- drive configuration function
-From:   Guodong Liu <guodong.liu@mediatek.com>
-To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
-CC:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Sun, 26 Jun 2022 12:44:31 +0800
-In-Reply-To: <20220624160810.alotw7iwvivp5zg6@notapiano>
-References: <20220624133700.15487-1-guodong.liu@mediatek.com>
-         <20220624133700.15487-5-guodong.liu@mediatek.com>
-         <20220624160810.alotw7iwvivp5zg6@notapiano>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 26 Jun 2022 00:45:12 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F35113E36;
+        Sat, 25 Jun 2022 21:45:12 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3178acf2a92so57913717b3.6;
+        Sat, 25 Jun 2022 21:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mfondrNowJy2MyDkZH1tseDvQbcDiYCbfVByxBjiMa8=;
+        b=Clz/bnpubUuCNK5azdaWhznKmfR+aDJZJCingFwsA19xbp8jHaox0rqFxqXxvWozY5
+         5FnmHwuxopztUt0Ezev/LszePHdlvV41NzFTcvSkKy48ER1Jw5qRcKAC/scPW/CW7/h5
+         8WDCKE3vd6s6BbKLSQYuIcNV3LwKV16CrLGYTGIDHajGex3MVCt4XkN60RvZxQe+L63G
+         Vj7uxs328NBMqhuWbBJwgcjMneBw3fJk4ABpYy3bkx7AzJUc2yo7ivmxc+rVF7gJjcg8
+         X7YDz8+mr+/E6/RP1kG64TVFLC6E5FSPHY7mwC4LXmQGAMqws4+vsaSOU47+kp5vzxGO
+         uxyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mfondrNowJy2MyDkZH1tseDvQbcDiYCbfVByxBjiMa8=;
+        b=NqcUFtfV0qQ05VlK2rkQFqmQczNNjgObSMbbz9rq1Q5dTlM879bDWMlxph7XNVNZA+
+         00yazCfECGhH9+emrjFPgJnfCdm9CJRNhcx8DNjiKNymMaY9Zb+cYdVjFP3iv2oypwZg
+         y3IaCXE7PlazrVrdOREac9B2HoP/DS91a2rDYv/QmYQB2LCmk1Atx1kVFk9KWsiVddKy
+         DROqZIVfRh0/GKfDRun+/SaHVSEelKlNbakphHuiXTSKgah0rMIwLvt8oRZHhFSEprfH
+         IE+vDuTmWeThZMuKF53FS+Q1CrOPwSZ5obH7FRE4Cgd2u2QD/2tqdtDR1X6GN4kXISnJ
+         3vEA==
+X-Gm-Message-State: AJIora9y5nlUZAoHDt7KV9Pg75nbuuwK4Cu9nFbmASF2epFHO4g/psZ/
+        uVlotLc7nC7lPbaS3QM617QMCICeYgJVrOA1Pfs=
+X-Google-Smtp-Source: AGRyM1tQKA39vvEyfFnxgVUxhLji4zj6DOAxlGntbkdgcS/NyCI5P0h8PG9pJg9IsmpRL53jPWTDf8Ws+9yUUU+Lf54=
+X-Received: by 2002:a81:1315:0:b0:318:1841:8060 with SMTP id
+ 21-20020a811315000000b0031818418060mr7938630ywt.452.1656218711305; Sat, 25
+ Jun 2022 21:45:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220623074005.259309-1-ztong0001@gmail.com> <YrQw1CVJfIS18CNo@electric-eye.fr.zoreil.com>
+ <20220624114121.2c95c3aa@kernel.org>
+In-Reply-To: <20220624114121.2c95c3aa@kernel.org>
+From:   Tong Zhang <ztong0001@gmail.com>
+Date:   Sat, 25 Jun 2022 21:45:00 -0700
+Message-ID: <CAA5qM4Aq_2HSxCgaHUgZX9C3E0OCPT4tN-61-MZP1iLXCbF-=Q@mail.gmail.com>
+Subject: Re: [PATCH] epic100: fix use after free on rmmod
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Francois Romieu <romieu@fr.zoreil.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Yilun Wu <yiluwu@cs.stonybrook.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------Original Message-----
-From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-To: Guodong Liu <guodong.liu@mediatek.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Rob Herring <
-robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, Sean
-Wang <sean.wang@kernel.org>, Sean Wang <sean.wang@mediatek.com>,
-Zhiyong Tao <zhiyong.tao@mediatek.com>, linux-gpio@vger.kernel.org, 
-devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, 
-Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v2 4/5] pinctrl: mediatek: dropping original
-advanced drive configuration function
-Date: Fri, 24 Jun 2022 12:08:10 -0400
+On Fri, Jun 24, 2022 at 11:41 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Thu, 23 Jun 2022 11:22:28 +0200 Francois Romieu wrote:
+> > Tong Zhang <ztong0001@gmail.com> :
+> > > epic_close() calls epic_rx() and uses dma buffer, but in epic_remove_one()
+> > > we already freed the dma buffer. To fix this issue, reorder function calls
+> > > like in the .probe function.
+> > >
+> > > BUG: KASAN: use-after-free in epic_rx+0xa6/0x7e0 [epic100]
+> > > Call Trace:
+> > >  epic_rx+0xa6/0x7e0 [epic100]
+> > >  epic_close+0xec/0x2f0 [epic100]
+> > >  unregister_netdev+0x18/0x20
+> > >  epic_remove_one+0xaa/0xf0 [epic100]
+> > >
+> > > Fixes: ae150435b59e ("smsc: Move the SMC (SMSC) drivers")
+> > > Reported-by: Yilun Wu <yiluwu@cs.stonybrook.edu>
+> > > Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+> >
+> > The "Fixes:" tag is a bit misleading: this code path predates the move
+> > by several years. Ignoring pci_* vs dma_* API changes, this is pre-2005
+> > material.
+>
+> Yeah, please find the correct Fixes tag.
+>
+> > Reviewed-by: Francois Romieu <romieu@fr.zoreil.com>
+>
+> Keep Francois' tag when reposting.
 
-Hi Guodong,
-
-On Fri, Jun 24, 2022 at 09:36:59PM +0800, Guodong Liu wrote:
-> Function bias_combo getter/setters already handle all cases advanced
-> drive
-> configuration, include drive for I2C related pins.
-
-This commit message could be improved. I suggest using the following
-commit
-message:
-
-The bias_combo getter/setter is already able to handle advanced drive
-configuration, which is the reason commit 353d2ef77f2b ("dt-bindings:
-pinctrl:
-mt8192: Use generic bias instead of pull-*-adv") dropped the pull-up-
-adv and
-pull-down-adv properties from the binding. With those properties
-removed,
-there's no longer any use for the adv_pull callbacks, so drop them.
-
-When commit info include info "commit 353d2ef77f2b", local check pathch
-will report "WARNING:UNKNOWN_COMMIT_IO: Unknow commit id
-'353d2ef77f2b'", so isn't add those commit info here. thanks!
-> 
-> Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
-
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
-Thanks,
-Nícolas
-
+Looks like drivers/net/ethernet/smsc/epic100.c is renamed from
+drivers/net/epic100.c
+and this bug has been around since the very initial commit. What would
+you suggest ?
+Remove the fix tag or use
+Fix: 1da177e4c3f4 ("Linux-2.6.12-rc2")

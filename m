@@ -2,101 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA1A55AFFD
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 09:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D1455B002
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 09:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234046AbiFZHpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 03:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
+        id S233972AbiFZHo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 03:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234030AbiFZHpb (ORCPT
+        with ESMTP id S232160AbiFZHoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 03:45:31 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF6513CD1
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 00:45:30 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id s185so6276603pgs.3
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 00:45:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7eI5KlH8jvd2AEJBKlQ3J4jXLlokaOXyX+ZrVY++9vk=;
-        b=YmxDu6n74rkBICZ6OVQ14dYA1c/vmpv+9puClWEMW3wgBcX3L7S7yMOyr1wITpWnJA
-         Ok4/ZWXkcp+nNo3VnBk0jdgV2Jo8tdXMPi6jrYkW30OBf7O+/Qog6siMYDnnb9+ESjce
-         HiEEskIDqz1nnnewCMykc+ilDNofnFwx8dR3rArY2kg9ovfM9Lz/hJ5ZUer65Sm6D7sM
-         KmUa7OGuyNjAu8mTfQ0H6aZ2MMTLUwNbQwcuQnUmNdHOwIi9Ol6UOYXerR3OJfRjWJI3
-         PFSTP1qJmc05sb8NziC83TqhxhQ/U5m7BZsqoEYu1/fuhFGoVIPqjJ8amZ9t9AcNljay
-         C+2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7eI5KlH8jvd2AEJBKlQ3J4jXLlokaOXyX+ZrVY++9vk=;
-        b=nyb7+DxB3LQScT4jrE4Igf/Sywz+s6oY9gnVBPPlOf6CR1RXtir8ikVVZPun5KdOKn
-         Y6kqMMuIjGPaxhbMGL12B/zJaYeqe7H9z+rJV4vT20CEA1KE8e+Rngw6rPwLkN7YWzXy
-         Oem7GSWdFVKfpo+L9C2Nek9QhXKUaVpJr3oTymWox5McZQcdG/R8Ai2/ncaFcT+f3Iak
-         maTmeKehj0v1Y1rCe/8rtTIOJVjtYPpY7DX9QnhYDSl2fklU19J1afwfmwY5RzSQ+Nt8
-         h3QxnH+4/Q564e59pedg8tgCO8cHGFM7LShiVs+3qIfAKfiugTdn8A1nIVsNYr10giWW
-         ouog==
-X-Gm-Message-State: AJIora/u1t6vfiRZXAAzJ8+UwqDv9uTr6uDrAqkK8kdcN/EZLS+KYEJ4
-        BzgxXWI6NXJeRORWAfdJaRs=
-X-Google-Smtp-Source: AGRyM1suBXCRt8KBt367wr5hGvoxdwUh1ZPYvZlbV4zhU6zLaOTIG0PeXbdd+COlxiEO7UpR7QEiRw==
-X-Received: by 2002:a65:6745:0:b0:3fd:fd52:85bc with SMTP id c5-20020a656745000000b003fdfd5285bcmr6888172pgu.350.1656229530012;
-        Sun, 26 Jun 2022 00:45:30 -0700 (PDT)
-Received: from sebin-inspiron.bbrouter ([103.148.21.74])
-        by smtp.gmail.com with ESMTPSA id a5-20020a1709027e4500b0016784c93f23sm4715873pln.197.2022.06.26.00.45.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jun 2022 00:45:29 -0700 (PDT)
-From:   SebinSebastian <mailmesebin00@gmail.com>
-Cc:     mailmesebin00@gmail.com, skhan@linuxfoundation.org,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Martin Kaiser <martin@kaiser.cx>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: r8188eu: Remove null checking before freeing functions
-Date:   Sun, 26 Jun 2022 13:14:11 +0530
-Message-Id: <20220626074417.661312-1-mailmesebin00@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 26 Jun 2022 03:44:25 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACE311A2D;
+        Sun, 26 Jun 2022 00:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZYf9S+9v8SssB2f7SI0aLipRvyLjpdyjZAR4xNwIlyA=; b=ku+r4DqZkB95/Xfmh9ue6cm+09
+        CyOJKQrOsW5u38sU/yT0ordtzA+/36HzICae4wQDfFz2S+Hbn5laa+W58cHSq5nsw9ipLZBhM3hNJ
+        mXF+/5KDpW3EpisCVvR/XT04v0kdwEIr/NbG8Gznzxnrgcre+KeUy/4U2wO3EW4cPCpzcGr7sZHu4
+        G5qwtDrH1THEWNH3Y/cvkvBxQihfsVriRfNB5vflSLMXblFCTZcFF8+Yvxqhcd26i6lzK4QaFpaDi
+        Bn+3NT5N/eBtb5v+o6f9b2xcqVfF+oWNL2sc+ddYWmhqUodeV8wXtxU1nuUXbY0dI+3z1TddPdJIk
+        AQTuUgeQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o5MwN-00ARUE-Bk; Sun, 26 Jun 2022 07:44:19 +0000
+Date:   Sun, 26 Jun 2022 00:44:19 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Avi Kivity <avi@scylladb.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH v3 1/8] statx: add direct I/O alignment information
+Message-ID: <YrgOUw6YM2c6k59U@infradead.org>
+References: <20220616201506.124209-1-ebiggers@kernel.org>
+ <20220616201506.124209-2-ebiggers@kernel.org>
+ <6c06b2d4-2d96-c4a6-7aca-5147a91e7cf2@scylladb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c06b2d4-2d96-c4a6-7aca-5147a91e7cf2@scylladb.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warning:
-drivers/staging/r8188eu/os_dep/usb_intf.c:376:2-7: WARNING: NULL check before some freeing functions is not needed.
+On Sun, Jun 19, 2022 at 02:30:47PM +0300, Avi Kivity wrote:
+> > * stx_dio_offset_align: the alignment (in bytes) required for file
+> >    offsets and I/O segment lengths for DIO, or 0 if DIO is not supported
+> >    on the file.  This will only be nonzero if stx_dio_mem_align is
+> >    nonzero, and vice versa.
+> 
+> 
+> If you consider AIO, this is actually three alignments:
+> 
+> 1. offset alignment for reads (sector size in XFS)
+> 
+> 2. offset alignment for overwrites (sector size in XFS since ed1128c2d0c87e,
+> block size earlier)
+> 
+> 3. offset alignment for appending writes (block size)
+> 
+> 
+> This is critical for linux-aio since violation of these alignments will
+> stall the io_submit system call. Perhaps io_uring handles it better by
+> bouncing to a workqueue, but there is a significant performance and latency
+> penalty for that.
 
-Signed-off-by: Sebin Sebastian <mailmesebin00@gmail.com>
----
- drivers/staging/r8188eu/os_dep/usb_intf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I think you are mixing things up here.  We actually have two limits that
+matter:
 
-diff --git a/drivers/staging/r8188eu/os_dep/usb_intf.c b/drivers/staging/r8188eu/os_dep/usb_intf.c
-index 68869c5daeff..f5f1119b5444 100644
---- a/drivers/staging/r8188eu/os_dep/usb_intf.c
-+++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
-@@ -372,8 +372,8 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
- free_adapter:
- 	if (pnetdev)
- 		rtw_free_netdev(pnetdev);
--	else if (padapter)
--		vfree(padapter);
-+	
-+	vfree(padapter);
- 
- 	return NULL;
- }
--- 
-2.34.1
+ a) the hard limit, which if violated will return an error.
+    This has been sector size for all common file systems for years,
+    but can be bigger than that with fscrypt in the game (which
+    triggered this series)
+ b) an optimal write size, which can be done asynchronous and
+    without exclusive locking.
+    This is what your cases 2) and 3) above refer to.
 
+Exposting this additional optimal performance size might be a good idea
+in addition to what is proposed here, even if matters a little less
+with io_uring.  But I'm not sure I'd additional split it into append
+vs overwrite vs hole filling but just round up to the maximum of those.

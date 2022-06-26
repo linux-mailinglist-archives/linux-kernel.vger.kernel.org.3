@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E895C55AF70
+	by mail.lfdr.de (Postfix) with ESMTP id 128A655AF6D
 	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 08:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbiFZGSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 02:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S233935AbiFZGYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 02:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233964AbiFZGSJ (ORCPT
+        with ESMTP id S232885AbiFZGYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 02:18:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D71CB1FA;
-        Sat, 25 Jun 2022 23:18:08 -0700 (PDT)
+        Sun, 26 Jun 2022 02:24:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8047B101D3;
+        Sat, 25 Jun 2022 23:24:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06CEB610FB;
-        Sun, 26 Jun 2022 06:18:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DFB5C3411D;
-        Sun, 26 Jun 2022 06:18:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 365E3B80CF6;
+        Sun, 26 Jun 2022 06:23:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85530C34114;
+        Sun, 26 Jun 2022 06:23:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656224287;
-        bh=zZYSU8gslVRru78DctdKqo9B5aQthNmHzWz6doljCQo=;
+        s=k20201202; t=1656224637;
+        bh=WB3vT3WVZkW9Hgvvw424FD+cwJ0iWOXgy3acAWvUG30=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cOJt+FyxOyBkAzGh1aMGZhEurBeRFOPNveMuMhKen/8epYYDToXJaIPm/vuSlulrX
-         ZohXz9+kjsML9FTpng3N8xv9L27jJMJv0EKeIhrFYoOGksXH8UuL0IqQd3ojH1MQTx
-         HCy2Xv6Ox60fF3OL3atF9geqbOGvA50JMrPq9YvhLmhfiVyda1+T+9GpuMZguGVDco
-         VdlvPucz9b6nYSnuxphWuDNGSQwPz3FJdG5RnvXuVJ5tcjcUomQGHuPfLqoENlp+2+
-         ocY+CeDQOgULMOCjwr/heplQ7m2iT3dKkQUGlMsq6SFkQLOYm9Nm8CNTv0E4ZmDIl7
-         8riw2h+pZaRsQ==
-Date:   Sun, 26 Jun 2022 09:18:04 +0300
+        b=gabpwz7T+5T0u402eXby2IHjeNtClSYoG5fcgx8p805kmn9Rb0+USot1IaXqwlczV
+         QRtb8J5D36Go2xZO6rGb3NVrdNUDAV91/W5pqMuwjEcCbXfMJiKkOlUHZEMv0KocI0
+         h/9Dj/gTS8Gt3iPGx18MItiQrKHykwRLHXbhG16zxgT49YD8H5OfDrcCp+ahJZFXzu
+         Sd2h3yigdxIOMGXPNDTfiru6OqTqLMaB5bEbqGRmYGF8gDl+cF6xyYXkEM12XXnZTT
+         T/GfsEacPsEdMkzl49ayZ4zPG4RQJDuHzuvnYzeC+JQL7RRvNo+1TWZE5QBX6QKW0V
+         nsJsMnPFGAqNA==
+Date:   Sun, 26 Jun 2022 09:23:54 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
-Cc:     Johannes Holland <johannes.holland@infineon.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peterhuewe@gmx.de, jgg@ziepe.ca
-Subject: Re: [PATCH] tpm: increase timeout for kselftests
-Message-ID: <Yrf6HJgvuIHXyqrj@kernel.org>
-References: <20220510111607.22984-1-johannes.holland@infineon.com>
- <YnvSwJxOg+IZxrxz@kernel.org>
- <51a14f28-ce94-ade9-6512-a265f7b32dfb@infineon.com>
- <YovniXv6ATJ/vpt6@kernel.org>
- <4832efdf-f2a7-7b0c-4477-088772c962c0@infineon.com>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH v6 1/9] tpm, tpm_tis: Avoid cache incoherency in test for
+ interrupts
+Message-ID: <Yrf7elJccYq+vvN7@kernel.org>
+References: <20220621132447.16281-1-LinoSanfilippo@gmx.de>
+ <20220621132447.16281-2-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4832efdf-f2a7-7b0c-4477-088772c962c0@infineon.com>
+In-Reply-To: <20220621132447.16281-2-LinoSanfilippo@gmx.de>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,73 +58,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 04:45:45PM +0200, Stefan Mahnke-Hartmann wrote:
+On Tue, Jun 21, 2022 at 03:24:39PM +0200, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 > 
+> The interrupt handler that sets the boolean variable irq_tested may run on
+> another CPU as the thread that checks irq_tested as part of the irq test in
+> tmp_tis_send().
 > 
-> On 23.05.22 21:59, Jarkko Sakkinen wrote:
-> > On Fri, May 20, 2022 at 03:28:42PM +0200, Stefan Mahnke-Hartmann wrote:
-> >>
-> >> On 11.05.22 17:14, Jarkko Sakkinen wrote:
-> >>> On Tue, May 10, 2022 at 01:16:08PM +0200, Johannes Holland wrote:
-> >>>> Due to CreatePrimary commands which need to create RSA keys of
-> >>>> increasing size, the timeout value need to be raised, as well.
-> >>>> Default is 300s.
-> >>>>
-> >>>> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
-> >>>> ---
-> >>>> A timeout of anything below 600s still lead to occasional timeouts for
-> >>>> me. Therefore, I propose 600s as a new value. 
-> >>>>
-> >>>>  tools/testing/selftests/tpm2/settings | 2 ++
-> >>>>  1 file changed, 2 insertions(+)
-> >>>>  create mode 100644 tools/testing/selftests/tpm2/settings
-> >>>>
-> >>>> diff --git a/tools/testing/selftests/tpm2/settings b/tools/testing/selftests/tpm2/settings
-> >>>> new file mode 100644
-> >>>> index 000000000000..919bc3803f03
-> >>>> --- /dev/null
-> >>>> +++ b/tools/testing/selftests/tpm2/settings
-> >>>> @@ -0,0 +1,2 @@
-> >>>> +timeout=600
-> >>>> +
-> >>>> -- 
-> >>>> 2.34.1
-> >>>>
-> >>> Could cope but I did not get why it needs to be raised.
-> >> The TPM2 SpaceTest testsuite currently creates 8 primary RSA 2k keys + 1 for
-> >> setup. Generating a RSA2k key can take up to ~1-2 minutes on some of our TPMs.
-> >> => 2x9 = 18 minutes. In the kernel we even define a duration timeout for rsa2k
-> >> keygen of 5 min per key! (TPM2_DURATION_LONG_LONG = 300000) => up to 45 minutes
-> >> would be "acceptable".
-> >>
-> >> However since the average key generation time is much faster, a value of ~10
-> >> minutes should be fine enough.
-> >>
-> >> The reason why you did not experience this yet on your test system is either
-> >> because PTT TPMs are faster in that respect and/or some TPMs implement pre-gen
-> >> mechanisms for key generation, (or just plain luck)
-> >>
-> >> BR, Stefan
-> >>
-> >>> BR, Jarkko
-> > I think this is ok.
-> >
-> >
-> > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> >
-> > BR, Jarkko
-> >
-> Hi Jarkko,
->  
-> Just curious. I can't see this patch was added to linux-next. Was I
-> expected to do something more to it?
->  
-> Kind regards
-> Stefan
+> Since nothing guarantees cache coherency between CPUs for unsynchronized
+> accesses to boolean variables the testing thread might not perceive the
+> value change done in the interrupt handler.
+> 
+> Avoid this issue by setting the bit TPM_TIS_IRQ_TESTED in the flags field
+> of the tpm_tis_data struct and by accessing this field with the bit
+> manipulating functions that provide cache coherency.
+> 
+> Also convert all other existing sites to use the proper macros when
+> accessing this bitfield.
+> 
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> ---
+>  drivers/char/tpm/tpm_tis.c      |  2 +-
+>  drivers/char/tpm/tpm_tis_core.c | 21 +++++++++++----------
+>  drivers/char/tpm/tpm_tis_core.h |  2 +-
+>  3 files changed, 13 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> index bcff6429e0b4..ce43412eb398 100644
+> --- a/drivers/char/tpm/tpm_tis.c
+> +++ b/drivers/char/tpm/tpm_tis.c
+> @@ -226,7 +226,7 @@ static int tpm_tis_init(struct device *dev, struct tpm_info *tpm_info)
+>  		irq = tpm_info->irq;
+>  
+>  	if (itpm || is_itpm(ACPI_COMPANION(dev)))
+> -		phy->priv.flags |= TPM_TIS_ITPM_WORKAROUND;
+> +		set_bit(TPM_TIS_ITPM_WORKAROUND, &phy->priv.flags);
+>  
+>  	return tpm_tis_core_init(dev, &phy->priv, irq, &tpm_tcg,
+>  				 ACPI_HANDLE(dev));
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index dc56b976d816..b5fd4ff46666 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -343,7 +343,7 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>  	int rc, status, burstcnt;
+>  	size_t count = 0;
+> -	bool itpm = priv->flags & TPM_TIS_ITPM_WORKAROUND;
+> +	bool itpm = test_bit(TPM_TIS_ITPM_WORKAROUND, &priv->flags);
+>  
+>  	status = tpm_tis_status(chip);
+>  	if ((status & TPM_STS_COMMAND_READY) == 0) {
+> @@ -470,7 +470,8 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
+>  	int rc, irq;
+>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>  
+> -	if (!(chip->flags & TPM_CHIP_FLAG_IRQ) || priv->irq_tested)
+> +	if (!(chip->flags & TPM_CHIP_FLAG_IRQ) ||
+> +	     test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
+>  		return tpm_tis_send_main(chip, buf, len);
+>  
+>  	/* Verify receipt of the expected IRQ */
+> @@ -480,11 +481,11 @@ static int tpm_tis_send(struct tpm_chip *chip, u8 *buf, size_t len)
+>  	rc = tpm_tis_send_main(chip, buf, len);
+>  	priv->irq = irq;
+>  	chip->flags |= TPM_CHIP_FLAG_IRQ;
+> -	if (!priv->irq_tested)
+> +	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
+>  		tpm_msleep(1);
+> -	if (!priv->irq_tested)
+> +	if (!test_bit(TPM_TIS_IRQ_TESTED, &priv->flags))
+>  		disable_interrupts(chip);
+> -	priv->irq_tested = true;
+> +	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
+>  	return rc;
+>  }
+>  
+> @@ -627,7 +628,7 @@ static int probe_itpm(struct tpm_chip *chip)
+>  	size_t len = sizeof(cmd_getticks);
+>  	u16 vendor;
+>  
+> -	if (priv->flags & TPM_TIS_ITPM_WORKAROUND)
+> +	if (test_bit(TPM_TIS_ITPM_WORKAROUND, &priv->flags))
+>  		return 0;
+>  
+>  	rc = tpm_tis_read16(priv, TPM_DID_VID(0), &vendor);
+> @@ -647,13 +648,13 @@ static int probe_itpm(struct tpm_chip *chip)
+>  
+>  	tpm_tis_ready(chip);
+>  
+> -	priv->flags |= TPM_TIS_ITPM_WORKAROUND;
+> +	set_bit(TPM_TIS_ITPM_WORKAROUND, &priv->flags);
+>  
+>  	rc = tpm_tis_send_data(chip, cmd_getticks, len);
+>  	if (rc == 0)
+>  		dev_info(&chip->dev, "Detected an iTPM.\n");
+>  	else {
+> -		priv->flags &= ~TPM_TIS_ITPM_WORKAROUND;
+> +		clear_bit(TPM_TIS_ITPM_WORKAROUND, &priv->flags);
+>  		rc = -EFAULT;
+>  	}
+>  
+> @@ -693,7 +694,7 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+>  	if (interrupt == 0)
+>  		return IRQ_NONE;
+>  
+> -	priv->irq_tested = true;
+> +	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
+>  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
+>  		wake_up_interruptible(&priv->read_queue);
+>  	if (interrupt & TPM_INTF_LOCALITY_CHANGE_INT)
+> @@ -779,7 +780,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
+>  	if (rc < 0)
+>  		return rc;
+>  
+> -	priv->irq_tested = false;
+> +	clear_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
+>  
+>  	/* Generate an interrupt by having the core call through to
+>  	 * tpm_tis_send
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index 6c203f36b8a1..bf07379dea42 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -86,13 +86,13 @@ enum tis_defaults {
+>  enum tpm_tis_flags {
+>  	TPM_TIS_ITPM_WORKAROUND		= BIT(0),
+>  	TPM_TIS_INVALID_STATUS		= BIT(1),
+> +	TPM_TIS_IRQ_TESTED		= BIT(2),
+>  };
+>  
+>  struct tpm_tis_data {
+>  	u16 manufacturer_id;
+>  	int locality;
+>  	int irq;
+> -	bool irq_tested;
+>  	unsigned long flags;
+>  	void __iomem *ilb_base_addr;
+>  	u16 clkrun_enabled;
+> -- 
+> 2.36.1
+> 
 
-Couple of things:
-
-- Send to selftests maintainer:
-- "selftests/tpm2" instead of "tpm:"
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko

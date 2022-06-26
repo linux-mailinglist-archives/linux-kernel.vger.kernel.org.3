@@ -2,52 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC7255B29B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 17:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03F155B29F
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 17:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbiFZPOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 11:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
+        id S231527AbiFZPSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 11:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiFZPOS (ORCPT
+        with ESMTP id S229450AbiFZPSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 11:14:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D57E0E6
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 08:14:17 -0700 (PDT)
+        Sun, 26 Jun 2022 11:18:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5316AFD1E;
+        Sun, 26 Jun 2022 08:18:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B56446128E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 15:14:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B21B8C34114;
-        Sun, 26 Jun 2022 15:14:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB4F56128E;
+        Sun, 26 Jun 2022 15:18:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0D7BC34114;
+        Sun, 26 Jun 2022 15:18:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656256456;
-        bh=dLPUJl4bzRl09tUedmHK1x+k55z8n+7m45yrjk8LeXk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qam3NFp0Fat2+gvdLnmUeIhju1dZ8NE8Am80/mXUl4sETL+fzDC8A2fxc3xh9aJDB
-         4s1c8WS+bNgwNOOpL+f1BEky9tS37ZdSfTOoVNmL+wxWNLhzYfjPPKgKI5LVsk3V+4
-         3GsxxaAT/Eca5UuemTbGll7UesF6mKRJ06iHq0oBkIZnEhtT7IsYXV81cll4m9XdU9
-         y3/CF7km33vf0OTwu3WFg06oMGsy1pekWrQhbagtKHOcRv7CrwLIDqBXd87Edqtl7x
-         n3tCnoE8ttLAQTcWwIyumFq475tCKXo+Lgrqoz+eljdO5gk+/qivOWV1Rs/hvb+3hX
-         d0FmhmaV9MadA==
+        s=k20201202; t=1656256726;
+        bh=OfyIZ2aNwQeuhLBDMPwxc5nqF+GSkCgpyg8gVm/NQEM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NiTWeoQ+Pwq4w5SvvhHHG5XMx/B4B94NQm/vC1/y6dpDqeEuBhr3He3hxp08Sd38o
+         c+8I2P6bHAHFTOBXxCWHjjcy//PgoMhgtFPqtnLD7JxAa4VMJZWOfgueW6tMLcHobs
+         dapKuCJt11q/jMdeq9yLelu7Ee2hh6SxEvdJPTr7u28EZlX7187MOnS0WXWyKbhvlf
+         evBOBMIioJwCipx6iC2EsXj6covjOkpw+eQ81nM66XOhnVZ/oAM0pE6bl96Qmv8FcM
+         TZo21vgd8jJDaWd4GHkAkbOQaKqCHqy/pfquaXRjmEvIwKX/gt0uunJykCz3OTNuOV
+         nND3rMNxnmVLg==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D61644096F; Sun, 26 Jun 2022 12:14:12 -0300 (-03)
-Date:   Sun, 26 Jun 2022 12:14:12 -0300
+        id 97AFE4096F; Sun, 26 Jun 2022 12:18:43 -0300 (-03)
+Date:   Sun, 26 Jun 2022 12:18:43 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Gautam Dawar <gautam.dawar@xilinx.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1 FYI] tools include UAPI: Sync linux/vhost.h with the
- kernel sources
-Message-ID: <Yrh3xMYbfeAD0MFL@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Zixuan Tan <tanzixuangg@gmail.com>, terrelln@fb.com,
+        Zixuan Tan <tanzixuan.me@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] perf build: Suppress openssl v3 deprecation warnings in
+ libcrypto feature test
+Message-ID: <Yrh40wCIb1zDqTt5@kernel.org>
+References: <20220625153439.513559-1-tanzixuan.me@gmail.com>
+ <YrhxE4s0hLvbbibp@krava>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YrhxE4s0hLvbbibp@krava>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,152 +68,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+Em Sun, Jun 26, 2022 at 04:45:39PM +0200, Jiri Olsa escreveu:
+> On Sat, Jun 25, 2022 at 11:34:38PM +0800, Zixuan Tan wrote:
+> > With OpenSSL v3 installed, the libcrypto feature check fails as it use the
+> > deprecated MD5_* API (and is compiled with -Werror). The error message is
+> > as follows.
+> > 
+> > $ make tools/perf
+> > ```
+> > Makefile.config:778: No libcrypto.h found, disables jitted code injection,
+> > please install openssl-devel or libssl-dev
+> > 
+> > Auto-detecting system features:
+> > ...                         dwarf: [ on  ]
+> > ...            dwarf_getlocations: [ on  ]
+> > ...                         glibc: [ on  ]
+> > ...                        libbfd: [ on  ]
+> > ...                libbfd-buildid: [ on  ]
+> > ...                        libcap: [ on  ]
+> > ...                        libelf: [ on  ]
+> > ...                       libnuma: [ on  ]
+> > ...        numa_num_possible_cpus: [ on  ]
+> > ...                       libperl: [ on  ]
+> > ...                     libpython: [ on  ]
+> > ...                     libcrypto: [ OFF ]
+> > ...                     libunwind: [ on  ]
+> > ...            libdw-dwarf-unwind: [ on  ]
+> > ...                          zlib: [ on  ]
+> > ...                          lzma: [ on  ]
+> > ...                     get_cpuid: [ on  ]
+> > ...                           bpf: [ on  ]
+> > ...                        libaio: [ on  ]
+> > ...                       libzstd: [ on  ]
+> > ...        disassembler-four-args: [ on  ]
+> > ```
+> > 
+> > This is very confusing because the suggested library (on my Ubuntu 20.04
+> > it is libssl-dev) is already installed. As the test only checks for the
+> > presence of libcrypto, this commit suppresses the deprecation warning to
+> > allow the test to pass.
+> > 
+> > Signed-off-by: Zixuan Tan <tanzixuan.me@gmail.com>
+> > ---
+> >  tools/build/feature/test-libcrypto.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/tools/build/feature/test-libcrypto.c b/tools/build/feature/test-libcrypto.c
+> > index a98174e0569c..31afff093d0b 100644
+> > --- a/tools/build/feature/test-libcrypto.c
+> > +++ b/tools/build/feature/test-libcrypto.c
+> > @@ -2,6 +2,12 @@
+> >  #include <openssl/sha.h>
+> >  #include <openssl/md5.h>
+> >  
+> > +/*
+> > + * The MD5_* API have been deprecated since OpenSSL 3.0, which causes the
+> > + * feature test to fail silently. This is a workaround.
+> > + */
+> 
+> then we use these deprecated MD5 calls in util/genelf.c if libcrypto is detected,
+> so I wonder how come the rest of the compilation passed for you.. do you have
+> CONFIG_JITDUMP disabled?
+
+So, here, on fedora 36:
+
+[acme@quaco perf-urgent]$ m
+make: Entering directory '/home/acme/git/perf-urgent/tools/perf'
+  BUILD:   Doing 'make -j8' parallel build
+  HOSTCC  /tmp/build/perf-urgent/fixdep.o
+  HOSTLD  /tmp/build/perf-urgent/fixdep-in.o
+  LINK    /tmp/build/perf-urgent/fixdep
+Warning: Kernel ABI header at 'tools/include/uapi/linux/kvm.h' differs from latest version at 'include/uapi/linux/kvm.h'
+diff -u tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
+Warning: Kernel ABI header at 'tools/arch/x86/include/asm/disabled-features.h' differs from latest version at 'arch/x86/include/asm/disabled-features.h'
+diff -u tools/arch/x86/include/asm/disabled-features.h arch/x86/include/asm/disabled-features.h
+Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
+diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h arch/arm64/include/uapi/asm/perf_regs.h
+Warning: Kernel ABI header at 'tools/arch/x86/include/uapi/asm/svm.h' differs from latest version at 'arch/x86/include/uapi/asm/svm.h'
+diff -u tools/arch/x86/include/uapi/asm/svm.h arch/x86/include/uapi/asm/svm.h
+Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/kvm.h' differs from latest version at 'arch/arm64/include/uapi/asm/kvm.h'
+diff -u tools/arch/arm64/include/uapi/asm/kvm.h arch/arm64/include/uapi/asm/kvm.h
+Warning: Kernel ABI header at 'tools/include/linux/coresight-pmu.h' differs from latest version at 'include/linux/coresight-pmu.h'
+diff -u tools/include/linux/coresight-pmu.h include/linux/coresight-pmu.h
+Makefile.config:778: No libcrypto.h found, disables jitted code injection, please install openssl-devel or libssl-dev
+Makefile.config:1108: No openjdk development package found, please install JDK package, e.g. openjdk-8-jdk, java-1.8.0-openjdk-devel
+
+Auto-detecting system features:
+...                         dwarf: [ on  ]
+...            dwarf_getlocations: [ on  ]
+...                         glibc: [ on  ]
+...                        libbfd: [ on  ]
+...                libbfd-buildid: [ on  ]
+...                        libcap: [ on  ]
+...                        libelf: [ on  ]
+...                       libnuma: [ on  ]
+...        numa_num_possible_cpus: [ on  ]
+...                       libperl: [ on  ]
+...                     libpython: [ on  ]
+...                     libcrypto: [ OFF ] <-------------------------------------------------------
+...                     libunwind: [ on  ]
+...            libdw-dwarf-unwind: [ on  ]
+...                          zlib: [ on  ]
+...                          lzma: [ on  ]
+...                     get_cpuid: [ on  ]
+...                           bpf: [ on  ]
+...                        libaio: [ on  ]
+...                       libzstd: [ on  ]
+...        disassembler-four-args: [ on  ]
+
+
+  GEN     /tmp/build/perf-urgent/common-cmds.h
+  MKDIR   /tmp/build/perf-urgent/fd/
+  CC      /tmp/build/perf-urgent/exec-cmd.o
+  CC      /tmp/build/perf-urgent/fd/array.o
+
+
+But then:
+
+⬢[acme@toolbox perf-urgent]$ perf -vv
+perf version 5.19.rc3.gfbec4d8dd3a7
+                 dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
+    dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
+                 glibc: [ on  ]  # HAVE_GLIBC_SUPPORT
+         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
+                libbfd: [ on  ]  # HAVE_LIBBFD_SUPPORT
+            debuginfod: [ on  ]  # HAVE_DEBUGINFOD_SUPPORT
+                libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
+               libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+               libperl: [ on  ]  # HAVE_LIBPERL_SUPPORT
+             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
+              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
+             libcrypto: [ OFF ]  # HAVE_LIBCRYPTO_SUPPORT
+             libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
+    libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
+                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
+                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
+             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
+                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
+                   aio: [ on  ]  # HAVE_AIO_SUPPORT
+                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
+               libpfm4: [ OFF ]  # HAVE_LIBPFM
+⬢[acme@toolbox perf-urgent]$
+
+
+But...:
+
+⬢[acme@toolbox perf-urgent]$ ldd ~/bin/perf | grep ssl
+	libssl.so.3 => /lib64/libssl.so.3 (0x00007f02dc87e000)
+⬢[acme@toolbox perf-urgent]$
+
 
 - Arnaldo
-
-Full explanation:
-
-There used not to be copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
-
-The way these headers are used in perf are not restricted to just
-including them to compile something.
-
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
-
-E.g.:
-
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
-
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
----
-
-To get the changes in:
-
-  84d7c8fd3aade2fe ("vhost-vdpa: introduce uAPI to set group ASID")
-  2d1fcb7758e49fd9 ("vhost-vdpa: uAPI to get virtqueue group id")
-  a0c95f201170bd55 ("vhost-vdpa: introduce uAPI to get the number of address spaces")
-  3ace88bd37436abc ("vhost-vdpa: introduce uAPI to get the number of virtqueue groups")
-  175d493c3c3e09a3 ("vhost: move the backend feature bits to vhost_types.h")
-
-Silencing this perf build warning:
-
-  Warning: Kernel ABI header at 'tools/include/uapi/linux/vhost.h' differs from latest version at 'include/uapi/linux/vhost.h'
-  diff -u tools/include/uapi/linux/vhost.h include/uapi/linux/vhost.h
-
-To pick up these changes and support them:
-
-  $ tools/perf/trace/beauty/vhost_virtio_ioctl.sh > before
-  $ cp include/uapi/linux/vhost.h tools/include/uapi/linux/vhost.h
-  $ tools/perf/trace/beauty/vhost_virtio_ioctl.sh > after
-  $ diff -u before after
-  --- before	2022-06-26 12:04:35.982003781 -0300
-  +++ after	2022-06-26 12:04:43.819972476 -0300
-  @@ -28,6 +28,7 @@
-   	[0x74] = "VDPA_SET_CONFIG",
-   	[0x75] = "VDPA_SET_VRING_ENABLE",
-   	[0x77] = "VDPA_SET_CONFIG_CALL",
-  +	[0x7C] = "VDPA_SET_GROUP_ASID",
-   };
-   static const char *vhost_virtio_ioctl_read_cmds[] = {
-   	[0x00] = "GET_FEATURES",
-  @@ -39,5 +40,8 @@
-   	[0x76] = "VDPA_GET_VRING_NUM",
-   	[0x78] = "VDPA_GET_IOVA_RANGE",
-   	[0x79] = "VDPA_GET_CONFIG_SIZE",
-  +	[0x7A] = "VDPA_GET_AS_NUM",
-  +	[0x7B] = "VDPA_GET_VRING_GROUP",
-   	[0x80] = "VDPA_GET_VQS_COUNT",
-  +	[0x81] = "VDPA_GET_GROUP_NUM",
-   };
-  $
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Gautam Dawar <gautam.dawar@xilinx.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Michael S. Tsirkin <mst@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Link: https://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/include/uapi/linux/vhost.h | 26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
-
-diff --git a/tools/include/uapi/linux/vhost.h b/tools/include/uapi/linux/vhost.h
-index 5d99e7c242a25e11..cab645d4a6455564 100644
---- a/tools/include/uapi/linux/vhost.h
-+++ b/tools/include/uapi/linux/vhost.h
-@@ -89,11 +89,6 @@
- 
- /* Set or get vhost backend capability */
- 
--/* Use message type V2 */
--#define VHOST_BACKEND_F_IOTLB_MSG_V2 0x1
--/* IOTLB can accept batching hints */
--#define VHOST_BACKEND_F_IOTLB_BATCH  0x2
--
- #define VHOST_SET_BACKEND_FEATURES _IOW(VHOST_VIRTIO, 0x25, __u64)
- #define VHOST_GET_BACKEND_FEATURES _IOR(VHOST_VIRTIO, 0x26, __u64)
- 
-@@ -150,11 +145,30 @@
- /* Get the valid iova range */
- #define VHOST_VDPA_GET_IOVA_RANGE	_IOR(VHOST_VIRTIO, 0x78, \
- 					     struct vhost_vdpa_iova_range)
--
- /* Get the config size */
- #define VHOST_VDPA_GET_CONFIG_SIZE	_IOR(VHOST_VIRTIO, 0x79, __u32)
- 
- /* Get the count of all virtqueues */
- #define VHOST_VDPA_GET_VQS_COUNT	_IOR(VHOST_VIRTIO, 0x80, __u32)
- 
-+/* Get the number of virtqueue groups. */
-+#define VHOST_VDPA_GET_GROUP_NUM	_IOR(VHOST_VIRTIO, 0x81, __u32)
-+
-+/* Get the number of address spaces. */
-+#define VHOST_VDPA_GET_AS_NUM		_IOR(VHOST_VIRTIO, 0x7A, unsigned int)
-+
-+/* Get the group for a virtqueue: read index, write group in num,
-+ * The virtqueue index is stored in the index field of
-+ * vhost_vring_state. The group for this specific virtqueue is
-+ * returned via num field of vhost_vring_state.
-+ */
-+#define VHOST_VDPA_GET_VRING_GROUP	_IOWR(VHOST_VIRTIO, 0x7B,	\
-+					      struct vhost_vring_state)
-+/* Set the ASID for a virtqueue group. The group index is stored in
-+ * the index field of vhost_vring_state, the ASID associated with this
-+ * group is stored at num field of vhost_vring_state.
-+ */
-+#define VHOST_VDPA_SET_GROUP_ASID	_IOW(VHOST_VIRTIO, 0x7C, \
-+					     struct vhost_vring_state)
-+
- #endif
--- 
-2.36.1
-

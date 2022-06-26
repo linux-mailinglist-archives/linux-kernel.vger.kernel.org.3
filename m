@@ -2,57 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D7F55AF55
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 07:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664F355AF5F
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 07:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233788AbiFZFgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 01:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
+        id S233894AbiFZFwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 01:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiFZFgQ (ORCPT
+        with ESMTP id S229742AbiFZFwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 01:36:16 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E00913DEA;
-        Sat, 25 Jun 2022 22:36:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656221775; x=1687757775;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kblb61Kx0cy7fIE3JvdSA0q4mukZjRDnLg/zeZBGwCI=;
-  b=fKNwhDU2WDkBlD4mMsyXzVq3+C1Ohem8sStnVwLNGcLUHjQ4/wBQBEY4
-   jBKYn2Uwwr0k+xPOKTijTeYazLJXulYF2blN5vo/KBIXPsps6bG4lxEWP
-   flVwKgjPToNe6eXzZ9KgMg4xtTYrBMpAxKaGBBuQYiCJYFwIBfQGy2q90
-   tR9owOJmP6zG2TeTEsLxw1CQh4Lbmv5xylqOqW6qklqkz7T8J+krIduAG
-   aLDwUUYPLXNbHDyU79hlWRcSXyiLSl7CbQFoXV/f3OzzdPHq/NoTxLFgB
-   HqQxtzf55QDyTB+tOKKXOkNlE8hmMALiTTZquw/YdzO8bOHZRWs4l4v9H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10389"; a="261665108"
-X-IronPort-AV: E=Sophos;i="5.92,223,1650956400"; 
-   d="scan'208";a="261665108"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 22:36:14 -0700
-X-IronPort-AV: E=Sophos;i="5.92,223,1650956400"; 
-   d="scan'208";a="645892285"
-Received: from fyu1.sc.intel.com ([172.25.103.126])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 22:36:14 -0700
-Date:   Sat, 25 Jun 2022 22:36:40 -0700
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     dmaengine@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        linux-kernel@vger.kernel.org, Dave Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH v3] dmaengine: idxd: Only call idxd_enable_system_pasid()
- if succeeded in enabling SVA feature
-Message-ID: <YrfwaC06wZfUTHjH@fyu1.sc.intel.com>
-References: <20220625221333.214589-1-jsnitsel@redhat.com>
- <20220626051648.14249-1-jsnitsel@redhat.com>
+        Sun, 26 Jun 2022 01:52:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122F312778
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 22:52:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=zwx5Svpj0Ro/UPJKmY0oNTC1x1wYqztY5B1xeCB49S4=; b=F3sWX83IIuJpvV9ZkcA03mtXNl
+        oAYusD5wkL0bBiKKKoGb97E3gewpXr5zD2wQ/89ljziXzithgG++He30A2OG5RjbcGfKJ48b2UB9w
+        +fEIBZugUDAZp/h37kG6zPd87Or1zAbCtus5CiuqxosDJZhnEXZCc6/RBTeQQjRmA38YoAU66PTTJ
+        vB8UTie4nAZ6VeN492Z2rN80FuLgHgkAxiXgpOzP8VMs9Zt4Ogrq0mc0IzbwHopLH0la+6ppg8c+7
+        Ljkmmf2U9f6xYoE9JjiAMPaLOSTo2MZxfb768N6/58eNE9YDapH97eC9Nv6m1AYXPPuTidAEmBGo3
+        v+M2sWig==;
+Received: from [2001:4bb8:199:3788:15b9:a02f:7fe3:abaf] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o5LCG-009vHw-T9; Sun, 26 Jun 2022 05:52:37 +0000
+Date:   Sun, 26 Jun 2022 07:52:34 +0200
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+Subject: [GIT PULL] dma-mapping fix for Linux 5.19
+Message-ID: <Yrf0ItiAJ4cVfdPf@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220626051648.14249-1-jsnitsel@redhat.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,13 +48,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 10:16:48PM -0700, Jerry Snitselaar wrote:
-> On a Sapphire Rapids system if boot without intel_iommu=on, the IDXD
-> driver will crash during probe in iommu_sva_bind_device().
-> Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
 
-Acked-by: Fenghua Yu <fenghua.yu@intel.com>
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
 
-Thanks.
+are available in the Git repository at:
 
--Fenghua
+  git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-5.19-2022-06-26
+
+for you to fetch changes up to 3be4562584bba603f33863a00c1c32eecf772ee6:
+
+  dma-direct: use the correct size for dma_set_encrypted() (2022-06-23 15:26:59 +0200)
+
+----------------------------------------------------------------
+dma-mapping fixes for Linux 5.19
+
+ - pass the correct size to dma_set_encrypted() when freeing memory
+   (Dexuan Cui)
+
+----------------------------------------------------------------
+Dexuan Cui (1):
+      dma-direct: use the correct size for dma_set_encrypted()
+
+ kernel/dma/direct.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)

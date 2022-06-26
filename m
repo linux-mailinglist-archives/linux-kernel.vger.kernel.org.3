@@ -2,123 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D02B355AFD0
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 09:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7AA55AFED
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 09:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232770AbiFZHLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 03:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S233897AbiFZHjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 03:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiFZHLf (ORCPT
+        with ESMTP id S229742AbiFZHjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 03:11:35 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C93113DC5
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 00:11:34 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id z21so11382359lfb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 00:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IBedsG9Q5xgkDI4Di1vJ798mBW+tiuIsna2FmqI3oz8=;
-        b=BROfm7VbE1SLLJAAQRbRMYSFFuYVMx32Rq+TL06HlNfW5yYfeyzp7rFodfTjhMjslf
-         0kC1417O0TcfoXi1Kqm4Gt20jySLwoxrWnqXsZUbwc6hInzvpw4nSCdGJOPaVRItWqO4
-         J8qLBhnW1aIyqh8xBUjsDdMn3k0mfnUqDgSj7zSiqU3iHUOp7lOBno8nMLR8CbxLOACn
-         f61afhZ2Ix88+32NTl/aBBhRUibW0rTfgoY4jnRvVHf6inQrRlyQpYJEiRBTUA2mmDkf
-         4i/mRGDfvXof4eGvNcvi1Jpo9sBrvqsSwZVMzm2uGpOwcABIac+++DEDXAsWzuaol1lu
-         lkKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IBedsG9Q5xgkDI4Di1vJ798mBW+tiuIsna2FmqI3oz8=;
-        b=TA0aR+RbLJpn3oV+IeBHlsM3asVghBD7SrZaaMXhuSrczs4A5dNKtx3/AeXjbszq3p
-         y28usMCUSlsgD8wvr//mUO0FfmiaT4ijRkIOQz69A0fNkqINHHzExBt5cuqHEeycG0yR
-         5kNX5oeGa3bCRgSpxXDI3v5ACuHCDD4zPT33oaTFdn+XPi0IiSaLgL3F3Im2ItDjIjMr
-         xjIusAc1rzL2ooCydFGxl61sLT5azraI+lhOagdkft+SSoY1w8ZdvTuPU9rF8PrXe8UO
-         3afVtiyVLm0euL4QUwFNv7PW/7qIw86I7agf7WC5Syd4BM5EIi3UziRJukhcfU0KIM0K
-         WOKA==
-X-Gm-Message-State: AJIora//3IBfQxWVHa0AKxHSS8MQUu9jsAY0oHfJQyiv1/WH2Ny4jpGO
-        L23t/1laIMvn2Qw2JAJztrym+g==
-X-Google-Smtp-Source: AGRyM1vXA1oEPxIc8sDac5VdTBnwUc4JmX5iCt4wthxe7yU+h8n385bEl/WmrImHFr0+iq1iRjfILg==
-X-Received: by 2002:a05:6512:22c1:b0:479:54b6:8281 with SMTP id g1-20020a05651222c100b0047954b68281mr5076178lfu.291.1656227492453;
-        Sun, 26 Jun 2022 00:11:32 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.129])
-        by smtp.gmail.com with ESMTPSA id b22-20020a056512305600b0047da6e495b1sm1246277lfb.4.2022.06.26.00.11.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 00:11:32 -0700 (PDT)
-Message-ID: <186d5b5b-a082-3814-9963-bf57dfe08511@openvz.org>
-Date:   Sun, 26 Jun 2022 10:11:31 +0300
+        Sun, 26 Jun 2022 03:39:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8914BFD22;
+        Sun, 26 Jun 2022 00:39:36 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A3BED6E;
+        Sun, 26 Jun 2022 00:39:36 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.71.61])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 13F243F792;
+        Sun, 26 Jun 2022 00:39:33 -0700 (PDT)
+Date:   Sun, 26 Jun 2022 08:39:26 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     madvenka@linux.microsoft.com
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v15 1/6] arm64: Split unwind_init()
+Message-ID: <YrgNLjLnug6PfgO2@FVFF77S0Q05N>
+References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
+ <20220617210717.27126-1-madvenka@linux.microsoft.com>
+ <20220617210717.27126-2-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH RFC] memcg: notify about global mem_cgroup_id space
- depletion
-Content-Language: en-US
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Michal Hocko <mhocko@suse.com>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
-References: <YrXDV7uPpmDigh3G@dhcp22.suse.cz>
- <c53e1df0-5174-66de-23cc-18797f0b512d@openvz.org> <Yre8tNUY8vBrO0yl@castle>
-From:   Vasily Averin <vvs@openvz.org>
-In-Reply-To: <Yre8tNUY8vBrO0yl@castle>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220617210717.27126-2-madvenka@linux.microsoft.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/22 04:56, Roman Gushchin wrote:
-> On Sat, Jun 25, 2022 at 05:04:27PM +0300, Vasily Averin wrote:
->> Currently host owner is not informed about the exhaustion of the
->> global mem_cgroup_id space. When this happens, systemd cannot
->> start a new service, but nothing points to the real cause of
->> this failure.
->>
->> Signed-off-by: Vasily Averin <vvs@openvz.org>
->> ---
->>  mm/memcontrol.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
->> index d4c606a06bcd..5229321636f2 100644
->> --- a/mm/memcontrol.c
->> +++ b/mm/memcontrol.c
->> @@ -5317,6 +5317,7 @@ static struct mem_cgroup *mem_cgroup_alloc(void)
->>  				 1, MEM_CGROUP_ID_MAX + 1, GFP_KERNEL);
->>  	if (memcg->id.id < 0) {
->>  		error = memcg->id.id;
->> +		pr_notice_ratelimited("mem_cgroup_id space is exhausted\n");
->>  		goto fail;
->>  	}
+On Fri, Jun 17, 2022 at 04:07:12PM -0500, madvenka@linux.microsoft.com wrote:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 > 
-> Hm, in this case it should return -ENOSPC and it's a very unique return code.
-> If it's not returned from the mkdir() call, we should fix this.
-> Otherwise it's up to systemd to handle it properly.
+> unwind_init() is currently a single function that initializes all of the
+> unwind state. Split it into the following functions and call them
+> appropriately:
 > 
-> I'm not opposing for adding a warning, but parsing dmesg is not how
-> the error handling should be done.
+> 	- unwind_init_from_regs() - initialize from regs passed by caller.
+> 
+> 	- unwind_init_from_caller() - initialize for the current task
+> 	  from the caller of arch_stack_walk().
+> 
+> 	- unwind_init_from_task() - initialize from the saved state of a
+> 	  task other than the current task. In this case, the other
+> 	  task must not be running.
+> 
+> This is done for two reasons:
+> 
+> 	- the different ways of initializing are clear
+> 
+> 	- specialized code can be added to each initializer in the future.
+> 
+> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+> Reviewed-by: Mark Brown <broonie@kernel.org>
 
-I'm agree,  I think it's a good idea. Moreover I think it makes sense to
-use -ENOSPC  when the local cgroup's limit is reached.
-Currently cgroup_mkdir() returns -EAGAIN, this looks strange for me.
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-        if (!cgroup_check_hierarchy_limits(parent)) {
-                ret = -EAGAIN;
-                goto out_unlock;
-        }
+Mark.
 
-Thank you,
-	Vasily Averin
+> ---
+>  arch/arm64/kernel/stacktrace.c | 66 ++++++++++++++++++++++++++++------
+>  1 file changed, 55 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> index 0467cb79f080..e44f93ff25f0 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -50,11 +50,8 @@ struct unwind_state {
+>  #endif
+>  };
+>  
+> -static notrace void unwind_init(struct unwind_state *state, unsigned long fp,
+> -				unsigned long pc)
+> +static void unwind_init_common(struct unwind_state *state)
+>  {
+> -	state->fp = fp;
+> -	state->pc = pc;
+>  #ifdef CONFIG_KRETPROBES
+>  	state->kr_cur = NULL;
+>  #endif
+> @@ -72,7 +69,57 @@ static notrace void unwind_init(struct unwind_state *state, unsigned long fp,
+>  	state->prev_fp = 0;
+>  	state->prev_type = STACK_TYPE_UNKNOWN;
+>  }
+> -NOKPROBE_SYMBOL(unwind_init);
+> +
+> +/*
+> + * Start an unwind from a pt_regs.
+> + *
+> + * The unwind will begin at the PC within the regs.
+> + *
+> + * The regs must be on a stack currently owned by the calling task.
+> + */
+> +static inline void unwind_init_from_regs(struct unwind_state *state,
+> +					 struct pt_regs *regs)
+> +{
+> +	unwind_init_common(state);
+> +
+> +	state->fp = regs->regs[29];
+> +	state->pc = regs->pc;
+> +}
+> +
+> +/*
+> + * Start an unwind from a caller.
+> + *
+> + * The unwind will begin at the caller of whichever function this is inlined
+> + * into.
+> + *
+> + * The function which invokes this must be noinline.
+> + */
+> +static __always_inline void unwind_init_from_caller(struct unwind_state *state)
+> +{
+> +	unwind_init_common(state);
+> +
+> +	state->fp = (unsigned long)__builtin_frame_address(1);
+> +	state->pc = (unsigned long)__builtin_return_address(0);
+> +}
+> +
+> +/*
+> + * Start an unwind from a blocked task.
+> + *
+> + * The unwind will begin at the blocked tasks saved PC (i.e. the caller of
+> + * cpu_switch_to()).
+> + *
+> + * The caller should ensure the task is blocked in cpu_switch_to() for the
+> + * duration of the unwind, or the unwind will be bogus. It is never valid to
+> + * call this for the current task.
+> + */
+> +static inline void unwind_init_from_task(struct unwind_state *state,
+> +					 struct task_struct *task)
+> +{
+> +	unwind_init_common(state);
+> +
+> +	state->fp = thread_saved_fp(task);
+> +	state->pc = thread_saved_pc(task);
+> +}
+>  
+>  /*
+>   * Unwind from one frame record (A) to the next frame record (B).
+> @@ -213,14 +260,11 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+>  	struct unwind_state state;
+>  
+>  	if (regs)
+> -		unwind_init(&state, regs->regs[29], regs->pc);
+> +		unwind_init_from_regs(&state, regs);
+>  	else if (task == current)
+> -		unwind_init(&state,
+> -				(unsigned long)__builtin_frame_address(1),
+> -				(unsigned long)__builtin_return_address(0));
+> +		unwind_init_from_caller(&state);
+>  	else
+> -		unwind_init(&state, thread_saved_fp(task),
+> -				thread_saved_pc(task));
+> +		unwind_init_from_task(&state, task);
+>  
+>  	unwind(task, &state, consume_entry, cookie);
+>  }
+> -- 
+> 2.25.1
+> 

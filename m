@@ -2,108 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3F555B3F3
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 22:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8812C55B3F8
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 22:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232149AbiFZUCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 16:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
+        id S232172AbiFZUFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 16:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbiFZUC3 (ORCPT
+        with ESMTP id S232057AbiFZUFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 16:02:29 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3704555BE
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:02:28 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id e40so10387735eda.2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:02:28 -0700 (PDT)
+        Sun, 26 Jun 2022 16:05:46 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BB35FA1
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:05:41 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id h13-20020a63e14d000000b0040df75eaa2eso476742pgk.21
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:05:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=L5luTbophPMtkkcPCTZKh24/A/2KpC32wThCfYNcqBw=;
-        b=Ft2aRODYm0ooP4HVNITmIfrnQxEc1UVQXmL45t2je8p42F4zyOb1RtKjS4YngXvoeL
-         N8ABZ6cSPXVSZ5JsNLY9Kqdd98xeFvOTS3xELRf9iN7+MsRnqNIqQCwzH13wgnZoS6IS
-         xIzufEXQRLsizhjwafl1zU//kC1cdTkiU7hZw5HMtUI5TkauwJRQeOFgcOPZK84MVvmz
-         NeCud2UCvQKFVFhifUXhW/yn5Ey9CGEghzzvjg6dBbhvGT0PUhzZcsEdm9hfg3mpKsAO
-         aZNZ7M8xDKghh6dOR63Z4i00T+xo1WNkuCBz9ArPTKR6tE/TA953SEo+AGeW0fLoU0j4
-         SrJw==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=SHvTwEAagVJ3mN0Qty2biE6ESSKF4d2LGs55m3Aiei8=;
+        b=VVxioJBPdc/m1LIyig1BROTV0DRf8OjryQD0bdHRYx5o6Jbm5lBSp6PTgl/VPQh8as
+         OmtcsPcZX8wIpv5fKdGWrZu4XIWfsMpjR+pG78qY8QHLU5yVmWhEE/0OOttT85RD4dqn
+         qGHQ5wjU+yOSTbZ/btlh0yn+PYmPNPHRK5eZ9L52kNZfbQ3SUw/3MGImeb/jKKA7kc2R
+         PlI0qL+He4FiPTydANKCdpRcGbLtJuj0QDYMc91abiJ1N/p2khYLKRrJceIk6liEqbUK
+         t+d3zHcQmQ/NrDLe2jX010CfUy3uprFYGV+WAmXNswcue0MyxSIN1JGut2EOnmfgTM5X
+         MYNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=L5luTbophPMtkkcPCTZKh24/A/2KpC32wThCfYNcqBw=;
-        b=u78l+SIaLk2Z+rAW2m3DEs9xQxZS+s0YJGFJA+Ih7iFMo2X5bEdk/pucYyybhTlYOO
-         uMkNS8vUlIhV9UpswE0IZkzoqGQpnSPMzbC2IfIKw2dCUH58KABPmFYpZiqw2k15T1+S
-         JxEcufynRf2YqoWmHRVRprMY/N7pBGfmTTcv+Qg30Kp19S5ZM3ojLU+BzMCz0kh+e4FJ
-         XALRZ0SrqCHgnrbaAmaHonNNdcy0M3U9bH5+GYPM0xySjmSCAIMtayPxxVb7rNYNEdKe
-         l9b39vl6ol9cQDqhOs3vJa4vHGO702lZ3xEE574o2R+kFQaA2KVEVA6eWY/lK4Nx5yiG
-         Mlqg==
-X-Gm-Message-State: AJIora+JLehnitCkar30wGHlmXvdvemnisI+4MvGpfRJmo6LLWnCHSvg
-        1oAm4YIOVb93qbXu3lGNjA9IYQ==
-X-Google-Smtp-Source: AGRyM1uAX7GHluPWOZ+mm6n4aoUDMhbCqd/31547KKJrSeyePKgiWbv0/VTiEo5zhKBxoWInDD10Mw==
-X-Received: by 2002:a50:ff0e:0:b0:433:5d15:eada with SMTP id a14-20020a50ff0e000000b004335d15eadamr12551827edu.102.1656273746784;
-        Sun, 26 Jun 2022 13:02:26 -0700 (PDT)
-Received: from [192.168.0.245] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y1-20020aa7c241000000b004355dc75066sm6321979edo.86.2022.06.26.13.02.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 13:02:26 -0700 (PDT)
-Message-ID: <63b7e653-d2d2-c1fc-e43f-1c70ecbe9d04@linaro.org>
-Date:   Sun, 26 Jun 2022 22:02:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/2] NFC: nxp-nci: Don't issue a zero length
- i2c_master_read()
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     Charles Gorand <charles.gorand@effinnov.com>,
-        =?UTF-8?Q?Cl=c3=a9ment_Perrochaud?= <clement.perrochaud@nxp.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220626194243.4059870-1-michael@walle.cc>
- <20220626194243.4059870-2-michael@walle.cc>
- <3c28bc43-4994-8e12-25f4-32b723e6e7ac@linaro.org>
- <f9aa0597b22e2282abe7925135eebc4e@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f9aa0597b22e2282abe7925135eebc4e@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=SHvTwEAagVJ3mN0Qty2biE6ESSKF4d2LGs55m3Aiei8=;
+        b=PMqdI1VwlBnlFpK6CCCQDh5nWwW3iHUNqjamQb7s9i1ViB+8Zm6oEP4mE5/YyOS8bZ
+         Dad32Lq7qBDmQJIFje4InwRFEPogvNq1hRSEUCfoDYEYa+l9karArCUxFUaSTgcJPIzb
+         XYJqWgESO/8IpRaZXkLS07RH/7PfXnO1rqKT0mnOV0RqahxXFIgZbuXI9MkALOFM1q6S
+         581LniRRpvYyiLZS9v9TNdyEVGY4XwQc56L8LYf3/xziYPJyxPTHCsMNFIwttIhVMHp6
+         jmrYNrrECi04yyPS44TIaXNnS6A0wbxY1eZDzLoHaJp/ReXbCpCkSqVnVbLwBPCny+iX
+         06bg==
+X-Gm-Message-State: AJIora+lRvnCZmpBo+4xNklA1DFn+7lmq31I7SD3CTQvV9ZYMW8XsKs+
+        01vKOao/c29R8gkyxcWAtiKc6FUBN38J
+X-Google-Smtp-Source: AGRyM1vwun+MwnGbBaWTTQkqAwwk+stfTrLtMzekZGGLsJgE5sSyPtAqM2KhNOJ9qp0IkdYiIX9eILX3bXPT
+X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
+ (user=mizhang job=sendgmr) by 2002:a05:6a00:889:b0:510:91e6:6463 with SMTP id
+ q9-20020a056a00088900b0051091e66463mr11138566pfj.58.1656273941306; Sun, 26
+ Jun 2022 13:05:41 -0700 (PDT)
+Reply-To: Mingwei Zhang <mizhang@google.com>
+Date:   Sun, 26 Jun 2022 20:05:38 +0000
+Message-Id: <20220626200538.3210528-1-mizhang@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH] kvm: nVMX: add tracepoint for kvm:kvm_nested_vmrun
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/06/2022 21:56, Michael Walle wrote:
-> Am 2022-06-26 21:51, schrieb Krzysztof Kozlowski:
->> On 26/06/2022 21:42, Michael Walle wrote:
->>> There are packets which doesn't have a payload. In that case, the 
->>> second
->>> i2c_master_read() will have a zero length. But because the NFC
->>> controller doesn't have any data left, it will NACK the I2C read and
->>> -ENXIO will be returned. In case there is no payload, just skip the
->>> second i2c master read.
->>>
->>> Fixes: 6be88670fc59 ("NFC: nxp-nci_i2c: Add I2C support to NXP NCI 
->>> driver")
->>> Signed-off-by: Michael Walle <michael@walle.cc>
->>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Thanks, I'll reorder the patches in the next version otherwise
-> there will likely be a conflict.
+From: David Matlack <dmatlack@google.com>
 
-Yes.
+This tracepoint is called by nested SVM during emulated VMRUN. Call
+also during emulated VMLAUNCH and VMRESUME in nested VMX.
 
-> That should work with any patch
-> tools (i.e. b4), shouldn't it?
+Attempt to use analagous VMCS fields to the VMCB fields that are
+reported in the SVM case:
 
-You mean - re-ordering should work? Yes, no problem with that.
+"int_ctl": 32-bit field of the VMCB that the CPU uses to deliver virtual
+interrupts. The analagous VMCS field is the 16-bit "guest interrupt
+status".
 
-Best regards,
-Krzysztof
+"event_inj": 32-bit field of VMCB that is used to inject events
+(exceptions and interrupts) into the guest. The analagous VMCS field
+is the "VM-entry interruption-information field".
+
+"npt": 1 when the VCPU has enabled nested paging. The analagous VMCS
+field is the enable-EPT execution control.
+
+Signed-off-by: David Matlack <dmatlack@google.com>
+[Move the code into the nested_vmx_enter_non_root_mode().]
+Signed-off-by: Mingwei Zhang <mizhang@google.com>
+---
+ arch/x86/kvm/vmx/nested.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index f5cb18e00e78..29cc36cf2568 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -3367,6 +3367,13 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+ 	};
+ 	u32 failed_index;
+ 
++	trace_kvm_nested_vmrun(
++		kvm_rip_read(vcpu), vmx->nested.current_vmptr,
++		vmcs12->guest_rip,
++		vmcs12->guest_intr_status,
++		vmcs12->vm_entry_intr_info_field,
++		vmcs12->secondary_vm_exec_control & SECONDARY_EXEC_ENABLE_EPT);
++
+ 	kvm_service_local_tlb_flush_requests(vcpu);
+ 
+ 	evaluate_pending_interrupts = exec_controls_get(vmx) &
+
+base-commit: 922d4578cfd017da67f545bfd07331bda86f795d
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+

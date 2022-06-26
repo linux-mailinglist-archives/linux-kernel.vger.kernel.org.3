@@ -2,119 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF22C55B177
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 13:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B18855B1A0
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 14:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233675AbiFZLPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 07:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
+        id S234261AbiFZL7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 07:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiFZLPa (ORCPT
+        with ESMTP id S229531AbiFZL7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 07:15:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C77BE2E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 04:15:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F025E611F9
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 11:15:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D25DAC34114;
-        Sun, 26 Jun 2022 11:15:27 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fny0/IT4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656242125;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ztpCLeJiN8x8NtOpZ42f8MSD1Gm0OAEWaX3b+SAs9kA=;
-        b=fny0/IT4ZwXmr6J7YriIEf3MCfCq11FKNasaW4DcI58lhhHAUNvJtLW59OCCqNICTRq13s
-        lSUgR6eU7MNTm0Laq+DYAcVxlKaMZ9eWR7VenLKXpbvGhx3/T0D7B32EsYc2wzJGdWOkYm
-        fRsH+lUBjLdV9RMyIcusngxCiXZ7++U=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c89af2ac (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 26 Jun 2022 11:15:25 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     geert@linux-m68k.org, laurent@vivier.eu,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH v2] m68k: virt: use RNG seed from bootinfo block
-Date:   Sun, 26 Jun 2022 13:15:09 +0200
-Message-Id: <20220626111509.330159-1-Jason@zx2c4.com>
-In-Reply-To: <Yrg6BzpKIJBTAVmO@zx2c4.com>
-References: <Yrg6BzpKIJBTAVmO@zx2c4.com>
+        Sun, 26 Jun 2022 07:59:09 -0400
+X-Greylist: delayed 2379 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 26 Jun 2022 04:59:06 PDT
+Received: from bues.ch (bues.ch [IPv6:2a01:138:9005::1:4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87BC11460;
+        Sun, 26 Jun 2022 04:59:06 -0700 (PDT)
+Received: by bues.ch with esmtpsa (Exim 4.92)
+        (envelope-from <m@bues.ch>)
+        id 1o5QIF-0002eX-RG; Sun, 26 Jun 2022 13:19:07 +0200
+Date:   Sun, 26 Jun 2022 13:18:37 +0200
+From:   Michael =?UTF-8?B?QsO8c2No?= <m@bues.ch>
+To:     Sebastian Gottschall <s.gottschall@newmedia-net.de>
+Cc:     Praghadeesh T K S <praghadeeshthevendria@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, b43-dev@lists.infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        praghadeeshtks@zohomail.in, skhan@linuxfoundation.org
+Subject: Re: [PATCH] net: wireless/broadcom: fix possible condition with no
+ effect
+Message-ID: <20220626131837.622a36c5@barney>
+In-Reply-To: <458bd8dd-29c2-8029-20f5-f746db57740a@newmedia-net.de>
+References: <20220625192902.30050-1-praghadeeshthevendria@gmail.com>
+ <458bd8dd-29c2-8029-20f5-f746db57740a@newmedia-net.de>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/gLIzHQzsO8pBgS_8XdvwdPb";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Other virt VMs can pass RNG seeds via the "rng-seed" device tree
-property or via UEFI, but m68k doesn't have either. Instead it has its
-own bootinfo protocol. So this commit adds support for receiving a RNG
-seed from it, which will be used at the earliest possible time in boot,
-just like device tree.
+--Sig_/gLIzHQzsO8pBgS_8XdvwdPb
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Laurent Vivier <laurent@vivier.eu>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- arch/m68k/include/uapi/asm/bootinfo-virt.h | 7 +++++++
- arch/m68k/virt/config.c                    | 9 +++++++++
- 2 files changed, 16 insertions(+)
+On Sun, 26 Jun 2022 13:03:57 +0200
+Sebastian Gottschall <s.gottschall@newmedia-net.de> wrote:
 
-diff --git a/arch/m68k/include/uapi/asm/bootinfo-virt.h b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-index e4db7e2213ab..0cb2c2a41610 100644
---- a/arch/m68k/include/uapi/asm/bootinfo-virt.h
-+++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-@@ -13,6 +13,13 @@
- #define BI_VIRT_VIRTIO_BASE	0x8004
- #define BI_VIRT_CTRL_BASE	0x8005
- 
-+/* A random seed used to initialize the RNG. Record format:
-+ *
-+ *   - length       [ 2 bytes, 16-bit big endian ]
-+ *   - seed data    [ `length` bytes ]
-+ */
-+#define BI_VIRT_RNG_SEED	0x8006
-+
- #define VIRT_BOOTI_VERSION	MK_BI_VERSION(2, 0)
- 
- #endif /* _UAPI_ASM_M68K_BOOTINFO_MAC_H */
-diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
-index 632ba200ad42..645acc6918b2 100644
---- a/arch/m68k/virt/config.c
-+++ b/arch/m68k/virt/config.c
-@@ -2,6 +2,7 @@
- 
- #include <linux/reboot.h>
- #include <linux/serial_core.h>
-+#include <linux/random.h>
- #include <clocksource/timer-goldfish.h>
- 
- #include <asm/bootinfo.h>
-@@ -92,6 +93,14 @@ int __init virt_parse_bootinfo(const struct bi_record *record)
- 		data += 4;
- 		virt_bi_data.virtio.irq = be32_to_cpup(data);
- 		break;
-+	case BI_VIRT_RNG_SEED: {
-+		u16 len = be16_to_cpup(data);
-+		add_bootloader_randomness(data + 2, len);
-+		/* Zero the data to preserve forward secrecy, and zero the
-+		 * length to prevent kexec from using it. */
-+		memzero_explicit((void *)data, len + 2);
-+		break;
-+	}
- 	default:
- 		unknown = 1;
- 		break;
--- 
-2.35.1
+> Am 25.06.2022 um 21:29 schrieb Praghadeesh T K S:
+> > Fix a coccinelle warning by removing condition with no possible
+> > effect
+> >
+> > Signed-off-by: Praghadeesh T K S <praghadeeshthevendria@gmail.com>
+> > ---
+> >   drivers/net/wireless/broadcom/b43/xmit.c | 7 +------
+> >   1 file changed, 1 insertion(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/net/wireless/broadcom/b43/xmit.c
+> > b/drivers/net/wireless/broadcom/b43/xmit.c index 7651b1b..667a74b
+> > 100644 --- a/drivers/net/wireless/broadcom/b43/xmit.c
+> > +++ b/drivers/net/wireless/broadcom/b43/xmit.c
+> > @@ -169,12 +169,7 @@ static u16 b43_generate_tx_phy_ctl1(struct
+> > b43_wldev *dev, u8 bitrate) const struct b43_phy *phy =3D &dev->phy;
+> >   	const struct b43_tx_legacy_rate_phy_ctl_entry *e;
+> >   	u16 control =3D 0;
+> > -	u16 bw;
+> > -
+> > -	if (phy->type =3D=3D B43_PHYTYPE_LP)
+> > -		bw =3D B43_TXH_PHY1_BW_20;
+> > -	else /* FIXME */
+> > -		bw =3D B43_TXH_PHY1_BW_20;
+> > +	u16 bw =3D B43_TXH_PHY1_BW_20; =20
+> Can you check if this is a possible register typo?
 
+
+I think use of this name was intentional.
+The code is marked as being incomplete with /* FIXME */
+
+This change removes the FIXME. Which is bad. It doesn't improve the
+code. It reduces code quality by removing the
+incompleteness documentation.
+
+Please leave the code as-is.
+
+--=20
+Michael B=C3=BCsch
+https://bues.ch/
+
+--Sig_/gLIzHQzsO8pBgS_8XdvwdPb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEihRzkKVZOnT2ipsS9TK+HZCNiw4FAmK4QI0ACgkQ9TK+HZCN
+iw6qfg//Xz4FgwF/d8Elx8vDBrIjZS+3IeOuZoLP3Ljiz/YHjDRKdcZHG8fcm4c5
+zsxT27VyXc466fOKCM+dV7ArdXGdkAPBT+8G3Z0v7EBoBxbj91prW+dc2Oa8mdxH
+o6YDR0cqjXT+/3tMO9hasuMoembusnmhMoiWkIm6Lc/s8MzvKPLRVxRqknhNMR1o
+wiamTMmM8cUyBcalQWg1rJ0E8WWy7gq0RHb51vaqVpMe+KmfCQLKIm5q4YbOEXb2
+ol5dC/RFPeCNgF2zQEJGrqnNPbAVgncsaA21W4D1lLlXNmz0FO+LwVuK5tIK7/5z
+oDIBBIcbQsHR15j5fkmpe5ykhJfIs4q7XwauYTvaVwTC/eX+/0jPT3MuKplEEK/m
+D6FGvVkvmnzSns/m1DOZB/gpuPZvf0qLi1X+AH4gtxp4PbLRTIgPkS0I7YNpdEju
+xjc0IVK6a5LKwrseAZKCkT9EC9zPPkg1gN0VMNlP4H92UT2/CCOeIuDgdJitVkE5
+waItsFQpIIvAcnkcYe5BEW4toqkFtD1snbKPHinDDpD6OmwvpQvdILwCmkOFBuQU
+0W+F2d0BTcbVvJl8m/Qj9jv43FF5PUu5WsbGN7VKdOnFXFcnsyn+t5166P3tuy1n
+wH6UR+MWJ+eo533M8jq9pZdv59A7S+rJlQ115di4Pa4YffWQ8z4=
+=dwmE
+-----END PGP SIGNATURE-----
+
+--Sig_/gLIzHQzsO8pBgS_8XdvwdPb--

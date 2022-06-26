@@ -2,244 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994CB55ADD8
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 02:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B691D55ADDF
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 02:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233756AbiFZAo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 20:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S233751AbiFZAuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 20:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233753AbiFZAo0 (ORCPT
+        with ESMTP id S233524AbiFZAuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 20:44:26 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A74413D23;
-        Sat, 25 Jun 2022 17:44:24 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.92,222,1650898800"; 
-   d="scan'208";a="125658112"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 26 Jun 2022 09:44:24 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id CBA9A40078B9;
-        Sun, 26 Jun 2022 09:44:19 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 2/2] irqchip/sifive-plic: Add support for Renesas RZ/Five SoC
-Date:   Sun, 26 Jun 2022 01:43:26 +0100
-Message-Id: <20220626004326.8548-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220626004326.8548-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220626004326.8548-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 25 Jun 2022 20:50:54 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C320413EAE
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 17:50:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LVsjR1qpZz4xXD;
+        Sun, 26 Jun 2022 10:50:51 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1656204651;
+        bh=OB5tn+I2GIG329HuwGDVgM1HpRDegLtdTaJsILlADQk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NaTLgayttFGRvh7kXgESiyIXYFRWRVtB6FOcTLGo1kG7PJ1V14o195WBXoHCj53Qb
+         F1rLvIPaYpYtt26XF2G1rr0cyuWFPhAdoTuYk1QQo0DaFG4dg2Us48f6pnAEgJc35j
+         YKGX/f1gVHQw+ZQnQmFMiLxeOZ0hLPWgeiUDnQsAQmqx6on2EOWYQTxm+S6pphKGZx
+         bir61Y61I5wA5eVFekEDvzOoCoDUAovkv5RxrBhruPagJWZ7xBwrLvPqYMz8oKQ7HC
+         fch6d9jhKyCd0WGseR4e2qQ9y6Y3oVr1U8qE8c2ety43Ah/YuANWcYUZfuksgaUglk
+         2O3OvgxB1QCgA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jason@zx2c4.com, ajd@linux.ibm.com, christophe.leroy@csgroup.eu,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        naveen.n.rao@linux.vnet.ibm.com
+Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-5.19-3 tag
+Date:   Sun, 26 Jun 2022 10:50:49 +1000
+Message-ID: <87pmiw4592.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
-NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
-case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
-edge until the previous completion message has been received and
-NCEPLIC100 doesn't support pending interrupt counter, hence losing the
-interrupts if not acknowledged in time.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
 
-So the workaround for edge-triggered interrupts to be handled correctly
-and without losing is that it needs to be acknowledged first and then
-handler must be run so that we don't miss on the next edge-triggered
-interrupt.
+Hi Linus,
 
-This patch adds a new compatible string for Renesas RZ/Five SoC and adds
-support to change interrupt flow based on the interrupt type. It also
-implements irq_ack and irq_set_type callbacks.
+Please pull some more powerpc fixes for 5.19:
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v1->v2:
-* Implemented IRQ flow as suggested by Marc
+The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
 
-RFC-->v1:
-* Fixed review comments pointed by Geert
-* Dropped handle_fasteoi_ack_irq support as for the PLIC we need to
-claim the interrupt by reading the register and then acknowledge it.
-* Add a new chained handler for RZ/Five SoC.
----
- drivers/irqchip/Kconfig           |  1 +
- drivers/irqchip/irq-sifive-plic.c | 73 ++++++++++++++++++++++++++++++-
- 2 files changed, 72 insertions(+), 2 deletions(-)
+  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 4ab1038b5482..0245dcabe3e9 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -530,6 +530,7 @@ config SIFIVE_PLIC
- 	bool "SiFive Platform-Level Interrupt Controller"
- 	depends on RISCV
- 	select IRQ_DOMAIN_HIERARCHY
-+	select IRQ_FASTEOI_HIERARCHY_HANDLERS
- 	help
- 	   This enables support for the PLIC chip found in SiFive (and
- 	   potentially other) RISC-V systems.  The PLIC controls devices
-diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
-index bb87e4c3b88e..9fb9f62afb6a 100644
---- a/drivers/irqchip/irq-sifive-plic.c
-+++ b/drivers/irqchip/irq-sifive-plic.c
-@@ -60,10 +60,13 @@
- #define	PLIC_DISABLE_THRESHOLD		0x7
- #define	PLIC_ENABLE_THRESHOLD		0
- 
-+#define RENESAS_R9A07G043_PLIC		1
-+
- struct plic_priv {
- 	struct cpumask lmask;
- 	struct irq_domain *irqdomain;
- 	void __iomem *regs;
-+	u8 of_data;
- };
- 
- struct plic_handler {
-@@ -81,6 +84,8 @@ static int plic_parent_irq __ro_after_init;
- static bool plic_cpuhp_setup_done __ro_after_init;
- static DEFINE_PER_CPU(struct plic_handler, plic_handlers);
- 
-+static int plic_irq_set_type(struct irq_data *d, unsigned int type);
-+
- static void __plic_toggle(void __iomem *enable_base, int hwirq, int enable)
- {
- 	u32 __iomem *reg = enable_base + (hwirq / 32) * sizeof(u32);
-@@ -176,16 +181,61 @@ static void plic_irq_eoi(struct irq_data *d)
- 	}
- }
- 
-+static void renesas_rzfive_plic_edge_irq_eoi(struct irq_data *data)
-+{
-+	/* We have nothing to do here */
-+}
-+
- static struct irq_chip plic_chip = {
- 	.name		= "SiFive PLIC",
- 	.irq_mask	= plic_irq_mask,
- 	.irq_unmask	= plic_irq_unmask,
- 	.irq_eoi	= plic_irq_eoi,
-+	.irq_set_type	= plic_irq_set_type,
-+#ifdef CONFIG_SMP
-+	.irq_set_affinity = plic_set_affinity,
-+#endif
-+};
-+
-+static struct irq_chip renesas_rzfive_edge_plic_chip = {
-+	.name		= "Renesas RZ/Five PLIC",
-+	.irq_mask	= plic_irq_mask,
-+	.irq_unmask	= plic_irq_unmask,
-+	.irq_ack	= plic_irq_eoi,
-+	.irq_eoi	= renesas_rzfive_plic_edge_irq_eoi,
-+	.irq_set_type	= plic_irq_set_type,
- #ifdef CONFIG_SMP
- 	.irq_set_affinity = plic_set_affinity,
- #endif
- };
- 
-+static int plic_irq_set_type(struct irq_data *d, unsigned int type)
-+{
-+	struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
-+
-+	if (handler->priv->of_data != RENESAS_R9A07G043_PLIC)
-+		return 0;
-+
-+	switch (type) {
-+	case IRQ_TYPE_LEVEL_HIGH:
-+		irq_set_chip_handler_name_locked(d, &renesas_rzfive_edge_plic_chip,
-+						 handle_fasteoi_ack_irq,
-+						 "Edge");
-+		break;
-+
-+	case IRQ_TYPE_EDGE_RISING:
-+		irq_set_chip_handler_name_locked(d, &plic_chip,
-+						 handle_fasteoi_irq,
-+						 "Level");
-+		break;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
- 			      irq_hw_number_t hwirq)
- {
-@@ -198,6 +248,19 @@ static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
- 	return 0;
- }
- 
-+static int plic_irq_domain_translate(struct irq_domain *d,
-+				     struct irq_fwspec *fwspec,
-+				     unsigned long *hwirq,
-+				     unsigned int *type)
-+{
-+	struct plic_priv *priv = d->host_data;
-+
-+	if (priv->of_data == RENESAS_R9A07G043_PLIC)
-+		return irq_domain_translate_twocell(d, fwspec, hwirq, type);
-+
-+	return irq_domain_translate_onecell(d, fwspec, hwirq, type);
-+}
-+
- static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
- 				 unsigned int nr_irqs, void *arg)
- {
-@@ -206,7 +269,7 @@ static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
- 	unsigned int type;
- 	struct irq_fwspec *fwspec = arg;
- 
--	ret = irq_domain_translate_onecell(domain, fwspec, &hwirq, &type);
-+	ret = plic_irq_domain_translate(domain, fwspec, &hwirq, &type);
- 	if (ret)
- 		return ret;
- 
-@@ -220,7 +283,7 @@ static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
- }
- 
- static const struct irq_domain_ops plic_irqdomain_ops = {
--	.translate	= irq_domain_translate_onecell,
-+	.translate	= plic_irq_domain_translate,
- 	.alloc		= plic_irq_domain_alloc,
- 	.free		= irq_domain_free_irqs_top,
- };
-@@ -293,6 +356,11 @@ static int __init plic_init(struct device_node *node,
- 	if (!priv)
- 		return -ENOMEM;
- 
-+	if (of_device_is_compatible(node, "renesas,r9a07g043-plic")) {
-+		priv->of_data = RENESAS_R9A07G043_PLIC;
-+		plic_chip.name = "Renesas RZ/Five PLIC";
-+	}
-+
- 	priv->regs = of_iomap(node, 0);
- 	if (WARN_ON(!priv->regs)) {
- 		error = -EIO;
-@@ -411,5 +479,6 @@ static int __init plic_init(struct device_node *node,
- }
- 
- IRQCHIP_DECLARE(sifive_plic, "sifive,plic-1.0.0", plic_init);
-+IRQCHIP_DECLARE(renesas_r9a07g043_plic, "renesas,r9a07g043-plic", plic_init);
- IRQCHIP_DECLARE(riscv_plic0, "riscv,plic0", plic_init); /* for legacy systems */
- IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", plic_init); /* for firmware driver */
--- 
-2.25.1
+are available in the git repository at:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-5.19-3
+
+for you to fetch changes up to f3eac426657d985b97c92fa5f7ae1d43f04721f3:
+
+  powerpc/powernv: wire up rng during setup_arch (2022-06-22 19:47:22 +1000)
+
+- ------------------------------------------------------------------
+powerpc fixes for 5.19 #3
+
+ - A fix for a CMA change that broke booting guests with > 2G RAM on Power8 hosts.
+
+ - Fix the RTAS call filter to allow a special case that applications rely on.
+
+ - A change to our execve path, to make the execve syscall exit tracepoint work.
+
+ - Three fixes to wire up our various RNGs earlier in boot so they're available for use in
+   the initial seeding in random_init().
+
+ - A build fix for when KASAN is enabled along with STRUCTLEAK_BYREF_ALL.
+
+Thanks to: Andrew Donnellan, Aneesh Kumar K.V, Christophe Leroy, Jason A. Donenfeld,
+Nathan Lynch, Naveen N. Rao, Sathvika Vasireddy, Sumit Dubey2, Tyrel Datwyler, Zi Yan.
+
+- ------------------------------------------------------------------
+Andrew Donnellan (1):
+      powerpc/rtas: Allow ibm,platform-dump RTAS call with null buffer address
+
+Christophe Leroy (1):
+      powerpc/prom_init: Fix build failure with GCC_PLUGIN_STRUCTLEAK_BYREF_ALL and KASAN
+
+Jason A. Donenfeld (3):
+      powerpc/microwatt: wire up rng during setup_arch()
+      powerpc/pseries: wire up rng during setup_arch()
+      powerpc/powernv: wire up rng during setup_arch
+
+Michael Ellerman (1):
+      powerpc/mm: Move CMA reservations after initmem_init()
+
+Naveen N. Rao (1):
+      powerpc: Enable execve syscall exit tracepoint
+
+
+ arch/powerpc/kernel/process.c                |  2 +-
+ arch/powerpc/kernel/prom_init.c              |  2 +-
+ arch/powerpc/kernel/rtas.c                   | 11 ++++-
+ arch/powerpc/kernel/setup-common.c           | 13 ++---
+ arch/powerpc/platforms/microwatt/microwatt.h |  7 +++
+ arch/powerpc/platforms/microwatt/rng.c       | 10 ++--
+ arch/powerpc/platforms/microwatt/setup.c     |  8 +++
+ arch/powerpc/platforms/powernv/powernv.h     |  2 +
+ arch/powerpc/platforms/powernv/rng.c         | 52 ++++++++++++++------
+ arch/powerpc/platforms/powernv/setup.c       |  2 +
+ arch/powerpc/platforms/pseries/pseries.h     |  2 +
+ arch/powerpc/platforms/pseries/rng.c         | 11 ++---
+ arch/powerpc/platforms/pseries/setup.c       |  1 +
+ 13 files changed, 83 insertions(+), 40 deletions(-)
+ create mode 100644 arch/powerpc/platforms/microwatt/microwatt.h
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmK3rQsACgkQUevqPMjh
+pYBy9hAAqTgh+EzA0L2c8u8jps+xDrkzlx1yc3uRGGPJr+q/HoV6daZnN1gTDolF
+ryK98wDeBIy/2+3TZj18+ok86/jXHSXpQd8w2sT9o1fMfmMUGrxe2qWrvxTUOUCr
+eRgZNzOE0u7kANppuEpwEtT1oQu1Tmcta2Fen7EBxJ5FZaOkrQrF6oOee5vRSRlA
+O0cIzYBu6Wd/KYpJCVmixcywIrz1U3mdPFzzPbG/G+/jvUxvp5jJudJf40QSpEbl
+7zg7Ilxga+LHL8yJSnKHV9GTx8MlDqBM/e4+BDC0eNL4GGNkFjQmVXpD13ovVsMe
+tXF/oM+6/7emHDpP21Dzx6+TFXYTOeIu07k2z1R/WkOzZZkYE1/7RCvltX/h8/9W
+XwAwGRTi1xvMDmWGlNEV116v9si+WXzDWRBCe4P5TNcb8d1Y+I3cLVvrJa6QtqIj
+S/QroyB+Z6dLWxZbBQBm35muOqdHm91HQWV8EdHmePAwhntji/Hkghjfr2+4mi9J
+ZVnWyVeYhhhSMzVva3MuEcZNu0kXLdslW4mNkwkIJTcqg9K8KxFCfZK/6VdK6ask
+6hLP/fitGCpZ9YVpB40CTPvwLxO93ShrtRmGu8qoQSX1YmlbvIReA7jDuBnU2u6T
+f1UHagFzWKePmPXUHFXJWzHjb9IBUGWRat9jFlerL+5sRLoLkes=
+=+YP6
+-----END PGP SIGNATURE-----

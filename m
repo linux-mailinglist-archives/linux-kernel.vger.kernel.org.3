@@ -2,94 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D1A55B183
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 13:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CAC55B193
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 13:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbiFZL2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 07:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
+        id S234233AbiFZLs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 07:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiFZL2p (ORCPT
+        with ESMTP id S229531AbiFZLsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 07:28:45 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DC312609
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 04:28:43 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id fi2so13447327ejb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 04:28:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=V8+VYdQEsK9oOtVXodXHKHdWUFgAqKfNzP3Ab6GKk74=;
-        b=NL5FIXKco+X7S1NGDtKwspPT3yDIPYsP5uuLTpejMFqQ30eFm/xXjJkNGCmjtzRDzi
-         iUdAPFAlxDVL2ncVC29gXlc3m8lLtzy3tMlEH4fJ0B8JpB4jh0Tqh0/U6Cq1N+Yf+Caj
-         BuaEZOzJhCY1uZqnt07yIRbyv0GuFL7zRgSwxbAirdTfrnASg5Al43VvyKTuz4RkvmE1
-         J1+ZIz+zNT2teonAu2biFylKu0X/5APlNVsSgPsiuxA5OoHs3X1vaU5yVD8RVDU3aGHJ
-         szCG6sltUQbz3F57hA/SnaTBOs5iXyq4b+k2lir55ZYgKJV2g42HguPoO5y+XAgGOFcO
-         8qYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=V8+VYdQEsK9oOtVXodXHKHdWUFgAqKfNzP3Ab6GKk74=;
-        b=L5HT9Il1pVernyNv7RV/dEXDRHPB0CrgVxEOf+Pue4NcA2EIHH1LS34CupXXIJWnWr
-         W/KYmgBMrkw28YcJWYXTmoMPe4iYsWGLxcsTfP4cqRmSd9WxIZWg4slN/KFskeb5N/wT
-         QZWbGJjnIFxPWjEvP+O/An5U/cMB1JLqutRwBGZ4RrbYWGsAT042dODH198OCPcr/9kU
-         gF2WLup5RhWa6JQkeItElNoMegHPdK08eQuY1I22Lnu8qQNz9BdCKrh3/CztQIl0jnfe
-         0T8+GFnRb8FDc5+cIKLfoHdcKDS4R2MKvCN9wFY06l0mSFsLMd5IZKVTefQW16vzNNOK
-         T5iw==
-X-Gm-Message-State: AJIora/mjGY4wyvWn7E6d4aqPBAWIG4uRWe5Y63P1QAHJHI6pAJSvFTy
-        4RPnln110x51qjkWag7XJgowwA==
-X-Google-Smtp-Source: AGRyM1swA7uRM6xN6H4QKad+1J4WMM1j0vRKwu+IwjMqIEGGBtItsY5zv+jk9FY/ZywX2fDZOIbSIw==
-X-Received: by 2002:a17:907:1c8d:b0:6f2:eb2:1cd6 with SMTP id nb13-20020a1709071c8d00b006f20eb21cd6mr7498326ejc.568.1656242921917;
-        Sun, 26 Jun 2022 04:28:41 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id w2-20020a170906384200b00722f8d02928sm3721082ejc.174.2022.06.26.04.28.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jun 2022 04:28:41 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-spi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        Sun, 26 Jun 2022 07:48:23 -0400
+Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD1611C1B;
+        Sun, 26 Jun 2022 04:48:21 -0700 (PDT)
+Received: from newone.lan (_gateway [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id BB9732007F;
+        Sun, 26 Jun 2022 13:48:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1656244099;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=I/mAZDQYdv9m84vfS3Qv7/85j2cosVucoKTYVfbJ9zg=;
+        b=gTZudDbaN9LlFqhKxNkc6Ij+/4hDOI2oef/cEmXhvh0xKfo9KkCv+Wa0pCQg+Y7mZF6ktX
+        7gmMU6Xymaqp3lp+JiqXgDQ97lC5JlqSlJnYDOfSqhkWzdFe+eBkzfxMd2OMm5hIca9VVE
+        Zfryy28GPWYHx30lIUJ9TLHxBwN2DDw=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        Robert Marko <robimarko@gmail.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: dt-bindings: samsung: Add Exynos4210 SPI
-Date:   Sun, 26 Jun 2022 13:28:38 +0200
-Message-Id: <20220626112838.19281-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+Subject: [PATCH v3 1/3] ARM: dts: qcom: extend scm compatible to match dt-schema
+Date:   Sun, 26 Jun 2022 13:46:32 +0200
+Message-Id: <20220626114634.90850-1-david@ixit.cz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam: Yes
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_DYNAMIC,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document samsung,exynos4210-spi compatible which is already used on
-several Exynos SoCs.
+First device specific compatible, then general one.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Robert Marko <robimarko@gmail.com>
+Cc: Guru Das Srinagesh <quic_gurus@quicinc.com>
+Signed-off-by: David Heidelberg <david@ixit.cz>
 ---
- Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/qcom-apq8064.dtsi | 2 +-
+ arch/arm/boot/dts/qcom-apq8084.dtsi | 2 +-
+ arch/arm/boot/dts/qcom-ipq4019.dtsi | 2 +-
+ arch/arm/boot/dts/qcom-msm8974.dtsi | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-index a50f24f9359d..ef59ff62e88d 100644
---- a/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-@@ -20,6 +20,7 @@ properties:
-           - samsung,s3c2443-spi # for S3C2443, S3C2416 and S3C2450
-           - samsung,s3c6410-spi
-           - samsung,s5pv210-spi # for S5PV210 and S5PC110
-+          - samsung,exynos4210-spi
-           - samsung,exynos5433-spi
-           - tesla,fsd-spi
-       - const: samsung,exynos7-spi
+diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
+index 9120d10dcd9e..67e625e56e04 100644
+--- a/arch/arm/boot/dts/qcom-apq8064.dtsi
++++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
+@@ -309,7 +309,7 @@ dsps_smsm: dsps@4 {
+ 
+ 	firmware {
+ 		scm {
+-			compatible = "qcom,scm-apq8064";
++			compatible = "qcom,scm-apq8064", "qcom,scm";
+ 
+ 			clocks = <&rpmcc RPM_DAYTONA_FABRIC_CLK>;
+ 			clock-names = "core";
+diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
+index cb01faa23eb7..123c0c32d1df 100644
+--- a/arch/arm/boot/dts/qcom-apq8084.dtsi
++++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
+@@ -95,7 +95,7 @@ memory {
+ 
+ 	firmware {
+ 		scm {
+-			compatible = "qcom,scm";
++			compatible = "qcom,scm-apq8084", "qcom,scm";
+ 			clocks = <&gcc GCC_CE1_CLK> , <&gcc GCC_CE1_AXI_CLK>, <&gcc GCC_CE1_AHB_CLK>;
+ 			clock-names = "core", "bus", "iface";
+ 		};
+diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+index c5da723f7674..4faf854aab9c 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+@@ -156,7 +156,7 @@ xo: xo {
+ 
+ 	firmware {
+ 		scm {
+-			compatible = "qcom,scm-ipq4019";
++			compatible = "qcom,scm-ipq4019", "qcom,scm";
+ 		};
+ 	};
+ 
+diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
+index 804d094c4d79..4cbd8d91f7d0 100644
+--- a/arch/arm/boot/dts/qcom-msm8974.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+@@ -96,7 +96,7 @@ CPU_SPC: spc {
+ 
+ 	firmware {
+ 		scm {
+-			compatible = "qcom,scm";
++			compatible = "qcom,scm-msm8974", "qcom,scm";
+ 			clocks = <&gcc GCC_CE1_CLK>, <&gcc GCC_CE1_AXI_CLK>, <&gcc GCC_CE1_AHB_CLK>;
+ 			clock-names = "core", "bus", "iface";
+ 		};
 -- 
-2.34.1
+2.35.1
 

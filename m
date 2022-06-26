@@ -2,80 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6CA55B0D7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348BD55B0CE
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234337AbiFZJQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 05:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53328 "EHLO
+        id S234390AbiFZJSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 05:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234328AbiFZJQl (ORCPT
+        with ESMTP id S234151AbiFZJSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 05:16:41 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8435412D3E;
-        Sun, 26 Jun 2022 02:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=1gzj5oIHVtFlpBvDQAUEEcqsXk12AVODco7VgEIoQf8=; b=AZer2m1ttmyhsW7HUqwAleQ8dx
-        XZYv8v4i/jV1WWmk/LMtxP+PaiZNdy6Kmb24Oz6LDeWuSE3k2DNrNE2cC4bBH15trYS1++n8nkSh+
-        02CXBYT5KFWqbt52oWsbqCxl2eea1tYsrBtg8qQb8fo535rTrxjdC31OEfTYkQlHn1LU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1o5ONF-008HVF-32; Sun, 26 Jun 2022 11:16:09 +0200
-Date:   Sun, 26 Jun 2022 11:16:09 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     alexandru.tachici@analog.com
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gerhard@engleder-embedded.com,
-        geert+renesas@glider.be, joel@jms.id.au, stefan.wahren@i2se.com,
-        wellslutw@gmail.com, geert@linux-m68k.org, robh+dt@kernel.org,
-        d.michailidis@fungible.com, stephen@networkplumber.org,
-        l.stelmach@samsung.com, linux-kernel@vger.kernel.org
-Subject: Re: [net-next 1/2] net: ethernet: adi: Add ADIN1110 support
-Message-ID: <Yrgj2WM5/O7YSUeZ@lunn.ch>
-References: <20220624200628.77047-1-alexandru.tachici@analog.com>
- <20220624200628.77047-2-alexandru.tachici@analog.com>
+        Sun, 26 Jun 2022 05:18:51 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E538F5B9;
+        Sun, 26 Jun 2022 02:18:50 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47C0A2B;
+        Sun, 26 Jun 2022 02:18:50 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.71.61])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0447E3F792;
+        Sun, 26 Jun 2022 02:18:47 -0700 (PDT)
+Date:   Sun, 26 Jun 2022 10:18:44 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Cc:     Will Deacon <will@kernel.org>, broonie@kernel.org,
+        jpoimboe@redhat.com, ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maz@kernel.org, Kalesh Singh <kaleshsingh@google.com>
+Subject: Re: [PATCH v15 0/6] arm64: Reorganize the unwinder and implement
+ stack trace reliability checks
+Message-ID: <YrgkdBtbFmOvKJpX@FVFF77S0Q05N>
+References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
+ <20220617210717.27126-1-madvenka@linux.microsoft.com>
+ <20220623173224.GB16966@willie-the-truck>
+ <66545c21-cfcf-60eb-4acf-39be99520369@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220624200628.77047-2-alexandru.tachici@analog.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <66545c21-cfcf-60eb-4acf-39be99520369@linux.microsoft.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static int adin1110_mdio_read(struct mii_bus *bus, int phy_id, int reg)
-> +{
-> +	struct adin1110_priv *priv = bus->priv;
-> +	u32 val = 0;
-> +	int ret;
-> +
-> +	mutex_lock(&priv->lock);
-> +
-> +	val |= FIELD_PREP(ADIN1110_MDIO_OP, ADIN1110_MDIO_OP_RD);
-> +	val |= FIELD_PREP(ADIN1110_MDIO_ST, 0x1);
-> +	val |= FIELD_PREP(ADIN1110_MDIO_PRTAD, phy_id);
-> +	val |= FIELD_PREP(ADIN1110_MDIO_DEVAD, reg);
-> +
-> +	/* write the clause 22 read command to the chip */
+On Fri, Jun 24, 2022 at 12:19:01AM -0500, Madhavan T. Venkataraman wrote:
+> 
+> 
+> On 6/23/22 12:32, Will Deacon wrote:
+> > On Fri, Jun 17, 2022 at 04:07:11PM -0500, madvenka@linux.microsoft.com wrote:
+> >> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+> >>
+> >> I have synced this patch series to v5.19-rc2.
+> >> I have also removed the following patch.
+> >>
+> >> 	[PATCH v14 7/7] arm64: Select HAVE_RELIABLE_STACKTRACE
+> >>
+> >> as HAVE_RELIABLE_STACKTRACE depends on STACK_VALIDATION which is not present
+> >> yet. This patch will be added in the future once Objtool is enhanced to
+> >> provide stack validation in some form.
+> > 
+> > Given that it's not at all obvious that we're going to end up using objtool
+> > for arm64, does this patch series gain us anything in isolation?
+> > 
+> 
+> BTW, I have synced my patchset to 5.19-rc2 and sent it as v15.
+> 
+> So, to answer your question, patches 1 thru 3 in v15 are still useful even if we don't
+> consider reliable stacktrace. These patches reorganize the unwinder code based on
+> comments from both Mark Rutland and Mark Brown. Mark Brown has already OKed them.
+> If Mark Rutland OKes them, we should upstream them.
 
-Please return -EOPNOTSUPP if asked to do a C45 transfer.
+Sorry for the delay; I have been rather swamped recently and haven't had the
+time to give this the time it needs.
 
-> +static int adin1110_mdio_write(struct mii_bus *bus, int phy_id, int reg, u16 reg_val)
-> +{
-> +	struct adin1110_priv *priv = bus->priv;
-> +	u32 val = 0;
-> +	int ret;
+I'm happy with patches 1 and 2, and I've acked those in case Will wants to pick
+them.
 
-same here.
+Kalesh (cc'd) is working to share the unwinder code with hyp, and I think that
+we need to take a step back and consider how we can make the design work
+cleanly with that. I'd had a go at prototyping making the unwinder more data
+driven, but I haven't come up with something satisfactory so far.
 
-     Andrew
+It would be good if you could look at / comment on each others series.
+
+Thanks,
+Mark.
+
+> 
+> I can drop patches 4 thru 6. Actually, the objtool patch series that I have
+> sent separately for supporting livepatch already addresses reliability. So, if that
+> gets reviewed and accepted, we don't even need patches 4 thru 6.
+> 
+> If you are OK with that, I can resend v16 with just patches 1 thru 3. Let me know.
+> 
+> Madhavan
+> 

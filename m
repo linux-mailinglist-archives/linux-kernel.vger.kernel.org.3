@@ -2,110 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BDDA55B26E
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 16:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DE755B272
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 16:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233602AbiFZOVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 10:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
+        id S231875AbiFZOZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 10:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiFZOVL (ORCPT
+        with ESMTP id S229550AbiFZOZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 10:21:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49EA5F5BB
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 07:21:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656253268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ahf2yCApAVRKZIV4QgwQyLJ3X4VNm/eYrF4Rb3afHBs=;
-        b=Qu/pwwpYTojMoVlTxOw8clwcq1wFxp4jA8rjXJLgEC8EfQXR/WrWib7moGfYSmAuHL0s1X
-        VL8KRf90VeibRMjC4LnBzA+O6ywZPdf0FaWewdGeaHQ7egRZVc7RA8ungWw9r9yRTB/8lI
-        4F88EsJHdFOyG5S6RFHFnPSYzrIdrHI=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-106-lFdc5I9hP3agfcEcB092qg-1; Sun, 26 Jun 2022 10:21:05 -0400
-X-MC-Unique: lFdc5I9hP3agfcEcB092qg-1
-Received: by mail-qk1-f200.google.com with SMTP id w16-20020a376210000000b006af059b17b7so6966880qkb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 07:21:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ahf2yCApAVRKZIV4QgwQyLJ3X4VNm/eYrF4Rb3afHBs=;
-        b=lHJcx0KVqI2G0im5Fp911FE3icYAFh9pV6J1CHKdhkwFXKEz8lcedaHgg90i++mjUg
-         rVNISfIAtwturMKFevY43IBCsVLMbEuYjphI1KtXtw2CxipY/CPe0W+jrRMxdxzqlVvg
-         elTRWKWLw2pCn/9/wIB/JhXxN4aOHgBt4bPTYENn0v0uZcz6n8duayhyIRxJHDwVfXh6
-         8KyL1n4Hmv2QpNDVXqg4DnZNljQsc2u07/uesKd7aDfFffcgLGoP5u+4F9G9F9y4fY6n
-         oM0++5BVYejNm4QqYDn2c5AlmAE+dLwps8YgWu+2xgZSnk6MnTwBLln9IYlTqotcjWx0
-         00Og==
-X-Gm-Message-State: AJIora8hubmwQUVKPi9kyBo3O8apUm8RnZ0OeIp0JmdvAc4BE8zfOiJU
-        45iPfLAAogBaOeliOKLlTlaEkOPrENUBtPH5OqVwdltVjyjWZ7XEc3rTpf+EauUp0DYxDP7Nr8g
-        DpRs3uftIvKOECZa+rz0Ovhc/
-X-Received: by 2002:a05:620a:471f:b0:6a6:f574:8b78 with SMTP id bs31-20020a05620a471f00b006a6f5748b78mr5486445qkb.469.1656253264869;
-        Sun, 26 Jun 2022 07:21:04 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1taraKCxi2XWY8/KIXCz5Sr4ylSIyPsZkkuTt119Zkfdt3zbyYiMOzX4TAVcI2CZmI4Sd2wRg==
-X-Received: by 2002:a05:620a:471f:b0:6a6:f574:8b78 with SMTP id bs31-20020a05620a471f00b006a6f5748b78mr5486420qkb.469.1656253264652;
-        Sun, 26 Jun 2022 07:21:04 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id m22-20020a05620a291600b006aef641865esm6399256qkp.128.2022.06.26.07.21.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jun 2022 07:21:04 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, wenjing.liu@amd.com, Jun.Lei@amd.com,
-        George.Shen@amd.com, Jimmy.Kizito@amd.com, Jerry.Zuo@amd.com,
-        michael.strauss@amd.com, aurabindo.pillai@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amd/display: Remove unused globals FORCE_RATE and FORCE_LANE_COUNT
-Date:   Sun, 26 Jun 2022 10:20:53 -0400
-Message-Id: <20220626142053.3373970-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sun, 26 Jun 2022 10:25:28 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE18DFE2;
+        Sun, 26 Jun 2022 07:25:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1656253505;
+        bh=V2zLP+Q6I1/UFW3ZsVkjipSTGPK6qygTlMrwpvwc3qs=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=iDpI0X4c4EvjZ8K4GQRqgIdqOp/HEbZhDDbDSXNyk5rgbHJNgHI337HQOKD9sJ1Cx
+         thZ6DBVg63qnXqKrKyQCpUggIIEThbzsD/2YrlcafB78FOnUVJfsNkIXkpQWsnFd0X
+         81sHAwsAOHozynaJVDbEWzKWn9RT1Z/8FJwcnG8c=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.33] ([46.223.2.248]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MacOQ-1nUknr1To2-00cDcr; Sun, 26
+ Jun 2022 16:25:05 +0200
+Subject: Re: [PATCH 4/8] serial: core: sanitize RS485 delays read from device
+ tree
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        vz@mleia.com, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, lukas@wunner.de,
+        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
+References: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
+ <20220622154659.8710-5-LinoSanfilippo@gmx.de>
+ <5d406271-3290-f321-5984-bbc1f9a3bd96@linux.intel.com>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <5f4f4750-95c1-fb39-fefc-dbd2cd51e4a7@gmx.de>
+Date:   Sun, 26 Jun 2022 16:25:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5d406271-3290-f321-5984-bbc1f9a3bd96@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Yktu9u31aqAs7jhThOJR32JZKvmscc7SXjC6uQl83fXmjNX5LCa
+ +KujvR9Yq4KmSO6XN356rP2y89A8P/5QmKIWhR0/s/iEK4Itgsp/jPKcmHMKeSklzckq5I8
+ 63QtTKqOf/SAsaI4EM6TT70hq1kUg5W8UwybyBOSoF0mvQYE2Bu5g2VOJptWtGnvuGc0cln
+ v7LGYeDTn0sRPMwLm7U/w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:sUCrIRbOmUU=:5U5Fg4XJWkc97wRA6PNARj
+ 43tXT3PdoRp/nlr1ltlHtbVOKqRkOtGu6LCPk5SyWHZQksZMAgm4g4lBfliipjE+xDO9nQJQX
+ /viu8lqNzzvMu1O7A3ChaNZl889/ZnhKGjy/qOLaAg9X0smd8tdGTEnPMm3+c2QkqhJ6TJWjV
+ TlS4RUx/QAGRL4L/Ve1Mz4/u/LvWU6wbzM/V3MYIH7bSIK9wH2MSNo6/BzZxjv3wJH4YoTUZP
+ ITNoIE8IklxT4r+WTiwmGCc6Y/HNR3YLI0JEY7/kLbMl2qRv/jQbIqQiceXWO+MXTu+a3WQ5w
+ tZCR8NiMrKPHkpuyivJN0gGI8mk/gx3Dsm8ts+iUjh2emDiHamvvm5G+MnKukFVLOGgWAQ4OR
+ BMLzBrzHU1TOEN1lXVng3uBXDnuUteCRcGG3r/gtqpL5dQEAwUNSkPHaBQkJlLRW0lfK4yK5Q
+ W8G9kTxuQ/II9Vm7ccIzSK9HrlpsStuSu792oFRXfSX+DnrSU9a36ptzd0cv3EaNdkLs3F1nU
+ RQNb6dha+CT5HyRjUwBwUE48DmnKiGjVSXT9sdW2TSqOhm3gkXRBEK0ISnAHS30cHnEJMJGZc
+ /mou3PYhKnNg2x6g3XPyY/0Ul8zC3K70vbQ8vnS+6oWPQlE2b/YQgvUde1PBm4Ur+diOLDo6s
+ YFwoT1Q21fag/xUWhRD0BFa267LUM6uOuTWh8ZdbkxzQmWV9RbVjZZAdCSC0lVXibAI0yQX5w
+ 436xTsyu3FjNwUsvj+c/XpJ4uqwUjJKAJRNkQS82DjmCIOem4fUS2Df+t9bXu5/IgbrImeqAB
+ Xeg7SGH/9nM8X0RKLjW/Y2fHbu/Udhq5k6UPrfmot/RvYs0imOe7JBgSxTt2eJ5Hik+aO9uPi
+ NQmqDyGuFFN4qB8sBy3KLBoflRgfZQeCSndiAg1L/AAy8ss6z8saRhU3jxeQK29l90yUSFh1R
+ hv+D45VhabFJfOQTO/ek6LTIfrQ8m/xq9lU7ceWIV4lOjlIXuHoIrkjTwGu1Kkz08QNG5kYXC
+ 7HXk6ewfowZeB9f5fnSWlPGWasI+my6ZadFmEK4BqbXVQQ7ICUYJPkcHXBTwHVIJNl/jy0PEa
+ h9ss6mjMXq6oQ+R7spVx0iWQz4LsNHwkKEUTNBVqsoa+4ZiOaLc24kaJg==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sparse reports
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:3885:6: warning: symbol 'FORCE_RATE' was not declared. Should it be static?
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:3886:10: warning: symbol 'FORCE_LANE_COUNT' was not declared. Should it be static?
+On 25.06.22 at 12:05, Ilpo J=C3=A4rvinen wrote:
+> On Wed, 22 Jun 2022, Lino Sanfilippo wrote:
+>
+>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>>
+>> When setting the RS485 configuration from userspace via TIOCSRS485 the
+>> delays are clamped to 100ms. Make this consistent with the values passe=
+d
+>> in by means of device tree parameters.
+>>
+>> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>> ---
+>>  drivers/tty/serial/serial_core.c | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/seri=
+al_core.c
+>> index fa6acadd7d0c..2e9f90e73e62 100644
+>> --- a/drivers/tty/serial/serial_core.c
+>> +++ b/drivers/tty/serial/serial_core.c
+>> @@ -3382,6 +3382,8 @@ int uart_get_rs485_mode(struct uart_port *port)
+>>  		rs485conf->delay_rts_after_send =3D 0;
+>>  	}
+>>
+>> +	uart_sanitize_serial_rs485_delays(port, rs485conf);
+>> +
+>>  	/*
+>>  	 * Clear full-duplex and enabled flags, set RTS polarity to active hi=
+gh
+>>  	 * to get to a defined state with the following properties:
+>> --
+>> 2.36.1
+>
+> While above works, if we go to this change user-visible behavior route,
+> uart_get_rs485_mode() could just call full uart_sanitize_serial_rs485()?
 
-Neither of thse variables is used in dc_link_dp.c.  Reviewing the commit listed in
-the fixes tag shows neither was used in the original patch.  So remove them.
+As it is now uart_sanitize_serial_rs485() will clear the entire serial_rs4=
+85 struct and
+return immediately if rs485-enabled-at-boot-time (and thus SER_RS485_ENABL=
+ED)
+is not set. That was one of the reasons I moved the delay checks into an o=
+wn fucntion. The other
+reason is that the remaining sanity check for RTS on send/after send in ua=
+rt_sanitize_serial_rs485() is not
+required in uart_get_rs485_mode() since here we already ensure a sane sett=
+ing.
 
-Fixes: 265280b99822 ("drm/amd/display: add CLKMGR changes for DCN32/321")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-index be1dcb0a2a06..f3421f2bd52e 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-@@ -3882,9 +3882,6 @@ static bool decide_mst_link_settings(const struct dc_link *link, struct dc_link_
- 	return true;
- }
- 
--bool FORCE_RATE = false;
--uint32_t FORCE_LANE_COUNT = 0;
--
- void decide_link_settings(struct dc_stream_state *stream,
- 	struct dc_link_settings *link_setting)
- {
--- 
-2.27.0
-
+Regards,
+Lino

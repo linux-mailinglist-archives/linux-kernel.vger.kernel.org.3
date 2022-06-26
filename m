@@ -2,82 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFDB55B417
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 22:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8355855B414
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 22:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbiFZUyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 16:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
+        id S232248AbiFZUzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 16:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbiFZUys (ORCPT
+        with ESMTP id S230477AbiFZUzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 16:54:48 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08243883
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:54:47 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z19so10405687edb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:54:47 -0700 (PDT)
+        Sun, 26 Jun 2022 16:55:51 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32612DF3
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:55:50 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id mf9so15243582ejb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=F6P3zC7r4qnr1luJY9BEvSQvlGGlGr98+TEUY9WUlLM=;
-        b=GziGBpi7dQFfIG0Txygu2pnE6fjt94O2OQY6YUkszCaMMnCzFMZfPq2lo472IfIkuQ
-         bIIKuBjGkGUctDV/KawGQViKWjhAkTcGa0dFqgWB1WYmRe/mBZsC4/NvC/RfOKPmqP34
-         bjs0rruKGrlyoFzy24TAZKfII14+tbtVPmXiE=
+        bh=OJgI0r/OP80N9dcPFjCLZLQisBcOF18myzMX4U+o7vY=;
+        b=TqtTYTG1IxT0ubMo+gmUVYoa8uQ/KV90cCN6x8dihdGcq4c4m3JhdQfBdZiaB9c38W
+         6ji4Xh3GrVCWwS6EUkhuhilYtLLJeOl0H/BCci+5nOlRTRLdjU2PimbT5UY2ArhRfFpA
+         JTbUB7StCoA9mrGxGCHyGp85ujKOBB0yR1XPg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=F6P3zC7r4qnr1luJY9BEvSQvlGGlGr98+TEUY9WUlLM=;
-        b=i5yN5u7o8rpsR7YBrPUzII/9lGmtuj6tmmvRCSW7jAlzAj0HrculklAy99t14UOvw9
-         a9t6fZOVvp5qSd85Untq2sE5yGl0VZhnTmlYNnLNwCi8i3DfibWi+CWO5yGUo7TEFtom
-         aEF7wqHx6hMZYGwYoy9s7L4uKaWMlp4gS0Xo9jvvSQ/tFCAUOrcZ3dYjMBBQZjrZTHTB
-         J+v7t5+Zf2A/b2LkYlW7/YYCtdaRQh7tLcmcymKkjSa1D2YdjW3yQLBm7Oac+Xgll1vq
-         mYkB2B5s08UcA2jxWt8skPBwgnqRAAt+fa7ZjUSYKyVawZP93PXw9xtU8ej+7XeFEeqT
-         s3NQ==
-X-Gm-Message-State: AJIora9tf9rBvrBV7UzM59lY/q2pM8dohaoNTKRpVvRBX5l0aQRexYfY
-        MY7NG82VBJUx4CBy8tLM7PujplN6RLjRYPoq
-X-Google-Smtp-Source: AGRyM1vnUT8bEyUzqoOez+RCtGYfhLUQlSBQhwQ1u7qgEVLtf98bWyCrjwOPgnN4bHo/AZRvnDKRaA==
-X-Received: by 2002:a50:ff0e:0:b0:433:5d15:eada with SMTP id a14-20020a50ff0e000000b004335d15eadamr12739879edu.102.1656276886321;
-        Sun, 26 Jun 2022 13:54:46 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id a27-20020a170906275b00b00722e57fa051sm4123837ejd.90.2022.06.26.13.54.44
+        bh=OJgI0r/OP80N9dcPFjCLZLQisBcOF18myzMX4U+o7vY=;
+        b=GvOM8ISbMY7UtGuaw8tyqJ6X9NwHd823mOZ1FfPBT/bjGKnP/SG2+BZuikQOghrrsr
+         I5ejI21z7gUoP3/WDgSrCNCP7SCZzzalBQIep8WBh4VT43rNPACsS6VGUzRlDdlaUR2B
+         f4W77JhgBIx3PVMgrs4wlBjcivWQiawDOLTLXquhhAKVYb0ZLRkqm0o8xbLs6YZXaYup
+         /4w50KQ73yskI3CLZGgp+08vLuWkKzgH99a4MEqknlTTTZW2V2NkWy24OOMFYkUyQi9y
+         lHfjVQ8occmVFoshSN+ljleXapyMgrchlxpZTaf6fapGdXQZ+MD/UvqP6CS8y7bEJUzJ
+         Ekkg==
+X-Gm-Message-State: AJIora9AwWCX/DuR9q6cGiRKx4kC3S1suvIBkW94aLe+DoOO24KbkMCF
+        +vau/mJ7oIw67AwIRcHkUQ3zSDUjz6yzaaEx
+X-Google-Smtp-Source: AGRyM1t/+0EU5SzPDp4T9EaQt3rFHxLf1hNsJuJ2Q0kpYhW0f8FMvH0xouQ9/YjoCjBsniPq1rXFcQ==
+X-Received: by 2002:a17:906:9f0c:b0:712:1b55:37e1 with SMTP id fy12-20020a1709069f0c00b007121b5537e1mr9604827ejc.69.1656276949132;
+        Sun, 26 Jun 2022 13:55:49 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id l2-20020a170906078200b006fe89cafc42sm4192435ejc.172.2022.06.26.13.55.46
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 13:54:45 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id w17so10365535wrg.7
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:54:44 -0700 (PDT)
-X-Received: by 2002:a5d:48c1:0:b0:21a:3574:e70c with SMTP id
- p1-20020a5d48c1000000b0021a3574e70cmr9249733wrs.97.1656276884478; Sun, 26 Jun
- 2022 13:54:44 -0700 (PDT)
+        Sun, 26 Jun 2022 13:55:47 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id w17so10367681wrg.7
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:55:46 -0700 (PDT)
+X-Received: by 2002:a05:6000:1f8d:b0:21b:aaec:ebae with SMTP id
+ bw13-20020a0560001f8d00b0021baaecebaemr9680616wrb.274.1656276946496; Sun, 26
+ Jun 2022 13:55:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
- <0a5901f8460f452a89c9b0cda32fb833@AcuMS.aculab.com> <20220620150514.3tjy5dv7pv5frcwd@moria.home.lan>
- <53d77ae6101a0f24cfb694174d4c7699424c57e8.camel@perches.com>
- <20220621005752.ohiq5besmy3r5rjo@moria.home.lan> <a795818f9a49ed401bffc7c38ca7e39ae449e9e0.camel@perches.com>
- <c1a92cf059fc9a3c395d87b11e9f757f5ec1ff6a.camel@perches.com>
- <355e912490dbaef8fe4e12df0201c3f5b439565d.camel@perches.com>
- <CAHk-=whwyxSpzgr+roEr7_V5wVenw9fV3EOAZhAYCAuRdEyChQ@mail.gmail.com> <93ab94ec92497af13c563c52fc7e1f7f81dac333.camel@perches.com>
-In-Reply-To: <93ab94ec92497af13c563c52fc7e1f7f81dac333.camel@perches.com>
+References: <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
+ <874k0863x8.fsf@email.froward.int.ebiederm.org> <CAHk-=wgTG2K3erROP19320zBN6BHVf0hRfXGdawkGR4gzrJN6w@mail.gmail.com>
+ <CAHk-=whLsaRKaFKS0UffeCYYCVyP0bbiB4BTYTaXtScgu6R9yA@mail.gmail.com>
+ <87pmiw1fy6.fsf@email.froward.int.ebiederm.org> <CAHk-=wiutNT47oNhyk_WvMj2qp4pehYFptXCUzW=u_2STLQiww@mail.gmail.com>
+ <CAHk-=whX_=BNZ4kVEAu2NV3CMnhwsuYTyE65FQXUMx8VPNOAOA@mail.gmail.com>
+ <87ilonuti2.fsf_-_@email.froward.int.ebiederm.org> <871qvbutex.fsf_-_@email.froward.int.ebiederm.org>
+ <CAHk-=wg9eqtrpYrjJ=yobkwkTimWFtiDd_JOfADttG0fyAJrqg@mail.gmail.com> <YrjAJN7dDJ9R7Ocu@mtj.duckdns.org>
+In-Reply-To: <YrjAJN7dDJ9R7Ocu@mtj.duckdns.org>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 26 Jun 2022 13:54:28 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi4snadB1LiV=FAUTpHNumsF=GN=U5vckWaLMbnU5nfQA@mail.gmail.com>
-Message-ID: <CAHk-=wi4snadB1LiV=FAUTpHNumsF=GN=U5vckWaLMbnU5nfQA@mail.gmail.com>
-Subject: Re: [RFC[ Alloc in vsprintf
-To:     Joe Perches <joe@perches.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Laight <David.Laight@aculab.com>,
+Date:   Sun, 26 Jun 2022 13:55:30 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgNxL17-bsKM8qcrK+mGSpgeBVkWu00pQgnypOOgqTF9Q@mail.gmail.com>
+Message-ID: <CAHk-=wgNxL17-bsKM8qcrK+mGSpgeBVkWu00pQgnypOOgqTF9Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3] kthread: Stop abusing TASK_UNINTERRUPTIBLE (INCOMPLETE)
+To:     Tejun Heo <tj@kernel.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Christian Brauner <brauner@kernel.org>,
         Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -89,24 +88,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 1:39 PM Joe Perches <joe@perches.com> wrote:
+On Sun, Jun 26, 2022 at 1:23 PM Tejun Heo <tj@kernel.org> wrote:
 >
-> OK, and that's true for all the temp stack buffers in every %p<foo>.
+> Would it be a reasonable tradeoff to have a kthread wrapper -
+> kthread_start() or whatever - which ensures that it is actually called
+> once on a new task? That way, we can keep the init code inline and
+> bugs on both sides (not starting and starting incorrectly) are
+> obvious.
 
-Yup.
+Yeah, that sounds reasonable to me.
 
-A lot of them are simply due to it just being simple, and when the
-temp buffer is of a fairly limited size, "simple is good".
-
-But yeah, that KSYM_SYMBOL_LEN thing was questionable before, and as
-it grows with KSYM_NAME_LEN growing, it's getting pretty ridiculous.
-
-For example, the buffer in "number()" looks very reasonable to me,
-since it's not only pretty small (24 bytes on 64-bit architectures).
-it has that special alignment requirement too.
-
-So I don't think those temporary stack buffers are necessarily wrong
-in general, but there's a point where they go from "ok, there's being
-_simple_ and then there's _overly_simplistic_".
-
-                   Linus
+                Linus

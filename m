@@ -2,152 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F86455B283
+	by mail.lfdr.de (Postfix) with ESMTP id A8C3755B284
 	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 16:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbiFZOpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 10:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
+        id S230401AbiFZOq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 10:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiFZOpp (ORCPT
+        with ESMTP id S229503AbiFZOq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 10:45:45 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B0DDFD4;
-        Sun, 26 Jun 2022 07:45:43 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id c13so9706823eds.10;
-        Sun, 26 Jun 2022 07:45:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bIMKDBig1maexVfXVGf3hHvuLRrK8hEhsnsL3tm2gHY=;
-        b=oJ5xCy2XbaMLUKI0Zl7eQai0P3WTwCQ4U26EEiEZ1IXGA5mUn+OmpdH2KsN0j6Xbx4
-         1FFyJ7nKImJIVoMQBezO9VWz6mlt5PsDknCv1ndyTkyPCXWH9Un29Bt+kvwRjNuAW01B
-         IWx1csUkU1Jg3ew9xYxGXLvWFNqJhmnJbp6Ir0IDKY1/wRmy2jUZKbLltvBk7EQGOE4l
-         5WIjxJzdFtXjM9sd1hDgIpwuSmlR9U+R4jdHscOc5QoH15I4jDTOdCAVPjHKZzdMBMHn
-         jo9q+xHwsNEXlvPohR3ZEJts4XcWnruRcRr4tL9QG02P8FPMqs5036CcCJKWr2qyUQWG
-         NJTQ==
+        Sun, 26 Jun 2022 10:46:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18B24DFD8
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 07:46:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656254781;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5EXh2xkTs1zBkhfCl8CTHqf9DxClLVCKfcSwd9L8zzg=;
+        b=FrJpvHXIW1OTGgisNIeazetbem2rm2qB2+C/sXSDLMmDnxDbQdtSry2Ox1SBD3WlexL7ky
+        TAxMasRrSYmdcmnOjaWRU9dNXXKSLikNsHgXuUIT9+pSBqhR+A1/OlVJQU+4KmBLpVF9gE
+        pZWLMgODLEtYv4WyNTWisNF85cTBcHc=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-332-DKJpAloiNqylPxl0ZyhtRg-1; Sun, 26 Jun 2022 10:46:20 -0400
+X-MC-Unique: DKJpAloiNqylPxl0ZyhtRg-1
+Received: by mail-qk1-f199.google.com with SMTP id m15-20020a05620a290f00b006a74cf760b2so7897759qkp.20
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 07:46:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bIMKDBig1maexVfXVGf3hHvuLRrK8hEhsnsL3tm2gHY=;
-        b=FUfqrc3X98KmSxhCS+WR7luGH1LHHEiUnyTS1ccrhr5YIzo+JvhBIrSgYG8dexp2C8
-         lg6N/3ePHRWcHHGSK1Z7bQdIgduhVYrLG9vOBQ8l1JQb5RVbpN5tpFrL7KkAROps5AGd
-         GJPa8fCyXZDhFPZZUBT7lHYa1Vr9vl2M+oqWaMzfB1t6cgdhXXaqda7uxgHR3IcIgIGm
-         cppGVGBLiJCJTLxBVUE0dULl6mr/4luvR6y6BV8a+amvR+vBPBLGYWzj5vhfvtl+EEL+
-         iwsArdGHoWZPGxoKg+SB6QgPZcyKM4F7xNw4N9RMzm1NM7nhsHc+7BjFl/c8kS3p5NYH
-         9XTg==
-X-Gm-Message-State: AJIora8qUwXBhXDidsfugj0Apl9+EJFIbQvtpltn9IiaM8w4YYVLrVTO
-        PHkr6TtJc8GEYkHpu5rkgWk=
-X-Google-Smtp-Source: AGRyM1tAPMWyeRVEd9C6eKkGB8Rs9tPJ/M2KKoE1rbQMulc466FSETvA/4HuZRN40LPzJS5oUS6N/w==
-X-Received: by 2002:a05:6402:428a:b0:42e:8f7e:1638 with SMTP id g10-20020a056402428a00b0042e8f7e1638mr11293288edc.228.1656254742328;
-        Sun, 26 Jun 2022 07:45:42 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id d11-20020a1709064c4b00b0070cac22060esm3785328ejw.95.2022.06.26.07.45.41
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5EXh2xkTs1zBkhfCl8CTHqf9DxClLVCKfcSwd9L8zzg=;
+        b=uO9ev9sryG612iViA2XVCxU3tKPGSjtYG8CDkDtAN3ksiBNhjW+eszR7dfsqVKlshz
+         3lcwaMX1RSv7XGk0vf7R7Sux7Vsk+Itl1Ql/WUSt4rlF7F5RH2qrKHjfpgbWBu5OknjK
+         Es010jf7reN9JuF38TP5C8R2efFox12USTo/U88FQSTitp6KxdSgN1fD0ffffGM1OuNg
+         2OnBXpYSFX5dPis23H/yZ9Jn6X0EUFKFBuGiKcE76DKHeE/gAIfPPwLGHSWk067zckz6
+         LhEN5cRUeQAPegkgsEZquLLbR5rC96lOfeezJJraKV3XrceduRPwf902EaLTNJZsVTfW
+         78Lg==
+X-Gm-Message-State: AJIora+sUL/eGOCeLErFqk+DdRwmyU7qg2CQaX6WTFQqFoHbPZ9Jv7kb
+        Q/U/qSJmwJF+2ToTanDm9R7996GFcfWsymxQk1LQaQ3+I15evixK+Lg8AEZxmXxzyW8pbex74/H
+        KWjhufKNIGWHVMhugM1BtBqat
+X-Received: by 2002:a05:6214:1c49:b0:470:5f70:4ab1 with SMTP id if9-20020a0562141c4900b004705f704ab1mr6041404qvb.13.1656254780312;
+        Sun, 26 Jun 2022 07:46:20 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vwKpbQh1t2Fwl4Ge8LmFUOf/3X70OZcbrAYYkN7/IZ4bcE826TN7H5F8YkD5GlSQNHaim5WA==
+X-Received: by 2002:a05:6214:1c49:b0:470:5f70:4ab1 with SMTP id if9-20020a0562141c4900b004705f704ab1mr6041396qvb.13.1656254780138;
+        Sun, 26 Jun 2022 07:46:20 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 22-20020ac85916000000b00317bcb6ad2csm5343266qty.17.2022.06.26.07.46.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jun 2022 07:45:41 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Sun, 26 Jun 2022 16:45:39 +0200
-To:     Zixuan Tan <tanzixuangg@gmail.com>
-Cc:     terrelln@fb.com, Zixuan Tan <tanzixuan.me@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] perf build: Suppress openssl v3 deprecation warnings in
- libcrypto feature test
-Message-ID: <YrhxE4s0hLvbbibp@krava>
-References: <20220625153439.513559-1-tanzixuan.me@gmail.com>
+        Sun, 26 Jun 2022 07:46:19 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch, Qingqing.Zhuo@amd.com, mario.limonciello@amd.com,
+        nicholas.kazlauskas@amd.com, aurabindo.pillai@amd.com,
+        maira.canal@usp.br
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amd/display: change to_dal_irq_source_dnc32() storage class specifier to static
+Date:   Sun, 26 Jun 2022 10:46:15 -0400
+Message-Id: <20220626144615.2227149-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220625153439.513559-1-tanzixuan.me@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 11:34:38PM +0800, Zixuan Tan wrote:
-> With OpenSSL v3 installed, the libcrypto feature check fails as it use the
-> deprecated MD5_* API (and is compiled with -Werror). The error message is
-> as follows.
-> 
-> $ make tools/perf
-> ```
-> Makefile.config:778: No libcrypto.h found, disables jitted code injection,
-> please install openssl-devel or libssl-dev
-> 
-> Auto-detecting system features:
-> ...                         dwarf: [ on  ]
-> ...            dwarf_getlocations: [ on  ]
-> ...                         glibc: [ on  ]
-> ...                        libbfd: [ on  ]
-> ...                libbfd-buildid: [ on  ]
-> ...                        libcap: [ on  ]
-> ...                        libelf: [ on  ]
-> ...                       libnuma: [ on  ]
-> ...        numa_num_possible_cpus: [ on  ]
-> ...                       libperl: [ on  ]
-> ...                     libpython: [ on  ]
-> ...                     libcrypto: [ OFF ]
-> ...                     libunwind: [ on  ]
-> ...            libdw-dwarf-unwind: [ on  ]
-> ...                          zlib: [ on  ]
-> ...                          lzma: [ on  ]
-> ...                     get_cpuid: [ on  ]
-> ...                           bpf: [ on  ]
-> ...                        libaio: [ on  ]
-> ...                       libzstd: [ on  ]
-> ...        disassembler-four-args: [ on  ]
-> ```
-> 
-> This is very confusing because the suggested library (on my Ubuntu 20.04
-> it is libssl-dev) is already installed. As the test only checks for the
-> presence of libcrypto, this commit suppresses the deprecation warning to
-> allow the test to pass.
-> 
-> Signed-off-by: Zixuan Tan <tanzixuan.me@gmail.com>
-> ---
->  tools/build/feature/test-libcrypto.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/tools/build/feature/test-libcrypto.c b/tools/build/feature/test-libcrypto.c
-> index a98174e0569c..31afff093d0b 100644
-> --- a/tools/build/feature/test-libcrypto.c
-> +++ b/tools/build/feature/test-libcrypto.c
-> @@ -2,6 +2,12 @@
->  #include <openssl/sha.h>
->  #include <openssl/md5.h>
->  
-> +/*
-> + * The MD5_* API have been deprecated since OpenSSL 3.0, which causes the
-> + * feature test to fail silently. This is a workaround.
-> + */
+sparse reports
+drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn32/irq_service_dcn32.c:39:20: warning: symbol 'to_dal_irq_source_dcn32' was not declared. Should it be static?
 
-then we use these deprecated MD5 calls in util/genelf.c if libcrypto is detected,
-so I wonder how come the rest of the compilation passed for you.. do you have
-CONFIG_JITDUMP disabled?
+to_dal_irq_source_dnc32() is only referenced in irq_service_dnc32.c, so change its
+storage class specifier to static.
 
-thanks,
-jirka
+Fixes: 0efd4374f6b4 ("drm/amd/display: add dcn32 IRQ changes")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-> +
->  int main(void)
->  {
->  	MD5_CTX context;
-> -- 
-> 2.34.1
-> 
+diff --git a/drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c b/drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c
+index 3a213ca2f077..b1012fa1977b 100644
+--- a/drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c
++++ b/drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c
+@@ -36,7 +36,7 @@
+ 
+ #define DCN_BASE__INST0_SEG2                       0x000034C0
+ 
+-enum dc_irq_source to_dal_irq_source_dcn32(
++static enum dc_irq_source to_dal_irq_source_dcn32(
+ 		struct irq_service *irq_service,
+ 		uint32_t src_id,
+ 		uint32_t ext_id)
+-- 
+2.27.0
+

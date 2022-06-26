@@ -2,74 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B056C55B410
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 22:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2355D55B411
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 22:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbiFZUpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 16:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51178 "EHLO
+        id S231921AbiFZUwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 16:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbiFZUpm (ORCPT
+        with ESMTP id S230477AbiFZUwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 16:45:42 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3768EB5
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:45:39 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id o10so10467194edi.1
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:45:39 -0700 (PDT)
+        Sun, 26 Jun 2022 16:52:01 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782F81175
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:52:00 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id 89so12382451qvc.0
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:52:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/ci1+NPUxEsVxZZfKgEg6JySTcs1pF3WLyCCsnWy1KA=;
-        b=R5/A1EFUSSujFY8sf4fu7RwPA4Dwc4d+8eOJdJpbOiGhnkaFTm8fcgNXS2u9w8Uh6M
-         UhXsh0TFo6jgys/pJPT/MhgXuan6EAr8ye6XOW5FSYrd0xbNhbg3VOzKFSm+2NmtD7Vq
-         JjqMjbYvbCnL+0fEVTjXP9JaCzi9Udzy0AVPoVSLNh3RkH9a3EEH36B4N4nUZKSIu73W
-         L4r5VT8Bu3gAdJTNVNnykPn75BGe7gX3H1skZ3vfis6c3e4ubn4JCWXlj2XOwSJdcx13
-         lx3spPfCCxcpDP06guSadAHfuiUoXjDrJSISVJeXFIaHeS2JSWmtxINPobRxoaymMfQN
-         y0+g==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0uMJf4FJG/5wuR5sGkF8+rRgoUV4V+m2L2oEIirjeF8=;
+        b=SKI1T/TZ191ugcTzlr53quPp0usXsnPGme2ITPQplFyNs5QQ6Wa3ttioJeMUtV0wBY
+         RJT7Qn6mMyi3+QZ+q5TvcJBb5aEemux4u0+kwYFYHmCZb3WopQrN1UxbnR/6eXUPYzpR
+         5CKVYPs38K4NQxhj2z3eiAoeAfHleFPWtG0FjTPDdF+G6mW4KL2j+h9pIjykZ0cauwns
+         vTjEq86u9NpTh/Xem6IcE5ML1my0X8std/QeU1U8EovJyukiyCadPWADP8aAMhyvnl4S
+         fg10GYyjCP+L/EyvqArtGapezu9XOG81BHOyBvT2Ta/hM6waPUorVEt5wQLy9D2OWrKC
+         1GVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/ci1+NPUxEsVxZZfKgEg6JySTcs1pF3WLyCCsnWy1KA=;
-        b=zkKp1Z7jzEoaTIzvdc09EuwccGBDEdFk4t23ap/gg6W8WbTdosQkIMFmupbwKxLwpi
-         ps/VYPXFpsYUex/YwHgRb5oxHXn34Fs+kizj38bLVFjU5TanBXFzA4g6JjFdjYv/TDzU
-         5p36xDNnxj7es1/DIAAyO+CNVJsdN2j8WbBbJM+gMWz0QHXf/ax+n/7E/DQju2UJBx/L
-         wUuSKSyLed8ZaSVSB51utoIXiI6IeWlL5uJw6iRLPqKqXAb4tLt9BMvAoGcqH6ENP6Iv
-         QDGeJ4W08PwXLdzOsQqjxTXor7jv7qDghHRQM+hHjWNZp8KeQxPTVmPh6eqf5E5g9axk
-         Q25w==
-X-Gm-Message-State: AJIora9+EipYc458OhSHIdFFZBPobKZkSFU9vW0IdMdCkZr3r63NP7nO
-        TnVngEig7ucHks1MylGKn18=
-X-Google-Smtp-Source: AGRyM1vIrlrNeHZBHntI8u/d9LgSPfq6A2Tt7jtq59RDqKHRB3Qu0gFpnKHh4CmjCxecAVn0zyaYqw==
-X-Received: by 2002:a05:6402:25c2:b0:431:932e:eb6f with SMTP id x2-20020a05640225c200b00431932eeb6fmr13078820edb.296.1656276338173;
-        Sun, 26 Jun 2022 13:45:38 -0700 (PDT)
-Received: from [192.168.1.100] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
-        by smtp.gmail.com with ESMTPSA id o19-20020a170906775300b007052b183d51sm4131367ejn.132.2022.06.26.13.45.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 13:45:37 -0700 (PDT)
-Message-ID: <e048a607-6679-8a0d-f68c-91b4c4b42afd@gmail.com>
-Date:   Sun, 26 Jun 2022 22:45:36 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0uMJf4FJG/5wuR5sGkF8+rRgoUV4V+m2L2oEIirjeF8=;
+        b=HLP987+YjN5u3mkD3y8dTHTY4P7kFKcKL8x2E8xjW8LGH8f2b1Aex939vD5DacS4E2
+         C93ChpYfGmhp9vyIylxxA6sC3vb2RbwZcZ9bgqCMbE7ZNtPHnCh8reYw5027ZMyljn2n
+         s3zV0dZxz0xhyPfCxJAKQF294EsQJPdNQqmjEPymF5mDXEOHwgTWwmyo58KhQqCL/qX1
+         NpHmoIe4CJKgQK1eQOLmnSd19F8WQMlia6rn1Wy/4Xppes5uN6GI2vLCwOGtkHW7mTKe
+         +wnLRnbpIQ2CDE0VRA3aVUmTywZTtUxxcFFD+yHl9FMTCFC+n/o8LQ6xtW/sNptCzG2I
+         SydA==
+X-Gm-Message-State: AJIora+wrFxT/a18fqWmibYj4qZV6mlDQnUPwPW7NfdwiE6E3mHEKP1x
+        AD75+aNJYrfk/C3JL0kVuuMp0uFPTawhfPw5Wg==
+X-Google-Smtp-Source: AGRyM1s0/7XqSbpTLPbt4CnLr4T/V3zTpGusZFFoFg9i+FFHWwKSNLcYjUDpNMwqcGFidyAiKaYu0Q==
+X-Received: by 2002:a05:6214:76a:b0:470:b527:a3f8 with SMTP id f10-20020a056214076a00b00470b527a3f8mr4021308qvz.110.1656276719619;
+        Sun, 26 Jun 2022 13:51:59 -0700 (PDT)
+Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id j9-20020a05620a410900b006a740bb8578sm7402075qko.83.2022.06.26.13.51.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Jun 2022 13:51:58 -0700 (PDT)
+Date:   Sun, 26 Jun 2022 16:51:58 -0400
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Laight <David.Laight@aculab.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>
+Subject: Re: [RFC[ Alloc in vsprintf
+Message-ID: <20220626205158.bqeyetui3cromscp@moria.home.lan>
+References: <20220620004233.3805-1-kent.overstreet@gmail.com>
+ <0a5901f8460f452a89c9b0cda32fb833@AcuMS.aculab.com>
+ <20220620150514.3tjy5dv7pv5frcwd@moria.home.lan>
+ <53d77ae6101a0f24cfb694174d4c7699424c57e8.camel@perches.com>
+ <20220621005752.ohiq5besmy3r5rjo@moria.home.lan>
+ <a795818f9a49ed401bffc7c38ca7e39ae449e9e0.camel@perches.com>
+ <c1a92cf059fc9a3c395d87b11e9f757f5ec1ff6a.camel@perches.com>
+ <355e912490dbaef8fe4e12df0201c3f5b439565d.camel@perches.com>
+ <CAHk-=whwyxSpzgr+roEr7_V5wVenw9fV3EOAZhAYCAuRdEyChQ@mail.gmail.com>
+ <93ab94ec92497af13c563c52fc7e1f7f81dac333.camel@perches.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] staging: r8188eu: merge two led structs
-Content-Language: en-US
-To:     Martin Kaiser <martin@kaiser.cx>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220626181000.287225-1-martin@kaiser.cx>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20220626181000.287225-1-martin@kaiser.cx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <93ab94ec92497af13c563c52fc7e1f7f81dac333.camel@perches.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,128 +89,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/22 20:09, Martin Kaiser wrote:
-> The led layer uses struct led_priv and struct LED_871x to store state
-> info. Merge the two structs. Move LED_871x's components into led_priv.
+On Sun, Jun 26, 2022 at 01:39:01PM -0700, Joe Perches wrote:
+> On Sun, 2022-06-26 at 13:19 -0700, Linus Torvalds wrote:
+> > On Sun, Jun 26, 2022 at 12:53 PM Joe Perches <joe@perches.com> wrote:
+> > > 
+> > > In a reply to the printbufs thread, I wrote a proposal to use an
+> > > alloc to reduce stack in vsprintf when CONFIG_KALLSYMS is enabled.
+> > > 
+> > > No one has replied to this but I think it's somewhat sensible.
+> > 
+> > I think that's a bad idea.
 > 
-> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-> ---
->   drivers/staging/r8188eu/core/rtw_led.c    | 27 ++++++++++-------------
->   drivers/staging/r8188eu/include/rtw_led.h |  9 +++-----
->   2 files changed, 15 insertions(+), 21 deletions(-)
+> Somewhat sensible not sensible...
 > 
-> diff --git a/drivers/staging/r8188eu/core/rtw_led.c b/drivers/staging/r8188eu/core/rtw_led.c
-> index 25989acf5259..d5c6c5e29621 100644
-> --- a/drivers/staging/r8188eu/core/rtw_led.c
-> +++ b/drivers/staging/r8188eu/core/rtw_led.c
-> @@ -16,7 +16,7 @@
->   	(l)->CurrLedState == LED_BLINK_WPS_STOP || \
->   	(l)->bLedWPSBlinkInProgress)
->   
-> -static void ResetLedStatus(struct LED_871x *pLed)
-> +static void ResetLedStatus(struct led_priv *pLed)
->   {
->   	pLed->CurrLedState = RTW_LED_OFF; /*  Current LED state. */
->   	pLed->bLedOn = false; /*  true if LED is ON, false if LED is OFF. */
-> @@ -32,7 +32,7 @@ static void ResetLedStatus(struct LED_871x *pLed)
->   	pLed->bLedScanBlinkInProgress = false;
->   }
->   
-> -static void SwLedOn(struct adapter *padapter, struct LED_871x *pLed)
-> +static void SwLedOn(struct adapter *padapter, struct led_priv *pLed)
->   {
->   	u8	LedCfg;
->   	int res;
-> @@ -48,7 +48,7 @@ static void SwLedOn(struct adapter *padapter, struct LED_871x *pLed)
->   	pLed->bLedOn = true;
->   }
->   
-> -static void SwLedOff(struct adapter *padapter, struct LED_871x *pLed)
-> +static void SwLedOff(struct adapter *padapter, struct led_priv *pLed)
->   {
->   	u8	LedCfg;
->   	int res;
-> @@ -75,7 +75,7 @@ static void SwLedOff(struct adapter *padapter, struct LED_871x *pLed)
->   static void blink_work(struct work_struct *work)
->   {
->   	struct delayed_work *dwork = to_delayed_work(work);
-> -	struct LED_871x *pLed = container_of(dwork, struct LED_871x, blink_work);
-> +	struct led_priv *pLed = container_of(dwork, struct led_priv, blink_work);
->   	struct adapter *padapter = pLed->padapter;
->   	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
->   
-> @@ -182,35 +182,32 @@ static void blink_work(struct work_struct *work)
->   void rtl8188eu_InitSwLeds(struct adapter *padapter)
->   {
->   	struct led_priv *pledpriv = &padapter->ledpriv;
-> -	struct LED_871x *pLed = &pledpriv->SwLed0;
->   
-> -	pLed->padapter = padapter;
-> -	ResetLedStatus(pLed);
-> -	INIT_DELAYED_WORK(&pLed->blink_work, blink_work);
-> +	pledpriv->padapter = padapter;
-> +	ResetLedStatus(pledpriv);
-> +	INIT_DELAYED_WORK(&pledpriv->blink_work, blink_work);
->   }
->   
->   void rtl8188eu_DeInitSwLeds(struct adapter *padapter)
->   {
->   	struct led_priv	*ledpriv = &padapter->ledpriv;
-> -	struct LED_871x *pLed = &ledpriv->SwLed0;
->   
-> -	cancel_delayed_work_sync(&pLed->blink_work);
-> -	ResetLedStatus(pLed);
-> -	SwLedOff(padapter, pLed);
-> +	cancel_delayed_work_sync(&ledpriv->blink_work);
-> +	ResetLedStatus(ledpriv);
-> +	SwLedOff(padapter, ledpriv);
->   }
->   
->   void rtw_led_control(struct adapter *padapter, enum LED_CTL_MODE LedAction)
->   {
-> -	struct led_priv *ledpriv = &padapter->ledpriv;
-> +	struct led_priv *pLed = &padapter->ledpriv;
->   	struct registry_priv *registry_par;
-> -	struct LED_871x *pLed = &ledpriv->SwLed0;
->   	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
->   
->   	if ((padapter->bSurpriseRemoved) || (padapter->bDriverStopped) ||
->   	    (!padapter->hw_init_completed))
->   		return;
->   
-> -	if (!ledpriv->bRegUseLed)
-> +	if (!pLed->bRegUseLed)
->   		return;
->   
->   	registry_par = &padapter->registrypriv;
-> diff --git a/drivers/staging/r8188eu/include/rtw_led.h b/drivers/staging/r8188eu/include/rtw_led.h
-> index 2c14cb23d9ad..d6b0c1c2f9a2 100644
-> --- a/drivers/staging/r8188eu/include/rtw_led.h
-> +++ b/drivers/staging/r8188eu/include/rtw_led.h
-> @@ -37,9 +37,11 @@ enum LED_STATE_871x {
->   	LED_BLINK_RUNTOP = 13, /*  Customized for RunTop */
->   };
->   
-> -struct LED_871x {
-> +struct led_priv {
->   	struct adapter *padapter;
->   
-> +	bool bRegUseLed;
-> +
->   	enum LED_STATE_871x	CurrLedState; /*  Current LED state. */
->   	enum LED_STATE_871x	BlinkingLedState; /*  Next state for blinking,
->   				   * either RTW_LED_ON or RTW_LED_OFF are. */
-> @@ -58,11 +60,6 @@ struct LED_871x {
->   	struct delayed_work blink_work;
->   };
->   
-> -struct led_priv{
-> -	struct LED_871x			SwLed0;
-> -	bool	bRegUseLed;
-> -};
-> -
->   void rtl8188eu_InitSwLeds(struct adapter *padapter);
->   void rtl8188eu_DeInitSwLeds(struct adapter *padapter);
->   
+> > Those things are *literally* called from panic situations, which may
+> > be while holding core memory allocation locks, or similar.
+> 
+> True, and special_hex_number was used on alloc failure.
+> 
+> > Now, you are correct that the stack buffer is annoying. But I think
+> > the proper way to fix that is to say "we already *have* the target
+> > buffer, let's use it".
+> 
+> OK, and that's true for all the temp stack buffers in every %p<foo>.
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
+Serious question: why are you trying to half-ass just _one_ of these functions
+when I've been working on solving stack allocations in all of them? I've already
+killed every single stack buffer in the last patch series that was posted except
+for symbol_string(). I would welcome the help if you wanted to tackle that one.
+
+It's not completely trivial because while kallsyms_expand_symbol() can be
+trivially converted to printbufs - it just outputs one char at a time, so that
+becomes prt_char() - it's not a output-once-and-done algorithm:
+cleanup_symbol_name() then goes back over the output buffer and modifies it in
+place (ew), because of weird clang things that it's got #ifdefs for.
+
+Specifically, it's truncating the output at the first period (easy to convert;
+just stop when we see a period) but then it truncates at the last $ - why? do we
+have symbols when building with gcc that legitimately have dollar signs in them?
+One would hope we could drop the #ifdefs but that needs to be checked.
+
+That's as far as I got looking at it just now. It will be some time before I
+have time to do it properly and run tests and research what I'm doing (because
+I am completely buried in bcachefs bugs to work through at the moment, and
+getting sucked into working on test automation _again_ when I have a million
+more valuable things I could be working on because the test infrastructure story
+for the kernel is still a shitshow, but that's another rant).
+
+Anayways, I'm trying to take the time to do this stuff right, but there's a
+_lot_ of work involved, so if you want to help out instead of just slag what I'm
+doing... well, it'd be nice...
+
+Cheers,
+Kent

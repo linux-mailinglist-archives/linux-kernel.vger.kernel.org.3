@@ -2,110 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7038555AE1B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 04:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6371455AE21
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 04:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233806AbiFZCBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 22:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60958 "EHLO
+        id S233818AbiFZCFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 22:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233753AbiFZCBs (ORCPT
+        with ESMTP id S233617AbiFZCFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 22:01:48 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE0E13E38;
-        Sat, 25 Jun 2022 19:01:46 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id EBFD0320051E;
-        Sat, 25 Jun 2022 22:01:43 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sat, 25 Jun 2022 22:01:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=davidreaver.com;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1656208903; x=1656295303; bh=cwUPUl+OA5
-        T721UciMEMKWal2tgSsfaKw5bHf2WB2Bg=; b=Vrpc7VzWm2Is2FrgPWUh3oJS2J
-        TZJVavr+Qi6w1BZCAlOfZK0eqOF3MUmo5XOzo1+k4iT6NGaAN3JjlNmG6RNWMVjR
-        qGB+VkJ29f59nQWCkVNsjJr1bBLjVlLRnfh7+db3+l9nls8AgGXqkizaT/9gla4C
-        ddfz18H/brNWgEm+jhlEbbyTvAiQiuxlt90oqOqrxRH0GZE31lfCds3cNjDtXM+T
-        lpxl/90/dHUnhsYlB3SCjFlHKJWvz7iseJzcAg/yxIo2vlv5pdNDR6xnByYbWxtN
-        /SH9NXmpuVf+iARsjhTFFbD7F5FdDUFwpo+e+7SlyCLDzzK3FjPu6CpJZ4Yw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1656208903; x=1656295303; bh=cwUPUl+OA5T721UciMEMKWal2tgSsfaKw5b
-        Hf2WB2Bg=; b=TrG7REjbLp2fryMdS/mOHTnncpwaYqBmKRy37t0AfUoLN1Jg+cJ
-        uSu5slr8Iz6hB9p4JnCkDjspCWxWv2lnf7Rg4BazRzOdsB5lGukCGrUWvMmyTqsQ
-        wxp1dlWvkh0+ETBME+LQmEqPnA9RMJ4Tm8vD+O++aIEf1aI0YwrxmDLwDNxp0N+n
-        o7OOFT2jWBKwQIEr8TaYkEVlFx4vpguR52Oop3iztQMWDlYggj+PNMrtkhVVbGPd
-        tc/uAZ55++6nnAHJ8bV+fv5yakL/K3at2Cz9t/+uB1cu686rfBfkdpt+tGth3eWH
-        OzPS6imxzeKjNJ6TiXFGFPexUDUMaVr1kTQ==
-X-ME-Sender: <xms:B763Yq9OQrv6n8E7W63sBoJchrjPUsAy0u1A_mu2x-jG350sab1DXA>
-    <xme:B763YqvWNuHmKgjFB6p6o26CEXQamp6Dj4LrWWGI7erMAghkRHTW4iz_4FEHDFALW
-    fWCcoVQkfss0g9_Ia0>
-X-ME-Received: <xmr:B763YgBhO1C58QCCn73wPUCGPODUyeegxFsCRBlki5jTCAXxC3Ig_GPiQkkf-5usRb7T6x7jPa60sUBpHdQrquICHu4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudegvddgheefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrvhhiugcu
-    tfgvrghvvghruceomhgvsegurghvihgurhgvrghvvghrrdgtohhmqeenucggtffrrghtth
-    gvrhhnpedvvdeifeelgefgfedtjedtffehueeiffehjeeggfffjeevudeuueegteekheej
-    vdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmvg
-    esuggrvhhiughrvggrvhgvrhdrtghomh
-X-ME-Proxy: <xmx:B763Yie5UTOKJwsSWtrkaiz3lY32BISJ5r8VIp3j7vwZAY-PShk7jQ>
-    <xmx:B763YvOjXAS7Cq88-NSIAlud4Dv9S79OaC-Fa76e58W7YNvEMWJkSg>
-    <xmx:B763Ysm8qHXV9HscF4kkuKoUVvmnpJb4JTviY9e5aiboPVtXCtRpJw>
-    <xmx:B763YkoAMKpMtSWGfHBQRRWlaR3yLGXVKwX_i4UuANR4vGcrAJbWFQ>
-Feedback-ID: i67e946c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 25 Jun 2022 22:01:41 -0400 (EDT)
-From:   David Reaver <me@davidreaver.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        David Reaver <me@davidreaver.com>
-Subject: [PATCH] staging: fbtft: fix alignment should match open parenthesis
-Date:   Sat, 25 Jun 2022 19:00:02 -0700
-Message-Id: <20220626020002.1577101-1-me@davidreaver.com>
-X-Mailer: git-send-email 2.36.1
+        Sat, 25 Jun 2022 22:05:47 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8A913E87
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 19:05:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656209146; x=1687745146;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mCarAyWC+otJD1oXPZsVsSW56BCUzmm6bXZLmfj9BZw=;
+  b=kwPLRPk6RHD0JWZyr+PC9OSpl1wqnCDgaD0iG192Jr+wzk8DBuHWT0N9
+   csUNcPKEnWN2gsOJa6Zr40ouboRG03jB0jLZNN728Y87DzFGkfZNWNFAK
+   NZS9fcJd+o+SV811/j1TOZsZJo2I75M3cnlwwNaUgZziCExB2jQ/oTHFN
+   24JmOQVlZydqqTu9pPW2yp1fAdiLngw51eKVaXH2/pz7lyKa/KIu87WAj
+   +lR/HixRqWbLHUWDIFgc3C8R8w7u53oec1RjONU0q33YC/5AatZdeD6SV
+   6l0T0xE5LvqkSRR2oDjM1OztPCuNXE4eGEbAoq4UBerq2zCHD8hQfo6Zr
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10389"; a="342923931"
+X-IronPort-AV: E=Sophos;i="5.92,223,1650956400"; 
+   d="scan'208";a="342923931"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2022 19:05:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,223,1650956400"; 
+   d="scan'208";a="835665819"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 25 Jun 2022 19:05:44 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o5Heh-0006bf-MN;
+        Sun, 26 Jun 2022 02:05:43 +0000
+Date:   Sun, 26 Jun 2022 10:04:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [norov:fns 24/24] lib/test_bitmap.c:226:30: error: use of undeclared
+ identifier 'EXP1_IN_BITS'
+Message-ID: <202206260952.cf6IJRdW-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix alignment of this line of code with the previous parenthesis, as
-suggested by checkpatch.pl:
+tree:   https://github.com/norov/linux fns
+head:   c6f11d769095eb58ae2f05e3df1d8e71b7ccc5d7
+commit: c6f11d769095eb58ae2f05e3df1d8e71b7ccc5d7 [24/24] fixes
+config: arm64-randconfig-r015-20220626
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b0d6dd3905db145853c7c744ac92d49b00b1fa20)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/norov/linux/commit/c6f11d769095eb58ae2f05e3df1d8e71b7ccc5d7
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov fns
+        git checkout c6f11d769095eb58ae2f05e3df1d8e71b7ccc5d7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash lib/
 
-  $ ./scripts/checkpatch.pl -f drivers/staging/fbtft/fb_tinylcd.c
-  CHECK: Alignment should match open parenthesis
-  #41: FILE: drivers/staging/fbtft/fb_tinylcd.c:41:
-  +       write_reg(par, 0xE0, 0x00, 0x35, 0x33, 0x00, 0x00, 0x00,
-  +                      0x00, 0x35, 0x33, 0x00, 0x00, 0x00);
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: David Reaver <me@davidreaver.com>
----
- drivers/staging/fbtft/fb_tinylcd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/staging/fbtft/fb_tinylcd.c b/drivers/staging/fbtft/fb_tinylcd.c
-index 9469248f2c50..60cda57bcb33 100644
---- a/drivers/staging/fbtft/fb_tinylcd.c
-+++ b/drivers/staging/fbtft/fb_tinylcd.c
-@@ -38,7 +38,7 @@ static int init_display(struct fbtft_par *par)
- 	write_reg(par, 0xE5, 0x00);
- 	write_reg(par, 0xF0, 0x36, 0xA5, 0x53);
- 	write_reg(par, 0xE0, 0x00, 0x35, 0x33, 0x00, 0x00, 0x00,
--		       0x00, 0x35, 0x33, 0x00, 0x00, 0x00);
-+		  0x00, 0x35, 0x33, 0x00, 0x00, 0x00);
- 	write_reg(par, MIPI_DCS_SET_PIXEL_FORMAT, 0x55);
- 	write_reg(par, MIPI_DCS_EXIT_SLEEP_MODE);
- 	udelay(250);
+>> lib/test_bitmap.c:226:30: error: use of undeclared identifier 'EXP1_IN_BITS'
+           for_each_set_bit(bit, exp1, EXP1_IN_BITS) {
+                                       ^
+>> lib/test_bitmap.c:226:30: error: use of undeclared identifier 'EXP1_IN_BITS'
+>> lib/test_bitmap.c:226:30: error: use of undeclared identifier 'EXP1_IN_BITS'
+   lib/test_bitmap.c:227:26: error: use of undeclared identifier 'EXP1_IN_BITS'
+                   b = find_nth_bit(exp1, EXP1_IN_BITS, ++cnt);
+                                          ^
+   lib/test_bitmap.c:234:46: error: use of undeclared identifier 'EXP1_IN_BITS'
+           const unsigned long w = bitmap_weight(exp1, EXP1_IN_BITS);
+                                                       ^
+   lib/test_bitmap.c:237:26: error: use of undeclared identifier 'EXP1_IN_BITS'
+           for (start = 0; start < EXP1_IN_BITS; start++) {
+                                   ^
+   lib/test_bitmap.c:240:36: error: use of undeclared identifier 'EXP1_IN_BITS'
+                   for_each_set_bit_wrap(bit, exp1, EXP1_IN_BITS, start)
+                                                    ^
+   lib/test_bitmap.c:240:36: error: use of undeclared identifier 'EXP1_IN_BITS'
+   lib/test_bitmap.c:240:36: error: use of undeclared identifier 'EXP1_IN_BITS'
+   9 errors generated.
+
+
+vim +/EXP1_IN_BITS +226 lib/test_bitmap.c
+
+   221	
+   222	static void __init test_find_nth_bit(void)
+   223	{
+   224		unsigned long b, bit, cnt = 0;
+   225	
+ > 226		for_each_set_bit(bit, exp1, EXP1_IN_BITS) {
+   227			b = find_nth_bit(exp1, EXP1_IN_BITS, ++cnt);
+   228			expect_eq_uint(b, bit);
+   229		}
+   230	}
+   231	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

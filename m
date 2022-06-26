@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E7A55B12C
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A1355B132
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234238AbiFZKdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 06:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
+        id S234248AbiFZKdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 06:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiFZKdM (ORCPT
+        with ESMTP id S232828AbiFZKdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 06:33:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9659FB7D3
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:33:10 -0700 (PDT)
+        Sun, 26 Jun 2022 06:33:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C95E101D7
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:33:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 319FE6113D
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 10:33:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3A58C34114;
-        Sun, 26 Jun 2022 10:33:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E2C861177
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 10:33:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20152C341CB;
+        Sun, 26 Jun 2022 10:33:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656239589;
-        bh=c6LZLm52pCtskTA/Y5nwIytWtE5KrVyZEG65ZFoKBXw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=h7gtElTkspFbUOhC1ZxTd4nVkqCbokzC2cqMe0B6uL0LPIpfK3EXCieZu8OPlp1k6
-         COJAdl7OQeWyn6h3B+Wn3fR3lr3fA3N9IWWcrwcqg4vEjXPfhBmJkIPIgpIi4NqZLU
-         JIW/CcIeRCTgUHMvi+SnroSq+LdlhVkNVUrrcA6PLQuJJmpiVnamMpN1KvmuuUj133
-         5lEFWuEaxs2mAEWKxNQngfjU17u+GedfRj8pI1MchdSkUqNGSIML2VqPnvmRZM5hl2
-         VIS6QPztJDUiDCKoajTBv4UTrltFIRascSh6MKPd9LMMb/wq7gkUrDYscR9GsLumXz
-         A8J+cwRLVccfA==
+        s=k20201202; t=1656239590;
+        bh=okXhggd116ikOIv7Ma4tsfvoZ4sxbGPsd7uz5Si032g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dJ3nYw+q9KW1xcoMmJUF9q69suk3wDDMyZIWHgl8jgyx1RyZyYVNkoUxPRRsmC33e
+         gH52Fc9qPnmCKtxTy2LPCbK9twAY5FdMZmD2w1JaER64U5PxgChP+y4hqLImHjmOoA
+         whnzURcUokix0+kDKZP0G0YHg7EXrjZFPjGkp3jWbw1Hqu3cdXh9xtPfaN3ChI5u8e
+         RBd8e5/Elh6FsdSDFJi5Z3ou63QdIQEFyixDAilID+Rxm6c31418Sj6iHY1WKoWIns
+         X63Ow4pMz7DEn5/88oeuRjPaL5n347IjGah7JciTk59AywOq+919Wens/eTf+bt1od
+         tak7N40NxJegQ==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Tomer Tayar <ttayar@habana.ai>
-Subject: [PATCH 1/2] habanalabs: remove dead code from free_device_memory()
-Date:   Sun, 26 Jun 2022 13:33:03 +0300
-Message-Id: <20220626103304.46126-1-ogabbay@kernel.org>
+Cc:     Ohad Sharabi <osharabi@habana.ai>
+Subject: [PATCH 2/2] habanalabs: communicate supported page sizes to user
+Date:   Sun, 26 Jun 2022 13:33:04 +0300
+Message-Id: <20220626103304.46126-2-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220626103304.46126-1-ogabbay@kernel.org>
+References: <20220626103304.46126-1-ogabbay@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -51,87 +53,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tomer Tayar <ttayar@habana.ai>
+From: Ohad Sharabi <osharabi@habana.ai>
 
-free_device_memory() ends with if and else, each has a return statement,
-followed by another return statement that can never be reached.
-Restructure the function and remove this dead code.
+Because in future ASICs the driver will allow the user to set the
+page size we need to make sure this data is propagated in all APIs.
 
-Signed-off-by: Tomer Tayar <ttayar@habana.ai>
+In addition, since this is already an ASIC property we no longer need
+ASIC function for it.
+
+Signed-off-by: Ohad Sharabi <osharabi@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/memory.c | 50 +++++++++++--------------
- 1 file changed, 22 insertions(+), 28 deletions(-)
+ drivers/misc/habanalabs/common/habanalabs.h       | 5 +++--
+ drivers/misc/habanalabs/common/habanalabs_ioctl.c | 2 +-
+ drivers/misc/habanalabs/common/memory.c           | 4 ++--
+ drivers/misc/habanalabs/gaudi/gaudi.c             | 7 -------
+ drivers/misc/habanalabs/goya/goya.c               | 7 -------
+ 5 files changed, 6 insertions(+), 19 deletions(-)
 
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index df8d1038723d..c5f9501b1113 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -401,6 +401,8 @@ enum hl_device_hw_state {
+  * @hop_masks: array holds HOPs masks.
+  * @last_mask: mask to get the bit indicating this is the last hop.
+  * @pgt_size: size for page tables.
++ * @supported_pages_mask: bitmask for supported page size (relevant only for MMUs
++ *                        supporting multiple page size).
+  * @page_size: default page size used to allocate memory.
+  * @num_hops: The amount of hops supported by the translation table.
+  * @hop_table_size: HOP table size.
+@@ -415,6 +417,7 @@ struct hl_mmu_properties {
+ 	u64	hop_masks[MMU_HOP_MAX];
+ 	u64	last_mask;
+ 	u64	pgt_size;
++	u64	supported_pages_mask;
+ 	u32	page_size;
+ 	u32	num_hops;
+ 	u32	hop_table_size;
+@@ -1332,7 +1335,6 @@ struct fw_load_mgr {
+  * @get_sob_addr: get SOB base address offset.
+  * @set_pci_memory_regions: setting properties of PCI memory regions
+  * @get_stream_master_qid_arr: get pointer to stream masters QID array
+- * @get_valid_dram_page_orders: get valid device memory allocation page orders
+  * @access_dev_mem: access device memory
+  * @set_dram_bar_base: set the base of the DRAM BAR
+  */
+@@ -1453,7 +1455,6 @@ struct hl_asic_funcs {
+ 	u32* (*get_stream_master_qid_arr)(void);
+ 	int (*mmu_get_real_page_size)(struct hl_device *hdev, struct hl_mmu_properties *mmu_prop,
+ 					u32 page_size, u32 *real_page_size, bool is_dram_addr);
+-	void (*get_valid_dram_page_orders)(struct hl_info_dev_memalloc_page_sizes *info);
+ 	int (*access_dev_mem)(struct hl_device *hdev, struct pci_mem_region *region,
+ 		enum pci_region region_type, u64 addr, u64 *val, enum debugfs_access_type acc_type);
+ 	u64 (*set_dram_bar_base)(struct hl_device *hdev, u64 addr);
+diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
+index fe7ed46cd1c5..e66dec385ba6 100644
+--- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
++++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
+@@ -648,7 +648,7 @@ static int dev_mem_alloc_page_sizes_info(struct hl_fpriv *hpriv, struct hl_info_
+ 	 * For this reason for all ASICs that not support multiple page size the function will
+ 	 * return an empty bitmask indicating that multiple page sizes is not supported.
+ 	 */
+-	hdev->asic_funcs->get_valid_dram_page_orders(&info);
++	info.page_order_bitmask = hdev->asic_prop.dmmu.supported_pages_mask;
+ 
+ 	return copy_to_user(out, &info, min_t(size_t, max_size, sizeof(info))) ? -EFAULT : 0;
+ }
 diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-index 4f35a5668fcb..bc921f32716a 100644
+index bc921f32716a..0964c26d717c 100644
 --- a/drivers/misc/habanalabs/common/memory.c
 +++ b/drivers/misc/habanalabs/common/memory.c
-@@ -359,41 +359,35 @@ static int free_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args)
+@@ -27,7 +27,7 @@ static int allocate_timestamps_buffers(struct hl_fpriv *hpriv,
+ static int set_alloc_page_size(struct hl_device *hdev, struct hl_mem_in *args, u32 *page_size)
+ {
+ 	struct asic_fixed_properties *prop = &hdev->asic_prop;
+-	u32 psize;
++	u64 psize;
  
- 	spin_lock(&vm->idr_lock);
- 	phys_pg_pack = idr_find(&vm->phys_pg_pack_handles, handle);
--	if (phys_pg_pack) {
--		if (atomic_read(&phys_pg_pack->mapping_cnt) > 0) {
--			dev_err(hdev->dev, "handle %u is mapped, cannot free\n",
--				handle);
--			spin_unlock(&vm->idr_lock);
--			return -EINVAL;
--		}
--
--		if (phys_pg_pack->exporting_cnt) {
--			dev_dbg(hdev->dev, "handle %u is exported, cannot free\n", handle);
--			spin_unlock(&vm->idr_lock);
--			return -EINVAL;
--		}
--
--		/*
--		 * must remove from idr before the freeing of the physical
--		 * pages as the refcount of the pool is also the trigger of the
--		 * idr destroy
--		 */
--		idr_remove(&vm->phys_pg_pack_handles, handle);
-+	if (!phys_pg_pack) {
- 		spin_unlock(&vm->idr_lock);
-+		dev_err(hdev->dev, "free device memory failed, no match for handle %u\n", handle);
-+		return -EINVAL;
-+	}
+ 	/*
+ 	 * for ASIC that supports setting the allocation page size by user we will address
+@@ -37,7 +37,7 @@ static int set_alloc_page_size(struct hl_device *hdev, struct hl_mem_in *args, u
+ 		psize = args->alloc.page_size;
  
--		atomic64_sub(phys_pg_pack->total_size, &ctx->dram_phys_mem);
--		atomic64_sub(phys_pg_pack->total_size, &hdev->dram_used_mem);
-+	if (atomic_read(&phys_pg_pack->mapping_cnt) > 0) {
-+		spin_unlock(&vm->idr_lock);
-+		dev_err(hdev->dev, "handle %u is mapped, cannot free\n", handle);
-+		return -EINVAL;
-+	}
- 
--		free_phys_pg_pack(hdev, phys_pg_pack);
--		return 0;
--	} else {
-+	if (phys_pg_pack->exporting_cnt) {
- 		spin_unlock(&vm->idr_lock);
--		dev_err(hdev->dev,
--			"free device memory failed, no match for handle %u\n",
--			handle);
-+		dev_dbg(hdev->dev, "handle %u is exported, cannot free\n", handle);
- 		return -EINVAL;
- 	}
- 
-+	/* must remove from idr before the freeing of the physical pages as the refcount of the pool
-+	 * is also the trigger of the idr destroy
-+	 */
-+	idr_remove(&vm->phys_pg_pack_handles, handle);
-+	spin_unlock(&vm->idr_lock);
-+
-+	atomic64_sub(phys_pg_pack->total_size, &ctx->dram_phys_mem);
-+	atomic64_sub(phys_pg_pack->total_size, &hdev->dram_used_mem);
-+
-+	free_phys_pg_pack(hdev, phys_pg_pack);
-+
- 	return 0;
+ 		if (!is_power_of_2(psize)) {
+-			dev_err(hdev->dev, "user page size (%#x) is not power of 2\n", psize);
++			dev_err(hdev->dev, "user page size (%#llx) is not power of 2\n", psize);
+ 			return -EINVAL;
+ 		}
+ 	} else {
+diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
+index 33ad7226dd8c..584feac7ee83 100644
+--- a/drivers/misc/habanalabs/gaudi/gaudi.c
++++ b/drivers/misc/habanalabs/gaudi/gaudi.c
+@@ -9237,12 +9237,6 @@ static u32 *gaudi_get_stream_master_qid_arr(void)
+ 	return gaudi_stream_master;
  }
  
+-static void gaudi_get_valid_dram_page_orders(struct hl_info_dev_memalloc_page_sizes *info)
+-{
+-	/* set 0 since multiple pages are not supported */
+-	info->page_order_bitmask = 0;
+-}
+-
+ static ssize_t infineon_ver_show(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+ 	struct hl_device *hdev = dev_get_drvdata(dev);
+@@ -9351,7 +9345,6 @@ static const struct hl_asic_funcs gaudi_funcs = {
+ 	.set_pci_memory_regions = gaudi_set_pci_memory_regions,
+ 	.get_stream_master_qid_arr = gaudi_get_stream_master_qid_arr,
+ 	.mmu_get_real_page_size = hl_mmu_get_real_page_size,
+-	.get_valid_dram_page_orders = gaudi_get_valid_dram_page_orders,
+ 	.access_dev_mem = hl_access_dev_mem,
+ 	.set_dram_bar_base = gaudi_set_hbm_bar_base,
+ };
+diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
+index 49f859a1f07a..9bde01de4fcf 100644
+--- a/drivers/misc/habanalabs/goya/goya.c
++++ b/drivers/misc/habanalabs/goya/goya.c
+@@ -5405,12 +5405,6 @@ static u32 *goya_get_stream_master_qid_arr(void)
+ 	return NULL;
+ }
+ 
+-static void goya_get_valid_dram_page_orders(struct hl_info_dev_memalloc_page_sizes *info)
+-{
+-	/* set 0 since multiple pages are not supported */
+-	info->page_order_bitmask = 0;
+-}
+-
+ static int goya_get_monitor_dump(struct hl_device *hdev, void *data)
+ {
+ 	return -EOPNOTSUPP;
+@@ -5505,7 +5499,6 @@ static const struct hl_asic_funcs goya_funcs = {
+ 	.set_pci_memory_regions = goya_set_pci_memory_regions,
+ 	.get_stream_master_qid_arr = goya_get_stream_master_qid_arr,
+ 	.mmu_get_real_page_size = hl_mmu_get_real_page_size,
+-	.get_valid_dram_page_orders = goya_get_valid_dram_page_orders,
+ 	.access_dev_mem = hl_access_dev_mem,
+ 	.set_dram_bar_base = goya_set_ddr_bar_base,
+ };
 -- 
 2.25.1
 

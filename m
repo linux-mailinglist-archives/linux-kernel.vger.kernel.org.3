@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49C255AE1C
+	by mail.lfdr.de (Postfix) with ESMTP id 7038555AE1B
 	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 04:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbiFZB6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 21:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
+        id S233806AbiFZCBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 22:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233806AbiFZB6M (ORCPT
+        with ESMTP id S233753AbiFZCBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 21:58:12 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE7BE31
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 18:58:08 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 9so5867602pgd.7
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 18:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MzaHy7CH67twv+n83XoCxJz/5x47URWouUOlx3uldKw=;
-        b=TswylHpkps2dFlqv2itbDCaTYhordG8kGRlDu+4QBjjY1CgEnFp433YOE4TSnp5vJ4
-         a4ZiOliA20PV3J1/QTjoJeYIFTOEWq1+142l260oK3Kix1rYVQ3b5I3Z0MJxthMqroi6
-         gIpQ/de8AtNYBLstZLjiJCUYSDQv00/9hjekM9kZat4GK34rOSKRq+SNAmF/9Xr3hyGY
-         vR4k/0uELZkDVJKMa/geO6Ijkhg13ECVxVSE3eItAMNJNQCt5jRqGT1eW7K4Wn4lFlsm
-         bJI73KsScl1Zq9BjAxrjchY5+i4Od3vZebJruFpycRjqumcw8k3a3jH40OD+9FkhnN3H
-         3L9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=MzaHy7CH67twv+n83XoCxJz/5x47URWouUOlx3uldKw=;
-        b=yy+YJh44FmpjeUAHAGAwFMo0JfuSwlnXOcJIzAISBXdiDs/zwQ+TbLRQCyowSIJj4E
-         Tlu/k5LnwI5F+ITcYf8+//xjHzGaFFlVE9AyubSHW+ESt0tYSASWBaA6Wx9tj9Dq24Xa
-         iCmEFOzvMd9tmJ3w2B8pGfbUgPJYnjjkrnTYEqL/oDZhZ6+bvysO7P4LzzDCbdhCxvTJ
-         sfWCdUvAMR0WCwD2/f+Scw9LArRvp+g7YawnX2qN1rJgjLA709HDreue//3hRKPqKQSu
-         NWEjGTffAMZSjiyMmym9o/zZpPtpvqs0qfWR2GFH3OPk0EVEGzyAzstcwFWWvGGD5ClC
-         rLBw==
-X-Gm-Message-State: AJIora8cs6iDWr4DbSU9CnUEe9iXlleoJbPfyDKFv7LvNI/K5J8mJjP/
-        D78HdMAlC3rZ/Xv1e1Wkw5A=
-X-Google-Smtp-Source: AGRyM1s77IRUBMZc/PRBcp5omRP5G22B0kd73OqnRlsE5FRA+ulvPJPHIAHlyKJdQ3YzWFVrjr1RGA==
-X-Received: by 2002:a05:6a00:3498:b0:525:448a:de0 with SMTP id cp24-20020a056a00349800b00525448a0de0mr7210218pfb.85.1656208687625;
-        Sat, 25 Jun 2022 18:58:07 -0700 (PDT)
-Received: from localhost ([182.211.131.157])
-        by smtp.gmail.com with ESMTPSA id w5-20020a623005000000b005251f0985bdsm4379383pfw.179.2022.06.25.18.58.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 18:58:07 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sun, 26 Jun 2022 10:58:04 +0900
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: Re: re. Spurious wakeup on a newly created kthread
-Message-ID: <Yre9LO2nj+Hbr67V@mtj.duckdns.org>
-References: <20220622140853.31383-1-pmladek@suse.com>
- <YraWWl+Go17uPOgR@mtj.duckdns.org>
- <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
+        Sat, 25 Jun 2022 22:01:48 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE0E13E38;
+        Sat, 25 Jun 2022 19:01:46 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id EBFD0320051E;
+        Sat, 25 Jun 2022 22:01:43 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 25 Jun 2022 22:01:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=davidreaver.com;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1656208903; x=1656295303; bh=cwUPUl+OA5
+        T721UciMEMKWal2tgSsfaKw5bHf2WB2Bg=; b=Vrpc7VzWm2Is2FrgPWUh3oJS2J
+        TZJVavr+Qi6w1BZCAlOfZK0eqOF3MUmo5XOzo1+k4iT6NGaAN3JjlNmG6RNWMVjR
+        qGB+VkJ29f59nQWCkVNsjJr1bBLjVlLRnfh7+db3+l9nls8AgGXqkizaT/9gla4C
+        ddfz18H/brNWgEm+jhlEbbyTvAiQiuxlt90oqOqrxRH0GZE31lfCds3cNjDtXM+T
+        lpxl/90/dHUnhsYlB3SCjFlHKJWvz7iseJzcAg/yxIo2vlv5pdNDR6xnByYbWxtN
+        /SH9NXmpuVf+iARsjhTFFbD7F5FdDUFwpo+e+7SlyCLDzzK3FjPu6CpJZ4Yw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1656208903; x=1656295303; bh=cwUPUl+OA5T721UciMEMKWal2tgSsfaKw5b
+        Hf2WB2Bg=; b=TrG7REjbLp2fryMdS/mOHTnncpwaYqBmKRy37t0AfUoLN1Jg+cJ
+        uSu5slr8Iz6hB9p4JnCkDjspCWxWv2lnf7Rg4BazRzOdsB5lGukCGrUWvMmyTqsQ
+        wxp1dlWvkh0+ETBME+LQmEqPnA9RMJ4Tm8vD+O++aIEf1aI0YwrxmDLwDNxp0N+n
+        o7OOFT2jWBKwQIEr8TaYkEVlFx4vpguR52Oop3iztQMWDlYggj+PNMrtkhVVbGPd
+        tc/uAZ55++6nnAHJ8bV+fv5yakL/K3at2Cz9t/+uB1cu686rfBfkdpt+tGth3eWH
+        OzPS6imxzeKjNJ6TiXFGFPexUDUMaVr1kTQ==
+X-ME-Sender: <xms:B763Yq9OQrv6n8E7W63sBoJchrjPUsAy0u1A_mu2x-jG350sab1DXA>
+    <xme:B763YqvWNuHmKgjFB6p6o26CEXQamp6Dj4LrWWGI7erMAghkRHTW4iz_4FEHDFALW
+    fWCcoVQkfss0g9_Ia0>
+X-ME-Received: <xmr:B763YgBhO1C58QCCn73wPUCGPODUyeegxFsCRBlki5jTCAXxC3Ig_GPiQkkf-5usRb7T6x7jPa60sUBpHdQrquICHu4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudegvddgheefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrvhhiugcu
+    tfgvrghvvghruceomhgvsegurghvihgurhgvrghvvghrrdgtohhmqeenucggtffrrghtth
+    gvrhhnpedvvdeifeelgefgfedtjedtffehueeiffehjeeggfffjeevudeuueegteekheej
+    vdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmvg
+    esuggrvhhiughrvggrvhgvrhdrtghomh
+X-ME-Proxy: <xmx:B763Yie5UTOKJwsSWtrkaiz3lY32BISJ5r8VIp3j7vwZAY-PShk7jQ>
+    <xmx:B763YvOjXAS7Cq88-NSIAlud4Dv9S79OaC-Fa76e58W7YNvEMWJkSg>
+    <xmx:B763Ysm8qHXV9HscF4kkuKoUVvmnpJb4JTviY9e5aiboPVtXCtRpJw>
+    <xmx:B763YkoAMKpMtSWGfHBQRRWlaR3yLGXVKwX_i4UuANR4vGcrAJbWFQ>
+Feedback-ID: i67e946c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 25 Jun 2022 22:01:41 -0400 (EDT)
+From:   David Reaver <me@davidreaver.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        David Reaver <me@davidreaver.com>
+Subject: [PATCH] staging: fbtft: fix alignment should match open parenthesis
+Date:   Sat, 25 Jun 2022 19:00:02 -0700
+Message-Id: <20220626020002.1577101-1-me@davidreaver.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,108 +82,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Fix alignment of this line of code with the previous parenthesis, as
+suggested by checkpatch.pl:
 
-On Sat, Jun 25, 2022 at 10:01:35AM -0700, Linus Torvalds wrote:
-> On Fri, Jun 24, 2022 at 10:00 PM Tejun Heo <tj@kernel.org> wrote:
-> >
-> > So, Petr debugged a NULL deref in workqueue code to a spurious wakeup
-> > on a newly created kthread.
-> 
-> What? No. That patch can't be right for several reasons.
-> 
-> What we call "spurious wakeups" exist, but they are about wakeups that
-> happen from being on a _previous_ wait-queue, and having already been
-> removed from it.
-> 
-> They aren't "really" spurious, they are just asynchronous enough (and
-> thus unexpected) that you basically should never have a "sleep on
-> wait-queue" without then looping and re-testing the condition.
+  $ ./scripts/checkpatch.pl -f drivers/staging/fbtft/fb_tinylcd.c
+  CHECK: Alignment should match open parenthesis
+  #41: FILE: drivers/staging/fbtft/fb_tinylcd.c:41:
+  +       write_reg(par, 0xE0, 0x00, 0x35, 0x33, 0x00, 0x00, 0x00,
+  +                      0x00, 0x35, 0x33, 0x00, 0x00, 0x00);
 
-Can you elaborate on this a bit? At least for the standard
-wait_event-ish wait blocks, the waiter always does finish_wait()
-before leavig a wait. finish_wait() does lockless check on
-wq_entry->entry and may or may not grab wq_head->lock. When it does,
-it's fully synchronized against the waker. Even when it doesn't, while
-the lack of memory ordering on the finish_wait() side may let things
-slide a bit, I can't see how it can slide after the set_current_state
-in the next wait block.
+Signed-off-by: David Reaver <me@davidreaver.com>
+---
+ drivers/staging/fbtft/fb_tinylcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm probably missing sometihng. Is it about bespoke wait mechanisms?
-Can you give a concrete example of an async wakeup scenario?
-
-> There is no _truly_ spurious wakeup. You were always woken up for a
-> reason, it's just that there are more reasons than the entirely
-> obvious ones.
-
-So, the deferred wakeups from earlier waits are one. Can you give some
-other examples? This is something which has always bothered me and I
-couldn't find explanations which aren't hand-wavy on my own. It'd be
-really great to have clarity.
-
-> For example, the reason that quoted patch cannot be right is that this
-> code pattern:
-> 
->   while (wait_for_completion_interruptible(&worker->ready_to_start))
->     ;
-> 
-> is not valid kernel code. EVER. There is absolutely no way that can be correct.
->
-> Either that code can take a signal, or it cannot. If it can take a
-> signal, it had better react to said signal. If it cannot, it must not
-> use an interruptble sleep - since now that loop turned into a
-> kernel-side busy-loop.
-> 
-> So NAK on this kind of crazy "I don't know what happened, so I'll just
-> add *more* bugs to the code" voodoo programming.
->
-> And no, we don't "fix" that by then adding a timeout.
-
-Yeah, I should've been more explicit on this. Michal already pointed
-out that it doesn't make sense to loop over interruptible timed sleeps
-and it should use one plain uninterruptible sleep, so this part isn't
-in question.
-
-...
-> I think the problem here is much more fundamental: you expect a new
-> thread to not wake up until you've told it to.
-> 
-> We do have that infrastructure in the kernel: when  you create a new
-> thread, you can do various setup, and the thread won't actually run
-> until you do "wake_up_new_task()" on it.
-
-That's because that's the only thing which ignores TASK_NEW, right?
-
-> However, that's not how kernel_thread() (or kernel_clone()) works.
-> Those will call wake_up_new_task(p) for you, and as such a new kernel
-> thread will immediately start running.
-> 
-> So I think the expectations here are entirely wrong.  I think
-> create_worker() is fundamentally buggy, in how it does that
-> 
->         /* start the newly created worker */
->         ..
->         wake_up_process(worker->task);
-> 
-> because that wake_up_process() is already much too late. The process
-> got woken up already, because it was created by create_kthread() ->
-> kernel_thread() -> kernel_clone, which does that wake_up_new_task()
-> and it starts running.
-
-A couple things still aren't clear for me.
-
-* If there are no true spurious wakeups, where did the racing wakeup
-  come from? The task just got created w/ TASK_NEW and woken up once
-  with wake_up_new_task(). It hasn't been on any wait queue or
-  advertised itself to anything.
-
-* If there are spurious wakeups, why is kthread() scheduling after
-  signaling creation completion in the first place? As I wrote before,
-  all it would do is masking these bugs. If we can't gurantee that the
-  kthread will stay blocked, shouldn't we just remove the
-  schedule_preempt_disabled() call in kthread()?
-
-Thanks.
-
--- 
-tejun
+diff --git a/drivers/staging/fbtft/fb_tinylcd.c b/drivers/staging/fbtft/fb_tinylcd.c
+index 9469248f2c50..60cda57bcb33 100644
+--- a/drivers/staging/fbtft/fb_tinylcd.c
++++ b/drivers/staging/fbtft/fb_tinylcd.c
+@@ -38,7 +38,7 @@ static int init_display(struct fbtft_par *par)
+ 	write_reg(par, 0xE5, 0x00);
+ 	write_reg(par, 0xF0, 0x36, 0xA5, 0x53);
+ 	write_reg(par, 0xE0, 0x00, 0x35, 0x33, 0x00, 0x00, 0x00,
+-		       0x00, 0x35, 0x33, 0x00, 0x00, 0x00);
++		  0x00, 0x35, 0x33, 0x00, 0x00, 0x00);
+ 	write_reg(par, MIPI_DCS_SET_PIXEL_FORMAT, 0x55);
+ 	write_reg(par, MIPI_DCS_EXIT_SLEEP_MODE);
+ 	udelay(250);

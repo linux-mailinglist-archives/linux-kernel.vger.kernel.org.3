@@ -2,198 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A1355B132
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E8D55B13C
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbiFZKdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 06:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
+        id S233630AbiFZKgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 06:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232828AbiFZKdO (ORCPT
+        with ESMTP id S232828AbiFZKf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 06:33:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C95E101D7
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:33:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E2C861177
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 10:33:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20152C341CB;
-        Sun, 26 Jun 2022 10:33:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656239590;
-        bh=okXhggd116ikOIv7Ma4tsfvoZ4sxbGPsd7uz5Si032g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dJ3nYw+q9KW1xcoMmJUF9q69suk3wDDMyZIWHgl8jgyx1RyZyYVNkoUxPRRsmC33e
-         gH52Fc9qPnmCKtxTy2LPCbK9twAY5FdMZmD2w1JaER64U5PxgChP+y4hqLImHjmOoA
-         whnzURcUokix0+kDKZP0G0YHg7EXrjZFPjGkp3jWbw1Hqu3cdXh9xtPfaN3ChI5u8e
-         RBd8e5/Elh6FsdSDFJi5Z3ou63QdIQEFyixDAilID+Rxm6c31418Sj6iHY1WKoWIns
-         X63Ow4pMz7DEn5/88oeuRjPaL5n347IjGah7JciTk59AywOq+919Wens/eTf+bt1od
-         tak7N40NxJegQ==
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ohad Sharabi <osharabi@habana.ai>
-Subject: [PATCH 2/2] habanalabs: communicate supported page sizes to user
-Date:   Sun, 26 Jun 2022 13:33:04 +0300
-Message-Id: <20220626103304.46126-2-ogabbay@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220626103304.46126-1-ogabbay@kernel.org>
-References: <20220626103304.46126-1-ogabbay@kernel.org>
+        Sun, 26 Jun 2022 06:35:56 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E9B1275B;
+        Sun, 26 Jun 2022 03:35:52 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id a15so6434461pfv.13;
+        Sun, 26 Jun 2022 03:35:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CT9UzjAprHUqV7ZTg5rA+EnKneUfvjzMy7Q3wVldT2o=;
+        b=S9F3gYcdAgALN/i00FyqnFPtw72EX93LhTZjMcfrkZUtXojwUQ9tPv/wzwSjp1qmWk
+         TTZufc3+EeKVDchJO/N9kqI6IP9t4OMy+QPy02kqaNxRVAEGoQ2j4oozWseT+euZJaZa
+         WwMfRf/17IKfcMeVkaDXkOhBnTNBoRsoUE7587XITamp2UYpa1AiEr4L13IIT1g1jVtu
+         +t7ygiWiLTigI7XjxQbVzh7vWEnQDTQAnXTqn9dmF2jnN53kEJuBP0ckSNiB7ZEIs2Uy
+         7Ktp5TtzKeM8yuDyBEXY9a/ZzxVFOhxQES4k5HvrEdlf11fajT6MYCXu3CPyxVic1NV5
+         UgTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CT9UzjAprHUqV7ZTg5rA+EnKneUfvjzMy7Q3wVldT2o=;
+        b=yjJi8i/zG9DO8tW3qjWsPz4wLGQ7izj/kxCqxMgat5QjsrQchI8y5HqTzpEve7tx5r
+         3Fyr7AwPPT/KmqSKa9rYo1lRBaNxkKOrnGRZA2X37covPz/2/WuQPQw9dWKFUR/LiaOB
+         GpcCTaFek3Nnhb15YPLGzpqviDDxULZ9F+78pn3NG3zoVRrii6yR3QI6EV/0rwOe9JM0
+         Leuq/5/x4Q18gpZcjkwoovWuaWNLScNqTdJb658YQ0QZKl14VG05NfuDBVW3gDd6VMs6
+         uePBe1xjVTJpufQI27IW/PdMAUSjaHfF4WhTHbIDPCEivOm97SpxZNyORZaUpZikgw3M
+         QD4w==
+X-Gm-Message-State: AJIora/cqls/PB8EjpNRri0JBFBDk5qeqF+bymeTOwsPmFG+vU6bUvhu
+        VJ0h9BLiKYvugObreyhJP0l75TADkaUab6EaJclfng==
+X-Google-Smtp-Source: AGRyM1tyxkS+6IBKYS5jpOLHXHR+Grdw0U05dHqC0cQpGPwB5fWT+ckGXL6txKRos0UN3ZQVfZs6tg==
+X-Received: by 2002:a63:f91b:0:b0:40d:d291:1555 with SMTP id h27-20020a63f91b000000b0040dd2911555mr3559579pgi.399.1656239752099;
+        Sun, 26 Jun 2022 03:35:52 -0700 (PDT)
+Received: from ip-172-31-11-128.ap-south-1.compute.internal (ec2-35-154-4-181.ap-south-1.compute.amazonaws.com. [35.154.4.181])
+        by smtp.gmail.com with ESMTPSA id n9-20020a635c49000000b0040cf8789851sm4849234pgm.35.2022.06.26.03.35.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Jun 2022 03:35:51 -0700 (PDT)
+From:   Praghadeesh T K S <praghadeeshthevendria@gmail.com>
+To:     Rain River <rain.1986.08.12@gmail.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     skhan@linuxfoundation.org, praghadeeshtks@zohomail.in,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Praghadeesh T K S <praghadeeshthevendria@gmail.com>
+Subject: [PATCH] net: ethernet/nvidia: fix possible condition with no effect
+Date:   Sun, 26 Jun 2022 10:35:39 +0000
+Message-Id: <20220626103539.80283-1-praghadeeshthevendria@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ohad Sharabi <osharabi@habana.ai>
+Fix Coccinelle bug, removed condition with no effect.
 
-Because in future ASICs the driver will allow the user to set the
-page size we need to make sure this data is propagated in all APIs.
-
-In addition, since this is already an ASIC property we no longer need
-ASIC function for it.
-
-Signed-off-by: Ohad Sharabi <osharabi@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Praghadeesh T K S <praghadeeshthevendria@gmail.com>
 ---
- drivers/misc/habanalabs/common/habanalabs.h       | 5 +++--
- drivers/misc/habanalabs/common/habanalabs_ioctl.c | 2 +-
- drivers/misc/habanalabs/common/memory.c           | 4 ++--
- drivers/misc/habanalabs/gaudi/gaudi.c             | 7 -------
- drivers/misc/habanalabs/goya/goya.c               | 7 -------
- 5 files changed, 6 insertions(+), 19 deletions(-)
+ drivers/net/ethernet/nvidia/forcedeth.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index df8d1038723d..c5f9501b1113 100644
---- a/drivers/misc/habanalabs/common/habanalabs.h
-+++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -401,6 +401,8 @@ enum hl_device_hw_state {
-  * @hop_masks: array holds HOPs masks.
-  * @last_mask: mask to get the bit indicating this is the last hop.
-  * @pgt_size: size for page tables.
-+ * @supported_pages_mask: bitmask for supported page size (relevant only for MMUs
-+ *                        supporting multiple page size).
-  * @page_size: default page size used to allocate memory.
-  * @num_hops: The amount of hops supported by the translation table.
-  * @hop_table_size: HOP table size.
-@@ -415,6 +417,7 @@ struct hl_mmu_properties {
- 	u64	hop_masks[MMU_HOP_MAX];
- 	u64	last_mask;
- 	u64	pgt_size;
-+	u64	supported_pages_mask;
- 	u32	page_size;
- 	u32	num_hops;
- 	u32	hop_table_size;
-@@ -1332,7 +1335,6 @@ struct fw_load_mgr {
-  * @get_sob_addr: get SOB base address offset.
-  * @set_pci_memory_regions: setting properties of PCI memory regions
-  * @get_stream_master_qid_arr: get pointer to stream masters QID array
-- * @get_valid_dram_page_orders: get valid device memory allocation page orders
-  * @access_dev_mem: access device memory
-  * @set_dram_bar_base: set the base of the DRAM BAR
-  */
-@@ -1453,7 +1455,6 @@ struct hl_asic_funcs {
- 	u32* (*get_stream_master_qid_arr)(void);
- 	int (*mmu_get_real_page_size)(struct hl_device *hdev, struct hl_mmu_properties *mmu_prop,
- 					u32 page_size, u32 *real_page_size, bool is_dram_addr);
--	void (*get_valid_dram_page_orders)(struct hl_info_dev_memalloc_page_sizes *info);
- 	int (*access_dev_mem)(struct hl_device *hdev, struct pci_mem_region *region,
- 		enum pci_region region_type, u64 addr, u64 *val, enum debugfs_access_type acc_type);
- 	u64 (*set_dram_bar_base)(struct hl_device *hdev, u64 addr);
-diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-index fe7ed46cd1c5..e66dec385ba6 100644
---- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-@@ -648,7 +648,7 @@ static int dev_mem_alloc_page_sizes_info(struct hl_fpriv *hpriv, struct hl_info_
- 	 * For this reason for all ASICs that not support multiple page size the function will
- 	 * return an empty bitmask indicating that multiple page sizes is not supported.
- 	 */
--	hdev->asic_funcs->get_valid_dram_page_orders(&info);
-+	info.page_order_bitmask = hdev->asic_prop.dmmu.supported_pages_mask;
- 
- 	return copy_to_user(out, &info, min_t(size_t, max_size, sizeof(info))) ? -EFAULT : 0;
- }
-diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-index bc921f32716a..0964c26d717c 100644
---- a/drivers/misc/habanalabs/common/memory.c
-+++ b/drivers/misc/habanalabs/common/memory.c
-@@ -27,7 +27,7 @@ static int allocate_timestamps_buffers(struct hl_fpriv *hpriv,
- static int set_alloc_page_size(struct hl_device *hdev, struct hl_mem_in *args, u32 *page_size)
- {
- 	struct asic_fixed_properties *prop = &hdev->asic_prop;
--	u32 psize;
-+	u64 psize;
- 
- 	/*
- 	 * for ASIC that supports setting the allocation page size by user we will address
-@@ -37,7 +37,7 @@ static int set_alloc_page_size(struct hl_device *hdev, struct hl_mem_in *args, u
- 		psize = args->alloc.page_size;
- 
- 		if (!is_power_of_2(psize)) {
--			dev_err(hdev->dev, "user page size (%#x) is not power of 2\n", psize);
-+			dev_err(hdev->dev, "user page size (%#llx) is not power of 2\n", psize);
- 			return -EINVAL;
- 		}
+diff --git a/drivers/net/ethernet/nvidia/forcedeth.c b/drivers/net/ethernet/nvidia/forcedeth.c
+index 5116bad..8e49cfa 100644
+--- a/drivers/net/ethernet/nvidia/forcedeth.c
++++ b/drivers/net/ethernet/nvidia/forcedeth.c
+@@ -3471,9 +3471,6 @@ static int nv_update_linkspeed(struct net_device *dev)
+ 	} else if (adv_lpa & LPA_10FULL) {
+ 		newls = NVREG_LINKSPEED_FORCE|NVREG_LINKSPEED_10;
+ 		newdup = 1;
+-	} else if (adv_lpa & LPA_10HALF) {
+-		newls = NVREG_LINKSPEED_FORCE|NVREG_LINKSPEED_10;
+-		newdup = 0;
  	} else {
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index 33ad7226dd8c..584feac7ee83 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -9237,12 +9237,6 @@ static u32 *gaudi_get_stream_master_qid_arr(void)
- 	return gaudi_stream_master;
- }
- 
--static void gaudi_get_valid_dram_page_orders(struct hl_info_dev_memalloc_page_sizes *info)
--{
--	/* set 0 since multiple pages are not supported */
--	info->page_order_bitmask = 0;
--}
--
- static ssize_t infineon_ver_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
- 	struct hl_device *hdev = dev_get_drvdata(dev);
-@@ -9351,7 +9345,6 @@ static const struct hl_asic_funcs gaudi_funcs = {
- 	.set_pci_memory_regions = gaudi_set_pci_memory_regions,
- 	.get_stream_master_qid_arr = gaudi_get_stream_master_qid_arr,
- 	.mmu_get_real_page_size = hl_mmu_get_real_page_size,
--	.get_valid_dram_page_orders = gaudi_get_valid_dram_page_orders,
- 	.access_dev_mem = hl_access_dev_mem,
- 	.set_dram_bar_base = gaudi_set_hbm_bar_base,
- };
-diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
-index 49f859a1f07a..9bde01de4fcf 100644
---- a/drivers/misc/habanalabs/goya/goya.c
-+++ b/drivers/misc/habanalabs/goya/goya.c
-@@ -5405,12 +5405,6 @@ static u32 *goya_get_stream_master_qid_arr(void)
- 	return NULL;
- }
- 
--static void goya_get_valid_dram_page_orders(struct hl_info_dev_memalloc_page_sizes *info)
--{
--	/* set 0 since multiple pages are not supported */
--	info->page_order_bitmask = 0;
--}
--
- static int goya_get_monitor_dump(struct hl_device *hdev, void *data)
- {
- 	return -EOPNOTSUPP;
-@@ -5505,7 +5499,6 @@ static const struct hl_asic_funcs goya_funcs = {
- 	.set_pci_memory_regions = goya_set_pci_memory_regions,
- 	.get_stream_master_qid_arr = goya_get_stream_master_qid_arr,
- 	.mmu_get_real_page_size = hl_mmu_get_real_page_size,
--	.get_valid_dram_page_orders = goya_get_valid_dram_page_orders,
- 	.access_dev_mem = hl_access_dev_mem,
- 	.set_dram_bar_base = goya_set_ddr_bar_base,
- };
+ 		newls = NVREG_LINKSPEED_FORCE|NVREG_LINKSPEED_10;
+ 		newdup = 0;
 -- 
-2.25.1
+2.34.1
 

@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D4B55B428
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 23:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 008AA55B42C
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 23:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbiFZVMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 17:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
+        id S232141AbiFZVVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 17:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiFZVMC (ORCPT
+        with ESMTP id S229722AbiFZVVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 17:12:02 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D48388B;
-        Sun, 26 Jun 2022 14:12:01 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id k12-20020a17090a404c00b001eaabc1fe5dso10516222pjg.1;
-        Sun, 26 Jun 2022 14:12:01 -0700 (PDT)
+        Sun, 26 Jun 2022 17:21:07 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A222729
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 14:21:04 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id e40so10529608eda.2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 14:21:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=cEPrEFRzl8/hH5h4Kq/JMLZy1JAPCmAuI9Gd2Rq87rg=;
-        b=Tdhn7mYaWJqKozxEVc41aBHeMwUAHCviE3P9m99KGmu2E6ETH7CQOLHveynLjO43v6
-         oMJO2v/sCMWvLIvRZUjn5JCyH3aZ1fVEe9NRAPxWglzh+dCvdvC+9mns2mmJvyy3xMDb
-         qSLMl7EzSIpgsiB77EJJvsAqk/LMPXbxxNbp2ZEbtgptlHdnZwTUOd6iMlSzR1P4DAMu
-         epSax1+dqB+FeQ4hwWoGlX9clWi6cZuFEXN7oJzEmVwOB5GgSHWJTGtYRh06fo/iuwxE
-         HYhZaZU2QjeOdNAj6zW9Jfn15a7vZelnWUY3jyUFHZzCamB3C2mZinoVL5bo2VwzlMOO
-         59ag==
+         :cc;
+        bh=bbJojmI8xjJtQIB9zYw+MqLEwyRtrNfWto0156iR2fY=;
+        b=KbSa/eU4a+soRfSbrfd0diz5c+o7BU66TeU7NXALVYrzjGRWCURXKgzIG/YJoEd5Wf
+         W4FOvEe/PPZDjkcXA7gTBZjSZSa22Xgr+foAR6m3UIEu9dnP2RD1Nf1+GpoguXMshCsp
+         63BMzSIWWCvb49d9F8mK5SXiU0cBJnLvzT12o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=cEPrEFRzl8/hH5h4Kq/JMLZy1JAPCmAuI9Gd2Rq87rg=;
-        b=glAJxoafrrS1yBY4eHIOaQm0qNCuaDTwR2uqZByH2aIIVeElF1zodITpn/ing1bIv9
-         7M+ogi/tCg37jwOBOdEiwUIlHL9d4NZEIB6XEAVD6NN77Fep0/gWhaxASfMywzBrz7Sp
-         msrA3PvtsA8B/NrHEVnF97RcNVAAIOn4y2CBZRXW12Zs3s9OkPhyf8JWV2Y25wT/J4Ga
-         /kB+QBvzZIaF9c9DK76JSsKbyUbSLO0/QGrwJqAM0Z4aad0vFi2dFgxD8Sh7gq9/EpRP
-         D9fcVYBtR0W12HR+s7pSawW5arFCSH3TBnPyWtN7jhh+1Q7CGly6AjOBllVqEOxod+YI
-         8jVQ==
-X-Gm-Message-State: AJIora+dz8drhFIJuFm8mv6NweFtWxeOecYRX6ehqVLhpDPgOMNcvNUS
-        z8LmSIgUh5W49Z3TJsZN5VhgC/WjOVakZgkOEdzhOanZnlljRQ==
-X-Google-Smtp-Source: AGRyM1uK2n2rrbTo68LgcBR0h/JBHHQzfaDaQY/3vI/V+9tKewavo5JWH1UshDtgt9NfR5sSUlrbaUU4PzgKBbDtzro=
-X-Received: by 2002:a17:90b:4a4c:b0:1ec:9036:8f91 with SMTP id
- lb12-20020a17090b4a4c00b001ec90368f91mr11752496pjb.33.1656277920825; Sun, 26
- Jun 2022 14:12:00 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=bbJojmI8xjJtQIB9zYw+MqLEwyRtrNfWto0156iR2fY=;
+        b=1g0ZMI5c0t9p6RMo9QgGKQM8md44jurAGOqhP0LjH/RuvTT9edmyN4b85o8/+Cu0zm
+         Gey2YzdfrtQbuUKDPoLHICd8FMSiCIUKl4V+z8B3xGorrt9dNpX4Lf6bHVRZDZ52e5Ep
+         yJvH8eLEFUBi5RUwrLNafR9oPU06905sErFo9DmN4eZwM9ThMMJczOqEyj/WkEzvYxXB
+         wjL8carrCM2shUBqMSCJb+wr+11iQVWmO9EvXQ0tD/6kR4lvXtdbRLAwUrJ2E64eU3ia
+         7PPMJ2h9zZX7LnMjFCxv2t/s47giO2/V21ca4hVeIouby3GzaHhGsPxdsLffRgxjLvJl
+         /rkQ==
+X-Gm-Message-State: AJIora/4hkasWqQLA2p9olruneTn//HGhxtPNo7erx13X4nMMxfwEVAy
+        iEEnLOtgIcc7EKlVUgNL2DBJPS0gGxRAA5UP
+X-Google-Smtp-Source: AGRyM1u3kxp+QFaKudVWwMWqXjrr0PTB9aqt8aiRHjxt+MAQaz0BaEiyIZ1GvYLQOG4pxR3j1jy2ow==
+X-Received: by 2002:a05:6402:189:b0:437:8a8a:d08a with SMTP id r9-20020a056402018900b004378a8ad08amr4747036edv.241.1656278462453;
+        Sun, 26 Jun 2022 14:21:02 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id q4-20020a1709064cc400b006fec4ee28d0sm4147289ejt.189.2022.06.26.14.21.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Jun 2022 14:21:01 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id r20so10458408wra.1
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 14:21:01 -0700 (PDT)
+X-Received: by 2002:a05:6000:1f8d:b0:21b:aaec:ebae with SMTP id
+ bw13-20020a0560001f8d00b0021baaecebaemr9748530wrb.274.1656278460708; Sun, 26
+ Jun 2022 14:21:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220623103543.4138-1-yongsuyoo0215@gmail.com>
-In-Reply-To: <20220623103543.4138-1-yongsuyoo0215@gmail.com>
-From:   =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>
-Date:   Mon, 27 Jun 2022 06:11:53 +0900
-Message-ID: <CANXPkT49g7_YaL3rABY5Uhohz=EPgPqOL2tb6K4SHsWmshtysw@mail.gmail.com>
-Subject: Re: [PATCH] media: dvb_ringbuffer : Fix a bug in dvb_ringbuffer.c
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, Hans Petter Selasky <hps@selasky.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        =?UTF-8?B?7Jyg7Jqp7IiY?= <yongsuyoo0215@gmail.com>
+References: <20220622140853.31383-1-pmladek@suse.com> <YraWWl+Go17uPOgR@mtj.duckdns.org>
+ <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
+ <874k0863x8.fsf@email.froward.int.ebiederm.org> <CAHk-=wgTG2K3erROP19320zBN6BHVf0hRfXGdawkGR4gzrJN6w@mail.gmail.com>
+ <CAHk-=whLsaRKaFKS0UffeCYYCVyP0bbiB4BTYTaXtScgu6R9yA@mail.gmail.com>
+ <87pmiw1fy6.fsf@email.froward.int.ebiederm.org> <CAHk-=wiutNT47oNhyk_WvMj2qp4pehYFptXCUzW=u_2STLQiww@mail.gmail.com>
+ <CAHk-=whX_=BNZ4kVEAu2NV3CMnhwsuYTyE65FQXUMx8VPNOAOA@mail.gmail.com>
+ <87ilonuti2.fsf_-_@email.froward.int.ebiederm.org> <87czevutgb.fsf_-_@email.froward.int.ebiederm.org>
+In-Reply-To: <87czevutgb.fsf_-_@email.froward.int.ebiederm.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 26 Jun 2022 14:20:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg2t3D4CjdMiNR6Bs6DESgxf2nVwdX-Cv4G4Uhig2isPg@mail.gmail.com>
+Message-ID: <CAHk-=wg2t3D4CjdMiNR6Bs6DESgxf2nVwdX-Cv4G4Uhig2isPg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] kthread: Remove the flags argument from kernel_thread
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi ~
+On Sun, Jun 26, 2022 at 12:15 PM Eric W. Biederman
+<ebiederm@xmission.com> wrote:
+>
+> As kthreadd never exists it simply does not matter what kind of exit
+> it has.  So for simplicity make it look like everything else and use
+> SIGCHLD.
 
-How is this patch going ?
-Can you share current status ?
+That "never exists" should be "never exits" ;)
 
-Thank you
+But:
 
+> +pid_t kernel_thread(int (*fn)(void *), void *arg)
+>  {
+> +       unsigned long flags = CLONE_FS | CLONE_FILES | SIGCHLD;
+>         struct kernel_clone_args args = {
+>                 .flags          = ((lower_32_bits(flags) | CLONE_VM |
+>                                     CLONE_UNTRACED) & ~CSIGNAL),
 
-2022=EB=85=84 6=EC=9B=94 23=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 7:35, Y=
-ongSu Yoo <yongsuyoo0215@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> Signed-off-by:Yongsu Yoo <yongsuyoo0215@gmail.com>
->
-> The function dvb_ringbuffer_pkt_next in
-> /linux-next/drviers/media/dvb-core/dvb_ringbuffer.c,
-> which searches the idx of the next valid packet in the ring
-> buffer of the ca->slot_info[slot].rx_buffer at
-> /linux-next/drivers/media/dvb-core/dvb_ca_en50221.c,
-> has the following problem.
-> In calculating the amounts of the consumed address of the ring
-> buffer, if the read address(rbuf->pread) of the ring buffer is
-> smaller than the idx, the amounts of the searched address
-> should be (idx - rbuf->pread),
-> whereas if the read address(rbuf->pread) of the ring buffer is
-> larger than the idx, the amounts of the consumed address should
-> be (idx - rbuf->pread + rbug->size). But there exists an
-> incorrect logic that the rbug-size was not properly added on
-> (idx - rbug->pread) in the later case. With this commit, we
-> fixed this bug.
-> ---
->  drivers/media/dvb-core/dvb_ringbuffer.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/media/dvb-core/dvb_ringbuffer.c b/drivers/media/dvb-=
-core/dvb_ringbuffer.c
-> index d1d471af0636..7d4558de8e83 100644
-> --- a/drivers/media/dvb-core/dvb_ringbuffer.c
-> +++ b/drivers/media/dvb-core/dvb_ringbuffer.c
-> @@ -335,7 +335,9 @@ ssize_t dvb_ringbuffer_pkt_next(struct dvb_ringbuffer=
- *rbuf, size_t idx, size_t*
->                 idx =3D (idx + curpktlen + DVB_RINGBUFFER_PKTHDRSIZE) % r=
-buf->size;
->         }
->
-> -       consumed =3D (idx - rbuf->pread) % rbuf->size;
-> +       consumed =3D (idx - rbuf->pread);
-> +       if (consumed < 0)
-> +               consumed +=3D rbuf->size;
->
->         while((dvb_ringbuffer_avail(rbuf) - consumed) > DVB_RINGBUFFER_PK=
-THDRSIZE) {
->
-> --
-> 2.17.1
->
+Please just get rid of that 'flags' thing, and the lower_32_bits()
+games and write this all as
+
+    pid_t kernel_thread(int (*fn)(void *), void *arg)
+    {
+        struct kernel_clone_args args = {
+                .flags          = CLONE_FS | CLONE_FILES |
+                                  CLONE_VM | CLONE_UNTRACED,
+                .exit_signal    = SIGCHLD,
+                ...
+
+which does that whole thing much more clearly.
+
+              Linus

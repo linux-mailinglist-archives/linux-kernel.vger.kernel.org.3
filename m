@@ -2,132 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E65A55B457
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 01:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C1355B469
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 01:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiFZWmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 18:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35474 "EHLO
+        id S230384AbiFZWo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 18:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiFZWmO (ORCPT
+        with ESMTP id S229782AbiFZWo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 18:42:14 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07092BC7;
-        Sun, 26 Jun 2022 15:42:13 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id w83so10751686oiw.1;
-        Sun, 26 Jun 2022 15:42:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uIE8gKMJ6mLlCMRbp3LqS0tnA9eQSWmifmvEY7fIxFs=;
-        b=CMFJOxB5ugqwghnDzXk33D61FP9nb3o8ckuZ2Lkvo7eFEffE5YdQ+NIJnNwyYW6A3S
-         plXzv29WtaorKlGdc8sNPsdHaj/lbUKNctFqyxporlDAuMooFfoZ5U4fCyH+oVWQa0+o
-         xPqZGzOWIjH0ZwKg07auJ2DM2WcUekvdbWXFP0z2US4KpG3VzJ1OyyDZoeL11+ggRZpU
-         SUQHhsjIlGRk9uIEJ95e3C+in5K8fc9odL34jL+E1ydz7EHIh4PTHnOKFx8ESfsQbLhW
-         k+Ll7NVdPgGhHu24M0mDEPkh1/FLZkuYdNdauKunpSTLC1FxfjPKhhzeometK59VunVv
-         /xvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uIE8gKMJ6mLlCMRbp3LqS0tnA9eQSWmifmvEY7fIxFs=;
-        b=2bSE5mxnX2itjoIh7pqzjGeGJaXp2hEUhRDJHZ7fGxOsH5zF09RBDy2/8DhdTaxbp6
-         ZAe1/zZaJ2jrj1VW15B/lwhtQR2ynZB5Bc4D7A4qDvjcksyw1SrbLd1fTmyu2G46qBwe
-         etZ5eLeUZxEDeovGDgFb5iPwPNBYnDHX1nDObIPgu9Tu7Ub8Jilu6pBbocH29PGMkjEu
-         1tcG0I0Pj8C1Aem24AcqNu4iLMw/q2s2hAllbrK/d+aCAOjcqEtEajJmcgEXlexHkgnZ
-         k2G5jvzVowxL045grcw9ZhIwxloifEP1VIjcqos//20n3mtt/+U0/2RfaJ85IDv8je08
-         2Mvg==
-X-Gm-Message-State: AJIora//KNP8bRQ0yMJoH6nb+XgaLDGxyfHume/dqo2xTEcdPhTktXuu
-        nW7pO4AMic5H9zFQvTzF1D0=
-X-Google-Smtp-Source: AGRyM1vNFUW8TYrg4+oxkLjHUXXfnsMv26Bz6TiZ5D2wwePgcQhrNyzhz8UPXQCaqoMFM5bGNy0Upg==
-X-Received: by 2002:a05:6808:1898:b0:331:4343:7637 with SMTP id bi24-20020a056808189800b0033143437637mr8891384oib.83.1656283333059;
-        Sun, 26 Jun 2022 15:42:13 -0700 (PDT)
-Received: from ?IPV6:2603:8081:140c:1a00:7f25:2769:1033:f8c1? (2603-8081-140c-1a00-7f25-2769-1033-f8c1.res6.spectrum.com. [2603:8081:140c:1a00:7f25:2769:1033:f8c1])
-        by smtp.gmail.com with ESMTPSA id en38-20020a05687007a600b000f325409614sm6053772oab.13.2022.06.26.15.42.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 15:42:12 -0700 (PDT)
-Message-ID: <40582262-9d58-b38a-5a0e-7c32d1efadbe@gmail.com>
-Date:   Sun, 26 Jun 2022 17:42:11 -0500
+        Sun, 26 Jun 2022 18:44:56 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7862BCA
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 15:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656283494; x=1687819494;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6ldNtxryiGQA157R36YiyLpP+MEeDc4uJSIYeTMYoMY=;
+  b=aQ2CtKBmCxsR+xUVxUM1W6/2HZH7YMwu1jOEQKvkb3mUW9VWtHQAPbsu
+   cbb9+ef14BnpZzw5/Vs2337o378eVSNHKED7zwm97Dxa8wzMzh+L1BoUO
+   PYBDQWiK6lTKFWgToaX6HyFBtk/xSMSey4G1c9n6QZQiOxycLSisAMFR7
+   Rt5JI9du1qwg3Ou/zYH258fvwUKqdd78koscIBTT/GB6qiLT13juxInmC
+   LiakjT9KwyvwSIlHyRhqqVIaxmsYu/31yxhd5aC4vQZZflWoB7tkpDHsb
+   FgOk9f1H3vUqs/NQ1sE5Se5Ah05mgIG6FYkWwFNCmwKncaeVKHepgKccT
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="281359590"
+X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
+   d="scan'208";a="281359590"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 15:44:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
+   d="scan'208";a="589697177"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 26 Jun 2022 15:44:52 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o5azr-0007up-CL;
+        Sun, 26 Jun 2022 22:44:51 +0000
+Date:   Mon, 27 Jun 2022 06:44:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Venkateshwar Rao Gannavarapu 
+        <venkateshwar.rao.gannavarapu@xilinx.com>,
+        laurent.pinchart@ideasonboard.com, sam@ravnborg.org,
+        dri-devel@lists.freedesktop.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, airlied@linux.ie,
+        vgannava@xilinx.com,
+        Venkateshwar Rao Gannavarapu 
+        <venkateshwar.rao.gannavarapu@xilinx.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 2/2] drm: xlnx: dsi: Add Xilinx MIPI DSI-Tx subsystem
+ driver
+Message-ID: <202206270612.vJbBPJ9r-lkp@intel.com>
+References: <1655389056-37044-3-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 2/2] RDMA/rxe: Generate error completion for error
- requester QP state
-Content-Language: en-US
-To:     Li Zhijian <lizhijian@fujitsu.com>,
-        Yanjun Zhu <yanjun.zhu@linux.dev>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Haakon Bugge <haakon.bugge@oracle.com>,
-        Cheng Xu <chengyou@linux.alibaba.com>,
-        linux-rdma@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220516015329.445474-1-lizhijian@fujitsu.com>
- <20220516015329.445474-3-lizhijian@fujitsu.com>
-From:   Bob Pearson <rpearsonhpe@gmail.com>
-In-Reply-To: <20220516015329.445474-3-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1655389056-37044-3-git-send-email-venkateshwar.rao.gannavarapu@xilinx.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/22 20:53, Li Zhijian wrote:
-> As per IBTA specification, all subsequent WQEs while QP is in error
-> state should be completed with a flush error.
-> 
-> Here we check QP_STATE_ERROR after req_next_wqe() so that rxe_completer()
-> has chance to be called where it will set CQ state to FLUSH ERROR and the
-> completion can associate with its WQE.
-> 
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
-> V3: unlikely() optimization # Cheng Xu <chengyou@linux.alibaba.com>
->     update commit log # Haakon Bugge <haakon.bugge@oracle.com>
-> ---
->  drivers/infiniband/sw/rxe/rxe_req.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/infiniband/sw/rxe/rxe_req.c b/drivers/infiniband/sw/rxe/rxe_req.c
-> index 8bdd0b6b578f..c1f1c19f26b2 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_req.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_req.c
-> @@ -624,7 +624,7 @@ int rxe_requester(void *arg)
->  	rxe_get(qp);
->  
->  next_wqe:
-> -	if (unlikely(!qp->valid || qp->req.state == QP_STATE_ERROR))
-> +	if (unlikely(!qp->valid))
->  		goto exit;
->  
->  	if (unlikely(qp->req.state == QP_STATE_RESET)) {
-> @@ -646,6 +646,14 @@ int rxe_requester(void *arg)
->  	if (unlikely(!wqe))
->  		goto exit;
->  
-> +	if (unlikely(qp->req.state == QP_STATE_ERROR)) {
-> +		/*
-> +		 * Generate an error completion so that user space is able to
-> +		 * poll this completion.
-> +		 */
-> +		goto err;
-> +	}
-> +
->  	if (wqe->mask & WR_LOCAL_OP_MASK) {
->  		ret = rxe_do_local_ops(qp, wqe);
->  		if (unlikely(ret))
+Hi Venkateshwar,
 
-There may be issues with moving this after the retry check since the retransmit timer can
-fire at any time and may race with the completer setting the error state and result in
-a retry flow occurring while you are trying to flush out all the wqes. Perhaps better
-to to duplicate setting wqe in the error state check.
+Thank you for the patch! Yet something to improve:
 
-Bob
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on linus/master v5.19-rc3 next-20220624]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Venkateshwar-Rao-Gannavarapu/Add-Xilinx-DSI-Tx-subsystem-DRM-driver/20220616-222008
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: mips-randconfig-c004-20220626
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b0d6dd3905db145853c7c744ac92d49b00b1fa20)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/28aa62ffdc1901029bf75961166f4ebba948b9b7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Venkateshwar-Rao-Gannavarapu/Add-Xilinx-DSI-Tx-subsystem-DRM-driver/20220616-222008
+        git checkout 28aa62ffdc1901029bf75961166f4ebba948b9b7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/xlnx/xlnx_dsi.c:255:10: error: label at end of compound statement: expected statement
+           default: /* define */
+                   ^
+                    ;
+   1 error generated.
+
+
+vim +255 drivers/gpu/drm/xlnx/xlnx_dsi.c
+
+   227	
+   228	#define MAX_INPUT_SEL_FORMATS   3
+   229	static u32
+   230	*xlnx_dsi_bridge_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
+   231						   struct drm_bridge_state *bridge_state,
+   232						   struct drm_crtc_state *crtc_state,
+   233						   struct drm_connector_state *conn_state,
+   234						   u32 output_fmt,
+   235						   unsigned int *num_input_fmts)
+   236	{
+   237		u32 *input_fmts;
+   238		unsigned int i = 0;
+   239	
+   240		*num_input_fmts = 0;
+   241		input_fmts = kcalloc(MAX_INPUT_SEL_FORMATS, sizeof(*input_fmts), GFP_KERNEL);
+   242		if (!input_fmts)
+   243			return NULL;
+   244	
+   245		switch (output_fmt) {
+   246		case MEDIA_BUS_FMT_FIXED:
+   247			input_fmts[i++] = MEDIA_BUS_FMT_RGB888_1X24;
+   248			break;
+   249		case MEDIA_BUS_FMT_RGB666_1X18:
+   250			input_fmts[i++] = MEDIA_BUS_FMT_RGB666_1X18;
+   251			break;
+   252		case MEDIA_BUS_FMT_RGB565_1X16:
+   253			input_fmts[i++] = MEDIA_BUS_FMT_RGB565_1X16;
+   254			break;
+ > 255		default: /* define */
+   256		}
+   257	
+   258		*num_input_fmts = i;
+   259		if (*num_input_fmts == 0) {
+   260			kfree(input_fmts);
+   261			input_fmts = NULL;
+   262		}
+   263	
+   264		return input_fmts;
+   265	}
+   266	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

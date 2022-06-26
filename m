@@ -2,141 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B330A55B111
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED3D55B117
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbiFZKQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 06:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
+        id S234195AbiFZKUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 06:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiFZKQB (ORCPT
+        with ESMTP id S232828AbiFZKUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 06:16:01 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1180120B2
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:15:59 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-317ab78a345so56542487b3.10
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:15:59 -0700 (PDT)
+        Sun, 26 Jun 2022 06:20:30 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E94312610
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:20:27 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id c65so9239405edf.4
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:20:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=A6ULT6qt3Y8m7tER4ibPrZPKIE4ZaUO512mygVxvB7M=;
-        b=EWyKT6lVXQco7x0/YZIBkhh6XaHBmrYABXmXYWxpobNTufTvVuAh6R/hGaomB0gbk9
-         MoDhbR6pLqoqhC0NtIrOylctzuk6nPlCi1SMitw8nT9b8tSsOKzQkzZCf6y9QyjNGyXf
-         71YVbB+DiRPc7Rl/6UOPfPcl3n5D2XcNWbSEoNL+j9fL8ToVqSd77/n1ioORc/bfKoiv
-         2ud53+X8DXDdazBwA7IHj7f6E+V5D21cZhmhRR0IWPkZ/FLATABE8cPEtJ7J/Ngp/NJz
-         Lf66maTxduZrOD6INDIZqgVwS/MOeXOMPx/FNSfvlDXT6OOJXSHseDvPC63ceiCvfyrP
-         HY6Q==
+        d=scylladb.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=zy1Ih5xnZLYR31pscqnLVprtiUwTUenQdef+MWxKKMA=;
+        b=oBfck6+XscL2VeZ+MF8T02/Q0GkUoM1jN27mDG9zEwpHpTEFhiBjXDUOLSiVvUMvGM
+         2sicpmI3J24iRKAA/5RxJuX+VnPWJOq0n/0CFMTZwa0ERpZlFUFFpw22CJ5BPYHwH0NF
+         xzEehUBouX/IGDTkYFQ5Ev+S6CtOjASt8p1uYEBuekmHqcuo9NYiLJuBQ11SgTbV+s4Q
+         h+eTO5wsRZUjz6KnScQnB5ClLMK88d5eMfaRvO0FBf2N/bHMRc5rTU2sCUNWnro6M8G+
+         X6ErBcZ5i27Gmfz0rtcLWgvjPPhKS2RKwPNQrtAxFkITjgYwLdz6VFt3v67paBWA0AQH
+         wxMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=A6ULT6qt3Y8m7tER4ibPrZPKIE4ZaUO512mygVxvB7M=;
-        b=q5kctxhyHHpD5s9jSPVVuIdH1lu7TOLTmY+LRt0RGznr5MjWKQ1XeDRZZN87x3VbNw
-         CAyGH6yk68kJxAS4hNUFn6ket9kK5PFZpWe+d+vCgvOAk4pszL2QNl4gQIkEAAVKHvBv
-         PUgV07k+dzw5fO0lwhdqky43bPzrQFvk7zh6+ctpiq4eFa0IXCChg70gqdTSO+T6omKO
-         hYL1eqPOU7XW9gE+3zHo2aW99mo7CypsF2fdbFSaF/BUk2xpHe0uMniQgfCXGvYN1Saw
-         N41IZMUuwmlDu9ZcCrSYfY6JlwGSwWfz7SEbeH7OdXOxvSs+iqVm3kqzDn6vSEruhpZy
-         KO1w==
-X-Gm-Message-State: AJIora8tG4eUEKxOCInGu6wBZKSeBwmDrV/jaPTwumDgjwR2GrpQHFya
-        W/sbsfQnldKZ7W0pCIjzsKDf9ydcNb1TOg==
-X-Google-Smtp-Source: AGRyM1vCFOBXMZXYd2wjunuMNSNfbqV2Qv5fUQ3A41LP1Ll6863YkjO7hQah6BirT2fg3gXJc6cEcx8GXwqnqA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:a08c:0:b0:66a:a7c3:d5a with SMTP id
- y12-20020a25a08c000000b0066aa7c30d5amr8229590ybh.82.1656238559009; Sun, 26
- Jun 2022 03:15:59 -0700 (PDT)
-Date:   Sun, 26 Jun 2022 18:15:53 +0800
-Message-Id: <20220626101553.1885428-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] Documentation: kunit: Cleanup run_wrapper, fix x-ref
-From:   David Gow <davidgow@google.com>
-To:     Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=zy1Ih5xnZLYR31pscqnLVprtiUwTUenQdef+MWxKKMA=;
+        b=AXYgQ/6BxhCXru3UDltQ46brJqdsnG+c+1Xk3SFNZ3uNm13NV0kA6qHXN4HaG6J6+I
+         lBEKPpSowuBqnp338VSQYMLKAw2MupZKH7zomRtKtg5vNgZ3yu7Dr3GRo566zfjaMT3V
+         At5KMcj7FDlKriPbZrZVabk2Dp4Pp3Na7giDTBqWNwAORJxrcO+hrVQveLot6zMJTlJZ
+         RIvpSqZN5aIhbdRrovILO7SCYLuTJV1r+H6Kisye5VCYAl028ApFKeV8FM6xoEf19YM+
+         LjUAzpGesvR5P9MKBRAA/SVHm1+q6hXJRk2uzPQIt35zbi7PgwS99BmcQ7iPwLBqwo/m
+         28lA==
+X-Gm-Message-State: AJIora/wxEikpfAgYQ4+m31UIRX6yWN8DK7cVMQYWMoT0DQ+t4FYr04h
+        l5M1m1FI7gYR943w3WHKQpen0A==
+X-Google-Smtp-Source: AGRyM1tv3WbUrJipd2xn/7Heq9RfOQOWLVedSKXLcrr95zGLiEg/pzWHi319OrG4Zqw5VAKidmbPoA==
+X-Received: by 2002:a05:6402:26d5:b0:435:aba2:9495 with SMTP id x21-20020a05640226d500b00435aba29495mr10073740edd.133.1656238825841;
+        Sun, 26 Jun 2022 03:20:25 -0700 (PDT)
+Received: from [10.0.0.1] (system.cloudius-systems.com. [199.203.229.89])
+        by smtp.gmail.com with ESMTPSA id c4-20020a170906340400b0070abf371274sm3634422ejb.136.2022.06.26.03.20.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Jun 2022 03:20:25 -0700 (PDT)
+Message-ID: <23067de5-7955-7f58-f8ad-70a812602ac8@scylladb.com>
+Date:   Sun, 26 Jun 2022 13:20:22 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 1/8] statx: add direct I/O alignment information
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
+References: <20220616201506.124209-1-ebiggers@kernel.org>
+ <20220616201506.124209-2-ebiggers@kernel.org>
+ <6c06b2d4-2d96-c4a6-7aca-5147a91e7cf2@scylladb.com>
+ <YrgOUw6YM2c6k59U@infradead.org>
+From:   Avi Kivity <avi@scylladb.com>
+Organization: ScyllaDB
+In-Reply-To: <YrgOUw6YM2c6k59U@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "Run Tests on qemu" section of run_wrapper.rst had a few issues left
-over from the last big documentation refactor[1]:
-- It referenced a run_uml.rst page, which was integrated into the other
-  pages (including run_wrapper.rst).
-- It skimmed over the use of --arch= and --cross_compile= in favour of
-  using a custom --qemu_config. Since most users will want to use the
-  former, let's give examples.
 
-Remove the reference to the non-existant page, and add a couple of
-examples to encourage the use of --arch= and --cross_compile=.
+On 26/06/2022 10.44, Christoph Hellwig wrote:
+> On Sun, Jun 19, 2022 at 02:30:47PM +0300, Avi Kivity wrote:
+>>> * stx_dio_offset_align: the alignment (in bytes) required for file
+>>>     offsets and I/O segment lengths for DIO, or 0 if DIO is not supported
+>>>     on the file.  This will only be nonzero if stx_dio_mem_align is
+>>>     nonzero, and vice versa.
+>>
+>> If you consider AIO, this is actually three alignments:
+>>
+>> 1. offset alignment for reads (sector size in XFS)
+>>
+>> 2. offset alignment for overwrites (sector size in XFS since ed1128c2d0c87e,
+>> block size earlier)
+>>
+>> 3. offset alignment for appending writes (block size)
+>>
+>>
+>> This is critical for linux-aio since violation of these alignments will
+>> stall the io_submit system call. Perhaps io_uring handles it better by
+>> bouncing to a workqueue, but there is a significant performance and latency
+>> penalty for that.
+> I think you are mixing things up here.
 
-With this change, there should be no more broken references in the KUnit
-documentation (i.e., the one mentioned in [2] is gone).
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=46201d47d6c4be594c1d57b7f3251c371626a9c4
-[2]: https://lore.kernel.org/linux-doc/cover.1656234456.git.mchehab@kernel.org/
+Yes.
 
-Signed-off-by: David Gow <davidgow@google.com>
----
 
-Thanks, Mauro, for noticing this in [2]: for whatever reason my version
-of Sphinx wasn't warning on it.
+> We actually have two limits that
+> matter:
+>
+>   a) the hard limit, which if violated will return an error.
+>      This has been sector size for all common file systems for years,
+>      but can be bigger than that with fscrypt in the game (which
+>      triggered this series)
+>   b) an optimal write size, which can be done asynchronous and
+>      without exclusive locking.
+>      This is what your cases 2) and 3) above refer to.
+>
+> Exposting this additional optimal performance size might be a good idea
+> in addition to what is proposed here, even if matters a little less
+> with io_uring.  But I'm not sure I'd additional split it into append
+> vs overwrite vs hole filling but just round up to the maximum of those.
 
-Unless anyone objects, I'll add this to the list of things to be taken
-in via the kunit/kunit-fixes tree.
 
-Cheers,
--- David
+Rounding up will penalize database workloads, with and without io_uring. 
+Database commit logs are characterized by frequent small writes. Telling 
+the database to round up to 4k vs 512 bytes means large write 
+amplification. The disk probably won't care (or maybe it will - it will 
+also have to generate more erase blocks), but the database will run out 
+of commitlog space much sooner and will have to compensate in expensive 
+ways.
 
----
- Documentation/dev-tools/kunit/run_wrapper.rst | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-index 653985ce9cae..a695f58cd64e 100644
---- a/Documentation/dev-tools/kunit/run_wrapper.rst
-+++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-@@ -192,6 +192,20 @@ via UML. To run tests on qemu, by default it requires two flags:
-     if we have downloaded the microblaze toolchain from the 0-day
-     website to a directory in our home directory called toolchains.
- 
-+This means that for most architectures, running under qemu is as simple as:
-+
-+.. code-block:: bash
-+
-+	./tools/testing/kunit/kunit.py run --arch=x86_64
-+
-+If a special toolchain is required, it can be slightly more complicated:
-+
-+.. code-block:: bash
-+
-+	./tools/testing/kunit/kunit.py run \
-+		--arch=s390 \
-+		--cross_compile=s390x-linux-gnu-
-+
- If we want to run KUnit tests on an architecture not supported by
- the ``--arch`` flag, or want to run KUnit tests on qemu using a
- non-default configuration; then we can write our own``QemuConfig``.
-@@ -214,9 +228,6 @@ as
- 		--jobs=12 \
- 		--qemu_config=./tools/testing/kunit/qemu_configs/x86_64.py
- 
--To run existing KUnit tests on non-UML architectures, see:
--Documentation/dev-tools/kunit/non_uml.rst.
--
- Command-Line Arguments
- ======================
- 
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+Of course, people that care can continue to use internal filesystem 
+knowledge, and maybe there are few enough of those that the API can 
+choose to ignore them.
+
 

@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC8655AF6A
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 08:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E895C55AF70
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 08:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233955AbiFZGQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 02:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
+        id S233958AbiFZGSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 02:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiFZGQh (ORCPT
+        with ESMTP id S233964AbiFZGSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 02:16:37 -0400
+        Sun, 26 Jun 2022 02:18:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18C211155;
-        Sat, 25 Jun 2022 23:16:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D71CB1FA;
+        Sat, 25 Jun 2022 23:18:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C2C5610FB;
-        Sun, 26 Jun 2022 06:16:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C4F2C34114;
-        Sun, 26 Jun 2022 06:16:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06CEB610FB;
+        Sun, 26 Jun 2022 06:18:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DFB5C3411D;
+        Sun, 26 Jun 2022 06:18:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656224195;
-        bh=V0kwl8PvcFuWUQKUbcZaHYnx6/0U8WaC/H8xFjHCvAM=;
+        s=k20201202; t=1656224287;
+        bh=zZYSU8gslVRru78DctdKqo9B5aQthNmHzWz6doljCQo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V1oO92sRoNfKpgTsoGjnLLIuuWNrukLZC1zSr4glAOA6KGrcEkuIZfQauQk5ovdWc
-         D+4tq5HVJS02DXrct1Jk6k3o87E92s1LZifsSwpCOhfNrwy2DP/vh1Qzl/OAiaEA7C
-         98wVS9fIMoBf5oaxgXgP4EiU6X5vRQJ0NTwZN1SmkcTFGNW8F1k1ywIcCe0b9eCCGi
-         1OCQekLZyQDfeevwfpYbhBysl0jlTCo9ZKaxcXZixgKfXh2oZqyxeCEX/RnRi37r/C
-         I+MG0EHi22xxkFYezjo6vCCZGSfVhPSdol/BngyexfZFV/t/LycdWzPjSNoJ4R2ptZ
-         XAlOIz1VQYRUQ==
-Date:   Sun, 26 Jun 2022 09:16:32 +0300
+        b=cOJt+FyxOyBkAzGh1aMGZhEurBeRFOPNveMuMhKen/8epYYDToXJaIPm/vuSlulrX
+         ZohXz9+kjsML9FTpng3N8xv9L27jJMJv0EKeIhrFYoOGksXH8UuL0IqQd3ojH1MQTx
+         HCy2Xv6Ox60fF3OL3atF9geqbOGvA50JMrPq9YvhLmhfiVyda1+T+9GpuMZguGVDco
+         VdlvPucz9b6nYSnuxphWuDNGSQwPz3FJdG5RnvXuVJ5tcjcUomQGHuPfLqoENlp+2+
+         ocY+CeDQOgULMOCjwr/heplQ7m2iT3dKkQUGlMsq6SFkQLOYm9Nm8CNTv0E4ZmDIl7
+         8riw2h+pZaRsQ==
+Date:   Sun, 26 Jun 2022 09:18:04 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-Subject: Re: [PATCH 2/4] certs: fix and refactor
- CONFIG_SYSTEM_BLACKLIST_HASH_LIST build
-Message-ID: <Yrf5wDBWKXCGGkxM@kernel.org>
-References: <20220611172233.1494073-1-masahiroy@kernel.org>
- <20220611172233.1494073-2-masahiroy@kernel.org>
- <58a20890-557e-f31c-ed59-7e256445a26c@digikod.net>
- <YqopiZgC8vNSKYPt@iki.fi>
- <CAK7LNARSYSupt1nL_JS2prLunRpOhMRG_pPhHfto7+K+QDVp2Q@mail.gmail.com>
+To:     Stefan Mahnke-Hartmann <stefan.mahnke-hartmann@infineon.com>
+Cc:     Johannes Holland <johannes.holland@infineon.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterhuewe@gmx.de, jgg@ziepe.ca
+Subject: Re: [PATCH] tpm: increase timeout for kselftests
+Message-ID: <Yrf6HJgvuIHXyqrj@kernel.org>
+References: <20220510111607.22984-1-johannes.holland@infineon.com>
+ <YnvSwJxOg+IZxrxz@kernel.org>
+ <51a14f28-ce94-ade9-6512-a265f7b32dfb@infineon.com>
+ <YovniXv6ATJ/vpt6@kernel.org>
+ <4832efdf-f2a7-7b0c-4477-088772c962c0@infineon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNARSYSupt1nL_JS2prLunRpOhMRG_pPhHfto7+K+QDVp2Q@mail.gmail.com>
+In-Reply-To: <4832efdf-f2a7-7b0c-4477-088772c962c0@infineon.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,120 +60,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 07:12:31AM +0900, Masahiro Yamada wrote:
-> On Thu, Jun 16, 2022 at 3:51 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+On Mon, Jun 20, 2022 at 04:45:45PM +0200, Stefan Mahnke-Hartmann wrote:
+> 
+> 
+> On 23.05.22 21:59, Jarkko Sakkinen wrote:
+> > On Fri, May 20, 2022 at 03:28:42PM +0200, Stefan Mahnke-Hartmann wrote:
+> >>
+> >> On 11.05.22 17:14, Jarkko Sakkinen wrote:
+> >>> On Tue, May 10, 2022 at 01:16:08PM +0200, Johannes Holland wrote:
+> >>>> Due to CreatePrimary commands which need to create RSA keys of
+> >>>> increasing size, the timeout value need to be raised, as well.
+> >>>> Default is 300s.
+> >>>>
+> >>>> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> >>>> ---
+> >>>> A timeout of anything below 600s still lead to occasional timeouts for
+> >>>> me. Therefore, I propose 600s as a new value. 
+> >>>>
+> >>>>  tools/testing/selftests/tpm2/settings | 2 ++
+> >>>>  1 file changed, 2 insertions(+)
+> >>>>  create mode 100644 tools/testing/selftests/tpm2/settings
+> >>>>
+> >>>> diff --git a/tools/testing/selftests/tpm2/settings b/tools/testing/selftests/tpm2/settings
+> >>>> new file mode 100644
+> >>>> index 000000000000..919bc3803f03
+> >>>> --- /dev/null
+> >>>> +++ b/tools/testing/selftests/tpm2/settings
+> >>>> @@ -0,0 +1,2 @@
+> >>>> +timeout=600
+> >>>> +
+> >>>> -- 
+> >>>> 2.34.1
+> >>>>
+> >>> Could cope but I did not get why it needs to be raised.
+> >> The TPM2 SpaceTest testsuite currently creates 8 primary RSA 2k keys + 1 for
+> >> setup. Generating a RSA2k key can take up to ~1-2 minutes on some of our TPMs.
+> >> => 2x9 = 18 minutes. In the kernel we even define a duration timeout for rsa2k
+> >> keygen of 5 min per key! (TPM2_DURATION_LONG_LONG = 300000) => up to 45 minutes
+> >> would be "acceptable".
+> >>
+> >> However since the average key generation time is much faster, a value of ~10
+> >> minutes should be fine enough.
+> >>
+> >> The reason why you did not experience this yet on your test system is either
+> >> because PTT TPMs are faster in that respect and/or some TPMs implement pre-gen
+> >> mechanisms for key generation, (or just plain luck)
+> >>
+> >> BR, Stefan
+> >>
+> >>> BR, Jarkko
+> > I think this is ok.
 > >
-> > On Mon, Jun 13, 2022 at 02:34:36PM +0200, Mickaël Salaün wrote:
-> > >
-> > >
-> > > On 11/06/2022 19:22, Masahiro Yamada wrote:
-> > > > Commit addf466389d9 ("certs: Check that builtin blacklist hashes are
-> > > > valid") was applied 8 months after the submission.
-> > > >
-> > > > In the meantime, the base code had been removed by commit b8c96a6b466c
-> > > > ("certs: simplify $(srctree)/ handling and remove config_filename
-> > > > macro").
-> > > >
-> > > > Fix the Makefile.
-> > > >
-> > > > Create a local copy of $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST). It is
-> > > > included from certs/blacklist_hashes.c and also works as a timestamp.
-> > > >
-> > > > Send error messages from check-blacklist-hashes.awk to stderr instead
-> > > > of stdout.
-> > > >
-> > > > Fixes: addf466389d9 ("certs: Check that builtin blacklist hashes are valid")
-> > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > >
-> > > Reviewed-by: Mickaël Salaün <mic@linux.microsoft.com>
-> > >
-> > > As a side note, it may let an orphan certs/blacklist_hashes_checked file but
-> > > we can't really do something about that and it's OK.
-> > >
-> > > Thanks!
-> > >
-> > > > ---
-> > > >
-> > > >   certs/.gitignore         |  2 +-
-> > > >   certs/Makefile           | 20 ++++++++++----------
-> > > >   certs/blacklist_hashes.c |  2 +-
-> > > >   3 files changed, 12 insertions(+), 12 deletions(-)
-> > > >
-> > > > diff --git a/certs/.gitignore b/certs/.gitignore
-> > > > index 56637aceaf81..cec5465f31c1 100644
-> > > > --- a/certs/.gitignore
-> > > > +++ b/certs/.gitignore
-> > > > @@ -1,5 +1,5 @@
-> > > >   # SPDX-License-Identifier: GPL-2.0-only
-> > > > -/blacklist_hashes_checked
-> > > > +/blacklist_hash_list
-> > > >   /extract-cert
-> > > >   /x509_certificate_list
-> > > >   /x509_revocation_list
-> > > > diff --git a/certs/Makefile b/certs/Makefile
-> > > > index cb1a9da3fc58..a8d628fd5f7b 100644
-> > > > --- a/certs/Makefile
-> > > > +++ b/certs/Makefile
-> > > > @@ -7,22 +7,22 @@ obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o c
-> > > >   obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist.o common.o
-> > > >   obj-$(CONFIG_SYSTEM_REVOCATION_LIST) += revocation_certificates.o
-> > > >   ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),)
-> > > > -quiet_cmd_check_blacklist_hashes = CHECK   $(patsubst "%",%,$(2))
-> > > > -      cmd_check_blacklist_hashes = $(AWK) -f $(srctree)/scripts/check-blacklist-hashes.awk $(2); touch $@
-> > > > -$(eval $(call config_filename,SYSTEM_BLACKLIST_HASH_LIST))
-> > > > +$(obj)/blacklist_hashes.o: $(obj)/blacklist_hash_list
-> > > > +CFLAGS_blacklist_hashes.o := -I $(obj)
-> > > > -$(obj)/blacklist_hashes.o: $(obj)/blacklist_hashes_checked
-> > > > +quiet_cmd_check_and_copy_blacklist_hash_list = GEN     $@
-> > > > +      cmd_check_and_copy_blacklist_hash_list = \
-> > > > +   $(AWK) -f $(srctree)/scripts/check-blacklist-hashes.awk $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) >&2; \
-> > > > +   cat $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) > $@
-> > > > -CFLAGS_blacklist_hashes.o += -I$(srctree)
-> > > > -
-> > > > -targets += blacklist_hashes_checked
-> > > > -$(obj)/blacklist_hashes_checked: $(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$(SYSTEM_BLACKLIST_HASH_LIST_FILENAME) scripts/check-blacklist-hashes.awk FORCE
-> > > > -   $(call if_changed,check_blacklist_hashes,$(SYSTEM_BLACKLIST_HASH_LIST_SRCPREFIX)$(CONFIG_SYSTEM_BLACKLIST_HASH_LIST))
-> > > > +$(obj)/blacklist_hash_list: $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) FORCE
-> > > > +   $(call if_changed,check_and_copy_blacklist_hash_list)
-> > > >   obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_hashes.o
-> > > >   else
-> > > >   obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_nohashes.o
-> > > >   endif
-> > > > +targets += blacklist_hash_list
-> > > >   quiet_cmd_extract_certs  = CERT    $@
-> > > >         cmd_extract_certs  = $(obj)/extract-cert $(extract-cert-in) $@
-> > > > @@ -33,7 +33,7 @@ $(obj)/system_certificates.o: $(obj)/x509_certificate_list
-> > > >   $(obj)/x509_certificate_list: $(CONFIG_SYSTEM_TRUSTED_KEYS) $(obj)/extract-cert FORCE
-> > > >     $(call if_changed,extract_certs)
-> > > > -targets += x509_certificate_list blacklist_hashes_checked
-> > > > +targets += x509_certificate_list
-> > > >   # If module signing is requested, say by allyesconfig, but a key has not been
-> > > >   # supplied, then one will need to be generated to make sure the build does not
-> > > > diff --git a/certs/blacklist_hashes.c b/certs/blacklist_hashes.c
-> > > > index d5961aa3d338..86d66fe11348 100644
-> > > > --- a/certs/blacklist_hashes.c
-> > > > +++ b/certs/blacklist_hashes.c
-> > > > @@ -2,6 +2,6 @@
-> > > >   #include "blacklist.h"
-> > > >   const char __initconst *const blacklist_hashes[] = {
-> > > > -#include CONFIG_SYSTEM_BLACKLIST_HASH_LIST
-> > > > +#include "blacklist_hash_list"
-> > > >     , NULL
-> > > >   };
 > >
-> > I'll make a PR for 1/4 and 2/4 so that they get into 5.19.
+> > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 > >
 > > BR, Jarkko
-> 
-> 
-> Thank you!
-> 
-> What shall we do for 3/4 and 4/4?
-> 
-> Do you have a plan to queue them up for the next MW?
-> 
-> Or, shall I apply them to my kbuild tree with your reivewed-by?
+> >
+> Hi Jarkko,
+>  
+> Just curious. I can't see this patch was added to linux-next. Was I
+> expected to do something more to it?
+>  
+> Kind regards
+> Stefan
 
-If possible, please do, thank you for taking the trouble.
+Couple of things:
+
+- Send to selftests maintainer:
+- "selftests/tpm2" instead of "tpm:"
 
 BR, Jarkko

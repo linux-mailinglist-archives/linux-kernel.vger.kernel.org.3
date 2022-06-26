@@ -2,191 +2,458 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E2255B16C
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 13:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB6A55B170
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 13:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234354AbiFZLKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 07:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
+        id S234361AbiFZLKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 07:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234298AbiFZLKL (ORCPT
+        with ESMTP id S234298AbiFZLKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 07:10:11 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD5C14011;
-        Sun, 26 Jun 2022 04:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1656241808; x=1687777808;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=CqJf2Z01nbXRgpxlTU01p4HDiFum8ZZ6zkxPSndh89U=;
-  b=uDfcSZzxlBbBSwfWO6hMv41N9EkfadcAFlf+D97HCrhoDGaqdtN4n09D
-   7WMGU/S28V5/d6CqArcWFPB7eY5jZ3rn//rBrJpPAcIXjyewlDcKsXoSy
-   SIF382ww+TLkrWYs4sP3nzvY1kJ9UlWQ/215qUacMbJqQLxneleSM57mw
-   jq0rjTMIxOg5CEUnilQ0BKbGqZnzTMnVfYbNfW5QbpoPV3Wo3k2Pn9AqJ
-   dh/byZiiAKdtnct2Hpf93/ZHBxuxVhrnZVoqvwbUiKrtRylReHHS34ibK
-   xb6IGh0fSlyB9MnMCvNZjhPKaTtEa7A9fqObt+bYp/PiXbbZHjM5jwtZ0
-   w==;
-X-IronPort-AV: E=Sophos;i="5.92,224,1650956400"; 
-   d="scan'208";a="179544267"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Jun 2022 04:10:07 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sun, 26 Jun 2022 04:10:07 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Sun, 26 Jun 2022 04:10:07 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ksdMnQzZ2i1WwA2EW9sPZW/2QHGvXs3jxEl408TJzI4tFVe5bFkp8JVveArXCDZBbppRvnaomtnC9jMp9uINyM2SyyisB798+C4PFCogfflwaO6Fkl0yOu43CI5iBTr9Wdt6SczwOHsseHrLLceSbnr6Mp7i2hSjurb/U1zV5yH/zrHLUgi7LlhPtbniWf5NHGfURqzs5Wl4CLcQxYdUGtVNpT8YIZKirni+B7/Vd0QI3MDng5fJiOya+31N9clB79RIuXoe1VG9QylWu2CQSt932DNhANNNDc+HiDirRmVLRPfmvNU4ySvBODbuHklypn3/7FJCxwOWl06aiAYBLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CqJf2Z01nbXRgpxlTU01p4HDiFum8ZZ6zkxPSndh89U=;
- b=HaK4lIykXIZAdir1QAdkJ1/odQpB5Jc/jfSaLHA9RYYv5jt9oQnGckORpFeoQVXcX9hhRRi+SpjLDb5/iz01ADAsrw/f/aCSQSh9GCLkztEeHj95iUK+4fIBzTR/jeSpm2cGG1DQ8Jv6Lf57cqgvzsYGjuwoPyaeMHf/6mS3/Y4mUvhHnFljGLGZnVavIaPo/kh75kApuZV2PhmyaVGPW7xyxduX0uL6aNw3y5KWAWesYKB0VAFw97366Ae3UO/PP1C3iHPYmMtSeNf4GAcXXykKmEzwzFfXGBH2R5EBTPR/b4q9UUv0at56xhq0uSB3ZcOXOPo4jbmg9BuWneurjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CqJf2Z01nbXRgpxlTU01p4HDiFum8ZZ6zkxPSndh89U=;
- b=O/yg0ACoHihsuua3WjOz+TXJ7YQPqMeb53OUsvD49Nr3Z1mWLKYADMn/EjwhCXKqk8lww8VjDBGJ47o126atzMGDWxPfkHuooUE03SZWkMYWMMlrD5m+WuM562AQfBSfubv2UGt1WHBPpdiOsbArd70B8ATBH5ROKFXFKTumbco=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by DM6PR11MB3756.namprd11.prod.outlook.com (2603:10b6:5:136::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Sun, 26 Jun
- 2022 11:10:01 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa%4]) with mapi id 15.20.5373.018; Sun, 26 Jun 2022
- 11:10:01 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <mchehab@kernel.org>, <linux-doc@vger.kernel.org>
-CC:     <corbet@lwn.net>, <mchehab+huawei@kernel.org>,
-        <dmitry.torokhov@gmail.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <lee.jones@linaro.org>, <robh+dt@kernel.org>,
-        <support.opensource@diasemi.com>, <devicetree@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 18/20] dt-bindings: mfd: update dlg,da9063.yaml
- reference
-Thread-Topic: [PATCH v2 18/20] dt-bindings: mfd: update dlg,da9063.yaml
- reference
-Thread-Index: AQHYiTzNapQAv3PM2U+ERVSvek7NS61hiBMA
-Date:   Sun, 26 Jun 2022 11:10:01 +0000
-Message-ID: <fdccc65d-ecfe-1332-97b8-ee7cb0430b69@microchip.com>
-References: <cover.1656234456.git.mchehab@kernel.org>
- <da459164d166d994b06f9ce8bf3a2108ccd0abd5.1656234456.git.mchehab@kernel.org>
-In-Reply-To: <da459164d166d994b06f9ce8bf3a2108ccd0abd5.1656234456.git.mchehab@kernel.org>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5d1fe7ff-d1a0-4376-6d4c-08da57646a0a
-x-ms-traffictypediagnostic: DM6PR11MB3756:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hXpkAvJ6SmnM0T/E0y/t8y5iQJs45PFFqwgXLBEG2IvXBi0pem6cBgu6wOAZZkZMvBoNZ4VfKuGpEEfLZfoK0RAuKXxUqWN9ZaqUHBI1KujOZ/mmWsvAJNDVIIX8T/SO34pZHcz/46Kygx0cwVSsXUWMBiZph5KABVDlpsW/tTycX2jEtGsAdeTwTG56BQOdQ6p7SzOTxn7gBcLAKbZqsae6qgtb3Pu79+lXgNNJVLKF6+H7TpkoSBu8mvOrI7QM4bezX1z+I8ga0jYzl1JQJ4o2WNzBOH6ad4lFixNiuhu3xibiOX3jcUbCS1x1SO/2qKX0iCeHWXULYFZh23lIWsaWGBptndT7Bota1clqdHYe5AjYX6HQe5wczqTDN16Xg3F8ryZ0PJfeAZfNc9Km976F5gMJ861/IJPetnBHcYbv7NYBKLwnOZlTbGLxS6f1quKq9XgLv4cVWAtabubUac1MJb4jWrqJTcJIAvJ1GXgGG8j4gAuS3zWTzpklNro3YQ2kXR664/W7iOOKF4VE9oEzUrdKdsSjhhoMkaXrvD3vs8cQKifSAp07jhvpBDNHb1Ikbk74W4E2BIlze7l1U5+bqfkKB9j9cX3GrUxAPey0irdczqIjTmXzMLLdU8CP4uZkwEhRQ16gvme3egPSyIlJgR95d04JEY3zF6GaLGcWF1LxlC3TulAf8D9hSuappQYnvGKBg6ERnLuR9vAza/zlt5llNC00QZonW0popOtqsFfuHy1S4VU/xCwTyXSwvL2qFbmGeisNIdPcr+BNoU0uLrEdKjTxSov7Xfp5LOcKd30T5iIBpptLggdlaEJpOi0mS51ZK41bmyCzXrV3V8noc9+vc1+W0TBMwLyCfW4pt7j9bsdKiQbKwRtoI+HhYo77v5BxfR0Du35GqG+zPA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(396003)(376002)(39850400004)(136003)(83380400001)(122000001)(31686004)(53546011)(15650500001)(6486002)(36756003)(7416002)(2906002)(186003)(86362001)(31696002)(26005)(5660300002)(8936002)(66556008)(66446008)(91956017)(64756008)(8676002)(76116006)(478600001)(4326008)(66476007)(66946007)(110136005)(54906003)(6506007)(38070700005)(41300700001)(6512007)(2616005)(966005)(71200400001)(316002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZXREbWpjaDFzRERWZXRLSVRQL0JDeWQxbWduRmxyejdFMStwaHhOM0RhQ1ZT?=
- =?utf-8?B?N040MFphWmR3WlE3S3hzM1h4Wld0NVVMWjlrSFRZcGJXai9aSzk4L1VseGEx?=
- =?utf-8?B?SHRsMWpXSE4yZlR4eS9uSTFDTHJyanhOTTB4VVVydnB0R1IvM212czdOUEZm?=
- =?utf-8?B?L2NXb3BDYjdpck9maVA0aTBKQ1dmTit6NmlsaVZLMW5RRTVQT25tTE5QTkdG?=
- =?utf-8?B?SjgzeFdtc0RHOWwvbm53TXJNSG9UQituR2RIYnBHN3EvTUdWdWRuNVM2NWcx?=
- =?utf-8?B?eVFFcmJLZUVKdEtsWDlGOWw1eW4rTE5nRFNlTmMzVEt5czhLNjRJbWJMYkZu?=
- =?utf-8?B?d2dZTnRXVlFCVnlUaWVHem5zRXhBMThsVXdwME4rK2tXNzRlQUh4emtpeVdh?=
- =?utf-8?B?VUo3eUJxV1c4RXQyUVVvNzFoUm9WcGFHd1ZUNDNkREs3SmUxa2E5SzhxdFFN?=
- =?utf-8?B?bFdCTXlWVXFiQjJpL2g4bSt3QVdFUFhjdkFpcENyWTN3NkhJTXZDUVRNc0Q1?=
- =?utf-8?B?YWhNQUJycUNWRWZwdWg2UGN1eGI4cVkvdFMzRXdabDBVMkpjb3I2UmVpUXlE?=
- =?utf-8?B?V3hHWm4yNWlEdHBxZ1N2T2NOWWw1VjVJZ1luWFFOeHFCOHV3NjdJMm4wZ3hJ?=
- =?utf-8?B?RGdodWloNkhsaGprS2Jlb2VSaUZENG5NbzVzNGt2MEVaNDNOTVpUZ0l3N1ly?=
- =?utf-8?B?WHNEdDQzNzdnMUFaN21abURlL0JMczVaTjNwNi85eWt0N3VZM05Ib0pnZW5a?=
- =?utf-8?B?VlN1MC9qSmZES3A0OWhMSXQ1Mk45eGJsY0w5MTdaNFFwM0ZiUm5XcnBMNkRB?=
- =?utf-8?B?YWtZRHdVT25EamR3a2g3RFE5TENPM0NYeEFmajQxK2tIS3RVVmNCNVRKaHVy?=
- =?utf-8?B?UlBSTDV2U21VSG1iNHlSVTcwTzB4VGR4enVXRWZFRHNhYzk3RkkwMXVVZi9G?=
- =?utf-8?B?MjJFQlR4dUYxRW9WRWNmUyt3VGVqLzdqNjZJZnYwWWZpMjFqY0Y0ZGloOTRX?=
- =?utf-8?B?d1ZyQUcvWlFuYTBYVTdIQ2hrWDFFUy9mSUlhWUdPV09zdVk3dTQ2WDNlQ0lW?=
- =?utf-8?B?M3dnSVFwT0hmUjFVclhXRysvUmFFYUplWmwwdkFMRVVlSmRvdHUyWFdXMnQ0?=
- =?utf-8?B?aFlySFJvNnZlTlJ5cGNqbHlLY0dXUlVmOEcxZzZsTVg4aVMrMWdKTi9ydklj?=
- =?utf-8?B?ejNZT3dUTGthL2hKZkVNSU40N1AyeDB5WXFCMjdmdWVtK1paM2pZdm55M1ln?=
- =?utf-8?B?RjZiMlhTOGI3VmUyaDRkLytLcE5YUlFmeVBWNDZHbzlNZjBkZ3kzN2kyZTNK?=
- =?utf-8?B?MGdJYjRxRTZtM2UyNWNwRDE0VzBGZXRYSDc1Vm0wMzBGdWd5c09IQnBWaURs?=
- =?utf-8?B?aENrR0x4d0ZCZWQyNFphME1BK2hhazJxOTJoT0NqeHJMb0lScDRrOGl3NTI3?=
- =?utf-8?B?dVowcE9ieGxGWlpMQ3FPTG9zM015a05ZSmYrQ0VNWjNWY3BaVFVYd3paUEFv?=
- =?utf-8?B?Sko3cmxzTDBqdi8rdDVlSUtuREw5Q0l1MTZXVW5vYW96VDMramt5bzZDd1dy?=
- =?utf-8?B?YncrZC9sMzQ2eDJTMzFWTmd4RlVoNWhHdkR4UERrMTIwMjdCNStRRmw0alNW?=
- =?utf-8?B?MEd4am9BVGtGUnB1OUNyNFFNaDB0WVJYWU5lQm43OUsveTJuTzRDOE5Gdjh2?=
- =?utf-8?B?bkJSa0M2a3FBbTQwUk5aR1ZTVFZibU05ekc2VkhMWWU0cXJKVURQcHB5Tk1R?=
- =?utf-8?B?azRvYnpwZWNab3FhQWZyNHErVkpPTnpxYW9RUmd2UFhSQm5ScWI4VWN6aUVl?=
- =?utf-8?B?a2VnVGF6YU9ySXVQU2FSMHZEWGtObDE5eENzUVJZVDNVTXR5bTEwQjR0Yjd3?=
- =?utf-8?B?cXVWRktoMTI2YTlEVHVvaDZueklOeVlweVcwcTdZZktCOE9PeDFCWW85MjBq?=
- =?utf-8?B?Y2ZMRnErSDhldWdoVUQ2bTllNDd0ZWxYVVpmWmNhZTRVdlFMNStxeGc1cEhn?=
- =?utf-8?B?RmlyV3IyQUMzOHh5QW82TDlSNWZFZlNNUXFXSkNMZk92akdrN0NxYXIrMFc0?=
- =?utf-8?B?L1d0S1l6S1dHUERCZERUaHZLbGlReEZQSGxYNkFOdVQ5T2QzRS9MNC9sTytk?=
- =?utf-8?Q?T5IZnPypobv7fyt2E0aK0uONR?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A8537FE35B299F4393CA4A3BB0FA54F8@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d1fe7ff-d1a0-4376-6d4c-08da57646a0a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2022 11:10:01.3447
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fZTweec3fi7sljcRqnh4gHEjoDCL77j1kqn3xhW6Qc6TpnEM1qOSNNQrFzApd8K8UU995WHWFruVKA8Lb6tjcATKCSZjW414PwMLEkIcZ2Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3756
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 26 Jun 2022 07:10:31 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BFAE0F3
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 04:10:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VHNx9KF_1656241815;
+Received: from VM20190228-102.tbsite.net(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VHNx9KF_1656241815)
+          by smtp.aliyun-inc.com;
+          Sun, 26 Jun 2022 19:10:24 +0800
+From:   Guanghui Feng <guanghuifeng@linux.alibaba.com>
+To:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        will@kernel.org, akpm@linux-foundation.org, david@redhat.com,
+        jianyong.wu@arm.com, james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        chenzhou10@huawei.com, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        rppt@kernel.org, geert+renesas@glider.be, ardb@kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH] arm64: mm: fix linear mapping mem access performace degradation
+Date:   Sun, 26 Jun 2022 19:10:15 +0800
+Message-Id: <1656241815-28494-1-git-send-email-guanghuifeng@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMjYvMDYvMjAyMiAxMDoxMSwgTWF1cm8gQ2FydmFsaG8gQ2hlaGFiIHdyb3RlOg0KPiBFWFRF
-Uk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNz
-IHlvdSBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IENoYW5nZXNldCA0NDE2MTM2NjJk
-YjcgKCJkdC1iaW5kaW5nczogbWZkOiBDb252ZXJ0IGRhOTA2MyB0byB5YW1sIikNCj4gcmVuYW1l
-ZDogRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21mZC9kYTkwNjMudHh0DQo+IHRv
-OiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbWZkL2RsZyxkYTkwNjMueWFtbC4N
-Cj4gDQo+IFVwZGF0ZSBpdHMgY3Jvc3MtcmVmZXJlbmNlIGFjY29yZGluZ2x5Lg0KDQpIZXkgTWF1
-cm8sDQpUaGFua3MgZm9yIHRoZSBwYXRjaC4NCkFja2VkLWJ5OiBDb25vciBEb29sZXkgPGNvbm9y
-LmRvb2xleUBtaWNyb2NoaXAuY29tPg0KDQo+IA0KPiBGaXhlczogNDQxNjEzNjYyZGI3ICgiZHQt
-YmluZGluZ3M6IG1mZDogQ29udmVydCBkYTkwNjMgdG8geWFtbCIpDQo+IFNpZ25lZC1vZmYtYnk6
-IE1hdXJvIENhcnZhbGhvIENoZWhhYiA8bWNoZWhhYkBrZXJuZWwub3JnPg0KPiAtLS0NCj4gDQo+
-IFRvIGF2b2lkIG1haWxib21iaW5nIG9uIGEgbGFyZ2UgbnVtYmVyIG9mIHBlb3BsZSwgb25seSBt
-YWlsaW5nIGxpc3RzIHdlcmUgQy9DIG9uIHRoZSBjb3Zlci4NCj4gU2VlIFtQQVRDSCB2MiAwMC8y
-MF0gYXQ6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC9jb3Zlci4xNjU2MjM0NDU2LmdpdC5t
-Y2hlaGFiQGtlcm5lbC5vcmcvDQo+IA0KPiAgIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5k
-aW5ncy9pbnB1dC9kYTkwNjItb25rZXkudHh0IHwgMiArLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAx
-IGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50
-YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pbnB1dC9kYTkwNjItb25rZXkudHh0IGIvRG9jdW1l
-bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2lucHV0L2RhOTA2Mi1vbmtleS50eHQNCj4gaW5k
-ZXggNWY5ZmJjNjhlNThhLi5lNWVlZjU5YTkzZGMgMTAwNjQ0DQo+IC0tLSBhL0RvY3VtZW50YXRp
-b24vZGV2aWNldHJlZS9iaW5kaW5ncy9pbnB1dC9kYTkwNjItb25rZXkudHh0DQo+ICsrKyBiL0Rv
-Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pbnB1dC9kYTkwNjItb25rZXkudHh0DQo+
-IEBAIC0yLDcgKzIsNyBAQA0KPiANCj4gICBUaGlzIG1vZHVsZSBpcyBwYXJ0IG9mIHRoZSBEQTkw
-NjEvREE5MDYyL0RBOTA2My4gRm9yIG1vcmUgZGV0YWlscyBhYm91dCBlbnRpcmUNCj4gICBEQTkw
-NjIgYW5kIERBOTA2MSBjaGlwcyBzZWUgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L21mZC9kYTkwNjIudHh0DQo+IC1Gb3IgREE5MDYzIHNlZSBEb2N1bWVudGF0aW9uL2RldmljZXRy
-ZWUvYmluZGluZ3MvbWZkL2RhOTA2My50eHQNCj4gK0ZvciBEQTkwNjMgc2VlIERvY3VtZW50YXRp
-b24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZmQvZGxnLGRhOTA2My55YW1sDQo+IA0KPiAgIFRoaXMg
-bW9kdWxlIHByb3ZpZGVzIHRoZSBLRVlfUE9XRVIgZXZlbnQuDQo+IA0KPiAtLQ0KPiAyLjM2LjEN
-Cj4gDQoNCg==
+The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
+(enable crashkernel, disable rodata full, disable kfence), the mem_map will
+use non block/section mapping(for crashkernel requires to shrink the region
+in page granularity). But it will degrade performance when doing larging
+continuous mem access in kernel(memcpy/memmove, etc).
+
+There are many changes and discussions:
+commit 031495635b46
+commit 1a8e1cef7603
+commit 8424ecdde7df
+commit 0a30c53573b0
+commit 2687275a5843
+
+This patch changes mem_map to use block/section mapping with crashkernel.
+Firstly, do block/section mapping(normally 2M or 1G) for all avail mem at
+mem_map, reserve crashkernel memory. And then walking pagetable to split
+block/section mapping to non block/section mapping(normally 4K) [[[only]]]
+for crashkernel mem. So the linear mem mapping use block/section mapping
+as more as possible. We will reduce the cpu dTLB miss conspicuously, and
+accelerate mem access about 10-20% performance improvement.
+
+I have tested it with pft(Page Fault Test) and fio, obtained great
+performace improvement.
+
+For fio test:
+1.prepare ramdisk
+  modprobe -r brd
+  modprobe brd rd_nr=1 rd_size=67108864
+  dmsetup remove_all
+  wipefs -a --force /dev/ram0
+  mkfs -t ext4 -E lazy_itable_init=0,lazy_journal_init=0 -q -F /dev/ram0
+  mkdir -p /fs/ram0
+  mount -t ext4 /dev/ram0 /fs/ram0
+
+2.prepare fio paremeter in x.fio file:
+[global]
+bs=4k
+ioengine=psync
+iodepth=128
+size=32G
+direct=1
+invalidate=1
+group_reporting
+thread=1
+rw=read
+directory=/fs/ram0
+numjobs=1
+
+[task_0]
+cpus_allowed=16
+stonewall=1
+
+3.run testcase:
+perf stat -e dTLB-load-misses fio x.fio
+
+4.contrast
+------------------------
+			without patch		with patch
+fio READ		aggrb=1493.2MB/s	aggrb=1775.3MB/s
+dTLB-load-misses	1,818,320,693		438,729,774
+time elapsed(s)		70.500326434		62.877316408
+user(s)			15.926332000		15.684721000
+sys(s)			54.211939000		47.046165000
+
+5.conclusion
+Using this patch will reduce dTLB misses and improve performace greatly.
+
+Signed-off-by: Guanghui Feng <guanghuifeng@linux.alibaba.com>
+---
+ arch/arm64/include/asm/mmu.h |   1 +
+ arch/arm64/mm/init.c         |   8 +-
+ arch/arm64/mm/mmu.c          | 274 +++++++++++++++++++++++++++++++++++++++----
+ 3 files changed, 253 insertions(+), 30 deletions(-)
+
+diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
+index 48f8466..df113cc 100644
+--- a/arch/arm64/include/asm/mmu.h
++++ b/arch/arm64/include/asm/mmu.h
+@@ -63,6 +63,7 @@ static inline bool arm64_kernel_unmapped_at_el0(void)
+ extern void arm64_memblock_init(void);
+ extern void paging_init(void);
+ extern void bootmem_init(void);
++extern void mapping_crashkernel(void);
+ extern void __iomem *early_io_map(phys_addr_t phys, unsigned long virt);
+ extern void init_mem_pgprot(void);
+ extern void create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index 339ee84..0e7540b 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -388,10 +388,6 @@ void __init arm64_memblock_init(void)
+ 	}
+ 
+ 	early_init_fdt_scan_reserved_mem();
+-
+-	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+-		reserve_crashkernel();
+-
+ 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
+ }
+ 
+@@ -438,8 +434,8 @@ void __init bootmem_init(void)
+ 	 * request_standard_resources() depends on crashkernel's memory being
+ 	 * reserved, so do it here.
+ 	 */
+-	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
+-		reserve_crashkernel();
++	reserve_crashkernel();
++	mapping_crashkernel();
+ 
+ 	memblock_dump_all();
+ }
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 626ec32..0672afd 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -498,6 +498,256 @@ static int __init enable_crash_mem_map(char *arg)
+ }
+ early_param("crashkernel", enable_crash_mem_map);
+ 
++#ifdef CONFIG_KEXEC_CORE
++static phys_addr_t __init early_crashkernel_pgtable_alloc(int shift)
++{
++	phys_addr_t phys;
++	void *ptr;
++
++	phys = memblock_phys_alloc_range(PAGE_SIZE, PAGE_SIZE, 0,
++					 MEMBLOCK_ALLOC_NOLEAKTRACE);
++	if (!phys)
++		panic("Failed to allocate page table page\n");
++
++	ptr = (void *)__phys_to_virt(phys);
++	memset(ptr, 0, PAGE_SIZE);
++	return phys;
++}
++
++static void init_crashkernel_pte(pmd_t *pmdp, unsigned long addr,
++				 unsigned long end,
++				 phys_addr_t phys, pgprot_t prot)
++{
++	pte_t *ptep;
++	ptep = pte_offset_kernel(pmdp, addr);
++	do {
++		set_pte(ptep, pfn_pte(__phys_to_pfn(phys), prot));
++		phys += PAGE_SIZE;
++	} while (ptep++, addr += PAGE_SIZE, addr != end);
++}
++
++static void alloc_crashkernel_cont_pte(pmd_t *pmdp, unsigned long addr,
++				       unsigned long end, phys_addr_t phys,
++				       pgprot_t prot,
++				       phys_addr_t (*pgtable_alloc)(int),
++				       int flags)
++{
++	unsigned long next;
++	pmd_t pmd = READ_ONCE(*pmdp);
++
++	BUG_ON(pmd_sect(pmd));
++	if (pmd_none(pmd)) {
++		pmdval_t pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
++		phys_addr_t pte_phys;
++
++		if (flags & NO_EXEC_MAPPINGS)
++			pmdval |= PMD_TABLE_PXN;
++		BUG_ON(!pgtable_alloc);
++		pte_phys = pgtable_alloc(PAGE_SHIFT);
++		__pmd_populate(pmdp, pte_phys, pmdval);
++		pmd = READ_ONCE(*pmdp);
++	}
++	BUG_ON(pmd_bad(pmd));
++
++	do {
++		pgprot_t __prot = prot;
++		next = pte_cont_addr_end(addr, end);
++		init_crashkernel_pte(pmdp, addr, next, phys, __prot);
++		phys += next - addr;
++	} while (addr = next, addr != end);
++}
++
++static void init_crashkernel_pmd(pud_t *pudp, unsigned long addr,
++				 unsigned long end, phys_addr_t phys,
++				 pgprot_t prot,
++				 phys_addr_t (*pgtable_alloc)(int), int flags)
++{
++	phys_addr_t map_offset;
++	unsigned long next;
++	pmd_t *pmdp;
++	pmdval_t pmdval;
++
++	pmdp = pmd_offset(pudp, addr);
++	do {
++		next = pmd_addr_end(addr, end);
++		if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
++			phys_addr_t pte_phys = pgtable_alloc(PAGE_SHIFT);
++			pmd_clear(pmdp);
++			pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
++			if (flags & NO_EXEC_MAPPINGS)
++				pmdval |= PMD_TABLE_PXN;
++			__pmd_populate(pmdp, pte_phys, pmdval);
++			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
++
++			map_offset = addr - (addr & PMD_MASK);
++			if (map_offset)
++			    alloc_init_cont_pte(pmdp, addr & PMD_MASK, addr,
++						phys - map_offset, prot,
++						pgtable_alloc, flags);
++
++			if (next < (addr & PMD_MASK) + PMD_SIZE)
++			    alloc_init_cont_pte(pmdp, next, (addr & PUD_MASK) +
++						PUD_SIZE, next - addr + phys,
++						prot, pgtable_alloc, flags);
++		}
++		alloc_crashkernel_cont_pte(pmdp, addr, next, phys, prot,
++					   pgtable_alloc, flags);
++		phys += next - addr;
++	} while (pmdp++, addr = next, addr != end);
++}
++
++static void alloc_crashkernel_cont_pmd(pud_t *pudp, unsigned long addr,
++				       unsigned long end, phys_addr_t phys,
++				       pgprot_t prot,
++				       phys_addr_t (*pgtable_alloc)(int),
++				       int flags)
++{
++	unsigned long next;
++	pud_t pud = READ_ONCE(*pudp);
++
++	/*
++	 * Check for initial section mappings in the pgd/pud.
++	 */
++	BUG_ON(pud_sect(pud));
++	if (pud_none(pud)) {
++		pudval_t pudval = PUD_TYPE_TABLE | PUD_TABLE_UXN;
++		phys_addr_t pmd_phys;
++
++		if (flags & NO_EXEC_MAPPINGS)
++			pudval |= PUD_TABLE_PXN;
++		BUG_ON(!pgtable_alloc);
++		pmd_phys = pgtable_alloc(PMD_SHIFT);
++		__pud_populate(pudp, pmd_phys, pudval);
++		pud = READ_ONCE(*pudp);
++	}
++	BUG_ON(pud_bad(pud));
++
++	do {
++		pgprot_t __prot = prot;
++		next = pmd_cont_addr_end(addr, end);
++		init_crashkernel_pmd(pudp, addr, next, phys, __prot,
++				     pgtable_alloc, flags);
++		phys += next - addr;
++	} while (addr = next, addr != end);
++}
++
++static void alloc_crashkernel_pud(pgd_t *pgdp, unsigned long addr,
++				  unsigned long end, phys_addr_t phys,
++				  pgprot_t prot,
++				  phys_addr_t (*pgtable_alloc)(int),
++				  int flags)
++{
++	phys_addr_t map_offset;
++	unsigned long next;
++	pud_t *pudp;
++	p4d_t *p4dp = p4d_offset(pgdp, addr);
++	p4d_t p4d = READ_ONCE(*p4dp);
++	pudval_t pudval;
++
++	if (p4d_none(p4d)) {
++		p4dval_t p4dval = P4D_TYPE_TABLE | P4D_TABLE_UXN;
++		phys_addr_t pud_phys;
++
++		if (flags & NO_EXEC_MAPPINGS)
++			p4dval |= P4D_TABLE_PXN;
++		BUG_ON(!pgtable_alloc);
++		pud_phys = pgtable_alloc(PUD_SHIFT);
++		__p4d_populate(p4dp, pud_phys, p4dval);
++		p4d = READ_ONCE(*p4dp);
++	}
++	BUG_ON(p4d_bad(p4d));
++
++	/*
++	 * No need for locking during early boot. And it doesn't work as
++	 * expected with KASLR enabled.
++	 */
++	if (system_state != SYSTEM_BOOTING)
++		mutex_lock(&fixmap_lock);
++	pudp = pud_offset(p4dp, addr);
++	do {
++		next = pud_addr_end(addr, end);
++		if (!pud_none(*pudp) && pud_sect(*pudp)) {
++			phys_addr_t pmd_phys = pgtable_alloc(PMD_SHIFT);
++			pud_clear(pudp);
++
++			pudval = PUD_TYPE_TABLE | PUD_TABLE_UXN;
++			if (flags & NO_EXEC_MAPPINGS)
++				pudval |= PUD_TABLE_PXN;
++			__pud_populate(pudp, pmd_phys, pudval);
++			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
++
++			map_offset = addr - (addr & PUD_MASK);
++			if (map_offset)
++			    alloc_init_cont_pmd(pudp, addr & PUD_MASK, addr,
++						phys - map_offset, prot,
++						pgtable_alloc, flags);
++
++			if (next < (addr & PUD_MASK) + PUD_SIZE)
++			    alloc_init_cont_pmd(pudp, next, (addr & PUD_MASK) +
++						PUD_SIZE, next - addr + phys,
++						prot, pgtable_alloc, flags);
++		}
++		alloc_crashkernel_cont_pmd(pudp, addr, next, phys, prot,
++					   pgtable_alloc, flags);
++		phys += next - addr;
++	} while (pudp++, addr = next, addr != end);
++
++	if (system_state != SYSTEM_BOOTING)
++		mutex_unlock(&fixmap_lock);
++}
++
++static void __create_crashkernel_mapping(pgd_t *pgdir, phys_addr_t phys,
++					 unsigned long virt, phys_addr_t size,
++					 pgprot_t prot,
++					 phys_addr_t (*pgtable_alloc)(int),
++					 int flags)
++{
++	unsigned long addr, end, next;
++	pgd_t *pgdp = pgd_offset_pgd(pgdir, virt);
++
++	/*
++	 * If the virtual and physical address don't have the same offset
++	 * within a page, we cannot map the region as the caller expects.
++	 */
++	if (WARN_ON((phys ^ virt) & ~PAGE_MASK))
++		return;
++
++	phys &= PAGE_MASK;
++	addr = virt & PAGE_MASK;
++	end = PAGE_ALIGN(virt + size);
++
++	do {
++		next = pgd_addr_end(addr, end);
++		alloc_crashkernel_pud(pgdp, addr, next, phys, prot,
++				      pgtable_alloc, flags);
++		phys += next - addr;
++	} while (pgdp++, addr = next, addr != end);
++}
++
++static void __init map_crashkernel(pgd_t *pgdp, phys_addr_t start,
++				   phys_addr_t end, pgprot_t prot, int flags)
++{
++	__create_crashkernel_mapping(pgdp, start, __phys_to_virt(start),
++				     end - start, prot,
++				     early_crashkernel_pgtable_alloc, flags);
++}
++
++void __init mapping_crashkernel(void)
++{
++	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
++	    return;
++
++	if (!crash_mem_map || !crashk_res.end)
++	    return;
++
++	map_crashkernel(swapper_pg_dir, crashk_res.start,
++			crashk_res.end + 1, PAGE_KERNEL,
++			NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
++}
++#else
++void __init mapping_crashkernel(void) {}
++#endif
++
+ static void __init map_mem(pgd_t *pgdp)
+ {
+ 	static const u64 direct_map_end = _PAGE_END(VA_BITS_MIN);
+@@ -527,17 +777,6 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 */
+ 	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+ 
+-#ifdef CONFIG_KEXEC_CORE
+-	if (crash_mem_map) {
+-		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
+-		    IS_ENABLED(CONFIG_ZONE_DMA32))
+-			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+-		else if (crashk_res.end)
+-			memblock_mark_nomap(crashk_res.start,
+-			    resource_size(&crashk_res));
+-	}
+-#endif
+-
+ 	/* map all the memory banks */
+ 	for_each_mem_range(i, &start, &end) {
+ 		if (start >= end)
+@@ -570,19 +809,6 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 * in page granularity and put back unused memory to buddy system
+ 	 * through /sys/kernel/kexec_crash_size interface.
+ 	 */
+-#ifdef CONFIG_KEXEC_CORE
+-	if (crash_mem_map &&
+-	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
+-		if (crashk_res.end) {
+-			__map_memblock(pgdp, crashk_res.start,
+-				       crashk_res.end + 1,
+-				       PAGE_KERNEL,
+-				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
+-			memblock_clear_nomap(crashk_res.start,
+-					     resource_size(&crashk_res));
+-		}
+-	}
+-#endif
+ }
+ 
+ void mark_rodata_ro(void)
+-- 
+1.8.3.1
+

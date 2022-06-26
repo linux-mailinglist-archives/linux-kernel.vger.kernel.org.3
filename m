@@ -2,85 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944C655B0CF
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6EE155B0D9
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234208AbiFZJXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 05:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
+        id S234074AbiFZJcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 05:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234151AbiFZJXN (ORCPT
+        with ESMTP id S231689AbiFZJc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 05:23:13 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E4910561;
-        Sun, 26 Jun 2022 02:23:11 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id y18so6873667iof.2;
-        Sun, 26 Jun 2022 02:23:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y+LUHC0DYaulPNo54n0DeVDYRCFGg0Z9uPUo6eao7cY=;
-        b=gsetRLCAEWRpYTa+ktubHph4GACN1etqI0SW0ZaKl+tXJgFgfvNyI1sIMBOmdufqWn
-         5VGXphd8iVaSX1K2KdxgbA9Tu6tDn3QkShLII6lmA9jRvcRB9xuu5MTQKHfyZQ+SkgPr
-         yfUc+O5FVteVBQBBwq7PGOLwpXa7VUqpPrdVr+8ycLThEc+SuTBpJjnc9gV1XJEYrkkY
-         XUxSf+Qs6glluHVKhscIZCgYFlGtsRpDKgItYzC9UhZrdea4CVB3JsW37QtCtpq8bkyK
-         PCtX35olaRNIHekoPkIx9yqE55q5ylkOwVQ3OTaO4IiGbdunNDS/nQ3//R8J7Ws2Njgb
-         rLyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y+LUHC0DYaulPNo54n0DeVDYRCFGg0Z9uPUo6eao7cY=;
-        b=ao84SzjZLBpgw097RmWx9ZWuZ2gO6xzeI2emxKoJoUn9FNc/dgExfSm5tjA7HdHspR
-         I7NS4IEpjtQUE6M9z8gvLhwVv+K/IJ4BCM0p2oYG78fHLRiImd3SnnvV5HSAvFypha3r
-         qEE3iFXFrHIbMv88oBtO0uRI0dF+BnEw1H4te4kLFOcW41qvG1sBLscSN8C+N5L+Iusb
-         L8Xhvwk2cdxygGiDARrZL4pnOcw/c3qrDlPuxdf1Dc74AGmCuVOEPBxfS5hBxGsS6ubE
-         avYHjFJN2ub6j/GbpWPmiBzjGHG92ZMg1DDlWTdQd+Sa8xuS47iXO+adIC9mAtFMsd+J
-         vFGQ==
-X-Gm-Message-State: AJIora/gLASsNMauMnj8fso/L/jI0IOD3xV+IDEx2VUglS32g3wILz9Y
-        f7SYchUZgWEcU3+esL6rglRKFbBUoSU1+6DxeOM=
-X-Google-Smtp-Source: AGRyM1sTPyrwAW7cGfkqYHJ4SWTFXqK2TW3q006TuQYS4E5Jki/zc4K+pbjxw2exH/ObCFtwMxxZS7iRr4Q8A6RfMLo=
-X-Received: by 2002:a05:6602:2d90:b0:63d:b41e:e4e4 with SMTP id
- k16-20020a0566022d9000b0063db41ee4e4mr3954751iow.172.1656235390597; Sun, 26
- Jun 2022 02:23:10 -0700 (PDT)
+        Sun, 26 Jun 2022 05:32:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E360D11C3F;
+        Sun, 26 Jun 2022 02:32:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F301B80D32;
+        Sun, 26 Jun 2022 09:32:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D24C341CA;
+        Sun, 26 Jun 2022 09:32:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656235946;
+        bh=RCb3BybKgkMjj7wm7bAA/tavxLZ3Xapy1cZ9JMlfXaA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dwdTQyGxt2cS/1PQoES6mBFPj/BaFnsMk/gGFj8lg5lBls1fjxTSD3rUow+6bMi++
+         LBLYimPeAh/y/tw27ceRgHmhNQDrDoJwKvOwmfIEYdLvETM+c3zKRo8BP2ZFFUwNTv
+         a6uwxrWVIgejyO5GCGus3kvd1t/906kb22NV0s1/w0u6pkJxqaw6oXP3qW9OiB8wbv
+         PzPL9fwEguqqohuoczP8k1wzsYTkepGsbCPbZRxpfabOce3te2ZLCJYi7B5N2ApHc1
+         TseYMzYeM+sZ00jF1YgsXIKaskihk74fBRtnPtxHdYjvnC0aFsqhwvj2sfZMCd5SIo
+         8JOnIq/6Mqajg==
+Received: from mchehab by mail.kernel.org with local (Exim 4.95)
+        (envelope-from <mchehab@kernel.org>)
+        id 1o5Ocw-001d5W-Rw;
+        Sun, 26 Jun 2022 10:32:22 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Kohei Tarumizu <tarumizu.kohei@fujitsu.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Tony Luck <tony.luck@intel.com>, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ABI: testing/sysfs-devices-system-cpu: remove duplicated core_id
+Date:   Sun, 26 Jun 2022 10:32:21 +0100
+Message-Id: <1e92337c1ef74f5eb9e1c1871e20b858b490d269.1656235926.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <cover.1656234456.git.mchehab@kernel.org> <94fe771609d32583fee41f47fe29433cbce5b04e.1656234456.git.mchehab@kernel.org>
-In-Reply-To: <94fe771609d32583fee41f47fe29433cbce5b04e.1656234456.git.mchehab@kernel.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sun, 26 Jun 2022 11:22:59 +0200
-Message-ID: <CANiq72=0HHiixjrBqbdEWjiOL0tAtLz=zGe5N3TqRoeq6Rk71A@mail.gmail.com>
-Subject: Re: [PATCH v2 06/20] docs: zh_CN: fix a broken reference
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Alex Shi <alexs@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Wu XiangCheng <bobwxc@email.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 11:11 AM Mauro Carvalho Chehab
-<mchehab@kernel.org> wrote:
->
-> The location of the rust doc is wrong (probably a typo). Fix it.
+This was already defined at stable/sysfs-devices-system-cpu with
+the same description, as pointed by get_abi.pl:
 
-Thanks Mauro -- it was the old location of the document. For some
-reason, the translated docs have bits from -next.
+	Warning: /sys/devices/system/cpu/cpuX/topology/core_id is defined 2 times:  Documentation/ABI/stable/sysfs-devices-system-cpu:38  Documentation/ABI/testing/sysfs-devices-system-cpu:69
 
-Cheers,
-Miguel
+Remove the duplicated one.
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ Documentation/ABI/testing/sysfs-devices-system-cpu | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+index bcc974d276dc..3135d0c5fc72 100644
+--- a/Documentation/ABI/testing/sysfs-devices-system-cpu
++++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+@@ -67,8 +67,7 @@ Description:	Discover NUMA node a CPU belongs to
+ 		/sys/devices/system/cpu/cpu42/node2 -> ../../node/node2
+ 
+ 
+-What:		/sys/devices/system/cpu/cpuX/topology/core_id
+-		/sys/devices/system/cpu/cpuX/topology/core_siblings
++What:		/sys/devices/system/cpu/cpuX/topology/core_siblings
+ 		/sys/devices/system/cpu/cpuX/topology/core_siblings_list
+ 		/sys/devices/system/cpu/cpuX/topology/physical_package_id
+ 		/sys/devices/system/cpu/cpuX/topology/thread_siblings
+@@ -84,10 +83,6 @@ Description:	CPU topology files that describe a logical CPU's relationship
+ 
+ 		Briefly, the files above are:
+ 
+-		core_id: the CPU core ID of cpuX. Typically it is the
+-		hardware platform's identifier (rather than the kernel's).
+-		The actual value is architecture and platform dependent.
+-
+ 		core_siblings: internal kernel map of cpuX's hardware threads
+ 		within the same physical_package_id.
+ 
+-- 
+2.36.1
+

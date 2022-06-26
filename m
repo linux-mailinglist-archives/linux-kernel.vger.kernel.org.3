@@ -2,106 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC1355AE54
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 05:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5389455AE64
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 05:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233878AbiFZC6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 22:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233894AbiFZC6J (ORCPT
+        id S233859AbiFZDBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 23:01:55 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:47530 "EHLO
+        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233777AbiFZDBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 22:58:09 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE09765CC
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 19:58:03 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id ay16so12236760ejb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 19:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=aT1sw4m4Agr0F5UoyxxRFIViLo6ffv+TYGmHogSjXGo=;
-        b=p/DaixlYtjrJxt0TZ9Sv0PspLH4F4gpAQfDxd2T6KqC1SHP9iljS+DwZTMfPiVSSGm
-         F/yNzbwcX3bzuMK/1r8IAdidUXoNi472FD+5xEchiaxU5Sq/f4nUM5bs2KzE38nQDDEZ
-         xSboCrjSiM+wm/jrg/92deA9oYzxIYEuFDC4v6npNzzWb+JsMCzxVQlhOP/J5Ouy0uLi
-         Z7+yA39BZEdGRUHmW3xbx5TQB4S2VCry5+wcWHVQ4OBH4rBTSMkxbT0Jgm49FOL7iNyZ
-         eJjfuW2I9E7w0ML0yN3iKNPtc1B9yptX2/H88HdKh8PtQprUzdCaXhiksW5fAtIU0eIH
-         t/wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=aT1sw4m4Agr0F5UoyxxRFIViLo6ffv+TYGmHogSjXGo=;
-        b=ttXbR85T52oCR5kA6p3NqojpMTY5la1qWhFqldad8AGWzUs0BvOkabJ1Gm+9q+brfz
-         pZOJoeZ9VCFw6tWid0xnqKPf1WCfeQS4s/wxaYMRbzSLfhuhuha8emK7AsTIZ34KBUoF
-         BUj9HnJ5UMLv/hQKA2exwe+yF4uqCosv67otAt467Z6BKFX2/YXNwOPt0j2Jzm5s/lRU
-         gISAHucexAHrc6+ApnGOJpojgp3KOTyer8+xiU8/+vzvVqgNr7PHOGzHlkl5lZUwwovh
-         CoNdcHY1L6XDHPSQhw/jjpCIaARoDWMd4+EsQbl2Anpje0qqWjw40xNgF1y/wG7O/phr
-         21Ow==
-X-Gm-Message-State: AJIora/pAouOyupb+gNo7UGurGJcYyym08U8dXw6IDebiU7MoupKHv78
-        j99+l+lv3NqAgbl4AJ+WPh6P+TuA3KIPUjJpP3E=
-X-Google-Smtp-Source: AGRyM1ugSbCDNnHpCb0lHalta+66K0E8Up9pyta5m/WjutEeClM5wDgsnA3eyhUSaZXFZvkZaFOFWCa0CuHHdyv6tMw=
-X-Received: by 2002:a17:907:2cc5:b0:711:d50b:287a with SMTP id
- hg5-20020a1709072cc500b00711d50b287amr6181154ejc.47.1656212283268; Sat, 25
- Jun 2022 19:58:03 -0700 (PDT)
+        Sat, 25 Jun 2022 23:01:53 -0400
+Received: from [IPV6:2620:137:e001:0:c663:d265:4cca:c19] (unknown [IPv6:2620:137:e001:0:c663:d265:4cca:c19])
+        by mail.monkeyblade.net (Postfix) with ESMTPSA id 2B39B837F015;
+        Sat, 25 Jun 2022 20:01:51 -0700 (PDT)
+Message-ID: <12417afa-331b-e0f6-a3b0-19623e38590b@eaglescrag.net>
+Date:   Sat, 25 Jun 2022 20:01:50 -0700
 MIME-Version: 1.0
-Sender: jerryojomah@gmail.com
-Received: by 2002:a17:906:7306:b0:6ff:31c2:22be with HTTP; Sat, 25 Jun 2022
- 19:58:02 -0700 (PDT)
-From:   mrs marie brigitte prouvost <mariebrigitteprouvost332@gmail.com>
-Date:   Sat, 25 Jun 2022 19:58:02 -0700
-X-Google-Sender-Auth: kxr1f60VkmaWOTB8ethgMxSh3l0
-Message-ID: <CALqLPnenBJaHG2ho-J_j2WZA+Mx98T=PMFWK0Zefx=rNSkwZ6w@mail.gmail.com>
-Subject: Dear Old Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        HK_SCAM,LOTS_OF_MONEY,MONEY_FRAUD_3,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: possible trace_printk() bug in v5.19-rc1
+Content-Language: en-MW
+From:   John 'Warthog9' Hawley <warthog9@eaglescrag.net>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Chuck Lever III <chuck.lever@oracle.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <F6C267B0-83EA-4151-A4EC-44482AC52C59@oracle.com>
+ <20220616113400.15335d91@gandalf.local.home>
+ <E309A098-DA06-490D-A75C-E6295C2987B9@oracle.com>
+ <20220617155019.373adda7@gandalf.local.home>
+ <3BAD2CD9-3A34-4140-A28C-0FE798B83C41@oracle.com>
+ <355D2478-33D3-4046-8422-E512F42C51BC@oracle.com>
+ <20220624190819.59df11d3@rorschach.local.home>
+ <3EB14A14-767B-4B66-9B28-97DDE7EECFD2@oracle.com>
+ <20220625134552.08c1a23a@rorschach.local.home>
+ <0bf1d366-348c-0f91-8f0a-fc9cc6228783@kernel.org>
+In-Reply-To: <0bf1d366-348c-0f91-8f0a-fc9cc6228783@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Sat, 25 Jun 2022 20:01:51 -0700 (PDT)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-I know you may have forgotten me, I am very happy to inform you about
-my success in getting the money transferred under the co-operation of
-a new partner from Venezuela.
+On 6/25/22 11:28, John 'Warthog9' Hawley wrote:
+> 
+> On 6/25/2022 10:45 AM, Steven Rostedt wrote:
+>> On Sat, 25 Jun 2022 17:15:07 +0000
+>> Chuck Lever III <chuck.lever@oracle.com> wrote:
+>>
+>>> [root@manet ~]# cat /etc/redhat-release
+>>> Fedora release 35 (Thirty Five)
+>>> [root@manet ~]# trace-cmd version
+>>>
+>>> trace-cmd version 2.9.2 (not-a-git-repo)
+>>
+>> Ug, that's very old. Fedora should be shipping 3.1.1 soon.
+>>
+>> Right John? ;-)
+> 
+> I've got 3.0.2 in there right now (~3mo old) and I've started the builds 
+> on the latest tags (REALLY need to automate this!), probably have latest 
+> tags built/packaged by tonight.
+> 
+> https://copr.fedorainfracloud.org/coprs/warthog9/tracing/
 
-Presently I am in Venezuela with my partner for a better treatment; I
-told you that I rather die than to miss this opportunity. Meanwhile, I
-didn't forget your past efforts and attempts to assist me in
-transferring the funds despite that it failed us somehow.
+As, vaguely, promised this morning trace-cmd, and all libraries needed 
+for everything but centos-9-stream x86_64 (it's having some fit about 
+not finding trace_seq_vprintf and trace_seq_printf, which is weird that 
+it finds it on every other build...)
 
-Before my living Burkina Faso I left a complete sum of Nine Hundred
-THousand Dollars,
-with the western union money transfer to transfer to you as your
-compensation.
+https://copr.fedorainfracloud.org/coprs/warthog9/tracing/build/4564577/
 
-Now you are to contact the western union for them to commence on your
-payments, Ask them to send you the Nine Hundred
-THousand Dollars, which I kept for
-your compensation for all the past efforts and attempts to assist me
-in this transfer.
+so dnf copr enable warthog9/tracing and dnf update should snag 3.1.1
 
-Here is the Western Union money Transfer section
-
-Email. westernunionmoneytransfer.WU@financier.com
-
-Remember I have already forward this instruction to them and they will
-be expecting you to contact them to commence on your transfers.
-
-
-Bye and stay bless.
-
-But never forget to inform me whenever you received all your money
-because I have paid for the transfer fee.
-
-Thanks and God bless you
-
-Sincerely
-mrs marie brigitte prouvost
+- John 'Warthog9' Hawley

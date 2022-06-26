@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F5755ADB3
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 02:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A4855ADC3
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 02:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233585AbiFZADl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 20:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
+        id S233622AbiFZATi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 20:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233484AbiFZADj (ORCPT
+        with ESMTP id S229603AbiFZATh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 20:03:39 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F8813E3D
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 17:03:38 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id 88so9945847qva.9
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 17:03:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uzBv+rLiOMQN1QJ1CAlWRVrSA/M0AyPQIUhJ4NlvMOE=;
-        b=DuSHNIG60LiWNKf6jLN1j6RVigzx0qhdEesKDgOV6wCISOLAQI7oQlLZ/pFMrGS7uL
-         hfcEwE0OB9CtMtMYxyMiNYaG81IkT4C7Ua/QhOEJnd39panh+4ltOP/BIBAEV3y1R9GA
-         gv/uHXrgxGI6bX2M8ODhkxbSUoYXIQKyd3l/SN/UakjuIzb9CfFxYw4rJ1i++aOpA7Ar
-         28C4xehBv/LYcrSDI0eWRkL2H7mbfx8qErhO3Q+c3I7RJcgd1K95DRVGNFv533NU9SJR
-         LJCRdDJqjgWOpL8hXm0Btn05S45hfiod4wR8rAV4Po2MD/PXo22z8w15OPX/cpr44Fsz
-         wgfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uzBv+rLiOMQN1QJ1CAlWRVrSA/M0AyPQIUhJ4NlvMOE=;
-        b=jIBxgrhCsYp8BKf87VN9vca7U5ojyutICi9Rx93T6jYLUTWNllJbTQgBSSJjrWmQqH
-         4/6saebeavof5KKJlwX1q6bVf+KxS7bt9hwfPMzqrO7U9eEdf5wSlAidOlFP9K3A10F/
-         kxtKmrv4C8CWCSlRREVqeR/0yNxx0t2YRcmpZY7QAhDTS3BsiSw1EOwgqDH+30BE2WMC
-         82EQlJvLZ/b5WU4glOia0C3XUVuN+u88nNqSvOWNatLI1+ZC0uwE1fS6SkfpUO335Hh4
-         2Y/i8z9RlSUTR8x+hQrAe17fHPuUCMb9FgAlj80670gxGPgFbBcY2qSciti88TrdmhKT
-         NGaw==
-X-Gm-Message-State: AJIora+cvifyZX7oai8Xsmx9+hLmer66c3P49z+2FgUVKMDpCLPsVMxj
-        CtcXY9kx2g9uUu3rKZtBQXHmfJiNYeJNXA==
-X-Google-Smtp-Source: AGRyM1tE4BoFBAJJvdfxmP6e/GRmO8k9uiseuk8Afwuboo2RrknpwMgvTsRL6ljMihM8ni/ZMauTrg==
-X-Received: by 2002:a05:6214:c2c:b0:470:a060:4543 with SMTP id a12-20020a0562140c2c00b00470a0604543mr4509412qvd.49.1656201817425;
-        Sat, 25 Jun 2022 17:03:37 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id h18-20020ac87772000000b002f905347586sm4168554qtu.14.2022.06.25.17.03.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 17:03:36 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1o5FkV-001s2q-Pc; Sat, 25 Jun 2022 21:03:35 -0300
-Date:   Sat, 25 Jun 2022 21:03:35 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Ajay Sharma <sharmaajay@microsoft.com>
-Cc:     Long Li <longli@microsoft.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "shiraz.saleem@intel.com" <shiraz.saleem@intel.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: Re: [EXTERNAL] [Patch v4 12/12] RDMA/mana_ib: Add a driver for
- Microsoft Azure Network Adapter
-Message-ID: <20220626000335.GL23621@ziepe.ca>
-References: <1655345240-26411-1-git-send-email-longli@linuxonhyperv.com>
- <1655345240-26411-13-git-send-email-longli@linuxonhyperv.com>
- <DM4PR21MB32967BB85B7B022671ECADD1D6B79@DM4PR21MB3296.namprd21.prod.outlook.com>
+        Sat, 25 Jun 2022 20:19:37 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E7013E8F
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 17:19:36 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:41856)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o5Fzz-009E2B-H2; Sat, 25 Jun 2022 18:19:35 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:57626 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1o5Fzy-00AYHt-KI; Sat, 25 Jun 2022 18:19:35 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>
+References: <20220622140853.31383-1-pmladek@suse.com>
+        <YraWWl+Go17uPOgR@mtj.duckdns.org>
+        <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
+        <874k0863x8.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=wgTG2K3erROP19320zBN6BHVf0hRfXGdawkGR4gzrJN6w@mail.gmail.com>
+        <CAHk-=whLsaRKaFKS0UffeCYYCVyP0bbiB4BTYTaXtScgu6R9yA@mail.gmail.com>
+        <87pmiw1fy6.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=wiutNT47oNhyk_WvMj2qp4pehYFptXCUzW=u_2STLQiww@mail.gmail.com>
+        <CAHk-=whX_=BNZ4kVEAu2NV3CMnhwsuYTyE65FQXUMx8VPNOAOA@mail.gmail.com>
+Date:   Sat, 25 Jun 2022 19:19:27 -0500
+In-Reply-To: <CAHk-=whX_=BNZ4kVEAu2NV3CMnhwsuYTyE65FQXUMx8VPNOAOA@mail.gmail.com>
+        (Linus Torvalds's message of "Sat, 25 Jun 2022 16:48:38 -0700")
+Message-ID: <87y1xkwa28.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM4PR21MB32967BB85B7B022671ECADD1D6B79@DM4PR21MB3296.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1o5Fzy-00AYHt-KI;;;mid=<87y1xkwa28.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/D80Oi4qTinv1YmPEUUSX8Os0cPZfAqnk=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 352 ms - load_scoreonly_sql: 0.12 (0.0%),
+        signal_user_changed: 14 (4.1%), b_tie_ro: 12 (3.4%), parse: 1.68
+        (0.5%), extract_message_metadata: 19 (5.4%), get_uri_detail_list: 1.13
+        (0.3%), tests_pri_-1000: 23 (6.5%), tests_pri_-950: 1.93 (0.5%),
+        tests_pri_-900: 1.39 (0.4%), tests_pri_-90: 80 (22.7%), check_bayes:
+        77 (22.0%), b_tokenize: 7 (2.0%), b_tok_get_all: 6 (1.8%),
+        b_comp_prob: 2.3 (0.7%), b_tok_touch_all: 58 (16.4%), b_finish: 1.26
+        (0.4%), tests_pri_0: 178 (50.5%), check_dkim_signature: 0.85 (0.2%),
+        check_dkim_adsp: 3.6 (1.0%), poll_dns_idle: 0.99 (0.3%), tests_pri_10:
+        4.7 (1.3%), tests_pri_500: 23 (6.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: re. Spurious wakeup on a newly created kthread
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 04:20:19AM +0000, Ajay Sharma wrote:
-> Hello Maintainers,
->  Any idea when these patches would make it into the next kernel release ?
 
-New rdma drivers typically take a long time to get merged due to their
-typical huge size. Currently I'm working through ERDMA. Reviewing the
-ERDMA submission would be helpful, I generally prefer it if people
-proposing new drivers review other new drivers being submitted.
+Linus Torvalds <torvalds@linux-foundation.org> writes:
 
-In this case it seems smaller, so you might make this cycle, though I
-haven't even opened the userspace portion yet.
+> Anyway, the whole "don't wake up thread until it's all done" is a
+> separate and independent issue from the "odd use of kthreadd" issue.
 
-Jason
+Yes.  "don't wake up a kthread until it's all done" is a much easier
+change that will simplify things tremendously.
+
+Further it is necessary for Peter Zijlstra's rewrite of the kernel
+freezer.   As anything that isn't a special stop state (which
+TASK_UNINTERRUPTIBLE is not) will receive a spurious wake up on when
+thawed out.
+
+Eric

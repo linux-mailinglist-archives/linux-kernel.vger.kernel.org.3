@@ -2,119 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F6E55B3F4
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 22:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CF155B3EC
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 22:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbiFZT7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 15:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
+        id S232070AbiFZUAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 16:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbiFZT7b (ORCPT
+        with ESMTP id S229895AbiFZUAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 15:59:31 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D9FF67
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 12:59:29 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ay16so14961956ejb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 12:59:29 -0700 (PDT)
+        Sun, 26 Jun 2022 16:00:24 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31160E1C
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:00:23 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id cw10so14985123ejb.3
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:00:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5UWv11VNJ/YPSJfroU2OJEJHY0p68aKQdefLMtRTM+s=;
-        b=WcVCBYqELLfShlSDUapvAXjyqQDHiiXW1so9DXggwd7mpoEXwut+oVplzuFyFGbk9H
-         3zs37YmB1V+vvH2ipbVvs3rajq0UMirKiw4AU2RC/3paB8v23eCncIBWo0qmqXCzEalv
-         vhQM1RyZRvYTtCaapDtLLBWvaObrSJIWXGyDM=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=56YzwVQKdHGziCBUUIednU1Z8rEBgdNoppTuq6x0/M8=;
+        b=NnwoGGTb7v+KSqJ5iDMFmofL3n9nM5O/+xjyqJ1YBYmQxbiEZ6Li1wJ1SL9/RwCMW5
+         5CPkIKEP+HSlofaZ9XBU4e0al5O4FU19sS/XS7+j+afROckxahWfDAhw8OIkcmp07nvR
+         oD/kXv1XlmWdg1MOrZdBWgh1u53lgeR6IkkG9jJR8+A1+pH37c7rxWs2odAD/J+vSHA9
+         T5JcfaMFIKQ6AONnA5rzdDflDt1/o4K7UFqb0aGD59e/Q/UviFnjmZbTWAhz02E1KDo+
+         iRzVmy+FaEn/NppE6okbwI4JSBAAozt9O2b/hqwDrfJpgwOhERwAZ+V50J//BTG24mG/
+         nNxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5UWv11VNJ/YPSJfroU2OJEJHY0p68aKQdefLMtRTM+s=;
-        b=ocbYz5MqIAQeEmDWr53wAVaJk2q1QrRnx0Oka9b4BcUddOCa3s5N/29xb04AhM7W9Y
-         ixxKsAXlRK43aqikbSCX9piewbf4CxfT3Rfs3juuXkySxtTm2+IOUbuyfJHPhgtRVMl7
-         CsYHgxdEiHJ6XKukor1skCmM9sAF8bvfLk+6NGbXNVmPCXIbnoCfvsetU9HHXOaa6T4N
-         pzwAQStraKQpIcIFHnYMz7dUbFy/Epf5B3L6k0S/azlkcqYgid20bpGgy22GORc+FM3O
-         wDSPDeGcq0v9MTuC+eh2+bHD9TZeixQ0JmBwJsK4QSTdUGHt0ILsz4jw6xEh+d6ZzddD
-         Rm+w==
-X-Gm-Message-State: AJIora9JCkHPzrr+rejXG4fuL7Yl6TtnJIJn7whAoi1EPRg3QHygBjAt
-        HW5ajrGkTMuaeTPRrOfxWmtYG6ILhN2TT10S
-X-Google-Smtp-Source: AGRyM1uTsFnW5isW+XcSsNaC1h9QIkDEcp8ziRO5UaBdK0bvNv7qba0IhKFrozndv5am87L0fuOVyw==
-X-Received: by 2002:a17:906:380a:b0:722:fbf8:29a4 with SMTP id v10-20020a170906380a00b00722fbf829a4mr9072341ejc.139.1656273567620;
-        Sun, 26 Jun 2022 12:59:27 -0700 (PDT)
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
-        by smtp.gmail.com with ESMTPSA id p15-20020a05640243cf00b0042a2d9af0f8sm6262276edc.79.2022.06.26.12.59.25
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=56YzwVQKdHGziCBUUIednU1Z8rEBgdNoppTuq6x0/M8=;
+        b=nH+03cASY8/nJhcTNbriFhahwxifz9hX1jDmLqC1xdW1iJsUxxYfg8ix6Rq7H9nnwX
+         HE2j/r8Cv5FZryWb/qzLTaO5I3hd1jt5i1HOn0e4ATVOh17EfBV5onmuK/23aVyYApAa
+         s5Nr7+guTuloL1WJWEqk4MwjWcYXdSwAmQng44Jsx7owPIzORbcHujLaM8LgwI0b+TXW
+         bSHY36JL4/GNXKB/t3pkYzN1Yr2q1OqHTgfrIjxti0XAAOKj1DzqGQBgXaOff16J06Z6
+         fHDB0+Zb2IM0HS2LfDjdxLNf0Nn3j35ZXd2iAQ9xARMVhTkXSKB4RubdgmHB7/Z+rEy8
+         4kOw==
+X-Gm-Message-State: AJIora+x2w/UYH5eZwRjtBbDnRG/KuuqOEw2yxxq/v0FCBrgDd2HzM4h
+        akxHjyySeCUtaWpzRfXuflIxtg==
+X-Google-Smtp-Source: AGRyM1smRDpHE9xz9/L06jkLVOqTAUdavGeWX6/lobROMiqKscv2iJGPLP10Se3MtGyQnK2ImDbuJw==
+X-Received: by 2002:a17:907:6e9f:b0:711:d2cb:63d8 with SMTP id sh31-20020a1709076e9f00b00711d2cb63d8mr9794470ejc.232.1656273621773;
+        Sun, 26 Jun 2022 13:00:21 -0700 (PDT)
+Received: from [192.168.0.245] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i17-20020a1709061e5100b00704b196e59bsm4099635ejj.185.2022.06.26.13.00.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 12:59:26 -0700 (PDT)
-Received: by mail-wr1-f50.google.com with SMTP id k22so10249822wrd.6
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 12:59:25 -0700 (PDT)
-X-Received: by 2002:a05:6000:1f8d:b0:21b:aaec:ebae with SMTP id
- bw13-20020a0560001f8d00b0021baaecebaemr9527634wrb.274.1656273565426; Sun, 26
- Jun 2022 12:59:25 -0700 (PDT)
+        Sun, 26 Jun 2022 13:00:21 -0700 (PDT)
+Message-ID: <9dd87d64-5124-a75b-be8a-1b056da645ce@linaro.org>
+Date:   Sun, 26 Jun 2022 22:00:20 +0200
 MIME-Version: 1.0
-References: <20220622140853.31383-1-pmladek@suse.com> <YraWWl+Go17uPOgR@mtj.duckdns.org>
- <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
- <874k0863x8.fsf@email.froward.int.ebiederm.org> <CAHk-=wgTG2K3erROP19320zBN6BHVf0hRfXGdawkGR4gzrJN6w@mail.gmail.com>
- <CAHk-=whLsaRKaFKS0UffeCYYCVyP0bbiB4BTYTaXtScgu6R9yA@mail.gmail.com>
- <87pmiw1fy6.fsf@email.froward.int.ebiederm.org> <CAHk-=wiutNT47oNhyk_WvMj2qp4pehYFptXCUzW=u_2STLQiww@mail.gmail.com>
- <CAHk-=whX_=BNZ4kVEAu2NV3CMnhwsuYTyE65FQXUMx8VPNOAOA@mail.gmail.com>
- <87ilonuti2.fsf_-_@email.froward.int.ebiederm.org> <871qvbutex.fsf_-_@email.froward.int.ebiederm.org>
-In-Reply-To: <871qvbutex.fsf_-_@email.froward.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 26 Jun 2022 12:59:09 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg9eqtrpYrjJ=yobkwkTimWFtiDd_JOfADttG0fyAJrqg@mail.gmail.com>
-Message-ID: <CAHk-=wg9eqtrpYrjJ=yobkwkTimWFtiDd_JOfADttG0fyAJrqg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kthread: Stop abusing TASK_UNINTERRUPTIBLE (INCOMPLETE)
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 3/3] dt-bindings: firmware: convert Qualcomm SCM
+ binding to the yaml
+Content-Language: en-US
+To:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Das Srinagesh <quic_gurus@quicinc.com>
+Cc:     ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220626183247.142776-1-david@ixit.cz>
+ <20220626183247.142776-3-david@ixit.cz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220626183247.142776-3-david@ixit.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 12:16 PM Eric W. Biederman
-<ebiederm@xmission.com> wrote:
->
-> Instead leave the task as a new unscheduled task and require the
-> caller to call wake_up_new_task.
+On 26/06/2022 20:32, David Heidelberg wrote:
+> Convert Qualcomm SCM firmware binding to the yaml format.
+> 
+> This commit also:
+>  - adds qcom,scm-mdm9607 into list which has only core clock
+>  - adds qcom,scm-sm6125, qcom,scm-ipq6018
+>  - #reset-cells, because the property is already used
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> --
+> v4:
+>  - added clocks minItems and maxItems
+>  - removed quotes from $id and $schema
+>  - adjusted description of TCSR HW block
 
-So I think this is somewhat error-prone, and we should probably
-abstract things out a bit more.
+Thank you for your patch. There is something to discuss/improve.
 
-Almost every single case that does this does this for one single
-reason: it wants to run setup code before the new kthread is actually
-activated.
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - qcom,scm-apq8064
+> +          - qcom,scm-apq8084
+> +          - qcom,scm-ipq4019
+> +          - qcom,scm-ipq6018
+> +          - qcom,scm-ipq806x
+> +          - qcom,scm-ipq8074
+> +          - qcom,scm-mdm9607
+> +          - qcom,scm-msm8226
+> +          - qcom,scm-msm8660
+> +          - qcom,scm-msm8916
+> +          - qcom,scm-msm8953
+> +          - qcom,scm-msm8960
+> +          - qcom,scm-msm8974
+> +          - qcom,scm-msm8976
+> +          - qcom,scm-msm8994
+> +          - qcom,scm-msm8996
+> +          - qcom,scm-msm8998
+> +          - qcom,scm-sc7180
+> +          - qcom,scm-sc7280
+> +          - qcom,scm-sdm845
+> +          - qcom,scm-sdx55
+> +          - qcom,scm-sm6125
+> +          - qcom,scm-sm6350
+> +          - qcom,scm-sm8150
+> +          - qcom,scm-sm8250
+> +          - qcom,scm-sm8350
+> +          - qcom,scm-sm8450
+> +          - qcom,scm-qcs404
+> +      - const: qcom,scm
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 3
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 3
+> +
+> +  '#reset-cells':
+> +    const: 1
+> +
+> +  qcom,dload-mode:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      - items:
+> +          - description: phandle to TCSR hardware block
+> +          - description: offset of the download mode control register
+> +    description: TCSR hardware block
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,scm-apq8064
+> +              - qcom,scm-mdm9607
+> +              - qcom,scm-msm8660
+> +              - qcom,scm-msm8960
+> +    then:
+> +      properties:
+> +        clock-names:
+> +          items:
+> +            - const: core
+> +
+> +        clocks:
+> +          maxItems: 1
+> +
+> +      required:
+> +        - clocks
+> +        - clock-names
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,scm-apq8084
+> +              - qcom,scm-msm8916
+> +              - qcom,scm-msm8953
+> +              - qcom,scm-msm8974
+> +              - qcom,scm-msm8976
+> +    then:
+> +      properties:
+> +        clock-names:
+> +          items:
+> +            - const: core
+> +            - const: bus
+> +            - const: iface
+> +
+> +        clocks:
+> +          minItems: 3
+> +          maxItems: 3
+> +
+> +
 
-And I think *that* should be the change - add a "setup()" function
-pointer to the whole kthread infrastructure. Allow it to return an
-error, which will then just kill the new thread again without ever
-even starting it up.
+Just one blank line.
 
-I'd really prefer to avoid having random drivers and subsystems know
-about the *very* magical "wake_up_new_task()" thing.  Yes, it's a real
-thing, but it's a thing that normal code should not ever use.
+> +      required:
+> +        - clocks
+> +        - clock-names
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    include <dt-bindings/clock/qcom,gcc-msm8916.h>
+> +
+> +    firmware {
+> +        scm {
+> +            compatible = "qcom,msm8916", "qcom,scm";
+> +            clocks = <&gcc GCC_CRYPTO_CLK>,
+> +                     <&gcc GCC_CRYPTO_AXI_CLK>,
+> +                     <&gcc GCC_CRYPTO_AHB_CLK>;
+> +            clock-names = "core", "bus", "iface";
+> +        };
+> +    };
 
-The whole "wake_up_process()" model for kthread creation was wrong.
-But moving existing users of a bad interface to using the even more
-special "wake_up_new_task()" thing is not the solution, I feel.
 
-Also, since you're very much in this area - you also please look into
-getting rid of that horrible 'done' completion pointer entirely? The
-xchg games on that thing are horrendous and very non-intuitive.
-
-              Linus
+Best regards,
+Krzysztof

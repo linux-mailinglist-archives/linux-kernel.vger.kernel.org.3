@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5717155B103
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA81855B10D
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234163AbiFZKGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 06:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
+        id S234199AbiFZKOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 06:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234118AbiFZKGl (ORCPT
+        with ESMTP id S233081AbiFZKOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 06:06:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83FD0DF25
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:06:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656237998;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PM53ZyiRE2Y6MtoCWE2Qvp7sGZnpAIPWEB1KZDVgiLw=;
-        b=TBT8HUXmGJj2ncVgdVCtjCE6Y6EOm07Ifpy1yFipyzrZrGBG21e2P7yAJ6ochBwC5sqo2w
-        rxrMdYnleNh/HnCDi/KzhROrJxBb0a9JIELoLfYKRZSJroj0YCjTvUKYfhu/6+w60fPt2y
-        GNIs5Ur9J+HT9d7ELBUYcweYDGwK+cA=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-49-VSNNZIu0OBa2yexF2eYPLA-1; Sun, 26 Jun 2022 06:06:37 -0400
-X-MC-Unique: VSNNZIu0OBa2yexF2eYPLA-1
-Received: by mail-ed1-f71.google.com with SMTP id c20-20020a05640227d400b004369cf00c6bso4927478ede.22
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:06:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PM53ZyiRE2Y6MtoCWE2Qvp7sGZnpAIPWEB1KZDVgiLw=;
-        b=xrUnd9WEnJ8M7CXkJy2uty5pGSzq3YghgbDUaHx636FTlATRK18Lh+xMHNMeEG1Fvz
-         Gx0o7E8AJCvezwofXFHbJ7TnoruQfm8CNtknwn7wKdhaSmCYcAmTxPfQXHlWx58sExYt
-         4FKGHd+c7IVzVAE57bi5lAfpIbl8HNBJksMb3K+QMIxDM1i78fZdV5+W1DAObrGx5gBx
-         ldZJiQ2ogpDGYxsCMNDofgaotDuo+gUrDfsfyE3AvwCakwYbHEvPsITWxNwCFXcPixbr
-         IeIC1+4oMqPSdoTLbiRn178QK+zP4+LGX8vbA9rOHaL1AxQchR5vYTMK3GirYbb5OvRF
-         Q76A==
-X-Gm-Message-State: AJIora+3SbCL5vZROXy3Wxb2OO4+cltQ21/uYv2sH8Iwu+13Thm6nf6u
-        zAuE+D3KJAb6qfVX79WfB7OoxjxA+IzMQ/XTcolss1UDdtcaTslyl6Iluyfm9tq48yZQlD6IIQy
-        zsBAEocVuuTEK2WFiFKK+XcLy
-X-Received: by 2002:a17:907:2d08:b0:726:35bd:b3c1 with SMTP id gs8-20020a1709072d0800b0072635bdb3c1mr7318654ejc.281.1656237995944;
-        Sun, 26 Jun 2022 03:06:35 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sR6/NOEJBvmum3KtZh4MNJRHib/2vaboCpV41MaaHJUXpUm9TdfochNuki2EeE9Zq7sqq2WQ==
-X-Received: by 2002:a17:907:2d08:b0:726:35bd:b3c1 with SMTP id gs8-20020a1709072d0800b0072635bdb3c1mr7318631ejc.281.1656237995618;
-        Sun, 26 Jun 2022 03:06:35 -0700 (PDT)
-Received: from redhat.com ([2.54.171.2])
-        by smtp.gmail.com with ESMTPSA id a7-20020a056402236700b0043570d96d25sm5604121eda.95.2022.06.26.03.06.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jun 2022 03:06:35 -0700 (PDT)
-Date:   Sun, 26 Jun 2022 06:06:31 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Cindy Lu <lulu@redhat.com>
-Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] vdpa: Do not count the pages that were already
- pinned in the vhost-vDPA
-Message-ID: <20220626060331-mutt-send-email-mst@kernel.org>
-References: <20220626090409.1011144-2-lulu@redhat.com>
+        Sun, 26 Jun 2022 06:14:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7367F11822;
+        Sun, 26 Jun 2022 03:14:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA3F3B80D18;
+        Sun, 26 Jun 2022 10:14:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04285C34114;
+        Sun, 26 Jun 2022 10:14:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656238449;
+        bh=qIGjD6TZL6NqEWibOR70iK55ImyWJYSx1Hb311PflLE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Fo0pyebLU0vSU9Moys8dldaFoVJHODxohvscievtUrXhrJ3YNdD1EmEfPrWmEGEMC
+         a2GJsrrIAx20wJuax12xDrGDwkBQajQw7jZr5502cz0QhOMDSkX+d4qh+BgLwSOg3X
+         u0m3IfTqTGdBKrVYbq8k3OuYx8W7dVnx0V35ia1HkvoDocX1Uy7eVL0QO+H8aTjjHR
+         bGf/tkAqbbzF+ejPvnMmoKlW/kYrD9kGXOmV17aKL9/7gshhAfZap98aZavV2bFI+W
+         AesFaYO0IytimJThYckVYsFNOj8RQ2I5iiTjjKvXAMGJZZxGxn/bwmAtbMV4nFDJ6C
+         WeiCkTvLDxeOg==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Wu XiangCheng <bobwxc@email.cn>, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] docs: rename Documentation/vm to Documentation/mm
+Date:   Sun, 26 Jun 2022 05:13:52 -0500
+Message-Id: <20220626101352.109601-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220626090409.1011144-2-lulu@redhat.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,575 +57,1446 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 05:04:09PM +0800, Cindy Lu wrote:
-> we add a tree vdpa_mem_tree to save the page that counted.
-> we will not count it again if the address already in this tree.
-> Here is the process that we count the newly add/del mem
-> 1.remove all the node have overlap address from this tree.
-> 2.if this range is newly added then add the new node(ref=1) to the tree,
->   if this range is already in the tree, then change the ref to ref+1
->    and add back to the tree(split the node if needed)
-> 3. Counted the size newly add to the tree.
-> Del the address is the same process
-> 
-> Signed-off-by: Cindy Lu <lulu@redhat.com>
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-Sorry I don't really understand the commit log or the comments.
-What are we trying to do here?
-A bunch of typos and coding style violations all of the place
-don't really help either ...
+so it will be consistent with code mm directory and with
+Documentation/admin-guide/mm and won't be confused with virtual
+machines.
 
-Try adding a cover letter to the patchset maybe.
+Suggested-by: Matthew Wilcox <willy@infradead.org>
+Tested-by: Ira Weiny <ira.weiny@intel.com>
+Acked-by: Jonathan Corbet <corbet@lwn.net>
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+---
+
+v2:
+fix hmm.rst reference in Documentation/translations/zh_CN/mm/memory-model.rst
 
 
-> ---
->  drivers/vhost/vdpa.c | 467 ++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 456 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 5ad2596c6e8a..e9de24c437ff 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -24,6 +24,9 @@
->  #include <linux/vhost.h>
->  
->  #include "vhost.h"
-> +#include <linux/rbtree.h>
-> +#include <linux/interval_tree.h>
-> +#include <linux/interval_tree_generic.h>
->  
->  enum {
->  	VHOST_VDPA_BACKEND_FEATURES =
-> @@ -65,6 +68,12 @@ static DEFINE_IDA(vhost_vdpa_ida);
->  
->  static dev_t vhost_vdpa_major;
->  
-> +struct vdpa_tree_node {
-> +	struct interval_tree_node tree_node;
-> +	struct list_head list_node;
-> +	u64 ref;
-> +};
-> +
->  static inline u32 iotlb_to_asid(struct vhost_iotlb *iotlb)
->  {
->  	struct vhost_vdpa_as *as = container_of(iotlb, struct
-> @@ -470,6 +479,430 @@ static long vhost_vdpa_get_vqs_count(struct vhost_vdpa *v, u32 __user *argp)
->  	return 0;
->  }
->  
-> +int vhost_vdpa_add_node(struct rb_root_cached *root, u64 start, u64 last,
-> +			u64 ref)
-> +{
-> +	struct interval_tree_node *new_node;
-> +	struct vdpa_tree_node *vdpa_node;
-> +
-> +	if (last < start)
-> +		return -EFAULT;
-> +
-> +	/* If the range being mapped is [0, ULONG_MAX], split it into two entries
-> +	 * otherwise its size would overflow u64.
-> +	 */
-> +	if (start == 0 && last == ULONG_MAX) {
-> +		u64 mid = last / 2;
-> +
-> +		vhost_vdpa_add_node(root, start, mid, ref);
-> +		start = mid + 1;
-> +	}
-> +	vdpa_node = kmalloc(sizeof(struct vdpa_tree_node), GFP_ATOMIC);
-> +	if (!vdpa_node)
-> +		return -ENOMEM;
-> +
-> +	new_node = &vdpa_node->tree_node;
-> +
-> +	new_node->start = start;
-> +	new_node->last = last;
-> +	vdpa_node->ref = ref;
-> +
-> +	interval_tree_insert(new_node, root);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * vhost_vdpa_range_ref_add()
-> + * the main process is
-> + * 1. if the range not in the tree, add the new tree_node and make the ref =1
-> + * 2. if a part of the rang in the tree_node, splt the tree_node, count the ref
-> + * @root:	the rb_root for this tree, this tree saved the range of address that used
-> + * @start:	starting  address
-> + * @last:	the end  address
-> + * @list_node_head: the list of the node that have overlaped with the range
-> + *
-> + * @size_count : this size is the newly added/del size, if the address
-> + * range already in the vdpa_tree then we will not count it again
-> + */
-> +
-> +int vhost_vdpa_range_ref_add(struct rb_root_cached *root,
-> +			     struct list_head *list_node_head, int node_number,
-> +			     u64 start, u64 last, u64 *size_count)
-> +
-> +{
-> +	int i, ret = 0;
-> +	u64 size = 0;
-> +	u64 ref;
-> +	u64 node_start, node_last, range_start, range_last;
-> +	int range_size;
-> +	struct list_head *list_node;
-> +	struct vdpa_tree_node *vdpa_node = NULL;
-> +	struct interval_tree_node *node = NULL;
-> +
-> +	if (node_number == 0) {
-> +		ret = vhost_vdpa_add_node(root, start, last, 1);
-> +
-> +		size = last - start + 1;
-> +		*size_count = size;
-> +		return ret;
-> +	}
-> +
-> +	list_node = list_node_head;
-> +	range_start = start;
-> +	range_last = last;
-> +
-> +	for (i = 0; i < node_number; i++) {
-> +		vdpa_node = container_of(list_node, struct vdpa_tree_node,
-> +					 list_node);
-> +
-> +		node = &vdpa_node->tree_node;
-> +		ref = vdpa_node->ref;
-> +		node_start = node->start;
-> +		node_last = node->last;
-> +
-> +		list_node = list_node->next;
-> +
-> +		/* checking the size and count ref */
-> +		/* 1: all these nodes are removed from the tree*/
-> +		/* 2: all these nodes are sorted in ascending order*/
-> +		/* 3: in this is loop the largest address we work in will be the node_last */
-> +		/* 4: if the range_last larger the node last, will work in next node*/
-> +		/* 5: the range_start in next loop will be node_last+1*/
-> +
-> +		if (range_start == node_start) {
-> +			if (node_last <= range_last) {
-> +				/* this comment the layout of the range and node in this loop*/
-> +
-> +				/* range_start= =node_start---node_last--range_last*/
-> +				ret = vhost_vdpa_add_node(root, node_start,
-> +							  node_last, ref + 1);
-> +				/*node_last+1--range_last will count in next loop */
-> +			} else {
-> +				/* range_start== node_start---range_last---node_last*/
-> +				ret = vhost_vdpa_add_node(root, node_start,
-> +							  range_last, ref + 1);
-> +				ret += vhost_vdpa_add_node(root, range_last + 1,
-> +							   node_last, ref);
-> +			}
-> +		} else if (node_start < range_start) {
-> +			if (range_last < node_last) {
-> +				/* node_start---range_last---range_last---node_last*/
-> +				ret = vhost_vdpa_add_node(root, node_start,
-> +							  range_start - 1, ref);
-> +				ret += vhost_vdpa_add_node(root, range_start,
-> +							   range_last, ref + 1);
-> +				ret += vhost_vdpa_add_node(root, range_last + 1,
-> +							   node_last, ref);
-> +
-> +			} else {
-> +				/* node_start---range_last---node_last= =range_last*/
-> +				ret = vhost_vdpa_add_node(root, node_start,
-> +							  range_start - 1, ref);
-> +				ret += vhost_vdpa_add_node(root, range_start,
-> +							   node_last, ref + 1);
-> +			}
-> +		} else {
-> +			if (node_last <= range_last) {
-> +				/* range_start---node_start---node_last ----range_last  */
-> +
-> +				ret = vhost_vdpa_add_node(root, range_start,
-> +							  node_start - 1, 1);
-> +				ret += vhost_vdpa_add_node(root, node_start,
-> +							   node_last, ref + 1);
-> +				size += ((node_start - 1) - range_start) + 1;
-> +			} else {
-> +				/* range_start---node_start---range_last --node_last*/
-> +				ret = vhost_vdpa_add_node(root, range_start,
-> +							  node_start - 1, 1);
-> +				ret += vhost_vdpa_add_node(root, node_start,
-> +							   range_last, ref + 1);
-> +				ret += vhost_vdpa_add_node(root, range_last + 1,
-> +							   node_last, ref);
-> +				size += ((node_start - 1) - range_start) + 1;
-> +			}
-> +		}
-> +
-> +		/* move range_start to next node*/
-> +		range_start = node_last + 1;
-> +		if ((range_start > range_last) || (ret != 0))
-> +			break;
-> +	}
-> +
-> +	range_size = range_last - range_start;
-> +	/* last round and but still some range left */
-> +	/*start with node_last+1 end with range_last*/
-> +
-> +	if (node_number == i + 1) {
-> +		if ((range_size >= 0) && (range_start >= node_last)) {
-> +			ret = vhost_vdpa_add_node(root, range_start, range_last,
-> +						  1);
-> +			size = size + (range_last - range_start) + 1;
-> +
-> +			*size_count = size;
-> +
-> +			return ret;
-> +
-> +		} else if (range_size == -1) {
-> +			/*this means the node_last ==range_last in final loop */
-> +			*size_count = size;
-> +
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return -EFAULT;
-> +}
-> +/**
-> + * vhost_vdpa_range_ref_del()
-> + * the main process is
-> + * 1. if the range not in the tree, return -1
-> + * 2. if a part of the rang in the tree_node, splt the tree_node, count the ref
-> + *
-> + * @root:	the rb_root for this tree, this tree saved the range of address that used
-> + * @start:	starting  address
-> + * @last:	the end  address
-> + * @list_node_head: the list of the node that have overlaped with the range
-> + *
-> + * OUT @size_count : this size is the newly added/del size
-> + */
-> +
-> +int vhost_vdpa_range_ref_del(struct rb_root_cached *root,
-> +			     struct list_head *list_node_head, int node_number,
-> +			     u64 start, u64 last, u64 *size_count)
-> +{
-> +	int i, ret = 0;
-> +	u64 size = 0;
-> +	u64 ref;
-> +	u64 node_start, node_last, range_start, range_last;
-> +	int range_size;
-> +	struct list_head *list_node;
-> +	struct vdpa_tree_node *vdpa_node = NULL;
-> +	struct interval_tree_node *node = NULL;
-> +
-> +	if (node_number == 0) {
-> +		/* the address range not in the tree */
-> +		*size_count = 0;
-> +		return -EFAULT;
-> +	}
-> +
-> +	list_node = list_node_head;
-> +
-> +	range_start = start;
-> +	range_last = last;
-> +
-> +	for (i = 0; i < node_number; i++) {
-> +		vdpa_node = container_of(list_node, struct vdpa_tree_node,
-> +					 list_node);
-> +
-> +		node = &vdpa_node->tree_node;
-> +		ref = vdpa_node->ref;
-> +		node_start = node->start;
-> +		node_last = node->last;
-> +		list_node = list_node->next;
-> +
-> +		/* checking the size and count ref, here are some note here */
-> +		/* 1: these nodes are removed from tree, we just need to check ref and add it back*/
-> +		/* 2: all these nodes are sorted in ascending order*/
-> +		/* 3: in this is loop the largest address we work in will be the node_last */
-> +		/* 4: if the range_last larger the node last, will work in next node*/
-> +
-> +		if (range_start == node_start) {
-> +			if (node_last < range_last) {
-> +				/*this comment is the layout for this memory*/
-> +				/*range_start==node_start---node_last----range_last*/
-> +				if (ref > 1) {
-> +					ret = vhost_vdpa_add_node(root,
-> +								  node_start,
-> +								  node_last,
-> +								  ref - 1);
-> +				} else {
-> +					/*new ref ==0, don't need add it back, count the size*/
-> +					size += (node_last - node_start) + 1;
-> +				}
-> +
-> +			} else if (node_last > range_last) {
-> +				/*range_start== node_start--range_last---node_last*/
-> +
-> +				if (ref > 1) {
-> +					ret = vhost_vdpa_add_node(root,
-> +								  node_start,
-> +								  range_last,
-> +								  ref - 1);
-> +				} else {
-> +					/*new ref ==0, don't need add it back, count the size*/
-> +					size += (range_last - node_start) + 1;
-> +				}
-> +				ret = vhost_vdpa_add_node(root, range_last + 1,
-> +							  node_last, ref);
-> +			} else {
-> +				/*range_start== node_start---range_last = =node_last*/
-> +
-> +				if (ref > 1) {
-> +					ret = vhost_vdpa_add_node(root,
-> +								  node_start,
-> +								  range_last,
-> +								  ref - 1);
-> +				} else {
-> +					size += (range_last - node_start) + 1;
-> +				}
-> +			}
-> +		} else if (node_start < range_start) {
-> +			if (range_last < node_last) {
-> +				/* node_start--range_start--range_last--node_last*/
-> +				ret = vhost_vdpa_add_node(root, node_start,
-> +							  range_start - 1, ref);
-> +				if (ref > 1) {
-> +					ret += vhost_vdpa_add_node(root,
-> +								   range_start,
-> +								   range_last,
-> +								   ref - 1);
-> +				} else {
-> +					size += (range_last - range_start) + 1;
-> +				}
-> +				ret += vhost_vdpa_add_node(root, range_last + 1,
-> +							   node_last, ref);
-> +
-> +			} else if (range_last > node_last) {
-> +				/*node_start--range_start--node_last--range_last*/
-> +
-> +				ret = vhost_vdpa_add_node(root, node_start,
-> +							  range_start - 1, ref);
-> +				if (ref > 1) {
-> +					ret = vhost_vdpa_add_node(root,
-> +								  range_start,
-> +								  node_last,
-> +								  ref - 1);
-> +				} else {
-> +					size += (node_last - range_start) + 1;
-> +				}
-> +			} else {
-> +				/*node_start---range_start---node_last==range_last*/
-> +				ret = vhost_vdpa_add_node(root, node_start,
-> +							  range_start - 1, ref);
-> +				if (ref > 1) {
-> +					ret = vhost_vdpa_add_node(root,
-> +								  range_start,
-> +								  range_last,
-> +								  ref - 1);
-> +				} else {
-> +					size += (range_last - range_start) + 1;
-> +				}
-> +			}
-> +		} else {
-> +			/* some range not in the node, should not happened*/
-> +			*size_count = size;
-> +			return -EFAULT;
-> +		}
-> +
-> +		range_start = node_last + 1;
-> +		if ((range_start > range_last) || (ret != 0))
-> +			break;
-> +	}
-> +
-> +	range_size = range_last - range_start;
-> +
-> +	/* last round and still some range, this should not happened*/
-> +
-> +	if ((range_size > 0) && (node_number == i + 1))
-> +		return -EFAULT;
-> +
-> +	*size_count = size;
-> +	return ret;
-> +}
-> +/**
-> + * vhost_vdpa_range_ops()
-> + * @root:	the rb_root for this tree, this tree saved the range of address that used
-> + * @start:	starting  address
-> + * @last:	the end  address
-> + * @ops:	the opreater for this BOOL true means to add the range of address
-> + *      FALSE means to del the range address
-> + * OUTPUT@size_count : this size is the SIZE newly added/del,
-> + * if the address range already in the vdpa_tree, will not count it again
-> + */
-> +int vhost_vdpa_range_ops(struct rb_root_cached *root, u64 start, u64 last,
-> +			 bool ops, u64 *size_count)
-> +{
-> +	struct interval_tree_node *node = NULL;
-> +	struct vdpa_tree_node *vdpa_node;
-> +	struct list_head *list_node = NULL;
-> +	struct vdpa_tree_node dummyHead = { 0 };
-> +	int node_number = 0;
-> +	int i = 0;
-> +	int ret;
-> +
-> +	INIT_LIST_HEAD(&dummyHead.list_node);
-> +
-> +	/*search the rang overlaped, and del from the tree*/
-> +	while ((node = interval_tree_iter_first(root, start, last)) != NULL) {
-> +		node_number++;
-> +		vdpa_node =
-> +			container_of(node, struct vdpa_tree_node, tree_node);
-> +
-> +		list_node = &vdpa_node->list_node;
-> +
-> +		/* Remove the node overlaped with the range from the tree*/
-> +		/* otherwish it will count again in a loop */
-> +		interval_tree_remove(node, root);
-> +		list_add_tail(list_node, &dummyHead.list_node);
-> +	}
-> +
-> +	list_node = (&dummyHead.list_node)->next;
-> +
-> +	/* check the ref and add/del to tree*/
-> +	if (ops == true) {
-> +		ret = vhost_vdpa_range_ref_add(root, list_node, node_number,
-> +					       start, last, size_count);
-> +	} else {
-> +		ret = vhost_vdpa_range_ref_del(root, list_node, node_number,
-> +					       start, last, size_count);
-> +	}
-> +
-> +	/*free all the node overlaped with the range*/
-> +	for (i = 0; i < node_number; i++) {
-> +		vdpa_node = container_of(list_node, struct vdpa_tree_node,
-> +					 list_node);
-> +
-> +		list_node = list_node->next;
-> +		kfree(vdpa_node);
-> +	}
-> +
-> +	return ret;
-> +}
-> +int vhost_vdpa_range_add(struct vhost_vdpa *v, u64 start, u64 last,
-> +			 u64 *size_count)
-> +
-> +{
-> +	int r;
-> +	struct vhost_dev *dev = &v->vdev;
-> +
-> +	r = vhost_vdpa_range_ops(dev->vdpa_mem_tree, start, last, true,
-> +				 size_count);
-> +	if (unlikely(r))
-> +		dev_info(&v->dev,
-> +			 "vhost vdpa range add fail start %lld last %lld %lld",
-> +			 start, last, *size_count);
-> +
-> +	return r;
-> +}
-> +
-> +int vhost_vdpa_range_del(struct vhost_vdpa *v, u64 start, u64 last,
-> +			 u64 *size_count)
-> +
-> +{
-> +	int r;
-> +	struct vhost_dev *dev = &v->vdev;
-> +
-> +	r = vhost_vdpa_range_ops(dev->vdpa_mem_tree, start, last, false,
-> +				 size_count);
-> +	if (unlikely(r))
-> +		dev_info(&v->dev,
-> +			 "vhost vdpa range del fail start %lld last %lld %lld",
-> +			 start, last, *size_count);
-> +
-> +	return r;
-> +}
-> +
->  static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned int cmd,
->  				   void __user *argp)
->  {
-> @@ -658,6 +1091,7 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v,
->  	struct vhost_dev *dev = &v->vdev;
->  	struct vhost_iotlb_map *map;
->  	struct page *page;
-> +	u64 size;
->  	unsigned long pfn, pinned;
->  
->  	while ((map = vhost_iotlb_itree_first(iotlb, start, last)) != NULL) {
-> @@ -669,7 +1103,10 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v,
->  				set_page_dirty_lock(page);
->  			unpin_user_page(page);
->  		}
-> -		atomic64_sub(PFN_DOWN(map->size), &dev->mm->pinned_vm);
-> +
-> +		vhost_vdpa_range_del(v, map->start, map->start + map->size - 1,
-> +				     &size);
-> +		atomic64_sub(PFN_DOWN(size), &dev->mm->pinned_vm);
->  		vhost_iotlb_map_free(iotlb, map);
->  	}
->  }
-> @@ -731,6 +1168,20 @@ static int vhost_vdpa_map(struct vhost_vdpa *v, struct vhost_iotlb *iotlb,
->  	const struct vdpa_config_ops *ops = vdpa->config;
->  	u32 asid = iotlb_to_asid(iotlb);
->  	int r = 0;
-> +	u64 size_count;
-> +	unsigned long lock_limit;
-> +
-> +	lock_limit = PFN_DOWN(rlimit(RLIMIT_MEMLOCK));
-> +	if (!vdpa->use_va) {
-> +		r = vhost_vdpa_range_add(v, iova, iova + size - 1, &size_count);
-> +
-> +		if (size_count + atomic64_read(&dev->mm->pinned_vm) >
-> +		    lock_limit) {
-> +			r = vhost_vdpa_range_del(v, iova, iova + size - 1,
-> +						 &size_count);
-> +			return -ENOMEM;
-> +		}
-> +	}
->  
->  	r = vhost_iotlb_add_range_ctx(iotlb, iova, iova + size - 1,
->  				      pa, perm, opaque);
-> @@ -748,11 +1199,11 @@ static int vhost_vdpa_map(struct vhost_vdpa *v, struct vhost_iotlb *iotlb,
->  	}
->  	if (r) {
->  		vhost_iotlb_del_range(iotlb, iova, iova + size - 1);
-> +		r = vhost_vdpa_range_del(v, iova, iova + size - 1, &size_count);
->  		return r;
->  	}
-> -
->  	if (!vdpa->use_va)
-> -		atomic64_add(PFN_DOWN(size), &dev->mm->pinned_vm);
-> +		atomic64_add(PFN_DOWN(size_count), &dev->mm->pinned_vm);
->  
->  	return 0;
->  }
-> @@ -843,7 +1294,7 @@ static int vhost_vdpa_pa_map(struct vhost_vdpa *v,
->  	unsigned long list_size = PAGE_SIZE / sizeof(struct page *);
->  	unsigned int gup_flags = FOLL_LONGTERM;
->  	unsigned long npages, cur_base, map_pfn, last_pfn = 0;
-> -	unsigned long lock_limit, sz2pin, nchunks, i;
-> +	unsigned long sz2pin, nchunks, i;
->  	u64 start = iova;
->  	long pinned;
->  	int ret = 0;
-> @@ -864,12 +1315,6 @@ static int vhost_vdpa_pa_map(struct vhost_vdpa *v,
->  
->  	mmap_read_lock(dev->mm);
->  
-> -	lock_limit = PFN_DOWN(rlimit(RLIMIT_MEMLOCK));
-> -	if (npages + atomic64_read(&dev->mm->pinned_vm) > lock_limit) {
-> -		ret = -ENOMEM;
-> -		goto unlock;
-> -	}
-> -
->  	cur_base = uaddr & PAGE_MASK;
->  	iova &= PAGE_MASK;
->  	nchunks = 0;
-> @@ -951,7 +1396,7 @@ static int vhost_vdpa_pa_map(struct vhost_vdpa *v,
->  		}
->  		vhost_vdpa_unmap(v, iotlb, start, size);
->  	}
-> -unlock:
-> +
->  	mmap_read_unlock(dev->mm);
->  free:
->  	free_page((unsigned long)page_list);
-> -- 
-> 2.34.3
+ Documentation/ABI/testing/sysfs-kernel-mm-ksm        |  2 +-
+ Documentation/ABI/testing/sysfs-kernel-slab          |  4 ++--
+ Documentation/admin-guide/kernel-parameters.txt      | 10 +++++-----
+ Documentation/admin-guide/mm/concepts.rst            |  2 +-
+ Documentation/admin-guide/mm/damon/index.rst         |  2 +-
+ Documentation/admin-guide/mm/damon/reclaim.rst       |  2 +-
+ Documentation/admin-guide/mm/damon/usage.rst         |  8 ++++----
+ Documentation/admin-guide/sysctl/vm.rst              |  2 +-
+ Documentation/core-api/index.rst                     |  2 +-
+ Documentation/filesystems/proc.rst                   |  2 +-
+ Documentation/index.rst                              |  2 +-
+ Documentation/{vm => mm}/active_mm.rst               |  0
+ Documentation/{vm => mm}/arch_pgtable_helpers.rst    |  0
+ Documentation/{vm => mm}/balance.rst                 |  0
+ Documentation/{vm => mm}/bootmem.rst                 |  0
+ Documentation/{vm => mm}/damon/api.rst               |  0
+ Documentation/{vm => mm}/damon/design.rst            |  0
+ Documentation/{vm => mm}/damon/faq.rst               |  0
+ Documentation/{vm => mm}/damon/index.rst             |  0
+ Documentation/{vm => mm}/free_page_reporting.rst     |  0
+ Documentation/{vm => mm}/frontswap.rst               |  0
+ Documentation/{vm => mm}/highmem.rst                 |  0
+ Documentation/{vm => mm}/hmm.rst                     |  0
+ Documentation/{vm => mm}/hugetlbfs_reserv.rst        |  0
+ Documentation/{vm => mm}/hwpoison.rst                |  0
+ Documentation/{vm => mm}/index.rst                   |  0
+ Documentation/{vm => mm}/ksm.rst                     |  0
+ Documentation/{vm => mm}/memory-model.rst            |  2 +-
+ Documentation/{vm => mm}/mmu_notifier.rst            |  0
+ Documentation/{vm => mm}/numa.rst                    |  0
+ Documentation/{vm => mm}/oom.rst                     |  0
+ Documentation/{vm => mm}/overcommit-accounting.rst   |  0
+ Documentation/{vm => mm}/page_allocation.rst         |  0
+ Documentation/{vm => mm}/page_cache.rst              |  0
+ Documentation/{vm => mm}/page_frags.rst              |  0
+ Documentation/{vm => mm}/page_migration.rst          |  0
+ Documentation/{vm => mm}/page_owner.rst              |  0
+ Documentation/{vm => mm}/page_reclaim.rst            |  0
+ Documentation/{vm => mm}/page_table_check.rst        |  0
+ Documentation/{vm => mm}/page_tables.rst             |  0
+ Documentation/{vm => mm}/physical_memory.rst         |  0
+ Documentation/{vm => mm}/process_addrs.rst           |  0
+ Documentation/{vm => mm}/remap_file_pages.rst        |  0
+ Documentation/{vm => mm}/shmfs.rst                   |  0
+ Documentation/{vm => mm}/slab.rst                    |  0
+ Documentation/{vm => mm}/slub.rst                    |  0
+ Documentation/{vm => mm}/split_page_table_lock.rst   |  0
+ Documentation/{vm => mm}/swap.rst                    |  0
+ Documentation/{vm => mm}/transhuge.rst               |  0
+ Documentation/{vm => mm}/unevictable-lru.rst         |  0
+ Documentation/{vm => mm}/vmalloc.rst                 |  0
+ Documentation/{vm => mm}/vmalloced-kernel-stacks.rst |  0
+ Documentation/{vm => mm}/vmemmap_dedup.rst           |  0
+ Documentation/{vm => mm}/z3fold.rst                  |  0
+ Documentation/{vm => mm}/zsmalloc.rst                |  0
+ .../zh_CN/admin-guide/mm/damon/index.rst             |  2 +-
+ .../zh_CN/admin-guide/mm/damon/reclaim.rst           |  2 +-
+ .../zh_CN/admin-guide/mm/damon/usage.rst             |  8 ++++----
+ Documentation/translations/zh_CN/core-api/index.rst  |  2 +-
+ Documentation/translations/zh_CN/index.rst           |  2 +-
+ .../translations/zh_CN/{vm => mm}/active_mm.rst      |  2 +-
+ .../translations/zh_CN/{vm => mm}/balance.rst        |  2 +-
+ .../translations/zh_CN/{vm => mm}/damon/api.rst      |  2 +-
+ .../translations/zh_CN/{vm => mm}/damon/design.rst   |  2 +-
+ .../translations/zh_CN/{vm => mm}/damon/faq.rst      |  2 +-
+ .../translations/zh_CN/{vm => mm}/damon/index.rst    |  5 ++---
+ .../zh_CN/{vm => mm}/free_page_reporting.rst         |  2 +-
+ .../translations/zh_CN/{vm => mm}/frontswap.rst      |  2 +-
+ .../translations/zh_CN/{vm => mm}/highmem.rst        |  2 +-
+ Documentation/translations/zh_CN/{vm => mm}/hmm.rst  |  2 +-
+ .../zh_CN/{vm => mm}/hugetlbfs_reserv.rst            |  2 +-
+ .../translations/zh_CN/{vm => mm}/hwpoison.rst       |  2 +-
+ .../translations/zh_CN/{vm => mm}/index.rst          |  2 +-
+ Documentation/translations/zh_CN/{vm => mm}/ksm.rst  |  2 +-
+ .../translations/zh_CN/{vm => mm}/memory-model.rst   |  4 ++--
+ .../translations/zh_CN/{vm => mm}/mmu_notifier.rst   |  2 +-
+ Documentation/translations/zh_CN/{vm => mm}/numa.rst |  2 +-
+ .../zh_CN/{vm => mm}/overcommit-accounting.rst       |  2 +-
+ .../translations/zh_CN/{vm => mm}/page_frags.rst     |  2 +-
+ .../translations/zh_CN/{vm => mm}/page_owner.rst     |  2 +-
+ .../zh_CN/{vm => mm}/page_table_check.rst            |  2 +-
+ .../zh_CN/{vm => mm}/remap_file_pages.rst            |  2 +-
+ .../zh_CN/{vm => mm}/split_page_table_lock.rst       |  2 +-
+ .../translations/zh_CN/{vm => mm}/z3fold.rst         |  2 +-
+ .../translations/zh_CN/{vm => mm}/zsmalloc.rst       |  2 +-
+ Documentation/translations/zh_TW/index.rst           |  2 +-
+ Documentation/vm/.gitignore                          |  3 ---
+ MAINTAINERS                                          | 12 ++++++------
+ arch/loongarch/Kconfig                               |  2 +-
+ arch/powerpc/include/asm/book3s/64/pgtable.h         |  2 +-
+ include/linux/hmm.h                                  |  4 ++--
+ include/linux/memremap.h                             |  2 +-
+ include/linux/mmu_notifier.h                         |  2 +-
+ include/linux/sched/mm.h                             |  4 ++--
+ include/linux/swap.h                                 |  2 +-
+ mm/Kconfig                                           |  2 +-
+ mm/debug_vm_pgtable.c                                |  2 +-
+ mm/frontswap.c                                       |  2 +-
+ mm/huge_memory.c                                     |  2 +-
+ mm/hugetlb.c                                         |  6 +++---
+ mm/hugetlb_vmemmap.c                                 |  2 +-
+ mm/ksm.c                                             |  4 ++--
+ mm/mmap.c                                            |  2 +-
+ mm/rmap.c                                            |  8 ++++----
+ mm/sparse-vmemmap.c                                  |  2 +-
+ mm/util.c                                            |  2 +-
+ tools/vm/page_owner_sort.c                           |  2 +-
+ 107 files changed, 89 insertions(+), 93 deletions(-)
+ rename Documentation/{vm => mm}/active_mm.rst (100%)
+ rename Documentation/{vm => mm}/arch_pgtable_helpers.rst (100%)
+ rename Documentation/{vm => mm}/balance.rst (100%)
+ rename Documentation/{vm => mm}/bootmem.rst (100%)
+ rename Documentation/{vm => mm}/damon/api.rst (100%)
+ rename Documentation/{vm => mm}/damon/design.rst (100%)
+ rename Documentation/{vm => mm}/damon/faq.rst (100%)
+ rename Documentation/{vm => mm}/damon/index.rst (100%)
+ rename Documentation/{vm => mm}/free_page_reporting.rst (100%)
+ rename Documentation/{vm => mm}/frontswap.rst (100%)
+ rename Documentation/{vm => mm}/highmem.rst (100%)
+ rename Documentation/{vm => mm}/hmm.rst (100%)
+ rename Documentation/{vm => mm}/hugetlbfs_reserv.rst (100%)
+ rename Documentation/{vm => mm}/hwpoison.rst (100%)
+ rename Documentation/{vm => mm}/index.rst (100%)
+ rename Documentation/{vm => mm}/ksm.rst (100%)
+ rename Documentation/{vm => mm}/memory-model.rst (99%)
+ rename Documentation/{vm => mm}/mmu_notifier.rst (100%)
+ rename Documentation/{vm => mm}/numa.rst (100%)
+ rename Documentation/{vm => mm}/oom.rst (100%)
+ rename Documentation/{vm => mm}/overcommit-accounting.rst (100%)
+ rename Documentation/{vm => mm}/page_allocation.rst (100%)
+ rename Documentation/{vm => mm}/page_cache.rst (100%)
+ rename Documentation/{vm => mm}/page_frags.rst (100%)
+ rename Documentation/{vm => mm}/page_migration.rst (100%)
+ rename Documentation/{vm => mm}/page_owner.rst (100%)
+ rename Documentation/{vm => mm}/page_reclaim.rst (100%)
+ rename Documentation/{vm => mm}/page_table_check.rst (100%)
+ rename Documentation/{vm => mm}/page_tables.rst (100%)
+ rename Documentation/{vm => mm}/physical_memory.rst (100%)
+ rename Documentation/{vm => mm}/process_addrs.rst (100%)
+ rename Documentation/{vm => mm}/remap_file_pages.rst (100%)
+ rename Documentation/{vm => mm}/shmfs.rst (100%)
+ rename Documentation/{vm => mm}/slab.rst (100%)
+ rename Documentation/{vm => mm}/slub.rst (100%)
+ rename Documentation/{vm => mm}/split_page_table_lock.rst (100%)
+ rename Documentation/{vm => mm}/swap.rst (100%)
+ rename Documentation/{vm => mm}/transhuge.rst (100%)
+ rename Documentation/{vm => mm}/unevictable-lru.rst (100%)
+ rename Documentation/{vm => mm}/vmalloc.rst (100%)
+ rename Documentation/{vm => mm}/vmalloced-kernel-stacks.rst (100%)
+ rename Documentation/{vm => mm}/vmemmap_dedup.rst (100%)
+ rename Documentation/{vm => mm}/z3fold.rst (100%)
+ rename Documentation/{vm => mm}/zsmalloc.rst (100%)
+ rename Documentation/translations/zh_CN/{vm => mm}/active_mm.rst (98%)
+ rename Documentation/translations/zh_CN/{vm => mm}/balance.rst (99%)
+ rename Documentation/translations/zh_CN/{vm => mm}/damon/api.rst (91%)
+ rename Documentation/translations/zh_CN/{vm => mm}/damon/design.rst (98%)
+ rename Documentation/translations/zh_CN/{vm => mm}/damon/faq.rst (98%)
+ rename Documentation/translations/zh_CN/{vm => mm}/damon/index.rst (90%)
+ rename Documentation/translations/zh_CN/{vm => mm}/free_page_reporting.rst (97%)
+ rename Documentation/translations/zh_CN/{vm => mm}/frontswap.rst (99%)
+ rename Documentation/translations/zh_CN/{vm => mm}/highmem.rst (99%)
+ rename Documentation/translations/zh_CN/{vm => mm}/hmm.rst (99%)
+ rename Documentation/translations/zh_CN/{vm => mm}/hugetlbfs_reserv.rst (99%)
+ rename Documentation/translations/zh_CN/{vm => mm}/hwpoison.rst (99%)
+ rename Documentation/translations/zh_CN/{vm => mm}/index.rst (96%)
+ rename Documentation/translations/zh_CN/{vm => mm}/ksm.rst (98%)
+ rename Documentation/translations/zh_CN/{vm => mm}/memory-model.rst (98%)
+ rename Documentation/translations/zh_CN/{vm => mm}/mmu_notifier.rst (98%)
+ rename Documentation/translations/zh_CN/{vm => mm}/numa.rst (99%)
+ rename Documentation/translations/zh_CN/{vm => mm}/overcommit-accounting.rst (98%)
+ rename Documentation/translations/zh_CN/{vm => mm}/page_frags.rst (97%)
+ rename Documentation/translations/zh_CN/{vm => mm}/page_owner.rst (99%)
+ rename Documentation/translations/zh_CN/{vm => mm}/page_table_check.rst (97%)
+ rename Documentation/translations/zh_CN/{vm => mm}/remap_file_pages.rst (97%)
+ rename Documentation/translations/zh_CN/{vm => mm}/split_page_table_lock.rst (98%)
+ rename Documentation/translations/zh_CN/{vm => mm}/z3fold.rst (96%)
+ rename Documentation/translations/zh_CN/{vm => mm}/zsmalloc.rst (98%)
+ delete mode 100644 Documentation/vm/.gitignore
+
+diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-ksm b/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+index 1c9bed5595f5..d244674a9480 100644
+--- a/Documentation/ABI/testing/sysfs-kernel-mm-ksm
++++ b/Documentation/ABI/testing/sysfs-kernel-mm-ksm
+@@ -41,7 +41,7 @@ Description:	Kernel Samepage Merging daemon sysfs interface
+ 		sleep_millisecs: how many milliseconds ksm should sleep between
+ 		scans.
+ 
+-		See Documentation/vm/ksm.rst for more information.
++		See Documentation/mm/ksm.rst for more information.
+ 
+ What:		/sys/kernel/mm/ksm/merge_across_nodes
+ Date:		January 2013
+diff --git a/Documentation/ABI/testing/sysfs-kernel-slab b/Documentation/ABI/testing/sysfs-kernel-slab
+index c440f4946e12..cd5fb8fa3ddf 100644
+--- a/Documentation/ABI/testing/sysfs-kernel-slab
++++ b/Documentation/ABI/testing/sysfs-kernel-slab
+@@ -37,7 +37,7 @@ Description:
+ 		The alloc_calls file is read-only and lists the kernel code
+ 		locations from which allocations for this cache were performed.
+ 		The alloc_calls file only contains information if debugging is
+-		enabled for that cache (see Documentation/vm/slub.rst).
++		enabled for that cache (see Documentation/mm/slub.rst).
+ 
+ What:		/sys/kernel/slab/<cache>/alloc_fastpath
+ Date:		February 2008
+@@ -219,7 +219,7 @@ Contact:	Pekka Enberg <penberg@cs.helsinki.fi>,
+ Description:
+ 		The free_calls file is read-only and lists the locations of
+ 		object frees if slab debugging is enabled (see
+-		Documentation/vm/slub.rst).
++		Documentation/mm/slub.rst).
+ 
+ What:		/sys/kernel/slab/<cache>/free_fastpath
+ Date:		February 2008
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 2522b11e593f..8c0ea6b6c6a9 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5442,7 +5442,7 @@
+ 			cache (risks via metadata attacks are mostly
+ 			unchanged). Debug options disable merging on their
+ 			own.
+-			For more information see Documentation/vm/slub.rst.
++			For more information see Documentation/mm/slub.rst.
+ 
+ 	slab_max_order=	[MM, SLAB]
+ 			Determines the maximum allowed order for slabs.
+@@ -5456,13 +5456,13 @@
+ 			slub_debug can create guard zones around objects and
+ 			may poison objects when not in use. Also tracks the
+ 			last alloc / free. For more information see
+-			Documentation/vm/slub.rst.
++			Documentation/mm/slub.rst.
+ 
+ 	slub_max_order= [MM, SLUB]
+ 			Determines the maximum allowed order for slabs.
+ 			A high setting may cause OOMs due to memory
+ 			fragmentation. For more information see
+-			Documentation/vm/slub.rst.
++			Documentation/mm/slub.rst.
+ 
+ 	slub_min_objects=	[MM, SLUB]
+ 			The minimum number of objects per slab. SLUB will
+@@ -5471,12 +5471,12 @@
+ 			the number of objects indicated. The higher the number
+ 			of objects the smaller the overhead of tracking slabs
+ 			and the less frequently locks need to be acquired.
+-			For more information see Documentation/vm/slub.rst.
++			For more information see Documentation/mm/slub.rst.
+ 
+ 	slub_min_order=	[MM, SLUB]
+ 			Determines the minimum page order for slabs. Must be
+ 			lower than slub_max_order.
+-			For more information see Documentation/vm/slub.rst.
++			For more information see Documentation/mm/slub.rst.
+ 
+ 	slub_merge	[MM, SLUB]
+ 			Same with slab_merge.
+diff --git a/Documentation/admin-guide/mm/concepts.rst b/Documentation/admin-guide/mm/concepts.rst
+index b966fcff993b..c79f1e336222 100644
+--- a/Documentation/admin-guide/mm/concepts.rst
++++ b/Documentation/admin-guide/mm/concepts.rst
+@@ -125,7 +125,7 @@ processor. Each bank is referred to as a `node` and for each node Linux
+ constructs an independent memory management subsystem. A node has its
+ own set of zones, lists of free and used pages and various statistics
+ counters. You can find more details about NUMA in
+-:ref:`Documentation/vm/numa.rst <numa>` and in
++:ref:`Documentation/mm/numa.rst <numa>` and in
+ :ref:`Documentation/admin-guide/mm/numa_memory_policy.rst <numa_memory_policy>`.
+ 
+ Page cache
+diff --git a/Documentation/admin-guide/mm/damon/index.rst b/Documentation/admin-guide/mm/damon/index.rst
+index 61aff88347f3..c4681fa69b9c 100644
+--- a/Documentation/admin-guide/mm/damon/index.rst
++++ b/Documentation/admin-guide/mm/damon/index.rst
+@@ -4,7 +4,7 @@
+ Monitoring Data Accesses
+ ========================
+ 
+-:doc:`DAMON </vm/damon/index>` allows light-weight data access monitoring.
++:doc:`DAMON </mm/damon/index>` allows light-weight data access monitoring.
+ Using DAMON, users can analyze the memory access patterns of their systems and
+ optimize those.
+ 
+diff --git a/Documentation/admin-guide/mm/damon/reclaim.rst b/Documentation/admin-guide/mm/damon/reclaim.rst
+index 46306f1f34b1..a8bd3bd29959 100644
+--- a/Documentation/admin-guide/mm/damon/reclaim.rst
++++ b/Documentation/admin-guide/mm/damon/reclaim.rst
+@@ -268,4 +268,4 @@ granularity reclamation. ::
+ 
+ .. [1] https://research.google/pubs/pub48551/
+ .. [2] https://lwn.net/Articles/787611/
+-.. [3] https://www.kernel.org/doc/html/latest/vm/free_page_reporting.html
++.. [3] https://www.kernel.org/doc/html/latest/mm/free_page_reporting.html
+diff --git a/Documentation/admin-guide/mm/damon/usage.rst b/Documentation/admin-guide/mm/damon/usage.rst
+index 1bb7b72414b2..5540a3a40fc9 100644
+--- a/Documentation/admin-guide/mm/damon/usage.rst
++++ b/Documentation/admin-guide/mm/damon/usage.rst
+@@ -30,11 +30,11 @@ DAMON provides below interfaces for different users.
+   <sysfs_interface>`.  This will be removed after next LTS kernel is released,
+   so users should move to the :ref:`sysfs interface <sysfs_interface>`.
+ - *Kernel Space Programming Interface.*
+-  :doc:`This </vm/damon/api>` is for kernel space programmers.  Using this,
++  :doc:`This </mm/damon/api>` is for kernel space programmers.  Using this,
+   users can utilize every feature of DAMON most flexibly and efficiently by
+   writing kernel space DAMON application programs for you.  You can even extend
+   DAMON for various address spaces.  For detail, please refer to the interface
+-  :doc:`document </vm/damon/api>`.
++  :doc:`document </mm/damon/api>`.
+ 
+ .. _sysfs_interface:
+ 
+@@ -185,7 +185,7 @@ controls the monitoring overhead, exist.  You can set and get the values by
+ writing to and rading from the files.
+ 
+ For more details about the intervals and monitoring regions range, please refer
+-to the Design document (:doc:`/vm/damon/design`).
++to the Design document (:doc:`/mm/damon/design`).
+ 
+ contexts/<N>/targets/
+ ---------------------
+@@ -402,7 +402,7 @@ Attributes
+ Users can get and set the ``sampling interval``, ``aggregation interval``,
+ ``update interval``, and min/max number of monitoring target regions by
+ reading from and writing to the ``attrs`` file.  To know about the monitoring
+-attributes in detail, please refer to the :doc:`/vm/damon/design`.  For
++attributes in detail, please refer to the :doc:`/mm/damon/design`.  For
+ example, below commands set those values to 5 ms, 100 ms, 1,000 ms, 10 and
+ 1000, and then check it again::
+ 
+diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+index 5c9aa171a0d3..4a440a7cfeb0 100644
+--- a/Documentation/admin-guide/sysctl/vm.rst
++++ b/Documentation/admin-guide/sysctl/vm.rst
+@@ -760,7 +760,7 @@ and don't use much of it.
+ 
+ The default value is 0.
+ 
+-See Documentation/vm/overcommit-accounting.rst and
++See Documentation/mm/overcommit-accounting.rst and
+ mm/util.c::__vm_enough_memory() for more information.
+ 
+ 
+diff --git a/Documentation/core-api/index.rst b/Documentation/core-api/index.rst
+index dedd4d853329..5b1188494bcd 100644
+--- a/Documentation/core-api/index.rst
++++ b/Documentation/core-api/index.rst
+@@ -87,7 +87,7 @@ Memory management
+ =================
+ 
+ How to allocate and use memory in the kernel.  Note that there is a lot
+-more memory-management documentation in Documentation/vm/index.rst.
++more memory-management documentation in Documentation/mm/index.rst.
+ 
+ .. toctree::
+    :maxdepth: 1
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 1bc91fb8c321..8543a59f288f 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -1109,7 +1109,7 @@ CommitLimit
+               yield a CommitLimit of 7.3G.
+ 
+               For more details, see the memory overcommit documentation
+-              in vm/overcommit-accounting.
++              in mm/overcommit-accounting.
+ Committed_AS
+               The amount of memory presently allocated on the system.
+               The committed memory is a sum of all of the memory which
+diff --git a/Documentation/index.rst b/Documentation/index.rst
+index 67036a05b771..4737c18c97ff 100644
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -128,7 +128,7 @@ needed).
+    sound/index
+    crypto/index
+    filesystems/index
+-   vm/index
++   mm/index
+    bpf/index
+    usb/index
+    PCI/index
+diff --git a/Documentation/vm/active_mm.rst b/Documentation/mm/active_mm.rst
+similarity index 100%
+rename from Documentation/vm/active_mm.rst
+rename to Documentation/mm/active_mm.rst
+diff --git a/Documentation/vm/arch_pgtable_helpers.rst b/Documentation/mm/arch_pgtable_helpers.rst
+similarity index 100%
+rename from Documentation/vm/arch_pgtable_helpers.rst
+rename to Documentation/mm/arch_pgtable_helpers.rst
+diff --git a/Documentation/vm/balance.rst b/Documentation/mm/balance.rst
+similarity index 100%
+rename from Documentation/vm/balance.rst
+rename to Documentation/mm/balance.rst
+diff --git a/Documentation/vm/bootmem.rst b/Documentation/mm/bootmem.rst
+similarity index 100%
+rename from Documentation/vm/bootmem.rst
+rename to Documentation/mm/bootmem.rst
+diff --git a/Documentation/vm/damon/api.rst b/Documentation/mm/damon/api.rst
+similarity index 100%
+rename from Documentation/vm/damon/api.rst
+rename to Documentation/mm/damon/api.rst
+diff --git a/Documentation/vm/damon/design.rst b/Documentation/mm/damon/design.rst
+similarity index 100%
+rename from Documentation/vm/damon/design.rst
+rename to Documentation/mm/damon/design.rst
+diff --git a/Documentation/vm/damon/faq.rst b/Documentation/mm/damon/faq.rst
+similarity index 100%
+rename from Documentation/vm/damon/faq.rst
+rename to Documentation/mm/damon/faq.rst
+diff --git a/Documentation/vm/damon/index.rst b/Documentation/mm/damon/index.rst
+similarity index 100%
+rename from Documentation/vm/damon/index.rst
+rename to Documentation/mm/damon/index.rst
+diff --git a/Documentation/vm/free_page_reporting.rst b/Documentation/mm/free_page_reporting.rst
+similarity index 100%
+rename from Documentation/vm/free_page_reporting.rst
+rename to Documentation/mm/free_page_reporting.rst
+diff --git a/Documentation/vm/frontswap.rst b/Documentation/mm/frontswap.rst
+similarity index 100%
+rename from Documentation/vm/frontswap.rst
+rename to Documentation/mm/frontswap.rst
+diff --git a/Documentation/vm/highmem.rst b/Documentation/mm/highmem.rst
+similarity index 100%
+rename from Documentation/vm/highmem.rst
+rename to Documentation/mm/highmem.rst
+diff --git a/Documentation/vm/hmm.rst b/Documentation/mm/hmm.rst
+similarity index 100%
+rename from Documentation/vm/hmm.rst
+rename to Documentation/mm/hmm.rst
+diff --git a/Documentation/vm/hugetlbfs_reserv.rst b/Documentation/mm/hugetlbfs_reserv.rst
+similarity index 100%
+rename from Documentation/vm/hugetlbfs_reserv.rst
+rename to Documentation/mm/hugetlbfs_reserv.rst
+diff --git a/Documentation/vm/hwpoison.rst b/Documentation/mm/hwpoison.rst
+similarity index 100%
+rename from Documentation/vm/hwpoison.rst
+rename to Documentation/mm/hwpoison.rst
+diff --git a/Documentation/vm/index.rst b/Documentation/mm/index.rst
+similarity index 100%
+rename from Documentation/vm/index.rst
+rename to Documentation/mm/index.rst
+diff --git a/Documentation/vm/ksm.rst b/Documentation/mm/ksm.rst
+similarity index 100%
+rename from Documentation/vm/ksm.rst
+rename to Documentation/mm/ksm.rst
+diff --git a/Documentation/vm/memory-model.rst b/Documentation/mm/memory-model.rst
+similarity index 99%
+rename from Documentation/vm/memory-model.rst
+rename to Documentation/mm/memory-model.rst
+index 30e8fbed6914..3779e562dc76 100644
+--- a/Documentation/vm/memory-model.rst
++++ b/Documentation/mm/memory-model.rst
+@@ -170,7 +170,7 @@ The users of `ZONE_DEVICE` are:
+ * hmm: Extend `ZONE_DEVICE` with `->page_fault()` and `->page_free()`
+   event callbacks to allow a device-driver to coordinate memory management
+   events related to device-memory, typically GPU memory. See
+-  Documentation/vm/hmm.rst.
++  Documentation/mm/hmm.rst.
+ 
+ * p2pdma: Create `struct page` objects to allow peer devices in a
+   PCI/-E topology to coordinate direct-DMA operations between themselves,
+diff --git a/Documentation/vm/mmu_notifier.rst b/Documentation/mm/mmu_notifier.rst
+similarity index 100%
+rename from Documentation/vm/mmu_notifier.rst
+rename to Documentation/mm/mmu_notifier.rst
+diff --git a/Documentation/vm/numa.rst b/Documentation/mm/numa.rst
+similarity index 100%
+rename from Documentation/vm/numa.rst
+rename to Documentation/mm/numa.rst
+diff --git a/Documentation/vm/oom.rst b/Documentation/mm/oom.rst
+similarity index 100%
+rename from Documentation/vm/oom.rst
+rename to Documentation/mm/oom.rst
+diff --git a/Documentation/vm/overcommit-accounting.rst b/Documentation/mm/overcommit-accounting.rst
+similarity index 100%
+rename from Documentation/vm/overcommit-accounting.rst
+rename to Documentation/mm/overcommit-accounting.rst
+diff --git a/Documentation/vm/page_allocation.rst b/Documentation/mm/page_allocation.rst
+similarity index 100%
+rename from Documentation/vm/page_allocation.rst
+rename to Documentation/mm/page_allocation.rst
+diff --git a/Documentation/vm/page_cache.rst b/Documentation/mm/page_cache.rst
+similarity index 100%
+rename from Documentation/vm/page_cache.rst
+rename to Documentation/mm/page_cache.rst
+diff --git a/Documentation/vm/page_frags.rst b/Documentation/mm/page_frags.rst
+similarity index 100%
+rename from Documentation/vm/page_frags.rst
+rename to Documentation/mm/page_frags.rst
+diff --git a/Documentation/vm/page_migration.rst b/Documentation/mm/page_migration.rst
+similarity index 100%
+rename from Documentation/vm/page_migration.rst
+rename to Documentation/mm/page_migration.rst
+diff --git a/Documentation/vm/page_owner.rst b/Documentation/mm/page_owner.rst
+similarity index 100%
+rename from Documentation/vm/page_owner.rst
+rename to Documentation/mm/page_owner.rst
+diff --git a/Documentation/vm/page_reclaim.rst b/Documentation/mm/page_reclaim.rst
+similarity index 100%
+rename from Documentation/vm/page_reclaim.rst
+rename to Documentation/mm/page_reclaim.rst
+diff --git a/Documentation/vm/page_table_check.rst b/Documentation/mm/page_table_check.rst
+similarity index 100%
+rename from Documentation/vm/page_table_check.rst
+rename to Documentation/mm/page_table_check.rst
+diff --git a/Documentation/vm/page_tables.rst b/Documentation/mm/page_tables.rst
+similarity index 100%
+rename from Documentation/vm/page_tables.rst
+rename to Documentation/mm/page_tables.rst
+diff --git a/Documentation/vm/physical_memory.rst b/Documentation/mm/physical_memory.rst
+similarity index 100%
+rename from Documentation/vm/physical_memory.rst
+rename to Documentation/mm/physical_memory.rst
+diff --git a/Documentation/vm/process_addrs.rst b/Documentation/mm/process_addrs.rst
+similarity index 100%
+rename from Documentation/vm/process_addrs.rst
+rename to Documentation/mm/process_addrs.rst
+diff --git a/Documentation/vm/remap_file_pages.rst b/Documentation/mm/remap_file_pages.rst
+similarity index 100%
+rename from Documentation/vm/remap_file_pages.rst
+rename to Documentation/mm/remap_file_pages.rst
+diff --git a/Documentation/vm/shmfs.rst b/Documentation/mm/shmfs.rst
+similarity index 100%
+rename from Documentation/vm/shmfs.rst
+rename to Documentation/mm/shmfs.rst
+diff --git a/Documentation/vm/slab.rst b/Documentation/mm/slab.rst
+similarity index 100%
+rename from Documentation/vm/slab.rst
+rename to Documentation/mm/slab.rst
+diff --git a/Documentation/vm/slub.rst b/Documentation/mm/slub.rst
+similarity index 100%
+rename from Documentation/vm/slub.rst
+rename to Documentation/mm/slub.rst
+diff --git a/Documentation/vm/split_page_table_lock.rst b/Documentation/mm/split_page_table_lock.rst
+similarity index 100%
+rename from Documentation/vm/split_page_table_lock.rst
+rename to Documentation/mm/split_page_table_lock.rst
+diff --git a/Documentation/vm/swap.rst b/Documentation/mm/swap.rst
+similarity index 100%
+rename from Documentation/vm/swap.rst
+rename to Documentation/mm/swap.rst
+diff --git a/Documentation/vm/transhuge.rst b/Documentation/mm/transhuge.rst
+similarity index 100%
+rename from Documentation/vm/transhuge.rst
+rename to Documentation/mm/transhuge.rst
+diff --git a/Documentation/vm/unevictable-lru.rst b/Documentation/mm/unevictable-lru.rst
+similarity index 100%
+rename from Documentation/vm/unevictable-lru.rst
+rename to Documentation/mm/unevictable-lru.rst
+diff --git a/Documentation/vm/vmalloc.rst b/Documentation/mm/vmalloc.rst
+similarity index 100%
+rename from Documentation/vm/vmalloc.rst
+rename to Documentation/mm/vmalloc.rst
+diff --git a/Documentation/vm/vmalloced-kernel-stacks.rst b/Documentation/mm/vmalloced-kernel-stacks.rst
+similarity index 100%
+rename from Documentation/vm/vmalloced-kernel-stacks.rst
+rename to Documentation/mm/vmalloced-kernel-stacks.rst
+diff --git a/Documentation/vm/vmemmap_dedup.rst b/Documentation/mm/vmemmap_dedup.rst
+similarity index 100%
+rename from Documentation/vm/vmemmap_dedup.rst
+rename to Documentation/mm/vmemmap_dedup.rst
+diff --git a/Documentation/vm/z3fold.rst b/Documentation/mm/z3fold.rst
+similarity index 100%
+rename from Documentation/vm/z3fold.rst
+rename to Documentation/mm/z3fold.rst
+diff --git a/Documentation/vm/zsmalloc.rst b/Documentation/mm/zsmalloc.rst
+similarity index 100%
+rename from Documentation/vm/zsmalloc.rst
+rename to Documentation/mm/zsmalloc.rst
+diff --git a/Documentation/translations/zh_CN/admin-guide/mm/damon/index.rst b/Documentation/translations/zh_CN/admin-guide/mm/damon/index.rst
+index 0c8276109fc0..30c69e1f44fe 100644
+--- a/Documentation/translations/zh_CN/admin-guide/mm/damon/index.rst
++++ b/Documentation/translations/zh_CN/admin-guide/mm/damon/index.rst
+@@ -13,7 +13,7 @@
+ 监测数据访问
+ ============
+ 
+-:doc:`DAMON </vm/damon/index>` 允许轻量级的数据访问监测。使用DAMON，
++:doc:`DAMON </mm/damon/index>` 允许轻量级的数据访问监测。使用DAMON，
+ 用户可以分析他们系统的内存访问模式，并优化它们。
+ 
+ .. toctree::
+diff --git a/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst b/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst
+index 1500bdbf338a..c976f3e33ffd 100644
+--- a/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst
++++ b/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst
+@@ -229,4 +229,4 @@ DAMON_RECLAIM再次什么都不做，这样我们就可以退回到基于LRU列
+ 
+ .. [1] https://research.google/pubs/pub48551/
+ .. [2] https://lwn.net/Articles/787611/
+-.. [3] https://www.kernel.org/doc/html/latest/vm/free_page_reporting.html
++.. [3] https://www.kernel.org/doc/html/latest/mm/free_page_reporting.html
+diff --git a/Documentation/translations/zh_CN/admin-guide/mm/damon/usage.rst b/Documentation/translations/zh_CN/admin-guide/mm/damon/usage.rst
+index eee0e8c5c368..cd41ada4fdad 100644
+--- a/Documentation/translations/zh_CN/admin-guide/mm/damon/usage.rst
++++ b/Documentation/translations/zh_CN/admin-guide/mm/damon/usage.rst
+@@ -33,9 +33,9 @@ DAMON 为不同的用户提供了下面这些接口。
+   口相同。这将在下一个LTS内核发布后被移除，所以用户应该转移到
+   :ref:`sysfs interface <sysfs_interface>`。
+ - *内核空间编程接口。*
+-  :doc:`这 </vm/damon/api>` 这是为内核空间程序员准备的。使用它，用户可以通过为你编写内
++  :doc:`这 </mm/damon/api>` 这是为内核空间程序员准备的。使用它，用户可以通过为你编写内
+   核空间的DAMON应用程序，最灵活有效地利用DAMON的每一个功能。你甚至可以为各种地址空间扩展DAMON。
+-  详细情况请参考接口 :doc:`文件 </vm/damon/api>`。
++  详细情况请参考接口 :doc:`文件 </mm/damon/api>`。
+ 
+ sysfs接口
+ =========
+@@ -148,7 +148,7 @@ contexts/<N>/monitoring_attrs/
+ 在 ``nr_regions`` 目录下，有两个文件分别用于DAMON监测区域的下限和上限（``min`` 和 ``max`` ），
+ 这两个文件控制着监测的开销。你可以通过向这些文件的写入和读出来设置和获取这些值。
+ 
+-关于间隔和监测区域范围的更多细节，请参考设计文件 (:doc:`/vm/damon/design`)。
++关于间隔和监测区域范围的更多细节，请参考设计文件 (:doc:`/mm/damon/design`)。
+ 
+ contexts/<N>/targets/
+ ---------------------
+@@ -318,7 +318,7 @@ DAMON导出了八个文件, ``attrs``, ``target_ids``, ``init_regions``,
+ ----
+ 
+ 用户可以通过读取和写入 ``attrs`` 文件获得和设置 ``采样间隔`` 、 ``聚集间隔`` 、 ``更新间隔``
+-以及监测目标区域的最小/最大数量。要详细了解监测属性，请参考 `:doc:/vm/damon/design` 。例如，
++以及监测目标区域的最小/最大数量。要详细了解监测属性，请参考 `:doc:/mm/damon/design` 。例如，
+ 下面的命令将这些值设置为5ms、100ms、1000ms、10和1000，然后再次检查::
+ 
+     # cd <debugfs>/damon
+diff --git a/Documentation/translations/zh_CN/core-api/index.rst b/Documentation/translations/zh_CN/core-api/index.rst
+index 26d9913fc8b6..b03020c8b2ab 100644
+--- a/Documentation/translations/zh_CN/core-api/index.rst
++++ b/Documentation/translations/zh_CN/core-api/index.rst
+@@ -101,7 +101,7 @@ Todolist:
+ ========
+ 
+ 如何在内核中分配和使用内存。请注意，在
+-:doc:`/vm/index` 中有更多的内存管理文档。
++:doc:`/mm/index` 中有更多的内存管理文档。
+ 
+ .. toctree::
+    :maxdepth: 1
+diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/translations/zh_CN/index.rst
+index ad7bb8c17562..bf85baca8b3e 100644
+--- a/Documentation/translations/zh_CN/index.rst
++++ b/Documentation/translations/zh_CN/index.rst
+@@ -118,7 +118,7 @@ TODOList:
+    sound/index
+    filesystems/index
+    scheduler/index
+-   vm/index
++   mm/index
+    peci/index
+ 
+ TODOList:
+diff --git a/Documentation/translations/zh_CN/vm/active_mm.rst b/Documentation/translations/zh_CN/mm/active_mm.rst
+similarity index 98%
+rename from Documentation/translations/zh_CN/vm/active_mm.rst
+rename to Documentation/translations/zh_CN/mm/active_mm.rst
+index 366609ea4f37..c2816f523bd7 100644
+--- a/Documentation/translations/zh_CN/vm/active_mm.rst
++++ b/Documentation/translations/zh_CN/mm/active_mm.rst
+@@ -1,6 +1,6 @@
+ .. include:: ../disclaimer-zh_CN.rst
+ 
+-:Original: Documentation/vm/active_mm.rst
++:Original: Documentation/mm/active_mm.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/balance.rst b/Documentation/translations/zh_CN/mm/balance.rst
+similarity index 99%
+rename from Documentation/translations/zh_CN/vm/balance.rst
+rename to Documentation/translations/zh_CN/mm/balance.rst
+index e98a47ef24a8..6fd79209c307 100644
+--- a/Documentation/translations/zh_CN/vm/balance.rst
++++ b/Documentation/translations/zh_CN/mm/balance.rst
+@@ -1,6 +1,6 @@
+ .. include:: ../disclaimer-zh_CN.rst
+ 
+-:Original: Documentation/vm/balance.rst
++:Original: Documentation/mm/balance.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/damon/api.rst b/Documentation/translations/zh_CN/mm/damon/api.rst
+similarity index 91%
+rename from Documentation/translations/zh_CN/vm/damon/api.rst
+rename to Documentation/translations/zh_CN/mm/damon/api.rst
+index 21143eea4ebe..5593a83c86bc 100644
+--- a/Documentation/translations/zh_CN/vm/damon/api.rst
++++ b/Documentation/translations/zh_CN/mm/damon/api.rst
+@@ -1,6 +1,6 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+-:Original: Documentation/vm/damon/api.rst
++:Original: Documentation/mm/damon/api.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/damon/design.rst b/Documentation/translations/zh_CN/mm/damon/design.rst
+similarity index 98%
+rename from Documentation/translations/zh_CN/vm/damon/design.rst
+rename to Documentation/translations/zh_CN/mm/damon/design.rst
+index 46128b77c2b3..16e3db34a7dd 100644
+--- a/Documentation/translations/zh_CN/vm/damon/design.rst
++++ b/Documentation/translations/zh_CN/mm/damon/design.rst
+@@ -1,6 +1,6 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+-:Original: Documentation/vm/damon/design.rst
++:Original: Documentation/mm/damon/design.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/damon/faq.rst b/Documentation/translations/zh_CN/mm/damon/faq.rst
+similarity index 98%
+rename from Documentation/translations/zh_CN/vm/damon/faq.rst
+rename to Documentation/translations/zh_CN/mm/damon/faq.rst
+index 07b4ac19407d..de4be417494a 100644
+--- a/Documentation/translations/zh_CN/vm/damon/faq.rst
++++ b/Documentation/translations/zh_CN/mm/damon/faq.rst
+@@ -1,6 +1,6 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+-:Original: Documentation/vm/damon/faq.rst
++:Original: Documentation/mm/damon/faq.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/damon/index.rst b/Documentation/translations/zh_CN/mm/damon/index.rst
+similarity index 90%
+rename from Documentation/translations/zh_CN/vm/damon/index.rst
+rename to Documentation/translations/zh_CN/mm/damon/index.rst
+index 84d36d90c9b0..b03bf307204f 100644
+--- a/Documentation/translations/zh_CN/vm/damon/index.rst
++++ b/Documentation/translations/zh_CN/mm/damon/index.rst
+@@ -1,6 +1,6 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+-:Original: Documentation/vm/damon/index.rst
++:Original: Documentation/mm/damon/index.rst
+ 
+ :翻译:
+ 
+@@ -14,7 +14,7 @@ DAMON:数据访问监视器
+ ==========================
+ 
+ DAMON是Linux内核的一个数据访问监控框架子系统。DAMON的核心机制使其成为
+-（该核心机制详见(Documentation/translations/zh_CN/vm/damon/design.rst)）
++（该核心机制详见(Documentation/translations/zh_CN/mm/damon/design.rst)）
+ 
+  - *准确度* （监测输出对DRAM级别的内存管理足够有用；但可能不适合CPU Cache级别），
+  - *轻量级* （监控开销低到可以在线应用），以及
+@@ -30,4 +30,3 @@ DAMON是Linux内核的一个数据访问监控框架子系统。DAMON的核心
+    faq
+    design
+    api
+-
+diff --git a/Documentation/translations/zh_CN/vm/free_page_reporting.rst b/Documentation/translations/zh_CN/mm/free_page_reporting.rst
+similarity index 97%
+rename from Documentation/translations/zh_CN/vm/free_page_reporting.rst
+rename to Documentation/translations/zh_CN/mm/free_page_reporting.rst
+index 31d6c34b956b..83b14cce9adf 100644
+--- a/Documentation/translations/zh_CN/vm/free_page_reporting.rst
++++ b/Documentation/translations/zh_CN/mm/free_page_reporting.rst
+@@ -1,6 +1,6 @@
+ .. include:: ../disclaimer-zh_CN.rst
+ 
+-:Original: Documentation/vm/_free_page_reporting.rst
++:Original: Documentation/mm/_free_page_reporting.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/frontswap.rst b/Documentation/translations/zh_CN/mm/frontswap.rst
+similarity index 99%
+rename from Documentation/translations/zh_CN/vm/frontswap.rst
+rename to Documentation/translations/zh_CN/mm/frontswap.rst
+index 3eb07870e2ef..5c18ea2be04f 100644
+--- a/Documentation/translations/zh_CN/vm/frontswap.rst
++++ b/Documentation/translations/zh_CN/mm/frontswap.rst
+@@ -1,4 +1,4 @@
+-:Original: Documentation/vm/_free_page_reporting.rst
++:Original: Documentation/mm/_free_page_reporting.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/highmem.rst b/Documentation/translations/zh_CN/mm/highmem.rst
+similarity index 99%
+rename from Documentation/translations/zh_CN/vm/highmem.rst
+rename to Documentation/translations/zh_CN/mm/highmem.rst
+index 018838e58c3e..81202c65e000 100644
+--- a/Documentation/translations/zh_CN/vm/highmem.rst
++++ b/Documentation/translations/zh_CN/mm/highmem.rst
+@@ -1,6 +1,6 @@
+ .. include:: ../disclaimer-zh_CN.rst
+ 
+-:Original: Documentation/vm/highmem.rst
++:Original: Documentation/mm/highmem.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/hmm.rst b/Documentation/translations/zh_CN/mm/hmm.rst
+similarity index 99%
+rename from Documentation/translations/zh_CN/vm/hmm.rst
+rename to Documentation/translations/zh_CN/mm/hmm.rst
+index 2379df95aa58..5024a8a15516 100644
+--- a/Documentation/translations/zh_CN/vm/hmm.rst
++++ b/Documentation/translations/zh_CN/mm/hmm.rst
+@@ -1,6 +1,6 @@
+ .. include:: ../disclaimer-zh_CN.rst
+ 
+-:Original: Documentation/vm/hmm.rst
++:Original: Documentation/mm/hmm.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/hugetlbfs_reserv.rst b/Documentation/translations/zh_CN/mm/hugetlbfs_reserv.rst
+similarity index 99%
+rename from Documentation/translations/zh_CN/vm/hugetlbfs_reserv.rst
+rename to Documentation/translations/zh_CN/mm/hugetlbfs_reserv.rst
+index c6d471ce2131..752e5696cd47 100644
+--- a/Documentation/translations/zh_CN/vm/hugetlbfs_reserv.rst
++++ b/Documentation/translations/zh_CN/mm/hugetlbfs_reserv.rst
+@@ -1,6 +1,6 @@
+ .. include:: ../disclaimer-zh_CN.rst
+ 
+-:Original: Documentation/vm/hugetlbfs_reserv.rst
++:Original: Documentation/mm/hugetlbfs_reserv.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/hwpoison.rst b/Documentation/translations/zh_CN/mm/hwpoison.rst
+similarity index 99%
+rename from Documentation/translations/zh_CN/vm/hwpoison.rst
+rename to Documentation/translations/zh_CN/mm/hwpoison.rst
+index c6e1e7bdb05b..310862edc937 100644
+--- a/Documentation/translations/zh_CN/vm/hwpoison.rst
++++ b/Documentation/translations/zh_CN/mm/hwpoison.rst
+@@ -1,5 +1,5 @@
+ 
+-:Original: Documentation/vm/hwpoison.rst
++:Original: Documentation/mm/hwpoison.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/index.rst b/Documentation/translations/zh_CN/mm/index.rst
+similarity index 96%
+rename from Documentation/translations/zh_CN/vm/index.rst
+rename to Documentation/translations/zh_CN/mm/index.rst
+index a1c6d529b6ff..4c8c6b7b72a3 100644
+--- a/Documentation/translations/zh_CN/vm/index.rst
++++ b/Documentation/translations/zh_CN/mm/index.rst
+@@ -1,6 +1,6 @@
+ .. include:: ../disclaimer-zh_CN.rst
+ 
+-:Original: Documentation/vm/index.rst
++:Original: Documentation/mm/index.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/ksm.rst b/Documentation/translations/zh_CN/mm/ksm.rst
+similarity index 98%
+rename from Documentation/translations/zh_CN/vm/ksm.rst
+rename to Documentation/translations/zh_CN/mm/ksm.rst
+index 83b0c73984da..d1f82e857ad7 100644
+--- a/Documentation/translations/zh_CN/vm/ksm.rst
++++ b/Documentation/translations/zh_CN/mm/ksm.rst
+@@ -1,6 +1,6 @@
+ .. include:: ../disclaimer-zh_CN.rst
+ 
+-:Original: Documentation/vm/ksm.rst
++:Original: Documentation/mm/ksm.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/memory-model.rst b/Documentation/translations/zh_CN/mm/memory-model.rst
+similarity index 98%
+rename from Documentation/translations/zh_CN/vm/memory-model.rst
+rename to Documentation/translations/zh_CN/mm/memory-model.rst
+index 013e30c88d72..d47c9263de01 100644
+--- a/Documentation/translations/zh_CN/vm/memory-model.rst
++++ b/Documentation/translations/zh_CN/mm/memory-model.rst
+@@ -1,6 +1,6 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+-:Original: Documentation/vm/memory-model.rst
++:Original: Documentation/mm/memory-model.rst
+ 
+ :翻译:
+ 
+@@ -129,7 +129,7 @@ ZONE_DEVICE
+ * pmem: 通过DAX映射将平台持久性内存作为直接I/O目标使用。
+ 
+ * hmm: 用 `->page_fault()` 和 `->page_free()` 事件回调扩展 `ZONE_DEVICE` ，
+-  以允许设备驱动程序协调与设备内存相关的内存管理事件，通常是GPU内存。参见/vm/hmm.rst。
++  以允许设备驱动程序协调与设备内存相关的内存管理事件，通常是GPU内存。参见Docmentation/mm/hmm.rst。
+ 
+ * p2pdma: 创建 `struct page` 对象，允许PCI/E拓扑结构中的peer设备协调它们之间的
+   直接DMA操作，即绕过主机内存。
+diff --git a/Documentation/translations/zh_CN/vm/mmu_notifier.rst b/Documentation/translations/zh_CN/mm/mmu_notifier.rst
+similarity index 98%
+rename from Documentation/translations/zh_CN/vm/mmu_notifier.rst
+rename to Documentation/translations/zh_CN/mm/mmu_notifier.rst
+index b29a37b33628..ce3664d1a410 100644
+--- a/Documentation/translations/zh_CN/vm/mmu_notifier.rst
++++ b/Documentation/translations/zh_CN/mm/mmu_notifier.rst
+@@ -1,4 +1,4 @@
+-:Original: Documentation/vm/mmu_notifier.rst
++:Original: Documentation/mm/mmu_notifier.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/numa.rst b/Documentation/translations/zh_CN/mm/numa.rst
+similarity index 99%
+rename from Documentation/translations/zh_CN/vm/numa.rst
+rename to Documentation/translations/zh_CN/mm/numa.rst
+index 6af412b924ad..b15cfeeb6dfb 100644
+--- a/Documentation/translations/zh_CN/vm/numa.rst
++++ b/Documentation/translations/zh_CN/mm/numa.rst
+@@ -1,4 +1,4 @@
+-:Original: Documentation/vm/numa.rst
++:Original: Documentation/mm/numa.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/overcommit-accounting.rst b/Documentation/translations/zh_CN/mm/overcommit-accounting.rst
+similarity index 98%
+rename from Documentation/translations/zh_CN/vm/overcommit-accounting.rst
+rename to Documentation/translations/zh_CN/mm/overcommit-accounting.rst
+index 8765cb118f24..d8452d8b7fbb 100644
+--- a/Documentation/translations/zh_CN/vm/overcommit-accounting.rst
++++ b/Documentation/translations/zh_CN/mm/overcommit-accounting.rst
+@@ -1,4 +1,4 @@
+-:Original: Documentation/vm/overcommit-accounting.rst
++:Original: Documentation/mm/overcommit-accounting.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/page_frags.rst b/Documentation/translations/zh_CN/mm/page_frags.rst
+similarity index 97%
+rename from Documentation/translations/zh_CN/vm/page_frags.rst
+rename to Documentation/translations/zh_CN/mm/page_frags.rst
+index ad27fed33634..320952ca93af 100644
+--- a/Documentation/translations/zh_CN/vm/page_frags.rst
++++ b/Documentation/translations/zh_CN/mm/page_frags.rst
+@@ -1,4 +1,4 @@
+-:Original: Documentation/vm/page_frag.rst
++:Original: Documentation/mm/page_frag.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/page_owner.rst b/Documentation/translations/zh_CN/mm/page_owner.rst
+similarity index 99%
+rename from Documentation/translations/zh_CN/vm/page_owner.rst
+rename to Documentation/translations/zh_CN/mm/page_owner.rst
+index 9e951fabba9d..03d9e613094a 100644
+--- a/Documentation/translations/zh_CN/vm/page_owner.rst
++++ b/Documentation/translations/zh_CN/mm/page_owner.rst
+@@ -1,4 +1,4 @@
+-:Original: Documentation/vm/page_owner.rst
++:Original: Documentation/mm/page_owner.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/page_table_check.rst b/Documentation/translations/zh_CN/mm/page_table_check.rst
+similarity index 97%
+rename from Documentation/translations/zh_CN/vm/page_table_check.rst
+rename to Documentation/translations/zh_CN/mm/page_table_check.rst
+index a29fc1b360e6..e8077310a76c 100644
+--- a/Documentation/translations/zh_CN/vm/page_table_check.rst
++++ b/Documentation/translations/zh_CN/mm/page_table_check.rst
+@@ -1,6 +1,6 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+-:Original: Documentation/vm/page_table_check.rst
++:Original: Documentation/mm/page_table_check.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/remap_file_pages.rst b/Documentation/translations/zh_CN/mm/remap_file_pages.rst
+similarity index 97%
+rename from Documentation/translations/zh_CN/vm/remap_file_pages.rst
+rename to Documentation/translations/zh_CN/mm/remap_file_pages.rst
+index af6b7e28af23..31e0c54dc36f 100644
+--- a/Documentation/translations/zh_CN/vm/remap_file_pages.rst
++++ b/Documentation/translations/zh_CN/mm/remap_file_pages.rst
+@@ -1,4 +1,4 @@
+-:Original: Documentation/vm/remap_file_pages.rst
++:Original: Documentation/mm/remap_file_pages.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/split_page_table_lock.rst b/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
+similarity index 98%
+rename from Documentation/translations/zh_CN/vm/split_page_table_lock.rst
+rename to Documentation/translations/zh_CN/mm/split_page_table_lock.rst
+index 50694d97c426..4fb7aa666037 100644
+--- a/Documentation/translations/zh_CN/vm/split_page_table_lock.rst
++++ b/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
+@@ -1,4 +1,4 @@
+-:Original: Documentation/vm/split_page_table_lock.rst
++:Original: Documentation/mm/split_page_table_lock.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/z3fold.rst b/Documentation/translations/zh_CN/mm/z3fold.rst
+similarity index 96%
+rename from Documentation/translations/zh_CN/vm/z3fold.rst
+rename to Documentation/translations/zh_CN/mm/z3fold.rst
+index 57204aa08caa..9569a6d88270 100644
+--- a/Documentation/translations/zh_CN/vm/z3fold.rst
++++ b/Documentation/translations/zh_CN/mm/z3fold.rst
+@@ -1,4 +1,4 @@
+-:Original: Documentation/vm/z3fold.rst
++:Original: Documentation/mm/z3fold.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_CN/vm/zsmalloc.rst b/Documentation/translations/zh_CN/mm/zsmalloc.rst
+similarity index 98%
+rename from Documentation/translations/zh_CN/vm/zsmalloc.rst
+rename to Documentation/translations/zh_CN/mm/zsmalloc.rst
+index 29e9c70a8eb6..b5596ea08ae4 100644
+--- a/Documentation/translations/zh_CN/vm/zsmalloc.rst
++++ b/Documentation/translations/zh_CN/mm/zsmalloc.rst
+@@ -1,4 +1,4 @@
+-:Original: Documentation/vm/zs_malloc.rst
++:Original: Documentation/mm/zs_malloc.rst
+ 
+ :翻译:
+ 
+diff --git a/Documentation/translations/zh_TW/index.rst b/Documentation/translations/zh_TW/index.rst
+index e1ce9d8c06f8..e97d7d578751 100644
+--- a/Documentation/translations/zh_TW/index.rst
++++ b/Documentation/translations/zh_TW/index.rst
+@@ -128,7 +128,7 @@ TODOList:
+ * security/index
+ * sound/index
+ * crypto/index
+-* vm/index
++* mm/index
+ * bpf/index
+ * usb/index
+ * PCI/index
+diff --git a/Documentation/vm/.gitignore b/Documentation/vm/.gitignore
+deleted file mode 100644
+index bc74f5643008..000000000000
+--- a/Documentation/vm/.gitignore
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-page-types
+-slabinfo
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3cf9842d9233..389544a3da69 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5509,7 +5509,7 @@ L:	linux-mm@kvack.org
+ S:	Maintained
+ F:	Documentation/ABI/testing/sysfs-kernel-mm-damon
+ F:	Documentation/admin-guide/mm/damon/
+-F:	Documentation/vm/damon/
++F:	Documentation/mm/damon/
+ F:	include/linux/damon.h
+ F:	include/trace/events/damon.h
+ F:	mm/damon/
+@@ -9016,7 +9016,7 @@ HMM - Heterogeneous Memory Management
+ M:	Jérôme Glisse <jglisse@redhat.com>
+ L:	linux-mm@kvack.org
+ S:	Maintained
+-F:	Documentation/vm/hmm.rst
++F:	Documentation/mm/hmm.rst
+ F:	include/linux/hmm*
+ F:	lib/test_hmm*
+ F:	mm/hmm*
+@@ -9114,8 +9114,8 @@ L:	linux-mm@kvack.org
+ S:	Maintained
+ F:	Documentation/ABI/testing/sysfs-kernel-mm-hugepages
+ F:	Documentation/admin-guide/mm/hugetlbpage.rst
+-F:	Documentation/vm/hugetlbfs_reserv.rst
+-F:	Documentation/vm/vmemmap_dedup.rst
++F:	Documentation/mm/hugetlbfs_reserv.rst
++F:	Documentation/mm/vmemmap_dedup.rst
+ F:	fs/hugetlbfs/
+ F:	include/linux/hugetlb.h
+ F:	mm/hugetlb.c
+@@ -15025,7 +15025,7 @@ M:	Pasha Tatashin <pasha.tatashin@soleen.com>
+ M:	Andrew Morton <akpm@linux-foundation.org>
+ L:	linux-mm@kvack.org
+ S:	Maintained
+-F:	Documentation/vm/page_table_check.rst
++F:	Documentation/mm/page_table_check.rst
+ F:	include/linux/page_table_check.h
+ F:	mm/page_table_check.c
+ 
+@@ -22107,7 +22107,7 @@ M:	Nitin Gupta <ngupta@vflare.org>
+ R:	Sergey Senozhatsky <senozhatsky@chromium.org>
+ L:	linux-mm@kvack.org
+ S:	Maintained
+-F:	Documentation/vm/zsmalloc.rst
++F:	Documentation/mm/zsmalloc.rst
+ F:	include/linux/zsmalloc.h
+ F:	mm/zsmalloc.c
+ 
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 1920d52653b4..db2838cf8c02 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -410,7 +410,7 @@ config ARCH_SPARSEMEM_ENABLE
+ 	  Say Y to support efficient handling of sparse physical memory,
+ 	  for architectures which are either NUMA (Non-Uniform Memory Access)
+ 	  or have huge holes in the physical address space for other reasons.
+-	  See <file:Documentation/vm/numa.rst> for more.
++	  See <file:Documentation/mm/numa.rst> for more.
+ 
+ config ARCH_ENABLE_THP_MIGRATION
+ 	def_bool y
+diff --git a/arch/powerpc/include/asm/book3s/64/pgtable.h b/arch/powerpc/include/asm/book3s/64/pgtable.h
+index cb9d5fd39d7f..392ff48f77df 100644
+--- a/arch/powerpc/include/asm/book3s/64/pgtable.h
++++ b/arch/powerpc/include/asm/book3s/64/pgtable.h
+@@ -1273,7 +1273,7 @@ static inline void pmdp_set_wrprotect(struct mm_struct *mm, unsigned long addr,
+  * should return true.
+  * We should not call this on a hugetlb entry. We should check for HugeTLB
+  * entry using vma->vm_flags
+- * The page table walk rule is explained in Documentation/vm/transhuge.rst
++ * The page table walk rule is explained in Documentation/mm/transhuge.rst
+  */
+ static inline int pmd_trans_huge(pmd_t pmd)
+ {
+diff --git a/include/linux/hmm.h b/include/linux/hmm.h
+index d5a6f101f843..126a36571667 100644
+--- a/include/linux/hmm.h
++++ b/include/linux/hmm.h
+@@ -4,7 +4,7 @@
+  *
+  * Authors: Jérôme Glisse <jglisse@redhat.com>
+  *
+- * See Documentation/vm/hmm.rst for reasons and overview of what HMM is.
++ * See Documentation/mm/hmm.rst for reasons and overview of what HMM is.
+  */
+ #ifndef LINUX_HMM_H
+ #define LINUX_HMM_H
+@@ -100,7 +100,7 @@ struct hmm_range {
+ };
+ 
+ /*
+- * Please see Documentation/vm/hmm.rst for how to use the range API.
++ * Please see Documentation/mm/hmm.rst for how to use the range API.
+  */
+ int hmm_range_fault(struct hmm_range *range);
+ 
+diff --git a/include/linux/memremap.h b/include/linux/memremap.h
+index 8af304f6b504..9f5ee49482de 100644
+--- a/include/linux/memremap.h
++++ b/include/linux/memremap.h
+@@ -39,7 +39,7 @@ struct vmem_altmap {
+  * must be treated as an opaque object, rather than a "normal" struct page.
+  *
+  * A more complete discussion of unaddressable memory may be found in
+- * include/linux/hmm.h and Documentation/vm/hmm.rst.
++ * include/linux/hmm.h and Documentation/mm/hmm.rst.
+  *
+  * MEMORY_DEVICE_FS_DAX:
+  * Host memory that has similar access semantics as System RAM i.e. DMA
+diff --git a/include/linux/mmu_notifier.h b/include/linux/mmu_notifier.h
+index 45fc2c81e370..d6c06e140277 100644
+--- a/include/linux/mmu_notifier.h
++++ b/include/linux/mmu_notifier.h
+@@ -198,7 +198,7 @@ struct mmu_notifier_ops {
+ 	 * invalidate_range_start()/end() notifiers, as
+ 	 * invalidate_range() already catches the points in time when an
+ 	 * external TLB range needs to be flushed. For more in depth
+-	 * discussion on this see Documentation/vm/mmu_notifier.rst
++	 * discussion on this see Documentation/mm/mmu_notifier.rst
+ 	 *
+ 	 * Note that this function might be called with just a sub-range
+ 	 * of what was passed to invalidate_range_start()/end(), if
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index 8cd975a8bfeb..2a243616f222 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -29,7 +29,7 @@ extern struct mm_struct *mm_alloc(void);
+  *
+  * Use mmdrop() to release the reference acquired by mmgrab().
+  *
+- * See also <Documentation/vm/active_mm.rst> for an in-depth explanation
++ * See also <Documentation/mm/active_mm.rst> for an in-depth explanation
+  * of &mm_struct.mm_count vs &mm_struct.mm_users.
+  */
+ static inline void mmgrab(struct mm_struct *mm)
+@@ -92,7 +92,7 @@ static inline void mmdrop_sched(struct mm_struct *mm)
+  *
+  * Use mmput() to release the reference acquired by mmget().
+  *
+- * See also <Documentation/vm/active_mm.rst> for an in-depth explanation
++ * See also <Documentation/mm/active_mm.rst> for an in-depth explanation
+  * of &mm_struct.mm_count vs &mm_struct.mm_users.
+  */
+ static inline void mmget(struct mm_struct *mm)
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index 0c0fed1b348f..95a5b7aa1ae9 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -74,7 +74,7 @@ static inline int current_is_kswapd(void)
+ 
+ /*
+  * Unaddressable device memory support. See include/linux/hmm.h and
+- * Documentation/vm/hmm.rst. Short description is we need struct pages for
++ * Documentation/mm/hmm.rst. Short description is we need struct pages for
+  * device memory that is unaddressable (inaccessible) by CPU, so that we can
+  * migrate part of a process memory to device memory.
+  *
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 169e64192e48..c1fa4993a56f 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -663,7 +663,7 @@ config KSM
+ 	  the many instances by a single page with that content, so
+ 	  saving memory until one or another app needs to modify the content.
+ 	  Recommended for use with KVM, or with other duplicative applications.
+-	  See Documentation/vm/ksm.rst for more information: KSM is inactive
++	  See Documentation/mm/ksm.rst for more information: KSM is inactive
+ 	  until a program has madvised that an area is MADV_MERGEABLE, and
+ 	  root has set /sys/kernel/mm/ksm/run to 1 (if CONFIG_SYSFS is set).
+ 
+diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
+index 1ab091f49fc0..dc7df1254f0a 100644
+--- a/mm/debug_vm_pgtable.c
++++ b/mm/debug_vm_pgtable.c
+@@ -35,7 +35,7 @@
+ #include <asm/tlbflush.h>
+ 
+ /*
+- * Please refer Documentation/vm/arch_pgtable_helpers.rst for the semantics
++ * Please refer Documentation/mm/arch_pgtable_helpers.rst for the semantics
+  * expectations that are being validated here. All future changes in here
+  * or the documentation need to be in sync.
+  */
+diff --git a/mm/frontswap.c b/mm/frontswap.c
+index 6f69b044a8cc..1a97610308cb 100644
+--- a/mm/frontswap.c
++++ b/mm/frontswap.c
+@@ -4,7 +4,7 @@
+  *
+  * This code provides the generic "frontend" layer to call a matching
+  * "backend" driver implementation of frontswap.  See
+- * Documentation/vm/frontswap.rst for more information.
++ * Documentation/mm/frontswap.rst for more information.
+  *
+  * Copyright (C) 2009-2012 Oracle Corp.  All rights reserved.
+  * Author: Dan Magenheimer
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index f7248002dad9..b3b5d8cf63ab 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1937,7 +1937,7 @@ static void __split_huge_zero_page_pmd(struct vm_area_struct *vma,
+ 	 * replacing a zero pmd write protected page with a zero pte write
+ 	 * protected page.
+ 	 *
+-	 * See Documentation/vm/mmu_notifier.rst
++	 * See Documentation/mm/mmu_notifier.rst
+ 	 */
+ 	pmdp_huge_clear_flush(vma, haddr, pmd);
+ 
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index a57e1be41401..b36a4ef87a2e 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4875,7 +4875,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+ 				 * table protection not changing it to point
+ 				 * to a new page.
+ 				 *
+-				 * See Documentation/vm/mmu_notifier.rst
++				 * See Documentation/mm/mmu_notifier.rst
+ 				 */
+ 				huge_ptep_set_wrprotect(src, addr, src_pte);
+ 				entry = huge_pte_wrprotect(entry);
+@@ -6403,7 +6403,7 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
+ 	 * No need to call mmu_notifier_invalidate_range() we are downgrading
+ 	 * page table protection not changing it to point to a new page.
+ 	 *
+-	 * See Documentation/vm/mmu_notifier.rst
++	 * See Documentation/mm/mmu_notifier.rst
+ 	 */
+ 	i_mmap_unlock_write(vma->vm_file->f_mapping);
+ 	mmu_notifier_invalidate_range_end(&range);
+@@ -7102,7 +7102,7 @@ void hugetlb_unshare_all_pmds(struct vm_area_struct *vma)
+ 	i_mmap_unlock_write(vma->vm_file->f_mapping);
+ 	/*
+ 	 * No need to call mmu_notifier_invalidate_range(), see
+-	 * Documentation/vm/mmu_notifier.rst.
++	 * Documentation/mm/mmu_notifier.rst.
+ 	 */
+ 	mmu_notifier_invalidate_range_end(&range);
+ }
+diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
+index 1089ea8a9c98..ba29c15c53d6 100644
+--- a/mm/hugetlb_vmemmap.c
++++ b/mm/hugetlb_vmemmap.c
+@@ -6,7 +6,7 @@
+  *
+  *     Author: Muchun Song <songmuchun@bytedance.com>
+  *
+- * See Documentation/vm/vmemmap_dedup.rst
++ * See Documentation/mm/vmemmap_dedup.rst
+  */
+ #define pr_fmt(fmt)	"HugeTLB: " fmt
+ 
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 54f78c9eecae..8d2dc501c92c 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -1083,7 +1083,7 @@ static int write_protect_page(struct vm_area_struct *vma, struct page *page,
+ 		 * No need to notify as we are downgrading page table to read
+ 		 * only not changing it to point to a new page.
+ 		 *
+-		 * See Documentation/vm/mmu_notifier.rst
++		 * See Documentation/mm/mmu_notifier.rst
+ 		 */
+ 		entry = ptep_clear_flush(vma, pvmw.address, pvmw.pte);
+ 		/*
+@@ -1186,7 +1186,7 @@ static int replace_page(struct vm_area_struct *vma, struct page *page,
+ 	 * No need to notify as we are replacing a read only page with another
+ 	 * read only page with the same content.
+ 	 *
+-	 * See Documentation/vm/mmu_notifier.rst
++	 * See Documentation/mm/mmu_notifier.rst
+ 	 */
+ 	ptep_clear_flush(vma, addr, ptep);
+ 	set_pte_at_notify(mm, addr, ptep, newpte);
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 61e6135c54ef..c14d7286a379 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2944,7 +2944,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
+ 	unsigned long ret = -EINVAL;
+ 	struct file *file;
+ 
+-	pr_warn_once("%s (%d) uses deprecated remap_file_pages() syscall. See Documentation/vm/remap_file_pages.rst.\n",
++	pr_warn_once("%s (%d) uses deprecated remap_file_pages() syscall. See Documentation/mm/remap_file_pages.rst.\n",
+ 		     current->comm, current->pid);
+ 
+ 	if (prot)
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 5bcb334cd6f2..65e0a767b837 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -999,7 +999,7 @@ static int page_vma_mkclean_one(struct page_vma_mapped_walk *pvmw)
+ 		 * downgrading page table protection not changing it to point
+ 		 * to a new page.
+ 		 *
+-		 * See Documentation/vm/mmu_notifier.rst
++		 * See Documentation/mm/mmu_notifier.rst
+ 		 */
+ 		if (ret)
+ 			cleaned++;
+@@ -1765,7 +1765,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 			 * to point at a new folio while a device is
+ 			 * still using this folio.
+ 			 *
+-			 * See Documentation/vm/mmu_notifier.rst
++			 * See Documentation/mm/mmu_notifier.rst
+ 			 */
+ 			dec_mm_counter(mm, mm_counter_file(&folio->page));
+ 		}
+@@ -1775,7 +1775,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 		 * done above for all cases requiring it to happen under page
+ 		 * table lock before mmu_notifier_invalidate_range_end()
+ 		 *
+-		 * See Documentation/vm/mmu_notifier.rst
++		 * See Documentation/mm/mmu_notifier.rst
+ 		 */
+ 		page_remove_rmap(subpage, vma, folio_test_hugetlb(folio));
+ 		if (vma->vm_flags & VM_LOCKED)
+@@ -2093,7 +2093,7 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+ 		 * done above for all cases requiring it to happen under page
+ 		 * table lock before mmu_notifier_invalidate_range_end()
+ 		 *
+-		 * See Documentation/vm/mmu_notifier.rst
++		 * See Documentation/mm/mmu_notifier.rst
+ 		 */
+ 		page_remove_rmap(subpage, vma, folio_test_hugetlb(folio));
+ 		if (vma->vm_flags & VM_LOCKED)
+diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+index f4fa61dbbee3..49ebd8dc42ef 100644
+--- a/mm/sparse-vmemmap.c
++++ b/mm/sparse-vmemmap.c
+@@ -752,7 +752,7 @@ static int __meminit vmemmap_populate_compound_pages(unsigned long start_pfn,
+ 
+ 		/*
+ 		 * Reuse the previous page for the rest of tail pages
+-		 * See layout diagram in Documentation/vm/vmemmap_dedup.rst
++		 * See layout diagram in Documentation/mm/vmemmap_dedup.rst
+ 		 */
+ 		next += PAGE_SIZE;
+ 		rc = vmemmap_populate_range(next, last, node, NULL,
+diff --git a/mm/util.c b/mm/util.c
+index 0837570c9225..5df8f2db7ca9 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -1005,7 +1005,7 @@ EXPORT_SYMBOL_GPL(vm_memory_committed);
+  * succeed and -ENOMEM implies there is not.
+  *
+  * We currently support three overcommit policies, which are set via the
+- * vm.overcommit_memory sysctl.  See Documentation/vm/overcommit-accounting.rst
++ * vm.overcommit_memory sysctl.  See Documentation/mm/overcommit-accounting.rst
+  *
+  * Strict overcommit modes added 2002 Feb 26 by Alan Cox.
+  * Additional code 2002 Jul 20 by Robert Love.
+diff --git a/tools/vm/page_owner_sort.c b/tools/vm/page_owner_sort.c
+index c149427eb1c9..74c3dcecf64d 100644
+--- a/tools/vm/page_owner_sort.c
++++ b/tools/vm/page_owner_sort.c
+@@ -8,7 +8,7 @@
+  * Or sort by total memory:
+  * ./page_owner_sort -m page_owner_full.txt sorted_page_owner.txt
+  *
+- * See Documentation/vm/page_owner.rst
++ * See Documentation/mm/page_owner.rst
+ */
+ 
+ #include <stdio.h>
+
+base-commit: a111daf0c53ae91e71fd2bfe7497862d14132e3e
+-- 
+2.35.3
 

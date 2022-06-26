@@ -2,782 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755D555B0ED
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFE155B0FD
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233683AbiFZJvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 05:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
+        id S234139AbiFZKBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 06:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbiFZJvM (ORCPT
+        with ESMTP id S231403AbiFZKBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 05:51:12 -0400
-Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F74CE3F;
-        Sun, 26 Jun 2022 02:51:08 -0700 (PDT)
-Received: from [10.0.0.163] (_gateway [10.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 19F732007F;
-        Sun, 26 Jun 2022 11:51:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1656237065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XnK3jXRLmKGL15EwHg9nyVtETA9yxJfIZHTS2DQfLxU=;
-        b=aFMpEa45GaGM7eS/Mxi5XGTzGkhjF2uTz5elkLDhwO0lvBRRZkRaSeGamjU6CGYoZhUBkL
-        yrAInhuZ4OaUSXnUJza8Dn+5fLKeQa++WfqRJ4IEy2yKAlcZQjqos9P+pQKVm2Wtx/WW9i
-        CAeLu2idyyN52L7z7tcQR/1XjMxtBAk=
-Message-ID: <db93815b-6d13-cba1-3e29-13ed0dd46a71@ixit.cz>
-Date:   Sun, 26 Jun 2022 11:51:04 +0200
+        Sun, 26 Jun 2022 06:01:32 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF52EE0F2;
+        Sun, 26 Jun 2022 03:01:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=UfNTsZDFBTUHvbQvIabx1RTUSyCNhgNOnFpow90ezV8=; b=ApuS05K2hw2k7iHbZR3ws9vEJY
+        ODKxeRnjTwP7f3sW+urtFGH/4RpWLCG5JgAcBaTPJ0qq0uKgwwfTPMxfykMWI5sAGO0Qu+IF7MX6P
+        Ck78bWe5j2wNwBIrbvC2bjkA6lAPUJJEx9/VbVf1bn85FMmfyh9M3H/Mypi0Hl0rxflQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1o5P4m-008Hf9-TE; Sun, 26 Jun 2022 12:01:08 +0200
+Date:   Sun, 26 Jun 2022 12:01:08 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     alexandru.tachici@analog.com
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gerhard@engleder-embedded.com,
+        geert+renesas@glider.be, joel@jms.id.au, stefan.wahren@i2se.com,
+        wellslutw@gmail.com, geert@linux-m68k.org, robh+dt@kernel.org,
+        d.michailidis@fungible.com, stephen@networkplumber.org,
+        l.stelmach@samsung.com, linux-kernel@vger.kernel.org
+Subject: Re: [net-next 1/2] net: ethernet: adi: Add ADIN1110 support
+Message-ID: <YrguZPrrHA77Tx25@lunn.ch>
+References: <20220624200628.77047-1-alexandru.tachici@analog.com>
+ <20220624200628.77047-2-alexandru.tachici@analog.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] arm64: dts: qcom: timer should use only 32-bit size
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220515221758.88723-1-david@ixit.cz>
- <YrfOn6T+cUn5mEe3@builder.lan>
-From:   David Heidelberg <david@ixit.cz>
-In-Reply-To: <YrfOn6T+cUn5mEe3@builder.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_DYNAMIC,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624200628.77047-2-alexandru.tachici@analog.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> +static void adin1110_read_frames(struct adin1110_port_priv *port_priv)
+> +{
+> +	struct adin1110_priv *priv = port_priv->priv;
+> +	u32 status1;
+> +	int ret;
+> +
+> +	while (1) {
+> +		ret = adin1110_read_reg(priv, ADIN1110_STATUS1, &status1);
+> +		if (ret < 0)
+> +			return;
+> +
+> +		if (!adin1110_port_rx_ready(port_priv, status1))
+> +			break;
+> +
+> +		ret = adin1110_read_fifo(port_priv);
+> +		if (ret < 0)
+> +			return;
+> +	}
 
-On 26/06/2022 05:12, Bjorn Andersson wrote:
-> On Sun 15 May 17:17 CDT 2022, David Heidelberg wrote:
->
->> There's no reason the timer needs > 32-bits of size.
->> Since we using 32-bit size, we need to define ranges properly.
->>
->> Fixes warnings as:
->> ```
->> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: timer@17c90000: #size-cells:0:0: 1 was expected
->>          From schema: Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
->> ```
->>
->> Signed-off-by: David Heidelberg <david@ixit.cz>
->>
->> ---
->> Replaces "dt-bindings: timer: add #size-cells 2 for ARM"
-> I'm not able to find this patch, but I'm guessing that you tried to make
-> it possible to allow #size-cells to be 2 in the binding?
+Not sure an endless loop is a good idea here. I assume your SPI bus is
+slower than your two Ethernet interfaces. So somebody could DOS the
+machine by sending ethernet at line rate, and this function would
+never exit? NAPI has the concept of a budget. You only every receive
+up to 64 frames at once.
 
-Yes, here it's the original patch link: 
-https://lkml.iu.edu/hypermail/linux/kernel/2112.1/09190.html
+> +static int adin1110_set_mac_address(struct net_device *netdev, void *addr)
+> +{
+> +	struct adin1110_port_priv *port_priv = netdev_priv(netdev);
+> +	struct sockaddr *sa = addr;
+> +	u8 mask[ETH_ALEN];
+> +
+> +	if (netif_running(netdev))
+> +		return -EBUSY;
+> +
+> +	if (!is_valid_ether_addr(sa->sa_data))
+> +		return -EADDRNOTAVAIL;
+> +
+> +	eth_hw_addr_set(netdev, sa->sa_data);
+> +	memset(mask, 0xFF, ETH_ALEN);
+> +
+> +	return adin1110_write_mac_address(port_priv, ADIN_MAC_ADDR_SLOT, netdev->dev_addr, mask);
+> +}
 
+So there is a function to set an entry for Multicast, another for its
+own MAC address? Does it need entries for broadcast? What about STP
+bridge PDUs?
 
->
->> v2: fix accidental change of value 0x0 to 0
->>
->>   arch/arm64/boot/dts/qcom/ipq6018.dtsi | 20 ++++++++++----------
->>   arch/arm64/boot/dts/qcom/sc7180.dtsi  | 20 ++++++++++----------
->>   arch/arm64/boot/dts/qcom/sc7280.dtsi  | 20 ++++++++++----------
->>   arch/arm64/boot/dts/qcom/sdm845.dtsi  | 20 ++++++++++----------
->>   arch/arm64/boot/dts/qcom/sm6350.dtsi  | 20 ++++++++++----------
->>   arch/arm64/boot/dts/qcom/sm8150.dtsi  | 20 ++++++++++----------
->>   arch/arm64/boot/dts/qcom/sm8250.dtsi  | 20 ++++++++++----------
->>   arch/arm64/boot/dts/qcom/sm8350.dtsi  | 20 ++++++++++----------
->>   arch/arm64/boot/dts/qcom/sm8450.dtsi  | 20 ++++++++++----------
->>   9 files changed, 90 insertions(+), 90 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
->> index c89499e366d3..8638231dbd2f 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
->> @@ -526,8 +526,8 @@ timer {
->>   
->>   		timer@b120000 {
->>   			#address-cells = <2>;
->> -			#size-cells = <2>;
->> -			ranges;
->> +			#size-cells = <1>;
-> While perfectly valid, I don't like the asymmetry of #address-cells = 2
-> and #size-cells = 1.
->
-> If the binding maintainers don't approve of allowing #size-cells = 2,
-> can you please make #address-cells = 1 as well?
+> +static void adin1110_rx_mode_work(struct work_struct *work)
+> +{
+> +	struct adin1110_port_priv *port_priv = container_of(work, struct adin1110_port_priv, rx_mode_work);
+> +	struct adin1110_priv *priv = port_priv->priv;
+> +	u32 mask;
+> +
+> +	if (!port_priv->nr)
+> +		mask = ADIN1110_FWD_UNK2HOST;
+> +	else
+> +		mask = ADIN2111_P2_FWD_UNK2HOST;
+> +
+> +	mutex_lock(&priv->lock);
+> +
+> +	/* Bridge core sets IFF_PROMISC on all interfaces and all frames would be
+> +	 * forwarded to the CPU over SPI. Allow this only on the single port MAC.
+> +	 */
 
-Yes, for sure, I should noticed in reply to my original patch -
+That is a bit of an over-simplification. But it is not clear to me yet
+if this hardware can do it all correct, so this is a good start.
 
-https://lkml.iu.edu/hypermail/linux/kernel/2112.1/09937.html
+> +static int adin1110_init_mac(struct adin1110_port_priv *port_priv)
+> +{
+> +	struct net_device *netdev = port_priv->netdev;
+> +	u8 mask[ETH_ALEN];
+> +	u8 mac[ETH_ALEN];
+> +	int ret;
+> +
+> +	memset(mask, 0xFF, ETH_ALEN);
+> +	ret = adin1110_write_mac_address(port_priv, ADIN_MAC_ADDR_SLOT, netdev->dev_addr, mask);
+> +	if (ret < 0) {
+> +		netdev_err(netdev, "Could not set MAC address: %pM, %d\n", mac, ret);
+> +		return ret;
+> +	}
 
-that both address and size should be 32-bit only.
+Better to call adin1110_set_mac_address()
 
-Fixed patch coming soon! :)
+> +
+> +	memset(mac, 0xFF, ETH_ALEN);
+> +	ret = adin1110_write_mac_address(port_priv, ADIN_MAC_BROADCAST_ADDR_SLOT, mac, mask);
+> +	if (ret < 0) {
+> +		netdev_err(netdev, "Could not set Broadcast MAC address: %d\n", ret);
+> +		return ret;
+> +	}
 
-David
+And i would suggest a little helper for this as well.
 
->
-> Regards,
-> Bjorn
->
->> +			ranges = <0 0 0 0 0x10000000>;
->>   			compatible = "arm,armv7-timer-mem";
->>   			reg = <0x0 0x0b120000 0x0 0x1000>;
->>   
->> @@ -535,49 +535,49 @@ frame@b120000 {
->>   				frame-number = <0>;
->>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
->>   					     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x0b121000 0x0 0x1000>,
->> -				      <0x0 0x0b122000 0x0 0x1000>;
->> +				reg = <0x0 0x0b121000 0x1000>,
->> +				      <0x0 0x0b122000 0x1000>;
->>   			};
->>   
->>   			frame@b123000 {
->>   				frame-number = <1>;
->>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0xb123000 0x0 0x1000>;
->> +				reg = <0x0 0x0b123000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@b124000 {
->>   				frame-number = <2>;
->>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x0b124000 0x0 0x1000>;
->> +				reg = <0x0 0x0b124000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@b125000 {
->>   				frame-number = <3>;
->>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x0b125000 0x0 0x1000>;
->> +				reg = <0x0 0x0b125000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@b126000 {
->>   				frame-number = <4>;
->>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x0b126000 0x0 0x1000>;
->> +				reg = <0x0 0x0b126000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@b127000 {
->>   				frame-number = <5>;
->>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x0b127000 0x0 0x1000>;
->> +				reg = <0x0 0x0b127000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@b128000 {
->>   				frame-number = <6>;
->>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x0b128000 0x0 0x1000>;
->> +				reg = <0x0 0x0b128000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   		};
->> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
->> index 5dcaac23a138..4b7be66e04df 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
->> @@ -3385,8 +3385,8 @@ watchdog@17c10000 {
->>   
->>   		timer@17c20000{
->>   			#address-cells = <2>;
->> -			#size-cells = <2>;
->> -			ranges;
->> +			#size-cells = <1>;
->> +			ranges = <0 0 0 0 0x20000000>;
->>   			compatible = "arm,armv7-timer-mem";
->>   			reg = <0 0x17c20000 0 0x1000>;
->>   
->> @@ -3394,49 +3394,49 @@ frame@17c21000 {
->>   				frame-number = <0>;
->>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
->>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c21000 0 0x1000>,
->> -				      <0 0x17c22000 0 0x1000>;
->> +				reg = <0 0x17c21000 0x1000>,
->> +				      <0 0x17c22000 0x1000>;
->>   			};
->>   
->>   			frame@17c23000 {
->>   				frame-number = <1>;
->>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c23000 0 0x1000>;
->> +				reg = <0 0x17c23000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c25000 {
->>   				frame-number = <2>;
->>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c25000 0 0x1000>;
->> +				reg = <0 0x17c25000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c27000 {
->>   				frame-number = <3>;
->>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c27000 0 0x1000>;
->> +				reg = <0 0x17c27000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c29000 {
->>   				frame-number = <4>;
->>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c29000 0 0x1000>;
->> +				reg = <0 0x17c29000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c2b000 {
->>   				frame-number = <5>;
->>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c2b000 0 0x1000>;
->> +				reg = <0 0x17c2b000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c2d000 {
->>   				frame-number = <6>;
->>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c2d000 0 0x1000>;
->> +				reg = <0 0x17c2d000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   		};
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> index e66fc67de206..1b81cd1e84e9 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> @@ -4772,8 +4772,8 @@ watchdog@17c10000 {
->>   
->>   		timer@17c20000 {
->>   			#address-cells = <2>;
->> -			#size-cells = <2>;
->> -			ranges;
->> +			#size-cells = <1>;
->> +			ranges = <0 0 0 0 0x20000000>;
->>   			compatible = "arm,armv7-timer-mem";
->>   			reg = <0 0x17c20000 0 0x1000>;
->>   
->> @@ -4781,49 +4781,49 @@ frame@17c21000 {
->>   				frame-number = <0>;
->>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
->>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c21000 0 0x1000>,
->> -				      <0 0x17c22000 0 0x1000>;
->> +				reg = <0 0x17c21000 0x1000>,
->> +				      <0 0x17c22000 0x1000>;
->>   			};
->>   
->>   			frame@17c23000 {
->>   				frame-number = <1>;
->>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c23000 0 0x1000>;
->> +				reg = <0 0x17c23000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c25000 {
->>   				frame-number = <2>;
->>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c25000 0 0x1000>;
->> +				reg = <0 0x17c25000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c27000 {
->>   				frame-number = <3>;
->>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c27000 0 0x1000>;
->> +				reg = <0 0x17c27000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c29000 {
->>   				frame-number = <4>;
->>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c29000 0 0x1000>;
->> +				reg = <0 0x17c29000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c2b000 {
->>   				frame-number = <5>;
->>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c2b000 0 0x1000>;
->> +				reg = <0 0x17c2b000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c2d000 {
->>   				frame-number = <6>;
->>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17c2d000 0 0x1000>;
->> +				reg = <0 0x17c2d000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   		};
->> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->> index 0692ae0e60a4..9a1705bfa425 100644
->> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
->> @@ -4949,8 +4949,8 @@ slimbam: dma-controller@17184000 {
->>   
->>   		timer@17c90000 {
->>   			#address-cells = <2>;
->> -			#size-cells = <2>;
->> -			ranges;
->> +			#size-cells = <1>;
->> +			ranges = <0 0 0 0 0x20000000>;
->>   			compatible = "arm,armv7-timer-mem";
->>   			reg = <0 0x17c90000 0 0x1000>;
->>   
->> @@ -4958,49 +4958,49 @@ frame@17ca0000 {
->>   				frame-number = <0>;
->>   				interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
->>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17ca0000 0 0x1000>,
->> -				      <0 0x17cb0000 0 0x1000>;
->> +				reg = <0 0x17ca0000 0x1000>,
->> +				      <0 0x17cb0000 0x1000>;
->>   			};
->>   
->>   			frame@17cc0000 {
->>   				frame-number = <1>;
->>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17cc0000 0 0x1000>;
->> +				reg = <0 0x17cc0000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17cd0000 {
->>   				frame-number = <2>;
->>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17cd0000 0 0x1000>;
->> +				reg = <0 0x17cd0000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17ce0000 {
->>   				frame-number = <3>;
->>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17ce0000 0 0x1000>;
->> +				reg = <0 0x17ce0000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17cf0000 {
->>   				frame-number = <4>;
->>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17cf0000 0 0x1000>;
->> +				reg = <0 0x17cf0000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17d00000 {
->>   				frame-number = <5>;
->>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17d00000 0 0x1000>;
->> +				reg = <0 0x17d00000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17d10000 {
->>   				frame-number = <6>;
->>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0 0x17d10000 0 0x1000>;
->> +				reg = <0 0x17d10000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   		};
->> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
->> index d4f8f33f3f0c..fc473cb8c93b 100644
->> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
->> @@ -1305,56 +1305,56 @@ timer@17c20000 {
->>   			reg = <0x0 0x17c20000 0x0 0x1000>;
->>   			clock-frequency = <19200000>;
->>   			#address-cells = <2>;
->> -			#size-cells = <2>;
->> -			ranges;
->> +			#size-cells = <1>;
->> +			ranges = <0 0 0 0 0x20000000>;
->>   
->>   			frame@17c21000 {
->>   				frame-number = <0>;
->>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
->>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c21000 0x0 0x1000>,
->> -				      <0x0 0x17c22000 0x0 0x1000>;
->> +				reg = <0x0 0x17c21000 0x1000>,
->> +				      <0x0 0x17c22000 0x1000>;
->>   			};
->>   
->>   			frame@17c23000 {
->>   				frame-number = <1>;
->>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c23000 0x0 0x1000>;
->> +				reg = <0x0 0x17c23000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c25000 {
->>   				frame-number = <2>;
->>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c25000 0x0 0x1000>;
->> +				reg = <0x0 0x17c25000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c27000 {
->>   				frame-number = <3>;
->>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c27000 0x0 0x1000>;
->> +				reg = <0x0 0x17c27000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c29000 {
->>   				frame-number = <4>;
->>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c29000 0x0 0x1000>;
->> +				reg = <0x0 0x17c29000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c2b000 {
->>   				frame-number = <5>;
->>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c2b000 0x0 0x1000>;
->> +				reg = <0x0 0x17c2b000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c2d000 {
->>   				frame-number = <6>;
->>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c2d000 0x0 0x1000>;
->> +				reg = <0x0 0x17c2d000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   		};
->> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
->> index 8ea44c4b56b4..066cc00191b2 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
->> @@ -3945,8 +3945,8 @@ watchdog@17c10000 {
->>   
->>   		timer@17c20000 {
->>   			#address-cells = <2>;
->> -			#size-cells = <2>;
->> -			ranges;
->> +			#size-cells = <1>;
->> +			ranges = <0 0 0 0 0x20000000>;
->>   			compatible = "arm,armv7-timer-mem";
->>   			reg = <0x0 0x17c20000 0x0 0x1000>;
->>   			clock-frequency = <19200000>;
->> @@ -3955,49 +3955,49 @@ frame@17c21000{
->>   				frame-number = <0>;
->>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
->>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c21000 0x0 0x1000>,
->> -				      <0x0 0x17c22000 0x0 0x1000>;
->> +				reg = <0x0 0x17c21000 0x1000>,
->> +				      <0x0 0x17c22000 0x1000>;
->>   			};
->>   
->>   			frame@17c23000 {
->>   				frame-number = <1>;
->>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c23000 0x0 0x1000>;
->> +				reg = <0x0 0x17c23000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c25000 {
->>   				frame-number = <2>;
->>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c25000 0x0 0x1000>;
->> +				reg = <0x0 0x17c25000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c27000 {
->>   				frame-number = <3>;
->>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c26000 0x0 0x1000>;
->> +				reg = <0x0 0x17c26000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c29000 {
->>   				frame-number = <4>;
->>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c29000 0x0 0x1000>;
->> +				reg = <0x0 0x17c29000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c2b000 {
->>   				frame-number = <5>;
->>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c2b000 0x0 0x1000>;
->> +				reg = <0x0 0x17c2b000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c2d000 {
->>   				frame-number = <6>;
->>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c2d000 0x0 0x1000>;
->> +				reg = <0x0 0x17c2d000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   		};
->> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
->> index cf0c97bd5ad3..ae7d0573e1dc 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
->> @@ -4868,8 +4868,8 @@ watchdog@17c10000 {
->>   
->>   		timer@17c20000 {
->>   			#address-cells = <2>;
->> -			#size-cells = <2>;
->> -			ranges;
->> +			#size-cells = <1>;
->> +			ranges = <0 0 0 0 0x20000000>;
->>   			compatible = "arm,armv7-timer-mem";
->>   			reg = <0x0 0x17c20000 0x0 0x1000>;
->>   			clock-frequency = <19200000>;
->> @@ -4878,49 +4878,49 @@ frame@17c21000 {
->>   				frame-number = <0>;
->>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
->>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c21000 0x0 0x1000>,
->> -				      <0x0 0x17c22000 0x0 0x1000>;
->> +				reg = <0x0 0x17c21000 0x1000>,
->> +				      <0x0 0x17c22000 0x1000>;
->>   			};
->>   
->>   			frame@17c23000 {
->>   				frame-number = <1>;
->>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c23000 0x0 0x1000>;
->> +				reg = <0x0 0x17c23000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c25000 {
->>   				frame-number = <2>;
->>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c25000 0x0 0x1000>;
->> +				reg = <0x0 0x17c25000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c27000 {
->>   				frame-number = <3>;
->>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c27000 0x0 0x1000>;
->> +				reg = <0x0 0x17c27000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c29000 {
->>   				frame-number = <4>;
->>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c29000 0x0 0x1000>;
->> +				reg = <0x0 0x17c29000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c2b000 {
->>   				frame-number = <5>;
->>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c2b000 0x0 0x1000>;
->> +				reg = <0x0 0x17c2b000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c2d000 {
->>   				frame-number = <6>;
->>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c2d000 0x0 0x1000>;
->> +				reg = <0x0 0x17c2d000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   		};
->> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
->> index 743cba9b683c..58e6bb4a1899 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
->> @@ -1934,8 +1934,8 @@ intc: interrupt-controller@17a00000 {
->>   		timer@17c20000 {
->>   			compatible = "arm,armv7-timer-mem";
->>   			#address-cells = <2>;
->> -			#size-cells = <2>;
->> -			ranges;
->> +			#size-cells = <1>;
->> +			ranges = <0 0 0 0 0x20000000>;
->>   			reg = <0x0 0x17c20000 0x0 0x1000>;
->>   			clock-frequency = <19200000>;
->>   
->> @@ -1943,49 +1943,49 @@ frame@17c21000 {
->>   				frame-number = <0>;
->>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
->>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c21000 0x0 0x1000>,
->> -				      <0x0 0x17c22000 0x0 0x1000>;
->> +				reg = <0x0 0x17c21000 0x1000>,
->> +				      <0x0 0x17c22000 0x1000>;
->>   			};
->>   
->>   			frame@17c23000 {
->>   				frame-number = <1>;
->>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c23000 0x0 0x1000>;
->> +				reg = <0x0 0x17c23000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c25000 {
->>   				frame-number = <2>;
->>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c25000 0x0 0x1000>;
->> +				reg = <0x0 0x17c25000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c27000 {
->>   				frame-number = <3>;
->>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c27000 0x0 0x1000>;
->> +				reg = <0x0 0x17c27000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c29000 {
->>   				frame-number = <4>;
->>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c29000 0x0 0x1000>;
->> +				reg = <0x0 0x17c29000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c2b000 {
->>   				frame-number = <5>;
->>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c2b000 0x0 0x1000>;
->> +				reg = <0x0 0x17c2b000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17c2d000 {
->>   				frame-number = <6>;
->>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17c2d000 0x0 0x1000>;
->> +				reg = <0x0 0x17c2d000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   		};
->> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> index 7d08fad76371..64ceff515337 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> @@ -2858,8 +2858,8 @@ intc: interrupt-controller@17100000 {
->>   		timer@17420000 {
->>   			compatible = "arm,armv7-timer-mem";
->>   			#address-cells = <2>;
->> -			#size-cells = <2>;
->> -			ranges;
->> +			#size-cells = <1>;
->> +			ranges = <0 0 0 0 0x20000000>;
->>   			reg = <0x0 0x17420000 0x0 0x1000>;
->>   			clock-frequency = <19200000>;
->>   
->> @@ -2867,49 +2867,49 @@ frame@17421000 {
->>   				frame-number = <0>;
->>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
->>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17421000 0x0 0x1000>,
->> -				      <0x0 0x17422000 0x0 0x1000>;
->> +				reg = <0x0 0x17421000 0x1000>,
->> +				      <0x0 0x17422000 0x1000>;
->>   			};
->>   
->>   			frame@17423000 {
->>   				frame-number = <1>;
->>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17423000 0x0 0x1000>;
->> +				reg = <0x0 0x17423000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17425000 {
->>   				frame-number = <2>;
->>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17425000 0x0 0x1000>;
->> +				reg = <0x0 0x17425000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17427000 {
->>   				frame-number = <3>;
->>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17427000 0x0 0x1000>;
->> +				reg = <0x0 0x17427000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@17429000 {
->>   				frame-number = <4>;
->>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x17429000 0x0 0x1000>;
->> +				reg = <0x0 0x17429000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@1742b000 {
->>   				frame-number = <5>;
->>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x1742b000 0x0 0x1000>;
->> +				reg = <0x0 0x1742b000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   
->>   			frame@1742d000 {
->>   				frame-number = <6>;
->>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
->> -				reg = <0x0 0x1742d000 0x0 0x1000>;
->> +				reg = <0x0 0x1742d000 0x1000>;
->>   				status = "disabled";
->>   			};
->>   		};
->> -- 
->> 2.35.1
->>
--- 
-David Heidelberg
-Consultant Software Engineer
+This partially answers my question above. But so far, i see no STP
+support?
 
-Matrix: @okias:matrix.org
+> +static int adin1110_net_open(struct net_device *net_dev)
+> +{
+> +	struct adin1110_port_priv *port_priv = netdev_priv(net_dev);
+> +	struct adin1110_priv *priv = port_priv->priv;
+> +	u32 val;
+> +	int ret;
+> +
+> +	mutex_lock(&priv->lock);
+> +
+> +	/* Configure MAC to compute and append the FCS itself. */
+> +	ret = adin1110_set_bits(priv, ADIN1110_CONFIG2, ADIN1110_CRC_APPEND, ADIN1110_CRC_APPEND);
+> +	if (ret < 0) {
+> +		mutex_unlock(&priv->lock);
+> +		return ret;
+> +	}
+> +
+> +	val = ADIN1110_TX_RDY_IRQ | ADIN1110_RX_RDY_IRQ | ADIN1110_SPI_ERR_IRQ;
+> +	if (priv->cfg->id == ADIN2111_MAC)
+> +		val |= ADIN2111_RX_RDY_IRQ;
+> +
+> +	priv->irq_mask = val;
+> +	ret = adin1110_write_reg(priv, ADIN1110_IMASK1, ~val);
+> +	if (ret < 0) {
+> +		netdev_err(net_dev, "Failed to enable chip IRQs: %d\n", ret);
+> +		mutex_unlock(&priv->lock);
+> +		return ret;
+> +	}
 
+Rather than have all these 
+		mutex_unlock(&priv->lock);
++		return ret;
+
+it is better to have
+                goto out;
+
+out:
+		mutex_unlock(&priv->lock);
+		return ret;
+
+You are less likely to miss an unlock. Please do this everywhere.
+
+> +void adin1110_ndo_get_stats64(struct net_device *dev, struct rtnl_link_stats64 *storage)
+> +{
+> +	struct adin1110_port_priv *port_priv = netdev_priv(dev);
+> +	struct adin1110_priv *priv = port_priv->priv;
+> +	u32 val;
+> +
+> +	mutex_lock(&priv->lock);
+
+I really should remember this, since it keeps coming up again and
+again. I think this gets called in a context which does not allow
+blocking.
+
+> +static void adin1110_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *di)
+> +{
+> +	strscpy(di->driver, "ADIN1110", sizeof(di->driver));
+> +	strscpy(di->version, "1.00", sizeof(di->version));
+
+No version information please, it is meaningless. The core will fill
+in the kernel version, which at least is a little bit useful.
+
+> +static int adin1110_hw_forwarding(struct adin1110_priv *priv, bool enable)
+> +{
+> +	int mac_nr;
+> +	int ret;
+> +
+> +	mutex_lock(&priv->lock);
+> +
+> +	/* Configure MAC to forward unknown host to other port. */
+
+Does unknown also go to the CPU? You need the software bridge to see
+such frames, it might know where they go, e.g. over a VPN, out some
+other Ethernet interface etc.
+
+> +	ret = adin1110_set_bits(priv, ADIN1110_CONFIG2, ADIN2111_FWD_UNK2PORT,
+> +				enable ? ADIN2111_FWD_UNK2PORT : 0);
+> +	if (ret < 0) {
+> +		mutex_unlock(&priv->lock);
+> +		return ret;
+> +	}
+> +
+> +	/* Broadcast and multicast should also be forwarded to the other port */
+
+So it seems like there is no STP support. If your network has loops,
+it will die in a broadcast storm. Is STP something you plan to add
+later?
+
+> +static int adin1110_port_bridge_join(struct adin1110_port_priv *port_priv,
+> +				     struct net_device *bridge)
+> +{
+> +	struct adin1110_priv *priv = port_priv->priv;
+> +	int ret = 0;
+> +
+> +	/* Having the same port belong to multiple bridges is not supported */
+> +	if (port_priv->bridge && port_priv->bridge != bridge)
+> +		return -EOPNOTSUPP;
+
+That is always true, so i don't think you need to check this. If this
+happens, something is broken in the core.
+
+> +
+> +	port_priv->bridge = bridge;
+> +
+> +	/* If other port joined same bridge, allow forwarding between ports */
+> +	if (priv->ports[0]->bridge == priv->ports[1]->bridge)
+> +		ret = adin1110_hw_forwarding(priv, true);
+> +
+> +	return ret;
+> +}
+> +
+
+> +static int adin1110_probe_netdevs(struct adin1110_priv *priv)
+> +{
+> +	struct device *dev = &priv->spidev->dev;
+> +	struct adin1110_port_priv *port_priv;
+> +	struct net_device *netdev;
+> +	int ret;
+> +	int i;
+> +
+> +	for (i = 0; i < priv->cfg->ports_nr; i++) {
+> +		netdev = devm_alloc_etherdev(dev, sizeof(*port_priv));
+> +		if (!netdev)
+> +			return -ENOMEM;
+> +
+> +		port_priv = netdev_priv(netdev);
+> +		port_priv->netdev = netdev;
+> +		port_priv->priv = priv;
+> +		port_priv->cfg = priv->cfg;
+> +		port_priv->nr = i;
+> +		priv->ports[i] = port_priv;
+> +		SET_NETDEV_DEV(netdev, dev);
+> +
+> +		ret = device_get_ethdev_address(dev, netdev);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		netdev->irq = priv->spidev->irq;
+> +		INIT_WORK(&port_priv->tx_work, adin1110_tx_work);
+> +		INIT_WORK(&port_priv->rx_mode_work, adin1110_rx_mode_work);
+> +		skb_queue_head_init(&port_priv->txq);
+> +
+> +		netif_carrier_off(netdev);
+> +
+> +		netdev->if_port = IF_PORT_10BASET;
+> +		netdev->netdev_ops = &adin1110_netdev_ops;
+> +		netdev->ethtool_ops = &adin1110_ethtool_ops;
+> +		netdev->priv_flags |= IFF_UNICAST_FLT;
+> +		netdev->features |= NETIF_F_NETNS_LOCAL;
+> +
+> +		ret = devm_register_netdev(dev, netdev);
+> +		if (ret < 0) {
+> +			dev_err(dev, "failed to register network device\n");
+> +			return ret;
+> +		}
+> +
+> +		port_priv->phydev = get_phy_device(priv->mii_bus, i + 1, false);
+> +		if (!port_priv->phydev) {
+> +			netdev_err(netdev, "Could not find PHY with device address: %d.\n", i);
+> +			return -ENODEV;
+> +		}
+> +
+> +		port_priv->phydev = phy_connect(netdev, phydev_name(port_priv->phydev),
+> +						adin1110_adjust_link, PHY_INTERFACE_MODE_MII);
+
+That should probably be PHY_INTERFACE_MODE_INTERNAL.
+
+     Andrew

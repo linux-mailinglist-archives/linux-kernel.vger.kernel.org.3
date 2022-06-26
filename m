@@ -2,93 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B4655B3B5
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 21:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEFB55B3B9
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 21:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbiFZTPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 15:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
+        id S231969AbiFZTPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 15:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiFZTPL (ORCPT
+        with ESMTP id S231843AbiFZTPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 15:15:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690C5B7C2;
-        Sun, 26 Jun 2022 12:15:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 26 Jun 2022 15:15:46 -0400
+Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F81B7C2;
+        Sun, 26 Jun 2022 12:15:45 -0700 (PDT)
+Received: from newone.lan (_gateway [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21F22B80DF9;
-        Sun, 26 Jun 2022 19:15:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B7D6CC34114;
-        Sun, 26 Jun 2022 19:15:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656270907;
-        bh=43PGScvluWTooU/TYpWh1BYeq7eIjhr2zaDN3uAsJLk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=JfFBWEs5MAebQDhALvHVnoNL2v8cC/gHfCZE9dxKh1Y6V3zDoIJjguekpvDE/kVJP
-         M0K3Ch93DRjbCAOEzKb0UPvV6zQ5z3nbt0SN+J+rF7sSz5FEXOBps9pH/4Gs84TY8i
-         FiGu/3m29U0JNsjSeMjXyAhQ4HEh/UntqGhkz+JxmBnYqoa9Kvi/kGabD6hqTaGiF3
-         ZtzNCmQcXCGoB6tgO4S22UxGbgIR14o3RZc1yWgqGAv700wNo6GMZtdsyRGeQKl4Kf
-         SYqOPNZ5mw5wBC557SRglRsypQaf1r7awJGPLYuue/dg+SPhPRQZEomo2RINvLUFYY
-         sZf5mYMuskcZA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9E002FD99FF;
-        Sun, 26 Jun 2022 19:15:07 +0000 (UTC)
-Subject: Re: [GIT PULL] perf tools fixes for v5.19: 2nd batch
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220626175707.1168954-1-acme@kernel.org>
-References: <20220626175707.1168954-1-acme@kernel.org>
-X-PR-Tracked-List-Id: <linux-perf-users.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220626175707.1168954-1-acme@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.19-2022-06-26
-X-PR-Tracked-Commit-Id: f8d866194082e703c86751cceb07f6243cde96d2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 893d1eaa56e8ed8ebf0726556454c9e53c0bf047
-Message-Id: <165627090761.30585.13601361175916372679.pr-tracker-bot@kernel.org>
-Date:   Sun, 26 Jun 2022 19:15:07 +0000
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ali Saidi <alisaidi@amazon.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
-        Gang Li <ligang.bdlg@bytedance.com>,
-        German Gomez <german.gomez@arm.com>,
-        Ian Rogers <irogers@google.com>, Leo Yan <leo.yan@linaro.org>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Raul Silvera <rsilvera@google.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ixit.cz (Postfix) with ESMTPSA id 6780E2007F;
+        Sun, 26 Jun 2022 21:15:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1656270943;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oiSdtipuF7avckNwRyOmxo7gG8XRjIVtSeP2AN33dFU=;
+        b=vAZOM/3ss7UHZHD4lk4K+IPyVUqgLszbc8EU0idPnTwyrFffyfDvIaZ7+uJZyK2BAgEl0l
+        zEe0oGn+1a7OtO7TJKKF4galorZGz20UlJto3PeRpnz8zTfrknGOr5pSXqNFF1qvllEshB
+        HH0cfAVsQLVm5GSoKyRiqxPk1JFt0KM=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: add missing compatible for pm8916
+Date:   Sun, 26 Jun 2022 21:15:40 +0200
+Message-Id: <20220626191540.176574-1-david@ixit.cz>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_DYNAMIC,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 26 Jun 2022 14:57:07 -0300:
+Format should be: device specific, generic compatible.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v5.19-2022-06-26
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ arch/arm64/boot/dts/qcom/pm8916.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/893d1eaa56e8ed8ebf0726556454c9e53c0bf047
-
-Thank you!
-
+diff --git a/arch/arm64/boot/dts/qcom/pm8916.dtsi b/arch/arm64/boot/dts/qcom/pm8916.dtsi
+index d58902432812..aedc0aa5602f 100644
+--- a/arch/arm64/boot/dts/qcom/pm8916.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm8916.dtsi
+@@ -108,7 +108,7 @@ pm8916_mpps: mpps@a000 {
+ 		};
+ 
+ 		pm8916_gpios: gpios@c000 {
+-			compatible = "qcom,pm8916-gpio";
++			compatible = "qcom,pm8916-gpio", "qcom,spmi-gpio";
+ 			reg = <0xc000>;
+ 			gpio-controller;
+ 			#gpio-cells = <2>;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.35.1
+

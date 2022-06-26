@@ -2,79 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6559A55B449
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 00:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC5255B44E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 00:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiFZWPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 18:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        id S230417AbiFZWWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 18:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiFZWPE (ORCPT
+        with ESMTP id S229538AbiFZWWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 18:15:04 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C7E2DC1;
-        Sun, 26 Jun 2022 15:15:03 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id a4so2305lfm.0;
-        Sun, 26 Jun 2022 15:15:02 -0700 (PDT)
+        Sun, 26 Jun 2022 18:22:05 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2EA2DD6
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 15:22:04 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id pk21so15417259ejb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 15:22:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XHCbllkBeLeSjH8vK0GpVgCRiCwSLLCr2jMYejhftaU=;
-        b=ZE0PLd6l+It8dLl4j2n+JmT2JwuQgVzYexXvyObyR1qap9PLYIaruYuhbqDVr8sImp
-         cumwYN+jY6+msbvyY3iMDMlYLtk2zS6ktEOV13LCWXwUH8umnm+y5GvdJZfc9MH5bR4N
-         pCalbqA8BTOyyQmIHBMYD7+/A4frglOPOqjzTBRkVSTwTO7qSyaqIZpEbi5sjcs9kXUa
-         O/Tu0Nb+FR1zivFm5858rD9htf6J95OrnsQZ+p0ryEn33sQEQc0Q2fsOPnaXvd9HW0Lt
-         avqEwy2idiVMD9/YE6K4z3KJjhIPnv4ZD1Gdy14T60MZF8e2RT1qy/l0ksZnJqiahyuN
-         zWeQ==
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/dRXy76sdL7Y/YzwJ1RSzZzZXuzUmmJM6patKce0lSs=;
+        b=G/QzgObNuFFB6sQpSeSJ/EwNSjfapmrUIiFxEqiKsD92cORGQxK0WvfCeqrW1RyHgL
+         dkMOce31bPuID+gguD1GV16x5RlELmZfSHbvHFYMMZOBrCJMX8673EGBBHYheLhWCTec
+         y1BXVOsVFp4erFXgxhTzJOLLaFAWEkvsQRc54jOLsou7qpuk9EE2XHyPqJtDhEi8yyWr
+         hL0Ud993pU5ey7KpUxaavcoHG880XaiTs7PnAtxk8fxT18+6c8Vrwuo478eg9B9yjlqY
+         qk9bp3Io7FlriuoklO4v4NiDv32p1Jy063RsTmSAZVeIiqSktHSbg+jbMyVB+7DvlpaS
+         xQ6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XHCbllkBeLeSjH8vK0GpVgCRiCwSLLCr2jMYejhftaU=;
-        b=MOi8lFN3rfAgPC7DIhZsVZe7U+TLp969SmPgUbGwTYoaBwyF8c2mmGPPAIcZqlvTzK
-         /CY73Czu4ZH91st3cXBlYs0ZTViop0Kimp+VbJUrk+cuszrzjH/aYr469AS4KNq3GvuQ
-         PK02f84gqCNYzW8SsZ69cBTNnjBpd3TOt+Qp7TRPRXQla6cKLzF5UU/eglhI7MZ+jg4U
-         NQRAkbPVnbQWaT4FJ3CVDp5sRWLw6QnTGAycwenyAqoR+pLsiJBZmoLmDJ4Qo5fz8t4v
-         +LtWJl0UBqvYww1CRkY9g63t7v79wcaNEQQArcAE6yjEZwhTdmGEXaP4cM2YIexPoFk9
-         QrzQ==
-X-Gm-Message-State: AJIora8GSWTEnSeDaqm1ByjKDExztUf+2aXndGdCeUzZbXjh81ShrIhP
-        Y6X0dNkEBppI2BMhTv3TUlU=
-X-Google-Smtp-Source: AGRyM1ttJa7fcjrbvFQtIejHinelD+5+3JfCeRzS/Y6MzAL2ZVVQ9HYfV3+Dp+3KNEfsjtZmJ1rUXQ==
-X-Received: by 2002:a05:6512:793:b0:47f:82d0:fadb with SMTP id x19-20020a056512079300b0047f82d0fadbmr6578789lfr.545.1656281701212;
-        Sun, 26 Jun 2022 15:15:01 -0700 (PDT)
-Received: from [192.168.2.145] ([109.252.118.164])
-        by smtp.googlemail.com with ESMTPSA id s13-20020a05651c200d00b0025a928f3d63sm1117650ljo.61.2022.06.26.15.15.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 15:15:00 -0700 (PDT)
-Message-ID: <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
-Date:   Mon, 27 Jun 2022 01:14:54 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/dRXy76sdL7Y/YzwJ1RSzZzZXuzUmmJM6patKce0lSs=;
+        b=C8+QSPEWytwkBtN0xsZeiA6jgoZFXqyNgxgSlO5MaSg093phXs5AGywWLxwPUGzsXN
+         1tbOsm0ygN1mwny9yXHrg2fDJciisXcyOd36uKCPZLM1TLP1qsErNKo7XZu4VtvTkXm6
+         CRxdQfGbsyRz1bfg8d+QRI9QjE6Rw7sWv22UTErDzEWW6tTstHN1Jx9ZW+nGeI7XeIFp
+         lBJg7K8+iDB4h980/T8P6BXq2Zq7VVNEyTuuxF+ggMqXk1gFzllDUeHI9BTdHSnhbxw2
+         OiDZwG9Pzo+cBVwRGnPg5OQqu3SgDK/s7XjM2GKSZFm/kpqS0okMkGFihrTNylPY1cEF
+         KSDA==
+X-Gm-Message-State: AJIora9ddypgXRsb/p3FkJEaqRFZRwyHOgqAvT7ORMFlk4FQsRKtkxR0
+        cPlEpIqWYhOIGSFLOXEtwr7uaTnVWDhlU47Bo0I=
+X-Google-Smtp-Source: AGRyM1sLRgxNCsB7cXaoTsisvOlnKbFi+KeCPUXiQpDKnxmlU0RfmCxf8a50de/VHNNaGr0vNXlRLQJlSpLEs7hCE7s=
+X-Received: by 2002:a17:906:7a0e:b0:722:e8c5:ee96 with SMTP id
+ d14-20020a1709067a0e00b00722e8c5ee96mr9907372ejo.147.1656282122843; Sun, 26
+ Jun 2022 15:22:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
- <20220624004831.po35sowzfo4c47b3@vireshk-i7>
- <20220624005700.oj4etaajbutvsym7@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220624005700.oj4etaajbutvsym7@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220616133811.1674777-1-narmstrong@baylibre.com> <20220616133811.1674777-3-narmstrong@baylibre.com>
+In-Reply-To: <20220616133811.1674777-3-narmstrong@baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 27 Jun 2022 00:21:52 +0200
+Message-ID: <CAFBinCCcx_pG7rsMMGsoOOZC6E0-+qiWY3HPQTizMsDWm9wBnw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] phy: amlogic: Add G12A Analog MIPI D-PHY driver
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     kishon@ti.com, vkoul@kernel.org, linux-phy@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,39 +67,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-24.06.2022 03:57, Viresh Kumar пишет:
-> On 24-06-22, 06:18, Viresh Kumar wrote:
->> +       struct dev_pm_opp_config config = {
->> +               /*
->> +                * For some devices we don't have any OPP table in the DT, and
->> +                * in order to use the same code path for all the devices, we
->> +                * create a dummy OPP table for them via this. The dummy OPP
->> +                * table is only capable of doing clk_set_rate() on invocation
->> +                * of dev_pm_opp_set_rate() and doesn't provide any other
->> +                * functionality.
->> +                */
->> +               .clk_names = NULL,
->> +               .clk_count = 1,
->> +       };
-> 
-> Slight modification here, sorry about that. We just need to set the
-> name as NULL and not the array itself.
-> 
-> diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
-> index cd53e46c4058..6a099d764cce 100644
-> --- a/drivers/soc/tegra/common.c
-> +++ b/drivers/soc/tegra/common.c
-> @@ -116,7 +116,7 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
->                  * of dev_pm_opp_set_rate() and doesn't provide any other
->                  * functionality.
->                  */
-> -               .clk_names = NULL,
-> +               .clk_names = (const char *[]){ NULL },
->                 .clk_count = 1,
->         };
-> 
+Hi Neil,
 
-Looks okay. If you'll solve the cpufreq problem where OPP config is set
-by two drivers for the same cpu device and will keep the set_opp()
-helper that is needed by the Tegra 3d driver, then it all should work
-for Tegra. Looking forward to the next update of the OPP patches, thank you.
+On Thu, Jun 16, 2022 at 3:39 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
+>
+> The Amlogic G12A SoCs embeds an Analog MIPI D-PHY used to communicate with DSI
+> panels.
+>
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> ---
+>  drivers/phy/amlogic/Kconfig                   |  12 ++
+>  drivers/phy/amlogic/Makefile                  |   1 +
+>  .../amlogic/phy-meson-g12a-mipi-dphy-analog.c | 177 ++++++++++++++++++
+>  3 files changed, 190 insertions(+)
+>  create mode 100644 drivers/phy/amlogic/phy-meson-g12a-mipi-dphy-analog.c
+>
+> diff --git a/drivers/phy/amlogic/Kconfig b/drivers/phy/amlogic/Kconfig
+> index 486ca23aba32..e4d1170efd54 100644
+> --- a/drivers/phy/amlogic/Kconfig
+> +++ b/drivers/phy/amlogic/Kconfig
+> @@ -59,6 +59,18 @@ config PHY_MESON_G12A_USB3_PCIE
+>           in Meson G12A SoCs.
+>           If unsure, say N.
+>
+> +config PHY_MESON_G12A_MIPI_DPHY_ANALOG
+> +       tristate "Meson G12A MIPI Analog DPHY driver"
+> +       default ARCH_MESON
+> +       depends on OF && (ARCH_MESON || COMPILE_TEST)
+> +       select GENERIC_PHY
+> +       select REGMAP_MMIO
+I think this should be "select MFD_SYSCON" as we're not using
+REGMAP_MMIO directly
+
+[...]
+> +       /* Get the hhi system controller node */
+> +       map = syscon_node_to_regmap(of_get_parent(dev->of_node));
+I just reviewed a patch that adds of_node_put() for the node returned
+by of_get_parent() (after (syscon_node_to_regmap() has been used).
+I think we need the same here
+
+> +       if (IS_ERR(map)) {
+> +               dev_err(dev,
+> +                       "failed to get HHI regmap\n");
+> +               return PTR_ERR(map);
+to simplify we can use:
+    return dev_err_probe(dev, PTR_ERR(map), "failed to get HHI regmap\n");
+doesn't make much difference for this one though, but...
+
+[...]
+> +       priv->phy = devm_phy_create(dev, np, &phy_g12a_mipi_dphy_analog_ops);
+> +       if (IS_ERR(priv->phy)) {
+> +               ret = PTR_ERR(priv->phy);
+> +               if (ret != -EPROBE_DEFER)
+> +                       dev_err(dev, "failed to create PHY\n");
+> +               return ret;
+here dev_err_probe() would simplify the code a lot
+
+[...]
+> +static const struct of_device_id phy_g12a_mipi_dphy_analog_of_match[] = {
+> +       {
+> +               .compatible = "amlogic,g12a-mipi-dphy-analog",
+> +       },
+> +       { /* sentinel */ },
+super nit-pick: no comma here
+
+
+Best regards,
+Martin

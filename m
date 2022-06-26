@@ -2,68 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8812C55B3F8
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 22:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AD055B3FD
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 22:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbiFZUFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 16:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
+        id S232186AbiFZUGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 16:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbiFZUFq (ORCPT
+        with ESMTP id S232066AbiFZUGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 16:05:46 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BB35FA1
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:05:41 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id h13-20020a63e14d000000b0040df75eaa2eso476742pgk.21
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:05:41 -0700 (PDT)
+        Sun, 26 Jun 2022 16:06:22 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7275FA1
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:06:21 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id k20so5707438qkj.1
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:06:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=SHvTwEAagVJ3mN0Qty2biE6ESSKF4d2LGs55m3Aiei8=;
-        b=VVxioJBPdc/m1LIyig1BROTV0DRf8OjryQD0bdHRYx5o6Jbm5lBSp6PTgl/VPQh8as
-         OmtcsPcZX8wIpv5fKdGWrZu4XIWfsMpjR+pG78qY8QHLU5yVmWhEE/0OOttT85RD4dqn
-         qGHQ5wjU+yOSTbZ/btlh0yn+PYmPNPHRK5eZ9L52kNZfbQ3SUw/3MGImeb/jKKA7kc2R
-         PlI0qL+He4FiPTydANKCdpRcGbLtJuj0QDYMc91abiJ1N/p2khYLKRrJceIk6liEqbUK
-         t+d3zHcQmQ/NrDLe2jX010CfUy3uprFYGV+WAmXNswcue0MyxSIN1JGut2EOnmfgTM5X
-         MYNA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZgLetThySYV51Aytz6mh0N038I4xXTGk9aBFCM9zRec=;
+        b=a2Yt5gzzM3yzj5vSUuIuvXaPNDCciwPVd7rzWq4cowkgBqcx+0pxMCgMZCVbN+25eN
+         Ony8G9mj9cbyeEOSU5Me4xp2a17SHxR5i1r5/mmdtI6HyBXGax89T3xQf7UNNHdJRpfc
+         J6YqrilbDb8wGPvT7Hb6VNr0P0ByVQgFF+OLRvsF4c2C/c6TEnY2IAPnFPnrPH5ly5fN
+         MuXffAihwZOCAxMzFwCNm1snokHyBLhzOoGZCJABPNud0Cju1PpHaHNMXEe2iCiiIDgA
+         pjh2RNHChebcQ6ZmAF+5zNHcKVVkpYI9/dVr7PnKms80UqujZdm0vmBr03b9x1qVLnKA
+         nnrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=SHvTwEAagVJ3mN0Qty2biE6ESSKF4d2LGs55m3Aiei8=;
-        b=PMqdI1VwlBnlFpK6CCCQDh5nWwW3iHUNqjamQb7s9i1ViB+8Zm6oEP4mE5/YyOS8bZ
-         Dad32Lq7qBDmQJIFje4InwRFEPogvNq1hRSEUCfoDYEYa+l9karArCUxFUaSTgcJPIzb
-         XYJqWgESO/8IpRaZXkLS07RH/7PfXnO1rqKT0mnOV0RqahxXFIgZbuXI9MkALOFM1q6S
-         581LniRRpvYyiLZS9v9TNdyEVGY4XwQc56L8LYf3/xziYPJyxPTHCsMNFIwttIhVMHp6
-         jmrYNrrECi04yyPS44TIaXNnS6A0wbxY1eZDzLoHaJp/ReXbCpCkSqVnVbLwBPCny+iX
-         06bg==
-X-Gm-Message-State: AJIora+lRvnCZmpBo+4xNklA1DFn+7lmq31I7SD3CTQvV9ZYMW8XsKs+
-        01vKOao/c29R8gkyxcWAtiKc6FUBN38J
-X-Google-Smtp-Source: AGRyM1vwun+MwnGbBaWTTQkqAwwk+stfTrLtMzekZGGLsJgE5sSyPtAqM2KhNOJ9qp0IkdYiIX9eILX3bXPT
-X-Received: from mizhang-super.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1071])
- (user=mizhang job=sendgmr) by 2002:a05:6a00:889:b0:510:91e6:6463 with SMTP id
- q9-20020a056a00088900b0051091e66463mr11138566pfj.58.1656273941306; Sun, 26
- Jun 2022 13:05:41 -0700 (PDT)
-Reply-To: Mingwei Zhang <mizhang@google.com>
-Date:   Sun, 26 Jun 2022 20:05:38 +0000
-Message-Id: <20220626200538.3210528-1-mizhang@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH] kvm: nVMX: add tracepoint for kvm:kvm_nested_vmrun
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZgLetThySYV51Aytz6mh0N038I4xXTGk9aBFCM9zRec=;
+        b=xyU/Ar1fIVu394MJWgaqUk8cpmSMhbygLTyUfbfArmDYwxN9bUHignZDztWSoDebX0
+         b0L763ZbleaOGA4MluJXOGu3UOPFuFFmn1Ilu+/n/o8jnmJRGORrg1ond6GATzVOMnvg
+         ndhMyhLggZfu4DuEXypZC9FMA9m67MX/zidkvAg5JAuOPLI4H04Qy5GbPIKh4Rp4VhOT
+         d8SZTxNO4lslQHuoso/F0y5WAArttQrIc3ZlFcsWtkRsfwxfzFdztvERgoFfT99EiCQy
+         mFGCSxdEy+S80CIyzlMI5t8Q6ULmF1dKH1iQ07/Z/F3WOSi8wV/DCYGiS7/wWgGSVmRn
+         bgvg==
+X-Gm-Message-State: AJIora+Ut6zZZl0iAbhVaD/hK6kDO01V6UTsp6DJwBsnVceOgC6W8fck
+        ATiaIvV/9151ux4gSGdk+w==
+X-Google-Smtp-Source: AGRyM1sAJAR5/R/iEM96/kcnjIvfe6WWzgqnDoiUADllWujM4vzLfnQXAoshQW44CQdMxAIiWW0sxA==
+X-Received: by 2002:a05:620a:12f8:b0:6af:25af:f169 with SMTP id f24-20020a05620a12f800b006af25aff169mr1733612qkl.541.1656273980907;
+        Sun, 26 Jun 2022 13:06:20 -0700 (PDT)
+Received: from localhost (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id f1-20020a05620a280100b006a71c420460sm7540956qkp.22.2022.06.26.13.06.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Jun 2022 13:06:19 -0700 (PDT)
+Date:   Sun, 26 Jun 2022 16:06:18 -0400
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>
+Subject: Re: [RFC[ Alloc in vsprintf
+Message-ID: <20220626200618.jhxu5lg4w7o2irhr@moria.home.lan>
+References: <20220620004233.3805-1-kent.overstreet@gmail.com>
+ <0a5901f8460f452a89c9b0cda32fb833@AcuMS.aculab.com>
+ <20220620150514.3tjy5dv7pv5frcwd@moria.home.lan>
+ <53d77ae6101a0f24cfb694174d4c7699424c57e8.camel@perches.com>
+ <20220621005752.ohiq5besmy3r5rjo@moria.home.lan>
+ <a795818f9a49ed401bffc7c38ca7e39ae449e9e0.camel@perches.com>
+ <c1a92cf059fc9a3c395d87b11e9f757f5ec1ff6a.camel@perches.com>
+ <355e912490dbaef8fe4e12df0201c3f5b439565d.camel@perches.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <355e912490dbaef8fe4e12df0201c3f5b439565d.camel@perches.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,52 +87,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Matlack <dmatlack@google.com>
+On Sun, Jun 26, 2022 at 12:53:26PM -0700, Joe Perches wrote:
+> In a reply to the printbufs thread, I wrote a proposal to use an
+> alloc to reduce stack in vsprintf when CONFIG_KALLSYMS is enabled.
+> 
+> No one has replied to this but I think it's somewhat sensible.
+> 
+> Thoughts?
 
-This tracepoint is called by nested SVM during emulated VMRUN. Call
-also during emulated VMLAUNCH and VMRESUME in nested VMX.
-
-Attempt to use analagous VMCS fields to the VMCB fields that are
-reported in the SVM case:
-
-"int_ctl": 32-bit field of the VMCB that the CPU uses to deliver virtual
-interrupts. The analagous VMCS field is the 16-bit "guest interrupt
-status".
-
-"event_inj": 32-bit field of VMCB that is used to inject events
-(exceptions and interrupts) into the guest. The analagous VMCS field
-is the "VM-entry interruption-information field".
-
-"npt": 1 when the VCPU has enabled nested paging. The analagous VMCS
-field is the enable-EPT execution control.
-
-Signed-off-by: David Matlack <dmatlack@google.com>
-[Move the code into the nested_vmx_enter_non_root_mode().]
-Signed-off-by: Mingwei Zhang <mizhang@google.com>
----
- arch/x86/kvm/vmx/nested.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index f5cb18e00e78..29cc36cf2568 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -3367,6 +3367,13 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
- 	};
- 	u32 failed_index;
- 
-+	trace_kvm_nested_vmrun(
-+		kvm_rip_read(vcpu), vmx->nested.current_vmptr,
-+		vmcs12->guest_rip,
-+		vmcs12->guest_intr_status,
-+		vmcs12->vm_entry_intr_info_field,
-+		vmcs12->secondary_vm_exec_control & SECONDARY_EXEC_ENABLE_EPT);
-+
- 	kvm_service_local_tlb_flush_requests(vcpu);
- 
- 	evaluate_pending_interrupts = exec_controls_get(vmx) &
-
-base-commit: 922d4578cfd017da67f545bfd07331bda86f795d
--- 
-2.37.0.rc0.161.g10f37bed90-goog
-
+As functions get converted to printbufs the separate stack allocated buffers
+become unnecessary, because printbufs have helpers that do bounds checking and
+make outputting to the vsprintf buffer painless. So it's not necessary - I
+haven't fully converted symbol_string() yet but I'll do so by the time I mail
+out the next round of patches.

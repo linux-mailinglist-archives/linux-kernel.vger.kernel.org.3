@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9624455B176
+	by mail.lfdr.de (Postfix) with ESMTP id DF22C55B177
 	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 13:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234376AbiFZLMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 07:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
+        id S233675AbiFZLPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 07:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234366AbiFZLMh (ORCPT
+        with ESMTP id S229631AbiFZLPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 07:12:37 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5050F14083;
-        Sun, 26 Jun 2022 04:12:36 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id fi2so13400509ejb.9;
-        Sun, 26 Jun 2022 04:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=N6dLqEiFUVhyOT2Oi0mYoUX+LKu3KUGpm3OoFD9jDr0=;
-        b=Mns7/HuyuOY0O3axXDwhuxxoPT/0mdwpJNfNwMtaYzNw8EghJHoA9yzFw/9Jawvag/
-         RZkuW+aa/LQsebnv4W7qZk3Upnbzm2XmqCQFfetU87NnrbFY4un0XT6JREDDxrg+puzO
-         voDQty7jHi7ceCus+JQZth4msSPY3rfkOlO51Ud2+ShE3iHNHhVqPMB3lYCDzZPjZuXi
-         BXc9MtCzfMU1T9NsKO/tBSGSqhsd0lZzXj3rvXVueVOIOZJWh1mdnCCMqdEwhtUSkdiI
-         ZGb1QCMgiSR/XBFFzBcPlN9JqbLk5kltO9E70TuOCOwLdoJ68hsQaCL4BcdCTOP243Oz
-         ABMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=N6dLqEiFUVhyOT2Oi0mYoUX+LKu3KUGpm3OoFD9jDr0=;
-        b=DxlsEtX8DwBBzFhn6dugWoqsfeECxzlq02b7B2OTB9WSdC+wXt1BdPDMyEgjsLjvjo
-         lt9xJP48JU+uCRQLReCaOBc4I6sdzbsYxsq441pAih1XY8PPIwb7kIXwXUlmhvBSeCZ+
-         9FHOgo+EwWc3/5lgn8qZQPWBdpXQhb/awouw1vN8vYD+iGN+gLIncCg2kI11FryEEuaD
-         vpYBydfZ3oJTfNLvPbUm8uQtkWzKGZ8hTrt2xo9bUEl1GDYzN2Fntf7rMDLH82lSZ2UQ
-         2IKfvfQOIZrDbbcabwY1G+bCsC6f7g9qlREWoVLC4zsSHkU14BShj5OVKWo8A3prqvYa
-         yimQ==
-X-Gm-Message-State: AJIora86OffYMVigVLxtyMKPaMg2Aye8J4Jljpn0VYLp6nE9NQtblHE3
-        CImKgTNS4k/8UOwJRQdFFXk=
-X-Google-Smtp-Source: AGRyM1suGq/KD5mpzsSiyHVWqJ4zUnqnfvcAFvTBvWC3Wic6LaqR4l3n9LQSP9Zj2ho1z5/UnTWvbw==
-X-Received: by 2002:a17:907:1b28:b0:6fe:fc41:35ce with SMTP id mp40-20020a1709071b2800b006fefc4135cemr7875894ejc.153.1656241954751;
-        Sun, 26 Jun 2022 04:12:34 -0700 (PDT)
-Received: from opensuse.localnet (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
-        by smtp.gmail.com with ESMTPSA id i3-20020a170906444300b006feec47dae7sm3713749ejp.149.2022.06.26.04.12.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jun 2022 04:12:32 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>,
-        Filipe Manana <fdmanana@suse.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Qu Wenruo <wqu@suse.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH] btrfs: Convert zlib_compress_pages() to use kmap_local_page()
-Date:   Sun, 26 Jun 2022 13:12:31 +0200
-Message-ID: <2656130.mvXUDI8C0e@opensuse>
-In-Reply-To: <f65fd4fb-675a-3f9e-accb-77db9ad7d551@suse.com>
-References: <20220618092752.25153-1-fmdefrancesco@gmail.com> <3110135.5fSG56mABF@opensuse> <f65fd4fb-675a-3f9e-accb-77db9ad7d551@suse.com>
+        Sun, 26 Jun 2022 07:15:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C77BE2E
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 04:15:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F025E611F9
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 11:15:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D25DAC34114;
+        Sun, 26 Jun 2022 11:15:27 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fny0/IT4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656242125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ztpCLeJiN8x8NtOpZ42f8MSD1Gm0OAEWaX3b+SAs9kA=;
+        b=fny0/IT4ZwXmr6J7YriIEf3MCfCq11FKNasaW4DcI58lhhHAUNvJtLW59OCCqNICTRq13s
+        lSUgR6eU7MNTm0Laq+DYAcVxlKaMZ9eWR7VenLKXpbvGhx3/T0D7B32EsYc2wzJGdWOkYm
+        fRsH+lUBjLdV9RMyIcusngxCiXZ7++U=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c89af2ac (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sun, 26 Jun 2022 11:15:25 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     geert@linux-m68k.org, laurent@vivier.eu,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH v2] m68k: virt: use RNG seed from bootinfo block
+Date:   Sun, 26 Jun 2022 13:15:09 +0200
+Message-Id: <20220626111509.330159-1-Jason@zx2c4.com>
+In-Reply-To: <Yrg6BzpKIJBTAVmO@zx2c4.com>
+References: <Yrg6BzpKIJBTAVmO@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,72 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On domenica 26 giugno 2022 01:03:55 CEST Qu Wenruo wrote:
-> 
-> On 2022/6/25 22:41, Fabio M. De Francesco wrote:
-> > On sabato 18 giugno 2022 11:27:52 CEST Fabio M. De Francesco wrote:
-> >> The use of kmap() is being deprecated in favor of kmap_local_page(). 
-> >> With kmap_local_page(), the mapping is per thread, CPU local and not 
-> >> globally visible.
-> >>
-> >> Therefore, use kmap_local_page() / kunmap_local() in
-> >> zlib_compress_pages() because in this function the mappings are per 
-> >> thread and are not visible in other contexts.
-> >>
-> >> Tested with xfstests on QEMU + KVM 32-bit VM with 4GB of RAM and
-> >> HIGHMEM64G enabled. This patch passes 26/26 tests of group "compress".
-> >>
-> >> Cc: Qu Wenruo <wqu@suse.com>
-> >> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> >> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> >> ---
-> >>
-> >> This patch builds only on top of
-> >> "[PATCH] btrfs: zlib: refactor how we prepare the input buffer" by Qu
-> >> Wenruo".
-> >> https://lore.kernel.org/linux-btrfs/
-d0bfc791b5509df7b9ad44e41ada197d1b3149b3.1655519730.git.wqu@suse.com/
-> >>
-> > 
-> > I've seen that Qu sent a v2 of the above patch. However David thinks 
-> > that it is better not to map pages allocated in zlib.c for output 
-> > (out_page) since they cannot come from highmem because of 
-> > "alloc_page(GFP_NOFS);".
-> > 
-> > @David:
-> > 
-> > I suppose that, since it builds _only_ on top of the refactor submitted 
-> > by
-> > Qu, I'll have to wait and see what you decide.
-> > 
-> > If you don't want kmap_local_page() and prefer using page_address() on
-> > "out_page", please drop this patch and let me know, so that I can send 
-a
-> > new patch which will be in accordance to your preference.
-> 
-> And that would also make the convert much easier for kmap_local_page() 
-> of input pages.
-> 
-> I'll hold the refactor patch after all the kmap code is converted.
+Other virt VMs can pass RNG seeds via the "rng-seed" device tree
+property or via UEFI, but m68k doesn't have either. Instead it has its
+own bootinfo protocol. So this commit adds support for receiving a RNG
+seed from it, which will be used at the earliest possible time in boot,
+just like device tree.
 
-Thanks Qu,
+Reviewed-by: Laurent Vivier <laurent@vivier.eu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ arch/m68k/include/uapi/asm/bootinfo-virt.h | 7 +++++++
+ arch/m68k/virt/config.c                    | 9 +++++++++
+ 2 files changed, 16 insertions(+)
 
-I have already made a patch to zlib_compress_pages() in accordance to what 
-David asked for, but I cannot compile and test it. 
-
-With last week update of Tumbleweed, openSUSE dropped GCC-10 for x86_32, so 
-we've been left only with GCC-7. With GCC-7 I cannot any longer build 
-5.19.rc3 because it fails somewhere in drm/i915 (where code has not changed 
-since April 2022).
-
-I suppose it's just a mistake which they will fix within few days. 
-
-I'm pretty sure that my patch works properly, however I'm not comfortable 
-to submit it with no successful build and tests.
-
-Again thanks,
-
-Fabio
-
-
+diff --git a/arch/m68k/include/uapi/asm/bootinfo-virt.h b/arch/m68k/include/uapi/asm/bootinfo-virt.h
+index e4db7e2213ab..0cb2c2a41610 100644
+--- a/arch/m68k/include/uapi/asm/bootinfo-virt.h
++++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
+@@ -13,6 +13,13 @@
+ #define BI_VIRT_VIRTIO_BASE	0x8004
+ #define BI_VIRT_CTRL_BASE	0x8005
+ 
++/* A random seed used to initialize the RNG. Record format:
++ *
++ *   - length       [ 2 bytes, 16-bit big endian ]
++ *   - seed data    [ `length` bytes ]
++ */
++#define BI_VIRT_RNG_SEED	0x8006
++
+ #define VIRT_BOOTI_VERSION	MK_BI_VERSION(2, 0)
+ 
+ #endif /* _UAPI_ASM_M68K_BOOTINFO_MAC_H */
+diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
+index 632ba200ad42..645acc6918b2 100644
+--- a/arch/m68k/virt/config.c
++++ b/arch/m68k/virt/config.c
+@@ -2,6 +2,7 @@
+ 
+ #include <linux/reboot.h>
+ #include <linux/serial_core.h>
++#include <linux/random.h>
+ #include <clocksource/timer-goldfish.h>
+ 
+ #include <asm/bootinfo.h>
+@@ -92,6 +93,14 @@ int __init virt_parse_bootinfo(const struct bi_record *record)
+ 		data += 4;
+ 		virt_bi_data.virtio.irq = be32_to_cpup(data);
+ 		break;
++	case BI_VIRT_RNG_SEED: {
++		u16 len = be16_to_cpup(data);
++		add_bootloader_randomness(data + 2, len);
++		/* Zero the data to preserve forward secrecy, and zero the
++		 * length to prevent kexec from using it. */
++		memzero_explicit((void *)data, len + 2);
++		break;
++	}
+ 	default:
+ 		unknown = 1;
+ 		break;
+-- 
+2.35.1
 

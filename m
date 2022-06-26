@@ -2,98 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A10855AE3D
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 04:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85D955AE44
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 04:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233766AbiFZCjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 22:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
+        id S233771AbiFZCuM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 25 Jun 2022 22:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbiFZCjv (ORCPT
+        with ESMTP id S232327AbiFZCuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 22:39:51 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7605712AC0;
-        Sat, 25 Jun 2022 19:39:49 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LVw6Q2fbjzDsC8;
-        Sun, 26 Jun 2022 10:39:10 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 26 Jun 2022 10:39:47 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 26 Jun 2022 10:39:46 +0800
-Subject: Re: [PATCH -next v5 4/8] blk-throttle: fix io hung due to config
- updates
-To:     Jens Axboe <axboe@kernel.dk>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        <tj@kernel.org>
-CC:     <ming.lei@redhat.com>, <cgroups@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20220528064330.3471000-1-yukuai3@huawei.com>
- <20220528064330.3471000-5-yukuai3@huawei.com>
- <20220622172621.GA28246@blackbody.suse.cz>
- <f5165488-2461-8946-593f-14154e404850@huawei.com>
- <20220623162620.GB16004@blackbody.suse.cz>
- <75b3cdcc-1aa3-7259-4900-f09a2a081716@huawei.com>
- <7e14a11b-225e-13c4-35ff-762eafd20b70@kernel.dk>
-From:   Yu Kuai <yukuai3@huawei.com>
-Message-ID: <65dac189-92f5-f2bc-b322-cbda10f897b4@huawei.com>
-Date:   Sun, 26 Jun 2022 10:39:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sat, 25 Jun 2022 22:50:11 -0400
+Received: from relay5.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8F411A13;
+        Sat, 25 Jun 2022 19:50:09 -0700 (PDT)
+Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay11.hostedemail.com (Postfix) with ESMTP id D04FD80BF9;
+        Sun, 26 Jun 2022 02:50:07 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id 8AC4219;
+        Sun, 26 Jun 2022 02:50:06 +0000 (UTC)
+Message-ID: <a63132e226c2bb7b3f689cb09f7479adea5fe918.camel@perches.com>
+Subject: Re: [PATCH] staging: fbtft: fix alignment should match open
+ parenthesis
+From:   Joe Perches <joe@perches.com>
+To:     David Reaver <me@davidreaver.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Date:   Sat, 25 Jun 2022 19:50:05 -0700
+In-Reply-To: <20220626020002.1577101-1-me@davidreaver.com>
+References: <20220626020002.1577101-1-me@davidreaver.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-In-Reply-To: <7e14a11b-225e-13c4-35ff-762eafd20b70@kernel.dk>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: ie1xjhbtnmtckymqa5nbd5owyyick64u
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 8AC4219
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+0U75mtrql51gGZXBWbhJ1RhG/AW4Ea4c=
+X-HE-Tag: 1656211806-344269
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/06/26 0:41, Jens Axboe 写道:
-> On 6/25/22 2:36 AM, Yu Kuai wrote:
->> ? 2022/06/24 0:26, Michal Koutn? ??:
->>> On Thu, Jun 23, 2022 at 08:27:11PM +0800, Yu Kuai <yukuai3@huawei.com> wrote:
->>>>> Here we may allow to dispatch a bio above current slice's
->>>>> calculate_bytes_allowed() if bytes_skipped is already >0.
->>>>
->>>> Hi, I don't expect that to happen. For example, if a bio is still
->>>> throttled, then old slice is keeped with proper 'bytes_skipped',
->>>> then new wait time is caculated based on (bio_size - bytes_skipped).
->>>>
->>>> After the bio is dispatched(I assum that other bios can't preempt),
->>>
->>> With this assumptions it adds up as you write. I believe we're in
->>> agreement.
->>>
->>> It's the same assumption I made below (FIFO everywhere, i.e. no
->>> reordering). So the discussed difference shouldn't really be negative
->>> (and if the assumption didn't hold, so the modular arithmetic yields
->>> corerct bytes_skipped value).
->> Yes, nice that we're in aggreement.
->>
->> I'll wait to see if Tejun has any suggestions.
-> 
-> I flushed more emails from spam again. Please stop using the buggy
-> huawei address until this gets resolved, your patches are getting lost
-> left and right and I don't have time to go hunting for emails.
-> 
+On Sat, 2022-06-25 at 19:00 -0700, David Reaver wrote:
+> Fix alignment of this line of code with the previous parenthesis, as
+> suggested by checkpatch.pl:
+[]
+> diff --git a/drivers/staging/fbtft/fb_tinylcd.c b/drivers/staging/fbtft/fb_tinylcd.c
+[]
+> @@ -38,7 +38,7 @@ static int init_display(struct fbtft_par *par)
+>  	write_reg(par, 0xE5, 0x00);
+>  	write_reg(par, 0xF0, 0x36, 0xA5, 0x53);
+>  	write_reg(par, 0xE0, 0x00, 0x35, 0x33, 0x00, 0x00, 0x00,
+> -		       0x00, 0x35, 0x33, 0x00, 0x00, 0x00);
+> +		  0x00, 0x35, 0x33, 0x00, 0x00, 0x00);
 
-My apologize for that, I'm quite annoied that our IT still can't solve
-this. I'll stop sending new emails with this address for now..
+It's probably better to ignore the message in this case as the first
+argument means something and the second and subsequent are the data
+being written via a specific macro using NUMARGS.
 
-Thanks,
-Kuai

@@ -2,34 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CAC55B193
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 13:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5949055B196
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 13:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234233AbiFZLs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 07:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
+        id S234257AbiFZLs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 07:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiFZLsX (ORCPT
+        with ESMTP id S229531AbiFZLs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 07:48:23 -0400
+        Sun, 26 Jun 2022 07:48:58 -0400
 Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD1611C1B;
-        Sun, 26 Jun 2022 04:48:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B2F11C10;
+        Sun, 26 Jun 2022 04:48:57 -0700 (PDT)
 Received: from newone.lan (_gateway [10.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id BB9732007F;
-        Sun, 26 Jun 2022 13:48:19 +0200 (CEST)
+        by ixit.cz (Postfix) with ESMTPSA id C7DC62007F;
+        Sun, 26 Jun 2022 13:48:55 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1656244099;
+        t=1656244135;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=I/mAZDQYdv9m84vfS3Qv7/85j2cosVucoKTYVfbJ9zg=;
-        b=gTZudDbaN9LlFqhKxNkc6Ij+/4hDOI2oef/cEmXhvh0xKfo9KkCv+Wa0pCQg+Y7mZF6ktX
-        7gmMU6Xymaqp3lp+JiqXgDQ97lC5JlqSlJnYDOfSqhkWzdFe+eBkzfxMd2OMm5hIca9VVE
-        Zfryy28GPWYHx30lIUJ9TLHxBwN2DDw=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YndBNZ0lvr/m34EAnVpOYwY/mP5Uv37FbG+Xwh1ccJI=;
+        b=2FJrNomMXgvJm37BBmW+DA6orjlOCG7vUIvaZjwtfC2SHOAJDzxiS5w/5UmHeZ9plMqe0W
+        AKI1nS+CLfEj5OwR17tMNj7k4NWfdo78CwZqTi/chXklydDYSLyZPE6V1TzNBmtyB4IORH
+        fSeS4A/p8DMhknQLjjlcevFHBUuNOsg=
 From:   David Heidelberg <david@ixit.cz>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -40,13 +41,14 @@ Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
         Guru Das Srinagesh <quic_gurus@quicinc.com>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/3] ARM: dts: qcom: extend scm compatible to match dt-schema
-Date:   Sun, 26 Jun 2022 13:46:32 +0200
-Message-Id: <20220626114634.90850-1-david@ixit.cz>
+Subject: [PATCH v3 2/3] arm64: dts: qcom: extend scm compatible strings
+Date:   Sun, 26 Jun 2022 13:46:34 +0200
+Message-Id: <20220626114634.90850-2-david@ixit.cz>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220626114634.90850-1-david@ixit.cz>
+References: <20220626114634.90850-1-david@ixit.cz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam: Yes
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_DYNAMIC,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
@@ -57,70 +59,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-First device specific compatible, then general one.
+Follow scheme where device specific compatible is first,
+then general compatible string.
 
 Cc: Robert Marko <robimarko@gmail.com>
 Cc: Guru Das Srinagesh <quic_gurus@quicinc.com>
 Signed-off-by: David Heidelberg <david@ixit.cz>
 ---
- arch/arm/boot/dts/qcom-apq8064.dtsi | 2 +-
- arch/arm/boot/dts/qcom-apq8084.dtsi | 2 +-
- arch/arm/boot/dts/qcom-ipq4019.dtsi | 2 +-
- arch/arm/boot/dts/qcom-msm8974.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/msm8953.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi  | 2 +-
  4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
-index 9120d10dcd9e..67e625e56e04 100644
---- a/arch/arm/boot/dts/qcom-apq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
-@@ -309,7 +309,7 @@ dsps_smsm: dsps@4 {
- 
- 	firmware {
- 		scm {
--			compatible = "qcom,scm-apq8064";
-+			compatible = "qcom,scm-apq8064", "qcom,scm";
- 
- 			clocks = <&rpmcc RPM_DAYTONA_FABRIC_CLK>;
- 			clock-names = "core";
-diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
-index cb01faa23eb7..123c0c32d1df 100644
---- a/arch/arm/boot/dts/qcom-apq8084.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
-@@ -95,7 +95,7 @@ memory {
+diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+index 748575ed1490..19228e4f5313 100644
+--- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+@@ -125,7 +125,7 @@ opp-1800000000 {
  
  	firmware {
  		scm {
 -			compatible = "qcom,scm";
-+			compatible = "qcom,scm-apq8084", "qcom,scm";
- 			clocks = <&gcc GCC_CE1_CLK> , <&gcc GCC_CE1_AXI_CLK>, <&gcc GCC_CE1_AHB_CLK>;
- 			clock-names = "core", "bus", "iface";
- 		};
-diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-index c5da723f7674..4faf854aab9c 100644
---- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-@@ -156,7 +156,7 @@ xo: xo {
- 
- 	firmware {
- 		scm {
--			compatible = "qcom,scm-ipq4019";
-+			compatible = "qcom,scm-ipq4019", "qcom,scm";
++			compatible = "qcom,scm-ipq6018", "qcom,scm";
  		};
  	};
  
-diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
-index 804d094c4d79..4cbd8d91f7d0 100644
---- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-@@ -96,7 +96,7 @@ CPU_SPC: spc {
+diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
+index ffc3ec2cd3bc..6fd361be0fe2 100644
+--- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
+@@ -215,7 +215,7 @@ L2_1: l2-cache_1 {
+ 
+ 	firmware {
+ 		scm: scm {
+-			compatible = "qcom,scm-msm8953";
++			compatible = "qcom,scm-msm8953", "qcom,scm";
+ 			clocks = <&gcc GCC_CRYPTO_CLK>,
+ 				 <&gcc GCC_CRYPTO_AXI_CLK>,
+ 				 <&gcc GCC_CRYPTO_AHB_CLK>;
+diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+index ab95ec4a7491..7c854c9c2517 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+@@ -357,7 +357,7 @@ opp-2150400000 {
  
  	firmware {
  		scm {
--			compatible = "qcom,scm";
-+			compatible = "qcom,scm-msm8974", "qcom,scm";
- 			clocks = <&gcc GCC_CE1_CLK>, <&gcc GCC_CE1_AXI_CLK>, <&gcc GCC_CE1_AHB_CLK>;
- 			clock-names = "core", "bus", "iface";
+-			compatible = "qcom,scm-msm8996";
++			compatible = "qcom,scm-msm8996", "qcom,scm";
+ 			qcom,dload-mode = <&tcsr 0x13000>;
  		};
+ 	};
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index d0760e6ec942..fc4a490add48 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -628,7 +628,7 @@ cpu7_opp20: opp-2841600000 {
+ 
+ 	firmware {
+ 		scm: scm {
+-			compatible = "qcom,scm";
++			compatible = "qcom,scm-sm8250", "qcom,scm";
+ 			#reset-cells = <1>;
+ 		};
+ 	};
 -- 
 2.35.1
 

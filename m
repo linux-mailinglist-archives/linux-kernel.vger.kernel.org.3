@@ -2,125 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD50055AED7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 06:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A7655AEDB
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 06:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233809AbiFZE2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 00:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
+        id S233903AbiFZEcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 00:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiFZE2H (ORCPT
+        with ESMTP id S229481AbiFZEcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 00:28:07 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B9DCDC;
-        Sat, 25 Jun 2022 21:28:01 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 33832320055E;
-        Sun, 26 Jun 2022 00:27:59 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sun, 26 Jun 2022 00:28:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1656217678; x=1656304078; bh=hRF+I95UJxqPYyeXN8EYFMKCR
-        8uRybetp/GgkAZvqNY=; b=UgogN9O6ApCHwdLBnlbf6p3Hbmc+RzKkXeY5330e/
-        H90NJ2BunN2wS20rCEpWwc6a09sIMpP4K9Wm+Y3mBqYUSBNEw6YkzI9U+gvZvwyK
-        IyfZpyvcWH3e8urt2AcPheSzCOKTLh39aOxG2TPGf0kjVZvhl0qyTl0c2krR7GGH
-        hvd1Pq7/iOhKVGwTy9sU9K1xt+hDm8EOvar+DOK2K27fZ+cc7g8q4hR24dlmDF9D
-        QoXEe8747y94drqBur80fu1+LLPVmpM2zmU+eJfzCk/gj3SLHt14IWjwYJW9xkKz
-        fXvuW3SOXNcVHzlSiL9IQataCl7c5gJSZ0X8hG6Fzec7A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1656217678; x=1656304078; bh=hRF+I95UJxqPYyeXN8EYFMKCR8uRybetp/G
-        gkAZvqNY=; b=kBb/Ju001J1aZWFImoH0YeKHuscG7ZSv+E4/6OmzsNXYW5yQfIS
-        Ox7KhZYqSykJOM8FZlRBYA+cqtx21i+kceD9bVyXBAuHhcHv1+bThd/nCklXSNlK
-        4IlL6C5icg5E1r9mhEFSl+/5k3FR9Wx3TBksyQXA89uAdyZv6OQ4UIoZ7hw4DIKY
-        omS8QPPM8+6H5/TOSGadZqEOnKFYaM3kApGM//qgzK2VQTdLOjkaqNnYdi9o/khu
-        7evM16ffbL/rYjkuGohx9qUfOx4XUqd25vBzdyNz3ObdnHC8HkxyNvKvw2Vekrov
-        UlbdcoNUQ0pEvle+cLtvV2OzBWJYB4qgnOg==
-X-ME-Sender: <xms:TuC3YkzYKl2txXJXSuQ7EQxDTHioul3hu0RpQ2DGubt9d6edGg0IRg>
-    <xme:TuC3YoR8mL9fNSxtDGLqRPprl8RkRI67So5DPPkyf3mphe9FnCjYARz_OS8dhN2ev
-    5xk68InxEBIqf6lWw>
-X-ME-Received: <xmr:TuC3YmX028yqqFtezCzYY0zdBPpmm0jHYYIiEv3auPmIbVKK94oKOfdSfemTjYvxQgYuNHGjrYWdr87MlhV5ryTUTtQk4or2QaJ6opmHFsWebiyfwliQEul_RoYAK3RmiCGHLA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudegvddgkeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepkeehffethedtteffgfefteetjedvfeelueevudffgfeutdejvdehledv
-    vdffhfevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgu
-    rdhorhhg
-X-ME-Proxy: <xmx:TuC3Yig5Of93IMDqqrQwoNSy_IErl1mpNMFWT6ACw0BqLC0XueWSfw>
-    <xmx:TuC3YmAK27EbRL4dkl3e-3FzA_jwa41yvmjBohkzel58afPl6amBdg>
-    <xmx:TuC3YjJH_NZfSEuD2ytiC_Y_lAxFF9uwcR0n4q45G6DnwZyzoFpNjg>
-    <xmx:TuC3Yi3ANJGnY9m4ez287FOmD-y6lCoZxGkq_1Zeq8FysCI7gVdwCQ>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 26 Jun 2022 00:27:57 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Sun, 26 Jun 2022 00:32:20 -0400
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D29F120B4
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 21:32:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1656217902; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=mhbi1uu6vVxUi2jFtaaqGSWBzfGI4Fybg1G8k+5J1cx6Yi8/54IB9tCWG9SN/Wz5RJDjdGZrYANuA/JsSWhe7G3aaCdLAUnsNnRkufCA/f1A+mWhpqgkPniAFnymPXuYDGgWx3TlPAIL28XmRMXhh318G+qHA+4iPPVxR54y7gU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1656217902; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=m0GJoA8N1D+ADr9TilMdmNJP85FBo9fAO2AjMIO46oY=; 
+        b=IHCyZ0TKvEuYpLwe0rTBu1oJzjbmQ9qCGmtyVbbntRVMEW2cBV/QbTWCGt9xyvxzNSk4EZ3UPqLnRbfUgSX/9UxWnpD26GypNUOLGVPaNIw8i0Id3Px0J2umrwwpNHi1cPFly9Wqp8NZ57VW155Jc7TMR1/qhBJWZZvy5xHm02A=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1656217902;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=m0GJoA8N1D+ADr9TilMdmNJP85FBo9fAO2AjMIO46oY=;
+        b=gW/0BML9giZH5pku8fw9KPRcLzhseBMfCOPqUzllrEtIy+GKArLZPlMxIiXnsUYr
+        bImaqdTGV4ry8dVyDVSOlS+XeBL8Q9jHp5fmo5TeqO6EXRmB/46D6Puct7y0RMQ3j3a
+        fycPrt3X4DBkv2hS6k6ERvfFDxUmohj5Wa26vdYw=
+Received: from edelgard.icenowy.me (59.41.163.103 [59.41.163.103]) by mx.zohomail.com
+        with SMTPS id 1656217900652289.35212594776544; Sat, 25 Jun 2022 21:31:40 -0700 (PDT)
+Message-ID: <b3a6ca6a4af7773f68f29b443fa5a4e106727e83.camel@icenowy.me>
+Subject: Re: [RESEND PATCH] rtc: sun6i: add support for R329 RTC
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Samuel Holland <samuel@sholland.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Samuel Holland <samuel@sholland.org>,
-        Chen-Yu Tsai <wens@csie.org>,
+Cc:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: [RESEND PATCH] rtc: sun6i: add support for R329 RTC
-Date:   Sat, 25 Jun 2022 23:27:56 -0500
-Message-Id: <20220626042756.58961-1-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
+Date:   Sun, 26 Jun 2022 12:31:33 +0800
+In-Reply-To: <20220626042756.58961-1-samuel@sholland.org>
+References: <20220626042756.58961-1-samuel@sholland.org>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Icenowy Zheng <icenowy@aosc.io>
+=E5=9C=A8 2022-06-25=E6=98=9F=E6=9C=9F=E5=85=AD=E7=9A=84 23:27 -0500=EF=BC=
+=8CSamuel Holland=E5=86=99=E9=81=93=EF=BC=9A
+> From: Icenowy Zheng <icenowy@aosc.io>
+>=20
+> Allwinner R329 has a RTC with a similar time storage with H616 but a
+> slightly different clock part.
+>=20
+> As we have already handled the R329 RTC clocks in the CCU driver, add
+> a
+> compatible string to RTC driver to allow probing of the RTC.
+>=20
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> Resending this patch separately from Icenowy's R329 series[1] because
+> it
+> is also needed for D1 (which has R329 as its fallback compatible[2]),
+> so
+> I would like to get it in to 5.20.
 
-Allwinner R329 has a RTC with a similar time storage with H616 but a
-slightly different clock part.
+Thanks!
 
-As we have already handled the R329 RTC clocks in the CCU driver, add a
-compatible string to RTC driver to allow probing of the RTC.
+BTW when will you put D1 DTs into kernel?
 
-Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
-Resending this patch separately from Icenowy's R329 series[1] because it
-is also needed for D1 (which has R329 as its fallback compatible[2]), so
-I would like to get it in to 5.20.
+>=20
+> [1]:
+> https://lore.kernel.org/lkml/BYAPR20MB2472C608678F3FAEDA7B7541BCF79@BYAPR=
+20MB2472.namprd20.prod.outlook.com/
+> [2]:
+> https://lore.kernel.org/lkml/20220203021736.13434-3-samuel@sholland.org/
+>=20
+> =C2=A0drivers/rtc/rtc-sun6i.c | 2 ++
+> =C2=A01 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+> index 57540727ce1c..ed5516089e9a 100644
+> --- a/drivers/rtc/rtc-sun6i.c
+> +++ b/drivers/rtc/rtc-sun6i.c
+> @@ -875,6 +875,8 @@ static const struct of_device_id
+> sun6i_rtc_dt_ids[] =3D {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ .compatible =3D "allwin=
+ner,sun50i-h6-rtc" },
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ .compatible =3D "allwin=
+ner,sun50i-h616-rtc",
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0.data =3D (void *)RTC_LINEAR_DAY },
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ .compatible =3D "allwinner,s=
+un50i-r329-rtc",
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0.data =3D (void *)RTC_LINEAR_DAY },
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ /* sentinel */ },
+> =C2=A0};
+> =C2=A0MODULE_DEVICE_TABLE(of, sun6i_rtc_dt_ids);
 
-[1]: https://lore.kernel.org/lkml/BYAPR20MB2472C608678F3FAEDA7B7541BCF79@BYAPR20MB2472.namprd20.prod.outlook.com/
-[2]: https://lore.kernel.org/lkml/20220203021736.13434-3-samuel@sholland.org/
-
- drivers/rtc/rtc-sun6i.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index 57540727ce1c..ed5516089e9a 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -875,6 +875,8 @@ static const struct of_device_id sun6i_rtc_dt_ids[] = {
- 	{ .compatible = "allwinner,sun50i-h6-rtc" },
- 	{ .compatible = "allwinner,sun50i-h616-rtc",
- 		.data = (void *)RTC_LINEAR_DAY },
-+	{ .compatible = "allwinner,sun50i-r329-rtc",
-+		.data = (void *)RTC_LINEAR_DAY },
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, sun6i_rtc_dt_ids);
--- 
-2.35.1
 

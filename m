@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2749D55AF38
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 06:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F164255AF3A
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 06:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233988AbiFZEsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 00:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
+        id S233837AbiFZEv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 00:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233703AbiFZEsv (ORCPT
+        with ESMTP id S229957AbiFZEvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 00:48:51 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD04013CD4;
-        Sat, 25 Jun 2022 21:48:50 -0700 (PDT)
-X-UUID: bb63f37a39444690989f5c3506ccfa1c-20220626
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:2cdadda3-9fb6-4760-a526-160f989ce651,OB:10,L
-        OB:60,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:45
-X-CID-INFO: VERSION:1.1.6,REQID:2cdadda3-9fb6-4760-a526-160f989ce651,OB:10,LOB
-        :60,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-META: VersionHash:b14ad71,CLOUDID:2f9a91d8-850a-491d-a127-60d9309b2b3e,C
-        OID:0a685b5cea48,Recheck:0,SF:28|17|19|48,TC:nil,Content:-5,EDM:-3,IP:nil,
-        URL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: bb63f37a39444690989f5c3506ccfa1c-20220626
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <guodong.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 863720791; Sun, 26 Jun 2022 12:48:45 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Sun, 26 Jun 2022 12:48:43 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sun, 26 Jun 2022 12:48:43 +0800
-Message-ID: <ffcf1452e96ce982b4dc366c508de9e87b0cc0f5.camel@mediatek.com>
-Subject: Re: [PATCH v2 3/5] pinctrl: mediatek: add rsel setting on mt8192
-From:   Guodong Liu <guodong.liu@mediatek.com>
-To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
-CC:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Sun, 26 Jun 2022 12:48:42 +0800
-In-Reply-To: <20220624152926.76hvymguryhfv4sq@notapiano>
-References: <20220624133700.15487-1-guodong.liu@mediatek.com>
-         <20220624133700.15487-4-guodong.liu@mediatek.com>
-         <20220624152926.76hvymguryhfv4sq@notapiano>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 26 Jun 2022 00:51:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BB0F14D3F
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 21:51:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656219112;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4CX/E6JYv2WQxxdvMRVd+6+3DXTPnuXJbU5BJpFyg+4=;
+        b=B14s7T5VK2GmpxRmkRLaR0mMDOj15KW6RbhA5bL6UkkETKiZxYnnewAqVWfcP+OChIJA0r
+        IvnsSdYdFnmCIRGrnOiHpUtApQ4q5lE6NId1QmxKa+Zs1eLVw5dETYkai0Pi3s1ibk0xia
+        yAuLimw3QLkFj1Xt+wSj7DTa52K0jww=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-418-zV1LmzvGOMOByaV6-9oPfA-1; Sun, 26 Jun 2022 00:51:47 -0400
+X-MC-Unique: zV1LmzvGOMOByaV6-9oPfA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0D23C1C05AE9;
+        Sun, 26 Jun 2022 04:51:47 +0000 (UTC)
+Received: from cantor.redhat.com (unknown [10.2.16.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 523DC2166B2A;
+        Sun, 26 Jun 2022 04:51:46 +0000 (UTC)
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     dmaengine@vger.kernel.org
+Cc:     Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        Dave Jiang <dave.jiang@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>
+Subject: [PATCH v2] dmaengine: idxd: Only call idxd_enable_system_pasid() if succeeded in enabling SVA feature
+Date:   Sat, 25 Jun 2022 21:51:44 -0700
+Message-Id: <20220626045144.9063-1-jsnitsel@redhat.com>
+In-Reply-To: <20220625221333.214589-1-jsnitsel@redhat.com>
+References: <20220625221333.214589-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,64 +62,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------Original Message-----
-From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-To: Guodong Liu <guodong.liu@mediatek.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Rob Herring <
-robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, Sean
-Wang <sean.wang@kernel.org>, Sean Wang <sean.wang@mediatek.com>,
-Zhiyong Tao <zhiyong.tao@mediatek.com>, linux-gpio@vger.kernel.org, 
-devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, 
-Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v2 3/5] pinctrl: mediatek: add rsel setting on
-mt8192
-Date: Fri, 24 Jun 2022 11:29:26 -0400
+On a Sapphire Rapids system if you boot without intel_iommu=on, the IDXD
+driver will crash during probe in iommu_sva_bind_device().
 
-Hi Guodong,
+[   21.423729] BUG: kernel NULL pointer dereference, address: 0000000000000038
+[   21.445108] #PF: supervisor read access in kernel mode
+[   21.450912] #PF: error_code(0x0000) - not-present page
+[   21.456706] PGD 0
+[   21.459047] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[   21.464004] CPU: 0 PID: 1420 Comm: kworker/0:3 Not tainted 5.19.0-0.rc3.27.eln120.x86_64 #1
+[   21.464011] Hardware name: Intel Corporation EAGLESTREAM/EAGLESTREAM, BIOS EGSDCRB1.SYS.0067.D12.2110190954 10/19/2021
+[   21.464015] Workqueue: events work_for_cpu_fn
+[   21.464030] RIP: 0010:iommu_sva_bind_device+0x1d/0xe0
+[   21.464046] Code: c3 cc 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 41 57 41 56 49 89 d6 41 55 41 54 55 53 48 83 ec 08 48 8b 87 d8 02 00 00 <48> 8b 40 38 48 8b 50 10 48 83 7a 70 00 48 89 14 24 0f 84 91 00 00
+[   21.464050] RSP: 0018:ff7245d9096b7db8 EFLAGS: 00010296
+[   21.464054] RAX: 0000000000000000 RBX: ff1eadeec8a51000 RCX: 0000000000000000
+[   21.464058] RDX: ff7245d9096b7e24 RSI: 0000000000000000 RDI: ff1eadeec8a510d0
+[   21.464060] RBP: ff1eadeec8a51000 R08: ffffffffb1a12300 R09: ff1eadffbfce25b4
+[   21.464062] R10: ffffffffffffffff R11: 0000000000000038 R12: ffffffffc09f8000
+[   21.464065] R13: ff1eadeec8a510d0 R14: ff7245d9096b7e24 R15: ff1eaddf54429000
+[   21.464067] FS:  0000000000000000(0000) GS:ff1eadee7f600000(0000) knlGS:0000000000000000
+[   21.464070] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   21.464072] CR2: 0000000000000038 CR3: 00000008c0e10006 CR4: 0000000000771ef0
+[   21.464074] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   21.464076] DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 0000000000000400
+[   21.464078] PKRU: 55555554
+[   21.464079] Call Trace:
+[   21.464083]  <TASK>
+[   21.464092]  idxd_pci_probe+0x259/0x1070 [idxd]
+[   21.464121]  local_pci_probe+0x3e/0x80
+[   21.464132]  work_for_cpu_fn+0x13/0x20
+[   21.464136]  process_one_work+0x1c4/0x380
+[   21.464143]  worker_thread+0x1ab/0x380
+[   21.464147]  ? _raw_spin_lock_irqsave+0x23/0x50
+[   21.464158]  ? process_one_work+0x380/0x380
+[   21.464161]  kthread+0xe6/0x110
+[   21.464168]  ? kthread_complete_and_exit+0x20/0x20
+[   21.464172]  ret_from_fork+0x1f/0x30
 
-thanks for the patch. Please see comments below.
+iommu_sva_bind_device() requires SVA has been enabled successfully on
+the IDXD device before it's called. Otherwise, iommu_sva_bind_device()
+will access a NULL pointer. If Intel IOMMU is disabled, SVA cannot be
+enabled and thus idxd_enable_system_pasid() and iommu_sva_bind_device()
+should not be called.
 
-On Fri, Jun 24, 2022 at 09:36:58PM +0800, Guodong Liu wrote:
-> 1. I2C pins's resistance value can be controlled by rsel register.
-> This patch provides rsel (resistance selection) setting on mt8192.
-> 2. Also add the missing pull type array for mt8192 to document the
-> pull type of each pin and prevent invalid pull type settings.
-> 
-> Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
-> ---
->  drivers/pinctrl/mediatek/pinctrl-mt8192.c | 136
-> ++++++++++++++++++++++
->  1 file changed, 136 insertions(+)
-> 
-> diff --git a/drivers/pinctrl/mediatek/pinctrl-mt8192.c
-> b/drivers/pinctrl/mediatek/pinctrl-mt8192.c
-> index efabeb422aea..ffb0b04f0e3c 100644
-> --- a/drivers/pinctrl/mediatek/pinctrl-mt8192.c
-> +++ b/drivers/pinctrl/mediatek/pinctrl-mt8192.c
+v2: Balance braces on if else block. Fix up commit description.
 
-<snip>
+Fixes: 42a1b73852c4 ("dmaengine: idxd: Separate user and kernel pasid enabling")
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+---
+ drivers/dma/idxd/init.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-> +	MTK_PULL_PU_PD_TYPE,/*100* MTK_PULL_PU_PD_TYPE,/*101*/
-> +	MTK_PULL_PU_PD_TYPE,/*102* MTK_PULL_PU_PD_TYPE,/*103*/
-> +	MTK_PULL_PU_PD_TYPE,/*104* MTK_PULL_PU_PD_TYPE,/*105*/
-> +	MTK_PULL_PU_PD_TYPE,/*106* MTK_PULL_PU_PD_TYPE,/*107*/
-> +	MTK_PULL_PU_PD_TYPE,/*108* MTK_PULL_PU_PD_TYPE,/*109*/
-> +	MTK_PULL_PU_PD_TYPE,/*110* MTK_PULL_PU_PD_TYPE,/*111*/
-> +	MTK_PULL_PU_PD_TYPE,/*112* MTK_PULL_PU_PD_TYPE,/*113*/
-> +	MTK_PULL_PU_PD_TYPE,/*114* MTK_PULL_PU_PD_TYPE,/*115*/
-> +	MTK_PULL_PU_PD_TYPE,/*116* MTK_PULL_PU_PD_TYPE,/*117*/
-
-The comments on pins 100 - 116 are missing the closing '/', effectively
-commenting out pins 101 - 117 and leading to errors. Please fix this.
-
-Other than that,
-
-Fixed in next patch,thanks!
-
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
-Thanks,
-Nícolas
+diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
+index 355fb3ef4cbf..aa3478257ddb 100644
+--- a/drivers/dma/idxd/init.c
++++ b/drivers/dma/idxd/init.c
+@@ -512,15 +512,16 @@ static int idxd_probe(struct idxd_device *idxd)
+ 	dev_dbg(dev, "IDXD reset complete\n");
+ 
+ 	if (IS_ENABLED(CONFIG_INTEL_IDXD_SVM) && sva) {
+-		if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA))
++		if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA)) {
+ 			dev_warn(dev, "Unable to turn on user SVA feature.\n");
+-		else
++		} else {
+ 			set_bit(IDXD_FLAG_USER_PASID_ENABLED, &idxd->flags);
+ 
+-		if (idxd_enable_system_pasid(idxd))
+-			dev_warn(dev, "No in-kernel DMA with PASID.\n");
+-		else
+-			set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
++			if (idxd_enable_system_pasid(idxd))
++				dev_warn(dev, "No in-kernel DMA with PASID.\n");
++			else
++				set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
++		}
+ 	} else if (!sva) {
+ 		dev_warn(dev, "User forced SVA off via module param.\n");
+ 	}
+-- 
+2.36.1
 

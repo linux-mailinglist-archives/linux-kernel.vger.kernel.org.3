@@ -2,80 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1443E55B049
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 10:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035E855B062
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 10:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233962AbiFZIga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 04:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
+        id S234008AbiFZIrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 04:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiFZIg2 (ORCPT
+        with ESMTP id S229550AbiFZIrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 04:36:28 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77431054B;
-        Sun, 26 Jun 2022 01:36:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 11B25CE0FC4;
-        Sun, 26 Jun 2022 08:36:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41580C341D8;
-        Sun, 26 Jun 2022 08:36:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656232582;
-        bh=juR3pWHFZdE8Vf6QGsSTJiJ2f3ZwildJoxwQZWNpG/E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=f6yc1RaNJwQq5dElIkyuYvUvwHkvBLBi9KqlHP2ZC+oxWcerSMGK3hkxIM7cIAAT/
-         TtueQ33cy4/n0Uda61TReBytE65eLfQrezytZmtm7bX//WKI/yOT60iTP49ZEIOPSW
-         6z1NOCnw36qsukMeObt289BsjK4np0rxC1P8TL2Fy3MIi0PXPCcxYI0ThEmMrCWGfS
-         UrkYBYjapcfJFTuf2LfH5cpnGXFFNt0wE6A6XBDTb085dl806k7RyMDAUO+JHUYTkX
-         Au2xvaXvS/pK8PTQWyJuWsS1hRHbV8q3oa+eOltOLdGmLNGlNuBwPHqKBVX/LvLixJ
-         OvRvGfKxK4K+w==
-Received: by mail-yb1-f174.google.com with SMTP id h187so9569940ybg.0;
-        Sun, 26 Jun 2022 01:36:22 -0700 (PDT)
-X-Gm-Message-State: AJIora+WE7CBSMpN5yeJ0ShnL/3L5tQrerlTtqlFOGQtN7+wOCgkBfb9
-        CrGeHkihKKllOOy0iR/ubsfNxVTQV7l50KK79Pc=
-X-Google-Smtp-Source: AGRyM1s9r/oqGpmVzKxZ+US+FaaRE8PSLnvRSxz/eiJkctG/2AzfYvDmvG4YKVmQhXgJnW7ApVihluVitAAeI1SlHhw=
-X-Received: by 2002:a25:8b8b:0:b0:669:b37d:f9cd with SMTP id
- j11-20020a258b8b000000b00669b37df9cdmr7722013ybl.394.1656232581073; Sun, 26
- Jun 2022 01:36:21 -0700 (PDT)
+        Sun, 26 Jun 2022 04:47:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 877FC2AE6;
+        Sun, 26 Jun 2022 01:46:59 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 67358D6E;
+        Sun, 26 Jun 2022 01:46:59 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.71.61])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F3CD3F792;
+        Sun, 26 Jun 2022 01:46:57 -0700 (PDT)
+Date:   Sun, 26 Jun 2022 09:46:53 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     madvenka@linux.microsoft.com
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v15 5/6] arm64: Create a list of SYM_CODE functions,
+ check return PC against list
+Message-ID: <Yrgc/Z7uG29XihFg@FVFF77S0Q05N>
+References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
+ <20220617210717.27126-1-madvenka@linux.microsoft.com>
+ <20220617210717.27126-6-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20220617125750.728590-1-arnd@kernel.org> <20220617125750.728590-4-arnd@kernel.org>
- <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com> <CAK8P3a1XfwkTOV7qOs1fTxf4vthNBRXKNu8A5V7TWnHT081NGA@mail.gmail.com>
- <6d1d88ee-1cf6-c735-1e6d-bafd2096e322@gmail.com>
-In-Reply-To: <6d1d88ee-1cf6-c735-1e6d-bafd2096e322@gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sun, 26 Jun 2022 10:36:02 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1KKPXr0ews9po_xjmnGYUWf18gBaZYYmnC+DvtxTKLmQ@mail.gmail.com>
-Message-ID: <CAK8P3a1KKPXr0ews9po_xjmnGYUWf18gBaZYYmnC+DvtxTKLmQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Khalid Aziz <khalid@gonehiking.org>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Matt Wang <wwentao@vmware.com>,
-        Miquel van Smoorenburg <mikevs@xs4all.net>,
-        Mark Salyzyn <salyzyn@android.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Denis Efremov <efremov@linux.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220617210717.27126-6-madvenka@linux.microsoft.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,46 +48,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(On Sun, Jun 26, 2022 at 7:21 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
->  > The same could be done for the two vme drivers (scsi/mvme147.c
-> > and ethernet/82596.c), which do the cache management but
-> > apparently don't need swiotlb bounce buffering.
-> >
-> > Rewriting the drivers to modern APIs is of course non-trivial,
-> > and if you want a shortcut here, I would suggest introducing
-> > platform specific helpers similar to isa_virt_to_bus() and call
-> > them amiga_virt_to_bus() and vme_virt_to_bus, respectively.
->
-> I don't think Amiga and m68k VME differ at all in that respect, so might
-> just call it m68k_virt_to_bus() for now.
->
-> > Putting these into a platform specific header file at least helps
-> > clarify that both the helper functions and the drivers using them
-> > are non-portable.
->
-> There are no platform specific header files other than asm/amigahw.h and
-> asm/mvme147hw.h, currently only holding register address definitions.
-> Would it be OK to add m68k_virt_to_bus() in there if it can't remain in
-> asm/virtconvert.h, Geert?
+On Fri, Jun 17, 2022 at 04:07:16PM -0500, madvenka@linux.microsoft.com wrote:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+> 
+> SYM_CODE functions don't follow the usual calling conventions. Check if the
+> return PC in a stack frame falls in any of these. If it does, consider the
+> stack trace unreliable.
+> 
+> Define a special section for unreliable functions
+> =================================================
+> 
+> Define a SYM_CODE_END() macro for arm64 that adds the function address
+> range to a new section called "sym_code_functions".
+> 
+> Linker file
+> ===========
+> 
+> Include the "sym_code_functions" section under read-only data in
+> vmlinux.lds.S.
+> 
+> Initialization
+> ==============
+> 
+> Define an early_initcall() to create a sym_code_functions[] array from
+> the linker data.
+> 
+> Unwinder check
+> ==============
+> 
+> Add a reliability check in unwind_check_reliability() that compares a
+> return PC with sym_code_functions[]. If there is a match, then return
+> failure.
+> 
+> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/include/asm/linkage.h  | 11 +++++++
+>  arch/arm64/include/asm/sections.h |  1 +
+>  arch/arm64/kernel/stacktrace.c    | 55 +++++++++++++++++++++++++++++++
+>  arch/arm64/kernel/vmlinux.lds.S   | 10 ++++++
+>  4 files changed, 77 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/linkage.h b/arch/arm64/include/asm/linkage.h
+> index 43f8c25b3fda..d4058de4af78 100644
+> --- a/arch/arm64/include/asm/linkage.h
+> +++ b/arch/arm64/include/asm/linkage.h
+> @@ -39,4 +39,15 @@
+>  	SYM_START(name, SYM_L_WEAK, SYM_A_NONE)		\
+>  	bti c ;
+>  
+> +/*
+> + * Record the address range of each SYM_CODE function in a struct code_range
+> + * in a special section.
+> + */
+> +#define SYM_CODE_END(name)				\
+> +	SYM_END(name, SYM_T_NONE)			;\
+> +99:	.pushsection "sym_code_functions", "aw"		;\
+> +	.quad	name					;\
+> +	.quad	99b					;\
+> +	.popsection
+> +
+>  #endif
+> diff --git a/arch/arm64/include/asm/sections.h b/arch/arm64/include/asm/sections.h
+> index 40971ac1303f..50cfd1083563 100644
+> --- a/arch/arm64/include/asm/sections.h
+> +++ b/arch/arm64/include/asm/sections.h
+> @@ -22,6 +22,7 @@ extern char __irqentry_text_start[], __irqentry_text_end[];
+>  extern char __mmuoff_data_start[], __mmuoff_data_end[];
+>  extern char __entry_tramp_text_start[], __entry_tramp_text_end[];
+>  extern char __relocate_new_kernel_start[], __relocate_new_kernel_end[];
+> +extern char __sym_code_functions_start[], __sym_code_functions_end[];
+>  
+>  static inline size_t entry_tramp_text_size(void)
+>  {
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> index 5ef2ce217324..eda8581f7dbe 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -62,6 +62,31 @@ struct unwind_state {
+>  	bool reliable;
+>  };
+>  
+> +struct code_range {
+> +	unsigned long	start;
+> +	unsigned long	end;
+> +};
+> +
+> +static struct code_range	*sym_code_functions;
+> +static int			num_sym_code_functions;
+> +
+> +int __init init_sym_code_functions(void)
+> +{
+> +	size_t size = (unsigned long)__sym_code_functions_end -
+> +		      (unsigned long)__sym_code_functions_start;
+> +
+> +	sym_code_functions = (struct code_range *)__sym_code_functions_start;
+> +	/*
+> +	 * Order it so that sym_code_functions is not visible before
+> +	 * num_sym_code_functions.
+> +	 */
+> +	smp_mb();
+> +	num_sym_code_functions = size / sizeof(struct code_range);
+> +
+> +	return 0;
+> +}
+> +early_initcall(init_sym_code_functions);
 
-In that case, I would just leave it under the current name and not change
-m68k at all. I don't like the m68k_virt_to_bus() name because there is
-not anything CPU specific in what it does, and keeping it in a common
-header does nothing to prevent it from being used on other platforms
-either.
+There's no reason to need an initcall for this; we can iterate over this
+directly using __sym_code_functions_start and __sym_code_functions_end, like we
+do for exception tables today.
 
-> >> 32bit powerpc is a different matter though.
-> >
-> > It's similar, but unrelated. The two apple ethernet drivers
-> > (bmac and mace) can again either get changed to use the
-> > dma-mapping interfaces, or get a custom pmac_virt_to_bus()/
-> > pmac_bus_to_virt() helper.
->
-> Hmmm - I see Finn had done the DMA API conversion on macmace.c which
-> might give some hints on what to do about mace.c ... no idea about
-> bmac.c though. And again, haven't got hardware to test, so custom
-> helpers is it, then.
+For example:
 
-Ok.
+static inline bool pc_is_sym_code(unsigned long pc)
+{
+	extern struct code_range *__sym_code_functions_start;
+	extern struct code_range *__sym_code_functions_end;
 
-          Arnd
+	struct code_range *r;
+
+	for (r = __sym_code_functions_start; r < __sym_code_functions_end; r++) {
+		if (pc >= r->start && pc < r->end)
+			return true;
+	}
+
+	return false;
+}
+
+Thanks,
+Mark.
+
+> +
+>  static void unwind_init_common(struct unwind_state *state,
+>  			       struct task_struct *task)
+>  {
+> @@ -251,6 +276,10 @@ NOKPROBE_SYMBOL(unwind_next);
+>   */
+>  static void unwind_check_reliability(struct unwind_state *state)
+>  {
+> +	const struct code_range *range;
+> +	unsigned long pc;
+> +	int i;
+> +
+>  	if (state->fp == state->final_fp) {
+>  		/* Final frame; no more unwind, no need to check reliability */
+>  		return;
+> @@ -263,6 +292,32 @@ static void unwind_check_reliability(struct unwind_state *state)
+>  	 */
+>  	if (!__kernel_text_address(state->pc))
+>  		state->reliable = false;
+> +
+> +	/*
+> +	 * Check the return PC against sym_code_functions[]. If there is a
+> +	 * match, then the consider the stack frame unreliable.
+> +	 *
+> +	 * As SYM_CODE functions don't follow the usual calling conventions,
+> +	 * we assume by default that any SYM_CODE function cannot be unwound
+> +	 * reliably.
+> +	 *
+> +	 * Note that this includes:
+> +	 *
+> +	 * - Exception handlers and entry assembly
+> +	 * - Trampoline assembly (e.g., ftrace, kprobes)
+> +	 * - Hypervisor-related assembly
+> +	 * - Hibernation-related assembly
+> +	 * - CPU start-stop, suspend-resume assembly
+> +	 * - Kernel relocation assembly
+> +	 */
+> +	pc = state->pc;
+> +	for (i = 0; i < num_sym_code_functions; i++) {
+> +		range = &sym_code_functions[i];
+> +		if (pc >= range->start && pc < range->end) {
+> +			state->reliable = false;
+> +			return;
+> +		}
+> +	}
+>  }
+>  
+>  static bool notrace unwind(struct unwind_state *state,
+> diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+> index 2d4a8f995175..414dbc82d0a6 100644
+> --- a/arch/arm64/kernel/vmlinux.lds.S
+> +++ b/arch/arm64/kernel/vmlinux.lds.S
+> @@ -120,6 +120,14 @@ jiffies = jiffies_64;
+>  #define TRAMP_TEXT
+>  #endif
+>  
+> +#define SYM_CODE_FUNCTIONS				\
+> +	. = ALIGN(16);					\
+> +	.symcode : AT(ADDR(.symcode) - LOAD_OFFSET) {	\
+> +		__sym_code_functions_start = .;		\
+> +		KEEP(*(sym_code_functions))		\
+> +		__sym_code_functions_end = .;		\
+> +	}
+> +
+>  /*
+>   * The size of the PE/COFF section that covers the kernel image, which
+>   * runs from _stext to _edata, must be a round multiple of the PE/COFF
+> @@ -212,6 +220,8 @@ SECTIONS
+>  	swapper_pg_dir = .;
+>  	. += PAGE_SIZE;
+>  
+> +	SYM_CODE_FUNCTIONS
+> +
+>  	. = ALIGN(SEGMENT_ALIGN);
+>  	__init_begin = .;
+>  	__inittext_begin = .;
+> -- 
+> 2.25.1
+> 

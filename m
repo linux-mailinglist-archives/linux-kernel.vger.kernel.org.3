@@ -2,192 +2,391 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CDF55B3BD
+	by mail.lfdr.de (Postfix) with ESMTP id C238D55B3BE
 	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 21:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbiFZTQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 15:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        id S232079AbiFZTQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 15:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232020AbiFZTQV (ORCPT
+        with ESMTP id S232055AbiFZTQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 15:16:21 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A54DF35
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 12:16:20 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:43804)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o5Xk3-00Cq77-RR; Sun, 26 Jun 2022 13:16:19 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:57744 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o5Xk2-008ahI-S9; Sun, 26 Jun 2022 13:16:19 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>
-References: <20220622140853.31383-1-pmladek@suse.com>
-        <YraWWl+Go17uPOgR@mtj.duckdns.org>
-        <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
-        <874k0863x8.fsf@email.froward.int.ebiederm.org>
-        <CAHk-=wgTG2K3erROP19320zBN6BHVf0hRfXGdawkGR4gzrJN6w@mail.gmail.com>
-        <CAHk-=whLsaRKaFKS0UffeCYYCVyP0bbiB4BTYTaXtScgu6R9yA@mail.gmail.com>
-        <87pmiw1fy6.fsf@email.froward.int.ebiederm.org>
-        <CAHk-=wiutNT47oNhyk_WvMj2qp4pehYFptXCUzW=u_2STLQiww@mail.gmail.com>
-        <CAHk-=whX_=BNZ4kVEAu2NV3CMnhwsuYTyE65FQXUMx8VPNOAOA@mail.gmail.com>
-        <87ilonuti2.fsf_-_@email.froward.int.ebiederm.org>
-Date:   Sun, 26 Jun 2022 14:16:12 -0500
-In-Reply-To: <87ilonuti2.fsf_-_@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Sun, 26 Jun 2022 14:14:45 -0500")
-Message-ID: <877d53utfn.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 26 Jun 2022 15:16:35 -0400
+Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DE5DF52;
+        Sun, 26 Jun 2022 12:16:33 -0700 (PDT)
+Received: from newone.lan (_gateway [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id E81EA2007F;
+        Sun, 26 Jun 2022 21:16:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1656270992;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=WKybZGhV4YjO/putV0v1ehsWG0C62FhaFEQ12u5mHj0=;
+        b=wqQEAaYOW66KNmpLo/LganRB/8rOL5P0Ra6pANPWdYmpP/FBD5lHIszIWJH2hqzz3xtzX9
+        jfVG2Q1OztvmrXANrXlUKfK+b8wnvP8AIi9OQuq6oeNLvY7zhZKp60cKB+AZLOrP/5Njl5
+        IDj4EpW2n5YfIhUM5cGUgJ+K9hkeD7M=
+From:   David Heidelberg <david@ixit.cz>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     ~okias/devicetree@lists.sr.ht, David Heidelberg <david@ixit.cz>,
+        Caleb Connolly <caleb@connolly.tech>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: mfd: convert to yaml Qualcomm SPMI PMIC
+Date:   Sun, 26 Jun 2022 21:16:30 +0200
+Message-Id: <20220626191630.176835-1-david@ixit.cz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1o5Xk2-008ahI-S9;;;mid=<877d53utfn.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX190SQdd+8R3p3eCZ3mGtEfgajVYGJGF7/E=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Transfer-Encoding: 8bit
+X-Spam: Yes
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_DYNAMIC,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 470 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 4.2 (0.9%), b_tie_ro: 2.8 (0.6%), parse: 1.23
-        (0.3%), extract_message_metadata: 11 (2.4%), get_uri_detail_list: 2.6
-        (0.5%), tests_pri_-1000: 11 (2.3%), tests_pri_-950: 1.01 (0.2%),
-        tests_pri_-900: 0.81 (0.2%), tests_pri_-90: 103 (22.0%), check_bayes:
-        102 (21.8%), b_tokenize: 8 (1.7%), b_tok_get_all: 8 (1.6%),
-        b_comp_prob: 1.46 (0.3%), b_tok_touch_all: 83 (17.6%), b_finish: 0.67
-        (0.1%), tests_pri_0: 323 (68.8%), check_dkim_signature: 0.45 (0.1%),
-        check_dkim_adsp: 2.5 (0.5%), poll_dns_idle: 1.09 (0.2%), tests_pri_10:
-        2.9 (0.6%), tests_pri_500: 7 (1.6%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH 2/3] kthread: Replace kernel_thread with new_kthread
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Convert Qualcomm SPMI PMIC binding to yaml format.
 
-It is desriable to be able to perform all of the kthread setup before
-the kernel thread is awaked for the first time.
+Additional changes:
+ - filled many missing compatibles
 
-To make that possible replace kernel_thread with new_kthread that does
-all of the same work except it does not call wake_up_new_task.
-
-Replace the two uses of kernel_threadd with new_kthread and a call
-to wake_up_new_task.
-
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Co-developed-by: Caleb Connolly <caleb@connolly.tech>
+Signed-off-by: David Heidelberg <david@ixit.cz>
 ---
- include/linux/sched/task.h |  2 +-
- init/main.c                |  6 ++----
- kernel/fork.c              |  4 ++--
- kernel/kthread.c           | 10 ++++++----
- 4 files changed, 11 insertions(+), 11 deletions(-)
+v3:
+ - added subnodes, there are two not converted to YAML yet, but it works
+ - now it prints milion directly unrelated warning to this binding
+   (it's related to the included subnodes bindings, can be merged,
+    but it'll generate more warnings and preferably anyone can takeover
+    from here)
+ - add qcom,pmx65
 
-diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index d95930e220da..c4c7a0118553 100644
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -91,7 +91,7 @@ extern pid_t kernel_clone(struct kernel_clone_args *kargs);
- struct task_struct *create_io_thread(int (*fn)(void *), void *arg, int node);
- struct task_struct *fork_idle(int);
- struct mm_struct *copy_init_mm(void);
--extern pid_t kernel_thread(int (*fn)(void *), void *arg);
-+extern struct task_struct *new_kthread(int (*fn)(void *), void *arg, int node);
- extern pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags);
- extern long kernel_wait4(pid_t, int __user *, int, struct rusage *);
- int kernel_wait(pid_t pid, int *stat);
-diff --git a/init/main.c b/init/main.c
-index 211d38db0d16..b437581f8001 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -701,10 +701,8 @@ noinline void __ref rest_init(void)
- 	rcu_read_unlock();
- 
- 	numa_default_policy();
--	pid = kernel_thread(kthreadd, NULL);
--	rcu_read_lock();
--	kthreadd_task = find_task_by_pid_ns(pid, &init_pid_ns);
--	rcu_read_unlock();
-+	kthreadd_task = new_kthread(kthreadd, NULL, NUMA_NO_NODE);
-+	wake_up_new_task(kthreadd_task);
- 
- 	/*
- 	 * Enable might_sleep() and smp_processor_id() checks.
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 65909ded0ea7..794d9f9c78bc 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2694,7 +2694,7 @@ pid_t kernel_clone(struct kernel_clone_args *args)
- /*
-  * Create a kernel thread.
-  */
--pid_t kernel_thread(int (*fn)(void *), void *arg)
-+struct task_struct *new_kthread(int (*fn)(void *), void *arg, int node)
- {
- 	unsigned long flags = CLONE_FS | CLONE_FILES | SIGCHLD;
- 	struct kernel_clone_args args = {
-@@ -2706,7 +2706,7 @@ pid_t kernel_thread(int (*fn)(void *), void *arg)
- 		.kthread	= 1,
- 	};
- 
--	return kernel_clone(&args);
-+	return copy_process(NULL, 0, node, &args);
- }
- 
- /*
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index c0505e6b7142..8529f6b1582b 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -390,14 +390,14 @@ int tsk_fork_get_node(struct task_struct *tsk)
- 
- static void create_kthread(struct kthread_create_info *create)
- {
--	int pid;
-+	struct task_struct *new;
- 
- #ifdef CONFIG_NUMA
- 	current->pref_node_fork = create->node;
- #endif
- 	/* We want our own signal handler (we take no signals by default). */
--	pid = kernel_thread(kthread, create);
--	if (pid < 0) {
-+	new = new_kthread(kthread, create, NUMA_NO_NODE);
-+	if (IS_ERR(new)) {
- 		/* If user was SIGKILLed, I release the structure. */
- 		struct completion *done = xchg(&create->done, NULL);
- 
-@@ -405,8 +405,10 @@ static void create_kthread(struct kthread_create_info *create)
- 			kfree(create);
- 			return;
- 		}
--		create->result = ERR_PTR(pid);
-+		create->result = ERR_CAST(new);
- 		complete(done);
-+	} else {
-+		wake_up_new_task(new);
- 	}
- }
- 
+v2:
+ - changed author to myself, kept Caleb as co-author
+ - moved nodename to properties
+ - add nodenames for pm* with deprecated property
+ - add ^$ to pattern properties
+ - dropped interrupt-names property
+ - added reg prop. to the nodes which have register in nodename
+ - added compatible pmx55
+Signed-off-by: David Heidelberg <david@ixit.cz>
+---
+ .../bindings/mfd/qcom,spmi-pmic.txt           |  94 ---------
+ .../bindings/mfd/qcom,spmi-pmic.yaml          | 191 ++++++++++++++++++
+ 2 files changed, 191 insertions(+), 94 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt
+deleted file mode 100644
+index eb78e3ae7703..000000000000
+--- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt
++++ /dev/null
+@@ -1,94 +0,0 @@
+-          Qualcomm SPMI PMICs multi-function device bindings
+-
+-The Qualcomm SPMI series presently includes PM8941, PM8841 and PMA8084
+-PMICs.  These PMICs use a QPNP scheme through SPMI interface.
+-QPNP is effectively a partitioning scheme for dividing the SPMI extended
+-register space up into logical pieces, and set of fixed register
+-locations/definitions within these regions, with some of these regions
+-specifically used for interrupt handling.
+-
+-The QPNP PMICs are used with the Qualcomm Snapdragon series SoCs, and are
+-interfaced to the chip via the SPMI (System Power Management Interface) bus.
+-Support for multiple independent functions are implemented by splitting the
+-16-bit SPMI slave address space into 256 smaller fixed-size regions, 256 bytes
+-each. A function can consume one or more of these fixed-size register regions.
+-
+-Required properties:
+-- compatible:      Should contain one of:
+-                   "qcom,pm660",
+-                   "qcom,pm660l",
+-                   "qcom,pm7325",
+-                   "qcom,pm8004",
+-                   "qcom,pm8005",
+-                   "qcom,pm8019",
+-                   "qcom,pm8028",
+-                   "qcom,pm8110",
+-                   "qcom,pm8150",
+-                   "qcom,pm8150b",
+-                   "qcom,pm8150c",
+-                   "qcom,pm8150l",
+-                   "qcom,pm8226",
+-                   "qcom,pm8350c",
+-                   "qcom,pm8841",
+-                   "qcom,pm8901",
+-                   "qcom,pm8909",
+-                   "qcom,pm8916",
+-                   "qcom,pm8941",
+-                   "qcom,pm8950",
+-                   "qcom,pm8953",
+-                   "qcom,pm8994",
+-                   "qcom,pm8998",
+-                   "qcom,pma8084",
+-                   "qcom,pmd9635",
+-                   "qcom,pmi8950",
+-                   "qcom,pmi8962",
+-                   "qcom,pmi8994",
+-                   "qcom,pmi8998",
+-                   "qcom,pmk8002",
+-                   "qcom,pmk8350",
+-                   "qcom,pmr735a",
+-                   "qcom,smb2351",
+-                   or generalized "qcom,spmi-pmic".
+-- reg:             Specifies the SPMI USID slave address for this device.
+-                   For more information see:
+-                   Documentation/devicetree/bindings/spmi/spmi.yaml
+-
+-Required properties for peripheral child nodes:
+-- compatible:      Should contain "qcom,xxx", where "xxx" is a peripheral name.
+-
+-Optional properties for peripheral child nodes:
+-- interrupts:      Interrupts are specified as a 4-tuple. For more information
+-                   see:
+-                   Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+-- interrupt-names: Corresponding interrupt name to the interrupts property
+-
+-Each child node of SPMI slave id represents a function of the PMIC. In the
+-example below the rtc device node represents a peripheral of pm8941
+-SID = 0. The regulator device node represents a peripheral of pm8941 SID = 1.
+-
+-Example:
+-
+-	spmi {
+-		compatible = "qcom,spmi-pmic-arb";
+-
+-		pm8941@0 {
+-			compatible = "qcom,pm8941", "qcom,spmi-pmic";
+-			reg = <0x0 SPMI_USID>;
+-
+-			rtc {
+-				compatible = "qcom,rtc";
+-				interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
+-				interrupt-names = "alarm";
+-			};
+-		};
+-
+-		pm8941@1 {
+-			compatible = "qcom,pm8941", "qcom,spmi-pmic";
+-			reg = <0x1 SPMI_USID>;
+-
+-			regulator {
+-				compatible = "qcom,regulator";
+-				regulator-name = "8941_boost";
+-			};
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+new file mode 100644
+index 000000000000..32daebc3a0bc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+@@ -0,0 +1,191 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/qcom,spmi-pmic.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm SPMI PMICs multi-function device
++
++description: |
++  Some Qualcomm PMICs used with the Snapdragon series SoCs are interfaced
++  to the chip via the SPMI (System Power Management Interface) bus.
++  Support for multiple independent functions are implemented by splitting the
++  16-bit SPMI peripheral address space into 256 smaller fixed-size regions, 256 bytes
++  each. A function can consume one or more of these fixed-size register regions.
++
++  The Qualcomm SPMI series includes the PM8941, PM8841, PMA8084, PM8998 and other
++  PMICs.  These PMICs use a "QPNP" scheme through SPMI interface.
++  QPNP is effectively a partitioning scheme for dividing the SPMI extended
++  register space up into logical pieces, and set of fixed register
++  locations/definitions within these regions, with some of these regions
++  specifically used for interrupt handling.
++
++maintainers:
++  - Stephen Boyd <sboyd@kernel.org>
++
++properties:
++  $nodename:
++    oneOf:
++      - pattern: '^pmic@.*$'
++      - pattern: '^pm(a|s)?[0-9]*@.*$'
++        deprecated: true
++
++  compatible:
++    items:
++      - enum:
++          - qcom,pm660
++          - qcom,pm660l
++          - qcom,pm6150
++          - qcom,pm6150l
++          - qcom,pm6350
++          - qcom,pm7325
++          - qcom,pm8004
++          - qcom,pm8005
++          - qcom,pm8009
++          - qcom,pm8019
++          - qcom,pm8110
++          - qcom,pm8150
++          - qcom,pm8150b
++          - qcom,pm8150l
++          - qcom,pm8226
++          - qcom,pm8350
++          - qcom,pm8350b
++          - qcom,pm8350c
++          - qcom,pm8841
++          - qcom,pm8909
++          - qcom,pm8916
++          - qcom,pm8941
++          - qcom,pm8950
++          - qcom,pm8994
++          - qcom,pm8998
++          - qcom,pma8084
++          - qcom,pmd9635
++          - qcom,pmi8950
++          - qcom,pmi8962
++          - qcom,pmi8994
++          - qcom,pmi8998
++          - qcom,pmk8350
++          - qcom,pmm8155au
++          - qcom,pmr735a
++          - qcom,pmr735b
++          - qcom,pms405
++          - qcom,pmx55
++          - qcom,pmx65
++          - qcom,smb2351
++      - const: qcom,spmi-pmic
++
++  reg:
++    minItems: 1
++    maxItems: 2
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
++  labibb:
++    type: object
++    $ref: /schemas/regulator/qcom-labibb-regulator.yaml#
++
++  regulators:
++    type: object
++    $ref: /schemas/regulator/regulator.yaml#
++
++patternProperties:
++  "^adc@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/iio/adc/qcom,spmi-vadc.yaml#
++
++  "^adc-tm@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/thermal/qcom-spmi-adc-tm5.yaml#
++
++  "^audio-codec@[0-9a-f]+$":
++    type: object
++    additionalProperties: true # FIXME qcom,pm8916-wcd-analog-codec binding not converted yet
++
++  "extcon@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/extcon/qcom,pm8941-misc.yaml#
++
++  "gpio(s)?@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/pinctrl/qcom,pmic-gpio.yaml#
++
++  "pon@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/power/reset/qcom,pon.yaml#
++
++  "pwm@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/leds/leds-qcom-lpg.yaml#
++
++  "^rtc@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/rtc/qcom-pm8xxx-rtc.yaml#
++
++  "^temp-alarm@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/thermal/qcom,spmi-temp-alarm.yaml#
++
++  "^vibrator@[0-9a-f]+$":
++    type: object
++    additionalProperties: true # FIXME qcom,pm8916-vib binding not converted yet
++
++  "^mpps@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/pinctrl/qcom,pmic-mpp.yaml#
++
++  "(.*)?(wled|leds)@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/leds/backlight/qcom-wled.yaml#
++    unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/spmi/spmi.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    spmi@c440000 {
++        compatible = "qcom,spmi-pmic-arb";
++        reg = <0x0c440000 0x1100>,
++              <0x0c600000 0x2000000>,
++              <0x0e600000 0x100000>,
++              <0x0e700000 0xa0000>,
++              <0x0c40a000 0x26000>;
++        reg-names = "core", "chnls", "obsrvr", "intr", "cnfg";
++        interrupt-names = "periph_irq";
++        interrupts = <GIC_SPI 481 IRQ_TYPE_LEVEL_HIGH>;
++        qcom,ee = <0>;
++        qcom,channel = <0>;
++        #address-cells = <2>;
++        #size-cells = <0>;
++        interrupt-controller;
++        #interrupt-cells = <4>;
++        cell-index = <0>;
++
++        pmi8998_lsid0: pmic@2 {
++            compatible = "qcom,pmi8998", "qcom,spmi-pmic";
++            reg = <0x2 SPMI_USID>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            pmi8998_gpio: gpios@c000 {
++                compatible = "qcom,pmi8998-gpio", "qcom,spmi-gpio";
++                reg = <0xc000>;
++                gpio-controller;
++                gpio-ranges = <&pmi8998_gpio 0 0 14>;
++                #gpio-cells = <2>;
++                interrupt-controller;
++                #interrupt-cells = <2>;
++            };
++        };
++    };
 -- 
-2.35.3
+2.35.1
 

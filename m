@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F164255AF3A
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 06:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C53355AF3D
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 07:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233837AbiFZEv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 00:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
+        id S233945AbiFZFEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 01:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiFZEvy (ORCPT
+        with ESMTP id S229957AbiFZFEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 00:51:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BB0F14D3F
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 21:51:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656219112;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4CX/E6JYv2WQxxdvMRVd+6+3DXTPnuXJbU5BJpFyg+4=;
-        b=B14s7T5VK2GmpxRmkRLaR0mMDOj15KW6RbhA5bL6UkkETKiZxYnnewAqVWfcP+OChIJA0r
-        IvnsSdYdFnmCIRGrnOiHpUtApQ4q5lE6NId1QmxKa+Zs1eLVw5dETYkai0Pi3s1ibk0xia
-        yAuLimw3QLkFj1Xt+wSj7DTa52K0jww=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-418-zV1LmzvGOMOByaV6-9oPfA-1; Sun, 26 Jun 2022 00:51:47 -0400
-X-MC-Unique: zV1LmzvGOMOByaV6-9oPfA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Sun, 26 Jun 2022 01:04:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D82213D62
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 22:04:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0D23C1C05AE9;
-        Sun, 26 Jun 2022 04:51:47 +0000 (UTC)
-Received: from cantor.redhat.com (unknown [10.2.16.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 523DC2166B2A;
-        Sun, 26 Jun 2022 04:51:46 +0000 (UTC)
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     dmaengine@vger.kernel.org
-Cc:     Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        Dave Jiang <dave.jiang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v2] dmaengine: idxd: Only call idxd_enable_system_pasid() if succeeded in enabling SVA feature
-Date:   Sat, 25 Jun 2022 21:51:44 -0700
-Message-Id: <20220626045144.9063-1-jsnitsel@redhat.com>
-In-Reply-To: <20220625221333.214589-1-jsnitsel@redhat.com>
-References: <20220625221333.214589-1-jsnitsel@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EA63B8009F
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 05:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99494C341CB
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 05:04:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656219883;
+        bh=7oOGRyu0tC98OV2VuDUV0usAqseVpiJUcrzGvwxzzbw=;
+        h=From:Date:Subject:To:Cc:From;
+        b=oRczlz0eRwpq6cE+rAmo3iH1dvDBWo6jW4eo34kfyFrLGQn3zODA9PflMu/x3jM+o
+         XYkcabCtFtiWHSvJYC2m9O1s+3ke6K9f1URKr8dgsHDSrZ3OVTEtdXFgo21tV2mYWk
+         Czt9HPbLPcq9zQtl8m0uLsOXryuosegw9l0qfJTnBKokK/zhsnJSZv+T+eSqQWbSB/
+         HqPaJylzJI6qKgidBOg0AnHD+rYZrwbjRrvgDlR9XY0zuNwS7p5lhfW+r1Ov0rA3hu
+         p5Q+vxbfb6qv7iH/KsPaswpQOjiGGzNqLRwoS15aijKjQY0Rr6dHDDjujvUe/bkNK2
+         6FH+bibVd6VJw==
+Received: by mail-wm1-f45.google.com with SMTP id n185so3444667wmn.4
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 22:04:43 -0700 (PDT)
+X-Gm-Message-State: AJIora8AZTg3PcTbE7PKyUDRvY4INyEER8UWNGNydMd8FogyDre5n6SS
+        wKeBJaZohoLtg1qBX9aU78i+GccuVnPU/ow3X7s=
+X-Google-Smtp-Source: AGRyM1u5AujRwTBTJxJfLN/iMWs3d3m7/plnKqA/m3WOt3h0yFNccU2KLrlWEwkDfMClPLKO9PVanuWGZ0IHj6ud0s4=
+X-Received: by 2002:a1c:ac83:0:b0:39c:87fc:5797 with SMTP id
+ v125-20020a1cac83000000b0039c87fc5797mr12509763wme.13.1656219881842; Sat, 25
+ Jun 2022 22:04:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:adf:f805:0:0:0:0:0 with HTTP; Sat, 25 Jun 2022 22:04:41
+ -0700 (PDT)
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Sun, 26 Jun 2022 14:04:41 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd9C+9RAF=M2h-gVXpnUDq-JQSF857agrE5c=eZQjEZaVg@mail.gmail.com>
+Message-ID: <CAKYAXd9C+9RAF=M2h-gVXpnUDq-JQSF857agrE5c=eZQjEZaVg@mail.gmail.com>
+Subject: [GIT PULL] exfat fixes for 5.19-rc4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,89 +62,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On a Sapphire Rapids system if you boot without intel_iommu=on, the IDXD
-driver will crash during probe in iommu_sva_bind_device().
+Hi Linus,
 
-[   21.423729] BUG: kernel NULL pointer dereference, address: 0000000000000038
-[   21.445108] #PF: supervisor read access in kernel mode
-[   21.450912] #PF: error_code(0x0000) - not-present page
-[   21.456706] PGD 0
-[   21.459047] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[   21.464004] CPU: 0 PID: 1420 Comm: kworker/0:3 Not tainted 5.19.0-0.rc3.27.eln120.x86_64 #1
-[   21.464011] Hardware name: Intel Corporation EAGLESTREAM/EAGLESTREAM, BIOS EGSDCRB1.SYS.0067.D12.2110190954 10/19/2021
-[   21.464015] Workqueue: events work_for_cpu_fn
-[   21.464030] RIP: 0010:iommu_sva_bind_device+0x1d/0xe0
-[   21.464046] Code: c3 cc 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 41 57 41 56 49 89 d6 41 55 41 54 55 53 48 83 ec 08 48 8b 87 d8 02 00 00 <48> 8b 40 38 48 8b 50 10 48 83 7a 70 00 48 89 14 24 0f 84 91 00 00
-[   21.464050] RSP: 0018:ff7245d9096b7db8 EFLAGS: 00010296
-[   21.464054] RAX: 0000000000000000 RBX: ff1eadeec8a51000 RCX: 0000000000000000
-[   21.464058] RDX: ff7245d9096b7e24 RSI: 0000000000000000 RDI: ff1eadeec8a510d0
-[   21.464060] RBP: ff1eadeec8a51000 R08: ffffffffb1a12300 R09: ff1eadffbfce25b4
-[   21.464062] R10: ffffffffffffffff R11: 0000000000000038 R12: ffffffffc09f8000
-[   21.464065] R13: ff1eadeec8a510d0 R14: ff7245d9096b7e24 R15: ff1eaddf54429000
-[   21.464067] FS:  0000000000000000(0000) GS:ff1eadee7f600000(0000) knlGS:0000000000000000
-[   21.464070] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   21.464072] CR2: 0000000000000038 CR3: 00000008c0e10006 CR4: 0000000000771ef0
-[   21.464074] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   21.464076] DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 0000000000000400
-[   21.464078] PKRU: 55555554
-[   21.464079] Call Trace:
-[   21.464083]  <TASK>
-[   21.464092]  idxd_pci_probe+0x259/0x1070 [idxd]
-[   21.464121]  local_pci_probe+0x3e/0x80
-[   21.464132]  work_for_cpu_fn+0x13/0x20
-[   21.464136]  process_one_work+0x1c4/0x380
-[   21.464143]  worker_thread+0x1ab/0x380
-[   21.464147]  ? _raw_spin_lock_irqsave+0x23/0x50
-[   21.464158]  ? process_one_work+0x380/0x380
-[   21.464161]  kthread+0xe6/0x110
-[   21.464168]  ? kthread_complete_and_exit+0x20/0x20
-[   21.464172]  ret_from_fork+0x1f/0x30
+This is exfat fixes pull request for v5.19-rc4. I add description of
+this pull request on below. Please pull exfat with following fixes.
 
-iommu_sva_bind_device() requires SVA has been enabled successfully on
-the IDXD device before it's called. Otherwise, iommu_sva_bind_device()
-will access a NULL pointer. If Intel IOMMU is disabled, SVA cannot be
-enabled and thus idxd_enable_system_pasid() and iommu_sva_bind_device()
-should not be called.
+Thanks!
 
-v2: Balance braces on if else block. Fix up commit description.
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
-Fixes: 42a1b73852c4 ("dmaengine: idxd: Separate user and kernel pasid enabling")
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
----
- drivers/dma/idxd/init.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
-diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
-index 355fb3ef4cbf..aa3478257ddb 100644
---- a/drivers/dma/idxd/init.c
-+++ b/drivers/dma/idxd/init.c
-@@ -512,15 +512,16 @@ static int idxd_probe(struct idxd_device *idxd)
- 	dev_dbg(dev, "IDXD reset complete\n");
- 
- 	if (IS_ENABLED(CONFIG_INTEL_IDXD_SVM) && sva) {
--		if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA))
-+		if (iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA)) {
- 			dev_warn(dev, "Unable to turn on user SVA feature.\n");
--		else
-+		} else {
- 			set_bit(IDXD_FLAG_USER_PASID_ENABLED, &idxd->flags);
- 
--		if (idxd_enable_system_pasid(idxd))
--			dev_warn(dev, "No in-kernel DMA with PASID.\n");
--		else
--			set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
-+			if (idxd_enable_system_pasid(idxd))
-+				dev_warn(dev, "No in-kernel DMA with PASID.\n");
-+			else
-+				set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
-+		}
- 	} else if (!sva) {
- 		dev_warn(dev, "User forced SVA off via module param.\n");
- 	}
--- 
-2.36.1
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat.git
+tags/exfat-for-5.19-rc4
+
+for you to fetch changes up to 204e6ceaa1035cb7b92b156517e88842ebb4c7ff:
+
+  exfat: use updated exfat_chain directly during renaming (2022-06-09
+21:26:32 +0900)
+
+----------------------------------------------------------------
+Description for this pull request:
+ - Use updated exfat_chain directly instead of snapshot values  in rename.
+
+----------------------------------------------------------------
+Sungjong Seo (1):
+      exfat: use updated exfat_chain directly during renaming
+
+ fs/exfat/namei.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)

@@ -2,109 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FAB55B104
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 262B055B108
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbiFZKCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 06:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
+        id S234030AbiFZKGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 06:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbiFZKCF (ORCPT
+        with ESMTP id S229955AbiFZKGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 06:02:05 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98219EE06;
-        Sun, 26 Jun 2022 03:02:04 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id f14so5193332qkm.0;
-        Sun, 26 Jun 2022 03:02:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EOYqlxwdQdrnN6hSTkbM6b0WWc0keG2pFd9ArViBEXc=;
-        b=MpzFQkh0M5y/2N+a8mFTWu+DmWzuiXNtGIb2WYhdBjl9xkCiodapRWvTXrKCIEdjVQ
-         n8bX80bbLscB1gWFlPp8SAUCXA2ZzGhMJUErjsE8vPoHHovNt4Vb1Lr3/cl9wcTy4xjC
-         o8XCllmkYBWpvKshz7GNzZq8V7DSlsDdL+raAAQKd53GHahBTN97S07WrDiUfGi1DDxn
-         lMpvtwF0/ehp3MFRDWXELMIlx7teWE98dg6fVGNISoSu3+S0iRoGYkCITSVi/uBVarE8
-         MfeSEX+ZcQYgMzaCSFdciKQVWGeMdjOv+fZiGdgOFmGLJeYjv0sdPtIdiesnj+nSb/6V
-         KeYg==
-X-Gm-Message-State: AJIora+TAVKBu5/g3FfiISiKSoXAaVwhIlGzJj+H5Fj1Mgqzk6YkVyx8
-        TWitHaFtha8hQZ4SKipBPb1Sr0P/qfg4/Q==
-X-Google-Smtp-Source: AGRyM1t3IKyqUzzA8DYujLG9UsLC5z8zgmGFSiMRYylKCGSj0dgcZuI1DcuMeP42ss2O22StviGjAg==
-X-Received: by 2002:ae9:f40b:0:b0:6ae:fdd7:1935 with SMTP id y11-20020ae9f40b000000b006aefdd71935mr4937140qkl.676.1656237723546;
-        Sun, 26 Jun 2022 03:02:03 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id m22-20020a05620a291600b006aef641865esm5983024qkp.128.2022.06.26.03.02.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 03:02:03 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id v185so2434528ybe.8;
-        Sun, 26 Jun 2022 03:02:02 -0700 (PDT)
-X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
- bu5-20020a056902090500b0064a2089f487mr8140536ybb.202.1656237722731; Sun, 26
- Jun 2022 03:02:02 -0700 (PDT)
+        Sun, 26 Jun 2022 06:06:18 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A434B4AE;
+        Sun, 26 Jun 2022 03:06:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=ETSXXR3XzgEhkm6ZhG3jzrQ5JVh23r2tv8xELktbMK0=; b=2VxIh+rLvtGkW1BMXzrLQTbgJh
+        b0gPCfkzwwu5a0FknvqBQ2ICpc60iHlAnYvw68oXbqo6ZYV0xRLxBI/lggAVjMvhHutBCgh3cH/oK
+        qrkGjqA7YjIK+Hy2sTNd4zD7FvnjAlkxGOZXJ/d5uKKiPeEXy+AI5RalhXZKxbqWBtRk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1o5P9W-008Hgp-AH; Sun, 26 Jun 2022 12:06:02 +0200
+Date:   Sun, 26 Jun 2022 12:06:02 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     alexandru.tachici@analog.com
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gerhard@engleder-embedded.com,
+        geert+renesas@glider.be, joel@jms.id.au, stefan.wahren@i2se.com,
+        wellslutw@gmail.com, geert@linux-m68k.org, robh+dt@kernel.org,
+        d.michailidis@fungible.com, stephen@networkplumber.org,
+        l.stelmach@samsung.com, linux-kernel@vger.kernel.org
+Subject: Re: [net-next 2/2] dt-bindings: net: adin1110: Add docs
+Message-ID: <YrgvimyFdPVhL6hF@lunn.ch>
+References: <20220624200628.77047-1-alexandru.tachici@analog.com>
+ <20220624200628.77047-3-alexandru.tachici@analog.com>
 MIME-Version: 1.0
-References: <521788e22ad8f7a5058c154f068b061525321841.1656142814.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <521788e22ad8f7a5058c154f068b061525321841.1656142814.git.christophe.jaillet@wanadoo.fr>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 26 Jun 2022 12:01:50 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU1zN4Eo52T+AhJtJqBM0woW8vvTgysniMd_nv207NjgA@mail.gmail.com>
-Message-ID: <CAMuHMdU1zN4Eo52T+AhJtJqBM0woW8vvTgysniMd_nv207NjgA@mail.gmail.com>
-Subject: Re: [PATCH] sh: sq: Use the bitmap API when applicable
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624200628.77047-3-alexandru.tachici@analog.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+> +patternProperties:
+> +  "^phy@[0-1]$":
+> +    description: |
+> +      ADIN1100 PHY that is present on the same chip as the MAC.
+> +    type: object
+> +
+> +    properties:
+> +      reg:
+> +        items:
+> +          maximum: 1
+> +
+> +    allOf:
+> +      - if:
+> +          properties:
+> +            compatible:
+> +              contains:
+> +                const: adi,adin1110
+> +        then:
+> +          properties:
+> +            compatible:
+> +              const: ethernet-phy-id0283.bc91
+> +        else:
+> +          properties:
+> +            compatible:
+> +              const: ethernet-phy-id0283.bca1
+> +
+> +    required:
+> +      - compatible
+> +      - reg
 
-On Sat, Jun 25, 2022 at 9:45 AM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
-> Using the bitmap API is less verbose than hand writing them.
-> It also improves the semantic.
+Why is any of this needed? You register an MDIO bus and then use the
+PHY at address 0 or 1. phylib should find the PHY and read its ID
+register to load the driver. So i don't think there is anything useful
+here.
 
-Thanks for your patch!
-
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> I don't cross compile, so this patch is NOT compile-tested.
-
-Why not? Cross-compiling is so easy nowadays?
-Many distros even provide cross-compilers ("apt install gcc-sh4-linux-gnu").
-Else try https://mirrors.edge.kernel.org/pub/tools/crosstool/.
-
-> --- a/arch/sh/kernel/cpu/sh4/sq.c
-> +++ b/arch/sh/kernel/cpu/sh4/sq.c
-
-> @@ -382,7 +381,7 @@ static int __init sq_api_init(void)
->         if (unlikely(!sq_cache))
->                 return ret;
->
-> -       sq_bitmap = kzalloc(size, GFP_KERNEL);
-> +       sq_bitmap = bitmap_zalloc(nr_pages, GFP_KERNEL);
-
-Perhaps you need #include <linux/bitmap.h>?
-
-I don't know, I also didn't bother to cross-compile. Why would I? ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+	Andrew

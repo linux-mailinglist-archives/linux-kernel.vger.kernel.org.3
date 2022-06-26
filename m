@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77A555B21D
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 15:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756BD55B232
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 15:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234434AbiFZM4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 08:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
+        id S234455AbiFZM7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 08:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiFZM4n (ORCPT
+        with ESMTP id S230153AbiFZM7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 08:56:43 -0400
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B5EEE23;
-        Sun, 26 Jun 2022 05:56:43 -0700 (PDT)
-Received: by mail-vk1-f173.google.com with SMTP id j15so3330077vkp.5;
-        Sun, 26 Jun 2022 05:56:43 -0700 (PDT)
+        Sun, 26 Jun 2022 08:59:35 -0400
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DE7BE38;
+        Sun, 26 Jun 2022 05:59:34 -0700 (PDT)
+Received: by mail-vs1-f52.google.com with SMTP id i186so6582511vsc.9;
+        Sun, 26 Jun 2022 05:59:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
          :from:date:message-id:subject:to:cc;
-        bh=wxBv0rqVkr7svlorve8lqrJrpCummteUUicpF5jJzIE=;
-        b=cv8OBASz0uocJ83UXvnjAYusBwPdI+Bfw4CQgVdn0pt53xhorb/hSVTbHoO13KL3IR
-         lL9u3vNojAet7kGl6SIDwP/CjMdh/wOfqKsJq+JjCb+WI3FVDelmvAuLf11KzMfm0IZ0
-         aN+Z/lRytoTSw4QI3Jvx+bd/xV+XKGIzz09HSa+PcIappUnO7+sTXzH8RiCgAkWAOZvT
-         58TIjt/g7inSaf8vSpIyDf6l0Na/08/j/HrSD4NxE9aUT/OjO0BOoHZT3zWU/dcPRBQV
-         0fExs5uoOEu08IKXnnlJkIpRpQqQf+uHDtkJaPessLIjzk6ZRhxOGfSK2V2vcfWBHvOl
-         V0Gw==
-X-Gm-Message-State: AJIora8GBxTykefeSCz/QN2ydDNFgr4M86S85o9eRoa4NyRJu6iusxx9
-        f41ewwcgW7GIjpPkSMQrern9wgsFK42dVw==
-X-Google-Smtp-Source: AGRyM1vzk8B0AqTKqO6UYuKfseam6QK26cZXxpI2vBy4Mw4X861x4RsZ3jF/4xmfiWxIZKJ7BlHfpA==
-X-Received: by 2002:a1f:b649:0:b0:36c:d23b:bc4d with SMTP id g70-20020a1fb649000000b0036cd23bbc4dmr2744123vkf.6.1656248202218;
-        Sun, 26 Jun 2022 05:56:42 -0700 (PDT)
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com. [209.85.221.177])
-        by smtp.gmail.com with ESMTPSA id z11-20020a67f54b000000b003519349c5b8sm966156vsn.32.2022.06.26.05.56.41
+        bh=37nZCE11jdK8Rc36vFIBOelXQW1kiUiyXAdrdtitw3s=;
+        b=a9zdDz4sd5oa7DTYKhWGOmR8TyE2Fc/ckEVdYjndAqfwkjBMUeSbjyTCODCfUkK+7Y
+         BsR/FqQzmRBUTnN9rISx3iUUbGOY8bSqrS/V5qzZL+6j1EfzN6XvKnxqjKsfOSyqK5kD
+         /zOxL2p1MkpanJKr2O+qzv8cPyiUHKnjAtaYDrIv1VoUGWdLgZBZ/BfjLIJr60mkppmV
+         uIpKnWihsnBapwHlfRWdxbD4hnhIhIhRm0pGlODwDH0PoegvFmMx8De3Hdku3tMYWcmB
+         ntIck53ET4QL8UspIKYgmC/c8kVCZ3dSKcJQhOrcAek1+SCR8g1oazYeEB5tAxQ/NReK
+         VQvw==
+X-Gm-Message-State: AJIora+xXHskzvyn49TpBAbeEG6ODaXU2ESP9rQfSHGRl+uSXcZhdm87
+        YDGcJo++0Cm3jz9bDLPShpzBaRa0SzgvMw==
+X-Google-Smtp-Source: AGRyM1sGDcYIvncDsLAkB7wfozTBvslTXqS0cToxoMnoy+eYuoLjrz2h7hEW24YVRpaXP5DIRRmCPw==
+X-Received: by 2002:a67:d787:0:b0:354:6074:f63f with SMTP id q7-20020a67d787000000b003546074f63fmr3017103vsj.1.1656248373472;
+        Sun, 26 Jun 2022 05:59:33 -0700 (PDT)
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com. [209.85.217.45])
+        by smtp.gmail.com with ESMTPSA id m62-20020a1f5841000000b0036cf5adf823sm639832vkb.21.2022.06.26.05.59.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 05:56:42 -0700 (PDT)
-Received: by mail-vk1-f177.google.com with SMTP id n187so3317078vkn.11;
-        Sun, 26 Jun 2022 05:56:41 -0700 (PDT)
-X-Received: by 2002:a1f:5f8f:0:b0:36b:fdd7:7788 with SMTP id
- t137-20020a1f5f8f000000b0036bfdd77788mr3021927vkb.22.1656248201811; Sun, 26
- Jun 2022 05:56:41 -0700 (PDT)
+        Sun, 26 Jun 2022 05:59:33 -0700 (PDT)
+Received: by mail-vs1-f45.google.com with SMTP id e7so6562616vsp.13;
+        Sun, 26 Jun 2022 05:59:33 -0700 (PDT)
+X-Received: by 2002:a67:e095:0:b0:354:50f1:b708 with SMTP id
+ f21-20020a67e095000000b0035450f1b708mr3015443vsl.58.1656248373070; Sun, 26
+ Jun 2022 05:59:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220621034224.38995-1-samuel@sholland.org> <20220621034224.38995-2-samuel@sholland.org>
-In-Reply-To: <20220621034224.38995-2-samuel@sholland.org>
+References: <20220621034224.38995-1-samuel@sholland.org> <20220621034224.38995-3-samuel@sholland.org>
+In-Reply-To: <20220621034224.38995-3-samuel@sholland.org>
 Reply-To: wens@csie.org
 From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Sun, 26 Jun 2022 20:56:30 +0800
-X-Gmail-Original-Message-ID: <CAGb2v67fmRt6pxsFvzP7CWSVZMXEdFe-E6Q8Uy_GuyRVrm4xCw@mail.gmail.com>
-Message-ID: <CAGb2v67fmRt6pxsFvzP7CWSVZMXEdFe-E6Q8Uy_GuyRVrm4xCw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: gpio: Add AXP221/AXP223/AXP809 compatibles
+Date:   Sun, 26 Jun 2022 20:59:21 +0800
+X-Gmail-Original-Message-ID: <CAGb2v66eaFsb+JaXpd4rZQbsgMkOHGhdmA8ZKYRe6FH9TQwWfw@mail.gmail.com>
+Message-ID: <CAGb2v66eaFsb+JaXpd4rZQbsgMkOHGhdmA8ZKYRe6FH9TQwWfw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] mfd: axp20x: Add AXP221/AXP223/AXP809 GPIO cells
 To:     Samuel Holland <samuel@sholland.org>
 Cc:     Lee Jones <lee.jones@linaro.org>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -74,8 +74,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Tue, Jun 21, 2022 at 11:42 AM Samuel Holland <samuel@sholland.org> wrote:
 >
-> These PMICs each have 2 GPIOs with the same register layout as AXP813,
-> but without an ADC function.
+> These PMICs all contain a compatible GPIO controller.
 >
 > Signed-off-by: Samuel Holland <samuel@sholland.org>
 

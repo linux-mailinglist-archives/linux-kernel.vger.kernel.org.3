@@ -2,45 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035E855B062
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 10:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CFC55B078
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 10:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234008AbiFZIrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 04:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
+        id S234053AbiFZI5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 04:57:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiFZIrB (ORCPT
+        with ESMTP id S231126AbiFZI5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 04:47:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 877FC2AE6;
-        Sun, 26 Jun 2022 01:46:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 67358D6E;
-        Sun, 26 Jun 2022 01:46:59 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.71.61])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F3CD3F792;
-        Sun, 26 Jun 2022 01:46:57 -0700 (PDT)
-Date:   Sun, 26 Jun 2022 09:46:53 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     madvenka@linux.microsoft.com
-Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v15 5/6] arm64: Create a list of SYM_CODE functions,
- check return PC against list
-Message-ID: <Yrgc/Z7uG29XihFg@FVFF77S0Q05N>
-References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
- <20220617210717.27126-1-madvenka@linux.microsoft.com>
- <20220617210717.27126-6-madvenka@linux.microsoft.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220617210717.27126-6-madvenka@linux.microsoft.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sun, 26 Jun 2022 04:57:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB0E11A21;
+        Sun, 26 Jun 2022 01:56:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97F4AB80D30;
+        Sun, 26 Jun 2022 08:56:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24FBAC341CA;
+        Sun, 26 Jun 2022 08:56:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656233817;
+        bh=Y02jfhJb1Aqml7DaR0aSSrkuFXXZPYf8YiFSNPaKI7s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eroUWlgUoQRbpFWysapxdXBVoUkOrEQpvFyG9hjANycmYhsy6EjgCPTMWsYIgsASa
+         Urvby5om/JJ3V/EuSwdyynAGkJg8gO0keisYx0y32L6wLHj8fcyAPoFSduN7CyFUg1
+         h95354tLRMfOZcuvBSNlsy+u304toTu4ub3uk6tHAH4a9dFcAvz8LN9/6xX8UHgAUy
+         BBAtpOPvGmXFuX/1R0EPyg/AA5Uurb3MgQalw0yNd1sbnkVgt/lG9dtz6rfZJPbLO8
+         /lyO/Jpm31W11yxjpijme6/kyUxwLK6ejIh4VQMyKx/aBrbSexfZlRXs24u7FaNWcz
+         aWDaBHI1/I8xQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o5O4c-003Af3-TG;
+        Sun, 26 Jun 2022 09:56:55 +0100
+Date:   Sun, 26 Jun 2022 09:57:00 +0100
+Message-ID: <87wnd3erab.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v2 2/2] irqchip/sifive-plic: Add support for Renesas RZ/Five SoC
+In-Reply-To: <20220626004326.8548-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220626004326.8548-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        <20220626004326.8548-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.mahadev-lad.rj@bp.renesas.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, sagar.kadam@sifive.com, palmer@dabbelt.com, paul.walmsley@sifive.com, linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, geert+renesas@glider.be, linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, prabhakar.csengg@gmail.com, biju.das.jz@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,212 +76,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 04:07:16PM -0500, madvenka@linux.microsoft.com wrote:
-> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+On Sun, 26 Jun 2022 01:43:26 +0100,
+Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 > 
-> SYM_CODE functions don't follow the usual calling conventions. Check if the
-> return PC in a stack frame falls in any of these. If it does, consider the
-> stack trace unreliable.
+> The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
+> NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
+> case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
+> edge until the previous completion message has been received and
+> NCEPLIC100 doesn't support pending interrupt counter, hence losing the
+> interrupts if not acknowledged in time.
 > 
-> Define a special section for unreliable functions
-> =================================================
+> So the workaround for edge-triggered interrupts to be handled correctly
+> and without losing is that it needs to be acknowledged first and then
+> handler must be run so that we don't miss on the next edge-triggered
+> interrupt.
 > 
-> Define a SYM_CODE_END() macro for arm64 that adds the function address
-> range to a new section called "sym_code_functions".
+> This patch adds a new compatible string for Renesas RZ/Five SoC and adds
+> support to change interrupt flow based on the interrupt type. It also
+> implements irq_ack and irq_set_type callbacks.
 > 
-> Linker file
-> ===========
-> 
-> Include the "sym_code_functions" section under read-only data in
-> vmlinux.lds.S.
-> 
-> Initialization
-> ==============
-> 
-> Define an early_initcall() to create a sym_code_functions[] array from
-> the linker data.
-> 
-> Unwinder check
-> ==============
-> 
-> Add a reliability check in unwind_check_reliability() that compares a
-> return PC with sym_code_functions[]. If there is a match, then return
-> failure.
-> 
-> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
-> Reviewed-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
->  arch/arm64/include/asm/linkage.h  | 11 +++++++
->  arch/arm64/include/asm/sections.h |  1 +
->  arch/arm64/kernel/stacktrace.c    | 55 +++++++++++++++++++++++++++++++
->  arch/arm64/kernel/vmlinux.lds.S   | 10 ++++++
->  4 files changed, 77 insertions(+)
+> v1->v2:
+> * Implemented IRQ flow as suggested by Marc
 > 
-> diff --git a/arch/arm64/include/asm/linkage.h b/arch/arm64/include/asm/linkage.h
-> index 43f8c25b3fda..d4058de4af78 100644
-> --- a/arch/arm64/include/asm/linkage.h
-> +++ b/arch/arm64/include/asm/linkage.h
-> @@ -39,4 +39,15 @@
->  	SYM_START(name, SYM_L_WEAK, SYM_A_NONE)		\
->  	bti c ;
->  
-> +/*
-> + * Record the address range of each SYM_CODE function in a struct code_range
-> + * in a special section.
-> + */
-> +#define SYM_CODE_END(name)				\
-> +	SYM_END(name, SYM_T_NONE)			;\
-> +99:	.pushsection "sym_code_functions", "aw"		;\
-> +	.quad	name					;\
-> +	.quad	99b					;\
-> +	.popsection
-> +
->  #endif
-> diff --git a/arch/arm64/include/asm/sections.h b/arch/arm64/include/asm/sections.h
-> index 40971ac1303f..50cfd1083563 100644
-> --- a/arch/arm64/include/asm/sections.h
-> +++ b/arch/arm64/include/asm/sections.h
-> @@ -22,6 +22,7 @@ extern char __irqentry_text_start[], __irqentry_text_end[];
->  extern char __mmuoff_data_start[], __mmuoff_data_end[];
->  extern char __entry_tramp_text_start[], __entry_tramp_text_end[];
->  extern char __relocate_new_kernel_start[], __relocate_new_kernel_end[];
-> +extern char __sym_code_functions_start[], __sym_code_functions_end[];
->  
->  static inline size_t entry_tramp_text_size(void)
->  {
-> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-> index 5ef2ce217324..eda8581f7dbe 100644
-> --- a/arch/arm64/kernel/stacktrace.c
-> +++ b/arch/arm64/kernel/stacktrace.c
-> @@ -62,6 +62,31 @@ struct unwind_state {
->  	bool reliable;
->  };
->  
-> +struct code_range {
-> +	unsigned long	start;
-> +	unsigned long	end;
-> +};
-> +
-> +static struct code_range	*sym_code_functions;
-> +static int			num_sym_code_functions;
-> +
-> +int __init init_sym_code_functions(void)
+> RFC-->v1:
+> * Fixed review comments pointed by Geert
+> * Dropped handle_fasteoi_ack_irq support as for the PLIC we need to
+> claim the interrupt by reading the register and then acknowledge it.
+> * Add a new chained handler for RZ/Five SoC.
+> ---
+>  drivers/irqchip/Kconfig           |  1 +
+>  drivers/irqchip/irq-sifive-plic.c | 73 ++++++++++++++++++++++++++++++-
+>  2 files changed, 72 insertions(+), 2 deletions(-)
+
+[...]
+
+>
+> +static int plic_irq_set_type(struct irq_data *d, unsigned int type)
 > +{
-> +	size_t size = (unsigned long)__sym_code_functions_end -
-> +		      (unsigned long)__sym_code_functions_start;
+> +	struct plic_handler *handler = this_cpu_ptr(&plic_handlers);
 > +
-> +	sym_code_functions = (struct code_range *)__sym_code_functions_start;
-> +	/*
-> +	 * Order it so that sym_code_functions is not visible before
-> +	 * num_sym_code_functions.
-> +	 */
-> +	smp_mb();
-> +	num_sym_code_functions = size / sizeof(struct code_range);
+> +	if (handler->priv->of_data != RENESAS_R9A07G043_PLIC)
+> +		return 0;
+> +
+> +	switch (type) {
+> +	case IRQ_TYPE_LEVEL_HIGH:
+> +		irq_set_chip_handler_name_locked(d, &renesas_rzfive_edge_plic_chip,
+> +						 handle_fasteoi_ack_irq,
+> +						 "Edge");
+> +		break;
+> +
+> +	case IRQ_TYPE_EDGE_RISING:
+> +		irq_set_chip_handler_name_locked(d, &plic_chip,
+> +						 handle_fasteoi_irq,
+> +						 "Level");
+> +		break;
+
+Really? Have you even tested this?
+
+> +
+> +	default:
+> +		return -EINVAL;
+> +	}
 > +
 > +	return 0;
 > +}
-> +early_initcall(init_sym_code_functions);
-
-There's no reason to need an initcall for this; we can iterate over this
-directly using __sym_code_functions_start and __sym_code_functions_end, like we
-do for exception tables today.
-
-For example:
-
-static inline bool pc_is_sym_code(unsigned long pc)
-{
-	extern struct code_range *__sym_code_functions_start;
-	extern struct code_range *__sym_code_functions_end;
-
-	struct code_range *r;
-
-	for (r = __sym_code_functions_start; r < __sym_code_functions_end; r++) {
-		if (pc >= r->start && pc < r->end)
-			return true;
-	}
-
-	return false;
-}
-
-Thanks,
-Mark.
-
 > +
->  static void unwind_init_common(struct unwind_state *state,
->  			       struct task_struct *task)
+>  static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
+>  			      irq_hw_number_t hwirq)
 >  {
-> @@ -251,6 +276,10 @@ NOKPROBE_SYMBOL(unwind_next);
->   */
->  static void unwind_check_reliability(struct unwind_state *state)
->  {
-> +	const struct code_range *range;
-> +	unsigned long pc;
-> +	int i;
-> +
->  	if (state->fp == state->final_fp) {
->  		/* Final frame; no more unwind, no need to check reliability */
->  		return;
-> @@ -263,6 +292,32 @@ static void unwind_check_reliability(struct unwind_state *state)
->  	 */
->  	if (!__kernel_text_address(state->pc))
->  		state->reliable = false;
-> +
-> +	/*
-> +	 * Check the return PC against sym_code_functions[]. If there is a
-> +	 * match, then the consider the stack frame unreliable.
-> +	 *
-> +	 * As SYM_CODE functions don't follow the usual calling conventions,
-> +	 * we assume by default that any SYM_CODE function cannot be unwound
-> +	 * reliably.
-> +	 *
-> +	 * Note that this includes:
-> +	 *
-> +	 * - Exception handlers and entry assembly
-> +	 * - Trampoline assembly (e.g., ftrace, kprobes)
-> +	 * - Hypervisor-related assembly
-> +	 * - Hibernation-related assembly
-> +	 * - CPU start-stop, suspend-resume assembly
-> +	 * - Kernel relocation assembly
-> +	 */
-> +	pc = state->pc;
-> +	for (i = 0; i < num_sym_code_functions; i++) {
-> +		range = &sym_code_functions[i];
-> +		if (pc >= range->start && pc < range->end) {
-> +			state->reliable = false;
-> +			return;
-> +		}
-> +	}
+> @@ -198,6 +248,19 @@ static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
+>  	return 0;
 >  }
 >  
->  static bool notrace unwind(struct unwind_state *state,
-> diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-> index 2d4a8f995175..414dbc82d0a6 100644
-> --- a/arch/arm64/kernel/vmlinux.lds.S
-> +++ b/arch/arm64/kernel/vmlinux.lds.S
-> @@ -120,6 +120,14 @@ jiffies = jiffies_64;
->  #define TRAMP_TEXT
->  #endif
->  
-> +#define SYM_CODE_FUNCTIONS				\
-> +	. = ALIGN(16);					\
-> +	.symcode : AT(ADDR(.symcode) - LOAD_OFFSET) {	\
-> +		__sym_code_functions_start = .;		\
-> +		KEEP(*(sym_code_functions))		\
-> +		__sym_code_functions_end = .;		\
-> +	}
+> +static int plic_irq_domain_translate(struct irq_domain *d,
+> +				     struct irq_fwspec *fwspec,
+> +				     unsigned long *hwirq,
+> +				     unsigned int *type)
+> +{
+> +	struct plic_priv *priv = d->host_data;
 > +
->  /*
->   * The size of the PE/COFF section that covers the kernel image, which
->   * runs from _stext to _edata, must be a round multiple of the PE/COFF
-> @@ -212,6 +220,8 @@ SECTIONS
->  	swapper_pg_dir = .;
->  	. += PAGE_SIZE;
->  
-> +	SYM_CODE_FUNCTIONS
+> +	if (priv->of_data == RENESAS_R9A07G043_PLIC)
+> +		return irq_domain_translate_twocell(d, fwspec, hwirq, type);
 > +
->  	. = ALIGN(SEGMENT_ALIGN);
->  	__init_begin = .;
->  	__inittext_begin = .;
-> -- 
-> 2.25.1
-> 
+> +	return irq_domain_translate_onecell(d, fwspec, hwirq, type);
+> +}
+> +
+>  static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>  				 unsigned int nr_irqs, void *arg)
+>  {
+> @@ -206,7 +269,7 @@ static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>  	unsigned int type;
+>  	struct irq_fwspec *fwspec = arg;
+>  
+> -	ret = irq_domain_translate_onecell(domain, fwspec, &hwirq, &type);
+> +	ret = plic_irq_domain_translate(domain, fwspec, &hwirq, &type);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -220,7 +283,7 @@ static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>  }
+>  
+>  static const struct irq_domain_ops plic_irqdomain_ops = {
+> -	.translate	= irq_domain_translate_onecell,
+> +	.translate	= plic_irq_domain_translate,
+>  	.alloc		= plic_irq_domain_alloc,
+>  	.free		= irq_domain_free_irqs_top,
+>  };
+> @@ -293,6 +356,11 @@ static int __init plic_init(struct device_node *node,
+>  	if (!priv)
+>  		return -ENOMEM;
+>  
+> +	if (of_device_is_compatible(node, "renesas,r9a07g043-plic")) {
+> +		priv->of_data = RENESAS_R9A07G043_PLIC;
+> +		plic_chip.name = "Renesas RZ/Five PLIC";
+
+NAK. The irq_chip structure isn't the place for platform marketing.
+This is way too long anyway (and same for the edge version), and you
+even sent me a patch to make that structure const...
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

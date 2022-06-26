@@ -2,131 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EB555B250
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 15:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D0E55B23E
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 15:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234474AbiFZNgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 09:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60786 "EHLO
+        id S234321AbiFZNiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 09:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233597AbiFZNgo (ORCPT
+        with ESMTP id S234405AbiFZNiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 09:36:44 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92663F5B0;
-        Sun, 26 Jun 2022 06:36:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656250581;
-        bh=hZku3pKad6YdlzoC5bnphtrI9Ac066vFM1ZhUPMS+rw=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=b9ZE/z5GSMtb3BZtVIzM6M5tJ8rCPS4Q1ppvhyuXq4Hw9hlcyZwxKwPJhrWT9fB0s
-         Tuy0KbphosNndDXxRMpFLwjeAyXNEKai+9tbiZDE83nEEbKyYWz8uplZro+WQAiFKy
-         tVjed0FRXJRJ91nKtCAfYoChINNKhwngzRw9U+iE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.2.248]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N79yG-1nZciH1HW0-017XzA; Sun, 26
- Jun 2022 15:36:21 +0200
-Subject: Re: [PATCH 2/8] serial: core, 8250: set RS485 termination gpio in
- serial core
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, vz@mleia.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
-References: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
- <20220622154659.8710-3-LinoSanfilippo@gmx.de>
- <20220625195844.GB2879@wunner.de>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <067e6fa2-6015-2eea-5719-8b75fb08882c@gmx.de>
-Date:   Sun, 26 Jun 2022 15:36:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sun, 26 Jun 2022 09:38:19 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527B7A45D;
+        Sun, 26 Jun 2022 06:38:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656250698; x=1687786698;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kxS+Hd8ciLGEOc4OUv7lM1xi/hzO+2ID9BxcmTd+74w=;
+  b=PHze+GXEsiD3aTLdZEf7yYe9oNgrYeJAYtmQbP1d6JKZ2kdp+FZ09Q7o
+   AZ86ENFERAw7jlfMht6+oxbbaATo3QXVwIposdMP21LRqiEf59NocsjVj
+   UHyg+DXbXlIRSH/0JfP2t/SshDybnpjJQVqr4jIXW0h8rF9G82tplYx8r
+   d/Z7Kbb9A0J+YA/kL5plJsqs9/lM4yEWAqTLlhr9iqCzH4IW2qE3/zn6G
+   ixadXvqhtxsvGmnT3kvG9DyF466QVLOZia9T/eX8+gIplfFzPiuCgf3PO
+   p0yo/yh6AQ0Gqn8Q3EusiGovkK/HfyvfR9SsIXKqQIn5mr34yqoytMuF2
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10389"; a="280040572"
+X-IronPort-AV: E=Sophos;i="5.92,224,1650956400"; 
+   d="scan'208";a="280040572"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 06:38:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,224,1650956400"; 
+   d="scan'208";a="616477359"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 26 Jun 2022 06:38:15 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o5SSt-0007Lb-8K;
+        Sun, 26 Jun 2022 13:38:15 +0000
+Date:   Sun, 26 Jun 2022 21:37:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jie Hai <haijie1@huawei.com>, vkoul@kernel.org,
+        wangzhou1@hisilicon.com
+Cc:     kbuild-all@lists.01.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/8] dmaengine: hisilicon: Fix CQ head update
+Message-ID: <202206262132.9GLS9dHC-lkp@intel.com>
+References: <20220625074422.3479591-3-haijie1@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <20220625195844.GB2879@wunner.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:hGacXh8oLZwt9FXVfKQ60JrkzhKSJzVtnlbg7gxtB/Y8cLLiTZX
- 0UudFxjwIY6NNCUIvHA9id3q9rsmkt2Yb1CUX3ZQmqxbGf99XceXBTanC75Eu3CFG6wNSgz
- Y181rwQmovaKbb/4m+R++hxGVjXzJWvnP4YhlkXnh/tUTlSyEyH3YrPEA7WWNLFrSsPxr/F
- +/t156IfegsjgTCUv6j+A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:64O+XQE5+sw=:qLnwlZq1Yx43Hro9ph4Hvz
- mU2ImpgbsRpC8OWld0hX7Hgqn64mxGHNzRzOuXE21AFnd+h0NPn1SFS35RThbriuO9euOaw2x
- QdOPMJhZ2nCBM7Ui5UzIxOZCaoqz1EUZufuoMWEMlkFDd6srLb3+RC/NpV0iPYRJ5BaWmsOG7
- oYGyVqZtbS6IGKADr3T8o0Bl+hF55PHUXA2xGqQx1KShqdp//cxMEPrL9QWZwhKxnEh4fWR4F
- vxJoGOHWf8zDiUeSJDXH45ETwQt4hJ8yZvNu9RFLi26mIY0XLE6h1EJGripG7W9OOC6LafcIu
- p9cZMK9WRW9MyPzMILT5TMbxpwHsLlNwKOPTxLCrKrE4rRirF2i2p5bgDboJMnYonxcxgiwpm
- 2zGFtJYmR7bsjLELi6Pt1LBEyRyv6RMAXBjE3+x+HGV/k6i86OQfaj27GIpktkqvIILByPEgG
- uz/XKNbVe6JBtXhXXWJvI2glHUFumDpeA5wQmdp/5G7YfRUZvusPPZu35voYNRM7Ag8nia7/J
- kEBQQmy2L2dQ+/dD1yln/EmIWvncPD0tYLFpX8QFHt+zKAzCNuwwHbmWkqPFcswaXQryZ6dYb
- viRve4kwhWq1WK6aqRyL/Em7kQ2QGUQag2g00hxv5m66kWvpzFm+QxpwSyPudw+4sTr3WcJwT
- aCXb71RjOfQyyEvjWKRU+2UDCLb/+5ZnhHuxKvHmaRRAdJyX3VbyD184jf13TDn/ZrLzRdN/4
- +GFBaaNttECHxY2fgYrNGq8oiat3REVsFr2RGqJMfdcJbXzRw+NfbsVwtYEOXPX6L7+9bKLlR
- v2ZdyR+KxuGo2P5wM6t7ZIbL7RnZgE/GJ6eeGOpBeh7tM4wEjKT1AOFTcVoqezR3Xm986Cpni
- tTkSzyG3vAmV4SfYpILmmtQ65QsKYFMwEGaJoKDj5aeLFWKHM22CEEbHfObEvIzMAMnz2W7Om
- BZ9qk9IXnyF7iCpCbqCp+/IVNCuFWPy4tW4Ug0JAfEKBdqpeDPT6dCb7TUU5clGpITG2vS2lr
- kn35cd+DVX2YnHAYAtGnEfeptJPWDumIF04r+TDyvxJ16tjGoeBxwKY0lAUA1/Hk7FElzNBtR
- i3ce1JeFkkRsUjpftXWlVQz/MdFnwkhKtyLaQf26XHaoLR2nWYGlnwa/A==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220625074422.3479591-3-haijie1@huawei.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.06.22 at 21:58, Lukas Wunner wrote:
-> On Wed, Jun 22, 2022 at 05:46:53PM +0200, Lino Sanfilippo wrote:
->> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>
->> In serial8250_em485_config() the termination GPIO is set with the uart_=
-port
->> spinlock held. This is an issue if setting the GPIO line can sleep (e.g=
-.
->> since the concerning GPIO expander is connected via SPI or I2C).
->>
->> Fix this by setting the termination line outside of the uart_port spinl=
-ock
->> in the serial core.
-> [...]
->> --- a/drivers/tty/serial/serial_core.c
->> +++ b/drivers/tty/serial/serial_core.c
->> @@ -1400,6 +1411,7 @@ static int uart_set_rs485_config(struct uart_port=
- *port,
->>  	if (ret)
->>  		return ret;
->>  	uart_sanitize_serial_rs485(port, &rs485);
->> +	uart_set_rs485_termination(port, &rs485);
->>
->>  	spin_lock_irqsave(&port->lock, flags);
->>  	ret =3D port->rs485_config(port, &rs485);
->
-> That's one way to solve the issue.  Another would be to push
-> acquisition of the port spinlock down into drivers.
->
-> I think in most drivers we don't need to take the port spinlock at all
-> or only for a few specific register accesses.  So taking the lock here
-> in the midlayer is likely unwarranted.  However, changing that requires
-> going through every single driver's ->rs485_config() callback and
-> checking whether it needs the lock or not.
+Hi Jie,
 
-As a first step its sufficient to take the lock in each drivers rs485_conf=
-ig()
-function and remove it from uart_set_rs485_config(). Then after time sort =
-out
-the drivers that dont require the lock and remove it from their function.
+Thank you for the patch! Yet something to improve:
 
-However the point of this patch was also to generalize the handling of the
-termination GPIO, so I would still see this placed in uart_set_rs485_confi=
-g().
+[auto build test ERROR on vkoul-dmaengine/next]
+[also build test ERROR on linus/master v5.19-rc3 next-20220624]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Regards,
-Lino
+url:    https://github.com/intel-lab-lkp/linux/commits/Jie-Hai/dmaengine-hisilicon-Add-support-for-hisi-dma-driver/20220625-154524
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+config: arc-allyesconfig
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4a79d13d35e4f95c88bc0dfb44923dbd030bb126
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jie-Hai/dmaengine-hisilicon-Add-support-for-hisi-dma-driver/20220625-154524
+        git checkout 4a79d13d35e4f95c88bc0dfb44923dbd030bb126
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+Note: the linux-review/Jie-Hai/dmaengine-hisilicon-Add-support-for-hisi-dma-driver/20220625-154524 HEAD e823cc5940ad1d20993113591a7ba26946ae0840 builds fine.
+      It only hurts bisectability.
+
+All errors (new ones prefixed by >>):
+
+   drivers/dma/hisi_dma.c: In function 'hisi_dma_irq':
+>> drivers/dma/hisi_dma.c:441:37: error: 'q_base' undeclared (first use in this function)
+     441 |                 hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR,
+         |                                     ^~~~~~
+   drivers/dma/hisi_dma.c:441:37: note: each undeclared identifier is reported only once for each function it appears in
+>> drivers/dma/hisi_dma.c:441:45: error: 'HISI_DMA_Q_CQ_HEAD_PTR' undeclared (first use in this function); did you mean 'HISI_DMA_CQ_HEAD_PTR'?
+     441 |                 hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR,
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~
+         |                                             HISI_DMA_CQ_HEAD_PTR
 
 
+vim +/q_base +441 drivers/dma/hisi_dma.c
 
+   426	
+   427	static irqreturn_t hisi_dma_irq(int irq, void *data)
+   428	{
+   429		struct hisi_dma_chan *chan = data;
+   430		struct hisi_dma_dev *hdma_dev = chan->hdma_dev;
+   431		struct hisi_dma_desc *desc;
+   432		struct hisi_dma_cqe *cqe;
+   433	
+   434		spin_lock(&chan->vc.lock);
+   435	
+   436		desc = chan->desc;
+   437		cqe = chan->cq + chan->cq_head;
+   438		if (desc) {
+   439			chan->cq_head = (chan->cq_head + 1) %
+   440					hdma_dev->chan_depth;
+ > 441			hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR,
+   442					    chan->qp_num, chan->cq_head);
+   443			if (FIELD_GET(STATUS_MASK, cqe->w0) == STATUS_SUCC) {
+   444				vchan_cookie_complete(&desc->vd);
+   445			} else {
+   446				dev_err(&hdma_dev->pdev->dev, "task error!\n");
+   447			}
+   448	
+   449			chan->desc = NULL;
+   450		}
+   451	
+   452		spin_unlock(&chan->vc.lock);
+   453	
+   454		return IRQ_HANDLED;
+   455	}
+   456	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

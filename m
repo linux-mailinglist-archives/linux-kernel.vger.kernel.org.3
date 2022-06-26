@@ -2,106 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D9855B2BB
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 17:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0966B55B2C2
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 18:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiFZPtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 11:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
+        id S231314AbiFZQNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 12:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiFZPtK (ORCPT
+        with ESMTP id S230413AbiFZQNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 11:49:10 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915E2DEC3;
-        Sun, 26 Jun 2022 08:49:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=1HGEtHzkdYFCGW7ANqN5HrrMrcP7Zd/q8tMBeRZp9zY=; b=eo/KMH7QYwiA0mgyV2DsXE3ikf
-        4rfMDuFFuJaaHw0TOGYReukToi0g2Zv0FFd74fm+noB1w9Z8ifGtRTez/2w2Acdm1cxWZFd4OW03h
-        8GxWvN9zCC2jLYNkLbodRv8mvAfRhKFYvVfhlOAELCh7frmUSpKL/So7TwNnTH623tU3MSQYkKX28
-        logrbUbNHXkny2ODJnNMsV0b8PTUM18ooxSTVDwP6b6XpboB6U/vr07jYZEopThmA4fKuWAJWhZ9p
-        0IjZXWGPpEibep0wXbNGLfPbUXaDwoQrfMvxphDKSMCMICL/tO6XoSdGvboh5/jWAurvs3XOQ7gNP
-        ehmNMTnQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o5UVU-00CXe7-OU; Sun, 26 Jun 2022 15:49:04 +0000
-Message-ID: <065c391b-ec72-4a72-7ca1-55093082164d@infradead.org>
-Date:   Sun, 26 Jun 2022 08:49:02 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 10/20] Documentation: update watch_queue.rst references
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Chris Down <chris@chrisdown.name>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        David Howells <dhowells@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Kees Cook <keescook@chromium.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Oliver Glitta <glittao@gmail.com>,
-        Peter Xu <peterx@redhat.com>, Petr Mladek <pmladek@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1656234456.git.mchehab@kernel.org>
- <1c220de9c58f35e815a3df9458ac2bea323c8bfb.1656234456.git.mchehab@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <1c220de9c58f35e815a3df9458ac2bea323c8bfb.1656234456.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 26 Jun 2022 12:13:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E803E6466;
+        Sun, 26 Jun 2022 09:13:50 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25QFBMY8016249;
+        Sun, 26 Jun 2022 16:13:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=9bOOwg7KyFjJW5FLMZFmjAf3RG25Cs8657ZdDmoMgfM=;
+ b=E7n2+R7ISaDMexWYNkaLx+pfmgGes7KY1L4ZW/gAHHanPKGVenCP+pb5t12y7hqMr6cw
+ FMukv/cidUlStaGqo8Pp4rH+Jc4SjsdjIF95NoPaxBfyfZiKJSAvLQw5PvApjuudA+FT
+ FmxiLLIsdJ5BFbRgza03w+GgN4aVJaNC08KLEWM9T27cgmeEImwQReR2AmnoKlQI3U6G
+ vQ1o4fds7ioGLFawQe2R75/q3vvX8jK3CZX/3CesMybgvMd1WWMK4dCmXhXI8qAuXr0O
+ LBJCwRMvSayqTWR1Yyw6PHL50S1X/fnfeO1IJc4PsayUL22CH75AovE09KIj35gvvPqr 8A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gxseph276-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 26 Jun 2022 16:13:22 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25QGDMLM011401;
+        Sun, 26 Jun 2022 16:13:22 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gxseph26q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 26 Jun 2022 16:13:21 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25QG6ot2016412;
+        Sun, 26 Jun 2022 16:13:19 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3gwsmj1ra1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 26 Jun 2022 16:13:19 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25QGDHdo23331232
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 26 Jun 2022 16:13:17 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 146FCA4051;
+        Sun, 26 Jun 2022 16:13:17 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A5B87A404D;
+        Sun, 26 Jun 2022 16:13:14 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.95.64])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 26 Jun 2022 16:13:14 +0000 (GMT)
+Message-ID: <38fd40d03b030f9a60afe4445ddc0daca220e449.camel@linux.ibm.com>
+Subject: Re: [PATCH -next] evm: Use IS_ENABLED to initialize .enabled
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     xiujianfeng <xiujianfeng@huawei.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 26 Jun 2022 12:13:13 -0400
+In-Reply-To: <YrJ7x3kCTy3ZutZ/@sol.localdomain>
+References: <20220606101042.89638-1-xiujianfeng@huawei.com>
+         <64511312-df94-c40b-689c-5fc3823e91f5@pengutronix.de>
+         <812c4ee9-56f7-900a-df48-f3ca3e15542f@huawei.com>
+         <5d0c291bb4a674a6733a18f9eb67cf40193732f4.camel@linux.ibm.com>
+         <YrJ7x3kCTy3ZutZ/@sol.localdomain>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: PAS0ahUU4Eu5nM8Lj6csyxE8Ll0pSe7L
+X-Proofpoint-ORIG-GUID: CPqnM25LhCrOzG4V4dzu6NrFY7yHn6TU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-26_04,2022-06-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 suspectscore=0 lowpriorityscore=0 mlxscore=0
+ phishscore=0 spamscore=0 adultscore=0 malwarescore=0 bulkscore=0
+ impostorscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2204290000 definitions=main-2206260067
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/26/22 02:10, Mauro Carvalho Chehab wrote:
-> Changeset f5461124d59b ("Documentation: move watch_queue to core-api")
-> renamed: Documentation/watch_queue.rst
-> to: Documentation/core-api/watch_queue.rst.
+On Tue, 2022-06-21 at 19:17 -0700, Eric Biggers wrote:
+> On Tue, Jun 21, 2022 at 10:03:39AM -0400, Mimi Zohar wrote:
+> > On Tue, 2022-06-21 at 18:58 +0800, xiujianfeng wrote:
+> > > Hi, Ahmad
+> > > 
+> > > 在 2022/6/7 14:06, Ahmad Fatoum 写道:
+> > > > On 06.06.22 12:10, Xiu Jianfeng wrote:
+> > > >> Use IS_ENABLED(CONFIG_XXX) instead of #ifdef/#endif statements to
+> > > >> initialize .enabled, minor simplicity improvement.
+> > 
+> > The difference between using ifdef's and IS_ENABLED is when the
+> > decision is made - build time, run time.   Please update the patch
+> > description providing an explanation for needing to make the decision
+> > at run time.
+> > 
+> > thanks,
 > 
-> Update the cross-references accordingly.
-> 
-> Fixes: f5461124d59b ("Documentation: move watch_queue to core-api")
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> IS_ENABLED() is a compile time constant.  So the patch looks fine to me.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Thanks, Eric, for the clarification.
 
-Thanks.
+As LSMs are only builtin, why the need for using IS_ENABLED as opposed
+to IS_BUILTIN?
 
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1656234456.git.mchehab@kernel.org/
-> 
->  Documentation/security/keys/core.rst | 2 +-
->  include/linux/watch_queue.h          | 2 +-
->  init/Kconfig                         | 2 +-
->  kernel/watch_queue.c                 | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
+#define IS_ENABLED(option) __or(IS_BUILTIN(option), IS_MODULE(option))
 
+thanks,
 
--- 
-~Randy
+Mimi
+

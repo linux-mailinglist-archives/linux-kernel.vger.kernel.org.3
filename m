@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE2455AE24
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 04:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D9C55AE2C
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 04:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233825AbiFZCLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 22:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
+        id S233831AbiFZCL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 22:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbiFZCLx (ORCPT
+        with ESMTP id S233617AbiFZCL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 22:11:53 -0400
+        Sat, 25 Jun 2022 22:11:56 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E529913E85;
-        Sat, 25 Jun 2022 19:11:52 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 49A0B32000D9;
-        Sat, 25 Jun 2022 22:11:51 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B1313E85;
+        Sat, 25 Jun 2022 19:11:56 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 90DC432008FD;
+        Sat, 25 Jun 2022 22:11:54 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sat, 25 Jun 2022 22:11:52 -0400
+  by compute4.internal (MEProxy); Sat, 25 Jun 2022 22:11:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1656209510; x=1656295910; bh=OfLz51eTek1s6L0r4HLI8XBL1
-        7NaYVkguVMcN4kMcsY=; b=an8/1OvBznkGHwaVf1scWXRfYTuyBfgn9Jz8RaHCZ
-        RCYnrIeDw5cFH9DLZN//uMVkyjPF5SC+0WlocvKHpADlmEUEYfhgkugqgKyTsmOM
-        XhsfZCE68njzzSYbkL3MrLDktIKcsEJWsEhevlTdtmN0GiHrkxgpapFohPNpJVi1
-        OrV4uS/PJ8Dc+5N/vebHMVxqHMcflYuFGYbiEZSop0t+Bvg/6egj+vF2RjWEziK+
-        AH+hnZ+pfqQRFzghYFCXpeBKMbARdcA6ckhTcpUj2hZJPq30hN8+XLdH0W6KWBZ9
-        5yOu+KZM5KY+SNRvOt4jU0OKwcXuK4TzVxbpc0bZJTxmg==
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1656209514; x=1656295914; bh=wy
+        eR3lxXOmCAQeS8Gi1vPaFAP1UPTolRFL1liomH1uY=; b=UMRYy2VZTfJXilwIFX
+        yXRA+QsmMl+TpKJZvAL/jt6lF6b2R96RXr4NW21RZT7dJCRPxiXmUuSUrbea8mMc
+        qJfGRl7brmjm2IJ2oQNpCYqG5wu+kLzpY5GCCR0GX9P5YwIy3mHe3tsjky1gGvTM
+        MS7Y9kQ57fH6LyikbdPWZC01AWovdwtIJsPAqhpy9fqEZ+a+nEe9YTFMLDB6MnMi
+        jo76U63erM+QPAUr4kEGXqYFY9wRnncTQD73j5OmZfNcHBcdfcywibVHB7XwEk7x
+        D6bTGjY5HGUVahcPit/BH8SmQ6F+GgNyibsACVEg/Yx3CpMrmuYBCJp3lXNBcHVk
+        3y0A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1656209510; x=1656295910; bh=OfLz51eTek1s6L0r4HLI8XBL17NaYVkguVM
-        cN4kMcsY=; b=rjNFR2TZ7Jiv4bl0bwJQSJJh4YY3gFSewRhrjZUEoTYIVdoOgbG
-        iUUkL9+87xpvXZhHX7afjAl0j7BQ/JUyXdmWfiwyc3fP6AcWzZXQgLS1ykK4rpY0
-        DZMuJgBGHlfrvmwHJ94qBxgVYJvu9RN5muvSCi3OPyIHXew4CDxluGrps3e89twE
-        +uGGP4Cdmnm4n5EzyB1eOUG7Nvj8O9LSxm5pVw6PF8C7jV7rOFo9zp40r6Pek2uj
-        +ynHhvtm1PcHZxGamywZN9MEKGVrNgB5P5UdD/XJ0sz89nQYVFYalHsCPopRw4Jp
-        yFbR2vJeOQvurnLvZaOJ6yFnx9+0ABQ8ing==
-X-ME-Sender: <xms:ZcC3YuNcSfN95GPzVh2iPUvgWF72Y7xFyIKN3irmapd-JEKpbo8-vA>
-    <xme:ZcC3Ys-a6kIFJxjXEUGgHSRoVf9xKSdKCxjXYxDsjv2ViWBW9OstqESLXkVpCoMDW
-    suFB_eyJlNkUKCtug>
-X-ME-Received: <xmr:ZcC3YlQ8LnVqF2PFRFMsSA5-Xevb_ZikbV3aWyEKkEQ_d5a2RU1gsb81v2aXGqYz9pI5GCLZofbpWzCMVPLoXHUMdGT0yuehhLsF3NyZHr477Nufl8vhuY0JrRW3gAcCJ8uZUQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudegvddgheeiucetufdoteggodetrfdotf
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1656209514; x=1656295914; bh=wyeR3lxXOmCAQ
+        eS8Gi1vPaFAP1UPTolRFL1liomH1uY=; b=tZr2yA54Oo+Gvr0yxaoyy9Re09KuI
+        06XV/Z6CCc8+VGRfg48y21eGZzZcpDxNiNK4swBTeiA+smgxgZoZdrG81JscVu4t
+        hR5+gJgkUW5u3auoiEqt7yp/Z/4SOTziUYPX3xH4buiSn0TqrQuhJrFOQcM5nkzP
+        BVL+goApqpRho5WVvzsLeeS4he6GYx3QCEXlHvLfg3IYbMxmYYIsM82N2HgZJW4K
+        RGNAAzevFowaN4apvqlmK84YCg0sRnYnJq1gesMZ2+k6ykHulA05p3NhZjCmPNdm
+        g/WUb5JOO6CYfNyu9cauG5LIaLyiAxd/LsbeW4NRjN0nmj9PVYNArtxiw==
+X-ME-Sender: <xms:acC3Ypp8mmu0aS8kgDdSBDzew5WDlhCvpWKSV1vZFNmxgDpKtziP3g>
+    <xme:acC3YrqFp073nP6tekECKZijxDHoSuIK6JCoV1eRI-IrAYa6YqbBYHmz44l7-DLcO
+    9ROXFP89Z3osf2LGg>
+X-ME-Received: <xmr:acC3YmNkUYoX864X-HB9MqKeZOGI_aF2_gBHGpGIzM1UTlNH73swzbsHbAw0YeMgVZf581uh4zrM5TXVudJBnjOdN33vMSIYCgerw65xyEeovJATEFIm8DYmeIcTsEqflW_uAA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudegvddgheehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
-    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:ZcC3YuuTNimGPhK4gCTgHbDPzVTABx1YdBjlZ9oF9KdunZ372nIKfA>
-    <xmx:ZcC3YmfhCfjFans4H_yP2niug-C-HsLqzIcIbIO6PWH5Rsw4fAjrYQ>
-    <xmx:ZcC3Yi0fkhpw8oPhhcyJOH5k6kBYccFv9Cs3TSLbc1nwCuD_DFOv1g>
-    <xmx:ZsC3Yi1XUiJmAT6GAEr0C3AF5eaL3UyxOxUOW4Z5RejYPGBreGRMJQ>
+    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
+    udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:acC3Yk4cAK8jy9e_SOr40EDGv7wY77pob-Zov-ZmWNo2tGl_WYWx0A>
+    <xmx:acC3Yo7lpZS5bvkSA-BsQk2891RnQ78sVN_hhCZ3R1fgMhEFrQkt7A>
+    <xmx:acC3YsjtrppmHdFd2LRs4SW3oldE2JaGtphdaWX7Hxo3erCrEvvaeQ>
+    <xmx:asC3YogCfKGZ2GO6kuv9iDLeRnhEr2E7mpy3wFVL1uandePGq4n5Yg>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 25 Jun 2022 22:11:49 -0400 (EDT)
+ 25 Jun 2022 22:11:52 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -71,10 +72,12 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH 0/6] pinctrl: sunxi: Allwinner D1/D1s support
-Date:   Sat, 25 Jun 2022 21:11:41 -0500
-Message-Id: <20220626021148.56740-1-samuel@sholland.org>
+Subject: [PATCH 1/6] dt-bindings: pinctrl: Add compatibles for Allwinner D1/D1s
+Date:   Sat, 25 Jun 2022 21:11:42 -0500
+Message-Id: <20220626021148.56740-2-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220626021148.56740-1-samuel@sholland.org>
+References: <20220626021148.56740-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,43 +90,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds pinctrl support for the Allwinner D1/D1s SoCs. First,
-it updates the I/O bias code to support the new mode found on the D1/D1s
-(as well as some existing SoCs). Then it refactors the driver to support
-the new register layout found on the D1/D1s. Finally, it adds the new
-driver.
+D1 contains a pin controller similar to previous SoCs, but with some
+register layout changes. It includes 6 interrupt-capable pin banks.
 
-The code size impact of the dynamic register layout ends up being just
-over 100 bytes:
+D1s is a low pin count version of the D1 SoC, with some pins omitted.
+The remaining pins have the same function assignments as D1.
 
-   text    data     bss     dec     hex filename
-  11293     564       0   11857    2e51 pinctrl-sunxi.o (patch 3)
-  11405     564       0   11969    2ec1 pinctrl-sunxi.o (patch 6)
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-This series was tested on A64, H6, and D1.
+ .../pinctrl/allwinner,sun4i-a10-pinctrl.yaml      | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-
-Samuel Holland (6):
-  dt-bindings: pinctrl: Add compatibles for Allwinner D1/D1s
-  pinctrl: sunxi: Add I/O bias setting for H6 R-PIO
-  pinctrl: sunxi: Support the 2.5V I/O bias mode
-  pinctrl: sunxi: Refactor register/offset calculation
-  pinctrl: sunxi: Make some layout parameters dynamic
-  pinctrl: sunxi: Add driver for Allwinner D1/D1s
-
- .../pinctrl/allwinner,sun4i-a10-pinctrl.yaml  |  15 +
- drivers/pinctrl/sunxi/Kconfig                 |   5 +
- drivers/pinctrl/sunxi/Makefile                |   1 +
- drivers/pinctrl/sunxi/pinctrl-sun20i-d1.c     | 860 ++++++++++++++++++
- drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c |   1 +
- drivers/pinctrl/sunxi/pinctrl-sun50i-a100.c   |   2 +-
- drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c   |   1 +
- drivers/pinctrl/sunxi/pinctrl-sun50i-h616.c   |   2 +-
- drivers/pinctrl/sunxi/pinctrl-sunxi.c         | 156 +++-
- drivers/pinctrl/sunxi/pinctrl-sunxi.h         | 110 +--
- 10 files changed, 1022 insertions(+), 131 deletions(-)
- create mode 100644 drivers/pinctrl/sunxi/pinctrl-sun20i-d1.c
-
+diff --git a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
+index bfce850c2035..3da52814f151 100644
+--- a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
+@@ -46,6 +46,8 @@ properties:
+       - allwinner,sun8i-v3s-pinctrl
+       - allwinner,sun9i-a80-pinctrl
+       - allwinner,sun9i-a80-r-pinctrl
++      - allwinner,sun20i-d1-pinctrl
++      - allwinner,sun20i-d1s-pinctrl
+       - allwinner,sun50i-a64-pinctrl
+       - allwinner,sun50i-a64-r-pinctrl
+       - allwinner,sun50i-a100-pinctrl
+@@ -171,6 +173,19 @@ allOf:
+           minItems: 7
+           maxItems: 7
+ 
++  - if:
++      properties:
++        compatible:
++          enum:
++            - allwinner,sun20i-d1-pinctrl
++            - allwinner,sun20i-d1s-pinctrl
++
++    then:
++      properties:
++        interrupts:
++          minItems: 6
++          maxItems: 6
++
+   - if:
+       properties:
+         compatible:
 -- 
 2.35.1
 

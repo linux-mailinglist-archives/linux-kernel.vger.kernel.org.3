@@ -2,128 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD9C55B2AB
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 17:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6811C55B2B4
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 17:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbiFZPmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 11:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
+        id S231419AbiFZPs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 11:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiFZPmA (ORCPT
+        with ESMTP id S229468AbiFZPsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 11:42:00 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F39EDFDB;
-        Sun, 26 Jun 2022 08:41:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656258099;
-        bh=9wnn2viNtYo2HS4a6b8V2lbF+SSHfd4WFAFaclgRsso=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=SHlhQLJT8dgGcqR+X5nHvn7Yjw4el0brNLtT897XUkjePIvV7HSm8fOECnfOBmutl
-         x6KPuUYG554QgIvtaUVlD7FQ+d0+i/+9+eK0kxF/jy2xDFddJR5rmueyp6NRelRDzk
-         wCOCGuqjgcXIdlJrmnUVtAgIv3A+7RhI+qgSCuuA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.2.248]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M7b6b-1o0Ef93eAf-0085OH; Sun, 26
- Jun 2022 17:41:38 +0200
-Subject: Re: [PATCH 2/8] serial: core, 8250: set RS485 termination gpio in
- serial core
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        vz@mleia.com, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, lukas@wunner.de,
-        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
-References: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
- <20220622154659.8710-3-LinoSanfilippo@gmx.de>
- <83762813-70ec-93c3-4015-5676ce9534fd@linux.intel.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <aa851698-ff26-a319-500a-575a9c669d95@gmx.de>
-Date:   Sun, 26 Jun 2022 17:41:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sun, 26 Jun 2022 11:48:53 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D956BC0E;
+        Sun, 26 Jun 2022 08:48:52 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25QEC3hk026475;
+        Sun, 26 Jun 2022 15:48:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Vx8qhw9gsD0GT+n5MLIi+2BfObnIPd+FACJyCWPp8I8=;
+ b=a1+0w5V9zR4fLwolFFcdgiYDd9Z0TtUsQm43h6ECifBvltnDtebBIT74AiGh/hV8cI9s
+ xmAQQRRJvkrnXzWr9BmuRdKgmf6quhX+c4Xwtxy2PNLTw9yHax1iwKVJYlJDB0hV7D+z
+ U77yZiNCQKeCLF6jkr1Rn0wQLWbVR6IpO3SPGolpog30oQfs14cGd0RpJv8mcE7jrHsD
+ gaqjXphF1jwO4d4OzrefKH2MDlvtb075DKJZ6ZI3elO8wW1eGkSZQg9IUzEYDNLu0Y0O
+ YdEVAsWKg9ahk/obUuQ5nnz8yCXrIMcL+tHfVVsRRfQVMkthfR6LI1X9vHrvbuvJxjSj Yg== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gxs0hs6vy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 26 Jun 2022 15:48:17 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25QFlSel001778;
+        Sun, 26 Jun 2022 15:48:14 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3gwsmj1qn0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 26 Jun 2022 15:48:14 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25QFmBZt14221784
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 26 Jun 2022 15:48:11 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8A40C11C050;
+        Sun, 26 Jun 2022 15:48:11 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DDA1811C04A;
+        Sun, 26 Jun 2022 15:48:07 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.211.95.64])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 26 Jun 2022 15:48:07 +0000 (GMT)
+Message-ID: <54af4a92356090d88639531413ea8cb46837bd18.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH v2 2/3] fs: define a firmware security filesystem
+ named fwsecurityfs
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nayna Jain <nayna@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
+        linux-efi@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        George Wilson <gcwilson@linux.ibm.com>, gjoyce@ibm.com,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Date:   Sun, 26 Jun 2022 11:48:06 -0400
+In-Reply-To: <41ca51e8db9907d9060cc38adb59a66dcae4c59b.camel@HansenPartnership.com>
+References: <20220622215648.96723-1-nayna@linux.ibm.com>
+         <20220622215648.96723-3-nayna@linux.ibm.com> <YrQqPhi4+jHZ1WJc@kroah.com>
+         <41ca51e8db9907d9060cc38adb59a66dcae4c59b.camel@HansenPartnership.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9AuopBc9nCHv2PWc6MREZAyjLibJAqd-
+X-Proofpoint-ORIG-GUID: 9AuopBc9nCHv2PWc6MREZAyjLibJAqd-
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-In-Reply-To: <83762813-70ec-93c3-4015-5676ce9534fd@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:cyIQlMtZ+G8jaNtEoKMkpMf21pMZu7+zmG4ZsrBrWfjfJ8shTgY
- pupK7k4b3RxBSSU6r9jfqTCB/AphGTAU8V3S3pjE2iwtUCvrYjHGrkDi+IPTZtbaekmMP+j
- XLGfEG2lV+c8+nuB09tRdgrxUIbTeEoRaX28TCdEgdjkjYfN9fyuas6tcj1o9kLXhp5/HUn
- m8SricM+TNI9EiH/EpPHg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fIJ5qj6lHQc=:8S6VSR7PdExKw8bJkX+MlF
- H3suE7c7Pe31QjpiBufX07LOqmrqcIPg9Fb74x6UYoHX0oIemab+QCZnQBoipJ+ZRU2MrHS5x
- YbZZsMXFkSyd/jraIb1QkxALtwaYRC2TVItcrFAP2khOCzjkahUGtg7Xo1vQzri/EgV1fureK
- ZnJ8BWp32B9RgiCm1+6YaDmTDvNwEC3AH64mKc7RWIGcOuJG+v96COjpg6GFgMmakS4TDCUiA
- qePKp9BlPyrft6XyxHuFMXGe9lPiwzUHBNljEGGDaLLLiHr5DpWOQ55YRFZz95yDMhFddqdLP
- w/It7/0N/09QO+MWw2n+/CZfkxqxFyW9+WLEkz8pZ78Yg41AsXS6TFvKfwy7HfhbBNkfs7kGG
- M65SooRgYaOFRySABeQHafEaPv3vn6eo9Aizb7ntyPC3sYHoDpBMQbIyFgDixyd0atKw1rXhj
- IxmzzuSac633dPs8pwy537nD1TGox6uBlR2ibk5Lmf1RvI2TnTyL9en4iPXiyHvhnDIdvYr2p
- WURTyDybVg/jtC445+TLuZtbGkdxV7M3f+dYrJV7AQozPjQMJ7NqNkOHCBd5tgxsQhNKp9ZKh
- DHnukgvivd57KVUuh/Btq3PbkAWd9s2fkNWRZICTJDaytt2dlBBBOZXGzhrDTJPhJgaakrcqa
- 43vh758Dkg1bf8ZKqb++q0PLM+0QWAAWwqkaHD9Dlh3cXOmg0x22nwN/wqW7onSPqbLMB+Rm5
- ZbXnuqPM9JBXQQZvLtiwphigpARm/8JWzI6syf/EH4VF9oU2KrVtU3b6oFDbAbZVXQqBhY0PL
- 2xfoyQR7UUYsYt8hyKBG9cCwLrcNwjxeUjOVFTyUuOoegcCADElKZMxE63J6UU6MaBCRVlkNp
- LYkOPRUGYyrFZpctUonaYlx4cWvaMifyDxhe7g2aXBjPtjkuYPHWmy7YLxxuAhiugVFmkKaQW
- eRtw+y89NGeDycpISmXxIdc2u4mt12L3+LMCMwc8cGaaHYbekAAvdjIiVBL+aJJswjPSnc8c5
- FCwh/4nmH8Ruo8qTnNeSjZqJKOXWJ+/i9ftc7HxCGup0W2J/vsr64f1jZwObNz6n4/i7UdFNN
- eepTFF5kuDkJc12KYI927EsBzYxv0oAaKKj7n9hqdRjENbw/9nZfNcuPg==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-26_03,2022-06-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ mlxscore=0 mlxlogscore=999 spamscore=0 lowpriorityscore=0 suspectscore=0
+ bulkscore=0 impostorscore=0 phishscore=0 adultscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206260064
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2022-06-23 at 09:23 -0400, James Bottomley wrote:
+> On Thu, 2022-06-23 at 10:54 +0200, Greg Kroah-Hartman wrote:
+> [...]
+> > > diff --git a/fs/fwsecurityfs/inode.c b/fs/fwsecurityfs/inode.c
+> > > new file mode 100644
+> > > index 000000000000..5d06dc0de059
+> > > --- /dev/null
+> > > +++ b/fs/fwsecurityfs/inode.c
+> > > @@ -0,0 +1,159 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +/*
+> > > + * Copyright (C) 2022 IBM Corporation
+> > > + * Author: Nayna Jain <nayna@linux.ibm.com>
+> > > + */
+> > > +
+> > > +#include <linux/sysfs.h>
+> > > +#include <linux/kobject.h>
+> > > +#include <linux/fs.h>
+> > > +#include <linux/fs_context.h>
+> > > +#include <linux/mount.h>
+> > > +#include <linux/pagemap.h>
+> > > +#include <linux/init.h>
+> > > +#include <linux/namei.h>
+> > > +#include <linux/security.h>
+> > > +#include <linux/lsm_hooks.h>
+> > > +#include <linux/magic.h>
+> > > +#include <linux/ctype.h>
+> > > +#include <linux/fwsecurityfs.h>
+> > > +
+> > > +#include "internal.h"
+> > > +
+> > > +int fwsecurityfs_remove_file(struct dentry *dentry)
+> > > +{
+> > > +	drop_nlink(d_inode(dentry));
+> > > +	dput(dentry);
+> > > +	return 0;
+> > > +};
+> > > +EXPORT_SYMBOL_GPL(fwsecurityfs_remove_file);
+> > > +
+> > > +int fwsecurityfs_create_file(const char *name, umode_t mode,
+> > > +					u16 filesize, struct dentry
+> > > *parent,
+> > > +					struct dentry *dentry,
+> > > +					const struct file_operations
+> > > *fops)
+> > > +{
+> > > +	struct inode *inode;
+> > > +	int error;
+> > > +	struct inode *dir;
+> > > +
+> > > +	if (!parent)
+> > > +		return -EINVAL;
+> > > +
+> > > +	dir = d_inode(parent);
+> > > +	pr_debug("securityfs: creating file '%s'\n", name);
+> > 
+> > Did you forget to call simple_pin_fs() here or anywhere else?
+> > 
+> > And this can be just one function with the directory creation file,
+> > just check the mode and you will be fine.  Look at securityfs as an
+> > example of how to make this simpler.
+> 
+> Actually, before you go down this route can you consider the namespace
+> ramifications.  In fact we're just having to rework securityfs to pull
+> out all the simple_pin_... calls because simple_pin_... is completely
+> inimical to namespaces.
+> 
+> The first thing to consider is if you simply use securityfs you'll
+> inherit all the simple_pin_... removal work and be namespace ready.  It
+> could be that creating a new filesystem that can't be namespaced is the
+> right thing to do here, but at least ask the question: would we ever
+> want any of these files to be presented selectively inside containers? 
+> If the answer is "yes" then simple_pin_... is the wrong interface.
 
-Hi,
+Greg, the securityfs changes James is referring to are part of the IMA
+namespacing patch set:
+https://lore.kernel.org/linux-integrity/20220420140633.753772-1-stefanb@linux.ibm.com/
 
-On 25.06.22 at 12:40, Ilpo J=C3=A4rvinen wrote:
->> +
->>  int uart_rs485_config(struct uart_port *port)
->>  {
->>  	struct serial_rs485 *rs485 =3D &port->rs485;
->>  	int ret;
->>
->>  	uart_sanitize_serial_rs485(port, rs485);
->> +	uart_set_rs485_termination(port, rs485);
->>
->>  	ret =3D port->rs485_config(port, rs485);
->>  	if (ret)
->> @@ -1400,6 +1411,7 @@ static int uart_set_rs485_config(struct uart_port=
- *port,
->>  	if (ret)
->>  		return ret;
->>  	uart_sanitize_serial_rs485(port, &rs485);
->> +	uart_set_rs485_termination(port, &rs485);
->>
->>  	spin_lock_irqsave(&port->lock, flags);
->>  	ret =3D port->rs485_config(port, &rs485);
->
-> When port->rs485_config(port, &rs485) returns non-zero, the input got
-> partially applied?
->
->
-The thing is we dont know what the state of the termination GPIO (asserted=
- or deasserted)
-was before we set it and port->rs485_config() failed, so we cannot restore=
- it.
-We could read the GPIO before we change it but AFAIK this is unsafe since =
-it is an output
-pin. Maybe add a boolean variable "rs485_termination_gpio_asserted" to uar=
-t_port to track the
-current state?
+I'd really appreciate your reviewing the first two patches:
+[PATCH v12 01/26] securityfs: rework dentry creation
+[PATCH v12 02/26] securityfs: Extend securityfs with namespacing
+support
 
+thanks,
 
-Regards,
-Lino
+Mimi
 
 
 

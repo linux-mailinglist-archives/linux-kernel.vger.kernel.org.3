@@ -2,93 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A12555B0DA
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6CA55B0D7
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234330AbiFZJOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 05:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S234337AbiFZJQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 05:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234305AbiFZJOu (ORCPT
+        with ESMTP id S234328AbiFZJQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 05:14:50 -0400
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D353E56;
-        Sun, 26 Jun 2022 02:14:48 -0700 (PDT)
-Received: by mail-qk1-f173.google.com with SMTP id b125so5005973qkg.11;
-        Sun, 26 Jun 2022 02:14:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jbPraZXafoS9hoTYKTZ34AOWnSsSx8JmOQi+FZJXy5o=;
-        b=7805PzomCq7irGRYCGTH0DbQJ7yVnuoNMTEcvXHbvQcGWoZQbVN7fEKsPhmNnyMZxp
-         JBX2c9pZGuNfZreubKg3tyCOvTMdNEbI+YrEs/wIupOnyvtzsghOgU9m8akp8nx5hoWW
-         RtVf8ylVQgnAM1ntSN/UgnGE3+syYLc//IH/UaBhxMigqvRiC13cPhRIDNcw319NiPk8
-         Zi27fjzItyr/cjLVSWugL9W3wGCc0YE+vrWbZ+1NUTA0znl0azeasXiasf2vakxLqL4Z
-         gKx4wUO0ZL5qHt4MtMfLz1pL5Lsk43LCt0J7hbcobtsxK69w6re2hdrX9FNfjUcwH0p6
-         3MSQ==
-X-Gm-Message-State: AJIora/FgzCs1SPssKC5mivdIXrbUzzBV9/PV9LPBFqKq1/VW3xURnJ8
-        H1n2W02k6DjHsIq/mpz+tSVVnHsvjsUMxA==
-X-Google-Smtp-Source: AGRyM1uD91pSXgG6pa19BRUmEZPCsvKJEdw3NaYit4C9PLiRW6MyvdMCHwpONNxrPkT+Fz7sA1wxsQ==
-X-Received: by 2002:a05:620a:4712:b0:6a7:304f:89c2 with SMTP id bs18-20020a05620a471200b006a7304f89c2mr4950769qkb.46.1656234887485;
-        Sun, 26 Jun 2022 02:14:47 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id g18-20020a37e212000000b006a691904891sm5620392qki.16.2022.06.26.02.14.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 02:14:47 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id i7so11812211ybe.11;
-        Sun, 26 Jun 2022 02:14:47 -0700 (PDT)
-X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
- s14-20020a056902120e00b006346f296b84mr7820984ybu.604.1656234886883; Sun, 26
- Jun 2022 02:14:46 -0700 (PDT)
+        Sun, 26 Jun 2022 05:16:41 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8435412D3E;
+        Sun, 26 Jun 2022 02:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=1gzj5oIHVtFlpBvDQAUEEcqsXk12AVODco7VgEIoQf8=; b=AZer2m1ttmyhsW7HUqwAleQ8dx
+        XZYv8v4i/jV1WWmk/LMtxP+PaiZNdy6Kmb24Oz6LDeWuSE3k2DNrNE2cC4bBH15trYS1++n8nkSh+
+        02CXBYT5KFWqbt52oWsbqCxl2eea1tYsrBtg8qQb8fo535rTrxjdC31OEfTYkQlHn1LU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1o5ONF-008HVF-32; Sun, 26 Jun 2022 11:16:09 +0200
+Date:   Sun, 26 Jun 2022 11:16:09 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     alexandru.tachici@analog.com
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gerhard@engleder-embedded.com,
+        geert+renesas@glider.be, joel@jms.id.au, stefan.wahren@i2se.com,
+        wellslutw@gmail.com, geert@linux-m68k.org, robh+dt@kernel.org,
+        d.michailidis@fungible.com, stephen@networkplumber.org,
+        l.stelmach@samsung.com, linux-kernel@vger.kernel.org
+Subject: Re: [net-next 1/2] net: ethernet: adi: Add ADIN1110 support
+Message-ID: <Yrgj2WM5/O7YSUeZ@lunn.ch>
+References: <20220624200628.77047-1-alexandru.tachici@analog.com>
+ <20220624200628.77047-2-alexandru.tachici@analog.com>
 MIME-Version: 1.0
-References: <cover.1656234456.git.mchehab@kernel.org> <d6e3482ed622b6953db69cddb70f20c55c96e4da.1656234456.git.mchehab@kernel.org>
-In-Reply-To: <d6e3482ed622b6953db69cddb70f20c55c96e4da.1656234456.git.mchehab@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 26 Jun 2022 11:14:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXu_v28veaFva_VSKMKWjCYSosSr6pGpj5W3kj-MXfzsg@mail.gmail.com>
-Message-ID: <CAMuHMdXu_v28veaFva_VSKMKWjCYSosSr6pGpj5W3kj-MXfzsg@mail.gmail.com>
-Subject: Re: [PATCH v2 16/20] arch: m68k: q40: README: drop references to IDE driver
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Finn Thain <fthain@linux-m68k.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624200628.77047-2-alexandru.tachici@analog.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 11:11 AM Mauro Carvalho Chehab
-<mchehab@kernel.org> wrote:
-> Since IDE support was deleted by Christoph Hellwig <hch@lst.de>,
-> Jun 16 2021, drop the left-over from README file, updating the
-> documentation to point to ata/pata_falcon.c.
->
-> Fixes: 44b1fbc0f5f3 ("m68k/q40: Replace q40ide driver with pata_falcon and falconide")
-> Fixes: b7fb14d3ac63 ("ide: remove the legacy ide driver")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> +static int adin1110_mdio_read(struct mii_bus *bus, int phy_id, int reg)
+> +{
+> +	struct adin1110_priv *priv = bus->priv;
+> +	u32 val = 0;
+> +	int ret;
+> +
+> +	mutex_lock(&priv->lock);
+> +
+> +	val |= FIELD_PREP(ADIN1110_MDIO_OP, ADIN1110_MDIO_OP_RD);
+> +	val |= FIELD_PREP(ADIN1110_MDIO_ST, 0x1);
+> +	val |= FIELD_PREP(ADIN1110_MDIO_PRTAD, phy_id);
+> +	val |= FIELD_PREP(ADIN1110_MDIO_DEVAD, reg);
+> +
+> +	/* write the clause 22 read command to the chip */
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Please return -EOPNOTSUPP if asked to do a C45 transfer.
 
-Gr{oetje,eeting}s,
+> +static int adin1110_mdio_write(struct mii_bus *bus, int phy_id, int reg, u16 reg_val)
+> +{
+> +	struct adin1110_priv *priv = bus->priv;
+> +	u32 val = 0;
+> +	int ret;
 
-                        Geert
+same here.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+     Andrew

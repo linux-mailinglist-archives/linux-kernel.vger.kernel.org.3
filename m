@@ -2,217 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1208955B380
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 20:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997B455B384
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 20:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbiFZSZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 14:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
+        id S231823AbiFZS2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 14:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiFZSZ2 (ORCPT
+        with ESMTP id S230346AbiFZS2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 14:25:28 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA682B49F;
-        Sun, 26 Jun 2022 11:25:26 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id a11-20020a17090acb8b00b001eca0041455so8604988pju.1;
-        Sun, 26 Jun 2022 11:25:26 -0700 (PDT)
+        Sun, 26 Jun 2022 14:28:33 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342C6DFEA
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 11:28:32 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id u15so14650543ejc.10
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 11:28:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=0kDdey0EndqmLRkA5ufbfPEkjggzxpyPuYdCNjCML98=;
-        b=oJCB4VrJV+qklpSu/rT4sY9QsRgrlincz9patMBGhaBU+DFih5XiCmuneU1OnuVV5q
-         NnjRtT/g545wQVvjyiJrDjfOATO5np4zuBAjts050pIUeewf3hcYx6ILf/OaLkGmFbLg
-         PKktTfit5UKUPkpqVYRAS1ax9eMc7FuKCHAaQBAi5R7wuitUQOvPHch7WnM9+YjsUMT/
-         IlKs56ZgF0lkWIgRpTGJSlyNMLxJXbcTudvkqhSsnJwCCyj3TVHb/0AxzRjViupzf3m7
-         zBbF2fXa4h7HW7G7GIWl7fOLaQmZwGfbEkjaIWkaRaVJujDhANBiMhyYAXx85LXB6Lyx
-         UgIw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XAouVpcuNw+xkGv1ro6XQDbRNz/+UookdfvS2DjviFc=;
+        b=df1WpvNnsk4sOSrk1LpaKY9Dd6EcxG47fQKxV/1LDriGOhH6eu9cw2a4/YZwccX+nM
+         vNcwqm9MyaR2bhJVqTYIvOwGLFU/8XehY/yR24Fu2+/FN3dWB5VjB8oX4PW/jegmv5cz
+         BS5EapXZx/A1OenJVpKAenOW9ZEUmHsfKUXZzICpSHhB3cWhLQe/1+ybP6oPFxDJbCay
+         0eLH6Ziym37sYWPccFE5Y5I3DRWLwKxJ16w4fsNpP+1iVyHL7D3x1V0jsNO72qHZGRcp
+         QTu72d7BvOcsK42toxzM48QnPJHm1P8FGFRGccPLio/VBHuuzuI4/GzKI6L6LukFkZEE
+         LvzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0kDdey0EndqmLRkA5ufbfPEkjggzxpyPuYdCNjCML98=;
-        b=ix9mOnkS3223Ws00dAR9WHIEzVLzyPb9dGNppd/dKhdLchCBnAlz8p+BSwA9SWdMpa
-         lWL7w0XIkR43gWWQp7tLqUvQjHt9BqDW1Ifp1USNuo7T5Uqv60pjM4kRtpy7Axh13WY1
-         1U9EoV05XeIaWAVngcjDbbM1XF9YJ1tss9iioWjShY9lFfD0sVp/vGnpoX9WuDkwsIhS
-         BLECdDbHj1QSPL0QGGTPmJSQ/udQtQiJyfYvtGBPKoIIA6pWm8dyjoodjjxEOAZi4jyG
-         PR5MV9d4itM894WXrHNp+tH9TvwONNWz0p9kbDSZNtJa1hHc5S9rbCeu3VX8pSVQy8kP
-         8F2Q==
-X-Gm-Message-State: AJIora/US9rl6R3gPx5h+qZ5D84ybCkP+p7lAGZhHMhD+w8MUq6u8mMX
-        SQqq0qmE53VWVEbzlxA95zQ=
-X-Google-Smtp-Source: AGRyM1vnPeWJtc6NU5leOmihMN0R1mQx3CPZvVya1FvBIkIBQ9zly+tLU6u5RCOe1H/p9vAnwD30Xg==
-X-Received: by 2002:a17:902:b085:b0:16a:417a:83a8 with SMTP id p5-20020a170902b08500b0016a417a83a8mr10833221plr.49.1656267926290;
-        Sun, 26 Jun 2022 11:25:26 -0700 (PDT)
-Received: from Mahakal ([2401:4900:1cc4:27af:3c7b:fbbd:ca8e:e9dc])
-        by smtp.gmail.com with ESMTPSA id ll11-20020a17090b21cb00b001ec86a0490csm5458697pjb.32.2022.06.26.11.25.23
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 26 Jun 2022 11:25:26 -0700 (PDT)
-Date:   Sun, 26 Jun 2022 23:55:21 +0530
-From:   "<Vishal Badole>" <badolevishal1116@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>, mturquette@baylibre.com,
-        inux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     chinmoyghosh2001@gmail.com, mintupatel89@gmail.com,
-        vimal.kumar32@gmail.com
-Subject: Re: [PATCH] Common clock: =?utf-8?B?4oCL?= =?utf-8?B?4oCLVG8=?= list
- active consumers of clocks
-Message-ID: <20220626182517.GA26001@Mahakal>
-References: <CAEXpiVQihEadxsNodarz2-wxSAipfpzEaA8zKpnozszC+weYTQ@mail.gmail.com>
- <20220610194013.DD39DC34114@smtp.kernel.org>
- <20220622170219.GA6978@Mahakal>
- <20220624010550.582BBC341C7@smtp.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XAouVpcuNw+xkGv1ro6XQDbRNz/+UookdfvS2DjviFc=;
+        b=M1EgsogGOA9pwzHPim+tGQ7cwdCd/kRKtCfHRbr6mReEvNaUq2CWXxKFNv1QROiBy5
+         xjLGqLiF/6nSCORaQpJ7ed12on6BKdT7mSjc9pzwiT8Z/yVKZSLalvNTLCFzVi5TsxbU
+         j5jp+fKeqnxWC5JXP2mgFXw8lHocU6hXp1ZNoU2TDVSqCtqW3CIci4XjHLZfswmLpex0
+         u7pt4KBMFgXvggMuCG55TAn+ZyK/sqK/bByolDMGrAJhK96MSwHthLqiC1wUGE6xgr2A
+         efeResWWttI+6zn/+KVVvLggCC5JjcwyA9BWvBdehWNpF3eDFOzkRtO7y5V/aX5BfQfU
+         kKDg==
+X-Gm-Message-State: AJIora9UwoHWTmWUa4DIVlGVo0l1z/nLBSygEeNor4mU1gXWc3n6P5Gl
+        HTuS/WY1n2H432LeKH+zNTwLNg==
+X-Google-Smtp-Source: AGRyM1sLUwWh1IchCdLHZvbLfcuBrxSWUg30trCiAE/Q0kbP5vlObIQUmHVe7Jwf2wXJFjiv0qupwQ==
+X-Received: by 2002:a17:906:5d07:b0:722:eac8:29a6 with SMTP id g7-20020a1709065d0700b00722eac829a6mr9072271ejt.89.1656268110735;
+        Sun, 26 Jun 2022 11:28:30 -0700 (PDT)
+Received: from [192.168.0.243] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id h8-20020a170906260800b00718f4d4f073sm4039818ejc.88.2022.06.26.11.28.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Jun 2022 11:28:30 -0700 (PDT)
+Message-ID: <7f4ebc9c-6412-9494-ba77-cc625b34d197@linaro.org>
+Date:   Sun, 26 Jun 2022 20:28:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220624010550.582BBC341C7@smtp.kernel.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_MISSP_FREEMAIL,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 3/3] dt-bindings: firmware: convert Qualcomm SCM
+ binding to the yaml
+Content-Language: en-US
+To:     David Heidelberg <david@ixit.cz>
+Cc:     ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        Robert Marko <robimarko@gmail.com>
+References: <20220626114634.90850-1-david@ixit.cz>
+ <20220626114634.90850-3-david@ixit.cz>
+ <d00d6c3e-7d65-9021-7a26-486c705a16de@linaro.org>
+ <8704fbd6-94a1-5692-5ccb-95f66ffaaf6f@ixit.cz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8704fbd6-94a1-5692-5ccb-95f66ffaaf6f@ixit.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 06:05:48PM -0700, Stephen Boyd wrote:
-> Quoting <Vishal Badole> (2022-06-22 10:02:20)
-> > 
-> > From f2e9d78bd0f135206fbfbf2e0178a5782b972939 Mon Sep 17 00:00:00 2001
-> > From: Vishal Badole <badolevishal1116@gmail.com>
-> > Date: Tue, 21 Jun 2022 09:55:51 +0530
-> > Subject: [PATCH] Common clock: To list active consumers of clocks
+On 26/06/2022 19:13, David Heidelberg wrote:
+> On 26/06/2022 18:45, Krzysztof Kozlowski wrote:
+>> On 26/06/2022 13:46, David Heidelberg wrote:
+>>> Convert Qualcomm SCM firmware binding to the yaml format.
+>>>
+>>> This commit also:
+>>>   - adds qcom,scm-mdm9607 into list which has only core clock
+>>>   - adds qcom,scm-sm6125, qcom,scm-ipq6018
+>>>   - #reset-cells, because the property is already used
+>>>
+>>> Cc: Robert Marko <robimarko@gmail.com>
+>>> Cc: Guru Das Srinagesh <quic_gurus@quicinc.com>
+>>> Signed-off-by: David Heidelberg <david@ixit.cz>
+>>> ---
+>>> v3:
+>>>   - add preceding patches for ARM and arm64 adding missing compatible strings
+>>>   - extended with missing compatible strings
+>>>   - added two additional maintainers, see https://lkml.org/lkml/2022/6/23/1969
+>>> v2:
+>>>   - changed maintainer to Bjorn
+>>>   - document #reset-cells
+>>>
+>>>   .../devicetree/bindings/firmware/qcom,scm.txt |  57 --------
+>>>   .../bindings/firmware/qcom,scm.yaml           | 131 ++++++++++++++++++
+>>>   2 files changed, 131 insertions(+), 57 deletions(-)
+>>>   delete mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.txt
+>>>   create mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.txt b/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+>>> deleted file mode 100644
+>>> index 0f4e5ab26477..000000000000
+>>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+>>> +++ /dev/null
+>>> @@ -1,57 +0,0 @@
+>>> -QCOM Secure Channel Manager (SCM)
+>>> -
+>>> -Qualcomm processors include an interface to communicate to the secure firmware.
+>>> -This interface allows for clients to request different types of actions.  These
+>>> -can include CPU power up/down, HDCP requests, loading of firmware, and other
+>>> -assorted actions.
+>>> -
+>>> -Required properties:
+>>> -- compatible: must contain one of the following:
+>>> - * "qcom,scm-apq8064"
+>>> - * "qcom,scm-apq8084"
+>>> - * "qcom,scm-ipq4019"
+>>> - * "qcom,scm-ipq806x"
+>>> - * "qcom,scm-ipq8074"
+>>> - * "qcom,scm-mdm9607"
+>>> - * "qcom,scm-msm8226"
+>>> - * "qcom,scm-msm8660"
+>>> - * "qcom,scm-msm8916"
+>>> - * "qcom,scm-msm8953"
+>>> - * "qcom,scm-msm8960"
+>>> - * "qcom,scm-msm8974"
+>>> - * "qcom,scm-msm8976"
+>>> - * "qcom,scm-msm8994"
+>>> - * "qcom,scm-msm8996"
+>>> - * "qcom,scm-msm8998"
+>>> - * "qcom,scm-sc7180"
+>>> - * "qcom,scm-sc7280"
+>>> - * "qcom,scm-sdm845"
+>>> - * "qcom,scm-sdx55"
+>>> - * "qcom,scm-sm6350"
+>>> - * "qcom,scm-sm8150"
+>>> - * "qcom,scm-sm8250"
+>>> - * "qcom,scm-sm8350"
+>>> - * "qcom,scm-sm8450"
+>>> - and:
+>>> - * "qcom,scm"
+>>> -- clocks: Specifies clocks needed by the SCM interface, if any:
+>>> - * core clock required for "qcom,scm-apq8064", "qcom,scm-msm8660" and
+>>> -   "qcom,scm-msm8960"
+>>> - * core, iface and bus clocks required for "qcom,scm-apq8084",
+>>> -   "qcom,scm-msm8916", "qcom,scm-msm8953", "qcom,scm-msm8974" and "qcom,scm-msm8976"
+>>> -- clock-names: Must contain "core" for the core clock, "iface" for the interface
+>>> -  clock and "bus" for the bus clock per the requirements of the compatible.
+>>> -- qcom,dload-mode: phandle to the TCSR hardware block and offset of the
+>>> -		   download mode control register (optional)
+>>> -
+>>> -Example for MSM8916:
+>>> -
+>>> -	firmware {
+>>> -		scm {
+>>> -			compatible = "qcom,msm8916", "qcom,scm";
+>>> -			clocks = <&gcc GCC_CRYPTO_CLK> ,
+>>> -				 <&gcc GCC_CRYPTO_AXI_CLK>,
+>>> -				 <&gcc GCC_CRYPTO_AHB_CLK>;
+>>> -			clock-names = "core", "bus", "iface";
+>>> -		};
+>>> -	};
+>>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>> new file mode 100644
+>>> index 000000000000..17d06e75b82b
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>> @@ -0,0 +1,131 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: "http://devicetree.org/schemas/firmware/qcom,scm.yaml#"
+>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> No quotes here.
+>>
+>>> +
+>>> +title: QCOM Secure Channel Manager (SCM)
+>>> +
+>>> +description: |
+>>> +  Qualcomm processors include an interface to communicate to the secure firmware.
+>>> +  This interface allows for clients to request different types of actions.
+>>> +  These can include CPU power up/down, HDCP requests, loading of firmware,
+>>> +  and other assorted actions.
+>>> +
+>>> +maintainers:
+>>> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+>>> +  - Robert Marko <robimarko@gmail.com>
+>>> +  - Guru Das Srinagesh <quic_gurus@quicinc.com>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - qcom,scm-apq8064
+>>> +          - qcom,scm-apq8084
+>>> +          - qcom,scm-ipq4019
+>>> +          - qcom,scm-ipq6018
+>>> +          - qcom,scm-ipq806x
+>>> +          - qcom,scm-ipq8074
+>>> +          - qcom,scm-mdm9607
+>>> +          - qcom,scm-msm8226
+>>> +          - qcom,scm-msm8660
+>>> +          - qcom,scm-msm8916
+>>> +          - qcom,scm-msm8953
+>>> +          - qcom,scm-msm8960
+>>> +          - qcom,scm-msm8974
+>>> +          - qcom,scm-msm8976
+>>> +          - qcom,scm-msm8994
+>>> +          - qcom,scm-msm8996
+>>> +          - qcom,scm-msm8998
+>>> +          - qcom,scm-sc7180
+>>> +          - qcom,scm-sc7280
+>>> +          - qcom,scm-sdm845
+>>> +          - qcom,scm-sdx55
+>>> +          - qcom,scm-sm6125
+>>> +          - qcom,scm-sm6350
+>>> +          - qcom,scm-sm8150
+>>> +          - qcom,scm-sm8250
+>>> +          - qcom,scm-sm8350
+>>> +          - qcom,scm-sm8450
+>>> +          - qcom,scm-qcs404
+>>> +      - const: qcom,scm
+>>> +
+>>> +  clocks:
+>>> +    minItems: 1
+>>> +    maxItems: 3
+>>> +
+>>> +  clock-names: true
+>> You should have constraints here - min/maxItems.
+>>
+>>> +
+>>> +  '#reset-cells':
+>>> +    const: 1
+>>> +
+>>> +  qcom,dload-mode:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>>> +    items:
+>>> +      - items:
+>>> +          - description: phandle to TCSR hardware block
+>>> +          - description: offset of the download mode control register
+>>> +    description:
+>>> +      Should be phandle/offset pair.
+>> This description is not helpful. Should be something closer to "TCSR
+>> hardware block".
+>>
+>>> +
+>>> +allOf:
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - qcom,scm-apq8064
+>>> +              - qcom,scm-mdm9607
+>>> +              - qcom,scm-msm8660
+>>> +              - qcom,scm-msm8960
+>>> +    then:
+>>> +      properties:
+>>> +        clock-names:
+>>> +          items:
+>>> +            - const: core
+>> Missing constraints (maxItems:2) for clocks.
 > 
-> That patch is still malformed. Please try again. Also, stop sending it
-> as a reply-to the previous patch. Thanks!
->
-We have applied and checked the patch on top of the mainline and not
-able to see that it is malformed. We will share revised patch using git
-send mail.
-> > 
-> > This feature lists the name of clocks and their consumer devices.
-> > Using this feature user can easily check which device is using a
-> > perticular clock. Consumers without dev_id are listed as no_dev_id.
-> > 
-> > Co-developed-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
-> > Signed-off-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
-> > Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
-> > Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
-> > Acked-by: Vimal Kumar <vimal.kumar32@gmail.com>
+> Why 2? I would put `maxItems: 1` there
 > 
-> The acked-by tag is largely for maintainer use. Please remove it. See
-> Documentation/process/5.Posting.rst for more info.
-> 
-Agreed, We will update this in the revised patch.
 
-> > Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
-> > ---
-> >  drivers/clk/clk.c | 59 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 59 insertions(+)
-> > 
-> > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> > index ed11918..b191009 100644
-> > --- a/drivers/clk/clk.c
-> > +++ b/drivers/clk/clk.c
-> > @@ -3018,6 +3018,63 @@ static int clk_summary_show(struct seq_file *s, void *data)
-> >  }
-> >  DEFINE_SHOW_ATTRIBUTE(clk_summary);
-> >  
-> > +static void clk_consumer_show_one(struct seq_file *s, struct clk_core *core, int level)
-> > +{
-> > +       struct clk *clk_user;
-> > +       const char *consumer;
-> > +
-> > +       hlist_for_each_entry(clk_user, &core->clks, clks_node) {
-> > +               if (!clk_user->dev_id)
-> > +                       consumer = "no_dev_id";
-> > +               else
-> > +                       consumer = clk_user->dev_id;
-> 
-> We can just pass NULL if there isn't a dev_id and get a nice "(NULL)"
-> print instead of "no_dev_id".
-> 
-Agreed, we will replace "no_dev_id" with "deviceless" in the revised
-patch.
-> > +
-> > +               seq_printf(s, "%*s%-*s %30s %5d %7d ",
-> > +                          level * 3 + 1, "",
-> > +                          30 - level * 3, clk_user->core->name, consumer,
-> > +                          clk_user->core->enable_count, clk_user->core->prepare_count);
-> 
-> It would be great to not print the core enable count here and instead
-> have two levels of enable accounting so we can print the per-user count.
-> Basically, one in the 'struct clk_core' and one in the 'struct clk'. If
-> that isn't done then this print is going to duplicate the count for
-> every 'struct clk' and be meaningless.
->
-We will add enable count member to struct clock to represent per user
-count and will print that one along with clock and consumer name
-> > +
-> > +               if (clk_user->core->ops->is_enabled)
-> > +                       seq_printf(s, " %8c\n", clk_core_is_enabled(clk_user->core) ? 'Y' : 'N');
-> > +               else if (!clk_user->core->ops->enable)
-> > +                       seq_printf(s, " %8c\n", 'Y');
-> > +               else
-> > +                       seq_printf(s, " %8c\n", '?');
-> 
-> I don't think we need any of these prints. They're already covered in
-> the summary. And the summary should be able to print the users. See
-> regulator_summary_show_subtree() for inspiration. It looks like they
-> print "deviceless" for the "no_dev_id" case so maybe just use that
-> instead of NULL print.
-> 
-We will remove above prints in the revised patch. We are facing indentation issue whle printing consumer in summary
-as given below
-                                 enable  prepare  protect                            duty  hardware            per-user
-  clock                          count    count    count        rateccuracy phase  cycle    enable  consumer   count
-  clk_mcasp0_fixed                   0        0        0           24576000     0  50000         Y   
-  deviceless        0
+Yes, of course, typo.
 
-In this case it will be better to have a separate debugfs entry as
-clK_consumer to print clock, consumer and per-user count.
-> > +       }
-> > +}
-> > +
-> > +static void clk_consumer_show_subtree(struct seq_file *s, struct clk_core *c, int level)
-> > +{
-> > +       struct clk_core *child;
-> > +
-> > +       clk_consumer_show_one(s, c, level);
-> > +
-> > +       hlist_for_each_entry(child, &c->children, child_node)
-> > +               clk_consumer_show_subtree(s, child, level + 1);
-> > +}
-> > +
-> > +static int clk_consumer_show(struct seq_file *s, void *data)
-> > +{
-> > +       struct clk_core *c;
-> > +       struct hlist_head **lists = (struct hlist_head **)s->private;
-> > +
-> > +       seq_puts(s, "                                                              enable   prepare   hardware\n");
-> > +       seq_puts(s, "   clock                                       consumer        count     count     enable\n");
-> > +       seq_puts(s, "-----------------------------------------------------------------------------------------\n");
-> > +       clk_prepare_lock();
-> > +
-> > +       /*Traversing Linked List to print clock consumer*/
-> 
-> Please run scripts/checkpatch.pl, as this comment needs space after /*
-> and before */
-> 
-We will update this in revised patch.
-> > +
-> > +       for (; *lists; lists++)
-> > +               hlist_for_each_entry(c, *lists, child_node)
-> > +                       clk_consumer_show_subtree(s, c, 0);
-> > +
-> > +       clk_prepare_unlock();
-> > +
-> > +       return 0;
-> > +}
-> > +DEFINE_SHOW_ATTRIBUTE(clk_consumer);
-> > +
-> >  static void clk_dump_one(struct seq_file *s, struct clk_core *c, int level)
-> >  {
-> >         int phase;
+Best regards,
+Krzysztof

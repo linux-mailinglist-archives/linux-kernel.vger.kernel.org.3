@@ -2,100 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BAB55B15B
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA9D55B157
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234224AbiFZKu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 06:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
+        id S234340AbiFZKu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 06:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiFZKuX (ORCPT
+        with ESMTP id S229631AbiFZKu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 06:50:23 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE9F13DFF
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:50:22 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id sb34so13303386ejc.11
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:50:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qm3saVsXQFyYF7XKRzCFxHnQjtvbQdpVuuv8fnV6oQQ=;
-        b=fe1iXci9tCe6L2xFZ3P7p/kc36HTF7DyalYl7LT5YmzKnyaEtnBgqkPALfoSYHafMe
-         5seSCpPDdR8BxgPRyhdnMFqxf3xe7G4yT13IqyEaN+mlk28EoUneItnD88p6ExFLvkMV
-         MLTO5q9Nu7Brxsbf/CaW+QS4TqRzAUsl5UG/Ogcjdy8CNSV3tsDX0u/EoStiY42fXP59
-         xWLSI3Nb67HE3r/kxb+JsRZdbZKmuNsfcQD74UeD3JknRSNoqpiT3xZlxr3mghMP0ORF
-         bdc7eXZCZn4C1vKzMxHkOzBUojeGzfPOKNKXbnFD9KRfG3VJ+nEcBbK9Ccl2Bv+ZLMVZ
-         EIaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qm3saVsXQFyYF7XKRzCFxHnQjtvbQdpVuuv8fnV6oQQ=;
-        b=JLwO/qgFhmIUrJOKKakA4IapKsGDwXRrZfBlajHI8hIKVhEq6+EFPdFam8cGmbt4B8
-         hjR6Nyi2Fq2+ORdHCLpoLFjtL/VBlNGHMN8mM69qXVOuA6f+5anSOaKaywllyEmLlGBH
-         +bPWRVEuA+mpWppGtCRz21BN0EKh7MJDDucQxPPe5jJREXqntk+v70gT1r3s83woa28p
-         YvFnL0nZP4IS7yShEzVhs0sFvRqybLh9OcYf0eUOdYVEDVjebJfMZgfFjvwJVMbHRPRS
-         Mg/YLRwyE93Ms+56Ccy1jbM3YGHSHElfXntxEk0eaontxyy+BEinHszeUSt8UW9sH/jN
-         IWUQ==
-X-Gm-Message-State: AJIora+KUvUpB1BMS+d0f3czYOHgNO6CzswGEdF4VhExi3O4SDJlaA8c
-        2IpMXWuM7ptDitGUQjRd3KJXxg==
-X-Google-Smtp-Source: AGRyM1vsckuhI5W/5/+uG8dWjoP8xYOurUPiiZq7KICxgI9Tk9qBUslJdZ7qw4SBHIubDQ+UPYVtVg==
-X-Received: by 2002:a17:906:99c5:b0:6df:8215:4ccd with SMTP id s5-20020a17090699c500b006df82154ccdmr7281866ejn.684.1656240620912;
-        Sun, 26 Jun 2022 03:50:20 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id x6-20020aa7cd86000000b0043574d27ddasm5623845edv.16.2022.06.26.03.50.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jun 2022 03:50:20 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     bjorn.andersson@linaro.org, mpe@ellerman.id.au, vz@mleia.com,
-        robh@kernel.org, abrodkin@synopsys.com,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        krzk@kernel.org, balbi@kernel.org,
-        Sergey.Semin@baikalelectronics.ru, agross@kernel.org,
-        gregkh@linuxfoundation.org, vgupta@synopsys.com,
-        khuong@os.amperecomputing.com, linux-usb@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        paulus@samba.org, linux-arm-msm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, patrice.chotard@st.com,
-        devicetree@vger.kernel.org, fancer.lancer@gmail.com,
-        benh@kernel.crashing.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: (subset) [PATCH RESEND v9 5/5] arm64: dts: apm: Harmonize DWC USB3 DT nodes name
-Date:   Sun, 26 Jun 2022 12:50:18 +0200
-Message-Id: <165624061445.7618.11344979529426500237.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220624141622.7149-6-Sergey.Semin@baikalelectronics.ru>
-References: <20220624141622.7149-1-Sergey.Semin@baikalelectronics.ru> <20220624141622.7149-6-Sergey.Semin@baikalelectronics.ru>
+        Sun, 26 Jun 2022 06:50:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9448D13E36
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:50:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7C7FB80D87
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 10:50:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB56AC34114;
+        Sun, 26 Jun 2022 10:50:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="HyudfkAb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656240649;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lEW0xx3G3bznhUDvdAWREy0uMnoRzWx1KuZdwLD9EJg=;
+        b=HyudfkAboDZSCYig3siayhTZJnqgwYYY939ZaPd181UTruYyg+I578/3XSw2kcph+OtSYr
+        xEvg50R6kwmqN+61dLfyMUppuNB0dvhbJIQ11iabnYufxqIu/R5HbQMtqHIyAS9RMnSoxj
+        xRl0n06wzTl+aycvp4ddGJDc9q8r0pU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7a80d376 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sun, 26 Jun 2022 10:50:49 +0000 (UTC)
+Date:   Sun, 26 Jun 2022 12:50:47 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Laurent Vivier <laurent@vivier.eu>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] m68k: virt: pass RNG seed via bootinfo block
+Message-ID: <Yrg6BzpKIJBTAVmO@zx2c4.com>
+References: <20220625153841.143928-1-Jason@zx2c4.com>
+ <512bdf97-5468-e2d2-75bd-24107aaf8a34@vivier.eu>
+ <CAHmME9qKkL8r7QSwq+2DA54mpMHzqpnq=pi5f0DhKOcB-qezoQ@mail.gmail.com>
+ <fa4f2fba-ad77-e5a9-a78a-680ed5137157@vivier.eu>
+ <CAHmME9oGOduYbw_-=0QeKzW6Lj07S6tevssvUpyWLgutuxE+UA@mail.gmail.com>
+ <CAMuHMdVKpmN=Cp6zTe7=JO=5GoAhrfhoKT=pqszNR8iUkEv9Rw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdVKpmN=Cp6zTe7=JO=5GoAhrfhoKT=pqszNR8iUkEv9Rw@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Jun 2022 17:16:21 +0300, Serge Semin wrote:
-> In accordance with the DWC USB3 bindings the corresponding node
-> name is suppose to comply with the Generic USB HCD DT schema, which
-> requires the USB nodes to have the name acceptable by the regexp:
-> "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
-> named despite of the warning comment about possible backward
-> compatibility issues.
+Hi Geert,
+
+On Sun, Jun 26, 2022 at 11:39:46AM +0200, Geert Uytterhoeven wrote:
+> Hi Jason,
 > 
-> [...]
+> Thanks for your patch!
+> 
+> On Sat, Jun 25, 2022 at 6:26 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > On Sat, Jun 25, 2022 at 6:24 PM Laurent Vivier <laurent@vivier.eu> wrote:
+> > > Le 25/06/2022 à 18:19, Jason A. Donenfeld a écrit :
+> > > > On Sat, Jun 25, 2022 at 6:08 PM Laurent Vivier <laurent@vivier.eu> wrote:
+> > > >> Le 25/06/2022 à 17:38, Jason A. Donenfeld a écrit :
+> > > >>> Other virt VMs can pass RNG seeds via the "rng-seed" device tree
+> 
+> FTR, "rng-seed" does not seem to be documented anywhere, not under
+> Documentation/devicetree/bindings/, and not in the Devicetree
+> Specification?
 
-Applied, thanks!
+Good point. It's quite old, this field, so odd it was missed. I'll send
+in a separate patch for that.
 
-[5/5] arm64: dts: apm: Harmonize DWC USB3 DT nodes name
-      https://git.kernel.org/krzk/linux/c/fcf036a017b251d362559cf7eb0bb6e614ccf842
+> 
+> > > >>> property or via UEFI, but m68k doesn't have either. Instead it has its
+> > > >>> own bootinfo protocol. So this commit adds support for receiving a RNG
+> > > >>> seed from it, which will be used at the earliest possible time in boot,
+> > > >>> just like device tree.
+> > > >>>
+> > > >>> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > > >>> --- a/arch/m68k/include/uapi/asm/bootinfo-virt.h
+> > > >>> +++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
+> > > >>> @@ -12,6 +12,7 @@
+> > > >>>    #define BI_VIRT_GF_TTY_BASE 0x8003
+> > > >>>    #define BI_VIRT_VIRTIO_BASE 0x8004
+> > > >>>    #define BI_VIRT_CTRL_BASE   0x8005
+> > > >>> +#define BI_VIRT_RNG_SEED     0x8006
+> 
+> Please add a comment documenting the record format.
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Ack.
+
+> 
+> Laurent: Would be nice if you could add this for the other BI_*, too.
+> 
+> > > >>>
+> > > >>>    #define VIRT_BOOTI_VERSION  MK_BI_VERSION(2, 0)
+> > > >>>
+> > > >>> diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
+> > > >>> index 632ba200ad42..ad71af8273ec 100644
+> > > >>> --- a/arch/m68k/virt/config.c
+> > > >>> +++ b/arch/m68k/virt/config.c
+> > > >>> @@ -2,6 +2,7 @@
+> > > >>>
+> > > >>>    #include <linux/reboot.h>
+> > > >>>    #include <linux/serial_core.h>
+> > > >>> +#include <linux/random.h>
+> > > >>>    #include <clocksource/timer-goldfish.h>
+> > > >>>
+> > > >>>    #include <asm/bootinfo.h>
+> > > >>> @@ -92,6 +93,9 @@ int __init virt_parse_bootinfo(const struct bi_record *record)
+> > > >>>                data += 4;
+> > > >>>                virt_bi_data.virtio.irq = be32_to_cpup(data);
+> > > >>>                break;
+> > > >>> +     case BI_VIRT_RNG_SEED:
+> > > >>> +             add_bootloader_randomness(data + 4, be32_to_cpup(data));
+> > > >>
+> > > >> In fact, why don't you use the record->size to get the size of the buffer?
+> > > >>
+> > > >> It seems useless to encode twice the length of the buffer, the second time on a 32bit while the
+> > > >> length cannot exceed a 16bit value.
+> > > >
+> > > > Doesn't that make the length ambiguous because of required alignment?
+> > >
+> > > I agree, it's why I understand reviewing the QEMU part of your patch.
+> > >
+> > > > Would rather keep this general. As is, it's also much more like the
+> > > > others and more uniform to keep it that way. You were able to review
+> > > > it and see that it was right after glancing for a second. That seems
+> > > > superior to any imaginary gains we'd get by overloading the record
+> > > > size.
+> > >
+> > > And what about using a 16bit field rather than a 32bit field as the encoded length cannot be greater
+> > > than the record length?
+> >
+> > I guess but that's different from all other length fields, and means
+> > we can't expand past 65k if somebody wants to use this for something
+> > more interesting later. Again I wonder what stinginess here gets us.
+> > This is just a boot parameter... No need to go crazy optimizing it.
+> 
+> You cannot extend this past (64 KiB - sizeof(struct bi_record))
+> anyway, as the total record size is limited to 64 KiB, regardless of
+> the additional buffer size you try to encode inside your own 32-bit
+> size field.
+> 
+> So either just store the data inside the record, rely on bi_record.size,
+> and live with random data that must be a number of even bytes (does
+> it really hurt to drop the last byte, or add a dummy byte?), or store
+> a pointer/size, like is done for e.g. BI_RAMDISK.
+
+I modeled this on BOOTINFOSTR, which benefits from null termination.
+I'll just reduce the length field to 2 bytes. I really don't want to
+play padding games here, and anyway the length field needs to be
+separate for reasons that will become apparent in v2 (zeroing for
+kexec).
+
+Jason
+

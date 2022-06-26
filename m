@@ -2,117 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1336055B462
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 01:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B96655B45D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 01:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiFZWfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 18:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
+        id S230051AbiFZWlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 18:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiFZWff (ORCPT
+        with ESMTP id S229867AbiFZWlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 18:35:35 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECCC2DDF;
-        Sun, 26 Jun 2022 15:35:34 -0700 (PDT)
-Received: from [192.168.2.145] (unknown [109.252.118.164])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 26 Jun 2022 18:41:22 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB0F2ACF;
+        Sun, 26 Jun 2022 15:41:21 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 68E1A66016B4;
-        Sun, 26 Jun 2022 23:35:31 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656282932;
-        bh=8rXxTlcstkFQNootjbn8QCtpfVmztVI0c8pZei6dYig=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HnSsbwGcG6ht6Oy6ED05gqtbxf+0uxcp+BlKnAnY6X92UXaHhlp5D+WFj7oS1omfW
-         XPzwyc8giZ4MR2G2QGGxNOCgP3o+ZvYAc8jb3oW5xB+xbbuYPUZb3hdEb9FswAg9nJ
-         hrrPvwSkSi5zi3zxYsLPs0wT8Z5J9JXvJD4tlto0lO9kABRM7RcA/iZMTLDgeBwcyF
-         UD3k25W8bZteJs+aPq1pHzC1gGQZzEGzISYKENM458W5x0VK8mXXAjLGipla6r3GdJ
-         Vo/gb9JUrz1oZet2hKhj88s2nJQHBR3j9s32avttlqrdESPJN4t3M3FBVUK1asaq8u
-         +JwWCTbmsGGZw==
-Message-ID: <b6e28520-01cc-f163-7ed2-a7f99ad6be26@collabora.com>
-Date:   Mon, 27 Jun 2022 01:35:28 +0300
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LWQnS569Dz4xDH;
+        Mon, 27 Jun 2022 08:41:16 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1656283276;
+        bh=v0M0/nb6YdMx4nugtyCRHV2oZo4XfWKPM1RTmB3XRuc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=lX+qlPMxpTptuaFDqiOAohJMfeB6EmrhhpPQH/733TsFZJPpCKRozkyHKwSDI+8N0
+         bJYWHHAaY5BTVqAKmVxJAB2oK59N6ZeTVpu8XC4e0qixc1yNfBgWEruJQvWicHmrRl
+         YvxIB8nvW4Hx4QsgjAtYt6eSBPnFJqliaaeFggY9AQdUBUJwxlTp/lGTE7jOoLbo10
+         m9fFOgxSpiWbJmtCco3li3kagUNEdQ8PoLG+w7Y26FpwHvjXoKDjLuqgyG1nMRr6RY
+         NW3pd66BhV3MR8Qnp80YARxIs4BF6E/ksJ8wURZ/Q8ieIoLlfav/2xbzpLlTQAEoXC
+         s7NoJAHE5RwYQ==
+Date:   Mon, 27 Jun 2022 08:41:15 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Vasant Hegde <vasant.hegde@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the iommu tree
+Message-ID: <20220627084115.559a257f@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH RESEND v5 1/8] reset: Fix devm bulk optional exclusive
- control getter
-Content-Language: en-US
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru>
- <20220624141853.7417-2-Sergey.Semin@baikalelectronics.ru>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20220624141853.7417-2-Sergey.Semin@baikalelectronics.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/XFzdjH5IlC.vLRq6PnFL5/I";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/22 17:18, Serge Semin wrote:
-> Most likely due to copy-paste mistake the device managed version of the
-> denoted reset control getter has been implemented with invalid semantic,
-> which can be immediately spotted by having "WARN_ON(shared && acquired)"
-> warning in the system log as soon as the method is called. Anyway let's
-> fix it by altering the boolean arguments passed to the
-> __devm_reset_control_bulk_get() method from
-> - shared = true, optional = false, acquired = true
-> to
-> + shared = false, optional = true, acquired = true
-> That's what they were supposed to be in the first place (see the non-devm
-> version of the same method: reset_control_bulk_get_optional_exclusive()).
-> 
-> Fixes: 48d71395896d ("reset: Add reset_control_bulk API")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v4:
-> - This is a new patch added on v4 lap of the series.
-> ---
->  include/linux/reset.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/reset.h b/include/linux/reset.h
-> index 8a21b5756c3e..514ddf003efc 100644
-> --- a/include/linux/reset.h
-> +++ b/include/linux/reset.h
-> @@ -731,7 +731,7 @@ static inline int __must_check
->  devm_reset_control_bulk_get_optional_exclusive(struct device *dev, int num_rstcs,
->  					       struct reset_control_bulk_data *rstcs)
->  {
-> -	return __devm_reset_control_bulk_get(dev, num_rstcs, rstcs, true, false, true);
-> +	return __devm_reset_control_bulk_get(dev, num_rstcs, rstcs, false, true, true);
->  }
->  
->  /**
+--Sig_/XFzdjH5IlC.vLRq6PnFL5/I
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Good catch,
+Hi all,
 
-Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Commits
 
-Although, this patch should be sent as standalone since it's unrelated
-to the rest of the clk patches.
+  145c15624f39 ("iommu/amd: Update amd_iommu_fault structure to include PCI=
+ seg ID")
+  58f1c71a0e84 ("iommu/amd: Update device_state structure to include PCI se=
+g ID")
+  964d21a7654c ("iommu/amd: Print PCI segment ID in error log messages")
+  58e5ca96cb16 ("iommu/amd: Flush upto last_bdf only")
+  5a903a691117 ("iommu/amd: Convert to use per PCI segment rlookup_table")
+  a0eedb5738c3 ("iommu/amd: Convert to use per PCI segment irq_lookup_table=
+")
+  f1bd29bde636 ("iommu/amd: Introduce per PCI segment rlookup table size")
+  d59145a5e129 ("iommu/amd: Introduce per PCI segment alias table size")
+  ad967e9639e3 ("iommu/amd: Introduce per PCI segment device table size")
+  89e9f3d6219d ("iommu/amd: Introduce per PCI segment last_bdf")
+  e202b39618b3 ("iommu/amd: Introduce per PCI segment unity map list")
+  a42d9be7f4e9 ("iommu/amd: Introduce per PCI segment dev_data_list")
+  65ad39268837 ("iommu/amd: Introduce per PCI segment irq_lookup_table")
+  ec6f20c037c8 ("iommu/amd: Introduce pci segment structure")
+  98496c13a2b6 ("iommu/amd: Update struct iommu_dev_data definition")
 
--- 
-Best regards,
-Dmitry
+are missing a Signed-off-by from their authors.
+
+What is really happening here is that the iommu@lists.linux-foundation.org
+mailing list is changing the From: header in the email submissions.
+The solution is to either use th Reply-To: header for these mails, get
+an off list copy of the patch, or make sure that all patch submissions
+to that list have a From: line at eth start of the body.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/XFzdjH5IlC.vLRq6PnFL5/I
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK44IsACgkQAVBC80lX
+0GwxJQf+Mp94gqA8MsYludSJbMcQYnqIM3tyBgx+XUP1lMfHUBBypfGka642XnUo
+mWyayygkYYHwoHFvLE64xkfUHkQcljurrdB2w4tTPeK0JwDmerb3B9DR4lVmW7K3
+NgS/+nP0PdfQVLvQTu8M4GugbnMN/M9ZuiLMNxACQypEdfBwRe8d7Cj81OLubbPv
+nlO7rQcvW8bGADlOh4LZEERRqMLIfgX3vNt4GI+Oa6fUn4geihTlm2fWrbHEH+W2
+bnZBSS4QFYn39zgS1/SUZOxkMjnXsZnEfve1ahsGUm5HC10osApQkiA+51JCruY4
+kWh7c7s23YwPOmI/lKnoecYelr4BUw==
+=VAMY
+-----END PGP SIGNATURE-----
+
+--Sig_/XFzdjH5IlC.vLRq6PnFL5/I--

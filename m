@@ -2,75 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644C355B3AC
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 21:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6294C55B3AF
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 21:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiFZTBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 15:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S231768AbiFZTL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 15:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiFZTBd (ORCPT
+        with ESMTP id S229775AbiFZTLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 15:01:33 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C766055BB;
-        Sun, 26 Jun 2022 12:01:32 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id k14so6370907plh.4;
-        Sun, 26 Jun 2022 12:01:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=YhLum+QNHV5LbF0vbyclZG43HtRpC8u5pHO8IwynhYY=;
-        b=lWB50lhhRnq1RO4XlPbofPmDbjjuB5kUnFup1XQrZNHclVXf09maAzCAJYr12CqtFQ
-         OP6jWhdiEd/vJtG0Cw/PJAf5mSbsLwlZd6zmb3Ubbx/hg8lR0686B4KI7b4bsK3dSREX
-         Ypu3jyX9XZ0OyFEFwLG16h2hvQUXz1+OvOF12zwDakfKfxyq2IqUcXeGf9801K+Vjyf3
-         +vuBR6mOTKwnquu4OwOGqE7ghw+XB7mWm90lJtg+HLxsHBTBBzn2JQk+YfiWegLrqR3Y
-         EdK7KLQvrg3TQoWi0P3ptXtvXOwUqlJIXjabhGCZ+7RhoEe0/ahBLwZUs/qoksDlA33r
-         U97w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=YhLum+QNHV5LbF0vbyclZG43HtRpC8u5pHO8IwynhYY=;
-        b=6Dn6XR28LbOC+02UKjEfitH9OyFeclK2zNOeeGKp7qAIls5GNuku+WnRptzvTPkEsj
-         +VfnjKxWODdK+tBCFQGQEiMDdCyTW4s+ar8i3LzXSDyPVs2jye42Se/+IjQgX3bfQJdw
-         PM3e9UekvpKwRledrsYi53dKxmXgbYhVS9qiGK4tkdRdmfwgtkFjgiueCPql4jvTP4wM
-         b09e1HK5HNQja/qnijzr5qBUy2gKvMdJYoqKS2eyaWZrjI6TMX8fmcJJMR0zE2GD9VoR
-         rSI6knP1URSRRIorTjHX3KFsOyQBKTRm/HSZ0Aq1OUbWkuERvuxv4nfhZmriO50Cl5WK
-         Qh4w==
-X-Gm-Message-State: AJIora/PfnfUaaE3KW6Dl70W/WE7mK6DlwZZoX+yU3MAluao4WzCVi7R
-        aXypN/PQKxBztco8qpwJFmOOTqCwcrN9aWW8UeFxADZv034=
-X-Google-Smtp-Source: AGRyM1vTXhVQi8hLlvc0tyZI14d4vNy6gUF8pDFA9nZyjktyroLjcP5BBi9hjrFL/Y/D77y6J/6B56Mt7yMLtyeDqr4=
-X-Received: by 2002:a17:903:124d:b0:16b:8008:6081 with SMTP id
- u13-20020a170903124d00b0016b80086081mr214493plh.68.1656270091916; Sun, 26 Jun
- 2022 12:01:31 -0700 (PDT)
+        Sun, 26 Jun 2022 15:11:24 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A4FBCAE;
+        Sun, 26 Jun 2022 12:11:22 -0700 (PDT)
+Received: (Authenticated sender: peter@korsgaard.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F0E29C0005;
+        Sun, 26 Jun 2022 19:11:19 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.94.2)
+        (envelope-from <peter@korsgaard.com>)
+        id 1o5XfC-00CMMP-Iw; Sun, 26 Jun 2022 21:11:18 +0200
+From:   Peter Korsgaard <peter@korsgaard.com>
+To:     Saurav Girepunje <saurav.girepunje@gmail.com>
+Cc:     santoshkumar.yadav@barco.com, peter.korsgaard@barco.com,
+        hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        saurav.girepunje@hotmail.com
+Subject: Re: [PATCH] platform: x86: Remove duplicated include in
+ barco-p50-gpio.c
+References: <YriUMDJoip0Mknh3@Sauravs-MacBook-Air.local>
+Date:   Sun, 26 Jun 2022 21:11:18 +0200
+In-Reply-To: <YriUMDJoip0Mknh3@Sauravs-MacBook-Air.local> (Saurav Girepunje's
+        message of "Sun, 26 Jun 2022 22:45:28 +0530")
+Message-ID: <8735fr1bqh.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-From:   RAJESH DASARI <raajeshdasari@gmail.com>
-Date:   Sun, 26 Jun 2022 22:01:20 +0300
-Message-ID: <CAPXMrf-_RGYBJNu51rq2mdzcpf7Sk_z3kRNL9pmLvf4xmUkmow@mail.gmail.com>
-Subject: Reg: rseq selftests failed on 5.4.199
-To:     stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi ,
+>>>>> "Saurav" == Saurav Girepunje <saurav.girepunje@gmail.com> writes:
 
-We are running rseq selftests on 5.4.199 kernel with  glibc 2.34
-version  and we see that tests are failing to compile with invalid
-argument errors. When we took all the commits from
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/tools/testing/selftests/rseq
- related to rseq locally , test cases have passed. I see that there are
-some adaptations to the latest glibc version done in those commits, is
-there any plan to backport them to 5.4.x versions. Could you please
-provide your inputs.
+ > Remove the duplicate include of linux/io.h in barco-p50-gpio.c
+ > file.
 
-Regards,
-Rajesh.
+ > Signed-off-by: Saurav Girepunje <saurav.girepunje@gmail.com>
+
+What tree is this against? The io.h include in the line just above
+delay.h was already removed by:
+
+commit 011881b80ebe773914b59905bce0f5e0ef93e7ba
+Author: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Date:   Thu May 26 17:03:45 2022 +0800
+
+    platform/x86: barco-p50-gpio: Add check for platform_driver_register
+
+    As platform_driver_register() could fail, it should be better
+    to deal with the return value in order to maintain the code
+    consisitency.
+
+    Fixes: 86af1d02d458 ("platform/x86: Support for EC-connected GPIOs for identify LED/button on Barco P50 board")
+    Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+    Acked-by: Peter Korsgaard <peter.korsgaard@barco.com>
+    Link: https://lore.kernel.org/r/20220526090345.1444172-1-jiasheng@iscas.ac.cn
+    Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+
+> ---
+ >  drivers/platform/x86/barco-p50-gpio.c | 1 -
+ >  1 file changed, 1 deletion(-)
+
+ > diff --git a/drivers/platform/x86/barco-p50-gpio.c b/drivers/platform/x86/barco-p50-gpio.c
+ > index f5c72e33f9ae..bb8ed8e95225 100644
+ > --- a/drivers/platform/x86/barco-p50-gpio.c
+ > +++ b/drivers/platform/x86/barco-p50-gpio.c
+ > @@ -14,7 +14,6 @@
+ >  #include <linux/delay.h>
+ >  #include <linux/dmi.h>
+ >  #include <linux/err.h>
+ > -#include <linux/io.h>
+ >  #include <linux/kernel.h>
+ >  #include <linux/leds.h>
+ >  #include <linux/module.h>
+ > --
+ > 2.33.0
+
+
+-- 
+Bye, Peter Korsgaard

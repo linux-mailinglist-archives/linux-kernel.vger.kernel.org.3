@@ -2,304 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D95855AE59
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 05:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B9455AE58
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 05:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233797AbiFZCx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 22:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S233819AbiFZC4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 22:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233753AbiFZCxz (ORCPT
+        with ESMTP id S233777AbiFZC4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 22:53:55 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50965120BC
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 19:53:54 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id g26so12215355ejb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 19:53:54 -0700 (PDT)
+        Sat, 25 Jun 2022 22:56:49 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D2913E97;
+        Sat, 25 Jun 2022 19:56:48 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id m2so5359828plx.3;
+        Sat, 25 Jun 2022 19:56:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=slObHazg0D55B5zgHVSk+V2DhERWYrcDXPm8e+t3nZ4=;
-        b=fXI+f48Qe88+PgAc5VxHZg4+V6ato4XCva+ABOxSY0cIjDyEdngX5rU98KiGjGhsnc
-         vATuLmFoRiJ3KFd9nDbzQgsNn0nTKJI3TDuxG7rP93+of0baNqr3lVxS1wBqC21OQxhI
-         0O8uz/p1DTd1OWF5Tl/EsaDOhdCkbwoNBgE8M=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UaUCLQ3nS9Up5cEY9+LaU4BO2fMeHRxRDTuwdcMT7iw=;
+        b=BOCsaX3+zhpo2CXDBCzzEiUhtT+fYHh1eGWUiqX1eEsWXMJCFUvDKc8O7dtm1l13nf
+         ubPWwBB8gvFggWiyBbMTZEFchmLyd6htqDjNtboFxjdAfclcNHbpDDR3LmPm/gGXVf+8
+         a0x18BM5eblWWrRHW/7eTsl9d4VZc/esaKp9vJtSJYgJ23oFiljjDqPplzVlXw9My6t+
+         9NxLyh2LdLGd90cGOEPEfRxSasd68jPQI0kgkPy7gTPf4d8FawV4ZFtp4Yu9bBUdiv7v
+         Ynwky+HReFT6nnoLaqSLjhPBZ1s9eGODeOhpSMEN8OyqXaq3By4ah7cGqjYeQRXR72SZ
+         uQ+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=slObHazg0D55B5zgHVSk+V2DhERWYrcDXPm8e+t3nZ4=;
-        b=PYDRCHx2KnKxYgaXf4xYNc3jpDxRIAqQxTeGuFZe5l8JTz7QBGDGxRchYa5TKl4s7J
-         6wJuk+Jcyd1PgHbYlqCz5ZUXi14KnDYdDXT+FzVYcItff6RN86NWA89YBHZRj0SMv//b
-         k6KA96D3eqYPu57wyD3fpJsY0fGSU4qb5TuuLfpIePz8Cbc1kpsQAcSVLQOIisCZP0HG
-         lbXIB//iGsnwkhLT7f/yh1+aXqqdSD/9c0lV2pHJavswOQkhi3L4YTIjVljRx0UHvChV
-         POxeepf3pr+VS5budFXsn0IqE2OW4uWYZOaRDqKdtNYMjKJ41xKJkhu1WT3Ma00oNoQd
-         J9hg==
-X-Gm-Message-State: AJIora99l+M9UCDGGD8L4vjuhS51pjViC2xIQSR44dNuEpBPbF6TFkSK
-        LxVyM7prgtdJWvYgEtDCtOsuAx/P+evEOvMG
-X-Google-Smtp-Source: AGRyM1ui1AifI/NwHrx0MeT+9hJHtRp4aYT4GdPgjbZ/9+VqIXoWlBP8jRnBwXh22RM19H7Ri57b0g==
-X-Received: by 2002:a17:907:a088:b0:70b:a1c5:b807 with SMTP id hu8-20020a170907a08800b0070ba1c5b807mr6310170ejc.6.1656212032433;
-        Sat, 25 Jun 2022 19:53:52 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id y1-20020aa7c241000000b004355dc75066sm5030978edo.86.2022.06.25.19.53.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Jun 2022 19:53:51 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id h14-20020a1ccc0e000000b0039eff745c53so3590262wmb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 19:53:51 -0700 (PDT)
-X-Received: by 2002:a05:600c:354c:b0:39c:7e86:6ff5 with SMTP id
- i12-20020a05600c354c00b0039c7e866ff5mr11744806wmq.145.1656212031078; Sat, 25
- Jun 2022 19:53:51 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UaUCLQ3nS9Up5cEY9+LaU4BO2fMeHRxRDTuwdcMT7iw=;
+        b=uAj+otElGE7orEKk9ZURtsROGLa3xPzrRZaqsG6wIeWEUh8WQUALC3zGfNtcezsEtn
+         UNMORADlqVsk2anq0k0GEMn5g32Fzs1psoRmURNxfHtVuOpjsD9m/xODoQDGrfYUiRpB
+         T5Bildwm2hTrIsDNOmSGuz4CCRyuLxMy57JuWyScxH9k/ylWbXNu8kYuLLnfFA00WFZy
+         DuhOxUXHEKVBbPZtPhrA0DfX9kMIcyTjpgEPLoDj+8r0DXMjKE6pZcL2rG+6f/Ttw1RC
+         CdPGEdD/SCX4Dw9WaUFzmFQ4960ZGi5k+xV5acwlFinG/l31COyIytOeW1Zb0evyP4yW
+         e89g==
+X-Gm-Message-State: AJIora/fOarKyyWsuLRRj/cVxL2SDSARViWAdyuxRhffT6Dclgfe4Lh7
+        jIb68Mt9ri3d5YSTiMvSmFc=
+X-Google-Smtp-Source: AGRyM1vV0I+gt2YVOXOLuC5ALl5F1MzWlDWKcH3JQRha2Ba68tRONGAQ+IeO4Y1UK74foUZpplN6+Q==
+X-Received: by 2002:a17:90b:1c01:b0:1ed:4b98:2499 with SMTP id oc1-20020a17090b1c0100b001ed4b982499mr4235711pjb.90.1656212207394;
+        Sat, 25 Jun 2022 19:56:47 -0700 (PDT)
+Received: from localhost.localdomain (li567-56.members.linode.com. [192.155.81.56])
+        by smtp.gmail.com with ESMTPSA id d15-20020a056a0024cf00b005258df7615bsm1607061pfv.0.2022.06.25.19.56.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Jun 2022 19:56:46 -0700 (PDT)
+From:   Jeff Xie <xiehuan09@gmail.com>
+To:     rostedt@goodmis.org
+Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, linux-doc@vger.kernel.org, corbet@lwn.net,
+        chensong_2000@189.cn, Jeff Xie <xiehuan09@gmail.com>
+Subject: [PATCH v13 0/4] trace: Introduce objtrace trigger to trace the kernel object
+Date:   Sun, 26 Jun 2022 10:56:00 +0800
+Message-Id: <20220626025604.277413-1-xiehuan09@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220622140853.31383-1-pmladek@suse.com> <YraWWl+Go17uPOgR@mtj.duckdns.org>
- <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com> <Yre9LO2nj+Hbr67V@mtj.duckdns.org>
-In-Reply-To: <Yre9LO2nj+Hbr67V@mtj.duckdns.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 25 Jun 2022 19:53:34 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjmWUSdK7-LLjpUrH_TX78emb3ajxZ1ueT2HU0_FVJQfA@mail.gmail.com>
-Message-ID: <CAHk-=wjmWUSdK7-LLjpUrH_TX78emb3ajxZ1ueT2HU0_FVJQfA@mail.gmail.com>
-Subject: Re: re. Spurious wakeup on a newly created kthread
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 6:58 PM Tejun Heo <tj@kernel.org> wrote:
-> >
-> > They aren't "really" spurious, they are just asynchronous enough (and
-> > thus unexpected) that you basically should never have a "sleep on
-> > wait-queue" without then looping and re-testing the condition.
->
-> Can you elaborate on this a bit? At least for the standard
-> wait_event-ish wait blocks, the waiter always does finish_wait()
-> before leavig a wait.
+Introduce a method based on function tracer to trace any object and get
+the value of the object dynamically. the object can be obtained from the
+dynamic event (kprobe_event/uprobe_event) or the static event(tracepoint).
 
-Correct.
+Usage:
+When using the kprobe event, only need to set the objtrace(a new trigger),
+we can get the value of the object. The object is from the setting of the 
+kprobe event.
 
-As long as *all* you ever use is a standard wait_event thing, you are
-always serialized by the spinlock on the wait queue.
+For example:
+For the function bio_add_page():
 
-However.
+int bio_add_page(struct bio *bio, struct page *page,
+	unsigned int len, unsigned int offset)
 
-Very few processes only use standard wait_event things. There are a
-number of places that use "wake_up_process()" which doesn't use a
-wait-queue, but a wake-up directed right at a particular task.
+Firstly, we can set the base of the object, thus the first string "arg1"
+stands for the value of the first parameter of this function bio_add_gage(),
 
-Is that the _common_ pattern? It's not *uncommon*. It's maybe not the
-strictly normal wait-queue one, but if you grep for
-"wake_up_process()" you will find quite a lot of them.
+# echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
 
-And yes, many of those uses too will use strictly serialized locking:
-in that both the waker and the sleeper (ie the target of the
-wake_up_process()) will have serialized the target thread pointer with
-some lock, exactly like the normal wait-queues serialize using the
-wait-queue lock.
+Secondly, we can get the value dynamically based on above object. 
 
-But several do *not* use locking, and instead rely on the
-thread_struct being RCU-free'd.
+find the offset of the bi_size in struct bio:
+$ gdb vmlinux
+(gdb) p &(((struct bio *)0)->bi_iter.bi_size)
+$1 = (unsigned int *) 0x28
 
-In fact, I think kthread_create() itself is such an example, with that
+# echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
+	p_bio_add_page_0/trigger
 
-        wake_up_process(kthreadd_task);
+# cd /sys/kernel/debug/tracing/
+# echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+# echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
 
-just doing a blind directed wakeup with no locking what-so-ever, just
-a straight wake_up.
+# du -sh /test.txt
+12.0K   /test.txt
 
-And the important thing to notice that if you have even just *one*
-such user, that kthreadd_task will basically get randomyl "spuriously"
-woken up while it is waiting for something else.
+# cat  /test.txt > /dev/null
+# cat ./trace
+# tracer: nop
+#
+# entries-in-buffer/entries-written: 128/128   #P:4
+#
+#                                _-----=> irqs-off/BH-disabled
+#                               / _----=> need-resched
+#                              | / _---=> hardirq/softirq
+#                              || / _--=> preempt-depth
+#                              ||| / _-=> migrate-disable
+#                              |||| /     delay
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+             cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+             cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+             cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
+             cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+             cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+             cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
+             cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
+             cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
+             cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+             cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+          <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
+          <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+	  ...
 
-Now, the kthreadd_task task is kind of specialized, and that
-particular wake_up_process() doesn't affect anybody else, so think of
-that just as an example.
+Almost all changelogs were suggested by Masami(mhiramat@kernel.org)
+and steve(rostedt@goodmis.org), thank you all so much.
 
-But now imagine any of the other unlocked directed wake_up_process()
-users. Imagine them targeting regular user processes that may be doing
-regular system calls.  Imagine that wake_up_process() being just done
-under a RCU read lock, and maybe the process had already woken up
-*AND* had already gone on to do entirely other things!
+v13:
+- remove the 's' type, since the objtrace event doesn't show the value with sign
+- change the [3/4] tag with 'selftests/ftrace' instead of 'trace/objtrace'
+- add 'Documentation:' tag for [4/4]
 
-IOW, maybe you are now a thread that does a perfectly normal locked
-wait_queue thing - but because the *previous* system call did
-something that did less strictly locked things, there may be another
-CPU that is still in the process of waking you up from that previous
-system call. So now your "strictly locked" waitqueue usage sees a
-"spurious" wakeup, because a previous not-so-stictly-locked usage had
-been delayed by interrupts on another CPU.
+v12:
+- use the %zu to print the sizeof
+  Reported-by: kernel test robot <lkp@intel.com>
+  Suggested-by: Nathan Chancellor <nathan@kernel.org>
 
-And yes, those "wake up process under RCU read lock" really do exist.
-There are literally things that take a reference to a task struct, add
-it to some RCU-safe list, and then do the wakeup without locking.
+v11:
+- remove useless atomic counting methods for num_traced_obj
+- make array objtrace_fetch_types null terminated
+- add raw_spin_lock_init for obj_data_lock
 
-> I'm probably missing sometihng. Is it about bespoke wait mechanisms?
-> Can you give a concrete example of an async wakeup scenario?
+v10:
+- support ftrace instances
+- use trace_buffer_lock_reserve instead of trace_event_buffer_lock_reserve
+- a lot of cleanup work has been done mainly for event_object_trigger_parse
 
-Grep for wake_up_process() and just look for them/
+v9:
+- fix objtrace trigger output was incomplete
+- fix the objtrace trigger was removed when using the existed parameter on
+  event.
+- add testcase for the second fix above.
 
-Side note: signals end up doing effectively the same thing if you're
-doing interruptible waits, of course, but people are probably more
-*aware* of signals when they use TASK_INTERRUPTIBLE. But these
-RCU-delayed wakeups can wake up even TASK_UNINTERRUPTIBLE calls.
+v8:
+- revert to use per-cpu recursion for the function trace_object_events_call
+- recover the filter when getting the value of the object
+- simplify the implementation for the function get_object_value
+- fix the build error
 
-Anyway, it's easy enough to deal with: use the "event" macros, and
-you'll never have to worry about it.
+v7:
+- use fixed-size array for object pool instead of list structure
+- use ftrace_test_recursion_trylock for function trace hook function
+- fix trace_object_ref reference count in the init_trace_object
+- invoke exit_trace_object no matter whether data->ops->free is null 
+  in the unregister_object_trigger
+- release private_data of event_trigger_data in the trace_object_trigger_free
+- remove [RFC] tag
 
-But if you use explicit wait-queues and manual scheduling (rather than
-wait_event() and friends), you need to be aware that when you go to
-sleep, the fact that you woke up is *not* a guarantee that the wakeup
-came from the wait queue.
+v6:
+- change the objtrace trigger syntax.
+- add patchset description
+- add <tracefs>/README
 
-So you need to always do that in a loop. The wait_event code will do
-that loop for you, but if you do manual wait-queues you are required
-to do the looping yourself.
+v5:
+- add testcasts
+- add check the field->size
+- add lockless to search object
+- describe the object trace more clearly in Kconfig
 
-> So, the deferred wakeups from earlier waits are one. Can you give some
-> other examples? This is something which has always bothered me and I
-> couldn't find explanations which aren't hand-wavy on my own. It'd be
-> really great to have clarity.
+v4:
+- please ignore the v4 which is the same as v3
 
-There's a second class of "spurious" waits that aren't really spurious
-at all, and aren't even deferred, and are simply due to "there were
-multiple things you waited for, but you didn't even *think* about it".
+v3:
+- change the objfilter to objtrace
+- add a command to the objfilter syntax
+- change to get the value of the object
+- use trace_find_event_field to find the field instead of using argN
+- get data from @rec in the event trigger callback funciton
 
-The obvious one is for poll/select, but there people are aware of it.
+v2:
+- adding a "objfilter" trigger to update object
 
-The less obvious one is for taking a page fault or being put to sleep
-and being woken up again while actively *inside* a wait loop, and
-already with a wait-queue entry added.
+Jeff Xie (4):
+  trace: Add trace any kernel object
+  trace/objtrace: Get the value of the object
+  selftests/ftrace: Add testcases for objtrace
+  Documentation: trace/objtrace: Add documentation for objtrace
 
-For a historical example of *both* of those kinds of situations, take
-a look at n_tty_read() in drivers/tty/n_tty.c, and in particular,
-notice how the wait-loop looks something like this:
+ Documentation/trace/events.rst                |  83 +++
+ include/linux/trace_events.h                  |   1 +
+ kernel/trace/Kconfig                          |  10 +
+ kernel/trace/Makefile                         |   1 +
+ kernel/trace/trace.c                          |  11 +
+ kernel/trace/trace.h                          |  21 +
+ kernel/trace/trace_entries.h                  |  18 +
+ kernel/trace/trace_events_trigger.c           |   5 +-
+ kernel/trace/trace_object.c                   | 611 ++++++++++++++++++
+ kernel/trace/trace_output.c                   |  40 ++
+ .../ftrace/test.d/trigger/trigger-objtrace.tc |  41 ++
+ 11 files changed, 840 insertions(+), 2 deletions(-)
+ create mode 100644 kernel/trace/trace_object.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
 
-        add_wait_queue(&tty->read_wait, &wait);
-        while (nr) {
-                ..
-        }
-        ...
-        remove_wait_queue(&tty->read_wait, &wait);
 
-and *inside* the loop, you have both
+base-commit: 408d26e261b089596c0837e71d2fb4a80ea04ef3
+-- 
+2.25.1
 
- (a) locking:
-
-                        down_read(&tty->termios_rwsem);
-
- (b) historically (but not any more) user space accesses
-
-and both of those kinds mean that you actually have overlapping
-lifetimes of wait-queues for the same process.
-
-That's very much how wait-queues were always designed to work - it
-solves a lot of race conditions (ie the traditional "sleep_on()" model
-is broken garbage), but it means that each individual user doesn't
-necessarily understand that other active wait-queues can wake up a
-process *while* the code thinks about another wait-queue entirely.
-
-IOW, when you are in the page fault code, and you are waiting for the
-filesystem IO to complete, you may *also* be on that kind of
-"tty->read_wait" waitqueue, and a character coming in on that tty will
-wake you up.
-
-The *filesyustem* code doesn't care about the tty wakeup, so it's very
-much an example of a "spurious" wake event as far as the filesystem
-code is concerned.
-
-Similarly, when you are locking a semaphote, the only wait-queue
-activity you care about at the time of the lock is the ones coming
-from the unlockers, but you may get "spurious" wakeups from other
-things that the process is *also* interested in.
-
-Again, none of these are *really* spurious. They are real wakeup
-events. It's just that within the *local* code they look spurious,
-because the locking code, the disk IO code, whatever the code is
-doesn't know or care about all the other things that process is
-involved in.
-
-And once again, it's not that different from "hey, signals can wake
-you up at pretty much any time", but people *think* that because they
-are doing a non-interruptible wait it is somehow "exclusive", and
-don't think about all the other things that that process has been
-involved in
-
-> * If there are no true spurious wakeups, where did the racing wakeup
->   come from? The task just got created w/ TASK_NEW and woken up once
->   with wake_up_new_task(). It hasn't been on any wait queue or
->   advertised itself to anything.
-
-I don't think it was ever a spurious wakeup at all.
-
-The create_worker() code does:
-
-        worker->task = kthread_create_on_node(..
-        ..
-        worker_attach_to_pool(worker, pool);
-        ..
-        wake_up_process(worker->task);
-
-and thinks that the wake_up_process() happens after the worker_attach_to_pool().
-
-But I don't see that at all.
-
-The reality seems to be that the wake_up_process() is a complete
-no-op, because the task was already woken up by
-kthread_create_on_node().
-
-But I dunno. I think the whole argument of
-
-  Any kthread is supposed to stay in TASK_UNINTERRUPTIBLE sleep
-  until it is explicitly woken.
-
-was completely broken to begin with, and then the belief that there's
-some spurious wakeup came from that.
-
-But hey, that "wake_up_process(worker->task)" itself does seem spurious.
-
-Anyway, I think this whole "spurious wakeup" is a complete red
-herring. They don't "really" exist, but any code that expects some
-exclusive wakeup tends to be broken code and that kind of thinking is
-dangerous.
-
-So you should *ALWAYS* write your code as if things can get random
-spurious wakeups at any time. Because with various CPU hotplug events
-etc, it really might happen.
-
-But I don't think that's what's going on here. I think the workqueue
-code is just confused, and should have initielized "worker->pool" much
-earlier.  Because as things are now, when worker_thread() starts
-running, and does that
-
-  static int worker_thread(void *__worker)
-  {
-        struct worker *worker = __worker;
-        struct worker_pool *pool = worker->pool;
-
-thing, that can happen *immediately* after that
-
-   kthread_create_on_node(worker_thread, worker,
-
-happens. It just so happens that *normally* the create_worker() code
-ends up finishing setup before the new worker has actually finished
-scheduling..
-
-No?
-
-               Linus

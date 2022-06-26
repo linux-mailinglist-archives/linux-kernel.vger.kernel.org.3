@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D9C55AE2C
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 04:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 132AC55AE31
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 04:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233831AbiFZCL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 22:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
+        id S233541AbiFZCMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 22:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233617AbiFZCL4 (ORCPT
+        with ESMTP id S233811AbiFZCMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 22:11:56 -0400
+        Sat, 25 Jun 2022 22:12:03 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B1313E85;
-        Sat, 25 Jun 2022 19:11:56 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 90DC432008FD;
-        Sat, 25 Jun 2022 22:11:54 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B5713F37;
+        Sat, 25 Jun 2022 19:11:59 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 7BAF23200909;
+        Sat, 25 Jun 2022 22:11:57 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sat, 25 Jun 2022 22:11:55 -0400
+  by compute2.internal (MEProxy); Sat, 25 Jun 2022 22:11:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1656209514; x=1656295914; bh=wy
-        eR3lxXOmCAQeS8Gi1vPaFAP1UPTolRFL1liomH1uY=; b=UMRYy2VZTfJXilwIFX
-        yXRA+QsmMl+TpKJZvAL/jt6lF6b2R96RXr4NW21RZT7dJCRPxiXmUuSUrbea8mMc
-        qJfGRl7brmjm2IJ2oQNpCYqG5wu+kLzpY5GCCR0GX9P5YwIy3mHe3tsjky1gGvTM
-        MS7Y9kQ57fH6LyikbdPWZC01AWovdwtIJsPAqhpy9fqEZ+a+nEe9YTFMLDB6MnMi
-        jo76U63erM+QPAUr4kEGXqYFY9wRnncTQD73j5OmZfNcHBcdfcywibVHB7XwEk7x
-        D6bTGjY5HGUVahcPit/BH8SmQ6F+GgNyibsACVEg/Yx3CpMrmuYBCJp3lXNBcHVk
-        3y0A==
+        :subject:subject:to:to; s=fm3; t=1656209517; x=1656295917; bh=Rs
+        /fITujWP8gCqOdfm6a/ydgF+XVF/nxsSLYWExuY7o=; b=UfmcXm7D9oHNO1+UJz
+        IuvACek7SvmSSz8hsd7DhEaF8kzI0pw4hGkeWxBa3yA7ph1CXylEzqF0eLluaYbT
+        owXLjUbzNCSpsUdRtIPXOyYiHEp30M9Ez7RvyR+8cBMywl9lmDLbx1rrvvLbSRfl
+        76ox0+xwC5U/9sacT3wF9KineHOZMXASA381zUxFZ6tECSX1W1PRybbBwtFWNntz
+        nV5q/jR17oioMcLiuXIJIxqVR6RUmWVzDZdAN24/zQBPBqtKZRrR/0QR3eAdbi1V
+        u14DfXSToULLA3c3KhWJ/TqtylUXsbJ57YQIFWTj1SB0+phplfATlEhJ8Fkx1WE1
+        zyzA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1656209514; x=1656295914; bh=wyeR3lxXOmCAQ
-        eS8Gi1vPaFAP1UPTolRFL1liomH1uY=; b=tZr2yA54Oo+Gvr0yxaoyy9Re09KuI
-        06XV/Z6CCc8+VGRfg48y21eGZzZcpDxNiNK4swBTeiA+smgxgZoZdrG81JscVu4t
-        hR5+gJgkUW5u3auoiEqt7yp/Z/4SOTziUYPX3xH4buiSn0TqrQuhJrFOQcM5nkzP
-        BVL+goApqpRho5WVvzsLeeS4he6GYx3QCEXlHvLfg3IYbMxmYYIsM82N2HgZJW4K
-        RGNAAzevFowaN4apvqlmK84YCg0sRnYnJq1gesMZ2+k6ykHulA05p3NhZjCmPNdm
-        g/WUb5JOO6CYfNyu9cauG5LIaLyiAxd/LsbeW4NRjN0nmj9PVYNArtxiw==
-X-ME-Sender: <xms:acC3Ypp8mmu0aS8kgDdSBDzew5WDlhCvpWKSV1vZFNmxgDpKtziP3g>
-    <xme:acC3YrqFp073nP6tekECKZijxDHoSuIK6JCoV1eRI-IrAYa6YqbBYHmz44l7-DLcO
-    9ROXFP89Z3osf2LGg>
-X-ME-Received: <xmr:acC3YmNkUYoX864X-HB9MqKeZOGI_aF2_gBHGpGIzM1UTlNH73swzbsHbAw0YeMgVZf581uh4zrM5TXVudJBnjOdN33vMSIYCgerw65xyEeovJATEFIm8DYmeIcTsEqflW_uAA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudegvddgheehucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm2; t=1656209517; x=1656295917; bh=Rs/fITujWP8gC
+        qOdfm6a/ydgF+XVF/nxsSLYWExuY7o=; b=MDhp15BJGPEv/pc6UiqDVy4bb5qaN
+        +bMaZf11iZU4s+l1lvLmjc9NYmJB8tIPBGbD+gnaixP9jnOGbVN+JGQr8geIzSlV
+        agwP1zh99skzHm0rKB5KL0OYWmqZrKIfr1kR2WJsqBSvvs8jomBP4lQiVSnFWyws
+        a9oLovnQHBI6vLjrRHslGxKAh+Tx6DwjmQ5B0y/SeDo0H/7Qj1mbIZKDv3r0GNz2
+        v20TGVSAnnpnjrkKW9UgoB5c9KFK1RhKXS5HjsD1YzT4zSn/Kc2sXVknWa052n3d
+        AQIbPHce6PQQjfLSuS0isb9BXKPsv0q76Ac3KINNX8/yn56cA98frE1lQ==
+X-ME-Sender: <xms:bMC3YjHj6FNKH6S-RnrASQLEo7WCOcEq2pDkxPHcRyQ02TK3uzAZ2Q>
+    <xme:bMC3YgXeaC2JmRVSARbi9Q3Mj4ALokIuRvMYd5tLyKZsXj-nTxCAUlf2GyQ5lzi60
+    kkgq6SCKpoBfSm2Qw>
+X-ME-Received: <xmr:bMC3YlJeG4f26H1s_IGnCQCQ3_qtaV8VAjfL8JYni1B6WRBNbVaUv7moKqWCcLN9GuGf9QPvjaNWMLt19sby4-ltOcwcuyOvddZ5Dzuynp96g4Ur76vyVoQEd_iVHuUtKxxKFg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudegvddgheeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudegvddgheehucetufdoteggod
     ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
     udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:acC3Yk4cAK8jy9e_SOr40EDGv7wY77pob-Zov-ZmWNo2tGl_WYWx0A>
-    <xmx:acC3Yo7lpZS5bvkSA-BsQk2891RnQ78sVN_hhCZ3R1fgMhEFrQkt7A>
-    <xmx:acC3YsjtrppmHdFd2LRs4SW3oldE2JaGtphdaWX7Hxo3erCrEvvaeQ>
-    <xmx:asC3YogCfKGZ2GO6kuv9iDLeRnhEr2E7mpy3wFVL1uandePGq4n5Yg>
+X-ME-Proxy: <xmx:bMC3YhFB4HF2ZMd2Hh0saG6JhmoCUT3IDljYJ7CMGkh3vH6oV6lohg>
+    <xmx:bMC3YpW-4Owt-IKwbQJYXZKD8Bvz9PQCGdVwBslPyPRzBYpMft-O9A>
+    <xmx:bMC3YsOfLS_gAPp9WqKBHElm2HYLyhhba62jJhxzb-5GNMeiznnwWw>
+    <xmx:bcC3YkMpxxi4YyXtGwC3AbMPwyA_j22qsilHFFPYlngiqQX8EvhKaw>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 25 Jun 2022 22:11:52 -0400 (EDT)
+ 25 Jun 2022 22:11:56 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -72,9 +72,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH 1/6] dt-bindings: pinctrl: Add compatibles for Allwinner D1/D1s
-Date:   Sat, 25 Jun 2022 21:11:42 -0500
-Message-Id: <20220626021148.56740-2-samuel@sholland.org>
+Subject: [PATCH 2/6] pinctrl: sunxi: Add I/O bias setting for H6 R-PIO
+Date:   Sat, 25 Jun 2022 21:11:43 -0500
+Message-Id: <20220626021148.56740-3-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220626021148.56740-1-samuel@sholland.org>
 References: <20220626021148.56740-1-samuel@sholland.org>
@@ -90,51 +90,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-D1 contains a pin controller similar to previous SoCs, but with some
-register layout changes. It includes 6 interrupt-capable pin banks.
+H6 requires I/O bias configuration on both of its PIO devices.
+Previously it was only done for the main PIO.
 
-D1s is a low pin count version of the D1 SoC, with some pins omitted.
-The remaining pins have the same function assignments as D1.
+The setting for Port L is at bit 0, so the bank calculation needs to
+account for the pin base. Otherwise the wrong bit is used.
 
+Fixes: cc62383fcebe ("pinctrl: sunxi: Support I/O bias voltage setting on H6")
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- .../pinctrl/allwinner,sun4i-a10-pinctrl.yaml      | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c | 1 +
+ drivers/pinctrl/sunxi/pinctrl-sunxi.c       | 7 ++++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
-index bfce850c2035..3da52814f151 100644
---- a/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
-@@ -46,6 +46,8 @@ properties:
-       - allwinner,sun8i-v3s-pinctrl
-       - allwinner,sun9i-a80-pinctrl
-       - allwinner,sun9i-a80-r-pinctrl
-+      - allwinner,sun20i-d1-pinctrl
-+      - allwinner,sun20i-d1s-pinctrl
-       - allwinner,sun50i-a64-pinctrl
-       - allwinner,sun50i-a64-r-pinctrl
-       - allwinner,sun50i-a100-pinctrl
-@@ -171,6 +173,19 @@ allOf:
-           minItems: 7
-           maxItems: 7
+diff --git a/drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c b/drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c
+index c7d90c44e87a..7b4b9f3d4555 100644
+--- a/drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c
++++ b/drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c
+@@ -107,6 +107,7 @@ static const struct sunxi_pinctrl_desc sun50i_h6_r_pinctrl_data = {
+ 	.npins = ARRAY_SIZE(sun50i_h6_r_pins),
+ 	.pin_base = PL_BASE,
+ 	.irq_banks = 2,
++	.io_bias_cfg_variant = BIAS_VOLTAGE_PIO_POW_MODE_SEL,
+ };
  
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - allwinner,sun20i-d1-pinctrl
-+            - allwinner,sun20i-d1s-pinctrl
+ static int sun50i_h6_r_pinctrl_probe(struct platform_device *pdev)
+diff --git a/drivers/pinctrl/sunxi/pinctrl-sunxi.c b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
+index d9327d7d56ee..3c5e71359ca8 100644
+--- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
++++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
+@@ -622,7 +622,7 @@ static int sunxi_pinctrl_set_io_bias_cfg(struct sunxi_pinctrl *pctl,
+ 					 unsigned pin,
+ 					 struct regulator *supply)
+ {
+-	unsigned short bank = pin / PINS_PER_BANK;
++	unsigned short bank;
+ 	unsigned long flags;
+ 	u32 val, reg;
+ 	int uV;
+@@ -638,6 +638,9 @@ static int sunxi_pinctrl_set_io_bias_cfg(struct sunxi_pinctrl *pctl,
+ 	if (uV == 0)
+ 		return 0;
+ 
++	pin -= pctl->desc->pin_base;
++	bank = pin / PINS_PER_BANK;
 +
-+    then:
-+      properties:
-+        interrupts:
-+          minItems: 6
-+          maxItems: 6
-+
-   - if:
-       properties:
-         compatible:
+ 	switch (pctl->desc->io_bias_cfg_variant) {
+ 	case BIAS_VOLTAGE_GRP_CONFIG:
+ 		/*
+@@ -655,8 +658,6 @@ static int sunxi_pinctrl_set_io_bias_cfg(struct sunxi_pinctrl *pctl,
+ 		else
+ 			val = 0xD; /* 3.3V */
+ 
+-		pin -= pctl->desc->pin_base;
+-
+ 		reg = readl(pctl->membase + sunxi_grp_config_reg(pin));
+ 		reg &= ~IO_BIAS_MASK;
+ 		writel(reg | val, pctl->membase + sunxi_grp_config_reg(pin));
 -- 
 2.35.1
 

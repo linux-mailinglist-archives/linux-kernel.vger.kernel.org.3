@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE4F55B137
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 055CF55B13F
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 12:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234116AbiFZKgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 06:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S234243AbiFZKhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 06:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234247AbiFZKgU (ORCPT
+        with ESMTP id S234175AbiFZKhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 06:36:20 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0369C12778
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:36:19 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id ay16so13342637ejb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:36:18 -0700 (PDT)
+        Sun, 26 Jun 2022 06:37:25 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E6C12A85
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:37:23 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id sb34so13268938ejc.11
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 03:37:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/KOGP9jELmtiwr0N4d0KhuY//bqDOGVF37th/t1CLEc=;
-        b=c9k+2kBBz3UPPDy153Zqn5YLgmmzCvWAx5s0bmqNurg0OpWm5fMwHhi0y2l5k8FhY8
-         R4OKjAkq+/OKojaWSfaUlIWG/gFJCYVt8/QcgX5bWHENFFesScVVvKi3Z3yCfuP3jUN4
-         howve+/5fXJ1d5LjbvzvsQPa0xkRqXFj8bI0Z4dXRM0bsCI1iCK/VTeLo8b/bO4z/MDr
-         MUYVnwQiJB3uMsG/S2t0k4zVR9frhQxOPR/LEFfO9DwQDtZMut0G5Ia9YYNe7CDW45zO
-         03Eo7BEl+6uOix+WhqpQbp8t9n+U8YrEDs75LnV2hwUzk7FCRgV2Wsd2bYXjpk7rglFt
-         xAWQ==
+        bh=v5MWZtaUVFOqtoxtacN9tsMmQ+YFWE4QkhWitNXkbM8=;
+        b=FgKQolRyfAt9w6xD99Ino2epPCiqr+aD2KNrO2/A5NTVNZIkxOjp1iaG//izy3NqmN
+         sMO73MAUM1s3gh6CLH2Eonf0Gp7oWerOORUx+iBQ9rOfkNmu5w71fL/OZFZnD1A98y4N
+         vdmpHvxMcltr8PAZVc4SriR4ie0S4mZXudhhW0Z9ooglfND2eX3UaRWyBIp/TZGiWBLW
+         ILC3j3EvOlda4FuzpOHjjxlMEwti5UM30ll25Bu8uX5wPrLoFV6OcZr6tmLLEwzXNz6O
+         JbKhswqenlfJ4XZIVCCmu/lSlYS/qG3aKPLLMte+cptIkucen8FgbPZZTkuvoTB93C9l
+         whqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=/KOGP9jELmtiwr0N4d0KhuY//bqDOGVF37th/t1CLEc=;
-        b=7gqFtcgNXJdA+5WVpQRbCYRpy4t549jAeyidzvhUlfKOSaviUkbZmXBbqQ4ntDhidb
-         hnh1XUrXIeEpEjgUtZ3Wwhb+y8YGVFg5dLND4jmsplwa1uOub1G2MucdteXKOj1oJ0Qu
-         95Q8GDluMbvvjyTXms53LWpMln0W0bRVoqP5zb1xXo5vHGAMA6HEGGcnC/l1XgXEgief
-         lgU/fEnoigu9H4/uwMY3ugOI4f+Nfj2L5eu9cKQe+BqkgwsPyCnsv1bGfGr8UJ+S3EKX
-         n6BUyUNc5AaEpTUy4ao/elfAeU4mOJfEY8y6c47UAyzCbql97GjQHJGNnfxSkLAbJfcw
-         KlTQ==
-X-Gm-Message-State: AJIora/iK3xrkpB56W3+GvwIDmDjtXwbyeDpcJ7ERnjDS0ILLWQrn4HP
-        EzMDkRqC+kjUxJ/Qx4Ex8eHYdQ==
-X-Google-Smtp-Source: AGRyM1tgawZLer3hzJeLKf6LM8wmjjs2sRb71tDoP2t9+PZad8dfYMUiHALgBJhdp/iOHGqpoDxK5Q==
-X-Received: by 2002:a17:907:8a13:b0:707:194c:30df with SMTP id sc19-20020a1709078a1300b00707194c30dfmr7675177ejc.154.1656239777590;
-        Sun, 26 Jun 2022 03:36:17 -0700 (PDT)
+        bh=v5MWZtaUVFOqtoxtacN9tsMmQ+YFWE4QkhWitNXkbM8=;
+        b=0ulHhiD5HnDpE78nvaYgIYGz5/bJTyFuz3ULkrixtEYsPvSE3FA5jUf0vh9c17peGN
+         2of86TCoGuDBWd4ypbRA75FFWTbXFNoJN6hkw/GvtqpLHPFLKKsolNcOhPsBBdRRD90U
+         ITwZPI83ztExu8GrkAtrLHzKIiMVFeIdxgn7qIXNmLY7wpz9+XZs3hmdtOI4EbdfeHx8
+         zBccXBJZErj3Pm6POObro1HMy5cVkyvQZaQHquL3a3m2S0rcIAmKouvCuZgxshtWb+M0
+         Ehsk3Hka9FQa64NDjbEsqP4tzEWu5hdedmTVz05Gl3TbKeYvp6UBZUv+QW57r2rmCEYb
+         38XA==
+X-Gm-Message-State: AJIora85R8af2Cr8PtsNuiqkUMVUTtDEY2BRCGQhQQ3hVo3fhnrsi6Sb
+        32hbI2GG1h0G+e5Zga0JsszbTQ==
+X-Google-Smtp-Source: AGRyM1uWyS24JWs5XjcLmOW4sPUId65Hj2vcLLUX54VtWo/YEmnh8xQ//lOm8qCxYI8AVf++vBA9bg==
+X-Received: by 2002:a17:906:2252:b0:711:d2e6:9e7e with SMTP id 18-20020a170906225200b00711d2e69e7emr7421799ejr.161.1656239841978;
+        Sun, 26 Jun 2022 03:37:21 -0700 (PDT)
 Received: from [192.168.0.239] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q21-20020aa7d455000000b0042fb3badd48sm5673595edr.9.2022.06.26.03.36.16
+        by smtp.gmail.com with ESMTPSA id jz18-20020a17090775f200b0070fd7da3e47sm3624539ejc.127.2022.06.26.03.37.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jun 2022 03:36:17 -0700 (PDT)
-Message-ID: <e14c6be5-1815-3c6b-2f41-3d00c4888f64@linaro.org>
-Date:   Sun, 26 Jun 2022 12:36:16 +0200
+        Sun, 26 Jun 2022 03:37:21 -0700 (PDT)
+Message-ID: <4d50b9ae-fad4-346d-8e98-8e10786ec8f1@linaro.org>
+Date:   Sun, 26 Jun 2022 12:37:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH V10 1/3] dt-bindings: rtc: zynqmp: Add clock information
+Subject: Re: [PATCH 1/6] dt-bindings: pinctrl: Add compatibles for Allwinner
+ D1/D1s
 Content-Language: en-US
-To:     Srinivas Neeli <srinivas.neeli@xilinx.com>, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        srinivas.neeli@amd.com, neelisrinivas18@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, michal.simek@xilinx.com,
-        sgoud@xilinx.com, shubhraj@xilinx.com
-Cc:     devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@amd.com, git@xilinx.com, Rob Herring <robh@kernel.org>
-References: <20220626070817.3780977-1-srinivas.neeli@xilinx.com>
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>, Ondrej Jirman <x@xff.cz>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+References: <20220626021148.56740-1-samuel@sholland.org>
+ <20220626021148.56740-2-samuel@sholland.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220626070817.3780977-1-srinivas.neeli@xilinx.com>
+In-Reply-To: <20220626021148.56740-2-samuel@sholland.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,15 +81,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/06/2022 09:08, Srinivas Neeli wrote:
-> Added clock information and deprecated calibration support.
+On 26/06/2022 04:11, Samuel Holland wrote:
+> D1 contains a pin controller similar to previous SoCs, but with some
+> register layout changes. It includes 6 interrupt-capable pin banks.
 > 
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
-> Changes in V10:
-> -resolved dt_check error.
-> Changes in V9:
+> D1s is a low pin count version of the D1 SoC, with some pins omitted.
+> The remaining pins have the same function assignments as D1.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

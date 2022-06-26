@@ -2,147 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D0E55B23E
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 15:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D556555B23C
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 15:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbiFZNiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 09:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
+        id S234426AbiFZNlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 09:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234405AbiFZNiT (ORCPT
+        with ESMTP id S231148AbiFZNlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 09:38:19 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527B7A45D;
-        Sun, 26 Jun 2022 06:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656250698; x=1687786698;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kxS+Hd8ciLGEOc4OUv7lM1xi/hzO+2ID9BxcmTd+74w=;
-  b=PHze+GXEsiD3aTLdZEf7yYe9oNgrYeJAYtmQbP1d6JKZ2kdp+FZ09Q7o
-   AZ86ENFERAw7jlfMht6+oxbbaATo3QXVwIposdMP21LRqiEf59NocsjVj
-   UHyg+DXbXlIRSH/0JfP2t/SshDybnpjJQVqr4jIXW0h8rF9G82tplYx8r
-   d/Z7Kbb9A0J+YA/kL5plJsqs9/lM4yEWAqTLlhr9iqCzH4IW2qE3/zn6G
-   ixadXvqhtxsvGmnT3kvG9DyF466QVLOZia9T/eX8+gIplfFzPiuCgf3PO
-   p0yo/yh6AQ0Gqn8Q3EusiGovkK/HfyvfR9SsIXKqQIn5mr34yqoytMuF2
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10389"; a="280040572"
-X-IronPort-AV: E=Sophos;i="5.92,224,1650956400"; 
-   d="scan'208";a="280040572"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 06:38:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,224,1650956400"; 
-   d="scan'208";a="616477359"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 26 Jun 2022 06:38:15 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o5SSt-0007Lb-8K;
-        Sun, 26 Jun 2022 13:38:15 +0000
-Date:   Sun, 26 Jun 2022 21:37:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jie Hai <haijie1@huawei.com>, vkoul@kernel.org,
-        wangzhou1@hisilicon.com
-Cc:     kbuild-all@lists.01.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/8] dmaengine: hisilicon: Fix CQ head update
-Message-ID: <202206262132.9GLS9dHC-lkp@intel.com>
-References: <20220625074422.3479591-3-haijie1@huawei.com>
+        Sun, 26 Jun 2022 09:41:20 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453F0DFFE;
+        Sun, 26 Jun 2022 06:41:19 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id i17so11321553qvo.13;
+        Sun, 26 Jun 2022 06:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wsr7GyWI/nrL4tsAp10vAzoFNjZ53E89T9GWndfpfdo=;
+        b=me6B0zZoRRhh6rEZLz1xxKTu16H//E447EH8bpU2IQh/i/IGWhtmIVLMoZL5ErTWX4
+         CVXkDF6KN/DU3EEvNO9Z2c6H/Uu11yF4H3evy4YR9xzteBRDmqVeqKfeO3MDlZVYTz7T
+         DCBHTj4ddkrZ+WuquRE0C16ossEhevyr+Gbllr5aPmu+J7t+plF8OSf6wqK72jfteOPB
+         Vpprz1+5jrj3jfy0OzWs43uWI2vusnlnXl9lrrARC2lbvlsbJ6owcO7i9qIiLqp5aaeA
+         +ES8f2v23qmB82FGtgsSrC+c0heEn7n0gENR29zqiqcNVpxoaR5iivEnyOUUkXZrzlNG
+         3TXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wsr7GyWI/nrL4tsAp10vAzoFNjZ53E89T9GWndfpfdo=;
+        b=rA4bRjJufZ0t+4y2Fj44ZP/DDxuU0nSqa4kHqv+0Hkm60Nx9srZwaVNrn41l+VR3X+
+         XWzPzm22Rx9F7csgBWCsThDcjado2DrQhJM343e4UCsBhMZAuWX/k7lCWqpKdy8/xa3C
+         zlpXY5znxo/+z377WUFAtx3RJPBmj928jz4s7O+7ZWv3miUvO6Vdqf1fRqEygeO8NpbR
+         tyFA58phdqUjRae4ZJbifur5czu7zVkjgXsIL8eXS0aHx+Hbxwlvrj3mZL8O48JW1rYF
+         lvqGmMSQls00uuVX0azqvgwkt3466phuqzp1Q5BQB6K7U7lkwjXSeQeVf3rmTD8O28XL
+         /7CQ==
+X-Gm-Message-State: AJIora9PAQLVy7gdH4byjeCiMq9LcDOam86Of0L2BLppHVRbuDJjYSoA
+        0NFfy5hfLqqaLEj0saK8VgpnaHOxWEvZQHwFVgc=
+X-Google-Smtp-Source: AGRyM1tWY6CCIhsExLB2W7wpR6qwuX2B+MmpQkfjs8JMlfBvozH1vusWsotmarNOX9imUk6M6rPP430PXOKuc2EUKj8=
+X-Received: by 2002:ac8:5dce:0:b0:305:300e:146d with SMTP id
+ e14-20020ac85dce000000b00305300e146dmr6019153qtx.546.1656250878361; Sun, 26
+ Jun 2022 06:41:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220625074422.3479591-3-haijie1@huawei.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220623182542.1116677-1-robimarko@gmail.com> <26cdc24c-e0e8-1059-f6ca-11c08615eeca@linaro.org>
+ <CAOX2RU7aEaBt_PYS2UA6BES+dJgx4n2QPHJ6yWYWZuTt2SLXoA@mail.gmail.com> <46ec1f38-dcbe-f87c-4f37-999d24eec522@linaro.org>
+In-Reply-To: <46ec1f38-dcbe-f87c-4f37-999d24eec522@linaro.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Sun, 26 Jun 2022 15:41:07 +0200
+Message-ID: <CAOX2RU4zhtwacgWWwZehnRBXw9qUgVPdfOexOWeKSxe-tt=ZHA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: firmware: qcom-scm: convert to dtschema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jie,
+On Sat, 25 Jun 2022 at 22:10, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 25/06/2022 10:50, Robert Marko wrote:
+> > On Fri, 24 Jun 2022 at 11:52, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 23/06/2022 20:25, Robert Marko wrote:
+> >>> Convert bindings for Qualcomm SCM to dtschema.
+> >>>
+> >>> SoC compatibles that were used, but not documented were added.
+> >>>
+> >>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> >>
+> >> This was already submitted:
+> >> https://lore.kernel.org/all/20211218194038.26913-1-david@ixit.cz/
+> >
+> > Hi Krzysztof,
+> > I was not aware there was already a version sent, just used linux-next
+> > as the base
+>
+>
+> lore and "dfn" keyword. Several people are working on Qualcomm bindings,
+> so that's the only way to check it.
+>
+> > and it wasn't there so I assumed, will search through the archives next time.
+> >
+> > Anyway, that attempt looks abandoned.
+>
+> Let's give few days to David to respond and to re-submit. If he does, I
+> am for FIFO approach. If David does not resubmits, then check the review
+> he got to be sure there is no need for same feedback.
 
-Thank you for the patch! Yet something to improve:
+I see that David sent a v2 today, I'm just glad to get this converted.
 
-[auto build test ERROR on vkoul-dmaengine/next]
-[also build test ERROR on linus/master v5.19-rc3 next-20220624]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jie-Hai/dmaengine-hisilicon-Add-support-for-hisi-dma-driver/20220625-154524
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-config: arc-allyesconfig
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4a79d13d35e4f95c88bc0dfb44923dbd030bb126
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jie-Hai/dmaengine-hisilicon-Add-support-for-hisi-dma-driver/20220625-154524
-        git checkout 4a79d13d35e4f95c88bc0dfb44923dbd030bb126
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-Note: the linux-review/Jie-Hai/dmaengine-hisilicon-Add-support-for-hisi-dma-driver/20220625-154524 HEAD e823cc5940ad1d20993113591a7ba26946ae0840 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
-   drivers/dma/hisi_dma.c: In function 'hisi_dma_irq':
->> drivers/dma/hisi_dma.c:441:37: error: 'q_base' undeclared (first use in this function)
-     441 |                 hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR,
-         |                                     ^~~~~~
-   drivers/dma/hisi_dma.c:441:37: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/dma/hisi_dma.c:441:45: error: 'HISI_DMA_Q_CQ_HEAD_PTR' undeclared (first use in this function); did you mean 'HISI_DMA_CQ_HEAD_PTR'?
-     441 |                 hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR,
-         |                                             ^~~~~~~~~~~~~~~~~~~~~~
-         |                                             HISI_DMA_CQ_HEAD_PTR
-
-
-vim +/q_base +441 drivers/dma/hisi_dma.c
-
-   426	
-   427	static irqreturn_t hisi_dma_irq(int irq, void *data)
-   428	{
-   429		struct hisi_dma_chan *chan = data;
-   430		struct hisi_dma_dev *hdma_dev = chan->hdma_dev;
-   431		struct hisi_dma_desc *desc;
-   432		struct hisi_dma_cqe *cqe;
-   433	
-   434		spin_lock(&chan->vc.lock);
-   435	
-   436		desc = chan->desc;
-   437		cqe = chan->cq + chan->cq_head;
-   438		if (desc) {
-   439			chan->cq_head = (chan->cq_head + 1) %
-   440					hdma_dev->chan_depth;
- > 441			hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR,
-   442					    chan->qp_num, chan->cq_head);
-   443			if (FIELD_GET(STATUS_MASK, cqe->w0) == STATUS_SUCC) {
-   444				vchan_cookie_complete(&desc->vd);
-   445			} else {
-   446				dev_err(&hdma_dev->pdev->dev, "task error!\n");
-   447			}
-   448	
-   449			chan->desc = NULL;
-   450		}
-   451	
-   452		spin_unlock(&chan->vc.lock);
-   453	
-   454		return IRQ_HANDLED;
-   455	}
-   456	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+Robert
+>
+>
+> Best regards,
+> Krzysztof

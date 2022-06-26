@@ -2,79 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE6155B266
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 16:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B1855B267
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 16:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234393AbiFZOKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 10:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S234530AbiFZOLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 10:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbiFZOKQ (ORCPT
+        with ESMTP id S230497AbiFZOLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 10:10:16 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EADF9588;
-        Sun, 26 Jun 2022 07:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656252590;
-        bh=yTusrjLOKRKwRvbd8R+ykK/3/JvyRwhEMn0DfEPv1UQ=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=OEFvmYruw9c/MQw0Bb57+QhL/P3LfieAzofQsvHzfZU4qHFtZ6YCY8fGF49l0nlN7
-         d91HEORwKcv5+VjBO7JThNTMwrXuURI0wsAnEPtqyY2qup8tlyKEsWkJ4ssvDt+5UI
-         zowxewehHN5/BKy76GTg0uolk6B6+T4mtj0AoFvw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.2.248]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mk0NU-1nLMYg0rea-00kNyS; Sun, 26
- Jun 2022 16:09:50 +0200
-Subject: Re: [PATCH 7/8] serial: ar933x: Remove redundant assignment in
- rs485_config
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        vz@mleia.com, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, lukas@wunner.de,
-        p.rosenberger@kunbus.com, Lino Sanfilippo <l.sanfilippo@kunbus.com>
-References: <20220622154659.8710-1-LinoSanfilippo@gmx.de>
- <20220622154659.8710-8-LinoSanfilippo@gmx.de>
- <f7beef4-c422-cae3-8e22-8652b407434@linux.intel.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <df19d91d-371b-f0e9-e37c-2bde00d2b840@gmx.de>
-Date:   Sun, 26 Jun 2022 16:09:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sun, 26 Jun 2022 10:11:51 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F49101FA;
+        Sun, 26 Jun 2022 07:11:44 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id lw20so13964114ejb.4;
+        Sun, 26 Jun 2022 07:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=poXbOCN9IoB/jszUsadi8cNiKABYkr96dLkZjXwEC3I=;
+        b=pQ1kU2KyLLscteODpu2pZR5UQlv0xxtV+U4J7ZS5wK4R8bEj9/PEXDB/IkDxytqHd0
+         RlWedsVHwCQ+oUMIMBoAdeNG+ugr9l5Iw45KWvHYz0jrK6UXCN9N1X0rNbLjIyI7lSYv
+         QQE0liY4anlBfBDXcPGGaVeYFjWnRaz/72XV5VY+wP7LbGLq4LdAuORhX8kzmFzjntNV
+         21GucCZaAHKoL7WBgL8tb3ohDWRjevOfc4iAE0MFnT/baLSS+m2IIdCIyf/cVCCFzv3E
+         VWAcLT4O0czG2C0svpjKBrJ7HWd8IFoYXtyH+09hpikZInH/ZgrU2mIsbVgMBchCWBnK
+         Cr8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=poXbOCN9IoB/jszUsadi8cNiKABYkr96dLkZjXwEC3I=;
+        b=nCs+Us3iMt/P93ujanTnuyT2gvK35wXQwzAOnZPOYoqfmym/N5xQXnrSpgwbO4SfFH
+         ddSOaHkr5HAoCcOmIR4fr7hf44mQ31N+YY1ivM9sxQs7w9Cua82QI9UGqYlPRw/fSh27
+         7dfqiHg9UEU+bCH2sGc/5U10SZ1kTdzA6A5fSRi22aibMBXkzrTS057EKUlnYIeFLioV
+         +1dMmjuyYzjfkgiieCwMSZZGFvXjAPtaaAXMzp9LDup5Q7Zg5qjJ2hMie7HXUplMIltj
+         nu2brQYAHLNmpJUUsvXWOg9n83Uir4d73ZjdNA8NziTWAaOACHpc1EGATufuCF93NOLr
+         Y+Qg==
+X-Gm-Message-State: AJIora8n4D0fD8FzpbRVb44nz57keSCn5GMT3MHeVjIRY4KHCqFkot9Q
+        N40xDyj+np4eIAYf64GToUE=
+X-Google-Smtp-Source: AGRyM1u4y11s3WwdGdWPBRqNOU1QbABAJKflnweOsewRrHajNo17f7CG1/wYE/tobFBqdO/TABr8sw==
+X-Received: by 2002:a17:906:6416:b0:722:e812:1000 with SMTP id d22-20020a170906641600b00722e8121000mr8570835ejm.275.1656252702264;
+        Sun, 26 Jun 2022 07:11:42 -0700 (PDT)
+Received: from skbuf ([188.25.231.135])
+        by smtp.gmail.com with ESMTPSA id ba29-20020a0564021add00b00435a62d35b5sm5876166edb.45.2022.06.26.07.11.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Jun 2022 07:11:41 -0700 (PDT)
+Date:   Sun, 26 Jun 2022 17:11:39 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux@armlinux.org.uk
+Subject: Re: [PATCH net-next 5/8] net: lan966x: Add lag support for lan966x.
+Message-ID: <20220626141139.kbwhpgmwzp7rpxgy@skbuf>
+References: <20220626130451.1079933-1-horatiu.vultur@microchip.com>
+ <20220626130451.1079933-6-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <f7beef4-c422-cae3-8e22-8652b407434@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:HPs9BkINPOugQ76QtMRekLInNgNbeZHcwpIRkgAQ+/3JpS8T0E5
- na8Gv2u7zhVw+/nGBiNBdETNueMeS2z0KYd8T+thup1HRX8cPEQWHJCRUme+sLjOVrY9j/v
- HGcmWJriW/REC6uIJyGdMquWHsEvzy69rHxqpAYt9v/R5gyUAza+rlq5uqy7XN/wV2Lgtdk
- vRA0qQqnky+Ef3Gyj9OZQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0M5kIdMhVrk=:srVvd9zQL+xSR57YuedoOV
- /klAYSy3rvIMzmA00If2+O4UcMWsOhuIcPzEln880XwVg6Y45DlNZbRfjjT31dPXqvdzb8edr
- DqkggG9E11HTUgKrHMvl+zNrkd6B5STjmN4B5ApRWcta0kz5TcyaDndDYHh7HH9ytgM0JSFjS
- jLgPGGM9A9zzfi2kz4N+dcXgHAagTGwhxgYU+1scp7M6qsXGVv2Z5mOtitep1jMYajpZ643ek
- L+gM5O/J39AHGSHMaS2+YS2i4ley2UnoIUOhG8gb8QW+XmGYHAT8hR9p+3opzut2JT4hH27W+
- NwBeHqNfN+wDP9HnGwIufJRrYw1OaNcS3zotqpRIYeNf0zSzGgdRBg1kbElmD5JKY6N+ePIK7
- BwHjI/Sh/OOYxShROfH+airEgIlq2E1P+jC5YM19MFhJi0yb+DLtgXKQWziVQ3F+AYexp9FhG
- YQVM59n1577iA7LSKWdR90/P3trIpAn3QGdHBXMs6sReNShW1yPmpMK5SzTrK0sidY0MQddb5
- zPE44nmHBqceHQFGwpLTL5/S03oMo24+BFb7XAIZoa5mtINsVnN07oUkUUAtRY7fLXX98sa3g
- JvvtASfBu5+OKrlMoSJ9t4kp/bKPDcUbSla/Ar8+Lk0edH/zqswF27WVb6FKK4wj4EspC5w2F
- c77ZUt8MuJZ+f5QO+KP88UxrcnHlIZAp6L2W6hpjDclzIPNfPhDALw+S4jclNRAm9G5G9pkBu
- HfAU3VcEEh5PKS6zfkrDr/Wp3FrJnKDyR1QoHtsCjYwJrjT5D1nNfLLQTbuvMzVTnoX8q+ZKU
- xO9r3a7e1WOdqLE6dW15E9lerGP26whbH6uMdePSU5WHnErLNgd60EmRqkruUfUViCipkI3Az
- ON7noMgBcVNDapFc0YeKr0bEKtlkuC+F035YTYAi+oeVSIw0kTIK1xYwIayFY8wrvTuIGSjwc
- cz4wXmFxGI/UgqL0sXvTQb/R0lRAwaMtmo4hpfLlbjeldAFHLliY9p7Z+yXFEFwX7azljTmAp
- PkAutccHGbPK82e4mOOsstpwmh0K74VrAizX2IGTo72I8CDF5czBic0XQBrEPXpOZWAcBZp/P
- hZrP9muQ960wbyBcKxKfZtxKyDt/F5TJtG/VlEkRrA9qGIgA1s23EPv/Q==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220626130451.1079933-6-horatiu.vultur@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,72 +73,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.06.22 at 12:14, Ilpo J=C3=A4rvinen wrote:
-> On Wed, 22 Jun 2022, Lino Sanfilippo wrote:
->
->> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>
->> In uart_set_rs485_config() the serial core already assigns the passed
->> serial_rs485 struct to the uart port.
->>
->> So remove the assignment in the drivers rs485_config() function to avoi=
-d
->> redundancy.
->>
->> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->> ---
->>  drivers/tty/serial/ar933x_uart.c | 1 -
->>  1 file changed, 1 deletion(-)
->>
->> diff --git a/drivers/tty/serial/ar933x_uart.c b/drivers/tty/serial/ar93=
-3x_uart.c
->> index ab2c5b2a1ce8..857e010d01dc 100644
->> --- a/drivers/tty/serial/ar933x_uart.c
->> +++ b/drivers/tty/serial/ar933x_uart.c
->> @@ -591,7 +591,6 @@ static int ar933x_config_rs485(struct uart_port *po=
-rt,
->>  		dev_err(port->dev, "RS485 needs rts-gpio\n");
->>  		return 1;
->>  	}
->> -	port->rs485 =3D *rs485conf;
->>  	return 0;
->>  }
->
-> Hmm, I realize that for some reason I missed cleaning up this particular
-> driver after introducing the serial_rs485 sanitization. It shouldn't nee=
-d
-> that preceeding if block either because ar933x_no_rs485 gets applied if
-> there's no rts_gpiod so the core clears SER_RS485_ENABLED.
->
+Hi Horatiu,
 
-I think we still need that "if" in case that RS485 was not enabled at driv=
-er
-startup (no rs485-enabled-at-boot-time) and no RTS GPIO was defined but th=
-en
-RS485 is enabled via TIOCSRS485.
+Just casually browsing through the patches. A comment below.
 
-Maybe in ar933x_uart_probe()
+On Sun, Jun 26, 2022 at 03:04:48PM +0200, Horatiu Vultur wrote:
+> Add link aggregation hardware offload support for lan966x
+> 
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  .../net/ethernet/microchip/lan966x/Makefile   |   2 +-
+>  .../ethernet/microchip/lan966x/lan966x_lag.c  | 296 ++++++++++++++++++
+>  .../ethernet/microchip/lan966x/lan966x_main.h |  28 ++
+>  .../microchip/lan966x/lan966x_switchdev.c     |  78 ++++-
+>  4 files changed, 388 insertions(+), 16 deletions(-)
+>  create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_lag.c
+> 
+> diff --git a/drivers/net/ethernet/microchip/lan966x/Makefile b/drivers/net/ethernet/microchip/lan966x/Makefile
+> index fd2e0ebb2427..0c22c86bdaa9 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/Makefile
+> +++ b/drivers/net/ethernet/microchip/lan966x/Makefile
+> @@ -8,4 +8,4 @@ obj-$(CONFIG_LAN966X_SWITCH) += lan966x-switch.o
+>  lan966x-switch-objs  := lan966x_main.o lan966x_phylink.o lan966x_port.o \
+>  			lan966x_mac.o lan966x_ethtool.o lan966x_switchdev.o \
+>  			lan966x_vlan.o lan966x_fdb.o lan966x_mdb.o \
+> -			lan966x_ptp.o lan966x_fdma.o
+> +			lan966x_ptp.o lan966x_fdma.o lan966x_lag.o
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_lag.c b/drivers/net/ethernet/microchip/lan966x/lan966x_lag.c
+> new file mode 100644
+> index 000000000000..c721a05d44d2
+> --- /dev/null
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_lag.c
+> @@ -0,0 +1,296 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +
+> +#include "lan966x_main.h"
+> +
+> +static void lan966x_lag_set_aggr_pgids(struct lan966x *lan966x)
+> +{
+> +	u32 visited = GENMASK(lan966x->num_phys_ports - 1, 0);
+> +	int p, lag, i;
+> +
+> +	/* Reset destination and aggregation PGIDS */
+> +	for (p = 0; p < lan966x->num_phys_ports; ++p)
+> +		lan_wr(ANA_PGID_PGID_SET(BIT(p)),
+> +		       lan966x, ANA_PGID(p));
+> +
+> +	for (p = PGID_AGGR; p < PGID_SRC; ++p)
+> +		lan_wr(ANA_PGID_PGID_SET(visited),
+> +		       lan966x, ANA_PGID(p));
+> +
+> +	/* The visited ports bitmask holds the list of ports offloading any
+> +	 * bonding interface. Initially we mark all these ports as unvisited,
+> +	 * then every time we visit a port in this bitmask, we know that it is
+> +	 * the lowest numbered port, i.e. the one whose logical ID == physical
+> +	 * port ID == LAG ID. So we mark as visited all further ports in the
+> +	 * bitmask that are offloading the same bonding interface. This way,
+> +	 * we set up the aggregation PGIDs only once per bonding interface.
+> +	 */
+> +	for (p = 0; p < lan966x->num_phys_ports; ++p) {
+> +		struct lan966x_port *port = lan966x->ports[p];
+> +
+> +		if (!port || !port->bond)
+> +			continue;
+> +
+> +		visited &= ~BIT(p);
+> +	}
+> +
+> +	/* Now, set PGIDs for each active LAG */
+> +	for (lag = 0; lag < lan966x->num_phys_ports; ++lag) {
+> +		struct lan966x_port *port = lan966x->ports[lag];
+> +		int num_active_ports = 0;
+> +		struct net_device *bond;
+> +		unsigned long bond_mask;
+> +		u8 aggr_idx[16];
+> +
+> +		if (!port || !port->bond || (visited & BIT(lag)))
+> +			continue;
+> +
+> +		bond = port->bond;
+> +		bond_mask = lan966x_lag_get_mask(lan966x, bond, true);
+> +
+> +		for_each_set_bit(p, &bond_mask, lan966x->num_phys_ports) {
+> +			lan_wr(ANA_PGID_PGID_SET(bond_mask),
+> +			       lan966x, ANA_PGID(p));
+> +			aggr_idx[num_active_ports++] = p;
+> +		}
 
-	if ((port->rs485.flags & SER_RS485_ENABLED) &&
-	    !up->rts_gpiod) {
-		dev_err(&pdev->dev, "lacking rts-gpio, disabling RS485\n");
-		port->rs485.flags &=3D ~SER_RS485_ENABLED;
-		port->rs485_supported =3D &ar933x_no_rs485;
-	}
+This incorrect logic seems to have been copied from ocelot from before
+commit a14e6b69f393 ("net: mscc: ocelot: fix incorrect balancing with
+down LAG ports").
 
-should rather be
+The issue is that you calculate bond_mask with only_active_ports=true.
+This means the for_each_set_bit() will not iterate through the inactive
+LAG ports, and won't set the bond_mask as the PGID destination for those
+ports.
 
-	if (!up->rts_gpiod) {
-		dev_err(&pdev->dev, "lacking rts-gpio, disabling RS485\n");
-		port->rs485.flags &=3D ~SER_RS485_ENABLED;
-		port->rs485_supported =3D &ar933x_no_rs485;
-	}
+That isn't what is desired; as explained in that commit, inactive LAG
+ports should be removed via the aggregation PGIDs and not via the
+destination PGIDs. Otherwise, an FDB entry targeted towards the
+LAG (effectively towards the "primary" LAG port, whose logical port ID
+gives the LAG ID) will not egress even the "secondary" LAG port if the
+primary's link is down.
 
-
-
-
-Regards,
-Lino
-
-
-
+> +
+> +		for (i = PGID_AGGR; i < PGID_SRC; ++i) {
+> +			u32 ac;
+> +
+> +			ac = lan_rd(lan966x, ANA_PGID(i));
+> +			ac &= ~bond_mask;
+> +			/* Don't do division by zero if there was no active
+> +			 * port. Just make all aggregation codes zero.
+> +			 */
+> +			if (num_active_ports)
+> +				ac |= BIT(aggr_idx[i % num_active_ports]);
+> +			lan_wr(ANA_PGID_PGID_SET(ac),
+> +			       lan966x, ANA_PGID(i));
+> +		}
+> +
+> +		/* Mark all ports in the same LAG as visited to avoid applying
+> +		 * the same config again.
+> +		 */
+> +		for (p = lag; p < lan966x->num_phys_ports; p++) {
+> +			struct lan966x_port *port = lan966x->ports[p];
+> +
+> +			if (!port)
+> +				continue;
+> +
+> +			if (port->bond == bond)
+> +				visited |= BIT(p);
+> +		}
+> +	}
+> +}

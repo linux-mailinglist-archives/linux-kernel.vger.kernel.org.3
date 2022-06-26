@@ -2,105 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1573855B40D
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 22:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F163355B40F
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 22:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbiFZUjO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 26 Jun 2022 16:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
+        id S232126AbiFZUow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 16:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiFZUjM (ORCPT
+        with ESMTP id S232014AbiFZUov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 16:39:12 -0400
-Received: from relay4.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806A0DD8
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:39:11 -0700 (PDT)
-Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay12.hostedemail.com (Postfix) with ESMTP id 0A933120DAD;
-        Sun, 26 Jun 2022 20:39:09 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 77FB020025;
-        Sun, 26 Jun 2022 20:39:02 +0000 (UTC)
-Message-ID: <93ab94ec92497af13c563c52fc7e1f7f81dac333.camel@perches.com>
-Subject: Re: [RFC[ Alloc in vsprintf
-From:   Joe Perches <joe@perches.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Laight <David.Laight@aculab.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>
-Date:   Sun, 26 Jun 2022 13:39:01 -0700
-In-Reply-To: <CAHk-=whwyxSpzgr+roEr7_V5wVenw9fV3EOAZhAYCAuRdEyChQ@mail.gmail.com>
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
-         <0a5901f8460f452a89c9b0cda32fb833@AcuMS.aculab.com>
-         <20220620150514.3tjy5dv7pv5frcwd@moria.home.lan>
-         <53d77ae6101a0f24cfb694174d4c7699424c57e8.camel@perches.com>
-         <20220621005752.ohiq5besmy3r5rjo@moria.home.lan>
-         <a795818f9a49ed401bffc7c38ca7e39ae449e9e0.camel@perches.com>
-         <c1a92cf059fc9a3c395d87b11e9f757f5ec1ff6a.camel@perches.com>
-         <355e912490dbaef8fe4e12df0201c3f5b439565d.camel@perches.com>
-         <CAHk-=whwyxSpzgr+roEr7_V5wVenw9fV3EOAZhAYCAuRdEyChQ@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Sun, 26 Jun 2022 16:44:51 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C631EEB5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:44:47 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id lw20so15112564ejb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 13:44:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+NiKnLEANxLAPhew67VDLJo2BLnUAn/GY67TsCLrKkQ=;
+        b=e0DR+7Flsxt4JCftlM/n7rZXiVyC+6Wu49NvaZtQoeVAo+kDEbS5v+G0pLT0pdcBKZ
+         3CsqdXyDndrUmP+hJjly12AOjr5jVB6bnAyq9VVrUxPAjBJXcUAJLm6egZm+oUBX672W
+         QCTYvn9hLMA373G23Vs1nAtWcwvMZ3o4YFrAj3tV7aZjKiJtBFFB8B+oV8DAuCx16ejo
+         9OElXexSkFUAruKSSGU7UCaf5sQdtze7H8D8BK5Cy3Yi3TlDgWJQUCzIoMgRGGucpAxy
+         l2hPej2sc5yYU+Z9k/Cc9LRFoCAtnt3CXtgj2NHMsA4JTAieo5+t0TQfeyKiT9HX7nMG
+         +G+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+NiKnLEANxLAPhew67VDLJo2BLnUAn/GY67TsCLrKkQ=;
+        b=ypQWLhxh8KX5cKl25zyQf5hwUx0WrIUVcrNQP30JPFin7bZiXbksWuZdR4LVeStxiI
+         xa41uVNg8sw+JOYstWHvoBfhYw9XLxhNxyWL7S0HeHXpMLwfXbbyh+Rvis/6egZvWhc6
+         N5MNJ8TcAQkfKnEy2r7608DmRz4OsU/it7YYvfOLAdpAWDArqA8ETacscRKYxgPafEk0
+         pi3OxgDD2cDlVM03o548qNZqtRhoFfI/LVEHYNk3OE9z85yA2fqnXBhj3rHmpaXqX/Y8
+         01gn1/hydKlSqBdqZRKQbsksB9MfcDce7NCbli/SpNSYrEGPSD6NjCCjoqtdhBA7SnSs
+         dy7w==
+X-Gm-Message-State: AJIora/xn19DPHCWAN07wUaMKgBdiCApJzh7H9bLOHR9XvkTFlASEqSo
+        p+euDUVCvaSOhBItCMOkCU4=
+X-Google-Smtp-Source: AGRyM1sihdHv4mKJi+4Gh/l2yvDSlHnR/tA+lgO5Su0blV9xf5TiG1xEgZoWHv7dfccYoxyLf4jFJw==
+X-Received: by 2002:a17:906:66d4:b0:70f:e86d:61b with SMTP id k20-20020a17090666d400b0070fe86d061bmr9656981ejp.401.1656276286306;
+        Sun, 26 Jun 2022 13:44:46 -0700 (PDT)
+Received: from [192.168.1.100] (p54a07b82.dip0.t-ipconnect.de. [84.160.123.130])
+        by smtp.gmail.com with ESMTPSA id y1-20020aa7c241000000b004355dc75066sm6368347edo.86.2022.06.26.13.44.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Jun 2022 13:44:45 -0700 (PDT)
+Message-ID: <3a177ab1-5e56-e3bf-4756-4532957fca7d@gmail.com>
+Date:   Sun, 26 Jun 2022 22:44:44 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 77FB020025
-X-Stat-Signature: k6zu5exz6pfmapas8yidcramkpopggc3
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/JLXlIzYuF27J9e1KXiNp5QhT/nSZMl8E=
-X-HE-Tag: 1656275942-506383
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] staging: r8188eu: remove rtw_usleep_os
+Content-Language: en-US
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220602194807.281115-1-martin@kaiser.cx>
+ <20220626180603.287054-1-martin@kaiser.cx>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20220626180603.287054-1-martin@kaiser.cx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-06-26 at 13:19 -0700, Linus Torvalds wrote:
-> On Sun, Jun 26, 2022 at 12:53 PM Joe Perches <joe@perches.com> wrote:
-> > 
-> > In a reply to the printbufs thread, I wrote a proposal to use an
-> > alloc to reduce stack in vsprintf when CONFIG_KALLSYMS is enabled.
-> > 
-> > No one has replied to this but I think it's somewhat sensible.
+On 6/26/22 20:06, Martin Kaiser wrote:
+> Remove the rtw_usleep_os helper function. There are only two callers, both
+> of which call rtw_usleep_os(100). This is equivalent to msleep(1).
 > 
-> I think that's a bad idea.
+> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+> ---
+> changes in v2:
+> - use msleep(1) instead of usleep_range
+> 
+>   drivers/staging/r8188eu/core/rtw_pwrctrl.c      | 2 +-
+>   drivers/staging/r8188eu/hal/rtl8188e_hal_init.c | 2 +-
+>   drivers/staging/r8188eu/include/osdep_service.h | 2 --
+>   drivers/staging/r8188eu/os_dep/osdep_service.c  | 8 --------
+>   4 files changed, 2 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/staging/r8188eu/core/rtw_pwrctrl.c b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
+> index 45e85b593665..cf9020a73933 100644
+> --- a/drivers/staging/r8188eu/core/rtw_pwrctrl.c
+> +++ b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
+> @@ -273,7 +273,7 @@ static s32 LPS_RF_ON_check(struct adapter *padapter, u32 delay_ms)
+>   			err = -1;
+>   			break;
+>   		}
+> -		rtw_usleep_os(100);
+> +		msleep(1);
+>   	}
+>   
+>   	return err;
+> diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+> index 5549e7be334a..5b65313e0b9d 100644
+> --- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+> +++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
+> @@ -243,7 +243,7 @@ static int efuse_read_phymap_from_txpktbuf(
+>   			if (reg)
+>   				break;
+>   
+> -			rtw_usleep_os(100);
+> +			msleep(1);
+>   		} while (time_before(jiffies, timeout));
+>   
+>   		/* data from EEPROM needs to be in LE */
+> diff --git a/drivers/staging/r8188eu/include/osdep_service.h b/drivers/staging/r8188eu/include/osdep_service.h
+> index 1d97d5be46d5..72990a1cdc66 100644
+> --- a/drivers/staging/r8188eu/include/osdep_service.h
+> +++ b/drivers/staging/r8188eu/include/osdep_service.h
+> @@ -76,8 +76,6 @@ void *rtw_malloc2d(int h, int w, int size);
+>   		spin_lock_init(&((q)->lock));			\
+>   	} while (0)
+>   
+> -void rtw_usleep_os(int us);
+> -
+>   static inline unsigned char _cancel_timer_ex(struct timer_list *ptimer)
+>   {
+>   	return del_timer_sync(ptimer);
+> diff --git a/drivers/staging/r8188eu/os_dep/osdep_service.c b/drivers/staging/r8188eu/os_dep/osdep_service.c
+> index 812acd59be79..3504a0a9ba87 100644
+> --- a/drivers/staging/r8188eu/os_dep/osdep_service.c
+> +++ b/drivers/staging/r8188eu/os_dep/osdep_service.c
+> @@ -42,14 +42,6 @@ Otherwise, there will be racing condition.
+>   Caller must check if the list is empty before calling rtw_list_delete
+>   */
+>   
+> -void rtw_usleep_os(int us)
+> -{
+> -	if (1 < (us / 1000))
+> -		msleep(1);
+> -	else
+> -		msleep((us / 1000) + 1);
+> -}
+> -
+>   static const struct device_type wlan_type = {
+>   	.name = "wlan",
+>   };
 
-Somewhat sensible not sensible...
-
-> Those things are *literally* called from panic situations, which may
-> be while holding core memory allocation locks, or similar.
-
-True, and special_hex_number was used on alloc failure.
-
-> Now, you are correct that the stack buffer is annoying. But I think
-> the proper way to fix that is to say "we already *have* the target
-> buffer, let's use it".
-
-OK, and that's true for all the temp stack buffers in every %p<foo>.
-
-> That does require teaching the sprint_symbol() functions that they
-> need to take a "length of buffer" and return how much they used, but
-> that would seem to be a sensible thing anyway, and what the code
-> should always have done?
-
-Unnecessary stack and/or unnecessary buffers for printbufs are
-just unnecessary. 
-
-> It's bad policy to just pass in a buffer without length, and I think
-> it was always broken. Nasty. That KSYM_SYMBOL_LEN is magically taking
-> care of it all, but it's ugly as heck, wouldn't you say?
-
-Yup.
-
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150

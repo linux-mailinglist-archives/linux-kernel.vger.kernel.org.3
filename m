@@ -2,79 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CCAA55ADAD
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 01:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F5755ADB3
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 02:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbiFYX7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 19:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
+        id S233585AbiFZADl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 20:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbiFYX7J (ORCPT
+        with ESMTP id S233484AbiFZADj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 19:59:09 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8585D13DF3
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:59:07 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id c1so9917457qvi.11
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 16:59:07 -0700 (PDT)
+        Sat, 25 Jun 2022 20:03:39 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F8813E3D
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 17:03:38 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id 88so9945847qva.9
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 17:03:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ziepe.ca; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=OIkvZSCfU1CjrPejBudrIGntnY32egXHLdKIcmmN0pg=;
-        b=duH504ulYOnzBaVTLyLo1maWRZER3UvuJOkl8g0W5A7EYWwmU7JLyVVOeVm/mzY6jz
-         wEQqHqotXWBM9p2+EAvrZPlBnGf0wIXCNnyoHFxr5zjGsKVcLPXHkfQVwIGTrVZFfHJg
-         E4e8lZiIn8rsAZTGPhWBTHBxWkOp5DngPB1Az8BgpizpK4wZTN68kKTCIq1n4SCn6Y5V
-         56K05ugA1OyB3vJpg7045S8yLgufcX3ypvS9ZGEs793kJzwt2Pp/5EpQpLRLJ0SmkWOO
-         9J5MhDH6Dt3+awMXHKsUxbuCGMHLj/OPr3AwVMHf2ZWmG4UVE5Y1CWHYNDj00yZt0DW0
-         kIiA==
+        bh=uzBv+rLiOMQN1QJ1CAlWRVrSA/M0AyPQIUhJ4NlvMOE=;
+        b=DuSHNIG60LiWNKf6jLN1j6RVigzx0qhdEesKDgOV6wCISOLAQI7oQlLZ/pFMrGS7uL
+         hfcEwE0OB9CtMtMYxyMiNYaG81IkT4C7Ua/QhOEJnd39panh+4ltOP/BIBAEV3y1R9GA
+         gv/uHXrgxGI6bX2M8ODhkxbSUoYXIQKyd3l/SN/UakjuIzb9CfFxYw4rJ1i++aOpA7Ar
+         28C4xehBv/LYcrSDI0eWRkL2H7mbfx8qErhO3Q+c3I7RJcgd1K95DRVGNFv533NU9SJR
+         LJCRdDJqjgWOpL8hXm0Btn05S45hfiod4wR8rAV4Po2MD/PXo22z8w15OPX/cpr44Fsz
+         wgfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=OIkvZSCfU1CjrPejBudrIGntnY32egXHLdKIcmmN0pg=;
-        b=xh3SGDIof93z/dkPKavtQCSKTOg2pgU9TVOxRVHVFETFKbSFBgidf5/nYqN3oUbPsP
-         j/XFSO5Mzq1OrAr2B+McGeSSW1BgWEMxctSWpsrnOc3/UCNwtq8M4TfcKn9k/yq/bNm6
-         dwB1ZhDwgeGA8UvXsoddjLopSvAylWi6xyJ4YjlruOBpD3lS+76aQcu3sfCYA6Im8tVo
-         pHfGTRe/IgEGKT6NZzcqKVxxgaqOiKACuoL3BqsyBMhJJhDl86kW0T9bRKU99yNQ+tfm
-         1Fnc9lLXCCxIaD6zhgHLBUVJxrgNpoy30eX2M4hM9XuGi1fYQAZVHdlj+A5GQqcUbN/E
-         Y4wA==
-X-Gm-Message-State: AJIora+KGjUeUvna+Gmx8QkwMZvXDK65YQkQ+aqCwi5sVJ2UJ+jHEpLU
-        Cf4k1Z64bNm6K3nki9mxGhx+9Q==
-X-Google-Smtp-Source: AGRyM1vkSR+fkkuzlMpkZs/yPAV/CYQBTRY/CutcwMiNTqboWAwrJeP6fXDvYF6KEeySkwQaI+gI6w==
-X-Received: by 2002:a05:622a:13c8:b0:317:7862:6b45 with SMTP id p8-20020a05622a13c800b0031778626b45mr4688676qtk.266.1656201546699;
-        Sat, 25 Jun 2022 16:59:06 -0700 (PDT)
+        bh=uzBv+rLiOMQN1QJ1CAlWRVrSA/M0AyPQIUhJ4NlvMOE=;
+        b=jIBxgrhCsYp8BKf87VN9vca7U5ojyutICi9Rx93T6jYLUTWNllJbTQgBSSJjrWmQqH
+         4/6saebeavof5KKJlwX1q6bVf+KxS7bt9hwfPMzqrO7U9eEdf5wSlAidOlFP9K3A10F/
+         kxtKmrv4C8CWCSlRREVqeR/0yNxx0t2YRcmpZY7QAhDTS3BsiSw1EOwgqDH+30BE2WMC
+         82EQlJvLZ/b5WU4glOia0C3XUVuN+u88nNqSvOWNatLI1+ZC0uwE1fS6SkfpUO335Hh4
+         2Y/i8z9RlSUTR8x+hQrAe17fHPuUCMb9FgAlj80670gxGPgFbBcY2qSciti88TrdmhKT
+         NGaw==
+X-Gm-Message-State: AJIora+cvifyZX7oai8Xsmx9+hLmer66c3P49z+2FgUVKMDpCLPsVMxj
+        CtcXY9kx2g9uUu3rKZtBQXHmfJiNYeJNXA==
+X-Google-Smtp-Source: AGRyM1tE4BoFBAJJvdfxmP6e/GRmO8k9uiseuk8Afwuboo2RrknpwMgvTsRL6ljMihM8ni/ZMauTrg==
+X-Received: by 2002:a05:6214:c2c:b0:470:a060:4543 with SMTP id a12-20020a0562140c2c00b00470a0604543mr4509412qvd.49.1656201817425;
+        Sat, 25 Jun 2022 17:03:37 -0700 (PDT)
 Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id l2-20020a05620a28c200b006a6cadd89efsm5717888qkp.82.2022.06.25.16.59.05
+        by smtp.gmail.com with ESMTPSA id h18-20020ac87772000000b002f905347586sm4168554qtu.14.2022.06.25.17.03.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 16:59:05 -0700 (PDT)
+        Sat, 25 Jun 2022 17:03:36 -0700 (PDT)
 Received: from jgg by mlx with local (Exim 4.94)
         (envelope-from <jgg@ziepe.ca>)
-        id 1o5Fg8-001ry7-9l; Sat, 25 Jun 2022 20:59:04 -0300
-Date:   Sat, 25 Jun 2022 20:59:04 -0300
+        id 1o5FkV-001s2q-Pc; Sat, 25 Jun 2022 21:03:35 -0300
+Date:   Sat, 25 Jun 2022 21:03:35 -0300
 From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Linux MM Mailing List <linux-mm@kvack.org>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH 1/4] mm/gup: Add FOLL_INTERRUPTIBLE
-Message-ID: <20220625235904.GK23621@ziepe.ca>
-References: <20220622213656.81546-1-peterx@redhat.com>
- <20220622213656.81546-2-peterx@redhat.com>
- <20220625003554.GJ23621@ziepe.ca>
- <YrZjeEv1Z2IDMwgy@xz-m1.local>
+To:     Ajay Sharma <sharmaajay@microsoft.com>
+Cc:     Long Li <longli@microsoft.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "shiraz.saleem@intel.com" <shiraz.saleem@intel.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+Subject: Re: [EXTERNAL] [Patch v4 12/12] RDMA/mana_ib: Add a driver for
+ Microsoft Azure Network Adapter
+Message-ID: <20220626000335.GL23621@ziepe.ca>
+References: <1655345240-26411-1-git-send-email-longli@linuxonhyperv.com>
+ <1655345240-26411-13-git-send-email-longli@linuxonhyperv.com>
+ <DM4PR21MB32967BB85B7B022671ECADD1D6B79@DM4PR21MB3296.namprd21.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YrZjeEv1Z2IDMwgy@xz-m1.local>
+In-Reply-To: <DM4PR21MB32967BB85B7B022671ECADD1D6B79@DM4PR21MB3296.namprd21.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,14 +88,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 09:23:04PM -0400, Peter Xu wrote:
-> If to go back to the original question with a shorter answer: if the ioctl
-> context that GUP upon a page that will never be with a uffd context, then
-> it's probably not gonna help at all.. at least not before we use
-> FAULT_FLAG_INTERRUPTIBLE outside uffd page fault handling.
+On Sat, Jun 25, 2022 at 04:20:19AM +0000, Ajay Sharma wrote:
+> Hello Maintainers,
+>  Any idea when these patches would make it into the next kernel release ?
 
-I think I would be more interested in this if it could abort a swap
-in, for instance. Doesn't this happen if it flows the interruptible
-flag into the VMA's fault handler?
+New rdma drivers typically take a long time to get merged due to their
+typical huge size. Currently I'm working through ERDMA. Reviewing the
+ERDMA submission would be helpful, I generally prefer it if people
+proposing new drivers review other new drivers being submitted.
+
+In this case it seems smaller, so you might make this cycle, though I
+haven't even opened the userspace portion yet.
 
 Jason

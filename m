@@ -2,267 +2,782 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE23C55B0E7
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755D555B0ED
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233660AbiFZJsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 05:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
+        id S233683AbiFZJvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 05:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233502AbiFZJsC (ORCPT
+        with ESMTP id S231403AbiFZJvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 05:48:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA132100E;
-        Sun, 26 Jun 2022 02:48:00 -0700 (PDT)
-Received: from [10.0.0.163] (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
+        Sun, 26 Jun 2022 05:51:12 -0400
+Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F74CE3F;
+        Sun, 26 Jun 2022 02:51:08 -0700 (PDT)
+Received: from [10.0.0.163] (_gateway [10.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: david.heidelberg)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 72C3366016D9;
-        Sun, 26 Jun 2022 10:47:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656236878;
-        bh=ZBhVm6IGWseUER7MkXUlFCT29ycUychI6NdxaG+9H94=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QQSQB7DpPodscJDotm27LdPwtvKQBhPJink12zTUxiTf78vdtog82vhEEXSPVG5xS
-         TAIXfK6BsNQyVFktTkAscotdLCOZ5HaqtE3BwSfJ7WotKB0jHMYC/eeeGLqY9tYYXu
-         gMZpdTdhxY8KTl+sEE18b3EVcIKv/tIASVu+I89zUF53k3NV0eWN1q2VLD4n5nKy5J
-         9Ew89pAXHluttSW+sk3h4VmSObHVTlLErOWFcJDf0rM0aHxGhEQ7Ha5wWZJK7rk76x
-         3yZVkhu6Fr1ySgtrmZPuuLHVWF9TWaQyhGDTtLVa0C98brBtkl+apxnTDq0bMKUzrU
-         Q71bzJBYLHZ0w==
-Message-ID: <728b2c54-0dc0-533f-bab8-fca228f6c1b1@collabora.com>
-Date:   Sun, 26 Jun 2022 11:47:55 +0200
+        by ixit.cz (Postfix) with ESMTPSA id 19F732007F;
+        Sun, 26 Jun 2022 11:51:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1656237065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XnK3jXRLmKGL15EwHg9nyVtETA9yxJfIZHTS2DQfLxU=;
+        b=aFMpEa45GaGM7eS/Mxi5XGTzGkhjF2uTz5elkLDhwO0lvBRRZkRaSeGamjU6CGYoZhUBkL
+        yrAInhuZ4OaUSXnUJza8Dn+5fLKeQa++WfqRJ4IEy2yKAlcZQjqos9P+pQKVm2Wtx/WW9i
+        CAeLu2idyyN52L7z7tcQR/1XjMxtBAk=
+Message-ID: <db93815b-6d13-cba1-3e29-13ed0dd46a71@ixit.cz>
+Date:   Sun, 26 Jun 2022 11:51:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v3 4/7] dt-bindings: clock: mediatek: Add clock driver
- bindings for MT6795
+Subject: Re: [PATCH v2] arm64: dts: qcom: timer should use only 32-bit size
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        y.oudjana@protonmail.com, jason-jh.lin@mediatek.com,
-        ck.hu@mediatek.com, fparent@baylibre.com, rex-bc.chen@mediatek.com,
-        tinghan.shen@mediatek.com, chun-jie.chen@mediatek.com,
-        weiyi.lu@mediatek.com, ikjn@chromium.org, miles.chen@mediatek.com,
-        sam.shih@mediatek.com, wenst@chromium.org,
-        bgolaszewski@baylibre.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
-        kernel@collabora.com
-References: <20220624093525.243077-1-angelogioacchino.delregno@collabora.com>
- <20220624093525.243077-5-angelogioacchino.delregno@collabora.com>
- <cea65d6a-7d9b-7b14-9984-bcd7f115da47@linaro.org>
-From:   David Heidelberg <david.heidelberg@collabora.com>
-Autocrypt: addr=david.heidelberg@collabora.com; keydata=
- xjMEYlvLOxYJKwYBBAHaRw8BAQdA5CoWEzz4igpwK4h6lK6ZformRk84+ymcfkGNPwqEeILN
- MURhdmlkIEhlaWRlbGJlcmcgPGRhdmlkLmhlaWRlbGJlcmdAY29sbGFib3JhLmNvbT7ClgQT
- FggAPhYhBEo7kSl22BK0F1Np/mn1Z4YcHsAUBQJiW8s7AhsDBQkFo5qABQsJCAcCBhUKCQgL
- AgQWAgMBAh4BAheAAAoJEGn1Z4YcHsAU84kBAK5YqSWAOuIumAqgWvke6BEsaIGWGQzXSuKj
- er/TXuFuAQCwc9ITSVXWWTSpdFt2+4z7Wch8tIGlbIFcS9dCFddwCc44BGJbyzsSCisGAQQB
- l1UBBQEBB0AEk7jXEwDApGOwMH/X0UAPBH8Y3isjxhNMjpyRcnl2CwMBCAfCfgQYFggAJhYh
- BEo7kSl22BK0F1Np/mn1Z4YcHsAUBQJiW8s7AhsMBQkFo5qAAAoJEGn1Z4YcHsAU0PEA/j0Y
- uAOKJCnnwrkf3ozPP0sutA5bojoARwcIaZKO/zvIAP9PwTC9DGLg+8LJm7m2Lyf0LxLA8FXD
- wueLHBdwHg6zAQ==
-In-Reply-To: <cea65d6a-7d9b-7b14-9984-bcd7f115da47@linaro.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------01SB8j7fsrDg1UCCZJHvnO6w"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220515221758.88723-1-david@ixit.cz>
+ <YrfOn6T+cUn5mEe3@builder.lan>
+From:   David Heidelberg <david@ixit.cz>
+In-Reply-To: <YrfOn6T+cUn5mEe3@builder.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_DYNAMIC,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------01SB8j7fsrDg1UCCZJHvnO6w
-Content-Type: multipart/mixed; boundary="------------igpTnjsExajZs0wD231Hp3a8";
- protected-headers="v1"
-From: David Heidelberg <david.heidelberg@collabora.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
- mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
- y.oudjana@protonmail.com, jason-jh.lin@mediatek.com, ck.hu@mediatek.com,
- fparent@baylibre.com, rex-bc.chen@mediatek.com, tinghan.shen@mediatek.com,
- chun-jie.chen@mediatek.com, weiyi.lu@mediatek.com, ikjn@chromium.org,
- miles.chen@mediatek.com, sam.shih@mediatek.com, wenst@chromium.org,
- bgolaszewski@baylibre.com, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
- konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
- martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
- phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
- kernel@collabora.com
-Message-ID: <728b2c54-0dc0-533f-bab8-fca228f6c1b1@collabora.com>
-Subject: Re: [PATCH v3 4/7] dt-bindings: clock: mediatek: Add clock driver
- bindings for MT6795
-References: <20220624093525.243077-1-angelogioacchino.delregno@collabora.com>
- <20220624093525.243077-5-angelogioacchino.delregno@collabora.com>
- <cea65d6a-7d9b-7b14-9984-bcd7f115da47@linaro.org>
-In-Reply-To: <cea65d6a-7d9b-7b14-9984-bcd7f115da47@linaro.org>
 
---------------igpTnjsExajZs0wD231Hp3a8
-Content-Type: multipart/mixed; boundary="------------4TT4k8GW9tO0EQaIeP92D69x"
+On 26/06/2022 05:12, Bjorn Andersson wrote:
+> On Sun 15 May 17:17 CDT 2022, David Heidelberg wrote:
+>
+>> There's no reason the timer needs > 32-bits of size.
+>> Since we using 32-bit size, we need to define ranges properly.
+>>
+>> Fixes warnings as:
+>> ```
+>> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: timer@17c90000: #size-cells:0:0: 1 was expected
+>>          From schema: Documentation/devicetree/bindings/timer/arm,arch_timer_mmio.yaml
+>> ```
+>>
+>> Signed-off-by: David Heidelberg <david@ixit.cz>
+>>
+>> ---
+>> Replaces "dt-bindings: timer: add #size-cells 2 for ARM"
+> I'm not able to find this patch, but I'm guessing that you tried to make
+> it possible to allow #size-cells to be 2 in the binding?
 
---------------4TT4k8GW9tO0EQaIeP92D69x
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Yes, here it's the original patch link: 
+https://lkml.iu.edu/hypermail/linux/kernel/2112.1/09190.html
 
-T24gMjUvMDYvMjAyMiAyMjoyOSwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gT24g
-MjQvMDYvMjAyMiAxMTozNSwgQW5nZWxvR2lvYWNjaGlubyBEZWwgUmVnbm8gd3JvdGU6DQo+
-PiBBZGQgdGhlIGJpbmRpbmdzIGZvciB0aGUgY2xvY2sgZHJpdmVycyBvZiB0aGUgTWVkaWFU
-ZWsgSGVsaW8gWDEwDQo+PiBNVDY3OTUgU29DLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IEFu
-Z2Vsb0dpb2FjY2hpbm8gRGVsIFJlZ25vIDxhbmdlbG9naW9hY2NoaW5vLmRlbHJlZ25vQGNv
-bGxhYm9yYS5jb20+DQo+PiAtLS0NCj4+ICAgLi4uL2JpbmRpbmdzL2Nsb2NrL21lZGlhdGVr
-LG10Njc5NS1jbG9jay55YW1sIHwgNjYgKysrKysrKysrKysrKysrKysNCj4+ICAgLi4uL2Ns
-b2NrL21lZGlhdGVrLG10Njc5NS1zeXMtY2xvY2sueWFtbCAgICAgIHwgNzQgKysrKysrKysr
-KysrKysrKysrKw0KPj4gICAyIGZpbGVzIGNoYW5nZWQsIDE0MCBpbnNlcnRpb25zKCspDQo+
-PiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
-Z3MvY2xvY2svbWVkaWF0ZWssbXQ2Nzk1LWNsb2NrLnlhbWwNCj4+ICAgY3JlYXRlIG1vZGUg
-MTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jbG9jay9tZWRpYXRl
-ayxtdDY3OTUtc3lzLWNsb2NrLnlhbWwNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRh
-dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2Nsb2NrL21lZGlhdGVrLG10Njc5NS1jbG9jay55
-YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2Nsb2NrL21lZGlhdGVr
-LG10Njc5NS1jbG9jay55YW1sDQo+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPj4gaW5kZXgg
-MDAwMDAwMDAwMDAwLi43OTVmYjE4NzIxYzMNCj4+IC0tLSAvZGV2L251bGwNCj4+ICsrKyBi
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jbG9jay9tZWRpYXRlayxtdDY3
-OTUtY2xvY2sueWFtbA0KPj4gQEAgLTAsMCArMSw2NiBAQA0KPj4gKyMgU1BEWC1MaWNlbnNl
-LUlkZW50aWZpZXI6IChHUEwtMi4wIE9SIEJTRC0yLUNsYXVzZSkNCj4+ICslWUFNTCAxLjIN
-Cj4+ICstLS0NCj4+ICskaWQ6ICJodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9jbG9j
-ay9tZWRpYXRlayxtdDY3OTUtY2xvY2sueWFtbCMiDQo+PiArJHNjaGVtYTogImh0dHA6Ly9k
-ZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIyINCj4+ICsNCj4+ICt0aXRs
-ZTogTWVkaWFUZWsgRnVuY3Rpb25hbCBDbG9jayBDb250cm9sbGVyIGZvciBNVDY3OTUNCj4+
-ICsNCj4+ICttYWludGFpbmVyczoNCj4+ICsgIC0gQW5nZWxvR2lvYWNjaGlubyBEZWwgUmVn
-bm8gPGFuZ2Vsb2dpb2FjY2hpbm8uZGVscmVnbm9AY29sbGFib3JhLmNvbT4NCj4+ICsgIC0g
-Q2h1bi1KaWUgQ2hlbiA8Y2h1bi1qaWUuY2hlbkBtZWRpYXRlay5jb20+DQo+PiArDQo+PiAr
-ZGVzY3JpcHRpb246IHwNCj4+ICsgIFRoZSBjbG9jayBhcmNoaXRlY3R1cmUgaW4gTWVkaWFU
-ZWsgbGlrZSBiZWxvdw0KPj4gKyAgUExMcyAtLT4NCj4+ICsgICAgICAgICAgZGl2aWRlcnMg
-LS0+DQo+PiArICAgICAgICAgICAgICAgICAgICAgIG11eGVzDQo+PiArICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgLS0+DQo+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-Y2xvY2sgZ2F0ZQ0KPj4gKw0KPj4gKyAgVGhlIGRldmljZXMgcHJvdmlkZSBjbG9jayBnYXRl
-IGNvbnRyb2wgaW4gZGlmZmVyZW50IElQIGJsb2Nrcy4NCj4+ICsNCj4+ICtwcm9wZXJ0aWVz
-Og0KPj4gKyAgY29tcGF0aWJsZToNCj4+ICsgICAgZW51bToNCj4+ICsgICAgICAtIG1lZGlh
-dGVrLG10Njc5NS1tZmdjZmcNCj4+ICsgICAgICAtIG1lZGlhdGVrLG10Njc5NS12ZGVjc3lz
-DQo+PiArICAgICAgLSBtZWRpYXRlayxtdDY3OTUtdmVuY3N5cw0KPj4gKw0KPj4gKyAgcmVn
-Og0KPj4gKyAgICBtYXhJdGVtczogMQ0KPj4gKw0KPj4gKyAgJyNjbG9jay1jZWxscyc6DQo+
-PiArICAgIGNvbnN0OiAxDQo+PiArDQo+PiArcmVxdWlyZWQ6DQo+PiArICAtIGNvbXBhdGli
-bGUNCj4+ICsgIC0gcmVnDQo+PiArICAtICcjY2xvY2stY2VsbHMnDQo+PiArDQo+PiArYWRk
-aXRpb25hbFByb3BlcnRpZXM6IGZhbHNlDQo+PiArDQo+PiArZXhhbXBsZXM6DQo+PiArICAt
-IHwNCj4+ICsgICAgc29jIHsNCj4+ICsgICAgICAgICNhZGRyZXNzLWNlbGxzID0gPDI+Ow0K
-Pj4gKyAgICAgICAgI3NpemUtY2VsbHMgPSA8Mj47DQo+PiArDQo+PiArICAgICAgICBtZmdj
-Zmc6IGNsb2NrLWNvbnRyb2xsZXJAMTMwMDAwMDAgew0KPj4gKyAgICAgICAgICAgIGNvbXBh
-dGlibGUgPSAibWVkaWF0ZWssbXQ2Nzk1LW1mZ2NmZyI7DQo+PiArICAgICAgICAgICAgcmVn
-ID0gPDAgMHgxMzAwMDAwMCAwIDB4MTAwMD47DQo+PiArICAgICAgICAgICAgI2Nsb2NrLWNl
-bGxzID0gPDE+Ow0KPj4gKyAgICAgICAgfTsNCj4+ICsNCj4+ICsgICAgICAgIHZkZWNzeXM6
-IGNsb2NrLWNvbnRyb2xsZXJAMTYwMDAwMDAgew0KPj4gKyAgICAgICAgICAgIGNvbXBhdGli
-bGUgPSAibWVkaWF0ZWssbXQ2Nzk1LXZkZWNzeXMiOw0KPj4gKyAgICAgICAgICAgIHJlZyA9
-IDwwIDB4MTYwMDAwMDAgMCAweDEwMDA+Ow0KPj4gKyAgICAgICAgICAgICNjbG9jay1jZWxs
-cyA9IDwxPjsNCj4+ICsgICAgICAgIH07DQo+PiArDQo+PiArICAgICAgICB2ZW5jc3lzOiBj
-bG9jay1jb250cm9sbGVyQDE4MDAwMDAwIHsNCj4+ICsgICAgICAgICAgICBjb21wYXRpYmxl
-ID0gIm1lZGlhdGVrLG10Njc5NS12ZW5jc3lzIjsNCj4+ICsgICAgICAgICAgICByZWcgPSA8
-MCAweDE4MDAwMDAwIDAgMHgxMDAwPjsNCj4+ICsgICAgICAgICAgICAjY2xvY2stY2VsbHMg
-PSA8MT47DQo+PiArICAgICAgICB9Ow0KPj4gKyAgICB9Ow0KPj4gZGlmZiAtLWdpdCBhL0Rv
-Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jbG9jay9tZWRpYXRlayxtdDY3OTUt
-c3lzLWNsb2NrLnlhbWwgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY2xv
-Y2svbWVkaWF0ZWssbXQ2Nzk1LXN5cy1jbG9jay55YW1sDQo+PiBuZXcgZmlsZSBtb2RlIDEw
-MDY0NA0KPj4gaW5kZXggMDAwMDAwMDAwMDAwLi40NGI5NmFmOWNlYWYNCj4+IC0tLSAvZGV2
-L251bGwNCj4+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jbG9j
-ay9tZWRpYXRlayxtdDY3OTUtc3lzLWNsb2NrLnlhbWwNCj4+IEBAIC0wLDAgKzEsNzQgQEAN
-Cj4+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMCBPUiBCU0QtMi1DbGF1
-c2UpDQo+PiArJVlBTUwgMS4yDQo+PiArLS0tDQo+PiArJGlkOiAiaHR0cDovL2RldmljZXRy
-ZWUub3JnL3NjaGVtYXMvY2xvY2svbWVkaWF0ZWssbXQ2Nzk1LXN5cy1jbG9jay55YW1sIyIN
-Cj4+ICskc2NoZW1hOiAiaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2NoZW1hcy9jb3Jl
-LnlhbWwjIg0KPj4gKw0KPj4gK3RpdGxlOiBNZWRpYVRlayBTeXN0ZW0gQ2xvY2sgQ29udHJv
-bGxlciBmb3IgTVQ2Nzk1DQo+PiArDQo+PiArbWFpbnRhaW5lcnM6DQo+PiArICAtIEFuZ2Vs
-b0dpb2FjY2hpbm8gRGVsIFJlZ25vIDxhbmdlbG9naW9hY2NoaW5vLmRlbHJlZ25vQGNvbGxh
-Ym9yYS5jb20+DQo+PiArICAtIENodW4tSmllIENoZW4gPGNodW4tamllLmNoZW5AbWVkaWF0
-ZWsuY29tPg0KPj4gKw0KPj4gK2Rlc2NyaXB0aW9uOg0KPj4gKyAgVGhlIE1lZGlhdGVrIHN5
-c3RlbSBjbG9jayBjb250cm9sbGVyIHByb3ZpZGVzIHZhcmlvdXMgY2xvY2tzIGFuZCBzeXN0
-ZW0gY29uZmlndXJhdGlvbg0KPiBXcmFwIGFjY29yZGluZyB0byBMaW51eCBjb2RpbmcgY29u
-dmVudGlvbiwgc28gYXQgODAuDQoNCldoYXQgSSB1bmRlcnN0b29kIHRoYXQgMTAwIGxlbmd0
-aCB3YXMgYWdyZWVkIFsxXSBhcyBhIGxpbWl0LiBJIGhhdmVuJ3QgDQpub3RpY2VkIGFueSBy
-ZWNlbnQgY2hhbmdlIHJlZ2FyZGluZyB0byBsaW5lIGxlbmd0aC4NCg0KWzFdIA0KaHR0cHM6
-Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGlu
-dXguZ2l0L2NvbW1pdC8/aWQ9YmRjNDhmYTExZTQ2Zjg2N2VhNGQ3NWZhNTllZTg3YTdmNDhi
-ZTE0NA0KDQo+DQo+PiArICBsaWtlIHJlc2V0IGFuZCBidXMgcHJvdGVjdGlvbiBvbiBNVDY3
-OTUuDQo+PiArDQo+PiArcHJvcGVydGllczoNCj4+ICsgIGNvbXBhdGlibGU6DQo+PiArICAg
-IGl0ZW1zOg0KPj4gKyAgICAgIC0gZW51bToNCj4+ICsgICAgICAgICAgLSBtZWRpYXRlayxt
-dDY3OTUtYXBtaXhlZHN5cw0KPj4gKyAgICAgICAgICAtIG1lZGlhdGVrLG10Njc5NS1pbmZy
-YWNmZw0KPj4gKyAgICAgICAgICAtIG1lZGlhdGVrLG10Njc5NS1wZXJpY2ZnDQo+PiArICAg
-ICAgICAgIC0gbWVkaWF0ZWssbXQ2Nzk1LXRvcGNrZ2VuDQo+PiArICAgICAgLSBjb25zdDog
-c3lzY29uDQo+PiArDQo+PiArICByZWc6DQo+PiArICAgIG1heEl0ZW1zOiAxDQo+PiArDQo+
-PiArICAnI2Nsb2NrLWNlbGxzJzoNCj4+ICsgICAgY29uc3Q6IDENCj4+ICsNCj4+ICsgICcj
-cmVzZXQtY2VsbHMnOg0KPj4gKyAgICBjb25zdDogMQ0KPj4gKw0KPj4gK3JlcXVpcmVkOg0K
-Pj4gKyAgLSBjb21wYXRpYmxlDQo+PiArICAtIHJlZw0KPj4gKyAgLSAnI2Nsb2NrLWNlbGxz
-Jw0KPj4gKw0KPj4gK2FkZGl0aW9uYWxQcm9wZXJ0aWVzOiBmYWxzZQ0KPj4gKw0KPj4gK2V4
-YW1wbGVzOg0KPj4gKyAgLSB8DQo+PiArICAgIHNvYyB7DQo+PiArICAgICAgICAjYWRkcmVz
-cy1jZWxscyA9IDwyPjsNCj4+ICsgICAgICAgICNzaXplLWNlbGxzID0gPDI+Ow0KPj4gKw0K
-Pj4gKyAgICAgICAgdG9wY2tnZW46IGNsb2NrLWNvbnRyb2xsZXJAMTAwMDAwMDAgew0KPj4g
-KyAgICAgICAgICAgIGNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ2Nzk1LXRvcGNrZ2VuIiwg
-InN5c2NvbiI7DQo+PiArICAgICAgICAgICAgcmVnID0gPDAgMHgxMDAwMDAwMCAwIDB4MTAw
-MD47DQo+PiArICAgICAgICAgICAgI2Nsb2NrLWNlbGxzID0gPDE+Ow0KPj4gKyAgICAgICAg
-fTsNCj4+ICsNCj4+ICsgICAgICAgIGluZnJhY2ZnOiBwb3dlci1jb250cm9sbGVyQDEwMDAx
-MDAwIHsNCj4+ICsgICAgICAgICAgICBjb21wYXRpYmxlID0gIm1lZGlhdGVrLG10Njc5NS1p
-bmZyYWNmZyIsICJzeXNjb24iOw0KPj4gKyAgICAgICAgICAgIHJlZyA9IDwwIDB4MTAwMDEw
-MDAgMCAweDEwMDA+Ow0KPj4gKyAgICAgICAgICAgICNjbG9jay1jZWxscyA9IDwxPjsNCj4+
-ICsgICAgICAgICAgICAjcmVzZXQtY2VsbHMgPSA8MT47DQo+IE5vIG5lZWQgZm9yIGZvdXIg
-ZXhhbXBsZXMgb2YgdGhlIHNhbWUuIFRoZXkgZGlmZmVyIG9ubHkgYnkgY29tcGF0aWJsZSwN
-Cj4gc28gdGhpcyBpcyBqdXN0IHVubmVjZXNzYXJ5IGNvZGUuLi4gd2hpY2ggYXMgeW91IGNh
-biBzZWUgZG9lcyBub3QgcGFzcw0KPiB0aGUgY2hlY2tzLiBUaGlzIGFsc28gaGFzIHRvIGJl
-IGZpeGVkLg0KPg0KPiBNYXliZSBrZWVwIGl0IGFzIGNsb2NrLWNvbnRyb2xsZXI/DQo+DQo+
-DQo+IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6dG9mDQo+DQotLSANCkRhdmlkIEhlaWRlbGJl
-cmcNCkNvbnN1bHRhbnQgU29mdHdhcmUgRW5naW5lZXINCg0KQ29sbGFib3JhIEx0ZC4NClBs
-YXRpbnVtIEJ1aWxkaW5nLCBTdCBKb2huJ3MgSW5ub3ZhdGlvbiBQYXJrLCBDYW1icmlkZ2Ug
-Q0I0IDBEUywgVUsNClJlZ2lzdGVyZWQgaW4gRW5nbGFuZCAmIFdhbGVzLCBuby4gNTUxMzcx
-OA0KDQo=
---------------4TT4k8GW9tO0EQaIeP92D69x
-Content-Type: application/pgp-keys; name="OpenPGP_0x69F567861C1EC014.asc"
-Content-Disposition: attachment; filename="OpenPGP_0x69F567861C1EC014.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+>
+>> v2: fix accidental change of value 0x0 to 0
+>>
+>>   arch/arm64/boot/dts/qcom/ipq6018.dtsi | 20 ++++++++++----------
+>>   arch/arm64/boot/dts/qcom/sc7180.dtsi  | 20 ++++++++++----------
+>>   arch/arm64/boot/dts/qcom/sc7280.dtsi  | 20 ++++++++++----------
+>>   arch/arm64/boot/dts/qcom/sdm845.dtsi  | 20 ++++++++++----------
+>>   arch/arm64/boot/dts/qcom/sm6350.dtsi  | 20 ++++++++++----------
+>>   arch/arm64/boot/dts/qcom/sm8150.dtsi  | 20 ++++++++++----------
+>>   arch/arm64/boot/dts/qcom/sm8250.dtsi  | 20 ++++++++++----------
+>>   arch/arm64/boot/dts/qcom/sm8350.dtsi  | 20 ++++++++++----------
+>>   arch/arm64/boot/dts/qcom/sm8450.dtsi  | 20 ++++++++++----------
+>>   9 files changed, 90 insertions(+), 90 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+>> index c89499e366d3..8638231dbd2f 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+>> @@ -526,8 +526,8 @@ timer {
+>>   
+>>   		timer@b120000 {
+>>   			#address-cells = <2>;
+>> -			#size-cells = <2>;
+>> -			ranges;
+>> +			#size-cells = <1>;
+> While perfectly valid, I don't like the asymmetry of #address-cells = 2
+> and #size-cells = 1.
+>
+> If the binding maintainers don't approve of allowing #size-cells = 2,
+> can you please make #address-cells = 1 as well?
 
-xjMEYlvLOxYJKwYBBAHaRw8BAQdA5CoWEzz4igpwK4h6lK6ZformRk84+ymcfkGN
-PwqEeILNMURhdmlkIEhlaWRlbGJlcmcgPGRhdmlkLmhlaWRlbGJlcmdAY29sbGFi
-b3JhLmNvbT7ClgQTFggAPhYhBEo7kSl22BK0F1Np/mn1Z4YcHsAUBQJiW8s7AhsD
-BQkFo5qABQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEGn1Z4YcHsAU84kBAK5Y
-qSWAOuIumAqgWvke6BEsaIGWGQzXSuKjer/TXuFuAQCwc9ITSVXWWTSpdFt2+4z7
-Wch8tIGlbIFcS9dCFddwCc44BGJbyzsSCisGAQQBl1UBBQEBB0AEk7jXEwDApGOw
-MH/X0UAPBH8Y3isjxhNMjpyRcnl2CwMBCAfCfgQYFggAJhYhBEo7kSl22BK0F1Np
-/mn1Z4YcHsAUBQJiW8s7AhsMBQkFo5qAAAoJEGn1Z4YcHsAU0PEA/j0YuAOKJCnn
-wrkf3ozPP0sutA5bojoARwcIaZKO/zvIAP9PwTC9DGLg+8LJm7m2Lyf0LxLA8FXD
-wueLHBdwHg6zAQ=3D=3D
-=3DOQS+
------END PGP PUBLIC KEY BLOCK-----
+Yes, for sure, I should noticed in reply to my original patch -
 
---------------4TT4k8GW9tO0EQaIeP92D69x--
+https://lkml.iu.edu/hypermail/linux/kernel/2112.1/09937.html
 
---------------igpTnjsExajZs0wD231Hp3a8--
+that both address and size should be 32-bit only.
 
---------------01SB8j7fsrDg1UCCZJHvnO6w
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Fixed patch coming soon! :)
 
------BEGIN PGP SIGNATURE-----
+David
 
-iHUEARYIAB0WIQRKO5EpdtgStBdTaf5p9WeGHB7AFAUCYrgrSwAKCRBp9WeGHB7A
-FI9aAPwKZ9qdy8fkfWuR5+0DNALpnxhA22wMeS/Rr+FJzCIO6wD/Q/q4xqSAb6h2
-Q4m/b/mqOFD4AYAJ416vkMM4dwJj0wg=
-=NSS0
------END PGP SIGNATURE-----
+>
+> Regards,
+> Bjorn
+>
+>> +			ranges = <0 0 0 0 0x10000000>;
+>>   			compatible = "arm,armv7-timer-mem";
+>>   			reg = <0x0 0x0b120000 0x0 0x1000>;
+>>   
+>> @@ -535,49 +535,49 @@ frame@b120000 {
+>>   				frame-number = <0>;
+>>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>>   					     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x0b121000 0x0 0x1000>,
+>> -				      <0x0 0x0b122000 0x0 0x1000>;
+>> +				reg = <0x0 0x0b121000 0x1000>,
+>> +				      <0x0 0x0b122000 0x1000>;
+>>   			};
+>>   
+>>   			frame@b123000 {
+>>   				frame-number = <1>;
+>>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0xb123000 0x0 0x1000>;
+>> +				reg = <0x0 0x0b123000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@b124000 {
+>>   				frame-number = <2>;
+>>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x0b124000 0x0 0x1000>;
+>> +				reg = <0x0 0x0b124000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@b125000 {
+>>   				frame-number = <3>;
+>>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x0b125000 0x0 0x1000>;
+>> +				reg = <0x0 0x0b125000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@b126000 {
+>>   				frame-number = <4>;
+>>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x0b126000 0x0 0x1000>;
+>> +				reg = <0x0 0x0b126000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@b127000 {
+>>   				frame-number = <5>;
+>>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x0b127000 0x0 0x1000>;
+>> +				reg = <0x0 0x0b127000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@b128000 {
+>>   				frame-number = <6>;
+>>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x0b128000 0x0 0x1000>;
+>> +				reg = <0x0 0x0b128000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   		};
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+>> index 5dcaac23a138..4b7be66e04df 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+>> @@ -3385,8 +3385,8 @@ watchdog@17c10000 {
+>>   
+>>   		timer@17c20000{
+>>   			#address-cells = <2>;
+>> -			#size-cells = <2>;
+>> -			ranges;
+>> +			#size-cells = <1>;
+>> +			ranges = <0 0 0 0 0x20000000>;
+>>   			compatible = "arm,armv7-timer-mem";
+>>   			reg = <0 0x17c20000 0 0x1000>;
+>>   
+>> @@ -3394,49 +3394,49 @@ frame@17c21000 {
+>>   				frame-number = <0>;
+>>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c21000 0 0x1000>,
+>> -				      <0 0x17c22000 0 0x1000>;
+>> +				reg = <0 0x17c21000 0x1000>,
+>> +				      <0 0x17c22000 0x1000>;
+>>   			};
+>>   
+>>   			frame@17c23000 {
+>>   				frame-number = <1>;
+>>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c23000 0 0x1000>;
+>> +				reg = <0 0x17c23000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c25000 {
+>>   				frame-number = <2>;
+>>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c25000 0 0x1000>;
+>> +				reg = <0 0x17c25000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c27000 {
+>>   				frame-number = <3>;
+>>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c27000 0 0x1000>;
+>> +				reg = <0 0x17c27000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c29000 {
+>>   				frame-number = <4>;
+>>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c29000 0 0x1000>;
+>> +				reg = <0 0x17c29000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c2b000 {
+>>   				frame-number = <5>;
+>>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c2b000 0 0x1000>;
+>> +				reg = <0 0x17c2b000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c2d000 {
+>>   				frame-number = <6>;
+>>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c2d000 0 0x1000>;
+>> +				reg = <0 0x17c2d000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   		};
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> index e66fc67de206..1b81cd1e84e9 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> @@ -4772,8 +4772,8 @@ watchdog@17c10000 {
+>>   
+>>   		timer@17c20000 {
+>>   			#address-cells = <2>;
+>> -			#size-cells = <2>;
+>> -			ranges;
+>> +			#size-cells = <1>;
+>> +			ranges = <0 0 0 0 0x20000000>;
+>>   			compatible = "arm,armv7-timer-mem";
+>>   			reg = <0 0x17c20000 0 0x1000>;
+>>   
+>> @@ -4781,49 +4781,49 @@ frame@17c21000 {
+>>   				frame-number = <0>;
+>>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c21000 0 0x1000>,
+>> -				      <0 0x17c22000 0 0x1000>;
+>> +				reg = <0 0x17c21000 0x1000>,
+>> +				      <0 0x17c22000 0x1000>;
+>>   			};
+>>   
+>>   			frame@17c23000 {
+>>   				frame-number = <1>;
+>>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c23000 0 0x1000>;
+>> +				reg = <0 0x17c23000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c25000 {
+>>   				frame-number = <2>;
+>>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c25000 0 0x1000>;
+>> +				reg = <0 0x17c25000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c27000 {
+>>   				frame-number = <3>;
+>>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c27000 0 0x1000>;
+>> +				reg = <0 0x17c27000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c29000 {
+>>   				frame-number = <4>;
+>>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c29000 0 0x1000>;
+>> +				reg = <0 0x17c29000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c2b000 {
+>>   				frame-number = <5>;
+>>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c2b000 0 0x1000>;
+>> +				reg = <0 0x17c2b000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c2d000 {
+>>   				frame-number = <6>;
+>>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17c2d000 0 0x1000>;
+>> +				reg = <0 0x17c2d000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   		};
+>> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>> index 0692ae0e60a4..9a1705bfa425 100644
+>> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+>> @@ -4949,8 +4949,8 @@ slimbam: dma-controller@17184000 {
+>>   
+>>   		timer@17c90000 {
+>>   			#address-cells = <2>;
+>> -			#size-cells = <2>;
+>> -			ranges;
+>> +			#size-cells = <1>;
+>> +			ranges = <0 0 0 0 0x20000000>;
+>>   			compatible = "arm,armv7-timer-mem";
+>>   			reg = <0 0x17c90000 0 0x1000>;
+>>   
+>> @@ -4958,49 +4958,49 @@ frame@17ca0000 {
+>>   				frame-number = <0>;
+>>   				interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+>>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17ca0000 0 0x1000>,
+>> -				      <0 0x17cb0000 0 0x1000>;
+>> +				reg = <0 0x17ca0000 0x1000>,
+>> +				      <0 0x17cb0000 0x1000>;
+>>   			};
+>>   
+>>   			frame@17cc0000 {
+>>   				frame-number = <1>;
+>>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17cc0000 0 0x1000>;
+>> +				reg = <0 0x17cc0000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17cd0000 {
+>>   				frame-number = <2>;
+>>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17cd0000 0 0x1000>;
+>> +				reg = <0 0x17cd0000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17ce0000 {
+>>   				frame-number = <3>;
+>>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17ce0000 0 0x1000>;
+>> +				reg = <0 0x17ce0000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17cf0000 {
+>>   				frame-number = <4>;
+>>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17cf0000 0 0x1000>;
+>> +				reg = <0 0x17cf0000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17d00000 {
+>>   				frame-number = <5>;
+>>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17d00000 0 0x1000>;
+>> +				reg = <0 0x17d00000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17d10000 {
+>>   				frame-number = <6>;
+>>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0 0x17d10000 0 0x1000>;
+>> +				reg = <0 0x17d10000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   		};
+>> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+>> index d4f8f33f3f0c..fc473cb8c93b 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+>> @@ -1305,56 +1305,56 @@ timer@17c20000 {
+>>   			reg = <0x0 0x17c20000 0x0 0x1000>;
+>>   			clock-frequency = <19200000>;
+>>   			#address-cells = <2>;
+>> -			#size-cells = <2>;
+>> -			ranges;
+>> +			#size-cells = <1>;
+>> +			ranges = <0 0 0 0 0x20000000>;
+>>   
+>>   			frame@17c21000 {
+>>   				frame-number = <0>;
+>>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c21000 0x0 0x1000>,
+>> -				      <0x0 0x17c22000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c21000 0x1000>,
+>> +				      <0x0 0x17c22000 0x1000>;
+>>   			};
+>>   
+>>   			frame@17c23000 {
+>>   				frame-number = <1>;
+>>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c23000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c23000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c25000 {
+>>   				frame-number = <2>;
+>>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c25000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c25000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c27000 {
+>>   				frame-number = <3>;
+>>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c27000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c27000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c29000 {
+>>   				frame-number = <4>;
+>>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c29000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c29000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c2b000 {
+>>   				frame-number = <5>;
+>>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c2b000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c2b000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c2d000 {
+>>   				frame-number = <6>;
+>>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c2d000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c2d000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   		};
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+>> index 8ea44c4b56b4..066cc00191b2 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+>> @@ -3945,8 +3945,8 @@ watchdog@17c10000 {
+>>   
+>>   		timer@17c20000 {
+>>   			#address-cells = <2>;
+>> -			#size-cells = <2>;
+>> -			ranges;
+>> +			#size-cells = <1>;
+>> +			ranges = <0 0 0 0 0x20000000>;
+>>   			compatible = "arm,armv7-timer-mem";
+>>   			reg = <0x0 0x17c20000 0x0 0x1000>;
+>>   			clock-frequency = <19200000>;
+>> @@ -3955,49 +3955,49 @@ frame@17c21000{
+>>   				frame-number = <0>;
+>>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c21000 0x0 0x1000>,
+>> -				      <0x0 0x17c22000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c21000 0x1000>,
+>> +				      <0x0 0x17c22000 0x1000>;
+>>   			};
+>>   
+>>   			frame@17c23000 {
+>>   				frame-number = <1>;
+>>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c23000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c23000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c25000 {
+>>   				frame-number = <2>;
+>>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c25000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c25000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c27000 {
+>>   				frame-number = <3>;
+>>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c26000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c26000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c29000 {
+>>   				frame-number = <4>;
+>>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c29000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c29000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c2b000 {
+>>   				frame-number = <5>;
+>>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c2b000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c2b000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c2d000 {
+>>   				frame-number = <6>;
+>>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c2d000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c2d000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   		};
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+>> index cf0c97bd5ad3..ae7d0573e1dc 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+>> @@ -4868,8 +4868,8 @@ watchdog@17c10000 {
+>>   
+>>   		timer@17c20000 {
+>>   			#address-cells = <2>;
+>> -			#size-cells = <2>;
+>> -			ranges;
+>> +			#size-cells = <1>;
+>> +			ranges = <0 0 0 0 0x20000000>;
+>>   			compatible = "arm,armv7-timer-mem";
+>>   			reg = <0x0 0x17c20000 0x0 0x1000>;
+>>   			clock-frequency = <19200000>;
+>> @@ -4878,49 +4878,49 @@ frame@17c21000 {
+>>   				frame-number = <0>;
+>>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c21000 0x0 0x1000>,
+>> -				      <0x0 0x17c22000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c21000 0x1000>,
+>> +				      <0x0 0x17c22000 0x1000>;
+>>   			};
+>>   
+>>   			frame@17c23000 {
+>>   				frame-number = <1>;
+>>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c23000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c23000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c25000 {
+>>   				frame-number = <2>;
+>>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c25000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c25000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c27000 {
+>>   				frame-number = <3>;
+>>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c27000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c27000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c29000 {
+>>   				frame-number = <4>;
+>>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c29000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c29000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c2b000 {
+>>   				frame-number = <5>;
+>>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c2b000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c2b000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c2d000 {
+>>   				frame-number = <6>;
+>>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c2d000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c2d000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   		};
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+>> index 743cba9b683c..58e6bb4a1899 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+>> @@ -1934,8 +1934,8 @@ intc: interrupt-controller@17a00000 {
+>>   		timer@17c20000 {
+>>   			compatible = "arm,armv7-timer-mem";
+>>   			#address-cells = <2>;
+>> -			#size-cells = <2>;
+>> -			ranges;
+>> +			#size-cells = <1>;
+>> +			ranges = <0 0 0 0 0x20000000>;
+>>   			reg = <0x0 0x17c20000 0x0 0x1000>;
+>>   			clock-frequency = <19200000>;
+>>   
+>> @@ -1943,49 +1943,49 @@ frame@17c21000 {
+>>   				frame-number = <0>;
+>>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c21000 0x0 0x1000>,
+>> -				      <0x0 0x17c22000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c21000 0x1000>,
+>> +				      <0x0 0x17c22000 0x1000>;
+>>   			};
+>>   
+>>   			frame@17c23000 {
+>>   				frame-number = <1>;
+>>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c23000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c23000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c25000 {
+>>   				frame-number = <2>;
+>>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c25000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c25000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c27000 {
+>>   				frame-number = <3>;
+>>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c27000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c27000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c29000 {
+>>   				frame-number = <4>;
+>>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c29000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c29000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c2b000 {
+>>   				frame-number = <5>;
+>>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c2b000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c2b000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17c2d000 {
+>>   				frame-number = <6>;
+>>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17c2d000 0x0 0x1000>;
+>> +				reg = <0x0 0x17c2d000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   		};
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> index 7d08fad76371..64ceff515337 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> @@ -2858,8 +2858,8 @@ intc: interrupt-controller@17100000 {
+>>   		timer@17420000 {
+>>   			compatible = "arm,armv7-timer-mem";
+>>   			#address-cells = <2>;
+>> -			#size-cells = <2>;
+>> -			ranges;
+>> +			#size-cells = <1>;
+>> +			ranges = <0 0 0 0 0x20000000>;
+>>   			reg = <0x0 0x17420000 0x0 0x1000>;
+>>   			clock-frequency = <19200000>;
+>>   
+>> @@ -2867,49 +2867,49 @@ frame@17421000 {
+>>   				frame-number = <0>;
+>>   				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>>   					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17421000 0x0 0x1000>,
+>> -				      <0x0 0x17422000 0x0 0x1000>;
+>> +				reg = <0x0 0x17421000 0x1000>,
+>> +				      <0x0 0x17422000 0x1000>;
+>>   			};
+>>   
+>>   			frame@17423000 {
+>>   				frame-number = <1>;
+>>   				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17423000 0x0 0x1000>;
+>> +				reg = <0x0 0x17423000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17425000 {
+>>   				frame-number = <2>;
+>>   				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17425000 0x0 0x1000>;
+>> +				reg = <0x0 0x17425000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17427000 {
+>>   				frame-number = <3>;
+>>   				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17427000 0x0 0x1000>;
+>> +				reg = <0x0 0x17427000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@17429000 {
+>>   				frame-number = <4>;
+>>   				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x17429000 0x0 0x1000>;
+>> +				reg = <0x0 0x17429000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@1742b000 {
+>>   				frame-number = <5>;
+>>   				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x1742b000 0x0 0x1000>;
+>> +				reg = <0x0 0x1742b000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   
+>>   			frame@1742d000 {
+>>   				frame-number = <6>;
+>>   				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+>> -				reg = <0x0 0x1742d000 0x0 0x1000>;
+>> +				reg = <0x0 0x1742d000 0x1000>;
+>>   				status = "disabled";
+>>   			};
+>>   		};
+>> -- 
+>> 2.35.1
+>>
+-- 
+David Heidelberg
+Consultant Software Engineer
 
---------------01SB8j7fsrDg1UCCZJHvnO6w--
+Matrix: @okias:matrix.org
+

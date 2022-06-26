@@ -2,199 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9640855B04E
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 10:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1443E55B049
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 10:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233975AbiFZIdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 04:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
+        id S233962AbiFZIga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 04:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbiFZIdT (ORCPT
+        with ESMTP id S229508AbiFZIg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 04:33:19 -0400
-Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10101634A
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 01:33:17 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 5NhgocNcnOXCy5NhhoLboN; Sun, 26 Jun 2022 10:33:15 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 26 Jun 2022 10:33:15 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <c8b888fc-dff9-c278-da10-6883c4277289@wanadoo.fr>
-Date:   Sun, 26 Jun 2022 10:33:12 +0200
+        Sun, 26 Jun 2022 04:36:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77431054B;
+        Sun, 26 Jun 2022 01:36:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 11B25CE0FC4;
+        Sun, 26 Jun 2022 08:36:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41580C341D8;
+        Sun, 26 Jun 2022 08:36:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656232582;
+        bh=juR3pWHFZdE8Vf6QGsSTJiJ2f3ZwildJoxwQZWNpG/E=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=f6yc1RaNJwQq5dElIkyuYvUvwHkvBLBi9KqlHP2ZC+oxWcerSMGK3hkxIM7cIAAT/
+         TtueQ33cy4/n0Uda61TReBytE65eLfQrezytZmtm7bX//WKI/yOT60iTP49ZEIOPSW
+         6z1NOCnw36qsukMeObt289BsjK4np0rxC1P8TL2Fy3MIi0PXPCcxYI0ThEmMrCWGfS
+         UrkYBYjapcfJFTuf2LfH5cpnGXFFNt0wE6A6XBDTb085dl806k7RyMDAUO+JHUYTkX
+         Au2xvaXvS/pK8PTQWyJuWsS1hRHbV8q3oa+eOltOLdGmLNGlNuBwPHqKBVX/LvLixJ
+         OvRvGfKxK4K+w==
+Received: by mail-yb1-f174.google.com with SMTP id h187so9569940ybg.0;
+        Sun, 26 Jun 2022 01:36:22 -0700 (PDT)
+X-Gm-Message-State: AJIora+WE7CBSMpN5yeJ0ShnL/3L5tQrerlTtqlFOGQtN7+wOCgkBfb9
+        CrGeHkihKKllOOy0iR/ubsfNxVTQV7l50KK79Pc=
+X-Google-Smtp-Source: AGRyM1s9r/oqGpmVzKxZ+US+FaaRE8PSLnvRSxz/eiJkctG/2AzfYvDmvG4YKVmQhXgJnW7ApVihluVitAAeI1SlHhw=
+X-Received: by 2002:a25:8b8b:0:b0:669:b37d:f9cd with SMTP id
+ j11-20020a258b8b000000b00669b37df9cdmr7722013ybl.394.1656232581073; Sun, 26
+ Jun 2022 01:36:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v8 2/8] ASoC: mediatek: mt8186: add platform driver
-Content-Language: en-US
-To:     jiaxin.yu@mediatek.com
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        aaronyu@google.com, alsa-devel@alsa-project.org,
-        angelogioacchino.delregno@collabora.com, broonie@kernel.org,
-        devicetree@vger.kernel.org, julianbraha@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, trevor.wu@mediatek.com, tzungbi@google.com
-References: <20220625190852.29130-1-jiaxin.yu@mediatek.com>
- <20220625190852.29130-3-jiaxin.yu@mediatek.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220625190852.29130-3-jiaxin.yu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220617125750.728590-1-arnd@kernel.org> <20220617125750.728590-4-arnd@kernel.org>
+ <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com> <CAK8P3a1XfwkTOV7qOs1fTxf4vthNBRXKNu8A5V7TWnHT081NGA@mail.gmail.com>
+ <6d1d88ee-1cf6-c735-1e6d-bafd2096e322@gmail.com>
+In-Reply-To: <6d1d88ee-1cf6-c735-1e6d-bafd2096e322@gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sun, 26 Jun 2022 10:36:02 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1KKPXr0ews9po_xjmnGYUWf18gBaZYYmnC+DvtxTKLmQ@mail.gmail.com>
+Message-ID: <CAK8P3a1KKPXr0ews9po_xjmnGYUWf18gBaZYYmnC+DvtxTKLmQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Matt Wang <wwentao@vmware.com>,
+        Miquel van Smoorenburg <mikevs@xs4all.net>,
+        Mark Salyzyn <salyzyn@android.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Denis Efremov <efremov@linux.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 25/06/2022 à 21:08, Jiaxin Yu a écrit :
-> Add mt8186 platform and affiliated driver.
-> 
-> Signed-off-by: Jiaxin Yu <jiaxin.yu-NuS5LvNUpcJWk0Htik3J/w@public.gmane.org>
-> ---
->   sound/soc/mediatek/Kconfig                    |   12 +
->   sound/soc/mediatek/Makefile                   |    1 +
->   sound/soc/mediatek/mt8186/Makefile            |   19 +
->   sound/soc/mediatek/mt8186/mt8186-afe-common.h |  235 ++
->   .../soc/mediatek/mt8186/mt8186-afe-control.c  |  255 ++
->   sound/soc/mediatek/mt8186/mt8186-afe-pcm.c    | 3011 +++++++++++++++++
->   6 files changed, 3533 insertions(+)
->   create mode 100644 sound/soc/mediatek/mt8186/Makefile
->   create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-common.h
->   create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-control.c
->   create mode 100644 sound/soc/mediatek/mt8186/mt8186-afe-pcm.c
+(On Sun, Jun 26, 2022 at 7:21 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
+>  > The same could be done for the two vme drivers (scsi/mvme147.c
+> > and ethernet/82596.c), which do the cache management but
+> > apparently don't need swiotlb bounce buffering.
+> >
+> > Rewriting the drivers to modern APIs is of course non-trivial,
+> > and if you want a shortcut here, I would suggest introducing
+> > platform specific helpers similar to isa_virt_to_bus() and call
+> > them amiga_virt_to_bus() and vme_virt_to_bus, respectively.
+>
+> I don't think Amiga and m68k VME differ at all in that respect, so might
+> just call it m68k_virt_to_bus() for now.
+>
+> > Putting these into a platform specific header file at least helps
+> > clarify that both the helper functions and the drivers using them
+> > are non-portable.
+>
+> There are no platform specific header files other than asm/amigahw.h and
+> asm/mvme147hw.h, currently only holding register address definitions.
+> Would it be OK to add m68k_virt_to_bus() in there if it can't remain in
+> asm/virtconvert.h, Geert?
 
-[...]
+In that case, I would just leave it under the current name and not change
+m68k at all. I don't like the m68k_virt_to_bus() name because there is
+not anything CPU specific in what it does, and keeping it in a common
+header does nothing to prevent it from being used on other platforms
+either.
 
-> +	MT8186_DAI_HOSTLESS_SRC_AAUDIO,
-> +	MT8186_DAI_HOSTLESS_SRC_1,	/* just an exmpale */
+> >> 32bit powerpc is a different matter though.
+> >
+> > It's similar, but unrelated. The two apple ethernet drivers
+> > (bmac and mace) can again either get changed to use the
+> > dma-mapping interfaces, or get a custom pmac_virt_to_bus()/
+> > pmac_bus_to_virt() helper.
+>
+> Hmmm - I see Finn had done the DMA API conversion on macmace.c which
+> might give some hints on what to do about mace.c ... no idea about
+> bmac.c though. And again, haven't got hardware to test, so custom
+> helpers is it, then.
 
-example?
+Ok.
 
-> +	MT8186_DAI_HOSTLESS_SRC_BARGEIN,
-> +	MT8186_DAI_HOSTLESS_UL1,
-
-[...]
-
-> +#define MTK_SPK_I2S_0_STR "MTK_SPK_I2S_0"
-> +#define MTK_SPK_I2S_1_STR "MTK_SPK_I2S_1"
-> +#define MTK_SPK_I2S_2_STR "MTK_SPK_I2S_2"
-> +#define MTK_SPK_I2S_3_STR "MTK_SPK_I2S_3"
-
-Out of curiosity, why no 4?
-Or, if related to mtk_spk_i2s_type below, why  6, 7, 8 and 9?
-
-> +#define MTK_SPK_I2S_5_STR "MTK_SPK_I2S_5"
-> +#define MTK_SPK_I2S_6_STR "MTK_SPK_I2S_6"
-> +#define MTK_SPK_I2S_7_STR "MTK_SPK_I2S_7"
-> +#define MTK_SPK_I2S_8_STR "MTK_SPK_I2S_8"
-> +#define MTK_SPK_I2S_9_STR "MTK_SPK_I2S_9"
-> +
-
-[...]
-
-> +
-> +enum mtk_spk_i2s_type {
-> +	MTK_SPK_I2S_TYPE_INVALID = -1,
-> +	MTK_SPK_I2S_0,
-> +	MTK_SPK_I2S_1,
-> +	MTK_SPK_I2S_2,
-> +	MTK_SPK_I2S_3,
-> +	MTK_SPK_I2S_5,
-> +	MTK_SPK_I2S_TYPE_NUM
-> +};
-
-[...]
-
-> +static int mt8186_afe_pcm_dev_probe(struct platform_device *pdev)
-> +{
-> +	struct mtk_base_afe *afe;
-> +	struct mt8186_afe_private *afe_priv;
-> +	struct resource *res;
-> +	struct reset_control *rstc;
-> +	struct device *dev = &pdev->dev;
-> +	int i, ret, irq_id;
-> +
-> +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34));
-> +	if (ret)
-> +		return ret;
-> +
-> +	afe = devm_kzalloc(dev, sizeof(*afe), GFP_KERNEL);
-> +	if (!afe)
-> +		return -ENOMEM;
-> +	platform_set_drvdata(pdev, afe);
-> +
-> +	afe->platform_priv = devm_kzalloc(dev, sizeof(*afe_priv), GFP_KERNEL);
-> +	if (!afe->platform_priv)
-> +		return -ENOMEM;
-> +
-> +	afe_priv = afe->platform_priv;
-> +	afe->dev = &pdev->dev;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	afe->base_addr = devm_ioremap_resource(&pdev->dev, res);
-> +	if (IS_ERR(afe->base_addr))
-> +		return PTR_ERR(afe->base_addr);
-> +
-> +	/* init audio related clock */
-> +	ret = mt8186_init_clock(afe);
-> +	if (ret) {
-> +		dev_err(dev, "init clock error, ret %d\n", ret);
-> +		return ret;
-> +	}
-
-There is a mt8186_deinit_clock() call in the remove function.
-Should this also be called in the error handling path below?
-Or should a devm_add_action_or_reset() be used to ease error handling?
-
-> +
-> +	/* init memif */
-> +	afe->memif_32bit_supported = 0;
-> +	afe->memif_size = MT8186_MEMIF_NUM;
-> +	afe->memif = devm_kcalloc(dev, afe->memif_size, sizeof(*afe->memif),
-> +				  GFP_KERNEL);
-> +
-
-Nit: no need for an empty line here.
-
-> +	if (!afe->memif)
-> +		return -ENOMEM;
-> +
-
-[...]
-
-> +
-> +	return 0;
-> +
-> +err_pm_disable:
-> +	pm_runtime_put_noidle(dev);
-> +	pm_runtime_set_suspended(dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static int mt8186_afe_pcm_dev_remove(struct platform_device *pdev)
-> +{
-> +	struct mtk_base_afe *afe = platform_get_drvdata(pdev);
-> +
-> +	if (!pm_runtime_status_suspended(&pdev->dev))
-> +		mt8186_afe_runtime_suspend(&pdev->dev);
-
-Out of curiosity, is it normal to have some pm_runtime related code here 
-that does not look the same as the one in the error handling of the probe?
-(I don't know much about pm, but usually, .remove() functions and error 
-handling in the probe look quite close)
-
-> +
-> +	mt8186_deinit_clock(afe);
-> +
-> +	return 0;
-> +}
-> +
-
-[...]
+          Arnd

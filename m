@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA4455B315
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 19:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 228D555B316
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 19:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbiFZRKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 13:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
+        id S231314AbiFZROC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 13:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiFZRKT (ORCPT
+        with ESMTP id S230161AbiFZROA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 13:10:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8529DF46
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 10:10:18 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o5Vly-0003fl-59; Sun, 26 Jun 2022 19:10:10 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o5Vlw-0008K0-92; Sun, 26 Jun 2022 19:10:08 +0200
-Date:   Sun, 26 Jun 2022 19:10:08 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v1 2/3] net: dsa: ar9331: add support for pause
- stats
-Message-ID: <20220626171008.GA7581@pengutronix.de>
-References: <20220624125902.4068436-1-o.rempel@pengutronix.de>
- <20220624125902.4068436-2-o.rempel@pengutronix.de>
- <20220624220317.ckhx6z7cmzegvoqi@skbuf>
+        Sun, 26 Jun 2022 13:14:00 -0400
+Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63072DF51;
+        Sun, 26 Jun 2022 10:13:57 -0700 (PDT)
+Received: from [10.0.0.163] (_gateway [10.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 4CC112007F;
+        Sun, 26 Jun 2022 19:13:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1656263635;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZqvmWyTsVuvs/huJ/V36dOyCmwQvHHFwtiV6jD5FiDE=;
+        b=HOwivlHYajhNQmpv4nAngJYyDm80OCWMv680pq128OJYichPedj9gbHk3RQksu9nrN1Aq3
+        Q8ZfGYkOoVWt623U7QXbPMDUEwQ5aTTEEwQoxbs4eIuOatYAgour3RsgSCdaVn8YZdGC4c
+        V5naMI6PtHMwmWUxI1va+QeScy2RLuc=
+Message-ID: <8704fbd6-94a1-5692-5ccb-95f66ffaaf6f@ixit.cz>
+Date:   Sun, 26 Jun 2022 19:13:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220624220317.ckhx6z7cmzegvoqi@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 3/3] dt-bindings: firmware: convert Qualcomm SCM
+ binding to the yaml
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     ~okias/devicetree@lists.sr.ht, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        Robert Marko <robimarko@gmail.com>
+References: <20220626114634.90850-1-david@ixit.cz>
+ <20220626114634.90850-3-david@ixit.cz>
+ <d00d6c3e-7d65-9021-7a26-486c705a16de@linaro.org>
+From:   David Heidelberg <david@ixit.cz>
+In-Reply-To: <d00d6c3e-7d65-9021-7a26-486c705a16de@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_DYNAMIC,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,60 +65,241 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 01:03:17AM +0300, Vladimir Oltean wrote:
-> On Fri, Jun 24, 2022 at 02:59:01PM +0200, Oleksij Rempel wrote:
-> > Add support for pause stats and fix rx_packets/tx_packets calculation.
-> > 
-> > Pause packets are counted by raw.rx64byte/raw.tx64byte counters, so
-> > subtract it from main rx_packets/tx_packets counters.
-> > 
-> > tx_/rx_bytes are not affected.
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >  drivers/net/dsa/qca/ar9331.c | 23 +++++++++++++++++++++--
-> >  1 file changed, 21 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/net/dsa/qca/ar9331.c b/drivers/net/dsa/qca/ar9331.c
-> > index fb3fe74abfe6..82412f54c432 100644
-> > --- a/drivers/net/dsa/qca/ar9331.c
-> > +++ b/drivers/net/dsa/qca/ar9331.c
-> > @@ -606,6 +607,7 @@ static void ar9331_sw_phylink_mac_link_up(struct dsa_switch *ds, int port,
-> >  static void ar9331_read_stats(struct ar9331_sw_port *port)
-> >  {
-> >  	struct ar9331_sw_priv *priv = ar9331_sw_port_to_priv(port);
-> > +	struct ethtool_pause_stats *pstats = &port->pause_stats;
-> >  	struct rtnl_link_stats64 *stats = &port->stats;
-> >  	struct ar9331_sw_stats_raw raw;
-> >  	int ret;
-> > @@ -625,9 +627,11 @@ static void ar9331_read_stats(struct ar9331_sw_port *port)
-> >  	stats->tx_bytes += raw.txbyte;
-> >  
-> >  	stats->rx_packets += raw.rx64byte + raw.rx128byte + raw.rx256byte +
-> > -		raw.rx512byte + raw.rx1024byte + raw.rx1518byte + raw.rxmaxbyte;
-> > +		raw.rx512byte + raw.rx1024byte + raw.rx1518byte +
-> > +		raw.rxmaxbyte - raw.rxpause;
-> >  	stats->tx_packets += raw.tx64byte + raw.tx128byte + raw.tx256byte +
-> > -		raw.tx512byte + raw.tx1024byte + raw.tx1518byte + raw.txmaxbyte;
-> > +		raw.tx512byte + raw.tx1024byte + raw.tx1518byte +
-> > +		raw.txmaxbyte - raw.txpause;
-> 
-> Is there an authoritative source who is able to tell whether rtnl_link_stats64 ::
-> rx_packets and tx_packets should count PAUSE frames or not?
+On 26/06/2022 18:45, Krzysztof Kozlowski wrote:
+> On 26/06/2022 13:46, David Heidelberg wrote:
+>> Convert Qualcomm SCM firmware binding to the yaml format.
+>>
+>> This commit also:
+>>   - adds qcom,scm-mdm9607 into list which has only core clock
+>>   - adds qcom,scm-sm6125, qcom,scm-ipq6018
+>>   - #reset-cells, because the property is already used
+>>
+>> Cc: Robert Marko <robimarko@gmail.com>
+>> Cc: Guru Das Srinagesh <quic_gurus@quicinc.com>
+>> Signed-off-by: David Heidelberg <david@ixit.cz>
+>> ---
+>> v3:
+>>   - add preceding patches for ARM and arm64 adding missing compatible strings
+>>   - extended with missing compatible strings
+>>   - added two additional maintainers, see https://lkml.org/lkml/2022/6/23/1969
+>> v2:
+>>   - changed maintainer to Bjorn
+>>   - document #reset-cells
+>>
+>>   .../devicetree/bindings/firmware/qcom,scm.txt |  57 --------
+>>   .../bindings/firmware/qcom,scm.yaml           | 131 ++++++++++++++++++
+>>   2 files changed, 131 insertions(+), 57 deletions(-)
+>>   delete mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.txt
+>>   create mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.txt b/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+>> deleted file mode 100644
+>> index 0f4e5ab26477..000000000000
+>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+>> +++ /dev/null
+>> @@ -1,57 +0,0 @@
+>> -QCOM Secure Channel Manager (SCM)
+>> -
+>> -Qualcomm processors include an interface to communicate to the secure firmware.
+>> -This interface allows for clients to request different types of actions.  These
+>> -can include CPU power up/down, HDCP requests, loading of firmware, and other
+>> -assorted actions.
+>> -
+>> -Required properties:
+>> -- compatible: must contain one of the following:
+>> - * "qcom,scm-apq8064"
+>> - * "qcom,scm-apq8084"
+>> - * "qcom,scm-ipq4019"
+>> - * "qcom,scm-ipq806x"
+>> - * "qcom,scm-ipq8074"
+>> - * "qcom,scm-mdm9607"
+>> - * "qcom,scm-msm8226"
+>> - * "qcom,scm-msm8660"
+>> - * "qcom,scm-msm8916"
+>> - * "qcom,scm-msm8953"
+>> - * "qcom,scm-msm8960"
+>> - * "qcom,scm-msm8974"
+>> - * "qcom,scm-msm8976"
+>> - * "qcom,scm-msm8994"
+>> - * "qcom,scm-msm8996"
+>> - * "qcom,scm-msm8998"
+>> - * "qcom,scm-sc7180"
+>> - * "qcom,scm-sc7280"
+>> - * "qcom,scm-sdm845"
+>> - * "qcom,scm-sdx55"
+>> - * "qcom,scm-sm6350"
+>> - * "qcom,scm-sm8150"
+>> - * "qcom,scm-sm8250"
+>> - * "qcom,scm-sm8350"
+>> - * "qcom,scm-sm8450"
+>> - and:
+>> - * "qcom,scm"
+>> -- clocks: Specifies clocks needed by the SCM interface, if any:
+>> - * core clock required for "qcom,scm-apq8064", "qcom,scm-msm8660" and
+>> -   "qcom,scm-msm8960"
+>> - * core, iface and bus clocks required for "qcom,scm-apq8084",
+>> -   "qcom,scm-msm8916", "qcom,scm-msm8953", "qcom,scm-msm8974" and "qcom,scm-msm8976"
+>> -- clock-names: Must contain "core" for the core clock, "iface" for the interface
+>> -  clock and "bus" for the bus clock per the requirements of the compatible.
+>> -- qcom,dload-mode: phandle to the TCSR hardware block and offset of the
+>> -		   download mode control register (optional)
+>> -
+>> -Example for MSM8916:
+>> -
+>> -	firmware {
+>> -		scm {
+>> -			compatible = "qcom,msm8916", "qcom,scm";
+>> -			clocks = <&gcc GCC_CRYPTO_CLK> ,
+>> -				 <&gcc GCC_CRYPTO_AXI_CLK>,
+>> -				 <&gcc GCC_CRYPTO_AHB_CLK>;
+>> -			clock-names = "core", "bus", "iface";
+>> -		};
+>> -	};
+>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>> new file mode 100644
+>> index 000000000000..17d06e75b82b
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>> @@ -0,0 +1,131 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/firmware/qcom,scm.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> No quotes here.
+>
+>> +
+>> +title: QCOM Secure Channel Manager (SCM)
+>> +
+>> +description: |
+>> +  Qualcomm processors include an interface to communicate to the secure firmware.
+>> +  This interface allows for clients to request different types of actions.
+>> +  These can include CPU power up/down, HDCP requests, loading of firmware,
+>> +  and other assorted actions.
+>> +
+>> +maintainers:
+>> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+>> +  - Robert Marko <robimarko@gmail.com>
+>> +  - Guru Das Srinagesh <quic_gurus@quicinc.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - enum:
+>> +          - qcom,scm-apq8064
+>> +          - qcom,scm-apq8084
+>> +          - qcom,scm-ipq4019
+>> +          - qcom,scm-ipq6018
+>> +          - qcom,scm-ipq806x
+>> +          - qcom,scm-ipq8074
+>> +          - qcom,scm-mdm9607
+>> +          - qcom,scm-msm8226
+>> +          - qcom,scm-msm8660
+>> +          - qcom,scm-msm8916
+>> +          - qcom,scm-msm8953
+>> +          - qcom,scm-msm8960
+>> +          - qcom,scm-msm8974
+>> +          - qcom,scm-msm8976
+>> +          - qcom,scm-msm8994
+>> +          - qcom,scm-msm8996
+>> +          - qcom,scm-msm8998
+>> +          - qcom,scm-sc7180
+>> +          - qcom,scm-sc7280
+>> +          - qcom,scm-sdm845
+>> +          - qcom,scm-sdx55
+>> +          - qcom,scm-sm6125
+>> +          - qcom,scm-sm6350
+>> +          - qcom,scm-sm8150
+>> +          - qcom,scm-sm8250
+>> +          - qcom,scm-sm8350
+>> +          - qcom,scm-sm8450
+>> +          - qcom,scm-qcs404
+>> +      - const: qcom,scm
+>> +
+>> +  clocks:
+>> +    minItems: 1
+>> +    maxItems: 3
+>> +
+>> +  clock-names: true
+> You should have constraints here - min/maxItems.
+>
+>> +
+>> +  '#reset-cells':
+>> +    const: 1
+>> +
+>> +  qcom,dload-mode:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +    items:
+>> +      - items:
+>> +          - description: phandle to TCSR hardware block
+>> +          - description: offset of the download mode control register
+>> +    description:
+>> +      Should be phandle/offset pair.
+> This description is not helpful. Should be something closer to "TCSR
+> hardware block".
+>
+>> +
+>> +allOf:
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,scm-apq8064
+>> +              - qcom,scm-mdm9607
+>> +              - qcom,scm-msm8660
+>> +              - qcom,scm-msm8960
+>> +    then:
+>> +      properties:
+>> +        clock-names:
+>> +          items:
+>> +            - const: core
+> Missing constraints (maxItems:2) for clocks.
 
-Yes, it will be interesting to know how to proceed with it. For example
-KSZ switch do count pause frame Bytes together will other frames. At
-same time, atheros switch do not count pause frame bytes at all.
+Why 2? I would put `maxItems: 1` there
 
-To make things worse, i can manually send pause frame of any size, so it
-will not be accounted by HW. What ever decision we will made, i will
-need to calculate typical pause frame size and hope it will fit for 90%
-of cases.
 
-Regards,
-Oleksij
+>
+>> +
+>> +      required:
+>> +        - clocks
+>> +        - clock-names
+>> +
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,scm-apq8084
+>> +              - qcom,scm-msm8916
+>> +              - qcom,scm-msm8953
+>> +              - qcom,scm-msm8974
+>> +              - qcom,scm-msm8976
+>> +    then:
+>> +      properties:
+>> +        clock-names:
+>> +          items:
+>> +            - const: core
+>> +            - const: bus
+>> +            - const: iface
+> Missing constraints for clocks.
+>
+>> +
+>> +      required:
+>> +        - clocks
+>> +        - clock-names
+>> +
+>> +required:
+>> +  - compatible
+>> +
+>> +additionalProperties: false
+>> +
+> Best regards,
+> Krzysztof
+
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+David Heidelberg
+Consultant Software Engineer
+
+Matrix: @okias:matrix.org
+

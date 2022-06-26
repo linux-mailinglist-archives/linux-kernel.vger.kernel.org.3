@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A28455AE83
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 05:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A17455AE9A
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 06:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233887AbiFZDaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 23:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
+        id S233895AbiFZDm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 23:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiFZDaB (ORCPT
+        with ESMTP id S233799AbiFZDmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 23:30:01 -0400
-Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D105111804;
-        Sat, 25 Jun 2022 20:29:59 -0700 (PDT)
-IronPort-Data: =?us-ascii?q?A9a23=3AUErOU6OzLIe7VGDvrR0xlcFynXyQoLVcMsFnjC/?=
- =?us-ascii?q?WdQTs0TNx3jxSmmEXW2mCbPuKMWCjftElPYWzoBwPvcWGm99gGjLY11k3ESsS9?=
- =?us-ascii?q?pCt6fd1j6vIF3rLaJWFFSqL1u1GAjX7BJ1yHi+0SiuFaOC79yEmjfjQH9IQNca?=
- =?us-ascii?q?fUsxPbV49IMseoUI78wIJqtYAbemRW2thi/uryyHsEAPNNwpPD44hw/nrRCWDE?=
- =?us-ascii?q?xjFkGhwUlQWPZintbJF/pUfJMp3yaqZdxMUTmTId9NWSdovzJnhlo/Y1xwrTN2?=
- =?us-ascii?q?4kLfnaVBMSbnXVeSMoiMOHfH83V4Z/Wpvuko4HKN0hUN/jzSbn9FzydxLnZKtS?=
- =?us-ascii?q?wY1JbCKk+MYO/VdO3gkY/QYo+KbcBBTtuTWlSUqaUDEyPVjCk4nOpAw/udxHHE?=
- =?us-ascii?q?I/PgZIjkHZ1aIgOfe6KOyTOtxgIIxLNTDOIIZp2EmwTzHZd4mSJnARKOM78JX0?=
- =?us-ascii?q?zoYgdpHFvLTIcEebFJHaBXGfg0KOVoNDp86tPmni2O5cDBCrl+R460t7AD7yA1?=
- =?us-ascii?q?3zaioKtbQc/SUSshP2EWVvGTL+yL+GB5yHN6QxhKX83+0i6nElEvGtCg6fFGj3?=
- =?us-ascii?q?qcyxgTNmSpIU1tLPWZXaMKR0iaWM++z4WRNksb2kZUPyQ=3D=3D?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AEcZ7e6lIXPVwcbq8CPpBP8x2a4zpDfIQ3DAb?=
- =?us-ascii?q?v31ZSRFFG/Fw9vre+MjzsCWYtN9/Yh8dcK+7UpVoLUm8yXcX2/h1AV7BZniEhI?=
- =?us-ascii?q?LAFugLgrcKqAeQeREWmNQ86Y5QN4B6CPDVSWNxlNvG5mCDeOoI8Z2q97+JiI7l?=
- =?us-ascii?q?o0tQcQ=3D=3D?=
-X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
-   d="scan'208";a="126163549"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 26 Jun 2022 11:29:58 +0800
-Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
-        by cn.fujitsu.com (Postfix) with ESMTP id B71594D17168;
-        Sun, 26 Jun 2022 11:29:53 +0800 (CST)
-Received: from G08CNEXCHPEKD08.g08.fujitsu.local (10.167.33.83) by
- G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Sun, 26 Jun 2022 11:29:54 +0800
-Received: from [192.168.122.212] (10.167.226.45) by
- G08CNEXCHPEKD08.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Sun, 26 Jun 2022 11:29:53 +0800
-Subject: Re: [PATCH v3 0/2] RDMA/rxe: Fix no completion event issue
-To:     Yanjun Zhu <yanjun.zhu@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>,
-        "Haakon Bugge" <haakon.bugge@oracle.com>,
-        Cheng Xu <chengyou@linux.alibaba.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "Yang, Xiao" <yangx.jy@fujitsu.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220516015329.445474-1-lizhijian@fujitsu.com>
- <fa9863f0-d42e-f114-5321-108dda270e27@fujitsu.com>
- <3ee9e8d1-01dc-0936-efde-b07482a5e785@linux.dev>
-From:   "Li, Zhijian" <lizhijian@fujitsu.com>
-Message-ID: <83cfdf23-7a2d-0776-85ee-7314187e9980@fujitsu.com>
-Date:   Sun, 26 Jun 2022 11:29:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.1.1
+        Sat, 25 Jun 2022 23:42:25 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E91813D47
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 20:42:24 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so9224876pjl.5
+        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 20:42:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Fm4CiRWTrY1xm9RLX1deAr3n8PdyWY9E+pPn+FMbLvw=;
+        b=kqgu1HSkTJovDW5DnaFLtQo2hjWo5bfFdX8NfAwmudDxCPe0IcT7qw4EmhT4C+R1aS
+         4CCh8u5T2lAdNBqPRkZkY4regcy/lYSx7kRsUzlQIxAzB6u0hCZ6eIAc6MLLzUxrWX1J
+         bBcX8EMJFQo0i+f+u/J/kCqpWlOy6dXkr96xs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Fm4CiRWTrY1xm9RLX1deAr3n8PdyWY9E+pPn+FMbLvw=;
+        b=WSgjl9AGTnlT+ve58jJOBey9SkCcPnnB4U9XkDt43nd8mYdlX26zBcor/Ub91M8V+T
+         GruwcktYZqcn3DFeBskLOx6STHPquSD6sfcauIBfcDpkzf2LWEC9ucePXvNjC/BYv89l
+         UCkt+A0frAyHe6ZEHfzZP3twVYItQSSJ54tLCRmukCJypiGfmyi3C2n+Npk7ZIwq9/mk
+         YbOsyu37I9y7RsVq7nH5pHEuX1Cgv0dx5xbYcjAKEmdBLP2KlcIO7tkxhhSGBS/X/FDq
+         DXKmLWZP8oOFeMSU2JLXAgcjb+wMhFB0TMs5XsBAyAmWsfeiIDkGUfSoOIuUA/nGOem3
+         YW0A==
+X-Gm-Message-State: AJIora8ji6rEvDBqJGqBJfssGuDhTN16M0r6CzEZNNIccoCetFiDHOND
+        RjXTp5wRy4s08Df1biVzSe8/+Q==
+X-Google-Smtp-Source: AGRyM1uQpFBrV3V/C++kV15CCtP/ORtqOCAtfGTrHJrM2kWRw19CERn8AJrxQs/NlhcpTmNLpPLNiw==
+X-Received: by 2002:a17:90b:3b4a:b0:1ed:38a0:d45f with SMTP id ot10-20020a17090b3b4a00b001ed38a0d45fmr8112619pjb.87.1656214944111;
+        Sat, 25 Jun 2022 20:42:24 -0700 (PDT)
+Received: from [192.168.1.67] ([107.126.90.40])
+        by smtp.gmail.com with ESMTPSA id x9-20020aa79a89000000b0052514384f02sm4297737pfi.54.2022.06.25.20.42.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Jun 2022 20:42:23 -0700 (PDT)
+Message-ID: <cc136daa-b820-96c3-b5f6-c2c13690f2e0@chromium.org>
+Date:   Sat, 25 Jun 2022 20:41:59 -0700
 MIME-Version: 1.0
-In-Reply-To: <3ee9e8d1-01dc-0936-efde-b07482a5e785@linux.dev>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v13 4/5] arm64: dts: qcom: sc7180: Add pazquel dts files
 Content-Language: en-US
-X-yoursite-MailScanner-ID: B71594D17168.AC98B
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+References: <20220625022716.683664-1-joebar@chromium.org>
+ <20220624192643.v13.4.I41e2c2dc12961fe000ebc4d4ef6f0bc5da1259ea@changeid>
+ <CAD=FV=X+92d+PvrHENT3g5=hkJ_UaVWHgMHyuvn3erg10DpVAw@mail.gmail.com>
+From:   "Joseph S. Barrera III" <joebar@chromium.org>
+In-Reply-To: <CAD=FV=X+92d+PvrHENT3g5=hkJ_UaVWHgMHyuvn3erg10DpVAw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,62 +81,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/25/22 7:45 AM, Doug Anderson wrote:
+> * If you want to try to do something like this, it should be in a
+> separate patch, probably at the end of the series. Then if people all
+> love it then it can be applied and if people don't like it then the
+> series can simply be applied without it.
 
-on 6/25/2022 8:59 PM, Yanjun Zhu wrote:
->
-> 在 2022/6/7 16:32, lizhijian@fujitsu.com 写道:
->> Hi Json & Yanjun
->>
->>
->> I know there are still a few regressions on RXE, but i do wish you 
->> could take some time to review these *simple and bugfix* patches
->> They are not related to the regressions.
->
-> Now there are some problems from Redhat and other Linux Vendors.
->
-> We had better focus on these problems.
+Right now I don't see *any* device tree files for *any* architecture
+using #ifdef guards. So introducing them and selling them seems like
+more than I want to take on right now, especially because I assume
+they've already been proposed before (given that they are such a common
+idiom in C/C++).
 
-+ Xiao
-I do believe regression is high priority,  and I'm very willing to contribute our efforts to improve the stability of RXE :)
-Yang,Xiao and me tried to reproduce the issues in maillist and we also tried to review the their corresponding patches.
-However actually we didn't find a unified way something like bugzilla to maintain the issues and their status, and most of
-them are not reproduced by our local environment. So it's a bit hard for us to review/verify the patches especially for the
-large/complicate patch if we don't have the use cases.
-
-BTW, IMO we shouldn't stop reviewing other fixes expect recent regressions.
-
-Zhijian
-
->
-> Zhu Yanjun
->
->>
->>
->> Thanks
->> Zhijian
->>
->>
->> On 16/05/2022 09:53, Li Zhijian wrote:
->>> Since RXE always posts RDMA_WRITE successfully, it's observed that
->>> no more completion occurs after a few incorrect posts. Actually, it
->>> will block the polling. we can easily reproduce it by the below 
->>> pattern.
->>>
->>> a. post correct RDMA_WRITE
->>> b. poll completion event
->>> while true {
->>>     c. post incorrect RDMA_WRITE(wrong rkey for example)
->>>     d. poll completion event <<<< block after 2 incorrect RDMA_WRITE 
->>> posts
->>> }
->>>
->>>
->>> Li Zhijian (2):
->>>     RDMA/rxe: Update wqe_index for each wqe error completion
->>>     RDMA/rxe: Generate error completion for error requester QP state
->>>
->>>    drivers/infiniband/sw/rxe/rxe_req.c | 12 +++++++++++-
->>>    1 file changed, 11 insertions(+), 1 deletion(-)
->>>
+So in v14 I have just removed the #ifdef guards.
 
 

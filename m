@@ -2,97 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6995455B081
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EA855B085
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 11:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234091AbiFZI6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 04:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
+        id S234100AbiFZJEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 05:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiFZI6q (ORCPT
+        with ESMTP id S229550AbiFZJEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 04:58:46 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FDAE0F8;
-        Sun, 26 Jun 2022 01:58:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=1JKbLmopt0oRqy5yYNNrI21JPFQkbbU7U2hItfpsuus=; b=bJR8iIVxbtaUXB8NG6eDKqiuVa
-        9xrMJnFB15Amkl8LagOgvijKEaeh9zgoC3mhJBCcBNlf4ZjIxiLGToqMKFmW+xvL1pkeMHdaK4ZL9
-        tFyONmKeM676Dr4TwnFCvsDVXQw1uEDIbBVkcF76otqwqJWfovuEgAvUbIuI+cyDRGNg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1o5O64-008HQM-Mi; Sun, 26 Jun 2022 10:58:24 +0200
-Date:   Sun, 26 Jun 2022 10:58:24 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] net: phy: ax88772a: fix lost pause
- advertisement configuration
-Message-ID: <YrgfsPq4lrYnSStk@lunn.ch>
-References: <20220624075558.3141464-1-o.rempel@pengutronix.de>
- <20220625071731.GA3462@wunner.de>
+        Sun, 26 Jun 2022 05:04:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD8A1EE04
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 02:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656234260;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=S9HmucARGH4U51xZGz2NUlyf6+GRMYlD6t9LRB32Dik=;
+        b=WnJhyS/r9i8FZ1mTHmwT9CDd4guvbDRHp7FwEzmBIXDlZOwEtH8iHsNoUB3zTRMPQ1JKyL
+        +JkXFmkQDu0AhvSK1K4wWhF3lETPAmTswRKwCh4LjmivbmcQhPY6RdJ6pMh7z1JtpXds0L
+        GAhl041V3iK1foOzfNg/W3ciHgjjFmE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-306-lyOwNRFaN5e0Zdk0w4EVVw-1; Sun, 26 Jun 2022 05:04:17 -0400
+X-MC-Unique: lyOwNRFaN5e0Zdk0w4EVVw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 736221C05EB0;
+        Sun, 26 Jun 2022 09:04:17 +0000 (UTC)
+Received: from server.redhat.com (ovpn-12-26.pek2.redhat.com [10.72.12.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2A9DD1131D;
+        Sun, 26 Jun 2022 09:04:14 +0000 (UTC)
+From:   Cindy Lu <lulu@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com, lulu@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/2] vhost: Add rbtree vdpa_mem_tree to saved the counted mem
+Date:   Sun, 26 Jun 2022 17:04:08 +0800
+Message-Id: <20220626090409.1011144-1-lulu@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220625071731.GA3462@wunner.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 09:17:31AM +0200, Lukas Wunner wrote:
-> On Fri, Jun 24, 2022 at 09:55:58AM +0200, Oleksij Rempel wrote:
-> > In case of asix_ax88772a_link_change_notify() workaround, we run soft
-> > reset which will automatically clear MII_ADVERTISE configuration. The
-> > PHYlib framework do not know about changed configuration state of the
-> > PHY, so we need to save and restore all needed configuration registers.
-> [...]
-> >  static void asix_ax88772a_link_change_notify(struct phy_device *phydev)
-> >  {
-> >  	/* Reset PHY, otherwise MII_LPA will provide outdated information.
-> >  	 * This issue is reproducible only with some link partner PHYs
-> >  	 */
-> > -	if (phydev->state == PHY_NOLINK && phydev->drv->soft_reset)
-> > +	if (phydev->state == PHY_NOLINK && phydev->drv->soft_reset) {
-> > +		struct asix_context context;
-> > +
-> > +		asix_context_save(phydev, &context);
-> > +
-> >  		phydev->drv->soft_reset(phydev);
-> > +
-> > +		asix_context_restore(phydev, &context);
-> > +	}
-> >  }
-> 
-> Hm, how about just calling phy_init_hw()?  That will perform a
-> ->soft_reset() and also restore the configuration, including
-> interrupts (which the above does not, but I guess that's
-> irrelevant as long as the driver uses polling).
-> 
-> Does phy_init_hw() do too much or too little compared to the above
-> and is hence not a viable solution?
+We count pinned_vm as follow in vhost-vDPA
 
+lock_limit = rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
+if (npages + atomic64_read(&dev->mm->pinned_vm) > lock_limit) {
+         ret = -ENOMEM;
+         goto unlock;
+}
+This means if we have two vDPA devices for the same VM the pages
+would be counted twice. So we add a tree to save the page that
+counted and we will not count it again.
 
-at803x.c has:
+Add vdpa_mem_tree to saved the mem that already counted.
+use a hlist to saved the root for vdpa_mem_tree.
 
-        /* After changing the smart speed settings, we need to perform a
-         * software reset, use phy_init_hw() to make sure we set the
-         * reapply any values which might got lost during software reset.
-         */
-        if (ret == 1)
-                ret = phy_init_hw(phydev);
+Signed-off-by: Cindy Lu <lulu@redhat.com>
+---
+ drivers/vhost/vhost.c | 63 +++++++++++++++++++++++++++++++++++++++++++
+ drivers/vhost/vhost.h |  1 +
+ 2 files changed, 64 insertions(+)
 
-	Andrew
+diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+index 40097826cff0..4ca8b1ed944b 100644
+--- a/drivers/vhost/vhost.c
++++ b/drivers/vhost/vhost.c
+@@ -32,6 +32,8 @@
+ #include <linux/kcov.h>
+ 
+ #include "vhost.h"
++#include <linux/hashtable.h>
++#include <linux/jhash.h>
+ 
+ static ushort max_mem_regions = 64;
+ module_param(max_mem_regions, ushort, 0444);
+@@ -49,6 +51,14 @@ enum {
+ #define vhost_used_event(vq) ((__virtio16 __user *)&vq->avail->ring[vq->num])
+ #define vhost_avail_event(vq) ((__virtio16 __user *)&vq->used->ring[vq->num])
+ 
++struct vhost_vdpa_rbtree_node {
++	struct hlist_node node;
++	struct rb_root_cached vdpa_mem_tree;
++	struct mm_struct *mm_using;
++};
++static DECLARE_HASHTABLE(vhost_vdpa_rbtree_hlist, 8);
++int vhost_vdpa_rbtree_hlist_status;
++
+ #ifdef CONFIG_VHOST_CROSS_ENDIAN_LEGACY
+ static void vhost_disable_cross_endian(struct vhost_virtqueue *vq)
+ {
+@@ -571,6 +581,51 @@ static void vhost_detach_mm(struct vhost_dev *dev)
+ 	dev->mm = NULL;
+ }
+ 
++struct rb_root_cached *vhost_vdpa_get_mem_tree(struct mm_struct *mm)
++{
++	struct vhost_vdpa_rbtree_node *rbtree_root = NULL;
++	struct rb_root_cached *vdpa_tree;
++	u32 key;
++
++	/* No hased table, init one */
++	if (vhost_vdpa_rbtree_hlist_status == 0) {
++		hash_init(vhost_vdpa_rbtree_hlist);
++		vhost_vdpa_rbtree_hlist_status = 1;
++	}
++
++	key = jhash_1word((u64)mm, JHASH_INITVAL);
++	hash_for_each_possible(vhost_vdpa_rbtree_hlist, rbtree_root, node,
++			       key) {
++		if (rbtree_root->mm_using == mm)
++			return &(rbtree_root->vdpa_mem_tree);
++	}
++	rbtree_root = kmalloc(sizeof(*rbtree_root), GFP_KERNEL);
++	if (!rbtree_root)
++		return NULL;
++	rbtree_root->mm_using = mm;
++	rbtree_root->vdpa_mem_tree = RB_ROOT_CACHED;
++	hash_add(vhost_vdpa_rbtree_hlist, &rbtree_root->node, key);
++	vdpa_tree = &(rbtree_root->vdpa_mem_tree);
++	return vdpa_tree;
++}
++
++void vhost_vdpa_relase_mem_tree(struct mm_struct *mm)
++{
++	struct vhost_vdpa_rbtree_node *rbtree_root = NULL;
++	u32 key;
++
++	key = jhash_1word((u64)mm, JHASH_INITVAL);
++
++	/* No hased table, init one */
++	hash_for_each_possible(vhost_vdpa_rbtree_hlist, rbtree_root, node,
++			       key) {
++		if (rbtree_root->mm_using == mm) {
++			hash_del(&rbtree_root->node);
++			kfree(rbtree_root);
++		}
++	}
++}
++
+ /* Caller should have device mutex */
+ long vhost_dev_set_owner(struct vhost_dev *dev)
+ {
+@@ -605,6 +660,11 @@ long vhost_dev_set_owner(struct vhost_dev *dev)
+ 	err = vhost_dev_alloc_iovecs(dev);
+ 	if (err)
+ 		goto err_cgroup;
++	dev->vdpa_mem_tree = vhost_vdpa_get_mem_tree(dev->mm);
++	if (dev->vdpa_mem_tree == NULL) {
++		err = -ENOMEM;
++		goto err_cgroup;
++	}
+ 
+ 	return 0;
+ err_cgroup:
+@@ -613,6 +673,7 @@ long vhost_dev_set_owner(struct vhost_dev *dev)
+ 		dev->worker = NULL;
+ 	}
+ err_worker:
++	vhost_vdpa_relase_mem_tree(dev->mm);
+ 	vhost_detach_mm(dev);
+ 	dev->kcov_handle = 0;
+ err_mm:
+@@ -710,6 +771,8 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+ 		dev->worker = NULL;
+ 		dev->kcov_handle = 0;
+ 	}
++
++	vhost_vdpa_relase_mem_tree(dev->mm);
+ 	vhost_detach_mm(dev);
+ }
+ EXPORT_SYMBOL_GPL(vhost_dev_cleanup);
+diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+index d9109107af08..84de33de3abf 100644
+--- a/drivers/vhost/vhost.h
++++ b/drivers/vhost/vhost.h
+@@ -160,6 +160,7 @@ struct vhost_dev {
+ 	int byte_weight;
+ 	u64 kcov_handle;
+ 	bool use_worker;
++	struct rb_root_cached *vdpa_mem_tree;
+ 	int (*msg_handler)(struct vhost_dev *dev, u32 asid,
+ 			   struct vhost_iotlb_msg *msg);
+ };
+-- 
+2.34.3
+

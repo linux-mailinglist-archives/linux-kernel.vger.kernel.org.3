@@ -2,132 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7012E55AE43
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 04:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D92055AE5B
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 05:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233787AbiFZCvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 22:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
+        id S233879AbiFZC7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 22:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233776AbiFZCvC (ORCPT
+        with ESMTP id S230439AbiFZC7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 22:51:02 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD31111A2C
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 19:51:00 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-101d96fe0a5so8883137fac.2
-        for <linux-kernel@vger.kernel.org>; Sat, 25 Jun 2022 19:51:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FWO45eIYFBQmwmscjEO8obu5eF0m7SDwa2uDfj2lCtQ=;
-        b=kNeXyQ+bY7oXYtqNCldU5st/KY8gDUnZellzOC74iz6rmOFKtz4QADeBtJLwUwzJxw
-         Vonxli42R0/RnTOoU8eKazgrYfCEFM1qQjVhoc22sjmUlHn+dq57JA12zw3TIxYMZZeR
-         3MoEy3E0WaJuBXHdEN6Pr4Ah6PqpISRRWEc34afLT/AuotYzFL83UD+6Z9v1jq45XrX0
-         jbVut31AyYORTHW+30MS7JcPky2ksQhw+2AA3JC8qf6zZxcHzFKdlNgxUvOLF8vEUfC8
-         LsrfN7j6qSVW28T2LODeOAKn2WOHbDDb32MY+oPsveBT8te16B4yXDw0d1er71lZClWc
-         oLvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FWO45eIYFBQmwmscjEO8obu5eF0m7SDwa2uDfj2lCtQ=;
-        b=mfj69cUbGM4gWwBvQuPhAzkrZ8b8gVDBP1A1C/9ToPMphhlpT6ZWr0jl7raSsIZ6sx
-         EHW7WKt+ou3e4e6gWUs4fs7uWnxZP09ymDzjP5sXYR9AmzbZ2q5huKR0LB1PSxbS97FN
-         RycJPBFn7fy6PwGcmI8UFljUBnvWRSF96a2VxEEv/8kiYkribClDlg16/6zvXf/t1OpL
-         nH/FxTQnCJJ7vNM793HmHAmwhuNqYlofZjeSFRPdlIsYw+Cw6UY4UIbfK+TPfyyLaI+l
-         AXNYTwcTlY7pPqmjjaIYl3FxxQJw0VSxVo1otQT6vD/kzfOoNBLo0GVcbwmOPd26bMsE
-         Skcw==
-X-Gm-Message-State: AJIora+pjOq8lU5Rjj+wB951Cv1TV2JB4rmKBk3PWFVdXxG/NJf2YvGQ
-        oKOZIBGTqBsX3ZRVOsGJoQVOeQ==
-X-Google-Smtp-Source: AGRyM1tAYBW3863GYNQjAozn1ppqNTY1kF4OWUYjYm5F61IMBqhsJcDqOoSxpX4dFnVRkb6IZ8Y8QA==
-X-Received: by 2002:a05:6870:4390:b0:101:ce58:7f53 with SMTP id r16-20020a056870439000b00101ce587f53mr6945293oah.8.1656211859902;
-        Sat, 25 Jun 2022 19:50:59 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id l4-20020a056820030400b0041b87a7a654sm3866487ooe.37.2022.06.25.19.50.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jun 2022 19:50:59 -0700 (PDT)
-Date:   Sat, 25 Jun 2022 21:50:57 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Judy Hsiao <judyhsiao@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        dianders@chromium.org, mka@chromium.org, cychiang@google.com,
-        judyhsiao@google.com, tzungbi@chromium.org, swboyd@chromium.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [v3 0/3] Add dtsi for sc7280 herobrine boards that using rt5682
- codec
-Message-ID: <YrfJkQYFCsxPpUzi@builder.lan>
-References: <20220525014308.1853576-1-judyhsiao@chromium.org>
+        Sat, 25 Jun 2022 22:59:38 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13DE14D0C;
+        Sat, 25 Jun 2022 19:59:37 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id A0AAB320083A;
+        Sat, 25 Jun 2022 22:59:36 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 25 Jun 2022 22:59:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=davidreaver.com;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1656212376; x=1656298776; bh=3I
+        eufCplLlcj9jpQ45a+cMmawOgellICku8X7+NCdvM=; b=C4uaTn0BV58qsBXmJA
+        G31lvN+p1ycP3wMZodrdgPDswfXZCWAeACWdrBa35dvOUMbIho6JAvbdxWylXFK8
+        leTlj/7ZtOxbCjVfMkXNI0ZJMRR+TTsaj02+iIAk53geiVBjgFGFK+ed6ZTmXyK6
+        DEx64LA6fXRaOHL3wLbLR0RtG9OCYs8F5O/SJitzIhGNLvkNjLFDmQlEbCn5ZfLy
+        pS2BN/ugz6aIrs9PugCwXJ6CPFVk1XHoEz9mn5ElKF3GoSmlkwfznCBTTNvSvK3p
+        ataB+R+QpeAnzUqKoE5Mj82olwiACZTYl48EidkJFDD5QapO0zg5LK1u/gfd4ge8
+        rO2w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1656212376; x=1656298776; bh=3IeufCplLlcj9jpQ45a+cMmawOge
+        llICku8X7+NCdvM=; b=sYLCXgmxwM6ntrLu+ozxGwUBrvZN36pfkF/6l8f8Gv3K
+        ddyYOqVWOBbRZ6JtGIUgZIk9QwkjkQTyGCiwFcU3+KnF+gg51zm00nduXBnAXKrq
+        S+6m6R0wxhHp0kZWhi4BjdELxnXq4fsGVKMi05c0k2ffiC0CRlbhXApRdyZ3t3g5
+        JWU4gtc73WLN+LUwRgCWf6wSNsYk8MN/MHNyt1ZnDfaLh4SttBRkK2c7xaA9cNIY
+        DaHxOblwd+/jKffyIqrV3M33cDjuJXnMlQhj6j9/v1NZG0qyxvsOL8jM8HsqyHXg
+        CNYEqmhfsv7jWi1tMlUyg9tHmv3EHmcTQAfF/KQGhA==
+X-ME-Sender: <xms:l8u3YvF0cdHKwL3ixNowYoncBmWbkso2ddD_gTNmP59eHjwA1wEY7g>
+    <xme:l8u3YsVsgTAPPmcvUvVNALQ0P7dzgP2kLWcDyw19yaGlFbN2wxtEdYfbEh31TuaTA
+    9mXrukfQ2htvY02BxY>
+X-ME-Received: <xmr:l8u3YhKm0AGL31IrsYEjsMhqiGkQ7aXFWXGdSQTNXauUSaCkJCa_YyoRmTJtXXSqg9KK38TKxbxLFh5adjY2fg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudegvddgieehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfhgfhffvvefuffgjkfggtgesthdtredttdertdenucfhrhhomhepffgrvhhi
+    ugcutfgvrghvvghruceomhgvsegurghvihgurhgvrghvvghrrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeffiedvtdekgeevhefhudeitdeuvddtgffftedtueelffffkeetgfdtjeev
+    uedvleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmvgesuggrvhhiughrvggrvhgvrhdrtghomh
+X-ME-Proxy: <xmx:l8u3YtFNhjQ_J_NxZ3IRMnX4SbiLdTWdpMKOZYMvdwJeTN8K-cUo_A>
+    <xmx:l8u3YlWsCD6UNREZ_QQEfZuZJpdwbNsopjgJg1NJXlH4FP5XqBzTog>
+    <xmx:l8u3YoNayElDfI9O09C_0W9uTTrGMG3RBIMyyMcK1X7sLg1v2UtGSQ>
+    <xmx:mMu3YrzY0Pu6pLJlsM8CQ59y7FomD8OzaP9vzcbMHD2Pwjxvq-K5pw>
+Feedback-ID: i67e946c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 25 Jun 2022 22:59:34 -0400 (EDT)
+References: <20220626020002.1577101-1-me@davidreaver.com>
+ <a63132e226c2bb7b3f689cb09f7479adea5fe918.camel@perches.com>
+User-agent: mu4e 1.6.11; emacs 28.1
+From:   David Reaver <me@davidreaver.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: fbtft: fix alignment should match open
+ parenthesis
+Date:   Sat, 25 Jun 2022 19:52:01 -0700
+In-reply-to: <a63132e226c2bb7b3f689cb09f7479adea5fe918.camel@perches.com>
+Message-ID: <86a6a0xh7v.fsf@davidreaver.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220525014308.1853576-1-judyhsiao@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 24 May 20:43 CDT 2022, Judy Hsiao wrote:
 
-> Put sound node and lpass_cpu node settings for boards that use rt5682
-> codec in the sc7280-herobrine-audio-rt5682.dtsi as there are different
-> choices of headset codec for herobrine projects. Common audio setting
-> for the internal speaker is in sc7280-herobrine.dtsi.
-> 
-> This series depends on:
-> "Add lpass pin control support for audio on sc7280 based targets" [1]
-> "Add soundcard support for sc7280 based platforms" [2]
-> 
-> [1]
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=638776
+Joe Perches <joe@perches.com> writes:
 
-Afaict this is applied.
+> On Sat, 2022-06-25 at 19:00 -0700, David Reaver wrote:
+>> Fix alignment of this line of code with the previous parenthesis, as
+>> suggested by checkpatch.pl:
+> []
+>> diff --git a/drivers/staging/fbtft/fb_tinylcd.c b/drivers/staging/fbtft/fb_tinylcd.c
+> []
+>> @@ -38,7 +38,7 @@ static int init_display(struct fbtft_par *par)
+>>  	write_reg(par, 0xE5, 0x00);
+>>  	write_reg(par, 0xF0, 0x36, 0xA5, 0x53);
+>>  	write_reg(par, 0xE0, 0x00, 0x35, 0x33, 0x00, 0x00, 0x00,
+>> -		       0x00, 0x35, 0x33, 0x00, 0x00, 0x00);
+>> +		  0x00, 0x35, 0x33, 0x00, 0x00, 0x00);
+>
+> It's probably better to ignore the message in this case as the first
+> argument means something and the second and subsequent are the data
+> being written via a specific macro using NUMARGS.
 
-> [2]
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=643589
-> 
-
-But [2] doesn't compile and hence this series doesn't compile.
-
-Can you please submit a single series with all the audio dts patches you
-want me to apply, where it's possible to run "make dtbs" after every
-single patch in the series.
-
-Thanks,
-Bjorn
-
-> 
-> Changes Since V2:
->     -- Add bias-disable for i2s ws line.
->     -- Fix typo in the commit message.
-> 
-> Changes Since V1:
->     -- Remove sound-dai-cells in sound node.
->     -- Add dependency list.
->     -- Update patch subject.
-> 
-> Judy Hsiao (3):
->   arm64: dts: qcom: sc7280: herobrine: Add pinconf settings for mi2s1
->   arm64: dts: qcom: sc7280: Add sc7280-herobrine-audio-rt5682.dtsi
->   arm64: dts: qcom: sc7280: include sc7280-herobrine-audio-rt5682.dtsi
->     in villager and herobrine-r1
-> 
->  .../qcom/sc7280-herobrine-audio-rt5682.dtsi   | 121 ++++++++++++++++++
->  .../qcom/sc7280-herobrine-herobrine-r1.dts    |   1 +
->  .../dts/qcom/sc7280-herobrine-villager-r0.dts |   1 +
->  .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  15 +++
->  4 files changed, 138 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
-> 
-> -- 
-> 2.36.1.124.g0e6072fb45-goog
-> 
+Thanks for taking a look Joe! That makes sense. I'm new to the kernel
+and running checkpath.pl on staging drivers was suggested as a good
+place to start contributing, but I'll keep a more careful eye out next
+time and not follow checkpath blindly.

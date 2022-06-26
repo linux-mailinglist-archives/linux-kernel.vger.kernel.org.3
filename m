@@ -2,169 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD03755B36C
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 20:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CAEF55B377
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 20:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbiFZSKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 14:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
+        id S231605AbiFZSUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 14:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiFZSKN (ORCPT
+        with ESMTP id S231472AbiFZSUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 14:10:13 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D90A47F
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 11:10:12 -0700 (PDT)
-Received: from dslb-188-104-057-109.188.104.pools.vodafone-ip.de ([188.104.57.109] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1o5Whw-00075l-6b; Sun, 26 Jun 2022 20:10:04 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH] staging: r8188eu: merge two led structs
-Date:   Sun, 26 Jun 2022 20:09:59 +0200
-Message-Id: <20220626181000.287225-1-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
+        Sun, 26 Jun 2022 14:20:02 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB55DFCE
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 11:19:59 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id lw20so14685246ejb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 11:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nnL5Lxxf/SWDHyzp3vUYT4HVrZt90qdFl5DYglMXXuA=;
+        b=QeC+mV/762n9+Kg8dqlJ2cSws1Yi/uDMsCvuWjTePgnggap1WZwqMbXoj4C+piq3Nc
+         67KX/l5gHG5nSQ77D6XSxxQhLFdbpQwmgNiV1gl4zJHKvNETyoxTS3eRHMw8GiJaky0f
+         Wu1UzKzTWhGLL2yIB9daWX/MpGmblYRuiPE6A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nnL5Lxxf/SWDHyzp3vUYT4HVrZt90qdFl5DYglMXXuA=;
+        b=c09sbfDPzGqn1v1lPwDPxPddCr8DvdiHXI16lOxZu5gytD4MzshP15y828/TLL5dVf
+         vU1nd9YoaqvX+R06ezgOee99Dx0iISPtA2A8eI91E7V8TxMqd0M1ODoJuQ6k+X4QOaCW
+         JHAc3dicXZOtlAq5xjTuvBSCjDlIrK/b4FfljywFo8gtPLif43LXLa7Ns2bVB8XDp9LT
+         GgyihiHs6vNk8/QrGZMvzN+Z9Wjiruq+dgyBhv0YaIr+62+74YGPRFJc5DpAUa87DqtA
+         OUAOCHNuzNPq/ObuZjlBAjLwkjQT6NHt+z3/U1z4Ze77kfo+C/rH4DUUfk/wAaVsOw03
+         +UZQ==
+X-Gm-Message-State: AJIora8/2tUsfjviuaqQZ+hrewTVjM3dmjDTkYZiX62iU5bzOciSLoSl
+        NbwQo5TVr119zbF9ftQdXDeYCEbvI0rGdQ9X
+X-Google-Smtp-Source: AGRyM1umyW6l5I1AiDS6vGKbNouFn3r+xmRrpj2cAFJZxeDQ10amKqMSEDTBb6wiwhh5AgGFpPSYLA==
+X-Received: by 2002:a17:906:58d5:b0:722:fc0b:305a with SMTP id e21-20020a17090658d500b00722fc0b305amr8810949ejs.251.1656267597898;
+        Sun, 26 Jun 2022 11:19:57 -0700 (PDT)
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
+        by smtp.gmail.com with ESMTPSA id q22-20020a170906941600b0072660d8d83fsm2020985ejx.188.2022.06.26.11.19.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Jun 2022 11:19:56 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id i67-20020a1c3b46000000b003a03567d5e9so4538239wma.1
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 11:19:56 -0700 (PDT)
+X-Received: by 2002:a05:600c:681:b0:3a0:2da6:d173 with SMTP id
+ a1-20020a05600c068100b003a02da6d173mr15489119wmn.68.1656267595975; Sun, 26
+ Jun 2022 11:19:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAK7LNARjq-x+8rdXfkVt2YEoJsjnZNntxurYTwOqEaAX71m04w@mail.gmail.com>
+In-Reply-To: <CAK7LNARjq-x+8rdXfkVt2YEoJsjnZNntxurYTwOqEaAX71m04w@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 26 Jun 2022 11:19:40 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgcsUU-TNoLS7Q6YF3RCSVAKwNM7gFOwqnPQTiU_oGEWA@mail.gmail.com>
+Message-ID: <CAHk-=wgcsUU-TNoLS7Q6YF3RCSVAKwNM7gFOwqnPQTiU_oGEWA@mail.gmail.com>
+Subject: Re: [GIT PULL] Kbuild fixes for v5.19-rc4
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The led layer uses struct led_priv and struct LED_871x to store state
-info. Merge the two structs. Move LED_871x's components into led_priv.
+On Sat, Jun 25, 2022 at 3:16 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Please pull a couple of Kbuild fixes.
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/core/rtw_led.c    | 27 ++++++++++-------------
- drivers/staging/r8188eu/include/rtw_led.h |  9 +++-----
- 2 files changed, 15 insertions(+), 21 deletions(-)
+Masahiro, I already complained about this once:
 
-diff --git a/drivers/staging/r8188eu/core/rtw_led.c b/drivers/staging/r8188eu/core/rtw_led.c
-index 25989acf5259..d5c6c5e29621 100644
---- a/drivers/staging/r8188eu/core/rtw_led.c
-+++ b/drivers/staging/r8188eu/core/rtw_led.c
-@@ -16,7 +16,7 @@
- 	(l)->CurrLedState == LED_BLINK_WPS_STOP || \
- 	(l)->bLedWPSBlinkInProgress)
- 
--static void ResetLedStatus(struct LED_871x *pLed)
-+static void ResetLedStatus(struct led_priv *pLed)
- {
- 	pLed->CurrLedState = RTW_LED_OFF; /*  Current LED state. */
- 	pLed->bLedOn = false; /*  true if LED is ON, false if LED is OFF. */
-@@ -32,7 +32,7 @@ static void ResetLedStatus(struct LED_871x *pLed)
- 	pLed->bLedScanBlinkInProgress = false;
- }
- 
--static void SwLedOn(struct adapter *padapter, struct LED_871x *pLed)
-+static void SwLedOn(struct adapter *padapter, struct led_priv *pLed)
- {
- 	u8	LedCfg;
- 	int res;
-@@ -48,7 +48,7 @@ static void SwLedOn(struct adapter *padapter, struct LED_871x *pLed)
- 	pLed->bLedOn = true;
- }
- 
--static void SwLedOff(struct adapter *padapter, struct LED_871x *pLed)
-+static void SwLedOff(struct adapter *padapter, struct led_priv *pLed)
- {
- 	u8	LedCfg;
- 	int res;
-@@ -75,7 +75,7 @@ static void SwLedOff(struct adapter *padapter, struct LED_871x *pLed)
- static void blink_work(struct work_struct *work)
- {
- 	struct delayed_work *dwork = to_delayed_work(work);
--	struct LED_871x *pLed = container_of(dwork, struct LED_871x, blink_work);
-+	struct led_priv *pLed = container_of(dwork, struct led_priv, blink_work);
- 	struct adapter *padapter = pLed->padapter;
- 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
- 
-@@ -182,35 +182,32 @@ static void blink_work(struct work_struct *work)
- void rtl8188eu_InitSwLeds(struct adapter *padapter)
- {
- 	struct led_priv *pledpriv = &padapter->ledpriv;
--	struct LED_871x *pLed = &pledpriv->SwLed0;
- 
--	pLed->padapter = padapter;
--	ResetLedStatus(pLed);
--	INIT_DELAYED_WORK(&pLed->blink_work, blink_work);
-+	pledpriv->padapter = padapter;
-+	ResetLedStatus(pledpriv);
-+	INIT_DELAYED_WORK(&pledpriv->blink_work, blink_work);
- }
- 
- void rtl8188eu_DeInitSwLeds(struct adapter *padapter)
- {
- 	struct led_priv	*ledpriv = &padapter->ledpriv;
--	struct LED_871x *pLed = &ledpriv->SwLed0;
- 
--	cancel_delayed_work_sync(&pLed->blink_work);
--	ResetLedStatus(pLed);
--	SwLedOff(padapter, pLed);
-+	cancel_delayed_work_sync(&ledpriv->blink_work);
-+	ResetLedStatus(ledpriv);
-+	SwLedOff(padapter, ledpriv);
- }
- 
- void rtw_led_control(struct adapter *padapter, enum LED_CTL_MODE LedAction)
- {
--	struct led_priv *ledpriv = &padapter->ledpriv;
-+	struct led_priv *pLed = &padapter->ledpriv;
- 	struct registry_priv *registry_par;
--	struct LED_871x *pLed = &ledpriv->SwLed0;
- 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
- 
- 	if ((padapter->bSurpriseRemoved) || (padapter->bDriverStopped) ||
- 	    (!padapter->hw_init_completed))
- 		return;
- 
--	if (!ledpriv->bRegUseLed)
-+	if (!pLed->bRegUseLed)
- 		return;
- 
- 	registry_par = &padapter->registrypriv;
-diff --git a/drivers/staging/r8188eu/include/rtw_led.h b/drivers/staging/r8188eu/include/rtw_led.h
-index 2c14cb23d9ad..d6b0c1c2f9a2 100644
---- a/drivers/staging/r8188eu/include/rtw_led.h
-+++ b/drivers/staging/r8188eu/include/rtw_led.h
-@@ -37,9 +37,11 @@ enum LED_STATE_871x {
- 	LED_BLINK_RUNTOP = 13, /*  Customized for RunTop */
- };
- 
--struct LED_871x {
-+struct led_priv {
- 	struct adapter *padapter;
- 
-+	bool bRegUseLed;
-+
- 	enum LED_STATE_871x	CurrLedState; /*  Current LED state. */
- 	enum LED_STATE_871x	BlinkingLedState; /*  Next state for blinking,
- 				   * either RTW_LED_ON or RTW_LED_OFF are. */
-@@ -58,11 +60,6 @@ struct LED_871x {
- 	struct delayed_work blink_work;
- };
- 
--struct led_priv{
--	struct LED_871x			SwLed0;
--	bool	bRegUseLed;
--};
--
- void rtl8188eu_InitSwLeds(struct adapter *padapter);
- void rtl8188eu_DeInitSwLeds(struct adapter *padapter);
- 
--- 
-2.30.2
+    Section mismatch in reference from the variable .. declared __init
 
+and now you re-introduced this sneakily by just putting it in another place.
+
+I told you last time that you need to *FIX* these things before adding
+the warning, instead of adding a warning and then waiting for others
+to fix them.
+
+Yes, it's fixing an earlier mistake, but that earlier mistake is over
+a decade old by now.
+
+Now, the only warning that seems to show up for me is about
+tick_nohz_full_setup. Which is only called from housekeeping_setup()
+in kernel/sched/isolation.c if I grepped correctly.
+
+And that seems only ever built-in as far as I can tell, so the whole
+export seems pointless, and the fix is presumably to remove the
+export_SYMBOL_GPL entirely.
+
+So it seems fixable.
+
+But I'm upset about this sneaking in when we _talked_ about this issue earlier.
+
+Paul - that export was added by commit ae9e557b5be2 ("time: Export
+tick start/stop functions for rcutorture"), and it seems to have been
+bogus even at that time.
+
+              Linus

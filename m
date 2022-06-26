@@ -2,111 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B227C55AEFB
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 06:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A1055AF33
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 06:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233968AbiFZEpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 00:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S233978AbiFZEpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 00:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233773AbiFZEpM (ORCPT
+        with ESMTP id S233799AbiFZEpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 00:45:12 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F35113E36;
-        Sat, 25 Jun 2022 21:45:12 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3178acf2a92so57913717b3.6;
-        Sat, 25 Jun 2022 21:45:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mfondrNowJy2MyDkZH1tseDvQbcDiYCbfVByxBjiMa8=;
-        b=Clz/bnpubUuCNK5azdaWhznKmfR+aDJZJCingFwsA19xbp8jHaox0rqFxqXxvWozY5
-         5FnmHwuxopztUt0Ezev/LszePHdlvV41NzFTcvSkKy48ER1Jw5qRcKAC/scPW/CW7/h5
-         8WDCKE3vd6s6BbKLSQYuIcNV3LwKV16CrLGYTGIDHajGex3MVCt4XkN60RvZxQe+L63G
-         Vj7uxs328NBMqhuWbBJwgcjMneBw3fJk4ABpYy3bkx7AzJUc2yo7ivmxc+rVF7gJjcg8
-         X7YDz8+mr+/E6/RP1kG64TVFLC6E5FSPHY7mwC4LXmQGAMqws4+vsaSOU47+kp5vzxGO
-         uxyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mfondrNowJy2MyDkZH1tseDvQbcDiYCbfVByxBjiMa8=;
-        b=NqcUFtfV0qQ05VlK2rkQFqmQczNNjgObSMbbz9rq1Q5dTlM879bDWMlxph7XNVNZA+
-         00yazCfECGhH9+emrjFPgJnfCdm9CJRNhcx8DNjiKNymMaY9Zb+cYdVjFP3iv2oypwZg
-         y3IaCXE7PlazrVrdOREac9B2HoP/DS91a2rDYv/QmYQB2LCmk1Atx1kVFk9KWsiVddKy
-         DROqZIVfRh0/GKfDRun+/SaHVSEelKlNbakphHuiXTSKgah0rMIwLvt8oRZHhFSEprfH
-         IE+vDuTmWeThZMuKF53FS+Q1CrOPwSZ5obH7FRE4Cgd2u2QD/2tqdtDR1X6GN4kXISnJ
-         3vEA==
-X-Gm-Message-State: AJIora9y5nlUZAoHDt7KV9Pg75nbuuwK4Cu9nFbmASF2epFHO4g/psZ/
-        uVlotLc7nC7lPbaS3QM617QMCICeYgJVrOA1Pfs=
-X-Google-Smtp-Source: AGRyM1tQKA39vvEyfFnxgVUxhLji4zj6DOAxlGntbkdgcS/NyCI5P0h8PG9pJg9IsmpRL53jPWTDf8Ws+9yUUU+Lf54=
-X-Received: by 2002:a81:1315:0:b0:318:1841:8060 with SMTP id
- 21-20020a811315000000b0031818418060mr7938630ywt.452.1656218711305; Sat, 25
- Jun 2022 21:45:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220623074005.259309-1-ztong0001@gmail.com> <YrQw1CVJfIS18CNo@electric-eye.fr.zoreil.com>
- <20220624114121.2c95c3aa@kernel.org>
-In-Reply-To: <20220624114121.2c95c3aa@kernel.org>
-From:   Tong Zhang <ztong0001@gmail.com>
-Date:   Sat, 25 Jun 2022 21:45:00 -0700
-Message-ID: <CAA5qM4Aq_2HSxCgaHUgZX9C3E0OCPT4tN-61-MZP1iLXCbF-=Q@mail.gmail.com>
-Subject: Re: [PATCH] epic100: fix use after free on rmmod
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Francois Romieu <romieu@fr.zoreil.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Yilun Wu <yiluwu@cs.stonybrook.edu>
+        Sun, 26 Jun 2022 00:45:49 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8173D14D22;
+        Sat, 25 Jun 2022 21:45:47 -0700 (PDT)
+X-UUID: 3dfabf3dbdca40c19f4dc6353c3e88cf-20220626
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:a48a8ce6-fead-4dcf-96cb-2ef86e1104b9,OB:20,L
+        OB:50,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:45
+X-CID-INFO: VERSION:1.1.6,REQID:a48a8ce6-fead-4dcf-96cb-2ef86e1104b9,OB:20,LOB
+        :50,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:cb4483ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:bc5cf8b9677e,Recheck:0,SF:28|17|19|48,TC:nil,Content:-5,EDM:-3,IP:nil,
+        URL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 3dfabf3dbdca40c19f4dc6353c3e88cf-20220626
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <guodong.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 958410682; Sun, 26 Jun 2022 12:45:43 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Sun, 26 Jun 2022 12:45:42 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 26 Jun 2022 12:45:41 +0800
+Message-ID: <59308e27c021de6bed80d6986bc2766f2a73a739.camel@mediatek.com>
+Subject: Re: [PATCH v2 1/5] pinctrl: mediatek: add generic driving setup
+ property on mt8192
+From:   Guodong Liu <guodong.liu@mediatek.com>
+To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
+CC:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Sun, 26 Jun 2022 12:45:41 +0800
+In-Reply-To: <20220624155224.lizeca5rnruhihdn@notapiano>
+References: <20220624133700.15487-1-guodong.liu@mediatek.com>
+         <20220624133700.15487-2-guodong.liu@mediatek.com>
+         <20220624155224.lizeca5rnruhihdn@notapiano>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 11:41 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Thu, 23 Jun 2022 11:22:28 +0200 Francois Romieu wrote:
-> > Tong Zhang <ztong0001@gmail.com> :
-> > > epic_close() calls epic_rx() and uses dma buffer, but in epic_remove_one()
-> > > we already freed the dma buffer. To fix this issue, reorder function calls
-> > > like in the .probe function.
-> > >
-> > > BUG: KASAN: use-after-free in epic_rx+0xa6/0x7e0 [epic100]
-> > > Call Trace:
-> > >  epic_rx+0xa6/0x7e0 [epic100]
-> > >  epic_close+0xec/0x2f0 [epic100]
-> > >  unregister_netdev+0x18/0x20
-> > >  epic_remove_one+0xaa/0xf0 [epic100]
-> > >
-> > > Fixes: ae150435b59e ("smsc: Move the SMC (SMSC) drivers")
-> > > Reported-by: Yilun Wu <yiluwu@cs.stonybrook.edu>
-> > > Signed-off-by: Tong Zhang <ztong0001@gmail.com>
-> >
-> > The "Fixes:" tag is a bit misleading: this code path predates the move
-> > by several years. Ignoring pci_* vs dma_* API changes, this is pre-2005
-> > material.
->
-> Yeah, please find the correct Fixes tag.
->
-> > Reviewed-by: Francois Romieu <romieu@fr.zoreil.com>
->
-> Keep Francois' tag when reposting.
+-----Original Message-----
+From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+To: Guodong Liu <guodong.liu@mediatek.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Rob Herring <
+robh+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, Sean
+Wang <sean.wang@kernel.org>, Sean Wang <sean.wang@mediatek.com>,
+Zhiyong Tao <zhiyong.tao@mediatek.com>, linux-gpio@vger.kernel.org, 
+devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, 
+Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v2 1/5] pinctrl: mediatek: add generic driving
+setup property on mt8192
+Date: Fri, 24 Jun 2022 11:52:24 -0400
 
-Looks like drivers/net/ethernet/smsc/epic100.c is renamed from
-drivers/net/epic100.c
-and this bug has been around since the very initial commit. What would
-you suggest ?
-Remove the fix tag or use
-Fix: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Hi Guodong,
+
+please see comments below.
+
+On Fri, Jun 24, 2022 at 09:36:56PM +0800, Guodong Liu wrote:
+> 1. The dt-binding expects that drive-strength arguments be passed
+> in mA, but the driver was expecting raw values. And that this
+> commit changes the driver so that it is aligned with the binding.
+> 2. This commit provides generic driving setup, which support
+> 2/4/6/8/10/12/14/16mA driving, original driver just set raw data
+> setup setting when use drive-strength property.
+
+This commit message is a bit confusing, I suggest using the following
+commit
+message instead:
+
+The dt-binding expects the drive-strength arguments to be passed in mA,
+but the
+driver was using callbacks that expect raw values instead. Change the
+callbacks
+for the ones that operate on mA values, so that the driver is in
+accordance to
+the dt-binding.
+
+The drive-strength property requiring values in mA is the standard and
+other
+MediaTek SoCs of the same generation already do the same, so this
+change avoids
+mt8192 having a non-standard property.
+
+There are no current upstream users of this driver, so this change
+doesn't cause
+any regression.
+
+Fixed in next patch, thanks!
+
+> 
+> Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
+
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+Thanks,
+Nícolas
+

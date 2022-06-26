@@ -2,77 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5389455AE64
-	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 05:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111E655AE6C
+	for <lists+linux-kernel@lfdr.de>; Sun, 26 Jun 2022 05:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbiFZDBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 25 Jun 2022 23:01:55 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:47530 "EHLO
-        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233777AbiFZDBx (ORCPT
+        id S233796AbiFZDMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 25 Jun 2022 23:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229801AbiFZDMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 25 Jun 2022 23:01:53 -0400
-Received: from [IPV6:2620:137:e001:0:c663:d265:4cca:c19] (unknown [IPv6:2620:137:e001:0:c663:d265:4cca:c19])
-        by mail.monkeyblade.net (Postfix) with ESMTPSA id 2B39B837F015;
-        Sat, 25 Jun 2022 20:01:51 -0700 (PDT)
-Message-ID: <12417afa-331b-e0f6-a3b0-19623e38590b@eaglescrag.net>
-Date:   Sat, 25 Jun 2022 20:01:50 -0700
+        Sat, 25 Jun 2022 23:12:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D25140B1;
+        Sat, 25 Jun 2022 20:12:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13B0C6100D;
+        Sun, 26 Jun 2022 03:12:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED4FC341C6;
+        Sun, 26 Jun 2022 03:12:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656213127;
+        bh=AXeVf6h4Nfj3KQurMLHUyo1k4lOvkrxgNJByd+BctN8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ZtsvnImYwEdjJiQM1l8to5/itB6yIc3gXnJs8k7zU2O53mqc/AsULSi5zmVdaDTFT
+         Y+g5JXhviFJARuXdSIOmHlwMWZ39MdkFjQsYvyNGpxxVfSCLP1rT7asvMZKmdVbT2f
+         NOHZTrqvdpBYKopoosM7oClmilddej4yspImPYwScim3DekBwaz93za8WHbgMbXxSn
+         1hzTZBYig/4OF6w2Y9z84pO2pjKyl++VRWQsF1RxiakHRZPb2bJEXKWQa9J0ZrraQ7
+         ac7T5XpATFAacGuXJpVsHjig5xaWOCilulkY4ySxS4jpNv0xueUXfSG4XnUonjmotN
+         GTgCHTmn3hwAA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E111E5C0260; Sat, 25 Jun 2022 20:12:06 -0700 (PDT)
+Date:   Sat, 25 Jun 2022 20:12:06 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
+        vineeth@bitbyteword.org
+Subject: Re: [PATCH v2 0/8] Implement call_rcu_lazy() and miscellaneous fixes
+Message-ID: <20220626031206.GJ1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220622225102.2112026-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: possible trace_printk() bug in v5.19-rc1
-Content-Language: en-MW
-From:   John 'Warthog9' Hawley <warthog9@eaglescrag.net>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Chuck Lever III <chuck.lever@oracle.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <F6C267B0-83EA-4151-A4EC-44482AC52C59@oracle.com>
- <20220616113400.15335d91@gandalf.local.home>
- <E309A098-DA06-490D-A75C-E6295C2987B9@oracle.com>
- <20220617155019.373adda7@gandalf.local.home>
- <3BAD2CD9-3A34-4140-A28C-0FE798B83C41@oracle.com>
- <355D2478-33D3-4046-8422-E512F42C51BC@oracle.com>
- <20220624190819.59df11d3@rorschach.local.home>
- <3EB14A14-767B-4B66-9B28-97DDE7EECFD2@oracle.com>
- <20220625134552.08c1a23a@rorschach.local.home>
- <0bf1d366-348c-0f91-8f0a-fc9cc6228783@kernel.org>
-In-Reply-To: <0bf1d366-348c-0f91-8f0a-fc9cc6228783@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Sat, 25 Jun 2022 20:01:51 -0700 (PDT)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622225102.2112026-1-joel@joelfernandes.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/25/22 11:28, John 'Warthog9' Hawley wrote:
+On Wed, Jun 22, 2022 at 10:50:53PM +0000, Joel Fernandes (Google) wrote:
 > 
-> On 6/25/2022 10:45 AM, Steven Rostedt wrote:
->> On Sat, 25 Jun 2022 17:15:07 +0000
->> Chuck Lever III <chuck.lever@oracle.com> wrote:
->>
->>> [root@manet ~]# cat /etc/redhat-release
->>> Fedora release 35 (Thirty Five)
->>> [root@manet ~]# trace-cmd version
->>>
->>> trace-cmd version 2.9.2 (not-a-git-repo)
->>
->> Ug, that's very old. Fedora should be shipping 3.1.1 soon.
->>
->> Right John? ;-)
+> Hello!
+> Please find the next improved version of call_rcu_lazy() attached.  The main
+> difference between the previous version is that it is now using bypass lists,
+> and thus handling rcu_barrier() and hotplug situations, with some small changes
+> to those parts.
 > 
-> I've got 3.0.2 in there right now (~3mo old) and I've started the builds 
-> on the latest tags (REALLY need to automate this!), probably have latest 
-> tags built/packaged by tonight.
+> I also don't see the TREE07 RCU stall from v1 anymore.
 > 
-> https://copr.fedorainfracloud.org/coprs/warthog9/tracing/
+> In the v1, we some numbers below (testing on v2 is in progress). Rushikesh,
+> feel free to pull these patches into your tree. Just to note, you will also
+> need to pull the call_rcu_lazy() user patches from v1. I have dropped in this
+> series, just to make the series focus on the feature code first.
+> 
+> Following are power savings we see on top of RCU_NOCB_CPU on an Intel platform.
+> The observation is that due to a 'trickle down' effect of RCU callbacks, the
+> system is very lightly loaded but constantly running few RCU callbacks very
+> often. This confuses the power management hardware that the system is active,
+> when it is in fact idle.
+> 
+> For example, when ChromeOS screen is off and user is not doing anything on the
+> system, we can see big power savings.
+> Before:
+> Pk%pc10 = 72.13
+> PkgWatt = 0.58
+> CorWatt = 0.04
+> 
+> After:
+> Pk%pc10 = 81.28
+> PkgWatt = 0.41
+> CorWatt = 0.03
 
-As, vaguely, promised this morning trace-cmd, and all libraries needed 
-for everything but centos-9-stream x86_64 (it's having some fit about 
-not finding trace_seq_vprintf and trace_seq_printf, which is weird that 
-it finds it on every other build...)
+So not quite 30% savings in power at the package level?  Not bad at all!
 
-https://copr.fedorainfracloud.org/coprs/warthog9/tracing/build/4564577/
+> Further, when ChromeOS screen is ON but system is idle or lightly loaded, we
+> can see that the display pipeline is constantly doing RCU callback queuing due
+> to open/close of file descriptors associated with graphics buffers. This is
+> attributed to the file_free_rcu() path which this patch series also touches.
+> 
+> This patch series adds a simple but effective, and lockless implementation of
+> RCU callback batching. On memory pressure, timeout or queue growing too big, we
+> initiate a flush of one or more per-CPU lists.
 
-so dnf copr enable warthog9/tracing and dnf update should snag 3.1.1
+It is no longer lockless, correct?  Or am I missing something subtle?
 
-- John 'Warthog9' Hawley
+Full disclosure: I don't see a whole lot of benefit to its being lockless.
+But truth in advertising!  ;-)
+
+> Similar results can be achieved by increasing jiffies_till_first_fqs, however
+> that also has the effect of slowing down RCU. Especially I saw huge slow down
+> of function graph tracer when increasing that.
+> 
+> One drawback of this series is, if another frequent RCU callback creeps up in
+> the future, that's not lazy, then that will again hurt the power. However, I
+> believe identifying and fixing those is a more reasonable approach than slowing
+> RCU down for the whole system.
+
+Very good!  I have you down as the official call_rcu_lazy() whack-a-mole
+developer.  ;-)
+
+							Thanx, Paul
+
+> Disclaimer: I have intentionally not CC'd other subsystem maintainers (like
+> net, fs) to keep noise low and will CC them in the future after 1 or 2 rounds
+> of review and agreements.
+> 
+> Joel Fernandes (Google) (7):
+>   rcu: Introduce call_rcu_lazy() API implementation
+>   fs: Move call_rcu() to call_rcu_lazy() in some paths
+>   rcu/nocb: Add option to force all call_rcu() to lazy
+>   rcu/nocb: Wake up gp thread when flushing
+>   rcuscale: Add test for using call_rcu_lazy() to emulate kfree_rcu()
+>   rcu/nocb: Rewrite deferred wake up logic to be more clean
+>   rcu/kfree: Fix kfree_rcu_shrink_count() return value
+> 
+> Vineeth Pillai (1):
+>   rcu: shrinker for lazy rcu
+> 
+>  fs/dcache.c                   |   4 +-
+>  fs/eventpoll.c                |   2 +-
+>  fs/file_table.c               |   2 +-
+>  fs/inode.c                    |   2 +-
+>  include/linux/rcu_segcblist.h |   1 +
+>  include/linux/rcupdate.h      |   6 +
+>  kernel/rcu/Kconfig            |   8 ++
+>  kernel/rcu/rcu.h              |   8 ++
+>  kernel/rcu/rcu_segcblist.c    |  19 +++
+>  kernel/rcu/rcu_segcblist.h    |  24 ++++
+>  kernel/rcu/rcuscale.c         |  64 +++++++++-
+>  kernel/rcu/tree.c             |  35 +++++-
+>  kernel/rcu/tree.h             |  10 +-
+>  kernel/rcu/tree_nocb.h        | 217 +++++++++++++++++++++++++++-------
+>  14 files changed, 345 insertions(+), 57 deletions(-)
+> 
+> -- 
+> 2.37.0.rc0.104.g0611611a94-goog
+> 

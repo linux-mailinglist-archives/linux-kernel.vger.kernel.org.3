@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1EF55CC85
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED36F55C713
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235430AbiF0L3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S237096AbiF0Lnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235242AbiF0L2s (ORCPT
+        with ESMTP id S236421AbiF0LlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:28:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41876587;
-        Mon, 27 Jun 2022 04:27:27 -0700 (PDT)
+        Mon, 27 Jun 2022 07:41:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0A3CFB;
+        Mon, 27 Jun 2022 04:35:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24796B81123;
-        Mon, 27 Jun 2022 11:27:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5825BC341C8;
-        Mon, 27 Jun 2022 11:27:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB8EF60920;
+        Mon, 27 Jun 2022 11:35:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C159FC341C7;
+        Mon, 27 Jun 2022 11:35:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329244;
-        bh=lkdp9TG2/+HjYn1m8Nr4MRQIkow3L5qBfoi9/2E0Trc=;
+        s=korg; t=1656329751;
+        bh=Zn0BYp46A4dFER39cxzvOe3JLaYepvkr5CLe4WXSL18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sO2jvOmaDBnEPtHCa9NqK2jLz7uvuzbAB3MrahEQ3Vsq94qagI2YxdR/6DRv4vIbH
-         zpmgSf7y65JTfoA5OoV3F3laToYcVW2DivUR4lpdRKoDFgWyFiZiBZCrvVOD9OuXeK
-         GrdvPml4hDpjUyMa5ixboAKpKWbJ+I7wUKxX5YyU=
+        b=lOcvQ0oy4pd592YKpYmT/pO9PrnqVn+haNk3Qn73wEQQrwtD4G47+kDRrTl4AIwEO
+         eKWUaQ2CsY2YVlIIi6uPSV0vMg+31XaqNm0xK6cby2JwoNrf24h4s/TsqwhDq9thHh
+         5zkDTQB5O3FOz2RiOxGL/6DGxk2aMZ7FFyX6W8yc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH 5.10 099/102] modpost: fix section mismatch check for exported init/exit sections
+        stable@vger.kernel.org,
+        Olivier Moysan <olivier.moysan@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.15 103/135] iio: adc: stm32: fix maximum clock rate for stm32mp15x
 Date:   Mon, 27 Jun 2022 13:21:50 +0200
-Message-Id: <20220627111936.402838961@linuxfoundation.org>
+Message-Id: <20220627111941.145240102@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +57,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Olivier Moysan <olivier.moysan@foss.st.com>
 
-commit 28438794aba47a27e922857d27b31b74e8559143 upstream.
+commit 990539486e7e311fb5dab1bf4d85d1a8973ae644 upstream.
 
-Since commit f02e8a6596b7 ("module: Sort exported symbols"),
-EXPORT_SYMBOL* is placed in the individual section ___ksymtab(_gpl)+<sym>
-(3 leading underscores instead of 2).
+Change maximum STM32 ADC input clock rate to 36MHz, as specified
+in STM32MP15x datasheets.
 
-Since then, modpost cannot detect the bad combination of EXPORT_SYMBOL
-and __init/__exit.
-
-Fix the .fromsec field.
-
-Fixes: f02e8a6596b7 ("module: Sort exported symbols")
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Fixes: d58c67d1d851 ("iio: adc: stm32-adc: add support for STM32MP1")
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Link: https://lore.kernel.org/r/20220609095234.375925-1-olivier.moysan@foss.st.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/mod/modpost.c |    2 +-
+ drivers/iio/adc/stm32-adc-core.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1119,7 +1119,7 @@ static const struct sectioncheck section
- },
- /* Do not export init/exit functions or data */
- {
--	.fromsec = { "__ksymtab*", NULL },
-+	.fromsec = { "___ksymtab*", NULL },
- 	.bad_tosec = { INIT_SECTIONS, EXIT_SECTIONS, NULL },
- 	.mismatch = EXPORT_TO_INIT_EXIT,
- 	.symbol_white_list = { DEFAULT_SYMBOL_WHITE_LIST, NULL },
+--- a/drivers/iio/adc/stm32-adc-core.c
++++ b/drivers/iio/adc/stm32-adc-core.c
+@@ -809,7 +809,7 @@ static const struct stm32_adc_priv_cfg s
+ static const struct stm32_adc_priv_cfg stm32mp1_adc_priv_cfg = {
+ 	.regs = &stm32h7_adc_common_regs,
+ 	.clk_sel = stm32h7_adc_clk_sel,
+-	.max_clk_rate_hz = 40000000,
++	.max_clk_rate_hz = 36000000,
+ 	.has_syscfg = HAS_VBOOSTER | HAS_ANASWVDD,
+ 	.num_irqs = 2,
+ };
 
 

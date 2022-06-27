@@ -2,69 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5624055CC9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D57255E285
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233538AbiF0Kan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S233510AbiF0KbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbiF0Kal (ORCPT
+        with ESMTP id S232718AbiF0Ka7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:30:41 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BA86261;
-        Mon, 27 Jun 2022 03:30:39 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id 89so14165695qvc.0;
-        Mon, 27 Jun 2022 03:30:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cZfAPaEvqTx34DnDPzb0WJHLTgfejH45gbcwnO/wivg=;
-        b=G2l+hKTC3b/3VUqvEpG03cbAWnBPUCxVt0TElZyrlXe9sLwg2fGZr+Xbz7KNps23gX
-         FUHqn/6nL6V+5PnjpOPvbU4+0MmRB82Um2XU44C0uYkdL/cw5EC6nUECFdLsKTNCSEIL
-         TYiO7Zif4ZqUm3feIrFdS5VmRvbQcaaCtvnT2zdYqNg6RoAbf/rb6RLjUw4wzHMJvJJo
-         FmbQ93mhlFAyaXF901/8R+aOozJuguPprdQpTYaYCVaftU/st+gZ+DjZ4DzPsSSYEcVo
-         KBQi1zWKuk77SiLYtPDPK8cAa3OTSPMfBFrqeaP0+noIs6TO5oysc1G4glI+yYaHj6nx
-         GIvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cZfAPaEvqTx34DnDPzb0WJHLTgfejH45gbcwnO/wivg=;
-        b=YcpWuWmC7AWCvvtsu8YSe61YPS/2vBbs9ohJQcxdK7gO9m/daWje/8CFZ6UD0uuIS/
-         TqNRU8QSiyXMyITnunAIqMrHRz6hkW0XpZGUn3qYO5rfnONSMFfZMMI5tIfx/GojunuC
-         yv2NWhDmw06EaTDSxU2gEpSv/9iNf0MhOXCa2d+fnxFcaK9Z4gJRl7PQoa3a10+32Sj8
-         v4FMv5njJEPC3uQJC9HW3XPakB/uuutYNquntqtCMZAKBULsPouxYqRAUFnktocSsNc2
-         o4L+pkYdy3x4tjv7+svpVerfSn6mXmZjQbIYjXETAC+iU3sWguTcWuwdL9GAMgVBRbkT
-         fVCA==
-X-Gm-Message-State: AJIora+8TfA0F3xzWX/FFhYGpCbd8gAfUaR64hakAfaaq+kUbU3kOCkm
-        rAyjg0rCgckKrYNo1PAUlxOpgRUSTCo6ESsO9jM=
-X-Google-Smtp-Source: AGRyM1voIwXZ4dMPnpLAqnCx3C8loYQQRTztZqdu3BPiOLJoENjZC+j0T+13kENmWdRQC8XyE5oler0toFCdYmPZk3w=
-X-Received: by 2002:a05:622a:1791:b0:317:76d8:d17f with SMTP id
- s17-20020a05622a179100b0031776d8d17fmr8667214qtk.82.1656325838358; Mon, 27
- Jun 2022 03:30:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220621135339.1269409-1-robimarko@gmail.com> <87o7yeo104.fsf@kernel.org>
-In-Reply-To: <87o7yeo104.fsf@kernel.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Mon, 27 Jun 2022 12:30:27 +0200
-Message-ID: <CAOX2RU4G-009qYZF7-LcCT9SCeAmj=v9Hdk+NU-nebq=fGdjBQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: net: wireless: ath11k: add new DT entry
- for board ID
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     davem@davemloft.net, Eric Dumazet <edumazet@google.com>,
-        kuba@kernel.org, pabeni@redhat.com,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+        Mon, 27 Jun 2022 06:30:59 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5BE62D7;
+        Mon, 27 Jun 2022 03:30:48 -0700 (PDT)
+X-UUID: 0bafa932750b4551b7c5197945cce3bf-20220627
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:dcfe5252-9fd0-41bd-b998-846f539e1025,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:87442a2,CLOUDID:16d2252e-1756-4fa3-be7f-474a6e4be921,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 0bafa932750b4551b7c5197945cce3bf-20220627
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1823173727; Mon, 27 Jun 2022 18:30:41 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 27 Jun 2022 18:30:39 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 27 Jun 2022 18:30:39 +0800
+Message-ID: <5f94612c26c79604fe62550808c481c0031456e5.camel@mediatek.com>
+Subject: Re: [PATCH v12 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "mripard@kernel.org" <mripard@kernel.org>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "airlied@linux.ie" <airlied@linux.ie>
+CC:     "msp@baylibre.com" <msp@baylibre.com>,
+        "granquet@baylibre.com" <granquet@baylibre.com>,
+        "Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?=" 
+        <jitao.shi@mediatek.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "CK Hu =?UTF-8?Q?=28=E8=83=A1=E4=BF=8A=E5=85=89=29?=" 
+        <ck.hu@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 27 Jun 2022 18:30:39 +0800
+In-Reply-To: <269ba882-1975-7148-524a-2bb8eb8667b7@collabora.com>
+References: <20220627080341.5087-1-rex-bc.chen@mediatek.com>
+         <20220627080341.5087-6-rex-bc.chen@mediatek.com>
+         <269ba882-1975-7148-524a-2bb8eb8667b7@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,41 +88,607 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Jun 2022 at 12:27, Kalle Valo <kvalo@kernel.org> wrote:
->
-> Robert Marko <robimarko@gmail.com> writes:
->
-> > bus + qmi-chip-id + qmi-board-id and optionally the variant are currently
-> > used for identifying the correct board data file.
-> >
-> > This however is sometimes not enough as all of the IPQ8074 boards that I
-> > have access to dont have the qmi-board-id properly fused and simply return
-> > the default value of 0xFF.
-> >
-> > So, to provide the correct qmi-board-id add a new DT property that allows
-> > the qmi-board-id to be overridden from DTS in cases where its not set.
-> > This is what vendors have been doing in the stock firmwares that were
-> > shipped on boards I have.
->
-> What's wrong with using 0xff? Ie. something like this:
->
-> bus=ahb,qmi-chip-id=0,qmi-board-id=255,variant=foo
->
-> Or maybe even just skip qmi-board-id entirely if it's not supported? So
-> that the board file string would be something like:
->
-> bus=ahb,qmi-chip-id=0,variant=foo
->
-> I really would like to avoid adding more DT properties unless it's
-> absolutely critical.
+On Mon, 2022-06-27 at 18:07 +0800, AngeloGioacchino Del Regno wrote:
+> Il 27/06/22 10:03, Bo-Chen Chen ha scritto:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > 
+> > This patch adds a embedded displayport driver for the MediaTek
+> > mt8195 SoC.
+> > 
+> > It supports the MT8195, the embedded DisplayPort units. It offers
+> > DisplayPort 1.4 with up to 4 lanes.
+> > 
+> > The driver creates a child device for the phy. The child device
+> > will
+> > never exist without the parent being active. As they are sharing a
+> > register range, the parent passes a regmap pointer to the child so
+> > that
+> > both can work with the same register range. The phy driver sets
+> > device
+> > data that is read by the parent to get the phy device that can be
+> > used
+> > to control the phy properties.
+> > 
+> > This driver is based on an initial version by
+> > Jitao shi <jitao.shi@mediatek.com>
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >   drivers/gpu/drm/mediatek/Kconfig       |   10 +
+> >   drivers/gpu/drm/mediatek/Makefile      |    1 +
+> >   drivers/gpu/drm/mediatek/mtk_dp.c      | 2198
+> > ++++++++++++++++++++++++
+> >   drivers/gpu/drm/mediatek/mtk_dp_reg.h  |  543 ++++++
+> >   drivers/gpu/drm/mediatek/mtk_drm_drv.c |    3 +
+> >   drivers/gpu/drm/mediatek/mtk_drm_drv.h |    3 +
+> >   6 files changed, 2758 insertions(+)
+> >   create mode 100644 drivers/gpu/drm/mediatek/mtk_dp.c
+> >   create mode 100644 drivers/gpu/drm/mediatek/mtk_dp_reg.h
+> > 
+> 
+> 
+> > diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c
+> > b/drivers/gpu/drm/mediatek/mtk_dp.c
+> > new file mode 100644
+> > index 000000000000..9e9b516409e2
+> > --- /dev/null
+> > +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
+> > @@ -0,0 +1,2198 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (c) 2019-2022 MediaTek Inc.
+> > + * Copyright (c) 2022 BayLibre
+> > + */
+> > +
+> > +#include <drm/display/drm_dp.h>
+> > +#include <drm/display/drm_dp_helper.h>
+> > +#include <drm/drm_atomic_helper.h>
+> > +#include <drm/drm_bridge.h>
+> > +#include <drm/drm_crtc.h>
+> > +#include <drm/drm_edid.h>
+> > +#include <drm/drm_of.h>
+> > +#include <drm/drm_panel.h>
+> > +#include <drm/drm_print.h>
+> > +#include <drm/drm_probe_helper.h>
+> > +#include <linux/arm-smccc.h>
+> > +#include <linux/clk.h>
+> > +#include <linux/delay.h>
+> > +#include <linux/errno.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/nvmem-consumer.h>
+> > +#include <linux/of.h>
+> > +#include <linux/of_irq.h>
+> > +#include <linux/of_platform.h>
+> > +#include <linux/phy/phy.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/pm_runtime.h>
+> > +#include <linux/regmap.h>
+> > +#include <sound/hdmi-codec.h>
+> > +#include <video/videomode.h>
+> > +
+> > +#include "mtk_dp_reg.h"
+> > +
+> > +#define MTK_DP_SIP_CONTROL_AARCH32 0x82000523
+> 
+> Why have you forced this SIP call to AArch32 SMC convention?
+> Is there any particular reason why this should always be AA32 and
+> *never* AA64?
+> 
+> In any case, you've got MediaTek SIP macros in
+> include/soc/mediatek/mtk_sip_svc.h
+> so, please, include that header and either redefine this as
+> 
+> MTK_SIP_CMD(0x523) or add a new macro in there to force
+> ARM_SMCCC_SMC_32
+> convention with a very explanatory comment saying why some calls need
+> to
+> be forced to use the AArch32 SMC convention.
+> 
 
-Well, I suppose that due to the variant property we can avoid "correcting" the
-qmi-board-id
+Hello Angelo,
 
-Regards,
-Robert
->
-> --
-> https://patchwork.kernel.org/project/linux-wireless/list/
->
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Thanks for your review.
+ok, I will do this in next version.
+
+> > +
+> > +#define MTK_VDOSYS1_MAX_FRAMERATE 60
+> > +#define MTK_DP_4P1T 4
+> > +#define MTK_DP_HDE 2
+> > +#define MTK_DP_PIX_PER_ADDR 2
+> > +#define MTK_DP_AUX_WAIT_REPLY_COUNT 20
+> > +#define MTK_DP_CHECK_SINK_CAP_TIMEOUT_COUNT 3
+> > +#define MTK_DP_TBC_BUF_READ_START_ADDR 0x08
+> > +#define MTK_DP_TRAIN_RETRY_LIMIT 8
+> > +#define MTK_DP_TRAIN_MAX_ITERATIONS 5
+> > +#define MTK_DP_DP_VERSION_11 0x11
+> 
+> MTK_DP_HW_VERSION_11 0x11 ?
+> 
+> ...but anyway, this definition is unused, so please either use it or
+> drop it.
+> 
+
+it's fro audio patch, and I will move this there.
+
+> > +
+> > +enum mtk_dp_train_state {
+> > +	MTK_DP_TRAIN_STATE_TRAINING,
+> > +	MTK_DP_TRAIN_STATE_NORMAL,
+> > +};
+> > +
+> > +struct mtk_dp_timings {
+> > +	struct videomode vm;
+> > +	u8 frame_rate;
+> > +};
+> > +
+> > +struct mtk_dp_irq_sta {
+> > +	bool hpd_disconnect;
+> > +	bool hpd_inerrupt;
+> > +};
+> > +
+> > +struct mtk_dp_train_info {
+> > +	bool tps3;
+> > +	bool tps4;
+> > +	bool sink_ssc;
+> > +	bool cable_plugged_in;
+> > +	bool cable_state_change;
+> > +	bool cr_done;
+> > +	bool eq_done;
+> > +	/* link_rate is in multiple of 0.27Gbps */
+> > +	int link_rate;
+> > +	int lane_count;
+> > +	struct mtk_dp_irq_sta irq_sta;
+> > +};
+> > +
+> > +struct mtk_dp_info {
+> > +	u32 depth;
+> > +	enum dp_pixelformat format;
+> > +	struct mtk_dp_timings timings;
+> > +};
+> > +
+> > +struct dp_cal_data {
+> > +	unsigned int glb_bias_trim;
+> > +	unsigned int clktx_impse;
+> > +
+> > +	unsigned int ln_tx_impsel_pmos[4];
+> > +	unsigned int ln_tx_impsel_nmos[4];
+> > +};
+> > +
+> > +struct mtk_dp {
+> > +	struct device *dev;
+> > +	struct platform_device *phy_dev;
+> > +	struct phy *phy;
+> > +	struct dp_cal_data cal_data;
+> > +	u8 max_lanes;
+> > +	u8 max_linkrate;
+> > +
+> > +	struct drm_device *drm_dev;
+> > +	struct drm_bridge bridge;
+> > +	struct drm_bridge *next_bridge;
+> > +	struct drm_dp_aux aux;
+> > +
+> > +	u8 rx_cap[DP_RECEIVER_CAP_SIZE];
+> > +
+> > +	struct mtk_dp_info info;
+> > +
+> > +	struct mtk_dp_train_info train_info;
+> > +	enum mtk_dp_train_state train_state;
+> > +
+> > +	struct regmap *regs;
+> > +
+> > +	bool enabled;
+> > +
+> > +	struct drm_connector *conn;
+> > +};
+> > +
+> > +static struct regmap_config mtk_dp_regmap_config = {
+> > +	.reg_bits = 32,
+> > +	.val_bits = 32,
+> > +	.reg_stride = 4,
+> > +	.max_register = SEC_OFFSET + 0x90,
+> > +	.name = "mtk-dp-registers",
+> > +};
+> > +
+> > +static struct mtk_dp *mtk_dp_from_bridge(struct drm_bridge *b)
+> > +{
+> > +	return container_of(b, struct mtk_dp, bridge);
+> > +}
+> > +
+> > +static u32 mtk_dp_read(struct mtk_dp *mtk_dp, u32 offset)
+> > +{
+> > +	u32 read_val;
+> > +	int ret;
+> > +
+> > +	ret = regmap_read(mtk_dp->regs, offset, &read_val);
+> > +	if (ret) {
+> > +		dev_err(mtk_dp->dev, "Failed to read register 0x%x:
+> > %d\n",
+> > +			offset, ret);
+> > +		return 0;
+> > +	}
+> > +
+> > +	return read_val;
+> > +}
+> > +
+> > +static void mtk_dp_write(struct mtk_dp *mtk_dp, u32 offset, u32
+> > val)
+> > +{
+> 
+> This should be int... you should propagate the error to the caller,
+> and also
+> eventually take action in case you get an error.
+> 
+> > +	if (regmap_write(mtk_dp->regs, offset, val))
+> > +		dev_err(mtk_dp->dev,
+> > +			"Failed to write register 0x%x with value
+> > 0x%x\n",
+> > +			offset, val);
+> > +}
+> > +
+> > +static void mtk_dp_update_bits(struct mtk_dp *mtk_dp, u32 offset,
+> > +			       u32 val, u32 mask)
+> > +{
+> 
+> Same here.
+> 
+
+I don't think we need to control this.
+From most drivers, I see there are many example which are not control
+the error of write register function.
+
+If there is any error, the root cause is power domain is not enabled.
+In this case, we can not go to these register setting. Besides, we also
+can saves hundreds of driver lines to handle the write register error.
+
+> > +	if (regmap_update_bits(mtk_dp->regs, offset, mask, val))
+> > +		dev_err(mtk_dp->dev,
+> > +			"Failed to update register 0x%x with value
+> > 0x%x, mask 0x%x\n",
+> > +			offset, val, mask);
+> > +}
+> > +
+> > +static void mtk_dp_bulk_16bit_write(struct mtk_dp *mtk_dp, u32
+> > offset, u8 *buf,
+> > +				    size_t length)
+> > +{
+> > +	int i;
+> > +	int num_regs = (length + 1) / 2;
+> > +
+> 
+> ... and here.
+> 
+> > +	/* 2 bytes per register */
+> > +	for (i = 0; i < num_regs; i++) {
+> > +		u32 val = buf[i * 2] |
+> > +			  (i * 2 + 1 < length ? buf[i * 2 + 1] << 8 :
+> > 0);
+> > +
+> > +		mtk_dp_write(mtk_dp, offset + i * 4, val);
+> 
+> P.S.: Does it make sense to keep writing if you get an error?
+>        I'd say that doing this may lead to unexpected hardware
+> status.
+> 
+
+If one register failed to write, it should be for *all* registers and
+not only for *one* register.
+
+> > +	}
+> > +}
+> > +
+> > +static unsigned long mtk_dp_sip_atf_call(struct mtk_dp *mtk_dp,
+> > +					 unsigned int cmd, unsigned int
+> > para)
+> > +{
+> > +	struct arm_smccc_res res;
+> > +
+> > +	arm_smccc_smc(MTK_DP_SIP_CONTROL_AARCH32, cmd, para, 0, 0, 0,
+> > 0, 0,
+> > +		      &res);
+> > +
+> > +	dev_dbg(mtk_dp->dev, "sip cmd 0x%x, p1 0x%x, ret 0x%lx-0x%lx",
+> > +		cmd, para, res.a0, res.a1);
+> > +
+> > +	return res.a1;
+> 
+> We have SIP_SVC_E_(xxxxx) error codes defined in mtk_sip_svc.h...
+> this makes me
+> think that res.a1 is not an unsigned long for real: please confirm.
+> 
+
+ok, I will confirm that.
+
+> > +}
+> > +
+> 
+> ..snip..
+> 
+> > +
+> > +static void mtk_dp_set_color_format(struct mtk_dp *mtk_dp,
+> > +				    enum dp_pixelformat color_format)
+> > +{
+> > +	u32 val;
+> > +
+> > +	mtk_dp->info.format = color_format;
+> > +
+> > +	/* update MISC0 */
+> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3034,
+> > +			   color_format << DP_TEST_COLOR_FORMAT_SHIFT,
+> > +			   DP_TEST_COLOR_FORMAT_MASK);
+> > +
+> > +	switch (color_format) {
+> > +	case DP_PIXELFORMAT_YUV422:
+> > +		val = PIXEL_ENCODE_FORMAT_DP_ENC0_P0_YCBCR422;
+> > +		break;
+> > +	case DP_PIXELFORMAT_YUV420:
+> > +		val = PIXEL_ENCODE_FORMAT_DP_ENC0_P0_YCBCR420;
+> > +		break;
+> > +	case DP_PIXELFORMAT_RGB:
+> > +	case DP_PIXELFORMAT_YUV444:
+> > +		val = PIXEL_ENCODE_FORMAT_DP_ENC0_P0_RGB;
+> > +		break;
+> > +	case DP_PIXELFORMAT_Y_ONLY:
+> > +	case DP_PIXELFORMAT_RAW:
+> > +	case DP_PIXELFORMAT_RESERVED:
+> > +	default:
+> > +		drm_warn(mtk_dp->drm_dev, "Unsupported color format:
+> > %d\n",
+> > +			 color_format);
+> > +		return;
+> 
+> return -EINVAL here?
+> 
+
+ok, I will take care the error handle.
+
+> > +	}
+> > +
+> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_303C,
+> > +			   val, PIXEL_ENCODE_FORMAT_DP_ENC0_P0_MASK);
+> 
+> ... and return 0 here.
+> 
+> > +}
+> > +
+> > +static void mtk_dp_set_color_depth(struct mtk_dp *mtk_dp)
+> > +{
+> > +	u32 val;
+> > +	/* Only support 8 bits currently */
+> > +	u32 color_depth = DP_MSA_MISC_8_BPC;
+> > +
+> > +	mtk_dp->info.depth = color_depth;
+> > +
+> > +	/* Update MISC0 */
+> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3034,
+> > +			   color_depth, DP_TEST_BIT_DEPTH_MASK);
+> > +
+> > +	switch (color_depth) {
+> > +	case DP_MSA_MISC_6_BPC:
+> > +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_6BIT;
+> > +		break;
+> > +	case DP_MSA_MISC_8_BPC:
+> > +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_8BIT;
+> > +		break;
+> > +	case DP_MSA_MISC_10_BPC:
+> > +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_10BIT;
+> > +		break;
+> > +	case DP_MSA_MISC_12_BPC:
+> > +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_12BIT;
+> > +		break;
+> > +	case DP_MSA_MISC_16_BPC:
+> > +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_16BIT;
+> > +		break;
+> 
+> ditto
+> 
+> > +	default:
+> > +		drm_warn(mtk_dp->drm_dev, "Unsupported color depth
+> > %d\n",
+> > +			 color_depth);
+> > +		return;
+> > +	}
+> > +
+> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_303C, val,
+> > +			   VIDEO_COLOR_DEPTH_DP_ENC0_P0_MASK);
+> > +}
+> > +
+> 
+> ..snip..
+> 
+> > +
+> > +static int mtk_dp_phy_configure(struct mtk_dp *mtk_dp,
+> > +				u32 link_rate, int lane_count)
+> > +{
+> > +	int ret;
+> > +	union phy_configure_opts phy_opts = {
+> > +		.dp = {
+> > +			.link_rate = link_rate_to_mb_per_s(mtk_dp,
+> > link_rate),
+> > +			.set_rate = 1,
+> > +			.lanes = lane_count,
+> > +			.set_lanes = 1,
+> > +			.ssc = mtk_dp->train_info.sink_ssc,
+> > +		}
+> > +	};
+> > +
+> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> > DP_PWR_STATE_BANDGAP,
+> > +			   DP_PWR_STATE_MASK);
+> > +
+> > +	ret = phy_configure(mtk_dp->phy, &phy_opts);
+> > +
+> 
+> This new blank line is unnecessary, please remove.
+> 
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	mtk_dp_set_cal_data(mtk_dp);
+> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> > +			   DP_PWR_STATE_BANDGAP_TPLL_LANE,
+> > DP_PWR_STATE_MASK);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> 
+> ..snip..
+> 
+> > +
+> > +static void mtk_dp_calculate_pixrate(struct mtk_dp *mtk_dp)
+> > +{
+> > +	u8 target_frame_rate = 60;
+> 
+> Don't assign any value here: this will make sure to avoid double
+> assignments later.
+> 
+> > +	u32 target_pixel_clk;
+> > +	struct drm_display_mode mode;
+> > +	struct mtk_dp_timings *timings = &mtk_dp->info.timings;
+> > +
+> > +	drm_display_mode_from_videomode(&timings->vm, &mode);
+> > +
+> > +	if (mtk_dp->info.timings.frame_rate > 0) {
+> > +		target_frame_rate = mtk_dp->info.timings.frame_rate;
+> > +		target_pixel_clk = mode.htotal * mode.vtotal *
+> > +				   target_frame_rate;
+> > +	} else {
+> > +		target_pixel_clk = mode.htotal * mode.vtotal *
+> > +				   target_frame_rate;
+> > +	}
+> 
+> This should be
+> 
+> 	if (mtk_dp->info.timings.frame_rate > 0)
+> 		target_frame_rate = mtk_dp->info.timings.frame_rate;
+> 	else
+> 		target_frame_rate = 60;
+> 
+> 	target_pixel_clk = mode.htotal * mode.vtotal *
+> target_frame_rate;
+> 
+
+ok.
+
+> > +}
+> > +
+> > +static void mtk_dp_set_tx_out(struct mtk_dp *mtk_dp)
+> > +{
+> > +	mtk_dp_msa_bypass_disable(mtk_dp);
+> > +	mtk_dp_calculate_pixrate(mtk_dp);
+> > +	mtk_dp_pg_disable(mtk_dp);
+> > +	mtk_dp_setup_tu(mtk_dp);
+> > +}
+> > +
+> > +static ssize_t mtk_dp_hpd_sink_event(struct mtk_dp *mtk_dp)
+> > +{
+> > +	ssize_t ret;
+> > +	u8 sink_count;
+> > +	bool locked;
+> > +	u8 link_status[DP_LINK_STATUS_SIZE] = {};
+> > +	u32 sink_count_reg = DP_SINK_COUNT_ESI;
+> > +	u32 link_status_reg = DP_LANE0_1_STATUS;
+> > +
+> > +	ret = drm_dp_dpcd_readb(&mtk_dp->aux, sink_count_reg,
+> > &sink_count);
+> > +	if (ret < 0) {
+> 
+> This function can never return anything > 1, so this should probably
+> be:
+> 
+> 	if (ret < 1) {
+> 		drm_err ....
+> 		return ret == 0 ? -EIO : ret;
+> 	}
+> 
+
+ok, I will check this.
+
+BRs,
+Bo-Chen
+
+> > +		drm_err(mtk_dp->drm_dev, "Read sink count failed\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	ret = drm_dp_dpcd_read(&mtk_dp->aux, link_status_reg,
+> > link_status,
+> > +			       sizeof(link_status));
+> > +	if (!ret) {
+> > +		drm_err(mtk_dp->drm_dev, "Read link status failed\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	locked = drm_dp_channel_eq_ok(link_status,
+> > +				      mtk_dp->train_info.lane_count);
+> > +	if (!locked && mtk_dp->train_state >
+> > MTK_DP_TRAIN_STATE_TRAINING)
+> > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_TRAINING;
+> > +
+> > +	if (link_status[1] & DP_REMOTE_CONTROL_COMMAND_PENDING)
+> > +		drm_dp_dpcd_writeb(&mtk_dp->aux,
+> > DP_DEVICE_SERVICE_IRQ_VECTOR,
+> > +				   DP_REMOTE_CONTROL_COMMAND_PENDING);
+> > +
+> > +	if (DP_GET_SINK_COUNT(sink_count) &&
+> > +	    (link_status[2] & DP_DOWNSTREAM_PORT_STATUS_CHANGED)) {
+> > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_TRAINING;
+> > +		msleep(20);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> 
+> ..snip..
+> 
+> > +
+> > +static int mtk_dp_train_flow(struct mtk_dp *mtk_dp, u8
+> > target_link_rate,
+> > +			     u8 target_lane_count)
+> > +{
+> > +	u8 lane_adjust[2] = {};
+> > +	bool pass_tps1 = false;
+> > +	bool pass_tps2_3 = false;
+> > +	int train_retries;
+> > +	int status_control;
+> > +	int iteration_count;
+> > +	int ret;
+> > +	u8 prev_lane_adjust;
+> > +
+> > +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LINK_BW_SET,
+> > target_link_rate);
+> > +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LANE_COUNT_SET,
+> > +			   target_lane_count |
+> > DP_LANE_COUNT_ENHANCED_FRAME_EN);
+> > +
+> > +	if (mtk_dp->train_info.sink_ssc)
+> > +		drm_dp_dpcd_writeb(&mtk_dp->aux, DP_DOWNSPREAD_CTRL,
+> > +				   DP_SPREAD_AMP_0_5);
+> > +
+> > +	train_retries = 0;
+> > +	status_control = 0;
+> > +	iteration_count = 1;
+> > +	prev_lane_adjust = 0xFF;
+> > +
+> > +	mtk_dp_set_lanes(mtk_dp, target_lane_count / 2);
+> > +	ret = mtk_dp_phy_configure(mtk_dp, target_link_rate,
+> > target_lane_count);
+> > +	if (ret)
+> > +		return -EINVAL;
+> 
+> Why are you overriding the error value here?
+> 
+> > +
+> > +	dev_dbg(mtk_dp->dev,
+> > +		"Link train target_link_rate = 0x%x, target_lane_count
+> > = 0x%x\n",
+> > +		target_link_rate, target_lane_count);
+> > +
+> 
+> Cheers,
+> Angelo
+

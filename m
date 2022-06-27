@@ -2,140 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E77255C4DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA31055D599
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233620AbiF0IpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
+        id S232724AbiF0Iqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbiF0IpI (ORCPT
+        with ESMTP id S233019AbiF0Iqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:45:08 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430806320
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:45:07 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id ge10so17584733ejb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:45:07 -0700 (PDT)
+        Mon, 27 Jun 2022 04:46:34 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4DA6353
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:46:33 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id g4so3983168ybg.9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:46:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=NGASEu1UuSCF/KBZiD+Xxr1++0cQqP/bZ9atPVdxcAE=;
-        b=zwOiD2QKTBHyIkb8zfy5wq7S5Mww4LyKRvCXX8L0AZh2gXCJhELBJ8f0A/XkDSVso8
-         L7FBqCQ1oH/jJ7cFNnDxOLM/sxfKCUrrkCofLhaw/momIYZMHhEHZpJOHEGUvzLRPMh4
-         rqABqqzgmYQTAm8yw7R/n9Gp1l3nYBMiMTmNfrZEKRXHZTTnQcnweoEk611FTXs1sScD
-         bvalF3SeBbnDxo1XZ1qikeONNl6gzZMDT5bG46uL+RNIiPovs1XXqW+jtfcH05Uy5ReG
-         T8MCvFHPt4EpHEJr1g0CDlWrQK1ioh748xirTzj8Kbs2i655NcUaO0jeW/cPQxhpyMJi
-         brBw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4vsOnIc+C2gY1UVlbVz/JDciMvgYEap1WYGcSJm7nik=;
+        b=izm5TvVaySgpwnEQF9/y67fAWYu9B2xhHcC5MrbsqfKRyBWcvUJOefttP3U8C7H5yK
+         cf/c+G/MDFeL9d3jWR3ZM1W+uRZZqwp2hTAlphjRcQ4y5gzmknF6zrBjrzS5Oq9593TH
+         prMhKu/+/nH//vvJzE+A8myFZw0Vf2YB5togDcAyh2pSj1lg7+NXGygkUac2Pq5BEBXO
+         5+wwtXrzIkpK6w7dEXtmMbM9imlU0I4M6KLt1i3bZoyGQ30Vb87yxIZpNyIgjCBXAtgw
+         DSd6AsFRpnuauM1qBq8q0T/kLZUm8tLjA1oB1Fx/TPENkDLwNudIWg8vpilEWofAkp3b
+         qS3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=NGASEu1UuSCF/KBZiD+Xxr1++0cQqP/bZ9atPVdxcAE=;
-        b=bZFeB3VVZSSYECaTxtT1xwInr8MscI+UQgiD/dg8DPp57s/hdjAUICIo0MPxP0g0OQ
-         ZMb/1q17YYTeO0P82QQX9o3ABQNtbs4DJmpvfDvE2w8iqW4ellVx5Z+0UJzanN2WoHtL
-         i85cJ9e1F67QFGwQFu0OOKt4YkJLhJJt8+4oNXuoHo4rQGkzCeq2gSckPnQqAiJfT1My
-         dSElONJ1Ko+8sllL56V4JS0IrACvn24d44FGW4yB9B22rLzV1iOq724Qz8FE7ry+LmVq
-         VPBAffG3W5XsBDkhrNWFDyStlg9m5USazhMiKfLVomFNN334VFvwpizXHyOeEm/o8dsX
-         o7YA==
-X-Gm-Message-State: AJIora9/tQfR0yVg14krYCeE/nSLzD+KSJScpxfQpWfR/a+CqNFZErj/
-        qMQW5sUbdU8JU58RzvUmJ4x4BQ==
-X-Google-Smtp-Source: AGRyM1v5eWfRK0YQoqHluU652Yu0VL9rjqD1R4mOxvp/6i3wbLE6ekpCxsFI+Ofij4URWX6raZwyEA==
-X-Received: by 2002:a17:906:8315:b0:726:38da:f0f with SMTP id j21-20020a170906831500b0072638da0f0fmr11685646ejx.462.1656319505768;
-        Mon, 27 Jun 2022 01:45:05 -0700 (PDT)
-Received: from [192.168.0.247] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g18-20020a170906595200b006f3ef214e20sm4685683ejr.134.2022.06.27.01.45.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 01:45:05 -0700 (PDT)
-Message-ID: <724bca0f-2474-0aba-35df-6733bb5597d3@linaro.org>
-Date:   Mon, 27 Jun 2022 10:45:04 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4vsOnIc+C2gY1UVlbVz/JDciMvgYEap1WYGcSJm7nik=;
+        b=oJLa0ziUJtUmkj0rqLB1KIVnCsymH5FwINwKY/SCsd3wuQwU7D4P+cSXKoEMhlghfo
+         XzwBhh96DBk8A+jPG5KcX8v92JMVgJZGXcN644iw9skrECkhRqr9wEiJO+4T/URCcSna
+         fG0oANLdei9VCXd/Cedrtll6g5qKDV7/95UNnSLAaA5Ce/zjus/8fgYT25b9KmdP5lU7
+         nHdD+X+sKQe85YJl5tKU+dIMgbA+c/eY4XU05ww+SLxfstvm6PehcFQ3Fqj9q3GqojYy
+         ZwGpMbtrDXoBMTyQiY41j0AzwP2wgyGD6518nOebSz/TCSrwdGugIZY6Or7fyX8dXeU+
+         6IfQ==
+X-Gm-Message-State: AJIora8mZIZ+HCkGlwmatWYcC1RxXEvKboCmMNdR8OWfpONx/3gf3dQ8
+        NKvnhM8MwHZuTSEGZKfogLvrPZilKGMEpQzISDh3GQ==
+X-Google-Smtp-Source: AGRyM1tmdR+Xbj5kJ69vq4foOyHTSytqN33Xz6MWmkpMcamFreKrameDkaAL4/75vWqZ0Cye+/NLca9lf7qZmNQ/HPM=
+X-Received: by 2002:a25:6c5:0:b0:669:a17a:2289 with SMTP id
+ 188-20020a2506c5000000b00669a17a2289mr12352386ybg.231.1656319592797; Mon, 27
+ Jun 2022 01:46:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 19/40] arm64: dts: tegra: align gpio-key node names
- with dtschema
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     arm@kernel.org, soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
- <20220616005333.18491-19-krzysztof.kozlowski@linaro.org>
- <YrXhb5izGPNXEmMK@orome> <dcd4be85-21ab-beb9-e6dc-bd7f570459fd@linaro.org>
-In-Reply-To: <dcd4be85-21ab-beb9-e6dc-bd7f570459fd@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220619150456.GB34471@xsang-OptiPlex-9020> <20220622172857.37db0d29@kernel.org>
+ <CADvbK_csvmkKe46hT9792=+Qcjor2EvkkAnr--CJK3NGX-N9BQ@mail.gmail.com>
+ <CADvbK_eQUmb942vC+bG+NRzM1ki1LiCydEDR1AezZ35Jvsdfnw@mail.gmail.com>
+ <20220623185730.25b88096@kernel.org> <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
+ <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
+ <20220624070656.GE79500@shbuild999.sh.intel.com> <20220624144358.lqt2ffjdry6p5u4d@google.com>
+ <20220625023642.GA40868@shbuild999.sh.intel.com> <20220627023812.GA29314@shbuild999.sh.intel.com>
+In-Reply-To: <20220627023812.GA29314@shbuild999.sh.intel.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 27 Jun 2022 10:46:21 +0200
+Message-ID: <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
+Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Shakeel Butt <shakeelb@google.com>, Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        network dev <netdev@vger.kernel.org>,
+        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/06/2022 18:09, Krzysztof Kozlowski wrote:
-> On 24/06/2022 18:08, Thierry Reding wrote:
->> On Wed, Jun 15, 2022 at 05:53:12PM -0700, Krzysztof Kozlowski wrote:
->> [...]
->>> diff --git a/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts b/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts
->>> index f16acb4cabaa..62d58221ad3c 100644
->>> --- a/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts
->>> +++ b/arch/arm64/boot/dts/nvidia/tegra132-norrin.dts
->>> @@ -1030,7 +1030,7 @@ clk32k_in: clock-32k {
->>>  	gpio-keys {
->>>  		compatible = "gpio-keys";
->>>  
->>> -		lid {
->>> +		switch-lid {
->>>  			label = "Lid";
->>>  			gpios = <&gpio TEGRA_GPIO(R, 4) GPIO_ACTIVE_LOW>;
->>>  			linux,input-type = <5>;
->>> @@ -1039,7 +1039,7 @@ lid {
->>>  			wakeup-source;
->>>  		};
->>>  
->>> -		power {
->>> +		switch-power {
->>
->> This one is actually a key.
->>
->> [...]
->>> diff --git a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
->>> index a263d51882ee..8494c7b2961b 100644
->>> --- a/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
->>> +++ b/arch/arm64/boot/dts/nvidia/tegra210-smaug.dts
->> [...]
->>> @@ -1772,7 +1772,7 @@ lid {
->>>  			wakeup-source;
->>>  		};
->>>  
->>> -		tablet_mode {
->>> +		key-tablet-mode {
->>>  			label = "Tablet Mode";
->>>  			gpios = <&gpio TEGRA_GPIO(Z, 2) GPIO_ACTIVE_HIGH>;
->>>  			linux,input-type = <EV_SW>;
->>
->> And this one more like a switch since it's triggered by a magnet, as far
->> as I understand.
->>
->> No need to resend, I can fix these up when I apply. Just let me know if
->> you have any objections to me making those changes.
-> 
-> Sounds good, thanks for catching these.
+On Mon, Jun 27, 2022 at 4:38 AM Feng Tang <feng.tang@intel.com> wrote:
+>
+> On Sat, Jun 25, 2022 at 10:36:42AM +0800, Feng Tang wrote:
+> > On Fri, Jun 24, 2022 at 02:43:58PM +0000, Shakeel Butt wrote:
+> > > On Fri, Jun 24, 2022 at 03:06:56PM +0800, Feng Tang wrote:
+> > > > On Thu, Jun 23, 2022 at 11:34:15PM -0700, Shakeel Butt wrote:
+> > > [...]
+> > > > >
+> > > > > Feng, can you please explain the memcg setup on these test machines
+> > > > > and if the tests are run in root or non-root memcg?
+> > > >
+> > > > I don't know the exact setup, Philip/Oliver from 0Day can correct me.
+> > > >
+> > > > I logged into a test box which runs netperf test, and it seems to be
+> > > > cgoup v1 and non-root memcg. The netperf tasks all sit in dir:
+> > > > '/sys/fs/cgroup/memory/system.slice/lkp-bootstrap.service'
+> > > >
+> > >
+> > > Thanks Feng. Can you check the value of memory.kmem.tcp.max_usage_in_bytes
+> > > in /sys/fs/cgroup/memory/system.slice/lkp-bootstrap.service after making
+> > > sure that the netperf test has already run?
+> >
+> > memory.kmem.tcp.max_usage_in_bytes:0
+>
+> Sorry, I made a mistake that in the original report from Oliver, it
+> was 'cgroup v2' with a 'debian-11.1' rootfs.
+>
+> When you asked about cgroup info, I tried the job on another tbox, and
+> the original 'job.yaml' didn't work, so I kept the 'netperf' test
+> parameters and started a new job which somehow run with a 'debian-10.4'
+> rootfs and acutally run with cgroup v1.
+>
+> And as you mentioned cgroup version does make a big difference, that
+> with v1, the regression is reduced to 1% ~ 5% on different generations
+> of test platforms. Eric mentioned they also got regression report,
+> but much smaller one, maybe it's due to the cgroup version?
 
+This was using the current net-next tree.
+Used recipe was something like:
 
-Hi Thierry,
+Make sure cgroup2 is mounted or mount it by mount -t cgroup2 none $MOUNT_POINT.
+Enable memory controller by echo +memory > $MOUNT_POINT/cgroup.subtree_control.
+Create a cgroup by mkdir $MOUNT_POINT/job.
+Jump into that cgroup by echo $$ > $MOUNT_POINT/job/cgroup.procs.
 
-To be more explicit - no objects for taking these, please apply.
+<Launch tests>
 
-Best regards,
-Krzysztof
+The regression was smaller than 1%, so considered noise compared to
+the benefits of the bug fix.
+
+>
+> Thanks,
+> Feng
+>
+> > And here is more memcg stats (let me know if you want to check more)
+> >
+> > > If this is non-zero then network memory accounting is enabled and the
+> > > slowdown is expected.
+> >
+> > >From the perf-profile data in original report, both
+> > __sk_mem_raise_allocated() and __sk_mem_reduce_allocated() are called
+> > much more often, which call memcg charge/uncharge functions.
+> >
+> > IIUC, the call chain is:
+> >
+> > __sk_mem_raise_allocated
+> >     sk_memory_allocated_add
+> >     mem_cgroup_charge_skmem
+> >         charge memcg->tcpmem (for cgroup v2)
+> >       try_charge memcg (for v1)
+> >
+> > Also from Eric's one earlier commit log:
+> >
+> > "
+> > net: implement per-cpu reserves for memory_allocated
+> > ...
+> > This means we are going to call sk_memory_allocated_add()
+> > and sk_memory_allocated_sub() more often.
+> > ...
+> > "
+> >
+> > So this slowdown is related to the more calling of charge/uncharge?
+> >
+> > Thanks,
+> > Feng
+> >
+> > > > And the rootfs is a debian based rootfs
+> > > >
+> > > > Thanks,
+> > > > Feng
+> > > >
+> > > >
+> > > > > thanks,
+> > > > > Shakeel

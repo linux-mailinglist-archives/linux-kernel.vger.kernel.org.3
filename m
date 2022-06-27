@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB29255CDAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32A355D943
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234892AbiF0L0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S236673AbiF0LjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234871AbiF0LZj (ORCPT
+        with ESMTP id S236460AbiF0Lhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:25:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB1F658E;
-        Mon, 27 Jun 2022 04:25:29 -0700 (PDT)
+        Mon, 27 Jun 2022 07:37:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BDD1083;
+        Mon, 27 Jun 2022 04:32:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90231B81122;
-        Mon, 27 Jun 2022 11:25:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F039FC3411D;
-        Mon, 27 Jun 2022 11:25:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54B7F60920;
+        Mon, 27 Jun 2022 11:32:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6032BC3411D;
+        Mon, 27 Jun 2022 11:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329127;
-        bh=KRoiypMvnU0fpSm6Chup8fkPi/ta/hJsQWETKlgcBIo=;
+        s=korg; t=1656329578;
+        bh=mOz0bUko/Aq9cVya7lmZnQKIlYbi1GBF6Mw25F2zQ4M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LQYUUsR9nHFEmUHROllEh6jApsHcUwm5H+/tzMMlEVyD2rIh9+MtZYHMlIRPCVOMk
-         eMf/0xS96t5yWkl22l0u7L5oWK+fSVNzkHBV6FUzI3o+BhWoeGKejSxIjlHCWIf0Ua
-         y2lo/DvFDALDDVvism2SDlhtKq8x+NfEwc66tX+k=
+        b=l8/ybG5X0Xmx5C9m7xeaPf7zBruU4vZiGQ1PGjf/IUF47D92Ai8DGEcsno+djWkEw
+         xkOYL51F5LmiphFUMXYpSAx+8Hhp6lQgYsGOT8q76GT3xBW9d9TQa336bL/9w6mLBQ
+         VC+z1DjvstrI/wwnzuz9EFFVYsV3FXaRoFJrrlCw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
-        Eric Dumazet <edumazet@google.com>,
-        William Tu <u9012063@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 042/102] erspan: do not assume transport header is always set
+        stable@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 046/135] KVM: arm64: Prevent kmemleak from accessing pKVM memory
 Date:   Mon, 27 Jun 2022 13:20:53 +0200
-Message-Id: <20220627111934.719870948@linuxfoundation.org>
+Message-Id: <20220627111939.496922216@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,125 +56,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Quentin Perret <qperret@google.com>
 
-[ Upstream commit 301bd140ed0b24f0da660874c7e8a47dad8c8222 ]
+[ Upstream commit 56961c6331463cce2d84d0f973177a517fb33a82 ]
 
-Rewrite tests in ip6erspan_tunnel_xmit() and
-erspan_fb_xmit() to not assume transport header is set.
+Commit a7259df76702 ("memblock: make memblock_find_in_range method
+private") changed the API using which memory is reserved for the pKVM
+hypervisor. However, memblock_phys_alloc() differs from the original API in
+terms of kmemleak semantics -- the old one didn't report the reserved
+regions to kmemleak while the new one does. Unfortunately, when protected
+KVM is enabled, all kernel accesses to pKVM-private memory result in a
+fatal exception, which can now happen because of kmemleak scans:
 
-syzbot reported:
+$ echo scan > /sys/kernel/debug/kmemleak
+[   34.991354] kvm [304]: nVHE hyp BUG at: [<ffff800008fa3750>] __kvm_nvhe_handle_host_mem_abort+0x270/0x290!
+[   34.991580] kvm [304]: Hyp Offset: 0xfffe8be807e00000
+[   34.991813] Kernel panic - not syncing: HYP panic:
+[   34.991813] PS:600003c9 PC:0000f418011a3750 ESR:00000000f2000800
+[   34.991813] FAR:ffff000439200000 HPFAR:0000000004792000 PAR:0000000000000000
+[   34.991813] VCPU:0000000000000000
+[   34.993660] CPU: 0 PID: 304 Comm: bash Not tainted 5.19.0-rc2 #102
+[   34.994059] Hardware name: linux,dummy-virt (DT)
+[   34.994452] Call trace:
+[   34.994641]  dump_backtrace.part.0+0xcc/0xe0
+[   34.994932]  show_stack+0x18/0x6c
+[   34.995094]  dump_stack_lvl+0x68/0x84
+[   34.995276]  dump_stack+0x18/0x34
+[   34.995484]  panic+0x16c/0x354
+[   34.995673]  __hyp_pgtable_total_pages+0x0/0x60
+[   34.995933]  scan_block+0x74/0x12c
+[   34.996129]  scan_gray_list+0xd8/0x19c
+[   34.996332]  kmemleak_scan+0x2c8/0x580
+[   34.996535]  kmemleak_write+0x340/0x4a0
+[   34.996744]  full_proxy_write+0x60/0xbc
+[   34.996967]  vfs_write+0xc4/0x2b0
+[   34.997136]  ksys_write+0x68/0xf4
+[   34.997311]  __arm64_sys_write+0x20/0x2c
+[   34.997532]  invoke_syscall+0x48/0x114
+[   34.997779]  el0_svc_common.constprop.0+0x44/0xec
+[   34.998029]  do_el0_svc+0x2c/0xc0
+[   34.998205]  el0_svc+0x2c/0x84
+[   34.998421]  el0t_64_sync_handler+0xf4/0x100
+[   34.998653]  el0t_64_sync+0x18c/0x190
+[   34.999252] SMP: stopping secondary CPUs
+[   35.000034] Kernel Offset: disabled
+[   35.000261] CPU features: 0x800,00007831,00001086
+[   35.000642] Memory Limit: none
+[   35.001329] ---[ end Kernel panic - not syncing: HYP panic:
+[   35.001329] PS:600003c9 PC:0000f418011a3750 ESR:00000000f2000800
+[   35.001329] FAR:ffff000439200000 HPFAR:0000000004792000 PAR:0000000000000000
+[   35.001329] VCPU:0000000000000000 ]---
 
-WARNING: CPU: 0 PID: 1350 at include/linux/skbuff.h:2911 skb_transport_header include/linux/skbuff.h:2911 [inline]
-WARNING: CPU: 0 PID: 1350 at include/linux/skbuff.h:2911 ip6erspan_tunnel_xmit+0x15af/0x2eb0 net/ipv6/ip6_gre.c:963
-Modules linked in:
-CPU: 0 PID: 1350 Comm: aoe_tx0 Not tainted 5.19.0-rc2-syzkaller-00160-g274295c6e53f #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:skb_transport_header include/linux/skbuff.h:2911 [inline]
-RIP: 0010:ip6erspan_tunnel_xmit+0x15af/0x2eb0 net/ipv6/ip6_gre.c:963
-Code: 0f 47 f0 40 88 b5 7f fe ff ff e8 8c 16 4b f9 89 de bf ff ff ff ff e8 a0 12 4b f9 66 83 fb ff 0f 85 1d f1 ff ff e8 71 16 4b f9 <0f> 0b e9 43 f0 ff ff e8 65 16 4b f9 48 8d 85 30 ff ff ff ba 60 00
-RSP: 0018:ffffc90005daf910 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 000000000000ffff RCX: 0000000000000000
-RDX: ffff88801f032100 RSI: ffffffff882e8d3f RDI: 0000000000000003
-RBP: ffffc90005dafab8 R08: 0000000000000003 R09: 000000000000ffff
-R10: 000000000000ffff R11: 0000000000000000 R12: ffff888024f21d40
-R13: 000000000000a288 R14: 00000000000000b0 R15: ffff888025a2e000
-FS: 0000000000000000(0000) GS:ffff88802c800000(0000) knlGS:0000000000000000
-CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b2e425000 CR3: 000000006d099000 CR4: 0000000000152ef0
-Call Trace:
-<TASK>
-__netdev_start_xmit include/linux/netdevice.h:4805 [inline]
-netdev_start_xmit include/linux/netdevice.h:4819 [inline]
-xmit_one net/core/dev.c:3588 [inline]
-dev_hard_start_xmit+0x188/0x880 net/core/dev.c:3604
-sch_direct_xmit+0x19f/0xbe0 net/sched/sch_generic.c:342
-__dev_xmit_skb net/core/dev.c:3815 [inline]
-__dev_queue_xmit+0x14a1/0x3900 net/core/dev.c:4219
-dev_queue_xmit include/linux/netdevice.h:2994 [inline]
-tx+0x6a/0xc0 drivers/block/aoe/aoenet.c:63
-kthread+0x1e7/0x3b0 drivers/block/aoe/aoecmd.c:1229
-kthread+0x2e9/0x3a0 kernel/kthread.c:376
-ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-</TASK>
+Fix this by explicitly excluding the hypervisor's memory pool from
+kmemleak like we already do for the hyp BSS.
 
-Fixes: d5db21a3e697 ("erspan: auto detect truncated ipv6 packets.")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: William Tu <u9012063@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Cc: Mike Rapoport <rppt@kernel.org>
+Fixes: a7259df76702 ("memblock: make memblock_find_in_range method private")
+Signed-off-by: Quentin Perret <qperret@google.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220616161135.3997786-1-qperret@google.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/ip_gre.c  | 15 ++++++++++-----
- net/ipv6/ip6_gre.c | 15 ++++++++++-----
- 2 files changed, 20 insertions(+), 10 deletions(-)
+ arch/arm64/kvm/arm.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
-index a7e32be8714f..6ab5c50aa7a8 100644
---- a/net/ipv4/ip_gre.c
-+++ b/net/ipv4/ip_gre.c
-@@ -519,7 +519,6 @@ static void erspan_fb_xmit(struct sk_buff *skb, struct net_device *dev)
- 	int tunnel_hlen;
- 	int version;
- 	int nhoff;
--	int thoff;
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index a30c036577a3..f181527f9d43 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -2011,11 +2011,11 @@ static int finalize_hyp_mode(void)
+ 		return 0;
  
- 	tun_info = skb_tunnel_info(skb);
- 	if (unlikely(!tun_info || !(tun_info->mode & IP_TUNNEL_INFO_TX) ||
-@@ -553,10 +552,16 @@ static void erspan_fb_xmit(struct sk_buff *skb, struct net_device *dev)
- 	    (ntohs(ip_hdr(skb)->tot_len) > skb->len - nhoff))
- 		truncate = true;
+ 	/*
+-	 * Exclude HYP BSS from kmemleak so that it doesn't get peeked
+-	 * at, which would end badly once the section is inaccessible.
+-	 * None of other sections should ever be introspected.
++	 * Exclude HYP sections from kmemleak so that they don't get peeked
++	 * at, which would end badly once inaccessible.
+ 	 */
+ 	kmemleak_free_part(__hyp_bss_start, __hyp_bss_end - __hyp_bss_start);
++	kmemleak_free_part(__va(hyp_mem_base), hyp_mem_size);
+ 	return pkvm_drop_host_privileges();
+ }
  
--	thoff = skb_transport_header(skb) - skb_mac_header(skb);
--	if (skb->protocol == htons(ETH_P_IPV6) &&
--	    (ntohs(ipv6_hdr(skb)->payload_len) > skb->len - thoff))
--		truncate = true;
-+	if (skb->protocol == htons(ETH_P_IPV6)) {
-+		int thoff;
-+
-+		if (skb_transport_header_was_set(skb))
-+			thoff = skb_transport_header(skb) - skb_mac_header(skb);
-+		else
-+			thoff = nhoff + sizeof(struct ipv6hdr);
-+		if (ntohs(ipv6_hdr(skb)->payload_len) > skb->len - thoff)
-+			truncate = true;
-+	}
- 
- 	if (version == 1) {
- 		erspan_build_header(skb, ntohl(tunnel_id_to_key32(key->tun_id)),
-diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
-index 3f88ba6555ab..9e0890738d93 100644
---- a/net/ipv6/ip6_gre.c
-+++ b/net/ipv6/ip6_gre.c
-@@ -944,7 +944,6 @@ static netdev_tx_t ip6erspan_tunnel_xmit(struct sk_buff *skb,
- 	__be16 proto;
- 	__u32 mtu;
- 	int nhoff;
--	int thoff;
- 
- 	if (!pskb_inet_may_pull(skb))
- 		goto tx_err;
-@@ -965,10 +964,16 @@ static netdev_tx_t ip6erspan_tunnel_xmit(struct sk_buff *skb,
- 	    (ntohs(ip_hdr(skb)->tot_len) > skb->len - nhoff))
- 		truncate = true;
- 
--	thoff = skb_transport_header(skb) - skb_mac_header(skb);
--	if (skb->protocol == htons(ETH_P_IPV6) &&
--	    (ntohs(ipv6_hdr(skb)->payload_len) > skb->len - thoff))
--		truncate = true;
-+	if (skb->protocol == htons(ETH_P_IPV6)) {
-+		int thoff;
-+
-+		if (skb_transport_header_was_set(skb))
-+			thoff = skb_transport_header(skb) - skb_mac_header(skb);
-+		else
-+			thoff = nhoff + sizeof(struct ipv6hdr);
-+		if (ntohs(ipv6_hdr(skb)->payload_len) > skb->len - thoff)
-+			truncate = true;
-+	}
- 
- 	if (skb_cow_head(skb, dev->needed_headroom ?: t->hlen))
- 		goto tx_err;
 -- 
 2.35.1
 

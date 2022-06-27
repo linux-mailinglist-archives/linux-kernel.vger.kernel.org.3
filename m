@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A84C55CCE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3008E55C4F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240754AbiF0Tvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 15:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
+        id S240760AbiF0TwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 15:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238433AbiF0Tvs (ORCPT
+        with ESMTP id S238433AbiF0Tv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 15:51:48 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553AD1BE83;
-        Mon, 27 Jun 2022 12:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656359507; x=1687895507;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4M4vuBj1FZO2Dx0Ze9OY5eJ59QeeaTSDFNt2IHMzOMc=;
-  b=OPy90ekIor3wW+btFI2RZXr9UvFxKyoTW1G+/DQ2gRv6l58QDsOPKQSI
-   iz/knB6QEfmpKBywIGwND/2l+bJv5/Uxk6BKsghs7dBr/OYJhDwKTRN9c
-   6nq9FEG2BaBQ8LNOVK6ml/zsmtNZ48clVIebPtmUzRDHtPJahROxz4dIU
-   o=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 27 Jun 2022 12:51:47 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 12:51:46 -0700
-Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 27 Jun 2022 12:51:45 -0700
-Received: from [10.216.11.205] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 27 Jun
- 2022 12:51:39 -0700
-Message-ID: <f358606f-0dd5-7dfa-ec6b-b6ade9d5a1a0@quicinc.com>
-Date:   Tue, 28 Jun 2022 01:21:36 +0530
+        Mon, 27 Jun 2022 15:51:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FD071BE83
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656359515;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jiwuO61xqDYsAatAV0xcjY2AT3XPbcqJO2ZheElIFe4=;
+        b=UGI9V8UrnzcIqVB9s28fpog6u5GzuVM8i32paLNcov0EfJuHwcEwlPgzka3xm/AhdvCX9P
+        JJRHPUxWvgoLtNbIKhujmHTcpf6R8MnSHol8xMTRuIHdUPfXOsCu98M2XDAws/0tWIk+Zx
+        xz8zjQbgN8JiqXIflnncQpx3R03ZSIQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-563-OIXhawpzPVS0ihlNq5O2Mw-1; Mon, 27 Jun 2022 15:51:52 -0400
+X-MC-Unique: OIXhawpzPVS0ihlNq5O2Mw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8F7A801233;
+        Mon, 27 Jun 2022 19:51:51 +0000 (UTC)
+Received: from rules.brq.redhat.com (unknown [10.40.208.9])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 250BD2026D64;
+        Mon, 27 Jun 2022 19:51:49 +0000 (UTC)
+From:   Vladis Dronov <vdronov@redhat.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Vladis Dronov <vdronov@redhat.com>, Simo Sorce <simo@redhat.com>
+Subject: [PATCH v3] crypto: fips - make proc files report fips module name and version
+Date:   Mon, 27 Jun 2022 21:51:44 +0200
+Message-Id: <20220627195144.976741-1-vdronov@redhat.com>
+In-Reply-To: <20220620131618.952133-1-vdronov@redhat.com>
+References: <20220620131618.952133-1-vdronov@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH V2 3/8] clk: qcom: Add Global Clock controller (GCC)
- driver for IPQ5018
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <agross@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <p.zabel@pengutronix.de>,
-        <quic_varada@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220621161126.15883-1-quic_srichara@quicinc.com>
- <20220621161126.15883-4-quic_srichara@quicinc.com>
- <YrU4D+eDBctFl0ZY@builder.lan>
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-In-Reply-To: <YrU4D+eDBctFl0ZY@builder.lan>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,99 +63,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+FIPS 140-3 introduced a requirement for the FIPS module to return
+information about itself, specifically a name and a version. These
+values must match the values reported on FIPS certificates.
 
-On 6/24/2022 9:35 AM, Bjorn Andersson wrote:
-> On Tue 21 Jun 11:11 CDT 2022, Sricharan R wrote:
->> diff --git a/drivers/clk/qcom/gcc-ipq5018.c b/drivers/clk/qcom/gcc-ipq5018.c
-> [..]
->> +static const struct clk_parent_data gcc_xo_gpll0_gpll0_out_main_div2[] = {
->> +	{ .fw_name = "xo", .name = "xo", },
-> Please replace .fw_name with .index based lookup, in line with what was
-> done in gcc-sc8280xp.c recently.
+This patch adds two files to read a name and a version from:
 
+/proc/sys/crypto/fips_name
+/proc/sys/crypto/fips_version
 
-  Sure, understand will fix it.
+v2: removed redundant parentheses in config entries.
+v3: move FIPS_MODULE_* defines to fips.c where they are used.
 
->
-> There's no reason to include global name lookup (.name) in new drivers,
-> so please omit this part.
+Signed-off-by: Simo Sorce <simo@redhat.com>
+Signed-off-by: Vladis Dronov <vdronov@redhat.com>
+---
+ crypto/Kconfig | 21 +++++++++++++++++++++
+ crypto/fips.c  | 34 +++++++++++++++++++++++++++++-----
+ 2 files changed, 50 insertions(+), 5 deletions(-)
 
-   ok.
-
-
->> +	{ .fw_name = "gpll0", .name = "gpll0", },
->> +	{ .fw_name = "gpll0_out_main_div2", .name = "gpll0_out_main_div2", },
->> +};
->> +
-> [..]
->> +static struct clk_alpha_pll gpll0_main = {
->> +	.offset = 0x21000,
->> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
->> +	.clkr = {
->> +		.enable_reg = 0x0b000,
->> +		.enable_mask = BIT(0),
->> +		.hw.init = &(struct clk_init_data){
->> +			.name = "gpll0_main",
->> +			.parent_data = &(const struct clk_parent_data){
->> +				.fw_name = "xo",
->> +				.name = "xo",
-> Are you referring to the board XO here, or the CXO pin on the SoC? On
-> many platforms these are not the same...
-   board XO, will refer your above example and fix it here as well
-> Please omit the .name here as well and as this is used a few times,
-> please create a struct clk_parent_data for this parent.
-
-   ok.
-
-
->> +			},
->> +			.num_parents = 1,
->> +			.ops = &clk_alpha_pll_stromer_ops,
->> +			.flags = CLK_IS_CRITICAL,
->> +		},
->> +	},
->> +};
->> +
->> +static struct clk_fixed_factor gpll0_out_main_div2 = {
->> +	.mult = 1,
->> +	.div = 2,
->> +	.hw.init = &(struct clk_init_data){
->> +		.name = "gpll0_out_main_div2",
->> +		.parent_data = &(const struct clk_parent_data){
-> It would be nice to have a space inbetween ) and { in all these.
-
-   ok.
-
-
->> +			.fw_name = "gpll0_main",
->> +			.name = "gpll0_main",
->> +		},
->> +		.num_parents = 1,
->> +		.ops = &clk_fixed_factor_ops,
->> +		.flags = CLK_SET_RATE_PARENT,
->> +	},
->> +};
-> [..]
->> +static struct clk_branch gcc_gephy_tx_clk = {
->> +	.halt_reg = 0x56014,
->> +	.halt_check = BRANCH_HALT_DELAY,
->> +	.clkr = {
->> +		.enable_reg = 0x56014,
->> +		.enable_mask = BIT(0),
->> +		.hw.init = &(struct clk_init_data){
->> +			.name = "gcc_gephy_tx_clk",
->> +			.parent_data = &(const struct clk_parent_data){
->> +				.fw_name = "gmac0_tx_div_clk_src",
->> +				.name = "gmac0_tx_div_clk_src",
->> +			},
-> This parent_data is repeated multiple times, but more importantly it's
-> not an external clock, so you should use .parent_hw instead of
-> .parent_data.
->
-> Please review the parent for all your clocks.
-
-   ok, will do.
-
-Regards,
-   Sricharan
+diff --git a/crypto/Kconfig b/crypto/Kconfig
+index 1d44893a997b..3891c331f2e7 100644
+--- a/crypto/Kconfig
++++ b/crypto/Kconfig
+@@ -33,6 +33,27 @@ config CRYPTO_FIPS
+ 	  certification.  You should say no unless you know what
+ 	  this is.
+ 
++config CRYPTO_FIPS_NAME
++	string "FIPS Module Name"
++	default "Linux Kernel Cryptographic API"
++	depends on CRYPTO_FIPS
++	help
++	  This option sets the FIPS Module name reported by the Crypto API via
++	  the /proc/sys/crypto/fips_name file.
++
++config CRYPTO_FIPS_CUSTOM_VERSION
++	bool "Use Custom FIPS Module Version"
++	depends on CRYPTO_FIPS
++	default n
++
++config CRYPTO_FIPS_VERSION
++	string "FIPS Module Version"
++	default "(none)"
++	depends on CRYPTO_FIPS_CUSTOM_VERSION
++	help
++	  This option provides the ability to override the FIPS Module Version.
++	  By default the KERNELRELEASE value is used.
++
+ config CRYPTO_ALGAPI
+ 	tristate
+ 	select CRYPTO_ALGAPI2
+diff --git a/crypto/fips.c b/crypto/fips.c
+index 7b1d8caee669..d820f83cb878 100644
+--- a/crypto/fips.c
++++ b/crypto/fips.c
+@@ -30,13 +30,37 @@ static int fips_enable(char *str)
+ 
+ __setup("fips=", fips_enable);
+ 
++#define FIPS_MODULE_NAME CONFIG_CRYPTO_FIPS_NAME
++#ifdef CONFIG_CRYPTO_FIPS_CUSTOM_VERSION
++#define FIPS_MODULE_VERSION CONFIG_CRYPTO_FIPS_VERSION
++#else
++#define FIPS_MODULE_VERSION UTS_RELEASE
++#endif
++
++static char fips_name[] = FIPS_MODULE_NAME;
++static char fips_version[] = FIPS_MODULE_VERSION;
++
+ static struct ctl_table crypto_sysctl_table[] = {
+ 	{
+-		.procname       = "fips_enabled",
+-		.data           = &fips_enabled,
+-		.maxlen         = sizeof(int),
+-		.mode           = 0444,
+-		.proc_handler   = proc_dointvec
++		.procname	= "fips_enabled",
++		.data		= &fips_enabled,
++		.maxlen		= sizeof(int),
++		.mode		= 0444,
++		.proc_handler	= proc_dointvec
++	},
++	{
++		.procname	= "fips_name",
++		.data		= &fips_name,
++		.maxlen		= 64,
++		.mode		= 0444,
++		.proc_handler	= proc_dostring
++	},
++	{
++		.procname	= "fips_version",
++		.data		= &fips_version,
++		.maxlen		= 64,
++		.mode		= 0444,
++		.proc_handler	= proc_dostring
+ 	},
+ 	{}
+ };
+-- 
+2.36.1
 

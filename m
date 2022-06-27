@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E33655D7F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F6355C725
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233479AbiF0IRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
+        id S233480AbiF0ISN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbiF0IR1 (ORCPT
+        with ESMTP id S232564AbiF0ISK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:17:27 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611FF6273
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:17:26 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id r18so3948935edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:17:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bJe+EHscmpBI3l8sdzkx98qjGwntmBZw5/UI+r8ZqSI=;
-        b=NSiQD4pcQ7h4Nb3yuNNthTQZjzy0AC9aizCXSr6X6WSSMjfNAo0JvxUzc2re/98uy8
-         CTpKXFnQr3x+l8kFC0WQM0Wpt5lX/fDZn4W5Z7+9251QBlWCWX+AEmocG/wIaZOSB4I6
-         uXntkNfAwjg9P+eZSPPJkPR3kz4lLNAqQZuE3csp8HLrs249gzEZD8dsUS2asvfyj76f
-         wX5kcCOPj91+iJVd9nlidDg6nwaeakpIbqc6l/jC4pMoCrVvRPEElFjiy0ef6QwRysif
-         YNZi1+Ne+F+Z4WyxWJaiKzFrausU+XK68VxsqW2bE1qQO0YJsGCcFCqV/4YL9WXIUo3C
-         Qu6w==
+        Mon, 27 Jun 2022 04:18:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A15C7C76
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:18:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656317888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OPtn4J82OzWsDsVXNRibX7f2Ro4efWlqotHQQJeFEvk=;
+        b=R3U8/EvmMWizRkCBzv/ew+E1T7qmsPuOSukCFtmGQp0u8AE0tVCrxgqkaZgGB80YDbBGCq
+        +wrwISe4GqvCt+UxhhPxwle60jLTflfnPZulwCpMk4rG+QjVY5MmvTfxwiZC2LtYk36zkG
+        toGD4Zk2ll5uZiNv0weiSmWOC+wQRRQ=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-509-FAs2RuA2MAuFRDgrwP4nGA-1; Mon, 27 Jun 2022 04:18:07 -0400
+X-MC-Unique: FAs2RuA2MAuFRDgrwP4nGA-1
+Received: by mail-lf1-f70.google.com with SMTP id p36-20020a05651213a400b004779d806c13so4354934lfa.10
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:18:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bJe+EHscmpBI3l8sdzkx98qjGwntmBZw5/UI+r8ZqSI=;
-        b=Uu7nRZ+KoCiUnjbtOnx2/Jscaap5LIYGzrJoPcy1XDQeKyK7uKslbSaB66f4aye4zo
-         T5NP9E6s597F75d1J+d03nuHm/dvSfxIbl6t8STAM8hiE1A3pFLgSosIZoqGb7T8q/Mg
-         VOhpedAFyJ8YQS44WeMb4Y73cDbZ5vXJDsdVJcxMowetEETvlVTSN7OACUvPzP430+f4
-         dM+7Mkjf8IuoSp8lVHGzfVHaWJxnIr9mvrlh2C8r0MpMmGOtloPqEvKshh8QpT3ck28r
-         n/ElhKQS7MR3xg06mBdtl+HMp1p+WvsGUC1nVZWU+2TNbx6dJlGXlWlos/L7eRRwFQ0w
-         BYLQ==
-X-Gm-Message-State: AJIora9L/JjOxiS0Usjm2XfxGIOVwi3GTRdPJKJC5T1ujrzADt5SLz97
-        rEyVsdlAzNJxpqOO3O4/HlWCKg==
-X-Google-Smtp-Source: AGRyM1uY/I+C8DSEIO+4P/vX0mBvSB1E3AuWL8dm46TteoTz/uhg5BxVd1obDTUaJQ8kUbO4cfZm8g==
-X-Received: by 2002:a05:6402:1e93:b0:435:7f3f:407f with SMTP id f19-20020a0564021e9300b004357f3f407fmr15073343edf.173.1656317844990;
-        Mon, 27 Jun 2022 01:17:24 -0700 (PDT)
-Received: from [192.168.0.246] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170906604600b006f3ef214de7sm4800441ejj.77.2022.06.27.01.17.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 01:17:24 -0700 (PDT)
-Message-ID: <cab6fd96-4b8e-42a3-4dce-db63656df92c@linaro.org>
-Date:   Mon, 27 Jun 2022 10:17:23 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OPtn4J82OzWsDsVXNRibX7f2Ro4efWlqotHQQJeFEvk=;
+        b=LjLZbDBWbZvcGJfybl2GNoOGnZuycVqZIhi+kxvszeuAmRXq9Ik/X8fGY8bHDbQLnh
+         AfFDu7kXDQtILV9UjacL/lin4tDCYTlqeTrtjb2gHECf9VWUf49oFVLG0F7+rL8xcdlD
+         yoyunZRv6DU3jOI9mGTp7zLZtoNiPCm4ElWoBa/xeCk5AGUzNeo/FxXd1xUnztOWp762
+         WWt3ZFfKH3fqHGhgNf/lQaLPJHEFd390yYdRrY0qA+Q6xR1VNSk91xVLH2jmPQwyxdyr
+         OkDRA180Q104nIHCEAJy1B2BgqD+4rjVtEBNWfuCzUtB8wRFc+JMctS7foDcnkth1Wcg
+         posg==
+X-Gm-Message-State: AJIora8RhW6CYGL8Ik0S6SJBw0Of1HEjZ6q3fouslCsfZMy6nlybIvZe
+        EZK9GJeh/yn+SqlEljlXTqOqDpaBoK8TGfLx6eFAhrOdzo5tLyaZLsQYxMBYDNkmhkYkf/zSm9F
+        HNxO06Zp5YqHrEc5nQEuXpbdIoGXOVWF4J+95D1I9
+X-Received: by 2002:ac2:51a5:0:b0:47f:79a1:5c02 with SMTP id f5-20020ac251a5000000b0047f79a15c02mr7378514lfk.575.1656317885576;
+        Mon, 27 Jun 2022 01:18:05 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1ud5rlcp28+Fmhb5gpV7n5UDaClclIIoV1luhzWBK2LZrI8iuHqy4DEqfW17VF71T1X3oIofm19Bk+5PrzQAPI=
+X-Received: by 2002:ac2:51a5:0:b0:47f:79a1:5c02 with SMTP id
+ f5-20020ac251a5000000b0047f79a15c02mr7378505lfk.575.1656317885391; Mon, 27
+ Jun 2022 01:18:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 01/40] dt-bindings: input: gpio-keys: enforce node
- names to match all properties
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
-        Olof Johansson <olof@lixom.net>, devicetree@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh@kernel.org>, arm@kernel.org,
-        linux-input@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
- <20220616005333.18491-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220616005333.18491-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220627063656.52397-1-jasowang@redhat.com> <20220627033422-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220627033422-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 27 Jun 2022 16:17:54 +0800
+Message-ID: <CACGkMEvhk1UmcMNhYFb8dceoLnNs5Jr4WmKaQ++ZVgR2sOu1QQ@mail.gmail.com>
+Subject: Re: [PATCH net] virtio-net: fix race between ndo_open() and virtio_device_ready()
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     davem <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,32 +74,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/06/2022 02:52, Krzysztof Kozlowski wrote:
-> The gpio-keys DT schema matches all properties with a wide pattern and
-> applies specific schema to children.  This has drawback - all regular
-> properties are also matched and are silently ignored, even if they are
-> not described in schema.  Basically this allows any non-object property
-> to be present.
-> 
-> Enforce specific naming pattern for children (keys) to narrow the
-> pattern thus do not match other properties.  This will require all
-> children to be properly prefixed or suffixed (button, event, switch or
-> key).
-> 
-> Removal of "if:" within patternProperties causes drop of one indentation
-> level, but there are no other changes in the affected block.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/input/gpio-keys.yaml  | 157 +++++++++---------
->  1 file changed, 77 insertions(+), 80 deletions(-)
-> 
+On Mon, Jun 27, 2022 at 3:44 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Mon, Jun 27, 2022 at 02:36:56PM +0800, Jason Wang wrote:
+> > We used to call virtio_device_ready() after netdev registration.
+>
+> s/used to call/currently call/
+>
+> > This
+> > cause
+>
+> s/This cause/Since ndo_open can be called immediately
+> after register_netdev, this means there exists/
+>
+> > a race between ndo_open() and virtio_device_ready(): if
+> > ndo_open() is called before virtio_device_ready(), the driver may
+> > start to use the device before DRIVER_OK which violates the spec.
+> >
+> > Fixing
+>
+> s/Fixing/Fix/
+>
+> > this by switching to use register_netdevice() and protect the
+> > virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
+> > only be called after virtio_device_ready().
+> >
+> > Fixes: 4baf1e33d0842 ("virtio_net: enable VQs early")
+>
+> it's an unusual use of Fixes - the patch in question does not
+> introduce the problem, it just does not fix it completely.
 
-Dmitry,
+Yes, but I couldn't find a better commit.
 
-Any comments from your side? Are you planning to pick up the dt-bindings
-here (patch 1-3)?
+> But OK I guess.
+>
+> > Signed-off-by: Jason Wang <jasowang@redhat.com>
+>
+> With commit log changes:
 
-Best regards,
-Krzysztof
+Will post a new version with the above fixed.
+
+Thanks
+
+>
+> Acked-by: Michael S. Tsirkin <mst@redhat.com>
+>
+> > ---
+> >  drivers/net/virtio_net.c | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index db05b5e930be..8a5810bcb839 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -3655,14 +3655,20 @@ static int virtnet_probe(struct virtio_device *vdev)
+> >       if (vi->has_rss || vi->has_rss_hash_report)
+> >               virtnet_init_default_rss(vi);
+> >
+> > -     err = register_netdev(dev);
+> > +     /* serialize netdev register + virtio_device_ready() with ndo_open() */
+> > +     rtnl_lock();
+> > +
+> > +     err = register_netdevice(dev);
+> >       if (err) {
+> >               pr_debug("virtio_net: registering device failed\n");
+> > +             rtnl_unlock();
+> >               goto free_failover;
+> >       }
+> >
+> >       virtio_device_ready(vdev);
+> >
+> > +     rtnl_unlock();
+> > +
+> >       err = virtnet_cpu_notif_add(vi);
+> >       if (err) {
+> >               pr_debug("virtio_net: registering cpu notifier failed\n");
+> > --
+> > 2.25.1
+>
+

@@ -2,194 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B29D55E125
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E682F55DFF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239979AbiF0Rgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
+        id S239988AbiF0Ri3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239943AbiF0Rgc (ORCPT
+        with ESMTP id S234295AbiF0Ri1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:36:32 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD79D11C;
-        Mon, 27 Jun 2022 10:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656351391; x=1687887391;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ifbgke9g3cUqAFj1zvxitSnKIjkRzB3Yfahvct9CLGk=;
-  b=V/5IA1ThfFeavyUMXOPTdQ364YNNmdumYoEj17MTCE93ZoiHqA4Q57mi
-   eItQNoiRIKovHx0/5CMecacRyX9pTqptHq4d55Zbm0I3hPvszAPhZyBug
-   qr6PmpPJsIoEzwvzjml83+BOSF9inxG8YZTO0U0E5Quw3cMcLhaB711z+
-   bXuKX1zptjRenAvfSrh8ROK/EmSANKKpHReJyxYgrfcwpNXtf3HZyi2QT
-   RDWM3bydUqdhWSWGSotS+QvhQD42k/QF+C/BhQZBYeQRVxEsxjqnOlgP6
-   XD+YYVyT4zOy2M33MZRVV1bZ8999S4w2Wn1qBS3Tiag0lDV+owztmlwht
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="270262458"
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="270262458"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 10:36:12 -0700
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="594399461"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 10:36:11 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Smita.KoralahalliChannabasappa@amd.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, yazen.ghannam@amd.com, patches@lists.linux.dev,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v2 5/5] x86/mce: Handle AMD threshold interrupt storms
-Date:   Mon, 27 Jun 2022 10:36:05 -0700
-Message-Id: <20220627173605.514504-6-tony.luck@intel.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220627173605.514504-1-tony.luck@intel.com>
-References: <YrFSSZqjtWlm9rUr@agluck-desk3.sc.intel.com>
- <20220627173605.514504-1-tony.luck@intel.com>
+        Mon, 27 Jun 2022 13:38:27 -0400
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283E6BC11;
+        Mon, 27 Jun 2022 10:38:27 -0700 (PDT)
+Received: by mail-io1-f47.google.com with SMTP id h85so10318007iof.4;
+        Mon, 27 Jun 2022 10:38:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MXpG8a54i73DxyJ8pjX+3sdV3EJr4mPuRN2vogX5Pjs=;
+        b=PNzQtMWrS4L5c9G70xKfj/tH+hnZ3LSczeprtQ1ydtrSu5pJhnCxp95l2ccEyDlYrs
+         rVQgnvvF0ikS3AJbQ5OWj+L0s3V8TiZITsH5xbNtCniBrqkOh7egvp9Ii85reXxLJeVB
+         MjS+i13Tc9RR9j9vs+VkdxYdNhaDUKGn1Fol7j6S+tVrjMUgn46777QyBgEodXrxK53v
+         VWrNu+Ky/GSoLBE1os0UvoxN8TrzZqB1p97m3gDrYgmfGim+gsGmctc3v/2rdPSu8xwW
+         wOlknquK8CXbHsLTpY/c+ex00acjTKVOjUond3KLVNROKhZBoi6NuDeWYa3vRdQb7qG+
+         hGZg==
+X-Gm-Message-State: AJIora8LFCaBiSKP7o6Gd0bgnOxNLwU/oT2azzNl46RwGQlhyDU4mLST
+        61rYmJ3dY0ZlpNQN7oZJ+Q==
+X-Google-Smtp-Source: AGRyM1vaLHPxfl47WVkP1GJtHbKyi/rnOH1ihcmiGZYS1xOjmUYwkTbg4KMWTFWVfPlmPj7BSMj60Q==
+X-Received: by 2002:a05:6638:1690:b0:331:950f:8ea9 with SMTP id f16-20020a056638169000b00331950f8ea9mr8507145jat.67.1656351506390;
+        Mon, 27 Jun 2022 10:38:26 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id z3-20020a6b5c03000000b00672714b81e0sm5614956ioh.26.2022.06.27.10.38.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 10:38:25 -0700 (PDT)
+Received: (nullmailer pid 2643194 invoked by uid 1000);
+        Mon, 27 Jun 2022 17:38:25 -0000
+Date:   Mon, 27 Jun 2022 11:38:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jiang Jian <jiangjian@cdjrlc.com>
+Cc:     frowand.list@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] of: device - Remove duplicate 'of' in two places.
+Message-ID: <20220627173825.GA2637590-robh@kernel.org>
+References: <20220621154222.13714-1-jiangjian@cdjrlc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621154222.13714-1-jiangjian@cdjrlc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+On Tue, Jun 21, 2022 at 11:42:22PM +0800, Jiang Jian wrote:
+> file: ./drivers/of/device.c
+> line: 22
+>  * @matches: array of of device match structures to search in
+> changed to
+>  * @matches: array of device match structures to search in
+> 
+> Signed-off-by: Jiang Jian <jiangjian@cdjrlc.com>
+> ---
+>  drivers/of/device.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/of/device.c b/drivers/of/device.c
+> index 874f031442dc..1582388156a9 100644
+> --- a/drivers/of/device.c
+> +++ b/drivers/of/device.c
+> @@ -19,7 +19,7 @@
+>  
+>  /**
+>   * of_match_device - Tell if a struct device matches an of_device_id list
+> - * @matches: array of of device match structures to search in
+> + * @matches: array of device match structures to search in
 
-Extend the logic of handling CMCI storms to AMD threshold interrupts.
+Maybe that was supposed to be 'of OF device match'? 
 
-Rely on the similar approach as of Intel's CMCI to mitigate storms per
-CPU and per bank. But, unlike CMCI, do not set thresholds and reduce
-interrupt rate on a storm. Rather, disable the interrupt on the
-corresponding CPU and bank. Re-enable back the interrupts if enough
-consecutive polls of the bank show no corrected errors (30, as
-programmed by Intel).
+But really, something like 'NULL terminated array of struct of_device_id 
+entries to search' would be better.
 
-Turning off the threshold interrupts would be a better solution on AMD
-systems as other error severities will still be handled even if the
-threshold interrupts are disabled.
+>   * @dev: the of device structure to match against
 
-[Tony: Small tweak because mce_handle_storm() isn't a pointer now]
+Like 'of' here.
 
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- arch/x86/kernel/cpu/mce/amd.c      | 49 ++++++++++++++++++++++++++++++
- arch/x86/kernel/cpu/mce/core.c     |  3 ++
- arch/x86/kernel/cpu/mce/internal.h |  2 ++
- 3 files changed, 54 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 1c87501e0fa3..b7f92af065e1 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -466,6 +466,47 @@ static void threshold_restart_bank(void *_tr)
- 	wrmsr(tr->b->address, lo, hi);
- }
- 
-+static void _reset_block(struct threshold_block *block)
-+{
-+	struct thresh_restart tr;
-+
-+	memset(&tr, 0, sizeof(tr));
-+	tr.b = block;
-+	threshold_restart_bank(&tr);
-+}
-+
-+static void toggle_interrupt_reset_block(struct threshold_block *block, bool on)
-+{
-+	if (!block)
-+		return;
-+
-+	block->interrupt_enable = !!on;
-+	_reset_block(block);
-+}
-+
-+void mce_amd_handle_storm(int bank, bool on)
-+{
-+	struct threshold_block *first_block = NULL, *block = NULL, *tmp = NULL;
-+	struct threshold_bank **bp = this_cpu_read(threshold_banks);
-+	unsigned long flags;
-+
-+	if (!bp)
-+		return;
-+
-+	local_irq_save(flags);
-+
-+	first_block = bp[bank]->blocks;
-+	if (!first_block)
-+		goto end;
-+
-+	toggle_interrupt_reset_block(first_block, on);
-+
-+	list_for_each_entry_safe(block, tmp, &first_block->miscj, miscj)
-+		toggle_interrupt_reset_block(block, on);
-+end:
-+	local_irq_restore(flags);
-+}
-+
- static void mce_threshold_block_init(struct threshold_block *b, int offset)
- {
- 	struct thresh_restart tr = {
-@@ -867,6 +908,7 @@ static void amd_threshold_interrupt(void)
- 	struct threshold_block *first_block = NULL, *block = NULL, *tmp = NULL;
- 	struct threshold_bank **bp = this_cpu_read(threshold_banks);
- 	unsigned int bank, cpu = smp_processor_id();
-+	u64 status;
- 
- 	/*
- 	 * Validate that the threshold bank has been initialized already. The
-@@ -880,6 +922,13 @@ static void amd_threshold_interrupt(void)
- 		if (!(per_cpu(bank_map, cpu) & (1 << bank)))
- 			continue;
- 
-+		rdmsrl(mca_msr_reg(bank, MCA_STATUS), status);
-+		track_cmci_storm(bank, status);
-+
-+		/* Return early on an interrupt storm */
-+		if (this_cpu_read(bank_storm[bank]))
-+			return;
-+
- 		first_block = bp[bank]->blocks;
- 		if (!first_block)
- 			continue;
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index d27daa199523..6121f0afe45a 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -2072,6 +2072,9 @@ void mce_handle_storm(int bank, bool on)
- 	case X86_VENDOR_INTEL:
- 		mce_intel_handle_storm(bank, on);
- 		break;
-+	case X86_VENDOR_AMD:
-+		mce_amd_handle_storm(bank, on);
-+		break;
- 	}
- }
- 
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index d7cad839a6a9..24b2b1f1bfdc 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -206,7 +206,9 @@ extern bool filter_mce(struct mce *m);
- 
- #ifdef CONFIG_X86_MCE_AMD
- extern bool amd_filter_mce(struct mce *m);
-+void mce_amd_handle_storm(int bank, bool on);
- #else
-+static inline void mce_amd_handle_storm(int bank, bool on) {}
- static inline bool amd_filter_mce(struct mce *m) { return false; }
- #endif
- 
--- 
-2.35.3
-
+>   *
+>   * Used by a driver to check whether an platform_device present in the
+> -- 
+> 2.17.1
+> 
+> 

@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAEE55D281
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E46055E18B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236244AbiF0LlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
+        id S234629AbiF0LXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236421AbiF0Lh2 (ORCPT
+        with ESMTP id S234601AbiF0LXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:37:28 -0400
+        Mon, 27 Jun 2022 07:23:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F1225F1;
-        Mon, 27 Jun 2022 04:32:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7F2656A;
+        Mon, 27 Jun 2022 04:23:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95C1360920;
-        Mon, 27 Jun 2022 11:32:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C634C3411D;
-        Mon, 27 Jun 2022 11:32:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 563BC61457;
+        Mon, 27 Jun 2022 11:23:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59745C3411D;
+        Mon, 27 Jun 2022 11:23:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329552;
-        bh=RRoyCBS/BMhOAU3Ya3CGai3P9gxrLkfHT9hBdUp20hA=;
+        s=korg; t=1656329006;
+        bh=1/lCkrF4vafEyVqiBKyPl5LKPvi2uvhMhbw8/hNNjLg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eYVwfrC7/fWh9ekUa63FdTHwNykcaOUCqPEFFcWoPaBTR7u4zNm7/etyx8P3oqN4+
-         3n67if3amizFdI8H2fEbGxWEgeAsS4SXJeYjXbkbvPLqI8Pf+pPmjDl+GJmXZNvWot
-         jZ5c7QoVdzJIAhRlxTJFGPXXup+3IHB9iiLYpMk8=
+        b=1+G7B87EYzSsEgXP1FJxfmMRkdWHWxDsMmDC7LMjs6QxU1+zmyM6CXk3TSGIa+qFd
+         w7LZPp/esr+CfA/xVgxIobvqSz66Y250Prjf302YO+C4QTUKHgBLEwmrS0nn+mbhcG
+         tDucGzzwrftlyWBi+Bqorsvd3yrkjQPHuMXqWcu0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Soham Sen <contact@sohamsen.me>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 005/135] ALSA: hda/realtek: Add mute LED quirk for HP Omen laptop
-Date:   Mon, 27 Jun 2022 13:20:12 +0200
-Message-Id: <20220627111938.313694722@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.10 002/102] random: schedule mix_interrupt_randomness() less often
+Date:   Mon, 27 Jun 2022 13:20:13 +0200
+Message-Id: <20220627111933.531539217@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,30 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Soham Sen <contact@sohamsen.me>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit b2e6b3d9bbb0a59ba7c710cc06e44cc548301f5f upstream.
+commit 534d2eaf1970274150596fdd2bf552721e65d6b2 upstream.
 
-The HP Omen 15 laptop needs a quirk to toggle the mute LED. It already is implemented for a different variant of the HP Omen laptop so a fixup entry is needed for this variant.
+It used to be that mix_interrupt_randomness() would credit 1 bit each
+time it ran, and so add_interrupt_randomness() would schedule mix() to
+run every 64 interrupts, a fairly arbitrary number, but nonetheless
+considered to be a decent enough conservative estimate.
 
-Signed-off-by: Soham Sen <contact@sohamsen.me>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220609181919.45535-1-contact@sohamsen.me
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Since e3e33fc2ea7f ("random: do not use input pool from hard IRQs"),
+mix() is now able to credit multiple bits, depending on the number of
+calls to add(). This was done for reasons separate from this commit, but
+it has the nice side effect of enabling this patch to schedule mix()
+less often.
+
+Currently the rules are:
+a) Credit 1 bit for every 64 calls to add().
+b) Schedule mix() once a second that add() is called.
+c) Schedule mix() once every 64 calls to add().
+
+Rules (a) and (c) no longer need to be coupled. It's still important to
+have _some_ value in (c), so that we don't "over-saturate" the fast
+pool, but the once per second we get from rule (b) is a plenty enough
+baseline. So, by increasing the 64 in rule (c) to something larger, we
+avoid calling queue_work_on() as frequently during irq storms.
+
+This commit changes that 64 in rule (c) to be 1024, which means we
+schedule mix() 16 times less often. And it does *not* need to change the
+64 in rule (a).
+
+Fixes: 58340f8e952b ("random: defer fast pool mixing to worker")
+Cc: stable@vger.kernel.org
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/char/random.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8830,6 +8830,7 @@ static const struct snd_pci_quirk alc269
- 		      ALC285_FIXUP_HP_GPIO_AMP_INIT),
- 	SND_PCI_QUIRK(0x103c, 0x8783, "HP ZBook Fury 15 G7 Mobile Workstation",
- 		      ALC285_FIXUP_HP_GPIO_AMP_INIT),
-+	SND_PCI_QUIRK(0x103c, 0x8787, "HP OMEN 15", ALC285_FIXUP_HP_MUTE_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8788, "HP OMEN 15", ALC285_FIXUP_HP_MUTE_LED),
- 	SND_PCI_QUIRK(0x103c, 0x87c8, "HP", ALC287_FIXUP_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x87e5, "HP ProBook 440 G8 Notebook PC", ALC236_FIXUP_HP_GPIO_LED),
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1001,7 +1001,7 @@ void add_interrupt_randomness(int irq)
+ 	if (new_count & MIX_INFLIGHT)
+ 		return;
+ 
+-	if (new_count < 64 && !time_is_before_jiffies(fast_pool->last + HZ))
++	if (new_count < 1024 && !time_is_before_jiffies(fast_pool->last + HZ))
+ 		return;
+ 
+ 	if (unlikely(!fast_pool->mix.func))
 
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1C455E381
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7324855D82D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239095AbiF0Lyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
+        id S232362AbiF0LXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238504AbiF0Lsc (ORCPT
+        with ESMTP id S234549AbiF0LXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:48:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23844BF7F;
-        Mon, 27 Jun 2022 04:42:02 -0700 (PDT)
+        Mon, 27 Jun 2022 07:23:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9469BDE8;
+        Mon, 27 Jun 2022 04:23:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1DA561236;
-        Mon, 27 Jun 2022 11:42:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4492C3411D;
-        Mon, 27 Jun 2022 11:42:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3246061451;
+        Mon, 27 Jun 2022 11:23:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46C64C341CD;
+        Mon, 27 Jun 2022 11:23:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330121;
-        bh=DRf/7hqnTDWzUb9iWt+BSd2gs6HeVlp+ofx2tRbAUTM=;
+        s=korg; t=1656328985;
+        bh=uCms7sCXhbllyuq1NDeao1p5ydnZQ1Te9CfA6z5pYAE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=du4YO0T2Y0agwX5CT3HodgW/PGGm0XM4DBBh3Iy3OXRxud5oVGSn6064CjfQksoP2
-         kvPf644oX85VI0ldhnpBdL8d6q3hvw898vu0xDlHeVZIhIFJgKxTteTnZFrYYy/Xz6
-         1Isp074cpD+tzr3KdoB9m2ZVmCby0Qv7XW8Y2Ebg=
+        b=jC6X9ntV+n2FsVYwnvnBa25DB7XZHKjPHAiz/YTCx6UmauwuYEsq5raliCzfhZO+U
+         SIgJLb+CM14R7vzKEgkFj97GCwYOQVm4FK33V2DJ2Rsi4hlyIZ4ug+LUvrLoCJrT5/
+         URsjnQlRnju4ikSAY0YafK2SAE4uPphDQjDOIwlE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 051/181] drm/sun4i: Fix crash during suspend after component bind failure
+        stable@vger.kernel.org, Chevron Li <chevron.li@bayhubtech.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.10 013/102] mmc: sdhci-pci-o2micro: Fix card detect by dealing with debouncing
 Date:   Mon, 27 Jun 2022 13:20:24 +0200
-Message-Id: <20220627111946.047078016@linuxfoundation.org>
+Message-Id: <20220627111933.859519094@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,59 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Chevron Li <chevron.li@bayhubtech.com>
 
-[ Upstream commit 1342b5b23da9559a1578978eaff7f797d8a87d91 ]
+commit e591fcf6b4e39335c9b128b17738fcd2fdd278ae upstream.
 
-If the component driver fails to bind, or is unbound, the driver data
-for the top-level platform device points to a freed drm_device. If the
-system is then suspended, the driver passes this dangling pointer to
-drm_mode_config_helper_suspend(), which crashes.
+The result from ->get_cd() may be incorrect as the card detect debouncing
+isn't managed correctly. Let's fix it.
 
-Fix this by only setting the driver data while the platform driver holds
-a reference to the drm_device.
-
-Fixes: 624b4b48d9d8 ("drm: sun4i: Add support for suspending the display driver")
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://lore.kernel.org/r/20220615054254.16352-1-samuel@sholland.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Chevron Li<chevron.li@bayhubtech.com>
+Fixes: 7d44061704dd ("mmc: sdhci-pci-o2micro: Fix O2 Host data read/write DLL Lock phase shift issue")
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220602132543.596-1-chevron.li@bayhubtech.com
+[Ulf: Updated the commit message]
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/sun4i/sun4i_drv.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/mmc/host/sdhci-pci-o2micro.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
-index 6a9ba8a77c77..4b29de65a563 100644
---- a/drivers/gpu/drm/sun4i/sun4i_drv.c
-+++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
-@@ -73,7 +73,6 @@ static int sun4i_drv_bind(struct device *dev)
- 		goto free_drm;
- 	}
+--- a/drivers/mmc/host/sdhci-pci-o2micro.c
++++ b/drivers/mmc/host/sdhci-pci-o2micro.c
+@@ -147,6 +147,8 @@ static int sdhci_o2_get_cd(struct mmc_ho
  
--	dev_set_drvdata(dev, drm);
- 	drm->dev_private = drv;
- 	INIT_LIST_HEAD(&drv->frontend_list);
- 	INIT_LIST_HEAD(&drv->engine_list);
-@@ -114,6 +113,8 @@ static int sun4i_drv_bind(struct device *dev)
+ 	if (!(sdhci_readw(host, O2_PLL_DLL_WDT_CONTROL1) & O2_PLL_LOCK_STATUS))
+ 		sdhci_o2_enable_internal_clock(host);
++	else
++		sdhci_o2_wait_card_detect_stable(host);
  
- 	drm_fbdev_generic_setup(drm, 32);
- 
-+	dev_set_drvdata(dev, drm);
-+
- 	return 0;
- 
- finish_poll:
-@@ -130,6 +131,7 @@ static void sun4i_drv_unbind(struct device *dev)
- {
- 	struct drm_device *drm = dev_get_drvdata(dev);
- 
-+	dev_set_drvdata(dev, NULL);
- 	drm_dev_unregister(drm);
- 	drm_kms_helper_poll_fini(drm);
- 	drm_atomic_helper_shutdown(drm);
--- 
-2.35.1
-
+ 	return !!(sdhci_readl(host, SDHCI_PRESENT_STATE) & SDHCI_CARD_PRESENT);
+ }
 
 

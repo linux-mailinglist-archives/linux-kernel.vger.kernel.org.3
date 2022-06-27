@@ -2,69 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD72555D29B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA9255C391
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239138AbiF0QNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
+        id S239128AbiF0QNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239139AbiF0QNj (ORCPT
+        with ESMTP id S239135AbiF0QNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:13:39 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE0A186FD
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:13:37 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id ay16so20225642ejb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:13:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YSimcfIaUu8P8Zd0kHKcHjUirkPTuMp+KjnpxJVA5io=;
-        b=NOr80kINOxbn9hWrJtWZUy0A7Z5bnVxhfzNk7yGXC9cX2y5Is9kq5gu7JXvFN2fKFO
-         Wkyx/XoC6NxV63yEjFUm+CKEDH8bzoDu0gT9Dha0paYgM87Rncz+9YnPlG/fcD+ak9Db
-         R7vWps1VSNAgUGBxVJVHDYadM4SEd0ThYN40Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YSimcfIaUu8P8Zd0kHKcHjUirkPTuMp+KjnpxJVA5io=;
-        b=SmPvqEiZUq+VPJ7z/GKvPQjAIexmHqtTOdwJT+75Vfu29uwbE2dmX5Im8eXjolZMhB
-         saD0tiU5AGFpSbU3xohEMktSUoA8hgRD2Utw4qgrlj54WoHzvEFTTjnRU/EPSWIePCsL
-         18IT3SD1vnOYnj0EZKiwh0VgHIyddfn/1mfEHeKpKUsW3OfHy70YuMMOczmdRbzk8snS
-         srsMSvaG1zgozlJw+nKN1OJXVgCtfibUNHFUe5WR369SOQ1H3ufRgON3a7hNPfN+/PTq
-         XpRPvEkzuTrpnWGRm8aFgI1XfNU9SDchQZou5QIw/w62wzGiHXP87wS0TGkWmFH6+i7w
-         6vdQ==
-X-Gm-Message-State: AJIora/SMjvyDnc0i28LheHOQgqA7Ld/q67h9s8d8y8DSkpM1JL/1/e9
-        801whPkDyo06mHRSMfeDx389pYXNy/WQSpGhFv8fXg==
-X-Google-Smtp-Source: AGRyM1t4SKs8xAPTAkOLharE1S0BnU6t82l9azV9EQCQJnwi3GPWnDhaPL0W18baR+3XPfgOOSa38vx0CCtKssnCvvQ=
-X-Received: by 2002:a17:906:f84:b0:711:eda5:db31 with SMTP id
- q4-20020a1709060f8400b00711eda5db31mr13441225ejj.397.1656346416538; Mon, 27
- Jun 2022 09:13:36 -0700 (PDT)
+        Mon, 27 Jun 2022 12:13:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DEB186E5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:13:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 528D3B81186
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:13:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D22C3411D;
+        Mon, 27 Jun 2022 16:13:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656346412;
+        bh=5Eiao4YckIx1rV8LSQxic4/kEhehVORgdHvrvRDRKu0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qu7hLvCDcgOTXERvXWEdBRsbjojMj9azE7PYdGf1axLagEfZ0jOKE7xd7Jernf99T
+         aiDSBcY9dPeemPEXKAo2LVDaxTySyKtwkde5FB8VfrT1pLOXJ/hx533f3Mwcgw1f4M
+         ED3RDkNajY0xCAXUuOoYkZzsrOpSmCVAlFkwhP4wz3sQ6qcQmZqhVnTS4GeCJJ54Je
+         va5JG6kvjI2fCJbVLeLfEKWwZEIbSYUVll4DUfW22DTVnurdt0vrG6hkgZInEgigGf
+         rR1SnpK8P/D+vv7QTJzNJ4ozyeiyTTZOmkw42FwMwYfSF4XNtSAuuIIsPc1S/4OfLq
+         bxLkfTxKB/9/Q==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ofir Bitton <obitton@habana.ai>
+Subject: [PATCH] habanalabs: remove redundant argument in access_dev_mem APIs
+Date:   Mon, 27 Jun 2022 19:13:27 +0300
+Message-Id: <20220627161327.775077-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220627112402.2332046-1-wenst@chromium.org> <20220627112402.2332046-2-wenst@chromium.org>
- <43f393d2dcdd0bfac66bfc420e9261d31b3ceedc.camel@collabora.com>
-In-Reply-To: <43f393d2dcdd0bfac66bfc420e9261d31b3ceedc.camel@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 28 Jun 2022 00:13:25 +0800
-Message-ID: <CAGXv+5GweDwKPczT3GTYeiRCuaHNzV7+q4xfC_pgvo4GFDPOUg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] media: mediatek: vcodec: dec: Fix 4K frame size enumeration
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,85 +51,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 11:33 PM Nicolas Dufresne
-<nicolas.dufresne@collabora.com> wrote:
->
-> Le lundi 27 juin 2022 =C3=A0 19:23 +0800, Chen-Yu Tsai a =C3=A9crit :
-> > This partially reverts commit b018be06f3c7 ("media: mediatek: vcodec:
-> > Read max resolution from dec_capability"). In this commit, the maximum
-> > resolution ended up being a function of both the firmware capability an=
-d
-> > the current set format.
-> >
-> > However, frame size enumeration for output (coded) formats should not
-> > depend on the format set, but should return supported resolutions for
-> > the format requested by userspace.
-> >
-> > Fix this so that the driver returns the supported resolutions correctly=
-,
-> > even if the instance only has default settings, or if the output format
-> > is currently set to VP8F, which does not support 4K.
-> >
-> > Fixes: b018be06f3c7 ("media: mediatek: vcodec: Read max resolution from=
- dec_capability")
-> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> > ---
-> >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c    | 2 --
-> >  .../platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c    | 7 +++++++
-> >  2 files changed, 7 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/=
-drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> > index 5d6fdf18c3a6..fcb4b8131c49 100644
-> > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> > @@ -595,8 +595,6 @@ static int vidioc_enum_framesizes(struct file *file=
-, void *priv,
-> >               fsize->type =3D V4L2_FRMSIZE_TYPE_STEPWISE;
-> >               fsize->stepwise =3D dec_pdata->vdec_framesizes[i].stepwis=
-e;
-> >
-> > -             fsize->stepwise.max_width =3D ctx->max_width;
-> > -             fsize->stepwise.max_height =3D ctx->max_height;
-> >               mtk_v4l2_debug(1, "%x, %d %d %d %d %d %d",
-> >                               ctx->dev->dec_capability,
-> >                               fsize->stepwise.min_width,
-> > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stat=
-eless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-> > index 16d55785d84b..9a4d3e3658aa 100644
-> > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-> > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-> > @@ -360,6 +360,13 @@ static void mtk_vcodec_add_formats(unsigned int fo=
-urcc,
-> >
-> >               mtk_vdec_framesizes[count_framesizes].fourcc =3D fourcc;
-> >               mtk_vdec_framesizes[count_framesizes].stepwise =3D stepwi=
-se_fhd;
->
-> While at it, can you constify stepwise_fhd, it is scary to think that som=
-eone
-> could modify it and cause big headache.
+From: Ofir Bitton <obitton@habana.ai>
 
-I noticed that as well, but since a planned refactoring would get rid of it=
-,
-I didn't fix it in this series.
+Region structure is derived from region type, hence no need to pass
+it as an argument.
 
-I can add a patch for that.
+Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+---
+ drivers/misc/habanalabs/common/debugfs.c    | 3 +--
+ drivers/misc/habanalabs/common/device.c     | 5 ++---
+ drivers/misc/habanalabs/common/habanalabs.h | 8 ++++----
+ 3 files changed, 7 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/misc/habanalabs/common/debugfs.c
+index 0f07c2de986b..aaf5235a58d5 100644
+--- a/drivers/misc/habanalabs/common/debugfs.c
++++ b/drivers/misc/habanalabs/common/debugfs.c
+@@ -695,8 +695,7 @@ static int hl_access_dev_mem_by_region(struct hl_device *hdev, u64 addr,
+ 		if (addr >= mem_reg->region_base &&
+ 			addr <= mem_reg->region_base + mem_reg->region_size - acc_size) {
+ 			*found = true;
+-			return hdev->asic_funcs->access_dev_mem(hdev, mem_reg, i,
+-				addr, val, acc_type);
++			return hdev->asic_funcs->access_dev_mem(hdev, i, addr, val, acc_type);
+ 		}
+ 	}
+ 	return 0;
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index c42557052f88..adf0ff26636c 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -245,14 +245,13 @@ int hl_access_cfg_region(struct hl_device *hdev, u64 addr, u64 *val,
+  * hl_access_dev_mem - access device memory
+  *
+  * @hdev: pointer to habanalabs device structure
+- * @region: the memory region the address belongs to
+  * @region_type: the type of the region the address belongs to
+  * @addr: the address to access
+  * @val: the value to write from or read to
+  * @acc_type: the type of access (r/w, 32/64)
+  */
+-int hl_access_dev_mem(struct hl_device *hdev, struct pci_mem_region *region,
+-		enum pci_region region_type, u64 addr, u64 *val, enum debugfs_access_type acc_type)
++int hl_access_dev_mem(struct hl_device *hdev, enum pci_region region_type,
++			u64 addr, u64 *val, enum debugfs_access_type acc_type)
+ {
+ 	switch (region_type) {
+ 	case PCI_REGION_CFG:
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index c5f9501b1113..c7401b524aed 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -1455,8 +1455,8 @@ struct hl_asic_funcs {
+ 	u32* (*get_stream_master_qid_arr)(void);
+ 	int (*mmu_get_real_page_size)(struct hl_device *hdev, struct hl_mmu_properties *mmu_prop,
+ 					u32 page_size, u32 *real_page_size, bool is_dram_addr);
+-	int (*access_dev_mem)(struct hl_device *hdev, struct pci_mem_region *region,
+-		enum pci_region region_type, u64 addr, u64 *val, enum debugfs_access_type acc_type);
++	int (*access_dev_mem)(struct hl_device *hdev, enum pci_region region_type,
++				u64 addr, u64 *val, enum debugfs_access_type acc_type);
+ 	u64 (*set_dram_bar_base)(struct hl_device *hdev, u64 addr);
+ };
+ 
+@@ -3133,8 +3133,8 @@ void hl_dma_unmap_sgtable(struct hl_device *hdev, struct sg_table *sgt,
+ 				enum dma_data_direction dir);
+ int hl_access_cfg_region(struct hl_device *hdev, u64 addr, u64 *val,
+ 	enum debugfs_access_type acc_type);
+-int hl_access_dev_mem(struct hl_device *hdev, struct pci_mem_region *region,
+-		enum pci_region region_type, u64 addr, u64 *val, enum debugfs_access_type acc_type);
++int hl_access_dev_mem(struct hl_device *hdev, enum pci_region region_type,
++			u64 addr, u64 *val, enum debugfs_access_type acc_type);
+ int hl_device_open(struct inode *inode, struct file *filp);
+ int hl_device_open_ctrl(struct inode *inode, struct file *filp);
+ bool hl_device_operational(struct hl_device *hdev,
+-- 
+2.25.1
 
-ChenYu
-
-> > +             if (!(ctx->dev->dec_capability & VCODEC_CAPABILITY_4K_DIS=
-ABLED) &&
-> > +                 fourcc !=3D V4L2_PIX_FMT_VP8_FRAME) {
-> > +                     mtk_vdec_framesizes[count_framesizes].stepwise.ma=
-x_width =3D
-> > +                             VCODEC_DEC_4K_CODED_WIDTH;
-> > +                     mtk_vdec_framesizes[count_framesizes].stepwise.ma=
-x_height =3D
-> > +                             VCODEC_DEC_4K_CODED_HEIGHT;
-> > +             }
-> >               num_framesizes++;
-> >               break;
-> >       case V4L2_PIX_FMT_MM21:
->

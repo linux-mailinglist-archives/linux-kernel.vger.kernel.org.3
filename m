@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0109155DA34
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC3D55E1AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236587AbiF0Lin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        id S234701AbiF0LYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236440AbiF0Lhb (ORCPT
+        with ESMTP id S234681AbiF0LYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:37:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40952626;
-        Mon, 27 Jun 2022 04:32:38 -0700 (PDT)
+        Mon, 27 Jun 2022 07:24:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50E0656C;
+        Mon, 27 Jun 2022 04:24:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B4E060C17;
-        Mon, 27 Jun 2022 11:32:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76530C3411D;
-        Mon, 27 Jun 2022 11:32:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 690BFB8111E;
+        Mon, 27 Jun 2022 11:24:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A23D8C385A5;
+        Mon, 27 Jun 2022 11:23:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329557;
-        bh=qFx8ituOKob9EOtVHxccCobyGYw3VQGH5tyYocEmG9Y=;
+        s=korg; t=1656329040;
+        bh=Dofcmi+hdhw1/cNl7/QLeE8tyR3IXblze26vcC06QdQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KcMYdLa1ODAfBGUh4ldCB4fFdVdcZBllSlScshv8Of1NQdYOmtmPFu+Mfz7RXJD+0
-         ffztnlt9n/o5n7h8T8wVYo7VAI8Ffr5IRUeaHyvFnyG1YYDzK3mtBQ9nV6NcslqV0L
-         aIX8eF0cHmwhKk3QK0p/PtG61jSayzyejXAE8ObQ=
+        b=DG0/cst5MNEs9qnFwbhriLzxJL3TdSJKKF0OmVAlcW6HgFJ2cWtpek5XNyo4IAb/6
+         7LLAKri/0/SMiuKYNzrcHJ0ycMBkKSJdsmmg0qterrkLhHSdq5sP4FWVjOyFNGMcT4
+         9w32LLZyfujgTMu5yTDGs7Zh4viAYY2e/8z6EP6c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        nikitashvets@flyium.com, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 007/135] ALSA: hda/realtek: Apply fixup for Lenovo Yoga Duet 7 properly
+        stable@vger.kernel.org, Jon Hunter <jonathanh@nvidia.com>,
+        Ron Economos <re@w6rz.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.10 003/102] random: quiet urandom warning ratelimit suppression message
 Date:   Mon, 27 Jun 2022 13:20:14 +0200
-Message-Id: <20220627111938.371580511@linuxfoundation.org>
+Message-Id: <20220627111933.561143737@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,139 +55,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 56ec3e755bd1041d35bdec020a99b327697ee470 upstream.
+commit c01d4d0a82b71857be7449380338bc53dde2da92 upstream.
 
-It turned out that Lenovo shipped two completely different products
-with the very same PCI SSID, where both require different quirks;
-namely, Lenovo C940 has already the fixup for its speaker
-(ALC298_FIXUP_LENOVO_SPK_VOLUME) with the PCI SSID 17aa:3818, while
-Yoga Duet 7 has also the very same PCI SSID but requires a different
-quirk, ALC287_FIXUP_YOGA7_14TIL_SPEAKERS.
+random.c ratelimits how much it warns about uninitialized urandom reads
+using __ratelimit(). When the RNG is finally initialized, it prints the
+number of missed messages due to ratelimiting.
 
-Fortunately, both are with different codecs (C940 with ALC298 and Duet
-7 with ALC287), hence we can apply different fixes by checking the
-codec ID.  This patch implements that special fixup function.
+It has been this way since that functionality was introduced back in
+2018. Recently, cc1e127bfa95 ("random: remove ratelimiting for in-kernel
+unseeded randomness") put a bit more stress on the urandom ratelimiting,
+which teased out a bug in the implementation.
 
-For easier handling, the internal function for applying a specific
-fixup entry is exported as __snd_hda_apply_fixup(), so that it can be
-called from the codec driver.  The rest is simply calling it with a
-different fixup ID depending on the codec ID.
+Specifically, when under pressure, __ratelimit() will print its own
+message and reset the count back to 0, making the final message at the
+end less useful. Secondly, it does so as a pr_warn(), which apparently
+is undesirable for people's CI.
 
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Tested-by: nikitashvets@flyium.com
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/5ca147d1-3a2d-60c6-c491-8aa844183222@redhat.com
-Link: https://lore.kernel.org/r/20220614054831.14648-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fortunately, __ratelimit() has the RATELIMIT_MSG_ON_RELEASE flag exactly
+for this purpose, so we set the flag.
+
+Fixes: 4e00b339e264 ("random: rate limit unseeded randomness warnings")
+Cc: stable@vger.kernel.org
+Reported-by: Jon Hunter <jonathanh@nvidia.com>
+Reported-by: Ron Economos <re@w6rz.net>
+Tested-by: Ron Economos <re@w6rz.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/hda_auto_parser.c |    7 ++++---
- sound/pci/hda/hda_local.h       |    1 +
- sound/pci/hda/patch_realtek.c   |   24 +++++++++++++++++++++++-
- 3 files changed, 28 insertions(+), 4 deletions(-)
+ drivers/char/random.c           |    2 +-
+ include/linux/ratelimit_types.h |   12 ++++++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
---- a/sound/pci/hda/hda_auto_parser.c
-+++ b/sound/pci/hda/hda_auto_parser.c
-@@ -823,7 +823,7 @@ static void set_pin_targets(struct hda_c
- 		snd_hda_set_pin_ctl_cache(codec, cfg->nid, cfg->val);
- }
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -88,7 +88,7 @@ static RAW_NOTIFIER_HEAD(random_ready_ch
  
--static void apply_fixup(struct hda_codec *codec, int id, int action, int depth)
-+void __snd_hda_apply_fixup(struct hda_codec *codec, int id, int action, int depth)
- {
- 	const char *modelname = codec->fixup_name;
- 
-@@ -833,7 +833,7 @@ static void apply_fixup(struct hda_codec
- 		if (++depth > 10)
- 			break;
- 		if (fix->chained_before)
--			apply_fixup(codec, fix->chain_id, action, depth + 1);
-+			__snd_hda_apply_fixup(codec, fix->chain_id, action, depth + 1);
- 
- 		switch (fix->type) {
- 		case HDA_FIXUP_PINS:
-@@ -874,6 +874,7 @@ static void apply_fixup(struct hda_codec
- 		id = fix->chain_id;
- 	}
- }
-+EXPORT_SYMBOL_GPL(__snd_hda_apply_fixup);
- 
- /**
-  * snd_hda_apply_fixup - Apply the fixup chain with the given action
-@@ -883,7 +884,7 @@ static void apply_fixup(struct hda_codec
- void snd_hda_apply_fixup(struct hda_codec *codec, int action)
- {
- 	if (codec->fixup_list)
--		apply_fixup(codec, codec->fixup_id, action, 0);
-+		__snd_hda_apply_fixup(codec, codec->fixup_id, action, 0);
- }
- EXPORT_SYMBOL_GPL(snd_hda_apply_fixup);
- 
---- a/sound/pci/hda/hda_local.h
-+++ b/sound/pci/hda/hda_local.h
-@@ -350,6 +350,7 @@ void snd_hda_apply_verbs(struct hda_code
- void snd_hda_apply_pincfgs(struct hda_codec *codec,
- 			   const struct hda_pintbl *cfg);
- void snd_hda_apply_fixup(struct hda_codec *codec, int action);
-+void __snd_hda_apply_fixup(struct hda_codec *codec, int id, int action, int depth);
- void snd_hda_pick_fixup(struct hda_codec *codec,
- 			const struct hda_model_fixup *models,
- 			const struct snd_pci_quirk *quirk,
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -6883,6 +6883,7 @@ enum {
- 	ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS,
- 	ALC287_FIXUP_LEGION_15IMHG05_AUTOMUTE,
- 	ALC287_FIXUP_YOGA7_14ITL_SPEAKERS,
-+	ALC298_FIXUP_LENOVO_C940_DUET7,
- 	ALC287_FIXUP_13S_GEN2_SPEAKERS,
- 	ALC256_FIXUP_SET_COEF_DEFAULTS,
- 	ALC256_FIXUP_SYSTEM76_MIC_NO_PRESENCE,
-@@ -6892,6 +6893,23 @@ enum {
- 	ALC285_FIXUP_LEGION_Y9000X_AUTOMUTE,
+ /* Control how we warn userspace. */
+ static struct ratelimit_state urandom_warning =
+-	RATELIMIT_STATE_INIT("warn_urandom_randomness", HZ, 3);
++	RATELIMIT_STATE_INIT_FLAGS("urandom_warning", HZ, 3, RATELIMIT_MSG_ON_RELEASE);
+ static int ratelimit_disable __read_mostly =
+ 	IS_ENABLED(CONFIG_WARN_ALL_UNSEEDED_RANDOM);
+ module_param_named(ratelimit_disable, ratelimit_disable, int, 0644);
+--- a/include/linux/ratelimit_types.h
++++ b/include/linux/ratelimit_types.h
+@@ -23,12 +23,16 @@ struct ratelimit_state {
+ 	unsigned long	flags;
  };
  
-+/* A special fixup for Lenovo C940 and Yoga Duet 7;
-+ * both have the very same PCI SSID, and we need to apply different fixups
-+ * depending on the codec ID
-+ */
-+static void alc298_fixup_lenovo_c940_duet7(struct hda_codec *codec,
-+					   const struct hda_fixup *fix,
-+					   int action)
-+{
-+	int id;
+-#define RATELIMIT_STATE_INIT(name, interval_init, burst_init) {		\
+-		.lock		= __RAW_SPIN_LOCK_UNLOCKED(name.lock),	\
+-		.interval	= interval_init,			\
+-		.burst		= burst_init,				\
++#define RATELIMIT_STATE_INIT_FLAGS(name, interval_init, burst_init, flags_init) { \
++		.lock		= __RAW_SPIN_LOCK_UNLOCKED(name.lock),		  \
++		.interval	= interval_init,				  \
++		.burst		= burst_init,					  \
++		.flags		= flags_init,					  \
+ 	}
+ 
++#define RATELIMIT_STATE_INIT(name, interval_init, burst_init) \
++	RATELIMIT_STATE_INIT_FLAGS(name, interval_init, burst_init, 0)
 +
-+	if (codec->core.vendor_id == 0x10ec0298)
-+		id = ALC298_FIXUP_LENOVO_SPK_VOLUME; /* C940 */
-+	else
-+		id = ALC287_FIXUP_YOGA7_14ITL_SPEAKERS; /* Duet 7 */
-+	__snd_hda_apply_fixup(codec, id, action, 0);
-+}
-+
- static const struct hda_fixup alc269_fixups[] = {
- 	[ALC269_FIXUP_GPIO2] = {
- 		.type = HDA_FIXUP_FUNC,
-@@ -8591,6 +8609,10 @@ static const struct hda_fixup alc269_fix
- 		.chained = true,
- 		.chain_id = ALC269_FIXUP_HEADSET_MODE,
- 	},
-+	[ALC298_FIXUP_LENOVO_C940_DUET7] = {
-+		.type = HDA_FIXUP_FUNC,
-+		.v.func = alc298_fixup_lenovo_c940_duet7,
-+	},
- 	[ALC287_FIXUP_13S_GEN2_SPEAKERS] = {
- 		.type = HDA_FIXUP_VERBS,
- 		.v.verbs = (const struct hda_verb[]) {
-@@ -9060,7 +9082,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x17aa, 0x31af, "ThinkCentre Station", ALC623_FIXUP_LENOVO_THINKSTATION_P340),
- 	SND_PCI_QUIRK(0x17aa, 0x3802, "Lenovo Yoga DuetITL 2021", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3813, "Legion 7i 15IMHG05", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
--	SND_PCI_QUIRK(0x17aa, 0x3818, "Lenovo C940", ALC298_FIXUP_LENOVO_SPK_VOLUME),
-+	SND_PCI_QUIRK(0x17aa, 0x3818, "Lenovo C940 / Yoga Duet 7", ALC298_FIXUP_LENOVO_C940_DUET7),
- 	SND_PCI_QUIRK(0x17aa, 0x3819, "Lenovo 13s Gen2 ITL", ALC287_FIXUP_13S_GEN2_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3820, "Yoga Duet 7 13ITL6", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3824, "Legion Y9000X 2020", ALC285_FIXUP_LEGION_Y9000X_SPEAKERS),
+ #define RATELIMIT_STATE_INIT_DISABLED					\
+ 	RATELIMIT_STATE_INIT(ratelimit_state, 0, DEFAULT_RATELIMIT_BURST)
+ 
 
 

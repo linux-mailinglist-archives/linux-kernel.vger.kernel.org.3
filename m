@@ -2,76 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CB355C131
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A949655D633
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbiF0NSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
+        id S235409AbiF0NQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234978AbiF0NS3 (ORCPT
+        with ESMTP id S235308AbiF0NQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:18:29 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD67CF0;
-        Mon, 27 Jun 2022 06:18:26 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z19so12935149edb.11;
-        Mon, 27 Jun 2022 06:18:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:from:to:cc:subject:date:in-reply-to:message-id
-         :mime-version;
-        bh=bYTHdHMf3jC1jHl9DPaG8LW+XxhPJYraR1ILnGyaWRE=;
-        b=f7txa/JvespsDWBSVg8Ll3tCX6K3cgmKj2lHck8JsGumPgcNxcfqJbch+A/UMBa4Sn
-         mUWOW5Rpz/SqzZaGRqMUi05ujw2jA3MImbffJFCiSIQdl+50++0mfL4sh5okGmDJ7Bx/
-         oCfMm9fKe+6lJt4PMnhjSB4VuJ5D8y5ApzQT1zVxl30i1jOMykW017Dw9qoux3qPQJVF
-         3juShRUsDYWYYKWBJzOWmMJ+jrRhF3lk9h6eEd0W7xcZLDK+9V1Bbq09XFETPfC2UGpP
-         J8MAl41OEORRjiElAHKikKzOjbCxPizi5JSBNYfxCtycR6gt7OJjJkRfJcNeQyF7ZoAh
-         fNJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=bYTHdHMf3jC1jHl9DPaG8LW+XxhPJYraR1ILnGyaWRE=;
-        b=IhPlyBoxTZ8nrVWUYm2xJ21GvbR0vrtmuPWNEGrHINu8OEmJDUoxzyk+DbtbbAPBRq
-         uaDi3d9dxtncBiHj1KJU8bxFxfvCfghPdbh8Bs0Na3uRiad24ocvFlOTGKcapUMLse+R
-         5OdUXd+We5Ogxg3ZuBFLKsERbOn1RBJgJ2L1N+PCXdFwE3/nPFenHfFPuhPfWbScZ38Z
-         b0LNaR/Rv0SDrV3YS/Zj7O7gJ/rg5ikuXOlMJJHHYBWmTwtS/hiLEtbu9OxDYO4KPUxT
-         2P7YT7nOzZ0P4Dn1U5bwssyMRf8CJuaKq/Hq2IsS6rShLYd2LAGu9Tf4wzcA7Ol/eKlD
-         WWXA==
-X-Gm-Message-State: AJIora9SOzTFWGf8WJI1BwOla1rB6cpDS47qLbRQCRMUwOC7HUXvqpfs
-        TOSrrjUK+Rr4uNs4av46iiw=
-X-Google-Smtp-Source: AGRyM1sOiuU691m9UNqKILrcF++Me1UMVhCLagzUfxoYS+ZZ9h9DjZQudKSBeU5wzuC1B2KMFg4l+A==
-X-Received: by 2002:a05:6402:84a:b0:426:262d:967e with SMTP id b10-20020a056402084a00b00426262d967emr16126132edz.286.1656335905115;
-        Mon, 27 Jun 2022 06:18:25 -0700 (PDT)
-Received: from localhost (92.40.170.45.threembb.co.uk. [92.40.170.45])
-        by smtp.gmail.com with ESMTPSA id g3-20020a170906594300b006f3ef214daesm5014147ejr.20.2022.06.27.06.18.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 06:18:24 -0700 (PDT)
-References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com>
- <20220618214009.2178567-14-aidanmacdonald.0x0@gmail.com>
- <cafd8a40ad35dcf8a35350261af6031c@walle.cc>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
-        rafael@kernel.org, quic_gurus@quicinc.com,
-        sebastian.reichel@collabora.com, andy.shevchenko@gmail.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 13/16] pinctrl: Add AXP192 pin control driver
-Date:   Mon, 27 Jun 2022 14:12:58 +0100
-In-reply-to: <cafd8a40ad35dcf8a35350261af6031c@walle.cc>
-Message-ID: <me4ummrWKIPseIG4ay7yCfrumN8sIdvc@localhost>
+        Mon, 27 Jun 2022 09:16:27 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE521055D;
+        Mon, 27 Jun 2022 06:14:05 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LWp5x2xgmzhYnY;
+        Mon, 27 Jun 2022 21:11:49 +0800 (CST)
+Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 21:14:03 +0800
+Received: from [10.67.102.167] (10.67.102.167) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 21:14:02 +0800
+Message-ID: <91566735-d576-9c3d-88f1-9e0f3bc94395@huawei.com>
+Date:   Mon, 27 Jun 2022 21:14:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 3/8] dmaengine: hisilicon: Add multi-thread support for a
+ DMA channel
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     "Wangzhou (B)" <wangzhou1@hisilicon.com>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220625074422.3479591-1-haijie1@huawei.com>
+ <20220625074422.3479591-4-haijie1@huawei.com> <YrlMaasl+ORdDJaN@matsya>
+ <eed10a2b5ea745878024ca653158f4de@huawei.com>
+From:   haijie <haijie1@huawei.com>
+In-Reply-To: <eed10a2b5ea745878024ca653158f4de@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.102.167]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,91 +58,109 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Michael Walle <michael@walle.cc> writes:
+在 2022/6/27 14:51, - 写道:
+> -----Original Message-----
+> From: Vinod Koul [mailto:vkoul@kernel.org]
+> Sent: Monday, June 27, 2022 2:21 PM
+> To: haijie <haijie1@huawei.com>
+> Cc: Wangzhou (B) <wangzhou1@hisilicon.com>; dmaengine@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH 3/8] dmaengine: hisilicon: Add multi-thread support for a DMA channel
+>
+> On 25-06-22, 15:44, Jie Hai wrote:
+>> When we get a DMA channel and try to use it in multiple threads it
+>> will cause oops and hanging the system.
+>>
+>> % echo 100 > /sys/module/dmatest/parameters/threads_per_chan
+>> % echo 100 > /sys/module/dmatest/parameters/iterations
+>> % echo 1 > /sys/module/dmatest/parameters/run
+>> [383493.327077] Unable to handle kernel paging request at virtual
+>> 		address dead000000000108
+>> [383493.335103] Mem abort info:
+>> [383493.335103]   ESR = 0x96000044
+>> [383493.335105]   EC = 0x25: DABT (current EL), IL = 32 bits
+>> [383493.335107]   SET = 0, FnV = 0
+>> [383493.335108]   EA = 0, S1PTW = 0
+>> [383493.335109]   FSC = 0x04: level 0 translation fault
+>> [383493.335110] Data abort info:
+>> [383493.335111]   ISV = 0, ISS = 0x00000044
+>> [383493.364739]   CM = 0, WnR = 1
+>> [383493.367793] [dead000000000108] address between user and kernel
+>> 		address ranges
+>> [383493.375021] Internal error: Oops: 96000044 [#1] PREEMPT SMP
+>> [383493.437574] CPU: 63 PID: 27895 Comm: dma0chan0-copy2 Kdump:
+>> 		loaded Tainted: GO 5.17.0-rc4+ #2
+>> [383493.457851] pstate: 204000c9 (nzCv daIF +PAN -UAO -TCO -DIT
+>> 		-SSBS BTYPE=--)
+>> [383493.465331] pc : vchan_tx_submit+0x64/0xa0 [383493.469957] lr :
+>> vchan_tx_submit+0x34/0xa0
+>>
+>> This happens because of data race. Each thread rewrite channels's
+>> descriptor as soon as device_issue_pending is called. It leads to the
+>> situation that the driver thinks that it uses the right descriptor in
+>> interrupt handler while channels's descriptor has been changed by
+>> other thread.
+>>
+>> With current fixes channels's descriptor changes it's value only when
+>> it has been used. A new descriptor is acquired from
+>> vc->desc_issued queue that is already filled with descriptors
+>> that are ready to be sent. Threads have no direct access to DMA
+>> channel descriptor. Now it is just possible to queue a descriptor for
+>> further processing.
+>>
+>> Fixes: e9f08b65250d ("dmaengine: hisilicon: Add Kunpeng DMA engine
+>> support")
+>> Signed-off-by: Jie Hai <haijie1@huawei.com>
+>> ---
+>>   drivers/dma/hisi_dma.c | 6 ++----
+>>   1 file changed, 2 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/dma/hisi_dma.c b/drivers/dma/hisi_dma.c index
+>> 0a0f8a4d168a..0385419be8d5 100644
+>> --- a/drivers/dma/hisi_dma.c
+>> +++ b/drivers/dma/hisi_dma.c
+>> @@ -271,7 +271,6 @@ static void hisi_dma_start_transfer(struct
+>> hisi_dma_chan *chan)
+>>   
+>>   	vd = vchan_next_desc(&chan->vc);
+>>   	if (!vd) {
+>> -		dev_err(&hdma_dev->pdev->dev, "no issued task!\n");
+> how is this a fix?
 
-> Hi,
->
-> As Linus suggested you could have a look at devm_gpio_regmap_register()
-> with a custom xlate() callback and some improvements. But I've never
-> worked with pinctrl so I might be wrong. See below.
->
->> +static int axp192_gpio_get(struct gpio_chip *chip, unsigned int offset)
->> +{
->> +	struct axp192_pctl *pctl = gpiochip_get_data(chip);
->> +	const struct axp192_pctl_reg_info *reginfo = &pctl->desc->in_regs[offset];
->> +	unsigned int val;
->> +	int ret;
->> +
->> +	ret = regmap_read(pctl->regmap, reginfo->reg, &val);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return !!(val & reginfo->mask);
->> +}
->
-> This should work.
->
->> +
->> +static int axp192_gpio_get_direction(struct gpio_chip *chip, unsigned
->> int offset)
->> +{
->> +	struct axp192_pctl *pctl = gpiochip_get_data(chip);
->> +	const struct axp192_pctl_reg_info *reginfo =
->> &pctl->desc->ctrl_regs[offset];
->> +	const u8 *input_muxvals = pctl->desc->functions[AXP192_FUNC_INPUT].muxvals;
->> +	unsigned int val;
->> +	int ret;
->> +
->> +	ret = regmap_read(pctl->regmap, reginfo->reg, &val);
->> +	if (ret)
->> +		return ret;
->> +
->> +	if ((val & reginfo->mask) == (input_muxvals[offset] <<
->> (ffs(reginfo->mask) - 1)))
->> +		return GPIO_LINE_DIRECTION_IN;
->
-> This isn't supported (yet) in gpio-regmap...
->
->> +
->> +	return GPIO_LINE_DIRECTION_OUT;
->> +}
->> +
->> +static void axp192_gpio_set(struct gpio_chip *chip, unsigned int
->> offset, int value)
->> +{
->> +	struct axp192_pctl *pctl = gpiochip_get_data(chip);
->> +	const struct axp192_pctl_reg_info *reginfo = &pctl->desc->out_regs[offset];
->> +
->> +	regmap_update_bits(pctl->regmap, reginfo->reg, reginfo->mask, value
->> ? reginfo->mask : 0);
->> +}
->> +
->> +static int axp192_gpio_direction_input(struct gpio_chip *chip,
->> unsigned int offset)
->> +{
->> +	return pinctrl_gpio_direction_input(chip->base + offset);
->> +}
->
-> ..as well as this.
->
->> +
->> +static int axp192_gpio_direction_output(struct gpio_chip *chip,
->> unsigned int offset, int value)
->> +{
->> +	chip->set(chip, offset, value);
->
-> Why don't you call pinctrl_gpio_direction_output() here?
+> With current fixes, hisi_dma_start_transfer may be called twice for one desc.
 
-Probably because I copied this from pinctrl-axp209. I'll fix it in
-the next version.
-
+> If channel's desc is NULL, When hisi_dma_issue_pending
+>>   		chan->desc = NULL;
+>>   		return;
+>>   	}
+>> @@ -303,7 +302,7 @@ static void hisi_dma_issue_pending(struct dma_chan
+>> *c)
+>>   
+>>   	spin_lock_irqsave(&chan->vc.lock, flags);
+>>   
+>> -	if (vchan_issue_pending(&chan->vc))
+>> +	if (vchan_issue_pending(&chan->vc) && !chan->desc)
+> This looks good
 >
+>>   		hisi_dma_start_transfer(chan);
+>>   
+>>   	spin_unlock_irqrestore(&chan->vc.lock, flags); @@ -442,11 +441,10 @@
+>> static irqreturn_t hisi_dma_irq(int irq, void *data)
+>>   				    chan->qp_num, chan->cq_head);
+>>   		if (FIELD_GET(STATUS_MASK, cqe->w0) == STATUS_SUCC) {
+>>   			vchan_cookie_complete(&desc->vd);
+>> +			hisi_dma_start_transfer(chan);
+> Why should this fix the error reported?
 >
-> I *think* what is needed for gpio-regmap to support this is:
->  - support values and masks for the direction, for now, we
->    only support single bits.
->  - support the pinctrl_gpio_direction_{input,output} calls
->
-> -michael
-
-That sounds about right, thanks for taking a look.
+>>   		} else {
+>>   			dev_err(&hdma_dev->pdev->dev, "task error!\n");
+>>   		}
+>> -
+>> -		chan->desc = NULL;
+>>   	}
+>>   
+>>   	spin_unlock(&chan->vc.lock);
+>> --
+>> 2.33.0
+> --
+> ~Vinod
+> .

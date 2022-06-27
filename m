@@ -2,71 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5572455DC29
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D16A55D112
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234445AbiF0LIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
+        id S234436AbiF0LLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234436AbiF0LH7 (ORCPT
+        with ESMTP id S234409AbiF0LLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:07:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F01164D3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:07:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B15F2613F9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:07:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9493EC3411D;
-        Mon, 27 Jun 2022 11:07:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656328078;
-        bh=haxHAjRpU+/6mmZExs2SLPmWmGf4m9w9TRXkoNQuhUU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eppB2M+eor9/IjlnMPrkfJlJ84xF7uPrdwdJL3tBmsDaoxemYE6FCre4vfDFWpDkO
-         VmIYZ4WOc30sfcUoagZ6jZBq/qtAhMdYBy9Oz77bBFQoytE38AVltbeFWCn+wF2cg1
-         3Axb+k5TRIAe6oiJgo33F71ULPNPpVTOqAFpdu8E=
-Date:   Mon, 27 Jun 2022 13:07:55 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yangxi Xiang <xyangxi5@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        nick black <dankamongmen@gmail.com>
-Subject: Re: [PATCH] vt: fix memory overlapping when deleting chars in the
- buffer
-Message-ID: <YrmPi/D4dZAySgll@kroah.com>
-References: <YrmKvSFSvPpT7Q3O@kroah.com>
- <20220627110417.27648-1-xyangxi5@gmail.com>
+        Mon, 27 Jun 2022 07:11:38 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F1764F2;
+        Mon, 27 Jun 2022 04:11:36 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LWlQR6B2gz9srK;
+        Mon, 27 Jun 2022 19:10:55 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 19:11:34 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 19:11:33 +0800
+Subject: Re: [PATCH 5/5] arm64: kdump: Don't defer the reservation of crash
+ high memory
+To:     Baoquan He <bhe@redhat.com>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>, <kexec@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        liushixin <liushixin2@huawei.com>
+References: <20220613080932.663-1-thunder.leizhen@huawei.com>
+ <20220613080932.663-6-thunder.leizhen@huawei.com>
+ <YrFYHYgX3mC//t2l@MiWiFi-R3L-srv>
+ <3f66323d-f371-b931-65fb-edfae0f01c88@huawei.com> <YrIIJkhKWSuAqkCx@arm.com>
+ <YrLUREAoBMSZo7RR@MiWiFi-R3L-srv> <YrRzvO5F0dumsbAU@arm.com>
+ <Yrkbak66vYT55H4x@MiWiFi-R3L-srv>
+ <e3318551-4134-245a-c060-86ab81eb3e68@huawei.com>
+ <YrmDo7Sx1jNQ4WFd@MiWiFi-R3L-srv>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <5996a53a-70eb-bb30-c8a6-b0c2c8ebb0f9@huawei.com>
+Date:   Mon, 27 Jun 2022 19:11:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627110417.27648-1-xyangxi5@gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YrmDo7Sx1jNQ4WFd@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 07:04:17PM +0800, Yangxi Xiang wrote:
-> > What commit does this fix?  how was this tested?
+
+
+On 2022/6/27 18:17, Baoquan He wrote:
+> On 06/27/22 at 05:17pm, Leizhen (ThunderTown) wrote:
+>>
+>>
+>> On 2022/6/27 10:52, Baoquan He wrote:
+>>> On 06/23/22 at 03:07pm, Catalin Marinas wrote:
+>>>> On Wed, Jun 22, 2022 at 04:35:16PM +0800, Baoquan He wrote:
+>>>>> On 06/21/22 at 07:04pm, Catalin Marinas wrote:
+>>>>>> The problem with splitting is that you can end up with two entries in
+>>>>>> the TLB for the same VA->PA mapping (e.g. one for a 4KB page and another
+>>>>>> for a 2MB block). In the lucky case, the CPU will trigger a TLB conflict
+>>>>>> abort (but can be worse like loss of coherency).
+>>>>>
+>>>>> Thanks for this explanation. Is this a drawback of arm64 design? X86
+>>>>> code do the same thing w/o issue, is there way to overcome this on
+>>>>> arm64 from hardware or software side?
+>>>>
+>>>> It is a drawback of the arm64 implementations. Having multiple TLB
+>>>> entries for the same VA would need additional logic in hardware to
+>>>> detect, so the microarchitects have pushed back. In ARMv8.4, some
+>>>> balanced was reached with FEAT_BBM so that the only visible side-effect
+>>>> is a potential TLB conflict abort that could be resolved by software.
+>>>
+>>> I see, thx.
+>>>
+>>>>
+>>>>> I ever got a arm64 server with huge memory, w or w/o crashkernel setting 
+>>>>> have different bootup time. And the more often TLB miss and flush will
+>>>>> cause performance cost. It is really a pity if we have very powerful
+>>>>> arm64 cpu and system capacity, but bottlenecked by this drawback.
+>>>>
+>>>> Is it only the boot time affected or the runtime performance as well?
+>>>
+>>> Sorry for late reply. What I observerd is the boot time serious latecy
+>>> with huge memory. Since the timestamp is not available at that time,
+>>> we can't tell the number. I didn't notice the runtime performance.
+>>
+>> There's some data here, and I see you're not on the cc list.
+>>
+>> https://lore.kernel.org/linux-mm/1656241815-28494-1-git-send-email-guanghuifeng@linux.alibaba.com/T/
 > 
-> This bug is triggered by running a dynamic analysis on the kernel,
-> with the help of sanitizer to observe this bug. This memory
-> overlapping copy can cause data corruption when scr_memcpyw is
-> optimized to memcpy because memcpy does not ensure its behavior if
-> the destination buffer overlaps with the source buffer.
+> Thanks, Zhen Lei. I also saw the patch. That seems to be a good way,
 
-And what commit id does this fix, or has it always been broken?
+Yes.
 
-thanks,
+> since there's only one process running at that time. Not sure if there's
+> still risk of multiple TLB entries for the same VA existing.
+> 
+> .
+> 
 
-greg k-h
+-- 
+Regards,
+  Zhen Lei

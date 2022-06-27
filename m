@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A698B55C4BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4307B55D6EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbiF0I2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55820 "EHLO
+        id S233445AbiF0I24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233555AbiF0I2t (ORCPT
+        with ESMTP id S233560AbiF0I2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Jun 2022 04:28:49 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217EAB24
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:28:47 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ay16so17521968ejb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:28:47 -0700 (PDT)
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BF562C7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:28:48 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id fd6so11866408edb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:28:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PTln65IiWVFNI8/zs4JVrceMHpafS1zMofC+vruC3r4=;
-        b=e/Jz9vr6NuUOQgCo1uUznJgL19mPh39TCDjsuXf4BGdZc8mhm9xsuNJjwIFPZtb56K
-         m7YlT2KAoycYxIAvdXREbvjlE9/1bBj1J5VWE6q29H63i0NBRO2zedqEb9d0s22m8491
-         EY0wKxcnjZ0xmKHdqaYlpTYt4fkbvj/2abnUm5b4Bk0yUdRTEO55eo4AKb47PnuiAhLw
-         L+e+gbIB/HU9nqGC/aZgEp9KbH6C1T3bGj2bFMw3+VIxI8ki2ZE0F4KJGbVEkIjZozEh
-         y6FZGGqx+psxgZRHzkKQ6wYSt4RuzX6GvwVXmGYVpyutkSjYzzUcCLjALAg0rXvDjptA
-         GnUA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zKH3Tesbl/NGDeaepzYHkR+mNGiL5G7Vu+6CzYaCN2o=;
+        b=F25vIrBxmoT+FqoFT+BJgJXfFRfmp5rXW6x++VWyI+l1agAgoTzazB0zSRZvFk4WGQ
+         Gi0Gzy1OfPiwBWLawwQMt1DTfBPSjoxyzEyb6nb1SuZj3gKM4/PjwkHYuClu1aHpn3X+
+         CJ573A4j6mKreJO7Vo4+UIC6dwNmDEXX6Cn8DYoR5Y3oCsihFLDtqwEXmqEJRnfVgAr1
+         J5r+C9+rco5T/OyoUanoNQnBXH/QJYokCltWCVLwz6aA1SNfcwyF9mJm3xKU5sPn16tD
+         XooSPjZh6cOa/VnZysy0VBrxTAhSruv4TBorYxJbtrG2Fv/omMWxXYVFE3E3OGlO5FaY
+         Baxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PTln65IiWVFNI8/zs4JVrceMHpafS1zMofC+vruC3r4=;
-        b=kUJi163pKCIbG7Ofs2D+bGuoLyXqI5o3CEKEYLdrUWBKj70DFmfaU/+IZ1+KtJmQIF
-         wIcBaFBRW2rrA+PBDFYZ8KmwQu5elwCdrFzca8i8s/T+YBnH+TA22jLSQu1+NovNlUxy
-         mUVlM+82tK+woqhgHv17cPgZWpAxG7ZczdsM1BSvBD2/osPUV+1NOWhhKY9OxrY4E+4m
-         U4YvQc2ObR2fG1MD5e+MKi1l0taxfyCcl/sHNpA+6qPlx6cBGATMvS601/65kG4SjdTp
-         uNXh3oRhUAVbwTjD+5Oaxe9l4JtZ9V62IfldB0W3KCyMNRUHWAGUZqf7an5zNOYrL7mr
-         OLcg==
-X-Gm-Message-State: AJIora+M1Du5A3od5rbRJE4+Gr77YqLO6/KOYW3ApTqA01weH7Ec/Zdz
-        TKlHGvva5/NYdmjCPI46qm0y0g==
-X-Google-Smtp-Source: AGRyM1sUEuXrrmm9VnutdGTV08Io2RWyQq9OFou8JEFVz3+lo/yFQYCJCyPLiZXgjRUjD276CjkIfw==
-X-Received: by 2002:a17:906:8501:b0:711:bf65:2a47 with SMTP id i1-20020a170906850100b00711bf652a47mr11904262ejx.150.1656318525636;
-        Mon, 27 Jun 2022 01:28:45 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zKH3Tesbl/NGDeaepzYHkR+mNGiL5G7Vu+6CzYaCN2o=;
+        b=xFc8SWJPSJjCuLfk/qBXN4HfNqPaTJ4yWuYWxOL8ia+TuDEsaSvFl9p+ZVAjVUI5wT
+         GnpUsb4fchBjn4QH/PhbLxT0/fwWNEMn1OEw3NQ1E68JWSCnsQ/8Taj0b/VxDR9C7PcU
+         o9BdFzne6+zDDZF4qTAhek+P5HsMLMM0LIwxEN8ihwqLPAx/84Fvu2OEF/mK/k9YOqO4
+         uqdAhoTcwh5dOOHegC0i4spq2YE3+NldYp6N1Sz6pMXDC+Z2dTbzJmhH4sQRSQx1tn1U
+         9RR5jsxoLh+JKK/EtaWHUsWO/HfzgeZ3CQyVy2Bi3Z8D+4v/dhB1fTHrhER2BFQ04n0n
+         OdZA==
+X-Gm-Message-State: AJIora82GznhnfqrH6J+lLvFFU6CxOeNRQ+neoD3+ZBH4OzTte+4ku+g
+        ItVXZ7jpfj9jhmTt0fFOTGH6sA==
+X-Google-Smtp-Source: AGRyM1tlVPIJ6klFHkYwpNQXzMcs+I+DRlK2Z0x6pNXWJZeMS6/VYBEC8jkniI09RJJvpD0+4c2M0w==
+X-Received: by 2002:a05:6402:2402:b0:435:3418:61b5 with SMTP id t2-20020a056402240200b00435341861b5mr14505258eda.82.1656318526712;
+        Mon, 27 Jun 2022 01:28:46 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o9-20020aa7c7c9000000b004356e90d13esm7056364eds.83.2022.06.27.01.28.44
+        by smtp.gmail.com with ESMTPSA id o9-20020aa7c7c9000000b004356e90d13esm7056364eds.83.2022.06.27.01.28.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 01:28:45 -0700 (PDT)
+        Mon, 27 Jun 2022 01:28:46 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
         arm@kernel.org, soc@kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 1/2] arm64: dts: cleanup for v5.20
-Date:   Mon, 27 Jun 2022 10:28:41 +0200
-Message-Id: <20220627082842.50508-1-krzysztof.kozlowski@linaro.org>
+Subject: [GIT PULL 2/2] ARM: dts: cleanup for v5.20
+Date:   Mon, 27 Jun 2022 10:28:42 +0200
+Message-Id: <20220627082842.50508-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220627082842.50508-1-krzysztof.kozlowski@linaro.org>
+References: <20220627082842.50508-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,7 +77,8 @@ Hi,
 These cleanups were part of my set, which partially was taken by other
 maintainers.  For some here I have acks, but for most not.
 
-It also includes parts of very old patchset from Serge, in similar style.
+It also includes documenting compatibles for Aspeed boards, for which I was not
+sure whether they will be applied by Aspeed maintainer or not.
 
 The series bring us closer to clean `make dtbs_check`.
 
@@ -89,59 +92,79 @@ The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/dt64-cleanup-5.20
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/dt-cleanup-5.20
 
-for you to fetch changes up to 87ccc38e2f8e55853ddfe633d9934bc7ca74b21c:
+for you to fetch changes up to 2f7a7f941d770c03942fefe1d91ce954cb329c7e:
 
-  arm64: dts: apm: Harmonize DWC USB3 DT nodes name (2022-06-27 10:15:20 +0200)
-
-----------------------------------------------------------------
-Cleanup of ARM64 DTS for v5.20
-
-Series of cleanups for ARM64 DTS: White-spaces, gpio-key subnode names,
-USB DWC3/EHCI node names.
+  Merge branch 'for-v5.20/aspeed-dts-cleanup' into for-v5.20/dts-cleanup (2022-06-27 10:19:57 +0200)
 
 ----------------------------------------------------------------
-Krzysztof Kozlowski (11):
-      arm64: dts: amd: adjust whitespace around '='
-      arm64: dts: apm: adjust whitespace around '='
-      arm64: dts: lg: adjust whitespace around '='
-      arm64: dts: marvell: adjust whitespace around '='
-      arm64: dts: hisilicon: adjust whitespace around '='
-      arm64: dts: sprd: adjust whitespace around '='
-      arm64: dts: microchip: adjust whitespace around '='
-      arm64: dts: apm: correct gpio-keys properties
-      arm64: dts: broadcom: align gpio-key node names with dtschema
-      arm64: dts: hisilicon: align gpio-key node names with dtschema
-      arm64: dts: hisilicon: correct gpio-keys properties
+Cleanup of ARM DTS for v5.20
 
-Serge Semin (1):
-      arm64: dts: apm: Harmonize DWC USB3 DT nodes name
+Series of cleanups for ARM DTS:
+1. White-spaces, gpio-key subnode names, USB DWC3/EHCI node names,
+2. Add board-level compatibles to Aspeed evaluation boards.
 
- arch/arm64/boot/dts/amd/amd-overdrive-rev-b0.dts   |   4 +-
- arch/arm64/boot/dts/amd/amd-overdrive-rev-b1.dts   |   4 +-
- arch/arm64/boot/dts/apm/apm-merlin.dts             |   2 +-
- arch/arm64/boot/dts/apm/apm-mustang.dts            |   2 +-
- arch/arm64/boot/dts/apm/apm-shadowcat.dtsi         |   6 +-
- arch/arm64/boot/dts/apm/apm-storm.dtsi             |  10 +-
- .../bcm4908/bcm4906-tplink-archer-c2300-v1.dts     |   8 +-
- .../broadcom/bcm4908/bcm4908-asus-gt-ac5300.dts    |   8 +-
- arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dts  |  14 +-
- arch/arm64/boot/dts/hisilicon/hi3660.dtsi          |   8 +-
- arch/arm64/boot/dts/hisilicon/hi3670.dtsi          |   2 +-
- arch/arm64/boot/dts/hisilicon/hi6220-hikey.dts     |  12 +-
- arch/arm64/boot/dts/hisilicon/hip05-d02.dts        |   6 +-
- arch/arm64/boot/dts/hisilicon/hip06.dtsi           |   6 +-
- arch/arm64/boot/dts/hisilicon/hip07.dtsi           |   6 +-
- arch/arm64/boot/dts/lg/lg1312.dtsi                 |  38 ++--
- arch/arm64/boot/dts/lg/lg1313.dtsi                 |  38 ++--
- .../boot/dts/marvell/armada-7040-mochabin.dts      |   4 +-
- arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtsi |   2 +-
- .../boot/dts/marvell/armada-8040-puzzle-m801.dts   |   4 +-
- arch/arm64/boot/dts/marvell/cn9130-db.dtsi         |   2 +-
- .../boot/dts/microchip/sparx5_pcb134_board.dtsi    | 200 ++++++++++-----------
- .../boot/dts/microchip/sparx5_pcb135_board.dtsi    |  48 ++---
- arch/arm64/boot/dts/sprd/sc9836.dtsi               |  10 +-
- arch/arm64/boot/dts/sprd/sc9863a.dtsi              |   4 +-
- arch/arm64/boot/dts/sprd/whale2.dtsi               |   2 +-
- 26 files changed, 224 insertions(+), 226 deletions(-)
+----------------------------------------------------------------
+Krzysztof Kozlowski (18):
+      ARM: dts: pxa: adjust whitespace around '='
+      ARM: dts: aspeed: adjust whitespace around '='
+      ARM: dts: at91: adjust whitespace around '='
+      ARM: dts: axm: adjust whitespace around '='
+      ARM: dts: spear: adjust whitespace around '='
+      ARM: dts: alpine: adjust whitespace around '='
+      ARM: dts: ecx: adjust whitespace around '='
+      ARM: dts: lpc: adjust whitespace around '='
+      ARM: dts: nuvoton: adjust whitespace around '='
+      ARM: dts: ste: adjust whitespace around '='
+      ARM: dts: sti: adjust whitespace around '='
+      ARM: dts: sd: adjust whitespace around '='
+      ARM: dts: animeo: align gpio-key node names with dtschema
+      ARM: dts: animeo: correct gpio-keys properties
+      ARM: dts: ast2500-evb: fix board compatible
+      ARM: dts: ast2600-evb: fix board compatible
+      ARM: dts: ast2600-evb-a1: fix board compatible
+      Merge branch 'for-v5.20/aspeed-dts-cleanup' into for-v5.20/dts-cleanup
+
+Serge Semin (2):
+      ARM: dts: lpc18xx: Harmonize EHCI/OHCI DT nodes name
+      ARM: dts: stih407-family: Harmonize DWC USB3 DT nodes name
+
+ arch/arm/boot/dts/alpine.dtsi                     |   2 +-
+ arch/arm/boot/dts/animeo_ip.dts                   |  10 +-
+ arch/arm/boot/dts/aspeed-ast2500-evb.dts          |   2 +-
+ arch/arm/boot/dts/aspeed-ast2600-evb-a1.dts       |   1 +
+ arch/arm/boot/dts/aspeed-ast2600-evb.dts          |   2 +-
+ arch/arm/boot/dts/aspeed-bmc-portwell-neptune.dts |   6 +-
+ arch/arm/boot/dts/aspeed-bmc-quanta-s6q.dts       |   6 +-
+ arch/arm/boot/dts/at91-kizbox3-hs.dts             |   2 +-
+ arch/arm/boot/dts/at91-sam9x60ek.dts              |   2 +-
+ arch/arm/boot/dts/at91-sama5d27_som1.dtsi         |   2 +-
+ arch/arm/boot/dts/at91-sama5d27_som1_ek.dts       |   4 +-
+ arch/arm/boot/dts/at91-sama5d27_wlsom1_ek.dts     |   2 +-
+ arch/arm/boot/dts/at91-sama5d2_icp.dts            |   4 +-
+ arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts         |   6 +-
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts       |   6 +-
+ arch/arm/boot/dts/axm5516-cpus.dtsi               |  32 ++--
+ arch/arm/boot/dts/ecx-common.dtsi                 |  10 +-
+ arch/arm/boot/dts/lpc18xx.dtsi                    |   6 +-
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi     |   2 +-
+ arch/arm/boot/dts/nuvoton-npcm750.dtsi            |   2 +-
+ arch/arm/boot/dts/pxa300-raumfeld-common.dtsi     |  10 +-
+ arch/arm/boot/dts/sam9x60.dtsi                    |   2 +-
+ arch/arm/boot/dts/sd5203.dts                      |   2 +-
+ arch/arm/boot/dts/spear1310-evb.dts               |   2 +-
+ arch/arm/boot/dts/spear1340-evb.dts               |   2 +-
+ arch/arm/boot/dts/spear1340.dtsi                  |   2 +-
+ arch/arm/boot/dts/spear300-evb.dts                |   2 +-
+ arch/arm/boot/dts/spear310-evb.dts                |   2 +-
+ arch/arm/boot/dts/spear320-evb.dts                |   2 +-
+ arch/arm/boot/dts/spear320-hmi.dts                |   2 +-
+ arch/arm/boot/dts/spear320.dtsi                   |   2 +-
+ arch/arm/boot/dts/ste-ab8500.dtsi                 |   6 +-
+ arch/arm/boot/dts/ste-hrefv60plus.dtsi            |   4 +-
+ arch/arm/boot/dts/stih407-family.dtsi             | 176 +++++++++++-----------
+ arch/arm/boot/dts/stih407.dtsi                    |   4 +-
+ arch/arm/boot/dts/stih410.dtsi                    |   4 +-
+ arch/arm/boot/dts/stihxxx-b2120.dtsi              |   8 +-
+ 37 files changed, 170 insertions(+), 171 deletions(-)

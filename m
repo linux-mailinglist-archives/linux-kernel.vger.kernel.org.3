@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D3B55CBB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0BF55C93F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242203AbiF0XAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        id S241868AbiF0XAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241243AbiF0XAQ (ORCPT
+        with ESMTP id S240843AbiF0XAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:00:16 -0400
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B9120F61;
-        Mon, 27 Jun 2022 16:00:15 -0700 (PDT)
-Received: by mail-il1-f172.google.com with SMTP id p9so6749546ilj.7;
-        Mon, 27 Jun 2022 16:00:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BBFolvCCjJnxhxohRNSfL/AQrqOPHqKgSw2LBcN2NnQ=;
-        b=bfXVza1My8NSlUM8fMnH6rlEd9095RBvJGqKsD3Zsdz7rTOiJnG252FT3Sb/axL2E1
-         cHTl+aYPFp1SNDQZ79q/9KrLR+p9sndPKTqGIup2ydW+V02jbfongpRrmXx8ENLS4mJX
-         UXAVwVviNmomi0kmLf/qNF+iKR46jlnAMlNQxomIuBW8UFtK7nhAtfBdaS627M1KdopS
-         xqSfRf+57ma3Z8tHl6DljT5HQbtiNsQMtK66X46s15KUPRzyupoTB4rdTn2cdQdLNhmu
-         bR94PUVvOqY4TUyaEffV8Xr3x4sDAta0ybSrJC/b55lV//7JLUEUj9HaTJ6mjtS2/mHs
-         YysQ==
-X-Gm-Message-State: AJIora+Yhm21t4Q9bqmh40J4StOcbHE0IldgvsqGTP3tAVuV90qX8tA4
-        2bnHhiiSFVT/MbdvomkViw==
-X-Google-Smtp-Source: AGRyM1s3mDmWtHR9KacZ3brBzVulekXmlkOSi7niZLvqZ3o/vbqhjQZ0fgaGh7zEyYExAh29I7iuRQ==
-X-Received: by 2002:a05:6e02:154d:b0:2da:9539:3093 with SMTP id j13-20020a056e02154d00b002da95393093mr4813252ilu.131.1656370814723;
+        Mon, 27 Jun 2022 19:00:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB54120F5E;
         Mon, 27 Jun 2022 16:00:14 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id u18-20020a92ccd2000000b002d8d813892csm5083745ilq.8.2022.06.27.16.00.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 16:00:14 -0700 (PDT)
-Received: (nullmailer pid 3126600 invoked by uid 1000);
-        Mon, 27 Jun 2022 23:00:12 -0000
-Date:   Mon, 27 Jun 2022 17:00:12 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        krzk+dt@kernel.org, devicetree@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/7] ASoC: dt-bindings: fsl-sai: Add new property to
- configure dataline
-Message-ID: <20220627230012.GA3122063-robh@kernel.org>
-References: <1655451877-16382-1-git-send-email-shengjiu.wang@nxp.com>
- <1655451877-16382-7-git-send-email-shengjiu.wang@nxp.com>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 672DD6152E;
+        Mon, 27 Jun 2022 23:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B91F4C34115;
+        Mon, 27 Jun 2022 23:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656370813;
+        bh=Cz/mDLhtdOHDanqNZb29JFI8MUxivS35BpGxClMYb/4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=vIUOwrANsGFnJKMs0wcS/+4g7TJ2Tl/KKXsuhRKu5Nl1vZinaHOcdIT6f9kx+AJkx
+         rWuU8NZcpnQajR+O47at7kYCtapC5ZqMMV7SJmiZA2KygQQ9WG+y//e6AgAjf81diB
+         s414gD+9B8inUlu8XZlHD/ET+4EHqEuWusj2M9hNT3dxaEzdKsET24RKpfofSas4Iu
+         GwhnGYniaG2r5OFkRFVRBDGWZEoFkc1Vod/VqmpdINNDl+crmHsKlKHTqGY+uVvAXQ
+         cqL0Zuddg8rlH+eoXzGmV6Qo0HHIZ//m/IkUhW0cTuk4N4wbktHXQB+0oerAgzv+RO
+         GFCTLIEkGQlgg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 96E0DE49BBA;
+        Mon, 27 Jun 2022 23:00:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1655451877-16382-7-git-send-email-shengjiu.wang@nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3] Bluetooth: btmtksdio: Add in-band wakeup support
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <165637081361.14351.14905070415572630432.git-patchwork-notify@kernel.org>
+Date:   Mon, 27 Jun 2022 23:00:13 +0000
+References: <848d3d5baf23eb78411a9672b8973ae3c593db98.1656285304.git.objelf@gmail.com>
+In-Reply-To: <848d3d5baf23eb78411a9672b8973ae3c593db98.1656285304.git.objelf@gmail.com>
+To:     Sean Wang <sean.wang@mediatek.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
+        Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
+        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
+        Deren.Wu@mediatek.com, km.lin@mediatek.com,
+        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
+        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
+        Eric.Liang@mediatek.com, Stella.Chang@mediatek.com,
+        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
+        frankgor@google.com, abhishekpandit@google.com,
+        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        yake.yang@mediatek.com
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,40 +68,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 03:44:36PM +0800, Shengjiu Wang wrote:
-> "fsl,dataline" is added to configure the dataline of SAI.
-> It has 3 value for each configuration, first one means the type:
-> I2S(1) or PDM(2), second one is dataline mask for 'rx', third one is
-> dataline mask for 'tx'. for example:
-> 
-> fsl,dataline = <1 0xff 0xff 2 0xff 0x11>,
-> 
-> it means I2S type rx mask is 0xff, tx mask is 0xff, PDM type
-> rx mask is 0xff, tx mask is 0x11 (dataline 1 and 4 enabled).
-> 
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-> ---
->  Documentation/devicetree/bindings/sound/fsl-sai.txt | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/fsl-sai.txt b/Documentation/devicetree/bindings/sound/fsl-sai.txt
-> index c71c5861d787..4c66e6a1a533 100644
-> --- a/Documentation/devicetree/bindings/sound/fsl-sai.txt
-> +++ b/Documentation/devicetree/bindings/sound/fsl-sai.txt
-> @@ -49,6 +49,14 @@ Required properties:
->  			  receive data by following their own bit clocks and
->  			  frame sync clocks separately.
->  
-> +  - fsl,dataline        : configure the dataline. it has 3 value for each configuration
-> +                          first one means the type: I2S(1) or PDM(2)
-> +                          second one is dataline mask for 'rx'
-> +                          third one is dataline mask for 'tx'.
-> +                          for example: fsl,dataline = <1 0xff 0xff 2 0xff 0x11>;
-> +                          it means I2S type rx mask is 0xff, tx mask is 0xff, PDM type
-> +                          rx mask is 0xff, tx mask is 0x11 (dataline 1 and 4 enabled).
+Hello:
 
-You mean 0 and 4 enabled? Or 1 and 4?
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-How many 3 cell entries can you have?
+On Mon, 27 Jun 2022 07:27:36 +0800 you wrote:
+> From: Sean Wang <sean.wang@mediatek.com>
+> 
+> Commit ce64b3e94919 ("Bluetooth: mt7921s: Support wake on bluetooth")
+> adds the wake on bluethooth via a dedicated GPIO.
+> 
+> Extend the wake-on-bluetooth to use the SDIO DAT1 pin (in-band wakeup),
+> when supported by the SDIO host driver.
+> 
+> [...]
 
-Rob
+Here is the summary with links:
+  - [v3] Bluetooth: btmtksdio: Add in-band wakeup support
+    https://git.kernel.org/bluetooth/bluetooth-next/c/681ec6abcd7f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

@@ -2,193 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D739C55E263
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742EB55C3FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233902AbiF0JYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        id S233551AbiF0JZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbiF0JYV (ORCPT
+        with ESMTP id S233023AbiF0JZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:24:21 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2CC5F48
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:24:17 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id cw10so17841740ejb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:24:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WheMo0jihvDqC8vkz7SeuHDX+Y7spNQBPItzd2n3lJ0=;
-        b=L2p+vhW8V4W2qd7Xx3ICJgwuBfUCYsXAwPJ9+Y54ki6Mzrs21eZhOBQOQqzrdRq/ki
-         q0wO1Kbml/A5MfI4+eCB/NgTIvhAWmZPe+KUVsiGeHeztxDvJQabWrZZSskL6GEP1urI
-         di/+WaZWgQGlzKszgnTOuItTXx/H8QdR/6gx8NMdNwu9XtjumwRj0LLc8wZjyo/bYs0Y
-         pGGhj20wTkxXzcozlbLzEubE27s5Z5Pdn8wEDc4jfG6uWnRvSPbNv0rV59MkXIyeNnyd
-         zTqYMzzoQ/bRv2c90D5XQF1LkO+eUL1tVBNcnB2g7ZdGy97RIG1VFYU63ghv9apqNY+r
-         07gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WheMo0jihvDqC8vkz7SeuHDX+Y7spNQBPItzd2n3lJ0=;
-        b=aJGeUpBXzwjqGGs3Acxvv3wvqIUOC78I3MVA7+/pfk00dD6GdFP8ApHRDsTJvGfReT
-         5vTbtgorJbUwp0j+FALXbCZS8XvJdNqA2FaggiG5bEVf0iSHmjA896cbWvIRgGqhTO5s
-         S8i9h6ED54bHc5JP1DtPnICBm3gJn/6gdnmvxsYNyhEP19i6eLGgWUgdW+LgsyrPgr6Q
-         9fZlBOVfOgz16MEYickWFtmreNkU2BPOEkTuLys/i9UdXE8L78cSBalT8amNJgrpuTGu
-         UhdH7ZcR7ZVi0ftJfSeh6H8+GCWVaPSUmWYix9vBVZb105XXiQx8hk78p21m1yBUsci1
-         SIoA==
-X-Gm-Message-State: AJIora/anWTf00AttTDXYJG16lAVUkNFcgrhFuCsaW+rGgA64jaPnYit
-        EUhtkpSg65DBZqgAwvZagB7TeQ==
-X-Google-Smtp-Source: AGRyM1vmSw4PkoUJobIyZ+0PFFNkXJG8udoaIUyo4XAy6BtVMPROE7ZMi8N88/BWlX2w6+MlYxVhXQ==
-X-Received: by 2002:a17:906:478e:b0:722:f84d:159f with SMTP id cw14-20020a170906478e00b00722f84d159fmr11897036ejc.182.1656321856221;
-        Mon, 27 Jun 2022 02:24:16 -0700 (PDT)
-Received: from [192.168.0.247] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d16-20020a170906545000b006feb20b5235sm4820639ejp.84.2022.06.27.02.24.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 02:24:15 -0700 (PDT)
-Message-ID: <430f5284-b107-e43c-7329-9e299093a352@linaro.org>
-Date:   Mon, 27 Jun 2022 11:24:13 +0200
+        Mon, 27 Jun 2022 05:25:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DD132DE4;
+        Mon, 27 Jun 2022 02:25:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C4B141758;
+        Mon, 27 Jun 2022 02:25:51 -0700 (PDT)
+Received: from [192.168.4.21] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9BC583F792;
+        Mon, 27 Jun 2022 02:25:47 -0700 (PDT)
+Message-ID: <4e4b9e1a-778e-9ca1-5c15-65e45a532790@arm.com>
+Date:   Mon, 27 Jun 2022 10:25:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 07/14] riscv: dts: canaan: fix the k210's memory node
+ Thunderbird/91.9.1
+Subject: Re: [PATCH net-next 1/4] time64.h: define PSEC_PER_NSEC and use it in
+ tc-taprio
 Content-Language: en-US
-To:     Conor.Dooley@microchip.com, damien.lemoal@opensource.wdc.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     fancer.lancer@gmail.com, tglx@linutronix.de, sam@ravnborg.org,
-        Eugeniy.Paltsev@synopsys.com, daniel.lezcano@linaro.org,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        masahiroy@kernel.org, geert@linux-m68k.org, lgirdwood@gmail.com,
-        niklas.cassel@wdc.com, dillon.minfei@gmail.com,
-        jee.heng.sia@intel.com, thierry.reding@gmail.com,
-        joabreu@synopsys.com, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, airlied@linux.ie,
-        linux-kernel@vger.kernel.org, vkoul@kernel.org, palmer@dabbelt.com,
-        broonie@kernel.org, dmaengine@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@rivosinc.com,
-        daniel@ffwll.ch
-References: <20220618123035.563070-1-mail@conchuod.ie>
- <20220618123035.563070-8-mail@conchuod.ie>
- <9cd60b3b-44fe-62ac-9874-80ae2223d078@opensource.wdc.com>
- <e1fbf363-d057-1000-a846-3df524801f15@microchip.com>
- <891cf74c-ac0a-b380-1d5f-dd7ce5aeda9d@opensource.wdc.com>
- <6c9de242-6ccf-49a2-8422-e6949c5169ff@microchip.com>
- <70cd0066-9aa7-ca41-ad61-898d491328aa@linaro.org>
- <b8dce80e-2753-497e-1dd3-3eb0d248b74e@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b8dce80e-2753-497e-1dd3-3eb0d248b74e@microchip.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Richie Pearn <richard.pearn@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20220626120505.2369600-1-vladimir.oltean@nxp.com>
+ <20220626120505.2369600-2-vladimir.oltean@nxp.com>
+ <5db4e640-8165-d7bf-c6b6-192ea7edfafd@arm.com>
+ <20220627085101.jw55y3fakqcw7zgi@skbuf>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+In-Reply-To: <20220627085101.jw55y3fakqcw7zgi@skbuf>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2022 09:06, Conor.Dooley@microchip.com wrote:
+Hi Vladimir,
+
+On 6/27/22 09:51, Vladimir Oltean wrote:
+> Hi Vincenzo,
 > 
-> 
-> On 27/06/2022 07:55, Krzysztof Kozlowski wrote:
->> On 21/06/2022 11:49, Conor.Dooley@microchip.com wrote:
->>> On 20/06/2022 01:25, Damien Le Moal wrote:
->>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>>
->>>> On 6/20/22 08:54, Conor.Dooley@microchip.com wrote:
->>>>> On 20/06/2022 00:38, Damien Le Moal wrote:
->>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>>>>
->>>>>> On 6/18/22 21:30, Conor Dooley wrote:
->>>>>>> From: Conor Dooley <conor.dooley@microchip.com>
->>>>>>>
->>>>>>> The k210 memory node has a compatible string that does not match with
->>>>>>> any driver or dt-binding & has several non standard properties.
->>>>>>> Replace the reg names with a comment and delete the rest.
->>>>>>>
->>>>>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->>>>>>> ---
->>>>>>> ---
->>>>>>>    arch/riscv/boot/dts/canaan/k210.dtsi | 6 ------
->>>>>>>    1 file changed, 6 deletions(-)
->>>>>>>
->>>>>>> diff --git a/arch/riscv/boot/dts/canaan/k210.dtsi b/arch/riscv/boot/dts/canaan/k210.dtsi
->>>>>>> index 44d338514761..287ea6eebe47 100644
->>>>>>> --- a/arch/riscv/boot/dts/canaan/k210.dtsi
->>>>>>> +++ b/arch/riscv/boot/dts/canaan/k210.dtsi
->>>>>>> @@ -69,15 +69,9 @@ cpu1_intc: interrupt-controller {
->>>>>>>
->>>>>>>         sram: memory@80000000 {
->>>>>>>                 device_type = "memory";
->>>>>>> -             compatible = "canaan,k210-sram";
->>>>>>>                 reg = <0x80000000 0x400000>,
->>>>>>>                       <0x80400000 0x200000>,
->>>>>>>                       <0x80600000 0x200000>;
->>>>>>> -             reg-names = "sram0", "sram1", "aisram";
->>>>>>> -             clocks = <&sysclk K210_CLK_SRAM0>,
->>>>>>> -                      <&sysclk K210_CLK_SRAM1>,
->>>>>>> -                      <&sysclk K210_CLK_AI>;
->>>>>>> -             clock-names = "sram0", "sram1", "aisram";
->>>>>>>         };
->>>>>>
->>>>>> These are used by u-boot to setup the memory clocks and initialize the
->>>>>> aisram. Sure the kernel actually does not use this, but to be in sync with
->>>>>> u-boot DT, I would prefer keeping this as is. Right now, u-boot *and* the
->>>>>> kernel work fine with both u-boot internal DT and the kernel DT.
->>>>>
->>>>> Right, but unfortunately that desire alone doesn't do anything about
->>>>> the dtbs_check complaints.
->>>>>
->>>>> I guess the alternative approach of actually documenting the compatible
->>>>> would be more palatable?
->>>>
->>>> Yes, I think so. That would allow keeping the fields without the DTB build
->>>> warnings.
->>>
->>> Hmm looks like that approach contradicts the dt-schema;
->>> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/memory.yaml
->>>
->>> @Rob,Krzysztof what is one meant to do here?
+> On Mon, Jun 27, 2022 at 08:52:51AM +0100, Vincenzo Frascino wrote:
+>> Hi Vladimir,
 >>
->> Why do you think it contradict bindings? Bindings for memory allow
-> 
-> Because when I tried to write the binding, the memory node complained
-> about the clock properties etc and referenced the dt-schema (which
-> for memory@foo nodes has additionalProperties: false.
-
-Ah, I see, I looked at wrong level. Indeed memory node cannot have
-anything else.
-
-> 
->> additional properties, so you just need to create binding for this one.
->> And make it a correct binding, IOW, be sure that these clocks are real etc.
+>> On 6/26/22 13:05, Vladimir Oltean wrote:
+>>> Time-sensitive networking code needs to work with PTP times expressed in
+>>> nanoseconds, and with packet transmission times expressed in
+>>> picoseconds, since those would be fractional at higher than gigabit
+>>> speed when expressed in nanoseconds.
+>>>
+>>> Convert the existing uses in tc-taprio to a PSEC_PER_NSEC macro.
+>>>
+>>> Cc: Andy Lutomirski <luto@kernel.org>
+>>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>>> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>>> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+>>> ---
+>>>  include/vdso/time64.h  | 1 +
+>>>  net/sched/sch_taprio.c | 4 ++--
+>>>  2 files changed, 3 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/include/vdso/time64.h b/include/vdso/time64.h
+>>> index b40cfa2aa33c..f1c2d02474ae 100644
+>>> --- a/include/vdso/time64.h
+>>> +++ b/include/vdso/time64.h
+>>> @@ -6,6 +6,7 @@
+>>>  #define MSEC_PER_SEC	1000L
+>>>  #define USEC_PER_MSEC	1000L
+>>>  #define NSEC_PER_USEC	1000L
+>>> +#define PSEC_PER_NSEC	1000L
 >>
->> Although usually we had separate bindings (and device drivers) for
->> memory controllers, instead of including them in the "memory" node.
+>> Are you planning to use this definition in the vdso library code? If not, you
+>> should define PSEC_PER_NSEC in "include/linux/time64.h". The vdso namespace
+>> should contain only the definitions shared by the implementations of the kernel
+>> and of the vdso library.
 > 
-> I guess changing to that format would probably require some changes on
-> the U-Boot side of things. Taking "calxeda,hb-ddr-ctrl" as an example,
-> looks like the clocks etc go in a controller node, which seems like a
-> "better" way of doing it - 
+> I am not. I thought it would be ok to preserve the locality of
+> definitions by placing this near the others of its kind, since a macro
+> doesn't affect the compiled vDSO code in any way. But if you prefer, I
+> can create a new mini-section in linux/time64.h. Any preference on where
+> exactly to place that definition within the file?
 
-Yes, because I think memory node is kind of special. It describes the
-physical memory layout for the system, not the memory controller or
-memory characteristics (like timings).
+I do not have a strong opinion on where to put it. But I think that if you put a
+section above TIME64_MAX should work.
 
-What U-Boot needs is indeed memory controller node. It's not only
-calxeda but also few others using JEDEC LPDDR bindings.
-
-> but would break existing dts in U-Boot
-> without changes to handle both methods there.
-
-Yes, that's a bit inconvenient but also a price someone has to pay for
-introducing DTS properties without bindings.
-
-Best regards,
-Krzysztof
+-- 
+Regards,
+Vincenzo

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B1C55D994
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95D755D335
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234563AbiF0LXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S236288AbiF0Lg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234544AbiF0LXE (ORCPT
+        with ESMTP id S234500AbiF0LfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:23:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8C2654B;
-        Mon, 27 Jun 2022 04:23:03 -0700 (PDT)
+        Mon, 27 Jun 2022 07:35:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC6DD47;
+        Mon, 27 Jun 2022 04:31:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B1286144F;
-        Mon, 27 Jun 2022 11:23:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D283C3411D;
-        Mon, 27 Jun 2022 11:23:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 184DB60920;
+        Mon, 27 Jun 2022 11:31:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B0CEC341C7;
+        Mon, 27 Jun 2022 11:31:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656328982;
-        bh=XfgLOJdxrlG9Mmu3iDIZDiD4n1y+qaWvN+p8XJPvlh0=;
+        s=korg; t=1656329491;
+        bh=ofn2fEtn2NgumFR9kyJjtjl7CDqFCrg7S2Lfx1WBC2E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uS9wMaWhaW6pIwK614Y9QrrFi68r6n9z7cUnhCKIiVT3Jy2P1MlfS5fp+edEpn5qn
-         lhTqnb8PrU5lAspaV52H9z0JTKaSEgXljVKna0B5khfDlRP+zFf8NAPUciEu0/GPnW
-         DcMq9FDrgXe8fe9M76DQfGSYokSAoohieTVL/YQ8=
+        b=HWXG3GjJZi+IHb+cZhPKVg/geOXYzKLA6+PSATdVb0qYLCylcDFP3KEhW2am8YQ3S
+         L3HhIDAZgRFuaMgVhFaw8rAFiYDbIIGQ1F5GlXBzzxXF7TPMnnXl63MzuVKKZpg3h+
+         ANQ4JdkwqtUuo6vc0XaWUrE9Mgr9AZy7TZruiZK8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        Anand Jain <anand.jain@oracle.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.10 012/102] btrfs: add error messages to all unrecognized mount options
-Date:   Mon, 27 Jun 2022 13:20:23 +0200
-Message-Id: <20220627111933.828735444@linuxfoundation.org>
+        stable@vger.kernel.org, Brian King <brking@linux.vnet.ibm.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.15 017/135] scsi: ibmvfc: Store vhost pointer during subcrq allocation
+Date:   Mon, 27 Jun 2022 13:20:24 +0200
+Message-Id: <20220627111938.660961360@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,150 +55,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Sterba <dsterba@suse.com>
+From: Tyrel Datwyler <tyreld@linux.ibm.com>
 
-commit e3a4167c880cf889f66887a152799df4d609dd21 upstream.
+commit aeaadcde1a60138bceb65de3cdaeec78170b4459 upstream.
 
-Almost none of the errors stemming from a valid mount option but wrong
-value prints a descriptive message which would help to identify why
-mount failed. Like in the linked report:
+Currently the back pointer from a queue to the vhost adapter isn't set
+until after subcrq interrupt registration. The value is available when a
+queue is first allocated and can/should be also set for primary and async
+queues as well as subcrqs.
 
-  $ uname -r
-  v4.19
-  $ mount -o compress=zstd /dev/sdb /mnt
-  mount: /mnt: wrong fs type, bad option, bad superblock on
-  /dev/sdb, missing codepage or helper program, or other error.
-  $ dmesg
-  ...
-  BTRFS error (device sdb): open_ctree failed
+This fixes a crash observed during kexec/kdump on Power 9 with legacy XICS
+interrupt controller where a pending subcrq interrupt from the previous
+kernel can be replayed immediately upon IRQ registration resulting in
+dereference of a garbage backpointer in ibmvfc_interrupt_scsi().
 
-Errors caused by memory allocation failures are left out as it's not a
-user error so reporting that would be confusing.
+Kernel attempted to read user page (58) - exploit attempt? (uid: 0)
+BUG: Kernel NULL pointer dereference on read at 0x00000058
+Faulting instruction address: 0xc008000003216a08
+Oops: Kernel access of bad area, sig: 11 [#1]
+...
+NIP [c008000003216a08] ibmvfc_interrupt_scsi+0x40/0xb0 [ibmvfc]
+LR [c0000000082079e8] __handle_irq_event_percpu+0x98/0x270
+Call Trace:
+[c000000047fa3d80] [c0000000123e6180] 0xc0000000123e6180 (unreliable)
+[c000000047fa3df0] [c0000000082079e8] __handle_irq_event_percpu+0x98/0x270
+[c000000047fa3ea0] [c000000008207d18] handle_irq_event+0x98/0x188
+[c000000047fa3ef0] [c00000000820f564] handle_fasteoi_irq+0xc4/0x310
+[c000000047fa3f40] [c000000008205c60] generic_handle_irq+0x50/0x80
+[c000000047fa3f60] [c000000008015c40] __do_irq+0x70/0x1a0
+[c000000047fa3f90] [c000000008016d7c] __do_IRQ+0x9c/0x130
+[c000000014622f60] [0000000020000000] 0x20000000
+[c000000014622ff0] [c000000008016e50] do_IRQ+0x40/0xa0
+[c000000014623020] [c000000008017044] replay_soft_interrupts+0x194/0x2f0
+[c000000014623210] [c0000000080172a8] arch_local_irq_restore+0x108/0x170
+[c000000014623240] [c000000008eb1008] _raw_spin_unlock_irqrestore+0x58/0xb0
+[c000000014623270] [c00000000820b12c] __setup_irq+0x49c/0x9f0
+[c000000014623310] [c00000000820b7c0] request_threaded_irq+0x140/0x230
+[c000000014623380] [c008000003212a50] ibmvfc_register_scsi_channel+0x1e8/0x2f0 [ibmvfc]
+[c000000014623450] [c008000003213d1c] ibmvfc_init_sub_crqs+0xc4/0x1f0 [ibmvfc]
+[c0000000146234d0] [c0080000032145a8] ibmvfc_reset_crq+0x150/0x210 [ibmvfc]
+[c000000014623550] [c0080000032147c8] ibmvfc_init_crq+0x160/0x280 [ibmvfc]
+[c0000000146235f0] [c00800000321a9cc] ibmvfc_probe+0x2a4/0x530 [ibmvfc]
 
-Link: https://lore.kernel.org/linux-btrfs/9c3fec36-fc61-3a33-4977-a7e207c3fa4e@gmx.de/
-CC: stable@vger.kernel.org # 4.9+
-Reviewed-by: Qu Wenruo <wqu@suse.com>
-Reviewed-by: Nikolay Borisov <nborisov@suse.com>
-Reviewed-by: Anand Jain <anand.jain@oracle.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Link: https://lore.kernel.org/r/20220616191126.1281259-2-tyreld@linux.ibm.com
+Fixes: 3034ebe26389 ("scsi: ibmvfc: Add alloc/dealloc routines for SCSI Sub-CRQ Channels")
+Cc: stable@vger.kernel.org
+Reviewed-by: Brian King <brking@linux.vnet.ibm.com>
+Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/super.c |   39 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 32 insertions(+), 7 deletions(-)
+ drivers/scsi/ibmvscsi/ibmvfc.c |    3 ++-
+ drivers/scsi/ibmvscsi/ibmvfc.h |    2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
---- a/fs/btrfs/super.c
-+++ b/fs/btrfs/super.c
-@@ -652,6 +652,8 @@ int btrfs_parse_options(struct btrfs_fs_
- 				compress_force = false;
- 				no_compress++;
- 			} else {
-+				btrfs_err(info, "unrecognized compression value %s",
-+					  args[0].from);
- 				ret = -EINVAL;
- 				goto out;
- 			}
-@@ -710,8 +712,11 @@ int btrfs_parse_options(struct btrfs_fs_
- 		case Opt_thread_pool:
- 			ret = match_int(&args[0], &intarg);
- 			if (ret) {
-+				btrfs_err(info, "unrecognized thread_pool value %s",
-+					  args[0].from);
- 				goto out;
- 			} else if (intarg == 0) {
-+				btrfs_err(info, "invalid value 0 for thread_pool");
- 				ret = -EINVAL;
- 				goto out;
- 			}
-@@ -772,8 +777,11 @@ int btrfs_parse_options(struct btrfs_fs_
- 			break;
- 		case Opt_ratio:
- 			ret = match_int(&args[0], &intarg);
--			if (ret)
-+			if (ret) {
-+				btrfs_err(info, "unrecognized metadata_ratio value %s",
-+					  args[0].from);
- 				goto out;
-+			}
- 			info->metadata_ratio = intarg;
- 			btrfs_info(info, "metadata ratio %u",
- 				   info->metadata_ratio);
-@@ -790,6 +798,8 @@ int btrfs_parse_options(struct btrfs_fs_
- 				btrfs_set_and_info(info, DISCARD_ASYNC,
- 						   "turning on async discard");
- 			} else {
-+				btrfs_err(info, "unrecognized discard mode value %s",
-+					  args[0].from);
- 				ret = -EINVAL;
- 				goto out;
- 			}
-@@ -814,6 +824,8 @@ int btrfs_parse_options(struct btrfs_fs_
- 				btrfs_set_and_info(info, FREE_SPACE_TREE,
- 						   "enabling free space tree");
- 			} else {
-+				btrfs_err(info, "unrecognized space_cache value %s",
-+					  args[0].from);
- 				ret = -EINVAL;
- 				goto out;
- 			}
-@@ -889,8 +901,12 @@ int btrfs_parse_options(struct btrfs_fs_
- 			break;
- 		case Opt_check_integrity_print_mask:
- 			ret = match_int(&args[0], &intarg);
--			if (ret)
-+			if (ret) {
-+				btrfs_err(info,
-+				"unrecognized check_integrity_print_mask value %s",
-+					args[0].from);
- 				goto out;
-+			}
- 			info->check_integrity_print_mask = intarg;
- 			btrfs_info(info, "check_integrity_print_mask 0x%x",
- 				   info->check_integrity_print_mask);
-@@ -905,13 +921,15 @@ int btrfs_parse_options(struct btrfs_fs_
- 			goto out;
- #endif
- 		case Opt_fatal_errors:
--			if (strcmp(args[0].from, "panic") == 0)
-+			if (strcmp(args[0].from, "panic") == 0) {
- 				btrfs_set_opt(info->mount_opt,
- 					      PANIC_ON_FATAL_ERROR);
--			else if (strcmp(args[0].from, "bug") == 0)
-+			} else if (strcmp(args[0].from, "bug") == 0) {
- 				btrfs_clear_opt(info->mount_opt,
- 					      PANIC_ON_FATAL_ERROR);
--			else {
-+			} else {
-+				btrfs_err(info, "unrecognized fatal_errors value %s",
-+					  args[0].from);
- 				ret = -EINVAL;
- 				goto out;
- 			}
-@@ -919,8 +937,12 @@ int btrfs_parse_options(struct btrfs_fs_
- 		case Opt_commit_interval:
- 			intarg = 0;
- 			ret = match_int(&args[0], &intarg);
--			if (ret)
-+			if (ret) {
-+				btrfs_err(info, "unrecognized commit_interval value %s",
-+					  args[0].from);
-+				ret = -EINVAL;
- 				goto out;
-+			}
- 			if (intarg == 0) {
- 				btrfs_info(info,
- 					   "using default commit interval %us",
-@@ -934,8 +956,11 @@ int btrfs_parse_options(struct btrfs_fs_
- 			break;
- 		case Opt_rescue:
- 			ret = parse_rescue_options(info, args[0].from);
--			if (ret < 0)
-+			if (ret < 0) {
-+				btrfs_err(info, "unrecognized rescue value %s",
-+					  args[0].from);
- 				goto out;
-+			}
- 			break;
- #ifdef CONFIG_BTRFS_DEBUG
- 		case Opt_fragment_all:
+--- a/drivers/scsi/ibmvscsi/ibmvfc.c
++++ b/drivers/scsi/ibmvscsi/ibmvfc.c
+@@ -5680,6 +5680,8 @@ static int ibmvfc_alloc_queue(struct ibm
+ 	queue->cur = 0;
+ 	queue->fmt = fmt;
+ 	queue->size = PAGE_SIZE / fmt_size;
++
++	queue->vhost = vhost;
+ 	return 0;
+ }
+ 
+@@ -5788,7 +5790,6 @@ static int ibmvfc_register_scsi_channel(
+ 	}
+ 
+ 	scrq->hwq_id = index;
+-	scrq->vhost = vhost;
+ 
+ 	LEAVE;
+ 	return 0;
+--- a/drivers/scsi/ibmvscsi/ibmvfc.h
++++ b/drivers/scsi/ibmvscsi/ibmvfc.h
+@@ -789,6 +789,7 @@ struct ibmvfc_queue {
+ 	spinlock_t _lock;
+ 	spinlock_t *q_lock;
+ 
++	struct ibmvfc_host *vhost;
+ 	struct ibmvfc_event_pool evt_pool;
+ 	struct list_head sent;
+ 	struct list_head free;
+@@ -797,7 +798,6 @@ struct ibmvfc_queue {
+ 	union ibmvfc_iu cancel_rsp;
+ 
+ 	/* Sub-CRQ fields */
+-	struct ibmvfc_host *vhost;
+ 	unsigned long cookie;
+ 	unsigned long vios_cookie;
+ 	unsigned long hw_irq;
 
 

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D3855C91C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFA055CFC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241227AbiF0U0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 16:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
+        id S241260AbiF0U1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 16:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241198AbiF0U0i (ORCPT
+        with ESMTP id S241204AbiF0U0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 16:26:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42E21A80C
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:26:37 -0700 (PDT)
+        Mon, 27 Jun 2022 16:26:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F631929A
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:26:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B885B81B2B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:26:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BCF9C341CC;
-        Mon, 27 Jun 2022 20:26:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAB9EB81B00
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:26:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD2EC34115;
+        Mon, 27 Jun 2022 20:26:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656361595;
-        bh=ZJOgukKzIIWG1u+rOhY9IBwltUHizRwnj2gvl++eP5M=;
+        s=k20201202; t=1656361598;
+        bh=dEuRvRtMn7Z7bsz5XWWHveXkJSjwPgsUHwFeTrQWp2c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BiIVhZ7E9SgjYjo8CRplzz3KEJNgQzm4oLyNGsmhLNtpcT48YEBUZLfRWxKoBpljV
-         bQNFXVNvKTChNhNcpLGKD5610auQ9yuy/aHKLa44JV1hwTEwnWo7adol2SUMSE2vT8
-         Vm1yxf+OiSzPQ1/JGpg3J3Vl8yqdh5rudRAsBnIXHBHFAzsoRiX4OrEfd4sQp1QJf5
-         JbQRi+990FcPArv2Qge/AYzgNkTVFO5eVmd2x7n9MZwdJ/a/xGUcVhOuE9MpCi6aCX
-         NhULPSOVo8jJSBQelGWkybVl1FuBXoq/17fDw0lt1nv6wBcYzgqTOX1qELpN+sI3Al
-         pKYSZ15WHNrSA==
+        b=iTvDzWauO9UDW6hrCuoGzkypyxwKZgQ4NQ9LeZkiasCiRgWxkPUbaTFTmBH34MA+7
+         PFkZpQ1fVhGUfVxSqINJfuxPm6pN0cCEpff31rQjhFZfC9HVwthRtUiL+cJYYs/Vvn
+         HKtWGOBD+ftx70pLTGCuBf1TsJ94Jr9ubvdE+tgRk2mF5xI6EOKjc4JhQzbhlzQTFq
+         tQB36NZXd/5dCDi3Nf0pUGI6pdWKDeotZR6ZEyu528VuIk5uWriunG8qZTdDaDabo8
+         Oea5/XHFYGhUSxfto6SMXcNflKR1edSajXkVofZtlLi8XtbJKYsDUgHnmoKxQEMd8S
+         ZZ5GhU8NGfS6g==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org
-Subject: [PATCH 05/12] habanalabs: initialize new asic properties
-Date:   Mon, 27 Jun 2022 23:26:13 +0300
-Message-Id: <20220627202620.961350-6-ogabbay@kernel.org>
+Cc:     gregkh@linuxfoundation.org, Ofir Bitton <obitton@habana.ai>
+Subject: [PATCH 06/12] habanalabs: add generic security module
+Date:   Mon, 27 Jun 2022 23:26:14 +0300
+Message-Id: <20220627202620.961350-7-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220627202620.961350-1-ogabbay@kernel.org>
 References: <20220627202620.961350-1-ogabbay@kernel.org>
@@ -53,151 +53,750 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-New asic properties were added for Gaudi2. We want to initialize
-and use them, when relevant, also for Goya and Gaudi.
+From: Ofir Bitton <obitton@habana.ai>
 
+As the ASICs become more complex and have many more registers, we need
+a better way to configure the security properties.
+
+As a reminder, we have two dedicated mechanisms for security:
+Range Registers and Protection bits. Those mechanisms protect sensitive
+memory and configuration areas inside the device.
+
+The generic module handles the low-level part of the configuration,
+because the configuration mechanism is identical in all ASICs. The
+difference is the address ranges and register names.
+
+Any ASIC that use this block should first block all the register
+blocks in the ASIC. Then, it should open only the registers that
+need to be accessed by the user (This is opposed to Goya and Gaudi,
+where we blocked only what should not be accesses by the user).
+
+The module contains several functions, to unblock single register,
+multiple registers, entire blocks, ranges, ranges with mask.
+
+Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- .../misc/habanalabs/common/habanalabs_ioctl.c | 21 ++++++++++++-------
- drivers/misc/habanalabs/gaudi/gaudi.c         | 18 ++++++++++------
- drivers/misc/habanalabs/goya/goya.c           |  3 ++-
- 3 files changed, 28 insertions(+), 14 deletions(-)
+ drivers/misc/habanalabs/common/Makefile     |   4 +-
+ drivers/misc/habanalabs/common/habanalabs.h |  69 +++
+ drivers/misc/habanalabs/common/security.c   | 600 ++++++++++++++++++++
+ 3 files changed, 671 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/misc/habanalabs/common/security.c
 
-diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-index 1d80e0b1e718..a7a00f8dab30 100644
---- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-@@ -47,7 +47,7 @@ static int hw_ip_info(struct hl_device *hdev, struct hl_info_args *args)
- 	u32 size = args->return_size;
- 	void __user *out = (void __user *) (uintptr_t) args->return_pointer;
- 	struct asic_fixed_properties *prop = &hdev->asic_prop;
--	u64 sram_kmd_size, dram_kmd_size;
-+	u64 sram_kmd_size, dram_kmd_size, dram_available_size;
+diff --git a/drivers/misc/habanalabs/common/Makefile b/drivers/misc/habanalabs/common/Makefile
+index 2bc022552acf..e6abffea9f87 100644
+--- a/drivers/misc/habanalabs/common/Makefile
++++ b/drivers/misc/habanalabs/common/Makefile
+@@ -11,5 +11,5 @@ HL_COMMON_FILES := common/habanalabs_drv.o common/device.o common/context.o \
+ 		common/command_buffer.o common/hw_queue.o common/irq.o \
+ 		common/sysfs.o common/hwmon.o common/memory.o \
+ 		common/command_submission.o common/firmware_if.o \
+-		common/state_dump.o common/memory_mgr.o \
+-		common/decoder.o
++		common/security.o common/state_dump.o \
++		common/memory_mgr.o common/decoder.o
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index 0108cd3977fa..6597b048b681 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -173,7 +173,23 @@ enum hl_mmu_page_table_location {
+  * Security
+  */
  
- 	if ((!size) || (!out))
- 		return -EINVAL;
-@@ -62,19 +62,22 @@ static int hw_ip_info(struct hl_device *hdev, struct hl_info_args *args)
- 	hw_ip.dram_base_address =
- 			hdev->mmu_enable && prop->dram_supports_virtual_memory ?
- 			prop->dmmu.start_addr : prop->dram_user_base_address;
--	hw_ip.tpc_enabled_mask = prop->tpc_enabled_mask;
-+	hw_ip.tpc_enabled_mask = prop->tpc_enabled_mask & 0xFF;
-+	hw_ip.tpc_enabled_mask_ext = prop->tpc_enabled_mask;
++#define HL_PB_SHARED		1
++#define HL_PB_NA		0
++#define HL_PB_SINGLE_INSTANCE	1
+ #define HL_BLOCK_SIZE		0x1000
++#define HL_BLOCK_GLBL_ERR_MASK	0xF40
++#define HL_BLOCK_GLBL_ERR_ADDR	0xF44
++#define HL_BLOCK_GLBL_ERR_CAUSE	0xF48
++#define HL_BLOCK_GLBL_SEC_OFFS	0xF80
++#define HL_BLOCK_GLBL_SEC_SIZE	(HL_BLOCK_SIZE - HL_BLOCK_GLBL_SEC_OFFS)
++#define HL_BLOCK_GLBL_SEC_LEN	(HL_BLOCK_GLBL_SEC_SIZE / sizeof(u32))
++#define UNSET_GLBL_SEC_BIT(array, b) ((array)[((b) / 32)] |= (1 << ((b) % 32)))
 +
- 	hw_ip.sram_size = prop->sram_size - sram_kmd_size;
++enum hl_protection_levels {
++	SECURED_LVL,
++	PRIVILEGED_LVL,
++	NON_SECURED_LVL
++};
  
-+	dram_available_size = prop->dram_size - dram_kmd_size;
+ /**
+  * struct iterate_module_ctx - HW module iterator
+@@ -194,6 +210,10 @@ struct iterate_module_ctx {
+ 	void *data;
+ };
+ 
++struct hl_block_glbl_sec {
++	u32 sec_array[HL_BLOCK_GLBL_SEC_LEN];
++};
 +
- 	if (hdev->mmu_enable)
--		hw_ip.dram_size =
--			DIV_ROUND_DOWN_ULL(prop->dram_size - dram_kmd_size,
--						prop->dram_page_size) *
--							prop->dram_page_size;
-+		hw_ip.dram_size = DIV_ROUND_DOWN_ULL(dram_available_size,
-+				prop->dram_page_size) * prop->dram_page_size;
- 	else
--		hw_ip.dram_size = prop->dram_size - dram_kmd_size;
-+		hw_ip.dram_size = dram_available_size;
+ #define HL_MAX_SOBS_PER_MONITOR	8
  
- 	if (hw_ip.dram_size > PAGE_SIZE)
- 		hw_ip.dram_enabled = 1;
+ /**
+@@ -3657,6 +3677,55 @@ static inline void hl_debugfs_set_state_dump(struct hl_device *hdev,
+ 
+ #endif
+ 
++/* Security */
++int hl_unsecure_register(struct hl_device *hdev, u32 mm_reg_addr, int offset,
++		const u32 pb_blocks[], struct hl_block_glbl_sec sgs_array[],
++		int array_size);
++int hl_unsecure_registers(struct hl_device *hdev, const u32 mm_reg_array[],
++		int mm_array_size, int offset, const u32 pb_blocks[],
++		struct hl_block_glbl_sec sgs_array[], int blocks_array_size);
++void hl_config_glbl_sec(struct hl_device *hdev, const u32 pb_blocks[],
++		struct hl_block_glbl_sec sgs_array[], u32 block_offset,
++		int array_size);
++void hl_secure_block(struct hl_device *hdev,
++		struct hl_block_glbl_sec sgs_array[], int array_size);
++int hl_init_pb_with_mask(struct hl_device *hdev, u32 num_dcores,
++		u32 dcore_offset, u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size,
++		const u32 *regs_array, u32 regs_array_size, u64 mask);
++int hl_init_pb(struct hl_device *hdev, u32 num_dcores, u32 dcore_offset,
++		u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size,
++		const u32 *regs_array, u32 regs_array_size);
++int hl_init_pb_ranges_with_mask(struct hl_device *hdev, u32 num_dcores,
++		u32 dcore_offset, u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size,
++		const struct range *regs_range_array, u32 regs_range_array_size,
++		u64 mask);
++int hl_init_pb_ranges(struct hl_device *hdev, u32 num_dcores,
++		u32 dcore_offset, u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size,
++		const struct range *regs_range_array,
++		u32 regs_range_array_size);
++int hl_init_pb_single_dcore(struct hl_device *hdev, u32 dcore_offset,
++		u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size,
++		const u32 *regs_array, u32 regs_array_size);
++int hl_init_pb_ranges_single_dcore(struct hl_device *hdev, u32 dcore_offset,
++		u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size,
++		const struct range *regs_range_array,
++		u32 regs_range_array_size);
++void hl_ack_pb(struct hl_device *hdev, u32 num_dcores, u32 dcore_offset,
++		u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size);
++void hl_ack_pb_with_mask(struct hl_device *hdev, u32 num_dcores,
++		u32 dcore_offset, u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size, u64 mask);
++void hl_ack_pb_single_dcore(struct hl_device *hdev, u32 dcore_offset,
++		u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size);
 +
- 	hw_ip.dram_page_size = prop->dram_page_size;
- 	hw_ip.device_mem_alloc_default_page_size = prop->device_mem_alloc_default_page_size;
- 	hw_ip.num_of_events = prop->num_of_events;
-@@ -93,8 +96,12 @@ static int hw_ip_info(struct hl_device *hdev, struct hl_info_args *args)
- 	hw_ip.psoc_pci_pll_od = prop->psoc_pci_pll_od;
- 	hw_ip.psoc_pci_pll_div_factor = prop->psoc_pci_pll_div_factor;
- 
-+	hw_ip.decoder_enabled_mask = prop->decoder_enabled_mask;
-+	hw_ip.mme_master_slave_mode = prop->mme_master_slave_mode;
- 	hw_ip.first_available_interrupt_id = prop->first_available_user_interrupt;
- 	hw_ip.number_of_user_interrupts = prop->user_interrupt_count;
+ /* IOCTLs */
+ long hl_ioctl(struct file *filep, unsigned int cmd, unsigned long arg);
+ long hl_ioctl_control(struct file *filep, unsigned int cmd, unsigned long arg);
+diff --git a/drivers/misc/habanalabs/common/security.c b/drivers/misc/habanalabs/common/security.c
+new file mode 100644
+index 000000000000..b27ab097776b
+--- /dev/null
++++ b/drivers/misc/habanalabs/common/security.c
+@@ -0,0 +1,600 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+	hw_ip.edma_enabled_mask = prop->edma_enabled_mask;
- 	hw_ip.server_type = prop->server_type;
- 
- 	return copy_to_user(out, &hw_ip,
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index f4581220ecd5..f3cda66e03e7 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -582,10 +582,13 @@ static int gaudi_set_fixed_properties(struct hl_device *hdev)
- 						get_collective_mode(hdev, i);
- 	}
- 
-+	prop->cache_line_size = DEVICE_CACHE_LINE_SIZE;
-+	prop->cfg_base_address = CFG_BASE;
- 	prop->device_dma_offset_for_host_access = HOST_PHYS_BASE;
- 	prop->host_base_address = HOST_PHYS_BASE;
- 	prop->host_end_address = prop->host_base_address + HOST_PHYS_SIZE;
- 	prop->completion_queues_count = NUMBER_OF_CMPLT_QUEUES;
-+	prop->completion_mode = HL_COMPLETION_MODE_JOB;
- 	prop->collective_first_sob = 0;
- 	prop->collective_first_mon = 0;
- 
-@@ -612,6 +615,9 @@ static int gaudi_set_fixed_properties(struct hl_device *hdev)
- 	prop->sram_user_base_address =
- 			prop->sram_base_address + SRAM_USER_BASE_OFFSET;
- 
-+	prop->mmu_cache_mng_addr = MMU_CACHE_MNG_ADDR;
-+	prop->mmu_cache_mng_size = MMU_CACHE_MNG_SIZE;
++/*
++ * Copyright 2020 HabanaLabs, Ltd.
++ * All Rights Reserved.
++ */
 +
- 	prop->mmu_pgt_addr = MMU_PAGE_TABLES_ADDR;
- 	if (hdev->pldm)
- 		prop->mmu_pgt_size = 0x800000; /* 8MB */
-@@ -3871,8 +3877,8 @@ static int gaudi_mmu_init(struct hl_device *hdev)
- 	}
- 
- 	/* init MMU cache manage page */
--	WREG32(mmSTLB_CACHE_INV_BASE_39_8, MMU_CACHE_MNG_ADDR >> 8);
--	WREG32(mmSTLB_CACHE_INV_BASE_49_40, MMU_CACHE_MNG_ADDR >> 40);
-+	WREG32(mmSTLB_CACHE_INV_BASE_39_8, prop->mmu_cache_mng_addr >> 8);
-+	WREG32(mmSTLB_CACHE_INV_BASE_49_40, prop->mmu_cache_mng_addr >> 40);
- 
- 	/* mem cache invalidation */
- 	WREG32(mmSTLB_MEM_CACHE_INVALIDATION, 1);
-@@ -4763,7 +4769,7 @@ static void gaudi_dma_free_coherent(struct hl_device *hdev, size_t size,
- static int gaudi_scrub_device_dram(struct hl_device *hdev, u64 val)
- {
- 	struct asic_fixed_properties *prop = &hdev->asic_prop;
--	u64  cur_addr = DRAM_BASE_ADDR_USER;
-+	u64 cur_addr = prop->dram_user_base_address;
- 	u32 chunk_size, busy;
- 	int rc, dma_id;
- 
-@@ -6068,10 +6074,10 @@ static int gaudi_context_switch(struct hl_device *hdev, u32 asid)
- 
- static int gaudi_mmu_clear_pgt_range(struct hl_device *hdev)
- {
--	struct asic_fixed_properties *prop = &hdev->asic_prop;
-+	u32 size = hdev->asic_prop.mmu_pgt_size +
-+			hdev->asic_prop.mmu_cache_mng_size;
- 	struct gaudi_device *gaudi = hdev->asic_specific;
--	u64 addr = prop->mmu_pgt_addr;
--	u32 size = prop->mmu_pgt_size + MMU_CACHE_MNG_SIZE;
-+	u64 addr = hdev->asic_prop.mmu_pgt_addr;
- 
- 	if (!(gaudi->hw_cap_initialized & HW_CAP_MMU))
- 		return 0;
-diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
-index 0e4dca5e4a5c..d83ceffd1dae 100644
---- a/drivers/misc/habanalabs/goya/goya.c
-+++ b/drivers/misc/habanalabs/goya/goya.c
-@@ -389,11 +389,12 @@ int goya_set_fixed_properties(struct hl_device *hdev)
- 		prop->hw_queues_props[i].cb_alloc_flags = CB_ALLOC_USER;
- 	}
- 
-+	prop->cfg_base_address = CFG_BASE;
- 	prop->device_dma_offset_for_host_access = HOST_PHYS_BASE;
- 	prop->host_base_address = HOST_PHYS_BASE;
- 	prop->host_end_address = prop->host_base_address + HOST_PHYS_SIZE;
- 	prop->completion_queues_count = NUMBER_OF_CMPLT_QUEUES;
--
-+	prop->completion_mode = HL_COMPLETION_MODE_JOB;
- 	prop->dram_base_address = DRAM_PHYS_BASE;
- 	prop->dram_size = DRAM_PHYS_DEFAULT_SIZE;
- 	prop->dram_end_address = prop->dram_base_address + prop->dram_size;
++#include "habanalabs.h"
++
++/**
++ * hl_get_pb_block - return the relevant block within the block array
++ *
++ * @hdev: pointer to hl_device structure
++ * @mm_reg_addr: register address in the desired block
++ * @pb_blocks: blocks array
++ * @array_size: blocks array size
++ *
++ */
++static int hl_get_pb_block(struct hl_device *hdev, u32 mm_reg_addr,
++		const u32 pb_blocks[], int array_size)
++{
++	int i;
++	u32 start_addr, end_addr;
++
++	for (i = 0 ; i < array_size ; i++) {
++		start_addr = pb_blocks[i];
++		end_addr = start_addr + HL_BLOCK_SIZE;
++
++		if ((mm_reg_addr >= start_addr) && (mm_reg_addr < end_addr))
++			return i;
++	}
++
++	dev_err(hdev->dev, "No protection domain was found for 0x%x\n",
++			mm_reg_addr);
++	return -EDOM;
++}
++
++/**
++ * hl_unset_pb_in_block - clear a specific protection bit in a block
++ *
++ * @hdev: pointer to hl_device structure
++ * @reg_offset: register offset will be converted to bit offset in pb block
++ * @sgs_entry: pb array
++ *
++ */
++static int hl_unset_pb_in_block(struct hl_device *hdev, u32 reg_offset,
++		struct hl_block_glbl_sec *sgs_entry)
++{
++	if ((reg_offset >= HL_BLOCK_SIZE) || (reg_offset & 0x3)) {
++		dev_err(hdev->dev,
++			"Register offset(%d) is out of range(%d) or invalid\n",
++			reg_offset, HL_BLOCK_SIZE);
++		return -EINVAL;
++	}
++
++	UNSET_GLBL_SEC_BIT(sgs_entry->sec_array,
++			 (reg_offset & (HL_BLOCK_SIZE - 1)) >> 2);
++
++	return 0;
++}
++
++/**
++ * hl_unsecure_register - locate the relevant block for this register and
++ *                        remove corresponding protection bit
++ *
++ * @hdev: pointer to hl_device structure
++ * @mm_reg_addr: register address to unsecure
++ * @offset: additional offset to the register address
++ * @pb_blocks: blocks array
++ * @sgs_array: pb array
++ * @array_size: blocks array size
++ *
++ */
++int hl_unsecure_register(struct hl_device *hdev, u32 mm_reg_addr, int offset,
++		const u32 pb_blocks[], struct hl_block_glbl_sec sgs_array[],
++		int array_size)
++{
++	u32 reg_offset;
++	int block_num;
++
++	block_num = hl_get_pb_block(hdev, mm_reg_addr + offset, pb_blocks,
++			array_size);
++	if (block_num < 0)
++		return block_num;
++
++	reg_offset = (mm_reg_addr + offset) - pb_blocks[block_num];
++
++	return hl_unset_pb_in_block(hdev, reg_offset, &sgs_array[block_num]);
++}
++
++/**
++ * hl_unsecure_register_range - locate the relevant block for this register
++ *                              range and remove corresponding protection bit
++ *
++ * @hdev: pointer to hl_device structure
++ * @mm_reg_range: register address range to unsecure
++ * @offset: additional offset to the register address
++ * @pb_blocks: blocks array
++ * @sgs_array: pb array
++ * @array_size: blocks array size
++ *
++ */
++static int hl_unsecure_register_range(struct hl_device *hdev,
++		struct range mm_reg_range, int offset, const u32 pb_blocks[],
++		struct hl_block_glbl_sec sgs_array[],
++		int array_size)
++{
++	u32 reg_offset;
++	int i, block_num, rc = 0;
++
++	block_num = hl_get_pb_block(hdev,
++			mm_reg_range.start + offset, pb_blocks,
++			array_size);
++	if (block_num < 0)
++		return block_num;
++
++	for (i = mm_reg_range.start ; i <= mm_reg_range.end ; i += 4) {
++		reg_offset = (i + offset) - pb_blocks[block_num];
++		rc |= hl_unset_pb_in_block(hdev, reg_offset,
++					&sgs_array[block_num]);
++	}
++
++	return rc;
++}
++
++/**
++ * hl_unsecure_registers - locate the relevant block for all registers and
++ *                        remove corresponding protection bit
++ *
++ * @hdev: pointer to hl_device structure
++ * @mm_reg_array: register address array to unsecure
++ * @mm_array_size: register array size
++ * @offset: additional offset to the register address
++ * @pb_blocks: blocks array
++ * @sgs_array: pb array
++ * @blocks_array_size: blocks array size
++ *
++ */
++int hl_unsecure_registers(struct hl_device *hdev, const u32 mm_reg_array[],
++		int mm_array_size, int offset, const u32 pb_blocks[],
++		struct hl_block_glbl_sec sgs_array[], int blocks_array_size)
++{
++	int i, rc = 0;
++
++	for (i = 0 ; i < mm_array_size ; i++) {
++		rc = hl_unsecure_register(hdev, mm_reg_array[i], offset,
++				pb_blocks, sgs_array, blocks_array_size);
++
++		if (rc)
++			return rc;
++	}
++
++	return rc;
++}
++
++/**
++ * hl_unsecure_registers_range - locate the relevant block for all register
++ *                        ranges and remove corresponding protection bit
++ *
++ * @hdev: pointer to hl_device structure
++ * @mm_reg_range_array: register address range array to unsecure
++ * @mm_array_size: register array size
++ * @offset: additional offset to the register address
++ * @pb_blocks: blocks array
++ * @sgs_array: pb array
++ * @blocks_array_size: blocks array size
++ *
++ */
++static int hl_unsecure_registers_range(struct hl_device *hdev,
++		const struct range mm_reg_range_array[], int mm_array_size,
++		int offset, const u32 pb_blocks[],
++		struct hl_block_glbl_sec sgs_array[], int blocks_array_size)
++{
++	int i, rc = 0;
++
++	for (i = 0 ; i < mm_array_size ; i++) {
++		rc = hl_unsecure_register_range(hdev, mm_reg_range_array[i],
++			offset, pb_blocks, sgs_array, blocks_array_size);
++
++		if (rc)
++			return rc;
++	}
++
++	return rc;
++}
++
++/**
++ * hl_ack_pb_security_violations - Ack security violation
++ *
++ * @hdev: pointer to hl_device structure
++ * @pb_blocks: blocks array
++ * @block_offset: additional offset to the block
++ * @array_size: blocks array size
++ *
++ */
++static void hl_ack_pb_security_violations(struct hl_device *hdev,
++		const u32 pb_blocks[], u32 block_offset, int array_size)
++{
++	int i;
++	u32 cause, addr, block_base;
++
++	for (i = 0 ; i < array_size ; i++) {
++		block_base = pb_blocks[i] + block_offset;
++		cause = RREG32(block_base + HL_BLOCK_GLBL_ERR_CAUSE);
++		if (cause) {
++			addr = RREG32(block_base + HL_BLOCK_GLBL_ERR_ADDR);
++			hdev->asic_funcs->pb_print_security_errors(hdev,
++					block_base, cause, addr);
++			WREG32(block_base + HL_BLOCK_GLBL_ERR_CAUSE, cause);
++		}
++	}
++}
++
++/**
++ * hl_config_glbl_sec - set pb in HW according to given pb array
++ *
++ * @hdev: pointer to hl_device structure
++ * @pb_blocks: blocks array
++ * @sgs_array: pb array
++ * @block_offset: additional offset to the block
++ * @array_size: blocks array size
++ *
++ */
++void hl_config_glbl_sec(struct hl_device *hdev, const u32 pb_blocks[],
++		struct hl_block_glbl_sec sgs_array[], u32 block_offset,
++		int array_size)
++{
++	int i, j;
++	u32 sgs_base;
++
++	if (hdev->pldm)
++		usleep_range(100, 1000);
++
++	for (i = 0 ; i < array_size ; i++) {
++		sgs_base = block_offset + pb_blocks[i] +
++				HL_BLOCK_GLBL_SEC_OFFS;
++
++		for (j = 0 ; j < HL_BLOCK_GLBL_SEC_LEN ; j++)
++			WREG32(sgs_base + j * sizeof(u32),
++				sgs_array[i].sec_array[j]);
++	}
++}
++
++/**
++ * hl_secure_block - locally memsets a block to 0
++ *
++ * @hdev: pointer to hl_device structure
++ * @sgs_array: pb array to clear
++ * @array_size: blocks array size
++ *
++ */
++void hl_secure_block(struct hl_device *hdev,
++		struct hl_block_glbl_sec sgs_array[], int array_size)
++{
++	int i;
++
++	for (i = 0 ; i < array_size ; i++)
++		memset((char *)(sgs_array[i].sec_array), 0,
++			HL_BLOCK_GLBL_SEC_SIZE);
++}
++
++/**
++ * hl_init_pb_with_mask - set selected pb instances with mask in HW according
++ *                        to given configuration
++ *
++ * @hdev: pointer to hl_device structure
++ * @num_dcores: number of decores to apply configuration to
++ *              set to HL_PB_SHARED if need to apply only once
++ * @dcore_offset: offset between dcores
++ * @num_instances: number of instances to apply configuration to
++ * @instance_offset: offset between instances
++ * @pb_blocks: blocks array
++ * @blocks_array_size: blocks array size
++ * @regs_array: register array
++ * @regs_array_size: register array size
++ * @mask: enabled instances mask: 1- enabled, 0- disabled
++ */
++int hl_init_pb_with_mask(struct hl_device *hdev, u32 num_dcores,
++		u32 dcore_offset, u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size,
++		const u32 *regs_array, u32 regs_array_size, u64 mask)
++{
++	int i, j;
++	struct hl_block_glbl_sec *glbl_sec;
++
++	glbl_sec = kcalloc(blocks_array_size,
++			sizeof(struct hl_block_glbl_sec),
++			GFP_KERNEL);
++	if (!glbl_sec)
++		return -ENOMEM;
++
++	hl_secure_block(hdev, glbl_sec, blocks_array_size);
++	hl_unsecure_registers(hdev, regs_array, regs_array_size, 0, pb_blocks,
++			glbl_sec, blocks_array_size);
++
++	/* Fill all blocks with the same configuration */
++	for (i = 0 ; i < num_dcores ; i++) {
++		for (j = 0 ; j < num_instances ; j++) {
++			int seq = i * num_instances + j;
++
++			if (!(mask & BIT_ULL(seq)))
++				continue;
++
++			hl_config_glbl_sec(hdev, pb_blocks, glbl_sec,
++					i * dcore_offset + j * instance_offset,
++					blocks_array_size);
++		}
++	}
++
++	kfree(glbl_sec);
++
++	return 0;
++}
++
++/**
++ * hl_init_pb - set pb in HW according to given configuration
++ *
++ * @hdev: pointer to hl_device structure
++ * @num_dcores: number of decores to apply configuration to
++ *              set to HL_PB_SHARED if need to apply only once
++ * @dcore_offset: offset between dcores
++ * @num_instances: number of instances to apply configuration to
++ * @instance_offset: offset between instances
++ * @pb_blocks: blocks array
++ * @blocks_array_size: blocks array size
++ * @regs_array: register array
++ * @regs_array_size: register array size
++ *
++ */
++int hl_init_pb(struct hl_device *hdev, u32 num_dcores, u32 dcore_offset,
++		u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size,
++		const u32 *regs_array, u32 regs_array_size)
++{
++	return hl_init_pb_with_mask(hdev, num_dcores, dcore_offset,
++			num_instances, instance_offset, pb_blocks,
++			blocks_array_size, regs_array, regs_array_size,
++			ULLONG_MAX);
++}
++
++/**
++ * hl_init_pb_ranges_with_mask - set pb instances using mask in HW according to
++ *                               given configuration unsecurring registers
++ *                               ranges instead of specific registers
++ *
++ * @hdev: pointer to hl_device structure
++ * @num_dcores: number of decores to apply configuration to
++ *              set to HL_PB_SHARED if need to apply only once
++ * @dcore_offset: offset between dcores
++ * @num_instances: number of instances to apply configuration to
++ * @instance_offset: offset between instances
++ * @pb_blocks: blocks array
++ * @blocks_array_size: blocks array size
++ * @regs_range_array: register range array
++ * @regs_range_array_size: register range array size
++ * @mask: enabled instances mask: 1- enabled, 0- disabled
++ */
++int hl_init_pb_ranges_with_mask(struct hl_device *hdev, u32 num_dcores,
++		u32 dcore_offset, u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size,
++		const struct range *regs_range_array, u32 regs_range_array_size,
++		u64 mask)
++{
++	int i, j, rc = 0;
++	struct hl_block_glbl_sec *glbl_sec;
++
++	glbl_sec = kcalloc(blocks_array_size,
++			sizeof(struct hl_block_glbl_sec),
++			GFP_KERNEL);
++	if (!glbl_sec)
++		return -ENOMEM;
++
++	hl_secure_block(hdev, glbl_sec, blocks_array_size);
++	rc = hl_unsecure_registers_range(hdev, regs_range_array,
++			regs_range_array_size, 0, pb_blocks, glbl_sec,
++			blocks_array_size);
++	if (rc)
++		goto free_glbl_sec;
++
++	/* Fill all blocks with the same configuration */
++	for (i = 0 ; i < num_dcores ; i++) {
++		for (j = 0 ; j < num_instances ; j++) {
++			int seq = i * num_instances + j;
++
++			if (!(mask & BIT_ULL(seq)))
++				continue;
++
++			hl_config_glbl_sec(hdev, pb_blocks, glbl_sec,
++					i * dcore_offset + j * instance_offset,
++					blocks_array_size);
++		}
++	}
++
++free_glbl_sec:
++	kfree(glbl_sec);
++
++	return rc;
++}
++
++/**
++ * hl_init_pb_ranges - set pb in HW according to given configuration unsecurring
++ *                     registers ranges instead of specific registers
++ *
++ * @hdev: pointer to hl_device structure
++ * @num_dcores: number of decores to apply configuration to
++ *              set to HL_PB_SHARED if need to apply only once
++ * @dcore_offset: offset between dcores
++ * @num_instances: number of instances to apply configuration to
++ * @instance_offset: offset between instances
++ * @pb_blocks: blocks array
++ * @blocks_array_size: blocks array size
++ * @regs_range_array: register range array
++ * @regs_range_array_size: register range array size
++ *
++ */
++int hl_init_pb_ranges(struct hl_device *hdev, u32 num_dcores,
++		u32 dcore_offset, u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size,
++		const struct range *regs_range_array, u32 regs_range_array_size)
++{
++	return hl_init_pb_ranges_with_mask(hdev, num_dcores, dcore_offset,
++			num_instances, instance_offset, pb_blocks,
++			blocks_array_size, regs_range_array,
++			regs_range_array_size, ULLONG_MAX);
++}
++
++/**
++ * hl_init_pb_single_dcore - set pb for a single docre in HW
++ * according to given configuration
++ *
++ * @hdev: pointer to hl_device structure
++ * @dcore_offset: offset from the dcore0
++ * @num_instances: number of instances to apply configuration to
++ * @instance_offset: offset between instances
++ * @pb_blocks: blocks array
++ * @blocks_array_size: blocks array size
++ * @regs_array: register array
++ * @regs_array_size: register array size
++ *
++ */
++int hl_init_pb_single_dcore(struct hl_device *hdev, u32 dcore_offset,
++		u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size,
++		const u32 *regs_array, u32 regs_array_size)
++{
++	int i, rc = 0;
++	struct hl_block_glbl_sec *glbl_sec;
++
++	glbl_sec = kcalloc(blocks_array_size,
++			sizeof(struct hl_block_glbl_sec),
++			GFP_KERNEL);
++	if (!glbl_sec)
++		return -ENOMEM;
++
++	hl_secure_block(hdev, glbl_sec, blocks_array_size);
++	rc = hl_unsecure_registers(hdev, regs_array, regs_array_size, 0,
++			pb_blocks, glbl_sec, blocks_array_size);
++	if (rc)
++		goto free_glbl_sec;
++
++	/* Fill all blocks with the same configuration */
++	for (i = 0 ; i < num_instances ; i++)
++		hl_config_glbl_sec(hdev, pb_blocks, glbl_sec,
++				dcore_offset + i * instance_offset,
++				blocks_array_size);
++
++free_glbl_sec:
++	kfree(glbl_sec);
++
++	return rc;
++}
++
++/**
++ * hl_init_pb_ranges_single_dcore - set pb for a single docre in HW according
++ *                                  to given configuration unsecurring
++ *                                  registers ranges instead of specific
++ *                                  registers
++ *
++ * @hdev: pointer to hl_device structure
++ * @dcore_offset: offset from the dcore0
++ * @num_instances: number of instances to apply configuration to
++ * @instance_offset: offset between instances
++ * @pb_blocks: blocks array
++ * @blocks_array_size: blocks array size
++ * @regs_range_array: register range array
++ * @regs_range_array_size: register range array size
++ *
++ */
++int hl_init_pb_ranges_single_dcore(struct hl_device *hdev, u32 dcore_offset,
++		u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size,
++		const struct range *regs_range_array, u32 regs_range_array_size)
++{
++	int i;
++	struct hl_block_glbl_sec *glbl_sec;
++
++	glbl_sec = kcalloc(blocks_array_size,
++			sizeof(struct hl_block_glbl_sec),
++			GFP_KERNEL);
++	if (!glbl_sec)
++		return -ENOMEM;
++
++	hl_secure_block(hdev, glbl_sec, blocks_array_size);
++	hl_unsecure_registers_range(hdev, regs_range_array,
++			regs_range_array_size, 0, pb_blocks, glbl_sec,
++			blocks_array_size);
++
++	/* Fill all blocks with the same configuration */
++	for (i = 0 ; i < num_instances ; i++)
++		hl_config_glbl_sec(hdev, pb_blocks, glbl_sec,
++				dcore_offset + i * instance_offset,
++				blocks_array_size);
++
++	kfree(glbl_sec);
++
++	return 0;
++}
++
++/**
++ * hl_ack_pb_with_mask - ack pb with mask in HW according to given configuration
++ *
++ * @hdev: pointer to hl_device structure
++ * @num_dcores: number of decores to apply configuration to
++ *              set to HL_PB_SHARED if need to apply only once
++ * @dcore_offset: offset between dcores
++ * @num_instances: number of instances to apply configuration to
++ * @instance_offset: offset between instances
++ * @pb_blocks: blocks array
++ * @blocks_array_size: blocks array size
++ * @mask: enabled instances mask: 1- enabled, 0- disabled
++ *
++ */
++void hl_ack_pb_with_mask(struct hl_device *hdev, u32 num_dcores,
++		u32 dcore_offset, u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size, u64 mask)
++{
++	int i, j;
++
++	/* ack all blocks */
++	for (i = 0 ; i < num_dcores ; i++) {
++		for (j = 0 ; j < num_instances ; j++) {
++			int seq = i * num_instances + j;
++
++			if (!(mask & BIT_ULL(seq)))
++				continue;
++
++			hl_ack_pb_security_violations(hdev, pb_blocks,
++					i * dcore_offset + j * instance_offset,
++					blocks_array_size);
++		}
++	}
++}
++
++/**
++ * hl_ack_pb - ack pb in HW according to given configuration
++ *
++ * @hdev: pointer to hl_device structure
++ * @num_dcores: number of decores to apply configuration to
++ *              set to HL_PB_SHARED if need to apply only once
++ * @dcore_offset: offset between dcores
++ * @num_instances: number of instances to apply configuration to
++ * @instance_offset: offset between instances
++ * @pb_blocks: blocks array
++ * @blocks_array_size: blocks array size
++ *
++ */
++void hl_ack_pb(struct hl_device *hdev, u32 num_dcores, u32 dcore_offset,
++		u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size)
++{
++	hl_ack_pb_with_mask(hdev, num_dcores, dcore_offset, num_instances,
++			instance_offset, pb_blocks, blocks_array_size,
++			ULLONG_MAX);
++}
++
++/**
++ * hl_ack_pb_single_dcore - ack pb for single docre in HW
++ * according to given configuration
++ *
++ * @hdev: pointer to hl_device structure
++ * @dcore_offset: offset from dcore0
++ * @num_instances: number of instances to apply configuration to
++ * @instance_offset: offset between instances
++ * @pb_blocks: blocks array
++ * @blocks_array_size: blocks array size
++ *
++ */
++void hl_ack_pb_single_dcore(struct hl_device *hdev, u32 dcore_offset,
++		u32 num_instances, u32 instance_offset,
++		const u32 pb_blocks[], u32 blocks_array_size)
++{
++	int i;
++
++	/* ack all blocks */
++	for (i = 0 ; i < num_instances ; i++)
++		hl_ack_pb_security_violations(hdev, pb_blocks,
++				dcore_offset + i * instance_offset,
++				blocks_array_size);
++
++}
 -- 
 2.25.1
 

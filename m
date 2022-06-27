@@ -2,161 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55DC55C7E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFDE55DB4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235494AbiF0NUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S235503AbiF0NWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234136AbiF0NUS (ORCPT
+        with ESMTP id S234136AbiF0NWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:20:18 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2083.outbound.protection.outlook.com [40.107.243.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819A310A3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:20:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k4StscwISwSUXkzswdKAEYTYS07Nl81syxCh5REbAmJ8JVSUPwtX8Rh1KK9dJ8aBSiQJK5sdGVflcS+3DmYuFyXya/DiqMTkATGv5BQ8TAYpRMT/p5UwCyp1i7L0uqsQrSovJlb/S7M65b4PeFVuNNIdPg2HaC4+AtTJMLg7/3dbPf00RXvcvCleWeS54gKc9u7ROGq5t+VhdvDdoRWFUz/H09dblFoC2q6Wu8PpfYEZLCRSvekDxBFCdLxWqdU5qNR3H5u7UlANw9e1zeOVSFL7zYg+AmLQRN07e9L5FVyexeI1OJXo0Lm488WMy0AcY+tn0zhVfAnhlw4eEqjyEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q20C6SnQHqMPznC6Z28Vvkmn6wOMcf61p22+fnjcnhA=;
- b=BraPfVsCDhdhxJm/23r/lhu8oXo0jc5loUMLKGyrDI67Obi693tdzvrfB2WOFYGwL54lwnc+Cv64orSbkgl+p8Ql/Wlb3M5o+yTfR3hhiso83xjagXKecbSn4DMIdFnDtgZRih2ZNPH79H2gniZqY6NB1U8ovXdKltl8qZQB2po3wirel0A3HOK4ioAGJV8NvRTEpMXDPVg0Ce+TyWsgoOH83cuSnaSguZqgIkwh5yz6zN6olcLqyulcPLN5VYhlXtEqUHmv/hGyKObwd1C6njI2k/Gh8ji8Cw+VAqxGMqMTi+j6/c7xaji2L8Em0popJuwDCzFuTQg4csWFMG25zA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q20C6SnQHqMPznC6Z28Vvkmn6wOMcf61p22+fnjcnhA=;
- b=g718TmgTCgDqE5OmBWNmDEhxjVdoFNi87lImkQd3kicelsDtmmEQgVlvd+w3vWT+gv/t/mT7eTR77AWhcYWxSJZO7aD2h2xVyKZC3R6MGdHTexsjaqkl1uDXAHNBPWTAxoLbJ37NISlNi1ODRFfhkgxN+R+MlPQxalEBgf7uBp4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CH0PR12MB5284.namprd12.prod.outlook.com (2603:10b6:610:d7::13)
- by DM6PR12MB2953.namprd12.prod.outlook.com (2603:10b6:5:189::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.16; Mon, 27 Jun
- 2022 13:20:15 +0000
-Received: from CH0PR12MB5284.namprd12.prod.outlook.com
- ([fe80::1563:b9e5:78e3:5c15]) by CH0PR12MB5284.namprd12.prod.outlook.com
- ([fe80::1563:b9e5:78e3:5c15%5]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
- 13:20:15 +0000
-Message-ID: <34b5c26c-bf3f-4b7c-3dd8-9e1317968c28@amd.com>
-Date:   Mon, 27 Jun 2022 09:20:13 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] drm/amd/display: change to_dal_irq_source_dnc32() storage
- class specifier to static
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, harry.wentland@amd.com,
-        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        Qingqing.Zhuo@amd.com, mario.limonciello@amd.com,
-        nicholas.kazlauskas@amd.com, maira.canal@usp.br
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220626144615.2227149-1-trix@redhat.com>
-From:   Aurabindo Pillai <aurabindo.pillai@amd.com>
-In-Reply-To: <20220626144615.2227149-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BLAPR03CA0024.namprd03.prod.outlook.com
- (2603:10b6:208:32b::29) To CH0PR12MB5284.namprd12.prod.outlook.com
- (2603:10b6:610:d7::13)
+        Mon, 27 Jun 2022 09:22:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3680226F7;
+        Mon, 27 Jun 2022 06:22:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6D1661275;
+        Mon, 27 Jun 2022 13:21:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C841EC3411D;
+        Mon, 27 Jun 2022 13:21:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656336119;
+        bh=E1q1+oBwOrnDHyb2Ekxn6ULxemjx+uZKthjCDjiYI38=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tK2eCWySAeRn2bVVsb40r2/51hQYbCOiWnET4CRa3SAB1XqLrGCcaBonuxa59EwsN
+         iQA/IV2qXZKBNb63s2aVIYXKMbnDnP6wDfnUcxu3muWhENpg+LLfr+X3rY7zSrve/8
+         biw0OMZBwYYjK2nyCOaTImriODMYpAp7xm/fXv8w=
+Date:   Mon, 27 Jun 2022 15:21:56 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Zhangfei Gao <zhangfei.gao@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        jean-philippe <jean-philippe@linaro.org>,
+        Wangzhou <wangzhou1@hisilicon.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        acc@openeuler.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
+        Yang Shen <shenyang39@huawei.com>
+Subject: Re: [PATCH v2 1/2] uacce: Handle parent driver module removal
+Message-ID: <Yrmu9DcNObmraG72@kroah.com>
+References: <20220624142122.30528-1-zhangfei.gao@linaro.org>
+ <20220624142122.30528-2-zhangfei.gao@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4d03025e-08cf-44a1-90ea-08da583fc5b4
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2953:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0v5WqIXv/IgvnzrtBMhQJ9/e2rlFWaai9U7vzvfB/i6Gkws+oAmG9U+TtP+VvCUM76fQtPhABHjw5HVXEMjojQf9Zs3XUPiKD+eTgZfGoRwtUdW7er3UybY56ZQ28/fmnue6JQNWD3NFwhrEZzByGidvo2mKNc693fLklPl/6cAc78TRd+k9cm9DmnXQP5bz+za2NpzB19Q6H1C7Y9shZCLkZoJNO0OfQCPzopHUuKoiRZHIN4BI0vbjYxW5ljO0PPQzjThAoHVTPaNo5l2hbxn27XkNN016ZVsyKHuhNuVtQphMfS3gcrwKgMGhyvqktM7enhrmGnsaniuHWL2sWWzFeBgrYkLoTfe3VxhMhtkf1P/hy0Juy4aynuwxYGZILsQo1blm6SCqjfHJW0bav+DkaaBPmr7xyS6Xeq91w5NOuyp2j1RfEpDI3tsdFTjs5XXfnmrvVG/gA9nmZbuDTijOR0uYlCJNL58Xcm/J1FUGCJS2lToEEt43DQfFBBjqARzH9+EVdho76L33yDmgdvGP6EWyjw2jxMGBwZsc+LiSvlcmij2JPTVaVp6R7Gb9cb/MxCrQh7TmweN4Vkg75r/N1wiX+BAfptRj+LpI4btqRbcb8/xLRmuJLI/BCYWcADu3X1LtShTAkgtb5zYCefhij84+wUZ9QoxlqLu3DzFlRuyRRB6rFrVFuK2oM7FgeHD3ofyKvrhDda+bCaCwTTE+wDw0iI6iKebfAnvdys7jNTsdAseSodv/myDDx3+/hsx189tGNrTIfXaxj6vyz8FuUh5cqKi5owKJ7UGlUOYCeo7Hb+ivzTngTuPq3anKn/NhtU+60qJj1dsqim/5WGU3SA/UtH/CDMies3/X5/A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5284.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(376002)(396003)(136003)(366004)(921005)(316002)(8936002)(66476007)(2616005)(31686004)(5660300002)(83380400001)(53546011)(36756003)(8676002)(186003)(478600001)(44832011)(2906002)(6512007)(66556008)(38100700002)(41300700001)(26005)(6506007)(31696002)(6486002)(4326008)(66946007)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TFNDbWM3Q0VKa3hxWWJmaDdsNWhCL2w5UGhHc0dlc2hlbW5mdno5dDRta3ls?=
- =?utf-8?B?R0JkVEVEOThsUUMxWVZ1V3d2OUZKRXFxSVRDUkIzZ1Y5T0tmOG1xMlFiU2Iy?=
- =?utf-8?B?a2RKa1lNaWt6VlVDbDNVTEFjRVp5bDBWNnZhL3VGMjlsR25qTFFJa1lXU21U?=
- =?utf-8?B?ZUtrYjQ4QWVUaVpHLytqMjdzN3hhVVArVjZ0ZUJkVmQ5aVZFQW1XeXUybDdv?=
- =?utf-8?B?aWgwbFZIRkM3WWZJYy9HZDhKbG9ZamVOSzFSUm9DQkxmWVJuSEpBdnBVOWFL?=
- =?utf-8?B?bEZiSDhpRFJuOThJb2lMb0oyd0RZZXFuZnoxOFMzYjQ4UHlPZkkwbm4xSTFM?=
- =?utf-8?B?aURSTlNLQTVUQ3p5d1hnUmxXQWlTMG0rZm0zZ2U3YW5EOFJQM1FiVklGcXIv?=
- =?utf-8?B?b1k4dW1IUjloLzkzeWVBeGk2azkrd2ZQMGEyVDVmVkhsbUhYQUJheVJYdWRs?=
- =?utf-8?B?OGttUzVGbW84ZUxMcTF0N3BDMWlxZ0lDenI0c2tjVGFvelMyQjZjeHd3RTB5?=
- =?utf-8?B?MlJFRXMyZldPYUJuMU53djhtTXFBemxKaGIrME9nb1kyWlNtbGI0SEpacnZx?=
- =?utf-8?B?SXRmMGlhWG1rdkp0QzErYVRPcDQ5S1dQMndyZTUwbm11RUw0ejdmcDA2cGhX?=
- =?utf-8?B?SVlQLy8zd1dQdERZRVBZTnA2T0ZuZXNXdi85REQySTB4RW1BK1IyUkNmV3d3?=
- =?utf-8?B?dFhYWlE4OWZlSFYvemZxTVZ0aFZFQ1ZxSlNOY2NmRG90a1NGTnRYamRUdHps?=
- =?utf-8?B?a21vTmpBbWpGUVY3MHJKb2E5ZDZyOXJTM3FCRzAyRUJUL0hkUDZjUTZPRmc1?=
- =?utf-8?B?M1FzS0dtNFlTejFHdVFWV2c3V0JDdFVaY3JtT25ydW9ZODBJNmVlTWpCVXlK?=
- =?utf-8?B?dVE5c0ZEYmZlR1E5YUhMMFBhQzVTNUlNZnpKTGVSUWNydXgveVR0MU9tYktD?=
- =?utf-8?B?Y2NuK2x3Y3FPVlJURUJqTXpPVDBaNUJnU1hlem91ZXZSSk8wQWdzY2xDZ294?=
- =?utf-8?B?dis2VDBobFZnQUNCZlVWRi9DM0lJNTJEdkZCSzZqT2g0YkM0VHNGK3dodk1x?=
- =?utf-8?B?L2FFN1VUQlFIVS9RUE14VGpnc1ZJMGZQRUhqUnVWTy9Ibzc5SlNtT1BQcEVj?=
- =?utf-8?B?WUs1UDluS3A4bGFjOGdmZGtZK2VMam9rZmMzbVBQN3o4YlEwUnpFWTRMa2w2?=
- =?utf-8?B?VHo1dFhRTldCWGhCVlVHMkFwaFlKNVp6clVvbkNYUStXMkY5V21pTHJIMVZv?=
- =?utf-8?B?eXA4dU91MENsSS9vclUyT29ZcmRKQXBDT2ZzbU84ck05c0VKaExtZFByMFpK?=
- =?utf-8?B?NGcyK1UvK0NGZEhiUS8xRDRZaTc1WWNYV0RxTi9WekFwYmhOTFZmTWZxU2tQ?=
- =?utf-8?B?M1BneDVyNTE3K3BFT092OEdhZ3pWS3g3bWh3N1o0c0hDazA5YXB4S1ZBRk15?=
- =?utf-8?B?T1pVWGxvcjVMOVFBenpGT1BPaUxuMC9xU1ZwWUFwd2VMTTk2bW96NVArTWp4?=
- =?utf-8?B?TnJZRjZQUTJZUnBReVgrQlgzeXhFaDI0bWdXRmkyWHF6cmdFVWhKRlg4cEQz?=
- =?utf-8?B?eFVHeUZjOVVhWXphNHczR1l2R013Y2lxUklRNktRQm1kVzlEOGI5emIxbmM1?=
- =?utf-8?B?M2ZxTFQydktYUkw3NXJ6UUs4MmFOU2NOWlJuRWJCMkR4VGtDaEVkWDV1ZjNN?=
- =?utf-8?B?TWRCZzcxTzBzNGtMSmtBTWtSc2xmQmRuUkcxUUZVL2xRMm90UzlaT1BzaEpR?=
- =?utf-8?B?dzZpQ1J4L3c1R1FqL01yRzJVQ2FBR000RllFUlE4VHVYUThOd3hDSEJtUThj?=
- =?utf-8?B?aEdUNVVEYkY1SEttQ2k0NEUybERBUkhTMEdYZHdmZHArcXRsd1dEQnBsUDg3?=
- =?utf-8?B?eHU1b3hUdllrY05JalZuenhWdi9aNVpBQThhMHpLZVBGYUkzNmdBRFB2UVZp?=
- =?utf-8?B?R25aZjRWU3JOeXZJL3ZiWUZKcFU3OUhuVzhaT0VOdjdvMWxaaWpVcyswS1FR?=
- =?utf-8?B?bEV1dUN0V1U3UDVyVHZremFHVjh2eXlPL0o0RE5pVjVGZ0pQMUxmR3JkNkUy?=
- =?utf-8?B?b1RxcXNEOUhTYjFPYVlqRVpIOGpVV2xha0R5bVB6T2VDajNOK0lrblVzUGRp?=
- =?utf-8?Q?Nxq6PRJBHlpDnfdGh/M23wRRv?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d03025e-08cf-44a1-90ea-08da583fc5b4
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5284.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2022 13:20:15.0894
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oh+f/K20sjGT4wJRG/zTJ3kxeiiLLmq36LQAntnge8jndNuBC3iq6jZsAMRM3FSKlpK4aygtyMFb5bMK2oBwOA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2953
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220624142122.30528-2-zhangfei.gao@linaro.org>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-06-26 10:46, Tom Rix wrote:
-> sparse reports
-> drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn32/irq_service_dcn32.c:39:20: warning: symbol 'to_dal_irq_source_dcn32' was not declared. Should it be static?
+On Fri, Jun 24, 2022 at 10:21:21PM +0800, Zhangfei Gao wrote:
+> Change cdev owner to parent driver owner, which blocks rmmod parent
+> driver module once fd is opened.
 > 
-> to_dal_irq_source_dnc32() is only referenced in irq_service_dnc32.c, so change its
-> storage class specifier to static.
-> 
-> Fixes: 0efd4374f6b4 ("drm/amd/display: add dcn32 IRQ changes")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Yang Shen <shenyang39@huawei.com>
+> Signed-off-by: Zhangfei Gao <zhangfei.gao@linaro.org>
 > ---
->   drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/misc/uacce/uacce.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c b/drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c
-> index 3a213ca2f077..b1012fa1977b 100644
-> --- a/drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c
-> +++ b/drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c
-> @@ -36,7 +36,7 @@
->   
->   #define DCN_BASE__INST0_SEG2                       0x000034C0
->   
-> -enum dc_irq_source to_dal_irq_source_dcn32(
-> +static enum dc_irq_source to_dal_irq_source_dcn32(
->   		struct irq_service *irq_service,
->   		uint32_t src_id,
->   		uint32_t ext_id)
+> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
+> index 281c54003edc..f82f2dd30e76 100644
+> --- a/drivers/misc/uacce/uacce.c
+> +++ b/drivers/misc/uacce/uacce.c
+> @@ -484,7 +484,7 @@ int uacce_register(struct uacce_device *uacce)
+>  		return -ENOMEM;
+>  
+>  	uacce->cdev->ops = &uacce_fops;
+> -	uacce->cdev->owner = THIS_MODULE;
+> +	uacce->cdev->owner = uacce->parent->driver->owner;
 
-Reviewed-by: Aurabindo Pillai <aurabindo.pillai@amd.com>
+What if parent is not set?  What if parent does not have a driver set to
+it yet?  Why would a device's parent module control the lifespan of this
+child device's cdev?
+
+This feels wrong and like a layering violation here.
+
+If a parent's module is unloaded, then invalidate the cdev for the
+device when you tear it down before the module is unloaded.
+
+Yes, the interaction between the driver model and a cdev is messy, and
+always tricky (see the recent ksummit discussion about this again, and
+last year's discussion), but that does not mean you should add laying
+violations like this to the codebase.  Please fix this properly.
+
+thanks,
+
+greg k-h

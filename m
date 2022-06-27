@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA43055C6C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1528155DDA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236095AbiF0Lfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
+        id S237360AbiF0Lmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235677AbiF0Lcb (ORCPT
+        with ESMTP id S236833AbiF0LlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:32:31 -0400
+        Mon, 27 Jun 2022 07:41:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C904E95A3;
-        Mon, 27 Jun 2022 04:29:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C2BCE0B;
+        Mon, 27 Jun 2022 04:35:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54FD0614E6;
-        Mon, 27 Jun 2022 11:29:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C6D3C3411D;
-        Mon, 27 Jun 2022 11:29:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E175F60920;
+        Mon, 27 Jun 2022 11:35:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F400EC3411D;
+        Mon, 27 Jun 2022 11:35:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329370;
-        bh=y9i6OcD3+jttfol87JifqvXY8ddQ2O+EJsT5yNM2FLE=;
+        s=korg; t=1656329742;
+        bh=gWzA8PrGnUJhOXrbp3YKCgrX1OK0Ymx2qf90jYVRaWE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0jky/vpF1yIa1he5wVsRCrQnlq4VbdLC+ekAKH5h317VVi8ubqnhp+5v/yWZkZIQO
-         p2bhYUZnsI9TR6KrregwFeqeM0mvF9qXosezEFNBAjE/PMg4oeZdBj9AwVwrzGcZbn
-         NjCayxX5iPkgHIFY3bbxXosYNWltMe9jwC1TZ/PU=
+        b=nPfs0epwI0Y6I1vFBF4C6mhpU+JqSvV4PcNBS8XdDZCDBO234gs4kessMNyGTrxrZ
+         Khib+Pj8aboWxRIaoeRqbJSzcZEAkFAjFUJ41ueqXNhTeRfXKkKikv5n1AzNYmlVdQ
+         5tquZhh7yVn4kwIMwdm9IQtNn8+iDma0uxKZPVHg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 35/60] iio: adc: vf610: fix conversion mode sysfs node name
-Date:   Mon, 27 Jun 2022 13:21:46 +0200
-Message-Id: <20220627111928.723166638@linuxfoundation.org>
+        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
+        Hans de Goede <hdegoede@redhat.com>, Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.15 100/135] iio: accel: mma8452: ignore the return value of reset operation
+Date:   Mon, 27 Jun 2022 13:21:47 +0200
+Message-Id: <20220627111941.058472508@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
-References: <20220627111927.641837068@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baruch Siach <baruch@tkos.co.il>
+From: Haibo Chen <haibo.chen@nxp.com>
 
-[ Upstream commit f1a633b15cd5371a2a83f02c513984e51132dd68 ]
+commit bf745142cc0a3e1723f9207fb0c073c88464b7b4 upstream.
 
-The documentation missed the "in_" prefix for this IIO_SHARED_BY_DIR
-entry.
+On fxls8471, after set the reset bit, the device will reset immediately,
+will not give ACK. So ignore the return value of this reset operation,
+let the following code logic to check whether the reset operation works.
 
-Fixes: bf04c1a367e3 ("iio: adc: vf610: implement configurable conversion modes")
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Haibo Chen <haibo.chen@nxp.com>
-Link: https://lore.kernel.org/r/560dc93fafe5ef7e9a409885fd20b6beac3973d8.1653900626.git.baruch@tkos.co.il
+Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+Fixes: ecabae713196 ("iio: mma8452: Initialise before activating")
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/1655292718-14287-1-git-send-email-haibo.chen@nxp.com
+Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/ABI/testing/sysfs-bus-iio-vf610 | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/accel/mma8452.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-iio-vf610 b/Documentation/ABI/testing/sysfs-bus-iio-vf610
-index 308a6756d3bf..491ead804488 100644
---- a/Documentation/ABI/testing/sysfs-bus-iio-vf610
-+++ b/Documentation/ABI/testing/sysfs-bus-iio-vf610
-@@ -1,4 +1,4 @@
--What:		/sys/bus/iio/devices/iio:deviceX/conversion_mode
-+What:		/sys/bus/iio/devices/iio:deviceX/in_conversion_mode
- KernelVersion:	4.2
- Contact:	linux-iio@vger.kernel.org
- Description:
--- 
-2.35.1
-
+--- a/drivers/iio/accel/mma8452.c
++++ b/drivers/iio/accel/mma8452.c
+@@ -1493,10 +1493,14 @@ static int mma8452_reset(struct i2c_clie
+ 	int i;
+ 	int ret;
+ 
+-	ret = i2c_smbus_write_byte_data(client,	MMA8452_CTRL_REG2,
++	/*
++	 * Find on fxls8471, after config reset bit, it reset immediately,
++	 * and will not give ACK, so here do not check the return value.
++	 * The following code will read the reset register, and check whether
++	 * this reset works.
++	 */
++	i2c_smbus_write_byte_data(client, MMA8452_CTRL_REG2,
+ 					MMA8452_CTRL_REG2_RST);
+-	if (ret < 0)
+-		return ret;
+ 
+ 	for (i = 0; i < 10; i++) {
+ 		usleep_range(100, 200);
 
 

@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC5955C330
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BC955CBF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239817AbiF0RCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
+        id S239824AbiF0RDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239161AbiF0RCh (ORCPT
+        with ESMTP id S235544AbiF0RDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:02:37 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0026C12090;
-        Mon, 27 Jun 2022 10:02:35 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id o10so13998607edi.1;
-        Mon, 27 Jun 2022 10:02:35 -0700 (PDT)
+        Mon, 27 Jun 2022 13:03:10 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCF2635B;
+        Mon, 27 Jun 2022 10:03:10 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id r1so8708125plo.10;
+        Mon, 27 Jun 2022 10:03:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=b4uPhYJvFz/g+C9k3Fn9GcbJYJZ+36h5lm4GFR6WiWY=;
-        b=IgHa3PsH8zSKyhq7Rwmb2RqR1Ery52etIx/5ocY0OJEbWFAGfhL30zVAIYauycb4Vb
-         7X2USgJQxUzrfCQXLbtCFOEERQ8nWg7Z+ogn8TYROX8bQa0KhoW+wVFwHNpdZCINyGDj
-         5zLBu6di+2fFaXuBBxHR9IdBRSVVTHw9pPKw99zMDZ+wU5QZnrgGwCa2BqrK11j06QIZ
-         qLDNKh2GHYvCf71//7CgXraVCNLnn0sfYk2izL3LAF03EttvPlQAHVkt8d6jiDzE06U7
-         65s85RbCPDizS/rerF9Dy6Yc71+xXki4aNQ2o3Yh8XvyrCBnYQfiEPTcRLlK79FGdmFF
-         5N3A==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=rGfyA4qJjKKkXwIS/Jt9GkdBhguVFiA2hQLFBi775QI=;
+        b=FaM85x3kT+wtUxWMOLGjkDy2YZ0Qkn4Qs3dt5XoQvzVK4sDYETLdmlJwVkIf0VBdU4
+         8YYnmFA91S+hCFM5KnMZdB+F8eQAJuUH653ekROLMT5aSailee4MvUbHUAqZpMFLPeKe
+         nms+ZxHcgKuYhQNDdT97L8ODD1VrVMGcVrVnjbwjHW707A3f61JIFEY7TROVBsrCBjOL
+         ARI0cLW365TsI9WxzK+XJRs8YCoPohQqz/8Huqvjk8YH8KHN0HiEawGDuFATosbaJt5S
+         lBW9O09q2S2B2Dep0fBM+y8+FdhOnar9YDkPofNQhnhrOBUKNv8IG/qBZ78lfKb/ho4W
+         oLXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=b4uPhYJvFz/g+C9k3Fn9GcbJYJZ+36h5lm4GFR6WiWY=;
-        b=6lRly51qNIZgBaBsBZq/HPZKtKrTLbVPljhhAXM6b2uPJf/N27+bN9vZQGaHPQ50qd
-         K0vCfIav2MfefjjbgStOviFRwwYtc+FKA84H7tIg+QneeM33UsGdezn4tLHkzP7Ih/PV
-         F0byOVobypUPzb/t8+hXcZ6OB86aFyHPY/2x05ScshJi+2XjDZvsBgAZ9SZmSDzMPKfc
-         Vedb/2e11+nOQfo3lIOyTptic5ZUPY0RSHzvHXgtYkLKjQIU75y7iOnlw17sy8p2jHOo
-         mzCqxC85TQaHSSn5BL2GnesDBK6+9cI17KKncunWzfkvMg7PLmj7gnpht4dXthSY7gZD
-         1y0A==
-X-Gm-Message-State: AJIora+u4IRrj0alinArqDd6mDnozCMIkzVbK0qbT9k6l4uPkLkpdZDi
-        81nYRO+GA59p++W7eV8GKc8=
-X-Google-Smtp-Source: AGRyM1vAeotP6mrOtJ7asAIflldAIm1WxyGeOvIIOVbqET1+NOoONwOIBuOwPNPGG+xRrvTRJw63ag==
-X-Received: by 2002:a05:6402:1459:b0:437:9282:2076 with SMTP id d25-20020a056402145900b0043792822076mr7617213edx.6.1656349354543;
-        Mon, 27 Jun 2022 10:02:34 -0700 (PDT)
-Received: from opensuse.localnet (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
-        by smtp.gmail.com with ESMTPSA id co6-20020a0564020c0600b0042dd022787esm7927777edb.6.2022.06.27.10.02.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 10:02:32 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     David Sterba <dsterba@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        linux-parisc@vger.kernel.org, David Sterba <dsterba@suse.cz>
-Subject: Re: [RESEND PATCH v4 1/2] highmem: Make __kunmap_{local,atomic}() take "const void *"
-Date:   Mon, 27 Jun 2022 19:02:31 +0200
-Message-ID: <2192593.iZASKD2KPV@opensuse>
-In-Reply-To: <20220616210037.7060-2-fmdefrancesco@gmail.com>
-References: <20220616210037.7060-1-fmdefrancesco@gmail.com> <20220616210037.7060-2-fmdefrancesco@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rGfyA4qJjKKkXwIS/Jt9GkdBhguVFiA2hQLFBi775QI=;
+        b=xh/FvzsKJMY+g1//KC2it3YTslamPwMnIGufmWUzOuRLlYyPI+C/MILTS7DDOYUzis
+         lnmG8Xmnkc5XyKICG6O8evv3VG8VVvI39pWMyTDLfgDZIcDShB9KBPSlKgesDaLaLQQv
+         PhZBrgNLBAam3kGwcxOFlxIWF/2QihQe+LHHVGKotiIhfMztTFH5NuQYAQ9gxZAjhNRJ
+         zrvcwj0cEa/mZ3s7r26MtGtu6VUBtZ+MY6v8TOgbsgKAoCJwmoxd4/KyETqFTfxOhMTl
+         jHNn3x2i1H+wnOEKN11q2/Kh42wtrC0IEuln7ctOhb2cMgFzHd881V8LUopDF7uLP+gU
+         mZuQ==
+X-Gm-Message-State: AJIora/HP9+E5CssVTbyD8PAyRH4/XspeJETJkIMaoCxdu7veKhfvBxA
+        F53WJ1AW46b0VmZ2vyn+QdI=
+X-Google-Smtp-Source: AGRyM1t9pIr14VyXDTKGuIVCpHCRItGNMLxRYLx96NQ+JJJ3PaNL1PMwr1vbuvrDq2LS4khJiykQLg==
+X-Received: by 2002:a17:903:22c7:b0:16a:7114:feb4 with SMTP id y7-20020a17090322c700b0016a7114feb4mr15432598plg.22.1656349389433;
+        Mon, 27 Jun 2022 10:03:09 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id w15-20020a1709029a8f00b0016a1c61c5f7sm7466424plp.71.2022.06.27.10.03.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 10:03:08 -0700 (PDT)
+Message-ID: <6cd16364-f0cd-b3f3-248f-4b6d585d05ef@gmail.com>
+Date:   Mon, 27 Jun 2022 10:03:07 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.4 57/60] modpost: fix section mismatch check for
+ exported init/exit sections
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <20220627111927.641837068@linuxfoundation.org>
+ <20220627111929.368555413@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220627111929.368555413@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,174 +77,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=C3=AC 16 giugno 2022 23:00:35 CEST Fabio M. De Francesco wrote:
-> __kunmap_ {local,atomic}() currently take pointers to void. However, this
-> is semantically incorrect, since these functions do not change the memory
-> their arguments point to.
->=20
-> Therefore, make this semantics explicit by modifying the prototypes of
-> __kunmap_{local,atomic}() to take pointers to const void.
->=20
-> As a side effect, compilers will likely produce more efficient code.
->=20
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Suggested-by: David Sterba <dsterba@suse.cz>
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->=20
-> v3->v4: Cc Maintainers and mailing lists I had overlooked when I sent v3.
->=20
-> v2->v3: Fix compilation errors for ARCH=3Dparisc.
->         Reported-by: kernel test robot <lkp@intel.com>
->=20
-> v1->v2: Change the commit message to clearly explain why these functions
->         should require pointers to const void. The fundamental argument
->         behind the commit message changes is semantic correctness.
->         Obviously, there are no changes to the code.
->         Many thanks to David Sterba and Ira Weiny for suggestions and
->         reviews.
->
->  arch/parisc/include/asm/cacheflush.h |  6 +++---
->  arch/parisc/kernel/cache.c           |  2 +-
->  include/linux/highmem-internal.h     | 10 +++++-----
->  mm/highmem.c                         |  2 +-
->  4 files changed, 10 insertions(+), 10 deletions(-)
+On 6/27/22 04:22, Greg Kroah-Hartman wrote:
+> From: Masahiro Yamada <masahiroy@kernel.org>
+> 
+> commit 28438794aba47a27e922857d27b31b74e8559143 upstream.
+> 
+> Since commit f02e8a6596b7 ("module: Sort exported symbols"),
+> EXPORT_SYMBOL* is placed in the individual section ___ksymtab(_gpl)+<sym>
+> (3 leading underscores instead of 2).
+> 
+> Since then, modpost cannot detect the bad combination of EXPORT_SYMBOL
+> and __init/__exit.
+> 
+> Fix the .fromsec field.
+> 
+> Fixes: f02e8a6596b7 ("module: Sort exported symbols")
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-@Andrew:
+This commit causes the following warning to show up on my kernel builds 
+used for testing 5.4 stable candidates:
 
-Ira Weiny asked David Sterba for taking this patch through his tree because=
-=20
-it is a pre-requisite for a patch to fs/btrfs. He agreed with the above-
-mentioned suggestion, however I suppose that an ACK by you is needed.
+WARNING: vmlinux.o(___ksymtab+drm_fb_helper_modinit+0x0): Section 
+mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit 
+to the function .init.text:drm_fb_helper_modinit()
+The symbol drm_fb_helper_modinit is exported and annotated __init
+Fix this by removing the __init annotation of drm_fb_helper_modinit or 
+drop the export.
 
-Can you please take a look at this patch and say what you think about it?
+The kernel configuration to reproduce this is located here (this is 5.10 
+but works in 5.4 as well):
 
-Thanks,
+https://gist.github.com/2c3e8edd5ceb089c8040db724073d941
 
-=46abio
-
->=20
-> diff --git a/arch/parisc/include/asm/cacheflush.h b/arch/parisc/include/
-asm/cacheflush.h
-> index 8d03b3b26229..0bdee6724132 100644
-> --- a/arch/parisc/include/asm/cacheflush.h
-> +++ b/arch/parisc/include/asm/cacheflush.h
-> @@ -22,7 +22,7 @@ void flush_kernel_icache_range_asm(unsigned long,=20
-unsigned long);
->  void flush_user_dcache_range_asm(unsigned long, unsigned long);
->  void flush_kernel_dcache_range_asm(unsigned long, unsigned long);
->  void purge_kernel_dcache_range_asm(unsigned long, unsigned long);
-> -void flush_kernel_dcache_page_asm(void *);
-> +void flush_kernel_dcache_page_asm(const void *addr);
->  void flush_kernel_icache_page(void *);
-> =20
->  /* Cache flush operations */
-> @@ -31,7 +31,7 @@ void flush_cache_all_local(void);
->  void flush_cache_all(void);
->  void flush_cache_mm(struct mm_struct *mm);
-> =20
-> -void flush_kernel_dcache_page_addr(void *addr);
-> +void flush_kernel_dcache_page_addr(const void *addr);
-> =20
->  #define flush_kernel_dcache_range(start,size) \
->  	flush_kernel_dcache_range_asm((start), (start)+(size));
-> @@ -75,7 +75,7 @@ void flush_dcache_page_asm(unsigned long phys_addr,=20
-unsigned long vaddr);
->  void flush_anon_page(struct vm_area_struct *vma, struct page *page,=20
-unsigned long vmaddr);
-> =20
->  #define ARCH_HAS_FLUSH_ON_KUNMAP
-> -static inline void kunmap_flush_on_unmap(void *addr)
-> +static inline void kunmap_flush_on_unmap(const void *addr)
->  {
->  	flush_kernel_dcache_page_addr(addr);
->  }
-> diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
-> index c8a11fcecf4c..824064cafd61 100644
-> --- a/arch/parisc/kernel/cache.c
-> +++ b/arch/parisc/kernel/cache.c
-> @@ -549,7 +549,7 @@ extern void purge_kernel_dcache_page_asm(unsigned=20
-long);
->  extern void clear_user_page_asm(void *, unsigned long);
->  extern void copy_user_page_asm(void *, void *, unsigned long);
-> =20
-> -void flush_kernel_dcache_page_addr(void *addr)
-> +void flush_kernel_dcache_page_addr(const void *addr)
->  {
->  	unsigned long flags;
-> =20
-> diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-
-internal.h
-> index cddb42ff0473..034b1106d022 100644
-> --- a/include/linux/highmem-internal.h
-> +++ b/include/linux/highmem-internal.h
-> @@ -8,7 +8,7 @@
->  #ifdef CONFIG_KMAP_LOCAL
->  void *__kmap_local_pfn_prot(unsigned long pfn, pgprot_t prot);
->  void *__kmap_local_page_prot(struct page *page, pgprot_t prot);
-> -void kunmap_local_indexed(void *vaddr);
-> +void kunmap_local_indexed(const void *vaddr);
->  void kmap_local_fork(struct task_struct *tsk);
->  void __kmap_local_sched_out(void);
->  void __kmap_local_sched_in(void);
-> @@ -89,7 +89,7 @@ static inline void *kmap_local_pfn(unsigned long pfn)
->  	return __kmap_local_pfn_prot(pfn, kmap_prot);
->  }
-> =20
-> -static inline void __kunmap_local(void *vaddr)
-> +static inline void __kunmap_local(const void *vaddr)
->  {
->  	kunmap_local_indexed(vaddr);
->  }
-> @@ -121,7 +121,7 @@ static inline void *kmap_atomic_pfn(unsigned long=20
-pfn)
->  	return __kmap_local_pfn_prot(pfn, kmap_prot);
->  }
-> =20
-> -static inline void __kunmap_atomic(void *addr)
-> +static inline void __kunmap_atomic(const void *addr)
->  {
->  	kunmap_local_indexed(addr);
->  	pagefault_enable();
-> @@ -197,7 +197,7 @@ static inline void *kmap_local_pfn(unsigned long pfn)
->  	return kmap_local_page(pfn_to_page(pfn));
->  }
-> =20
-> -static inline void __kunmap_local(void *addr)
-> +static inline void __kunmap_local(const void *addr)
->  {
->  #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
->  	kunmap_flush_on_unmap(addr);
-> @@ -224,7 +224,7 @@ static inline void *kmap_atomic_pfn(unsigned long=20
-pfn)
->  	return kmap_atomic(pfn_to_page(pfn));
->  }
-> =20
-> -static inline void __kunmap_atomic(void *addr)
-> +static inline void __kunmap_atomic(const void *addr)
->  {
->  #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
->  	kunmap_flush_on_unmap(addr);
-> diff --git a/mm/highmem.c b/mm/highmem.c
-> index 1a692997fac4..e32083e4ce0d 100644
-> --- a/mm/highmem.c
-> +++ b/mm/highmem.c
-> @@ -561,7 +561,7 @@ void *__kmap_local_page_prot(struct page *page,=20
-pgprot_t prot)
->  }
->  EXPORT_SYMBOL(__kmap_local_page_prot);
-> =20
-> -void kunmap_local_indexed(void *vaddr)
-> +void kunmap_local_indexed(const void *vaddr)
->  {
->  	unsigned long addr =3D (unsigned long) vaddr & PAGE_MASK;
->  	pte_t *kmap_pte;
-> --=20
-> 2.36.1
->=20
->=20
-
-
-
-
+Same applies to the 5.10, 5.15 and 5.18 stable queues FWIW.
+-- 
+Florian

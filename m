@@ -2,82 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C2E255C365
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23AF155D72C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbiF0Ik1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
+        id S233605AbiF0Ikn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232724AbiF0Ik0 (ORCPT
+        with ESMTP id S232724AbiF0Ikk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:40:26 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FD56313
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:40:25 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id v65-20020a1cac44000000b003a03c76fa38so4387356wme.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:40:24 -0700 (PDT)
+        Mon, 27 Jun 2022 04:40:40 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A695C6313;
+        Mon, 27 Jun 2022 01:40:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XRmJjWWFtnuNSlD/e9eL++RxDIH2gU2v0iOznKKFYn8=;
-        b=Wuf9RiWGC4Ck7nVJZxIuaXqlmtEYZQSIQ/XU/Z3BJHvJoGLTwlZuqu5MCm4eK8t4D6
-         fSnBv50+/jxAWA+u1iNE8whVMBdy0DjEnq1FbrGKA0TR37/yl1d/wO9Ser1jFscjBj6c
-         QW15NB1JthAErb3q383ZT/lBSAQVHiH11T3Z/Le9O3AL3nzdk2slefDkprcvlxggRPD2
-         E7zlM652mFNrNCuRTHdqzfs5qO/5QlGtZJh6nVcsRgHPMGrTLUPKgtqkhBYboGYjExQX
-         +QMRShFRn4BvAwX0BPOX8fJsMYKSGCo62b1c7mA0RzQ1z5SYVxFCGQEWFZ0hVr9xMuvu
-         eJ4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XRmJjWWFtnuNSlD/e9eL++RxDIH2gU2v0iOznKKFYn8=;
-        b=0H4kCrKdMDbxf9rbEb/OzQjfDo+lZAIEyLw/cwOiC2xhd7pQTuLW3Z3dbsOBudn4sf
-         9qCeQtphp+JWqchoD6i1VOVmlahPub+Bf2pej6TnmYFqfaillgdIVf8f0bDAZu3SWUz2
-         jpJmxz411yTGizvGP8AOKxQHiaJuCsMQN8hlceX/RjbkE5O8F7mY1TJCH3E1hPgyQ9Fq
-         Hn9dtF88apEg2Go400k4jK9APKqTr6FdGxifS2Z/MD/JikMqvyD9Wj23kZQtXz0aphbm
-         iEhHqaeN0/wGfQaOgHQPHSuym6kl4P3VnJLCxvZ31sz968gHWVKc659QO4NWowOET5pb
-         H+zw==
-X-Gm-Message-State: AJIora9KrwF+U6d/twRzaER020xfIW5N1A9wQ6r4qJMkOyaBiHAQfxba
-        JqUGzoawdXAf5mdSJ7tHwuy4NTjdbxh7Uij22rVbmg==
-X-Google-Smtp-Source: AGRyM1vfAz4nYaYXojroBzq5KWiZRFn5bk/JU96hitxFveZR7fyQu+0CEcHEugmroP8FCBjpV7cdOQ0hrleKIxj6Rxo=
-X-Received: by 2002:a05:600c:1906:b0:39c:7f82:3090 with SMTP id
- j6-20020a05600c190600b0039c7f823090mr18668927wmq.152.1656319223415; Mon, 27
- Jun 2022 01:40:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220623000530.1194226-1-yosryahmed@google.com>
- <YrQe5A+FXnbgOR1f@dhcp22.suse.cz> <CAJD7tkanavKpKrQr8-jA8pukgD7OY4eOwJRZufJ2NoThD12G+Q@mail.gmail.com>
- <YrQ1o3CeaZWhm+h4@dhcp22.suse.cz> <CAJD7tkadsLOV7GMFAm+naX4Y1WpZ-4=NkAhAMxNw60iaRPWx=w@mail.gmail.com>
- <YrSWruhPlJV1X9kp@dhcp22.suse.cz> <CALvZod6eLa1X1FJ2Qi6FXhFA-qBCP4mN2SB31MSgjj+g8hKo6Q@mail.gmail.com>
- <YrSdFy3qYdG+rGR6@dhcp22.suse.cz> <CAJD7tkZNEtzJMDsLMHuNHkxFfurS37UuK=zFcPCkOkWfN-dbJQ@mail.gmail.com>
- <YrlpcdgF1HzA7bHS@dhcp22.suse.cz>
-In-Reply-To: <YrlpcdgF1HzA7bHS@dhcp22.suse.cz>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 27 Jun 2022 01:39:46 -0700
-Message-ID: <CAJD7tkYVy2uNwaPiiJdPKT5P_O-9WgxD68iFJ6vw=TLJcQV3Ag@mail.gmail.com>
-Subject: Re: [PATCH] mm: vmpressure: don't count userspace-induced reclaim as
- memory pressure
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1656319239; x=1687855239;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=on5GEhLSPeEeD9pSzUDQAdj9+heGus4n4IvHxRiN4uY=;
+  b=LYM2UCauaneLqacW0SkJgmWmDE2//VI/HJgrQph3iSnn3Z7kTqiOacNP
+   zvmR9ngsSpNOcHw0AN7YAl3ONFp1JeXD0pc3zRuhNDWgbGShiP/uhiYZS
+   wlonfLFTtvWw1rY/n6DVFeNvw7pV5CtHS8OPtPb8h9QIDdhIikarea318
+   AOujv4T+8VLHA1Po+6NrQ3oVWsOtedRQZs0OhfMRL2oXZgfS6MyIpi6jz
+   zgUuRlV4BT9/BYUSi+z5w12IhscUbZoy1wNJlE+MygI+t+zrQdGuPZOrf
+   l0KdY9DHYov5uYbeVMWClpUORp9AAelV07mAbgb0dR1av1HaI5h0jzaIb
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,225,1650924000"; 
+   d="scan'208";a="24684535"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 27 Jun 2022 10:40:37 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Mon, 27 Jun 2022 10:40:37 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Mon, 27 Jun 2022 10:40:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1656319237; x=1687855237;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=on5GEhLSPeEeD9pSzUDQAdj9+heGus4n4IvHxRiN4uY=;
+  b=J99YHCqquxpSQIft96YfqKlT+t47roCs6Y8+ueodnrqNVq43cMdjZc/g
+   6OhVSXdZ+N95rZ7B9CRq1R42ocIZu0xmsAlHLhxtphRTPwpu5j0e4OK/+
+   QL1a+Unq3J7+TcgoQWY1KQ6rfoPiQ4sayRMIMQoHVNoBIvFMs5T6xHHdB
+   OdxmmuhNeWt5jTCBXKBSvwtxUQCTEW1oUq8MBOMYa2h7j3Cu8hk1QaSOV
+   dLNcSQNWmievEqBdpmCgKNEkQEhwVRcwwEqRkU5SSDAZySjqNYaRRHWVo
+   Qnt1w8WVtQFINZPzuvGBPvpCcvHs5j1h+Szcu7pF6bKncIaCJy8bFzHD/
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,225,1650924000"; 
+   d="scan'208";a="24684534"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 27 Jun 2022 10:40:37 +0200
+Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.49.136])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id D0194280071;
+        Mon, 27 Jun 2022 10:40:36 +0200 (CEST)
+Message-ID: <383f5d66d6828a5f09f5705f6ff98e3727ecfdf2.camel@ew.tq-group.com>
+Subject: Re: [PATCH] serial: Revert RS485 polarity change on UART open
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Date:   Mon, 27 Jun 2022 10:40:36 +0200
+In-Reply-To: <b2f29129f966685105e09781620b85c8f4f1a88e.camel@ew.tq-group.com>
+References: <20220329085050.311408-1-matthias.schiffer@ew.tq-group.com>
+         <20220329100328.GA2090@wunner.de>
+         <b2f29129f966685105e09781620b85c8f4f1a88e.camel@ew.tq-group.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,91 +85,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 1:25 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Thu 23-06-22 10:26:11, Yosry Ahmed wrote:
-> > On Thu, Jun 23, 2022 at 10:04 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Thu 23-06-22 09:42:43, Shakeel Butt wrote:
-> > > > On Thu, Jun 23, 2022 at 9:37 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > > >
-> > > > > On Thu 23-06-22 09:22:35, Yosry Ahmed wrote:
-> > > > > > On Thu, Jun 23, 2022 at 2:43 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > > > > >
-> > > > > > > On Thu 23-06-22 01:35:59, Yosry Ahmed wrote:
-> > > > > [...]
-> > > > > > > > In our internal version of memory.reclaim that we recently upstreamed,
-> > > > > > > > we do not account vmpressure during proactive reclaim (similar to how
-> > > > > > > > psi is handled upstream). We want to make sure this behavior also
-> > > > > > > > exists in the upstream version so that consolidating them does not
-> > > > > > > > break our users who rely on vmpressure and will start seeing increased
-> > > > > > > > pressure due to proactive reclaim.
-> > > > > > >
-> > > > > > > These are good reasons to have this patch in your tree. But why is this
-> > > > > > > patch benefitial for the upstream kernel? It clearly adds some code and
-> > > > > > > some special casing which will add a maintenance overhead.
-> > > > > >
-> > > > > > It is not just Google, any existing vmpressure users will start seeing
-> > > > > > false pressure notifications with memory.reclaim. The main goal of the
-> > > > > > patch is to make sure memory.reclaim does not break pre-existing users
-> > > > > > of vmpressure, and doing it in a way that is consistent with psi makes
-> > > > > > sense.
-> > > > >
-> > > > > memory.reclaim is v2 only feature which doesn't have vmpressure
-> > > > > interface. So I do not see how pre-existing users of the upstream kernel
-> > > > > can see any breakage.
-> > > > >
-> > > >
-> > > > Please note that vmpressure is still being used in v2 by the
-> > > > networking layer (see mem_cgroup_under_socket_pressure()) for
-> > > > detecting memory pressure.
-> > >
-> > > I have missed this. It is hidden quite good. I thought that v2 is
-> > > completely vmpressure free. I have to admit that the effect of
-> > > mem_cgroup_under_socket_pressure is not really clear to me. Not to
-> > > mention whether it should or shouldn't be triggered for the user
-> > > triggered memory reclaim. So this would really need some explanation.
-> >
-> > vmpressure was tied into socket pressure by 8e8ae645249b ("mm:
-> > memcontrol: hook up vmpressure to socket pressure"). A quick look at
-> > the commit log and the code suggests that this is used all over the
-> > socket and tcp code to throttles the memory consumption of the
-> > networking layer if we are under pressure.
-> >
-> > However, for proactive reclaim like memory.reclaim, the target is to
-> > probe the memcg for cold memory. Reclaiming such memory should not
-> > have a visible effect on the workload performance. I don't think that
-> > any network throttling side effects are correct here.
->
-> Please describe the user visible effects of this change. IIUC this is
-> changing the vmpressure semantic for pre-existing users (v1 when setting
-> the hard limit for example) and it really should be explained why
-> this is good for them after those years. I do not see any actual bug
-> being described explicitly so please make sure this is all properly
-> documented.
+On Tue, 2022-03-29 at 12:39 +0200, Matthias Schiffer wrote:
+> On Tue, 2022-03-29 at 12:03 +0200, Lukas Wunner wrote:
+> > [cc += Ilpo, Lino]
+> > 
+> > On Tue, Mar 29, 2022 at 10:50:50AM +0200, Matthias Schiffer wrote:
+> > > While the change of the RS485 polarity in
+> > > commit d3b3404df318 ("serial: Fix incorrect rs485 polarity on uart
+> > > open")
+> > > might have made sense based on the original intention of the
+> > > rs485-rts-active-low flag (*), this is not how it is implemented in
+> > > various drivers:
+> > [...]
+> > > [(*) My understanding of the mentioned commit's description is that
+> > > rs485-rts-active-low should have referred to the electical signal
+> > > level
+> > > of the RTS pin, rather than the logical RTS state as understood by
+> > > the
+> > > UART controller.]
+> 
+> Hi Lukas,
+> 
+> > Since RTS is often just a GPIO on a pin controller that's configured
+> > to function as RTS, my expectation would be that the same rules apply
+> > to RTS polarity as those that apply to *any* GPIO.
+> > 
+> > According to Documentation/devicetree/bindings/gpio/gpio.txt:
+> > 
+> > "A gpio-specifier should contain a flag indicating the GPIO polarity;
+> > active-
+> >  high or active-low. If it does, the following best practices should
+> > be
+> >  followed:
+> >  The gpio-specifier's polarity flag should represent the physical
+> > level at the
+> >                                                          ^^^^^^^^^^^^
+> > ^^
+> >  GPIO controller that achieves (or represents, for inputs) a
+> > logically asserted
+> >  value at the device."
+> 
+> Yes, that would make sense to me as well, but as described, this is not
+> how the majority of drivers that I looked at works at the moment :(
+> 
+> I'm not particularly attached to any of the interpretations, but it
+> would be great to have some consistency here. And if the majority of
+> drivers does it the "wrong" way, maybe we should accept that to keep
+> the breakage as small as possible?
+> 
+> > 
+> > > At least the 8250 and the i.MX UART drivers interpret rs485-rts-
+> > > active-low
+> > 
+> > Which 8250 driver are you referring to specifically?  When developing
+> > d3b3404df318, I tested with 8250_bcm2835aux.c and amba-pl011.c.  Both
+> > worked exactly the way they should.
+> 
+> I tested with 8250_omap.c, which does not implement the RS485 handling
+> itself, but refers to the generic code in 8250_port.c. In fact, my
+> first attempt to get the RS485 to work on my device was the following
+> (which matches the originally intended interpretation of the polarity
+> flag, but breaks existing users):
+> 
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -1460,9 +1460,9 @@ void serial8250_em485_stop_tx(struct
+> uart_8250_port *p)
+>         unsigned char mcr = serial8250_in_MCR(p);
+>  
+>         if (p->port.rs485.flags & SER_RS485_RTS_AFTER_SEND)
+> -               mcr |= UART_MCR_RTS;
+> -       else
+>                 mcr &= ~UART_MCR_RTS;
+> +       else
+> +               mcr |= UART_MCR_RTS;
+>         serial8250_out_MCR(p, mcr);
+>  
+>         /*
+> @@ -1611,9 +1611,9 @@ void serial8250_em485_start_tx(struct
+> uart_8250_port *up)
+>                 serial8250_stop_rx(&up->port);
+>  
+>         if (up->port.rs485.flags & SER_RS485_RTS_ON_SEND)
+> -               mcr |= UART_MCR_RTS;
+> -       else
+>                 mcr &= ~UART_MCR_RTS;
+> +       else
+> +               mcr |= UART_MCR_RTS;
+>         serial8250_out_MCR(up, mcr);
+>  }
+> 
+> > If imx.c and others have historically interpreted rs485-rts-active-
+> > low
+> > to mean that the physical level is "high" when active, then we could
+> > just
+> > amend imx_uart_probe() such that after calling uart_get_rs485_mode(),
+> > the SER_RS485_RTS_ON_SEND and SER_RS485_RTS_AFTER_SEND bits are
+> > flipped.  Would that work for you?
+> > 
+> 
+> I guess that would work. The fact that even the different
+> variants of the 8250 are implemented inconsistently makes this
+> especially ugly... It certainly puts a damper on the efforts to make
+> the handling of RS485 in serial drivers more generic.
+> 
+> 
+> > I'll go through the drivers to check which ones are affected.  I'm
+> > sorry
+> > that you're seeing breakage, it's surprising to me that these
+> > different
+> > interpretations of rs485-rts-active-low exist.
+> > Thanks,
+> > 
+> > Lukas
+> 
 
-In cgroup v1, user-induced reclaim that is caused by limit-setting (or
-memory.reclaim for systems that choose to expose it in cgroup v1) will
-no longer cause vmpressure notifications, which makes the vmpressure
-behavior consistent with the current psi behavior.
+Hi Lukas,
 
-In cgroup v2, user-induced reclaim (limit-setting, memory.reclaim, ..)
-would currently cause the networking layer to perceive the memcg as
-being under memory pressure, reducing memory consumption and possibly
-causing throttling. This patch makes the networking layer only
-perceive the memcg as being under pressure when the "pressure" is
-caused by increased memory usage, not limit-setting or proactive
-reclaim, which also makes the definition of memcg memory pressure
-consistent with psi today.
+do you know if there has been any progress on this issue? I see that
+there has been quite a bit of activity in the RS485 code in linux-next, 
+but I didn't have time to check if that has any effect on the polarity
+issue so far.
 
-In short, the purpose of this patch is to unify the definition of
-memcg memory pressure across psi and vmpressure (which indirectly also
-defines the definition of memcg memory pressure for the networking
-layer). If this sounds good to you, I can add this explanation to the
-commit log, and possibly anywhere you see appropriate in the
-code/docs.
+Thanks,
+Matthias
 
->
-> --
-> Michal Hocko
-> SUSE Labs

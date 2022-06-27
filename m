@@ -2,160 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A49955D651
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A31455CE2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239909AbiF0RPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36252 "EHLO
+        id S238961AbiF0RSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239893AbiF0RPF (ORCPT
+        with ESMTP id S235968AbiF0RSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:15:05 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB325F78;
-        Mon, 27 Jun 2022 10:15:04 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id m13so10313561ioj.0;
-        Mon, 27 Jun 2022 10:15:04 -0700 (PDT)
+        Mon, 27 Jun 2022 13:18:09 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C41137
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:18:07 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id i1so9521602wrb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Rx9f3FFpQHBCbk0ON6Xh6VW45WNeEZB24W/hAUNIOhc=;
+        b=G+D6o8B0JVucQW6+PhCQ5L2XRwfWedIWe5iLwmsIKnP8l2kIPE3ln4/ME0/NvRV+UI
+         IRq3HZNljewherNlCxkZNHbPRyhOKbLAJsPLf/122Lc0zDeUZ3DSYptMKEcEzzE5M49v
+         K7z5/G6X58efTmpm/XecTLJdA7JzogWXZL37jfBfaiP12a4vZimKbpMNVbZqbhlrQndn
+         amVSil4XRxHxN3Czg+9XDVPJzWWjWA1lGbD0M6Gf9a4KCdlQI4edBbYRGLimeSp7uaaN
+         pvrRhrhKcOF/RRlK5ucxsSdCE8jF8RFh7BplqDvHDLsP9MUYF1Emg8N/f0LtedmrcKxn
+         UcoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=An//ZVIBHusXq7ojPg64QggrwNUop5VEk57ILCBBv0U=;
-        b=CBvltL9en7zdkd9Xbno6IFiA1P8DymS8Gudymsubfx04HeE6ItR2ZXg0GNd1YjS0SH
-         deDSIU1Oan8FUDNwy0eRx3NqYxVz3wqQFNjVXnICkPtBr3F/E5pUfB9LNKUGoOJ41yfv
-         0JOaHXAizkwDaSwkoSFrNnxMDfh/mPYKNquwrTgZp926JWK62pzfcsWcA+p7+k3EEsnb
-         fdA7Dm5wXFDTYKifNPw7k4jnAowpjYfQI8RZGEEW8YE1Kmf9FKYL+iW1G3cmxP2ZJtpS
-         VFcR90HTjQoSaJ9FVaRZU+P/UsaN0iwHq/MuEQ6dC9qLklCFDzaDN9PxxHHSRsyaJplY
-         NSkg==
-X-Gm-Message-State: AJIora8r9OCtTrGY2XShKEJdvNxtPWs9KQrrS3qJnNnQzS/A3NQ5HDAU
-        +cz5lB/nQjqwkD1VCiVegQ==
-X-Google-Smtp-Source: AGRyM1trlOnex3HcAYrl5SVQu6l8zcvR+jlYFtBQiWM5jDgBNdFpV78MBBeicB8VYl+Oe0sIBxfwBA==
-X-Received: by 2002:a05:6638:3387:b0:33c:9f9e:5a17 with SMTP id h7-20020a056638338700b0033c9f9e5a17mr2713672jav.12.1656350104060;
-        Mon, 27 Jun 2022 10:15:04 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id a23-20020a056638059700b003320e4b5bb7sm5118946jar.57.2022.06.27.10.15.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 10:15:03 -0700 (PDT)
-Received: (nullmailer pid 2608313 invoked by uid 1000);
-        Mon, 27 Jun 2022 17:15:00 -0000
-Date:   Mon, 27 Jun 2022 11:15:00 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor.Dooley@microchip.com
-Cc:     fancer.lancer@gmail.com, mail@conchuod.ie, airlied@linux.ie,
-        daniel@ffwll.ch, krzysztof.kozlowski+dt@linaro.org,
-        thierry.reding@gmail.com, sam@ravnborg.org,
-        Eugeniy.Paltsev@synopsys.com, vkoul@kernel.org,
-        lgirdwood@gmail.com, broonie@kernel.org, daniel.lezcano@linaro.org,
-        palmer@dabbelt.com, palmer@rivosinc.com, tglx@linutronix.de,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        masahiroy@kernel.org, damien.lemoal@opensource.wdc.com,
-        geert@linux-m68k.org, niklas.cassel@wdc.com,
-        dillon.minfei@gmail.com, jee.heng.sia@intel.com,
-        joabreu@synopsys.com, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 06/14] spi: dt-bindings: dw-apb-ssi: update
- spi-{r,t}x-bus-width for dwc-ssi
-Message-ID: <20220627171500.GA2600685-robh@kernel.org>
-References: <20220618123035.563070-1-mail@conchuod.ie>
- <20220618123035.563070-7-mail@conchuod.ie>
- <20220620205654.g7fyipwytbww5757@mobilestation>
- <61b0fb86-078d-0262-b142-df2984ce0f97@microchip.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Rx9f3FFpQHBCbk0ON6Xh6VW45WNeEZB24W/hAUNIOhc=;
+        b=hMvcH9LORbZtgKLkJlJVydM25th/ik2f+eaidsLoea27qx3sSH7BPssCC6dy2KHx/z
+         0QM7M1aJICfPfcCRT8uzK8+gN4O7rw6HngkU5b5jFkaAU+/XFyaQh9Ho50YNO9INGlEZ
+         rRdph4YCJt2TAQGw3oGjnhS9vv1BgT7NPihpwVUZw3zKbRtipws8PqiFsVY+QTii59sd
+         VxC9yQdaTwi44ydUczcvDyqekFQm1BmV5n+0hB87YPGBEwtIP+tuLCeB6qUyRvz+GuIy
+         yZu4zk86zhI89L5hutyObJ4gcz+FaeobuGEzBXXXrS2BMRpCY7+p3ENg4zifRP0FREsy
+         2uQw==
+X-Gm-Message-State: AJIora/fIk38XAo9yzqXVgBbvpAgBY+xdCUsaIGQ6CN2qL2Mm9UBGn4o
+        jRhcMM85rVYjtGI6EHQaAx4kHC1QuuAvYk7IyIivEw==
+X-Google-Smtp-Source: AGRyM1vXlEJ2cJEQvlLdrnPihXwK9o/E1cIAWChD1xuv8agkjMs9iJuTfwntYyHAZfhGP9MzEdXOJwWhE277bB/fsJI=
+X-Received: by 2002:a5d:6b91:0:b0:21b:bc0b:7282 with SMTP id
+ n17-20020a5d6b91000000b0021bbc0b7282mr13477019wrx.375.1656350285740; Mon, 27
+ Jun 2022 10:18:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61b0fb86-078d-0262-b142-df2984ce0f97@microchip.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220614014714.1407239-1-irogers@google.com>
+In-Reply-To: <20220614014714.1407239-1-irogers@google.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 27 Jun 2022 10:17:51 -0700
+Message-ID: <CAP-5=fVg9ZVOONuiJZopC7RyuEXvP8t79EFjQF0GCcV=atGbCg@mail.gmail.com>
+Subject: Re: [PATCH] perf bpf: 8 byte align bpil data
+To:     Dave Marchevsky <davemarchevsky@fb.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Song Liu <songliubraving@fb.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 09:06:34PM +0000, Conor.Dooley@microchip.com wrote:
-> On 20/06/2022 21:56, Serge Semin wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > On Sat, Jun 18, 2022 at 01:30:28PM +0100, Conor Dooley wrote:
-> >> From: Conor Dooley <conor.dooley@microchip.com>
-> >>
-> >> snps,dwc-ssi-1.01a has a single user - the Canaan k210, which uses a
-> >> width of 4 for spi-{r,t}x-bus-width. Update the binding to reflect
-> >> this.
-> >>
-> >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> >> ---
-> >>  .../bindings/spi/snps,dw-apb-ssi.yaml         | 48 ++++++++++++++-----
-> >>  1 file changed, 35 insertions(+), 13 deletions(-)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> >> index e25d44c218f2..f2b9e3f062cd 100644
-> >> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> >> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-> >> @@ -135,19 +135,41 @@ properties:
-> >>        of the designware controller, and the upper limit is also subject to
-> >>        controller configuration.
-> >>
-> >> -patternProperties:
-> >> -  "^.*@[0-9a-f]+$":
-> >> -    type: object
-> >> -    properties:
-> >> -      reg:
-> >> -        minimum: 0
-> >> -        maximum: 3
-> >> -
-> >> -      spi-rx-bus-width:
-> >> -        const: 1
-> >> -
-> >> -      spi-tx-bus-width:
-> >> -        const: 1
-> >> +if:
-> >> +  properties:
-> >> +    compatible:
-> >> +      contains:
-> >> +        const: snps,dwc-ssi-1.01a
-> >> +
-> >> +then:
-> >> +  patternProperties:
-> >> +    "^.*@[0-9a-f]+$":
-> >> +      type: object
-> >> +      properties:
-> >> +        reg:
-> >> +          minimum: 0
-> >> +          maximum: 3
-> >> +
-> >> +        spi-rx-bus-width:
-> >> +          const: 4
-> >> +
-> >> +        spi-tx-bus-width:
-> >> +          const: 4
-> >> +
-> >> +else:
-> >> +  patternProperties:
-> >> +    "^.*@[0-9a-f]+$":
-> >> +      type: object
-> >> +      properties:
-> >> +        reg:
-> >> +          minimum: 0
-> >> +          maximum: 3
-> >> +
-> >> +        spi-rx-bus-width:
-> >> +          const: 1
-> >> +
-> >> +        spi-tx-bus-width:
-> >> +          const: 1
-> > 
-> > You can just use a more relaxed constraint "enum: [1 2 4 8]" here
-> 
-> 8 too? sure.
+On Mon, Jun 13, 2022 at 6:47 PM Ian Rogers <irogers@google.com> wrote:
+>
+> bpil data is accessed assuming 64-bit alignment resulting in undefined
+> behavior as the data is just byte aligned. With an -fsanitize=undefined
+> build the following errors are observed:
+>
+> $ sudo perf record -a sleep 1
+> util/bpf-event.c:310:22: runtime error: load of misaligned address 0x55f61084520f for type '__u64', which requires 8 byte alignment
+> 0x55f61084520f: note: pointer points here
+>  a8 fe ff ff 3c  51 d3 c0 ff ff ff ff 04  84 d3 c0 ff ff ff ff d8  aa d3 c0 ff ff ff ff a4  c0 d3 c0
+>              ^
+> util/bpf-event.c:311:20: runtime error: load of misaligned address 0x55f61084522f for type '__u32', which requires 4 byte alignment
+> 0x55f61084522f: note: pointer points here
+>  ff ff ff ff c7  17 00 00 f1 02 00 00 1f  04 00 00 58 04 00 00 00  00 00 00 0f 00 00 00 63  02 00 00
+>              ^
+> util/bpf-event.c:198:33: runtime error: member access within misaligned address 0x55f61084523f for type 'const struct bpf_func_info', which requires 4 byte alignment
+> 0x55f61084523f: note: pointer points here
+>  58 04 00 00 00  00 00 00 0f 00 00 00 63  02 00 00 3b 00 00 00 ab  02 00 00 44 00 00 00 14  03 00 00
+>
+> Correct this by rouding up the data sizes and aligning the pointers.
 
-Then no constraints needed because the common definition already has 
-this presumably.
+Happy Monday, polite ping!
 
-Rob
+Thanks,
+Ian
+
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/bpf-utils.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/util/bpf-utils.c b/tools/perf/util/bpf-utils.c
+> index e271e05e51bc..80b1d2b3729b 100644
+> --- a/tools/perf/util/bpf-utils.c
+> +++ b/tools/perf/util/bpf-utils.c
+> @@ -149,11 +149,10 @@ get_bpf_prog_info_linear(int fd, __u64 arrays)
+>                 count = bpf_prog_info_read_offset_u32(&info, desc->count_offset);
+>                 size  = bpf_prog_info_read_offset_u32(&info, desc->size_offset);
+>
+> -               data_len += count * size;
+> +               data_len += roundup(count * size, sizeof(__u64));
+>         }
+>
+>         /* step 3: allocate continuous memory */
+> -       data_len = roundup(data_len, sizeof(__u64));
+>         info_linear = malloc(sizeof(struct perf_bpil) + data_len);
+>         if (!info_linear)
+>                 return ERR_PTR(-ENOMEM);
+> @@ -180,7 +179,7 @@ get_bpf_prog_info_linear(int fd, __u64 arrays)
+>                 bpf_prog_info_set_offset_u64(&info_linear->info,
+>                                              desc->array_offset,
+>                                              ptr_to_u64(ptr));
+> -               ptr += count * size;
+> +               ptr += roundup(count * size, sizeof(__u64));
+>         }
+>
+>         /* step 5: call syscall again to get required arrays */
+> --
+> 2.36.1.476.g0c4daa206d-goog
+>

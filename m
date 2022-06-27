@@ -2,153 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA82D55D78C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A4F55DBF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239733AbiF0RT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
+        id S239252AbiF0RUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239337AbiF0RTZ (ORCPT
+        with ESMTP id S234977AbiF0RUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:19:25 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED619A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:19:24 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RGH4up001813;
-        Mon, 27 Jun 2022 17:19:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=wo61g/Q5MUZ4LtKdZnDHV2MfT0MOg5u/j7x0OaK/5WU=;
- b=Ilc7PQLueM+vnr+DyhYDU7wd25mJh7WxcYxZlk696SQYFplwEUx30O9KLv2aHW3P9azz
- OxFB+Q0aKw8/0H6UAqftG535JiTo+ykVVirKSVOXtuugM1r3rtGucSDOF+xb6dzW4/BP
- UpcbiORSIbxrkQ6hg2bdNvR0pFSKI0sJmzoIrfCd2SHHzKSUUWur/0X3oDb6NXeYcr9K
- iTj7ziOp9b/h31oUEknVkGiqZXVomxa8L+TwWapuXTfX9/RDKh5BTe4AWkSdO1kSLqQg
- 44cpPgWH8yqZi/5JtJ9aCaJpGr8oSjRRC2aQFwLyPD0iA/T1jWgSDI/BSV3DYVGEzmgo vg== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gwry0bx1g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jun 2022 17:19:22 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25RHC2KC033769;
-        Mon, 27 Jun 2022 17:19:21 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gwrt781ba-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jun 2022 17:19:21 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D5w1w+34b1mocCwxfZW+q7wbCAPB/zf0eH9wqGd3QFQrPAuiU1OXtr4Z9K49R/wzxl9jfympgmcY0TFZkdeNykuwORGmKcb8AQWcSV8q/TQUjwGw/ZRu8iwFSo0VThGocwg5YtjrKze4dxPIy2XmnezDP+Pz7z4VR5nB0+OQbQAujJm0VYvJuPx7dDINadkGp8d3HZGDc7Zh7Bi6TEOVRPgS7aApknYwZu7OIDc5L1kjl0f25YnthZgX5pZvoIuNLqpTds4OO7FWSUVh2jSx3GhN4OOkDS38Fx9FJ82TVKZQbhMzjYyrkFGHibGzR1gi+dNZH0KC5uY7gIQy6YLFZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wo61g/Q5MUZ4LtKdZnDHV2MfT0MOg5u/j7x0OaK/5WU=;
- b=hfPZxHAvTILxboR9nzCRj2tr6i2pX0Zn4wT7/UFxR5K8OmzoTQ3qM06Iw9FCDBHyBNBo+CW1XQxZVvGwxDalg7K0ljOdQrwPFlu967bvvWRIWwhiUeSXxROeOhA7uq/WZ552GJY35IAQC1FKf7yyp2kaiCc33lEzY2Q08x9dvh/lqJpGF1jlm89tvh48iisSNb+ElrWiSKvFHH8nzawRlJDcX4t4bsFqLW7d2TtcyyjtEgGUsgiFq+5BXmwPPIYoTZbY7d9g9tAQ7OTOIez4zlSMY0Gyq7LObeyj396GOErDPxG8tP8srNBzv+9nU+RRzlf6JirUSJ4wvzbM8hvRpg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wo61g/Q5MUZ4LtKdZnDHV2MfT0MOg5u/j7x0OaK/5WU=;
- b=slxu4GrtNG0GvNjeic/IB0j4aB+gLNopycCGFn7A/OLPK4ByWte5mXcJ4Ef6mBgQwHyZlhMM7qp8VpecT5HmaItQyFqhOQXHN2h4MYBKE29qdTuAIR+rde/oM5Y1JFasd57UPo90flDf7wcrR2ABFGXyY0hWPkKqYeaMj9bBI7w=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by DM5PR10MB1642.namprd10.prod.outlook.com (2603:10b6:4:b::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5373.18; Mon, 27 Jun 2022 17:19:19 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::9920:1ac4:2d14:e703]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::9920:1ac4:2d14:e703%5]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
- 17:19:19 +0000
-From:   Chuck Lever III <chuck.lever@oracle.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     John 'Warthog9' Hawley <warthog9@eaglescrag.net>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: possible trace_printk() bug in v5.19-rc1
-Thread-Topic: possible trace_printk() bug in v5.19-rc1
-Thread-Index: AQHYgZTiaV2APa8LiECz6bYrBgXq161SKdYAgAAAwoCAAdkwgIAAXpIAgAMb4QCAB70xgIABL6QAgAAImQCAAAv4AIAAj14AgAJ+wgCAAAEDAIAAAiIA
-Date:   Mon, 27 Jun 2022 17:19:18 +0000
-Message-ID: <25C37F40-7D8E-41C6-961F-0774C8138CCB@oracle.com>
-References: <F6C267B0-83EA-4151-A4EC-44482AC52C59@oracle.com>
- <20220616113400.15335d91@gandalf.local.home>
- <E309A098-DA06-490D-A75C-E6295C2987B9@oracle.com>
- <20220617155019.373adda7@gandalf.local.home>
- <3BAD2CD9-3A34-4140-A28C-0FE798B83C41@oracle.com>
- <355D2478-33D3-4046-8422-E512F42C51BC@oracle.com>
- <20220624190819.59df11d3@rorschach.local.home>
- <3EB14A14-767B-4B66-9B28-97DDE7EECFD2@oracle.com>
- <20220625134552.08c1a23a@rorschach.local.home>
- <0bf1d366-348c-0f91-8f0a-fc9cc6228783@kernel.org>
- <12417afa-331b-e0f6-a3b0-19623e38590b@eaglescrag.net>
- <308F6A3B-1FB9-42CD-8239-12B0FD0F5FDB@oracle.com>
- <20220627131140.56761db9@gandalf.local.home>
-In-Reply-To: <20220627131140.56761db9@gandalf.local.home>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.100.31)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6390dd34-b271-4cd2-adf1-08da58612b64
-x-ms-traffictypediagnostic: DM5PR10MB1642:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LBrWuu4DqfdA7eGKhwD7zRdpG6AVpCpnDK5Yf/qtcD6RKUmcAiIWGiUR7YjU8hYlSU2H8tH1X9TziN7K8bLBdMaAzUH0kmgDyJ1gg1oRdkbCYsP4cZ22Q1EDj5/WAc342Qi7GpWWmKnrltRApxcgSJFp9tWIoBS7YZmjIIOA1wSdkNWmiqI9T0Tb/+Vx3fyaD7QBsRr/6mTo8aIg+ExEPKDwIaFfddiI6GgYm/I4vNTcdXAWanZ1yvQ33a5zYD0dLx3UjRkgtz6Nq7Sr0QKelHt9tv80yyGK8hWjLea1DkPlayFAuu4K0LJDFVqaCUVhgvs9sR3bs9wppTWj8eJ4CV4SVtCRsC5EawbCp8+8EhBHo9RgAccdr10puFDa/aF0KS4sxq1ZOaXKi/mfThlQULHZMc5tRJfgasZhZE5IbBMBPDIeju5XCQOZLxSxUw78e60K1NfyarPJx25sacxQBqs6qSm+/FSQvdMbZVXeckysxCP3IgzYCCobzia58iiA3LWS8ZKPcvOGVcLoHjq6guMqGF2Dvo00Qbymu2LNODxISzfA8LOvqksB8qwQ4eEEumGx/YMzQMVIN40FZQzPamJycjEd/lVCMxMtr6sn9TKlNl9+J8QWgsXKnXADP+YpJD5tSSYOtcgLOPu4L15d7LNu9/T5SbcMWbeDxqh3U2UxS7KMX4z++eDXAz7Z65vHs/dneaF89smb+U7359qA5vVGfX5msJaYlFzks22rWv9uL5zD8prWlpQodyfVDur2feVdr86evrS0gKiYLsClaOrzDCcjnNqnLEE3QSp4bBmk8X1Nh2wu89NVTKQGn9Kti5SbzqA8Fm8IT7dr/f6S6A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(39860400002)(396003)(376002)(366004)(136003)(66476007)(66446008)(6486002)(66556008)(4326008)(38070700005)(8676002)(64756008)(71200400001)(478600001)(26005)(86362001)(66946007)(53546011)(6512007)(76116006)(6506007)(91956017)(41300700001)(2906002)(6916009)(36756003)(38100700002)(8936002)(122000001)(186003)(2616005)(54906003)(33656002)(83380400001)(316002)(5660300002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?S3AiKBt7mDqE4W6UHjZHiDSOvS4mXOnUpt/63X1qzgAW5+c0Wc1oU428BQUl?=
- =?us-ascii?Q?HxTjUCLVqI++ZzL6vkhqzcyzEB7MuhgApiBL9LwtFUCUyi0ztuxMeI7poa7S?=
- =?us-ascii?Q?Fmq/Mup+nYkSwOxvOJ/+7zg0le5WHkv9bdDPgKZypDeon2pM8kxoGdfhvL1l?=
- =?us-ascii?Q?wIpls4aQQd8sz0H0lfHRsIQ2tfieFic4ZLbyl/Pv3HZ54HLc746sXDy/hfGT?=
- =?us-ascii?Q?xg93Y6g2Hoyu1ef4JQ7vibuKZ+mNES0oWiRN80kw5eoNQeb0WfBpx2MoFxFa?=
- =?us-ascii?Q?Au/VEp8Ay18UInjSFnGVdRw06MSFRWfXai0GcGxBzBa2j0gS7Y0D3+yFj74b?=
- =?us-ascii?Q?s6+uP6MySs/7fihH0e8DRxBIonAETVOnulP7bBqaZ1+rxr1CRKo4FPkR8SqJ?=
- =?us-ascii?Q?qz/9FhS0kk+QdrCB6g8Mz+rlQlNfkyRtk8mJXvk4Tj4tgW644igVZ8V3BNe+?=
- =?us-ascii?Q?c0RXb04BUk/V9hslKmODS+mN6loESdmK3gA3p0Rr6pZvD/OBrsAn5uSRCWo8?=
- =?us-ascii?Q?8Up7k+60a+dzyx8WzjCKh1fO/H8yCVTRWjTg+v0a1T8k2TuXeuekvxrxVVr3?=
- =?us-ascii?Q?m46rN+xY5Lc1bouXQX6dbs+WN8eGCxhtEPEzoOkIen3P5XyNVerLWqd6kQzc?=
- =?us-ascii?Q?nUy5Hs5I/+EuBtEzBTmjKy2U26bckTj5h++mcyDPx5zkQu/pdlrZedxYuL8b?=
- =?us-ascii?Q?60kDXWyhZBnW4usbw+w7r+N8MYrbFwsy9GyGMEbiVOcLcs9mVN7vUI9RxO/2?=
- =?us-ascii?Q?KOkKmy1/F5n/EPQ64IZkiS2HUAKjv/kWFlPVybzOm7YLgUfEyQ/LGyV6Hf1l?=
- =?us-ascii?Q?abRC5xBRDtDQ91b1a+PH7WBITkCyET2/qFF0SIiuhYgaSMXUU8qjfA7HqY98?=
- =?us-ascii?Q?gx/SCN43lEyzqUp8dudZeqi4rrmeGgs3dBIFCuJh7lUMob6JnUM3THJBIdug?=
- =?us-ascii?Q?Nx4sEomK+NQLcdLt8G1pWz5N6+/mjDLgOjmfW6u3/6HCFKxYpvD9W1xjG7Zt?=
- =?us-ascii?Q?wykUgVd33kclWDLjl9oDlLz/k78wDAVZzJ01D9TCt2uNoT+XL+iYnFAptpE+?=
- =?us-ascii?Q?u2jAJsGuxeNyK8hCYN8/CWUgDu76mylPLVsiZZ/gxK0ZSVlJVMfHqBscuyVg?=
- =?us-ascii?Q?MxCRjFy98cnlNoCveCzMQuUZDJOcYZhODQ/bOlpYSVDmxQHbtCFm1zT3MLjB?=
- =?us-ascii?Q?WxItbaHNWewI3NngcoSxpdJ9PiF1B1rDkaE6hZWbGCQL3Z9qkkxdsMgdqspz?=
- =?us-ascii?Q?STVgZgZgzuFd98yTLUePvMgV6qck7uTsSG32PCQwFplkeOvD0slagio9skvH?=
- =?us-ascii?Q?3Yl8RGI158lVIbfjBLq2KqIvNTMNc9lJNOwSZuih8e/198yCOCIu+QQbvY1A?=
- =?us-ascii?Q?h2KxBF2UAH7IB+B4dWrcwJrmCOoV4w/A526g2weZECbWnnRvQ6e2ncx3DVvW?=
- =?us-ascii?Q?NkK8MkileWRNW4vz0cxHQONYB/u/SRNYxPnHD2ZLWcMFn5RdejX4WD3vuZhj?=
- =?us-ascii?Q?1iCUJY2dFhvPvPgwF+OhLUvq4sKxyMG5/T9WbuLXnLCdBAQYj6hZulLiXLS4?=
- =?us-ascii?Q?S9grJSlzuwpBwqPPewGkigT5wch+bXVlJ6KMmdZMDkHaYlgYuvGpBh55X4h5?=
- =?us-ascii?Q?Tg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9AD463AD3258D542897C62371A5085E4@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Mon, 27 Jun 2022 13:20:01 -0400
+Received: from mx0b-00256a01.pphosted.com (mx0a-00256a01.pphosted.com [148.163.150.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9901CE
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:19:59 -0700 (PDT)
+Received: from pps.filterd (m0094546.ppops.net [127.0.0.1])
+        by mx0b-00256a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RFVsgt006813
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:19:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nyu.edu; h=mime-version :
+ references : in-reply-to : from : date : message-id : subject : to : cc :
+ content-type; s=20180315; bh=8YDueYU8b2jg9KPKbFHwrWNJX+YOLcGyJVjwU50A1Eo=;
+ b=JWjQ377n+MxBhm+OC1LZmsvp5c9zHbBCrZnhy4chUwctJhQgf9s7oeWS2pt/0PvNuorp
+ P3GhivAhKvg1oBfLsamcWvL0bL6P3xSOTr2jOA7Gw9rMnmNeIKBmSrzBzyXNX461Xk2s
+ k7HdIPuKjWyRxfrwGlssd2F48HjDZgP+qyOigDDuPdAXPeMVbFneGCqxMUtNNnwET5NW
+ PkDKi+ZEz+8KNpw8c8PhtNizTCo/dEyL5q7zQDYgBnuYKc34u0avTt+dsnsOA7uo/cYX
+ 8AOSHXlLVLhHPZ8DEuYXONp3NM99rcrmThSQE7hif48+xxbtS29tG9FL+Qs2dtQG6NOg RQ== 
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        by mx0b-00256a01.pphosted.com (PPS) with ESMTPS id 3gyf962a6j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:19:59 -0400
+Received: by mail-ej1-f71.google.com with SMTP id qa41-20020a17090786a900b00722f313a60eso2659161ejc.13
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:19:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8YDueYU8b2jg9KPKbFHwrWNJX+YOLcGyJVjwU50A1Eo=;
+        b=BJvS1xaiRaU3wDndc5BznlLtRMaaLcILlNBjMUgN/MT43ggCgORsZUTJRMSnwHhiT/
+         00KaxgEJSblmV1vs1i5HZ1sh3xRR2Q5ziiCGHulYYGCODtdRMT1K6rasA4nLSaPbia6D
+         q7p2sudzm+QObyasGPxr0rOn4PVnnVRumNYbdqj5TwCGeAJgZnARlUqVDSxXsWAdgb3z
+         Lg+/UFtytccQiASnsF6Ee2VxGE5FqukRYpCwsVDxNsMbZx0VmtIPwsvXULHLo4o5EkRk
+         0UhNQVMLTVtOC6fTSJr3Jg38Q8cYmQ2kLNZiPyF8a1OFuaLShiZmVCLH20mysiiUZo5A
+         N1rQ==
+X-Gm-Message-State: AJIora/+MgFEmSzYsqf9747mh4tZXJA1+JuHp4Efz0s9mv2aRsV3xUi8
+        +gvkyKqlKKEwDtR5p7q5CHERd6Edj9et0fgPQ/90f1l+4z1t0KrzNfuRChm/SWt09lBU+wcAXjx
+        IqpL9NL1p17Aa+jGgs6ljSiquXG9SpC9eBjG288o=
+X-Received: by 2002:a17:907:3e81:b0:726:9615:d14d with SMTP id hs1-20020a1709073e8100b007269615d14dmr9595608ejc.517.1656350396654;
+        Mon, 27 Jun 2022 10:19:56 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vSQ5/1QB71Hg4lzY2NR2sSKZpWJgM46OeZOkRdEbMiJUX0n0Hl5pbzy0UCEvEDqcgezp0Hb7qhSaXUoeuvbR8=
+X-Received: by 2002:a17:907:3e81:b0:726:9615:d14d with SMTP id
+ hs1-20020a1709073e8100b007269615d14dmr9595584ejc.517.1656350396337; Mon, 27
+ Jun 2022 10:19:56 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6390dd34-b271-4cd2-adf1-08da58612b64
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 17:19:18.9124
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AXiloq/RgoZnWH0MAqrS0WxM+ufAI5/ge64peub7VVbHDuZLnBm98MakUZTmNAjlVE5TT018PL5N12HrN8vWFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1642
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-06-27_06:2022-06-24,2022-06-27 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=872 suspectscore=0
- mlxscore=0 phishscore=0 malwarescore=0 adultscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+References: <20220617050101.37620-1-huzh@nyu.edu> <202206280043.B60ScXNe-lkp@intel.com>
+In-Reply-To: <202206280043.B60ScXNe-lkp@intel.com>
+From:   Zhenghao Hu <huzh@nyu.edu>
+Date:   Mon, 27 Jun 2022 13:19:44 -0400
+Message-ID: <CANeN5i-jh3-O+foQztariey1hWv5mwgpdrDiZzkFTRoVh-s9BA@mail.gmail.com>
+Subject: Re: [PATCH v2] Fix buffer overflow in hinic_devlink.c:hinic_flash_fw
+To:     kernel test robot <lkp@intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kbuild-all@lists.01.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-GUID: 4D3wtkzfbCBIeCkS9rEntrZsVrXbZnRD
+X-Proofpoint-ORIG-GUID: 4D3wtkzfbCBIeCkS9rEntrZsVrXbZnRD
+X-Orig-IP: 209.85.218.71
+X-Proofpoint-Spam-Details: rule=outbound_bp_notspam policy=outbound_bp score=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 priorityscore=1501 malwarescore=0
+ bulkscore=0 adultscore=0 impostorscore=0 clxscore=1015 mlxscore=0
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2204290000 definitions=main-2206270071
-X-Proofpoint-GUID: gbmlS6BnzKgELyM94V8vTiI4VrHkPFnk
-X-Proofpoint-ORIG-GUID: gbmlS6BnzKgELyM94V8vTiI4VrHkPFnk
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -159,39 +84,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-> On Jun 27, 2022, at 1:11 PM, Steven Rostedt <rostedt@goodmis.org> wrote:
->=20
-> On Mon, 27 Jun 2022 17:08:03 +0000
-> Chuck Lever III <chuck.lever@oracle.com> wrote:
->=20
->> Updated from your copr repo. The problem persists.
->=20
-> The symbol lookup problem still exists. What about the get_sockaddr() not
-> processing?
-
-"trace-cmd report" no longer produces the get_sockaddr warning messages,
-but tracepoints that use __get_sockaddr() still FAIL TO PARSE on my
-system:
-
-            nfsd-1167  [005]   117.853235: nfsd_cb_probe:        [FAILED TO=
- PARSE] state=3D0x1 cl_boot=3D1656349219 cl_id=3D3054917767 addr=3DARRAY[02=
-, 00, 00, 00, c0, a8, 02, 43, 00, 00, 00, 00, 00, 00, 00, 00]
-   kworker/u24:2-985   [003]   117.853368: nfsd_cb_setup:        [FAILED TO=
- PARSE] cl_boot=3D1656349219 cl_id=3D3054917767 authflavor=3D0x1 addr=3DARR=
-AY[02, 00, 00, 00, c0, a8, 02, 43, 00, 00, 00, 00, 00, 00, 00, 00] netid=3D=
-rdma
-   kworker/u24:2-985   [003]   117.853370: nfsd_cb_state:        [FAILED TO=
- PARSE] state=3D0x0 cl_boot=3D1656349219 cl_id=3D3054917767 addr=3DARRAY[02=
-, 00, 00, 00, c0, a8, 02, 43, 00, 00, 00, 00, 00, 00, 00, 00]
+ugh... please ignore this patch. I got it mixed up with the fortified
+string warning from the other memcpy in the same file.
 
 
-> Would you be able to send me a trace.dat file that has this issue?
-
-Sending under separate cover.
-
-
---
-Chuck Lever
-
-
+On Mon, Jun 27, 2022 at 12:15 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi HighW4y2H3ll,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on horms-ipvs/master]
+> [also build test WARNING on linus/master]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://urldefense.com/v3/__https://git-scm.com/docs/git-format-patch__;!!BhJSzQqDqA!XYG2GtvZ6S2jfkp5Dd1G9i6xPhuBkvMuQWVEjV_rgLnKYvLVmow_TtmG3s5MYZMUQaWO1co$ ]
+>
+> url:    https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commits/HighW4y2H3ll/Fix-buffer-overflow-in-hinic_devlink-c-hinic_flash_fw/20220617-130659__;!!BhJSzQqDqA!XYG2GtvZ6S2jfkp5Dd1G9i6xPhuBkvMuQWVEjV_rgLnKYvLVmow_TtmG3s5MYZMUe5-_sY0$
+> base:   https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git__;!!BhJSzQqDqA!XYG2GtvZ6S2jfkp5Dd1G9i6xPhuBkvMuQWVEjV_rgLnKYvLVmow_TtmG3s5MYZMUf3RrLGs$  master
+> config: arm64-randconfig-r022-20220627 (https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/20220628/202206280043.B60ScXNe-lkp@intel.com/config__;!!BhJSzQqDqA!XYG2GtvZ6S2jfkp5Dd1G9i6xPhuBkvMuQWVEjV_rgLnKYvLVmow_TtmG3s5MYZMU2ridR0A$ )
+> compiler: aarch64-linux-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>         wget https://urldefense.com/v3/__https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross__;!!BhJSzQqDqA!XYG2GtvZ6S2jfkp5Dd1G9i6xPhuBkvMuQWVEjV_rgLnKYvLVmow_TtmG3s5MYZMUmop686I$  -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commit/821efd063fed15fd0bab30b29df0af61d5ba4cac__;!!BhJSzQqDqA!XYG2GtvZ6S2jfkp5Dd1G9i6xPhuBkvMuQWVEjV_rgLnKYvLVmow_TtmG3s5MYZMU2ZVzELE$
+>         git remote add linux-review https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux__;!!BhJSzQqDqA!XYG2GtvZ6S2jfkp5Dd1G9i6xPhuBkvMuQWVEjV_rgLnKYvLVmow_TtmG3s5MYZMU6rLGMIs$
+>         git fetch --no-tags linux-review HighW4y2H3ll/Fix-buffer-overflow-in-hinic_devlink-c-hinic_flash_fw/20220617-130659
+>         git checkout 821efd063fed15fd0bab30b29df0af61d5ba4cac
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/ethernet/huawei/hinic/
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>    drivers/net/ethernet/huawei/hinic/hinic_devlink.c: In function 'hinic_flash_fw':
+> >> drivers/net/ethernet/huawei/hinic/hinic_devlink.c:176:25: warning: 'memset' used with length equal to number of elements without multiplication by element size [-Wmemset-elt-size]
+>      176 |                         memset(fw_update_msg->data, 0, MAX_FW_FRAGMENT_LEN);
+>          |                         ^~~~~~
+>
+>
+> vim +/memset +176 drivers/net/ethernet/huawei/hinic/hinic_devlink.c
+>
+> 5e126e7c4e5275 Luo bin 2020-07-15  123
+> 5e126e7c4e5275 Luo bin 2020-07-15  124  static int hinic_flash_fw(struct hinic_devlink_priv *priv, const u8 *data,
+> 5e126e7c4e5275 Luo bin 2020-07-15  125                            struct host_image_st *host_image)
+> 5e126e7c4e5275 Luo bin 2020-07-15  126  {
+> 5e126e7c4e5275 Luo bin 2020-07-15  127          u32 section_remain_send_len, send_fragment_len, send_pos, up_total_len;
+> 5e126e7c4e5275 Luo bin 2020-07-15  128          struct hinic_cmd_update_fw *fw_update_msg = NULL;
+> 5e126e7c4e5275 Luo bin 2020-07-15  129          u32 section_type, section_crc, section_version;
+> 5e126e7c4e5275 Luo bin 2020-07-15  130          u32 i, len, section_len, section_offset;
+> 5e126e7c4e5275 Luo bin 2020-07-15  131          u16 out_size = sizeof(*fw_update_msg);
+> 5e126e7c4e5275 Luo bin 2020-07-15  132          int total_len_flag = 0;
+> 5e126e7c4e5275 Luo bin 2020-07-15  133          int err;
+> 5e126e7c4e5275 Luo bin 2020-07-15  134
+> 5e126e7c4e5275 Luo bin 2020-07-15  135          fw_update_msg = kzalloc(sizeof(*fw_update_msg), GFP_KERNEL);
+> 5e126e7c4e5275 Luo bin 2020-07-15  136          if (!fw_update_msg)
+> 5e126e7c4e5275 Luo bin 2020-07-15  137                  return -ENOMEM;
+> 5e126e7c4e5275 Luo bin 2020-07-15  138
+> 5e126e7c4e5275 Luo bin 2020-07-15  139          up_total_len = host_image->image_info.up_total_len;
+> 5e126e7c4e5275 Luo bin 2020-07-15  140
+> 5e126e7c4e5275 Luo bin 2020-07-15  141          for (i = 0; i < host_image->section_type_num; i++) {
+> 5e126e7c4e5275 Luo bin 2020-07-15  142                  len = host_image->image_section_info[i].fw_section_len;
+> 5e126e7c4e5275 Luo bin 2020-07-15  143                  if (host_image->image_section_info[i].fw_section_type ==
+> 5e126e7c4e5275 Luo bin 2020-07-15  144                      UP_FW_UPDATE_BOOT) {
+> 5e126e7c4e5275 Luo bin 2020-07-15  145                          up_total_len = up_total_len - len;
+> 5e126e7c4e5275 Luo bin 2020-07-15  146                          break;
+> 5e126e7c4e5275 Luo bin 2020-07-15  147                  }
+> 5e126e7c4e5275 Luo bin 2020-07-15  148          }
+> 5e126e7c4e5275 Luo bin 2020-07-15  149
+> 5e126e7c4e5275 Luo bin 2020-07-15  150          for (i = 0; i < host_image->section_type_num; i++) {
+> 5e126e7c4e5275 Luo bin 2020-07-15  151                  section_len =
+> 5e126e7c4e5275 Luo bin 2020-07-15  152                          host_image->image_section_info[i].fw_section_len;
+> 5e126e7c4e5275 Luo bin 2020-07-15  153                  section_offset =
+> 5e126e7c4e5275 Luo bin 2020-07-15  154                          host_image->image_section_info[i].fw_section_offset;
+> 5e126e7c4e5275 Luo bin 2020-07-15  155                  section_remain_send_len = section_len;
+> 5e126e7c4e5275 Luo bin 2020-07-15  156                  section_type =
+> 5e126e7c4e5275 Luo bin 2020-07-15  157                          host_image->image_section_info[i].fw_section_type;
+> 5e126e7c4e5275 Luo bin 2020-07-15  158                  section_crc = host_image->image_section_info[i].fw_section_crc;
+> 5e126e7c4e5275 Luo bin 2020-07-15  159                  section_version =
+> 5e126e7c4e5275 Luo bin 2020-07-15  160                          host_image->image_section_info[i].fw_section_version;
+> 5e126e7c4e5275 Luo bin 2020-07-15  161
+> 5e126e7c4e5275 Luo bin 2020-07-15  162                  if (section_type == UP_FW_UPDATE_BOOT)
+> 5e126e7c4e5275 Luo bin 2020-07-15  163                          continue;
+> 5e126e7c4e5275 Luo bin 2020-07-15  164
+> 5e126e7c4e5275 Luo bin 2020-07-15  165                  send_fragment_len = 0;
+> 5e126e7c4e5275 Luo bin 2020-07-15  166                  send_pos = 0;
+> 5e126e7c4e5275 Luo bin 2020-07-15  167
+> 5e126e7c4e5275 Luo bin 2020-07-15  168                  while (section_remain_send_len > 0) {
+> 5e126e7c4e5275 Luo bin 2020-07-15  169                          if (!total_len_flag) {
+> 5e126e7c4e5275 Luo bin 2020-07-15  170                                  fw_update_msg->total_len = up_total_len;
+> 5e126e7c4e5275 Luo bin 2020-07-15  171                                  total_len_flag = 1;
+> 5e126e7c4e5275 Luo bin 2020-07-15  172                          } else {
+> 5e126e7c4e5275 Luo bin 2020-07-15  173                                  fw_update_msg->total_len = 0;
+> 5e126e7c4e5275 Luo bin 2020-07-15  174                          }
+> 5e126e7c4e5275 Luo bin 2020-07-15  175
+> 5e126e7c4e5275 Luo bin 2020-07-15 @176                          memset(fw_update_msg->data, 0, MAX_FW_FRAGMENT_LEN);
+> 5e126e7c4e5275 Luo bin 2020-07-15  177
+> 5e126e7c4e5275 Luo bin 2020-07-15  178                          fw_update_msg->ctl_info.SF =
+> 5e126e7c4e5275 Luo bin 2020-07-15  179                                  (section_remain_send_len == section_len) ?
+> 5e126e7c4e5275 Luo bin 2020-07-15  180                                  true : false;
+> 5e126e7c4e5275 Luo bin 2020-07-15  181                          fw_update_msg->section_info.FW_section_CRC = section_crc;
+> 5e126e7c4e5275 Luo bin 2020-07-15  182                          fw_update_msg->fw_section_version = section_version;
+> 5e126e7c4e5275 Luo bin 2020-07-15  183                          fw_update_msg->ctl_info.flag = UP_TYPE_A;
+> 5e126e7c4e5275 Luo bin 2020-07-15  184
+> 5e126e7c4e5275 Luo bin 2020-07-15  185                          if (section_type <= UP_FW_UPDATE_UP_DATA_B) {
+> 5e126e7c4e5275 Luo bin 2020-07-15  186                                  fw_update_msg->section_info.FW_section_type =
+> 5e126e7c4e5275 Luo bin 2020-07-15  187                                          (section_type % 2) ?
+> 5e126e7c4e5275 Luo bin 2020-07-15  188                                          UP_FW_UPDATE_UP_DATA :
+> 5e126e7c4e5275 Luo bin 2020-07-15  189                                          UP_FW_UPDATE_UP_TEXT;
+> 5e126e7c4e5275 Luo bin 2020-07-15  190
+> 5e126e7c4e5275 Luo bin 2020-07-15  191                                  fw_update_msg->ctl_info.flag = UP_TYPE_B;
+> 5e126e7c4e5275 Luo bin 2020-07-15  192                                  if (section_type <= UP_FW_UPDATE_UP_DATA_A)
+> 5e126e7c4e5275 Luo bin 2020-07-15  193                                          fw_update_msg->ctl_info.flag = UP_TYPE_A;
+> 5e126e7c4e5275 Luo bin 2020-07-15  194                          } else {
+> 5e126e7c4e5275 Luo bin 2020-07-15  195                                  fw_update_msg->section_info.FW_section_type =
+> 5e126e7c4e5275 Luo bin 2020-07-15  196                                          section_type - 0x2;
+> 5e126e7c4e5275 Luo bin 2020-07-15  197                          }
+> 5e126e7c4e5275 Luo bin 2020-07-15  198
+> 5e126e7c4e5275 Luo bin 2020-07-15  199                          fw_update_msg->setion_total_len = section_len;
+> 5e126e7c4e5275 Luo bin 2020-07-15  200                          fw_update_msg->section_offset = send_pos;
+> 5e126e7c4e5275 Luo bin 2020-07-15  201
+> 5e126e7c4e5275 Luo bin 2020-07-15  202                          if (section_remain_send_len <= MAX_FW_FRAGMENT_LEN) {
+> 5e126e7c4e5275 Luo bin 2020-07-15  203                                  fw_update_msg->ctl_info.SL = true;
+> 5e126e7c4e5275 Luo bin 2020-07-15  204                                  fw_update_msg->ctl_info.fragment_len =
+> 5e126e7c4e5275 Luo bin 2020-07-15  205                                          section_remain_send_len;
+> 5e126e7c4e5275 Luo bin 2020-07-15  206                                  send_fragment_len += section_remain_send_len;
+> 5e126e7c4e5275 Luo bin 2020-07-15  207                          } else {
+> 5e126e7c4e5275 Luo bin 2020-07-15  208                                  fw_update_msg->ctl_info.SL = false;
+> 5e126e7c4e5275 Luo bin 2020-07-15  209                                  fw_update_msg->ctl_info.fragment_len =
+> 5e126e7c4e5275 Luo bin 2020-07-15  210                                          MAX_FW_FRAGMENT_LEN;
+> 5e126e7c4e5275 Luo bin 2020-07-15  211                                  send_fragment_len += MAX_FW_FRAGMENT_LEN;
+> 5e126e7c4e5275 Luo bin 2020-07-15  212                          }
+> 5e126e7c4e5275 Luo bin 2020-07-15  213
+> 5e126e7c4e5275 Luo bin 2020-07-15  214                          memcpy(fw_update_msg->data,
+> 5e126e7c4e5275 Luo bin 2020-07-15  215                                 data + UPDATEFW_IMAGE_HEAD_SIZE +
+> 5e126e7c4e5275 Luo bin 2020-07-15  216                                 section_offset + send_pos,
+> 5e126e7c4e5275 Luo bin 2020-07-15  217                                 fw_update_msg->ctl_info.fragment_len);
+> 5e126e7c4e5275 Luo bin 2020-07-15  218
+> 5e126e7c4e5275 Luo bin 2020-07-15  219                          err = hinic_port_msg_cmd(priv->hwdev,
+> 5e126e7c4e5275 Luo bin 2020-07-15  220                                                   HINIC_PORT_CMD_UPDATE_FW,
+> 5e126e7c4e5275 Luo bin 2020-07-15  221                                                   fw_update_msg,
+> 5e126e7c4e5275 Luo bin 2020-07-15  222                                                   sizeof(*fw_update_msg),
+> 5e126e7c4e5275 Luo bin 2020-07-15  223                                                   fw_update_msg, &out_size);
+> 5e126e7c4e5275 Luo bin 2020-07-15  224                          if (err || !out_size || fw_update_msg->status) {
+> 5e126e7c4e5275 Luo bin 2020-07-15  225                                  dev_err(&priv->hwdev->hwif->pdev->dev, "Failed to update firmware, err: %d, status: 0x%x, out size: 0x%x\n",
+> 5e126e7c4e5275 Luo bin 2020-07-15  226                                          err, fw_update_msg->status, out_size);
+> 5e126e7c4e5275 Luo bin 2020-07-15  227                                  err = fw_update_msg->status ?
+> 5e126e7c4e5275 Luo bin 2020-07-15  228                                          fw_update_msg->status : -EIO;
+> 5e126e7c4e5275 Luo bin 2020-07-15  229                                  kfree(fw_update_msg);
+> 5e126e7c4e5275 Luo bin 2020-07-15  230                                  return err;
+> 5e126e7c4e5275 Luo bin 2020-07-15  231                          }
+> 5e126e7c4e5275 Luo bin 2020-07-15  232
+> 5e126e7c4e5275 Luo bin 2020-07-15  233                          send_pos = send_fragment_len;
+> 5e126e7c4e5275 Luo bin 2020-07-15  234                          section_remain_send_len = section_len -
+> 5e126e7c4e5275 Luo bin 2020-07-15  235                                                    send_fragment_len;
+> 5e126e7c4e5275 Luo bin 2020-07-15  236                  }
+> 5e126e7c4e5275 Luo bin 2020-07-15  237          }
+> 5e126e7c4e5275 Luo bin 2020-07-15  238
+> 5e126e7c4e5275 Luo bin 2020-07-15  239          kfree(fw_update_msg);
+> 5e126e7c4e5275 Luo bin 2020-07-15  240
+> 5e126e7c4e5275 Luo bin 2020-07-15  241          return 0;
+> 5e126e7c4e5275 Luo bin 2020-07-15  242  }
+> 5e126e7c4e5275 Luo bin 2020-07-15  243
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://urldefense.com/v3/__https://01.org/lkp__;!!BhJSzQqDqA!XYG2GtvZ6S2jfkp5Dd1G9i6xPhuBkvMuQWVEjV_rgLnKYvLVmow_TtmG3s5MYZMUnQBIKVk$

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC0355C9F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6148D55C41A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234771AbiF0LYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S238731AbiF0Lwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234731AbiF0LYU (ORCPT
+        with ESMTP id S238402AbiF0LsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:24:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D9E6586;
-        Mon, 27 Jun 2022 04:24:16 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB125C19;
+        Mon, 27 Jun 2022 04:41:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E97D61476;
-        Mon, 27 Jun 2022 11:24:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B3EC3411D;
-        Mon, 27 Jun 2022 11:24:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EE2CB81134;
+        Mon, 27 Jun 2022 11:41:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E437AC341C7;
+        Mon, 27 Jun 2022 11:41:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329055;
-        bh=Kvlf2zbqYtcRyjhUTmX+6OnAyBmwSU6Bg/DipYrK7PY=;
+        s=korg; t=1656330069;
+        bh=FrKv/fYisOYImlCmHvguXRljYQWRRY7Ecyt+PcKsa6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=enlxmACxkM8c7AU4w5xntScCFssozZb6pcMDeLMjZ+qkOn+YEd97ltbpST26vHqX7
-         K5rMJPmdkJI5stpbRUNPRj1AsP1NgwDjytl7NPWQy1/xiUneBAcTdiIpgYbY2rxW+u
-         7N1cbMufP1ceGAK3l6AHZicQ0iW1dQ7ZSG94VCmk=
+        b=y69VIK3g/2ygs0nuEPJgX5bo/Cbjnd01E8d9C8sRAt0lkgOlMjg5+56l5X4QTA0Ph
+         TTyTkW+epdCswgIZaNNFP7FjbGHzmz0JJRkInPgqzR3ZG9/PajxPHoAnazQmR7p41w
+         MaDzr55rzNDHlLA6DoaJBohM3RpJXzVNR0wGVEog=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Toppins <jtoppins@redhat.com>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Riccardo Paolo Bestetti <pbl@bestov.io>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 034/102] bonding: ARP monitor spams NETDEV_NOTIFY_PEERS notifiers
-Date:   Mon, 27 Jun 2022 13:20:45 +0200
-Message-Id: <20220627111934.476508972@linuxfoundation.org>
+Subject: [PATCH 5.18 073/181] ipv4: fix bind address validity regression tests
+Date:   Mon, 27 Jun 2022 13:20:46 +0200
+Message-Id: <20220627111946.681083536@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +55,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jay Vosburgh <jay.vosburgh@canonical.com>
+From: Riccardo Paolo Bestetti <pbl@bestov.io>
 
-[ Upstream commit 7a9214f3d88cfdb099f3896e102a306b316d8707 ]
+[ Upstream commit 313c502fa3b3494159cb8f18d4a6444d06c5c9a5 ]
 
-The bonding ARP monitor fails to decrement send_peer_notif, the
-number of peer notifications (gratuitous ARP or ND) to be sent. This
-results in a continuous series of notifications.
+Commit 8ff978b8b222 ("ipv4/raw: support binding to nonlocal addresses")
+introduces support for binding to nonlocal addresses, as well as some
+basic test coverage for some of the related cases.
 
-Correct this by decrementing the counter for each notification.
+Commit b4a028c4d031 ("ipv4: ping: fix bind address validity check")
+fixes a regression which incorrectly removed some checks for bind
+address validation. In addition, it introduces regression tests for
+those specific checks. However, those regression tests are defective, in
+that they perform the tests using an incorrect combination of bind
+flags. As a result, those tests fail when they should succeed.
 
-Reported-by: Jonathan Toppins <jtoppins@redhat.com>
-Signed-off-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Fixes: b0929915e035 ("bonding: Fix RTNL: assertion failed at net/core/rtnetlink.c for ab arp monitor")
-Link: https://lore.kernel.org/netdev/b2fd4147-8f50-bebd-963a-1a3e8d1d9715@redhat.com/
-Tested-by: Jonathan Toppins <jtoppins@redhat.com>
-Reviewed-by: Jonathan Toppins <jtoppins@redhat.com>
-Link: https://lore.kernel.org/r/9400.1655407960@famine
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+This commit introduces additional regression tests for nonlocal binding
+and fixes the defective regression tests. It also introduces new
+set_sysctl calls for the ipv4_bind test group, as to perform the ICMP
+binding tests it is necessary to allow ICMP socket creation by setting
+the net.ipv4.ping_group_range knob.
+
+Fixes: b4a028c4d031 ("ipv4: ping: fix bind address validity check")
+Reported-by: Riccardo Paolo Bestetti <pbl@bestov.io>
+Signed-off-by: Riccardo Paolo Bestetti <pbl@bestov.io>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bonding/bond_main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/fcnal-test.sh | 36 +++++++++++++++++------
+ 1 file changed, 27 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index cbeb69bca0bb..9c4b45341fd2 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -3368,9 +3368,11 @@ static void bond_activebackup_arp_mon(struct bonding *bond)
- 		if (!rtnl_trylock())
- 			return;
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 75223b63e3c8..03b586760164 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -1800,24 +1800,32 @@ ipv4_addr_bind_novrf()
+ 	done
  
--		if (should_notify_peers)
-+		if (should_notify_peers) {
-+			bond->send_peer_notif--;
- 			call_netdevice_notifiers(NETDEV_NOTIFY_PEERS,
- 						 bond->dev);
-+		}
- 		if (should_notify_rtnl) {
- 			bond_slave_state_notify(bond);
- 			bond_slave_link_notify(bond);
+ 	#
+-	# raw socket with nonlocal bind
++	# tests for nonlocal bind
+ 	#
+ 	a=${NL_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${NSA_DEV} -b
+-	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after device bind"
++	run_cmd nettest -s -R -f -l ${a} -b
++	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address"
++
++	log_start
++	run_cmd nettest -s -f -l ${a} -b
++	log_test_addr ${a} $? 0 "TCP socket bind to nonlocal address"
++
++	log_start
++	run_cmd nettest -s -D -P icmp -f -l ${a} -b
++	log_test_addr ${a} $? 0 "ICMP socket bind to nonlocal address"
+ 
+ 	#
+ 	# check that ICMP sockets cannot bind to broadcast and multicast addresses
+ 	#
+ 	a=${BCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -l ${a} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to broadcast address"
+ 
+ 	a=${MCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to multicast address"
+ 
+ 	#
+@@ -1870,24 +1878,32 @@ ipv4_addr_bind_vrf()
+ 	log_test_addr ${a} $? 1 "Raw socket bind to out of scope address after VRF bind"
+ 
+ 	#
+-	# raw socket with nonlocal bind
++	# tests for nonlocal bind
+ 	#
+ 	a=${NL_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${VRF} -b
++	run_cmd nettest -s -R -f -l ${a} -I ${VRF} -b
+ 	log_test_addr ${a} $? 0 "Raw socket bind to nonlocal address after VRF bind"
+ 
++	log_start
++	run_cmd nettest -s -f -l ${a} -I ${VRF} -b
++	log_test_addr ${a} $? 0 "TCP socket bind to nonlocal address after VRF bind"
++
++	log_start
++	run_cmd nettest -s -D -P icmp -f -l ${a} -I ${VRF} -b
++	log_test_addr ${a} $? 0 "ICMP socket bind to nonlocal address after VRF bind"
++
+ 	#
+ 	# check that ICMP sockets cannot bind to broadcast and multicast addresses
+ 	#
+ 	a=${BCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -l ${a} -I ${VRF} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -I ${VRF} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to broadcast address after VRF bind"
+ 
+ 	a=${MCAST_IP}
+ 	log_start
+-	run_cmd nettest -s -R -P icmp -f -l ${a} -I ${VRF} -b
++	run_cmd nettest -s -D -P icmp -l ${a} -I ${VRF} -b
+ 	log_test_addr ${a} $? 1 "ICMP socket bind to multicast address after VRF bind"
+ 
+ 	#
+@@ -1922,10 +1938,12 @@ ipv4_addr_bind()
+ 
+ 	log_subsection "No VRF"
+ 	setup
++	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
+ 	ipv4_addr_bind_novrf
+ 
+ 	log_subsection "With VRF"
+ 	setup "yes"
++	set_sysctl net.ipv4.ping_group_range='0 2147483647' 2>/dev/null
+ 	ipv4_addr_bind_vrf
+ }
+ 
 -- 
 2.35.1
 

@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B619655E0B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D700355C719
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234857AbiF0NyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S236462AbiF0Nyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236376AbiF0NyK (ORCPT
+        with ESMTP id S235121AbiF0Nyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:54:10 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7075B3E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:54:08 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 58A315C012B;
-        Mon, 27 Jun 2022 09:54:08 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 27 Jun 2022 09:54:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1656338048; x=
-        1656424448; bh=q+1sB2EjKcE1D8Tt+wDoAsTfPMB0jI+HIrgtAgz1Z1g=; b=u
-        AU0K7dyq3nxoLFHI3xDzu49j1PDXSwgSsjbljTcWvmYNuyYRNeR8CGqMMNT7s0Xv
-        I4b1dzobXDJjgfF1Z0L3TMxJnZd8lQiGgkGlQJEJ3HfE88P8WQfB3296N/9Qm20o
-        ck6WNphZlECVXYGr8iXxAEPHCOrbEqBP57wkBgoKzPTOUZE2I/xdVAdh2CIOJviA
-        ggpcXdAcW8iTykevTd49ok2w331wvac/XYALg9Pd4VlfM78KtYOPCPRzpl8ZnKyf
-        yPHZB6N4vcZO3+FL22x6Jmt3j6Zi713ZJt7fd9riqkRIJ2vcvPhsuSIQWKqeyo/+
-        scgfTjG05n8a7MCXZb30w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1656338048; x=
-        1656424448; bh=q+1sB2EjKcE1D8Tt+wDoAsTfPMB0jI+HIrgtAgz1Z1g=; b=x
-        kgDm3Amu09zG7ZzoMOs7HaZ3HgMl7Xx2I8Q9sXfp09vhbPnmm5gP+tggPZRJ1dLm
-        9D7Z/FLNEylOpCqIqjC1TMs4tWakCC35zqbh1zKN96LJFEgJjVx5JP0/Piklj92P
-        Hx3TFn8N4HJQSR19D2nN9T/tSE91COqcF+VS78jULbKATSfegboASYehkpMJXUsd
-        kbeQIYxxv2kYOofhlbUPRZ/+KUbUTxzxj/NmHjgVLpU+Y3o3Uk0pmpAvtTRghwZl
-        0fCZKKCwPs8aGA/8ZWHmcxHZ4sOqti/z3bgUZogjQVS7KwhPitJ7IBg3ZoxzJVGi
-        sqDqKKHyBFdarLpViyxsg==
-X-ME-Sender: <xms:f7a5Yl__QZ45XXNciEE-EHfpSbjqICr2xeUosPjLWdW06k-EIpDB0w>
-    <xme:f7a5YpsxE8OTwNij8ipVjJdUpPJhXqMo0sIHkotay8jen_AlYSBkdOD5TF26EAIcp
-    -FjopIg4NuwuMjdm5E>
-X-ME-Received: <xmr:f7a5YjC5AWpevjipQ-5CmeAF3W1ERBBRh87CbwbBqsCaMlf4X6zI_oc6ct9dLZ_V3-Tvr8ms2wm1SWaBGIBGut235s-GhV1uIc2FvfU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeghedgjeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfgggtgfesth
-    ekredtredtjeenucfhrhhomhepofgrgihimhgvucftihhprghrugcuoehmrgigihhmvges
-    tggvrhhnohdrthgvtghhqeenucggtffrrghtthgvrhhnpeeuieeggffhffffieefheduie
-    euvdetgeeufeffvefgtedvffehheekffevudefieenucevlhhushhtvghrufhiiigvpedt
-    necurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:f7a5YpdlQExR2mTP8LWISu9VymKMOYA7FMAVC82nw8cD4zUD7PK2Xw>
-    <xmx:f7a5YqOvKChoRShS060Qm7AS9cOs_M0wxivCV2_TAEsR_z6bNsEsmg>
-    <xmx:f7a5YrnWSWx07H9HeJoC7MC6e79r06WTcLLgJJr4dvetKfjpGhFD1A>
-    <xmx:gLa5YpdY6Dq9v5Q2MIchgn7_BEjVKqe4ejKt_krUnQe87MAv0hSMMA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Jun 2022 09:54:07 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     farooqui_saud@hotmail.com
-Cc:     Maxime Ripard <maxime@cerno.tech>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, wens@csie.org,
-        linux-sunxi@lists.linux.dev, jernej.skrabec@gmail.com,
-        samuel@sholland.org, daniel@ffwll.ch
-Subject: Re: [PATCH v2] drm/sun4i: Return if frontend is not present
-Date:   Mon, 27 Jun 2022 15:54:03 +0200
-Message-Id: <165633801993.372965.3420512862905584546.b4-ty@cerno.tech>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <PA4P189MB1421E93EF5F8E8E00E71B7878BB29@PA4P189MB1421.EURP189.PROD.OUTLOOK.COM>
-References: <20220622075725.y6ws22ielpc4pmxw@houat> <PA4P189MB1421E93EF5F8E8E00E71B7878BB29@PA4P189MB1421.EURP189.PROD.OUTLOOK.COM>
+        Mon, 27 Jun 2022 09:54:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A063AA47D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:54:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9ABBF1758;
+        Mon, 27 Jun 2022 06:54:30 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0BA403F5A1;
+        Mon, 27 Jun 2022 06:54:29 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 14:54:28 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 00/20] arch_topology: Updates to add socket support
+ and fix cluster ids
+Message-ID: <Yrm2lG3uskxT26Of@arm.com>
+References: <20220621192034.3332546-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621192034.3332546-1-sudeep.holla@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Jun 2022 13:59:17 +0500, Saud Farooqui wrote:
-> Added return statement in sun4i_layer_format_mod_supported()
-> in case frontend is not present.
+Hi Sudeep,
+
+On Tuesday 21 Jun 2022 at 20:20:14 (+0100), Sudeep Holla wrote:
+> Hi All,
 > 
+> This version updates cacheinfo to populate and use the information from
+> there for all the cache topology.
+> 
+> This series intends to fix some discrepancies we have in the CPU topology
+> parsing from the device tree /cpu-map node. Also this diverges from the
+> behaviour on a ACPI enabled platform. The expectation is that both DT
+> and ACPI enabled systems must present consistent view of the CPU topology.
+> 
+> Currently we assign generated cluster count as the physical package identifier
+> for each CPU which is wrong. The device tree bindings for CPU topology supports
+> sockets to infer the socket or physical package identifier for a given CPU.
+> Also we don't check if all the cores/threads belong to the same cluster before
+> updating their sibling masks which is fine as we don't set the cluster id yet.
+> 
+> These changes also assigns the cluster identifier as parsed from the device tree
+> cluster nodes within /cpu-map without support for nesting of the clusters.
+> Finally, it also add support for socket nodes in /cpu-map. With this the
+> parsing of exact same information from ACPI PPTT and /cpu-map DT node
+> aligns well.
+> 
+> The only exception is that the last level cache id information can be
+> inferred from the same ACPI PPTT while we need to parse CPU cache nodes
+> in the device tree.
+> 
+> Hi Greg,
+> 
+> I had not cc-ed you on earlier 3 versions as we had some disagreement
+> amongst Arm developers which we have not settled. Let me know how you want to
+
+s/not/now :)
+
+> merge this once you agree with the changes. I can set pull request if
+> you prefer. Let me know.
+> 
+> v4[3]->v4:
+> 	- Updated ACPI PPTT fw_token to use table offset instead of virtual
+> 	  address as it could get changed for everytime it is mapped before
+> 	  the global acpi_permanent_mmap is set
+> 	- Added warning for the topology with nested clusters
+> 	- Added update to cpu_clustergroup_mask so that introduction of
+> 	  correct cluster_id doesn't break existing platforms by limiting
+> 	  the span of clustergroup_mask(by Ionela)
 > 
 
-Applied to drm/drm-misc (drm-misc-fixes).
+I've tested v4 on quite a few platforms:
+ - DT: Juno R0, DB845c, RB5
+ - ACPI: TX2, Ampere Altra, Kunpeng920
 
-Thanks!
-Maxime
+and it all looks good from my point of view (topology and sched domain
+hierarchy).
+
+So for the full set (after the changes requested for 16/20 and 20/20):
+
+Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
+
+Hope it helps,
+Ionela.

@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA9555C66A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E837055CDC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242496AbiF0XnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
+        id S241571AbiF0XsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242290AbiF0XnC (ORCPT
+        with ESMTP id S242538AbiF0Xre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:43:02 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E041D9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:43:01 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31780ad7535so100576107b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:43:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kDH8nCKE+Rk+mLLCcRc/EY/phPcC3Vah5J9OCcFx0Hc=;
-        b=I2H7+Imgyei3TLEIV0b8EayiG3a6fOGNwNzhw7YUzdJsrJx5Sa+Xv5+nANIRZOzhK1
-         PiNsAMtuoeRxW826kqYTKzhANa8gUBX2PWFtRA/S8KrjDylzzxI2RZbd9hm+GYiOGYBP
-         ntmm7PUaEsiIBcwR3N+5qVU3IYOP/O7ghGb3gJtKWJh+lZV+aYhfuYWaUZaGyMwiqE1K
-         bWM6NACMYDOgLeDlqLzqFo71nOQ8Wz1MkkOtnsgiQ+9/YXq8y7rw7SHZ9ygmrkFLelKj
-         TGVR32SR6IlTZnrcyeqdELcHrpS36icVuAhgUmrQfXXYjZlWR0/N95pZVilY+gR1Mjg2
-         Miig==
+        Mon, 27 Jun 2022 19:47:34 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A83316585;
+        Mon, 27 Jun 2022 16:47:34 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id z191so11262105iof.6;
+        Mon, 27 Jun 2022 16:47:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kDH8nCKE+Rk+mLLCcRc/EY/phPcC3Vah5J9OCcFx0Hc=;
-        b=OmSGyJ7rmCsmtVgOZ6m2Mun1eTDeanry9ke5WGXnv5B71ya5N2GmqcvDJyELexjkgN
-         QmWMJflQDJ33Gy3cE4my2SPZ9cryrJpCja+LVk3dDxy5V0Hq7TZwYL1bq93yU7fsPUcY
-         +jPKlB97EuN94bTwqSPMdXA1ylDAfT+VQix1tdlr7y1eHTDDwK/ZSlkzZQ+ztFifHFaU
-         y/QnOW8H0DsbFPmw/XBJ8HEGgMkovysabY36LL62lzhBUAsG4AOb8TMmPrwaLo0RzOI3
-         cqTQ/iFTeBwRgFsLIJaoahGxBv2bVOMtP+C2gQacHYtZ7kfZvFsSQhxu2QMXYBdtEq0w
-         gwJA==
-X-Gm-Message-State: AJIora/gQAoL6JQGXd+5qTWEt2/seXNJFvNVzGl9o84jSA5t9jdsJdtZ
-        9EDqrjkrOJ4PWGkK8F1bnZmpMkLVW8mrjO/h58dc7A==
-X-Google-Smtp-Source: AGRyM1vtgukrH0lPIavGy6PN09frlla89CCezcO1MR/XP83gOvqGwAyv7x7NutAEcpEgkFlUPEHftFmdKQtCznwxE/s=
-X-Received: by 2002:a81:19ca:0:b0:31b:732c:15e9 with SMTP id
- 193-20020a8119ca000000b0031b732c15e9mr17210855ywz.167.1656373380221; Mon, 27
- Jun 2022 16:43:00 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oRvWZ9TeKvYoId4Is7bsf/P3csJZYeH6unVDw+FoBLU=;
+        b=DqGL5rQAznhpykG45QQmWkBJJ+kum7QXo7ndJNibCk03g5AykLFcHP5z2f16At5LTx
+         h5CBS0YfD25NEv5fqWowdPQi0pttPk6hAuJBiEFDhp96xE7sFSeXjaTXjH3F2/9MlGoP
+         x61Mkx/76Y7aZS9pruuPfZSAFWN9YU6f7eqt+rWBcLQZEl69L8ZbxE0LoXFx2JrGN75o
+         w43jmI5jtwQkFIA6FfJaj9nj6tWhxO01XpZd70CiF2lPxvaaXrPcz3r9MfEDyLPGnHCn
+         X7W+e1wC6KeUNJiUghw6xn4JzrG0PQsCfeXS0215lnVb4MET35BWbf079akN4ZYlZo6J
+         EU9Q==
+X-Gm-Message-State: AJIora8thM5q6XjZ44OxBYVwae09kS4EqjL1Mci4YZEc4oKT/z7DHpm0
+        zj3Ui9KkYyPpjQhflYJZrw==
+X-Google-Smtp-Source: AGRyM1sfviI8ea8JVeUGZ7ysyjsRGHtyP3Kc3Y6dB0rkpSKEubWLB6skv7nEn5awW3d9L+56SWnBOg==
+X-Received: by 2002:a05:6638:1344:b0:331:f546:69e with SMTP id u4-20020a056638134400b00331f546069emr9894555jad.131.1656373653305;
+        Mon, 27 Jun 2022 16:47:33 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id b201-20020a6bb2d2000000b00674c8448c3csm5993564iof.6.2022.06.27.16.47.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 16:47:32 -0700 (PDT)
+Received: (nullmailer pid 3193779 invoked by uid 1000);
+        Mon, 27 Jun 2022 23:47:29 -0000
+Date:   Mon, 27 Jun 2022 17:47:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: Re: [PATCH] dt-bindings: phy: make phy-cells description a text
+Message-ID: <20220627234729.GA3169775-robh@kernel.org>
+References: <20220619113325.21396-1-krzysztof.kozlowski@linaro.org>
+ <Yq8LHN+WGVpXDwiM@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-References: <20220619120451.95251-1-wuyun.abel@bytedance.com> <20220619120451.95251-5-wuyun.abel@bytedance.com>
-In-Reply-To: <20220619120451.95251-5-wuyun.abel@bytedance.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Mon, 27 Jun 2022 16:42:49 -0700
-Message-ID: <CABk29NuXvCTkbQ=MdX5F+YswhOAPZSAQTAXn7B_uuKRr4=XVnQ@mail.gmail.com>
-Subject: Re: [PATCH v4 4/7] sched/fair: remove useless check in select_idle_core
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Chen Yu <yu.c.chen@intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yq8LHN+WGVpXDwiM@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 5:05 AM Abel Wu <wuyun.abel@bytedance.com> wrote:
->
-> The function only gets called when sds->has_idle_cores is true which can
-> be possible only when sched_smt_present is enabled.
->
-> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
-> ---
->  kernel/sched/fair.c | 3 ---
->  1 file changed, 3 deletions(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index aba1dad19574..1cc86e76e38e 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6256,9 +6256,6 @@ static int select_idle_core(struct task_struct *p, int core, struct cpumask *cpu
->         bool idle = true;
->         int cpu;
->
-> -       if (!static_branch_likely(&sched_smt_present))
-> -               return __select_idle_cpu(core, p);
-> -
+On Sun, Jun 19, 2022 at 02:40:12PM +0300, Laurent Pinchart wrote:
+> Hi Krzysztof,
+> 
+> Thank you for the patch.
+> 
+> On Sun, Jun 19, 2022 at 01:33:25PM +0200, Krzysztof Kozlowski wrote:
+> > The description field is a string, so using YAML inside phy-cells
+> > description is not actually helpful.
+> 
+> Does it hurt though ? 
 
-The static branch is basically free; although you're right that we
-currently don't take !smt_present branch direction here, it doesn't
-seem harmful to leave this check in case assumptions change about when
-we call select_idle_core().
+Unfortunately, I see this a bit. It's convenient because the schema 
+passes all the checks. Doh! And I usually stare at it wondering how it 
+passed.
 
->         for_each_cpu(cpu, cpu_smt_mask(core)) {
->                 if (!available_idle_cpu(cpu)) {
->                         idle = false;
-> --
-> 2.31.1
->
+Though I probably did review this, so IDK...
+
+> For xlnx,zynqmp-psgtr.yaml I wrote it that way to
+> prepare for a future where it could be described using a YAML schema
+> (but such future may never come).
+
+There's 2 parts. There's the resolving the defines and then applying the 
+schema to the cells. I actually think the latter would be easier. At 
+least from a documenting standpoint, we just need to define our own 
+keyword to stick the schema under. With the tools doing dtb based 
+validation now, the tools already get the phandle node and get the cell 
+size from the DT. It's just another step to extract the 
+node's compatible, find it's schema, and get its cell format schema. Any 
+volunteers?
+
+Rob

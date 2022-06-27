@@ -2,75 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF0D55E0BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37ADD55DA1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbiF0GQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 02:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
+        id S232422AbiF0GSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 02:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiF0GQp (ORCPT
+        with ESMTP id S232040AbiF0GSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 02:16:45 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855AC5F53
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 23:16:44 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id g20-20020a17090a579400b001ed52939d72so2962119pji.4
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 23:16:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=r/J3Po9NeFpqV5rxVhYICc6jfeaTIZBxOHc9ImOjXzU=;
-        b=YeeXTY/RvaVAcHkwII82KReoOt8gA6Mmao5gmcStFvupvyF6g3M6LmID31PyZiSmtb
-         Ba45TwMV7kTkCYmx+YLMur41feLQYqsn/kMGRpLa6zc1GBF+Rp744hxd+g5Gczk+N4XB
-         FzJOE+hsm/HIvvPnMvOwu2xD5ZTlIe4ksfvqb+n6tagMiF9SuT7qzmJKybzED8qrwv2p
-         LWCzLr2In6JKbT91kFPAQECTYXch5zuwZMl1pM3bSqHax3C8tpLe+HalNKf8KfkXzHmy
-         r1KHoVgcXmGLmBs3HlPyTiiDFDHNoKEhl3V1NeVRa417SyKfW799tqGob5UeYi00bHPZ
-         fJSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=r/J3Po9NeFpqV5rxVhYICc6jfeaTIZBxOHc9ImOjXzU=;
-        b=rpmYeVAaFTrHE6Fn9f6dXVpeG581N6IjoV5IajIJq039D0fdaq5/S4gSS1lPc/edOt
-         qFg4ot2vfOz4p9unMebYbRQechCMc5p4sNJAGU3nJVqk8+nbTlPuRrY29vnqt4drOcSG
-         h4q9LBCuyYmhTfxs4H0181DJGdWEpaps6YVsvxAIRNH+rRYg6B9cAKg5fDvWvkkjPew4
-         0m4MRSyV9F1bQhw92ygbPPvo+ntDV/9iT6xH0+doqZKnM4dnJdhXl1msvmY77Vg/zpHJ
-         GHQYSbuU3Ah+OeVKnCsjn06ZPO53Rg/YbDZ6zZ215DW79FdMX3v0TUljiqQcywpMsP8N
-         ibYw==
-X-Gm-Message-State: AJIora8Nd/LXCzK7rLWqoMvfwspICc1f+bUJ8drZ+8HeWgKgYIY6aZKE
-        eWlSdQPTXCtqb2ji7HWysPz8vg==
-X-Google-Smtp-Source: AGRyM1sC3cz7TkCvxRBI6Hsw3b0ldlXmIdIOndojHMDcGUWcV+frU1IvBfhiulmJuWA1LoghhAwAAQ==
-X-Received: by 2002:a17:902:ecd1:b0:16a:6b2e:2a76 with SMTP id a17-20020a170902ecd100b0016a6b2e2a76mr13203916plh.90.1656310604051;
-        Sun, 26 Jun 2022 23:16:44 -0700 (PDT)
-Received: from [10.76.43.148] ([61.120.150.78])
-        by smtp.gmail.com with ESMTPSA id w8-20020a1709026f0800b00168c523032fsm6204952plk.269.2022.06.26.23.16.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 26 Jun 2022 23:16:43 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
-Subject: Re: [External] PING: [PATCH] crypto: testmgr - fix version number of
- RSA tests
-From:   Lei He <helei.sig11@bytedance.com>
-In-Reply-To: <YrZXly80TZhO6lBE@gondor.apana.org.au>
-Date:   Mon, 27 Jun 2022 14:16:35 +0800
-Cc:     Lei He <helei.sig11@bytedance.com>, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pizhenwei@bytedance.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <9C9200B6-FDF8-4DB3-A3E7-0C6BA65D69D2@bytedance.com>
-References: <20220615091317.36995-1-helei.sig11@bytedance.com>
- <0610F5ED-98B5-49AD-9D58-4D5960EFB3A8@bytedance.com>
- <YrV7uo9E/5aegAny@gondor.apana.org.au>
- <062CAA76-7229-4E4F-A9A5-A2A9A47A1C61@bytedance.com>
- <YrZXly80TZhO6lBE@gondor.apana.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-X-Mailer: Apple Mail (2.3608.120.23.2.4)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 27 Jun 2022 02:18:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 438982713
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 23:18:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 10B471758;
+        Sun, 26 Jun 2022 23:18:47 -0700 (PDT)
+Received: from [10.162.42.6] (unknown [10.162.42.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B19AE3F5A1;
+        Sun, 26 Jun 2022 23:18:43 -0700 (PDT)
+Message-ID: <f0cfe169-44fa-5653-d454-149ef286d3bb@arm.com>
+Date:   Mon, 27 Jun 2022 11:48:40 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] mm: hugetlb: kill set_huge_swap_pte_at()
+Content-Language: en-US
+To:     Qi Zheng <zhengqi.arch@bytedance.com>, mike.kravetz@oracle.com,
+        songmuchun@bytedance.com, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, will@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20220626145717.53572-1-zhengqi.arch@bytedance.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220626145717.53572-1-zhengqi.arch@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,39 +48,63 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-> On Jun 25, 2022, at 8:32 AM, Herbert Xu <herbert@gondor.apana.org.au> =
-wrote:
->=20
-> On Fri, Jun 24, 2022 at 06:29:29PM +0800, =E4=BD=95=E7=A3=8A wrote:
->>=20
->>=20
->>> On Jun 24, 2022, at 4:54 PM, Herbert Xu =
-<herbert@gondor.apana.org.au> wrote:
->>>=20
->>> On Fri, Jun 24, 2022 at 09:53:02AM +0800, =E4=BD=95=E7=A3=8A wrote:
->>>> PING=EF=BC=81
->>>=20
->>> Please resubmit.
->>>=20
->>=20
->> Thanks a lot for your reply, a new patch has been sent.
->> By the way, why this patch needs to be resubmitted. Please let me =
-know if I have made any mistakes.
->=20
-> You first sent a subsequent version that superceded the
-> original patch.  That subsequent patch was then dismissed because
-> you replied in the thread saying that it needed changes.
->=20
-> Please be more careful in how you send patches and thread them.
 
-Thanks for the explanation, now all patches have been resubmitted. Sorry=20=
+On 6/26/22 20:27, Qi Zheng wrote:
+> The commit e5251fd43007 ("mm/hugetlb: introduce set_huge_swap_pte_at()
+> helper") add set_huge_swap_pte_at() to handle swap entries on
+> architectures that support hugepages consisting of contiguous ptes.
+> And currently the set_huge_swap_pte_at() is only overridden by arm64.
+> 
+> The set_huge_swap_pte_at() provide a sz parameter to help determine
+> the number of entries to be updated. But in fact, all hugetlb swap
+> entries contain pfn information, so we can find the corresponding
+> folio through the pfn recorded in the swap entry, then the folio_size()
+> is the number of entries that need to be updated.
+> 
+> And considering that users will easily cause bugs by ignoring the
+> difference between set_huge_swap_pte_at() and set_huge_pte_at().
+> Let's handle swap entries in set_huge_pte_at() and remove the
+> set_huge_swap_pte_at(), then we can call set_huge_pte_at()
+> anywhere, which simplifies our coding.
+> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> ---
+>  arch/arm64/include/asm/hugetlb.h |  3 ---
+>  arch/arm64/mm/hugetlbpage.c      | 34 ++++++++++++++++----------------
+>  include/linux/hugetlb.h          | 13 ------------
+>  mm/hugetlb.c                     |  8 +++-----
+>  mm/rmap.c                        | 11 +++--------
+>  5 files changed, 23 insertions(+), 46 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/hugetlb.h b/arch/arm64/include/asm/hugetlb.h
+> index 1fd2846dbefe..d20f5da2d76f 100644
+> --- a/arch/arm64/include/asm/hugetlb.h
+> +++ b/arch/arm64/include/asm/hugetlb.h
+> @@ -46,9 +46,6 @@ extern void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
+>  			   pte_t *ptep, unsigned long sz);
+>  #define __HAVE_ARCH_HUGE_PTEP_GET
+>  extern pte_t huge_ptep_get(pte_t *ptep);
+> -extern void set_huge_swap_pte_at(struct mm_struct *mm, unsigned long addr,
+> -				 pte_t *ptep, pte_t pte, unsigned long sz);
+> -#define set_huge_swap_pte_at set_huge_swap_pte_at
+>  
+>  void __init arm64_hugetlb_cma_reserve(void);
+>  
+> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+> index c9e076683e5d..58b89b9d13e0 100644
+> --- a/arch/arm64/mm/hugetlbpage.c
+> +++ b/arch/arm64/mm/hugetlbpage.c
+> @@ -238,6 +238,13 @@ static void clear_flush(struct mm_struct *mm,
+>  	flush_tlb_range(&vma, saddr, addr);
+>  }
+>  
+> +static inline struct folio *hugetlb_swap_entry_to_folio(swp_entry_t entry)
+> +{
+> +	VM_BUG_ON(!is_migration_entry(entry) && !is_hwpoison_entry(entry));
+> +
+> +	return page_folio(pfn_to_page(swp_offset(entry)));
+> +}
 
-for the extra trouble, I'll be more careful in the future.
-
->=20
-> Cheers,
-> --=20
-> Email: Herbert Xu <herbert@gondor.apana.org.au>
-> Home Page: http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
-
+Extracting this huge page size from swap entry is an additional operation which
+will increase the over all cost for set_huge_swap_pte_at(). At present the size
+value is readily available near set_huge_swap_pte_at() call sites.

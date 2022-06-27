@@ -2,125 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BC055E30B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29FBB55D56D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238017AbiF0PU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
+        id S238085AbiF0PVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236789AbiF0PTW (ORCPT
+        with ESMTP id S237948AbiF0PV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:19:22 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21432B7DB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:19:20 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id t21so9346953pfq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YaZf+iuRf5VcdUABylMh/I8zxebuNZqSPzEggA0QsB8=;
-        b=EAZiPo1z5Oj055MNcLne6utIxA3+KNzAFdg+8cktsPfsaEj9t+alS08Gh9t/KvWzfJ
-         MNEVhFUpDFSbSWqT1iKKSAuOYTXK8siJi1QzE9kbM0TGnNmPsOYBQX3jTLA/yBIp6onh
-         rXK0DS2rmHFfxfgT3Mgeq7ObsFasLHWqqbUFKLWtZO1mIXSDvb8pJ9wVBOQk8hxwpB4m
-         A9u841zQ/QP/0xkYJbpiVw0l2qQiwa8OvZLZyXR+mLK0VyyKaXxVYC8R/pad2jfp5wwD
-         c3HlXmdX3bsjsQUb7jaCyTxAFEs95x9V1NtkWJ1+bcQPrr4mDuV6Bd1kbrTgmOacdfk8
-         Wfug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YaZf+iuRf5VcdUABylMh/I8zxebuNZqSPzEggA0QsB8=;
-        b=2bknJPXvhmP8JkAzZZIRVF6dC3a3QP1653VfHp3LtFjVEIGBLNml27KTzOqmlTYYcu
-         J628E94KT2Oz10uJSvytDKOMgXxo53ome9ns4zvjrq5oFxoX1NENYsjGMboeDbtcTP7h
-         MRIgBe/BT0ftSSuxxIt7svjARyoAHQVVKovmTDkiZL6loj+6EKnVoK3hUXKpgZDAyz9u
-         Di7taLK2z1xsv1DQZbAHhpAVOfXKwCtFT5YM5UAaJ17QQ5/Ji9iN1ijIfWdYFnqqzAE1
-         jeaJ2409XjVQPFi7HHAAw5yikfOH8wI+0hb+PEFzCyEo3KWmX3G2fLdJcVEP6AS09mc/
-         hJzQ==
-X-Gm-Message-State: AJIora8Gs2KdmIr/NNmvWfPT+fmyBcD1TTaEZTrQhJRdbtkmFBdrxvvR
-        cRSNeSQop9iGbIYNwUV7dH2sAg==
-X-Google-Smtp-Source: AGRyM1vHuTM6ZgX8JalSiT8QyeSxhAVGc/h5+tA5iASu1cjNANEQXeoNehpvLiPcclhIac/WHxozOg==
-X-Received: by 2002:a63:90c7:0:b0:40d:3c0d:33f4 with SMTP id a190-20020a6390c7000000b0040d3c0d33f4mr13116674pge.334.1656343159459;
-        Mon, 27 Jun 2022 08:19:19 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id bf20-20020a056a000d9400b00525392cb386sm7451670pfb.201.2022.06.27.08.19.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 08:19:19 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 15:19:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paul Durrant <pdurrant@amazon.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v4] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info)
- sub-leaves, if present
-Message-ID: <YrnKc6RoqDM/At3T@google.com>
-References: <20220622151728.13622-1-pdurrant@amazon.com>
+        Mon, 27 Jun 2022 11:21:27 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6B7186CF;
+        Mon, 27 Jun 2022 08:20:29 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 07B51407435;
+        Mon, 27 Jun 2022 11:20:28 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id gM9jpXD0zGeX; Mon, 27 Jun 2022 11:20:27 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id A881C4072EA;
+        Mon, 27 Jun 2022 11:20:27 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com A881C4072EA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1656343227;
+        bh=3TioutwihSc8CEW2tiLyyeSsqZfAWkRLuzcsvj5rNgc=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=RjsRuvILNgqCtxiXug0tVyRylQ6APS8mQUX3XrmW3mb7PkxxMM66mWUDM+9+aM8Rn
+         8lgqWI3ZQbY35t3GM9wpsdmyNdsnjwokTV7YTLt27XpGAe2/QRTV474HTLVOUGDt5K
+         f1UIQh0wdi7GM6etZtBfKfWTmWXM24aSLDNCYVSXa9S/ZtJuZrOONqW9vD4c47BPvq
+         1A//YOjkcf3tbwawzJ3DPqgmRBcI1Bp5V0IBYHIBwp8LvEGpBe+2x3Fc5knCNpEzDm
+         GvJE9g6m3Poy5hXvqomMe/AIJXEvddxk8Scv3wZkKvXhk7UFnrxRCpo4zwsMiVqNnw
+         hq6Bn/aZfU7WA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id nfYg2j5gOJwx; Mon, 27 Jun 2022 11:20:27 -0400 (EDT)
+Received: from localhost (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by mail.efficios.com (Postfix) with ESMTPSA id 790E6407593;
+        Mon, 27 Jun 2022 11:20:27 -0400 (EDT)
+Date:   Mon, 27 Jun 2022 11:20:40 -0400
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Greg KH <gregkh@linuxfoundation.org>, peterz@infradead.org
+Cc:     RAJESH DASARI <raajeshdasari@gmail.com>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Reg: rseq selftests failed on 5.4.199
+Message-ID: <YrnKyKiNlsqkuI6k@localhost>
+References: <CAPXMrf-_RGYBJNu51rq2mdzcpf7Sk_z3kRNL9pmLvf4xmUkmow@mail.gmail.com>
+ <YrlbDgpIVFvh5L9O@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220622151728.13622-1-pdurrant@amazon.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <YrlbDgpIVFvh5L9O@kroah.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022, Paul Durrant wrote:
-> The scaling information in subleaf 1 should match the values set by KVM in
-> the 'vcpu_info' sub-structure 'time_info' (a.k.a. pvclock_vcpu_time_info)
-> which is shared with the guest, but is not directly available to the VMM.
-> The offset values are not set since a TSC offset is already applied.
-> The TSC frequency should also be set in sub-leaf 2.
+On 27-Jun-2022 09:23:58 AM, Greg KH wrote:
+> On Sun, Jun 26, 2022 at 10:01:20PM +0300, RAJESH DASARI wrote:
+> > Hi ,
+> > 
+> > We are running rseq selftests on 5.4.199 kernel with  glibc 2.34
+> > version  and we see that tests are failing to compile with invalid
+> > argument errors. When we took all the commits from
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/tools/testing/selftests/rseq
+> >  related to rseq locally , test cases have passed. I see that there are
+> > some adaptations to the latest glibc version done in those commits, is
+> > there any plan to backport them to 5.4.x versions. Could you please
+> > provide your inputs.
 > 
-> Cache pointers to the sub-leaves when CPUID is updated by the VMM and
-> populate the relevant information prior to entering the guest.
+> What commits specifically are you referring to please?  A list of them
+> would be great, and if you have tested them and verified that they can
+> be backported cleanly would also be very helpful.
 
-All of my comments about the code still apply.
+Hi Greg,
 
-https://lore.kernel.org/all/YrMqtHzNSean+qkh@google.com
+Specifically related to rseq selftests, the following string of commits
+would be relevant on top of v5.4.199. Those are not all strictly only
+bugfixes, but they help applying the following commits without
+conflicts. I have validated that this string of commits cherry-picks on
+top of v5.4.199, and that the resulting selftests build fine.
 
-> Signed-off-by: Paul Durrant <pdurrant@amazon.com>
-> ---
-> Cc: David Woodhouse <dwmw2@infradead.org>
+ea366dd79c ("seq/selftests,x86_64: Add rseq_offset_deref_addv()")
+07ad4f7629 ("selftests/rseq: remove ARRAY_SIZE define from individual tests")
+5c105d55a9 ("selftests/rseq: introduce own copy of rseq uapi header")
+930378d056 ("selftests/rseq: Remove useless assignment to cpu variable")
+94b80a19eb ("selftests/rseq: Remove volatile from __rseq_abi")
+e546cd48cc ("selftests/rseq: Introduce rseq_get_abi() helper")
+886ddfba93 ("selftests/rseq: Introduce thread pointer getters")
+233e667e1a ("selftests/rseq: Uplift rseq selftests for compatibility with glibc-2.35")
+24d1136a29 ("selftests/rseq: Fix ppc32: wrong rseq_cs 32-bit field pointer on big endian")
+de6b52a214 ("selftests/rseq: Fix ppc32 missing instruction selection "u" and "x" for load/store")
+26dc8a6d8e ("selftests/rseq: Fix ppc32 offsets by using long rather than off_t")
+d7ed99ade3 ("selftests/rseq: Fix warnings about #if checks of undefined tokens")
+94c5cf2a0e ("selftests/rseq: Remove arm/mips asm goto compiler work-around")
+b53823fb2e ("selftests/rseq: Fix: work-around asm goto compiler bugs")
+4e15bb766b ("selftests/rseq: x86-64: use %fs segment selector for accessing rseq thread area")
+127b6429d2 ("selftests/rseq: x86-32: use %gs segment selector for accessing rseq thread area")
+889c5d60fb ("selftests/rseq: Change type of rseq_offset to ptrdiff_t")
 
-Cc: can go in the changelog, it's helpful info to carry with the commit as it
-documents who was made aware of the patch, e.g. show who may have had a cance to
-object/review.
+There is also this patch (currently in -tip, not in the master branch
+yet) which is relevant for the case where a glibc-2.35 (or a glibc-2.34
+with backported rseq support) ends up being built against kernel headers
+that do not have rseq support:
 
-> 
-> v2:
->  - Make sure sub-leaf pointers are NULLed if the time leaf is removed
-> 
-> v3:
->  - Add leaf limit check in kvm_xen_set_cpuid()
-> 
-> v4:
->  - Update commit comment
+https://lore.kernel.org/lkml/20220614154830.1367382-4-mjeanson@efficios.com/
 
-Please start with the most recent verison and work backardwards, that way reviewers
-can quickly see the delta for _this_ version.  I.e.
+Thanks,
+
+Mathieu
 
 
-v4:
-
-v3:
-
-v2:
-
-v1:
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

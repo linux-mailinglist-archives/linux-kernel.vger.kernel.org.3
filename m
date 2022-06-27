@@ -2,51 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9833155C2CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D5455C23A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234267AbiF0NCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        id S234633AbiF0NCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234437AbiF0NB6 (ORCPT
+        with ESMTP id S234557AbiF0NCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:01:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C2B12091;
-        Mon, 27 Jun 2022 06:00:58 -0700 (PDT)
+        Mon, 27 Jun 2022 09:02:00 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF2D120A3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:01:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99DCEB8166A;
-        Mon, 27 Jun 2022 13:00:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDFCBC341C7;
-        Mon, 27 Jun 2022 13:00:52 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9CBADCE19A6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:00:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C9CC341CB;
+        Mon, 27 Jun 2022 13:00:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656334855;
-        bh=DOQ5mwSpRmG7SdZF6XPq4GgQR+HBslD0lVkCHtkvk1c=;
+        s=k20201202; t=1656334857;
+        bh=hreBI8EgJFm06gBn+LIBkI3qYVbQdetQMsfgmAVbTvc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jg3hiKDaCJUnAkCyUFjM7OEYotxMAxcrcQkoI1p1PTzJw9fgHDnJVKwUWKdnN7hyY
-         o2vhmIl+XOCLlSXokF8cnAmRENBIAX8ErGTSDb5KzC3rPjuBXfFgjEqQnzLo/YETQy
-         8uSBZi5Gn9XBc7GzfdrqLbsGOmlKGxmj0B49vI1RE9vMIDiwsQ8mbKraM/PDcYrbPI
-         IaeM6mPPHtk/wmD5J7FWFufpzyuL/x9cF8UvVvzgU9OOEPe+mkQA7itUHEMIG8qYZP
-         VPRlLd9brA9gXfUv8MDEpwJx5VAhadJPuQEzqX+bd4uHgGrFUbLbTl0Da710ZAW2MM
-         GK7xhl7XAoKvQ==
+        b=DcLGnfytx0Fz1gXcLEfUbJS+NsSbmkvSiV1vBZtYodFFjKyugRqV2zK+H4kqnS89j
+         BAL2s1TclOqFwuX8Px9TvtfArm0FafMiUzgAyc0AIT3i6bRmMksDxe16zsuO0RC240
+         WYPaeyxdLrRUP42ajEz/ScYCgeJvmTN/iFQ2SO472YIJDdufJJxVNBRktBDnpdex3G
+         i1aN7CAmV3aBD/5tZcQZr5VOZqd+oSaZ3VGGRRM+Wi5PKO9amyVquoHEyWMXSootJP
+         Osyo3L8mRBgWhnLf8s/3nneh89YiOViJU+5oYn2ggQwBK5i/ylBYhgZSFPGGSBVdJk
+         Az+KS58lj+lQw==
 From:   Will Deacon <will@kernel.org>
-To:     sjitindarsingh@gmail.com, catalin.marinas@arm.com,
-        madvenka@linux.microsoft.com, ardb@kernel.org,
-        mark.rutland@arm.com, jamorris@linux.microsoft.com,
-        jpoimboe@redhat.com, nobuta.keiya@fujitsu.com,
-        live-patching@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, broonie@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>
-Subject: Re: [RFC PATCH v15 0/6] arm64: Reorganize the unwinder and implement stack trace reliability checks
-Date:   Mon, 27 Jun 2022 14:00:43 +0100
-Message-Id: <165632350271.638103.10773612881829908260.b4-ty@kernel.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        akpm@linux-foundation.org, catalin.marinas@arm.com
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        hch@infradead.org, arnd@arndb.de, linux-mm@kvack.org,
+        anshuman.khandual@arm.com
+Subject: Re: [PATCH v5 0/6] arm64: Cleanup ioremap() and support ioremap_prot()
+Date:   Mon, 27 Jun 2022 14:00:44 +0100
+Message-Id: <165632887130.3614125.5739508840825390970.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220617180219.20352-1-madvenka@linux.microsoft.com>
-References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24> <20220617180219.20352-1-madvenka@linux.microsoft.com>
+In-Reply-To: <20220607125027.44946-1-wangkefeng.wang@huawei.com>
+References: <20220607125027.44946-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,22 +58,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Jun 2022 13:02:13 -0500, madvenka@linux.microsoft.com wrote:
-> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+On Tue, 7 Jun 2022 20:50:21 +0800, Kefeng Wang wrote:
+> 1. Enhance generic ioremap to make it more useful.
+> 2. Let's arm64 use GENERIC_IOREMAP to cleanup code.
+> 3. Support HAVE_IOREMAP_PROT on arm64, which enable generic_access_phys(),
+>    it is useful when debug(eg, gdb) via access_process_vm device memory
+>    infrastructure.
 > 
-> I have synced this patch series to v5.19-rc2.
-> I have also removed the following patch.
-> 
-> 	[PATCH v14 7/7] arm64: Select HAVE_RELIABLE_STACKTRACE
+> v5:
+> - break long lines(> 80 cols), per Christoph Hellwig
+> - move is_vmalloc_addr() check from arm64 into generic ioremap, per
+>   Christoph Hellwig
+> - make arm64's ioremap_cache as an inline function, per Christoph
+> - keep changes simple, make ioremap/iounmap_allowed return bool, per
+>   Baoquan He
+> - simplify use 'void *' instead of 'void __iomem *' in iounmap, then
+>   drop __force annotation
 > 
 > [...]
 
-Applied first two patches to arm64 (for-next/stacktrace), thanks!
+Applied to arm64 (for-next/ioremap), thanks!
 
-[1/6] arm64: Split unwind_init()
-      https://git.kernel.org/arm64/c/a019d8a2cc82
-[2/6] arm64: Copy the task argument to unwind_state
-      https://git.kernel.org/arm64/c/82a592c13b0a
+[1/6] ARM: mm: kill unused runtime hook arch_iounmap()
+      https://git.kernel.org/arm64/c/d803336abdbc
+[2/6] mm: ioremap: Use more sensibly name in ioremap_prot()
+      https://git.kernel.org/arm64/c/abc5992b9dd0
+[3/6] mm: ioremap: Setup phys_addr of struct vm_struct
+      https://git.kernel.org/arm64/c/a14fff1c0379
+[4/6] mm: ioremap: Add ioremap/iounmap_allowed()
+      https://git.kernel.org/arm64/c/18e780b4e6ab
+[5/6] arm64: mm: Convert to GENERIC_IOREMAP
+      https://git.kernel.org/arm64/c/f23eab0bfaef
+[6/6] arm64: Add HAVE_IOREMAP_PROT support
+      https://git.kernel.org/arm64/c/893dea9ccd08
 
 Cheers,
 -- 

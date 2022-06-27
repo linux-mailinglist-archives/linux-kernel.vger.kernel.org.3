@@ -2,101 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1002B55E149
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DAE55C5A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233167AbiF0HxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
+        id S233059AbiF0H4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiF0HxO (ORCPT
+        with ESMTP id S232495AbiF0H4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:53:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFA565FC8;
-        Mon, 27 Jun 2022 00:53:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9CBB61758;
-        Mon, 27 Jun 2022 00:53:13 -0700 (PDT)
-Received: from [192.168.4.21] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 791553F5A1;
-        Mon, 27 Jun 2022 00:53:08 -0700 (PDT)
-Message-ID: <5db4e640-8165-d7bf-c6b6-192ea7edfafd@arm.com>
-Date:   Mon, 27 Jun 2022 08:52:51 +0100
+        Mon, 27 Jun 2022 03:56:05 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED4D60E7;
+        Mon, 27 Jun 2022 00:56:02 -0700 (PDT)
+X-UUID: 2cdac14ec1bf4d66a921af120172e58a-20220627
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:0ee28835-190a-42a8-9798-4488fbbea4ea,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-META: VersionHash:b14ad71,CLOUDID:a8f698ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:3,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 2cdac14ec1bf4d66a921af120172e58a-20220627
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 438266948; Mon, 27 Jun 2022 15:55:58 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 27 Jun 2022 15:55:57 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 27 Jun 2022 15:55:57 +0800
+Message-ID: <a6163af1980ca55085163e8106d2c49294ecdddf.camel@mediatek.com>
+Subject: Re: [PATCH v14 02/15] dt-bindings: mediatek,dpi: Revise mediatek
+ strings to correct format
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 27 Jun 2022 15:55:57 +0800
+In-Reply-To: <20220624030946.14961-3-rex-bc.chen@mediatek.com>
+References: <20220624030946.14961-1-rex-bc.chen@mediatek.com>
+         <20220624030946.14961-3-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH net-next 1/4] time64.h: define PSEC_PER_NSEC and use it in
- tc-taprio
-Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        linux-kernel@vger.kernel.org, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220626120505.2369600-1-vladimir.oltean@nxp.com>
- <20220626120505.2369600-2-vladimir.oltean@nxp.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-In-Reply-To: <20220626120505.2369600-2-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vladimir,
+Hi, Bo-Chen:
 
-On 6/26/22 13:05, Vladimir Oltean wrote:
-> Time-sensitive networking code needs to work with PTP times expressed in
-> nanoseconds, and with packet transmission times expressed in
-> picoseconds, since those would be fractional at higher than gigabit
-> speed when expressed in nanoseconds.
+On Fri, 2022-06-24 at 11:09 +0800, Bo-Chen Chen wrote:
+> Strings replacement:
+> - s/mediatek/MediaTek/ in title.
+> - s/Mediatek/MediaTek/ in description.
+
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+
 > 
-> Convert the existing uses in tc-taprio to a PSEC_PER_NSEC macro.
-> 
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 > ---
->  include/vdso/time64.h  | 1 +
->  net/sched/sch_taprio.c | 4 ++--
->  2 files changed, 3 insertions(+), 2 deletions(-)
+>  .../devicetree/bindings/display/mediatek/mediatek,dpi.yaml    | 4
+> ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/vdso/time64.h b/include/vdso/time64.h
-> index b40cfa2aa33c..f1c2d02474ae 100644
-> --- a/include/vdso/time64.h
-> +++ b/include/vdso/time64.h
-> @@ -6,6 +6,7 @@
->  #define MSEC_PER_SEC	1000L
->  #define USEC_PER_MSEC	1000L
->  #define NSEC_PER_USEC	1000L
-> +#define PSEC_PER_NSEC	1000L
+> diff --git
+> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> index 8e526a4b134e..5bb23e97cf33 100644
+> ---
+> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> +++
+> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> @@ -4,14 +4,14 @@
+>  $id: 
+> http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: mediatek DPI and DP_INTF Controller
+> +title: MediaTek DPI and DP_INTF Controller
+>  
+>  maintainers:
+>    - CK Hu <ck.hu@mediatek.com>
+>    - Jitao shi <jitao.shi@mediatek.com>
+>  
+>  description: |
+> -  The Mediatek DPI and DP_INTF function blocks are a sink of the
+> display
+> +  The MediaTek DPI and DP_INTF function blocks are a sink of the
+> display
+>    subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422
+> pixel data on a
+>    parallel output bus.
+>  
 
-Are you planning to use this definition in the vdso library code? If not, you
-should define PSEC_PER_NSEC in "include/linux/time64.h". The vdso namespace
-should contain only the definitions shared by the implementations of the kernel
-and of the vdso library.
-
-...
--- 
-Regards,
-Vincenzo

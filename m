@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAC155DC80
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B4055DA50
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236718AbiF0LjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
+        id S236682AbiF0LjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236474AbiF0Lhe (ORCPT
+        with ESMTP id S236477AbiF0Lhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Jun 2022 07:37:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEBFB7;
-        Mon, 27 Jun 2022 04:33:10 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAFA223;
+        Mon, 27 Jun 2022 04:33:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8D45B80E6F;
-        Mon, 27 Jun 2022 11:33:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49601C3411D;
-        Mon, 27 Jun 2022 11:33:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD3DEB80E6F;
+        Mon, 27 Jun 2022 11:33:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27C34C3411D;
+        Mon, 27 Jun 2022 11:33:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329587;
-        bh=ANm7NZ3p20kcA1xNI5TBb7Uyk/XbUVFrE8pqixiN7l8=;
+        s=korg; t=1656329590;
+        bh=FFo5qQnm4OH0okQMXRGwjQ4ynXyznGl40vyyIuYjSbQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EaJxsCVha1uciM2P1AiDU8m1M2NQ1PhnEDQqX4t0niQU8RXEFmSRai2FJYgKYzOrE
-         mpsdSYiHQhFo1U/DjA9d3Ai+3CEmD264I6H8uyH2gVKixvv6xkmjU7QxrycFcVGQJb
-         TfWgdXvDL3XGlxqlgQmsMIuaI/Mt5D6xdb7YS60M=
+        b=Js4Zzo7I+Fr1C/mT4PWNJPYiJiQeS0G0D6HfsQuEDRJ6urUw+lMyYcTOjJjLKdT10
+         hNa7mBX8K1sMguwXgN0TTYJFX8H3Y598OaEgo1wqEz0UlqaL0UYvrCO3V7WuhTZ4lL
+         VpHn7kLuIiwqCzSuNz5jIZL5+ngpOsiOer55fCBw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+47af19f3307fc9c5c82e@syzkaller.appspotmail.com,
-        Jon Maloy <jmaloy@redhat.com>,
-        Ying Xue <ying.xue@windriver.com>,
-        Hoang Le <hoang.h.le@dektech.com.au>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 049/135] tipc: fix use-after-free Read in tipc_named_reinit
-Date:   Mon, 27 Jun 2022 13:20:56 +0200
-Message-Id: <20220627111939.582820168@linuxfoundation.org>
+Subject: [PATCH 5.15 050/135] igb: fix a use-after-free issue in igb_clean_tx_ring
+Date:   Mon, 27 Jun 2022 13:20:57 +0200
+Message-Id: <20220627111939.612269699@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
 References: <20220627111938.151743692@linuxfoundation.org>
@@ -59,78 +57,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hoang Le <hoang.h.le@dektech.com.au>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit 911600bf5a5e84bfda4d33ee32acc75ecf6159f0 ]
+[ Upstream commit 3f6a57ee8544ec3982f8a3cbcbf4aea7d47eb9ec ]
 
-syzbot found the following issue on:
-==================================================================
-BUG: KASAN: use-after-free in tipc_named_reinit+0x94f/0x9b0
-net/tipc/name_distr.c:413
-Read of size 8 at addr ffff88805299a000 by task kworker/1:9/23764
+Fix the following use-after-free bug in igb_clean_tx_ring routine when
+the NIC is running in XDP mode. The issue can be triggered redirecting
+traffic into the igb NIC and then closing the device while the traffic
+is flowing.
 
-CPU: 1 PID: 23764 Comm: kworker/1:9 Not tainted
-5.18.0-rc4-syzkaller-00878-g17d49e6e8012 #0
-Hardware name: Google Compute Engine/Google Compute Engine,
-BIOS Google 01/01/2011
-Workqueue: events tipc_net_finalize_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495
-mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- tipc_named_reinit+0x94f/0x9b0 net/tipc/name_distr.c:413
- tipc_net_finalize+0x234/0x3d0 net/tipc/net.c:138
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-[...]
-==================================================================
+[   73.322719] CPU: 1 PID: 487 Comm: xdp_redirect Not tainted 5.18.3-apu2 #9
+[   73.330639] Hardware name: PC Engines APU2/APU2, BIOS 4.0.7 02/28/2017
+[   73.337434] RIP: 0010:refcount_warn_saturate+0xa7/0xf0
+[   73.362283] RSP: 0018:ffffc9000081f798 EFLAGS: 00010282
+[   73.367761] RAX: 0000000000000000 RBX: ffffc90000420f80 RCX: 0000000000000000
+[   73.375200] RDX: ffff88811ad22d00 RSI: ffff88811ad171e0 RDI: ffff88811ad171e0
+[   73.382590] RBP: 0000000000000900 R08: ffffffff82298f28 R09: 0000000000000058
+[   73.390008] R10: 0000000000000219 R11: ffffffff82280f40 R12: 0000000000000090
+[   73.397356] R13: ffff888102343a40 R14: ffff88810359e0e4 R15: 0000000000000000
+[   73.404806] FS:  00007ff38d31d740(0000) GS:ffff88811ad00000(0000) knlGS:0000000000000000
+[   73.413129] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   73.419096] CR2: 000055cff35f13f8 CR3: 0000000106391000 CR4: 00000000000406e0
+[   73.426565] Call Trace:
+[   73.429087]  <TASK>
+[   73.431314]  igb_clean_tx_ring+0x43/0x140 [igb]
+[   73.436002]  igb_down+0x1d7/0x220 [igb]
+[   73.439974]  __igb_close+0x3c/0x120 [igb]
+[   73.444118]  igb_xdp+0x10c/0x150 [igb]
+[   73.447983]  ? igb_pci_sriov_configure+0x70/0x70 [igb]
+[   73.453362]  dev_xdp_install+0xda/0x110
+[   73.457371]  dev_xdp_attach+0x1da/0x550
+[   73.461369]  do_setlink+0xfd0/0x10f0
+[   73.465166]  ? __nla_validate_parse+0x89/0xc70
+[   73.469714]  rtnl_setlink+0x11a/0x1e0
+[   73.473547]  rtnetlink_rcv_msg+0x145/0x3d0
+[   73.477709]  ? rtnl_calcit.isra.0+0x130/0x130
+[   73.482258]  netlink_rcv_skb+0x8d/0x110
+[   73.486229]  netlink_unicast+0x230/0x340
+[   73.490317]  netlink_sendmsg+0x215/0x470
+[   73.494395]  __sys_sendto+0x179/0x190
+[   73.498268]  ? move_addr_to_user+0x37/0x70
+[   73.502547]  ? __sys_getsockname+0x84/0xe0
+[   73.506853]  ? netlink_setsockopt+0x1c1/0x4a0
+[   73.511349]  ? __sys_setsockopt+0xc8/0x1d0
+[   73.515636]  __x64_sys_sendto+0x20/0x30
+[   73.519603]  do_syscall_64+0x3b/0x80
+[   73.523399]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[   73.528712] RIP: 0033:0x7ff38d41f20c
+[   73.551866] RSP: 002b:00007fff3b945a68 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
+[   73.559640] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff38d41f20c
+[   73.567066] RDX: 0000000000000034 RSI: 00007fff3b945b30 RDI: 0000000000000003
+[   73.574457] RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000000
+[   73.581852] R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff3b945ab0
+[   73.589179] R13: 0000000000000000 R14: 0000000000000003 R15: 00007fff3b945b30
+[   73.596545]  </TASK>
+[   73.598842] ---[ end trace 0000000000000000 ]---
 
-In the commit
-d966ddcc3821 ("tipc: fix a deadlock when flushing scheduled work"),
-the cancel_work_sync() function just to make sure ONLY the work
-tipc_net_finalize_work() is executing/pending on any CPU completed before
-tipc namespace is destroyed through tipc_exit_net(). But this function
-is not guaranteed the work is the last queued. So, the destroyed instance
-may be accessed in the work which will try to enqueue later.
-
-In order to completely fix, we re-order the calling of cancel_work_sync()
-to make sure the work tipc_net_finalize_work() was last queued and it
-must be completed by calling cancel_work_sync().
-
-Reported-by: syzbot+47af19f3307fc9c5c82e@syzkaller.appspotmail.com
-Fixes: d966ddcc3821 ("tipc: fix a deadlock when flushing scheduled work")
-Acked-by: Jon Maloy <jmaloy@redhat.com>
-Signed-off-by: Ying Xue <ying.xue@windriver.com>
-Signed-off-by: Hoang Le <hoang.h.le@dektech.com.au>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 9cbc948b5a20c ("igb: add XDP support")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Link: https://lore.kernel.org/r/e5c01d549dc37bff18e46aeabd6fb28a7bcf84be.1655388571.git.lorenzo@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tipc/core.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/ethernet/intel/igb/igb_main.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/net/tipc/core.c b/net/tipc/core.c
-index 3f4542e0f065..434e70eabe08 100644
---- a/net/tipc/core.c
-+++ b/net/tipc/core.c
-@@ -109,10 +109,9 @@ static void __net_exit tipc_exit_net(struct net *net)
- 	struct tipc_net *tn = tipc_net(net);
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index b88303351484..5ee5ee8e6848 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -4819,8 +4819,11 @@ static void igb_clean_tx_ring(struct igb_ring *tx_ring)
+ 	while (i != tx_ring->next_to_use) {
+ 		union e1000_adv_tx_desc *eop_desc, *tx_desc;
  
- 	tipc_detach_loopback(net);
-+	tipc_net_stop(net);
- 	/* Make sure the tipc_net_finalize_work() finished */
- 	cancel_work_sync(&tn->work);
--	tipc_net_stop(net);
--
- 	tipc_bcast_stop(net);
- 	tipc_nametbl_stop(net);
- 	tipc_sk_rht_destroy(net);
+-		/* Free all the Tx ring sk_buffs */
+-		dev_kfree_skb_any(tx_buffer->skb);
++		/* Free all the Tx ring sk_buffs or xdp frames */
++		if (tx_buffer->type == IGB_TYPE_SKB)
++			dev_kfree_skb_any(tx_buffer->skb);
++		else
++			xdp_return_frame(tx_buffer->xdpf);
+ 
+ 		/* unmap skb header data */
+ 		dma_unmap_single(tx_ring->dev,
 -- 
 2.35.1
 

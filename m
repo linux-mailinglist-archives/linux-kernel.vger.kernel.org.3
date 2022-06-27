@@ -2,88 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3765D55D888
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BAC55C1C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240398AbiF0ThP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 15:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
+        id S238543AbiF0Tjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 15:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238466AbiF0ThM (ORCPT
+        with ESMTP id S231765AbiF0Tjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 15:37:12 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E44C66357
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:37:10 -0700 (PDT)
-Received: (qmail 130357 invoked by uid 1000); 27 Jun 2022 15:37:10 -0400
-Date:   Mon, 27 Jun 2022 15:37:10 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: Re: [PATCH v22 2/3] usb: misc: Add onboard_usb_hub driver
-Message-ID: <YroG5keFWVJo8JVR@rowland.harvard.edu>
-References: <CAD=FV=VEztPLhsrJecZUdyHCW7ZfFTVvxyqY5CqRVv2mWyrLog@mail.gmail.com>
- <YquoSMiQS+RG8rOM@google.com>
- <CAD=FV=W81pSEUbzw2ZQgs_TJ9MLnHQHiDopZXZ6bHdS7QMzAyA@mail.gmail.com>
- <YqvMffveCPiKQEUk@google.com>
- <CAD=FV=UJOStPfRR3Hq2DmRBSH-HCtZ16hAU9eVH5w6Hm=WSJRQ@mail.gmail.com>
- <YqytDNB2y4+qT8GD@google.com>
- <CAD=FV=UT0XtMjZ9syQPGXeTEaUrwGTb_LgDow+cofgmx4D30VA@mail.gmail.com>
- <Yrnzl8k81f9JTMIQ@google.com>
- <Yrn8y4GGZm+NyXIi@rowland.harvard.edu>
- <Yrn/rfrzSWod5SCT@google.com>
+        Mon, 27 Jun 2022 15:39:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D6A112A8D;
+        Mon, 27 Jun 2022 12:39:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 65D001758;
+        Mon, 27 Jun 2022 12:39:45 -0700 (PDT)
+Received: from [10.57.84.159] (unknown [10.57.84.159])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE96A3F792;
+        Mon, 27 Jun 2022 12:39:43 -0700 (PDT)
+Message-ID: <8b237fd0-96f0-ad48-dfcb-e4a46e4463eb@arm.com>
+Date:   Mon, 27 Jun 2022 20:39:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yrn/rfrzSWod5SCT@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 1/2] vfio/type1: Simplify bus_type determination
+Content-Language: en-GB
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     cohuck@redhat.com, kvm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        jgg@nvidia.com, baolu.lu@linux.intel.com, iommu@lists.linux.dev
+References: <194a12d3434d7b38f84fa96503c7664451c8c395.1656092606.git.robin.murphy@arm.com>
+ <20220627132136.2b902875.alex.williamson@redhat.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220627132136.2b902875.alex.williamson@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 12:06:21PM -0700, Matthias Kaehlcke wrote:
-> On Mon, Jun 27, 2022 at 02:54:03PM -0400, Alan Stern wrote:
-> > On Mon, Jun 27, 2022 at 11:14:47AM -0700, Matthias Kaehlcke wrote:
-> > > 
-> > >   Further there must be only one platform device for onboard hubs with a
-> > >   companion hub (the hub is a single physical device). To achieve this two
-> > 
-> > What do you mean by "companion hub"?  I think you are using the wrong 
-> > word here.  If you're talking about the relation between the two logical 
-> > hubs (one attached to the SuperSpeed bus and one attached to the 
-> > Low/Full/High-speed bus) within a physical USB-3 hub, the correct term 
-> > for this is "peer".  See the existing usages in hub.h, hub.c, and 
-> > port.c.
-> > 
-> > "Companion" refers to something completely different (i.e., the UHCI or 
-> > OHCI controllers that handle Low/Full-speed connections on behalf of a 
-> > High-speed EHCI controller).
+On 2022-06-27 20:21, Alex Williamson wrote:
+> On Fri, 24 Jun 2022 18:51:44 +0100
+> Robin Murphy <robin.murphy@arm.com> wrote:
 > 
-> Yes it's the relation between the two logical hub. The term 'companion-hub'
-> stems from the binding and has been around since v6 of this series. I guess
-> we should update the binding if the terminology isn't correct.
+>> Since IOMMU groups are mandatory for drivers to support, it stands to
+>> reason that any device which has been successfully added to a group
+>> must be on a bus supported by that IOMMU driver, and therefore a domain
+>> viable for any device in the group must be viable for all devices in
+>> the group. This already has to be the case for the IOMMU API's internal
+>> default domain, for instance. Thus even if the group contains devices on
+>> different buses, that can only mean that the IOMMU driver actually
+>> supports such an odd topology, and so without loss of generality we can
+>> expect the bus type of any device in a group to be suitable for IOMMU
+>> API calls.
+>>
+>> Furthermore, scrutiny reveals a lack of protection for the bus being
+>> removed while vfio_iommu_type1_attach_group() is using it; the reference
+>> that VFIO holds on the iommu_group ensures that data remains valid, but
+>> does not prevent the group's membership changing underfoot.
+>>
+>> We can address both concerns by recycling vfio_bus_type() into some
+>> superficially similar logic to indirect the IOMMU API calls themselves.
+>> Each call is thus protected from races by the IOMMU group's own locking,
+>> and we no longer need to hold group-derived pointers beyond that scope.
+>> It also gives us an easy path for the IOMMU API's migration of bus-based
+>> interfaces to device-based, of which we can already take the first step
+>> with device_iommu_capable(). As with domains, any capability must in
+>> practice be consistent for devices in a given group - and after all it's
+>> still the same capability which was expected to be consistent across an
+>> entire bus! - so there's no need for any complicated validation.
+>>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>> ---
+>>
+>> v3: Complete rewrite yet again, and finally it doesn't feel like we're
+>> stretching any abstraction boundaries the wrong way, and the diffstat
+>> looks right too. I did think about embedding IOMMU_CAP_INTR_REMAP
+>> directly in the callback, but decided I like the consistency of minimal
+>> generic wrappers. And yes, if the capability isn't supported then it
+>> does end up getting tested for the whole group, but meh, it's harmless.
+>>
+>>   drivers/vfio/vfio_iommu_type1.c | 42 +++++++++++++++++----------------
+>>   1 file changed, 22 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+>> index c13b9290e357..a77ff00c677b 100644
+>> --- a/drivers/vfio/vfio_iommu_type1.c
+>> +++ b/drivers/vfio/vfio_iommu_type1.c
+>> @@ -1679,18 +1679,6 @@ static int vfio_dma_do_map(struct vfio_iommu *iommu,
+>>   	return ret;
+>>   }
+>>   
+>> -static int vfio_bus_type(struct device *dev, void *data)
+>> -{
+>> -	struct bus_type **bus = data;
+>> -
+>> -	if (*bus && *bus != dev->bus)
+>> -		return -EINVAL;
+>> -
+>> -	*bus = dev->bus;
+>> -
+>> -	return 0;
+>> -}
+>> -
+>>   static int vfio_iommu_replay(struct vfio_iommu *iommu,
+>>   			     struct vfio_domain *domain)
+>>   {
+>> @@ -2153,13 +2141,25 @@ static void vfio_iommu_iova_insert_copy(struct vfio_iommu *iommu,
+>>   	list_splice_tail(iova_copy, iova);
+>>   }
+>>   
+> 
+> Any objection if I add the following comment:
+> 
+> /* Redundantly walks non-present capabilities to simplify caller */
 
-That sounds like a good idea.
+Not at all, feel free - I guess if I felt it was worth pre-empting the 
+review question then it probably is subtle enough to deserve a code comment!
 
-Alan Stern
+Thanks,
+Robin.
+
+> 
+> Thanks,
+> Alex
+> 
+>> +static int vfio_iommu_device_capable(struct device *dev, void *data)
+>> +{
+>> +	return device_iommu_capable(dev, (enum iommu_cap)data);
+>> +}
+>> +
+>> +static int vfio_iommu_domain_alloc(struct device *dev, void *data)
+>> +{
+>> +	struct iommu_domain **domain = data;
+>> +
+>> +	*domain = iommu_domain_alloc(dev->bus);
+>> +	return 1; /* Don't iterate */
+>> +}
+>> +
+>>   static int vfio_iommu_type1_attach_group(void *iommu_data,
+>>   		struct iommu_group *iommu_group, enum vfio_group_type type)
+>>   {
+>>   	struct vfio_iommu *iommu = iommu_data;
+>>   	struct vfio_iommu_group *group;
+>>   	struct vfio_domain *domain, *d;
+>> -	struct bus_type *bus = NULL;
+>>   	bool resv_msi, msi_remap;
+>>   	phys_addr_t resv_msi_base = 0;
+>>   	struct iommu_domain_geometry *geo;
+>> @@ -2192,18 +2192,19 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>>   		goto out_unlock;
+>>   	}
+>>   
+>> -	/* Determine bus_type in order to allocate a domain */
+>> -	ret = iommu_group_for_each_dev(iommu_group, &bus, vfio_bus_type);
+>> -	if (ret)
+>> -		goto out_free_group;
+>> -
+>>   	ret = -ENOMEM;
+>>   	domain = kzalloc(sizeof(*domain), GFP_KERNEL);
+>>   	if (!domain)
+>>   		goto out_free_group;
+>>   
+>> +	/*
+>> +	 * Going via the iommu_group iterator avoids races, and trivially gives
+>> +	 * us a representative device for the IOMMU API call. We don't actually
+>> +	 * want to iterate beyond the first device (if any).
+>> +	 */
+>>   	ret = -EIO;
+>> -	domain->domain = iommu_domain_alloc(bus);
+>> +	iommu_group_for_each_dev(iommu_group, &domain->domain,
+>> +				 vfio_iommu_domain_alloc);
+>>   	if (!domain->domain)
+>>   		goto out_free_domain;
+>>   
+>> @@ -2258,7 +2259,8 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
+>>   	list_add(&group->next, &domain->group_list);
+>>   
+>>   	msi_remap = irq_domain_check_msi_remap() ||
+>> -		    iommu_capable(bus, IOMMU_CAP_INTR_REMAP);
+>> +		    iommu_group_for_each_dev(iommu_group, (void *)IOMMU_CAP_INTR_REMAP,
+>> +					     vfio_iommu_device_capable);
+>>   
+>>   	if (!allow_unsafe_interrupts && !msi_remap) {
+>>   		pr_warn("%s: No interrupt remapping support.  Use the module param \"allow_unsafe_interrupts\" to enable VFIO IOMMU support on this platform\n",
+> 

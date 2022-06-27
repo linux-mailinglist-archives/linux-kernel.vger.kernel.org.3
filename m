@@ -2,123 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE09655B5A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 05:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB77F55B5AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 05:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbiF0DM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 23:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S232578AbiF0DQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 23:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbiF0DMz (ORCPT
+        with ESMTP id S232583AbiF0DQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 23:12:55 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 850AE388F
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 20:12:53 -0700 (PDT)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX9gqILlisZ9fAA--.5897S3;
-        Mon, 27 Jun 2022 11:12:43 +0800 (CST)
-Subject: Re:
- arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:510:5:
- warning: no previous prototype for function
- 'LZ4_decompress_safe_forceExtDict'
-To:     kernel test robot <lkp@intel.com>
-References: <202206260948.akgsho1q-lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <5753fd35-9848-0481-3a77-6a9c02e2170d@loongson.cn>
-Date:   Mon, 27 Jun 2022 11:12:42 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Sun, 26 Jun 2022 23:16:12 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643585F5A
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 20:16:10 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LWXr21W2wzhYqd;
+        Mon, 27 Jun 2022 11:13:54 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 11:16:07 +0800
+Subject: Re: [PATCH v2 4/9] mm, hwpoison, hugetlb: support saving mechanism of
+ raw error pages
+To:     Naoya Horiguchi <nao.horiguchi@gmail.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
+ <20220623235153.2623702-5-naoya.horiguchi@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <3e15e325-ae82-8e29-128d-dd0425b8db4d@huawei.com>
+Date:   Mon, 27 Jun 2022 11:16:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <202206260948.akgsho1q-lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+In-Reply-To: <20220623235153.2623702-5-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9DxX9gqILlisZ9fAA--.5897S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxAw1fAF17Gw48try8ZF4xJFb_yoW5Aryfpa
-        1jkws5Kr1rWF18J3y0gayFg3WxXrZ5J3sruw1UJr1DZF4YqFyvqrnakrZ5Xr47Krn5X3yq
-        ya18W3Wjgw12yaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvvb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
-        xK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-        r21lc2xSY4AK67AK6r48MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
-        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
-        xVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
-        8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73Uj
-        IFyTuYvjxUy8nYDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/6/24 7:51, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> 
+> When handling memory error on a hugetlb page, the error handler tries to
+> dissolve and turn it into 4kB pages.  If it's successfully dissolved,
+> PageHWPoison flag is moved to the raw error page, so that's all right.
+> However, dissolve sometimes fails, then the error page is left as
+> hwpoisoned hugepage. It's useful if we can retry to dissolve it to save
+> healthy pages, but that's not possible now because the information about
+> where the raw error pages is lost.
+> 
+> Use the private field of a few tail pages to keep that information.  The
+> code path of shrinking hugepage pool uses this info to try delayed dissolve.
+> In order to remember multiple errors in a hugepage, a singly-linked list
+> originated from SUBPAGE_INDEX_HWPOISON-th tail page is constructed.  Only
+> simple operations (adding an entry or clearing all) are required and the
+> list is assumed not to be very long, so this simple data structure should
+> be enough.
+> 
+> If we failed to save raw error info, the hwpoison hugepage has errors on
+> unknown subpage, then this new saving mechanism does not work any more,
+> so disable saving new raw error info and freeing hwpoison hugepages.
+> 
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
+Many thanks for your patch. This patch looks good to me. Some nits below.
 
-On 06/26/2022 09:14 AM, kernel test robot wrote:
-> Hi Tiezhu,
 >
-> First bad commit (maybe != root cause):
-
-Yes, I think the first bad commit is not the root cause.
-
+<snip>
 >
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   0840a7914caa14315a3191178a9f72c742477860
-> commit: 7e4fd16b38923028b01d3dbadf4ca973d885c53e MIPS: RALINK: Define pci_remap_iospace under CONFIG_PCI_DRIVERS_GENERIC
-> date:   4 weeks ago
-> config: mips-randconfig-r035-20220626
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 42a7ddb428c999229491b0effbb1a4059149fba8)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mipsel-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7e4fd16b38923028b01d3dbadf4ca973d885c53e
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 7e4fd16b38923028b01d3dbadf4ca973d885c53e
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->    arch/mips/boot/compressed/decompress.c:42:6: warning: no previous prototype for function 'error' [-Wmissing-prototypes]
->    void error(char *x)
->         ^
->    arch/mips/boot/compressed/decompress.c:42:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    void error(char *x)
->    ^
->    static
->    In file included from arch/mips/boot/compressed/decompress.c:64:
->    In file included from arch/mips/boot/compressed/../../../../lib/decompress_unlz4.c:10:
->>> arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:510:5: warning: no previous prototype for function 'LZ4_decompress_safe_forceExtDict' [-Wmissing-prototypes]
->    int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
->        ^
->    arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:510:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->    int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
->    ^
-[...]
+> +static inline int hugetlb_set_page_hwpoison(struct page *hpage,
+> +					struct page *page)
+> +{
+> +	struct llist_head *head;
+> +	struct raw_hwp_page *raw_hwp;
+> +	struct llist_node *t, *tnode;
+> +	int ret;
+> +
+> +	/*
+> +	 * Once the hwpoison hugepage has lost reliable raw error info,
+> +	 * there is little mean to keep additional error info precisely,
 
-I think the following patch can fix the above build warning:
+It should be s/mean/meaning/ ?
 
-[PATCH] lib: Make LZ4_decompress_safe_forceExtDict() static
-https://lore.kernel.org/lkml/1656298965-8698-1-git-send-email-yangtiezhu@loongson.cn/T/#u
+> +	 * so skip to add additional raw error info.
+> +	 */
+> +	if (raw_hwp_unreliable(hpage))
+> +		return -EHWPOISON;
+> +	head = raw_hwp_list_head(hpage);
+> +	llist_for_each_safe(tnode, t, head->first) {
+> +		struct raw_hwp_page *p = container_of(tnode, struct raw_hwp_page, node);
+> +
+> +		if (p->page == page)
+> +			return -EHWPOISON;
+> +	}
+> +
+> +	ret = TestSetPageHWPoison(hpage) ? -EHWPOISON : 0;
+> +	/* the first error event will be counted in action_result(). */
+> +	if (ret)
+> +		num_poisoned_pages_inc();
+> +
+> +	raw_hwp = kmalloc(sizeof(struct raw_hwp_page), GFP_KERNEL);
+> +	if (raw_hwp) {
+> +		raw_hwp->page = page;
+> +		llist_add(&raw_hwp->node, head);
+> +	} else {
+> +		/*
+> +		 * Failed to save raw error info.  We no longer trace all
+> +		 * hwpoisoned subpages, and we need refuse to free/dissolve
+> +		 * this hwpoisoned hugepage.
+> +		 */
+> +		set_raw_hwp_unreliable(hpage);
+> +		return ret;
 
-Thanks,
-Tiezhu
+This "return ret" can be combined into the below one?
+
+> +	}
+> +	return ret;
+> +}
+> +
+> +inline int hugetlb_clear_page_hwpoison(struct page *hpage)
+> +{
+> +	struct llist_head *head;
+> +	struct llist_node *t, *tnode;
+> +
+> +	if (raw_hwp_unreliable(hpage))
+> +		return -EBUSY;
+
+Can we try freeing the memory of raw_hwp_list to save possible memory? It seems
+raw_hwp_list becomes unneeded when raw_hwp_unreliable.
+
+Thanks.
+
+> +	ClearPageHWPoison(hpage);
+> +	head = raw_hwp_list_head(hpage);
+> +	llist_for_each_safe(tnode, t, head->first) {
+> +		struct raw_hwp_page *p = container_of(tnode, struct raw_hwp_page, node);
+> +
+> +		SetPageHWPoison(p->page);
+> +		kfree(p);
+> +	}
+> +	llist_del_all(head);
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Called from hugetlb code with hugetlb_lock held.
+>   *
+> @@ -1533,7 +1624,7 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
+>  		goto out;
+>  	}
+>  
+> -	if (TestSetPageHWPoison(head)) {
+> +	if (hugetlb_set_page_hwpoison(head, page)) {
+>  		ret = -EHWPOISON;
+>  		goto out;
+>  	}
+> @@ -1585,7 +1676,7 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+>  	lock_page(head);
+>  
+>  	if (hwpoison_filter(p)) {
+> -		ClearPageHWPoison(head);
+> +		hugetlb_clear_page_hwpoison(head);
+>  		res = -EOPNOTSUPP;
+>  		goto out;
+>  	}
+> 
 

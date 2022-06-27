@@ -2,110 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79ACC55C506
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DA955DBFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236998AbiF0OyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        id S236935AbiF0Oym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235197AbiF0OyR (ORCPT
+        with ESMTP id S235197AbiF0Oyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:54:17 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C053915839
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:54:15 -0700 (PDT)
-Received: (qmail 121138 invoked by uid 1000); 27 Jun 2022 10:54:14 -0400
-Date:   Mon, 27 Jun 2022 10:54:14 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Neal Liu <neal_liu@aspeedtech.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <roger.quadros@nokia.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-Subject: Re: [PATCH v2] usb: gadget: f_mass_storage: Make CD-ROM emulation
- works with Windows OS
-Message-ID: <YrnEli0fdOERpIXe@rowland.harvard.edu>
-References: <20220624021916.318067-1-neal_liu@aspeedtech.com>
- <YrXJss4cTtfenu90@rowland.harvard.edu>
- <HK0PR06MB320272ACB1CA4ADFF8DDABC080B99@HK0PR06MB3202.apcprd06.prod.outlook.com>
+        Mon, 27 Jun 2022 10:54:40 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FC2115A21;
+        Mon, 27 Jun 2022 07:54:36 -0700 (PDT)
+Received: from [192.168.100.8] (unknown [112.20.112.134])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX9enxLlinxxgAA--.5695S3;
+        Mon, 27 Jun 2022 22:54:31 +0800 (CST)
+Message-ID: <00688b96-a194-71e6-726a-15ee949e7648@loongson.cn>
+Date:   Mon, 27 Jun 2022 22:54:31 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <HK0PR06MB320272ACB1CA4ADFF8DDABC080B99@HK0PR06MB3202.apcprd06.prod.outlook.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 07/20] docs: zh_CN/vm: fix a typo for page reporting
+ ReST file
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Alex Shi <alexs@kernel.org>, linux-kernel@vger.kernel.org
+References: <cover.1656234456.git.mchehab@kernel.org>
+ <c7db8f975f461eaebd7ea7489ff9666d89e121c6.1656234456.git.mchehab@kernel.org>
+From:   YanTeng Si <siyanteng@loongson.cn>
+In-Reply-To: <c7db8f975f461eaebd7ea7489ff9666d89e121c6.1656234456.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxX9enxLlinxxgAA--.5695S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFWfZr17uFyDtFWDZF4rAFb_yoW8CryrpF
+        ykKr92ga42yw15G347Gw47Cw18ZF4xGa1UCryUtw4rWrsxJ3W0yr40kF90ga9xXr1vqFZI
+        9F4SkF90g34jyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvFb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkI
+        ecxEwVAFwVW5XwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_
+        Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        xUc73kDUUUU
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 02:56:40AM +0000, Neal Liu wrote:
-> > On Fri, Jun 24, 2022 at 10:19:16AM +0800, Neal Liu wrote:
-> > > Add read TOC with format 1 to support CD-ROM emulation with Windows
-> > > OS.
-> > > This patch is tested on Windows OS Server 2019.
-> > >
-> > > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> > > ---
-> > >  drivers/usb/gadget/function/f_mass_storage.c | 5 +++--
-> > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/gadget/function/f_mass_storage.c
-> > > b/drivers/usb/gadget/function/f_mass_storage.c
-> > > index 3a77bca0ebe1..9edf76c22605 100644
-> > > --- a/drivers/usb/gadget/function/f_mass_storage.c
-> > > +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> > > @@ -1209,7 +1209,8 @@ static int do_read_toc(struct fsg_common
-> > > *common, struct fsg_buffhd *bh)
-> > >
-> > >  	switch (format) {
-> > >  	case 0:
-> > > -		/* Formatted TOC */
-> > > +	case 1:
-> > > +		/* Formatted TOC, Session info */
-> > 
-> > This comment is a little misleading.  0 is formatted TOC, and 1 is
-> > multi-session info.  The way you wrote it, it looks like the comment applies to
-> > both formats.  Do it like this:
-> > 
-> > 	case 0:		/* Formatted TOC */
-> > 	case 1:		/* Multi-session info */
-> > 
-> 
-> Okay, looks more clear. I'll fix it in next patch.
-> 
-> > >  		len = 4 + 2*8;		/* 4 byte header + 2 descriptors */
-> > >  		memset(buf, 0, len);
-> > >  		buf[1] = len - 2;	/* TOC Length excludes length field */
-> > 
-> > It looks like you ignored one of the problems I pointed out in my earlier email:
-> > 
-> > > When format is 1, the driver is supposed to ignore the start_track
-> > > value.  Your patch does not do this.
-> > 
-> > Please fix this.
-> > 
-> 
-> Do you mean ignore the "start_track > 1" above?
 
-Yes, that's what I mean.
+在 2022/6/26 17:10, Mauro Carvalho Chehab 写道:
+> typo:
+> 	_free_page_reporting.rst -> free_page_reporting.rst
+>
+> Fixes: 9859b277bffe ("docs/zh_CN: add vm frontswap translation")
+> Fixes: adeacecbd36c ("docs/zh_CN: add free_page_reporting translation")
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-> Do this check only for format 0? Or format 0 & 2?
+Acked-by: Yanteng Si<siyanteng@loongson.cn>
 
-According to the MMC spec, the Track/Session Number is ignored for 
-format 1.  For format 0 it is valid as a Track Number, and for format 2 
-it is valid as a Session Number.  Therefore it should be checked for 
-formats 0 and 2 but not for format 1.
+Thanks,
+Yanteng
 
-Alan Stern
+> ---
+>
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1656234456.git.mchehab@kernel.org/
+>
+>   Documentation/translations/zh_CN/vm/free_page_reporting.rst | 2 +-
+>   Documentation/translations/zh_CN/vm/frontswap.rst           | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/translations/zh_CN/vm/free_page_reporting.rst b/Documentation/translations/zh_CN/vm/free_page_reporting.rst
+> index 31d6c34b956b..14336a3aa5f4 100644
+> --- a/Documentation/translations/zh_CN/vm/free_page_reporting.rst
+> +++ b/Documentation/translations/zh_CN/vm/free_page_reporting.rst
+> @@ -1,6 +1,6 @@
+>   .. include:: ../disclaimer-zh_CN.rst
+>   
+> -:Original: Documentation/vm/_free_page_reporting.rst
+> +:Original: Documentation/vm/free_page_reporting.rst
+>   
+>   :翻译:
+>   
+> diff --git a/Documentation/translations/zh_CN/vm/frontswap.rst b/Documentation/translations/zh_CN/vm/frontswap.rst
+> index 3eb07870e2ef..98aa6f581ea7 100644
+> --- a/Documentation/translations/zh_CN/vm/frontswap.rst
+> +++ b/Documentation/translations/zh_CN/vm/frontswap.rst
+> @@ -1,4 +1,4 @@
+> -:Original: Documentation/vm/_free_page_reporting.rst
+> +:Original: Documentation/vm/free_page_reporting.rst
+>   
+>   :翻译:
+>   
+

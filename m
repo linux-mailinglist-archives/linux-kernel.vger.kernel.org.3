@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BE655C655
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E2655D7C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237618AbiF0LpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
+        id S239487AbiF0L7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237408AbiF0Lmt (ORCPT
+        with ESMTP id S238840AbiF0Lwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:42:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9006EB8;
-        Mon, 27 Jun 2022 04:37:23 -0700 (PDT)
+        Mon, 27 Jun 2022 07:52:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52C5DEBB;
+        Mon, 27 Jun 2022 04:45:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90385B8111B;
-        Mon, 27 Jun 2022 11:37:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB74C3411D;
-        Mon, 27 Jun 2022 11:37:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41C1E61192;
+        Mon, 27 Jun 2022 11:45:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A90DC3411D;
+        Mon, 27 Jun 2022 11:45:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329841;
-        bh=bqRXFxor9G/w/qz5p3HqTcjfA3BWyqfO3Up8XN+Lo7w=;
+        s=korg; t=1656330352;
+        bh=j9qNbIV5qykTmfb74nTj6QNsbGZq+ysCLwQ6Ymh4+Ek=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P0gAQzC0vubjXg3/o/9FSq3BFik1NXC5x8r+mo3OUJX7+XPBfCj20kGsvMjEprPYx
-         AelnNjWQzVH/iWg5lA0+1v/VqRtQc0H056002LBhB+MC22FWMNeqPwYmZFMg9hpaIj
-         z8uYXb35sKAwlyhuNsz/v9+P7ddgTkWkVjVHyPO4=
+        b=Tu+wE2EnVQwNhqPEnx+pKfG01kDr82gj13Qw/FGT7HeIDRO5RIBOIMYapyvqOgTt9
+         0J9tfu0hsqE5AylGwE/TqQ4XvCZwMoLNHG/2GmhPUOzRcddrzR7Pfc/yieP9nEY5lZ
+         dOFUyUgG6m1t9J+XiG1StTNexWhMSfmAQswWxPVk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH 5.15 134/135] kbuild: link vmlinux only once for CONFIG_TRIM_UNUSED_KSYMS (2nd attempt)
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH 5.18 168/181] soc: bcm: brcmstb: pm: pm-arm: Fix refcount leak in brcmstb_pm_probe
 Date:   Mon, 27 Jun 2022 13:22:21 +0200
-Message-Id: <20220627111942.038354765@linuxfoundation.org>
+Message-Id: <20220627111949.557099893@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 53632ba87d9f302a8d97a11ec2f4f4eec7bb75ea upstream.
+commit 37d838de369b07b596c19ff3662bf0293fdb09ee upstream.
 
-If CONFIG_TRIM_UNUSED_KSYMS is enabled and the kernel is built from
-a pristine state, the vmlinux is linked twice.
+of_find_matching_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Commit 3fdc7d3fe4c0 ("kbuild: link vmlinux only once for
-CONFIG_TRIM_UNUSED_KSYMS") explains why this happens, but it did not fix
-the issue at all.
+In brcmstb_init_sram, it pass dn to of_address_to_resource(),
+of_address_to_resource() will call of_find_device_by_node() to take
+reference, so we should release the reference returned by
+of_find_matching_node().
 
-Now I realized I had applied a wrong patch.
-
-In v1 patch [1], the autoksyms_recursive target correctly recurses to
-"$(MAKE) -f $(srctree)/Makefile autoksyms_recursive".
-
-In v2 patch [2], I accidentally dropped the diff line, and it recurses to
-"$(MAKE) -f $(srctree)/Makefile vmlinux".
-
-Restore the code I intended in v1.
-
-[1]: https://lore.kernel.org/linux-kbuild/1521045861-22418-8-git-send-email-yamada.masahiro@socionext.com/
-[2]: https://lore.kernel.org/linux-kbuild/1521166725-24157-8-git-send-email-yamada.masahiro@socionext.com/
-
-Fixes: 3fdc7d3fe4c0 ("kbuild: link vmlinux only once for CONFIG_TRIM_UNUSED_KSYMS")
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Tested-by: Sami Tolvanen <samitolvanen@google.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Fixes: 0b741b8234c8 ("soc: bcm: brcmstb: Add support for S2/S3/S5 suspend states (ARM)")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/soc/bcm/brcmstb/pm/pm-arm.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/Makefile
-+++ b/Makefile
-@@ -1163,7 +1163,7 @@ KBUILD_MODULES := 1
+--- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
++++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+@@ -783,6 +783,7 @@ static int brcmstb_pm_probe(struct platf
+ 	}
  
- autoksyms_recursive: descend modules.order
- 	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/adjust_autoksyms.sh \
--	  "$(MAKE) -f $(srctree)/Makefile vmlinux"
-+	  "$(MAKE) -f $(srctree)/Makefile autoksyms_recursive"
- endif
- 
- autoksyms_h := $(if $(CONFIG_TRIM_UNUSED_KSYMS), include/generated/autoksyms.h)
+ 	ret = brcmstb_init_sram(dn);
++	of_node_put(dn);
+ 	if (ret) {
+ 		pr_err("error setting up SRAM for PM\n");
+ 		return ret;
 
 

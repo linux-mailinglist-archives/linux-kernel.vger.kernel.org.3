@@ -2,186 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D9455DE27
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64DA55C1E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242532AbiF0WCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 18:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
+        id S242067AbiF0WET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 18:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242227AbiF0V7j (ORCPT
+        with ESMTP id S242431AbiF0WCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 17:59:39 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B411CB2E;
-        Mon, 27 Jun 2022 14:57:23 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id k15so11056093iok.5;
-        Mon, 27 Jun 2022 14:57:23 -0700 (PDT)
+        Mon, 27 Jun 2022 18:02:01 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3290BBC2A
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:58:57 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id a16so6950822ilr.6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9GT2nNkf49vF8e158U/wUxr794H1AaU7oOi4NpwptRo=;
+        b=hI3vmhAhkEP9/+pbu0tlgrBl5K2kpR9NO/0KOOMQlkWERtpIiGxuMs6UYoVc0khr1B
+         T2N/zjxyZ5U9LpQOGiqhXC46jisNQvSetx43pFRoxEn/5vcfNHzlu0/SbHmnKwALj9iq
+         9jM1ZidZCct2NUfVieaRv5q5u1wMbm8FSEJXk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GByTRovhreeBVcySF/6td5WnIoeUKJH8EVN0W2QYucY=;
-        b=gKrkD2reMY/KvDMNmxPtPyaMIMGlcP6HoJqXkBmqHnn04hPHz2i/8r1TDiliJO/sbr
-         0dz7kye4gnFG/XdWBTxshmvciOpz7YwE3JP8Is/CqQ3CyqgGsDjCoRC7/ZwAlLKwv2mc
-         WtOL+AgSnzAgrkOCrJ2iGDj9k+FYRQvt7B/78WKbbVxmWirNvoalQBdYRQ5ZBdJp6nll
-         tksE+q1YLZJHe8Rt9hV2RQOcCGCz0i+6vdWE2GuOvhbvzVAgX/78MZh8mpZj6XOxQSHF
-         b5S+IRvb65Hi0tbtbcjSeOEEKr3Uq2F4IGlEueK3JiXPPvIEvRn7Y21xpF+7eZHzOXRM
-         bkTg==
-X-Gm-Message-State: AJIora+KgyI+qr/WxduJ+t/AmOf4fJHsIdq42z9VHgIzHWuCEQ+vbTV5
-        44rac9ISt2UGdSDKbqw5aKQckFNjyQ==
-X-Google-Smtp-Source: AGRyM1uMna/0ZhSmeNlsBB7VjCYVusraceaPQMcCVlLmwH+8k6NuzZefhWbziP1Ag2HjwKDfsksPdg==
-X-Received: by 2002:a02:c619:0:b0:339:bc5a:205e with SMTP id i25-20020a02c619000000b00339bc5a205emr9510427jan.184.1656367042314;
-        Mon, 27 Jun 2022 14:57:22 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id h8-20020a92d848000000b002da9f82c703sm956479ilq.5.2022.06.27.14.57.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 14:57:21 -0700 (PDT)
-Received: (nullmailer pid 3036027 invoked by uid 1000);
-        Mon, 27 Jun 2022 21:57:20 -0000
-Date:   Mon, 27 Jun 2022 15:57:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, chrome-platform@lists.linux.dev,
-        Guenter Roeck <groeck@chromium.org>,
-        Craig Hesling <hesling@chromium.org>,
-        Tom Hughes <tomhughes@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH v6 2/2] dt-bindings: cros-ec: Add ChromeOS fingerprint
- binding
-Message-ID: <20220627215720.GA3004792-robh@kernel.org>
-References: <20220614195144.2794796-1-swboyd@chromium.org>
- <20220614195144.2794796-3-swboyd@chromium.org>
- <CAD=FV=UU-AENyChCvVAKH709E4hFtgo4Txa8zFDY=JM1UifA0g@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9GT2nNkf49vF8e158U/wUxr794H1AaU7oOi4NpwptRo=;
+        b=kDS0aDOIB1oJYa2P+PScjblpI5WHVaiu58VfwfNIYFVklfB4Ppynndx2IgY8dIF+YS
+         zw7w4O69YfQ3YbeIsajWQjAXP1BJPzmPaQUhxwMzb1gzT96LgPkrKeNJ7XTK9gOGYKVf
+         WlUBCFJIfc5S/Iwlfow4LcYVdOtycceKVxmFGJ5EL8h5fFvSsw67/W5SksjBNIjC1Elv
+         g4zxs414YlR9OSfHxsa4ixX1gcPpzgjEcWWuyCWZ1xRmsdQRoryN38Pkau90UedgfEYL
+         /q5xyJ9UR0kOQNdUO1wSsMBbO1Kn4YeIx8R8ZhtOaJzDEr1IMYlUL41rh73baN1nhdkJ
+         dzBA==
+X-Gm-Message-State: AJIora8PYGcQ9PPekH+jZUXIQkQtRqPNF4qN2WduZVQu0La97db/9h7H
+        Rte8s6nX8aNw3Q/AIznS/tcm0A==
+X-Google-Smtp-Source: AGRyM1uZ8G2wTmyTVBvBNcpvF0K/igCH/hzNr+NZzmvopzmHYb/uOzsaqR+LDhuX70NqRGsjSNzyvg==
+X-Received: by 2002:a92:a041:0:b0:2d7:7935:effa with SMTP id b1-20020a92a041000000b002d77935effamr7843380ilm.222.1656367136275;
+        Mon, 27 Jun 2022 14:58:56 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id t3-20020a056e02060300b002d93c072c56sm4031214ils.40.2022.06.27.14.58.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 14:58:55 -0700 (PDT)
+Subject: Re: [PATCH 5.4 00/60] 5.4.202-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <ff5f22d8-37b5-df9d-5873-4a9ce7c1b070@linuxfoundation.org>
+Date:   Mon, 27 Jun 2022 15:58:55 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=UU-AENyChCvVAKH709E4hFtgo4Txa8zFDY=JM1UifA0g@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 03:41:25PM -0700, Doug Anderson wrote:
-> Hi,
+On 6/27/22 5:21 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.202 release.
+> There are 60 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> On Tue, Jun 14, 2022 at 12:51 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Add a binding to describe the fingerprint processor found on Chromebooks
-> > with a fingerprint sensor. Previously we've been describing this with
-> > the google,cros-ec-spi binding but it lacks gpio and regulator control
-> > used during firmware flashing.
-> >
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> > Cc: <devicetree@vger.kernel.org>
-> > Cc: <chrome-platform@lists.linux.dev>
-> > Cc: Guenter Roeck <groeck@chromium.org>
-> > Cc: Douglas Anderson <dianders@chromium.org>
-> > Cc: Craig Hesling <hesling@chromium.org>
-> > Cc: Tom Hughes <tomhughes@chromium.org>
-> > Cc: Alexandru M Stan <amstan@chromium.org>
-> > Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-> > Cc: Matthias Kaehlcke <mka@chromium.org>
-> > Cc: Benson Leung <bleung@chromium.org>
-> > Cc: Lee Jones <lee.jones@linaro.org>
-> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> > ---
-> >  .../bindings/chrome/google,cros-ec-fp.yaml    | 97 +++++++++++++++++++
-> >  .../bindings/mfd/google,cros-ec.yaml          |  9 ++
-> >  2 files changed, 106 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/chrome/google,cros-ec-fp.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/chrome/google,cros-ec-fp.yaml b/Documentation/devicetree/bindings/chrome/google,cros-ec-fp.yaml
-> > new file mode 100644
-> > index 000000000000..48c02bd4585c
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/chrome/google,cros-ec-fp.yaml
-> > @@ -0,0 +1,97 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/chrome/google,cros-ec-fp.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: ChromeOS Embedded Fingerprint Controller
-> > +
-> > +description:
-> > +  Google's ChromeOS embedded fingerprint controller is a device which
-> > +  implements fingerprint functionality such as unlocking a Chromebook
-> > +  without typing a password.
-> > +
-> > +maintainers:
-> > +  - Tom Hughes <tomhughes@chromium.org>
-> > +
-> > +select:
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        const: google,cros-ec-spi
-> > +  required:
-> > +    - compatible
-> > +    - boot0-gpios
+> Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
+> Anything received after that time might be too late.
 > 
-> I've never personally used "select" before and I'm not sure where it's
-> documented. 
-
-Documentation/devicetree/bindings/writing-schema.rst
-
-> Without knowing anything, it seems weird to me that in
-> this file we're matching against a compatible that's not
-> google,cros-ec-fp. Randomly grabbing some other example that's similar
-> (panel-lvds.yaml) looks more like what I would have expected. AKA in
-> this file:
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.202-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
 > 
-> select:
->   properties:
->     compatible:
->       contains:
->         const: google,cros-ec-fp
->   required:
->     - compatible
+> thanks,
 > 
-> ...and then in the other file:
+> greg k-h
 > 
-> select:
->   properties:
->     compatible:
->       contains:
->         const: google,cros-ec-spi
 
-What about i2c and rpmsg variants?
+Compiled and booted on my test system. No dmesg regressions.
 
->   not:
->     properties:
->       compatible:
->         contains:
->           const: google,cros-ec-fp
->   required:
->     - compatible
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-That is what is needed assuming the binding stands as-is. Otherwise, 
-boot0-gpios erroneously present or missing will give unexpected results.
-
-If we were starting from scratch, I would say you should just drop 
-'google,cros-ec-spi' from this binding. But I guess you want to preserve 
-compatibility here. In that case, I think all this should be added to 
-the existing doc with an if/then schema for conditional parts. That also 
-avoids defining the common properties twice or moving them to a common, 
-shared schema.
-
-Rob
+thanks,
+-- Shuah

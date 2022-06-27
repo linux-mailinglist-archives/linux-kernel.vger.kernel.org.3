@@ -2,102 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B58D55DFF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AAF455C626
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238177AbiF0RcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
+        id S239063AbiF0Rep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231809AbiF0RcS (ORCPT
+        with ESMTP id S236463AbiF0Rel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:32:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0686153;
-        Mon, 27 Jun 2022 10:32:16 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (unknown [194.36.25.20])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2C504660163E;
-        Mon, 27 Jun 2022 18:32:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656351135;
-        bh=pmO4Ykqu/l20TUXuLhKhk6GbE3MTS3qlWrVbXnn/+6U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=g/nB/8IAeor6UrcJ/kdz+O718V+XFBHN9Zq3n8MTcJdc8FRc5LcQ6SWSxfipd22Me
-         paFkUhw9ToV3wCp9P+PIBY91UjrQCPMr5ksUMPO+ra5sTUdybdVNEV4a3fNQcrpHy1
-         dN7I6+iYlLzslQKvfNRclWUjNkIcrJmjXB8nx/77mi3ZbcC88/wHEXv2KKM0cEHJKq
-         oBLOIVk6hln1mQOxKF9PGN3+nVzfTm6qNVjNQvNde8S9l+bcOIqw1Zj8xZN6JPyIgD
-         kgO7jphOwrI2a5BJMlzFfeNSPAcBNhsRU4OwGmtNv/bz9eXG++K+J0ExqnZ0/k7PsG
-         dhwWV56rPC4Og==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>,
+        Mon, 27 Jun 2022 13:34:41 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64D1B1CD;
+        Mon, 27 Jun 2022 10:34:39 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id p69so10277998iod.10;
+        Mon, 27 Jun 2022 10:34:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=a/8X5CuFWSs44Wf8DabrTq3lrtrQa6yryAnIBK8XrMM=;
+        b=dpTwiJs0sVdT1dprtR6W49mKRmiOZLvX5QJCz7jLaFoMhZ613SSTKyOjtjAveo6f9A
+         QPxBnkiAQXYnLrS+bZKV5vhwtPD/menrEhc7E0mDpeMR2SETfT/cM4GQxRRj8bX4wkTU
+         b/eCoCRC/RbBKBU2SHKxRGq8sVjwQl2vdyBlFv5gEEwlP4bWZWta0xqIeGC78IcaSAtz
+         OVRMszn/hNqDJDDA2yV0uSaQCdG+tBhNBVnwkugxeCGpz9IiNUL0E3Sw9R+KMVwAUtqX
+         /qIhBATsJkFj8VMAb+53kmuODivn4ojdzNuz9q5R/hOIOvfu4CGibjST1azv2xe2eHz/
+         1e/g==
+X-Gm-Message-State: AJIora8k2Xj/cnpRQnvlyI9Hu7EPJd9KBbf7EHwXKJFXG8RTmpb74Tam
+        QaTvFEEOrW4RuxVmz/oQetcRCiGmGw==
+X-Google-Smtp-Source: AGRyM1sywh7nza/vYaLVKSMTgBH/gRL4kZTOpa021AlwH6FPO+QZDC2J6Bq3pJHgENIJ1ZNse6UfLQ==
+X-Received: by 2002:a5e:c60a:0:b0:674:fd9d:e31f with SMTP id f10-20020a5ec60a000000b00674fd9de31fmr7164558iok.148.1656351278940;
+        Mon, 27 Jun 2022 10:34:38 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id i39-20020a023b67000000b00339e90e57e6sm4946959jaf.104.2022.06.27.10.34.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 10:34:38 -0700 (PDT)
+Received: (nullmailer pid 2637344 invoked by uid 1000);
+        Mon, 27 Jun 2022 17:34:36 -0000
+Date:   Mon, 27 Jun 2022 11:34:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Hakan Jansson <hakan.jansson@infineon.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH] dt-bindings: pinctrl: mt8192: Add RSEL values to bias-pull-{up,down}
-Date:   Mon, 27 Jun 2022 13:32:08 -0400
-Message-Id: <20220627173209.604400-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.36.1
+        Linus Walleij <linus.walleij@linaro.org>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: net: broadcom-bluetooth: Add CYW55572
+ DT binding
+Message-ID: <20220627173436.GA2616639-robh@kernel.org>
+References: <cover.1655723462.git.hakan.jansson@infineon.com>
+ <acd9e85b1ba82875e83ca68ae2aa62d828bfdfa3.1655723462.git.hakan.jansson@infineon.com>
+ <2c753258-b68e-b2ad-c4cc-f0a437769bc2@linaro.org>
+ <cb973352-36f9-8d70-95ac-5b63a566422c@infineon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cb973352-36f9-8d70-95ac-5b63a566422c@infineon.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit fe44e4984018 ("pinctrl: mediatek: add rsel setting on mt8192")
-added RSEL bias type definition for some pins on mt8192. In order to be
-able to configure the bias on those pins, add the RSEL values in the
-bias-pull-up and bias-pull-down properties in the binding.
+On Mon, Jun 20, 2022 at 04:06:25PM +0200, Hakan Jansson wrote:
+> Hi Krzysztof,
+> 
+> Thanks for replying.
+> 
+> On 6/20/2022 2:32 PM, Krzysztof Kozlowski wrote:
+> > > CYW55572 is a Wi-Fi + Bluetooth combo device from Infineon.
+> > > Extend the binding with its DT compatible.
+> > > 
+> > > Signed-off-by: Hakan Jansson <hakan.jansson@infineon.com>
+> > > ---
+> > >   Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml | 1 +
+> > >   1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
+> > > index df59575840fe..71fe9b17f8f1 100644
+> > > --- a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
+> > > +++ b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
+> > > @@ -24,6 +24,7 @@ properties:
+> > >         - brcm,bcm43540-bt
+> > >         - brcm,bcm4335a0
+> > >         - brcm,bcm4349-bt
+> > > +      - infineon,cyw55572-bt
+> > Patch is okay, but just to be sure - is it entirely different device
+> > from Infineon or some variant of Broadcom block?
+> 
+> CYW55572 is a new device from Infineon. It is not the same as any Broadcom
+> device.
+> 
+> >   Are all existing
+> > properties applicable to it as well?
+> 
+> Yes, all existing properties are applicable.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Including 'brcm,bt-pcm-int-params'? I don't see a BT reset signal 
+either, but maybe that's not pinned out in the AzureWave module which 
+was the only documentation details I could find[1].
 
----
+I think a separate doc will be better as it can be more precise as to 
+what's allowed or not. It's fine to reuse the same property names 
+though.
 
- .../devicetree/bindings/pinctrl/pinctrl-mt8192.yaml         | 6 ++++++
- 1 file changed, 6 insertions(+)
+Rob
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8192.yaml b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8192.yaml
-index e39f5893bf16..e0e943e5b874 100644
---- a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8192.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8192.yaml
-@@ -90,6 +90,9 @@ patternProperties:
-               - enum: [100, 101, 102, 103]
-                 description: PUPD/R1/R0 pull down type. See MTK_PUPD_SET_R1R0_
-                   defines in dt-bindings/pinctrl/mt65xx.h.
-+              - enum: [200, 201, 202, 203]
-+                description: RSEL pull down type. See MTK_PULL_SET_RSEL_
-+                  defines in dt-bindings/pinctrl/mt65xx.h.
- 
-           bias-pull-up:
-             oneOf:
-@@ -98,6 +101,9 @@ patternProperties:
-               - enum: [100, 101, 102, 103]
-                 description: PUPD/R1/R0 pull up type. See MTK_PUPD_SET_R1R0_
-                   defines in dt-bindings/pinctrl/mt65xx.h.
-+              - enum: [200, 201, 202, 203]
-+                description: RSEL pull up type. See MTK_PULL_SET_RSEL_
-+                  defines in dt-bindings/pinctrl/mt65xx.h.
- 
-           bias-disable: true
- 
--- 
-2.36.1
-
+[1] https://www.azurewave.com/img/infineon/AW-XH316_DS_DF_A_STD.pdf

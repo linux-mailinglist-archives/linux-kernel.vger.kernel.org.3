@@ -2,129 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E87655C917
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 488C255C8C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239515AbiF0Rqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
+        id S239332AbiF0RsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236600AbiF0Rqc (ORCPT
+        with ESMTP id S239557AbiF0RsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:46:32 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E49712AC6;
-        Mon, 27 Jun 2022 10:46:31 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 25RHkBIm029206;
-        Tue, 28 Jun 2022 02:46:12 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 25RHkBIm029206
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1656351972;
-        bh=eF/z4J3hvK46CYjkz0vW2qP3SSL8GNPi/m4MKa3lTA4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Cv6IvFBdMcUwAQjan0sYNsjrIyv7qi2kPgTqLmnAadqXJ5S76mJr+/deINoItIkcy
-         5ktlzDsGy8cmP6zMrf0omRH85sQvnbpx15riV0ABksOUo2VKdYublx+ZKYxfMLdr7O
-         aL/gbv6bQcT4iB/z5nG2hAk7KdP7AwLKEL0tgEriyZkBaevEmYvDgPq554yXOnG7+x
-         e5liEIswtuAPaZTj+MVd3pm5r15A4HqADODSB62cVk0aNYCLZ+G+Qp+Exfzi2Tl9zC
-         hQqn5t0P7O8fCB/uruXIPNwdMmN1FYCoR28ycT881hLDqEyUu4YlcJHr/p/N/Hwskg
-         OsPjS0kUZ8Ynw==
-X-Nifty-SrcIP: [209.85.221.44]
-Received: by mail-wr1-f44.google.com with SMTP id n1so14087225wrg.12;
-        Mon, 27 Jun 2022 10:46:12 -0700 (PDT)
-X-Gm-Message-State: AJIora+OHyQGo8IENuw5+4NsX2w+r4xMMpDLS6VX6K/cv4wH4ySziEXU
-        ebJoF+dvKTdF2s6XZtme92vXkCGJvhPTk4Das0k=
-X-Google-Smtp-Source: AGRyM1vOTihmrMGMQABUqpV4BfSLQb31+T6YJmO0Sla5hVJuoRGBowvH+3KWuuyg6Aj2mLDtIe82jcUBH+O98laxfmI=
-X-Received: by 2002:adf:f5ce:0:b0:21b:832c:80dd with SMTP id
- k14-20020adff5ce000000b0021b832c80ddmr13360923wrp.235.1656351970800; Mon, 27
- Jun 2022 10:46:10 -0700 (PDT)
+        Mon, 27 Jun 2022 13:48:15 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3216BC8E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:48:13 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id a2so17933333lfg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:48:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6aKB/QLCWmLrVGWONqEu+ORb8Q8cClKmFQluSXDoGZQ=;
+        b=i6zQDWekT3tX0R35o7h69Vg58Aqg2ifNeXuz7vS/si1KOVWhvAIIiDsflaLJYiHEbF
+         jtjOiSayX4xlpArK1PT3iJ27XuJWEt23imCAIL7lafzyP4kucEHso7QrpwhTX+6NvMNx
+         06OBRaK2cA6nnRAqYFWF9D697LNkjqIH18dBawktIMAZNmNkD3GGiqrkHimod//LyRIe
+         exFaGKq7UudYhVsmiYu2+S+0ZEqAu/o0h69JuVOSCoKmeIasfVhfLSBrK+SEe4+NbeOl
+         FEIF1cSbWGeOfLw9LXKWx/fDHD6VK2Vl4uEc5LPQ25b3Qsnbb8BI80sfLOKzhgCKfbRX
+         glFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6aKB/QLCWmLrVGWONqEu+ORb8Q8cClKmFQluSXDoGZQ=;
+        b=vPK3RlTcwCs2/iuNW3MVjICm+rZNQ2/ooN0jYw7swzXEALTTfvYb49s35279r+L9U/
+         Sj5PX4Or8XG8FyiE5BfmqvuS+2Abslx9aJtF6yjR5RLhVx6wN6dIMk8XU86S8WcCfAsF
+         5BC/AF7Tb3+dslQbwYMei40YTuB3qtqTtcoYce9JTDWgzIh6uQwPDZyUrADZTNfpPTIl
+         AVmHQZr8H0i3VEbW8dyABCos1ZJEKidgnAnhihxTOwRu1Jdh1jJiR3Ah/rR9FNIJYyb6
+         r4SZDzD4wDTerkklX9Ij8plzlOL5DZANQbrbb8IwtfNhZY4yB7ztL6H0RTCCi0ZqGpTz
+         jMww==
+X-Gm-Message-State: AJIora9/lLBQ9igS8pH2BzODNVTRE1L47AHOZ5magWDuxtDzU0QUZk4s
+        SAxCYVgVKBSxh4rVXTKXTObCRv8qTV59pGknj1qVpw==
+X-Google-Smtp-Source: AGRyM1vOwBmc/srzedpGTqPpTfRqYGh2g1w/wn6UMZGTSUFahPMJtlm9T22FvntsocrRqlh0nhqWSfHHdvpG1QdZLwU=
+X-Received: by 2002:ac2:495d:0:b0:47f:a2bc:762c with SMTP id
+ o29-20020ac2495d000000b0047fa2bc762cmr8801666lfi.93.1656352091777; Mon, 27
+ Jun 2022 10:48:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220627070214.432390-1-usama.anjum@collabora.com> <15532d64-6744-c8a5-184b-18358211d345@linuxfoundation.org>
-In-Reply-To: <15532d64-6744-c8a5-184b-18358211d345@linuxfoundation.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 28 Jun 2022 02:45:27 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARxSFSQgmrZe2CXj+V153kymBVyGkXwOPWLNoybQ8+bfg@mail.gmail.com>
-Message-ID: <CAK7LNARxSFSQgmrZe2CXj+V153kymBVyGkXwOPWLNoybQ8+bfg@mail.gmail.com>
-Subject: Re: [PATCH v1] kbuild: fix sub directory output build of kselftests
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kieran Bingham <kbingham@kernel.org>, kernel@collabora.com,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220618005457.2379324-1-vipinsh@google.com>
+In-Reply-To: <20220618005457.2379324-1-vipinsh@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Mon, 27 Jun 2022 10:47:35 -0700
+Message-ID: <CAHVum0euKMV+rCLXMQ4NuDAqowyeCkO1LheSafR2tm=R4aUfJw@mail.gmail.com>
+Subject: Re: [PATCH] scripts/tags.sh: Include tools directory in tags generation
+To:     gregkh@linuxfoundation.org, rkovhaev@gmail.com
+Cc:     dmatlack@google.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 1:54 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+On Fri, Jun 17, 2022 at 5:55 PM Vipin Sharma <vipinsh@google.com> wrote:
 >
-> On 6/27/22 1:02 AM, Muhammad Usama Anjum wrote:
-> > Build of kselftests fail if kernel's top most Makefile is used for
-> > running or building kselftests with separate output directory which is
-> > sub-directory. srctree is set to .. erroneously.
-> >
-> > make kselftest-all O=/linux_mainline/build
-> > Makefile:1080: ../scripts/Makefile.extrawarn: No such file or directory
-> >
-> > make kselftest-all O=build
-> > Makefile:1080: ../scripts/Makefile.extrawarn: No such file or directory
-> >
-> > Fix this by comparing abs_srctree with CURDIR instead of abs_objtree.
-> > CURDIR changes based on from where the command has been run and it sets
-> > the srctree correctly.
-> >
-> > Fixes: 25b146c5b8cee("kbuild: allow Kbuild to start from any directory")
-> > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> > ---
-> > Changes in V2:
-> > - Correct the bugfix instead of workaround
-> >
-> > V1: https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/
-> > ---
-> >   Makefile | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index e66358b64ede..4090d7afcda4 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -238,12 +238,12 @@ ifeq ($(need-sub-make),)
-> >   # so that IDEs/editors are able to understand relative filenames.
-> >   MAKEFLAGS += --no-print-directory
-> >
-> > -ifeq ($(abs_srctree),$(abs_objtree))
-> > +ifeq ($(abs_srctree),$(CURDIR))
-> >           # building in the source tree
-> >           srctree := .
-> >       building_out_of_srctree :=
-> >   else
-> > -        ifeq ($(abs_srctree)/,$(dir $(abs_objtree)))
-> > +        ifeq ($(abs_srctree)/,$(dir $(CURDIR)))
-> >                   # building in a subdirectory of the source tree
-> >                   srctree := ..
-> >           else
-> >
+> Add tools directory in generating tags and quiet the "No such file or
+> directory" warnings.
 >
-> Please resend cc'ing linux-kselftest
+> It reverts the changes introduced in commit 162343a876f1
+> ("scripts/tags.sh: exclude tools directory from tags generation") while
+> maintainig the original intent of the patch to get rid of the warnings.
+> This allows the root level cscope files to include tools source code
+> besides kernel and a single place to browse the code for both.
 >
-> thanks,
-> -- Shuah
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> ---
+>
+> I have found myself many times to browse tools and other part of the
+> kernel code together. Excluding tools from the root level cscope makes
+> it difficult to efficiently move between files and find user api
+> definitions.
+>
+> Root cause of these warning is due to generated .cmd files which use
+> relative paths in some files, I am not sure how to make them absolute
+> file paths which can satisfy realpath warnings. Also, not sure if those
+> warnings are helpful and should be kept. Passing "-q" to realpath seems
+> easier solution. Please, let me know if there is a better alternative.
+>
+> Thanks
+>
+>  scripts/tags.sh | 9 +--------
+>  1 file changed, 1 insertion(+), 8 deletions(-)
+>
+> diff --git a/scripts/tags.sh b/scripts/tags.sh
+> index 01fab3d4f90b5..e137cf15aae9d 100755
+> --- a/scripts/tags.sh
+> +++ b/scripts/tags.sh
+> @@ -25,13 +25,6 @@ else
+>         tree=${srctree}/
+>  fi
+>
+> -# ignore userspace tools
+> -if [ -n "$COMPILED_SOURCE" ]; then
+> -       ignore="$ignore ( -path ./tools ) -prune -o"
+> -else
+> -       ignore="$ignore ( -path ${tree}tools ) -prune -o"
+> -fi
+> -
+>  # Detect if ALLSOURCE_ARCHS is set. If not, we assume SRCARCH
+>  if [ "${ALLSOURCE_ARCHS}" = "" ]; then
+>         ALLSOURCE_ARCHS=${SRCARCH}
+> @@ -100,7 +93,7 @@ all_compiled_sources()
+>                 find $ignore -name "*.cmd" -exec \
+>                         grep -Poh '(?(?=^source_.* \K).*|(?=^  \K\S).*(?= \\))' {} \+ |
+>                 awk '!a[$0]++'
+> -       } | xargs realpath -es $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
+> +       } | xargs realpath -esq $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
+>         sort -u
+>  }
+>
+> --
+> 2.37.0.rc0.104.g0611611a94-goog
+>
 
+Hi Greg,
 
-Please do not send this any more.
-This part is good as is.
+Any update on the patch?
 
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Thanks
+Vipin

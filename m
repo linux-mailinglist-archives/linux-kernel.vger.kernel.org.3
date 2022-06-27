@@ -2,289 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9938A55DF87
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236EA55C843
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiF0FmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 01:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
+        id S230231AbiF0Fru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 01:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiF0FmN (ORCPT
+        with ESMTP id S229463AbiF0Frr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 01:42:13 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49FE26D7
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 22:42:10 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-317ae1236feso69606397b3.11
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 22:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=6ugrU1MGXLeENUAWeA/v71NxEcqwADvXjmhMwZVOVq8=;
-        b=OHHdWU/2lhPxL/k5W1dwQn2iMqr/+UvuVDchlcbajoyfFB7Ka/cgjeSp5XY68+mLWT
-         0H/pvZs9BGIFGofZgdsrskUhcjkI/g5RMoeiWkEKWYXXYhHmITfqADrjgSz+yX6ObglL
-         uviDshZcYc4XokwjOkjfB6LT1pka0mUc6GJR1031umZVDbYBmHdsPQ/dwjdRWWg57Bvx
-         9t1Yldjww5fEwlj6W1MTaUohLurlr2Z2jjnut/2lFg2HdRYGSKV/FK3Q6TVrCBxIOw7H
-         Qes3VzXMCvHdxupr5E5lvwT0XxqL54IL4B+XSmSxtCMFIQI80QqjHzJqpYQRWNTcEsx5
-         AYXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=6ugrU1MGXLeENUAWeA/v71NxEcqwADvXjmhMwZVOVq8=;
-        b=dhl4cxgF7J3utUVlIhfGNuPpIodeVn/7URELI1m6QmgSjAQ6x0pf9C2FOGfAzdnLE/
-         bJbkW0//kR4uEEToGNkPtZPQSwYaevRjVTxX+Q14FSDkIzSqnGtx3LHG3KwXUYsyUt9U
-         bYdb/q/RVUGJUhr2s1r0rmnCax9k5CAB6CQiiC7KAj4cNKI+LPGf+hH9Ai0CV/g+pXMr
-         16PbvCswA1syjfUdw8LJMo467JEu+lE0Q7n/SMfORjlrvf6p4XKPjzDgUKMLiY9B72WM
-         n/cYA5fTpcWuCbxdeTMjZH9GVd70mou7YsWB4QQZuvIWeRzjbyIfrD68en+vEKVVAtDz
-         YhGw==
-X-Gm-Message-State: AJIora/nSDhfeH7onUvtEuWGpcEQMmLsiZ+LPXHXWMi3t0TDLXy/ZQbv
-        yJzs9sExH45Zne7s1sN29v6Mtbi3UlDG
-X-Google-Smtp-Source: AGRyM1txBZUNVDIF9L2rRwBsk+bVepzTvUIy0qAiT+hxTSJnD4A1Z7vKbZz/EVc/NI2W6EFy+JZFN+Q8aJjU
-X-Received: from gthelen-ubiquity2.mtv.corp.google.com ([2620:0:1000:868b:b395:8c1b:8c90:79f5])
- (user=gthelen job=sendgmr) by 2002:a5b:98c:0:b0:64a:d5c3:4422 with SMTP id
- c12-20020a5b098c000000b0064ad5c34422mr12005685ybq.638.1656308529848; Sun, 26
- Jun 2022 22:42:09 -0700 (PDT)
-Date:   Sun, 26 Jun 2022 22:42:06 -0700
-In-Reply-To: <6bc6ae48-b569-2002-118a-d3468b0278cd@kernel.dk>
-Message-Id: <xr93czeu64sx.fsf@gthelen-ubiquity2.mtv.corp.google.com>
-Mime-Version: 1.0
-References: <1656164548242121@kroah.com> <xr93fsjr5901.fsf@gthelen-ubiquity2.mtv.corp.google.com>
- <ea9b3819-418a-5b79-8bcd-0b28ead70a61@kernel.dk> <6bc6ae48-b569-2002-118a-d3468b0278cd@kernel.dk>
-Subject: Re: Linux 5.10.125
-From:   Greg Thelen <gthelen@google.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Cc:     lwn@lwn.net, jslaby@suse.cz
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 27 Jun 2022 01:47:47 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90070.outbound.protection.outlook.com [40.107.9.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A117026E2;
+        Sun, 26 Jun 2022 22:47:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ekb2jO2TGz0bpRyOUCwW/JUNjOtOcdw6ZJuL1Itv4tDn02a8V3iisAvCs3eepxAQaqBX4BVqLcNtncrdONS6Y0Max1LsLlKNahmE8reBqeKYZanSBf5JHtpkrvR79Lujm8EeLYCzzejzlUiBizL7ILfw4IN9620E8ysNKJxLKVUPKKR8iFKThkWhWH0gsT8xgmHkcpmQAU0F4tCWnt+kgJ7/5Yr1/+jm+GyDJzAIsRCeFznu7HDhuaRPGyjI15EPiGFrmc09FYAe6eNzlJnyJGdo/G/jLXG1SVrdi95vUxhj0jCYm8Wx6XJsGwNXAjbRVzQr9sC2UIMMgJvTbYHsFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b1Q33phjBECCtetFkImhoykw5BTUIAQDmxJrl6FRRNI=;
+ b=BnL/ozCE9LpIHZpr8e63VMncrMB3+qH61I5c3/ybP/r2MEjFb3wgNoVAE40XJCHjyAFXvmPT2kn2sX6PGjOUFCX6jzvBjgCn+xkNxgkorzOwf8MEU2ZzEjpUOTS4b0Wmei6w1G3kt3YjdWfezJ1SWbZA2ABrtuqaC2tmv44k69bFc26AYmv/RlXFSQxEiDnJLK2BqSGlRHxlCuGC8IKAaeSBdCIyl39vD6eQdJT88AAcMxwAgAoIIvCyb/Ud8M2AjV+PeWijJSn3t6HlYhmX+7k8hfo+VrUiS5bc3Ie2Jz/qz2jo818l38xq1eRio05e1NUkleP51DKKUo1IeTsdaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b1Q33phjBECCtetFkImhoykw5BTUIAQDmxJrl6FRRNI=;
+ b=pGWZNTRnmLexpMa7Q/nqL+cJ8M93Hl0791x7PDWm4jDiKl5HbUb7WSlF3u5UUamYA4z0kygDA6/FdaedDDx1QGDItYJbQDnsnQQo370tqXwMYlgsvCVVeE4Ix/Cmrb4l/cEK4ss72f+Hs6eL9JnIU7Tv1f/S/Z6bZxLt4EomrMJquvmWQzQ+JLur6/EGLv9fX3wsZTJJS2TdJMDp/iQoqCfbgpSxE+4ZNyssBjEA4nNwu+THrpoHGP6GtQPU+QpED9Y5//breZIuoZXQPtEgnMo8GVZ3jB3Zu4mPdG88NKD6HX9Uyoj9doFWejyPFd4zNCzykwLwLKm3V6UNmts2FA==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB1617.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:14::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Mon, 27 Jun
+ 2022 05:47:42 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e10e:bd98:2143:4d44]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::e10e:bd98:2143:4d44%3]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
+ 05:47:42 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+CC:     "hch@infradead.org" <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V4 01/26] mm/mmap: Build protect protection_map[] with
+ __P000
+Thread-Topic: [PATCH V4 01/26] mm/mmap: Build protect protection_map[] with
+ __P000
+Thread-Index: AQHYh4UJI5SazA4DbUS8logWIeWXuK1iw8qA
+Date:   Mon, 27 Jun 2022 05:47:42 +0000
+Message-ID: <6d213700-9e7f-409a-3dc7-186eeae87099@csgroup.eu>
+References: <20220624044339.1533882-1-anshuman.khandual@arm.com>
+ <20220624044339.1533882-2-anshuman.khandual@arm.com>
+In-Reply-To: <20220624044339.1533882-2-anshuman.khandual@arm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 627a2f02-a3ec-4244-2a4f-08da58008d5b
+x-ms-traffictypediagnostic: MR1P264MB1617:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FvpwNnecMqvEhKSRaF0JGfkPlXWTCIholoUWM1P8LBk4pQtufEdp7+/Tu8cO7uT1TPahAxV8v+UB//+aZu9iScjF7TAzKewVbvlThG2cO/N5MMUbLmdeG5VrYuFiUjc4xyFmWAtpXC8RaXEXDL6EEbEhLhU6QVh1VUi3Rt9Wy3pO2FA23VePBa6ejl3UlO5OE5JHX67vMMocOBOj6kAr2/fIxbfCAJjr3iAqg/T2YuWvYzMytjzWieT4yf0heKHl+xoQml6ampl4c6sCU6sG4yRsx+npjKVvLhvHxxK3f0Z1gtOyBONR0+tywoMfDpb0GPJrmxKeQ7cpRLYSk+1WgZAyZI1HjIK87STREoyuFfy0bPPfeH3FTNI8qBqrkp/WbQX1IivogUf18SRamJp8M0WF+ERPDuqT/nmJBjgJ74cBPtTEvD6JQxxbnEEdk7YJfxnC227f3/LMtKpIekZl0kmibfVFxqalt1Bdwv+xdmxkRuUufVfFC0OqCn8UpNZv8elBhZSV9L7tW9B3u9nuOjXwwNCJcBhK0KRrX4863FbShWeo2WXTDwAXv3vEj+BwpKoJXh9AUYrS4UabKz6TKzBWluxfr7Qw4TGzNNkoPdCTjLLrBpc948mU/803U0e9BpQDS5qvQIaSh+Z832naLYgL3yjwrKI0f44uBDnX08a7zkdZ+Hhdd3ViwWG2scve4KkdUbCmWFL6NT5sYaIdVLBgzjq8ajH9YC2Bii4FTqzHQVXvmeY4JDNhKiLFT0QWKRkGKojSYfUkH+yRzddujtSOEFWtdzz/b255ZJjZKdHO669QQiTHuifINxT59imkMGmHklceq63m3ykj/+p+rpoym9CmTPaxn6UxS2WiwWg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39850400004)(396003)(366004)(346002)(376002)(136003)(36756003)(31696002)(86362001)(316002)(7416002)(2906002)(122000001)(54906003)(31686004)(110136005)(6512007)(6506007)(26005)(38070700005)(6486002)(66556008)(76116006)(4326008)(38100700002)(5660300002)(66476007)(66946007)(66446008)(8676002)(64756008)(71200400001)(2616005)(186003)(41300700001)(83380400001)(91956017)(44832011)(478600001)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z29haGtUVTlwdlYvczUyVmREK0xXMnBFS1I2ZDcxWUZyRFBnM1FOQTlFdlBG?=
+ =?utf-8?B?WlZERUVoUGhONXNJVmJYMzJiR2lsWjBsdTRXbmxseUxSdm1yNEYwK2xjUlZE?=
+ =?utf-8?B?Q3ZTNmp5N1VUN2NxR2V3UmwrbEwxMngrUGVsTFhydm1GcXRsaTc1MC9WUVh5?=
+ =?utf-8?B?a1BZOFdOYnV6WERjUUNFV1dXb2pEbUJvc0piZEp2dUZvVXphWWRWUVVuRGNn?=
+ =?utf-8?B?MXh2YlYreGM4algycUpnblVFVGVsbCtScmo2RFpSbjRVNE9odTlTUHBMRGth?=
+ =?utf-8?B?SFllMFRsVkRxdnJMaS9oZHRSZjNQZnZJRFh1bkJyRGlOQmJpd0hnNHBiTVFU?=
+ =?utf-8?B?MDFlL2ZhUHlZeDdHNGE5ZlA2T29PZ3pycWVQRUNnVFo2QXFTSWtmc1h2b29l?=
+ =?utf-8?B?b3doa2NMaXpWNWhKN0FTWWtJU0Y4RDZld2ZtZkZ3Vkh4dWtHcHAwN09PeXpK?=
+ =?utf-8?B?Y1VkbGJlUkh5clB0ZUNUYjhpYU1DcmhYUVB3djFNZ2FxRjdRK0ZaS21IVTJ6?=
+ =?utf-8?B?TTdxMlhRMFIrT1krU2JqNEZpc3ZoUzQxUExUa296YTl2NS9pVTliUFkxcVox?=
+ =?utf-8?B?NjI4V0sxRFBEQSsyOCtTcXJYV0NIY096RUJrb3Y1K1ovZTZiU2p6OW9nSGo5?=
+ =?utf-8?B?NXV1VVh4dEh2SUxKVDFVMXFOMGpmWVMrY0I0T2U2ditlUGs3WFdzWVcrYXF1?=
+ =?utf-8?B?WjViLzVuZG5zaWJ4RkNKYThSbld6U2Zmb3hTd2ZjYm1POUZiNktxTTFIRjlz?=
+ =?utf-8?B?VXE0Z2JQczBQa3lmK043Wm9yVXhxTnJaRFhvK3prK1M3MW1KNUI4S0VndTlp?=
+ =?utf-8?B?Z0Y0ZEJLVnJQZGt3QzdkdHFHMHVxSWpkcmFOamxpaE1BdWtVeFZUUDRCcXV2?=
+ =?utf-8?B?TStXdGU4a2d1bFVMNFV4dW8xYnVKb0VDdmw4dk96dXlGYTdEa2lvei94Vndw?=
+ =?utf-8?B?QkFKN1NmOWtOQ252UkhGRFhOK25JWnJFWE9mdjZlbDV3R0ZwNVpkRjBRVnF4?=
+ =?utf-8?B?d3FXR3htK3Y5ZDViV2R1OHNJZ05GNExSL2lZR2lON2J2YXBNT1pzS2JhVjY2?=
+ =?utf-8?B?WGdTa2dpR1FYakdJTmdDN3pTZnl1NFBKUXR5SzV0QlZVSytBZkMwdlV1M3FM?=
+ =?utf-8?B?TnhNb3VXVExLeTV6OHc5L1BRRW5qakZoeFV3WlZrckprWTRkczlkckdtSlpQ?=
+ =?utf-8?B?WGRKcFhiKzVRMG1xWVVaaWtFVGVqRkZITlJxcGEwZy9RU3pxOG52RjhKT3pC?=
+ =?utf-8?B?b1BPaFB1cGorSnpKb0ZRems2RzBCQ0JwYm90WHFtcXowU3dSZndhdkdVQnVF?=
+ =?utf-8?B?NmF3eG0vOU8vZ1dTWTk5ODVQM0FUOG9zVVpMZlYyTDQrYWtNVC81SHlHT1FD?=
+ =?utf-8?B?SFlOd1JSQmhJOXRUd1pJZXBSZ3RPcm9UOXFUeVBCOUdqQ29HZWU4UU91ZnZU?=
+ =?utf-8?B?bHo5SERDM3VWdWVORzVhOGRHeTJvUWNaM2JILyszYWZ5K2pZa0dEU3c1UEJQ?=
+ =?utf-8?B?RTN3YVpTSFNhUzM1TXNnSitodFc1Y1Fobjc2ZTdFdzJrb29tOGVDRi9CaE02?=
+ =?utf-8?B?ejR4V2M3Y3RzbVl1dkdhdnhJSm9UU0tIaTMrWHEzeWpvb0wzdHBENTdxb2lQ?=
+ =?utf-8?B?L1FLOExMckJuVjVaU2krS3dha3ZQR1FOc25Xak9VWkFmTHpXSlRRazRqOUJL?=
+ =?utf-8?B?ZWpQdVVKZjFPSS9TMHRTZG0zdGdOOW44NjJNY2JhUUtWbUY0SjRPNlRXN1pD?=
+ =?utf-8?B?MG1kK3lnblluTVZ3YThLT3M4OGZRK1BHOVYxajBOZHVNZ01icmNFNTN2TGcy?=
+ =?utf-8?B?L3B3c0wvUnFOTktwWEM1WXN2RnAzcjZzQUxLNGJ1c3hLc0hhQjIyNnlGc3hY?=
+ =?utf-8?B?djJEZ3RwMzFsOWx1aTVWOU9nZmx0a1NIOGFHcVA5SWo3bkNQSEFRbDJNWjg5?=
+ =?utf-8?B?VGIxdlFJVTA2WFpnbU50NVJnWENRVmp3YmJsbW1ZVFBvL2pCVjY2R0tQYVEz?=
+ =?utf-8?B?Nk5lY0pSazBXS2libXcwbWRac0hrVGw1NDlXRmJZSVdzaWVhbG9LZVVNOE9u?=
+ =?utf-8?B?ZUJERENNUENWaDFGNXVKTHZaMVN3RmpmbHk4cElTTG5ON0x3RGQzMHh4ME5E?=
+ =?utf-8?B?NXdFUXRqbldNSXo5UmJ4V0xzZWtuNFlZaFlhT2hFWFRqbXplNjB6M2hRUm9o?=
+ =?utf-8?Q?3iKYOjTFDWBgsTwSf39vo00=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A29F3570E7FDF74DB67B48A483FC2F0E@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 627a2f02-a3ec-4244-2a4f-08da58008d5b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 05:47:42.0684
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hE62QeN2RLuUqEHkHoanaJmzM/T2gj9KkWRc/pL8hdtx6yzO5xhFyqyMlx0OeS5mbtKOqglLf7RzE0FGUOp+nBGUJNjupF3I9Uw3X7rdGTU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB1617
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jens Axboe <axboe@kernel.dk> wrote:
-
-> On 6/26/22 6:04 PM, Jens Axboe wrote:
->> On 6/26/22 4:56 PM, Greg Thelen wrote:
->>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
->>>
->>>> I'm announcing the release of the 5.10.125 kernel.
->>>>
->>>> All users of the 5.10 kernel series must upgrade.
->>>>
->>>> The updated 5.10.y git tree can be found at:
->>>> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
->>>> and can be browsed at the normal kernel.org git web browser:
->>>> 	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
->>>>
->>>> thanks,
->>>>
->>>> greg k-h
->>>>
->>>> ------------
->>>>
->>>>  Makefile                              |    2 
->>>>  arch/arm64/mm/cache.S                 |    2 
->>>>  arch/s390/mm/pgtable.c                |    2 
->>>>  drivers/tty/serial/serial_core.c      |   34 ++++--------
->>>>  drivers/usb/gadget/function/u_ether.c |   11 +++-
->>>>  fs/io_uring.c                         |   23 +++++---
->>>>  fs/zonefs/super.c                     |   92 ++++++++++++++++++++++------------
->>>>  net/ipv4/inet_hashtables.c            |   31 ++++++++---
->>>>  8 files changed, 122 insertions(+), 75 deletions(-)
->>>>
->>>> Christian Borntraeger (1):
->>>>       s390/mm: use non-quiescing sske for KVM switch to keyed guest
->>>>
->>>> Damien Le Moal (1):
->>>>       zonefs: fix zonefs_iomap_begin() for reads
->>>>
->>>> Eric Dumazet (1):
->>>>       tcp: add some entropy in __inet_hash_connect()
->>>>
->>>> Greg Kroah-Hartman (1):
->>>>       Linux 5.10.125
->>>>
->>>> Jens Axboe (1):
->>>>       io_uring: add missing item types for various requests
->>>>
->>>> Lukas Wunner (1):
->>>>       serial: core: Initialize rs485 RTS polarity already on probe
->>>>
->>>> Marian Postevca (1):
->>>>       usb: gadget: u_ether: fix regression in setting fixed MAC address
->>>>
->>>> Will Deacon (1):
->>>>       arm64: mm: Don't invalidate FROM_DEVICE buffers at start of DMA transfer
->>>>
->>>> Willy Tarreau (5):
->>>>       tcp: use different parts of the port_offset for index and offset
->>>>       tcp: add small random increments to the source port
->>>>       tcp: dynamically allocate the perturb table used by source ports
->>>>       tcp: increase source port perturb table to 2^16
->>>>       tcp: drop the hash_32() part from the index calculation
->>>
->>> 5.10.125 commit df3f3bb5059d20ef094d6b2f0256c4bf4127a859 ("io_uring: add
->>> missing item types for various requests") causes panic when running
->>> test/iopoll.t from https://github.com/axboe/liburing commit
->>> dda4848a9911120a903bef6284fb88286f4464c9 (liburing-2.2).
->>>
->>> Here's a manually annotated panic message:
->>> [  359.047161] list_del corruption, ffffa42098824f80->next is LIST_POISON1 (dead000000000100)
->>> [  359.055393] kernel BUG at lib/list_debug.c:47!
->>> [  359.059786] invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC PTI
->>> [  359.065463] CPU: 11 PID: 15862 Comm: iopoll.t Tainted: G S        I       5.10.124 #1
->>> [  359.081804] RIP: 0010:__list_del_entry_valid+0x49/0x80
->>> [  359.086880] Code: c2 22 48 39 d1 74 25 48 8b 11 48 39 f2 75 2d 48 8b 50 08 48 39 f2 75 34 b0 01 5d c3 48 c7 c7 68 15 79 b1 31 c0 e8 c5 a2 5a 00 <0f> 0b 48 c7 c7 d8 8e 76 b1 31 c0 e8 b5 a2 5a 00 0f 0b 48 c7 c7 69
->>> [  359.105431] RSP: 0018:ffffb6b66785bd58 EFLAGS: 00010046
->>> [  359.110592] RAX: 000000000000004e RBX: ffffa42098824f00 RCX: d07284ea1fbba400
->>> [  359.117642] RDX: ffffa43f7f4f05b8 RSI: ffffa43f7f4dff48 RDI: ffffa43f7f4dff48
->>> [  359.124691] RBP: ffffb6b66785bd58 R08: 0000000000000000 R09: ffffffffb1f38540
->>> [  359.131740] R10: 00000000ffff7fff R11: 0000000000000000 R12: 0000000000000282
->>> [  359.138789] R13: ffffb6b66785beb8 R14: ffffa42095d33e00 R15: ffffa420937e3d20
->>> [  359.145836] FS:  00000000004f8380(0000) GS:ffffa43f7f4c0000(0000) knlGS:0000000000000000
->>> [  359.153830] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>> [  359.159506] CR2: 0000000000539388 CR3: 000000027b57c006 CR4: 00000000003706e0
->>> [  359.166552] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>> [  359.173600] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>> [  359.180647] Call Trace:
->>> [  359.183064]  io_dismantle_req+0x1da/0x2b0
->>>                     __list_del_entry [include/linux/list.h:132]
->>>                     list_del [include/linux/list.h:146]
->>>                     io_req_drop_files [fs/io_uring.c:5934]
->>>                     io_req_clean_work [fs/io_uring.c:1315]
->>>                     io_dismantle_req [fs/io_uring.c:1911]
->>> [  359.187023]  io_do_iopoll+0x4e5/0x790
->>> [  359.194602]  __se_sys_io_uring_enter+0x39b/0x6f0
->>> [  359.208318]  __x64_sys_io_uring_enter+0x29/0x30
->>> [  359.212793]  do_syscall_64+0x31/0x40
->>> [  359.216324]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
->> 
->> Well that sucks, I wonder why mine didn't fail like that. I'll see if I
->> can hit this and send a fix. Thanks for reporting!
->
-> Below should do it, I apologize for that. I think my test box booted the
-> previous kernel which is why it didn't hit it in my regression tests :-(
->
-> Greg, can you add this to 5.10-stable? Verified it ran tests with the
-> right kernel now...
->
->
-> commit d2aaf8fdc544a3edf44820a07294d693dedd12e3
-> Author: Jens Axboe <axboe@kernel.dk>
-> Date:   Sun Jun 26 18:16:17 2022 -0600
->
->     io_uring: use separate list entry for iopoll requests
->     
->     A previous commit ended up enabling file tracking for iopoll requests,
->     which conflicts with both of them using the same list entry for tracking.
->     Add a separate list entry just for iopoll requests, avoid this issue.
->     
->     No upstream commit exists for this issue.
->     
->     Reported-by: Greg Thelen <gthelen@google.com>
->     Fixes: df3f3bb5059d ("io_uring: add missing item types for various requests")
->     Signed-off-by: Jens Axboe <axboe@kernel.dk>
-
-Confirmed. This patch fixes the error I saw.
-
-Tested-by: Greg Thelen <gthelen@google.com>
-
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index 40ac37beca47..2e12dcbc7b0f 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -696,6 +696,8 @@ struct io_kiocb {
->  	 */
->  	struct list_head		inflight_entry;
->  
-> +	struct list_head		iopoll_entry;
-> +
->  	struct percpu_ref		*fixed_file_refs;
->  	struct callback_head		task_work;
->  	/* for polled requests, i.e. IORING_OP_POLL_ADD and async armed poll */
-> @@ -2350,8 +2352,8 @@ static void io_iopoll_queue(struct list_head *again)
->  	struct io_kiocb *req;
->  
->  	do {
-> -		req = list_first_entry(again, struct io_kiocb, inflight_entry);
-> -		list_del(&req->inflight_entry);
-> +		req = list_first_entry(again, struct io_kiocb, iopoll_entry);
-> +		list_del(&req->iopoll_entry);
->  		__io_complete_rw(req, -EAGAIN, 0, NULL);
->  	} while (!list_empty(again));
->  }
-> @@ -2373,14 +2375,14 @@ static void io_iopoll_complete(struct io_ring_ctx *ctx, unsigned int *nr_events,
->  	while (!list_empty(done)) {
->  		int cflags = 0;
->  
-> -		req = list_first_entry(done, struct io_kiocb, inflight_entry);
-> +		req = list_first_entry(done, struct io_kiocb, iopoll_entry);
->  		if (READ_ONCE(req->result) == -EAGAIN) {
->  			req->result = 0;
->  			req->iopoll_completed = 0;
-> -			list_move_tail(&req->inflight_entry, &again);
-> +			list_move_tail(&req->iopoll_entry, &again);
->  			continue;
->  		}
-> -		list_del(&req->inflight_entry);
-> +		list_del(&req->iopoll_entry);
->  
->  		if (req->flags & REQ_F_BUFFER_SELECTED)
->  			cflags = io_put_rw_kbuf(req);
-> @@ -2416,7 +2418,7 @@ static int io_do_iopoll(struct io_ring_ctx *ctx, unsigned int *nr_events,
->  	spin = !ctx->poll_multi_file && *nr_events < min;
->  
->  	ret = 0;
-> -	list_for_each_entry_safe(req, tmp, &ctx->iopoll_list, inflight_entry) {
-> +	list_for_each_entry_safe(req, tmp, &ctx->iopoll_list, iopoll_entry) {
->  		struct kiocb *kiocb = &req->rw.kiocb;
->  
->  		/*
-> @@ -2425,7 +2427,7 @@ static int io_do_iopoll(struct io_ring_ctx *ctx, unsigned int *nr_events,
->  		 * and complete those lists first, if we have entries there.
->  		 */
->  		if (READ_ONCE(req->iopoll_completed)) {
-> -			list_move_tail(&req->inflight_entry, &done);
-> +			list_move_tail(&req->iopoll_entry, &done);
->  			continue;
->  		}
->  		if (!list_empty(&done))
-> @@ -2437,7 +2439,7 @@ static int io_do_iopoll(struct io_ring_ctx *ctx, unsigned int *nr_events,
->  
->  		/* iopoll may have completed current req */
->  		if (READ_ONCE(req->iopoll_completed))
-> -			list_move_tail(&req->inflight_entry, &done);
-> +			list_move_tail(&req->iopoll_entry, &done);
->  
->  		if (ret && spin)
->  			spin = false;
-> @@ -2670,7 +2672,7 @@ static void io_iopoll_req_issued(struct io_kiocb *req)
->  		struct io_kiocb *list_req;
->  
->  		list_req = list_first_entry(&ctx->iopoll_list, struct io_kiocb,
-> -						inflight_entry);
-> +						iopoll_entry);
->  		if (list_req->file != req->file)
->  			ctx->poll_multi_file = true;
->  	}
-> @@ -2680,9 +2682,9 @@ static void io_iopoll_req_issued(struct io_kiocb *req)
->  	 * it to the front so we find it first.
->  	 */
->  	if (READ_ONCE(req->iopoll_completed))
-> -		list_add(&req->inflight_entry, &ctx->iopoll_list);
-> +		list_add(&req->iopoll_entry, &ctx->iopoll_list);
->  	else
-> -		list_add_tail(&req->inflight_entry, &ctx->iopoll_list);
-> +		list_add_tail(&req->iopoll_entry, &ctx->iopoll_list);
->  
->  	if ((ctx->flags & IORING_SETUP_SQPOLL) &&
->  	    wq_has_sleeper(&ctx->sq_data->wait))
+DQoNCkxlIDI0LzA2LzIwMjIgw6AgMDY6NDMsIEFuc2h1bWFuIEtoYW5kdWFsIGEgw6ljcml0wqA6
+DQo+IEJ1aWxkIHByb3RlY3QgZ2VuZXJpYyBwcm90ZWN0aW9uX21hcFtdIGFycmF5IHdpdGggX19Q
+MDAwLCBzbyB0aGF0IGl0IGNhbiBiZQ0KPiBtb3ZlZCBpbnNpZGUgYWxsIHRoZSBwbGF0Zm9ybXMg
+b25lIGFmdGVyIHRoZSBvdGhlci4gT3RoZXJ3aXNlIHRoZXJlIHdpbGwgYmUNCj4gYnVpbGQgZmFp
+bHVyZXMgZHVyaW5nIHRoaXMgcHJvY2Vzcy4gQ09ORklHX0FSQ0hfSEFTX1ZNX0dFVF9QQUdFX1BS
+T1QgY2Fubm90DQo+IGJlIHVzZWQgZm9yIHRoaXMgcHVycG9zZSBhcyBvbmx5IGNlcnRhaW4gcGxh
+dGZvcm1zIGVuYWJsZSB0aGlzIGNvbmZpZyBub3cuDQo+IA0KPiBDYzogQW5kcmV3IE1vcnRvbiA8
+YWtwbUBsaW51eC1mb3VuZGF0aW9uLm9yZz4NCj4gQ2M6IGxpbnV4LW1tQGt2YWNrLm9yZw0KPiBD
+YzogbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBTdWdnZXN0ZWQtYnk6IENocmlzdG9w
+aGUgTGVyb3kgPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4NCj4gU2lnbmVkLW9mZi1ieTog
+QW5zaHVtYW4gS2hhbmR1YWwgPGFuc2h1bWFuLmtoYW5kdWFsQGFybS5jb20+DQoNClJldmlld2Vk
+LWJ5OiBDaHJpc3RvcGhlIExlcm95IDxjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+DQoNCj4g
+LS0tDQo+ICAgaW5jbHVkZS9saW51eC9tbS5oIHwgMiArKw0KPiAgIG1tL21tYXAuYyAgICAgICAg
+ICB8IDIgKysNCj4gICAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlm
+ZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvbW0uaCBiL2luY2x1ZGUvbGludXgvbW0uaA0KPiBpbmRl
+eCBiYzhmMzI2YmUwY2UuLjQ3YmZlMDM4ZDQ2ZSAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9saW51
+eC9tbS5oDQo+ICsrKyBiL2luY2x1ZGUvbGludXgvbW0uaA0KPiBAQCAtNDI0LDcgKzQyNCw5IEBA
+IGV4dGVybiB1bnNpZ25lZCBpbnQga29ianNpemUoY29uc3Qgdm9pZCAqb2JqcCk7DQo+ICAgICog
+bWFwcGluZyBmcm9tIHRoZSBjdXJyZW50bHkgYWN0aXZlIHZtX2ZsYWdzIHByb3RlY3Rpb24gYml0
+cyAodGhlDQo+ICAgICogbG93IGZvdXIgYml0cykgdG8gYSBwYWdlIHByb3RlY3Rpb24gbWFzay4u
+DQo+ICAgICovDQo+ICsjaWZkZWYgX19QMDAwDQo+ICAgZXh0ZXJuIHBncHJvdF90IHByb3RlY3Rp
+b25fbWFwWzE2XTsNCj4gKyNlbmRpZg0KPiAgIA0KPiAgIC8qDQo+ICAgICogVGhlIGRlZmF1bHQg
+ZmF1bHQgZmxhZ3MgdGhhdCBzaG91bGQgYmUgdXNlZCBieSBtb3N0IG9mIHRoZQ0KPiBkaWZmIC0t
+Z2l0IGEvbW0vbW1hcC5jIGIvbW0vbW1hcC5jDQo+IGluZGV4IDYxZTYxMzVjNTRlZi4uYjAxZjAy
+ODBiZGEyIDEwMDY0NA0KPiAtLS0gYS9tbS9tbWFwLmMNCj4gKysrIGIvbW0vbW1hcC5jDQo+IEBA
+IC0xMDEsNiArMTAxLDcgQEAgc3RhdGljIHZvaWQgdW5tYXBfcmVnaW9uKHN0cnVjdCBtbV9zdHJ1
+Y3QgKm1tLA0KPiAgICAqCQkJCQkJCQl3OiAobm8pIG5vDQo+ICAgICoJCQkJCQkJCXg6ICh5ZXMp
+IHllcw0KPiAgICAqLw0KPiArI2lmZGVmIF9fUDAwMA0KPiAgIHBncHJvdF90IHByb3RlY3Rpb25f
+bWFwWzE2XSBfX3JvX2FmdGVyX2luaXQgPSB7DQo+ICAgCVtWTV9OT05FXQkJCQkJPSBfX1AwMDAs
+DQo+ICAgCVtWTV9SRUFEXQkJCQkJPSBfX1AwMDEsDQo+IEBAIC0xMTksNiArMTIwLDcgQEAgcGdw
+cm90X3QgcHJvdGVjdGlvbl9tYXBbMTZdIF9fcm9fYWZ0ZXJfaW5pdCA9IHsNCj4gICAJW1ZNX1NI
+QVJFRCB8IFZNX0VYRUMgfCBWTV9XUklURV0JCT0gX19TMTEwLA0KPiAgIAlbVk1fU0hBUkVEIHwg
+Vk1fRVhFQyB8IFZNX1dSSVRFIHwgVk1fUkVBRF0JPSBfX1MxMTENCj4gICB9Ow0KPiArI2VuZGlm
+DQo+ICAgDQo+ICAgI2lmbmRlZiBDT05GSUdfQVJDSF9IQVNfVk1fR0VUX1BBR0VfUFJPVA0KPiAg
+IHBncHJvdF90IHZtX2dldF9wYWdlX3Byb3QodW5zaWduZWQgbG9uZyB2bV9mbGFncyk=

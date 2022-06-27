@@ -2,100 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0D155DA5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050C155CFEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbiF0HOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
+        id S232705AbiF0HRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiF0HOd (ORCPT
+        with ESMTP id S232558AbiF0HRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:14:33 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596085F56;
-        Mon, 27 Jun 2022 00:14:32 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id a4so1424483lfm.0;
-        Mon, 27 Jun 2022 00:14:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1vhD6QvwPb1Sk0ztcGCX9DIwPhwZXx+jWZOw6iM4IT4=;
-        b=BAIkya7n14RIykaoNgFlpV/r3TQL/WNsEaKH7PY7aa/oang0UBV1YhJSag35l0RO6w
-         VZ2j3uINQ3aQYfK8IMMSkPMQJQ3UxWe9/IB+/BxsB3XfbPFbvDwiiXtUMklAXqfefPC/
-         Ckk9RqlYgDteapU5sKgZGFIQ/ggZJCHmKQuT8LwizCUd7q1m/NDwW+lXsEhfTUbzOUDE
-         C5/gKwtALVMoIDRH8MQYaQr6N8BYuNvyuN7qcQA40dkTrEve4pDXkiBxmJmWr0z4TXOH
-         1rurxGuK7Ua8OvElU3uPCrKKQEawbYW6BP1wCPdLiz01Hzq6f31aRsMGKl00SwNXSVXe
-         XUUA==
+        Mon, 27 Jun 2022 03:17:15 -0400
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB8E5FE6;
+        Mon, 27 Jun 2022 00:17:13 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id y14so13529784qvs.10;
+        Mon, 27 Jun 2022 00:17:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1vhD6QvwPb1Sk0ztcGCX9DIwPhwZXx+jWZOw6iM4IT4=;
-        b=tbBfzrONuyQqpIodRRsfhfeBbcrikKbOFWYS+coNEqG5fEB42nX+x8yjcbdKst758K
-         +Gd8HTbZ0F/cnnDKSnXTrPRbRtY/6a7hbJ+eloO44zYZWOKXMF/k373FkFlOje+XXKUa
-         owpDLPCN5eaLNH9MfWUvX52SRhDGelPRPiRmZ/czmMqjZinSQxISvFpOQ1x4gWgoQxSy
-         oecR/6tEoIK866PI5Q9SuskSqgOPH9D3A1RQHWFJyet2Rcm6mlNVpy+jIyMWBdUmqFUz
-         HFnX1Zfq2xghUshJVrFbmWIsLNfHiTu2lZ3lvS9wimxUoVqCwVhJYtLaCmvxy0uRsBFZ
-         93wg==
-X-Gm-Message-State: AJIora9cPa/DUUwX+txWZyeAiG7saMJL/6+8o9aWOeelYSBWlI82GwJ3
-        e7MQ8ZnJtQFOoZUA4wf3cTM=
-X-Google-Smtp-Source: AGRyM1s3ipXM6rHscQ0lTPauWlKgFP+yMT68KWO8w0OHs08H9fUOh/0tp6DBqhGuWsgzcwouWyQTDQ==
-X-Received: by 2002:a05:6512:3486:b0:47f:8790:85b with SMTP id v6-20020a056512348600b0047f8790085bmr8020143lfr.551.1656314070682;
-        Mon, 27 Jun 2022 00:14:30 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru. [109.252.118.164])
-        by smtp.googlemail.com with ESMTPSA id h18-20020a05651c125200b0025a91928236sm1292403ljh.90.2022.06.27.00.14.29
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e/zqkQPFTUj9N5yUlKAt6CBYdzhsrN+6ZcFTDaIiaZY=;
+        b=yKlbCeeWoczArlS08sJa8qkBDxpUuSNgLCYucSj9Pj0yIPSMsOtt+GcBFXvt//HGsU
+         WrN6KtzGDIVMEN3DmgsReyaQow5y6V1oVGLlnwzasW6BaZr47A4iR8AB/A0i/HYoWouv
+         GkBwJEb/XZbeIIckKDx7tCicFpkkqWhSIXdd9DDcwfoXPp3qqlrnZUUrJwhpoFhE0EzY
+         h3CldsH3cCCkT37cZ2mGKFPO8XQG4hvUhZcNJwSZ2QjnNqwbdOA2LO4pPwBDEeX5Mq/3
+         /PQUmml6QF0UKvu4MhffwfSc7jKpZE20hBdDiOaGXSSCfSatByzuT0FRaqh9JFMFmC+k
+         FGRQ==
+X-Gm-Message-State: AJIora+YHohVoY5h9kfjHt8qw8u1NfEiVGih3fLIe0c1XX/VlW/10QIe
+        Uw3z7n9LASoE7aanlcHkCdRZfG3SVecI5g==
+X-Google-Smtp-Source: AGRyM1t6D0kJxzhDzKgLa9OikDBLTIlLI87jQEeKacvqoyjuqewB8LkiTwHryMozHnbbl4pg23hEcw==
+X-Received: by 2002:ac8:5749:0:b0:305:1ea5:4a7 with SMTP id 9-20020ac85749000000b003051ea504a7mr7816225qtx.291.1656314232362;
+        Mon, 27 Jun 2022 00:17:12 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id w20-20020a05620a445400b006af37b005bdsm664399qkp.128.2022.06.27.00.17.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 00:14:30 -0700 (PDT)
-Message-ID: <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
-Date:   Mon, 27 Jun 2022 10:14:24 +0300
+        Mon, 27 Jun 2022 00:17:11 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id o19so8675891ybg.2;
+        Mon, 27 Jun 2022 00:17:11 -0700 (PDT)
+X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
+ s14-20020a056902120e00b006346f296b84mr12087179ybu.604.1656314231501; Mon, 27
+ Jun 2022 00:17:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
- <20220624004831.po35sowzfo4c47b3@vireshk-i7>
- <20220624005700.oj4etaajbutvsym7@vireshk-i7>
- <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
- <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <165515741424.1554877.9363755381201121213.stgit@warthog.procyon.org.uk>
+ <165515742832.1554877.2073456606206090838.stgit@warthog.procyon.org.uk>
+In-Reply-To: <165515742832.1554877.2073456606206090838.stgit@warthog.procyon.org.uk>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 27 Jun 2022 09:16:59 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWWtdoAwWo_qitV+s-3amxKzbVSDJ3f51E9fKT3MQwLAw@mail.gmail.com>
+Message-ID: <CAMuHMdWWtdoAwWo_qitV+s-3amxKzbVSDJ3f51E9fKT3MQwLAw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] certs: Add FIPS selftests
+To:     David Howells <dhowells@redhat.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Simo Sorce <simo@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-27.06.2022 09:45, Viresh Kumar пишет:
->> Looks okay. If you'll solve the cpufreq problem where OPP config is set
->> by two drivers for the same cpu device
-> This is supported, there is some early freeing of resources on the
-> removal path though, the reasoning for which I already gave in another
-> email. Though, I am open to sorting that out as well, but nothing
-> breaks the code for now AFAICT.
-> 
+Hi David,
 
-In case of Tegra, we use tegra-cpufreq driver that sets supported_hw and
-registers cpufreq-dt. If cpufreq-dt driver defers the probe, then the
-supported_hw will be lost on the re-probe. I haven't checked yet, but I
-suppose that cpufreq-dt driver defers on Tegra30 because of the CPU
-regulator and that's why we get the "OPP table is missing" error.
+On Tue, Jun 14, 2022 at 12:29 AM David Howells <dhowells@redhat.com> wrote:
+> Add some selftests for signature checking when FIPS mode is enabled.  These
+> need to be done before we start actually using the signature checking for
+> things and must panic the kernel upon failure.
+>
+> Note that the tests must not check the blacklist lest this provide a way to
+> prevent a kernel from booting by installing a hash of a test key in the
+> appropriate UEFI table.
+>
+> Reported-by: Simo Sorce <simo@redhat.com>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+
+Thanks for your patch, which is now commit 3cde3174eb910513 ("certs:
+Add FIPS selftests") in v5.19-rc4.
+
+> --- a/crypto/asymmetric_keys/Kconfig
+> +++ b/crypto/asymmetric_keys/Kconfig
+> @@ -75,4 +75,14 @@ config SIGNED_PE_FILE_VERIFICATION
+>           This option provides support for verifying the signature(s) on a
+>           signed PE binary.
+>
+> +config FIPS_SIGNATURE_SELFTEST
+> +       bool "Run FIPS selftests on the X.509+PKCS7 signature verification"
+
+Is there any reason this cannot be tristate, so I can always enable
+this as a module, and run the test by loading the module whenever
+I want?
+
+> +       help
+> +         This option causes some selftests to be run on the signature
+> +         verification code, using some built in data.  This is required
+> +         for FIPS.
+> +       depends on KEYS
+> +       depends on ASYMMETRIC_KEY_TYPE
+> +       depends on PKCS7_MESSAGE_PARSER
+> +
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

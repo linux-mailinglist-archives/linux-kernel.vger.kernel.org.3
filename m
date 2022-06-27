@@ -2,147 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B514E55CD15
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7882855CA67
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbiF0JzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
+        id S233770AbiF0J5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiF0Jy6 (ORCPT
+        with ESMTP id S233188AbiF0J5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:54:58 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A17C63E2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:54:58 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25R9L2Gm023644;
-        Mon, 27 Jun 2022 09:54:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=mime-version : date :
- from : to : cc : subject : reply-to : in-reply-to : references :
- message-id : content-type : content-transfer-encoding; s=pp1;
- bh=/y3l5xAjx+IYQtvlH/fk4bKasCuTmYHVC/DKG2WAsHM=;
- b=Q8o0hlYYANpHPdtJNoLwaR8eX6tlEQlXTThyqwLK7JA5pAudQt5ZHyC94ElGRDTc28OT
- VAcidVoSHKwpSWQ3LlWgmfA8GZFvgc6Q9CnBMK6uWbhv6WdELSMYuatnfDSkqBh3AxGf
- v1bMsG4UpBQNBqBKY10uKXdQnIn5L0nuHkbPPumf8Us01vjX9j0KFeTD0dIS38+bnl8Z
- 0Ly6mavX/xNazRpHjSW1rN0ghQwvQvVF8kiEm2cfvnKdMs1gLDD6ss8c+o3jZCqLVyta
- mHZavXuLApoJ/pGAyuz6+D9jEeHXlp+1ILVdE5Cidzb5NGCPGGrBmTLAz0RkAc0cNEjV Jg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gy9uegng6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 09:54:49 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25R9QSks013472;
-        Mon, 27 Jun 2022 09:54:49 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gy9uegnfx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 09:54:49 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25R9pDmB018787;
-        Mon, 27 Jun 2022 09:54:48 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma01dal.us.ibm.com with ESMTP id 3gwt094stu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 09:54:48 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25R9skV910813860
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jun 2022 09:54:47 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E5E046A04D;
-        Mon, 27 Jun 2022 09:54:46 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 96A626A051;
-        Mon, 27 Jun 2022 09:54:46 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.10.229.42])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Jun 2022 09:54:46 +0000 (GMT)
+        Mon, 27 Jun 2022 05:57:39 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DAE63F7;
+        Mon, 27 Jun 2022 02:57:38 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id r1so7704312plo.10;
+        Mon, 27 Jun 2022 02:57:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lxoRw2NzocC5cl5OT0cmp5DtPwfu2AsSjzuxrbc18bo=;
+        b=ik7jWwIHFtvt+5uRZljDRamPqiEq6gj2NtjeqKj8DiVfWrZhVFQJNr8tx3YCshzVnk
+         DcFY5Hvxw1XYJmQ5kgMNs8Ar2+owosOtWiK6G4vICTrl+cIYOy2I5dYASXh1Pqs/6UqX
+         osiW/usM52hG1UEJU81fX9laLZIfqKSrfex1c9zulsJtRmZr1GAeyL+hSR/W2exPFFHt
+         pOdm4qoEooQi+o8GJbR4KiJZqNXm+ukhwt86ZSXJwPomebL6szGKQ7lSeCq94ijPQP7W
+         zyXi7ndlha3lngMnBTxjx8K/oj+fwIrkj9GSRofE2gQQ9a26flm2BFVzPOBFQqrZt6GP
+         QINQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lxoRw2NzocC5cl5OT0cmp5DtPwfu2AsSjzuxrbc18bo=;
+        b=tMqoZam1S1Bdi5gf76gqir9ZcOdzNDml12bP/6Waj3e5CTbkVYoFToFE9xT+xSDmG2
+         bQAUONyaNGlk8qhQpCLExupxozRWSLJqEERaortFk7u9GOeKYvFtrBKFSknPKcpD3X3C
+         MVScEtsE534FNd3Aoo7IdJmTXVpel7VIIPuz83Iq0C5s+nPX81VGKtuvk/JQAKthb6Cq
+         w2omFxMuiPNp4Zd/BS8yvJNBD9a5LBoZGNDhZ9LHmd7XE3VX1ZuwmsheodPINihsZ9L9
+         HvaBiQ887kKQCejGz/j30FxcZp/yLRSGoMU+OUs4/Xloy1WLRZBc3iWle6CINcT+Gr1W
+         97Og==
+X-Gm-Message-State: AJIora9l+tfca1e+0jHztI6rPr6MbT+e4gYUO6RTKriFdobtZh8Zll22
+        xcUgP1HydNg3FkPt05Eoq5l+KJgKyiw=
+X-Google-Smtp-Source: AGRyM1tiit+ZVbULeU9zKNCqYhhKW3z3YzZGRNN96K2uAnbTzJ/xS23sjTftQdJsIC+JUcD9jgm7Aw==
+X-Received: by 2002:a17:90b:1986:b0:1ec:71f6:5fd9 with SMTP id mv6-20020a17090b198600b001ec71f65fd9mr19539478pjb.188.1656323858127;
+        Mon, 27 Jun 2022 02:57:38 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-72.three.co.id. [180.214.233.72])
+        by smtp.gmail.com with ESMTPSA id a23-20020aa79717000000b0051c03229a2bsm6813638pfg.21.2022.06.27.02.57.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 02:57:37 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 96D3E102D1B; Mon, 27 Jun 2022 16:57:34 +0700 (WIB)
+Date:   Mon, 27 Jun 2022 16:57:34 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
+        Ben Gardon <bgardon@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the kvm tree
+Message-ID: <Yrl/Dhm2zbK5mF4o@debian.me>
+References: <20220627181937.3be67263@canb.auug.org.au>
 MIME-Version: 1.0
-Date:   Mon, 27 Jun 2022 11:54:46 +0200
-From:   Harald Freudenberger <freude@linux.ibm.com>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Vladis Dronov <vdronov@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH 1/1] tools/testing/crypto: Use vzalloc instead of
- vmalloc+memset
-Reply-To: freude@linux.ibm.com
-In-Reply-To: <20220627075148.140705-1-code@siddh.me>
-References: <20220627075148.140705-1-code@siddh.me>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <9f79f8edfa8f7c5099b842f020782ac2@linux.ibm.com>
-X-Sender: freude@linux.ibm.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: xI9r3hS_Qbzt_MtV4L6wEaoZNmA1_1OW
-X-Proofpoint-ORIG-GUID: fJmfIu6SBsiFcHS5PBmyP1Oua5vvwc8O
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 suspectscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
- phishscore=0 spamscore=0 adultscore=0 mlxlogscore=940 malwarescore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206270041
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220627181937.3be67263@canb.auug.org.au>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-27 09:51, Siddh Raman Pant wrote:
-> This fixes the corresponding coccinelle warning.
+On Mon, Jun 27, 2022 at 06:19:37PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Signed-off-by: Siddh Raman Pant <code@siddh.me>
-> ---
->  tools/testing/crypto/chacha20-s390/test-cipher.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+> After merging the kvm tree, today's linux-next build (htmldocs) produced
+> this warning:
 > 
-> diff --git a/tools/testing/crypto/chacha20-s390/test-cipher.c
-> b/tools/testing/crypto/chacha20-s390/test-cipher.c
-> index 34e8b855266f..8141d45df51a 100644
-> --- a/tools/testing/crypto/chacha20-s390/test-cipher.c
-> +++ b/tools/testing/crypto/chacha20-s390/test-cipher.c
-> @@ -252,29 +252,26 @@ static int __init chacha_s390_test_init(void)
->  	memset(plain, 'a', data_size);
->  	get_random_bytes(plain, (data_size > 256 ? 256 : data_size));
+> Documentation/virt/kvm/api.rst:8210: WARNING: Title underline too short.
 > 
-> -	cipher_generic = vmalloc(data_size);
-> +	cipher_generic = vzalloc(data_size);
->  	if (!cipher_generic) {
->  		pr_info("could not allocate cipher_generic buffer\n");
->  		ret = -2;
->  		goto out;
->  	}
-> -	memset(cipher_generic, 0, data_size);
+> 8.38 KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
+> ---------------------------
+> Documentation/virt/kvm/api.rst:8217: WARNING: Unexpected indentation.
 > 
-> -	cipher_s390 = vmalloc(data_size);
-> +	cipher_s390 = vzalloc(data_size);
->  	if (!cipher_s390) {
->  		pr_info("could not allocate cipher_s390 buffer\n");
->  		ret = -2;
->  		goto out;
->  	}
-> -	memset(cipher_s390, 0, data_size);
+> Introduced by commit
 > 
-> -	revert = vmalloc(data_size);
-> +	revert = vzalloc(data_size);
->  	if (!revert) {
->  		pr_info("could not allocate revert buffer\n");
->  		ret = -2;
->  		goto out;
->  	}
-> -	memset(revert, 0, data_size);
+>   084cc29f8bbb ("KVM: x86/MMU: Allow NX huge pages to be disabled on a per-vm basis")
 > 
->  	if (debug)
->  		print_hex_dump(KERN_INFO, "src: ", DUMP_PREFIX_OFFSET,
-Thanks Siddh
-I'll forward this patch into the s390 subsystem and on the next merge
-window for the 5.20 kernel then it will appear in the upstream kernel.
+
+Hi Stephen and Paolo,
+
+I have sent the fixes at [1], please test.
+
+[1] https://lore.kernel.org/linux-doc/20220627095151.19339-1-bagasdotme@gmail.com/
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara

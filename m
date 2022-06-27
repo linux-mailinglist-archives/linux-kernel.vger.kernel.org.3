@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2950A55C1FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FA655DF95
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235923AbiF0Lfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S240100AbiF0L6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236376AbiF0Ldo (ORCPT
+        with ESMTP id S238659AbiF0LwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:33:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA57CB50;
-        Mon, 27 Jun 2022 04:31:04 -0700 (PDT)
+        Mon, 27 Jun 2022 07:52:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99039CE3B;
+        Mon, 27 Jun 2022 04:45:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51F8BB8111B;
-        Mon, 27 Jun 2022 11:31:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBE36C3411D;
-        Mon, 27 Jun 2022 11:31:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 376C561274;
+        Mon, 27 Jun 2022 11:45:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E9C8C3411D;
+        Mon, 27 Jun 2022 11:45:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329462;
-        bh=+PEY8aTgvCN7a4zjWSNtiwwqaicvZrFgs6faUOWbhog=;
+        s=korg; t=1656330303;
+        bh=0u83o4b8jqVxJj96kjDZk5MoeLJqvngsmEsDtEas6KE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lO9YyI3dvmlRHkJ3nJAT8CD9VXqnytrEZOfm+oPLQMFIbRLk6qMhs1ajevn22J7s4
-         uMPdMiYoz0Z7WklBCSwl2+x13umJ66wE58z4whuug+ADtz1q3G84p74luJFnTdWziN
-         yZ6AwHc/FGPDRK2Z1zpVbHKvLudbjwu7KtShVP7o=
+        b=KzApN541T695ppOM70BMGWT4DbKDuyIreeYOu75x49GEzK+kwAmLV4dTSy+H+xDiV
+         Mhyw2lh86wkzGJoX67gOKeLuTeFoKNZdNIBy1Y4K78wnywU+K0wc8xTMdloyxX7IEw
+         973TyO9EJd63F8iZncvou3O6ZPxj1dydlbTr/+1E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH 5.4 54/60] soc: bcm: brcmstb: pm: pm-arm: Fix refcount leak in brcmstb_pm_probe
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH 5.18 152/181] xtensa: Fix refcount leak bug in time.c
 Date:   Mon, 27 Jun 2022 13:22:05 +0200
-Message-Id: <20220627111929.279609206@linuxfoundation.org>
+Message-Id: <20220627111949.091029106@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
-References: <20220627111927.641837068@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Liang He <windhl@126.com>
 
-commit 37d838de369b07b596c19ff3662bf0293fdb09ee upstream.
+commit a0117dc956429f2ede17b323046e1968d1849150 upstream.
 
-of_find_matching_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+In calibrate_ccount(), of_find_compatible_node() will return a node
+pointer with refcount incremented. We should use of_node_put() when
+it is not used anymore.
 
-In brcmstb_init_sram, it pass dn to of_address_to_resource(),
-of_address_to_resource() will call of_find_device_by_node() to take
-reference, so we should release the reference returned by
-of_find_matching_node().
-
-Fixes: 0b741b8234c8 ("soc: bcm: brcmstb: Add support for S2/S3/S5 suspend states (ARM)")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Liang He <windhl@126.com>
+Message-Id: <20220617124432.4049006-1-windhl@126.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/soc/bcm/brcmstb/pm/pm-arm.c |    1 +
+ arch/xtensa/kernel/time.c |    1 +
  1 file changed, 1 insertion(+)
 
---- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-+++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
-@@ -780,6 +780,7 @@ static int brcmstb_pm_probe(struct platf
- 	}
- 
- 	ret = brcmstb_init_sram(dn);
-+	of_node_put(dn);
- 	if (ret) {
- 		pr_err("error setting up SRAM for PM\n");
- 		return ret;
+--- a/arch/xtensa/kernel/time.c
++++ b/arch/xtensa/kernel/time.c
+@@ -154,6 +154,7 @@ static void __init calibrate_ccount(void
+ 	cpu = of_find_compatible_node(NULL, NULL, "cdns,xtensa-cpu");
+ 	if (cpu) {
+ 		clk = of_clk_get(cpu, 0);
++		of_node_put(cpu);
+ 		if (!IS_ERR(clk)) {
+ 			ccount_freq = clk_get_rate(clk);
+ 			return;
 
 

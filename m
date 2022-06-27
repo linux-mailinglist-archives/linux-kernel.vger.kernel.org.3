@@ -2,341 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FAA55C2EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED0055D3F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236906AbiF0ONX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
+        id S234323AbiF0ONo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236918AbiF0ONT (ORCPT
+        with ESMTP id S236192AbiF0ONl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:13:19 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD3712749
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:13:17 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RDMsWJ021792;
-        Mon, 27 Jun 2022 16:13:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=S67RHgyySSh/dLSqLzz5PGyoQ38J8KujtB8DpByq90U=;
- b=dT3Cs36VjCNoMJC4bBlv0xwcSWTNbCVfye3mcg12pgickgmtMP7xp0FWeJsqZ1MeR7Qc
- +REHIHMlGFVAELe0SapSurPtAT++TlMpoFXQ+tGqQePQbBXtOF/ma1ev5ZGgD/R+cUfU
- 5I8/zL1d/fQQPEZT9zzAlw+5SbUbAGb4xMVDAiBxWiNsV3ztA5rjAbumu972b6s9/f0Y
- NhNY4vf7lwvTADqMU1ZRw1iB3erxTukgjno8aNKA584DE05yiQnI0cz0WZCv02lbBJPB
- 2LSi5DDw04nc0vjXvt5saWECKVKiEF5vObdCVBa7uNrzKjrii2/d0S169KplNmeg/0iL ew== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gydcu08e9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 16:13:08 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3293D10002A;
-        Mon, 27 Jun 2022 16:13:08 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2E184221777;
-        Mon, 27 Jun 2022 16:13:08 +0200 (CEST)
-Received: from [10.48.1.86] (10.75.127.50) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 27 Jun
- 2022 16:13:07 +0200
-Message-ID: <ca6de04c-4547-f068-6b29-194d3d256926@foss.st.com>
-Date:   Mon, 27 Jun 2022 16:13:06 +0200
+        Mon, 27 Jun 2022 10:13:41 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8958FAE79;
+        Mon, 27 Jun 2022 07:13:40 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso9632532pjk.0;
+        Mon, 27 Jun 2022 07:13:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uXrsIcbQX9kiX4dGH6TZ9BISJlnoJsgnlX/GklfNetU=;
+        b=J1NJpjM/NInTPRzBm9VeTT2HkM+nGa8FmGa7PiZBcjJ22kEhWKy9px8G1bcA+mIljw
+         ODJtE9uC2NK6F3TEawN9JFEzWb7KBQdu9p3n0jFkJ24KKOG3NTirPeXyJ3pzEpZ5LgOo
+         bmmyS4E7vNx1bkSt834DKLFN6XQg1OTur3kucMxFe7An38rlEunyE1mkyE2BOy/sQuYK
+         Da+U4KRgqq3ucgMuMQYe3iKL7zmt1//hNzm+Ovx3KOS3XJhytIyoD/uKUhbTXI+uDrNG
+         u6GK6XIN4Wj+N/ZkaFnRSNTvuA6GfnwLUdpF62lSpoxNHcIVAynTujnszeoc5g9bsNvw
+         p2Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uXrsIcbQX9kiX4dGH6TZ9BISJlnoJsgnlX/GklfNetU=;
+        b=oRRPXdGPahI/Oxs6H1TIS1Zno6lTIozlx/p9zaNeqyzvsNhIrinyFSLMOH60oNTrwz
+         ZZ0TepbDkzXd/BhHI5hjcQKUqi//blxl4ZLm7yUdUA28IV9Tg9hkjuC83Ap/XtCKhjPB
+         jlVAdjfbDVCrwtAwzxxLuJljU/3IbXX+JWv/KQC8jLQO4Jez0g//tRxxlANPd6tDWPDu
+         cUOhtAE4OEngbhvZxl1d6md10fDEm97dDurvR8DkRK52Y/mDxYeKzf6OtTWtiyleWZTy
+         /sfoXonUfUYdh6Y+GrV2k1EJ6pimUA6zf+ZqkJzYSvZnAdeulRT4BI21UqI3wCJOqTs6
+         6hVQ==
+X-Gm-Message-State: AJIora81TzYNtUZexSVnJwa8w2hG73rwyhtqvgurI+9wwuRXdbWbahs3
+        er8QDAMH27wsKv9C2TK3WFk=
+X-Google-Smtp-Source: AGRyM1si1PoMCw2NoE92GWgmSMrsBswIkr+8/TBVU13iRHkG1p0l0ljC4R0GCMvcyfHHLIzF+1N5ow==
+X-Received: by 2002:a17:90b:4c49:b0:1ec:e8a2:b5f0 with SMTP id np9-20020a17090b4c4900b001ece8a2b5f0mr20718959pjb.21.1656339219957;
+        Mon, 27 Jun 2022 07:13:39 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z9-20020a1709027e8900b0016b865ea2d6sm997876pla.82.2022.06.27.07.13.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 07:13:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e640e330-5318-e60e-d3e3-16d9bd7b289a@roeck-us.net>
+Date:   Mon, 27 Jun 2022 07:13:37 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH] drm/stm: ltdc: update hardware error management
+Subject: Re: [PATCH] watchdog: sp805_wdt: add arm cmsdk apb wdt support
 Content-Language: en-US
-To:     Yannick Fertre <yannick.fertre@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220603134654.594373-1-yannick.fertre@foss.st.com>
-From:   Philippe CORNU <philippe.cornu@foss.st.com>
-In-Reply-To: <20220603134654.594373-1-yannick.fertre@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Bing Fan <hptsfb@gmail.com>, wim@linux-watchdog.org
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1656037482-19505-1-git-send-email-hptsfb@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <1656037482-19505-1-git-send-email-hptsfb@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/3/22 15:46, Yannick Fertre wrote:
-> The latest hardware version (0x40100) supports a hardware threshold
-> register (aka FUTR) to trigger a fifo underrun interrupt.
-> A software threshold has been implemented for other hardware versions.
-> The threshold is set to 128 by default.
+On 6/23/22 19:24, Bing Fan wrote:
+> From: Bing Fan <tombinfan@tencent.com>
 > 
-> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+> Support arm CMSDK ip apb watchdog device.
+> Description details of this device can be found in the
+> document DDI0479D_m_class_processor_system_r1p1_trm.pdf
+> on the arm's document web. Which periphid is 0x001bb824.
+> The registers are basically the same as the 805, just a
+> few more: Periphid4/5/6/7 with offset 0xFD0/0xFD4/0xFD8/0xFDC.
+> For the register description of arm,sp805, please refer
+> to the document DDI0270-arm-sp805.pdf.
+> 
+> Signed-off-by: Bing Fan <tombinfan@tencent.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->   drivers/gpu/drm/stm/ltdc.c | 90 ++++++++++++++++++++++++++++++--------
->   drivers/gpu/drm/stm/ltdc.h |  6 ++-
->   2 files changed, 77 insertions(+), 19 deletions(-)
+>   drivers/watchdog/sp805_wdt.c | 5 +++++
+>   1 file changed, 5 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-> index ff2075dd9474..42a3bd515477 100644
-> --- a/drivers/gpu/drm/stm/ltdc.c
-> +++ b/drivers/gpu/drm/stm/ltdc.c
-> @@ -162,16 +162,20 @@
->   #define BCCR_BCWHITE	GENMASK(23, 0)	/* Background Color WHITE */
->   
->   #define IER_LIE		BIT(0)		/* Line Interrupt Enable */
-> -#define IER_FUIE	BIT(1)		/* Fifo Underrun Interrupt Enable */
-> +#define IER_FUWIE	BIT(1)		/* Fifo Underrun Warning Interrupt Enable */
->   #define IER_TERRIE	BIT(2)		/* Transfer ERRor Interrupt Enable */
-> -#define IER_RRIE	BIT(3)		/* Register Reload Interrupt enable */
-> +#define IER_RRIE	BIT(3)		/* Register Reload Interrupt Enable */
-> +#define IER_FUEIE	BIT(6)		/* Fifo Underrun Error Interrupt Enable */
-> +#define IER_CRCIE	BIT(7)		/* CRC Error Interrupt Enable */
->   
->   #define CPSR_CYPOS	GENMASK(15, 0)	/* Current Y position */
->   
->   #define ISR_LIF		BIT(0)		/* Line Interrupt Flag */
-> -#define ISR_FUIF	BIT(1)		/* Fifo Underrun Interrupt Flag */
-> +#define ISR_FUWIF	BIT(1)		/* Fifo Underrun Warning Interrupt Flag */
->   #define ISR_TERRIF	BIT(2)		/* Transfer ERRor Interrupt Flag */
->   #define ISR_RRIF	BIT(3)		/* Register Reload Interrupt Flag */
-> +#define ISR_FUEIF	BIT(6)		/* Fifo Underrun Error Interrupt Flag */
-> +#define ISR_CRCIF	BIT(7)		/* CRC Error Interrupt Flag */
->   
->   #define EDCR_OCYEN	BIT(25)		/* Output Conversion to YCbCr 422: ENable */
->   #define EDCR_OCYSEL	BIT(26)		/* Output Conversion to YCbCr 422: SELection of the CCIR */
-> @@ -231,6 +235,8 @@
->   
->   #define NB_PF		8		/* Max nb of HW pixel format */
->   
-> +#define FUT_DFT		128		/* Default value of fifo underrun threshold */
-> +
+> diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
+> index f9479a3fe2a6..78ba36689eec 100644
+> --- a/drivers/watchdog/sp805_wdt.c
+> +++ b/drivers/watchdog/sp805_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0+
 >   /*
->    * Skip the first value and the second in case CRC was enabled during
->    * the thread irq. This is to be sure CRC value is relevant for the
-> @@ -711,12 +717,13 @@ static irqreturn_t ltdc_irq_thread(int irq, void *arg)
->   			ltdc_irq_crc_handle(ldev, crtc);
->   	}
->   
-> -	/* Save FIFO Underrun & Transfer Error status */
->   	mutex_lock(&ldev->err_lock);
-> -	if (ldev->irq_status & ISR_FUIF)
-> -		ldev->error_status |= ISR_FUIF;
->   	if (ldev->irq_status & ISR_TERRIF)
-> -		ldev->error_status |= ISR_TERRIF;
-> +		ldev->transfer_err++;
-> +	if (ldev->irq_status & ISR_FUEIF)
-> +		ldev->fifo_err++;
-> +	if (ldev->irq_status & ISR_FUWIF)
-> +		ldev->fifo_warn++;
->   	mutex_unlock(&ldev->err_lock);
->   
->   	return IRQ_HANDLED;
-> @@ -775,7 +782,7 @@ static void ltdc_crtc_atomic_enable(struct drm_crtc *crtc,
->   	regmap_write(ldev->regmap, LTDC_BCCR, BCCR_BCBLACK);
->   
->   	/* Enable IRQ */
-> -	regmap_set_bits(ldev->regmap, LTDC_IER, IER_RRIE | IER_FUIE | IER_TERRIE);
-> +	regmap_set_bits(ldev->regmap, LTDC_IER, IER_FUWIE | IER_FUEIE | IER_RRIE | IER_TERRIE);
->   
->   	/* Commit shadow registers = update planes at next vblank */
->   	if (!ldev->caps.plane_reg_shadow)
-> @@ -801,13 +808,20 @@ static void ltdc_crtc_atomic_disable(struct drm_crtc *crtc,
->   				  LXCR_CLUTEN | LXCR_LEN, 0);
->   
->   	/* disable IRQ */
-> -	regmap_clear_bits(ldev->regmap, LTDC_IER, IER_RRIE | IER_FUIE | IER_TERRIE);
-> +	regmap_clear_bits(ldev->regmap, LTDC_IER, IER_FUWIE | IER_FUEIE | IER_RRIE | IER_TERRIE);
->   
->   	/* immediately commit disable of layers before switching off LTDC */
->   	if (!ldev->caps.plane_reg_shadow)
->   		regmap_set_bits(ldev->regmap, LTDC_SRCR, SRCR_IMR);
->   
->   	pm_runtime_put_sync(ddev->dev);
-> +
-> +	/*  clear interrupt error counters */
-> +	mutex_lock(&ldev->err_lock);
-> +	ldev->transfer_err = 0;
-> +	ldev->fifo_err = 0;
-> +	ldev->fifo_warn = 0;
-> +	mutex_unlock(&ldev->err_lock);
->   }
->   
->   #define CLK_TOLERANCE_HZ 50
-> @@ -1168,6 +1182,18 @@ static int ltdc_crtc_verify_crc_source(struct drm_crtc *crtc,
->   	return 0;
->   }
->   
-> +static void ltdc_crtc_atomic_print_state(struct drm_printer *p,
-> +					 const struct drm_crtc_state *state)
-> +{
-> +	struct drm_crtc *crtc = state->crtc;
-> +	struct ltdc_device *ldev = crtc_to_ltdc(crtc);
-> +
-> +	drm_printf(p, "\ttransfer_error=%d\n", ldev->transfer_err);
-> +	drm_printf(p, "\tfifo_underrun_error=%d\n", ldev->fifo_err);
-> +	drm_printf(p, "\tfifo_underrun_warning=%d\n", ldev->fifo_warn);
-> +	drm_printf(p, "\tfifo_underrun_threshold=%d\n", ldev->fifo_threshold);
-> +}
-> +
->   static const struct drm_crtc_funcs ltdc_crtc_funcs = {
->   	.destroy = drm_crtc_cleanup,
->   	.set_config = drm_atomic_helper_set_config,
-> @@ -1178,6 +1204,7 @@ static const struct drm_crtc_funcs ltdc_crtc_funcs = {
->   	.enable_vblank = ltdc_crtc_enable_vblank,
->   	.disable_vblank = ltdc_crtc_disable_vblank,
->   	.get_vblank_timestamp = drm_crtc_vblank_helper_get_vblank_timestamp,
-> +	.atomic_print_state = ltdc_crtc_atomic_print_state,
+>    * drivers/char/watchdog/sp805-wdt.c
+>    *
+> @@ -341,6 +342,10 @@ static const struct amba_id sp805_wdt_ids[] = {
+>   		.id	= 0x00141805,
+>   		.mask	= 0x00ffffff,
+>   	},
+> +	{
+> +		.id     = 0x001bb824,
+> +		.mask   = 0x00ffffff,
+> +	},
+>   	{ 0, 0 },
 >   };
 >   
->   static const struct drm_crtc_funcs ltdc_crtc_with_crc_support_funcs = {
-> @@ -1192,6 +1219,7 @@ static const struct drm_crtc_funcs ltdc_crtc_with_crc_support_funcs = {
->   	.get_vblank_timestamp = drm_crtc_vblank_helper_get_vblank_timestamp,
->   	.set_crc_source = ltdc_crtc_set_crc_source,
->   	.verify_crc_source = ltdc_crtc_verify_crc_source,
-> +	.atomic_print_state = ltdc_crtc_atomic_print_state,
->   };
->   
->   /*
-> @@ -1452,13 +1480,21 @@ static void ltdc_plane_atomic_update(struct drm_plane *plane,
->   	ldev->plane_fpsi[plane->index].counter++;
->   
->   	mutex_lock(&ldev->err_lock);
-> -	if (ldev->error_status & ISR_FUIF) {
-> -		DRM_WARN("ltdc fifo underrun: please verify display mode\n");
-> -		ldev->error_status &= ~ISR_FUIF;
-> +	if (ldev->transfer_err) {
-> +		DRM_WARN("ltdc transfer error: %d\n", ldev->transfer_err);
-> +		ldev->transfer_err = 0;
->   	}
-> -	if (ldev->error_status & ISR_TERRIF) {
-> -		DRM_WARN("ltdc transfer error\n");
-> -		ldev->error_status &= ~ISR_TERRIF;
-> +
-> +	if (ldev->caps.fifo_threshold) {
-> +		if (ldev->fifo_err) {
-> +			DRM_WARN("ltdc fifo underrun: please verify display mode\n");
-> +			ldev->fifo_err = 0;
-> +		}
-> +	} else {
-> +		if (ldev->fifo_warn >= ldev->fifo_threshold) {
-> +			DRM_WARN("ltdc fifo underrun: please verify display mode\n");
-> +			ldev->fifo_warn = 0;
-> +		}
->   	}
->   	mutex_unlock(&ldev->err_lock);
->   }
-> @@ -1700,6 +1736,10 @@ static void ltdc_encoder_enable(struct drm_encoder *encoder)
->   
->   	DRM_DEBUG_DRIVER("\n");
->   
-> +	/* set fifo underrun threshold register */
-> +	if (ldev->caps.fifo_threshold)
-> +		regmap_write(ldev->regmap, LTDC_FUT, ldev->fifo_threshold);
-> +
->   	/* Enable LTDC */
->   	regmap_set_bits(ldev->regmap, LTDC_GCR, GCR_LTDCEN);
->   }
-> @@ -1801,6 +1841,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
->   		ldev->caps.crc = false;
->   		ldev->caps.dynamic_zorder = false;
->   		ldev->caps.plane_rotation = false;
-> +		ldev->caps.fifo_threshold = false;
->   		break;
->   	case HWVER_20101:
->   		ldev->caps.layer_ofs = LAY_OFS_0;
-> @@ -1818,6 +1859,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
->   		ldev->caps.crc = false;
->   		ldev->caps.dynamic_zorder = false;
->   		ldev->caps.plane_rotation = false;
-> +		ldev->caps.fifo_threshold = false;
->   		break;
->   	case HWVER_40100:
->   		ldev->caps.layer_ofs = LAY_OFS_1;
-> @@ -1835,6 +1877,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
->   		ldev->caps.crc = true;
->   		ldev->caps.dynamic_zorder = true;
->   		ldev->caps.plane_rotation = true;
-> +		ldev->caps.fifo_threshold = true;
->   		break;
->   	default:
->   		return -ENODEV;
-> @@ -1959,9 +2002,6 @@ int ltdc_load(struct drm_device *ddev)
->   		goto err;
->   	}
->   
-> -	/* Disable interrupts */
-> -	regmap_clear_bits(ldev->regmap, LTDC_IER, IER_LIE | IER_RRIE | IER_FUIE | IER_TERRIE);
-> -
->   	ret = ltdc_get_caps(ddev);
->   	if (ret) {
->   		DRM_ERROR("hardware identifier (0x%08x) not supported!\n",
-> @@ -1969,8 +2009,22 @@ int ltdc_load(struct drm_device *ddev)
->   		goto err;
->   	}
->   
-> +	/* Disable interrupts */
-> +	if (ldev->caps.fifo_threshold)
-> +		regmap_clear_bits(ldev->regmap, LTDC_IER, IER_LIE | IER_RRIE | IER_FUWIE |
-> +				  IER_TERRIE);
-> +	else
-> +		regmap_clear_bits(ldev->regmap, LTDC_IER, IER_LIE | IER_RRIE | IER_FUWIE |
-> +				  IER_TERRIE | IER_FUEIE);
-> +
->   	DRM_DEBUG_DRIVER("ltdc hw version 0x%08x\n", ldev->caps.hw_version);
->   
-> +	/* initialize default value for fifo underrun threshold & clear interrupt error counters */
-> +	ldev->transfer_err = 0;
-> +	ldev->fifo_err = 0;
-> +	ldev->fifo_warn = 0;
-> +	ldev->fifo_threshold = FUT_DFT;
-> +
->   	for (i = 0; i < ldev->caps.nb_irq; i++) {
->   		irq = platform_get_irq(pdev, i);
->   		if (irq < 0) {
-> diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
-> index 15139980d8ea..9d488043ffdb 100644
-> --- a/drivers/gpu/drm/stm/ltdc.h
-> +++ b/drivers/gpu/drm/stm/ltdc.h
-> @@ -30,6 +30,7 @@ struct ltdc_caps {
->   	bool crc;		/* cyclic redundancy check supported */
->   	bool dynamic_zorder;	/* dynamic z-order */
->   	bool plane_rotation;	/* plane rotation */
-> +	bool fifo_threshold;	/* fifo underrun threshold supported */
->   };
->   
->   #define LTDC_MAX_LAYER	4
-> @@ -45,8 +46,11 @@ struct ltdc_device {
->   	struct clk *pixel_clk;	/* lcd pixel clock */
->   	struct mutex err_lock;	/* protecting error_status */
->   	struct ltdc_caps caps;
-> -	u32 error_status;
->   	u32 irq_status;
-> +	u32 fifo_err;		/* fifo underrun error counter */
-> +	u32 fifo_warn;		/* fifo underrun warning counter */
-> +	u32 fifo_threshold;	/* fifo underrun threshold */
-> +	u32 transfer_err;	/* transfer error counter */
->   	struct fps_info plane_fpsi[LTDC_MAX_LAYER];
->   	struct drm_atomic_state *suspend_state;
->   	int crc_skip_count;
-Dear Yannick,
-Many thanks for your patch,
-Applied on drm-misc-next.
-Have a good day
-Philippe :-)
+

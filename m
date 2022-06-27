@@ -2,141 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5968B55D39A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F70755C5CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238811AbiF0PwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
+        id S238665AbiF0PwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238674AbiF0PwA (ORCPT
+        with ESMTP id S238637AbiF0Pv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:52:00 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C752D1A04E;
-        Mon, 27 Jun 2022 08:51:55 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RCSNNN017521;
-        Mon, 27 Jun 2022 10:51:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=LBdjpKTcBhVvtkLLUBtkb/1VdJ7fQ8gDmZFGNTWayfE=;
- b=c0o3P4PcBbYyxm6ma7UiOlgpOXOy/8kMKDphJvtHrS57G6vD94kqdvWLq3cwIZ5BG1RA
- hZNQua5juIFMrh5mxBSh4e3aDs+EA9lS6ZQujOEeP1N6/fmjlftNE0u/YGSjRo14n+fN
- Igt3Hk05zZuPVcA96ogWYeRc/1Ei35xpDbO72PV7gI4KzE/t5GZJ4UvTTruEEI/RAoVq
- AaNEfm/gz6/aBTRL/4lQCAuyOoTwPvqPx6jEE2iReIYvCmBbSFi3KtDhVBu2BDG1OCQ3
- 55fIF+Ib0sB14k+a92d7SiOTfpYGPajMa56zesP2HEKuw3k7KybCL8gQCsb+ZTTgwDsJ ng== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gwys2k0uh-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 27 Jun 2022 10:51:45 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 27 Jun
- 2022 16:51:42 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Mon, 27 Jun 2022 16:51:42 +0100
-Received: from sbinding-cirrus-dsktp.ad.cirrus.com (unknown [198.90.238.163])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7A824458;
-        Mon, 27 Jun 2022 15:51:42 +0000 (UTC)
-From:   Stefan Binding <sbinding@opensource.cirrus.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-CC:     <linux-acpi@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v3 2/2] ASoC: cs35l41: Read System Name from ACPI _SUB to identify firmware
-Date:   Mon, 27 Jun 2022 16:51:38 +0100
-Message-ID: <20220627155138.807420-3-sbinding@opensource.cirrus.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220627155138.807420-1-sbinding@opensource.cirrus.com>
-References: <20220627155138.807420-1-sbinding@opensource.cirrus.com>
+        Mon, 27 Jun 2022 11:51:59 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0970119C29
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:51:52 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id jh14so8556606plb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:51:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6LxmU+WQXLNtw6pgWpGmr460o0vfQZB4+u6bJ7WRLy4=;
+        b=EwZlSkhOodz7ts1b+UrLbL7DVdG12pJYBSYGIg4fFW+/BFe12jf3UJ3H7IqQrDkBlP
+         ZIOuK1AUqUso6wbaEB82ecZGEqy/UPrnOrVJSXlrYZhy48wChjam2QrHugv2jp5WKQ5F
+         aC1+kB9uaAUZlUsPcqxpFxCVoqxUNXPAUwBj+r5oQZoHsXvF3pG/u5HTL2z0Yfx7IQKz
+         g6UVUanS24JpxpZj/8rUSqBoC1OHk9YuOTra1fZotCgI6oIWvJ6L84Twp33YjqnZyvv2
+         fgViXczymN9nlKkO53gGkmSL9LsgVHVuu+5zmpNpEuvdMT6JQegryhpO9CYVgFfhNnVp
+         K3VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6LxmU+WQXLNtw6pgWpGmr460o0vfQZB4+u6bJ7WRLy4=;
+        b=1EkSY39pbd3uv+JQu0cm7GMTMPUq89LaAnYyyxi1BzDFqxb89mw8Fv2CsR5XJ7Q1NN
+         kVNj3E5USUFDG50DSb+Fkbp1vDv7Z7q6L/6ddKQSbK+tU+oWZyWOWZCqXzjNfWIPxuC6
+         gso+gDhBnyFZRZ1ZpCnFpuc4seRR54IuZhogTAcGg3lyG4KKwoL8YOJBlJiiG39lfEC4
+         6G4CE/TKxZNzLzt6kQ7By0VVpKDTUyS9WrM0tVuu5puoDlhus8a4QR49D1ZsJzMuchlF
+         RfKc5IoDwMmk5H44APhn9+3kMLDpcOr2kpdqXA8ELn+y3hxgf/+Px1swauN/NcGaDREW
+         +28g==
+X-Gm-Message-State: AJIora8zREUqM1NfrbfFf9uNrNZmhPYn12FcHyzcUPHIiWw90JioG5fb
+        ceQ3wHtDjNAGBw0xCbGpxyX9Vg==
+X-Google-Smtp-Source: AGRyM1tB1UPKeH3bo/MQZJWlxo8K/y4GHIXTynLBgDx6mxTSBunPFcmHvShjiguzG92o5sJ7nFVPDQ==
+X-Received: by 2002:a17:902:ea04:b0:16a:1f33:cb0d with SMTP id s4-20020a170902ea0400b0016a1f33cb0dmr111885plg.103.1656345112028;
+        Mon, 27 Jun 2022 08:51:52 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id b8-20020a170902650800b00168a651316csm7391374plk.270.2022.06.27.08.51.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 08:51:51 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 15:51:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Durrant, Paul" <pdurrant@amazon.co.uk>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info)
+ sub-leaves, if present
+Message-ID: <YrnSFGURsmxV2Qmu@google.com>
+References: <20220622092202.15548-1-pdurrant@amazon.com>
+ <YrMqtHzNSean+qkh@google.com>
+ <834f41a88e9f49b6b72d9d3672d702e5@EX13D32EUC003.ant.amazon.com>
+ <0abf9f5de09e45ef9eb06b56bf16e3e6@EX13D32EUC003.ant.amazon.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: M2HzhwYqUWoCzSSn_C-Krx8bqnoCz755
-X-Proofpoint-GUID: M2HzhwYqUWoCzSSn_C-Krx8bqnoCz755
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0abf9f5de09e45ef9eb06b56bf16e3e6@EX13D32EUC003.ant.amazon.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When loading firmware, wm_adsp uses a number of parameters to
-determine the path of the firmware and tuning files to load.
-One of these parameters is system_name.
-Add support in cs35l41 to read this system name from the ACPI
-_SUB ID in order to uniquely identify the firmware and tuning
-mapped to a particular system.
+On Mon, Jun 27, 2022, Durrant, Paul wrote:
+> > -----Original Message-----
+> [snip]
+> > > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > > index 00e23dc518e0..8b45f9975e45 100644
+> > > > --- a/arch/x86/kvm/x86.c
+> > > > +++ b/arch/x86/kvm/x86.c
+> > > > @@ -3123,6 +3123,7 @@ static int kvm_guest_time_update(struct kvm_vcpu *v)
+> > > >       if (vcpu->xen.vcpu_time_info_cache.active)
+> > > >               kvm_setup_guest_pvclock(v, &vcpu->xen.vcpu_time_info_cache, 0);
+> > > >       kvm_hv_setup_tsc_page(v->kvm, &vcpu->hv_clock);
+> > > > +     kvm_xen_setup_tsc_info(v);
+> > >
+> > > This can be called inside this if statement, no?
+> > >
+> > >         if (unlikely(vcpu->hw_tsc_khz != tgt_tsc_khz)) {
+> > >
+> > >         }
+> > >
+> 
+> I think it ought to be done whenever the shared copy of Xen's vcpu_info is
+> updated (it will always match on real Xen) so unconditionally calling it here
+> seems reasonable.
 
-Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
----
- sound/soc/codecs/cs35l41.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+But isn't the call pointless if the vCPU's hw_tsc_khz is unchanged?  E.g if the
+params were explicitly passed in, then it would look like:
 
-diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
-index 8766e19d85f1..9ab016094b32 100644
---- a/sound/soc/codecs/cs35l41.c
-+++ b/sound/soc/codecs/cs35l41.c
-@@ -6,6 +6,7 @@
- //
- // Author: David Rhodes <david.rhodes@cirrus.com>
- 
-+#include <linux/acpi.h>
- #include <linux/delay.h>
- #include <linux/err.h>
- #include <linux/init.h>
-@@ -1142,6 +1143,24 @@ static int cs35l41_dsp_init(struct cs35l41_private *cs35l41)
- 	return ret;
- }
- 
-+static int cs35l41_probe_acpi(struct cs35l41_private *cs35l41)
-+{
-+	acpi_handle handle = ACPI_HANDLE(cs35l41->dev);
-+	const char *sub;
-+
-+	/* If there is no ACPI_HANDLE, there is no ACPI for this system, return 0 */
-+	if (!handle)
-+		return 0;
-+
-+	sub = acpi_get_subsystem_id(handle);
-+	if (IS_ERR(sub))
-+		return PTR_ERR(sub);
-+
-+	cs35l41->dsp.system_name = sub;
-+	dev_dbg(cs35l41->dev, "Susystem ID: %s\n", cs35l41->dsp.system_name);
-+	return 0;
-+}
-+
- int cs35l41_probe(struct cs35l41_private *cs35l41, const struct cs35l41_hw_cfg *hw_cfg)
- {
- 	u32 regid, reg_revid, i, mtl_revid, int_status, chipid_match;
-@@ -1270,6 +1289,10 @@ int cs35l41_probe(struct cs35l41_private *cs35l41, const struct cs35l41_hw_cfg *
- 		goto err;
- 	}
- 
-+	ret = cs35l41_probe_acpi(cs35l41);
-+	if (ret < 0)
-+		goto err;
-+
- 	ret = cs35l41_dsp_init(cs35l41);
- 	if (ret < 0)
- 		goto err;
-@@ -1316,6 +1339,7 @@ void cs35l41_remove(struct cs35l41_private *cs35l41)
- 	pm_runtime_disable(cs35l41->dev);
- 
- 	regmap_write(cs35l41->regmap, CS35L41_IRQ1_MASK1, 0xFFFFFFFF);
-+	kfree(cs35l41->dsp.system_name);
- 	wm_adsp2_remove(&cs35l41->dsp);
- 	cs35l41_safe_reset(cs35l41->regmap, cs35l41->hw_cfg.bst_type);
- 
--- 
-2.25.1
+	if (unlikely(vcpu->hw_tsc_khz != tgt_tsc_khz)) {
+		kvm_get_time_scale(NSEC_PER_SEC, tgt_tsc_khz * 1000LL,
+				   &vcpu->hv_clock.tsc_shift,
+				   &vcpu->hv_clock.tsc_to_system_mul);
+		vcpu->hw_tsc_khz = tgt_tsc_khz;
 
+		kvm_xen_setup_tsc_info(vcpu, tgt_tsc_khz,
+				       vcpu->hv_clock.tsc_shift,
+				       vcpu->hv_clock.tsc_to_system_mul);
+	}
+
+Explicitly passing in the arguments probably isn't necessary, just use a more
+precise name, e.g. kvm_xen_update_tsc_khz(), to make it clear that the update is
+limited to TSC frequency changes.
+
+> > > > +{
+> > > > +     u32 base = 0;
+> > > > +     u32 function;
+> > > > +
+> > > > +     for_each_possible_hypervisor_cpuid_base(function) {
+> > > > +             struct kvm_cpuid_entry2 *entry = kvm_find_cpuid_entry(vcpu, function, 0);
+> > > > +
+> > > > +             if (entry &&
+> > > > +                 entry->ebx == XEN_CPUID_SIGNATURE_EBX &&
+> > > > +                 entry->ecx == XEN_CPUID_SIGNATURE_ECX &&
+> > > > +                 entry->edx == XEN_CPUID_SIGNATURE_EDX) {
+> > > > +                     base = function;
+> > > > +                     break;
+> > > > +             }
+> > > > +     }
+> > > > +     if (!base)
+> > > > +             return;
+> > > > +
+> > > > +     function = base | XEN_CPUID_LEAF(3);
+> > > > +     vcpu->arch.xen.tsc_info_1 = kvm_find_cpuid_entry(vcpu, function, 1);
+> > > > +     vcpu->arch.xen.tsc_info_2 = kvm_find_cpuid_entry(vcpu, function, 2);
+> > >
+> > > Is it really necessary to cache the leave?  Guest CPUID isn't optimized, but it's
+> > > not _that_ slow, and unless I'm missing something updating the TSC frequency and
+> > > scaling info should be uncommon, i.e. not performance critical.
+> 
+> If we're updating the values in the leaves on every entry into the guest (as
+> with calls to kvm_setup_guest_pvclock()) then I think the cached pointers are
+> worthwhile.
+
+But why would you update on every entry to the guest?   Isn't this a rare operation
+if the update is limited to changes in the host CPU's TSC frequency?  Or am I
+missing something?

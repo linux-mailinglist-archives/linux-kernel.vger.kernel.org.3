@@ -2,77 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D66855D3E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5013A55D97C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiF0Gpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 02:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
+        id S232449AbiF0Gm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 02:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiF0Gp3 (ORCPT
+        with ESMTP id S231767AbiF0Gm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 02:45:29 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BE73881
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 23:45:28 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id n10so7366789plp.0
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 23:45:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bH3Vt7XX7aybZeFwi1CTdnlCoZZeRmTfAiO/nez5hfo=;
-        b=ykFyF40ED8ltV1C22vrrCu2Ahxrq6lDUEHVRJJMWmLISGsTYVnUmByK/WyYZAoFJEs
-         B77swVbdEz6e+oEZpaCTgE7Hylf9Yb4qjD1AgGIoCJ8RD+MrjKrI5Jzy6D9vBdJplVae
-         7c4aw1Z1c1SkbrHp2rQGTuUna8Soo5ErVHrT5kZo6hpBqOGkEiYtHauCfhmOFHxhV3E+
-         zgN/C30pAgiLj6MF5qA727QeEDMlQ1tRsxevl8fyMpQ981JkaJ8cqYjKcrHG0nMcghWE
-         P9Yz0E5CiyTfhYjTcXLUNV7+9waiX+sM8Fhix46lgrs218sgFUTqtBihxvmnWEXWe4aY
-         xJHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bH3Vt7XX7aybZeFwi1CTdnlCoZZeRmTfAiO/nez5hfo=;
-        b=KiWpqH9j7vXp5zcN5IFUp9W9f9hhhr2dnXzwPz0tKecs3PSfKG+kwLnCyh6jisvcxh
-         045F4X8Dy4OZz5lOry5DMFLnW6iac8TqSjiQn+FpH6U8Bw2ATcGEqRzvU48Kai/fnDDc
-         eoHrY18CWjE87lSJ+KyAB+SCBTCI+Hg136HAcZxhzzXYBYrf5wIf6UqBLh4naPoBCqZu
-         1fFImUjNMrEf6/zeqaV/UEA1lGR8yPJCJZTPlj93xUub0dFPHZA+/EVT0jAeVBI4R/hM
-         yxDHbm8hECZ7BM7MBvvEOE1sipYjx1i0x8m3UVyHYjmtLpodtd8IbI1f2SYV2NicvwQM
-         iszQ==
-X-Gm-Message-State: AJIora+MgdoQAaETo9jIBevXePV1ulqIf9DfPFNh1p17QVOIZjCnuhNQ
-        n2UW1wgp3DmU74gtQ7b3ghl5Jw==
-X-Google-Smtp-Source: AGRyM1skjSIr2LG5qz1p7HriNtf5RQBG+zI/jwqerqVBvWNFUvR0glyAewRI0itDcsi27L2Yi8fzKw==
-X-Received: by 2002:a17:902:f20a:b0:16a:22ef:b17f with SMTP id m10-20020a170902f20a00b0016a22efb17fmr13305957plc.168.1656312328184;
-        Sun, 26 Jun 2022 23:45:28 -0700 (PDT)
-Received: from localhost ([122.172.201.58])
-        by smtp.gmail.com with ESMTPSA id jf5-20020a170903268500b0016a1d007637sm6295143plb.110.2022.06.26.23.45.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jun 2022 23:45:27 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 12:15:26 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
-Message-ID: <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
-References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
- <20220624004831.po35sowzfo4c47b3@vireshk-i7>
- <20220624005700.oj4etaajbutvsym7@vireshk-i7>
- <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
+        Mon, 27 Jun 2022 02:42:26 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FC73881;
+        Sun, 26 Jun 2022 23:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656312142; x=1687848142;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/B9jPCXoGr+s2dOSilHfB1A0vqJQl+HCS0EByBkjXms=;
+  b=VbhPiumJkyxNlGQ91SmFinRUX4nQXV3UJ40YzXQFZs9CgQjw2I/u+b79
+   Skrp5qbSuT87vrh8VFqZHpyumhcOjy9aPlahyGX0zGxeI8fh7e6A2PMmr
+   WycljlJJ2E7Rq0ooZNz0Vhb6Xu3FVPdLvQ3yHMj/XNLwFGRsoMGVzbdQZ
+   GI1xAmZWmCOZEPOIuCw8VErdhy5dOl53b9ShXS3J1H2HmKyEic8CAWzx+
+   8iHL8ZHNkPvdLqJ8EgIZBz2klAOQ7SJUd6p5/kpflFZqfYaCMa7ZbC8J0
+   Q2lUqUxa/9NjSpzDjfuu1g0aXVaQcfsr/j0bZbpfp8Fk92Ff/323ModPw
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
+   d="scan'208";a="179614170"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Jun 2022 23:42:21 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sun, 26 Jun 2022 23:42:21 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Sun, 26 Jun 2022 23:42:21 -0700
+Date:   Mon, 27 Jun 2022 08:46:12 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>
+Subject: Re: [PATCH net-next 5/8] net: lan966x: Add lag support for lan966x.
+Message-ID: <20220627064612.vzz2sd7kxpxnprxc@soft-dev3-1.localhost>
+References: <20220626130451.1079933-1-horatiu.vultur@microchip.com>
+ <20220626130451.1079933-6-horatiu.vultur@microchip.com>
+ <20220626141139.kbwhpgmwzp7rpxgy@skbuf>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220626141139.kbwhpgmwzp7rpxgy@skbuf>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,25 +65,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27-06-22, 01:14, Dmitry Osipenko wrote:
-> Looks okay. If you'll solve the cpufreq problem where OPP config is set
-> by two drivers for the same cpu device
+The 06/26/2022 17:11, Vladimir Oltean wrote:
+> 
+> Hi Horatiu,
 
-This is supported, there is some early freeing of resources on the
-removal path though, the reasoning for which I already gave in another
-email. Though, I am open to sorting that out as well, but nothing
-breaks the code for now AFAICT.
+Hi Vladimir,
 
-> and will keep the set_opp()
-> helper that is needed by the Tegra 3d driver, then it all should work
-> for Tegra.
+> 
+> Just casually browsing through the patches. A comment below.
 
-I have responded to that as well on another thread.
+> 
+> On Sun, Jun 26, 2022 at 03:04:48PM +0200, Horatiu Vultur wrote:
+> > Add link aggregation hardware offload support for lan966x
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > ---
+> >  .../net/ethernet/microchip/lan966x/Makefile   |   2 +-
+> >  .../ethernet/microchip/lan966x/lan966x_lag.c  | 296 ++++++++++++++++++
+> >  .../ethernet/microchip/lan966x/lan966x_main.h |  28 ++
+> >  .../microchip/lan966x/lan966x_switchdev.c     |  78 ++++-
+> >  4 files changed, 388 insertions(+), 16 deletions(-)
+> >  create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_lag.c
+> >
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/Makefile b/drivers/net/ethernet/microchip/lan966x/Makefile
+> > index fd2e0ebb2427..0c22c86bdaa9 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/Makefile
+> > +++ b/drivers/net/ethernet/microchip/lan966x/Makefile
+> > @@ -8,4 +8,4 @@ obj-$(CONFIG_LAN966X_SWITCH) += lan966x-switch.o
+> >  lan966x-switch-objs  := lan966x_main.o lan966x_phylink.o lan966x_port.o \
+> >                       lan966x_mac.o lan966x_ethtool.o lan966x_switchdev.o \
+> >                       lan966x_vlan.o lan966x_fdb.o lan966x_mdb.o \
+> > -                     lan966x_ptp.o lan966x_fdma.o
+> > +                     lan966x_ptp.o lan966x_fdma.o lan966x_lag.o
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_lag.c b/drivers/net/ethernet/microchip/lan966x/lan966x_lag.c
+> > new file mode 100644
+> > index 000000000000..c721a05d44d2
+> > --- /dev/null
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_lag.c
+> > @@ -0,0 +1,296 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +
+> > +#include "lan966x_main.h"
+> > +
+> > +static void lan966x_lag_set_aggr_pgids(struct lan966x *lan966x)
+> > +{
+> > +     u32 visited = GENMASK(lan966x->num_phys_ports - 1, 0);
+> > +     int p, lag, i;
+> > +
+> > +     /* Reset destination and aggregation PGIDS */
+> > +     for (p = 0; p < lan966x->num_phys_ports; ++p)
+> > +             lan_wr(ANA_PGID_PGID_SET(BIT(p)),
+> > +                    lan966x, ANA_PGID(p));
+> > +
+> > +     for (p = PGID_AGGR; p < PGID_SRC; ++p)
+> > +             lan_wr(ANA_PGID_PGID_SET(visited),
+> > +                    lan966x, ANA_PGID(p));
+> > +
+> > +     /* The visited ports bitmask holds the list of ports offloading any
+> > +      * bonding interface. Initially we mark all these ports as unvisited,
+> > +      * then every time we visit a port in this bitmask, we know that it is
+> > +      * the lowest numbered port, i.e. the one whose logical ID == physical
+> > +      * port ID == LAG ID. So we mark as visited all further ports in the
+> > +      * bitmask that are offloading the same bonding interface. This way,
+> > +      * we set up the aggregation PGIDs only once per bonding interface.
+> > +      */
+> > +     for (p = 0; p < lan966x->num_phys_ports; ++p) {
+> > +             struct lan966x_port *port = lan966x->ports[p];
+> > +
+> > +             if (!port || !port->bond)
+> > +                     continue;
+> > +
+> > +             visited &= ~BIT(p);
+> > +     }
+> > +
+> > +     /* Now, set PGIDs for each active LAG */
+> > +     for (lag = 0; lag < lan966x->num_phys_ports; ++lag) {
+> > +             struct lan966x_port *port = lan966x->ports[lag];
+> > +             int num_active_ports = 0;
+> > +             struct net_device *bond;
+> > +             unsigned long bond_mask;
+> > +             u8 aggr_idx[16];
+> > +
+> > +             if (!port || !port->bond || (visited & BIT(lag)))
+> > +                     continue;
+> > +
+> > +             bond = port->bond;
+> > +             bond_mask = lan966x_lag_get_mask(lan966x, bond, true);
+> > +
+> > +             for_each_set_bit(p, &bond_mask, lan966x->num_phys_ports) {
+> > +                     lan_wr(ANA_PGID_PGID_SET(bond_mask),
+> > +                            lan966x, ANA_PGID(p));
+> > +                     aggr_idx[num_active_ports++] = p;
+> > +             }
+> 
+> This incorrect logic seems to have been copied from ocelot from before
+> commit a14e6b69f393 ("net: mscc: ocelot: fix incorrect balancing with
+> down LAG ports").
+> 
+> The issue is that you calculate bond_mask with only_active_ports=true.
+> This means the for_each_set_bit() will not iterate through the inactive
+> LAG ports, and won't set the bond_mask as the PGID destination for those
+> ports.
+> 
+> That isn't what is desired; as explained in that commit, inactive LAG
+> ports should be removed via the aggregation PGIDs and not via the
+> destination PGIDs. Otherwise, an FDB entry targeted towards the
+> LAG (effectively towards the "primary" LAG port, whose logical port ID
+> gives the LAG ID) will not egress even the "secondary" LAG port if the
+> primary's link is down.
 
-> Looking forward to the next update of the OPP patches, thank you.
+Thanks for looking at this.
+That is correct, ocelot was the source of inspiration. The issue that
+you described in the mentioned commit is fixed in the last patch of this
+series.
+I will have a look at your commit and will try to integrated it. Thanks.
 
-All that I have is already pushed to linux-next, I don't have any more
-changes. Yes I still need to send the updated changes to list.
+> 
+> > +
+> > +             for (i = PGID_AGGR; i < PGID_SRC; ++i) {
+> > +                     u32 ac;
+> > +
+> > +                     ac = lan_rd(lan966x, ANA_PGID(i));
+> > +                     ac &= ~bond_mask;
+> > +                     /* Don't do division by zero if there was no active
+> > +                      * port. Just make all aggregation codes zero.
+> > +                      */
+> > +                     if (num_active_ports)
+> > +                             ac |= BIT(aggr_idx[i % num_active_ports]);
+> > +                     lan_wr(ANA_PGID_PGID_SET(ac),
+> > +                            lan966x, ANA_PGID(i));
+> > +             }
+> > +
+> > +             /* Mark all ports in the same LAG as visited to avoid applying
+> > +              * the same config again.
+> > +              */
+> > +             for (p = lag; p < lan966x->num_phys_ports; p++) {
+> > +                     struct lan966x_port *port = lan966x->ports[p];
+> > +
+> > +                     if (!port)
+> > +                             continue;
+> > +
+> > +                     if (port->bond == bond)
+> > +                             visited |= BIT(p);
+> > +             }
+> > +     }
+> > +}
 
 -- 
-viresh
+/Horatiu

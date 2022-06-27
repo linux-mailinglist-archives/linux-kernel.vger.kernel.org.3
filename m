@@ -2,62 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34BD555C461
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D84955CD59
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbiF0ISn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:18:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48680 "EHLO
+        id S233000AbiF0ITp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbiF0ISl (ORCPT
+        with ESMTP id S231998AbiF0ITm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:18:41 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE065C76;
-        Mon, 27 Jun 2022 01:18:39 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LWgY31qVdzhYn4;
-        Mon, 27 Jun 2022 16:16:23 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 27 Jun 2022 16:18:36 +0800
-CC:     <gregkh@linuxfoundation.org>, <alexander.shishkin@linux.intel.com>,
-        <james.clark@arm.com>, <will@kernel.org>, <robin.murphy@arm.com>,
-        <acme@kernel.org>, <jonathan.cameron@huawei.com>,
-        <john.garry@huawei.com>, <helgaas@kernel.org>,
-        <lorenzo.pieralisi@arm.com>, <mathieu.poirier@linaro.org>,
-        <suzuki.poulose@arm.com>, <mark.rutland@arm.com>,
-        <joro@8bytes.org>, <shameerali.kolothum.thodi@huawei.com>,
-        <peterz@infradead.org>, <mingo@redhat.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
-        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
-        <linuxarm@huawei.com>
-Subject: Re: [PATCH v9 5/8] perf tool: Add support for HiSilicon PCIe Tune and
- Trace device driver
-To:     Leo Yan <leo.yan@linaro.org>,
-        Yicong Yang <yangyicong@hisilicon.com>
-References: <20220606115555.41103-1-yangyicong@hisilicon.com>
- <20220606115555.41103-6-yangyicong@hisilicon.com>
- <20220627020256.GB143063@leoy-ThinkPad-X240s>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <fb55fdab-3ad6-a21a-315a-9dc404b35f11@huawei.com>
-Date:   Mon, 27 Jun 2022 16:18:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Mon, 27 Jun 2022 04:19:42 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85868E45;
+        Mon, 27 Jun 2022 01:19:40 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LWgcp4plPz4xDB;
+        Mon, 27 Jun 2022 18:19:38 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1656317979;
+        bh=7g/3i3juQG76SYtldFCyXOFRWfeOFgQJvo6kNSgX9JI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kINRBB6qxfkklttarj7+0VGOt5rZIjAxq447Pa0H5xUJiTpA2lcfOp6nhvO09b0lh
+         OMzTBBpfwxsqLxo5J4MmP1GSj2rJpl8ApTyQjlXvfH11k/eZdwPKVBj9hHXRCBVTiV
+         kISKyB3igW0g7qalbY4BjreIly5e8uNBWjyjrsbK0dYLxE/JwBgvxWpsqdU4sXEOvv
+         HDX7cqKS2onLozI/Lu75XBqhycFXBVXzDT48eDh9MUbzO24DMCGGvF8gnr+39UM9Td
+         m3pzW26YIUMU7GgadRtMk76upq7YkUt5urTbv0yY3RPGtdBcZQ9D0Jr3zUo1uGLBhn
+         0Qy5mDUJAOeTQ==
+Date:   Mon, 27 Jun 2022 18:19:37 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc:     Ben Gardon <bgardon@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the kvm tree
+Message-ID: <20220627181937.3be67263@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20220627020256.GB143063@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/+j5HvyYz1P499cVlhWwTAPs";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,59 +51,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/27 10:02, Leo Yan wrote:
-> On Mon, Jun 06, 2022 at 07:55:52PM +0800, Yicong Yang wrote:
->> From: Qi Liu <liuqi115@huawei.com>
->>
->> HiSilicon PCIe tune and trace device (PTT) could dynamically tune
->> the PCIe link's events, and trace the TLP headers).
->>
->> This patch add support for PTT device in perf tool, so users could
->> use 'perf record' to get TLP headers trace data.
->>
->> Signed-off-by: Qi Liu <liuqi115@huawei.com>
->> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> 
-> Just one minor comment.
-> 
-> [...]
-> 
->> diff --git a/tools/perf/util/hisi-ptt.h b/tools/perf/util/hisi-ptt.h
->> new file mode 100644
->> index 000000000000..2db9b4056214
->> --- /dev/null
->> +++ b/tools/perf/util/hisi-ptt.h
->> @@ -0,0 +1,19 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * HiSilicon PCIe Trace and Tuning (PTT) support
->> + * Copyright (c) 2022 HiSilicon Technologies Co., Ltd.
->> + */
->> +
->> +#ifndef INCLUDE__PERF_HISI_PTT_H__
->> +#define INCLUDE__PERF_HISI_PTT_H__
->> +
->> +#define HISI_PTT_PMU_NAME		"hisi_ptt"
->> +#define HISI_PTT_AUXTRACE_PRIV_SIZE	sizeof(u64)
->> +
->> +struct auxtrace_record *hisi_ptt_recording_init(int *err,
->> +						struct perf_pmu *hisi_ptt_pmu);
->> +
->> +int hisi_ptt_process_auxtrace_info(union perf_event *event,
->> +				   struct perf_session *session);
-> 
-> The function hisi_ptt_process_auxtrace_info() is introduced by next
-> patch for support PTT decoding, for good practice (e.g. keep
-> bisection), it's good to introduce function declaration and definition
-> in one patch.
-> 
+--Sig_/+j5HvyYz1P499cVlhWwTAPs
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for catching this. There's something wrong when doing the patch splitting.
-Will fix this!
+Hi all,
 
-> With this fixing, this patch looks good to me:
-> 
-> Reviewed-by: Leo Yan <leo.yan@linaro.org>
-> 
+After merging the kvm tree, today's linux-next build (htmldocs) produced
+this warning:
 
-Thanks.
+Documentation/virt/kvm/api.rst:8210: WARNING: Title underline too short.
+
+8.38 KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
+---------------------------
+Documentation/virt/kvm/api.rst:8217: WARNING: Unexpected indentation.
+
+Introduced by commit
+
+  084cc29f8bbb ("KVM: x86/MMU: Allow NX huge pages to be disabled on a per-=
+vm basis")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+j5HvyYz1P499cVlhWwTAPs
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK5aBkACgkQAVBC80lX
+0Gz2HAf8DYtPt/dHj5EvB7SbRpRlmFjmtN3UB+bz7NtUsFXFXf0prtUCPDq9qBl7
+ty4Pa0KPgEItbcgfBBldD8pvE/IWFfuNdjiu+Asz3NjURfLaQDhCB+N5wFl/GfbO
+W4dK0fwbiADyLwvOanpwmNY/qkGdB53Kvi6XPad1sETaDEwVDZpZzKnewHaa6O6y
+wqgubhL2NYWT1GIOXHopImATlA3il9LDwCB+krWgYrtV+HeWBRvZNmuO7H/SQNjU
+UHaMIZ6XyfDeVndPGmdkZNS8Vp2CvHtOmA1aBEhGwBMoXpwZFkHeWSZuhsVGjUNn
+E8S+FulQWwgPBIvQFdMCluczCcu1ww==
+=tz3s
+-----END PGP SIGNATURE-----
+
+--Sig_/+j5HvyYz1P499cVlhWwTAPs--

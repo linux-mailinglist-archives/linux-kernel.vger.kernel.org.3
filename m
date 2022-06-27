@@ -2,141 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6750B55CA28
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0BD55C408
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242055AbiF0XYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S242082AbiF0XZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241941AbiF0XYQ (ORCPT
+        with ESMTP id S240138AbiF0XZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:24:16 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014872315F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:24:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1656372254; x=1687908254;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=S8N+p0moc3MloWqEEauJLXVpb/5eTV2AD6EVivHGR+Q=;
-  b=OI0edh33Da6Kr4vDJdjyVE+HOpOLwVJxXtDJRqKZ/PFgQ9lyvBqJX126
-   wjmzbAI/B6A8EaXC+LwyDiz6gJu5ZoToC2IyOww9yJ8bJduuFtKj40qsx
-   kK98GfLegK6WSN0MI4PxfRjQsUZJ8PlQKGRpeSkgmDcRFoopPMCz/xjlc
-   TowN2YWrCd9XjBC/tsaRns7aFlHejEei2IqfuO96wpKNyzbEuHgrvN4O4
-   XoorNgNHlbzFot8O4XX68lO/NEmGXlzioR1yG6hIlGvEbErpcO1/fFgrB
-   n02DCbwKWzA0ksPRvX46zlzgXmjJ1byFRcyDxJXJbZ7S+aZ01SPJx7u9C
-   A==;
-X-IronPort-AV: E=Sophos;i="5.92,227,1650902400"; 
-   d="scan'208";a="204233395"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Jun 2022 07:24:13 +0800
-IronPort-SDR: YfruM3WpxOaIniRtNESqOpGbs5nm3tjmRNkK2Vn5AuQLereOM7xdRo0gykKLmM4axoaaV8l9dN
- LkCqDvUNTn646aLtaOuWGr16vXkrT/+jMaj6oKWCgD/5rukFjWy9WSD+AblEGvs72iPMcxwTKp
- 2NEMr38cbYKEo76KNYsqxoZx6VH5btft2oWmy1il+dyjm6SJnwmvYI8Q9gtba6KG/Z1m4MH9wG
- rvNMprKs0bJ7x1mEeTiSnZRvKxOWiPEXKc+hdzYQE3IgtlYwZuwX3D9sm5ONHhJzAnZ4RBkBrP
- a1RclBCUBoE1CPkJq2n87F2G
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jun 2022 15:46:36 -0700
-IronPort-SDR: VTnkQYTygL7EDjTA1sJqf7Hac+Y34iZSTRzTi/JS/1oeRBm8sGkoMMHpyPkR2Iv/QvFiEJUPSU
- 7sfaMXxJ/G0b6ZDUIgSSszm6//9dbndVTIoq1jPto2b8vQ3GBnL/mOv1DSY2L5w06LsXfOj/GN
- NphxVGGub6T/Ft5qAEPem/IDOIIFJ2aGiHTugJOKoUjhI2YVBUEj170YD5HDakttRzQdzQFd9e
- EdNa8Sz46qwDy++scIIz5KQ0y258QpiBrxUSn7Pq5YC/gp8d+5YzNb1gxsjG7NJUS81tOoNfUH
- rrU=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jun 2022 16:24:14 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LX3hY3ptcz1RwqM
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:24:13 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1656372252; x=1658964253; bh=S8N+p0moc3MloWqEEauJLXVpb/5eTV2AD6E
-        VivHGR+Q=; b=DOmB0q+yumadQfEfKMysp6ZcnZ0HtW72qJdwM5m8B0Kc9Tad+dF
-        7gDs0OfNHqCTGeSJfqD9/6sW1evo3sq7cfUvTRWVJIHK1cvpn/iA0skUc9IIKiE8
-        KNmo/tqZYLCa5cn5qWD0Ryij/7qx8e/kumjGMwTGlY2HfYRxOMPtvr9WNC/dUNhF
-        menESGNdXZJXjqA+MtrgYPevYEFlhkjHja7G3apSDEhYWjiRMEr2hwIPvwtYRb3G
-        oGa6nySA/D6iv8hrxLg69E36edryEq45dv95ZCgDqaDMBUQ/0rXQ/5OSFkcyN4S3
-        m/oYW8SWIyUKCVcIwEf/+kyLjCcbBjt44xA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ILHe7cmz6yRB for <linux-kernel@vger.kernel.org>;
-        Mon, 27 Jun 2022 16:24:12 -0700 (PDT)
-Received: from [10.225.163.99] (unknown [10.225.163.99])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LX3hV0cq4z1RtVk;
-        Mon, 27 Jun 2022 16:24:09 -0700 (PDT)
-Message-ID: <b69c6112-98b7-3890-9d11-bb321a7c877a@opensource.wdc.com>
-Date:   Tue, 28 Jun 2022 08:24:08 +0900
+        Mon, 27 Jun 2022 19:25:07 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0D723169
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:25:07 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3176b6ed923so100132537b3.11
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:25:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZKrYTXSW7z/1khk7h8njEpnz4YPMgWD7vmDOzXoSSXQ=;
+        b=gtN2flgn1WeaLbf0Wj16VG1k7Df3OBtuLCZtIHy6GLDK13OK0XcF0/mY0PJLzlagb6
+         bSBAWPQfKQYasXdVBPBMVkaquJ1MahTNrnbEAfDuq7VCMbaY39MOJ1NpNWXiKZCp3FNw
+         yzjPzTId5ow80G6dd12A+ysaDcswKtDT7+2Dd4scMlHt+QsGWgdhg3UUG2mTXbxdsusE
+         SnQ2ZpHlqe5aiz5SLrYRZ761XQB8Vdvjcc7p4fO+A1EOQkV3fv9VOPqo0lAsEoYHel/6
+         Qwr6FkdJGqn1a8BuxjCIgguvP9P9xpzQE8i4d6BPpH5s0BpTlOBOoV6h9JHjAmHviT41
+         npIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZKrYTXSW7z/1khk7h8njEpnz4YPMgWD7vmDOzXoSSXQ=;
+        b=ycmzCP4WpAjLGaWCbcw/MHAm98Xss+RD1iXWnQrPKA2uf4iAbbTBMMJVQeVc2VGbnc
+         b0CIOulVzqO6PoZ7ijK6ga8A3JYEo1BzGpEOxL9ehLwroSP4OCN63DguW3vxiA5MZAue
+         hUIThnntpxRGRYrd2d2PyQfnIbIKo3wyrOG8rqTbgFxiQdyWiTo3nCMJ3asuFqXM5mPm
+         h3C4TzkXxr4vtUYIdgOtqpUbjP8Y4gfZLVKxYKG3mdFbFHiTCZNQVNcGmC10eMcEdtcu
+         p73lZITljMHeDKdvQ1mzVku98ifyJrmE3ox6nTLvisTtqXsJ4EIdpI5e/z+wAYjuhhVk
+         yo6g==
+X-Gm-Message-State: AJIora/+Hf6g4UfdeIC+yT1kkeepeeMJohJllv8Ieqju5Tea1f8OZL7/
+        PqMEK05VthVlK8KOmU+kyqvRvquE3R9m7xUANX9POw==
+X-Google-Smtp-Source: AGRyM1uz0/ZMpJZKCgtw9mtullcfVxvLxBbX7tRqkJMY6GnxwYpcsV3erlMrs3lAoSmsdkedVJfyf2GI2cJLkWCRtpE=
+X-Received: by 2002:a81:19ca:0:b0:31b:732c:15e9 with SMTP id
+ 193-20020a8119ca000000b0031b732c15e9mr17136460ywz.167.1656372306244; Mon, 27
+ Jun 2022 16:25:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 5/5] libata-scsi: Cap ata_device->max_sectors according
- to shost->max_sectors
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
-        will@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, iommu@lists.linux-foundation.org,
-        iommu@lists.linux.dev, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com
-References: <1656343521-62897-1-git-send-email-john.garry@huawei.com>
- <1656343521-62897-6-git-send-email-john.garry@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <1656343521-62897-6-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220619120451.95251-1-wuyun.abel@bytedance.com> <20220619120451.95251-4-wuyun.abel@bytedance.com>
+In-Reply-To: <20220619120451.95251-4-wuyun.abel@bytedance.com>
+From:   Josh Don <joshdon@google.com>
+Date:   Mon, 27 Jun 2022 16:24:55 -0700
+Message-ID: <CABk29NszU9vhmO7W3LJumonK7NW-4Nq+PkNFj_hX-WP6ZiF-FA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/7] sched/fair: avoid double search on same cpu
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Chen Yu <yu.c.chen@intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/22 00:25, John Garry wrote:
-> ATA devices (struct ata_device) have a max_sectors field which is
-> configured internally in libata. This is then used to (re)configure the
-> associated sdev request queue max_sectors value from how it is earlier set
-> in __scsi_init_queue(). In __scsi_init_queue() the max_sectors value is set
-> according to shost limits, which includes host DMA mapping limits.
-> 
-> Cap the ata_device max_sectors according to shost->max_sectors to respect
-> this shost limit.
-> 
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+On Sun, Jun 19, 2022 at 5:05 AM Abel Wu <wuyun.abel@bytedance.com> wrote:
+>
+> The prev cpu is checked at the beginning of SIS, and it's unlikely to be
+> idle before the second check in select_idle_smt(). So we'd better focus
+> only on its SMT siblings.
+>
+> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
 
-Nit: please change the patch title to "ata: libata-scsi: Cap ..."
-
-> ---
->  drivers/ata/libata-scsi.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-> index 86dbb1cdfabd..24a43d540d9f 100644
-> --- a/drivers/ata/libata-scsi.c
-> +++ b/drivers/ata/libata-scsi.c
-> @@ -1060,6 +1060,7 @@ int ata_scsi_dev_config(struct scsi_device *sdev, struct ata_device *dev)
->  		dev->flags |= ATA_DFLAG_NO_UNLOAD;
->  
->  	/* configure max sectors */
-> +	dev->max_sectors = min(dev->max_sectors, sdev->host->max_sectors);
->  	blk_queue_max_hw_sectors(q, dev->max_sectors);
->  
->  	if (dev->class == ATA_DEV_ATAPI) {
-
-
--- 
-Damien Le Moal
-Western Digital Research
+Reviewed-by: Josh Don <joshdon@google.com>

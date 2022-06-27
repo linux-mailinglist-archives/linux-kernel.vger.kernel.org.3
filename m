@@ -2,81 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2853155C852
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9496455D4B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239072AbiF0LxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S239033AbiF0LxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238467AbiF0Lsa (ORCPT
+        with ESMTP id S238436AbiF0Ls1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:48:30 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747A8101CD
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:41:42 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id g20-20020a17090a579400b001ed52939d72so3703928pji.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:41:42 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:27 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C84B101C3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:41:31 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id r20so12682290wra.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:41:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Te7Bn8Ps7JLUBbyJF7xQc/CqErZW/fxCMAa/7Pn2yJM=;
-        b=qr4/FdoUOLjao3iROoOoGGqQLYxyZk8N4KJeqcyLsA/aLFlDP6ADm5eaypCcTYBSPk
-         GcR+tSWPRyMynemMo89OuGlPYzYpgQIHwbmoyJaRizq6YzIOsAuY+bM2Wpybp9byYCmN
-         +wNEEA5+2h5HYgBSBLlNI94gyV3xriVzK/Nn9y2v5RtzU8sUu02OS1wByd8UypL52h3v
-         dhJ+N+/WL1OqQwhpFa+NOYZjGSWAs5q/5iXcyDb07X8QqV+Vqe83pmqp65flZ7qD0k3L
-         gUZocr93jSt/REJ8P7inp/EIoXZx8zAjRt4RHyT4rRZXyK1SuSaVkqIkuVzYcfn2pT7n
-         Ksow==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=XGLjigKahLIbEiIjs4vb9AiZqSJH2kvHBxMmjbNszGQ=;
+        b=aPvmFznj7yqy4vj7LQLlbbcOIzC9aADXBp0AZlgIo456NCt8eVi6q37s5G+UG6Iigm
+         9iY7kl9/Mq2qyMAK3FgNVLrJ6oiNEeBtvY431Q0iuqZIUYR0lSTG+VhgSDRM9bc7ZOwI
+         nazBwO094kgX/wWej7vNXtwHePuuulFp46SC7Xif4L7pR+BmyneLm+h656KBMtrqAXHN
+         eZMaLz3fYaWmtX/DFKq13ZM9PQtYu/F5iMSJJgNgcG9tgD10XAl6Po+wAZIr01kQkSev
+         osJenA2uOk/VHO2aYlLGGMs7IwgYseZB3BeP32J5XhOlIdOItPsOT8/nQ5eZufUuRDC4
+         pD/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Te7Bn8Ps7JLUBbyJF7xQc/CqErZW/fxCMAa/7Pn2yJM=;
-        b=jNFCZ7NwzIfD6wHcDofLteyQgMst59ZeXkctxoVgehWv3TaNJxpq117QLn5CWD9MYh
-         CTJxetPPdh/ilt9JebaeCVK2jf+DrduiPxpQRUjIVJkbJNbjS10OTmEZIDe2Ae08VtPE
-         CCqF27QCtGxNvs694ldTlKlSNqyMHi6gl0uwOT9zJ8o/5Qde9qQ7qSUp1BZv2bJsgaE9
-         nREx99GdKhZENN6YlMKneln78kbxhdZKe5z60g2sl9aUfrdAdwWZlvzwLehE/lG/+w/T
-         kngwoPVkXgrmHmT1JZdTXvB8GRtW+10iBPmaS9tkCUi1Ai4oEq9U/8ttkC2QV7iZAENC
-         u8BQ==
-X-Gm-Message-State: AJIora9m0eARoK3G2PRhOT2CwOF2axb+QA6UFbv8HhtzOSVE7SwJZxHt
-        68FNrIQ1eO3j6091GeRPLk4=
-X-Google-Smtp-Source: AGRyM1tez5E2FyjPLs5PGhg40qU0H0E3SQlD0MFHWrBuezbgs9Ad5uO//+4+CT6fA8NmPaeVeHiALg==
-X-Received: by 2002:a17:90a:6809:b0:1ec:c213:56c8 with SMTP id p9-20020a17090a680900b001ecc21356c8mr20399771pjj.82.1656330101753;
-        Mon, 27 Jun 2022 04:41:41 -0700 (PDT)
-Received: from desktop-hypoxic.kamiya.io ([42.120.103.58])
-        by smtp.gmail.com with ESMTPSA id q2-20020a170902f34200b0016a2a8c7e8fsm6974942ple.143.2022.06.27.04.41.37
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=XGLjigKahLIbEiIjs4vb9AiZqSJH2kvHBxMmjbNszGQ=;
+        b=yFuQwVVihF8MCdc9oC8OsFKBSd7sjw6aAvvFkpehoya3S8hLgRIm0srfgq8FSvZFJw
+         qc7GPpyAHyB1w2XPDICAIbDeNUm6UJ5sJvZKtlMZ+2aBO0rZZKoG3FIM80yylOZ7QYQE
+         xbVJ+2q7kkoDK5eRujcwKuhUr6HlXk1Eq+eGGmCt5Nv13QUjY9QobmmVGQaoBNN4JYNS
+         gBYNHo5TQZ/NzHOydLlNZ/WEb5F8HWFLhRB28VmuoVYWz2sPFYHrrGCgioO9P1iu1O/o
+         XGOPU4cRbJZWm+ZlMUMx/djz+Du8RS93YLI9tw6vfXGHroo7JLWU7e+W5fk8XVo8/m+/
+         U3rA==
+X-Gm-Message-State: AJIora9v2mLFfj0uFC6bqSaUCmoJaTW6GDTWtgOX8dSGUqet+qpiSNin
+        9qs/utgnBSRmKF1Zw1BczNXy5g==
+X-Google-Smtp-Source: AGRyM1tano6gA3YQd1oWYRrXYlajjDR3D5/RPCRCXOlsa7JV+jUhPYwOBPQeaAZ+HX6xShSm0p7Hxg==
+X-Received: by 2002:adf:dbc1:0:b0:219:e994:6ba7 with SMTP id e1-20020adfdbc1000000b00219e9946ba7mr11742596wrj.229.1656330090193;
+        Mon, 27 Jun 2022 04:41:30 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id m12-20020adffe4c000000b0020d106c0386sm10066389wrs.89.2022.06.27.04.41.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 04:41:41 -0700 (PDT)
-From:   Yangxi Xiang <xyangxi5@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        nick black <dankamongmen@gmail.com>
-Subject: Re: [PATCH] vt: fix memory overlapping when deleting chars in the buffer
-Date:   Mon, 27 Jun 2022 19:40:16 +0800
-Message-Id: <20220627114016.11114-1-xyangxi5@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <YrmPi/D4dZAySgll@kroah.com>
-References: <YrmPi/D4dZAySgll@kroah.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 27 Jun 2022 04:41:29 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 12:41:27 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, johnson.wang@mediatek.com,
+        hsin-hsiung.wang@mediatek.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: mfd: mt6397: Add compatibles for
+ MT6331 RTC and keys
+Message-ID: <YrmXZyNHNrHtzOUC@google.com>
+References: <20220617110728.90132-1-angelogioacchino.delregno@collabora.com>
+ <20220617110728.90132-2-angelogioacchino.delregno@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220617110728.90132-2-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> And what commit id does this fix, or has it always been broken?
+On Fri, 17 Jun 2022, AngeloGioacchino Del Regno wrote:
 
-It fixes the commit 81732c3 (tty vt: Fix line garbage in virtual
-console on command line edition). The line buffer is not always
-broken, because the memcpy utilized the hardware acceleration, whose
-result is not deterministic. I fix this issue by replacing the
-scr_memcpyw with scr_memmovew used in insert_char, and preserving the
-memcpy optimization when the buffers are not overlapping.
+> The MT6331 PMIC provides many sub modules: regulators, audio
+> codec, LED controller, keys, RTC and some GPIOs.
+> It is always paired with a MT6332 Companion PMIC, which provides
+> thermistors, WLEDs (display LED backlight), secondary AP cluster
+> regulators, modem clocks, battery charger and fuel gauge.
+> 
+> Add the necessary compatibles to start implementing the basics.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/mt6397.txt | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
-Yangxi Xiang
+Applied, thanks.
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

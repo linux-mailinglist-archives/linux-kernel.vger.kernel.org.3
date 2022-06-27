@@ -2,139 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F97155C70A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB31D55D5DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233664AbiF0JFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
+        id S233773AbiF0JF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbiF0JFL (ORCPT
+        with ESMTP id S233086AbiF0JFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:05:11 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EC8634B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:05:10 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id o4so8088005wrh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=CHDSHYN9BpInL+Ryv54jLqygVypCcJUYwj0S5dNNlNY=;
-        b=MO2WKWmoot/lvaNaNLbFYHdQbYxMJrCc8Btuz3nNZZ29NgZl6WWHLb+Bhw3gMGbc8M
-         2kessA9KbEV0qfbho4/R4rkdmxxGJvWOz+ZGiX3nj7KbiDxw88N5vGtT1vBwpjZb+IcX
-         Cxn8aEaKnk0SFBS22KOnIjSkO2zuFzmmMTdI+IkgrtblacfoAPpBX4MZekPL3orpXEVr
-         izrWTdm+dEZPknvnd64z09PIl8+YsM2nbrD7hO8VzoGQ95eN4xKk0a56A8+un6NxmfAS
-         hMYi2WAnA/lNRBxysFwE/Aaa4+e8/DToDiEGOjbrYfYgMa5FPIhIw19bGPMwypSjBx1E
-         aLHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=CHDSHYN9BpInL+Ryv54jLqygVypCcJUYwj0S5dNNlNY=;
-        b=agrZ5lPTzaTflfN7LIXi9TD3rzrhTeGG8afls84w2Le2iP9LdnndrIAbvPjQI9VJVq
-         1uY2h0nIB7+iXXiY8EvsMt/WFkKJl8O2d5qQdzTF20eL4uoiD0naqIJnCs5Z2uZaT2sk
-         GBot6KqPwCrwhOHyU7L+eHg/+7NO1xzRuuZMCtHlMhXduIblqCsyktGiXhdd3/vGTQGk
-         iFIMw9d2ucAYZOjD/Jz6YYje05DpviBG5HfOFRR01hTqAOWNXy+RJaj2iX4ubsw4Ie3p
-         qoz6te+O3vGVcqWj3Ie7XNjpZP4h/Xs3ryu/+X8EDG4Cx/goD98It1XeVlXmt8gOBs1M
-         4y4Q==
-X-Gm-Message-State: AJIora/LTcHLcTFneijPXnK6NsVdEfu3t3MQIKd1wK9N6ub541XaFTcs
-        fimIKSnmGhZMSlYs9RBZCgmr2Q6JOxc+gA==
-X-Google-Smtp-Source: AGRyM1t0ygV4mlezEyvrgca03/hH34yMCOG3h4y+9E3XRdKQnETyVn+fb2Xm5QpzSHVjp+QFTfsyBg==
-X-Received: by 2002:a5d:544c:0:b0:21b:a288:f98c with SMTP id w12-20020a5d544c000000b0021ba288f98cmr11075178wrv.300.1656320709219;
-        Mon, 27 Jun 2022 02:05:09 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id n13-20020a05600c4f8d00b003971fc23185sm17770593wmq.20.2022.06.27.02.05.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 02:05:08 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 10:05:07 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v1 01/11] mfd: intel_soc_pmic_bxtwc: Don't shadow error
- codes in show()/store()
-Message-ID: <Yrlyw1eMFy4kd0JB@google.com>
-References: <20220616165823.4919-1-andriy.shevchenko@linux.intel.com>
+        Mon, 27 Jun 2022 05:05:55 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FE1634B;
+        Mon, 27 Jun 2022 02:05:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656320754; x=1687856754;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=jcKmTKeNDN11ToKECGTcEIIGoAMkwCReSD4tvZEnNOU=;
+  b=gh89DNe4LlIV3cmFQXzkOR5I57fix3KhHHbqM5idztRcTyFZtuUk5W+5
+   DRHzumX06f2vLeVrABUuXKQfMHry2HtRYW/QDZLMW0040hF9y7dEyV15l
+   CLDl/LLRT/UJzeDvnpubz5QQfzJVKaqWIPjqGGdKsMgjH0c550WbEfJV1
+   /KParq2Eo93HyjRIVCoFdRWnICVbzhYHucW5QsikB0N4MySnwbqA6FNDx
+   d79zPv8cE73mNatcjAmW2JVYO1d650Vyab4Y7tj0XG4UsS/urrhdSO0ow
+   AvUqprzvoUlP3r/nRuh5HFG7RDpdFuurNCWmxpbJHyB0KVDpM6DG74owq
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="367719636"
+X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
+   d="scan'208";a="367719636"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 02:05:53 -0700
+X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
+   d="scan'208";a="646348400"
+Received: from gretavix-mobl3.amr.corp.intel.com ([10.249.43.78])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 02:05:49 -0700
+Date:   Mon, 27 Jun 2022 12:05:50 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Lukas Wunner <lukas@wunner.de>
+cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        vz@mleia.com, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Subject: Re: [PATCH 1/8] serial: core: only get RS485 termination gpio if
+ supported
+In-Reply-To: <20220625194951.GA2879@wunner.de>
+Message-ID: <fbce8d7e-86e-d47e-bcd8-5b99754d1d2e@linux.intel.com>
+References: <20220622154659.8710-1-LinoSanfilippo@gmx.de> <20220622154659.8710-2-LinoSanfilippo@gmx.de> <20220625194951.GA2879@wunner.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220616165823.4919-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022, Andy Shevchenko wrote:
+On Sat, 25 Jun 2022, Lukas Wunner wrote:
 
-> kstrtox() along with regmap API can return different error codes based on
-> circumstances.
+> On Wed, Jun 22, 2022 at 05:46:52PM +0200, Lino Sanfilippo wrote:
+> > In uart_get_rs485_mode() only try to get a termination GPIO if RS485 bus
+> > termination is supported by the driver.
+> [...]
+> > --- a/drivers/tty/serial/serial_core.c
+> > +++ b/drivers/tty/serial/serial_core.c
+> > @@ -3384,17 +3384,20 @@ int uart_get_rs485_mode(struct uart_port *port)
+> >  		rs485conf->flags |= SER_RS485_RTS_AFTER_SEND;
+> >  	}
+> >  
+> > -	/*
+> > -	 * Disabling termination by default is the safe choice:  Else if many
+> > -	 * bus participants enable it, no communication is possible at all.
+> > -	 * Works fine for short cables and users may enable for longer cables.
+> > -	 */
+> > -	port->rs485_term_gpio = devm_gpiod_get_optional(dev, "rs485-term",
+> > -							GPIOD_OUT_LOW);
+> > -	if (IS_ERR(port->rs485_term_gpio)) {
+> > -		ret = PTR_ERR(port->rs485_term_gpio);
+> > -		port->rs485_term_gpio = NULL;
+> > -		return dev_err_probe(dev, ret, "Cannot get rs485-term-gpios\n");
+> > +	if (port->rs485_supported->flags & SER_RS485_TERMINATE_BUS) {
 > 
-> Don't shadow them when returning to the caller.
+> So I think linux-next commit be2e2cb1d281 ("serial: Sanitize rs485_struct")
+> contains a mistake in that it forces drivers to set SER_RS485_TERMINATE_BUS
+> in their rs485_supported->flags to allow enabling bus termination.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/mfd/intel_soc_pmic_bxtwc.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/mfd/intel_soc_pmic_bxtwc.c b/drivers/mfd/intel_soc_pmic_bxtwc.c
-> index bc069c4daa60..3148a319d467 100644
-> --- a/drivers/mfd/intel_soc_pmic_bxtwc.c
-> +++ b/drivers/mfd/intel_soc_pmic_bxtwc.c
-> @@ -339,10 +339,14 @@ static ssize_t addr_show(struct device *dev,
->  static ssize_t addr_store(struct device *dev,
->  			  struct device_attribute *attr, const char *buf, size_t count)
->  {
-> -	if (kstrtoul(buf, 0, &bxtwc_reg_addr)) {
-> +	int ret;
-> +
-> +	ret = kstrtoul(buf, 0, &bxtwc_reg_addr);
-> +	if (ret) {
->  		dev_err(dev, "Invalid register address\n");
+> That's wrong because *every* rs485-capable driver can enable bus
+> termination if a GPIO has been defined for that in the DT.
 
-Is that really what failure means, on every failure?
+Do you mean every em485 using driver? Otherwise I don't see this "forces 
+drivers to set" happening anywhere in the code?
 
-  "Returns 0 on success, -ERANGE on overflow and -EINVAL on parsing
-   error."
+You're partially right because there are other bugs in this area such 
+as the one you propose a fix below. While I was making the sanitization 
+series, I entirely missed some parts related to termination because 
+SER_RS485_TERMINATE_BUS is seemingly not set/handled correctly by the 
+core.
 
-> -		return -EINVAL;
-> +		return ret;
->  	}
-> +
->  	return (ssize_t)count;
->  }
->  
-> @@ -354,9 +358,9 @@ static ssize_t val_show(struct device *dev,
->  	struct intel_soc_pmic *pmic = dev_get_drvdata(dev);
->  
->  	ret = regmap_read(pmic->regmap, bxtwc_reg_addr, &val);
-> -	if (ret < 0) {
-> +	if (ret) {
->  		dev_err(dev, "Failed to read 0x%lx\n", bxtwc_reg_addr);
-> -		return -EIO;
-> +		return ret;
->  	}
->  
->  	return sprintf(buf, "0x%02x\n", val);
-> @@ -377,7 +381,7 @@ static ssize_t val_store(struct device *dev,
->  	if (ret) {
->  		dev_err(dev, "Failed to write value 0x%02x to address 0x%lx",
->  			val, bxtwc_reg_addr);
-> -		return -EIO;
-> +		return ret;
->  	}
->  	return count;
->  }
+Another thing that looks a bug is that on subsequent call to TIOCSRS485, 
+w/o SER_RS485_TERMINATE_BUS nothing happens (for non-em485 driver, that 
+is)? It seems to be taken care by 2/8 of this series though, I think. But 
+it should be properly marked as Fixes: ... in that case although nobody 
+has complained about it so likely not a huge issue to anyone.
+
+> In fact, another commit which was applied as part of the same series,
+> ebe2cf736a04 ("serial: pl011: Fill in rs485_supported") does not set
+> SER_RS485_TERMINATE_BUS in amba-pl011.c's flags and thus forbids the
+> driver from enabling bus termination, even though we know there are
+> products out there which support bus termination on the pl011 through
+> a GPIO (Revolution Pi RevPi Compact, Revpi Flat).
+>
+> I think what you want to do is amend uart_get_rs485_mode() to set
+> SER_RS485_TERMINATE_BUS in port->rs485_supported_flags if a GPIO
+> was found in the DT.  Instead of the change proposed above.
+
+That seems appropriate (and is a fix).
+
+What makes it a bit complicated though is that it's a pointer currently
+and what it points to is shared per driver (besides being const):
+	const struct serial_rs485       *rs485_supported;
+While it could be embedded into uart_port, there's the .padding which we 
+might not want to bloat uart_port with. Perhaps create non-uapi struct 
+kserial_rs485 w/o .padding and add static_assert()s to ensure the 
+layout is identical to serial_rs485?
+
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+ i.
+

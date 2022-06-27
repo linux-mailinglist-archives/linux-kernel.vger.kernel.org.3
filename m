@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D4555CFCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFDC55DC0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240535AbiF0Tlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 15:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
+        id S240603AbiF0Tlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 15:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240529AbiF0Tlp (ORCPT
+        with ESMTP id S240534AbiF0Tlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Jun 2022 15:41:45 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6201917E0D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:41:31 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id o19-20020a05600c4fd300b003a0489f414cso2716235wmq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:41:31 -0700 (PDT)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5571617AB4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:41:34 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id r20so14522648wra.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/4pSTzmZJtMPfdZhp3nJkb++kMPSJ1FDzT5rHgbkyFo=;
-        b=fUcGP1N8oyv9wbrxArow7bj9CcdpzDUZQAModO/c79V3MzgRbDNNV/8LgF4H1T1GQs
-         IChP1zjgi/XOcXFhZIkbV0TCnP/aEmt30Qt/x1j/QHaiLaw6W7XR/ZcK5lCplaamVDzb
-         m6w/B2QGiflnmfO1WZS7VEaMRJK0e3ugiRjiGSRO0gWg6iojMRzR5V4a0KyyQUXAI3fT
-         ePAmN8ijusyEpXfItpVgKuiAKLDnsyTJqmZX5NWTsvckGK1LX1/XQ9zMdcZhLecowRCr
-         rvyMkn21VBG8epRNjd1ed0nDT3oBvlHa57V6rwoKJH5h/ATmx4dpU3nicZ3JbdF7uof3
-         6JRA==
+        bh=0yX9mBCtyn3dt/LFcnWYLnHjmmtyKFR5605f1mLuzSM=;
+        b=AtMYN6PSkLA1y0PqfjVZ9B2anDv7fpdxjk9Z2GEBmdgR3Y/a5AVf7ucMgQk3IvAslk
+         Q0FldXcJOm2h1zMZQtoN6HX/VUa9z6V+celDZ6Cf6uyoZ436qN3qrQ4XzyB4kEaC/OCy
+         hcHOUjibIOU8Lfa1bhhnNuso3DiXNufNqD3OC3JF6FBFpZWJXFeM2Ph8krHKA6xsWkzO
+         fu96DPwW+8Wa2B9/eZ4mV4u23G09Fp5aWq/QeIOVXKmMAqyQFsynIPrm59xnsG6Zk4C0
+         oWRHhkY277ATUfplHzV4oeIn1Ke23xrVrGkP/kyz5t1D04Mi19ZmsHObET6qcXxwAAAm
+         jXLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/4pSTzmZJtMPfdZhp3nJkb++kMPSJ1FDzT5rHgbkyFo=;
-        b=7mpYf5mClHKljXWCS+ZU9nB2nklMqmXwavqrW5Y6A+8M0kkNeLa6DfV6XIIH7DDnyg
-         i7rvf3I6XpqJo4p4qOppvyknacNg3tvVFSYuhfrwmgLHZilrG6N4kn25pixfmVZSoG2h
-         G3gJEAGDHdZizmhw/KOxKZHERJo8HLLb77jR65zsIhXPN8ZlRkksmjhpAWJrrINiBL3o
-         VOVaOBIXbfoT2MZ1EuOsO/gdnu2eMNwt4x88ik+LhJ1nk9hwDIfzIAGAETE+Vszp63eU
-         U3NIVBbPLo9QIS/gl9NinpcCgTzVK3FlVptga4EenqC87fSUmYG5DHdXHhFDQI1wtwSY
-         UNSw==
-X-Gm-Message-State: AJIora9RvTRz0oHUkYHrol836PfFsPj+hrFgjgabTh3HwXaIO5UAvnPz
-        wl1X3/meE38hLLb4oDiHQqvi7g==
-X-Google-Smtp-Source: AGRyM1ulzUVwSrZMGumLgKk0IITcW4JskOSYSyGzeL5vL40TAZn2Pd2mkHEB4lIYztTEoPvb5D5DGQ==
-X-Received: by 2002:a1c:ed08:0:b0:39c:80b1:b0b3 with SMTP id l8-20020a1ced08000000b0039c80b1b0b3mr17522441wmh.134.1656358890978;
-        Mon, 27 Jun 2022 12:41:30 -0700 (PDT)
+        bh=0yX9mBCtyn3dt/LFcnWYLnHjmmtyKFR5605f1mLuzSM=;
+        b=a6HghhEwTOw87TfPXLEjGEGANoDZzRzjCAqDWfMIWHqn/4QeLpgvpQ1zYgEBA7zLAN
+         /flX00BjEQ855R5Dmg3jep5cVeKSAcp7rSeXkEfOGO5LXSEaCfP+rAi0sicGHy3vy4MT
+         fMJ9LNhk0Cgdim0tAWEyE18VMf2tbVUuYzmleKwAbQrFkxYq03k3egAVSTgF2dKWP0Jr
+         xSFa1dk98dorvMWpJn9LwN25s/6nEry+jf+afFOvFdRtc2iBNL38TRd2ZG4occD79q08
+         0OXwTCvVKR8aYNsJLnDTIx7OmxB+rs5UzNJMkGHGEYR1jVWN9QyO5teYfZOjcdUkmCdn
+         q/vQ==
+X-Gm-Message-State: AJIora+z/UVlnZXCEqpVEIT7ltA655J+yX/mn3pkImZHxc9VWGKG9RfY
+        EHSp41rYSbNPyPTPYZ8xGghFyw==
+X-Google-Smtp-Source: AGRyM1v+CiQCqjbnq4vRMZqSCSRDlEuyAPNKkRp+mF7UYQN9jimLW4SxHvA7KTYHLOBZVxNPsqPSbA==
+X-Received: by 2002:a5d:584f:0:b0:21b:a557:98fa with SMTP id i15-20020a5d584f000000b0021ba55798famr13392886wrf.462.1656358893163;
+        Mon, 27 Jun 2022 12:41:33 -0700 (PDT)
 Received: from henark71.. ([51.37.234.167])
-        by smtp.gmail.com with ESMTPSA id e9-20020a5d4e89000000b0021a3a87fda9sm11428047wru.47.2022.06.27.12.41.29
+        by smtp.gmail.com with ESMTPSA id e9-20020a5d4e89000000b0021a3a87fda9sm11428047wru.47.2022.06.27.12.41.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 12:41:30 -0700 (PDT)
+        Mon, 27 Jun 2022 12:41:32 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
@@ -77,9 +77,9 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
         alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v2 09/16] riscv: dts: canaan: add a specific compatible for k210's dma
-Date:   Mon, 27 Jun 2022 20:39:57 +0100
-Message-Id: <20220627194003.2395484-10-mail@conchuod.ie>
+Subject: [PATCH v2 10/16] riscv: dts: canaan: add a specific compatible for k210's timers
+Date:   Mon, 27 Jun 2022 20:39:58 +0100
+Message-Id: <20220627194003.2395484-11-mail@conchuod.ie>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627194003.2395484-1-mail@conchuod.ie>
 References: <20220627194003.2395484-1-mail@conchuod.ie>
@@ -87,7 +87,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,32 +97,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-The DMAC on the k210 has a non standard interrupt configuration, which
-leads to dtbs_check warnings:
+The timers on the k210 have non standard interrupt configurations,
+which leads to dtbs_check warnings:
 
-k210_generic.dtb: dma-controller@50000000: interrupts: [[27], [28], [29], [30], [31], [32]] is too long
-From schema: Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
+k210_generic.dtb: timer@502d0000: interrupts: [[14], [15]] is too long
+From schema: Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
 
-Update the binding to use a custom compatible to avoid the warning.
+Change to using the newly added canaan k210 specific binding to avoid
+the warning.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/boot/dts/canaan/k210.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/boot/dts/canaan/k210.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/arch/riscv/boot/dts/canaan/k210.dtsi b/arch/riscv/boot/dts/canaan/k210.dtsi
-index cd4eae82d8b2..45ccab36618a 100644
+index 45ccab36618a..be42c56e770c 100644
 --- a/arch/riscv/boot/dts/canaan/k210.dtsi
 +++ b/arch/riscv/boot/dts/canaan/k210.dtsi
-@@ -143,7 +143,7 @@ gpio0: gpio-controller@38001000 {
- 		};
+@@ -318,7 +318,7 @@ fpioa: pinmux@502b0000 {
+ 			};
  
- 		dmac0: dma-controller@50000000 {
--			compatible = "snps,axi-dma-1.01a";
-+			compatible = "canaan,k210-axi-dma", "snps,axi-dma-1.01a";
- 			reg = <0x50000000 0x1000>;
- 			interrupts = <27>, <28>, <29>, <30>, <31>, <32>;
- 			#dma-cells = <1>;
+ 			timer0: timer@502d0000 {
+-				compatible = "snps,dw-apb-timer";
++				compatible = "canaan,k210-apb-timer", "snps,dw-apb-timer";
+ 				reg = <0x502D0000 0x100>;
+ 				interrupts = <14>, <15>;
+ 				clocks = <&sysclk K210_CLK_TIMER0>,
+@@ -328,7 +328,7 @@ timer0: timer@502d0000 {
+ 			};
+ 
+ 			timer1: timer@502e0000 {
+-				compatible = "snps,dw-apb-timer";
++				compatible = "canaan,k210-apb-timer", "snps,dw-apb-timer";
+ 				reg = <0x502E0000 0x100>;
+ 				interrupts = <16>, <17>;
+ 				clocks = <&sysclk K210_CLK_TIMER1>,
+@@ -338,7 +338,7 @@ timer1: timer@502e0000 {
+ 			};
+ 
+ 			timer2: timer@502f0000 {
+-				compatible = "snps,dw-apb-timer";
++				compatible = "canaan,k210-apb-timer", "snps,dw-apb-timer";
+ 				reg = <0x502F0000 0x100>;
+ 				interrupts = <18>, <19>;
+ 				clocks = <&sysclk K210_CLK_TIMER2>,
 -- 
 2.36.1
 

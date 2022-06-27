@@ -2,72 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2042355D969
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFFC55D602
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233774AbiF0JBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
+        id S232986AbiF0JD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233653AbiF0JBU (ORCPT
+        with ESMTP id S232174AbiF0JD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:01:20 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38148638D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:01:19 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id l11so15540117ybu.13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:01:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sE+c2xBowUT0oZC9mJQkDcVYUMmhR1gbqrppxK7hGZQ=;
-        b=EaOtpJG1VTk5K3EQ8AGM1DheeW112pL2+D/Ji/GXydUHnQIKmMQLm+7mzEy7kIf53Q
-         c2I6VJbLQe4LotUrbFCadEldgNY4qPzYukLrtw2PVBXDVhU1iE/+8rEKzz5jseLHlIaf
-         0uBVTbd9scAsRleKLjLYPlvZwLGUmLMLRVVEOeOvy2cGhWp4hdkWqVEHf3E3298mBfwk
-         9UpU7jrIASTXhXWU+2qQqPYxxvECCKgpbCdV23BNSmv7eH1QXqT9v5Th05TgAhrc0wGL
-         21LHUj7KowEgMCZsU9/on9bNp9y5C/0t7P69JhvFswJu6eyRIEtN4htNMP7aARHEBzDy
-         j/tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sE+c2xBowUT0oZC9mJQkDcVYUMmhR1gbqrppxK7hGZQ=;
-        b=KeUHvCYvTRcHXy7kT95ldPJ6kTlS4zOGVeprrrhWXZ6RgGE4Lj/qmrnX3+2pqW8rqR
-         ZdlOtGYj682Nbh+Trpi+HwGeQerMK915wKveIuZ/K32jZON4qeA5VEEBYL9C5YCNGFrt
-         1qyjdkFD19g0yjqemNJjId4qrwGP4iOD1tutIfEwENAJEZ+Z2LD0I5QH9IOpXbJS0BfA
-         dIHObKdymw11BFxkrfV7ztxAMt18TpjGwDng1N5Ko78cKB+TYqD7lPD8Np2iGInTKf6a
-         9dgDtXCEVlkk9oDgyVUNTcSa8mhiI7nV2sT8/d0MUTHsOqJs5FDuPnzlRAoJhfM8kN3M
-         BMEA==
-X-Gm-Message-State: AJIora8AYPJMNZX5QErm//ZAt7mPffuIxF2NzcNP3gmDGFB3rkjXzlmR
-        PN/iyPNRTRwOwIe5EIbDUEXAq66NN/FmUhLYSoCysA==
-X-Google-Smtp-Source: AGRyM1vf0ubueZoJ427sMdcLnwQLYRPIcHlV/NXtwe2cG4KgWMgSwQBjg2vI+ToQ9/fKNI+vfmY3XB6b6+sUaXEMyM4=
-X-Received: by 2002:a25:3383:0:b0:66b:6205:1583 with SMTP id
- z125-20020a253383000000b0066b62051583mr12237480ybz.387.1656320478104; Mon, 27
- Jun 2022 02:01:18 -0700 (PDT)
+        Mon, 27 Jun 2022 05:03:27 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ABB26C7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:03:24 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LWhYm2R5szkWjZ;
+        Mon, 27 Jun 2022 17:02:04 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 17:02:47 +0800
+Subject: Re: [PATCH v2 7/9] mm, hwpoison: make __page_handle_poison returns
+ int
+To:     Naoya Horiguchi <nao.horiguchi@gmail.com>, <linux-mm@kvack.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
+ <20220623235153.2623702-8-naoya.horiguchi@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <ecbcdd7e-b21f-315b-7eff-1eb692e320f7@huawei.com>
+Date:   Mon, 27 Jun 2022 17:02:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-References: <20220625054524.2445867-1-zys.zljxml@gmail.com>
-In-Reply-To: <20220625054524.2445867-1-zys.zljxml@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 27 Jun 2022 11:01:07 +0200
-Message-ID: <CANn89iKyovwB1WC0FbGV3tqz2f+0rSShtPjStuEhvyygSjOGrQ@mail.gmail.com>
-Subject: Re: [PATCH v2] ipv6/sit: fix ipip6_tunnel_get_prl when memory
- allocation fails
-To:     zys.zljxml@gmail.com
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        katrinzhou <katrinzhou@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <20220623235153.2623702-8-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,77 +59,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 7:45 AM <zys.zljxml@gmail.com> wrote:
->
-> From: katrinzhou <katrinzhou@tencent.com>
->
-> Fix an illegal copy_to_user() attempt when the system fails to
-> allocate memory for prl due to a lack of memory.
-
-I do not really see an illegal copy_to_user()
-
-c = 0
--> len = 0
-
-if ((len && copy_to_user(a + 1, kp, len)) || put_user(len, &a->datalen))
-
-So the copy_to_user() should not be called ?
-
-I think you should only mention that after this patch, correct error
-code is returned (-ENOMEM)
-
-
->
-> Addresses-Coverity: ("Unused value")
-> Fixes: 300aaeeaab5f ("[IPV6] SIT: Add SIOCGETPRL ioctl to get/dump PRL.")
-> Signed-off-by: katrinzhou <katrinzhou@tencent.com>
+On 2022/6/24 7:51, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> 
+> __page_handle_poison() returns bool that shows whether
+> take_page_off_buddy() has passed or not now.  But we will want to
+> distinguish another case of "dissolve has passed but taking off failed"
+> by its return value. So change the type of the return value.
+> No functional change.
+> 
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 > ---
->
-> Changes in v2:
-> - Move the position of label "out"
->
->  net/ipv6/sit.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-> index c0b138c20992..3330882c0f94 100644
-> --- a/net/ipv6/sit.c
-> +++ b/net/ipv6/sit.c
-> @@ -323,8 +323,6 @@ static int ipip6_tunnel_get_prl(struct net_device *dev, struct ip_tunnel_prl __u
->                 kcalloc(cmax, sizeof(*kp), GFP_KERNEL_ACCOUNT | __GFP_NOWARN) :
->                 NULL;
->
-> -       rcu_read_lock();
-> -
->         ca = min(t->prl_count, cmax);
->
->         if (!kp) {
-> @@ -342,6 +340,7 @@ static int ipip6_tunnel_get_prl(struct net_device *dev, struct ip_tunnel_prl __u
->         }
->
->         c = 0;
-> +       rcu_read_lock();
->         for_each_prl_rcu(t->prl) {
->                 if (c >= cmax)
->                         break;
-> @@ -353,7 +352,7 @@ static int ipip6_tunnel_get_prl(struct net_device *dev, struct ip_tunnel_prl __u
->                 if (kprl.addr != htonl(INADDR_ANY))
->                         break;
->         }
-> -out:
-> +
->         rcu_read_unlock();
->
->         len = sizeof(*kp) * c;
-> @@ -362,7 +361,7 @@ static int ipip6_tunnel_get_prl(struct net_device *dev, struct ip_tunnel_prl __u
->                 ret = -EFAULT;
->
->         kfree(kp);
-> -
-> +out:
->         return ret;
+>  mm/memory-failure.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index ce045d0d6115..db85f644a1e3 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -71,7 +71,13 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
+>  
+>  static bool hw_memory_failure __read_mostly = false;
+>  
+> -static bool __page_handle_poison(struct page *page)
+> +/*
+> + * Return values:
+> + *   1:   the page is dissolved (if needed) and taken off from buddy,
+> + *   0:   the page is dissolved (if needed) and not taken off from buddy,
+> + *   < 0: failed to dissolve.
+> + */
+> +static int __page_handle_poison(struct page *page)
+>  {
+>  	int ret;
+>  
+> @@ -81,7 +87,7 @@ static bool __page_handle_poison(struct page *page)
+>  		ret = take_page_off_buddy(page);
+>  	zone_pcp_enable(page_zone(page));
+>  
+> -	return ret > 0;
+> +	return ret;
 >  }
->
-> --
-> 2.27.0
->
+>  
+>  static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, bool release)
+> @@ -91,7 +97,7 @@ static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, boo
+>  		 * Doing this check for free pages is also fine since dissolve_free_huge_page
+>  		 * returns 0 for non-hugetlb pages as well.
+>  		 */
+> -		if (!__page_handle_poison(page))
+> +		if (__page_handle_poison(page) <= 0)
+>  			/*
+>  			 * We could fail to take off the target page from buddy
+>  			 * for example due to racy page allocation, but that's
+> @@ -1048,7 +1054,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+>  		 * subpages.
+>  		 */
+>  		put_page(hpage);
+> -		if (__page_handle_poison(p)) {
+> +		if (__page_handle_poison(p) > 0) {
+>  			page_ref_inc(p);
+>  			res = MF_RECOVERED;
+>  		}
+> @@ -1698,8 +1704,7 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+>  	 */
+>  	if (res == 0) {
+>  		unlock_page(head);
+> -		res = MF_FAILED;
+
+It seems the previous discussion in [1] is missed. But that doesn't matter as pointed out by [1]. :)
+
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Thanks.
+
+[1]: https://lkml.org/lkml/2022/6/8/10
+
+> -		if (__page_handle_poison(p)) {
+> +		if (__page_handle_poison(p) > 0) {
+>  			page_ref_inc(p);
+>  			res = MF_RECOVERED;
+>  		}
+> 
+

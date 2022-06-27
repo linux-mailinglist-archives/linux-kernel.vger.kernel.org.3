@@ -2,188 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A6E55CB9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE5E55CBF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235449AbiF0ORI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33782 "EHLO
+        id S236860AbiF0ORi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234732AbiF0ORD (ORCPT
+        with ESMTP id S235757AbiF0ORg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:17:03 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B976513EBC;
-        Mon, 27 Jun 2022 07:16:59 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id o9so13215636edt.12;
-        Mon, 27 Jun 2022 07:16:59 -0700 (PDT)
+        Mon, 27 Jun 2022 10:17:36 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D0113F17
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:17:34 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id o19-20020a05600c4fd300b003a0489f414cso2188255wmq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:17:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mxDYyaY89H5EEfQVpEFxonV022j7M6z20MFWKjTlNFg=;
-        b=Qk0/EglqTX5KDRowJv35NcK7NDq76PkEU72HzKvwT77kpEL65fNlFFuC8njT9TUmVv
-         oprUM/cV0SpRVAwIqHxCIfR3jTxTN2rheZ75ZX4i1Fbt6sylkGae3VDGg6zLxLRYVDOQ
-         UIoHYKzRCM3jY1kUFzsWyiGkveLVr2u43nyoEhxTV00D1aKwPyzyjSdpIadRfqtowDqd
-         HcYTrrbNUK+JGJrcYh2KzAOf/iKYc2oCPrPZJUK36KBQiPZe9CoAJiP4q1z+eEqOFyWw
-         T1bgSkFTgCUqLunj0XMMO0gvldNMl09Ib9pKcPhbi6Tz0UU8DhLKBym8dJEOWlcQkKnZ
-         73Hw==
+        d=linaro.org; s=google;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Z6QEA8N2fEQzv1S4tlA6paW9O7X6dQLMNsP0wc/HP7s=;
+        b=uPe74+/ly+UMX4CPKTPoTCSysd09kq6ElePcLvkN3BHQIUDPVKN/iclvrwHzcB+Gve
+         +3RYNJUC4EBs85ofz36ifnr1kSj6JUBL0gmznsAKS2Us42FhQxSRJ8GJZHlWU++AFJhR
+         qciHTjt2In5k37i2G74J8dMFAhtB8SCJBWrC1ielz30UDmlDpjlSgwnwx2XZLQlKo9O0
+         PGjRkJePaH/xixuOVV5ZWvKIbM4Up9kW9q6p/gMUAnTLFhXlBo/GgcBIE40vE7niMosi
+         6HmvJaT4JbOvAksvVi9GxR8yecXufZJSm6Ad0lafFkOKFdqFvwWaaHIMVNfNrP/galS3
+         qXCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mxDYyaY89H5EEfQVpEFxonV022j7M6z20MFWKjTlNFg=;
-        b=d/m+91Z3QY6BwFACV2+NMKT2Y1rmNFjAWpvoXc9/hcYlScRRHkQr6BJiUXs8tWMzLC
-         ZFHFge7OL2aSA6wrIUqy9dG+HIwxmwryLn8yrhKRFpM5Jy8yowcgDrxmgoKAF3pbjlk/
-         Wo43ymwZXITsVk2LGmo0NKb5mJbviCoztx5W9fTFDJ1OqDNsByEsaLhmQdEhmOzSQNVd
-         2GdD+Z4eKOkFPGor7Pnn+t8g6yqSPVNm2TePav+18r1/HvwgxJ+QVv1T53MJwfMY9Cqz
-         Rv2+GvYRHxYITTcum211nhMgRM68tnuxuj7A4APvGXa9+1pUgkl8az8bymMRG7C0Zidu
-         LgkA==
-X-Gm-Message-State: AJIora+GgkpNcZTEwB0EN51LSAudeaJBLzAN7jHnpnEjF1ErL9Qm/8e2
-        +9YzznrhBwioo8P02DrHplq7QFJqstNYYP/wYCE=
-X-Google-Smtp-Source: AGRyM1smieOYkbwkdYTJgUqEsMZQclsTD1DaOkAuXXPHKDskOVgnam8GfZY8mVRNQRLOv4PDHfacH1xT6lu8DV40k4s=
-X-Received: by 2002:a05:6402:42d3:b0:435:2c49:313d with SMTP id
- i19-20020a05640242d300b004352c49313dmr16224916edc.86.1656339418100; Mon, 27
- Jun 2022 07:16:58 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Z6QEA8N2fEQzv1S4tlA6paW9O7X6dQLMNsP0wc/HP7s=;
+        b=X5FSCZIe9uQvCTpG7/wcBXIKh3E1crPT/WRr9Yc7wIoR2dENviTJclMMM19MIiNN7d
+         +8ANrEqdo1Mhm8ygNCJjNA+4OR+ekVFe+oVCyrlMIIv8A+W1fD5SPlGKGiKwSH9/L652
+         Fka2ztYRuZoAikkQ0DtjTlfNTaLHloBIavglYBJYzOYifY0FIq0O22eyfL5GlLVKh6j1
+         NNk46491nOKPEtb4Dwi1iBOf9nH/T2cE9wyfAz3CS+rmdjBpyUArpNh4PpqgJaJsOA5Z
+         KttEAV8LF+iEyrtxrgGSDNhO7rnRbM3EnYPfv+kVA+aAqHWOm9NALRuMKf7ZaQOIDG1W
+         jVYA==
+X-Gm-Message-State: AJIora+lAL/aqgRzVpyLAmOu6lTSo5MXUBjZwCn8bJr8u0ZZLRfbA7N6
+        +aTjWg8wJgw2blEBu2qiKgZ8BrmBYZxxQg==
+X-Google-Smtp-Source: AGRyM1sUUa25aokTh8//D/5KozJ829O+SuqtdxIljGwkDpsa/KC5DdNSc9Zz2uwc6cZM6qwVzhqy/A==
+X-Received: by 2002:a05:600c:a02:b0:39c:97cc:82e3 with SMTP id z2-20020a05600c0a0200b0039c97cc82e3mr20504099wmp.97.1656339453354;
+        Mon, 27 Jun 2022 07:17:33 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id l4-20020a1c7904000000b003a04d19dab3sm2315371wme.3.2022.06.27.07.17.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 07:17:32 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 15:17:30 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     linux-kernel@vger.kernel.org, stable@kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [RESEND 1/1] Bluetooth: Use chan_list_lock to protect the whole
+ put/destroy invokation
+Message-ID: <Yrm7+nSB4QAK7zfN@google.com>
+References: <20220622082716.478486-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-References: <20220626004326.8548-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220626004326.8548-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <87wnd3erab.wl-maz@kernel.org> <CA+V-a8tcxj_N0sBHhgAZAN8WSJ12JnDzAvUUnCXto3wHLqNVwg@mail.gmail.com>
- <87v8snehwi.wl-maz@kernel.org> <CAMuHMdVt9FjCtvMgJcCh=g2b+8b-fgabGbOLDcXNrrPMpC+3jQ@mail.gmail.com>
- <CA+V-a8uLzLJ=wB6oUu0b2oZO=FPSCTSrqb=3m9=BJxATFKmjMw@mail.gmail.com>
- <CAMuHMdUWC_7MPnP6LcOqi96FAhrAENC4iwtv2ksZVnvR8BC4ww@mail.gmail.com> <0fdbfdd0ee1c7ca39f8d3e2f86af1194@kernel.org>
-In-Reply-To: <0fdbfdd0ee1c7ca39f8d3e2f86af1194@kernel.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 27 Jun 2022 15:16:31 +0100
-Message-ID: <CA+V-a8u8X+bne_a3LY13zGTKr-hOWhm=R9gGX1JyE8PzWRNXpQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] irqchip/sifive-plic: Add support for Renesas
- RZ/Five SoC
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220622082716.478486-1-lee.jones@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+On Wed, 22 Jun 2022, Lee Jones wrote:
 
-On Mon, Jun 27, 2022 at 2:53 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On 2022-06-27 14:12, Geert Uytterhoeven wrote:
-> > Hi Prabhakar,
-> >
-> > On Mon, Jun 27, 2022 at 3:06 PM Lad, Prabhakar
-> > <prabhakar.csengg@gmail.com> wrote:
-> >> On Mon, Jun 27, 2022 at 9:53 AM Geert Uytterhoeven
-> >> <geert@linux-m68k.org> wrote:
-> >> > On Sun, Jun 26, 2022 at 2:19 PM Marc Zyngier <maz@kernel.org> wrote:
-> >> > > On Sun, 26 Jun 2022 10:38:18 +0100,
-> >> > > "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
-> >> > > > On Sun, Jun 26, 2022 at 9:56 AM Marc Zyngier <maz@kernel.org> wrote:
-> >> > > > > On Sun, 26 Jun 2022 01:43:26 +0100,
-> >> > > > > Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >> > > > > > The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
-> >> > > > > > NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
-> >> > > > > > case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
-> >> > > > > > edge until the previous completion message has been received and
-> >> > > > > > NCEPLIC100 doesn't support pending interrupt counter, hence losing the
-> >> > > > > > interrupts if not acknowledged in time.
-> >> > > > > >
-> >> > > > > > So the workaround for edge-triggered interrupts to be handled correctly
-> >> > > > > > and without losing is that it needs to be acknowledged first and then
-> >> > > > > > handler must be run so that we don't miss on the next edge-triggered
-> >> > > > > > interrupt.
-> >> > > > > >
-> >> > > > > > This patch adds a new compatible string for Renesas RZ/Five SoC and adds
-> >> > > > > > support to change interrupt flow based on the interrupt type. It also
-> >> > > > > > implements irq_ack and irq_set_type callbacks.
-> >> > > > > >
-> >> > > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >> >
-> >> > > > > > +     if (of_device_is_compatible(node, "renesas,r9a07g043-plic")) {
-> >> > > > > > +             priv->of_data = RENESAS_R9A07G043_PLIC;
-> >> > > > > > +             plic_chip.name = "Renesas RZ/Five PLIC";
-> >> > > > >
-> >> > > > > NAK. The irq_chip structure isn't the place for platform marketing.
-> >> > > > > This is way too long anyway (and same for the edge version), and you
-> >> > > > > even sent me a patch to make that structure const...
-> >> > > > >
-> >> > > > My bad will drop this.
-> >> > >
-> >> > > And why you're at it, please turn this rather random 'of_data' into
-> >> > > something like:
-> >> > >
-> >> > > diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
-> >> > > index bb87e4c3b88e..cd1683b77caf 100644
-> >> > > --- a/drivers/irqchip/irq-sifive-plic.c
-> >> > > +++ b/drivers/irqchip/irq-sifive-plic.c
-> >> > > @@ -64,6 +64,10 @@ struct plic_priv {
-> >> > >         struct cpumask lmask;
-> >> > >         struct irq_domain *irqdomain;
-> >> > >         void __iomem *regs;
-> >> > > +       enum {
-> >> > > +               VANILLA_PLIC,
-> >> > > +               RENESAS_R9A07G043_PLIC,
-> >> > > +       } flavour;
-> >> > >  };
-> >> > >
-> >> > >  struct plic_handler {
-> >> > >
-> >> > > to give some structure to the whole thing, because I'm pretty sure
-> >> > > we'll see more braindead implementations as time goes by.
-> >> >
-> >> > What about using a feature flag (e.g. had_edge_irqs) instead?
-> >>
-> >> diff --git a/drivers/irqchip/irq-sifive-plic.c
-> >> b/drivers/irqchip/irq-sifive-plic.c
-> >> index 9f16833dcb41..247c3c98b655 100644
-> >> --- a/drivers/irqchip/irq-sifive-plic.c
-> >> +++ b/drivers/irqchip/irq-sifive-plic.c
-> >> @@ -60,13 +60,13 @@
-> >>  #define        PLIC_DISABLE_THRESHOLD          0x7
-> >>  #define        PLIC_ENABLE_THRESHOLD           0
-> >>
-> >> +#define PLIC_QUIRK_EDGE_INTERRUPT      BIT(0)
-> >>
-> >>  struct plic_priv {
-> >>         struct cpumask lmask;
-> >>         struct irq_domain *irqdomain;
-> >>         void __iomem *regs;
-> >> +       u32 plic_quirks;
-> >>  };
-> >>
-> >> What about something like above?
-> >
-> > LGTM.
-> >
-> > Marc suggested to make this unsigned long, but TBH, that won't make
-> > much of a difference.  PLICs are present on RV32 SoCs, too, so you
-> > cannot rely on having more than 32 bits anyway.
->
-> But it will make a difference on a 64bit platform, as we want to
-> use test_bit() and co to check for features.
->
-Ok will change that to unsigned long and use the test_bit/set_bit instead.
+> This change prevents a use-after-free caused by one of the worker
+> threads starting up (see below) *after* the final channel reference
+> has been put() during sock_close() but *before* the references to the
+> channel have been destroyed.
+> 
+>   refcount_t: increment on 0; use-after-free.
+>   BUG: KASAN: use-after-free in refcount_dec_and_test+0x20/0xd0
+>   Read of size 4 at addr ffffffc114f5bf18 by task kworker/u17:14/705
+> 
+>   CPU: 4 PID: 705 Comm: kworker/u17:14 Tainted: G S      W       4.14.234-00003-g1fb6d0bd49a4-dirty #28
+>   Hardware name: Qualcomm Technologies, Inc. SM8150 V2 PM8150 Google Inc. MSM sm8150 Flame DVT (DT)
+>   Workqueue: hci0 hci_rx_work
+>   Call trace:
+>    dump_backtrace+0x0/0x378
+>    show_stack+0x20/0x2c
+>    dump_stack+0x124/0x148
+>    print_address_description+0x80/0x2e8
+>    __kasan_report+0x168/0x188
+>    kasan_report+0x10/0x18
+>    __asan_load4+0x84/0x8c
+>    refcount_dec_and_test+0x20/0xd0
+>    l2cap_chan_put+0x48/0x12c
+>    l2cap_recv_frame+0x4770/0x6550
+>    l2cap_recv_acldata+0x44c/0x7a4
+>    hci_acldata_packet+0x100/0x188
+>    hci_rx_work+0x178/0x23c
+>    process_one_work+0x35c/0x95c
+>    worker_thread+0x4cc/0x960
+>    kthread+0x1a8/0x1c4
+>    ret_from_fork+0x10/0x18
+> 
+> Cc: stable@kernel.org
+> Cc: Marcel Holtmann <marcel@holtmann.org>
+> Cc: Johan Hedberg <johan.hedberg@gmail.com>
+> Cc: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: linux-bluetooth@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  net/bluetooth/l2cap_core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Cheers,
-Prabhakar
+This patch now passes all of the CI tests.
+
+Except the check-patch/lint tests which return false positives.
+
+Please consider for inclusion to remedy this serious bug.
+
+TIA.
+
+> diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+> index ae78490ecd3d4..82279c5919fd8 100644
+> --- a/net/bluetooth/l2cap_core.c
+> +++ b/net/bluetooth/l2cap_core.c
+> @@ -483,9 +483,7 @@ static void l2cap_chan_destroy(struct kref *kref)
+>  
+>  	BT_DBG("chan %p", chan);
+>  
+> -	write_lock(&chan_list_lock);
+>  	list_del(&chan->global_l);
+> -	write_unlock(&chan_list_lock);
+>  
+>  	kfree(chan);
+>  }
+> @@ -501,7 +499,9 @@ void l2cap_chan_put(struct l2cap_chan *c)
+>  {
+>  	BT_DBG("chan %p orig refcnt %u", c, kref_read(&c->kref));
+>  
+> +	write_lock(&chan_list_lock);
+>  	kref_put(&c->kref, l2cap_chan_destroy);
+> +	write_unlock(&chan_list_lock);
+>  }
+>  EXPORT_SYMBOL_GPL(l2cap_chan_put);
+>  
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

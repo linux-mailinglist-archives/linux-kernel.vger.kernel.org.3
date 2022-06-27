@@ -2,83 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2452855D9EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FF855DCB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234148AbiF0Khq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
+        id S233964AbiF0KmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233588AbiF0Khn (ORCPT
+        with ESMTP id S233884AbiF0KmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:37:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB2C63E3;
-        Mon, 27 Jun 2022 03:37:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E5735CE13B0;
-        Mon, 27 Jun 2022 10:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A9D9C3411D;
-        Mon, 27 Jun 2022 10:37:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656326259;
-        bh=gVPonoPPVuCVSEsji6A1NjbiecWc5W7N4UZpiOGZZXM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KqFvUTQmrW5Mc1I2JqUklPlvVsLqD8kPcH7ChI2Ep54Yn2DXkUKcqav50fSVOhO3c
-         5Ln5z75cGhQx/lEjkDH44uhIrFX026+9nQdVY6q7NJT7ajzKP6nj99oDKMJLAeScWp
-         Ih6HpuStN9tdPgwGipAJsyTJW3VqUV6lCc88yIR9dtx5rTuTRhewBIa7IeHN5PrXLN
-         o60PihSLkFmyubxW1zMBxdaZeKrOfDcae6tDkbzS8/L7TL5BqkuiK1zk40yqrEFqao
-         cxMkC2CTwrp2lQGXPsizUranYQPLVfikSVOFRVyTHvlBLrLNDApLuDpwEY+XVdufuW
-         yb2EsCH11AFFg==
-Date:   Mon, 27 Jun 2022 11:37:32 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Besar Wicaksono <bwicaksono@nvidia.com>
-Cc:     suzuki.poulose@arm.com, robin.murphy@arm.com,
-        catalin.marinas@arm.com, mark.rutland@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, sudeep.holla@arm.com,
-        thanu.rangarajan@arm.com, Michael.Williams@arm.com,
-        treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
-        mathieu.poirier@linaro.org, mike.leach@linaro.org,
-        leo.yan@linaro.org
-Subject: Re: [RESEND PATCH v3 2/2] perf: coresight_pmu: Add support for
- NVIDIA SCF and MCF attribute
-Message-ID: <20220627103731.GC22095@willie-the-truck>
-References: <20220621055035.31766-1-bwicaksono@nvidia.com>
- <20220621055035.31766-3-bwicaksono@nvidia.com>
+        Mon, 27 Jun 2022 06:42:14 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D156424;
+        Mon, 27 Jun 2022 03:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656326533; x=1687862533;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sd/cHeGy8jdWVz1qnBVANjV157gqCMkdgO7Xv3oof5I=;
+  b=cZuFqAM8KbuYQ6MzeN9j/1XcEagNY5FR6/Sr4lb070nxY1MdK5cRztfl
+   lkX3m9sT1GFR/x1cOWdp8PpHAivROuzS5+y0736w8NEc9uEXW1ZuZpuOW
+   L7ZdZbAidz6/THlinamhq8azUpxhDgVucXPyhg2Pw6nXmpK0A13hhOp4i
+   rEkawS9zLSuTWguyqaxQIaIxZ8XWdhDoGeMPRpuCn6wGuDqRzTOQKl4pZ
+   0Cbqg+iIZ4zULsRmGCy/140XyuhaYdluPQZsrdhMIeNO2GXyoe+kS1FQ5
+   0U65Xse98QrgZbvYTPM7JxJa5t+W/o+HaRctYIMy9s3SRYNYdAXRU2JlQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="282511843"
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="282511843"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 03:42:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="622510788"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 27 Jun 2022 03:42:05 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 90E5FD9; Mon, 27 Jun 2022 13:42:11 +0300 (EEST)
+Date:   Mon, 27 Jun 2022 13:42:11 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv7 14/14] x86/tdx: Add unaccepted memory support
+Message-ID: <20220627104211.whyuxx7h5tebrasb@black.fi.intel.com>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-15-kirill.shutemov@linux.intel.com>
+ <7c74e86e-295f-0958-cbdf-b54b4ca688dd@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220621055035.31766-3-bwicaksono@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <7c74e86e-295f-0958-cbdf-b54b4ca688dd@intel.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 12:50:35AM -0500, Besar Wicaksono wrote:
-> Add support for NVIDIA System Cache Fabric (SCF) and Memory Control
-> Fabric (MCF) PMU attributes for CoreSight PMU implementation in
-> NVIDIA devices.
+On Fri, Jun 24, 2022 at 09:22:03AM -0700, Dave Hansen wrote:
+> On 6/14/22 05:02, Kirill A. Shutemov wrote:
+> >  static inline void __accept_memory(phys_addr_t start, phys_addr_t end)
+> >  {
+> >  	/* Platform-specific memory-acceptance call goes here */
+> > -	error("Cannot accept memory");
+> > +	if (is_tdx_guest())
+> > +		tdx_accept_memory(start, end);
+> > +	else
+> > +		error("Cannot accept memory: unknown platform\n");
+> >  }
 > 
-> Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
-> ---
->  drivers/perf/coresight_pmu/Makefile           |   3 +-
->  .../perf/coresight_pmu/arm_coresight_pmu.c    |   4 +
->  .../coresight_pmu/arm_coresight_pmu_nvidia.c  | 312 ++++++++++++++++++
->  .../coresight_pmu/arm_coresight_pmu_nvidia.h  |  17 +
->  4 files changed, 335 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.c
->  create mode 100644 drivers/perf/coresight_pmu/arm_coresight_pmu_nvidia.h
+> There are quite a few of these
+> 
+> 	if (tdx())
+> 		...
+> 
+> conditions in common code here.  Shouldn't this be something like a
+> CC_ATTR_MEM_ACCEPT?
+> 
+> 	if (cc_platform_has(CC_ATTR_MEM_ACCEPT))
+> 		cc_accept_memory(...);
+> 	else
+> 		error("Cannot accept memory: unknown platform\n");
+> 
+> I understand that TDX is the first one to the party.  Is this the time
+> to add the cc_ infrastructure?
 
-Please can you include some documentation along with this driver? See
-Documentation/admin-guide/perf/ for examples of other PMUs.
+We need if tdx() check *somewhere* as how exactly memory gets accepted is
+specific to a particular platform.
 
-Will
+There are two callsites where memory acceptance happens. One of them is in
+boot stub where we don't have cc_ infrastructure. So it will boil down to
+a single cc_accept_memory() that will have 'if tdx()' inside.
+
+I don't see much sense in the exercise. We can as well keep the 'if' in
+accept_memory().
+
+-- 
+ Kirill A. Shutemov

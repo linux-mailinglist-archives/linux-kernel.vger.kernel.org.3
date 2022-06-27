@@ -2,76 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FD155CFE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADA055CDE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238637AbiF0QCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
+        id S237930AbiF0QEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbiF0QCL (ORCPT
+        with ESMTP id S236789AbiF0QEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:02:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEA560D5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:02:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 27 Jun 2022 12:04:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42E0EB483
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:04:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656345888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=LYkNIEs5Mn24fJrau8L4ZctBwCdXRpyqBWYk8TuQ9zI=;
+        b=dPM+iboCjiE218lCss8f1cfjoV4MnHG1kGUSRvbj+mZkhPYkv9SYsjZ34KTezpdgc60uHq
+        B+9c12Hwmb7GV3bihIKD2LX5JKAsHZS60/RLaubCQeGEnQgcUpIJyfw75TRr+cgoEXevKr
+        mI7rNg3MdzjLrNvvRaNudm9LkHuVSXQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-629-4VZnuFsLOpWKkzjSQeBrlg-1; Mon, 27 Jun 2022 12:04:44 -0400
+X-MC-Unique: 4VZnuFsLOpWKkzjSQeBrlg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F47BB818A6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:02:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6E98C3411D;
-        Mon, 27 Jun 2022 16:02:07 +0000 (UTC)
-Date:   Mon, 27 Jun 2022 12:02:06 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     John 'Warthog9' Hawley <warthog9@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: possible trace_printk() bug in v5.19-rc1
-Message-ID: <20220627120206.182da050@gandalf.local.home>
-In-Reply-To: <0FA59723-8784-4D28-AB5B-049D605095B4@oracle.com>
-References: <F6C267B0-83EA-4151-A4EC-44482AC52C59@oracle.com>
-        <20220616113400.15335d91@gandalf.local.home>
-        <E309A098-DA06-490D-A75C-E6295C2987B9@oracle.com>
-        <20220617155019.373adda7@gandalf.local.home>
-        <3BAD2CD9-3A34-4140-A28C-0FE798B83C41@oracle.com>
-        <355D2478-33D3-4046-8422-E512F42C51BC@oracle.com>
-        <20220624190819.59df11d3@rorschach.local.home>
-        <3EB14A14-767B-4B66-9B28-97DDE7EECFD2@oracle.com>
-        <20220625134552.08c1a23a@rorschach.local.home>
-        <AD7B3406-C1A3-4AC0-BFD5-C7DF7E449478@oracle.com>
-        <20220625190105.750bbb0a@rorschach.local.home>
-        <B902ACBA-9318-418D-A14A-1411E7A8B47D@oracle.com>
-        <20220627114340.4d89842b@gandalf.local.home>
-        <0FA59723-8784-4D28-AB5B-049D605095B4@oracle.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A46E680418F;
+        Mon, 27 Jun 2022 16:04:43 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.192.126])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A9006C15D40;
+        Mon, 27 Jun 2022 16:04:41 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/14] KVM: nVMX: Use vmcs_config for setting up nested VMX MSRs
+Date:   Mon, 27 Jun 2022 18:04:26 +0200
+Message-Id: <20220627160440.31857-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Jun 2022 15:51:04 +0000
-Chuck Lever III <chuck.lever@oracle.com> wrote:
+Changes since RFC:
+- "KVM: VMX: Extend VMX controls macro shenanigans" PATCH added and the
+  infrastructure is later used in other patches [Sean] PATCHes 1-3 added
+  to support the change.
+- "KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup" PATCH
+  added [Sean].
+- Commit messages added.
 
-> I'd like to avoid having to maintain the latest version of
-> the tool and its libraries by hand on all of my development
-> systems.
+vmcs_config is a sanitized version of host VMX MSRs where some controls are
+filtered out (e.g. when Enlightened VMCS is enabled, some know bugs are 
+discovered, some inconsistencies in controls are detected,...) but
+nested_vmx_setup_ctls_msrs() uses raw host MSRs instead. This may end up
+in exposing undesired controls to L1. Switch to using vmcs_config instead.
 
-But can you just verify that the new ones fix the issue in one of your
-builds?
+Sean Christopherson (1):
+  KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup
 
-I'm not a fedora maintainer, so I have no control over what they ship. But
-if you can prove that the issues you have are resolved when upgrading, then
-there's nothing more I can do. It's up to fedora to update the libraries.
+Vitaly Kuznetsov (13):
+  KVM: VMX: Check VM_ENTRY_IA32E_MODE in setup_vmcs_config()
+  KVM: VMX: Check CPU_BASED_{INTR,NMI}_WINDOW_EXITING in
+    setup_vmcs_config()
+  KVM: VMX: Tweak the special handling of SECONDARY_EXEC_ENCLS_EXITING
+    in setup_vmcs_config()
+  KVM: VMX: Extend VMX controls macro shenanigans
+  KVM: VMX: Move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering out of
+    setup_vmcs_config()
+  KVM: VMX: Add missing VMEXIT controls to vmcs_config
+  KVM: VMX: Add missing VMENTRY controls to vmcs_config
+  KVM: VMX: Add missing CPU based VM execution controls to vmcs_config
+  KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs
+  KVM: VMX: Store required-1 VMX controls in vmcs_config
+  KVM: nVMX: Use sanitized required-1 bits for VMX control MSRs
+  KVM: VMX: Cache MSR_IA32_VMX_MISC in vmcs_config
+  KVM: nVMX: Use cached host MSR_IA32_VMX_MISC value for setting up
+    nested MSR
 
-If it's still broken in the latest versions, then I can do something. But
-without verification, this is just a fedora bug, not an upstream one.
+ arch/x86/kvm/vmx/capabilities.h |  16 +--
+ arch/x86/kvm/vmx/nested.c       |  37 +++---
+ arch/x86/kvm/vmx/nested.h       |   2 +-
+ arch/x86/kvm/vmx/vmx.c          | 198 ++++++++++++++------------------
+ arch/x86/kvm/vmx/vmx.h          | 118 +++++++++++++++++++
+ 5 files changed, 229 insertions(+), 142 deletions(-)
 
--- Steve
+-- 
+2.35.3
+

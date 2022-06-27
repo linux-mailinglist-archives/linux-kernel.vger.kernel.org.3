@@ -2,99 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A896B55C6A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B636855D7BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239804AbiF0RG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
+        id S239855AbiF0RFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239775AbiF0RGx (ORCPT
+        with ESMTP id S235574AbiF0RFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:06:53 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FC118E0C;
-        Mon, 27 Jun 2022 10:06:51 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 88B4322248;
-        Mon, 27 Jun 2022 19:06:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1656349609;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kra5h0wwW4GQDM8Vbkzfd0KEGUN+KNxA9BZZU6Z+J00=;
-        b=S5mci/UIJbSVWEQAwBeIJM+sT+GFn8WvKbFjOjoLCb1JMImLy+Htzz2TABfileY8SiMjAV
-        l3yKwPwqDpty0lS+2nv1nbqPWRL5w7iEsVuO9GKpt3dtRtcWTBhrrp1yCQuykSKb5IYRxS
-        bgQ3s4xZ/eXhMawljCzc7uWJeZxNXN4=
-From:   Michael Walle <michael@walle.cc>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20Perrochaud?= <clement.perrochaud@nxp.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v2 2/2] NFC: nxp-nci: don't print header length mismatch on i2c error
-Date:   Mon, 27 Jun 2022 19:06:43 +0200
-Message-Id: <20220627170643.98239-2-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220627170643.98239-1-michael@walle.cc>
-References: <20220627170643.98239-1-michael@walle.cc>
+        Mon, 27 Jun 2022 13:05:20 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CCB13D3D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:05:20 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id w83so13704069oiw.1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:05:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hiy6+iiLMeGDFL3yjWewYCuuYeu2rtEHRH1Mk/XtDns=;
+        b=QyMvNo8m4T4TgwC1HpgS28kutB5bX/froVFu40QZNr8jKdGTdFzyVD0Eho8FO90ag6
+         b9PdDHM8MvcHpcDYzcGhJLRYWlCSfwv0JEO9m4YwDjiM70RE/SY9DYTsVTol0wEl4oj4
+         y+rJU6jj4JNSYVaaDRSsIuTl92Jf5FV1LIhBxyOy0GhjOLS8S16EqNjLjq+u3/FxSB7N
+         xZnfg2lS2BkhbtVMXoI/4p2sjmgnSrwquLhrO0kstzVdFaO9twKcFerIbX2zxSQ4NsZo
+         pq5KOIMlue1YiiqONpRWXmDpwDlNf5eJuwTajSGUoJCP/jT4p4BnPoweMItLaYxbb3/d
+         wrwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hiy6+iiLMeGDFL3yjWewYCuuYeu2rtEHRH1Mk/XtDns=;
+        b=JqYfm9X+zdZsDdk656kdAC2evd8sfvMbd09AwvCM47V8vhsNp+XB50ocp70FPRK5S+
+         nPM3WRysLG7xFZ1xdwUJ8e1iuZcjGlxvNw0UNY3i+xPiWz4OIGNmVvi+BdJrp6YHrXb0
+         M9lcZL3k8I1CCNhfoUsYaalkZ/7L98M7H++3hRGA0e0ndo8fak23/0UYmT8T7hYdjJNi
+         Q7oW3JHKqYjOG8sFBiJltepSJD7rnttkrec7iDZLxN/7md3xrwQashjG8hR3cW1IaGEa
+         AGvMaGTsYqXeR9uiLkcL1AwIvIoTlTY7TP9WtCcl5MYR5G0DB8Arg00fkBKYLhz4IFmY
+         kOow==
+X-Gm-Message-State: AJIora/UFp1JGj0WD7nB4jsut+Zk6UbAowDrr5SeQtsO8wXrieu3gty3
+        W+CwJl2MG/8wYiZ0+WKJP5abXWVaEHh2nQ==
+X-Google-Smtp-Source: AGRyM1sY/DvE1sLhaZz0G6NJ4ve3bOkQmSv9AL7zpQxIJqIY3FhpZKQIVsCNUjWlNP6i46JvXnLxJw==
+X-Received: by 2002:a05:6808:2111:b0:335:510c:eee4 with SMTP id r17-20020a056808211100b00335510ceee4mr8161509oiw.151.1656349519431;
+        Mon, 27 Jun 2022 10:05:19 -0700 (PDT)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id a12-20020a056870d60c00b000f30837129esm7303175oaq.55.2022.06.27.10.05.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 10:05:18 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Hemant Kumar <quic_hemantk@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Loic Poulain <loic.poulain@linaro.org>, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] bus: mhi: host: pci_generic: Add another Foxconn T99W175
+Date:   Mon, 27 Jun 2022 10:07:17 -0700
+Message-Id: <20220627170717.2252335-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't print a misleading header length mismatch error if the i2c call
-returns an error. Instead just return the error code without any error
-message.
+The Foxconn e0c3 device identifies itself as a T99W175 X55, add support
+for this to the pci_generic driver.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
-changes since v1:
- - reworded commit message
- - removed fixes tag
- - removed nfc_err() call, as it is done elsewhere in this driver
- - nxp_nci_i2c_fw_read() has the same issue. also handle it there
+ drivers/bus/mhi/host/pci_generic.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
- drivers/nfc/nxp-nci/i2c.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/nfc/nxp-nci/i2c.c b/drivers/nfc/nxp-nci/i2c.c
-index e8f3b35afbee..ae2ba08d8ac3 100644
---- a/drivers/nfc/nxp-nci/i2c.c
-+++ b/drivers/nfc/nxp-nci/i2c.c
-@@ -122,7 +122,9 @@ static int nxp_nci_i2c_fw_read(struct nxp_nci_i2c_phy *phy,
- 	skb_put_data(*skb, &header, NXP_NCI_FW_HDR_LEN);
- 
- 	r = i2c_master_recv(client, skb_put(*skb, frame_len), frame_len);
--	if (r != frame_len) {
-+	if (r < 0) {
-+		goto fw_read_exit_free_skb;
-+	} else if (r != frame_len) {
- 		nfc_err(&client->dev,
- 			"Invalid frame length: %u (expected %zu)\n",
- 			r, frame_len);
-@@ -166,7 +168,9 @@ static int nxp_nci_i2c_nci_read(struct nxp_nci_i2c_phy *phy,
- 		return 0;
- 
- 	r = i2c_master_recv(client, skb_put(*skb, header.plen), header.plen);
--	if (r != header.plen) {
-+	if (r < 0) {
-+		goto nci_read_exit_free_skb;
-+	} else if (r != header.plen) {
- 		nfc_err(&client->dev,
- 			"Invalid frame payload length: %u (expected %u)\n",
- 			r, header.plen);
+diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+index 57d5f611a979..bf82d90f9ca9 100644
+--- a/drivers/bus/mhi/host/pci_generic.c
++++ b/drivers/bus/mhi/host/pci_generic.c
+@@ -571,6 +571,9 @@ static const struct pci_device_id mhi_pci_id_table[] = {
+ 	/* T99W175 (sdx55), Based on Qualcomm new baseline */
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0bf),
+ 		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
++	/* T99W175 (sdx55) */
++	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0c3),
++		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
+ 	/* T99W368 (sdx65) */
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0d8),
+ 		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx65_info },
 -- 
-2.30.2
+2.35.1
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBF355C622
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D057355DDB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239185AbiF0L5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
+        id S235471AbiF0L3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238204AbiF0Lua (ORCPT
+        with ESMTP id S235085AbiF0L25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:50:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21100101E;
-        Mon, 27 Jun 2022 04:43:42 -0700 (PDT)
+        Mon, 27 Jun 2022 07:28:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25F69FC7;
+        Mon, 27 Jun 2022 04:27:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2F6861240;
-        Mon, 27 Jun 2022 11:43:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C026BC3411D;
-        Mon, 27 Jun 2022 11:43:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E81661366;
+        Mon, 27 Jun 2022 11:27:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92029C3411D;
+        Mon, 27 Jun 2022 11:27:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330221;
-        bh=SPjt+EvEQ4079Mv+pWhVZgBzhL/o5jfkH6JC8grHV94=;
+        s=korg; t=1656329260;
+        bh=0u83o4b8jqVxJj96kjDZk5MoeLJqvngsmEsDtEas6KE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X/rtqP6xiOLZrnXZ3HJBwZf5TR8GmyT2V/Af+1JWoKN9jNCaTlaIP7/oIqYtLUxm4
-         x35VTG1Mq/p2qtC2jdDtXtqNpYbbW0vVzgeKQPSsRpU9Zer48jxRmdahbO/UrT5idR
-         98FF4HXF+NDPByvPwAlIfLTe0/XKMexs1X0ctbh4=
+        b=cqnuVxpLB5lWpzza5r1IoAwjtAOvOoaKJ9PepWMIOdFUwz3O6qSoaDf9CiK340Zno
+         eSwWonxUL8wbsd0/SXZPL2prZR/Qu6kRpCsdDWuIYfMfbvB3Xg2znzP6yd2rpH30m7
+         nE4bD9Vw8wtdIMb6bzVj9alRILrxHdMoHkv6ODXQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 5.18 123/181] dt-bindings: usb: ehci: Increase the number of PHYs
-Date:   Mon, 27 Jun 2022 13:21:36 +0200
-Message-Id: <20220627111948.260032848@linuxfoundation.org>
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH 5.10 086/102] xtensa: Fix refcount leak bug in time.c
+Date:   Mon, 27 Jun 2022 13:21:37 +0200
+Message-Id: <20220627111936.017437780@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Liang He <windhl@126.com>
 
-commit 9faa1c8f92f33daad9db96944139de225cefa199 upstream.
+commit a0117dc956429f2ede17b323046e1968d1849150 upstream.
 
-"make dtbs_check":
+In calibrate_ccount(), of_find_compatible_node() will return a node
+pointer with refcount incremented. We should use of_node_put() when
+it is not used anymore.
 
-    arch/arm/boot/dts/r8a77470-iwg23s-sbc.dtb: usb@ee080100: phys: [[17, 0], [31]] is too long
-	    From schema: Documentation/devicetree/bindings/usb/generic-ehci.yaml
-    arch/arm/boot/dts/r8a77470-iwg23s-sbc.dtb: usb@ee0c0100: phys: [[17, 1], [33], [21, 0]] is too long
-	    From schema: Documentation/devicetree/bindings/usb/generic-ehci.yaml
-
-Some USB EHCI controllers (e.g. on the Renesas RZ/G1C SoC) have multiple
-PHYs.  Increase the maximum number of PHYs to 3, which is sufficient for
-now.
-
-Fixes: 0499220d6dadafa5 ("dt-bindings: Add missing array size constraints")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/c5d19e2f9714f43effd90208798fc1936098078f.1655301043.git.geert+renesas@glider.be
+Cc: stable@vger.kernel.org
+Signed-off-by: Liang He <windhl@126.com>
+Message-Id: <20220617124432.4049006-1-windhl@126.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/usb/generic-ehci.yaml |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/xtensa/kernel/time.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-@@ -135,7 +135,8 @@ properties:
-       Phandle of a companion.
- 
-   phys:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 3
- 
-   phy-names:
-     const: usb
+--- a/arch/xtensa/kernel/time.c
++++ b/arch/xtensa/kernel/time.c
+@@ -154,6 +154,7 @@ static void __init calibrate_ccount(void
+ 	cpu = of_find_compatible_node(NULL, NULL, "cdns,xtensa-cpu");
+ 	if (cpu) {
+ 		clk = of_clk_get(cpu, 0);
++		of_node_put(cpu);
+ 		if (!IS_ERR(clk)) {
+ 			ccount_freq = clk_get_rate(clk);
+ 			return;
 
 

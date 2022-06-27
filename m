@@ -2,134 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA73255DF2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD9255D16F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234047AbiF0JdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
+        id S233581AbiF0Je2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbiF0JdW (ORCPT
+        with ESMTP id S233591AbiF0JeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:33:22 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475DC60F7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:33:21 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id r20so12183728wra.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:33:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=2n3L8G4jlo8gnX0RwebcTVvXVr2RWwNLmm09LfVziHo=;
-        b=Zsv1tJkq9gNSbSM16VhBkw+5pOqZ2kvZIpOZJc4PXIoomtZ2tWxjuRQCMZpY/woAia
-         4rFK94mD3yNyO8Q9SdoqMUQnY8y2fYTVzkfzR4iE4NtOjwpvbdnbGEGPGf4kqyUjFvp1
-         dB2XXmK7H8Qeqci8qpWIolt1qAbHVF3e1rMDKSKsbXCPnM8wvaGl/M16WDFr9Iku60qa
-         69uqRJZazVgnd51Inv8l+6+MTTXhBaJ3vxwP6+mFxJiIXFTfYCto8h2U96vHJx74Ehal
-         qEISA4so36/gGUPf+t1JMQdROKqTPU/tvaoWOgl1zXNy+x1AZevrgOByE9b2dwaCQuqs
-         EAkQ==
+        Mon, 27 Jun 2022 05:34:23 -0400
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF0163D9;
+        Mon, 27 Jun 2022 02:34:21 -0700 (PDT)
+Received: by mail-qv1-f50.google.com with SMTP id y14so13877081qvs.10;
+        Mon, 27 Jun 2022 02:34:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=2n3L8G4jlo8gnX0RwebcTVvXVr2RWwNLmm09LfVziHo=;
-        b=UDzZScusQ9WyVoMfyYLRkMTHC2Lpy1gpKSgcs/bmcLnb6Q3pXTR198t9Du50PKDNbF
-         csWS5F/p24BNAKZzBF+yAVxM7yZ16OBKa9kglaMSK0zufUAlw8eJQUg7QztneR/ZcPk3
-         jv8TRwejCcadMfdr0SQ9CvIetukWMmo0URljrmkVsQ3oCixTLA4Uk2a3rNCdrZKs220c
-         6mbAntAGuoKrd+UeQCz5dkyISH1V8y4RDRJyZuHh8ntwGEMD8G7xPDC8RcxLjLHiQ8YM
-         GISSXtSxVclrJFtdwsUmTn2CELWq2kC4nZD0YyG0woBv0VW+N8o9MNUQ61KaacRWqXdE
-         Ef2w==
-X-Gm-Message-State: AJIora+Fh8BVPhRlnbpCVaSCcsrjItB0tjnYIgV9HU7SJTztZmP+/Uio
-        ZFvw3EP5I8mprRbmJlTiSBV9EKTjaqm+sA==
-X-Google-Smtp-Source: AGRyM1uxJnnXWT0isDEPsl55AaG91ZiUdPFF+/2YvVcuX2uefTiqptX+LLkF6MvEKjGBLkuD0RfBRA==
-X-Received: by 2002:a05:6000:1148:b0:21b:a4b2:ccd3 with SMTP id d8-20020a056000114800b0021ba4b2ccd3mr11493996wrx.193.1656322399855;
-        Mon, 27 Jun 2022 02:33:19 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id l15-20020a05600c1d0f00b003a04962ad3esm4939920wms.31.2022.06.27.02.33.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 02:33:19 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 10:33:17 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v1 11/11] mfd: intel_soc_pmic_bxtwc: Fix spelling in the
- comment
-Message-ID: <Yrl5XZOgD8abd+Qm@google.com>
-References: <20220616165823.4919-1-andriy.shevchenko@linux.intel.com>
- <20220616165823.4919-11-andriy.shevchenko@linux.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R5th0qpP/J1ycxyypwJPUwSeLA3QY+9VgG/84MEtg00=;
+        b=LKmvaQuvjMNtr2jA3MZX5X+OVC62FMHIl/huLurFrECWr2caDZ4gw/8A+gNgbe6cfI
+         I1pLeabPlqAwpIyiIxX/97CM6MSQqPssYFz8EMl8RpoVoQSj2/yeHGuMoh7ZwWf4TJWc
+         ywyZreVkO4VQGuTSHX8P1aPrrGKe/D/f/AVroalK2FzHwNOBY2/ofwerz+E9NiGy9mM8
+         l02nSjj/Wwx9wknMAfWsdUauQ2hdAIqjIdhJiC+ekaIRJzIhvjoqiGqofYpr7Hb8VcYU
+         7QIWirmvEqhEqWnDy7SsTQU8pEhTdD+IfnTFbct123BeXt+8hMbAj2NWYPx7VDmyvFrG
+         U/IA==
+X-Gm-Message-State: AJIora803xRn0luYV7G7mQCuuUSiOefHJgUq+J1D1+AoAgbb8bAq7BAE
+        ccCjbPEjqZtHrAjuq5XZ+E6uyT9YUaGG8A==
+X-Google-Smtp-Source: AGRyM1utvzLdA+PTPQs9Kw/g22g0rpxqI/GgMV2tm1q04ZDXA/G7m7E5sr2HvGffP6r6mhKyo/q4Qg==
+X-Received: by 2002:a05:6214:21ce:b0:470:f4e:951b with SMTP id d14-20020a05621421ce00b004700f4e951bmr7793594qvh.14.1656322460566;
+        Mon, 27 Jun 2022 02:34:20 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id p24-20020ac84098000000b00317ccf991a3sm5954243qtl.19.2022.06.27.02.34.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 02:34:20 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-3177f4ce3e2so79475447b3.5;
+        Mon, 27 Jun 2022 02:34:20 -0700 (PDT)
+X-Received: by 2002:a0d:c787:0:b0:31b:a963:e1de with SMTP id
+ j129-20020a0dc787000000b0031ba963e1demr6407552ywd.283.1656322459903; Mon, 27
+ Jun 2022 02:34:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220616165823.4919-11-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220623103024.24222-1-chris.paterson2@renesas.com>
+In-Reply-To: <20220623103024.24222-1-chris.paterson2@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 27 Jun 2022 11:34:07 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXeR_7gJb0PJVheUjyR68=a9yCD5ixtskKB0EZT3-HVrw@mail.gmail.com>
+Message-ID: <CAMuHMdXeR_7gJb0PJVheUjyR68=a9yCD5ixtskKB0EZT3-HVrw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: renesas: r9a07g054l2-smarc: Correct SoC name
+ in comment
+To:     Chris Paterson <chris.paterson2@renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022, Andy Shevchenko wrote:
+On Thu, Jun 23, 2022 at 12:30 PM Chris Paterson
+<chris.paterson2@renesas.com> wrote:
+> This dts is for the RZ/V2L SMARC EVK, not RZ/G2L.
+>
+> Fixes: f91c4c74796a ("arm64: dts: renesas: Add initial device tree for RZ/V2L SMARC EVK")
+> Signed-off-by: Chris Paterson <chris.paterson2@renesas.com>
 
-> There are a couple of spelling issues in the comment, fix them.
-> While at it, fix indentation in the MODULE_AUTHOR() parameter
-> and update copyright years.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/mfd/intel_soc_pmic_bxtwc.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/mfd/intel_soc_pmic_bxtwc.c b/drivers/mfd/intel_soc_pmic_bxtwc.c
-> index 953f535a3c93..9e412d1d00f1 100644
-> --- a/drivers/mfd/intel_soc_pmic_bxtwc.c
-> +++ b/drivers/mfd/intel_soc_pmic_bxtwc.c
-> @@ -2,7 +2,7 @@
->  /*
->   * MFD core driver for Intel Broxton Whiskey Cove PMIC
->   *
-> - * Copyright (C) 2015 Intel Corporation. All rights reserved.
-> + * Copyright (C) 2015-2017, 2022 Intel Corporation. All rights reserved.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.20.
 
-I do not profess to be an expert.  What happened between 2017-2022?
+Gr{oetje,eeting}s,
 
->   */
->  
->  #include <linux/acpi.h>
-> @@ -527,11 +527,11 @@ static int bxtwc_probe(struct platform_device *pdev)
->  		return dev_err_probe(dev, ret, "Failed to add devices\n");
->  
->  	/*
-> -	 * There is known hw bug. Upon reset BIT 5 of register
-> +	 * There is known HW bug. Upon reset BIT 5 of register
+                        Geert
 
-You may as well fix the grammar while you're at it.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
->  	 * BXTWC_CHGR_LVL1_IRQ is 0 which is the expected value. However,
->  	 * later it's set to 1(masked) automatically by hardware. So we
-> -	 * have the software workaround here to unmaksed it in order to let
-> -	 * charger interrutp work.
-> +	 * have the software workaround here to unmasked it in order to let
-> +	 * charger interrupt work.
-
-Likewise.
-
->  	 */
->  	regmap_update_bits(pmic->regmap, BXTWC_MIRQLVL1, BXTWC_MIRQLVL1_MCHGR, 0);
->  
-> @@ -584,4 +584,4 @@ static struct platform_driver bxtwc_driver = {
->  module_platform_driver(bxtwc_driver);
->  
->  MODULE_LICENSE("GPL v2");
-> -MODULE_AUTHOR("Qipeng Zha<qipeng.zha@intel.com>");
-> +MODULE_AUTHOR("Qipeng Zha <qipeng.zha@intel.com>");
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

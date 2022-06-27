@@ -2,195 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A8E55D478
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0FE55E17B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242336AbiF0WKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 18:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
+        id S240028AbiF0WNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 18:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238131AbiF0WKh (ORCPT
+        with ESMTP id S234577AbiF0WNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 18:10:37 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91E213D39;
-        Mon, 27 Jun 2022 15:10:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656367836; x=1687903836;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=3r3oxJCGBnkJZuklf2qLlNGuTGcw7hPnJG3vvORYXOc=;
-  b=hCIzg0LXLT0ammDZPvC36vSbxXistTud33Ld/fuUBnqXJJt0p21PQRYi
-   wvt8jGpPElAEQrQCVwkXewtErguTsnTWw4BWpQ3UQTEQ6qmzq0Eu9++4S
-   sXbacdMWi7+vCrwrLsbaK7udDQqrZy8/Xel7+PjORmniY8mMYnxhTOXql
-   s/i5LJnI5sjWs4ttyUOTEeRPXB2H+c06/4clyGWeRjnY51T91uBeJ2uGx
-   Fr8h1r5/UoDKPTaxbVeC3kQMYI/MatVIfMku2OKXAhjwc27vS81f4Umvk
-   tctJa+86QwREnBbrXs1gT2xMlCfOl8/+eV/XroriJ5rEXmR+8x+MX5xAc
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="307051943"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="307051943"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 15:10:32 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="657868295"
-Received: from iiturbeo-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.89.183])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 15:10:29 -0700
-Message-ID: <6bef368ccc68676e4acaecc4b6dc52f598ea7f2f.camel@intel.com>
-Subject: Re: [PATCH v5 07/22] x86/virt/tdx: Implement SEAMCALL function
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Tue, 28 Jun 2022 10:10:27 +1200
-In-Reply-To: <84e93539-a2f9-f68e-416a-ea3d8fc725af@intel.com>
-References: <cover.1655894131.git.kai.huang@intel.com>
-         <095e6bbc57b4470e1e9a9104059a5238c9775f00.1655894131.git.kai.huang@intel.com>
-         <069a062e-a4a6-09af-7b74-7f4929f2ec0b@intel.com>
-         <5ce7ebfe54160ea35e432bf50207ebed32db31fc.camel@intel.com>
-         <84e93539-a2f9-f68e-416a-ea3d8fc725af@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Mon, 27 Jun 2022 18:13:00 -0400
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE1E13E8F;
+        Mon, 27 Jun 2022 15:12:59 -0700 (PDT)
+Received: by mail-il1-f182.google.com with SMTP id 9so6977888ill.5;
+        Mon, 27 Jun 2022 15:12:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q9EHtvpXO/rR/UwsAegXUt2kZ+QWagzbfNR/vsPSSqE=;
+        b=J+NpajjfNNhhHhCE/uWRUMcsivZdWYTPW29m0i1Az+jU1NYHjtC4JaxWb4vBsqhDja
+         lQPrPm/ZrA/gzbwavGk7nJkVocCrWD6N0zmo7T3SDqL8pRL0AMnfYSYhvmdYe32U+LHF
+         tEQBmKjtH8Q8feB+WAD7GiRn9n7CY1DUsC5gwkvqyf7/T/Xz7wQw6+Hd/+RpO4DPo6bu
+         TOKfkhVh17WmsZeh1DhHZUw4fIF/uz/G4QwM9DrE8wxlJxoHIB3R8CcAqmtGH5N3aNeK
+         vDLp2nRFkCznhuPJI+NfzkK654/BuDjYsSFTxQKidg4p5WHWcxEFJvJtXWLBVYzkAc0f
+         kVTQ==
+X-Gm-Message-State: AJIora8GMtGSyUb/coowZa1tGy2GJzdSTAyGiMlnY7IHaSKhJMDQlADe
+        AeTnXa214uB9MO5MXSvWag==
+X-Google-Smtp-Source: AGRyM1ttgJl6J3mqoPXF0Lh40LVHvAb/nsVTOsZFyo7O6MpuNXaqHqe24DDYYyxyNdPYVjf4dRC2Rg==
+X-Received: by 2002:a05:6e02:170b:b0:2d4:d764:bebe with SMTP id u11-20020a056e02170b00b002d4d764bebemr8390187ill.95.1656367978968;
+        Mon, 27 Jun 2022 15:12:58 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id m2-20020a02cdc2000000b00339e6168237sm4802445jap.34.2022.06.27.15.12.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 15:12:58 -0700 (PDT)
+Received: (nullmailer pid 3058109 invoked by uid 1000);
+        Mon, 27 Jun 2022 22:12:57 -0000
+Date:   Mon, 27 Jun 2022 16:12:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     pavel@ucw.cz, sven.schwermer@disruptive-technologies.com,
+        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
+        marijn.suijten@somainline.org, bjorn.andersson@linaro.org,
+        andy.shevchenko@gmail.com, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] dt-bindings: leds: Add binding for a multicolor
+ group of LEDs
+Message-ID: <20220627221257.GA3046298-robh@kernel.org>
+References: <20220615154918.521687-1-jjhiblot@traphandler.com>
+ <20220615154918.521687-4-jjhiblot@traphandler.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615154918.521687-4-jjhiblot@traphandler.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-27 at 13:58 -0700, Dave Hansen wrote:
-> On 6/26/22 22:23, Kai Huang wrote:
-> > On Fri, 2022-06-24 at 11:38 -0700, Dave Hansen wrote:
-> > > On 6/22/22 04:16, Kai Huang wrote:
-> > > > SEAMCALL instruction causes #GP when SEAMRR isn't enabled, and #UD =
-when
-> > > > CPU is not in VMX operation.  The TDX_MODULE_CALL macro doesn't han=
-dle
-> > > > SEAMCALL exceptions.  Leave to the caller to guarantee those condit=
-ions
-> > > > before calling __seamcall().
-> > >=20
-> > > I was trying to make the argument earlier that you don't need *ANY*
-> > > detection for TDX, other than the ability to make a SEAMCALL.
-> > > Basically, patch 01/22 could go away.
-> ...
-> > > So what does patch 01/22 buy us?  One EXTABLE entry?
-> >=20
-> > There are below pros if we can detect whether TDX is enabled by BIOS du=
-ring boot
-> > before initializing the TDX Module:
-> >=20
-> > 1) There are requirements from customers to report whether platform sup=
-ports TDX
-> > and the TDX keyID numbers before initializing the TDX module so the use=
-rspace
-> > cloud software can use this information to do something.  Sorry I canno=
-t find
-> > the lore link now.
->=20
-> <sigh>
->=20
-> Never listen to customers literally.  It'll just lead you down the wrong
-> path.  They told you, "we need $FOO in dmesg" and you ran with it
-> without understanding why.  The fact that you even *need* to find the
-> lore link is because you didn't bother to realize what they really needed=
-.
->=20
-> dmesg is not ABI.  It's for humans.  If you need data out of the kernel,
-> do it with a *REAL* ABI.  Not dmesg.
+On Wed, Jun 15, 2022 at 05:49:17PM +0200, Jean-Jacques Hiblot wrote:
+> This allows to group multiple monochromatic LEDs into a multicolor
+> LED, e.g. RGB LEDs.
+> 
+> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> ---
+>  .../bindings/leds/leds-group-multicolor.yaml  | 94 +++++++++++++++++++
+>  1 file changed, 94 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml b/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+> new file mode 100644
+> index 000000000000..30a67985ae33
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
+> @@ -0,0 +1,94 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/leds/leds-group-multicolor.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Multi-color LED built with monochromatic LEDs
+> +
+> +maintainers:
+> +  - Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> +
+> +description: |
+> +  This driver combines several monochromatic LEDs into one multi-color
+> +  LED using the multicolor LED class.
+> +
+> +properties:
+> +  compatible:
+> +    const: leds-group-multicolor
+> +
+> +  multi-led:
+> +    type: object
+> +
+> +    patternProperties:
+> +      "^led-[0-9a-z]+$":
+> +        type: object
+> +        $ref: common.yaml#
+> +
+> +        additionalProperties: false
+> +
+> +        properties:
+> +          leds:
 
-Showing in the dmesg is the first step, but later we have plan to expose ke=
-yID
-info via /sysfs.  Of course, it's always arguable customer's such requireme=
-nt is
-absolutely needed, but to me it's still a good thing to have code to detect=
- TDX
-during boot.  The code isn't complicated as you can see.
+Not a standard property. What is the type?
 
->=20
-> > 2) As you can see, it can be used to handle ACPI CPU/memory hotplug and=
- driver
-> > managed memory hotplug.  Kexec() support patch also can use it.
-> >=20
-> > Particularly, in concept, ACPI CPU/memory hotplug is only related to wh=
-ether TDX
-> > is enabled by BIOS, but not whether TDX module is loaded, or the result=
- of
-> > initializing the TDX module.  So I think we should have some code to de=
-tect TDX
-> > during boot.
->=20
-> This is *EXACTLY* why our colleagues at Intel needs to tell us about
-> what the OS and firmware should do when TDX is in varying states of decay=
-.
+Really, just do a GPIO multi-color LED binding similar to the PWM one 
+rather than adding this layer. I suppose you could combine LEDs from all 
+different controllers, but that seems somewhat unlikely to me.
 
-Yes I am working on it to make it public.
-
->=20
-> Does the mere presence of the TDX module prevent hotplug? =C2=A0
->=20
-
-For ACPI CPU hotplug, yes.  The TDX module even doesn't need to be loaded.=
-=20
-Whether SEAMRR is enabled determines.
-
-For ACPI memory hotplug, in practice yes.  For architectural behaviour, I'l=
-l
-work with others internally to get some public statement.
-
-> Or, if a
-> system has the TDX module loaded but no intent to ever use TDX, why
-> can't it just use hotplug like a normal system which is not addled with
-> the TDX albatross around its neck?
-
-I think if a machine has enabled TDX in the BIOS, the user of the machine v=
-ery
-likely has intention to actually use TDX.
-
-Yes for driver-managed memory hotplug, it makes sense if user doesn't want =
-to
-use TDX, it's better to not disable it.  But to me it's also not a disaster=
- if
-we just disable driver-managed memory hotplug if TDX is enabled by BIOS.
-
-For ACPI memory hotplug, I think in practice we can treat it as BIOS bug, b=
-ut
-I'll get some public statement around this.
-
->=20
-> > Also, it seems adding EXTABLE to TDX_MODULE_CALL doesn't have significa=
-ntly less
-> > code comparing to detecting TDX during boot:
->=20
-> It depends on a bunch of things.  It might only be a line or two of
-> assembly.
->=20
-> If you actually went and tried it, you might be able to convince me it's
-> a bad idea.
-
-The code I showed is basically the patch we need to call SEAMCALL at runtim=
-e w/o
-detecting TDX at first.  #GP must be handled as it is what SEAMCALL trigger=
-s if
-TDX is not enabled.  #UD happens when CPU isn't in VMX operation, and we sh=
-ould
-distinguish it from #GP if we already want to handle #GP.
-
-
---=20
-Thanks,
--Kai
-
-
+Rob

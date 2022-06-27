@@ -2,62 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A5D55CCF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EFC55C24C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbiF0KuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S234310AbiF0KwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233298AbiF0KuT (ORCPT
+        with ESMTP id S233558AbiF0KwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:50:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45FC62E0;
-        Mon, 27 Jun 2022 03:50:18 -0700 (PDT)
+        Mon, 27 Jun 2022 06:52:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD48644C
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:52:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B57761359;
-        Mon, 27 Jun 2022 10:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B72C0C341C7;
-        Mon, 27 Jun 2022 10:50:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A375061359
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0052BC3411D;
+        Mon, 27 Jun 2022 10:52:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656327017;
-        bh=8LxALkYX99QM0o3OZgiKgB0ILjh8O2RMDXaPQIHDGUI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mcSm99tpafBJecQ/I28UXwi0I5xqsZKQLuRriUF/iDPwE/EgWmjNAtNJakzD9w9gt
-         EVhCwLH/ujOiWejPqgmTGSQWqt+t4Hs6ydYu2eySUQjAC/fZ/PEhe+gReMco8Kh9I3
-         xcA2dWf+XIuItslFOzZaAgO1I3MtkiT/7if+F0beNz10j0M0Ph05IH7fbB7sHi/WwB
-         ObNhdNvX1mjgd9I37Scd1YvXo6I0hjxSA65z0cQtsxvz83yTV4zGVcr9MSZfxki8t0
-         AzcsI1YE39xOGwNaCnGR5P7eNSiy4tXH88tKdBxdQJhaJW/q2czsmSGIm8AkzeJ9p7
-         mV7xKm3AxW0yA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99722E49BBB;
-        Mon, 27 Jun 2022 10:50:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1656327138;
+        bh=gswl8VXoSaynFC5hVjucevy2klG2JzBobBOLT+yU1BY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MwgGtUpbNJiP6ZRVdVnG9fyiBv+cXXkr60sIvEc+pRvGu1Lo/b73vWC2FDvd4joOI
+         EdLqYn+SKuMn9bbp5YhKLe8Byi2JlOtuSrUgGDXytLHiXXax60VXbgRybJ2FV254c4
+         Wl3a15MKrqDNUtH4rfmknJn1JQzHWpkpvq6U/BhaEp46tp8bq5LQ/m0zjMVfgsYJAc
+         o25/eERdI4TkkLF3iyEyjVf6Wb0TqMYM04B47xVfWM6t2qe5SateKA0mMsFnC7txef
+         xBveRnw/srJWZz9kjSTQEIfYYBrvwUiR6oRimuENWxulJzTZBJMX23IyRvH+nfOOLh
+         O+OrQAFi5BBgw==
+Date:   Mon, 27 Jun 2022 11:52:12 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Guangbin Huang <huangguangbin2@huawei.com>
+Cc:     john.garry@huawei.com, mark.rutland@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, liuqi115@huawei.com,
+        zhangshaokun@hisilicon.com, f.fangjian@huawei.com,
+        lipeng321@huawei.com, shenjian15@huawei.com
+Subject: Re: [RESEND PATCH V7 2/2] drivers/perf: hisi: add driver for HNS3 PMU
+Message-ID: <20220627105211.GD22095@willie-the-truck>
+References: <20220525005211.57059-1-huangguangbin2@huawei.com>
+ <20220525005211.57059-3-huangguangbin2@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v9 00/16] add support for Renesas RZ/N1 ethernet
- subsystem devices
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165632701762.8538.13185906941735942250.git-patchwork-notify@kernel.org>
-Date:   Mon, 27 Jun 2022 10:50:17 +0000
-References: <20220624144001.95518-1-clement.leger@bootlin.com>
-In-Reply-To: <20220624144001.95518-1-clement.leger@bootlin.com>
-To:     =?utf-8?b?Q2zDqW1lbnQgTMOpZ2VyIDxjbGVtZW50LmxlZ2VyQGJvb3RsaW4uY29tPg==?=@ci.codeaurora.org
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzk+dt@kernel.org, geert+renesas@glider.be, magnus.damm@gmail.com,
-        hkallweit1@gmail.com, linux@armlinux.org.uk,
-        alexandre.torgue@foss.st.com, peppe.cavallaro@st.com,
-        joabreu@synopsys.com, thomas.petazzoni@bootlin.com,
-        herve.codina@bootlin.com, miquel.raynal@bootlin.com,
-        milan.stevanovic@se.com, jimmy.lalande@se.com,
-        pascal.eberhard@se.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        netdev@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220525005211.57059-3-huangguangbin2@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,61 +59,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 24 Jun 2022 16:39:45 +0200 you wrote:
-> The Renesas RZ/N1 SoCs features an ethernet subsystem which contains
-> (most notably) a switch, two GMACs, and a MII converter [1]. This
-> series adds support for the switch and the MII converter.
+On Wed, May 25, 2022 at 08:52:11AM +0800, Guangbin Huang wrote:
+> HNS3(HiSilicon Network System 3) PMU is RCiEP device in HiSilicon SoC NIC,
+> supports collection of performance statistics such as bandwidth, latency,
+> packet rate and interrupt rate.
 > 
-> The MII converter present on this SoC has been represented as a PCS
-> which sit between the MACs and the PHY. This PCS driver is probed from
-> the device-tree since it requires to be configured. Indeed the MII
-> converter also contains the registers that are handling the muxing of
-> ports (Switch, MAC, HSR, RTOS, etc) internally to the SoC.
+> NIC of each SICL has one PMU device for it. Driver registers each PMU
+> device to perf, and exports information of supported events, filter mode of
+> each event, bdf range, hardware clock frequency, identifier and so on via
+> sysfs.
 > 
-> [...]
+> Each PMU device has its own registers of control, counters and interrupt,
+> and it supports 8 hardware events, each hardward event has its own
+> registers for configuration, counters and interrupt.
+> 
+> Filter options contains:
+> event        - select event
+> port         - select physical port of nic
+> tc           - select tc(must be used with port)
+> func         - select PF/VF
+> queue        - select queue of PF/VF(must be used with func)
+> intr         - select interrupt number(must be used with func)
+> global       - select all functions of IO DIE
+> 
+> Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+> Reviewed-by: John Garry <john.garry@huawei.com>
+> Reviewed-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+> ---
+>  MAINTAINERS                       |    6 +
+>  drivers/perf/hisilicon/Kconfig    |   10 +
+>  drivers/perf/hisilicon/Makefile   |    1 +
+>  drivers/perf/hisilicon/hns3_pmu.c | 1662 +++++++++++++++++++++++++++++
+>  include/linux/cpuhotplug.h        |    1 +
+>  5 files changed, 1680 insertions(+)
+>  create mode 100644 drivers/perf/hisilicon/hns3_pmu.c
 
-Here is the summary with links:
-  - [net-next,v9,01/16] net: dsa: allow port_bridge_join() to override extack message
-    https://git.kernel.org/netdev/net-next/c/1c6e8088d9a7
-  - [net-next,v9,02/16] net: dsa: add support for ethtool get_rmon_stats()
-    https://git.kernel.org/netdev/net-next/c/67f38b1c7324
-  - [net-next,v9,03/16] net: dsa: add Renesas RZ/N1 switch tag driver
-    https://git.kernel.org/netdev/net-next/c/a08d6a6dc820
-  - [net-next,v9,04/16] dt-bindings: net: pcs: add bindings for Renesas RZ/N1 MII converter
-    https://git.kernel.org/netdev/net-next/c/c823c2bf9156
-  - [net-next,v9,05/16] net: pcs: add Renesas MII converter driver
-    https://git.kernel.org/netdev/net-next/c/7dc54d3b8d91
-  - [net-next,v9,06/16] dt-bindings: net: dsa: add bindings for Renesas RZ/N1 Advanced 5 port switch
-    https://git.kernel.org/netdev/net-next/c/8956e96c1d4d
-  - [net-next,v9,07/16] net: dsa: rzn1-a5psw: add Renesas RZ/N1 advanced 5 port switch driver
-    https://git.kernel.org/netdev/net-next/c/888cdb892b61
-  - [net-next,v9,08/16] net: dsa: rzn1-a5psw: add statistics support
-    https://git.kernel.org/netdev/net-next/c/c7243fd4a62f
-  - [net-next,v9,09/16] net: dsa: rzn1-a5psw: add FDB support
-    https://git.kernel.org/netdev/net-next/c/5edf246c6869
-  - [net-next,v9,10/16] dt-bindings: net: snps,dwmac: add "power-domains" property
-    https://git.kernel.org/netdev/net-next/c/955fe312a9d2
-  - [net-next,v9,11/16] dt-bindings: net: snps,dwmac: add "renesas,rzn1" compatible
-    https://git.kernel.org/netdev/net-next/c/d7cc14bc9802
-  - [net-next,v9,12/16] ARM: dts: r9a06g032: describe MII converter
-    https://git.kernel.org/netdev/net-next/c/066c3bd35835
-  - [net-next,v9,13/16] ARM: dts: r9a06g032: describe GMAC2
-    https://git.kernel.org/netdev/net-next/c/3f5261f1c2a8
-  - [net-next,v9,14/16] ARM: dts: r9a06g032: describe switch
-    https://git.kernel.org/netdev/net-next/c/cf9695d8a7e9
-  - [net-next,v9,15/16] ARM: dts: r9a06g032-rzn1d400-db: add switch description
-    https://git.kernel.org/netdev/net-next/c/9aab31d66ec9
-  - [net-next,v9,16/16] MAINTAINERS: add Renesas RZ/N1 switch related driver entry
-    https://git.kernel.org/netdev/net-next/c/717a5c56deec
+This mostly looks good to me, but I have one niggling concern with the ABI:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> +#define HNS3_PMU_FILTER_ATTR(_name, _config, _start, _end)               \
+> +	static inline u64 hns3_pmu_get_##_name(struct perf_event *event) \
+> +	{                                                                \
+> +		return FIELD_GET(GENMASK_ULL(_end, _start),              \
+> +				 event->attr._config);                   \
+> +	}
+> +
+> +HNS3_PMU_FILTER_ATTR(event, config, 0, 16);
+> +HNS3_PMU_FILTER_ATTR(subevent, config, 0, 7);
+> +HNS3_PMU_FILTER_ATTR(event_type, config, 8, 15);
+> +HNS3_PMU_FILTER_ATTR(ext_counter_used, config, 16, 16);
+> +HNS3_PMU_FILTER_ATTR(real_event, config, 0, 15);
 
+How does perf tool deal with overlapping fields like this? It seems like
+quite a bad idea to allow things like "event=0xffff,subevent=0" when they
+are no longer distinct and I don't _think_ any other drivers do this.
 
+Can you remove 'event' and 'real_event' for now, or are they needed?
+
+Will

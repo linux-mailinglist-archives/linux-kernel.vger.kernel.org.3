@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875AB55C686
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74E855DF22
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237217AbiF0Lmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
+        id S236086AbiF0Lf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236884AbiF0LkL (ORCPT
+        with ESMTP id S235351AbiF0LcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:40:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40EABF4D;
-        Mon, 27 Jun 2022 04:35:28 -0700 (PDT)
+        Mon, 27 Jun 2022 07:32:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8E76579;
+        Mon, 27 Jun 2022 04:29:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7063960CA4;
-        Mon, 27 Jun 2022 11:35:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E52C341C7;
-        Mon, 27 Jun 2022 11:35:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2845B81122;
+        Mon, 27 Jun 2022 11:29:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D49C3411D;
+        Mon, 27 Jun 2022 11:29:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329727;
-        bh=VLQyzPYvXcOhroRTJOIwWKIJLr+kYg5ugNy72uYPY+s=;
+        s=korg; t=1656329361;
+        bh=hqBg51TtQ2Y5YQFT14WWcZJPCnt/QxcNOyTLRLJ9cAg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SUMBdrjEjpnjd20LKqWpg/1XZWdmMK0Wr4QsF0vepBUjqVqE7V3SHXvvI51119/7O
-         hfZCocXW/dTqz8EmVsW5d63U+87kqT6SzAQB4KlRJmryvjIdgQwQ71COGTpC86a6e+
-         iLgpBD3FBkie/2qqYfOUJ2PdrA9zQt9jPT2DaUTw=
+        b=YKdcr4jJbDiZPXru7cCAI6weRvxVw+GwnVsX4ATQuKr0/C9Cz5QEOZmQbuxBP+EmA
+         di/SyP2hxHYlrkXybmNjNWDuwexDUOCDzPDtdxGmnG3wj7RyDvy/JcrCbPixMXcEF9
+         77qLlCLFuDj/dv1wAKhWa1d5mZgadlELlbWAJNJ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.15 096/135] iio:chemical:ccs811: rearrange iio trigger get and register
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 32/60] Revert "net/tls: fix tls_sk_proto_close executed repeatedly"
 Date:   Mon, 27 Jun 2022 13:21:43 +0200
-Message-Id: <20220627111940.943278924@linuxfoundation.org>
+Message-Id: <20220627111928.633100609@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Rokosov <DDRokosov@sberdevices.ru>
+From: Jakub Kicinski <kuba@kernel.org>
 
-commit d710359c0b445e8c03e24f19ae2fb79ce7282260 upstream.
+[ Upstream commit 1b205d948fbb06a7613d87dcea0ff5fd8a08ed91 ]
 
-IIO trigger interface function iio_trigger_get() should be called after
-iio_trigger_register() (or its devm analogue) strictly, because of
-iio_trigger_get() acquires module refcnt based on the trigger->owner
-pointer, which is initialized inside iio_trigger_register() to
-THIS_MODULE.
-If this call order is wrong, the next iio_trigger_put() (from sysfs
-callback or "delete module" path) will dereference "default" module
-refcnt, which is incorrect behaviour.
+This reverts commit 69135c572d1f84261a6de2a1268513a7e71753e2.
 
-Fixes: f1f065d7ac30 ("iio: chemical: ccs811: Add support for data ready trigger")
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220524181150.9240-5-ddrokosov@sberdevices.ru
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This commit was just papering over the issue, ULP should not
+get ->update() called with its own sk_prot. Each ULP would
+need to add this check.
+
+Fixes: 69135c572d1f ("net/tls: fix tls_sk_proto_close executed repeatedly")
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Link: https://lore.kernel.org/r/20220620191353.1184629-1-kuba@kernel.org
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/chemical/ccs811.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/tls/tls_main.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/drivers/iio/chemical/ccs811.c
-+++ b/drivers/iio/chemical/ccs811.c
-@@ -499,11 +499,11 @@ static int ccs811_probe(struct i2c_clien
+diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+index df9177d96f7f..7aba4ee77aba 100644
+--- a/net/tls/tls_main.c
++++ b/net/tls/tls_main.c
+@@ -803,9 +803,6 @@ static void tls_update(struct sock *sk, struct proto *p,
+ {
+ 	struct tls_context *ctx;
  
- 		data->drdy_trig->ops = &ccs811_trigger_ops;
- 		iio_trigger_set_drvdata(data->drdy_trig, indio_dev);
--		indio_dev->trig = data->drdy_trig;
--		iio_trigger_get(indio_dev->trig);
- 		ret = iio_trigger_register(data->drdy_trig);
- 		if (ret)
- 			goto err_poweroff;
-+
-+		indio_dev->trig = iio_trigger_get(data->drdy_trig);
- 	}
- 
- 	ret = iio_triggered_buffer_setup(indio_dev, NULL,
+-	if (sk->sk_prot == p)
+-		return;
+-
+ 	ctx = tls_get_ctx(sk);
+ 	if (likely(ctx)) {
+ 		ctx->sk_write_space = write_space;
+-- 
+2.35.1
+
 
 

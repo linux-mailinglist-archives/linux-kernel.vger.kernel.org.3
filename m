@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A0755CA88
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B00855C819
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234724AbiF0LYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
+        id S238910AbiF0LyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234668AbiF0LX7 (ORCPT
+        with ESMTP id S238372AbiF0LsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:23:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA596465;
-        Mon, 27 Jun 2022 04:23:57 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C52FD1A;
+        Mon, 27 Jun 2022 04:40:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 873CF61473;
-        Mon, 27 Jun 2022 11:23:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80749C341CB;
-        Mon, 27 Jun 2022 11:23:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDA24B81126;
+        Mon, 27 Jun 2022 11:40:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52CAFC341C8;
+        Mon, 27 Jun 2022 11:40:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329036;
-        bh=2DDAeQJd086sVGb3mvKxL4YwMs/5y7Tr5uoqX1olOME=;
+        s=korg; t=1656330054;
+        bh=ZsL1VgM0jfdDxU8UfBSdjwW5Nvhb3WaZ+2QVkoudGQU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NpuELNejRGDmVZYmOct3csm5jLHnWiJ+IEdBycmWNrKmiZzGQSiMDD/TjuViXqycf
-         vdI5322RvrZO+/vijtPshQtfDFzgYDl+V0NSKFZkbiwGYm6OAt/cAPskfXj4tdqHVB
-         uxGRonYKKnxcPuTOk6xO+XWd6AILGNNuUftLYddE=
+        b=mC/OOD3dYmQUiOd+Nw4We42Pz99Jjysmcuq7pEvK6aioSyQF6MssXF2bWKz7msUfi
+         8yJgKi59Gbc4mhNtHUA78bv1kn93VuRkADjLxhK2we9GDkOcijAWBmIa+3JsxbkPQ+
+         LXCHVjnaVyH9bZchKdlwWrQrTML7mRgO45umISv0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 029/102] bpf, x86: Fix tail call count offset calculation on bpf2bpf call
-Date:   Mon, 27 Jun 2022 13:20:40 +0200
-Message-Id: <20220627111934.330367140@linuxfoundation.org>
+Subject: [PATCH 5.18 068/181] drm/msm/dp: force link training for display resolution change
+Date:   Mon, 27 Jun 2022 13:20:41 +0200
+Message-Id: <20220627111946.536485301@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,84 +56,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+From: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-[ Upstream commit ff672c67ee7635ca1e28fb13729e8ef0d1f08ce5 ]
+[ Upstream commit a6e2af64a79afa7f1b29375b5231e840a84bb845 ]
 
-On x86-64 the tail call count is passed from one BPF function to another
-through %rax. Additionally, on function entry, the tail call count value
-is stored on stack right after the BPF program stack, due to register
-shortage.
+Display resolution change is implemented through drm modeset. Older
+modeset (resolution) has to be disabled first before newer modeset
+(resolution) can be enabled. Display disable will turn off both
+pixel clock and main link clock so that main link have to be
+re-trained during display enable to have new video stream flow
+again. At current implementation, display enable function manually
+kicks up irq_hpd_handle which will read panel link status and start
+link training if link status is not in sync state.
 
-The stored count is later loaded from stack either when performing a tail
-call - to check if we have not reached the tail call limit - or before
-calling another BPF function call in order to pass it via %rax.
+However, there is rare case that a particular panel links status keep
+staying in sync for some period of time after main link had been shut
+down previously at display disabled. In this case, main link retraining
+will not be executed by irq_hdp_handle(). Hence video stream of newer
+display resolution will fail to be transmitted to panel due to main
+link is not in sync between host and panel.
 
-In the latter case, we miscalculate the offset at which the tail call count
-was stored on function entry. The JIT does not take into account that the
-allocated BPF program stack is always a multiple of 8 on x86, while the
-actual stack depth does not have to be.
+This patch will bypass irq_hpd_handle() in favor of directly call
+dp_ctrl_on_stream() to always perform link training in regardless of
+main link status. So that no unexpected exception resolution change
+failure cases will happen. Also this implementation are more efficient
+than manual kicking off irq_hpd_handle function.
 
-This leads to a load from an offset that belongs to the BPF stack, as shown
-in the example below:
+Changes in v2:
+-- set force_link_train flag on DP only (is_edp == false)
 
-SEC("tc")
-int entry(struct __sk_buff *skb)
-{
-	/* Have data on stack which size is not a multiple of 8 */
-	volatile char arr[1] = {};
-	return subprog_tail(skb);
-}
+Changes in v3:
+-- revise commit  text
+-- add Fixes tag
 
-int entry(struct __sk_buff * skb):
-   0: (b4) w2 = 0
-   1: (73) *(u8 *)(r10 -1) = r2
-   2: (85) call pc+1#bpf_prog_ce2f79bb5f3e06dd_F
-   3: (95) exit
+Changes in v4:
+-- revise commit  text
 
-int entry(struct __sk_buff * skb):
-   0xffffffffa0201788:  nop    DWORD PTR [rax+rax*1+0x0]
-   0xffffffffa020178d:  xor    eax,eax
-   0xffffffffa020178f:  push   rbp
-   0xffffffffa0201790:  mov    rbp,rsp
-   0xffffffffa0201793:  sub    rsp,0x8
-   0xffffffffa020179a:  push   rax
-   0xffffffffa020179b:  xor    esi,esi
-   0xffffffffa020179d:  mov    BYTE PTR [rbp-0x1],sil
-   0xffffffffa02017a1:  mov    rax,QWORD PTR [rbp-0x9]	!!! tail call count
-   0xffffffffa02017a8:  call   0xffffffffa02017d8       !!! is at rbp-0x10
-   0xffffffffa02017ad:  leave
-   0xffffffffa02017ae:  ret
+Changes in v5:
+-- fix spelling at commit text
 
-Fix it by rounding up the BPF stack depth to a multiple of 8, when
-calculating the tail call count offset on stack.
+Changes in v6:
+-- split dp_ctrl_on_stream() for phy test case
+-- revise commit text for modeset
 
-Fixes: ebf7d1f508a7 ("bpf, x64: rework pro/epilogue and tailcall handling in JIT")
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220616162037.535469-2-jakub@cloudflare.com
+Changes in v7:
+-- drop 0 assignment at local variable (ret = 0)
+
+Changes in v8:
+-- add patch to remove pixel_rate from dp_ctrl
+
+Changes in v9:
+-- forward declare dp_ctrl_on_stream_phy_test_report()
+
+Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Patchwork: https://patchwork.freedesktop.org/patch/489895/
+Link: https://lore.kernel.org/r/1655411200-7255-1-git-send-email-quic_khsieh@quicinc.com
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/net/bpf_jit_comp.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    | 33 ++++++++++++++++++++++-------
+ drivers/gpu/drm/msm/dp/dp_ctrl.h    |  2 +-
+ drivers/gpu/drm/msm/dp/dp_display.c | 13 ++++++------
+ 3 files changed, 32 insertions(+), 16 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index a0a7ead52698..1714e85eb26d 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1261,8 +1261,9 @@ xadd:			if (is_imm8(insn->off))
- 		case BPF_JMP | BPF_CALL:
- 			func = (u8 *) __bpf_call_base + imm32;
- 			if (tail_call_reachable) {
-+				/* mov rax, qword ptr [rbp - rounded_stack_depth - 8] */
- 				EMIT3_off32(0x48, 0x8B, 0x85,
--					    -(bpf_prog->aux->stack_depth + 8));
-+					    -round_up(bpf_prog->aux->stack_depth, 8) - 8);
- 				if (!imm32 || emit_call(&prog, func, image + addrs[i - 1] + 7))
- 					return -EINVAL;
- 			} else {
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index de1974916ad2..499d0bbc442c 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1523,6 +1523,8 @@ static int dp_ctrl_link_maintenance(struct dp_ctrl_private *ctrl)
+ 	return ret;
+ }
+ 
++static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl);
++
+ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
+ {
+ 	int ret = 0;
+@@ -1545,7 +1547,7 @@ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
+ 
+ 	ret = dp_ctrl_on_link(&ctrl->dp_ctrl);
+ 	if (!ret)
+-		ret = dp_ctrl_on_stream(&ctrl->dp_ctrl);
++		ret = dp_ctrl_on_stream_phy_test_report(&ctrl->dp_ctrl);
+ 	else
+ 		DRM_ERROR("failed to enable DP link controller\n");
+ 
+@@ -1800,7 +1802,27 @@ static int dp_ctrl_link_retrain(struct dp_ctrl_private *ctrl)
+ 	return dp_ctrl_setup_main_link(ctrl, &training_step);
+ }
+ 
+-int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
++static int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
++{
++	int ret;
++	struct dp_ctrl_private *ctrl;
++
++	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
++
++	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
++
++	ret = dp_ctrl_enable_stream_clocks(ctrl);
++	if (ret) {
++		DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
++		return ret;
++	}
++
++	dp_ctrl_send_phy_test_pattern(ctrl);
++
++	return 0;
++}
++
++int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
+ {
+ 	int ret = 0;
+ 	bool mainlink_ready = false;
+@@ -1831,12 +1853,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+ 		goto end;
+ 	}
+ 
+-	if (ctrl->link->sink_request & DP_TEST_LINK_PHY_TEST_PATTERN) {
+-		dp_ctrl_send_phy_test_pattern(ctrl);
+-		return 0;
+-	}
+-
+-	if (!dp_ctrl_channel_eq_ok(ctrl))
++	if (force_link_train || !dp_ctrl_channel_eq_ok(ctrl))
+ 		dp_ctrl_link_retrain(ctrl);
+ 
+ 	/* stop txing train pattern to end link training */
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+index 2433edbc70a6..dcc7af21a5f0 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+@@ -20,7 +20,7 @@ struct dp_ctrl {
+ };
+ 
+ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
+-int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl);
++int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train);
+ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
+ int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
+ void dp_ctrl_push_idle(struct dp_ctrl *dp_ctrl);
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index d11c81d8a5db..12270bd3cff9 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -903,7 +903,7 @@ static int dp_display_enable(struct dp_display_private *dp, u32 data)
+ 		return 0;
+ 	}
+ 
+-	rc = dp_ctrl_on_stream(dp->ctrl);
++	rc = dp_ctrl_on_stream(dp->ctrl, data);
+ 	if (!rc)
+ 		dp_display->power_on = true;
+ 
+@@ -1590,6 +1590,7 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
+ 	int rc = 0;
+ 	struct dp_display_private *dp_display;
+ 	u32 state;
++	bool force_link_train = false;
+ 
+ 	dp_display = container_of(dp, struct dp_display_private, dp_display);
+ 	if (!dp_display->dp_mode.drm_mode.clock) {
+@@ -1618,10 +1619,12 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
+ 
+ 	state =  dp_display->hpd_state;
+ 
+-	if (state == ST_DISPLAY_OFF)
++	if (state == ST_DISPLAY_OFF) {
+ 		dp_display_host_phy_init(dp_display);
++		force_link_train = true;
++	}
+ 
+-	dp_display_enable(dp_display, 0);
++	dp_display_enable(dp_display, force_link_train);
+ 
+ 	rc = dp_display_post_enable(dp);
+ 	if (rc) {
+@@ -1630,10 +1633,6 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
+ 		dp_display_unprepare(dp);
+ 	}
+ 
+-	/* manual kick off plug event to train link */
+-	if (state == ST_DISPLAY_OFF)
+-		dp_add_event(dp_display, EV_IRQ_HPD_INT, 0, 0);
+-
+ 	/* completed connection */
+ 	dp_display->hpd_state = ST_CONNECTED;
+ 
 -- 
 2.35.1
 

@@ -2,76 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184F655B4EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 03:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3273455B4EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 03:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbiF0BTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 21:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
+        id S230346AbiF0BUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 21:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiF0BTS (ORCPT
+        with ESMTP id S229955AbiF0BUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 21:19:18 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609C52AC7;
-        Sun, 26 Jun 2022 18:19:16 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1o5dP6-00BRbS-2p; Mon, 27 Jun 2022 11:19:05 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Mon, 27 Jun 2022 09:19:04 +0800
-Date:   Mon, 27 Jun 2022 09:19:04 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Vladis Dronov <vdronov@redhat.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Simo Sorce <simo@redhat.com>
-Subject: Re: [PATCH v2] crypto: fips - make proc files report fips module
- name and version
-Message-ID: <YrkFiM+Y2G7a50z5@gondor.apana.org.au>
-References: <20220620131618.952133-1-vdronov@redhat.com>
- <20220621150832.1710738-1-vdronov@redhat.com>
+        Sun, 26 Jun 2022 21:20:03 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE7C2AE0
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 18:20:01 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id g7so2737326pjj.2
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 18:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JiM3N5evqJOowVHWeRy1BwX3FfyhynbxcUWkOm6L1ik=;
+        b=MsSky8rDDNs+PaeJiRVQB1ywR02u//iGONyyvf7FEtTfEv4lDjV4I0s9czbxLDUlC7
+         hsbylmLh4lkwFDR2wcTssR4JKfGmiC0X2jbsyTQqZ8piT/seBMuw9fJg5afyGhwP6hWJ
+         h4KVr+A/lgCTGixqzRRf/QAH3Ih2kD9CrSUYJyArsX3bkBBSeQWDmcUaIaTgp/poVGou
+         wCELTMGy/eNdRn8wkTfLBYMviw3HKzeBKLaP4DuXF7jOANwxuL7mwKoQdphN9VwfycyL
+         EYnKRM7gBzMgq54yzBZbT0+8WpoxkEAGhh9PIHUMCo7yarxf3rbI8yqoZGFOpq3EQwXU
+         GTEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JiM3N5evqJOowVHWeRy1BwX3FfyhynbxcUWkOm6L1ik=;
+        b=GSeX6wFgYBN0r+rgPoBrs3xGXug21NYI7zegTP/pUmtsfrfl5R4y8pmjmrDLt+YRXg
+         v9Ms3AZNyBH5xLcmlPUmAgMlY5Wo/qirZE12AQYBy72y65W3Js0QT7QFzP0Iomu5gNfb
+         0KZ1kGIW6ed/AZlrH5E/h2ngxZWO7t8BTvH91frPaTeZQmfwAb5IsLSRVlPtILf6b8qB
+         wp386xycqNyKjQsP/+6k50nh2wOjQaanpgBEHCFaxmeSvDuZm55r1qYl0tjq/iyMzs8p
+         BPQ6crtVJ9uygEs4iVPyIW45albi0XSczaMIhxlmYS4Y+3vFPBzORSksTqJqR2dmt5LQ
+         j/bA==
+X-Gm-Message-State: AJIora+JZ9ZCz1t+0WQjN4vxCOl66RrvBS7oJ1QjMsXdCEIwuxG3fxLJ
+        X6L9ZCxORqE4jMtRyPTpabEInw==
+X-Google-Smtp-Source: AGRyM1t2oztCFYrN6uMQKxDHkXdOqDSQ8UIJhLBDVPzheHA8LqCKnazYXDAdI5hfVtGXQ8ObBUyVpQ==
+X-Received: by 2002:a17:903:1cf:b0:16a:605a:d58a with SMTP id e15-20020a17090301cf00b0016a605ad58amr11786381plh.37.1656292800336;
+        Sun, 26 Jun 2022 18:20:00 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([103.135.249.206])
+        by smtp.gmail.com with ESMTPSA id n22-20020a17090a161600b001ecd48b80a2sm8064260pja.5.2022.06.26.18.19.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Jun 2022 18:19:59 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 09:19:52 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     gregkh@linuxfoundation.org, alexander.shishkin@linux.intel.com,
+        james.clark@arm.com, will@kernel.org, robin.murphy@arm.com,
+        acme@kernel.org, jonathan.cameron@huawei.com,
+        john.garry@huawei.com, helgaas@kernel.org,
+        lorenzo.pieralisi@arm.com, mathieu.poirier@linaro.org,
+        suzuki.poulose@arm.com, mark.rutland@arm.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, peterz@infradead.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, iommu@lists.linux-foundation.org,
+        prime.zeng@huawei.com, liuqi115@huawei.com,
+        zhangshaokun@hisilicon.com, linuxarm@huawei.com
+Subject: Re: [PATCH v9 4/8] perf tool: arm: Refactor event list iteration in
+ auxtrace_record__init()
+Message-ID: <20220627011952.GA143063@leoy-ThinkPad-X240s>
+References: <20220606115555.41103-1-yangyicong@hisilicon.com>
+ <20220606115555.41103-5-yangyicong@hisilicon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220621150832.1710738-1-vdronov@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220606115555.41103-5-yangyicong@hisilicon.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 05:08:32PM +0200, Vladis Dronov wrote:
->
-> diff --git a/include/linux/fips.h b/include/linux/fips.h
-> index c6961e932fef..72d2e0e1d3ac 100644
-> --- a/include/linux/fips.h
-> +++ b/include/linux/fips.h
-> @@ -2,10 +2,19 @@
->  #ifndef _FIPS_H
->  #define _FIPS_H
+On Mon, Jun 06, 2022 at 07:55:51PM +0800, Yicong Yang wrote:
+> From: Qi Liu <liuqi115@huawei.com>
+> 
+> Add find_pmu_for_event() and use to simplify logic in
+> auxtrace_record_init(). find_pmu_for_event() will be
+> reused in subsequent patches.
+> 
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+
+> ---
+>  tools/perf/arch/arm/util/auxtrace.c | 53 ++++++++++++++++++-----------
+>  1 file changed, 34 insertions(+), 19 deletions(-)
+> 
+> diff --git a/tools/perf/arch/arm/util/auxtrace.c b/tools/perf/arch/arm/util/auxtrace.c
+> index 5fc6a2a3dbc5..384c7cfda0fd 100644
+> --- a/tools/perf/arch/arm/util/auxtrace.c
+> +++ b/tools/perf/arch/arm/util/auxtrace.c
+> @@ -50,16 +50,32 @@ static struct perf_pmu **find_all_arm_spe_pmus(int *nr_spes, int *err)
+>  	return arm_spe_pmus;
+>  }
 >  
-> +#include <generated/utsrelease.h>
+> +static struct perf_pmu *find_pmu_for_event(struct perf_pmu **pmus,
+> +					   int pmu_nr, struct evsel *evsel)
+> +{
+> +	int i;
 > +
->  #ifdef CONFIG_CRYPTO_FIPS
->  extern int fips_enabled;
->  extern struct atomic_notifier_head fips_fail_notif_chain;
+> +	if (!pmus)
+> +		return NULL;
+> +
+> +	for (i = 0; i < pmu_nr; i++) {
+> +		if (evsel->core.attr.type == pmus[i]->type)
+> +			return pmus[i];
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+>  struct auxtrace_record
+>  *auxtrace_record__init(struct evlist *evlist, int *err)
+>  {
+> -	struct perf_pmu	*cs_etm_pmu;
+> +	struct perf_pmu	*cs_etm_pmu = NULL;
+> +	struct perf_pmu **arm_spe_pmus = NULL;
+>  	struct evsel *evsel;
+> -	bool found_etm = false;
+> +	struct perf_pmu *found_etm = NULL;
+>  	struct perf_pmu *found_spe = NULL;
+> -	struct perf_pmu **arm_spe_pmus = NULL;
+> +	int auxtrace_event_cnt = 0;
+>  	int nr_spes = 0;
+> -	int i = 0;
 >  
-> +#define FIPS_MODULE_NAME CONFIG_CRYPTO_FIPS_NAME
-> +#ifdef CONFIG_CRYPTO_FIPS_CUSTOM_VERSION
-> +#define FIPS_MODULE_VERSION CONFIG_CRYPTO_FIPS_VERSION
-> +#else
-> +#define FIPS_MODULE_VERSION UTS_RELEASE
-> +#endif
-
-Why does this need to be in fips.h? If it's only used by one file
-then it should be moved to the place where it's used.
-
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+>  	if (!evlist)
+>  		return NULL;
+> @@ -68,24 +84,23 @@ struct auxtrace_record
+>  	arm_spe_pmus = find_all_arm_spe_pmus(&nr_spes, err);
+>  
+>  	evlist__for_each_entry(evlist, evsel) {
+> -		if (cs_etm_pmu &&
+> -		    evsel->core.attr.type == cs_etm_pmu->type)
+> -			found_etm = true;
+> -
+> -		if (!nr_spes || found_spe)
+> -			continue;
+> -
+> -		for (i = 0; i < nr_spes; i++) {
+> -			if (evsel->core.attr.type == arm_spe_pmus[i]->type) {
+> -				found_spe = arm_spe_pmus[i];
+> -				break;
+> -			}
+> -		}
+> +		if (cs_etm_pmu && !found_etm)
+> +			found_etm = find_pmu_for_event(&cs_etm_pmu, 1, evsel);
+> +
+> +		if (arm_spe_pmus && !found_spe)
+> +			found_spe = find_pmu_for_event(arm_spe_pmus, nr_spes, evsel);
+>  	}
+> +
+>  	free(arm_spe_pmus);
+>  
+> -	if (found_etm && found_spe) {
+> -		pr_err("Concurrent ARM Coresight ETM and SPE operation not currently supported\n");
+> +	if (found_etm)
+> +		auxtrace_event_cnt++;
+> +
+> +	if (found_spe)
+> +		auxtrace_event_cnt++;
+> +
+> +	if (auxtrace_event_cnt > 1) {
+> +		pr_err("Concurrent AUX trace operation not currently supported\n");
+>  		*err = -EOPNOTSUPP;
+>  		return NULL;
+>  	}
+> -- 
+> 2.24.0

@@ -2,125 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B383855CAAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180CA55D742
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237261AbiF0PEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        id S237489AbiF0PFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbiF0PEE (ORCPT
+        with ESMTP id S236422AbiF0PE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:04:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62A4167CB
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:04:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6149F615B4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 15:04:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AE29C3411D;
-        Mon, 27 Jun 2022 15:04:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656342242;
-        bh=YsKjrEb0ud1B28xSx98ye6oo+vg3Tz7dJdUJTyfsPV4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s+EKKHCVm2hnCNS2sh53Y9S3iLc/Bd9nZZVz9N/Fd5DHh51GCAVH92KOSHSOMc97/
-         9d8l/KYhsx0X3pRGgzkKmJItiLgODBqgD2mzLNMpjg5NAmRCY7qTPd0G5PD1qH9Cof
-         +PsWiH76Df8RI3yOhZPohUrPDgAsnmPIUIAKjBao=
-Date:   Mon, 27 Jun 2022 17:03:59 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Liang He <windhl@126.com>
-Cc:     broonie@kernel.org, ckeepax@opensource.cirrus.com,
-        michal.simek@xilinx.com, abhyuday.godhasara@xilinx.com,
-        simont@opensource.cirrus.com, ronak.jain@xilinx.com,
-        peng.fan@nxp.com, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] firmware: Hold a reference for
- of_find_compatible_node()
-Message-ID: <YrnG3ymy0dg/VPQs@kroah.com>
-References: <20220621032625.4078445-1-windhl@126.com>
- <Yrm6JztPuqYmKlKF@kroah.com>
- <578840ee.438c.181a5a58c00.Coremail.windhl@126.com>
+        Mon, 27 Jun 2022 11:04:59 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8581707D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:04:57 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id d17so7855582wrc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:04:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n2jsRBQt/as88KnizPDABOC4Rxp2adLjCepzZaIKHw4=;
+        b=alhgb7zjFNA2DChp05P9W6U97OR3JUxFxOuLocZTHoA50Kq3TB1FjiYYmf4ocBmry9
+         GOqGXS2fBITZMwEjSE+jWZJDzZRIUC2PfhXiR5uh0PqYfWSTXjKadJ8lpBJqi3Y2TKmW
+         Yn5clXjLGwiK7q/SEQopZao8lJPj1CsshnoCc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n2jsRBQt/as88KnizPDABOC4Rxp2adLjCepzZaIKHw4=;
+        b=wHCnj1dvUISWPH9xT0ZlR4ycL8acJNXmuF3yRsV+qOgnVSQ2S6dt2tOlWu2sZzpp2S
+         aZXBrz5BYlu0+tftEcZeiXR3cKwZ4ctb/YKEEv8+icuIPJug3sHfQyXHTdK1r/9LHXUU
+         vF+FL2WLbG6AVQPv5aP7mr7yVld2foW7vZfpqU1PpQwmnITrhAW5ClDHH3U1YUj11mln
+         Ufnx+77tucRM9sG9ATSxWr06ygt4aIDBW/8TtddBZPQMZ+BRuDisX+PUuccik3/S6wAD
+         TVDjMUdIyVIvgcSi2aHj8jJ7rPdI/49bleljMSIoha/wVEGuQLmNJRrMmUW3OK24lvHL
+         FDfw==
+X-Gm-Message-State: AJIora+QDD6fn0R+s5V2bs0vVC15BCcgKlFfoYZQAxOVmWM4L4qg00sf
+        vGkUieqsKpZeFKXQuNchum/4xw==
+X-Google-Smtp-Source: AGRyM1vjbzImBeyzjCT33qexRbsSGOojEv7XQ5hl+VQMUrn7xV7wiU9d6d6Kp/0ACop06AB39WMlcg==
+X-Received: by 2002:a5d:50cd:0:b0:21b:a288:f987 with SMTP id f13-20020a5d50cd000000b0021ba288f987mr12566123wrt.146.1656342296444;
+        Mon, 27 Jun 2022 08:04:56 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-58-216.cust.vodafonedsl.it. [188.217.58.216])
+        by smtp.gmail.com with ESMTPSA id d18-20020adfe852000000b0021ba3d1f2a0sm10581250wrn.48.2022.06.27.08.04.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 08:04:55 -0700 (PDT)
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
+        quentin.schulz@theobroma-systems.com,
+        Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/7] media: ov5693: cleanup code and add dts support
+Date:   Mon, 27 Jun 2022 17:04:46 +0200
+Message-Id: <20220627150453.220292-1-tommaso.merciai@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <578840ee.438c.181a5a58c00.Coremail.windhl@126.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 10:51:38PM +0800, Liang He wrote:
-> 
-> 
-> At 2022-06-27 22:09:43, "Greg KH" <gregkh@linuxfoundation.org> wrote:
-> >On Tue, Jun 21, 2022 at 11:26:25AM +0800, Liang He wrote:
-> >> In of_register_trusted_foundations(), we need to hold the reference
-> >> returned by of_find_compatible_node() and then use it to call
-> >> of_node_put() for refcount balance.
-> >> 
-> >> Signed-off-by: Liang He <windhl@126.com>
-> >> ---
-> >>  include/linux/firmware/trusted_foundations.h | 8 ++++++--
-> >>  1 file changed, 6 insertions(+), 2 deletions(-)
-> >> 
-> >> diff --git a/include/linux/firmware/trusted_foundations.h b/include/linux/firmware/trusted_foundations.h
-> >> index be5984bda592..399471c2f1c7 100644
-> >> --- a/include/linux/firmware/trusted_foundations.h
-> >> +++ b/include/linux/firmware/trusted_foundations.h
-> >> @@ -71,12 +71,16 @@ static inline void register_trusted_foundations(
-> >>  
-> >>  static inline void of_register_trusted_foundations(void)
-> >>  {
-> >> +	struct device_node *np = of_find_compatible_node(NULL, NULL, "tlm,trusted-foundations");
-> >> +
-> >> +	of_node_put(np);
-> >> +	if (!np)
-> >
-> >While this is technically correct, you are now checking to see if this
-> >points to a memory location that you no longer know what it really
-> >belongs to.  C will let you do this, but it might be nicer to fix it up
-> >properly so it doesn't look like this.
-> >
-> >thanks,
-> >
-> >greg k-h
-> 
-> Hi，Greg KH，
-> 
-> Thanks very much for your effort to review my patch.
-> 
-> In fact, I have reported a commit for this kind of 'check-after-put' coding style:
-> https://lore.kernel.org/all/20220617112636.4041671-1-windhl@126.com/
-> 
-> But I have been told to keep such style and I think the explanation is also reasonable.
+Hi All,
+This series cleanup code on ov5693 driver and bring up dts support, also add
+documentation for ov5693 camera sensor
 
-It's not very reasonable if you talk to C compiler authors.  They can do
-crazy things with dereferenced memory locations, including optimizing
-them away entirely as they now "know" that this does not point to any
-valid memory so it's an undefined thing that the compiler is being asked
-to do.
+Inspired by recently Quentin series:
 
-> So when I make this patch, I am indeed confused what I should write.
-> 
-> Finally, I think it is better to be consistent with current coding style so
-> I chose this 'check-after-put' style.
-> 
-> But if you think it is better to use a normal order, i.e., check-then-put,
-> I am, of cause, very happy to send a new patch for this bug and I will
-> also keep to use this coding style in future.
+ - https://patchwork.kernel.org/project/linux-media/list/?series=64807
 
-check and then put please.  That prevents you from having to fix up this
-type of thing in a few years when the compilers all start to blow up on
-it.
+Tommaso Merciai (7):
+  media: ov5693: count num_supplies using array_size
+  media: ov5693: add dvdd into ov5693_supply_names array
+  media: ov5693: rename clk into xvclk
+  media: ov5693: move hw cfg functions into ov5693_check_hwcfg
+  media: ov5693: rename ov5693_check_hwcfg into ov5693_get_hwcfg
+  media: ov5693: add ov5693_of_match, dts support
+  media: dt-bindings: ov5693: document YAML binding
 
-thanks,
+ .../bindings/media/i2c/ovti,ov5693.yaml       | 108 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ drivers/media/i2c/ov5693.c                    |  86 ++++++++------
+ 3 files changed, 161 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
 
-greg k-h
+-- 
+2.25.1
+

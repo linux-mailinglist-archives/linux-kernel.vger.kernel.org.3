@@ -2,135 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E3255D4EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 298E755CCE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233552AbiF0JJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        id S233380AbiF0JJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232634AbiF0JJn (ORCPT
+        with ESMTP id S233565AbiF0JJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:09:43 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A6C25CD
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:09:42 -0700 (PDT)
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 85C783F210
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:09:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1656320981;
-        bh=s566ipww91mKnS3Ml2xQ5GbO9Dmtu286N5Zfo5g5Lhs=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=rsVQTYLeqdOQ4Sb5IDNIuGm0lvjDw5fXqYQUqBXEXeSvrK0OMPhbs8SwDW6sbJnUo
-         YpK6Mh80gu08FthsjLaRuf3wplPfA4rohV1Xg+/+e95F5ymk/KmMj/d/mQU4bd89HW
-         RWZfMMUvBC+q37KteaI7ZGNeyWVJZVt/HOYZ9uzc/9lNHgOZ8AJlbY9n3xvlAcaskg
-         Mi/3Fwo8s4uqwwapMJrXwaTGpqpQZBDnNKA3OfQFaLs6YLMNwasZuJTxAx9G/bhbd5
-         gLAitSUiqKopXd+3fAHraPh7oYxowi9jk+30z85LcgDVxvYswi/DqmwGsvmE+rwSJM
-         IE0DZisXuqttQ==
-Received: by mail-ej1-f71.google.com with SMTP id p7-20020a170906614700b006f87f866117so2140307ejl.21
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:09:41 -0700 (PDT)
+        Mon, 27 Jun 2022 05:09:57 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F517265C;
+        Mon, 27 Jun 2022 02:09:56 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id a11-20020a17090acb8b00b001eca0041455so9597411pju.1;
+        Mon, 27 Jun 2022 02:09:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jzEXo2wNJKuAXzdzPYSnlSN8fixwVSEGJI0x/W31JkM=;
+        b=hU4DhJ+W7BPhJkIWmS8d8NgVX/6O0gsSZ6+OJHBNigkHfBGv3KGB2PpoPYMekkqEKc
+         G9arIfzZLle4EjKLrbn5G2gG8JvZbK84yRMfRQ76bqdRegXh9PPvm7dqC6NfedlYeZSL
+         hcuE2zj95GukfZvGBs6RDpr9Wac/bRrAtRMWrspwqj9gAJrrBwFoiDbGa/J09EoJrN7n
+         P8VCUxO15woow6TQJpqoRmYZ+DqaOKhJ750PBDSuTCbHaeIOE4UVtVznqK5v7qwEk5XX
+         A/7Ij+mmkNcQH6B8JpcNYPdDrsShy0J34i2C3DiXovN91e2VObvlkiVCM5/AKR/+kljp
+         PMIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s566ipww91mKnS3Ml2xQ5GbO9Dmtu286N5Zfo5g5Lhs=;
-        b=o+CPMd+ZtEzDF+I6QL36n0bBLBlWvXzadFKCXq1BJgKrk9T8NzfKwmH/wYqJ3ZYAEI
-         ak3urUzyNAba5CmZZQ+G+tA9u5DbxTEzhZEOSw+UIipKY/hywTDeEd0nbuu+WBD7h84J
-         sHoU0h8+yx8hAkgB73fhMWKc1XKb7vNvVsjxwHNJolwDRPMXJcmHmlHbiJGPwJUm2lGi
-         ab/aTd+RLj8p1dF8tbLE2mR+PHWzIuQbsIlbbPu5NmsvRTmGDJiqY1Dt9ADuWLYo2c3o
-         SyFhp4bgRQ5cpWiaSjFxWIcFKQ5hylaeCPluV3eiiaalZLZLQIZMQn7saAUWyCNOc2Pe
-         wfJw==
-X-Gm-Message-State: AJIora8dm/E3URPUjGeyIO9yPg7W0hb9QSNr1iJ3DgaGsd6gPwED7h0N
-        JwGC7oyiyntg4+/3i9qT2a1hEUSVsZbVKNX4HoQI1h6FHi9R6TGqqlhBlqHy9eWP7TcMAiW16LL
-        BVcz/ssJz4SiOxxBERuAgZNCaSJxixpa7xS4FC67BDg==
-X-Received: by 2002:a17:906:a245:b0:708:ce69:e38b with SMTP id bi5-20020a170906a24500b00708ce69e38bmr11816136ejb.100.1656320980905;
-        Mon, 27 Jun 2022 02:09:40 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t2/dRjKlfbsFr1REuQ8B/eBBS2/XPQR4aiwvOT5IFkq44OQXYNt3It3POSVHQrMzyK1rgtZQ==
-X-Received: by 2002:a17:906:a245:b0:708:ce69:e38b with SMTP id bi5-20020a170906a24500b00708ce69e38bmr11816125ejb.100.1656320980724;
-        Mon, 27 Jun 2022 02:09:40 -0700 (PDT)
-Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id fi9-20020a170906da0900b00722e5b234basm4821607ejb.179.2022.06.27.02.09.39
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=jzEXo2wNJKuAXzdzPYSnlSN8fixwVSEGJI0x/W31JkM=;
+        b=A+WCPy0leV1gtI13GSIc4hBgtaUXmHTyhEtgHqmjkm5bRzrhpO+ch+dLStCPzvbB3U
+         nsU9hXo91pAB0FjPVVeRWKsXxNSWdeoG+PXknoSgJpjYFsutfD/r0TZK033Jvcq6egxM
+         pLrVybeXrNSuufz4uS2Qu4HMkAYhylIE8vmqqoiXZXFzeegO3wiMlAHGUuP4pcaF1cLz
+         PEV7dNnWk/XjGdYRh83uWvyKZQhsH2hA0546+7h5m2ohkJYn8IDV0srmkXIb61yD0H6L
+         zxFkvXmXowwhBClEC262wTdxhHYDp4yA6e+oJb1OvXSy53tHSpt+pT/Dk/aOS7dndnvF
+         dYbw==
+X-Gm-Message-State: AJIora/3xAMz+WV7TciSCqeS58Yaa1+l2LpVxRhsDOAGtk+5cXQ2vc1X
+        x5XRAsIW2EBiKQOAJwH5Lsc=
+X-Google-Smtp-Source: AGRyM1sp3nkuVyFqSoHySHVx5/xqLARUgA6kJuHXjvfDTzveLyniCZLei7v+jKzA8L0ZBNfR1wFl6w==
+X-Received: by 2002:a17:902:b215:b0:168:da4b:c925 with SMTP id t21-20020a170902b21500b00168da4bc925mr13285908plr.155.1656320995426;
+        Mon, 27 Jun 2022 02:09:55 -0700 (PDT)
+Received: from localhost ([121.167.227.144])
+        by smtp.gmail.com with ESMTPSA id q5-20020a170902bd8500b001640beeebf1sm6583975pls.268.2022.06.27.02.09.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 02:09:40 -0700 (PDT)
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-To:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        dmaengine@vger.kernel.org
-Cc:     Emil Renner Berthing <kernel@esmil.dk>,
-        Vinod Koul <vkoul@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Pandith N <pandith.n@intel.com>,
-        Michael Zhu <michael.zhu@starfivetech.com>,
-        linux-kernel@vger.kernel.org,
-        Samin Guo <samin.guo@starfivetech.com>
-Subject: [PATCH] dmaengine: dw-axi-dmac: Fix RMW on channel suspend register
-Date:   Mon, 27 Jun 2022 11:09:39 +0200
-Message-Id: <20220627090939.1775717-1-emil.renner.berthing@canonical.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 27 Jun 2022 02:09:54 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 27 Jun 2022 18:09:52 +0900
+From:   Tejun Heo <tj@kernel.org>
+To:     Lin Feng <linf@wangsu.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup.c: remove redundant check for mixable cgroup in
+ cgroup_migrate_vet_dst
+Message-ID: <Yrlz4E4QbrzdOfMF@mtj.duckdns.org>
+References: <20220621092358.223594-1-linf@wangsu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220621092358.223594-1-linf@wangsu.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emil Renner Berthing <kernel@esmil.dk>
+On Tue, Jun 21, 2022 at 05:23:58PM +0800, Lin Feng wrote:
+...
+> so explicitly checking in cgroup_migrate_vet_dst is unnecessary.
+> 
+> Signed-off-by: Lin Feng <linf@wangsu.com>
 
-When the DMA is configured for more than 8 channels the bits controlling
-suspend moves to another register. However when adding support for this
-the new register would be completely overwritten in one case and
-overwritten with values from the old register in another case.
+Applied to cgroup/for-5.20.
 
-Found by comparing the parallel implementation of more than 8 channel
-support for the StarFive JH7100 SoC by Samin.
+Thanks.
 
-Fixes: 824351668a41 ("dmaengine: dw-axi-dmac: support DMAX_NUM_CHANNELS > 8")
-Co-developed-by: Samin Guo <samin.guo@starfivetech.com>
-Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
----
- drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-index e9c9bcb1f5c2..c741da02b67e 100644
---- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-+++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-@@ -1164,8 +1164,9 @@ static int dma_chan_pause(struct dma_chan *dchan)
- 			BIT(chan->id) << DMAC_CHAN_SUSP_WE_SHIFT;
- 		axi_dma_iowrite32(chan->chip, DMAC_CHEN, val);
- 	} else {
--		val = BIT(chan->id) << DMAC_CHAN_SUSP2_SHIFT |
--		      BIT(chan->id) << DMAC_CHAN_SUSP2_WE_SHIFT;
-+		val = axi_dma_ioread32(chan->chip, DMAC_CHSUSPREG);
-+		val |= BIT(chan->id) << DMAC_CHAN_SUSP2_SHIFT |
-+			BIT(chan->id) << DMAC_CHAN_SUSP2_WE_SHIFT;
- 		axi_dma_iowrite32(chan->chip, DMAC_CHSUSPREG, val);
- 	}
- 
-@@ -1190,12 +1191,13 @@ static inline void axi_chan_resume(struct axi_dma_chan *chan)
- {
- 	u32 val;
- 
--	val = axi_dma_ioread32(chan->chip, DMAC_CHEN);
- 	if (chan->chip->dw->hdata->reg_map_8_channels) {
-+		val = axi_dma_ioread32(chan->chip, DMAC_CHEN);
- 		val &= ~(BIT(chan->id) << DMAC_CHAN_SUSP_SHIFT);
- 		val |=  (BIT(chan->id) << DMAC_CHAN_SUSP_WE_SHIFT);
- 		axi_dma_iowrite32(chan->chip, DMAC_CHEN, val);
- 	} else {
-+		val = axi_dma_ioread32(chan->chip, DMAC_CHSUSPREG);
- 		val &= ~(BIT(chan->id) << DMAC_CHAN_SUSP2_SHIFT);
- 		val |=  (BIT(chan->id) << DMAC_CHAN_SUSP2_WE_SHIFT);
- 		axi_dma_iowrite32(chan->chip, DMAC_CHSUSPREG, val);
 -- 
-2.36.1
-
+tejun

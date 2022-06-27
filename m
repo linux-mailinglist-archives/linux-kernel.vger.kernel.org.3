@@ -2,117 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F8455D8E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 821B455DA10
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237339AbiF0O5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
+        id S237620AbiF0O5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234416AbiF0O5D (ORCPT
+        with ESMTP id S234416AbiF0O5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:57:03 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE5617587
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:56:59 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31772f8495fso88166407b3.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:56:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V2nkfUAYBDu+tfL2X9orUiMGatP89Pe54EDyxN988kQ=;
-        b=i+OGq2gIOrj1f7wJzQ/eJW7dkmfzigU161pJ9k36Z3eExzuYM+VOxhAoq8edk1Lj6g
-         GI/bPHIeILex5TIvyQUh9j5heq/SmDq7hfMD81AoulOR5oXjLHEwbRahu/0IOZ6XBzcb
-         kzJH4QV57nE3AOYV6nw52zlZNjxqVQ7rk8D+tA58OeeOHf+3PtKM96u1+os+o3UFPnqU
-         qfVS2dWuH5VfyxtdEiJk6Rw0iPTSMhC9CdmRxAoqt3dPzOsnhCbsa288dFK5oepKzJzI
-         IFAbYUxAe2mFHV+UT4i5fQJ53K6bAoD/8IXzOQMCLsQjhBZmYNgAleopWVgDXEb9DCuU
-         PeGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V2nkfUAYBDu+tfL2X9orUiMGatP89Pe54EDyxN988kQ=;
-        b=FzXyPPUTQMueTnFnBn53VI4rNrLJqKlVg0ybrpEVLAQC3z8mCZ0Rda+zCMG9S2+XkW
-         lgo0dVRSKAIUEl1cmqftUcT8rVdZnCGw4VkVwApDyK3Ia3lVItsxQLThkvYGnnAp+8fw
-         P9Q1pkuZs7R566XXOcVht9BY/1WD1DcOMkQmsWIwqTcEztz/HKkj/dVkFhYmLFZ/X+pL
-         MxSlhtLZf+nHLU8mGo/VzTdjCoaaSkYj+FULc5quVo9+8idG9Ks3pJum8sXDGEEFWNPb
-         MillrxzgSlnclHOUMUMSEieNh25vVyeJtrAiuUX5sIMad1lYb22KHpu+O4tID1OvS1tU
-         Gi3w==
-X-Gm-Message-State: AJIora9F1zYc2iNO0bMssugIqzZrwvBIC5a0LzYZhismFb8UJjqqKmr7
-        PEfcgR+0/swp2H29KjAOPG0jUxbnpa2e/2kWIpYuaQ==
-X-Google-Smtp-Source: AGRyM1u8B4kcLVWeZgzZxIUcRpqFs89OsvNHHhNb/IgGIfmRs5gfWD02FqhOdPn0RnPeAh7WgtQAQ18XliZui2xrm3U=
-X-Received: by 2002:a0d:df50:0:b0:317:9c40:3b8b with SMTP id
- i77-20020a0ddf50000000b003179c403b8bmr15687403ywe.332.1656341818790; Mon, 27
- Jun 2022 07:56:58 -0700 (PDT)
+        Mon, 27 Jun 2022 10:57:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB3E17A82
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:57:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0CE7DB81851
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:57:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5E50C3411D;
+        Mon, 27 Jun 2022 14:57:26 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="KZbTn82t"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656341844;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qvBOHidW14C5SbscgVMeXZF4furaNMFe21DCdOydfxY=;
+        b=KZbTn82tKYOESC1i/vIwkmATYPLjpYQBqMjmT2+CkpuC9EZMWL2kED5VvDsCZbcMeZaxmj
+        D9jAYcny+gYEKgr8AdOdtbu1p/5RRQBuFhP9GpkNVScLCpSpb7FWUFmKoycIGtJXZNSvJF
+        d+vlKDZGZbkkNYHF+aZdEluITXW3DKQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f8c882a2 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 27 Jun 2022 14:57:23 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, ebiederm@xmission.com
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>
+Subject: [PATCH v2] signal: break out of wait loops on kthread_stop()
+Date:   Mon, 27 Jun 2022 16:57:16 +0200
+Message-Id: <20220627145716.641185-1-Jason@zx2c4.com>
+In-Reply-To: <YrnEvjcG8tmF3dRV@zx2c4.com>
+References: <YrnEvjcG8tmF3dRV@zx2c4.com>
 MIME-Version: 1.0
-References: <CADvbK_csvmkKe46hT9792=+Qcjor2EvkkAnr--CJK3NGX-N9BQ@mail.gmail.com>
- <CADvbK_eQUmb942vC+bG+NRzM1ki1LiCydEDR1AezZ35Jvsdfnw@mail.gmail.com>
- <20220623185730.25b88096@kernel.org> <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
- <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
- <20220624070656.GE79500@shbuild999.sh.intel.com> <20220624144358.lqt2ffjdry6p5u4d@google.com>
- <20220625023642.GA40868@shbuild999.sh.intel.com> <20220627023812.GA29314@shbuild999.sh.intel.com>
- <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
- <20220627123415.GA32052@shbuild999.sh.intel.com> <CALvZod7i_=7bNZR-LAXBPXJFxj-1KBuYs+rmG0iABAE1T90BPg@mail.gmail.com>
-In-Reply-To: <CALvZod7i_=7bNZR-LAXBPXJFxj-1KBuYs+rmG0iABAE1T90BPg@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 27 Jun 2022 16:56:47 +0200
-Message-ID: <CANn89i+gKtKsNT3SUJyOc8FiF4EO74Fando7GudeXw0+CPr=EQ@mail.gmail.com>
-Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Feng Tang <feng.tang@intel.com>, Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Xin Long <lucien.xin@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 4:53 PM Shakeel Butt <shakeelb@google.com> wrote:
+I was recently surprised to learn that msleep_interruptible(),
+wait_for_completion_interruptible_timeout(), and related functions
+simply hung when I called kthread_stop() on kthreads using them. The
+solution to fixing the case with msleep_interruptible() was more simply
+to move to schedule_timeout_interruptible(). Why?
 
-> Am I understanding correctly that this 69.4% (or 73.7%) regression is
-> with cgroup v2?
->
-> Eric did the experiments on v2 but on real hardware where the
-> performance impact was negligible.
->
-> BTW do you see similar regression for tcp as well or just sctp?
+The reason is that msleep_interruptible(), and many functions just like
+it, has a loop like this:
 
-TCP_RR with big packets can show a regression as well.
+        while (timeout && !signal_pending(current))
+                timeout = schedule_timeout_interruptible(timeout);
 
-I gave this perf profile:
+The call to kthread_stop() woke up the thread, so schedule_timeout_
+interruptible() returned early, but because signal_pending() returned
+true, it went back into another timeout, which was never woken up.
 
-    28.69%  [kernel]       [k] copy_user_enhanced_fast_string
-    16.13%  [kernel]       [k] intel_idle_irq
-     6.46%  [kernel]       [k] page_counter_try_charge
-     6.20%  [kernel]       [k] __sk_mem_reduce_allocated
-     5.68%  [kernel]       [k] try_charge_memcg
-     5.16%  [kernel]       [k] page_counter_cancel
+This wait loop pattern is common to various pieces of code, and I
+suspect that subtle misuse in a kthread that caused a deadlock in the
+code I looked at last week is also found elsewhere.
 
-And this points to false sharing on (struct page_counter *)->usage
+So this commit causes signal_pending() to return true when
+kthread_stop() is called. This is already what's done for
+TIF_NOTIFY_SIGNAL, for these same purposes of breaking out of wait
+loops, so a similar KTHREAD_SHOULD_STOP check isn't too much different.
 
-I guess memcg had free lunch, because of per-socket cache, that we
-need to remove.
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Eric W. Biederman <ebiederm@xmission.com>
+Cc: Toke Høiland-Jørgensen <toke@redhat.com>
+Cc: Kalle Valo <kvalo@kernel.org>
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ include/linux/kthread.h      | 1 +
+ include/linux/sched/signal.h | 9 +++++++++
+ kernel/kthread.c             | 8 ++++++++
+ 3 files changed, 18 insertions(+)
+
+diff --git a/include/linux/kthread.h b/include/linux/kthread.h
+index 30e5bec81d2b..7061dde23237 100644
+--- a/include/linux/kthread.h
++++ b/include/linux/kthread.h
+@@ -87,6 +87,7 @@ void kthread_bind(struct task_struct *k, unsigned int cpu);
+ void kthread_bind_mask(struct task_struct *k, const struct cpumask *mask);
+ int kthread_stop(struct task_struct *k);
+ bool kthread_should_stop(void);
++bool __kthread_should_stop(struct task_struct *k);
+ bool kthread_should_park(void);
+ bool __kthread_should_park(struct task_struct *k);
+ bool kthread_freezable_should_stop(bool *was_frozen);
+diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+index cafbe03eed01..08700c65b806 100644
+--- a/include/linux/sched/signal.h
++++ b/include/linux/sched/signal.h
+@@ -11,6 +11,7 @@
+ #include <linux/refcount.h>
+ #include <linux/posix-timers.h>
+ #include <linux/mm_types.h>
++#include <linux/kthread.h>
+ #include <asm/ptrace.h>
+ 
+ /*
+@@ -397,6 +398,14 @@ static inline int signal_pending(struct task_struct *p)
+ 	 */
+ 	if (unlikely(test_tsk_thread_flag(p, TIF_NOTIFY_SIGNAL)))
+ 		return 1;
++
++	/*
++	 * Likewise, KTHREAD_SHOULD_STOP isn't really a signal, but it also
++	 * requires the same behavior, lest wait loops go forever.
++	 */
++	if (unlikely(__kthread_should_stop(p)))
++		return 1;
++
+ 	return task_sigpending(p);
+ }
+ 
+diff --git a/kernel/kthread.c b/kernel/kthread.c
+index 3c677918d8f2..80f6ba323060 100644
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@ -145,6 +145,14 @@ void free_kthread_struct(struct task_struct *k)
+ 	kfree(kthread);
+ }
+ 
++bool __kthread_should_stop(struct task_struct *k)
++{
++	struct kthread *kthread = __to_kthread(k);
++
++	return kthread && test_bit(KTHREAD_SHOULD_STOP, &kthread->flags);
++}
++EXPORT_SYMBOL_GPL(__kthread_should_stop);
++
+ /**
+  * kthread_should_stop - should this kthread return now?
+  *
+-- 
+2.35.1
+

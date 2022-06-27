@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138F855E300
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9833155C2CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234792AbiF0NCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
+        id S234267AbiF0NCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234788AbiF0NBy (ORCPT
+        with ESMTP id S234437AbiF0NB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:01:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B43F11C2E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:00:53 -0700 (PDT)
+        Mon, 27 Jun 2022 09:01:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C2B12091;
+        Mon, 27 Jun 2022 06:00:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 000A261261
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:00:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94154C341CD;
-        Mon, 27 Jun 2022 13:00:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99DCEB8166A;
+        Mon, 27 Jun 2022 13:00:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDFCBC341C7;
+        Mon, 27 Jun 2022 13:00:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656334852;
-        bh=NvsXPSEn0GyIx+tB8Ah/KXXYDbydpolKGcoM/qyUbRs=;
+        s=k20201202; t=1656334855;
+        bh=DOQ5mwSpRmG7SdZF6XPq4GgQR+HBslD0lVkCHtkvk1c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aH0zN7+08xGRTtGPqTCl6bKBTo1kvsIiax3+MQ+l/YscGj5sFITuckDbsErkqpWfJ
-         7VzxLmhL1RufpKgrIwCtbRKKJXtgKZdfciKeeRgrIKOhpFau3fPdabylLKq9Q1Ttk6
-         jtlzqC9/0ps+RyzSjyhm+Cz3A1P4NpPNHKNvcHQEwUKSsekzNQCS/Jomn/syWsWBLk
-         V8R/R5urGomZRjFwgR6rT3lrbbk0DqUzgY1s0PUakfBMhtFHWOOB2hD4gOx9DnSCZR
-         9iQlcq+wJV1k4lg0H5RgnZcIdyfy9JGX6sEN8j4mMbNqAWTM6GLcHQDTHiAvUJWB2a
-         xAuTKNCqSeKKA==
+        b=jg3hiKDaCJUnAkCyUFjM7OEYotxMAxcrcQkoI1p1PTzJw9fgHDnJVKwUWKdnN7hyY
+         o2vhmIl+XOCLlSXokF8cnAmRENBIAX8ErGTSDb5KzC3rPjuBXfFgjEqQnzLo/YETQy
+         8uSBZi5Gn9XBc7GzfdrqLbsGOmlKGxmj0B49vI1RE9vMIDiwsQ8mbKraM/PDcYrbPI
+         IaeM6mPPHtk/wmD5J7FWFufpzyuL/x9cF8UvVvzgU9OOEPe+mkQA7itUHEMIG8qYZP
+         VPRlLd9brA9gXfUv8MDEpwJx5VAhadJPuQEzqX+bd4uHgGrFUbLbTl0Da710ZAW2MM
+         GK7xhl7XAoKvQ==
 From:   Will Deacon <will@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        mark.rutland@arm.com, zhangshaokun@hisilicon.com,
-        Chen Jun <chenjun102@huawei.com>
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>, xuqiang36@huawei.com
-Subject: Re: [PATCH 1/1] perf: hisi: Extract hisi_pmu_init
-Date:   Mon, 27 Jun 2022 14:00:42 +0100
-Message-Id: <165632489472.2211970.18392089709892363501.b4-ty@kernel.org>
+To:     sjitindarsingh@gmail.com, catalin.marinas@arm.com,
+        madvenka@linux.microsoft.com, ardb@kernel.org,
+        mark.rutland@arm.com, jamorris@linux.microsoft.com,
+        jpoimboe@redhat.com, nobuta.keiya@fujitsu.com,
+        live-patching@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, broonie@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>
+Subject: Re: [RFC PATCH v15 0/6] arm64: Reorganize the unwinder and implement stack trace reliability checks
+Date:   Mon, 27 Jun 2022 14:00:43 +0100
+Message-Id: <165632350271.638103.10773612881829908260.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220516131601.48383-1-chenjun102@huawei.com>
-References: <20220516131601.48383-1-chenjun102@huawei.com>
+In-Reply-To: <20220617180219.20352-1-madvenka@linux.microsoft.com>
+References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24> <20220617180219.20352-1-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,15 +60,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022 13:16:01 +0000, Chen Jun wrote:
-> Extract the initialization code of hisi_pmu->pmu into a function
+On Fri, 17 Jun 2022 13:02:13 -0500, madvenka@linux.microsoft.com wrote:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 > 
+> I have synced this patch series to v5.19-rc2.
+> I have also removed the following patch.
 > 
+> 	[PATCH v14 7/7] arm64: Select HAVE_RELIABLE_STACKTRACE
+> 
+> [...]
 
-Applied to will (for-next/perf), thanks!
+Applied first two patches to arm64 (for-next/stacktrace), thanks!
 
-[1/1] perf: hisi: Extract hisi_pmu_init
-      https://git.kernel.org/will/c/e500405dd15d
+[1/6] arm64: Split unwind_init()
+      https://git.kernel.org/arm64/c/a019d8a2cc82
+[2/6] arm64: Copy the task argument to unwind_state
+      https://git.kernel.org/arm64/c/82a592c13b0a
 
 Cheers,
 -- 

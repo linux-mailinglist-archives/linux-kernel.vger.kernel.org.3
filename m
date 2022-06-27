@@ -2,50 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A943655D34B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC60055D127
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236324AbiF0Nnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
+        id S236189AbiF0Npv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233224AbiF0Nnu (ORCPT
+        with ESMTP id S233224AbiF0Npt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:43:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1389F2722
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:43:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17BF6175A;
-        Mon, 27 Jun 2022 06:43:50 -0700 (PDT)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7DD093F5A1;
-        Mon, 27 Jun 2022 06:43:49 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 14:43:47 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 15/20] arch_topology: Don't set cluster identifier as
- physical package identifier
-Message-ID: <Yrm0E3mFHvJ5Nkgt@arm.com>
-References: <20220621192034.3332546-1-sudeep.holla@arm.com>
- <20220621192034.3332546-16-sudeep.holla@arm.com>
+        Mon, 27 Jun 2022 09:45:49 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3B45FE6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:45:48 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id e28so7981593wra.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:45:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=9FdyKVqxca7JjMXT8AI+UPWtuLm5yrwvxgWDtl5sUco=;
+        b=McDeXl9WgPit2868FtACoq5aGzLsbGWPqIpLp1GNzIx3/DBU8r4BZkbO9Upt75LrSB
+         NvNIgCcLABS3nVXmB6TkvcCq1zZiQKXFQpYrOWTugCaNY/mWZ2glRjKmKKj+eys1qZRr
+         vdX//Ley6RVUR3JeyfsIAKoZjCycZqgSVpGjN64++1EjpqdsPUVUltMCU0km3VYzFZkq
+         GcyAh/zcvdyRDFBYcBHDug31ABf39v4TDafXnassjvSy7x4kHakYek5xOZBZJvbfHN/N
+         dXdfpf84Ne5EZD4obF9Ah8wwoA1y9GxSIPMr6YSqdM7JGqEobK3ZOWy4X84wMQ5ThBLI
+         PgsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=9FdyKVqxca7JjMXT8AI+UPWtuLm5yrwvxgWDtl5sUco=;
+        b=PKL5gt56owcwLwu6m8NRTpZxksADACjpVQ+Id+pdQc3FkiRzCBOxxWhPw8DgHjHZ/Y
+         bb+FD5ndYYeSQ4CvUMKbojt4dFrCBEq9nWLDgMS7j8wUhRY4lM23678rfjdrYoju+jOS
+         Al2KqA874RV7M4qBDyGqOgsl1PkZpXZ+AR1I0T6vkmsFllCbztlFWwfUZr8DpBV6/5yF
+         xD1/Z3ce5c5/0lb1u6F/A1T0hmlTZdP5qjrV/CSTHPjv+WPBMKA5rmIf0+TcnuT9bm4e
+         gl7YQeN1uBVaT7e/almqy/d5c8xrLRQnE33vV3T7W1V/lAjTLzipJkxJ+M0lMDdn4blu
+         0EmQ==
+X-Gm-Message-State: AJIora+nnrqcubyU04fLAvCgyKsgyNUxGPZNpTjMAUnOsEsjFxDP1/Zy
+        5+VaKp7zsM5+EBT13WMFcVx7Yg==
+X-Google-Smtp-Source: AGRyM1vl+MtLumtxCqKdMXnHzbNbEBPayhz1xyDXnuOB/INTROe+20T3wT1BsuZ9naWtGpZ5QbfdpA==
+X-Received: by 2002:a05:6000:12c3:b0:21a:3795:70ac with SMTP id l3-20020a05600012c300b0021a379570acmr12575805wrx.175.1656337547419;
+        Mon, 27 Jun 2022 06:45:47 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id 1-20020a05600c248100b0039c5ab7167dsm17393339wms.48.2022.06.27.06.45.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 06:45:47 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 14:45:45 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v1 8/9] mfd: intel_soc_pmic_crc: Replace intel_soc_pmic
+ with crystal_cove
+Message-ID: <Yrm0iT4ht8DVdLli@google.com>
+References: <20220616182524.7956-1-andriy.shevchenko@linux.intel.com>
+ <20220616182524.7956-8-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220621192034.3332546-16-sudeep.holla@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220616182524.7956-8-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,63 +74,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 21 Jun 2022 at 20:20:29 (+0100), Sudeep Holla wrote:
-> Currently as we parse the CPU topology from /cpu-map node from the
-> device tree, we assign generated cluster count as the physical package
-> identifier for each CPU which is wrong.
-> 
-> The device tree bindings for CPU topology supports sockets to infer
-> the socket or physical package identifier for a given CPU. Since it is
-> fairly new and not support on most of the old and existing systems, we
-                     ^^^^^^^
-Nit:		     supported
-> can assume all such systems have single socket/physical package.
-> 
-> Fix the physical package identifier to 0 by removing the assignment of
-> cluster identifier to the same.
-> 
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+On Thu, 16 Jun 2022, Andy Shevchenko wrote:
 
-Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
-
-Thanks,
-Ionela.
-
+> To reflect the point that this driver is only for one type of the PMICs,
+> replace intel_soc_pmic with crystal_cove (avoid using crc for possible
+> namespace collisions with CRC library APIs).
+> 
+> Note, also rename the driver name since we don't expect any user
+> that enumerates by it, only ACPI known so far.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  drivers/base/arch_topology.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 7a569aefe313..46fa1b70b02b 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -549,7 +549,6 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
->  	bool leaf = true;
->  	bool has_cores = false;
->  	struct device_node *c;
-> -	static int package_id __initdata;
->  	int core_id = 0;
->  	int i, ret;
->  
-> @@ -588,7 +587,7 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
->  			}
->  
->  			if (leaf) {
-> -				ret = parse_core(c, package_id, core_id++);
-> +				ret = parse_core(c, 0, core_id++);
->  			} else {
->  				pr_err("%pOF: Non-leaf cluster with core %s\n",
->  				       cluster, name);
-> @@ -605,9 +604,6 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
->  	if (leaf && !has_cores)
->  		pr_warn("%pOF: empty cluster\n", cluster);
->  
-> -	if (leaf)
-> -		package_id++;
-> -
->  	return 0;
->  }
->  
-> -- 
-> 2.36.1
-> 
+>  drivers/mfd/intel_soc_pmic_crc.c | 42 ++++++++++++++++----------------
+>  1 file changed, 21 insertions(+), 21 deletions(-)
+
+For my own reference (apply this as-is to your sign-off block):
+
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

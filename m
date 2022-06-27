@@ -2,228 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CD455DDD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18CFB55E269
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237780AbiF0PNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S237824AbiF0PNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237876AbiF0PMj (ORCPT
+        with ESMTP id S237962AbiF0PM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:12:39 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2433DD12E;
-        Mon, 27 Jun 2022 08:12:37 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25RFCLgk108561;
-        Mon, 27 Jun 2022 10:12:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1656342741;
-        bh=1x+NxdEoiSFo+pDWtHOPBfvhGy1WzeyR8WRyXcD8FVI=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=qNBVLupUI/bppft9D6NFgdfn2t1PCDSabHEwbnkQbFXXF3RExX9LmRPZv59ypspYt
-         FFmSWRdrgN8tLkcn1ctlpoCBNZfrqaVUZoEYsRqaD9E0ZMzCsJp/2vkNmoGjpNcBsO
-         TMT6uQJtb0VkYLh8tYNsk3P2up1eQsHgzLxOFhZM=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25RFCLFV096646
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 27 Jun 2022 10:12:21 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 27
- Jun 2022 10:12:21 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 27 Jun 2022 10:12:21 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25RFC5pn118508;
-        Mon, 27 Jun 2022 10:12:06 -0500
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-To:     Tomi Valkeinen <tomba@kernel.org>, Jyri Sarha <jyri.sarha@iki.fi>,
-        Rob Herring <robh+dt@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Aradhya Bhatia <a-bhatia1@ti.com>
-Subject: [PATCH v3 2/2] drm/tidss: Add support for AM625 DSS
-Date:   Mon, 27 Jun 2022 20:42:00 +0530
-Message-ID: <20220627151200.4693-3-a-bhatia1@ti.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627151200.4693-1-a-bhatia1@ti.com>
-References: <20220627151200.4693-1-a-bhatia1@ti.com>
+        Mon, 27 Jun 2022 11:12:57 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF03811819
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656342776; x=1687878776;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NbIrdKrUNh3MxRBYH+k9IK39tT7o7aV72Bn2pVO6UI0=;
+  b=bK2UcJdtnabwb6b/hw6asJw0xnmbAD4c4+rAFv6eeDQpfaACr52gBeX2
+   KIPLK1fJmBy6+Gy0i/2elj6RAYf5M7v4x5zIU6RXaMn+rbZYBksHM6bRP
+   KvpGZFosx1XlBaGPtR7fZPavh+OYqHln0Qwjo3b9siPnaZhREjeQtqnNv
+   uV2sBJ5JCbTJB95G8OBFgk11ei5JBR3aX8F5/1+MOKoPAZjbAdf9hr7jU
+   rgQgonxVhC2WaXVtFohLan+eT0KjbfnwrdyGK5B/wdwlHZhsSah4l0VM0
+   5DOVp6zyJV4MRyw+01NcnJNdJjdgvlhBbvCj/LEss8cwvcZ34rCuOD+s9
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="282203196"
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="282203196"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 08:12:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="594338030"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Jun 2022 08:12:51 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 9FDC0D9; Mon, 27 Jun 2022 18:12:57 +0300 (EEST)
+Date:   Mon, 27 Jun 2022 18:12:57 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 4/5] x86/mm: Add noalias variants of
+ set_memory_*crypted() functions
+Message-ID: <20220627151257.fhynhvcnpk22kflw@black.fi.intel.com>
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220609025220.2615197-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <b4190b5d-89e8-b02f-5ef6-c05047af8166@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b4190b5d-89e8-b02f-5ef6-c05047af8166@intel.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the DSS IP on TI's new AM625 SoC in the tidss driver.
+On Fri, Jun 24, 2022 at 06:19:23AM -0700, Dave Hansen wrote:
+> On 6/8/22 19:52, Kuppuswamy Sathyanarayanan wrote:
+> > set_memory_*crypted() functions are used to modify the "shared" page
+> > attribute of the given memory. Using these APIs will modify the page
+> > attributes of the aliased mappings (which also includes the direct
+> > mapping).
+> > 
+> > But such aliased mappings modification is not desirable in use cases
+> > like TDX guest, where the requirement is to create the shared mapping
+> > without touching the direct map. It is used when allocating VMM shared
+> > buffers using alloc_pages()/vmap()/set_memory_*crypted() API
+> > combinations.
+> > 
+> > So to support such use cases, add support for noalias variants of
+> > set_memory_*crypted() functions.
+> 
+> This changelog has a lot of words, but doesn't tell us much.
+> 
+> It basically says, we don't want to touch the direct map in use cases
+> where we don't want to touch the direct map.  Not helpful.
+> 
+> The alias processing is there for a reason.  What is it?  Why don't you
+> need alias processing for TDX?  Sure, you decided you don't want to
+> touch the direct map, but *WHY*?  Why is it normally OK to touch the
+> direct map, but not OK in this case?  Even better, why is it *DESIRABLE*
+> to leave the direct map alone?  Lastly, why is this safe?  If alias
+> processing was to protect us from something, why is losing that
+> protection OK here?
 
-Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-Reviewed-by: Rahul T R <r-ravikumar@ti.com>
----
- drivers/gpu/drm/tidss/tidss_dispc.c | 56 ++++++++++++++++++++++++++++-
- drivers/gpu/drm/tidss/tidss_dispc.h |  2 ++
- drivers/gpu/drm/tidss/tidss_drv.c   |  1 +
- 3 files changed, 58 insertions(+), 1 deletion(-)
+The whole idea of alloc_pages()/vmap()/set_memory_decrypted() exercise is
+to avoid direct map fragmentation.
 
-diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
-index dae47853b728..f084f0688a54 100644
---- a/drivers/gpu/drm/tidss/tidss_dispc.c
-+++ b/drivers/gpu/drm/tidss/tidss_dispc.c
-@@ -272,6 +272,55 @@ const struct dispc_features dispc_j721e_feats = {
- 	.vid_order = { 1, 3, 0, 2 },
- };
- 
-+const struct dispc_features dispc_am625_feats = {
-+	.max_pclk_khz = {
-+		[DISPC_VP_DPI] = 165000,
-+		[DISPC_VP_OLDI] = 165000,
-+	},
-+
-+	.scaling = {
-+		.in_width_max_5tap_rgb = 1280,
-+		.in_width_max_3tap_rgb = 2560,
-+		.in_width_max_5tap_yuv = 2560,
-+		.in_width_max_3tap_yuv = 4096,
-+		.upscale_limit = 16,
-+		.downscale_limit_5tap = 4,
-+		.downscale_limit_3tap = 2,
-+		/*
-+		 * The max supported pixel inc value is 255. The value
-+		 * of pixel inc is calculated like this: 1+(xinc-1)*bpp.
-+		 * The maximum bpp of all formats supported by the HW
-+		 * is 8. So the maximum supported xinc value is 32,
-+		 * because 1+(32-1)*8 < 255 < 1+(33-1)*4.
-+		 */
-+		.xinc_max = 32,
-+	},
-+
-+	.subrev = DISPC_AM625,
-+
-+	.common = "common",
-+	.common_regs = tidss_am65x_common_regs,
-+
-+	.num_vps = 2,
-+	.vp_name = { "vp1", "vp2" },
-+	.ovr_name = { "ovr1", "ovr2" },
-+	.vpclk_name =  { "vp1", "vp2" },
-+	.vp_bus_type = { DISPC_VP_OLDI, DISPC_VP_DPI },
-+
-+	.vp_feat = { .color = {
-+			.has_ctm = true,
-+			.gamma_size = 256,
-+			.gamma_type = TIDSS_GAMMA_8BIT,
-+		},
-+	},
-+
-+	.num_planes = 2,
-+	/* note: vid is plane_id 0 and vidl1 is plane_id 1 */
-+	.vid_name = { "vid", "vidl1" },
-+	.vid_lite = { false, true, },
-+	.vid_order = { 1, 0 },
-+};
-+
- static const u16 *dispc_common_regmap;
- 
- struct dss_vp_data {
-@@ -775,6 +824,7 @@ dispc_irq_t dispc_read_and_clear_irqstatus(struct dispc_device *dispc)
- 		return dispc_k2g_read_and_clear_irqstatus(dispc);
- 	case DISPC_AM65X:
- 	case DISPC_J721E:
-+	case DISPC_AM625:
- 		return dispc_k3_read_and_clear_irqstatus(dispc);
- 	default:
- 		WARN_ON(1);
-@@ -790,6 +840,7 @@ void dispc_set_irqenable(struct dispc_device *dispc, dispc_irq_t mask)
- 		break;
- 	case DISPC_AM65X:
- 	case DISPC_J721E:
-+	case DISPC_AM625:
- 		dispc_k3_set_irqenable(dispc, mask);
- 		break;
- 	default:
-@@ -1279,6 +1330,7 @@ void dispc_ovr_set_plane(struct dispc_device *dispc, u32 hw_plane,
- 					x, y, layer);
- 		break;
- 	case DISPC_AM65X:
-+	case DISPC_AM625:
- 		dispc_am65x_ovr_set_plane(dispc, hw_plane, hw_videoport,
- 					  x, y, layer);
- 		break;
-@@ -2202,6 +2254,7 @@ static void dispc_plane_init(struct dispc_device *dispc)
- 		break;
- 	case DISPC_AM65X:
- 	case DISPC_J721E:
-+	case DISPC_AM625:
- 		dispc_k3_plane_init(dispc);
- 		break;
- 	default:
-@@ -2307,6 +2360,7 @@ static void dispc_vp_write_gamma_table(struct dispc_device *dispc,
- 		dispc_k2g_vp_write_gamma_table(dispc, hw_videoport);
- 		break;
- 	case DISPC_AM65X:
-+	case DISPC_AM625:
- 		dispc_am65x_vp_write_gamma_table(dispc, hw_videoport);
- 		break;
- 	case DISPC_J721E:
-@@ -2580,7 +2634,7 @@ int dispc_runtime_resume(struct dispc_device *dispc)
- 		REG_GET(dispc, DSS_SYSSTATUS, 2, 2),
- 		REG_GET(dispc, DSS_SYSSTATUS, 3, 3));
- 
--	if (dispc->feat->subrev == DISPC_AM65X)
-+	if (dispc->feat->subrev == DISPC_AM65X || dispc->feat->subrev == DISPC_AM625)
- 		dev_dbg(dispc->dev, "OLDI RESETDONE %d,%d,%d\n",
- 			REG_GET(dispc, DSS_SYSSTATUS, 5, 5),
- 			REG_GET(dispc, DSS_SYSSTATUS, 6, 6),
-diff --git a/drivers/gpu/drm/tidss/tidss_dispc.h b/drivers/gpu/drm/tidss/tidss_dispc.h
-index e49432f0abf5..a28005dafdc9 100644
---- a/drivers/gpu/drm/tidss/tidss_dispc.h
-+++ b/drivers/gpu/drm/tidss/tidss_dispc.h
-@@ -61,6 +61,7 @@ enum dispc_dss_subrevision {
- 	DISPC_K2G,
- 	DISPC_AM65X,
- 	DISPC_J721E,
-+	DISPC_AM625,
- };
- 
- struct dispc_features {
-@@ -88,6 +89,7 @@ struct dispc_features {
- extern const struct dispc_features dispc_k2g_feats;
- extern const struct dispc_features dispc_am65x_feats;
- extern const struct dispc_features dispc_j721e_feats;
-+extern const struct dispc_features dispc_am625_feats;
- 
- void dispc_set_irqenable(struct dispc_device *dispc, dispc_irq_t mask);
- dispc_irq_t dispc_read_and_clear_irqstatus(struct dispc_device *dispc);
-diff --git a/drivers/gpu/drm/tidss/tidss_drv.c b/drivers/gpu/drm/tidss/tidss_drv.c
-index 04cfff89ee51..326059e99696 100644
---- a/drivers/gpu/drm/tidss/tidss_drv.c
-+++ b/drivers/gpu/drm/tidss/tidss_drv.c
-@@ -235,6 +235,7 @@ static const struct of_device_id tidss_of_table[] = {
- 	{ .compatible = "ti,k2g-dss", .data = &dispc_k2g_feats, },
- 	{ .compatible = "ti,am65x-dss", .data = &dispc_am65x_feats, },
- 	{ .compatible = "ti,j721e-dss", .data = &dispc_j721e_feats, },
-+	{ .compatible = "ti,am625-dss", .data = &dispc_am625_feats, },
- 	{ }
- };
- 
+Alias processing modifies direct mapping and highmap in addition to the
+mapping user requested the modification for. Alias processing is required
+to keep different mappings in sync, but here we want to avoid this because
+it leads to direct mapping fragmentation.
+
+Normally, direct mapping modifications are done for long-lasting
+allocation where fragmentation is lesser concern. Here we have transient
+allocation which may repeat over and over trashing the direct mapping.
+
+Speaking of safety, I wanted initially claim that it is safe as only owner
+of the allocation will touch the memory and it only does via the vmap
+mapping.
+
+*BUT* 
+
+It made me thing about my recent story with load_unaligned_zeropad(). 
+If we leave the page in direct mapping mapped as private and
+load_unaligned_zeropad() will roll off to it, we will get SEPT violation
+that will terminate the TD as it is considered unaccepted.
+
+I think we must keep aliases in think. And vmap() doesn't make much sense
+in this case :/
+
+I urge you folks to consider DMA API again. Or have any other way to tap
+into swiotlb pool.
+
 -- 
-2.36.1
-
+ Kirill A. Shutemov

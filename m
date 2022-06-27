@@ -2,88 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B962755DD1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EC455CCA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240493AbiF0MWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
+        id S240661AbiF0MWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbiF0MWN (ORCPT
+        with ESMTP id S240572AbiF0MWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:22:13 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25298BC22
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:22:12 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id e28so7638332wra.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=188VvDq1B6vx6sWxx4ceVbynV0wzhkvfQ94tlUBCWVo=;
-        b=JWWBEC6UjGz31es5Orpifs2fmId+2PFWHpYPGqcUyEflB+3uOZHze9pg4t/TL3Ai4z
-         ZxifaLGz+qaUA8iBaWRvlQptrX59LYqMUl2hPdenEnARk5NKOxdKJFI1EpG8xFJQT3Am
-         dBOxj37Hgb2Z0Wl1inYBLUDvKEs6EkWHd5cXkO3PsfcieGjlEvL1LHOjIhwT3v7Ln9XA
-         cr4qTjqks7uaMc6Val0kFxsl6S61zUT0dNK3b/zCs/yL+9IHVYJIBv9E+o+yegpTtC0b
-         Cw13uLX61yOXRAVMIOnGgak/Vz7p4DI660bTgKvRQBtftZMc0zQhFng+eEI7CXYFA/cr
-         aysA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=188VvDq1B6vx6sWxx4ceVbynV0wzhkvfQ94tlUBCWVo=;
-        b=675pXA/F7/HaXy89DKdZO4IvSFt3m3dyeQvgXzqgmd8r7V2Nt1M5Bp/j1f00EYpGfp
-         RsU+k7Fo2yeNiZk9vVVel38v0olKw2WsdULkTQcfhZD4jhhRTKVf7ZGrCxq5UqlZMzGb
-         txwiCsoo4MqF7HYTTIxj/p6M9XE6EkPCMnaAyXI3Det8araJHvLUq+SzZAqib2rOT9l1
-         fsVjYWWy6Q4RvHFkGTXacHwx8d6JfFbrntv+ymq6r5wdjMhDG43NwmKIQZ60MSmW9PVl
-         U+kDqE/l6irOtvG8qpbYNyKRZAaRZas2ycBJOtMdQhbLIX0xtdIL7oV+Nj5eFiN/l5XK
-         BK3g==
-X-Gm-Message-State: AJIora/mBt6X5l9zgp3VTNubBcC+TtaMM9dj5fEGNVCBpXY2h3OdwWcF
-        KffZNui2RAscq+SLNQn44FC2OA==
-X-Google-Smtp-Source: AGRyM1uP9iNE+N88b9RoSyrLps3SkHLc2iB388m4oNY4BNDo4xDy3PzsZEiuqBl66tMHwbxuA1WY5Q==
-X-Received: by 2002:a05:6000:1147:b0:21b:93db:701a with SMTP id d7-20020a056000114700b0021b93db701amr11721409wrx.447.1656332530591;
-        Mon, 27 Jun 2022 05:22:10 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:6f56:f3c6:ba4f:bf5c? ([2001:861:44c0:66c0:6f56:f3c6:ba4f:bf5c])
-        by smtp.gmail.com with ESMTPSA id n17-20020a05600c501100b003975c7058bfsm13143413wmr.12.2022.06.27.05.22.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 05:22:10 -0700 (PDT)
-Message-ID: <b625ba83-fee9-b668-09db-976cb3bef3ca@baylibre.com>
-Date:   Mon, 27 Jun 2022 14:22:08 +0200
+        Mon, 27 Jun 2022 08:22:33 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB89BE3F;
+        Mon, 27 Jun 2022 05:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656332552; x=1687868552;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LLKc0AVQgj8YvmbVbYU1Kd08ep7uNhDDyJkSyY3E5oQ=;
+  b=dYZEZ9vnMMeH3Lvl201eBMdOes9F22is1Gt8P5Z/Mi2t3M9pIoODaT+E
+   G52579bUW22uFGSx7FPyxhtX295odTFiLbNHPIJmog3orzhqwwHS61O0r
+   cjd4LjU/A5Kvm/poGFXcL+ztz+L27G+unQcbb0FyywFcadaduuolF5nfu
+   E5zpWNjL8tDQSZn2NDk/vWWeUGUCPMyCpRDAeQQ/sx4XduWdJlCvGeTDX
+   bh8IFBIoQ3eo42lgwi/4ifT9gg2pqMAJSgtiA0BSSbEd/38c8BEIkfj2x
+   5RR1nKk/jEvoxBkSu3CTX9EjbVYBapjdI2l/Ae7u/e3Zd8D5mUfcyy3mN
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="270180404"
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="270180404"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 05:22:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="836173918"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 27 Jun 2022 05:22:25 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 1FEC3D9; Mon, 27 Jun 2022 15:22:30 +0300 (EEST)
+Date:   Mon, 27 Jun 2022 15:22:30 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Peter Gonda <pgonda@google.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com, khalid.elmously@canonical.com,
+        philip.cox@canonical.com,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted
+ memory
+Message-ID: <20220627122230.7eetepoufd5w3lxd@black.fi.intel.com>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <CAMkAt6osbEGBFrgn=y1=x4mDHC1aL40BwaW0NdGHF8qmWd7ktA@mail.gmail.com>
+ <20220627113019.3q62luiay7izhehr@black.fi.intel.com>
+ <CAMj1kXHD5XBAS1aBjzg1RCeK6qgtanUSED_xyTZ0v1j+UShMKw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2] drm/bridge: imx: i.MX8 bridge drivers should depend on
- ARCH_MXC
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Liu Ying <victor.liu@nxp.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Marek Vasut <marex@denx.de>
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <42c542b53a1c8027b23a045045fbb7b34479913d.1656072500.git.geert+renesas@glider.be>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <42c542b53a1c8027b23a045045fbb7b34479913d.1656072500.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHD5XBAS1aBjzg1RCeK6qgtanUSED_xyTZ0v1j+UShMKw@mail.gmail.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,47 +91,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 24/06/2022 14:10, Geert Uytterhoeven wrote:
-> The various Freescale i.MX8 display bridges are only present on
-> Freescale i.MX8 SoCs.  Hence add a dependency on ARCH_MXC, to prevent
-> asking the user about these drivers when configuring a kernel without
-> i.MX SoC support.
+On Mon, Jun 27, 2022 at 01:54:45PM +0200, Ard Biesheuvel wrote:
+> On Mon, 27 Jun 2022 at 13:30, Kirill A. Shutemov
+> <kirill.shutemov@linux.intel.com> wrote:
+> >
+> > On Fri, Jun 24, 2022 at 10:37:10AM -0600, Peter Gonda wrote:
+> > > On Tue, Jun 14, 2022 at 6:03 AM Kirill A. Shutemov
+> > > <kirill.shutemov@linux.intel.com> wrote:
+> > > >
+> > > > UEFI Specification version 2.9 introduces the concept of memory
+> > > > acceptance: some Virtual Machine platforms, such as Intel TDX or AMD
+> > > > SEV-SNP, requiring memory to be accepted before it can be used by the
+> > > > guest. Accepting happens via a protocol specific for the Virtual
+> > > > Machine platform.
+> > > >
+> > > > Accepting memory is costly and it makes VMM allocate memory for the
+> > > > accepted guest physical address range. It's better to postpone memory
+> > > > acceptance until memory is needed. It lowers boot time and reduces
+> > > > memory overhead.
+> > > >
+> > > > The kernel needs to know what memory has been accepted. Firmware
+> > > > communicates this information via memory map: a new memory type --
+> > > > EFI_UNACCEPTED_MEMORY -- indicates such memory.
+> > > >
+> > > > Range-based tracking works fine for firmware, but it gets bulky for
+> > > > the kernel: e820 has to be modified on every page acceptance. It leads
+> > > > to table fragmentation, but there's a limited number of entries in the
+> > > > e820 table
+> > > >
+> > > > Another option is to mark such memory as usable in e820 and track if the
+> > > > range has been accepted in a bitmap. One bit in the bitmap represents
+> > > > 2MiB in the address space: one 4k page is enough to track 64GiB or
+> > > > physical address space.
+> > > >
+> > > > In the worst-case scenario -- a huge hole in the middle of the
+> > > > address space -- It needs 256MiB to handle 4PiB of the address
+> > > > space.
+> > > >
+> > > > Any unaccepted memory that is not aligned to 2M gets accepted upfront.
+> > > >
+> > > > The approach lowers boot time substantially. Boot to shell is ~2.5x
+> > > > faster for 4G TDX VM and ~4x faster for 64G.
+> > > >
+> > > > TDX-specific code isolated from the core of unaccepted memory support. It
+> > > > supposed to help to plug-in different implementation of unaccepted memory
+> > > > such as SEV-SNP.
+> > > >
+> > > > The tree can be found here:
+> > > >
+> > > > https://github.com/intel/tdx.git guest-unaccepted-memory
+> > >
+> > > Hi Kirill,
+> > >
+> > > I have a couple questions about this feature mainly about how cloud
+> > > customers can use this, I assume since this is a confidential compute
+> > > feature a large number of the users of these patches will be cloud
+> > > customers using TDX and SNP. One issue I see with these patches is how
+> > > do we as a cloud provider know whether a customer's linux image
+> > > supports this feature, if the image doesn't have these patches UEFI
+> > > needs to fully validate the memory, if the image does we can use this
+> > > new protocol. In GCE we supply our VMs with a version of the EDK2 FW
+> > > and the customer doesn't input into which UEFI we run, as far as I can
+> > > tell from the Azure SNP VM documentation it seems very similar. We
+> > > need to somehow tell our UEFI in the VM what to do based on the image.
+> > > The current way I can see to solve this issue would be to have our
+> > > customers give us metadata about their VM's image but this seems kinda
+> > > burdensome on our customers (I assume we'll have more features which
+> > > both UEFI and kernel need to both support inorder to be turned on like
+> > > this one) and error-prone, if a customer incorrectly labels their
+> > > image it may fail to boot.. Has there been any discussion about how to
+> > > solve this? My naive thoughts were what if UEFI and Kernel had some
+> > > sort of feature negotiation. Maybe that could happen via an extension
+> > > to exit boot services or a UEFI runtime driver, I'm not sure what's
+> > > best here just some ideas.
+> >
+> > Just as an idea, we can put info into UTS_VERSION which can be read from
+> > the built bzImage. We have info on SMP and preeption there already.
+> >
 > 
-> Fixes: e60c4354840b2fe8 ("drm/bridge: imx: Add LDB support for i.MX8qm")
-> Fixes: 3818715f62b42b5c ("drm/bridge: imx: Add LDB support for i.MX8qxp")
-> Fixes: 96988a526c97cfbe ("drm/bridge: imx: Add i.MX8qxp pixel link to DPI support")
-> Fixes: 1ec17c26bc06289d ("drm/bridge: imx: Add i.MX8qm/qxp display pixel link support")
-> Fixes: 93e163a9e0392aca ("drm/bridge: imx: Add i.MX8qm/qxp pixel combiner support")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Liu Ying <victor.liu@nxp.com>
-> ---
-> v2:
->    - s/i.MX8MP/i.MX8/,
->    - Add Reviewed-by.
-> ---
->   drivers/gpu/drm/bridge/imx/Kconfig | 4 ++++
->   1 file changed, 4 insertions(+)
+> Instead of hacking this into the binary, couldn't we define a protocol
+> that the kernel will call from the EFI stub (before EBS()) to identify
+> itself as an image that understands unaccepted memory, and knows how
+> to deal with it?
 > 
-> diff --git a/drivers/gpu/drm/bridge/imx/Kconfig b/drivers/gpu/drm/bridge/imx/Kconfig
-> index 212a7b0e64fd8b5a..608f47f41bcd1c81 100644
-> --- a/drivers/gpu/drm/bridge/imx/Kconfig
-> +++ b/drivers/gpu/drm/bridge/imx/Kconfig
-> @@ -1,3 +1,5 @@
-> +if ARCH_MXC || COMPILE_TEST
-> +
->   config DRM_IMX8QM_LDB
->   	tristate "Freescale i.MX8QM LVDS display bridge"
->   	depends on OF
-> @@ -41,3 +43,5 @@ config DRM_IMX8QXP_PIXEL_LINK_TO_DPI
->   	help
->   	  Choose this to enable pixel link to display pixel interface(PXL2DPI)
->   	  found in Freescale i.MX8qxp processor.
-> +
-> +endif # ARCH_MXC || COMPILE_TEST
+> That way, the firmware can accept all the memory on behalf of the OS
+> at ExitBootServices() time, unless the OS has indicated there is no
+> need to do so.
 
-I was wondering why those were added in drivers/gpu/drm/bridge/imx since they are specific to NXP SoCs,
-I think they should be moved in the right drm imx subsystem instead of this change.
+I agree it would be better. But I think it would require change to EFI
+spec, no?
 
-Neil
+-- 
+ Kirill A. Shutemov

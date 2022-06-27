@@ -2,97 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0432E55C58B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE2B55D65D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240319AbiF0Swh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 14:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S237241AbiF0Swv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240243AbiF0Swe (ORCPT
+        with ESMTP id S230122AbiF0Swt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 14:52:34 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623BDEB9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:52:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656355953; x=1687891953;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=A7ztOuMqK8/tvFrlCEBcCLu71GhWrpbUZrN88Eif/Dg=;
-  b=igx6RM+Cr13r97Jtm/SEUmPojG3g+7+5PHBr/ttfj5KKBxzyfGSXOGaM
-   yWc49JYu4dsslrEkgS3XyU1BUuP29wvm+oaU/S/hMLnl81Wrqtd3HA9iD
-   xtdhXUiKOuqFf4WOwt6/H5kVJwcdKUKaCioShvGeMjaU+vsRMnRdvaRzw
-   w+BNZ3mKsesBM1ZQTSUsK3gAV1Y7EoOR5kbGYqQaWqhDLGT2+N5noI6XG
-   Fv1TQL2UYUdRCQvvvA/vkhzqBK/NmQ5sgrlBgvnMSwo8v4O40Nl9aTDuA
-   pRI31GuF7CpY6U47Mog6mdUTX1hZENy7S/rvhExzWrbYjYcsR8KWof4j1
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="343224095"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="343224095"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 11:52:32 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="732439707"
-Received: from jsagoe-mobl1.amr.corp.intel.com (HELO [10.209.12.66]) ([10.209.12.66])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 11:52:31 -0700
-Message-ID: <d9df53b3-97ea-d394-fb04-ce2c95d76d82@intel.com>
-Date:   Mon, 27 Jun 2022 11:51:33 -0700
+        Mon, 27 Jun 2022 14:52:49 -0400
+Received: from mail-oa1-x43.google.com (mail-oa1-x43.google.com [IPv6:2001:4860:4864:20::43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194D0EBA
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:52:48 -0700 (PDT)
+Received: by mail-oa1-x43.google.com with SMTP id 586e51a60fabf-101bb9275bcso14053584fac.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:52:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XKZM258eeVNalbW9PviyXuddlycPIKbUhYNUTTlTg/M=;
+        b=F8kXXgXcSZrDyiu/yv1/sVQb26Py2Tr+6heeVEg/m42Z0yE+ptv/JjJSKZ+7x9IGO0
+         MFpBWzseFnhA8rYBmvX+bkj1/uidr7QLfhlIEEJnQs+nqAXLd0NUG5d+xiZNelgwlFeR
+         4A/1i0xMwCd9XuYrpJGnLO6Wbvt82xSK624MAKmsW1mFref+qNRZ8FV63JOcC3rREUSI
+         emgSbHdzCXvGBMlXCQ2r66yBd63IMcPltHq7Y58e7mGwIs9uADBDGxzEnFlZDxnsraQw
+         cvgUCwxDlR5RLsh4PJ4JPpIG2JO0/IcB1JksU+qqKafYd2CaN0aOMorV5DTELZY//rhE
+         dM/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XKZM258eeVNalbW9PviyXuddlycPIKbUhYNUTTlTg/M=;
+        b=4IffSJTdLMwC44wyHGjcEZStmoDdr37hKKrzNsjO88gNFbcTGHeTX6ADfBELqGwLAd
+         0XOtjjdpGJ1mrLOCgPQAXSz5ctueKB41pIJPZKgtyxNc7Uu8OHw9YcEfWsTQwml1FL8C
+         u3pLN/wz/02/Q/HnWfx+GloZKiDcF//3golIzqmVyLPsMClIBczgboBmlCnl+1HUlWx8
+         2n4SD8UrhxAXBJHKPwMBGombqZt3vp1IkTDJJO5hJIwj/+apXqw4lzHNsNc5C3Fo/GQu
+         hxNhDCVyD73V298k5uxn+kfuInSQlCHktCcgtd2tsCFZN7xF23thlHQN6YrWNLDEScm/
+         iSuA==
+X-Gm-Message-State: AJIora8Z8D/hstgRbuyZeGp55lt44nfMVjUhREOwDWBhDNK4sLDrJDu4
+        0MjaT6eFRzonA0bx5Xj1wgMpmg==
+X-Google-Smtp-Source: AGRyM1vh6kLi1AYeeZWbLYz/aG1GJtHaS9hz3XK4wcGnPTkKl3GRsBPgJsty3BDw4pM1peCSUvnZTw==
+X-Received: by 2002:a05:6870:a707:b0:101:c416:f837 with SMTP id g7-20020a056870a70700b00101c416f837mr11461670oam.237.1656355967403;
+        Mon, 27 Jun 2022 11:52:47 -0700 (PDT)
+Received: from [192.168.17.16] ([189.219.74.211])
+        by smtp.gmail.com with ESMTPSA id a5-20020a056808120500b00335713cd3f8sm2020568oil.17.2022.06.27.11.52.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 11:52:47 -0700 (PDT)
+Message-ID: <1dac60a4-8f97-6914-b2ce-f24449fc5036@linaro.org>
+Date:   Mon, 27 Jun 2022 13:52:45 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v8 0/5] Add TDX Guest Attestation support
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5.10 000/102] 5.10.127-rc1 review
 Content-Language: en-US
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <9abde78c-d2c5-c762-24fe-f26669b7cc6c@intel.com>
- <2502d21b-8f27-ebe5-b677-4cc56b03ee2c@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <2502d21b-8f27-ebe5-b677-4cc56b03ee2c@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220627111933.455024953@linuxfoundation.org>
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 07:51, Sathyanarayanan Kuppuswamy wrote:
-> In TDX guest, attestation process generally involves the following steps:
+Hello!
+
+On 27/06/22 06:20, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.127 release.
+> There are 102 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> 1. Get the TDREPORT using user specified REPORTDATA. This is implemented
->    using TDG.MR.TDREPORT Module call. An IOCTL interface is added to let
->    userspace get the TDREPORT data  (implemented in patch #1).
->    
-> 2. Using the TDREPORT data, generate a remotely verifiable signed Quote.
->    Quote can be generated either using GetQuote hypercall or by communicating
->    with VMM/Quoting Enclave(QE) using VSOCK. In this patch set, only the
->    GetQuote hypercall model is supported. Since Quote generation is an
->    asynchronous request, and takes more time, we let VMM notify the TDX Guest
->    using the callback interrupt. Patch # 2-5 implements Quote generation support,
->    in which Patch # 2 implements the callback interrupt support.
+> Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.127-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-IMNHO, too much gibberish, not enough English, too much superfluous
-information.
+Results from Linaro's test farm.
+The following new warnings have been found while building for all architectures with GCC:
 
-For instance, why do we need a quote and a report?  Why does this have
-an interrupt?
+   WARNING: modpost: vmlinux.o(___ksymtab+drm_fb_helper_modinit+0x0): Section mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit to the function .init.text:drm_fb_helper_modinit()
+   The symbol drm_fb_helper_modinit is exported and annotated __init
+   Fix this by removing the __init annotation of drm_fb_helper_modinit or drop the export.
+
+   WARNING: modpost: drivers/gpu/drm/drm_kms_helper.o(___ksymtab+drm_fb_helper_modinit+0x0): Section mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit to the function .init.text:drm_fb_helper_modinit()
+   The symbol drm_fb_helper_modinit is exported and annotated __init
+   Fix this by removing the __init annotation of drm_fb_helper_modinit or drop the export.
+
+
+## Build
+* kernel: 5.10.127-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 0075d2af9da3b9fa78240432ba9847ff9838f92f
+* git describe: v5.10.125-105-g0075d2af9da3
+* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.125-105-g0075d2af9da3
+
+## No test regressions (compared to v5.10.125)
+
+## Metric Regressions (compared to v5.10.125)
+* arm, build
+   - gcc-8-at91_dt_defconfig-warnings
+   - gcc-8-bcm2835_defconfig-warnings
+   - gcc-8-davinci_all_defconfig-warnings
+   - gcc-8-defconfig-warnings
+   - gcc-8-exynos_defconfig-warnings
+   - gcc-8-imx_v6_v7_defconfig-warnings
+   - gcc-8-integrator_defconfig-warnings
+   - gcc-8-ixp4xx_defconfig-warnings
+   - gcc-8-lpc32xx_defconfig-warnings
+   - gcc-8-multi_v5_defconfig-45747f0c-warnings
+   - gcc-8-multi_v5_defconfig-warnings
+   - gcc-8-mxs_defconfig-warnings
+   - gcc-8-nhk8815_defconfig-warnings
+   - gcc-8-omap2plus_defconfig-warnings
+   - gcc-8-s5pv210_defconfig-warnings
+   - gcc-8-sama5_defconfig-warnings
+   - gcc-8-u8500_defconfig-warnings
+   - gcc-8-vexpress_defconfig-warnings
+   - gcc-9-at91_dt_defconfig-warnings
+   - gcc-9-bcm2835_defconfig-warnings
+   - gcc-9-davinci_all_defconfig-warnings
+   - gcc-9-defconfig-warnings
+   - gcc-9-exynos_defconfig-warnings
+   - gcc-9-imx_v6_v7_defconfig-warnings
+   - gcc-9-integrator_defconfig-warnings
+   - gcc-9-ixp4xx_defconfig-warnings
+   - gcc-9-lpc32xx_defconfig-warnings
+   - gcc-9-multi_v5_defconfig-45747f0c-warnings
+   - gcc-9-multi_v5_defconfig-warnings
+   - gcc-9-mxs_defconfig-warnings
+   - gcc-9-nhk8815_defconfig-warnings
+   - gcc-9-omap2plus_defconfig-warnings
+   - gcc-9-s5pv210_defconfig-warnings
+   - gcc-9-sama5_defconfig-warnings
+   - gcc-9-u8500_defconfig-warnings
+   - gcc-9-vexpress_defconfig-warnings
+   - gcc-10-at91_dt_defconfig-warnings
+   - gcc-10-bcm2835_defconfig-warnings
+   - gcc-10-davinci_all_defconfig-warnings
+   - gcc-10-defconfig-warnings
+   - gcc-10-exynos_defconfig-warnings
+   - gcc-10-imx_v6_v7_defconfig-warnings
+   - gcc-10-integrator_defconfig-warnings
+   - gcc-10-ixp4xx_defconfig-warnings
+   - gcc-10-lkftconfig-debug-kmemleak-warnings
+   - gcc-10-lkftconfig-debug-warnings
+   - gcc-10-lkftconfig-kasan-warnings
+   - gcc-10-lkftconfig-kselftest-kernel-warnings
+   - gcc-10-lkftconfig-kselftest-warnings
+   - gcc-10-lkftconfig-kunit-warnings
+   - gcc-10-lkftconfig-libgpiod-warnings
+   - gcc-10-lkftconfig-perf-warnings
+   - gcc-10-lkftconfig-rcutorture-warnings
+   - gcc-10-lkftconfig-warnings
+   - gcc-10-lpc32xx_defconfig-warnings
+   - gcc-10-multi_v5_defconfig-45747f0c-warnings
+   - gcc-10-multi_v5_defconfig-warnings
+   - gcc-10-mxs_defconfig-warnings
+   - gcc-10-nhk8815_defconfig-warnings
+   - gcc-10-omap2plus_defconfig-warnings
+   - gcc-10-s5pv210_defconfig-warnings
+   - gcc-10-sama5_defconfig-warnings
+   - gcc-10-u8500_defconfig-warnings
+   - gcc-10-vexpress_defconfig-warnings
+   - gcc-11-at91_dt_defconfig-warnings
+   - gcc-11-bcm2835_defconfig-warnings
+   - gcc-11-davinci_all_defconfig-warnings
+   - gcc-11-defconfig-warnings
+   - gcc-11-exynos_defconfig-warnings
+   - gcc-11-imx_v6_v7_defconfig-warnings
+   - gcc-11-integrator_defconfig-warnings
+   - gcc-11-ixp4xx_defconfig-warnings
+   - gcc-11-lpc32xx_defconfig-warnings
+   - gcc-11-multi_v5_defconfig-45747f0c-warnings
+   - gcc-11-multi_v5_defconfig-warnings
+   - gcc-11-mxs_defconfig-warnings
+   - gcc-11-nhk8815_defconfig-warnings
+   - gcc-11-omap2plus_defconfig-warnings
+   - gcc-11-s5pv210_defconfig-warnings
+   - gcc-11-sama5_defconfig-warnings
+   - gcc-11-u8500_defconfig-warnings
+   - gcc-11-vexpress_defconfig-warnings
+
+* arm64, build
+   - gcc-8-defconfig-40bc7ee5-warnings
+   - gcc-9-defconfig-40bc7ee5-warnings
+   - gcc-10-defconfig-40bc7ee5-warnings
+   - gcc-11-defconfig-40bc7ee5-warnings
+   - gcc-11-lkftconfig-64k_page_size-warnings
+   - gcc-11-lkftconfig-armv8_features-warnings
+   - gcc-11-lkftconfig-debug-kmemleak-warnings
+   - gcc-11-lkftconfig-debug-warnings
+   - gcc-11-lkftconfig-devicetree-warnings
+   - gcc-11-lkftconfig-kasan-warnings
+   - gcc-11-lkftconfig-kselftest-kernel-warnings
+   - gcc-11-lkftconfig-kselftest-warnings
+   - gcc-11-lkftconfig-kunit-warnings
+   - gcc-11-lkftconfig-libgpiod-warnings
+   - gcc-11-lkftconfig-perf-warnings
+   - gcc-11-lkftconfig-rcutorture-warnings
+   - gcc-11-lkftconfig-warnings
+
+* i386, build
+   - gcc-8-i386_defconfig-warnings
+   - gcc-9-i386_defconfig-warnings
+   - gcc-10-defconfig-warnings
+   - gcc-11-defconfig-warnings
+   - gcc-11-lkftconfig-debug-kmemleak-warnings
+   - gcc-11-lkftconfig-debug-warnings
+   - gcc-11-lkftconfig-kselftest-kernel-warnings
+   - gcc-11-lkftconfig-kselftest-warnings
+   - gcc-11-lkftconfig-kunit-warnings
+   - gcc-11-lkftconfig-libgpiod-warnings
+   - gcc-11-lkftconfig-perf-warnings
+   - gcc-11-lkftconfig-rcutorture-warnings
+   - gcc-11-lkftconfig-warnings
+
+* powerpc, build
+   - gcc-8-ppc6xx_defconfig-warnings
+   - gcc-9-ppc6xx_defconfig-warnings
+   - gcc-10-ppc6xx_defconfig-warnings
+   - gcc-11-ppc6xx_defconfig-warnings
+
+* riscv, build
+   - gcc-8-defconfig-warnings
+   - gcc-9-defconfig-warnings
+   - gcc-10-defconfig-warnings
+   - gcc-11-defconfig-warnings
+
+* x86_64, build
+   - gcc-8-x86_64_defconfig-warnings
+   - gcc-9-x86_64_defconfig-warnings
+   - gcc-10-defconfig-warnings
+   - gcc-11-defconfig-warnings
+   - gcc-11-lkftconfig-debug-kmemleak-warnings
+   - gcc-11-lkftconfig-debug-warnings
+   - gcc-11-lkftconfig-kasan-warnings
+   - gcc-11-lkftconfig-kselftest-kernel-warnings
+   - gcc-11-lkftconfig-kselftest-warnings
+   - gcc-11-lkftconfig-kunit-warnings
+   - gcc-11-lkftconfig-libgpiod-warnings
+   - gcc-11-lkftconfig-perf-warnings
+   - gcc-11-lkftconfig-rcutorture-warnings
+   - gcc-11-lkftconfig-warnings
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## No test fixes (compared to v5.10.125)
+
+## No metric fixes (compared to v5.10.125)
+
+## Test result summary
+total: 113063, pass: 101475, fail: 233, skip: 10740, xfail: 615
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 314 total, 314 passed, 0 failed
+* arm64: 58 total, 58 passed, 0 failed
+* i386: 52 total, 49 passed, 3 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 51 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 55 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+
+Greetings!
+
+Daniel Díaz
+daniel.diaz@linaro.org
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org

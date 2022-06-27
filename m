@@ -2,214 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 855F755C238
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A882355D0A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239420AbiF0RZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
+        id S239620AbiF0RZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236319AbiF0RZF (ORCPT
+        with ESMTP id S236222AbiF0RZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:25:05 -0400
-Received: from sonic316-26.consmr.mail.ne1.yahoo.com (sonic316-26.consmr.mail.ne1.yahoo.com [66.163.187.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3101263D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1656350701; bh=jxel8bTjG3W3h1RD32LktqNRvAXqoxtEjoNyKlu4UI4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=Pw19L37gV+8n5LICrnZzd3+bB3AMwtQAi2ogf0LYs5ZxB6folivGMAYHOIKPC43HbETw240MYdQ+WnkBJhqBDLidr7xnWMqwEIT9u2zQOYDOOfBVuLepTrRhkaYWNdCo0JCtaYuR3beB5zhxi7TP05lunI72dEW9JHDiC3HdaAteCXwLNrPnb1pE1m8XAnSpJX3wb+2WQIgO+8xvLGFc5XMkNwWkikEJ2enWY/wQRwMcFqHi9sZbYfOTCF3fLaKGtyTdVELjtV0EhyK/a9qeRo0Z/1PqPw39Gbrpp6+SrOiO1/9IcSprPsXcVlG11IW4s9xJhO+fL8eiipHdU37VNw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1656350701; bh=x8SDBHhPSDxecqI7yLXEoUaOYcPThrh5OOqkXQa5QMi=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=QNXKT4fgC45mMKDqHqt9oEx8DoZjn3bdWbWsA622BTgNXVUVuv4Q6mvgMy4GXxp3IGqBnH87fU5ccFlwV9B88zGBo6U8u57BFCHZYkxxVvHkF1+aqbxK9qIN2i1Fpz9bwf22v4UhyeBuzOeUKzoAG7UURD9rNJnK5JqMHadQc4gNC8iSYik2+mU60k+W0QOnpz2bxpU4tLKfO1xwys/yus3FTwSX3Un17CPPNfolkxagIjQbdCRV7aU8qsrpHNCmz0/WkRBp/85YwY00RoO/sYmG5pnUqAvu8vnu3eeNWdCWAHsrGkfb+GydnhDDnnKZaLKjZhUXEpmrBjR2nRgF2Q==
-X-YMail-OSG: JMvsJk0VM1mX9Zcld89SIAeehjI8Fif.qvkNdYzMOvrTG_DThf1WAfzHUfMbgbw
- 9QrQl0A1zrD815FiXJGhmZ87VfMFx0NoySGFrncX3v4fnapVh4lNTun3zMH8gU85utUwlIpom3IP
- Wn5u4gTryQeEgbgx8jglnqVfKhi07XBq7qsCnt9lu9JVkX9N78DG01xvpzxobq2HFg0q8h_KZpDX
- p69aaw4GeOcWZhdM9hgZX7DL8bUb3Snv4IbO03lymDOb0ISl_itLSxtoEnXiYLCu3MvRDQ63s5tY
- GJrTbAOg8YL_XXSQ6ZmI4Mi4lL8AcJsVSgT2wxj4YyeLxAQMPNvw9YL1QvP3r9zOaoFC.28yGAHQ
- iYKUSPRA5tb.lpclmGuV2dijok7nxaBzUcbmLcU0kAaH3FwCPk5tuMrQOy7g_D5pf78Pg06YErxJ
- htHhiVbR.CzrLU.ByqJ24MzgXqc2ReIkZYwCMStDUOULit8yhnIUvOjVaPzbsLkLEyxHK.6aEbCZ
- ibPajYXPE5B.Xcb8mPL6wOd3ySI8kyXQVILcELddVmQNTkmLkNI8V3VGAM1IUaPkP6Z5oSSM2GyK
- pFb8FYIUPbnFsv6p5JfAAj3juXiwtKFpc1vpUGbTTjDby38PbQLNAVZLuVKlUYLP8hvsyVrhApqH
- 8ejU7OSWjdXGZWeQR7AsV77An8AvLJSmGWPQ_hfNhj1eXUOOP8bb2STvg1GvI0Q5RXN_H2jMGrYO
- nhmPtEnijIydxFBDtGyWPOdWjaCo3wacgnMGaITw7cgtaVJgotcl52Z7sZoRMGinMJMf5uL19WxC
- 0TZaqp9.NzH6c2C8KHgLkE7j0eVila9ifK3JNjb3eqwtNFtILMkjAaroSgROduiNym6z8dAfEC6I
- WQ.2Pa41Lm4fsEZBmGpfmwbQ5lhLtLqSdTpT_K_pQbMyS2hz8r4.Z3cYdfSaKXjywNJq4tlt_y28
- OC4NCfSjRnxQthCaP8d5bGFv0JrIOw1GhTao7i0BnSjVp97PNQfS7A1LGP33DzGzS32PaaasqQ54
- YNfTQ_ioiicWiFxUsr47SoPqI8i1FIvcnC38w520ne5ek5hKy0sDPDHkhK3rqT9A8V1OIJdVKZqz
- tlPsbdEKTF_BwWIYC8okpnA3mkVM14a4wkeuAveKdvPByxm6IksY_oNR4uPMke3o3syXj76V9OUe
- Tq0zYHhKWy5ryw3sZ6rFONv50n4t4CKGDgY6vGlRUnapYHKevtw3ONUNmX_N8VnL.v5q20DguWnp
- 7huKasCY5w5EiK7dFgooV0pKiwGvzmT8iBJ9.t5z659Heb6WvkjXwAOC9ltEDKiS.cA.dvaF4F1i
- lQG.HGAEZEgV8NMFV84KxJhHU4ag6_A8wtM9Gl4hD3HdVXy2UVW5Zys8hwYjEpG1JLvvYtYKusnS
- c16QehoAWxGH7eUn.DpiwLoys6QAWaUdj2pHHdz6qVWnNaV5y6E.FkhZht2j56EaqRph4Hy7EDmh
- FErLmvWPw2HPSCxIH9hdkDHWCqTvER8xsBZ.G3u8MWZDtP17Vcqv2xsDVDKDU_lAatgBWiiAuGQb
- 9AA4j2sgBYJS74.n.0jpoN3kr2WbG1pCbNI5H4sLKMlPByYBse0VJQXEup63kgtMPQF2XzVjVPcR
- ryEYbzAyKblSHQX0ApQ0lrSr4PIwTdeJ_6gesPK7bvKZ3G9TypZ16Z3XPCY6nbB8.BnpIHbN0yux
- hbOBy3MkZfs1T4Wn8ZbafHACYlD9xm36WHjw8hHatALeS_ClAIrrg8gpOMPNIKpocUjI.dHmlgk3
- DfoW6VYBW83BAoTMa1EHnznfVSEEoVLr2qeVdxNkQvAQ_e1kZDyi_B_khxZQsiHuwDVY_r9Zhv9F
- EBhFRwE_WqqxPbXKufQXytzgQ9PbVTHiI3PDu2ONleVFr_zzPX88k4fLhi2qbRLxE.LDvxudSduj
- WlovE77tB4tAW8vLcZV7AuVvHHxObq7aKtnHlYqVaRNxHWA5yHh2T06lFDaLbaA8Z3ab9uNJTvGj
- nhZR1e794a2RNkTYIqStLQjzAYSPABFwF4PN8WzLRW2r9j1Czykt8ZvpyDckA14ZKS.DSOgyXpmk
- RondCQ1Msr4Zejta_NLWU7VrNJdNeFtgkNaO2TFsBG7VMVKolV7oIBmBxCi9gIEaMsNgNHxBOzc2
- f6r_bq6uyFern8spPEuODsWvWcKMNNsBwoKBuD2yHDwNABFFVuNy.yCde2dDw4lShVEKdnulTqVv
- HG7SNqXSHjUxsvhWugw4ZRwXIFlS29o56jyMr0fEUElOgt.zMhqwQKfsa6BuQ2VcIXFRI
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Mon, 27 Jun 2022 17:25:01 +0000
-Received: by hermes--production-ne1-7459d5c5c9-fdkvw (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 220ceb13a755144268a58ef99922991a;
-          Mon, 27 Jun 2022 17:24:57 +0000 (UTC)
-Message-ID: <1c0be7d4-3f81-3117-6fb7-4fbd84aaeea7@schaufler-ca.com>
-Date:   Mon, 27 Jun 2022 10:24:56 -0700
+        Mon, 27 Jun 2022 13:25:37 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B34E12AB7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:25:35 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RGLGNj031567;
+        Mon, 27 Jun 2022 17:25:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type :
+ content-transfer-encoding : in-reply-to : mime-version; s=corp-2021-07-09;
+ bh=o/oMns1QbAZ5Xhf7W5EbpUjkhVki3iIstHyZCkaGYgg=;
+ b=ldZcuH2kkzl2WIPFMPcqiuMVvrwFlPYPEWzhXjicOhaz8n9UE64UNxORjh0y95iIVRt6
+ HYZVA7dF8tdbZvHK+7gFKlCs94eGHGG3r965psdwRL5nONrwJj8eVPzGzD18IDQp0wa/
+ cbZdnqW9CSM+IZhQzTiIj+F2567Wetl1LHvuD87ZNWVOT5G6fEITxS/WoEO2KQSh89f+
+ 0IEG6rAzE7sX+58dcFV62RbVvlAkMMAkszuJFEHy4lHKUu4XDajwMXvIGKKMdhn2mwsz
+ dYHTSUusrelnN/8peYwev3sb2C6TbDT3N74csk7QHT5YM0yIMIWbRioq0oiGuv8+tdNH 9g== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gwrscbvy6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jun 2022 17:25:20 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25RHAnBd006383;
+        Mon, 27 Jun 2022 17:25:19 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gwrt1n1yu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jun 2022 17:25:19 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mBrkiPVuPukvz8EqzG5qoCk/x1SCwPM3BTXxp1x59JQYfTgtXH6LGBbMwRlRUSwH5vIiX/zmjKT/r4hagWRdBaaUEOl2kuCod35jrXRyxtrjfxh9muvwWRsI0dm0NSjrymNhtg+/pwD0eJaqE6av8gZ+nTXiMyGxGch9dsYPaWAUuYcMcoG4H0+Qkqf+lF5+c0vB5X/qDZVqlXNj4Cs73YBtxGgjVezlARelpGcYc0vWH8sv30bLUW7ZQ9J7UEHySYu/IR79jxaSC9Y/Hvd2IFw9iDzEAmO+774uqmjzqp5xd6+Y6LnWBlRp/qub30izym4Uk54pxcYoUs2xgGtnXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=o/oMns1QbAZ5Xhf7W5EbpUjkhVki3iIstHyZCkaGYgg=;
+ b=etDoaNi4L7VDBH+k7jEhHTd9BPxj0ThjH9pZMqWQkRdZTnaM1btsB/t0ZGE2lnINBnCj3qbRE2cIo83TC5Nw8wVvNu+2FYeYaf8/ypKlYBRrddw5tAcN3H4FRcKetnx4T+qDKfPgLzkuTdb+Uf46qbuWfaKpgy7wLETurHRmOJd4CfnByocodlFpKO5I0sOWGZNdE9ZvbLKJ3W83sW1uZK7VN2JKKGGpsm1sRzCTj3qGGNMJ+MCL6TL58prMN4cZdXrjR4X4zrucCTuEy6uVA5idk0k9cOcAbvnS6BnrSDZHFasvrYyBN8jMo/X9ptrUHyJtCNB7/2gg54vP3tZ/Yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o/oMns1QbAZ5Xhf7W5EbpUjkhVki3iIstHyZCkaGYgg=;
+ b=Caz4HrlxU3t26hA5auH5M0RkA+qMjppg2HoAT32h/2/ugtmaHLE2jLaulk27gIEGo9Hq8S1taYtOcLMDZLj+sSEVtszfTlzirLetkDBKC/etfT+ooi3JW036qFGNum4FYJ8LcFHtz2R7rr/W51nDJ4/rG6Bz4Gtl3kIA/lbqp1M=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by BN6PR10MB1475.namprd10.prod.outlook.com (2603:10b6:404:44::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Mon, 27 Jun
+ 2022 17:25:16 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::c1ba:c197:f81f:ec0%4]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
+ 17:25:16 +0000
+Date:   Mon, 27 Jun 2022 10:25:13 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+j44CA55u05LmfKQ==?= 
+        <naoya.horiguchi@nec.com>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <nao.horiguchi@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH v2 1/9] mm/hugetlb: remove checking hstate_is_gigantic()
+ in return_unused_surplus_pages()
+Message-ID: <Yrnn+QS8JCMT/3JV@monkey>
+References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
+ <20220623235153.2623702-2-naoya.horiguchi@linux.dev>
+ <0b69e3ef-0123-4575-b68d-4d9b2067aa0e@huawei.com>
+ <YrVv3gKMxbu/dwCs@FVFYT0MHHV2J.usts.net>
+ <e9a22524-d9f6-1018-a712-00adb90d432a@huawei.com>
+ <20220624083428.GA2070418@hori.linux.bs1.fc.nec.co.jp>
+ <YrYMS5sATPzEgUxb@monkey>
+ <20220627060231.GA2159330@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220627060231.GA2159330@hori.linux.bs1.fc.nec.co.jp>
+X-ClientProxiedBy: MWHPR19CA0076.namprd19.prod.outlook.com
+ (2603:10b6:320:1f::14) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        Frederick Lawler <fred@cloudflare.com>
-Cc:     Paul Moore <paul@paul-moore.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20220621233939.993579-1-fred@cloudflare.com>
- <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
- <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
- <CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com>
- <20220627121137.cnmctlxxtcgzwrws@wittgenstein>
- <b7c23d54-d196-98d1-8187-605f6d4dca4d@cloudflare.com>
- <20220627155639.b5jky27loen3ydrz@wittgenstein>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20220627155639.b5jky27loen3ydrz@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20280 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4d00575e-c4d8-4ff8-7455-08da58620080
+X-MS-TrafficTypeDiagnostic: BN6PR10MB1475:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nB9KGFdGCneVTJsci+QIeCirMu1XR425w9rJPyaEdcHm92UcshHk7VQxe20ooUGWhmul3W53iYsGZRgMPAzmmqYNBR7DoyaJVLEXl2r6b+nuBrz94pa6u4hRrn3lX5qlzLTvcCrvVSoEeMuNoCma3xCbDeOf4Y4ic/qcT6FwIStYfAsba2TnGieTgDc1EQdIHZabNBpMZsenNBkTVwe46ZCV/PfsRFdmab1ZK13dRrFqhGtLI9SzKv9O03APwlQ45TbgJ3H2qYEPsrEB0Ej1cKTiF5S5cKc+YKzVx6EBqFpyNKX81MrOYPu5x6qhstuEyga9FvhNxXzYIYUf2fXzC4yb7b99fmgBjPQFnE/l9CSw6AsN/ZH6/GeLHZPi1t+K3N/00aAXf8fdjF7oSQGcfY/c05CT50ZU0psVRfIdn28Y3brtOcs55gpeeAsOWFUTeWIOMCHmQv4k/YNC+NLDX1raKrYiNDs0fCuyBHZL9D7s+nUO0+qUBmtrCC09pO3WZ/bZuwlEtqZBZZVxMNPfGCA0ESKNlnHeBURar8EBxKEacJaYY54YkAapj4CCHPw3/kL7p7PtVKInKnpjwvkgSjA78vBcQ0Yb/gGiDQwtH2+3AQDrTtb0LirjucwqjjvcYgkfdEqULpAfbWcaIce2gQzoheLbMc3tyGF9aZ1e9ATjZaD2a2njsnDJrRJLzsD/umB+ZDjC2CJgmLPANZaTaUSjquXillLK98rJlVXrR6U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(136003)(39860400002)(346002)(376002)(396003)(8676002)(38100700002)(478600001)(6486002)(4326008)(86362001)(316002)(6666004)(9686003)(6512007)(66556008)(53546011)(6506007)(6916009)(2906002)(41300700001)(66946007)(33716001)(7416002)(5660300002)(83380400001)(26005)(186003)(8936002)(66476007)(44832011)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TXRkaUcrZGlGdFNsaU9wSVpDK2ZNbWRDNVBNNFgxTmZSeThLbXNvelNGQ0Rk?=
+ =?utf-8?B?OG1kQ2twWXMzUXRWSVQvanZHamtZMUdoUUdVQWtNK1ZnQ2NxYTE2WCtOY3c4?=
+ =?utf-8?B?bUFyWHpyZGNEdml6dzBIbE1QSENoSGlBZVAvdnp1ay9waExlZUcrNm9PQnRE?=
+ =?utf-8?B?c2VHbG5PVS9Id0RUQUVKdmsrZy9WYk4zdUMza2dQR3JydHJtZXo3b1RyVjc5?=
+ =?utf-8?B?ZlFtS2c3VFFZa2lRRVlXTjBPcDMzMTJWS29MdHRGZHozMW1uRWt5UVp0Y09W?=
+ =?utf-8?B?dy9tZzRMTDJ5a2gyK0xUeENtTHNuWWROcTFMVGp1TDhzbUl4c0VybHZhZnd4?=
+ =?utf-8?B?b3JSMjFCU252K1pLZGdNeWlZZUk2bjdINEVjaStPTHB3VDFXU3h5ZU4wYTZY?=
+ =?utf-8?B?d2s0OXBYNWVSWUQ2SmZLSTJuWWhsbUVRNndCMHphK2dTOThGV2p0eWdNZEg1?=
+ =?utf-8?B?UFIxRHV1dWtVT2hxMWxQQlZ6ei9RUUpYK1JXczB5cnlXaDh6VGhxMXhMSE1Y?=
+ =?utf-8?B?SXhNWVdTS0FFTEQ0QzJMN0xwWkI2VFdZQVNmWFZyZnBvenQzTTN2MkRnSWtG?=
+ =?utf-8?B?Zk5sVEYzcDFqTUVSaEloUlZRdXNjbThqcnRUL01HV2pKeEQ5Q1o0SlRadVJT?=
+ =?utf-8?B?TDJEMmFRdHUwK3cvUHNEdzdlSERPZmEvSEpleDEzb21EdmYxR0o4MTA3OUtj?=
+ =?utf-8?B?ci9RcHM1cm9rRUllakoyekQ1MmJRZ3ZRRTljWU1MUkpyRzQzR3NaSytOK3hJ?=
+ =?utf-8?B?bk5zZjR5MVYzNTlybTdHYUVXR0N6ZFpSZnNXU214b1h3a1BLMlpFQXVQcHVM?=
+ =?utf-8?B?a0ZqNXJtUTN3SFo0aWtQcm85a1ZmNFc5QW05NHBEcHpMUjBnTitZYU16cVhm?=
+ =?utf-8?B?aHZJVWVDclJ1YW1MYUxDZkVUU1dCdzkzbmRRRDd6WmZMNzhnbjZ1MElIZ0w1?=
+ =?utf-8?B?VEIxSzVTK3k4djVsUjFUQnRRU093QlE0SlpseVRlbXd4QVpSSWJHaEg4U0lS?=
+ =?utf-8?B?bjVsUzZ3eGh6V3VGL1dOMUwreEVuVEpCMWhSYktxQkpxQTJvd05RVWdFL01B?=
+ =?utf-8?B?L0RNT1NvVTNvc1MyTndxU003VzFCdkJYUXpLWitudlFNWm1JNnFqV3FnUHRx?=
+ =?utf-8?B?UzRPdjgvdzZ3L28rcWhaTk92dnJHU0VMN0VKRUpJWlhQaXpXbU9LUXZNQ1JK?=
+ =?utf-8?B?VDJ0VXR0K2pTdTFTNUl4MUV1cElLU3pVMm1RWXhBWjBDa25PdGZ0b2I5Ym5H?=
+ =?utf-8?B?TmpTZlhOT2xCOG9xSFNLSnBudjJSdWJSbStWY2dseUp3b3lFenR2NUpUTDF0?=
+ =?utf-8?B?dXB0amgyem83RWt5TWF6djhyM29mamo0K2RIYUxWYjFCblQrTGFOYW5STWVw?=
+ =?utf-8?B?RUpMNjB6NDJjMXVZSTcraEd0TnZjY0k3NWFNbjkrV2sySEdzTi8vbDB4QkFP?=
+ =?utf-8?B?STV4ajdyQm1tT2VDVWdtYmRpbGJ2MmYwcUc4NzYzYzJEWkNIOCt3VGI1TEtY?=
+ =?utf-8?B?TkFiWkVjM2Y3RE1LM05hekhNMzFsbE9FQlJHekVrem16dkIwaHNLRllKQzBH?=
+ =?utf-8?B?YVpObUM2ejF0TCtCenRZcVVhMTUySG1jUnd4K2IxYVh0OG5RVmlMcVpnQSs4?=
+ =?utf-8?B?R0ptTWFRRWIvYjZBRDh4djMwdTZncjhpekhzeWhEaWo0QytoL0VNUU5zc1d2?=
+ =?utf-8?B?dXhxc2dTdzQ5OW9mQVRxSzRuaVB5MnV6dGhVMnlNK3NUY1JxV1duVkJXV0hj?=
+ =?utf-8?B?OTBVQ2MrS2JxNllaV2hReUM3WkozZ0pIN09qV0paNTFra3IwNmlBOWdZK0tp?=
+ =?utf-8?B?MHJOSzhVTTF6TklxbjgvSWNyU29rNitVNGlwT1NWc1p5OXh1anczYm1ReU5k?=
+ =?utf-8?B?L1poZis4SjQxSU91M2hvOXFINXgrdGc0UHpEU3dGNlZtakZUQk1nbUpzVStu?=
+ =?utf-8?B?ZjhVOWVPSWtqci84eitPaVRCNGpqU3VaQmxQcTVNczJ5eWhBdFVOVGZjZEt4?=
+ =?utf-8?B?alRIQTllS3RwZW5lMTFYeWlqRW0xc2ZaeGFaSnlJWG0zN3k5dEdqdkpDeHlU?=
+ =?utf-8?B?TzVHMG1aTHFsMlZYcEwyZk01V002TzhZbmtiV1lwamFjVjhONERPcmVDdTVT?=
+ =?utf-8?B?UURPclkxMDk3cTNTZjB4dXQ5UXZlekpFRzhNUGJqQ3ZMc21Ra1hFMlF4TUdR?=
+ =?utf-8?B?ZkE9PQ==?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d00575e-c4d8-4ff8-7455-08da58620080
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2022 17:25:16.7291
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hUYZa2PKGQ+UATfQbnPDnyHwcrgg/D2xMjLtG0Uqqfs45H0gW944QvXUMtQP2AOTpXM5LSzfpKIKFleTKkpyAg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1475
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-06-27_06:2022-06-24,2022-06-27 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 mlxlogscore=999 adultscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206270071
+X-Proofpoint-ORIG-GUID: o2gqL_4hGW8PvaJKodSE3nqjV-jpY4Ry
+X-Proofpoint-GUID: o2gqL_4hGW8PvaJKodSE3nqjV-jpY4Ry
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/2022 8:56 AM, Christian Brauner wrote:
-> On Mon, Jun 27, 2022 at 10:51:48AM -0500, Frederick Lawler wrote:
->> On 6/27/22 7:11 AM, Christian Brauner wrote:
->>> On Thu, Jun 23, 2022 at 11:21:37PM -0400, Paul Moore wrote:
->>>> On Wed, Jun 22, 2022 at 10:24 AM Frederick Lawler <fred@cloudflare.com> wrote:
->>>>> On 6/21/22 7:19 PM, Casey Schaufler wrote:
->>>>>> On 6/21/2022 4:39 PM, Frederick Lawler wrote:
->>>>>>> While creating a LSM BPF MAC policy to block user namespace creation, we
->>>>>>> used the LSM cred_prepare hook because that is the closest hook to
->>>>>>> prevent
->>>>>>> a call to create_user_ns().
->>>>>>>
->>>>>>> The calls look something like this:
->>>>>>>
->>>>>>>        cred = prepare_creds()
->>>>>>>            security_prepare_creds()
->>>>>>>                call_int_hook(cred_prepare, ...
->>>>>>>        if (cred)
->>>>>>>            create_user_ns(cred)
->>>>>>>
->>>>>>> We noticed that error codes were not propagated from this hook and
->>>>>>> introduced a patch [1] to propagate those errors.
->>>>>>>
->>>>>>> The discussion notes that security_prepare_creds()
->>>>>>> is not appropriate for MAC policies, and instead the hook is
->>>>>>> meant for LSM authors to prepare credentials for mutation. [2]
->>>>>>>
->>>>>>> Ultimately, we concluded that a better course of action is to introduce
->>>>>>> a new security hook for LSM authors. [3]
->>>>>>>
->>>>>>> This patch set first introduces a new security_create_user_ns() function
->>>>>>> and create_user_ns LSM hook, then marks the hook as sleepable in BPF.
->>>>>> Why restrict this hook to user namespaces? It seems that an LSM that
->>>>>> chooses to preform controls on user namespaces may want to do so for
->>>>>> network namespaces as well.
->>>>> IIRC, CLONE_NEWUSER is the only namespace flag that does not require
->>>>> CAP_SYS_ADMIN. There is a security use case to prevent this namespace
->>>>> from being created within an unprivileged environment. I'm not opposed
->>>>> to a more generic hook, but I don't currently have a use case to block
->>>>> any others. We can also say the same is true for the other namespaces:
->>>>> add this generic security function to these too.
->>>>>
->>>>> I'm curious what others think about this too.
->>>> While user namespaces are obviously one of the more significant
->>>> namespaces from a security perspective, I do think it seems reasonable
->>>> that the LSMs could benefit from additional namespace creation hooks.
->>>> However, I don't think we need to do all of them at once, starting
->>>> with a userns hook seems okay to me.
->>>>
->>>> I also think that using the same LSM hook as an access control point
->>>> for all of the different namespaces would be a mistake.  At the very
->>> Agreed. >
->>>> least we would need to pass a flag or some form of context to the hook
->>>> to indicate which new namespace(s) are being requested and I fear that
->>>> is a problem waiting to happen.  That isn't to say someone couldn't
->>>> mistakenly call the security_create_user_ns(...) from the mount
->>>> namespace code, but I suspect that is much easier to identify as wrong
->>>> than the equivalent security_create_ns(USER, ...).
->>> Yeah, I think that's a pretty unlikely scenario.
->>>
->>>> We also should acknowledge that while in most cases the current task's
->>>> credentials are probably sufficient to make any LSM access control
->>>> decisions around namespace creation, it's possible that for some
->>>> namespaces we would need to pass additional, namespace specific info
->>>> to the LSM.  With a shared LSM hook this could become rather awkward.
->>> Agreed.
->>>
->>>>>> Also, the hook seems backwards. You should
->>>>>> decide if the creation of the namespace is allowed before you create it.
->>>>>> Passing the new namespace to a function that checks to see creating a
->>>>>> namespace is allowed doesn't make a lot off sense.
->>>>> I think having more context to a security hook is a good thing.
->>>> This is one of the reasons why I usually like to see at least one LSM
->>>> implementation to go along with every new/modified hook.  The
->>>> implementation forces you to think about what information is necessary
->>>> to perform a basic access control decision; sometimes it isn't always
->>>> obvious until you have to write the access control :)
->>> I spoke to Frederick at length during LSS and as I've been given to
->>> understand there's a eBPF program that would immediately use this new
->>> hook. Now I don't want to get into the whole "Is the eBPF LSM hook
->>> infrastructure an LSM" but I think we can let this count as a legitimate
->>> first user of this hook/code.
+On 06/27/22 06:02, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Fri, Jun 24, 2022 at 12:11:07PM -0700, Mike Kravetz wrote:
+> > On 06/24/22 08:34, HORIGUCHI NAOYA(堀口 直也) wrote:
+> > > On Fri, Jun 24, 2022 at 04:15:19PM +0800, Miaohe Lin wrote:
+> > > > On 2022/6/24 16:03, Muchun Song wrote:
+> > > > > On Fri, Jun 24, 2022 at 10:25:48AM +0800, Miaohe Lin wrote:
+> > > > >> On 2022/6/24 7:51, Naoya Horiguchi wrote:
+> > > > >>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> > > > >>
+> > > > >> IIUC it might be better to do the below check:
+> > > > >> 	/*
+> > > > >> 	 * Cannot return gigantic pages currently if runtime gigantic page
+> > > > >> 	 * allocation is not supported.
+> > > > >> 	 */
+> > > > >> 	if (hstate_is_gigantic(h) && !gigantic_page_runtime_supported())
+> > > > >> 		goto out;
+> > > > >>
+> > > > > 
+> > > > > The change looks good to me. However, the comments above is unnecessary
+> > > > > since gigantic_page_runtime_supported() is straightforward.
+> > > > 
+> > > > Agree. The comments can be removed.
+> > > 
+> > > Thank you, both. Adding !gigantic_page_runtime_supported without comment
+> > > makes sense to me.
+> > 
+> > The change above makes sense to me.  However, ...
+> > 
+> > If we make the change above, will we have the same strange situation described
+> > in the commit message when !gigantic_page_runtime_supported() is true?
+> > 
+> > IIUC, !gigantic_page_runtime_supported implies that gigantic hugetlb
+> > pages can not be allocated or freed at run time.  They can only be
+> > allocated at boot time.  So, there should NEVER be surplus gigantic
+> > pages if !gigantic_page_runtime_supported().
+> 
+> I have the same understanding as the above.
+> 
+> >  To avoid this situation,
+> > perhaps we should change set_max_huge_pages as follows (not tested)?
+> 
+> The suggested diff looks clearer about what it does, so I'd like to take it
+> in the next version.  Then, what do we do on the "if (hstate_if_gigantic())"
+> check in return_unused_surplus_pages in the original suggestion?  Should it
+> be kept as is, or removed, or checked with !gigantic_page_runtime_supported()?
+> I guess that the new checks prevent calling return_unused_surplus_pages()
+> during pool shrinking, so the check seems not necessary any more.
 
-Yes, although it would be really helpful if there were a recognized upstream
-for eBPF programs so that we could see not only that the hook is used but how
-it is being used. It is possible (even likely) that someone will want to change
-either the interface or the caller some day. Without having the eBPF that
-depends on it, it's hard to determine if a change would be a regression.
+My first thought was to keep the check in return_unused_surplus_pages() as it
+is called in other code paths.  However, it SHOULD only try to free surplus
+hugetlb pages.  With the modifications to set_max_huge_pages we will not
+have any surplus gigantic pages if !gigantic_page_runtime_supported, so
+the check can be removed.
 
->>>
->>>> [aside: If you would like to explore the SELinux implementation let me
->>>> know, I'm happy to work with you on this.  I suspect Casey and the
->>>> other LSM maintainers would also be willing to do the same for their
->>>> LSMs.]
->>>>
->> I can take a shot at making a SELinux implementation, but the question
->> becomes: is that for v2 or a later patch? I don't think the implementation
->> for SELinux would be too complicated (i.e. make a call to avc_has_perm()?)
->> but, testing and revisions might take a bit longer.
->>
->>>> In this particular case I think the calling task's credentials are
->>>> generally all that is needed.  You mention that the newly created
->>> Agreed.
->>>
->>>> namespace would be helpful, so I'll ask: what info in the new ns do
->>>> you believe would be helpful in making an access decision about its
->>>> creation?
->>>>
->> In the other thread [1], there was mention of xattr mapping support. As I
->> understand Caseys response to this thread [2], that feature is no longer
->> requested for this hook.
-> I think that is an orthogonal problem at least wrt to this hook.
+Also note that we never try to dynamically allocate surplus gigantic pages.
+This also is left over from the time when we could not easily allocate a
+gigantic page at runtime.  It would not surprise me if someone found a use
+case to ease this restriction in the future.  Especially so if 1G THP support
+is ever added.  If this happens, the check would be necessary and I would
+guess that it would not be added.
 
-Agreed. It was always a look deeply into the future sort of thing.
-At this point I don't see anything blocking the proposed hook moving
-forward.
+Sorry for thinking our loud!!!  Although not necessary, it 'might' be a good
+idea to leave the check because it would be overlooked if dynamic allocation
+of gigantic surplus pages is ever added.  I do not have a strong opinion.
 
->
->> Users can still access the older parent ns from the passed in cred, but I
->> was thinking of handling the transition point here. There's probably more
->> suitable hooks for that case.
-> Yes.
+P.S. This also reminds me that a similar check should be added to the
+demote hugetlb code path.  It would be bad if !gigantic_page_runtime_supported
+and we demoted a gigantic page into numerous non-gigantic pages.  I will
+send a patch.
+-- 
+Mike Kravetz

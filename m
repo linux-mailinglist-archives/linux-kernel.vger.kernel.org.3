@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5360555D02A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6321255D27C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238807AbiF0Lyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
+        id S236997AbiF0LlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238479AbiF0Lsa (ORCPT
+        with ESMTP id S236478AbiF0Lhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:48:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35E5101CC;
-        Mon, 27 Jun 2022 04:41:46 -0700 (PDT)
+        Mon, 27 Jun 2022 07:37:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA09222;
+        Mon, 27 Jun 2022 04:33:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D82CB81144;
-        Mon, 27 Jun 2022 11:41:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00658C3411D;
-        Mon, 27 Jun 2022 11:41:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C7C2608D4;
+        Mon, 27 Jun 2022 11:33:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C31FC3411D;
+        Mon, 27 Jun 2022 11:33:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330104;
-        bh=kCwdNzqMem6ihDmySz6U2kWUQrGOpG+87jgLRiwTaSE=;
+        s=korg; t=1656329593;
+        bh=9EtlxQsMc5ri6HFAXtVDa5cEQKwbR7JyWxgRf83RwYo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bn94/jzRm2jBhbEGf4eAAORjvJOssJ3MnWqOQqEOnUMzxRZwX1n8XLW+TRiHHYSrJ
-         TPvJ4fwCQGsFCPUrFb7fzPSvYOI/cT4DUW/YzibAe9tM/GfjXeIhMQ6bfkRN3pMD6m
-         JoMjx2/HYT297asB53+ncrcJzJZa9e8HFDb7vE8E=
+        b=NkkLh0y+hw9Tp2wS4p0g+1KzuHJ6ydLtHuxG/HZi3G5453r31tZktou/KfqFwfgmI
+         WwoQhajXJr58U4QT3LkEtlBxn/ChHNfGjDlj3p9/hDO2PBRY5Fpoww6fkJKstJUuRA
+         IxMB0CKBsHk7yflHARSaSGo/E0ybR8zsJ6Zyo0Os=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dylan Yudaken <dylany@fb.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 084/181] block: pop cached rq before potentially blocking rq_qos_throttle()
-Date:   Mon, 27 Jun 2022 13:20:57 +0200
-Message-Id: <20220627111946.996652252@linuxfoundation.org>
+        stable@vger.kernel.org, Jonathan Toppins <jtoppins@redhat.com>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 051/135] bonding: ARP monitor spams NETDEV_NOTIFY_PEERS notifiers
+Date:   Mon, 27 Jun 2022 13:20:58 +0200
+Message-Id: <20220627111939.641048735@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Jay Vosburgh <jay.vosburgh@canonical.com>
 
-[ Upstream commit 2645672ffe21f0a1c139bfbc05ad30fd4e4f2583 ]
+[ Upstream commit 7a9214f3d88cfdb099f3896e102a306b316d8707 ]
 
-If rq_qos_throttle() ends up blocking, then we will have invalidated and
-flushed our current plug. Since blk_mq_get_cached_request() hasn't
-popped the cached request off the plug list just yet, we end holding a
-pointer to a request that is no longer valid. This insta-crashes with
-rq->mq_hctx being NULL in the validity checks just after.
+The bonding ARP monitor fails to decrement send_peer_notif, the
+number of peer notifications (gratuitous ARP or ND) to be sent. This
+results in a continuous series of notifications.
 
-Pop the request off the cached list before doing rq_qos_throttle() to
-avoid using a potentially stale request.
+Correct this by decrementing the counter for each notification.
 
-Fixes: 0a5aa8d161d1 ("block: fix blk_mq_attempt_bio_merge and rq_qos_throttle protection")
-Reported-by: Dylan Yudaken <dylany@fb.com>
-Tested-by: Dylan Yudaken <dylany@fb.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Reported-by: Jonathan Toppins <jtoppins@redhat.com>
+Signed-off-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Fixes: b0929915e035 ("bonding: Fix RTNL: assertion failed at net/core/rtnetlink.c for ab arp monitor")
+Link: https://lore.kernel.org/netdev/b2fd4147-8f50-bebd-963a-1a3e8d1d9715@redhat.com/
+Tested-by: Jonathan Toppins <jtoppins@redhat.com>
+Reviewed-by: Jonathan Toppins <jtoppins@redhat.com>
+Link: https://lore.kernel.org/r/9400.1655407960@famine
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/blk-mq.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/net/bonding/bond_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 631fb87b4976..37caa73bff89 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2777,15 +2777,20 @@ static inline struct request *blk_mq_get_cached_request(struct request_queue *q,
- 		return NULL;
- 	}
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 2e75b7e8f70b..cd0d7b24f014 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -3474,9 +3474,11 @@ static void bond_activebackup_arp_mon(struct bonding *bond)
+ 		if (!rtnl_trylock())
+ 			return;
  
--	rq_qos_throttle(q, *bio);
--
- 	if (blk_mq_get_hctx_type((*bio)->bi_opf) != rq->mq_hctx->type)
- 		return NULL;
- 	if (op_is_flush(rq->cmd_flags) != op_is_flush((*bio)->bi_opf))
- 		return NULL;
- 
--	rq->cmd_flags = (*bio)->bi_opf;
-+	/*
-+	 * If any qos ->throttle() end up blocking, we will have flushed the
-+	 * plug and hence killed the cached_rq list as well. Pop this entry
-+	 * before we throttle.
-+	 */
- 	plug->cached_rq = rq_list_next(rq);
-+	rq_qos_throttle(q, *bio);
-+
-+	rq->cmd_flags = (*bio)->bi_opf;
- 	INIT_LIST_HEAD(&rq->queuelist);
- 	return rq;
- }
+-		if (should_notify_peers)
++		if (should_notify_peers) {
++			bond->send_peer_notif--;
+ 			call_netdevice_notifiers(NETDEV_NOTIFY_PEERS,
+ 						 bond->dev);
++		}
+ 		if (should_notify_rtnl) {
+ 			bond_slave_state_notify(bond);
+ 			bond_slave_link_notify(bond);
 -- 
 2.35.1
 

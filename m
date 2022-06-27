@@ -2,127 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A515755DE28
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D739C55E263
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232944AbiF0JXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
+        id S233902AbiF0JYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232824AbiF0JXr (ORCPT
+        with ESMTP id S233473AbiF0JYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:23:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A10E2DE4;
-        Mon, 27 Jun 2022 02:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656321826; x=1687857826;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=vtuj/GeBkHA5KwrozFoymb6ynohmJjqPDoiYReRC71M=;
-  b=Ont6+M/g9gEOW3MInanIlfh2bgHK14dowpLEaHepq3k85OOB9Nb7c7h7
-   HuNv+7bowbPtPDZWXMTOyU8uBMEYFbnFvgR6QIb7pJTd28kMjH8qkZftv
-   xeXMNUkGglVpIyUQD6CRMdLkh2Ex9gVwZeMG7Z92XsgS2zWWRNAcs2kXz
-   ySuKAPszvlgBUP+XMr69Fymu9p1JzNwcVKXboRWIC8WywmXSpGwLoGriv
-   RoVDeRO6chVOxmhMJri/cJBqwOaIAXRNSbfKy716yf9W8VvS+JLNMwFyO
-   ctSyw9yJhHFu8RJvDXVr25xNyWvzu8YTcVPf0xjIbunhWyKEhf71MTY4b
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="345407303"
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="345407303"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 02:23:45 -0700
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="646353034"
-Received: from gretavix-mobl3.amr.corp.intel.com ([10.249.43.78])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 02:23:42 -0700
-Date:   Mon, 27 Jun 2022 12:23:42 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Lukas Wunner <lukas@wunner.de>
-cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vz@mleia.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, p.rosenberger@kunbus.com,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: Re: [PATCH 5/8] dt_bindings: rs485: Correct delay values
-In-Reply-To: <c8919968-74e8-fc9d-15b4-daa28b48d8d8@linux.intel.com>
-Message-ID: <9f3accf9-319-f0b-9035-9cff3c6cbf@linux.intel.com>
-References: <20220622154659.8710-1-LinoSanfilippo@gmx.de> <20220622154659.8710-6-LinoSanfilippo@gmx.de> <YrSU4eL9hgISg3Y1@smile.fi.intel.com> <6c50fdca-aac4-aaf5-ad34-18a60fcc0aa0@gmx.de> <c8919968-74e8-fc9d-15b4-daa28b48d8d8@linux.intel.com>
+        Mon, 27 Jun 2022 05:24:21 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2CC5F48
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:24:17 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id cw10so17841740ejb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WheMo0jihvDqC8vkz7SeuHDX+Y7spNQBPItzd2n3lJ0=;
+        b=L2p+vhW8V4W2qd7Xx3ICJgwuBfUCYsXAwPJ9+Y54ki6Mzrs21eZhOBQOQqzrdRq/ki
+         q0wO1Kbml/A5MfI4+eCB/NgTIvhAWmZPe+KUVsiGeHeztxDvJQabWrZZSskL6GEP1urI
+         di/+WaZWgQGlzKszgnTOuItTXx/H8QdR/6gx8NMdNwu9XtjumwRj0LLc8wZjyo/bYs0Y
+         pGGhj20wTkxXzcozlbLzEubE27s5Z5Pdn8wEDc4jfG6uWnRvSPbNv0rV59MkXIyeNnyd
+         zTqYMzzoQ/bRv2c90D5XQF1LkO+eUL1tVBNcnB2g7ZdGy97RIG1VFYU63ghv9apqNY+r
+         07gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WheMo0jihvDqC8vkz7SeuHDX+Y7spNQBPItzd2n3lJ0=;
+        b=aJGeUpBXzwjqGGs3Acxvv3wvqIUOC78I3MVA7+/pfk00dD6GdFP8ApHRDsTJvGfReT
+         5vTbtgorJbUwp0j+FALXbCZS8XvJdNqA2FaggiG5bEVf0iSHmjA896cbWvIRgGqhTO5s
+         S8i9h6ED54bHc5JP1DtPnICBm3gJn/6gdnmvxsYNyhEP19i6eLGgWUgdW+LgsyrPgr6Q
+         9fZlBOVfOgz16MEYickWFtmreNkU2BPOEkTuLys/i9UdXE8L78cSBalT8amNJgrpuTGu
+         UhdH7ZcR7ZVi0ftJfSeh6H8+GCWVaPSUmWYix9vBVZb105XXiQx8hk78p21m1yBUsci1
+         SIoA==
+X-Gm-Message-State: AJIora/anWTf00AttTDXYJG16lAVUkNFcgrhFuCsaW+rGgA64jaPnYit
+        EUhtkpSg65DBZqgAwvZagB7TeQ==
+X-Google-Smtp-Source: AGRyM1vmSw4PkoUJobIyZ+0PFFNkXJG8udoaIUyo4XAy6BtVMPROE7ZMi8N88/BWlX2w6+MlYxVhXQ==
+X-Received: by 2002:a17:906:478e:b0:722:f84d:159f with SMTP id cw14-20020a170906478e00b00722f84d159fmr11897036ejc.182.1656321856221;
+        Mon, 27 Jun 2022 02:24:16 -0700 (PDT)
+Received: from [192.168.0.247] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d16-20020a170906545000b006feb20b5235sm4820639ejp.84.2022.06.27.02.24.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 02:24:15 -0700 (PDT)
+Message-ID: <430f5284-b107-e43c-7329-9e299093a352@linaro.org>
+Date:   Mon, 27 Jun 2022 11:24:13 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1944914680-1656321828=:1622"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 07/14] riscv: dts: canaan: fix the k210's memory node
+Content-Language: en-US
+To:     Conor.Dooley@microchip.com, damien.lemoal@opensource.wdc.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     fancer.lancer@gmail.com, tglx@linutronix.de, sam@ravnborg.org,
+        Eugeniy.Paltsev@synopsys.com, daniel.lezcano@linaro.org,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        masahiroy@kernel.org, geert@linux-m68k.org, lgirdwood@gmail.com,
+        niklas.cassel@wdc.com, dillon.minfei@gmail.com,
+        jee.heng.sia@intel.com, thierry.reding@gmail.com,
+        joabreu@synopsys.com, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, airlied@linux.ie,
+        linux-kernel@vger.kernel.org, vkoul@kernel.org, palmer@dabbelt.com,
+        broonie@kernel.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@rivosinc.com,
+        daniel@ffwll.ch
+References: <20220618123035.563070-1-mail@conchuod.ie>
+ <20220618123035.563070-8-mail@conchuod.ie>
+ <9cd60b3b-44fe-62ac-9874-80ae2223d078@opensource.wdc.com>
+ <e1fbf363-d057-1000-a846-3df524801f15@microchip.com>
+ <891cf74c-ac0a-b380-1d5f-dd7ce5aeda9d@opensource.wdc.com>
+ <6c9de242-6ccf-49a2-8422-e6949c5169ff@microchip.com>
+ <70cd0066-9aa7-ca41-ad61-898d491328aa@linaro.org>
+ <b8dce80e-2753-497e-1dd3-3eb0d248b74e@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b8dce80e-2753-497e-1dd3-3eb0d248b74e@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1944914680-1656321828=:1622
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Sat, 25 Jun 2022, Ilpo Järvinen wrote:
-
-> On Thu, 23 Jun 2022, Lino Sanfilippo wrote:
+On 27/06/2022 09:06, Conor.Dooley@microchip.com wrote:
 > 
-> > On 23.06.22 at 18:29, Andy Shevchenko wrote:
-> > > On Wed, Jun 22, 2022 at 05:46:56PM +0200, Lino Sanfilippo wrote:
-> > >> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > >>
-> > >> The maximum allowed delay for RTS before and RTS after send is 100 ms.
-> > >> Adjust the documentation accordingly.
-> > >
-> > >
-> > > Is it only documentation issue? If the code allows this to be set higher
-> > > than 100, we may not change the documentation since this an ABI (from
-> > > firmware <--> kernel perspective) we need to support old variants.
-> > >
-> > 
-> > Well currently the documentation claims that a maximum of 1000 msecs is allowed but
-> > nothing actually checks the values read from device tree/ACPI and so it is possible
-> > to set much higher values (note that the UART drivers dont check the delays read from
-> > DT/ACPI either, the only exception I found is max310x which clamps it to 15 ms).
-> > 
-> > We already have a maximum of 100 ms defined for RTS delays set via TIOCSRS485. To be
-> > consistent with TIOCSRS485 the same limit is used for DT/ACPI values in this patch.
-> > 
-> > I am aware that this changes the firmware/kernel ABI. But we had a similar situation when
-> > the sanity checks for TIOCSRS485 were introduced
-> > (see https://lore.kernel.org/all/20220410104642.32195-2-LinoSanfilippo@gmx.de/)
-> > since before we did not have those limits for all drivers (some drivers clamped the
-> > values itself but many did not care).
-> > Furthermore 100 ms is already a very high value for RTS delays (which are usually rather
-> > in usecs range). So IMHO the risk is very low to break anything when values are clamped
-> > that are higher than that.
 > 
-> Did you see this development direction (from Lukas):
+> On 27/06/2022 07:55, Krzysztof Kozlowski wrote:
+>> On 21/06/2022 11:49, Conor.Dooley@microchip.com wrote:
+>>> On 20/06/2022 01:25, Damien Le Moal wrote:
+>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>>>
+>>>> On 6/20/22 08:54, Conor.Dooley@microchip.com wrote:
+>>>>> On 20/06/2022 00:38, Damien Le Moal wrote:
+>>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>>>>>
+>>>>>> On 6/18/22 21:30, Conor Dooley wrote:
+>>>>>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>>>>>
+>>>>>>> The k210 memory node has a compatible string that does not match with
+>>>>>>> any driver or dt-binding & has several non standard properties.
+>>>>>>> Replace the reg names with a comment and delete the rest.
+>>>>>>>
+>>>>>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>>>>>>> ---
+>>>>>>> ---
+>>>>>>>    arch/riscv/boot/dts/canaan/k210.dtsi | 6 ------
+>>>>>>>    1 file changed, 6 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/arch/riscv/boot/dts/canaan/k210.dtsi b/arch/riscv/boot/dts/canaan/k210.dtsi
+>>>>>>> index 44d338514761..287ea6eebe47 100644
+>>>>>>> --- a/arch/riscv/boot/dts/canaan/k210.dtsi
+>>>>>>> +++ b/arch/riscv/boot/dts/canaan/k210.dtsi
+>>>>>>> @@ -69,15 +69,9 @@ cpu1_intc: interrupt-controller {
+>>>>>>>
+>>>>>>>         sram: memory@80000000 {
+>>>>>>>                 device_type = "memory";
+>>>>>>> -             compatible = "canaan,k210-sram";
+>>>>>>>                 reg = <0x80000000 0x400000>,
+>>>>>>>                       <0x80400000 0x200000>,
+>>>>>>>                       <0x80600000 0x200000>;
+>>>>>>> -             reg-names = "sram0", "sram1", "aisram";
+>>>>>>> -             clocks = <&sysclk K210_CLK_SRAM0>,
+>>>>>>> -                      <&sysclk K210_CLK_SRAM1>,
+>>>>>>> -                      <&sysclk K210_CLK_AI>;
+>>>>>>> -             clock-names = "sram0", "sram1", "aisram";
+>>>>>>>         };
+>>>>>>
+>>>>>> These are used by u-boot to setup the memory clocks and initialize the
+>>>>>> aisram. Sure the kernel actually does not use this, but to be in sync with
+>>>>>> u-boot DT, I would prefer keeping this as is. Right now, u-boot *and* the
+>>>>>> kernel work fine with both u-boot internal DT and the kernel DT.
+>>>>>
+>>>>> Right, but unfortunately that desire alone doesn't do anything about
+>>>>> the dtbs_check complaints.
+>>>>>
+>>>>> I guess the alternative approach of actually documenting the compatible
+>>>>> would be more palatable?
+>>>>
+>>>> Yes, I think so. That would allow keeping the fields without the DTB build
+>>>> warnings.
+>>>
+>>> Hmm looks like that approach contradicts the dt-schema;
+>>> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/memory.yaml
+>>>
+>>> @Rob,Krzysztof what is one meant to do here?
+>>
+>> Why do you think it contradict bindings? Bindings for memory allow
 > 
-> https://lore.kernel.org/linux-serial/20220309125908.GA9283@wunner.de/
-> 
-> ?
-> 
-> Effectively, he wants to making a compat threshold at 1msec and beyond 
-> that the input value would be interpreted as nsecs.
+> Because when I tried to write the binding, the memory node complained
+> about the clock properties etc and referenced the dt-schema (which
+> for memory@foo nodes has additionalProperties: false.
 
-I was thinking this more the other day and came up with the idea of adding
-SER_RS485_DELAY_RTS_NSEC and SER_RS485_DELAY_RTS_MSEC flags instead of
-magic threshold and deprecate specifying those delays w/o either flag. 
-That way we'd not need to change behavior and we provide an easy way to 
-keep the delay in msec if somebody really wants (just for the sake of 
-getting rid of the warning).
+Ah, I see, I looked at wrong level. Indeed memory node cannot have
+anything else.
 
--- 
- i.
+> 
+>> additional properties, so you just need to create binding for this one.
+>> And make it a correct binding, IOW, be sure that these clocks are real etc.
+>>
+>> Although usually we had separate bindings (and device drivers) for
+>> memory controllers, instead of including them in the "memory" node.
+> 
+> I guess changing to that format would probably require some changes on
+> the U-Boot side of things. Taking "calxeda,hb-ddr-ctrl" as an example,
+> looks like the clocks etc go in a controller node, which seems like a
+> "better" way of doing it - 
 
---8323329-1944914680-1656321828=:1622--
+Yes, because I think memory node is kind of special. It describes the
+physical memory layout for the system, not the memory controller or
+memory characteristics (like timings).
+
+What U-Boot needs is indeed memory controller node. It's not only
+calxeda but also few others using JEDEC LPDDR bindings.
+
+> but would break existing dts in U-Boot
+> without changes to handle both methods there.
+
+Yes, that's a bit inconvenient but also a price someone has to pay for
+introducing DTS properties without bindings.
+
+Best regards,
+Krzysztof

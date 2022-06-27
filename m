@@ -2,115 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897A055E0E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3880655D9B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241545AbiF0XTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
+        id S241665AbiF0XTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240970AbiF0XRJ (ORCPT
+        with ESMTP id S241714AbiF0XRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:17:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CD6237E9;
-        Mon, 27 Jun 2022 16:17:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED4A96152E;
-        Mon, 27 Jun 2022 23:17:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 030D9C34115;
-        Mon, 27 Jun 2022 23:17:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656371826;
-        bh=xK/0Jo6bbbOr8Su6qSlzhWJlbL3Ou6nGEBskw/gJN6w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gdjqnp7gzy7ZTPEUKfdbOqeFJEN/O/BYL4VEKBpEKVbwjd09UG9BxxKpVsD1KYeCa
-         i3dcZwhZNPDgzim3GabS0RB16XMcveEZkNr5pnCUs9UbsZDlHFHSVFwIADz/RuhYO1
-         +X6jmug6bGuNwd5qfmumJzvYe7FnpUjEEEC29dYCDyP4/7X6PW7K9ZF4Y7BkA+bUPN
-         v9xiPwa0oN9Be40+n8jRhyukCy76ntvcIQx0/8sNERa+6sCQRST9oB8eb6hwAd9TPD
-         ccPjBGSWynfhc8fEjPnmY1kiUubF+Dbh6sEYH6iAUD7Fy31aa9BsnUA052Wx1MnwYj
-         R9mUu/hA9pOkw==
-Date:   Tue, 28 Jun 2022 02:17:02 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Elvira Khabirova <e.khabirova@omp.ru>,
-        Vitaly Chikunov <vt@altlinux.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2 RESEND] pkcs7: support EC-RDSA/streebog in
- SignerInfo
-Message-ID: <Yro6btp1iF4plBk/@kernel.org>
-References: <20220627092142.21095-1-tianjia.zhang@linux.alibaba.com>
- <20220627092142.21095-3-tianjia.zhang@linux.alibaba.com>
+        Mon, 27 Jun 2022 19:17:24 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B421E237D0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:17:22 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id v185so9782592ybe.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:17:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eOgbheeHHLx9uc+m1bX9bnF0itm2DUuG6BGXmAFqbGY=;
+        b=HLHQZExevJDo8Y1z5GpwsfTYJGywU8z5kmu59kREUxEbT88sqolNfwoDFSOOK/13+f
+         rh0q4q0W+BsJxJOCscpuXaL8NQSzW7GWDP7dTqf0NADnfMvGaQ2mEcRg6RBtsCuARl9Y
+         CZ80yP1yUbZIttCR65kc5ZRC9gqWYEkaL2kXcv2wIvexT+Lw6cQt5LLoyxYPZgMSq7v7
+         hCFdLghtJsFQ0l5XlOyr6ugRNwnkuJ25kChv2EvLVJXBiAzhEAvI7fl0kgkGsid3cAX7
+         kuXF+Q2QWoMv1CpqtLSwbVAvT4VpfvhdsVv+SV94rfWIZ9OJZOG5bSadzdHJ+j0GIE0h
+         P4Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eOgbheeHHLx9uc+m1bX9bnF0itm2DUuG6BGXmAFqbGY=;
+        b=ObUGq7XYdbro7UmHxUNTHtFWwzv80Pf6oJg8jdE4KWQzW9CcnG6zrN/kKApOhMS6im
+         EFDAMCZihwCEQ0vD1VDBM9Oxcsn7/VVvWoXJwz6VeWqxrfsUKCv4AGJH4SDRh+hyd1D9
+         +Az3v79jr8DLjjjOgG4P8LRqKKGCgZkKa4AwYOxgIP3gEFzmdG9eY3cUfJQJ+KIf0VbD
+         ELlEbLZ2IeEDOgqwPlnVFlDi1odzC3b6jOAo6be6X5XqQpjAshkht1Rmjc2xdDyaMIOo
+         tdhRWCpBBMTGN/MMj9Zno8FtuniATnzMuvFnOoDyK5J1krMKVH1emX2BrkZucT6mDPkV
+         SYFw==
+X-Gm-Message-State: AJIora+LzXmRVtJ4r6secoLIw16tKyUTozRUm3qK24fOUnErkiJSr8Yl
+        hjOvNRWvFX9+zRSnjRCA62qyXsazZlYtMhyHmihTIw==
+X-Google-Smtp-Source: AGRyM1v6Dk2Qv7A4RssdrCAPUCr8IHhm+4/uF/DqBgXC0b8TGnzsXd0pqOR8Vs+yJQ+R8GlAivav01HXpQYEownlNG8=
+X-Received: by 2002:a25:3bcf:0:b0:66c:815c:a58f with SMTP id
+ i198-20020a253bcf000000b0066c815ca58fmr17269199yba.352.1656371841684; Mon, 27
+ Jun 2022 16:17:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627092142.21095-3-tianjia.zhang@linux.alibaba.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220619120451.95251-1-wuyun.abel@bytedance.com> <20220619120451.95251-3-wuyun.abel@bytedance.com>
+In-Reply-To: <20220619120451.95251-3-wuyun.abel@bytedance.com>
+From:   Josh Don <joshdon@google.com>
+Date:   Mon, 27 Jun 2022 16:17:10 -0700
+Message-ID: <CABk29NvHFxCxmZBnB5ozjqDQGVqBQQeneC-mi-W6KyYfX8ENQw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/7] sched/fair: remove redundant check in select_idle_smt
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Chen Yu <yu.c.chen@intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 05:21:42PM +0800, Tianjia Zhang wrote:
-> From: Elvira Khabirova <e.khabirova@omp.ru>
-> 
-> Allow using EC-RDSA/streebog in pkcs7 certificates in a similar way
-> to how it's done in the x509 parser.
-> 
-> This is needed e.g. for loading kernel modules signed with EC-RDSA.
-> 
-> Signed-off-by: Elvira Khabirova <e.khabirova@omp.ru>
-> Reviewed-by: Vitaly Chikunov <vt@altlinux.org>
-> Reviewed-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> ---
->  crypto/asymmetric_keys/pkcs7_parser.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_keys/pkcs7_parser.c
-> index 24e2e4a6d842..277482bb1777 100644
-> --- a/crypto/asymmetric_keys/pkcs7_parser.c
-> +++ b/crypto/asymmetric_keys/pkcs7_parser.c
-> @@ -251,6 +251,12 @@ int pkcs7_sig_note_digest_algo(void *context, size_t hdrlen,
->  	case OID_sm3:
->  		ctx->sinfo->sig->hash_algo = "sm3";
->  		break;
-> +	case OID_gost2012Digest256:
-> +		ctx->sinfo->sig->hash_algo = "streebog256";
-> +		break;
-> +	case OID_gost2012Digest512:
-> +		ctx->sinfo->sig->hash_algo = "streebog512";
-> +		break;
->  	default:
->  		printk("Unsupported digest algo: %u\n", ctx->last_oid);
->  		return -ENOPKG;
-> @@ -284,6 +290,11 @@ int pkcs7_sig_note_pkey_algo(void *context, size_t hdrlen,
->  		ctx->sinfo->sig->pkey_algo = "sm2";
->  		ctx->sinfo->sig->encoding = "raw";
->  		break;
-> +	case OID_gost2012PKey256:
-> +	case OID_gost2012PKey512:
-> +		ctx->sinfo->sig->pkey_algo = "ecrdsa";
-> +		ctx->sinfo->sig->encoding = "raw";
-> +		break;
->  	default:
->  		printk("Unsupported pkey algo: %u\n", ctx->last_oid);
->  		return -ENOPKG;
-> -- 
-> 2.24.3 (Apple Git-128)
-> 
+On Sun, Jun 19, 2022 at 5:05 AM Abel Wu <wuyun.abel@bytedance.com> wrote:
+>
+> If two cpus share LLC cache, then the cores they belong to are also in
+> the same LLC domain.
+>
+> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
 
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-BR, Jarkko
+Reviewed-by: Josh Don <joshdon@google.com>

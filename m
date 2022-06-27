@@ -2,193 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBF255D942
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A571A55C1F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239483AbiF0Qfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
+        id S239496AbiF0QgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234722AbiF0Qfm (ORCPT
+        with ESMTP id S239481AbiF0Qf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:35:42 -0400
+        Mon, 27 Jun 2022 12:35:59 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C950FDEC0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:35:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DF4ADEA2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:35:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656347740;
+        s=mimecast20190719; t=1656347757;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VXkvf9Dz/3Rc1tZTIiOEIYW6xJ4bF2M7kN20MmYwhCw=;
-        b=h7N5dsE3RRNoiAHhU5qHX2LpBWhww4q1FTDPQEeG+5G292ktLnV/6IE3lujI3nJCxuaJfr
-        8DaEYT32X3gauvMSEheeQe47m79a3zzTsAmPFkBWM9YnpzdAgYtNryMQujveBXy2kVw2Qw
-        CG3UNs5p67XMLD777kn1wHsohwbgZX8=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=ajZ6rDuNIkxlTWf9Tu/rlCccLsTD5TfeTqcQISFWLfw=;
+        b=fxiYDgTDdtX9G9iaW7YJ/HTc/73hU8Ne3AKKE9DdCPBwj4plGxAmpSwOhNt94oVbPvPh0t
+        pwjKn5OJQ9VW5NYhlbamDHIpXymDMagYaS1zfs379vch4Pd6q/6YB/g3Vfm1ca1acxnwxD
+        SHZANirE8m62w456jQBoSG8jtuzzl7E=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-8q6G59CYPKi2RTIzlc0YdA-1; Mon, 27 Jun 2022 12:35:38 -0400
-X-MC-Unique: 8q6G59CYPKi2RTIzlc0YdA-1
-Received: by mail-wm1-f70.google.com with SMTP id v184-20020a1cacc1000000b0039c7efa3e95so3781396wme.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:35:38 -0700 (PDT)
+ us-mta-556-XDVFq1HSNFOtWkT-WtuZbQ-1; Mon, 27 Jun 2022 12:35:54 -0400
+X-MC-Unique: XDVFq1HSNFOtWkT-WtuZbQ-1
+Received: by mail-io1-f71.google.com with SMTP id q13-20020a5d9f0d000000b00669c03397f7so5953889iot.10
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:35:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=VXkvf9Dz/3Rc1tZTIiOEIYW6xJ4bF2M7kN20MmYwhCw=;
-        b=faKLtuwW6VMj1tygbiE6m0AR5UlgvJTw3B4yfxTDgk7NcVQvBnXgi7OZ5woaVs4AQj
-         ofklH+YTODqv2XJLHFpxdygscZn4peneoItayBTXNpmy7r1P8MgS+0ycUDCi2pq6h5NH
-         F5hLvRlhzJDCcl5s624RYBGr7Cb3pK7LmBpLMzpnsPVN3gto5m95svFbZsxqruUc+LAk
-         LzOQ4o94v9Sj0oUT++gOynSBQWf9LuIHOrQAX9qw7lwKTHD1QnctWx/ak2X7hFG/QFV4
-         66uzP/JmFBvaTO8UG0pCeolWldhT1wJrFP1wiByOxhRRLb4vYOSxr4kFsPXUr4U2WBn6
-         XbBg==
-X-Gm-Message-State: AJIora9pbPiPy1Wn9rh+RGtoWo+q/jf/HRgFMhsccxHAeKhuEUHWlrwQ
-        RffQGIebYYRslyeJDTtj+/siEcE/1LlQ5LizL040TnkxIOCyKaJ1pQT1cImmkJy1/3cq8rb4KkG
-        MBuICydqQDc1oBpQKDWSCfX7b
-X-Received: by 2002:a05:600c:3845:b0:39c:6ea9:ed34 with SMTP id s5-20020a05600c384500b0039c6ea9ed34mr15813982wmr.175.1656347737546;
-        Mon, 27 Jun 2022 09:35:37 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tQi9g3utC8EzXjKD8m93yuKrwANYFg//2CpsGdAnGzYjiEv6/vdPPRcD412Ha4VSvENvZqJQ==
-X-Received: by 2002:a05:600c:3845:b0:39c:6ea9:ed34 with SMTP id s5-20020a05600c384500b0039c6ea9ed34mr15813955wmr.175.1656347737217;
-        Mon, 27 Jun 2022 09:35:37 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:d100:dd9:b2f7:f126:11c2? (p200300cbc708d1000dd9b2f7f12611c2.dip0.t-ipconnect.de. [2003:cb:c708:d100:dd9:b2f7:f126:11c2])
-        by smtp.gmail.com with ESMTPSA id ib3-20020a05600ca14300b003a04e6410e0sm1554270wmb.33.2022.06.27.09.35.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 09:35:36 -0700 (PDT)
-Message-ID: <8fefe59d-c893-39f4-3225-65343086c867@redhat.com>
-Date:   Mon, 27 Jun 2022 18:35:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Charan Teja Kalla <quic_charante@quicinc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Minchan Kim <minchan@kernel.org>
-Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <59edde13-4167-8550-86f0-11fc67882107@quicinc.com>
-From:   David Hildenbrand <david@redhat.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=ajZ6rDuNIkxlTWf9Tu/rlCccLsTD5TfeTqcQISFWLfw=;
+        b=06acJGHkGPYB6T3Pv3PlYVDySyhmS1lpS0xj0+hKStIhFqlTuELYSwSD2tEGWhNW6C
+         gjQQKKv4sC+DBiXlpvtaTBvAk4Uzfe3oohVsRjmCkJN/py9UH5/gikxSjcj9lEJp8ZaM
+         7HW+7FyJ0ZX8nIGcsjpjudaPVDGXSQclDnKO6bq8NsfwFi6NGocT7nB4w9etz+YYF7IA
+         JMzl0ORyjoBJpHTVdSUMNelh85rFNPom5yjdjg0F3oXAWekQQnAKcAC5Sv86DjtFLh/D
+         OJeuaBFCp7i9zWzEpQMrlZobfq2JPS3btJnPzhmWnWP6bX9P82oXEqkw223o02xUWD3U
+         Mp1A==
+X-Gm-Message-State: AJIora9wk1+n0qz9hpWroF7KMlHMbh9KI0AZU1GMkqr/ErZ+T3AT63+P
+        1EfLAzImxJJO3gd301GXsDUbg4Zigt5/z9OcXtLGThPf5wwoyFwXRBF+Nr88V5iiroaFq4drat/
+        Iyd4sRlXmGAe4SMNytKr+k4AK
+X-Received: by 2002:a05:6638:dc6:b0:332:3565:397a with SMTP id m6-20020a0566380dc600b003323565397amr7957163jaj.312.1656347753688;
+        Mon, 27 Jun 2022 09:35:53 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vv1JOb9B1ol8/IGTBQLrpbIC5YwburDgiT1ESupNJ64ipmLjowP6AySpptuL2gZYgDyI57hw==
+X-Received: by 2002:a05:6638:dc6:b0:332:3565:397a with SMTP id m6-20020a0566380dc600b003323565397amr7957152jaj.312.1656347753485;
+        Mon, 27 Jun 2022 09:35:53 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id p20-20020a02b014000000b00339c015fd84sm4957144jah.59.2022.06.27.09.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 09:35:52 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 10:35:51 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     kwankhede@nvidia.com, farman@linux.ibm.com, mjrosato@linux.ibm.com,
+        pasic@linux.ibm.com, diana.craciun@oss.nxp.com, cohuck@redhat.com,
+        eric.auger@redhat.com, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, yishaih@nvidia.com, hch@lst.de
+Subject: Re: [PATCH] vfio: de-extern-ify function prototypes
+Message-ID: <20220627103551.48b34517.alex.williamson@redhat.com>
+In-Reply-To: <20220610164407.25feeb23.alex.williamson@redhat.com>
+References: <165471414407.203056.474032786990662279.stgit@omen>
+        <20220610000434.GE1343366@nvidia.com>
+        <20220610164407.25feeb23.alex.williamson@redhat.com>
 Organization: Red Hat
-Subject: Re: Discussion on race between freed page_ext access and memory
- offline operation
-In-Reply-To: <59edde13-4167-8550-86f0-11fc67882107@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.06.22 18:09, Charan Teja Kalla wrote:
-> The below race between page_ext and online/offline of the respective
-> memory blocks will cause use-after-free on the access of page_ext structure.
+On Fri, 10 Jun 2022 16:44:07 -0600
+Alex Williamson <alex.williamson@redhat.com> wrote:
+
+> On Thu, 9 Jun 2022 21:04:34 -0300
+> Jason Gunthorpe <jgg@nvidia.com> wrote:
 > 
-> process1			    process2
-> ---------			    ---------
-> a)doing /proc/page_owner            doing memory offline	
-> 			            through offline_pages
+> > On Wed, Jun 08, 2022 at 12:55:13PM -0600, Alex Williamson wrote:  
+> > > The use of 'extern' in function prototypes has been disrecommended in
+> > > the kernel coding style for several years now, remove them from all vfio
+> > > related files so contributors no longer need to decide between style and
+> > > consistency.
+> > > 
+> > > Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+> > > ---
+> > > 
+> > > A patch in the same vein was proposed about a year ago, but tied to an ill
+> > > fated series and forgotten.  Now that we're at the beginning of a new
+> > > development cycle, I'd like to propose kicking off the v5.20 vfio next
+> > > branch with this patch and would kindly ask anyone with pending respins or
+> > > significant conflicts to rebase on top of this patch.  Thanks!    
+> > 
+> > Can you stick it in your branch please?  
 > 
-> b)PageBuddy check is failed
-> thus proceed to get the
-> page_owner information
-> through page_ext access.
-> page_ext = lookup_page_ext(page);
-> 				
-> 				  migrate_pages();
-> 				 ................
-> 				Since all pages are successfully
-> 				migrated as part of the offline
-> 				operation,send MEM_OFFLINE notification
-> 				where for page_ext it calls:
-> 				offline_page_ext()-->
-> 				  __free_page_ext()-->
-> 				    free_page_ext()-->
-> 				      vfree(ms->page_ext)
-> 				mem_section->page_ext = NULL
+> Thanks for the R-b, it was my plan today to put it in my next branch,
+> but I can't currently test vfio on mainline due to:
 > 
-> c) Check for the PAGE_EXT flags
-> in the page_ext->flags access
-> results into the use-after-free(leading
-> to the translation faults).
+> https://lore.kernel.org/all/165490039431.944052.12458624139225785964.stgit@omen/
 > 
-> As mentioned above, there is really no synchronization between page_ext
-> access and its freeing in the memory_offline.  The above is just one
-> example but the problem persists in the other paths too involving
-> page_ext->flags access(eg: page_is_idle()).
-> 
-> The memory offline steps(roughly) on a memory block is as below:
-> 1) Isolate all the pages
-> 2) while(1)
->   try free the pages to buddy.(->free_list[MIGRATE_ISOLATE])
-> 3) delete the pages from this buddy list.
-> 4) Then free page_ext.(Note: The struct page is still alive as it is
-> freed only during hot remove of the memory which frees the memmap, which
-> steps the user might not perform).
-> 
-> This design leads to the state where struct page is alive but the struct
-> page_ext is freed, where the later is ideally part of the former which
-> just representing the page_flags. This seems to be a wrong design where
-> 'struct page' as a whole is not accessible(Thanks to Minchan for
-> pointing this out).
+> I'll get this in once there's a mainline base where vfio still works.  Thanks,
 
-Accessing the struct page -- including any extensions -- is invalid if
-the memory section is marked offline.
+This has now been resolved in rc4 via 034e5afad921 ("mm: re-allow
+pinning of zero pfns").  I've rebased to rc4 and pushed this patch out
+to the vfio next branch.  Thanks,
 
-Usual PFN walkers use pfn_to_online_page() to make sure we have PFN with
-an actual meaning in it.
-
-There is no real synchronization between pfn_to_online_page() and memory
-offline code. For now it wasn't required because it was never relevant
-in practice.
-
-After pfn_to_online_page() it takes quite a long time until memory is
-actually offlined and then, the memmap is removed. Maybe it's different
-for page_ext.
-
-
-It smells like page_ext should use some mechanism during  MEM_OFFLINE to
-synchronize against any users of its metadata. Generic memory offlining
-code might be the wrong place for that.
-
-> 
-> Some solutions we think are:
-> ----------------------------
-> 1) Take the mem_hotplug_lock read_lock every time page_ext access.
-
-That would be the big hammer. But it feels wrong, because page_ext is
-another subsystem that's synchronized from generic memory offlining code
-via the notifier.
-
-> 
-> 2) Take the extra refcount on the page every time page_ext access is
-> made, so that parallel offline operation can't free the page to buddy.
-
-No, that's no good. Just racy.
-
-> 
-> 3) Change the design where the page_ext is valid as long as the struct
-> page is alive.
-
-:/ Doesn't spark joy.
-
-> 
-> Any other inputs here?
-
-
-page_ext needs a mechanism to synchronize against any users of the data
-it manages. Maybe RCU can help?
-
-
--- 
-Thanks,
-
-David / dhildenb
+Alex
 

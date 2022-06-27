@@ -2,91 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027D455DBF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C3955C740
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233230AbiF0JHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58676 "EHLO
+        id S233352AbiF0JHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232893AbiF0JG4 (ORCPT
+        with ESMTP id S232845AbiF0JHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:06:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AAD63A9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:06:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D3FA61170
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:06:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D469C341C8;
-        Mon, 27 Jun 2022 09:06:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656320814;
-        bh=1gnVoaGuW6a9eUN1HMGFl1vsiRYSGtGUhkQ+scokzb4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aGoQlVBNwVHtMmTI89fC8rV1T9cwXGPJ/P/klazH38euiLYM6z22qK3/OVbVxDAqp
-         Y26odl5Rm8y3O1pS8bshbWe9p13b5I88nfxKMEtD+C5Ueb9x7XKGd8dUDSh2nwoM/G
-         vBlRrVOHWqKTlqWdLvXJ9PWX9OuF7mGutuuIQkd4=
-Date:   Mon, 27 Jun 2022 11:06:52 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Martin Kaiser <martin@kaiser.cx>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: r8188eu: drop return value from
- receive_disconnect
-Message-ID: <YrlzLEf1atin6gBd@kroah.com>
-References: <20220626180734.287137-1-martin@kaiser.cx>
+        Mon, 27 Jun 2022 05:07:24 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1B96398;
+        Mon, 27 Jun 2022 02:07:23 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 184so8499066pga.12;
+        Mon, 27 Jun 2022 02:07:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tRneTDLFQMzVfO2N/gHNDmUeVj26egu5hiaZEE0FtjA=;
+        b=fQ6t0azwoBYBWQ8D03hqBSBzPvIyFe3pEoBa6IZz851wn1dYbZd0wh1MP3LHlJrK1Z
+         PR26etFEelPHmooDifKqYpWUU2au6IzvThqe7T/W9DIHRtZzh76Gl+aJbsl81IElKp1g
+         Xr6UAyqwZDm/OodxwZM5UIxd2tz5aK2ERESgtEinTj0kBv/8fpavsVUfi8Rsqv9ts2zr
+         ncCAouqGAx6myEp+eMgvDhtVPZNwQol0xcDdNC7W9qEI9YVLNQJ154N9AIB3kGxtm+fV
+         CVRlFohYoB+MOLR5g4J5qiaCzmq6dBpKT+foP0DhKFsDGm3HoQ+jvSJSF5xyzu8rxB6W
+         YHOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=tRneTDLFQMzVfO2N/gHNDmUeVj26egu5hiaZEE0FtjA=;
+        b=2+HVaGeblmrvfKQU4BF2350WUu+WPqfW+xMu+Y6JMVAU0qb/kxgp1oJ4Io9aNHxAxV
+         W+u/cBugNEFS1iiiCrGO8vqgVODj+G8Lr54505Bt4Jrhn3DIQjsFOboBabY9kkc6qKtG
+         dduEqmwSRGgtt+A/g6fJyw+B2UJ6CEdfl9BAafuSLIdpTM66FFDIv6WuNCeBZLDm+kZn
+         FA5SO79pEgSSCZrrp3TaBv04yK61yiLwoJlGDLncVOuU8E4RV6JqerSB7PHIW41S0n+z
+         NLwwgobkZkCB6WJBgcZD/v9sqSNyAyJG4KSijxUNPu3j9wM4garZpNsgIDQytLu4+iIw
+         hshQ==
+X-Gm-Message-State: AJIora+RdjWOflFb5cxk5C9q/WJcMZgbxC/cKG+AcUDebpDKCsKprf2w
+        NXqvRUvhrmFA1lyi2V+nPPU=
+X-Google-Smtp-Source: AGRyM1tfSRVndX1YIfPY/R7kGngBQ/GIQ02B+ypq/d09Iko+wa3RjVqYr5haNhwuwrvCLhik3vADLA==
+X-Received: by 2002:a62:1b85:0:b0:525:604d:7dd3 with SMTP id b127-20020a621b85000000b00525604d7dd3mr13781932pfb.4.1656320842802;
+        Mon, 27 Jun 2022 02:07:22 -0700 (PDT)
+Received: from localhost ([121.167.227.144])
+        by smtp.gmail.com with ESMTPSA id u12-20020a056a00098c00b00525184bad5csm6752959pfg.63.2022.06.27.02.07.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 02:07:22 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 27 Jun 2022 18:07:20 +0900
+From:   Tejun Heo <tj@kernel.org>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
+Subject: Re: [PATCH cgroup] cgroup: set the correct return code if hierarchy
+ limits are reached
+Message-ID: <YrlzSFkywHthpAZN@mtj.duckdns.org>
+References: <186d5b5b-a082-3814-9963-bf57dfe08511@openvz.org>
+ <d8a9e9c6-856e-1502-95ac-abf9700ff568@openvz.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220626180734.287137-1-martin@kaiser.cx>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <d8a9e9c6-856e-1502-95ac-abf9700ff568@openvz.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 08:07:34PM +0200, Martin Kaiser wrote:
-> The receive_disconnect function always returns _SUCCESS. None of the
-> callers checks the return value. We can remove it.
-> 
-> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-> ---
->  drivers/staging/r8188eu/core/rtw_mlme_ext.c    | 5 ++---
->  drivers/staging/r8188eu/include/rtw_mlme_ext.h | 3 +--
->  2 files changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-> index cce0575e93b7..fc6e06d7b5ca 100644
-> --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-> +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-> @@ -6191,14 +6191,14 @@ void start_clnt_assoc(struct adapter *padapter)
->  	set_link_timer(pmlmeext, REASSOC_TO);
->  }
->  
-> -unsigned int receive_disconnect(struct adapter *padapter, unsigned char *MacAddr, unsigned short reason)
-> +void receive_disconnect(struct adapter *padapter, unsigned char *MacAddr, unsigned short reason)
->  {
->  	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
->  	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
->  
->  	/* check A3 */
->  	if (!(!memcmp(MacAddr, get_my_bssid(&pmlmeinfo->network), ETH_ALEN)))
-> -		return _SUCCESS;
-> +		return;
+On Mon, Jun 27, 2022 at 05:12:55AM +0300, Vasily Averin wrote:
+> When cgroup_mkdir reaches the limits of the cgroup hierarchy, it should
+> not return -EAGAIN, but instead react similarly to reaching the global
+> limit.
 
-Shouldn't this check return an error instead of success?  If not, what
-exactly is this checking this for?
+While I'm not necessarily against this change, I find the rationale to
+be somewhat lacking. Can you please elaborate why -ENOSPC is the right
+one while -EAGAIN is incorrect?
 
-thanks,
+Thanks.
 
-greg k-h
+-- 
+tejun

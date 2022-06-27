@@ -2,224 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8A055DEF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 179F855D81B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241170AbiF0Vbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 17:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
+        id S240757AbiF0VfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 17:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237676AbiF0Vb3 (ORCPT
+        with ESMTP id S234524AbiF0Ve5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 17:31:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94A0BCB0;
-        Mon, 27 Jun 2022 14:31:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72A8A617E5;
-        Mon, 27 Jun 2022 21:31:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C67C341CC;
-        Mon, 27 Jun 2022 21:31:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656365487;
-        bh=pFl5jXI+R+FItl0KPDFfejeWnXc79fJW2HdbYJ9gCA8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=TwseWLeFDqNy+Np5qHxdGmckLk7PGJxNAVdMEMAh8E+kJASSQSNEq8KqEEJ1CtphS
-         bVx3xEiMpozqHiXZSETG+MwqJjWWgTqGS//NCYUMmXl2+7NL7Tyqgcayd9+J20G2L9
-         3nsyPfXT8b5xZKBL2eO+e8VVjq4qD5J3nOh7oakUzJZyx3tw13+CVywhNh8oAsMVWS
-         DyYEhWzbLhNgOAwKE0jTlP+pfWJjREWdhBe6rr799cgN8DZlg/hbetmm6YtuCWpuMF
-         BSkGPU+dqW/z1DrLDmI4t4rZiyYdAE/0Kxsb9umZLT2fo/umIdVdDghkLz+AS7wBHW
-         iKoMX2i6wVmyg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6905D5C04B1; Mon, 27 Jun 2022 14:31:26 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 14:31:26 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH v2 1/1] rcu/kvfree: Update KFREE_DRAIN_JIFFIES interval
-Message-ID: <20220627213126.GO1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220627195353.1575285-1-urezki@gmail.com>
+        Mon, 27 Jun 2022 17:34:57 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8F7336;
+        Mon, 27 Jun 2022 14:34:55 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id b23so12535242ljh.7;
+        Mon, 27 Jun 2022 14:34:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=r50n64wyDXc98klCxenqB007ebeUTjgGTq3cHnewLs4=;
+        b=eTl8RIM33/VhG6tyN0u1F7fh7bD9vwV9Nzl/DTA5Ny2T+C6Zz9CjWOXxw7tIRCfdSF
+         JYJ+vK6VW6ow6XLR5ZnJoODpvohnt2Z+3t+vZDZHvM57s96TKZNFnlBSRDHDoYRnNnyQ
+         N0k44RLYsM83fxNhFomNU3IiMDIB4LHzbT4UomKmLLPc0fcxeMBuZkZoILf+4d9CFzu5
+         UGEjxpB5ZDTuXmtB4swbT0dDHmqosyfnMddfaHNphkAj8y6jxGlSDFIcL0nXRbbh3k9b
+         NayiDEFJxxACHU3nhoe6LL8qnnNmGMIoh2ujOpxj9PuVm+6S9FPq9eujRABge7XAKiJx
+         lZVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=r50n64wyDXc98klCxenqB007ebeUTjgGTq3cHnewLs4=;
+        b=IU0snQ5YY2kXt4pHW7rFqfovGK9wGTngUud7fRrjSna+RyM/Gdqb7cycuLGWHAR8xL
+         aIyh+jB+mk5C7mf0HBWnt1R8p80X1ICyuQYbjF+ExT5zwFe784NqgpT65lO9kLQE96d9
+         DKc3GMi6yVWE8R/fJGpQSZA2MijOT9KrYO6XxxVXX/UYUZtCRecO95OY2qRIP0VCv+8X
+         ro5rv5+uBEOCnU4TJpciR3JzdweJemjSOmM9tuod+G79flpewNbtoPY1aJN8kg8OPUuy
+         RhdYbuhjXPtXqpXz3h45PH/90pOqrMm7FcnIwPxSWwsVhHJW7X5N9qwwpDSUJzWCBWhm
+         JqpQ==
+X-Gm-Message-State: AJIora9/qIeuzYtahJD2olyalzvHCwQs0guxLGtuvmOWWmsiBFdpx97x
+        Pus2pltCaegtBdy8PcsPDuA=
+X-Google-Smtp-Source: AGRyM1s2Xww9mZJQuItbTSCpLvPnTOre5lxdTZAquDOY9Sz5QQprbSClbPdC4vgd++PPS48AGvyOcw==
+X-Received: by 2002:a2e:702:0:b0:253:bc1a:8a8c with SMTP id 2-20020a2e0702000000b00253bc1a8a8cmr7961986ljh.128.1656365693778;
+        Mon, 27 Jun 2022 14:34:53 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id y1-20020ac24461000000b0047fb3ea0659sm1929044lfl.292.2022.06.27.14.34.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 14:34:53 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 00:34:50 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Heng Sia <jee.heng.sia@intel.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 05/16] dt-bindings: dma: add Canaan k210 to Synopsys
+ DesignWare DMA
+Message-ID: <20220627213450.ukqai4bsjzcwhnlp@mobilestation>
+References: <20220627194003.2395484-1-mail@conchuod.ie>
+ <20220627194003.2395484-6-mail@conchuod.ie>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220627195353.1575285-1-urezki@gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220627194003.2395484-6-mail@conchuod.ie>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 09:53:53PM +0200, Uladzislau Rezki (Sony) wrote:
-> Currently the monitor work is scheduled with a fixed interval that
-> is HZ/20 or each 50 milliseconds. The drawback of such approach is
-> a low utilization of page slot in some scenarios. The page can store
-> up to 512 records. For example on Android system it can look like:
-
-I was looking at queuing this one, but we need a bit more data.  In
-the meantime, here is my wordsmithing of the above paragraph:
-
-Currently the monitor work is scheduled with a fixed interval of HZ/20,
-which is roughly 50 milliseconds. The drawback of this approach is
-low utilization of the 512 page slots in scenarios with infrequence
-kvfree_rcu() calls.  For example on an Android system:
-
-> <snip>
->   kworker/3:0-13872   [003] .... 11286.007048: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=1
->   kworker/3:0-13872   [003] .... 11286.015638: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
->   kworker/1:2-20434   [001] .... 11286.051230: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
->   kworker/1:2-20434   [001] .... 11286.059322: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=2
->   kworker/0:1-20052   [000] .... 11286.095295: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=2
->   kworker/0:1-20052   [000] .... 11286.103418: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=1
->   kworker/2:3-14372   [002] .... 11286.135155: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
->   kworker/2:3-14372   [002] .... 11286.135198: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
->   kworker/1:2-20434   [001] .... 11286.155377: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=5
->   kworker/2:3-14372   [002] .... 11286.167181: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=5
->   kworker/1:2-20434   [001] .... 11286.179202: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000008ef95e14 nr_records=1
->   kworker/2:3-14372   [002] .... 11286.187398: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000c597d297 nr_records=6
->   kworker/3:0-13872   [003] .... 11286.187445: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000050bf92e2 nr_records=3
->   kworker/1:2-20434   [001] .... 11286.198975: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=4
->   kworker/1:2-20434   [001] .... 11286.207203: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=4
-> <snip>
+On Mon, Jun 27, 2022 at 08:39:53PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> where a page only carries few records to reclaim a memory. In order
-> to improve batching and make utilization more efficient the patch sets
-> a drain interval to 1 second as default one. When a flood is detected
-> an interval is adjusted in a way that a reclaim work is re-scheduled
-> on a next timer jiffy.
-
-And of the above paragraph:
-
-Out of 512 slots, in all cases, fewer than 10 were actually used.
-In order to improve batching and make utilization more efficient this
-commit sets a drain interval to a fixed 1-second interval. Floods are
-detected when a page fills quickly, and in that case, the reclaim work
-is re-scheduled for the next scheduling-clock tick (jiffy).
-
----
-
-But what we need now is a trace like the one above showing higher utilization
-of the pages.  Could you please supply this?
-
-> - default -
-> Total time taken by all kfree'ers: 11510245312 ns, loops: 10000, batches: 1553, memory footprint: 70MB
-> Total time taken by all kfree'ers: 9813329636  ns, loops: 10000, batches: 1544, memory footprint: 67MB
-> Total time taken by all kfree'ers: 10085206318 ns, loops: 10000, batches: 1499, memory footprint: 156MB
-> Total time taken by all kfree'ers: 9582207782  ns, loops: 10000, batches: 1456, memory footprint: 103MB
-> Total time taken by all kfree'ers: 9872195750  ns, loops: 10000, batches: 1519, memory footprint: 105MB
-> Total time taken by all kfree'ers: 9574438300  ns, loops: 10000, batches: 1480, memory footprint: 101MB
-> Total time taken by all kfree'ers: 9990015265  ns, loops: 10000, batches: 1489, memory footprint: 127MB
-> Total time taken by all kfree'ers: 9978971689  ns, loops: 10000, batches: 1455, memory footprint: 94MB
-> Total time taken by all kfree'ers: 10357628090 ns, loops: 10000, batches: 1456, memory footprint: 64MB
-> Total time taken by all kfree'ers: 9838469975  ns, loops: 10000, batches: 1448, memory footprint: 131MB
+> The Canaan k210 apparently has a Sysnopsys Designware AXI DMA
+> controller, but according to the documentation & devicetree it has 6
+> interrupts rather than the standard one. Add a custom compatible that
+> supports the 6 interrupt configuration which falls back to the standard
+> binding which is currently the one in use in the devicetree entry.
 > 
-> - patch -
-> Total time taken by all kfree'ers: 8488575321  ns, loops: 10000, batches: 1735, memory footprint: 82MB
-> Total time taken by all kfree'ers: 9256401034  ns, loops: 10000, batches: 1762, memory footprint: 76MB
-> Total time taken by all kfree'ers: 9198011994  ns, loops: 10000, batches: 1751, memory footprint: 82MB
-> Total time taken by all kfree'ers: 10590540622 ns, loops: 10000, batches: 1540, memory footprint: 94MB
-> Total time taken by all kfree'ers: 9953902918  ns, loops: 10000, batches: 1638, memory footprint: 89MB
-> Total time taken by all kfree'ers: 10176669464 ns, loops: 10000, batches: 1613, memory footprint: 84MB
-> Total time taken by all kfree'ers: 9387490978  ns, loops: 10000, batches: 1762, memory footprint: 85MB
-> Total time taken by all kfree'ers: 9530535341  ns, loops: 10000, batches: 1781, memory footprint: 66MB
-> Total time taken by all kfree'ers: 9945442340  ns, loops: 10000, batches: 1758, memory footprint: 68MB
-> Total time taken by all kfree'ers: 9188848287  ns, loops: 10000, batches: 1781, memory footprint: 67MB
-> 
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> Link: https://canaan-creative.com/wp-content/uploads/2020/03/kendryte_standalone_programming_guide_20190311144158_en.pdf #Page 58
+
+I believe what you've got here is the per-channel IRQs, which is
+activated for the DW AXI DMAC by setting IP-core synthesize parameter
+DMAX_INTR_IO_TYPE=1 (CHANNEL AND COMMONREG). That's why there are six
+IRQ signals and six DMA-channels available.
+
+Seeing such setting isn't the Canaan k210 specific, but is the DW AXI
+DMA controller common property, what would be right in this case is to
+unconditionally extend the number of IRQs in the DT-bindings schema.
+
+Please note the DW AXI DMAC driver currently doesn't support the
+per-channel IRQs. So most likely the DMA will only work with using the
+channel 0 only.
+
+-Sergey
+
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->  kernel/rcu/tree.c | 28 ++++++++++++++++++++++++----
->  1 file changed, 24 insertions(+), 4 deletions(-)
+>  .../bindings/dma/snps,dw-axi-dmac.yaml        | 35 ++++++++++++++-----
+>  1 file changed, 26 insertions(+), 9 deletions(-)
 > 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index fd16c0b46d9e..c11670ba008e 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -3249,7 +3249,7 @@ EXPORT_SYMBOL_GPL(call_rcu);
+> diff --git a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
+> index 4324a94b26b2..bc85598151ef 100644
+> --- a/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
+> +++ b/Documentation/devicetree/bindings/dma/snps,dw-axi-dmac.yaml
+> @@ -18,9 +18,13 @@ allOf:
 >  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - snps,axi-dma-1.01a
+> -      - intel,kmb-axi-dma
+> +    oneOf:
+> +      - items:
+> +          - const: canaan,k210-axi-dma
+> +          - const: snps,axi-dma-1.01a
+> +      - enum:
+> +          - snps,axi-dma-1.01a
+> +          - intel,kmb-axi-dma
 >  
->  /* Maximum number of jiffies to wait before draining a batch. */
-> -#define KFREE_DRAIN_JIFFIES (HZ / 50)
-> +#define KFREE_DRAIN_JIFFIES (HZ)
->  #define KFREE_N_BATCHES 2
->  #define FREE_N_CHANNELS 2
+>    reg:
+>      minItems: 1
+> @@ -33,9 +37,6 @@ properties:
+>        - const: axidma_ctrl_regs
+>        - const: axidma_apb_regs
 >  
-> @@ -3510,6 +3510,26 @@ need_offload_krc(struct kfree_rcu_cpu *krcp)
->  	return !!krcp->head;
->  }
+> -  interrupts:
+> -    maxItems: 1
+> -
+>    clocks:
+>      items:
+>        - description: Bus Clock
+> @@ -92,6 +93,22 @@ properties:
+>      minimum: 1
+>      maximum: 256
 >  
-> +static void
-> +schedule_delayed_monitor_work(struct kfree_rcu_cpu *krcp)
-> +{
-> +	long delay, delay_left;
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: canaan,k210-axi-dma
 > +
-> +	delay = READ_ONCE(krcp->count) >= KVFREE_BULK_MAX_ENTR ?
-> +		1:KFREE_DRAIN_JIFFIES;
-
-The above fits as one line in 100 characters, like this:
-
-	delay = READ_ONCE(krcp->count) >= KVFREE_BULK_MAX_ENTR ?  1 : KFREE_DRAIN_JIFFIES;
-
-Many of the blank lines below this point in this function are better
-removed.
-
-Other than that, looks good!  Could you please resend with the added
-trace with the patch applied?
-
-							Thanx, Paul
-
+> +then:
+> +  properties:
+> +    interrupts:
+> +      maxItems: 6
 > +
-> +	if (delayed_work_pending(&krcp->monitor_work)) {
-> +		delay_left = krcp->monitor_work.timer.expires - jiffies;
+> +else:
+> +  properties:
+> +    interrupts:
+> +      maxItems: 1
 > +
-> +		if (delay < delay_left)
-> +			mod_delayed_work(system_wq, &krcp->monitor_work, delay);
-> +
-> +		return;
-> +	}
-> +
-> +	queue_delayed_work(system_wq, &krcp->monitor_work, delay);
-> +}
-> +
->  /*
->   * This function is invoked after the KFREE_DRAIN_JIFFIES timeout.
->   */
-> @@ -3567,7 +3587,7 @@ static void kfree_rcu_monitor(struct work_struct *work)
->  	// work to repeat an attempt. Because previous batches are
->  	// still in progress.
->  	if (need_offload_krc(krcp))
-> -		schedule_delayed_work(&krcp->monitor_work, KFREE_DRAIN_JIFFIES);
-> +		schedule_delayed_monitor_work(krcp);
+>  required:
+>    - compatible
+>    - reg
+> @@ -105,7 +122,7 @@ required:
+>    - snps,priority
+>    - snps,block-size
 >  
->  	raw_spin_unlock_irqrestore(&krcp->lock, flags);
->  }
-> @@ -3755,7 +3775,7 @@ void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
+> -additionalProperties: false
+> +unevaluatedProperties: false
 >  
->  	// Set timer to drain after KFREE_DRAIN_JIFFIES.
->  	if (rcu_scheduler_active == RCU_SCHEDULER_RUNNING)
-> -		schedule_delayed_work(&krcp->monitor_work, KFREE_DRAIN_JIFFIES);
-> +		schedule_delayed_monitor_work(krcp);
->  
->  unlock_return:
->  	krc_this_cpu_unlock(krcp, flags);
-> @@ -3831,7 +3851,7 @@ void __init kfree_rcu_scheduler_running(void)
->  
->  		raw_spin_lock_irqsave(&krcp->lock, flags);
->  		if (need_offload_krc(krcp))
-> -			schedule_delayed_work_on(cpu, &krcp->monitor_work, KFREE_DRAIN_JIFFIES);
-> +			schedule_delayed_monitor_work(krcp);
->  		raw_spin_unlock_irqrestore(&krcp->lock, flags);
->  	}
->  }
+>  examples:
+>    - |
+> @@ -113,12 +130,12 @@ examples:
+>       #include <dt-bindings/interrupt-controller/irq.h>
+>       /* example with snps,dw-axi-dmac */
+>       dmac: dma-controller@80000 {
+> -         compatible = "snps,axi-dma-1.01a";
+> +         compatible = "canaan,k210-axi-dma", "snps,axi-dma-1.01a";
+>           reg = <0x80000 0x400>;
+>           clocks = <&core_clk>, <&cfgr_clk>;
+>           clock-names = "core-clk", "cfgr-clk";
+>           interrupt-parent = <&intc>;
+> -         interrupts = <27>;
+> +         interrupts = <27>, <28>, <29>, <30>, <31>, <32>;
+>           #dma-cells = <1>;
+>           dma-channels = <4>;
+>           snps,dma-masters = <2>;
 > -- 
-> 2.30.2
+> 2.36.1
 > 

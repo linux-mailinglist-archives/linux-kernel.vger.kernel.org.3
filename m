@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B749555DF84
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B078255DE66
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbiF0JIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59950 "EHLO
+        id S233518AbiF0JIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232620AbiF0JIU (ORCPT
+        with ESMTP id S233481AbiF0JIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:08:20 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8AB38A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:08:19 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id q5so6701967wrc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:08:19 -0700 (PDT)
+        Mon, 27 Jun 2022 05:08:37 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBEC3B58
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:08:35 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id cw10so17754532ejb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:08:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=EK8ZKVC4vXKP44XZRmB3DEh4s34C/LuW//SP9lrTtxA=;
-        b=Iu4BSJ9vx3AG/xKmrAnhxS01VXfFI+mCtc2w9a/Anxo873GlqOV+sdZJZPwJY++P4R
-         W7/zvP8P1ZjxxHvfQcTU5XmUoLrb/iVDgD5Y+qSyubQBge+FVD5ViCObPyag13+Qbpsz
-         cDluqrCRzhfcSxi2LXGxZSTAYsgvNC5MhjJk57+DaHZfQGub9sHARFvAu4WqA73uC6mX
-         571KUvYqg3Zzcg4JvW/3ZkzOp1bdJr5tgzz/SMcxccDYl+oxqDmtuTecSqU6t3mSJ36+
-         2Ty8nb1/AW/ir3bw95wPXIOwFN1jWgyXwfkEDjWo+zvFLe8wDNd55FgRG6//DVisY5cb
-         588g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=EK8ZKVC4vXKP44XZRmB3DEh4s34C/LuW//SP9lrTtxA=;
-        b=RsEiWri4zCceLJTvszGQYgKqtVtYcl0/K+/E/28UFAF2Y1yZGgql53Nvrh/ch8wTQ6
-         6Gpyf7D+YS4Y4k7tZ/ILXOLGy9zACeAzEJxiLuc4njd8zB6+KrHiwoENOhbIrxauG6K6
-         VhrBPkoHVAia4JF6I1FNYP/QiWkdBK0INorvsHYkdw7z1/8Gd6gCDoOROsC8KSJI3Z6g
-         kaTY912+6NMxb6q/0hnwniNiECNGYuuku5vrjExygPDQeA6K0UfwVYDXpTgwBPXPoBeH
-         UJm85IbHZH42qnFhwrGOpekLXxVLwKwwYwl/ywPwIfuiHX+MaHUQPvhkCw5PKX0PGRDq
-         7nnQ==
-X-Gm-Message-State: AJIora8rwin+TTjc0IMPe7j1SaKGrInARFZYm9y2noJKARM325QuwBbC
-        N1ydxyM9QPw/6M5ich0sWKLZKn+7ZxCeKg==
-X-Google-Smtp-Source: AGRyM1vV3ajVvpW2wTwwVIQWDTGvJ7BUl6Ue39v8aMt4h8x3HEjB5qy8tiHZ3PHYiEV2E5UndzlWBA==
-X-Received: by 2002:a05:6000:15c6:b0:21b:ccda:fc69 with SMTP id y6-20020a05600015c600b0021bccdafc69mr5018850wry.411.1656320898449;
-        Mon, 27 Jun 2022 02:08:18 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id t11-20020adff60b000000b0021b962f4256sm9677219wrp.80.2022.06.27.02.08.17
+        bh=k1e7Wwe1AjCbXe7sromgO+mILN6P9Y2vdSpGp2oCkCk=;
+        b=b8qCSWEOKka9s84N0wcEJ/GTZwusewGy5IsaK2F9Q4UFzB6+y+8ozRjXh89hAvLlMU
+         K12dt4t2k478igf5w1imCsx/nqsNQMxOs1sQIJ30nQnGe+id+s6HkddlqiCTvSHJSysA
+         9g99nL0Wk1M/DhvRrpm4pO91F74cEKsE6GmoE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=k1e7Wwe1AjCbXe7sromgO+mILN6P9Y2vdSpGp2oCkCk=;
+        b=nt8MoRvYvOMZXH4s9ouvPN4NYOOPCvip8mqYQYyqYQ8a0vOLLyNVAYkCG2uCNk3XQg
+         ihH+ZKFd/015iGmHkNi33RGRTKNZ37UE0iRbA6w2zvBdLVCWwdGksfzIfYgTWhn2pHjE
+         +wgnCAvQ1ZpmVNmh0V/r4GXgtct3XneXy679AkuK3JBW3n6RA8bJ4TeOEuktL4av9zx2
+         IRSZdocxX+gst6V5YLG5zaxNdjdnd02MzXgpsnzdCDPp6SzfqxJmQm/lFAL5BNjyI+vF
+         PZX/peOMHTNCt1wkEoIUNFBygDS8DMPdNHXcf59+dEznCsqh52u2UEr4Mt1kFC7nXY4X
+         3bAw==
+X-Gm-Message-State: AJIora+5u5Y7U5KfiDyLM1UzCQHm2iNOJhdU/BT/RzO9yl04s+90ntOq
+        BM61xDRICP9un1be7H86HOJlNA==
+X-Google-Smtp-Source: AGRyM1vFhPN1meHKKImI2keGZpwl6qEWNsZwQgQPLYnEouybFA2jLTjk/b7ksAjiA+H1CLyv+UeX1w==
+X-Received: by 2002:a17:907:7811:b0:6ef:a896:b407 with SMTP id la17-20020a170907781100b006efa896b407mr11583984ejc.645.1656320914396;
+        Mon, 27 Jun 2022 02:08:34 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id b7-20020a50e787000000b0042ab4e20543sm7225848edn.48.2022.06.27.02.08.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 02:08:17 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 10:08:16 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v1 03/11] mfd: intel_soc_pmic_bxtwc: Convert to use
- platform_get/set_drvdata()
-Message-ID: <YrlzgJq6FA+BvtOZ@google.com>
-References: <20220616165823.4919-1-andriy.shevchenko@linux.intel.com>
- <20220616165823.4919-3-andriy.shevchenko@linux.intel.com>
+        Mon, 27 Jun 2022 02:08:33 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 11:08:32 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Subject: Re: [PATCH v2 7/8] dma-buf: remove useless FMODE_LSEEK flag
+Message-ID: <YrlzkAlheCR0ZMuO@phenom.ffwll.local>
+Mail-Followup-To: "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+References: <20220625110115.39956-1-Jason@zx2c4.com>
+ <20220625110115.39956-8-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220616165823.4919-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220625110115.39956-8-Jason@zx2c4.com>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,23 +81,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022, Andy Shevchenko wrote:
-
-> We have the specific helpers for platform device to set and get
-> its driver data. Convert driver to use them instead of open coded
-> variants.
+On Sat, Jun 25, 2022 at 01:01:14PM +0200, Jason A. Donenfeld wrote:
+> This is already set by anon_inode_getfile(), since dma_buf_fops has
+> non-NULL ->llseek, so we don't need to set it here too.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> Cc: Christian K�nig <christian.koenig@amd.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+
+I'm assuming this is part of a vfs cleanup and lands through that tree?
+For that:
+
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+
 > ---
->  drivers/mfd/intel_soc_pmic_bxtwc.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-
-For my own reference (apply this as-is to your sign-off block):
-
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+>  drivers/dma-buf/dma-buf.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index 32f55640890c..3f08e0b960ec 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -549,7 +549,6 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
+>  		goto err_dmabuf;
+>  	}
+>  
+> -	file->f_mode |= FMODE_LSEEK;
+>  	dmabuf->file = file;
+>  
+>  	mutex_init(&dmabuf->lock);
+> -- 
+> 2.35.1
+> 
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

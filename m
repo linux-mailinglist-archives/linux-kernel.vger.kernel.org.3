@@ -2,47 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D3055D8AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E446D55CD36
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234759AbiF0LYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
+        id S238678AbiF0Lw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234729AbiF0LYU (ORCPT
+        with ESMTP id S238393AbiF0LsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:24:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B185D8F;
-        Mon, 27 Jun 2022 04:24:15 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE74BE30;
+        Mon, 27 Jun 2022 04:41:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0FFCB81116;
-        Mon, 27 Jun 2022 11:24:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E96D1C3411D;
-        Mon, 27 Jun 2022 11:24:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1F1F611AE;
+        Mon, 27 Jun 2022 11:41:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5186C3411D;
+        Mon, 27 Jun 2022 11:41:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329052;
-        bh=NZwEGq5COlaiXka4yBKee4vS+6t6vmFblG7772Sy7vA=;
+        s=korg; t=1656330063;
+        bh=n1kN6QUvuP5FKMu+ird+MiX9I1OOaASG6N4jrNYqVUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QqjMIly8iUJv52vr1HI5zH8jH5ARIUAz2EQb+or9kZvTo7tzcOFrSxcbggC6oAZhJ
-         flhHq93i+fHbNQ0jh12rQwCU0qKgtYp5/u2E6w1211tILykhn24686EGwPN09acg4w
-         zLOVkHU/H0LS3TqB1N+EYPWq2hZkHrKUDAYtcgRo=
+        b=uuWR2vCGy7n/zFCUklVk6qnSipATzZX3AKhQxOMf3BOHWyc66D7jP1QRIo9y4h+3J
+         gthcJVJJI6vRNF+Z0RpTa01yU9Uw+i0RgVbQqqohNuLS2Zh+cJEvoMZccUc6TPLGQv
+         1AiIrWjwa5dgjWmvL76RNJuHa113O2v8BbVn2iHc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Thomas Richter <tmricht@linux.ibm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Disha Goel <disgoel@linux.vnet.ibm.com>,
+        Jiri Olsa <jolsa@kernel.org>, Kajol Jain <kjain@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nageswara R Sastry <rnsastry@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 033/102] igb: fix a use-after-free issue in igb_clean_tx_ring
+Subject: [PATCH 5.18 071/181] perf test topology: Use !strncmp(right platform) to fix guest PPC comparision check
 Date:   Mon, 27 Jun 2022 13:20:44 +0200
-Message-Id: <20220627111934.447049241@linuxfoundation.org>
+Message-Id: <20220627111946.622947848@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,91 +63,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
 
-[ Upstream commit 3f6a57ee8544ec3982f8a3cbcbf4aea7d47eb9ec ]
+[ Upstream commit b236371421df57b93fc49c4b9d0e53bd1aab2b2e ]
 
-Fix the following use-after-free bug in igb_clean_tx_ring routine when
-the NIC is running in XDP mode. The issue can be triggered redirecting
-traffic into the igb NIC and then closing the device while the traffic
-is flowing.
+commit cfd7092c31aed728 ("perf test session topology: Fix test to skip
+the test in guest environment") added check to skip the testcase if the
+socket_id can't be fetched from topology info.
 
-[   73.322719] CPU: 1 PID: 487 Comm: xdp_redirect Not tainted 5.18.3-apu2 #9
-[   73.330639] Hardware name: PC Engines APU2/APU2, BIOS 4.0.7 02/28/2017
-[   73.337434] RIP: 0010:refcount_warn_saturate+0xa7/0xf0
-[   73.362283] RSP: 0018:ffffc9000081f798 EFLAGS: 00010282
-[   73.367761] RAX: 0000000000000000 RBX: ffffc90000420f80 RCX: 0000000000000000
-[   73.375200] RDX: ffff88811ad22d00 RSI: ffff88811ad171e0 RDI: ffff88811ad171e0
-[   73.382590] RBP: 0000000000000900 R08: ffffffff82298f28 R09: 0000000000000058
-[   73.390008] R10: 0000000000000219 R11: ffffffff82280f40 R12: 0000000000000090
-[   73.397356] R13: ffff888102343a40 R14: ffff88810359e0e4 R15: 0000000000000000
-[   73.404806] FS:  00007ff38d31d740(0000) GS:ffff88811ad00000(0000) knlGS:0000000000000000
-[   73.413129] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   73.419096] CR2: 000055cff35f13f8 CR3: 0000000106391000 CR4: 00000000000406e0
-[   73.426565] Call Trace:
-[   73.429087]  <TASK>
-[   73.431314]  igb_clean_tx_ring+0x43/0x140 [igb]
-[   73.436002]  igb_down+0x1d7/0x220 [igb]
-[   73.439974]  __igb_close+0x3c/0x120 [igb]
-[   73.444118]  igb_xdp+0x10c/0x150 [igb]
-[   73.447983]  ? igb_pci_sriov_configure+0x70/0x70 [igb]
-[   73.453362]  dev_xdp_install+0xda/0x110
-[   73.457371]  dev_xdp_attach+0x1da/0x550
-[   73.461369]  do_setlink+0xfd0/0x10f0
-[   73.465166]  ? __nla_validate_parse+0x89/0xc70
-[   73.469714]  rtnl_setlink+0x11a/0x1e0
-[   73.473547]  rtnetlink_rcv_msg+0x145/0x3d0
-[   73.477709]  ? rtnl_calcit.isra.0+0x130/0x130
-[   73.482258]  netlink_rcv_skb+0x8d/0x110
-[   73.486229]  netlink_unicast+0x230/0x340
-[   73.490317]  netlink_sendmsg+0x215/0x470
-[   73.494395]  __sys_sendto+0x179/0x190
-[   73.498268]  ? move_addr_to_user+0x37/0x70
-[   73.502547]  ? __sys_getsockname+0x84/0xe0
-[   73.506853]  ? netlink_setsockopt+0x1c1/0x4a0
-[   73.511349]  ? __sys_setsockopt+0xc8/0x1d0
-[   73.515636]  __x64_sys_sendto+0x20/0x30
-[   73.519603]  do_syscall_64+0x3b/0x80
-[   73.523399]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   73.528712] RIP: 0033:0x7ff38d41f20c
-[   73.551866] RSP: 002b:00007fff3b945a68 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
-[   73.559640] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff38d41f20c
-[   73.567066] RDX: 0000000000000034 RSI: 00007fff3b945b30 RDI: 0000000000000003
-[   73.574457] RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000000
-[   73.581852] R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff3b945ab0
-[   73.589179] R13: 0000000000000000 R14: 0000000000000003 R15: 00007fff3b945b30
-[   73.596545]  </TASK>
-[   73.598842] ---[ end trace 0000000000000000 ]---
+But the condition check uses strncmp which should be changed to !strncmp
+and to correctly match platform.
 
-Fixes: 9cbc948b5a20c ("igb: add XDP support")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Link: https://lore.kernel.org/r/e5c01d549dc37bff18e46aeabd6fb28a7bcf84be.1655388571.git.lorenzo@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fix this condition check.
+
+Fixes: cfd7092c31aed728 ("perf test session topology: Fix test to skip the test in guest environment")
+Reported-by: Thomas Richter <tmricht@linux.ibm.com>
+Signed-off-by: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+Acked-by: Ian Rogers <irogers@google.com>
+Cc: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Cc: Disha Goel <disgoel@linux.vnet.ibm.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Kajol Jain <kjain@linux.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nageswara R Sastry <rnsastry@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220610135939.63361-1-atrajeev@linux.vnet.ibm.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/igb/igb_main.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/perf/tests/topology.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 5e67c9c119d2..758e468e677a 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -4813,8 +4813,11 @@ static void igb_clean_tx_ring(struct igb_ring *tx_ring)
- 	while (i != tx_ring->next_to_use) {
- 		union e1000_adv_tx_desc *eop_desc, *tx_desc;
- 
--		/* Free all the Tx ring sk_buffs */
--		dev_kfree_skb_any(tx_buffer->skb);
-+		/* Free all the Tx ring sk_buffs or xdp frames */
-+		if (tx_buffer->type == IGB_TYPE_SKB)
-+			dev_kfree_skb_any(tx_buffer->skb);
-+		else
-+			xdp_return_frame(tx_buffer->xdpf);
- 
- 		/* unmap skb header data */
- 		dma_unmap_single(tx_ring->dev,
+diff --git a/tools/perf/tests/topology.c b/tools/perf/tests/topology.c
+index d23a9e322ff5..0b4f61b6cc6b 100644
+--- a/tools/perf/tests/topology.c
++++ b/tools/perf/tests/topology.c
+@@ -115,7 +115,7 @@ static int check_cpu_topology(char *path, struct perf_cpu_map *map)
+ 	 * physical_package_id will be set to -1. Hence skip this
+ 	 * test if physical_package_id returns -1 for cpu from perf_cpu_map.
+ 	 */
+-	if (strncmp(session->header.env.arch, "powerpc", 7)) {
++	if (!strncmp(session->header.env.arch, "ppc64le", 7)) {
+ 		if (cpu__get_socket_id(perf_cpu_map__cpu(map, 0)) == -1)
+ 			return TEST_SKIP;
+ 	}
 -- 
 2.35.1
 

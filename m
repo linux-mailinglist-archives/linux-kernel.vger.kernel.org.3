@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E228955C592
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811D655DF7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237944AbiF0PUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        id S238058AbiF0PUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237827AbiF0PTY (ORCPT
+        with ESMTP id S237854AbiF0PTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:19:24 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386E912AE1;
-        Mon, 27 Jun 2022 08:19:23 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z19so13492295edb.11;
-        Mon, 27 Jun 2022 08:19:23 -0700 (PDT)
+        Mon, 27 Jun 2022 11:19:25 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B640615FD7;
+        Mon, 27 Jun 2022 08:19:24 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id cf14so13530052edb.8;
+        Mon, 27 Jun 2022 08:19:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=y9fLCoDjX9rrrX0oj8XNyUYP/ZsreaQRf2qQi5uPknQ=;
-        b=pLeurTZ6VbuBl15KuR6fVVIpAjrXu1MWRc6f+75rhPwq1s/LHegop0H73efOqzZWeB
-         CbJQjcqz3VkGTR7z3xshixE5nkH/B/ieCZwEBYcIWKRo6lcE4RTcNpzfxRXl35qSlMNE
-         8tS5spLfrlEfUOmXeycqtITRMggZ3jH5t2XTTV1Lds02cA0otEdxG8NjKn7L949ZFWnu
-         xEpPXfRHcXvXKpVd9e3YcsLhMustaOrZzoWhG+uvlBrxiZknjRwz7WJTPL/He+ToA2b8
-         /uPELxBnRTiKstgXGA96w0h3oGZubgW4u9qAI4UkCHSW9EWy581uHofSQwxmIu09oIlt
-         MyQQ==
+        bh=iUi8PRt1C1hxriDLpqIJwYgJ7+Ti+qx1RIsoZc3JWOw=;
+        b=bfzJZMSrLClLHbt1G5H03y4ulCRznQDgHU77oL1p5y+rwFWsnrknNBj6PuVqNX8lQg
+         b87b76r1ryfwhAM12BB6huxCzsSmx1lsNvI9qlC4qWuuxyAomhpErXHXeuP++MNpADL2
+         ukgcOjokHVkjqYoHnWjBEaeSK07tNIBNPcZq/o2cbqmRLaF835o7Ye/CIo7HmW4igtWl
+         KfTANRZA2xfXOqUnknz1lffuDipWm7wySS6Ub/TW/DdpiRmP2zEH02d4qxiHWWXmSELO
+         B9nEwzC1K00J3XpqbbKL9ov4XDLd5Mv0oZn7487IvvdbR219B7MvljhSXXIVMocEvaPq
+         y0JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=y9fLCoDjX9rrrX0oj8XNyUYP/ZsreaQRf2qQi5uPknQ=;
-        b=RAoB8j4Y0l61Svb0L3eLqwlQDX6B15ruP3H8MJF2BKGqJm8cTGByQTlvXRUSlZmpRG
-         jw7nG8n39MC18eVdTP1lBcsNYJSgq+dNjdZW11fprfxyeQ7Y/kKTbnajE7ioYgSfgH0i
-         mEr8t8542JUL4ru72zcVRStnzclayks8ircRAdUyG30timOGdaZIJoZbwVyMcVAr7qLg
-         7YYIMFg8IdyQ5lpXdby+1+YwcyyS0K95GRV4eeEgItzqQuPM+lGngl0JDbz0eX9FdXg1
-         ajMjBD7+vNGmXddeaP6MY2ZbdLlitRj59vXRW+v3I7CwkiPR7KmeC891ACx7tqVw45zG
-         L0UA==
-X-Gm-Message-State: AJIora+6WSe5J9fApRF95bxt3+YPBVRUk0iqT0jMbSAlGI++tgtEfghY
-        nflDfHJxkDwAGRVMrqFRj5I=
-X-Google-Smtp-Source: AGRyM1uTtKgDwut5RI26tx1pUpEvODCSgxKJR29m8yG2RZvqCW1pnlbj1xuBuqOptkfmmuXsD7xo0g==
-X-Received: by 2002:a50:cb8b:0:b0:435:68a3:4d40 with SMTP id k11-20020a50cb8b000000b0043568a34d40mr17552648edi.394.1656343161640;
-        Mon, 27 Jun 2022 08:19:21 -0700 (PDT)
+        bh=iUi8PRt1C1hxriDLpqIJwYgJ7+Ti+qx1RIsoZc3JWOw=;
+        b=sIVMGLLLRzaq0DMcaZVXEPHCSLjbE/hAnhCffenqQzfnpzUBdevZtCAWF6amk+tkoM
+         8woFUJ/TILdUWobzXaAP1uXK2AzHAuFfFUJJ8eNvb06AMb6/uQx8EzqblLuQQBFlbiJH
+         My+g0O10wUvR1rhMtOsDsKluoF8FUh0cz2Jl1ROY7xTWceo2sitlOMCfJxFuabWj4Nha
+         zlV2wA89WiTJ56lPYdLtDGZO427X/XNIyZ18qR+PskzuWfy9q4661/ZMO8+awULWB8TS
+         ZFKu2rD/zDanz5Scw2V3PIciWAQaObUfz6ycNOS6v7Db24dKiSzWdCwdK1MFJYcmGR9B
+         K0Kg==
+X-Gm-Message-State: AJIora8qnDaltO102qJ0DX/zCUwwyl3kmyG8+gO6AjBZr891HI8SLV9T
+        Bx2TpZo24gvKgIOmfE2CNtw=
+X-Google-Smtp-Source: AGRyM1slJBMDBsuNHpBj4n7MqHsIZaDLMAhmKyrXOce9iFdlI007tFK5W5uPJ8jNdY9haIjz73z1yA==
+X-Received: by 2002:aa7:c45a:0:b0:435:d7a4:99bc with SMTP id n26-20020aa7c45a000000b00435d7a499bcmr17000932edr.158.1656343163248;
+        Mon, 27 Jun 2022 08:19:23 -0700 (PDT)
 Received: from felia.fritz.box (200116b826511b0021a0c74157938809.dip.versatel-1u1.de. [2001:16b8:2651:1b00:21a0:c741:5793:8809])
-        by smtp.gmail.com with ESMTPSA id z8-20020a170906434800b00722f2a0944fsm5076901ejm.107.2022.06.27.08.19.20
+        by smtp.gmail.com with ESMTPSA id z8-20020a170906434800b00722f2a0944fsm5076901ejm.107.2022.06.27.08.19.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 08:19:21 -0700 (PDT)
+        Mon, 27 Jun 2022 08:19:22 -0700 (PDT)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Federico Vaga <federico.vaga@vaga.pv.it>,
@@ -59,9 +59,9 @@ Cc:     Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [RFC PATCH 04/11] docs: kernel-docs: add a reference mentioned in submitting-drivers.rst
-Date:   Mon, 27 Jun 2022 17:18:12 +0200
-Message-Id: <20220627151819.22694-5-lukas.bulwahn@gmail.com>
+Subject: [RFC PATCH 05/11] docs: admin: devices:  drop confusing outdated statement on Latex
+Date:   Mon, 27 Jun 2022 17:18:13 +0200
+Message-Id: <20220627151819.22694-6-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
 References: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
@@ -75,44 +75,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One section in submitting-drivers.rst was just a collection of references
-to other external documentation. All except the one added in this commit
-is already mentioned in kernel-docs or other places in the kernel
-documentation.
+The statement that the Latex version of Linux Device List is unmaintained,
+must go back to some historic time where there were actually two separate
+document sources, one in a txt format and another in a tex format (maybe
+even just on lanana.org).
 
-Add Arjan van de Ven's article on How to NOT write kernel driver to this
-index of further kernel documentation.
+Nowadays, html and tex are generated from the ReST document file and the
+statement might be confused, believing the actual generated LaTeX document
+from the maintained ReST document could be an unmaintained one.
+
+Remove this statement on the LaTeX version and only keep pointing out that
+the version on lanana.org is no longer maintained.
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- Documentation/process/kernel-docs.rst | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ Documentation/admin-guide/devices.rst | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/process/kernel-docs.rst b/Documentation/process/kernel-docs.rst
-index b2523267ffc7..502289d63385 100644
---- a/Documentation/process/kernel-docs.rst
-+++ b/Documentation/process/kernel-docs.rst
-@@ -134,6 +134,20 @@ On-line docs
-         describes how to write user-mode utilities for communicating with
-         Card Services.
+diff --git a/Documentation/admin-guide/devices.rst b/Documentation/admin-guide/devices.rst
+index 035275fedbdd..e3776d77374b 100644
+--- a/Documentation/admin-guide/devices.rst
++++ b/Documentation/admin-guide/devices.rst
+@@ -7,10 +7,9 @@ This list is the Linux Device List, the official registry of allocated
+ device numbers and ``/dev`` directory nodes for the Linux operating
+ system.
  
-+    * Title: **How NOT to write kernel drivers**
-+
-+      :Author: Arjan van de Ven.
-+      :URL: https://landley.net/kdocs/ols/2002/ols2002-pages-545-555.pdf
-+      :Date: 2002
-+      :Keywords: driver.
-+      :Description: Programming bugs and Do-nots in kernel driver development
-+      :Abstract: *Quit a few tutorials, articles and books give an introduction
-+        on how to write Linux kernel drivers. Unfortunately the things one
-+        should NOT do in Linux kernel code is either only a minor appendix
-+        or, more commonly, completely absent. This paper tries to briefly touch
-+        the areas in which the most common and serious bugs and do-nots are
-+        encountered.*
-+
-     * Title: **Global spinlock list and usage**
- 
-       :Author: Rick Lindsley.
+-The LaTeX version of this document is no longer maintained, nor is
+-the document that used to reside at lanana.org.  This version in the
+-mainline Linux kernel is the master document.  Updates shall be sent
+-as patches to the kernel maintainers (see the
++The version of this document at lanana.org is no longer maintained.  This
++version in the mainline Linux kernel is the master document.  Updates
++shall be sent as patches to the kernel maintainers (see the
+ :ref:`Documentation/process/submitting-patches.rst <submittingpatches>` document).
+ Specifically explore the sections titled "CHAR and MISC DRIVERS", and
+ "BLOCK LAYER" in the MAINTAINERS file to find the right maintainers
 -- 
 2.17.1
 

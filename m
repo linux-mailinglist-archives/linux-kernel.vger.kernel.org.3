@@ -2,225 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9929C55B5FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 06:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0831355B606
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 06:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbiF0EPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 00:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
+        id S231593AbiF0ESc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 00:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiF0EP3 (ORCPT
+        with ESMTP id S229492AbiF0ES3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 00:15:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B3F2BE9;
-        Sun, 26 Jun 2022 21:15:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E8C8611E3;
-        Mon, 27 Jun 2022 04:15:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A8B2C341C8;
-        Mon, 27 Jun 2022 04:15:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656303327;
-        bh=Ulx6aqzrlbxaA/jiQit1/Ykye9FA3EESv3aCio3r3fA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T46pjQxABqtqqI4q0dy8MnZEOKczGhoPW/rYLQwq7+vJ+88TCaJWmahikfWQB5FAM
-         8QhzQucl7rdpZsRKONvnkZ2r31q7juCrzknDZ2KsWDefBoah6pUmag3TYWDrmuhEPs
-         rmu9Dw4Z42fvxU7aKC9Vs9iaBjCFaNi8poMseuudS+65sLlLrxFoVyxcYp3oq05oZq
-         Ij39MJ/pnN/eQyLf0QyRWuCU3d2KTKCLtLV9Gv3DE8i6cds2o0Qi9ZRzRn7JAEPIZp
-         WyIXp77PJ00S/rZKeHKil9kxi/2Dc/cMPMsyXrdFDFDou7hutqcCYhOCgITmQH14cu
-         ywqXLQiXDg0/w==
-Date:   Sun, 26 Jun 2022 21:15:27 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v3 25/25] xfs: Support large folios
-Message-ID: <Yrku31ws6OCxRGSQ@magnolia>
-References: <20211216210715.3801857-1-willy@infradead.org>
- <20211216210715.3801857-26-willy@infradead.org>
- <YrO243DkbckLTfP7@magnolia>
+        Mon, 27 Jun 2022 00:18:29 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2045.outbound.protection.outlook.com [40.107.95.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354602DE5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 21:18:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QtZdODcZ8MyizUbDECL/meCvR4ryNmIH8WYBvar6nV5I9+2UUGAFXOPDypPGKMaIbNmO5rTipPeFRhDt2BWky9qJmP6UYkvY2MEC+XLmjQ+WxapNmNRqfqkv7Qr1QNKmkCOeQIPqmurG/ptfQyfZ55/VYXGE8Ic4rr8itNFDz6QucbKcyl7uzO3TdFjbcOZ92K7DqqJyGfa/mSjffPF+4yDKMbFa2jO4nY+xK5VU2zVnZcFGDaZIDEqpuY0XUWTWB8RvHAwJpExpN2LGSFM8TZlgLZU2xOCzz0Uwq7wK6ALNw6mkqKCUpHrHBm5dGBC0HWbc8DVdidkTnIkdJrRboQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M3bSlYNezZ/V3s5KFnG5kep5QwlIAAsP/NfYZM1eLvY=;
+ b=eGiswYhe0akAHU5NtTTIRXhcfve5+XVsQBlXBf1EadNp+8W/6+qTGYbusRpWd1HJ/kWVDvz1RPMrokpvv4dvXcH3AZ+IpUIb+64poOPUV4xOqPw5Lt0ptO2EFtFHIniU14L2nNKcc8yoT7OJvmUzHnw2QlWRVmA7muko+yR2iN0ra+3hTrz5V57nuKvev57h3LSOidBRUReHi25xS3OmeT4vPrFks3lwXDVjeP2pcKW/dmMTLA23ck0bVS5Ad4YCXSEzV1P5tYjd+lgQ/0GPU7pRVmqfK5YO+Bb+7h+ssCN/MR95U/qHfrtmo+WtO66rAC8SJ8W0CQN/jUj210n7bw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M3bSlYNezZ/V3s5KFnG5kep5QwlIAAsP/NfYZM1eLvY=;
+ b=Phvuj1ZapsrweOWMAJPdyFNlFtbFFpFkFNQUYJA1QqJyW0hVrhHRiVFhLjCa6RIZAdNal3PsrbHnrbl8/e6gAEXRrB+UWymkoQXTRx5BRvQRPx09rx9c2ks980cpUfdf4N9YE1ibV5bTTZgq2pjYHVgc7Okj/cPiVgSFAS0OYEs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by DM6PR12MB4026.namprd12.prod.outlook.com (2603:10b6:5:1cc::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Mon, 27 Jun
+ 2022 04:18:26 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::1c48:55fc:da99:87c9]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::1c48:55fc:da99:87c9%3]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
+ 04:18:26 +0000
+Message-ID: <3492774b-a462-d8e6-34bf-9f5ea10729d4@amd.com>
+Date:   Mon, 27 Jun 2022 09:48:12 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [RFC v2] perf: Rewrite core context handling
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
+        eranian@google.com, alexey.budankov@linux.intel.com,
+        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
+        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
+        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
+        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20220113134743.1292-1-ravi.bangoria@amd.com>
+ <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0015.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:95::19) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrO243DkbckLTfP7@magnolia>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4008071c-5643-4e78-5a24-08da57f414b8
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4026:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BsYsw8aoO9M9ivhy67dl4LrL42QjDXaAJBVGc8pJDnC5g4U0fIvPRgzlhklB34XmRL2PmKd+zTmV9f3e8RJFuKxJNmoA3IBr25t20clld0XVWw69gtMVZn4RNnMjmTPUTpTZ3iYdAxrBlIVdLvCzfgCz6RtMxA+QVn4pRKRj2dSPFOmWTseTfxgRQ1vB8LAC8dt2zjHzuxUTnnfoOss3Ir7vCIybvOM3kLtWPYrKW8lNXIkpKya3T/rFd5gkO0h6Jg3hO+FPhpyDy3xfGkjOdReO82YHdrpZsFda1+93NFVokLy2EIRUle3bY4dEv7p9NMHVBV8+LxeDBOadml0hlFtUa9n5XZW1dT1zXWeD636DNbARZvODvZxvIv+tH7OPU/k41A5cOBusvVpINwy1wjIhMfRmudzRzatfPWwPkWbxG+Yyqg0luK023x94gR4pf6icPkg+v9yl9mDJXYAG6ehdh6DVbnXbIP5D2xaYOrTKHZDRDJg6stWrmtNE0Js/cJKblTeuNxe0CGmhchULkOP93AuetYEwzFGcDsl7edFIW3ibjE2FB0XisFBePd+3iT6zAykGdNaBlO44ZS6yz8D9b09IAzuKCnoaN44582NsKQORrZ5RdCjabdNgqnvSQ3iikPhqh2hhl1jeNKLJw/aVru/cyiNJCop2FD5GII11IpFBHK6Kfvs2aTU0hPtgYB1EMOf9ZiNMmra5IbhH6MFX6X3/ZKcxS8zykqipNbj0IXgqgVWU4C3DvvIemnTD2JNYQ/nBpLAJFPpnsScpMaQidt/8/5A3Mmh+YQlwZ3wduzFXFVehPJBjjv8dQDFg8dKw+Y2zaV3Hd5px+5JBiQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(366004)(396003)(39860400002)(136003)(4744005)(7416002)(44832011)(6666004)(31696002)(38100700002)(2906002)(316002)(186003)(4326008)(8936002)(41300700001)(8676002)(5660300002)(478600001)(66476007)(86362001)(6486002)(6506007)(36756003)(2616005)(53546011)(66556008)(6916009)(6512007)(66946007)(26005)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?djBjM05jWERHWEVOdGpjNzdkWkwySmNpSC9HQVllY0dTV0VTUGN3aFY2MTA5?=
+ =?utf-8?B?amdyL1VSNVlvbmlvaEdzanlYaGdNaVQ2S1N0SmxCbGs4NFloa1pQUjIrRFJr?=
+ =?utf-8?B?ZCsxV0VlY1dFSVZYcHlKMG15bnRSSmhWdnlwNmZIaFlXVDVYUDNVOTZNakVQ?=
+ =?utf-8?B?TStvZU9oUlBVMUVqRUJNM2p3Uk9zYTVwa2RZK0F5eGNpYTBXN2RqUnYweXZS?=
+ =?utf-8?B?Z1B4ZXNUQnRUSDc3TVFEem9xYnozUFlueVA0YzJPeGIxd1RKa0Qyc2dic3hL?=
+ =?utf-8?B?emNKK1U5NlJ0R3g3ZkhxV3BBaU9LUmFHTEVRQ1o1dDd2eHlnRVMvdzBqYzZt?=
+ =?utf-8?B?VWFIMVJCZlhPd1BPcjNKLzlWd1J3SFU2YXZJaFRLZDdJcFZsMGlQWDF2MEQ2?=
+ =?utf-8?B?MklVMS9jYlBYSnpKc05ybHJIb1p6UDBlN0RXUmJPZlk3RjRVYVE1MW0rMEtz?=
+ =?utf-8?B?bng2R2RqY3ErTFk1b21ZNEV1b3pGemdvUWt1UVR0NFJoMGd3OGZka2xvWU5Q?=
+ =?utf-8?B?N1pwWHNaWmVwZzJ2RzYxUHhQSTY0aEtjaUdTdDVzelpwcS9KTTZ4QVFaTUZs?=
+ =?utf-8?B?bHNSa0dqUXZBRkdhSm9xdWtqeXNwbEIxbzlFdFhHUzNlN2VwMmlJT3ZaNFFO?=
+ =?utf-8?B?cnN2QzZaRjlNZnVVeFQ1VUV5Q2ZQb3pxTWdxL1gxSXdSYk5wMWI4cUZjWkJl?=
+ =?utf-8?B?QVVvdkFVeU52ZWc4L2NYQndwQ2h3bUMzb0szSGFuOTFkbVlYUjJMbXkvcEhP?=
+ =?utf-8?B?ZEE0anhBdVYxWVRROFVFZXRMaDVleU0veCs5eGhQZGdzYVA0ZE92dno1bzlH?=
+ =?utf-8?B?ck9xRWc5aEM0VGxaZWpza25OWjFWL1VsK2Q2UjJyZFAvM0V6TVZPYWJJaDdo?=
+ =?utf-8?B?M1R2c1FwU1FDYTY2cVhKb3pJWjUzWjdrMlh2UVY0d2QzOFYyZHUxdHJWNHBZ?=
+ =?utf-8?B?dmN4L2piMlNwNzIxYTlpcFRySHVvZlQ2S255ZmQvblhjYjhxVVRXMzErdkdz?=
+ =?utf-8?B?WTBUYWZwUFRiVnNzWWw2a1hVZGRud0tSMllhZzdmVXM4SXROTWdEdXQybTd6?=
+ =?utf-8?B?ZmVhQ3YrSHorU0l6c3c2ZFMwN1E5d05vM3pWUlp6cjE4N2JpaWVnWTBhNTQv?=
+ =?utf-8?B?MlM4MWF4R2F0Ri9TTlRCZjVLZ1I0Z2NGdUtuSGErQStBcDRqUngvKzgwK3lx?=
+ =?utf-8?B?Um4wWDNIa1ladkpKYXpkQkhZeVhmKy9QWUNFT1J1eXorV29UWEY5K1RMTUdl?=
+ =?utf-8?B?SzZ2YVBoR2labUI5blRpU09KTFVRbEJhWFdPSmZxWjRCWXN1WDVNTjJKdUJQ?=
+ =?utf-8?B?dCtiaDdPMEl3ZlVSTUNPZVcvejF1UzMxYTliTmIrZmtjNEtISU5lM3NrbkVl?=
+ =?utf-8?B?cjFRMW5qU1h0RWFYU2dXWE42MzdwWDIzb3lFSDBQdGRncHJQUXByT1pRRVZk?=
+ =?utf-8?B?YU1wVWNGSWQxTEx0ZklFT3ZrTUNKcVduUiszeVZxQVhJZWhmLzlobkNoRGo0?=
+ =?utf-8?B?WDJRN2diZlBEdUFpUCtJRkpWMlNreWdNL01pZThnSkFPMUNjOGMyTDMvNHho?=
+ =?utf-8?B?WU9GaDlBV3ZBTjE2aFlObGVqdERIK1ZPSjM3YmhXZ3lQUlo5aUtIM2RTUXV5?=
+ =?utf-8?B?dmFocC9XYk82SnZvQlBFQUJ1MnVDczdSaFR5S3BlTy9UVlRTQVVCeEtDMlVW?=
+ =?utf-8?B?UEJzYjVpZ2hyVmNZV0dyY29ONUhVSzVueUJzSlRIdFhqbitUek9mbGxSRWtP?=
+ =?utf-8?B?eXd0R0pXdERxYjRaK2QwRGtZeTZrODNacVM2NTAxek84Mm9uUVpFNWFKQkV6?=
+ =?utf-8?B?cHdPOTdsT3JvZzV3dFlPbTJwcDRyWTdNVFg0Wnh3WjFkcUcrU1UvcjhORnpG?=
+ =?utf-8?B?N2VIUU04cTZyMU5jOFhvRFE0dGdYNU5Za3E4VkIxd2U2a1k4OHpDK0p1TWZL?=
+ =?utf-8?B?bDEvcWNRTExDcmllQ0YxczFlSW1sc3d1QkV6WCtGRSs0c1YzNVRyREpoa2U0?=
+ =?utf-8?B?R0JoNmdCdGhOSlEyWm42VE1pQVBpZVFQdjJCNkp1OTZEUjJjVFFyTnJjZkg4?=
+ =?utf-8?B?MXcxb0pQdXFmcm44TW5peVZOdG85bFF0R1RhRG9YRGd5WFF3Q1lSOWxGL295?=
+ =?utf-8?Q?E369QffCW8KmZ6PegMHQRne6/?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4008071c-5643-4e78-5a24-08da57f414b8
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2022 04:18:26.1202
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: imGq+m23ysoFfbxFrd7ingLE4W6AUzl55ENOAZVbo1V5qy7kwpi3pNCzuuPQMe4INS1tk63eaemLn7Mz0aBj1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4026
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 05:42:11PM -0700, Darrick J. Wong wrote:
-> [resend with shorter 522.out file to keep us under the 300k maximum]
-> 
-> On Thu, Dec 16, 2021 at 09:07:15PM +0000, Matthew Wilcox (Oracle) wrote:
-> > Now that iomap has been converted, XFS is large folio safe.
-> > Indicate to the VFS that it can now create large folios for XFS.
-> > 
-> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > Reviewed-by: Christoph Hellwig <hch@lst.de>
-> > Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-> > ---
-> >  fs/xfs/xfs_icache.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
-> > index da4af2142a2b..cdc39f576ca1 100644
-> > --- a/fs/xfs/xfs_icache.c
-> > +++ b/fs/xfs/xfs_icache.c
-> > @@ -87,6 +87,7 @@ xfs_inode_alloc(
-> >  	/* VFS doesn't initialise i_mode or i_state! */
-> >  	VFS_I(ip)->i_mode = 0;
-> >  	VFS_I(ip)->i_state = 0;
-> > +	mapping_set_large_folios(VFS_I(ip)->i_mapping);
-> >  
-> >  	XFS_STATS_INC(mp, vn_active);
-> >  	ASSERT(atomic_read(&ip->i_pincount) == 0);
-> > @@ -320,6 +321,7 @@ xfs_reinit_inode(
-> >  	inode->i_rdev = dev;
-> >  	inode->i_uid = uid;
-> >  	inode->i_gid = gid;
-> > +	mapping_set_large_folios(inode->i_mapping);
-> 
-> Hmm.  Ever since 5.19-rc1, I've noticed that fsx in generic/522 now
-> reports file corruption after 20 minutes of runtime.  The corruption is
-> surprisingly reproducible (522.out.bad attached below) in that I ran it
-> three times and always got the same bad offset (0x6e000) and always the
-> same opcode (6213798(166 mod 256) MAPREAD).
-> 
-> I turned off multipage folios and now 522 has run for over an hour
-> without problems, so before I go do more debugging, does this ring a
-> bell to anyone?
 
-I tried bisecting, but that didn't yield anything productive and
-5.19-rc4 still fails after 25 minutes; however, it seems that g/522 will
-run without problems for at least 3-4 days after reverting this patch
-from -rc3.
+On 13-Jun-22 8:05 PM, Peter Zijlstra wrote:
+> 
+> 
+> Right, so sorry for being incredibly tardy on this. Find below the
+> patch fwd ported to something recent.
+> 
+> I'll reply to this with fixes and comments.
 
-So I guess I have a blunt force fix if we can't figure this one out
-before 5.19 final, but I'd really rather not.  Will keep trying this
-week.
+Thanks! I've resumed on this but my mind has lost all the context so
+it might take a while for me to reply to your comments. Please bear
+with me if I'm bit slow.
 
---D
-
-> [addendum: Apparently vger now has a 300K message size limit; if you
-> want the full output, see https://djwong.org/docs/522.out.txt ]
-> 
-> --D
-> 
-> QA output created by 522
-> READ BAD DATA: offset = 0x69e3e, size = 0x1c922, fname = /mnt/junk
-> OFFSET	GOOD	BAD	RANGE
-> 0x6e000	0x0000	0x9173	0x00000
-> operation# (mod 256) for the bad data may be 145
-> 0x6e001	0x0000	0x7391	0x00001
-> operation# (mod 256) for the bad data may be 145
-> 0x6e002	0x0000	0x9195	0x00002
-> operation# (mod 256) for the bad data may be 145
-> 0x6e003	0x0000	0x9591	0x00003
-> operation# (mod 256) for the bad data may be 145
-> 0x6e004	0x0000	0x91b5	0x00004
-> operation# (mod 256) for the bad data may be 145
-> 0x6e005	0x0000	0xb591	0x00005
-> operation# (mod 256) for the bad data may be 145
-> 0x6e006	0x0000	0x91e2	0x00006
-> operation# (mod 256) for the bad data may be 145
-> 0x6e007	0x0000	0xe291	0x00007
-> operation# (mod 256) for the bad data may be 145
-> 0x6e008	0x0000	0x919d	0x00008
-> operation# (mod 256) for the bad data may be 145
-> 0x6e009	0x0000	0x9d91	0x00009
-> operation# (mod 256) for the bad data may be 145
-> 0x6e00a	0x0000	0x91e8	0x0000a
-> operation# (mod 256) for the bad data may be 145
-> 0x6e00b	0x0000	0xe891	0x0000b
-> operation# (mod 256) for the bad data may be 145
-> 0x6e00c	0x0000	0x91c9	0x0000c
-> operation# (mod 256) for the bad data may be 145
-> 0x6e00d	0x0000	0xc991	0x0000d
-> operation# (mod 256) for the bad data may be 145
-> 0x6e00e	0x0000	0x9147	0x0000e
-> operation# (mod 256) for the bad data may be 145
-> 0x6e00f	0x0000	0x4791	0x0000f
-> operation# (mod 256) for the bad data may be 145
-> LOG DUMP (6213798 total operations):
-> 
-> <snip>
-> 
-> 6213732(100 mod 256): COLLAPSE 0x3b000 thru 0x4efff	(0x14000 bytes)
-> 6213733(101 mod 256): READ     0x1953d thru 0x29311	(0xfdd5 bytes)
-> 6213734(102 mod 256): INSERT 0x14000 thru 0x2ffff	(0x1c000 bytes)
-> 6213735(103 mod 256): COPY 0x1d381 thru 0x36d38	(0x199b8 bytes) to 0x64491 thru 0x7de48	******EEEE
-> 6213736(104 mod 256): ZERO     0x74247 thru 0x927bf	(0x1e579 bytes)
-> 6213737(105 mod 256): INSERT 0x8000 thru 0x16fff	(0xf000 bytes)
-> 6213738(106 mod 256): READ     0x87aba thru 0x8ce48	(0x538f bytes)
-> 6213739(107 mod 256): TRUNCATE DOWN	from 0x8ce49 to 0x46571	******WWWW
-> 6213740(108 mod 256): SKIPPED (no operation)
-> 6213741(109 mod 256): ZERO     0x55674 thru 0x70d41	(0x1b6ce bytes)	******ZZZZ
-> 6213742(110 mod 256): PUNCH    0xc8b5 thru 0xe80d	(0x1f59 bytes)
-> 6213743(111 mod 256): TRUNCATE DOWN	from 0x70d42 to 0x11ade	******WWWW
-> 6213744(112 mod 256): COLLAPSE 0x6000 thru 0xffff	(0xa000 bytes)
-> 6213745(113 mod 256): SKIPPED (no operation)
-> 6213746(114 mod 256): MAPREAD  0x2625 thru 0x7add	(0x54b9 bytes)
-> 6213747(115 mod 256): CLONE 0x2000 thru 0x6fff	(0x5000 bytes) to 0x10000 thru 0x14fff
-> 6213748(116 mod 256): SKIPPED (no operation)
-> 6213749(117 mod 256): TRUNCATE UP	from 0x15000 to 0x8d131	******WWWW
-> 6213750(118 mod 256): WRITE    0x82547 thru 0x88334	(0x5dee bytes)
-> 6213751(119 mod 256): DEDUPE 0x7d000 thru 0x83fff	(0x7000 bytes) to 0x22000 thru 0x28fff
-> 6213752(120 mod 256): READ     0x11e69 thru 0x2864c	(0x167e4 bytes)
-> 6213753(121 mod 256): INSERT 0x41000 thru 0x45fff	(0x5000 bytes)
-> 6213754(122 mod 256): COPY 0x2ca4c thru 0x2ed9f	(0x2354 bytes) to 0x2fef1 thru 0x32244
-> 6213755(123 mod 256): MAPWRITE 0x70677 thru 0x8b993	(0x1b31d bytes)
-> 6213756(124 mod 256): FALLOC   0x7229f thru 0x91158	(0x1eeb9 bytes) INTERIOR
-> 6213757(125 mod 256): COLLAPSE 0x13000 thru 0x2bfff	(0x19000 bytes)
-> 6213758(126 mod 256): COPY 0x9271 thru 0xba34	(0x27c4 bytes) to 0x3227c thru 0x34a3f
-> 6213759(127 mod 256): CLONE 0x23000 thru 0x2cfff	(0xa000 bytes) to 0x6c000 thru 0x75fff	******JJJJ
-> 6213760(128 mod 256): READ     0x44cff thru 0x4c4a1	(0x77a3 bytes)
-> 6213761(129 mod 256): DEDUPE 0x60000 thru 0x73fff	(0x14000 bytes) to 0x39000 thru 0x4cfff	BBBB******
-> 6213762(130 mod 256): COLLAPSE 0x39000 thru 0x3ffff	(0x7000 bytes)
-> 6213763(131 mod 256): WRITE    0x57565 thru 0x5e710	(0x71ac bytes)
-> 6213764(132 mod 256): MAPREAD  0x39c49 thru 0x4accd	(0x11085 bytes)
-> 6213765(133 mod 256): ZERO     0x4faf5 thru 0x6a5cc	(0x1aad8 bytes)
-> 6213766(134 mod 256): MAPREAD  0x57f8 thru 0x8c98	(0x34a1 bytes)
-> 6213767(135 mod 256): MAPREAD  0x5cbd8 thru 0x72130	(0x15559 bytes)	***RRRR***
-> 6213768(136 mod 256): SKIPPED (no operation)
-> 6213769(137 mod 256): INSERT 0x24000 thru 0x32fff	(0xf000 bytes)
-> 6213770(138 mod 256): COPY 0x32b0c thru 0x4d035	(0x1a52a bytes) to 0x4f97f thru 0x69ea8
-> 6213771(139 mod 256): DEDUPE 0x3f000 thru 0x52fff	(0x14000 bytes) to 0x23000 thru 0x36fff
-> 6213772(140 mod 256): READ     0x6d9bf thru 0x81130	(0x13772 bytes)	***RRRR***
-> 6213773(141 mod 256): TRUNCATE DOWN	from 0x81131 to 0x569c0	******WWWW
-> 6213774(142 mod 256): MAPREAD  0x354d5 thru 0x44e7b	(0xf9a7 bytes)
-> 6213775(143 mod 256): MAPWRITE 0x547c4 thru 0x60a8e	(0xc2cb bytes)
-> 6213776(144 mod 256): SKIPPED (no operation)
-> 6213777(145 mod 256): WRITE    0x28ada thru 0x4356c	(0x1aa93 bytes)
-> 6213778(146 mod 256): ZERO     0x74c28 thru 0x91fec	(0x1d3c5 bytes)
-> 6213779(147 mod 256): INSERT 0x12000 thru 0x1cfff	(0xb000 bytes)
-> 6213780(148 mod 256): ZERO     0x30834 thru 0x330f7	(0x28c4 bytes)
-> 6213781(149 mod 256): PUNCH    0x36080 thru 0x42edc	(0xce5d bytes)
-> 6213782(150 mod 256): DEDUPE 0x14000 thru 0x19fff	(0x6000 bytes) to 0x49000 thru 0x4efff
-> 6213783(151 mod 256): DEDUPE 0x51000 thru 0x5efff	(0xe000 bytes) to 0x2a000 thru 0x37fff
-> 6213784(152 mod 256): WRITE    0x2448e thru 0x400f5	(0x1bc68 bytes)
-> 6213785(153 mod 256): ZERO     0x87615 thru 0x927bf	(0xb1ab bytes)
-> 6213786(154 mod 256): READ     0x5afc thru 0xa32c	(0x4831 bytes)
-> 6213787(155 mod 256): SKIPPED (no operation)
-> 6213788(156 mod 256): ZERO     0x7aab0 thru 0x7e2b3	(0x3804 bytes)
-> 6213789(157 mod 256): INSERT 0x45000 thru 0x58fff	(0x14000 bytes)
-> 6213790(158 mod 256): FALLOC   0x1a80e thru 0x289a3	(0xe195 bytes) INTERIOR
-> 6213791(159 mod 256): SKIPPED (no operation)
-> 6213792(160 mod 256): SKIPPED (no operation)
-> 6213793(161 mod 256): FALLOC   0x2aca thru 0x20562	(0x1da98 bytes) INTERIOR
-> 6213794(162 mod 256): ZERO     0x72fb9 thru 0x75887	(0x28cf bytes)
-> 6213795(163 mod 256): COPY 0xa62e thru 0x218d0	(0x172a3 bytes) to 0x28ab1 thru 0x3fd53
-> 6213796(164 mod 256): SKIPPED (no operation)
-> 6213797(165 mod 256): COPY 0xa666 thru 0xf6a1	(0x503c bytes) to 0x353f0 thru 0x3a42b
-> 6213798(166 mod 256): MAPREAD  0x69e3e thru 0x8675f	(0x1c922 bytes)	***RRRR***
-> Log of operations saved to "/mnt/junk.fsxops"; replay with --replay-ops
-> Correct content saved for comparison
-> (maybe hexdump "/mnt/junk" vs "/mnt/junk.fsxgood")
-> Silence is golden
+Thanks,
+Ravi

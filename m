@@ -2,195 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06A255D6C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B7955E0F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234098AbiF0Ju5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        id S234119AbiF0JvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233576AbiF0Juw (ORCPT
+        with ESMTP id S234106AbiF0JvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:50:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 552125FEF
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:50:51 -0700 (PDT)
+        Mon, 27 Jun 2022 05:51:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D96EC63E5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:51:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656323450;
+        s=mimecast20190719; t=1656323475;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bpgVvEHm/IV3hFTY2amgkVK+YIMLBXRHwpjPAdXd8MA=;
-        b=GEQNMDb2+d4gfZNyNW5wQPUjM5jBO4Zxh0cqWokNml5sTpXBlQvQBv5Y6+GNW3epkjEqQV
-        R5/H2Mijl6iGG12wmrVlufbR93b5aLxSQ9QvGou+UaEYm5ekZcjHikYYGvaPBSF02umAlA
-        wjMz2zu719nxdlhs62pKiwaViqzQdos=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ODcJ6zydXCy0RZ8g5fZRHZR+hlMipts1TZGkhFsZ1LY=;
+        b=cb0sj9Dt1dQGs6CmtLZowD2s6mKiK2Rou0+DYQIjWlFhn7Noq7aMBFIQ/FXZ5Vpvwnb1KC
+        3w0bjI4AiahdvQrL0K1/mBMY4k4hmx7dh3XzrzkJwUjqiSbXxp7y43pK6IXqRYoufa31KX
+        CcTC3J1Sfy5IGYwOEzlmR/53YC+XIL4=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-457-Ixa5Rb5NN0CiswsF02sdMw-1; Mon, 27 Jun 2022 05:50:49 -0400
-X-MC-Unique: Ixa5Rb5NN0CiswsF02sdMw-1
-Received: by mail-lf1-f69.google.com with SMTP id j7-20020a056512398700b004811ba582d2so869276lfu.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:50:48 -0700 (PDT)
+ us-mta-572-GEPC4uU3O5eeFy75kyzBfg-1; Mon, 27 Jun 2022 05:51:13 -0400
+X-MC-Unique: GEPC4uU3O5eeFy75kyzBfg-1
+Received: by mail-qv1-f72.google.com with SMTP id q36-20020a0c9127000000b00461e3828064so8873576qvq.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:51:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
-         :subject:content-language:to:references:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=bpgVvEHm/IV3hFTY2amgkVK+YIMLBXRHwpjPAdXd8MA=;
-        b=Y8ZYGkiL0vx8jEGwHy9U1lM17aqGJk6e564V3TDp6zBIRmcJ+TAH4FSmA1EH8GPu4N
-         rdtPj8X3x/CecBOcbOzNPbKuMj6pLGiAkyJj7n6OuSvi4fxW7dWmgRVi1ormfU5qZtxM
-         s0XQV+9htZSmRl9+rK75Mk5KMLFmqHFbZtY/GsYcUzUNVa8+LG9VmTpKDlzeMygPWG00
-         eluiQE/leFThyUykFR6/LpQinwJ4KJ75+saeHRd8bROY4iFJnOhba8DnBMnTpQvxTek+
-         7v6Ob2SuBVwLc/x2SrQwhAI24h0ouMdw4ETQTicPQukqqfQfPsvM2N/xWqhbfFTl7hLc
-         8bWw==
-X-Gm-Message-State: AJIora+J24yKvwzDZSqo635HAvsEHX+EBCd4AUNQ4rBK1/0M5DWvHUCG
-        pUZb5syRpAN7gvPLOkl6V2hXg0wMRgKLytYGLNTs9boA83cESy80ue1i6ka0qxH29QaEUwN8zmP
-        lO8q7Ur62BoMr4F6WaD4MYz3d
-X-Received: by 2002:a05:6512:2208:b0:480:ff57:ab31 with SMTP id h8-20020a056512220800b00480ff57ab31mr7704978lfu.144.1656323446883;
-        Mon, 27 Jun 2022 02:50:46 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v6NtFz8znhFOivwgMDjtuZ13nFN7XQO5FYA1oOa2kxAuJ3kJU0aVCNUE8LBKrPh0N5ds5U7g==
-X-Received: by 2002:a05:6512:2208:b0:480:ff57:ab31 with SMTP id h8-20020a056512220800b00480ff57ab31mr7704954lfu.144.1656323446542;
-        Mon, 27 Jun 2022 02:50:46 -0700 (PDT)
-Received: from [192.168.0.50] (87-59-106-155-cable.dk.customer.tdc.net. [87.59.106.155])
-        by smtp.gmail.com with ESMTPSA id d22-20020a2e3316000000b0025907141aa6sm1338611ljc.83.2022.06.27.02.50.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 02:50:46 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <64caa039-14fb-c883-de1c-6549b5314269@redhat.com>
-Date:   Mon, 27 Jun 2022 11:50:44 +0200
+        bh=ODcJ6zydXCy0RZ8g5fZRHZR+hlMipts1TZGkhFsZ1LY=;
+        b=SWlwwbTXKK+3vjnuaJOIBX39tSCZkdpHYvFqdzfRVsWn7UUozM3GAB30EDrcH3PAGY
+         FwqF9AX+9+CW2LwCE9BSGwISH4c0dynY7H7DGFMFGAQN7sLba9jsfGt3w0F0z43ZWlfm
+         cRmwDpGyXQt1+tQmSTJg7K+QzRU8Jvpz6FeqkI2qKAmHk8OJH+am4HxMJThxrfFfQovO
+         1FRUAD8aqsDsULay2YUv1//gJS3IjIMf1R+p+1X+/hWV4Td4IAN+W8KnS4nJBKYr1Lt8
+         +JELCwfgb244WbYPC+vAEdMeQdd60fJ74NIwui9pL8D7FEFu0UM7u9gR1yq3EZikMROL
+         62Fg==
+X-Gm-Message-State: AJIora8o2UJfJdyFIU9DW2NK+jCxtARRG1VIW8uQmfifpCjD+HTwYZ4q
+        DemJZFtk/znkwuHrMOexgQdZv83A7BqczTafqCne0Oy/TWMf1fa1ibRfNt+/y3gofMLx42HH6se
+        iCeTVg6Mx0oPNjjQPoAOOMPuchkpwLbQNOL0d629rOeL9PhMpXqh+EBc3Yy49X3bD83Bq0y65Ke
+        fff7w=
+X-Received: by 2002:a05:622a:1992:b0:319:cb47:b3a4 with SMTP id u18-20020a05622a199200b00319cb47b3a4mr3868115qtc.472.1656323472797;
+        Mon, 27 Jun 2022 02:51:12 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vstaH0LIoUtcaZsCgkerz4macwKXsk/gMfm6Al+4zrfGHkmD/MM84XZGxlVYeWOoxVFH6+bA==
+X-Received: by 2002:a05:622a:1992:b0:319:cb47:b3a4 with SMTP id u18-20020a05622a199200b00319cb47b3a4mr3868086qtc.472.1656323472424;
+        Mon, 27 Jun 2022 02:51:12 -0700 (PDT)
+Received: from localhost.localdomain.com ([151.29.54.194])
+        by smtp.gmail.com with ESMTPSA id p11-20020a05622a00cb00b00316d7f9ebaesm7262444qtw.3.2022.06.27.02.51.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 02:51:11 -0700 (PDT)
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Bruno Goncalves <bgoncalv@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Subject: [PATCH] linux/wait: Fix __wait_event_hrtimeout for RT/DL tasks
+Date:   Mon, 27 Jun 2022 11:50:51 +0200
+Message-Id: <20220627095051.42470-1-juri.lelli@redhat.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Cc:     brouer@redhat.com, lorenzo@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        lipeng321@huawei.com, chenhao288@hisilicon.com
-Subject: Re: [PATCH net-next] net: page_pool: optimize page pool page
- allocation in NUMA scenario
-Content-Language: en-US
-To:     Guangbin Huang <huangguangbin2@huawei.com>, hawk@kernel.org,
-        ilias.apalodimas@linaro.org, davem@davemloft.net, kuba@kernel.org,
-        edumazet@google.com, pabeni@redhat.com
-References: <20220624093621.12505-1-huangguangbin2@huawei.com>
-In-Reply-To: <20220624093621.12505-1-huangguangbin2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes to hrtimer mode (potentially made by __hrtimer_init_sleeper on
+PREEMPT_RT) are not visible to hrtimer_start_range_ns, thus not
+accounted for by hrtimer_start_expires call paths. In particular,
+__wait_event_hrtimeout suffers from this problem as we have, for
+example:
 
+fs/aio.c::read_events
+  wait_event_interruptible_hrtimeout
+    __wait_event_hrtimeout
+      hrtimer_init_sleeper_on_stack <- this might "mode |= HRTIMER_MODE_HARD"
+                                       on RT if task runs at RT/DL priority
+        hrtimer_start_range_ns
+          WARN_ON_ONCE(!(mode & HRTIMER_MODE_HARD) ^ !timer->is_hard)
+          fires since the latter doesn't see the change of mode done by
+          init_sleeper
 
-On 24/06/2022 11.36, Guangbin Huang wrote:
-> From: Jie Wang <wangjie125@huawei.com>
-> 
-> Currently NIC packet receiving performance based on page pool deteriorates
-> occasionally. To analysis the causes of this problem page allocation stats
-> are collected. Here are the stats when NIC rx performance deteriorates:
-> 
-> bandwidth(Gbits/s)		16.8		6.91
-> rx_pp_alloc_fast		13794308	21141869
-> rx_pp_alloc_slow		108625		166481
-> rx_pp_alloc_slow_h		0		0
-> rx_pp_alloc_empty		8192		8192
-> rx_pp_alloc_refill		0		0
-> rx_pp_alloc_waive		100433		158289
-> rx_pp_recycle_cached		0		0
-> rx_pp_recycle_cache_full	0		0
-> rx_pp_recycle_ring		362400		420281
-> rx_pp_recycle_ring_full		6064893		9709724
-> rx_pp_recycle_released_ref	0		0
-> 
-> The rx_pp_alloc_waive count indicates that a large number of pages' numa
-> node are inconsistent with the NIC device numa node. Therefore these pages
-> can't be reused by the page pool. As a result, many new pages would be
-> allocated by __page_pool_alloc_pages_slow which is time consuming. This
-> causes the NIC rx performance fluctuations.
-> 
-> The main reason of huge numa mismatch pages in page pool is that page pool
-> uses alloc_pages_bulk_array to allocate original pages. This function is
-> not suitable for page allocation in NUMA scenario. So this patch uses
-> alloc_pages_bulk_array_node which has a NUMA id input parameter to ensure
-> the NUMA consistent between NIC device and allocated pages.
-> 
-> Repeated NIC rx performance tests are performed 40 times. NIC rx bandwidth
-> is higher and more stable compared to the datas above. Here are three test
-> stats, the rx_pp_alloc_waive count is zero and rx_pp_alloc_slow which
-> indicates pages allocated from slow patch is relatively low.
-> 
-> bandwidth(Gbits/s)		93		93.9		93.8
-> rx_pp_alloc_fast		60066264	61266386	60938254
-> rx_pp_alloc_slow		16512		16517		16539
-> rx_pp_alloc_slow_ho		0		0		0
-> rx_pp_alloc_empty		16512		16517		16539
-> rx_pp_alloc_refill		473841		481910		481585
-> rx_pp_alloc_waive		0		0		0
-> rx_pp_recycle_cached		0		0		0
-> rx_pp_recycle_cache_full	0		0		0
-> rx_pp_recycle_ring		29754145	30358243	30194023
-> rx_pp_recycle_ring_full		0		0		0
-> rx_pp_recycle_released_ref	0		0		0
-> 
-> Signed-off-by: Jie Wang <wangjie125@huawei.com>
-> ---
->   net/core/page_pool.c | 11 ++++++++++-
->   1 file changed, 10 insertions(+), 1 deletion(-)
+Fix it by making __wait_event_hrtimeout call hrtimer_sleeper_start_expires,
+which is aware of the special RT/DL case, instead of hrtimer_start_range_ns.
 
-Thanks for improving this, but we need some small adjustments below.
-And then you need to send a V2 of the patch.
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Reported-by: Bruno Goncalves <bgoncalv@redhat.com>
+Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
 
-> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index f18e6e771993..15997fcd78f3 100644
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
-> @@ -377,6 +377,7 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
->   	unsigned int pp_order = pool->p.order;
->   	struct page *page;
->   	int i, nr_pages;
-> +	int pref_nid; /* preferred NUMA node */
->   
->   	/* Don't support bulk alloc for high-order pages */
->   	if (unlikely(pp_order))
-> @@ -386,10 +387,18 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
->   	if (unlikely(pool->alloc.count > 0))
->   		return pool->alloc.cache[--pool->alloc.count];
->   
-> +#ifdef CONFIG_NUMA
-> +	pref_nid = (pool->p.nid == NUMA_NO_NODE) ? numa_mem_id() : pool->p.nid;
-> +#else
-> +	/* Ignore pool->p.nid setting if !CONFIG_NUMA, helps compiler */
+---
+This is a continuation of discussion happened at
+https://lore.kernel.org/lkml/YqnygxNWOztakt8+@localhost.localdomain/
+"[RT] WARNING at hrtimer_start_range_ns"
+---
+ include/linux/wait.h | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-Remove "helps compiler" from comments, it only make sense in the code
-this was copy-pasted from.
-
-
-> +	pref_nid = numa_mem_id(); /* will be zero like page_to_nid() */
-
-The comment about "page_to_nid()" is only relevant in the code
-this was copy-pasted from.
-
-Change to:
-	pref_nid = NUMA_NO_NODE;
-
-As alloc_pages_bulk_array_node() will be inlined, the effect (generated 
-asm code) will be the same, but it will be better for code maintenance.
-
-> +#endif
-> +
->   	/* Mark empty alloc.cache slots "empty" for alloc_pages_bulk_array */
->   	memset(&pool->alloc.cache, 0, sizeof(void *) * bulk);
->   
-> -	nr_pages = alloc_pages_bulk_array(gfp, bulk, pool->alloc.cache);
-> +	nr_pages = alloc_pages_bulk_array_node(gfp, pref_nid, bulk,
-> +					       pool->alloc.cache);
->   	if (unlikely(!nr_pages))
->   		return NULL;
->   
+diff --git a/include/linux/wait.h b/include/linux/wait.h
+index 851e07da2583..58cfbf81447c 100644
+--- a/include/linux/wait.h
++++ b/include/linux/wait.h
+@@ -544,10 +544,11 @@ do {										\
+ 										\
+ 	hrtimer_init_sleeper_on_stack(&__t, CLOCK_MONOTONIC,			\
+ 				      HRTIMER_MODE_REL);			\
+-	if ((timeout) != KTIME_MAX)						\
+-		hrtimer_start_range_ns(&__t.timer, timeout,			\
+-				       current->timer_slack_ns,			\
+-				       HRTIMER_MODE_REL);			\
++	if ((timeout) != KTIME_MAX) {						\
++		hrtimer_set_expires_range_ns(&__t.timer, timeout,		\
++					current->timer_slack_ns);		\
++		hrtimer_sleeper_start_expires(&__t, HRTIMER_MODE_REL);		\
++	}									\
+ 										\
+ 	__ret = ___wait_event(wq_head, condition, state, 0, 0,			\
+ 		if (!__t.task) {						\
+-- 
+2.36.1
 

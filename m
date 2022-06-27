@@ -2,106 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4722B55B488
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 02:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C7355B490
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 02:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiF0ABP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 20:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
+        id S230174AbiF0AEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 20:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiF0ABN (ORCPT
+        with ESMTP id S229521AbiF0AEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 20:01:13 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0DC2AFC
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 17:01:11 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id g26so15659648ejb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 17:01:11 -0700 (PDT)
+        Sun, 26 Jun 2022 20:04:14 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C8E2BC3
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 17:04:12 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so10702811pjl.5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 17:04:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=U7B1AcQA6Gzc0Yr5M2dpDTXBq84XMlsgT/yjld4pTYc=;
-        b=cb4WKkeMDBPiIKfycaoOb+moATBFwsgREGqiyUaKJuQAP3qpALLueIMe8jY6bCV9wC
-         qqBCLzm7RFi01kbt5s8ksRZMDBE9Mo+bvzpaKZ0fb/xFfjAIboiaOfWRKJCX+d/udhlO
-         OtVSKapPspVk5YqgZQvJCO5tLALJ4yizrj4DJoF4/XmcRAugwMedIL0M0ITdzdT4fiYS
-         wRPoMkHxJkZ1OXFv7NXt7/U9siqzofkhgxCsRLDzzQSl/wn7KaOIzUwzz0mmvvbGHCvi
-         GSGJK4B2L+EzGEPSqmsB+0Sxi2SKuPbeQrjRYADQCbpU61CQuoApnooF4yKtU0LaMZte
-         d4gw==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6JULXCbJoBht9KmD5lTvCvsKCigckFdBsjqJiarx+Gs=;
+        b=UFQnsrvdhet4IupZ3K+DNFEG2q71nd4aSKNYWfC0JRXKij1U4KDIBRoTf5gMyLRpQM
+         zAvuc7sMI19kLiZ+GBGKhXNCFlkuvhIm0RUEE65HXOT3YRgtKxvtK4ktvTkyS9gNVsI6
+         Ert8nVDzbxJHaavqaBFJuqdRkN5E5kytywLWhk3tZPeiNjBco3r5aIk1sThMpNZddQHz
+         XvL3VAPQgTJ9usnRMeafpY1kmmhtmh/xW1HH82ifWutTcLIO36Jj8NIzJmaR6lAJJ5vh
+         9YOAXrNO3zxvB3a8b4GzPY9LvJoD3poRz+0GHoquFO+j5EqMlqNX8MZb20mTdVp1zkFp
+         AQYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=U7B1AcQA6Gzc0Yr5M2dpDTXBq84XMlsgT/yjld4pTYc=;
-        b=2NFu8beJP+qHED3GLJ0MivYbJmyJHAXk8RgXs/h06GOlv/+pHcJQUzSv2IuW7QBlUz
-         Cw+mxstU7pv8XZXiL8vLjF2xzt53y2vpiznPt9K9l5uOEjtA19Qah1WMemIcPM+2OlyO
-         fWagVc3sNU1k0QVO68TLU3jyRg3szNFr7NMdblQ+2YOjsbru4tjbVhyxfi1O62bfrcZ2
-         8E6BaBJvkYISgRoM4CFX9l/e1dZM+MxatjACkFCBEe6FJmCLcy+gGUy4bfnebbyoohRK
-         wVaDduWoEiin91ygeNcoY73zNSJUrpTipYK1nY5/l68Je1yMXM6o9ZSAe5zxEQ0sGsvm
-         DtmA==
-X-Gm-Message-State: AJIora8GI/eViWUTJIKHRPfgrrHdl1i9lxk9pybo1NRAekAINJsYy5lj
-        osPfXvqHtXwXs66CsD7AlEBO
-X-Google-Smtp-Source: AGRyM1vEqy2OuipXzgZujiYs2E96gYzqUQGlRQbR6EeR/ZxO1lvhOg3UwNQAgmWuiJazyYk8Xuiz3g==
-X-Received: by 2002:a17:906:f51:b0:6fe:cf1c:cdbf with SMTP id h17-20020a1709060f5100b006fecf1ccdbfmr9681843ejj.695.1656288069663;
-        Sun, 26 Jun 2022 17:01:09 -0700 (PDT)
-Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id d18-20020a05640208d200b00435bfcad6d1sm6658462edz.74.2022.06.26.17.01.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jun 2022 17:01:08 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 00:01:04 +0000
-From:   Wedson Almeida Filho <wedsonaf@google.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Tejun Heo <tj@kernel.org>, Petr Mladek <pmladek@suse.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: Re: re. Spurious wakeup on a newly created kthread
-Message-ID: <YrjxcR2M6AD6S9dW@google.com>
-References: <20220622140853.31383-1-pmladek@suse.com>
- <YraWWl+Go17uPOgR@mtj.duckdns.org>
- <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
- <874k0863x8.fsf@email.froward.int.ebiederm.org>
- <CAHk-=wgTG2K3erROP19320zBN6BHVf0hRfXGdawkGR4gzrJN6w@mail.gmail.com>
- <CAHk-=whLsaRKaFKS0UffeCYYCVyP0bbiB4BTYTaXtScgu6R9yA@mail.gmail.com>
- <87pmiw1fy6.fsf@email.froward.int.ebiederm.org>
- <CAHk-=wiutNT47oNhyk_WvMj2qp4pehYFptXCUzW=u_2STLQiww@mail.gmail.com>
- <CAHk-=whX_=BNZ4kVEAu2NV3CMnhwsuYTyE65FQXUMx8VPNOAOA@mail.gmail.com>
- <87y1xkwa28.fsf@email.froward.int.ebiederm.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6JULXCbJoBht9KmD5lTvCvsKCigckFdBsjqJiarx+Gs=;
+        b=HbB/bTrP9GK8DBh8BHSZsh1pYnfv6GoDcEbWFfyKEq25dniuwvhVM/EBY8G5xfw4y5
+         uwugR9UmUkX+QLdSBd0hkoZKocDW2gg0WxvxGzXWGN4zBbI9AgCT6iNkS2k917vQsq5z
+         ajt7L0HqGwJDYRjHBlaBNDXz+1T7QCENUXzDZlTPq+7sLlsythBXMFt0pHcDZs1KM4Qx
+         HlKOE8+baEHPZFPX7z4DW1VPDgI2ooo1tUIOJRhVmarGwsdFGF7v5XToXTOd9HGklui9
+         79A1/i7Anbr0BstDwAbjcaALUnIW/BV4w44khRNhROutlDIItDCO2dvRH68Yj0jd5hcL
+         RYSg==
+X-Gm-Message-State: AJIora/yXuPkwf1ZvYrFulUTNUgWRMRj/V2gu/V1qqxNKeCjbncwf6RX
+        MUAqB3iZ9i7QBenk8fp/qpekfw==
+X-Google-Smtp-Source: AGRyM1uLcwlBqXn4TfbTsIjo2+PKQcgGixV7Ln0RZmtCBBdlLJ7hc1c5yAF/7OgcrtWPoPuz/XPLwg==
+X-Received: by 2002:a17:90b:380c:b0:1ed:2071:e6b with SMTP id mq12-20020a17090b380c00b001ed20710e6bmr12464689pjb.82.1656288251695;
+        Sun, 26 Jun 2022 17:04:11 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id k5-20020a170902d58500b0016a1096bc95sm5741255plh.12.2022.06.26.17.04.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Jun 2022 17:04:11 -0700 (PDT)
+Message-ID: <ea9b3819-418a-5b79-8bcd-0b28ead70a61@kernel.dk>
+Date:   Sun, 26 Jun 2022 18:04:09 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87y1xkwa28.fsf@email.froward.int.ebiederm.org>
-X-Mutt-References: <87y1xkwa28.fsf@email.froward.int.ebiederm.org>
-X-Mutt-Fcc: ~/sent
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: Linux 5.10.125
+Content-Language: en-US
+To:     Greg Thelen <gthelen@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz
+References: <1656164548242121@kroah.com>
+ <xr93fsjr5901.fsf@gthelen-ubiquity2.mtv.corp.google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <xr93fsjr5901.fsf@gthelen-ubiquity2.mtv.corp.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 24, 2022 at 07:19:27PM -0500, Eric W. Biederman wrote:
+On 6/26/22 4:56 PM, Greg Thelen wrote:
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 > 
-> Further it is necessary for Peter Zijlstra's rewrite of the kernel
-> freezer.   As anything that isn't a special stop state (which
-> TASK_UNINTERRUPTIBLE is not) will receive a spurious wake up on when
-> thawed out.
+>> I'm announcing the release of the 5.10.125 kernel.
+>>
+>> All users of the 5.10 kernel series must upgrade.
+>>
+>> The updated 5.10.y git tree can be found at:
+>> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
+>> and can be browsed at the normal kernel.org git web browser:
+>> 	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+>>
+>> thanks,
+>>
+>> greg k-h
+>>
+>> ------------
+>>
+>>  Makefile                              |    2 
+>>  arch/arm64/mm/cache.S                 |    2 
+>>  arch/s390/mm/pgtable.c                |    2 
+>>  drivers/tty/serial/serial_core.c      |   34 ++++--------
+>>  drivers/usb/gadget/function/u_ether.c |   11 +++-
+>>  fs/io_uring.c                         |   23 +++++---
+>>  fs/zonefs/super.c                     |   92 ++++++++++++++++++++++------------
+>>  net/ipv4/inet_hashtables.c            |   31 ++++++++---
+>>  8 files changed, 122 insertions(+), 75 deletions(-)
+>>
+>> Christian Borntraeger (1):
+>>       s390/mm: use non-quiescing sske for KVM switch to keyed guest
+>>
+>> Damien Le Moal (1):
+>>       zonefs: fix zonefs_iomap_begin() for reads
+>>
+>> Eric Dumazet (1):
+>>       tcp: add some entropy in __inet_hash_connect()
+>>
+>> Greg Kroah-Hartman (1):
+>>       Linux 5.10.125
+>>
+>> Jens Axboe (1):
+>>       io_uring: add missing item types for various requests
+>>
+>> Lukas Wunner (1):
+>>       serial: core: Initialize rs485 RTS polarity already on probe
+>>
+>> Marian Postevca (1):
+>>       usb: gadget: u_ether: fix regression in setting fixed MAC address
+>>
+>> Will Deacon (1):
+>>       arm64: mm: Don't invalidate FROM_DEVICE buffers at start of DMA transfer
+>>
+>> Willy Tarreau (5):
+>>       tcp: use different parts of the port_offset for index and offset
+>>       tcp: add small random increments to the source port
+>>       tcp: dynamically allocate the perturb table used by source ports
+>>       tcp: increase source port perturb table to 2^16
+>>       tcp: drop the hash_32() part from the index calculation
+> 
+> 5.10.125 commit df3f3bb5059d20ef094d6b2f0256c4bf4127a859 ("io_uring: add
+> missing item types for various requests") causes panic when running
+> test/iopoll.t from https://github.com/axboe/liburing commit
+> dda4848a9911120a903bef6284fb88286f4464c9 (liburing-2.2).
+> 
+> Here's a manually annotated panic message:
+> [  359.047161] list_del corruption, ffffa42098824f80->next is LIST_POISON1 (dead000000000100)
+> [  359.055393] kernel BUG at lib/list_debug.c:47!
+> [  359.059786] invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC PTI
+> [  359.065463] CPU: 11 PID: 15862 Comm: iopoll.t Tainted: G S        I       5.10.124 #1
+> [  359.081804] RIP: 0010:__list_del_entry_valid+0x49/0x80
+> [  359.086880] Code: c2 22 48 39 d1 74 25 48 8b 11 48 39 f2 75 2d 48 8b 50 08 48 39 f2 75 34 b0 01 5d c3 48 c7 c7 68 15 79 b1 31 c0 e8 c5 a2 5a 00 <0f> 0b 48 c7 c7 d8 8e 76 b1 31 c0 e8 b5 a2 5a 00 0f 0b 48 c7 c7 69
+> [  359.105431] RSP: 0018:ffffb6b66785bd58 EFLAGS: 00010046
+> [  359.110592] RAX: 000000000000004e RBX: ffffa42098824f00 RCX: d07284ea1fbba400
+> [  359.117642] RDX: ffffa43f7f4f05b8 RSI: ffffa43f7f4dff48 RDI: ffffa43f7f4dff48
+> [  359.124691] RBP: ffffb6b66785bd58 R08: 0000000000000000 R09: ffffffffb1f38540
+> [  359.131740] R10: 00000000ffff7fff R11: 0000000000000000 R12: 0000000000000282
+> [  359.138789] R13: ffffb6b66785beb8 R14: ffffa42095d33e00 R15: ffffa420937e3d20
+> [  359.145836] FS:  00000000004f8380(0000) GS:ffffa43f7f4c0000(0000) knlGS:0000000000000000
+> [  359.153830] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  359.159506] CR2: 0000000000539388 CR3: 000000027b57c006 CR4: 00000000003706e0
+> [  359.166552] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [  359.173600] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [  359.180647] Call Trace:
+> [  359.183064]  io_dismantle_req+0x1da/0x2b0
+>                     __list_del_entry [include/linux/list.h:132]
+>                     list_del [include/linux/list.h:146]
+>                     io_req_drop_files [fs/io_uring.c:5934]
+>                     io_req_clean_work [fs/io_uring.c:1315]
+>                     io_dismantle_req [fs/io_uring.c:1911]
+> [  359.187023]  io_do_iopoll+0x4e5/0x790
+> [  359.194602]  __se_sys_io_uring_enter+0x39b/0x6f0
+> [  359.208318]  __x64_sys_io_uring_enter+0x29/0x30
+> [  359.212793]  do_syscall_64+0x31/0x40
+> [  359.216324]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-Do you know if the current (i.e., prior to the rewrite) kernel freezer
-also sends spurious wakeups when thawing tasks?
+Well that sucks, I wonder why mine didn't fail like that. I'll see if I
+can hit this and send a fix. Thanks for reporting!
 
-I'm trying to understand if this source of spurious wakeups will be a
-new one or already exists (and might therefore explain what's described
-in the original email).
+-- 
+Jens Axboe
 

@@ -2,246 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C283C55C9A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF4555CCFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238752AbiF0P7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S238860AbiF0QAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238706AbiF0P7O (ORCPT
+        with ESMTP id S238796AbiF0QAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:59:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 078D0D79
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:59:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656345551;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PrdaOUdviFNqJUrxeM9jQQOmGHi626ZP241EikWZxH4=;
-        b=PcpO/86mxhC20LeX1LRowMVUciLybSxewqSS4jbfGIENPYBXzDQt1Qtl9mR4cnk3BYE58u
-        kRomsyCCEybfolhmS+5TSc9NPLrKELD9W+Gr/qpTBVCAzJHI6hq4st7io5zYZRv14RGwmK
-        lLnpbv3/im5/wquJyzNARaTe8XtmsEE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-462-WeusmHWPNzy5143zaHwmuA-1; Mon, 27 Jun 2022 11:59:00 -0400
-X-MC-Unique: WeusmHWPNzy5143zaHwmuA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 11F7F2806AD1;
-        Mon, 27 Jun 2022 15:59:00 +0000 (UTC)
-Received: from [10.22.10.125] (unknown [10.22.10.125])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 45DA6415F5E;
-        Mon, 27 Jun 2022 15:58:59 +0000 (UTC)
-Message-ID: <c69f25d2-128d-0ff8-ecba-93c82e1adfde@redhat.com>
-Date:   Mon, 27 Jun 2022 11:58:58 -0400
+        Mon, 27 Jun 2022 12:00:02 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411F1B1CF
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:00:01 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id m2so8572878plx.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:00:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PYA86m3m6KKN8+fip9lvQ6xHPvZviw+uoFD0wwDrX2s=;
+        b=VaXTBEE75YJL3sPSVnzDJZanyQb+K05AMlW8ddb1VOmVKzy5RB1VeN1qu7bpE5wOSe
+         s73BAXy7osQre4GY163jc4W9ApmRiCOxCe0RK2ifyBf9bfyR1yXG3D6P2t4q8/oFg5cR
+         4k0HFBZLliZcx3te7RGHevgzkkZAz6LuNSca4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PYA86m3m6KKN8+fip9lvQ6xHPvZviw+uoFD0wwDrX2s=;
+        b=bPr2YyH6NqQCgQ0RFDk+xSlxjWsRxL+vVbxsAzKyJw2PBvYM9jF9zQifTyqLHsNmtE
+         s+3GPCETSbqBYji4ze+49UX/8wuTH60zti0ELQpJW22Xa/pimyG8Cb3YhtHfpKhFTnVG
+         CxXXrCIbHrmVicsbADU2UaTDi/oYnWYVwY8fXevYO+j0QIjQDwx7OwNXOoQ+Sc1ovMaL
+         RSV198S09qj8SP7F5BZoMslbyH2J1vXmJd82t8XsVSXehVG4TjClg67648KgFXcwIjUz
+         OpjeWk6WUkKIvuYq7QsltKL2TGAg3810WyX+cnrDlV0eqNCtTFQBselp2IFg0xPziOb6
+         s2LA==
+X-Gm-Message-State: AJIora9RgYGf3xE2s5P+ZTxw3qnMRr4hqjmX13X2TV+Vb+6J350xlA8v
+        qJkkx/j6vRBO+eYpPf2f/YRROQ==
+X-Google-Smtp-Source: AGRyM1u1abSyl7cHfPGKO4JsjkUtSSoO2KNWPcgWwtXRGWesBkLxWWJ4bz+viP5u9BJTxE3M6D66kA==
+X-Received: by 2002:a17:903:1249:b0:168:e059:59c9 with SMTP id u9-20020a170903124900b00168e05959c9mr15550467plh.103.1656345600738;
+        Mon, 27 Jun 2022 09:00:00 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:f31c:687c:3a61:62c5])
+        by smtp.gmail.com with UTF8SMTPSA id s21-20020a056a00179500b0051c4ecb0e3dsm7640113pfg.193.2022.06.27.08.59.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 09:00:00 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 08:59:58 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+Cc:     Judy Hsiao <judyhsiao@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        dianders@chromium.org, cychiang@google.com, judyhsiao@google.com,
+        tzungbi@chromium.org, swboyd@chromium.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v3 0/3] Add dtsi for sc7280 herobrine boards that using rt5682
+ codec
+Message-ID: <YrnT/nLN0erv6VRz@google.com>
+References: <20220525014308.1853576-1-judyhsiao@chromium.org>
+ <YrfJkQYFCsxPpUzi@builder.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4] x86/paravirt: useless assignment instructions cause
- Unixbench full core performance degradation
-Content-Language: en-US
-To:     Guo Hui <guohui@uniontech.com>, peterz@infradead.org
-Cc:     jgross@suse.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, will@kernel.org, boqun.feng@gmail.com,
-        virtualization@lists.linux-foundation.org,
-        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org
-References: <YrlhGqqce0NCQ6hi@hirez.programming.kicks-ass.net>
- <20220627142732.31067-1-guohui@uniontech.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220627142732.31067-1-guohui@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YrfJkQYFCsxPpUzi@builder.lan>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 10:27, Guo Hui wrote:
-> The instructions assigned to the vcpu_is_preempted function parameter
-> in the X86 architecture physical machine are redundant instructions,
-> causing the multi-core performance of Unixbench to drop by about 4% to 5%.
-> The C function is as follows:
-> static bool vcpu_is_preempted(long vcpu);
->
-> The parameter 'vcpu' in the function osq_lock
-> that calls the function vcpu_is_preempted is assigned as follows:
->
-> The C code is in the function node_cpu:
-> cpu = node->cpu - 1;
->
-> The instructions corresponding to the C code are:
-> mov 0x14(%rax),%edi
-> sub $0x1,%edi
->
-> The above instructions are unnecessary
-> in the X86 Native operating environment,
-> causing high cache-misses and degrading performance.
->
-> This patch uses static_key to not execute this instruction
-> in the Native runtime environment.
->
-> The patch effect is as follows two machines,
-> Unixbench runs with full core score:
->
-> 1. Machine configuration:
-> Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz
-> CPU core: 40
-> Memory: 256G
-> OS Kernel: 5.19-rc3
->
-> Before using the patch:
-> System Benchmarks Index Values               BASELINE       RESULT    INDEX
-> Dhrystone 2 using register variables         116700.0  948326591.2  81261.9
-> Double-Precision Whetstone                       55.0     211986.3  38543.0
-> Execl Throughput                                 43.0      43453.2  10105.4
-> File Copy 1024 bufsize 2000 maxblocks          3960.0     438936.2   1108.4
-> File Copy 256 bufsize 500 maxblocks            1655.0     118197.4    714.2
-> File Copy 4096 bufsize 8000 maxblocks          5800.0    1534674.7   2646.0
-> Pipe Throughput                               12440.0   46482107.6  37365.0
-> Pipe-based Context Switching                   4000.0    1915094.2   4787.7
-> Process Creation                                126.0      85442.2   6781.1
-> Shell Scripts (1 concurrent)                     42.4      69400.7  16368.1
-> Shell Scripts (8 concurrent)                      6.0       8877.2  14795.3
-> System Call Overhead                          15000.0    4714906.1   3143.3
->                                                                     ========
-> System Benchmarks Index Score                                        7923.3
->
-> After using the patch:
-> System Benchmarks Index Values               BASELINE       RESULT    INDEX
-> Dhrystone 2 using register variables         116700.0  947032915.5  81151.1
-> Double-Precision Whetstone                       55.0     211971.2  38540.2
-> Execl Throughput                                 43.0      45054.8  10477.9
-> File Copy 1024 bufsize 2000 maxblocks          3960.0     515024.9   1300.6
-> File Copy 256 bufsize 500 maxblocks            1655.0     146354.6    884.3
-> File Copy 4096 bufsize 8000 maxblocks          5800.0    1679995.9   2896.5
-> Pipe Throughput                               12440.0   46466394.2  37352.4
-> Pipe-based Context Switching                   4000.0    1898221.4   4745.6
-> Process Creation                                126.0      85653.1   6797.9
-> Shell Scripts (1 concurrent)                     42.4      69437.3  16376.7
-> Shell Scripts (8 concurrent)                      6.0       8898.9  14831.4
-> System Call Overhead                          15000.0    4658746.7   3105.8
->                                                                     ========
-> System Benchmarks Index Score                                        8248.8
->
-> 2. Machine configuration:
-> Hygon C86 7185 32-core Processor
-> CPU core: 128
-> Memory: 256G
-> OS Kernel: 5.19-rc3
->
-> Before using the patch:
-> System Benchmarks Index Values               BASELINE       RESULT    INDEX
-> Dhrystone 2 using register variables         116700.0 2256644068.3 193371.4
-> Double-Precision Whetstone                       55.0     438969.9  79812.7
-> Execl Throughput                                 43.0      10108.6   2350.8
-> File Copy 1024 bufsize 2000 maxblocks          3960.0     275892.8    696.7
-> File Copy 256 bufsize 500 maxblocks            1655.0      72082.7    435.5
-> File Copy 4096 bufsize 8000 maxblocks          5800.0     925043.4   1594.9
-> Pipe Throughput                               12440.0  118905512.5  95583.2
-> Pipe-based Context Switching                   4000.0    7820945.7  19552.4
-> Process Creation                                126.0      31233.3   2478.8
-> Shell Scripts (1 concurrent)                     42.4      49042.8  11566.7
-> Shell Scripts (8 concurrent)                      6.0       6656.0  11093.3
-> System Call Overhead                          15000.0    6816047.5   4544.0
->                                                                     ========
-> System Benchmarks Index Score                                        7756.6
->
-> After using the patch:
-> System Benchmarks Index Values               BASELINE       RESULT    INDEX
-> Dhrystone 2 using register variables         116700.0 2252272929.4 192996.8
-> Double-Precision Whetstone                       55.0     451847.2  82154.0
-> Execl Throughput                                 43.0      10595.1   2464.0
-> File Copy 1024 bufsize 2000 maxblocks          3960.0     301279.3    760.8
-> File Copy 256 bufsize 500 maxblocks            1655.0      79291.3    479.1
-> File Copy 4096 bufsize 8000 maxblocks          5800.0    1039755.2   1792.7
-> Pipe Throughput                               12440.0  118701468.1  95419.2
-> Pipe-based Context Switching                   4000.0    8073453.3  20183.6
-> Process Creation                                126.0      33440.9   2654.0
-> Shell Scripts (1 concurrent)                     42.4      52722.6  12434.6
-> Shell Scripts (8 concurrent)                      6.0       7050.4  11750.6
-> System Call Overhead                          15000.0    6834371.5   4556.2
->                                                                     ========
-> System Benchmarks Index Score                                        8157.8
->
-> Signed-off-by: Guo Hui <guohui@uniontech.com>
-> ---
->   arch/x86/kernel/paravirt-spinlocks.c |  4 ++++
->   kernel/locking/osq_lock.c            | 12 +++++++++++-
->   2 files changed, 15 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/kernel/paravirt-spinlocks.c b/arch/x86/kernel/paravirt-spinlocks.c
-> index 9e1ea99ad..a2eb375e2 100644
-> --- a/arch/x86/kernel/paravirt-spinlocks.c
-> +++ b/arch/x86/kernel/paravirt-spinlocks.c
-> @@ -33,6 +33,8 @@ bool pv_is_native_vcpu_is_preempted(void)
->   		__raw_callee_save___native_vcpu_is_preempted;
->   }
->   
-> +DECLARE_STATIC_KEY_TRUE(vcpu_has_preemption);
-> +
->   void __init paravirt_set_cap(void)
->   {
->   	if (!pv_is_native_spin_unlock())
-> @@ -40,4 +42,6 @@ void __init paravirt_set_cap(void)
->   
->   	if (!pv_is_native_vcpu_is_preempted())
->   		setup_force_cpu_cap(X86_FEATURE_VCPUPREEMPT);
-> +	else
-> +		static_branch_disable(&vcpu_has_preemption);
->   }
-> diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
-> index d5610ad52..adb41080d 100644
-> --- a/kernel/locking/osq_lock.c
-> +++ b/kernel/locking/osq_lock.c
-> @@ -27,6 +27,16 @@ static inline int node_cpu(struct optimistic_spin_node *node)
->   	return node->cpu - 1;
->   }
->   
-> +DEFINE_STATIC_KEY_TRUE(vcpu_has_preemption);
-> +
-> +static inline bool vcpu_is_preempted_node(struct optimistic_spin_node *node)
-> +{
-> +	if (!static_branch_unlikely(&vcpu_has_preemption))
-> +		return false;
-> +
-> +	return vcpu_is_preempted(node_cpu(node->prev));
-> +}
-> +
->   static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
->   {
->   	int cpu_nr = encoded_cpu_val - 1;
-> @@ -141,7 +151,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
->   	 * polling, be careful.
->   	 */
->   	if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
-> -				  vcpu_is_preempted(node_cpu(node->prev))))
-> +						vcpu_is_preempted_node(node)))
->   		return true;
->   
->   	/* unqueue */
+On Sat, Jun 25, 2022 at 09:50:57PM -0500, Bjorn Andersson wrote:
+> On Tue 24 May 20:43 CDT 2022, Judy Hsiao wrote:
+> 
+> > Put sound node and lpass_cpu node settings for boards that use rt5682
+> > codec in the sc7280-herobrine-audio-rt5682.dtsi as there are different
+> > choices of headset codec for herobrine projects. Common audio setting
+> > for the internal speaker is in sc7280-herobrine.dtsi.
+> > 
+> > This series depends on:
+> > "Add lpass pin control support for audio on sc7280 based targets" [1]
+> > "Add soundcard support for sc7280 based platforms" [2]
+> > 
+> > [1]
+> > https://patchwork.kernel.org/project/linux-arm-msm/list/?series=638776
+> 
+> Afaict this is applied.
+> 
+> > [2]
+> > https://patchwork.kernel.org/project/linux-arm-msm/list/?series=643589
+> > 
+> 
+> But [2] doesn't compile and hence this series doesn't compile.
 
-The patch looks good. I do have a minor nit though.
+If I'm not mistaken the main contender is the "Add support for audio clock
+gating resets for SC7280" series [1], which still has open comments.
 
-Usually, DEFINE_STATIC_KEY_TRUE() is paired with static_branch_likely() 
-and DEFINE_STATIC_KEY_FALSE() is paired with static_branch_unlikely(). I 
-think what Peter meant is to use DEFINE_STATIC_KEY_FALSE() and enable 
-vcpu_has_preemption together with X86_FEATURE_VCPUPREEMPT in the same if 
-block.
+[1] https://patchwork.kernel.org/project/linux-arm-msm/list/?series=650267
 
-Cheers,
-Longman
-
+> Can you please submit a single series with all the audio dts patches you
+> want me to apply, where it's possible to run "make dtbs" after every
+> single patch in the series.
+> 
+> Thanks,
+> Bjorn
+> 
+> > 
+> > Changes Since V2:
+> >     -- Add bias-disable for i2s ws line.
+> >     -- Fix typo in the commit message.
+> > 
+> > Changes Since V1:
+> >     -- Remove sound-dai-cells in sound node.
+> >     -- Add dependency list.
+> >     -- Update patch subject.
+> > 
+> > Judy Hsiao (3):
+> >   arm64: dts: qcom: sc7280: herobrine: Add pinconf settings for mi2s1
+> >   arm64: dts: qcom: sc7280: Add sc7280-herobrine-audio-rt5682.dtsi
+> >   arm64: dts: qcom: sc7280: include sc7280-herobrine-audio-rt5682.dtsi
+> >     in villager and herobrine-r1
+> > 
+> >  .../qcom/sc7280-herobrine-audio-rt5682.dtsi   | 121 ++++++++++++++++++
+> >  .../qcom/sc7280-herobrine-herobrine-r1.dts    |   1 +
+> >  .../dts/qcom/sc7280-herobrine-villager-r0.dts |   1 +
+> >  .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  15 +++
+> >  4 files changed, 138 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
+> > 
+> > -- 
+> > 2.36.1.124.g0e6072fb45-goog
+> > 

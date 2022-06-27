@@ -2,165 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA5955C79F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EE755C636
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236217AbiF0Ok4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S236409AbiF0Olh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbiF0Okz (ORCPT
+        with ESMTP id S234816AbiF0Olg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:40:55 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69190F68;
-        Mon, 27 Jun 2022 07:40:54 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id CDA215C00A1;
-        Mon, 27 Jun 2022 10:40:53 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 27 Jun 2022 10:40:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1656340853; x=1656427253; bh=yLd/tFyFBX
-        Pfe4WL4650xXMRPu9U8zL44cPGtXj0tuw=; b=Swb2iaAcnVPoeH4cVNNzg/u60L
-        xp9UyyL4m0zZn2NnbslisrRlxjNg7yQHzz3j0pUdS5TWLp3lTTVLpLYYUPcgFmD4
-        q0QgLoDHJwj9FYLoq8qkkvPnHHXXyxWdp+VK40p9P1jJuwWlAEuu/LNRM2f0IwWM
-        L40siopL5y36sbMLRjGxWZ3FXuTD385n409ac45Z/fwk35HkAIX0ip2BqU/Tn+6+
-        dRf8cPOc4IEMAaYtco76BkrZycptb43lNmDqE/rTu/bfrhZovBMuSqw1jNN1hFMz
-        4pz74464XBPrLU+dloGrFlnIxVSIXDPcmKw/HnYukzo4gAZBbb+RieNZBVKg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1656340853; x=1656427253; bh=yLd/tFyFBXPfe4WL4650xXMRPu9U
-        8zL44cPGtXj0tuw=; b=DCNwxgQsuY49OnDxnuWk37BEcm5WNAttBictH0+a6qlD
-        C3cHwClZyqRq3zKSa46ImNcSJGMxZ2eHRA5U2c6+qV05k4piPVlDADmEBy7tRlUU
-        fi1iiV3kkShlFPLXm3Q63fKujBInZbWG9Tn62CryH0L1KXuXgChS6Hqqm5U9rcqc
-        c8SUcl29kS9T3OKSuz8HhPUYWqwdrRPALfzrNft0lzvufLKUTyFn22hr4WV3ExJS
-        tWaJigYXyhrlNPlQWBA054jjJ1fIGFa31i/ArnKLjQsZk0Dp2Z76NdM9TKXT1IW/
-        47pMyovX3kszS9m9vTHST9RTZGirTG1CwfE3QZwieA==
-X-ME-Sender: <xms:dMG5YpJgFuekJRpqcxw1nBIbRzvFUQ2ZEmeCxEtz-nHe34Dx1vnRTw>
-    <xme:dMG5YlJm2GnneGXT7ZiMJPr6Jnvahld0GfrVzG_gZf2Q9TD4QBMgdHnZFcxhVS1RF
-    tNgn4thLaIPPg>
-X-ME-Received: <xmr:dMG5YhuVCeSZbOy8p20Z_kaLAbjWnqAwBn_BMWue1Z8rxETbArOxZAFAjhc9hBRcxWtoPp0ZbY72NFC0wGQSIXyD7piFnidg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeghedgkeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:dMG5YqYq0teEk3zK_N2dqPkC4BHmFoopf2vT1bRKUfptGzLYLjp4ng>
-    <xmx:dMG5YgYRGTirzGzw4-7BM2gSefa5Ed0X-Hf_Diosc5vMFr34fd-VQA>
-    <xmx:dMG5YuA_Zs7iuv7cwjmFdLpkI0O30rYQGxqY7u5iDZpYM88LuxuStA>
-    <xmx:dcG5YsTJdhXWuXrX7qNkJKtD33ZPFvk5YEwo0XQn50VROSN5yD7GlQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Jun 2022 10:40:52 -0400 (EDT)
-Date:   Mon, 27 Jun 2022 16:40:50 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Duoming Zhou <duoming@zju.edu.cn>,
-        Dave Airlie <airlied@linux.ie>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <YrnBcobDaStH8/83@kroah.com>
-References: <20220623160723.7a44b573@canb.auug.org.au>
+        Mon, 27 Jun 2022 10:41:36 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D87CE04
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:41:35 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-3178acf2a92so87717247b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:41:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1hHJnJQFjFuIToWQDKaqG2N15/HHTzVxPaO06uGF804=;
+        b=qTM2lIpYwNuYEZQHZ/Ga8EB8z8R7o9AlA+eFAqPxYsUT4s9V9gs4aimap7TPAFPAaA
+         ELUH0DHsK9PT8ELf2dOUQ4WQNMbFH3LZpKgMsvmF3l8l+QU2g6NII4dNHODvqI+AP2Db
+         E4bZLJ5qn6m5BvtP3b80w2chOfqLRLwTFHL5OgSvy1ylgaAqrQdZVeb8rfTXkGffV5qD
+         0CR3PXBpHQfC3kB3Qw7CeYcUGVvSGHmsCuOnH3tXUnt4opHjvfidbEXTZvnww+jzze0N
+         mY8whBGPhmS8XmcFL98LqcG4CuVlwXAdfqY3s6h5MpWMqN+EUi4/duM3XUjkfqNGpvGi
+         DYbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1hHJnJQFjFuIToWQDKaqG2N15/HHTzVxPaO06uGF804=;
+        b=eVcvcmajUiU45aQf94SPV+cEv6tIdceIDTA/JtTLSrZ3bTG2y22tRGwEdcWQVP7f00
+         kp6lKYnSE0FN/2w1nbGp1vdbAA3e6sTTj9SP+ENi3e+1NUmuUcAjOqYTYnIqJzmWGDLG
+         xUhqwUjWTwFp/1MUZTzABFmvWMaYp3UZFHA8vwSLT0lgqHBIk3vl0puBr97PJlBOAZdl
+         TR+HeeWoQXHoIxX2GHR+Iyq3XipnczBfmy/h8B64798mEXWtVdeUiNUMcLnwPDcOMq4A
+         XAqyehM4dR0jAMzEAUIePBe3R6kbppE6BveG0bavdU11SGW3/32FRA/+XW95X1afH3Fu
+         dKFg==
+X-Gm-Message-State: AJIora/Ru5W9LXg8PlL1aEaznlQ5RviWW8AMvGa18OFrIYJw/DmQJdMJ
+        MArQcjFp+ViN+5oUPd/aT4F2/uFL3zeOafQxsFXCJhejn/sZYw==
+X-Google-Smtp-Source: AGRyM1urGW/4H0GG94INFmrk81Rte5WO/5OidXSkbfUxWXyGmrcqN1x1WsStdWmSl8REBtZN+R+gCul7YvpVCEsrNVM=
+X-Received: by 2002:a81:9b93:0:b0:317:8c9d:4c22 with SMTP id
+ s141-20020a819b93000000b003178c9d4c22mr14864512ywg.278.1656340894677; Mon, 27
+ Jun 2022 07:41:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623160723.7a44b573@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220622082716.478486-1-lee.jones@linaro.org>
+In-Reply-To: <20220622082716.478486-1-lee.jones@linaro.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 27 Jun 2022 16:41:23 +0200
+Message-ID: <CANn89iK-uFP6Swgc0ZeEC38UsuywJ3wbybSNouH202Wa7X7Tzg@mail.gmail.com>
+Subject: Re: [RESEND 1/1] Bluetooth: Use chan_list_lock to protect the whole
+ put/destroy invokation
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, stable@kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 04:07:23PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the amdgpu tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> In file included from include/linux/radix-tree.h:12,
->                  from include/linux/idr.h:15,
->                  from include/linux/kernfs.h:12,
->                  from include/linux/sysfs.h:16,
->                  from include/linux/kobject.h:20,
->                  from include/linux/energy_model.h:7,
->                  from include/linux/device.h:16,
->                  from include/linux/power_supply.h:15,
->                  from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:28:
-> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c: In function 'amdgpu_reset_capture_coredumpm':
-> include/linux/gfp.h:337:25: error: passing argument 5 of 'dev_coredumpm' makes pointer from integer without a cast [-Werror=int-conversion]
->   337 | #define GFP_KERNEL      (__GFP_RECLAIM | __GFP_IO | __GFP_FS)
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                         |
->       |                         unsigned int
-> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4726:55: note: in expansion of macro 'GFP_KERNEL'
->  4726 |         dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
->       |                                                       ^~~~~~~~~~
-> In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:35:
-> include/linux/devcoredump.h:59:30: note: expected 'ssize_t (*)(char *, loff_t,  size_t,  void *, size_t)' {aka 'long int (*)(char *, long long int,  long unsigned int,  void *, long unsigned int)'} but argument is of type 'unsigned int'
->    59 |                    ssize_t (*read)(char *buffer, loff_t offset, size_t count,
->       |                    ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    60 |                                    void *data, size_t datalen),
->       |                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4727:23: error: passing argument 6 of 'dev_coredumpm' from incompatible pointer type [-Werror=incompatible-pointer-types]
->  4727 |                       amdgpu_devcoredump_read, amdgpu_devcoredump_free);
->       |                       ^~~~~~~~~~~~~~~~~~~~~~~
->       |                       |
->       |                       ssize_t (*)(char *, loff_t,  size_t,  void *, size_t) {aka long int (*)(char *, long long int,  long unsigned int,  void *, long unsigned int)}
-> In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:35:
-> include/linux/devcoredump.h:61:27: note: expected 'void (*)(void *)' but argument is of type 'ssize_t (*)(char *, loff_t,  size_t,  void *, size_t)' {aka 'long int (*)(char *, long long int,  long unsigned int,  void *, long unsigned int)'}
->    61 |                    void (*free)(void *data));
->       |                    ~~~~~~~^~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:4726:9: error: too many arguments to function 'dev_coredumpm'
->  4726 |         dev_coredumpm(dev->dev, THIS_MODULE, adev, 0, GFP_KERNEL,
->       |         ^~~~~~~~~~~~~
-> In file included from drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:35:
-> include/linux/devcoredump.h:57:6: note: declared here
->    57 | void dev_coredumpm(struct device *dev, struct module *owner,
->       |      ^~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   3d8785f6c04a ("drm/amdgpu: adding device coredump support")
-> 
-> interacting with commit
-> 
->   77515ebaf019 ("devcoredump: remove the useless gfp_t parameter in dev_coredumpv and dev_coredumpm")
-> 
-> from the driver-core tree.
-> 
-> I have applied the following merge resolution patch for today.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 23 Jun 2022 15:56:22 +1000
-> Subject: [PATCH] fix up for "devcoredump: remove the useless gfp_t parameter in dev_coredumpv and dev_coredumpm"
-> 
-> interacting with
-> 
->   3d8785f6c04a ("drm/amdgpu: adding device coredump support")
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+On Wed, Jun 22, 2022 at 10:27 AM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> This change prevents a use-after-free caused by one of the worker
+> threads starting up (see below) *after* the final channel reference
+> has been put() during sock_close() but *before* the references to the
+> channel have been destroyed.
+>
+>   refcount_t: increment on 0; use-after-free.
+>   BUG: KASAN: use-after-free in refcount_dec_and_test+0x20/0xd0
+>   Read of size 4 at addr ffffffc114f5bf18 by task kworker/u17:14/705
+>
+>   CPU: 4 PID: 705 Comm: kworker/u17:14 Tainted: G S      W       4.14.234-00003-g1fb6d0bd49a4-dirty #28
+>   Hardware name: Qualcomm Technologies, Inc. SM8150 V2 PM8150 Google Inc. MSM sm8150 Flame DVT (DT)
+>   Workqueue: hci0 hci_rx_work
+>   Call trace:
+>    dump_backtrace+0x0/0x378
+>    show_stack+0x20/0x2c
+>    dump_stack+0x124/0x148
+>    print_address_description+0x80/0x2e8
+>    __kasan_report+0x168/0x188
+>    kasan_report+0x10/0x18
+>    __asan_load4+0x84/0x8c
+>    refcount_dec_and_test+0x20/0xd0
+>    l2cap_chan_put+0x48/0x12c
+>    l2cap_recv_frame+0x4770/0x6550
+>    l2cap_recv_acldata+0x44c/0x7a4
+>    hci_acldata_packet+0x100/0x188
+>    hci_rx_work+0x178/0x23c
+>    process_one_work+0x35c/0x95c
+>    worker_thread+0x4cc/0x960
+>    kthread+0x1a8/0x1c4
+>    ret_from_fork+0x10/0x18
+>
+> Cc: stable@kernel.org
+
+When was the bug added ? (Fixes: tag please)
+
+> Cc: Marcel Holtmann <marcel@holtmann.org>
+> Cc: Johan Hedberg <johan.hedberg@gmail.com>
+> Cc: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: linux-bluetooth@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
 > ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  net/bluetooth/l2cap_core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+> index ae78490ecd3d4..82279c5919fd8 100644
+> --- a/net/bluetooth/l2cap_core.c
+> +++ b/net/bluetooth/l2cap_core.c
+> @@ -483,9 +483,7 @@ static void l2cap_chan_destroy(struct kref *kref)
+>
+>         BT_DBG("chan %p", chan);
+>
+> -       write_lock(&chan_list_lock);
+>         list_del(&chan->global_l);
+> -       write_unlock(&chan_list_lock);
+>
+>         kfree(chan);
+>  }
+> @@ -501,7 +499,9 @@ void l2cap_chan_put(struct l2cap_chan *c)
+>  {
+>         BT_DBG("chan %p orig refcnt %u", c, kref_read(&c->kref));
+>
+> +       write_lock(&chan_list_lock);
+>         kref_put(&c->kref, l2cap_chan_destroy);
+> +       write_unlock(&chan_list_lock);
+>  }
+>  EXPORT_SYMBOL_GPL(l2cap_chan_put);
+>
+> --
+> 2.36.1.255.ge46751e96f-goog
+>
 
-Sorry for the delay, the driver-core tree has now reverted this, so all
-should be good.
+I do not think this patch is correct.
 
-greg k-h
+a kref does not need to be protected by a write lock.
+
+This might shuffle things enough to work around a particular repro you have.
+
+If the patch was correct why not protect kref_get() sides ?
+
+Before the &hdev->rx_work is scheduled (queue_work(hdev->workqueue,
+&hdev->rx_work),
+a reference must be taken.
+
+Then this reference must be released at the end of hci_rx_work() or
+when hdev->workqueue
+is canceled.
+
+This refcount is not needed _if_ the workqueue is properly canceled at
+device dismantle,
+in a synchronous way.
+
+I do not see this hdev->rx_work being canceled, maybe this is the real issue.
+
+There is a call to drain_workqueue() but this is not enough I think,
+because hci_recv_frame()
+can re-arm
+   queue_work(hdev->workqueue, &hdev->rx_work);

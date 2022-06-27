@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0395155DDE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFC455DE1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240628AbiF0Vnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 17:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44626 "EHLO
+        id S241389AbiF0Vnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 17:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238216AbiF0Vno (ORCPT
+        with ESMTP id S238871AbiF0Vnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 17:43:44 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CF0C4A;
-        Mon, 27 Jun 2022 14:43:42 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id d129so10285263pgc.9;
-        Mon, 27 Jun 2022 14:43:42 -0700 (PDT)
+        Mon, 27 Jun 2022 17:43:41 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CFBC4A
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:43:40 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id fd6so14934428edb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:43:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tsp6NWTiXSJ0zfkiGxcTyiVcKEGRfQJ96DU5zcvmvhA=;
-        b=WuBauiPHNgwaS1JBOh71BPtqPlPvMN2PZLdgBpcs5mPw/64QyyNNsRDE2I1oPamnWs
-         yH+ZmYC/KFHskKTFDDEdMiU0/NfuQnu2oHb0uefxd60xIBhQ71G9FBVEMy7AsGxal8kE
-         J2JxpnlGhPrn+Hd4W42EK0DRx3GbS6q/yAE4dEGqMzhwG3ipp7LrSkr/lzQ/I9QkWd50
-         gia8mVit37kNI1HQn27DfOjb/D9Erex/iPtiA6HK+TonCT19ckW9/Sb8FklUtBsvlX+S
-         zPMwAoqLSN9BfViwkfTSzOZ+US/n0ZJqCIIZZdOsNp8VfwpbxDgOB+P7mo3alFSdaGl9
-         DmTg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H1XknEnfRCFWWO1LXEJmw/yXLZDBD0z0CO+bXSUF3KY=;
+        b=VfraCNxL3WGDCeRLxpsTD6VREJ07+yuuUDSzFON46Edw6+tXSXffSdDoF7eoQ4xdo1
+         4/eFKWb/m/jURAq8eVhrhAlrtNryoFQE2LZ3kwNC9xh1AnWbkoXeNGSkBzm9CH070RKQ
+         tuGscuRmNWmyMAHr96xKdTXJFwtva3l5WPDSbeHDADaYA7AvpiboY0DY/e5hg8Nk8hfr
+         4o8P+8tiL4EoS+5WZ3J1KZ+QYcFKspqN5KVoUYaem4dhZhdUScy3tEoj9quq09ZkPKdA
+         oEDh77ToBPLW+T7NoWX3X1k2GZNNRRO9//n2moFcOYbiy6e9MfRz5Iys81hsJ81gj20Y
+         xRWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tsp6NWTiXSJ0zfkiGxcTyiVcKEGRfQJ96DU5zcvmvhA=;
-        b=qiNPXFhkz8K6ycRmwC7Pk7fYTLw+KJgH1EOzvbX8MZ1NuWJ14PDErKTMQy7vouOSFp
-         VrBHeIxSUs3vrl8PJDiQcuslFsFfXXIx/EtX+K8A/0Mf3zFMGE/HD5+TD4esJFZNPhtB
-         Z9eygSbbXIWVuo47mI+3MIIyZBr6u9BSAuo37bOeelx1+bDkeLXZvFFZ24EnfjGGBEDs
-         /3EmAc2INYPgpgFQnbubokvLxtWqjZjj8G/ihCFczHyp1IjgRtELTykzrhimXIex55rZ
-         8zhp/YEvDDtki8Dg0jHVbclU1LXMgFxG3f0mQIDsEVl8vfvzKfRgZGrV7vCAvwitEJmW
-         AkDA==
-X-Gm-Message-State: AJIora+PI6EEKlv0ta62BTJW4Umm6rpMaBUwMR+8MO+21zwMj7Jq2po4
-        Px07d89Uw91MunAJDYx8YFY=
-X-Google-Smtp-Source: AGRyM1sbLVHH/FJZe241zkPNZj4SGgeHPgS+lUiLtRFIreMiYU4bVWPssKK4vwZfhTUB/zhZEW+1Iw==
-X-Received: by 2002:a63:d949:0:b0:408:870f:70d1 with SMTP id e9-20020a63d949000000b00408870f70d1mr14450923pgj.620.1656366222013;
-        Mon, 27 Jun 2022 14:43:42 -0700 (PDT)
-Received: from localhost.localdomain ([2409:4072:e95:685d:6958:8e77:9c10:bd78])
-        by smtp.gmail.com with ESMTPSA id bj12-20020a056a02018c00b003fbfe88be17sm7587529pgb.24.2022.06.27.14.43.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 14:43:41 -0700 (PDT)
-From:   Praghadeesh T K S <praghadeeshthevendria@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Praghadeesh T K S <praghadeeshthevendria@gmail.com>,
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
-        skhan@linuxfoundation.org, praghadeeshtks@zohomail.in
-Subject: [PATCH] docs: fix 'make htmldocs' warning in leds
-Date:   Tue, 28 Jun 2022 03:13:11 +0530
-Message-Id: <20220627214311.7817-1-praghadeeshthevendria@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H1XknEnfRCFWWO1LXEJmw/yXLZDBD0z0CO+bXSUF3KY=;
+        b=n+iCuXxlxFvaRtiyncxqDbJgf/k4J7S4TUXKZoKPeFJFg6epeRz9JwgdaabSrxHI/I
+         0IAy4TKL/SAtrmLUD0L1IlhIzV5Vb8My/iT4KISZr2hsCCd6IEvk5OaKrQjTXHUkcdsX
+         oxLELKVUZ69ennWiaMSm8Jp10zCMs06LgiEhQgdQR5uMtdTzfaOWw8BOBmfmom+eNDVH
+         UZiZz3/QzLCa02WTGuUps0UD0Hwf8mBPu9zpbwhtzWAVmYbQixreW4VrPtA3gcQsTfKA
+         0rpk0eNLYaskeusEKfrG2IwmUldC1L7JUHj1O1MyYeg61F0a9inWD3oSBahbV9rmJtbJ
+         yGbg==
+X-Gm-Message-State: AJIora+0X0k8WV8Lknv3ITo7EOvYtQXdQwQyUJ2hpRmjcLuEDFwsdV/h
+        RmhYeJxYHJgG0oGw8yWHsgiB41pbSkpUk9wzFZk=
+X-Google-Smtp-Source: AGRyM1ty/F1vTKJ4iSXafpmMdgGebsJxkxtMH0H5oixaFzda6xrN+UoEjNyjWvXW0aPqdyRCXLmG71/0bvD9Z4sYB2c=
+X-Received: by 2002:a05:6402:158e:b0:435:7d0f:ac85 with SMTP id
+ c14-20020a056402158e00b004357d0fac85mr19127349edv.93.1656366219396; Mon, 27
+ Jun 2022 14:43:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220626144615.2227149-1-trix@redhat.com> <34b5c26c-bf3f-4b7c-3dd8-9e1317968c28@amd.com>
+In-Reply-To: <34b5c26c-bf3f-4b7c-3dd8-9e1317968c28@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 27 Jun 2022 17:43:27 -0400
+Message-ID: <CADnq5_P8J12C-QZL7U9x6rs2RV44o-rvmESd7_R9b9qZuD_XhA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: change to_dal_irq_source_dnc32() storage
+ class specifier to static
+To:     Aurabindo Pillai <aurabindo.pillai@amd.com>
+Cc:     Tom Rix <trix@redhat.com>,
+        "Wentland, Harry" <harry.wentland@amd.com>,
+        "Leo (Sunpeng) Li" <sunpeng.li@amd.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Qingqing Zhuo <Qingqing.Zhuo@amd.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        "Kazlauskas, Nicholas" <nicholas.kazlauskas@amd.com>,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,24 +82,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix following 'make htmldocs' warnings:
-./Documentation/leds/leds-qcom-lpg.rst: WARNING:
-document isn't included in any toctree
+Applied.  Thanks!
 
-Signed-off-by: Praghadeesh T K S <praghadeeshthevendria@gmail.com>
----
- Documentation/leds/index.rst | 1 +
- 1 file changed, 1 insertion(+)
+Alex
 
-diff --git a/Documentation/leds/index.rst b/Documentation/leds/index.rst
-index e5d63b9..b9ca081 100644
---- a/Documentation/leds/index.rst
-+++ b/Documentation/leds/index.rst
-@@ -26,3 +26,4 @@ LEDs
-    leds-lp55xx
-    leds-mlxcpld
-    leds-sc27xx
-+   leds-qcom-lpg
--- 
-2.25.1
-
+On Mon, Jun 27, 2022 at 9:20 AM Aurabindo Pillai
+<aurabindo.pillai@amd.com> wrote:
+>
+>
+>
+> On 2022-06-26 10:46, Tom Rix wrote:
+> > sparse reports
+> > drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn32/irq_service_dcn32.c:39:20: warning: symbol 'to_dal_irq_source_dcn32' was not declared. Should it be static?
+> >
+> > to_dal_irq_source_dnc32() is only referenced in irq_service_dnc32.c, so change its
+> > storage class specifier to static.
+> >
+> > Fixes: 0efd4374f6b4 ("drm/amd/display: add dcn32 IRQ changes")
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> > ---
+> >   drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c b/drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c
+> > index 3a213ca2f077..b1012fa1977b 100644
+> > --- a/drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c
+> > +++ b/drivers/gpu/drm/amd/display/dc/irq/dcn32/irq_service_dcn32.c
+> > @@ -36,7 +36,7 @@
+> >
+> >   #define DCN_BASE__INST0_SEG2                       0x000034C0
+> >
+> > -enum dc_irq_source to_dal_irq_source_dcn32(
+> > +static enum dc_irq_source to_dal_irq_source_dcn32(
+> >               struct irq_service *irq_service,
+> >               uint32_t src_id,
+> >               uint32_t ext_id)
+>
+> Reviewed-by: Aurabindo Pillai <aurabindo.pillai@amd.com>

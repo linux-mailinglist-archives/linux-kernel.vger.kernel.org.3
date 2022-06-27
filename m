@@ -2,185 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C256155B772
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 07:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD31155B75C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 07:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbiF0FIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 01:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
+        id S231752AbiF0FNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 01:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiF0FIl (ORCPT
+        with ESMTP id S229714AbiF0FNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 01:08:41 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15332DC3;
-        Sun, 26 Jun 2022 22:08:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656306520; x=1687842520;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=Sw1KTVkqveRatJqsRHyJilac0Q0XsQzusp80Ox1oQaI=;
-  b=sd2xV2r1xorymCN3iZIofzEcR4hET98eF6qGtvt1bBGQuvq7P8yFAzpn
-   B5Dq6BqOtrKX0nk+h23sjV9rhvABoitkVeNMdwI0TOSfIm40UfGBBOYh2
-   mZGnk5ixZIy1tZpU6+XuHivnZx5kccKOCbiOxBrgEQ3tXontXhPc1Ds0V
-   k=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Jun 2022 22:07:39 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 22:07:39 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 26 Jun 2022 22:07:39 -0700
-Received: from [10.50.51.171] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 26 Jun
- 2022 22:07:34 -0700
-Message-ID: <503f1a8b-eadb-d3a6-6e24-d60437f778b6@quicinc.com>
-Date:   Mon, 27 Jun 2022 10:37:31 +0530
+        Mon, 27 Jun 2022 01:13:01 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6212ADC3;
+        Sun, 26 Jun 2022 22:13:00 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id C3E545C00FC;
+        Mon, 27 Jun 2022 01:12:59 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 27 Jun 2022 01:12:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1656306779; x=1656393179; bh=dkueX+p0HF
+        YN1z2kkJI5unMCYjLIq2dF7wkxiC1Hy0g=; b=XQ6P+XfnaI1AmNkhMSzJl0yEyP
+        WFde2eM+YF5jN2Z2CEJ+uYF+sFJ4OLTgq3VlHjdJrExFf2QP9CZjGQuW1rkU61Av
+        L18Ttp5KonJEj5ce3vUQ3xb4cIpfZXIE74kh/+brUn0AUS3iLTjBPBUC7pzds/k+
+        t6Mnm3a/jSh7Q7F0qmo7lzvlVcQnFYVI0e9Oe7PGNuLGVOsxOzNHEmOnJYfZC7zJ
+        Yd+tTSxYqr0dR2lay4Xi4GdYab4ghofuQUwlRMNnkSEfaodBrefb9Ap9xrP1ehyG
+        kKz63rpNi1WK0W9kV6FG7Giq78hMmaqXryxvtjmmDscZPl8sk/Kz4A8j12xw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1656306779; x=1656393179; bh=dkueX+p0HFYN1
+        z2kkJI5unMCYjLIq2dF7wkxiC1Hy0g=; b=t6SDsjptSrlFMiBuvnxyMDicrWH4T
+        H2tTDzHLzKigA7+PGp3tkoEZTiBLb9wLGItuKAAyALZtI8VJyql5WBm9n3M7EYp0
+        KRv3T1Wq/n8e5cJP3FzZPKvHlf0pR7rBBBt7xSxR8whQQuLKYcBZcKuNIYgpX92U
+        +EpSi/mgAl7u9DfSmxMm3CyIHcxsCcEdXn2OsDIyytrXKFIf3kTFzHNIVURmB7yS
+        soHAcGiv7grHn5sl19XTmiYLfOMgEj1suynJoAjnI61NtqzfKUFqV76IzY7W2gCi
+        3mE/KrpChugBABaXb4SrAACcTUGD+8SVAqkdYf9bCYYA/lwImloPNV67g==
+X-ME-Sender: <xms:Wjy5YtpA9epOY7jZ_4B-DR82wBgYNd4GGXnf-BMFySik5TzFf4mmYg>
+    <xme:Wjy5YvqUnn-zKWPUUrTZjHD_EQtnM6H43HopfooJF_hvoKmb-t7GuMRTRTK09HjaK
+    KMLFsPAT-Ui91-HbA>
+X-ME-Received: <xmr:Wjy5YqNiNuohVTQy4gxOkGs_oPPNA3Ynyttx-hnxTQklps_eWsRg5K7f1JxpjsMdMU7LMVonZtL1li-f1XLyIeQZyt6ftitQbg5WSlZ5KGiwUW5iXhwlPvhLV3RuI_8LvjfTdg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeggedgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpeefkedvudekfeehgffgteekieehhfekfeegteefgfduhfffvdehvdet
+    keegfefgteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghn
+    ugdrohhrgh
+X-ME-Proxy: <xmx:Wjy5Yo7d7SIKWlSRqO19nVFNUmQh1LKTD_zoGC84hPqr1qcHGrCOmQ>
+    <xmx:Wjy5Ys6tgDOtNUXgKHycW4cLryTMwwpkf4KCOcLWWfGybqEZZucDHg>
+    <xmx:Wjy5Ygixv-gXz66WozkAIBWqBuzeRgc7Cn4HSOQq_Ivd7UITaVqXjQ>
+    <xmx:Wzy5YorWnMzBB7hupMhVjcJv19e4QLc_36RXBJ4C6vHVhIrycYGD-Q>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Jun 2022 01:12:57 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     linux-renesas-soc@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v1 0/3] irqchip/sifive-plic: Fix T-HEAD PLIC edge trigger handling
+Date:   Mon, 27 Jun 2022 00:12:54 -0500
+Message-Id: <20220627051257.38543-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V15 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
-Content-Language: en-US
-From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-To:     Lee Jones <lee.jones@linaro.org>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
-        <quic_jprakash@quicinc.com>
-References: <1655200111-18357-1-git-send-email-quic_c_skakit@quicinc.com>
- <1655200111-18357-7-git-send-email-quic_c_skakit@quicinc.com>
- <YquZRcuRCrdF+Q1z@google.com>
- <eccbb030-97f7-3a6c-958e-05adcdca6210@quicinc.com>
- <YrAt6dq6ty9p8d05@google.com>
- <a11732d6-a9b1-7ead-e89a-564a57a7192b@quicinc.com>
-In-Reply-To: <a11732d6-a9b1-7ead-e89a-564a57a7192b@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee,
+This is a follow-up to the series "[PATCH v2 0/2] Add PLIC support for
+Renesas RZ/Five SoC"[1].
 
+The change made there is also needed for the already-supported T-HEAD
+C9xx PLIC. So this binding change is necessary before I can send the
+Allwinner D1 devicetree.
 
-On 6/20/2022 4:37 PM, Satya Priya Kakitapalli (Temp) wrote:
->
-> On 6/20/2022 1:50 PM, Lee Jones wrote:
->> On Mon, 20 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
->>
->>> On 6/17/2022 2:27 AM, Lee Jones wrote:
->>>> On Tue, 14 Jun 2022, Satya Priya wrote:
->>>>
->>>>> Use i2c_new_dummy_device() to register pm8008-regulator
->>>>> client present at a different address space, instead of
->>>>> defining a separate DT node. This avoids calling the probe
->>>>> twice for the same chip, once for each client pm8008-infra
->>>>> and pm8008-regulator.
->>>>>
->>>>> As a part of this define pm8008_regmap_init() to do regmap
->>>>> init for both the clients and define pm8008_get_regmap() to
->>>>> pass the regmap to the regulator driver.
->>>>>
->>>>> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
->>>>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
->>>>> ---
->>>>> Changes in V15:
->>>>>    - None.
->>>>>
->>>>> Changes in V14:
->>>>>    - None.
->>>>>
->>>>> Changes in V13:
->>>>>    - None.
->>>>>
->>>>>    drivers/mfd/qcom-pm8008.c       | 34 
->>>>> ++++++++++++++++++++++++++++++++--
->>>>>    include/linux/mfd/qcom_pm8008.h |  9 +++++++++
->>>>>    2 files changed, 41 insertions(+), 2 deletions(-)
->>>>>    create mode 100644 include/linux/mfd/qcom_pm8008.h
->>>>>
->>>>> diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
->>>>> index 569ffd50..55e2a8e 100644
->>>>> --- a/drivers/mfd/qcom-pm8008.c
->>>>> +++ b/drivers/mfd/qcom-pm8008.c
->>>>> @@ -9,6 +9,7 @@
->>>>>    #include <linux/interrupt.h>
->>>>>    #include <linux/irq.h>
->>>>>    #include <linux/irqdomain.h>
->>>>> +#include <linux/mfd/qcom_pm8008.h>
->>>>>    #include <linux/module.h>
->>>>>    #include <linux/of_device.h>
->>>>>    #include <linux/of_platform.h>
->>>>> @@ -57,6 +58,7 @@ enum {
->>>>>    struct pm8008_data {
->>>>>        struct device *dev;
->>>>> +    struct regmap *regulators_regmap;
->>>>>        int irq;
->>>>>        struct regmap_irq_chip_data *irq_data;
->>>>>    };
->>>>> @@ -150,6 +152,12 @@ static struct regmap_config 
->>>>> qcom_mfd_regmap_cfg = {
->>>>>        .max_register    = 0xFFFF,
->>>>>    };
->>>>> +struct regmap *pm8008_get_regmap(const struct pm8008_data *chip)
->>>>> +{
->>>>> +    return chip->regulators_regmap;
->>>>> +}
->>>>> +EXPORT_SYMBOL_GPL(pm8008_get_regmap);
->>>> Seems like abstraction for the sake of abstraction.
->>>>
->>>> Why not do the dereference inside the regulator driver?
->>> To derefer this in the regulator driver, we need to have the 
->>> pm8008_data
->>> struct definition in the qcom_pm8008 header file.
->>>
->>> I think it doesn't look great to have only that structure in header 
->>> and all
->>> other structs and enum in the mfd driver.
->> Then why pass 'pm8008_data' at all?
->
->
-> There is one more option, instead of passing the pm8008_data, we could 
-> pass the pdev->dev.parent and get the pm8008 chip data directly in the 
-> pm8008_get_regmap() like below
->
->
-> struct regmap *pm8008_get_regmap(const struct device *dev)
->  {
->      const struct pm8008_data *chip = dev_get_drvdata(dev);
->
->      return chip->regulators_regmap;
-> }
-> EXPORT_SYMBOL_GPL(pm8008_get_regmap);
->
->
-> By doing this we can avoid having declaration of pm8008_data also in 
-> the header. Please let me know if this looks good.
->
+[1]: https://lore.kernel.org/linux-riscv/20220626004326.8548-1-prabhakar.mahadev-lad.rj@bp.renesas.com/T/
 
-Could you please confirm on this?
+Changes in v1:
+ - Use a flag for enabling the changes instead of a variant ID
+ - Use handle_edge_irq instead of handle_fasteoi_ack_irq
+ - Do not set the handler name, as RISC-V selects GENERIC_IRQ_SHOW_LEVEL
 
+Samuel Holland (3):
+  dt-bindings: interrupt-controller: Require trigger type for T-HEAD
+    PLIC
+  irqchip/sifive-plic: Name the chip more generically
+  irqchip/sifive-plic: Fix T-HEAD PLIC edge trigger handling
 
->> What's preventing you from passing 'regmap'?
->
->
-> I didn't get what you meant here, could you please elaborate a bit?
->
->
+ .../sifive,plic-1.0.0.yaml                    | 31 ++++++-
+ drivers/irqchip/irq-sifive-plic.c             | 91 +++++++++++++++++--
+ 2 files changed, 108 insertions(+), 14 deletions(-)
+
+-- 
+2.35.1
+

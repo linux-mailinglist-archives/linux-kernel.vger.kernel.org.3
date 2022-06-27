@@ -2,303 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AD855D5DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BCD355C267
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238010AbiF0PVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
+        id S236571AbiF0PTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237977AbiF0PUZ (ORCPT
+        with ESMTP id S236106AbiF0PTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:20:25 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E44815FD7;
-        Mon, 27 Jun 2022 08:19:38 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id u15so19855850ejc.10;
-        Mon, 27 Jun 2022 08:19:38 -0700 (PDT)
+        Mon, 27 Jun 2022 11:19:10 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6DC11450
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:19:09 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RDdDBN002132;
+        Mon, 27 Jun 2022 15:19:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=corp-2021-07-09;
+ bh=ssiK/EL03nR15wa5XDL0cWqkXbqPb3zW+IPkbY06mPc=;
+ b=cykSt5DBlI1RZG088styafsyE79m9QOLjJaY/IUP9dX/RcBUxsvHUR6li5amhpoN71y5
+ O63J1uVchavd/uWG0gKbWbdokiWbIswLaRGAUEfvt0nWN1OWUTsOCYw0S+FOqLAmUhTE
+ +dWZ3uAi/qJyhEoofyCUXxMB+VhRa6nFl/MhcSAdyBlzbU0rx3UnURGRW39np6h7iG3s
+ vbATvb2mSK2dkw9WwrbLYHTkwhseV56Ytqu5+3NwntcbUztd0cJn3r8jZwYo9Myh0swg
+ pgsmjWGw+bKT23o5uAxJdPE6Y+gQq7sKQr2ZKZko1/GGWoulOKS8mjv7rWbiOc9KoEil RA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gws52bhxw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jun 2022 15:19:02 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25RF6m2q034198;
+        Mon, 27 Jun 2022 15:19:01 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2102.outbound.protection.outlook.com [104.47.55.102])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gwrt1hmn0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jun 2022 15:19:01 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UrQ+K0nr0WTIdEM9eN9KLxrP9cI5CwsIeXkG6CWBcIKrXl2aHWBQaBnM4n0k4YyByTaZuvJ16YdKdP4Me5c6x+4LIhxJX6ya5tMFc/WnDEuqHdDQunsyGPBo9/tTv+XXQsCde1/d2jsI77YuydLVutGQhbdxgoAyfptSKl1eIAxHuOAGQTMmDshEZ1VAhOuw/yMzkvidhnQRL/753UqkWIP0CfJ9o2s76CtvwaJDWNJtu7215HlsLKSANsXfni9brF4Gzuu9HueL59P9JAgP3PTnF6pgqnRnWDXjnt25CPV6IzAKsAiUGbDYGd95PiwMr56oCtmQujkUGt7s5GAKtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ssiK/EL03nR15wa5XDL0cWqkXbqPb3zW+IPkbY06mPc=;
+ b=lPfsVtDRaTjc+Jiue3WDIBUxGWgW/P10tIwg1ggP7ZWNtaI6+1oAIsC6piIA2o0Ur/GyJls1iSzO6NWGqV9KPoIF8vWQ3DA0wHY60C12F3I83jbgole5hgcRVEpWrV6ZsJeIe2VKZQJ8twhPmlP60HTmQEVhYmgcBhg56BMf+L6RLv9JsgaN38rQ9TTpsUzwvx1zpw/7iDp8yyep3yVY7KpUcbB+JMieXSSjg8kPB8fJnOmdcNyK+2YgZ/p4ozUp9oDqGkPf0FHfE+G9MfJZuh2vWnYWecbyyN7kWV/ul9xGkooy4MFcl0Yl8xuXWCfhz0GYwV4AJCLRz3xUG52vCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XqoVCGDCGZDBmrA96lhlLMZTaqVBMBouX+m6wwZdWOE=;
-        b=hlCJhaqDY8rxUlu5N+hpJHiJHqbM71glq9/yMFixxBcQhbv1GEulo5AFGwJ5iid1xw
-         LCCwRE/WQSCwtwvBwndCz1UCXsx3F1V4/WVRjapWYOoMnE0gbZm90hVDNPiiwMhBSutJ
-         BTATdtcNbu9Ccu00KN3wboprwmb3CxxKEhoL8oygUibAttsWlxrQP/GW3yNvWQ8i0pyq
-         zAzoptlpEShxDO38c46Agp9JzlSsW7qbrBrYv6iTjuj6EFPMulbOOJXy5zwiQarBxpJq
-         QvP/26fT2BwWwF3aLVemR6VaRHFvhbiVCvvewCC8T/cl7zkApho4a5Oz/nYo2pNs8WbR
-         Me2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XqoVCGDCGZDBmrA96lhlLMZTaqVBMBouX+m6wwZdWOE=;
-        b=Ve6mosDgykwq/xy25CaSC/Py4YglFm08h8zuBzXrahLU94P63+wGVJuq2YmfCWqUf+
-         8yBIvb0hbODygytymV8jwrM9UTS5lhW+Pmp5JDfElsQCsEQV/qLEWjjmijDUiabJtq3S
-         +x2FLxjc7URqUei6+rAoftljAD7nM/ejAcYcbILfMeAWFZvfi7FbROYuCzCw0hVYvz78
-         b23ygdxLI8lkoo92+U22S1dQRQ72uHGRW+uP9OZZZNeiq/fzGaReKXIPtT2yCEmBgdwz
-         wUAKEVCDe8OWOzSc35NmaKKRZtchS7pY5JVloaDmujgYXy83nwqoxPU9I+/Wube/5t9J
-         Mfrg==
-X-Gm-Message-State: AJIora9mS+xUt7oeOUowGQiBXq0RNm874hmppN32LRuHqSA+3E5TzJMD
-        lOEyxq/REB/rzM7d9a7iixY=
-X-Google-Smtp-Source: AGRyM1uC6fo8zJQ32qtkHEMfmHd2OfWmghr9BsRzbBwCa/eaMI1j6hURvg+FP11Y9IIhgeDIQeb8Gw==
-X-Received: by 2002:a17:906:58d5:b0:722:fc0b:305a with SMTP id e21-20020a17090658d500b00722fc0b305amr12809375ejs.251.1656343177816;
-        Mon, 27 Jun 2022 08:19:37 -0700 (PDT)
-Received: from felia.fritz.box (200116b826511b0021a0c74157938809.dip.versatel-1u1.de. [2001:16b8:2651:1b00:21a0:c741:5793:8809])
-        by smtp.gmail.com with ESMTPSA id z8-20020a170906434800b00722f2a0944fsm5076901ejm.107.2022.06.27.08.19.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 08:19:37 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>, linux-doc@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [RFC PATCH 11/11] docs: zh_TW: align to submitting-drivers removal
-Date:   Mon, 27 Jun 2022 17:18:19 +0200
-Message-Id: <20220627151819.22694-12-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
-References: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ssiK/EL03nR15wa5XDL0cWqkXbqPb3zW+IPkbY06mPc=;
+ b=g07R82/9wlf1ibfWwqf1j7W9tyK372BBGl2HpDXsFtjYz58gIKUW7SmL54ZZGFcIeKFtlL52uMO97VgIydoudO9E+kei1MxUDCp0yCsY4Icq6udC9ObIBbl3JlgXB8V88kx5TtstqGR+mSByljl1XKE2w9wbXgdBDWv9PTOoTWE=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by BYAPR10MB4101.namprd10.prod.outlook.com (2603:10b6:a03:120::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Mon, 27 Jun
+ 2022 15:18:59 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::f59a:175d:d24:949c]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::f59a:175d:d24:949c%7]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
+ 15:18:59 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "arve@android.com" <arve@android.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "hridya@google.com" <hridya@google.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "maco@android.com" <maco@android.com>,
+        "surenb@google.com" <surenb@google.com>,
+        "tkjos@android.com" <tkjos@android.com>
+Subject: [PATCH] android: binder: Fix lockdep check on clearing vma
+Thread-Topic: [PATCH] android: binder: Fix lockdep check on clearing vma
+Thread-Index: AQHYijk5ai/jtwYSKECpl16NkdQYag==
+Date:   Mon, 27 Jun 2022 15:18:59 +0000
+Message-ID: <20220627151857.2316964-1-Liam.Howlett@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.35.1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 097ad632-9304-441c-9489-08da58505c22
+x-ms-traffictypediagnostic: BYAPR10MB4101:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: P7QB1ZIdxBc2B+MGfG/nUW/7hChR7J54sIGMU1UyOsckQPDS6KWMDguU4EmuJPaP3a7I1jNrFnVGsu3JAutrh/VELj8an1n97qFoRb/aruDuT8YAawmm1TVgbBJVobIyLyK5Ws/nk9euJ4RzBKSTi7Ca9LV0EslNyWyH6e23U7aLiYfjThQZdr8oRIvNxZF6RTkEfKjdjY2traSAdXFszjXob0wy6GZOMOOSKl2zIgBod5oMeCX8IAt0oiPmIEFVlgUMQ8pdQ5ikKsjxRIzTfhAIlr+6ZyzZYgKxGXxvXBtqj0LEITt98QGpzOfiUygk2vPuHaA/B3ux14hwtBJWNw8F7Uc1xol2uTZhHlQwU+2Z9jUUiHSv+S/7oKhefPyRoXYkiytF7cPYHRQ2PFZS4lMwgbKAVtufieXQ4xDpoB+WfuVZ2UY+ZJxOBI5sEGzbuAQWMRV+wCCzWpBD2MXh2xpAXQfR7kV6Qg6D5fuCD+V9vaVsq00ZDMQZVzlBskIN5UileMLiYFVYcVG1lOsCltj8cl51ZWFzuMUkcVgkN4JeynK1zPkJGpcf8kMijEviMw5BqFletbh0awf7Rge93fXIEynpIH/mgJ7ZVjmKR/koaO1HYIKUGXhzlZ/Ql9jNgeBPayugwxw4fVcZ9YdZxeGdXcSMrGFqtoPVz48X6YppohCxQ5pkw5U6rssEY73asGcOpsEq2MIOjbyGrSIxsol7+ZX0cM0vsZsX6JpZuUAQJ0v3dzds5yaZrtCJ/8B8dHi9yASigUbmq9O/mm1FNF+ne/AXyD+CIQURrlMjvWT+mXf32oVdLpPhniF+awoV
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(396003)(136003)(346002)(39860400002)(366004)(6512007)(122000001)(66556008)(66476007)(7416002)(8936002)(38070700005)(41300700001)(186003)(2616005)(6486002)(86362001)(38100700002)(83380400001)(71200400001)(6506007)(1076003)(66446008)(921005)(478600001)(91956017)(66946007)(36756003)(2906002)(64756008)(44832011)(76116006)(26005)(8676002)(316002)(110136005)(5660300002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?9GetVxHnKUt/jDvuXwmw+kn5i6YQ39ehBL55FK9CE9/HIqTxodKL8fUBi/?=
+ =?iso-8859-1?Q?1MuSrOE+0skYhNCuLvv2tm8X6LoCfWgiFaiWB/BjA/1dSpjvrd26PW5jyT?=
+ =?iso-8859-1?Q?wwfJygsY3Nl4cmgREookvIyQzjRw1LngduM9lDNGPdz2OBnUaVmcZud+0q?=
+ =?iso-8859-1?Q?YfqVs/s9nNFaEV+6zmpwjHIm/LjhvIwrKNlRDjgfYGyAfE4GJHtbi7TaaL?=
+ =?iso-8859-1?Q?y5qPj6EOTSS1BzqVafUMXj9+O0mr2SKGEvBjV2kpmUKrXbc78hTIpZqQjG?=
+ =?iso-8859-1?Q?HlsanGQKtJ4Th8KZVdd+WWux+20ZD1hxgRMxXkgkF7+3Xt8DnZ10998GCh?=
+ =?iso-8859-1?Q?Z+/xgAImpjuliYdVOMDS5pfiiqmdlP9pRtFkvhbFnVHKlTwSpPieY2Eck/?=
+ =?iso-8859-1?Q?Gs9nKiOUk6tIKBRHe9z3xCeXzafDZ7IBKnHT2pGfV4qOIGekv97GwJogpW?=
+ =?iso-8859-1?Q?aDFb4DU8AhD5WJF5ipOhhYbogKfS4ar7ePhpnZmdX81b4lXgsyCIUEZZn7?=
+ =?iso-8859-1?Q?WyMsqtaTrmOnmjEVtZQRSQc/uchrEJkI4lt4EZ5KtayKdC7k0vs4q7CL6e?=
+ =?iso-8859-1?Q?20wU9uN7bngzhcAXDJVEyWWERtu4gCBu61xeI6dR0PH5tPY+S3eCtIH/E4?=
+ =?iso-8859-1?Q?tl2t70tpIh6rffH/XkcP4UiEjeex4HmANf2Gf21gkizlvSAuakNlJkvD/e?=
+ =?iso-8859-1?Q?DXIesiPZcajYTR7Qc5mBd2u9oZc9gfxAY8hr6ETrXC2Mws/E+o7EZE+EVo?=
+ =?iso-8859-1?Q?OaqUNUSHpsWWlMwOzJUp+rzhMKzSvEpPVFPG2JwHmmbJnTHDquDvq93fPL?=
+ =?iso-8859-1?Q?EuyFMgjSSs4MxGw9VPGBsO6DmWJtYOjaSPtVRwnZf1Oc7YnsLCC41epzl7?=
+ =?iso-8859-1?Q?2g9II0pSLZLW7o/FIewE6uI4BIZcW3dIATyOKs+F4cU7GzEQTay+uUowgQ?=
+ =?iso-8859-1?Q?NHY/BPP/7A5ApTgs+VLn1sl8TF6tBNQw73PupNo4PXna7HSbg6zmu4GP1Q?=
+ =?iso-8859-1?Q?JCm6RpZdjtmbIeAPhn9Szx244hk0Ngeq3vt8uYl+pXAW8+7hDj9U8vs/Do?=
+ =?iso-8859-1?Q?je5BItwo0bNUjmXg6VlVDw5MkvKc/N5Zmu83pvQi9Fh/KqMsqf02RWpoNj?=
+ =?iso-8859-1?Q?w19PtyWgkxyueljkiWK/kVwcsG48iDeHyVKU19LknkDMI9E2t8Qp/cJ/Qp?=
+ =?iso-8859-1?Q?nch1CtEcDzSBqQtKSX94/zcDH/0lcNEpNDmpXJNHSsc6/im4YIjt6wj6qH?=
+ =?iso-8859-1?Q?TjvOzX3icV+sDyeUQTZhbnQ4I5uMI8TXirUgs7pUmf0odpYUG4siUUth3d?=
+ =?iso-8859-1?Q?ldQL5aBX3IYZebwj9KnhgpBHrGK1Dwbx3mVK47ID28XKPh5GsLS+OVHxGL?=
+ =?iso-8859-1?Q?vtmkchQstwANrgQyGbGJ0RtyF2Z25m0P7HpI2CWZ1TvjSP1pLsFpu0P3Dl?=
+ =?iso-8859-1?Q?aAtGsnxFPAzrNthtTyd46VJV1lS5NxgwbL1MA14w2e7Qd+zsWnS3MUUFO3?=
+ =?iso-8859-1?Q?AmFbbF3w+leDE+8rNBgji8rFOAToz3+fljWu4i9kRh//ySpGrD6rtW4aaG?=
+ =?iso-8859-1?Q?1tAoVnmtUfJIgyb8JjfXHQtna//unG+19NuNDDKSYcqd0ib/v/rjXfzdmU?=
+ =?iso-8859-1?Q?ItcA+zcv4YQR1svolqo6fjqiJD/4udspQBYK+n9TKDXyisTb0W+7CTCA?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 097ad632-9304-441c-9489-08da58505c22
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 15:18:59.2119
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: T15REgXPm/jhJiTU9dVvsYrFiMWHQYBwWaEHEF6LqgiV7Sh9oa91UMlyw8+zFIE7rKxUB6vZE/OrFSKFX1XhiA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB4101
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-06-27_06:2022-06-24,2022-06-27 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 mlxlogscore=999 adultscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206270066
+X-Proofpoint-ORIG-GUID: x_0Ap5wGsHCIAcAOjVXR_opM-WDxTE5E
+X-Proofpoint-GUID: x_0Ap5wGsHCIAcAOjVXR_opM-WDxTE5E
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjust the Taiwanese translation to the removal of submitting-drivers in
-the English kernel documentation.
+When munmapping a vma, the mmap_lock can be degraded to a write before
+calling close() on the file handle.  The binder close() function calls
+binder_alloc_set_vma() to clear the vma address, which now has a lock
+dep check for writing on the mmap_lock.  Change the lockdep check to
+ensure the reading lock is held while clearing and keep the write check
+while writing.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Reported-by: syzbot+da54fa8d793ca89c741f@syzkaller.appspotmail.com
+Fixes: 472a68df605b ("android: binder: stop saving a pointer to the VMA")
+Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 ---
- .../translations/zh_TW/process/5.Posting.rst  |   3 +-
- .../translations/zh_TW/process/howto.rst      |   1 -
- .../translations/zh_TW/process/index.rst      |   1 -
- .../zh_TW/process/submitting-drivers.rst      | 164 ------------------
- 4 files changed, 1 insertion(+), 168 deletions(-)
- delete mode 100644 Documentation/translations/zh_TW/process/submitting-drivers.rst
+ drivers/android/binder_alloc.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/translations/zh_TW/process/5.Posting.rst b/Documentation/translations/zh_TW/process/5.Posting.rst
-index 5578bca403e6..280a8832ecc0 100644
---- a/Documentation/translations/zh_TW/process/5.Posting.rst
-+++ b/Documentation/translations/zh_TW/process/5.Posting.rst
-@@ -22,8 +22,7 @@
- 內核開發社區已經發展出一套用於發布補丁的約定和過程；遵循這些約定和過程將使
- 參與其中的每個人的生活更加輕鬆。本文檔試圖描述這些約定的部分細節；更多信息
- 也可在以下文檔中找到
--:ref:`Documentation/translations/zh_TW/process/submitting-patches.rst <tw_submittingpatches>`，
--:ref:`Documentation/translations/zh_TW/process/submitting-drivers.rst <tw_submittingdrivers>`
-+:ref:`Documentation/translations/zh_TW/process/submitting-patches.rst <tw_submittingpatches>`
- 和 :ref:`Documentation/translations/zh_TW/process/submit-checklist.rst <tw_submitchecklist>`。
- 
- 何時郵寄
-diff --git a/Documentation/translations/zh_TW/process/howto.rst b/Documentation/translations/zh_TW/process/howto.rst
-index 2043691b92e3..68ae4411285b 100644
---- a/Documentation/translations/zh_TW/process/howto.rst
-+++ b/Documentation/translations/zh_TW/process/howto.rst
-@@ -99,7 +99,6 @@ Linux內核代碼中包含有大量的文檔。這些文檔對於學習如何與
-     的代碼。
- 
-   :ref:`Documentation/translations/zh_TW/process/submitting-patches.rst <tw_submittingpatches>`
--  :ref:`Documentation/process/submitting-drivers.rst <submittingdrivers>`
- 
-     這兩份文檔明確描述如何創建和發送補丁，其中包括（但不僅限於)：
-        - 郵件內容
-diff --git a/Documentation/translations/zh_TW/process/index.rst b/Documentation/translations/zh_TW/process/index.rst
-index ec7ad14bfd13..c5c59b4fd595 100644
---- a/Documentation/translations/zh_TW/process/index.rst
-+++ b/Documentation/translations/zh_TW/process/index.rst
-@@ -43,7 +43,6 @@
- .. toctree::
-    :maxdepth: 1
- 
--   submitting-drivers
-    submit-checklist
-    stable-api-nonsense
-    stable-kernel-rules
-diff --git a/Documentation/translations/zh_TW/process/submitting-drivers.rst b/Documentation/translations/zh_TW/process/submitting-drivers.rst
-deleted file mode 100644
-index 2fdd742318ba..000000000000
---- a/Documentation/translations/zh_TW/process/submitting-drivers.rst
-+++ /dev/null
-@@ -1,164 +0,0 @@
--.. SPDX-License-Identifier: GPL-2.0
--
--.. _tw_submittingdrivers:
--
--.. include:: ../disclaimer-zh_TW.rst
--
--:Original: :ref:`Documentation/process/submitting-drivers.rst
--           <submittingdrivers>`
--
--如果想評論或更新本文的內容，請直接聯繫原文檔的維護者。如果你使用英文
--交流有困難的話，也可以向中文版維護者求助。如果本翻譯更新不及時或者翻
--譯存在問題，請聯繫中文版維護者::
--
--        中文版維護者： 李陽  Li Yang <leoyang.li@nxp.com>
--        中文版翻譯者： 李陽  Li Yang <leoyang.li@nxp.com>
--        中文版校譯者： 陳琦 Maggie Chen <chenqi@beyondsoft.com>
--                       王聰 Wang Cong <xiyou.wangcong@gmail.com>
--                       張巍 Zhang Wei <wezhang@outlook.com>
--                       胡皓文 Hu Haowen <src.res@email.cn>
--
--如何向 Linux 內核提交驅動程序
--=============================
--
--這篇文檔將會解釋如何向不同的內核源碼樹提交設備驅動程序。請注意，如果你感
--興趣的是顯卡驅動程序，你也許應該訪問 XFree86 項目(https://www.xfree86.org/)
--和／或 X.org 項目 (https://x.org)。
--
--另請參閱 Documentation/translations/zh_TW/process/submitting-patches.rst 文檔。
--
--
--分配設備號
------------
--
--塊設備和字符設備的主設備號與從設備號是由 Linux 命名編號分配權威 LANANA（
--現在是 Torben Mathiasen）負責分配。申請的網址是 https://www.lanana.org/。
--即使不準備提交到主流內核的設備驅動也需要在這裡分配設備號。有關詳細信息，
--請參閱 Documentation/admin-guide/devices.rst。
--
--如果你使用的不是已經分配的設備號，那麼當你提交設備驅動的時候，它將會被強
--制分配一個新的設備號，即便這個設備號和你之前發給客戶的截然不同。
--
--設備驅動的提交對象
--------------------
--
--Linux 2.0:
--	此內核源碼樹不接受新的驅動程序。
--
--Linux 2.2:
--	此內核源碼樹不接受新的驅動程序。
--
--Linux 2.4:
--	如果所屬的代碼領域在內核的 MAINTAINERS 文件中列有一個總維護者，
--	那麼請將驅動程序提交給他。如果此維護者沒有回應或者你找不到恰當的
--	維護者，那麼請聯繫 Willy Tarreau <w@1wt.eu>。
--
--Linux 2.6:
--	除了遵循和 2.4 版內核同樣的規則外，你還需要在 linux-kernel 郵件
--	列表上跟蹤最新的 API 變化。向 Linux 2.6 內核提交驅動的頂級聯繫人
--	是 Andrew Morton <akpm@linux-foundation.org>。
--
--決定設備驅動能否被接受的條件
------------------------------
--
--許可：		代碼必須使用 GNU 通用公開許可證 (GPL) 提交給 Linux，但是
--		我們並不要求 GPL 是唯一的許可。你或許會希望同時使用多種
--		許可證發布，如果希望驅動程序可以被其他開源社區（比如BSD）
--		使用。請參考 include/linux/module.h 文件中所列出的可被
--		接受共存的許可。
--
--版權：		版權所有者必須同意使用 GPL 許可。最好提交者和版權所有者
--		是相同個人或實體。否則，必需列出授權使用 GPL 的版權所有
--		人或實體，以備驗證之需。
--
--接口：		如果你的驅動程序使用現成的接口並且和其他同類的驅動程序行
--		爲相似，而不是去發明無謂的新接口，那麼它將會更容易被接受。
--		如果你需要一個 Linux 和 NT 的通用驅動接口，那麼請在用
--		戶空間實現它。
--
--代碼：		請使用 Documentation/process/coding-style.rst 中所描述的 Linux 代碼風
--		格。如果你的某些代碼段（例如那些與 Windows 驅動程序包共
--		享的代碼段）需要使用其他格式，而你卻只希望維護一份代碼，
--		那麼請將它們很好地區分出來，並且註明原因。
--
--可移植性：	請注意，指針並不永遠是 32 位的，不是所有的計算機都使用小
--		尾模式 (little endian) 存儲數據，不是所有的人都擁有浮點
--		單元，不要隨便在你的驅動程序里嵌入 x86 彙編指令。只能在
--		x86 上運行的驅動程序一般是不受歡迎的。雖然你可能只有 x86
--		硬體，很難測試驅動程序在其他平台上是否可用，但是確保代碼
--		可以被輕鬆地移植卻是很簡單的。
--
--清晰度：	做到所有人都能修補這個驅動程序將會很有好處，因爲這樣你將
--		會直接收到修復的補丁而不是 bug 報告。如果你提交一個試圖
--		隱藏硬體工作機理的驅動程序，那麼它將會被扔進廢紙簍。
--
--電源管理：	因爲 Linux 正在被很多行動裝置和桌面系統使用，所以你的驅
--		動程序也很有可能被使用在這些設備上。它應該支持最基本的電
--		源管理，即在需要的情況下實現系統級休眠和喚醒要用到的
--		.suspend 和 .resume 函數。你應該檢查你的驅動程序是否能正
--		確地處理休眠與喚醒，如果實在無法確認，請至少把 .suspend
--		函數定義成返回 -ENOSYS（功能未實現）錯誤。你還應該嘗試確
--		保你的驅動在什麼都不乾的情況下將耗電降到最低。要獲得驅動
--		程序測試的指導，請參閱
--		Documentation/power/drivers-testing.rst。有關驅動程序電
--		源管理問題相對全面的概述，請參閱
--		Documentation/driver-api/pm/devices.rst。
--
--管理：		如果一個驅動程序的作者還在進行有效的維護，那麼通常除了那
--		些明顯正確且不需要任何檢查的補丁以外，其他所有的補丁都會
--		被轉發給作者。如果你希望成爲驅動程序的聯繫人和更新者，最
--		好在代碼注釋中寫明並且在 MAINTAINERS 文件中加入這個驅動
--		程序的條目。
--
--不影響設備驅動能否被接受的條件
--------------------------------
--
--供應商：	由硬體供應商來維護驅動程序通常是一件好事。不過，如果源碼
--		樹里已經有其他人提供了可穩定工作的驅動程序，那麼請不要期
--		望「我是供應商」會成爲內核改用你的驅動程序的理由。理想的情
--		況是：供應商與現有驅動程序的作者合作，構建一個統一完美的
--		驅動程序。
--
--作者：		驅動程序是由大的 Linux 公司研發還是由你個人編寫，並不影
--		響其是否能被內核接受。沒有人對內核源碼樹享有特權。只要你
--		充分了解內核社區，你就會發現這一點。
--
--
--資源列表
----------
--
--Linux 內核主源碼樹：
--	ftp.??.kernel.org:/pub/linux/kernel/...
--	?? == 你的國家代碼，例如 "cn"、"us"、"uk"、"fr" 等等
--
--Linux 內核郵件列表：
--	linux-kernel@vger.kernel.org
--	[可通過向majordomo@vger.kernel.org發郵件來訂閱]
--
--Linux 設備驅動程序，第三版（探討 2.6.10 版內核）：
--	https://lwn.net/Kernel/LDD3/ （免費版）
--
--LWN.net:
--	每周內核開發活動摘要 - https://lwn.net/
--
--	2.6 版中 API 的變更：
--
--		https://lwn.net/Articles/2.6-kernel-api/
--
--	將舊版內核的驅動程序移植到 2.6 版：
--
--		https://lwn.net/Articles/driver-porting/
--
--內核新手(KernelNewbies):
--	爲新的內核開發者提供文檔和幫助
--	https://kernelnewbies.org/
--
--Linux USB項目：
--	http://www.linux-usb.org/
--
--寫內核驅動的「不要」（Arjan van de Ven著）:
--	http://www.fenrus.org/how-to-not-write-a-device-driver-paper.pdf
--
--內核清潔工 (Kernel Janitor):
--	https://kernelnewbies.org/KernelJanitors
--
--- 
-2.17.1
-
+diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.=
+c
+index f555eebceef6..1014beb12802 100644
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -315,12 +315,19 @@ static inline void binder_alloc_set_vma(struct binder=
+_alloc *alloc,
+ {
+ 	unsigned long vm_start =3D 0;
+=20
++	/*
++	 * Allow clearing the vma with holding just the read lock to allow
++	 * munmapping downgrade of the write lock before freeing and closing the
++	 * file using binder_alloc_vma_close().
++	 */
+ 	if (vma) {
+ 		vm_start =3D vma->vm_start;
+ 		alloc->vma_vm_mm =3D vma->vm_mm;
++		mmap_assert_write_locked(alloc->vma_vm_mm);
++	} else {
++		mmap_assert_locked(alloc->vma_vm_mm);
+ 	}
+=20
+-	mmap_assert_write_locked(alloc->vma_vm_mm);
+ 	alloc->vma_addr =3D vm_start;
+ }
+=20
+--=20
+2.35.1

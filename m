@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BC955CBF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADBDA55D812
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239824AbiF0RDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        id S238540AbiF0RD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235544AbiF0RDK (ORCPT
+        with ESMTP id S235533AbiF0RDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:03:10 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCF2635B;
-        Mon, 27 Jun 2022 10:03:10 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id r1so8708125plo.10;
-        Mon, 27 Jun 2022 10:03:10 -0700 (PDT)
+        Mon, 27 Jun 2022 13:03:54 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AB413D3D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:03:53 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id v185so3527202ioe.11
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:03:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rGfyA4qJjKKkXwIS/Jt9GkdBhguVFiA2hQLFBi775QI=;
-        b=FaM85x3kT+wtUxWMOLGjkDy2YZ0Qkn4Qs3dt5XoQvzVK4sDYETLdmlJwVkIf0VBdU4
-         8YYnmFA91S+hCFM5KnMZdB+F8eQAJuUH653ekROLMT5aSailee4MvUbHUAqZpMFLPeKe
-         nms+ZxHcgKuYhQNDdT97L8ODD1VrVMGcVrVnjbwjHW707A3f61JIFEY7TROVBsrCBjOL
-         ARI0cLW365TsI9WxzK+XJRs8YCoPohQqz/8Huqvjk8YH8KHN0HiEawGDuFATosbaJt5S
-         lBW9O09q2S2B2Dep0fBM+y8+FdhOnar9YDkPofNQhnhrOBUKNv8IG/qBZ78lfKb/ho4W
-         oLXw==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=E++Zo91YUYL49yU+TLX4vsiJviRDwZYo3TtlF2dL+yc=;
+        b=TH4qcvBC1WfFEVD0R2JEuUcpb16hZQ61gitb2lAXhJHnsDqjmg6llAHTDZe6jj0mxj
+         T/wEf4Z9pMJPuHomU36S1GhPxojnvtssDMENzgI6XhnASUHDJxfv8WJPh5LFQYXCf9Mq
+         rx2SK6QAf9KONBavHi4wNImeJvU8tMpT7dAzY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=rGfyA4qJjKKkXwIS/Jt9GkdBhguVFiA2hQLFBi775QI=;
-        b=xh/FvzsKJMY+g1//KC2it3YTslamPwMnIGufmWUzOuRLlYyPI+C/MILTS7DDOYUzis
-         lnmG8Xmnkc5XyKICG6O8evv3VG8VVvI39pWMyTDLfgDZIcDShB9KBPSlKgesDaLaLQQv
-         PhZBrgNLBAam3kGwcxOFlxIWF/2QihQe+LHHVGKotiIhfMztTFH5NuQYAQ9gxZAjhNRJ
-         zrvcwj0cEa/mZ3s7r26MtGtu6VUBtZ+MY6v8TOgbsgKAoCJwmoxd4/KyETqFTfxOhMTl
-         jHNn3x2i1H+wnOEKN11q2/Kh42wtrC0IEuln7ctOhb2cMgFzHd881V8LUopDF7uLP+gU
-         mZuQ==
-X-Gm-Message-State: AJIora/HP9+E5CssVTbyD8PAyRH4/XspeJETJkIMaoCxdu7veKhfvBxA
-        F53WJ1AW46b0VmZ2vyn+QdI=
-X-Google-Smtp-Source: AGRyM1t9pIr14VyXDTKGuIVCpHCRItGNMLxRYLx96NQ+JJJ3PaNL1PMwr1vbuvrDq2LS4khJiykQLg==
-X-Received: by 2002:a17:903:22c7:b0:16a:7114:feb4 with SMTP id y7-20020a17090322c700b0016a7114feb4mr15432598plg.22.1656349389433;
-        Mon, 27 Jun 2022 10:03:09 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id w15-20020a1709029a8f00b0016a1c61c5f7sm7466424plp.71.2022.06.27.10.03.08
+        bh=E++Zo91YUYL49yU+TLX4vsiJviRDwZYo3TtlF2dL+yc=;
+        b=gR3yZ5+EJeZr/ImrZa1dCxZbh3MMx1Swezv8R8Obosqwm7mkz66R+pnY6tWzN1x10l
+         fdzocdBMAsj6X5jFQfkDXEg5SYWPeyXC/XvqwWrSslvf4BRfdlIqzVZKQ4ehjkNNcijc
+         o3tmRMeoHHsAiCmoctdnQ/ji0m4F3o1VEWP43rEtJiTyF0gyjFtSnLWzuQIh9jq3p6gn
+         mODPhTCthnqBuWv4g7lPbBZZY0IJEJ0mVxqkHHKd7Dpt4SNnKrp7r0GCuQNIey4XIDJM
+         HPpSCnCZxciZ0vjA32z9W5qXdmSMRtQPLjf1LI9Ar3zV59oyqDz8Y1sLg7vgusonOJgQ
+         2XRQ==
+X-Gm-Message-State: AJIora/56ZIMWeBA0mbiGQnw3UEZ3wniv41v3ITXreO509fTKj+GcQ11
+        Tw4+WzndKk7NYsNaX5i5cfZcEA==
+X-Google-Smtp-Source: AGRyM1v+GraNnGmLT3MJ5XC6BajyKtuce8TmvgiRH13sBZEVJK3xUNAN7bWSx+L2B2EU5t4WqU2UeQ==
+X-Received: by 2002:a05:6638:f16:b0:339:e45e:2cb4 with SMTP id h22-20020a0566380f1600b00339e45e2cb4mr8526928jas.151.1656349433131;
+        Mon, 27 Jun 2022 10:03:53 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id q3-20020a02a983000000b0033be74df72csm3881238jam.3.2022.06.27.10.03.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 10:03:08 -0700 (PDT)
-Message-ID: <6cd16364-f0cd-b3f3-248f-4b6d585d05ef@gmail.com>
-Date:   Mon, 27 Jun 2022 10:03:07 -0700
+        Mon, 27 Jun 2022 10:03:52 -0700 (PDT)
+Subject: Re: [PATCH] kselftests: Enable the echo command to print newlines in
+ Makefile
+To:     Gautam <gautammenghani201@gmail.com>, shuah@kernel.org,
+        brauner@kernel.org, keescook@chromium.org
+Cc:     kafai@fb.com, songliubraving@fb.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220625135455.167939-1-gautammenghani201@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <0c6c6966-0164-12b5-f73f-1ecf157e196f@linuxfoundation.org>
+Date:   Mon, 27 Jun 2022 11:03:52 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.4 57/60] modpost: fix section mismatch check for
- exported init/exit sections
+In-Reply-To: <20220625135455.167939-1-gautammenghani201@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <20220627111927.641837068@linuxfoundation.org>
- <20220627111929.368555413@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220627111929.368555413@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,40 +76,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 04:22, Greg Kroah-Hartman wrote:
-> From: Masahiro Yamada <masahiroy@kernel.org>
+On 6/25/22 7:54 AM, Gautam wrote:
+> In the install section of the main Makefile of kselftests, the echo
+> command is used with -n flag, which disables the printing of new line
+> due to which the output contains "\n" chars as follows:
 > 
-> commit 28438794aba47a27e922857d27b31b74e8559143 upstream.
+>    Emit Tests for alsa\nSkipping non-existent dir: arm64
+>    Emit Tests for breakpoints\nEmit Tests for capabilities\n
 > 
-> Since commit f02e8a6596b7 ("module: Sort exported symbols"),
-> EXPORT_SYMBOL* is placed in the individual section ___ksymtab(_gpl)+<sym>
-> (3 leading underscores instead of 2).
+> This patch fixes the above bug by using the -e flag.
 > 
-> Since then, modpost cannot detect the bad combination of EXPORT_SYMBOL
-> and __init/__exit.
+> Signed-off-by: Gautam <gautammenghani201@gmail.com>
+> ---
+>   tools/testing/selftests/Makefile | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Fix the .fromsec field.
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index de11992dc577..52e31437f1a3 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -253,7 +253,7 @@ ifdef INSTALL_PATH
+>   	for TARGET in $(TARGETS); do \
+>   		BUILD_TARGET=$$BUILD/$$TARGET;	\
+>   		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
+> -		echo -n "Emit Tests for $$TARGET\n"; \
+> +		echo -ne "Emit Tests for $$TARGET\n"; \
+>   		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
+>   			-C $$TARGET emit_tests >> $(TEST_LIST); \
+>   	done;
 > 
-> Fixes: f02e8a6596b7 ("module: Sort exported symbols")
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-This commit causes the following warning to show up on my kernel builds 
-used for testing 5.4 stable candidates:
+Thank you. Will be applied to kselftest next for Linux 5.20-rc1
 
-WARNING: vmlinux.o(___ksymtab+drm_fb_helper_modinit+0x0): Section 
-mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit 
-to the function .init.text:drm_fb_helper_modinit()
-The symbol drm_fb_helper_modinit is exported and annotated __init
-Fix this by removing the __init annotation of drm_fb_helper_modinit or 
-drop the export.
-
-The kernel configuration to reproduce this is located here (this is 5.10 
-but works in 5.4 as well):
-
-https://gist.github.com/2c3e8edd5ceb089c8040db724073d941
-
-Same applies to the 5.10, 5.15 and 5.18 stable queues FWIW.
--- 
-Florian
+thanks,
+-- Shuah

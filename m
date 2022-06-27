@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC5855DE3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5397C55D560
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237603AbiF0LoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        id S237829AbiF0Lqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237230AbiF0Lmg (ORCPT
+        with ESMTP id S237244AbiF0Lmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:42:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62432DF13;
-        Mon, 27 Jun 2022 04:36:35 -0700 (PDT)
+        Mon, 27 Jun 2022 07:42:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D34DF70;
+        Mon, 27 Jun 2022 04:36:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0EB01B8111C;
-        Mon, 27 Jun 2022 11:36:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01A2EC341C7;
-        Mon, 27 Jun 2022 11:36:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25703B8111C;
+        Mon, 27 Jun 2022 11:36:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93445C3411D;
+        Mon, 27 Jun 2022 11:36:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329792;
-        bh=6Br1c/oBrlqi0+RzoaGSQW/BY74uBeyEDv/Eufwhohg=;
+        s=korg; t=1656329799;
+        bh=P6fzE7iXoVUT+eQqAEMea/LZbGUVwRj9OH5L+AQ5ztY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KjpaAswzIcaixfNqwAMmQhN5TFdBkHkqwu1xOKIHfXRb4oY0Gqjw9TauwSOyKawVs
-         vk2BcLR4fc3ld5LuXHZuWXzX1fscRuffHgbIWSl+Mlo9pmmWLzhlU4NpyyTajw5Fau
-         aFn7oZ0+eWm4cOLZGFPW0DlqxxE73woVt2qG9z8w=
+        b=xT8GmHWWsfSXu9okzK1oqRR2U8Zg57WmFp2WDIGyUPnRFHddhUIsDTbuaxu4QwckJ
+         3mlwwOsRjaiZxBfzAl6rMEyVVZY+u/Bk7WuRknDFOxODHPyUqqFsUn+iqGmJEgvGZR
+         k/VPg89yrXNObuBmLiSiot0GV9nm5Zkb6Pm9Jw8E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        stable@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Sumit Dubey2 <Sumit.Dubey2@ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.15 116/135] powerpc/microwatt: wire up rng during setup_arch()
-Date:   Mon, 27 Jun 2022 13:22:03 +0200
-Message-Id: <20220627111941.520295755@linuxfoundation.org>
+Subject: [PATCH 5.15 117/135] powerpc: Enable execve syscall exit tracepoint
+Date:   Mon, 27 Jun 2022 13:22:04 +0200
+Message-Id: <20220627111941.549090742@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
 References: <20220627111938.151743692@linuxfoundation.org>
@@ -55,111 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 
-commit 20a9689b3607456d92c6fb764501f6a95950b098 upstream.
+commit ec6d0dde71d760aa60316f8d1c9a1b0d99213529 upstream.
 
-The platform's RNG must be available before random_init() in order to be
-useful for initial seeding, which in turn means that it needs to be
-called from setup_arch(), rather than from an init call. Fortunately,
-each platform already has a setup_arch function pointer, which means
-it's easy to wire this up. This commit also removes some noisy log
-messages that don't add much.
+On execve[at], we are zero'ing out most of the thread register state
+including gpr[0], which contains the syscall number. Due to this, we
+fail to trigger the syscall exit tracepoint properly. Fix this by
+retaining gpr[0] in the thread register state.
 
-Fixes: c25769fddaec ("powerpc/microwatt: Add support for hardware random number generator")
-Cc: stable@vger.kernel.org # v5.14+
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Before this patch:
+  # tail /sys/kernel/debug/tracing/trace
+	       cat-123     [000] .....    61.449351: sys_execve(filename:
+  7fffa6b23448, argv: 7fffa6b233e0, envp: 7fffa6b233f8)
+	       cat-124     [000] .....    62.428481: sys_execve(filename:
+  7fffa6b23448, argv: 7fffa6b233e0, envp: 7fffa6b233f8)
+	      echo-125     [000] .....    65.813702: sys_execve(filename:
+  7fffa6b23378, argv: 7fffa6b233a0, envp: 7fffa6b233b0)
+	      echo-125     [000] .....    65.822214: sys_execveat(fd: 0,
+  filename: 1009ac48, argv: 7ffff65d0c98, envp: 7ffff65d0ca8, flags: 0)
+
+After this patch:
+  # tail /sys/kernel/debug/tracing/trace
+	       cat-127     [000] .....   100.416262: sys_execve(filename:
+  7fffa41b3448, argv: 7fffa41b33e0, envp: 7fffa41b33f8)
+	       cat-127     [000] .....   100.418203: sys_execve -> 0x0
+	      echo-128     [000] .....   103.873968: sys_execve(filename:
+  7fffa41b3378, argv: 7fffa41b33a0, envp: 7fffa41b33b0)
+	      echo-128     [000] .....   103.875102: sys_execve -> 0x0
+	      echo-128     [000] .....   103.882097: sys_execveat(fd: 0,
+  filename: 1009ac48, argv: 7fffd10d2148, envp: 7fffd10d2158, flags: 0)
+	      echo-128     [000] .....   103.883225: sys_execveat -> 0x0
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Tested-by: Sumit Dubey2 <Sumit.Dubey2@ibm.com>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220611151015.548325-2-Jason@zx2c4.com
+Link: https://lore.kernel.org/r/20220609103328.41306-1-naveen.n.rao@linux.vnet.ibm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/platforms/microwatt/microwatt.h |  7 +++++++
- arch/powerpc/platforms/microwatt/rng.c       | 10 +++-------
- arch/powerpc/platforms/microwatt/setup.c     |  8 ++++++++
- 3 files changed, 18 insertions(+), 7 deletions(-)
- create mode 100644 arch/powerpc/platforms/microwatt/microwatt.h
+ arch/powerpc/kernel/process.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/platforms/microwatt/microwatt.h b/arch/powerpc/platforms/microwatt/microwatt.h
-new file mode 100644
-index 000000000000..335417e95e66
---- /dev/null
-+++ b/arch/powerpc/platforms/microwatt/microwatt.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _MICROWATT_H
-+#define _MICROWATT_H
-+
-+void microwatt_rng_init(void);
-+
-+#endif /* _MICROWATT_H */
-diff --git a/arch/powerpc/platforms/microwatt/rng.c b/arch/powerpc/platforms/microwatt/rng.c
-index 7bc4d1cbfaf0..8ece87d005c8 100644
---- a/arch/powerpc/platforms/microwatt/rng.c
-+++ b/arch/powerpc/platforms/microwatt/rng.c
-@@ -11,6 +11,7 @@
- #include <asm/archrandom.h>
- #include <asm/cputable.h>
- #include <asm/machdep.h>
-+#include "microwatt.h"
+--- a/arch/powerpc/kernel/process.c
++++ b/arch/powerpc/kernel/process.c
+@@ -1818,7 +1818,7 @@ void start_thread(struct pt_regs *regs,
+ 		tm_reclaim_current(0);
+ #endif
  
- #define DARN_ERR 0xFFFFFFFFFFFFFFFFul
- 
-@@ -29,7 +30,7 @@ static int microwatt_get_random_darn(unsigned long *v)
- 	return 1;
- }
- 
--static __init int rng_init(void)
-+void __init microwatt_rng_init(void)
- {
- 	unsigned long val;
- 	int i;
-@@ -37,12 +38,7 @@ static __init int rng_init(void)
- 	for (i = 0; i < 10; i++) {
- 		if (microwatt_get_random_darn(&val)) {
- 			ppc_md.get_random_seed = microwatt_get_random_darn;
--			return 0;
-+			return;
- 		}
- 	}
--
--	pr_warn("Unable to use DARN for get_random_seed()\n");
--
--	return -EIO;
- }
--machine_subsys_initcall(, rng_init);
-diff --git a/arch/powerpc/platforms/microwatt/setup.c b/arch/powerpc/platforms/microwatt/setup.c
-index 0b02603bdb74..6b32539395a4 100644
---- a/arch/powerpc/platforms/microwatt/setup.c
-+++ b/arch/powerpc/platforms/microwatt/setup.c
-@@ -16,6 +16,8 @@
- #include <asm/xics.h>
- #include <asm/udbg.h>
- 
-+#include "microwatt.h"
-+
- static void __init microwatt_init_IRQ(void)
- {
- 	xics_init();
-@@ -32,10 +34,16 @@ static int __init microwatt_populate(void)
- }
- machine_arch_initcall(microwatt, microwatt_populate);
- 
-+static void __init microwatt_setup_arch(void)
-+{
-+	microwatt_rng_init();
-+}
-+
- define_machine(microwatt) {
- 	.name			= "microwatt",
- 	.probe			= microwatt_probe,
- 	.init_IRQ		= microwatt_init_IRQ,
-+	.setup_arch		= microwatt_setup_arch,
- 	.progress		= udbg_progress,
- 	.calibrate_decr		= generic_calibrate_decr,
- };
--- 
-2.36.1
-
+-	memset(regs->gpr, 0, sizeof(regs->gpr));
++	memset(&regs->gpr[1], 0, sizeof(regs->gpr) - sizeof(regs->gpr[0]));
+ 	regs->ctr = 0;
+ 	regs->link = 0;
+ 	regs->xer = 0;
 
 

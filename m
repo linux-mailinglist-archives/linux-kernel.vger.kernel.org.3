@@ -2,160 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45D355C415
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A5D55CCF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234041AbiF0KuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
+        id S234298AbiF0KuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233298AbiF0KuH (ORCPT
+        with ESMTP id S233298AbiF0KuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:50:07 -0400
+        Mon, 27 Jun 2022 06:50:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA98637C;
-        Mon, 27 Jun 2022 03:50:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45FC62E0;
+        Mon, 27 Jun 2022 03:50:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CDBF61356;
-        Mon, 27 Jun 2022 10:50:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DFDAC3411D;
-        Mon, 27 Jun 2022 10:50:03 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Gmhl4g69"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656327001;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ndhjDSh6IDAApHdUOhYyREQEG9KTS7ba1Hpskd+9mCY=;
-        b=Gmhl4g69U3WqJc7i44KmIx8UxtP/m263zqIEmsOgbl6PmUVfMO8YrIHzv4MgOiBsjl8Qb9
-        Y5ujXv8qsMfOUeBcrjI2e0AjH3yuBXKjSSiidOO5sU72beiiIJQQSefeXW3qqsxIgB+6ZR
-        2b3m3IozdIZUu2DU0QPWCiOahDrlbeg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id eba74c79 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 27 Jun 2022 10:50:01 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Gregory Erwin <gregerwin256@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Rui Salvaterra <rsalvaterra@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        stable@vger.kernel.org
-Subject: [PATCH v4] ath9k: sleep for less time when unregistering hwrng
-Date:   Mon, 27 Jun 2022 12:49:55 +0200
-Message-Id: <20220627104955.534013-1-Jason@zx2c4.com>
-In-Reply-To: <20220627092927.513709-1-Jason@zx2c4.com>
-References: <20220627092927.513709-1-Jason@zx2c4.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B57761359;
+        Mon, 27 Jun 2022 10:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B72C0C341C7;
+        Mon, 27 Jun 2022 10:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656327017;
+        bh=8LxALkYX99QM0o3OZgiKgB0ILjh8O2RMDXaPQIHDGUI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mcSm99tpafBJecQ/I28UXwi0I5xqsZKQLuRriUF/iDPwE/EgWmjNAtNJakzD9w9gt
+         EVhCwLH/ujOiWejPqgmTGSQWqt+t4Hs6ydYu2eySUQjAC/fZ/PEhe+gReMco8Kh9I3
+         xcA2dWf+XIuItslFOzZaAgO1I3MtkiT/7if+F0beNz10j0M0Ph05IH7fbB7sHi/WwB
+         ObNhdNvX1mjgd9I37Scd1YvXo6I0hjxSA65z0cQtsxvz83yTV4zGVcr9MSZfxki8t0
+         AzcsI1YE39xOGwNaCnGR5P7eNSiy4tXH88tKdBxdQJhaJW/q2czsmSGIm8AkzeJ9p7
+         mV7xKm3AxW0yA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99722E49BBB;
+        Mon, 27 Jun 2022 10:50:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net-next v9 00/16] add support for Renesas RZ/N1 ethernet
+ subsystem devices
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165632701762.8538.13185906941735942250.git-patchwork-notify@kernel.org>
+Date:   Mon, 27 Jun 2022 10:50:17 +0000
+References: <20220624144001.95518-1-clement.leger@bootlin.com>
+In-Reply-To: <20220624144001.95518-1-clement.leger@bootlin.com>
+To:     =?utf-8?b?Q2zDqW1lbnQgTMOpZ2VyIDxjbGVtZW50LmxlZ2VyQGJvb3RsaW4uY29tPg==?=@ci.codeaurora.org
+Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzk+dt@kernel.org, geert+renesas@glider.be, magnus.damm@gmail.com,
+        hkallweit1@gmail.com, linux@armlinux.org.uk,
+        alexandre.torgue@foss.st.com, peppe.cavallaro@st.com,
+        joabreu@synopsys.com, thomas.petazzoni@bootlin.com,
+        herve.codina@bootlin.com, miquel.raynal@bootlin.com,
+        milan.stevanovic@se.com, jimmy.lalande@se.com,
+        pascal.eberhard@se.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even though hwrng provides a `wait` parameter, it doesn't work very well
-when waiting for a long time. There are numerous deadlocks that emerge
-related to shutdown. Work around this API limitation by waiting for a
-shorter amount of time and erroring more frequently. This commit also
-prevents hwrng from splatting messages to dmesg when there's a timeout
-and prevents calling msleep_interruptible() for tons of time when a
-thread is supposed to be shutting down, since msleep_interruptible()
-isn't actually interrupted by kthread_stop().
+Hello:
 
-Reported-by: Gregory Erwin <gregerwin256@gmail.com>
-Tested-by: Gregory Erwin <gregerwin256@gmail.com>
-Cc: Toke Høiland-Jørgensen <toke@redhat.com>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: Rui Salvaterra <rsalvaterra@gmail.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: stable@vger.kernel.org
-Fixes: fcd09c90c3c5 ("ath9k: use hw_random API instead of directly dumping into random.c")
-Link: https://lore.kernel.org/all/CAO+Okf6ZJC5-nTE_EJUGQtd8JiCkiEHytGgDsFGTEjs0c00giw@mail.gmail.com/
-Link: https://lore.kernel.org/lkml/CAO+Okf5k+C+SE6pMVfPf-d8MfVPVq4PO7EY8Hys_DVXtent3HA@mail.gmail.com/
-Link: https://bugs.archlinux.org/task/75138
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/hw_random/core.c        | 10 ++++++++--
- drivers/net/wireless/ath/ath9k/rng.c | 20 +++-----------------
- 2 files changed, 11 insertions(+), 19 deletions(-)
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/char/hw_random/core.c b/drivers/char/hw_random/core.c
-index 16f227b995e8..a15273271d87 100644
---- a/drivers/char/hw_random/core.c
-+++ b/drivers/char/hw_random/core.c
-@@ -513,8 +513,13 @@ static int hwrng_fillfn(void *unused)
- 			break;
- 
- 		if (rc <= 0) {
--			pr_warn("hwrng: no data available\n");
--			msleep_interruptible(10000);
-+			int i;
-+
-+			for (i = 0; i < 100; ++i) {
-+				if (kthread_should_stop() ||
-+				    schedule_timeout_interruptible(HZ / 20))
-+					goto out;
-+			}
- 			continue;
- 		}
- 
-@@ -529,6 +534,7 @@ static int hwrng_fillfn(void *unused)
- 		add_hwgenerator_randomness((void *)rng_fillbuf, rc,
- 					   entropy >> 10);
- 	}
-+out:
- 	hwrng_fill = NULL;
- 	return 0;
- }
-diff --git a/drivers/net/wireless/ath/ath9k/rng.c b/drivers/net/wireless/ath/ath9k/rng.c
-index cb5414265a9b..757603d1949d 100644
---- a/drivers/net/wireless/ath/ath9k/rng.c
-+++ b/drivers/net/wireless/ath/ath9k/rng.c
-@@ -52,20 +52,6 @@ static int ath9k_rng_data_read(struct ath_softc *sc, u32 *buf, u32 buf_size)
- 	return j << 2;
- }
- 
--static u32 ath9k_rng_delay_get(u32 fail_stats)
--{
--	u32 delay;
--
--	if (fail_stats < 100)
--		delay = 10;
--	else if (fail_stats < 105)
--		delay = 1000;
--	else
--		delay = 10000;
--
--	return delay;
--}
--
- static int ath9k_rng_read(struct hwrng *rng, void *buf, size_t max, bool wait)
- {
- 	struct ath_softc *sc = container_of(rng, struct ath_softc, rng_ops);
-@@ -80,10 +66,10 @@ static int ath9k_rng_read(struct hwrng *rng, void *buf, size_t max, bool wait)
- 			bytes_read += max & 3UL;
- 			memzero_explicit(&word, sizeof(word));
- 		}
--		if (!wait || !max || likely(bytes_read) || fail_stats > 110)
-+		if (!wait || !max || likely(bytes_read) || ++fail_stats >= 100 ||
-+		    ((current->flags & PF_KTHREAD) && kthread_should_stop()) ||
-+		    schedule_timeout_interruptible(HZ / 20))
- 			break;
--
--		msleep_interruptible(ath9k_rng_delay_get(++fail_stats));
- 	}
- 
- 	if (wait && !bytes_read && max)
+On Fri, 24 Jun 2022 16:39:45 +0200 you wrote:
+> The Renesas RZ/N1 SoCs features an ethernet subsystem which contains
+> (most notably) a switch, two GMACs, and a MII converter [1]. This
+> series adds support for the switch and the MII converter.
+> 
+> The MII converter present on this SoC has been represented as a PCS
+> which sit between the MACs and the PHY. This PCS driver is probed from
+> the device-tree since it requires to be configured. Indeed the MII
+> converter also contains the registers that are handling the muxing of
+> ports (Switch, MAC, HSR, RTOS, etc) internally to the SoC.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v9,01/16] net: dsa: allow port_bridge_join() to override extack message
+    https://git.kernel.org/netdev/net-next/c/1c6e8088d9a7
+  - [net-next,v9,02/16] net: dsa: add support for ethtool get_rmon_stats()
+    https://git.kernel.org/netdev/net-next/c/67f38b1c7324
+  - [net-next,v9,03/16] net: dsa: add Renesas RZ/N1 switch tag driver
+    https://git.kernel.org/netdev/net-next/c/a08d6a6dc820
+  - [net-next,v9,04/16] dt-bindings: net: pcs: add bindings for Renesas RZ/N1 MII converter
+    https://git.kernel.org/netdev/net-next/c/c823c2bf9156
+  - [net-next,v9,05/16] net: pcs: add Renesas MII converter driver
+    https://git.kernel.org/netdev/net-next/c/7dc54d3b8d91
+  - [net-next,v9,06/16] dt-bindings: net: dsa: add bindings for Renesas RZ/N1 Advanced 5 port switch
+    https://git.kernel.org/netdev/net-next/c/8956e96c1d4d
+  - [net-next,v9,07/16] net: dsa: rzn1-a5psw: add Renesas RZ/N1 advanced 5 port switch driver
+    https://git.kernel.org/netdev/net-next/c/888cdb892b61
+  - [net-next,v9,08/16] net: dsa: rzn1-a5psw: add statistics support
+    https://git.kernel.org/netdev/net-next/c/c7243fd4a62f
+  - [net-next,v9,09/16] net: dsa: rzn1-a5psw: add FDB support
+    https://git.kernel.org/netdev/net-next/c/5edf246c6869
+  - [net-next,v9,10/16] dt-bindings: net: snps,dwmac: add "power-domains" property
+    https://git.kernel.org/netdev/net-next/c/955fe312a9d2
+  - [net-next,v9,11/16] dt-bindings: net: snps,dwmac: add "renesas,rzn1" compatible
+    https://git.kernel.org/netdev/net-next/c/d7cc14bc9802
+  - [net-next,v9,12/16] ARM: dts: r9a06g032: describe MII converter
+    https://git.kernel.org/netdev/net-next/c/066c3bd35835
+  - [net-next,v9,13/16] ARM: dts: r9a06g032: describe GMAC2
+    https://git.kernel.org/netdev/net-next/c/3f5261f1c2a8
+  - [net-next,v9,14/16] ARM: dts: r9a06g032: describe switch
+    https://git.kernel.org/netdev/net-next/c/cf9695d8a7e9
+  - [net-next,v9,15/16] ARM: dts: r9a06g032-rzn1d400-db: add switch description
+    https://git.kernel.org/netdev/net-next/c/9aab31d66ec9
+  - [net-next,v9,16/16] MAINTAINERS: add Renesas RZ/N1 switch related driver entry
+    https://git.kernel.org/netdev/net-next/c/717a5c56deec
+
+You are awesome, thank you!
 -- 
-2.35.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

@@ -2,138 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5F955C215
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2755955C3CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239770AbiF0SAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 14:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59902 "EHLO
+        id S239867AbiF0SBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233706AbiF0R76 (ORCPT
+        with ESMTP id S233706AbiF0SBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:59:58 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39903B7CA;
-        Mon, 27 Jun 2022 10:59:58 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id h85so10376528iof.4;
-        Mon, 27 Jun 2022 10:59:58 -0700 (PDT)
+        Mon, 27 Jun 2022 14:01:36 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C8EB7CA;
+        Mon, 27 Jun 2022 11:01:35 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id cf14so14178755edb.8;
+        Mon, 27 Jun 2022 11:01:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HwEhp9Xv9rongHC1qnO1cBomEmnStSyCV7TDMuunF9g=;
+        b=AWYhjfCLkGMyI1hYkQDJgd32k04jzz+MR9ISAgxv0PNT/uAsrjdHcitLVrQhbZiEzd
+         7CCAvXF+ZmEMSd9zU+saUZYCWp4SpHdhX/hziZ2oiENgodFGR84fWJVYeWMQkGh8HAH8
+         pG165mH/Vgk2ymRVylbuMs0gRKkvexq53o5e1+mLHWIwT3d5D2bajXVG3/A0wB8nMjV1
+         UMFYAhXu5U+3G5zhs/vPthAvvknGrBlsl4hQlcLw0P8wTRbhpNhOwEkuwoRBO/oorVbb
+         FnsBtUeZKeOsEXAwvHnv9wBBByYwx9c1NWUU4GDrTUEpwb5c5Y0Rg5yQ2G9lV7uo+6UZ
+         A70Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=XogYVUgT3W3Q8+7OypuWUvQY31VgP/RT9SPk1+m3+FU=;
-        b=P1U5WA7glJBrsjBJuLAWdbBpoCGdAbSB/3LokD/2aLtZxdX/tUw6Nb05Q4uVYFSJ+Z
-         gGLUlqB6c4Khwma9dEe9gvHDHfyhT91L2PYLjKQ94bneP0O5PCvNvmoFMggtYQasmMIH
-         y2GxFpn6PrRGiofbD7V6loPG3ccC8Lk22jS8lSm6MIBmRJ+shSF2Y6O/tT88H6jvnSnb
-         9cV1GCBVW+bREy/Y1syWTOvLJhoL/k5NdDal32SeNhXgIBfR0lO2KNEy0Mbr6zlT6WtX
-         k1yd+QwTTsNfxIyFaV5WKnVkYEU5X4kZBneIR3ySTS2RkBmxgmrMJcFvmElzhedgXIfY
-         Ue/A==
-X-Gm-Message-State: AJIora8X2HMxP/FsDb8gyrFF0/cIZuQqGsrbnZtNO4nhBktHhmArifQ+
-        tmxBUlvagW01fEG+lhdvE3F64g0A/A==
-X-Google-Smtp-Source: AGRyM1vAnwCiFcCCYZPO4BGu1uNq+/KAgXdRX2IZdwF+ppESdewzYUfeD2cIKxI+ap3H/K+z1y5OaQ==
-X-Received: by 2002:a5d:9a84:0:b0:675:51d2:f1cd with SMTP id c4-20020a5d9a84000000b0067551d2f1cdmr1367241iom.173.1656352797431;
-        Mon, 27 Jun 2022 10:59:57 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id x17-20020a056e020f1100b002d943793c68sm4849162ilj.56.2022.06.27.10.59.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HwEhp9Xv9rongHC1qnO1cBomEmnStSyCV7TDMuunF9g=;
+        b=5Zhek5BPN4LkXZd5qE3JtdpCC6iFTKVmThyAQdwIGbSJ+0Apab6VRiv5UiBq2J0H6l
+         0tfghR95P/Yg51GG0SUlzc527+dNoUn5lpVz/zfaEQHI2HvbvzecNAW4dGqJS5VYk7oj
+         BEktGdYNaFk9iKtTve7X+Bjc9NCPXHFeRPXzSeVN3WTfJg0ujEDY2QC7KrM3CLjteVgl
+         UQz9eUUPKr1N2b1jHWSI0KDgmHs05TB2ECXFCLY4vvnCnVnMqAsrZPs08MIj1XAziT+p
+         KyD238Z7NgBN0cDmh4UqinUcbS+DaKEOeAb7f/eXS2sxiqBqdaA7He9okJyEb/uDSpDt
+         xNbg==
+X-Gm-Message-State: AJIora+wNvQ7NTYRN2R/xaC2Kgag8QPF2k4b8/tM7bY5WAGXYW1+pZ6T
+        Wv3rA14ZoNliNv0REvEeXwI=
+X-Google-Smtp-Source: AGRyM1tBMYRlO1nnXM5PucZjyvxj1gsIhGMabn0rfkuaG81mTWAtt40Q0ba7BlIeDyDoQblVEDqvsA==
+X-Received: by 2002:a05:6402:43c7:b0:435:8a92:e8d0 with SMTP id p7-20020a05640243c700b004358a92e8d0mr18461674edc.174.1656352893923;
+        Mon, 27 Jun 2022 11:01:33 -0700 (PDT)
+Received: from opensuse.localnet (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
+        by smtp.gmail.com with ESMTPSA id bh25-20020a170906a0d900b00722e1635531sm5309891ejb.193.2022.06.27.11.01.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 10:59:57 -0700 (PDT)
-Received: (nullmailer pid 2674770 invoked by uid 1000);
-        Mon, 27 Jun 2022 17:59:55 -0000
-Date:   Mon, 27 Jun 2022 11:59:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lizhi Hou <lizhi.hou@xilinx.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 1/2] of: create of_root if no dtb provided
-Message-ID: <20220627175955.GA2665611-robh@kernel.org>
-References: <20220624034327.2542112-1-frowand.list@gmail.com>
- <20220624034327.2542112-2-frowand.list@gmail.com>
- <20220624141320.3c473605@fixe.home>
- <6d40876c-2751-01bb-94ab-7c9ab90e636f@gmail.com>
+        Mon, 27 Jun 2022 11:01:32 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     David Sterba <dsterba@suse.com>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Chris Down <chris@chrisdown.name>,
+        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
+        Nikolay Borisov <nborisov@suse.com>,
+        Gabriel Niebler <gniebler@suse.com>,
+        Ira Weiny <ira.weiny@intel.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Sterba <dsterba@suse.cz>
+Subject: Re: [RFC PATCH] btrfs: Replace kmap_atomic() with kmap_local_page()
+Date:   Mon, 27 Jun 2022 20:01:31 +0200
+Message-ID: <8960694.CDJkKcVGEf@opensuse>
+In-Reply-To: <20220624084215.7287-1-fmdefrancesco@gmail.com>
+References: <20220624084215.7287-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6d40876c-2751-01bb-94ab-7c9ab90e636f@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 11:44:07AM -0500, Frank Rowand wrote:
-> On 6/24/22 08:13, Clément Léger wrote:
-> > Le Thu, 23 Jun 2022 22:43:26 -0500,
-> > frowand.list@gmail.com a écrit :
-> > 
-> >>  
-> >> +/*
-> >> + * __dtb_empty_root_begin[] magically created by cmd_dt_S_dtb in
-> >> + * scripts/Makefile.lib
-> >> + */
-> >> +extern void *__dtb_empty_root_begin;
-> >> +
-> >>  /*
-> >>   * of_fdt_limit_memory - limit the number of regions in the /memory node
-> >>   * @limit: maximum entries
-> >> @@ -1332,8 +1338,13 @@ bool __init early_init_dt_scan(void *params)
-> >>   */
-> >>  void __init unflatten_device_tree(void)
-> >>  {
-> > 
-> > Hi Frank,
-> > 
-> > This function is only defined when CONFIG_OF_EARLY_FLATTREE is enabled.
-> 
-> More precisely, only if CONFIG_OF_FLATTREE is enabled.  But that would
-> most likely be seleved by CONFIG_OF_EARLY_FLATTREE, so in practice the
-> issue you raise is valid.
-> 
-> > Which means that on platforms that do not select this, the default
-> > empty device-tree creation will not be done.
-> 
-> Yes, so platforms that need this functionality need to select this
-> option.
-> 
-> > 
-> > This configuration option is selected by the platform and not by the
-> > user. On x86, only one config enables this (X86_INTEL_CE) which means
-> > this won't work on all the other platforms even if CONFIG_OF is
-> > selected. I would need this to work by only selected CONFIG_OF.
-> 
-> Maybe this means that CONFIG_OF should be changed to select
-> CONFIG_OF_FLATTREE.  Any opinions on this Rob?
+On venerd=C3=AC 24 giugno 2022 10:42:15 CEST Fabio M. De Francesco wrote:
+> kmap_atomic() is being deprecated in favor of kmap_local_page() where it
+> is feasible. With kmap_local_page() mappings are per thread, CPU local,
+> and not globally visible.
+>=20
+> As far as I can see, the kmap_atomic() calls in compression.c and in
+> inode.c can be safely converted.
+>=20
+> Above all else, David Sterba has confirmed that "The context in
+> check_compressed_csum is atomic [...]" and that "kmap_atomic() in inode.c
+> [...] also can be replaced by kmap_local_page().".[1]
+>=20
+> Therefore, convert all kmap_atomic() calls currently still left in fs/
+btrfs
+> to kmap_local_page().
+>=20
+> This is an RFC only because, testing with "./check -g quick" (xfstests)=20
+on
+> a QEMU + KVM 32-bits VM with 4GB RAM and booting a kernel with=20
+HIGHMEM64GB
+> enabled, outputs several errors. These errors seem to be exactly the same
+> which are being output without this patch. It apparently seems that these
+> changes don't introduce further errors, however I'd like to ask for
+> comments before sending a "real" patch.
+>=20
+> With this patch, there are no more call sites for kmap() and=20
+kmap_atomic()
+> in fs/btrfs.
+>=20
+> [1] https://lore.kernel.org/linux-btrfs/
+20220601132545.GM20633@twin.jikos.cz/
+>=20
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Suggested-by: David Sterba <dsterba@suse.cz>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>  fs/btrfs/compression.c |  4 ++--
+>  fs/btrfs/inode.c       | 12 ++++++------
+>  2 files changed, 8 insertions(+), 8 deletions(-)
+>=20
 
-I don't think that works in the PDT (Sparc) case.
+Please discard this RFC.
 
-I think either CONFIG_OF_FLATTREE or CONFIG_OF_EARLY_FLATTREE will need 
-to become user selectable.
+I've just submitted a real patch:
 
-> 
-> > That's why I decided to add the of_root creation in of_core_init()
-> > using a function (of_fdt_unflatten()) that is provided if CONFIG_OF is
-> > defined.
-> 
-> I mentioned this in response to the previous patch series, but will
-> repeat here for those who might not have read that email thread.
-> 
-> I do not want the root live tree to be created buy different code in
-> different places; I want one central place where this occurs.  When
-> the tree can be created in multiple places by different code blocks,
-> it becomes more difficult to understand the code and more likely that
-> one of the tree creation code blocks is not updated when another is.
+https://lore.kernel.org/lkml/20220627174849.29962-1-fmdefrancesco@gmail.com/
 
-+1
+Thanks,
 
-Rob
+=46abio
+
+

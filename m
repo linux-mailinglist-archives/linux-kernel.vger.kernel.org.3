@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3D255C77D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD3F55E33B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbiF0L1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S239319AbiF0L41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235105AbiF0L0n (ORCPT
+        with ESMTP id S237965AbiF0Lt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:26:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416DC65D8;
-        Mon, 27 Jun 2022 04:26:33 -0700 (PDT)
+        Mon, 27 Jun 2022 07:49:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FE3E02;
+        Mon, 27 Jun 2022 04:43:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01274B8111B;
-        Mon, 27 Jun 2022 11:26:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6903DC3411D;
-        Mon, 27 Jun 2022 11:26:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C56CB80D37;
+        Mon, 27 Jun 2022 11:43:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D04F7C341C8;
+        Mon, 27 Jun 2022 11:43:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329190;
-        bh=4viCvBWNjlVqiYuJe3YQwX6lDbcoBs/EOvALTfDMLeg=;
+        s=korg; t=1656330200;
+        bh=/yUr5kOLGptxvdwwPg9SpLafIzbLfy8B2/nwoGPtK9E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SZKhFD5AReQKoaUheQMbbyJ0o5Kv3CCySAXeEEpn5SG6UqaM/RHZfXmSj1B4u3RAJ
-         Qjyq4UyN19u69aOUZrSBySnB54+3g2DkQftdW8SUVhp6epq4iCEn4sogho4RLVU6x9
-         BCIM3osiovQQSyIRaLD6IPzVHJfx/PcwsM0eFKe0=
+        b=YEr6qAO7pBdzVPwab7jLWAn7cMsKK9nToJYf/cRrpTjmvUPta6+ti+hCth+IML6XB
+         CpRUEUI2c90I3gSoqcESwfZvHdfnBfsseI0hIH45J1f3P+3iwZhHVllZLc2AyLxb6O
+         vRK+eGG8XfL3nqLLgVINYCoJCNMo5Y0WsVwDSaDU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.10 079/102] iio: adc: stm32: fix maximum clock rate for stm32mp15x
+        stable@vger.kernel.org, stable@kernel.org,
+        Utkarsh Patel <utkarsh.h.patel@intel.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 5.18 117/181] xhci-pci: Allow host runtime PM as default for Intel Meteor Lake xHCI
 Date:   Mon, 27 Jun 2022 13:21:30 +0200
-Message-Id: <20220627111935.812598474@linuxfoundation.org>
+Message-Id: <20220627111948.089219717@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,34 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olivier Moysan <olivier.moysan@foss.st.com>
+From: Utkarsh Patel <utkarsh.h.patel@intel.com>
 
-commit 990539486e7e311fb5dab1bf4d85d1a8973ae644 upstream.
+commit 8ffdc53a60049f3930afe161dc51c67959c8d83d upstream.
 
-Change maximum STM32 ADC input clock rate to 36MHz, as specified
-in STM32MP15x datasheets.
+Meteor Lake TCSS(Type-C Subsystem) xHCI needs to be runtime suspended
+whenever possible to allow the TCSS hardware block to enter D3cold and
+thus save energy.
 
-Fixes: d58c67d1d851 ("iio: adc: stm32-adc: add support for STM32MP1")
-Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
-Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Link: https://lore.kernel.org/r/20220609095234.375925-1-olivier.moysan@foss.st.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: stable@kernel.org
+Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20220623111945.1557702-5-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/stm32-adc-core.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci-pci.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/iio/adc/stm32-adc-core.c
-+++ b/drivers/iio/adc/stm32-adc-core.c
-@@ -797,7 +797,7 @@ static const struct stm32_adc_priv_cfg s
- static const struct stm32_adc_priv_cfg stm32mp1_adc_priv_cfg = {
- 	.regs = &stm32h7_adc_common_regs,
- 	.clk_sel = stm32h7_adc_clk_sel,
--	.max_clk_rate_hz = 40000000,
-+	.max_clk_rate_hz = 36000000,
- 	.has_syscfg = HAS_VBOOSTER | HAS_ANASWVDD,
- 	.num_irqs = 2,
- };
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -62,6 +62,7 @@
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_XHCI		0x464e
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI	0x51ed
+ #define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_XHCI		0xa71e
++#define PCI_DEVICE_ID_INTEL_METEOR_LAKE_XHCI		0x7ec0
+ 
+ #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
+@@ -272,7 +273,8 @@ static void xhci_pci_quirks(struct devic
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI ||
+-	     pdev->device == PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_XHCI))
++	     pdev->device == PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_INTEL_METEOR_LAKE_XHCI))
+ 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
 
 

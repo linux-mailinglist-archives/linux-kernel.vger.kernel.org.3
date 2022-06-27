@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C8155C34E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8048855C5C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241248AbiF0U1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 16:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S241311AbiF0U13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 16:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241203AbiF0U0s (ORCPT
+        with ESMTP id S241221AbiF0U0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 16:26:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1E719006
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:26:47 -0700 (PDT)
+        Mon, 27 Jun 2022 16:26:51 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B687A1A80D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:26:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1FC13B81135
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:26:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E104CC385A5;
-        Mon, 27 Jun 2022 20:26:44 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C21B3CE1D8F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6966BC385A2;
+        Mon, 27 Jun 2022 20:26:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656361605;
-        bh=S6sYovHV9TiZOorN/9SR/PSbBF1PStF1Rrk+75FPCvg=;
+        s=k20201202; t=1656361607;
+        bh=AEyGfo7qB0JdcoEU1SEFjmckCi16kjksfsTnCckfglw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jrJPNr0+5qEan1I3/TD5fESe6gr13cgFZ0fCiR+4XOgJ2Ot2tONR2PNcWiMHFOpQF
-         kye83SvCJ4kiqvf2pkIdA1mYC8TVuyf3qufZ5ADJehTfrNotcLQK/gFzJSzGunmrjP
-         agKY8WH/wGo9cA1U89Z4vJCssA5J1uEQprhJ6UgZIlalj8W1PHUhSbtv8d1TYSO3Fh
-         YFrJJVbSBuCqxtxw+Xhi3IkL6Y8v/+8C2L4/narhmlRGgIL9uKqwVfUDO0CtENY2yT
-         TU8Y1YOZeY80nCiqimETQZSLGOJPmDgeq7IRdmXtwcErOhNlZdbsRh0kPFNsBWrkGG
-         d6rJ2uF52qe7A==
+        b=tEB/jb8/wM8iH2mLKsSaXvLWtBQfAI/253KIxP4UqwOw2ehaclVwvB5fdNIgmgsRi
+         bEItqHuqyAQ4kYP4Y7EzotbKhdJLedBjLbu2bO7sqNbjRN0ftgNldaOZXSRgq+Vs5v
+         VuHwNzFf6EzK7uLa/145SapzPUSfEB1q9Ih6maioi2+KK5IQbbJkYrk2ndV59maYAq
+         8PiHwBHCAIf7r0Gcj8GliiyeGFA3MxpbbMC2MLdFfuSa2/KkWmQUJld67gCX3KDLlU
+         zrypRAdrMN4dEdiC2f8twIkUtnJ/gDCcYXd0jDqFDozQVTP0a0O9ukM2yJfg+GF0u6
+         3riis8OxMerAA==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, Dani Liberman <dliberman@habana.ai>
-Subject: [PATCH 11/12] habanalabs/gaudi2: add tpm attestation info uapi
-Date:   Mon, 27 Jun 2022 23:26:19 +0300
-Message-Id: <20220627202620.961350-12-ogabbay@kernel.org>
+Cc:     gregkh@linuxfoundation.org
+Subject: [PATCH 12/12] habanalabs: enable gaudi2 code in driver
+Date:   Mon, 27 Jun 2022 23:26:20 +0300
+Message-Id: <20220627202620.961350-13-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220627202620.961350-1-ogabbay@kernel.org>
 References: <20220627202620.961350-1-ogabbay@kernel.org>
@@ -53,275 +53,261 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dani Liberman <dliberman@habana.ai>
+Enable the Gaudi2 ASIC code in the pci probe callback of the driver so
+the driver will handle Gaudi2 ASICs.
 
-User will provide a nonce via the ioctl, and will retrieve
-attestation data of the boot from the tpm, generated using given
-nonce.
+Add the PCI ID to the PCI table and add the ASIC enum value to all
+relevant places.
 
-Signed-off-by: Dani Liberman <dliberman@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Fixup the device parameters initialization for Gaudi2.
+
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/firmware_if.c  | 58 +++++++++++++++++++
- drivers/misc/habanalabs/common/habanalabs.h   |  2 +
- .../misc/habanalabs/common/habanalabs_ioctl.c | 52 +++++++++++++++++
- .../misc/habanalabs/include/common/cpucp_if.h | 51 +++++++++++++++-
- 4 files changed, 162 insertions(+), 1 deletion(-)
+ drivers/misc/habanalabs/common/device.c       |  8 +++
+ drivers/misc/habanalabs/common/habanalabs.h   | 13 ++--
+ .../misc/habanalabs/common/habanalabs_drv.c   | 67 +++++++++++++++----
+ drivers/misc/habanalabs/common/sysfs.c        |  6 ++
+ 4 files changed, 77 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/firmware_if.c b/drivers/misc/habanalabs/common/firmware_if.c
-index 9f0a24ee5af4..60093088ba43 100644
---- a/drivers/misc/habanalabs/common/firmware_if.c
-+++ b/drivers/misc/habanalabs/common/firmware_if.c
-@@ -13,6 +13,14 @@
- #include <linux/slab.h>
- #include <linux/ctype.h>
- 
-+#if (TPM_PCR_DATA_BUF_SZ != HL_TPM_PCR_DATA_BUF_SZ) || \
-+	(TPM_PCR_QUOTE_BUF_SZ != HL_TPM_PCR_QUOTE_BUF_SZ) || \
-+	(TPM_SIGNATURE_BUF_SZ != HL_TPM_SIGNATURE_BUF_SZ) || \
-+	(TPM_PUB_DATA_BUF_SZ != HL_TPM_PUB_DATA_BUF_SZ) || \
-+	(TPM_CERTIFICATE_BUF_SZ != HL_TPM_CERTIFICATE_BUF_SZ)
-+#error TPM attestation structures are not aligned
-+#endif
-+
- #define FW_FILE_MAX_SIZE		0x1400000 /* maximum size of 20MB */
- 
- struct fw_binning_conf {
-@@ -525,6 +533,11 @@ static bool fw_report_boot_dev0(struct hl_device *hdev, u32 err_val,
- 		err_exists = true;
- 	}
- 
-+	if (err_val & CPU_BOOT_ERR0_TMP_THRESH_INIT_FAIL) {
-+		dev_err(hdev->dev, "Device boot error - Failed to set threshold for temperature sensor\n");
-+		err_exists = true;
-+	}
-+
- 	if (err_val & CPU_BOOT_ERR0_DEVICE_UNUSABLE_FAIL) {
- 		/* Ignore this bit, don't prevent driver loading */
- 		dev_dbg(hdev->dev, "device unusable status is set\n");
-@@ -2905,3 +2918,48 @@ void hl_fw_set_max_power(struct hl_device *hdev)
- 	if (rc)
- 		dev_err(hdev->dev, "Failed to set max power, error %d\n", rc);
- }
-+
-+static int hl_fw_get_tpm_data(struct hl_device *hdev, u32 packet_id,
-+				void *data, u32 size, u32 nonce, u32 timeout)
-+{
-+	struct cpucp_packet pkt = {};
-+	dma_addr_t req_dma_addr;
-+	void *req_cpu_addr;
-+	int rc;
-+
-+	req_cpu_addr = hl_cpu_accessible_dma_pool_alloc(hdev, size, &req_dma_addr);
-+	if (!data) {
-+		dev_err(hdev->dev,
-+			"Failed to allocate DMA memory for CPU-CP packet %u\n", packet_id);
-+		return -ENOMEM;
-+	}
-+
-+	memset(data, 0, size);
-+
-+	pkt.ctl = cpu_to_le32(packet_id << CPUCP_PKT_CTL_OPCODE_SHIFT);
-+	pkt.addr = cpu_to_le64(req_dma_addr);
-+	pkt.data_max_size = cpu_to_le32(size);
-+	pkt.nonce = cpu_to_le32(nonce);
-+
-+	rc = hdev->asic_funcs->send_cpu_message(hdev, (u32 *) &pkt, sizeof(pkt),
-+					timeout, NULL);
-+	if (rc) {
-+		dev_err(hdev->dev,
-+			"Failed to handle CPU-CP pkt %u, error %d\n", packet_id, rc);
-+		goto out;
-+	}
-+
-+	memcpy(data, req_cpu_addr, size);
-+
-+out:
-+	hl_cpu_accessible_dma_pool_free(hdev, size, req_cpu_addr);
-+
-+	return rc;
-+}
-+
-+int hl_fw_get_tpm_info(struct hl_device *hdev, struct cpucp_tpm_attest_info *tpm_info, u32 nonce)
-+{
-+	return hl_fw_get_tpm_data(hdev, CPUCP_PACKET_TPM_ATTEST_GET, tpm_info,
-+					sizeof(struct cpucp_tpm_attest_info), nonce,
-+					HL_CPUCP_TPM_INFO_TINEOUT_USEC);
-+}
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index 38cf2f1659ee..a4656eac495e 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -645,6 +645,14 @@ static int device_early_init(struct hl_device *hdev)
+ 		gaudi_set_asic_funcs(hdev);
+ 		strscpy(hdev->asic_name, "GAUDI SEC", sizeof(hdev->asic_name));
+ 		break;
++	case ASIC_GAUDI2:
++		gaudi2_set_asic_funcs(hdev);
++		strscpy(hdev->asic_name, "GAUDI2", sizeof(hdev->asic_name));
++		break;
++	case ASIC_GAUDI2_SEC:
++		gaudi2_set_asic_funcs(hdev);
++		strscpy(hdev->asic_name, "GAUDI2 SEC", sizeof(hdev->asic_name));
++		break;
+ 	default:
+ 		dev_err(hdev->dev, "Unrecognized ASIC type %d\n",
+ 			hdev->asic_type);
 diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index f61389115c26..4537845658f8 100644
+index 4537845658f8..587b1c537115 100644
 --- a/drivers/misc/habanalabs/common/habanalabs.h
 +++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -66,6 +66,7 @@ struct hl_fpriv;
- #define HL_CPUCP_INFO_TIMEOUT_USEC	10000000 /* 10s */
- #define HL_CPUCP_EEPROM_TIMEOUT_USEC	10000000 /* 10s */
- #define HL_CPUCP_MON_DUMP_TIMEOUT_USEC	10000000 /* 10s */
-+#define HL_CPUCP_TPM_INFO_TINEOUT_USEC	10000000 /* 10s */
+@@ -3033,7 +3033,6 @@ struct hl_reset_info {
+  * @disabled: is device disabled.
+  * @late_init_done: is late init stage was done during initialization.
+  * @hwmon_initialized: is H/W monitor sensors was initialized.
+- * @heartbeat: is heartbeat sanity check towards CPU-CP enabled.
+  * @reset_on_lockup: true if a reset should be done in case of stuck CS, false
+  *                   otherwise.
+  * @dram_default_page_mapping: is DRAM default page mapping enabled.
+@@ -3066,6 +3065,10 @@ struct hl_reset_info {
+  * @is_compute_ctx_active: Whether there is an active compute context executing.
+  * @compute_ctx_in_release: true if the current compute context is being released.
+  * @supports_mmu_prefetch: true if prefetch is supported, otherwise false.
++ * @reset_upon_device_release: reset the device when the user closes the file descriptor of the
++ *                             device.
++ * @skip_iatu_for_unsecured_device: skip the device PCI controller initialization when working
++ *                                  with device that runs f/w that is not secured.
+  */
+ struct hl_device {
+ 	struct pci_dev			*pdev;
+@@ -3175,7 +3178,6 @@ struct hl_device {
+ 	u8				disabled;
+ 	u8				late_init_done;
+ 	u8				hwmon_initialized;
+-	u8				heartbeat;
+ 	u8				reset_on_lockup;
+ 	u8				dram_default_page_mapping;
+ 	u8				memory_scrub;
+@@ -3199,6 +3201,8 @@ struct hl_device {
+ 	u8				is_compute_ctx_active;
+ 	u8				compute_ctx_in_release;
+ 	u8				supports_mmu_prefetch;
++	u8				reset_upon_device_release;
++	u8				skip_iatu_for_unsecured_device;
  
- #define HL_FW_STATUS_POLL_INTERVAL_USEC		10000 /* 10ms */
- #define HL_FW_COMMS_STATUS_PLDM_POLL_INTERVAL_USEC	1000000 /* 1s */
-@@ -3604,6 +3605,7 @@ int hl_get_pwm_info(struct hl_device *hdev, int sensor_index, u32 attr, long *va
- void hl_set_pwm_info(struct hl_device *hdev, int sensor_index, u32 attr, long value);
- long hl_fw_get_max_power(struct hl_device *hdev);
- void hl_fw_set_max_power(struct hl_device *hdev);
-+int hl_fw_get_tpm_info(struct hl_device *hdev, struct cpucp_tpm_attest_info *tpm_info, u32 nonce);
- int hl_set_voltage(struct hl_device *hdev, int sensor_index, u32 attr, long value);
- int hl_set_current(struct hl_device *hdev, int sensor_index, u32 attr, long value);
- int hl_set_power(struct hl_device *hdev, int sensor_index, u32 attr, long value);
-diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-index 96e12ab7a924..9db5167978e5 100644
---- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-@@ -660,6 +660,55 @@ static int dev_mem_alloc_page_sizes_info(struct hl_fpriv *hpriv, struct hl_info_
- 	return copy_to_user(out, &info, min_t(size_t, max_size, sizeof(info))) ? -EFAULT : 0;
- }
- 
-+static int tpm_info(struct hl_fpriv *hpriv, struct hl_info_args *args)
-+{
-+	void __user *out = (void __user *) (uintptr_t) args->return_pointer;
-+	struct cpucp_tpm_attest_info *tpm_info;
-+	struct hl_info_tpm *info;
-+	u32 max_size = args->return_size;
-+	int rc;
-+
-+	if ((!max_size) || (!out))
-+		return -EINVAL;
-+
-+	tpm_info = kmalloc(sizeof(*tpm_info), GFP_KERNEL);
-+	if (!tpm_info)
-+		return -ENOMEM;
-+
-+	info = kmalloc(sizeof(*info), GFP_KERNEL);
-+	if (!info) {
-+		rc = -ENOMEM;
-+		goto free_tpm_info;
-+	}
-+
-+	rc = hl_fw_get_tpm_info(hpriv->hdev, tpm_info, args->tpm_nonce);
-+	if (rc)
-+		goto free_info;
-+
-+	info->nonce = le32_to_cpu(tpm_info->nonce);
-+	info->pcr_quote_len = le16_to_cpu(tpm_info->pcr_quote_len);
-+	info->pub_data_len = le16_to_cpu(tpm_info->pub_data_len);
-+	info->certificate_len = le16_to_cpu(tpm_info->certificate_len);
-+	info->pcr_num_reg = tpm_info->pcr_num_reg;
-+	info->pcr_reg_len = tpm_info->pcr_reg_len;
-+	info->quote_sig_len = tpm_info->quote_sig_len;
-+	memcpy(&info->pcr_data, &tpm_info->pcr_data, sizeof(info->pcr_data));
-+	memcpy(&info->pcr_quote, &tpm_info->pcr_quote, sizeof(info->pcr_quote));
-+	memcpy(&info->public_data, &tpm_info->public_data, sizeof(info->public_data));
-+	memcpy(&info->certificate, &tpm_info->certificate, sizeof(info->certificate));
-+	memcpy(&info->quote_sig, &tpm_info->quote_sig, sizeof(info->quote_sig));
-+
-+	rc = copy_to_user(out, info,
-+				min_t(size_t, max_size, sizeof(*info))) ? -EFAULT : 0;
-+
-+free_info:
-+	kfree(info);
-+free_tpm_info:
-+	kfree(tpm_info);
-+
-+	return rc;
-+}
-+
- static int eventfd_register(struct hl_fpriv *hpriv, struct hl_info_args *args)
- {
- 	int rc;
-@@ -753,6 +802,9 @@ static int _hl_info_ioctl(struct hl_fpriv *hpriv, void *data,
- 	case HL_INFO_DEV_MEM_ALLOC_PAGE_SIZES:
- 		return dev_mem_alloc_page_sizes_info(hpriv, args);
- 
-+	case HL_INFO_TPM:
-+		return tpm_info(hpriv, args);
-+
- 	case HL_INFO_GET_EVENTS:
- 		return events_info(hpriv, args);
- 
-diff --git a/drivers/misc/habanalabs/include/common/cpucp_if.h b/drivers/misc/habanalabs/include/common/cpucp_if.h
-index 719b2ff80985..a97d9f03915d 100644
---- a/drivers/misc/habanalabs/include/common/cpucp_if.h
-+++ b/drivers/misc/habanalabs/include/common/cpucp_if.h
-@@ -629,6 +629,13 @@ enum pq_init_status {
-  * CPUCP_PACKET_ENGINE_CORE_ASID_SET -
-  *       Packet to perform engine core ASID configuration
-  *
-+ * CPUCP_PACKET_TPM_ATTEST_GET -
-+ *       Get the attestaion data that is collected by the Trusted Platform
-+ *       device during various stages of the boot sequence. the attestation data
-+ *       is also hashed with some unique number (nonce) provided by the host to
-+ *       prevent replay attacks. public key and certificate also provided as
-+ *       part of the FW response.
-+ *
-  * CPUCP_PACKET_MONITOR_DUMP_GET -
-  *       Get monitors registers dump from the CpuCP kernel.
-  *       The CPU will put the registers dump in the a buffer allocated by the driver
-@@ -687,7 +694,7 @@ enum cpucp_packet_id {
- 	CPUCP_PACKET_RESERVED,			/* not used */
- 	CPUCP_PACKET_ENGINE_CORE_ASID_SET,	/* internal */
- 	CPUCP_PACKET_RESERVED2,			/* not used */
--	CPUCP_PACKET_RESERVED3,			/* not used */
-+	CPUCP_PACKET_TPM_ATTEST_GET,		/* internal */
- 	CPUCP_PACKET_RESERVED4,			/* not used */
- 	CPUCP_PACKET_RESERVED5,			/* not used */
- 	CPUCP_PACKET_MONITOR_DUMP_GET,		/* debugfs */
-@@ -783,6 +790,9 @@ struct cpucp_packet {
- 		 * result cannot be used to hold general purpose data.
- 		 */
- 		__le32 status_mask;
-+
-+		/* random, used once number, for tpm secured packets */
-+		__le32 nonce;
- 	};
- 
- 	/* For NIC requests */
-@@ -1193,6 +1203,45 @@ enum cpu_reset_status {
- 	CPU_RST_STATUS_SOFT_RST_DONE = 1,
+ 	/* Parameters for bring-up */
+ 	u64				nic_ports_mask;
+@@ -3212,11 +3216,9 @@ struct hl_device {
+ 	u8				dram_scrambler_enable;
+ 	u8				hard_reset_on_fw_events;
+ 	u8				bmc_enable;
+-	u8				rl_enable;
+ 	u8				reset_on_preboot_fail;
+-	u8				reset_upon_device_release;
+-	u8				skip_iatu_for_unsecured_device;
+ 	u8				reset_if_device_not_idle;
++	u8				heartbeat;
  };
  
-+#define TPM_PCR_DATA_BUF_SZ	256
-+#define TPM_PCR_QUOTE_BUF_SZ	(512 - 2)	/* 2 bytes used for size */
-+#define TPM_SIGNATURE_BUF_SZ	(256 - 1)	/* 1 byte used for size */
-+#define TPM_PUB_DATA_BUF_SZ	(512 - 2)	/* 2 bytes used for size */
-+#define TPM_CERTIFICATE_BUF_SZ	(2048 - 2)	/* 2 bytes used for size */
+ 
+@@ -3451,6 +3453,7 @@ void hl_multi_cs_completion_init(struct hl_device *hdev);
+ 
+ void goya_set_asic_funcs(struct hl_device *hdev);
+ void gaudi_set_asic_funcs(struct hl_device *hdev);
++void gaudi2_set_asic_funcs(struct hl_device *hdev);
+ 
+ int hl_vm_ctx_init(struct hl_ctx *ctx);
+ void hl_vm_ctx_fini(struct hl_ctx *ctx);
+diff --git a/drivers/misc/habanalabs/common/habanalabs_drv.c b/drivers/misc/habanalabs/common/habanalabs_drv.c
+index 3a41dbef14f8..e7179c7d957c 100644
+--- a/drivers/misc/habanalabs/common/habanalabs_drv.c
++++ b/drivers/misc/habanalabs/common/habanalabs_drv.c
+@@ -54,10 +54,15 @@ MODULE_PARM_DESC(boot_error_status_mask,
+ #define PCI_IDS_GAUDI			0x1000
+ #define PCI_IDS_GAUDI_SEC		0x1010
+ 
++#define PCI_IDS_GAUDI2			0x1020
++#define PCI_IDS_GAUDI2_SEC		0x1030
 +
-+/*
-+ * struct cpucp_tpm_attest_info - attestation data of the boot from the TPM
-+ * @pcr_data: raw values of the PCR registers from the TPM
-+ * @pcr_num_reg: number of PCR registers in the pcr_data array
-+ * @pcr_reg_len: length of each PCR register in the pcr_data array (bytes)
-+ * @nonce: number only used once. random number provided by host. this also
-+ *	    passed to the quote command as a qualifying data.
-+ * @pcr_quote_len: length of the attestation quote data (bytes)
-+ * @pcr_quote: attestation data structure (TPM2B_ATTEST) from the TPM
-+ * @quote_sig_len: length of the attestation signature (bytes)
-+ * @quote_sig: signature structure (TPMT_SIGNATURE) of the attestation data
-+ * @pub_data_len: length of the public data (bytes)
-+ * @public_data: public key and certificate info from the TPM
-+ *		 (outPublic + name + qualifiedName)
-+ * @certificate_len: length of the certificate (bytes)
-+ * @certificate: certificate for the attestation data, read from the TPM NV mem
-+ */
-+struct cpucp_tpm_attest_info {
-+	__u8 pcr_data[TPM_PCR_DATA_BUF_SZ];
-+	__u8 pcr_num_reg;
-+	__u8 pcr_reg_len;
-+	__le16 pad0;
-+	__le32 nonce;
-+	__le16 pcr_quote_len;
-+	__u8 pcr_quote[TPM_PCR_QUOTE_BUF_SZ];
-+	__u8 quote_sig_len;
-+	__u8 quote_sig[TPM_SIGNATURE_BUF_SZ];
-+	__le16 pub_data_len;
-+	__u8 public_data[TPM_PUB_DATA_BUF_SZ];
-+	__le16 certificate_len;
-+	__u8 certificate[TPM_CERTIFICATE_BUF_SZ];
-+};
+ static const struct pci_device_id ids[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_HABANALABS, PCI_IDS_GOYA), },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_HABANALABS, PCI_IDS_GAUDI), },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_HABANALABS, PCI_IDS_GAUDI_SEC), },
++	{ PCI_DEVICE(PCI_VENDOR_ID_HABANALABS, PCI_IDS_GAUDI2), },
++	{ PCI_DEVICE(PCI_VENDOR_ID_HABANALABS, PCI_IDS_GAUDI2_SEC), },
+ 	{ 0, }
+ };
+ MODULE_DEVICE_TABLE(pci, ids);
+@@ -84,6 +89,12 @@ static enum hl_asic_type get_asic_type(u16 device)
+ 	case PCI_IDS_GAUDI_SEC:
+ 		asic_type = ASIC_GAUDI_SEC;
+ 		break;
++	case PCI_IDS_GAUDI2:
++		asic_type = ASIC_GAUDI2;
++		break;
++	case PCI_IDS_GAUDI2_SEC:
++		asic_type = ASIC_GAUDI2_SEC;
++		break;
+ 	default:
+ 		asic_type = ASIC_INVALID;
+ 		break;
+@@ -96,6 +107,7 @@ static bool is_asic_secured(enum hl_asic_type asic_type)
+ {
+ 	switch (asic_type) {
+ 	case ASIC_GAUDI_SEC:
++	case ASIC_GAUDI2_SEC:
+ 		return true;
+ 	default:
+ 		return false;
+@@ -280,42 +292,61 @@ int hl_device_open_ctrl(struct inode *inode, struct file *filp)
+ 
+ static void set_driver_behavior_per_device(struct hl_device *hdev)
+ {
+-	hdev->pldm = 0;
++	hdev->nic_ports_mask = 0;
+ 	hdev->fw_components = FW_TYPE_ALL_TYPES;
++	hdev->mmu_enable = MMU_EN_ALL;
++	hdev->mmu_huge_page_opt = 1;
++	hdev->reset_pcilink = 0;
+ 	hdev->cpu_queues_enable = 1;
+-	hdev->heartbeat = 1;
+-	hdev->mmu_enable = 1;
++	hdev->pldm = 0;
+ 	hdev->sram_scrambler_enable = 1;
+ 	hdev->dram_scrambler_enable = 1;
+-	hdev->bmc_enable = 1;
+ 	hdev->hard_reset_on_fw_events = 1;
++	hdev->bmc_enable = 1;
+ 	hdev->reset_on_preboot_fail = 1;
+ 	hdev->reset_if_device_not_idle = 1;
+-
+-	hdev->reset_pcilink = 0;
++	hdev->heartbeat = 1;
+ }
+ 
+ static void copy_kernel_module_params_to_device(struct hl_device *hdev)
+ {
++	hdev->asic_prop.fw_security_enabled = is_asic_secured(hdev->asic_type);
 +
- /*
-  * struct dcore_monitor_regs_data - DCORE monitor regs data.
-  * the structure follows sync manager block layout. relevant only to Gaudi.
+ 	hdev->major = hl_major;
+ 	hdev->memory_scrub = memory_scrub;
+ 	hdev->reset_on_lockup = reset_on_lockup;
+ 	hdev->boot_error_status_mask = boot_error_status_mask;
++}
+ 
+-	if (timeout_locked)
+-		hdev->timeout_jiffies = msecs_to_jiffies(timeout_locked * 1000);
+-	else
+-		hdev->timeout_jiffies = MAX_SCHEDULE_TIMEOUT;
++static void fixup_device_params_per_asic(struct hl_device *hdev)
++{
++	switch (hdev->asic_type) {
++	case ASIC_GOYA:
++	case ASIC_GAUDI:
++	case ASIC_GAUDI_SEC:
++		hdev->reset_upon_device_release = 0;
++		break;
+ 
++	default:
++		hdev->reset_upon_device_release = 1;
++		break;
++	}
+ }
+ 
+ static int fixup_device_params(struct hl_device *hdev)
+ {
+-	hdev->asic_prop.fw_security_enabled = is_asic_secured(hdev->asic_type);
++	int tmp_timeout;
++
++	tmp_timeout = timeout_locked;
+ 
+ 	hdev->fw_poll_interval_usec = HL_FW_STATUS_POLL_INTERVAL_USEC;
+ 	hdev->fw_comms_poll_interval_usec = HL_FW_STATUS_POLL_INTERVAL_USEC;
+ 
++	if (tmp_timeout)
++		hdev->timeout_jiffies = msecs_to_jiffies(tmp_timeout * 1000);
++	else
++		hdev->timeout_jiffies = MAX_SCHEDULE_TIMEOUT;
++
+ 	hdev->stop_on_err = true;
+ 	hdev->reset_info.curr_reset_cause = HL_RESET_CAUSE_UNKNOWN;
+ 	hdev->reset_info.prev_reset_trigger = HL_RESET_TRIGGER_DEFAULT;
+@@ -323,6 +354,18 @@ static int fixup_device_params(struct hl_device *hdev)
+ 	/* Enable only after the initialization of the device */
+ 	hdev->disabled = true;
+ 
++	if (!(hdev->fw_components & FW_TYPE_PREBOOT_CPU) &&
++			(hdev->fw_components & ~FW_TYPE_PREBOOT_CPU)) {
++		pr_err("Preboot must be set along with other components");
++		return -EINVAL;
++	}
++
++	/* If CPU queues not enabled, no way to do heartbeat */
++	if (!hdev->cpu_queues_enable)
++		hdev->heartbeat = 0;
++
++	fixup_device_params_per_asic(hdev);
++
+ 	return 0;
+ }
+ 
+@@ -347,7 +390,7 @@ static int create_hdev(struct hl_device **dev, struct pci_dev *pdev)
+ 	if (!hdev)
+ 		return -ENOMEM;
+ 
+-	/* can be NULL in case of simulator device */
++	/* Will be NULL in case of simulator device */
+ 	hdev->pdev = pdev;
+ 
+ 	/* Assign status description string */
+diff --git a/drivers/misc/habanalabs/common/sysfs.c b/drivers/misc/habanalabs/common/sysfs.c
+index da8181068895..edebdf960785 100644
+--- a/drivers/misc/habanalabs/common/sysfs.c
++++ b/drivers/misc/habanalabs/common/sysfs.c
+@@ -245,6 +245,12 @@ static ssize_t device_type_show(struct device *dev,
+ 	case ASIC_GAUDI_SEC:
+ 		str = "GAUDI SEC";
+ 		break;
++	case ASIC_GAUDI2:
++		str = "GAUDI2";
++		break;
++	case ASIC_GAUDI2_SEC:
++		str = "GAUDI2 SEC";
++		break;
+ 	default:
+ 		dev_err(hdev->dev, "Unrecognized ASIC type %d\n",
+ 				hdev->asic_type);
 -- 
 2.25.1
 

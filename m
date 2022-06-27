@@ -2,345 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 906FA55C1F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7FD55C499
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240627AbiF0TIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 15:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        id S240370AbiF0TKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 15:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240352AbiF0TIP (ORCPT
+        with ESMTP id S240365AbiF0TKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 15:08:15 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44F9C3E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:08:13 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id r82so5423304oig.2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:08:13 -0700 (PDT)
+        Mon, 27 Jun 2022 15:10:33 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A003B5597;
+        Mon, 27 Jun 2022 12:10:32 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id n16-20020a17090ade9000b001ed15b37424so10310355pjv.3;
+        Mon, 27 Jun 2022 12:10:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zh6s7nD7luk04qRXIjIb+WBt8LxVAnCFYF380i7oqSI=;
-        b=aNeHHhlvg3mghPdR1oMD4oLFc7JMCZB3jhuxSvhNvPpL9jN9eBhXuNbcylh1vBrqhT
-         z5FTMQ65QHN2UYEMIrSsAwxbt+euJhdYJefOLTu8UdjoOv1c4n2x2rLRHv1bK2jzg3nP
-         MNLh6Wup0Jc8AskdGI9EVbPWRwiOGtFd7PLKQck32/hvgZkjVfzMlK5zzmh80NW8L1Uq
-         nVtUvdciBrz3i9vWI0MizQJVksiEM0eh6BVwBzTIZVlB+N7Eeh8ycuId9wohZNlU0lkJ
-         Tumb2m/pJAyye9iXak8jQUIywPx2Jv4CAj4hHZfllb4vqcxfO407HCsI9efUL9KuiRzM
-         CSug==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/TJYBcpsxpHM1dgljke9KHv7g4SupUF3o95Sw1aZ2ck=;
+        b=IUrCqExbfNSEqdj1+aclN5lVCX6iP7eBPxz3UnA29I42X7w8qUJC0d2QFa6lECfvHS
+         lTMdErf6FACs1/hyp38L86tGz+o787pLf2VIheb7iIKAGcJlc9+ImxpPc6dZHKPr2Lnd
+         297Swn9MhvVXOe5pLyL9hyobmlUtJUylIgtVuWFNUy7M/cvy0Ei9a+7/6RNLP/vuaWpm
+         qPXLfyJ7VkpxIpiy0dSvQGEwS2wO1IikzptCMphwHEF+yGlRha2BCj6vVKJloizO0jzV
+         wtWURRXun0tZKmoLu2aju0/0SznVwcWbO33ww6x17xU68Xd6vEBZdnna3JSmuqObPHbN
+         196g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zh6s7nD7luk04qRXIjIb+WBt8LxVAnCFYF380i7oqSI=;
-        b=1leMbsh7mufHENQhrxizZXE8ILX10vW/pTmyVRVdxizz+meABk+PcVEqLnkV4wnkJt
-         qPbQQgNcqA5ibi9onXOqWqOpfLCay9RCaP3Vb2zf+hLU+cbWDHUd+/I7yeSGtTHQ3mzy
-         CSWIrw4yO/MY6jJTZQM4ZZAD8i4h26ZxPfbOsDHb2RFj95oYhZkKneEdVMwMiSDN611a
-         D2hR1tVYtpPwtPH1LA4AzLYrHywDtBH8pwCbyIc5jen12m2sPcpzjUKnfM/TkbNOhoQJ
-         9BvVJ4wrr5TEeRxomPZD4WgOeMXVPEY/o3G8yHM0tDcIDOZ5MBTEdlP6hfvNHUA6PsGi
-         YB1g==
-X-Gm-Message-State: AJIora8CeehuECBkNYluxlSzxARgSDCz7BCKWVD+K4M/aKux7bk6dlKS
-        Hjx2PWKiaGlU8Kug0EEEFdFX8w==
-X-Google-Smtp-Source: AGRyM1ug7gRwlSieSlpRshPw6m7S6kK6Rl+WiY8kvfNzB01JrBjCtq41RPeRmsjBFlZPva5aUZRUqQ==
-X-Received: by 2002:a05:6808:e89:b0:2f7:34db:6915 with SMTP id k9-20020a0568080e8900b002f734db6915mr8524587oil.284.1656356892978;
-        Mon, 27 Jun 2022 12:08:12 -0700 (PDT)
-Received: from [192.168.17.16] ([189.219.74.211])
-        by smtp.gmail.com with ESMTPSA id c8-20020a4ab188000000b0041b86fcc8dasm6311737ooo.25.2022.06.27.12.08.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 12:08:12 -0700 (PDT)
-Message-ID: <fe46a586-1af9-5988-9644-f7dd9ca63ca3@linaro.org>
-Date:   Mon, 27 Jun 2022 14:08:11 -0500
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=/TJYBcpsxpHM1dgljke9KHv7g4SupUF3o95Sw1aZ2ck=;
+        b=IMOxxCH+3YW5q69QljDGHjGdATj/9ipfgW8YCq9jPRqEyKqBRh2RZXFh4D7ZsUEVfT
+         mzyE2c4HHjZRyqIbUedzt1hnDzWumsvZ+nLG3+Sk/z0xcWNMzal8k1FLfXDcQnoHeIKl
+         ILWXqMi+/qF5Wbcni0hFrj1L/19CjIzt39lLEcCfP8PfC01hO3DDcPajvIXh4/pDcDga
+         6EsNtsdJOaojsCFXBewDrTw4w8ViVOiRXUqN/RAi5JStChLWQHyqii4df9+DRv5dzjMh
+         LKUvfXKhMiBz2PyciB+RSaywmCZCkwZ6DeoS/bqambujl3RFc+c8KYEAbumVLkh3K+qX
+         uxqQ==
+X-Gm-Message-State: AJIora91OBj6bihYl7CPX5A7XSvvfFZyAdfauZt6Awu7PWCc9g02kP2J
+        0C8f7S8c2PRRSttO0AzNRnY=
+X-Google-Smtp-Source: AGRyM1v4pZPlgtYqoeaDHgmUszlXO0IEON1F8nITnkj9iOAgcw3+OR56oHGI6Qm3c0Gt8vy7rjuFZw==
+X-Received: by 2002:a17:902:bc4c:b0:16a:4849:ddbe with SMTP id t12-20020a170902bc4c00b0016a4849ddbemr816273plz.25.1656357031911;
+        Mon, 27 Jun 2022 12:10:31 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:4120])
+        by smtp.gmail.com with ESMTPSA id t5-20020a17090aae0500b001ec4f258028sm7805995pjq.55.2022.06.27.12.10.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 12:10:31 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 28 Jun 2022 04:10:29 +0900
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Message-ID: <YroApRMPV/6zO5I8@mtj.duckdns.org>
+References: <20220510153413.400020-1-longman@redhat.com>
+ <20220510153413.400020-8-longman@redhat.com>
+ <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
+ <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
+ <YqarMyNo9oHxhZFh@slm.duckdns.org>
+ <20220613142452.GB6910@blackbody.suse.cz>
+ <YqdzuSQuAeiPXQvy@slm.duckdns.org>
+ <20220613175548.GB21665@blackbody.suse.cz>
+ <Yqd7WMFj6AEyV3Cy@slm.duckdns.org>
+ <20220614115345.GA6771@blackbody.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 5.4 00/60] 5.4.202-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220627111927.641837068@linuxfoundation.org>
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220614115345.GA6771@blackbody.suse.cz>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Hello,
 
-On 27/06/22 06:21, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.202 release.
-> There are 60 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Jun 14, 2022 at 01:53:45PM +0200, Michal Koutný wrote:
+> On Mon, Jun 13, 2022 at 08:00:56AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> > Yeah, I don't know why this part is different from any other errors that the
+> > parent can make.
 > 
-> Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
-> Anything received after that time might be too late.
+> It's different because a write to parent's cpuset.cpus is independent of
+> whether cpuset.cpus of its children are exclusive or not.
+> In an extreme case the children may be non-exclusive
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.202-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
+>     parent	cpuset.cpus=0-3 //   valid partition
+>     `- child_1	cpuset.cpus=0-1	// invalid partition
+>     `- child_2	cpuset.cpus=1-2 // invalid partition
 > 
-> thanks,
+> but the parent can still be a valid partition (thanks to cpu no. 3 in
+> the example above).
 > 
-> greg k-h
+> Do I miss anything?
 
-Results from Linaro's test farm.
-The following new warnings have been found while building for all architectures with GCC:
+What I'm trying to say is that cpuset.cpus of child_1 and child_2 are
+owned by the parent, so a feature which blocks siblings from
+intersecting each other doesn't make whole lot of sense because all
+those files are under the control of the parent who would have the
+power to enable or disable the restrition anyway.
 
-   WARNING: modpost: vmlinux.o(___ksymtab+drm_fb_helper_modinit+0x0): Section mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit to the function .init.text:drm_fb_helper_modinit()
-   The symbol drm_fb_helper_modinit is exported and annotated __init
-   Fix this by removing the __init annotation of drm_fb_helper_modinit or drop the export.
+The partition mode file is owned by the parent too, right? So, all
+these are to be configured by the same entity and the errors can be
+reported the same way, no?
 
-   WARNING: modpost: drivers/gpu/drm/drm_kms_helper.o(___ksymtab+drm_fb_helper_modinit+0x0): Section mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit to the function .init.text:drm_fb_helper_modinit()
-   The symbol drm_fb_helper_modinit is exported and annotated __init
-   Fix this by removing the __init annotation of drm_fb_helper_modinit or drop the export.
-
-
-## Build
-* kernel: 5.4.202-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: 1c351e730d68becde35c20fa77ae48dccd9b9fc2
-* git describe: v5.4.201-61-g1c351e730d68
-* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.201-61-g1c351e730d68
-
-## No test regressions (compared to v5.4.201)
-
-## Metric regressions (compared to v5.4.201)
-* arm, build
-   - gcc-8-at91_dt_defconfig-warnings
-   - gcc-8-bcm2835_defconfig-warnings
-   - gcc-8-davinci_all_defconfig-warnings
-   - gcc-8-defconfig-warnings
-   - gcc-8-exynos_defconfig-warnings
-   - gcc-8-imx_v6_v7_defconfig-warnings
-   - gcc-8-integrator_defconfig-warnings
-   - gcc-8-ixp4xx_defconfig-warnings
-   - gcc-8-lpc32xx_defconfig-warnings
-   - gcc-8-multi_v5_defconfig-45747f0c-warnings
-   - gcc-8-multi_v5_defconfig-warnings
-   - gcc-8-mxs_defconfig-warnings
-   - gcc-8-nhk8815_defconfig-warnings
-   - gcc-8-omap2plus_defconfig-warnings
-   - gcc-8-s3c6400_defconfig-warnings
-   - gcc-8-s5pv210_defconfig-warnings
-   - gcc-8-sama5_defconfig-warnings
-   - gcc-8-u8500_defconfig-warnings
-   - gcc-8-vexpress_defconfig-warnings
-   - gcc-9-at91_dt_defconfig-warnings
-   - gcc-9-bcm2835_defconfig-warnings
-   - gcc-9-davinci_all_defconfig-warnings
-   - gcc-9-defconfig-warnings
-   - gcc-9-exynos_defconfig-warnings
-   - gcc-9-imx_v6_v7_defconfig-warnings
-   - gcc-9-integrator_defconfig-warnings
-   - gcc-9-ixp4xx_defconfig-warnings
-   - gcc-9-lpc32xx_defconfig-warnings
-   - gcc-9-multi_v5_defconfig-45747f0c-warnings
-   - gcc-9-multi_v5_defconfig-warnings
-   - gcc-9-mxs_defconfig-warnings
-   - gcc-9-nhk8815_defconfig-warnings
-   - gcc-9-omap2plus_defconfig-warnings
-   - gcc-9-s3c6400_defconfig-warnings
-   - gcc-9-s5pv210_defconfig-warnings
-   - gcc-9-sama5_defconfig-warnings
-   - gcc-9-u8500_defconfig-warnings
-   - gcc-9-vexpress_defconfig-warnings
-   - gcc-10-at91_dt_defconfig-warnings
-   - gcc-10-bcm2835_defconfig-warnings
-   - gcc-10-davinci_all_defconfig-warnings
-   - gcc-10-defconfig-warnings
-   - gcc-10-exynos_defconfig-warnings
-   - gcc-10-imx_v6_v7_defconfig-warnings
-   - gcc-10-integrator_defconfig-warnings
-   - gcc-10-ixp4xx_defconfig-warnings
-   - gcc-10-lkftconfig-debug-kmemleak-warnings
-   - gcc-10-lkftconfig-debug-warnings
-   - gcc-10-lkftconfig-kasan-warnings
-   - gcc-10-lkftconfig-kselftest-kernel-warnings
-   - gcc-10-lkftconfig-kselftest-warnings
-   - gcc-10-lkftconfig-kunit-warnings
-   - gcc-10-lkftconfig-libgpiod-warnings
-   - gcc-10-lkftconfig-perf-warnings
-   - gcc-10-lkftconfig-rcutorture-warnings
-   - gcc-10-lkftconfig-warnings
-   - gcc-10-lpc32xx_defconfig-warnings
-   - gcc-10-multi_v5_defconfig-45747f0c-warnings
-   - gcc-10-multi_v5_defconfig-warnings
-   - gcc-10-mxs_defconfig-warnings
-   - gcc-10-nhk8815_defconfig-warnings
-   - gcc-10-omap2plus_defconfig-warnings
-   - gcc-10-s3c6400_defconfig-warnings
-   - gcc-10-s5pv210_defconfig-warnings
-   - gcc-10-sama5_defconfig-warnings
-   - gcc-10-u8500_defconfig-warnings
-   - gcc-10-vexpress_defconfig-warnings
-   - gcc-11-at91_dt_defconfig-warnings
-   - gcc-11-bcm2835_defconfig-warnings
-   - gcc-11-davinci_all_defconfig-warnings
-   - gcc-11-defconfig-warnings
-   - gcc-11-exynos_defconfig-warnings
-   - gcc-11-imx_v6_v7_defconfig-warnings
-   - gcc-11-integrator_defconfig-warnings
-   - gcc-11-ixp4xx_defconfig-warnings
-   - gcc-11-lpc32xx_defconfig-warnings
-   - gcc-11-multi_v5_defconfig-45747f0c-warnings
-   - gcc-11-multi_v5_defconfig-warnings
-   - gcc-11-mxs_defconfig-warnings
-   - gcc-11-nhk8815_defconfig-warnings
-   - gcc-11-omap2plus_defconfig-warnings
-   - gcc-11-s3c6400_defconfig-warnings
-   - gcc-11-s5pv210_defconfig-warnings
-   - gcc-11-sama5_defconfig-warnings
-   - gcc-11-u8500_defconfig-warnings
-   - gcc-11-vexpress_defconfig-warnings
-
-* arm64, build
-   - gcc-11-lkftconfig-64k_page_size-warnings
-   - gcc-11-lkftconfig-armv8_features-warnings
-   - gcc-11-lkftconfig-debug-kmemleak-warnings
-   - gcc-11-lkftconfig-debug-warnings
-   - gcc-11-lkftconfig-devicetree-warnings
-   - gcc-11-lkftconfig-kasan-warnings
-   - gcc-11-lkftconfig-kselftest-kernel-warnings
-   - gcc-11-lkftconfig-kselftest-warnings
-   - gcc-11-lkftconfig-kunit-warnings
-   - gcc-11-lkftconfig-libgpiod-warnings
-   - gcc-11-lkftconfig-perf-warnings
-   - gcc-11-lkftconfig-rcutorture-warnings
-   - gcc-11-lkftconfig-warnings
-
-* i386, build
-   - gcc-8-i386_defconfig-warnings
-   - gcc-9-i386_defconfig-warnings
-   - gcc-10-defconfig-warnings
-   - gcc-11-defconfig-warnings
-   - gcc-11-lkftconfig-debug-kmemleak-warnings
-   - gcc-11-lkftconfig-debug-warnings
-   - gcc-11-lkftconfig-kselftest-kernel-warnings
-   - gcc-11-lkftconfig-kselftest-warnings
-   - gcc-11-lkftconfig-kunit-warnings
-   - gcc-11-lkftconfig-libgpiod-warnings
-   - gcc-11-lkftconfig-perf-warnings
-   - gcc-11-lkftconfig-rcutorture-warnings
-   - gcc-11-lkftconfig-warnings
-
-* powerpc, build
-   - gcc-8-ppc6xx_defconfig-warnings
-   - gcc-9-ppc6xx_defconfig-warnings
-   - gcc-10-ppc6xx_defconfig-warnings
-   - gcc-11-ppc6xx_defconfig-warnings
-
-* riscv, build
-   - gcc-8-defconfig-warnings
-   - gcc-9-defconfig-warnings
-   - gcc-10-defconfig-warnings
-   - gcc-11-defconfig-warnings
-
-* x86_64, build
-   - gcc-8-x86_64_defconfig-warnings
-   - gcc-9-x86_64_defconfig-warnings
-   - gcc-10-defconfig-warnings
-   - gcc-11-defconfig-warnings
-   - gcc-11-lkftconfig-debug-kmemleak-warnings
-   - gcc-11-lkftconfig-debug-warnings
-   - gcc-11-lkftconfig-kasan-warnings
-   - gcc-11-lkftconfig-kselftest-kernel-warnings
-   - gcc-11-lkftconfig-kselftest-warnings
-   - gcc-11-lkftconfig-kunit-warnings
-   - gcc-11-lkftconfig-libgpiod-warnings
-   - gcc-11-lkftconfig-perf-warnings
-   - gcc-11-lkftconfig-rcutorture-warnings
-   - gcc-11-lkftconfig-warnings
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## No test fixes (compared to v5.4.201)
-
-## No metric fixes (compared to v5.4.201)
-
-## Test result summary
-total: 106600, pass: 95406, fail: 218, skip: 10208, xfail: 768
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 313 total, 313 passed, 0 failed
-* arm64: 57 total, 53 passed, 4 failed
-* i386: 28 total, 25 passed, 3 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 55 total, 54 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
-
-Greetings!
-
-Daniel DÃ­az
-daniel.diaz@linaro.org
+Thanks.
 
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+tejun

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A3D55D05A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A0255DBC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239121AbiF0L4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
+        id S235570AbiF0La2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237711AbiF0Ls7 (ORCPT
+        with ESMTP id S235260AbiF0L3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:48:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C48FD7B;
-        Mon, 27 Jun 2022 04:43:02 -0700 (PDT)
+        Mon, 27 Jun 2022 07:29:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D8C282;
+        Mon, 27 Jun 2022 04:28:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BCCFB80D37;
-        Mon, 27 Jun 2022 11:43:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 904A6C3411D;
-        Mon, 27 Jun 2022 11:42:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6FF88B81117;
+        Mon, 27 Jun 2022 11:28:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB71BC341C8;
+        Mon, 27 Jun 2022 11:28:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330179;
-        bh=wbR3MEKdW6BKJKVYfURMA437j2DqDri/6fTczRaIwwU=;
+        s=korg; t=1656329297;
+        bh=r/AUmqVNZ/rqk8TyaWRYjSqZNwcpqBfVSV8e106GGsk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PXLLadvB20Uyv6YobbX+qQ/a6kw85rwpOpzHIrYwM2/+QXEWbhdhTkj4APndmP3QO
-         +HMCotfiLio7lhvh1a232kkDBwygSHtBYswf+wvPxk0p5U/Fvu/bIqNTk7Afqhee0u
-         eRTXfTY2/xW8CMlVVqvrhfFoELBhFm6rjlr1C3Cg=
+        b=gDABpeYSYDTuYz7ukqDcaMTnOqfdo8VRSvoMqsX44DxyNuVg3mYzkVGGZt1P3hW0S
+         GHKSq50I/nBkXdSz0t59NhFEwYsMD7Ee2n2+9pC9DJDY19ddEqIYtyHTo54lEU/4yS
+         6aIHY57Q5H0vadHwgLLNPuHNjCXNDJiGtPsMxCvo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 111/181] io_uring: fix wrong arm_poll error handling
+        stable@vger.kernel.org, Jon Hunter <jonathanh@nvidia.com>,
+        Ron Economos <re@w6rz.net>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.4 13/60] random: quiet urandom warning ratelimit suppression message
 Date:   Mon, 27 Jun 2022 13:21:24 +0200
-Message-Id: <20220627111947.917086865@linuxfoundation.org>
+Message-Id: <20220627111928.045896631@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-[ Upstream commit 9d2ad2947a53abf5e5e6527a9eeed50a3a4cbc72 ]
+commit c01d4d0a82b71857be7449380338bc53dde2da92 upstream.
 
-Leaving ip.error set when a request was punted to task_work execution is
-problematic, don't forget to clear it.
+random.c ratelimits how much it warns about uninitialized urandom reads
+using __ratelimit(). When the RNG is finally initialized, it prints the
+number of missed messages due to ratelimiting.
 
-Fixes: aa43477b04025 ("io_uring: poll rework")
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Link: https://lore.kernel.org/r/a6c84ef4182c6962380aebe11b35bdcb25b0ccfb.1655852245.git.asml.silence@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+It has been this way since that functionality was introduced back in
+2018. Recently, cc1e127bfa95 ("random: remove ratelimiting for in-kernel
+unseeded randomness") put a bit more stress on the urandom ratelimiting,
+which teased out a bug in the implementation.
+
+Specifically, when under pressure, __ratelimit() will print its own
+message and reset the count back to 0, making the final message at the
+end less useful. Secondly, it does so as a pr_warn(), which apparently
+is undesirable for people's CI.
+
+Fortunately, __ratelimit() has the RATELIMIT_MSG_ON_RELEASE flag exactly
+for this purpose, so we set the flag.
+
+Fixes: 4e00b339e264 ("random: rate limit unseeded randomness warnings")
+Cc: stable@vger.kernel.org
+Reported-by: Jon Hunter <jonathanh@nvidia.com>
+Reported-by: Ron Economos <re@w6rz.net>
+Tested-by: Ron Economos <re@w6rz.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/char/random.c     |    2 +-
+ include/linux/ratelimit.h |   12 ++++++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 38ecea726254..e4186635aaa8 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -6178,6 +6178,7 @@ static int __io_arm_poll_handler(struct io_kiocb *req,
- 		if (unlikely(ipt->error || !ipt->nr_entries)) {
- 			poll->events |= EPOLLONESHOT;
- 			req->apoll_events |= EPOLLONESHOT;
-+			ipt->error = 0;
- 		}
- 		__io_poll_execute(req, mask, poll->events);
- 		return 0;
--- 
-2.35.1
-
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -88,7 +88,7 @@ static RAW_NOTIFIER_HEAD(random_ready_ch
+ 
+ /* Control how we warn userspace. */
+ static struct ratelimit_state urandom_warning =
+-	RATELIMIT_STATE_INIT("warn_urandom_randomness", HZ, 3);
++	RATELIMIT_STATE_INIT_FLAGS("urandom_warning", HZ, 3, RATELIMIT_MSG_ON_RELEASE);
+ static int ratelimit_disable __read_mostly =
+ 	IS_ENABLED(CONFIG_WARN_ALL_UNSEEDED_RANDOM);
+ module_param_named(ratelimit_disable, ratelimit_disable, int, 0644);
+--- a/include/linux/ratelimit.h
++++ b/include/linux/ratelimit.h
+@@ -23,12 +23,16 @@ struct ratelimit_state {
+ 	unsigned long	flags;
+ };
+ 
+-#define RATELIMIT_STATE_INIT(name, interval_init, burst_init) {		\
+-		.lock		= __RAW_SPIN_LOCK_UNLOCKED(name.lock),	\
+-		.interval	= interval_init,			\
+-		.burst		= burst_init,				\
++#define RATELIMIT_STATE_INIT_FLAGS(name, interval_init, burst_init, flags_init) { \
++		.lock		= __RAW_SPIN_LOCK_UNLOCKED(name.lock),		  \
++		.interval	= interval_init,				  \
++		.burst		= burst_init,					  \
++		.flags		= flags_init,					  \
+ 	}
+ 
++#define RATELIMIT_STATE_INIT(name, interval_init, burst_init) \
++	RATELIMIT_STATE_INIT_FLAGS(name, interval_init, burst_init, 0)
++
+ #define RATELIMIT_STATE_INIT_DISABLED					\
+ 	RATELIMIT_STATE_INIT(ratelimit_state, 0, DEFAULT_RATELIMIT_BURST)
+ 
 
 

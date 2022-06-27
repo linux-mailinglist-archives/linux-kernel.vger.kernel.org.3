@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E432655DE5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612D055DE0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235703AbiF0LeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
+        id S235726AbiF0LeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235730AbiF0Lch (ORCPT
+        with ESMTP id S235765AbiF0Lck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:32:37 -0400
+        Mon, 27 Jun 2022 07:32:40 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D276B85E;
-        Mon, 27 Jun 2022 04:29:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874CAB873;
+        Mon, 27 Jun 2022 04:29:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD14BB81122;
-        Mon, 27 Jun 2022 11:29:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D4F2C3411D;
-        Mon, 27 Jun 2022 11:29:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D79F3B81120;
+        Mon, 27 Jun 2022 11:29:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2804BC3411D;
+        Mon, 27 Jun 2022 11:29:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329373;
-        bh=Oae29rXEpAbedTU0LwPxLpUcqf8CXhY8N15Xyi0ITX0=;
+        s=korg; t=1656329376;
+        bh=H1bSBWVGZV+5s+ZnLeAHu/3Oh13Lb4XGnzywVcrTRGk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v49qUZ0SeYdzD7aVn3igA8R04ANuJdYI7WQr9BatVcOs8vnE/hSHT2qEG1QEVXyH+
-         b2VWJoxh8ONBC39ujn8ittiBsr7N5wBLeq5HAqCJKUMMqnWpiZhWr27NKI7afLpD5a
-         ayatkQ/8sdmpC+DmIHMWEpbVGytOmv49g9tKXjS8=
+        b=aNzyfZv9ODNMCb1lAvpc3MXcS5sFoAjom13ZIMIWtwM8yvWpztzlO5v8f4SLvIVxx
+         6UE4NyJZ4y6nYtjsBEosF7VgOCGXWDFjF7XyjuEj2mnbu5cgQnnnE313Gcd7ZTIgMU
+         7mr2GLAeLSIcvM0LdZmzawVH4fxmdN/pCx17x/cU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5.4 36/60] xhci: turn off port power in shutdown
-Date:   Mon, 27 Jun 2022 13:21:47 +0200
-Message-Id: <20220627111928.753066955@linuxfoundation.org>
+        stable@vger.kernel.org, Xu Yang <xu.yang_2@nxp.com>
+Subject: [PATCH 5.4 37/60] usb: chipidea: udc: check request status before setting device address
+Date:   Mon, 27 Jun 2022 13:21:48 +0200
+Message-Id: <20220627111928.781890501@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
 References: <20220627111927.641837068@linuxfoundation.org>
@@ -54,86 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Xu Yang <xu.yang_2@nxp.com>
 
-commit 83810f84ecf11dfc5a9414a8b762c3501b328185 upstream.
+commit b24346a240b36cfc4df194d145463874985aa29b upstream.
 
-If ports are not turned off in shutdown then runtime suspended
-self-powered USB devices may survive in U3 link state over S5.
+The complete() function may be called even though request is not
+completed. In this case, it's necessary to check request status so
+as not to set device address wrongly.
 
-During subsequent boot, if firmware sends an IPC command to program
-the port in DISCONNECT state, it will time out, causing significant
-delay in the boot time.
-
-Turning off roothub port power is also recommended in xhci
-specification 4.19.4 "Port Power" in the additional note.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220623111945.1557702-3-mathias.nyman@linux.intel.com
+Fixes: 10775eb17bee ("usb: chipidea: udc: update gadget states according to ch9")
+cc: <stable@vger.kernel.org>
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+Link: https://lore.kernel.org/r/20220623030242.41796-1-xu.yang_2@nxp.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/host/xhci-hub.c |    2 +-
- drivers/usb/host/xhci.c     |   15 +++++++++++++--
- drivers/usb/host/xhci.h     |    2 ++
- 3 files changed, 16 insertions(+), 3 deletions(-)
+ drivers/usb/chipidea/udc.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -566,7 +566,7 @@ struct xhci_hub *xhci_get_rhub(struct us
-  * It will release and re-aquire the lock while calling ACPI
-  * method.
-  */
--static void xhci_set_port_power(struct xhci_hcd *xhci, struct usb_hcd *hcd,
-+void xhci_set_port_power(struct xhci_hcd *xhci, struct usb_hcd *hcd,
- 				u16 index, bool on, unsigned long *flags)
- {
- 	struct xhci_hub *rhub;
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -775,6 +775,8 @@ static void xhci_stop(struct usb_hcd *hc
- void xhci_shutdown(struct usb_hcd *hcd)
- {
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+	unsigned long flags;
-+	int i;
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -921,6 +921,9 @@ isr_setup_status_complete(struct usb_ep
+ 	struct ci_hdrc *ci = req->context;
+ 	unsigned long flags;
  
- 	if (xhci->quirks & XHCI_SPURIOUS_REBOOT)
- 		usb_disable_xhci_ports(to_pci_dev(hcd->self.sysdev));
-@@ -790,12 +792,21 @@ void xhci_shutdown(struct usb_hcd *hcd)
- 		del_timer_sync(&xhci->shared_hcd->rh_timer);
- 	}
- 
--	spin_lock_irq(&xhci->lock);
-+	spin_lock_irqsave(&xhci->lock, flags);
- 	xhci_halt(xhci);
++	if (req->status < 0)
++		return;
 +
-+	/* Power off USB2 ports*/
-+	for (i = 0; i < xhci->usb2_rhub.num_ports; i++)
-+		xhci_set_port_power(xhci, xhci->main_hcd, i, false, &flags);
-+
-+	/* Power off USB3 ports*/
-+	for (i = 0; i < xhci->usb3_rhub.num_ports; i++)
-+		xhci_set_port_power(xhci, xhci->shared_hcd, i, false, &flags);
-+
- 	/* Workaround for spurious wakeups at shutdown with HSW */
- 	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
- 		xhci_reset(xhci, XHCI_RESET_SHORT_USEC);
--	spin_unlock_irq(&xhci->lock);
-+	spin_unlock_irqrestore(&xhci->lock, flags);
- 
- 	xhci_cleanup_msix(xhci);
- 
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2155,6 +2155,8 @@ int xhci_hub_control(struct usb_hcd *hcd
- int xhci_hub_status_data(struct usb_hcd *hcd, char *buf);
- int xhci_find_raw_port_number(struct usb_hcd *hcd, int port1);
- struct xhci_hub *xhci_get_rhub(struct usb_hcd *hcd);
-+void xhci_set_port_power(struct xhci_hcd *xhci, struct usb_hcd *hcd, u16 index,
-+			 bool on, unsigned long *flags);
- 
- void xhci_hc_died(struct xhci_hcd *xhci);
- 
+ 	if (ci->setaddr) {
+ 		hw_usb_set_address(ci, ci->address);
+ 		ci->setaddr = false;
 
 

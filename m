@@ -2,129 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9304455C95D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B53055D00C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239728AbiF0Qyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
+        id S239738AbiF0Qyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235363AbiF0Qym (ORCPT
+        with ESMTP id S239711AbiF0Qyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:54:42 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3D718B13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:54:41 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id m13so10253601ioj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:54:41 -0700 (PDT)
+        Mon, 27 Jun 2022 12:54:43 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F2A18B19;
+        Mon, 27 Jun 2022 09:54:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4PFA5xY31bsA5xLySpMra+nYbcLXicy6qxBOudOdw6s=;
-        b=C99mxI++15wHrpzLPS7WtIw1OxAq4W8+KG2tTx6ndyhkpVLjtdCL1+s4z5S5U/++VL
-         G3bThLkPVFOWL30UHDII21uIlDANxc9++0ldJKskucSCSCv5+XNf1/Sx9HmYN9MNNaxd
-         5iu4yIubRTzeVLOBPoxBgPw2voMZ3nyMZ7Jmc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4PFA5xY31bsA5xLySpMra+nYbcLXicy6qxBOudOdw6s=;
-        b=jh76GOBI6mxAFsUsInp5tbedqP8XUzkTDuhAMLEi41bHGeXW/bPjSYH5Y1QFCZIxcB
-         NGSAkyDDyFsN65ABmOG1bqnSGPRgKURFnLVcShIYo6AbvY+iCC7zkrILRsM7AV1JfwEs
-         /VsAfK9MyZFdNSXs0eMcO4VpkjwPitIEwCz3/wtWD8T0QNTQwYXlpIRUm8ro7h+/MMhK
-         Q7bIfjXFeb/piRNcQ+GJ7JxviKIHK4NsMnn2q3RXBRHA4nU4zozdmNjRxsZI3FMFLpET
-         VVOELqwwL02wF4id3UA80lKOJdwlfM8LNwnkol0Oo8z4rTMRp1OgLiSmNbPiMHAVBn3J
-         s0GQ==
-X-Gm-Message-State: AJIora9mifEvB02rp1VMgE/Pt7cgoyVpzW5OKHHFRZQRAbLW0sah/bIM
-        RdXpe8Efl+i17qJky6jL+IrwOw==
-X-Google-Smtp-Source: AGRyM1tF/p82Zhcy7H9U5p2rOolwBm86AMPGBqiPAvivGjweR94NYzafyP1fYfeQLL8dgfHWkEh3Jg==
-X-Received: by 2002:a05:6638:3297:b0:335:df89:8f46 with SMTP id f23-20020a056638329700b00335df898f46mr7765812jav.19.1656348880816;
-        Mon, 27 Jun 2022 09:54:40 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id a14-20020a5d980e000000b006696754eef5sm5405348iol.13.2022.06.27.09.54.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 09:54:40 -0700 (PDT)
-Subject: Re: [PATCH v1] kbuild: fix sub directory output build of kselftests
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kieran Bingham <kbingham@kernel.org>
-Cc:     kernel@collabora.com,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220627070214.432390-1-usama.anjum@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <15532d64-6744-c8a5-184b-18358211d345@linuxfoundation.org>
-Date:   Mon, 27 Jun 2022 10:54:39 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656348882; x=1687884882;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wOOCX+SVxBwY59HG8AlckopFe1xskYhOAeIAW3yTJZQ=;
+  b=nzMpYMT3fYki9DfgAeuOV06Aq1RMy5NgXpzC5yvn7TdcsvSedVub9t+L
+   ztMUJW8iNgQ4LDEYu3/GmyrS4seyuQvJ47+aWVZHV6x7nKYrboPqUQYUK
+   WL+6oxX+6bW3Ng5GqFZJ95sFzpbAU1WFAPGUPaAzWiYF3BqbQJpjqPlO7
+   8=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jun 2022 09:54:41 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 09:54:41 -0700
+Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 27 Jun
+ 2022 09:54:41 -0700
+Date:   Mon, 27 Jun 2022 09:54:39 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     David Heidelberg <david@ixit.cz>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        <~okias/devicetree@lists.sr.ht>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 3/3] dt-bindings: firmware: convert Qualcomm SCM
+ binding to the yaml
+Message-ID: <20220627165439.GB6690@quicinc.com>
+References: <20220626183247.142776-1-david@ixit.cz>
+ <20220626183247.142776-3-david@ixit.cz>
 MIME-Version: 1.0
-In-Reply-To: <20220627070214.432390-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220626183247.142776-3-david@ixit.cz>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 1:02 AM, Muhammad Usama Anjum wrote:
-> Build of kselftests fail if kernel's top most Makefile is used for
-> running or building kselftests with separate output directory which is
-> sub-directory. srctree is set to .. erroneously.
+On Jun 26 2022 20:32, David Heidelberg wrote:
+> Convert Qualcomm SCM firmware binding to the yaml format.
 > 
-> make kselftest-all O=/linux_mainline/build
-> Makefile:1080: ../scripts/Makefile.extrawarn: No such file or directory
+> This commit also:
+>  - adds qcom,scm-mdm9607 into list which has only core clock
+>  - adds qcom,scm-sm6125, qcom,scm-ipq6018
+>  - #reset-cells, because the property is already used
 > 
-> make kselftest-all O=build
-> Makefile:1080: ../scripts/Makefile.extrawarn: No such file or directory
-> 
-> Fix this by comparing abs_srctree with CURDIR instead of abs_objtree.
-> CURDIR changes based on from where the command has been run and it sets
-> the srctree correctly.
-> 
-> Fixes: 25b146c5b8cee("kbuild: allow Kbuild to start from any directory")
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> --
+> v4:
+>  - added clocks minItems and maxItems
+>  - removed quotes from $id and $schema
+>  - adjusted description of TCSR HW block
+> v3:
+>  - add preceding patches for ARM and arm64 adding missing compatible strings
+>  - extended with missing compatible strings
+>  - added two additional maintainers, see https://lkml.org/lkml/2022/6/23/1969
+> v2:
+>  - changed maintainer to Bjorn
+>  - document #reset-cells
 > ---
-> Changes in V2:
-> - Correct the bugfix instead of workaround
+>  .../devicetree/bindings/firmware/qcom,scm.txt |  57 -------
+>  .../bindings/firmware/qcom,scm.yaml           | 140 ++++++++++++++++++
+>  2 files changed, 140 insertions(+), 57 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.txt
+>  create mode 100644 Documentation/devicetree/bindings/firmware/qcom,scm.yaml
 > 
-> V1: https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/
-> ---
->   Makefile | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index e66358b64ede..4090d7afcda4 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -238,12 +238,12 @@ ifeq ($(need-sub-make),)
->   # so that IDEs/editors are able to understand relative filenames.
->   MAKEFLAGS += --no-print-directory
->   
-> -ifeq ($(abs_srctree),$(abs_objtree))
-> +ifeq ($(abs_srctree),$(CURDIR))
->           # building in the source tree
->           srctree := .
->   	building_out_of_srctree :=
->   else
-> -        ifeq ($(abs_srctree)/,$(dir $(abs_objtree)))
-> +        ifeq ($(abs_srctree)/,$(dir $(CURDIR)))
->                   # building in a subdirectory of the source tree
->                   srctree := ..
->           else
-> 
+> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.txt b/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+> deleted file mode 100644
+> index 0f4e5ab26477..000000000000
+> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.txt
+> +++ /dev/null
+> @@ -1,57 +0,0 @@
+> -QCOM Secure Channel Manager (SCM)
+> -
+> -Qualcomm processors include an interface to communicate to the secure firmware.
+> -This interface allows for clients to request different types of actions.  These
+> -can include CPU power up/down, HDCP requests, loading of firmware, and other
+> -assorted actions.
+> -
+> -Required properties:
+> -- compatible: must contain one of the following:
+> - * "qcom,scm-apq8064"
+> - * "qcom,scm-apq8084"
+> - * "qcom,scm-ipq4019"
+> - * "qcom,scm-ipq806x"
+> - * "qcom,scm-ipq8074"
+> - * "qcom,scm-mdm9607"
+> - * "qcom,scm-msm8226"
+> - * "qcom,scm-msm8660"
+> - * "qcom,scm-msm8916"
+> - * "qcom,scm-msm8953"
+> - * "qcom,scm-msm8960"
+> - * "qcom,scm-msm8974"
+> - * "qcom,scm-msm8976"
+> - * "qcom,scm-msm8994"
+> - * "qcom,scm-msm8996"
+> - * "qcom,scm-msm8998"
+> - * "qcom,scm-sc7180"
+> - * "qcom,scm-sc7280"
+> - * "qcom,scm-sdm845"
+> - * "qcom,scm-sdx55"
+> - * "qcom,scm-sm6350"
+> - * "qcom,scm-sm8150"
+> - * "qcom,scm-sm8250"
+> - * "qcom,scm-sm8350"
+> - * "qcom,scm-sm8450"
+> - and:
+> - * "qcom,scm"
+> -- clocks: Specifies clocks needed by the SCM interface, if any:
+> - * core clock required for "qcom,scm-apq8064", "qcom,scm-msm8660" and
+> -   "qcom,scm-msm8960"
+> - * core, iface and bus clocks required for "qcom,scm-apq8084",
+> -   "qcom,scm-msm8916", "qcom,scm-msm8953", "qcom,scm-msm8974" and "qcom,scm-msm8976"
+> -- clock-names: Must contain "core" for the core clock, "iface" for the interface
+> -  clock and "bus" for the bus clock per the requirements of the compatible.
+> -- qcom,dload-mode: phandle to the TCSR hardware block and offset of the
+> -		   download mode control register (optional)
+> -
+> -Example for MSM8916:
+> -
+> -	firmware {
+> -		scm {
+> -			compatible = "qcom,msm8916", "qcom,scm";
+> -			clocks = <&gcc GCC_CRYPTO_CLK> ,
+> -				 <&gcc GCC_CRYPTO_AXI_CLK>,
+> -				 <&gcc GCC_CRYPTO_AHB_CLK>;
+> -			clock-names = "core", "bus", "iface";
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+> new file mode 100644
+> index 000000000000..b01acbd1e408
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+> @@ -0,0 +1,140 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/firmware/qcom,scm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: QCOM Secure Channel Manager (SCM)
+> +
+> +description: |
+> +  Qualcomm processors include an interface to communicate to the secure firmware.
+> +  This interface allows for clients to request different types of actions.
+> +  These can include CPU power up/down, HDCP requests, loading of firmware,
+> +  and other assorted actions.
+> +
+> +maintainers:
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> +  - Robert Marko <robimarko@gmail.com>
+> +  - Guru Das Srinagesh <quic_gurus@quicinc.com>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - qcom,scm-apq8064
+> +          - qcom,scm-apq8084
+> +          - qcom,scm-ipq4019
+> +          - qcom,scm-ipq6018
+> +          - qcom,scm-ipq806x
+> +          - qcom,scm-ipq8074
+> +          - qcom,scm-mdm9607
+> +          - qcom,scm-msm8226
+> +          - qcom,scm-msm8660
+> +          - qcom,scm-msm8916
+> +          - qcom,scm-msm8953
+> +          - qcom,scm-msm8960
+> +          - qcom,scm-msm8974
+> +          - qcom,scm-msm8976
+> +          - qcom,scm-msm8994
+> +          - qcom,scm-msm8996
+> +          - qcom,scm-msm8998
+> +          - qcom,scm-sc7180
+> +          - qcom,scm-sc7280
+> +          - qcom,scm-sdm845
+> +          - qcom,scm-sdx55
+> +          - qcom,scm-sm6125
+> +          - qcom,scm-sm6350
+> +          - qcom,scm-sm8150
+> +          - qcom,scm-sm8250
+> +          - qcom,scm-sm8350
+> +          - qcom,scm-sm8450
+> +          - qcom,scm-qcs404
+> +      - const: qcom,scm
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 3
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 3
+> +
+> +  '#reset-cells':
+> +    const: 1
+> +
+> +  qcom,dload-mode:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      - items:
+> +          - description: phandle to TCSR hardware block
+> +          - description: offset of the download mode control register
+> +    description: TCSR hardware block
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,scm-apq8064
 
-Please resend cc'ing linux-kselftest
+scm-apq8064 doesn't have the clock specified in the driver (there's a FIXME
+comment to specify it), so even though the DT node specifies the clock, it
+currently has no effect. We would need to check if the conditions for
+re-enabling the clock are satisfied, and update the driver for this to take
+effect.
 
-thanks,
--- Shuah
+> +              - qcom,scm-mdm9607
+
+scm-mdm9607 has three clocks listed in the driver, not one. Please move this to
+the "three-clocks" list below.
+
+> +              - qcom,scm-msm8660
+> +              - qcom,scm-msm8960
+
+These two are good - they are listed as having a single clock each in the
+driver.
+
+> +    then:
+> +      properties:
+> +        clock-names:
+> +          items:
+> +            - const: core
+> +
+> +        clocks:
+> +          maxItems: 1
+> +
+> +      required:
+> +        - clocks
+> +        - clock-names
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,scm-apq8084
+> +              - qcom,scm-msm8916
+> +              - qcom,scm-msm8953
+> +              - qcom,scm-msm8974
+> +              - qcom,scm-msm8976
+
+Verified that the above five nodes are all listed as supporting three clocks
+each in the driver.
+
+> +    then:
+> +      properties:
+> +        clock-names:
+> +          items:
+> +            - const: core
+> +            - const: bus
+> +            - const: iface
+> +
+> +        clocks:
+> +          minItems: 3
+> +          maxItems: 3
+> +
+> +
+> +      required:
+> +        - clocks
+> +        - clock-names
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    include <dt-bindings/clock/qcom,gcc-msm8916.h>
+> +
+> +    firmware {
+> +        scm {
+> +            compatible = "qcom,msm8916", "qcom,scm";
+> +            clocks = <&gcc GCC_CRYPTO_CLK>,
+> +                     <&gcc GCC_CRYPTO_AXI_CLK>,
+> +                     <&gcc GCC_CRYPTO_AHB_CLK>;
+> +            clock-names = "core", "bus", "iface";
+> +        };
+> +    };
+> -- 
+> 2.35.1
+> 

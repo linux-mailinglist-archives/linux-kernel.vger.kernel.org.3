@@ -2,139 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0F755C351
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5147C55D4DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbiF0IZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
+        id S233513AbiF0IZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbiF0IZZ (ORCPT
+        with ESMTP id S233445AbiF0IZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:25:25 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C931E6178;
-        Mon, 27 Jun 2022 01:25:23 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7099B21CA5;
-        Mon, 27 Jun 2022 08:25:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1656318322; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RdjZ81SzFUwlHNc7CnTKQAx6FQYkKfx1logzGP6DqeY=;
-        b=rQn3PD59u/64iGg/OHUj9gw4KyNHEJJhftM7xBja/rSOmM8ZC6tWBdaQollFZlPepOguh2
-        Mpv08kDiPaqVBYCA1o1BqfyhFONXhDb0HHGiObc2jGV4xOxMEcYIFP2F5RxWEZRIp2Hv7d
-        s+u4et2mc6Wp4MixE9TzMgQ89j8F1zk=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9CB892C141;
-        Mon, 27 Jun 2022 08:25:21 +0000 (UTC)
-Date:   Mon, 27 Jun 2022 10:25:21 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Mon, 27 Jun 2022 04:25:32 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73A696178
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:25:30 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-54-1jANicmsPmWfA7kUguPDXg-1; Mon, 27 Jun 2022 09:25:27 +0100
+X-MC-Unique: 1jANicmsPmWfA7kUguPDXg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 27 Jun 2022 09:25:26 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 27 Jun 2022 09:25:26 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH] mm: vmpressure: don't count userspace-induced reclaim as
- memory pressure
-Message-ID: <YrlpcdgF1HzA7bHS@dhcp22.suse.cz>
-References: <20220623000530.1194226-1-yosryahmed@google.com>
- <YrQe5A+FXnbgOR1f@dhcp22.suse.cz>
- <CAJD7tkanavKpKrQr8-jA8pukgD7OY4eOwJRZufJ2NoThD12G+Q@mail.gmail.com>
- <YrQ1o3CeaZWhm+h4@dhcp22.suse.cz>
- <CAJD7tkadsLOV7GMFAm+naX4Y1WpZ-4=NkAhAMxNw60iaRPWx=w@mail.gmail.com>
- <YrSWruhPlJV1X9kp@dhcp22.suse.cz>
- <CALvZod6eLa1X1FJ2Qi6FXhFA-qBCP4mN2SB31MSgjj+g8hKo6Q@mail.gmail.com>
- <YrSdFy3qYdG+rGR6@dhcp22.suse.cz>
- <CAJD7tkZNEtzJMDsLMHuNHkxFfurS37UuK=zFcPCkOkWfN-dbJQ@mail.gmail.com>
+        Miguel Ojeda <ojeda@kernel.org>,
+        "Kent Overstreet" <kent.overstreet@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>
+Subject: RE: [RFC[ Alloc in vsprintf
+Thread-Topic: [RFC[ Alloc in vsprintf
+Thread-Index: AQHYiZoSZNRPYrXujUmM6V+Dm+02461i46rg
+Date:   Mon, 27 Jun 2022 08:25:26 +0000
+Message-ID: <a723f5dda62a4c448dd292a3b917fe6d@AcuMS.aculab.com>
+References: <20220620004233.3805-1-kent.overstreet@gmail.com>
+ <0a5901f8460f452a89c9b0cda32fb833@AcuMS.aculab.com>
+ <20220620150514.3tjy5dv7pv5frcwd@moria.home.lan>
+ <53d77ae6101a0f24cfb694174d4c7699424c57e8.camel@perches.com>
+ <20220621005752.ohiq5besmy3r5rjo@moria.home.lan>
+ <a795818f9a49ed401bffc7c38ca7e39ae449e9e0.camel@perches.com>
+ <c1a92cf059fc9a3c395d87b11e9f757f5ec1ff6a.camel@perches.com>
+ <355e912490dbaef8fe4e12df0201c3f5b439565d.camel@perches.com>
+ <CAHk-=whwyxSpzgr+roEr7_V5wVenw9fV3EOAZhAYCAuRdEyChQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whwyxSpzgr+roEr7_V5wVenw9fV3EOAZhAYCAuRdEyChQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkZNEtzJMDsLMHuNHkxFfurS37UuK=zFcPCkOkWfN-dbJQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 23-06-22 10:26:11, Yosry Ahmed wrote:
-> On Thu, Jun 23, 2022 at 10:04 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Thu 23-06-22 09:42:43, Shakeel Butt wrote:
-> > > On Thu, Jun 23, 2022 at 9:37 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Thu 23-06-22 09:22:35, Yosry Ahmed wrote:
-> > > > > On Thu, Jun 23, 2022 at 2:43 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > > > >
-> > > > > > On Thu 23-06-22 01:35:59, Yosry Ahmed wrote:
-> > > > [...]
-> > > > > > > In our internal version of memory.reclaim that we recently upstreamed,
-> > > > > > > we do not account vmpressure during proactive reclaim (similar to how
-> > > > > > > psi is handled upstream). We want to make sure this behavior also
-> > > > > > > exists in the upstream version so that consolidating them does not
-> > > > > > > break our users who rely on vmpressure and will start seeing increased
-> > > > > > > pressure due to proactive reclaim.
-> > > > > >
-> > > > > > These are good reasons to have this patch in your tree. But why is this
-> > > > > > patch benefitial for the upstream kernel? It clearly adds some code and
-> > > > > > some special casing which will add a maintenance overhead.
-> > > > >
-> > > > > It is not just Google, any existing vmpressure users will start seeing
-> > > > > false pressure notifications with memory.reclaim. The main goal of the
-> > > > > patch is to make sure memory.reclaim does not break pre-existing users
-> > > > > of vmpressure, and doing it in a way that is consistent with psi makes
-> > > > > sense.
-> > > >
-> > > > memory.reclaim is v2 only feature which doesn't have vmpressure
-> > > > interface. So I do not see how pre-existing users of the upstream kernel
-> > > > can see any breakage.
-> > > >
-> > >
-> > > Please note that vmpressure is still being used in v2 by the
-> > > networking layer (see mem_cgroup_under_socket_pressure()) for
-> > > detecting memory pressure.
-> >
-> > I have missed this. It is hidden quite good. I thought that v2 is
-> > completely vmpressure free. I have to admit that the effect of
-> > mem_cgroup_under_socket_pressure is not really clear to me. Not to
-> > mention whether it should or shouldn't be triggered for the user
-> > triggered memory reclaim. So this would really need some explanation.
-> 
-> vmpressure was tied into socket pressure by 8e8ae645249b ("mm:
-> memcontrol: hook up vmpressure to socket pressure"). A quick look at
-> the commit log and the code suggests that this is used all over the
-> socket and tcp code to throttles the memory consumption of the
-> networking layer if we are under pressure.
-> 
-> However, for proactive reclaim like memory.reclaim, the target is to
-> probe the memcg for cold memory. Reclaiming such memory should not
-> have a visible effect on the workload performance. I don't think that
-> any network throttling side effects are correct here.
+RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjYgSnVuZSAyMDIyIDIxOjE5DQouLg0KPiBU
+aGF0IGRvZXMgcmVxdWlyZSB0ZWFjaGluZyB0aGUgc3ByaW50X3N5bWJvbCgpIGZ1bmN0aW9ucyB0
+aGF0IHRoZXkNCj4gbmVlZCB0byB0YWtlIGEgImxlbmd0aCBvZiBidWZmZXIiIGFuZCByZXR1cm4g
+aG93IG11Y2ggdGhleSB1c2VkLCBidXQNCj4gdGhhdCB3b3VsZCBzZWVtIHRvIGJlIGEgc2Vuc2li
+bGUgdGhpbmcgYW55d2F5LCBhbmQgd2hhdCB0aGUgY29kZQ0KPiBzaG91bGQgYWx3YXlzIGhhdmUg
+ZG9uZT8NCg0KSXQgbmVlZHMgdG8gcmV0dXJuIHRoZSAnbGVuZ3RoIGl0IHdvdWxkIGhhdmUgdXNl
+ZCcuDQpXaGlsZSBvY2Nhc2lvbmFsbHkgdXNlZnVsIEknbSBwcmV0dHkgc3VyZSB0aGlzIGlzIGFj
+dHVhbGx5DQphIHNpZGUgZWZmZWN0IG9mIHRoZSB3YXMgdGhhdCBsaWJjIHNucHJpbnRmKCkgd2Fz
+IG9yaWdpbmFsbHkNCmltcGxlbWVudGVkIChzcHJpbnRmKCkgaGFkIGFuIG9uLXN0YWNrIEZJTEUp
+Lg0KDQpJbiBhbnkgY2FzZSBpdCBtaWdodCBiZSBzaW1wbGVzdCB0byBwYXNzIGFsbCB0aGVzZSBm
+dW5jdGlvbnMNCnRoZSB3cml0ZSBwb2ludGVyIGFuZCBidWZmZXIgbGltaXQgYW5kIGhhdmUgdGhl
+bSByZXR1cm4gdGhlDQpuZXcgd3JpdGUgcG9pbnRlci4NCkl0IGlzIGxpa2VseSB0byBnZW5lcmF0
+ZSBtdWNoIGJldHRlciBjb2RlIHRoYXQgcGFzc2luZw0KYSBzdHJ1Y3R1cmUgYnkgcmVmZXJlbmNl
+Lg0KDQpPbmx5IHRoZSBvcmlnaW5hbCBjYWxsZXIgbmVlZHMgdG8ga25vdyB3aGVyZSB0aGUgYnVm
+ZmVyIHN0YXJ0cy4NClRoZSBvcmlnaW5hbCBjYWxsZXIgaXMgYWxzbyB0aGUgb25seSBwbGFjZSB0
+aGF0IG5lZWRzIHRvDQplbnN1cmUgdGhhdCB0aGUgc3RyaW5nIGlzIGNvcnJlY3RseSB0ZXJtaW5h
+dGVkLg0KDQpZb3UnZCBnZXQgaGVscGVycyBsaWtlOg0KDQpjaGFyICphZGRfY2hhcihjaGFyICp3
+cCwgY29uc3QgY2hhciAqbGltLCBjaGFyIGFkZCkNCnsNCglpZiAobGltIDwgd3ApDQoJCSp3cCA9
+IGFkZDsNCglyZXR1cm4gd3AgKyAxOw0KfQ0KDQpjaGFyICphZGRfY2hhcnMoY2hhciAqd3AsIGNv
+bnN0IGNoYXIgKmxpbSwgY29uc3QgY2hhciAqYWRkLCBsb25nIGludCBjb3VudCkNCnsNCglsb25n
+IGludCBzcGFjZSA9IGxpbSAtIHdwOw0KCWxvbmcgaW50IGk7DQoNCglpZiAoc3BhY2UgPiBjb3Vu
+dCkNCgkJc3BhY2UgPSBjb3VudDsNCglmb3IgKGkgPSBpOyBpIDwgc3BhY2U7IGkrKykNCgkJd3Bb
+aV0gPSBhZGRbaV07DQoJDQoJcmV0dXJuIHdwICsgY291bnQ7DQp9DQoNCmNoYXIgKmFkZF9zdHIo
+Y2hhciAqd3AsIGNvbnN0IGNoYXIgKmxpbSwgY29uc3QgY2hhciAqYWRkKQ0Kew0KCXdoaWxlICgq
+YWRkKSB7DQoJCWlmICh3cCA+PSBsaW0pDQoJCQlyZXR1cm4gd3AgKyBzdHJsZW4oYWRkKTsNCgkJ
+KndwKysgPSAqYWRkKys7DQoJfQ0KCQ0KCXJldHVybiB3cDsNCn0NCg0KCURhdmlkDQoNCi0NClJl
+Z2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0
+b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykN
+Cg==
 
-Please describe the user visible effects of this change. IIUC this is
-changing the vmpressure semantic for pre-existing users (v1 when setting
-the hard limit for example) and it really should be explained why
-this is good for them after those years. I do not see any actual bug
-being described explicitly so please make sure this is all properly
-documented.
-
--- 
-Michal Hocko
-SUSE Labs

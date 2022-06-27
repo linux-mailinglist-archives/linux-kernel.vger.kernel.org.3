@@ -2,157 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0027C55CEBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5257E55E080
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbiF0Hu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
+        id S233161AbiF0HvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiF0HuZ (ORCPT
+        with ESMTP id S233159AbiF0HvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:50:25 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EB32DD3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:50:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=is7Eu+0H7HDxhCl/shZXvpRh5hl4o3ATrtA6ia1L7MM=; b=cSfth6hdEoIZb/zjDZH/w6rGSn
-        R76PdgIKZ780DCSfYzkJXp5IBZDMxb52+uXGZiXBQjbKo5KL/rvd9a3nSyGT1rZNPRxLIZMgkjVQp
-        rowAaHtUyn4/S/pZYfBZ6y/fHhNtO2Uv9Hac8y7aycjck1LMAU7YqAbvoAN4KeoNY54Hife7bxzjt
-        bHkmaLXfjmW8vCSJqvr2DK+vEbtTLzCqOyiom77U+hkUBs/gN27FZ4vbBQcNZrBBXnXP+LPXYqBt1
-        HyEpIHQ24fVwDJ1nqwfbt24kSsqwElik2fssi8berbCwF+1T2fHgjvz/Y537eLPmDTe1/6q3usZdq
-        ytKmRQDQ==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o5jVF-00BAP8-KF; Mon, 27 Jun 2022 07:49:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id ED45A300091;
-        Mon, 27 Jun 2022 09:49:46 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AFAE429BBBBC2; Mon, 27 Jun 2022 09:49:46 +0200 (CEST)
-Date:   Mon, 27 Jun 2022 09:49:46 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Guo Hui <guohui@uniontech.com>
-Cc:     longman@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, will@kernel.org,
-        boqun.feng@gmail.com, virtualization@lists.linux-foundation.org,
-        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] x86/paravirt: useless assignment instructions cause
- Unixbench full core   performance degradation
-Message-ID: <YrlhGqqce0NCQ6hi@hirez.programming.kicks-ass.net>
-References: <f6b68466-968c-4a91-655a-23970280a072@redhat.com>
- <20220627021350.25714-1-guohui@uniontech.com>
+        Mon, 27 Jun 2022 03:51:07 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065AD6168;
+        Mon, 27 Jun 2022 00:51:01 -0700 (PDT)
+X-UUID: b3e4799511524f0ca443ae7925150390-20220627
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:c2756198-7b65-4fe0-b6ba-48ddbafd8c76,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:25
+X-CID-META: VersionHash:b14ad71,CLOUDID:4252212e-1756-4fa3-be7f-474a6e4be921,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: b3e4799511524f0ca443ae7925150390-20220627
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 827043868; Mon, 27 Jun 2022 15:50:54 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 27 Jun 2022 15:50:53 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 27 Jun 2022 15:50:53 +0800
+Message-ID: <a2612c2628eefbbf909d4847b3d0067746813f33.camel@mediatek.com>
+Subject: Re: [PATCH v14 01/15] dt-bindings: mediatek,dpi: Add DP_INTF
+ compatible
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 27 Jun 2022 15:50:52 +0800
+In-Reply-To: <20220624030946.14961-2-rex-bc.chen@mediatek.com>
+References: <20220624030946.14961-1-rex-bc.chen@mediatek.com>
+         <20220624030946.14961-2-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627021350.25714-1-guohui@uniontech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 10:13:50AM +0800, Guo Hui wrote:
-> The instructions assigned to the vcpu_is_preempted function parameter
-> in the X86 architecture physical machine are redundant instructions,
-> causing the multi-core performance of Unixbench to drop by about 4% to 5%.
-> The C function is as follows:
-> static bool vcpu_is_preempted(long vcpu);
-> 
-> The parameter 'vcpu' in the function osq_lock
-> that calls the function vcpu_is_preempted is assigned as follows:
-> 
-> The C code is in the function node_cpu:
-> cpu = node->cpu - 1;
-> 
-> The instructions corresponding to the C code are:
-> mov 0x14(%rax),%edi
-> sub $0x1,%edi
-> 
-> The above instructions are unnecessary
-> in the X86 Native operating environment,
-> causing high cache-misses and degrading performance.
+Hi, Bo-Chen:
 
-The above basically says that argument setup is not patched out and
-causes significant pain due to a cache-miss.
+On Fri, 2022-06-24 at 11:09 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> DP_INTF is similar to DPI but does not have the exact same feature
+> set
+> or register layouts.
+> 
+> DP_INTF is the sink of the display pipeline that is connected to the
+> DisplayPort controller and encoder unit. It takes the same clocks as
+> DPI.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> [Bo-Chen: Modify reviewers' comments.]
 
-> Signed-off-by: Guo Hui <guohui@uniontech.com>
+Except this line,
+
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
 > ---
->  arch/x86/kernel/paravirt-spinlocks.c | 4 ++++
->  kernel/locking/osq_lock.c            | 9 ++++++++-
->  2 files changed, 12 insertions(+), 1 deletion(-)
+>  .../bindings/display/mediatek/mediatek,dpi.yaml       | 11 ++++++---
+> --
+>  1 file changed, 6 insertions(+), 5 deletions(-)
 > 
-> diff --git a/arch/x86/kernel/paravirt-spinlocks.c b/arch/x86/kernel/paravirt-spinlocks.c
-> index 9e1ea99ad..7a55f8407 100644
-> --- a/arch/x86/kernel/paravirt-spinlocks.c
-> +++ b/arch/x86/kernel/paravirt-spinlocks.c
-> @@ -33,6 +33,8 @@ bool pv_is_native_vcpu_is_preempted(void)
->  		__raw_callee_save___native_vcpu_is_preempted;
->  }
+> diff --git
+> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> index 77ee1b923991..8e526a4b134e 100644
+> ---
+> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> +++
+> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
+> l
+> @@ -4,16 +4,16 @@
+>  $id: 
+> http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
 >  
-> +DECLARE_STATIC_KEY_FALSE(preemted_key);
-> +
->  void __init paravirt_set_cap(void)
->  {
->  	if (!pv_is_native_spin_unlock())
-> @@ -40,4 +42,6 @@ void __init paravirt_set_cap(void)
+> -title: mediatek DPI Controller Device Tree Bindings
+> +title: mediatek DPI and DP_INTF Controller
 >  
->  	if (!pv_is_native_vcpu_is_preempted())
->  		setup_force_cpu_cap(X86_FEATURE_VCPUPREEMPT);
-> +	else
-> +		static_branch_enable(&preemted_key);
->  }
-
-At least for x86 it makes sense to have the static_key default the other
-way around. That is, enable it along with vcpu_is_preempted().
-
-> diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
-> index d5610ad52..a8798e701 100644
-> --- a/kernel/locking/osq_lock.c
-> +++ b/kernel/locking/osq_lock.c
-> @@ -22,9 +22,16 @@ static inline int encode_cpu(int cpu_nr)
->  	return cpu_nr + 1;
->  }
+>  maintainers:
+>    - CK Hu <ck.hu@mediatek.com>
+>    - Jitao shi <jitao.shi@mediatek.com>
 >  
-> +DEFINE_STATIC_KEY_FALSE(preemted_key);
-> +
->  static inline int node_cpu(struct optimistic_spin_node *node)
->  {
-> -	return node->cpu - 1;
-> +	int cpu = 0;
-> +
-> +	if (!static_branch_unlikely(&preemted_key))
-> +		cpu = node->cpu - 1;
-> +
-> +	return cpu;
->  }
+>  description: |
+> -  The Mediatek DPI function block is a sink of the display subsystem
+> and
+> -  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a
+> parallel
+> -  output bus.
+> +  The Mediatek DPI and DP_INTF function blocks are a sink of the
+> display
+> +  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422
+> pixel data on a
+> +  parallel output bus.
+>  
+>  properties:
+>    compatible:
+> @@ -24,6 +24,7 @@ properties:
+>        - mediatek,mt8183-dpi
+>        - mediatek,mt8186-dpi
+>        - mediatek,mt8192-dpi
+> +      - mediatek,mt8195-dp-intf
+>  
+>    reg:
+>      maxItems: 1
+> @@ -55,7 +56,7 @@ properties:
+>      $ref: /schemas/graph.yaml#/properties/port
+>      description:
+>        Output port node. This port should be connected to the input
+> port of an
+> -      attached HDMI or LVDS encoder chip.
+> +      attached HDMI, LVDS or DisplayPort encoder chip.
+>  
+>  required:
+>    - compatible
 
-Would not something like:
-
-static inline bool
-vcpu_is_preempted_node(struct optimistic_spin_node *node)
-{
-	if (!static_branch_unlikely(&vcpu_has_preemption))
-		return false;
-
-	return vcpu_is_preempted(node_cpu(node->prev));
-}
-
-And then use that like:
-
-	if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
-				  vcpu_is_preempted_node(node)))
-
-Not generate better code still?

@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBFA55D098
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CEC55E8FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233765AbiF0JAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
+        id S1347146AbiF1OIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 10:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbiF0JAe (ORCPT
+        with ESMTP id S230216AbiF1OIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:00:34 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1BC63A3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:00:33 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25R8BuKP028114;
-        Mon, 27 Jun 2022 09:00:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=7ybi4uuv2UsSkdNGFKxhBjHg13ZgnNx2vnAcPa0TLDk=;
- b=gdKXSh5AJCNeUzLE0CSE5iWcQPI64C3VDbZiwrpqBpJGuFwwJvLCZYrR+Y7q+gv3p2R2
- LKlTZUl89FO7mn9AQZ4We2m8xm4QyFsuk4Me72pFYIKsARAZe96errc9ued2KKT4+91B
- PPKBViYQl/GZ0p/0m9t/o0NwOKmKnLmE3Qbds/6+s+sBNomRl+o1V/hyYQvxpekOCGpy
- FxqkndyKVTRzjtulkdTSPDiSO4ZxydCZVUfo5/aio1+j0osWBdy3n0uqoXlkfPAugVUy
- zghRE7I2LhqYe7MDiHsY1Dbn5l/6kGuXDd2uIc3bGT8ksLb5JRxM5yNeleWZta2Pnp28 QQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gy8tx1a0x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 09:00:11 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25R8EYFm016389;
-        Mon, 27 Jun 2022 09:00:10 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gy8tx19y3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 09:00:10 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25R8opZ9019411;
-        Mon, 27 Jun 2022 09:00:08 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gwt08tkch-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 09:00:08 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25R905Qb23003460
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jun 2022 09:00:06 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E2F464C04E;
-        Mon, 27 Jun 2022 09:00:05 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3B30C4C046;
-        Mon, 27 Jun 2022 09:00:04 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.43.15.159])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 27 Jun 2022 09:00:04 +0000 (GMT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH] powerpc: perf: Fix refcount leak bug in imc-pmu.c
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-In-Reply-To: <20220618071353.4059000-1-windhl@126.com>
-Date:   Mon, 27 Jun 2022 14:30:01 +0530
-Cc:     Michael Ellerman <mpe@ellerman.id.au>, benh@kernel.crashing.org,
-        paulus@samba.org, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+        Tue, 28 Jun 2022 10:08:52 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6B03466B;
+        Tue, 28 Jun 2022 07:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656425331; x=1687961331;
+  h=date:from:to:cc:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding:resent-date:
+   resent-from:subject:resent-message-id:resent-to;
+  bh=NlN93CPLmTbVnxPPhc+BVfuBiZgxZ+dnkYTe/LYS/gQ=;
+  b=GQFp4GSMz9aZsJu51arHOXiSc917AQpi6WBE1e4nVvydAmiIMOBLm7hm
+   1ObneK1tIPaJfOu630qcEi9ksKWUh7Ggel96xi4mLHBYh3l7LiNTJ6+qk
+   km1qo9fL1RsgNVQf3kZuHv+DRl5N3gl+tR1O1/ZdatZs68AyKL7/e66Fj
+   np2DYK12fXqB0yL6BaWGcHDpmgBkB/HPqe5RzB15ADRjgxyljoVWiECn9
+   K3yL05MtXyhsEq4bFZfU5zGgczqM5DFZN9NCTXIcm0R6AJ2Gm66wIOAFm
+   /oaVwwfjXm9PPxNop6OIwI+ORH2G7JteqsrJnS2snbV+Dp+F8Dqhps2pp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="307233331"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="307233331"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 07:08:51 -0700
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="594809580"
+Received: from maurocar-mobl2.ger.corp.intel.com (HELO maurocar-mobl2) ([10.252.40.41])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 07:08:44 -0700
+Date:   Mon, 27 Jun 2022 11:00:56 +0200
+From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com> (by way of
+        Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>)
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Andi Shyti <andi.shyti@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chris Wilson <chris.p.wilson@intel.com>,
+        Fei Yang <fei.yang@intel.com>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>,
+        Bruce Chang <yu.bruce.chang@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        John Harrison <John.C.Harrison@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tejas Upadhyay <tejaskumarx.surendrakumar.upadhyay@intel.com>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Mika Kuoppala <mika.kuoppala@linux.intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        stable@vger.kernel.org,
+        Thomas =?UTF-8?B?SGVs?= =?UTF-8?B?bHN0csO2bQ==?= 
+        <thomas.hellstrom@linux.intel.com>
+Message-ID: <20220627110056.6dfa4f9b@maurocar-mobl2>
+In-Reply-To: <160e613f-a0a8-18ff-5d4b-249d4280caa8@linux.intel.com>
+References: <cover.1655306128.git.mchehab@kernel.org>
+ <5ee647f243a774927ec328bfca8212abc4957909.1655306128.git.mchehab@kernel.org>
+ <YrRLyg1IJoZpVGfg@intel.intel>
+ <160e613f-a0a8-18ff-5d4b-249d4280caa8@linux.intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <5B61320C-C37F-4B60-BE2B-461722D44742@linux.vnet.ibm.com>
-References: <20220618071353.4059000-1-windhl@126.com>
-To:     Liang He <windhl@126.com>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zXsXuV6a2jBqMgCfbfqhXcrLvpQo9LTl
-X-Proofpoint-ORIG-GUID: gSeTZLwweVeVvJgGXu_YjN97T9abW9_b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 phishscore=0 adultscore=0 mlxscore=0 suspectscore=0
- mlxlogscore=999 clxscore=1011 bulkscore=0 malwarescore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206270036
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+Subject: Re: [PATCH 5/6] drm/i915/gt: Serialize GRDOM access between
+ multiple engine resets
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,63 +88,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Tvrtko,
 
+On Fri, 24 Jun 2022 09:34:21 +0100
+Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> wrote:
 
-> On 18-Jun-2022, at 12:43 PM, Liang He <windhl@126.com> wrote:
+> On 23/06/2022 12:17, Andi Shyti wrote:
+> > Hi Mauro,
+> >=20
+> > On Wed, Jun 15, 2022 at 04:27:39PM +0100, Mauro Carvalho Chehab wrote: =
+=20
+> >> From: Chris Wilson <chris.p.wilson@intel.com>
+> >>
+> >> Don't allow two engines to be reset in parallel, as they would both
+> >> try to select a reset bit (and send requests to common registers)
+> >> and wait on that register, at the same time. Serialize control of
+> >> the reset requests/acks using the uncore->lock, which will also ensure
+> >> that no other GT state changes at the same time as the actual reset.
+> >>
+> >> Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing st=
+ore")
+> >>
+> >> Reported-by: Mika Kuoppala <mika.kuoppala@linux.intel.com>
+> >> Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
+> >> Cc: Mika Kuoppala <mika.kuoppala@linux.intel.com>
+> >> Cc: Andi Shyti <andi.shyti@intel.com>
+> >> Cc: stable@vger.kernel.org
+> >> Acked-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
+> >> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org> =20
+> >=20
+> > Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com> =20
 >=20
-> In update_events_in_group(), of_find_node_by_phandle() will return
-> a node pointer with refcount incremented. We should use of_node_put()
-> in fail path or when it is not used anymore.
+> Notice I had a bunch of questions and asks in this series so please do=20
+> not merge until those are addressed.
 >=20
-> Signed-off-by: Liang He <windhl@126.com>
+> In this particular patch (and some others) for instance Fixes: tag, at=20
+> least against that sha, shouldn't be there.
 
-Reviewed-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-> ---
-> arch/powerpc/perf/imc-pmu.c | 10 ++++++++--
-> 1 file changed, 8 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/powerpc/perf/imc-pmu.c b/arch/powerpc/perf/imc-pmu.c
-> index d7976ab40d38..d517aba94d1b 100644
-> --- a/arch/powerpc/perf/imc-pmu.c
-> +++ b/arch/powerpc/perf/imc-pmu.c
-> @@ -240,8 +240,10 @@ static int update_events_in_group(struct =
-device_node *node, struct imc_pmu *pmu)
-> 	ct =3D of_get_child_count(pmu_events);
->=20
-> 	/* Get the event prefix */
-> -	if (of_property_read_string(node, "events-prefix", &prefix))
-> +	if (of_property_read_string(node, "events-prefix", &prefix)) {
-> +		of_node_put(pmu_events);
-> 		return 0;
-> +	}
->=20
-> 	/* Get a global unit and scale data if available */
-> 	if (of_property_read_string(node, "scale", &g_scale))
-> @@ -255,8 +257,10 @@ static int update_events_in_group(struct =
-device_node *node, struct imc_pmu *pmu)
->=20
-> 	/* Allocate memory for the events */
-> 	pmu->events =3D kcalloc(ct, sizeof(struct imc_events), =
-GFP_KERNEL);
-> -	if (!pmu->events)
-> +	if (!pmu->events) {
-> +		of_node_put(pmu_events);
-> 		return -ENOMEM;
-> +	}
->=20
-> 	ct =3D 0;
-> 	/* Parse the events and update the struct */
-> @@ -266,6 +270,8 @@ static int update_events_in_group(struct =
-device_node *node, struct imc_pmu *pmu)
-> 			ct++;
-> 	}
->=20
-> +	of_node_put(pmu_events);
-> +
-> 	/* Allocate memory for attribute group */
-> 	attr_group =3D kzalloc(sizeof(*attr_group), GFP_KERNEL);
-> 	if (!attr_group) {
-> --=20
-> 2.25.1
->=20
+Hmm... I sent an answer to your points, but I can't see it at:
 
+	https://lore.kernel.org/all/160e613f-a0a8-18ff-5d4b-249d4280caa8@linux.int=
+el.com/
+
+Maybe it got lost somewhere, I dunno.
+
+Yeah, indeed the fixes tag on patch 5/6 should be removed as this is not
+directly related to changeset 7938d61591d3. Yet, this one is required for
+patch 6 to work.
+
+The other patches on this series, though, are modifying the code=20
+introduced by changeset 7938d61591d3.
+
+Patch 2 is clearly a workaround needed for TLB cache invalidation to
+work on some GPUs. So, while not related to Broadwell, they're also
+fixing some TLB cache issues. So, IMO, it should keep the fixes.
+
+I tried to port just the two serialize patches to drm-tip, in order
+to solve the issues on Broadwell, but it didn't work, as the logic=20
+inside the spinlock could be calling schedule() with a spinlock hold:
+=20
+	Jun 14 17:38:48 silver kernel: [   23.227813] BUG: sleeping function calle=
+d from invalid context at drivers/gpu/drm/i915/intel_uncore.c:2496
+	Jun 14 17:38:48 silver kernel: [   23.227816] in_atomic(): 1, irqs_disable=
+d(): 1, non_block: 0, pid: 37, name: kworker/u8:1
+	Jun 14 17:38:48 silver kernel: [   23.227818] preempt_count: 1, expected: 0
+	Jun 14 17:38:48 silver kernel: [   23.227819] RCU nest depth: 0, expected:=
+ 0
+	Jun 14 17:38:48 silver kernel: [   23.227820] 5 locks held by kworker/u8:1=
+/37:
+	Jun 14 17:38:48 silver kernel: [   23.227822]  #0: ffff88811159b538 ((wq_c=
+ompletion)i915){+.+.}-{0:0}, at: process_one_work+0x1e0/0x580
+	Jun 14 17:38:48 silver kernel: [   23.227831]  #1: ffffc90000183e60 ((work=
+_completion)(&(&i915->mm.free_work)->work)){+.+.}-{0:0}, at: process_one_wo=
+rk+0x1e0/0x580
+	Jun 14 17:38:48 silver kernel: [   23.227837]  #2: ffff88811b34c5e8 (reser=
+vation_ww_class_mutex){+.+.}-{3:3}, at: __i915_gem_free_objects+0xba/0x210 =
+[i915]
+	Jun 14 17:38:48 silver kernel: [   23.228283]  #3: ffff88810a66c2d8 (&gt->=
+tlb_invalidate_lock){+.+.}-{3:3}, at: intel_gt_invalidate_tlbs+0xe7/0x4d0 [=
+i915]
+	Jun 14 17:38:48 silver kernel: [   23.228663]  #4: ffff88810a668f28 (&unco=
+re->lock){-.-.}-{2:2}, at: intel_gt_invalidate_tlbs+0x115/0x4d0 [i915]
+
+I didn't investigate the root cause, but it seems related to PM, so=20
+patches 1 and 3 seem to be required for the serialization logic
+to actually work.
+
+So, I would keep the Fixes: tag mentioning changeset 7938d61591d3
+on patches: 1, 2, 3 and 6.
+
+Yet, IMO the entire series should be merged on -stable.
+
+If that's OK for you and there's no additional issues to be
+addressed, I'll submit a v2 of this series removing the Fixes tag
+from patches 4 and 5.
+
+Regards,
+Mauro

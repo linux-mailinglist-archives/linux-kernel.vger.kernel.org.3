@@ -2,96 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECF355DE79
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 588C455D8DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239280AbiF0QYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
+        id S239297AbiF0QY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234676AbiF0QYG (ORCPT
+        with ESMTP id S237910AbiF0QYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:24:06 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6571EAE7E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:24:05 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id n1so13786018wrg.12
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:24:05 -0700 (PDT)
+        Mon, 27 Jun 2022 12:24:55 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21D9BE39;
+        Mon, 27 Jun 2022 09:24:54 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id e63so9571186pgc.5;
+        Mon, 27 Jun 2022 09:24:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=9ZJokoMXakMIFvLaDTnIr0oqMcFY7ZRf51dGtS2NzKw=;
-        b=feeC4sKGHE7611Q+VF/dI1qLSv1TW8TB6IEUb172FaXQGILpjVUaEUzdifEOwGFOCR
-         2bQ5TCjXlEy5/hx5mWbltaaG2B8wr5ugFpllP8i6iOPzDtEZABXfGIP3DMXZ9FvR/5Uk
-         IzwOCB1CQCzzb5tGlJyMpgotO/sW/7G0KxDhK89RhjlWPVmH/gvJrNqlX8HgN2JRh9xl
-         /z3e2vhQkyYi+ROJJGuQ7bdtAh1WpsBmB05yEbqxAX17bkAAr/WfNX4gg0Lo7abcziJe
-         nSu3CLjJi5jsIKf3yB1Ud2thAqk1+UXl1TBX3rZLAIOX93jlxXgehnNP/Fl4PPt9wike
-         HiPQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=agTdFC77wAiPKF65qUDFakFqsb81qxDJ3UaD4sEYt/w=;
+        b=IIE+TLwo/0K9iYZITp/hc6jUuto3k5HhvAD+nsiUisLv5Q4wyvr9FmMjtJYZsH3E9S
+         Wzs6+cVruekXJPSY8wVLoZOU7kIYaO8EcBZqF2+r2+a+Ox3/W+rQ4jWtvvZMN2HM0C5O
+         QzYBRzgRINKohbhhk9bD7Dd1XLJ0A7sx2MfwMjPKt4f6Hjr4DxpWchGyvEsDN9G3Xvde
+         ae3vzMHrE2kgBP93GTa6ag/KAS5mfEFH56yPg1cfYiMM7LnTLOET5S8qHNldYHckM3gS
+         UK+qtGImHgor6rqpZY5chuYnLqBsxZ9FGT/Mgl9qjCMG5++fuTWOmo9eoPb0ODtsjMVK
+         yhBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=9ZJokoMXakMIFvLaDTnIr0oqMcFY7ZRf51dGtS2NzKw=;
-        b=EZO2x7TW7Usvrki0pxBFrL+jvxR4k/pJ4lmQowJSKMKMbKf5Zg46ytxtC6qyd5tg9R
-         bG7lcJAS3BFSwNP3JmX9+LS0YAM80fQeRIDQYpfeqTZE2a/mog72mFi5cX24GowdQrK2
-         6FyrNahH4wrOrpUJM6ELKwzebDykeW+OxUhRgfP9M64GT/9ZtZhnJwtP/vGkWZcAlaaL
-         7cspOS686uB3spwMzaqKDi8gfL9Z7NWxryxOH48xggG4zqQjjT6GR5Pc+HhkunFpS4B7
-         DH85eBl0TDIFXnn22mxCPZInKyhEGMA/ldwKHJwrr9z1SMys+p0u6+K1HkCHYdKbloCo
-         ckSA==
-X-Gm-Message-State: AJIora/2m7SWL4NB4RBFWSCD+lqW9vN2fpx2Xl3YJ6+mXE7kzEMImvYf
-        FnPJIPVCkILfsOUd3zr/udgiWg==
-X-Google-Smtp-Source: AGRyM1uZ9qNp8zEkPoKpJGNx/hE5miAeiNLVcPpeva+u+qwk34ucCb4LUGHAkEV7oJ9n/6hP9pxjxQ==
-X-Received: by 2002:a5d:5966:0:b0:21b:80b5:ecc3 with SMTP id e38-20020a5d5966000000b0021b80b5ecc3mr12913127wri.130.1656347044005;
-        Mon, 27 Jun 2022 09:24:04 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id l16-20020adffe90000000b0021b9a4a75e2sm10887612wrr.30.2022.06.27.09.24.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 09:24:03 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 17:24:01 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] mfd: axp20x: Add AXP221/AXP223/AXP809 GPIO cells
-Message-ID: <YrnZof9lwsIQCqu7@google.com>
-References: <20220616060915.48325-1-samuel@sholland.org>
- <20220616060915.48325-3-samuel@sholland.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=agTdFC77wAiPKF65qUDFakFqsb81qxDJ3UaD4sEYt/w=;
+        b=HCn4KS8skzPRWOIUDCIeV1yZyd06mnToGc48CraRjc1pIS3RIBaK6GrunI3VaeQxLo
+         GP1QkK6r1qme+sOOX6YHfCdLsvtx5IZ+dT657K7hBzEDkjD2Ffk8U8HfQxXQiTzq/oNi
+         gVo5vyT8IT0b72HGDm8W2zBRcj0hodA2Z0pRfUrYX0EtzHzfYHAV57tyY7u2Dsiicfoc
+         wpWIrJLgqP7C6O2QPCREAdUw++6NEdFoVvL55olbWeKSJjg2iFhOYyPwM53AGZl2VdAO
+         rZT4DX8ElmJqScNh+cU/tY5i0bgSUmfX47dq83CQg8kRFvTNCMloAFtgGSIP54BwYEn+
+         iw6g==
+X-Gm-Message-State: AJIora+NIQG7ibCYlEocUEA8mHXBV5jJlPAg5xLKePU4eqU/mOIdvPEj
+        /Aah2p3NrorM45Nyio9E5q8=
+X-Google-Smtp-Source: AGRyM1sG27yOPsRPwIvHWPhLNZZUlBJTHGS/Rtcv+tHJafgzf9lXLWrQ3EU8HM3gCD6lvDfXgJVNHA==
+X-Received: by 2002:a63:6e44:0:b0:40c:73a7:b6c9 with SMTP id j65-20020a636e44000000b0040c73a7b6c9mr13235895pgc.285.1656347094073;
+        Mon, 27 Jun 2022 09:24:54 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id t5-20020a17090aae0500b001ec4f258028sm7647327pjq.55.2022.06.27.09.24.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 09:24:53 -0700 (PDT)
+Message-ID: <7656fa2c-590a-8f0f-03ef-904e4f186c82@gmail.com>
+Date:   Mon, 27 Jun 2022 09:24:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220616060915.48325-3-samuel@sholland.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] clk: bcm: rpi: Fix error handling of
+ raspberrypi_fw_get_rate
+Content-Language: en-US
+To:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220625083643.4012-1-stefan.wahren@i2se.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220625083643.4012-1-stefan.wahren@i2se.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022, Samuel Holland wrote:
-
-> These PMICs all contain a compatible GPIO controller.
+On 6/25/22 01:36, Stefan Wahren wrote:
+> The function raspberrypi_fw_get_rate (e.g. used for the recalc_rate
+> hook) can fail to get the clock rate from the firmware. In this case
+> we cannot return a signed error value, which would be casted to
+> unsigned long. Fix this by returning 0 instead.
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
->  drivers/mfd/axp20x.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 
-Applied, thanks.
+Fixes: 4e85e535e6cc ("clk: bcm283x: add driver interfacing with 
+Raspberry Pi's firmware")
 
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Florian

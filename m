@@ -2,221 +2,842 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D53055C471
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E26CE55CDA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234292AbiF0LST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
+        id S237757AbiF0Lp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234461AbiF0LSQ (ORCPT
+        with ESMTP id S237444AbiF0Lmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:18:16 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B7764F3;
-        Mon, 27 Jun 2022 04:18:14 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LWlZ62Tc6z9srK;
-        Mon, 27 Jun 2022 19:17:34 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 27 Jun 2022 19:18:12 +0800
-CC:     <helgaas@kernel.org>, <lorenzo.pieralisi@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <jonathan.cameron@huawei.com>, <robin.murphy@arm.com>,
-        <leo.yan@linaro.org>, <mark.rutland@arm.com>, <will@kernel.org>,
-        <joro@8bytes.org>, <shameerali.kolothum.thodi@huawei.com>,
-        <peterz@infradead.org>, <mingo@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <john.garry@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
-        <liuqi115@huawei.com>, <james.clark@arm.com>,
-        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>,
-        <alexander.shishkin@linux.intel.com>,
-        Yicong Yang <yangyicong@hisilicon.com>, <acme@kernel.org>
-Subject: Re: [PATCH v9 0/8] Add support for HiSilicon PCIe Tune and Trace
- device
-To:     <gregkh@linuxfoundation.org>
-References: <20220606115555.41103-1-yangyicong@hisilicon.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <af6723f1-c0c5-8af5-857c-af9280e705af@huawei.com>
-Date:   Mon, 27 Jun 2022 19:18:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Mon, 27 Jun 2022 07:42:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60239B3;
+        Mon, 27 Jun 2022 04:38:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED48EB81122;
+        Mon, 27 Jun 2022 11:37:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5E87C341C7;
+        Mon, 27 Jun 2022 11:37:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656329877;
+        bh=yAUBbwG+OunXcrlFKPi7npOss7TR+owQd++MbqRw1Nw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SyqaTDTy7cdWzx5hWx4Wet3uvPCw5xZGZ0z+jifWAvPidgEcn3XH9NH6mqyHh3nMW
+         YchS/sLvCfzoFk12lV8UllHqGA6ieFQAZ2fwk1Eh+yeQZb4r49HAUuRCddSEMb5XTR
+         0fvrXvNQVG2yrSgPCJ9x4wkRTCwtvGDwQMJuYUs0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.18 000/181] 5.18.8-rc1 review
+Date:   Mon, 27 Jun 2022 13:19:33 +0200
+Message-Id: <20220627111944.553492442@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-In-Reply-To: <20220606115555.41103-1-yangyicong@hisilicon.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.8-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.18.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.18.8-rc1
+X-KernelTest-Deadline: 2022-06-29T11:19+00:00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+This is the start of the stable review cycle for the 5.18.8 release.
+There are 181 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-Since the kernel side of this device has been reviewed for 8 versions with
-all comments addressed and no more comment since v9 posted in 5.19-rc1,
-is it ok to merge it first (for Patch 1-3 and 7-8)?
+Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
+Anything received after that time might be too late.
 
-Thanks.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.8-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+and the diffstat can be found below.
 
-On 2022/6/6 19:55, Yicong Yang wrote:
-> HiSilicon PCIe tune and trace device (PTT) is a PCIe Root Complex
-> integrated Endpoint (RCiEP) device, providing the capability
-> to dynamically monitor and tune the PCIe traffic (tune),
-> and trace the TLP headers (trace).
-> 
-> PTT tune is designed for monitoring and adjusting PCIe link parameters.
-> We provide several parameters of the PCIe link. Through the driver,
-> user can adjust the value of certain parameter to affect the PCIe link
-> for the purpose of enhancing the performance in certian situation.
-> 
-> PTT trace is designed for dumping the TLP headers to the memory, which
-> can be used to analyze the transactions and usage condition of the PCIe
-> Link. Users can choose filters to trace headers, by either requester
-> ID, or those downstream of a set of Root Ports on the same core of the
-> PTT device. It's also supported to trace the headers of certain type and
-> of certain direction.
-> 
-> The driver registers a PMU device for each PTT device. The trace can
-> be used through `perf record` and the traced headers can be decoded
-> by `perf report`. The perf command support for the device is also
-> added in this patchset. The tune can be used through the sysfs
-> attributes of related PMU device. See the documentation for the
-> detailed usage.
-> 
-> Change since v8:
-> - Cleanups and one minor fix from Jonathan and John, thanks
-> Link: https://lore.kernel.org/lkml/20220516125223.32012-1-yangyicong@hisilicon.com/
-> 
-> Change since v7:
-> - Configure the DMA in probe rather than in runtime. Also use devres to manage
->   PMU device as we have no order problem now
-> - Refactor the config validation function per John and Leo
-> - Use a spinlock hisi_ptt::pmu_lock instead of mutex to serialize the perf process
->   in pmu::start as it's in atomic context
-> - Only commit the traced data when stop, per Leo and James
-> - Drop the filter dynamically updating patch from this series to simply the review
->   of the driver. That patch will be send separately.
-> - add a cpumask sysfs attribute and handle the cpu hotplug events, follow the
->   uncore PMU convention
-> - Other cleanups and fixes, both in driver and perf tool
-> Link: https://lore.kernel.org/lkml/20220407125841.3678-1-yangyicong@hisilicon.com/
-> 
-> Change since v6:
-> - Fix W=1 errors reported by lkp test, thanks
-> 
-> Change since v5:
-> - Squash the PMU patch into PATCH 2 suggested by John
-> - refine the commit message of PATCH 1 and some comments
-> Link: https://lore.kernel.org/lkml/20220308084930.5142-1-yangyicong@hisilicon.com/
-> 
-> Change since v4:
-> Address the comments from Jonathan, John and Ma Ca, thanks.
-> - Use devm* also for allocating the DMA buffers
-> - Remove the IRQ handler stub in Patch 2
-> - Make functions waiting for hardware state return boolean
-> - Manual remove the PMU device as it should be removed first
-> - Modifier the orders in probe and removal to make them matched well
-> - Make available {directions,type,format} array const and non-global
-> - Using the right filter list in filters show and well protect the
->   list with mutex
-> - Record the trace status with a boolean @started rather than enum
-> - Optimize the process of finding the PTT devices of the perf-tool
-> Link: https://lore.kernel.org/linux-pci/20220221084307.33712-1-yangyicong@hisilicon.com/
-> 
-> Change since v3:
-> Address the comments from Jonathan and John, thanks.
-> - drop members in the common struct which can be get on the fly
-> - reduce buffer struct and organize the buffers with array instead of list
-> - reduce the DMA reset wait time to avoid long time busy loop
-> - split the available_filters sysfs attribute into two files, for root port
->   and requester respectively. Update the documentation accordingly
-> - make IOMMU mapping check earlier in probe to avoid race condition. Also
->   make IOMMU quirk patch prior to driver in the series
-> - Cleanups and typos fixes from John and Jonathan
-> Link: https://lore.kernel.org/linux-pci/20220124131118.17887-1-yangyicong@hisilicon.com/
-> 
-> Change since v2:
-> - address the comments from Mathieu, thanks.
->   - rename the directory to ptt to match the function of the device
->   - spinoff the declarations to a separate header
->   - split the trace function to several patches
->   - some other comments.
-> - make default smmu domain type of PTT device to identity
->   Drop the RMR as it's not recommended and use an iommu_def_domain_type
->   quirk to passthrough the device DMA as suggested by Robin. 
-> Link: https://lore.kernel.org/linux-pci/20211116090625.53702-1-yangyicong@hisilicon.com/
-> 
-> Change since v1:
-> - switch the user interface of trace to perf from debugfs
-> - switch the user interface of tune to sysfs from debugfs
-> - add perf tool support to start trace and decode the trace data
-> - address the comments of documentation from Bjorn
-> - add RMR[1] support of the device as trace works in RMR mode or
->   direct DMA mode. RMR support is achieved by common APIs rather
->   than the APIs implemented in [1].
-> Link: https://lore.kernel.org/lkml/1618654631-42454-1-git-send-email-yangyicong@hisilicon.com/
-> [1] https://lore.kernel.org/linux-acpi/20210805080724.480-1-shameerali.kolothum.thodi@huawei.com/
-> 
-> Qi Liu (3):
->   perf tool: arm: Refactor event list iteration in
->     auxtrace_record__init()
->   perf tool: Add support for HiSilicon PCIe Tune and Trace device driver
->   perf tool: Add support for parsing HiSilicon PCIe Trace packet
-> 
-> Yicong Yang (5):
->   iommu/arm-smmu-v3: Make default domain type of HiSilicon PTT device to
->     identity
->   hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe
->     Tune and Trace device
->   hwtracing: hisi_ptt: Add tune function support for HiSilicon PCIe Tune
->     and Trace device
->   docs: trace: Add HiSilicon PTT device driver documentation
->   MAINTAINERS: Add maintainer for HiSilicon PTT driver
-> 
->  Documentation/trace/hisi-ptt.rst              |  307 +++++
->  Documentation/trace/index.rst                 |    1 +
->  MAINTAINERS                                   |    7 +
->  drivers/Makefile                              |    1 +
->  drivers/hwtracing/Kconfig                     |    2 +
->  drivers/hwtracing/ptt/Kconfig                 |   12 +
->  drivers/hwtracing/ptt/Makefile                |    2 +
->  drivers/hwtracing/ptt/hisi_ptt.c              | 1092 +++++++++++++++++
->  drivers/hwtracing/ptt/hisi_ptt.h              |  200 +++
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |   21 +
->  tools/perf/arch/arm/util/auxtrace.c           |  116 +-
->  tools/perf/arch/arm/util/pmu.c                |    3 +
->  tools/perf/arch/arm64/util/Build              |    2 +-
->  tools/perf/arch/arm64/util/hisi-ptt.c         |  187 +++
->  tools/perf/util/Build                         |    2 +
->  tools/perf/util/auxtrace.c                    |    4 +
->  tools/perf/util/auxtrace.h                    |    1 +
->  tools/perf/util/hisi-ptt-decoder/Build        |    1 +
->  .../hisi-ptt-decoder/hisi-ptt-pkt-decoder.c   |  164 +++
->  .../hisi-ptt-decoder/hisi-ptt-pkt-decoder.h   |   31 +
->  tools/perf/util/hisi-ptt.c                    |  192 +++
->  tools/perf/util/hisi-ptt.h                    |   19 +
->  22 files changed, 2347 insertions(+), 20 deletions(-)
->  create mode 100644 Documentation/trace/hisi-ptt.rst
->  create mode 100644 drivers/hwtracing/ptt/Kconfig
->  create mode 100644 drivers/hwtracing/ptt/Makefile
->  create mode 100644 drivers/hwtracing/ptt/hisi_ptt.c
->  create mode 100644 drivers/hwtracing/ptt/hisi_ptt.h
->  create mode 100644 tools/perf/arch/arm64/util/hisi-ptt.c
->  create mode 100644 tools/perf/util/hisi-ptt-decoder/Build
->  create mode 100644 tools/perf/util/hisi-ptt-decoder/hisi-ptt-pkt-decoder.c
->  create mode 100644 tools/perf/util/hisi-ptt-decoder/hisi-ptt-pkt-decoder.h
->  create mode 100644 tools/perf/util/hisi-ptt.c
->  create mode 100644 tools/perf/util/hisi-ptt.h
-> 
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.18.8-rc1
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    powerpc/pseries: wire up rng during setup_arch()
+
+Masahiro Yamada <masahiroy@kernel.org>
+    kbuild: link vmlinux only once for CONFIG_TRIM_UNUSED_KSYMS (2nd attempt)
+
+Dexuan Cui <decui@microsoft.com>
+    dma-direct: use the correct size for dma_set_encrypted()
+
+Shyam Prasad N <sprasad@microsoft.com>
+    smb3: use netname when available on secondary channels
+
+Adrian Hunter <adrian.hunter@intel.com>
+    perf build-id: Fix caching files with a wrong build ID
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: update comment from copy_to_user() -> copy_to_iter()
+
+Steve French <stfrench@microsoft.com>
+    smb3: fix empty netname context on secondary channels
+
+Stefan Wahren <stefan.wahren@i2se.com>
+    ARM: dts: bcm2711-rpi-400: Fix GPIO line names
+
+Masahiro Yamada <masahiroy@kernel.org>
+    modpost: fix section mismatch check for exported init/exit sections
+
+Miaoqian Lin <linmq006@gmail.com>
+    ARM: cns3xxx: Fix refcount leak in cns3xxx_init
+
+Miaoqian Lin <linmq006@gmail.com>
+    memory: samsung: exynos5422-dmc: Fix refcount leak in of_get_dram_timings
+
+Miaoqian Lin <linmq006@gmail.com>
+    memory: mtk-smi: add missing put_device() call in mtk_smi_device_link_common
+
+Miaoqian Lin <linmq006@gmail.com>
+    ARM: Fix refcount leak in axxia_boot_secondary
+
+Miaoqian Lin <linmq006@gmail.com>
+    soc: bcm: brcmstb: pm: pm-arm: Fix refcount leak in brcmstb_pm_probe
+
+David Virag <virag.david003@gmail.com>
+    arm64: dts: exynos: Correct UART clocks on Exynos7885
+
+Miaoqian Lin <linmq006@gmail.com>
+    ARM: exynos: Fix refcount leak in exynos_map_pmu
+
+Aswath Govindraju <a-govindraju@ti.com>
+    arm64: dts: ti: k3-am64-main: Remove support for HS400 speed mode
+
+Lucas Stach <l.stach@pengutronix.de>
+    ARM: dts: imx6qdl: correct PU regulator ramp delay
+
+Alexander Stein <alexander.stein@ew.tq-group.com>
+    ARM: dts: imx7: Move hsic_phy power domain to HSIC PHY node
+
+Marcelo Tosatti <mtosatti@redhat.com>
+    mm: lru_cache_disable: use synchronize_rcu_expedited
+
+zhenwei pi <pizhenwei@bytedance.com>
+    mm/memory-failure: disable unpoison once hw error happens
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    powerpc/powernv: wire up rng during setup_arch
+
+Andrew Donnellan <ajd@linux.ibm.com>
+    powerpc/rtas: Allow ibm,platform-dump RTAS call with null buffer address
+
+Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+    powerpc: Enable execve syscall exit tracepoint
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    powerpc/microwatt: wire up rng during setup_arch()
+
+Matt Ranostay <mranostay@ti.com>
+    arm64: dts: ti: k3-j721s2: Fix overlapping GICD memory region
+
+Helge Deller <deller@gmx.de>
+    parisc: Enable ARCH_HAS_STRICT_MODULE_RWX
+
+John David Anglin <dave.anglin@bell.net>
+    parisc: Fix flush_anon_page on PA8800/PA8900
+
+Helge Deller <deller@gmx.de>
+    parisc/stifb: Fix fb_is_primary_device() only available with CONFIG_FB_STI
+
+Liang He <windhl@126.com>
+    xtensa: Fix refcount leak bug in time.c
+
+Liang He <windhl@126.com>
+    xtensa: xtfpga: Fix refcount leak bug in setup
+
+Jialin Zhang <zhangjialin11@huawei.com>
+    iio: adc: ti-ads131e08: add missing fwnode_handle_put() in ads131e08_alloc_channels()
+
+Miaoqian Lin <linmq006@gmail.com>
+    iio: adc: adi-axi-adc: Fix refcount leak in adi_axi_adc_attach_client
+
+Jialin Zhang <zhangjialin11@huawei.com>
+    iio: adc: rzg2l_adc: add missing fwnode_handle_put() in rzg2l_adc_parse_properties()
+
+Hans de Goede <hdegoede@redhat.com>
+    iio: adc: axp288: Override TS pin bias current for some models
+
+Olivier Moysan <olivier.moysan@foss.st.com>
+    iio: adc: stm32: fix vrefint wrong calibration value handling
+
+Yannick Brosseau <yannick.brosseau@gmail.com>
+    iio: adc: stm32: Fix IRQs on STM32F4 by removing custom spurious IRQs message
+
+Yannick Brosseau <yannick.brosseau@gmail.com>
+    iio: adc: stm32: Fix ADCs iteration in irq handler
+
+Miaoqian Lin <linmq006@gmail.com>
+    iio: adc: aspeed: Fix refcount leak in aspeed_adc_set_trim_data
+
+Liam Beguin <liambeguin@gmail.com>
+    iio: test: fix missing MODULE_LICENSE for IIO_RESCALE=m
+
+Linus Walleij <linus.walleij@linaro.org>
+    iio: afe: rescale: Fix boolean logic bug
+
+Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>
+    iio: imu: inv_icm42600: Fix broken icm42600 (chip id 0 value)
+
+Olivier Moysan <olivier.moysan@foss.st.com>
+    iio: adc: stm32: fix maximum clock rate for stm32mp15x
+
+Vincent Whitchurch <vincent.whitchurch@axis.com>
+    iio: trigger: sysfs: fix use-after-free on remove
+
+Zheyu Ma <zheyuma97@gmail.com>
+    iio: gyro: mpu3050: Fix the error handling in mpu3050_power_up()
+
+Haibo Chen <haibo.chen@nxp.com>
+    iio: accel: mma8452: ignore the return value of reset operation
+
+Dmitry Rokosov <DDRokosov@sberdevices.ru>
+    iio:accel:mxc4005: rearrange iio trigger get and register
+
+Dmitry Rokosov <DDRokosov@sberdevices.ru>
+    iio:accel:bma180: rearrange iio trigger get and register
+
+Dmitry Rokosov <DDRokosov@sberdevices.ru>
+    iio:accel:kxcjk-1013: rearrange iio trigger get and register
+
+Dmitry Rokosov <DDRokosov@sberdevices.ru>
+    iio:chemical:ccs811: rearrange iio trigger get and register
+
+Aashish Sharma <shraash@google.com>
+    iio:proximity:sx9324: Check ret value of device_property_read_u32_array()
+
+Dmitry Rokosov <DDRokosov@sberdevices.ru>
+    iio:humidity:hts221: rearrange iio trigger get and register
+
+Jaegeuk Kim <jaegeuk@kernel.org>
+    f2fs: do not count ENOENT for error case
+
+Daeho Jeong <daehojeong@google.com>
+    f2fs: fix iostat related lock protection
+
+Jaegeuk Kim <jaegeuk@kernel.org>
+    f2fs: attach inline_data after setting compression
+
+Josef Bacik <josef@toxicpanda.com>
+    btrfs: fix deadlock with fsync+fiemap+transaction commit
+
+Zygo Blaxell <ce3g8jdj@umail.furryterror.org>
+    btrfs: don't set lock_owner when locking extent buffer for reading
+
+Filipe Manana <fdmanana@suse.com>
+    btrfs: fix race between reflinking and ordered extent completion
+
+Geert Uytterhoeven <geert+renesas@glider.be>
+    dt-bindings: usb: ehci: Increase the number of PHYs
+
+Geert Uytterhoeven <geert+renesas@glider.be>
+    dt-bindings: usb: ohci: Increase the number of PHYs
+
+Xu Yang <xu.yang_2@nxp.com>
+    usb: chipidea: udc: check request status before setting device address
+
+Alan Stern <stern@rowland.harvard.edu>
+    USB: gadget: Fix double-free bug in raw_gadget driver
+
+Alan Stern <stern@rowland.harvard.edu>
+    usb: gadget: Fix non-unique driver names in raw-gadget driver
+
+Dan Vacura <w36195@motorola.com>
+    usb: gadget: uvc: fix list double add in uvcg_video_pump
+
+Utkarsh Patel <utkarsh.h.patel@intel.com>
+    xhci-pci: Allow host runtime PM as default for Intel Meteor Lake xHCI
+
+Tanveer Alam <tanveer1.alam@intel.com>
+    xhci-pci: Allow host runtime PM as default for Intel Raptor Lake xHCI
+
+Mathias Nyman <mathias.nyman@linux.intel.com>
+    xhci: turn off port power in shutdown
+
+Alexander Gordeev <agordeev@linux.ibm.com>
+    s390/crash: make copy_oldmem_page() return number of bytes copied
+
+Alexander Gordeev <agordeev@linux.ibm.com>
+    s390/crash: add missing iterator advance in copy_oldmem_page()
+
+Matthew Wilcox (Oracle) <willy@infradead.org>
+    vmcore: convert copy_oldmem_page() to take an iov_iter
+
+Pavel Begunkov <asml.silence@gmail.com>
+    io_uring: fix wrong arm_poll error handling
+
+Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+    usb: typec: wcove: Drop wrong dependency to INTEL_SOC_PMIC
+
+Pavel Begunkov <asml.silence@gmail.com>
+    io_uring: fix req->apoll_events
+
+Christoph Hellwig <hch@lst.de>
+    io_uring: make apoll_events a __poll_t
+
+Baruch Siach <baruch@tkos.co.il>
+    iio: adc: vf610: fix conversion mode sysfs node name
+
+Lv Ruyi <lv.ruyi@zte.com.cn>
+    iio: adc: xilinx-ams: fix return error variable
+
+Linus Walleij <linus.walleij@linaro.org>
+    iio: magnetometer: yas530: Fix memchr_inv() misuse
+
+Haibo Chen <haibo.chen@nxp.com>
+    iio: mma8452: fix probe fail when device tree compatible is used.
+
+Peter Gonda <pgonda@google.com>
+    KVM: SEV: Init target VMCBs in sev_migrate_from
+
+Alistair Popple <apopple@nvidia.com>
+    filemap: Fix serialization adding transparent huge pages to page cache
+
+Thomas Richter <tmricht@linux.ibm.com>
+    s390/cpumf: Handle events cycles and instructions identical
+
+Dan Carpenter <dan.carpenter@oracle.com>
+    gpio: winbond: Fix error code in winbond_gpio_get()
+
+Christoph Hellwig <hch@lst.de>
+    nvme: move the Samsung X5 quirk entry to the core quirks
+
+Jakub Kicinski <kuba@kernel.org>
+    sock: redo the psock vs ULP protection check
+
+Jakub Kicinski <kuba@kernel.org>
+    Revert "net/tls: fix tls_sk_proto_close executed repeatedly"
+
+Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+    virtio_net: fix xdp_rxq_info bug after suspend/resume
+
+Kai-Heng Feng <kai.heng.feng@canonical.com>
+    igb: Make DMA faster when CPU is active on the PCIe link
+
+Christian Marangi <ansuelsmth@gmail.com>
+    net: dsa: qca8k: reduce mgmt ethernet timeout
+
+Mario Limonciello <mario.limonciello@amd.com>
+    drm/amd: Revert "drm/amd/display: keep eDP Vdd on when eDP stream is already enabled"
+
+Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+    iommu/ipmmu-vmsa: Fix compatible for rcar-gen4
+
+Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+    regmap-irq: Fix offset/index mismatch in read_sub_irq_data()
+
+Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+    regmap-irq: Fix a bug in regmap_irq_enable() for type_in_mask chips
+
+Pavel Begunkov <asml.silence@gmail.com>
+    io_uring: fail links when poll fails
+
+Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
+    ice: ethtool: Prohibit improper channel config for DCB
+
+Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
+    ice: ethtool: advertise 1000M speeds properly
+
+Wojciech Drewek <wojciech.drewek@intel.com>
+    ice: Fix switchdev rules book keeping
+
+Marcin Szycik <marcin.szycik@linux.intel.com>
+    ice: ignore protocol field in GTP offload
+
+Jens Axboe <axboe@kernel.dk>
+    block: pop cached rq before potentially blocking rq_qos_throttle()
+
+David Howells <dhowells@redhat.com>
+    afs: Fix dynamic root getattr
+
+huhai <huhai@kylinos.cn>
+    MIPS: Remove repetitive increase irq_err_count
+
+Julien Grall <jgrall@amazon.com>
+    x86/xen: Remove undefined behavior in setup_features()
+
+Jason Andryuk <jandryuk@gmail.com>
+    xen-blkfront: Handle NULL gendisk
+
+Florian Westphal <fw@strlen.de>
+    netfilter: nf_dup_netdev: add and use recursion counter
+
+Florian Westphal <fw@strlen.de>
+    netfilter: nf_dup_netdev: do not push mac header a second time
+
+Jie2x Zhou <jie2x.zhou@intel.com>
+    selftests: netfilter: correct PKTGEN_SCRIPT_PATHS in nft_concat_range.sh
+
+Gerd Hoffmann <kraxel@redhat.com>
+    udmabuf: add back sanity check
+
+Ziyang Xuan <william.xuanziyang@huawei.com>
+    net/tls: fix tls_sk_proto_close executed repeatedly
+
+Eric Dumazet <edumazet@google.com>
+    erspan: do not assume transport header is always set
+
+Riccardo Paolo Bestetti <pbl@bestov.io>
+    ipv4: fix bind address validity regression tests
+
+Leo Yan <leo.yan@linaro.org>
+    perf arm-spe: Don't set data source if it's not a memory operation
+
+Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+    perf test topology: Use !strncmp(right platform) to fix guest PPC comparision check
+
+Michael Petlan <mpetlan@redhat.com>
+    perf test: Record only user callchains on the "Check Arm64 callgraphs are complete in fp mode" test
+
+Oleksij Rempel <linux@rempel-privat.de>
+    net: phy: at803x: fix NULL pointer dereference on AR9331 PHY
+
+Kuogee Hsieh <quic_khsieh@quicinc.com>
+    drm/msm/dp: force link training for display resolution change
+
+Kuogee Hsieh <quic_khsieh@quicinc.com>
+    drm/msm/dp: check core_initialized before disable interrupts at dp_display_unbind()
+
+Miaoqian Lin <linmq006@gmail.com>
+    drm/msm/mdp4: Fix refcount leak in mdp4_modeset_init_intf
+
+Peilin Ye <peilin.ye@bytedance.com>
+    net/sched: sch_netem: Fix arithmetic in netem_dump() for 32-bit platforms
+
+Ivan Vecera <ivecera@redhat.com>
+    ethtool: Fix get module eeprom fallback
+
+Jay Vosburgh <jay.vosburgh@canonical.com>
+    bonding: ARP monitor spams NETDEV_NOTIFY_PEERS notifiers
+
+Lorenzo Bianconi <lorenzo@kernel.org>
+    igb: fix a use-after-free issue in igb_clean_tx_ring
+
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
+    rethook: Reject getting a rethook if RCU is not watching
+
+Christoph Hellwig <hch@lst.de>
+    block: disable the elevator int del_gendisk
+
+Hoang Le <hoang.h.le@dektech.com.au>
+    tipc: fix use-after-free Read in tipc_named_reinit
+
+Jay Vosburgh <jay.vosburgh@canonical.com>
+    veth: Add updating of trans_start
+
+Eric Dumazet <edumazet@google.com>
+    net: fix data-race in dev_isalive()
+
+Quentin Perret <qperret@google.com>
+    KVM: arm64: Prevent kmemleak from accessing pKVM memory
+
+Claudiu Manoil <claudiu.manoil@nxp.com>
+    phy: aquantia: Fix AN when higher speeds than 1G are not advertised
+
+Saurabh Sengar <ssengar@linux.microsoft.com>
+    scsi: storvsc: Correct reporting of Hyper-V I/O size limits
+
+Yu Liao <liaoyu15@huawei.com>
+    selftests dma: fix compile error for dma_map_benchmark
+
+Jakub Sitnicki <jakub@cloudflare.com>
+    bpf, x86: Fix tail call count offset calculation on bpf2bpf call
+
+Samuel Holland <samuel@sholland.org>
+    drm/sun4i: Fix crash during suspend after component bind failure
+
+Jon Maxwell <jmaxwell37@gmail.com>
+    bpf: Fix request_sock leak in sk lookup helpers
+
+Jonathan Marek <jonathan@marek.ca>
+    drm/msm: use for_each_sgtable_sg to iterate over scatterlist
+
+Ciara Loftus <ciara.loftus@intel.com>
+    xsk: Fix generic transmit when completion queue reservation fails
+
+Sergey Gorenko <sergeygo@nvidia.com>
+    scsi: iscsi: Exclude zero from the endpoint ID range
+
+Rob Clark <robdclark@chromium.org>
+    drm/msm: Switch ordering of runpm put vs devfreq_idle
+
+Damien Le Moal <damien.lemoal@opensource.wdc.com>
+    scsi: scsi_debug: Fix zone transition to full condition
+
+Florian Westphal <fw@strlen.de>
+    netfilter: use get_random_u32 instead of prandom
+
+Maximilian Luz <luzmaximilian@gmail.com>
+    drm/msm: Fix double pm_runtime_disable() call
+
+Rob Clark <robdclark@chromium.org>
+    drm/msm: Ensure mmap offset is initialized
+
+Macpaul Lin <macpaul.lin@mediatek.com>
+    USB: serial: option: add Quectel RM500K module support
+
+Yonglin Tan <yonglin.tan@outlook.com>
+    USB: serial: option: add Quectel EM05-G modem
+
+Carlo Lobrano <c.lobrano@gmail.com>
+    USB: serial: option: add Telit LE910Cx 0x1250 composition
+
+Johan Hovold <johan@kernel.org>
+    USB: serial: pl2303: add support for more HXN (G) types
+
+George Shen <george.shen@amd.com>
+    drm/amd/display: Fix typo in override_lane_settings
+
+Joshua Ashton <joshua@froggi.es>
+    amd/display/dc: Fix COLOR_ENCODING and COLOR_RANGE doing nothing for DCN20+
+
+Ville Syrjälä <ville.syrjala@linux.intel.com>
+    drm/i915: Implement w/a 22010492432 for adl-s
+
+Jann Horn <jannh@google.com>
+    mm/slub: add missing TID updates on slab deactivation
+
+Matthew Wilcox (Oracle) <willy@infradead.org>
+    filemap: Handle sibling entries in filemap_get_read_batch()
+
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
+    tracing/kprobes: Check whether get_kretprobe() returns NULL in kretprobe_dispatcher()
+
+Mikulas Patocka <mpatocka@redhat.com>
+    dm mirror log: clear log bits up to BITS_PER_LONG boundary
+
+Mike Snitzer <snitzer@kernel.org>
+    dm: do not return early from dm_io_complete if BLK_STS_AGAIN without polling
+
+Nikos Tsironis <ntsironis@arrikto.com>
+    dm era: commit metadata in postsuspend after worker stops
+
+Edward Wu <edwardwu@realtek.com>
+    ata: libata: add qc->flags in ata_qc_complete_template tracepoint
+
+Sascha Hauer <s.hauer@pengutronix.de>
+    mtd: rawnand: gpmi: Fix setting busy timeout setting
+
+Joerg Roedel <jroedel@suse.de>
+    MAINTAINERS: Add new IOMMU development mailing list
+
+Demi Marie Obenour <demi@invisiblethingslab.com>
+    xen/gntdev: Avoid blocking in unmap_grant_pages()
+
+Mengqi Zhang <mengqi.zhang@mediatek.com>
+    mmc: mediatek: wait dma stop bit reset to 0
+
+Chevron Li <chevron.li@bayhubtech.com>
+    mmc: sdhci-pci-o2micro: Fix card detect by dealing with debouncing
+
+Tyrel Datwyler <tyreld@linux.ibm.com>
+    scsi: ibmvfc: Allocate/free queue resource only during probe/remove
+
+Tyrel Datwyler <tyreld@linux.ibm.com>
+    scsi: ibmvfc: Store vhost pointer during subcrq allocation
+
+David Sterba <dsterba@suse.com>
+    btrfs: add error messages to all unrecognized mount options
+
+Qu Wenruo <wqu@suse.com>
+    btrfs: prevent remounting to v1 space cache for subpage mount
+
+Filipe Manana <fdmanana@suse.com>
+    btrfs: fix hang during unmount when block group reclaim task is running
+
+Dominique Martinet <asmadeus@codewreck.org>
+    9p: fix EBADF errors in cached mode
+
+Dominique Martinet <asmadeus@codewreck.org>
+    9p: fix fid refcount leak in v9fs_vfs_get_link
+
+Dominique Martinet <asmadeus@codewreck.org>
+    9p: fix fid refcount leak in v9fs_vfs_atomic_open_dotl
+
+Tyler Hicks <tyhicks@linux.microsoft.com>
+    9p: Fix refcounting during full path walks for fid lookups
+
+Riccardo Paolo Bestetti <pbl@bestov.io>
+    ipv4: ping: fix bind address validity check
+
+Rosemarie O'Riorden <roriorden@redhat.com>
+    net: openvswitch: fix parsing of nw_proto for IPv6 fragments
+
+Tim Crawford <tcrawford@system76.com>
+    ALSA: hda/realtek: Add quirk for Clevo NS50PU
+
+Tim Crawford <tcrawford@system76.com>
+    ALSA: hda/realtek: Add quirk for Clevo PD70PNT
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: hda/realtek: Apply fixup for Lenovo Yoga Duet 7 properly
+
+Kailang Yang <kailang@realtek.com>
+    ALSA: hda/realtek - ALC897 headset MIC no sound
+
+Soham Sen <contact@sohamsen.me>
+    ALSA: hda/realtek: Add mute LED quirk for HP Omen laptop
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: hda/conexant: Fix missing beep setup
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: hda: Fix discovery of i915 graphics PCI device
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: hda/via: Fix missing beep setup
+
+Takashi Iwai <tiwai@suse.de>
+    ALSA: memalloc: Drop x86-specific hack for WC allocations
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: quiet urandom warning ratelimit suppression message
+
+Jason A. Donenfeld <Jason@zx2c4.com>
+    random: schedule mix_interrupt_randomness() less often
+
+
+-------------
+
+Diffstat:
+
+ Documentation/ABI/testing/sysfs-bus-iio-vf610      |   2 +-
+ .../devicetree/bindings/usb/generic-ehci.yaml      |   3 +-
+ .../devicetree/bindings/usb/generic-ohci.yaml      |   3 +-
+ Documentation/vm/hwpoison.rst                      |   3 +-
+ MAINTAINERS                                        |  11 ++
+ Makefile                                           |   6 +-
+ arch/arm/boot/dts/bcm2711-rpi-400.dts              |   6 +-
+ arch/arm/boot/dts/imx6qdl.dtsi                     |   2 +-
+ arch/arm/boot/dts/imx7s.dtsi                       |   2 +-
+ arch/arm/kernel/crash_dump.c                       |  27 +---
+ arch/arm/mach-axxia/platsmp.c                      |   1 +
+ arch/arm/mach-cns3xxx/core.c                       |   2 +
+ arch/arm/mach-exynos/exynos.c                      |   1 +
+ arch/arm64/boot/dts/exynos/exynos7885.dtsi         |  12 +-
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi           |   2 -
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi         |   2 +-
+ arch/arm64/kernel/crash_dump.c                     |  29 +---
+ arch/arm64/kvm/arm.c                               |   6 +-
+ arch/ia64/kernel/crash_dump.c                      |  32 +----
+ arch/mips/kernel/crash_dump.c                      |  27 +---
+ arch/mips/vr41xx/common/icu.c                      |   2 -
+ arch/parisc/Kconfig                                |   1 +
+ arch/parisc/include/asm/fb.h                       |   2 +-
+ arch/parisc/kernel/cache.c                         |   5 +-
+ arch/powerpc/kernel/crash_dump.c                   |  35 +----
+ arch/powerpc/kernel/process.c                      |   2 +-
+ arch/powerpc/kernel/rtas.c                         |  11 +-
+ arch/powerpc/platforms/microwatt/microwatt.h       |   7 +
+ arch/powerpc/platforms/microwatt/rng.c             |  10 +-
+ arch/powerpc/platforms/microwatt/setup.c           |   8 ++
+ arch/powerpc/platforms/powernv/powernv.h           |   2 +
+ arch/powerpc/platforms/powernv/rng.c               |  52 ++++---
+ arch/powerpc/platforms/powernv/setup.c             |   2 +
+ arch/powerpc/platforms/pseries/pseries.h           |   2 +
+ arch/powerpc/platforms/pseries/rng.c               |  11 +-
+ arch/powerpc/platforms/pseries/setup.c             |   2 +
+ arch/riscv/kernel/crash_dump.c                     |  26 +---
+ arch/s390/kernel/crash_dump.c                      |  23 ++-
+ arch/s390/kernel/perf_cpum_cf.c                    |  22 ++-
+ arch/sh/kernel/crash_dump.c                        |  29 +---
+ arch/x86/kernel/crash_dump_32.c                    |  29 +---
+ arch/x86/kernel/crash_dump_64.c                    |  41 ++----
+ arch/x86/kvm/svm/sev.c                             |  68 ++++++---
+ arch/x86/kvm/svm/svm.c                             |  11 +-
+ arch/x86/kvm/svm/svm.h                             |   2 +-
+ arch/x86/net/bpf_jit_comp.c                        |   3 +-
+ arch/xtensa/kernel/time.c                          |   1 +
+ arch/xtensa/platforms/xtfpga/setup.c               |   1 +
+ block/blk-core.c                                   |  13 --
+ block/blk-mq.c                                     |  11 +-
+ block/genhd.c                                      |  39 ++---
+ drivers/base/memory.c                              |   2 +-
+ drivers/base/regmap/regmap-irq.c                   |   8 +-
+ drivers/block/xen-blkfront.c                       |  19 ++-
+ drivers/char/random.c                              |   6 +-
+ drivers/dma-buf/udmabuf.c                          |   5 +-
+ drivers/gpio/gpio-vr41xx.c                         |   2 -
+ drivers/gpio/gpio-winbond.c                        |   7 +-
+ drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c   |   2 +-
+ .../amd/display/dc/dce110/dce110_hw_sequencer.c    |  24 +---
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_dpp.c   |   3 +
+ drivers/gpu/drm/amd/display/dc/dcn201/dcn201_dpp.c |   3 +
+ drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dpp.c   |   3 +
+ drivers/gpu/drm/i915/display/intel_dpll_mgr.c      |   4 +-
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c            |   3 +-
+ drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c           |   2 +
+ drivers/gpu/drm/msm/dp/dp_ctrl.c                   |  33 +++--
+ drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   2 +-
+ drivers/gpu/drm/msm/dp/dp_display.c                |  16 +--
+ drivers/gpu/drm/msm/msm_drv.c                      |   2 +-
+ drivers/gpu/drm/msm/msm_drv.h                      |   1 +
+ drivers/gpu/drm/msm/msm_gem_prime.c                |  15 ++
+ drivers/gpu/drm/msm/msm_gpu.c                      |   3 +-
+ drivers/gpu/drm/msm/msm_iommu.c                    |   2 +-
+ drivers/gpu/drm/sun4i/sun4i_drv.c                  |   4 +-
+ drivers/iio/accel/bma180.c                         |   3 +-
+ drivers/iio/accel/kxcjk-1013.c                     |   4 +-
+ drivers/iio/accel/mma8452.c                        |  22 +--
+ drivers/iio/accel/mxc4005.c                        |   4 +-
+ drivers/iio/adc/adi-axi-adc.c                      |   3 +
+ drivers/iio/adc/aspeed_adc.c                       |   1 +
+ drivers/iio/adc/axp288_adc.c                       |   8 ++
+ drivers/iio/adc/rzg2l_adc.c                        |   8 +-
+ drivers/iio/adc/stm32-adc-core.c                   |   9 +-
+ drivers/iio/adc/stm32-adc.c                        |  37 +++--
+ drivers/iio/adc/ti-ads131e08.c                     |  10 +-
+ drivers/iio/adc/xilinx-ams.c                       |   2 +-
+ drivers/iio/afe/iio-rescale.c                      |   2 +-
+ drivers/iio/chemical/ccs811.c                      |   4 +-
+ drivers/iio/gyro/mpu3050-core.c                    |   1 +
+ drivers/iio/humidity/hts221_buffer.c               |   5 +-
+ drivers/iio/imu/inv_icm42600/inv_icm42600.h        |   1 +
+ drivers/iio/imu/inv_icm42600/inv_icm42600_core.c   |   2 +-
+ drivers/iio/magnetometer/yamaha-yas530.c           |   2 +-
+ drivers/iio/proximity/sx9324.c                     |   3 +
+ drivers/iio/test/Kconfig                           |   2 +-
+ drivers/iio/test/Makefile                          |   2 +-
+ drivers/iio/trigger/iio-trig-sysfs.c               |   1 +
+ drivers/iommu/ipmmu-vmsa.c                         |   2 +-
+ drivers/md/dm-era-target.c                         |   8 +-
+ drivers/md/dm-log.c                                |   2 +-
+ drivers/md/dm.c                                    |   4 +-
+ drivers/memory/mtk-smi.c                           |   5 +-
+ drivers/memory/samsung/exynos5422-dmc.c            |  29 ++--
+ drivers/mmc/host/mtk-sd.c                          |  20 +--
+ drivers/mmc/host/sdhci-pci-o2micro.c               |   2 +
+ drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c         |   2 +-
+ drivers/net/bonding/bond_main.c                    |   4 +-
+ drivers/net/dsa/qca8k.h                            |   2 +-
+ drivers/net/ethernet/intel/ice/ice_ethtool.c       |  49 ++++++-
+ drivers/net/ethernet/intel/ice/ice_lib.c           |  42 +++++-
+ drivers/net/ethernet/intel/ice/ice_tc_lib.c        |   5 +-
+ drivers/net/ethernet/intel/igb/igb_main.c          |  19 +--
+ drivers/net/phy/aquantia_main.c                    |  15 +-
+ drivers/net/phy/at803x.c                           |   6 +
+ drivers/net/veth.c                                 |   4 +
+ drivers/net/virtio_net.c                           |  25 +---
+ drivers/nvme/host/core.c                           |  14 ++
+ drivers/nvme/host/pci.c                            |   4 -
+ drivers/scsi/ibmvscsi/ibmvfc.c                     |  82 ++++++++---
+ drivers/scsi/ibmvscsi/ibmvfc.h                     |   2 +-
+ drivers/scsi/scsi_debug.c                          |  22 ++-
+ drivers/scsi/scsi_transport_iscsi.c                |   7 +-
+ drivers/scsi/storvsc_drv.c                         |  27 +++-
+ drivers/soc/bcm/brcmstb/pm/pm-arm.c                |   1 +
+ drivers/usb/chipidea/udc.c                         |   3 +
+ drivers/usb/gadget/function/uvc_video.c            |   3 +
+ drivers/usb/gadget/legacy/raw_gadget.c             |  63 ++++++---
+ drivers/usb/host/xhci-hub.c                        |   2 +-
+ drivers/usb/host/xhci-pci.c                        |   6 +-
+ drivers/usb/host/xhci.c                            |  15 +-
+ drivers/usb/host/xhci.h                            |   2 +
+ drivers/usb/serial/option.c                        |   6 +
+ drivers/usb/serial/pl2303.c                        |  29 ++--
+ drivers/usb/typec/tcpm/Kconfig                     |   1 -
+ drivers/video/console/sticore.c                    |   2 +
+ drivers/xen/features.c                             |   2 +-
+ drivers/xen/gntdev-common.h                        |   7 +
+ drivers/xen/gntdev.c                               | 157 ++++++++++++++-------
+ fs/9p/fid.c                                        |  22 ++-
+ fs/9p/vfs_addr.c                                   |  13 ++
+ fs/9p/vfs_inode.c                                  |   8 +-
+ fs/9p/vfs_inode_dotl.c                             |   3 +
+ fs/afs/inode.c                                     |   3 +-
+ fs/btrfs/disk-io.c                                 |  13 +-
+ fs/btrfs/file.c                                    |  67 +++++++--
+ fs/btrfs/locking.c                                 |   3 -
+ fs/btrfs/reflink.c                                 |  15 +-
+ fs/btrfs/super.c                                   |  47 +++++-
+ fs/cifs/smb2pdu.c                                  |  21 ++-
+ fs/f2fs/iostat.c                                   |  31 ++--
+ fs/f2fs/namei.c                                    |  17 ++-
+ fs/f2fs/node.c                                     |   4 +-
+ fs/io_uring.c                                      |  20 ++-
+ fs/proc/vmcore.c                                   |  54 ++++---
+ include/linux/crash_dump.h                         |   9 +-
+ include/linux/mm.h                                 |   1 +
+ include/linux/ratelimit_types.h                    |  12 +-
+ include/net/inet_sock.h                            |   5 +
+ include/trace/events/libata.h                      |   1 +
+ kernel/dma/direct.c                                |   5 +-
+ kernel/trace/rethook.c                             |   9 ++
+ kernel/trace/trace_kprobe.c                        |  11 +-
+ mm/filemap.c                                       |   2 +
+ mm/hwpoison-inject.c                               |   2 +-
+ mm/madvise.c                                       |   2 +-
+ mm/memory-failure.c                                |  12 ++
+ mm/readahead.c                                     |   2 +
+ mm/slub.c                                          |   2 +
+ mm/swap.c                                          |   2 +-
+ net/core/dev.c                                     |  25 ++--
+ net/core/filter.c                                  |  34 ++++-
+ net/core/net-sysfs.c                               |   1 +
+ net/core/skmsg.c                                   |   5 +
+ net/ethtool/eeprom.c                               |   2 +-
+ net/ipv4/ip_gre.c                                  |  15 +-
+ net/ipv4/ping.c                                    |  10 +-
+ net/ipv4/tcp_bpf.c                                 |   3 -
+ net/ipv6/ip6_gre.c                                 |  15 +-
+ net/netfilter/nf_dup_netdev.c                      |  25 +++-
+ net/netfilter/nft_meta.c                           |  13 +-
+ net/netfilter/nft_numgen.c                         |  12 +-
+ net/openvswitch/flow.c                             |   2 +-
+ net/sched/sch_netem.c                              |   4 +-
+ net/tipc/core.c                                    |   3 +-
+ net/tls/tls_main.c                                 |   2 +
+ net/xdp/xsk.c                                      |  16 ++-
+ scripts/mod/modpost.c                              |   2 +-
+ sound/core/memalloc.c                              |  23 +--
+ sound/hda/hdac_i915.c                              |  15 +-
+ sound/pci/hda/hda_auto_parser.c                    |   7 +-
+ sound/pci/hda/hda_local.h                          |   1 +
+ sound/pci/hda/patch_conexant.c                     |   4 +-
+ sound/pci/hda/patch_realtek.c                      |  36 ++++-
+ sound/pci/hda/patch_via.c                          |   4 +-
+ tools/perf/tests/shell/test_arm_callgraph_fp.sh    |   2 +-
+ tools/perf/tests/topology.c                        |   2 +-
+ tools/perf/util/arm-spe.c                          |  22 ++-
+ tools/perf/util/build-id.c                         |  28 ++++
+ tools/testing/selftests/dma/Makefile               |   1 +
+ tools/testing/selftests/dma/dma_map_benchmark.c    |   2 +-
+ tools/testing/selftests/net/fcnal-test.sh          |  61 +++++++-
+ .../selftests/netfilter/nft_concat_range.sh        |   2 +-
+ 203 files changed, 1558 insertions(+), 920 deletions(-)
+
+

@@ -2,97 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD80955E197
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA4555C49A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235748AbiF0M1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
+        id S235912AbiF0M2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbiF0M1L (ORCPT
+        with ESMTP id S235822AbiF0M2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:27:11 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B34BF40
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:27:09 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id d17so7194714wrc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:27:09 -0700 (PDT)
+        Mon, 27 Jun 2022 08:28:14 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976E363F4;
+        Mon, 27 Jun 2022 05:28:13 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id ay16so18822773ejb.6;
+        Mon, 27 Jun 2022 05:28:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wbsk5o6KgdL4SnufubuiVYM7EL+gtXq5PDT+l+PqB58=;
-        b=G39QUtITWY0/DbOcOb//w+M4CHOPXvYEoF0ubU5juOPNHcEYSrbvs643OgfKroXIDK
-         HCnkbocFpkO8zOxae0uYMUwDCj8D8+g1OP5T04xB2IOh8VzD4Kq43QVYZduOEWxxN3n2
-         TXvgzj0sEK993zoM4sITfkxNnS4p0fDaE/Or310c/w8ffN8kd0jI/k6mByuoK5jorTYh
-         MXJxNy/srJ7sIfNNF2DN+XQmh/VGhAyTT+gdbvkIJbgGVGPnLN3p4hqfc0GcZuziZcYO
-         zjntYDlGC9aTnlmUUrOEw7yZz7SHrfAsJcfhxAtYalKS4GetimgBD5h6UWA24P8f5RpN
-         OI5A==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Elsn1kdcp1T0aFss4s1Yn5n0Fewq2VGTa3vav17sj6c=;
+        b=T++L9c9Wrp7TLX3Coa2qMb2pFJ7wXTapRDHRv6uk6BV75+qlhlNOoLuXpRecpu4W4v
+         y6AUq2ckXD8LCT52aOCtqHxHtjwSGNIgpUr+S6cbXtL5gxkxOtxwlUMrRxvw8MQ5ZgCm
+         onofVTt+wbq4XQ58cUuY1hq520R6YjogzN+E6pzeS2uipAb1LxfCWhJf5g4Xx5frrrwj
+         jC0PrEkBRYG8d528lrEHQIwhV0XOgFVjYJoHnNGKsGTaJoiQ/LoDcClnXLG6bPNfPxie
+         oSaikNWNcscK4cjfAAphFn9wqbZkEMmNC5Y0ngxLXZBZp2H95SKOvvaWskvvQ4BlDyRe
+         vvrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wbsk5o6KgdL4SnufubuiVYM7EL+gtXq5PDT+l+PqB58=;
-        b=tKspVwYowxr/13AotbNz59XERpFwiOLJyuQTic2xZ+Qx6qfyFCv1wTMGI6UI3nnyB6
-         rdsEgPjg5q/io4uQkfuiVVUczslMigAyH+wNwF7j30d/hSNsR0pPj5AAGYBRcDppe9d+
-         pY5tVusOhKUoGmgF8TTQBsxn3lzJNvJpKqFnwBtSKXbipoeRUAMPcKXQzZkbsXALO1D7
-         2dNVs2YpDP4FbvIZTABzIANnxL5GCNwJnU4XOlGWVJ1F0M7Cy1Vw/GH/RKKSZkv8F3dQ
-         YYwJ+VVQ+FNeJylZjKNQHSW7Ws/JDpvP6Z0Fq6Vp7U9SmVilMFzRRsnYG8dTekOF0PfM
-         Uxbg==
-X-Gm-Message-State: AJIora87lxdJSuZNHHSGz3bBbJU0zai/N0wReeaqMcoTqTtCDlZpUpkr
-        yXaHU1sIu/QUNw0Hdx5pyJwjv+XrXypxWRq1
-X-Google-Smtp-Source: AGRyM1s10QCPtzo9j4RkTgku5PKsw19klOZT3gv3QSpsPaPKYe0nS6sDZVGtf8it5iJlLaSmpS/klg==
-X-Received: by 2002:a5d:6da8:0:b0:218:510a:be9f with SMTP id u8-20020a5d6da8000000b00218510abe9fmr12054141wrs.352.1656332828373;
-        Mon, 27 Jun 2022 05:27:08 -0700 (PDT)
-Received: from [10.44.2.26] ([81.246.10.41])
-        by smtp.gmail.com with ESMTPSA id d10-20020adff2ca000000b0021a38089e99sm10360546wrp.57.2022.06.27.05.27.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 05:27:07 -0700 (PDT)
-Message-ID: <c1fb40e6-7bab-20a3-febe-3af3b84fc2cd@tessares.net>
-Date:   Mon, 27 Jun 2022 14:27:06 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Elsn1kdcp1T0aFss4s1Yn5n0Fewq2VGTa3vav17sj6c=;
+        b=uocuFIiZR8Mj9tBz5g2ejmolunwy/EUY/fGp+Wa5QowGVrJrF5OK1nKf0BiBMvR7IM
+         onQRdAnkQ0VzYmBgtExNonZFYNBS4SdrZSVXuzeXrhVsE+ocBPFJm5oGFa1DYJznAmSE
+         M+XyihObXODXKI30u7StUgnGvyVBb1VqoxWlZzP2NaDB+CDd9KtmMvhMvESZweTZTDy7
+         qXUk4WDi0INoashYY0Sgl4FiLQXB05zqAOuF+Ij12Y4JETNlp0AOPaEcauqMkjZfKtle
+         o8yzHD1ZvxsnzjG0+grpn9VakJUPeM9BnJ8CQegaMkL4LsqCgPKZ59c8Ky2UzH26IGM4
+         ZwzA==
+X-Gm-Message-State: AJIora/rbZsJgBt52pytzziqWiO+KJ/dx4IV+82D3A/NirXsgJ6o7rC7
+        3UtoFHtcMSCqZsp8ahx/i2B0jrCA07EN3ccw4QpaX3tqAME=
+X-Google-Smtp-Source: AGRyM1sVp1iVWM23LPMLvWA8ATPnDg1VhspCYWfwAdDmgWn2gEDaIH/aDkyrg7GJPh57jqsKQn+pRxKUCbei30tyBbY=
+X-Received: by 2002:a17:907:72c4:b0:726:9406:f760 with SMTP id
+ du4-20020a17090772c400b007269406f760mr9104598ejc.247.1656332892065; Mon, 27
+ Jun 2022 05:28:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net-next] net: mptcp: fix some spelling mistake in mptcp
-Content-Language: en-GB
-To:     menglong8.dong@gmail.com, kuba@kernel.org
-Cc:     mathew.j.martineau@linux.intel.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-References: <20220627121626.1595732-1-imagedong@tencent.com>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20220627121626.1595732-1-imagedong@tencent.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220626004326.8548-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220626004326.8548-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <87tu87eh5h.wl-maz@kernel.org>
+In-Reply-To: <87tu87eh5h.wl-maz@kernel.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 27 Jun 2022 13:27:45 +0100
+Message-ID: <CA+V-a8sihw9=Ychakh6tV+1+MpRayr=1VSnhSYZNp0F+f4Hdnw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: interrupt-controller: sifive,plic:
+ Document Renesas RZ/Five SoC
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Menglong Dong,
+Hi Marc,
 
-On 27/06/2022 14:16, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> codespell finds some spelling mistake in mptcp:
-> 
-> net/mptcp/subflow.c:1624: interaces ==> interfaces
-> net/mptcp/pm_netlink.c:1130: regarless ==> regardless
-> 
-> Just fix them.
+Thank you for the review.
 
-Thank you for this fix.
-
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+On Sun, Jun 26, 2022 at 1:35 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Sun, 26 Jun 2022 01:43:25 +0100,
+> Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> >
+> > Document Renesas RZ/Five (R9A07G043) SoC.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > v1->v2:
+> > * Fixed binding doc
+> > * Fixed review comments pointed by Krzysztof.
+> >
+> > RFC->v1:
+> > * Fixed Review comments pointed by Geert and Rob
+> > ---
+> >  .../sifive,plic-1.0.0.yaml                    | 44 +++++++++++++++++--
+> >  1 file changed, 41 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+> > index 27092c6a86c4..59df367d1e44 100644
+> > --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+> > +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+> > @@ -28,7 +28,10 @@ description:
+> >
+> >    While the PLIC supports both edge-triggered and level-triggered interrupts,
+> >    interrupt handlers are oblivious to this distinction and therefore it is not
+> > -  specified in the PLIC device-tree binding.
+> > +  specified in the PLIC device-tree binding for SiFive PLIC (and similar PLIC's),
+> > +  but for the Renesas RZ/Five Soc (AX45MP AndesCore) which has NCEPLIC100 we need
+> > +  to specify the interrupt type as the flow for EDGE interrupts is different
+> > +  compared to LEVEL interrupts.
+> >
+> >    While the RISC-V ISA doesn't specify a memory layout for the PLIC, the
+> >    "sifive,plic-1.0.0" device is a concrete implementation of the PLIC that
+> > @@ -57,6 +60,7 @@ properties:
+> >            - enum:
+> >                - allwinner,sun20i-d1-plic
+> >            - const: thead,c900-plic
+> > +      - const: renesas,r9a07g043-plic
+>
+> Since it is the NCEPLIC100 that is broken, shouldn't the compatible
+> string actually reflect that? I'd rather see 'andes,nceplic100' once
+> and for all instead of starting with Renesas, quickly followed by all
+> the other licensees that will inevitably integrate the same IP (which
+> isn't even specific to the AX45MP).
+>
+> This IP also comes with all sort of added (mis-)features, which may or
+> may not be used in the future, and it would make sense to identify it
+> specifically.
+>
+Agreed, I'll update it as above.
 
 Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Prabhakar

@@ -2,71 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76E455E059
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A9755D2AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232806AbiF0HqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
+        id S233142AbiF0Hqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbiF0HqS (ORCPT
+        with ESMTP id S232620AbiF0Hqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:46:18 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4149860ED;
-        Mon, 27 Jun 2022 00:46:17 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 27 Jun 2022 03:46:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440A160D2;
+        Mon, 27 Jun 2022 00:46:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B82601F9FB;
-        Mon, 27 Jun 2022 07:46:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1656315975; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3Wdlvn9sWciNbkMAfVF+Ot+ku+tBgw7fKynxQLGq3pE=;
-        b=Cq44lemIAuPusIQCMbihA5ru9uASaxqbg5Yty7Vo2Dz/MJp+wBXc9M0P1JG8FEalaO+D+L
-        FN7f7kESMjoOorE8RfU/5h8NAU8pFoiv7PPbgVJfVVeAUQ3LKjE4qEv2jc5UdZV3xsI2sh
-        OaArb2LHXD7hKtA7esCUNqgRfTg7vTU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1656315975;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3Wdlvn9sWciNbkMAfVF+Ot+ku+tBgw7fKynxQLGq3pE=;
-        b=G9RfW/D5cD2/Ga1NucU0E7s0cAxwrNN2s2t+4a2qWnAhI6p4M1qfY7UR2fy43LgCx4zR5j
-        5vjHoSw841KWzXBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 94F6913456;
-        Mon, 27 Jun 2022 07:46:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id m9NuI0dguWLjegAAMHmgww
-        (envelope-from <jslaby@suse.cz>); Mon, 27 Jun 2022 07:46:15 +0000
-Message-ID: <0edab0e2-5355-a3da-445d-b6f45e3082ed@suse.cz>
-Date:   Mon, 27 Jun 2022 09:46:15 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9E6DB80FAB;
+        Mon, 27 Jun 2022 07:46:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8A90C3411D;
+        Mon, 27 Jun 2022 07:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656315990;
+        bh=2qUSacDWmeYxJkQPK+63Evm+SWsQuGEK6gdeP5B/qts=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YZEWDQuAp0/mO/vF1sqVBOyH5IvvUy6kXAC33onl+axLigsBi9Im0PWZctLY7FHzm
+         0HioTlziBXjQexiAxTpIU+2ojACmzAdCELvzvph/SiRyWQ08fEZMHS55O3Eg0yi0Te
+         hbk6aGKeYe/ejj0cUrdlYy1Y6NQ6a5WPhQzo4mx3Zw1nqunIuyntWem7/lT3VZWu/S
+         Zn4u48ZMGnNbyZDL6WzJwRxysGcSoSIwtym+Ewf0eoilqbS+fS2zgSvHeZrm4MEjei
+         U/Vg9AXcse7tm/EHzo84k++WqrYi8hl9Cz47hPT07G8Pz1Uh0ZFACm7ure9qWwAzAR
+         mH/nHG1t1nXDA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1o5jRz-00057V-S5; Mon, 27 Jun 2022 09:46:27 +0200
+Date:   Mon, 27 Jun 2022 09:46:27 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Input: usbtouchscreen - add driver_info sanity check
+Message-ID: <YrlgU6A+WYZRYjEn@hovoldconsulting.com>
+References: <20220623062446.16944-1-johan@kernel.org>
+ <YrSN+DYQun/IOPh7@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] clk: pistachio: Fix initconst confusion
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, mturquette@baylibre.com
-Cc:     mliska@suse.cz, linux-kernel@vger.kernel.org,
-        Andi Kleen <ak@linux.intel.com>, linux-clk@vger.kernel.org
-References: <20220623083217.26433-1-jslaby@suse.cz>
- <20220624004225.0DE4AC3411D@smtp.kernel.org>
-From:   Jiri Slaby <jslaby@suse.cz>
-In-Reply-To: <20220624004225.0DE4AC3411D@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrSN+DYQun/IOPh7@google.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,44 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24. 06. 22, 2:42, Stephen Boyd wrote:
-> Quoting Jiri Slaby (2022-06-23 01:32:16)
->> From: Andi Kleen <ak@linux.intel.com>
->>
->> A variable pointing to const isn't const itself. It'd have to contain
->> "const" keyword after "*" too. Therefore, PNAME() cannot put the strings
->> to "rodata".  Hence use __initdata instead of __initconst to fix this.
->>
->> [js] more explanatory commit message.
->>
->> Cc: Michael Turquette <mturquette@baylibre.com>
->> Cc: Stephen Boyd <sboyd@kernel.org>
->> Cc: linux-clk@vger.kernel.org
->> Signed-off-by: Andi Kleen <ak@linux.intel.com>
->> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
->> ---
->>   drivers/clk/pistachio/clk.h | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/clk/pistachio/clk.h b/drivers/clk/pistachio/clk.h
->> index f9c31e3a0e47..742e5fab00c0 100644
->> --- a/drivers/clk/pistachio/clk.h
->> +++ b/drivers/clk/pistachio/clk.h
->> @@ -34,7 +34,7 @@ struct pistachio_mux {
->>          const char **parents;
->>   };
->>   
->> -#define PNAME(x) static const char *x[] __initconst
->> +#define PNAME(x) static const char *x[] __initdata
+On Thu, Jun 23, 2022 at 08:59:52AM -0700, Dmitry Torokhov wrote:
+> On Thu, Jun 23, 2022 at 08:24:46AM +0200, Johan Hovold wrote:
+> > Add a sanity check on the device id-table driver_info field to make sure
+> > we never access a type structure (and function pointers) outside of the
+> > device info array (e.g. if someone fails to ifdef a device-id entry).
+> > 
+> > Note that this also suppresses a compiler warning with -Warray-bounds
+> > (gcc-11.3.0) when compile-testing the driver without enabling any of
+> > the device type Kconfig options:
+> > 
+> >     drivers/input/touchscreen/usbtouchscreen.c: In function 'usbtouch_probe':
+> >     drivers/input/touchscreen/usbtouchscreen.c:1668:16:warning: array subscript <unknown> is outside array bounds of 'struct usbtouch_device_info[0]' [-Warray-bounds]
+> >      1668 |         type = &usbtouch_dev_info[id->driver_info];
+> > 
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > ---
+> > 
+> > Changes in v2
+> >  - use ARRAY_SIZE() for the sanity check (Dmitry)
+> >  - drop the dummy entry and combine the two patches as the sanity check
+> >    itself is enough to suppress the compiler warning (Dmitry)
+> >  - use -ENODEV instead of -EINVAL even if this means no error will be
+> >    logged in the unlikely event of a future driver bug
 > 
-> Can it be const char * const and left as __initconst?
+> Is this on purpose or because I happened to have used this error code
+> when I suggested the change? I'm fine with returning -EINVAL there.
 
-Let me check, IIRC the struct where this is assigned would need to be 
-updated too.
+It was on purpose. Returning -EINVAL (invalid argument) here just
+doesn't seem quite right. I skimmed the errno list for a better
+alternative, but decided -ENODEV works as well.
 
-I will get into it only some time next week.
+If there's ever a driver bug that triggers this, you could say the
+device isn't supported in that configuration. ;)
 
-thanks,
--- 
-js
-suse labs
+If you prefer -EINVAL, I'll change it back.
+
+Johan

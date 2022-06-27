@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5A555D971
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAFC755C4D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236661AbiF0LjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
+        id S234860AbiF0L20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236448AbiF0Lhc (ORCPT
+        with ESMTP id S235195AbiF0L1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:37:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C907B262F;
-        Mon, 27 Jun 2022 04:32:53 -0700 (PDT)
+        Mon, 27 Jun 2022 07:27:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AB99FD9;
+        Mon, 27 Jun 2022 04:27:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65896608D4;
-        Mon, 27 Jun 2022 11:32:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76741C3411D;
-        Mon, 27 Jun 2022 11:32:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24688614C8;
+        Mon, 27 Jun 2022 11:27:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EF92C385A9;
+        Mon, 27 Jun 2022 11:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329572;
-        bh=yZtRmRs4EyBjcnbChlGztpsIsEFvf0sBvVhe+dThbu0=;
+        s=korg; t=1656329220;
+        bh=t6YNsAmuGSN6G8yIXFXw38LmA8/sEUriDb7d86ArpoQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tzNhOqWJko43oL9MD7zar1iqpdHjO5/797tU5EN8L3RtoeNpgzbjR6cWam5Wkm0hd
-         syzBk/1WrgYnTobSojcwOassm4B5ByNocWVzBl2Im8KKJ3RD6EDRYqIi8YRjOlfWjZ
-         Zlnvxz9MexkDtliMvbJmNxp4FQ3aanMPfvEYRmWk=
+        b=1zJzIXbhC9Kf5CGpvpDr1D6LifgpIXQMbz1+aVA26fEUs2HXHVghDioxfBrz8Czae
+         KPu3tEUvmqOsENd9bDMPMCAdx9+T2q6ACxkHpa9wuRQ+rciX0Sh2R3gRo+st2riEJV
+         9NW13uI3EBFo3gAZB26w3wZ0Pzh2mMyhQa7SSR4k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
-        Saurabh Sengar <ssengar@linux.microsoft.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Kuogee Hsieh <khsieh@codeaurora.org>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 044/135] scsi: storvsc: Correct reporting of Hyper-V I/O size limits
+Subject: [PATCH 5.10 040/102] drm/msm/dp: promote irq_hpd handle to handle link training correctly
 Date:   Mon, 27 Jun 2022 13:20:51 +0200
-Message-Id: <20220627111939.438743789@linuxfoundation.org>
+Message-Id: <20220627111934.660299951@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,97 +55,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurabh Sengar <ssengar@linux.microsoft.com>
+From: Kuogee Hsieh <khsieh@codeaurora.org>
 
-[ Upstream commit 1d3e0980782fbafaf93285779fd3905e4f866802 ]
+[ Upstream commit 26b8d66a399e625f3aa2c02ccbab1bff2e00040c ]
 
-Current code is based on the idea that the max number of SGL entries
-also determines the max size of an I/O request.  While this idea was
-true in older versions of the storvsc driver when SGL entry length
-was limited to 4 Kbytes, commit 3d9c3dcc58e9 ("scsi: storvsc: Enable
-scatterlist entry lengths > 4Kbytes") removed that limitation. It's
-now theoretically possible for the block layer to send requests that
-exceed the maximum size supported by Hyper-V. This problem doesn't
-currently happen in practice because the block layer defaults to a
-512 Kbyte maximum, while Hyper-V in Azure supports 2 Mbyte I/O sizes.
-But some future configuration of Hyper-V could have a smaller max I/O
-size, and the block layer could exceed that max.
+Some dongles require link training done at irq_hpd request instead
+of plugin request. This patch promote irq_hpd handler to handle link
+training and setup hpd_state correctly.
 
-Fix this by correctly setting max_sectors as well as sg_tablesize to
-reflect the maximum I/O size that Hyper-V reports. While allowing
-I/O sizes larger than the block layer default of 512 Kbytes doesn’t
-provide any noticeable performance benefit in the tests we ran, it's
-still appropriate to report the correct underlying Hyper-V capabilities
-to the Linux block layer.
-
-Also tweak the virt_boundary_mask to reflect that the required
-alignment derives from Hyper-V communication using a 4 Kbyte page size,
-and not on the guest page size, which might be bigger (eg. ARM64).
-
-Link: https://lore.kernel.org/r/1655190355-28722-1-git-send-email-ssengar@linux.microsoft.com
-Fixes: 3d9c3dcc58e9 ("scsi: storvsc: Enable scatter list entry lengths > 4Kbytes")
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Kuogee Hsieh <khsieh@codeaurora.org>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/storvsc_drv.c | 27 ++++++++++++++++++++++-----
- 1 file changed, 22 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/msm/dp/dp_display.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-index 9eb1b88a29dd..71c7f7b435c4 100644
---- a/drivers/scsi/storvsc_drv.c
-+++ b/drivers/scsi/storvsc_drv.c
-@@ -1907,7 +1907,7 @@ static struct scsi_host_template scsi_driver = {
- 	.cmd_per_lun =		2048,
- 	.this_id =		-1,
- 	/* Ensure there are no gaps in presented sgls */
--	.virt_boundary_mask =	PAGE_SIZE-1,
-+	.virt_boundary_mask =	HV_HYP_PAGE_SIZE - 1,
- 	.no_write_same =	1,
- 	.track_queue_depth =	1,
- 	.change_queue_depth =	storvsc_change_queue_depth,
-@@ -1961,6 +1961,7 @@ static int storvsc_probe(struct hv_device *device,
- 	int max_targets;
- 	int max_channels;
- 	int max_sub_channels = 0;
-+	u32 max_xfer_bytes;
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index d504cf68283a..f1f777baa2c4 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -476,10 +476,9 @@ static int dp_display_handle_irq_hpd(struct dp_display_private *dp)
+ 	sink_request = dp->link->sink_request;
  
- 	/*
- 	 * Based on the windows host we are running on,
-@@ -2049,12 +2050,28 @@ static int storvsc_probe(struct hv_device *device,
+ 	if (sink_request & DS_PORT_STATUS_CHANGED) {
+-		dp_add_event(dp, EV_USER_NOTIFICATION, false, 0);
+ 		if (dp_display_is_sink_count_zero(dp)) {
+ 			DRM_DEBUG_DP("sink count is zero, nothing to do\n");
+-			return 0;
++			return -ENOTCONN;
+ 		}
+ 
+ 		return dp_display_process_hpd_high(dp);
+@@ -496,7 +495,9 @@ static int dp_display_handle_irq_hpd(struct dp_display_private *dp)
+ static int dp_display_usbpd_attention_cb(struct device *dev)
+ {
+ 	int rc = 0;
++	u32 sink_request;
+ 	struct dp_display_private *dp;
++	struct dp_usbpd *hpd;
+ 
+ 	if (!dev) {
+ 		DRM_ERROR("invalid dev\n");
+@@ -510,10 +511,26 @@ static int dp_display_usbpd_attention_cb(struct device *dev)
+ 		return -ENODEV;
  	}
- 	/* max cmd length */
- 	host->max_cmd_len = STORVSC_MAX_CMD_LEN;
--
- 	/*
--	 * set the table size based on the info we got
--	 * from the host.
-+	 * Any reasonable Hyper-V configuration should provide
-+	 * max_transfer_bytes value aligning to HV_HYP_PAGE_SIZE,
-+	 * protecting it from any weird value.
-+	 */
-+	max_xfer_bytes = round_down(stor_device->max_transfer_bytes, HV_HYP_PAGE_SIZE);
-+	/* max_hw_sectors_kb */
-+	host->max_sectors = max_xfer_bytes >> 9;
-+	/*
-+	 * There are 2 requirements for Hyper-V storvsc sgl segments,
-+	 * based on which the below calculation for max segments is
-+	 * done:
-+	 *
-+	 * 1. Except for the first and last sgl segment, all sgl segments
-+	 *    should be align to HV_HYP_PAGE_SIZE, that also means the
-+	 *    maximum number of segments in a sgl can be calculated by
-+	 *    dividing the total max transfer length by HV_HYP_PAGE_SIZE.
-+	 *
-+	 * 2. Except for the first and last, each entry in the SGL must
-+	 *    have an offset that is a multiple of HV_HYP_PAGE_SIZE.
- 	 */
--	host->sg_tablesize = (stor_device->max_transfer_bytes >> PAGE_SHIFT);
-+	host->sg_tablesize = (max_xfer_bytes >> HV_HYP_PAGE_SHIFT) + 1;
- 	/*
- 	 * For non-IDE disks, the host supports multiple channels.
- 	 * Set the number of HW queues we are supporting.
+ 
++	hpd = dp->usbpd;
++
+ 	/* check for any test request issued by sink */
+ 	rc = dp_link_process_request(dp->link);
+-	if (!rc)
+-		dp_display_handle_irq_hpd(dp);
++	if (!rc) {
++		sink_request = dp->link->sink_request;
++		if (sink_request & DS_PORT_STATUS_CHANGED) {
++			/* same as unplugged */
++			hpd->hpd_high = 0;
++			dp->hpd_state = ST_DISCONNECT_PENDING;
++			dp_add_event(dp, EV_USER_NOTIFICATION, false, 0);
++		}
++
++		rc = dp_display_handle_irq_hpd(dp);
++
++		if (!rc && (sink_request & DS_PORT_STATUS_CHANGED)) {
++			hpd->hpd_high = 1;
++			dp->hpd_state = ST_CONNECT_PENDING;
++		}
++	}
+ 
+ 	return rc;
+ }
 -- 
 2.35.1
 

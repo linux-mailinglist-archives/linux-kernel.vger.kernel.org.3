@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094FF55E2F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F293655CB20
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234391AbiF0Mzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
+        id S234505AbiF0Mzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbiF0Mzg (ORCPT
+        with ESMTP id S234185AbiF0Mzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:55:36 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08548BC31
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:55:35 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 27 Jun 2022 08:55:37 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE0DBC1D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:55:36 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9AECE21DA6;
+        Mon, 27 Jun 2022 12:55:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1656334535; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=24tiTIsuqbEPo6pQsuXY/t4rRA8ruHn3WPiNQyQBOYw=;
+        b=dYiO+Yif6lu++q3hHtJRcX4ezVTLXFl+M3bSmJEMkVXAkjEPIhwnX1/V+6xAwGtYcTsp12
+        e7B+djDsh/nguiOvb8AoF18UYcksNtCiAKyhXzqppRdLL5/pAggDP6kYm69cn+bE/CH58R
+        UUyAZPEg98+ijIGPozOABtXEgIfX/To=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1656334535;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=24tiTIsuqbEPo6pQsuXY/t4rRA8ruHn3WPiNQyQBOYw=;
+        b=jIOne0XGX3hBiSQ7dR9EuM4bNtWcBOtQhM6eIBkp8nCG94WMtIPeOaeEdQbUUEHjM001pJ
+        R/pjdXtI+MMQJ2Cg==
+Received: from quack3.suse.cz (unknown [10.163.43.118])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 14261660178D;
-        Mon, 27 Jun 2022 13:55:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656334533;
-        bh=ifdpDVxFAJ7x6mxjxCa3kTl2O13CzEnu51wJDDLj6yY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RyIN62IlNGKr46nFhj1YIqMhkUGQA5IpK/U7l43Krbqfr1kdu0XwcBrWz/6/2uwvx
-         SKOWM6L2frNS1rf/I1Bl2/V14E6B2P34q/WCw4ZiIZWUJJtLK2Dqgm3IIZHo2/2a9I
-         BUNNlbpAaT6821/KUUXllBkfX8H3dKMtFWfMQlNE6O4GPj94f+aMBwCoEejB/0muHR
-         a55UMYRUGRXWBdpe95SIRu13607xv7YY/qQXnQw70/T0dZnL1nDtgI2E6YobpgXWMT
-         AiiX+KvNvYjxJfBdz85+RVYBnM7/fqY/MifNQmUTJl922YDOAZaaVm1o/uLKtcj7n7
-         Syo3ePm5kq9qQ==
-Message-ID: <7f565036-df78-a4e7-db5e-259115daaf79@collabora.com>
-Date:   Mon, 27 Jun 2022 14:55:29 +0200
+        by relay2.suse.de (Postfix) with ESMTPS id 51E9B2C141;
+        Mon, 27 Jun 2022 12:55:35 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id A800DA062F; Mon, 27 Jun 2022 14:55:33 +0200 (CEST)
+Date:   Mon, 27 Jun 2022 14:55:33 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Matthew Wilcox <willy6545@gmail.com>
+Cc:     Hannes Reinecke <hare@suse.de>, Matthew Wilcox <matthew@wil.cx>,
+        Mel Gorman <mgorman@suse.de>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Jan Kara <jack@suse.cz>
+Subject: Re: Oddities in do_read_cache_page()
+Message-ID: <20220627125533.v3o547uuvfo7r3pz@quack3.lan>
+References: <f69f7f28-cf24-ebca-41f2-f6cf76435839@suse.de>
+ <CAFhKne_hYFU0g5_68R=FA_QRWQc8ZRM8eCTNFwhP+4p4YHhZ8Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] drm/bridge: add it6505 driver read config from dt
- property
-Content-Language: en-US
-To:     allen <allen.chen@ite.com.tw>
-Cc:     Pin-yen Lin <treapking@google.com>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>,
-        Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-References: <20220623093154.52701-1-allen.chen@ite.com.tw>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220623093154.52701-1-allen.chen@ite.com.tw>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFhKne_hYFU0g5_68R=FA_QRWQc8ZRM8eCTNFwhP+4p4YHhZ8Q@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,92 +69,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 23/06/22 11:31, allen ha scritto:
-> From: allen chen <allen.chen@ite.com.tw>
+Hi Matthew!
+
+On Mon 27-06-22 07:17:35, Matthew Wilcox wrote:
+> &folio->page does not dereference the pointer, it simply performs
+> arithmetic on it. In this case, adding zero. It also changes the type from
+> folio to page. There's no bug here.
+
+I agree there's no functional bug there (at least yet). But arguably this
+would be much more readable and definitely more future-proof as:
+
+	return (struct page *)ERR_CAST(folio);
+
+Because even doing arithmetics on error pointer is fishy...
+
+								Honza
+
 > 
-> add read max-lane and max-pixel-clock from dt property
+> On Mon., Jun. 27, 2022, 04:12 Hannes Reinecke, <hare@suse.de> wrote:
 > 
-> Signed-off-by: Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-
-Hello Allen,
-
-as Sam also pointed out, please fix your S-o-b email: it has to match with the
-author one.
-
-Anyway, you're adding devicetree properties, so this implies that you should
-also change the dt-bindings documentation for this driver... and also, I have
-some more comments, check below:
-
-> ---
->   drivers/gpu/drm/bridge/ite-it6505.c | 35 ++++++++++++++++++++++++++---
->   1 file changed, 32 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> index 4b673c4792d77..c9121d4635a52 100644
-> --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -436,6 +436,8 @@ struct it6505 {
->   	bool powered;
->   	bool hpd_state;
->   	u32 afe_setting;
-> +	u32 max_dpi_pixel_clock;
-> +	u32 max_lane_count;
->   	enum hdcp_state hdcp_status;
->   	struct delayed_work hdcp_work;
->   	struct work_struct hdcp_wait_ksv_list;
-> @@ -1466,7 +1468,8 @@ static void it6505_parse_link_capabilities(struct it6505 *it6505)
->   	it6505->lane_count = link->num_lanes;
->   	DRM_DEV_DEBUG_DRIVER(dev, "Sink support %d lanes training",
->   			     it6505->lane_count);
-> -	it6505->lane_count = min_t(int, it6505->lane_count, MAX_LANE_COUNT);
-> +	it6505->lane_count = min_t(int, it6505->lane_count,
-> +				   it6505->max_lane_count);
->   
->   	it6505->branch_device = drm_dp_is_branch(it6505->dpcd);
->   	DRM_DEV_DEBUG_DRIVER(dev, "Sink %sbranch device",
-> @@ -2895,7 +2898,7 @@ it6505_bridge_mode_valid(struct drm_bridge *bridge,
->   	if (mode->flags & DRM_MODE_FLAG_INTERLACE)
->   		return MODE_NO_INTERLACE;
->   
-> -	if (mode->clock > DPI_PIXEL_CLK_MAX)
-> +	if (mode->clock > it6505->max_dpi_pixel_clock)
->   		return MODE_CLOCK_HIGH;
->   
->   	it6505->video_info.clock = mode->clock;
-> @@ -3057,6 +3060,8 @@ static void it6505_parse_dt(struct it6505 *it6505)
->   {
->   	struct device *dev = &it6505->client->dev;
->   	u32 *afe_setting = &it6505->afe_setting;
-> +	u32 *max_lane_count = &it6505->max_lane_count;
-> +	u32 *max_dpi_pixel_clock = &it6505->max_dpi_pixel_clock;
->   
->   	it6505->lane_swap_disabled =
->   		device_property_read_bool(dev, "no-laneswap");
-> @@ -3072,7 +3077,31 @@ static void it6505_parse_dt(struct it6505 *it6505)
->   	} else {
->   		*afe_setting = 0;
->   	}
-> -	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %d", *afe_setting);
-> +
-> +	if (device_property_read_u32(dev, "max-lane-count",
-
-Please use the standard property "data-lanes" from video-interfaces.yaml.
-
-> +				     max_lane_count) == 0) {
-> +		if (*max_lane_count > 4 || *max_lane_count == 3) {
-> +			dev_err(dev, "max lane count error, use default");
-> +			*max_lane_count = MAX_LANE_COUNT;
-> +		}
-> +	} else {
-> +		*max_lane_count = MAX_LANE_COUNT;
-> +	}
-> +
-> +	if (device_property_read_u32(dev, "max-dpi-pixel-clock",
-> +				     max_dpi_pixel_clock) == 0) {
-
-What about "max-pixel-clock-khz" or "max-pixel-clock-hz"?
-
-
-Regards,
-Angelo
+> > Hey Matt,
+> >
+> > I've stumbled across this code in do_read_cache_page():
+> >
+> >          struct folio *folio;
+> >
+> >          folio = do_read_cache_folio(mapping, index, filler, file, gfp);
+> >          if (IS_ERR(folio))
+> >                  return &folio->page;
+> >          return folio_file_page(folio, index);
+> >
+> > Following 'do_read_cache_folio()' I see that it does things like
+> >
+> >                  folio = filemap_alloc_folio(gfp, 0);
+> >                  if (!folio)
+> >                          return ERR_PTR(-ENOMEM);
+> >
+> > Now I freely admit that my knowledge of folios is hazy at best, but
+> > dereferencing an error pointer is something I would seriously frown upon
+> >   if I were to review the code.
+> > Care to explain?
+> > Or is it, indeed, simply a bug?
+> >
+> > Cheers,
+> >
+> > Hannes
+> > --
+> > Dr. Hannes Reinecke                        Kernel Storage Architect
+> > hare@suse.de                                      +49 911 74053 688
+> > SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+> > HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+> >
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

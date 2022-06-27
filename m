@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC79255E289
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF1D55CF87
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239745AbiF0SyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 14:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
+        id S231224AbiF0S4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237365AbiF0SyF (ORCPT
+        with ESMTP id S237394AbiF0S4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 14:54:05 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 45EF11094
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:54:04 -0700 (PDT)
-Received: (qmail 128884 invoked by uid 1000); 27 Jun 2022 14:54:03 -0400
-Date:   Mon, 27 Jun 2022 14:54:03 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: Re: [PATCH v22 2/3] usb: misc: Add onboard_usb_hub driver
-Message-ID: <Yrn8y4GGZm+NyXIi@rowland.harvard.edu>
-References: <CAD=FV=VNDamV4+j07TrnX3cUs2-D5ySbeQ-zfU=Eef8+WagGig@mail.gmail.com>
- <Yqub17iT4O7aqFMi@google.com>
- <CAD=FV=VEztPLhsrJecZUdyHCW7ZfFTVvxyqY5CqRVv2mWyrLog@mail.gmail.com>
- <YquoSMiQS+RG8rOM@google.com>
- <CAD=FV=W81pSEUbzw2ZQgs_TJ9MLnHQHiDopZXZ6bHdS7QMzAyA@mail.gmail.com>
- <YqvMffveCPiKQEUk@google.com>
- <CAD=FV=UJOStPfRR3Hq2DmRBSH-HCtZ16hAU9eVH5w6Hm=WSJRQ@mail.gmail.com>
- <YqytDNB2y4+qT8GD@google.com>
- <CAD=FV=UT0XtMjZ9syQPGXeTEaUrwGTb_LgDow+cofgmx4D30VA@mail.gmail.com>
- <Yrnzl8k81f9JTMIQ@google.com>
+        Mon, 27 Jun 2022 14:56:48 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C85710F5;
+        Mon, 27 Jun 2022 11:56:47 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id bx13so3480737ljb.1;
+        Mon, 27 Jun 2022 11:56:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ARUxKn4XTsqNqlAy2aX0A6ZVuWpKmpdTtIO20dOVpQM=;
+        b=BliNVePpBli3h/YthLA15cMLrqof6B39zVoBefaaFJebdtUIDW/pbqEqZ/Jl1jvXJQ
+         PeG5VgliQl8hSpL7rw20WI1RC84SY3eg0SDkUyRO/deyCaqvhLvHoXrh9hUWFFvVVdi2
+         Mw2GT/81aO0BATv51wYFD+guejja2aQDam/hAOEfJUY01qPncPumwHUL8tkXr8GGgBqE
+         87rL9x+hzmaAhx1pels6HA39ATpAEXJWymBvgo5fShTgotZGwR/D0tJMeN4abDyw7OfE
+         meTKMV45t8Nari7MOGJOEJDVZoozzR4U+H1KtDqY9URslVZ5q9z+B8WpBaDHMFpK+emv
+         r58w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ARUxKn4XTsqNqlAy2aX0A6ZVuWpKmpdTtIO20dOVpQM=;
+        b=ZnfJ+dsFbpIV2tKy2EALTZD0j7Vn7x+lbPoMomW339OPno1t1D7TZHbpAL2plzeyKH
+         iFAcOonAn+YUAC6E5LKD44zjajbwhua9nQzMUMhk7pNyJ6nWFsJLxgGXNLzzUjgux8nd
+         f7KALVWUQ23JG+VJYSTJou3PcVXXFsOSurDu76JHcZozI6BzT+ArRs18We3/w6pxx7wz
+         KRVgTjdV13CoYT7ZkZ/xltkP1AOEYMTIZB7TysNdXf+GdxbcD4IpD0pz4I1LQZM2QB6c
+         R+SoMB+iDB/hCQW0+TWm7hc636QytLsyAiBkjLjC3xdlK9Hm+HRKG3U+gQ4MHXNPIWK+
+         Bmcg==
+X-Gm-Message-State: AJIora9T616ETNN9azkojESbBn9WfQyTJNuvIZxss+2a9B5rRfMn23A7
+        VfpNhIpUz31/DTKEoHuD8IA=
+X-Google-Smtp-Source: AGRyM1vgAHYXy4qeoGrnp+BmbXNrssC4nZ3MYqp17PuiACyIX7i1fjd/BVaDSfsA0rlRARTnK0YdeQ==
+X-Received: by 2002:a2e:8681:0:b0:251:fd91:41a with SMTP id l1-20020a2e8681000000b00251fd91041amr7426850lji.216.1656356205685;
+        Mon, 27 Jun 2022 11:56:45 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id b28-20020a05651c033c00b0025a9de54750sm1487179ljp.54.2022.06.27.11.56.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 11:56:44 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Mon, 27 Jun 2022 20:56:43 +0200
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, paulmck@kernel.org,
+        rostedt@goodmis.org, vineeth@bitbyteword.org
+Subject: Re: [PATCH v2 8/8] rcu/kfree: Fix kfree_rcu_shrink_count() return
+ value
+Message-ID: <Yrn9a5pOvhvL/eZj@pc638.lan>
+References: <20220622225102.2112026-1-joel@joelfernandes.org>
+ <20220622225102.2112026-10-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yrnzl8k81f9JTMIQ@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220622225102.2112026-10-joel@joelfernandes.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 11:14:47AM -0700, Matthias Kaehlcke wrote:
-> Maybe a bit more verbose documentation like this could help:
+> As per the comments in include/linux/shrinker.h, .count_objects callback
+> should return the number of freeable items, but if there are no objects
+> to free, SHRINK_EMPTY should be returned. The only time 0 is returned
+> should be when we are unable to determine the number of objects, or the
+> cache should be skipped for another reason.
 > 
->   Some background about the logic in this function, which can be a bit hard
->   to follow:
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  kernel/rcu/tree.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->   Root hubs don't have dedicated device tree nodes, but use the node of their
->   HCD. The primary and secondary HCD are usually represented by a single DT
->   node. That means the root hubs of the primary and secondary HCD share the
->   same device tree node (the HCD node). As a result this function can be
->   called twice with the same DT node for root hubs. We only want to create a
->   single platform device for each physical onboard hub, hence for root hubs
->   the loop is only executed for the primary hub. Since the function scans
-
-By "primary hub", you mean "root hub for the primary HCD", right?  This 
-should be clarified.
-
->   through all child nodes it still creates pdevs for onboard hubs connected
->   to the secondary hub if needed.
-
-And likewise for "secondary hub".
-
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 711679d10cbb..935788e8d2d7 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -3722,7 +3722,7 @@ kfree_rcu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
+>  		atomic_set(&krcp->backoff_page_cache_fill, 1);
+>  	}
+>  
+> -	return count;
+> +	return count == 0 ? SHRINK_EMPTY : count;
+>  }
+>  
+>  static unsigned long
+> -- 
+> 2.37.0.rc0.104.g0611611a94-goog
 > 
->   Further there must be only one platform device for onboard hubs with a
->   companion hub (the hub is a single physical device). To achieve this two
+Looks good to me!
 
-What do you mean by "companion hub"?  I think you are using the wrong 
-word here.  If you're talking about the relation between the two logical 
-hubs (one attached to the SuperSpeed bus and one attached to the 
-Low/Full/High-speed bus) within a physical USB-3 hub, the correct term 
-for this is "peer".  See the existing usages in hub.h, hub.c, and 
-port.c.
+Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-"Companion" refers to something completely different (i.e., the UHCI or 
-OHCI controllers that handle Low/Full-speed connections on behalf of a 
-High-speed EHCI controller).
-
-Alan Stern
+--
+Uladzislau Rezki

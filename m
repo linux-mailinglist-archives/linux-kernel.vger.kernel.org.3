@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C3B55CE0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1D855C751
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241464AbiF0XFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        id S241476AbiF0XHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240751AbiF0XFt (ORCPT
+        with ESMTP id S238302AbiF0XHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:05:49 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94FD22507;
-        Mon, 27 Jun 2022 16:05:48 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id u20so11201008iob.8;
-        Mon, 27 Jun 2022 16:05:48 -0700 (PDT)
+        Mon, 27 Jun 2022 19:07:05 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415E72250C
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:07:04 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id mf9so22282363ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:07:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=NfqgJbSosLMARFR+8HOsCtjTWKHL8eM8i6GA2q20KXs=;
+        b=Wd5XrJH4RNPdVycldHky1miBc0yZX2F5ouQ/+Uzou+henCRa8mhiUAtrVVTrKeWqtz
+         cB0f2EgrQ03vfX6c6at1aja+ZGRJMx9aVOFaR18RKJoCDTISSAaM97aeRuVkmtIZ04Dc
+         QV8jXjEV7g4/pfWrsW5XjA/I5vnlmbKWr+X2o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=RsbxMGrAEPpDrcq9SD5GCJ241orHnQShiio8WLL4UIU=;
-        b=vosbjv9Rzy6oFghQx+giSZ32iDKT/5vZrxBqa9FuukA6j5Q7zOPTG/Sejx74FzMej7
-         3v4Gf2D+7iwxNOmZCCE8tYi0wyF6LM71ynZ8MY3z7Sx7p5Yag10buDDpkzOxfZuB7iHB
-         jtqwnH9OVmhj2BwkoTr3RfV1rccKMF8k0hNDSH/8YCQJBC2rUkHNogRfjbqHUbcA5pKQ
-         73Xdvd2YFzNdnGVW1qc/+7Sh9VvodTAjYzK5HOAxS21aOlPquIYK+lO/kcOz8HhWzpXK
-         6m5OidXPFYeG9K1aLRSjtGoNGCGCZVvdJ1al+b327Fj1+3JhQmSq3zBRCM6dj2FpHVqi
-         PNPw==
-X-Gm-Message-State: AJIora9qy1BoJBXBDXA+s3e0GiiENXs5thgLngsQeGMflpmOZm9x7GJ9
-        zzrIF/Jq3fxbsVcKt/C+1A==
-X-Google-Smtp-Source: AGRyM1usk/wrttz5ONExBVqjv9hoJ7YL8ko7p4t0WyBusRIAayBBYIv7q93475PYWubiuUWy74YCpg==
-X-Received: by 2002:a02:a08d:0:b0:33c:6a7d:87db with SMTP id g13-20020a02a08d000000b0033c6a7d87dbmr7505895jah.64.1656371147890;
-        Mon, 27 Jun 2022 16:05:47 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id t64-20020a025443000000b0033b73557de4sm5156297jaa.93.2022.06.27.16.05.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 16:05:47 -0700 (PDT)
-Received: (nullmailer pid 3134751 invoked by uid 1000);
-        Mon, 27 Jun 2022 23:05:45 -0000
-Date:   Mon, 27 Jun 2022 17:05:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Madalin Bucur <madalin.bucur@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next 02/28] dt-bindings: net: fman: Add additional
- interface properties
-Message-ID: <20220627230545.GA3128808-robh@kernel.org>
-References: <20220617203312.3799646-1-sean.anderson@seco.com>
- <20220617203312.3799646-3-sean.anderson@seco.com>
- <d483da73-c5a1-2474-4992-f7ce9947d5ba@linaro.org>
- <4b305b67-7bc1-d188-23b8-6e5c7e81813b@seco.com>
- <9c0513dd-67ce-0d6a-f2a5-58e981f0d55c@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=NfqgJbSosLMARFR+8HOsCtjTWKHL8eM8i6GA2q20KXs=;
+        b=nx0aXR41/fQmFDS6OgmCkzQTkhSwQuAmwiivD6tE2CgWzoen4RP557DLQ1poeEBMzO
+         BW0yFChqJ83DyHtX24cnTf1diDw9vtPkTJ+G+JxkhLHoDtYYmGYhQFWjDIRzdI4pMV/X
+         cfF7DWx6KtWWn6Os0LRV0uZel0tCFerVD7zM9blkcNC96BpKPzOeXNE+0HJ1XqfMoR7H
+         iusZwNMZYc+M1yRQfr0FPkJ9ZgTK3uhNszDWDv8fmqMCZ5wL0xqpIvVWdoFqsnuG2evc
+         g14di/EdBUrPRnnMgg74b0Exr1Uc/aC9T+h6vVPBgD4+hT7YPLJ1Yi6XD0Fkkjye/dKV
+         rErA==
+X-Gm-Message-State: AJIora+7Lzjj3/OJKoQSW7kTHSF74IJtE/UkBqTn45U49dE3GoDbkLs4
+        5/NPwZgEtaIbDbZJXKi1EeVVxSQZHMX+2SlD
+X-Google-Smtp-Source: AGRyM1t3niTVYp3xvOc+rX47Vw6KBIFXGAGFMV3UcaCSm60iXsng0jcT/vgVqOOPIWkLQtebtQAgoQ==
+X-Received: by 2002:a17:907:6d9e:b0:726:8f7a:7a7a with SMTP id sb30-20020a1709076d9e00b007268f7a7a7amr12154282ejc.425.1656371222474;
+        Mon, 27 Jun 2022 16:07:02 -0700 (PDT)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id h10-20020a50ed8a000000b00435728cd12fsm8414541edr.18.2022.06.27.16.07.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 16:07:01 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id q9so15080257wrd.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:07:01 -0700 (PDT)
+X-Received: by 2002:adf:d1e9:0:b0:21b:c8f8:3c16 with SMTP id
+ g9-20020adfd1e9000000b0021bc8f83c16mr8998757wrd.659.1656371221092; Mon, 27
+ Jun 2022 16:07:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9c0513dd-67ce-0d6a-f2a5-58e981f0d55c@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220519073301.7072-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220519073301.7072-1-krzysztof.kozlowski@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 27 Jun 2022 16:06:49 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VQ_O2eH2+bnEegOQuBmqMhD7ixiRV3=ukuU9SnPaBSDA@mail.gmail.com>
+Message-ID: <CAD=FV=VQ_O2eH2+bnEegOQuBmqMhD7ixiRV3=ukuU9SnPaBSDA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] soc: qcom: cmd-db: replace strncpy() with strscpy_pad()
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,101 +77,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 12:33:22PM +0200, Krzysztof Kozlowski wrote:
-> On 18/06/2022 17:55, Sean Anderson wrote:
-> > Hi Krzysztof,
-> > 
-> > On 6/17/22 9:16 PM, Krzysztof Kozlowski wrote:
-> >> On 17/06/2022 13:32, Sean Anderson wrote:
-> >>> At the moment, MEMACs are configured almost completely based on the
-> >>> phy-connection-type. That is, if the phy interface is RGMII, it assumed
-> >>> that RGMII is supported. For some interfaces, it is assumed that the
-> >>> RCW/bootloader has set up the SerDes properly. The actual link state is
-> >>> never reported.
-> >>>
-> >>> To address these shortcomings, the driver will need additional
-> >>> information. First, it needs to know how to access the PCS/PMAs (in
-> >>> order to configure them and get the link status). The SGMII PCS/PMA is
-> >>> the only currently-described PCS/PMA. Add the XFI and QSGMII PCS/PMAs as
-> >>> well. The XFI (and 1GBase-KR) PCS/PMA is a c45 "phy" which sits on the
-> >>> same MDIO bus as SGMII PCS/PMA. By default they will have conflicting
-> >>> addresses, but they are also not enabled at the same time by default.
-> >>> Therefore, we can let the default address for the XFI PCS/PMA be the
-> >>> same as for SGMII. This will allow for backwards-compatibility.
-> >>>
-> >>> QSGMII, however, cannot work with the current binding. This is because
-> >>> the QSGMII PCS/PMAs are only present on one MAC's MDIO bus. At the
-> >>> moment this is worked around by having every MAC write to the PCS/PMA
-> >>> addresses (without checking if they are present). This only works if
-> >>> each MAC has the same configuration, and only if we don't need to know
-> >>> the status. Because the QSGMII PCS/PMA will typically be located on a
-> >>> different MDIO bus than the MAC's SGMII PCS/PMA, there is no fallback
-> >>> for the QSGMII PCS/PMA.
-> >>>
-> >>> MEMACs (across all SoCs) support the following protocols:
-> >>>
-> >>> - MII
-> >>> - RGMII
-> >>> - SGMII, 1000Base-X, and 1000Base-KX
-> >>> - 2500Base-X (aka 2.5G SGMII)
-> >>> - QSGMII
-> >>> - 10GBase-R (aka XFI) and 10GBase-KR
-> >>> - XAUI and HiGig
-> >>>
-> >>> Each line documents a set of orthogonal protocols (e.g. XAUI is
-> >>> supported if and only if HiGig is supported). Additionally,
-> >>>
-> >>> - XAUI implies support for 10GBase-R
-> >>> - 10GBase-R is supported if and only if RGMII is not supported
-> >>> - 2500Base-X implies support for 1000Base-X
-> >>> - MII implies support for RGMII
-> >>>
-> >>> To switch between different protocols, we must reconfigure the SerDes.
-> >>> This is done by using the standard phys property. We can also use it to
-> >>> validate whether different protocols are supported (e.g. using
-> >>> phy_validate). This will work for serial protocols, but not RGMII or
-> >>> MII. Additionally, we still need to be compatible when there is no
-> >>> SerDes.
-> >>>
-> >>> While we can detect 10G support by examining the port speed (as set by
-> >>> fsl,fman-10g-port), we cannot determine support for any of the other
-> >>> protocols based on the existing binding. In fact, the binding works
-> >>> against us in some respects, because pcsphy-handle is required even if
-> >>> there is no possible PCS/PMA for that MAC. To allow for backwards-
-> >>> compatibility, we use a boolean-style property for RGMII (instead of
-> >>> presence/absence-style). When the property for RGMII is missing, we will
-> >>> assume that it is supported. The exception is MII, since no existing
-> >>> device trees use it (as far as I could tell).
-> >>>
-> >>> Unfortunately, QSGMII support will be broken for old device trees. There
-> >>> is nothing we can do about this because of the PCS/PMA situation (as
-> >>> described above).
-> >>>
-> >>> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> >>
-> >> Thanks for the patch but you add too many new properties. The file
-> >> should be converted to YAML/DT schema first.
-> > 
-> > Perhaps. However, conversion to yaml is a non-trivial task, especially for
-> > a complicated binding such as this one. I am more than happy to rework this
-> > patch to be based on a yaml conversion, but I do not have the bandwidth to
-> > do so myself.
-> 
-> I understand. Although since 2020  - since when we expect the bindings
-> to be in YAML - this file grew by 6 properties, because each person
-> extends it instead of converting. Each person uses the same excuse...
-> 
-> You add here 5 more, so it would be 11 new properties in total.
-> 
-> > 
-> > If you have any comments on the binding changes themselves, that would be
-> > much appreciated.
-> 
-> Maybe Rob will ack it, but for me the change is too big to be accepted
-> in TXT, so no from me.
+Hi,
 
-Above my threshold for not first converting too. Really, I'm pretty 
-close to saying no .txt file changes at all. Maybe compatible string 
-updates only, people should be rewarded for not changing their h/w.
+On Thu, May 19, 2022 at 12:33 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> The use of strncpy() is considered deprecated for NUL-terminated
+> strings[1].  Replace strncpy() with strscpy_pad(), to keep existing
+> pad-behavior of strncpy.  This fixes W=3D1 warning:
+>
+>   drivers/soc/qcom/cmd-db.c: In function =E2=80=98cmd_db_get_header.part.=
+0=E2=80=99:
+>   drivers/soc/qcom/cmd-db.c:151:9: warning: =E2=80=98strncpy=E2=80=99 spe=
+cified bound 8 equals destination size [-Wstringop-truncation]
+>     151 |         strncpy(query, id, sizeof(query));
+>
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strncp=
+y-on-nul-terminated-strings
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+>
+> ---
+>
+> Changes since v1:
+> 1. Split series per subsystem.
+> 2. Add tag.
+> ---
+>  drivers/soc/qcom/cmd-db.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/soc/qcom/cmd-db.c b/drivers/soc/qcom/cmd-db.c
+> index dd872017f345..c5137c25d819 100644
+> --- a/drivers/soc/qcom/cmd-db.c
+> +++ b/drivers/soc/qcom/cmd-db.c
+> @@ -148,7 +148,7 @@ static int cmd_db_get_header(const char *id, const st=
+ruct entry_header **eh,
+>                 return ret;
+>
+>         /* Pad out query string to same length as in DB */
+> -       strncpy(query, id, sizeof(query));
+> +       strscpy_pad(query, id, sizeof(query));
 
-Rob
+Sorry to report that this breaks booting on
+sc7280-herobrine-herobrine-r1. I believe that the function was
+actually _relying_ on the "unsafe" behavior of strncpy(). Specifically
+I think:
+* The source string (id) was a '\0' terminated string.
+* The destination (query) was a fixed 8-byte string and doesn't need
+to be '\0' terminated.
+
+So before your change we could actually support 8-byte strings. Now we
+can't because you'll only copy 7 bytes to the destination to leave
+room for the '\0' termination...
+
+Looking at printouts, I see, for instance at least one ID that looks
+like "lnbclka2".
+
+Given the requirements of this function(), the old strncpy() is
+actually _exactly_ what we want. Is there any way to disable the
+warning? If not, I guess we could make "query" be 9 bytes bit, or
+"sizeof(ent->id) + 1" bytes big... Happy to post a patch, but it's
+basically a bikeshed for how you want it fixed (there are dozens of
+ways) and I'd rather you just tell me instead of me guessing.
+
+-Doug

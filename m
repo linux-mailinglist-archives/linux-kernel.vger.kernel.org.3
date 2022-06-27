@@ -2,78 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C613355C9F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19CB355C131
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234624AbiF0NQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
+        id S234319AbiF0NSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234872AbiF0NQB (ORCPT
+        with ESMTP id S234978AbiF0NS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:16:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF785AD;
-        Mon, 27 Jun 2022 06:13:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FB39612AF;
-        Mon, 27 Jun 2022 13:13:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5371CC3411D;
-        Mon, 27 Jun 2022 13:12:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656335579;
-        bh=KxQd/s6GCe+NWcPsgCZLFK40rFPNf7a/wVIlViwbl/I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gUEh+UYZFfTXjVnNUnlNcOW6TiNlpvYR6c3SYIMVThWGemiWEGEzMvdDuSxWO2hlj
-         69sOlsqRfkx2RuVENH9MRUFO2zGzns88JJdOf2BTZVkhsXlYPPh812OROviwzDp2+H
-         3C8oLJU8WSEzjKAw4LjOosUp8Y1Rbj4AHKuCotU8=
-Date:   Mon, 27 Jun 2022 15:12:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yicong Yang <yangyicong@huawei.com>
-Cc:     helgaas@kernel.org, lorenzo.pieralisi@arm.com,
-        mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
-        jonathan.cameron@huawei.com, robin.murphy@arm.com,
-        leo.yan@linaro.org, mark.rutland@arm.com, will@kernel.org,
-        joro@8bytes.org, shameerali.kolothum.thodi@huawei.com,
-        peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, john.garry@huawei.com,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, iommu@lists.linux-foundation.org,
-        prime.zeng@huawei.com, liuqi115@huawei.com, james.clark@arm.com,
-        zhangshaokun@hisilicon.com, linuxarm@huawei.com,
-        alexander.shishkin@linux.intel.com,
-        Yicong Yang <yangyicong@hisilicon.com>, acme@kernel.org
-Subject: Re: [PATCH v9 0/8] Add support for HiSilicon PCIe Tune and Trace
- device
-Message-ID: <Yrms2cI05O2yZRKU@kroah.com>
-References: <20220606115555.41103-1-yangyicong@hisilicon.com>
- <af6723f1-c0c5-8af5-857c-af9280e705af@huawei.com>
+        Mon, 27 Jun 2022 09:18:29 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD67CF0;
+        Mon, 27 Jun 2022 06:18:26 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z19so12935149edb.11;
+        Mon, 27 Jun 2022 06:18:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:from:to:cc:subject:date:in-reply-to:message-id
+         :mime-version;
+        bh=bYTHdHMf3jC1jHl9DPaG8LW+XxhPJYraR1ILnGyaWRE=;
+        b=f7txa/JvespsDWBSVg8Ll3tCX6K3cgmKj2lHck8JsGumPgcNxcfqJbch+A/UMBa4Sn
+         mUWOW5Rpz/SqzZaGRqMUi05ujw2jA3MImbffJFCiSIQdl+50++0mfL4sh5okGmDJ7Bx/
+         oCfMm9fKe+6lJt4PMnhjSB4VuJ5D8y5ApzQT1zVxl30i1jOMykW017Dw9qoux3qPQJVF
+         3juShRUsDYWYYKWBJzOWmMJ+jrRhF3lk9h6eEd0W7xcZLDK+9V1Bbq09XFETPfC2UGpP
+         J8MAl41OEORRjiElAHKikKzOjbCxPizi5JSBNYfxCtycR6gt7OJjJkRfJcNeQyF7ZoAh
+         fNJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=bYTHdHMf3jC1jHl9DPaG8LW+XxhPJYraR1ILnGyaWRE=;
+        b=IhPlyBoxTZ8nrVWUYm2xJ21GvbR0vrtmuPWNEGrHINu8OEmJDUoxzyk+DbtbbAPBRq
+         uaDi3d9dxtncBiHj1KJU8bxFxfvCfghPdbh8Bs0Na3uRiad24ocvFlOTGKcapUMLse+R
+         5OdUXd+We5Ogxg3ZuBFLKsERbOn1RBJgJ2L1N+PCXdFwE3/nPFenHfFPuhPfWbScZ38Z
+         b0LNaR/Rv0SDrV3YS/Zj7O7gJ/rg5ikuXOlMJJHHYBWmTwtS/hiLEtbu9OxDYO4KPUxT
+         2P7YT7nOzZ0P4Dn1U5bwssyMRf8CJuaKq/Hq2IsS6rShLYd2LAGu9Tf4wzcA7Ol/eKlD
+         WWXA==
+X-Gm-Message-State: AJIora9SOzTFWGf8WJI1BwOla1rB6cpDS47qLbRQCRMUwOC7HUXvqpfs
+        TOSrrjUK+Rr4uNs4av46iiw=
+X-Google-Smtp-Source: AGRyM1sOiuU691m9UNqKILrcF++Me1UMVhCLagzUfxoYS+ZZ9h9DjZQudKSBeU5wzuC1B2KMFg4l+A==
+X-Received: by 2002:a05:6402:84a:b0:426:262d:967e with SMTP id b10-20020a056402084a00b00426262d967emr16126132edz.286.1656335905115;
+        Mon, 27 Jun 2022 06:18:25 -0700 (PDT)
+Received: from localhost (92.40.170.45.threembb.co.uk. [92.40.170.45])
+        by smtp.gmail.com with ESMTPSA id g3-20020a170906594300b006f3ef214daesm5014147ejr.20.2022.06.27.06.18.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 06:18:24 -0700 (PDT)
+References: <20220618214009.2178567-1-aidanmacdonald.0x0@gmail.com>
+ <20220618214009.2178567-14-aidanmacdonald.0x0@gmail.com>
+ <cafd8a40ad35dcf8a35350261af6031c@walle.cc>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
+        rafael@kernel.org, quic_gurus@quicinc.com,
+        sebastian.reichel@collabora.com, andy.shevchenko@gmail.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 13/16] pinctrl: Add AXP192 pin control driver
+Date:   Mon, 27 Jun 2022 14:12:58 +0100
+In-reply-to: <cafd8a40ad35dcf8a35350261af6031c@walle.cc>
+Message-ID: <me4ummrWKIPseIG4ay7yCfrumN8sIdvc@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <af6723f1-c0c5-8af5-857c-af9280e705af@huawei.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 07:18:12PM +0800, Yicong Yang wrote:
-> Hi Greg,
-> 
-> Since the kernel side of this device has been reviewed for 8 versions with
-> all comments addressed and no more comment since v9 posted in 5.19-rc1,
-> is it ok to merge it first (for Patch 1-3 and 7-8)?
 
-I am not the maintainer of this subsystem, so I do not understand why
-you are asking me :(
+Michael Walle <michael@walle.cc> writes:
 
-thanks,
+> Hi,
+>
+> As Linus suggested you could have a look at devm_gpio_regmap_register()
+> with a custom xlate() callback and some improvements. But I've never
+> worked with pinctrl so I might be wrong. See below.
+>
+>> +static int axp192_gpio_get(struct gpio_chip *chip, unsigned int offset)
+>> +{
+>> +	struct axp192_pctl *pctl = gpiochip_get_data(chip);
+>> +	const struct axp192_pctl_reg_info *reginfo = &pctl->desc->in_regs[offset];
+>> +	unsigned int val;
+>> +	int ret;
+>> +
+>> +	ret = regmap_read(pctl->regmap, reginfo->reg, &val);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	return !!(val & reginfo->mask);
+>> +}
+>
+> This should work.
+>
+>> +
+>> +static int axp192_gpio_get_direction(struct gpio_chip *chip, unsigned
+>> int offset)
+>> +{
+>> +	struct axp192_pctl *pctl = gpiochip_get_data(chip);
+>> +	const struct axp192_pctl_reg_info *reginfo =
+>> &pctl->desc->ctrl_regs[offset];
+>> +	const u8 *input_muxvals = pctl->desc->functions[AXP192_FUNC_INPUT].muxvals;
+>> +	unsigned int val;
+>> +	int ret;
+>> +
+>> +	ret = regmap_read(pctl->regmap, reginfo->reg, &val);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if ((val & reginfo->mask) == (input_muxvals[offset] <<
+>> (ffs(reginfo->mask) - 1)))
+>> +		return GPIO_LINE_DIRECTION_IN;
+>
+> This isn't supported (yet) in gpio-regmap...
+>
+>> +
+>> +	return GPIO_LINE_DIRECTION_OUT;
+>> +}
+>> +
+>> +static void axp192_gpio_set(struct gpio_chip *chip, unsigned int
+>> offset, int value)
+>> +{
+>> +	struct axp192_pctl *pctl = gpiochip_get_data(chip);
+>> +	const struct axp192_pctl_reg_info *reginfo = &pctl->desc->out_regs[offset];
+>> +
+>> +	regmap_update_bits(pctl->regmap, reginfo->reg, reginfo->mask, value
+>> ? reginfo->mask : 0);
+>> +}
+>> +
+>> +static int axp192_gpio_direction_input(struct gpio_chip *chip,
+>> unsigned int offset)
+>> +{
+>> +	return pinctrl_gpio_direction_input(chip->base + offset);
+>> +}
+>
+> ..as well as this.
+>
+>> +
+>> +static int axp192_gpio_direction_output(struct gpio_chip *chip,
+>> unsigned int offset, int value)
+>> +{
+>> +	chip->set(chip, offset, value);
+>
+> Why don't you call pinctrl_gpio_direction_output() here?
 
-greg k-h
+Probably because I copied this from pinctrl-axp209. I'll fix it in
+the next version.
+
+>
+>
+> I *think* what is needed for gpio-regmap to support this is:
+>  - support values and masks for the direction, for now, we
+>    only support single bits.
+>  - support the pinctrl_gpio_direction_{input,output} calls
+>
+> -michael
+
+That sounds about right, thanks for taking a look.

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB65B55DE86
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2DA55DCFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238825AbiF0Lwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
+        id S238962AbiF0LyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238425AbiF0Ls0 (ORCPT
+        with ESMTP id S238431AbiF0Ls0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Jun 2022 07:48:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0518BE3B;
-        Mon, 27 Jun 2022 04:41:24 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A6DBE5;
+        Mon, 27 Jun 2022 04:41:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DBBE6114A;
-        Mon, 27 Jun 2022 11:41:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50198C341C7;
-        Mon, 27 Jun 2022 11:41:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6ED3C61150;
+        Mon, 27 Jun 2022 11:41:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7846BC3411D;
+        Mon, 27 Jun 2022 11:41:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330083;
-        bh=FQmQsw/JHqQauGIOeLNCGxhNOogk+4nagum2qrSg5p4=;
+        s=korg; t=1656330086;
+        bh=4iS3yIV4a+2i40s0BOVe8M5NXjklo6bssC1oiYORHgU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R7GjA4/1COP+HmuyPz2yVxq+P1M/rnyeVzLQp8ky/ybg2Lj2S8DfVxXtzWxhSXxrG
-         5M7VCNaPDf4rWXffshMO/GqQbDwBe+EfhjUSjM009SeZ5y7VyKVA0mdBcsxI+mAzyF
-         tda/QDRFJ/7nv+dUNmJaepjPWb2+qOy4bXkrSb6c=
+        b=bm/ChJPifYpwhtkBv/+7D+akcXHG1kp1H4lQWiswKg80AJ8J9gGHiTsPBUgIovg1P
+         qWK9qSLYYn/fVS42tYrVQj/5H/B4VKHiusf4EpZ9oPvGq0zNUWO29GsIEqXv8DhjXV
+         SPISBH2gyYZugqfiMQT6Z+hUO1BjKbwLR+Bma0lM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Jie2x Zhou <jie2x.zhou@intel.com>,
+        stable@vger.kernel.org, Eric Garver <eric@garver.life>,
+        Florian Westphal <fw@strlen.de>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 077/181] selftests: netfilter: correct PKTGEN_SCRIPT_PATHS in nft_concat_range.sh
-Date:   Mon, 27 Jun 2022 13:20:50 +0200
-Message-Id: <20220627111946.795380068@linuxfoundation.org>
+Subject: [PATCH 5.18 078/181] netfilter: nf_dup_netdev: do not push mac header a second time
+Date:   Mon, 27 Jun 2022 13:20:51 +0200
+Message-Id: <20220627111946.823982964@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
 References: <20220627111944.553492442@linuxfoundation.org>
@@ -56,58 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jie2x Zhou <jie2x.zhou@intel.com>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit 5d79d8af8dec58bf709b3124d09d9572edd9c617 ]
+[ Upstream commit 574a5b85dc3b9ab672ff3fba0ee020f927960648 ]
 
-Before change:
-make -C netfilter
- TEST: performance
-   net,port                                                      [SKIP]
-   perf not supported
-   port,net                                                      [SKIP]
-   perf not supported
-   net6,port                                                     [SKIP]
-   perf not supported
-   port,proto                                                    [SKIP]
-   perf not supported
-   net6,port,mac                                                 [SKIP]
-   perf not supported
-   net6,port,mac,proto                                           [SKIP]
-   perf not supported
-   net,mac                                                       [SKIP]
-   perf not supported
+Eric reports skb_under_panic when using dup/fwd via bond+egress hook.
+Before pushing mac header, we should make sure that we're called from
+ingress to put back what was pulled earlier.
 
-After change:
-   net,mac                                                       [ OK ]
-     baseline (drop from netdev hook):               2061098pps
-     baseline hash (non-ranged entries):             1606741pps
-     baseline rbtree (match on first field only):    1191607pps
-     set with  1000 full, ranged entries:            1639119pps
-ok 8 selftests: netfilter: nft_concat_range.sh
+In egress case, the MAC header is already there; we should leave skb
+alone.
 
-Fixes: 611973c1e06f ("selftests: netfilter: Introduce tests for sets with range concatenation")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Jie2x Zhou <jie2x.zhou@intel.com>
+While at it be more careful here: skb might have been altered and
+headroom reduced, so add a skb_cow() before so that headroom is
+increased if necessary.
+
+nf_do_netdev_egress() assumes skb ownership (it normally ends with
+a call to dev_queue_xmit), so we must free the packet on error.
+
+Fixes: f87b9464d152 ("netfilter: nft_fwd_netdev: Support egress hook")
+Reported-by: Eric Garver <eric@garver.life>
+Signed-off-by: Florian Westphal <fw@strlen.de>
 Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/netfilter/nft_concat_range.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/netfilter/nf_dup_netdev.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/netfilter/nft_concat_range.sh b/tools/testing/selftests/netfilter/nft_concat_range.sh
-index b35010cc7f6a..a6991877e50c 100755
---- a/tools/testing/selftests/netfilter/nft_concat_range.sh
-+++ b/tools/testing/selftests/netfilter/nft_concat_range.sh
-@@ -31,7 +31,7 @@ BUGS="flush_remove_add reload"
+diff --git a/net/netfilter/nf_dup_netdev.c b/net/netfilter/nf_dup_netdev.c
+index 7873bd1389c3..13b7f6a66086 100644
+--- a/net/netfilter/nf_dup_netdev.c
++++ b/net/netfilter/nf_dup_netdev.c
+@@ -13,10 +13,16 @@
+ #include <net/netfilter/nf_tables_offload.h>
+ #include <net/netfilter/nf_dup_netdev.h>
  
- # List of possible paths to pktgen script from kernel tree for performance tests
- PKTGEN_SCRIPT_PATHS="
--	../../../samples/pktgen/pktgen_bench_xmit_mode_netif_receive.sh
-+	../../../../samples/pktgen/pktgen_bench_xmit_mode_netif_receive.sh
- 	pktgen/pktgen_bench_xmit_mode_netif_receive.sh"
+-static void nf_do_netdev_egress(struct sk_buff *skb, struct net_device *dev)
++static void nf_do_netdev_egress(struct sk_buff *skb, struct net_device *dev,
++				enum nf_dev_hooks hook)
+ {
+-	if (skb_mac_header_was_set(skb))
++	if (hook == NF_NETDEV_INGRESS && skb_mac_header_was_set(skb)) {
++		if (skb_cow_head(skb, skb->mac_len)) {
++			kfree_skb(skb);
++			return;
++		}
+ 		skb_push(skb, skb->mac_len);
++	}
  
- # Definition of set types:
+ 	skb->dev = dev;
+ 	skb_clear_tstamp(skb);
+@@ -33,7 +39,7 @@ void nf_fwd_netdev_egress(const struct nft_pktinfo *pkt, int oif)
+ 		return;
+ 	}
+ 
+-	nf_do_netdev_egress(pkt->skb, dev);
++	nf_do_netdev_egress(pkt->skb, dev, nft_hook(pkt));
+ }
+ EXPORT_SYMBOL_GPL(nf_fwd_netdev_egress);
+ 
+@@ -48,7 +54,7 @@ void nf_dup_netdev_egress(const struct nft_pktinfo *pkt, int oif)
+ 
+ 	skb = skb_clone(pkt->skb, GFP_ATOMIC);
+ 	if (skb)
+-		nf_do_netdev_egress(skb, dev);
++		nf_do_netdev_egress(skb, dev, nft_hook(pkt));
+ }
+ EXPORT_SYMBOL_GPL(nf_dup_netdev_egress);
+ 
 -- 
 2.35.1
 

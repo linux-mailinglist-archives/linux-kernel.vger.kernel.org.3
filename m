@@ -2,59 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B97155CDF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C33C55D130
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236780AbiF0Sj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 14:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35198 "EHLO
+        id S238092AbiF0Sjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240402AbiF0Si3 (ORCPT
+        with ESMTP id S240215AbiF0SjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 14:38:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D7F2FD;
-        Mon, 27 Jun 2022 11:38:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4E09615AE;
-        Mon, 27 Jun 2022 18:38:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1B9DC3411D;
-        Mon, 27 Jun 2022 18:38:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656355101;
-        bh=tpQhZQHIo3oAgckmaPgCZ4BNKAUK0XRiFuSAp70Cu8c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VTkRYWDjjVYa94ZaBuyuEozvQwpkROiN+nTDgabfp2ZHC/cee2Hx8BHgw1+hytmj6
-         sEoo/0DTgdMw35V5KIXKGb/BvgMC6OnHs9LZhmuT/3JTcODy6ENw+XyScjZAatC/oH
-         tHRNBiKZmg9p5Du1OBbQnRg5N/QrEB/J+B5w+fpZVtoMNgYhrfpvo4y8V1+/Nn/njU
-         uAGEcVETRgXf94TzYpa3HjRdW3Ihx9HJq4Fe2lo4fdGw8rW4rawyvAk/0OCvukW1ZR
-         lIvo/+fDZ226OOEky0wzu5BnRo6whDVUE9/X0njAvotepWFidSZWqw75CwqOxc0PEb
-         JL7WIM+kIENfg==
-Date:   Mon, 27 Jun 2022 11:38:12 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Praghadeesh T K S <praghadeeshthevendria@gmail.com>,
-        Rain River <rain.1986.08.12@gmail.com>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-        praghadeeshtks@zohomail.in,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] net: ethernet/nvidia: fix possible condition with no
- effect
-Message-ID: <20220627113812.08ae31f0@kernel.org>
-In-Reply-To: <Yrg+NZHBNcu3KFXn@lunn.ch>
-References: <20220626103539.80283-1-praghadeeshthevendria@gmail.com>
-        <Yrg+NZHBNcu3KFXn@lunn.ch>
+        Mon, 27 Jun 2022 14:39:17 -0400
+Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BB2B9E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:38:54 -0700 (PDT)
+Received: by mail-oo1-xc42.google.com with SMTP id f10-20020a4aa68a000000b0042579cb6238so2048229oom.7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=JuE4G4k+9s7zTgtnSqan6CD/Xhbwm1NdftTu21F3DUk=;
+        b=BtPk1oNY5b8hNQkJwLR6f223yM1TvEDeHwmHOQ7/JVtemgJckWyuHnoO2gq11dCJtc
+         ceuGvJj5vEkhN/sQLmcfo/UjHM/u4KsiKe9c/ZldXfhFxPjih7CXIDn1gu/mep8MX4mq
+         WWHY+GoWAvyaGpmY/suh/p5cpR32CZ1hXgMpkbohvZFvXBGn6dyiJlUIMKsMxpsBm2Ml
+         zvGS6B6O9dEzZnGpDcrJrK5GPok9UMicYAhsBPltmFiB9IbbBJhYSa919qB0Oeucs0KJ
+         xnk5ZR7bbft/pjWjvsGxEsRWF+fTOUHnpCewhJjHEQq3DZFgMJ184Q+NB67E6Dl6i7mG
+         /1WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=JuE4G4k+9s7zTgtnSqan6CD/Xhbwm1NdftTu21F3DUk=;
+        b=TxgpMLzMNin6/lBaVugAfWMfffOpMSVLqfdbuvm0woqVMeSZBwV/pTiX8tYCcDDX8x
+         sEwaRnnxTIrJIn8MqOEZPK2oP+B3NGRu4BIDMr0ZTvNXIeGTdjLrWxmbsQmOFqpenMDD
+         X4Q/wtQDiip6IPgxc7tJ2ZcRijRXYRt2n2ArQfE2aZKfeY90UFDlXxCB5r/Mqv6H7a6x
+         tVtr+qXGoJWWIfVVgwxnyyGxyPyeYT5p7wiYTBTlYBgX5oVjGdkyF/IAU82fwL72TK7N
+         vNSjSxc5ib2Hd/W/BSsbcoHanrUHHnXJyEKEEU+G1qlC+byFVBTKj0lbY4b8jjcsEiSL
+         MPLQ==
+X-Gm-Message-State: AJIora8M8t4pKBom9KuCKv4fAbmcbcNgisnSAqQIAhDPXXwcBhUE5j16
+        g2Ser4aHAKG9xnyc+3WsBELtS/m1YQfmwA/9JnM=
+X-Google-Smtp-Source: AGRyM1vZA5i0T8xVD9xQcRnUGH3VaeevgvCndiQPhHTtyiM6hRm8leQj653lw7xV4j3JUv6iQqcutA==
+X-Received: by 2002:a4a:49d0:0:b0:425:708a:224 with SMTP id z199-20020a4a49d0000000b00425708a0224mr6462805ooa.18.1656355133640;
+        Mon, 27 Jun 2022 11:38:53 -0700 (PDT)
+Received: from [192.168.17.16] ([189.219.74.211])
+        by smtp.gmail.com with ESMTPSA id i1-20020a4addc1000000b0041b768b58basm6309261oov.22.2022.06.27.11.38.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 11:38:53 -0700 (PDT)
+Message-ID: <24080846-a369-9333-589c-ad88d775bc04@linaro.org>
+Date:   Mon, 27 Jun 2022 13:38:51 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5.15 000/135] 5.15.51-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220627111938.151743692@linuxfoundation.org>
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,22 +78,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 26 Jun 2022 13:08:37 +0200 Andrew Lunn wrote:
-> On Sun, Jun 26, 2022 at 10:35:39AM +0000, Praghadeesh T K S wrote:
-> > Fix Coccinelle bug, removed condition with no effect.  
+Hello!
+
+On 27/06/22 06:20, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.51 release.
+> There are 135 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This is not a coccinelle bug. If it was, you would be patching
-> coccinelle, not the kernel.
+> Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.51-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-I'd say the commit message is better than the commit ;)
-Praghadeesh, could you fix Coccinelle to avoid matching:
+Results from Linaro's test farm.
+The following new warnings have been found while building ixp4xx_defconfig for Arm combinations with GCC:
 
-	if (/* case 1 */) {
-		/* BLOCK 1*/
-	} else (/* case 2 */ {
-		/* BLOCK 2 */
-	} else {
-		/* default == BLOCK 2 */
-	}
+   WARNING: modpost: vmlinux.o(___ksymtab_gpl+ixp4xx_irq_init+0x0): Section mismatch in reference from the variable __ksymtab_ixp4xx_irq_init to the function .init.text:ixp4xx_irq_init()
+   The symbol ixp4xx_irq_init is exported and annotated __init
+   Fix this by removing the __init annotation of ixp4xx_irq_init or drop the export.
 
-Because 99% of the time that construct is intentional.
+   WARNING: modpost: vmlinux.o(___ksymtab_gpl+ixp4xx_timer_setup+0x0): Section mismatch in reference from the variable __ksymtab_ixp4xx_timer_setup to the function .init.text:ixp4xx_timer_setup()
+   The symbol ixp4xx_timer_setup is exported and annotated __init
+   Fix this by removing the __init annotation of ixp4xx_timer_setup or drop the export.
+
+
+## Build
+* kernel: 5.15.51-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 2c21dc5c2cb635c1b549c0f3eb0ff3d3744be11a
+* git describe: v5.15.50-136-g2c21dc5c2cb6
+* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.50-136-g2c21dc5c2cb6
+
+## No test regressions (compared to v5.15.48-116-g18a33c8dabb8)
+
+## Metric Regressions (compared to v5.15.48-116-g18a33c8dabb8)
+* arm, build
+   - gcc-8-ixp4xx_defconfig-warnings
+   - gcc-9-ixp4xx_defconfig-warnings
+   - gcc-10-ixp4xx_defconfig-warnings
+   - gcc-11-ixp4xx_defconfig-warnings
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## No test fixes (compared to v5.15.48-116-g18a33c8dabb8)
+
+## No metric fixes (compared to v5.15.48-116-g18a33c8dabb8)
+
+## Test result summary
+total: 122583, pass: 109673, fail: 286, skip: 12014, xfail: 610
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 314 total, 314 passed, 0 failed
+* arm64: 58 total, 58 passed, 0 failed
+* i386: 52 total, 49 passed, 3 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* riscv: 22 total, 22 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 55 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+
+Greetings!
+
+Daniel Díaz
+daniel.diaz@linaro.org
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org

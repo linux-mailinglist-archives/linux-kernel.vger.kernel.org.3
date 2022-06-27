@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B85455CF77
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC19255D509
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235966AbiF0Lez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S235388AbiF0L6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236168AbiF0LdY (ORCPT
+        with ESMTP id S238690AbiF0Lw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:33:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBF4CE11;
-        Mon, 27 Jun 2022 04:30:29 -0700 (PDT)
+        Mon, 27 Jun 2022 07:52:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8805BB49B;
+        Mon, 27 Jun 2022 04:45:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDD5BB81126;
-        Mon, 27 Jun 2022 11:30:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 356ACC341C7;
-        Mon, 27 Jun 2022 11:30:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E610E6125A;
+        Mon, 27 Jun 2022 11:45:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0670DC3411D;
+        Mon, 27 Jun 2022 11:45:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329426;
-        bh=zbM+FiatcV99sgVVByCocxpD5uvDGwRXusMpryNERgc=;
+        s=korg; t=1656330309;
+        bh=0/smJ2Sa+Gz1IrVE/v9XQNQbsuEP/ZS/Wm98OhSZgv8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QFx/VgJvB45RKMRVXkiUK8Wqr644aSFYCUXrl3IdJPQyU5x0RX6+w45cPr4K6nh+O
-         uvOmVdhUQ0gb+taD8tGbeaNxGhx2Tl8elDYVWTze6+TJ2zR8M0ouuf1C5L2SqM0rvG
-         xvOYKG1/Jjh85/mfbZpp9bVw+A1yhMcaXXJcGug0=
+        b=t4+6vM/E/Ua/8K47JLWLHWDCjPPLTyotz+stZCWdhPgyPX8Ztik06M+LDMOgJc+mP
+         Ambnb6iznq8TzCoF8SnRKfTP3E8Mlmn7MbkLYCqiUqj3gLMUIrZvxmpDqsQ5bNcVkk
+         meysV+VcIyCRjHhF0Jf9UtoOGadF+zrKzEGyYTV8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.4 56/60] ARM: cns3xxx: Fix refcount leak in cns3xxx_init
+        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.18 154/181] parisc: Fix flush_anon_page on PA8800/PA8900
 Date:   Mon, 27 Jun 2022 13:22:07 +0200
-Message-Id: <20220627111929.338371319@linuxfoundation.org>
+Message-Id: <20220627111949.148453471@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
-References: <20220627111927.641837068@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: John David Anglin <dave.anglin@bell.net>
 
-commit 1ba904b6b16e08de5aed7c1349838d9cd0d178c5 upstream.
+commit e9ed22e6e5010997a2f922eef61ca797d0a2a246 upstream.
 
-of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+Anonymous pages are allocated with the shared mappings colouring,
+SHM_COLOUR. Since the alias boundary on machines with PA8800 and
+PA8900 processors is unknown, flush_user_cache_page() might not
+flush all mappings of a shared anonymous page. Flushing the whole
+data cache flushes all mappings.
 
-Fixes: 415f59142d9d ("ARM: cns3xxx: initial DT support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Acked-by: Krzysztof Halasa <khalasa@piap.pl>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+This won't fix all coherency issues with shared mappings but it
+seems to work well in practice.  I haven't seen any random memory
+faults in almost a month on a rp3440 running as a debian buildd
+machine.
+
+There is a small preformance hit.
+
+Signed-off-by: John David Anglin <dave.anglin@bell.net>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Cc: stable@vger.kernel.org   # v5.18+
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-cns3xxx/core.c |    2 ++
- 1 file changed, 2 insertions(+)
+ arch/parisc/kernel/cache.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/arch/arm/mach-cns3xxx/core.c
-+++ b/arch/arm/mach-cns3xxx/core.c
-@@ -376,6 +376,7 @@ static void __init cns3xxx_init(void)
- 		/* De-Asscer SATA Reset */
- 		cns3xxx_pwr_soft_rst(CNS3XXX_PWR_SOFTWARE_RST(SATA));
- 	}
-+	of_node_put(dn);
+--- a/arch/parisc/kernel/cache.c
++++ b/arch/parisc/kernel/cache.c
+@@ -722,7 +722,10 @@ void flush_anon_page(struct vm_area_stru
+ 		return;
  
- 	dn = of_find_compatible_node(NULL, NULL, "cavium,cns3420-sdhci");
- 	if (of_device_is_available(dn)) {
-@@ -389,6 +390,7 @@ static void __init cns3xxx_init(void)
- 		cns3xxx_pwr_clk_en(CNS3XXX_PWR_CLK_EN(SDIO));
- 		cns3xxx_pwr_soft_rst(CNS3XXX_PWR_SOFTWARE_RST(SDIO));
+ 	if (parisc_requires_coherency()) {
+-		flush_user_cache_page(vma, vmaddr);
++		if (vma->vm_flags & VM_SHARED)
++			flush_data_cache();
++		else
++			flush_user_cache_page(vma, vmaddr);
+ 		return;
  	}
-+	of_node_put(dn);
- 
- 	pm_power_off = cns3xxx_power_off;
  
 
 

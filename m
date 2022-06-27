@@ -2,115 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5563755C2B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991E455CE2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbiF0JnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
+        id S233546AbiF0KBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbiF0JnI (ORCPT
+        with ESMTP id S233887AbiF0KBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:43:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E81326F2;
-        Mon, 27 Jun 2022 02:43:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0B16B81063;
-        Mon, 27 Jun 2022 09:43:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11493C3411D;
-        Mon, 27 Jun 2022 09:43:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656322984;
-        bh=GkBQb/LDP/LrppRPZGnpAoFtkcRW5f8iMON0D/lxPKw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ohqaX4NzMaVnezuBBavy/jVJkemvk/EzxA99gZyn7wamwnWIPZmcH1FVAeNpFW3zp
-         BQz/yjjJVRLDzYRU5Cb/BPJE+VtUklc2ByCg2L0uAUTR7hHq+yOzxE8Gqo4JQewJQx
-         RKPs8q5de/TStYY4Z3WR9QktWHR3xidFMkVEUlx1e4pwfdXEFySMQQ8GA3e7qaf7M7
-         mlA8gI69LngE6XMFESZopzWiEOiYh1Aze4rDtLQC42TrNngaB9v3h/mzkK0DEFuZoz
-         +HG6lHg4Zz5uOyTBv4hEJaLxPqJHWkCysReVOKLB4StLayCycZzLcltwwq5ypJDozm
-         /4LTsIonxHhDg==
-Date:   Mon, 27 Jun 2022 10:42:58 +0100
-From:   Will Deacon <will@kernel.org>
-To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, broonie@kernel.org,
-        jpoimboe@redhat.com, ardb@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maz@kernel.org, Kalesh Singh <kaleshsingh@google.com>
-Subject: Re: [PATCH v15 0/6] arm64: Reorganize the unwinder and implement
- stack trace reliability checks
-Message-ID: <20220627094257.GA21634@willie-the-truck>
-References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
- <20220617210717.27126-1-madvenka@linux.microsoft.com>
- <20220623173224.GB16966@willie-the-truck>
- <66545c21-cfcf-60eb-4acf-39be99520369@linux.microsoft.com>
- <YrgkdBtbFmOvKJpX@FVFF77S0Q05N>
- <e1154054-0b5c-6ebf-9f24-8f4f9784f5a5@linux.microsoft.com>
+        Mon, 27 Jun 2022 06:01:50 -0400
+X-Greylist: delayed 616 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Jun 2022 03:01:42 PDT
+Received: from 7.mo548.mail-out.ovh.net (7.mo548.mail-out.ovh.net [46.105.33.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0456252
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:01:42 -0700 (PDT)
+Received: from mxplan5.mail.ovh.net (unknown [10.108.16.62])
+        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id 7066B21B82;
+        Mon, 27 Jun 2022 09:43:22 +0000 (UTC)
+Received: from kaod.org (37.59.142.96) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Mon, 27 Jun
+ 2022 11:43:20 +0200
+Authentication-Results: garm.ovh; auth=pass (GARM-96R001214c8b85-88ae-43d7-9f45-820f0b88e976,
+                    D5BAD815273CE4794DDBC5929823026F491AE39B) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <82015d89-cab5-3e9a-a40e-e5dafa17ec0c@kaod.org>
+Date:   Mon, 27 Jun 2022 11:43:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e1154054-0b5c-6ebf-9f24-8f4f9784f5a5@linux.microsoft.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH 3/6] mtd: spi-nor: core: run calibration when
+ initialization is done
+Content-Language: en-US
+To:     Pratyush Yadav <p.yadav@ti.com>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        Joel Stanley <joel@jms.id.au>
+References: <20210311191216.7363-1-p.yadav@ti.com>
+ <20210311191216.7363-4-p.yadav@ti.com> <20220517160226.4107f282@xps-13>
+ <20220518060640.os5fp5rez4ie7qc4@ti.com> <20220518091931.279c5398@xps-13>
+ <20220518075651.mvdhfnfbgutecgyq@ti.com>
+ <b3bfa5a6-caac-94ed-6741-04db9c2a9ee0@kaod.org>
+ <20220627091404.54257obrdazcjhre@ti.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20220627091404.54257obrdazcjhre@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.96]
+X-ClientProxiedBy: DAG3EX2.mxp5.local (172.16.2.22) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: d90d66d2-6dd4-4970-a538-40e48684ccd2
+X-Ovh-Tracer-Id: 8915438414617938820
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudeghedgvddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeekteejtdelkeejvdevffduhfetteelieefgeefffeugffhfeekheffueefledujeenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddrleeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtohepjhhovghlsehjmhhsrdhiugdrrghupdfovfetjfhoshhtpehmohehgeek
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 11:48:36PM -0500, Madhavan T. Venkataraman wrote:
+On 6/27/22 11:14, Pratyush Yadav wrote:
+> On 18/05/22 10:51AM, Cédric Le Goater wrote:
+>> Hello,
+>>
+>> On 5/18/22 09:56, Pratyush Yadav wrote:
+>>> On 18/05/22 09:19AM, Miquel Raynal wrote:
+>>>> Hi Pratyush,
+>>>>
+>>>> p.yadav@ti.com wrote on Wed, 18 May 2022 11:37:05 +0530:
+>>>>
+>>>>> +Cedric
+>>>>>
+>>>>> On 17/05/22 04:02PM, Miquel Raynal wrote:
+>>>>>> Hi Pratyush,
+>>>>>>
+>>>>>> p.yadav@ti.com wrote on Fri, 12 Mar 2021 00:42:13 +0530:
+>>>>>>> Once the flash is initialized tell the controller it can run
+>>>>>>> calibration procedures if needed. This can be useful when calibration is
+>>>>>>> needed to run at higher clock speeds.
+>>>>>>>
+>>>>>>> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+>>>>>>> ---
+>>>>>>>    drivers/mtd/spi-nor/core.c | 12 ++++++++++--
+>>>>>>>    1 file changed, 10 insertions(+), 2 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+>>>>>>> index 88888df009f0..e0cbcaf1be89 100644
+>>>>>>> --- a/drivers/mtd/spi-nor/core.c
+>>>>>>> +++ b/drivers/mtd/spi-nor/core.c
+>>>>>>> @@ -3650,6 +3650,7 @@ static int spi_nor_probe(struct spi_mem *spimem)
+>>>>>>>    	 * checking what's really supported using spi_mem_supports_op().
+>>>>>>>    	 */
+>>>>>>>    	const struct spi_nor_hwcaps hwcaps = { .mask = SNOR_HWCAPS_ALL };
+>>>>>>> +	struct spi_mem_op op;
+>>>>>>>    	char *flash_name;
+>>>>>>>    	int ret;
+>>>>>>> @@ -3709,8 +3710,15 @@ static int spi_nor_probe(struct spi_mem *spimem)
+>>>>>>>    	if (ret)
+>>>>>>>    		return ret;
+>>>>>>> -	return mtd_device_register(&nor->mtd, data ? data->parts : NULL,
+>>>>>>> -				   data ? data->nr_parts : 0);
+>>>>>>> +	ret = mtd_device_register(&nor->mtd, data ? data->parts : NULL,
+>>>>>>> +				  data ? data->nr_parts : 0);
+>>>>>>> +	if (ret)
+>>>>>>> +		return ret;
+>>>>>>> +
+>>>>>>> +	op = spi_nor_spimem_get_read_op(nor);
+>>>>>>
+>>>>>> Isn't this too specific? I really don't know much about spi-nors, but I
+>>>>>> find odd to have this op being created here, why not moving this into
+>>>>>> the _do_calibration() helper?
+>>>>>
+>>>>> Maybe the naming confused you but this is a function in the SPI NOR
+>>>>> core, not in SPI MEM. SPI NOR supports both SPI MEM based controllers
+>>>>> and "legacy" controllers, so the convention is to add the "spimem"
+>>>>> prefix before SPI MEM specific functions. So I don't get the comment
+>>>>> about it being too specific. It is too specific to what?
+>>>>
+>>>> Mmh right, it's fine then.
+>>>>
+>>>>>
+>>>>> And how can spi_mem_do_calibration() know what op the flash uses to read
+>>>>> data? SPI NOR or SPI NAND would know it, but not SPI MEM. That is why we
+>>>>> pass in that information to spi_mem_do_calibration().
+>>>>
+>>>> But here the op is "spi-nor wide", I would have expected a
+>>>> per-device op. But that is not a big deal, that is something that can
+>>>> also be updated later if needed I guess.
+>>>
+>>> It is per-device. The op is generated using nor->read_opcode,
+>>> nor->addr_width, nor->read_dummy, etc. So if you have 2 NOR flashes on
+>>> your system with different opcodes, it would work for both.
+>>>
+>>>>
+>>>> One last question, is there something that mtd_device_register() does
+>>>> that is really needed for the calibration to work? Otherwise I would
+>>>> rather prefer to have that calibration happening before the user gets
+>>>> access to the device.
+>>
+>> Which would mean calling it right after :
+>>
+>> 	ret = spi_nor_create_read_dirmap(nor);
+>> 	if (ret)
+>> 		return ret;
+>>
+>> 	ret = spi_nor_create_write_dirmap(nor);
+>> 	if (ret)
+>> 		return ret;
+>>
+>>> The calibration works by reading a known pattern that is already written
+>>> to the flash again and again and seeing what delays work and what don't.
+>>> For that to happen, the controller driver needs to know where the
+>>> pattern is stored.
+>>
+>> Why don't you simply choose some random place, first 16KB for instance,
+>> and check that the data is random enough ? If not, declare calibration
+>> not possible and choose a default safe setting which is anyhow a
+>> requirement for calibration. Retry at reboot as data might have changed.
 > 
-> 
-> On 6/26/22 04:18, Mark Rutland wrote:
-> > On Fri, Jun 24, 2022 at 12:19:01AM -0500, Madhavan T. Venkataraman wrote:
-> >>
-> >>
-> >> On 6/23/22 12:32, Will Deacon wrote:
-> >>> On Fri, Jun 17, 2022 at 04:07:11PM -0500, madvenka@linux.microsoft.com wrote:
-> >>>> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-> >>>>
-> >>>> I have synced this patch series to v5.19-rc2.
-> >>>> I have also removed the following patch.
-> >>>>
-> >>>> 	[PATCH v14 7/7] arm64: Select HAVE_RELIABLE_STACKTRACE
-> >>>>
-> >>>> as HAVE_RELIABLE_STACKTRACE depends on STACK_VALIDATION which is not present
-> >>>> yet. This patch will be added in the future once Objtool is enhanced to
-> >>>> provide stack validation in some form.
-> >>>
-> >>> Given that it's not at all obvious that we're going to end up using objtool
-> >>> for arm64, does this patch series gain us anything in isolation?
-> >>>
-> >>
-> >> BTW, I have synced my patchset to 5.19-rc2 and sent it as v15.
-> >>
-> >> So, to answer your question, patches 1 thru 3 in v15 are still useful even if we don't
-> >> consider reliable stacktrace. These patches reorganize the unwinder code based on
-> >> comments from both Mark Rutland and Mark Brown. Mark Brown has already OKed them.
-> >> If Mark Rutland OKes them, we should upstream them.
-> > 
-> > Sorry for the delay; I have been rather swamped recently and haven't had the
-> > time to give this the time it needs.
-> > 
-> > I'm happy with patches 1 and 2, and I've acked those in case Will wants to pick
-> > them.
-> > 
-> 
-> Thanks for the review.
-> 
-> Will,
-> 
-> Are you fine with picking up patches 1 and 2?
-> 
-> For the other patches, I have responded separately.
+> I did not come up with the pattern myself. But from what I can
+> understand, the pattern is not random at all, but is carefully chosen to
+> target certain ways a read can fail on the controller. So a random piece
+> of data won't work as well as this carefully designed pattern.
 
-Sure thing, I'll do that today. Thanks for persevering with this.
+True. I don't exactly remember how your proposal worked from the
+driver side but I imagine having a specific DT property to locate
+that pattern in the setup handler and to use it later on is not
+too complex.
 
-Will
+>>> This series does that by looking at the MTD
+>>> partitions. For that to happen, we need to create those partitions
+>>> first, which happens after mtd_device_register().
+>>
+>> hmm, that might work for some boards. This is not at all the case for
+>> the BMC boards. Vendors can put any kind of flash model and/or layout
+>> and the driver needs to be more generic.
+> 
+> Yes, vendors can choose any layout, but one partition on that layout
+> would be your calibration pattern. I think you can use a different
+> compatible for that partition. 
+
+OK. and that it would become more generic then.
+
+> I have not thought this through yet though.
+
+If a partition is required, that's a dependency on mtdpart.
+
+It could be done from spi_nor_probe() after mtd_device_register() with
+some spimem handler using the 'struct mtd_partition' for the {size,offset}
+parameters.
+
+>>
+>>> But I am planning to use device tree to get that information now so this
+>>> should no longer be needed and we can do calibration before registering
+>>> the device with MTD.
+>>
+>> Perfect, we can move the calibration hook in spi_nor_create_read_dirmap()
+>> then, or in devm_spi_mem_dirmap_create(), which would make more sense IMHO.
+> 
+> Sorry, I still don't get why you want to tie dirmap and calibration
+> together. Just let them be independent and let flash drivers take care
+> of when to call what. SPI MEM should not care.
+
+I know you would prefer a specific handler and that can still be done.
+
+Thanks,
+
+C.

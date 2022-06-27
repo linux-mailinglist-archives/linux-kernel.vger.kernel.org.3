@@ -2,98 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4D355E355
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF4155CAB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234900AbiF0NPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
+        id S235156AbiF0NSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234624AbiF0NPO (ORCPT
+        with ESMTP id S234120AbiF0NS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:15:14 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E550A13D2F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:12:21 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RBmurk015955;
-        Mon, 27 Jun 2022 08:12:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=0Khu6/fuJfMLzW9aQk1bRq1eHO8RZ0Hw8Fa6zQNMHwg=;
- b=Vdtnw+e2/Z5f0r9TaRj6P+z8CFdM5/uMRDNNaz7dDa6LkDEuGG0er5QbUg/Rr44z8C84
- xRyhkm8yjKTJr3D10fAeJT6UpZx2vZfDOQ05n0lGsORJwgdEp+XdjCOp+ZV3yUUSc2mL
- WGLiX7A1ZtuAceJScHAUn20aoA5ibMpIMBaNk07298AmzEIB+qnMxPahk/krCYFsv5VG
- KiD595tv8HBKMZmRqin/c62DIaFDQZCJfc6x/LsYeyfL6SRYAJuVBOBzS3BsXg7yO8E9
- AkahUruv7Z5wG6mhFWjdDbrV6BlFZsVGDYNjKFsqN8i76w0fp5pSXwHGX5xRInFAxlX8 rQ== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3gwys2jthu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 27 Jun 2022 08:12:04 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 27 Jun
- 2022 14:12:02 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Mon, 27 Jun 2022 14:12:02 +0100
-Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 52443458;
-        Mon, 27 Jun 2022 13:12:02 +0000 (UTC)
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <krzysztof.kozlowski@linaro.org>, <s.nawrocki@samsung.com>,
-        <jrdr.linux@gmail.com>, <lgirdwood@gmail.com>,
-        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] ASoC: samsung: s3c24xx-i2s: Fix typo in DAIFMT handling
-Date:   Mon, 27 Jun 2022 14:12:02 +0100
-Message-ID: <20220627131202.3148329-1-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 27 Jun 2022 09:18:28 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5E7C6F;
+        Mon, 27 Jun 2022 06:18:24 -0700 (PDT)
+Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LWp8t22bkz6H8NV;
+        Mon, 27 Jun 2022 21:14:22 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 15:18:22 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 14:18:19 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <s.shtylyov@omp.ru>, <damien.lemoal@opensource.wdc.com>
+CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH] ata: pata_cs5535: Fix W=1 warnings
+Date:   Mon, 27 Jun 2022 21:12:20 +0800
+Message-ID: <1656335540-50293-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 5HNY2iefiqGyrAbo5CP_Ne9bRYCsGn9B
-X-Proofpoint-GUID: 5HNY2iefiqGyrAbo5CP_Ne9bRYCsGn9B
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The conversion of the set_fmt callback to direct clock specification
-included a small typo, correct the affected code.
+x86_64 allmodconfig build with W=1 gives these warnings:
 
-Fixes: 0b491c7c1b25 ("ASoC: samsung: Update to use set_fmt_new callback")
-Reported-by: kernel test robot <lkp@intel.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
+drivers/ata/pata_cs5535.c: In function ‘cs5535_set_piomode’:
+drivers/ata/pata_cs5535.c:93:11: error: variable ‘dummy’ set but not used [-Werror=unused-but-set-variable]
+  u32 reg, dummy;
+           ^~~~~
+drivers/ata/pata_cs5535.c: In function ‘cs5535_set_dmamode’:
+drivers/ata/pata_cs5535.c:132:11: error: variable ‘dummy’ set but not used [-Werror=unused-but-set-variable]
+  u32 reg, dummy;
+           ^~~~~
+cc1: all warnings being treated as errors
 
-Changes since v1:
- - Correct fixes tag.
+Mark variables 'dummy' as "maybe unused" to satisfy when rdmsr() is
+stubbed, which is the same as what we already do in pata_cs5536.c .
 
- sound/soc/samsung/s3c24xx-i2s.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: John Garry <john.garry@huawei.com>
 
-diff --git a/sound/soc/samsung/s3c24xx-i2s.c b/sound/soc/samsung/s3c24xx-i2s.c
-index 4082ad7cbcc11..c1a314b86b155 100644
---- a/sound/soc/samsung/s3c24xx-i2s.c
-+++ b/sound/soc/samsung/s3c24xx-i2s.c
-@@ -170,7 +170,7 @@ static int s3c24xx_i2s_set_fmt(struct snd_soc_dai *cpu_dai,
- 	pr_debug("hw_params r: IISMOD: %x \n", iismod);
+diff --git a/drivers/ata/pata_cs5535.c b/drivers/ata/pata_cs5535.c
+index 6725931f3c35..c2c3238ff84b 100644
+--- a/drivers/ata/pata_cs5535.c
++++ b/drivers/ata/pata_cs5535.c
+@@ -90,7 +90,7 @@ static void cs5535_set_piomode(struct ata_port *ap, struct ata_device *adev)
+ 	static const u16 pio_cmd_timings[5] = {
+ 		0xF7F4, 0x53F3, 0x13F1, 0x5131, 0x1131
+ 	};
+-	u32 reg, dummy;
++	u32 reg, __maybe_unused dummy;
+ 	struct ata_device *pair = ata_dev_pair(adev);
  
- 	switch (fmt & SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK) {
--	case SND_SOC_DAIFMT_BC_CFC:
-+	case SND_SOC_DAIFMT_BC_FC:
- 		iismod |= S3C2410_IISMOD_SLAVE;
- 		break;
- 	case SND_SOC_DAIFMT_BP_FP:
+ 	int mode = adev->pio_mode - XFER_PIO_0;
+@@ -129,7 +129,7 @@ static void cs5535_set_dmamode(struct ata_port *ap, struct ata_device *adev)
+ 	static const u32 mwdma_timings[3] = {
+ 		0x7F0FFFF3, 0x7F035352, 0x7F024241
+ 	};
+-	u32 reg, dummy;
++	u32 reg, __maybe_unused dummy;
+ 	int mode = adev->dma_mode;
+ 
+ 	rdmsr(ATAC_CH0D0_DMA + 2 * adev->devno, reg, dummy);
 -- 
-2.30.2
+2.35.3
 

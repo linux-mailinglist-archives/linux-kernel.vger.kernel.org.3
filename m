@@ -2,154 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8495455C42C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33ED855D60F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbiF0UzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 16:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
+        id S233666AbiF0U4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 16:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiF0Uy6 (ORCPT
+        with ESMTP id S229583AbiF0U42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 16:54:58 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85E52AD8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:54:56 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id w83so14550532oiw.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:54:56 -0700 (PDT)
+        Mon, 27 Jun 2022 16:56:28 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9132ACD;
+        Mon, 27 Jun 2022 13:56:27 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id o9so14764561edt.12;
+        Mon, 27 Jun 2022 13:56:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+wu8FbJfJ+Q9MxmPPrAR91FAjnYekUfFagsceeKXjh0=;
-        b=loSSV131mIFKt3HpYTok7q4CoL9EKNUepLdX1KxCRXfu8a57sYL2uzn14dMUx/gSSk
-         VFxRQ53JaaPjOhxKg5QR/5lW7P6NuePeUVL8A45QCT0xNOi9ZcH2Kag49Pz3PQOddYhD
-         832ct3sFqIPJsHlWcoVfdoi5ySm8yAflN71laKCOlM331XmwE5gKW29jvnTW8ZJ/bk+F
-         Kmo+p5JbqhBZM1+smuwJ7F6i3aM5zbHfZieorgBQGA4UCHs99cTdVgIKqBI1s1EwBena
-         Q9rzvAN5ccj9luYtSSME8+YZ/NhcLOf60XnbyjjhH/mkAhE2aJe7mQR5szplNQzUh3rP
-         vzwg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zZYxoCPScWXjQwHFlcANYHGk3bPGNCdA16fhomtXzig=;
+        b=faGaQLRpG+IQROqdEzZ4ky3l7Le5IQ+LCAxS/3EHNHKYbddYRQ9XgwIwUqXyWa3R2K
+         Zl6dEtw1+qLg8qaj14p++CQBTiPXbQFX8kzaUqFaWxmT1ak2rJ6i7xftxkpORqvkP/+x
+         ccjiGREgPQf8W3l5Lr0OAHGgduHe27M1Vci6ciP58d3lb1CFdaoMSD1pD87RAVakxh5E
+         5pWp45VYYC5N/3vNHhlilp8dSWi9HiWRKq29g9MTVNzr9JtRzgOIPYN/FMZvwFl8L+wM
+         zgGMimUBRZDUUEM7JpeMhGXki8/I86b8N/SZHlA0nJASY6kbTRkBMTtF/cLDwyQbiJux
+         z+Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+wu8FbJfJ+Q9MxmPPrAR91FAjnYekUfFagsceeKXjh0=;
-        b=3vqnds5rp+MOjg02kxVjcWLepQB0d+3884rjH+BQTz4VT96fCpgQh6srtVSnSHUicK
-         Z0YA4vy6iLvfr4Jcc3aYT65i0vKWZpN3aKtyF3DqyUHXLm2CacJS70AqPeDo5c8SCxOQ
-         ydUqiM7pWUS/T3G8AI18z/WGxJ39huaSgRlPcfz1uvaBYlU6DOZVMxj1GC8Zb7LrsRNN
-         zL4fNmTw7ZvW0tGEho9wG+k4DTbyi5sEcfkbLYPVLmaXY5X9CtBT2tf9WvCh7ZZyDcoS
-         U6r8riPxWT69zp1dRoP38vWyUBiplAj8+vpJIUBC4IYwQPahL8B2AUn41NIp0rPLEPEk
-         0CSw==
-X-Gm-Message-State: AJIora9R7vqlRR9euZpQcgondP3pcxaXeC7xc1BTlK0hOXaEFxPHlaQ1
-        FsFrdkJYIrof0CYPuU+kc6e/HA==
-X-Google-Smtp-Source: AGRyM1tgbmKXwzWoirqUL53jUbbUZ64FHe+zsXVc527cYaSy3639GImZYXL6jCmaQhREfAnBhkhhDg==
-X-Received: by 2002:a05:6808:1202:b0:2f9:c7b4:fd56 with SMTP id a2-20020a056808120200b002f9c7b4fd56mr8925688oil.55.1656363296088;
-        Mon, 27 Jun 2022 13:54:56 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id w12-20020a056870a2cc00b000f33624baa4sm7751272oak.18.2022.06.27.13.54.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 13:54:55 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 15:54:53 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] dt-bindings: arm: msm: Convert kpss-gcc driver
- Documentation to yaml
-Message-ID: <YroZHWEbVK5BHEFM@builder.lan>
-References: <20220430060125.9124-1-ansuelsmth@gmail.com>
- <20220430060125.9124-4-ansuelsmth@gmail.com>
- <fec305d1-d4b3-3f9d-bc31-bc33490d1ad7@linaro.org>
- <626d4cbf.1c69fb81.e6965.76b4@mx.google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zZYxoCPScWXjQwHFlcANYHGk3bPGNCdA16fhomtXzig=;
+        b=ku/CSB3eyq2p0/9Z6lOn1A74G4iKYIr5fMr7cYTgK/x371HmP4ZsjnTBU6uKmAm2Ee
+         jII5sd5+qw8h+uppYkGoD0VE3iZXR1e7uXEVY5KThdnEHY8qLL+HyOGM2JNrG38puA2e
+         jIlbmeR7Gp1ZRYqQ44dRAQx7+Pi1smk16lgCfUBG144NZoMGAgSYkDWCucIfwqTwGYQe
+         aKeuNmQO/Fhee0hQc3K8c5xr5PaBbbIrC7DOOJRV5fyfKqBY1dan936MmL6rqvTbck8L
+         rqL6f9/Hx7155K+5RoeFVuI+O+tser0u8hj7vIl8VqJinhhXDeIUM013P0KgN3TuGu2T
+         xlfg==
+X-Gm-Message-State: AJIora80sbXaUQ96xkuEfKgH/Bn6RMJKNHXr3yGwbUrTeY0rQp12/G0L
+        DcjtP6kISBE+1/rkqp06y05e3VQtUcF1VJ4z1eg=
+X-Google-Smtp-Source: AGRyM1vSFR/5VfuUx99F/9e3fpf5w79op2GZg/nz3Tn8dAZhwJQByxpaIv+hq3rUNAk1YwfppxULTZUS/fan6EOKfTk=
+X-Received: by 2002:a05:6402:3514:b0:435:f24a:fbad with SMTP id
+ b20-20020a056402351400b00435f24afbadmr18301496edd.311.1656363385709; Mon, 27
+ Jun 2022 13:56:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <626d4cbf.1c69fb81.e6965.76b4@mx.google.com>
+References: <20220614014714.1407239-1-irogers@google.com>
+In-Reply-To: <20220614014714.1407239-1-irogers@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 27 Jun 2022 13:56:13 -0700
+Message-ID: <CAEf4BzYXQULPgC_qP-O9F6yo9ohKfDRWChDAOsqYX8bWYuv5ng@mail.gmail.com>
+Subject: Re: [PATCH] perf bpf: 8 byte align bpil data
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 30 Apr 02:42 CDT 2022, Ansuel Smith wrote:
+On Mon, Jun 13, 2022 at 6:47 PM Ian Rogers <irogers@google.com> wrote:
+>
+> bpil data is accessed assuming 64-bit alignment resulting in undefined
+> behavior as the data is just byte aligned. With an -fsanitize=undefined
+> build the following errors are observed:
+>
+> $ sudo perf record -a sleep 1
+> util/bpf-event.c:310:22: runtime error: load of misaligned address 0x55f61084520f for type '__u64', which requires 8 byte alignment
+> 0x55f61084520f: note: pointer points here
+>  a8 fe ff ff 3c  51 d3 c0 ff ff ff ff 04  84 d3 c0 ff ff ff ff d8  aa d3 c0 ff ff ff ff a4  c0 d3 c0
+>              ^
+> util/bpf-event.c:311:20: runtime error: load of misaligned address 0x55f61084522f for type '__u32', which requires 4 byte alignment
+> 0x55f61084522f: note: pointer points here
+>  ff ff ff ff c7  17 00 00 f1 02 00 00 1f  04 00 00 58 04 00 00 00  00 00 00 0f 00 00 00 63  02 00 00
+>              ^
+> util/bpf-event.c:198:33: runtime error: member access within misaligned address 0x55f61084523f for type 'const struct bpf_func_info', which requires 4 byte alignment
+> 0x55f61084523f: note: pointer points here
+>  58 04 00 00 00  00 00 00 0f 00 00 00 63  02 00 00 3b 00 00 00 ab  02 00 00 44 00 00 00 14  03 00 00
+>
+> Correct this by rouding up the data sizes and aligning the pointers.
 
-> On Sat, Apr 30, 2022 at 04:40:54PM +0200, Krzysztof Kozlowski wrote:
-> > On 30/04/2022 08:01, Ansuel Smith wrote:
-> > > Convert kpss-gcc driver Documentation to yaml.
-> > > Add #clock-cells additional binding to required bindings and example
-> > > as it's a required binding for clock-output-names.
-> > > 
-> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > 
-> > 
-> > (...)
-> > 
-> > > +properties:
-> > > +  compatible:
-> > > +    items:
-> > > +      - enum:
-> > > +          - qcom,kpss-gcc-ipq8064
-> > > +          - qcom,kpss-gcc-apq8064
-> > > +          - qcom,kpss-gcc-msm8974
-> > > +          - qcom,kpss-gcc-msm8960
-> > > +      - const: qcom,kpss-gcc
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  clocks:
-> > > +    items:
-> > > +      - description: phandle to pll8_vote
-> > > +      - description: phandle to pxo_board
-> > > +
-> > > +  clock-names:
-> > > +    items:
-> > > +      - const: pll8_vote
-> > > +      - const: pxo
-> > > +
-> > > +  clock-output-names:
-> > > +    const: acpu_l2_aux
-> > 
-> > It does not make sense having a constant output name. What is the
-> > meaning this property in such case? The original binding did not enforce it.
-> > 
-> > 
-> > 
-> > Best regards,
-> > Krzysztof
-> 
-> Mh. Should I just drop the const and put a description referring to an
-> advised name? The driver with the kpss-gcc hardcode the name to
-> acpu_l2_aux that's why I thought it was a correct conversion using a
-> const but I assume this is another problem of not making a correct 1:1
-> conversion and adding fixes on pure conversion.
-> Think I should drop it and put a description to it. (and then later fix
-> it when I will push the other series with all the tweaks)
-> 
-> What do you think?
-> 
+typo: rounding
 
-The typical reason for using clock-output-names is that we have some
-consumer that finds the clock based on global name lookup. Over time
-we've been moving these to use .fw_name or .index based lookup, which
-removes this problem.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
 
-But I don't see that being the case here. So my suggestion is that you
-just drop clock-output-names from the binding, which will solve
-Krzysztof's objection.
+Makes sense.
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
 
-From there we can review what needs to be done in the Linux driver to
-work with the improved binding.
-
-Regards,
-Bjorn
+>  tools/perf/util/bpf-utils.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/util/bpf-utils.c b/tools/perf/util/bpf-utils.c
+> index e271e05e51bc..80b1d2b3729b 100644
+> --- a/tools/perf/util/bpf-utils.c
+> +++ b/tools/perf/util/bpf-utils.c
+> @@ -149,11 +149,10 @@ get_bpf_prog_info_linear(int fd, __u64 arrays)
+>                 count = bpf_prog_info_read_offset_u32(&info, desc->count_offset);
+>                 size  = bpf_prog_info_read_offset_u32(&info, desc->size_offset);
+>
+> -               data_len += count * size;
+> +               data_len += roundup(count * size, sizeof(__u64));
+>         }
+>
+>         /* step 3: allocate continuous memory */
+> -       data_len = roundup(data_len, sizeof(__u64));
+>         info_linear = malloc(sizeof(struct perf_bpil) + data_len);
+>         if (!info_linear)
+>                 return ERR_PTR(-ENOMEM);
+> @@ -180,7 +179,7 @@ get_bpf_prog_info_linear(int fd, __u64 arrays)
+>                 bpf_prog_info_set_offset_u64(&info_linear->info,
+>                                              desc->array_offset,
+>                                              ptr_to_u64(ptr));
+> -               ptr += count * size;
+> +               ptr += roundup(count * size, sizeof(__u64));
+>         }
+>
+>         /* step 5: call syscall again to get required arrays */
+> --
+> 2.36.1.476.g0c4daa206d-goog
+>

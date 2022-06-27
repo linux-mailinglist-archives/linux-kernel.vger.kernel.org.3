@@ -2,79 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969DE55CB22
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A1555C7A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236586AbiF0NsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
+        id S236656AbiF0Nsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236395AbiF0Nrc (ORCPT
+        with ESMTP id S236671AbiF0Nr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:47:32 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E44860C0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:47:31 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id i25so7641711wrc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:47:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=thKvXG+JY3HbxZ4gHoPQEiQ+g4hVQKN6LBHIr47r/6k=;
-        b=jHNN/E/FNcXapK91iIDirAbb8f+wGuCbENy43xqwJNYCKodSw6sMQw5o3qBrwoBv5/
-         EBbdUO7C5KuSgFCPffAH0hqEQALbGoEhGlayBiez57/4mxZptaX6hEocri8MCD8m966N
-         OME3Wcv0nSd6XZR/+W7O/B5zMbnkZvTMlu8LM5E9rwowE0h+aIvHeu4JnabkLnMtWNe4
-         G8RV8szA1uuKsx5r46GEGat4w4/vEQAUFzl6zHJ1KxDpQl+86EpH8s4wTvkG459LGk/9
-         tViG69hLpnyGmp44Y+BX5CWXoQwZF+1pPjCcH6OMt93d4h4vxXiWINOb52yB3mtjKJ5I
-         y5lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=thKvXG+JY3HbxZ4gHoPQEiQ+g4hVQKN6LBHIr47r/6k=;
-        b=tXZsBjqerpKnFIEZlq/f468VPFuOzz47SLoNXPswjlZXA+0zxhEahYeIH0yX44thBO
-         J24gm/vcR2XayINxXQ2QOaabszsYPzg4WNczvxHt2veRZOIv4pyKyJfDxH8hHVDouZb3
-         pSeDA62TQJaipdHKuH+2W+koL64nS38lFjo8XrXooPBblaFu7sMKP2fZmvjLwKw9DdhB
-         o/aXXKP3Kh9Z2m4nVNwWIKCB+r9I2lJQap9JnhGErI+KXTOmWSmpyldnr0bN6aJIG/v2
-         LU0gF+o2K1KbXA2FbydJHjV3lelM95rEboyr5fTChPi4XBTy2PV+3v1MZJZVIME6/HpB
-         lOww==
-X-Gm-Message-State: AJIora9nF7N5Lg61kjVsW1ZaOt9+tDn+uwEfxUUeRTVJXs/aBtzpMP19
-        nU3JjO2ht36s8yI9LLJn6+oxNLpN2eGQlQ==
-X-Google-Smtp-Source: AGRyM1u6bcKos2Ai+xOrhZQz5EBIS0SCQvcwH2heAPU9X0Nf/agWvME05l1J5jMwiTo3Zm2Bvu++Zg==
-X-Received: by 2002:a05:6000:15c1:b0:21b:ad5e:2798 with SMTP id y1-20020a05600015c100b0021bad5e2798mr12340957wry.237.1656337649964;
-        Mon, 27 Jun 2022 06:47:29 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05600c358d00b003942a244f47sm18847964wmq.32.2022.06.27.06.47.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 06:47:29 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 14:47:27 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, andrzej.hajda@intel.com,
-        narmstrong@baylibre.com, robert.foss@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, mchehab@kernel.org,
-        marcel.ziswiler@toradex.com, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v9 13/14] dt-bindings: mfd: Add i.MX8qm/qxp Control and
- Status Registers module binding
-Message-ID: <Yrm07wceI4DfGVNG@google.com>
-References: <20220611141421.718743-1-victor.liu@nxp.com>
- <20220611141421.718743-14-victor.liu@nxp.com>
+        Mon, 27 Jun 2022 09:47:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA4B26315
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:47:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C95BE1758;
+        Mon, 27 Jun 2022 06:47:55 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B5263F5A1;
+        Mon, 27 Jun 2022 06:47:55 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 14:47:53 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 19/20] arch_topology: Add support for parsing sockets
+ in /cpu-map
+Message-ID: <Yrm1CbXzgj4uowOV@arm.com>
+References: <20220621192034.3332546-1-sudeep.holla@arm.com>
+ <20220621192034.3332546-20-sudeep.holla@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220611141421.718743-14-victor.liu@nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220621192034.3332546-20-sudeep.holla@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,36 +53,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Jun 2022, Liu Ying wrote:
-
-> This patch adds bindings for i.MX8qm/qxp Control and Status Registers module.
+On Tuesday 21 Jun 2022 at 20:20:33 (+0100), Sudeep Holla wrote:
+> Finally let us add support for socket nodes in /cpu-map in the device
+> tree. Since this may not be present in all the old platforms and even
+> most of the existing platforms, we need to assume absence of the socket
+> node indicates that it is a single socket system and handle appropriately.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> Also it is likely that most single socket systems skip to as the node
+> since it is optional.
+> 
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 > ---
-> v8->v9:
-> * No change.
+>  drivers/base/arch_topology.c | 37 +++++++++++++++++++++++++++++++-----
+>  1 file changed, 32 insertions(+), 5 deletions(-)
 > 
-> v7->v8:
-> * No change.
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 75604f783bfc..ed1cb64a95aa 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -545,8 +545,8 @@ static int __init parse_core(struct device_node *core, int package_id,
+>  	return 0;
+>  }
+>  
+> -static int __init
+> -parse_cluster(struct device_node *cluster, int cluster_id, int depth)
+> +static int __init parse_cluster(struct device_node *cluster, int package_id,
+> +				int cluster_id, int depth)
+>  {
+>  	char name[20];
+>  	bool leaf = true;
+> @@ -566,7 +566,7 @@ parse_cluster(struct device_node *cluster, int cluster_id, int depth)
+>  		c = of_get_child_by_name(cluster, name);
+>  		if (c) {
+>  			leaf = false;
+> -			ret = parse_cluster(c, i, depth + 1);
+> +			ret = parse_cluster(c, package_id, i, depth + 1);
+>  			of_node_put(c);
+>  			if (ret != 0)
+>  				return ret;
+> @@ -590,7 +590,8 @@ parse_cluster(struct device_node *cluster, int cluster_id, int depth)
+>  			}
+>  
+>  			if (leaf) {
+> -				ret = parse_core(c, 0, cluster_id, core_id++);
+> +				ret = parse_core(c, package_id, cluster_id,
+> +						 core_id++);
+>  			} else {
+>  				pr_err("%pOF: Non-leaf cluster with core %s\n",
+>  				       cluster, name);
+> @@ -610,6 +611,32 @@ parse_cluster(struct device_node *cluster, int cluster_id, int depth)
+>  	return 0;
+>  }
+>  
+> +static int __init parse_socket(struct device_node *socket)
+> +{
+> +	char name[20];
+> +	struct device_node *c;
+> +	bool has_socket = false;
+> +	int package_id = 0, ret;
+> +
+> +	do {
+> +		snprintf(name, sizeof(name), "socket%d", package_id);
+> +		c = of_get_child_by_name(socket, name);
+> +		if (c) {
+> +			has_socket = true;
+> +			ret = parse_cluster(c, package_id, -1, 0);
+> +			of_node_put(c);
+> +			if (ret != 0)
+> +				return ret;
+> +		}
+> +		package_id++;
+> +	} while (c);
+> +
+> +	if (!has_socket)
+> +		ret = parse_cluster(socket, 0, -1, 0);
+> +
+> +	return ret;
+> +}
+> +
+>  static int __init parse_dt_topology(void)
+>  {
+>  	struct device_node *cn, *map;
+> @@ -629,7 +656,7 @@ static int __init parse_dt_topology(void)
+>  	if (!map)
+>  		goto out;
+>  
+> -	ret = parse_cluster(map, -1, 0);
+> +	ret = parse_socket(map);
+>  	if (ret != 0)
+>  		goto out_map;
+>  
+> -- 
+> 2.36.1
 > 
-> v6->v7:
-> * Add Rob's R-b tag.
-> 
-> v5->v6:
-> * Drop 'select' schema. (Rob)
-> 
-> v4->v5:
-> * Newly introduced in v5. (Rob)
-> 
->  .../bindings/mfd/fsl,imx8qxp-csr.yaml         | 192 ++++++++++++++++++
->  1 file changed, 192 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.yaml
 
-Applied, thanks.
+Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Thanks,
+Ionela.

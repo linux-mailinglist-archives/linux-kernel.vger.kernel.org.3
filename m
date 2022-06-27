@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2F055E1C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364C555D920
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237694AbiF0Lp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
+        id S237861AbiF0LrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237433AbiF0Lmu (ORCPT
+        with ESMTP id S237367AbiF0Lmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:42:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6D1132;
-        Mon, 27 Jun 2022 04:37:49 -0700 (PDT)
+        Mon, 27 Jun 2022 07:42:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F5DDA0;
+        Mon, 27 Jun 2022 04:37:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A990609D0;
-        Mon, 27 Jun 2022 11:37:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14776C3411D;
-        Mon, 27 Jun 2022 11:37:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 643F5609D0;
+        Mon, 27 Jun 2022 11:37:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C7B6C3411D;
+        Mon, 27 Jun 2022 11:37:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329868;
-        bh=7CeDTL/ESwXNjDbUD8Y9dt45dM7nIakwkBF56hFoddU=;
+        s=korg; t=1656329829;
+        bh=w8pEeD49eTpvRe45M7NoRlebckBgfBtMDWOyG0gSJaQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l6YBUD/DHdUWysOeepY3M8fvkPRJBkDUeTx2mBYqqkhotSImFjRVvMcrhLgUVRMy3
-         ybxwyAscOgxfm9tuE1CWJAq6rtLDEzP45tZmslQ5xMmXDG+SGSxggE26slx/JIKNBE
-         SuYXQVXX+FLgCy2zmMO+F9iSN72LFB7UQKDqTGIE=
+        b=O3ptwaDU+hNCj01H7ROYVdR8iEFLRuzCE9HmRqnwidbSk+8xlEAf6gnvoHFiP3GB8
+         RFabHgfaFu587c/8sw7uyvwphX19SM+xdieU6Rglpe2761FQILB6a6gxo0gFXWHu8h
+         2H5+ZdFHRByrDGZ4+bFDPVOhEAoTzcdT7iAhkvCU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH 5.15 129/135] modpost: fix section mismatch check for exported init/exit sections
-Date:   Mon, 27 Jun 2022 13:22:16 +0200
-Message-Id: <20220627111941.895331668@linuxfoundation.org>
+        stable@vger.kernel.org, "Ivan T. Ivanov" <iivanov@suse.de>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH 5.15 130/135] ARM: dts: bcm2711-rpi-400: Fix GPIO line names
+Date:   Mon, 27 Jun 2022 13:22:17 +0200
+Message-Id: <20220627111941.923820586@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
 References: <20220627111938.151743692@linuxfoundation.org>
@@ -54,37 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Stefan Wahren <stefan.wahren@i2se.com>
 
-commit 28438794aba47a27e922857d27b31b74e8559143 upstream.
+commit b9b6d4c925604b70d007feb4c77b8cc4c038d2da upstream.
 
-Since commit f02e8a6596b7 ("module: Sort exported symbols"),
-EXPORT_SYMBOL* is placed in the individual section ___ksymtab(_gpl)+<sym>
-(3 leading underscores instead of 2).
+The GPIO expander line names has been fixed in the vendor tree last year,
+so upstream these changes.
 
-Since then, modpost cannot detect the bad combination of EXPORT_SYMBOL
-and __init/__exit.
-
-Fix the .fromsec field.
-
-Fixes: f02e8a6596b7 ("module: Sort exported symbols")
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Fixes: 1c701accecf2 ("ARM: dts: Add Raspberry Pi 400 support")
+Reported-by: Ivan T. Ivanov <iivanov@suse.de>
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/mod/modpost.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/bcm2711-rpi-400.dts |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1108,7 +1108,7 @@ static const struct sectioncheck section
- },
- /* Do not export init/exit functions or data */
- {
--	.fromsec = { "__ksymtab*", NULL },
-+	.fromsec = { "___ksymtab*", NULL },
- 	.bad_tosec = { INIT_SECTIONS, EXIT_SECTIONS, NULL },
- 	.mismatch = EXPORT_TO_INIT_EXIT,
- 	.symbol_white_list = { DEFAULT_SYMBOL_WHITE_LIST, NULL },
+--- a/arch/arm/boot/dts/bcm2711-rpi-400.dts
++++ b/arch/arm/boot/dts/bcm2711-rpi-400.dts
+@@ -28,12 +28,12 @@
+ &expgpio {
+ 	gpio-line-names = "BT_ON",
+ 			  "WL_ON",
+-			  "",
++			  "PWR_LED_OFF",
+ 			  "GLOBAL_RESET",
+ 			  "VDD_SD_IO_SEL",
+-			  "CAM_GPIO",
++			  "GLOBAL_SHUTDOWN",
+ 			  "SD_PWR_ON",
+-			  "SD_OC_N";
++			  "SHUTDOWN_REQUEST";
+ };
+ 
+ &genet_mdio {
 
 

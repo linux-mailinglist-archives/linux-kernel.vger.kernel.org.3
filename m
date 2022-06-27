@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC19255D509
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0936255D311
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235388AbiF0L6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+        id S237305AbiF0Loh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238690AbiF0Lw3 (ORCPT
+        with ESMTP id S237361AbiF0Lmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:52:29 -0400
+        Mon, 27 Jun 2022 07:42:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8805BB49B;
-        Mon, 27 Jun 2022 04:45:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A222DBB;
+        Mon, 27 Jun 2022 04:37:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E610E6125A;
-        Mon, 27 Jun 2022 11:45:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0670DC3411D;
-        Mon, 27 Jun 2022 11:45:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26246609D0;
+        Mon, 27 Jun 2022 11:37:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A874C3411D;
+        Mon, 27 Jun 2022 11:37:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330309;
-        bh=0/smJ2Sa+Gz1IrVE/v9XQNQbsuEP/ZS/Wm98OhSZgv8=;
+        s=korg; t=1656329826;
+        bh=EfqybhqZKCqHI6x6TuEbBk8Qw1d4L2PCvm9+UEsIQUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t4+6vM/E/Ua/8K47JLWLHWDCjPPLTyotz+stZCWdhPgyPX8Ztik06M+LDMOgJc+mP
-         Ambnb6iznq8TzCoF8SnRKfTP3E8Mlmn7MbkLYCqiUqj3gLMUIrZvxmpDqsQ5bNcVkk
-         meysV+VcIyCRjHhF0Jf9UtoOGadF+zrKzEGyYTV8=
+        b=ygnFz7+udtmJ65Jqp1d8vs0MPbZM1lsgrLyB6RDEInFwDbUyf5oHjS9FDMBe3Fzz2
+         oI5Wz78M4zozBki9yKcjeIcMuuP6G+JYUMqKKOGMIGAXBO1gbhfyT0HIWsGYF0gDVz
+         ZsYhqetntbU5wAUQz5orMKLS2ZodgJBA4l1XNbnY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.18 154/181] parisc: Fix flush_anon_page on PA8800/PA8900
-Date:   Mon, 27 Jun 2022 13:22:07 +0200
-Message-Id: <20220627111949.148453471@linuxfoundation.org>
+        stable@vger.kernel.org, Jun Li <jun.li@nxp.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH 5.15 121/135] ARM: dts: imx7: Move hsic_phy power domain to HSIC PHY node
+Date:   Mon, 27 Jun 2022 13:22:08 +0200
+Message-Id: <20220627111941.666378889@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John David Anglin <dave.anglin@bell.net>
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-commit e9ed22e6e5010997a2f922eef61ca797d0a2a246 upstream.
+commit 552ca27929ab28b341ae9b2629f0de3a84c98ee8 upstream.
 
-Anonymous pages are allocated with the shared mappings colouring,
-SHM_COLOUR. Since the alias boundary on machines with PA8800 and
-PA8900 processors is unknown, flush_user_cache_page() might not
-flush all mappings of a shared anonymous page. Flushing the whole
-data cache flushes all mappings.
+Move the power domain to its actual user. This keeps the power domain
+enabled even when the USB host is runtime suspended. This is necessary
+to detect any downstream events, like device attach.
 
-This won't fix all coherency issues with shared mappings but it
-seems to work well in practice.  I haven't seen any random memory
-faults in almost a month on a rp3440 running as a debian buildd
-machine.
-
-There is a small preformance hit.
-
-Signed-off-by: John David Anglin <dave.anglin@bell.net>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Cc: stable@vger.kernel.org   # v5.18+
+Fixes: 02f8eb40ef7b ("ARM: dts: imx7s: Add power domain for imx7d HSIC")
+Suggested-by: Jun Li <jun.li@nxp.com>
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/kernel/cache.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/imx7s.dtsi |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/parisc/kernel/cache.c
-+++ b/arch/parisc/kernel/cache.c
-@@ -722,7 +722,10 @@ void flush_anon_page(struct vm_area_stru
- 		return;
+--- a/arch/arm/boot/dts/imx7s.dtsi
++++ b/arch/arm/boot/dts/imx7s.dtsi
+@@ -104,6 +104,7 @@
+ 		compatible = "usb-nop-xceiv";
+ 		clocks = <&clks IMX7D_USB_HSIC_ROOT_CLK>;
+ 		clock-names = "main_clk";
++		power-domains = <&pgc_hsic_phy>;
+ 		#phy-cells = <0>;
+ 	};
  
- 	if (parisc_requires_coherency()) {
--		flush_user_cache_page(vma, vmaddr);
-+		if (vma->vm_flags & VM_SHARED)
-+			flush_data_cache();
-+		else
-+			flush_user_cache_page(vma, vmaddr);
- 		return;
- 	}
- 
+@@ -1135,7 +1136,6 @@
+ 				compatible = "fsl,imx7d-usb", "fsl,imx27-usb";
+ 				reg = <0x30b30000 0x200>;
+ 				interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
+-				power-domains = <&pgc_hsic_phy>;
+ 				clocks = <&clks IMX7D_USB_CTRL_CLK>;
+ 				fsl,usbphy = <&usbphynop3>;
+ 				fsl,usbmisc = <&usbmisc3 0>;
 
 

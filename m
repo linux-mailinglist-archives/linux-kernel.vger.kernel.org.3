@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CBC55CAB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119D555C9EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbiF0JRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S233811AbiF0JMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbiF0JQx (ORCPT
+        with ESMTP id S233786AbiF0JMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:16:53 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C826142;
-        Mon, 27 Jun 2022 02:16:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1656321412; x=1687857412;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=ZfnjeGaTXA62WKjkc0ev0zGBTHlOx0/hvfL7GfyMNRA=;
-  b=f+GPv5/SyNFumSAdnRTDmRj+MF3xKUMvt2d8mcAa0KE4nGfweBLYbSe8
-   pf2Gv+OlNnX0CHQPjiJVAjsbpnt17YSWQNU9qeIlhB4hu6gJugtzCbG6m
-   Sn7TPLPGgEB/kPAqK3jRBpEnj+N1Ds5xvgvv44mAZ2E8NZZHZfQdSio6n
-   mmdVmXUihj8GWDE6DjC7kg+8ga4OSdKOQig35HXETbKhhettjSZDv11vP
-   IplBU54W27RWKuRobllEDsa6mectaWfbhoUkb/YItGVEV3wQCBIrf7fTH
-   8nFZXiLA3OCgOH++c6GCCmiJO2oP1MzRSqAJ4Ig9gK/PtGR7Ca7wszoIc
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="179631289"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jun 2022 02:16:51 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 27 Jun 2022 02:16:50 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 27 Jun 2022 02:16:47 -0700
-From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-To:     <arnd@arndb.de>, <alexandre.belloni@bootlin.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <soc@kernel.org>,
-        <robh+dt@kernel.org>, <nicolas.ferre@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <Kavyasree.Kotagiri@microchip.com>
-Subject: [PATCH] ARM: dts: lan966x: Cleanup flexcom3 usart pinctrl settings.
-Date:   Mon, 27 Jun 2022 14:42:17 +0530
-Message-ID: <20220627091217.21701-1-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 27 Jun 2022 05:12:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C021D2667
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:12:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 504171FAD6;
+        Mon, 27 Jun 2022 09:12:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1656321162; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hWcCqwO3BTodK8igIZw+OA8TsjbOJ7vRUphPsAiYNv4=;
+        b=eeRgR8VepGtYhh2IgHJ7MPaSon2kC3s6egMSpO80f5L/5WThzmff4qewigVLB+qJH0ZuiK
+        RyXfaMTuLi70NRl7KBO4wEm55ZMvF83BXRZEuXzpVxAhe0PnOFIqR7mmiQ3HTy9ZSkMKeW
+        aOIpRpowQ0O+6qqnHcE0FY9rx7XZIUM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1656321162;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hWcCqwO3BTodK8igIZw+OA8TsjbOJ7vRUphPsAiYNv4=;
+        b=3gYlwMlEoElkfTm6cd/wO/q3VHQTTqvtC51R3D2kE8IUa5YnQaypTGqU4CXX87A8rJEBdX
+        PseDLBPqHiUkCrBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 362C113456;
+        Mon, 27 Jun 2022 09:12:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qcRbDIp0uWKHIgAAMHmgww
+        (envelope-from <hare@suse.de>); Mon, 27 Jun 2022 09:12:42 +0000
+Message-ID: <f69f7f28-cf24-ebca-41f2-f6cf76435839@suse.de>
+Date:   Mon, 27 Jun 2022 11:12:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Matthew Wilcox <matthew@wil.cx>, Mel Gorman <mgorman@suse.de>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Jan Kara <jack@suse.cz>
+From:   Hannes Reinecke <hare@suse.de>
+Subject: Oddities in do_read_cache_page()
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On pcb8291, Flexcom3 usart has only tx and rx pins.
-Cleaningup usart3 pinctrl settings.
+Hey Matt,
 
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
----
- arch/arm/boot/dts/lan966x-pcb8291.dts | 18 ++++++------------
- 1 file changed, 6 insertions(+), 12 deletions(-)
+I've stumbled across this code in do_read_cache_page():
 
-diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
-index 3c7e3a7d6f14..5dc8ed4cee9a 100644
---- a/arch/arm/boot/dts/lan966x-pcb8291.dts
-+++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
-@@ -19,19 +19,13 @@
- };
- 
- &gpio {
--	fc_shrd7_pins: fc_shrd7-pins {
--		pins = "GPIO_49";
--		function = "fc_shrd7";
--	};
--
--	fc_shrd8_pins: fc_shrd8-pins {
--		pins = "GPIO_54";
--		function = "fc_shrd8";
-+	fc3_b_rxd_pins: fc3-b-rxd-pins {
-+		pins = "GPIO_52";
-+		function = "fc3_b";
- 	};
- 
--	fc3_b_pins: fcb3-spi-pins {
--		/* SCK, RXD, TXD */
--		pins = "GPIO_51", "GPIO_52", "GPIO_53";
-+	fc3_b_txd_pins: fc3-b-txd-pins {
-+		pins = "GPIO_53";
- 		function = "fc3_b";
- 	};
- 
-@@ -53,7 +47,7 @@
- 	status = "okay";
- 
- 	usart3: serial@200 {
--		pinctrl-0 = <&fc3_b_pins>, <&fc_shrd7_pins>, <&fc_shrd8_pins>;
-+		pinctrl-0 = <&fc3_b_rxd_pins>, <&fc3_b_txd_pins>;
- 		pinctrl-names = "default";
- 		status = "okay";
- 	};
+         struct folio *folio;
+
+         folio = do_read_cache_folio(mapping, index, filler, file, gfp);
+         if (IS_ERR(folio))
+                 return &folio->page;
+         return folio_file_page(folio, index);
+
+Following 'do_read_cache_folio()' I see that it does things like
+
+                 folio = filemap_alloc_folio(gfp, 0);
+                 if (!folio)
+                         return ERR_PTR(-ENOMEM);
+
+Now I freely admit that my knowledge of folios is hazy at best, but 
+dereferencing an error pointer is something I would seriously frown upon 
+  if I were to review the code.
+Care to explain?
+Or is it, indeed, simply a bug?
+
+Cheers,
+
+Hannes
 -- 
-2.17.1
-
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer

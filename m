@@ -2,140 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D2555C1E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E33655D7F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiF0IQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
+        id S233479AbiF0IRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbiF0IQw (ORCPT
+        with ESMTP id S232771AbiF0IR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:16:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395E1626D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:16:50 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LWgX16K3ZzkWtn;
-        Mon, 27 Jun 2022 16:15:29 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 27 Jun 2022 16:16:33 +0800
-CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <bristot@redhat.com>,
-        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
-        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
-        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
-        <guodong.xu@linaro.org>, <hesham.almatary@huawei.com>,
-        <john.garry@huawei.com>, <shenyang39@huawei.com>
-Subject: Re: [PATCH v4 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-To:     Abel Wu <wuyun.abel@bytedance.com>,
-        Yicong Yang <yangyicong@hisilicon.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <tim.c.chen@linux.intel.com>,
-        <gautham.shenoy@amd.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220609120622.47724-1-yangyicong@hisilicon.com>
- <20220609120622.47724-3-yangyicong@hisilicon.com>
- <9cf43b10-85a2-1a83-057f-c43be339265e@bytedance.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <3105c9d4-9707-e9a3-47e5-c63095fa46e2@huawei.com>
-Date:   Mon, 27 Jun 2022 16:16:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Mon, 27 Jun 2022 04:17:27 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611FF6273
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:17:26 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id r18so3948935edb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:17:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bJe+EHscmpBI3l8sdzkx98qjGwntmBZw5/UI+r8ZqSI=;
+        b=NSiQD4pcQ7h4Nb3yuNNthTQZjzy0AC9aizCXSr6X6WSSMjfNAo0JvxUzc2re/98uy8
+         CTpKXFnQr3x+l8kFC0WQM0Wpt5lX/fDZn4W5Z7+9251QBlWCWX+AEmocG/wIaZOSB4I6
+         uXntkNfAwjg9P+eZSPPJkPR3kz4lLNAqQZuE3csp8HLrs249gzEZD8dsUS2asvfyj76f
+         wX5kcCOPj91+iJVd9nlidDg6nwaeakpIbqc6l/jC4pMoCrVvRPEElFjiy0ef6QwRysif
+         YNZi1+Ne+F+Z4WyxWJaiKzFrausU+XK68VxsqW2bE1qQO0YJsGCcFCqV/4YL9WXIUo3C
+         Qu6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bJe+EHscmpBI3l8sdzkx98qjGwntmBZw5/UI+r8ZqSI=;
+        b=Uu7nRZ+KoCiUnjbtOnx2/Jscaap5LIYGzrJoPcy1XDQeKyK7uKslbSaB66f4aye4zo
+         T5NP9E6s597F75d1J+d03nuHm/dvSfxIbl6t8STAM8hiE1A3pFLgSosIZoqGb7T8q/Mg
+         VOhpedAFyJ8YQS44WeMb4Y73cDbZ5vXJDsdVJcxMowetEETvlVTSN7OACUvPzP430+f4
+         dM+7Mkjf8IuoSp8lVHGzfVHaWJxnIr9mvrlh2C8r0MpMmGOtloPqEvKshh8QpT3ck28r
+         n/ElhKQS7MR3xg06mBdtl+HMp1p+WvsGUC1nVZWU+2TNbx6dJlGXlWlos/L7eRRwFQ0w
+         BYLQ==
+X-Gm-Message-State: AJIora9L/JjOxiS0Usjm2XfxGIOVwi3GTRdPJKJC5T1ujrzADt5SLz97
+        rEyVsdlAzNJxpqOO3O4/HlWCKg==
+X-Google-Smtp-Source: AGRyM1uY/I+C8DSEIO+4P/vX0mBvSB1E3AuWL8dm46TteoTz/uhg5BxVd1obDTUaJQ8kUbO4cfZm8g==
+X-Received: by 2002:a05:6402:1e93:b0:435:7f3f:407f with SMTP id f19-20020a0564021e9300b004357f3f407fmr15073343edf.173.1656317844990;
+        Mon, 27 Jun 2022 01:17:24 -0700 (PDT)
+Received: from [192.168.0.246] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id p6-20020a170906604600b006f3ef214de7sm4800441ejj.77.2022.06.27.01.17.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 01:17:24 -0700 (PDT)
+Message-ID: <cab6fd96-4b8e-42a3-4dce-db63656df92c@linaro.org>
+Date:   Mon, 27 Jun 2022 10:17:23 +0200
 MIME-Version: 1.0
-In-Reply-To: <9cf43b10-85a2-1a83-057f-c43be339265e@bytedance.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 01/40] dt-bindings: input: gpio-keys: enforce node
+ names to match all properties
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
+        Olof Johansson <olof@lixom.net>, devicetree@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>, arm@kernel.org,
+        linux-input@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
+ <20220616005333.18491-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616005333.18491-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/26 20:13, Abel Wu wrote:
+On 16/06/2022 02:52, Krzysztof Kozlowski wrote:
+> The gpio-keys DT schema matches all properties with a wide pattern and
+> applies specific schema to children.  This has drawback - all regular
+> properties are also matched and are silently ignored, even if they are
+> not described in schema.  Basically this allows any non-object property
+> to be present.
 > 
-> On 6/9/22 8:06 PM, Yicong Yang Wrote:
->> From: Barry Song <song.bao.hua@hisilicon.com>
->>
->> For platforms having clusters like Kunpeng920, CPUs within the same cluster
->> have lower latency when synchronizing and accessing shared resources like
->> cache. Thus, this patch tries to find an idle cpu within the cluster of the
->> target CPU before scanning the whole LLC to gain lower latency.
->>
->> Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so this patch
->> doesn't consider SMT for this moment.
->>
->> Testing has been done on Kunpeng920 by pinning tasks to one numa and two
->> numa. On Kunpeng920, Each numa has 8 clusters and each cluster has 4 CPUs.
->>
->> With this patch, We noticed enhancement on tbench within one numa or cross
->> two numa.
->>
->> On numa 0:
->>                              5.19-rc1                patched
->> Hmean     1        350.27 (   0.00%)      406.88 *  16.16%*
->> Hmean     2        702.01 (   0.00%)      808.22 *  15.13%*
->> Hmean     4       1405.14 (   0.00%)     1614.34 *  14.89%*
->> Hmean     8       2830.53 (   0.00%)     3169.02 *  11.96%*
->> Hmean     16      5597.95 (   0.00%)     6224.20 *  11.19%*
->> Hmean     32     10537.38 (   0.00%)    10524.97 *  -0.12%*
->> Hmean     64      8366.04 (   0.00%)     8437.41 *   0.85%*
->> Hmean     128     7060.87 (   0.00%)     7150.25 *   1.27%*
->>
->> On numa 0-1:
->>                              5.19-rc1                patched
->> Hmean     1        346.11 (   0.00%)      408.47 *  18.02%*
->> Hmean     2        693.34 (   0.00%)      805.78 *  16.22%*
->> Hmean     4       1384.96 (   0.00%)     1602.49 *  15.71%*
->> Hmean     8       2699.45 (   0.00%)     3069.98 *  13.73%*
->> Hmean     16      5327.11 (   0.00%)     5688.19 *   6.78%*
->> Hmean     32     10019.10 (   0.00%)    11862.56 *  18.40%*
->> Hmean     64     13850.57 (   0.00%)    17748.54 *  28.14%*
->> Hmean     128    12498.25 (   0.00%)    15541.59 *  24.35%*
->> Hmean     256    11195.77 (   0.00%)    13854.06 *  23.74%*
->>
->> Tested-by: Yicong Yang <yangyicong@hisilicon.com>
->> Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
->> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->> ---
->>   kernel/sched/fair.c | 44 +++++++++++++++++++++++++++++++++++++++++---
->>   1 file changed, 41 insertions(+), 3 deletions(-)
->>
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index 77b2048a9326..6d173e196ad3 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -6327,6 +6327,40 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
->>     #endif /* CONFIG_SCHED_SMT */
->>   +#ifdef CONFIG_SCHED_CLUSTER
->> +/*
->> + * Scan the cluster domain for idle CPUs and clear cluster cpumask after scanning
->> + */
->> +static inline int scan_cluster(struct task_struct *p, struct cpumask *cpus,
->> +                   int target, int *nr)
->> +{
->> +    struct sched_domain *sd = rcu_dereference(per_cpu(sd_cluster, target));
->> +    int cpu, idle_cpu;
->> +
->> +    /* TODO: Support SMT system with cluster topology */
->> +    if (!sched_smt_active() && sd) {
->> +        for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
->> +            if (!--*nr)
->> +                break;
+> Enforce specific naming pattern for children (keys) to narrow the
+> pattern thus do not match other properties.  This will require all
+> children to be properly prefixed or suffixed (button, event, switch or
+> key).
 > 
-> return -1;
-> :)
+> Removal of "if:" within patternProperties causes drop of one indentation
+> level, but there are no other changes in the affected block.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/input/gpio-keys.yaml  | 157 +++++++++---------
+>  1 file changed, 77 insertions(+), 80 deletions(-)
 > 
 
-thanks for the comment. If we've run out of nr the select_idle_cpu() will stop scanning as well,
-so it's unnecessary to clear the mask of cluster cpus and just return.
+Dmitry,
+
+Any comments from your side? Are you planning to pick up the dt-bindings
+here (patch 1-3)?
+
+Best regards,
+Krzysztof

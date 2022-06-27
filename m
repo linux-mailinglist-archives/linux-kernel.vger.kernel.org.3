@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE4255DCD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 971BE55C470
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239383AbiF0L5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
+        id S235153AbiF0L2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238197AbiF0Lu3 (ORCPT
+        with ESMTP id S235219AbiF0L1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:50:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CFE2196;
-        Mon, 27 Jun 2022 04:43:40 -0700 (PDT)
+        Mon, 27 Jun 2022 07:27:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774D59585;
+        Mon, 27 Jun 2022 04:27:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 644CDB80E32;
-        Mon, 27 Jun 2022 11:43:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA463C3411D;
-        Mon, 27 Jun 2022 11:43:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15050614C8;
+        Mon, 27 Jun 2022 11:27:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21A84C3411D;
+        Mon, 27 Jun 2022 11:27:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330218;
-        bh=TbJXaK1rbMB8btpOBGJnwp1o3DBVqNZI0GMIlKu8slk=;
+        s=korg; t=1656329223;
+        bh=OOi6JiC4hHGgym1taXsN4xlgN6UDOKMGxg2GFNAwFLA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gYEy+fWlxWfPFEBmHzAgkaQEx5t8PwqxyzjTObZsoJ1zoclJPKkuf17u0EhmYbnjm
-         uoWpAowC927pm9IPW9TWsoSUAbrWk9YjKi6vbDgTO5/cz9CbujQjb7G4XySWtta3Lk
-         4jc1DVL61oe1+uGnnyNlnpo2LhnsTtabFearM0Xk=
+        b=Nxrw6CsK40Yn8mXyFdv3Bf4rU1tlT53r5JGW/R3nkyo6IgtGGaV/ulohMa/zK90sw
+         lOJjoAavZSZO4cOCFU5Ni/igCYdUCxGBvGMySTdG6sK6xB7vNlGWZ861fBVpms7hhX
+         tRQG7qsQ/nForlQIJk06WDkBdS971UHwQdFJw1RE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 5.18 122/181] dt-bindings: usb: ohci: Increase the number of PHYs
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.10 084/102] iio: adc: adi-axi-adc: Fix refcount leak in adi_axi_adc_attach_client
 Date:   Mon, 27 Jun 2022 13:21:35 +0200
-Message-Id: <20220627111948.231950197@linuxfoundation.org>
+Message-Id: <20220627111935.958757066@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 0f074c1c95ea496dc91279b6c4b9845a337517fa upstream.
+commit ada7b0c0dedafd7d059115adf49e48acba3153a8 upstream.
 
-"make dtbs_check":
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-    arch/arm/boot/dts/r8a77470-iwg23s-sbc.dtb: usb@ee080000: phys: [[17, 0], [31]] is too long
-	    From schema: Documentation/devicetree/bindings/usb/generic-ohci.yaml
-    arch/arm/boot/dts/r8a77470-iwg23s-sbc.dtb: usb@ee0c0000: phys: [[17, 1], [33], [21, 0]] is too long
-	    From schema: Documentation/devicetree/bindings/usb/generic-ohci.yaml
-
-Some USB OHCI controllers (e.g. on the Renesas RZ/G1C SoC) have multiple
-PHYs.  Increase the maximum number of PHYs to 3, which is sufficient for
-now.
-
-Fixes: 0499220d6dadafa5 ("dt-bindings: Add missing array size constraints")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/0112f9c8881513cb33bf7b66bc743dd08b35a2f5.1655301203.git.geert+renesas@glider.be
+Fixes: ef04070692a2 ("iio: adc: adi-axi-adc: add support for AXI ADC IP core")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220524074517.45268-1-linmq006@gmail.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/usb/generic-ohci.yaml |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/iio/adc/adi-axi-adc.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
-@@ -102,7 +102,8 @@ properties:
-       Overrides the detected port count
+--- a/drivers/iio/adc/adi-axi-adc.c
++++ b/drivers/iio/adc/adi-axi-adc.c
+@@ -334,16 +334,19 @@ static struct adi_axi_adc_client *adi_ax
  
-   phys:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 3
+ 		if (!try_module_get(cl->dev->driver->owner)) {
+ 			mutex_unlock(&registered_clients_lock);
++			of_node_put(cln);
+ 			return ERR_PTR(-ENODEV);
+ 		}
  
-   phy-names:
-     const: usb
+ 		get_device(cl->dev);
+ 		cl->info = info;
+ 		mutex_unlock(&registered_clients_lock);
++		of_node_put(cln);
+ 		return cl;
+ 	}
+ 
+ 	mutex_unlock(&registered_clients_lock);
++	of_node_put(cln);
+ 
+ 	return ERR_PTR(-EPROBE_DEFER);
+ }
 
 

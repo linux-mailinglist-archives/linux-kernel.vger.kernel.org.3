@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9092655CA0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4587055D6FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235155AbiF0L06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
+        id S234899AbiF0Lkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235035AbiF0L0P (ORCPT
+        with ESMTP id S236640AbiF0Lhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:26:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD49965C3;
-        Mon, 27 Jun 2022 04:25:52 -0700 (PDT)
+        Mon, 27 Jun 2022 07:37:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A379FC5;
+        Mon, 27 Jun 2022 04:34:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EFBF61456;
-        Mon, 27 Jun 2022 11:25:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E353C36AE2;
-        Mon, 27 Jun 2022 11:25:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 193B060DB5;
+        Mon, 27 Jun 2022 11:34:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA43C3411D;
+        Mon, 27 Jun 2022 11:34:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329151;
-        bh=2CawkonEHZcFllPVwI2kBu3fA1mCMShdp09CEgSJfus=;
+        s=korg; t=1656329660;
+        bh=x4/dr29uEtkimduHGg5JIOxOjZHgrTFGzZarPmv2Skc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JXjGgIcve4Vb3SZ+VymCT4pjeFZsdLOzU88+aRLfGx/WOGymLFDUCPmo4VruUtZQo
-         EnS9n5o+xt18dJewrZRvkxzIf8Ta1MCoVCXaEMcJi3vn/8rOdf8oKoX1G5ZNTMh4mi
-         zeh7MsR2ib6sJPWX3a3wBUWZVLzsvssWy7zIv9y4=
+        b=iFzDepm7GcAGxaHsrdtreUGq7TnTjE4YQtKIjylKeFN3nkRZvYSiOzxbP9P3sDIWK
+         Cq/4F/s3ruKGL5EfqnL+wkW2FuBu0t5Mkd70lB7BV8EoNlWRMeIfCgmYiHoCcSarTo
+         7tfcb6qHA4AFtPLGwo0/N7ssE1K/u6D5KU0nckEU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Tanveer Alam <tanveer1.alam@intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5.10 067/102] xhci-pci: Allow host runtime PM as default for Intel Raptor Lake xHCI
+        stable@vger.kernel.org,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 071/135] regmap-irq: Fix offset/index mismatch in read_sub_irq_data()
 Date:   Mon, 27 Jun 2022 13:21:18 +0200
-Message-Id: <20220627111935.458819907@linuxfoundation.org>
+Message-Id: <20220627111940.221390939@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tanveer Alam <tanveer1.alam@intel.com>
+From: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
-commit 7516da47a349e74de623243a27f9b8a91446bf4f upstream.
+[ Upstream commit 3f05010f243be06478a9b11cfce0ce994f5a0890 ]
 
-In the same way as Intel Alder Lake TCSS (Type-C Subsystem) the Raptor
-Lake TCSS xHCI needs to be runtime suspended whenever possible to
-allow the TCSS hardware block to enter D3cold and thus save energy.
+We need to divide the sub-irq status register offset by register
+stride to get an index for the status buffer to avoid an out of
+bounds write when the register stride is greater than 1.
 
-Cc: stable@kernel.org
-Signed-off-by: Tanveer Alam <tanveer1.alam@intel.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220623111945.1557702-4-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: a2d21848d921 ("regmap: regmap-irq: Add main status register support")
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Link: https://lore.kernel.org/r/20220620200644.1961936-3-aidanmacdonald.0x0@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-pci.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/base/regmap/regmap-irq.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -61,6 +61,7 @@
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI		0x461e
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_XHCI		0x464e
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI	0x51ed
-+#define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_XHCI		0xa71e
+diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+index cd12078ed51b..3aac960ae30a 100644
+--- a/drivers/base/regmap/regmap-irq.c
++++ b/drivers/base/regmap/regmap-irq.c
+@@ -387,6 +387,7 @@ static inline int read_sub_irq_data(struct regmap_irq_chip_data *data,
+ 		subreg = &chip->sub_reg_offsets[b];
+ 		for (i = 0; i < subreg->num_regs; i++) {
+ 			unsigned int offset = subreg->offset[i];
++			unsigned int index = offset / map->reg_stride;
  
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
-@@ -265,7 +266,8 @@ static void xhci_pci_quirks(struct devic
- 	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI))
-+	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_XHCI))
- 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+ 			if (chip->not_fixed_stride)
+ 				ret = regmap_read(map,
+@@ -395,7 +396,7 @@ static inline int read_sub_irq_data(struct regmap_irq_chip_data *data,
+ 			else
+ 				ret = regmap_read(map,
+ 						chip->status_base + offset,
+-						&data->status_buf[offset]);
++						&data->status_buf[index]);
  
- 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
+ 			if (ret)
+ 				break;
+-- 
+2.35.1
+
 
 

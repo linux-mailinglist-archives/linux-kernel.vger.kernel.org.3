@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD2755C481
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFABE55C44F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235622AbiF0Lbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
+        id S239376AbiF0L5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235569AbiF0LbR (ORCPT
+        with ESMTP id S238167AbiF0Lu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:31:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2768ED6D;
-        Mon, 27 Jun 2022 04:28:54 -0700 (PDT)
+        Mon, 27 Jun 2022 07:50:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADEE1106;
+        Mon, 27 Jun 2022 04:43:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5D92B8111B;
-        Mon, 27 Jun 2022 11:28:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2DF8C3411D;
-        Mon, 27 Jun 2022 11:28:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDC1061241;
+        Mon, 27 Jun 2022 11:43:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B719AC3411D;
+        Mon, 27 Jun 2022 11:43:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329331;
-        bh=ZqftpU+kk3SnOFzlbRPWOF0DcyaQ14Ql2h3g/xhvsTI=;
+        s=korg; t=1656330215;
+        bh=MI0bsniUwDkWSt13JruOm4ZUqJHUFJtapMTmtz/L4J8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sxA40sSUMAfzLppPWJeP3pb+Q44hOJ5Edyl2Xit97W4Wtasm3ZLvXmsm6iUdE2ryk
-         o1GWkJFwY4Zv8aGDUl2cxF09ycZ3GOKjLhA9v/f1N4xbYyNGwh2h2mWBF/YY7OOuPa
-         0M7tM06KYzCT0GcFJ0EObLR9X65T43BwDkIRAljI=
+        b=K6Rohf26nWFU1gudn4ypUpNukFl7nHzF4fwN06yeWdOf0IUN/FY19xf8X8IMFxtCQ
+         +xBbV71PJYqi5suNE4Nda3uC675qfXHzOECvVVqatqIxvO19ouKBPlo8D0uGHuF4kP
+         Mh3U/0TrSytWKV21yX8eRWFQmiFfpRgWtcCXB/RY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+29c3c12f3214b85ad081@syzkaller.appspotmail.com,
-        Ziyang Xuan <william.xuanziyang@huawei.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 23/60] net/tls: fix tls_sk_proto_close executed repeatedly
+        stable@vger.kernel.org, Xu Yang <xu.yang_2@nxp.com>
+Subject: [PATCH 5.18 121/181] usb: chipidea: udc: check request status before setting device address
 Date:   Mon, 27 Jun 2022 13:21:34 +0200
-Message-Id: <20220627111928.347499673@linuxfoundation.org>
+Message-Id: <20220627111948.203330169@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
-References: <20220627111927.641837068@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,55 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ziyang Xuan <william.xuanziyang@huawei.com>
+From: Xu Yang <xu.yang_2@nxp.com>
 
-[ Upstream commit 69135c572d1f84261a6de2a1268513a7e71753e2 ]
+commit b24346a240b36cfc4df194d145463874985aa29b upstream.
 
-After setting the sock ktls, update ctx->sk_proto to sock->sk_prot by
-tls_update(), so now ctx->sk_proto->close is tls_sk_proto_close(). When
-close the sock, tls_sk_proto_close() is called for sock->sk_prot->close
-is tls_sk_proto_close(). But ctx->sk_proto->close() will be executed later
-in tls_sk_proto_close(). Thus tls_sk_proto_close() executed repeatedly
-occurred. That will trigger the following bug.
+The complete() function may be called even though request is not
+completed. In this case, it's necessary to check request status so
+as not to set device address wrongly.
 
-=================================================================
-KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
-RIP: 0010:tls_sk_proto_close+0xd8/0xaf0 net/tls/tls_main.c:306
-Call Trace:
- <TASK>
- tls_sk_proto_close+0x356/0xaf0 net/tls/tls_main.c:329
- inet_release+0x12e/0x280 net/ipv4/af_inet.c:428
- __sock_release+0xcd/0x280 net/socket.c:650
- sock_close+0x18/0x20 net/socket.c:1365
-
-Updating a proto which is same with sock->sk_prot is incorrect. Add proto
-and sock->sk_prot equality check at the head of tls_update() to fix it.
-
-Fixes: 95fa145479fb ("bpf: sockmap/tls, close can race with map free")
-Reported-by: syzbot+29c3c12f3214b85ad081@syzkaller.appspotmail.com
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 10775eb17bee ("usb: chipidea: udc: update gadget states according to ch9")
+cc: <stable@vger.kernel.org>
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+Link: https://lore.kernel.org/r/20220623030242.41796-1-xu.yang_2@nxp.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/tls/tls_main.c | 3 +++
+ drivers/usb/chipidea/udc.c |    3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
-index 7aba4ee77aba..df9177d96f7f 100644
---- a/net/tls/tls_main.c
-+++ b/net/tls/tls_main.c
-@@ -803,6 +803,9 @@ static void tls_update(struct sock *sk, struct proto *p,
- {
- 	struct tls_context *ctx;
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -1048,6 +1048,9 @@ isr_setup_status_complete(struct usb_ep
+ 	struct ci_hdrc *ci = req->context;
+ 	unsigned long flags;
  
-+	if (sk->sk_prot == p)
++	if (req->status < 0)
 +		return;
 +
- 	ctx = tls_get_ctx(sk);
- 	if (likely(ctx)) {
- 		ctx->sk_write_space = write_space;
--- 
-2.35.1
-
+ 	if (ci->setaddr) {
+ 		hw_usb_set_address(ci, ci->address);
+ 		ci->setaddr = false;
 
 

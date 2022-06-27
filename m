@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A145655D706
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E4355C37A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbiF0I7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
+        id S233536AbiF0It3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbiF0I65 (ORCPT
+        with ESMTP id S232615AbiF0It1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:58:57 -0400
-Received: from outbound-smtp14.blacknight.com (outbound-smtp14.blacknight.com [46.22.139.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7886252
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:58:50 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp14.blacknight.com (Postfix) with ESMTPS id 5D3541C4329
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:58:48 +0100 (IST)
-Received: (qmail 23735 invoked from network); 27 Jun 2022 08:58:48 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 27 Jun 2022 08:58:48 -0000
-Date:   Mon, 27 Jun 2022 09:46:45 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: [PATCH] mm/page_alloc: Replace local_lock with normal spinlock -fix
-Message-ID: <20220627084645.GA27531@techsingularity.net>
-References: <20220624125423.6126-1-mgorman@techsingularity.net>
- <20220624125423.6126-8-mgorman@techsingularity.net>
- <CAOUHufba2KQLbFMoHusTpvEBHS_EWQ1NnOfm3Wczmykk0A1pTw@mail.gmail.com>
+        Mon, 27 Jun 2022 04:49:27 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C8326F1;
+        Mon, 27 Jun 2022 01:49:26 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 9C5CF1C0B8F; Mon, 27 Jun 2022 10:49:24 +0200 (CEST)
+Date:   Mon, 27 Jun 2022 10:49:09 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>, krzk+dt@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/3] leds: Add driver for the TLC5925 LED controller
+Message-ID: <20220627084909.GA15970@duo.ucw.cz>
+References: <20220609162734.1462625-1-jjhiblot@traphandler.com>
+ <20220609162734.1462625-3-jjhiblot@traphandler.com>
+ <CAHp75Veurvhxi0Pg1Sjxav+3XpDTVOdan8WFFmZmdhJbZJiCaQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="UlVJffcvxoiEqYs2"
 Content-Disposition: inline
-In-Reply-To: <CAOUHufba2KQLbFMoHusTpvEBHS_EWQ1NnOfm3Wczmykk0A1pTw@mail.gmail.com>
+In-Reply-To: <CAHp75Veurvhxi0Pg1Sjxav+3XpDTVOdan8WFFmZmdhJbZJiCaQ@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As noted by Yu Zhao, use pcp_spin_trylock_irqsave instead of
-pcpu_spin_trylock_irqsave. This is a fix to the mm-unstable patch
-mm-page_alloc-replace-local_lock-with-normal-spinlock.patch
 
-Reported-by: Yu Zhao <yuzhao@google.com>
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
----
- mm/page_alloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--UlVJffcvxoiEqYs2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 71065b01827b..934d1b5a5449 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3493,7 +3493,7 @@ void free_unref_page(struct page *page, unsigned int order)
- 
- 	zone = page_zone(page);
- 	pcp_trylock_prepare(UP_flags);
--	pcp = pcpu_spin_trylock_irqsave(struct per_cpu_pages, lock, zone->per_cpu_pageset, flags);
-+	pcp = pcp_spin_trylock_irqsave(zone->per_cpu_pageset, flags);
- 	if (pcp) {
- 		free_unref_page_commit(zone, pcp, page, migratetype, order);
- 		pcp_spin_unlock_irqrestore(pcp, flags);
+On Thu 2022-06-09 18:57:24, Andy Shevchenko wrote:
+> On Thu, Jun 9, 2022 at 6:30 PM Jean-Jacques Hiblot
+> <jjhiblot@traphandler.com> wrote:
+> >
+> > The TLC5925 is a 16-channels constant-current LED sink driver.
+> > It is controlled via SPI but doesn't offer a register-based interface.
+> > Instead it contains a shift register and latches that convert the
+> > serial input into a parallel output.
+>=20
+> Can you add Datasheet: tag here with the corresponding URL? Rationale
+> is to get a link to the datasheet by just browsing Git log without
+> browsing the source code, which will benefit via Web UIs.
+
+If you want to add datasheet url, add it as a comment to the source,
+not to the git log.
+
+Thanks,
+							Pavel
+						=09
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--UlVJffcvxoiEqYs2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYrlvBQAKCRAw5/Bqldv6
+8lMjAJ9QpuvQP9tiG3G3LO7oImmcxCl19ACeMx/G70Fqwya3O7MADn4ofhcKyhc=
+=n4C4
+-----END PGP SIGNATURE-----
+
+--UlVJffcvxoiEqYs2--

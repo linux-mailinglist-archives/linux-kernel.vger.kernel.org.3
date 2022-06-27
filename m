@@ -2,331 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECDB55DA9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3FA55D936
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237523AbiF0Ocn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
+        id S237560AbiF0OdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235525AbiF0Ock (ORCPT
+        with ESMTP id S235525AbiF0OdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:32:40 -0400
-Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.142.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ED42646;
-        Mon, 27 Jun 2022 07:32:38 -0700 (PDT)
+        Mon, 27 Jun 2022 10:33:19 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69620AE60;
+        Mon, 27 Jun 2022 07:33:18 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id go6so9546295pjb.0;
+        Mon, 27 Jun 2022 07:33:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1656340359; x=1656945159;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=eYXH/ctB6v6XAcg42LM5ozEFN2HdhzgzZ+oK7wTjzCM=;
-  b=QoJXUa/b01FhK9zt2z0c8Xn88yu5jEQ5ltCECRuG2lL3D1yw5uU7v5pV
-   jas0PXwbfEvJn1mY4xy44T3k+Ogot+GcW2RojVZ6Vx6/VgspqnqONegH3
-   XhT+u0VuZj9ZuVbDXO54E2j1A5WdtmVF/otOXPnC926aSXfKQFtiuSWwi
-   8=;
-Received: from mail-bn8nam11lp2168.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.168])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 14:32:34 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cGOW8HUQIVaBTKpLWO+C4aPx6X9Xj3tooAfUWy+sPob781xwBfm+C7JsnAksVL3znA9fm8u9Q75Yeyd1o3Tge/tgaB1QffUppb747SaJw7lnJLJEB2Xolc+JaNjb7JGObqPkaNoXE5DSopsiW9Mz+IgZg7Q6LgK8dem1EfY/Dom8edgAwsjSPNiacB+Hm2wzLwIUdwES/SUxe7yPv5rnwHaMz/wspCxkPKRIaycwdqM2wHSk9mY5u492fZdBRANCSJlUmUMbcg8VJ4szN2By0Hj7ofjbjGE+lD1M2HU+LUA6MB3sN16m1uRBbHyqicSMhC2JSQuKZ7BagnmJAqeNhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eYXH/ctB6v6XAcg42LM5ozEFN2HdhzgzZ+oK7wTjzCM=;
- b=NZV31S8FY6LC+g0g4cS2e7+2EXToeuvX68UC8oiP7n15GL6EZoAyZ1Mk1LHHX6fJX7VbAv+uimUrpPyQNsAC0kPaga/El4ds1wJy/cUhoO9f/AUWI9p0aAw7xE0g616srjc8/TO5zPLlR3p3S5f1GWXxGuJrdLgScP+KM8s9alFA7vwQIrE/EWOEIOGH6W24mSg5e2A4jrxGMnrxSVeZBY3/bdNKpW6zIyQUWeApbFkcPIz5rVzVthWopVzFqCLjm8u8BWNFFMjxBwObIj6EtyDtdfBdxIB5F+UnczM9fuBx4/wn2aVBgcNsgo2gZa+FV5t69Qn33EI2GYHVUGr4hg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
- dkim=pass header.d=quicinc.com; arc=none
-Received: from SN6PR02MB4205.namprd02.prod.outlook.com (2603:10b6:805:35::17)
- by DM6PR02MB6138.namprd02.prod.outlook.com (2603:10b6:5:1fd::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Mon, 27 Jun
- 2022 14:32:29 +0000
-Received: from SN6PR02MB4205.namprd02.prod.outlook.com
- ([fe80::f4c0:89e2:789d:ceb1]) by SN6PR02MB4205.namprd02.prod.outlook.com
- ([fe80::f4c0:89e2:789d:ceb1%7]) with mapi id 15.20.5373.016; Mon, 27 Jun 2022
- 14:32:29 +0000
-From:   Brian Cain <bcain@quicinc.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-CC:     "hch@infradead.org" <hch@infradead.org>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Brian Cain <bcain@codeaurora.org>
-Subject: RE: [PATCH V5 12/26] hexagon/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Thread-Topic: [PATCH V5 12/26] hexagon/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Thread-Index: AQHYieNaF68nviM9AEWMdUsq7TAcg61jUU0Q
-Date:   Mon, 27 Jun 2022 14:32:29 +0000
-Message-ID: <SN6PR02MB4205D2460F6DB1F3C82999BDB8B99@SN6PR02MB4205.namprd02.prod.outlook.com>
-References: <20220627045833.1590055-1-anshuman.khandual@arm.com>
- <20220627045833.1590055-13-anshuman.khandual@arm.com>
-In-Reply-To: <20220627045833.1590055-13-anshuman.khandual@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quicinc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d4ab36eb-bfe6-4b73-98a3-08da5849dd6d
-x-ms-traffictypediagnostic: DM6PR02MB6138:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6LCBwa4CDTnSlgl6CnuvSHylK43fGHMLoBG839b+bXfVd5N7nYAqXddIKZqfMqXLDn6rdkMCP1/tZanVPeTPStEENKwpoEwvg8a0U6B/0/Ru8PHLp8EMwwlxlorNMwaAPhooSIHXe7nn8Z1ShjJ0dbEY2E3yX75YVCgoONo8/wT4Yp6zLqRil2kKMbKONi36XpqRJ62+CwUUA0rs8EYeg183Y/Nnzo8iYxACJkCAvv6uMW4GQlZO+IT8CgIrtpAaFh8vh4oq3k8339e0GqYlzOjkOwDqIfJDV4g3950HVCaF7gJRK8W/YV4c/M2sTtKAnZAzAp8OJnCivz55DqELuL+WRsKJOQvqZmwJdVdEcUS6HnSuyQZEjzX5c2CuBF6vVaMKBpkmRnBRlZn7mQhLMmQIGEtZhKClBhltEqaQAUMuE6h2rHsyU/HNe6/zj7Pniiyg77NtFG695+ENaEfPLLX8eBmdMPen7Wsl95DYcmW5egsFZmfXQ3rmNkz7xZxIotgUiku9DQAVGXvhGg6rFa8TTWNy7DcQXB5Hq57Qi/2nig5m7DruO8mx/x339XgDAo+wpIhkdysR0Xb3viQDLPnLEFX/NFqwRO8f6S1hJLGrZtxw3nCBuS7djTB/OYrEh0bRQbCS+XpS+5u74i+LLi89/GWkJbV0rSokF7YMuKyr2wfVZbnYPBfFLPEMyl/NZ8/npwsOHL3S22bC/riomYaiHfFjkhVIB3H8V/MO4W1u+CO6mrQ6oqQ+S6hzCuM98onf4SChF/QNMNhu2JlgX6H5pEuPIykBm/FLc1PIeTw=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR02MB4205.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(136003)(376002)(396003)(366004)(39860400002)(7696005)(64756008)(7416002)(66556008)(83380400001)(76116006)(71200400001)(66946007)(41300700001)(110136005)(8676002)(38100700002)(122000001)(316002)(5660300002)(26005)(54906003)(9686003)(86362001)(186003)(55016003)(2906002)(33656002)(4326008)(66446008)(66476007)(38070700005)(52536014)(6506007)(478600001)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fjdQUrKtASc2PpuHSL32JID+E3A8OdplJEurfWMCyWe1Ev0UAJb0kdJj2NuG?=
- =?us-ascii?Q?TlHv362lWxFoa5ALdsalq6xQWXSkO1YHoSJZY1k/rgx3J9dRCpUpxJtleWXj?=
- =?us-ascii?Q?ODdcjBHLqnp8WDg5wZVvpSO+GL8oXGAHwTr/ZjunTHyCIIEI/9QixrMCTsHp?=
- =?us-ascii?Q?7c5StcktmyuahjQeoeWVM/YQY8NsrQovteH2B/LvMZ6KGp024b0F7uUisWfq?=
- =?us-ascii?Q?+qQB1c1bIgNNH1WqYoZcu5gHJp337FDnuLe4nTqkDp3+cY42e2lP7jx6P9YY?=
- =?us-ascii?Q?GhUh5g+n8x8YRQt8Mpul/tlamczbwc/Dwh4pMotReDzXA8otSpw7fHIgqXj+?=
- =?us-ascii?Q?P7RlC0kVsZ7z5Az84FNGanwqy/bzikZoZYizroHVA/rmaC8EOzC2Rk4CkyXv?=
- =?us-ascii?Q?bZ8kSJGpToeh8O0GmHov5z2+/y3o2y0WWRvHOajDZXYB/5DpQZml+CgrN7Hs?=
- =?us-ascii?Q?Ou7iPMNFH+llQl3dtFofdGRcVZgRRKlKlNZvlTdLRUHpOwDGNi0x4k1zyEWN?=
- =?us-ascii?Q?TF6mzhZU4b3NFyGD/uG4/FWlbwgB4dV/IAL5MjjYug+4Z6P3IHUynKxDFbKz?=
- =?us-ascii?Q?ld/E9TkW1XZdKvkO805FstbIC4WtHsR0/erVsqP5MBSsRIJ7vfXLHYU284GL?=
- =?us-ascii?Q?kdVdT4aFiZsFORwOYvCuACAo9COWGeNV3AvFy+QxZwnsExzUgKcqqFc/wnRS?=
- =?us-ascii?Q?GQV6446YR4t9ooSnxQksthTEWeRWBNqkPTXe030jVc4yT5zeAXe5X6aGyEBN?=
- =?us-ascii?Q?VI6sPh+1rOEjS2/J4/GyFcbxW36qPqW4WWtKI1CL5lCH8A2N764ShZOKmoJx?=
- =?us-ascii?Q?IT0TMj8HZaeNiFuU5jCbUTJZPm6ARtU4eRp8rJdPWp0mCzU48npI4j0ga/bT?=
- =?us-ascii?Q?ns61D7TIBY98KX+NRDwu9anufHWBA8F45bVSPmvVsqouV9T0cN2z8tRtILcN?=
- =?us-ascii?Q?YBWCpGRq6B53gAqpAP6ERpRWDnbmS3zzNz4gElNUQsUiiyE62DhXwx4eoerU?=
- =?us-ascii?Q?3tClec7saJePlwbyuI+e7R5ysSR0cNnqLnHZtSU5Oa6iJpykIqtef0MYYRvE?=
- =?us-ascii?Q?p/wuhHMG5ys9bOxu3CpQudb2iDo7EvXruu0mrNxQVkF0f3sSBvgIRwQZH/3S?=
- =?us-ascii?Q?4eGoZhjEfrowgTio9EVAdKZ9FsSLrTfax+q5bW6C3PSaZB5F3Qv6ki+OZD9a?=
- =?us-ascii?Q?cnSVWsU72bjIXvLVSmM8lepIJhvSBbsCMXg1MaBU86su0Ipiqyzwh0IoO+SU?=
- =?us-ascii?Q?hm0J0op3lWe/SWrxgDhzur+2KBstLAH5JpBTlQ6tlwaY1xSc4UbI1eslgG6Y?=
- =?us-ascii?Q?WQEZ8lV1EFXR1uWVEJVZCI+SE98u4nI7h1aEw2t8DqveVLGyxF19c9SCNhJD?=
- =?us-ascii?Q?Oeflzg69bdYlLrdLheBQyDg5nnoRfnNJneD0CpPbrXYWggRXTSRPXggodcn3?=
- =?us-ascii?Q?N9RgBCFjUkp8ohtO/cnQgW1IdvFSX31rCJuDpOsg3nf7aFjqVYxX8wYadu2Q?=
- =?us-ascii?Q?XngHluuV8mZbArW9Q+q6i7T3IuXo9L920bB2loJhgUKHY6vu6HLBscmSIbM+?=
- =?us-ascii?Q?uA7yYrM07LaCL9dzQfTN1fZctgrOxlZODvGqAb+s?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=mL+vcZicRAtVScsFFZQTTbpBIGfBFPHev7LUE2Bv4nc=;
+        b=MUo83GqYpGCIMo1W1gIA1MyLwWmHwHHtBniyZa+g5JRfryoKxAq+hzjRlNYiIQlNxg
+         ATEmTcosEM6x3V3wLi+sqOS944AvX2OmNnXmYWsPMvTcB68k5R4GtvgyMK08CU6U8EVC
+         glM0n/zNJjMG/74nUtp3SdH1Pesv1hIK7FLmZc03yAC88e++WpVI8dHHjRpCltworzJi
+         yUGSQGBJLEQco90CsYuY2vnBX9M/6Gi+V1UgTgsbPXYIoDso9tt2jk62CRhu0Q4jrC78
+         bt4V3Nj/VQmhjuL5pxqR6mkmq/JX77yu7Afv2noh0aQ1crdjVDE+XvWpvdBRnr9n2kPH
+         aQDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=mL+vcZicRAtVScsFFZQTTbpBIGfBFPHev7LUE2Bv4nc=;
+        b=MPMX1M5mjMQJHZliBGf8n7j1JZhBK7MDQ36OZJvoKpoTLWdISEh/TASOxe3c0QuZwi
+         WvvQEzCxB57xNl087xyC8pyCXaftZrorn7seYuI9z0zCliZH0q0bCNklEwm9hn+NCwPk
+         9oob3mEctaQ+pq7ERDdXHwAHlaxq9wxdRtFELk+QZId7jfEAi9co4mhd0SAmunX/Vhci
+         Gv9A6T945lE6yUZ6dQ1IrxWbiseB38i358uITbFy753WXTehN2kZBYCUzkHJVVVjkCyJ
+         RBqLBakzIMS/F/rNVOinzIurF+zUkOTwme6wxOQ9sb4gBv/tLbmAxuQ9g13O0SpjZaV7
+         icCQ==
+X-Gm-Message-State: AJIora9ueM2FP8UNacmMcLQfKlPUnZozvLO10nbvE5Y05hoUqgISRJHh
+        hyaCUy+du5ggplFZ4giGg7Q=
+X-Google-Smtp-Source: AGRyM1vtE5sCgg826+r7Tq8i0bBzFDs4b2Pd/Nb9AgUHr0j4qfs7GXyAm4EHJ0f0pQLIn73mTsruZA==
+X-Received: by 2002:a17:902:bc4c:b0:16a:4849:ddbe with SMTP id t12-20020a170902bc4c00b0016a4849ddbemr13888825plz.25.1656340397798;
+        Mon, 27 Jun 2022 07:33:17 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o7-20020a17090a3d4700b001e8875e3326sm9538608pjf.47.2022.06.27.07.33.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 07:33:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b87a4407-29fd-4715-1394-ae6afaf4a192@roeck-us.net>
+Date:   Mon, 27 Jun 2022 07:33:14 -0700
 MIME-Version: 1.0
-X-OriginatorOrg: quicinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4205.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4ab36eb-bfe6-4b73-98a3-08da5849dd6d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 14:32:29.6681
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yz3IG0XM+MN1EUq2d+bRK8OLWKZV1yEnYf/4cni8BG9mK0RhLJTaLfTZn2doXORgMtR06QceXTPWnrNZpZNkrw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB6138
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Sebastian Ene <sebastianene@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        maz@kernel.org, will@kernel.org, vdonnefort@google.com
+References: <20220627102810.1811311-1-sebastianene@google.com>
+ <20220627102810.1811311-3-sebastianene@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v8 2/2] misc: Add a mechanism to detect stalls on guest
+ vCPUs
+In-Reply-To: <20220627102810.1811311-3-sebastianene@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Anshuman Khandual <anshuman.khandual@arm.com>
-...
-> WARNING: This email originated from outside of Qualcomm. Please be wary
-> of any links or attachments, and do not enable macros.
->=20
-> This enables ARCH_HAS_VM_GET_PAGE_PROT on the platform and exports
-> standard
-> vm_get_page_prot() implementation via DECLARE_VM_GET_PAGE_PROT,
-> which looks
-> up a private and static protection_map[] array. Subsequently all __SXXX a=
-nd
-> __PXXX macros can be dropped which are no longer needed.
->=20
-> Cc: Brian Cain <bcain@codeaurora.org>
-> Cc: linux-hexagon@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  arch/hexagon/Kconfig               |  1 +
->  arch/hexagon/include/asm/pgtable.h | 27 -------------------
->  arch/hexagon/mm/init.c             | 42 ++++++++++++++++++++++++++++++
->  3 files changed, 43 insertions(+), 27 deletions(-)
->=20
-> diff --git a/arch/hexagon/Kconfig b/arch/hexagon/Kconfig
-> index 54eadf265178..bc4ceecd0588 100644
-> --- a/arch/hexagon/Kconfig
-> +++ b/arch/hexagon/Kconfig
-> @@ -6,6 +6,7 @@ config HEXAGON
->         def_bool y
->         select ARCH_32BIT_OFF_T
->         select ARCH_HAS_SYNC_DMA_FOR_DEVICE
-> +       select ARCH_HAS_VM_GET_PAGE_PROT
->         select ARCH_NO_PREEMPT
->         select DMA_GLOBAL_POOL
->         # Other pending projects/to-do items.
-> diff --git a/arch/hexagon/include/asm/pgtable.h
-> b/arch/hexagon/include/asm/pgtable.h
-> index 0610724d6a28..f7048c18b6f9 100644
-> --- a/arch/hexagon/include/asm/pgtable.h
-> +++ b/arch/hexagon/include/asm/pgtable.h
-> @@ -126,33 +126,6 @@ extern unsigned long _dflt_cache_att;
->   */
->  #define CACHEDEF       (CACHE_DEFAULT << 6)
->=20
-> -/* Private (copy-on-write) page protections. */
-> -#define __P000 __pgprot(_PAGE_PRESENT | _PAGE_USER | CACHEDEF)
-> -#define __P001 __pgprot(_PAGE_PRESENT | _PAGE_USER | _PAGE_READ |
-> CACHEDEF)
-> -#define __P010 __P000  /* Write-only copy-on-write */
-> -#define __P011 __P001  /* Read/Write copy-on-write */
-> -#define __P100 __pgprot(_PAGE_PRESENT | _PAGE_USER | \
-> -                       _PAGE_EXECUTE | CACHEDEF)
-> -#define __P101 __pgprot(_PAGE_PRESENT | _PAGE_USER |
-> _PAGE_EXECUTE | \
-> -                       _PAGE_READ | CACHEDEF)
-> -#define __P110 __P100  /* Write/execute copy-on-write */
-> -#define __P111 __P101  /* Read/Write/Execute, copy-on-write */
-> -
-> -/* Shared page protections. */
-> -#define __S000 __P000
-> -#define __S001 __P001
-> -#define __S010 __pgprot(_PAGE_PRESENT | _PAGE_USER | \
-> -                       _PAGE_WRITE | CACHEDEF)
-> -#define __S011 __pgprot(_PAGE_PRESENT | _PAGE_USER | _PAGE_READ |
-> \
-> -                       _PAGE_WRITE | CACHEDEF)
-> -#define __S100 __pgprot(_PAGE_PRESENT | _PAGE_USER | \
-> -                       _PAGE_EXECUTE | CACHEDEF)
-> -#define __S101 __P101
-> -#define __S110 __pgprot(_PAGE_PRESENT | _PAGE_USER | \
-> -                       _PAGE_EXECUTE | _PAGE_WRITE | CACHEDEF)
-> -#define __S111 __pgprot(_PAGE_PRESENT | _PAGE_USER | _PAGE_READ |
-> \
-> -                       _PAGE_EXECUTE | _PAGE_WRITE | CACHEDEF)
-> -
->  extern pgd_t swapper_pg_dir[PTRS_PER_PGD];  /* located in head.S */
->=20
->  /*  HUGETLB not working currently  */
-> diff --git a/arch/hexagon/mm/init.c b/arch/hexagon/mm/init.c
-> index 3167a3b5c97b..146115c9de61 100644
-> --- a/arch/hexagon/mm/init.c
-> +++ b/arch/hexagon/mm/init.c
-> @@ -234,3 +234,45 @@ void __init setup_arch_memory(void)
->          *  which is called by start_kernel() later on in the process
->          */
->  }
-> +
-> +static const pgprot_t protection_map[16] =3D {
-> +       [VM_NONE]                                       =3D __pgprot(_PAG=
-E_PRESENT |
-> _PAGE_USER |
-> +                                                                  CACHED=
-EF),
-> +       [VM_READ]                                       =3D __pgprot(_PAG=
-E_PRESENT |
-> _PAGE_USER |
-> +                                                                  _PAGE_=
-READ | CACHEDEF),
-> +       [VM_WRITE]                                      =3D __pgprot(_PAG=
-E_PRESENT |
-> _PAGE_USER |
-> +                                                                  CACHED=
-EF),
-> +       [VM_WRITE | VM_READ]                            =3D __pgprot(_PAG=
-E_PRESENT |
-> _PAGE_USER |
-> +                                                                  _PAGE_=
-READ | CACHEDEF),
-> +       [VM_EXEC]                                       =3D __pgprot(_PAG=
-E_PRESENT |
-> _PAGE_USER |
-> +                                                                  _PAGE_=
-EXECUTE | CACHEDEF),
-> +       [VM_EXEC | VM_READ]                             =3D __pgprot(_PAG=
-E_PRESENT |
-> _PAGE_USER |
-> +                                                                  _PAGE_=
-EXECUTE | _PAGE_READ |
-> +                                                                  CACHED=
-EF),
-> +       [VM_EXEC | VM_WRITE]                            =3D __pgprot(_PAG=
-E_PRESENT |
-> _PAGE_USER |
-> +                                                                  _PAGE_=
-EXECUTE | CACHEDEF),
-> +       [VM_EXEC | VM_WRITE | VM_READ]                  =3D
-> __pgprot(_PAGE_PRESENT | _PAGE_USER |
-> +                                                                  _PAGE_=
-EXECUTE | _PAGE_READ |
-> +                                                                  CACHED=
-EF),
-> +       [VM_SHARED]                                     =3D __pgprot(_PAG=
-E_PRESENT |
-> _PAGE_USER |
-> +                                                                  CACHED=
-EF),
-> +       [VM_SHARED | VM_READ]                           =3D __pgprot(_PAG=
-E_PRESENT |
-> _PAGE_USER |
-> +                                                                  _PAGE_=
-READ | CACHEDEF),
-> +       [VM_SHARED | VM_WRITE]                          =3D __pgprot(_PAG=
-E_PRESENT |
-> _PAGE_USER |
-> +                                                                  _PAGE_=
-WRITE | CACHEDEF),
-> +       [VM_SHARED | VM_WRITE | VM_READ]                =3D
-> __pgprot(_PAGE_PRESENT | _PAGE_USER |
-> +                                                                  _PAGE_=
-READ | _PAGE_WRITE |
-> +                                                                  CACHED=
-EF),
-> +       [VM_SHARED | VM_EXEC]                           =3D __pgprot(_PAG=
-E_PRESENT |
-> _PAGE_USER |
-> +                                                                  _PAGE_=
-EXECUTE | CACHEDEF),
-> +       [VM_SHARED | VM_EXEC | VM_READ]                 =3D
-> __pgprot(_PAGE_PRESENT | _PAGE_USER |
-> +                                                                  _PAGE_=
-EXECUTE | _PAGE_READ |
-> +                                                                  CACHED=
-EF),
-> +       [VM_SHARED | VM_EXEC | VM_WRITE]                =3D
-> __pgprot(_PAGE_PRESENT | _PAGE_USER |
-> +                                                                  _PAGE_=
-EXECUTE | _PAGE_WRITE |
-> +                                                                  CACHED=
-EF),
-> +       [VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]      =3D
-> __pgprot(_PAGE_PRESENT | _PAGE_USER |
-> +                                                                  _PAGE_=
-READ | _PAGE_EXECUTE |
-> +                                                                  _PAGE_=
-WRITE | CACHEDEF)
-> +};
-> +DECLARE_VM_GET_PAGE_PROT
-> --
-> 2.25.1
+On 6/27/22 03:28, Sebastian Ene wrote:
+> This driver creates per-cpu hrtimers which are required to do the
+> periodic 'pet' operation. On a conventional watchdog-core driver, the
+> userspace is responsible for delivering the 'pet' events by writing to
+> the particular /dev/watchdogN node. In this case we require a strong
+> thread affinity to be able to account for lost time on a per vCPU.
+> 
+> This part of the driver is the 'frontend' which is reponsible for
+> delivering the periodic 'pet' events, configuring the virtual peripheral
+> and listening for cpu hotplug events. The other part of the driver
+> handles the peripheral emulation and this part accounts for lost time by
+> looking at the /proc/{}/task/{}/stat entries and is located here:
+> https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
+> 
+> Signed-off-by: Sebastian Ene <sebastianene@google.com>
 
-Acked-by: Brian Cain <bcain@quicinc.com>
+Couple of nitpicks.
+
+> ---
+>   drivers/misc/Kconfig               |  12 ++
+>   drivers/misc/Makefile              |   1 +
+>   drivers/misc/vcpu_stall_detector.c | 222 +++++++++++++++++++++++++++++
+>   3 files changed, 235 insertions(+)
+>   create mode 100644 drivers/misc/vcpu_stall_detector.c
+> 
+> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> index 41d2bb0ae23a..e15c85d74c4b 100644
+> --- a/drivers/misc/Kconfig
+> +++ b/drivers/misc/Kconfig
+> @@ -483,6 +483,18 @@ config OPEN_DICE
+>   
+>   	  If unsure, say N.
+>   
+> +config VCPU_STALL_DETECTOR
+> +	tristate "VCPU stall detector"
+> +	select LOCKUP_DETECTOR
+
+depends on OF ?
+
+> +	help
+> +	  Detect CPU locks on a kvm virtual machine. This driver relies on
+> +	  the hrtimers which are CPU-binded to do the 'pet' operation. When a
+> +	  vCPU has to do a 'pet', it exits the guest through MMIO write and
+> +	  the backend driver takes into account the lost ticks for this
+> +	  particular CPU.
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called vcpu_stall_detector.
+> +
+>   source "drivers/misc/c2port/Kconfig"
+>   source "drivers/misc/eeprom/Kconfig"
+>   source "drivers/misc/cb710/Kconfig"
+> diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+> index 70e800e9127f..2be8542616dd 100644
+> --- a/drivers/misc/Makefile
+> +++ b/drivers/misc/Makefile
+> @@ -60,3 +60,4 @@ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+>   obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
+>   obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
+>   obj-$(CONFIG_OPEN_DICE)		+= open-dice.o
+> +obj-$(CONFIG_VCPU_STALL_DETECTOR)	+= vcpu_stall_detector.o
+> \ No newline at end of file
+> diff --git a/drivers/misc/vcpu_stall_detector.c b/drivers/misc/vcpu_stall_detector.c
+> new file mode 100644
+> index 000000000000..8b33f04a9719
+> --- /dev/null
+> +++ b/drivers/misc/vcpu_stall_detector.c
+> @@ -0,0 +1,222 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// VCPU stall detector.
+> +//  Copyright (C) Google, 2022
+> +
+> +#include <linux/cpu.h>
+> +#include <linux/init.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +
+> +#include <linux/device.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/nmi.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/param.h>
+> +#include <linux/percpu.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +
+> +#define REG_STATUS		(0x00)
+> +#define REG_LOAD_CNT		(0x04)
+> +#define REG_CURRENT_CNT		(0x08)
+> +#define REG_CLOCK_FREQ_HZ	(0x0C)
+> +#define REG_LEN			(0x10)
+> +
+> +#define DEFAULT_CLOCK_HZ	(10)
+> +#define DEFAULT_TIMEOT_SEC	(8)
+> +
+> +struct vm_stall_detect_s {
+> +	void __iomem *membase;
+> +	u32 clock_freq;
+> +	u32 expiration_sec;
+> +	u32 ping_timeout_ms;
+> +	struct hrtimer per_cpu_hrtimer;
+> +	struct platform_device *dev;
+> +};
+> +
+> +#define vcpu_stall_detect_reg_write(stall_detect, reg, value)	\
+> +	iowrite32((value), (stall_detect)->membase + (reg))
+> +#define vcpu_stall_detect_reg_read(stall_detect, reg)		\
+> +	io32read((stall_detect)->membase + (reg))
+> +
+> +static struct platform_device *virt_dev;
+> +
+
+virt_dev is only used to call platform_set_drvdata() and platform_get_drvdata()
+on it. Why not just have a static variable named vm_stall_detect ?
+
+> +static enum hrtimer_restart
+> +vcpu_stall_detect_timer_fn(struct hrtimer *hrtimer)
+> +{
+> +	struct vm_stall_detect_s *cpu_stall_detect;
+> +	u32 ticks;
+> +
+> +	cpu_stall_detect = container_of(hrtimer, struct vm_stall_detect_s,
+> +					per_cpu_hrtimer);
+> +	ticks = cpu_stall_detect->clock_freq *
+> +		cpu_stall_detect->expiration_sec;
+
+Does this really require a continuation line ?
+
+> +	vcpu_stall_detect_reg_write(cpu_stall_detect, REG_LOAD_CNT, ticks);
+> +	hrtimer_forward_now(hrtimer,
+> +			    ms_to_ktime(cpu_stall_detect->ping_timeout_ms));
+> +
+> +	return HRTIMER_RESTART;
+> +}
+> +
+> +static void vcpu_stall_detect_start(void *arg)
+> +{
+> +	u32 ticks;
+> +	struct vm_stall_detect_s *cpu_stall_detect = arg;
+> +	struct hrtimer *hrtimer = &cpu_stall_detect->per_cpu_hrtimer;
+> +
+> +	vcpu_stall_detect_reg_write(cpu_stall_detect, REG_CLOCK_FREQ_HZ,
+> +			cpu_stall_detect->clock_freq);
+
+CHECK: Alignment should match open parenthesis
+
+> +
+> +	/* Compute the number of ticks required for the stall detector counter
+> +	 * register based on the internal clock frequency and the timeout
+> +	 * value given from the device tree.
+> +	 */
+> +	ticks = cpu_stall_detect->clock_freq *
+> +		cpu_stall_detect->expiration_sec;
+> +	vcpu_stall_detect_reg_write(cpu_stall_detect, REG_LOAD_CNT, ticks);
+> +
+> +	/* Enable the internal clock and start the stall detector */
+> +	vcpu_stall_detect_reg_write(cpu_stall_detect, REG_STATUS, 1);
+> +
+> +	hrtimer_init(hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+> +	hrtimer->function = vcpu_stall_detect_timer_fn;
+> +	hrtimer_start(hrtimer, ms_to_ktime(cpu_stall_detect->ping_timeout_ms),
+> +		      HRTIMER_MODE_REL_PINNED);
+> +}
+> +
+> +static void vcpu_stall_detect_stop(void *arg)
+> +{
+> +	struct vm_stall_detect_s *cpu_stall_detect = arg;
+> +	struct hrtimer *hrtimer = &cpu_stall_detect->per_cpu_hrtimer;
+> +
+> +	hrtimer_cancel(hrtimer);
+> +
+> +	/* Disable the stall detector */
+> +	vcpu_stall_detect_reg_write(cpu_stall_detect, REG_STATUS, 0);
+> +}
+> +
+> +static int start_stall_detector_on_cpu(unsigned int cpu)
+> +{
+> +	struct vm_stall_detect_s __percpu *vm_stall_detect;
+> +
+> +	vm_stall_detect = (struct vm_stall_detect_s __percpu *)
+> +		platform_get_drvdata(virt_dev);
+
+platform_get_drvdata() returns void *; typecast to it is unnecessary.
+
+
+> +	vcpu_stall_detect_start(this_cpu_ptr(vm_stall_detect));
+> +	return 0;
+> +}
+> +
+> +static int stop_stall_detector_on_cpu(unsigned int cpu)
+> +{
+> +	struct vm_stall_detect_s __percpu *vm_stall_detect;
+> +
+> +	vm_stall_detect = (struct vm_stall_detect_s __percpu *)
+> +		platform_get_drvdata(virt_dev);
+
+Same as above.
+
+> +	vcpu_stall_detect_stop(this_cpu_ptr(vm_stall_detect));
+> +	return 0;
+> +}
+> +
+> +static int vcpu_stall_detect_probe(struct platform_device *dev)
+> +{
+> +	int cpu, ret, err;
+> +	void __iomem *membase;
+> +	struct resource *r;
+> +	struct vm_stall_detect_s __percpu *vm_stall_detect;
+> +	u32 stall_detect_clock, stall_detect_timeout_sec = 0;
+> +
+> +	r = platform_get_resource(dev, IORESOURCE_MEM, 0);
+> +	if (r == NULL)
+
+	if (!r)
+
+> +		return -ENOENT;
+
+"No such file or directory" seems odd. Usually I see ENODEV, ENXIO,
+or EINVAL here.
+
+> +
+> +	vm_stall_detect = alloc_percpu(typeof(struct vm_stall_detect_s));
+> +	if (!vm_stall_detect)
+> +		return -ENOMEM;
+> +
+> +	membase = ioremap(r->start, resource_size(r));
+> +	if (!membase) {
+> +		ret = -ENXIO;
+
+The typical return value here is -ENOMEM.
+
+> +		goto err_withmem;
+> +	}
+> +
+> +	virt_dev = dev;
+> +	platform_set_drvdata(dev, vm_stall_detect);
+> +	if (of_property_read_u32(dev->dev.of_node, "clock-frequency",
+> +				 &stall_detect_clock))
+> +		stall_detect_clock = DEFAULT_CLOCK_HZ;
+> +
+> +	if (of_property_read_u32(dev->dev.of_node, "timeout-sec",
+> +				 &stall_detect_timeout_sec))
+> +		stall_detect_timeout_sec = DEFAULT_TIMEOT_SEC;
+> +
+> +	for_each_cpu_and(cpu, cpu_online_mask, &watchdog_cpumask) {
+> +		struct vm_stall_detect_s *cpu_stall_detect;
+> +
+> +		cpu_stall_detect = per_cpu_ptr(vm_stall_detect, cpu);
+> +		cpu_stall_detect->membase = membase + cpu * REG_LEN;
+> +		cpu_stall_detect->clock_freq = stall_detect_clock;
+> +		cpu_stall_detect->expiration_sec = stall_detect_timeout_sec;
+> +		cpu_stall_detect->ping_timeout_ms = stall_detect_timeout_sec *
+> +			MSEC_PER_SEC / 2;
+
+Please add a comment to explain division by 2.
+
+> +		smp_call_function_single(cpu, vcpu_stall_detect_start,
+> +					 cpu_stall_detect, true);
+> +	}
+> +
+> +	err = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+> +					"virt/vcpu_stall_detector:online",
+> +					start_stall_detector_on_cpu,
+> +					stop_stall_detector_on_cpu);
+> +	if (err < 0) {
+> +		dev_warn(&dev->dev, "failed to install cpu hotplug");
+
+Why dev_warn() and not dev_err() ?
+
+> +		ret = err;
+> +		goto err_withmem;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_withmem:
+> +	free_percpu(vm_stall_detect);
+> +	return ret;
+> +}
+> +
+> +static int vcpu_stall_detect_remove(struct platform_device *dev)
+> +{
+> +	int cpu;
+> +	struct vm_stall_detect_s __percpu *vm_stall_detect;
+> +
+> +	vm_stall_detect = (struct vm_stall_detect_s __percpu *)
+> +		platform_get_drvdata(dev);
+
+Same as above - unnecessary typecast.
+
+> +	for_each_cpu_and(cpu, cpu_online_mask, &watchdog_cpumask) {
+> +		struct vm_stall_detect_s *cpu_stall_detect;
+> +
+> +		cpu_stall_detect = per_cpu_ptr(vm_stall_detect, cpu);
+> +		smp_call_function_single(cpu, vcpu_stall_detect_stop,
+> +					 cpu_stall_detect, true);
+> +	}
+> +
+> +	free_percpu(vm_stall_detect);
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id vcpu_stall_detect_of_match[] = {
+> +	{ .compatible = "qemu,vcpu-stall-detector", },
+> +	{}
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, vcpu_stall_detect_of_match);
+> +
+> +static struct platform_driver vcpu_stall_detect_driver = {:
+> +	.probe  = vcpu_stall_detect_probe,
+> +	.remove = vcpu_stall_detect_remove,
+> +	.driver = {
+> +		.name           = KBUILD_MODNAME,
+> +		.of_match_table = vcpu_stall_detect_of_match,
+
+Either use of_match_ptr() or add dependency on OF.
+
+> +	},
+> +};
+> +
+> +module_platform_driver(vcpu_stall_detect_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("Sebastian Ene <sebastianene@google.com>");
+> +MODULE_DESCRIPTION("VCPU stall detector");
+

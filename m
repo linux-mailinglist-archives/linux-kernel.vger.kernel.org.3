@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDE455D28F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BCD55C8D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234756AbiF0LYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:24:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
+        id S238668AbiF0LwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234707AbiF0LYN (ORCPT
+        with ESMTP id S238377AbiF0LsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:24:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E40656C;
-        Mon, 27 Jun 2022 04:24:11 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEABFD34;
+        Mon, 27 Jun 2022 04:41:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E108661474;
-        Mon, 27 Jun 2022 11:24:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D36C5C3411D;
-        Mon, 27 Jun 2022 11:24:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 070ED6120B;
+        Mon, 27 Jun 2022 11:41:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14BA7C3411D;
+        Mon, 27 Jun 2022 11:40:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329049;
-        bh=An5gCgP8n/HwVi2nUgCPrJSjepvo3R5hCBZKFSsNPAk=;
+        s=korg; t=1656330060;
+        bh=+1FbClF0Z4V7fDTn2YOUEgIDdWMdgXXxnSO9h32EB18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0wQcrPAv+ly0TOZmcqkf1CU0W+9cFH7qH9xlLFrNe+4+p6jpXEvld9t8wsY9G6hwo
-         m9sez726/wjMeqmGD2q4JcAPS+o1FHZHN2HUCDr2yEpT9ePvVdmHEdBYVC+cjCyYQ4
-         LjkEQyiqIgOKedAJiMaY5u8MZxSc/mdDicm0XqsM=
+        b=drIW9xOVPDE4DkfWpRVp9xdp0XSdC5ozT9BzN0HQ+mX8lP0E8dTFOtNcu/N8Ccdz+
+         wnw/OZdFvJ6R4EW5BgOxmTTskxVGrSBV5dK+tdYC9wQKXttBECEG55izd6bcdjSIUI
+         cZBRLpC0oH5fcfnXPGCHFlDkWfdmlCe5DMFoY4co=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+47af19f3307fc9c5c82e@syzkaller.appspotmail.com,
-        Jon Maloy <jmaloy@redhat.com>,
-        Ying Xue <ying.xue@windriver.com>,
-        Hoang Le <hoang.h.le@dektech.com.au>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, German Gomez <german.gomez@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 032/102] tipc: fix use-after-free Read in tipc_named_reinit
+Subject: [PATCH 5.18 070/181] perf test: Record only user callchains on the "Check Arm64 callgraphs are complete in fp mode" test
 Date:   Mon, 27 Jun 2022 13:20:43 +0200
-Message-Id: <20220627111934.417959458@linuxfoundation.org>
+Message-Id: <20220627111946.593967753@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,78 +58,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hoang Le <hoang.h.le@dektech.com.au>
+From: Michael Petlan <mpetlan@redhat.com>
 
-[ Upstream commit 911600bf5a5e84bfda4d33ee32acc75ecf6159f0 ]
+[ Upstream commit 72dcae8efd42699bbfd55e1ef187310c4e2e5dcb ]
 
-syzbot found the following issue on:
-==================================================================
-BUG: KASAN: use-after-free in tipc_named_reinit+0x94f/0x9b0
-net/tipc/name_distr.c:413
-Read of size 8 at addr ffff88805299a000 by task kworker/1:9/23764
+The testcase 'Check Arm64 callgraphs are complete in fp mode' wants to
+see the following output:
 
-CPU: 1 PID: 23764 Comm: kworker/1:9 Not tainted
-5.18.0-rc4-syzkaller-00878-g17d49e6e8012 #0
-Hardware name: Google Compute Engine/Google Compute Engine,
-BIOS Google 01/01/2011
-Workqueue: events tipc_net_finalize_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495
-mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- tipc_named_reinit+0x94f/0x9b0 net/tipc/name_distr.c:413
- tipc_net_finalize+0x234/0x3d0 net/tipc/net.c:138
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-[...]
-==================================================================
+    610 leaf
+    62f parent
+    648 main
 
-In the commit
-d966ddcc3821 ("tipc: fix a deadlock when flushing scheduled work"),
-the cancel_work_sync() function just to make sure ONLY the work
-tipc_net_finalize_work() is executing/pending on any CPU completed before
-tipc namespace is destroyed through tipc_exit_net(). But this function
-is not guaranteed the work is the last queued. So, the destroyed instance
-may be accessed in the work which will try to enqueue later.
+However, without excluding kernel callchains, the output might look like:
 
-In order to completely fix, we re-order the calling of cancel_work_sync()
-to make sure the work tipc_net_finalize_work() was last queued and it
-must be completed by calling cancel_work_sync().
+	ffffc2ff40ef1b5c arch_local_irq_enable
+	ffffc2ff419d032c __schedule
+	ffffc2ff419d06c0 schedule
+	ffffc2ff40e4da30 do_notify_resume
+	ffffc2ff40e421b0 work_pending
+	             610 leaf
+	             62f parent
+	             648 main
 
-Reported-by: syzbot+47af19f3307fc9c5c82e@syzkaller.appspotmail.com
-Fixes: d966ddcc3821 ("tipc: fix a deadlock when flushing scheduled work")
-Acked-by: Jon Maloy <jmaloy@redhat.com>
-Signed-off-by: Ying Xue <ying.xue@windriver.com>
-Signed-off-by: Hoang Le <hoang.h.le@dektech.com.au>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Adding '--user-callchains' leaves only the wanted symbols in the chain.
+
+Fixes: cd6382d82752737e ("perf test arm64: Test unwinding using fame-pointer (fp) mode")
+Suggested-by: German Gomez <german.gomez@arm.com>
+Reviewed-by: German Gomez <german.gomez@arm.com>
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+Signed-off-by: Michael Petlan <mpetlan@redhat.com>
+Cc: German Gomez <german.gomez@arm.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Link: https://lore.kernel.org/r/20220614105207.26223-1-mpetlan@redhat.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tipc/core.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ tools/perf/tests/shell/test_arm_callgraph_fp.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/tipc/core.c b/net/tipc/core.c
-index 96bfcb2986f5..7724499f516e 100644
---- a/net/tipc/core.c
-+++ b/net/tipc/core.c
-@@ -111,10 +111,9 @@ static void __net_exit tipc_exit_net(struct net *net)
- 	struct tipc_net *tn = tipc_net(net);
+diff --git a/tools/perf/tests/shell/test_arm_callgraph_fp.sh b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
+index 6ffbb27afaba..ec108d45d3c6 100755
+--- a/tools/perf/tests/shell/test_arm_callgraph_fp.sh
++++ b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
+@@ -43,7 +43,7 @@ CFLAGS="-g -O0 -fno-inline -fno-omit-frame-pointer"
+ cc $CFLAGS $TEST_PROGRAM_SOURCE -o $TEST_PROGRAM || exit 1
  
- 	tipc_detach_loopback(net);
-+	tipc_net_stop(net);
- 	/* Make sure the tipc_net_finalize_work() finished */
- 	cancel_work_sync(&tn->work);
--	tipc_net_stop(net);
--
- 	tipc_bcast_stop(net);
- 	tipc_nametbl_stop(net);
- 	tipc_sk_rht_destroy(net);
+ # Add a 1 second delay to skip samples that are not in the leaf() function
+-perf record -o $PERF_DATA --call-graph fp -e cycles//u -D 1000 -- $TEST_PROGRAM 2> /dev/null &
++perf record -o $PERF_DATA --call-graph fp -e cycles//u -D 1000 --user-callchains -- $TEST_PROGRAM 2> /dev/null &
+ PID=$!
+ 
+ echo " + Recording (PID=$PID)..."
 -- 
 2.35.1
 

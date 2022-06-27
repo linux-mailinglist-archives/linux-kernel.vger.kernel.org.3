@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE9B55D9E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE7655D7CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241780AbiF0W5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 18:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
+        id S242800AbiF0W6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 18:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiF0W5S (ORCPT
+        with ESMTP id S241880AbiF0W6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 18:57:18 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835E118E38
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 15:57:17 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id v38so8533332ybi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 15:57:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gE/xA3Wye8hViJbK5UhmsnlZGnHWRGC3pMXvtMOoCt8=;
-        b=qyWovt3H2/S/PREhNpP70FSfQjvs5rJ9G6pZ9vtVfiXj25owaRv8/RaJ0lYbcK3hXj
-         Hpx1SebchV1O8NiX5BqxRmohGd2DVncnDboXcCprOeaTlqQ3uL+W+X7FSi+RnRp9bJ8x
-         cyaOL9ZtGbulxrb7IOaOwrsNBW1ivz/vuZ5V6XflcJFBMZl5V6+hCAyn2iFrYFpW8tNg
-         VIKFhgF4FnkYrBKdyOf+KcQ2owAWUgwlGLSRxK9X3eI2JdZe3gnhep1PieuPS0xrf1aR
-         cpVrmSqsNUmJUmZ/3YIxYnROIoiRRBrja3H/bKgRKmaeFIhn9wCADinruX/7Ufkgw8sc
-         NLpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gE/xA3Wye8hViJbK5UhmsnlZGnHWRGC3pMXvtMOoCt8=;
-        b=L49v+Feen0Xrp+eZf/U6rZ2kwUszb92nD8zeHIzwTYXrvc9gfW9ywI5l4N/cxQYmA4
-         LIBisSICHcJUbrroy8ILVtKsfCIZVt5oKXtrA2JDWbu2dTkCSVAEJL6bBh8MD9/efVww
-         FNZuxa4DVgJvGoH2ew0HydKhXFqA4jbB311ut59IA3KDoQSGjvRAdUhxVAWKfc0M4aAU
-         eTQHVr0ASSr9d3F9TpFi4KdgnDSbt7vZg6OOiOJ08jhxtrhqpAbvE9ARQy5RzuTZcNzQ
-         zIif670rlIIKyI87dyePm52vyawJyiEN33GhKZ4KBUjiTL9mZCiLqXPfKtu48XPWHd0z
-         NAIQ==
-X-Gm-Message-State: AJIora/6XFICoNvM/J/3upDMD9Btioqu7si8nBHK1susLfGFqhF5XA2y
-        0GtdYyEdtascjgf3aP7NGZQu7vyGxI6guwJOaYWkZA==
-X-Google-Smtp-Source: AGRyM1s8sgQ1jy0T7pu+ThAN9hgK9CCpf9A/jyg2Ut9Ur1TU10fbA438D/Xn3CjhSHa1NR5i/KdpOTMGIr7jPm5vCok=
-X-Received: by 2002:a25:a401:0:b0:664:7d19:5fc6 with SMTP id
- f1-20020a25a401000000b006647d195fc6mr15794134ybi.400.1656370636629; Mon, 27
- Jun 2022 15:57:16 -0700 (PDT)
+        Mon, 27 Jun 2022 18:58:08 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8726A10C;
+        Mon, 27 Jun 2022 15:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656370687; x=1687906687;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zVmwtCQNF6fzOVCPckEQuUt0SlS/3Ly8rekwR8DjUy4=;
+  b=gjQee9DuVZRDzrXgSfciibX16tkM1lEU8bJYoRxU1OvwYeUgu7a2oUuK
+   zmv8Pa+6mokamj/Zofq698nLSSVTqEqinvs4gHIGKK6D1g3oZRnG1p7/q
+   G+zQSqsChyc2SuhkVLlRuiXwzWuo4l6hTjfbM4ZX8vidRpmwEXn6MEpDG
+   ZOocKNpqPggZ5iddJKb5/MwI85FEqy4SJx7uBCHfU5IUuFTt+SL4ZWxel
+   8OnuPSa13MgLBz2DdlGOw9JViwTGx+Ukic6vXvssEXOpyOVxMMMhXS/1O
+   qZFlMNgNXdKjbNXod3eLpkY3izdN/yMb+dlZcfLv40CEiB91USJqqa3Pu
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="282672819"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="282672819"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 15:58:07 -0700
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="732509814"
+Received: from jsagoe-mobl1.amr.corp.intel.com (HELO [10.209.12.66]) ([10.209.12.66])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 15:58:06 -0700
+Message-ID: <3253e9fa-14f8-085e-5f13-bb70fea89abf@intel.com>
+Date:   Mon, 27 Jun 2022 15:57:07 -0700
 MIME-Version: 1.0
-References: <20220624084400.1454579-1-davidgow@google.com>
-In-Reply-To: <20220624084400.1454579-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 27 Jun 2022 15:57:04 -0700
-Message-ID: <CAGS_qxqrcyEH+C=63R8uT+K2opkXm6Da1wa4pyNupLUsy1iAKw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Enable virtio/PCI by default on UML
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v5 15/22] x86/virt/tdx: Allocate and set up PAMTs for
+ TDMRs
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1655894131.git.kai.huang@intel.com>
+ <c504a8acd06dc455050c25e2a4cc70aef5eb9358.1655894131.git.kai.huang@intel.com>
+ <e72703b0-767a-ec88-7cb6-f95a3564d823@intel.com>
+ <b376aef05bc032fdf8cc23762ce77a14830440cd.camel@intel.com>
+ <b43bf089-1202-a1fe-cbb3-d4e0926cab67@intel.com>
+ <a610ae9bd554f31364193abc928fad86ed5ebf7c.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <a610ae9bd554f31364193abc928fad86ed5ebf7c.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,170 +74,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 1:44 AM David Gow <davidgow@google.com> wrote:
->
-> There are several tests which depend on PCI, and hence need a bunch of
-> extra options to run under UML. This makes it awkward to give
-> configuration instructions (whether in documentation, or as part of a
-> .kunitconfig file), as two separate, incompatible sets of config options
-> are required for UML and "most other architectures".
->
-> For non-UML architectures, it's possible to add default kconfig options
-> via the qemu_config python files, but there's no equivalent for UML. Add
-> a new tools/testing/kunit/configs/arch_uml.config file containing extra
-> kconfig options to use on UML.
->
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->
-> NOTE: This has dependencies on the 'make --kunitconfig repeatable'
-> series:
-> https://lore.kernel.org/linux-kselftest/20220624001247.3255978-1-dlatypov@google.com/
-> which, in turn, depends on:
-> https://lore.kernel.org/linux-kselftest/20220520224200.3764027-1-dlatypov@google.com/
-> Please apply those first.
->
-> Changes since RFC:
-> https://lore.kernel.org/linux-kselftest/20220622035326.759935-1-davidgow@google.com/
-> - Rebase on top of the previous kconfig patches.
-> - Fix a missing make_arch_qemuconfig->make_arch_config rename (Thanks
->   Brendan)
-> - Fix the tests to use the base LinuxSourceTreeOperations class, which
->   has no default kconfig options (and so won't conflict with those set
->   in the tests). Only test_build_reconfig_existing_config actually
->   failed, but I updated a few more in case the defaults changed.
->
->
-> ---
->  tools/testing/kunit/configs/arch_uml.config |  5 +++++
->  tools/testing/kunit/kunit_kernel.py         | 14 ++++++++++----
->  tools/testing/kunit/kunit_tool_test.py      | 12 ++++++++++++
->  3 files changed, 27 insertions(+), 4 deletions(-)
->  create mode 100644 tools/testing/kunit/configs/arch_uml.config
->
-> diff --git a/tools/testing/kunit/configs/arch_uml.config b/tools/testing/kunit/configs/arch_uml.config
-> new file mode 100644
-> index 000000000000..e824ce43b05a
-> --- /dev/null
-> +++ b/tools/testing/kunit/configs/arch_uml.config
-> @@ -0,0 +1,5 @@
-> +# Config options which are added to UML builds by default
-> +
-> +# Enable virtio/pci, as a lot of tests require it.
-> +CONFIG_VIRTIO_UML=y
-> +CONFIG_UML_PCI_OVER_VIRTIO=y
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index fc415ff7530e..127598fb994b 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -26,6 +26,7 @@ KUNITCONFIG_PATH = '.kunitconfig'
->  OLD_KUNITCONFIG_PATH = 'last_used_kunitconfig'
->  DEFAULT_KUNITCONFIG_PATH = 'tools/testing/kunit/configs/default.config'
->  BROKEN_ALLCONFIG_PATH = 'tools/testing/kunit/configs/broken_on_uml.config'
-> +UML_KCONFIG_PATH = 'tools/testing/kunit/configs/arch_uml.config'
->  OUTFILE_PATH = 'test.log'
->  ABS_TOOL_PATH = os.path.abspath(os.path.dirname(__file__))
->  QEMU_CONFIGS_DIR = os.path.join(ABS_TOOL_PATH, 'qemu_configs')
-> @@ -53,7 +54,7 @@ class LinuxSourceTreeOperations:
->                 except subprocess.CalledProcessError as e:
->                         raise ConfigError(e.output.decode())
->
-> -       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
-> +       def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
->                 return base_kunitconfig
->
->         def make_allyesconfig(self, build_dir: str, make_options) -> None:
-> @@ -109,7 +110,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
->                 self._kernel_command_line = qemu_arch_params.kernel_command_line + ' kunit_shutdown=reboot'
->                 self._extra_qemu_params = qemu_arch_params.extra_qemu_params
->
-> -       def make_arch_qemuconfig(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
-> +       def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
->                 kconfig = kunit_config.parse_from_string(self._kconfig)
->                 kconfig.merge_in_entries(base_kunitconfig)
->                 return kconfig
-> @@ -138,6 +139,11 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
->         def __init__(self, cross_compile=None):
->                 super().__init__(linux_arch='um', cross_compile=cross_compile)
->
-> +       def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
-> +               kconfig = kunit_config.parse_file(UML_KCONFIG_PATH)
-> +               kconfig.merge_in_entries(base_kunitconfig)
-> +               return kconfig
-> +
->         def make_allyesconfig(self, build_dir: str, make_options) -> None:
->                 kunit_parser.print_with_timestamp(
->                         'Enabling all CONFIGs for UML...')
-> @@ -297,7 +303,7 @@ class LinuxSourceTree:
->                 if build_dir and not os.path.exists(build_dir):
->                         os.mkdir(build_dir)
->                 try:
-> -                       self._kconfig = self._ops.make_arch_qemuconfig(self._kconfig)
-> +                       self._kconfig = self._ops.make_arch_config(self._kconfig)
->                         self._kconfig.write_to_file(kconfig_path)
->                         self._ops.make_olddefconfig(build_dir, make_options)
->                 except ConfigError as e:
-> @@ -328,7 +334,7 @@ class LinuxSourceTree:
->                         return self.build_config(build_dir, make_options)
->
->                 existing_kconfig = kunit_config.parse_file(kconfig_path)
-> -               self._kconfig = self._ops.make_arch_qemuconfig(self._kconfig)
-> +               self._kconfig = self._ops.make_arch_config(self._kconfig)
->
->                 if self._kconfig.is_subset_of(existing_kconfig) and not self._kunitconfig_changed(build_dir):
->                         return True
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index e21ae1331350..08cb2dc8ef7d 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -430,6 +430,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
->                                 f.write('CONFIG_KUNIT=y')
->
->                         tree = kunit_kernel.LinuxSourceTree(build_dir)
-> +                       # Stub out the source tree operations, so we don't have
-> +                       # the defaults for any given architecture get in the
-> +                       # way.
-> +                       tree._ops = kunit_kernel.LinuxSourceTreeOperations(None, None)
+On 6/27/22 15:50, Kai Huang wrote:
+>> Are Kirill's magic 0/1/2 numbers the same as
+>>
+>> 	TDX_PG_4K,
+>> 	TDX_PG_2M,
+>> 	TDX_PG_1G,
+>>
+>> ?
+> Yes they are the same.  Kirill uses 0/1/2 as input of TDX_ACCEPT_PAGE TDCALL. 
+> Here I only need them to distinguish different page sizes.
+> 
+> Do you mean we should put TDX_PG_4K/2M/1G definition to asm/tdx.h, and
+> try_accept_one() should use them instead of magic 0/1/2?
 
-This runs and typechecks under mypy, but not under pytype.
-The problem is that the first argument is type str, not Optional[str].
-
-I think a fix would be to just use LinuxSourceTreeOperationsUml() instead here.
-
-Since you recently switched machines, you might want to run:
-$ pip install pytype
-
-And then
-$ ./tools/testing/kunit/run_checks.py
-would run pytype and show you the complaints here.
-
-
-
->                         mock_build_config = mock.patch.object(tree, 'build_config').start()
->
->                         # Should generate the .config
-> @@ -447,6 +451,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
->                                 f.write('CONFIG_KUNIT=y\nCONFIG_KUNIT_TEST=y')
->
->                         tree = kunit_kernel.LinuxSourceTree(build_dir)
-> +                       # Stub out the source tree operations, so we don't have
-> +                       # the defaults for any given architecture get in the
-> +                       # way.
-> +                       tree._ops = kunit_kernel.LinuxSourceTreeOperations(None, None)
->                         mock_build_config = mock.patch.object(tree, 'build_config').start()
->
->                         self.assertTrue(tree.build_reconfig(build_dir, make_options=[]))
-> @@ -463,6 +471,10 @@ class LinuxSourceTreeTest(unittest.TestCase):
->                                 f.write('CONFIG_KUNIT=y\nCONFIG_KUNIT_TEST=y')
->
->                         tree = kunit_kernel.LinuxSourceTree(build_dir)
-> +                       # Stub out the source tree operations, so we don't have
-> +                       # the defaults for any given architecture get in the
-> +                       # way.
-> +                       tree._ops = kunit_kernel.LinuxSourceTreeOperations(None, None)
->                         mock_build_config = mock.patch.object(tree, 'build_config').start()
->
->                         # ... so we should trigger a call to build_config()
-> --
-> 2.37.0.rc0.161.g10f37bed90-goog
->
+I honestly don't care how you do it as long as the magic numbers go away
+(within reason).

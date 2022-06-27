@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0D155CAD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5779855CEC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240860AbiF0UDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 16:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
+        id S240807AbiF0UDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 16:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240778AbiF0UDT (ORCPT
+        with ESMTP id S240819AbiF0UDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 16:03:19 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AE81A042
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:03:18 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id w2-20020a056830110200b00616ce0dfcb2so2880702otq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:03:18 -0700 (PDT)
+        Mon, 27 Jun 2022 16:03:21 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A581A056
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:03:20 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id w193so14332572oie.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:03:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ItqEu+lAWFywVj/7Sp4uH56FVniAGH7QFEwGCURs750=;
-        b=qpbOrnDDCSeOTeUMMOhi/+Gpih7IavGKBdKTPC996619XvZLRfxMFfNKZtkid3rx2s
-         fPMqtC0JQoyPri1hKDi6yW7F/q/mmD08m3hZXctogXAvxK7CBO+FuvMTVCoin5dp9eom
-         qvgO48HC/f1cZwRr3agSIoyIIL7jXP4haenUVQtMg7rk28yPnl6YhlE7NwAuk9cz47gf
-         c8Nq30XFxhIzhszThIuYS6dEGz65hFw0oGzgjcDplwd9qlkrkrUf8qtKntDDTQqiLcei
-         5ZCG46tvZGNCMagZO+HIEKOjb01uQAj/1SclumYWb0Se90Y5k1mRyStBOwosbWJqi6pY
-         SukA==
+        bh=TZ8+R3M0S1nQaMEUYxJlIWhu0Gas0lB13VSI9mi3gCo=;
+        b=jE9NBHIDH149VkRLhIk0yOTrQtpNiFaKNTUGDK89EhVFqEKC4abCikb/nksZMiAEsT
+         PDSAwpHsp5Yek0S95rRDahLASN3U+sDCAz6qZlTsANiRMVrBrcXqals463swf2TiOKr1
+         5AZCZe8m3u+jGC/GNgVhHgbvChx5BbL18SFS2+7KCiO3NljI3o6g+/bOe87gggHJnCu/
+         LG1Cn6RSFhOTyv/ycAqKp/ayCeCgMgILVHRHqVbGRezAdJ59yC93ziKTJzR6Xz8x/0uM
+         7GH4mlpCHuFO9QN1fyfSt1ylMQXp1PwT5WHYHlnKDCp1grBgD2cvqDrFjwZscvqrBOnP
+         1ggg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ItqEu+lAWFywVj/7Sp4uH56FVniAGH7QFEwGCURs750=;
-        b=5ytlT9N+2XD+DfIBqENsQheCk65RF97bQWYn0miwWX2XnF+4pmsK7xNSOttPuWhFab
-         bsVUGNngUkh4ohHMmqgSY1t54gZ7NL6P5ZqPHHtD22nqHnooExFzgTGuRtDSMtjMqtwg
-         Y2mx/VwrTphUbbmo7flupi7pG1EPoR1nDHaxJ3ouJWxnH0olsL8hYdvzuD/nILe0V6Cm
-         /lYW3l3V/LKj1hfbHOvFxUNnwZjdOFAF3nKR/XL6+echdnZ9GECZXefvDFWPsiXO/otm
-         1Hxr0eqedbLKEezCW/0XuiRKDIAuXxWCWMzyfWT+qADV9UnyoRCI8oUQb7YkNb/T6cW1
-         2h8w==
-X-Gm-Message-State: AJIora9yNmzolFC77nQriEn7XU/hky4HZ0CAMgIkyIRzrBNlyudRUCmP
-        BwshgMANEmbpKhE8B1SJc9GX6H/1OHPS0A==
-X-Google-Smtp-Source: AGRyM1uZjewcPz1q7uEbPg0Nk6kk17VoeOQhYespe3p3jGWG44ifdwVQS65I00wjnjaMborxq/j3rg==
-X-Received: by 2002:a05:6830:6516:b0:614:d633:8b9a with SMTP id cm22-20020a056830651600b00614d6338b9amr6457412otb.137.1656360198251;
-        Mon, 27 Jun 2022 13:03:18 -0700 (PDT)
+        bh=TZ8+R3M0S1nQaMEUYxJlIWhu0Gas0lB13VSI9mi3gCo=;
+        b=3aKbNL5zR5vm4O/+csAgPyd4fIhsADbi0afNy8MlAbOVIUQN5p3loEB1PnEjni7lEW
+         PA/Q0dy4Q9SVtZ2buyYqVB38JpQcKxI6ZS4cgV88paOzyjCr/5lExn2sUD/stygtQ43u
+         0FMTcBFI27Q4z/W+u0t/gL02sSsgYiZvandKAahZpgwfegp8ctv14LlxrUrVl0oWLxiB
+         88kpHo3k7lca4ReqbALDCLuXtFKhc16WwXjiMUUofRjD6JWS4m+A2WR0GpC/tWbFNPmi
+         xmGh3Cny7bl3zlXpOv8StD2G3xdFXuWo3yZx3d5pXpayImSVKFXAGb19fwuhBjXwRCLo
+         YlIA==
+X-Gm-Message-State: AJIora8BfMcgVeD4+aSe3mOqVLNo+xEm1OwIbIxt+GaOP57jmRwkEOpp
+        6au+Vw7yYcu4A2jv5a9mATD5UA==
+X-Google-Smtp-Source: AGRyM1sirrNSgfMuD2r1cwuzZWm2Oqngu9wBvfSeMbPZ5IiVWM+Vhp6aZ5l2qx23ivcg184/EjcZ8A==
+X-Received: by 2002:a05:6808:1648:b0:333:45ae:3777 with SMTP id az8-20020a056808164800b0033345ae3777mr12078448oib.4.1656360199747;
+        Mon, 27 Jun 2022 13:03:19 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id m16-20020a4a9510000000b0041bdf977c6dsm6428729ooi.31.2022.06.27.13.03.17
+        by smtp.gmail.com with ESMTPSA id m16-20020a4a9510000000b0041bdf977c6dsm6428729ooi.31.2022.06.27.13.03.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 13:03:17 -0700 (PDT)
+        Mon, 27 Jun 2022 13:03:19 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Douglas Anderson <dianders@chromium.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        matvore@chromium.org, Andy Gross <agross@kernel.org>,
+To:     Rob Herring <robh+dt@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Joseph S . Barrera III" <joebar@chromium.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Alexandru M Stan <amstan@chromium.org>,
+        devicetree@vger.kernel.org, Julius Werner <jwerner@chromium.org>,
+        linux-doc@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        patches@lists.linux.dev, Matthias Kaehlcke <mka@chromium.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Stephen Boyd <swboyd@chromium.org>
-Subject: Re: (subset) [PATCH v3] soc: qcom: socinfo: Add an ID for sc7180P
-Date:   Mon, 27 Jun 2022 15:02:39 -0500
-Message-Id: <165636016347.3080661.11368001720445085919.b4-ty@linaro.org>
+Subject: Re: [PATCH v4 1/5] dt-bindings: Document how Chromebooks with depthcharge boot
+Date:   Mon, 27 Jun 2022 15:02:40 -0500
+Message-Id: <165636016348.3080661.58233739131121561.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220523085437.v3.1.I26eca1856f99e6160d30de6d50ecab60e6226354@changeid>
-References: <20220523085437.v3.1.I26eca1856f99e6160d30de6d50ecab60e6226354@changeid>
+In-Reply-To: <20220520143502.v4.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
+References: <20220520143502.v4.1.I71e42c6174f1cec17da3024c9f73ba373263b9b6@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -73,23 +81,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 May 2022 08:54:57 -0700, Douglas Anderson wrote:
-> Some sc7180 Chromebooks actually have sc7180P (known by many names,
-> apparently, including possibly sc7180 Pro and sc7185). This is a
-> sc7180 part that has slightly higher clock speeds.
+On Fri, 20 May 2022 14:38:41 -0700, Douglas Anderson wrote:
+> This documents how many Chromebooks pick the device tree that will be
+> passed to the OS and can help understand the revisions / SKUs listed
+> as the top-level "compatible" in many Chromebooks.
 > 
-> The official ID number allocated to these devices by Qualcomm is 495
-> so we'll add an entry to the table for them. Note that currently
-> shipping BIOS for these devices will actually end up reporting an ID
-> of 407 due to a bug but eventually a new BIOS will be released which
-> corrects it to 495.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] soc: qcom: socinfo: Add an ID for sc7180P
-      commit: 0f0eca0ccb9b37743466fbd1b388a04ea0307b89
+[1/5] dt-bindings: Document how Chromebooks with depthcharge boot
+      commit: 59228d3b9060b0e5e6b37ceca078fd81a165cfc9
+[2/5] dt-bindings: arm: qcom: Mention that Chromebooks use a different scheme
+      commit: dbbccb3db122558b35ecb4c87a86bbad37c80862
+[3/5] dt-bindings: arm: qcom: Add sc7180 Chromebook board bindings
+      commit: 3b8bfe002c4ba633b48cc497238a69eb88346a60
+[4/5] dt-bindings: arm: qcom: Add / fix sc7280 board bindings
+      commit: 707b9b08789bf3312c9cf23c621ad942de9aa48c
+[5/5] dt-bindings: arm: qcom: Add more sc7180 Chromebook board bindings
+      commit: 5069fe941f76c9f37abc98636a7db33a5ac72840
 
 Best regards,
 -- 

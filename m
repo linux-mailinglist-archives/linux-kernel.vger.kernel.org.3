@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3008E55C4F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DADC55DAD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240760AbiF0TwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 15:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
+        id S240982AbiF0TyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 15:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238433AbiF0Tv5 (ORCPT
+        with ESMTP id S240829AbiF0Twg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 15:51:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FD071BE83
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:51:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656359515;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jiwuO61xqDYsAatAV0xcjY2AT3XPbcqJO2ZheElIFe4=;
-        b=UGI9V8UrnzcIqVB9s28fpog6u5GzuVM8i32paLNcov0EfJuHwcEwlPgzka3xm/AhdvCX9P
-        JJRHPUxWvgoLtNbIKhujmHTcpf6R8MnSHol8xMTRuIHdUPfXOsCu98M2XDAws/0tWIk+Zx
-        xz8zjQbgN8JiqXIflnncQpx3R03ZSIQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-OIXhawpzPVS0ihlNq5O2Mw-1; Mon, 27 Jun 2022 15:51:52 -0400
-X-MC-Unique: OIXhawpzPVS0ihlNq5O2Mw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8F7A801233;
-        Mon, 27 Jun 2022 19:51:51 +0000 (UTC)
-Received: from rules.brq.redhat.com (unknown [10.40.208.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 250BD2026D64;
-        Mon, 27 Jun 2022 19:51:49 +0000 (UTC)
-From:   Vladis Dronov <vdronov@redhat.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Vladis Dronov <vdronov@redhat.com>, Simo Sorce <simo@redhat.com>
-Subject: [PATCH v3] crypto: fips - make proc files report fips module name and version
-Date:   Mon, 27 Jun 2022 21:51:44 +0200
-Message-Id: <20220627195144.976741-1-vdronov@redhat.com>
-In-Reply-To: <20220620131618.952133-1-vdronov@redhat.com>
-References: <20220620131618.952133-1-vdronov@redhat.com>
+        Mon, 27 Jun 2022 15:52:36 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C291BE9F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:52:35 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id v126so5885855pgv.11
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:52:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=V4N/XV5AG1JF/lcVRWXIaUHhwjacSgO9qHu9c0dDYvM=;
+        b=RKUQgJa4N6T5aUYk2eRSPtiYKkt4OQaSH3CHrSTJywIzBp27kfOgRHJp3pJ6oMTFIZ
+         Hm3r1CfDdc8/+Utg6uH/ev/5VprIVzOMjsaRLKNscDiOdP0zLW1sTWNaLQ3viwHwxotc
+         waNOHJIcCgfXrKJFz1L0k625xp4VHe4zk5ePU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=V4N/XV5AG1JF/lcVRWXIaUHhwjacSgO9qHu9c0dDYvM=;
+        b=oUnPTcc41k3QyTASen5ojVVYzRoPsF2+ubNd+3yowfcLpF8QC2/O+/Fe14DETPiIhH
+         hd/JAdTo6mza57SNiiWZwxVsE6mEEaGZqpUQFGcn16S+QC5p513Sby8Lcs5EUTxT3+d2
+         sRgJkbGaCY7LSu6gp+0Zw2EdLmeMTG9q1PEU72fyweiBwmZGqdMJoB7S0CFjh70SziOo
+         hNAhjOLRUDmJxYGk3f8VPwQ2wFG/8+og45zlklMAaBm32E1B2iG1ZgA+LxWtCF2im/wi
+         ydbp/K3yJQIgnBX0xse3llKDbekGhFjyZdh1A6oX6TBBAIWycS4eTlP7YpfLnqc8xrhH
+         HZxw==
+X-Gm-Message-State: AJIora+5Zy7+43vz2HvjZMmnc9Z50uwY7fIPkg1tK5h79yWHX40xdNth
+        sQ9AI3D8uyhqr68dDPfpWyP1tw==
+X-Google-Smtp-Source: AGRyM1tfDJfj4YCkJqulZUOD5NK4Iy0AK2/wWZXQp3uFpG2Uznur+44u8Osde3vtvY4gJXtZeq/R5w==
+X-Received: by 2002:a63:9d88:0:b0:40c:9c4d:29ba with SMTP id i130-20020a639d88000000b0040c9c4d29bamr14564388pgd.590.1656359554584;
+        Mon, 27 Jun 2022 12:52:34 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:f31c:687c:3a61:62c5])
+        by smtp.gmail.com with UTF8SMTPSA id e4-20020a17090301c400b0016a11750b50sm7736419plh.16.2022.06.27.12.52.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 12:52:34 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 12:52:32 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: Re: [PATCH v23 2/3] usb: misc: Add onboard_usb_hub driver
+Message-ID: <YroKgNPY4YHh0kGf@google.com>
+References: <20220622214931.1914770-1-mka@chromium.org>
+ <20220622144857.v23.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <CAD=FV=XHnRNQQo8i95ROiZPOGqAD_=FfU0uzy83Vigb+Xsr4XQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=XHnRNQQo8i95ROiZPOGqAD_=FfU0uzy83Vigb+Xsr4XQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,104 +86,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FIPS 140-3 introduced a requirement for the FIPS module to return
-information about itself, specifically a name and a version. These
-values must match the values reported on FIPS certificates.
+On Fri, Jun 24, 2022 at 01:33:25PM -0700, Doug Anderson wrote:
+> Hi,
+> 
+> On Wed, Jun 22, 2022 at 2:49 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+> >
+> > diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> > index 4c5ddbd75b7e..7fd40183a395 100644
+> > --- a/drivers/usb/misc/Kconfig
+> > +++ b/drivers/usb/misc/Kconfig
+> > @@ -295,3 +295,19 @@ config BRCM_USB_PINMAP
+> >           This option enables support for remapping some USB external
+> >           signals, which are typically on dedicated pins on the chip,
+> >           to any gpio.
+> > +
+> > +config USB_ONBOARD_HUB
+> > +       bool "Onboard USB hub support"
+> 
+> The above needs to be "tristate", not bool.
 
-This patch adds two files to read a name and a version from:
+right, thanks!
 
-/proc/sys/crypto/fips_name
-/proc/sys/crypto/fips_version
+> Weirdly the way you have it if you set "CONFIG_USB=m" and
+> "CONFIG_USB_ONBOARD_HUB=y" you don't get any compile errors, but also
+> the onboard usb hub doesn't even get compiled (!). Once you switch to
+> tristate then setting "CONFIG_USB=m" will force the onboard hub to be
+> a module too (since it's underneath the "if" in the Kconfig).
+> 
+> ...ugh, but once you do that then you start getting compile errors if
+> you have "CONFIG_USB=y" and "CONFIG_USB_ONBOARD_HUB=m". I guess that
+> can be fixed with something like this
+> 
+> -usbcore-$(CONFIG_USB_ONBOARD_HUB)      += ../misc/onboard_usb_hub_pdevs.o
+> +ifdef CONFIG_USB_ONBOARD_HUB
+> +usbcore-y                      += ../misc/onboard_usb_hub_pdevs.o
+> +endif
 
-v2: removed redundant parentheses in config entries.
-v3: move FIPS_MODULE_* defines to fips.c where they are used.
+Thanks for testing and the suggestion!
 
-Signed-off-by: Simo Sorce <simo@redhat.com>
-Signed-off-by: Vladis Dronov <vdronov@redhat.com>
----
- crypto/Kconfig | 21 +++++++++++++++++++++
- crypto/fips.c  | 34 +++++++++++++++++++++++++++++-----
- 2 files changed, 50 insertions(+), 5 deletions(-)
+> Given the problems we've had in the past, please make sure you test
+> with all combinations of "=y" and "=m" for CONFIG_USB and
+> CONFIG_USB_ONBOARD_HUB. Note that on sc7180-trogdor devices if you
+> want CONFIG_USB to be a module don't forget to also set
+> CONFIG_USB_DWC3=m or DWC3 will force you to gadget mode...
 
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index 1d44893a997b..3891c331f2e7 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -33,6 +33,27 @@ config CRYPTO_FIPS
- 	  certification.  You should say no unless you know what
- 	  this is.
- 
-+config CRYPTO_FIPS_NAME
-+	string "FIPS Module Name"
-+	default "Linux Kernel Cryptographic API"
-+	depends on CRYPTO_FIPS
-+	help
-+	  This option sets the FIPS Module name reported by the Crypto API via
-+	  the /proc/sys/crypto/fips_name file.
-+
-+config CRYPTO_FIPS_CUSTOM_VERSION
-+	bool "Use Custom FIPS Module Version"
-+	depends on CRYPTO_FIPS
-+	default n
-+
-+config CRYPTO_FIPS_VERSION
-+	string "FIPS Module Version"
-+	default "(none)"
-+	depends on CRYPTO_FIPS_CUSTOM_VERSION
-+	help
-+	  This option provides the ability to override the FIPS Module Version.
-+	  By default the KERNELRELEASE value is used.
-+
- config CRYPTO_ALGAPI
- 	tristate
- 	select CRYPTO_ALGAPI2
-diff --git a/crypto/fips.c b/crypto/fips.c
-index 7b1d8caee669..d820f83cb878 100644
---- a/crypto/fips.c
-+++ b/crypto/fips.c
-@@ -30,13 +30,37 @@ static int fips_enable(char *str)
- 
- __setup("fips=", fips_enable);
- 
-+#define FIPS_MODULE_NAME CONFIG_CRYPTO_FIPS_NAME
-+#ifdef CONFIG_CRYPTO_FIPS_CUSTOM_VERSION
-+#define FIPS_MODULE_VERSION CONFIG_CRYPTO_FIPS_VERSION
-+#else
-+#define FIPS_MODULE_VERSION UTS_RELEASE
-+#endif
-+
-+static char fips_name[] = FIPS_MODULE_NAME;
-+static char fips_version[] = FIPS_MODULE_VERSION;
-+
- static struct ctl_table crypto_sysctl_table[] = {
- 	{
--		.procname       = "fips_enabled",
--		.data           = &fips_enabled,
--		.maxlen         = sizeof(int),
--		.mode           = 0444,
--		.proc_handler   = proc_dointvec
-+		.procname	= "fips_enabled",
-+		.data		= &fips_enabled,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0444,
-+		.proc_handler	= proc_dointvec
-+	},
-+	{
-+		.procname	= "fips_name",
-+		.data		= &fips_name,
-+		.maxlen		= 64,
-+		.mode		= 0444,
-+		.proc_handler	= proc_dostring
-+	},
-+	{
-+		.procname	= "fips_version",
-+		.data		= &fips_version,
-+		.maxlen		= 64,
-+		.mode		= 0444,
-+		.proc_handler	= proc_dostring
- 	},
- 	{}
- };
--- 
-2.36.1
+ack
 
+I think I did an 'allmodconfig' build only test, but that didn't really help
+in this case ...
+
+> > +/**
+> > + * onboard_hub_create_pdevs -- create platform devices for onboard USB hubs
+> > + * @parent_hub : parent hub to scan for connected onboard hubs
+> > + * @pdev_list  : list of onboard hub platform devices owned by the parent hub
+> > + *
+> > + * Creates a platform device for each supported onboard hub that is connected to
+> > + * the given parent hub. The platform device is in charge of initializing the
+> > + * hub (enable regulators, take the hub out of reset, ...) and can optionally
+> > + * control whether the hub remains powered during system suspend or not.
+> > +
+> > + * To keep track of the platform devices they are added to
+> > + * a list that is owned by the parent hub.
+> 
+> super nitty, but the above two lines of comment could be word-wrapped better.
+
+Sure, I probably rephrased that at some point and forgot to re-wrap.
+
+> > + */
+> > +void onboard_hub_create_pdevs(struct usb_device *parent_hub, struct list_head *pdev_list)
+> > +{
+> > +       int i;
+> > +       struct usb_hcd *hcd = bus_to_hcd(parent_hub->bus);
+> 
+> As per my response on v22, would you be willing to rename that to
+> "parent_hcd"? I'll probably still confuse myself next time I read this
+> function, but at least maybe this will help me recognize more quickly
+> that this isn't necessarily the child's hcd in the case of the root
+> hub.
+
+See my reply on v22, I think 'parent_hcd' could still be confusing and it
+might be best to have a more detailed description of the problem. In any
+case I'm open to discuss it :)

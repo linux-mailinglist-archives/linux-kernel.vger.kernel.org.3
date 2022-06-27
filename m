@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF1D55CF87
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787D155D29D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiF0S4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 14:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
+        id S237365AbiF0S60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237394AbiF0S4s (ORCPT
+        with ESMTP id S239147AbiF0S5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 14:56:48 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C85710F5;
-        Mon, 27 Jun 2022 11:56:47 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id bx13so3480737ljb.1;
-        Mon, 27 Jun 2022 11:56:47 -0700 (PDT)
+        Mon, 27 Jun 2022 14:57:15 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467A410C0;
+        Mon, 27 Jun 2022 11:57:14 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id o43so16179005qvo.4;
+        Mon, 27 Jun 2022 11:57:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ARUxKn4XTsqNqlAy2aX0A6ZVuWpKmpdTtIO20dOVpQM=;
-        b=BliNVePpBli3h/YthLA15cMLrqof6B39zVoBefaaFJebdtUIDW/pbqEqZ/Jl1jvXJQ
-         PeG5VgliQl8hSpL7rw20WI1RC84SY3eg0SDkUyRO/deyCaqvhLvHoXrh9hUWFFvVVdi2
-         Mw2GT/81aO0BATv51wYFD+guejja2aQDam/hAOEfJUY01qPncPumwHUL8tkXr8GGgBqE
-         87rL9x+hzmaAhx1pels6HA39ATpAEXJWymBvgo5fShTgotZGwR/D0tJMeN4abDyw7OfE
-         meTKMV45t8Nari7MOGJOEJDVZoozzR4U+H1KtDqY9URslVZ5q9z+B8WpBaDHMFpK+emv
-         r58w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=NOsgPwcDx+OihP7CM9EgDPr6TtruXCYq9aRNj46ysBQ=;
+        b=m2eUHMAtpzvN+Y99ePVbPBQhAiBwfdEMa4sYWEHf2vtSBRaVt/SObAY73NbhrfVRfT
+         bIAQti3EBUREmLes+VGyWRM/whbdbjPFFIuDU/j3NkDwPE/jOD3NueZzE82yw60Vs2Yc
+         3a8s7Yt92kyWFupcn49IGDFq2DfzziTMaUL/KsaDcRlQ+mv5JEU1/Z8gxzeJP5Mq7INE
+         mZyZpzrs+NVF5UJ38AiWA7JgBQu6LWX5NqeYEMPyHcLd7m4ZvXM1mtntv9xK71DmrCJV
+         3PLqp6sEguoeleMa70eC8OzsTFBtGVG58Kmve2RhNwey7dXpIv6CFExpLh+oqa94Vqkr
+         UQ4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ARUxKn4XTsqNqlAy2aX0A6ZVuWpKmpdTtIO20dOVpQM=;
-        b=ZnfJ+dsFbpIV2tKy2EALTZD0j7Vn7x+lbPoMomW339OPno1t1D7TZHbpAL2plzeyKH
-         iFAcOonAn+YUAC6E5LKD44zjajbwhua9nQzMUMhk7pNyJ6nWFsJLxgGXNLzzUjgux8nd
-         f7KALVWUQ23JG+VJYSTJou3PcVXXFsOSurDu76JHcZozI6BzT+ArRs18We3/w6pxx7wz
-         KRVgTjdV13CoYT7ZkZ/xltkP1AOEYMTIZB7TysNdXf+GdxbcD4IpD0pz4I1LQZM2QB6c
-         R+SoMB+iDB/hCQW0+TWm7hc636QytLsyAiBkjLjC3xdlK9Hm+HRKG3U+gQ4MHXNPIWK+
-         Bmcg==
-X-Gm-Message-State: AJIora9T616ETNN9azkojESbBn9WfQyTJNuvIZxss+2a9B5rRfMn23A7
-        VfpNhIpUz31/DTKEoHuD8IA=
-X-Google-Smtp-Source: AGRyM1vgAHYXy4qeoGrnp+BmbXNrssC4nZ3MYqp17PuiACyIX7i1fjd/BVaDSfsA0rlRARTnK0YdeQ==
-X-Received: by 2002:a2e:8681:0:b0:251:fd91:41a with SMTP id l1-20020a2e8681000000b00251fd91041amr7426850lji.216.1656356205685;
-        Mon, 27 Jun 2022 11:56:45 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id b28-20020a05651c033c00b0025a9de54750sm1487179ljp.54.2022.06.27.11.56.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=NOsgPwcDx+OihP7CM9EgDPr6TtruXCYq9aRNj46ysBQ=;
+        b=UArkldCLlMklvJThRGaV1iFIU37IuNO49rJpecn5qfXZXTUD6pRq2B7CwxbGnrG0ds
+         5KHd44Rb37K0rkxm22jIYfxriQskVmkDfES/s2tktMem3bQHUOw0zukLkJH6cbyyeQAo
+         XH0Vxc0anyNZdhjtw9KH2pfBb4lCb5jn4Q73mFyReNXsWBdbcbM6T+82GT+oiYqb6yrt
+         GHWFmzCP8RwehHM4hGw0vPeU3INTD1HLq7f5Ue8wSuLidz/bn/y21hQ8AJIESykM7pEG
+         37HLP+pm9cTC2DxdMPa/5ZDaWgHw/JeUxfT5+CMW9eN3aRFLlKNpefDuWJkvT99spFRT
+         lliw==
+X-Gm-Message-State: AJIora8HdfwZmjWdpzjaD8hSFTdNAkbzozqBxtWhR9xjKClISFSiC9aB
+        194GXnxkZFprlbYdqQ0R9yo=
+X-Google-Smtp-Source: AGRyM1v5DGJwQQuAEAEZGEeHt/yRbP+et2CeJtdJxfhZdyXi1ntL/oaNsKV7SbYf8pRvXiM6V6UuHQ==
+X-Received: by 2002:a0c:9a0e:0:b0:470:5ffa:ff43 with SMTP id p14-20020a0c9a0e000000b004705ffaff43mr745456qvd.6.1656356233274;
+        Mon, 27 Jun 2022 11:57:13 -0700 (PDT)
+Received: from localhost.localdomain (ec2-35-169-212-159.compute-1.amazonaws.com. [35.169.212.159])
+        by smtp.gmail.com with ESMTPSA id g1-20020ac87f41000000b002f93554c009sm7781826qtk.59.2022.06.27.11.57.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 11:56:44 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Mon, 27 Jun 2022 20:56:43 +0200
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, paulmck@kernel.org,
-        rostedt@goodmis.org, vineeth@bitbyteword.org
-Subject: Re: [PATCH v2 8/8] rcu/kfree: Fix kfree_rcu_shrink_count() return
- value
-Message-ID: <Yrn9a5pOvhvL/eZj@pc638.lan>
-References: <20220622225102.2112026-1-joel@joelfernandes.org>
- <20220622225102.2112026-10-joel@joelfernandes.org>
+        Mon, 27 Jun 2022 11:57:12 -0700 (PDT)
+From:   SeongJae Park <sj38.park@gmail.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Gautam <gautammenghani201@gmail.com>, shuah@kernel.org,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] kselftests/damon: add support for cases where debugfs cannot be read
+Date:   Mon, 27 Jun 2022 18:57:04 +0000
+Message-Id: <20220627185704.58902-1-sj38.park@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <7d6b7de6-4609-e6ca-0a88-1f9799c70769@linuxfoundation.org>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622225102.2112026-10-joel@joelfernandes.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,36 +72,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> As per the comments in include/linux/shrinker.h, .count_objects callback
-> should return the number of freeable items, but if there are no objects
-> to free, SHRINK_EMPTY should be returned. The only time 0 is returned
-> should be when we are unable to determine the number of objects, or the
-> cache should be skipped for another reason.
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  kernel/rcu/tree.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 711679d10cbb..935788e8d2d7 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -3722,7 +3722,7 @@ kfree_rcu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
->  		atomic_set(&krcp->backoff_page_cache_fill, 1);
->  	}
->  
-> -	return count;
-> +	return count == 0 ? SHRINK_EMPTY : count;
->  }
->  
->  static unsigned long
-> -- 
-> 2.37.0.rc0.104.g0611611a94-goog
-> 
-Looks good to me!
+From: SeongJae Park <sj@kernel.org>
 
-Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+Hi Shuah,
 
---
-Uladzislau Rezki
+On Mon, 27 Jun 2022 11:00:18 -0600 Shuah Khan <skhan@linuxfoundation.org> wrote:
+
+[...]
+> >> --- a/tools/testing/selftests/damon/_chk_dependency.sh
+> >> +++ b/tools/testing/selftests/damon/_chk_dependency.sh
+> >> @@ -26,3 +26,13 @@ do
+> >>   		exit 1
+> >>   	fi
+> >>   done
+> >> +
+> >> +permission_error="Operation not permitted"
+> >> +for f in attrs target_ids monitor_on
+> >> +do
+> >> +	status=$( cat "$DBGFS/$f" 2>&1 )
+> >> +	if [ "${status#*$permission_error}" != "$status" ]; then
+> >> +		echo "Permission for reading $DBGFS/$f denied; maybe secureboot enabled?"
+> 
+> btw - does this run as a regular user or does it need root privilege?
+> If so add a test for that and skip with a message.
+
+It needs the root permission, and does the check at the beginning[1].
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/damon/_chk_dependency.sh?h=v5.19-rc4#n9
+
+
+Thanks,
+SJ
+
+> >> +		exit $ksft_skip
+> >> +	fi
+> >> +done
+> >> -- 
+> >> 2.36.1
+> >
+> thanks,
+> -- Shuah

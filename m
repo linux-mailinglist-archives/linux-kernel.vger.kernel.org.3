@@ -2,80 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A52A55CD52
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B0D55DA54
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234398AbiF0LEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
+        id S234396AbiF0LGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234141AbiF0LE3 (ORCPT
+        with ESMTP id S233832AbiF0LGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:04:29 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DB96467
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:04:28 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id c6-20020a17090abf0600b001eee794a478so1382586pjs.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:04:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=wcbJGzeACf4gbqmMxJfqxYk8w6znOqhP2rxQLvNcAw4=;
-        b=SSmTcnHi6fs8Y/1bdABOrO9DsUKpQSFvVZwr+VCopTZ+K7SuPwfTsAUFd5KrDj4ZCK
-         56/wuQB3ONfEf/AONXJPbTgbPTkGRfOv6UyzdsSftu1++ryKJOnfpMzbsGfr4KnQFDTK
-         JO+a0NkrNxcnLB9M4R1UPOgh/1K5nHlQBIP2v5FJJkS4yCtfLHWkX/a/2wG3aDaCM0lm
-         saFFilwXLP9W7gkHPqnspu/VWVGCouzYf+3UxW4Stu9GgBu+yFFfd/nSLPhgFRWPQTtM
-         w4bOo7QhaAT0U+Iw4WUKhGvI4Z00hBg50omveudZgQBLlVKa1uvmm9kYw/2buEQitdtg
-         OsZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=wcbJGzeACf4gbqmMxJfqxYk8w6znOqhP2rxQLvNcAw4=;
-        b=TQV4Ed4dM5Gj7DLu06Iv7YIZpwUiwbEQg1IAavWQlkFAGnuCnEG8EAwEy9SDYnc9A/
-         9zLyC6mK25jinFV9z6xNU2ouB7aAYa9lUCenWuj1Ke6yUcO8eQu6aRGQ3BLwkrVoY7Ve
-         mY+oWw5kgfkivz+1KgTlnL7aGxiaudaGhJvT9hECOpcz9iX3Pdd96P2H9iPLsrSazLSR
-         WueftzDwKtomU0UWyBQTDTBPo9gFcQHFOsYvQsXtq+k2nd6UDyc/U4zXngcgggQfgLOg
-         Op3TbobfVtyGy2mrwqVHFyo0xITgQMHkwFOp/2glmAjNlZjlL2KK06nu1U89AwWyyxlj
-         L4jQ==
-X-Gm-Message-State: AJIora896MWJqqnKqElA+DW/IhV8dioepDviI1MO/t002Hw5yFUzQaaz
-        TxaE+OElM9ExdcJjyZ2tJuFyrgHjA7fSNRyL2Do=
-X-Google-Smtp-Source: AGRyM1tNvur3C/LUtQaHySirZf5UeS1HI+kX/FmUBWooB7Uu8TuugUQKPMJtY029DAYnBng/+kt0QQ==
-X-Received: by 2002:a17:90b:3143:b0:1ec:be03:e0a5 with SMTP id ip3-20020a17090b314300b001ecbe03e0a5mr15631699pjb.30.1656327868145;
-        Mon, 27 Jun 2022 04:04:28 -0700 (PDT)
-Received: from desktop-hypoxic.kamiya.io ([42.120.103.58])
-        by smtp.gmail.com with ESMTPSA id cq16-20020a056a00331000b00518764d09cdsm7002678pfb.164.2022.06.27.04.04.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 04:04:26 -0700 (PDT)
-From:   Yangxi Xiang <xyangxi5@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        nick black <dankamongmen@gmail.com>
-Subject: Re: [PATCH] vt: fix memory overlapping when deleting chars in the buffer
-Date:   Mon, 27 Jun 2022 19:04:17 +0800
-Message-Id: <20220627110417.27648-1-xyangxi5@gmail.com>
+        Mon, 27 Jun 2022 07:06:04 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65438646A;
+        Mon, 27 Jun 2022 04:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656327963; x=1687863963;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=OoPFRHqikt/yBEHB9HcY/GvSuduX5hDNnHB8YUjJssg=;
+  b=FWH/C6CZHHv/wRyapK82KYvrx24BHAR2NOrLvXPrZifNPl3XJdziaxAJ
+   Zd3Kfn+mWZGah7Lp31u3OvwURC63PBJYxkWP9PlTn55SqVEotvpLdjVWk
+   Yw1FUMEzizOoBPh4eV1S4jwgiVnU0uRzgwaoXwqbxw6JzBDsx4RDMl1sG
+   E7oWPmi/kBpjVwv4+XcgAPewvWd2ysO1tzaizNGV6aYdv0CXGSx84w4XS
+   v3xBvpleNjfM3RZyR70ZSVci8BfRAmlH+8Q9+D2c0K5RwQUl6Ygf5EI7M
+   jEMYm8v2Oj+G9RGQt8OAWJcqaY9x6vGXfqyaxMl9jhV4CecqH/nL07CUj
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="101875529"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jun 2022 04:06:02 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 27 Jun 2022 04:05:58 -0700
+Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Mon, 27 Jun 2022 04:05:54 -0700
+From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+To:     <alexandre.belloni@bootlin.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <nicolas.ferre@microchip.com>
+CC:     <arnd@arndb.de>, <soc@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <Kavyasree.Kotagiri@microchip.com>
+Subject: [PATCH] ARM: dts: lan966x: Add mcan1 node.
+Date:   Mon, 27 Jun 2022 16:35:52 +0530
+Message-ID: <20220627110552.26315-1-kavyasree.kotagiri@microchip.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <YrmKvSFSvPpT7Q3O@kroah.com>
-References: <YrmKvSFSvPpT7Q3O@kroah.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> What commit does this fix?  how was this tested?
+Add the mcan1 node. By default, keep it disabled.
 
-This bug is triggered by running a dynamic analysis on the kernel,
-with the help of sanitizer to observe this bug. This memory
-overlapping copy can cause data corruption when scr_memcpyw is
-optimized to memcpy because memcpy does not ensure its behavior if
-the destination buffer overlaps with the source buffer.
+Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+---
+ arch/arm/boot/dts/lan966x.dtsi | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Yangxi Xiang
+diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
+index 3cb02fffe716..25cfa89dde7b 100644
+--- a/arch/arm/boot/dts/lan966x.dtsi
++++ b/arch/arm/boot/dts/lan966x.dtsi
+@@ -473,6 +473,21 @@
+ 			status = "disabled";
+ 		};
+ 
++		can1: can@e0820000 {
++			compatible = "bosch,m_can";
++			reg = <0xe0820000 0xfc>, <0x00100000 0x8000>;
++			reg-names = "m_can", "message_ram";
++			interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "int0", "int1";
++			clocks = <&clks GCK_ID_MCAN1>, <&clks GCK_ID_MCAN1>;
++			clock-names = "hclk", "cclk";
++			assigned-clocks = <&clks GCK_ID_MCAN1>;
++			assigned-clock-rates = <40000000>;
++			bosch,mram-cfg = <0x4000 0 0 64 0 0 32 32>;
++			status = "disabled";
++		};
++
+ 		reset: reset-controller@e200400c {
+ 			compatible = "microchip,lan966x-switch-reset";
+ 			reg = <0xe200400c 0x4>;
+-- 
+2.17.1
+

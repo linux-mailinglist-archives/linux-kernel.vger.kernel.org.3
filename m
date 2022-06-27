@@ -2,134 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2199C55E28E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A12855D160
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233023AbiF0Q2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
+        id S239190AbiF0Q3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239234AbiF0Q2R (ORCPT
+        with ESMTP id S239169AbiF0Q3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:28:17 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E146B7CA
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:28:13 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id o16so13851310wra.4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:28:13 -0700 (PDT)
+        Mon, 27 Jun 2022 12:29:15 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6381B4BE
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:29:13 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id o16so13854999wra.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:29:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=RFbscGfZ1HvqkolFfPgOHxRAqCYKsO6AGhI1CWcF3U0=;
-        b=QL9P5fYJiAGJ0cVberqQxZgecUlCyO035Rs/RHERScTvlSGjFZWJwcJ83NKx7icnCf
-         MmmkqeK7/MKYHkhThvS+4I5n6eilA1iv0cTdd1jM4UXHDDaaVEXvSnXIRzJWnCUCUcUi
-         hfbpR0k3AwYuP7wFzDx1Qb4iWIpTN9nBpMOsMz5YzOvQfMZ+aNGdk1BwqtUaNtHKCBDC
-         fA9t5x0TJ4kWUQmeUPz8VsbAvV+0a4AUoZiJIyO7qENghiYMyKTM8whwQHTooEBVZnfa
-         hv7NO7jkwT4JYF/WPaOvNMBn/r4c0lJo2uE2cyoUPVH1HBvXxtPYqUUryaiaIppTOHk7
-         Xteg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gq7iVePtX9OMXEUxruOPEde6hXUmiczdKpj9eXTuegY=;
+        b=Ub1BAIMzdKFr+whCpBiAWhp0s8tYt12ZNPKk99qiMYNRD5+OYUzq488SqpH/xgr25t
+         tP6UW3BBP+BkhP4WSdd4xXE6Ci/tsk2iyT5Bhr9RQbir03Oa/iDHCs+QNPuMohYTUcPi
+         walxvoBGdCuOHpz56cewOoIomTU+g774SkXfUalipYiRJMVJoZ3pkUJWKDtxaJOUs9Wp
+         z0yK72oV7D8umgBnfJqMPVe0CbYroH1c27oYPHH9DprMH4CUrxPNoWI6SVXsXvOIGR2j
+         g7f70C02303LI4FevNbv4LB2Bfe3rGsWoe0WkiFs0zaMl+gMi3egdBS6vCi70LctvgjH
+         FSRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=RFbscGfZ1HvqkolFfPgOHxRAqCYKsO6AGhI1CWcF3U0=;
-        b=6dy5044EZpNqgE/pl6dRQO27ntbSjBcTRAHR//Ww5N5MvzSoZBbZlcLxAP/Vq0KWs6
-         rDQ7gAtO2oPF70j0ygP1rSkPaibwwv94mcDIJRtWmoDr0Un5L49Sxmvt1wO3wtT5GkhQ
-         Az+owNPdT/UIpQvIlzLlGT4FXTOAgANcjp4peT64Q3qyjjeR+uAETXueT3meC1Jb/bb1
-         CatQpVcUuEUgGJgwmdMcDoixHvQ8A/02kZT9UG+/EktscWQyNCICAZLEyzQfM3APovb4
-         aYL17FLpbNXQvci5dka42+F1uZSfl1htj4BelIgMjjKo+5B4kh0oMMrB7h5z6dI+rl9o
-         /MfA==
-X-Gm-Message-State: AJIora/nip+G3rvXTAGs1tAwbspqV7BuuFWwuhRVlB+vMzTt35NCbjCe
-        xKCYt2F4U+oyxYMNaJmLB5tunQ==
-X-Google-Smtp-Source: AGRyM1tWghCzrhvaQKuNnG4CtD67zaV7MVCuo84J73jDL9LXJFGuDL/uN51RLsUeyYqHqBL/FNulUA==
-X-Received: by 2002:a5d:5966:0:b0:21b:80b5:ecc3 with SMTP id e38-20020a5d5966000000b0021b80b5ecc3mr12930472wri.130.1656347292409;
-        Mon, 27 Jun 2022 09:28:12 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id m17-20020adfe0d1000000b0021b866397a7sm11132854wri.1.2022.06.27.09.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 09:28:12 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 17:28:09 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        szuni chen <szunichen@gmail.com>,
-        ChiYuan Huang <cy_huang@richtek.com>
-Subject: Re: [PATCH v2 08/15] mfd: mt6370: Add Mediatek MT6370 support
-Message-ID: <YrnamaUx236MsNQa@google.com>
-References: <20220613111146.25221-1-peterwu.pub@gmail.com>
- <20220613111146.25221-9-peterwu.pub@gmail.com>
- <Yqph8jwHU8rPooJA@google.com>
- <CABtFH5KLVQFYOBGZ--9+s4GrHXbsDao-yL-KCFwL3FD_kbNhjg@mail.gmail.com>
- <Yrm7NTID16g8gM5t@google.com>
- <CABtFH5L7B_kEvG5E2Um5EANEScJPTfQthyLNfCbvoHq_YDpXxQ@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gq7iVePtX9OMXEUxruOPEde6hXUmiczdKpj9eXTuegY=;
+        b=AhanVCZKW9yBqLpMyng+kjEk2QepfPbAoF+gQkxCjX+YQDJbeYm/2CzJxq7amrkQgc
+         tMaOvOyVsvAhzovcUCPtS3xOQXRLB0LHTkY6Q4FryzaT41dPVbdWONdSl2LNKkX9YzA7
+         bs69cKCmu/J7bMTSPzyYmW4gvyh71r+BHWe9ErE+phQK/tmDrUgW8T5IzevsWF8MoLkU
+         6V6l35lwroU+SSlZZ5jTCQ1m782B5kBqsK/WLhfaKsFdo2ysMgOtosxjepFRQhbe/Cdp
+         Q1D3hBXcJabKSsovMKFKuU+j48gvK1GP/p4xYqVBlyCYqvJViw0e4gKCpwM111yERR51
+         0+Aw==
+X-Gm-Message-State: AJIora/pWckgDn0G27hM/A+Y3ZqR8n5g602xpdB848PHKPegYxn6093D
+        17VHmzBmgZklu6R/ABfAQ8HR+FvyP+kNPlmplMKuNw==
+X-Google-Smtp-Source: AGRyM1uGAMC8S/HveHGgFfIt33JanygNnC6EqBWAtLcqKvSeXaHFdpGJHdDoPIAbhtZxeIi7YUBzjamq9VMTyn+dDKo=
+X-Received: by 2002:a5d:4308:0:b0:219:e5a4:5729 with SMTP id
+ h8-20020a5d4308000000b00219e5a45729mr13879267wrq.210.1656347352384; Mon, 27
+ Jun 2022 09:29:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABtFH5L7B_kEvG5E2Um5EANEScJPTfQthyLNfCbvoHq_YDpXxQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220606222058.86688-1-yosryahmed@google.com> <20220606222058.86688-3-yosryahmed@google.com>
+ <YrnYtMGmGDxCrwdv@google.com>
+In-Reply-To: <YrnYtMGmGDxCrwdv@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Mon, 27 Jun 2022 09:28:36 -0700
+Message-ID: <CAJD7tkbqAignkN-Vh3A3gyBV_n_gZDBpM56r9HiXrYG+F0v8wg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/4] KVM: mmu: add a helper to account memory used by
+ KVM MMU.
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
-
-> > > > > +#define MT6370_IRQ_DSV_VPOS_OCP              124
-> > > > > +#define MT6370_IRQ_DSV_BST_OCP               125
-> > > > > +#define MT6370_IRQ_DSV_VNEG_SCP              126
-> > > > > +#define MT6370_IRQ_DSV_VPOS_SCP              127
-> > > > > +
-> > > > > +struct mt6370_info {
-> > > > > +     struct i2c_client *i2c[MT6370_MAX_I2C];
-> > > > > +     struct device *dev;
-> > > > > +     struct regmap *regmap;
-> > > > > +     struct regmap_irq_chip_data *irq_data;
-> > > > > +};
-> > > >
-> > > > Can we shove all of the above into a header file?
-> > >
-> > > Well... In Patch v1, we put these "#define IRQ" into
-> > > "include/dt-bindings/mfd/mediatek,mt6370.h".
-> > > But the reviewer of DT files hoped us to remove this header file, we
-> > > put these "#define IRQ" in this .c file.
-> > > Shall we leave them here or put them into the header file in
-> > > "driver/power/supply/mt6370-charger.h"?
+On Mon, Jun 27, 2022 at 9:20 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Mon, Jun 06, 2022, Yosry Ahmed wrote:
+> > Add a helper to account pages used by KVM for page tables in secondary
+> > pagetable stats. This function will be used by subsequent patches in
+> > different archs.
 > >
-> > Where are they used?
-> 
-> Sorry, I wrote the wrong path last time...
-> What I should say last time was to put them into the header file into
-> "driver/mfd/mt6370.h"
-> These "#define IRQ" are just used in "driver/mfd/mt6370.c"
-> I’m really sorry for making this mistake...
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+> >  include/linux/kvm_host.h | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> >
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index 883e86ec8e8c4..645585f3a4bed 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -2246,6 +2246,15 @@ static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
+> >  }
+> >  #endif /* CONFIG_KVM_XFER_TO_GUEST_WORK */
+> >
+> > +/*
+> > + * If nr > 1, we assume virt is the address of the first page of a block of
+>
+> But what if @nr is -2, which is technically less than 1?  :-)
+>
+> > + * pages that were allocated together (i.e accounted together).
+>
+> Don't document assumptions, document the rules.  And avoid "we", pronouns are
+> ambiguous, e.g. is "we" the author, or KVM, or something else entirely?
+>
+> /*
+>  * If more than one page is being (un)accounted, @virt must be the address of
+>  * the first page of a block of pages what were allocated together.
+>  */
+>
 
-Yes, that would be fine.
+Looks much better, I will use that in the next version.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Thanks!
+
+>
+> > + */
+> > +static inline void kvm_account_pgtable_pages(void *virt, int nr)
+> > +{
+> > +     mod_lruvec_page_state(virt_to_page(virt), NR_SECONDARY_PAGETABLE, nr);
+> > +}
+> > +
+> >  /*
+> >   * This defines how many reserved entries we want to keep before we
+> >   * kick the vcpu to the userspace to avoid dirty ring full.  This
+> > --
+> > 2.36.1.255.ge46751e96f-goog
+> >

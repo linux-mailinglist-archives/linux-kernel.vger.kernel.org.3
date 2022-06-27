@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D918555D8C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D97855D0DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234513AbiF0Lew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
+        id S237686AbiF0Lp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236156AbiF0LdW (ORCPT
+        with ESMTP id S237436AbiF0Lmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:33:22 -0400
+        Mon, 27 Jun 2022 07:42:51 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D59BF74;
-        Mon, 27 Jun 2022 04:30:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CCD131;
+        Mon, 27 Jun 2022 04:37:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F022AB81117;
-        Mon, 27 Jun 2022 11:30:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E0ADC3411D;
-        Mon, 27 Jun 2022 11:30:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93BDDB81123;
+        Mon, 27 Jun 2022 11:37:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E858BC3411D;
+        Mon, 27 Jun 2022 11:37:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329423;
-        bh=ysNOEvu3zGd1TifXXdMtyPRCM21reTJXO7MAoKCElac=;
+        s=korg; t=1656329871;
+        bh=wVLdpTvzq4nn+YD/fTY4xJ31uZESHMWQlhJpXrVSYgA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VRvpeqnnQtA534pnBZPd/rUTbXBCbocaTQm/yWIeE1RWIjsWRbEYE9iHjN2MWvbbL
-         8X4BedeMFxqENHhl7YV5TNj1cKauWQE1m6o7hCiYsUAi8HUTxj7VFmkjc9b9AT1YMV
-         uN5JAY9tf7xX1khsLq57L0D2uaqmEeHAAjwHGUM4=
+        b=UpDho/PO0x1Jc3KAFpm81a9tzG5n8xl3qeF94SVTGiF1FaPtQt81TY0DyKjyfKVZ1
+         XN6efIH2fMyd+vJKe+vVPSib6MZOfBSMjWSYrKWbET6hWOgC9ekm8b9n006hZZzHc7
+         fOK4UEK6ITVy3pgwtSjkwb79UhlAUzgPijmZqV44=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.4 55/60] ARM: Fix refcount leak in axxia_boot_secondary
-Date:   Mon, 27 Jun 2022 13:22:06 +0200
-Message-Id: <20220627111929.308416091@linuxfoundation.org>
+        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: [PATCH 5.15 120/135] drm/msm/dp: Always clear mask bits to disable interrupts at dp_ctrl_reset_irq_ctrl()
+Date:   Mon, 27 Jun 2022 13:22:07 +0200
+Message-Id: <20220627111941.637551823@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
-References: <20220627111927.641837068@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-commit 7c7ff68daa93d8c4cdea482da4f2429c0398fcde upstream.
+commit 993a2adc6e2e94a0a7b5bfc054eda90ac95f62c3 upstream.
 
-of_find_compatible_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add missing of_node_put() to avoid refcount leak.
+dp_catalog_ctrl_reset() will software reset DP controller. But it will
+not reset programmable registers to default value. DP driver still have
+to clear mask bits to interrupt status registers to disable interrupts
+after software reset of controller.
 
-Fixes: 1d22924e1c4e ("ARM: Add platform support for LSI AXM55xx SoC")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220601090548.47616-1-linmq006@gmail.com'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+At current implementation, dp_ctrl_reset_irq_ctrl() will software reset dp
+controller but did not call dp_catalog_ctrl_enable_irq(false) to clear hpd
+related interrupt mask bits to disable hpd related interrupts due to it
+mistakenly think hpd related interrupt mask bits will be cleared by software
+reset of dp controller automatically. This mistake may cause system to crash
+during suspending procedure due to unexpected irq fired and trigger event
+thread to access dp controller registers with controller clocks are disabled.
+
+This patch fixes system crash during suspending problem by removing "enable"
+flag condition checking at dp_ctrl_reset_irq_ctrl() so that hpd related
+interrupt mask bits are cleared to prevent unexpected from happening.
+
+Changes in v2:
+-- add more details commit text
+
+Changes in v3:
+-- add synchrons_irq()
+-- add atomic_t suspended
+
+Changes in v4:
+-- correct Fixes's commit ID
+-- remove synchrons_irq()
+
+Changes in v5:
+-- revise commit text
+
+Changes in v6:
+-- add event_lock to protect "suspended"
+
+Changes in v7:
+-- delete "suspended" flag
+
+Fixes: 989ebe7bc446 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Patchwork: https://patchwork.freedesktop.org/patch/486591/
+Link: https://lore.kernel.org/r/1652804494-19650-1-git-send-email-quic_khsieh@quicinc.com
+Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-axxia/platsmp.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/msm/dp/dp_ctrl.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---- a/arch/arm/mach-axxia/platsmp.c
-+++ b/arch/arm/mach-axxia/platsmp.c
-@@ -39,6 +39,7 @@ static int axxia_boot_secondary(unsigned
- 		return -ENOENT;
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1356,8 +1356,13 @@ void dp_ctrl_reset_irq_ctrl(struct dp_ct
  
- 	syscon = of_iomap(syscon_np, 0);
-+	of_node_put(syscon_np);
- 	if (!syscon)
- 		return -ENOMEM;
+ 	dp_catalog_ctrl_reset(ctrl->catalog);
  
+-	if (enable)
+-		dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
++	/*
++	 * all dp controller programmable registers will not
++	 * be reset to default value after DP_SW_RESET
++	 * therefore interrupt mask bits have to be updated
++	 * to enable/disable interrupts
++	 */
++	dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
+ }
+ 
+ void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
 
 

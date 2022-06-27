@@ -2,108 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5147C55D4DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6518355D70B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbiF0IZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
+        id S233540AbiF0I05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbiF0IZc (ORCPT
+        with ESMTP id S233445AbiF0I0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:25:32 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73A696178
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:25:30 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-54-1jANicmsPmWfA7kUguPDXg-1; Mon, 27 Jun 2022 09:25:27 +0100
-X-MC-Unique: 1jANicmsPmWfA7kUguPDXg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Mon, 27 Jun 2022 09:25:26 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Mon, 27 Jun 2022 09:25:26 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        "Kent Overstreet" <kent.overstreet@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>
-Subject: RE: [RFC[ Alloc in vsprintf
-Thread-Topic: [RFC[ Alloc in vsprintf
-Thread-Index: AQHYiZoSZNRPYrXujUmM6V+Dm+02461i46rg
-Date:   Mon, 27 Jun 2022 08:25:26 +0000
-Message-ID: <a723f5dda62a4c448dd292a3b917fe6d@AcuMS.aculab.com>
-References: <20220620004233.3805-1-kent.overstreet@gmail.com>
- <0a5901f8460f452a89c9b0cda32fb833@AcuMS.aculab.com>
- <20220620150514.3tjy5dv7pv5frcwd@moria.home.lan>
- <53d77ae6101a0f24cfb694174d4c7699424c57e8.camel@perches.com>
- <20220621005752.ohiq5besmy3r5rjo@moria.home.lan>
- <a795818f9a49ed401bffc7c38ca7e39ae449e9e0.camel@perches.com>
- <c1a92cf059fc9a3c395d87b11e9f757f5ec1ff6a.camel@perches.com>
- <355e912490dbaef8fe4e12df0201c3f5b439565d.camel@perches.com>
- <CAHk-=whwyxSpzgr+roEr7_V5wVenw9fV3EOAZhAYCAuRdEyChQ@mail.gmail.com>
-In-Reply-To: <CAHk-=whwyxSpzgr+roEr7_V5wVenw9fV3EOAZhAYCAuRdEyChQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 27 Jun 2022 04:26:54 -0400
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1725617A;
+        Mon, 27 Jun 2022 01:26:53 -0700 (PDT)
+Received: by mail-qv1-f53.google.com with SMTP id t16so13792356qvh.1;
+        Mon, 27 Jun 2022 01:26:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ir7A3VG3rQ4e3U1bE1FV/pPr5VS7k4YiEaqfUpRXgys=;
+        b=IJ/ker2OztbJ6Y9amS9jpZJVZjrNwaCbvU7EONtHRurGva4phx1A2Vz5fxtGN0yZsA
+         TR1sYSnVi+/V0MXk4MqXo0SASB/Uw2uFsOVcvFPVguB+a2HLNqnUzalfWFG2yYwXK/qF
+         NmtOTqWa1cBkFPKEhFtzBI6YMI0t+NCK2yi3yQc6a3Dr6BeSU8Z3Pkamt/adCD1cs0nx
+         1gqv8CRD77DOzFqTdWNsVKzd1XKGOLikBxmMx3IInATouWFhQQyoNTXtJDhuk+ugiVaR
+         M6NCqh9vZn0yK5eFQgfBee37uGMtyAzD04nqvwb/eO0laJmRYajuNgNWugdSfnTDeJvt
+         WRiA==
+X-Gm-Message-State: AJIora8RvMF9qKR7n4Ab/++axdpQcYPngCMxpkIM0w7gRaRGIgrgeUvE
+        hiwKKJsE9Zo2Nl2+e9OPXCivO8YRY1AR0A==
+X-Google-Smtp-Source: AGRyM1vHhDLOj+YR67X6R5xmjl5UZpyqZlzepweNOBfzLHP+pW893g5tK/bnuEQLeWEDWMAu/+/d9w==
+X-Received: by 2002:a05:6214:21c4:b0:470:4aa8:1eba with SMTP id d4-20020a05621421c400b004704aa81ebamr7746704qvh.125.1656318411789;
+        Mon, 27 Jun 2022 01:26:51 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id ay41-20020a05620a17a900b006af0d99c7fesm4807183qkb.132.2022.06.27.01.26.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 01:26:51 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2ef5380669cso77766197b3.9;
+        Mon, 27 Jun 2022 01:26:50 -0700 (PDT)
+X-Received: by 2002:a81:a092:0:b0:318:5c89:a935 with SMTP id
+ x140-20020a81a092000000b003185c89a935mr14193176ywg.383.1656318410280; Mon, 27
+ Jun 2022 01:26:50 -0700 (PDT)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220617125750.728590-1-arnd@kernel.org> <20220617125750.728590-4-arnd@kernel.org>
+ <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com>
+In-Reply-To: <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 27 Jun 2022 10:26:37 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVewn0OYA9oJfStk0-+vCKAUou+4Mvd5H2kmrSks1p5jg@mail.gmail.com>
+Message-ID: <CAMuHMdVewn0OYA9oJfStk0-+vCKAUou+4Mvd5H2kmrSks1p5jg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>, scsi <linux-scsi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Matt Wang <wwentao@vmware.com>,
+        Miquel van Smoorenburg <mikevs@xs4all.net>,
+        Mark Salyzyn <salyzyn@android.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Denis Efremov <efremov@linux.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjYgSnVuZSAyMDIyIDIxOjE5DQouLg0KPiBU
-aGF0IGRvZXMgcmVxdWlyZSB0ZWFjaGluZyB0aGUgc3ByaW50X3N5bWJvbCgpIGZ1bmN0aW9ucyB0
-aGF0IHRoZXkNCj4gbmVlZCB0byB0YWtlIGEgImxlbmd0aCBvZiBidWZmZXIiIGFuZCByZXR1cm4g
-aG93IG11Y2ggdGhleSB1c2VkLCBidXQNCj4gdGhhdCB3b3VsZCBzZWVtIHRvIGJlIGEgc2Vuc2li
-bGUgdGhpbmcgYW55d2F5LCBhbmQgd2hhdCB0aGUgY29kZQ0KPiBzaG91bGQgYWx3YXlzIGhhdmUg
-ZG9uZT8NCg0KSXQgbmVlZHMgdG8gcmV0dXJuIHRoZSAnbGVuZ3RoIGl0IHdvdWxkIGhhdmUgdXNl
-ZCcuDQpXaGlsZSBvY2Nhc2lvbmFsbHkgdXNlZnVsIEknbSBwcmV0dHkgc3VyZSB0aGlzIGlzIGFj
-dHVhbGx5DQphIHNpZGUgZWZmZWN0IG9mIHRoZSB3YXMgdGhhdCBsaWJjIHNucHJpbnRmKCkgd2Fz
-IG9yaWdpbmFsbHkNCmltcGxlbWVudGVkIChzcHJpbnRmKCkgaGFkIGFuIG9uLXN0YWNrIEZJTEUp
-Lg0KDQpJbiBhbnkgY2FzZSBpdCBtaWdodCBiZSBzaW1wbGVzdCB0byBwYXNzIGFsbCB0aGVzZSBm
-dW5jdGlvbnMNCnRoZSB3cml0ZSBwb2ludGVyIGFuZCBidWZmZXIgbGltaXQgYW5kIGhhdmUgdGhl
-bSByZXR1cm4gdGhlDQpuZXcgd3JpdGUgcG9pbnRlci4NCkl0IGlzIGxpa2VseSB0byBnZW5lcmF0
-ZSBtdWNoIGJldHRlciBjb2RlIHRoYXQgcGFzc2luZw0KYSBzdHJ1Y3R1cmUgYnkgcmVmZXJlbmNl
-Lg0KDQpPbmx5IHRoZSBvcmlnaW5hbCBjYWxsZXIgbmVlZHMgdG8ga25vdyB3aGVyZSB0aGUgYnVm
-ZmVyIHN0YXJ0cy4NClRoZSBvcmlnaW5hbCBjYWxsZXIgaXMgYWxzbyB0aGUgb25seSBwbGFjZSB0
-aGF0IG5lZWRzIHRvDQplbnN1cmUgdGhhdCB0aGUgc3RyaW5nIGlzIGNvcnJlY3RseSB0ZXJtaW5h
-dGVkLg0KDQpZb3UnZCBnZXQgaGVscGVycyBsaWtlOg0KDQpjaGFyICphZGRfY2hhcihjaGFyICp3
-cCwgY29uc3QgY2hhciAqbGltLCBjaGFyIGFkZCkNCnsNCglpZiAobGltIDwgd3ApDQoJCSp3cCA9
-IGFkZDsNCglyZXR1cm4gd3AgKyAxOw0KfQ0KDQpjaGFyICphZGRfY2hhcnMoY2hhciAqd3AsIGNv
-bnN0IGNoYXIgKmxpbSwgY29uc3QgY2hhciAqYWRkLCBsb25nIGludCBjb3VudCkNCnsNCglsb25n
-IGludCBzcGFjZSA9IGxpbSAtIHdwOw0KCWxvbmcgaW50IGk7DQoNCglpZiAoc3BhY2UgPiBjb3Vu
-dCkNCgkJc3BhY2UgPSBjb3VudDsNCglmb3IgKGkgPSBpOyBpIDwgc3BhY2U7IGkrKykNCgkJd3Bb
-aV0gPSBhZGRbaV07DQoJDQoJcmV0dXJuIHdwICsgY291bnQ7DQp9DQoNCmNoYXIgKmFkZF9zdHIo
-Y2hhciAqd3AsIGNvbnN0IGNoYXIgKmxpbSwgY29uc3QgY2hhciAqYWRkKQ0Kew0KCXdoaWxlICgq
-YWRkKSB7DQoJCWlmICh3cCA+PSBsaW0pDQoJCQlyZXR1cm4gd3AgKyBzdHJsZW4oYWRkKTsNCgkJ
-KndwKysgPSAqYWRkKys7DQoJfQ0KCQ0KCXJldHVybiB3cDsNCn0NCg0KCURhdmlkDQoNCi0NClJl
-Z2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0
-b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykN
-Cg==
+Hi Michael,
 
+On Sat, Jun 18, 2022 at 3:06 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> Am 18.06.2022 um 00:57 schrieb Arnd Bergmann:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > All architecture-independent users of virt_to_bus() and bus_to_virt()
+> > have been fixed to use the dma mapping interfaces or have been
+> > removed now.  This means the definitions on most architectures, and the
+> > CONFIG_VIRT_TO_BUS symbol are now obsolete and can be removed.
+> >
+> > The only exceptions to this are a few network and scsi drivers for m68k
+> > Amiga and VME machines and ppc32 Macintosh. These drivers work correctly
+> > with the old interfaces and are probably not worth changing.
+>
+> The Amiga SCSI drivers are all old WD33C93 ones, and replacing
+> virt_to_bus by virt_to_phys in the dma_setup() function there would
+> cause no functional change at all.
+
+FTR, the sgiwd93 driver use dma_map_single().
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

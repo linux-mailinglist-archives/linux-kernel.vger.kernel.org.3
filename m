@@ -2,76 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BCD55DF6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B8655CACE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242057AbiF0WIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 18:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S242025AbiF0WIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 18:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242691AbiF0WH5 (ORCPT
+        with ESMTP id S242707AbiF0WH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 18:07:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 390951EAC9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 15:06:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656367605;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HZ/0VFUsE1d9kZvm1sE1gAvxnVwUtDWBiRbGTRNr4sc=;
-        b=EW2hKCpi30yFeiycX5DyK3XzA6LNiN8Qro9CBrEvwnJfFMKLOTifiPx8x1IZ8SjMEZFkzM
-        uO0Y4hMfJWWzcSiJxaN7m1+httG0eJ1bZuPoApnm7YPxEZK673SfnX2gBB+gvLBWuBrdBV
-        yYaFwoRPLBxLGEhPFqGFkwx76lFI4Xg=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-283-6WXn6AwWOmyFqXXvUPK03w-1; Mon, 27 Jun 2022 18:06:43 -0400
-X-MC-Unique: 6WXn6AwWOmyFqXXvUPK03w-1
-Received: by mail-io1-f71.google.com with SMTP id n19-20020a056602341300b0066850b49e09so6292162ioz.12
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 15:06:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=HZ/0VFUsE1d9kZvm1sE1gAvxnVwUtDWBiRbGTRNr4sc=;
-        b=PeXY8IkQLSuOrytb/bHzZyjAPNU4GeUQaDwPAlAFOxeBauODPJ1bXU1Q792K39AQKO
-         l/JFh/0lK6tdB+j3WY3bPbh+pb0lmNvTJPAbCmB2c2XH62svEp0S157ncdJObYgak1UJ
-         gU9wL94TBCEj9tJKx6b+8wQZO0gqH+1es27zW25RoOl0PTBK6ZGjtV8hTvnrkpKw/O6n
-         62HXwXhcc+79Vcbi6OvuYnC5hp/AshYGlFjSgeyfc0SBvl30sAQiX3smHiv0Sf84UdUa
-         A6KRnUfwf8gNMZ24UreCUwVg874VfAaObDW/MvhvsOFuIiHWROsxy1XdTLdaGBP+WlOX
-         s+wg==
-X-Gm-Message-State: AJIora+wnGXaAy0+eeahmRC6Y3uDMT3yeojd9jig26v8wqm17K118rIe
-        nQf2v+EzfTmtlcuNXz6GLa+FX4FAo1AcXdRdSGJnK6awLKCZq4yB7e/fRZCjPbAzia14jhOe0Sm
-        3CKwW2ui1lHGqNBYT1774+Yyy
-X-Received: by 2002:a02:c503:0:b0:339:ec67:b0a4 with SMTP id s3-20020a02c503000000b00339ec67b0a4mr9354415jam.27.1656367602698;
-        Mon, 27 Jun 2022 15:06:42 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vJu+p7efIp5RqCbZdmaWIB31YUy2oUvJlHvKxzgXHmLMwAfmlwT6tRQqUEqSDaByl6KgI3JA==
-X-Received: by 2002:a02:c503:0:b0:339:ec67:b0a4 with SMTP id s3-20020a02c503000000b00339ec67b0a4mr9354407jam.27.1656367602497;
-        Mon, 27 Jun 2022 15:06:42 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id d137-20020a02628f000000b00339c5bff7c0sm5155314jac.134.2022.06.27.15.06.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 15:06:42 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 16:06:40 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Steve Sistare <steven.sistare@oracle.com>
-Cc:     lizhe.67@bytedance.com, cohuck@redhat.com, jgg@ziepe.ca,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lizefan.x@bytedance.com
-Subject: Re: [PATCH] vfio: remove useless judgement
-Message-ID: <20220627160640.7edca0dd.alex.williamson@redhat.com>
-In-Reply-To: <20220627035109.73745-1-lizhe.67@bytedance.com>
-References: <20220627035109.73745-1-lizhe.67@bytedance.com>
-Organization: Red Hat
+        Mon, 27 Jun 2022 18:07:58 -0400
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E8EB1EAF7;
+        Mon, 27 Jun 2022 15:07:12 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id ACE1C10E8AAB;
+        Tue, 28 Jun 2022 08:07:08 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1o5wss-00BprG-R5; Tue, 28 Jun 2022 08:07:06 +1000
+Date:   Tue, 28 Jun 2022 08:07:06 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v3 25/25] xfs: Support large folios
+Message-ID: <20220627220706.GE227878@dread.disaster.area>
+References: <20211216210715.3801857-1-willy@infradead.org>
+ <20211216210715.3801857-26-willy@infradead.org>
+ <YrO243DkbckLTfP7@magnolia>
+ <Yrku31ws6OCxRGSQ@magnolia>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yrku31ws6OCxRGSQ@magnolia>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=62ba2a0f
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=kj9zAlcOel0A:10 a=JPEYwPQDsx4A:10 a=JfrnYn6hAAAA:8 a=VwQbUJbxAAAA:8
+        a=7-415B0cAAAA:8 a=zWDtqcPLiWjt79Nc-aUA:9 a=CjuIK1q_8ugA:10
+        a=1CNFftbPRP8L7MoqJWF3:22 a=AjGcO6oz07-iQ99wixmX:22
+        a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,51 +53,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hey Steve, how did you get around this for cpr or is this a gap?
-Thanks,
-
-Alex
-
-On Mon, 27 Jun 2022 11:51:09 +0800
-lizhe.67@bytedance.com wrote:
-
-> From: Li Zhe <lizhe.67@bytedance.com>
+On Sun, Jun 26, 2022 at 09:15:27PM -0700, Darrick J. Wong wrote:
+> On Wed, Jun 22, 2022 at 05:42:11PM -0700, Darrick J. Wong wrote:
+> > [resend with shorter 522.out file to keep us under the 300k maximum]
+> > 
+> > On Thu, Dec 16, 2021 at 09:07:15PM +0000, Matthew Wilcox (Oracle) wrote:
+> > > Now that iomap has been converted, XFS is large folio safe.
+> > > Indicate to the VFS that it can now create large folios for XFS.
+> > > 
+> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > > Reviewed-by: Christoph Hellwig <hch@lst.de>
+> > > Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+> > > ---
+> > >  fs/xfs/xfs_icache.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
+> > > index da4af2142a2b..cdc39f576ca1 100644
+> > > --- a/fs/xfs/xfs_icache.c
+> > > +++ b/fs/xfs/xfs_icache.c
+> > > @@ -87,6 +87,7 @@ xfs_inode_alloc(
+> > >  	/* VFS doesn't initialise i_mode or i_state! */
+> > >  	VFS_I(ip)->i_mode = 0;
+> > >  	VFS_I(ip)->i_state = 0;
+> > > +	mapping_set_large_folios(VFS_I(ip)->i_mapping);
+> > >  
+> > >  	XFS_STATS_INC(mp, vn_active);
+> > >  	ASSERT(atomic_read(&ip->i_pincount) == 0);
+> > > @@ -320,6 +321,7 @@ xfs_reinit_inode(
+> > >  	inode->i_rdev = dev;
+> > >  	inode->i_uid = uid;
+> > >  	inode->i_gid = gid;
+> > > +	mapping_set_large_folios(inode->i_mapping);
+> > 
+> > Hmm.  Ever since 5.19-rc1, I've noticed that fsx in generic/522 now
+> > reports file corruption after 20 minutes of runtime.  The corruption is
+> > surprisingly reproducible (522.out.bad attached below) in that I ran it
+> > three times and always got the same bad offset (0x6e000) and always the
+> > same opcode (6213798(166 mod 256) MAPREAD).
+> > 
+> > I turned off multipage folios and now 522 has run for over an hour
+> > without problems, so before I go do more debugging, does this ring a
+> > bell to anyone?
 > 
-> In function vfio_dma_do_unmap(), we currently prevent process to unmap
-> vfio dma region whose mm_struct is different from the vfio_dma->task.
-> In our virtual machine scenario which is using kvm and qemu, this
-> judgement stops us from liveupgrading our qemu, which uses fork() &&
-> exec() to load the new binary but the new process cannot do the
-> VFIO_IOMMU_UNMAP_DMA action during vm exit because of this judgement.
->
-> This judgement is added in commit 8f0d5bb95f76 ("vfio iommu type1: Add
-> task structure to vfio_dma") for the security reason. But it seems that
-> no other task who has no family relationship with old and new process
-> can get the same vfio_dma struct here for the reason of resource
-> isolation. So this patch delete it.
-> 
-> Signed-off-by: Li Zhe <lizhe.67@bytedance.com>
-> Reviewed-by: Jason Gunthorpe <jgg@ziepe.ca>
-> ---
->  drivers/vfio/vfio_iommu_type1.c | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-> index c13b9290e357..a8ff00dad834 100644
-> --- a/drivers/vfio/vfio_iommu_type1.c
-> +++ b/drivers/vfio/vfio_iommu_type1.c
-> @@ -1377,12 +1377,6 @@ static int vfio_dma_do_unmap(struct vfio_iommu *iommu,
->  
->  		if (!iommu->v2 && iova > dma->iova)
->  			break;
-> -		/*
-> -		 * Task with same address space who mapped this iova range is
-> -		 * allowed to unmap the iova range.
-> -		 */
-> -		if (dma->task->mm != current->mm)
-> -			break;
->  
->  		if (invalidate_vaddr) {
->  			if (dma->vaddr_invalid) {
+> I tried bisecting, but that didn't yield anything productive and
+> 5.19-rc4 still fails after 25 minutes; however, it seems that g/522 will
+> run without problems for at least 3-4 days after reverting this patch
+> from -rc3.
 
+Took 63 million ops and just over 3 hours before it failed here with
+a similar 16 byte map read corruption on the first 16 bytes of a
+page. Given the number of fallocate operations that lead up to the
+failure - 14 of last 23, plus 3 clone, 2 copy, 2 map read, 1 skip
+and the map write that it suggests the stale data came from - this
+smells of an invalidation issue...
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

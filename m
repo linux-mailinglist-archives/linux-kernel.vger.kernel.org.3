@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F6555C434
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3A455DBB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235059AbiF0L1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        id S236925AbiF0Lkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235046AbiF0L0T (ORCPT
+        with ESMTP id S236665AbiF0Lhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:26:19 -0400
+        Mon, 27 Jun 2022 07:37:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374729596;
-        Mon, 27 Jun 2022 04:26:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2DAAE5A;
+        Mon, 27 Jun 2022 04:34:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0D89B8111D;
-        Mon, 27 Jun 2022 11:25:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34659C36AE3;
-        Mon, 27 Jun 2022 11:25:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0919B81122;
+        Mon, 27 Jun 2022 11:34:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D64FC341C7;
+        Mon, 27 Jun 2022 11:34:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329157;
-        bh=Q0FmSk22MmWXOfGKpxWgp2HAFWb7+eU4+VutdiOFmyY=;
+        s=korg; t=1656329666;
+        bh=16JjpVXHZCyYFsraGSL4Rx88z3LBUJXQcEOatPLGges=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c1Qbag4JeQ8YaCFu6BcQPY6ysv2kU7FE+v8T6bBTwkPFzOqBh6TGiKK0IrTLB7Ard
-         qkDVidhaGDuMV9lqbeOYGLDRrB8HYfiDx4YaZKUO+lpkPVWiAvbg57HYLuykLGri1v
-         WOyKTpFFlzEMxaGW5m81QiZUVPEX0U71CwhDb/wQ=
+        b=Fxo0xatd79irMTjGtc2bX3SSN4plo7doTBUV/Mv1UFwcy0DNYnNd4eItpdTJuzYDn
+         5dAWMBF2UjHYXuLZ+CIdELny2liEO0VA4Q4YJYPgu/E9k8hAEzbycfXq8RFMuBCFx5
+         eXtufcM+5Z0flKA7mC7BDY59Gfu8RdrirAWT0h34=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrey Konovalov <andreyknvl@gmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com
-Subject: [PATCH 5.10 069/102] usb: gadget: Fix non-unique driver names in raw-gadget driver
+        stable@vger.kernel.org,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 073/135] virtio_net: fix xdp_rxq_info bug after suspend/resume
 Date:   Mon, 27 Jun 2022 13:21:20 +0200
-Message-Id: <20220627111935.517601450@linuxfoundation.org>
+Message-Id: <20220627111940.279565138@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,192 +58,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 
-commit f2d8c2606825317b77db1f9ba0fc26ef26160b30 upstream.
+[ Upstream commit 8af52fe9fd3bf5e7478da99193c0632276e1dfce ]
 
-In a report for a separate bug (which has already been fixed by commit
-5f0b5f4d50fa "usb: gadget: fix race when gadget driver register via
-ioctl") in the raw-gadget driver, the syzbot console log included
-error messages caused by attempted registration of a new driver with
-the same name as an existing driver:
+The following sequence currently causes a driver bug warning
+when using virtio_net:
 
-> kobject_add_internal failed for raw-gadget with -EEXIST, don't try to register things with the same name in the same directory.
-> UDC core: USB Raw Gadget: driver registration failed: -17
-> misc raw-gadget: fail, usb_gadget_register_driver returned -17
+  # ip link set eth0 up
+  # echo mem > /sys/power/state (or e.g. # rtcwake -s 10 -m mem)
+  <resume>
+  # ip link set eth0 down
 
-These errors arise because raw_gadget.c registers a separate UDC
-driver for each of the UDC instances it creates, but these drivers all
-have the same name: "raw-gadget".  Until recently this wasn't a
-problem, but when the "gadget" bus was added and UDC drivers were
-registered on this bus, it became possible for name conflicts to cause
-the registrations to fail.  The reason is simply that the bus code in
-the driver core uses the driver name as a sysfs directory name (e.g.,
-/sys/bus/gadget/drivers/raw-gadget/), and you can't create two
-directories with the same pathname.
+  Missing register, driver bug
+  WARNING: CPU: 0 PID: 375 at net/core/xdp.c:138 xdp_rxq_info_unreg+0x58/0x60
+  Call trace:
+   xdp_rxq_info_unreg+0x58/0x60
+   virtnet_close+0x58/0xac
+   __dev_close_many+0xac/0x140
+   __dev_change_flags+0xd8/0x210
+   dev_change_flags+0x24/0x64
+   do_setlink+0x230/0xdd0
+   ...
 
-To fix this problem, the driver names used by raw-gadget are made
-distinct by appending a unique ID number: "raw-gadget.N", with a
-different value of N for each driver instance.  And to avoid the
-proliferation of error handling code in the raw_ioctl_init() routine,
-the error return paths are refactored into the common pattern (goto
-statements leading to cleanup code at the end of the routine).
+This happens because virtnet_freeze() frees the receive_queue
+completely (including struct xdp_rxq_info) but does not call
+xdp_rxq_info_unreg(). Similarly, virtnet_restore() sets up the
+receive_queue again but does not call xdp_rxq_info_reg().
 
-Link: https://lore.kernel.org/all/0000000000008c664105dffae2eb@google.com/
-Fixes: fc274c1e9973 "USB: gadget: Add a new bus for gadgets"
-CC: Andrey Konovalov <andreyknvl@gmail.com>
-CC: <stable@vger.kernel.org>
-Reported-and-tested-by: syzbot+02b16343704b3af1667e@syzkaller.appspotmail.com
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Acked-by: Hillf Danton <hdanton@sina.com>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/YqdG32w+3h8c1s7z@rowland.harvard.edu
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Actually, parts of virtnet_freeze_down() and virtnet_restore_up()
+are almost identical to virtnet_close() and virtnet_open(): only
+the calls to xdp_rxq_info_(un)reg() are missing. This means that
+we can fix this easily and avoid such problems in the future by
+just calling virtnet_close()/open() from the freeze/restore handlers.
+
+Aside from adding the missing xdp_rxq_info calls the only difference
+is that the refill work is only cancelled if netif_running(). However,
+this should not make any functional difference since the refill work
+should only be active if the network interface is actually up.
+
+Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
+Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Link: https://lore.kernel.org/r/20220621114845.3650258-1-stephan.gerhold@kernkonzept.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/legacy/raw_gadget.c |   62 ++++++++++++++++++++++++---------
- 1 file changed, 46 insertions(+), 16 deletions(-)
+ drivers/net/virtio_net.c | 25 ++++++-------------------
+ 1 file changed, 6 insertions(+), 19 deletions(-)
 
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -10,6 +10,7 @@
- #include <linux/ctype.h>
- #include <linux/debugfs.h>
- #include <linux/delay.h>
-+#include <linux/idr.h>
- #include <linux/kref.h>
- #include <linux/miscdevice.h>
- #include <linux/module.h>
-@@ -35,6 +36,9 @@ MODULE_LICENSE("GPL");
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 73aba760e10c..468d0ffc266b 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -2431,7 +2431,6 @@ static const struct ethtool_ops virtnet_ethtool_ops = {
+ static void virtnet_freeze_down(struct virtio_device *vdev)
+ {
+ 	struct virtnet_info *vi = vdev->priv;
+-	int i;
  
- /*----------------------------------------------------------------------*/
- 
-+static DEFINE_IDA(driver_id_numbers);
-+#define DRIVER_DRIVER_NAME_LENGTH_MAX	32
-+
- #define RAW_EVENT_QUEUE_SIZE	16
- 
- struct raw_event_queue {
-@@ -160,6 +164,9 @@ struct raw_dev {
- 	/* Reference to misc device: */
- 	struct device			*dev;
- 
-+	/* Make driver names unique */
-+	int				driver_id_number;
-+
- 	/* Protected by lock: */
- 	enum dev_state			state;
- 	bool				gadget_registered;
-@@ -188,6 +195,7 @@ static struct raw_dev *dev_new(void)
- 	spin_lock_init(&dev->lock);
- 	init_completion(&dev->ep0_done);
- 	raw_event_queue_init(&dev->queue);
-+	dev->driver_id_number = -1;
- 	return dev;
+ 	/* Make sure no work handler is accessing the device */
+ 	flush_work(&vi->config_work);
+@@ -2439,14 +2438,8 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
+ 	netif_tx_lock_bh(vi->dev);
+ 	netif_device_detach(vi->dev);
+ 	netif_tx_unlock_bh(vi->dev);
+-	cancel_delayed_work_sync(&vi->refill);
+-
+-	if (netif_running(vi->dev)) {
+-		for (i = 0; i < vi->max_queue_pairs; i++) {
+-			napi_disable(&vi->rq[i].napi);
+-			virtnet_napi_tx_disable(&vi->sq[i].napi);
+-		}
+-	}
++	if (netif_running(vi->dev))
++		virtnet_close(vi->dev);
  }
  
-@@ -198,6 +206,9 @@ static void dev_free(struct kref *kref)
+ static int init_vqs(struct virtnet_info *vi);
+@@ -2454,7 +2447,7 @@ static int init_vqs(struct virtnet_info *vi);
+ static int virtnet_restore_up(struct virtio_device *vdev)
+ {
+ 	struct virtnet_info *vi = vdev->priv;
+-	int err, i;
++	int err;
  
- 	kfree(dev->udc_name);
- 	kfree(dev->driver.udc_name);
-+	kfree(dev->driver.driver.name);
-+	if (dev->driver_id_number >= 0)
-+		ida_free(&driver_id_numbers, dev->driver_id_number);
- 	if (dev->req) {
- 		if (dev->ep0_urb_queued)
- 			usb_ep_dequeue(dev->gadget->ep0, dev->req);
-@@ -421,6 +432,7 @@ static int raw_ioctl_init(struct raw_dev
- 	struct usb_raw_init arg;
- 	char *udc_driver_name;
- 	char *udc_device_name;
-+	char *driver_driver_name;
- 	unsigned long flags;
+ 	err = init_vqs(vi);
+ 	if (err)
+@@ -2463,15 +2456,9 @@ static int virtnet_restore_up(struct virtio_device *vdev)
+ 	virtio_device_ready(vdev);
  
- 	if (copy_from_user(&arg, (void __user *)value, sizeof(arg)))
-@@ -439,36 +451,44 @@ static int raw_ioctl_init(struct raw_dev
- 		return -EINVAL;
+ 	if (netif_running(vi->dev)) {
+-		for (i = 0; i < vi->curr_queue_pairs; i++)
+-			if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
+-				schedule_delayed_work(&vi->refill, 0);
+-
+-		for (i = 0; i < vi->max_queue_pairs; i++) {
+-			virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
+-			virtnet_napi_tx_enable(vi, vi->sq[i].vq,
+-					       &vi->sq[i].napi);
+-		}
++		err = virtnet_open(vi->dev);
++		if (err)
++			return err;
  	}
  
-+	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
-+	if (ret < 0)
-+		return ret;
-+	dev->driver_id_number = ret;
-+
-+	driver_driver_name = kmalloc(DRIVER_DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
-+	if (!driver_driver_name) {
-+		ret = -ENOMEM;
-+		goto out_free_driver_id_number;
-+	}
-+	snprintf(driver_driver_name, DRIVER_DRIVER_NAME_LENGTH_MAX,
-+				DRIVER_NAME ".%d", dev->driver_id_number);
-+
- 	udc_driver_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
--	if (!udc_driver_name)
--		return -ENOMEM;
-+	if (!udc_driver_name) {
-+		ret = -ENOMEM;
-+		goto out_free_driver_driver_name;
-+	}
- 	ret = strscpy(udc_driver_name, &arg.driver_name[0],
- 				UDC_NAME_LENGTH_MAX);
--	if (ret < 0) {
--		kfree(udc_driver_name);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out_free_udc_driver_name;
- 	ret = 0;
- 
- 	udc_device_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
- 	if (!udc_device_name) {
--		kfree(udc_driver_name);
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto out_free_udc_driver_name;
- 	}
- 	ret = strscpy(udc_device_name, &arg.device_name[0],
- 				UDC_NAME_LENGTH_MAX);
--	if (ret < 0) {
--		kfree(udc_driver_name);
--		kfree(udc_device_name);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out_free_udc_device_name;
- 	ret = 0;
- 
- 	spin_lock_irqsave(&dev->lock, flags);
- 	if (dev->state != STATE_DEV_OPENED) {
- 		dev_dbg(dev->dev, "fail, device is not opened\n");
--		kfree(udc_driver_name);
--		kfree(udc_device_name);
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-@@ -483,14 +503,24 @@ static int raw_ioctl_init(struct raw_dev
- 	dev->driver.suspend = gadget_suspend;
- 	dev->driver.resume = gadget_resume;
- 	dev->driver.reset = gadget_reset;
--	dev->driver.driver.name = DRIVER_NAME;
-+	dev->driver.driver.name = driver_driver_name;
- 	dev->driver.udc_name = udc_device_name;
- 	dev->driver.match_existing_only = 1;
- 
- 	dev->state = STATE_DEV_INITIALIZED;
-+	spin_unlock_irqrestore(&dev->lock, flags);
-+	return ret;
- 
- out_unlock:
- 	spin_unlock_irqrestore(&dev->lock, flags);
-+out_free_udc_device_name:
-+	kfree(udc_device_name);
-+out_free_udc_driver_name:
-+	kfree(udc_driver_name);
-+out_free_driver_driver_name:
-+	kfree(driver_driver_name);
-+out_free_driver_id_number:
-+	ida_free(&driver_id_numbers, dev->driver_id_number);
- 	return ret;
- }
- 
+ 	netif_tx_lock_bh(vi->dev);
+-- 
+2.35.1
+
 
 

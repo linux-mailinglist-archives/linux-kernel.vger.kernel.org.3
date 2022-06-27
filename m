@@ -2,78 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C63B55C9B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD4255E177
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237596AbiF0OqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        id S236457AbiF0OsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237514AbiF0OqQ (ORCPT
+        with ESMTP id S237637AbiF0OsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:46:16 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6E3DF65;
-        Mon, 27 Jun 2022 07:46:14 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id i18so17029262lfu.8;
-        Mon, 27 Jun 2022 07:46:14 -0700 (PDT)
+        Mon, 27 Jun 2022 10:48:17 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61FF5F96;
+        Mon, 27 Jun 2022 07:48:15 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id i1so8922528wrb.11;
+        Mon, 27 Jun 2022 07:48:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LUcZmkTGR5Hh6C+2kCtH4XekfuDCWDdiu6aLWv9Bsvc=;
-        b=bsPG5e6pSA54rPqXT/iG2JQkmpub79669Ga7QL7JTWZMGl9RnNaHE8Jeonlpw/N9+x
-         zKu7VxfkFdEDaC8YdNx165AUkCsKJ23tmjMePbt814goc5Sj/GbwIpsfUfkNupx29Zo0
-         u+QI/m8Ejf5qNPjjprjSvoixrfmEcLhdyA8f9xGz2W9lAhu6NsXhYFm22t0Kscu8WKzM
-         rMMN5hE72xUJN4GBMyhG7ZBzVkC2XJ0WfOXCHtBEFtqlZTHR4PPL5g8/ZsaNWoFE4Dza
-         UIAnVrGZsdr8o3RZZS30SQPKbjmC1jORZ5DRQdLwErj+ORRpJ44plrdGgRyQdnYUPTMm
-         oeOg==
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=vajkrPHc2kdtVXzMwbmKv0mu0zOE15b3yojVxzRhH8U=;
+        b=lq1SiFCUPTiw38F9BCLPRy6lLtcDUSB7H/DSBaSB5Gfh6Q4o7dDiHbAXI/pB3F5/7t
+         qG/LitLAT46c9sRfwXEE/viZ+mvnFVL0OQY7fwU+cTHNSPGjnuQuXD9b2ud/zVsJb/cf
+         c1DUXLwOimuxVMDPoeKd6KJ04iFCVTjztIlx9leJdWhVVFVN2gvwTbP209tX+6+Wpy+f
+         OjWX+0q2wNbuplyXfyE0S7eNv8PnqIK8ooapU82rAk9VfrkZ6ChEFMSofP1lBXZgNIEp
+         LomRbAwrvx8wwsHi+i0YOVa7rQAthqJusKL4gTr9/WYX+l/qBWtJmWBfpDap9l58Buy7
+         Lt9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=LUcZmkTGR5Hh6C+2kCtH4XekfuDCWDdiu6aLWv9Bsvc=;
-        b=OeP9l3EH4CjFCkTfLN8Bf+nE1yIyA5r4E+Fvqt2IyH3/LTQ5rxMDHkf5UQcHdAAZwR
-         j/2GFjsS4iEOhMnGKkT32J+AoDhr4mhs2yfAPHFjDvFWAPUJM60Pw5FfzuLT2hWSOfp+
-         fc1qa3hRsrkWhM6XRmmviH/XKgx5qSRuBr3vhvJaRr/InAjlT4+pj3NSIYnA1dzr3w+y
-         KNg9WlDUB/42oCStvt6ko2yPHtExxbB8BjmpSVX7oZCJSgifEqy+E7tydQy6+w1mhxCN
-         8MJY6gf0NZLa0wOalTE0ZWpMEmAVVwlDgPd9k57CC998pShazQzFMo0ol5kMNt4fLY/M
-         1beA==
-X-Gm-Message-State: AJIora/DFKN+nWd+irRlna3lLsO4dI5ZlRXgvuVIjBr0Ey84WYmAEWjF
-        ZqihKBDflUnwoZozk2Yw9L0=
-X-Google-Smtp-Source: AGRyM1tEjNUY1M3nmtsa+tlN070CxCzLPFktJ7wQV4c4x+FiWp+SfX/XIX/XRE1+28iHiBZzkjw0vg==
-X-Received: by 2002:a05:6512:3e16:b0:47f:9d6d:c7e3 with SMTP id i22-20020a0565123e1600b0047f9d6dc7e3mr9221730lfv.393.1656341172695;
-        Mon, 27 Jun 2022 07:46:12 -0700 (PDT)
-Received: from [192.168.1.11] ([46.235.67.63])
-        by smtp.gmail.com with ESMTPSA id c2-20020ac25f62000000b00478f3fe716asm1828735lfc.200.2022.06.27.07.46.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 07:46:11 -0700 (PDT)
-Message-ID: <4d08b849-3e79-7c82-803c-51c251344c7a@gmail.com>
-Date:   Mon, 27 Jun 2022 17:46:10 +0300
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=vajkrPHc2kdtVXzMwbmKv0mu0zOE15b3yojVxzRhH8U=;
+        b=N3y2KiqmylVU2+QuFRRwnt9w3iw+PCuOOc5ey8ArjBkPHYyM0ZdV3ROjNnFqANI4RA
+         VnHLIHOs6atvXmy7WF7O2qbqYMNqhIzKoh4iw5B7b0DFQDfDwmDFpFqiSx6qYvT6gXFz
+         6lwESfd8R3ZnTdCFle91tWuduRoM3mof9eMLgr03aO0e9NrfE2lQb0u4sfaQZejQtFM+
+         m+7qKUuBNu7hdq5x5tgmqgChTek3nHZZ7BbDk2218snLZiWgmRoTkYGa5ra3tsT/ttaP
+         czVn/UHvGoY/ZklciTt+d9vTshhwK6MGshn16lITVlTWr7LjwYTxDU2WU5Y7mngu7H87
+         9E5A==
+X-Gm-Message-State: AJIora9tz2r5C1XOtIviMmPzuSCqg1Vm/3Hr+rLzBOZd71GI9WZRwYwd
+        BEwVB7IGL+kkXufmuDf3P/kfSZ6No9VXzqSP3xk=
+X-Google-Smtp-Source: AGRyM1u6ojF9n9v9xGvAI9r9+rRnnj9vayuFlSL2GHs8AByrH3GMZSKH8CnEtt9j74Q9oEIem3zNBA==
+X-Received: by 2002:a5d:6d8b:0:b0:21b:9814:793d with SMTP id l11-20020a5d6d8b000000b0021b9814793dmr12621626wrs.344.1656341294084;
+        Mon, 27 Jun 2022 07:48:14 -0700 (PDT)
+Received: from [192.168.1.108] (68.201.26.77.dynamic.reverse-mundo-r.com. [77.26.201.68])
+        by smtp.gmail.com with ESMTPSA id az14-20020a05600c600e00b003a04c74efd1sm2080441wmb.21.2022.06.27.07.48.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 07:48:13 -0700 (PDT)
+Message-ID: <a57e1d14dda4f902cedddcfcea9a16a8e58316e6.camel@gmail.com>
+Subject: Re: [PATCH 2/3] iio: pressure: bmp280: Add support for BMP380
+ sensor family
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org
+Cc:     lkp@intel.com, kbuild-all@lists.01.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 27 Jun 2022 16:48:01 +0200
+In-Reply-To: <202206260803.ctZKSyI9-lkp@intel.com>
+References: <202206260803.ctZKSyI9-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.module_f35+14217+587aad52) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] net: ocelot: fix wrong time_after usage
-Content-Language: en-US
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <YoeMW+/KGk8VpbED@lunn.ch>
- <20220520213115.7832-1-paskripkin@gmail.com> <YojvUsJ090H/wfEk@lunn.ch>
- <20220521162108.bact3sn4z2yuysdt@skbuf> <20220624171429.4b3f7c0a@fixe.home>
-From:   Pavel Skripkin <paskripkin@gmail.com>
-In-Reply-To: <20220624171429.4b3f7c0a@fixe.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,29 +77,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/22 18:14, Clément Léger wrote:
-> So I actually tested and added logging to see if the CH_SAFE
-> register bits are set for the channel on the first iteration. From
-> what I could test (iperf3 with huge/non huge packets, TCP/UDP), it
-> always return true on the first try. So since I think Pavel solution
-> is ok to go with.
+On lun, 2022-06-27 at 10:37 +0300, Dan Carpenter wrote:
+> Hi Angel,
 > 
-> However, since ocelot_fdma_wait_chan_safe() is also called in the napi
-> poll function of this driver, I don't think sleeping is allowed (softirq
-> context) and thus I would suggest using the readx_poll_timeout_atomic()
-> function instead.
+> url:   
+> https://github.com/intel-lab-lkp/linux/commits/Angel-Iglesias/dt-bindings-iio-pressure-bmp085-Add-BMP380-compatible-string/20220625-231424
+> base:  
+> https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+> config: i386-randconfig-m021
+> compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
 > 
-> Regarding the delay to wait between each read, I don't have any
-> information about that possible value, the datasheet only says "wait
-> for the bit to be set" so I guess we'll have to live with an
-> approximate value.
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 > 
-
-Thank you for testing!
-
-I will update update v3 with _atomic variant
-
-
-
-Thanks,
---Pavel Skripkin
+> smatch warnings:
+> drivers/iio/pressure/bmp280-core.c:1000 bmp380_chip_config() warn:
+> should this be a bitwise op?
+> 
+> vim +1000 drivers/iio/pressure/bmp280-core.c
+> 
+> 56e3f8aecddacd Angel Iglesias 2022-06-25   988          if (ret < 0)
+> {
+> 56e3f8aecddacd Angel Iglesias 2022-06-25  
+> 989                  dev_err(data->dev, "failed to write config
+> register\n");
+> 56e3f8aecddacd Angel Iglesias 2022-06-25  
+> 990                  return ret;
+> 56e3f8aecddacd Angel Iglesias 2022-06-25   991          }
+> 56e3f8aecddacd Angel Iglesias 2022-06-25   992  
+> 56e3f8aecddacd Angel Iglesias 2022-06-25   993          /* check
+> config error flag */
+> 56e3f8aecddacd Angel Iglesias 2022-06-25   994          ret =
+> regmap_read(data->regmap, BMP380_REG_ERROR, &tmp);
+> 56e3f8aecddacd Angel Iglesias 2022-06-25   995          if (ret < 0)
+> {
+> 56e3f8aecddacd Angel Iglesias 2022-06-25  
+> 996                  dev_err(data->dev,
+> 56e3f8aecddacd Angel Iglesias 2022-06-25  
+> 997                          "failed to read error register\n");
+> 56e3f8aecddacd Angel Iglesias 2022-06-25  
+> 998                  return ret;
+> 56e3f8aecddacd Angel Iglesias 2022-06-25   999          }
+> 56e3f8aecddacd Angel Iglesias 2022-06-25 @1000          if (tmp &&
+> BMP380_ERR_CONF_MASK) {
+>                                                                
+> ^^^^^^^^^^^^^^^^^^^^^^^
+> Looks like & BMP380_ERR_CONF_MASK was intended.
+> 
+> 56e3f8aecddacd Angel Iglesias 2022-06-25 
+> 1001                  dev_warn(data->dev,
+> 56e3f8aecddacd Angel Iglesias 2022-06-25 
+> 1002                           "sensor flagged configuration as
+> incompatible\n");
+> 56e3f8aecddacd Angel Iglesias 2022-06-25  1003                  ret =
+> -EINVAL;
+> 56e3f8aecddacd Angel Iglesias 2022-06-25  1004          }
+> 56e3f8aecddacd Angel Iglesias 2022-06-25  1005  
+> 56e3f8aecddacd Angel Iglesias 2022-06-25  1006          return ret;
+> 56e3f8aecddacd Angel Iglesias 2022-06-25  1007  }
+> 
+Thanks! that is an awkward mistake, my bad!

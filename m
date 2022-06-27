@@ -2,190 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECCC355D6FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A9B55D060
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234052AbiF0Koq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
+        id S234261AbiF0KrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232895AbiF0Kop (ORCPT
+        with ESMTP id S234255AbiF0Kq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:44:45 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3D563B2;
-        Mon, 27 Jun 2022 03:44:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656326684; x=1687862684;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=lx+sq5BrYtlEATfMj2qSuWCQq/LYicVL0fuwLFTf85k=;
-  b=qnM245RDku6rbAxyGynWMv2J6zFQ3WHGBzUTOMGzpmLtwndtoY7XFY50
-   Ye/+ISVGiDME7CZsY9FIfSCNf2ExkmYNaVfFKAEzXgqU9AVdBJVYDzTlH
-   iJLS0IKZ9Q3SAlWlOOtwOCRbS6Zo0Mcp22xWnqz83YqCPdQfqwM6bctYJ
-   I=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jun 2022 03:44:44 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 03:44:43 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 27 Jun 2022 03:44:42 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 27 Jun 2022 03:44:37 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        <devicetree@vger.kernel.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v2] ASoC: qcom: Add driver support for audioreach solution
-Date:   Mon, 27 Jun 2022 16:14:22 +0530
-Message-ID: <1656326662-14524-1-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 27 Jun 2022 06:46:58 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0ED642B
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:46:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VHZ5z42_1656326810;
+Received: from 30.225.28.167(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VHZ5z42_1656326810)
+          by smtp.aliyun-inc.com;
+          Mon, 27 Jun 2022 18:46:52 +0800
+Message-ID: <ae5c6c07-1d49-ffd2-6f62-69df4308d0bb@linux.alibaba.com>
+Date:   Mon, 27 Jun 2022 18:46:50 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] arm64: mm: fix linear mapping mem access performace
+ degradation
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        will@kernel.org, akpm@linux-foundation.org, david@redhat.com,
+        jianyong.wu@arm.com, james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, thunder.leizhen@huawei.com,
+        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, geert+renesas@glider.be,
+        ardb@kernel.org, linux-mm@kvack.org
+References: <1656241815-28494-1-git-send-email-guanghuifeng@linux.alibaba.com>
+ <YrlPfjv2Wf/C77DI@kernel.org>
+ <4d18d303-aeed-0beb-a8a4-32893f2d438d@linux.alibaba.com>
+ <Yrl9FcVv1wZ5MnRp@kernel.org>
+From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+In-Reply-To: <Yrl9FcVv1wZ5MnRp@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Machine driver support for audioreach solution, which uses
-ADSP in SC7280 based paltforms.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
----
-Changes Since V1:
-    -- Remove audioreach compatible name.
-    -- Remove dt-binding patch.
 
- sound/soc/qcom/sc7280.c | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+在 2022/6/27 17:49, Mike Rapoport 写道:
+> Please don't post HTML.
+> 
+> On Mon, Jun 27, 2022 at 05:24:10PM +0800, guanghui.fgh wrote:
+>> Thanks.
+>>
+>> 在 2022/6/27 14:34, Mike Rapoport 写道:
+>>
+>>      On Sun, Jun 26, 2022 at 07:10:15PM +0800, Guanghui Feng wrote:
+>>
+>>          The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
+>>          (enable crashkernel, disable rodata full, disable kfence), the mem_map will
+>>          use non block/section mapping(for crashkernel requires to shrink the region
+>>          in page granularity). But it will degrade performance when doing larging
+>>          continuous mem access in kernel(memcpy/memmove, etc).
+>>
+>>          There are many changes and discussions:
+>>          commit 031495635b46
+>>          commit 1a8e1cef7603
+>>          commit 8424ecdde7df
+>>          commit 0a30c53573b0
+>>          commit 2687275a5843
+>>
+>>      Please include oneline summary of the commit. (See section "Describe your
+>>      changes" in Documentation/process/submitting-patches.rst)
+>>
+>> OK, I will add oneline summary in the git commit messages.
+>>
+>>          This patch changes mem_map to use block/section mapping with crashkernel.
+>>          Firstly, do block/section mapping(normally 2M or 1G) for all avail mem at
+>>          mem_map, reserve crashkernel memory. And then walking pagetable to split
+>>          block/section mapping to non block/section mapping(normally 4K) [[[only]]]
+>>          for crashkernel mem.
+>>
+>>      This already happens when ZONE_DMA/ZONE_DMA32 are disabled. Please explain
+>>      why is it Ok to change the way the memory is mapped with
+>>      ZONE_DMA/ZONE_DMA32 enabled.
+>>
+>> In short:
+>>
+>> 1.building all avail mem with block/section mapping（normally 1G/2M） without
+>> inspecting crashkernel
+>> 2. Reserve crashkernel mem as same as previous doing
+>> 3. only change the crashkernle mem mapping to normal mapping(normally 4k).
+>> With this method, there are block/section mapping as more as possible.
+> 
+> This does not answer the question why changing the way the memory is mapped
+> when there is ZONE_DMA/DMA32 and crashkernel won't cause a regression.
+> 
+1.Quoted messages from arch/arm64/mm/init.c
 
-diff --git a/sound/soc/qcom/sc7280.c b/sound/soc/qcom/sc7280.c
-index 34cdb99..da7469a 100644
---- a/sound/soc/qcom/sc7280.c
-+++ b/sound/soc/qcom/sc7280.c
-@@ -19,9 +19,11 @@
- #include "../codecs/rt5682s.h"
- #include "common.h"
- #include "lpass.h"
-+#include "qdsp6/q6afe.h"
- 
- #define DEFAULT_MCLK_RATE              19200000
- #define RT5682_PLL_FREQ (48000 * 512)
-+#define MI2S_BCLK_RATE		1536000
- 
- struct sc7280_snd_data {
- 	struct snd_soc_card card;
-@@ -79,6 +81,7 @@ static int sc7280_headset_init(struct snd_soc_pcm_runtime *rtd)
- 	case MI2S_PRIMARY:
- 	case LPASS_CDC_DMA_RX0:
- 	case LPASS_CDC_DMA_TX3:
-+	case TX_CODEC_DMA_TX_3:
- 		for_each_rtd_codec_dais(rtd, i, codec_dai) {
- 			rval = snd_soc_component_set_jack(component, &pdata->hs_jack, NULL);
- 			if (rval != 0 && rval != -ENOTSUPP) {
-@@ -164,10 +167,14 @@ static int sc7280_init(struct snd_soc_pcm_runtime *rtd)
- 	switch (cpu_dai->id) {
- 	case MI2S_PRIMARY:
- 	case LPASS_CDC_DMA_TX3:
-+	case TX_CODEC_DMA_TX_3:
- 		return sc7280_headset_init(rtd);
- 	case LPASS_CDC_DMA_RX0:
- 	case LPASS_CDC_DMA_VA_TX0:
- 	case MI2S_SECONDARY:
-+	case RX_CODEC_DMA_RX_0:
-+	case SECONDARY_MI2S_RX:
-+	case VA_CODEC_DMA_TX_0:
- 		return 0;
- 	case LPASS_DP_RX:
- 		return sc7280_hdmi_init(rtd);
-@@ -195,6 +202,10 @@ static int sc7280_snd_hw_params(struct snd_pcm_substream *substream,
- 	switch (cpu_dai->id) {
- 	case LPASS_CDC_DMA_TX3:
- 	case LPASS_CDC_DMA_RX0:
-+	case RX_CODEC_DMA_RX_0:
-+	case SECONDARY_MI2S_RX:
-+	case TX_CODEC_DMA_TX_3:
-+	case VA_CODEC_DMA_TX_0:
- 		for_each_rtd_codec_dais(rtd, i, codec_dai) {
- 			sruntime = snd_soc_dai_get_stream(codec_dai, substream->stream);
- 			if (sruntime != ERR_PTR(-ENOTSUPP))
-@@ -245,6 +256,9 @@ static int sc7280_snd_prepare(struct snd_pcm_substream *substream)
- 	switch (cpu_dai->id) {
- 	case LPASS_CDC_DMA_RX0:
- 	case LPASS_CDC_DMA_TX3:
-+	case RX_CODEC_DMA_RX_0:
-+	case TX_CODEC_DMA_TX_3:
-+	case VA_CODEC_DMA_TX_0:
- 		return sc7280_snd_swr_prepare(substream);
- 	default:
- 		break;
-@@ -263,6 +277,9 @@ static int sc7280_snd_hw_free(struct snd_pcm_substream *substream)
- 	switch (cpu_dai->id) {
- 	case LPASS_CDC_DMA_RX0:
- 	case LPASS_CDC_DMA_TX3:
-+	case RX_CODEC_DMA_RX_0:
-+	case TX_CODEC_DMA_TX_3:
-+	case VA_CODEC_DMA_TX_0:
- 		if (sruntime && data->stream_prepared[cpu_dai->id]) {
- 			sdw_disable_stream(sruntime);
- 			sdw_deprepare_stream(sruntime);
-@@ -291,6 +308,10 @@ static void sc7280_snd_shutdown(struct snd_pcm_substream *substream)
- 					       SNDRV_PCM_STREAM_PLAYBACK);
- 		}
- 		break;
-+	case SECONDARY_MI2S_RX:
-+		snd_soc_dai_set_sysclk(cpu_dai, Q6AFE_LPASS_CLK_ID_SEC_MI2S_IBIT,
-+					       0, SNDRV_PCM_STREAM_PLAYBACK);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -298,14 +319,26 @@ static void sc7280_snd_shutdown(struct snd_pcm_substream *substream)
- 
- static int sc7280_snd_startup(struct snd_pcm_substream *substream)
- {
-+	unsigned int fmt = SND_SOC_DAIFMT_CBS_CFS;
-+	unsigned int codec_dai_fmt = SND_SOC_DAIFMT_CBS_CFS;
- 	struct snd_soc_pcm_runtime *rtd = substream->private_data;
- 	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
-+	struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
- 	int ret = 0;
- 
- 	switch (cpu_dai->id) {
- 	case MI2S_PRIMARY:
- 		ret = sc7280_rt5682_init(rtd);
- 		break;
-+	case SECONDARY_MI2S_RX:
-+		codec_dai_fmt |= SND_SOC_DAIFMT_NB_NF | SND_SOC_DAIFMT_I2S;
-+
-+		snd_soc_dai_set_sysclk(cpu_dai, Q6AFE_LPASS_CLK_ID_SEC_MI2S_IBIT,
-+			MI2S_BCLK_RATE, SNDRV_PCM_STREAM_PLAYBACK);
-+
-+		snd_soc_dai_set_fmt(cpu_dai, fmt);
-+		snd_soc_dai_set_fmt(codec_dai, codec_dai_fmt);
-+		break;
- 	default:
- 		break;
- 	}
--- 
-2.7.4
+"Memory reservation for crash kernel either done early or deferred
+depending on DMA memory zones configs (ZONE_DMA) --
 
+In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
+here instead of max_zone_phys().  This lets early reservation of
+crash kernel memory which has a dependency on arm64_dma_phys_limit.
+Reserving memory early for crash kernel allows linear creation of block
+mappings (greater than page-granularity) for all the memory bank rangs.
+In this scheme a comparatively quicker boot is observed.
+
+If ZONE_DMA configs are defined, crash kernel memory reservation
+is delayed until DMA zone memory range size initialization performed in
+zone_sizes_init().  The defer is necessary to steer clear of DMA zone
+memory range to avoid overlap allocation.  So crash kernel memory 
+boundaries are not known when mapping all bank memory ranges, which 
+otherwise means not possible to exclude crash kernel range from creating 
+block mappings so page-granularity mappings are created for the entire 
+memory range."
+
+Namely, the init order: memblock init--->linear mem mapping(4k mapping 
+for crashkernel, requirinig page-granularity changing))--->zone dma 
+limit--->reserve crashkernel.
+So when enable ZONE DMA and using crashkernel, the mem mapping using 4k 
+mapping.
+
+2.As mentioned above, when linear mem use 4k mapping simply, there is 
+high dtlb miss(degrade performance).
+This patch use block/section mapping as far as possible with performance 
+improvement.
+
+3.This patch reserve crashkernel as same as the history(ZONE DMA & 
+crashkernel reserving order), and only change the linear mem mapping to 
+block/section mapping.

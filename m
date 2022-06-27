@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC7455C5A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D9055C55B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239127AbiF0Ly4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S234579AbiF0LXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238534AbiF0Lsn (ORCPT
+        with ESMTP id S233839AbiF0LXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:48:43 -0400
+        Mon, 27 Jun 2022 07:23:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C35101E6;
-        Mon, 27 Jun 2022 04:42:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB36164F8;
+        Mon, 27 Jun 2022 04:23:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66224B8112E;
-        Mon, 27 Jun 2022 11:42:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82ACC3411D;
-        Mon, 27 Jun 2022 11:42:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C6F7B8111B;
+        Mon, 27 Jun 2022 11:23:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4427C3411D;
+        Mon, 27 Jun 2022 11:23:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330127;
-        bh=14Cc3lgi1m160+6Jz2NgFBsl2TTrDobQb+bvHimA6DQ=;
+        s=korg; t=1656328991;
+        bh=x7P22JytzPf6oNjq71S/evHGGCzh/+caYNfY3VnwaO0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GxFbibsEec1Pv0+OvC5u0YItlh7oNHQChsTJE+cTPwuHDzVtPD+WM3WPV2ZxrpuHn
-         Lf5JFoR5nhroEcHrCZIPAH1WyIWpPGhJHg71SSFJD5XJxLisXOSWqnArM4NMHvHf6y
-         KoezjJdadCn8/4ut8IZDbyLEnAUs0COnKQLkSsww=
+        b=UllUc9aXHCLBDcDxFj72SR7Scoe3N/fTWmsPHjLKHaHXNX2P/jADud4/V3F2va2Mn
+         BFh4Y7rZZNEjLdTbb/PSoaEWRrVL1oKur3C7rg7FT8TxPxbh2rYH0aABeefLuP0XtO
+         V3Nhd1YkFGe44Fd95SHWjXJkIaF/bUQzyNtL6Xxg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yu Liao <liaoyu15@huawei.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 053/181] selftests dma: fix compile error for dma_map_benchmark
+        stable@vger.kernel.org, Edward Wu <edwardwu@realtek.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 5.10 015/102] ata: libata: add qc->flags in ata_qc_complete_template tracepoint
 Date:   Mon, 27 Jun 2022 13:20:26 +0200
-Message-Id: <20220627111946.104494390@linuxfoundation.org>
+Message-Id: <20220627111933.917810311@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +54,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Liao <liaoyu15@huawei.com>
+From: Edward Wu <edwardwu@realtek.com>
 
-[ Upstream commit 12a29115be72dfc72372af9ded4bc4ae7113a729 ]
+commit 540a92bfe6dab7310b9df2e488ba247d784d0163 upstream.
 
-When building selftests/dma:
-$ make -C tools/testing/selftests TARGETS=dma
-I hit the following compilation error:
+Add flags value to check the result of ata completion
 
-dma_map_benchmark.c:13:10: fatal error: linux/map_benchmark.h: No such file or directory
- #include <linux/map_benchmark.h>
-          ^~~~~~~~~~~~~~~~~~~~~~~
-
-dma/Makefile does not include the map_benchmark.h path, so add
-more including path, and fix include order in dma_map_benchmark.c
-
-Fixes: 8ddde07a3d28 ("dma-mapping: benchmark: extract a common header file for map_benchmark definition")
-Signed-off-by: Yu Liao <liaoyu15@huawei.com>
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 255c03d15a29 ("libata: Add tracepoints")
+Cc: stable@vger.kernel.org
+Signed-off-by: Edward Wu <edwardwu@realtek.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/dma/Makefile            | 1 +
- tools/testing/selftests/dma/dma_map_benchmark.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ include/trace/events/libata.h |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/dma/Makefile b/tools/testing/selftests/dma/Makefile
-index aa8e8b5b3864..cd8c5ece1cba 100644
---- a/tools/testing/selftests/dma/Makefile
-+++ b/tools/testing/selftests/dma/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- CFLAGS += -I../../../../usr/include/
-+CFLAGS += -I../../../../include/
+--- a/include/trace/events/libata.h
++++ b/include/trace/events/libata.h
+@@ -249,6 +249,7 @@ DECLARE_EVENT_CLASS(ata_qc_complete_temp
+ 		__entry->hob_feature	= qc->result_tf.hob_feature;
+ 		__entry->nsect		= qc->result_tf.nsect;
+ 		__entry->hob_nsect	= qc->result_tf.hob_nsect;
++		__entry->flags		= qc->flags;
+ 	),
  
- TEST_GEN_PROGS := dma_map_benchmark
- 
-diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
-index c3b3c09e995e..5c997f17fcbd 100644
---- a/tools/testing/selftests/dma/dma_map_benchmark.c
-+++ b/tools/testing/selftests/dma/dma_map_benchmark.c
-@@ -10,8 +10,8 @@
- #include <unistd.h>
- #include <sys/ioctl.h>
- #include <sys/mman.h>
--#include <linux/map_benchmark.h>
- #include <linux/types.h>
-+#include <linux/map_benchmark.h>
- 
- #define NSEC_PER_MSEC	1000000L
- 
--- 
-2.35.1
-
+ 	TP_printk("ata_port=%u ata_dev=%u tag=%d flags=%s status=%s " \
 
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B36355DF1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41B055D39B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237020AbiF0Lld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
+        id S236869AbiF0LkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236494AbiF0Lhf (ORCPT
+        with ESMTP id S236495AbiF0Lhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Jun 2022 07:37:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1C2283;
-        Mon, 27 Jun 2022 04:33:30 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F7C28F;
+        Mon, 27 Jun 2022 04:33:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFA6860A10;
-        Mon, 27 Jun 2022 11:33:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8C1CC3411D;
-        Mon, 27 Jun 2022 11:33:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44F85609D0;
+        Mon, 27 Jun 2022 11:33:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB24FC341C7;
+        Mon, 27 Jun 2022 11:33:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329609;
-        bh=4d/QsRyDTmGy61tkrt2m4n5m+CpbXi9uRl2S66/x0Mk=;
+        s=korg; t=1656329612;
+        bh=d83IYfUoSCwlimeO40t3MmhOsYVKQ9De0jR/4Cmakr4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CBO5+gAicKQ+JqEiQ6AuGmiLVun5X8epAEPCA45lrxxwXyQO/61Ait7JKdaXYi2UA
-         qsyStOdbGr8KE9NFZnphxYf/t2vM074dnlZW6+IVb4tiH11umyczENqvySzXF1KMDK
-         Npxyw+/E6sQHiZevClGrr287Iy542U+f3DhRnkcM=
+        b=ZdIKYUlyYu5IkcXzGRNnfMYZ1lO8rNJ5KJPp7V8PMzHuQ5XTmdbYpxnkJYmB4pRlP
+         FAoAcUN4rjoHCib5C557nSir1hlgemUswW2BCArR2xWFTjysASoNPQjS7NoSE+BkDp
+         76Jaba1jEBvhuOsMaX4xJqCnvNu0vsOIwRSNyqFk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        stable@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Stephen Boyd <swboyd@chromium.org>,
         Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 055/135] drm/msm/dp: check core_initialized before disable interrupts at dp_display_unbind()
-Date:   Mon, 27 Jun 2022 13:21:02 +0200
-Message-Id: <20220627111939.755751793@linuxfoundation.org>
+Subject: [PATCH 5.15 056/135] drm/msm/dp: Drop now unused hpd_high member
+Date:   Mon, 27 Jun 2022 13:21:03 +0200
+Message-Id: <20220627111939.784309520@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
 References: <20220627111938.151743692@linuxfoundation.org>
@@ -56,66 +57,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuogee Hsieh <quic_khsieh@quicinc.com>
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-[ Upstream commit d80c3ba0ac247791a4ed7a0cd865a64906c8906a ]
+[ Upstream commit fabae667b1263216be53e0230cd3966a9a1963a4 ]
 
-During msm initialize phase, dp_display_unbind() will be called to undo
-initializations had been done by dp_display_bind() previously if there is
-error happen at msm_drm_bind. In this case, core_initialized flag had to
-be check to make sure clocks is on before update DP controller register
-to disable HPD interrupts. Otherwise system will crash due to below NOC
-fatal error.
+Since '8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon
+Chipsets")' the hpd_high member of struct dp_usbpd has been write-only.
 
-QTISECLIB [01f01a7ad]CNOC2 ERROR: ERRLOG0_LOW = 0x00061007
-QTISECLIB [01f01a7ad]GEM_NOC ERROR: ERRLOG0_LOW = 0x00001007
-QTISECLIB [01f0371a0]CNOC2 ERROR: ERRLOG0_HIGH = 0x00000003
-QTISECLIB [01f055297]GEM_NOC ERROR: ERRLOG0_HIGH = 0x00000003
-QTISECLIB [01f072beb]CNOC2 ERROR: ERRLOG1_LOW = 0x00000024
-QTISECLIB [01f0914b8]GEM_NOC ERROR: ERRLOG1_LOW = 0x00000042
-QTISECLIB [01f0ae639]CNOC2 ERROR: ERRLOG1_HIGH = 0x00004002
-QTISECLIB [01f0cc73f]GEM_NOC ERROR: ERRLOG1_HIGH = 0x00004002
-QTISECLIB [01f0ea092]CNOC2 ERROR: ERRLOG2_LOW = 0x0009020c
-QTISECLIB [01f10895f]GEM_NOC ERROR: ERRLOG2_LOW = 0x0ae9020c
-QTISECLIB [01f125ae1]CNOC2 ERROR: ERRLOG2_HIGH = 0x00000000
-QTISECLIB [01f143be7]GEM_NOC ERROR: ERRLOG2_HIGH = 0x00000000
-QTISECLIB [01f16153a]CNOC2 ERROR: ERRLOG3_LOW = 0x00000000
-QTISECLIB [01f17fe07]GEM_NOC ERROR: ERRLOG3_LOW = 0x00000000
-QTISECLIB [01f19cf89]CNOC2 ERROR: ERRLOG3_HIGH = 0x00000000
-QTISECLIB [01f1bb08e]GEM_NOC ERROR: ERRLOG3_HIGH = 0x00000000
-QTISECLIB [01f1d8a31]CNOC2 ERROR: SBM1 FAULTINSTATUS0_LOW = 0x00000002
-QTISECLIB [01f1f72a4]GEM_NOC ERROR: SBM0 FAULTINSTATUS0_LOW = 0x00000001
-QTISECLIB [01f21a217]CNOC3 ERROR: ERRLOG0_LOW = 0x00000006
-QTISECLIB [01f23dfd3]NOC error fatal
+Let's clean up the code a little bit by removing the writes as well.
 
-changes in v2:
--- drop the first patch (drm/msm: enable msm irq after all initializations are done successfully at msm_drm_init()) since the problem had been fixed by other patch
-
-Fixes: 570d3e5d28db ("drm/msm/dp: stop event kernel thread when DP unbind")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Patchwork: https://patchwork.freedesktop.org/patch/488387/
-Link: https://lore.kernel.org/r/1654538139-7450-1-git-send-email-quic_khsieh@quicinc.com
+Link: https://lore.kernel.org/r/20211106172246.2597431-1-bjorn.andersson@linaro.org
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dp/dp_display.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/dp/dp_display.c | 6 ------
+ drivers/gpu/drm/msm/dp/dp_hpd.c     | 2 --
+ drivers/gpu/drm/msm/dp/dp_hpd.h     | 2 --
+ 3 files changed, 10 deletions(-)
 
 diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 7b624191abf1..8b51a5cc3eb8 100644
+index 8b51a5cc3eb8..a66ee63253a3 100644
 --- a/drivers/gpu/drm/msm/dp/dp_display.c
 +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -260,7 +260,8 @@ static void dp_display_unbind(struct device *dev, struct device *master,
- 			struct dp_display_private, dp_display);
+@@ -547,11 +547,8 @@ static int dp_hpd_plug_handle(struct dp_display_private *dp, u32 data)
  
- 	/* disable all HPD interrupts */
--	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, false);
-+	if (dp->core_initialized)
-+		dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, false);
+ 	dp->hpd_state = ST_CONNECT_PENDING;
  
- 	kthread_stop(dp->ev_tsk);
+-	hpd->hpd_high = 1;
+-
+ 	ret = dp_display_usbpd_configure_cb(&dp->pdev->dev);
+ 	if (ret) {	/* link train failed */
+-		hpd->hpd_high = 0;
+ 		dp->hpd_state = ST_DISCONNECTED;
  
+ 		if (ret == -ECONNRESET) { /* cable unplugged */
+@@ -628,7 +625,6 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
+ 		/* triggered by irq_hdp with sink_count = 0 */
+ 		if (dp->link->sink_count == 0) {
+ 			dp_ctrl_off_phy(dp->ctrl);
+-			hpd->hpd_high = 0;
+ 			dp->core_initialized = false;
+ 		}
+ 		mutex_unlock(&dp->event_mutex);
+@@ -652,8 +648,6 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
+ 	/* disable HPD plug interrupts */
+ 	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, false);
+ 
+-	hpd->hpd_high = 0;
+-
+ 	/*
+ 	 * We don't need separate work for disconnect as
+ 	 * connect/attention interrupts are disabled
+diff --git a/drivers/gpu/drm/msm/dp/dp_hpd.c b/drivers/gpu/drm/msm/dp/dp_hpd.c
+index e1c90fa47411..db98a1d431eb 100644
+--- a/drivers/gpu/drm/msm/dp/dp_hpd.c
++++ b/drivers/gpu/drm/msm/dp/dp_hpd.c
+@@ -32,8 +32,6 @@ int dp_hpd_connect(struct dp_usbpd *dp_usbpd, bool hpd)
+ 	hpd_priv = container_of(dp_usbpd, struct dp_hpd_private,
+ 					dp_usbpd);
+ 
+-	dp_usbpd->hpd_high = hpd;
+-
+ 	if (!hpd_priv->dp_cb || !hpd_priv->dp_cb->configure
+ 				|| !hpd_priv->dp_cb->disconnect) {
+ 		pr_err("hpd dp_cb not initialized\n");
+diff --git a/drivers/gpu/drm/msm/dp/dp_hpd.h b/drivers/gpu/drm/msm/dp/dp_hpd.h
+index 5bc5bb64680f..8feec5aa5027 100644
+--- a/drivers/gpu/drm/msm/dp/dp_hpd.h
++++ b/drivers/gpu/drm/msm/dp/dp_hpd.h
+@@ -26,7 +26,6 @@ enum plug_orientation {
+  * @multi_func: multi-function preferred
+  * @usb_config_req: request to switch to usb
+  * @exit_dp_mode: request exit from displayport mode
+- * @hpd_high: Hot Plug Detect signal is high.
+  * @hpd_irq: Change in the status since last message
+  * @alt_mode_cfg_done: bool to specify alt mode status
+  * @debug_en: bool to specify debug mode
+@@ -39,7 +38,6 @@ struct dp_usbpd {
+ 	bool multi_func;
+ 	bool usb_config_req;
+ 	bool exit_dp_mode;
+-	bool hpd_high;
+ 	bool hpd_irq;
+ 	bool alt_mode_cfg_done;
+ 	bool debug_en;
 -- 
 2.35.1
 

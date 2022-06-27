@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE57455C9C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED7E55DEE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235466AbiF0L76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55900 "EHLO
+        id S235411AbiF0L3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238856AbiF0Lwo (ORCPT
+        with ESMTP id S235322AbiF0L2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:52:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1EEDED0;
-        Mon, 27 Jun 2022 04:46:02 -0700 (PDT)
+        Mon, 27 Jun 2022 07:28:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20E9A189;
+        Mon, 27 Jun 2022 04:27:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13E4C61187;
-        Mon, 27 Jun 2022 11:46:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 099F7C36AEF;
-        Mon, 27 Jun 2022 11:46:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69402614A0;
+        Mon, 27 Jun 2022 11:27:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68BC5C3411D;
+        Mon, 27 Jun 2022 11:27:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330361;
-        bh=cBYTfI9m6Gk7vzGDgkegA0lWZDNMDrfWfgQxp3ZPtLM=;
+        s=korg; t=1656329238;
+        bh=YfwcNSiIhwhdnf99HY/KHAoQytjC7vOUMwai1NvGiYk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TpzwQ2JtqPGVrLco7M7d4998eIzrTTX7JmczGxaJUlu0iyJLnnbmfetM1KbxjBm7H
-         6kGuXxCBAAZaTAABeP4c4B5EyNSjN7+oZa1sBKwL+qqL35o4nrCvAjFuQUJx92n8yT
-         wbsZP/3Ca1NO+kBDn/bLtkChOSeZULI0xsoCSAzo=
+        b=eVi7KYSurA/rH/l0ZmPAoXCtiZKoigkw+QOVruEFYtNrANMK4z1w9hMfjLppXaPfE
+         dd6aniS+LEbeI06K8kJbluhqzpxBu4k5NCCYcM/iJdFXWKJp00jRhpq8PMYldLZdIL
+         /9lwXYmXtR7EkYHfeGnhfhoS1Nhpi83Dk5UOuTbE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.18 135/181] iio:accel:mxc4005: rearrange iio trigger get and register
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 5.10 097/102] memory: samsung: exynos5422-dmc: Fix refcount leak in of_get_dram_timings
 Date:   Mon, 27 Jun 2022 13:21:48 +0200
-Message-Id: <20220627111948.603031541@linuxfoundation.org>
+Message-Id: <20220627111936.343926340@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +55,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Rokosov <DDRokosov@sberdevices.ru>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 9354c224c9b4f55847a0de3e968cba2ebf15af3b upstream.
+commit 1332661e09304b7b8e84e5edc11811ba08d12abe upstream.
 
-IIO trigger interface function iio_trigger_get() should be called after
-iio_trigger_register() (or its devm analogue) strictly, because of
-iio_trigger_get() acquires module refcnt based on the trigger->owner
-pointer, which is initialized inside iio_trigger_register() to
-THIS_MODULE.
-If this call order is wrong, the next iio_trigger_put() (from sysfs
-callback or "delete module" path) will dereference "default" module
-refcnt, which is incorrect behaviour.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+This function doesn't call of_node_put() in some error paths.
+To unify the structure, Add put_node label and goto it on errors.
 
-Fixes: 47196620c82f ("iio: mxc4005: add data ready trigger for mxc4005")
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220524181150.9240-4-ddrokosov@sberdevices.ru
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 6e7674c3c6df ("memory: Add DMC driver for Exynos5422")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Link: https://lore.kernel.org/r/20220602041721.64348-1-linmq006@gmail.com
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/accel/mxc4005.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/memory/samsung/exynos5422-dmc.c |   29 ++++++++++++++++++-----------
+ 1 file changed, 18 insertions(+), 11 deletions(-)
 
---- a/drivers/iio/accel/mxc4005.c
-+++ b/drivers/iio/accel/mxc4005.c
-@@ -456,8 +456,6 @@ static int mxc4005_probe(struct i2c_clie
+--- a/drivers/memory/samsung/exynos5422-dmc.c
++++ b/drivers/memory/samsung/exynos5422-dmc.c
+@@ -1192,33 +1192,39 @@ static int of_get_dram_timings(struct ex
  
- 		data->dready_trig->ops = &mxc4005_trigger_ops;
- 		iio_trigger_set_drvdata(data->dready_trig, indio_dev);
--		indio_dev->trig = data->dready_trig;
--		iio_trigger_get(indio_dev->trig);
- 		ret = devm_iio_trigger_register(&client->dev,
- 						data->dready_trig);
- 		if (ret) {
-@@ -465,6 +463,8 @@ static int mxc4005_probe(struct i2c_clie
- 				"failed to register trigger\n");
- 			return ret;
- 		}
-+
-+		indio_dev->trig = iio_trigger_get(data->dready_trig);
+ 	dmc->timing_row = devm_kmalloc_array(dmc->dev, TIMING_COUNT,
+ 					     sizeof(u32), GFP_KERNEL);
+-	if (!dmc->timing_row)
+-		return -ENOMEM;
++	if (!dmc->timing_row) {
++		ret = -ENOMEM;
++		goto put_node;
++	}
+ 
+ 	dmc->timing_data = devm_kmalloc_array(dmc->dev, TIMING_COUNT,
+ 					      sizeof(u32), GFP_KERNEL);
+-	if (!dmc->timing_data)
+-		return -ENOMEM;
++	if (!dmc->timing_data) {
++		ret = -ENOMEM;
++		goto put_node;
++	}
+ 
+ 	dmc->timing_power = devm_kmalloc_array(dmc->dev, TIMING_COUNT,
+ 					       sizeof(u32), GFP_KERNEL);
+-	if (!dmc->timing_power)
+-		return -ENOMEM;
++	if (!dmc->timing_power) {
++		ret = -ENOMEM;
++		goto put_node;
++	}
+ 
+ 	dmc->timings = of_lpddr3_get_ddr_timings(np_ddr, dmc->dev,
+ 						 DDR_TYPE_LPDDR3,
+ 						 &dmc->timings_arr_size);
+ 	if (!dmc->timings) {
+-		of_node_put(np_ddr);
+ 		dev_warn(dmc->dev, "could not get timings from DT\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_node;
  	}
  
- 	return devm_iio_device_register(&client->dev, indio_dev);
+ 	dmc->min_tck = of_lpddr3_get_min_tck(np_ddr, dmc->dev);
+ 	if (!dmc->min_tck) {
+-		of_node_put(np_ddr);
+ 		dev_warn(dmc->dev, "could not get tck from DT\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_node;
+ 	}
+ 
+ 	/* Sorted array of OPPs with frequency ascending */
+@@ -1232,13 +1238,14 @@ static int of_get_dram_timings(struct ex
+ 					     clk_period_ps);
+ 	}
+ 
+-	of_node_put(np_ddr);
+ 
+ 	/* Take the highest frequency's timings as 'bypass' */
+ 	dmc->bypass_timing_row = dmc->timing_row[idx - 1];
+ 	dmc->bypass_timing_data = dmc->timing_data[idx - 1];
+ 	dmc->bypass_timing_power = dmc->timing_power[idx - 1];
+ 
++put_node:
++	of_node_put(np_ddr);
+ 	return ret;
+ }
+ 
 
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D6455C485
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A3D55D05A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234576AbiF0L1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
+        id S239121AbiF0L4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233236AbiF0L0f (ORCPT
+        with ESMTP id S237711AbiF0Ls7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:26:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE0795B3;
-        Mon, 27 Jun 2022 04:26:13 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C48FD7B;
+        Mon, 27 Jun 2022 04:43:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB962614A2;
-        Mon, 27 Jun 2022 11:26:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E56E0C3411D;
-        Mon, 27 Jun 2022 11:26:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3BCCFB80D37;
+        Mon, 27 Jun 2022 11:43:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 904A6C3411D;
+        Mon, 27 Jun 2022 11:42:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329172;
-        bh=YEWPxdckj3HbKhMDZMzBuatDvbXySe6JrnuwUn0KqiM=;
+        s=korg; t=1656330179;
+        bh=wbR3MEKdW6BKJKVYfURMA437j2DqDri/6fTczRaIwwU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tEn9wJBweli80b5adlDn4iAsnPP5Cx3fR6/qpQtPFlniKkTs9qyF6iwS4r9PfFIlL
-         FxLF3w0SrGhpXMZn1aTiVUiOoMjx50es/GzR3y4B95AE9Hg61NTj79PHU3aAp1MzuB
-         GrHmwVe1EAzqWsuMIuFNwGdF0J2gDiFX0zMbM+Qw=
+        b=PXLLadvB20Uyv6YobbX+qQ/a6kw85rwpOpzHIrYwM2/+QXEWbhdhTkj4APndmP3QO
+         +HMCotfiLio7lhvh1a232kkDBwygSHtBYswf+wvPxk0p5U/Fvu/bIqNTk7Afqhee0u
+         eRTXfTY2/xW8CMlVVqvrhfFoELBhFm6rjlr1C3Cg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.10 073/102] iio:chemical:ccs811: rearrange iio trigger get and register
+        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 111/181] io_uring: fix wrong arm_poll error handling
 Date:   Mon, 27 Jun 2022 13:21:24 +0200
-Message-Id: <20220627111935.635574402@linuxfoundation.org>
+Message-Id: <20220627111947.917086865@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Rokosov <DDRokosov@sberdevices.ru>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-commit d710359c0b445e8c03e24f19ae2fb79ce7282260 upstream.
+[ Upstream commit 9d2ad2947a53abf5e5e6527a9eeed50a3a4cbc72 ]
 
-IIO trigger interface function iio_trigger_get() should be called after
-iio_trigger_register() (or its devm analogue) strictly, because of
-iio_trigger_get() acquires module refcnt based on the trigger->owner
-pointer, which is initialized inside iio_trigger_register() to
-THIS_MODULE.
-If this call order is wrong, the next iio_trigger_put() (from sysfs
-callback or "delete module" path) will dereference "default" module
-refcnt, which is incorrect behaviour.
+Leaving ip.error set when a request was punted to task_work execution is
+problematic, don't forget to clear it.
 
-Fixes: f1f065d7ac30 ("iio: chemical: ccs811: Add support for data ready trigger")
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220524181150.9240-5-ddrokosov@sberdevices.ru
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: aa43477b04025 ("io_uring: poll rework")
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Link: https://lore.kernel.org/r/a6c84ef4182c6962380aebe11b35bdcb25b0ccfb.1655852245.git.asml.silence@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/chemical/ccs811.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/io_uring.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/iio/chemical/ccs811.c
-+++ b/drivers/iio/chemical/ccs811.c
-@@ -500,11 +500,11 @@ static int ccs811_probe(struct i2c_clien
- 		data->drdy_trig->dev.parent = &client->dev;
- 		data->drdy_trig->ops = &ccs811_trigger_ops;
- 		iio_trigger_set_drvdata(data->drdy_trig, indio_dev);
--		indio_dev->trig = data->drdy_trig;
--		iio_trigger_get(indio_dev->trig);
- 		ret = iio_trigger_register(data->drdy_trig);
- 		if (ret)
- 			goto err_poweroff;
-+
-+		indio_dev->trig = iio_trigger_get(data->drdy_trig);
- 	}
- 
- 	ret = iio_triggered_buffer_setup(indio_dev, NULL,
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 38ecea726254..e4186635aaa8 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -6178,6 +6178,7 @@ static int __io_arm_poll_handler(struct io_kiocb *req,
+ 		if (unlikely(ipt->error || !ipt->nr_entries)) {
+ 			poll->events |= EPOLLONESHOT;
+ 			req->apoll_events |= EPOLLONESHOT;
++			ipt->error = 0;
+ 		}
+ 		__io_poll_execute(req, mask, poll->events);
+ 		return 0;
+-- 
+2.35.1
+
 
 

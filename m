@@ -2,81 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAD455D322
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0432E55C58B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240205AbiF0Sq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 14:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        id S240319AbiF0Swh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236776AbiF0Sq4 (ORCPT
+        with ESMTP id S240243AbiF0Swe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 14:46:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456B3D53;
-        Mon, 27 Jun 2022 11:46:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC82D615CA;
-        Mon, 27 Jun 2022 18:46:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C350C3411D;
-        Mon, 27 Jun 2022 18:46:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656355614;
-        bh=EMtnD6IhXdZsJ6k5EKvw8L4xI5spiH3wNrPgTWqvPBQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=G8yaykvxux3jX6J47i1jLyS3R1wup4fawFmLJfYT6b20QaiQhrHb0hvK7eo61ZxUk
-         LEj18MXR2WnP5fNXLRayJWMfX9St91oiIKEgIQpKhQl/AhjJ5PZMU7meItW8i+KqMf
-         OltbtOyvKwVROCzZxgmHfmIXS5sPvzO9fDof/2Ge5OPr/LXdrB09Z03iiuGPBeehIZ
-         k5+OPcmq2+jrvSJq++yFpZFM7f6x/vkfgUaJnJqLFB2kd4wqusyRJUZPTnl8+0aaOc
-         q1BLXk6vw5hhQqKKjFPAux3tth8Tgf0FCdIZzTJzCYfluCDQfmLxyY2+9J1ai3Ri5y
-         6KcrUG3fQTsCg==
-Date:   Mon, 27 Jun 2022 11:46:44 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Richie Pearn <richard.pearn@nxp.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 4/4] net: dsa: felix: drop oversized frames
- with tc-taprio instead of hanging the port
-Message-ID: <20220627114644.6c2c163b@kernel.org>
-In-Reply-To: <20220626120505.2369600-5-vladimir.oltean@nxp.com>
-References: <20220626120505.2369600-1-vladimir.oltean@nxp.com>
-        <20220626120505.2369600-5-vladimir.oltean@nxp.com>
+        Mon, 27 Jun 2022 14:52:34 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623BDEB9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:52:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656355953; x=1687891953;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=A7ztOuMqK8/tvFrlCEBcCLu71GhWrpbUZrN88Eif/Dg=;
+  b=igx6RM+Cr13r97Jtm/SEUmPojG3g+7+5PHBr/ttfj5KKBxzyfGSXOGaM
+   yWc49JYu4dsslrEkgS3XyU1BUuP29wvm+oaU/S/hMLnl81Wrqtd3HA9iD
+   xtdhXUiKOuqFf4WOwt6/H5kVJwcdKUKaCioShvGeMjaU+vsRMnRdvaRzw
+   w+BNZ3mKsesBM1ZQTSUsK3gAV1Y7EoOR5kbGYqQaWqhDLGT2+N5noI6XG
+   Fv1TQL2UYUdRCQvvvA/vkhzqBK/NmQ5sgrlBgvnMSwo8v4O40Nl9aTDuA
+   pRI31GuF7CpY6U47Mog6mdUTX1hZENy7S/rvhExzWrbYjYcsR8KWof4j1
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="343224095"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="343224095"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 11:52:32 -0700
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="732439707"
+Received: from jsagoe-mobl1.amr.corp.intel.com (HELO [10.209.12.66]) ([10.209.12.66])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 11:52:31 -0700
+Message-ID: <d9df53b3-97ea-d394-fb04-ce2c95d76d82@intel.com>
+Date:   Mon, 27 Jun 2022 11:51:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v8 0/5] Add TDX Guest Attestation support
+Content-Language: en-US
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <9abde78c-d2c5-c762-24fe-f26669b7cc6c@intel.com>
+ <2502d21b-8f27-ebe5-b677-4cc56b03ee2c@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <2502d21b-8f27-ebe5-b677-4cc56b03ee2c@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 26 Jun 2022 15:05:05 +0300 Vladimir Oltean wrote:
-> When a frame is dropped due to a queue system oversize condition, the
-> counter that increments is the generic "drop_tail" in ethtool -S, even
-> if this isn't a tail drop as the rest (i.e. the controlling watermarks
-> don't count these frames, as can be seen in "devlink sb occupancy show
-> pci/0000:00:00.5 sb 0"). So the hardware counter is unspecific
-> regarding the drop reason.
+On 6/27/22 07:51, Sathyanarayanan Kuppuswamy wrote:
+> In TDX guest, attestation process generally involves the following steps:
+> 
+> 1. Get the TDREPORT using user specified REPORTDATA. This is implemented
+>    using TDG.MR.TDREPORT Module call. An IOCTL interface is added to let
+>    userspace get the TDREPORT data  (implemented in patch #1).
+>    
+> 2. Using the TDREPORT data, generate a remotely verifiable signed Quote.
+>    Quote can be generated either using GetQuote hypercall or by communicating
+>    with VMM/Quoting Enclave(QE) using VSOCK. In this patch set, only the
+>    GetQuote hypercall model is supported. Since Quote generation is an
+>    asynchronous request, and takes more time, we let VMM notify the TDX Guest
+>    using the callback interrupt. Patch # 2-5 implements Quote generation support,
+>    in which Patch # 2 implements the callback interrupt support.
 
-I had mixed feelings about the stats, as I usually do, but I don't
-recall if I sent that email. Are you at least counting the drop_tail
-into one of the standard tx error / drop stats so admins will notice?
+IMNHO, too much gibberish, not enough English, too much superfluous
+information.
+
+For instance, why do we need a quote and a report?  Why does this have
+an interrupt?

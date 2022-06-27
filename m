@@ -2,128 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8A755CBC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A6B55D17E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237468AbiF0O2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
+        id S237372AbiF0O2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237439AbiF0O15 (ORCPT
+        with ESMTP id S237312AbiF0O2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:27:57 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3979B13F25;
-        Mon, 27 Jun 2022 07:27:57 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-3177e60d980so86920387b3.12;
-        Mon, 27 Jun 2022 07:27:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2ausyBxe1EwSltgsOW+aLx9gGKbI9xmb58xvni35q/8=;
-        b=E3F+qN3ybblO1Sdk2PcIXCCiVMZ9ThL/41UkX9xCJvW5Zqv4fQpwQwPmcxdv9c3mpp
-         uuJkNlQaqn/XIpKUdYZqWGi7VEFguj7JWH8ggz6zgbGBLsyWPr62O7nPszyXRARwnDf5
-         a35zTjdZzQDY7XJZ1PvXAsQskpMhlW8tkOvn/uB7Hsd5yDxkGBk2Eoc6QJwdo3WPLbPd
-         OVgD/18qclQ3qE02EUEEPy/exy+LdLcrOnehTIm2x75GUBRM02/HhHzAhqPZMONM1II2
-         N0eWhKIc0umy9xlGog+L0wf9jtskPgqVD+nxHoGIJExcwMwqwd1iR9dvNAP3F+ACPTCs
-         XHog==
-X-Gm-Message-State: AJIora9zdFXXRYj4dGDDMFq2ahL4utpsjo6WaZy68ELhaDHz2sqFOX5K
-        O6DUBkC4UGknArSK08DD9AbRCoPWyQ5+P4nvghQ=
-X-Google-Smtp-Source: AGRyM1vIcglL1E5IuPFyWS28U+Yjuq52Iosbfn31LhbYRsuDUhrfMrQfTgx6LXwcWn1lzMGswldF2MiwAQkGGvT1aJ8=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr14642063ywb.326.1656340076401; Mon, 27
- Jun 2022 07:27:56 -0700 (PDT)
+        Mon, 27 Jun 2022 10:28:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB28B53;
+        Mon, 27 Jun 2022 07:28:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DAC5461509;
+        Mon, 27 Jun 2022 14:28:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F2AC3411D;
+        Mon, 27 Jun 2022 14:28:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656340115;
+        bh=EPvzEU9RXeJLCmVaTekleozBfg0QKTLFW3fDooa3hhA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fRolzTCbCuWTobTtwVCLecREgIDMkOUl8VsbMvSGucJxGVHDNU8Jfxu+fsCXH9fTz
+         A22KSiyA3bnwIcZbjybgrGDH65QGOBrr+BshNa1XA9rF94tnK2c4Hkf69M4AsTmHZy
+         SSD85+NJ177p/Km2SyOVcLZQJt1BTXFsirNFgS14=
+Date:   Mon, 27 Jun 2022 16:28:32 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     frank zago <frank@zago.net>, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
+        linux-usb@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v6 1/4] mfd: ch341: add core driver for the WCH CH341 in
+ I2C/SPI/GPIO mode
+Message-ID: <Yrm+kH6NvTy5A9WO@kroah.com>
+References: <20220616013747.126051-1-frank@zago.net>
+ <20220616013747.126051-2-frank@zago.net>
+ <Yrm48AYxkmoUgdwr@google.com>
 MIME-Version: 1.0
-References: <20220613120755.14306-1-peter.wang@mediatek.com> <Yrm7QSRXKZg4/q7s@kroah.com>
-In-Reply-To: <Yrm7QSRXKZg4/q7s@kroah.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Jun 2022 16:27:45 +0200
-Message-ID: <CAJZ5v0iFyTXc8TfEq5vHZvRmi9YbW-OA_G3n4xULhsw7=gdZ5A@mail.gmail.com>
-Subject: Re: [PATCH v1] PM-runtime: Check supplier_preactivated before release supplier
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     peter.wang@mediatek.com, Matthias Brugger <matthias.bgg@gmail.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        wsd_upstream <wsd_upstream@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>, chun-hung.wu@mediatek.com,
-        alice.chao@mediatek.com, cc.chou@mediatek.com,
-        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com,
-        powen.kao@mediatek.com, qilin.tan@mediatek.com,
-        lin.gui@mediatek.com, tun-yu.yu@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yrm48AYxkmoUgdwr@google.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 4:14 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Jun 13, 2022 at 08:07:55PM +0800, peter.wang@mediatek.com wrote:
-> > From: Peter Wang <peter.wang@mediatek.com>
-> >
-> > With divice link of DL_FLAG_PM_RUNTIME, if consumer call pm_runtime_get_suppliers
-> > to prevent supplier enter suspend, pm_runtime_release_supplier should
-> > check supplier_preactivated before let supplier enter suspend.
-> >
-> > If the link is drop or release, bypass check supplier_preactivated.
-> >
-> > Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+On Mon, Jun 27, 2022 at 03:04:32PM +0100, Lee Jones wrote:
+> USB review please.
+> 
+> > The CH341 is a multifunction chip, presenting 3 different USB PID. One
+> > 
+> > of these functions is for I2C/SPI/GPIO. This new set of drivers will
+> > manage I2C and GPIO.
+> > 
+> > Signed-off-by: frank zago <frank@zago.net>
 > > ---
-> >  drivers/base/core.c          |  2 +-
-> >  drivers/base/power/runtime.c | 15 ++++++++++++---
-> >  include/linux/pm_runtime.h   |  5 +++--
-> >  3 files changed, 16 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > index 7cd789c4985d..3b9cc559928f 100644
-> > --- a/drivers/base/core.c
-> > +++ b/drivers/base/core.c
-> > @@ -486,7 +486,7 @@ static void device_link_release_fn(struct work_struct *work)
-> >       /* Ensure that all references to the link object have been dropped. */
-> >       device_link_synchronize_removal();
-> >
-> > -     pm_runtime_release_supplier(link, true);
-> > +     pm_runtime_release_supplier(link, true, true);
-> >
-> >       put_device(link->consumer);
-> >       put_device(link->supplier);
-> > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > index 676dc72d912d..3c4f425937a1 100644
-> > --- a/drivers/base/power/runtime.c
-> > +++ b/drivers/base/power/runtime.c
-> > @@ -314,10 +314,19 @@ static int rpm_get_suppliers(struct device *dev)
-> >   * and if @check_idle is set, check if that device is idle (and so it can be
-> >   * suspended).
-> >   */
-> > -void pm_runtime_release_supplier(struct device_link *link, bool check_idle)
-> > +void pm_runtime_release_supplier(struct device_link *link, bool check_idle,
-> > +     bool drop)
->
-> This is just making this horrible api even worse.  Now there are 2
-> boolean flags required, 2 more than really should even be here at all.
-> Every time you see this function being used, you will now have to look
-> up the definition  to see what it really does.
->
-> Please make a new function that calls the internal function with the
-> flag set properly, so that it is obvious what is happening when the call
-> is made.
->
-> and really, the same thing should be done for the check_idle flag,
-> that's not good either.
+> >  MAINTAINERS               |  7 +++
+> >  drivers/mfd/Kconfig       | 10 +++++
+> >  drivers/mfd/Makefile      |  1 +
+> >  drivers/mfd/ch341-core.c  | 90 +++++++++++++++++++++++++++++++++++++++
+> >  include/linux/mfd/ch341.h | 18 ++++++++
+> >  5 files changed, 126 insertions(+)
+> >  create mode 100644 drivers/mfd/ch341-core.c
+> >  create mode 100644 include/linux/mfd/ch341.h
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 43d3d07afccd..628eeaa9bf68 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -21475,6 +21475,13 @@ M:	David Härdeman <david@hardeman.nu>
+> >  S:	Maintained
+> >  F:	drivers/media/rc/winbond-cir.c
+> >  
+> > +WINCHIPHEAD CH341 I2C/GPIO MFD DRIVER
+> > +M:	Frank Zago <frank@zago.net>
+> > +L:	linux-usb@vger.kernel.org
+> > +S:	Maintained
+> > +F:	drivers/mfd/ch341-core.c
+> > +F:	include/linux/mfd/ch341.h
+> > +
+> >  WINSYSTEMS EBC-C384 WATCHDOG DRIVER
+> >  M:	William Breathitt Gray <vilhelm.gray@gmail.com>
+> >  L:	linux-watchdog@vger.kernel.org
+> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > index 3b59456f5545..893acc821a42 100644
+> > --- a/drivers/mfd/Kconfig
+> > +++ b/drivers/mfd/Kconfig
+> > @@ -1784,6 +1784,16 @@ config MFD_LOCHNAGAR
+> >  	help
+> >  	  Support for Cirrus Logic Lochnagar audio development board.
+> >  
+> > +config MFD_CH341
+> > +	tristate "WinChipHead CH341 in I2C/SPI/GPIO mode"
+> > +	depends on USB
+> > +	help
+> > +	  If you say yes to this option, support for the CH341 series
+> > +	  of chips, running in I2C/SPI/GPIO mode will be included.
+> > +
+> > +	  This driver can also be built as a module.  If so, the
+> > +	  module will be called ch341-core.
+> > +
+> >  config MFD_ARIZONA
+> >  	select REGMAP
+> >  	select REGMAP_IRQ
+> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> > index 858cacf659d6..fd615ab3929f 100644
+> > --- a/drivers/mfd/Makefile
+> > +++ b/drivers/mfd/Makefile
+> > @@ -13,6 +13,7 @@ obj-$(CONFIG_MFD_ASIC3)		+= asic3.o tmio_core.o
+> >  obj-$(CONFIG_ARCH_BCM2835)	+= bcm2835-pm.o
+> >  obj-$(CONFIG_MFD_BCM590XX)	+= bcm590xx.o
+> >  obj-$(CONFIG_MFD_BD9571MWV)	+= bd9571mwv.o
+> > +obj-$(CONFIG_MFD_CH341)		+= ch341-core.o
+> >  obj-$(CONFIG_MFD_CROS_EC_DEV)	+= cros_ec_dev.o
+> >  obj-$(CONFIG_MFD_ENE_KB3930)	+= ene-kb3930.o
+> >  obj-$(CONFIG_MFD_EXYNOS_LPASS)	+= exynos-lpass.o
+> > diff --git a/drivers/mfd/ch341-core.c b/drivers/mfd/ch341-core.c
+> > new file mode 100644
+> > index 000000000000..f08a67dd6074
+> > --- /dev/null
+> > +++ b/drivers/mfd/ch341-core.c
+> > @@ -0,0 +1,90 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Core driver for the CH341A, CH341B and CH341T in I2C/SPI/GPIO
+> > + * mode. There are cell drivers available for I2C and GPIO. SPI is not
+> > + * yet supported.
+> > + *
+> > + * Copyright 2022, Frank Zago
+> > + * Copyright (c) 2017 Gunar Schorcht (gunar@schorcht.net)
+> > + * Copyright (c) 2016 Tse Lun Bien
+> > + * Copyright (c) 2014 Marco Gittler
+> > + * Copyright (c) 2006-2007 Till Harbaum (Till@Harbaum.org)
+> > + */
+> > +
+> > +#include <linux/kernel.h>
+> > +#include <linux/mfd/ch341.h>
+> > +#include <linux/mfd/core.h>
+> > +#include <linux/module.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/usb.h>
+> > +
+> > +static const struct mfd_cell ch341_devs[] = {
+> > +	{
+> > +		.name = "ch341-gpio",
+> > +	},
+> > +	{
+> > +		.name = "ch341-i2c",
+> > +	},
+> > +};
+> > +
+> > +static int ch341_usb_probe(struct usb_interface *iface,
+> > +			   const struct usb_device_id *usb_id)
+> > +{
+> > +	struct usb_endpoint_descriptor *bulk_out;
+> > +	struct usb_endpoint_descriptor *bulk_in;
+> > +	struct usb_endpoint_descriptor *intr_in;
+> > +	struct ch341_ddata *ddata;
+> > +	int ret;
+> > +
+> > +	ddata = devm_kzalloc(&iface->dev, sizeof(*ddata), GFP_KERNEL);
+> > +	if (!ddata)
+> > +		return -ENOMEM;
+> > +
+> > +	ddata->usb_dev = interface_to_usbdev(iface);
+> > +	mutex_init(&ddata->usb_lock);
+> > +
+> > +	ret = usb_find_common_endpoints(iface->cur_altsetting, &bulk_in,
+> > +					&bulk_out, &intr_in, NULL);
+> > +	if (ret) {
+> > +		dev_err(&iface->dev, "Could not find all endpoints\n");
+> > +		return -ENODEV;
+> > +	}
+> > +
+> > +	ddata->ep_in = bulk_in->bEndpointAddress;
+> > +	ddata->ep_out = bulk_out->bEndpointAddress;
+> > +	ddata->ep_intr = intr_in->bEndpointAddress;
+> > +	ddata->ep_intr_interval = intr_in->bInterval;
+> > +
+> > +	usb_set_intfdata(iface, ddata);
+> > +
+> > +	ret = mfd_add_devices(&iface->dev, PLATFORM_DEVID_AUTO, ch341_devs,
+> > +			      ARRAY_SIZE(ch341_devs), NULL, 0, NULL);
+> > +	if (ret)
+> > +		return dev_err_probe(&iface->dev, ret,
+> > +				     "Failed to register child devices\n");
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void ch341_usb_disconnect(struct usb_interface *usb_if)
+> > +{
+> > +	mfd_remove_devices(&usb_if->dev);
+> > +}
+> > +
+> > +static const struct usb_device_id ch341_usb_table[] = {
+> > +	{ USB_DEVICE(0x1a86, 0x5512) },
+> > +	{ }
+> > +};
+> > +MODULE_DEVICE_TABLE(usb, ch341_usb_table);
+> > +
+> > +static struct usb_driver ch341_usb_driver = {
+> > +	.name       = "ch341-mfd",
+> > +	.id_table   = ch341_usb_table,
+> > +	.probe      = ch341_usb_probe,
+> > +	.disconnect = ch341_usb_disconnect,
+> > +};
+> > +module_usb_driver(ch341_usb_driver);
+> > +
+> > +MODULE_AUTHOR("Frank Zago <frank@zago.net>");
+> > +MODULE_DESCRIPTION("CH341 USB to I2C/SPI/GPIO adapter");
+> > +MODULE_LICENSE("GPL");
+> > diff --git a/include/linux/mfd/ch341.h b/include/linux/mfd/ch341.h
+> > new file mode 100644
+> > index 000000000000..44f5da0720bd
+> > --- /dev/null
+> > +++ b/include/linux/mfd/ch341.h
+> > @@ -0,0 +1,18 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/* Definitions for the CH341 driver */
+> > +
+> > +#include <linux/mutex.h>
+> > +#include <linux/types.h>
+> > +
+> > +struct usb_device;
+> > +struct usb_interface;
+> > +
+> > +struct ch341_ddata {
+> > +	struct usb_device *usb_dev;
+> > +	struct mutex usb_lock;
+> > +
+> > +	int ep_in;
+> > +	int ep_out;
+> > +	int ep_intr;
+> > +	u8 ep_intr_interval;
+> > +};
 
-Agreed, and let me take care of this.
+
+Looks sane enough, but doesn't actually do any USB data transfers, maybe
+that happens somewhere else...
+
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>

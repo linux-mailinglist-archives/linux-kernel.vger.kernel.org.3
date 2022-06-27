@@ -2,79 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D515555C4EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 267A955C3F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242604AbiF0WbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 18:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        id S242635AbiF0Wbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 18:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242645AbiF0WbE (ORCPT
+        with ESMTP id S242616AbiF0Wbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 18:31:04 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634D01EEF2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 15:31:02 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3176b6ed923so99236857b3.11
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 15:31:02 -0700 (PDT)
+        Mon, 27 Jun 2022 18:31:47 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5841F603;
+        Mon, 27 Jun 2022 15:31:46 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id j21so19107194lfe.1;
+        Mon, 27 Jun 2022 15:31:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ic6C0bmcH9AgkMQw+lCa1TYZynXLTTH9ZtnkkH22rmQ=;
-        b=LZDHLASs1pFn3pf9nxMtict4BJANcSxCih32m6h5gd9YyS20OCjLsZqZ+DJWi3MNxV
-         VGWmo8NqVXvWA0Cjwmprwy+ywLQjDvUfC2uSaJchZRMC8avuyq6cwyNBdMTz+cjclD4t
-         HIcGcUg1dbPRl6Dgs4f7OzldgFJcbAD8FkFDwyqnlaBusbwAwy299uhlvgGuct744OBl
-         /Si/Rq1GDUkeIZUqf80/9OxdkA9gjljHaigE+au4rED07FGnmIW4HAGZuAo0zXQ89Lqr
-         b4LzYr2pm9PqZ4J4YFUhAQYpWJtjGhCwUwr9Iz86RrhGswHth/IquH158keCc3EBJP70
-         w72A==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ebUPv2y8CKJXtjGQGMNXRZnKdkcl00JDd47Ea+foYmc=;
+        b=K6AMMbAMeQ0+NMpEomZFp6AbmHXEFoMmYYFCd0RU6AdSfWQxPR6hdaiBq190z5fNeZ
+         sCkPerzqxyZHWsCYq+gM8iLSBAqHq0rHnV5KWJ4ISa1VumxngUWz4XsvQ1HTPNw7Q+AO
+         7D7LlqiiHSulXyBT18mF8QjRi0uozC396gXB6JksX88HAzn6fq7U/avuT7PrqWFa6HYt
+         ZCNr360StzxQdELNfprZkQJ3M0hPWFXbojGuCSh/jRsANiZSdxaRCfeaay3QwlGL67YK
+         7BtRcG9iZct1DCzmofz7rE2CqxwDUovuCiQzKNJ2/S9lrTCtQT+0nC8uduCVWQobCPkX
+         TtmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ic6C0bmcH9AgkMQw+lCa1TYZynXLTTH9ZtnkkH22rmQ=;
-        b=5hkUnSn6XFu1IJmErAYiCdp1S4i4C2tY74oGILcAPqeCKy4xPMCd5sk3WtcIjJN7pu
-         8SLvARhcgOrj9vKoDMjZ0mxYNtqezRg1GjVgyHLKOZJtDB9vzWDPOTqH2NstYmYxvjtH
-         dCuYy2wJd4Y3RDvVmhUZUobo4Axsx4xcWUC02Z2flF9y/pU+JP0nxogDxLfRU5cDBxoj
-         qaPJsqF9BhawRt/Y/HY2AqTZdymdrMo96lreuNtCAka20mRDrORpQgRok9KMV9JkROYj
-         iegSFKldnOMlYu4bWIZPv9F/cKdBWeA3wYXEl/qgb6j18PnA2XUy7qkrwspb9u751eR8
-         pYLw==
-X-Gm-Message-State: AJIora/lq6KjxFOmMY+X6grZ3vBYf60zHC7E2u4DjEM0MTmV/7LEglhv
-        9ampUHG/NdiNE9XQUPKxMxwBKdioLVkoFERWD8AviQ==
-X-Google-Smtp-Source: AGRyM1tUFYXa1u3wVtkxZxboJ89DDS4AuPHiVdMC0xYBTCaN8yVy6QiA1xNf+bXnuCHOV2mlpfP9gkMh9RNKKcrJLQM=
-X-Received: by 2002:a0d:eace:0:b0:317:87ac:b3a8 with SMTP id
- t197-20020a0deace000000b0031787acb3a8mr18136555ywe.126.1656369061313; Mon, 27
- Jun 2022 15:31:01 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ebUPv2y8CKJXtjGQGMNXRZnKdkcl00JDd47Ea+foYmc=;
+        b=5VTTG4kqQ8HnidXZ4Rkll0mslOn15YPr39KhliUg28ykAt9/SYvxz+ypxpaPNF66kR
+         CeQnOIIYo4CRdnPUvI+QTMI9VtvVH19pNdDamLasAjwEkywrg5ibW1keVZuBQxCy/QzW
+         p1PFWe/gQyyHAxzzjxp074ixXNg8ApKElr805vAHVXyvDVkNiH81Ae6kHVbyLvUPfKJV
+         /wRFpoqob93zer0VhjX7a40OunWs+H6p2pRS+mKi5j2A12Wlz/ntwlCvwVCbXHaqvXLw
+         UQ2X2LoeSWwLCJ7OggU9jJInAolthHTe6Bo3OLvXBFRepptgRLoyrw9Dry5q9oz7uFuE
+         5bYQ==
+X-Gm-Message-State: AJIora9s74i9kOHDjjSIUE1dft61fQUuwdy9zPaf5nAkBG/mYbuXmNHc
+        JRasdcKSYhGpubeEG76r4ik=
+X-Google-Smtp-Source: AGRyM1s7XDkWVNzlUNN4DZn+jHKm7XYpwR+3m/xsLRQtn9qkeFvGbQAXIsBTu7qObrs/crW128MTDA==
+X-Received: by 2002:a05:6512:2629:b0:47d:b9cd:1d1d with SMTP id bt41-20020a056512262900b0047db9cd1d1dmr9590870lfb.82.1656369104462;
+        Mon, 27 Jun 2022 15:31:44 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id z14-20020a056512376e00b0047f9dca3708sm1957298lft.51.2022.06.27.15.31.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 15:31:43 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 01:31:41 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 07/15] PCI: tegra194: Drop manual DW PCIe
+ controller version setup
+Message-ID: <20220627223141.qzi4unrloj23v5jt@mobilestation>
+References: <20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru>
+ <20220624143947.8991-8-Sergey.Semin@baikalelectronics.ru>
+ <48b2c4c2-3032-a90b-07c1-f03b3a84df3a@nvidia.com>
 MIME-Version: 1.0
-References: <20201121020232.908850-1-saravanak@google.com> <20201121020232.908850-14-saravanak@google.com>
- <YrmXpcU1NTYW6T/n@linaro.org>
-In-Reply-To: <YrmXpcU1NTYW6T/n@linaro.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 27 Jun 2022 15:30:25 -0700
-Message-ID: <CAGETcx8dwNcZFFzhhv=kMhpuQnyaEekrycpAmGusD-s+qfvA9g@mail.gmail.com>
-Subject: Re: [PATCH v2 13/17] driver core: Use device's fwnode to check if it
- is waiting for suppliers
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        kernel-team@android.com, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48b2c4c2-3032-a90b-07c1-f03b3a84df3a@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,168 +88,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 4:42 AM Abel Vesa <abel.vesa@linaro.org> wrote:
->
-> On 20-11-20 18:02:28, Saravana Kannan wrote:
-> > To check if a device is still waiting for its supplier devices to be
-> > added, we used to check if the devices is in a global
-> > waiting_for_suppliers list. Since the global list will be deleted in
-> > subsequent patches, this patch stops using this check.
-> >
-> > Instead, this patch uses a more device specific check. It checks if the
-> > device's fwnode has any fwnode links that haven't been converted to
-> > device links yet.
-> >
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+On Mon, Jun 27, 2022 at 01:29:33PM +0530, Vidya Sagar wrote:
+> 
+> 
+> On 6/24/2022 8:09 PM, Serge Semin wrote:
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > Since the DW PCIe common code now supports the IP-core version
+> > auto-detection there is no point in manually setting the version up for the
+> > controllers newer than v4.70a. Seeing Tegra 194 PCIe Host and EP
+> > controllers are based on the DW PCIe v4.90a IP-core we can freely drop the
+> > dw_pcie.version field initialization.
+> > 
+> > Suggested-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
 > > ---
-> >  drivers/base/core.c | 18 ++++++++----------
-> >  1 file changed, 8 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > index 395dece1c83a..1873cecb0cc4 100644
-> > --- a/drivers/base/core.c
-> > +++ b/drivers/base/core.c
-> > @@ -51,6 +51,7 @@ static DEFINE_MUTEX(wfs_lock);
-> >  static LIST_HEAD(deferred_sync);
-> >  static unsigned int defer_sync_state_count = 1;
-> >  static DEFINE_MUTEX(fwnode_link_lock);
-> > +static bool fw_devlink_is_permissive(void);
-> >
-> >  /**
-> >   * fwnode_link_add - Create a link between two fwnode_handles.
-> > @@ -995,13 +996,13 @@ int device_links_check_suppliers(struct device *dev)
-> >        * Device waiting for supplier to become available is not allowed to
-> >        * probe.
-> >        */
-> > -     mutex_lock(&wfs_lock);
-> > -     if (!list_empty(&dev->links.needs_suppliers) &&
-> > -         dev->links.need_for_probe) {
-> > -             mutex_unlock(&wfs_lock);
-> > +     mutex_lock(&fwnode_link_lock);
-> > +     if (dev->fwnode && !list_empty(&dev->fwnode->suppliers) &&
-> > +         !fw_devlink_is_permissive()) {
-> > +             mutex_unlock(&fwnode_link_lock);
->
-> Hi Saravana,
->
-> First of, sorry for going back to this.
+> > 
+> > Folks, I don't have Tegra 194 PCIe hw instance to test it out. Could you
+> > please make sure this patch doesn't brake anything?
+> 
 
-No worries at all. If there's an issue with fw_devlink, I want to have it fixed.
+> Hi,
+> I tried to apply the series
+> https://patchwork.kernel.org/project/linux-pci/list/?series=653624 on top of
+> linux-next and ran into conflicts. Could you please tell me the minimum set
+> of patches to be taken?
 
-> There is a scenario where this check will not work and probably should
-> work. It goes like this:
->
-> A clock controller is not allowed to probe because it uses a clock from a child device of a
-> consumer, like so:
->
->         dispcc: clock-controller@af00000 {
->                 clocks = <&dsi0_phy 0>;
->         };
->
->         mdss: mdss@ae00000 {
->                 clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>;
->
->                 dsi0_phy: dsi-phy@ae94400 {
->                         clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
->                 };
->         };
->
-> This is a real scenario actually, but I stripped it down to the essentials.
+Hi.
+As the cover letter says it is supposed to be applied on top of the
+next series *:
+https://lore.kernel.org/linux-pci/20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru/
+* Currently latest patchset version is v5.
 
-I'm well aware of this scenario and explicitly wrote code to address this :)
+Then - the resent series what you are referring to.
 
-See this comment in fw_devlink_create_devlink()
+-Sergey
 
-       /*
-         * If we can't find the supplier device from its fwnode, it might be
-         * due to a cyclic dependency between fwnodes. Some of these cycles can
-         * be broken by applying logic. Check for these types of cycles and
-         * break them so that devices in the cycle probe properly.
-         *
-         * If the supplier's parent is dependent on the consumer, then the
-         * consumer and supplier have a cyclic dependency. Since fw_devlink
-         * can't tell which of the inferred dependencies are incorrect, don't
-         * enforce probe ordering between any of the devices in this cyclic
-         * dependency. Do this by relaxing all the fw_devlink device links in
-         * this cycle and by treating the fwnode link between the consumer and
-         * the supplier as an invalid dependency.
-         */
-
-Applying this comment to your example, dispcc is the "consumer",
-dsi0_phy is the "supplier" and mdss is the "supplier's parent".
-
-And because we can't guarantee the order of addition of these top
-level devices is why I also have this piece of recursive call inside
-__fw_devlink_link_to_suppliers():
-
-                /*
-                 * If a device link was successfully created to a supplier, we
-                 * now need to try and link the supplier to all its suppliers.
-                 *
-                 * This is needed to detect and delete false dependencies in
-                 * fwnode links that haven't been converted to a device link
-                 * yet. See comments in fw_devlink_create_devlink() for more
-                 * details on the false dependency.
-                 *
-                 * Without deleting these false dependencies, some devices will
-                 * never probe because they'll keep waiting for their false
-                 * dependency fwnode links to be converted to device links.
-                 */
-                sup_dev = get_dev_from_fwnode(sup);
-                __fw_devlink_link_to_suppliers(sup_dev, sup_dev->fwnode);
-                put_device(sup_dev);
-
-So when mdss gets added, we'll link it to dispcc and then check if
-dispcc has any suppliers it needs to link to. And that's when the
-logic will catch the cycle and fix it.
-
-Can you tell me why this wouldn't unblock the probing of dispcc? Are
-you actually hitting this on a device? If so, can you please check why
-this logic isn't sufficient to catch and undo the cycle?
-
-Thanks,
-Saravana
-
-> So, the dsi0_phy will be "device_add'ed" (through of_platform_populate) by the mdss probe.
-> The mdss will probe defer waiting for the DISP_CC_MDSS_MDP_CLK, while
-> the dispcc will probe defer waiting for the dsi0_phy (supplier).
->
-> Basically, this 'supplier availability check' does not work when a supplier might
-> be populated by a consumer of the device that is currently trying to probe.
->
->
-> Abel
->
->
-> >               return -EPROBE_DEFER;
-> >       }
-> > -     mutex_unlock(&wfs_lock);
-> > +     mutex_unlock(&fwnode_link_lock);
-> >
-> >       device_links_write_lock();
-> >
-> > @@ -1167,10 +1168,7 @@ static ssize_t waiting_for_supplier_show(struct device *dev,
-> >       bool val;
-> >
-> >       device_lock(dev);
-> > -     mutex_lock(&wfs_lock);
-> > -     val = !list_empty(&dev->links.needs_suppliers)
-> > -           && dev->links.need_for_probe;
-> > -     mutex_unlock(&wfs_lock);
-> > +     val = !list_empty(&dev->fwnode->suppliers);
-> >       device_unlock(dev);
-> >       return sysfs_emit(buf, "%u\n", val);
-> >  }
-> > @@ -2202,7 +2200,7 @@ static int device_add_attrs(struct device *dev)
-> >                       goto err_remove_dev_groups;
-> >       }
-> >
-> > -     if (fw_devlink_flags && !fw_devlink_is_permissive()) {
-> > +     if (fw_devlink_flags && !fw_devlink_is_permissive() && dev->fwnode) {
-> >               error = device_create_file(dev, &dev_attr_waiting_for_supplier);
-> >               if (error)
-> >                       goto err_remove_dev_online;
+> 
+> Thanks,
+> Vidya Sagar
+> 
+> > 
+> > Changelog v3:
+> > - This is a new patch create as a result of the discussion:
+> >    https://lore.kernel.org/linux-pci/20220503214638.1895-6-Sergey.Semin@baikalelectronics.ru/
+> > ---
+> >   drivers/pci/controller/dwc/pcie-tegra194.c | 1 -
+> >   1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
+> > index f24b30b7454f..e497e6de8d15 100644
+> > --- a/drivers/pci/controller/dwc/pcie-tegra194.c
+> > +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
+> > @@ -1979,7 +1979,6 @@ static int tegra194_pcie_probe(struct platform_device *pdev)
+> >          pci->ops = &tegra_dw_pcie_ops;
+> >          pci->n_fts[0] = N_FTS_VAL;
+> >          pci->n_fts[1] = FTS_VAL;
+> > -       pci->version = DW_PCIE_VER_490A;
+> > 
+> >          pp = &pci->pp;
+> >          pp->num_vectors = MAX_MSI_IRQS;
 > > --
-> > 2.29.2.454.gaff20da3a2-goog
-> >
-> >
+> > 2.35.1
+> > 

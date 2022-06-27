@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0936255D311
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B59055C68F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237305AbiF0Loh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
+        id S235665AbiF0Lfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237361AbiF0Lmq (ORCPT
+        with ESMTP id S236179AbiF0LdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:42:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A222DBB;
-        Mon, 27 Jun 2022 04:37:07 -0700 (PDT)
+        Mon, 27 Jun 2022 07:33:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE8FCE15;
+        Mon, 27 Jun 2022 04:30:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26246609D0;
-        Mon, 27 Jun 2022 11:37:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A874C3411D;
-        Mon, 27 Jun 2022 11:37:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05F1D612D8;
+        Mon, 27 Jun 2022 11:30:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 070A0C3411D;
+        Mon, 27 Jun 2022 11:30:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329826;
-        bh=EfqybhqZKCqHI6x6TuEbBk8Qw1d4L2PCvm9+UEsIQUI=;
+        s=korg; t=1656329429;
+        bh=ShsZi12gGKcQZTw4TBWnl6cqCYb50NfFZL+L+POtwTQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ygnFz7+udtmJ65Jqp1d8vs0MPbZM1lsgrLyB6RDEInFwDbUyf5oHjS9FDMBe3Fzz2
-         oI5Wz78M4zozBki9yKcjeIcMuuP6G+JYUMqKKOGMIGAXBO1gbhfyT0HIWsGYF0gDVz
-         ZsYhqetntbU5wAUQz5orMKLS2ZodgJBA4l1XNbnY=
+        b=tkq82g0Gfl32HnwCKpJ8oX2gkJDdeEUMiEm2oEZSRUKLssW/4/b+8sl1bfhxeZNT9
+         YAdZZm+xosWpzPl8okpA3kprP/Dz5qPpa5sKZthSAhHi8MaEukK97Py8s0vBgDv5VP
+         XYLxB60cOj4N2jthdkb9KsZe6NoeD8gdTRHkpUvI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jun Li <jun.li@nxp.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH 5.15 121/135] ARM: dts: imx7: Move hsic_phy power domain to HSIC PHY node
+        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH 5.4 57/60] modpost: fix section mismatch check for exported init/exit sections
 Date:   Mon, 27 Jun 2022 13:22:08 +0200
-Message-Id: <20220627111941.666378889@linuxfoundation.org>
+Message-Id: <20220627111929.368555413@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-commit 552ca27929ab28b341ae9b2629f0de3a84c98ee8 upstream.
+commit 28438794aba47a27e922857d27b31b74e8559143 upstream.
 
-Move the power domain to its actual user. This keeps the power domain
-enabled even when the USB host is runtime suspended. This is necessary
-to detect any downstream events, like device attach.
+Since commit f02e8a6596b7 ("module: Sort exported symbols"),
+EXPORT_SYMBOL* is placed in the individual section ___ksymtab(_gpl)+<sym>
+(3 leading underscores instead of 2).
 
-Fixes: 02f8eb40ef7b ("ARM: dts: imx7s: Add power domain for imx7d HSIC")
-Suggested-by: Jun Li <jun.li@nxp.com>
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Since then, modpost cannot detect the bad combination of EXPORT_SYMBOL
+and __init/__exit.
+
+Fix the .fromsec field.
+
+Fixes: f02e8a6596b7 ("module: Sort exported symbols")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/imx7s.dtsi |    2 +-
+ scripts/mod/modpost.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm/boot/dts/imx7s.dtsi
-+++ b/arch/arm/boot/dts/imx7s.dtsi
-@@ -104,6 +104,7 @@
- 		compatible = "usb-nop-xceiv";
- 		clocks = <&clks IMX7D_USB_HSIC_ROOT_CLK>;
- 		clock-names = "main_clk";
-+		power-domains = <&pgc_hsic_phy>;
- 		#phy-cells = <0>;
- 	};
- 
-@@ -1135,7 +1136,6 @@
- 				compatible = "fsl,imx7d-usb", "fsl,imx27-usb";
- 				reg = <0x30b30000 0x200>;
- 				interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
--				power-domains = <&pgc_hsic_phy>;
- 				clocks = <&clks IMX7D_USB_CTRL_CLK>;
- 				fsl,usbphy = <&usbphynop3>;
- 				fsl,usbmisc = <&usbmisc3 0>;
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1131,7 +1131,7 @@ static const struct sectioncheck section
+ },
+ /* Do not export init/exit functions or data */
+ {
+-	.fromsec = { "__ksymtab*", NULL },
++	.fromsec = { "___ksymtab*", NULL },
+ 	.bad_tosec = { INIT_SECTIONS, EXIT_SECTIONS, NULL },
+ 	.mismatch = EXPORT_TO_INIT_EXIT,
+ 	.symbol_white_list = { DEFAULT_SYMBOL_WHITE_LIST, NULL },
 
 

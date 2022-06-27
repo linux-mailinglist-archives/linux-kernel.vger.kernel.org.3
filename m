@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCF155E2ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B4755D889
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238653AbiF0Lxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
+        id S239716AbiF0MAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238266AbiF0LsM (ORCPT
+        with ESMTP id S238941AbiF0Lwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:48:12 -0400
+        Mon, 27 Jun 2022 07:52:51 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A7AEBCAF
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:40:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7ABF0BC0D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:46:35 -0700 (PDT)
 Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx39kNl7liP_FfAA--.6156S10;
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx39kNl7liP_FfAA--.6156S11;
         Mon, 27 Jun 2022 19:40:03 +0800 (CST)
 From:   Jianmin Lv <lvjianmin@loongson.cn>
 To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
@@ -24,16 +24,16 @@ Cc:     linux-kernel@vger.kernel.org, Hanjun Guo <guohanjun@huawei.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V13 08/13] irqchip/loongson-htvec: Add ACPI init support
-Date:   Mon, 27 Jun 2022 19:39:52 +0800
-Message-Id: <1656329997-20524-9-git-send-email-lvjianmin@loongson.cn>
+Subject: [PATCH V13 09/13] irqchip/loongson-liointc: Add ACPI init support
+Date:   Mon, 27 Jun 2022 19:39:53 +0800
+Message-Id: <1656329997-20524-10-git-send-email-lvjianmin@loongson.cn>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1656329997-20524-1-git-send-email-lvjianmin@loongson.cn>
 References: <1656329997-20524-1-git-send-email-lvjianmin@loongson.cn>
-X-CM-TRANSID: AQAAf9Dx39kNl7liP_FfAA--.6156S10
-X-Coremail-Antispam: 1UD129KBjvJXoWxKrykGw1fGr13KrW3uFyUWrg_yoW7tFWfpF
-        W5C3yjqrW7GF1xurn5Ga1DZryay34rGFZrJaySk3WfA3ZrZw1vkF18JF1qyF43CFW8Za1Y
-        9r4F93W5CF1UCa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: AQAAf9Dx39kNl7liP_FfAA--.6156S11
+X-Coremail-Antispam: 1UD129KBjvJXoW3KryfuFy3Jry8Aw48tFyxZrb_yoWkGFyrpF
+        W8A34qqr45GFy7WrWvyFs8Za4ayw1Y9FsrXayfCas7AanrX3s5CF1ruFnFkF43C3yrWFWa
+        vF4rta18GF45Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUvj1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
         w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
         IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
@@ -63,129 +63,252 @@ We are preparing to add new Loongson (based on LoongArch, not compatible
 with old MIPS-based Loongson) support. LoongArch use ACPI other than DT
 as its boot protocol, so add ACPI init support.
 
-HTVECINTC stands for "HyperTransport Interrupts" that described in
-Section 14.3 of "Loongson 3A5000 Processor Reference Manual". For more
+LIOINTC stands for "Legacy I/O Interrupts" that described in Section
+11.1 of "Loongson 3A5000 Processor Reference Manual". For more
 information please refer Documentation/loongarch/irq-chip-model.rst.
 
 Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
 Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/irq.h     |   2 +-
- drivers/irqchip/irq-loongson-htvec.c | 121 +++++++++++++++++++++++++----------
- 2 files changed, 88 insertions(+), 35 deletions(-)
+ arch/loongarch/include/asm/irq.h       |   4 +-
+ arch/loongarch/kernel/irq.c            |   1 -
+ drivers/irqchip/irq-loongson-liointc.c | 227 ++++++++++++++++++++++-----------
+ 3 files changed, 154 insertions(+), 78 deletions(-)
 
 diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
-index 367aa44..e1e9e04 100644
+index e1e9e04..fbd2bc9 100644
 --- a/arch/loongarch/include/asm/irq.h
 +++ b/arch/loongarch/include/asm/irq.h
-@@ -110,7 +110,7 @@ struct irq_domain *liointc_acpi_init(struct irq_domain *parent,
+@@ -105,7 +105,7 @@ static inline void eiointc_enable(void)
+ 
+ struct irq_domain *loongarch_cpu_irq_init(void);
+ 
+-struct irq_domain *liointc_acpi_init(struct irq_domain *parent,
++int liointc_acpi_init(struct irq_domain *parent,
+ 					struct acpi_madt_lio_pic *acpi_liointc);
  struct irq_domain *eiointc_acpi_init(struct irq_domain *parent,
  					struct acpi_madt_eio_pic *acpi_eiointc);
+@@ -126,7 +126,7 @@ int pch_lpc_acpi_init(struct irq_domain *parent,
+ extern struct acpi_madt_bio_pic *acpi_pchpic[MAX_IO_PICS];
  
--struct irq_domain *htvec_acpi_init(struct irq_domain *parent,
-+int htvec_acpi_init(struct irq_domain *parent,
- 					struct acpi_madt_ht_pic *acpi_htvec);
- int pch_lpc_acpi_init(struct irq_domain *parent,
- 					struct acpi_madt_lpc_pic *acpi_pchlpc);
-diff --git a/drivers/irqchip/irq-loongson-htvec.c b/drivers/irqchip/irq-loongson-htvec.c
-index 60a335d..74e7896 100644
---- a/drivers/irqchip/irq-loongson-htvec.c
-+++ b/drivers/irqchip/irq-loongson-htvec.c
-@@ -20,7 +20,6 @@
- /* Registers */
- #define HTVEC_EN_OFF		0x20
- #define HTVEC_MAX_PARENT_IRQ	8
--
- #define VEC_COUNT_PER_REG	32
- #define VEC_REG_IDX(irq_id)	((irq_id) / VEC_COUNT_PER_REG)
- #define VEC_REG_BIT(irq_id)	((irq_id) % VEC_COUNT_PER_REG)
-@@ -30,8 +29,11 @@ struct htvec {
- 	void __iomem		*base;
- 	struct irq_domain	*htvec_domain;
- 	raw_spinlock_t		htvec_lock;
-+	struct fwnode_handle	*domain_handle;
+ extern struct irq_domain *cpu_domain;
+-extern struct irq_domain *liointc_domain;
++extern struct fwnode_handle *liointc_handle;
+ extern struct fwnode_handle *pch_lpc_handle;
+ extern struct fwnode_handle *pch_msi_handle[MAX_IO_PICS];
+ extern struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
+diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
+index 82bc6c7..5695826 100644
+--- a/arch/loongarch/kernel/irq.c
++++ b/arch/loongarch/kernel/irq.c
+@@ -26,7 +26,6 @@
+ EXPORT_PER_CPU_SYMBOL(irq_stat);
+ 
+ struct irq_domain *cpu_domain;
+-struct irq_domain *liointc_domain;
+ struct acpi_vector_group pch_group[MAX_IO_PICS];
+ struct acpi_vector_group msi_group[MAX_IO_PICS];
+ 
+diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+index 8d05d8b..f690155 100644
+--- a/drivers/irqchip/irq-loongson-liointc.c
++++ b/drivers/irqchip/irq-loongson-liointc.c
+@@ -23,7 +23,7 @@
+ #endif
+ 
+ #define LIOINTC_CHIP_IRQ	32
+-#define LIOINTC_NUM_PARENT 4
++#define LIOINTC_NUM_PARENT	4
+ #define LIOINTC_NUM_CORES	4
+ 
+ #define LIOINTC_INTC_CHIP_START	0x20
+@@ -51,6 +51,7 @@ struct liointc_handler_data {
  };
  
-+static struct htvec *htvec_priv;
+ struct liointc_priv {
++	struct fwnode_handle		*domain_handle;
+ 	struct irq_chip_generic		*gc;
+ 	struct liointc_handler_data	handler[LIOINTC_NUM_PARENT];
+ 	void __iomem			*core_isr[LIOINTC_NUM_CORES];
+@@ -58,6 +59,8 @@ struct liointc_priv {
+ 	bool				has_lpc_irq_errata;
+ };
+ 
++struct fwnode_handle *liointc_handle;
 +
- static void htvec_irq_dispatch(struct irq_desc *desc)
+ static void liointc_chained_handle_irq(struct irq_desc *desc)
  {
- 	int i;
-@@ -155,64 +157,115 @@ static void htvec_reset(struct htvec *priv)
- 	}
+ 	struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
+@@ -153,97 +156,83 @@ static void liointc_resume(struct irq_chip_generic *gc)
+ 	irq_gc_unlock_irqrestore(gc, flags);
  }
  
--static int htvec_of_init(struct device_node *node,
--				struct device_node *parent)
-+static int htvec_init(phys_addr_t addr, unsigned long size,
-+		int num_parents, int parent_irq[], struct fwnode_handle *domain_handle)
+-static const char * const parent_names[] = {"int0", "int1", "int2", "int3"};
+-static const char * const core_reg_names[] = {"isr0", "isr1", "isr2", "isr3"};
++static int parent_irq[LIOINTC_NUM_PARENT];
++static u32 parent_int_map[LIOINTC_NUM_PARENT];
++static const char *const parent_names[] = {"int0", "int1", "int2", "int3"};
++static const char *const core_reg_names[] = {"isr0", "isr1", "isr2", "isr3"};
+ 
+-static void __iomem *liointc_get_reg_byname(struct device_node *node,
+-						const char *name)
++static int liointc_domain_xlate(struct irq_domain *d, struct device_node *ctrlr,
++			     const u32 *intspec, unsigned int intsize,
++			     unsigned long *out_hwirq, unsigned int *out_type)
  {
-+	int i;
- 	struct htvec *priv;
--	int err, parent_irq[8], i;
+-	int index = of_property_match_string(node, "reg-names", name);
+-
+-	if (index < 0)
+-		return NULL;
+-
+-	return of_iomap(node, index);
++	if (WARN_ON(intsize < 1))
++		return -EINVAL;
++	*out_hwirq = intspec[0] - GSI_MIN_CPU_IRQ;
++	*out_type = IRQ_TYPE_NONE;
++	return 0;
+ }
+ 
+-static int __init liointc_of_init(struct device_node *node,
+-				  struct device_node *parent)
++const struct irq_domain_ops acpi_irq_gc_ops = {
++	.map	= irq_map_generic_chip,
++	.unmap  = irq_unmap_generic_chip,
++	.xlate	= liointc_domain_xlate,
++};
++
++static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
++		struct fwnode_handle *domain_handle, struct device_node *node)
+ {
++	int i, err;
++	void __iomem *base;
++	struct irq_chip_type *ct;
+ 	struct irq_chip_generic *gc;
+ 	struct irq_domain *domain;
+-	struct irq_chip_type *ct;
+ 	struct liointc_priv *priv;
+-	void __iomem *base;
+-	u32 of_parent_int_map[LIOINTC_NUM_PARENT];
+-	int parent_irq[LIOINTC_NUM_PARENT];
+-	bool have_parent = FALSE;
+-	int sz, i, err = 0;
  
  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
  	if (!priv)
  		return -ENOMEM;
  
-+	priv->num_parents = num_parents;
-+	priv->base = ioremap(addr, size);
-+	priv->domain_handle = domain_handle;
- 	raw_spin_lock_init(&priv->htvec_lock);
--	priv->base = of_iomap(node, 0);
--	if (!priv->base) {
--		err = -ENOMEM;
--		goto free_priv;
--	}
--
--	/* Interrupt may come from any of the 8 interrupt lines */
--	for (i = 0; i < HTVEC_MAX_PARENT_IRQ; i++) {
--		parent_irq[i] = irq_of_parse_and_map(node, i);
--		if (parent_irq[i] <= 0)
--			break;
--
--		priv->num_parents++;
--	}
--
--	if (!priv->num_parents) {
--		pr_err("Failed to get parent irqs\n");
--		err = -ENODEV;
--		goto iounmap_base;
--	}
+-	if (of_device_is_compatible(node, "loongson,liointc-2.0")) {
+-		base = liointc_get_reg_byname(node, "main");
+-		if (!base) {
+-			err = -ENODEV;
+-			goto out_free_priv;
+-		}
++	base = ioremap(addr, size);
++	if (!base)
++		goto out_free_priv;
  
--	priv->htvec_domain = irq_domain_create_linear(of_node_to_fwnode(node),
-+	/* Setup IRQ domain */
-+	priv->htvec_domain = irq_domain_create_linear(priv->domain_handle,
- 					(VEC_COUNT_PER_REG * priv->num_parents),
- 					&htvec_domain_ops, priv);
- 	if (!priv->htvec_domain) {
--		pr_err("Failed to create IRQ domain\n");
--		err = -ENOMEM;
--		goto irq_dispose;
-+		pr_err("loongson-htvec: cannot add IRQ domain\n");
-+		goto iounmap_base;
+-		for (i = 0; i < LIOINTC_NUM_CORES; i++)
+-			priv->core_isr[i] = liointc_get_reg_byname(node, core_reg_names[i]);
+-		if (!priv->core_isr[0]) {
+-			err = -ENODEV;
+-			goto out_iounmap_base;
+-		}
+-	} else {
+-		base = of_iomap(node, 0);
+-		if (!base) {
+-			err = -ENODEV;
+-			goto out_free_priv;
+-		}
++	priv->domain_handle = domain_handle;
+ 
+-		for (i = 0; i < LIOINTC_NUM_CORES; i++)
+-			priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
+-	}
++	for (i = 0; i < LIOINTC_NUM_CORES; i++)
++		priv->core_isr[i] = base + LIOINTC_REG_INTC_STATUS;
+ 
+-	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
+-		parent_irq[i] = of_irq_get_byname(node, parent_names[i]);
+-		if (parent_irq[i] > 0)
+-			have_parent = TRUE;
+-	}
+-	if (!have_parent) {
+-		err = -ENODEV;
+-		goto out_iounmap_isr;
+-	}
++	for (i = 0; i < LIOINTC_NUM_PARENT; i++)
++		priv->handler[i].parent_int_map = parent_int_map[i];
+ 
+-	sz = of_property_read_variable_u32_array(node,
+-						"loongson,parent_int_map",
+-						&of_parent_int_map[0],
+-						LIOINTC_NUM_PARENT,
+-						LIOINTC_NUM_PARENT);
+-	if (sz < 4) {
+-		pr_err("loongson-liointc: No parent_int_map\n");
+-		err = -ENODEV;
+-		goto out_iounmap_isr;
+-	}
++#ifdef CONFIG_OF
++	if (revision > 1) {
++		for (i = 0; i < LIOINTC_NUM_CORES; i++) {
++			int index = of_property_match_string(node,
++					"reg-names", core_reg_names[i]);
+ 
+-	for (i = 0; i < LIOINTC_NUM_PARENT; i++)
+-		priv->handler[i].parent_int_map = of_parent_int_map[i];
++			if (index < 0)
++				return -EINVAL;
++
++			priv->core_isr[i] = of_iomap(node, index);
++		}
++	}
++#endif
+ 
+ 	/* Setup IRQ domain */
+-	domain = irq_domain_add_linear(node, 32,
++	if (!node)
++		domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
++					&acpi_irq_gc_ops, priv);
++	else
++		domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
+ 					&irq_generic_chip_ops, priv);
+ 	if (!domain) {
+ 		pr_err("loongson-liointc: cannot add IRQ domain\n");
+-		err = -EINVAL;
+-		goto out_iounmap_isr;
++		goto out_iounmap;
  	}
  
- 	htvec_reset(priv);
+-	err = irq_alloc_domain_generic_chips(domain, 32, 1,
+-					node->full_name, handle_level_irq,
+-					IRQ_NOPROBE, 0, 0);
++	err = irq_alloc_domain_generic_chips(domain, LIOINTC_CHIP_IRQ, 1,
++					(node ? node->full_name : "LIOINTC"),
++					handle_level_irq, 0, IRQ_NOPROBE, 0);
+ 	if (err) {
+ 		pr_err("loongson-liointc: unable to register IRQ domain\n");
+ 		goto out_free_domain;
+@@ -299,24 +288,112 @@ static int __init liointc_of_init(struct device_node *node,
+ 				liointc_chained_handle_irq, &priv->handler[i]);
+ 	}
  
--	for (i = 0; i < priv->num_parents; i++)
-+	for (i = 0; i < priv->num_parents; i++) {
- 		irq_set_chained_handler_and_data(parent_irq[i],
- 						 htvec_irq_dispatch, priv);
-+	}
-+
-+	htvec_priv = priv;
- 
++	liointc_handle = domain_handle;
  	return 0;
  
--irq_dispose:
--	for (; i > 0; i--)
--		irq_dispose_mapping(parent_irq[i - 1]);
- iounmap_base:
- 	iounmap(priv->base);
--free_priv:
-+	priv->domain_handle = NULL;
+ out_free_domain:
+ 	irq_domain_remove(domain);
+-out_iounmap_isr:
+-	for (i = 0; i < LIOINTC_NUM_CORES; i++) {
+-		if (!priv->core_isr[i])
+-			continue;
+-		iounmap(priv->core_isr[i]);
+-	}
+-out_iounmap_base:
++out_iounmap:
+ 	iounmap(base);
+ out_free_priv:
  	kfree(priv);
  
 -	return err;
@@ -194,72 +317,99 @@ index 60a335d..74e7896 100644
 +
 +#ifdef CONFIG_OF
 +
-+static int htvec_of_init(struct device_node *node,
-+				struct device_node *parent)
++static int __init liointc_of_init(struct device_node *node,
++				  struct device_node *parent)
 +{
-+	int i, err;
-+	int parent_irq[8];
-+	int num_parents = 0;
++	bool have_parent = FALSE;
++	int sz, i, index, revision, err = 0;
 +	struct resource res;
 +
-+	if (of_address_to_resource(node, 0, &res))
-+		return -EINVAL;
-+
-+	/* Interrupt may come from any of the 8 interrupt lines */
-+	for (i = 0; i < HTVEC_MAX_PARENT_IRQ; i++) {
-+		parent_irq[i] = irq_of_parse_and_map(node, i);
-+		if (parent_irq[i] <= 0)
-+			break;
-+
-+		num_parents++;
++	if (!of_device_is_compatible(node, "loongson,liointc-2.0")) {
++		index = 0;
++		revision = 1;
++	} else {
++		index = of_property_match_string(node, "reg-names", "main");
++		revision = 2;
 +	}
 +
-+	err = htvec_init(res.start, resource_size(&res),
-+			num_parents, parent_irq, of_node_to_fwnode(node));
++	if (of_address_to_resource(node, index, &res))
++		return -EINVAL;
++
++	for (i = 0; i < LIOINTC_NUM_PARENT; i++) {
++		parent_irq[i] = of_irq_get_byname(node, parent_names[i]);
++		if (parent_irq[i] > 0)
++			have_parent = TRUE;
++	}
++	if (!have_parent)
++		return -ENODEV;
++
++	sz = of_property_read_variable_u32_array(node,
++						"loongson,parent_int_map",
++						&parent_int_map[0],
++						LIOINTC_NUM_PARENT,
++						LIOINTC_NUM_PARENT);
++	if (sz < 4) {
++		pr_err("loongson-liointc: No parent_int_map\n");
++		return -ENODEV;
++	}
++
++	err = liointc_init(res.start, resource_size(&res),
++			revision, of_node_to_fwnode(node), node);
 +	if (err < 0)
 +		return err;
 +
 +	return 0;
  }
  
- IRQCHIP_DECLARE(htvec, "loongson,htvec-1.0", htvec_of_init);
+ IRQCHIP_DECLARE(loongson_liointc_1_0, "loongson,liointc-1.0", liointc_of_init);
+ IRQCHIP_DECLARE(loongson_liointc_1_0a, "loongson,liointc-1.0a", liointc_of_init);
+ IRQCHIP_DECLARE(loongson_liointc_2_0, "loongson,liointc-2.0", liointc_of_init);
 +
 +#endif
 +
 +#ifdef CONFIG_ACPI
-+int __init htvec_acpi_init(struct irq_domain *parent,
-+				   struct acpi_madt_ht_pic *acpi_htvec)
++static int __init
++htintc_parse_madt(union acpi_subtable_headers *header,
++		       const unsigned long end)
 +{
-+	int i, ret;
-+	int num_parents, parent_irq[8];
++	struct acpi_madt_ht_pic *htintc_entry = (struct acpi_madt_ht_pic *)header;
++	struct irq_domain *parent = irq_find_matching_fwnode(liointc_handle, DOMAIN_BUS_ANY);
++
++	return htvec_acpi_init(parent, htintc_entry);
++}
++
++static int __init acpi_cascade_irqdomain_init(void)
++{
++	acpi_table_parse_madt(ACPI_MADT_TYPE_HT_PIC,
++			      htintc_parse_madt, 0);
++	return 0;
++}
++int __init liointc_acpi_init(struct irq_domain *parent, struct acpi_madt_lio_pic *acpi_liointc)
++{
++	int ret;
 +	struct fwnode_handle *domain_handle;
 +
-+	if (!acpi_htvec)
++	if (!acpi_liointc)
 +		return -EINVAL;
 +
-+	num_parents = HTVEC_MAX_PARENT_IRQ;
++	parent_int_map[0] = acpi_liointc->cascade_map[0];
++	parent_int_map[1] = acpi_liointc->cascade_map[1];
 +
-+	domain_handle = irq_domain_alloc_fwnode((phys_addr_t *)acpi_htvec);
++	parent_irq[0] = irq_create_mapping(parent, acpi_liointc->cascade[0]);
++	parent_irq[1] = irq_create_mapping(parent, acpi_liointc->cascade[1]);
++
++	domain_handle = irq_domain_alloc_fwnode((phys_addr_t *)acpi_liointc);
 +	if (!domain_handle) {
 +		pr_err("Unable to allocate domain handle\n");
 +		return -ENOMEM;
 +	}
++	ret = liointc_init(acpi_liointc->address, acpi_liointc->size,
++			   1, domain_handle, NULL);
++	if (ret == 0)
++		acpi_cascade_irqdomain_init();
 +
-+	/* Interrupt may come from any of the 8 interrupt lines */
-+	for (i = 0; i < HTVEC_MAX_PARENT_IRQ; i++)
-+		parent_irq[i] = irq_create_mapping(parent, acpi_htvec->cascade[i]);
-+
-+	ret = htvec_init(acpi_htvec->address, acpi_htvec->size,
-+			num_parents, parent_irq, domain_handle);
-+	if (ret == 0) {
-+		/* Only support single chipset system. */
-+		msi_group[0].parent = htvec_priv->htvec_domain;
-+		pch_group[0].parent = htvec_priv->htvec_domain;
-+		pch_group[0].node = 0;
-+	}
 +	return ret;
 +}
-+
 +#endif
 -- 
 1.8.3.1

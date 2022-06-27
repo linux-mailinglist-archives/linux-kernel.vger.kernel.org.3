@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6F555CFFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B819755D197
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237361AbiF0Lom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
+        id S235459AbiF0Lad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237355AbiF0Lmp (ORCPT
+        with ESMTP id S235271AbiF0L3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:42:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70FDDA6;
-        Mon, 27 Jun 2022 04:37:05 -0700 (PDT)
+        Mon, 27 Jun 2022 07:29:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5F82A9;
+        Mon, 27 Jun 2022 04:28:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89052B81117;
-        Mon, 27 Jun 2022 11:37:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9B18C3411D;
-        Mon, 27 Jun 2022 11:37:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40089B8111E;
+        Mon, 27 Jun 2022 11:28:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94464C3411D;
+        Mon, 27 Jun 2022 11:28:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329823;
-        bh=oSp11SA9Ushwr77sgGQoO8DqC1h3aTB+ykNjjjIV3lc=;
+        s=korg; t=1656329300;
+        bh=hGuOut/iB47OP+a8fIGR+FF0ZAQpLfuGm7US7TJUxkg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Aqd9qvALgxZqmC9WHoXjwnX3fdPMU5d2lNQKbz1Vzoq257AsOP1V9d8RvYnrzXKDI
-         iJpk9Lo74uzDik6/iUvU8t/bUXD8JzN0/piRb/QhvO5EgcSnaVSWMLq/nHITJmuCUJ
-         wsuzezmnO30lENXlC/gykEvK0kWy+j3Bx53udZ4o=
+        b=h6QdpYdojzuOV5Cr/lo/UL1yqN9dhKm/Z+h4SW3qRdyuqtTu4LYRGvzhUfXh6P3P5
+         XXjDiI1V6sw+e/Wy+dF4BVRU4x2HF8NILre0nWjbrHJvuTpaE6yM52VMAnYzP0z/hr
+         vhOe/rdTU/R2UmrBgntpTmViJvrundrVx3cfxU/A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 077/135] nvme: move the Samsung X5 quirk entry to the core quirks
-Date:   Mon, 27 Jun 2022 13:21:24 +0200
-Message-Id: <20220627111940.395844173@linuxfoundation.org>
+        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
+        Carlo Lobrano <c.lobrano@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.4 14/60] USB: serial: option: add Telit LE910Cx 0x1250 composition
+Date:   Mon, 27 Jun 2022 13:21:25 +0200
+Message-Id: <20220627111928.077293197@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,65 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Carlo Lobrano <c.lobrano@gmail.com>
 
-[ Upstream commit e6487833182a8a0187f0292aca542fc163ccd03e ]
+commit 342fc0c3b345525da21112bd0478a0dc741598ea upstream.
 
-This device shares the PCI ID with the Samsung 970 Evo Plus that
-does not need or want the quirks.  Move the the quirk entry to the
-core table based on the model number instead.
+Add support for the following Telit LE910Cx composition:
 
-Fixes: bc360b0b1611 ("nvme-pci: add quirks for Samsung X5 SSDs")
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Pankaj Raghav <p.raghav@samsung.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+0x1250: rmnet, tty, tty, tty, tty
+
+Reviewed-by: Daniele Palmas <dnlplm@gmail.com>
+Signed-off-by: Carlo Lobrano <c.lobrano@gmail.com>
+Link: https://lore.kernel.org/r/20220614075623.2392607-1-c.lobrano@gmail.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nvme/host/core.c | 14 ++++++++++++++
- drivers/nvme/host/pci.c  |  4 ----
- 2 files changed, 14 insertions(+), 4 deletions(-)
+ drivers/usb/serial/option.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 3ef1f9112ee0..19054b791c67 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -2489,6 +2489,20 @@ static const struct nvme_core_quirk_entry core_quirks[] = {
- 		.vid = 0x1e0f,
- 		.mn = "KCD6XVUL6T40",
- 		.quirks = NVME_QUIRK_NO_APST,
-+	},
-+	{
-+		/*
-+		 * The external Samsung X5 SSD fails initialization without a
-+		 * delay before checking if it is ready and has a whole set of
-+		 * other problems.  To make this even more interesting, it
-+		 * shares the PCI ID with internal Samsung 970 Evo Plus that
-+		 * does not need or want these quirks.
-+		 */
-+		.vid = 0x144d,
-+		.mn = "Samsung Portable SSD X5",
-+		.quirks = NVME_QUIRK_DELAY_BEFORE_CHK_RDY |
-+			  NVME_QUIRK_NO_DEEPEST_PS |
-+			  NVME_QUIRK_IGNORE_DEV_SUBNQN,
- 	}
- };
- 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 3ddd24a42043..58b8461b2b0f 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3380,10 +3380,6 @@ static const struct pci_device_id nvme_id_table[] = {
- 				NVME_QUIRK_128_BYTES_SQES |
- 				NVME_QUIRK_SHARED_TAGS |
- 				NVME_QUIRK_SKIP_CID_GEN },
--	{ PCI_DEVICE(0x144d, 0xa808),   /* Samsung X5 */
--		.driver_data =  NVME_QUIRK_DELAY_BEFORE_CHK_RDY|
--				NVME_QUIRK_NO_DEEPEST_PS |
--				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
- 	{ PCI_DEVICE_CLASS(PCI_CLASS_STORAGE_EXPRESS, 0xffffff) },
- 	{ 0, }
- };
--- 
-2.35.1
-
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1279,6 +1279,7 @@ static const struct usb_device_id option
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1231, 0xff),	/* Telit LE910Cx (RNDIS) */
+ 	  .driver_info = NCTRL(2) | RSVD(3) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x1250, 0xff, 0x00, 0x00) },	/* Telit LE910Cx (rmnet) */
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1260),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1261),
 
 

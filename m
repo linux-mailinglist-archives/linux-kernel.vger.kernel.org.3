@@ -2,164 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0956255CD60
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0688255C2C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239784AbiF0ROz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
+        id S239896AbiF0RPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235780AbiF0ROw (ORCPT
+        with ESMTP id S235780AbiF0RPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:14:52 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134A7C0D;
-        Mon, 27 Jun 2022 10:14:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C1Cwm68/Yg9O64XKyOtnEzh45M92uZSyPUynWntjSJcdu2t868b5xRrSm/jLJXCKJ7kdgQvTFoly3b0rRSZrCRkiNQQbzjIDZtplaULUrGSQYOilja4VIT6r7cZzxRwge2fokBo2c3MV6Sr6PaXZS+jfefxPrE/3eVEecPaWiWLFa+S2GdOZ6x08hhiJpNf3ifLnQtIA53GC48+vc6CKFeHdVUuLoIbddDD5w3twR5t0YkS9TLsBH5Z279WtSFujwHIcTUBlu0wUg31GhyGablX90NS5xVVEbb0yWetT6KcrHy/5tQTGjmXFXWsCmE4OBPdrwvm+zcOrJKgUJz9r0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HevRhSm63gQMXjhVEa8Yn1QnFlwAIIAkd6JNKxTG1Ow=;
- b=Ru5cY5rEdH5p80TWauZ8gz/qcPh6NAo2oX9SIDSl31K3C2dvA+n13RIGb7jcUzOK6mb6+yeS0s79fpnv/k/0pVRrE680zVPLI41DIhmUuNPzAj8d68jrzQa1h7J1tfJZsnITYwWkWjzdgGqmBrZeuh1IAqmA/md2yqz4+pmXNZADsdUMgT0xexjU9nvS7OGwVBu56BJEZuHXwHfFgLbxSRPazXoIkL2OGtOBAchOR03k4X0l9IfI4oDl7vtZ5HWTw71Q38ZuDSZRC7js+Pkqhd79KyfiS6xHWFOKSDILPUhx0eWYbwjTuMPBcsIoWrFqn8Bncy6H+KOC33GM5F5fhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HevRhSm63gQMXjhVEa8Yn1QnFlwAIIAkd6JNKxTG1Ow=;
- b=JWnubizx9JNDIzKFHpzdrRiS4SidW0miz+0fUR0QhZH2VdbQfrMF0ggUwmlZwJ+jw8pfnYhP6g8N1Ivllp0bkYQqRRKrluaC4Eol6BivEQEvQmVpEmFG9H5dXcle76y66IpvvMs6etGq92jnZHDs3u/G2ySgjYQGE8L2r+mW5vG66o068h2vlxXBICQrqt1/dJOnw9oaVBv6KWsDUbJ6oSCCdpH81/haIBUoOxCj8dImFPp9skbVSAYrsr3d8anj/c7Jm9IYTCzfHpoCx+MLEkiYNZKGBy7DXVfD+F203okVvaPN5hQEjoyPhoixaa/Ot4oH0daU2FapHciD+Tu82Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4116.namprd12.prod.outlook.com (2603:10b6:a03:210::13)
- by SJ0PR12MB5407.namprd12.prod.outlook.com (2603:10b6:a03:3ac::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Mon, 27 Jun
- 2022 17:14:50 +0000
-Received: from BY5PR12MB4116.namprd12.prod.outlook.com
- ([fe80::dda2:7b0a:3280:5365]) by BY5PR12MB4116.namprd12.prod.outlook.com
- ([fe80::dda2:7b0a:3280:5365%6]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
- 17:14:50 +0000
-Message-ID: <729aeab5-f3d7-a5fc-c1a6-c07a18572b11@nvidia.com>
-Date:   Mon, 27 Jun 2022 10:14:45 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 17/20] tegra194-hte.rst: fix reference to its binding
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <cover.1656234456.git.mchehab@kernel.org>
- <2e2c86485cb0642455cee01796f9a74de21403e6.1656234456.git.mchehab@kernel.org>
-X-Nvconfidentiality: pubic
-From:   Dipen Patel <dipenp@nvidia.com>
-In-Reply-To: <2e2c86485cb0642455cee01796f9a74de21403e6.1656234456.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR17CA0001.namprd17.prod.outlook.com
- (2603:10b6:a03:1b8::14) To BY5PR12MB4116.namprd12.prod.outlook.com
- (2603:10b6:a03:210::13)
+        Mon, 27 Jun 2022 13:15:03 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D405F78
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=7lcoTIguoCU25UtATqw0zpenNexDp4klBKBcas47lUI=;
+        b=DnMKzuyWChdqVj0eyu9qk+S12hDc5E1lpoUVu+RwnrA66JDBO9VVaJjjgy7iZh0CwjBX0Tb2UW9eA
+         IDL3blt0HWe+7nCJ6LBbtgtWCdYTIJf7JxMi5tEKyk04dMJhxQKgJhN19n7gZmip7ExOCH60av6Zc+
+         fpOnPKVrkcE6dB7IpmBBA5V/48B5nOCXs0dWxrIHUJoi6B5gDTxnps7C32yW7RQiRmwMZofOskZtJ1
+         g5yggk+VyjJho8A1QsSz/r/K9taqv0SWrqNZr//W7DugrtnSjHFKtDOi/ahsacud1GZwml0SRslSij
+         +WBGlPijIt3aAxUmrpMXX3P747L7FOQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=7lcoTIguoCU25UtATqw0zpenNexDp4klBKBcas47lUI=;
+        b=0c4FfNqt1mwTyFHOd20j3eJXx+yZAcz5xOVj+2VVBhkRNfl+lcYaMnmV/txPP7q97nUwiERp2Rz/D
+         LTtF3EvDA==
+X-HalOne-Cookie: be347a0a6f76c63821867329f3b288b192d004df
+X-HalOne-ID: ab689703-f63c-11ec-8236-d0431ea8bb10
+Received: from mailproxy2.cst.dirpod3-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id ab689703-f63c-11ec-8236-d0431ea8bb10;
+        Mon, 27 Jun 2022 17:14:58 +0000 (UTC)
+Date:   Mon, 27 Jun 2022 19:14:56 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, hch@infradead.org, christophe.leroy@csgroup.eu,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, openrisc@lists.librecores.org,
+        linux-xtensa@linux-xtensa.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-um@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH V5 04/26] sparc/mm: Move protection_map[] inside the
+ platform
+Message-ID: <YrnlkLbyYSbI0EQw@ravnborg.org>
+References: <20220627045833.1590055-1-anshuman.khandual@arm.com>
+ <20220627045833.1590055-5-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3381357c-cb4a-4b16-a0c1-08da58608afb
-X-MS-TrafficTypeDiagnostic: SJ0PR12MB5407:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eTSNoG0g3q70Ej5S2FWdZKo3zFxhrJIi5juyVz3Xx5qizy0MirY6NBwhCl4HTZ2gSrV34k2htMBWG/goYBOaNCghNgKJN/SSzwo6yjdRn40TJNZ5hIfSs3wewR6ecIwuN/T0fvKCdYV9p2yOEtoELTs7O7bXgLJBloLMw+0DPAh52hhmjKzoZB+D7YZQw+Wmq99A2sKZ66rfp5OZNX3VgZd9rkCFbzRpAvGSigrroTFM4TpS2Ip7vf4xAopv/RoGKfUjgHZqMo/zSlaRNvAofO7YLsyG0eVk6mRhvFfd1AnpZdUan7ACJmMNE9otdSyW86reW1LQ81sgFP5EQz63IDNGE2+sCRdoZOyPVpABRBuUf+tmNa7GMu4YrtWAQzUU9JdbDq2B3bU4pCISk+FYTJTK3ReIes3mWdeF5I7Ah/A1fF1a1PZxIPoLulZFYjKzC+etuwbHtJp6vr8Ay3OVXOR1eaFSepSRIAdauk0p93sAEsXXedL0zX2z5KY7rK7cdLrP/iYUs6/M1vRnVHuY7IYY36M/PD2KhvAguzQV4X/OAnOfTJu5lbKtxfZyDeqoewROear4263pIoVo+65Vmyuw8Y6VGp4Xgj33NH69aMq8cr+8L8LMY90ubfDy8R8kCGm5xuZi1FEte3RAYHbOq3T1Nw6UiJMk0MnHCOeisG1GK6bS2prH0yi/yuAWPi/ibELUIaZZDpzWWuTPfztJW49dzL04GCobCFMc5JDoSWCnFT8QOVS4tROqUYU/0OJf8gCYi+w4lLnCPejGxJIhC28vvjfg+USnFdnBFoTnDao2U1XtHgTfbhYao8S6wLI1VrFYmq1K0vJxjLAgZae2ka3e8IN8xkSMy13VF85KooalMZA18y0R7Cbt/ZRFvMJupByJ9PQZwd+GdiXo83mwMg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4116.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(396003)(376002)(366004)(346002)(6512007)(966005)(6486002)(478600001)(26005)(8676002)(4326008)(31686004)(86362001)(6666004)(36756003)(31696002)(41300700001)(2906002)(83380400001)(54906003)(186003)(8936002)(2616005)(38100700002)(316002)(6506007)(53546011)(110136005)(66476007)(5660300002)(66556008)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z240UzlhSGg5aURPeXd4cE1wcDBZS1diQU15M21MQ0xxYVJ6NXorUGVOZy9h?=
- =?utf-8?B?NEI4K3NSNU9CQms4Z1BtckVJVVRxL25kUTAwdFMxUlBoTkgxeHpTNjhHTVRw?=
- =?utf-8?B?ek1tTzVlMjlSRDFwQVBFNFVubkFscGN2WElzZjZYY29pdTdKQmpRQnhWbHlL?=
- =?utf-8?B?YnFaN3owVDFuQ2d3TjhNTHI5YzJjOXV4bTVSWi9tRnBLSSsya0twbkZ0ZUNF?=
- =?utf-8?B?V245NHhhanVqS1JlVVhwNUNRRzNZM08rbXlUcDhFMFlGTXJzZG5mKzRJRTZy?=
- =?utf-8?B?bjA2d0tSaTJHVmhWOWE2YmJvUzc0cnZmdkRWNTZaWWFuSlExa0xMbzNvMnR3?=
- =?utf-8?B?MlF2c0NieFdRZXl6UmpwSnVXVkd6TTFiU0RiQnlGWjMyaWxsa1F6WDRjQkxV?=
- =?utf-8?B?UGdiQU9RSGFpK1F4d2ZVMnN4M3pydERqbEpKSHczbGVuUXpkdkJwbm4rZktP?=
- =?utf-8?B?Y1llcjdsT3cvR3JzdEdYZmEycVJ4NEUvMDZEVWs0bVRSemd5Q0QwemJMVExn?=
- =?utf-8?B?YWFoakJqb3pRbzd0MzRTQ3doNlliOXVsbGthUUVyK2dvMUVMWU1CcG9odnVN?=
- =?utf-8?B?ZjE4RWxvZk5LTzdPOVl3dzZmMGFnbS9uL0hWL2VOUVNmRHFHUTU0NkJRTEFy?=
- =?utf-8?B?QzdJS3pZUk9UdjN0TXF5Rnd6bllMRHhQclNCUVRMUnl0Qk9CQ2xPTkcxR0pu?=
- =?utf-8?B?OWFKdkNKUkE4bFEvVXg3ZnkwQXY1czF3RjhRbjFlUXd0U2tlbHZacXpJZGZM?=
- =?utf-8?B?b2ZqVFgyVW9DakRUenc1ZEJjNDI0MnFWWG1nTytCeGl6aUZ1NDhPczgrZHA5?=
- =?utf-8?B?S1hoUEwyN3Q4cFRKQWZrUmlWTWJCRTczeUNhTEYxa3llcWxLaFN4ZGhSTUJY?=
- =?utf-8?B?Z0tCTTFXdzVObWxsa3RXV3A4eTlyR1BVYTdiS1AxcFJEQzFQUjZpeFZNUnov?=
- =?utf-8?B?NWpBV2FEczUzZmt1ZkU4TnVrNFphZHhiMUVWV3RKMEdaaEswQTZzVVE0QjFQ?=
- =?utf-8?B?YldIMmNyNHRJRUhGZXBkS1Jxbm10Z0tvS2paNUJGODRQZk5vZUgrR1VRNmNm?=
- =?utf-8?B?Z0xLWStWTEFxYlJIb2xoUFRjbXdweW9rZFUvbm94dlNwcno3bXNObEFFVSt6?=
- =?utf-8?B?R3dmM0wrQ0x2dkFRYlU5TVd3TlBRdjVJa3VaRmxFUzhhVXZtV1NBY1J2MGtm?=
- =?utf-8?B?WHV6eEs2VjFVNnFXeG91YW9qb2wvNlE4TVZVczZMZEFwS1l1anRDYzZLUFIv?=
- =?utf-8?B?UU1naCtpa2ExTlE0bmFMNERiaGw4U056TE11K0hrSVRtMERBMFZzVFl4Zy82?=
- =?utf-8?B?aXB4bm41NTREaE81Q2h0T2IraWJEaU1yb3RQSlpjTkhBN3Z2QWF2Vkd5OUZj?=
- =?utf-8?B?cFo2WmxPU2Q4dm55K3VmY2t0THNDZFJDdWkwc1FoRWFjbGRqaVhQbFlVd2dH?=
- =?utf-8?B?WlIyYkR3NnNlcUFZRjIxU3p6ZE55UTFHYXdJN2NvR3g2dC95VzlmWkR1aG9H?=
- =?utf-8?B?N3FicHRiQkNtN1RDRHEvVWgwU1o0dFhJOWZyeWVwNm41T016WHpCejBFdzhT?=
- =?utf-8?B?VlJVZEhiaVl1cW8zMSt0Q2lVOVRzNzJrU3lZZUMxa3k3dWJTS3pnaGhMekVY?=
- =?utf-8?B?Rk5lcVROd3N6V2RDYWI3VVJqYTlrR25XL1RsVUpoOFFWblMwbmxoR1VCSVVI?=
- =?utf-8?B?b04xTW5GS1g5a3VGeUIvMTBHQWw1TjZKVXJiRUpGZ3pXcnlyWk5obE5YV1hh?=
- =?utf-8?B?YmoyUVhyQnJ4KzJVTzBTVHJ1ZlBMNXpXV0NjVGFMaDkyZnJNR1BDdXpFb21l?=
- =?utf-8?B?dkg5Zm9ETTdzNHFOVkpOeDRtV2pSQUgvZHRDNkYyWXZ4blJYUWMwUWpSNDhG?=
- =?utf-8?B?ZnllZ0VqSEZDVEpORmlialY2YVBPenhTcnoyMlIzSSt3US9IR3R0cWQwVEpU?=
- =?utf-8?B?NG5yblJ6dUhlSHhhSWllNFhRVW9aTUZxU2wxNkhGUlNOVENCT0YybmNBUDdj?=
- =?utf-8?B?SEFvaFFHOVFORFJxUm54d3pIMGRCSmlmU3Y2MisrTXhhL2dkd2dzYWFNOWRy?=
- =?utf-8?B?VlNnVGoxaGpuT0lzaEtqQnZ5bVlXRjZhc2FUOStkcy85aE54Si9Fd0RDM2lV?=
- =?utf-8?Q?RwFF/dzC7Wr9a/JHJnIInFeoX?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3381357c-cb4a-4b16-a0c1-08da58608afb
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4116.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2022 17:14:50.1790
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7z31u/TIapYLs+sNzwXB1GWPmpt4bPZyjUm8tqACmXD13gJqmk6TH+SMQaIm0IunRKhqJyiI0O2f73sxCfkXvw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5407
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627045833.1590055-5-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/22 2:11 AM, Mauro Carvalho Chehab wrote:
-> The binding directory for hte was renamed. Update references accordingly.
->
-> Fixes: af583852d2ef ("dt-bindings: Renamed hte directory to timestamp")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Hi Anshuman,
+
+On Mon, Jun 27, 2022 at 10:28:11AM +0530, Anshuman Khandual wrote:
+> This moves protection_map[] inside the platform and while here, also enable
+> ARCH_HAS_VM_GET_PAGE_PROT on 32 bit platforms via DECLARE_VM_GET_PAGE_PROT.
+> 
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: sparclinux@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 > ---
->
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1656234456.git.mchehab@kernel.org/
->
->  Documentation/driver-api/hte/tegra194-hte.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/driver-api/hte/tegra194-hte.rst b/Documentation/driver-api/hte/tegra194-hte.rst
-> index 41983e04d2a0..d29b7fe86f31 100644
-> --- a/Documentation/driver-api/hte/tegra194-hte.rst
-> +++ b/Documentation/driver-api/hte/tegra194-hte.rst
-> @@ -37,7 +37,7 @@ LIC (Legacy Interrupt Controller) IRQ GTE
+>  arch/sparc/Kconfig                  |  2 +-
+>  arch/sparc/include/asm/pgtable_32.h | 19 -------------------
+>  arch/sparc/include/asm/pgtable_64.h | 19 -------------------
+>  arch/sparc/mm/init_32.c             | 20 ++++++++++++++++++++
+>  arch/sparc/mm/init_64.c             |  3 +++
+>  5 files changed, 24 insertions(+), 39 deletions(-)
+> 
+> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+> index ba449c47effd..09f868613a4d 100644
+> --- a/arch/sparc/Kconfig
+> +++ b/arch/sparc/Kconfig
+> @@ -13,6 +13,7 @@ config 64BIT
+>  config SPARC
+>  	bool
+>  	default y
+> +	select ARCH_HAS_VM_GET_PAGE_PROT
+>  	select ARCH_MIGHT_HAVE_PC_PARPORT if SPARC64 && PCI
+>  	select ARCH_MIGHT_HAVE_PC_SERIO
+>  	select DMA_OPS
+> @@ -84,7 +85,6 @@ config SPARC64
+>  	select PERF_USE_VMALLOC
+>  	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>  	select HAVE_C_RECORDMCOUNT
+> -	select ARCH_HAS_VM_GET_PAGE_PROT
+>  	select HAVE_ARCH_AUDITSYSCALL
+>  	select ARCH_SUPPORTS_ATOMIC_RMW
+>  	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
+> diff --git a/arch/sparc/include/asm/pgtable_32.h b/arch/sparc/include/asm/pgtable_32.h
+> index 4866625da314..8ff549004fac 100644
+> --- a/arch/sparc/include/asm/pgtable_32.h
+> +++ b/arch/sparc/include/asm/pgtable_32.h
+> @@ -64,25 +64,6 @@ void paging_init(void);
 >  
->  This GTE instance timestamps LIC IRQ lines in real time. There are 352 IRQ
->  lines which this instance can add timestamps to in real time. The hte
-> -devicetree binding described at ``Documentation/devicetree/bindings/hte/``
-> +devicetree binding described at ``Documentation/devicetree/bindings/timestamp``
->  provides an example of how a consumer can request an IRQ line. Since it is a
->  one-to-one mapping with IRQ GTE provider, consumers can simply specify the IRQ
->  number that they are interested in. There is no userspace consumer support for
+>  extern unsigned long ptr_in_current_pgd;
+>  
+> -/*         xwr */
+> -#define __P000  PAGE_NONE
+> -#define __P001  PAGE_READONLY
+> -#define __P010  PAGE_COPY
+> -#define __P011  PAGE_COPY
+> -#define __P100  PAGE_READONLY
+> -#define __P101  PAGE_READONLY
+> -#define __P110  PAGE_COPY
+> -#define __P111  PAGE_COPY
+> -
+> -#define __S000	PAGE_NONE
+> -#define __S001	PAGE_READONLY
+> -#define __S010	PAGE_SHARED
+> -#define __S011	PAGE_SHARED
+> -#define __S100	PAGE_READONLY
+> -#define __S101	PAGE_READONLY
+> -#define __S110	PAGE_SHARED
+> -#define __S111	PAGE_SHARED
+> -
+>  /* First physical page can be anywhere, the following is needed so that
+>   * va-->pa and vice versa conversions work properly without performance
+>   * hit for all __pa()/__va() operations.
+> diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
+> index 4679e45c8348..a779418ceba9 100644
+> --- a/arch/sparc/include/asm/pgtable_64.h
+> +++ b/arch/sparc/include/asm/pgtable_64.h
+> @@ -187,25 +187,6 @@ bool kern_addr_valid(unsigned long addr);
+>  #define _PAGE_SZHUGE_4U	_PAGE_SZ4MB_4U
+>  #define _PAGE_SZHUGE_4V	_PAGE_SZ4MB_4V
+>  
+> -/* These are actually filled in at boot time by sun4{u,v}_pgprot_init() */
+> -#define __P000	__pgprot(0)
+> -#define __P001	__pgprot(0)
+> -#define __P010	__pgprot(0)
+> -#define __P011	__pgprot(0)
+> -#define __P100	__pgprot(0)
+> -#define __P101	__pgprot(0)
+> -#define __P110	__pgprot(0)
+> -#define __P111	__pgprot(0)
+> -
+> -#define __S000	__pgprot(0)
+> -#define __S001	__pgprot(0)
+> -#define __S010	__pgprot(0)
+> -#define __S011	__pgprot(0)
+> -#define __S100	__pgprot(0)
+> -#define __S101	__pgprot(0)
+> -#define __S110	__pgprot(0)
+> -#define __S111	__pgprot(0)
+> -
+>  #ifndef __ASSEMBLY__
+>  
+>  pte_t mk_pte_io(unsigned long, pgprot_t, int, unsigned long);
+> diff --git a/arch/sparc/mm/init_32.c b/arch/sparc/mm/init_32.c
+> index 1e9f577f084d..8693e4e28b86 100644
+> --- a/arch/sparc/mm/init_32.c
+> +++ b/arch/sparc/mm/init_32.c
+> @@ -302,3 +302,23 @@ void sparc_flush_page_to_ram(struct page *page)
+>  		__flush_page_to_ram(vaddr);
+>  }
+>  EXPORT_SYMBOL(sparc_flush_page_to_ram);
+> +
+> +static pgprot_t protection_map[16] __ro_after_init = {
+This can be const - like done for powerpc and others.
+sparc32 and sparc64 uses each their own - and I do not see sparc32 do
+any modifications to protection_map.
 
-Reviewed-by: Dipen Patel <dipenp@nvidia.com>
+With this change:
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 
+> +	[VM_NONE]					= PAGE_NONE,
+> +	[VM_READ]					= PAGE_READONLY,
+> +	[VM_WRITE]					= PAGE_COPY,
+> +	[VM_WRITE | VM_READ]				= PAGE_COPY,
+> +	[VM_EXEC]					= PAGE_READONLY,
+> +	[VM_EXEC | VM_READ]				= PAGE_READONLY,
+> +	[VM_EXEC | VM_WRITE]				= PAGE_COPY,
+> +	[VM_EXEC | VM_WRITE | VM_READ]			= PAGE_COPY,
+> +	[VM_SHARED]					= PAGE_NONE,
+> +	[VM_SHARED | VM_READ]				= PAGE_READONLY,
+> +	[VM_SHARED | VM_WRITE]				= PAGE_SHARED,
+> +	[VM_SHARED | VM_WRITE | VM_READ]		= PAGE_SHARED,
+> +	[VM_SHARED | VM_EXEC]				= PAGE_READONLY,
+> +	[VM_SHARED | VM_EXEC | VM_READ]			= PAGE_READONLY,
+> +	[VM_SHARED | VM_EXEC | VM_WRITE]		= PAGE_SHARED,
+> +	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= PAGE_SHARED
+> +};
+> +DECLARE_VM_GET_PAGE_PROT
+> diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+> index f6174df2d5af..d6faee23c77d 100644
+> --- a/arch/sparc/mm/init_64.c
+> +++ b/arch/sparc/mm/init_64.c
+> @@ -2634,6 +2634,9 @@ void vmemmap_free(unsigned long start, unsigned long end,
+>  }
+>  #endif /* CONFIG_SPARSEMEM_VMEMMAP */
+>  
+> +/* These are actually filled in at boot time by sun4{u,v}_pgprot_init() */
+> +static pgprot_t protection_map[16] __ro_after_init;
+> +
+>  static void prot_init_common(unsigned long page_none,
+>  			     unsigned long page_shared,
+>  			     unsigned long page_copy,
+> -- 
+> 2.25.1

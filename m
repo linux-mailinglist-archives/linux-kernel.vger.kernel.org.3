@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C1A55DD93
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F2755C1A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234684AbiF0LYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
+        id S236958AbiF0Lk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234642AbiF0LXs (ORCPT
+        with ESMTP id S236340AbiF0Lg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:23:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A608B6465;
-        Mon, 27 Jun 2022 04:23:47 -0700 (PDT)
+        Mon, 27 Jun 2022 07:36:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01DC101E;
+        Mon, 27 Jun 2022 04:32:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 623F3B81125;
-        Mon, 27 Jun 2022 11:23:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B715AC3411D;
-        Mon, 27 Jun 2022 11:23:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3792E60920;
+        Mon, 27 Jun 2022 11:32:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA38C341C7;
+        Mon, 27 Jun 2022 11:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329025;
-        bh=6g+0kDNDTJ6rzAV6vLpGtfTRgDWoLZS/lo3rJxyabA8=;
+        s=korg; t=1656329530;
+        bh=9bAV0+306x5lteaFMiWqSZkBkr8FcYIqevBwLdY+pKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dX8E6P9BDtHJlTi9k3NIpJEFq1dSEUUQJYTxOw5+7AGYdqPanj/0myt+VLtCgKmKt
-         UEf9IC+yrO87R+5QXavm8Vra0jyzY/qgNMfehY9wne0h+ARj2llAbghuRflLbf6+Ho
-         p4ocINOiQ0sYCtq7az+yPD1BCECmyI7ylV0Ga3kE=
+        b=Y3L449+yfM0z3LEm1KONAjQkGC3QqteminuNX+qNGUzaTwfsqS0ODRL07dAKHarD8
+         o1z2JFWCZe8OvBej0CjCKjai3vySoKh7ZSHddBHC4xz6kUBe42i397oSEATeUQnVup
+         EupasvdKhSSHjkecSJMizhc6fV0T3RbZ2hSOrvGE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 025/102] scsi: scsi_debug: Fix zone transition to full condition
+        stable@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.15 029/135] USB: serial: pl2303: add support for more HXN (G) types
 Date:   Mon, 27 Jun 2022 13:20:36 +0200
-Message-Id: <20220627111934.213721698@linuxfoundation.org>
+Message-Id: <20220627111939.005772297@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,81 +54,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Johan Hovold <johan@kernel.org>
 
-[ Upstream commit 566d3c57eb526f32951af15866086e236ce1fc8a ]
+commit ae60aac59a9ad8ab64a4b07de509a534a75b6bac upstream.
 
-When a write command to a sequential write required or sequential write
-preferred zone result in the zone write pointer reaching the end of the
-zone, the zone condition must be set to full AND the number of implicitly
-or explicitly open zones updated to have a correct accounting for zone
-resources. However, the function zbc_inc_wp() only sets the zone condition
-to full without updating the open zone counters, resulting in a zone state
-machine breakage.
+Add support for further HXN (G) type devices (GT variant, GL variant, GS
+variant and GR) and document the bcdDevice mapping.
 
-Introduce the helper function zbc_set_zone_full() and use it in
-zbc_inc_wp() to correctly transition zones to the full condition.
+Note that the TA and TB types use the same bcdDevice as some GT and GE
+variants, respectively, but that the HX status request can be used to
+determine which is which.
 
-Link: https://lore.kernel.org/r/20220608011302.92061-1-damien.lemoal@opensource.wdc.com
-Fixes: f0d1cf9378bd ("scsi: scsi_debug: Add ZBC zone commands")
-Reviewed-by: Niklas Cassel <niklas.cassel@wdc.com>
-Acked-by: Douglas Gilbert <dgilbert@interlog.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Also note that we currently do not distinguish between the various HXN
+(G) types in the driver but that this may change eventually (e.g. when
+adding GPIO support).
+
+Reported-by: Charles Yeh <charlesyeh522@gmail.com>
+Link: https://lore.kernel.org/r/YrF77b9DdeumUAee@hovoldconsulting.com
+Cc: stable@vger.kernel.org	# 5.13
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/scsi_debug.c | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+ drivers/usb/serial/pl2303.c |   29 +++++++++++++++++------------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 6b00de6b6f0e..5eb959b5f701 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -2746,6 +2746,24 @@ static void zbc_open_zone(struct sdebug_dev_info *devip,
- 	}
- }
- 
-+static inline void zbc_set_zone_full(struct sdebug_dev_info *devip,
-+				     struct sdeb_zone_state *zsp)
-+{
-+	switch (zsp->z_cond) {
-+	case ZC2_IMPLICIT_OPEN:
-+		devip->nr_imp_open--;
-+		break;
-+	case ZC3_EXPLICIT_OPEN:
-+		devip->nr_exp_open--;
-+		break;
-+	default:
-+		WARN_ONCE(true, "Invalid zone %llu condition %x\n",
-+			  zsp->z_start, zsp->z_cond);
-+		break;
-+	}
-+	zsp->z_cond = ZC5_FULL;
-+}
-+
- static void zbc_inc_wp(struct sdebug_dev_info *devip,
- 		       unsigned long long lba, unsigned int num)
- {
-@@ -2758,7 +2776,7 @@ static void zbc_inc_wp(struct sdebug_dev_info *devip,
- 	if (zsp->z_type == ZBC_ZONE_TYPE_SWR) {
- 		zsp->z_wp += num;
- 		if (zsp->z_wp >= zend)
--			zsp->z_cond = ZC5_FULL;
-+			zbc_set_zone_full(devip, zsp);
- 		return;
- 	}
- 
-@@ -2777,7 +2795,7 @@ static void zbc_inc_wp(struct sdebug_dev_info *devip,
- 			n = num;
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -436,22 +436,27 @@ static int pl2303_detect_type(struct usb
+ 		break;
+ 	case 0x200:
+ 		switch (bcdDevice) {
+-		case 0x100:
++		case 0x100:	/* GC */
+ 		case 0x105:
++			return TYPE_HXN;
++		case 0x300:	/* GT / TA */
++			if (pl2303_supports_hx_status(serial))
++				return TYPE_TA;
++			fallthrough;
+ 		case 0x305:
++		case 0x400:	/* GL */
+ 		case 0x405:
++			return TYPE_HXN;
++		case 0x500:	/* GE / TB */
++			if (pl2303_supports_hx_status(serial))
++				return TYPE_TB;
++			fallthrough;
++		case 0x505:
++		case 0x600:	/* GS */
+ 		case 0x605:
+-			/*
+-			 * Assume it's an HXN-type if the device doesn't
+-			 * support the old read request value.
+-			 */
+-			if (!pl2303_supports_hx_status(serial))
+-				return TYPE_HXN;
+-			break;
+-		case 0x300:
+-			return TYPE_TA;
+-		case 0x500:
+-			return TYPE_TB;
++		case 0x700:	/* GR */
++		case 0x705:
++			return TYPE_HXN;
  		}
- 		if (zsp->z_wp >= zend)
--			zsp->z_cond = ZC5_FULL;
-+			zbc_set_zone_full(devip, zsp);
- 
- 		num -= n;
- 		lba += n;
--- 
-2.35.1
-
+ 		break;
+ 	}
 
 

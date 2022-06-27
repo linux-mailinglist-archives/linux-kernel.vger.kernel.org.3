@@ -2,174 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4ED055D26F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE08C55D7F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239273AbiF0RFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
+        id S239870AbiF0RFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239010AbiF0RFa (ORCPT
+        with ESMTP id S235591AbiF0RFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:05:30 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D6818344
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:05:30 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id g4so6273881ybg.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:05:29 -0700 (PDT)
+        Mon, 27 Jun 2022 13:05:51 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA3A15FCA;
+        Mon, 27 Jun 2022 10:05:51 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id v126so5498609pgv.11;
+        Mon, 27 Jun 2022 10:05:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=llT1Zq6sh+MENUn7ZyFpz597NkMTivkH2nO9uzDfXJc=;
-        b=hSVoyAPeZyTQ6QXLkInesPxCelw6q0JD7Hv9wsjbBHfFEdOnkZ2yvmx7AxA0Eh7LxL
-         5Br6FVTxPc7BCLirBQW+hf6peNUEzFOJvMNCPTWbaY6WN9blx5shC/VN1xq1zWQk2JZ1
-         sS/2tZbkP1G2ZnHwZpk9zwBdhJ9ydoT9I0699o4AHA7THbqNqWgs5cnENYiYAtskraqf
-         2kuwhXGgUbZwhBqFcRROjY03fkDh2BbMWkIszSqN8qA6NqD5lLk+ogy+J7EmL2CUFVJn
-         nJe4Drn1fXkyqf+a9IdT7HZr+7cy2fG3pgzM+tc/VZUqb+6vNOgyaO4phFEdxPZxjP+9
-         brQw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0R3AduDYroJAGIiiG+Jh2DNO0iwsy6h8YXWYMHiE2eY=;
+        b=MKdMCghlWquFbSuyyxcpMdFy9I0feANtk93K2OdCz6GM+pAmL+leesdHI+0g7knVZP
+         lzxkAYQpmFV3kLiR+f3XtEHCG94ZDLOapgTaySDwafZKUfP//NIGF6g1PT3YOwluFYL2
+         goRS90C2h22ikl0ymaoBjR/LfCWs0MgvLFhWj/Hdvpkn12nY0xLYhF/cyOL0LnMP/w+4
+         L0qJj3barAaz6e/7f2liqIv3p4NfLVAI2ODO7SL6UenM3xcCju83xIfyi8ZyOgXHviwv
+         9qXDmWAT8MhoCK78aKqB7VsfcDJko0QgCmERm0niuxnnaxpj1uO3kqrJO21FT0AU70yO
+         aF6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=llT1Zq6sh+MENUn7ZyFpz597NkMTivkH2nO9uzDfXJc=;
-        b=2MZU2Dfmcku0BofO8t3WYacO3e5GOsTnRy7Ch53264ymwnZSoFSxqLSJw+vWwH6IOv
-         HWiuAx0dIJi21UzZNnvP9dZXf6NwISZe/sjyAPtk3TMp56oVJyiaFL0xhtY4C33HR7gp
-         6vcjuAPbaT/AJqoR113lDsvF0uW9HYVwk42cws9nPO3nKy2JlSIO615YcR+g+zZzt9Nv
-         Hl9svApJt1Ngl47xGNAGCCwQ87dpPxkz/2ZMSjiKeWPODQWCHMbopdrbQVVkIx2onrli
-         7TiVEGvdR94oR3Gz0auKdMr0+JPDV+kpZEwcPSv8woDVOMPB03bQKpJg5qMb+UNjovyf
-         J+xA==
-X-Gm-Message-State: AJIora+EdG1QB2uP9wAyj22W5j7kzqxnnHtdRyDxFJjErwUI83POQxCl
-        5VbIYgyQx2n4kF0KLWhT+Zp42xUenw6CosmuMoffCg==
-X-Google-Smtp-Source: AGRyM1v+tQ4QFlzlRJhm1Rkgi+oPwKgFtB3zGgIAUGtDZNUytR6VX29Z8irDx5YhFCtKUwVtXFd5otJlwfAxhslH2Mk=
-X-Received: by 2002:a25:d957:0:b0:66c:9476:708f with SMTP id
- q84-20020a25d957000000b0066c9476708fmr11488633ybg.427.1656349528655; Mon, 27
- Jun 2022 10:05:28 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0R3AduDYroJAGIiiG+Jh2DNO0iwsy6h8YXWYMHiE2eY=;
+        b=D1CNBRPzyRLG6dhGjPgx25ecf8GoTQh/zL/SyP4h6P+I4Epl+BtNpXUFASelzyzqf4
+         jZnjmqTobDjskhpoHJE4c9RcnNHlimgzocd30f4bHNCHaNuvYME/b+EQivYKYB9dLiQ0
+         yjGeiEkmd2+pBlkKZC4sqaTnxL2aRxqJqZUhnR6yjFWDguHcAjjeHKZptBURXVvyDIZx
+         bTPqHIbfahfKF5pRD0tCb6rNlkSwINT8lNt7vCVLU8Ep2OcLRcD1SuoWPjVPD7NkpjDb
+         Vzf7x+6P0ioKZ2z5o/N1nBazbre6mzh95+oEG9lspVTLf3WkbHu0rWY5lfxLQRNgUirq
+         RbvA==
+X-Gm-Message-State: AJIora+UE/NlEfygsWao/sSHewSYYnBkoyUAiWVOCvx2KXVI9+DM+xpT
+        1vMbMqFdeSHU+FRR8BmVBZE=
+X-Google-Smtp-Source: AGRyM1ubAUvmFXEhWZqdNB95qxL4EobJyWkUmGM9ChHCf65q4HXVSp2kT9cFotQSLqPDhwIdynfjpA==
+X-Received: by 2002:a63:e64f:0:b0:40d:e79f:8b73 with SMTP id p15-20020a63e64f000000b0040de79f8b73mr6806285pgj.243.1656349550489;
+        Mon, 27 Jun 2022 10:05:50 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id u27-20020a62d45b000000b0050dc7628148sm7624190pfl.34.2022.06.27.10.05.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 10:05:50 -0700 (PDT)
+Message-ID: <388dbcd0-8e65-3c7f-0f08-f55f59eb7097@gmail.com>
+Date:   Mon, 27 Jun 2022 10:05:48 -0700
 MIME-Version: 1.0
-References: <20220623185730.25b88096@kernel.org> <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
- <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
- <20220624070656.GE79500@shbuild999.sh.intel.com> <20220624144358.lqt2ffjdry6p5u4d@google.com>
- <20220625023642.GA40868@shbuild999.sh.intel.com> <20220627023812.GA29314@shbuild999.sh.intel.com>
- <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
- <20220627123415.GA32052@shbuild999.sh.intel.com> <CANn89iJAoYCebNbXpNMXRoDUkFMhg9QagetVU9NZUq+GnLMgqQ@mail.gmail.com>
- <20220627144822.GA20878@shbuild999.sh.intel.com> <CANn89iLSWm-c4XE79rUsxzOp3VwXVDhOEPTQnWgeQ48UwM=u7Q@mail.gmail.com>
- <CALvZod60OHC4iQnyBd16evCHXa_8ucpHiRnm9iNErQeUOycGZw@mail.gmail.com>
-In-Reply-To: <CALvZod60OHC4iQnyBd16evCHXa_8ucpHiRnm9iNErQeUOycGZw@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 27 Jun 2022 19:05:17 +0200
-Message-ID: <CANn89iLnOBGk+P33MRAkNwVLQC+s1M36m+cg1d4pJ970ecdxcg@mail.gmail.com>
-Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Feng Tang <feng.tang@intel.com>, Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Xin Long <lucien.xin@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.10 000/102] 5.10.127-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220627111933.455024953@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 6:48 PM Shakeel Butt <shakeelb@google.com> wrote:
->
-> On Mon, Jun 27, 2022 at 9:26 AM Eric Dumazet <edumazet@google.com> wrote:
-> >
-> [...]
-> > >
-> >
-> > I simply did the following and got much better results.
-> >
-> > But I am not sure if updates to ->usage are really needed that often...
->
-> I suspect we need to improve the per-cpu memcg stock usage here. Were
-> the updates mostly from uncharge path or charge path or that's
-> irrelevant?
+On 6/27/22 04:20, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.127 release.
+> There are 102 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.127-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-I wonder if the cache is always used...
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-stock = this_cpu_ptr(&memcg_stock);
-if (memcg == stock->cached && stock->nr_pages >= nr_pages) {
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Apparently the per-cpu cache is only used for one memcg at a time ?
+There is however a section warning generated which is already reported 
+in the 5.4 stable queue discussion:
 
-Not sure how this would scale to hosts with dozens of memcgs.
-
-Maybe we could add some metrics to have an idea of the cache hit/miss ratio :/
-
-
->
-> I think doing full drain (i.e. drain_stock()) within __refill_stock()
-> when the local cache is larger than MEMCG_CHARGE_BATCH is not best.
-> Rather we should always keep at least MEMCG_CHARGE_BATCH for such
-> scenarios.
->
-> >
-> >
-> > diff --git a/include/linux/page_counter.h b/include/linux/page_counter.h
-> > index 679591301994d316062f92b275efa2459a8349c9..e267be4ba849760117d9fd041e22c2a44658ab36
-> > 100644
-> > --- a/include/linux/page_counter.h
-> > +++ b/include/linux/page_counter.h
-> > @@ -3,12 +3,15 @@
-> >  #define _LINUX_PAGE_COUNTER_H
-> >
-> >  #include <linux/atomic.h>
-> > +#include <linux/cache.h>
-> >  #include <linux/kernel.h>
-> >  #include <asm/page.h>
-> >
-> >  struct page_counter {
-> > -       atomic_long_t usage;
-> > -       unsigned long min;
-> > +       /* contended cache line. */
-> > +       atomic_long_t usage ____cacheline_aligned_in_smp;
-> > +
-> > +       unsigned long min ____cacheline_aligned_in_smp;
->
-> Do we need to align 'min' too?
-
-Probably if there is a hierarchy ...
-
-propagate_protected_usage() seems to have potential high cost.
-
-
->
-> >         unsigned long low;
-> >         unsigned long high;
-> >         unsigned long max;
-> > @@ -27,12 +30,6 @@ struct page_counter {
-> >         unsigned long watermark;
-> >         unsigned long failcnt;
-> >
-> > -       /*
-> > -        * 'parent' is placed here to be far from 'usage' to reduce
-> > -        * cache false sharing, as 'usage' is written mostly while
-> > -        * parent is frequently read for cgroup's hierarchical
-> > -        * counting nature.
-> > -        */
-> >         struct page_counter *parent;
-> >  };
-> >
-> >
-> >
+WARNING: vmlinux.o(___ksymtab+drm_fb_helper_modinit+0x0): Section 
+mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit 
+to the function .init.text:drm_fb_helper_modinit()
+The symbol drm_fb_helper_modinit is exported and annotated __init
+Fix this by removing the __init annotation of drm_fb_helper_modinit or 
+drop the export.
+-- 
+Florian

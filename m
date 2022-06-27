@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7C855C4B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A708755CC16
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234718AbiF0LYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        id S238660AbiF0LwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234619AbiF0LX5 (ORCPT
+        with ESMTP id S238345AbiF0LsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:23:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5D7656A;
-        Mon, 27 Jun 2022 04:23:56 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04B3FD05;
+        Mon, 27 Jun 2022 04:40:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D3D3B8111D;
-        Mon, 27 Jun 2022 11:23:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9CE2C3411D;
-        Mon, 27 Jun 2022 11:23:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57CDCB81141;
+        Mon, 27 Jun 2022 11:40:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7DF0C3411D;
+        Mon, 27 Jun 2022 11:40:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329034;
-        bh=zmgfCBE8i47Yk3OpWcKiVi08i3cvlj7aKx2cbxkaSc0=;
+        s=korg; t=1656330049;
+        bh=hFXNBVDVLzm/rkEtNtvSW+Zfs1sL6p6zOVvBlNCnB3Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=himz0f00uIWP9JHhnBXo7jYFnopS1E2fxpDTRXYPdZ8psyM8/Wf5k2MR4+0oXTgTj
-         kIYQLUqIzGwLZSmzIVyyocR9A9554qdKqFXfLHRkt9J0uivpMcS0EYmGIq2CgUPQ2c
-         7PVh+/UxcRKag6wRwmSZL+JGqQlvbHRgwH8uR4ZI=
+        b=pyM6P92JhtYlxjr4WfisCbxvCA97PzAGwSpw3btVY3xuD+X1sC7fuOe//SDUX5W6Q
+         2nV9edHHLFxDeZBpzLKx6A1ejAnu2I59B+7yGVSxdVuuy2o6wodfHH35QO9mdVHq+J
+         0OUcGxKioH6hWziRG4+vbt6/PuH+bwIGFqlfYYRc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 028/102] drm/sun4i: Fix crash during suspend after component bind failure
+Subject: [PATCH 5.18 066/181] drm/msm/mdp4: Fix refcount leak in mdp4_modeset_init_intf
 Date:   Mon, 27 Jun 2022 13:20:39 +0200
-Message-Id: <20220627111934.301189127@linuxfoundation.org>
+Message-Id: <20220627111946.479455974@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,57 +58,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 1342b5b23da9559a1578978eaff7f797d8a87d91 ]
+[ Upstream commit b9cc4598607cb7f7eae5c75fc1e3209cd52ff5e0 ]
 
-If the component driver fails to bind, or is unbound, the driver data
-for the top-level platform device points to a freed drm_device. If the
-system is then suspended, the driver passes this dangling pointer to
-drm_mode_config_helper_suspend(), which crashes.
+of_graph_get_remote_node() returns remote device node pointer with
+refcount incremented, we should use of_node_put() on it
+when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Fix this by only setting the driver data while the platform driver holds
-a reference to the drm_device.
-
-Fixes: 624b4b48d9d8 ("drm: sun4i: Add support for suspending the display driver")
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://lore.kernel.org/r/20220615054254.16352-1-samuel@sholland.org
+Fixes: 86418f90a4c1 ("drm: convert drivers to use of_graph_get_remote_node")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Patchwork: https://patchwork.freedesktop.org/patch/488473/
+Link: https://lore.kernel.org/r/20220607110841.53889-1-linmq006@gmail.com
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/sun4i/sun4i_drv.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
-index 29861fc81b35..c5912fd53772 100644
---- a/drivers/gpu/drm/sun4i/sun4i_drv.c
-+++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
-@@ -71,7 +71,6 @@ static int sun4i_drv_bind(struct device *dev)
- 		goto free_drm;
- 	}
+diff --git a/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c b/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
+index 3cf476c55158..d92193db7eb2 100644
+--- a/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
++++ b/drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c
+@@ -217,6 +217,7 @@ static int mdp4_modeset_init_intf(struct mdp4_kms *mdp4_kms,
+ 		encoder = mdp4_lcdc_encoder_init(dev, panel_node);
+ 		if (IS_ERR(encoder)) {
+ 			DRM_DEV_ERROR(dev->dev, "failed to construct LCDC encoder\n");
++			of_node_put(panel_node);
+ 			return PTR_ERR(encoder);
+ 		}
  
--	dev_set_drvdata(dev, drm);
- 	drm->dev_private = drv;
- 	INIT_LIST_HEAD(&drv->frontend_list);
- 	INIT_LIST_HEAD(&drv->engine_list);
-@@ -112,6 +111,8 @@ static int sun4i_drv_bind(struct device *dev)
+@@ -226,6 +227,7 @@ static int mdp4_modeset_init_intf(struct mdp4_kms *mdp4_kms,
+ 		connector = mdp4_lvds_connector_init(dev, panel_node, encoder);
+ 		if (IS_ERR(connector)) {
+ 			DRM_DEV_ERROR(dev->dev, "failed to initialize LVDS connector\n");
++			of_node_put(panel_node);
+ 			return PTR_ERR(connector);
+ 		}
  
- 	drm_fbdev_generic_setup(drm, 32);
- 
-+	dev_set_drvdata(dev, drm);
-+
- 	return 0;
- 
- finish_poll:
-@@ -128,6 +129,7 @@ static void sun4i_drv_unbind(struct device *dev)
- {
- 	struct drm_device *drm = dev_get_drvdata(dev);
- 
-+	dev_set_drvdata(dev, NULL);
- 	drm_dev_unregister(drm);
- 	drm_kms_helper_poll_fini(drm);
- 	drm_atomic_helper_shutdown(drm);
 -- 
 2.35.1
 

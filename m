@@ -2,56 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E06255C227
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E602E55D3E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240683AbiF0MYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
+        id S235756AbiF0MZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236111AbiF0MYN (ORCPT
+        with ESMTP id S234176AbiF0MZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:24:13 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBA72AF6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:24:11 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LWn2B6f5Cz9swb;
-        Mon, 27 Jun 2022 20:23:30 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 27 Jun 2022 20:24:09 +0800
-Subject: Re: [PATCH v2 8/9] mm, hwpoison: skip raw hwpoison page in freeing
- 1GB hugepage
-To:     Naoya Horiguchi <nao.horiguchi@gmail.com>, <linux-mm@kvack.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
- <20220623235153.2623702-9-naoya.horiguchi@linux.dev>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <db45e4bc-f09a-771a-f90d-448d46bacce1@huawei.com>
-Date:   Mon, 27 Jun 2022 20:24:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 27 Jun 2022 08:25:13 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A069580
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:25:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0VHb5j7j_1656332704;
+Received: from 30.225.28.167(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VHb5j7j_1656332704)
+          by smtp.aliyun-inc.com;
+          Mon, 27 Jun 2022 20:25:05 +0800
+Message-ID: <075b0a8e-cb7e-70f6-b45a-54cd31886794@linux.alibaba.com>
+Date:   Mon, 27 Jun 2022 20:25:03 +0800
 MIME-Version: 1.0
-In-Reply-To: <20220623235153.2623702-9-naoya.horiguchi@linux.dev>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] arm64: mm: fix linear mapping mem access performace
+ degradation
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
+        will@kernel.org, akpm@linux-foundation.org, david@redhat.com,
+        jianyong.wu@arm.com, james.morse@arm.com, quic_qiancai@quicinc.com,
+        christophe.leroy@csgroup.eu, jonathan@marek.ca,
+        mark.rutland@arm.com, anshuman.khandual@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        geert+renesas@glider.be, ardb@kernel.org, linux-mm@kvack.org,
+        bhe@redhat.com
+References: <1656241815-28494-1-git-send-email-guanghuifeng@linux.alibaba.com>
+ <YrlPfjv2Wf/C77DI@kernel.org>
+ <4d18d303-aeed-0beb-a8a4-32893f2d438d@linux.alibaba.com>
+ <Yrl9FcVv1wZ5MnRp@kernel.org>
+ <ae5c6c07-1d49-ffd2-6f62-69df4308d0bb@linux.alibaba.com>
+ <32aefb80-c59c-74b6-c373-dd24edba0752@huawei.com>
+From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+In-Reply-To: <32aefb80-c59c-74b6-c373-dd24edba0752@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,85 +56,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/24 7:51, Naoya Horiguchi wrote:
-> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> 
-> Currently if memory_failure() (modified to remove blocking code with
-> subsequent patch) is called on a page in some 1GB hugepage, memory error
-> handling fails and the raw error page gets into leaked state.  The impact
-> is small in production systems (just leaked single 4kB page), but this
-> limits the testability because unpoison doesn't work for it.
-> We can no longer create 1GB hugepage on the 1GB physical address range
-> with such leaked pages, that's not useful when testing on small systems.
-> 
-> When a hwpoison page in a 1GB hugepage is handled, it's caught by the
-> PageHWPoison check in free_pages_prepare() because the 1GB hugepage is
-> broken down into raw error pages before coming to this point:
-> 
->         if (unlikely(PageHWPoison(page)) && !order) {
->                 ...
->                 return false;
->         }
-> 
-> Then, the page is not sent to buddy and the page refcount is left 0.
-> 
-> Originally this check is supposed to work when the error page is freed from
-> page_handle_poison() (that is called from soft-offline), but now we are
-> opening another path to call it, so the callers of __page_handle_poison()
-> need to handle the case by considering the return value 0 as success. Then
-> page refcount for hwpoison is properly incremented so unpoison works.
-> 
-> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Thanks.
 
-It seems I misunderstand the commit log in [1]. But I hope I get the point this time. :)
-
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-
-Thanks!
-
-[1]https://lore.kernel.org/linux-mm/19981830-a5e6-bdba-4a1c-1cdcea61b93b@huawei.com/
-
-> ---
->  mm/memory-failure.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+在 2022/6/27 20:06, Leizhen (ThunderTown) 写道:
 > 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index db85f644a1e3..fc7b83cb6468 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -1046,7 +1046,6 @@ static int me_huge_page(struct page_state *ps, struct page *p)
->  		res = truncate_error_page(hpage, page_to_pfn(p), mapping);
->  		unlock_page(hpage);
->  	} else {
-> -		res = MF_FAILED;
->  		unlock_page(hpage);
->  		/*
->  		 * migration entry prevents later access on error hugepage,
-> @@ -1054,9 +1053,11 @@ static int me_huge_page(struct page_state *ps, struct page *p)
->  		 * subpages.
->  		 */
->  		put_page(hpage);
-> -		if (__page_handle_poison(p) > 0) {
-> +		if (__page_handle_poison(p) >= 0) {
->  			page_ref_inc(p);
->  			res = MF_RECOVERED;
-> +		} else {
-> +			res = MF_FAILED;
->  		}
->  	}
->  
-> @@ -1704,9 +1705,11 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
->  	 */
->  	if (res == 0) {
->  		unlock_page(head);
-> -		if (__page_handle_poison(p) > 0) {
-> +		if (__page_handle_poison(p) >= 0) {
->  			page_ref_inc(p);
->  			res = MF_RECOVERED;
-> +		} else {
-> +			res = MF_FAILED;
->  		}
->  		action_result(pfn, MF_MSG_FREE_HUGE, res);
->  		return res == MF_RECOVERED ? 0 : -EBUSY;
 > 
+> On 2022/6/27 18:46, guanghui.fgh wrote:
+>>
+>>
+>> 在 2022/6/27 17:49, Mike Rapoport 写道:
+>>> Please don't post HTML.
+>>>
+>>> On Mon, Jun 27, 2022 at 05:24:10PM +0800, guanghui.fgh wrote:
+>>>> Thanks.
+>>>>
+>>>> 在 2022/6/27 14:34, Mike Rapoport 写道:
+>>>>
+>>>>       On Sun, Jun 26, 2022 at 07:10:15PM +0800, Guanghui Feng wrote:
+>>>>
+>>>>           The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
+>>>>           (enable crashkernel, disable rodata full, disable kfence), the mem_map will
+>>>>           use non block/section mapping(for crashkernel requires to shrink the region
+>>>>           in page granularity). But it will degrade performance when doing larging
+>>>>           continuous mem access in kernel(memcpy/memmove, etc).
+>>>>
+>>>>           There are many changes and discussions:
+>>>>           commit 031495635b46
+>>>>           commit 1a8e1cef7603
+>>>>           commit 8424ecdde7df
+>>>>           commit 0a30c53573b0
+>>>>           commit 2687275a5843
+>>>>
+>>>>       Please include oneline summary of the commit. (See section "Describe your
+>>>>       changes" in Documentation/process/submitting-patches.rst)
+>>>>
+>>>> OK, I will add oneline summary in the git commit messages.
+>>>>
+>>>>           This patch changes mem_map to use block/section mapping with crashkernel.
+>>>>           Firstly, do block/section mapping(normally 2M or 1G) for all avail mem at
+>>>>           mem_map, reserve crashkernel memory. And then walking pagetable to split
+>>>>           block/section mapping to non block/section mapping(normally 4K) [[[only]]]
+>>>>           for crashkernel mem.
+>>>>
+>>>>       This already happens when ZONE_DMA/ZONE_DMA32 are disabled. Please explain
+>>>>       why is it Ok to change the way the memory is mapped with
+>>>>       ZONE_DMA/ZONE_DMA32 enabled.
+>>>>
+>>>> In short:
+>>>>
+>>>> 1.building all avail mem with block/section mapping（normally 1G/2M） without
+>>>> inspecting crashkernel
+>>>> 2. Reserve crashkernel mem as same as previous doing
+>>>> 3. only change the crashkernle mem mapping to normal mapping(normally 4k).
+>>>> With this method, there are block/section mapping as more as possible.
+>>>
+>>> This does not answer the question why changing the way the memory is mapped
+>>> when there is ZONE_DMA/DMA32 and crashkernel won't cause a regression.
+>>>
+>> 1.Quoted messages from arch/arm64/mm/init.c
+>>
+>> "Memory reservation for crash kernel either done early or deferred
+>> depending on DMA memory zones configs (ZONE_DMA) --
+>>
+>> In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
+>> here instead of max_zone_phys().  This lets early reservation of
+>> crash kernel memory which has a dependency on arm64_dma_phys_limit.
+>> Reserving memory early for crash kernel allows linear creation of block
+>> mappings (greater than page-granularity) for all the memory bank rangs.
+>> In this scheme a comparatively quicker boot is observed.
+>>
+>> If ZONE_DMA configs are defined, crash kernel memory reservation
+>> is delayed until DMA zone memory range size initialization performed in
+>> zone_sizes_init().  The defer is necessary to steer clear of DMA zone
+>> memory range to avoid overlap allocation.  So crash kernel memory boundaries are not known when mapping all bank memory ranges, which otherwise means not possible to exclude crash kernel range from creating block mappings so page-granularity mappings are created for the entire memory range."
+>>
+>> Namely, the init order: memblock init--->linear mem mapping(4k mapping for crashkernel, requirinig page-granularity changing))--->zone dma limit--->reserve crashkernel.
+>> So when enable ZONE DMA and using crashkernel, the mem mapping using 4k mapping.
+>>
+>> 2.As mentioned above, when linear mem use 4k mapping simply, there is high dtlb miss(degrade performance).
+>> This patch use block/section mapping as far as possible with performance improvement.
+>>
+>> 3.This patch reserve crashkernel as same as the history(ZONE DMA & crashkernel reserving order), and only change the linear mem mapping to block/section mapping.
+>> .
+>>
+> 
+> I think Mike Rapoport's probably asking you to answer whether you've
+> taken into account such as BBM. For example, the following code:
+> we should prepare the next level pgtable first, then change 2M block
+> mapping to 4K page mapping, and flush TLB at the end.
+> > +static void init_crashkernel_pmd(pud_t *pudp, unsigned long addr,
+> +				 unsigned long end, phys_addr_t phys,
+> +				 pgprot_t prot,
+> +				 phys_addr_t (*pgtable_alloc)(int), int flags)
+> +{
+> +	phys_addr_t map_offset;
+> +	unsigned long next;
+> +	pmd_t *pmdp;
+> +	pmdval_t pmdval;
+> +
+> +	pmdp = pmd_offset(pudp, addr);
+> +	do {
+> +		next = pmd_addr_end(addr, end);
+> +		if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
+> +			phys_addr_t pte_phys = pgtable_alloc(PAGE_SHIFT);
+> +			pmd_clear(pmdp);
+> +			pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
+> +			if (flags & NO_EXEC_MAPPINGS)
+> +				pmdval |= PMD_TABLE_PXN;
+> +			__pmd_populate(pmdp, pte_phys, pmdval);
+> +			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+> 
+> The pgtable is empty now. However, memory other than crashkernel may be being accessed.
+1.When reserving crashkernel and remapping linear mem mapping, there is 
+only one boot cpu running. There is no other cpu/thread running at the 
+same time.
 
+2.When clearing block/section mapping, I have flush tlb by 
+flush_tlb_kernel_range. Afterwards rebuilt 4k mapping(I think it's no 
+need flush tlb).
+
+> 
+> +
+> +			map_offset = addr - (addr & PMD_MASK);
+> +			if (map_offset)
+> +			    alloc_init_cont_pte(pmdp, addr & PMD_MASK, addr,
+> +						phys - map_offset, prot,
+> +						pgtable_alloc, flags);
+> +
+> +			if (next < (addr & PMD_MASK) + PMD_SIZE)
+> +			    alloc_init_cont_pte(pmdp, next, (addr & PUD_MASK) +
+> +						PUD_SIZE, next - addr + phys,
+> +						prot, pgtable_alloc, flags);
+> +		}
+> +		alloc_crashkernel_cont_pte(pmdp, addr, next, phys, prot,
+> +					   pgtable_alloc, flags);
+> +		phys += next - addr;
+> +	} while (pmdp++, addr = next, addr != end);
+> +}
+> 

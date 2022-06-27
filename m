@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449D555DB98
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF8755D5E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235377AbiF0L4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S237588AbiF0LoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237932AbiF0LtV (ORCPT
+        with ESMTP id S237235AbiF0Lmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:49:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7437DDD;
-        Mon, 27 Jun 2022 04:43:14 -0700 (PDT)
+        Mon, 27 Jun 2022 07:42:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FAEDF1F;
+        Mon, 27 Jun 2022 04:36:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F09EB80D37;
-        Mon, 27 Jun 2022 11:43:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16929C341C8;
-        Mon, 27 Jun 2022 11:43:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DF68610A1;
+        Mon, 27 Jun 2022 11:36:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2266FC3411D;
+        Mon, 27 Jun 2022 11:36:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330192;
-        bh=YUrqrbn/QJSmzgllfANENbqZxwC6t/rmd2LNeArJOlg=;
+        s=korg; t=1656329795;
+        bh=UKbEqA3Zv9VXTEGzuMe35zysRCOL+NKUWHwYEp7etj0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IZ08uKSCSYufDXoWjBjinh6gPCRdOwRE7eVlg706p7B0BFFqj0ngkI6J6odYL0q+W
-         h3JY/pVRwwZLTBlGxt+dgDMvLNxFFS+K3cWeZQOYLJV94wtGYp5f7BfdR4oyBGkFkQ
-         JQimjfHU2eJNnELN8kGshfJO2FOo2NXySHBkarNU=
+        b=W5pZDCtBPCdPFWba4wu298zZkGtz1Hn6bHx6P+L2PRzNIBuLo/U4ThMdVw0l1fykK
+         fsB/fHUs763vnLQ2O6U1GUAtqgo33WUn5UU3DhMEBVZPOOr6mJ1wSMkA9WsT1aCX3p
+         8k6ZJsPwNWCtCzVXJWHQ6hlNdr3Blw2HOnx8kli4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5.18 115/181] xhci: turn off port power in shutdown
+        stable@vger.kernel.org, Jakob Hauser <jahau@rocketmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 081/135] iio: magnetometer: yas530: Fix memchr_inv() misuse
 Date:   Mon, 27 Jun 2022 13:21:28 +0200
-Message-Id: <20220627111948.032456597@linuxfoundation.org>
+Message-Id: <20220627111940.512125939@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,86 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-commit 83810f84ecf11dfc5a9414a8b762c3501b328185 upstream.
+[ Upstream commit bb52d3691db8cf24cea049235223f3599778f264 ]
 
-If ports are not turned off in shutdown then runtime suspended
-self-powered USB devices may survive in U3 link state over S5.
+The call to check if the calibration is all zeroes is doing
+it wrong: memchr_inv() returns NULL if the the calibration
+contains all zeroes, but the check is for != NULL.
 
-During subsequent boot, if firmware sends an IPC command to program
-the port in DISCONNECT state, it will time out, causing significant
-delay in the boot time.
+Fix it up. It's probably not an urgent fix because the inner
+check for BIT(7) in data[13] will save us. But fix it.
 
-Turning off roothub port power is also recommended in xhci
-specification 4.19.4 "Port Power" in the additional note.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220623111945.1557702-3-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: de8860b1ed47 ("iio: magnetometer: Add driver for Yamaha YAS530")
+Reported-by: Jakob Hauser <jahau@rocketmail.com>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220501195029.151852-1-linus.walleij@linaro.org
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-hub.c |    2 +-
- drivers/usb/host/xhci.c     |   15 +++++++++++++--
- drivers/usb/host/xhci.h     |    2 ++
- 3 files changed, 16 insertions(+), 3 deletions(-)
+ drivers/iio/magnetometer/yamaha-yas530.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -652,7 +652,7 @@ struct xhci_hub *xhci_get_rhub(struct us
-  * It will release and re-aquire the lock while calling ACPI
-  * method.
-  */
--static void xhci_set_port_power(struct xhci_hcd *xhci, struct usb_hcd *hcd,
-+void xhci_set_port_power(struct xhci_hcd *xhci, struct usb_hcd *hcd,
- 				u16 index, bool on, unsigned long *flags)
- 	__must_hold(&xhci->lock)
- {
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -779,6 +779,8 @@ static void xhci_stop(struct usb_hcd *hc
- void xhci_shutdown(struct usb_hcd *hcd)
- {
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+	unsigned long flags;
-+	int i;
+diff --git a/drivers/iio/magnetometer/yamaha-yas530.c b/drivers/iio/magnetometer/yamaha-yas530.c
+index 9ff7b0e56cf6..b2bc637150bf 100644
+--- a/drivers/iio/magnetometer/yamaha-yas530.c
++++ b/drivers/iio/magnetometer/yamaha-yas530.c
+@@ -639,7 +639,7 @@ static int yas532_get_calibration_data(struct yas5xx *yas5xx)
+ 	dev_dbg(yas5xx->dev, "calibration data: %*ph\n", 14, data);
  
- 	if (xhci->quirks & XHCI_SPURIOUS_REBOOT)
- 		usb_disable_xhci_ports(to_pci_dev(hcd->self.sysdev));
-@@ -794,12 +796,21 @@ void xhci_shutdown(struct usb_hcd *hcd)
- 		del_timer_sync(&xhci->shared_hcd->rh_timer);
+ 	/* Sanity check, is this all zeroes? */
+-	if (memchr_inv(data, 0x00, 13)) {
++	if (memchr_inv(data, 0x00, 13) == NULL) {
+ 		if (!(data[13] & BIT(7)))
+ 			dev_warn(yas5xx->dev, "calibration is blank!\n");
  	}
- 
--	spin_lock_irq(&xhci->lock);
-+	spin_lock_irqsave(&xhci->lock, flags);
- 	xhci_halt(xhci);
-+
-+	/* Power off USB2 ports*/
-+	for (i = 0; i < xhci->usb2_rhub.num_ports; i++)
-+		xhci_set_port_power(xhci, xhci->main_hcd, i, false, &flags);
-+
-+	/* Power off USB3 ports*/
-+	for (i = 0; i < xhci->usb3_rhub.num_ports; i++)
-+		xhci_set_port_power(xhci, xhci->shared_hcd, i, false, &flags);
-+
- 	/* Workaround for spurious wakeups at shutdown with HSW */
- 	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
- 		xhci_reset(xhci, XHCI_RESET_SHORT_USEC);
--	spin_unlock_irq(&xhci->lock);
-+	spin_unlock_irqrestore(&xhci->lock, flags);
- 
- 	xhci_cleanup_msix(xhci);
- 
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2172,6 +2172,8 @@ int xhci_hub_control(struct usb_hcd *hcd
- int xhci_hub_status_data(struct usb_hcd *hcd, char *buf);
- int xhci_find_raw_port_number(struct usb_hcd *hcd, int port1);
- struct xhci_hub *xhci_get_rhub(struct usb_hcd *hcd);
-+void xhci_set_port_power(struct xhci_hcd *xhci, struct usb_hcd *hcd, u16 index,
-+			 bool on, unsigned long *flags);
- 
- void xhci_hc_died(struct xhci_hcd *xhci);
- 
+-- 
+2.35.1
+
 
 

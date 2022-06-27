@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78AD255DCC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39D355CE47
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235892AbiF0Nbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41608 "EHLO
+        id S235744AbiF0NbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235866AbiF0Nba (ORCPT
+        with ESMTP id S235469AbiF0NbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:31:30 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA0164E4;
-        Mon, 27 Jun 2022 06:31:24 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id h85so9547976iof.4;
-        Mon, 27 Jun 2022 06:31:24 -0700 (PDT)
+        Mon, 27 Jun 2022 09:31:13 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A000F6457;
+        Mon, 27 Jun 2022 06:31:12 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id z191so9525900iof.6;
+        Mon, 27 Jun 2022 06:31:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=YBApyAZhryutkj1N0CgYhNXY1+WXUhBmjXDtALNVzOI=;
-        b=hCMvud/6mKxaJaYNG9R4UASuCTNtbY1pl/kUT8ZykgYNwOOgqh4ItVXsGpNB1hsKa6
-         sE3i8w4bmWA4hNWpsNofNyJuNoucj/z4MTCvevOyRytpI33SQfLrYBpGrN74Yg9nBsh4
-         Ot8qWBumWj8rdkfGCuA9NR9u5YqQZQmhhGAHdPoDvDpfaqzZRtYwFincFUbtBP9thpFA
-         REuGgRmQbvSkkwziQ1ayCKBzmpRb4OUhhfzblhhUxgl7mtaArhSFRgZiv5Nn19EuXtGG
-         ntILoFrPLAPfd5T2AW08M43fQz9g1m26Qz/biNonPF5oSeugMECaRoA2A0OB+GBXI04L
-         y5sA==
-X-Gm-Message-State: AJIora8hbRmjW31LblXkop6IR8KEInYQfQM0Fz31Hq/tBzF6QFT62xKU
-        ylherlwi5vim/SynW2ex3Efrzestpg==
-X-Google-Smtp-Source: AGRyM1smbEVZ88IdJlCAbanipzttn6crpX6AL3iQCbRbOLHyD61OgJYhYskFjkrchfE0bQdfdtAKcg==
-X-Received: by 2002:a5d:9ac4:0:b0:674:fca5:62db with SMTP id x4-20020a5d9ac4000000b00674fca562dbmr6517964ion.177.1656336683456;
-        Mon, 27 Jun 2022 06:31:23 -0700 (PDT)
+        bh=gvyNOyKg09RJXU5ec40IlIX3sIrR9XwCvpl1WEk0W1A=;
+        b=Yy3XmkTJ4AuyTeGg+L1n9Um8dBoidfwsPStfg+WFgZhNEd5n0dG3jLpGouzAGBnCou
+         qqW5NsoyMLsLVcG9Ra7fVGLJcAJfjya/nNQQJPdea44VFoLYGWSP86S6J16RRySgohsK
+         3JQmTpnepk5sNItWRdcxhQWGlFoL+Uf6uwFmxXRsM3IKCtSWNTm+TBURveHNJ9VNB8Wx
+         fB6OGE38wedfHvlUKAasn1SpoSzxhIUB+o9o1yJHL8N4+UYPl0EKIaKBmiC2ktKCNsLx
+         vFXiwhyjg1cfovHq0DR+DgsZuaH/BpXEjm5J4Zzk7D52Kh42gfd03KG92CR0n8kbi6pe
+         oV/w==
+X-Gm-Message-State: AJIora8CaVeH1HQAUqqUJZKHLv0HdyC9UbfRsp9ueWgrroNqKaCLAErS
+        VpBpP4J0UvAdEXy9B5xuUQ==
+X-Google-Smtp-Source: AGRyM1sn5cxnWTFDJThm/N0WYIXFSI3CGx3Yy45HDIAoBp2dOs8SX9fD0bX2JUrEW7c9t3fT7UtB8g==
+X-Received: by 2002:a02:c942:0:b0:339:ec11:d04e with SMTP id u2-20020a02c942000000b00339ec11d04emr7739526jao.174.1656336671717;
+        Mon, 27 Jun 2022 06:31:11 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id d18-20020a056602185200b00669e1a9588esm5299273ioi.43.2022.06.27.06.31.22
+        by smtp.gmail.com with ESMTPSA id n21-20020a6b4115000000b0067554b8e92asm229787ioa.20.2022.06.27.06.31.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 06:31:23 -0700 (PDT)
-Received: (nullmailer pid 2285166 invoked by uid 1000);
+        Mon, 27 Jun 2022 06:31:11 -0700 (PDT)
+Received: (nullmailer pid 2285163 invoked by uid 1000);
         Mon, 27 Jun 2022 13:31:09 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-amarula@amarulasolutions.com,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        quentin.schulz@theobroma-systems.com, linuxfancy@googlegroups.com
-In-Reply-To: <20220624230307.3066530-8-tommaso.merciai@amarulasolutions.com>
-References: <20220624230307.3066530-1-tommaso.merciai@amarulasolutions.com> <20220624230307.3066530-8-tommaso.merciai@amarulasolutions.com>
-Subject: Re: [PATCH 7/7] media: dt-bindings: ov5693: document YAML binding
+To:     alexandru.tachici@analog.com
+Cc:     krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au,
+        l.stelmach@samsung.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stephen@networkplumber.org,
+        geert@linux-m68k.org, stefan.wahren@i2se.com, wellslutw@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        gerhard@engleder-embedded.com, devicetree@vger.kernel.org,
+        geert+renesas@glider.be, robh+dt@kernel.org,
+        d.michailidis@fungible.com
+In-Reply-To: <20220624200628.77047-3-alexandru.tachici@analog.com>
+References: <20220624200628.77047-1-alexandru.tachici@analog.com> <20220624200628.77047-3-alexandru.tachici@analog.com>
+Subject: Re: [net-next 2/2] dt-bindings: net: adin1110: Add docs
 Date:   Mon, 27 Jun 2022 07:31:09 -0600
-Message-Id: <1656336669.640985.2285165.nullmailer@robh.at.kernel.org>
+Message-Id: <1656336669.630006.2285162.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -64,25 +65,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Jun 2022 01:03:07 +0200, Tommaso Merciai wrote:
-> This patch adds documentation of device tree in YAML schema for the
-> OV5693 CMOS image sensor from Omnivision
+On Fri, 24 Jun 2022 23:06:28 +0300, alexandru.tachici@analog.com wrote:
+> From: Alexandru Tachici <alexandru.tachici@analog.com>
 > 
-> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+> Add bindings for the ADIN1110/2111 MAC-PHY/SWITCH.
+> 
+> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
 > ---
->  .../bindings/media/i2c/ovti,ov5693.yaml       | 123 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 124 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml
+>  .../devicetree/bindings/net/adi,adin1110.yaml | 127 ++++++++++++++++++
+>  1 file changed, 127 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/adi,adin1110.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/media/i2c/ovti,ov5693.yaml:123:7: [error] no new line character at the end of file (new-line-at-end-of-file)
 
 dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/net/adi,adin1110.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/net/spi-controller.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/adi,adin1110.example.dtb: ethernet@0: False schema does not allow {'compatible': ['adi,adin2111'], 'reg': [[0]], 'spi-max-frequency': [[24500000]], 'adi,spi-crc': True, '#address-cells': [[1]], '#size-cells': [[0]], 'interrupts': [[25, 2]], 'mac-address': [[202, 47, 183, 16, 35, 99]], 'phy@0': {'#phy-cells': [[0]], 'compatible': ['ethernet-phy-id0283.bca1'], 'reg': [[0]]}, 'phy@1': {'#phy-cells': [[0]], 'compatible': ['ethernet-phy-id0283.bca1'], 'reg': [[1]]}, '$nodename': ['ethernet@0']}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/adi,adin1110.yaml
 
 doc reference errors (make refcheckdocs):
 

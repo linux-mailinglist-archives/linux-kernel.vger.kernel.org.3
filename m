@@ -2,107 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E8555B506
+	by mail.lfdr.de (Postfix) with ESMTP id 34B0D55B505
 	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 03:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbiF0BqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 21:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
+        id S229955AbiF0Bqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 21:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiF0BqU (ORCPT
+        with ESMTP id S229463AbiF0Bqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 21:46:20 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0252AF5
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 18:46:18 -0700 (PDT)
+        Sun, 26 Jun 2022 21:46:37 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CA22AF5
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 18:46:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656294378; x=1687830378;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Cig3Rb3g37pgQUnLrX1cgsG9zIIk1tyGvL84767Sv+Y=;
-  b=O2vZ1pTUyEYR7jUTcAP8VSfwIXVhfm9SrQswf/YVzIe77d6g7rT5M7U5
-   d+DB38jxlWMCagL1/TdfMr/nh1+fNYLzUCtL+OSa8ZUOegs+CZ/MLkPGz
-   OKqcyKLPv4yOJV6ArtaUF11o1nekP8ue4w13W8H8veBda95bvfh8/bsTG
-   5j1nEXELZy0u0+/Mw6R4dvwtmfEH4ieeXU5NeVvk79S2kTcBJwOkudsbh
-   eu1Ml151YbPnAHchgpWgIgJhxvI1e8XvI17fiYTvflboVIg9+5QBbOhSm
-   zc85CW4AOV3XuSgnVJ47jDeheVJpitzEHwV5LKBq6esEyZl0r6qg/4v8T
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="280092861"
+  t=1656294397; x=1687830397;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=25q2Ot9qhgZzcqFAUdp6LMnf76NSWxWGDc2QUqsYmo8=;
+  b=bpuWvPoRTGG7klfvTjTUmQCk3/Z2JskHqooxy15JlWKno4bvAmlza84m
+   dKYJJsOc7pBRZYmT3rprSn72sg5WElPH74bYTZSzWhijBZcBRyIuEMril
+   kfQfIj1eeaKyb/yP36FdLOrJz1tC8sII2pp4as8G5WYtZ/JN6HaMsZO2+
+   w+oAu2begv4ykwYNIRqG+F148M7g3foPDONWnE1NOOJIYFV7JLP9dmkPl
+   FbFodKxkl5VXxMfZHHbDanwxs32NBZXmpHaC5UDIb17sBGuwcLLymuCJy
+   ramwSW2yWVQAZhNmjeojKG2n/Pg/Exv9iXPpmtKDRs68kKsZpsmKjd36Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="270074332"
 X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="280092861"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 18:46:18 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="270074332"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 18:46:36 -0700
 X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="594085487"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 26 Jun 2022 18:46:16 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o5dpP-000858-TH;
-        Mon, 27 Jun 2022 01:46:15 +0000
-Date:   Mon, 27 Jun 2022 09:46:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Oded Gabbay <ogabbay@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [ogabbay:gaudi2 49/54] gaudi2.c:(.text.gaudi2_cpucp_info_get+0x41c):
- undefined reference to `__udivdi3'
-Message-ID: <202206270919.BAqImbZ6-lkp@intel.com>
+   d="scan'208";a="835979159"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 18:46:35 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, Zi Yan <ziy@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [PATCH 4/7] migrate_pages(): fix failure counting for THP
+ subpages retrying
+References: <20220624025309.1033400-1-ying.huang@intel.com>
+        <20220624025309.1033400-5-ying.huang@intel.com>
+        <f2e1ea63-d0ca-7a80-fc16-90622ef2017d@linux.alibaba.com>
+Date:   Mon, 27 Jun 2022 09:46:31 +0800
+In-Reply-To: <f2e1ea63-d0ca-7a80-fc16-90622ef2017d@linux.alibaba.com> (Baolin
+        Wang's message of "Fri, 24 Jun 2022 17:45:50 +0800")
+Message-ID: <87zghy7ua0.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=ascii
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git gaudi2
-head:   46d258b93c9e6795f366c8b5159b33cfeb7d3bd8
-commit: bb6edeab4c9679a00b7bb85fb20fb0a11e015509 [49/54] habanalabs: add gaudi2 asic-specific code
-config: mips-allyesconfig
-compiler: mips-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=bb6edeab4c9679a00b7bb85fb20fb0a11e015509
-        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
-        git fetch --no-tags ogabbay gaudi2
-        git checkout bb6edeab4c9679a00b7bb85fb20fb0a11e015509
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> On 6/24/2022 10:53 AM, Huang Ying wrote:
+>> If THP is failed to be migrated for -ENOSYS and -ENOMEM, the THP will
+>> be split into thp_split_pages, and after other pages are migrated,
+>> pages in thp_split_pages will be migrated with no_subpage_counting ==
+>> true, because its failure have been counted already.  If some pages in
+>> thp_split_pages are retried during migration, we should not count
+>> their failure if no_subpage_counting == true too.  This is done this
+>> patch to fix the failure counting for THP subpages retrying.
+>
+> Good catch. Totally agree with you. It seems we can move the condition
+> into -EAGAIN case like other cases did?
+>
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 1ece23d80bc4..491c2d07402b 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1463,7 +1463,7 @@ int migrate_pages(struct list_head *from,
+> new_page_t get_new_page,
+>                         case -EAGAIN:
+>                                 if (is_thp)
+>                                         thp_retry++;
+> -                               else
+> +                               else if (!no_subpage_counting)
+>                                         retry++;
+>                                 break;
 
-All errors (new ones prefixed by >>):
+This has another effect except fixing the failure counting.  That is,
+the split subpages of THP will not be retried for 10 times for -EAGAIN.
+TBH, I think that we should do that.  But because this has some behavior
+change, it's better to be done in a separate patch?  Do you have
+interest to do that on top of this patchset?
 
-   arch/mips/kernel/head.o: in function `kernel_entry':
-   (.ref.text+0xac): relocation truncated to fit: R_MIPS_26 against `start_kernel'
-   init/main.o: in function `set_reset_devices':
-   main.c:(.init.text+0x20): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x30): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `debug_kernel':
-   main.c:(.init.text+0xa4): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0xb4): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `quiet_kernel':
-   main.c:(.init.text+0x128): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x138): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `warn_bootconfig':
-   main.c:(.init.text+0x1ac): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x1bc): relocation truncated to fit: R_MIPS_26 against `__sanitizer_cov_trace_pc'
-   init/main.o: in function `init_setup':
-   main.c:(.init.text+0x238): relocation truncated to fit: R_MIPS_26 against `_mcount'
-   main.c:(.init.text+0x258): additional relocation overflows omitted from the output
-   mips-linux-ld: drivers/misc/habanalabs/gaudi2/gaudi2.o: in function `gaudi2_cpucp_info_get':
->> gaudi2.c:(.text.gaudi2_cpucp_info_get+0x41c): undefined reference to `__udivdi3'
->> mips-linux-ld: gaudi2.c:(.text.gaudi2_cpucp_info_get+0x4d8): undefined reference to `__udivdi3'
+> Anyway this patch looks good to me.
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks!
+
+Best Regards,
+Huang, Ying
+
+>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>> Fixes: 5984fabb6e82 ("mm: move_pages: report the number of non-attempted pages")
+>> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> Cc: Zi Yan <ziy@nvidia.com>
+>> Cc: Yang Shi <shy828301@gmail.com>
+>> --- >   mm/migrate.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index 542533e4e3cf..61dab3025a1d 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1477,7 +1477,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   			}
+>>   		}
+>>   	}
+>> -	nr_failed += retry;
+>> +	if (!no_subpage_counting)
+>> +		nr_failed += retry;
+>>   	nr_thp_failed += thp_retry;
+>>   	/*
+>>   	 * Try to migrate subpages of fail-to-migrate THPs, no nr_failed

@@ -2,140 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A9B55D060
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247DF55CC5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234261AbiF0KrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S234287AbiF0Krg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234255AbiF0Kq6 (ORCPT
+        with ESMTP id S233342AbiF0Krf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:46:58 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0ED642B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:46:56 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VHZ5z42_1656326810;
-Received: from 30.225.28.167(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VHZ5z42_1656326810)
-          by smtp.aliyun-inc.com;
-          Mon, 27 Jun 2022 18:46:52 +0800
-Message-ID: <ae5c6c07-1d49-ffd2-6f62-69df4308d0bb@linux.alibaba.com>
-Date:   Mon, 27 Jun 2022 18:46:50 +0800
+        Mon, 27 Jun 2022 06:47:35 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B97642B
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:47:34 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id u9so12210796oiv.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:47:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BmZKb1z18EDVwc67jEwsvqQ2o+cNJLYi4tj3i//9p34=;
+        b=GHPKRSKrUAHBUwVDZE3XUgMpB/fT11Y1/6i9ub8wLkh7bteMlcs2VuSKn7E3ub+zad
+         /N+i0Ro5cItgL8qQuegPDkAuzDbeoYeP09clLXn9rT5WZQnSGhgujfMGcYoaniIBKTua
+         alv415OSebEWYA/d+ZtMCoQTiS8f4c6iYHQgySNFkjE5IrZ73AolYW/g7OCzas2WwDW8
+         k9MtlRZn2MLllCNX71SeBB38vPzlY12FuhCFrfyDK4TVnYZoV/NEEzd0XrOxIlObkMah
+         4/pyJ/t1NryP0XH2nhcuFsL+5lxk/hB5rfZvjju1vpHd1axAx9Td0mMJRQTpQirY09PP
+         7gdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BmZKb1z18EDVwc67jEwsvqQ2o+cNJLYi4tj3i//9p34=;
+        b=zsj795bGmh1dozhoWCtk97KAz2VMNLr89Sk8pwUodcFVbYaLOLD9dwifhCZ8eEYWcH
+         3l7ldXTYSxSUFync8OpVuaOXPHg2qaz3v0jYLLY3uDfe/drYmvKCUcueibLY59syHM33
+         mg/P5yc7KrxSFazLXZN1KOX5CeAF2lUnoaLlt4yZeubaJjMq5zX/g08AiKPq8vbLI0l4
+         kjQAgC9U1GsECZnwpJOyrsEtWhqgDFFRJhMF3uIcEmaWYjboMZV5vvwffe4POTBnvgRR
+         40Zy32Ym2NKHhZ8yLZfwafxKajkvGUbWjnf8ACTDT3VEBXgnl9mm8t8V343hXxZ0WrT1
+         8M8g==
+X-Gm-Message-State: AJIora+j4eA12JgiWvZUkWSRFgnwJPKKDUyZR2bfwH4hOJfIKedP9u9U
+        B8bMfBaycYxO1Q4k5+haNU0HUhZjC+E1xvjUuYxOnQ==
+X-Google-Smtp-Source: AGRyM1tZY52KkyYiJLHfNgYn+Ap7cZZWiTpq03zyjLMuN3cwjCqQKIaqOzOSH5cLn23NDCmR5KfEeCsgnonH/c7xVZQ=
+X-Received: by 2002:a05:6808:ed0:b0:331:4811:737f with SMTP id
+ q16-20020a0568080ed000b003314811737fmr7451560oiv.104.1656326853588; Mon, 27
+ Jun 2022 03:47:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] arm64: mm: fix linear mapping mem access performace
- degradation
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     baolin.wang@linux.alibaba.com, catalin.marinas@arm.com,
-        will@kernel.org, akpm@linux-foundation.org, david@redhat.com,
-        jianyong.wu@arm.com, james.morse@arm.com, quic_qiancai@quicinc.com,
-        christophe.leroy@csgroup.eu, jonathan@marek.ca,
-        mark.rutland@arm.com, thunder.leizhen@huawei.com,
-        anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, geert+renesas@glider.be,
-        ardb@kernel.org, linux-mm@kvack.org
-References: <1656241815-28494-1-git-send-email-guanghuifeng@linux.alibaba.com>
- <YrlPfjv2Wf/C77DI@kernel.org>
- <4d18d303-aeed-0beb-a8a4-32893f2d438d@linux.alibaba.com>
- <Yrl9FcVv1wZ5MnRp@kernel.org>
-From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
-In-Reply-To: <Yrl9FcVv1wZ5MnRp@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220624074549.3298-1-vincent.guittot@linaro.org> <YrWCctNSyKcqSHE9@e120937-lin>
+In-Reply-To: <YrWCctNSyKcqSHE9@e120937-lin>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Mon, 27 Jun 2022 12:47:22 +0200
+Message-ID: <CAN5uoS_v+WBRJjNkOnDDjtavQAnyPVMHEOrYx6GPo0HJ8a2Z_w@mail.gmail.com>
+Subject: Re: [PATCH] scmi/optee: fix response size warning
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>, sudeep.holla@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Vincent,
+
+On Fri, 24 Jun 2022 at 11:23, Cristian Marussi <cristian.marussi@arm.com> wrote:
+>
+> On Fri, Jun 24, 2022 at 09:45:49AM +0200, Vincent Guittot wrote:
+> > Some protocols check the response size with the expected value but optee
+> > shared memory doesn't return such size whereas it is available in the
+> > optee output buffer.
+> >
+> > As an example, the base protocol compares the response size with the
+> > expected result when requesting the list of protocol which triggers a
+> > warning with optee shared memory:
+> >
+> > [    1.260306] arm-scmi firmware:scmi0: Malformed reply - real_sz:116  calc_sz:4  (loop_num_ret:4)
+> >
+> > Save the output buffer length and use it when fetching the answer.
+> >
+> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+>
+> Hi Vincent,
+>
+> > ---
+> >
+> > Tested on sudeep's for-next/scmi branch
+> >
+> >  drivers/firmware/arm_scmi/optee.c | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/firmware/arm_scmi/optee.c b/drivers/firmware/arm_scmi/optee.c
+> > index b503c22cfd32..8abace56b958 100644
+> > --- a/drivers/firmware/arm_scmi/optee.c
+> > +++ b/drivers/firmware/arm_scmi/optee.c
+> > @@ -117,6 +117,7 @@ struct scmi_optee_channel {
+> >       u32 channel_id;
+> >       u32 tee_session;
+> >       u32 caps;
+> > +     u32 rx_len;
+> >       struct mutex mu;
+> >       struct scmi_chan_info *cinfo;
+> >       union {
+> > @@ -302,6 +303,9 @@ static int invoke_process_msg_channel(struct scmi_optee_channel *channel, size_t
+> >               return -EIO;
+> >       }
+> >
+> > +     /* Save response size */
+> > +     channel->rx_len = param[2].u.memref.size;
+> > +
+> >       return 0;
+> >  }
+> >
+> > @@ -353,6 +357,7 @@ static int setup_dynamic_shmem(struct device *dev, struct scmi_optee_channel *ch
+> >       shbuf = tee_shm_get_va(channel->tee_shm, 0);
+> >       memset(shbuf, 0, msg_size);
+> >       channel->req.msg = shbuf;
+> > +     channel->rx_len = msg_size;
+> >
+> >       return 0;
+> >  }
+> > @@ -508,7 +513,7 @@ static void scmi_optee_fetch_response(struct scmi_chan_info *cinfo,
+> >       struct scmi_optee_channel *channel = cinfo->transport_info;
+> >
+> >       if (channel->tee_shm)
+> > -             msg_fetch_response(channel->req.msg, SCMI_OPTEE_MAX_MSG_SIZE, xfer);
+> > +             msg_fetch_response(channel->req.msg, channel->rx_len, xfer);
+> >       else
+> >               shmem_fetch_response(channel->req.shmem, xfer);
+> >  }
+
+Thanks for the fix.
+Reviewed-by: Etienne Carriere <etienne.carriere@linaro.org>
 
 
-在 2022/6/27 17:49, Mike Rapoport 写道:
-> Please don't post HTML.
-> 
-> On Mon, Jun 27, 2022 at 05:24:10PM +0800, guanghui.fgh wrote:
->> Thanks.
->>
->> 在 2022/6/27 14:34, Mike Rapoport 写道:
->>
->>      On Sun, Jun 26, 2022 at 07:10:15PM +0800, Guanghui Feng wrote:
->>
->>          The arm64 can build 2M/1G block/sectiion mapping. When using DMA/DMA32 zone
->>          (enable crashkernel, disable rodata full, disable kfence), the mem_map will
->>          use non block/section mapping(for crashkernel requires to shrink the region
->>          in page granularity). But it will degrade performance when doing larging
->>          continuous mem access in kernel(memcpy/memmove, etc).
->>
->>          There are many changes and discussions:
->>          commit 031495635b46
->>          commit 1a8e1cef7603
->>          commit 8424ecdde7df
->>          commit 0a30c53573b0
->>          commit 2687275a5843
->>
->>      Please include oneline summary of the commit. (See section "Describe your
->>      changes" in Documentation/process/submitting-patches.rst)
->>
->> OK, I will add oneline summary in the git commit messages.
->>
->>          This patch changes mem_map to use block/section mapping with crashkernel.
->>          Firstly, do block/section mapping(normally 2M or 1G) for all avail mem at
->>          mem_map, reserve crashkernel memory. And then walking pagetable to split
->>          block/section mapping to non block/section mapping(normally 4K) [[[only]]]
->>          for crashkernel mem.
->>
->>      This already happens when ZONE_DMA/ZONE_DMA32 are disabled. Please explain
->>      why is it Ok to change the way the memory is mapped with
->>      ZONE_DMA/ZONE_DMA32 enabled.
->>
->> In short:
->>
->> 1.building all avail mem with block/section mapping（normally 1G/2M） without
->> inspecting crashkernel
->> 2. Reserve crashkernel mem as same as previous doing
->> 3. only change the crashkernle mem mapping to normal mapping(normally 4k).
->> With this method, there are block/section mapping as more as possible.
-> 
-> This does not answer the question why changing the way the memory is mapped
-> when there is ZONE_DMA/DMA32 and crashkernel won't cause a regression.
-> 
-1.Quoted messages from arch/arm64/mm/init.c
-
-"Memory reservation for crash kernel either done early or deferred
-depending on DMA memory zones configs (ZONE_DMA) --
-
-In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
-here instead of max_zone_phys().  This lets early reservation of
-crash kernel memory which has a dependency on arm64_dma_phys_limit.
-Reserving memory early for crash kernel allows linear creation of block
-mappings (greater than page-granularity) for all the memory bank rangs.
-In this scheme a comparatively quicker boot is observed.
-
-If ZONE_DMA configs are defined, crash kernel memory reservation
-is delayed until DMA zone memory range size initialization performed in
-zone_sizes_init().  The defer is necessary to steer clear of DMA zone
-memory range to avoid overlap allocation.  So crash kernel memory 
-boundaries are not known when mapping all bank memory ranges, which 
-otherwise means not possible to exclude crash kernel range from creating 
-block mappings so page-granularity mappings are created for the entire 
-memory range."
-
-Namely, the init order: memblock init--->linear mem mapping(4k mapping 
-for crashkernel, requirinig page-granularity changing))--->zone dma 
-limit--->reserve crashkernel.
-So when enable ZONE DMA and using crashkernel, the mem mapping using 4k 
-mapping.
-
-2.As mentioned above, when linear mem use 4k mapping simply, there is 
-high dtlb miss(degrade performance).
-This patch use block/section mapping as far as possible with performance 
-improvement.
-
-3.This patch reserve crashkernel as same as the history(ZONE DMA & 
-crashkernel reserving order), and only change the linear mem mapping to 
-block/section mapping.
+>
+> Looks good to me.
+>
+> Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
+>
+> Thanks,
+> Cristian
+>

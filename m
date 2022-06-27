@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FE755C95A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF5155D8D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239336AbiF0L7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
+        id S237441AbiF0Lop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238794AbiF0Lwi (ORCPT
+        with ESMTP id S237381AbiF0Lmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:52:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECF9DE9A;
-        Mon, 27 Jun 2022 04:45:44 -0700 (PDT)
+        Mon, 27 Jun 2022 07:42:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9D9E64;
+        Mon, 27 Jun 2022 04:37:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B93A9B80D37;
-        Mon, 27 Jun 2022 11:45:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C1BC341CB;
-        Mon, 27 Jun 2022 11:45:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E213B8112E;
+        Mon, 27 Jun 2022 11:37:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66BF8C3411D;
+        Mon, 27 Jun 2022 11:37:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330341;
-        bh=R9WiNoA1Z375yZXr23Z0fc8V/aSxJXUXwDvhAfWi05s=;
+        s=korg; t=1656329832;
+        bh=txsi3SPGgKkJ/yjLz7OMyx86d9QtjZZbPTZ6H+FrQ6Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1OD2Kf0RgqDMjdY+g1T3GPSXc8J889D5gpltCgVSVr7I4Cw/R3xawokeWkyWA1Ant
-         FDviB1X4/1EoGqn7frmF16hAe/woTd1PcHRI5GEsHmMZ4fQ9rRpYIQ6/xpFje9I1/k
-         O+pe3IKhjkCY+VO024nAYbXFKzRPB8OSsD58O2f8=
+        b=0akNtGNBsddnxqoD139nNH0WAcXkWl6sey89x9JI0BtPLWkJhezWCXN8zX+NSn8I8
+         jRMsj6HracD15L9waRPwy0mHsCU/IXvPrrzceKSUOVc7FZ47M+44faPTCH3KDrkuU2
+         zvIge2MZn/vCpMGSV4qSfHV9UhPlaZH8Puq93T1o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH 5.18 164/181] ARM: dts: imx6qdl: correct PU regulator ramp delay
-Date:   Mon, 27 Jun 2022 13:22:17 +0200
-Message-Id: <20220627111949.442997221@linuxfoundation.org>
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.15 131/135] random: update comment from copy_to_user() -> copy_to_iter()
+Date:   Mon, 27 Jun 2022 13:22:18 +0200
+Message-Id: <20220627111941.952350284@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +53,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Stach <l.stach@pengutronix.de>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 93a8ba2a619816d631bd69e9ce2172b4d7a481b8 upstream.
+commit 63b8ea5e4f1a87dea4d3114293fc8e96a8f193d7 upstream.
 
-Contrary to what was believed at the time, the ramp delay of 150us is not
-plenty for the PU LDO with the default step time of 512 pulses of the 24MHz
-clock. Measurements have shown that after enabling the LDO the voltage on
-VDDPU_CAP jumps to ~750mV in the first step and after that the regulator
-executes the normal ramp up as defined by the step size control.
+This comment wasn't updated when we moved from read() to read_iter(), so
+this patch makes the trivial fix.
 
-This means it takes the regulator between 360us and 370us to ramp up to
-the nominal 1.15V voltage for this power domain. With the old setting of
-the ramp delay the power up of the PU GPC domain would happen in the middle
-of the regulator ramp with the voltage being at around 900mV. Apparently
-this was enough for most units to properly power up the peripherals in the
-domain and execute the reset. Some units however, fail to power up properly,
-especially when the chip is at a low temperature. In that case any access
-to the GPU registers would yield an incorrect result with no way to recover
-from this situation.
-
-Change the ramp delay to 380us to cover the measured ramp up time with a
-bit of additional slack.
-
-Fixes: 40130d327f72 ("ARM: dts: imx6qdl: Allow disabling the PU regulator, add a enable ramp delay")
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Fixes: 1b388e7765f2 ("random: convert to using fops->read_iter()")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/imx6qdl.dtsi |    2 +-
+ drivers/char/random.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm/boot/dts/imx6qdl.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl.dtsi
-@@ -762,7 +762,7 @@
- 					regulator-name = "vddpu";
- 					regulator-min-microvolt = <725000>;
- 					regulator-max-microvolt = <1450000>;
--					regulator-enable-ramp-delay = <150>;
-+					regulator-enable-ramp-delay = <380>;
- 					anatop-reg-offset = <0x140>;
- 					anatop-vol-bit-shift = <9>;
- 					anatop-vol-bit-width = <5>;
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -452,7 +452,7 @@ static ssize_t get_random_bytes_user(str
+ 
+ 	/*
+ 	 * Immediately overwrite the ChaCha key at index 4 with random
+-	 * bytes, in case userspace causes copy_to_user() below to sleep
++	 * bytes, in case userspace causes copy_to_iter() below to sleep
+ 	 * forever, so that we still retain forward secrecy in that case.
+ 	 */
+ 	crng_make_state(chacha_state, (u8 *)&chacha_state[4], CHACHA_KEY_SIZE);
 
 

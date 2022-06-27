@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAD355DFD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6187855C246
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241281AbiF0U1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 16:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
+        id S241288AbiF0U1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 16:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241211AbiF0U0r (ORCPT
+        with ESMTP id S241191AbiF0U0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 16:26:47 -0400
+        Mon, 27 Jun 2022 16:26:48 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8802E1ADAD
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:26:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A532B1C925
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:26:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E26DEB81135
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:26:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 901C5C34115;
-        Mon, 27 Jun 2022 20:26:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33957B81B2B
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 20:26:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19DBAC341CB;
+        Mon, 27 Jun 2022 20:26:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656361601;
-        bh=sJ8ijMlPX8RKahKq8U4GqAMKQzj6XBDEiS46WTycTf4=;
+        s=k20201202; t=1656361602;
+        bh=ZIKmF83kYCqWmULGRhgCgu+aew0cQVXGrOU0NVx/yK4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=spdHuosWcYwyK9X7ADRNmyKFiogWSPchsFQ4LEjFp6OBFQ7x3nWjDePtzIP1uZPWe
-         RNrgsbqweYJsx0o3/pPXcJWywNmJGmjFLHYFzKB+nHN8W5eoqzK6YjOvxTvfGPioLB
-         N6/+y8ijAabij1u8aKLsDfULjAW0PwRJhz9AT0Psbli2MStvzIMnuOBxyAjPNOVWTM
-         qyNsp/rYZhx1K8oYkY5BhGRNN1t5mniDjlbXyTh+KQ3OAhlBlvF/5jQ++tupMgs7nU
-         UH2KZNtojp0SjJhwUfasZBJZ6sLiIcquu/vFj42hrH6Yggstqk9iY6nR96/Yh2CqDd
-         wWPgwfGmP9+Ag==
+        b=GsM6FtYNjrGGlQqsOjvCYBQa5z3E6tAGvkRkrCFUaTzZCdzKHhUXsHNkOnfmGq3AG
+         s4WPiJE/a4dRG5u/J3I5Qc8QkayqqjErMgtRn0Pwob3HLzfbWe2HF8/lGQqG1lgPOL
+         qsVqP4br0oxBGvYgjyUHh/fhr7YQl02DuH5DSol5lUEIwJ5y7BdQDqk6Cgt9+YwvU3
+         M5yNTdpCEL/gZ8jNFeG/8t7U5+hYuytESURlytN/418ea+XITrBP+oVbBCeynyuvG4
+         k5lMTLaTYC/M6e4jCJTLaS/5169OPWhpfRbaZ37dq4jZrc6IpyaOFmO411WfXCM/Lz
+         N/VXZFc4jNVGQ==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, Benjamin Dotan <bdotan@habana.ai>
-Subject: [PATCH 08/12] habanalabs/gaudi2: add gaudi2 profiler module
-Date:   Mon, 27 Jun 2022 23:26:16 +0300
-Message-Id: <20220627202620.961350-9-ogabbay@kernel.org>
+Cc:     gregkh@linuxfoundation.org
+Subject: [PATCH 09/12] habanalabs: add gaudi2 wait-for-CS support
+Date:   Mon, 27 Jun 2022 23:26:17 +0300
+Message-Id: <20220627202620.961350-10-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220627202620.961350-1-ogabbay@kernel.org>
 References: <20220627202620.961350-1-ogabbay@kernel.org>
@@ -45,3872 +45,784 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_75_100
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Dotan <bdotan@habana.ai>
+In Gaudi2 we moved to a different wait for command submission
+completion model. Instead of receiving interrupt only on external
+queues, we use the device's sync manager to notify us when the
+entire command submission finishes.
 
-Add the Gaudi2 code to initialize the ASIC's profiler. The profile
-receives its initialization values from the user, same as in Gaudi2,
-but the code to initialize is in the driver because the configuration
-space of the device is not directly exposed to the user.
+This enables us to remove the categorization of queues to external
+and internal, and treat each queue equally, without the need to parse
+and patch any command buffer.
 
-Signed-off-by: Benjamin Dotan <bdotan@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+This change also requires refactoring to the IRQ handling of
+CS completions.
+
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/gaudi2/Makefile       |    1 +
- drivers/misc/habanalabs/gaudi2/gaudi2.c       |    8 +-
- .../misc/habanalabs/gaudi2/gaudi2_coresight.c | 2722 +++++++++++++++++
- .../habanalabs/gaudi2/gaudi2_coresight_regs.h | 1063 +++++++
- 4 files changed, 3792 insertions(+), 2 deletions(-)
- create mode 100644 drivers/misc/habanalabs/gaudi2/gaudi2_coresight.c
- create mode 100644 drivers/misc/habanalabs/gaudi2/gaudi2_coresight_regs.h
+ .../habanalabs/common/command_submission.c    | 123 ++++++++++++------
+ drivers/misc/habanalabs/common/debugfs.c      |  21 +--
+ drivers/misc/habanalabs/common/device.c       |  48 +++++--
+ drivers/misc/habanalabs/common/habanalabs.h   |   6 +
+ drivers/misc/habanalabs/common/hw_queue.c     |  10 ++
+ drivers/misc/habanalabs/common/irq.c          |  94 ++++++++++---
+ drivers/misc/habanalabs/common/security.c     |   2 +-
+ 7 files changed, 215 insertions(+), 89 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/gaudi2/Makefile b/drivers/misc/habanalabs/gaudi2/Makefile
-index 9fbd905166a2..1e047883ba74 100644
---- a/drivers/misc/habanalabs/gaudi2/Makefile
-+++ b/drivers/misc/habanalabs/gaudi2/Makefile
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
+diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
+index 3805c6d6b65c..bc8ec6c426b0 100644
+--- a/drivers/misc/habanalabs/common/command_submission.c
++++ b/drivers/misc/habanalabs/common/command_submission.c
+@@ -12,7 +12,7 @@
+ #include <linux/slab.h>
  
- HL_GAUDI2_FILES := gaudi2/gaudi2.o gaudi2/gaudi2_security.o \
-+		gaudi2/gaudi2_coresight.o
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2.c b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-index 669dee491132..086956c53090 100644
---- a/drivers/misc/habanalabs/gaudi2/gaudi2.c
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2.c
-@@ -5036,6 +5036,10 @@ static int gaudi2_hw_init(struct hl_device *hdev)
- 	gaudi2_init_dec(hdev);
- 	gaudi2_enable_timestamp(hdev);
+ #define HL_CS_FLAGS_TYPE_MASK	(HL_CS_FLAGS_SIGNAL | HL_CS_FLAGS_WAIT | \
+-				HL_CS_FLAGS_COLLECTIVE_WAIT)
++					HL_CS_FLAGS_COLLECTIVE_WAIT)
  
-+	rc = gaudi2_coresight_init(hdev);
-+	if (rc)
-+		goto disable_queues;
+ #define MAX_TS_ITER_NUM 10
+ 
+@@ -29,8 +29,7 @@ enum hl_cs_wait_status {
+ };
+ 
+ static void job_wq_completion(struct work_struct *work);
+-static int _hl_cs_wait_ioctl(struct hl_device *hdev, struct hl_ctx *ctx,
+-				u64 timeout_us, u64 seq,
++static int _hl_cs_wait_ioctl(struct hl_device *hdev, struct hl_ctx *ctx, u64 timeout_us, u64 seq,
+ 				enum hl_cs_wait_status *status, s64 *timestamp);
+ static void cs_do_release(struct kref *ref);
+ 
+@@ -249,7 +248,12 @@ static void cs_job_do_release(struct kref *ref)
+ 	kfree(job);
+ }
+ 
+-static void cs_job_put(struct hl_cs_job *job)
++void hl_cs_job_get(struct hl_cs_job *job)
++{
++	kref_get(&job->refcount);
++}
 +
- 	rc = gaudi2_enable_msix(hdev);
++void hl_cs_job_put(struct hl_cs_job *job)
+ {
+ 	kref_put(&job->refcount, cs_job_do_release);
+ }
+@@ -344,7 +348,7 @@ static int cs_parser(struct hl_fpriv *hpriv, struct hl_cs_job *job)
+ 	return rc;
+ }
+ 
+-static void complete_job(struct hl_device *hdev, struct hl_cs_job *job)
++void hl_complete_job(struct hl_device *hdev, struct hl_cs_job *job)
+ {
+ 	struct hl_cs *cs = job->cs;
+ 
+@@ -363,12 +367,12 @@ static void complete_job(struct hl_device *hdev, struct hl_cs_job *job)
+ 
+ 	/* For H/W queue jobs, if a user CB was allocated by driver and MMU is
+ 	 * enabled, the user CB isn't released in cs_parser() and thus should be
+-	 * released here.
+-	 * This is also true for INT queues jobs which were allocated by driver
++	 * released here. This is also true for INT queues jobs which were
++	 * allocated by driver.
+ 	 */
+-	if (job->is_kernel_allocated_cb &&
++	if ((job->is_kernel_allocated_cb &&
+ 		((job->queue_type == QUEUE_TYPE_HW && hdev->mmu_enable) ||
+-				job->queue_type == QUEUE_TYPE_INT)) {
++				job->queue_type == QUEUE_TYPE_INT))) {
+ 		atomic_dec(&job->user_cb->cs_cnt);
+ 		hl_cb_put(job->user_cb);
+ 	}
+@@ -396,11 +400,10 @@ static void complete_job(struct hl_device *hdev, struct hl_cs_job *job)
+ 	 * flow by calling 'hl_hw_queue_update_ci'.
+ 	 */
+ 	if (cs_needs_completion(cs) &&
+-		(job->queue_type == QUEUE_TYPE_EXT ||
+-			job->queue_type == QUEUE_TYPE_HW))
++		(job->queue_type == QUEUE_TYPE_EXT || job->queue_type == QUEUE_TYPE_HW))
+ 		cs_put(cs);
+ 
+-	cs_job_put(job);
++	hl_cs_job_put(job);
+ }
+ 
+ /*
+@@ -690,7 +693,7 @@ static void cs_do_release(struct kref *ref)
+ 	 * still holds a pointer to them (but no reference).
+ 	 */
+ 	list_for_each_entry_safe(job, tmp, &cs->job_list, cs_node)
+-		complete_job(hdev, job);
++		hl_complete_job(hdev, job);
+ 
+ 	if (!cs->submitted) {
+ 		/*
+@@ -756,6 +759,7 @@ static void cs_do_release(struct kref *ref)
+ 	 */
+ 	hl_debugfs_remove_cs(cs);
+ 
++	hdev->shadow_cs_queue[cs->sequence & (hdev->asic_prop.max_pending_cs - 1)] = NULL;
+ 
+ 	/* We need to mark an error for not submitted because in that case
+ 	 * the hl fence release flow is different. Mainly, we don't need
+@@ -1007,7 +1011,7 @@ static void cs_rollback(struct hl_device *hdev, struct hl_cs *cs)
+ 	staged_cs_put(hdev, cs);
+ 
+ 	list_for_each_entry_safe(job, tmp, &cs->job_list, cs_node)
+-		complete_job(hdev, job);
++		hl_complete_job(hdev, job);
+ }
+ 
+ void hl_cs_rollback_all(struct hl_device *hdev, bool skip_wq_flush)
+@@ -1024,6 +1028,7 @@ void hl_cs_rollback_all(struct hl_device *hdev, bool skip_wq_flush)
+ 		for (i = 0 ; i < hdev->asic_prop.completion_queues_count ; i++)
+ 			flush_workqueue(hdev->cq_wq[i]);
+ 
++		flush_workqueue(hdev->cs_cmplt_wq);
+ 	}
+ 
+ 	/* Make sure we don't have leftovers in the CS mirror list */
+@@ -1031,7 +1036,7 @@ void hl_cs_rollback_all(struct hl_device *hdev, bool skip_wq_flush)
+ 		cs_get(cs);
+ 		cs->aborted = true;
+ 		dev_warn_ratelimited(hdev->dev, "Killing CS %d.%llu\n",
+-				cs->ctx->asid, cs->sequence);
++					cs->ctx->asid, cs->sequence);
+ 		cs_rollback(hdev, cs);
+ 		cs_put(cs);
+ 	}
+@@ -1092,7 +1097,17 @@ static void job_wq_completion(struct work_struct *work)
+ 	struct hl_device *hdev = cs->ctx->hdev;
+ 
+ 	/* job is no longer needed */
+-	complete_job(hdev, job);
++	hl_complete_job(hdev, job);
++}
++
++static void cs_completion(struct work_struct *work)
++{
++	struct hl_cs *cs = container_of(work, struct hl_cs, finish_work);
++	struct hl_device *hdev = cs->ctx->hdev;
++	struct hl_cs_job *job, *tmp;
++
++	list_for_each_entry_safe(job, tmp, &cs->job_list, cs_node)
++		hl_complete_job(hdev, job);
+ }
+ 
+ static int validate_queue_index(struct hl_device *hdev,
+@@ -1115,7 +1130,13 @@ static int validate_queue_index(struct hl_device *hdev,
+ 	hw_queue_prop = &asic->hw_queues_props[chunk->queue_index];
+ 
+ 	if (hw_queue_prop->type == QUEUE_TYPE_NA) {
+-		dev_err(hdev->dev, "Queue index %d is invalid\n",
++		dev_err(hdev->dev, "Queue index %d is not applicable\n",
++			chunk->queue_index);
++		return -EINVAL;
++	}
++
++	if (hw_queue_prop->binned) {
++		dev_err(hdev->dev, "Queue index %d is binned out\n",
+ 			chunk->queue_index);
+ 		return -EINVAL;
+ 	}
+@@ -1257,17 +1278,16 @@ static int hl_cs_sanity_checks(struct hl_fpriv *hpriv, union hl_cs_args *args)
+ 	cs_type = hl_cs_get_cs_type(cs_type_flags);
+ 	num_chunks = args->in.num_chunks_execute;
+ 
+-	if (unlikely((cs_type != CS_TYPE_DEFAULT) &&
+-					!hdev->supports_sync_stream)) {
++	if (unlikely((cs_type == CS_TYPE_SIGNAL || cs_type == CS_TYPE_WAIT ||
++			cs_type == CS_TYPE_COLLECTIVE_WAIT) &&
++			!hdev->supports_sync_stream)) {
+ 		dev_err(hdev->dev, "Sync stream CS is not supported\n");
+ 		return -EINVAL;
+ 	}
+ 
+ 	if (cs_type == CS_TYPE_DEFAULT) {
+ 		if (!num_chunks) {
+-			dev_err(hdev->dev,
+-				"Got execute CS with 0 chunks, context %d\n",
+-				ctx->asid);
++			dev_err(hdev->dev, "Got execute CS with 0 chunks, context %d\n", ctx->asid);
+ 			return -EINVAL;
+ 		}
+ 	} else if (num_chunks != 1) {
+@@ -1367,7 +1387,7 @@ static int cs_ioctl_default(struct hl_fpriv *hpriv, void __user *chunks,
+ 				u32 encaps_signals_handle, u32 timeout,
+ 				u16 *signal_initial_sob_count)
+ {
+-	bool staged_mid, int_queues_only = true;
++	bool staged_mid, int_queues_only = true, using_hw_queues = false;
+ 	struct hl_device *hdev = hpriv->hdev;
+ 	struct hl_cs_chunk *cs_chunk_array;
+ 	struct hl_cs_counters_atomic *cntr;
+@@ -1456,6 +1476,9 @@ static int cs_ioctl_default(struct hl_fpriv *hpriv, void __user *chunks,
+ 							chunk->queue_index);
+ 		}
+ 
++		if (queue_type == QUEUE_TYPE_HW)
++			using_hw_queues = true;
++
+ 		job = hl_cs_allocate_job(hdev, queue_type,
+ 						is_kernel_allocated_cb);
+ 		if (!job) {
+@@ -1476,6 +1499,7 @@ static int cs_ioctl_default(struct hl_fpriv *hpriv, void __user *chunks,
+ 		job->hw_queue_id = chunk->queue_index;
+ 
+ 		cs->jobs_in_queue_cnt[job->hw_queue_id]++;
++		cs->jobs_cnt++;
+ 
+ 		list_add_tail(&job->cs_node, &cs->job_list);
+ 
+@@ -1516,6 +1540,9 @@ static int cs_ioctl_default(struct hl_fpriv *hpriv, void __user *chunks,
+ 		goto free_cs_object;
+ 	}
+ 
++	if (using_hw_queues)
++		INIT_WORK(&cs->finish_work, cs_completion);
++
+ 	/*
+ 	 * store the (external/HW queues) streams used by the CS in the
+ 	 * fence object for multi-CS completion
+@@ -1864,6 +1891,7 @@ static int cs_ioctl_signal_wait_create_jobs(struct hl_device *hdev,
+ 	cs_get(cs);
+ 
+ 	cs->jobs_in_queue_cnt[job->hw_queue_id]++;
++	cs->jobs_cnt++;
+ 
+ 	list_add_tail(&job->cs_node, &cs->job_list);
+ 
+@@ -2282,6 +2310,9 @@ static int cs_ioctl_signal_wait(struct hl_fpriv *hpriv, enum hl_cs_type cs_type,
  	if (rc)
- 		goto disable_queues;
-@@ -9715,7 +9719,7 @@ static const struct hl_asic_funcs gaudi2_funcs = {
- 	.mmu_invalidate_cache_range = gaudi2_mmu_invalidate_cache_range,
- 	.mmu_prefetch_cache_range = NULL,
- 	.send_heartbeat = gaudi2_send_heartbeat,
--	.debug_coresight = NULL,
-+	.debug_coresight = gaudi2_debug_coresight,
- 	.is_device_idle = gaudi2_is_device_idle,
- 	.non_hard_reset_late_init = gaudi2_non_hard_reset_late_init,
- 	.hw_queues_lock = gaudi2_hw_queues_lock,
-@@ -9730,7 +9734,7 @@ static const struct hl_asic_funcs gaudi2_funcs = {
- 	.init_iatu = gaudi2_init_iatu,
- 	.rreg = hl_rreg,
- 	.wreg = hl_wreg,
--	.halt_coresight = NULL,
-+	.halt_coresight = gaudi2_halt_coresight,
- 	.ctx_init = gaudi2_ctx_init,
- 	.ctx_fini = gaudi2_ctx_fini,
- 	.pre_schedule_cs = gaudi2_pre_schedule_cs,
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2_coresight.c b/drivers/misc/habanalabs/gaudi2/gaudi2_coresight.c
-new file mode 100644
-index 000000000000..a92190d7a8cb
---- /dev/null
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2_coresight.c
-@@ -0,0 +1,2722 @@
-+// SPDX-License-Identifier: GPL-2.0
+ 		goto free_cs_object;
+ 
++	if (q_type == QUEUE_TYPE_HW)
++		INIT_WORK(&cs->finish_work, cs_completion);
 +
-+/*
-+ * Copyright 2019-2022 HabanaLabs, Ltd.
-+ * All Rights Reserved.
+ 	rc = hl_hw_queue_schedule_cs(cs);
+ 	if (rc) {
+ 		/* In case wait cs failed here, it means the signal cs
+@@ -2412,8 +2443,7 @@ int hl_cs_ioctl(struct hl_fpriv *hpriv, void *data)
+ }
+ 
+ static int hl_wait_for_fence(struct hl_ctx *ctx, u64 seq, struct hl_fence *fence,
+-				enum hl_cs_wait_status *status, u64 timeout_us,
+-				s64 *timestamp)
++				enum hl_cs_wait_status *status, u64 timeout_us, s64 *timestamp)
+ {
+ 	struct hl_device *hdev = ctx->hdev;
+ 	ktime_t timestamp_kt;
+@@ -2432,9 +2462,8 @@ static int hl_wait_for_fence(struct hl_ctx *ctx, u64 seq, struct hl_fence *fence
+ 	if (!fence) {
+ 		if (!hl_pop_cs_outcome(&ctx->outcome_store, seq, &timestamp_kt, &error)) {
+ 			dev_dbg(hdev->dev,
+-			"Can't wait on seq %llu because current CS is at seq %llu (Fence is gone)\n",
++				"Can't wait on seq %llu because current CS is at seq %llu (Fence is gone)\n",
+ 				seq, ctx->cs_sequence);
+-
+ 			*status = CS_WAIT_STATUS_GONE;
+ 			return 0;
+ 		}
+@@ -2542,8 +2571,7 @@ static int hl_cs_poll_fences(struct multi_cs_data *mcs_data, struct multi_cs_com
+ 		 * function won't sleep as it is called with timeout 0 (i.e.
+ 		 * poll the fence)
+ 		 */
+-		rc = hl_wait_for_fence(mcs_data->ctx, seq_arr[i], fence,
+-						&status, 0, NULL);
++		rc = hl_wait_for_fence(mcs_data->ctx, seq_arr[i], fence, &status, 0, NULL);
+ 		if (rc) {
+ 			dev_err(hdev->dev,
+ 				"wait_for_fence error :%d for CS seq %llu\n",
+@@ -2612,8 +2640,7 @@ static int hl_cs_poll_fences(struct multi_cs_data *mcs_data, struct multi_cs_com
+ 	return rc;
+ }
+ 
+-static int _hl_cs_wait_ioctl(struct hl_device *hdev, struct hl_ctx *ctx,
+-				u64 timeout_us, u64 seq,
++static int _hl_cs_wait_ioctl(struct hl_device *hdev, struct hl_ctx *ctx, u64 timeout_us, u64 seq,
+ 				enum hl_cs_wait_status *status, s64 *timestamp)
+ {
+ 	struct hl_fence *fence;
+@@ -2914,8 +2941,7 @@ static int hl_cs_wait_ioctl(struct hl_fpriv *hpriv, void *data)
+ 	s64 timestamp;
+ 	int rc;
+ 
+-	rc = _hl_cs_wait_ioctl(hdev, hpriv->ctx, args->in.timeout_us, seq,
+-				&status, &timestamp);
++	rc = _hl_cs_wait_ioctl(hdev, hpriv->ctx, args->in.timeout_us, seq, &status, &timestamp);
+ 
+ 	if (rc == -ERESTARTSYS) {
+ 		dev_err_ratelimited(hdev->dev,
+@@ -3200,7 +3226,6 @@ static int _hl_interrupt_wait_ioctl(struct hl_device *hdev, struct hl_ctx *ctx,
+ static int _hl_interrupt_wait_ioctl_user_addr(struct hl_device *hdev, struct hl_ctx *ctx,
+ 				u64 timeout_us, u64 user_address,
+ 				u64 target_value, struct hl_user_interrupt *interrupt,
+-
+ 				u32 *status,
+ 				u64 *timestamp)
+ {
+@@ -3322,12 +3347,12 @@ static int hl_interrupt_wait_ioctl(struct hl_fpriv *hpriv, void *data)
+ 	struct hl_user_interrupt *interrupt;
+ 	union hl_wait_cs_args *args = data;
+ 	u32 status = HL_WAIT_CS_STATUS_BUSY;
++	int rc, int_idx;
+ 	u64 timestamp;
+-	int rc;
+ 
+ 	prop = &hdev->asic_prop;
+ 
+-	if (!prop->user_interrupt_count) {
++	if (!(prop->user_interrupt_count + prop->user_dec_intr_count)) {
+ 		dev_err(hdev->dev, "no user interrupts allowed");
+ 		return -EPERM;
+ 	}
+@@ -3337,17 +3362,29 @@ static int hl_interrupt_wait_ioctl(struct hl_fpriv *hpriv, void *data)
+ 	first_interrupt = prop->first_available_user_interrupt;
+ 	last_interrupt = prop->first_available_user_interrupt + prop->user_interrupt_count - 1;
+ 
+-	if ((interrupt_id < first_interrupt || interrupt_id > last_interrupt) &&
+-			interrupt_id != HL_COMMON_USER_INTERRUPT_ID) {
++	if (interrupt_id < prop->user_dec_intr_count) {
++
++		/* Check if the requested core is enabled */
++		if (!(prop->decoder_enabled_mask & BIT(interrupt_id))) {
++			dev_err(hdev->dev, "interrupt on a disabled core(%u) not allowed",
++				interrupt_id);
++			return -EINVAL;
++		}
++
++		interrupt = &hdev->user_interrupt[interrupt_id];
++
++	} else if (interrupt_id >= first_interrupt && interrupt_id <= last_interrupt) {
++
++		int_idx = interrupt_id - first_interrupt + prop->user_dec_intr_count;
++		interrupt = &hdev->user_interrupt[int_idx];
++
++	} else if (interrupt_id == HL_COMMON_USER_INTERRUPT_ID) {
++		interrupt = &hdev->common_user_interrupt;
++	} else {
+ 		dev_err(hdev->dev, "invalid user interrupt %u", interrupt_id);
+ 		return -EINVAL;
+ 	}
+ 
+-	if (interrupt_id == HL_COMMON_USER_INTERRUPT_ID)
+-		interrupt = &hdev->common_user_interrupt;
+-	else
+-		interrupt = &hdev->user_interrupt[interrupt_id - first_interrupt];
+-
+ 	if (args->in.flags & HL_WAIT_CS_FLAGS_INTERRUPT_KERNEL_CQ)
+ 		rc = _hl_interrupt_wait_ioctl(hdev, hpriv->ctx, &hpriv->mem_mgr, &hpriv->mem_mgr,
+ 				args->in.interrupt_timeout_us, args->in.cq_counters_handle,
+diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/misc/habanalabs/common/debugfs.c
+index 831b050a1bf0..90273481a466 100644
+--- a/drivers/misc/habanalabs/common/debugfs.c
++++ b/drivers/misc/habanalabs/common/debugfs.c
+@@ -152,12 +152,12 @@ static int command_submission_show(struct seq_file *s, void *data)
+ 		if (first) {
+ 			first = false;
+ 			seq_puts(s, "\n");
+-			seq_puts(s, " CS ID   CTX ASID   CS RefCnt   Submitted    Completed\n");
+-			seq_puts(s, "------------------------------------------------------\n");
++			seq_puts(s, " CS ID   CS TYPE   CTX ASID   CS RefCnt   Submitted    Completed\n");
++			seq_puts(s, "----------------------------------------------------------------\n");
+ 		}
+ 		seq_printf(s,
+-			"   %llu       %d          %d           %d            %d\n",
+-			cs->sequence, cs->ctx->asid,
++			"   %llu        %d          %d          %d           %d            %d\n",
++			cs->sequence, cs->type, cs->ctx->asid,
+ 			kref_read(&cs->refcount),
+ 			cs->submitted, cs->completed);
+ 	}
+@@ -183,17 +183,18 @@ static int command_submission_jobs_show(struct seq_file *s, void *data)
+ 		if (first) {
+ 			first = false;
+ 			seq_puts(s, "\n");
+-			seq_puts(s, " JOB ID   CS ID    CTX ASID   JOB RefCnt   H/W Queue\n");
+-			seq_puts(s, "----------------------------------------------------\n");
++			seq_puts(s, " JOB ID   CS ID    CS TYPE    CTX ASID   JOB RefCnt   H/W Queue\n");
++			seq_puts(s, "---------------------------------------------------------------\n");
+ 		}
+ 		if (job->cs)
+ 			seq_printf(s,
+-				"   %02d      %llu        %d          %d           %d\n",
+-				job->id, job->cs->sequence, job->cs->ctx->asid,
+-				kref_read(&job->refcount), job->hw_queue_id);
++				"   %02d      %llu        %d        %d          %d           %d\n",
++				job->id, job->cs->sequence, job->cs->type,
++				job->cs->ctx->asid, kref_read(&job->refcount),
++				job->hw_queue_id);
+ 		else
+ 			seq_printf(s,
+-				"   %02d      0        %d          %d           %d\n",
++				"   %02d      0        0        %d          %d           %d\n",
+ 				job->id, HL_KERNEL_ASID_ID,
+ 				kref_read(&job->refcount), job->hw_queue_id);
+ 	}
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index 5b345fc3dcc1..38cf2f1659ee 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -15,14 +15,14 @@
+ 
+ #define HL_RESET_DELAY_USEC		10000	/* 10ms */
+ 
+-#define MEM_SCRUB_DEFAULT_VAL 0x1122334455667788
+-
+ enum dma_alloc_type {
+ 	DMA_ALLOC_COHERENT,
+ 	DMA_ALLOC_CPU_ACCESSIBLE,
+ 	DMA_ALLOC_POOL,
+ };
+ 
++#define MEM_SCRUB_DEFAULT_VAL 0x1122334455667788
++
+ /*
+  * hl_set_dram_bar- sets the bar to allow later access to address
+  *
+@@ -413,8 +413,8 @@ static int hl_device_release(struct inode *inode, struct file *filp)
+ 	 */
+ 	hl_release_pending_user_interrupts(hpriv->hdev);
+ 
+-	hl_mem_mgr_fini(&hpriv->mem_mgr);
+ 	hl_ctx_mgr_fini(hdev, &hpriv->ctx_mgr);
++	hl_mem_mgr_fini(&hpriv->mem_mgr);
+ 
+ 	hdev->compute_ctx_in_release = 1;
+ 
+@@ -462,7 +462,7 @@ static int hl_device_release_ctrl(struct inode *inode, struct file *filp)
+  * @*filp: pointer to file structure
+  * @*vma: pointer to vm_area_struct of the process
+  *
+- * Called when process does an mmap on habanalabs device. Call the device's mmap
++ * Called when process does an mmap on habanalabs device. Call the relevant mmap
+  * function at the end of the common code.
+  */
+ static int hl_mmap(struct file *filp, struct vm_area_struct *vma)
+@@ -487,7 +487,6 @@ static int hl_mmap(struct file *filp, struct vm_area_struct *vma)
+ 	case HL_MMAP_TYPE_TS_BUFF:
+ 		return hl_mem_mgr_mmap(&hpriv->mem_mgr, vma, NULL);
+ 	}
+-
+ 	return -EINVAL;
+ }
+ 
+@@ -687,12 +686,20 @@ static int device_early_init(struct hl_device *hdev)
+ 		goto free_cq_wq;
+ 	}
+ 
++	hdev->cs_cmplt_wq = alloc_workqueue("hl-cs-completions", WQ_UNBOUND, 0);
++	if (!hdev->cs_cmplt_wq) {
++		dev_err(hdev->dev,
++			"Failed to allocate CS completions workqueue\n");
++		rc = -ENOMEM;
++		goto free_eq_wq;
++	}
++
+ 	hdev->ts_free_obj_wq = alloc_workqueue("hl-ts-free-obj", WQ_UNBOUND, 0);
+ 	if (!hdev->ts_free_obj_wq) {
+ 		dev_err(hdev->dev,
+ 			"Failed to allocate Timestamp registration free workqueue\n");
+ 		rc = -ENOMEM;
+-		goto free_eq_wq;
++		goto free_cs_cmplt_wq;
+ 	}
+ 
+ 	hdev->pf_wq = alloc_workqueue("hl-prefetch", WQ_UNBOUND, 0);
+@@ -749,6 +756,8 @@ static int device_early_init(struct hl_device *hdev)
+ 	destroy_workqueue(hdev->pf_wq);
+ free_ts_free_wq:
+ 	destroy_workqueue(hdev->ts_free_obj_wq);
++free_cs_cmplt_wq:
++	destroy_workqueue(hdev->cs_cmplt_wq);
+ free_eq_wq:
+ 	destroy_workqueue(hdev->eq_wq);
+ free_cq_wq:
+@@ -789,6 +798,7 @@ static void device_early_fini(struct hl_device *hdev)
+ 
+ 	destroy_workqueue(hdev->pf_wq);
+ 	destroy_workqueue(hdev->ts_free_obj_wq);
++	destroy_workqueue(hdev->cs_cmplt_wq);
+ 	destroy_workqueue(hdev->eq_wq);
+ 	destroy_workqueue(hdev->device_reset_work.wq);
+ 
+@@ -1707,13 +1717,12 @@ int hl_device_init(struct hl_device *hdev, struct class *hclass)
+ 	if (rc)
+ 		goto free_dev_ctrl;
+ 
+-	user_interrupt_cnt = hdev->asic_prop.user_interrupt_count;
++	user_interrupt_cnt = hdev->asic_prop.user_dec_intr_count +
++				hdev->asic_prop.user_interrupt_count;
+ 
+ 	if (user_interrupt_cnt) {
+-		hdev->user_interrupt = kcalloc(user_interrupt_cnt,
+-				sizeof(*hdev->user_interrupt),
+-				GFP_KERNEL);
+-
++		hdev->user_interrupt = kcalloc(user_interrupt_cnt, sizeof(*hdev->user_interrupt),
++						GFP_KERNEL);
+ 		if (!hdev->user_interrupt) {
+ 			rc = -ENOMEM;
+ 			goto early_fini;
+@@ -1726,7 +1735,7 @@ int hl_device_init(struct hl_device *hdev, struct class *hclass)
+ 	 */
+ 	rc = hdev->asic_funcs->sw_init(hdev);
+ 	if (rc)
+-		goto user_interrupts_fini;
++		goto free_usr_intr_mem;
+ 
+ 
+ 	/* initialize completion structure for multi CS wait */
+@@ -1774,6 +1783,13 @@ int hl_device_init(struct hl_device *hdev, struct class *hclass)
+ 		hdev->completion_queue[i].cq_idx = i;
+ 	}
+ 
++	hdev->shadow_cs_queue = kcalloc(hdev->asic_prop.max_pending_cs,
++					sizeof(*hdev->shadow_cs_queue), GFP_KERNEL);
++	if (!hdev->shadow_cs_queue) {
++		rc = -ENOMEM;
++		goto cq_fini;
++	}
++
+ 	/*
+ 	 * Initialize the event queue. Must be done before hw_init,
+ 	 * because there the address of the event queue is being
+@@ -1782,7 +1798,7 @@ int hl_device_init(struct hl_device *hdev, struct class *hclass)
+ 	rc = hl_eq_init(hdev, &hdev->event_queue);
+ 	if (rc) {
+ 		dev_err(hdev->dev, "failed to initialize event queue\n");
+-		goto cq_fini;
++		goto free_shadow_cs_queue;
+ 	}
+ 
+ 	/* MMU S/W must be initialized before kernel context is created */
+@@ -1933,6 +1949,8 @@ int hl_device_init(struct hl_device *hdev, struct class *hclass)
+ 	hl_mmu_fini(hdev);
+ eq_fini:
+ 	hl_eq_fini(hdev, &hdev->event_queue);
++free_shadow_cs_queue:
++	kfree(hdev->shadow_cs_queue);
+ cq_fini:
+ 	for (i = 0 ; i < cq_ready_cnt ; i++)
+ 		hl_cq_fini(hdev, &hdev->completion_queue[i]);
+@@ -1941,7 +1959,7 @@ int hl_device_init(struct hl_device *hdev, struct class *hclass)
+ 	hl_hw_queues_destroy(hdev);
+ sw_fini:
+ 	hdev->asic_funcs->sw_fini(hdev);
+-user_interrupts_fini:
++free_usr_intr_mem:
+ 	kfree(hdev->user_interrupt);
+ early_fini:
+ 	device_early_fini(hdev);
+@@ -2081,6 +2099,8 @@ void hl_device_fini(struct hl_device *hdev)
+ 
+ 	hl_eq_fini(hdev, &hdev->event_queue);
+ 
++	kfree(hdev->shadow_cs_queue);
++
+ 	for (i = 0 ; i < hdev->asic_prop.completion_queues_count ; i++)
+ 		hl_cq_fini(hdev, &hdev->completion_queue[i]);
+ 	kfree(hdev->completion_queue);
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index 6597b048b681..bd2ecb836bc7 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -2893,9 +2893,13 @@ struct hl_reset_info {
+  * @common_user_interrupt: common user interrupt for all user interrupts.
+  *                         upon any user interrupt, driver will monitor the
+  *                         list of fences registered to this common structure.
++ * @shadow_cs_queue: pointer to a shadow queue that holds pointers to
++ *                   outstanding command submissions.
+  * @cq_wq: work queues of completion queues for executing work in process
+  *         context.
+  * @eq_wq: work queue of event queue for executing work in process context.
++ * @cs_cmplt_wq: work queue of CS completions for executing work in process
++ *               context.
+  * @ts_free_obj_wq: work queue for timestamp registration objects release.
+  * @pf_wq: work queue for MMU pre-fetch operations.
+  * @kernel_ctx: Kernel driver context structure.
+@@ -3039,8 +3043,10 @@ struct hl_device {
+ 	struct hl_cq			*completion_queue;
+ 	struct hl_user_interrupt	*user_interrupt;
+ 	struct hl_user_interrupt	common_user_interrupt;
++	struct hl_cs			**shadow_cs_queue;
+ 	struct workqueue_struct		**cq_wq;
+ 	struct workqueue_struct		*eq_wq;
++	struct workqueue_struct		*cs_cmplt_wq;
+ 	struct workqueue_struct		*ts_free_obj_wq;
+ 	struct workqueue_struct		*pf_wq;
+ 	struct hl_ctx			*kernel_ctx;
+diff --git a/drivers/misc/habanalabs/common/hw_queue.c b/drivers/misc/habanalabs/common/hw_queue.c
+index 1abd2340927a..3f15ab9d827f 100644
+--- a/drivers/misc/habanalabs/common/hw_queue.c
++++ b/drivers/misc/habanalabs/common/hw_queue.c
+@@ -696,6 +696,16 @@ int hl_hw_queue_schedule_cs(struct hl_cs *cs)
+ 			goto unroll_cq_resv;
+ 	}
+ 
++	rc = hdev->asic_funcs->pre_schedule_cs(cs);
++	if (rc) {
++		dev_err(hdev->dev,
++			"Failed in pre-submission operations of CS %d.%llu\n",
++			ctx->asid, cs->sequence);
++		goto unroll_cq_resv;
++	}
++
++	hdev->shadow_cs_queue[cs->sequence &
++				(hdev->asic_prop.max_pending_cs - 1)] = cs;
+ 
+ 	if (cs->encaps_signals && cs->staged_first) {
+ 		rc = encaps_sig_first_staged_cs_handler(hdev, cs);
+diff --git a/drivers/misc/habanalabs/common/irq.c b/drivers/misc/habanalabs/common/irq.c
+index 02c6faf9a10d..c1088377d1de 100644
+--- a/drivers/misc/habanalabs/common/irq.c
++++ b/drivers/misc/habanalabs/common/irq.c
+@@ -66,6 +66,56 @@ static void irq_handle_eqe(struct work_struct *work)
+ 	kfree(eqe_work);
+ }
+ 
++/**
++ * job_finish - queue job finish work
++ *
++ * @hdev: pointer to device structure
++ * @cs_seq: command submission sequence
++ * @cq: completion queue
++ *
 + */
-+#include "gaudi2_coresight_regs.h"
-+#include <uapi/misc/habanalabs.h>
++static void job_finish(struct hl_device *hdev, u32 cs_seq, struct hl_cq *cq)
++{
++	struct hl_hw_queue *queue;
++	struct hl_cs_job *job;
 +
-+#define GAUDI2_PLDM_CORESIGHT_TIMEOUT_USEC	(CORESIGHT_TIMEOUT_USEC * 2000)
-+#define SPMU_MAX_COUNTERS			6
-+/* SPMU should also include overflow_idx and cycle_cnt_idx */
-+#define SPMU_DATA_LEN				(SPMU_MAX_COUNTERS + 2)
++	queue = &hdev->kernel_queues[cq->hw_queue_id];
++	job = queue->shadow_queue[hl_pi_2_offset(cs_seq)];
++	queue_work(hdev->cq_wq[cq->cq_idx], &job->finish_work);
 +
-+#define COMPONENT_ID_INVALID ((u32)(-1))
-+#define MAX_BMONS_PER_UNIT 8
-+
-+enum gaudi2_hif_hmmu_id {
-+	HMMU_ID_DCORE0_HMMU0,
-+	HMMU_ID_DCORE0_HMMU1,
-+	HMMU_ID_DCORE0_HMMU2,
-+	HMMU_ID_DCORE0_HMMU3,
-+	HMMU_ID_DCORE1_HMMU0,
-+	HMMU_ID_DCORE1_HMMU1,
-+	HMMU_ID_DCORE1_HMMU2,
-+	HMMU_ID_DCORE1_HMMU3,
-+	HMMU_ID_DCORE2_HMMU0,
-+	HMMU_ID_DCORE2_HMMU1,
-+	HMMU_ID_DCORE2_HMMU2,
-+	HMMU_ID_DCORE2_HMMU3,
-+	HMMU_ID_DCORE3_HMMU0,
-+	HMMU_ID_DCORE3_HMMU1,
-+	HMMU_ID_DCORE3_HMMU2,
-+	HMMU_ID_DCORE3_HMMU3,
-+	HMMU_ID_SIZE,
-+};
-+
-+enum gaudi2_xbar_edge_id {
-+	XBAR_EDGE_ID_DCORE0,
-+	XBAR_EDGE_ID_DCORE1,
-+	XBAR_EDGE_ID_DCORE2,
-+	XBAR_EDGE_ID_DCORE3,
-+	XBAR_EDGE_ID_SIZE
-+};
++	atomic_inc(&queue->ci);
++}
 +
 +/**
-+ * struct component_config_offsets - per cs_dbg unit - view off all related components indices
-+ * @funnel_id: funnel id - index in debug_funnel_regs
-+ * @etf_id: etf id - index in debug_etf_regs
-+ * @stm_id: stm id - index in debug_stm_regs
-+ * @spmu_id: spmu_id - index in debug_spmu_regs
-+ * @bmon_count: number of bmons per unit
-+ * @bmon_ids: array of bmon id (max size - MAX_BMONS_PER_UNIT) index in debug_bmon_regs
-+ */
-+struct component_config_offsets {
-+	u32 funnel_id;
-+	u32 etf_id;
-+	u32 stm_id;
-+	u32 spmu_id;
-+	u32 bmon_count;
-+	u32 bmon_ids[MAX_BMONS_PER_UNIT];
-+};
-+
-+static u64 debug_stm_regs[GAUDI2_STM_LAST + 1] = {
-+	[GAUDI2_STM_DCORE0_TPC0_EML] = mmDCORE0_TPC0_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE0_TPC1_EML] = mmDCORE0_TPC1_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE0_TPC2_EML] = mmDCORE0_TPC2_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE0_TPC3_EML] = mmDCORE0_TPC3_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE0_TPC4_EML] = mmDCORE0_TPC4_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE0_TPC5_EML] = mmDCORE0_TPC5_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE0_TPC6_EML] = mmDCORE0_TPC6_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE1_TPC0_EML] = mmDCORE1_TPC0_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE1_TPC1_EML] = mmDCORE1_TPC1_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE1_TPC2_EML] = mmDCORE1_TPC2_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE1_TPC3_EML] = mmDCORE1_TPC3_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE1_TPC4_EML] = mmDCORE1_TPC4_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE1_TPC5_EML] = mmDCORE1_TPC5_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE2_TPC0_EML] = mmDCORE2_TPC0_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE2_TPC1_EML] = mmDCORE2_TPC1_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE2_TPC2_EML] = mmDCORE2_TPC2_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE2_TPC3_EML] = mmDCORE2_TPC3_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE2_TPC4_EML] = mmDCORE2_TPC4_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE2_TPC5_EML] = mmDCORE2_TPC5_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE3_TPC0_EML] = mmDCORE3_TPC0_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE3_TPC1_EML] = mmDCORE3_TPC1_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE3_TPC2_EML] = mmDCORE3_TPC2_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE3_TPC3_EML] = mmDCORE3_TPC3_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE3_TPC4_EML] = mmDCORE3_TPC4_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE3_TPC5_EML] = mmDCORE3_TPC5_EML_STM_BASE,
-+	[GAUDI2_STM_DCORE0_HMMU0_CS] = mmDCORE0_HMMU0_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE0_HMMU1_CS] = mmDCORE0_HMMU1_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE0_HMMU2_CS] = mmDCORE0_HMMU2_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE0_HMMU3_CS] = mmDCORE0_HMMU3_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE0_MME_CTRL] = mmDCORE0_MME_CTRL_STM_BASE,
-+	[GAUDI2_STM_DCORE0_MME_SBTE0] = mmDCORE0_MME_SBTE0_STM_BASE,
-+	[GAUDI2_STM_DCORE0_MME_SBTE1] = mmDCORE0_MME_SBTE1_STM_BASE,
-+	[GAUDI2_STM_DCORE0_MME_SBTE2] = mmDCORE0_MME_SBTE2_STM_BASE,
-+	[GAUDI2_STM_DCORE0_MME_SBTE3] = mmDCORE0_MME_SBTE3_STM_BASE,
-+	[GAUDI2_STM_DCORE0_MME_SBTE4] = mmDCORE0_MME_SBTE4_STM_BASE,
-+	[GAUDI2_STM_DCORE0_MME_ACC] = mmDCORE0_MME_ACC_STM_BASE,
-+	[GAUDI2_STM_DCORE0_SM] = mmDCORE0_SM_STM_BASE,
-+	[GAUDI2_STM_DCORE0_EDMA0_CS] = mmDCORE0_EDMA0_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE0_EDMA1_CS] = mmDCORE0_EDMA1_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE0_VDEC0_CS] = mmDCORE0_VDEC0_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE0_VDEC1_CS] = mmDCORE0_VDEC1_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE1_HMMU0_CS] = mmDCORE1_HMMU0_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE1_HMMU1_CS] = mmDCORE1_HMMU1_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE1_HMMU2_CS] = mmDCORE1_HMMU2_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE1_HMMU3_CS] = mmDCORE1_HMMU3_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE1_MME_CTRL] = mmDCORE1_MME_CTRL_STM_BASE,
-+	[GAUDI2_STM_DCORE1_MME_SBTE0] = mmDCORE1_MME_SBTE0_STM_BASE,
-+	[GAUDI2_STM_DCORE1_MME_SBTE1] = mmDCORE1_MME_SBTE1_STM_BASE,
-+	[GAUDI2_STM_DCORE1_MME_SBTE2] = mmDCORE1_MME_SBTE2_STM_BASE,
-+	[GAUDI2_STM_DCORE1_MME_SBTE3] = mmDCORE1_MME_SBTE3_STM_BASE,
-+	[GAUDI2_STM_DCORE1_MME_SBTE4] = mmDCORE1_MME_SBTE4_STM_BASE,
-+	[GAUDI2_STM_DCORE1_MME_ACC] = mmDCORE1_MME_ACC_STM_BASE,
-+	[GAUDI2_STM_DCORE1_SM] = mmDCORE1_SM_STM_BASE,
-+	[GAUDI2_STM_DCORE1_EDMA0_CS] = mmDCORE1_EDMA0_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE1_EDMA1_CS] = mmDCORE1_EDMA1_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE1_VDEC0_CS] = mmDCORE1_VDEC0_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE1_VDEC1_CS] = mmDCORE1_VDEC1_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE2_HMMU0_CS] = mmDCORE2_HMMU0_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE2_HMMU1_CS] = mmDCORE2_HMMU1_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE2_HMMU2_CS] = mmDCORE2_HMMU2_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE2_HMMU3_CS] = mmDCORE2_HMMU3_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE2_MME_CTRL] = mmDCORE2_MME_CTRL_STM_BASE,
-+	[GAUDI2_STM_DCORE2_MME_SBTE0] = mmDCORE2_MME_SBTE0_STM_BASE,
-+	[GAUDI2_STM_DCORE2_MME_SBTE1] = mmDCORE2_MME_SBTE1_STM_BASE,
-+	[GAUDI2_STM_DCORE2_MME_SBTE2] = mmDCORE2_MME_SBTE2_STM_BASE,
-+	[GAUDI2_STM_DCORE2_MME_SBTE3] = mmDCORE2_MME_SBTE3_STM_BASE,
-+	[GAUDI2_STM_DCORE2_MME_SBTE4] = mmDCORE2_MME_SBTE4_STM_BASE,
-+	[GAUDI2_STM_DCORE2_MME_ACC] = mmDCORE2_MME_ACC_STM_BASE,
-+	[GAUDI2_STM_DCORE2_SM] = mmDCORE2_SM_STM_BASE,
-+	[GAUDI2_STM_DCORE2_EDMA0_CS] = mmDCORE2_EDMA0_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE2_EDMA1_CS] = mmDCORE2_EDMA1_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE2_VDEC0_CS] = mmDCORE2_VDEC0_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE2_VDEC1_CS] = mmDCORE2_VDEC1_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE3_HMMU0_CS] = mmDCORE3_HMMU0_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE3_HMMU1_CS] = mmDCORE3_HMMU1_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE3_HMMU2_CS] = mmDCORE3_HMMU2_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE3_HMMU3_CS] = mmDCORE3_HMMU3_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE3_MME_CTRL] = mmDCORE3_MME_CTRL_STM_BASE,
-+	[GAUDI2_STM_DCORE3_MME_SBTE0] = mmDCORE3_MME_SBTE0_STM_BASE,
-+	[GAUDI2_STM_DCORE3_MME_SBTE1] = mmDCORE3_MME_SBTE1_STM_BASE,
-+	[GAUDI2_STM_DCORE3_MME_SBTE2] = mmDCORE3_MME_SBTE2_STM_BASE,
-+	[GAUDI2_STM_DCORE3_MME_SBTE3] = mmDCORE3_MME_SBTE3_STM_BASE,
-+	[GAUDI2_STM_DCORE3_MME_SBTE4] = mmDCORE3_MME_SBTE4_STM_BASE,
-+	[GAUDI2_STM_DCORE3_MME_ACC] = mmDCORE3_MME_ACC_STM_BASE,
-+	[GAUDI2_STM_DCORE3_SM] = mmDCORE3_SM_STM_BASE,
-+	[GAUDI2_STM_DCORE3_EDMA0_CS] = mmDCORE3_EDMA0_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE3_EDMA1_CS] = mmDCORE3_EDMA1_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE3_VDEC0_CS] = mmDCORE3_VDEC0_CS_STM_BASE,
-+	[GAUDI2_STM_DCORE3_VDEC1_CS] = mmDCORE3_VDEC1_CS_STM_BASE,
-+	[GAUDI2_STM_PCIE] = mmPCIE_STM_BASE,
-+	[GAUDI2_STM_PSOC] = mmPSOC_STM_BASE,
-+	[GAUDI2_STM_PSOC_ARC0_CS] = mmPSOC_ARC0_CS_STM_BASE,
-+	[GAUDI2_STM_PSOC_ARC1_CS] = mmPSOC_ARC1_CS_STM_BASE,
-+	[GAUDI2_STM_PDMA0_CS] = mmPDMA0_CS_STM_BASE,
-+	[GAUDI2_STM_PDMA1_CS] = mmPDMA1_CS_STM_BASE,
-+	[GAUDI2_STM_CPU] = mmCPU_STM_BASE,
-+	[GAUDI2_STM_PMMU_CS] = mmPMMU_CS_STM_BASE,
-+	[GAUDI2_STM_ROT0_CS] = mmROT0_CS_STM_BASE,
-+	[GAUDI2_STM_ROT1_CS] = mmROT1_CS_STM_BASE,
-+	[GAUDI2_STM_ARC_FARM_CS] = mmARC_FARM_CS_STM_BASE,
-+	[GAUDI2_STM_KDMA_CS] = mmKDMA_CS_STM_BASE,
-+	[GAUDI2_STM_PCIE_VDEC0_CS] = mmPCIE_VDEC0_CS_STM_BASE,
-+	[GAUDI2_STM_PCIE_VDEC1_CS] = mmPCIE_VDEC1_CS_STM_BASE,
-+	[GAUDI2_STM_HBM0_MC0_CS] = mmHBM0_MC0_CS_STM_BASE,
-+	[GAUDI2_STM_HBM0_MC1_CS] = mmHBM0_MC1_CS_STM_BASE,
-+	[GAUDI2_STM_HBM1_MC0_CS] = mmHBM1_MC0_CS_STM_BASE,
-+	[GAUDI2_STM_HBM1_MC1_CS] = mmHBM1_MC1_CS_STM_BASE,
-+	[GAUDI2_STM_HBM2_MC0_CS] = mmHBM2_MC0_CS_STM_BASE,
-+	[GAUDI2_STM_HBM2_MC1_CS] = mmHBM2_MC1_CS_STM_BASE,
-+	[GAUDI2_STM_HBM3_MC0_CS] = mmHBM3_MC0_CS_STM_BASE,
-+	[GAUDI2_STM_HBM3_MC1_CS] = mmHBM3_MC1_CS_STM_BASE,
-+	[GAUDI2_STM_HBM4_MC0_CS] = mmHBM4_MC0_CS_STM_BASE,
-+	[GAUDI2_STM_HBM4_MC1_CS] = mmHBM4_MC1_CS_STM_BASE,
-+	[GAUDI2_STM_HBM5_MC0_CS] = mmHBM5_MC0_CS_STM_BASE,
-+	[GAUDI2_STM_HBM5_MC1_CS] = mmHBM5_MC1_CS_STM_BASE,
-+	[GAUDI2_STM_NIC0_DBG_0] = mmNIC0_DBG_STM_0_BASE,
-+	[GAUDI2_STM_NIC0_DBG_1] = mmNIC0_DBG_STM_1_BASE,
-+	[GAUDI2_STM_NIC1_DBG_0] = mmNIC1_DBG_STM_0_BASE,
-+	[GAUDI2_STM_NIC1_DBG_1] = mmNIC1_DBG_STM_1_BASE,
-+	[GAUDI2_STM_NIC2_DBG_0] = mmNIC2_DBG_STM_0_BASE,
-+	[GAUDI2_STM_NIC2_DBG_1] = mmNIC2_DBG_STM_1_BASE,
-+	[GAUDI2_STM_NIC3_DBG_0] = mmNIC3_DBG_STM_0_BASE,
-+	[GAUDI2_STM_NIC3_DBG_1] = mmNIC3_DBG_STM_1_BASE,
-+	[GAUDI2_STM_NIC4_DBG_0] = mmNIC4_DBG_STM_0_BASE,
-+	[GAUDI2_STM_NIC4_DBG_1] = mmNIC4_DBG_STM_1_BASE,
-+	[GAUDI2_STM_NIC5_DBG_0] = mmNIC5_DBG_STM_0_BASE,
-+	[GAUDI2_STM_NIC5_DBG_1] = mmNIC5_DBG_STM_1_BASE,
-+	[GAUDI2_STM_NIC6_DBG_0] = mmNIC6_DBG_STM_0_BASE,
-+	[GAUDI2_STM_NIC6_DBG_1] = mmNIC6_DBG_STM_1_BASE,
-+	[GAUDI2_STM_NIC7_DBG_0] = mmNIC7_DBG_STM_0_BASE,
-+	[GAUDI2_STM_NIC7_DBG_1] = mmNIC7_DBG_STM_1_BASE,
-+	[GAUDI2_STM_NIC8_DBG_0] = mmNIC8_DBG_STM_0_BASE,
-+	[GAUDI2_STM_NIC8_DBG_1] = mmNIC8_DBG_STM_1_BASE,
-+	[GAUDI2_STM_NIC9_DBG_0] = mmNIC9_DBG_STM_0_BASE,
-+	[GAUDI2_STM_NIC9_DBG_1] = mmNIC9_DBG_STM_1_BASE,
-+	[GAUDI2_STM_NIC10_DBG_0] = mmNIC10_DBG_STM_0_BASE,
-+	[GAUDI2_STM_NIC10_DBG_1] = mmNIC10_DBG_STM_1_BASE,
-+	[GAUDI2_STM_NIC11_DBG_0] = mmNIC11_DBG_STM_0_BASE,
-+	[GAUDI2_STM_NIC11_DBG_1] = mmNIC11_DBG_STM_1_BASE
-+};
-+
-+static u64 debug_etf_regs[GAUDI2_ETF_LAST + 1] = {
-+	[GAUDI2_ETF_DCORE0_TPC0_EML] = mmDCORE0_TPC0_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_TPC1_EML] = mmDCORE0_TPC1_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_TPC2_EML] = mmDCORE0_TPC2_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_TPC3_EML] = mmDCORE0_TPC3_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_TPC4_EML] = mmDCORE0_TPC4_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_TPC5_EML] = mmDCORE0_TPC5_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_TPC6_EML] = mmDCORE0_TPC6_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_TPC0_EML] = mmDCORE1_TPC0_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_TPC1_EML] = mmDCORE1_TPC1_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_TPC2_EML] = mmDCORE1_TPC2_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_TPC3_EML] = mmDCORE1_TPC3_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_TPC4_EML] = mmDCORE1_TPC4_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_TPC5_EML] = mmDCORE1_TPC5_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_TPC0_EML] = mmDCORE2_TPC0_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_TPC1_EML] = mmDCORE2_TPC1_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_TPC2_EML] = mmDCORE2_TPC2_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_TPC3_EML] = mmDCORE2_TPC3_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_TPC4_EML] = mmDCORE2_TPC4_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_TPC5_EML] = mmDCORE2_TPC5_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_TPC0_EML] = mmDCORE3_TPC0_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_TPC1_EML] = mmDCORE3_TPC1_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_TPC2_EML] = mmDCORE3_TPC2_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_TPC3_EML] = mmDCORE3_TPC3_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_TPC4_EML] = mmDCORE3_TPC4_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_TPC5_EML] = mmDCORE3_TPC5_EML_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_HMMU0_CS] = mmDCORE0_HMMU0_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_HMMU1_CS] = mmDCORE0_HMMU1_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_HMMU2_CS] = mmDCORE0_HMMU2_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_HMMU3_CS] = mmDCORE0_HMMU3_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_MME_CTRL] = mmDCORE0_MME_CTRL_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_MME_SBTE0] = mmDCORE0_MME_SBTE0_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_MME_SBTE1] = mmDCORE0_MME_SBTE1_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_MME_SBTE2] = mmDCORE0_MME_SBTE2_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_MME_SBTE3] = mmDCORE0_MME_SBTE3_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_MME_SBTE4] = mmDCORE0_MME_SBTE4_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_MME_ACC] = mmDCORE0_MME_ACC_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_SM] = mmDCORE0_SM_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_EDMA0_CS] = mmDCORE0_EDMA0_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_EDMA1_CS] = mmDCORE0_EDMA1_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_VDEC0_CS] = mmDCORE0_VDEC0_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE0_VDEC1_CS] = mmDCORE0_VDEC1_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_HMMU0_CS] = mmDCORE1_HMMU0_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_HMMU1_CS] = mmDCORE1_HMMU1_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_HMMU2_CS] = mmDCORE1_HMMU2_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_HMMU3_CS] = mmDCORE1_HMMU3_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_MME_CTRL] = mmDCORE1_MME_CTRL_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_MME_SBTE0] = mmDCORE1_MME_SBTE0_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_MME_SBTE1] = mmDCORE1_MME_SBTE1_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_MME_SBTE2] = mmDCORE1_MME_SBTE2_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_MME_SBTE3] = mmDCORE1_MME_SBTE3_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_MME_SBTE4] = mmDCORE1_MME_SBTE4_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_MME_ACC] = mmDCORE1_MME_ACC_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_SM] = mmDCORE1_SM_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_EDMA0_CS] = mmDCORE1_EDMA0_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_EDMA1_CS] = mmDCORE1_EDMA1_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_VDEC0_CS] = mmDCORE1_VDEC0_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE1_VDEC1_CS] = mmDCORE1_VDEC1_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_HMMU0_CS] = mmDCORE2_HMMU0_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_HMMU1_CS] = mmDCORE2_HMMU1_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_HMMU2_CS] = mmDCORE2_HMMU2_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_HMMU3_CS] = mmDCORE2_HMMU3_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_MME_CTRL] = mmDCORE2_MME_CTRL_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_MME_SBTE0] = mmDCORE2_MME_SBTE0_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_MME_SBTE1] = mmDCORE2_MME_SBTE1_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_MME_SBTE2] = mmDCORE2_MME_SBTE2_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_MME_SBTE3] = mmDCORE2_MME_SBTE3_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_MME_SBTE4] = mmDCORE2_MME_SBTE4_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_MME_ACC] = mmDCORE2_MME_ACC_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_SM] = mmDCORE2_SM_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_EDMA0_CS] = mmDCORE2_EDMA0_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_EDMA1_CS] = mmDCORE2_EDMA1_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_VDEC0_CS] = mmDCORE2_VDEC0_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE2_VDEC1_CS] = mmDCORE2_VDEC1_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_HMMU0_CS] = mmDCORE3_HMMU0_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_HMMU1_CS] = mmDCORE3_HMMU1_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_HMMU2_CS] = mmDCORE3_HMMU2_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_HMMU3_CS] = mmDCORE3_HMMU3_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_MME_CTRL] = mmDCORE3_MME_CTRL_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_MME_SBTE0] = mmDCORE3_MME_SBTE0_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_MME_SBTE1] = mmDCORE3_MME_SBTE1_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_MME_SBTE2] = mmDCORE3_MME_SBTE2_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_MME_SBTE3] = mmDCORE3_MME_SBTE3_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_MME_SBTE4] = mmDCORE3_MME_SBTE4_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_MME_ACC] = mmDCORE3_MME_ACC_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_SM] = mmDCORE3_SM_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_EDMA0_CS] = mmDCORE3_EDMA0_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_EDMA1_CS] = mmDCORE3_EDMA1_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_VDEC0_CS] = mmDCORE3_VDEC0_CS_ETF_BASE,
-+	[GAUDI2_ETF_DCORE3_VDEC1_CS] = mmDCORE3_VDEC1_CS_ETF_BASE,
-+	[GAUDI2_ETF_PCIE] = mmPCIE_ETF_BASE,
-+	[GAUDI2_ETF_PSOC] = mmPSOC_ETF_BASE,
-+	[GAUDI2_ETF_PSOC_ARC0_CS] = mmPSOC_ARC0_CS_ETF_BASE,
-+	[GAUDI2_ETF_PSOC_ARC1_CS] = mmPSOC_ARC1_CS_ETF_BASE,
-+	[GAUDI2_ETF_PDMA0_CS] = mmPDMA0_CS_ETF_BASE,
-+	[GAUDI2_ETF_PDMA1_CS] = mmPDMA1_CS_ETF_BASE,
-+	[GAUDI2_ETF_CPU_0] = mmCPU_ETF_0_BASE,
-+	[GAUDI2_ETF_CPU_1] = mmCPU_ETF_1_BASE,
-+	[GAUDI2_ETF_CPU_TRACE] = mmCPU_ETF_TRACE_BASE,
-+	[GAUDI2_ETF_PMMU_CS] = mmPMMU_CS_ETF_BASE,
-+	[GAUDI2_ETF_ROT0_CS] = mmROT0_CS_ETF_BASE,
-+	[GAUDI2_ETF_ROT1_CS] = mmROT1_CS_ETF_BASE,
-+	[GAUDI2_ETF_ARC_FARM_CS] = mmARC_FARM_CS_ETF_BASE,
-+	[GAUDI2_ETF_KDMA_CS] = mmKDMA_CS_ETF_BASE,
-+	[GAUDI2_ETF_PCIE_VDEC0_CS] = mmPCIE_VDEC0_CS_ETF_BASE,
-+	[GAUDI2_ETF_PCIE_VDEC1_CS] = mmPCIE_VDEC1_CS_ETF_BASE,
-+	[GAUDI2_ETF_HBM0_MC0_CS] = mmHBM0_MC0_CS_ETF_BASE,
-+	[GAUDI2_ETF_HBM0_MC1_CS] = mmHBM0_MC1_CS_ETF_BASE,
-+	[GAUDI2_ETF_HBM1_MC0_CS] = mmHBM1_MC0_CS_ETF_BASE,
-+	[GAUDI2_ETF_HBM1_MC1_CS] = mmHBM1_MC1_CS_ETF_BASE,
-+	[GAUDI2_ETF_HBM2_MC0_CS] = mmHBM2_MC0_CS_ETF_BASE,
-+	[GAUDI2_ETF_HBM2_MC1_CS] = mmHBM2_MC1_CS_ETF_BASE,
-+	[GAUDI2_ETF_HBM3_MC0_CS] = mmHBM3_MC0_CS_ETF_BASE,
-+	[GAUDI2_ETF_HBM3_MC1_CS] = mmHBM3_MC1_CS_ETF_BASE,
-+	[GAUDI2_ETF_HBM4_MC0_CS] = mmHBM4_MC0_CS_ETF_BASE,
-+	[GAUDI2_ETF_HBM4_MC1_CS] = mmHBM4_MC1_CS_ETF_BASE,
-+	[GAUDI2_ETF_HBM5_MC0_CS] = mmHBM5_MC0_CS_ETF_BASE,
-+	[GAUDI2_ETF_HBM5_MC1_CS] = mmHBM5_MC1_CS_ETF_BASE,
-+	[GAUDI2_ETF_NIC0_DBG_0] = mmNIC0_DBG_ETF_0_BASE,
-+	[GAUDI2_ETF_NIC0_DBG_1] = mmNIC0_DBG_ETF_1_BASE,
-+	[GAUDI2_ETF_NIC1_DBG_0] = mmNIC1_DBG_ETF_0_BASE,
-+	[GAUDI2_ETF_NIC1_DBG_1] = mmNIC1_DBG_ETF_1_BASE,
-+	[GAUDI2_ETF_NIC2_DBG_0] = mmNIC2_DBG_ETF_0_BASE,
-+	[GAUDI2_ETF_NIC2_DBG_1] = mmNIC2_DBG_ETF_1_BASE,
-+	[GAUDI2_ETF_NIC3_DBG_0] = mmNIC3_DBG_ETF_0_BASE,
-+	[GAUDI2_ETF_NIC3_DBG_1] = mmNIC3_DBG_ETF_1_BASE,
-+	[GAUDI2_ETF_NIC4_DBG_0] = mmNIC4_DBG_ETF_0_BASE,
-+	[GAUDI2_ETF_NIC4_DBG_1] = mmNIC4_DBG_ETF_1_BASE,
-+	[GAUDI2_ETF_NIC5_DBG_0] = mmNIC5_DBG_ETF_0_BASE,
-+	[GAUDI2_ETF_NIC5_DBG_1] = mmNIC5_DBG_ETF_1_BASE,
-+	[GAUDI2_ETF_NIC6_DBG_0] = mmNIC6_DBG_ETF_0_BASE,
-+	[GAUDI2_ETF_NIC6_DBG_1] = mmNIC6_DBG_ETF_1_BASE,
-+	[GAUDI2_ETF_NIC7_DBG_0] = mmNIC7_DBG_ETF_0_BASE,
-+	[GAUDI2_ETF_NIC7_DBG_1] = mmNIC7_DBG_ETF_1_BASE,
-+	[GAUDI2_ETF_NIC8_DBG_0] = mmNIC8_DBG_ETF_0_BASE,
-+	[GAUDI2_ETF_NIC8_DBG_1] = mmNIC8_DBG_ETF_1_BASE,
-+	[GAUDI2_ETF_NIC9_DBG_0] = mmNIC9_DBG_ETF_0_BASE,
-+	[GAUDI2_ETF_NIC9_DBG_1] = mmNIC9_DBG_ETF_1_BASE,
-+	[GAUDI2_ETF_NIC10_DBG_0] = mmNIC10_DBG_ETF_0_BASE,
-+	[GAUDI2_ETF_NIC10_DBG_1] = mmNIC10_DBG_ETF_1_BASE,
-+	[GAUDI2_ETF_NIC11_DBG_0] = mmNIC11_DBG_ETF_0_BASE,
-+	[GAUDI2_ETF_NIC11_DBG_1] = mmNIC11_DBG_ETF_1_BASE
-+};
-+
-+static u64 debug_funnel_regs[GAUDI2_FUNNEL_LAST + 1] = {
-+	[GAUDI2_FUNNEL_DCORE0_TPC0_EML] = mmDCORE0_TPC0_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_TPC1_EML] = mmDCORE0_TPC1_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_TPC2_EML] = mmDCORE0_TPC2_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_TPC3_EML] = mmDCORE0_TPC3_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_TPC4_EML] = mmDCORE0_TPC4_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_TPC5_EML] = mmDCORE0_TPC5_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_TPC6_EML] = mmDCORE0_TPC6_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_TPC0_EML] = mmDCORE1_TPC0_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_TPC1_EML] = mmDCORE1_TPC1_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_TPC2_EML] = mmDCORE1_TPC2_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_TPC3_EML] = mmDCORE1_TPC3_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_TPC4_EML] = mmDCORE1_TPC4_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_TPC5_EML] = mmDCORE1_TPC5_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_TPC0_EML] = mmDCORE2_TPC0_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_TPC1_EML] = mmDCORE2_TPC1_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_TPC2_EML] = mmDCORE2_TPC2_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_TPC3_EML] = mmDCORE2_TPC3_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_TPC4_EML] = mmDCORE2_TPC4_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_TPC5_EML] = mmDCORE2_TPC5_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_TPC0_EML] = mmDCORE3_TPC0_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_TPC1_EML] = mmDCORE3_TPC1_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_TPC2_EML] = mmDCORE3_TPC2_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_TPC3_EML] = mmDCORE3_TPC3_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_TPC4_EML] = mmDCORE3_TPC4_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_TPC5_EML] = mmDCORE3_TPC5_EML_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_XFT] = mmDCORE0_XFT_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_TFT0] = mmDCORE0_TFT0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_TFT1] = mmDCORE0_TFT1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_TFT2] = mmDCORE0_TFT2_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_RTR0] = mmDCORE0_RTR0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_RTR1] = mmDCORE0_RTR1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_RTR2] = mmDCORE0_RTR2_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_RTR3] = mmDCORE0_RTR3_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_RTR4] = mmDCORE0_RTR4_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_MIF0] = mmDCORE0_MIF0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_RTR5] = mmDCORE0_RTR5_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_MIF1] = mmDCORE0_MIF1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_RTR6] = mmDCORE0_RTR6_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_MIF2] = mmDCORE0_MIF2_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_RTR7] = mmDCORE0_RTR7_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_MIF3] = mmDCORE0_MIF3_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_XFT] = mmDCORE1_XFT_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_TFT0] = mmDCORE1_TFT0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_TFT1] = mmDCORE1_TFT1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_TFT2] = mmDCORE1_TFT2_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_RTR0] = mmDCORE1_RTR0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_MIF0] = mmDCORE1_MIF0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_RTR1] = mmDCORE1_RTR1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_MIF1] = mmDCORE1_MIF1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_RTR2] = mmDCORE1_RTR2_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_MIF2] = mmDCORE1_MIF2_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_RTR3] = mmDCORE1_RTR3_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_MIF3] = mmDCORE1_MIF3_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_RTR4] = mmDCORE1_RTR4_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_RTR5] = mmDCORE1_RTR5_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_RTR6] = mmDCORE1_RTR6_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_RTR7] = mmDCORE1_RTR7_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_XFT] = mmDCORE2_XFT_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_TFT0] = mmDCORE2_TFT0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_TFT1] = mmDCORE2_TFT1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_TFT2] = mmDCORE2_TFT2_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_RTR0] = mmDCORE2_RTR0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_RTR1] = mmDCORE2_RTR1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_RTR2] = mmDCORE2_RTR2_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_RTR3] = mmDCORE2_RTR3_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_RTR4] = mmDCORE2_RTR4_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_MIF0] = mmDCORE2_MIF0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_RTR5] = mmDCORE2_RTR5_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_MIF1] = mmDCORE2_MIF1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_RTR6] = mmDCORE2_RTR6_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_MIF2] = mmDCORE2_MIF2_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_RTR7] = mmDCORE2_RTR7_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_MIF3] = mmDCORE2_MIF3_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_XFT] = mmDCORE3_XFT_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_TFT0] = mmDCORE3_TFT0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_TFT1] = mmDCORE3_TFT1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_TFT2] = mmDCORE3_TFT2_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_RTR0] = mmDCORE3_RTR0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_MIF0] = mmDCORE3_MIF0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_RTR1] = mmDCORE3_RTR1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_MIF1] = mmDCORE3_MIF1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_RTR2] = mmDCORE3_RTR2_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_MIF2] = mmDCORE3_MIF2_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_RTR3] = mmDCORE3_RTR3_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_MIF3] = mmDCORE3_MIF3_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_RTR4] = mmDCORE3_RTR4_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_RTR5] = mmDCORE3_RTR5_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_RTR6] = mmDCORE3_RTR6_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_RTR7] = mmDCORE3_RTR7_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_PSOC] = mmPSOC_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_PSOC_ARC0] = mmPSOC_ARC0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_PSOC_ARC1] = mmPSOC_ARC1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_XDMA] = mmXDMA_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_CPU] = mmCPU_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_PMMU] = mmPMMU_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_PMMU_DEC] = mmPMMU_FUNNEL_DEC_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_XBAR_MID] = mmDCORE0_XBAR_MID_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE0_XBAR_EDGE] = mmDCORE0_XBAR_EDGE_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_XBAR_MID] = mmDCORE1_XBAR_MID_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE1_XBAR_EDGE] = mmDCORE1_XBAR_EDGE_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_XBAR_MID] = mmDCORE2_XBAR_MID_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE2_XBAR_EDGE] = mmDCORE2_XBAR_EDGE_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_XBAR_MID] = mmDCORE3_XBAR_MID_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_DCORE3_XBAR_EDGE] = mmDCORE3_XBAR_EDGE_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_ARC_FARM] = mmARC_FARM_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_HBM0_MC0] = mmHBM0_MC0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_HBM0_MC1] = mmHBM0_MC1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_HBM1_MC0] = mmHBM1_MC0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_HBM1_MC1] = mmHBM1_MC1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_HBM2_MC0] = mmHBM2_MC0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_HBM2_MC1] = mmHBM2_MC1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_HBM3_MC0] = mmHBM3_MC0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_HBM3_MC1] = mmHBM3_MC1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_HBM4_MC0] = mmHBM4_MC0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_HBM4_MC1] = mmHBM4_MC1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_HBM5_MC0] = mmHBM5_MC0_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_HBM5_MC1] = mmHBM5_MC1_FUNNEL_BASE,
-+	[GAUDI2_FUNNEL_NIC0_DBG_TX] = mmNIC0_DBG_FUNNEL_TX_BASE,
-+	[GAUDI2_FUNNEL_NIC0_DBG_NCH] = mmNIC0_DBG_FUNNEL_NCH_BASE,
-+	[GAUDI2_FUNNEL_NIC1_DBG_TX] = mmNIC1_DBG_FUNNEL_TX_BASE,
-+	[GAUDI2_FUNNEL_NIC1_DBG_NCH] = mmNIC1_DBG_FUNNEL_NCH_BASE,
-+	[GAUDI2_FUNNEL_NIC2_DBG_TX] = mmNIC2_DBG_FUNNEL_TX_BASE,
-+	[GAUDI2_FUNNEL_NIC2_DBG_NCH] = mmNIC2_DBG_FUNNEL_NCH_BASE,
-+	[GAUDI2_FUNNEL_NIC3_DBG_TX] = mmNIC3_DBG_FUNNEL_TX_BASE,
-+	[GAUDI2_FUNNEL_NIC3_DBG_NCH] = mmNIC3_DBG_FUNNEL_NCH_BASE,
-+	[GAUDI2_FUNNEL_NIC4_DBG_TX] = mmNIC4_DBG_FUNNEL_TX_BASE,
-+	[GAUDI2_FUNNEL_NIC4_DBG_NCH] = mmNIC4_DBG_FUNNEL_NCH_BASE,
-+	[GAUDI2_FUNNEL_NIC5_DBG_TX] = mmNIC5_DBG_FUNNEL_TX_BASE,
-+	[GAUDI2_FUNNEL_NIC5_DBG_NCH] = mmNIC5_DBG_FUNNEL_NCH_BASE,
-+	[GAUDI2_FUNNEL_NIC6_DBG_TX] = mmNIC6_DBG_FUNNEL_TX_BASE,
-+	[GAUDI2_FUNNEL_NIC6_DBG_NCH] = mmNIC6_DBG_FUNNEL_NCH_BASE,
-+	[GAUDI2_FUNNEL_NIC7_DBG_TX] = mmNIC7_DBG_FUNNEL_TX_BASE,
-+	[GAUDI2_FUNNEL_NIC7_DBG_NCH] = mmNIC7_DBG_FUNNEL_NCH_BASE,
-+	[GAUDI2_FUNNEL_NIC8_DBG_TX] = mmNIC8_DBG_FUNNEL_TX_BASE,
-+	[GAUDI2_FUNNEL_NIC8_DBG_NCH] = mmNIC8_DBG_FUNNEL_NCH_BASE,
-+	[GAUDI2_FUNNEL_NIC9_DBG_TX] = mmNIC9_DBG_FUNNEL_TX_BASE,
-+	[GAUDI2_FUNNEL_NIC9_DBG_NCH] = mmNIC9_DBG_FUNNEL_NCH_BASE,
-+	[GAUDI2_FUNNEL_NIC10_DBG_TX] = mmNIC10_DBG_FUNNEL_TX_BASE,
-+	[GAUDI2_FUNNEL_NIC10_DBG_NCH] = mmNIC10_DBG_FUNNEL_NCH_BASE,
-+	[GAUDI2_FUNNEL_NIC11_DBG_TX] = mmNIC11_DBG_FUNNEL_TX_BASE,
-+	[GAUDI2_FUNNEL_NIC11_DBG_NCH] = mmNIC11_DBG_FUNNEL_NCH_BASE
-+};
-+
-+u64 debug_bmon_regs[GAUDI2_BMON_LAST + 1] = {
-+	[GAUDI2_BMON_DCORE0_TPC0_EML_0] = mmDCORE0_TPC0_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC0_EML_1] = mmDCORE0_TPC0_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC0_EML_2] = mmDCORE0_TPC0_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC0_EML_3] = mmDCORE0_TPC0_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC1_EML_0] = mmDCORE0_TPC1_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC1_EML_1] = mmDCORE0_TPC1_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC1_EML_2] = mmDCORE0_TPC1_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC1_EML_3] = mmDCORE0_TPC1_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC2_EML_0] = mmDCORE0_TPC2_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC2_EML_1] = mmDCORE0_TPC2_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC2_EML_2] = mmDCORE0_TPC2_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC2_EML_3] = mmDCORE0_TPC2_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC3_EML_0] = mmDCORE0_TPC3_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC3_EML_1] = mmDCORE0_TPC3_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC3_EML_2] = mmDCORE0_TPC3_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC3_EML_3] = mmDCORE0_TPC3_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC4_EML_0] = mmDCORE0_TPC4_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC4_EML_1] = mmDCORE0_TPC4_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC4_EML_2] = mmDCORE0_TPC4_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC4_EML_3] = mmDCORE0_TPC4_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC5_EML_0] = mmDCORE0_TPC5_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC5_EML_1] = mmDCORE0_TPC5_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC5_EML_2] = mmDCORE0_TPC5_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC5_EML_3] = mmDCORE0_TPC5_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC6_EML_0] = mmDCORE0_TPC6_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC6_EML_1] = mmDCORE0_TPC6_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC6_EML_2] = mmDCORE0_TPC6_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE0_TPC6_EML_3] = mmDCORE0_TPC6_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC0_EML_0] = mmDCORE1_TPC0_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC0_EML_1] = mmDCORE1_TPC0_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC0_EML_2] = mmDCORE1_TPC0_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC0_EML_3] = mmDCORE1_TPC0_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC1_EML_0] = mmDCORE1_TPC1_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC1_EML_1] = mmDCORE1_TPC1_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC1_EML_2] = mmDCORE1_TPC1_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC1_EML_3] = mmDCORE1_TPC1_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC2_EML_0] = mmDCORE1_TPC2_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC2_EML_1] = mmDCORE1_TPC2_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC2_EML_2] = mmDCORE1_TPC2_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC2_EML_3] = mmDCORE1_TPC2_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC3_EML_0] = mmDCORE1_TPC3_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC3_EML_1] = mmDCORE1_TPC3_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC3_EML_2] = mmDCORE1_TPC3_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC3_EML_3] = mmDCORE1_TPC3_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC4_EML_0] = mmDCORE1_TPC4_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC4_EML_1] = mmDCORE1_TPC4_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC4_EML_2] = mmDCORE1_TPC4_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC4_EML_3] = mmDCORE1_TPC4_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC5_EML_0] = mmDCORE1_TPC5_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC5_EML_1] = mmDCORE1_TPC5_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC5_EML_2] = mmDCORE1_TPC5_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE1_TPC5_EML_3] = mmDCORE1_TPC5_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC0_EML_0] = mmDCORE2_TPC0_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC0_EML_1] = mmDCORE2_TPC0_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC0_EML_2] = mmDCORE2_TPC0_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC0_EML_3] = mmDCORE2_TPC0_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC1_EML_0] = mmDCORE2_TPC1_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC1_EML_1] = mmDCORE2_TPC1_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC1_EML_2] = mmDCORE2_TPC1_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC1_EML_3] = mmDCORE2_TPC1_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC2_EML_0] = mmDCORE2_TPC2_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC2_EML_1] = mmDCORE2_TPC2_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC2_EML_2] = mmDCORE2_TPC2_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC2_EML_3] = mmDCORE2_TPC2_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC3_EML_0] = mmDCORE2_TPC3_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC3_EML_1] = mmDCORE2_TPC3_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC3_EML_2] = mmDCORE2_TPC3_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC3_EML_3] = mmDCORE2_TPC3_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC4_EML_0] = mmDCORE2_TPC4_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC4_EML_1] = mmDCORE2_TPC4_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC4_EML_2] = mmDCORE2_TPC4_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC4_EML_3] = mmDCORE2_TPC4_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC5_EML_0] = mmDCORE2_TPC5_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC5_EML_1] = mmDCORE2_TPC5_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC5_EML_2] = mmDCORE2_TPC5_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE2_TPC5_EML_3] = mmDCORE2_TPC5_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC0_EML_0] = mmDCORE3_TPC0_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC0_EML_1] = mmDCORE3_TPC0_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC0_EML_2] = mmDCORE3_TPC0_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC0_EML_3] = mmDCORE3_TPC0_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC1_EML_0] = mmDCORE3_TPC1_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC1_EML_1] = mmDCORE3_TPC1_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC1_EML_2] = mmDCORE3_TPC1_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC1_EML_3] = mmDCORE3_TPC1_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC2_EML_0] = mmDCORE3_TPC2_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC2_EML_1] = mmDCORE3_TPC2_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC2_EML_2] = mmDCORE3_TPC2_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC2_EML_3] = mmDCORE3_TPC2_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC3_EML_0] = mmDCORE3_TPC3_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC3_EML_1] = mmDCORE3_TPC3_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC3_EML_2] = mmDCORE3_TPC3_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC3_EML_3] = mmDCORE3_TPC3_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC4_EML_0] = mmDCORE3_TPC4_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC4_EML_1] = mmDCORE3_TPC4_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC4_EML_2] = mmDCORE3_TPC4_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC4_EML_3] = mmDCORE3_TPC4_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC5_EML_0] = mmDCORE3_TPC5_EML_BUSMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC5_EML_1] = mmDCORE3_TPC5_EML_BUSMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC5_EML_2] = mmDCORE3_TPC5_EML_BUSMON_2_BASE,
-+	[GAUDI2_BMON_DCORE3_TPC5_EML_3] = mmDCORE3_TPC5_EML_BUSMON_3_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU0_0] = mmDCORE0_HMMU0_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU0_1] = mmDCORE0_HMMU0_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU0_3] = mmDCORE0_HMMU0_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU0_2] = mmDCORE0_HMMU0_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU0_4] = mmDCORE0_HMMU0_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU1_0] = mmDCORE0_HMMU1_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU1_1] = mmDCORE0_HMMU1_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU1_3] = mmDCORE0_HMMU1_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU1_2] = mmDCORE0_HMMU1_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU1_4] = mmDCORE0_HMMU1_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU2_0] = mmDCORE0_HMMU2_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU2_1] = mmDCORE0_HMMU2_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU2_3] = mmDCORE0_HMMU2_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU2_2] = mmDCORE0_HMMU2_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU2_4] = mmDCORE0_HMMU2_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU3_0] = mmDCORE0_HMMU3_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU3_1] = mmDCORE0_HMMU3_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU3_3] = mmDCORE0_HMMU3_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU3_2] = mmDCORE0_HMMU3_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE0_HMMU3_4] = mmDCORE0_HMMU3_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE0_MME_CTRL_0] = mmDCORE0_MME_CTRL_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE0_MME_CTRL_1] = mmDCORE0_MME_CTRL_BMON1_BASE,
-+	[GAUDI2_BMON_DCORE0_MME_CTRL_2] = mmDCORE0_MME_CTRL_BMON2_BASE,
-+	[GAUDI2_BMON_DCORE0_MME_CTRL_3] = mmDCORE0_MME_CTRL_BMON3_BASE,
-+	[GAUDI2_BMON_DCORE0_MME_SBTE0_0] = mmDCORE0_MME_SBTE0_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE0_MME_SBTE1_0] = mmDCORE0_MME_SBTE1_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE0_MME_SBTE2_0] = mmDCORE0_MME_SBTE2_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE0_MME_SBTE3_0] = mmDCORE0_MME_SBTE3_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE0_MME_SBTE4_0] = mmDCORE0_MME_SBTE4_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE0_MME_ACC_0] = mmDCORE0_MME_ACC_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE0_MME_ACC_1] = mmDCORE0_MME_ACC_BMON1_BASE,
-+	[GAUDI2_BMON_DCORE0_SM] = mmDCORE0_SM_BMON_BASE,
-+	[GAUDI2_BMON_DCORE0_SM_1] = mmDCORE0_SM_BMON1_BASE,
-+	[GAUDI2_BMON_DCORE0_EDMA0_0] = mmDCORE0_EDMA0_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_EDMA0_1] = mmDCORE0_EDMA0_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_EDMA1_0] = mmDCORE0_EDMA1_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_EDMA1_1] = mmDCORE0_EDMA1_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_VDEC0_0] = mmDCORE0_VDEC0_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_VDEC0_1] = mmDCORE0_VDEC0_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_VDEC0_2] = mmDCORE0_VDEC0_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE0_VDEC1_0] = mmDCORE0_VDEC1_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE0_VDEC1_1] = mmDCORE0_VDEC1_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE0_VDEC1_2] = mmDCORE0_VDEC1_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU0_0] = mmDCORE1_HMMU0_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU0_1] = mmDCORE1_HMMU0_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU0_3] = mmDCORE1_HMMU0_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU0_2] = mmDCORE1_HMMU0_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU0_4] = mmDCORE1_HMMU0_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU1_0] = mmDCORE1_HMMU1_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU1_1] = mmDCORE1_HMMU1_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU1_3] = mmDCORE1_HMMU1_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU1_2] = mmDCORE1_HMMU1_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU1_4] = mmDCORE1_HMMU1_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU2_0] = mmDCORE1_HMMU2_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU2_1] = mmDCORE1_HMMU2_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU2_3] = mmDCORE1_HMMU2_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU2_2] = mmDCORE1_HMMU2_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU2_4] = mmDCORE1_HMMU2_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU3_0] = mmDCORE1_HMMU3_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU3_1] = mmDCORE1_HMMU3_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU3_3] = mmDCORE1_HMMU3_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU3_2] = mmDCORE1_HMMU3_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE1_HMMU3_4] = mmDCORE1_HMMU3_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE1_MME_CTRL_0] = mmDCORE1_MME_CTRL_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE1_MME_CTRL_1] = mmDCORE1_MME_CTRL_BMON1_BASE,
-+	[GAUDI2_BMON_DCORE1_MME_CTRL_2] = mmDCORE1_MME_CTRL_BMON2_BASE,
-+	[GAUDI2_BMON_DCORE1_MME_CTRL_3] = mmDCORE1_MME_CTRL_BMON3_BASE,
-+	[GAUDI2_BMON_DCORE1_MME_SBTE0_0] = mmDCORE1_MME_SBTE0_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE1_MME_SBTE1_0] = mmDCORE1_MME_SBTE1_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE1_MME_SBTE2_0] = mmDCORE1_MME_SBTE2_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE1_MME_SBTE3_0] = mmDCORE1_MME_SBTE3_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE1_MME_SBTE4_0] = mmDCORE1_MME_SBTE4_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE1_MME_ACC_0] = mmDCORE1_MME_ACC_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE1_MME_ACC_1] = mmDCORE1_MME_ACC_BMON1_BASE,
-+	[GAUDI2_BMON_DCORE1_SM] = mmDCORE1_SM_BMON_BASE,
-+	[GAUDI2_BMON_DCORE1_SM_1] = mmDCORE1_SM_BMON1_BASE,
-+	[GAUDI2_BMON_DCORE1_EDMA0_0] = mmDCORE1_EDMA0_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_EDMA0_1] = mmDCORE1_EDMA0_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_EDMA1_0] = mmDCORE1_EDMA1_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_EDMA1_1] = mmDCORE1_EDMA1_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_VDEC0_0] = mmDCORE1_VDEC0_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_VDEC0_1] = mmDCORE1_VDEC0_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_VDEC0_2] = mmDCORE1_VDEC0_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE1_VDEC1_0] = mmDCORE1_VDEC1_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE1_VDEC1_1] = mmDCORE1_VDEC1_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE1_VDEC1_2] = mmDCORE1_VDEC1_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU0_0] = mmDCORE2_HMMU0_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU0_1] = mmDCORE2_HMMU0_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU0_3] = mmDCORE2_HMMU0_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU0_2] = mmDCORE2_HMMU0_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU0_4] = mmDCORE2_HMMU0_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU1_0] = mmDCORE2_HMMU1_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU1_1] = mmDCORE2_HMMU1_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU1_3] = mmDCORE2_HMMU1_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU1_2] = mmDCORE2_HMMU1_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU1_4] = mmDCORE2_HMMU1_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU2_0] = mmDCORE2_HMMU2_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU2_1] = mmDCORE2_HMMU2_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU2_3] = mmDCORE2_HMMU2_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU2_2] = mmDCORE2_HMMU2_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU2_4] = mmDCORE2_HMMU2_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU3_0] = mmDCORE2_HMMU3_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU3_1] = mmDCORE2_HMMU3_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU3_3] = mmDCORE2_HMMU3_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU3_2] = mmDCORE2_HMMU3_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE2_HMMU3_4] = mmDCORE2_HMMU3_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE2_MME_CTRL_0] = mmDCORE2_MME_CTRL_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE2_MME_CTRL_1] = mmDCORE2_MME_CTRL_BMON1_BASE,
-+	[GAUDI2_BMON_DCORE2_MME_CTRL_2] = mmDCORE2_MME_CTRL_BMON2_BASE,
-+	[GAUDI2_BMON_DCORE2_MME_CTRL_3] = mmDCORE2_MME_CTRL_BMON3_BASE,
-+	[GAUDI2_BMON_DCORE2_MME_SBTE0_0] = mmDCORE2_MME_SBTE0_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE2_MME_SBTE1_0] = mmDCORE2_MME_SBTE1_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE2_MME_SBTE2_0] = mmDCORE2_MME_SBTE2_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE2_MME_SBTE3_0] = mmDCORE2_MME_SBTE3_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE2_MME_SBTE4_0] = mmDCORE2_MME_SBTE4_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE2_MME_ACC_0] = mmDCORE2_MME_ACC_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE2_MME_ACC_1] = mmDCORE2_MME_ACC_BMON1_BASE,
-+	[GAUDI2_BMON_DCORE2_SM] = mmDCORE2_SM_BMON_BASE,
-+	[GAUDI2_BMON_DCORE2_SM_1] = mmDCORE2_SM_BMON1_BASE,
-+	[GAUDI2_BMON_DCORE2_EDMA0_0] = mmDCORE2_EDMA0_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_EDMA0_1] = mmDCORE2_EDMA0_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_EDMA1_0] = mmDCORE2_EDMA1_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_EDMA1_1] = mmDCORE2_EDMA1_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_VDEC0_0] = mmDCORE2_VDEC0_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_VDEC0_1] = mmDCORE2_VDEC0_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_VDEC0_2] = mmDCORE2_VDEC0_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE2_VDEC1_0] = mmDCORE2_VDEC1_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE2_VDEC1_1] = mmDCORE2_VDEC1_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE2_VDEC1_2] = mmDCORE2_VDEC1_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU0_0] = mmDCORE3_HMMU0_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU0_1] = mmDCORE3_HMMU0_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU0_3] = mmDCORE3_HMMU0_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU0_2] = mmDCORE3_HMMU0_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU0_4] = mmDCORE3_HMMU0_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU1_0] = mmDCORE3_HMMU1_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU1_1] = mmDCORE3_HMMU1_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU1_3] = mmDCORE3_HMMU1_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU1_2] = mmDCORE3_HMMU1_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU1_4] = mmDCORE3_HMMU1_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU2_0] = mmDCORE3_HMMU2_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU2_1] = mmDCORE3_HMMU2_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU2_3] = mmDCORE3_HMMU2_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU2_2] = mmDCORE3_HMMU2_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU2_4] = mmDCORE3_HMMU2_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU3_0] = mmDCORE3_HMMU3_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU3_1] = mmDCORE3_HMMU3_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU3_3] = mmDCORE3_HMMU3_BMON_3_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU3_2] = mmDCORE3_HMMU3_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE3_HMMU3_4] = mmDCORE3_HMMU3_BMON_4_BASE,
-+	[GAUDI2_BMON_DCORE3_MME_CTRL_0] = mmDCORE3_MME_CTRL_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE3_MME_CTRL_1] = mmDCORE3_MME_CTRL_BMON1_BASE,
-+	[GAUDI2_BMON_DCORE3_MME_CTRL_2] = mmDCORE3_MME_CTRL_BMON2_BASE,
-+	[GAUDI2_BMON_DCORE3_MME_CTRL_3] = mmDCORE3_MME_CTRL_BMON3_BASE,
-+	[GAUDI2_BMON_DCORE3_MME_SBTE0_0] = mmDCORE3_MME_SBTE0_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE3_MME_SBTE1_0] = mmDCORE3_MME_SBTE1_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE3_MME_SBTE2_0] = mmDCORE3_MME_SBTE2_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE3_MME_SBTE3_0] = mmDCORE3_MME_SBTE3_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE3_MME_SBTE4_0] = mmDCORE3_MME_SBTE4_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE3_MME_ACC_0] = mmDCORE3_MME_ACC_BMON0_BASE,
-+	[GAUDI2_BMON_DCORE3_MME_ACC_1] = mmDCORE3_MME_ACC_BMON1_BASE,
-+	[GAUDI2_BMON_DCORE3_SM] = mmDCORE3_SM_BMON_BASE,
-+	[GAUDI2_BMON_DCORE3_SM_1] = mmDCORE3_SM_BMON1_BASE,
-+	[GAUDI2_BMON_DCORE3_EDMA0_0] = mmDCORE3_EDMA0_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_EDMA0_1] = mmDCORE3_EDMA0_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_EDMA1_0] = mmDCORE3_EDMA1_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_EDMA1_1] = mmDCORE3_EDMA1_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_VDEC0_0] = mmDCORE3_VDEC0_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_VDEC0_1] = mmDCORE3_VDEC0_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_VDEC0_2] = mmDCORE3_VDEC0_BMON_2_BASE,
-+	[GAUDI2_BMON_DCORE3_VDEC1_0] = mmDCORE3_VDEC1_BMON_0_BASE,
-+	[GAUDI2_BMON_DCORE3_VDEC1_1] = mmDCORE3_VDEC1_BMON_1_BASE,
-+	[GAUDI2_BMON_DCORE3_VDEC1_2] = mmDCORE3_VDEC1_BMON_2_BASE,
-+	[GAUDI2_BMON_PCIE_MSTR_WR] = mmPCIE_BMON_MSTR_WR_BASE,
-+	[GAUDI2_BMON_PCIE_MSTR_RD] = mmPCIE_BMON_MSTR_RD_BASE,
-+	[GAUDI2_BMON_PCIE_SLV_WR] = mmPCIE_BMON_SLV_WR_BASE,
-+	[GAUDI2_BMON_PCIE_SLV_RD] = mmPCIE_BMON_SLV_RD_BASE,
-+	[GAUDI2_BMON_PSOC_ARC0_0] = mmPSOC_ARC0_BMON_0_BASE,
-+	[GAUDI2_BMON_PSOC_ARC0_1] = mmPSOC_ARC0_BMON_1_BASE,
-+	[GAUDI2_BMON_PSOC_ARC1_0] = mmPSOC_ARC1_BMON_0_BASE,
-+	[GAUDI2_BMON_PSOC_ARC1_1] = mmPSOC_ARC1_BMON_1_BASE,
-+	[GAUDI2_BMON_PDMA0_0] = mmPDMA0_BMON_0_BASE,
-+	[GAUDI2_BMON_PDMA0_1] = mmPDMA0_BMON_1_BASE,
-+	[GAUDI2_BMON_PDMA1_0] = mmPDMA1_BMON_0_BASE,
-+	[GAUDI2_BMON_PDMA1_1] = mmPDMA1_BMON_1_BASE,
-+	[GAUDI2_BMON_CPU_WR] = mmCPU_WR_BMON_BASE,
-+	[GAUDI2_BMON_CPU_RD] = mmCPU_RD_BMON_BASE,
-+	[GAUDI2_BMON_PMMU_0] = mmPMMU_BMON_0_BASE,
-+	[GAUDI2_BMON_PMMU_1] = mmPMMU_BMON_1_BASE,
-+	[GAUDI2_BMON_PMMU_2] = mmPMMU_BMON_2_BASE,
-+	[GAUDI2_BMON_PMMU_3] = mmPMMU_BMON_3_BASE,
-+	[GAUDI2_BMON_PMMU_4] = mmPMMU_BMON_4_BASE,
-+	[GAUDI2_BMON_ROT0_0] = mmROT0_BMON_0_BASE,
-+	[GAUDI2_BMON_ROT0_1] = mmROT0_BMON_1_BASE,
-+	[GAUDI2_BMON_ROT0_2] = mmROT0_BMON_2_BASE,
-+	[GAUDI2_BMON_ROT0_3] = mmROT0_BMON_3_BASE,
-+	[GAUDI2_BMON_ROT1_0] = mmROT1_BMON_0_BASE,
-+	[GAUDI2_BMON_ROT1_1] = mmROT1_BMON_1_BASE,
-+	[GAUDI2_BMON_ROT1_2] = mmROT1_BMON_2_BASE,
-+	[GAUDI2_BMON_ROT1_3] = mmROT1_BMON_3_BASE,
-+	[GAUDI2_BMON_ARC_FARM_0] = mmARC_FARM_BMON_0_BASE,
-+	[GAUDI2_BMON_ARC_FARM_1] = mmARC_FARM_BMON_1_BASE,
-+	[GAUDI2_BMON_ARC_FARM_2] = mmARC_FARM_BMON_2_BASE,
-+	[GAUDI2_BMON_ARC_FARM_3] = mmARC_FARM_BMON_3_BASE,
-+	[GAUDI2_BMON_KDMA_0] = mmKDMA_BMON_0_BASE,
-+	[GAUDI2_BMON_KDMA_1] = mmKDMA_BMON_1_BASE,
-+	[GAUDI2_BMON_KDMA_2] = mmKDMA_BMON_2_BASE,
-+	[GAUDI2_BMON_KDMA_3] = mmKDMA_BMON_3_BASE,
-+	[GAUDI2_BMON_PCIE_VDEC0_0] = mmPCIE_VDEC0_BMON_0_BASE,
-+	[GAUDI2_BMON_PCIE_VDEC0_1] = mmPCIE_VDEC0_BMON_1_BASE,
-+	[GAUDI2_BMON_PCIE_VDEC0_2] = mmPCIE_VDEC0_BMON_2_BASE,
-+	[GAUDI2_BMON_PCIE_VDEC1_0] = mmPCIE_VDEC1_BMON_0_BASE,
-+	[GAUDI2_BMON_PCIE_VDEC1_1] = mmPCIE_VDEC1_BMON_1_BASE,
-+	[GAUDI2_BMON_PCIE_VDEC1_2] = mmPCIE_VDEC1_BMON_2_BASE,
-+	[GAUDI2_BMON_NIC0_DBG_0_0] = mmNIC0_DBG_BMON0_0_BASE,
-+	[GAUDI2_BMON_NIC0_DBG_1_0] = mmNIC0_DBG_BMON1_0_BASE,
-+	[GAUDI2_BMON_NIC0_DBG_2_0] = mmNIC0_DBG_BMON2_0_BASE,
-+	[GAUDI2_BMON_NIC0_DBG_0_1] = mmNIC0_DBG_BMON0_1_BASE,
-+	[GAUDI2_BMON_NIC0_DBG_1_1] = mmNIC0_DBG_BMON1_1_BASE,
-+	[GAUDI2_BMON_NIC0_DBG_2_1] = mmNIC0_DBG_BMON2_1_BASE,
-+	[GAUDI2_BMON_NIC1_DBG_0_0] = mmNIC1_DBG_BMON0_0_BASE,
-+	[GAUDI2_BMON_NIC1_DBG_1_0] = mmNIC1_DBG_BMON1_0_BASE,
-+	[GAUDI2_BMON_NIC1_DBG_2_0] = mmNIC1_DBG_BMON2_0_BASE,
-+	[GAUDI2_BMON_NIC1_DBG_0_1] = mmNIC1_DBG_BMON0_1_BASE,
-+	[GAUDI2_BMON_NIC1_DBG_1_1] = mmNIC1_DBG_BMON1_1_BASE,
-+	[GAUDI2_BMON_NIC1_DBG_2_1] = mmNIC1_DBG_BMON2_1_BASE,
-+	[GAUDI2_BMON_NIC2_DBG_0_0] = mmNIC2_DBG_BMON0_0_BASE,
-+	[GAUDI2_BMON_NIC2_DBG_1_0] = mmNIC2_DBG_BMON1_0_BASE,
-+	[GAUDI2_BMON_NIC2_DBG_2_0] = mmNIC2_DBG_BMON2_0_BASE,
-+	[GAUDI2_BMON_NIC2_DBG_0_1] = mmNIC2_DBG_BMON0_1_BASE,
-+	[GAUDI2_BMON_NIC2_DBG_1_1] = mmNIC2_DBG_BMON1_1_BASE,
-+	[GAUDI2_BMON_NIC2_DBG_2_1] = mmNIC2_DBG_BMON2_1_BASE,
-+	[GAUDI2_BMON_NIC3_DBG_0_0] = mmNIC3_DBG_BMON0_0_BASE,
-+	[GAUDI2_BMON_NIC3_DBG_1_0] = mmNIC3_DBG_BMON1_0_BASE,
-+	[GAUDI2_BMON_NIC3_DBG_2_0] = mmNIC3_DBG_BMON2_0_BASE,
-+	[GAUDI2_BMON_NIC3_DBG_0_1] = mmNIC3_DBG_BMON0_1_BASE,
-+	[GAUDI2_BMON_NIC3_DBG_1_1] = mmNIC3_DBG_BMON1_1_BASE,
-+	[GAUDI2_BMON_NIC3_DBG_2_1] = mmNIC3_DBG_BMON2_1_BASE,
-+	[GAUDI2_BMON_NIC4_DBG_0_0] = mmNIC4_DBG_BMON0_0_BASE,
-+	[GAUDI2_BMON_NIC4_DBG_1_0] = mmNIC4_DBG_BMON1_0_BASE,
-+	[GAUDI2_BMON_NIC4_DBG_2_0] = mmNIC4_DBG_BMON2_0_BASE,
-+	[GAUDI2_BMON_NIC4_DBG_0_1] = mmNIC4_DBG_BMON0_1_BASE,
-+	[GAUDI2_BMON_NIC4_DBG_1_1] = mmNIC4_DBG_BMON1_1_BASE,
-+	[GAUDI2_BMON_NIC4_DBG_2_1] = mmNIC4_DBG_BMON2_1_BASE,
-+	[GAUDI2_BMON_NIC5_DBG_0_0] = mmNIC5_DBG_BMON0_0_BASE,
-+	[GAUDI2_BMON_NIC5_DBG_1_0] = mmNIC5_DBG_BMON1_0_BASE,
-+	[GAUDI2_BMON_NIC5_DBG_2_0] = mmNIC5_DBG_BMON2_0_BASE,
-+	[GAUDI2_BMON_NIC5_DBG_0_1] = mmNIC5_DBG_BMON0_1_BASE,
-+	[GAUDI2_BMON_NIC5_DBG_1_1] = mmNIC5_DBG_BMON1_1_BASE,
-+	[GAUDI2_BMON_NIC5_DBG_2_1] = mmNIC5_DBG_BMON2_1_BASE,
-+	[GAUDI2_BMON_NIC6_DBG_0_0] = mmNIC6_DBG_BMON0_0_BASE,
-+	[GAUDI2_BMON_NIC6_DBG_1_0] = mmNIC6_DBG_BMON1_0_BASE,
-+	[GAUDI2_BMON_NIC6_DBG_2_0] = mmNIC6_DBG_BMON2_0_BASE,
-+	[GAUDI2_BMON_NIC6_DBG_0_1] = mmNIC6_DBG_BMON0_1_BASE,
-+	[GAUDI2_BMON_NIC6_DBG_1_1] = mmNIC6_DBG_BMON1_1_BASE,
-+	[GAUDI2_BMON_NIC6_DBG_2_1] = mmNIC6_DBG_BMON2_1_BASE,
-+	[GAUDI2_BMON_NIC7_DBG_0_0] = mmNIC7_DBG_BMON0_0_BASE,
-+	[GAUDI2_BMON_NIC7_DBG_1_0] = mmNIC7_DBG_BMON1_0_BASE,
-+	[GAUDI2_BMON_NIC7_DBG_2_0] = mmNIC7_DBG_BMON2_0_BASE,
-+	[GAUDI2_BMON_NIC7_DBG_0_1] = mmNIC7_DBG_BMON0_1_BASE,
-+	[GAUDI2_BMON_NIC7_DBG_1_1] = mmNIC7_DBG_BMON1_1_BASE,
-+	[GAUDI2_BMON_NIC7_DBG_2_1] = mmNIC7_DBG_BMON2_1_BASE,
-+	[GAUDI2_BMON_NIC8_DBG_0_0] = mmNIC8_DBG_BMON0_0_BASE,
-+	[GAUDI2_BMON_NIC8_DBG_1_0] = mmNIC8_DBG_BMON1_0_BASE,
-+	[GAUDI2_BMON_NIC8_DBG_2_0] = mmNIC8_DBG_BMON2_0_BASE,
-+	[GAUDI2_BMON_NIC8_DBG_0_1] = mmNIC8_DBG_BMON0_1_BASE,
-+	[GAUDI2_BMON_NIC8_DBG_1_1] = mmNIC8_DBG_BMON1_1_BASE,
-+	[GAUDI2_BMON_NIC8_DBG_2_1] = mmNIC8_DBG_BMON2_1_BASE,
-+	[GAUDI2_BMON_NIC9_DBG_0_0] = mmNIC9_DBG_BMON0_0_BASE,
-+	[GAUDI2_BMON_NIC9_DBG_1_0] = mmNIC9_DBG_BMON1_0_BASE,
-+	[GAUDI2_BMON_NIC9_DBG_2_0] = mmNIC9_DBG_BMON2_0_BASE,
-+	[GAUDI2_BMON_NIC9_DBG_0_1] = mmNIC9_DBG_BMON0_1_BASE,
-+	[GAUDI2_BMON_NIC9_DBG_1_1] = mmNIC9_DBG_BMON1_1_BASE,
-+	[GAUDI2_BMON_NIC9_DBG_2_1] = mmNIC9_DBG_BMON2_1_BASE,
-+	[GAUDI2_BMON_NIC10_DBG_0_0] = mmNIC10_DBG_BMON0_0_BASE,
-+	[GAUDI2_BMON_NIC10_DBG_1_0] = mmNIC10_DBG_BMON1_0_BASE,
-+	[GAUDI2_BMON_NIC10_DBG_2_0] = mmNIC10_DBG_BMON2_0_BASE,
-+	[GAUDI2_BMON_NIC10_DBG_0_1] = mmNIC10_DBG_BMON0_1_BASE,
-+	[GAUDI2_BMON_NIC10_DBG_1_1] = mmNIC10_DBG_BMON1_1_BASE,
-+	[GAUDI2_BMON_NIC10_DBG_2_1] = mmNIC10_DBG_BMON2_1_BASE,
-+	[GAUDI2_BMON_NIC11_DBG_0_0] = mmNIC11_DBG_BMON0_0_BASE,
-+	[GAUDI2_BMON_NIC11_DBG_1_0] = mmNIC11_DBG_BMON1_0_BASE,
-+	[GAUDI2_BMON_NIC11_DBG_2_0] = mmNIC11_DBG_BMON2_0_BASE,
-+	[GAUDI2_BMON_NIC11_DBG_0_1] = mmNIC11_DBG_BMON0_1_BASE,
-+	[GAUDI2_BMON_NIC11_DBG_1_1] = mmNIC11_DBG_BMON1_1_BASE,
-+	[GAUDI2_BMON_NIC11_DBG_2_1] = mmNIC11_DBG_BMON2_1_BASE
-+};
-+
-+u64 debug_spmu_regs[GAUDI2_SPMU_LAST + 1] = {
-+	[GAUDI2_SPMU_DCORE0_TPC0_EML] = mmDCORE0_TPC0_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_TPC1_EML] = mmDCORE0_TPC1_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_TPC2_EML] = mmDCORE0_TPC2_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_TPC3_EML] = mmDCORE0_TPC3_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_TPC4_EML] = mmDCORE0_TPC4_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_TPC5_EML] = mmDCORE0_TPC5_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_TPC6_EML] = mmDCORE0_TPC6_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_TPC0_EML] = mmDCORE1_TPC0_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_TPC1_EML] = mmDCORE1_TPC1_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_TPC2_EML] = mmDCORE1_TPC2_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_TPC3_EML] = mmDCORE1_TPC3_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_TPC4_EML] = mmDCORE1_TPC4_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_TPC5_EML] = mmDCORE1_TPC5_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_TPC0_EML] = mmDCORE2_TPC0_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_TPC1_EML] = mmDCORE2_TPC1_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_TPC2_EML] = mmDCORE2_TPC2_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_TPC3_EML] = mmDCORE2_TPC3_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_TPC4_EML] = mmDCORE2_TPC4_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_TPC5_EML] = mmDCORE2_TPC5_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_TPC0_EML] = mmDCORE3_TPC0_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_TPC1_EML] = mmDCORE3_TPC1_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_TPC2_EML] = mmDCORE3_TPC2_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_TPC3_EML] = mmDCORE3_TPC3_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_TPC4_EML] = mmDCORE3_TPC4_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_TPC5_EML] = mmDCORE3_TPC5_EML_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_HMMU0_CS] = mmDCORE0_HMMU0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_HMMU1_CS] = mmDCORE0_HMMU1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_HMMU2_CS] = mmDCORE0_HMMU2_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_HMMU3_CS] = mmDCORE0_HMMU3_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_MME_CTRL] = mmDCORE0_MME_CTRL_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_MME_SBTE0] = mmDCORE0_MME_SBTE0_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_MME_SBTE1] = mmDCORE0_MME_SBTE1_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_MME_SBTE2] = mmDCORE0_MME_SBTE2_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_MME_SBTE3] = mmDCORE0_MME_SBTE3_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_MME_SBTE4] = mmDCORE0_MME_SBTE4_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_MME_ACC] = mmDCORE0_MME_ACC_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_SM] = mmDCORE0_SM_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_EDMA0_CS] = mmDCORE0_EDMA0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_EDMA1_CS] = mmDCORE0_EDMA1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_VDEC0_CS] = mmDCORE0_VDEC0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE0_VDEC1_CS] = mmDCORE0_VDEC1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_HMMU0_CS] = mmDCORE1_HMMU0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_HMMU1_CS] = mmDCORE1_HMMU1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_HMMU2_CS] = mmDCORE1_HMMU2_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_HMMU3_CS] = mmDCORE1_HMMU3_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_MME_CTRL] = mmDCORE1_MME_CTRL_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_MME_SBTE0] = mmDCORE1_MME_SBTE0_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_MME_SBTE1] = mmDCORE1_MME_SBTE1_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_MME_SBTE2] = mmDCORE1_MME_SBTE2_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_MME_SBTE3] = mmDCORE1_MME_SBTE3_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_MME_SBTE4] = mmDCORE1_MME_SBTE4_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_MME_ACC] = mmDCORE1_MME_ACC_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_SM] = mmDCORE1_SM_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_EDMA0_CS] = mmDCORE1_EDMA0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_EDMA1_CS] = mmDCORE1_EDMA1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_VDEC0_CS] = mmDCORE1_VDEC0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE1_VDEC1_CS] = mmDCORE1_VDEC1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_HMMU0_CS] = mmDCORE2_HMMU0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_HMMU1_CS] = mmDCORE2_HMMU1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_HMMU2_CS] = mmDCORE2_HMMU2_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_HMMU3_CS] = mmDCORE2_HMMU3_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_MME_CTRL] = mmDCORE2_MME_CTRL_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_MME_SBTE0] = mmDCORE2_MME_SBTE0_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_MME_SBTE1] = mmDCORE2_MME_SBTE1_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_MME_SBTE2] = mmDCORE2_MME_SBTE2_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_MME_SBTE3] = mmDCORE2_MME_SBTE3_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_MME_SBTE4] = mmDCORE2_MME_SBTE4_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_MME_ACC] = mmDCORE2_MME_ACC_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_SM] = mmDCORE2_SM_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_EDMA0_CS] = mmDCORE2_EDMA0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_EDMA1_CS] = mmDCORE2_EDMA1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_VDEC0_CS] = mmDCORE2_VDEC0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE2_VDEC1_CS] = mmDCORE2_VDEC1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_HMMU0_CS] = mmDCORE3_HMMU0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_HMMU1_CS] = mmDCORE3_HMMU1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_HMMU2_CS] = mmDCORE3_HMMU2_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_HMMU3_CS] = mmDCORE3_HMMU3_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_MME_CTRL] = mmDCORE3_MME_CTRL_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_MME_SBTE0] = mmDCORE3_MME_SBTE0_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_MME_SBTE1] = mmDCORE3_MME_SBTE1_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_MME_SBTE2] = mmDCORE3_MME_SBTE2_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_MME_SBTE3] = mmDCORE3_MME_SBTE3_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_MME_SBTE4] = mmDCORE3_MME_SBTE4_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_MME_ACC] = mmDCORE3_MME_ACC_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_SM] = mmDCORE3_SM_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_EDMA0_CS] = mmDCORE3_EDMA0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_EDMA1_CS] = mmDCORE3_EDMA1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_VDEC0_CS] = mmDCORE3_VDEC0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_DCORE3_VDEC1_CS] = mmDCORE3_VDEC1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_PCIE] = mmPCIE_SPMU_BASE,
-+	[GAUDI2_SPMU_PSOC_ARC0_CS] = mmPSOC_ARC0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_PSOC_ARC1_CS] = mmPSOC_ARC1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_PDMA0_CS] = mmPDMA0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_PDMA1_CS] = mmPDMA1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_PMMU_CS] = mmPMMU_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_ROT0_CS] = mmROT0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_ROT1_CS] = mmROT1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_ARC_FARM_CS] = mmARC_FARM_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_KDMA_CS] = mmKDMA_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_PCIE_VDEC0_CS] = mmPCIE_VDEC0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_PCIE_VDEC1_CS] = mmPCIE_VDEC1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_HBM0_MC0_CS] = mmHBM0_MC0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_HBM0_MC1_CS] = mmHBM0_MC1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_HBM1_MC0_CS] = mmHBM1_MC0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_HBM1_MC1_CS] = mmHBM1_MC1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_HBM2_MC0_CS] = mmHBM2_MC0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_HBM2_MC1_CS] = mmHBM2_MC1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_HBM3_MC0_CS] = mmHBM3_MC0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_HBM3_MC1_CS] = mmHBM3_MC1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_HBM4_MC0_CS] = mmHBM4_MC0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_HBM4_MC1_CS] = mmHBM4_MC1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_HBM5_MC0_CS] = mmHBM5_MC0_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_HBM5_MC1_CS] = mmHBM5_MC1_CS_SPMU_BASE,
-+	[GAUDI2_SPMU_NIC0_DBG_0] = mmNIC0_DBG_SPMU_0_BASE,
-+	[GAUDI2_SPMU_NIC0_DBG_1] = mmNIC0_DBG_SPMU_1_BASE,
-+	[GAUDI2_SPMU_NIC1_DBG_0] = mmNIC1_DBG_SPMU_0_BASE,
-+	[GAUDI2_SPMU_NIC1_DBG_1] = mmNIC1_DBG_SPMU_1_BASE,
-+	[GAUDI2_SPMU_NIC2_DBG_0] = mmNIC2_DBG_SPMU_0_BASE,
-+	[GAUDI2_SPMU_NIC2_DBG_1] = mmNIC2_DBG_SPMU_1_BASE,
-+	[GAUDI2_SPMU_NIC3_DBG_0] = mmNIC3_DBG_SPMU_0_BASE,
-+	[GAUDI2_SPMU_NIC3_DBG_1] = mmNIC3_DBG_SPMU_1_BASE,
-+	[GAUDI2_SPMU_NIC4_DBG_0] = mmNIC4_DBG_SPMU_0_BASE,
-+	[GAUDI2_SPMU_NIC4_DBG_1] = mmNIC4_DBG_SPMU_1_BASE,
-+	[GAUDI2_SPMU_NIC5_DBG_0] = mmNIC5_DBG_SPMU_0_BASE,
-+	[GAUDI2_SPMU_NIC5_DBG_1] = mmNIC5_DBG_SPMU_1_BASE,
-+	[GAUDI2_SPMU_NIC6_DBG_0] = mmNIC6_DBG_SPMU_0_BASE,
-+	[GAUDI2_SPMU_NIC6_DBG_1] = mmNIC6_DBG_SPMU_1_BASE,
-+	[GAUDI2_SPMU_NIC7_DBG_0] = mmNIC7_DBG_SPMU_0_BASE,
-+	[GAUDI2_SPMU_NIC7_DBG_1] = mmNIC7_DBG_SPMU_1_BASE,
-+	[GAUDI2_SPMU_NIC8_DBG_0] = mmNIC8_DBG_SPMU_0_BASE,
-+	[GAUDI2_SPMU_NIC8_DBG_1] = mmNIC8_DBG_SPMU_1_BASE,
-+	[GAUDI2_SPMU_NIC9_DBG_0] = mmNIC9_DBG_SPMU_0_BASE,
-+	[GAUDI2_SPMU_NIC9_DBG_1] = mmNIC9_DBG_SPMU_1_BASE,
-+	[GAUDI2_SPMU_NIC10_DBG_0] = mmNIC10_DBG_SPMU_0_BASE,
-+	[GAUDI2_SPMU_NIC10_DBG_1] = mmNIC10_DBG_SPMU_1_BASE,
-+	[GAUDI2_SPMU_NIC11_DBG_0] = mmNIC11_DBG_SPMU_0_BASE,
-+	[GAUDI2_SPMU_NIC11_DBG_1] = mmNIC11_DBG_SPMU_1_BASE
-+};
-+
-+static struct component_config_offsets xbar_edge_binning_cfg_table[XBAR_EDGE_ID_SIZE] = {
-+	[XBAR_EDGE_ID_DCORE0] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE0_XBAR_EDGE,
-+		.etf_id = COMPONENT_ID_INVALID,
-+		.stm_id = COMPONENT_ID_INVALID,
-+		.spmu_id = COMPONENT_ID_INVALID,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[XBAR_EDGE_ID_DCORE1] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE1_XBAR_EDGE,
-+		.etf_id = COMPONENT_ID_INVALID,
-+		.stm_id = COMPONENT_ID_INVALID,
-+		.spmu_id = COMPONENT_ID_INVALID,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[XBAR_EDGE_ID_DCORE2] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE2_XBAR_EDGE,
-+		.etf_id = COMPONENT_ID_INVALID,
-+		.stm_id = COMPONENT_ID_INVALID,
-+		.spmu_id = COMPONENT_ID_INVALID,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[XBAR_EDGE_ID_DCORE3] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE3_XBAR_EDGE,
-+		.etf_id = COMPONENT_ID_INVALID,
-+		.stm_id = COMPONENT_ID_INVALID,
-+		.spmu_id = COMPONENT_ID_INVALID,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+};
-+
-+
-+static struct component_config_offsets hmmu_binning_cfg_table[HMMU_ID_SIZE] = {
-+	[HMMU_ID_DCORE0_HMMU0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE0_HMMU0_CS,
-+		.stm_id = GAUDI2_STM_DCORE0_HMMU0_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_HMMU0_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_HMMU0_0,
-+			GAUDI2_BMON_DCORE0_HMMU0_1,
-+			GAUDI2_BMON_DCORE0_HMMU0_2,
-+			GAUDI2_BMON_DCORE0_HMMU0_3,
-+			GAUDI2_BMON_DCORE0_HMMU0_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE0_HMMU1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE0_HMMU1_CS,
-+		.stm_id = GAUDI2_STM_DCORE0_HMMU1_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_HMMU1_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_HMMU1_0,
-+			GAUDI2_BMON_DCORE0_HMMU1_1,
-+			GAUDI2_BMON_DCORE0_HMMU1_2,
-+			GAUDI2_BMON_DCORE0_HMMU1_3,
-+			GAUDI2_BMON_DCORE0_HMMU1_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE0_HMMU2] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE0_HMMU2_CS,
-+		.stm_id = GAUDI2_STM_DCORE0_HMMU2_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_HMMU2_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_HMMU2_0,
-+			GAUDI2_BMON_DCORE0_HMMU2_1,
-+			GAUDI2_BMON_DCORE0_HMMU2_2,
-+			GAUDI2_BMON_DCORE0_HMMU2_3,
-+			GAUDI2_BMON_DCORE0_HMMU2_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE0_HMMU3] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE0_HMMU3_CS,
-+		.stm_id = GAUDI2_STM_DCORE0_HMMU3_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_HMMU3_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_HMMU3_0,
-+			GAUDI2_BMON_DCORE0_HMMU3_1,
-+			GAUDI2_BMON_DCORE0_HMMU3_2,
-+			GAUDI2_BMON_DCORE0_HMMU3_3,
-+			GAUDI2_BMON_DCORE0_HMMU3_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE1_HMMU0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE1_HMMU0_CS,
-+		.stm_id = GAUDI2_STM_DCORE1_HMMU0_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_HMMU0_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_HMMU0_0,
-+			GAUDI2_BMON_DCORE1_HMMU0_1,
-+			GAUDI2_BMON_DCORE1_HMMU0_2,
-+			GAUDI2_BMON_DCORE1_HMMU0_3,
-+			GAUDI2_BMON_DCORE1_HMMU0_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE1_HMMU1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE1_HMMU1_CS,
-+		.stm_id = GAUDI2_STM_DCORE1_HMMU1_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_HMMU1_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_HMMU1_0,
-+			GAUDI2_BMON_DCORE1_HMMU1_1,
-+			GAUDI2_BMON_DCORE1_HMMU1_2,
-+			GAUDI2_BMON_DCORE1_HMMU1_3,
-+			GAUDI2_BMON_DCORE1_HMMU1_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE1_HMMU2] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE1_HMMU2_CS,
-+		.stm_id = GAUDI2_STM_DCORE1_HMMU2_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_HMMU2_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_HMMU2_0,
-+			GAUDI2_BMON_DCORE1_HMMU2_1,
-+			GAUDI2_BMON_DCORE1_HMMU2_2,
-+			GAUDI2_BMON_DCORE1_HMMU2_3,
-+			GAUDI2_BMON_DCORE1_HMMU2_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE1_HMMU3] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE1_HMMU3_CS,
-+		.stm_id = GAUDI2_STM_DCORE1_HMMU3_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_HMMU3_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_HMMU3_0,
-+			GAUDI2_BMON_DCORE1_HMMU3_1,
-+			GAUDI2_BMON_DCORE1_HMMU3_2,
-+			GAUDI2_BMON_DCORE1_HMMU3_3,
-+			GAUDI2_BMON_DCORE1_HMMU3_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE2_HMMU0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE2_HMMU0_CS,
-+		.stm_id = GAUDI2_STM_DCORE2_HMMU0_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_HMMU0_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_HMMU0_0,
-+			GAUDI2_BMON_DCORE2_HMMU0_1,
-+			GAUDI2_BMON_DCORE2_HMMU0_2,
-+			GAUDI2_BMON_DCORE2_HMMU0_3,
-+			GAUDI2_BMON_DCORE2_HMMU0_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE2_HMMU1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE2_HMMU1_CS,
-+		.stm_id = GAUDI2_STM_DCORE2_HMMU1_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_HMMU1_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_HMMU1_0,
-+			GAUDI2_BMON_DCORE2_HMMU1_1,
-+			GAUDI2_BMON_DCORE2_HMMU1_2,
-+			GAUDI2_BMON_DCORE2_HMMU1_3,
-+			GAUDI2_BMON_DCORE2_HMMU1_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE2_HMMU2] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE2_HMMU2_CS,
-+		.stm_id = GAUDI2_STM_DCORE2_HMMU2_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_HMMU2_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_HMMU2_0,
-+			GAUDI2_BMON_DCORE2_HMMU2_1,
-+			GAUDI2_BMON_DCORE2_HMMU2_2,
-+			GAUDI2_BMON_DCORE2_HMMU2_3,
-+			GAUDI2_BMON_DCORE2_HMMU2_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE2_HMMU3] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE2_HMMU3_CS,
-+		.stm_id = GAUDI2_STM_DCORE2_HMMU3_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_HMMU3_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_HMMU3_0,
-+			GAUDI2_BMON_DCORE2_HMMU3_1,
-+			GAUDI2_BMON_DCORE2_HMMU3_2,
-+			GAUDI2_BMON_DCORE2_HMMU3_3,
-+			GAUDI2_BMON_DCORE2_HMMU3_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE3_HMMU0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE3_HMMU0_CS,
-+		.stm_id = GAUDI2_STM_DCORE3_HMMU0_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_HMMU0_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_HMMU0_0,
-+			GAUDI2_BMON_DCORE3_HMMU0_1,
-+			GAUDI2_BMON_DCORE3_HMMU0_2,
-+			GAUDI2_BMON_DCORE3_HMMU0_3,
-+			GAUDI2_BMON_DCORE3_HMMU0_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE3_HMMU1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE3_HMMU1_CS,
-+		.stm_id = GAUDI2_STM_DCORE3_HMMU1_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_HMMU1_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_HMMU1_0,
-+			GAUDI2_BMON_DCORE3_HMMU1_1,
-+			GAUDI2_BMON_DCORE3_HMMU1_2,
-+			GAUDI2_BMON_DCORE3_HMMU1_3,
-+			GAUDI2_BMON_DCORE3_HMMU1_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE3_HMMU2] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE3_HMMU2_CS,
-+		.stm_id = GAUDI2_STM_DCORE3_HMMU2_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_HMMU2_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_HMMU2_0,
-+			GAUDI2_BMON_DCORE3_HMMU2_1,
-+			GAUDI2_BMON_DCORE3_HMMU2_2,
-+			GAUDI2_BMON_DCORE3_HMMU2_3,
-+			GAUDI2_BMON_DCORE3_HMMU2_4,
-+		}
-+	},
-+	[HMMU_ID_DCORE3_HMMU3] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE3_HMMU3_CS,
-+		.stm_id = GAUDI2_STM_DCORE3_HMMU3_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_HMMU3_CS,
-+		.bmon_count = 5,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_HMMU3_0,
-+			GAUDI2_BMON_DCORE3_HMMU3_1,
-+			GAUDI2_BMON_DCORE3_HMMU3_2,
-+			GAUDI2_BMON_DCORE3_HMMU3_3,
-+			GAUDI2_BMON_DCORE3_HMMU3_4,
-+		}
-+	},
-+};
-+
-+static struct component_config_offsets hbm_mc0_binning_cfg_table[HBM_ID_SIZE] = {
-+	[HBM_ID0] = {
-+		.funnel_id = GAUDI2_FUNNEL_HBM0_MC0,
-+		.etf_id = GAUDI2_ETF_HBM0_MC0_CS,
-+		.stm_id = GAUDI2_STM_HBM0_MC0_CS,
-+		.spmu_id = GAUDI2_SPMU_HBM0_MC0_CS,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[HBM_ID1] = {
-+		.funnel_id = GAUDI2_FUNNEL_HBM1_MC0,
-+		.etf_id = GAUDI2_ETF_HBM1_MC0_CS,
-+		.stm_id = GAUDI2_STM_HBM1_MC0_CS,
-+		.spmu_id = GAUDI2_SPMU_HBM1_MC0_CS,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[HBM_ID2] = {
-+		.funnel_id = GAUDI2_FUNNEL_HBM2_MC0,
-+		.etf_id = GAUDI2_ETF_HBM2_MC0_CS,
-+		.stm_id = GAUDI2_STM_HBM2_MC0_CS,
-+		.spmu_id = GAUDI2_SPMU_HBM2_MC0_CS,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[HBM_ID3] = {
-+		.funnel_id = GAUDI2_FUNNEL_HBM3_MC0,
-+		.etf_id = GAUDI2_ETF_HBM3_MC0_CS,
-+		.stm_id = GAUDI2_STM_HBM3_MC0_CS,
-+		.spmu_id = GAUDI2_SPMU_HBM3_MC0_CS,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[HBM_ID4] = {
-+		.funnel_id = GAUDI2_FUNNEL_HBM4_MC0,
-+		.etf_id = GAUDI2_ETF_HBM4_MC0_CS,
-+		.stm_id = GAUDI2_STM_HBM4_MC0_CS,
-+		.spmu_id = GAUDI2_SPMU_HBM4_MC0_CS,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[HBM_ID5] = {
-+		.funnel_id = GAUDI2_FUNNEL_HBM5_MC0,
-+		.etf_id = GAUDI2_ETF_HBM5_MC0_CS,
-+		.stm_id = GAUDI2_STM_HBM5_MC0_CS,
-+		.spmu_id = GAUDI2_SPMU_HBM5_MC0_CS,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+};
-+
-+static struct component_config_offsets hbm_mc1_binning_cfg_table[HBM_ID_SIZE] = {
-+	[HBM_ID0] = {
-+		.funnel_id = GAUDI2_FUNNEL_HBM0_MC1,
-+		.etf_id = GAUDI2_ETF_HBM0_MC1_CS,
-+		.stm_id = GAUDI2_STM_HBM0_MC1_CS,
-+		.spmu_id = GAUDI2_SPMU_HBM0_MC1_CS,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[HBM_ID1] = {
-+		.funnel_id = GAUDI2_FUNNEL_HBM1_MC1,
-+		.etf_id = GAUDI2_ETF_HBM1_MC1_CS,
-+		.stm_id = GAUDI2_STM_HBM1_MC1_CS,
-+		.spmu_id = GAUDI2_SPMU_HBM1_MC1_CS,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[HBM_ID2] = {
-+		.funnel_id = GAUDI2_FUNNEL_HBM2_MC1,
-+		.etf_id = GAUDI2_ETF_HBM2_MC1_CS,
-+		.stm_id = GAUDI2_STM_HBM2_MC1_CS,
-+		.spmu_id = GAUDI2_SPMU_HBM2_MC1_CS,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[HBM_ID3] = {
-+		.funnel_id = GAUDI2_FUNNEL_HBM3_MC1,
-+		.etf_id = GAUDI2_ETF_HBM3_MC1_CS,
-+		.stm_id = GAUDI2_STM_HBM3_MC1_CS,
-+		.spmu_id = GAUDI2_SPMU_HBM3_MC1_CS,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[HBM_ID4] = {
-+		.funnel_id = GAUDI2_FUNNEL_HBM4_MC1,
-+		.etf_id = GAUDI2_ETF_HBM4_MC1_CS,
-+		.stm_id = GAUDI2_STM_HBM4_MC1_CS,
-+		.spmu_id = GAUDI2_SPMU_HBM4_MC1_CS,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+	[HBM_ID5] = {
-+		.funnel_id = GAUDI2_FUNNEL_HBM5_MC1,
-+		.etf_id = GAUDI2_ETF_HBM5_MC1_CS,
-+		.stm_id = GAUDI2_STM_HBM5_MC1_CS,
-+		.spmu_id = GAUDI2_SPMU_HBM5_MC1_CS,
-+		.bmon_count = 0,
-+		.bmon_ids = {COMPONENT_ID_INVALID}
-+	},
-+};
-+
-+static struct component_config_offsets decoder_binning_cfg_table[DEC_ID_SIZE] = {
-+	[DEC_ID_DCORE0_DEC0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE0_VDEC0_CS,
-+		.stm_id = GAUDI2_STM_DCORE0_VDEC0_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_VDEC0_CS,
-+		.bmon_count = 3,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_VDEC0_0,
-+			GAUDI2_BMON_DCORE0_VDEC0_1,
-+			GAUDI2_BMON_DCORE0_VDEC0_2,
-+		}
-+	},
-+	[DEC_ID_DCORE0_DEC1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE0_VDEC1_CS,
-+		.stm_id = GAUDI2_STM_DCORE0_VDEC1_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_VDEC1_CS,
-+		.bmon_count = 3,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_VDEC1_0,
-+			GAUDI2_BMON_DCORE0_VDEC1_1,
-+			GAUDI2_BMON_DCORE0_VDEC1_2,
-+		}
-+	},
-+	[DEC_ID_DCORE1_DEC0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE1_VDEC0_CS,
-+		.stm_id = GAUDI2_STM_DCORE1_VDEC0_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_VDEC0_CS,
-+		.bmon_count = 3,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_VDEC0_0,
-+			GAUDI2_BMON_DCORE1_VDEC0_1,
-+			GAUDI2_BMON_DCORE1_VDEC0_2,
-+		}
-+	},
-+	[DEC_ID_DCORE1_DEC1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE1_VDEC1_CS,
-+		.stm_id = GAUDI2_STM_DCORE1_VDEC1_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_VDEC1_CS,
-+		.bmon_count = 3,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_VDEC1_0,
-+			GAUDI2_BMON_DCORE1_VDEC1_1,
-+			GAUDI2_BMON_DCORE1_VDEC1_2,
-+		}
-+	},
-+	[DEC_ID_DCORE2_DEC0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE2_VDEC0_CS,
-+		.stm_id = GAUDI2_STM_DCORE2_VDEC0_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_VDEC0_CS,
-+		.bmon_count = 3,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_VDEC0_0,
-+			GAUDI2_BMON_DCORE2_VDEC0_1,
-+			GAUDI2_BMON_DCORE2_VDEC0_2,
-+		}
-+	},
-+	[DEC_ID_DCORE2_DEC1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE2_VDEC1_CS,
-+		.stm_id = GAUDI2_STM_DCORE2_VDEC1_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_VDEC1_CS,
-+		.bmon_count = 3,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_VDEC1_0,
-+			GAUDI2_BMON_DCORE2_VDEC1_1,
-+			GAUDI2_BMON_DCORE2_VDEC1_2,
-+		}
-+	},
-+	[DEC_ID_DCORE3_DEC0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE3_VDEC0_CS,
-+		.stm_id = GAUDI2_STM_DCORE3_VDEC0_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_VDEC0_CS,
-+		.bmon_count = 3,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_VDEC0_0,
-+			GAUDI2_BMON_DCORE3_VDEC0_1,
-+			GAUDI2_BMON_DCORE3_VDEC0_2,
-+		}
-+	},
-+	[DEC_ID_DCORE3_DEC1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE3_VDEC1_CS,
-+		.stm_id = GAUDI2_STM_DCORE3_VDEC1_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_VDEC1_CS,
-+		.bmon_count = 3,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_VDEC1_0,
-+			GAUDI2_BMON_DCORE3_VDEC1_1,
-+			GAUDI2_BMON_DCORE3_VDEC1_2,
-+		}
-+	},
-+	[DEC_ID_PCIE_VDEC0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_PCIE_VDEC0_CS,
-+		.stm_id = GAUDI2_STM_PCIE_VDEC0_CS,
-+		.spmu_id = GAUDI2_SPMU_PCIE_VDEC0_CS,
-+		.bmon_count = 3,
-+		.bmon_ids = {
-+			GAUDI2_BMON_PCIE_VDEC0_0,
-+			GAUDI2_BMON_PCIE_VDEC0_1,
-+			GAUDI2_BMON_PCIE_VDEC0_2,
-+		}
-+	},
-+	[DEC_ID_PCIE_VDEC1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_PCIE_VDEC1_CS,
-+		.stm_id = GAUDI2_STM_PCIE_VDEC1_CS,
-+		.spmu_id = GAUDI2_SPMU_PCIE_VDEC1_CS,
-+		.bmon_count = 3,
-+		.bmon_ids = {
-+			GAUDI2_BMON_PCIE_VDEC1_0,
-+			GAUDI2_BMON_PCIE_VDEC1_1,
-+			GAUDI2_BMON_PCIE_VDEC1_2,
-+		}
-+	},
-+};
-+
-+static struct component_config_offsets edma_binning_cfg_table[EDMA_ID_SIZE] = {
-+	[EDMA_ID_DCORE0_INSTANCE0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE0_EDMA0_CS,
-+		.stm_id = GAUDI2_STM_DCORE0_EDMA0_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_EDMA0_CS,
-+		.bmon_count = 2,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_EDMA0_0,
-+			GAUDI2_BMON_DCORE0_EDMA0_1,
-+		}
-+	},
-+	[EDMA_ID_DCORE0_INSTANCE1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE0_EDMA1_CS,
-+		.stm_id = GAUDI2_STM_DCORE0_EDMA1_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_EDMA1_CS,
-+		.bmon_count = 2,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_EDMA1_0,
-+			GAUDI2_BMON_DCORE0_EDMA1_1,
-+		}
-+	},
-+	[EDMA_ID_DCORE1_INSTANCE0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE1_EDMA0_CS,
-+		.stm_id = GAUDI2_STM_DCORE1_EDMA0_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_EDMA0_CS,
-+		.bmon_count = 2,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_EDMA0_0,
-+			GAUDI2_BMON_DCORE1_EDMA0_1,
-+		}
-+	},
-+	[EDMA_ID_DCORE1_INSTANCE1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE1_EDMA1_CS,
-+		.stm_id = GAUDI2_STM_DCORE1_EDMA1_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_EDMA1_CS,
-+		.bmon_count = 2,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_EDMA1_0,
-+			GAUDI2_BMON_DCORE1_EDMA1_1,
-+		}
-+	},
-+	[EDMA_ID_DCORE2_INSTANCE0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE2_EDMA0_CS,
-+		.stm_id = GAUDI2_STM_DCORE2_EDMA0_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_EDMA0_CS,
-+		.bmon_count = 2,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_EDMA0_0,
-+			GAUDI2_BMON_DCORE2_EDMA0_1,
-+		}
-+	},
-+	[EDMA_ID_DCORE2_INSTANCE1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE2_EDMA1_CS,
-+		.stm_id = GAUDI2_STM_DCORE2_EDMA1_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_EDMA1_CS,
-+		.bmon_count = 2,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_EDMA1_0,
-+			GAUDI2_BMON_DCORE2_EDMA1_1,
-+		}
-+	},
-+	[EDMA_ID_DCORE3_INSTANCE0] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE3_EDMA0_CS,
-+		.stm_id = GAUDI2_STM_DCORE3_EDMA0_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_EDMA0_CS,
-+		.bmon_count = 2,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_EDMA0_0,
-+			GAUDI2_BMON_DCORE3_EDMA0_1,
-+		}
-+	},
-+	[EDMA_ID_DCORE3_INSTANCE1] = {
-+		.funnel_id = COMPONENT_ID_INVALID,
-+		.etf_id = GAUDI2_ETF_DCORE3_EDMA1_CS,
-+		.stm_id = GAUDI2_STM_DCORE3_EDMA1_CS,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_EDMA1_CS,
-+		.bmon_count = 2,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_EDMA1_0,
-+			GAUDI2_BMON_DCORE3_EDMA1_1,
-+		}
-+	},
-+};
-+
-+static struct component_config_offsets tpc_binning_cfg_table[TPC_ID_SIZE] = {
-+	[TPC_ID_DCORE0_TPC0] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE0_TPC0_EML,
-+		.etf_id = GAUDI2_ETF_DCORE0_TPC0_EML,
-+		.stm_id = GAUDI2_STM_DCORE0_TPC0_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_TPC0_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_TPC0_EML_0,
-+			GAUDI2_BMON_DCORE0_TPC0_EML_1,
-+			GAUDI2_BMON_DCORE0_TPC0_EML_2,
-+			GAUDI2_BMON_DCORE0_TPC0_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE0_TPC1] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE0_TPC1_EML,
-+		.etf_id = GAUDI2_ETF_DCORE0_TPC1_EML,
-+		.stm_id = GAUDI2_STM_DCORE0_TPC1_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_TPC1_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_TPC1_EML_0,
-+			GAUDI2_BMON_DCORE0_TPC1_EML_1,
-+			GAUDI2_BMON_DCORE0_TPC1_EML_2,
-+			GAUDI2_BMON_DCORE0_TPC1_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE0_TPC2] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE0_TPC2_EML,
-+		.etf_id = GAUDI2_ETF_DCORE0_TPC2_EML,
-+		.stm_id = GAUDI2_STM_DCORE0_TPC2_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_TPC2_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_TPC2_EML_0,
-+			GAUDI2_BMON_DCORE0_TPC2_EML_1,
-+			GAUDI2_BMON_DCORE0_TPC2_EML_2,
-+			GAUDI2_BMON_DCORE0_TPC2_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE0_TPC3] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE0_TPC3_EML,
-+		.etf_id = GAUDI2_ETF_DCORE0_TPC3_EML,
-+		.stm_id = GAUDI2_STM_DCORE0_TPC3_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_TPC3_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_TPC3_EML_0,
-+			GAUDI2_BMON_DCORE0_TPC3_EML_1,
-+			GAUDI2_BMON_DCORE0_TPC3_EML_2,
-+			GAUDI2_BMON_DCORE0_TPC3_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE0_TPC4] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE0_TPC4_EML,
-+		.etf_id = GAUDI2_ETF_DCORE0_TPC4_EML,
-+		.stm_id = GAUDI2_STM_DCORE0_TPC4_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_TPC4_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_TPC4_EML_0,
-+			GAUDI2_BMON_DCORE0_TPC4_EML_1,
-+			GAUDI2_BMON_DCORE0_TPC4_EML_2,
-+			GAUDI2_BMON_DCORE0_TPC4_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE0_TPC5] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE0_TPC5_EML,
-+		.etf_id = GAUDI2_ETF_DCORE0_TPC5_EML,
-+		.stm_id = GAUDI2_STM_DCORE0_TPC5_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_TPC5_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_TPC5_EML_0,
-+			GAUDI2_BMON_DCORE0_TPC5_EML_1,
-+			GAUDI2_BMON_DCORE0_TPC5_EML_2,
-+			GAUDI2_BMON_DCORE0_TPC5_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE1_TPC0] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE1_TPC0_EML,
-+		.etf_id = GAUDI2_ETF_DCORE1_TPC0_EML,
-+		.stm_id = GAUDI2_STM_DCORE1_TPC0_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_TPC0_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_TPC0_EML_0,
-+			GAUDI2_BMON_DCORE1_TPC0_EML_1,
-+			GAUDI2_BMON_DCORE1_TPC0_EML_2,
-+			GAUDI2_BMON_DCORE1_TPC0_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE1_TPC1] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE1_TPC1_EML,
-+		.etf_id = GAUDI2_ETF_DCORE1_TPC1_EML,
-+		.stm_id = GAUDI2_STM_DCORE1_TPC1_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_TPC1_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_TPC1_EML_0,
-+			GAUDI2_BMON_DCORE1_TPC1_EML_1,
-+			GAUDI2_BMON_DCORE1_TPC1_EML_2,
-+			GAUDI2_BMON_DCORE1_TPC1_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE1_TPC2] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE1_TPC2_EML,
-+		.etf_id = GAUDI2_ETF_DCORE1_TPC2_EML,
-+		.stm_id = GAUDI2_STM_DCORE1_TPC2_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_TPC2_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_TPC2_EML_0,
-+			GAUDI2_BMON_DCORE1_TPC2_EML_1,
-+			GAUDI2_BMON_DCORE1_TPC2_EML_2,
-+			GAUDI2_BMON_DCORE1_TPC2_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE1_TPC3] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE1_TPC3_EML,
-+		.etf_id = GAUDI2_ETF_DCORE1_TPC3_EML,
-+		.stm_id = GAUDI2_STM_DCORE1_TPC3_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_TPC3_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_TPC3_EML_0,
-+			GAUDI2_BMON_DCORE1_TPC3_EML_1,
-+			GAUDI2_BMON_DCORE1_TPC3_EML_2,
-+			GAUDI2_BMON_DCORE1_TPC3_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE1_TPC4] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE1_TPC4_EML,
-+		.etf_id = GAUDI2_ETF_DCORE1_TPC4_EML,
-+		.stm_id = GAUDI2_STM_DCORE1_TPC4_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_TPC4_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_TPC4_EML_0,
-+			GAUDI2_BMON_DCORE1_TPC4_EML_1,
-+			GAUDI2_BMON_DCORE1_TPC4_EML_2,
-+			GAUDI2_BMON_DCORE1_TPC4_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE1_TPC5] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE1_TPC5_EML,
-+		.etf_id = GAUDI2_ETF_DCORE1_TPC5_EML,
-+		.stm_id = GAUDI2_STM_DCORE1_TPC5_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE1_TPC5_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE1_TPC5_EML_0,
-+			GAUDI2_BMON_DCORE1_TPC5_EML_1,
-+			GAUDI2_BMON_DCORE1_TPC5_EML_2,
-+			GAUDI2_BMON_DCORE1_TPC5_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE2_TPC0] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE2_TPC0_EML,
-+		.etf_id = GAUDI2_ETF_DCORE2_TPC0_EML,
-+		.stm_id = GAUDI2_STM_DCORE2_TPC0_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_TPC0_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_TPC0_EML_0,
-+			GAUDI2_BMON_DCORE2_TPC0_EML_1,
-+			GAUDI2_BMON_DCORE2_TPC0_EML_2,
-+			GAUDI2_BMON_DCORE2_TPC0_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE2_TPC1] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE2_TPC1_EML,
-+		.etf_id = GAUDI2_ETF_DCORE2_TPC1_EML,
-+		.stm_id = GAUDI2_STM_DCORE2_TPC1_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_TPC1_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_TPC1_EML_0,
-+			GAUDI2_BMON_DCORE2_TPC1_EML_1,
-+			GAUDI2_BMON_DCORE2_TPC1_EML_2,
-+			GAUDI2_BMON_DCORE2_TPC1_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE2_TPC2] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE2_TPC2_EML,
-+		.etf_id = GAUDI2_ETF_DCORE2_TPC2_EML,
-+		.stm_id = GAUDI2_STM_DCORE2_TPC2_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_TPC2_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_TPC2_EML_0,
-+			GAUDI2_BMON_DCORE2_TPC2_EML_1,
-+			GAUDI2_BMON_DCORE2_TPC2_EML_2,
-+			GAUDI2_BMON_DCORE2_TPC2_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE2_TPC3] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE2_TPC3_EML,
-+		.etf_id = GAUDI2_ETF_DCORE2_TPC3_EML,
-+		.stm_id = GAUDI2_STM_DCORE2_TPC3_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_TPC3_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_TPC3_EML_0,
-+			GAUDI2_BMON_DCORE2_TPC3_EML_1,
-+			GAUDI2_BMON_DCORE2_TPC3_EML_2,
-+			GAUDI2_BMON_DCORE2_TPC3_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE2_TPC4] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE2_TPC4_EML,
-+		.etf_id = GAUDI2_ETF_DCORE2_TPC4_EML,
-+		.stm_id = GAUDI2_STM_DCORE2_TPC4_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_TPC4_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_TPC4_EML_0,
-+			GAUDI2_BMON_DCORE2_TPC4_EML_1,
-+			GAUDI2_BMON_DCORE2_TPC4_EML_2,
-+			GAUDI2_BMON_DCORE2_TPC4_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE2_TPC5] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE2_TPC5_EML,
-+		.etf_id = GAUDI2_ETF_DCORE2_TPC5_EML,
-+		.stm_id = GAUDI2_STM_DCORE2_TPC5_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE2_TPC5_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE2_TPC5_EML_0,
-+			GAUDI2_BMON_DCORE2_TPC5_EML_1,
-+			GAUDI2_BMON_DCORE2_TPC5_EML_2,
-+			GAUDI2_BMON_DCORE2_TPC5_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE3_TPC0] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE3_TPC0_EML,
-+		.etf_id = GAUDI2_ETF_DCORE3_TPC0_EML,
-+		.stm_id = GAUDI2_STM_DCORE3_TPC0_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_TPC0_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_TPC0_EML_0,
-+			GAUDI2_BMON_DCORE3_TPC0_EML_1,
-+			GAUDI2_BMON_DCORE3_TPC0_EML_2,
-+			GAUDI2_BMON_DCORE3_TPC0_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE3_TPC1] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE3_TPC1_EML,
-+		.etf_id = GAUDI2_ETF_DCORE3_TPC1_EML,
-+		.stm_id = GAUDI2_STM_DCORE3_TPC1_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_TPC1_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_TPC1_EML_0,
-+			GAUDI2_BMON_DCORE3_TPC1_EML_1,
-+			GAUDI2_BMON_DCORE3_TPC1_EML_2,
-+			GAUDI2_BMON_DCORE3_TPC1_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE3_TPC2] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE3_TPC2_EML,
-+		.etf_id = GAUDI2_ETF_DCORE3_TPC2_EML,
-+		.stm_id = GAUDI2_STM_DCORE3_TPC2_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_TPC2_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_TPC2_EML_0,
-+			GAUDI2_BMON_DCORE3_TPC2_EML_1,
-+			GAUDI2_BMON_DCORE3_TPC2_EML_2,
-+			GAUDI2_BMON_DCORE3_TPC2_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE3_TPC3] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE3_TPC3_EML,
-+		.etf_id = GAUDI2_ETF_DCORE3_TPC3_EML,
-+		.stm_id = GAUDI2_STM_DCORE3_TPC3_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_TPC3_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_TPC3_EML_0,
-+			GAUDI2_BMON_DCORE3_TPC3_EML_1,
-+			GAUDI2_BMON_DCORE3_TPC3_EML_2,
-+			GAUDI2_BMON_DCORE3_TPC3_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE3_TPC4] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE3_TPC4_EML,
-+		.etf_id = GAUDI2_ETF_DCORE3_TPC4_EML,
-+		.stm_id = GAUDI2_STM_DCORE3_TPC4_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_TPC4_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_TPC4_EML_0,
-+			GAUDI2_BMON_DCORE3_TPC4_EML_1,
-+			GAUDI2_BMON_DCORE3_TPC4_EML_2,
-+			GAUDI2_BMON_DCORE3_TPC4_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE3_TPC5] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE3_TPC5_EML,
-+		.etf_id = GAUDI2_ETF_DCORE3_TPC5_EML,
-+		.stm_id = GAUDI2_STM_DCORE3_TPC5_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE3_TPC5_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE3_TPC5_EML_0,
-+			GAUDI2_BMON_DCORE3_TPC5_EML_1,
-+			GAUDI2_BMON_DCORE3_TPC5_EML_2,
-+			GAUDI2_BMON_DCORE3_TPC5_EML_3,
-+		}
-+	},
-+	[TPC_ID_DCORE0_TPC6] = {
-+		.funnel_id = GAUDI2_FUNNEL_DCORE0_TPC6_EML,
-+		.etf_id = GAUDI2_ETF_DCORE0_TPC6_EML,
-+		.stm_id = GAUDI2_STM_DCORE0_TPC6_EML,
-+		.spmu_id = GAUDI2_SPMU_DCORE0_TPC6_EML,
-+		.bmon_count = 4,
-+		.bmon_ids = {
-+			GAUDI2_BMON_DCORE0_TPC6_EML_0,
-+			GAUDI2_BMON_DCORE0_TPC6_EML_1,
-+			GAUDI2_BMON_DCORE0_TPC6_EML_2,
-+			GAUDI2_BMON_DCORE0_TPC6_EML_3,
-+		}
-+	}
-+};
-+
-+static int gaudi2_coresight_timeout(struct hl_device *hdev, u64 addr,
-+					int position, bool up)
-+{
-+	int rc;
-+	u32 val, timeout_usec;
-+
-+	if (hdev->pldm)
-+		timeout_usec = GAUDI2_PLDM_CORESIGHT_TIMEOUT_USEC;
-+	else
-+		timeout_usec = CORESIGHT_TIMEOUT_USEC;
-+
-+	rc = hl_poll_timeout(
-+		hdev,
-+		addr,
-+		val,
-+		up ? val & BIT(position) : !(val & BIT(position)),
-+		1000,
-+		timeout_usec);
-+
-+	if (rc)
-+		dev_err(hdev->dev,
-+			"Timeout while waiting for coresight, addr: 0x%llx, position: %d, up: %d\n",
-+			addr, position, up);
-+
-+	return rc;
-+}
-+
-+static int gaudi2_unlock_coresight_unit(struct hl_device *hdev,
-+	const u64 base_reg)
-+{
-+	int rc = 0;
-+
-+	WREG32(base_reg + mmCORESIGHT_UNLOCK_REGISTER_OFFSET, CORESIGHT_UNLOCK);
-+
-+	rc = gaudi2_coresight_timeout(hdev, base_reg + mmCORESIGHT_UNLOCK_STATUS_REGISTER_OFFSET,
-+					1, 0);
-+
-+	if (rc)
-+		dev_err(hdev->dev,
-+			"Failed to unlock register base addr: 0x%llx , position: 1, up: 0\n",
-+			base_reg);
-+
-+	return rc;
-+}
-+
-+static int gaudi2_config_stm(struct hl_device *hdev, struct hl_debug_params *params)
-+{
-+	struct hl_debug_params_stm *input;
-+	u64 base_reg;
-+	u32 frequency;
-+	u32 read_reg;
-+	int rc;
-+
-+	if (params->reg_idx >= ARRAY_SIZE(debug_stm_regs)) {
-+		dev_err(hdev->dev, "Invalid register index in STM\n");
-+		return -EINVAL;
-+	}
-+
-+	base_reg = debug_stm_regs[params->reg_idx];
-+
-+	/*
-+	 * in case base reg is 0x0 we ignore this configuration
-+	 */
-+	if (!base_reg)
-+		return 0;
-+
-+	/* check if stub component on pldm
-+	 * we check offset 0xCFC STMDMAIDR in case
-+	 * return value is 0x0 - hence stub component
-+	 */
-+	read_reg = RREG32(base_reg + mmSTM_STMDMAIDR_OFFSET);
-+	if (hdev->pldm &&  read_reg == 0x0)
-+		return 0;
-+
-+	rc = gaudi2_unlock_coresight_unit(hdev, base_reg);
-+	if (rc)
-+		return -EIO;
-+
-+	if (params->enable) {
-+		input = params->input;
-+
-+		if (!input)
-+			return -EINVAL;
-+
-+		WREG32(base_reg + mmSTM_STMTCSR_OFFSET, 0x80004);
-+		/* dummy read for pldm to flush outstanding writes */
-+		if (hdev->pldm)
-+			RREG32(base_reg + mmSTM_STMTCSR_OFFSET);
-+
-+		WREG32(base_reg + mmSTM_STMHEMCR_OFFSET, 7);
-+		WREG32(base_reg + mmSTM_STMHEBSR_OFFSET, 0);
-+		WREG32(base_reg + mmSTM_STMHEER_OFFSET, lower_32_bits(input->he_mask));
-+		WREG32(base_reg + mmSTM_STMHEBSR_OFFSET, 1);
-+		WREG32(base_reg + mmSTM_STMHEER_OFFSET, upper_32_bits(input->he_mask));
-+		WREG32(base_reg + mmSTM_STMSPTRIGCSR_OFFSET, 0x10);
-+		WREG32(base_reg + mmSTM_STMSPSCR_OFFSET, 0);
-+		WREG32(base_reg + mmSTM_STMSPER_OFFSET, lower_32_bits(input->sp_mask));
-+		WREG32(base_reg + mmSTM_STMITATBID_OFFSET, input->id);
-+		WREG32(base_reg + mmSTM_STMHEMASTR_OFFSET, 0x80);
-+		frequency = hdev->asic_prop.psoc_timestamp_frequency;
-+		if (frequency == 0)
-+			frequency = input->frequency;
-+		WREG32(base_reg + mmSTM_STMTSFREQR_OFFSET, frequency);
-+		WREG32(base_reg + mmSTM_STMSYNCR_OFFSET, 0x7FF);
-+		WREG32(base_reg + mmSTM_STMTCSR_OFFSET, 0x27 | (input->id << 16));
-+	} else {
-+		WREG32(base_reg + mmSTM_STMTCSR_OFFSET, 4);
-+		WREG32(base_reg + mmSTM_STMHEMCR_OFFSET, 0);
-+		WREG32(base_reg + mmSTM_STMHEBSR_OFFSET, 1);
-+		WREG32(base_reg + mmSTM_STMHEER_OFFSET, 0);
-+		WREG32(base_reg + mmSTM_STMHETER_OFFSET, 0);
-+		WREG32(base_reg + mmSTM_STMHEBSR_OFFSET, 0);
-+		WREG32(base_reg + mmSTM_STMSPTER_OFFSET, 0);
-+		WREG32(base_reg + mmSTM_STMSPER_OFFSET, 0);
-+		WREG32(base_reg + mmSTM_STMHEMASTR_OFFSET, 0x80);
-+		WREG32(base_reg + mmSTM_STMSPTRIGCSR_OFFSET, 0);
-+		WREG32(base_reg + mmSTM_STMSPSCR_OFFSET, 0);
-+		WREG32(base_reg + mmSTM_STMSPMSCR_OFFSET, 0);
-+		WREG32(base_reg + mmSTM_STMTSFREQR_OFFSET, 0);
-+
-+		rc = gaudi2_coresight_timeout(hdev, base_reg + mmSTM_STMTCSR_OFFSET, 23, false);
-+		if (rc) {
-+			dev_err(hdev->dev, "Failed to disable STM on timeout, error %d\n", rc);
-+			return rc;
-+		}
-+
-+		WREG32(base_reg + mmSTM_STMTCSR_OFFSET, 4);
-+	}
-+
-+	return 0;
-+}
-+
-+static int gaudi2_config_etf(struct hl_device *hdev, struct hl_debug_params *params)
-+{
-+	struct hl_debug_params_etf *input;
-+	u64 base_reg;
-+	u32 read_reg;
-+	u32 val;
-+	int rc;
-+
-+	if (params->reg_idx >= ARRAY_SIZE(debug_etf_regs)) {
-+		dev_err(hdev->dev, "Invalid register index in ETF\n");
-+		return -EINVAL;
-+	}
-+
-+	base_reg = debug_etf_regs[params->reg_idx];
-+
-+	/*
-+	 * in case base reg is 0x0 we ignore this configuration
-+	 */
-+	if (!base_reg)
-+		return 0;
-+
-+
-+	/* in pldm we need to check if unit is not stub
-+	 * for doing do need to read ETF STS register and check
-+	 * it is not return 0x0 - in case it does
-+	 * it means that this is stub, we ignore this and return 0
-+	 * means success
-+	 */
-+	read_reg = RREG32(base_reg + mmETF_STS_OFFSET);
-+	if (hdev->pldm &&  read_reg == 0x0)
-+		return 0;
-+
-+	rc = gaudi2_unlock_coresight_unit(hdev, base_reg);
-+	if (rc)
-+		return -EIO;
-+
-+	val = RREG32(base_reg + mmETF_FFCR_OFFSET);
-+	val |= 0x1000;
-+	WREG32(base_reg + mmETF_FFCR_OFFSET, val);
-+	val |= 0x40;
-+	WREG32(base_reg + mmETF_FFCR_OFFSET, val);
-+
-+	rc = gaudi2_coresight_timeout(hdev, base_reg + mmETF_FFCR_OFFSET, 6, false);
-+	if (rc) {
-+		dev_err(hdev->dev, "Failed to %s ETF on timeout, error %d\n",
-+			params->enable ? "enable" : "disable", rc);
-+		return rc;
-+	}
-+
-+	rc = gaudi2_coresight_timeout(hdev, base_reg + mmETF_STS_OFFSET, 2, true);
-+	if (rc) {
-+		dev_err(hdev->dev, "Failed to %s ETF on timeout, error %d\n",
-+			params->enable ? "enable" : "disable", rc);
-+		return rc;
-+	}
-+
-+	WREG32(base_reg + mmETF_CTL_OFFSET, 0);
-+
-+	if (params->enable) {
-+		input = params->input;
-+
-+		if (!input)
-+			return -EINVAL;
-+
-+		WREG32(base_reg + mmETF_BUFWM_OFFSET, 0x3FFC);
-+		WREG32(base_reg + mmETF_MODE_OFFSET, input->sink_mode);
-+		WREG32(base_reg + mmETF_FFCR_OFFSET, 0x4001);
-+		WREG32(base_reg + mmETF_PSCR_OFFSET, 0x10);
-+		WREG32(base_reg + mmETF_CTL_OFFSET, 1);
-+	} else {
-+		WREG32(base_reg + mmETF_BUFWM_OFFSET, 0);
-+		WREG32(base_reg + mmETF_MODE_OFFSET, 0);
-+		WREG32(base_reg + mmETF_FFCR_OFFSET, 0);
-+	}
-+
-+	return 0;
-+}
-+
-+static int gaudi2_etr_validate_address(struct hl_device *hdev, u64 addr, u64 size)
-+{
-+	struct asic_fixed_properties *prop = &hdev->asic_prop;
-+	struct gaudi2_device *gaudi2 = hdev->asic_specific;
-+
-+	if (addr > (addr + size)) {
-+		dev_err(hdev->dev, "ETR buffer size %llu overflow\n", size);
-+		return false;
-+	}
-+
-+	if (gaudi2->hw_cap_initialized & HW_CAP_PMMU) {
-+		if (hl_mem_area_inside_range(addr, size,
-+				prop->pmmu.start_addr,
-+				prop->pmmu.end_addr))
-+			return true;
-+
-+		if (hl_mem_area_inside_range(addr, size,
-+				prop->pmmu_huge.start_addr,
-+				prop->pmmu_huge.end_addr))
-+			return true;
-+
-+		if (hl_mem_area_inside_range(addr, size,
-+				prop->dmmu.start_addr,
-+				prop->dmmu.end_addr))
-+			return true;
-+	} else {
-+		if (hl_mem_area_inside_range(addr, size,
-+				prop->dram_user_base_address,
-+				prop->dram_end_address))
-+			return true;
-+	}
-+
-+	if (hl_mem_area_inside_range(addr, size,
-+			prop->sram_user_base_address,
-+			prop->sram_end_address))
-+		return true;
-+
-+	if (!(gaudi2->hw_cap_initialized & HW_CAP_PMMU))
-+		dev_err(hdev->dev, "ETR buffer should be in SRAM/DRAM\n");
-+
-+	return false;
-+}
-+
-+static int gaudi2_config_etr(struct hl_device *hdev, struct hl_ctx *ctx,
-+				struct hl_debug_params *params)
-+{
-+	struct hl_debug_params_etr *input;
-+	u64 msb;
-+	u32 val;
-+	int rc;
-+
-+	rc = gaudi2_unlock_coresight_unit(hdev, mmPSOC_ETR_BASE);
-+	if (rc)
-+		return -EIO;
-+
-+	val = RREG32(mmPSOC_ETR_FFCR);
-+	val |= 0x1000;
-+	WREG32(mmPSOC_ETR_FFCR, val);
-+	val |= 0x40;
-+	WREG32(mmPSOC_ETR_FFCR, val);
-+
-+	rc = gaudi2_coresight_timeout(hdev, mmPSOC_ETR_FFCR, 6, false);
-+	if (rc) {
-+		dev_err(hdev->dev, "Failed to %s ETR on timeout, error %d\n",
-+				params->enable ? "enable" : "disable", rc);
-+		return rc;
-+	}
-+
-+	rc = gaudi2_coresight_timeout(hdev, mmPSOC_ETR_STS, 2, true);
-+	if (rc) {
-+		dev_err(hdev->dev, "Failed to %s ETR on timeout, error %d\n",
-+				params->enable ? "enable" : "disable", rc);
-+		return rc;
-+	}
-+
-+	WREG32(mmPSOC_ETR_CTL, 0);
-+
-+	if (params->enable) {
-+		input = params->input;
-+
-+		if (!input)
-+			return -EINVAL;
-+
-+		if (input->buffer_size == 0) {
-+			dev_err(hdev->dev, "ETR buffer size should be bigger than 0\n");
-+			return -EINVAL;
-+		}
-+
-+		if (!gaudi2_etr_validate_address(hdev, input->buffer_address, input->buffer_size)) {
-+			dev_err(hdev->dev, "ETR buffer address is invalid\n");
-+			return -EINVAL;
-+		}
-+
-+		RMWREG32(mmPSOC_GLOBAL_CONF_TRACE_AWUSER, ctx->asid, MMUBP_ASID_MASK);
-+		RMWREG32(mmPSOC_GLOBAL_CONF_TRACE_ARUSER, ctx->asid, MMUBP_ASID_MASK);
-+
-+		msb = upper_32_bits(input->buffer_address) >> 8;
-+		WREG32(mmPSOC_GLOBAL_CONF_TRACE_ADDR, msb);
-+
-+		WREG32(mmPSOC_ETR_BUFWM, 0x3FFC);
-+		WREG32(mmPSOC_ETR_RSZ, input->buffer_size);
-+		WREG32(mmPSOC_ETR_MODE, input->sink_mode);
-+		/* write the protection bits only if security is disable */
-+		if (!(hdev->fw_components & FW_TYPE_BOOT_CPU)) {
-+			/* make ETR not privileged */
-+			val = FIELD_PREP(PSOC_ETR_AXICTL_PROTCTRLBIT0_MASK, 0);
-+			/* make ETR non-secured (inverted logic) */
-+			val |= FIELD_PREP(PSOC_ETR_AXICTL_PROTCTRLBIT1_MASK, 1);
-+			/* burst size 16 */
-+			val |= FIELD_PREP(PSOC_ETR_AXICTL_WRBURSTLEN_MASK, 0xF);
-+			WREG32(mmPSOC_ETR_AXICTL, val);
-+		}
-+		WREG32(mmPSOC_ETR_DBALO, lower_32_bits(input->buffer_address));
-+		WREG32(mmPSOC_ETR_DBAHI, upper_32_bits(input->buffer_address));
-+		WREG32(mmPSOC_ETR_FFCR, 3);
-+		WREG32(mmPSOC_ETR_PSCR, 0x10);
-+		WREG32(mmPSOC_ETR_CTL, 1);
-+	} else {
-+		WREG32(mmPSOC_ETR_BUFWM, 0);
-+		WREG32(mmPSOC_ETR_RSZ, 0x400);
-+		WREG32(mmPSOC_ETR_DBALO, 0);
-+		WREG32(mmPSOC_ETR_DBAHI, 0);
-+		WREG32(mmPSOC_ETR_PSCR, 0);
-+		WREG32(mmPSOC_ETR_MODE, 0);
-+		WREG32(mmPSOC_ETR_FFCR, 0);
-+
-+		if (params->output_size >= sizeof(u64)) {
-+			u32 rwp, rwphi;
-+
-+			/*
-+			 * The trace buffer address is 64 bits wide. The end of
-+			 * the buffer is set in the RWP register (lower 32
-+			 * bits), and in the RWPHI register (upper 8 bits).
-+			 * The 24 msb of the 64-bit address are stored in a
-+			 * global configuration register.
-+			 */
-+			rwp = RREG32(mmPSOC_ETR_RWP);
-+			rwphi = RREG32(mmPSOC_ETR_RWPHI) & 0xff;
-+			msb = RREG32(mmPSOC_GLOBAL_CONF_TRACE_ADDR);
-+			*(u64 *) params->output = ((u64) msb << 40) | ((u64) rwphi << 32) | rwp;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int gaudi2_config_funnel(struct hl_device *hdev, struct hl_debug_params *params)
-+{
-+	u64 base_reg;
-+	u32 val = params->enable ? 0xFFF : 0;
-+	u32 read_reg;
-+	int rc = 0;
-+
-+	if (params->reg_idx >= ARRAY_SIZE(debug_funnel_regs)) {
-+		dev_err(hdev->dev, "Invalid register index in FUNNEL\n");
-+		return -EINVAL;
-+	}
-+
-+	base_reg = debug_funnel_regs[params->reg_idx];
-+
-+	/*
-+	 * in case base reg is 0x0 we ignore this configuration
-+	 */
-+	if (!base_reg)
-+		return 0;
-+
-+
-+	/* in pldm we need to check if unit is not stub
-+	 * for doing so, need to read DEVID value.
-+	 * in case return 0x0 - it means that this is stub,
-+	 * we ignore this and return 0 - means success
-+	 */
-+	read_reg = RREG32(base_reg + mmFUNNEL_DEVID_OFFSET);
-+	if (hdev->pldm && read_reg == 0x0)
-+		return 0;
-+
-+	rc = gaudi2_unlock_coresight_unit(hdev, base_reg);
-+	if (rc)
-+		return -EIO;
-+
-+	WREG32(base_reg, val);
-+
-+	return 0;
-+}
-+
-+static int gaudi2_config_bmon(struct hl_device *hdev, struct hl_debug_params *params)
-+{
-+	struct hl_debug_params_bmon *input;
-+	u64 base_reg;
-+	u32 read_reg;
-+
-+	if (params->reg_idx >= ARRAY_SIZE(debug_bmon_regs)) {
-+		dev_err(hdev->dev, "Invalid register index in BMON\n");
-+		return -EINVAL;
-+	}
-+
-+	base_reg = debug_bmon_regs[params->reg_idx];
-+
-+	/*
-+	 * in case base reg is 0x0 we ignore this configuration
-+	 */
-+	if (!base_reg)
-+		return 0;
-+
-+
-+	/* in pldm we need to check if unit is not stub
-+	 * for doing do need to read Control Register (offset 0x0) and check
-+	 * it is not return 0x0 - in case it does
-+	 * it means that this is stub, we ignore this and return 0
-+	 * means success
-+	 */
-+	read_reg = RREG32(base_reg + mmBMON_CR_OFFSET);
-+	if (hdev->pldm &&  read_reg == 0x0)
-+		return 0;
-+
-+	WREG32(base_reg + mmBMON_ATTREN_OFFSET, 1);
-+	/* dummy read for pldm to flush outstanding writes */
-+	if (hdev->pldm)
-+		RREG32(base_reg + mmBMON_ATTREN_OFFSET);
-+
-+	/* Write Only	Reset AXIMON */
-+
-+	WREG32(base_reg + mmBMON_RESET_OFFSET, 0x1);
-+
-+	if (params->enable) {
-+		input = params->input;
-+
-+		if (!input)
-+			return -EINVAL;
-+
-+		WREG32(base_reg + mmBMON_ADDRL_S0_OFFSET, lower_32_bits(input->start_addr0));
-+		WREG32(base_reg + mmBMON_ADDRH_S0_OFFSET, upper_32_bits(input->start_addr0));
-+		WREG32(base_reg + mmBMON_ADDRL_E0_OFFSET, lower_32_bits(input->addr_mask0));
-+		WREG32(base_reg + mmBMON_ADDRH_E0_OFFSET, upper_32_bits(input->addr_mask0));
-+		WREG32(base_reg + mmBMON_ADDRL_S1_OFFSET, lower_32_bits(input->start_addr1));
-+		WREG32(base_reg + mmBMON_ADDRH_S1_OFFSET, upper_32_bits(input->start_addr1));
-+		WREG32(base_reg + mmBMON_ADDRL_E1_OFFSET, lower_32_bits(input->addr_mask1));
-+		WREG32(base_reg + mmBMON_ADDRH_E1_OFFSET, upper_32_bits(input->addr_mask1));
-+		WREG32(base_reg + mmBMON_ADDRL_S2_OFFSET, lower_32_bits(input->start_addr2));
-+		WREG32(base_reg + mmBMON_ADDRH_S2_OFFSET, upper_32_bits(input->start_addr2));
-+		WREG32(base_reg + mmBMON_ADDRL_E2_OFFSET, lower_32_bits(input->end_addr2));
-+		WREG32(base_reg + mmBMON_ADDRH_E2_OFFSET, upper_32_bits(input->end_addr2));
-+		WREG32(base_reg + mmBMON_ADDRL_S3_OFFSET, lower_32_bits(input->start_addr2));
-+		WREG32(base_reg + mmBMON_ADDRH_S3_OFFSET, upper_32_bits(input->start_addr2));
-+		WREG32(base_reg + mmBMON_ADDRL_E3_OFFSET, lower_32_bits(input->end_addr2));
-+		WREG32(base_reg + mmBMON_ADDRH_E3_OFFSET, upper_32_bits(input->end_addr2));
-+
-+		WREG32(base_reg + mmBMON_IDL_OFFSET, 0x0);
-+		WREG32(base_reg + mmBMON_IDH_OFFSET, 0x0);
-+
-+		WREG32(base_reg + mmBMON_ATTREN_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_BW_WIN_OFFSET, input->bw_win);
-+		WREG32(base_reg + mmBMON_WIN_CAPTURE_OFFSET, input->win_capture);
-+		WREG32(base_reg + mmBMON_REDUCTION_OFFSET, 0x1 | (13 << 8));
-+		WREG32(base_reg + mmBMON_STM_TRC_OFFSET, 0x7 | (input->id << 8));
-+		WREG32(base_reg + mmBMON_CR_OFFSET, input->control);
-+	} else {
-+		WREG32(base_reg + mmBMON_ADDRL_S0_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRH_S0_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRL_E0_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRH_E0_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRL_S1_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRH_S1_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRL_E1_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRH_E1_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRL_S2_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRH_S2_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRL_E2_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRH_E2_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRL_S3_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRH_S3_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRL_E3_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_ADDRH_E3_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_REDUCTION_OFFSET, 0);
-+		WREG32(base_reg + mmBMON_STM_TRC_OFFSET, 0x7 | (0xA << 8));
-+		WREG32(base_reg + mmBMON_CR_OFFSET, 0x77 | 0xf << 24);
-+	}
-+
-+	return 0;
-+}
-+
-+static int gaudi2_config_spmu(struct hl_device *hdev, struct hl_debug_params *params)
-+{
-+	struct hl_debug_params_spmu *input = params->input;
-+	u32 output_arr_len;
-+	u32 cycle_cnt_idx;
-+	u32 overflow_idx;
-+	u32 events_num;
-+	u32 event_mask;
-+	u64 base_reg;
-+	u32 read_reg;
-+	u64 *output;
-+	int i;
-+
-+	if (params->reg_idx >= ARRAY_SIZE(debug_spmu_regs)) {
-+		dev_err(hdev->dev, "Invalid register index in SPMU\n");
-+		return -EINVAL;
-+	}
-+
-+	base_reg = debug_spmu_regs[params->reg_idx];
-+
-+	/*
-+	 * in case base reg is 0x0 we ignore this configuration
-+	 */
-+	if (!base_reg)
-+		return 0;
-+
-+	/* in pldm we need to check if unit is not stub
-+	 * for doing do need to read  PMTRC (at offset 0x200)
-+	 * address and check if return value is 0x0 - in case it does
-+	 * it means that this is stub, we ignore this and return 0
-+	 * means success
-+	 */
-+	read_reg = RREG32(base_reg + mmSPMU_PMCR_EL0_OFFSET);
-+	if (hdev->pldm && read_reg == 0x0)
-+		return 0;
-+
-+	if (params->enable) {
-+		input = params->input;
-+
-+		if (!input)
-+			return -EINVAL;
-+
-+		if (input->event_types_num > SPMU_MAX_COUNTERS) {
-+			dev_err(hdev->dev, "too many event types values for SPMU enable\n");
-+			return -EINVAL;
-+		}
-+
-+		WREG32(base_reg + mmSPMU_PMCR_EL0_OFFSET, 0x41013046);
-+		WREG32(base_reg + mmSPMU_PMCR_EL0_OFFSET, 0x41013040);
-+
-+		/* dummy read for pldm to flush outstanding writes */
-+		if (hdev->pldm)
-+			RREG32(base_reg);
-+
-+		for (i = 0 ; i < input->event_types_num ; i++)
-+			WREG32(base_reg + mmSPMU_PMEVTYPER0_EL0_OFFSET + i * 4,
-+				input->event_types[i]);
-+
-+		WREG32(base_reg + mmSPMU_PMTRC_OFFSET, input->pmtrc_val);
-+		WREG32(base_reg + mmSPMU_TRC_CTRL_HOST_OFFSET, input->trc_ctrl_host_val);
-+		WREG32(base_reg + mmSPMU_TRC_EN_HOST_OFFSET, input->trc_en_host_val);
-+
-+		WREG32(base_reg + mmSPMU_PMCR_EL0_OFFSET, 0x41013041);
-+
-+		/*
-+		 * set enabled events mask based on input->event_types_num
-+		 */
-+		event_mask = 0x80000000;
-+		event_mask |= GENMASK(input->event_types_num, 0);
-+
-+		WREG32(base_reg + mmSPMU_PMCNTENSET_EL0_OFFSET, event_mask);
-+	} else {
-+		output = params->output;
-+		output_arr_len = params->output_size / 8;
-+		events_num = output_arr_len - 2;
-+		overflow_idx = output_arr_len - 2;
-+		cycle_cnt_idx = output_arr_len - 1;
-+
-+		WREG32(base_reg + mmSPMU_PMCR_EL0_OFFSET, 0x41013040);
-+
-+		if (output && output_arr_len > 2) {
-+
-+			if (events_num > SPMU_MAX_COUNTERS) {
-+				dev_err(hdev->dev, "too many events values for SPMU disable\n");
-+				return -EINVAL;
-+			}
-+
-+			for (i = 0 ; i < events_num ; i++) {
-+				const u64 performance_counter_offset =
-+					base_reg + mmSPMU_PMEVCNTR0_EL0_OFFSET + (i * 8);
-+
-+				output[i] = RREG32(performance_counter_offset);
-+			}
-+
-+			output[overflow_idx] = RREG32(base_reg + mmSPMU_PMOVSSET_EL0_OFFSET);
-+			output[cycle_cnt_idx] = RREG32(base_reg + mmSPMU_PMCCNTR_H_EL0_OFFSET);
-+			output[cycle_cnt_idx] <<= 32;
-+			output[cycle_cnt_idx] |= RREG32(base_reg + mmSPMU_PMCCNTR_L_EL0_OFFSET);
-+		}
-+
-+		WREG32(base_reg + mmSPMU_PMOVSSET_EL0_OFFSET, 0);
-+
-+		/* clean pmtrc to reset value */
-+		WREG32(base_reg + mmSPMU_PMTRC_OFFSET, 0x100400);
-+	}
-+
-+	return 0;
-+}
-+
-+int gaudi2_debug_coresight(struct hl_device *hdev, struct hl_ctx *ctx, void *data)
-+{
-+	struct hl_debug_params *params = data;
-+	int rc = 0;
-+
-+	switch (params->op) {
-+	case HL_DEBUG_OP_STM:
-+		rc = gaudi2_config_stm(hdev, params);
-+		break;
-+	case HL_DEBUG_OP_ETF:
-+		rc = gaudi2_config_etf(hdev, params);
-+		break;
-+	case HL_DEBUG_OP_ETR:
-+		rc = gaudi2_config_etr(hdev, ctx, params);
-+		break;
-+	case HL_DEBUG_OP_FUNNEL:
-+		rc = gaudi2_config_funnel(hdev, params);
-+		break;
-+	case HL_DEBUG_OP_BMON:
-+		rc = gaudi2_config_bmon(hdev, params);
-+		break;
-+	case HL_DEBUG_OP_SPMU:
-+		rc = gaudi2_config_spmu(hdev, params);
-+		break;
-+	case HL_DEBUG_OP_TIMESTAMP:
-+		/* Do nothing as this opcode is deprecated */
-+		break;
-+	default:
-+		dev_err(hdev->dev, "Unknown coresight id %d\n", params->op);
-+		return -EINVAL;
-+	}
-+
-+	return rc;
-+}
-+
-+void gaudi2_halt_coresight(struct hl_device *hdev, struct hl_ctx *ctx)
-+{
-+	struct hl_debug_params params = {};
-+	int i, rc;
-+
-+	/* in pldm attempting to access stubbed etfs can cause problems */
-+	if (!hdev->pldm)
-+		for (i = GAUDI2_ETF_FIRST ; i <= GAUDI2_ETF_LAST ; i++) {
-+			params.reg_idx = i;
-+			rc = gaudi2_config_etf(hdev, &params);
-+			if (rc)
-+				dev_err(hdev->dev, "halt ETF failed, %d/%d\n", rc, i);
-+		}
-+
-+	rc = gaudi2_config_etr(hdev, ctx, &params);
-+	if (rc)
-+		dev_err(hdev->dev, "halt ETR failed, %d\n", rc);
-+}
-+
-+
-+static int gaudi2_coresight_set_disabled_components(struct hl_device *hdev, u32 unit_count,
-+					u32 enabled_mask,
-+					const struct component_config_offsets *binning_table)
-+{
-+	u32 component_idx = 0;
-+	u32 disabled_mask;
-+	u32 full_mask;
-+
-+	/* in case no unit - no need to do work */
-+	if (!unit_count)
-+		return 0;
-+
-+	full_mask = GENMASK(unit_count - 1, 0);
-+
-+	/* set the disable bits on disabled mask */
-+	disabled_mask = (~enabled_mask) & full_mask;
-+
-+	while (disabled_mask) {
-+		u32 component_mask = 1 << component_idx;
-+
-+		if (component_idx >= unit_count) {
-+			dev_err(hdev->dev, "index is out of range index(%u) >= units_count(%u)\n",
-+				component_idx, unit_count);
-+			return -EINVAL;
-+		}
-+
-+		/*
-+		 * in case mask is set, driver need to set to 0x0
-+		 * all offsets for the following structures in the appropriate indices:
-+		 * debug_funnel_regs - offsets for all cs_dbg FUNNELs
-+		 * debug_etf_regs - offsets for all cs_dbg ETFs
-+		 * debug_stm_regs - offsets for all cs_dbg STMs
-+		 * debug_spmu_regs - offsets for all cs_dbg SPMUs
-+		 * debug_bmon_regs - offsets for all cs_dbg BMONs
-+		 * when value is set to COMPONENT_ID_INVALID -
-+		 * it means there is no such register for current component.
-+		 */
-+
-+		if (disabled_mask & component_mask) {
-+			u32 bmon_idx;
-+			const struct component_config_offsets *binned_component =
-+				&(binning_table[component_idx]);
-+
-+			if (binned_component->funnel_id != COMPONENT_ID_INVALID)
-+				debug_funnel_regs[binned_component->funnel_id] = 0x0;
-+
-+			if (binned_component->etf_id != COMPONENT_ID_INVALID)
-+				debug_etf_regs[binned_component->etf_id] = 0x0;
-+
-+			if (binned_component->stm_id != COMPONENT_ID_INVALID)
-+				debug_stm_regs[binned_component->stm_id] = 0x0;
-+
-+			if (binned_component->spmu_id != COMPONENT_ID_INVALID)
-+				debug_spmu_regs[binned_component->spmu_id] = 0x0;
-+
-+			for (bmon_idx = 0; bmon_idx < binned_component->bmon_count; bmon_idx++)
-+				debug_bmon_regs[binned_component->bmon_ids[bmon_idx]] = 0x0;
-+
-+			/*
-+			 * reset enabled bit
-+			 */
-+			disabled_mask &= ~component_mask;
-+		}
-+
-+		component_idx++;
-+	}
-+
-+	return 0;
-+}
-+
-+int gaudi2_coresight_init(struct hl_device *hdev)
-+{
-+	struct asic_fixed_properties *prop = &hdev->asic_prop;
-+	int ret;
-+
-+	/*
-+	 * Mask out all the disabled binned offsets.
-+	 * so when user request to configure a binned or masked out component,
-+	 * driver will ignore programing it ( happens when offset value is set to 0x0 )
-+	 * this is being set in gaudi2_coresight_set_disabled_components
-+	 */
-+
-+	/* Set TPC disable components */
-+	ret = gaudi2_coresight_set_disabled_components(hdev, TPC_ID_SIZE, prop->tpc_enabled_mask,
-+							tpc_binning_cfg_table);
-+	if (ret) {
-+		dev_err(hdev->dev, "Failed to set disabled cs_dbg units for tpc coresight\n");
-+		return ret;
-+	}
-+
-+	/* Set decoder disable components */
-+	ret = gaudi2_coresight_set_disabled_components(hdev, DEC_ID_SIZE,
-+					prop->decoder_enabled_mask, decoder_binning_cfg_table);
-+	if (ret) {
-+		dev_err(hdev->dev, "Failed to set disabled cs_dbg units for decoder coresight\n");
-+		return ret;
-+	}
-+
-+	/* Set HBM (MC0 and MC1) disable components */
-+	ret = gaudi2_coresight_set_disabled_components(hdev, HBM_ID_SIZE, prop->dram_enabled_mask,
-+							hbm_mc0_binning_cfg_table);
-+	if (ret) {
-+		dev_err(hdev->dev, "Failed to set disabled cs_dbg units for hbm mc0 coresight\n");
-+		return ret;
-+	}
-+
-+	ret = gaudi2_coresight_set_disabled_components(hdev, HBM_ID_SIZE, prop->dram_enabled_mask,
-+							hbm_mc1_binning_cfg_table);
-+	if (ret) {
-+		dev_err(hdev->dev, "Failed to set disabled cs_dbg units for hbm mc1 coresight\n");
-+		return ret;
-+	}
-+
-+	/* Set HIF_HMMU disable components */
-+	ret = gaudi2_coresight_set_disabled_components(hdev, HMMU_ID_SIZE,
-+					prop->hmmu_hif_enabled_mask, hmmu_binning_cfg_table);
-+	if (ret) {
-+		dev_err(hdev->dev, "Failed to set disabled cs_dbg units for hmmu coresight\n");
-+		return ret;
-+	}
-+
-+	/* Set XBAR_EDGE disable components */
-+	ret = gaudi2_coresight_set_disabled_components(hdev, XBAR_EDGE_ID_SIZE,
-+					prop->xbar_edge_enabled_mask, xbar_edge_binning_cfg_table);
-+	if (ret) {
-+		dev_err(hdev->dev, "Failed to set disabled cs_dbg units for xbar_edge coresight\n");
-+		return ret;
-+	}
-+
-+	/* Set EDMA disable components */
-+	ret = gaudi2_coresight_set_disabled_components(hdev, EDMA_ID_SIZE, prop->edma_enabled_mask,
-+							edma_binning_cfg_table);
-+	if (ret) {
-+		dev_err(hdev->dev, "Failed to set disabled cs_dbg units for edma coresight\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2_coresight_regs.h b/drivers/misc/habanalabs/gaudi2/gaudi2_coresight_regs.h
-new file mode 100644
-index 000000000000..df8729286e06
---- /dev/null
-+++ b/drivers/misc/habanalabs/gaudi2/gaudi2_coresight_regs.h
-@@ -0,0 +1,1063 @@
-+/* SPDX-License-Identifier: GPL-2.0
++ * cs_finish - queue all cs jobs finish work
 + *
-+ * Copyright 2020 HabanaLabs, Ltd.
-+ * All Rights Reserved.
++ * @hdev: pointer to device structure
++ * @cs_seq: command submission sequence
 + *
 + */
-+#ifndef GAUDI2_CORESIGHT_REGS_DRV_H_
-+#define GAUDI2_CORESIGHT_REGS_DRV_H_
-+
-+#include "gaudi2_masks.h"
-+#include "../include/gaudi2/gaudi2_coresight.h"
-+#include "gaudi2P.h"
-+
-+/* FUNNEL Offsets - same offsets for all funnels*/
-+#define mmFUNNEL_CTRL_REG_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_CTRL_REG -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_PRIORITY_CTRL_REG_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_PRIORITY_CTRL_REG -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_ITATBDATA0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_ITATBDATA0 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_ITATBCTR2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_ITATBCTR2 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_ITATBCTR1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_ITATBCTR1 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_ITATBCTR0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_ITATBCTR0 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_ITCTRL_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_ITCTRL -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_CLAIMSET_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_CLAIMSET -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_CLAIMCLR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_CLAIMCLR -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_LOCKACCESS_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_LOCKACCESS -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_LOCKSTATUS_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_LOCKSTATUS -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_AUTHSTATUS_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_AUTHSTATUS -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_DEVID_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_DEVID -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_DEVTYPE_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_DEVTYPE -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_PIDR4_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_PIDR4 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_PERIPHID5_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_PERIPHID5 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_PERIPHID6_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_PERIPHID6 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_PERIPHID7_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_PERIPHID7 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_PIDR0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_PIDR0 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_PIDR1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_PIDR1 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_PIDR2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_PIDR2 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_PIDR3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_PIDR3 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_CID0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_CID0 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_CID1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_CID1 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_CID2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_CID2 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+#define mmFUNNEL_CID3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_FUNNEL_CID3 -	\
-+				mmDCORE0_TPC0_EML_FUNNEL_BASE)
-+
-+/* ETF Offsets - same offsets for all etfs */
-+#define mmETF_RSZ_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_RSZ -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_STS_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_STS -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_RRD_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_RRD -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_RRP_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_RRP -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_RWP_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_RWP -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_TRG_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_TRG -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_CTL_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_CTL -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_RWD_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_RWD -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_MODE_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_MODE -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_LBUFLEVEL_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_LBUFLEVEL -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_CBUFLEVEL_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_CBUFLEVEL -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_BUFWM_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_BUFWM -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_FFSR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_FFSR -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_FFCR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_FFCR -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_PSCR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_PSCR -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_ITATBMDATA0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_ITATBMDATA0 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_ITATBMCTR2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_ITATBMCTR2 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_ITATBMCTR1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_ITATBMCTR1 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_ITATBMCTR0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_ITATBMCTR0 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_ITMISCOP0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_ITMISCOP0 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_ITTRFLIN_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_ITTRFLIN -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_ITATBDATA0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_ITATBDATA0 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_ITATBCTR2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_ITATBCTR2 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_ITATBCTR1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_ITATBCTR1 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_ITATBCTR0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_ITATBCTR0 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_ITCTRL_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_ITCTRL -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_CLAIMSET_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_CLAIMSET -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_CLAIMCLR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_CLAIMCLR -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_LAR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_LAR -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_LSR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_LSR -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_AUTHSTATUS_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_AUTHSTATUS -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_DEVID_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_DEVID -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_DEVTYPE_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_DEVTYPE -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_PERIPHID4_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_PERIPHID4 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_PERIPHID5_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_PERIPHID5 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_PERIPHID6_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_PERIPHID6 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_PERIPHID7_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_PERIPHID7 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_PERIPHID0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_PERIPHID0 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_PERIPHID1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_PERIPHID1 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_PERIPHID2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_PERIPHID2 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_PERIPHID3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_PERIPHID3 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_COMPID0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_COMPID0 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_COMPID1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_COMPID1 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_COMPID2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_COMPID2 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+#define mmETF_COMPID3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_ETF_COMPID3 -	\
-+				mmDCORE0_TPC0_EML_ETF_BASE)
-+
-+
-+/* STM OFFSETS - same offsets for all stms */
-+#define mmSTM_STMDMASTARTR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMDMASTARTR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMDMASTOPR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMDMASTOPR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMDMASTATR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMDMASTATR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMDMACTLR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMDMACTLR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMDMAIDR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMDMAIDR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMHEER_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMHEER -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMHETER_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMHETER -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMHEBSR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMHEBSR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMHEMCR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMHEMCR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMHEEXTMUXR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMHEEXTMUXR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMHEMASTR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMHEMASTR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMHEFEAT1R_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMHEFEAT1R -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMHEIDR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMHEIDR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMSPER_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMSPER -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMSPTER_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMSPTER -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMSPSCR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMSPSCR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMSPMSCR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMSPMSCR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMSPOVERRIDER_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMSPOVERRIDER -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMSPMOVERRIDER_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMSPMOVERRIDER -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMSPTRIGCSR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMSPTRIGCSR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMTCSR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMTCSR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMTSSTIMR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMTSSTIMR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMTSFREQR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMTSFREQR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMSYNCR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMSYNCR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMAUXCR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMAUXCR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMFEAT1R_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMFEAT1R -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMFEAT2R_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMFEAT2R -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMFEAT3R_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMFEAT3R -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMITTRIGGER_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMITTRIGGER -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMITATBDATA0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMITATBDATA0 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMITATBCTR2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMITATBCTR2 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMITATBID_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMITATBID -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMITATBCTR0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMITATBCTR0 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMITCTRL_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMITCTRL -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMCLAIMSET_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMCLAIMSET -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMCLAIMCLR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMCLAIMCLR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMLAR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMLAR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMLSR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMLSR -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMAUTHSTATUS_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMAUTHSTATUS -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMDEVARCH_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMDEVARCH -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMDEVID_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMDEVID -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMDEVTYPE_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMDEVTYPE -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMPIDR4_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMPIDR4 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMPIDR5_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMPIDR5 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMPIDR6_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMPIDR6 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMPIDR7_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMPIDR7 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMPIDR0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMPIDR0 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMPIDR1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMPIDR1 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMPIDR2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMPIDR2 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMPIDR3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMPIDR3 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMCIDR0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMCIDR0 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMCIDR1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMCIDR1 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMCIDR2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMCIDR2 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+#define mmSTM_STMCIDR3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_STM_STMCIDR3 -	\
-+				mmDCORE0_TPC0_EML_STM_BASE)
-+
-+
-+/* SPMU OFFSETS - same offsets for all SPMUs */
-+#define mmSPMU_PMEVCNTR0_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVCNTR0_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVCNTR1_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVCNTR1_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVCNTR2_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVCNTR2_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVCNTR3_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVCNTR3_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVCNTR4_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVCNTR4_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVCNTR5_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVCNTR5_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCCNTR_L_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCCNTR_L_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCCNTR_H_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCCNTR_H_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMTRC_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMTRC -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_TRC_CTRL_HOST_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_TRC_CTRL_HOST -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_TRC_STAT_HOST_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_TRC_STAT_HOST -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_TRC_EN_HOST_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_TRC_EN_HOST -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVTYPER0_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVTYPER0_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVTYPER1_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVTYPER1_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVTYPER2_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVTYPER2_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVTYPER3_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVTYPER3_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVTYPER4_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVTYPER4_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVTYPER5_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVTYPER5_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMSSR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMSSR -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMOVSSR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMOVSSR -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCCNTSR_L_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCCNTSR_L -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCCNTSR_H_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCCNTSR_H -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVCNTSR0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVCNTSR0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVCNTSR1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVCNTSR1 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVCNTSR2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVCNTSR2 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVCNTSR3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVCNTSR3 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVCNTSR4_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVCNTSR4 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMEVCNTSR5_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMEVCNTSR5 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMSCR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMSCR -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMSRR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMSRR -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCNTENSET_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCNTENSET_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCNTENCLR_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCNTENCLR_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMINTENSET_EL1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMINTENSET_EL1 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMINTENCLR_EL1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMINTENCLR_EL1 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMOVSCLR_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMOVSCLR_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMSWINC_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMSWINC_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMOVSSET_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMOVSSET_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCFGR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCFGR -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCR_EL0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCR_EL0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMITCTRL_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMITCTRL -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCLAIMSET_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCLAIMSET -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCLAIMCLR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCLAIMCLR -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMDEVAFF0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMDEVAFF0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMDEVAFF1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMDEVAFF1 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMLAR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMLAR -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMLSR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMLSR -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMAUTHSTATUS_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMAUTHSTATUS -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMDEVARCH_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMDEVARCH -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMDEVID2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMDEVID2 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMDEVID1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMDEVID1 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMDEVID_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMDEVID -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMDEVTYPE_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMDEVTYPE -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMPIDR4_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMPIDR4 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMPIDR5_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMPIDR5 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMPIDR6_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMPIDR6 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMPIDR7_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMPIDR7 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMPIDR0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMPIDR0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMPIDR1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMPIDR1 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMPIDR2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMPIDR2 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMPIDR3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMPIDR3 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCIDR0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCIDR0 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCIDR1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCIDR1 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCIDR2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCIDR2 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+#define mmSPMU_PMCIDR3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_SPMU_PMCIDR3 -	\
-+				mmDCORE0_TPC0_EML_SPMU_BASE)
-+
-+
-+/* BMON OFFSETS - same offsets for all BMONs*/
-+#define mmBMON_CR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_CR -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_RESET_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_REG_RESET -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_INT_CLR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_INT_CLR -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_TRIG_TH_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_TRIG_TH -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRL_S0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRL_S0 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRH_S0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRH_S0 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRL_E0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRL_E0 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRH_E0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRH_E0 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRL_S1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRL_S1 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRH_S1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRH_S1 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRL_E1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRL_E1 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRH_E1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRH_E1 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRL_S2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRL_S2 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRH_S2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRH_S2 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRL_E2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRL_E2 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRH_E2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRH_E2 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRL_S3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRL_S3 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRH_S3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRH_S3 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRL_E3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRL_E3 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRH_E3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRH_E3 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_REDUCTION_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_REDUCTION -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_IDL_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_IDL -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_IDH_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_IDH -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_IDENL_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_IDENL -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_IDENH_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_IDENH -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_LATENCY_SMP_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_LATENCY_SMP -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ATTR_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ATTR -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ATTREN_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ATTREN -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_USRENL_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_USRENL -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_USRL_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_USRL -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_USRENH_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_USRENH -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_USRH_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_USRH -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_CAPTURE_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_CAPTURE -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_RELEASE_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_RELEASE -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_WIN_CAPTURE_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_WIN_CAPTURE -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_BW_WIN_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_BW_WIN -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_MATCH_CNT_SOD_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_MATCH_CNT_SOD -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_MATCH_CNT_WIN_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_MATCH_CNT_WIN -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_CYCCNT_L_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_CYCCNT_L -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_CYCCNT_H_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_CYCCNT_H -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_MAXLAT_SOD_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_MAXLAT_SOD -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_MINLAT_SOD_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_MINLAT_SOD -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_MAXBW_SOD_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_MAXBW_SOD -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_MINBW_SOD_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_MINBW_SOD -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_MAXOS_SOD_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_MAXOS_SOD -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_MINOS_SOD_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_MINOS_SOD -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRL_SNAPSHOT_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRL_SNAPSHOT -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ADDRH_SNAPSHOT_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ADDRH_SNAPSHOT -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_IDL_SNAPSHOT_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_IDL_SNAPSHOT -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_IDH_SNAPSHOT_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_IDH_SNAPSHOT -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_ATTR_SNAPSHOT_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_ATTR_SNAPSHOT -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_STM_TRC_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_STM_TRC -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_STM_TRC_DROP_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_STM_TRC_DROP -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_DEVARCH_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_DEVARCH -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_PMDEVID2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_PMDEVID2 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_PMDEVID1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_PMDEVID1 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_PMDEVID_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_PMDEVID -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_DEVTYPE_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_DEVTYPE -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_PIDR4_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_PIDR4 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_PIDR5_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_PIDR5 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_PIDR6_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_PIDR6 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_PIDR7_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_PIDR7 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_PIDR0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_PIDR0 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_PIDR1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_PIDR1 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_PIDR2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_PIDR2 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_PIDR3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_PIDR3 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_CIDR0_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_CIDR0 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_CIDR1_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_CIDR1 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_CIDR2_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_CIDR2 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+#define mmBMON_CIDR3_OFFSET	\
-+			(mmDCORE0_TPC0_EML_BUSMON_0_CIDR3 -	\
-+				mmDCORE0_TPC0_EML_BUSMON_0_BASE)
-+
-+
-+/* Coresight unlock offset */
-+#define  mmCORESIGHT_UNLOCK_REGISTER_OFFSET mmSTM_STMLAR_OFFSET
-+#define  mmCORESIGHT_UNLOCK_STATUS_REGISTER_OFFSET mmSTM_STMLSR_OFFSET
-+
-+#endif /* GAUDI2_CORESIGHT_REGS_DRV_H_ */
++static void cs_finish(struct hl_device *hdev, u16 cs_seq)
++{
++	struct asic_fixed_properties *prop = &hdev->asic_prop;
++	struct hl_hw_queue *queue;
++	struct hl_cs *cs;
++	struct hl_cs_job *job;
++
++	cs = hdev->shadow_cs_queue[cs_seq & (prop->max_pending_cs - 1)];
++	if (!cs) {
++		dev_warn(hdev->dev,
++			"No pointer to CS in shadow array at index %d\n",
++			cs_seq);
++		return;
++	}
++
++	list_for_each_entry(job, &cs->job_list, cs_node) {
++		queue = &hdev->kernel_queues[job->hw_queue_id];
++		atomic_inc(&queue->ci);
++	}
++
++	queue_work(hdev->cs_cmplt_wq, &cs->finish_work);
++}
++
+ /**
+  * hl_irq_handler_cq - irq handler for completion queue
+  *
+@@ -77,9 +127,7 @@ irqreturn_t hl_irq_handler_cq(int irq, void *arg)
+ {
+ 	struct hl_cq *cq = arg;
+ 	struct hl_device *hdev = cq->hdev;
+-	struct hl_hw_queue *queue;
+-	struct hl_cs_job *job;
+-	bool shadow_index_valid;
++	bool shadow_index_valid, entry_ready;
+ 	u16 shadow_index;
+ 	struct hl_cq_entry *cq_entry, *cq_base;
+ 
+@@ -93,37 +141,41 @@ irqreturn_t hl_irq_handler_cq(int irq, void *arg)
+ 	cq_base = cq->kernel_address;
+ 
+ 	while (1) {
+-		bool entry_ready = ((le32_to_cpu(cq_base[cq->ci].data) &
+-					CQ_ENTRY_READY_MASK)
+-						>> CQ_ENTRY_READY_SHIFT);
++		cq_entry = (struct hl_cq_entry *) &cq_base[cq->ci];
+ 
++		entry_ready = !!FIELD_GET(CQ_ENTRY_READY_MASK,
++				le32_to_cpu(cq_entry->data));
+ 		if (!entry_ready)
+ 			break;
+ 
+-		cq_entry = (struct hl_cq_entry *) &cq_base[cq->ci];
+-
+ 		/* Make sure we read CQ entry contents after we've
+ 		 * checked the ownership bit.
+ 		 */
+ 		dma_rmb();
+ 
+-		shadow_index_valid = ((le32_to_cpu(cq_entry->data) &
+-					CQ_ENTRY_SHADOW_INDEX_VALID_MASK)
+-					>> CQ_ENTRY_SHADOW_INDEX_VALID_SHIFT);
+-
+-		shadow_index = (u16) ((le32_to_cpu(cq_entry->data) &
+-					CQ_ENTRY_SHADOW_INDEX_MASK)
+-					>> CQ_ENTRY_SHADOW_INDEX_SHIFT);
++		shadow_index_valid =
++			!!FIELD_GET(CQ_ENTRY_SHADOW_INDEX_VALID_MASK,
++					le32_to_cpu(cq_entry->data));
+ 
+-		queue = &hdev->kernel_queues[cq->hw_queue_id];
++		shadow_index = FIELD_GET(CQ_ENTRY_SHADOW_INDEX_MASK,
++				le32_to_cpu(cq_entry->data));
+ 
+-		if ((shadow_index_valid) && (!hdev->disabled)) {
+-			job = queue->shadow_queue[hl_pi_2_offset(shadow_index)];
+-			queue_work(hdev->cq_wq[cq->cq_idx], &job->finish_work);
++		/*
++		 * CQ interrupt handler has 2 modes of operation:
++		 * 1. Interrupt per CS completion: (Single CQ for all queues)
++		 *    CQ entry represents a completed CS
++		 *
++		 * 2. Interrupt per CS job completion in queue: (CQ per queue)
++		 *    CQ entry represents a completed job in a certain queue
++		 */
++		if (shadow_index_valid && !hdev->disabled) {
++			if (hdev->asic_prop.completion_mode ==
++					HL_COMPLETION_MODE_CS)
++				cs_finish(hdev, shadow_index);
++			else
++				job_finish(hdev, shadow_index, cq);
+ 		}
+ 
+-		atomic_inc(&queue->ci);
+-
+ 		/* Clear CQ entry ready bit */
+ 		cq_entry->data = cpu_to_le32(le32_to_cpu(cq_entry->data) &
+ 						~CQ_ENTRY_READY_MASK);
+diff --git a/drivers/misc/habanalabs/common/security.c b/drivers/misc/habanalabs/common/security.c
+index b27ab097776b..6196c0487c8b 100644
+--- a/drivers/misc/habanalabs/common/security.c
++++ b/drivers/misc/habanalabs/common/security.c
+@@ -44,7 +44,7 @@ static int hl_get_pb_block(struct hl_device *hdev, u32 mm_reg_addr,
+  *
+  */
+ static int hl_unset_pb_in_block(struct hl_device *hdev, u32 reg_offset,
+-		struct hl_block_glbl_sec *sgs_entry)
++				struct hl_block_glbl_sec *sgs_entry)
+ {
+ 	if ((reg_offset >= HL_BLOCK_SIZE) || (reg_offset & 0x3)) {
+ 		dev_err(hdev->dev,
 -- 
 2.25.1
 

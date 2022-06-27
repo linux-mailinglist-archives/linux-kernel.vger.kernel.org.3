@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886DA55CD98
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D006E55D11E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239275AbiF0Lzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
+        id S235854AbiF0Lej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235058AbiF0Lst (ORCPT
+        with ESMTP id S236036AbiF0LdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:48:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6608CE24;
-        Mon, 27 Jun 2022 04:42:43 -0700 (PDT)
+        Mon, 27 Jun 2022 07:33:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D852DBCB8;
+        Mon, 27 Jun 2022 04:30:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 427F061150;
-        Mon, 27 Jun 2022 11:42:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19040C3411D;
-        Mon, 27 Jun 2022 11:42:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71C82B8112E;
+        Mon, 27 Jun 2022 11:30:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF970C3411D;
+        Mon, 27 Jun 2022 11:30:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330162;
-        bh=0RKTv9fuvUiLZVQytPZUbFdJe6SPlFWii9zeU+xcIr4=;
+        s=korg; t=1656329406;
+        bh=MbXe0ur52wnHNXV65jswXkfskRWW47XRp/QkLCJo9nw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0eIOhIxI2eGczTApe9sKE2hgzhLZOrjRiBTrshWHEyQOfO+uC16me2Hrjtv+FWr+M
-         n8YkwQ9Ub6CMz5SceCKpI0v23sqktSkaZqA0mNNKXSPJHCfS2dgTOjO9HHhtmVqcv/
-         km/EoEaFreMvxT3t5bDLeWqCwUguT0K7yQKDxXG0=
+        b=YWDrUMewBj33EMio+vKdrPp1whs5ybk4j6TjjYULN6MjnAh3F+ZWktjcO7FTJXLQS
+         yTsDbrq9+qm2ARDn0djMcDQdqoq6GNEO/qePH371wq7oao5tRbajQekF1TkGcsJWGu
+         CEzJfP2TqrbzmlnW3qYbc9y6jTei83C8KN5wpBDc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Michal Simek <michal.simek@amd.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 106/181] iio: adc: xilinx-ams: fix return error variable
+        stable@vger.kernel.org, Chevron Li <chevron.li@bayhubtech.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.4 08/60] mmc: sdhci-pci-o2micro: Fix card detect by dealing with debouncing
 Date:   Mon, 27 Jun 2022 13:21:19 +0200
-Message-Id: <20220627111947.773092324@linuxfoundation.org>
+Message-Id: <20220627111927.896346056@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,37 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Chevron Li <chevron.li@bayhubtech.com>
 
-[ Upstream commit f8ef475aa069cd72e9e7bdb2d60dc6a89e2bafad ]
+commit e591fcf6b4e39335c9b128b17738fcd2fdd278ae upstream.
 
-Return irq instead of ret which always equals to zero here.
+The result from ->get_cd() may be incorrect as the card detect debouncing
+isn't managed correctly. Let's fix it.
 
-Fixes: d5c70627a794 ("iio: adc: Add Xilinx AMS driver")
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-Reviewed-by: Michal Simek <michal.simek@amd.com>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Chevron Li<chevron.li@bayhubtech.com>
+Fixes: 7d44061704dd ("mmc: sdhci-pci-o2micro: Fix O2 Host data read/write DLL Lock phase shift issue")
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220602132543.596-1-chevron.li@bayhubtech.com
+[Ulf: Updated the commit message]
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/xilinx-ams.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mmc/host/sdhci-pci-o2micro.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/iio/adc/xilinx-ams.c b/drivers/iio/adc/xilinx-ams.c
-index a55396c1f8b2..a7687706012d 100644
---- a/drivers/iio/adc/xilinx-ams.c
-+++ b/drivers/iio/adc/xilinx-ams.c
-@@ -1409,7 +1409,7 @@ static int ams_probe(struct platform_device *pdev)
+--- a/drivers/mmc/host/sdhci-pci-o2micro.c
++++ b/drivers/mmc/host/sdhci-pci-o2micro.c
+@@ -145,6 +145,8 @@ static int sdhci_o2_get_cd(struct mmc_ho
  
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
--		return ret;
-+		return irq;
+ 	if (!(sdhci_readw(host, O2_PLL_DLL_WDT_CONTROL1) & O2_PLL_LOCK_STATUS))
+ 		sdhci_o2_enable_internal_clock(host);
++	else
++		sdhci_o2_wait_card_detect_stable(host);
  
- 	ret = devm_request_irq(&pdev->dev, irq, &ams_irq, 0, "ams-irq",
- 			       indio_dev);
--- 
-2.35.1
-
+ 	return !!(sdhci_readl(host, SDHCI_PRESENT_STATE) & SDHCI_CARD_PRESENT);
+ }
 
 

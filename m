@@ -2,231 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BE255CADA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD0755CFC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238954AbiF0T25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 15:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S240169AbiF0Tex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 15:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235627AbiF0T24 (ORCPT
+        with ESMTP id S236184AbiF0Teu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 15:28:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9221AF;
-        Mon, 27 Jun 2022 12:28:54 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3A3726601667;
-        Mon, 27 Jun 2022 20:28:52 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656358133;
-        bh=JZYd0oVkoFsjInwx5U+1zSTfshvu3TjOpPrckSxmunY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=KPL/iEY8nrk6fxhY0AV6HQHyyclAKSz9FgBDVYmg2cHkOANS8ggYrC8ykwlknpC9R
-         /EZzxnPh/RcveQnL9H3XiHDBUtYF+pZe+zul8tJ3+CoHt5hDpPhpQ8hNjD9D0SlluM
-         xHaTDmuShtIX+ZRnRzwUGv+OIUfXoJPGER0ymYd4uM/Ih0dNyIZRYq4/UU+/bAaqFd
-         T59Od+iA1h9FJuf7UQurtcXGNBNKjU6e2SshvTkCthlh6+W9tYvIkX3viv78U3Rl9g
-         0NYHMHGS+Jsx/3ZC/2MTWCfpUl0ED4Y90qNyoKpYT69UTR6gphElinlVPKDJ4vUeTm
-         6jmGVIL68RPgw==
-Message-ID: <f05953a93fb8f250f4da7c3384b6e1c43c7b1605.camel@collabora.com>
-Subject: Re: [PATCH 1/4] media: mediatek: vcodec: dec: Fix 4K frame size
- enumeration
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>
-Date:   Mon, 27 Jun 2022 15:28:42 -0400
-In-Reply-To: <CAGXv+5GA04LBN0bnLDdL8g_+_8HXpc-KwtPxpXyXi_WgUOPrtQ@mail.gmail.com>
-References: <20220627112402.2332046-1-wenst@chromium.org>
-         <20220627112402.2332046-2-wenst@chromium.org>
-         <f5e68826df868ae5a3cd5737fd9d7f7683bbad73.camel@collabora.com>
-         <CAGXv+5GA04LBN0bnLDdL8g_+_8HXpc-KwtPxpXyXi_WgUOPrtQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Mon, 27 Jun 2022 15:34:50 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2053.outbound.protection.outlook.com [40.107.92.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0891C62EC;
+        Mon, 27 Jun 2022 12:34:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rx8hBayBF6OdDzT1tz/CE4V9n6HFCYUcbk+9oxHadUL6LjGelF/0Q4iMs7gtcT9RRqbEwMFajGjJIxSWpF1ojlA9733SYiFikUn9Z3jgliVSIbUVg7to32QX2wYlid8k1x6ceBbQ/TDNUeYamAqcp84+nEzu+XmG3m/g+Cst8t+vr8ACbNRLA2Eub3IoncUdTscH36k5CU9jOaoUb2kp0GbQoLJcgZOUzFqaV9aRJNwnRWHYRFZih3BdivEupJsSE/V44GdtBSuNxsbhNQOOwoM7NuobVoIbgiFQ6xu/hr393wPbEu6EmIcQlcA98z3YTr/aooOCAW/BSY3iVXbmhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zT16AZUgwLOkvpbqGh8dInij4wGjLP+Us9hUA8T70jQ=;
+ b=LkJBNaZE4VJl9O8t3L+7RhtKELhKRKO0Eq3fd3Sbd46jPNAa+FZbt2VPHOEqhnYpRrCIkCU1ftdmynLAdjvzPT/DZ2JIpDfjeOQVgm/HQz3A5XfAt/NpX39LBF/pxGngzQ/+fK2P4nt2PzxXblCC4mU3NWrG8J0Csr2dwvQ9LSb66tVefDlvW6CUtKYTWaZJXEMn1ejUmN4C4XsETWEcdHrjX9EowGJsdKN4Whkyp+RdBTdLIy1q3F7As7g7gQaXWS53gIUKnvQoBK7tmKffVcHuyRkEaRYouvYDQY/mfOxqbDJGffkVaTbMT7hxVU/xfifdJU1eScAVqWBnElmPjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=precisionplanting.com; dmarc=pass action=none
+ header.from=precisionplanting.com; dkim=pass header.d=precisionplanting.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=precisionplanting365.onmicrosoft.com;
+ s=selector1-precisionplanting365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zT16AZUgwLOkvpbqGh8dInij4wGjLP+Us9hUA8T70jQ=;
+ b=z/cbrCeltHzS5X/oXtISPwNW6RYhyt0mHxTcjkOggYZdEK2dlnCcYWifNkJg88w+RalMzXFG6MFebac0OKIDPEJ5om1AiKJTzT5rf1lrjp0Zy+BM7YJjx71DCjPbwRWyn20jopXzWGnfKPTubFb2rpo/vnyROdVIQRamUrd6SJM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=precisionplanting.com;
+Received: from SA1PR22MB3196.namprd22.prod.outlook.com (2603:10b6:806:22b::8)
+ by MWHPR22MB0445.namprd22.prod.outlook.com (2603:10b6:300:7d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Mon, 27 Jun
+ 2022 19:34:45 +0000
+Received: from SA1PR22MB3196.namprd22.prod.outlook.com
+ ([fe80::24b0:19e9:a42d:60b0]) by SA1PR22MB3196.namprd22.prod.outlook.com
+ ([fe80::24b0:19e9:a42d:60b0%6]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
+ 19:34:45 +0000
+Message-ID: <db9ad0da-da84-2cae-c354-3c9707df9c4f@precisionplanting.com>
+Date:   Mon, 27 Jun 2022 14:34:42 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4] ASoC: ti: omap-mcbsp: duplicate sysfs error
+Content-Language: en-US
+To:     David Owens <daowens01@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@bitmer.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220620183744.3176557-1-dowens@precisionplanting.com>
+From:   David Owens <dowens@precisionplanting.com>
+In-Reply-To: <20220620183744.3176557-1-dowens@precisionplanting.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH2PR07CA0001.namprd07.prod.outlook.com
+ (2603:10b6:610:20::14) To SA1PR22MB3196.namprd22.prod.outlook.com
+ (2603:10b6:806:22b::8)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c8073e00-5522-4833-3d92-08da587416cb
+X-MS-TrafficTypeDiagnostic: MWHPR22MB0445:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3SK8IfnuTa4BIg4rAs7qIjkWEUw7HkpAHvtq5P0XDfbw3RLoVZHSBKz6KCAfNwFsHpuXMDmj9vAnEWA3vZU+K/Kv6U2obeKpMoAyNcG0ZdsH4ekmNmjXa6d8jNanPIytiIrJi+6Nusynx9rNdnmZwHTZ6vTMMlTS97WXBsqqqmkK0xOsNyZ5vBXLLJMELLJODHNPDsxWDn5WsLHUaiIrJN9MqBKknIwHx2A9vCsMr2JSm0mmAJGSA2rbe2oYbDJwUVf7ylatLbWD92b8sPPg5MYpYBOUp+6cv8pGe7WmfGOPOHTr2ULqvTp50IdB7p5HQ8QpSeLH0qsm+RaZjxWbWbR05UE9sDoUMge+tz4YorOVPW4y2nu9QBlpgcpmNPQbJUzfg9JiQ39MvIvxcPJDDmmlpFJRi3nXSCoUtmShX+5gJZGefDuCc4iSjyQgsaxOMj3RWSYXoPbglSctKY7M48VeZqqn0DGJnxoEJd6v0UZ2KMxXgU0BIdgEvaSzJakgPyHjcRH0Vx4LMuaZGjIw/4B/oGuFbByytUJrMyE1Wq2ARuGdvEwxysdG4F8UzDO5W/av+2Sv6F+eeCQHPKjfn6ZHCFASJv4aOIMbPeAtfyibiIzvnW7/P2aUzGQHn8XBcMddBsqgBkAHp3l6cCAFKDqzbnGcSy+/e5pOWSu9SvQsMy883oW3FxCKOtc/2MnP7CBEQ29uMU5144n28wKhmZARZrdilQAaNdHpvasocFfRUqlhIltkXpLWJp3qXeyLFFsDW5u6oF/WjUWW9WW6UVLZkVkj0rethEBgoDGZv3wfUtsz8LoQS9JT2zGZ/8t9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR22MB3196.namprd22.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(39850400004)(376002)(396003)(136003)(2616005)(41300700001)(53546011)(38100700002)(66574015)(5660300002)(6512007)(6666004)(83380400001)(86362001)(2906002)(4326008)(8676002)(186003)(31686004)(110136005)(6486002)(66476007)(66946007)(7416002)(31696002)(52116002)(316002)(6506007)(66556008)(478600001)(8936002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGZ1UzJoTnpBaCtScm5qUnRhUklHcHlBRnhhQnRVMHBDY3plT2FRdDBLbWpF?=
+ =?utf-8?B?eng1RXZTS2ZjclZKaUkrbDhNZFYvVWdjM1JDY1krdGtqMG9iaWp3aWVtd3Vj?=
+ =?utf-8?B?azd6MnFENmFFZXhQMGJySXErajFpTEpFR21leGNrVG50UHZjRHZqMG1aVmI3?=
+ =?utf-8?B?SUtqS0Jma2l3Yld0dEVqY3o4WDlqK0hLQ1c5YkpkYzB2UWxPcHMyWGFnejhB?=
+ =?utf-8?B?YWhSejcyclJQSGloNnJDYzB4U2ZhMjl3MFNUV1RzekJGUG41RkxQSUZ5aUow?=
+ =?utf-8?B?WThtN0NqQWU1QVc4UDFxMEx5U1l0SFdiY1pRdGRjbzdIRkpnWmJFSVJ4TXZl?=
+ =?utf-8?B?dzRDakJPcWl6UXo2STZqVmdldURYdTVVemFzYS9hbjBWMVFab2tPL1Y4OWE4?=
+ =?utf-8?B?ckVJSWptQW1UUTY0UFRRbXJISEllMzQ3eDFRVE16MWoxU1RiUWc4SHNBV3dT?=
+ =?utf-8?B?WTcyOXVSVTZueFNzUlEyTjViR3VlTjhpcTlSNy9MSitueUgvdGs5MHk0RlVI?=
+ =?utf-8?B?alRUZTJxVGhjSzV1dmdhMUJra1d6TmJpc3ZNRXlsOFFuOU1DR3l2bW10dVZ4?=
+ =?utf-8?B?ZnFpNzZxWkRyZXdpVGZEbkM3dmt4MjBYd3E2a0NvemIvWGVjaE03VE1wWFo2?=
+ =?utf-8?B?cC9YRWNCRnhpYWNVT01Fdm1nMFdyd08xUFEwekJEeXY5Mlh0QmQyVy96MnhS?=
+ =?utf-8?B?VWRKZUhvSWFNdWJHQnNTbVN5elpmcFFRaUROb1ZJQUxVYjRrRHVJRkxWbnBx?=
+ =?utf-8?B?K3dmN0YxNm45Y2ZDcWlScmF5SThCZndPTUhMcGR3ZVVNNERCVi9lQ0JCeDlO?=
+ =?utf-8?B?TEo5Nmdkdkg4R2RtNjFTM2pHanlSdWk3NllDdzFPWWJ2OFgycU1sRmZ4U3J6?=
+ =?utf-8?B?UXZRN3YxalI4ZTdDMEgyU2wycHRmaVl4ZklmWmxVcmZDUDBGL0VmZS9kVCtT?=
+ =?utf-8?B?MkI2WXhlYkVZamNuQXgxYS9qUEIyRnpncnFxWlBOY3hJRGRabFBseFhBdmhM?=
+ =?utf-8?B?VVBXbjNiL0JxK1VsWlRZb3pOdzVtTFRJb0R3d2g3d2xoZCtZQVJVRlNGMUVN?=
+ =?utf-8?B?emdLcTJQVlBFaUN0a0daWVdyNkFOdERjVi92Q0xxMHRWTHRqbGZ0TFRZQTkr?=
+ =?utf-8?B?bWNHeG84dGtjemZXcWlPeU00RmFaOFFDVXFzZFFMTWlLaUJ4SjVXUm9KQ0Z5?=
+ =?utf-8?B?b2FjL0c3RXRFWWN0ekYwSUxZSWlxUUZkMUJHNGRjTTQ0NXB5eldKQUFtMGJ4?=
+ =?utf-8?B?RWVTWjVaQm11d0E1L1E4bUpRZmZXb3pROHRLZmpydjlCVEtSZ3ZKZ1JVeG5C?=
+ =?utf-8?B?QllQYk5lclIvc3dYYXpCa1pLMWN3QTVlNU1ZaU16QWtqN3QzN0dmdjFqTjJQ?=
+ =?utf-8?B?NmxoZjhwUnVKVExObittQVRxZHBjM3F4c0JJcU82VHA3YkFKeS9mbk14ejli?=
+ =?utf-8?B?bU1rSTdqOXluYjMxaVFNN0NrTDh1WnRLVzNhbWdma2FubTRZbzlienNpY2Fw?=
+ =?utf-8?B?U1FrOHFldHhXaC9sVnVvbVBYb1ZOT0I4SWt4NFRSdUZ1RXFIN1BJSUE5MUFP?=
+ =?utf-8?B?eDdReEpxb2hHTTk2T0VZdS9UaVNXZUY4aHVHSGJHek1iVFJndnZycHJ6TG5t?=
+ =?utf-8?B?RGhGTDc2Q0xWMzhOd09JdnRRVHJ1UWJFLzRnVjkzTzI2b0lGanF3RkVZa1BL?=
+ =?utf-8?B?SnF4Y01NcVlJZHJDWUhPSXZRamlxOEhBZUlyWDJ0UW5EaTcyNHo4amZZRlhI?=
+ =?utf-8?B?bGtWRldESDBLb1FsOVZzT2FrWlF4MURYMjl1NnR3cnlaUjU5OEpVZGtBYm94?=
+ =?utf-8?B?Y0Jyb3RhcGJWcnFQbUpydzR4b2FsUXR5NVFTUzdZNENDS0FCYUIxbktBWVJs?=
+ =?utf-8?B?OUdDSUU2bkdHSlFLcWtSY25xVm5MRzY1Skp5Z1FZRlJzdnZtSVFUamk2VkpT?=
+ =?utf-8?B?d0EvSzdPNDZ6b3plbjFCNVRhSmpLZTQveU1WVFlVNE5wTkNoQlBBUXB0SnBD?=
+ =?utf-8?B?dFFpYVpFY2dHb3NtSXJzTVpwaThlWmVLVURQTnV2WWJSd0ZPZllzd3hmL2hs?=
+ =?utf-8?B?MUVsYUFaNmpiRHlWUHRQOTdsaVozU1JOajdUaDlON2lZNEwxOGkzQW9OcnRD?=
+ =?utf-8?B?TnRsRUhZcFhjVkNJOWpZTzJlWTYzNlFnM25zVDUvSUhiMFJKR1BDS0ZaZDdz?=
+ =?utf-8?B?VGYvQm5MeVpVMEZaVjVBQ2VjbTZJZGVJWldDSGZNSktZQS81NkZDbnBjKzN4?=
+ =?utf-8?B?R09FcEZ1Y29ib3F6bnhPQk5TUnBnPT0=?=
+X-OriginatorOrg: precisionplanting.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8073e00-5522-4833-3d92-08da587416cb
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR22MB3196.namprd22.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2022 19:34:44.9790
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: aa593af2-61f8-4d4f-988a-e9c4c02b7f57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: k3E8cP5oPMzVz0BdnWP6+KRCjLC6gAjBU5XFtJy0Zz8c/ILrRjxVKVJP/+4GYPQ3UMdOdkaSLKim4p9T0koNY18o4Jjm/KBnt2BRzFaJVXg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR22MB0445
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 28 juin 2022 =C3=A0 00:08 +0800, Chen-Yu Tsai a =C3=A9crit=C2=A0:
-> On Mon, Jun 27, 2022 at 11:32 PM Nicolas Dufresne
-> <nicolas.dufresne@collabora.com> wrote:
-> >=20
-> > Hi Chen-Yu,
-> >=20
-> > Le lundi 27 juin 2022 =C3=A0 19:23 +0800, Chen-Yu Tsai a =C3=A9crit :
-> > > This partially reverts commit b018be06f3c7 ("media: mediatek: vcodec:
-> > > Read max resolution from dec_capability"). In this commit, the maximu=
-m
-> > > resolution ended up being a function of both the firmware capability =
-and
-> > > the current set format.
-> > >=20
-> > > However, frame size enumeration for output (coded) formats should not
-> > > depend on the format set, but should return supported resolutions for
-> > > the format requested by userspace.
-> >=20
-> > Good point. Though, I don't see any special casing for the CAPTURE case=
-. As this
-> > HW does not include a scaler, it must only return 1 resolution when bei=
-ng
-> > enumerated for CAPTURE side (or not implement that enumeration, but its
-> > complicated to half implement something in m2m). The return unique size=
- should
-> > match what G_FMT(CAPTURE) would return.
->=20
-> There are no frame sizes added for the capture formats, so this function
-> effectively returns -EINVAL for any of them. This is also what rkvdec
-> does: it only looks through the list of coded formats.
+On 6/20/22 13:37, David Owens wrote:
 
-This is effectively against the spec, ENOTTY would be the only alternative =
-to
-not implementing both sides. Though, I'll agree with you, this bugs predate=
-s
-anything here. Perhaps you could at add MM21 to the switch and returns ENOT=
-TY
-there ?
+> From: David Owens <daowens01@gmail.com>
+>
+> Convert to managed versions of sysfs and clk allocation to simplify
+> unbinding and error handling in probe.  Managed sysfs node
+> creation specifically addresses the following error seen the second time
+> probe is attempted after sdma_pcm_platform_register() previously requsted
+> probe deferral:
+>
+> sysfs: cannot create duplicate filename '/devices/platform/68000000.ocp/49022000.mcbsp/max_tx_thres'
+>
+> Signed-off-by: David Owens <dowens@precisionplanting.com>
+> ---
+>
+> Changes in v4:
+>  * Reverted change that added use ATTRIBUTE_GROUP and left the attribute
+>    structs as-is to fix compilation error and lessen the area of impact.
+>
+> Changes in v3:
+>  * Whitespace changes only to allow clean apply
+>
+> Changes in v2:
+>  * Improved error handling
+>
+> ---
+>  sound/soc/ti/omap-mcbsp-priv.h |  2 --
+>  sound/soc/ti/omap-mcbsp-st.c   | 14 ++------------
+>  sound/soc/ti/omap-mcbsp.c      | 19 ++-----------------
+>  3 files changed, 4 insertions(+), 31 deletions(-)
+>
+> diff --git a/sound/soc/ti/omap-mcbsp-priv.h b/sound/soc/ti/omap-mcbsp-priv.h
+> index 7865cda4bf0a..da519ea1f303 100644
+> --- a/sound/soc/ti/omap-mcbsp-priv.h
+> +++ b/sound/soc/ti/omap-mcbsp-priv.h
+> @@ -316,8 +316,6 @@ static inline int omap_mcbsp_read(struct omap_mcbsp *mcbsp, u16 reg,
+>  
+>  /* Sidetone specific API */
+>  int omap_mcbsp_st_init(struct platform_device *pdev);
+> -void omap_mcbsp_st_cleanup(struct platform_device *pdev);
+> -
+>  int omap_mcbsp_st_start(struct omap_mcbsp *mcbsp);
+>  int omap_mcbsp_st_stop(struct omap_mcbsp *mcbsp);
+>  
+> diff --git a/sound/soc/ti/omap-mcbsp-st.c b/sound/soc/ti/omap-mcbsp-st.c
+> index 0bc7d26c660a..7e8179cae92e 100644
+> --- a/sound/soc/ti/omap-mcbsp-st.c
+> +++ b/sound/soc/ti/omap-mcbsp-st.c
+> @@ -347,7 +347,7 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
+>  	if (!st_data)
+>  		return -ENOMEM;
+>  
+> -	st_data->mcbsp_iclk = clk_get(mcbsp->dev, "ick");
+> +	st_data->mcbsp_iclk = devm_clk_get(mcbsp->dev, "ick");
+>  	if (IS_ERR(st_data->mcbsp_iclk)) {
+>  		dev_warn(mcbsp->dev,
+>  			 "Failed to get ick, sidetone might be broken\n");
+> @@ -359,7 +359,7 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
+>  	if (!st_data->io_base_st)
+>  		return -ENOMEM;
+>  
+> -	ret = sysfs_create_group(&mcbsp->dev->kobj, &sidetone_attr_group);
+> +	ret = devm_device_add_group(mcbsp->dev, &sidetone_attr_group);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -368,16 +368,6 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -void omap_mcbsp_st_cleanup(struct platform_device *pdev)
+> -{
+> -	struct omap_mcbsp *mcbsp = platform_get_drvdata(pdev);
+> -
+> -	if (mcbsp->st_data) {
+> -		sysfs_remove_group(&mcbsp->dev->kobj, &sidetone_attr_group);
+> -		clk_put(mcbsp->st_data->mcbsp_iclk);
+> -	}
+> -}
+> -
+>  static int omap_mcbsp_st_info_volsw(struct snd_kcontrol *kcontrol,
+>  				    struct snd_ctl_elem_info *uinfo)
+>  {
+> diff --git a/sound/soc/ti/omap-mcbsp.c b/sound/soc/ti/omap-mcbsp.c
+> index 58d8e200a7b9..9fb7cf0c9f88 100644
+> --- a/sound/soc/ti/omap-mcbsp.c
+> +++ b/sound/soc/ti/omap-mcbsp.c
+> @@ -702,8 +702,7 @@ static int omap_mcbsp_init(struct platform_device *pdev)
+>  		mcbsp->max_tx_thres = max_thres(mcbsp) - 0x10;
+>  		mcbsp->max_rx_thres = max_thres(mcbsp) - 0x10;
+>  
+> -		ret = sysfs_create_group(&mcbsp->dev->kobj,
+> -					 &additional_attr_group);
+> +		ret = devm_device_add_group(mcbsp->dev, &additional_attr_group);
+>  		if (ret) {
+>  			dev_err(mcbsp->dev,
+>  				"Unable to create additional controls\n");
+> @@ -711,16 +710,7 @@ static int omap_mcbsp_init(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> -	ret = omap_mcbsp_st_init(pdev);
+> -	if (ret)
+> -		goto err_st;
+> -
+> -	return 0;
+> -
+> -err_st:
+> -	if (mcbsp->pdata->buffer_size)
+> -		sysfs_remove_group(&mcbsp->dev->kobj, &additional_attr_group);
+> -	return ret;
+> +	return omap_mcbsp_st_init(pdev);
+>  }
+>  
+>  /*
+> @@ -1431,11 +1421,6 @@ static int asoc_mcbsp_remove(struct platform_device *pdev)
+>  	if (cpu_latency_qos_request_active(&mcbsp->pm_qos_req))
+>  		cpu_latency_qos_remove_request(&mcbsp->pm_qos_req);
+>  
+> -	if (mcbsp->pdata->buffer_size)
+> -		sysfs_remove_group(&mcbsp->dev->kobj, &additional_attr_group);
+> -
+> -	omap_mcbsp_st_cleanup(pdev);
+> -
+>  	return 0;
+>  }
+>  
 
->=20
-> Also, struct v4l2_frmsizeenum does not have a field saying whether it's
-> capture or output side; it simply specifies a pixel format.
+This patch should resolve the compilation errors seen in the earlier version.  Péter, I ended up simply reverting the changes I made related to attribute groups since they were not strictly necessary for the fix and I probably shouldn't have modified those sections of the code anyway.
 
-Acked.
-
->=20
-> >=20
-> > >=20
-> > > Fix this so that the driver returns the supported resolutions correct=
-ly,
-> > > even if the instance only has default settings, or if the output form=
-at
-> > > is currently set to VP8F, which does not support 4K.
-> > >=20
-> > > Fixes: b018be06f3c7 ("media: mediatek: vcodec: Read max resolution fr=
-om dec_capability")
-> > > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> > > ---
-> > >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c    | 2 --
-> > >  .../platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c    | 7 +++++=
-++
-> > >  2 files changed, 7 insertions(+), 2 deletions(-)
-> > >=20
-> > > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c =
-b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> > > index 5d6fdf18c3a6..fcb4b8131c49 100644
-> > > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> > > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> > > @@ -595,8 +595,6 @@ static int vidioc_enum_framesizes(struct file *fi=
-le, void *priv,
-> > >               fsize->type =3D V4L2_FRMSIZE_TYPE_STEPWISE;
-> > >               fsize->stepwise =3D dec_pdata->vdec_framesizes[i].stepw=
-ise;
-> > >=20
-> > > -             fsize->stepwise.max_width =3D ctx->max_width;
-> > > -             fsize->stepwise.max_height =3D ctx->max_height;
-> > >               mtk_v4l2_debug(1, "%x, %d %d %d %d %d %d",
-> > >                               ctx->dev->dec_capability,
-> > >                               fsize->stepwise.min_width,
-> > > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_st=
-ateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless=
-.c
-> > > index 16d55785d84b..9a4d3e3658aa 100644
-> > > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless=
-.c
-> > > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless=
-.c
-> > > @@ -360,6 +360,13 @@ static void mtk_vcodec_add_formats(unsigned int =
-fourcc,
-> > >=20
-> > >               mtk_vdec_framesizes[count_framesizes].fourcc =3D fourcc=
-;
-> > >               mtk_vdec_framesizes[count_framesizes].stepwise =3D step=
-wise_fhd;
-> > > +             if (!(ctx->dev->dec_capability & VCODEC_CAPABILITY_4K_D=
-ISABLED) &&
-> > > +                 fourcc !=3D V4L2_PIX_FMT_VP8_FRAME) {
-> > > +                     mtk_vdec_framesizes[count_framesizes].stepwise.=
-max_width =3D
-> > > +                             VCODEC_DEC_4K_CODED_WIDTH;
-> > > +                     mtk_vdec_framesizes[count_framesizes].stepwise.=
-max_height =3D
-> > > +                             VCODEC_DEC_4K_CODED_HEIGHT;
-> > > +             }
-> >=20
-> > I don't particularly like to see this special cased check being added i=
-nto
-> > multiple places. Its also in your patch 2, and I think it exist in a th=
-ird
-> > place. Could it be possible to have an internal helper to ensure we don=
-'t
->=20
-> It's also in s_fmt(), so touched on in patch 4. I could also rewrite it s=
-o
-> only this spot has the special case, and all the other places look though
-> mtk_vdec_framesizes to get the maximum, like what I did for try_fmt in
-> patch 3. What do you think?
-
-I don't have a strong opinion, could be a totally internal (and unrelated t=
-o any
-ioctl naming) helper that does the right thing.
-
->=20
-> Ultimately I think it would be better to move framesizes into the
-> (driver-specific) pixel format data structure. That is a bigger refactori=
-ng
-> than a simple fix though.
-
-Agreed.
-
->=20
-> > duplicate this logic ? Somehow, it seems there is something in common b=
-etween
-> > set_default, try_fmt and this code.
->=20
-> Yes. That is what I mentioned in chat about refactoring the ioctls and fo=
-rmat
-> handling code. set_default should really not set anything format specific=
-,
-> but instead call set_fmt with a default format.
-
-So if this could have a simple helper that returns the max width/height for=
- the
-specified format and HW capability, I'm then fine with the series. If you c=
-an
-change the EINVAL (which means nothing is supported) into ENOTTY for the MM=
-21
-case, I'd also be more confortable (even though still a bit odd, but no lon=
-ger a
-lie).
-
-regards,
-Nicolas
-
->=20
->=20
-> Regards
-> ChenYu
->=20
-> >=20
-> > >               num_framesizes++;
-> > >               break;
-> > >       case V4L2_PIX_FMT_MM21:
-> >=20
+-Dave
 

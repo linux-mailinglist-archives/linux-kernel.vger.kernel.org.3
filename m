@@ -2,54 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA7A55D147
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4620155C85C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237485AbiF0Oeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50930 "EHLO
+        id S237526AbiF0Oca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237477AbiF0Oes (ORCPT
+        with ESMTP id S235525AbiF0Oc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:34:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AACD11456
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ntcReyowVjn4HnyNh4i2ofXYzIiLtVLY9clRf2PCq/o=; b=Yn4jQs8DMQdIfl/AuavcP6Vym4
-        KV1BRKVd24cbcWTUO0pVYZXCkIQJFb6CQvhYl00v4EU4DiRlxl5EcIOETEYWwp4EnuQOyNGtw2QyN
-        yhVrDnnyby8rYPrYJjxz9YZHD8jS1eIeARTuRTrmjpnP1TgZ7il4LmiJO+K/sWbbfGQAjC8tWVi+X
-        w7GUKSt20g8FNJAgDNmcLikkEBsR7U4xXMmtb89ZMftQbYy0Iru5bE9GnQAu1toIGFOomhbXcB9Dr
-        7/mCmO2644Q+m+ZAr/rjAEMhsjRfnbiAzMyb+DZW1ySzL3QMOefd/9yaWETwzIUHmNSAPfJCLjup9
-        SSnjcaMg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o5pov-00BR6K-7e; Mon, 27 Jun 2022 14:34:33 +0000
-Date:   Mon, 27 Jun 2022 15:34:33 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Qi Zheng <zhengqi.arch@bytedance.com>, mike.kravetz@oracle.com,
-        songmuchun@bytedance.com, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] mm: hugetlb: kill set_huge_swap_pte_at()
-Message-ID: <Yrm/+UoOtDY7G5bi@casper.infradead.org>
-References: <20220626145717.53572-1-zhengqi.arch@bytedance.com>
- <f0cfe169-44fa-5653-d454-149ef286d3bb@arm.com>
- <037fc8c3-9b71-cb83-8882-95d5459a494f@bytedance.com>
- <b46f5390-830d-08fd-0d6d-3fda7d31c36a@arm.com>
- <d68572c8-a12b-1e3a-09d4-7a971ff305d6@bytedance.com>
- <8b4eba5d-545e-c2a4-e4cf-fd5dd6634265@arm.com>
+        Mon, 27 Jun 2022 10:32:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18672FC2;
+        Mon, 27 Jun 2022 07:32:28 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RDfnph017001;
+        Mon, 27 Jun 2022 14:32:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=cNpka3XyxVZJwBSSjgtvDjM1yCmeeGaF1A25JBDFjSc=;
+ b=pEoF+ouh3niMqisHbRUzRYGJoHNGG5ZqjXmRCUEp5XATVsJho+l5lK1FOB59PDwNlBSs
+ ENPQTHnWlAWNxnIBUifDKsUCNFdJGXF99yQTswADo7OfE6HjDhxwLd44iF16S+UKTwfh
+ wdgKSpO1QYJslSlTJtq4X1p/I3cNLxfRe0XVXdlBAjAlqqN/cT8P1poBk9163cJ32Pyb
+ AIVFt/pF/K2xr8AJHF31Pa+vL5YJXVGOjw+z+sph8D67MOrfHuoBAqQ8r78Nb+C5gudR
+ K+9HZscwTg7vaxdcSViQznsJ2jpEo9F/8+i7m301qB7gyPElqsrIeb8R0X6iMJLJH8ZV /Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gydnjsnve-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 14:32:26 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25RDjOqX005928;
+        Mon, 27 Jun 2022 14:32:26 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gydnjsntj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 14:32:26 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25REKo8K015802;
+        Mon, 27 Jun 2022 14:32:23 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma02fra.de.ibm.com with ESMTP id 3gwt08tc17-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 14:32:23 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25REVN0821102938
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jun 2022 14:31:23 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 626D411C04C;
+        Mon, 27 Jun 2022 14:32:20 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A4FDA11C04A;
+        Mon, 27 Jun 2022 14:32:19 +0000 (GMT)
+Received: from [9.171.84.214] (unknown [9.171.84.214])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Jun 2022 14:32:19 +0000 (GMT)
+Message-ID: <cac6d852-5f0c-adca-1db7-1775d7814217@linux.ibm.com>
+Date:   Mon, 27 Jun 2022 16:36:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b4eba5d-545e-c2a4-e4cf-fd5dd6634265@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v10 2/3] KVM: s390: guest support for topology function
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
+        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
+        seiden@linux.ibm.com, nrb@linux.ibm.com
+References: <20220620125437.37122-1-pmorel@linux.ibm.com>
+ <20220620125437.37122-3-pmorel@linux.ibm.com>
+ <258450b3-e8e0-9868-4b38-1c39421cef05@linux.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <258450b3-e8e0-9868-4b38-1c39421cef05@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6JD0Jyd9m0d1vu9uUnD74XOusL4hqrba
+X-Proofpoint-GUID: FqWq4lWNu2KbHNwZM7CljJKCvBsBpP24
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ clxscore=1015 mlxscore=0 malwarescore=0 impostorscore=0 priorityscore=1501
+ suspectscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206270064
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,14 +99,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 01:05:00PM +0530, Anshuman Khandual wrote:
-> > For the swap entry of hugetlb, we need to remember that we should
-> > call set_huge_swap_pte_at() instead of set_huge_pte_at() every
-> 
-> Which is intuitive, so what is the problem ?
 
-The problem is that HugeTLB is DIFFERENT from the rest of the VM.
-This has a huge cost in programmer time, which is infinitely more
-valuable than the cycle shaving you're quibbling over.  We should take
-any and every opportunity to make huge pages work the same way as THP
-and order-0 pages.
+
+On 6/24/22 17:09, Janis Schoetterl-Glausch wrote:
+> On 6/20/22 14:54, Pierre Morel wrote:
+>> We report a topology change to the guest for any CPU hotplug.
+>>
+>> The reporting to the guest is done using the Multiprocessor
+>> Topology-Change-Report (MTCR) bit of the utility entry in the guest's
+>> SCA which will be cleared during the interpretation of PTF.
+>>
+>> On every vCPU creation we set the MCTR bit to let the guest know the
+>> next time he uses the PTF with command 2 instruction that the
+>> topology changed and that he should use the STSI(15.1.x) instruction
+>> to get the topology details.
+>>
+>> STSI(15.1.x) gives information on the CPU configuration topology.
+>> Let's accept the interception of STSI with the function code 15 and
+>> let the userland part of the hypervisor handle it when userland
+>> support the CPU Topology facility.
+>>
+>> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
+>> ---
+>>   arch/s390/include/asm/kvm_host.h | 11 ++++++++---
+>>   arch/s390/kvm/kvm-s390.c         | 27 ++++++++++++++++++++++++++-
+>>   arch/s390/kvm/priv.c             | 15 +++++++++++----
+>>   arch/s390/kvm/vsie.c             |  3 +++
+>>   4 files changed, 48 insertions(+), 8 deletions(-)
+>>
+> [...]
+> 
+>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+>> index 8fcb56141689..95b96019ca8e 100644
+>> --- a/arch/s390/kvm/kvm-s390.c
+>> +++ b/arch/s390/kvm/kvm-s390.c
+>> @@ -1691,6 +1691,25 @@ static int kvm_s390_get_cpu_model(struct kvm *kvm, struct kvm_device_attr *attr)
+>>   	return ret;
+>>   }
+>>
+>> +/**
+>> + * kvm_s390_sca_set_mtcr
+>> + * @kvm: guest KVM description
+>> + *
+>> + * Is only relevant if the topology facility is present,
+>> + * the caller should check KVM facility 11
+>> + *
+>> + * Updates the Multiprocessor Topology-Change-Report to signal
+>> + * the guest with a topology change.
+>> + */
+>> +static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
+>> +{
+>> +	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
+>> +
+>> +	ipte_lock(kvm);
+> 
+> Why do we need to take the ipte lock here and in patch 3?
+
+That is a good question.
+I fear I was tired as I understood that from the documentation, after 
+re-reading, we need an interlocked-update not an ipte lock update.
+... I have to change that
+
+
+> 
+>> +	sca->utility |= SCA_UTILITY_MTCR;
+>> +	ipte_unlock(kvm);
+>> +}
+> 
+> [...]
+> 
+
+-- 
+Pierre Morel
+IBM Lab Boeblingen

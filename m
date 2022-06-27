@@ -2,85 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFDA55C50F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BCD55DF6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241996AbiF0WIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 18:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        id S242057AbiF0WIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 18:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242702AbiF0WH6 (ORCPT
+        with ESMTP id S242691AbiF0WH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 18:07:58 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE8D1EAE3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 15:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hd5cTStikKtz0tlIXNTx5Krap4rwRL5aZNJ2LQhABak=; b=nLEdo93IKdL9y1s/O/X3cU2L6h
-        NxK6olojRPEtMre+dz8dkg5Q3gGv/xgeio7ua4m82gBPxgfVD/+P59L77mC/rIaIL6oPdY/S7EovR
-        /eV0WHKTOJWNnBYLr5qUTGsBa3IyavO00wDBkbpc7YST5hKbVavz4DqSNTBhh8zQ/Es3M+M0Rebfi
-        Q8DnxZzd/xwKNNH9wyEnIIAbMerRU1bOxvhiLs5boGQNUB8beLBfUzjqz9kBd6HKBkSD6Gbf6vXP0
-        LagFG+d6EVdDmqopVHMCsTeGJ0AtpoMLmy70Ud0Sc4FKGgRTCGfDl8Z5DLfHGmpnaB+GZAlUwGSfk
-        d685gLPg==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o5wsL-00Di3i-4C; Mon, 27 Jun 2022 22:06:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 73EA53001F3;
-        Tue, 28 Jun 2022 00:06:30 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B4C6C207F0D5E; Tue, 28 Jun 2022 00:06:29 +0200 (CEST)
-Date:   Tue, 28 Jun 2022 00:06:29 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Wedson Almeida Filho <wedsonaf@google.com>
-Cc:     Tejun Heo <tj@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [PATCH 3/3] kthread: Stop abusing TASK_UNINTERRUPTIBLE
- (INCOMPLETE)
-Message-ID: <Yrop5Wzc72GIREVv@hirez.programming.kicks-ass.net>
-References: <87pmiw1fy6.fsf@email.froward.int.ebiederm.org>
- <CAHk-=wiutNT47oNhyk_WvMj2qp4pehYFptXCUzW=u_2STLQiww@mail.gmail.com>
- <CAHk-=whX_=BNZ4kVEAu2NV3CMnhwsuYTyE65FQXUMx8VPNOAOA@mail.gmail.com>
- <87ilonuti2.fsf_-_@email.froward.int.ebiederm.org>
- <871qvbutex.fsf_-_@email.froward.int.ebiederm.org>
- <CAHk-=wg9eqtrpYrjJ=yobkwkTimWFtiDd_JOfADttG0fyAJrqg@mail.gmail.com>
- <YrjAJN7dDJ9R7Ocu@mtj.duckdns.org>
- <Yrlavf4Ymnz4T3LM@hirez.programming.kicks-ass.net>
- <YrlmOA/Xd+U7+b2E@mtj.duckdns.org>
- <YrnxHBoi6sO0vqV0@google.com>
+        Mon, 27 Jun 2022 18:07:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 390951EAC9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 15:06:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656367605;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HZ/0VFUsE1d9kZvm1sE1gAvxnVwUtDWBiRbGTRNr4sc=;
+        b=EW2hKCpi30yFeiycX5DyK3XzA6LNiN8Qro9CBrEvwnJfFMKLOTifiPx8x1IZ8SjMEZFkzM
+        uO0Y4hMfJWWzcSiJxaN7m1+httG0eJ1bZuPoApnm7YPxEZK673SfnX2gBB+gvLBWuBrdBV
+        yYaFwoRPLBxLGEhPFqGFkwx76lFI4Xg=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-283-6WXn6AwWOmyFqXXvUPK03w-1; Mon, 27 Jun 2022 18:06:43 -0400
+X-MC-Unique: 6WXn6AwWOmyFqXXvUPK03w-1
+Received: by mail-io1-f71.google.com with SMTP id n19-20020a056602341300b0066850b49e09so6292162ioz.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 15:06:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=HZ/0VFUsE1d9kZvm1sE1gAvxnVwUtDWBiRbGTRNr4sc=;
+        b=PeXY8IkQLSuOrytb/bHzZyjAPNU4GeUQaDwPAlAFOxeBauODPJ1bXU1Q792K39AQKO
+         l/JFh/0lK6tdB+j3WY3bPbh+pb0lmNvTJPAbCmB2c2XH62svEp0S157ncdJObYgak1UJ
+         gU9wL94TBCEj9tJKx6b+8wQZO0gqH+1es27zW25RoOl0PTBK6ZGjtV8hTvnrkpKw/O6n
+         62HXwXhcc+79Vcbi6OvuYnC5hp/AshYGlFjSgeyfc0SBvl30sAQiX3smHiv0Sf84UdUa
+         A6KRnUfwf8gNMZ24UreCUwVg874VfAaObDW/MvhvsOFuIiHWROsxy1XdTLdaGBP+WlOX
+         s+wg==
+X-Gm-Message-State: AJIora+wnGXaAy0+eeahmRC6Y3uDMT3yeojd9jig26v8wqm17K118rIe
+        nQf2v+EzfTmtlcuNXz6GLa+FX4FAo1AcXdRdSGJnK6awLKCZq4yB7e/fRZCjPbAzia14jhOe0Sm
+        3CKwW2ui1lHGqNBYT1774+Yyy
+X-Received: by 2002:a02:c503:0:b0:339:ec67:b0a4 with SMTP id s3-20020a02c503000000b00339ec67b0a4mr9354415jam.27.1656367602698;
+        Mon, 27 Jun 2022 15:06:42 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vJu+p7efIp5RqCbZdmaWIB31YUy2oUvJlHvKxzgXHmLMwAfmlwT6tRQqUEqSDaByl6KgI3JA==
+X-Received: by 2002:a02:c503:0:b0:339:ec67:b0a4 with SMTP id s3-20020a02c503000000b00339ec67b0a4mr9354407jam.27.1656367602497;
+        Mon, 27 Jun 2022 15:06:42 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id d137-20020a02628f000000b00339c5bff7c0sm5155314jac.134.2022.06.27.15.06.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 15:06:42 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 16:06:40 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Steve Sistare <steven.sistare@oracle.com>
+Cc:     lizhe.67@bytedance.com, cohuck@redhat.com, jgg@ziepe.ca,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lizefan.x@bytedance.com
+Subject: Re: [PATCH] vfio: remove useless judgement
+Message-ID: <20220627160640.7edca0dd.alex.williamson@redhat.com>
+In-Reply-To: <20220627035109.73745-1-lizhe.67@bytedance.com>
+References: <20220627035109.73745-1-lizhe.67@bytedance.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrnxHBoi6sO0vqV0@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 06:04:12PM +0000, Wedson Almeida Filho wrote:
 
->   let new_thread = task::new_paused(|| pr_info!("Hello world\n"))?;
+Hey Steve, how did you get around this for cpr or is this a gap?
+Thanks,
 
-I'm still having a really hard time with this Rust stuff, the above
-looks like a syntax error and random characters to me :/
+Alex
+
+On Mon, 27 Jun 2022 11:51:09 +0800
+lizhe.67@bytedance.com wrote:
+
+> From: Li Zhe <lizhe.67@bytedance.com>
+> 
+> In function vfio_dma_do_unmap(), we currently prevent process to unmap
+> vfio dma region whose mm_struct is different from the vfio_dma->task.
+> In our virtual machine scenario which is using kvm and qemu, this
+> judgement stops us from liveupgrading our qemu, which uses fork() &&
+> exec() to load the new binary but the new process cannot do the
+> VFIO_IOMMU_UNMAP_DMA action during vm exit because of this judgement.
+>
+> This judgement is added in commit 8f0d5bb95f76 ("vfio iommu type1: Add
+> task structure to vfio_dma") for the security reason. But it seems that
+> no other task who has no family relationship with old and new process
+> can get the same vfio_dma struct here for the reason of resource
+> isolation. So this patch delete it.
+> 
+> Signed-off-by: Li Zhe <lizhe.67@bytedance.com>
+> Reviewed-by: Jason Gunthorpe <jgg@ziepe.ca>
+> ---
+>  drivers/vfio/vfio_iommu_type1.c | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+> index c13b9290e357..a8ff00dad834 100644
+> --- a/drivers/vfio/vfio_iommu_type1.c
+> +++ b/drivers/vfio/vfio_iommu_type1.c
+> @@ -1377,12 +1377,6 @@ static int vfio_dma_do_unmap(struct vfio_iommu *iommu,
+>  
+>  		if (!iommu->v2 && iova > dma->iova)
+>  			break;
+> -		/*
+> -		 * Task with same address space who mapped this iova range is
+> -		 * allowed to unmap the iova range.
+> -		 */
+> -		if (dma->task->mm != current->mm)
+> -			break;
+>  
+>  		if (invalidate_vaddr) {
+>  			if (dma->vaddr_invalid) {
+

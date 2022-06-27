@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1953855D782
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E927255D68C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235244AbiF0L36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
+        id S237166AbiF0Lmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235177AbiF0L3E (ORCPT
+        with ESMTP id S236865AbiF0LkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:29:04 -0400
+        Mon, 27 Jun 2022 07:40:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35956A1A4;
-        Mon, 27 Jun 2022 04:27:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E159BE3A;
+        Mon, 27 Jun 2022 04:35:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C28DF614A0;
-        Mon, 27 Jun 2022 11:27:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19EBC3411D;
-        Mon, 27 Jun 2022 11:27:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF6BC60920;
+        Mon, 27 Jun 2022 11:35:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF007C3411D;
+        Mon, 27 Jun 2022 11:35:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329273;
-        bh=6s4OzjVqP8fvyE022P86NPf+L24fKj2JE6MKYOT/My0=;
+        s=korg; t=1656329722;
+        bh=r2eKPMwQaYVLkT+Jl24I3BIOnxml9Vlho6Ue9DjIrZ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jnZO8d/fnhE7/rNrXFaDlZWgIIzN3G7/+oXVnhQkZjPM2qUAitinKtvsAjY5lowEQ
-         30nS02fu1G3urm94x958s3Czd39+Zd553YZqmig4qhEASw6l9EysxXH0FV2J4pw9Kc
-         lsqT7UZnkMjW+9Xim6YEy5+axgixpCG7upIDpYcw=
+        b=Tyn2PczQ1zM3nW2Uwt3HVaND1Jfq5TGym9PEciW8l9GywUhSc8Te4oy6+uyJvrTnr
+         HbADGYWSiu3a+HnIpMOWaeOGP15hPE0DGLoy5NfTOHdei0w0Vmu26r84gFH5FJB+qu
+         hv4z4f/jg3Rdoheon79Bo3NDf5ce8i9E8Qp/XB9g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sathvika Vasireddy <sathvika@linux.ibm.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.10 090/102] powerpc/rtas: Allow ibm,platform-dump RTAS call with null buffer address
+        stable@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.15 094/135] f2fs: attach inline_data after setting compression
 Date:   Mon, 27 Jun 2022 13:21:41 +0200
-Message-Id: <20220627111936.135075465@linuxfoundation.org>
+Message-Id: <20220627111940.886356366@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,60 +53,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Donnellan <ajd@linux.ibm.com>
+From: Jaegeuk Kim <jaegeuk@kernel.org>
 
-commit 7bc08056a6dabc3a1442216daf527edf61ac24b6 upstream.
+commit 4cde00d50707c2ef6647b9b96b2cb40b6eb24397 upstream.
 
-Add a special case to block_rtas_call() to allow the ibm,platform-dump RTAS
-call through the RTAS filter if the buffer address is 0.
+This fixes the below corruption.
 
-According to PAPR, ibm,platform-dump is called with a null buffer address
-to notify the platform firmware that processing of a particular dump is
-finished.
+[345393.335389] F2FS-fs (vdb): sanity_check_inode: inode (ino=6d0, mode=33206) should not have inline_data, run fsck to fix
 
-Without this, on a pseries machine with CONFIG_PPC_RTAS_FILTER enabled, an
-application such as rtas_errd that is attempting to retrieve a dump will
-encounter an error at the end of the retrieval process.
-
-Fixes: bd59380c5ba4 ("powerpc/rtas: Restrict RTAS requests from userspace")
-Cc: stable@vger.kernel.org
-Reported-by: Sathvika Vasireddy <sathvika@linux.ibm.com>
-Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-Reviewed-by: Tyrel Datwyler <tyreld@linux.ibm.com>
-Reviewed-by: Nathan Lynch <nathanl@linux.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220614134952.156010-1-ajd@linux.ibm.com
+Cc: <stable@vger.kernel.org>
+Fixes: 677a82b44ebf ("f2fs: fix to do sanity check for inline inode")
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kernel/rtas.c |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ fs/f2fs/namei.c |   17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
---- a/arch/powerpc/kernel/rtas.c
-+++ b/arch/powerpc/kernel/rtas.c
-@@ -1040,7 +1040,7 @@ static struct rtas_filter rtas_filters[]
- 	{ "get-time-of-day", -1, -1, -1, -1, -1 },
- 	{ "ibm,get-vpd", -1, 0, -1, 1, 2 },
- 	{ "ibm,lpar-perftools", -1, 2, 3, -1, -1 },
--	{ "ibm,platform-dump", -1, 4, 5, -1, -1 },
-+	{ "ibm,platform-dump", -1, 4, 5, -1, -1 },		/* Special cased */
- 	{ "ibm,read-slot-reset-state", -1, -1, -1, -1, -1 },
- 	{ "ibm,scan-log-dump", -1, 0, 1, -1, -1 },
- 	{ "ibm,set-dynamic-indicator", -1, 2, -1, -1, -1 },
-@@ -1087,6 +1087,15 @@ static bool block_rtas_call(int token, i
- 				size = 1;
+--- a/fs/f2fs/namei.c
++++ b/fs/f2fs/namei.c
+@@ -91,8 +91,6 @@ static struct inode *f2fs_new_inode(stru
+ 	if (test_opt(sbi, INLINE_XATTR))
+ 		set_inode_flag(inode, FI_INLINE_XATTR);
  
- 			end = base + size - 1;
+-	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
+-		set_inode_flag(inode, FI_INLINE_DATA);
+ 	if (f2fs_may_inline_dentry(inode))
+ 		set_inode_flag(inode, FI_INLINE_DENTRY);
+ 
+@@ -109,10 +107,6 @@ static struct inode *f2fs_new_inode(stru
+ 
+ 	f2fs_init_extent_tree(inode, NULL);
+ 
+-	stat_inc_inline_xattr(inode);
+-	stat_inc_inline_inode(inode);
+-	stat_inc_inline_dir(inode);
+-
+ 	F2FS_I(inode)->i_flags =
+ 		f2fs_mask_flags(mode, F2FS_I(dir)->i_flags & F2FS_FL_INHERITED);
+ 
+@@ -129,6 +123,14 @@ static struct inode *f2fs_new_inode(stru
+ 			set_compress_context(inode);
+ 	}
+ 
++	/* Should enable inline_data after compression set */
++	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
++		set_inode_flag(inode, FI_INLINE_DATA);
 +
-+			/*
-+			 * Special case for ibm,platform-dump - NULL buffer
-+			 * address is used to indicate end of dump processing
-+			 */
-+			if (!strcmp(f->name, "ibm,platform-dump") &&
-+			    base == 0)
-+				return false;
++	stat_inc_inline_xattr(inode);
++	stat_inc_inline_inode(inode);
++	stat_inc_inline_dir(inode);
 +
- 			if (!in_rmo_buf(base, end))
- 				goto err;
- 		}
+ 	f2fs_set_inode_flags(inode);
+ 
+ 	trace_f2fs_new_inode(inode, 0);
+@@ -327,6 +329,9 @@ static void set_compress_inode(struct f2
+ 		if (!is_extension_exist(name, ext[i], false))
+ 			continue;
+ 
++		/* Do not use inline_data with compression */
++		stat_dec_inline_inode(inode);
++		clear_inode_flag(inode, FI_INLINE_DATA);
+ 		set_compress_context(inode);
+ 		return;
+ 	}
 
 

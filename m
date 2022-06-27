@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3584255D214
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB29255CDAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236635AbiF0Li7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
+        id S234892AbiF0L0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236451AbiF0Lhc (ORCPT
+        with ESMTP id S234871AbiF0LZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:37:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AA22632;
-        Mon, 27 Jun 2022 04:32:56 -0700 (PDT)
+        Mon, 27 Jun 2022 07:25:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB1F658E;
+        Mon, 27 Jun 2022 04:25:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7227560920;
-        Mon, 27 Jun 2022 11:32:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 651ACC3411D;
-        Mon, 27 Jun 2022 11:32:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90231B81122;
+        Mon, 27 Jun 2022 11:25:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F039FC3411D;
+        Mon, 27 Jun 2022 11:25:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329575;
-        bh=uwLP/YSqTMdpGRx9FDdvbNRrmMSkrIv3C1At+j3SF5w=;
+        s=korg; t=1656329127;
+        bh=KRoiypMvnU0fpSm6Chup8fkPi/ta/hJsQWETKlgcBIo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LV3lVAxDqfiWEuollvwDokiMP32aF7jSVyfadLpQVkiST48RqMt9LWBjgW88crPz8
-         Vkcne2lystLW5D7gWIw7nvCdN7VLGj2WusZDciCaio37P/MKzS/eKJS8HVQa54Wf3h
-         CNEQ16fABxM2V89hWlb0LGgfWIGTMPk3wHCqi4Uk=
+        b=LQYUUsR9nHFEmUHROllEh6jApsHcUwm5H+/tzMMlEVyD2rIh9+MtZYHMlIRPCVOMk
+         eMf/0xS96t5yWkl22l0u7L5oWK+fSVNzkHBV6FUzI3o+BhWoeGKejSxIjlHCWIf0Ua
+         y2lo/DvFDALDDVvism2SDlhtKq8x+NfEwc66tX+k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ondrej Spacek <ondrej.spacek@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
+        Eric Dumazet <edumazet@google.com>,
+        William Tu <u9012063@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 045/135] phy: aquantia: Fix AN when higher speeds than 1G are not advertised
-Date:   Mon, 27 Jun 2022 13:20:52 +0200
-Message-Id: <20220627111939.467741483@linuxfoundation.org>
+Subject: [PATCH 5.10 042/102] erspan: do not assume transport header is always set
+Date:   Mon, 27 Jun 2022 13:20:53 +0200
+Message-Id: <20220627111934.719870948@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +57,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Manoil <claudiu.manoil@nxp.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 9b7fd1670a94a57d974795acebde843a5c1a354e ]
+[ Upstream commit 301bd140ed0b24f0da660874c7e8a47dad8c8222 ]
 
-Even when the eth port is resticted to work with speeds not higher than 1G,
-and so the eth driver is requesting the phy (via phylink) to advertise up
-to 1000BASET support, the aquantia phy device is still advertising for 2.5G
-and 5G speeds.
-Clear these advertising defaults when requested.
+Rewrite tests in ip6erspan_tunnel_xmit() and
+erspan_fb_xmit() to not assume transport header is set.
 
-Cc: Ondrej Spacek <ondrej.spacek@nxp.com>
-Fixes: 09c4c57f7bc41 ("net: phy: aquantia: add support for auto-negotiation configuration")
-Signed-off-by: Claudiu Manoil <claudiu.manoil@nxp.com>
-Link: https://lore.kernel.org/r/20220610084037.7625-1-claudiu.manoil@nxp.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+syzbot reported:
+
+WARNING: CPU: 0 PID: 1350 at include/linux/skbuff.h:2911 skb_transport_header include/linux/skbuff.h:2911 [inline]
+WARNING: CPU: 0 PID: 1350 at include/linux/skbuff.h:2911 ip6erspan_tunnel_xmit+0x15af/0x2eb0 net/ipv6/ip6_gre.c:963
+Modules linked in:
+CPU: 0 PID: 1350 Comm: aoe_tx0 Not tainted 5.19.0-rc2-syzkaller-00160-g274295c6e53f #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:skb_transport_header include/linux/skbuff.h:2911 [inline]
+RIP: 0010:ip6erspan_tunnel_xmit+0x15af/0x2eb0 net/ipv6/ip6_gre.c:963
+Code: 0f 47 f0 40 88 b5 7f fe ff ff e8 8c 16 4b f9 89 de bf ff ff ff ff e8 a0 12 4b f9 66 83 fb ff 0f 85 1d f1 ff ff e8 71 16 4b f9 <0f> 0b e9 43 f0 ff ff e8 65 16 4b f9 48 8d 85 30 ff ff ff ba 60 00
+RSP: 0018:ffffc90005daf910 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 000000000000ffff RCX: 0000000000000000
+RDX: ffff88801f032100 RSI: ffffffff882e8d3f RDI: 0000000000000003
+RBP: ffffc90005dafab8 R08: 0000000000000003 R09: 000000000000ffff
+R10: 000000000000ffff R11: 0000000000000000 R12: ffff888024f21d40
+R13: 000000000000a288 R14: 00000000000000b0 R15: ffff888025a2e000
+FS: 0000000000000000(0000) GS:ffff88802c800000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2e425000 CR3: 000000006d099000 CR4: 0000000000152ef0
+Call Trace:
+<TASK>
+__netdev_start_xmit include/linux/netdevice.h:4805 [inline]
+netdev_start_xmit include/linux/netdevice.h:4819 [inline]
+xmit_one net/core/dev.c:3588 [inline]
+dev_hard_start_xmit+0x188/0x880 net/core/dev.c:3604
+sch_direct_xmit+0x19f/0xbe0 net/sched/sch_generic.c:342
+__dev_xmit_skb net/core/dev.c:3815 [inline]
+__dev_queue_xmit+0x14a1/0x3900 net/core/dev.c:4219
+dev_queue_xmit include/linux/netdevice.h:2994 [inline]
+tx+0x6a/0xc0 drivers/block/aoe/aoenet.c:63
+kthread+0x1e7/0x3b0 drivers/block/aoe/aoecmd.c:1229
+kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+</TASK>
+
+Fixes: d5db21a3e697 ("erspan: auto detect truncated ipv6 packets.")
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: William Tu <u9012063@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/aquantia_main.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ net/ipv4/ip_gre.c  | 15 ++++++++++-----
+ net/ipv6/ip6_gre.c | 15 ++++++++++-----
+ 2 files changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/phy/aquantia_main.c b/drivers/net/phy/aquantia_main.c
-index 968dd43a2b1e..3221224525ac 100644
---- a/drivers/net/phy/aquantia_main.c
-+++ b/drivers/net/phy/aquantia_main.c
-@@ -34,6 +34,8 @@
- #define MDIO_AN_VEND_PROV			0xc400
- #define MDIO_AN_VEND_PROV_1000BASET_FULL	BIT(15)
- #define MDIO_AN_VEND_PROV_1000BASET_HALF	BIT(14)
-+#define MDIO_AN_VEND_PROV_5000BASET_FULL	BIT(11)
-+#define MDIO_AN_VEND_PROV_2500BASET_FULL	BIT(10)
- #define MDIO_AN_VEND_PROV_DOWNSHIFT_EN		BIT(4)
- #define MDIO_AN_VEND_PROV_DOWNSHIFT_MASK	GENMASK(3, 0)
- #define MDIO_AN_VEND_PROV_DOWNSHIFT_DFLT	4
-@@ -231,9 +233,20 @@ static int aqr_config_aneg(struct phy_device *phydev)
- 			      phydev->advertising))
- 		reg |= MDIO_AN_VEND_PROV_1000BASET_HALF;
+diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
+index a7e32be8714f..6ab5c50aa7a8 100644
+--- a/net/ipv4/ip_gre.c
++++ b/net/ipv4/ip_gre.c
+@@ -519,7 +519,6 @@ static void erspan_fb_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	int tunnel_hlen;
+ 	int version;
+ 	int nhoff;
+-	int thoff;
  
-+	/* Handle the case when the 2.5G and 5G speeds are not advertised */
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_2500baseT_Full_BIT,
-+			      phydev->advertising))
-+		reg |= MDIO_AN_VEND_PROV_2500BASET_FULL;
+ 	tun_info = skb_tunnel_info(skb);
+ 	if (unlikely(!tun_info || !(tun_info->mode & IP_TUNNEL_INFO_TX) ||
+@@ -553,10 +552,16 @@ static void erspan_fb_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	    (ntohs(ip_hdr(skb)->tot_len) > skb->len - nhoff))
+ 		truncate = true;
+ 
+-	thoff = skb_transport_header(skb) - skb_mac_header(skb);
+-	if (skb->protocol == htons(ETH_P_IPV6) &&
+-	    (ntohs(ipv6_hdr(skb)->payload_len) > skb->len - thoff))
+-		truncate = true;
++	if (skb->protocol == htons(ETH_P_IPV6)) {
++		int thoff;
 +
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_5000baseT_Full_BIT,
-+			      phydev->advertising))
-+		reg |= MDIO_AN_VEND_PROV_5000BASET_FULL;
++		if (skb_transport_header_was_set(skb))
++			thoff = skb_transport_header(skb) - skb_mac_header(skb);
++		else
++			thoff = nhoff + sizeof(struct ipv6hdr);
++		if (ntohs(ipv6_hdr(skb)->payload_len) > skb->len - thoff)
++			truncate = true;
++	}
+ 
+ 	if (version == 1) {
+ 		erspan_build_header(skb, ntohl(tunnel_id_to_key32(key->tun_id)),
+diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
+index 3f88ba6555ab..9e0890738d93 100644
+--- a/net/ipv6/ip6_gre.c
++++ b/net/ipv6/ip6_gre.c
+@@ -944,7 +944,6 @@ static netdev_tx_t ip6erspan_tunnel_xmit(struct sk_buff *skb,
+ 	__be16 proto;
+ 	__u32 mtu;
+ 	int nhoff;
+-	int thoff;
+ 
+ 	if (!pskb_inet_may_pull(skb))
+ 		goto tx_err;
+@@ -965,10 +964,16 @@ static netdev_tx_t ip6erspan_tunnel_xmit(struct sk_buff *skb,
+ 	    (ntohs(ip_hdr(skb)->tot_len) > skb->len - nhoff))
+ 		truncate = true;
+ 
+-	thoff = skb_transport_header(skb) - skb_mac_header(skb);
+-	if (skb->protocol == htons(ETH_P_IPV6) &&
+-	    (ntohs(ipv6_hdr(skb)->payload_len) > skb->len - thoff))
+-		truncate = true;
++	if (skb->protocol == htons(ETH_P_IPV6)) {
++		int thoff;
 +
- 	ret = phy_modify_mmd_changed(phydev, MDIO_MMD_AN, MDIO_AN_VEND_PROV,
- 				     MDIO_AN_VEND_PROV_1000BASET_HALF |
--				     MDIO_AN_VEND_PROV_1000BASET_FULL, reg);
-+				     MDIO_AN_VEND_PROV_1000BASET_FULL |
-+				     MDIO_AN_VEND_PROV_2500BASET_FULL |
-+				     MDIO_AN_VEND_PROV_5000BASET_FULL, reg);
- 	if (ret < 0)
- 		return ret;
- 	if (ret > 0)
++		if (skb_transport_header_was_set(skb))
++			thoff = skb_transport_header(skb) - skb_mac_header(skb);
++		else
++			thoff = nhoff + sizeof(struct ipv6hdr);
++		if (ntohs(ipv6_hdr(skb)->payload_len) > skb->len - thoff)
++			truncate = true;
++	}
+ 
+ 	if (skb_cow_head(skb, dev->needed_headroom ?: t->hlen))
+ 		goto tx_err;
 -- 
 2.35.1
 

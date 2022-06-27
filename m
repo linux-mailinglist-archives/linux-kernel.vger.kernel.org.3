@@ -2,205 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C33C55D130
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C11755D468
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238092AbiF0Sjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 14:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
+        id S240408AbiF0Sj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240215AbiF0SjR (ORCPT
+        with ESMTP id S238686AbiF0Sj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 14:39:17 -0400
-Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BB2B9E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:38:54 -0700 (PDT)
-Received: by mail-oo1-xc42.google.com with SMTP id f10-20020a4aa68a000000b0042579cb6238so2048229oom.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:38:54 -0700 (PDT)
+        Mon, 27 Jun 2022 14:39:56 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16467B25
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:39:55 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id s10so12016883ljh.12
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:39:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JuE4G4k+9s7zTgtnSqan6CD/Xhbwm1NdftTu21F3DUk=;
-        b=BtPk1oNY5b8hNQkJwLR6f223yM1TvEDeHwmHOQ7/JVtemgJckWyuHnoO2gq11dCJtc
-         ceuGvJj5vEkhN/sQLmcfo/UjHM/u4KsiKe9c/ZldXfhFxPjih7CXIDn1gu/mep8MX4mq
-         WWHY+GoWAvyaGpmY/suh/p5cpR32CZ1hXgMpkbohvZFvXBGn6dyiJlUIMKsMxpsBm2Ml
-         zvGS6B6O9dEzZnGpDcrJrK5GPok9UMicYAhsBPltmFiB9IbbBJhYSa919qB0Oeucs0KJ
-         xnk5ZR7bbft/pjWjvsGxEsRWF+fTOUHnpCewhJjHEQq3DZFgMJ184Q+NB67E6Dl6i7mG
-         /1WQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=j4hbmbJoMUR/043f1gtsU9ggy7W36/KPjU+Af3Jvda8=;
+        b=W2bp3N/nc6A9fd8TGl01wDh9lzy9wHDNwzOb6PTiyT5sHPZ9gZsWvNOfQM+oO2QLy6
+         hn6cLw585q9YpYXzFr7ggc2fH86iRssYldTefymZoF3iUnFAgSvdGVCjX9WlaZ8im9q4
+         6g6HM3bkfYLU9V7ObvqHMofQwZw4Jmsz8Xv/qWgl3KXxofKkdfsaKS/5x/303/PhHMEn
+         UhvAdPSSo0YVDSgcCT9pjeyj8yay52Ham8/uSv14B1iA991nV1cdeUFb9e0SmtFRjFyg
+         tN7V4WRIv4w6Qqqv8Em05r4ZKFGt6EiC6pPmL/IG4V61eL8MjRNAhkz8U2fXq0jp1cLS
+         ULUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JuE4G4k+9s7zTgtnSqan6CD/Xhbwm1NdftTu21F3DUk=;
-        b=TxgpMLzMNin6/lBaVugAfWMfffOpMSVLqfdbuvm0woqVMeSZBwV/pTiX8tYCcDDX8x
-         sEwaRnnxTIrJIn8MqOEZPK2oP+B3NGRu4BIDMr0ZTvNXIeGTdjLrWxmbsQmOFqpenMDD
-         X4Q/wtQDiip6IPgxc7tJ2ZcRijRXYRt2n2ArQfE2aZKfeY90UFDlXxCB5r/Mqv6H7a6x
-         tVtr+qXGoJWWIfVVgwxnyyGxyPyeYT5p7wiYTBTlYBgX5oVjGdkyF/IAU82fwL72TK7N
-         vNSjSxc5ib2Hd/W/BSsbcoHanrUHHnXJyEKEEU+G1qlC+byFVBTKj0lbY4b8jjcsEiSL
-         MPLQ==
-X-Gm-Message-State: AJIora8M8t4pKBom9KuCKv4fAbmcbcNgisnSAqQIAhDPXXwcBhUE5j16
-        g2Ser4aHAKG9xnyc+3WsBELtS/m1YQfmwA/9JnM=
-X-Google-Smtp-Source: AGRyM1vZA5i0T8xVD9xQcRnUGH3VaeevgvCndiQPhHTtyiM6hRm8leQj653lw7xV4j3JUv6iQqcutA==
-X-Received: by 2002:a4a:49d0:0:b0:425:708a:224 with SMTP id z199-20020a4a49d0000000b00425708a0224mr6462805ooa.18.1656355133640;
-        Mon, 27 Jun 2022 11:38:53 -0700 (PDT)
-Received: from [192.168.17.16] ([189.219.74.211])
-        by smtp.gmail.com with ESMTPSA id i1-20020a4addc1000000b0041b768b58basm6309261oov.22.2022.06.27.11.38.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 11:38:53 -0700 (PDT)
-Message-ID: <24080846-a369-9333-589c-ad88d775bc04@linaro.org>
-Date:   Mon, 27 Jun 2022 13:38:51 -0500
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j4hbmbJoMUR/043f1gtsU9ggy7W36/KPjU+Af3Jvda8=;
+        b=UKGLBkm7oROtv1Xknez+VEJsgOvD0bqo5o1NEUkY799qAaCYx4w1tFXdLyhottazea
+         Ul7edZtkF/7uFBY7L/HAMzmdOciYZInNoCsSHpTVxnaSnBkXUdfLonZlsvnNiUIY/vg2
+         L4OrRwygCvbY3IlvZMFSBIfFTXfWLlpaX0dYK8RZ9X+mU2V48b+QVfPnQYlDJkmhIHWt
+         sxrb4fuoAEasMiRAEwj/ng6ZkV5HZUC8xMOUUOXichedHzmvLxqPRCLq8mfZnqQ4lleg
+         BxhcvqN7aM2bFScoBsAgwhvglx7IJiQLQnMZEzWGyd1mZxKNBz0uXZehkYJQEQXW0o2o
+         mhYA==
+X-Gm-Message-State: AJIora8FcaFPAEQUO7yczhHp+K4ldkYqJb5iWFfhDIjHCdWEHDFJYRbx
+        dFI3j4TfBkIuaaAuhivySL7cIyWQ0yaQzu6V1pb9mY10Z0hQ2g==
+X-Google-Smtp-Source: AGRyM1t2YlhNyy2b2oS22ZEa07490K1W8KWHnnHXnjPVpPlJppubAGVaXmqVB682qW55u19S3zFl1fTsyodE0sxBOaw=
+X-Received: by 2002:a2e:2a43:0:b0:25a:84a9:921c with SMTP id
+ q64-20020a2e2a43000000b0025a84a9921cmr7461767ljq.83.1656355193311; Mon, 27
+ Jun 2022 11:39:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 5.15 000/135] 5.15.51-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220627111938.151743692@linuxfoundation.org>
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220627161123.1386853-1-pgonda@google.com> <Yrnync27TAhgSRUq@google.com>
+In-Reply-To: <Yrnync27TAhgSRUq@google.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Mon, 27 Jun 2022 12:39:41 -0600
+Message-ID: <CAMkAt6q9iTsJO=UY_6588Zqa_rUjr5c01H5NsCj-4FiuTGnncw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: SEV: Clear the pages pointer in sev_unpin_memory
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm list <kvm@vger.kernel.org>, Greg Thelen <gthelen@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Mon, Jun 27, 2022 at 12:10 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Mon, Jun 27, 2022, Peter Gonda wrote:
+> > Clear to the @pages array pointer in sev_unpin_memory to avoid leaving a
+> > dangling pointer to invalid memory.
+> >
+> > Signed-off-by: Peter Gonda <pgonda@google.com>
+> > Cc: Greg Thelen <gthelen@google.com>
+> > Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > Cc: Sean Christopherson <seanjc@google.com>
+> > Cc: Tom Lendacky <thomas.lendacky@amd.com>
+> > Cc: kvm@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > ---
+> >  arch/x86/kvm/svm/sev.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> > index 309bcdb2f929..485ad86c01c6 100644
+> > --- a/arch/x86/kvm/svm/sev.c
+> > +++ b/arch/x86/kvm/svm/sev.c
+> > @@ -452,6 +452,7 @@ static void sev_unpin_memory(struct kvm *kvm, struct page **pages,
+> >       unpin_user_pages(pages, npages);
+> >       kvfree(pages);
+> >       sev->pages_locked -= npages;
+> > +     *pages = NULL;
+>
+> Would this have helped detect a real bug?  I generally like cleaning up, but this
+> leaves things in a somewhat inconsistent state, e.g. when unpinning a kvm_enc_region,
+> pages will be NULL but npages will be non-zero.  It's somewhat moot because the
+> region is immediately freed in that case, but that begs the question of what real
+> benefit this provides.  sev_dbg_crypt() is the only flow where there's much danger
+> of a use-after-free.
+>
 
-On 27/06/22 06:20, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.51 release.
-> There are 135 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.51-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+No strong opinion here, I just thought since this is a helper that
+takes a 'struct page **pages" we may as well clear this. While there
+are no bugs caught now if someone were to introduce something wrong
+this would make it more clear.
 
-Results from Linaro's test farm.
-The following new warnings have been found while building ixp4xx_defconfig for Arm combinations with GCC:
+We could update sev_unpin_memory() to take a int *npages so it can be
+cleared as well. Since kvm_enc_region describes a region with u64
+instead of pointers that seemed "safer" give you'd have to cast them
+to dereference.
 
-   WARNING: modpost: vmlinux.o(___ksymtab_gpl+ixp4xx_irq_init+0x0): Section mismatch in reference from the variable __ksymtab_ixp4xx_irq_init to the function .init.text:ixp4xx_irq_init()
-   The symbol ixp4xx_irq_init is exported and annotated __init
-   Fix this by removing the __init annotation of ixp4xx_irq_init or drop the export.
-
-   WARNING: modpost: vmlinux.o(___ksymtab_gpl+ixp4xx_timer_setup+0x0): Section mismatch in reference from the variable __ksymtab_ixp4xx_timer_setup to the function .init.text:ixp4xx_timer_setup()
-   The symbol ixp4xx_timer_setup is exported and annotated __init
-   Fix this by removing the __init annotation of ixp4xx_timer_setup or drop the export.
-
-
-## Build
-* kernel: 5.15.51-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 2c21dc5c2cb635c1b549c0f3eb0ff3d3744be11a
-* git describe: v5.15.50-136-g2c21dc5c2cb6
-* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.50-136-g2c21dc5c2cb6
-
-## No test regressions (compared to v5.15.48-116-g18a33c8dabb8)
-
-## Metric Regressions (compared to v5.15.48-116-g18a33c8dabb8)
-* arm, build
-   - gcc-8-ixp4xx_defconfig-warnings
-   - gcc-9-ixp4xx_defconfig-warnings
-   - gcc-10-ixp4xx_defconfig-warnings
-   - gcc-11-ixp4xx_defconfig-warnings
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## No test fixes (compared to v5.15.48-116-g18a33c8dabb8)
-
-## No metric fixes (compared to v5.15.48-116-g18a33c8dabb8)
-
-## Test result summary
-total: 122583, pass: 109673, fail: 286, skip: 12014, xfail: 610
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 314 total, 314 passed, 0 failed
-* arm64: 58 total, 58 passed, 0 failed
-* i386: 52 total, 49 passed, 3 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* riscv: 22 total, 22 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 56 total, 55 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
-
-Greetings!
-
-Daniel Díaz
-daniel.diaz@linaro.org
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+Totally fine with the NACK of course. =]

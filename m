@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189D555D011
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3E855D360
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238462AbiF0Lxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
+        id S235661AbiF0LgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238162AbiF0Lry (ORCPT
+        with ESMTP id S235264AbiF0Lds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:47:54 -0400
+        Mon, 27 Jun 2022 07:33:48 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4D4BC89;
-        Mon, 27 Jun 2022 04:39:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4A8BDE;
+        Mon, 27 Jun 2022 04:31:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF5EAB8111B;
-        Mon, 27 Jun 2022 11:39:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44445C3411D;
-        Mon, 27 Jun 2022 11:39:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14766B8111B;
+        Mon, 27 Jun 2022 11:31:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3768AC3411D;
+        Mon, 27 Jun 2022 11:31:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329989;
-        bh=XCFHaJCagRpq0gbPYvTBh6fQ/FDmtnX7FM0YjYEetag=;
+        s=korg; t=1656329473;
+        bh=1vs+4O73ZkfN8D3Bvz76KHOfCkHKRBezAWm1iAsVk0o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QL9qIqh8hMxjJ7WUieVwCoENyTrzf39psxFOPeDt3EqBTa5B5bnkWl6aQhm/2L2mH
-         t2SY1pSy8bcnXycjalFod9UlwDT1jdO1Pg6cV8gd0SUJVpG4fwJWoXuwEYe9UXBdRa
-         zJqPiFDCj50Su8JWskaKxLG+ehWh7qUINBaemWHc=
+        b=FLRbh6NnnW//aOSm9+vYtrX+vhevA1huohThrrmNKKc3WBPuAMUf7pGTp1DWURWfI
+         WU4TdMBqT1uSah0tFM0MLFJ0zFI+hoU4TIoxDB/c6iA5yVR+PIRhKwUqiZUJWJxzZP
+         PR6txZVVTY5JTWRv3SKKkPMWe1JNzR9kqBu6Ym4U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 044/181] netfilter: use get_random_u32 instead of prandom
-Date:   Mon, 27 Jun 2022 13:20:17 +0200
-Message-Id: <20220627111945.839956837@linuxfoundation.org>
+        stable@vger.kernel.org, Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH 5.15 011/135] 9p: Fix refcounting during full path walks for fid lookups
+Date:   Mon, 27 Jun 2022 13:20:18 +0200
+Message-Id: <20220627111938.486779755@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,131 +55,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Tyler Hicks <tyhicks@linux.microsoft.com>
 
-[ Upstream commit b1fd94e704571f98b21027340eecf821b2bdffba ]
+commit 2a3dcbccd64ba35c045fac92272ff981c4cbef44 upstream.
 
-bh might occur while updating per-cpu rnd_state from user context,
-ie. local_out path.
+Decrement the refcount of the parent dentry's fid after walking
+each path component during a full path walk for a lookup. Failure to do
+so can lead to fids that are not clunked until the filesystem is
+unmounted, as indicated by this warning:
 
-BUG: using smp_processor_id() in preemptible [00000000] code: nginx/2725
-caller is nft_ng_random_eval+0x24/0x54 [nft_numgen]
-Call Trace:
- check_preemption_disabled+0xde/0xe0
- nft_ng_random_eval+0x24/0x54 [nft_numgen]
+ 9pnet: found fid 3 not clunked
 
-Use the random driver instead, this also avoids need for local prandom
-state. Moreover, prandom now uses the random driver since d4150779e60f
-("random32: use real rng for non-deterministic randomness").
+The improper refcounting after walking resulted in open(2) returning
+-EIO on any directories underneath the mount point when using the virtio
+transport. When using the fd transport, there's no apparent issue until
+the filesytem is unmounted and the warning above is emitted to the logs.
 
-Based on earlier patch from Pablo Neira.
+In some cases, the user may not yet be attached to the filesystem and a
+new root fid, associated with the user, is created and attached to the
+root dentry before the full path walk is performed. Increment the new
+root fid's refcount to two in that situation so that it can be safely
+decremented to one after it is used for the walk operation. The new fid
+will still be attached to the root dentry when
+v9fs_fid_lookup_with_uid() returns so a final refcount of one is
+correct/expected.
 
-Fixes: 6b2faee0ca91 ("netfilter: nft_meta: place prandom handling in a helper")
-Fixes: 978d8f9055c3 ("netfilter: nft_numgen: add map lookups for numgen random operations")
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/20220527000003.355812-2-tyhicks@linux.microsoft.com
+Link: https://lkml.kernel.org/r/20220612085330.1451496-4-asmadeus@codewreck.org
+Fixes: 6636b6dcc3db ("9p: add refcount to p9_fid struct")
+Cc: stable@vger.kernel.org
+Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+[Dominique: fix clunking fid multiple times discussed in second link]
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nft_meta.c   | 13 ++-----------
- net/netfilter/nft_numgen.c | 12 +++---------
- 2 files changed, 5 insertions(+), 20 deletions(-)
+ fs/9p/fid.c |   22 +++++++++-------------
+ 1 file changed, 9 insertions(+), 13 deletions(-)
 
-diff --git a/net/netfilter/nft_meta.c b/net/netfilter/nft_meta.c
-index ac4859241e17..55d2d49c3425 100644
---- a/net/netfilter/nft_meta.c
-+++ b/net/netfilter/nft_meta.c
-@@ -14,6 +14,7 @@
- #include <linux/in.h>
- #include <linux/ip.h>
- #include <linux/ipv6.h>
-+#include <linux/random.h>
- #include <linux/smp.h>
- #include <linux/static_key.h>
- #include <net/dst.h>
-@@ -32,8 +33,6 @@
- #define NFT_META_SECS_PER_DAY		86400
- #define NFT_META_DAYS_PER_WEEK		7
+--- a/fs/9p/fid.c
++++ b/fs/9p/fid.c
+@@ -151,7 +151,7 @@ static struct p9_fid *v9fs_fid_lookup_wi
+ 	const unsigned char **wnames, *uname;
+ 	int i, n, l, clone, access;
+ 	struct v9fs_session_info *v9ses;
+-	struct p9_fid *fid, *old_fid = NULL;
++	struct p9_fid *fid, *old_fid;
  
--static DEFINE_PER_CPU(struct rnd_state, nft_prandom_state);
--
- static u8 nft_meta_weekday(void)
- {
- 	time64_t secs = ktime_get_real_seconds();
-@@ -271,13 +270,6 @@ static bool nft_meta_get_eval_ifname(enum nft_meta_keys key, u32 *dest,
- 	return true;
- }
+ 	v9ses = v9fs_dentry2v9ses(dentry);
+ 	access = v9ses->flags & V9FS_ACCESS_MASK;
+@@ -193,13 +193,12 @@ static struct p9_fid *v9fs_fid_lookup_wi
+ 		if (IS_ERR(fid))
+ 			return fid;
  
--static noinline u32 nft_prandom_u32(void)
--{
--	struct rnd_state *state = this_cpu_ptr(&nft_prandom_state);
--
--	return prandom_u32_state(state);
--}
--
- #ifdef CONFIG_IP_ROUTE_CLASSID
- static noinline bool
- nft_meta_get_eval_rtclassid(const struct sk_buff *skb, u32 *dest)
-@@ -389,7 +381,7 @@ void nft_meta_get_eval(const struct nft_expr *expr,
- 		break;
- #endif
- 	case NFT_META_PRANDOM:
--		*dest = nft_prandom_u32();
-+		*dest = get_random_u32();
- 		break;
- #ifdef CONFIG_XFRM
- 	case NFT_META_SECPATH:
-@@ -518,7 +510,6 @@ int nft_meta_get_init(const struct nft_ctx *ctx,
- 		len = IFNAMSIZ;
- 		break;
- 	case NFT_META_PRANDOM:
--		prandom_init_once(&nft_prandom_state);
- 		len = sizeof(u32);
- 		break;
- #ifdef CONFIG_XFRM
-diff --git a/net/netfilter/nft_numgen.c b/net/netfilter/nft_numgen.c
-index 81b40c663d86..45d3dc9e96f2 100644
---- a/net/netfilter/nft_numgen.c
-+++ b/net/netfilter/nft_numgen.c
-@@ -9,12 +9,11 @@
- #include <linux/netlink.h>
- #include <linux/netfilter.h>
- #include <linux/netfilter/nf_tables.h>
-+#include <linux/random.h>
- #include <linux/static_key.h>
- #include <net/netfilter/nf_tables.h>
- #include <net/netfilter/nf_tables_core.h>
- 
--static DEFINE_PER_CPU(struct rnd_state, nft_numgen_prandom_state);
--
- struct nft_ng_inc {
- 	u8			dreg;
- 	u32			modulus;
-@@ -135,12 +134,9 @@ struct nft_ng_random {
- 	u32			offset;
- };
- 
--static u32 nft_ng_random_gen(struct nft_ng_random *priv)
-+static u32 nft_ng_random_gen(const struct nft_ng_random *priv)
- {
--	struct rnd_state *state = this_cpu_ptr(&nft_numgen_prandom_state);
--
--	return reciprocal_scale(prandom_u32_state(state), priv->modulus) +
--	       priv->offset;
-+	return reciprocal_scale(get_random_u32(), priv->modulus) + priv->offset;
- }
- 
- static void nft_ng_random_eval(const struct nft_expr *expr,
-@@ -168,8 +164,6 @@ static int nft_ng_random_init(const struct nft_ctx *ctx,
- 	if (priv->offset + priv->modulus - 1 < priv->offset)
- 		return -EOVERFLOW;
- 
--	prandom_init_once(&nft_numgen_prandom_state);
--
- 	return nft_parse_register_store(ctx, tb[NFTA_NG_DREG], &priv->dreg,
- 					NULL, NFT_DATA_VALUE, sizeof(u32));
- }
--- 
-2.35.1
-
++		refcount_inc(&fid->count);
+ 		v9fs_fid_add(dentry->d_sb->s_root, fid);
+ 	}
+ 	/* If we are root ourself just return that */
+-	if (dentry->d_sb->s_root == dentry) {
+-		refcount_inc(&fid->count);
++	if (dentry->d_sb->s_root == dentry)
+ 		return fid;
+-	}
+ 	/*
+ 	 * Do a multipath walk with attached root.
+ 	 * When walking parent we need to make sure we
+@@ -211,6 +210,7 @@ static struct p9_fid *v9fs_fid_lookup_wi
+ 		fid = ERR_PTR(n);
+ 		goto err_out;
+ 	}
++	old_fid = fid;
+ 	clone = 1;
+ 	i = 0;
+ 	while (i < n) {
+@@ -220,19 +220,15 @@ static struct p9_fid *v9fs_fid_lookup_wi
+ 		 * walk to ensure none of the patch component change
+ 		 */
+ 		fid = p9_client_walk(fid, l, &wnames[i], clone);
++		/* non-cloning walk will return the same fid */
++		if (fid != old_fid) {
++			p9_client_clunk(old_fid);
++			old_fid = fid;
++		}
+ 		if (IS_ERR(fid)) {
+-			if (old_fid) {
+-				/*
+-				 * If we fail, clunk fid which are mapping
+-				 * to path component and not the last component
+-				 * of the path.
+-				 */
+-				p9_client_clunk(old_fid);
+-			}
+ 			kfree(wnames);
+ 			goto err_out;
+ 		}
+-		old_fid = fid;
+ 		i += l;
+ 		clone = 0;
+ 	}
 
 

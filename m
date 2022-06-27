@@ -2,95 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D9D55CBF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFA355DB00
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbiF0GNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 02:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
+        id S232363AbiF0GPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 02:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiF0GNA (ORCPT
+        with ESMTP id S229850AbiF0GPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 02:13:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E625587;
-        Sun, 26 Jun 2022 23:12:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50386612A1;
-        Mon, 27 Jun 2022 06:12:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A2A2C341C8;
-        Mon, 27 Jun 2022 06:12:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656310378;
-        bh=XSfX3h8z/tYeCfqUd1/OjZf3oxJkcrxHEwFVPj5HSUw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=psFJnp/1+9cXrSMdsLkWLP7bNJgswfVe/IWPxsu+F+2CgKPMBVTropheV6/uMhoDP
-         o5QiP5kBDaYc8arqOdhBIiNx/T9y7PxXGSpJV/UiwaMTl/uRTwdf/w+bcG5RVKyt5h
-         az2m1bnyYkCMP91ErIwltt/nDZIsOku7C7R7CdSkEL5nowr+xPzUSRK3IvJthr0gZ4
-         J3zIdPdSJRzj5gd5ZaC99KFxr6UJP1G6Gk9se0dg5DU1shHcSvK7TgXuiDoN8tLRec
-         K7sE3qMXdZHrlgrJrkdbyJTB8BkjItexpRoGccipSkLvoVT/GANfedbG0vMd2GH4Fg
-         gDKVLU4hF6+Ng==
-Date:   Mon, 27 Jun 2022 11:42:54 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jie Hai <haijie1@huawei.com>
-Cc:     wangzhou1@hisilicon.com, dmaengine@vger.kernel.org,
+        Mon, 27 Jun 2022 02:15:08 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70B8C2718;
+        Sun, 26 Jun 2022 23:15:04 -0700 (PDT)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH9_lSrlisbNfAA--.12536S2;
+        Mon, 27 Jun 2022 14:15:01 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/8] dmaengine: hisilicon: Fix CQ head update
-Message-ID: <YrlKZgC999AYMvXY@matsya>
-References: <20220625074422.3479591-1-haijie1@huawei.com>
- <20220625074422.3479591-3-haijie1@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220625074422.3479591-3-haijie1@huawei.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: [PATCH] MIPS: Loongson64: Fix section mismatch warning
+Date:   Mon, 27 Jun 2022 14:15:01 +0800
+Message-Id: <1656310501-29355-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxH9_lSrlisbNfAA--.12536S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Xr4UCF45CF4ruFW3GF43GFg_yoW8Jr1xpa
+        y8Aw1DWr4UKr4kJF1fCry8Z34xJFyrWFZ3A39rCryDW39rur95Zr1xCF4rZFyDtF4FyF4r
+        XF1fGrs5u3W8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUyxRDUUUU
+        U==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-06-22, 15:44, Jie Hai wrote:
-> After completion of data transfer of one or multiple descriptors,
-> the completion status and the current head pointer to submission
-> queue are written into the CQ and interrupt can be generated to
-> inform the software. In interrupt process CQ is read and cq_head
-> is updated.
-> 
-> hisi_dma_irq updates cq_head only when the completion status is
-> success. When an abnormal interrupt reports, cq_head will not update
-> which will cause subsequent interrupt processes read the error CQ
-> and never report the correct status.
-> 
-> This patch updates cq_head whenever CQ is accessed.
-> 
-> Fixes: e9f08b65250d ("dmaengine: hisilicon: Add Kunpeng DMA engine support")
-> 
+prom_init_numa_memory() is annotated __init and not used by any module,
+thus don't export it.
 
-No need for blank line
-> Signed-off-by: Jie Hai <haijie1@huawei.com>
-> ---
->  drivers/dma/hisi_dma.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/dma/hisi_dma.c b/drivers/dma/hisi_dma.c
-> index 98bc488893cc..0a0f8a4d168a 100644
-> --- a/drivers/dma/hisi_dma.c
-> +++ b/drivers/dma/hisi_dma.c
-> @@ -436,12 +436,11 @@ static irqreturn_t hisi_dma_irq(int irq, void *data)
->  	desc = chan->desc;
->  	cqe = chan->cq + chan->cq_head;
->  	if (desc) {
-> +		chan->cq_head = (chan->cq_head + 1) %
-> +				hdma_dev->chan_depth;
-> +		hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR,
+Remove not needed EXPORT_SYMBOL for prom_init_numa_memory() to fix the
+following section mismatch warning:
 
-q_base?
+  LD      vmlinux.o
+  MODPOST vmlinux.symvers
+WARNING: modpost: vmlinux.o(___ksymtab+prom_init_numa_memory+0x0): Section mismatch in reference
+from the variable __ksymtab_prom_init_numa_memory to the function .init.text:prom_init_numa_memory()
+The symbol prom_init_numa_memory is exported and annotated __init
+Fix this by removing the __init annotation of prom_init_numa_memory or drop the export.
 
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/loongson64/numa.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+index 69a5331..8f61e93 100644
+--- a/arch/mips/loongson64/numa.c
++++ b/arch/mips/loongson64/numa.c
+@@ -196,7 +196,6 @@ void __init prom_init_numa_memory(void)
+ 	pr_info("CP0_PageGrain: CP0 5.1 (0x%x)\n", read_c0_pagegrain());
+ 	prom_meminit();
+ }
+-EXPORT_SYMBOL(prom_init_numa_memory);
+ 
+ pg_data_t * __init arch_alloc_nodedata(int nid)
+ {
 -- 
-~Vinod
+2.1.0
+

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9696855CA42
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F7155C297
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239707AbiF0L6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S236171AbiF0Ljs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238037AbiF0LvK (ORCPT
+        with ESMTP id S236516AbiF0Lhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:51:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45749655E;
-        Mon, 27 Jun 2022 04:44:22 -0700 (PDT)
+        Mon, 27 Jun 2022 07:37:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61700B04;
+        Mon, 27 Jun 2022 04:33:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBE20B80DFB;
-        Mon, 27 Jun 2022 11:44:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E2A7C3411D;
-        Mon, 27 Jun 2022 11:44:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24467B81122;
+        Mon, 27 Jun 2022 11:33:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49DF4C341C8;
+        Mon, 27 Jun 2022 11:33:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330259;
-        bh=gWzTgie9Nra0hMwrYC2G+Zrey5VdDZ6WS9sye20VHUU=;
+        s=korg; t=1656329633;
+        bh=E49iyCRj4QbP3/EbZLXLwZp+fDTLfjOcMQvlo3rHagI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jJTpHgK3M2FFRsb7ylzOoI4K4A9TPORh/9CWYpDwppkQhad0aZUJDattXdw7io3IB
-         2ut3E0sEWgfeIIdgPHGWFK8QjR2k0XbjFWK5IaFj0ik5rrhv701F8wXtM/l/cgfpiQ
-         Ql2LBZS1lYs/LO25tnKoflXb3Q43jRy/AVmU8ksI=
+        b=kZ01N1CSEp5yk1qcQRSJBr7UN8P59XU4xn9Tu7nTuKepOTCh3vonnUPBSFIzUCg8w
+         gij9RA2ccPKOmHiNp6pcyPhcB1RQYqNNs5/f8ZbdFyO8zV+00lD8xaHuQdu8aZ0y1j
+         VnubhRWojSSV7FKD3AOWjoNRCq/VtJHVKZpMugeA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, zdi-disclosures@trendmicro.com,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 097/181] Revert "net/tls: fix tls_sk_proto_close executed repeatedly"
+Subject: [PATCH 5.15 063/135] udmabuf: add back sanity check
 Date:   Mon, 27 Jun 2022 13:21:10 +0200
-Message-Id: <20220627111947.372126973@linuxfoundation.org>
+Message-Id: <20220627111939.986095750@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Gerd Hoffmann <kraxel@redhat.com>
 
-[ Upstream commit 1b205d948fbb06a7613d87dcea0ff5fd8a08ed91 ]
+[ Upstream commit 05b252cccb2e5c3f56119d25de684b4f810ba40a ]
 
-This reverts commit 69135c572d1f84261a6de2a1268513a7e71753e2.
+Check vm_fault->pgoff before using it.  When we removed the warning, we
+also removed the check.
 
-This commit was just papering over the issue, ULP should not
-get ->update() called with its own sk_prot. Each ULP would
-need to add this check.
-
-Fixes: 69135c572d1f ("net/tls: fix tls_sk_proto_close executed repeatedly")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/r/20220620191353.1184629-1-kuba@kernel.org
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 7b26e4e2119d ("udmabuf: drop WARN_ON() check.")
+Reported-by: zdi-disclosures@trendmicro.com
+Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
+Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tls/tls_main.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/dma-buf/udmabuf.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
-index fc60bef83f90..7b2b0e7ffee4 100644
---- a/net/tls/tls_main.c
-+++ b/net/tls/tls_main.c
-@@ -873,9 +873,6 @@ static void tls_update(struct sock *sk, struct proto *p,
+diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+index e7330684d3b8..9631f2fd2faf 100644
+--- a/drivers/dma-buf/udmabuf.c
++++ b/drivers/dma-buf/udmabuf.c
+@@ -32,8 +32,11 @@ static vm_fault_t udmabuf_vm_fault(struct vm_fault *vmf)
  {
- 	struct tls_context *ctx;
+ 	struct vm_area_struct *vma = vmf->vma;
+ 	struct udmabuf *ubuf = vma->vm_private_data;
++	pgoff_t pgoff = vmf->pgoff;
  
--	if (sk->sk_prot == p)
--		return;
--
- 	ctx = tls_get_ctx(sk);
- 	if (likely(ctx)) {
- 		ctx->sk_write_space = write_space;
+-	vmf->page = ubuf->pages[vmf->pgoff];
++	if (pgoff >= ubuf->pagecount)
++		return VM_FAULT_SIGBUS;
++	vmf->page = ubuf->pages[pgoff];
+ 	get_page(vmf->page);
+ 	return 0;
+ }
 -- 
 2.35.1
 

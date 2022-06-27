@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BD755DA86
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC03B55DBFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235016AbiF0NDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
+        id S234493AbiF0NEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234643AbiF0NDV (ORCPT
+        with ESMTP id S234331AbiF0NET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:03:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19791E015
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:02:31 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o5oNn-0003x3-Iq; Mon, 27 Jun 2022 15:02:27 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o5oNl-0006mA-Un; Mon, 27 Jun 2022 15:02:25 +0200
-Date:   Mon, 27 Jun 2022 15:02:25 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Anton Lundin <glance@acc.umu.se>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, Lukas Wunner <lukas@wunner.de>
-Subject: Re: [REGRESSION] AX88772 card booted without cable can't receive
-Message-ID: <20220627130225.GA13092@pengutronix.de>
-References: <20220622141638.GE930160@montezuma.acc.umu.se>
- <20220623063649.GD23685@pengutronix.de>
- <20220624081706.GB14396@pengutronix.de>
- <20220627123229.GF930160@montezuma.acc.umu.se>
+        Mon, 27 Jun 2022 09:04:19 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B770D127
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:03:37 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id l68so338583wml.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:03:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=L882Qi37qgymZbCBpAO6lxX5xZGhjw0/8e7sf/riPRY=;
+        b=OElTWkNKtpQqellzrB9QTjaZMqFULrJ39h9Zuvrnv7fHYbC3K0Y/+k0chZnnyhITKQ
+         q1Su1dm4C80yP0/DawYBoUfBR7TBBmXa45RHeDIgpMSOE77KVjqmze4UPVzTG+qxNiPM
+         J6CsKfyuMQiawUJTjLzj96gcA//6DI431ZmytVuyp62KBtff1VIVyd9FlpzNRwDGAf5u
+         peruN5j3nDCK9cmfE51P7D8qnU4bCMuU8V+2Nfgod7QNK8R4VtUxm/MJPVr2sRTwTf5s
+         +rSE9TjeI/BlHBUf1irvcf4dIipxvGz2tKJ6xQ7c7Z/foj0NgdV7yRP/ozHTPBaA8ssP
+         blIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=L882Qi37qgymZbCBpAO6lxX5xZGhjw0/8e7sf/riPRY=;
+        b=SZlKh71iAY09rz4te2pZ+pM4DgGQSFIbC3aIvik+QrNgPN0a3DnGRuU89TizyCNBU5
+         HbIZ8WDpu7qssiUTG5b3xsDj485gA2xjAVCPI0GAWgVWh7uxdRrtzG76Kz3FOhaP0NWc
+         VpjfCsgq/u/MYNi1U4r1oqqoW9V8K+4JF4Q7lYUoIb6IjOEG360DvrJO8O4xCCn9Q9Pr
+         mVUMGZqRlebdoflDz0jDWcfnDzQ17W276YinTM3HeZfUPmXoBfGTTLtaEin6u6Bq1omG
+         bl7l2AcsM3OLHPHxRVCirowW2V8M3KKUOr3XrLz9/4KkAZHh6IAqAep7x+qQwjasInPG
+         8bxQ==
+X-Gm-Message-State: AJIora/qa2qQASDZhHj9mbdGUXg1WYeI1Yy/2Aq1u0+3gSxMMFdYPdBB
+        CUVubbzOXoccQTMvje11qwUa6Q==
+X-Google-Smtp-Source: AGRyM1suF2dPiURcmGK9WbFjLgebYglBZizVQFOYmypHt4B+qJRtY4JFvr8wTuDBORu+tW+FRGkDog==
+X-Received: by 2002:a7b:cc94:0:b0:39c:4507:e806 with SMTP id p20-20020a7bcc94000000b0039c4507e806mr19785729wma.91.1656335015949;
+        Mon, 27 Jun 2022 06:03:35 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id c2-20020a1c3502000000b0039c5328ad92sm17737451wma.41.2022.06.27.06.03.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 06:03:35 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 14:03:32 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v2] mfd: tc6393xb: Make disable callback return void
+Message-ID: <YrmqpN2VnjHSgMRW@google.com>
+References: <20220619082655.53728-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220627123229.GF930160@montezuma.acc.umu.se>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220619082655.53728-1-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,155 +76,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 02:32:29PM +0200, Anton Lundin wrote:
-> On 24 June, 2022 - Oleksij Rempel wrote:
+On Sun, 19 Jun 2022, Uwe Kleine-König wrote:
+
+> All implementations return 0, so simplify accordingly.
 > 
-> > Hi Anton,
-> > 
-> > On Thu, Jun 23, 2022 at 08:36:49AM +0200, Oleksij Rempel wrote:
-> > > Hi Anton,
-> > > 
-> > > Thank you for your report! I'll take a look on it ASAP.
-> > > 
-> > > Regards,
-> > > Oleksij
-> > > 
-> > > On Wed, Jun 22, 2022 at 04:16:38PM +0200, Anton Lundin wrote:
-> > > > Hi.
-> > > > 
-> > > > I've found a issue with a Dlink usb ether adapter, that can't receive
-> > > > anything until it self transmits if it's plugged in while booting, and
-> > > > doesn't have link.
-> > > > 
-> > > > Later when a cable is attached, link is detected but nothing is received
-> > > > either by daemons listening to ip address on that interface, or seen
-> > > > with tcpdump.
-> > > > 
-> > > > The dongle is a:
-> > > > D-Link Corp. DUB-E100 Fast Ethernet Adapter(rev.C1) [ASIX AX88772]
-> > > > 
-> > > > And it's detected at boot as:
-> > > > libphy: Asix MDIO Bus: probed
-> > > > Asix Electronics AX88772C usb-003:004:10: attached PHY driver (mii_bus:phy_addr=usb-003:004:10, irq=POLL)
-> > > > asix 3-10.4:1.0 eth1: register 'asix' at usb-0000:00:14.0-10.4, ASIX AX88772 USB 2.0 Ethernet, <masked-mac>
-> > > > usbcore: registered new interface driver asix
-> > > > 
-> > > > 
-> > > > While in this state, the hardware starts sending pause frames to the
-> > > > network when it has recived a couple of frames, and they look like:
-> > > > 0000   01 80 c2 00 00 01 00 00 00 00 00 00 88 08 00 01
-> > > > 0010   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > > > 0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > > > 0030   00 00 00 00 00 00 00 00 00 00 00 00
-> > > > 
-> > > > 0000   01 80 c2 00 00 01 00 00 00 00 00 00 88 08 00 01
-> > > > 0010   ff ff 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > > > 0020   00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > > > 0030   00 00 00 00 00 00 00 00 00 00 00 00
-> > > > 
-> > > > And these two frames are repeated every couple of seconds.
-> > > > 
-> > > > The card wakes up when something triggers a transmit on that card, and
-> > > > then starts receiving traffic as normal.
-> > > > 
-> > > > I've bisected this issue down to:
-> > > > "net: usb: asix: ax88772: add phylib support" (e532a096be0e)
-> > > > 
-> > > > 
-> > > > Reverting that makes the interface work as normal, even if the machine
-> > > > boots without a cable plugged in.
-> > > > 
-> > > > Another issue found with exactly the same patch is that if it's loaded
-> > > > as a module, then unloaded and loaded again, it fails to initialize the
-> > > > card with:
-> > > > 
-> > > > sysfs: cannot create duplicate filename '/devices/virtual/mdio_bus/usb-003:004'
-> > > > CPU: 0 PID: 3733 Comm: modprobe Tainted: G           O      5.15.10-core_64_preempt #3
-> > > > Hardware name:  <masked-hardware-name>
-> > > > Call Trace:
-> > > >  <TASK>
-> > > >  ? dump_stack_lvl+0x34/0x44
-> > > >  ? sysfs_warn_dup.cold+0x17/0x24
-> > > >  ? sysfs_create_dir_ns+0xbc/0xd0
-> > > >  ? kobject_add_internal+0xa6/0x260
-> > > >  ? kobject_add+0x7e/0xb0
-> > > >  ? preempt_count_add+0x68/0xa0
-> > > >  ? device_add+0x10f/0x8d0
-> > > >  ? dev_set_name+0x53/0x70
-> > > >  ? __mdiobus_register+0xc2/0x350
-> > > >  ? __devm_mdiobus_register+0x64/0xb0
-> > > >  ? ax88772_bind+0x22a/0x340 [asix]
-> > > >  ? usbnet_probe+0x346/0x870
-> > > >  ? usb_match_dynamic_id+0x8f/0xa0
-> > > >  ? usb_probe_interface+0x9b/0x150
-> > > >  ? really_probe.part.0+0x237/0x280
-> > > >  ? __driver_probe_device+0x8c/0xd0
-> > > >  ? driver_probe_device+0x1e/0xe0
-> > > >  ? __driver_attach+0xa8/0x170
-> > > >  ? __device_attach_driver+0xe0/0xe0
-> > > >  ? bus_for_each_dev+0x77/0xc0
-> > > >  ? bus_add_driver+0x10b/0x1c0
-> > > >  ? driver_register+0x8b/0xe0
-> > > >  ? usb_register_driver+0x84/0x120
-> > > >  ? 0xffffffffc06e4000
-> > > >  ? do_one_initcall+0x41/0x1f0
-> > > >  ? kmem_cache_alloc_trace+0x3f/0x1b0
-> > > >  ? do_init_module+0x5c/0x260
-> > > >  ? __do_sys_finit_module+0xa0/0xe0
-> > > >  ? do_syscall_64+0x35/0x80
-> > > >  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > > >  </TASK>
-> > > > kobject_add_internal failed for usb-003:004 with -EEXIST, don't try to register things with the same name in the same directory.
-> > > > libphy: mii_bus usb-003:004 failed to register
-> > > > asix: probe of 3-10.4:1.0 failed with error -22 
-> > > > usbcore: registered new interface driver asix
-> > > > 
-> > > > 
-> > > > Both these issues with "net: usb: asix: ax88772: add phylib support"
-> > > > (e532a096be0e) can be reproduced all the way from when it was introduced
-> > > > to linus current tree.
-> > > > 
-> > > > 
-> > > > I'm sorry to say that I don't know enough about either libphy or asix to
-> > > > figure out what cause the issues can be.
-> > 
-> > It looks like we have here 3 different bugs:
-> > - no rx before tx
-> >   addresses by this patch:
-> >   https://lore.kernel.org/all/20220624075139.3139300-1-o.rempel@pengutronix.de/
-> > - pause frames flood without advertising pause frames support
-> >   addresses by this patch:
-> >   https://lore.kernel.org/all/20220624075139.3139300-2-o.rempel@pengutronix.de/
-> > 
-> >   Can you please test this patches.
+> This is a preparation for making platform remove callbacks return void.
 > 
-> I've tested these and after these patches I think these two issues are
-> fixed.
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+> Hello,
 > 
-> If you'd like you can add:
-> Tested-by: Anton Lundin <glance@acc.umu.se>
-
-Can you please add your Tested-by directly as response to the patches.
-This will reduce some work for maintainers.
-
-> > - not everything is properly cleaned after module unload.
-> > 
-> > The last one i as bit more complicated. Lukas Wunner spend last months to solve
-> > this issues:
-> > https://lore.kernel.org/all/d1c87ebe9fc502bffcd1576e238d685ad08321e4.1655987888.git.lukas@wunner.de/
-> > 
+> compared to (implicit) v1
+> (https://lore.kernel.org/r/20220530192430.2108217-5-u.kleine-koenig@pengutronix.de)
+> this is rebased to v5.19-rc1. Up to now there is only a single patch in
+> next (next-20220617) since -rc1 touching one of the files:
 > 
-> Ok, no worries. If it's already known and fixed in later revisions, I'm
-> fine with that.
+> 	0fdebc5ec2ca ("treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_56.RULE (part 1)")
+> 
+> I don't expect any conflicts that need manual intervention.
+> 
+> Best regards
+> Uwe
+> 
+>  arch/arm/mach-pxa/eseries.c  | 3 +--
+>  arch/arm/mach-pxa/tosa.c     | 4 +---
+>  drivers/mfd/tc6393xb.c       | 5 ++---
+>  include/linux/mfd/tc6393xb.h | 2 +-
+>  4 files changed, 5 insertions(+), 9 deletions(-)
 
-OK,
+Applied, thanks.
 
-Thank you for testing.
-
-Regards,
-Oleksij
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

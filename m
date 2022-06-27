@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0223955DFF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E13B455C383
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235088AbiF0L25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
+        id S239821AbiF0MB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235276AbiF0L1b (ORCPT
+        with ESMTP id S238139AbiF0LvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:27:31 -0400
+        Mon, 27 Jun 2022 07:51:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015979FED;
-        Mon, 27 Jun 2022 04:27:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A939659D;
+        Mon, 27 Jun 2022 04:44:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA626149A;
-        Mon, 27 Jun 2022 11:27:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32DC5C3411D;
-        Mon, 27 Jun 2022 11:27:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33506612B1;
+        Mon, 27 Jun 2022 11:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38667C341CD;
+        Mon, 27 Jun 2022 11:44:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329229;
-        bh=WZXy+Bd4DgG1VVzSNOzT8zUIRZ/5VvEGPPSlCWy6ceA=;
+        s=korg; t=1656330265;
+        bh=VLQyzPYvXcOhroRTJOIwWKIJLr+kYg5ugNy72uYPY+s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r2lIVSWx7JCzB6xQrJqPjjstDD8Qh4Fi6PP3L5+8l/lMsSWIKIuhikuoOKB6xN/76
-         V2QsSkhMU2gt+bjS39zWevvNn89Z0D0KrbNFd4X5D77U/Xze+m9fumWOsDcFnhW2E7
-         QBY/ALuQj9JQYNRN3UAm6IIw/IKFJ3swQCjTuCq0=
+        b=cb282QUTV84x8dd7IUORV6SHLAIyXbknlGxp0HtLVH3HIUeAbh8Hix6cm6SZgwizN
+         O1AvdT0s9IdXvKUVdjsRGy5U8Ooagax8dNLdR57JBHNRqTbYshlUSTRk0MTFHyZ8wE
+         LbjrmD22Q7s0JwncPN7ixVCzCLOF7HD1mg9RSbwc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5.10 094/102] ARM: exynos: Fix refcount leak in exynos_map_pmu
+        stable@vger.kernel.org, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.18 132/181] iio:chemical:ccs811: rearrange iio trigger get and register
 Date:   Mon, 27 Jun 2022 13:21:45 +0200
-Message-Id: <20220627111936.255657266@linuxfoundation.org>
+Message-Id: <20220627111948.517998122@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Dmitry Rokosov <DDRokosov@sberdevices.ru>
 
-commit c4c79525042a4a7df96b73477feaf232fe44ae81 upstream.
+commit d710359c0b445e8c03e24f19ae2fb79ce7282260 upstream.
 
-of_find_matching_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
-of_node_put() checks null pointer.
+IIO trigger interface function iio_trigger_get() should be called after
+iio_trigger_register() (or its devm analogue) strictly, because of
+iio_trigger_get() acquires module refcnt based on the trigger->owner
+pointer, which is initialized inside iio_trigger_register() to
+THIS_MODULE.
+If this call order is wrong, the next iio_trigger_put() (from sysfs
+callback or "delete module" path) will dereference "default" module
+refcnt, which is incorrect behaviour.
 
-Fixes: fce9e5bb2526 ("ARM: EXYNOS: Add support for mapping PMU base address via DT")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220523145513.12341-1-linmq006@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fixes: f1f065d7ac30 ("iio: chemical: ccs811: Add support for data ready trigger")
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20220524181150.9240-5-ddrokosov@sberdevices.ru
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-exynos/exynos.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/iio/chemical/ccs811.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/arm/mach-exynos/exynos.c
-+++ b/arch/arm/mach-exynos/exynos.c
-@@ -149,6 +149,7 @@ static void exynos_map_pmu(void)
- 	np = of_find_matching_node(NULL, exynos_dt_pmu_match);
- 	if (np)
- 		pmu_base_addr = of_iomap(np, 0);
-+	of_node_put(np);
- }
+--- a/drivers/iio/chemical/ccs811.c
++++ b/drivers/iio/chemical/ccs811.c
+@@ -499,11 +499,11 @@ static int ccs811_probe(struct i2c_clien
  
- static void __init exynos_init_irq(void)
+ 		data->drdy_trig->ops = &ccs811_trigger_ops;
+ 		iio_trigger_set_drvdata(data->drdy_trig, indio_dev);
+-		indio_dev->trig = data->drdy_trig;
+-		iio_trigger_get(indio_dev->trig);
+ 		ret = iio_trigger_register(data->drdy_trig);
+ 		if (ret)
+ 			goto err_poweroff;
++
++		indio_dev->trig = iio_trigger_get(data->drdy_trig);
+ 	}
+ 
+ 	ret = iio_triggered_buffer_setup(indio_dev, NULL,
 
 

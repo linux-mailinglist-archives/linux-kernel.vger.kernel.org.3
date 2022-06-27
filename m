@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DB055DADD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119CF55D284
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233416AbiF0JHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
+        id S233560AbiF0JHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbiF0JHf (ORCPT
+        with ESMTP id S232471AbiF0JHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:07:35 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791A363A2;
-        Mon, 27 Jun 2022 02:07:33 -0700 (PDT)
-X-UUID: 23f17b2fbb3043a588c92764b0d1dd80-20220627
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:f70f43ab-e014-4ee0-9be2-df16cfa7cdc2,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:25
-X-CID-META: VersionHash:b14ad71,CLOUDID:1bda232e-1756-4fa3-be7f-474a6e4be921,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 23f17b2fbb3043a588c92764b0d1dd80-20220627
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1260323630; Mon, 27 Jun 2022 17:07:29 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 27 Jun 2022 17:07:28 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 27 Jun 2022 17:07:28 +0800
-Message-ID: <5a5d11158dd45355e5e6c3b5decbe41495bd19ad.camel@mediatek.com>
-Subject: Re: [PATCH v14 01/15] dt-bindings: mediatek,dpi: Add DP_INTF
- compatible
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 27 Jun 2022 17:07:28 +0800
-In-Reply-To: <a2612c2628eefbbf909d4847b3d0067746813f33.camel@mediatek.com>
-References: <20220624030946.14961-1-rex-bc.chen@mediatek.com>
-         <20220624030946.14961-2-rex-bc.chen@mediatek.com>
-         <a2612c2628eefbbf909d4847b3d0067746813f33.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 27 Jun 2022 05:07:45 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75916398
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:07:43 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id q9so12044698wrd.8
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:07:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=cyeQ+V4km9/2EvgWm0zwWf2s2+sPYdq3cKYPDuqN8vo=;
+        b=U3ZYJY6j0N1ghCOKh8XELTLBhAnp+6ZtxmUJ4YG1d4690N58olCy46j/PuCf31FoYN
+         KejM1sEBFhiyWFf62itChGtFjFyVlKQJSeCNFFNiCknD5cqu1kgxp2/Mim6XTekWJS4V
+         Re7jBHo0GNm99GYaQi9G4an2kxyPz1koKZmkIr2glBYTn0LTY/o6FoOLOHN7XXJtDEZ+
+         2x/RxT1NRt9jUd9a1+FHBqA+x2z2px6lt4lRLmpSLMSUkG2jofccZLtJejXzfDPp5iWL
+         cKm265BR7pPyUT2suMJZdO7PCqAbnIwSWiKL0cq6vza7gJPzA0qyKOoA8AYWR4PMWIgZ
+         VOBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=cyeQ+V4km9/2EvgWm0zwWf2s2+sPYdq3cKYPDuqN8vo=;
+        b=PymoCXC20g9zPI9TtR/fzIEixX9dBsBYjlBnEvRjNljeo9rYwJPBM5kRHer2nxGQnh
+         k1BYamnzpbXBJNRK3IJagl9N/4yDrHAXBS4zrYviFN66OSGo0tZ4U2VUuA0H6MP6Q8ED
+         LJQOb4XFBmDmcDlREW508dcCIb/P0yNNWFzu916/MeN/h41MeHNE5ei10dyFq2kfrXRA
+         9KOrKqoa+yB0DL+Yrqx1RB3MGfrIZCmDQ0Gl6Xex313LVSnTjhDrjfg4CuzA8teBHl5+
+         rX78GfRZ3f7umisM/deaYXOayQKR5loZxwhiS2xv/F8Q64RMJcjUPHCCGCb4zZYggKhY
+         8Pqw==
+X-Gm-Message-State: AJIora/VDmeYgPC0zMoh9A6wq9mVzWcFKTGfeV2d/Lq4L53IW+Jok0Kx
+        5AYgVTsHd0F3xfGfR3ayQLqaeg==
+X-Google-Smtp-Source: AGRyM1vEjNzJmNf0ZakZW+p9ZZMDGY2QxvgNATu+/8z9bq3w951/HqyXdHHVl0UQUprrm/4lq6JJ3w==
+X-Received: by 2002:a5d:64e2:0:b0:21b:b1ab:254e with SMTP id g2-20020a5d64e2000000b0021bb1ab254emr11005082wri.451.1656320862406;
+        Mon, 27 Jun 2022 02:07:42 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id r68-20020a1c2b47000000b0039c4b518df4sm15312320wmr.5.2022.06.27.02.07.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 02:07:42 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 10:07:40 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v1 02/11] mfd: intel_soc_pmic_bxtwc: Create sysfs
+ attributes using core driver's facility
+Message-ID: <YrlzXIDp8JgFfYWH@google.com>
+References: <20220616165823.4919-1-andriy.shevchenko@linux.intel.com>
+ <20220616165823.4919-2-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220616165823.4919-2-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,108 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-27 at 15:50 +0800, CK Hu wrote:
-> Hi, Bo-Chen:
-> 
-> On Fri, 2022-06-24 at 11:09 +0800, Bo-Chen Chen wrote:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > DP_INTF is similar to DPI but does not have the exact same feature
-> > set
-> > or register layouts.
-> > 
-> > DP_INTF is the sink of the display pipeline that is connected to
-> > the
-> > DisplayPort controller and encoder unit. It takes the same clocks
-> > as
-> > DPI.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > [Bo-Chen: Modify reviewers' comments.]
-> 
-> Except this line,
-> 
-> Reviewed-by: CK Hu <ck.hu@mediatek.com>
-> 
+On Thu, 16 Jun 2022, Andy Shevchenko wrote:
 
-Hello CK,
-
-What do you mean?
-Do you mean I should drop this line?
-
-BRs,
-Bo-Chen
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >  .../bindings/display/mediatek/mediatek,dpi.yaml       | 11 ++++++-
-> > --
-> > --
-> >  1 file changed, 6 insertions(+), 5 deletions(-)
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
-> > am
-> > l
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
-> > am
-> > l
-> > index 77ee1b923991..8e526a4b134e 100644
-> > ---
-> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
-> > am
-> > l
-> > +++
-> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
-> > am
-> > l
-> > @@ -4,16 +4,16 @@
-> >  $id: 
-> > http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
-> >  $schema: http://devicetree.org/meta-schemas/core.yaml#
-> >  
-> > -title: mediatek DPI Controller Device Tree Bindings
-> > +title: mediatek DPI and DP_INTF Controller
-> >  
-> >  maintainers:
-> >    - CK Hu <ck.hu@mediatek.com>
-> >    - Jitao shi <jitao.shi@mediatek.com>
-> >  
-> >  description: |
-> > -  The Mediatek DPI function block is a sink of the display
-> > subsystem
-> > and
-> > -  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a
-> > parallel
-> > -  output bus.
-> > +  The Mediatek DPI and DP_INTF function blocks are a sink of the
-> > display
-> > +  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422
-> > pixel data on a
-> > +  parallel output bus.
-> >  
-> >  properties:
-> >    compatible:
-> > @@ -24,6 +24,7 @@ properties:
-> >        - mediatek,mt8183-dpi
-> >        - mediatek,mt8186-dpi
-> >        - mediatek,mt8192-dpi
-> > +      - mediatek,mt8195-dp-intf
-> >  
-> >    reg:
-> >      maxItems: 1
-> > @@ -55,7 +56,7 @@ properties:
-> >      $ref: /schemas/graph.yaml#/properties/port
-> >      description:
-> >        Output port node. This port should be connected to the input
-> > port of an
-> > -      attached HDMI or LVDS encoder chip.
-> > +      attached HDMI, LVDS or DisplayPort encoder chip.
-> >  
-> >  required:
-> >    - compatible
+> Driver core takes care of sysfs attributes. Use this facility instead of
+> doing it explicitly in ->probe() and ->remove().
 > 
-> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/mfd/intel_soc_pmic_bxtwc.c | 23 +++++++----------------
+>  1 file changed, 7 insertions(+), 16 deletions(-)
 
+For my own reference (apply this as-is to your sign-off block):
+
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

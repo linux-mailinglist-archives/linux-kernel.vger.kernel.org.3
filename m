@@ -2,103 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE4955CFD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165B355C729
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236733AbiF0OH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
+        id S236763AbiF0OIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236697AbiF0OHx (ORCPT
+        with ESMTP id S236749AbiF0OIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:07:53 -0400
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5901312ACF;
-        Mon, 27 Jun 2022 07:07:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lo8YsPDdBOH9TT2g4EDcAKIrZ1oPIx9jlxewAjSpJR8=; b=GwztnKaqgVXNeLdjQ27GbjeQig
-        7IEjBiOFuO3QpNOJuRRs3caLXOo+ebAc77h1pDdN08p6caEyYaNPGznDtFiRCYh71WveiypxHc1ck
-        HwRHLzSD9q74rgZSmjJPIQa5EDbRWXuiYnhRL2RYgSTsQaWBsdMfEZf5FeStlEKepEY2GL91+Cvc9
-        5PAD5shGmKsn5yX+Q0MQpLJ4wKwm2NE0PtSXyzdAevrwN3gJI9qMW5l2k4ePRwoUO3+qp+yud/m4O
-        +Wzafhf/CHT/pUlcM/qhxWraqs/SRpvF9FZnSPKsZ0HrUW3MDPOR5lrfOJXwy+kxtp7muOMo24k2q
-        j+whfl2g==;
-Received: from [10.22.3.24] (helo=kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1o5pP0-006DLv-Bc; Mon, 27 Jun 2022 16:07:46 +0200
-Date:   Mon, 27 Jun 2022 16:07:39 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 2/3] regulator: dt-bindings: qcom,smd-rpm: Add PM8909
-Message-ID: <Yrm5q/2giqUDd0oa@kernkonzept.com>
-References: <20220623094614.1410180-1-stephan.gerhold@kernkonzept.com>
- <20220623094614.1410180-3-stephan.gerhold@kernkonzept.com>
- <1656091594.427255.146351.nullmailer@robh.at.kernel.org>
+        Mon, 27 Jun 2022 10:08:09 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E2E11448
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:08:07 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id h187so14734406ybg.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:08:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Sjw8Rq/SzvseVodDwQxp2+Q31Mr0tWQ4MKXsdJlU2cg=;
+        b=FNybrAKvk56tbmhGsNSol/sAk2WPCD9f/EnbfNGtYtTRxuDjK5KtlipdfEkdZ15GfR
+         2ZVGGTdXYE8JCJ73vYP045eGq1ZtgwuqKnC0ysZD0ffk/M8eLDDCoTK1+7MXH1UF8v/h
+         OmIFdtZQE8XN4VDlxAbc8cd3FHUJNWruSpWTHLSObfVxTcKInOj0mpwlSAwvhmGxXebU
+         htw640mczpUob+epPmy+ZAgZAg+JzC04mGFtVp1P15GuAjDL9Th+UMRsWwSWJZoe9+Qs
+         Q+mBhAat4RLw+HLV2uKp/c2ZKyCFZSW8QC8lGFgH/kagAIAnnCPkRitYGr0ZKOhtxwRN
+         x7BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sjw8Rq/SzvseVodDwQxp2+Q31Mr0tWQ4MKXsdJlU2cg=;
+        b=HFox9CTcv72EPhFWt9xd7U4E42Jywe21HThzeidpPMFzZsYgSklnuzK/18a1ryuRdl
+         J0UcJ6dGAvLwMG2ZGLsUyWFLx8UCAlZLEGktFXz05MhdUcnsnqPTc+/1CwKIUwfZhPsy
+         Vv9FpaJkrGCWDt/UV2MVSnziNeyKTc5T3MDDPJxv3U5zKqzfPgUASfyM5SmRlcSHedO2
+         a5rC3qBBZ09JVsV5qaIRc+HKXucFoxsY/SXX35POZlCgz0zL3Zmp9x8UgLP86vs+kIxC
+         iZfWGFdgQ/vOVGgr+B18jLaeYytPTz7J5AjFXqbfVU+zas+Rrhr8gPPtLXFfNZUKt3YM
+         i/vA==
+X-Gm-Message-State: AJIora8uIhpH3XqAgsFgWdl6Zc+rs+9DUh6W5BaLeDd3Imb4FVUkxr+Z
+        GOvW056GjNBJJDdUri8KqmVAcTdeujrFNCuNs4Oo1w==
+X-Google-Smtp-Source: AGRyM1uowX5w9MG4KUhH5mzYPs/nJYOessQKIWZ2T27hbR78LZ0upAkQZTZYPIlSVQsuDxp8yWRUmqzbJ4KyVb5DKSc=
+X-Received: by 2002:a25:d957:0:b0:66c:9476:708f with SMTP id
+ q84-20020a25d957000000b0066c9476708fmr10600680ybg.427.1656338886354; Mon, 27
+ Jun 2022 07:08:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1656091594.427255.146351.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CADvbK_csvmkKe46hT9792=+Qcjor2EvkkAnr--CJK3NGX-N9BQ@mail.gmail.com>
+ <CADvbK_eQUmb942vC+bG+NRzM1ki1LiCydEDR1AezZ35Jvsdfnw@mail.gmail.com>
+ <20220623185730.25b88096@kernel.org> <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
+ <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
+ <20220624070656.GE79500@shbuild999.sh.intel.com> <20220624144358.lqt2ffjdry6p5u4d@google.com>
+ <20220625023642.GA40868@shbuild999.sh.intel.com> <20220627023812.GA29314@shbuild999.sh.intel.com>
+ <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com> <20220627123415.GA32052@shbuild999.sh.intel.com>
+In-Reply-To: <20220627123415.GA32052@shbuild999.sh.intel.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 27 Jun 2022 16:07:55 +0200
+Message-ID: <CANn89iJAoYCebNbXpNMXRoDUkFMhg9QagetVU9NZUq+GnLMgqQ@mail.gmail.com>
+Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Shakeel Butt <shakeelb@google.com>, Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        network dev <netdev@vger.kernel.org>,
+        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 11:26:34AM -0600, Rob Herring wrote:
-> On Thu, 23 Jun 2022 11:46:13 +0200, Stephan Gerhold wrote:
-> > Document the "qcom,rpm-pm8909-regulators" compatible for describing
-> > the regulators available in the PM8909 PMIC (controlled via the RPM
-> > firmware).
-> > 
-> > PM8909 is very similar to the existing PM8916 but lacks 3 of the
-> > regulators (s3, s4 and l16).
-> > 
-> > Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-> > ---
-> >  .../devicetree/bindings/regulator/qcom,smd-rpm-regulator.yaml | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/
-> 
-> 
-> pm8994-regulators: 'vdd_lvs1_2' does not match any of the regexes: '.*-supply$', '^((s|l|lvs|5vs)[0-9]*)|(boost-bypass)|(bob)$', 'pinctrl-[0-9]+'
-> 	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dtb
-> 	arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dtb
-> 	arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dtb
-> 
+On Mon, Jun 27, 2022 at 2:34 PM Feng Tang <feng.tang@intel.com> wrote:
+>
+> On Mon, Jun 27, 2022 at 10:46:21AM +0200, Eric Dumazet wrote:
+> > On Mon, Jun 27, 2022 at 4:38 AM Feng Tang <feng.tang@intel.com> wrote:
+> [snip]
+> > > > >
+> > > > > Thanks Feng. Can you check the value of memory.kmem.tcp.max_usage_in_bytes
+> > > > > in /sys/fs/cgroup/memory/system.slice/lkp-bootstrap.service after making
+> > > > > sure that the netperf test has already run?
+> > > >
+> > > > memory.kmem.tcp.max_usage_in_bytes:0
+> > >
+> > > Sorry, I made a mistake that in the original report from Oliver, it
+> > > was 'cgroup v2' with a 'debian-11.1' rootfs.
+> > >
+> > > When you asked about cgroup info, I tried the job on another tbox, and
+> > > the original 'job.yaml' didn't work, so I kept the 'netperf' test
+> > > parameters and started a new job which somehow run with a 'debian-10.4'
+> > > rootfs and acutally run with cgroup v1.
+> > >
+> > > And as you mentioned cgroup version does make a big difference, that
+> > > with v1, the regression is reduced to 1% ~ 5% on different generations
+> > > of test platforms. Eric mentioned they also got regression report,
+> > > but much smaller one, maybe it's due to the cgroup version?
+> >
+> > This was using the current net-next tree.
+> > Used recipe was something like:
+> >
+> > Make sure cgroup2 is mounted or mount it by mount -t cgroup2 none $MOUNT_POINT.
+> > Enable memory controller by echo +memory > $MOUNT_POINT/cgroup.subtree_control.
+> > Create a cgroup by mkdir $MOUNT_POINT/job.
+> > Jump into that cgroup by echo $$ > $MOUNT_POINT/job/cgroup.procs.
+> >
+> > <Launch tests>
+> >
+> > The regression was smaller than 1%, so considered noise compared to
+> > the benefits of the bug fix.
+>
+> Yes, 1% is just around noise level for a microbenchmark.
+>
+> I went check the original test data of Oliver's report, the tests was
+> run 6 rounds and the performance data is pretty stable (0Day's report
+> will show any std deviation bigger than 2%)
+>
+> The test platform is a 4 sockets 72C/144T machine, and I run the
+> same job (nr_tasks = 25% * nr_cpus) on one CascadeLake AP (4 nodes)
+> and one Icelake 2 sockets platform, and saw 75% and 53% regresson on
+> them.
+>
+> In the first email, there is a file named 'reproduce', it shows the
+> basic test process:
+>
+> "
+>   use 'performane' cpufre  governor for all CPUs
+>
+>   netserver -4 -D
+>   modprobe sctp
+>   netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
+>   netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
+>   netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
+>   (repeat 36 times in total)
+>   ...
+>
+> "
+>
+> Which starts 36 (25% of nr_cpus) netperf clients. And the clients number
+> also matters, I tried to increase the client number from 36 to 72(50%),
+> and the regression is changed from 69.4% to 73.7%"
+>
 
-Thanks for the (automated) report, Rob! :)
+This seems like a lot of opportunities for memcg folks :)
 
-The failure is unrelated to my patch. It seems to be a simple typo in
-the device tree (not a mistake in the DT schema) so I posted a quick fix
-in a separate patch:
+struct page_counter has poor field placement [1], and no per-cpu cache.
 
-https://lore.kernel.org/linux-arm-msm/20220627135938.2901871-1-stephan.gerhold@kernkonzept.com/
+[1] "atomic_long_t usage" is sharing cache line with read mostly fields.
 
-It should land separately through the Qualcomm tree so no need to wait
-for it to be applied. :)
+(struct mem_cgroup also has poor field placement, mainly because of
+struct page_counter)
 
-Thanks,
-Stephan
+    28.69%  [kernel]       [k] copy_user_enhanced_fast_string
+    16.13%  [kernel]       [k] intel_idle_irq
+     6.46%  [kernel]       [k] page_counter_try_charge
+     6.20%  [kernel]       [k] __sk_mem_reduce_allocated
+     5.68%  [kernel]       [k] try_charge_memcg
+     5.16%  [kernel]       [k] page_counter_cancel
+
+
+
+> Thanks,
+> Feng
+>
+> > >
+> > > Thanks,
+> > > Feng

@@ -2,109 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C8C55D6A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E6255D191
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242369AbiF0Xwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S242330AbiF0X4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242350AbiF0Xwt (ORCPT
+        with ESMTP id S235320AbiF0Xz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:52:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59378E0B1;
-        Mon, 27 Jun 2022 16:52:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F13F161629;
-        Mon, 27 Jun 2022 23:52:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43895C34115;
-        Mon, 27 Jun 2022 23:52:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656373968;
-        bh=9o8m950DV1fTZ5y8Xg05BQF6yJMVzXBC+OPeMCZsUGE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=ITNEpab73iKnpFuZO1fsLuu9Bp4nVLQIXMSgxrBjfMrS9jnspsnARvsN/0PoDyVR0
-         xy9klbC7mVhKey7HpboQSJpekk8anFbbm392b1XIHuRLPtRTaAPKSYCzl5kyws+OCL
-         1S7XOLCZEoYPQGVw3TLxqyug+ehZnOARxSXZmyB8pcmHuU1i+sPhBX1g7fi3MhFSyg
-         mQ4MZppTFdi0jllcIlygL9Y7ZlbfJVP0T5TVQ6AG+Qdo2SFryIkaUaZXVasA9GcgMD
-         2rh6eMrfZiwwaiJ8dYibmYf43ooR1dHH6ISXlMenlW/GEKwnCarGn61wVBmrtN4Cmd
-         KeWgHWPa0o+Yg==
-Content-Type: text/plain; charset="utf-8"
+        Mon, 27 Jun 2022 19:55:58 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875EF186E7;
+        Mon, 27 Jun 2022 16:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656374157; x=1687910157;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rq/4gEVKFpg5ay0+GYJpcJLfsj+qRRQffLwqTvVaOEs=;
+  b=MXIHmMizfzvBr8uPqhS7UiuhmsNYM3ZFizOpOI+m2FpnA94bEJHZJhwI
+   zBku+iiR7bzlrEoxi1dqH312+G2UO5qDgBzaa3LUPIQ/7OMUSGVEYyevO
+   EzAE/qssrxVR3j1vGZOE8u02JCWPqY8TYPCbwFdJFlx7ZXjuoHC3rg6cI
+   Y=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jun 2022 16:55:56 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 16:55:56 -0700
+Received: from hu-collinsd-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 27 Jun 2022 16:55:56 -0700
+From:   David Collins <quic_collinsd@quicinc.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, <linux-kernel@vger.kernel.org>
+CC:     David Collins <quic_collinsd@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Ankit Gupta <ankgupta@codeaurora.org>,
+        "Gilad Avidov" <gavidov@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] spmi: trace: fix stack-out-of-bound access in SPMI tracing functions
+Date:   Mon, 27 Jun 2022 16:55:12 -0700
+Message-ID: <20220627235512.2272783-1-quic_collinsd@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220627161642.1.Ie7b480cd99e2c13319220cbc108caf2bcd41286b@changeid>
-References: <20220627161642.1.Ie7b480cd99e2c13319220cbc108caf2bcd41286b@changeid>
-Subject: Re: [PATCH] soc: qcom: cmd-db: replace strscpy_pad() with strncpy()
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>
-Date:   Mon, 27 Jun 2022 16:52:46 -0700
-User-Agent: alot/0.10
-Message-Id: <20220627235248.43895C34115@smtp.kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Douglas Anderson (2022-06-27 16:17:00)
-> Commit ac0126a01735 ("soc: qcom: cmd-db: replace strncpy() with
-> strscpy_pad()") breaks booting on my sc7280-herobrine-herobrine
-> device. From printouts I see that at bootup the function is called
-> with an id of "lnbclka2" which is 8 bytes big.
->=20
-> Previously all 8 bytes of this string were copied to the
-> destination. Now only 7 bytes will be copied since strscpy_pad() saves
-> a byte for '\0' termination.
->=20
-> We don't need the '\0' termination in the destination. Let's go back
-> to strncpy(). According to the warning:
->   If a caller is using non-NUL-terminated strings, strncpy() can still
->   be used, but destinations should be marked with the __nonstring
->   attribute to avoid future compiler warnings.
-> ...so we'll do that.
->=20
-> Fixes: ac0126a01735 ("soc: qcom: cmd-db: replace strncpy() with strscpy_p=
-ad()")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->=20
->  drivers/soc/qcom/cmd-db.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/soc/qcom/cmd-db.c b/drivers/soc/qcom/cmd-db.c
-> index c5137c25d819..0aafe90277bc 100644
-> --- a/drivers/soc/qcom/cmd-db.c
-> +++ b/drivers/soc/qcom/cmd-db.c
-> @@ -141,14 +141,14 @@ static int cmd_db_get_header(const char *id, const =
-struct entry_header **eh,
->         const struct rsc_hdr *rsc_hdr;
->         const struct entry_header *ent;
->         int ret, i, j;
-> -       u8 query[8];
-> +       u8 query[8] __nonstring;
+trace_spmi_write_begin() and trace_spmi_read_end() both call
+memcpy() with a length of "len + 1".  This leads to one extra
+byte being read beyond the end of the specified buffer.  Fix
+this out-of-bound memory access by using a length of "len"
+instead.
 
-Since you're already here, can you change 8 to be sizeof(ent->id)? That
-would directly tie the two lengths together so that one can't change and
-then the carefully crafted strncpy() fails again.
+Here is a KASAN log showing the issue:
 
-> =20
->         ret =3D cmd_db_ready();
->         if (ret)
->                 return ret;
-> =20
->         /* Pad out query string to same length as in DB */
-> -       strscpy_pad(query, id, sizeof(query));
-> +       strncpy(query, id, sizeof(query));
+BUG: KASAN: stack-out-of-bounds in trace_event_raw_event_spmi_read_end+0x1d0/0x234
+Read of size 2 at addr ffffffc0265b7540 by task thermal@2.0-ser/1314
+...
+Call trace:
+ dump_backtrace+0x0/0x3e8
+ show_stack+0x2c/0x3c
+ dump_stack_lvl+0xdc/0x11c
+ print_address_description+0x74/0x384
+ kasan_report+0x188/0x268
+ kasan_check_range+0x270/0x2b0
+ memcpy+0x90/0xe8
+ trace_event_raw_event_spmi_read_end+0x1d0/0x234
+ spmi_read_cmd+0x294/0x3ac
+ spmi_ext_register_readl+0x84/0x9c
+ regmap_spmi_ext_read+0x144/0x1b0 [regmap_spmi]
+ _regmap_raw_read+0x40c/0x754
+ regmap_raw_read+0x3a0/0x514
+ regmap_bulk_read+0x418/0x494
+ adc5_gen3_poll_wait_hs+0xe8/0x1e0 [qcom_spmi_adc5_gen3]
+ ...
+ __arm64_sys_read+0x4c/0x60
+ invoke_syscall+0x80/0x218
+ el0_svc_common+0xec/0x1c8
+ ...
+
+addr ffffffc0265b7540 is located in stack of task thermal@2.0-ser/1314 at offset 32 in frame:
+ adc5_gen3_poll_wait_hs+0x0/0x1e0 [qcom_spmi_adc5_gen3]
+
+this frame has 1 object:
+ [32, 33) 'status'
+
+Memory state around the buggy address:
+ ffffffc0265b7400: 00 00 00 00 00 00 00 00 00 00 00 00 f1 f1 f1 f1
+ ffffffc0265b7480: 04 f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
+>ffffffc0265b7500: 00 00 00 00 f1 f1 f1 f1 01 f3 f3 f3 00 00 00 00
+                                           ^
+ ffffffc0265b7580: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffffc0265b7600: f1 f1 f1 f1 01 f2 07 f2 f2 f2 01 f3 00 00 00 00
+==================================================================
+
+Fixes: a9fce374815d ("spmi: add command tracepoints for SPMI")
+Cc: stable@vger.kernel.org
+Signed-off-by: David Collins <quic_collinsd@quicinc.com>
+---
+ include/trace/events/spmi.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/include/trace/events/spmi.h b/include/trace/events/spmi.h
+index 8b60efe18ba6..a6819fd85cdf 100644
+--- a/include/trace/events/spmi.h
++++ b/include/trace/events/spmi.h
+@@ -21,15 +21,15 @@ TRACE_EVENT(spmi_write_begin,
+ 		__field		( u8,         sid       )
+ 		__field		( u16,        addr      )
+ 		__field		( u8,         len       )
+-		__dynamic_array	( u8,   buf,  len + 1   )
++		__dynamic_array	( u8,   buf,  len       )
+ 	),
+ 
+ 	TP_fast_assign(
+ 		__entry->opcode = opcode;
+ 		__entry->sid    = sid;
+ 		__entry->addr   = addr;
+-		__entry->len    = len + 1;
+-		memcpy(__get_dynamic_array(buf), buf, len + 1);
++		__entry->len    = len;
++		memcpy(__get_dynamic_array(buf), buf, len);
+ 	),
+ 
+ 	TP_printk("opc=%d sid=%02d addr=0x%04x len=%d buf=0x[%*phD]",
+@@ -92,7 +92,7 @@ TRACE_EVENT(spmi_read_end,
+ 		__field		( u16,        addr      )
+ 		__field		( int,        ret       )
+ 		__field		( u8,         len       )
+-		__dynamic_array	( u8,   buf,  len + 1   )
++		__dynamic_array	( u8,   buf,  len       )
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -100,8 +100,8 @@ TRACE_EVENT(spmi_read_end,
+ 		__entry->sid    = sid;
+ 		__entry->addr   = addr;
+ 		__entry->ret    = ret;
+-		__entry->len    = len + 1;
+-		memcpy(__get_dynamic_array(buf), buf, len + 1);
++		__entry->len    = len;
++		memcpy(__get_dynamic_array(buf), buf, len);
+ 	),
+ 
+ 	TP_printk("opc=%d sid=%02d addr=0x%04x ret=%d len=%02d buf=0x[%*phD]",
+-- 
+2.25.1
+

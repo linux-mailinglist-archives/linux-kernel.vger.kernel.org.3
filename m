@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D38C55CF2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F7E55D27F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239458AbiF0QvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
+        id S239529AbiF0QvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239430AbiF0QvG (ORCPT
+        with ESMTP id S239429AbiF0QvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:51:06 -0400
+        Mon, 27 Jun 2022 12:51:12 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05B1F1115B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:51:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 047DF12090
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:51:07 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7F081758;
-        Mon, 27 Jun 2022 09:51:05 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E18AD175A;
+        Mon, 27 Jun 2022 09:51:07 -0700 (PDT)
 Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EC1023F792;
-        Mon, 27 Jun 2022 09:51:03 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E53FD3F792;
+        Mon, 27 Jun 2022 09:51:05 -0700 (PDT)
 From:   Sudeep Holla <sudeep.holla@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Sudeep Holla <sudeep.holla@arm.com>,
@@ -36,9 +36,9 @@ Cc:     Sudeep Holla <sudeep.holla@arm.com>,
         Pierre Gondois <pierre.gondois@arm.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-riscv@lists.infradead.org, Gavin Shan <gshan@redhat.com>
-Subject: [PATCH v5 04/19] cacheinfo: Move cache_leaves_are_shared out of CONFIG_OF
-Date:   Mon, 27 Jun 2022 17:50:32 +0100
-Message-Id: <20220627165047.336669-5-sudeep.holla@arm.com>
+Subject: [PATCH v5 05/19] cacheinfo: Add support to check if last level cache(LLC) is valid or shared
+Date:   Mon, 27 Jun 2022 17:50:33 +0100
+Message-Id: <20220627165047.336669-6-sudeep.holla@arm.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627165047.336669-1-sudeep.holla@arm.com>
 References: <20220627165047.336669-1-sudeep.holla@arm.com>
@@ -53,66 +53,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cache_leaves_are_shared is already used even with ACPI and PPTT. It
-checks if the cache leaves are the shared based on fw_token pointer.
-However it is defined conditionally only if CONFIG_OF is enabled which
-is wrong.
+It is useful to have helper to check if the given two CPUs share last
+level cache. We can do that check by comparing fw_token or by comparing
+the cache ID. Currently we check just for fw_token as the cache ID is
+optional.
 
-Move the function cache_leaves_are_shared out of CONFIG_OF and keep it
-generic. It also handles the case where both OF and ACPI is not defined.
+This helper can be used to build the llc_sibling during arch specific
+topology parsing and feeding information to the sched_domains. This also
+helps to get rid of llc_id in the CPU topology as it is sort of duplicate
+information.
 
-Link: https://lore.kernel.org/r/20220621192034.3332546-5-sudeep.holla@arm.com
+Also add helper to check if the llc information in cacheinfo is valid
+or not.
+
+Link: https://lore.kernel.org/r/20220621192034.3332546-6-sudeep.holla@arm.com
 Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
 Reviewed-by: Gavin Shan <gshan@redhat.com>
 Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
- drivers/base/cacheinfo.c | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+ drivers/base/cacheinfo.c  | 26 ++++++++++++++++++++++++++
+ include/linux/cacheinfo.h |  2 ++
+ 2 files changed, 28 insertions(+)
 
 diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-index e13ef41763e4..2cea9201f31c 100644
+index 2cea9201f31c..fdc1baa342f1 100644
 --- a/drivers/base/cacheinfo.c
 +++ b/drivers/base/cacheinfo.c
-@@ -33,13 +33,21 @@ struct cpu_cacheinfo *get_cpu_cacheinfo(unsigned int cpu)
- 	return ci_cacheinfo(cpu);
- }
- 
--#ifdef CONFIG_OF
- static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
- 					   struct cacheinfo *sib_leaf)
- {
-+	/*
-+	 * For non DT/ACPI systems, assume unique level 1 caches,
-+	 * system-wide shared caches for all other levels. This will be used
-+	 * only if arch specific code has not populated shared_cpu_map
-+	 */
-+	if (!(IS_ENABLED(CONFIG_OF) || IS_ENABLED(CONFIG_ACPI)))
-+		return !(this_leaf->level == 1);
-+
+@@ -47,6 +47,32 @@ static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
  	return sib_leaf->fw_token == this_leaf->fw_token;
  }
  
-+#ifdef CONFIG_OF
++bool last_level_cache_is_valid(unsigned int cpu)
++{
++	struct cacheinfo *llc;
++
++	if (!cache_leaves(cpu))
++		return false;
++
++	llc = per_cpu_cacheinfo_idx(cpu, cache_leaves(cpu) - 1);
++
++	return !!llc->fw_token;
++}
++
++bool last_level_cache_is_shared(unsigned int cpu_x, unsigned int cpu_y)
++{
++	struct cacheinfo *llc_x, *llc_y;
++
++	if (!last_level_cache_is_valid(cpu_x) ||
++	    !last_level_cache_is_valid(cpu_y))
++		return false;
++
++	llc_x = per_cpu_cacheinfo_idx(cpu_x, cache_leaves(cpu_x) - 1);
++	llc_y = per_cpu_cacheinfo_idx(cpu_y, cache_leaves(cpu_y) - 1);
++
++	return cache_leaves_are_shared(llc_x, llc_y);
++}
++
+ #ifdef CONFIG_OF
  /* OF properties to query for a given cache type */
  struct cache_type_info {
- 	const char *size_prop;
-@@ -193,16 +201,6 @@ static int cache_setup_of_node(unsigned int cpu)
- }
- #else
- static inline int cache_setup_of_node(unsigned int cpu) { return 0; }
--static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
--					   struct cacheinfo *sib_leaf)
--{
--	/*
--	 * For non-DT/ACPI systems, assume unique level 1 caches, system-wide
--	 * shared caches for all other levels. This will be used only if
--	 * arch specific code has not populated shared_cpu_map
--	 */
--	return !(this_leaf->level == 1);
--}
- #endif
- 
- int __weak cache_setup_acpi(unsigned int cpu)
+diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
+index 4ff37cb763ae..7e429bc5c1a4 100644
+--- a/include/linux/cacheinfo.h
++++ b/include/linux/cacheinfo.h
+@@ -82,6 +82,8 @@ struct cpu_cacheinfo *get_cpu_cacheinfo(unsigned int cpu);
+ int init_cache_level(unsigned int cpu);
+ int populate_cache_leaves(unsigned int cpu);
+ int cache_setup_acpi(unsigned int cpu);
++bool last_level_cache_is_valid(unsigned int cpu);
++bool last_level_cache_is_shared(unsigned int cpu_x, unsigned int cpu_y);
+ #ifndef CONFIG_ACPI_PPTT
+ /*
+  * acpi_find_last_cache_level is only called on ACPI enabled
 -- 
 2.36.1
 

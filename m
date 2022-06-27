@@ -2,119 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A85555B566
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 04:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30DE55B56D
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 04:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231913AbiF0Cwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 22:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S231998AbiF0Cz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 22:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231855AbiF0Cwj (ORCPT
+        with ESMTP id S231939AbiF0Czx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 22:52:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 247593894
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 19:52:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656298357;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JakvLevS0YnBGyhibLY4QkJ72ieVyrb1/yRcRNc1BYw=;
-        b=W8ML5LPRh1Dp19WIipWlhBzHAMl6U9R34xgQRkHshJRBzphD5jF9eewHINnC5IFZLUcIoj
-        zewTjSvAUlzMQEfXS0n1sqln+EWezQ5MZPthIFTCN/Rqif7QmA6OSjxk6WNYA9QwNhbanv
-        TdqBcOKuPM0HJy8io1UwvkuNw9iqp7M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-3-3tZgnw0DPyKkAw1P9ym7bg-1; Sun, 26 Jun 2022 22:52:32 -0400
-X-MC-Unique: 3tZgnw0DPyKkAw1P9ym7bg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8B95D811E75;
-        Mon, 27 Jun 2022 02:52:31 +0000 (UTC)
-Received: from localhost (ovpn-13-65.pek2.redhat.com [10.72.13.65])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B0D6F40CFD05;
-        Mon, 27 Jun 2022 02:52:29 +0000 (UTC)
-Date:   Mon, 27 Jun 2022 10:52:26 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Eric Biederman <ebiederm@xmission.com>,
+        Sun, 26 Jun 2022 22:55:53 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5143885;
+        Sun, 26 Jun 2022 19:55:51 -0700 (PDT)
+X-UUID: 873b2e5b8af246f98b4a3f98904a208b-20220627
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:d392d537-bd5d-437e-96ca-a596b17dec9a,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,A
+        CTION:release,TS:95
+X-CID-INFO: VERSION:1.1.6,REQID:d392d537-bd5d-437e-96ca-a596b17dec9a,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,A
+        CTION:quarantine,TS:95
+X-CID-META: VersionHash:b14ad71,CLOUDID:d98890ea-f7af-4e69-92ee-0fd74a0c286c,C
+        OID:aba167f6f9b4,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 873b2e5b8af246f98b4a3f98904a208b-20220627
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1182116663; Mon, 27 Jun 2022 10:55:43 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 27 Jun 2022 10:55:43 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 27 Jun 2022 10:55:42 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        liushixin <liushixin2@huawei.com>
-Subject: Re: [PATCH 5/5] arm64: kdump: Don't defer the reservation of crash
- high memory
-Message-ID: <Yrkbak66vYT55H4x@MiWiFi-R3L-srv>
-References: <20220613080932.663-1-thunder.leizhen@huawei.com>
- <20220613080932.663-6-thunder.leizhen@huawei.com>
- <YrFYHYgX3mC//t2l@MiWiFi-R3L-srv>
- <3f66323d-f371-b931-65fb-edfae0f01c88@huawei.com>
- <YrIIJkhKWSuAqkCx@arm.com>
- <YrLUREAoBMSZo7RR@MiWiFi-R3L-srv>
- <YrRzvO5F0dumsbAU@arm.com>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <nicolas.dufresne@collabora.com>, <wenst@chromium.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
+        <maoguang.meng@mediatek.com>, kyrie wu <kyrie.wu@mediatek.com>,
+        <srv_heupstream@mediatek.com>
+Subject: [V4,0/8] Support multi-hardware jpeg decoder for MT8195
+Date:   Mon, 27 Jun 2022 10:55:32 +0800
+Message-ID: <20220627025540.8901-1-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrRzvO5F0dumsbAU@arm.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/23/22 at 03:07pm, Catalin Marinas wrote:
-> On Wed, Jun 22, 2022 at 04:35:16PM +0800, Baoquan He wrote:
-> > On 06/21/22 at 07:04pm, Catalin Marinas wrote:
-> > > The problem with splitting is that you can end up with two entries in
-> > > the TLB for the same VA->PA mapping (e.g. one for a 4KB page and another
-> > > for a 2MB block). In the lucky case, the CPU will trigger a TLB conflict
-> > > abort (but can be worse like loss of coherency).
-> > 
-> > Thanks for this explanation. Is this a drawback of arm64 design? X86
-> > code do the same thing w/o issue, is there way to overcome this on
-> > arm64 from hardware or software side?
-> 
-> It is a drawback of the arm64 implementations. Having multiple TLB
-> entries for the same VA would need additional logic in hardware to
-> detect, so the microarchitects have pushed back. In ARMv8.4, some
-> balanced was reached with FEAT_BBM so that the only visible side-effect
-> is a potential TLB conflict abort that could be resolved by software.
+From: kyrie wu <kyrie.wu@mediatek.com>
 
-I see, thx.
+This series adds support for multi hardware jpeg decoding,
+by first adding use of_platform_populate to manage each hardware
+information: interrupt, clock, register bases and power.
+Secondly add decoding work queue to deal with the decoding requests
+of multi-hardware at the same time. Lastly, add output picture
+reorder function interface to eliminate the out of order images.
 
-> 
-> > I ever got a arm64 server with huge memory, w or w/o crashkernel setting 
-> > have different bootup time. And the more often TLB miss and flush will
-> > cause performance cost. It is really a pity if we have very powerful
-> > arm64 cpu and system capacity, but bottlenecked by this drawback.
-> 
-> Is it only the boot time affected or the runtime performance as well?
+This series has been tested with both MT8195.
+Decoding worked for this chip.
 
-Sorry for late reply. What I observerd is the boot time serious latecy
-with huge memory. Since the timestamp is not available at that time,
-we can't tell the number. I didn't notice the runtime performance.
+Patch 1 Adds jpeg decoder dt-bindings for mt8195
+
+Patches 2 jpeg decoder builds three module for using Multi-HW,
+export some functions to make them visible by other modules.
+
+Patch 3 use of_platform_populate to manage multi-hardware.
+
+Patch 4 add jpeg decoding timeout function to judge hardware timeout.
+
+Patch 5 add decoding work queue to deal with multi-hardware decoding
+at the same time.
+
+Patch 6 add output picture reorder function to order images.
+
+Patch 7 refactor jpegdec func interface for HW working.
+
+Patch 8 add stop cmd function to deal with EOS operation.
+
+---
+This series patches dependent on:
+media_stage tree:
+[1]
+https://git.linuxtv.org/media_stage.git/commit/?id=b3627647f9ea7473d10fb08a95fd7c4133a17ca4
+
+patch1 new jpegdec dt-bindings included files
+[2] MM IOMMU binding:
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220217113453.13658-2-yong.wu@mediatek.com/
+
+[3] MT8195 power domain:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=580579
+
+Changes compared with v3:
+- some modifications for patch v3's review comments.
+
+Changes compared with v2:
+- add stop cmd function.
+- some modifications for patch v1's review comments.
+
+Changes compared with v1:
+- new yaml file for mt8195 jpeg decoder.
+- some modifications for patch v1's review comments.
+
+kyrie wu (8):
+  dt-bindings: mediatek: Add mediatek,mt8195-jpgdec compatible
+  media: mtk-jpegdec: export jpeg decoder functions
+  media: mtk-jpegdec: manage jpegdec multi-hardware
+  media: mtk-jpegdec: add jpegdec timeout func interface
+  media: mtk-jpegdec: add jpeg decode worker interface
+  media: mtk-jpegdec: add output pic reorder interface
+  media: mtk-jpegdec: refactor jpegdec func interface
+  mtk-jpegdec: add stop cmd interface for jpgdec
+
+ .../media/mediatek,mt8195-jpegdec.yaml        | 176 ++++++++++
+ drivers/media/platform/mediatek/jpeg/Makefile |   5 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 246 +++++++++++++-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.h    |  47 +++
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 310 ++++++++++++++++--
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.h  |   3 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_reg.h |   1 +
+ 7 files changed, 754 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+
+-- 
+2.18.0
 

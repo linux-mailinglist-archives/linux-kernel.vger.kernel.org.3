@@ -2,194 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B628255D7F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BBF255D942
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239475AbiF0QeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33918 "EHLO
+        id S239483AbiF0Qfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234722AbiF0QeH (ORCPT
+        with ESMTP id S234722AbiF0Qfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:34:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE77DEA2;
-        Mon, 27 Jun 2022 09:34:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97040B818E1;
-        Mon, 27 Jun 2022 16:34:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F12AC341CB;
-        Mon, 27 Jun 2022 16:34:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656347643;
-        bh=/SrPj904ouZSQFbqV4kyfH3imhY4twalKi5RBsFEDXg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hOiOupAlz0TGohr1zjOI5lFppGqzRMTEsnXwUTjo+AoOMM6Gpog71SfivxPwIX7NV
-         iXB4scHnRb8F21nU9UWDw3UJPTycIN4itNmgWilRZJoxPN/ykb4KNUwBCASRz2g8B5
-         ozEcRcl0G9O6t24gpWsacxQyuRb82ttrYlvzpT5chxphOl/fxEh/ZzLG6Iwp5yyJBa
-         I6G7FBcxCOwrsgR4to3Kezu+lQsavJbnz+NbIJG4Iin/YGpbkXyITEBWjaEAY7wjGG
-         zm3V3Dpkg2/z1CzyK/M+yUiv7tHtUQTptE2M+6o50uuxDkrnO+NPnVCHt0JoBNBozO
-         Fy8qOM9M2nZGg==
-Received: by mail-oi1-f177.google.com with SMTP id r82so4854036oig.2;
-        Mon, 27 Jun 2022 09:34:03 -0700 (PDT)
-X-Gm-Message-State: AJIora9EoGDfDF3q1tabo+eDjhUAKOGyv/WVxXd4k5vDJl2FQbpp1ZcL
-        r4qSU9zPWeoOtiJRu2f8zSYBJJjIy4ozMqnIV6U=
-X-Google-Smtp-Source: AGRyM1vx0evnQKAh1ZRdKNDvgSVxe65OJG5sTTVLkDoO84Dm1BfKlU9Oq5kS74fbNmzzvJd58LGrRlW4KWp06rIXVKM=
-X-Received: by 2002:a05:6808:300e:b0:32c:425e:df34 with SMTP id
- ay14-20020a056808300e00b0032c425edf34mr8224110oib.126.1656347642388; Mon, 27
- Jun 2022 09:34:02 -0700 (PDT)
+        Mon, 27 Jun 2022 12:35:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C950FDEC0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:35:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656347740;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VXkvf9Dz/3Rc1tZTIiOEIYW6xJ4bF2M7kN20MmYwhCw=;
+        b=h7N5dsE3RRNoiAHhU5qHX2LpBWhww4q1FTDPQEeG+5G292ktLnV/6IE3lujI3nJCxuaJfr
+        8DaEYT32X3gauvMSEheeQe47m79a3zzTsAmPFkBWM9YnpzdAgYtNryMQujveBXy2kVw2Qw
+        CG3UNs5p67XMLD777kn1wHsohwbgZX8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-646-8q6G59CYPKi2RTIzlc0YdA-1; Mon, 27 Jun 2022 12:35:38 -0400
+X-MC-Unique: 8q6G59CYPKi2RTIzlc0YdA-1
+Received: by mail-wm1-f70.google.com with SMTP id v184-20020a1cacc1000000b0039c7efa3e95so3781396wme.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:35:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=VXkvf9Dz/3Rc1tZTIiOEIYW6xJ4bF2M7kN20MmYwhCw=;
+        b=faKLtuwW6VMj1tygbiE6m0AR5UlgvJTw3B4yfxTDgk7NcVQvBnXgi7OZ5woaVs4AQj
+         ofklH+YTODqv2XJLHFpxdygscZn4peneoItayBTXNpmy7r1P8MgS+0ycUDCi2pq6h5NH
+         F5hLvRlhzJDCcl5s624RYBGr7Cb3pK7LmBpLMzpnsPVN3gto5m95svFbZsxqruUc+LAk
+         LzOQ4o94v9Sj0oUT++gOynSBQWf9LuIHOrQAX9qw7lwKTHD1QnctWx/ak2X7hFG/QFV4
+         66uzP/JmFBvaTO8UG0pCeolWldhT1wJrFP1wiByOxhRRLb4vYOSxr4kFsPXUr4U2WBn6
+         XbBg==
+X-Gm-Message-State: AJIora9pbPiPy1Wn9rh+RGtoWo+q/jf/HRgFMhsccxHAeKhuEUHWlrwQ
+        RffQGIebYYRslyeJDTtj+/siEcE/1LlQ5LizL040TnkxIOCyKaJ1pQT1cImmkJy1/3cq8rb4KkG
+        MBuICydqQDc1oBpQKDWSCfX7b
+X-Received: by 2002:a05:600c:3845:b0:39c:6ea9:ed34 with SMTP id s5-20020a05600c384500b0039c6ea9ed34mr15813982wmr.175.1656347737546;
+        Mon, 27 Jun 2022 09:35:37 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tQi9g3utC8EzXjKD8m93yuKrwANYFg//2CpsGdAnGzYjiEv6/vdPPRcD412Ha4VSvENvZqJQ==
+X-Received: by 2002:a05:600c:3845:b0:39c:6ea9:ed34 with SMTP id s5-20020a05600c384500b0039c6ea9ed34mr15813955wmr.175.1656347737217;
+        Mon, 27 Jun 2022 09:35:37 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c708:d100:dd9:b2f7:f126:11c2? (p200300cbc708d1000dd9b2f7f12611c2.dip0.t-ipconnect.de. [2003:cb:c708:d100:dd9:b2f7:f126:11c2])
+        by smtp.gmail.com with ESMTPSA id ib3-20020a05600ca14300b003a04e6410e0sm1554270wmb.33.2022.06.27.09.35.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 09:35:36 -0700 (PDT)
+Message-ID: <8fefe59d-c893-39f4-3225-65343086c867@redhat.com>
+Date:   Mon, 27 Jun 2022 18:35:36 +0200
 MIME-Version: 1.0
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <CAMkAt6osbEGBFrgn=y1=x4mDHC1aL40BwaW0NdGHF8qmWd7ktA@mail.gmail.com>
- <20220627113019.3q62luiay7izhehr@black.fi.intel.com> <CAMj1kXHD5XBAS1aBjzg1RCeK6qgtanUSED_xyTZ0v1j+UShMKw@mail.gmail.com>
- <20220627122230.7eetepoufd5w3lxd@black.fi.intel.com> <CAMkAt6oJJaRM_dy=y2BP99VziPriVuA4jAmMc=G7njwJYKFgyg@mail.gmail.com>
-In-Reply-To: <CAMkAt6oJJaRM_dy=y2BP99VziPriVuA4jAmMc=G7njwJYKFgyg@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 27 Jun 2022 18:33:51 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHpS2B9Q7AaQ1euGidZUEyR6gfi=e+t1J_Cr8bmK_9mTw@mail.gmail.com>
-Message-ID: <CAMj1kXHpS2B9Q7AaQ1euGidZUEyR6gfi=e+t1J_Cr8bmK_9mTw@mail.gmail.com>
-Subject: Re: [PATCHv7 00/14] mm, x86/cc: Implement support for unaccepted memory
-To:     Peter Gonda <pgonda@google.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Charan Teja Kalla <quic_charante@quicinc.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
+        Michal Hocko <mhocko@suse.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>
+Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <59edde13-4167-8550-86f0-11fc67882107@quicinc.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: Discussion on race between freed page_ext access and memory
+ offline operation
+In-Reply-To: <59edde13-4167-8550-86f0-11fc67882107@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Jun 2022 at 18:17, Peter Gonda <pgonda@google.com> wrote:
->
-> On Mon, Jun 27, 2022 at 6:22 AM Kirill A. Shutemov
-> <kirill.shutemov@linux.intel.com> wrote:
-> >
-> > On Mon, Jun 27, 2022 at 01:54:45PM +0200, Ard Biesheuvel wrote:
-> > > On Mon, 27 Jun 2022 at 13:30, Kirill A. Shutemov
-> > > <kirill.shutemov@linux.intel.com> wrote:
-> > > >
-> > > > On Fri, Jun 24, 2022 at 10:37:10AM -0600, Peter Gonda wrote:
-> > > > > On Tue, Jun 14, 2022 at 6:03 AM Kirill A. Shutemov
-> > > > > <kirill.shutemov@linux.intel.com> wrote:
-> > > > > >
-> > > > > > UEFI Specification version 2.9 introduces the concept of memory
-> > > > > > acceptance: some Virtual Machine platforms, such as Intel TDX or AMD
-> > > > > > SEV-SNP, requiring memory to be accepted before it can be used by the
-> > > > > > guest. Accepting happens via a protocol specific for the Virtual
-> > > > > > Machine platform.
-> > > > > >
-> > > > > > Accepting memory is costly and it makes VMM allocate memory for the
-> > > > > > accepted guest physical address range. It's better to postpone memory
-> > > > > > acceptance until memory is needed. It lowers boot time and reduces
-> > > > > > memory overhead.
-> > > > > >
-> > > > > > The kernel needs to know what memory has been accepted. Firmware
-> > > > > > communicates this information via memory map: a new memory type --
-> > > > > > EFI_UNACCEPTED_MEMORY -- indicates such memory.
-> > > > > >
-> > > > > > Range-based tracking works fine for firmware, but it gets bulky for
-> > > > > > the kernel: e820 has to be modified on every page acceptance. It leads
-> > > > > > to table fragmentation, but there's a limited number of entries in the
-> > > > > > e820 table
-> > > > > >
-> > > > > > Another option is to mark such memory as usable in e820 and track if the
-> > > > > > range has been accepted in a bitmap. One bit in the bitmap represents
-> > > > > > 2MiB in the address space: one 4k page is enough to track 64GiB or
-> > > > > > physical address space.
-> > > > > >
-> > > > > > In the worst-case scenario -- a huge hole in the middle of the
-> > > > > > address space -- It needs 256MiB to handle 4PiB of the address
-> > > > > > space.
-> > > > > >
-> > > > > > Any unaccepted memory that is not aligned to 2M gets accepted upfront.
-> > > > > >
-> > > > > > The approach lowers boot time substantially. Boot to shell is ~2.5x
-> > > > > > faster for 4G TDX VM and ~4x faster for 64G.
-> > > > > >
-> > > > > > TDX-specific code isolated from the core of unaccepted memory support. It
-> > > > > > supposed to help to plug-in different implementation of unaccepted memory
-> > > > > > such as SEV-SNP.
-> > > > > >
-> > > > > > The tree can be found here:
-> > > > > >
-> > > > > > https://github.com/intel/tdx.git guest-unaccepted-memory
-> > > > >
-> > > > > Hi Kirill,
-> > > > >
-> > > > > I have a couple questions about this feature mainly about how cloud
-> > > > > customers can use this, I assume since this is a confidential compute
-> > > > > feature a large number of the users of these patches will be cloud
-> > > > > customers using TDX and SNP. One issue I see with these patches is how
-> > > > > do we as a cloud provider know whether a customer's linux image
-> > > > > supports this feature, if the image doesn't have these patches UEFI
-> > > > > needs to fully validate the memory, if the image does we can use this
-> > > > > new protocol. In GCE we supply our VMs with a version of the EDK2 FW
-> > > > > and the customer doesn't input into which UEFI we run, as far as I can
-> > > > > tell from the Azure SNP VM documentation it seems very similar. We
-> > > > > need to somehow tell our UEFI in the VM what to do based on the image.
-> > > > > The current way I can see to solve this issue would be to have our
-> > > > > customers give us metadata about their VM's image but this seems kinda
-> > > > > burdensome on our customers (I assume we'll have more features which
-> > > > > both UEFI and kernel need to both support inorder to be turned on like
-> > > > > this one) and error-prone, if a customer incorrectly labels their
-> > > > > image it may fail to boot.. Has there been any discussion about how to
-> > > > > solve this? My naive thoughts were what if UEFI and Kernel had some
-> > > > > sort of feature negotiation. Maybe that could happen via an extension
-> > > > > to exit boot services or a UEFI runtime driver, I'm not sure what's
-> > > > > best here just some ideas.
-> > > >
-> > > > Just as an idea, we can put info into UTS_VERSION which can be read from
-> > > > the built bzImage. We have info on SMP and preeption there already.
-> > > >
-> > >
-> > > Instead of hacking this into the binary, couldn't we define a protocol
-> > > that the kernel will call from the EFI stub (before EBS()) to identify
-> > > itself as an image that understands unaccepted memory, and knows how
-> > > to deal with it?
-> > >
-> > > That way, the firmware can accept all the memory on behalf of the OS
-> > > at ExitBootServices() time, unless the OS has indicated there is no
-> > > need to do so.
-> >
-> > I agree it would be better. But I think it would require change to EFI
-> > spec, no?
->
-> Could this somehow be amended on to the UEFI Specification version 2.9
-> change which added all of the unaccepted memory features?
->
+On 27.06.22 18:09, Charan Teja Kalla wrote:
+> The below race between page_ext and online/offline of the respective
+> memory blocks will cause use-after-free on the access of page_ext structure.
+> 
+> process1			    process2
+> ---------			    ---------
+> a)doing /proc/page_owner            doing memory offline	
+> 			            through offline_pages
+> 
+> b)PageBuddy check is failed
+> thus proceed to get the
+> page_owner information
+> through page_ext access.
+> page_ext = lookup_page_ext(page);
+> 				
+> 				  migrate_pages();
+> 				 ................
+> 				Since all pages are successfully
+> 				migrated as part of the offline
+> 				operation,send MEM_OFFLINE notification
+> 				where for page_ext it calls:
+> 				offline_page_ext()-->
+> 				  __free_page_ext()-->
+> 				    free_page_ext()-->
+> 				      vfree(ms->page_ext)
+> 				mem_section->page_ext = NULL
+> 
+> c) Check for the PAGE_EXT flags
+> in the page_ext->flags access
+> results into the use-after-free(leading
+> to the translation faults).
+> 
+> As mentioned above, there is really no synchronization between page_ext
+> access and its freeing in the memory_offline.  The above is just one
+> example but the problem persists in the other paths too involving
+> page_ext->flags access(eg: page_is_idle()).
+> 
+> The memory offline steps(roughly) on a memory block is as below:
+> 1) Isolate all the pages
+> 2) while(1)
+>   try free the pages to buddy.(->free_list[MIGRATE_ISOLATE])
+> 3) delete the pages from this buddy list.
+> 4) Then free page_ext.(Note: The struct page is still alive as it is
+> freed only during hot remove of the memory which frees the memmap, which
+> steps the user might not perform).
+> 
+> This design leads to the state where struct page is alive but the struct
+> page_ext is freed, where the later is ideally part of the former which
+> just representing the page_flags. This seems to be a wrong design where
+> 'struct page' as a whole is not accessible(Thanks to Minchan for
+> pointing this out).
 
-Why would this need a change in the EFI spec? Not every EFI protocol
-needs to be in the spec.
+Accessing the struct page -- including any extensions -- is invalid if
+the memory section is marked offline.
+
+Usual PFN walkers use pfn_to_online_page() to make sure we have PFN with
+an actual meaning in it.
+
+There is no real synchronization between pfn_to_online_page() and memory
+offline code. For now it wasn't required because it was never relevant
+in practice.
+
+After pfn_to_online_page() it takes quite a long time until memory is
+actually offlined and then, the memmap is removed. Maybe it's different
+for page_ext.
+
+
+It smells like page_ext should use some mechanism during  MEM_OFFLINE to
+synchronize against any users of its metadata. Generic memory offlining
+code might be the wrong place for that.
+
+> 
+> Some solutions we think are:
+> ----------------------------
+> 1) Take the mem_hotplug_lock read_lock every time page_ext access.
+
+That would be the big hammer. But it feels wrong, because page_ext is
+another subsystem that's synchronized from generic memory offlining code
+via the notifier.
+
+> 
+> 2) Take the extra refcount on the page every time page_ext access is
+> made, so that parallel offline operation can't free the page to buddy.
+
+No, that's no good. Just racy.
+
+> 
+> 3) Change the design where the page_ext is valid as long as the struct
+> page is alive.
+
+:/ Doesn't spark joy.
+
+> 
+> Any other inputs here?
+
+
+page_ext needs a mechanism to synchronize against any users of the data
+it manages. Maybe RCU can help?
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

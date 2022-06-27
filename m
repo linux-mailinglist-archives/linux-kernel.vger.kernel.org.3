@@ -2,88 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395F355DCDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906FA55C1F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240336AbiF0TGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 15:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S240627AbiF0TIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 15:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240035AbiF0TG0 (ORCPT
+        with ESMTP id S240352AbiF0TIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 15:06:26 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5402639
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:06:24 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 23so9939659pgc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:06:24 -0700 (PDT)
+        Mon, 27 Jun 2022 15:08:15 -0400
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44F9C3E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:08:13 -0700 (PDT)
+Received: by mail-oi1-x244.google.com with SMTP id r82so5423304oig.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:08:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OwptFnOeVufNyWYVaUbNezAsNgxBLnSp5YRWWMPGeU4=;
-        b=Nep8adCrywMhk8ZutjZQ3tfryiXOviRDQw/MQJ/JqaCRwLAZt0pJQkuJPU5dUZf0T8
-         mzkjbRZ2Ht+PdUAcSPscDpb9zx/DbqWcULKOOejsjs9DKG/rTHE+7L/G+JDzAmlu5xbC
-         cXz3xW2lTdrodfN1MJJZBsb4eykNpRuRhXsMI=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zh6s7nD7luk04qRXIjIb+WBt8LxVAnCFYF380i7oqSI=;
+        b=aNeHHhlvg3mghPdR1oMD4oLFc7JMCZB3jhuxSvhNvPpL9jN9eBhXuNbcylh1vBrqhT
+         z5FTMQ65QHN2UYEMIrSsAwxbt+euJhdYJefOLTu8UdjoOv1c4n2x2rLRHv1bK2jzg3nP
+         MNLh6Wup0Jc8AskdGI9EVbPWRwiOGtFd7PLKQck32/hvgZkjVfzMlK5zzmh80NW8L1Uq
+         nVtUvdciBrz3i9vWI0MizQJVksiEM0eh6BVwBzTIZVlB+N7Eeh8ycuId9wohZNlU0lkJ
+         Tumb2m/pJAyye9iXak8jQUIywPx2Jv4CAj4hHZfllb4vqcxfO407HCsI9efUL9KuiRzM
+         CSug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OwptFnOeVufNyWYVaUbNezAsNgxBLnSp5YRWWMPGeU4=;
-        b=Pj79NCCFlRTH1vhE8VWv6FNmgBzj7tQf77pchMIWRq08Odli5ldm+VqyccZGmOlZxz
-         vlqDGU7bkuFWBN/O3E7QA1Din8NdotlEgPCYITVWx+doghi+KBYRpWA0lYIdWRx1lULp
-         gs4HJq2Zkl5VYLxDsHF69eLSREXunXfNlBVVkuR9Q3MHsK6/TEZXJtsWJlBFlLrhfj7u
-         iTvm7uv9ZKjhNWACQ5A4vv8AZ+RsX3/3jMmByifiui774NkUwDzxpEA1UTiCxvsxK465
-         JMOXOpct5tQNZY7yrksgK1oQMLKQOLZ9wOG8YY7xYUl9hycCQkPgjNrd/JejawCNyWyB
-         kjKA==
-X-Gm-Message-State: AJIora/FtP0P/qRLbMcUm7EQbRB4Plnu6hBw7MxtUb1CzFL/7lVurh1Z
-        RlZrveQBK61XxmXqDK3yemUrcQ==
-X-Google-Smtp-Source: AGRyM1uzKMX8lc3yOB65UK4bfLsFrTm5HeZk66lgKZ+5KpmhBSQTuno7q2Sp0F6BljBpXtnRsGe1DA==
-X-Received: by 2002:aa7:989a:0:b0:525:252f:3c51 with SMTP id r26-20020aa7989a000000b00525252f3c51mr510250pfl.39.1656356784404;
-        Mon, 27 Jun 2022 12:06:24 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:f31c:687c:3a61:62c5])
-        by smtp.gmail.com with UTF8SMTPSA id f9-20020a170902f38900b0016a51167b75sm7523839ple.286.2022.06.27.12.06.22
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zh6s7nD7luk04qRXIjIb+WBt8LxVAnCFYF380i7oqSI=;
+        b=1leMbsh7mufHENQhrxizZXE8ILX10vW/pTmyVRVdxizz+meABk+PcVEqLnkV4wnkJt
+         qPbQQgNcqA5ibi9onXOqWqOpfLCay9RCaP3Vb2zf+hLU+cbWDHUd+/I7yeSGtTHQ3mzy
+         CSWIrw4yO/MY6jJTZQM4ZZAD8i4h26ZxPfbOsDHb2RFj95oYhZkKneEdVMwMiSDN611a
+         D2hR1tVYtpPwtPH1LA4AzLYrHywDtBH8pwCbyIc5jen12m2sPcpzjUKnfM/TkbNOhoQJ
+         9BvVJ4wrr5TEeRxomPZD4WgOeMXVPEY/o3G8yHM0tDcIDOZ5MBTEdlP6hfvNHUA6PsGi
+         YB1g==
+X-Gm-Message-State: AJIora8CeehuECBkNYluxlSzxARgSDCz7BCKWVD+K4M/aKux7bk6dlKS
+        Hjx2PWKiaGlU8Kug0EEEFdFX8w==
+X-Google-Smtp-Source: AGRyM1ug7gRwlSieSlpRshPw6m7S6kK6Rl+WiY8kvfNzB01JrBjCtq41RPeRmsjBFlZPva5aUZRUqQ==
+X-Received: by 2002:a05:6808:e89:b0:2f7:34db:6915 with SMTP id k9-20020a0568080e8900b002f734db6915mr8524587oil.284.1656356892978;
+        Mon, 27 Jun 2022 12:08:12 -0700 (PDT)
+Received: from [192.168.17.16] ([189.219.74.211])
+        by smtp.gmail.com with ESMTPSA id c8-20020a4ab188000000b0041b86fcc8dasm6311737ooo.25.2022.06.27.12.08.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 12:06:24 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 12:06:21 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: Re: [PATCH v22 2/3] usb: misc: Add onboard_usb_hub driver
-Message-ID: <Yrn/rfrzSWod5SCT@google.com>
-References: <Yqub17iT4O7aqFMi@google.com>
- <CAD=FV=VEztPLhsrJecZUdyHCW7ZfFTVvxyqY5CqRVv2mWyrLog@mail.gmail.com>
- <YquoSMiQS+RG8rOM@google.com>
- <CAD=FV=W81pSEUbzw2ZQgs_TJ9MLnHQHiDopZXZ6bHdS7QMzAyA@mail.gmail.com>
- <YqvMffveCPiKQEUk@google.com>
- <CAD=FV=UJOStPfRR3Hq2DmRBSH-HCtZ16hAU9eVH5w6Hm=WSJRQ@mail.gmail.com>
- <YqytDNB2y4+qT8GD@google.com>
- <CAD=FV=UT0XtMjZ9syQPGXeTEaUrwGTb_LgDow+cofgmx4D30VA@mail.gmail.com>
- <Yrnzl8k81f9JTMIQ@google.com>
- <Yrn8y4GGZm+NyXIi@rowland.harvard.edu>
+        Mon, 27 Jun 2022 12:08:12 -0700 (PDT)
+Message-ID: <fe46a586-1af9-5988-9644-f7dd9ca63ca3@linaro.org>
+Date:   Mon, 27 Jun 2022 14:08:11 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yrn8y4GGZm+NyXIi@rowland.harvard.edu>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5.4 00/60] 5.4.202-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220627111927.641837068@linuxfoundation.org>
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,46 +78,269 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 02:54:03PM -0400, Alan Stern wrote:
-> On Mon, Jun 27, 2022 at 11:14:47AM -0700, Matthias Kaehlcke wrote:
-> > Maybe a bit more verbose documentation like this could help:
-> > 
-> >   Some background about the logic in this function, which can be a bit hard
-> >   to follow:
-> > 
-> >   Root hubs don't have dedicated device tree nodes, but use the node of their
-> >   HCD. The primary and secondary HCD are usually represented by a single DT
-> >   node. That means the root hubs of the primary and secondary HCD share the
-> >   same device tree node (the HCD node). As a result this function can be
-> >   called twice with the same DT node for root hubs. We only want to create a
-> >   single platform device for each physical onboard hub, hence for root hubs
-> >   the loop is only executed for the primary hub. Since the function scans
-> 
-> By "primary hub", you mean "root hub for the primary HCD", right?  This 
-> should be clarified.
+Hello!
 
-Ok, thanks for the suggestion!
+On 27/06/22 06:21, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.202 release.
+> There are 60 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.202-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-> >   through all child nodes it still creates pdevs for onboard hubs connected
-> >   to the secondary hub if needed.
-> 
-> And likewise for "secondary hub".
->
-> > 
-> >   Further there must be only one platform device for onboard hubs with a
-> >   companion hub (the hub is a single physical device). To achieve this two
-> 
-> What do you mean by "companion hub"?  I think you are using the wrong 
-> word here.  If you're talking about the relation between the two logical 
-> hubs (one attached to the SuperSpeed bus and one attached to the 
-> Low/Full/High-speed bus) within a physical USB-3 hub, the correct term 
-> for this is "peer".  See the existing usages in hub.h, hub.c, and 
-> port.c.
-> 
-> "Companion" refers to something completely different (i.e., the UHCI or 
-> OHCI controllers that handle Low/Full-speed connections on behalf of a 
-> High-speed EHCI controller).
+Results from Linaro's test farm.
+The following new warnings have been found while building for all architectures with GCC:
 
-Yes it's the relation between the two logical hub. The term 'companion-hub'
-stems from the binding and has been around since v6 of this series. I guess
-we should update the binding if the terminology isn't correct.
+   WARNING: modpost: vmlinux.o(___ksymtab+drm_fb_helper_modinit+0x0): Section mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit to the function .init.text:drm_fb_helper_modinit()
+   The symbol drm_fb_helper_modinit is exported and annotated __init
+   Fix this by removing the __init annotation of drm_fb_helper_modinit or drop the export.
+
+   WARNING: modpost: drivers/gpu/drm/drm_kms_helper.o(___ksymtab+drm_fb_helper_modinit+0x0): Section mismatch in reference from the variable __ksymtab_drm_fb_helper_modinit to the function .init.text:drm_fb_helper_modinit()
+   The symbol drm_fb_helper_modinit is exported and annotated __init
+   Fix this by removing the __init annotation of drm_fb_helper_modinit or drop the export.
+
+
+## Build
+* kernel: 5.4.202-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 1c351e730d68becde35c20fa77ae48dccd9b9fc2
+* git describe: v5.4.201-61-g1c351e730d68
+* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.201-61-g1c351e730d68
+
+## No test regressions (compared to v5.4.201)
+
+## Metric regressions (compared to v5.4.201)
+* arm, build
+   - gcc-8-at91_dt_defconfig-warnings
+   - gcc-8-bcm2835_defconfig-warnings
+   - gcc-8-davinci_all_defconfig-warnings
+   - gcc-8-defconfig-warnings
+   - gcc-8-exynos_defconfig-warnings
+   - gcc-8-imx_v6_v7_defconfig-warnings
+   - gcc-8-integrator_defconfig-warnings
+   - gcc-8-ixp4xx_defconfig-warnings
+   - gcc-8-lpc32xx_defconfig-warnings
+   - gcc-8-multi_v5_defconfig-45747f0c-warnings
+   - gcc-8-multi_v5_defconfig-warnings
+   - gcc-8-mxs_defconfig-warnings
+   - gcc-8-nhk8815_defconfig-warnings
+   - gcc-8-omap2plus_defconfig-warnings
+   - gcc-8-s3c6400_defconfig-warnings
+   - gcc-8-s5pv210_defconfig-warnings
+   - gcc-8-sama5_defconfig-warnings
+   - gcc-8-u8500_defconfig-warnings
+   - gcc-8-vexpress_defconfig-warnings
+   - gcc-9-at91_dt_defconfig-warnings
+   - gcc-9-bcm2835_defconfig-warnings
+   - gcc-9-davinci_all_defconfig-warnings
+   - gcc-9-defconfig-warnings
+   - gcc-9-exynos_defconfig-warnings
+   - gcc-9-imx_v6_v7_defconfig-warnings
+   - gcc-9-integrator_defconfig-warnings
+   - gcc-9-ixp4xx_defconfig-warnings
+   - gcc-9-lpc32xx_defconfig-warnings
+   - gcc-9-multi_v5_defconfig-45747f0c-warnings
+   - gcc-9-multi_v5_defconfig-warnings
+   - gcc-9-mxs_defconfig-warnings
+   - gcc-9-nhk8815_defconfig-warnings
+   - gcc-9-omap2plus_defconfig-warnings
+   - gcc-9-s3c6400_defconfig-warnings
+   - gcc-9-s5pv210_defconfig-warnings
+   - gcc-9-sama5_defconfig-warnings
+   - gcc-9-u8500_defconfig-warnings
+   - gcc-9-vexpress_defconfig-warnings
+   - gcc-10-at91_dt_defconfig-warnings
+   - gcc-10-bcm2835_defconfig-warnings
+   - gcc-10-davinci_all_defconfig-warnings
+   - gcc-10-defconfig-warnings
+   - gcc-10-exynos_defconfig-warnings
+   - gcc-10-imx_v6_v7_defconfig-warnings
+   - gcc-10-integrator_defconfig-warnings
+   - gcc-10-ixp4xx_defconfig-warnings
+   - gcc-10-lkftconfig-debug-kmemleak-warnings
+   - gcc-10-lkftconfig-debug-warnings
+   - gcc-10-lkftconfig-kasan-warnings
+   - gcc-10-lkftconfig-kselftest-kernel-warnings
+   - gcc-10-lkftconfig-kselftest-warnings
+   - gcc-10-lkftconfig-kunit-warnings
+   - gcc-10-lkftconfig-libgpiod-warnings
+   - gcc-10-lkftconfig-perf-warnings
+   - gcc-10-lkftconfig-rcutorture-warnings
+   - gcc-10-lkftconfig-warnings
+   - gcc-10-lpc32xx_defconfig-warnings
+   - gcc-10-multi_v5_defconfig-45747f0c-warnings
+   - gcc-10-multi_v5_defconfig-warnings
+   - gcc-10-mxs_defconfig-warnings
+   - gcc-10-nhk8815_defconfig-warnings
+   - gcc-10-omap2plus_defconfig-warnings
+   - gcc-10-s3c6400_defconfig-warnings
+   - gcc-10-s5pv210_defconfig-warnings
+   - gcc-10-sama5_defconfig-warnings
+   - gcc-10-u8500_defconfig-warnings
+   - gcc-10-vexpress_defconfig-warnings
+   - gcc-11-at91_dt_defconfig-warnings
+   - gcc-11-bcm2835_defconfig-warnings
+   - gcc-11-davinci_all_defconfig-warnings
+   - gcc-11-defconfig-warnings
+   - gcc-11-exynos_defconfig-warnings
+   - gcc-11-imx_v6_v7_defconfig-warnings
+   - gcc-11-integrator_defconfig-warnings
+   - gcc-11-ixp4xx_defconfig-warnings
+   - gcc-11-lpc32xx_defconfig-warnings
+   - gcc-11-multi_v5_defconfig-45747f0c-warnings
+   - gcc-11-multi_v5_defconfig-warnings
+   - gcc-11-mxs_defconfig-warnings
+   - gcc-11-nhk8815_defconfig-warnings
+   - gcc-11-omap2plus_defconfig-warnings
+   - gcc-11-s3c6400_defconfig-warnings
+   - gcc-11-s5pv210_defconfig-warnings
+   - gcc-11-sama5_defconfig-warnings
+   - gcc-11-u8500_defconfig-warnings
+   - gcc-11-vexpress_defconfig-warnings
+
+* arm64, build
+   - gcc-11-lkftconfig-64k_page_size-warnings
+   - gcc-11-lkftconfig-armv8_features-warnings
+   - gcc-11-lkftconfig-debug-kmemleak-warnings
+   - gcc-11-lkftconfig-debug-warnings
+   - gcc-11-lkftconfig-devicetree-warnings
+   - gcc-11-lkftconfig-kasan-warnings
+   - gcc-11-lkftconfig-kselftest-kernel-warnings
+   - gcc-11-lkftconfig-kselftest-warnings
+   - gcc-11-lkftconfig-kunit-warnings
+   - gcc-11-lkftconfig-libgpiod-warnings
+   - gcc-11-lkftconfig-perf-warnings
+   - gcc-11-lkftconfig-rcutorture-warnings
+   - gcc-11-lkftconfig-warnings
+
+* i386, build
+   - gcc-8-i386_defconfig-warnings
+   - gcc-9-i386_defconfig-warnings
+   - gcc-10-defconfig-warnings
+   - gcc-11-defconfig-warnings
+   - gcc-11-lkftconfig-debug-kmemleak-warnings
+   - gcc-11-lkftconfig-debug-warnings
+   - gcc-11-lkftconfig-kselftest-kernel-warnings
+   - gcc-11-lkftconfig-kselftest-warnings
+   - gcc-11-lkftconfig-kunit-warnings
+   - gcc-11-lkftconfig-libgpiod-warnings
+   - gcc-11-lkftconfig-perf-warnings
+   - gcc-11-lkftconfig-rcutorture-warnings
+   - gcc-11-lkftconfig-warnings
+
+* powerpc, build
+   - gcc-8-ppc6xx_defconfig-warnings
+   - gcc-9-ppc6xx_defconfig-warnings
+   - gcc-10-ppc6xx_defconfig-warnings
+   - gcc-11-ppc6xx_defconfig-warnings
+
+* riscv, build
+   - gcc-8-defconfig-warnings
+   - gcc-9-defconfig-warnings
+   - gcc-10-defconfig-warnings
+   - gcc-11-defconfig-warnings
+
+* x86_64, build
+   - gcc-8-x86_64_defconfig-warnings
+   - gcc-9-x86_64_defconfig-warnings
+   - gcc-10-defconfig-warnings
+   - gcc-11-defconfig-warnings
+   - gcc-11-lkftconfig-debug-kmemleak-warnings
+   - gcc-11-lkftconfig-debug-warnings
+   - gcc-11-lkftconfig-kasan-warnings
+   - gcc-11-lkftconfig-kselftest-kernel-warnings
+   - gcc-11-lkftconfig-kselftest-warnings
+   - gcc-11-lkftconfig-kunit-warnings
+   - gcc-11-lkftconfig-libgpiod-warnings
+   - gcc-11-lkftconfig-perf-warnings
+   - gcc-11-lkftconfig-rcutorture-warnings
+   - gcc-11-lkftconfig-warnings
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## No test fixes (compared to v5.4.201)
+
+## No metric fixes (compared to v5.4.201)
+
+## Test result summary
+total: 106600, pass: 95406, fail: 218, skip: 10208, xfail: 768
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 313 total, 313 passed, 0 failed
+* arm64: 57 total, 53 passed, 4 failed
+* i386: 28 total, 25 passed, 3 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 55 total, 54 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+
+Greetings!
+
+Daniel Díaz
+daniel.diaz@linaro.org
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org

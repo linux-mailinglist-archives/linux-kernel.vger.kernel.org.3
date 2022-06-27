@@ -2,73 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BFC55DE38
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCFD55E2C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240869AbiF0VAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 17:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
+        id S239213AbiF0VES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 17:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240838AbiF0U75 (ORCPT
+        with ESMTP id S239552AbiF0VEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 16:59:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B25F5FBF
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656363595;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=P2ALvax4QLHT/PRvyeFgcmdY6fh0+YOux9iV3/Np/Vk=;
-        b=dglIoFwONywXiBsQNPkFgD7rgqJWbBTTemHaKD966xhSGTqBANRzKiiinL2trbGS++GDJK
-        Gb9fjUbWBQLe0KPh2doGYI+zC58RdBCS/7bBptT7r52zOi1y2aL0ya9WTWOWdOVtgW5uPk
-        wIFpk54CDCJyvyCT4cwtUl38u810Aug=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-81-fw-lYOQWOSKY2vJq6gFlig-1; Mon, 27 Jun 2022 16:59:51 -0400
-X-MC-Unique: fw-lYOQWOSKY2vJq6gFlig-1
-Received: by mail-qv1-f72.google.com with SMTP id v13-20020ad4528d000000b004707f3f4683so10444354qvr.14
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:59:51 -0700 (PDT)
+        Mon, 27 Jun 2022 17:04:12 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A1895A4;
+        Mon, 27 Jun 2022 14:04:11 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id i194so10878171ioa.12;
+        Mon, 27 Jun 2022 14:04:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P2ALvax4QLHT/PRvyeFgcmdY6fh0+YOux9iV3/Np/Vk=;
-        b=LNP//5SneknvKckRPtG4Wk6FtwaL+3lbfhfL4DJJy43WsjKYABEtnd0kIQIHCFaodV
-         1DNYxoshQUcebBUmAr6lh5rLoEjBPYJ3L9rkbU2+pljFBR5SBkocxtq5p+h6jOObYToB
-         YKoix1WyJxlyoRqI5XxycWn1SerlXYpYf8GdfiBdPKzp4+0Gzktj4AlRTTePVqtsZiGa
-         aSrW5inPvsRKPOBFZb9mJXHVEp8L+SXpL7oeH3zCcAmr6nqI9O+cxscnFGRC0GOkiZn4
-         olJk1iSp7xV6F2n9+4+5NiJQRBERHhnlYFYPj1aih8H/PYYVL5O8Pv9+BpQOwevnLAzZ
-         rVMQ==
-X-Gm-Message-State: AJIora+y1/Ys0/sukVsDU+/sruaIF0n8IH8cst+wy8sbJqENeePeLNPh
-        ZRPkxoMuZ/iHc2rCcSIRNiMStJobIcW6HfvNuHvEbB8OL3cYpUjNrn3M17EcsdijS0Sb5sG5pzK
-        HdfVbr52wv/Hh4Dga8k4sC3CW
-X-Received: by 2002:ad4:4ee4:0:b0:472:7778:ff86 with SMTP id dv4-20020ad44ee4000000b004727778ff86mr1162013qvb.109.1656363591488;
-        Mon, 27 Jun 2022 13:59:51 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tOGQ37j2Gu0CzjFIVikcF7haS9EBEvbksI9EbPMv+s+mbkvrI4aOi6vEzPyMNbkPK8eNqn+g==
-X-Received: by 2002:ad4:4ee4:0:b0:472:7778:ff86 with SMTP id dv4-20020ad44ee4000000b004727778ff86mr1162003qvb.109.1656363591235;
-        Mon, 27 Jun 2022 13:59:51 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id x9-20020a05620a448900b006a708baa069sm1787831qkp.101.2022.06.27.13.59.49
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=VA6ORkBSx7XmeTMDyx85R9tA3TNtUa5l/wq0WUtTI6U=;
+        b=Txlh4qoMdq0z2yjG2CKysB+/BV22Q5HhXbH6NC+j3Dq+DsKFwgPcojTQ7mJPA4dffs
+         fH6sH+cDlDEJuUm+WzO45JjZTo3xgpuJ58VqLXZaoHfh3bArNIMoMC59kX/tuZhzE5aV
+         xovmT6RbXJt3P/3SIbPUMVeCVLOdzqiZDOnlZZQ38cyubf454gtKLJlA7azm93CxWjHE
+         lJgloT/QNnZGpwe4VmorXE6O+O7O1leoGll5G9yj3qldhCojPDfB0oSB6CfCEqTQpw+g
+         WgXbjDo94N3uiyaMJOcu59BqTnrEp/5ESN3aZ0KuFb91fsz1aRDcbufTC363iXWaRBIA
+         KJVw==
+X-Gm-Message-State: AJIora8R6UuEkl5BfsiJgkOEt9eYCDYXh4F0hUVjCXjPv1dux9/WnI++
+        Q3JKQapZNHmtxe+tbF0Ikw==
+X-Google-Smtp-Source: AGRyM1t4abnkeVbOz7m4JFXhTp+ZgOE+dhLfycD1T0nq7VKCENH5U1t29c/Aixyg12ceJlgkwe/REg==
+X-Received: by 2002:a05:6602:2a4b:b0:66a:44ad:89f3 with SMTP id k11-20020a0566022a4b00b0066a44ad89f3mr7492274iov.10.1656363850219;
+        Mon, 27 Jun 2022 14:04:10 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id e4-20020a0566380cc400b00339dbd4c8d7sm5215727jak.45.2022.06.27.14.04.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 13:59:50 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     lewis.hanly@microchip.com, conor.dooley@microchip.com,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        daire.mcnamara@microchip.com
-Cc:     linux-riscv@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] rtc: remove 'pending' variable from mpfs_rtc_wakeup_irq_handler()
-Date:   Mon, 27 Jun 2022 16:59:43 -0400
-Message-Id: <20220627205943.2075043-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 27 Jun 2022 14:04:09 -0700 (PDT)
+Received: (nullmailer pid 2954489 invoked by uid 1000);
+        Mon, 27 Jun 2022 21:04:07 -0000
+Date:   Mon, 27 Jun 2022 15:04:07 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Allen Chen <allen.chen@ite.com.tw>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: usb: Add Type-C switch binding
+Message-ID: <20220627210407.GA2905757-robh@kernel.org>
+References: <20220622173605.1168416-1-pmalani@chromium.org>
+ <20220622173605.1168416-2-pmalani@chromium.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220622173605.1168416-2-pmalani@chromium.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,34 +91,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cppcheck reports
-[drivers/rtc/rtc-mpfs.c:219]: (style) Variable 'pending' is assigned a value that is never used.
+On Wed, Jun 22, 2022 at 05:34:30PM +0000, Prashant Malani wrote:
+> Introduce a binding which represents a component that can control the
+> routing of USB Type-C data lines as well as address data line
+> orientation (based on CC lines' orientation).
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+> 
+> Changes since v4:
+> - Added Reviewed-by tags.
+> - Patch moved to 1/9 position (since Patch v4 1/7 and 2/7 were
+>   applied to usb-next)
+> 
+> Changes since v3:
+> - No changes.
+> 
+> Changes since v2:
+> - Added Reviewed-by and Tested-by tags.
+> 
+> Changes since v1:
+> - Removed "items" from compatible.
+> - Fixed indentation in example.
+> 
+>  .../devicetree/bindings/usb/typec-switch.yaml | 74 +++++++++++++++++++
+>  1 file changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/typec-switch.yaml b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> new file mode 100644
+> index 000000000000..78b0190c8543
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/typec-switch.yaml
+> @@ -0,0 +1,74 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/typec-switch.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: USB Type-C Switch
+> +
+> +maintainers:
+> +  - Prashant Malani <pmalani@chromium.org>
+> +
+> +description:
+> +  A USB Type-C switch represents a component which routes USB Type-C data
+> +  lines to various protocol host controllers (e.g USB, VESA DisplayPort,
+> +  Thunderbolt etc.) depending on which mode the Type-C port, port partner
+> +  and cable are operating in. It can also modify lane routing based on
+> +  the orientation of a connected Type-C peripheral.
+> +
+> +properties:
+> +  compatible:
+> +    const: typec-switch
+> +
+> +  mode-switch:
+> +    type: boolean
+> +    description: Specify that this switch can handle alternate mode switching.
+> +
+> +  orientation-switch:
+> +    type: boolean
+> +    description: Specify that this switch can handle orientation switching.
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +    description: OF graph binding modelling data lines to the Type-C switch.
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Link between the switch and a Type-C connector.
+> +
+> +    required:
+> +      - port@0
+> +
+> +required:
+> +  - compatible
+> +  - ports
+> +
+> +anyOf:
+> +  - required:
+> +      - mode-switch
+> +  - required:
+> +      - orientation-switch
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    drm-bridge {
+> +        usb-switch {
+> +            compatible = "typec-switch";
 
-The fetched CONTROL_REG stored in pending is unused and partially
-duplicates the functionality of the later call to mpfs_rtc_clear().  This looks
-like leftover development code, so remove pending.
+Unless this child is supposed to represent what the parent output is 
+connected to, this is just wrong as, at least for the it6505 chip, it 
+doesn't know anything about Type-C functionality. The bridge is 
+just a protocol converter AFAICT. 
 
-Fixes: 0b31d703598d ("rtc: Add driver for Microchip PolarFire SoC")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/rtc/rtc-mpfs.c | 3 ---
- 1 file changed, 3 deletions(-)
+If the child node represents what the output is connected to (like a 
+bus), then yes that is a pattern we have used. For example, a panel 
+represented as child node of a display controller. However, that only 
+works for simple cases, and is a pattern we have gotten away from in 
+favor of using the graph binding.
 
-diff --git a/drivers/rtc/rtc-mpfs.c b/drivers/rtc/rtc-mpfs.c
-index db9c638e50f7..f14d1925e0c9 100644
---- a/drivers/rtc/rtc-mpfs.c
-+++ b/drivers/rtc/rtc-mpfs.c
-@@ -213,10 +213,7 @@ static inline struct clk *mpfs_rtc_init_clk(struct device *dev)
- static irqreturn_t mpfs_rtc_wakeup_irq_handler(int irq, void *dev)
- {
- 	struct mpfs_rtc_dev *rtcdev = dev;
--	unsigned long pending;
- 
--	pending = readl(rtcdev->base + CONTROL_REG);
--	pending &= CONTROL_ALARM_ON_BIT;
- 	mpfs_rtc_clear_irq(rtcdev);
- 
- 	rtc_update_irq(rtcdev->rtc, 1, RTC_IRQF | RTC_AF);
--- 
-2.27.0
+I think Stephen and I are pretty much saying the same thing.
 
+Rob

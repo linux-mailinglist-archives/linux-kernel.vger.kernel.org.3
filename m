@@ -2,131 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653E255DF1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373F455D793
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234766AbiF0Oye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
+        id S237631AbiF0OyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235197AbiF0Oya (ORCPT
+        with ESMTP id S238003AbiF0OxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:54:30 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26FFF140E6;
-        Mon, 27 Jun 2022 07:52:50 -0700 (PDT)
-Received: from [192.168.100.8] (unknown [112.20.112.134])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb906xLliVxxgAA--.6409S3;
-        Mon, 27 Jun 2022 22:52:43 +0800 (CST)
-Message-ID: <5b6be487-13ab-835a-fac3-768700421754@loongson.cn>
-Date:   Mon, 27 Jun 2022 22:52:43 +0800
+        Mon, 27 Jun 2022 10:53:08 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D908BBC1D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:53:06 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id v126so5172965pgv.11
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:53:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w4nnCuaaqVKXnI7zfu4XEe/EidzYbOyoiaXDjkUN60I=;
+        b=gM2IEHiWITi7+4u4kxy5XXhdNF32YfAWT9wfPYpqKED+86BqP0njb8qUgEGsh9TRYl
+         FRgvQrSgG3jwRpHz/uynTtwGUcE/VoJkOuXWiry7nkDqDl2zZnQnFn3X5plbLx3+56e4
+         hC0V9xPTZ2U0O8Y2L8ACjYHGOIzt7S5t8FpBOYyrGUe0ZInCXT+oy7CDYYs4Sf2DvCNY
+         /KqagQAvzNqW1Eh3DsFCZ96+/e2yMMrqBvrtESk0Lw5VH/OFNxJ6iHniPwWMHoDSuUmt
+         CAb+Lssqwd8d5t2N1o+ikpuuiFm7ysYla8g2bWw1dyswpjy7jf+F/+zei0aPAiIRJoaM
+         cDSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w4nnCuaaqVKXnI7zfu4XEe/EidzYbOyoiaXDjkUN60I=;
+        b=WTPg1GohzQC1idCoW7Y4idAOA3lm3iq1QHEyBgFoC1ZnirMAwNaouQMn1LWn0vRP4I
+         R6B/RApvQqbq11zWZ6CtY3U0a8C616SmO5e2eA3FncWZTNJQMAhSwioYKyHd9mRnRip3
+         beW+ZLNeNU3WsnIn8TDueG1izymEDg3N+CQEAw0aLabgQr0Jy7JZR8inYeFM7oaA2qeR
+         S1jr2yb7ri+8IlKh7q86R2+Gj8fxNyOekMOPzU2bDtXU3p5e4c93MEt4FsLoROsx8hRZ
+         vM5RV9JRXZXl7ptineeKTFDvN6tzvvZ49K8dP/QRYJgoGIfwFg0ULB3EF/INc+kZ8qQi
+         t0Jw==
+X-Gm-Message-State: AJIora+xTlOWZWAzQxOnsCPAqPaayGymznbm+sVft/cAWlETmGy+Zfy4
+        IWjcthudRWcdA6hn8SWFiBXxPB5S0349i8Q5MP2kXQ==
+X-Google-Smtp-Source: AGRyM1vzP61WGqfu7fwvpR2g3YBsLeDPE49vmrsIKi0PKEuVDFQCZdthzssP0xkUNMYVlYw/hBLgJOeoW+fBSDeuNHo=
+X-Received: by 2002:a63:6cc8:0:b0:40d:e553:f200 with SMTP id
+ h191-20020a636cc8000000b0040de553f200mr6417592pgc.166.1656341586171; Mon, 27
+ Jun 2022 07:53:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 05/20] docs: zh_CN/devicetree: fix typos
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alex Shi <alexs@kernel.org>,
-        Huilong Deng <denghuilong@cdjrlc.com>,
-        linux-kernel@vger.kernel.org
-References: <cover.1656234456.git.mchehab@kernel.org>
- <b4ca010ef223ab9cb76e8caa0a3cde734e0b6b2f.1656234456.git.mchehab@kernel.org>
-From:   YanTeng Si <siyanteng@loongson.cn>
-In-Reply-To: <b4ca010ef223ab9cb76e8caa0a3cde734e0b6b2f.1656234456.git.mchehab@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxb906xLliVxxgAA--.6409S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF17Ar4DGr4kCFWUtw4xWFg_yoW5Xw18pF
-        92kFyxWF1Svr17W397WF4UGF4xJ3Wxuw45GF1UJw1FgFs8JryFyr9rt3yqg3W7Xr1xWay5
-        XF4rKryFkr4vyF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvYb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkI
-        ecxEwVAFwVW5XwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_
-        Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r4j6FyUMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-        j0ksgUUUUU=
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CADvbK_csvmkKe46hT9792=+Qcjor2EvkkAnr--CJK3NGX-N9BQ@mail.gmail.com>
+ <CADvbK_eQUmb942vC+bG+NRzM1ki1LiCydEDR1AezZ35Jvsdfnw@mail.gmail.com>
+ <20220623185730.25b88096@kernel.org> <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
+ <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
+ <20220624070656.GE79500@shbuild999.sh.intel.com> <20220624144358.lqt2ffjdry6p5u4d@google.com>
+ <20220625023642.GA40868@shbuild999.sh.intel.com> <20220627023812.GA29314@shbuild999.sh.intel.com>
+ <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com> <20220627123415.GA32052@shbuild999.sh.intel.com>
+In-Reply-To: <20220627123415.GA32052@shbuild999.sh.intel.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Mon, 27 Jun 2022 07:52:55 -0700
+Message-ID: <CALvZod7i_=7bNZR-LAXBPXJFxj-1KBuYs+rmG0iABAE1T90BPg@mail.gmail.com>
+Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Eric Dumazet <edumazet@google.com>, Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        network dev <netdev@vger.kernel.org>,
+        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/6/26 17:10, Mauro Carvalho Chehab 写道:
-> The devicetree directory was using wrong case:
+On Mon, Jun 27, 2022 at 5:34 AM Feng Tang <feng.tang@intel.com> wrote:
 >
-> 	Devicetree/ -> devicetree/
+> On Mon, Jun 27, 2022 at 10:46:21AM +0200, Eric Dumazet wrote:
+> > On Mon, Jun 27, 2022 at 4:38 AM Feng Tang <feng.tang@intel.com> wrote:
+> [snip]
+> > > > >
+> > > > > Thanks Feng. Can you check the value of memory.kmem.tcp.max_usage_in_bytes
+> > > > > in /sys/fs/cgroup/memory/system.slice/lkp-bootstrap.service after making
+> > > > > sure that the netperf test has already run?
+> > > >
+> > > > memory.kmem.tcp.max_usage_in_bytes:0
+> > >
+> > > Sorry, I made a mistake that in the original report from Oliver, it
+> > > was 'cgroup v2' with a 'debian-11.1' rootfs.
+> > >
+> > > When you asked about cgroup info, I tried the job on another tbox, and
+> > > the original 'job.yaml' didn't work, so I kept the 'netperf' test
+> > > parameters and started a new job which somehow run with a 'debian-10.4'
+> > > rootfs and acutally run with cgroup v1.
+> > >
+> > > And as you mentioned cgroup version does make a big difference, that
+> > > with v1, the regression is reduced to 1% ~ 5% on different generations
+> > > of test platforms. Eric mentioned they also got regression report,
+> > > but much smaller one, maybe it's due to the cgroup version?
+> >
+> > This was using the current net-next tree.
+> > Used recipe was something like:
+> >
+> > Make sure cgroup2 is mounted or mount it by mount -t cgroup2 none $MOUNT_POINT.
+> > Enable memory controller by echo +memory > $MOUNT_POINT/cgroup.subtree_control.
+> > Create a cgroup by mkdir $MOUNT_POINT/job.
+> > Jump into that cgroup by echo $$ > $MOUNT_POINT/job/cgroup.procs.
+> >
+> > <Launch tests>
+> >
+> > The regression was smaller than 1%, so considered noise compared to
+> > the benefits of the bug fix.
 >
-> Fixes: a17b0169f29b ("docs/zh_CN: add devicetree index translation")
-> Fixes: c56481299df3 ("docs/zh_CN: add devicetree usage-model translation")
-> Fixes: 09d4466d3f3c ("docs/zh_CN: add devicetree of_unittest translation")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-
-Acked-by: Yanteng Si<siyanteng@loongson.cn>
-
-Thanks,
-Yanteng
-
-> ---
+> Yes, 1% is just around noise level for a microbenchmark.
 >
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1656234456.git.mchehab@kernel.org/
+> I went check the original test data of Oliver's report, the tests was
+> run 6 rounds and the performance data is pretty stable (0Day's report
+> will show any std deviation bigger than 2%)
 >
->   Documentation/translations/zh_CN/devicetree/index.rst       | 2 +-
->   Documentation/translations/zh_CN/devicetree/of_unittest.rst | 2 +-
->   Documentation/translations/zh_CN/devicetree/usage-model.rst | 2 +-
->   3 files changed, 3 insertions(+), 3 deletions(-)
+> The test platform is a 4 sockets 72C/144T machine, and I run the
+> same job (nr_tasks = 25% * nr_cpus) on one CascadeLake AP (4 nodes)
+> and one Icelake 2 sockets platform, and saw 75% and 53% regresson on
+> them.
 >
-> diff --git a/Documentation/translations/zh_CN/devicetree/index.rst b/Documentation/translations/zh_CN/devicetree/index.rst
-> index 23d0b6fccd58..3fc355fe0037 100644
-> --- a/Documentation/translations/zh_CN/devicetree/index.rst
-> +++ b/Documentation/translations/zh_CN/devicetree/index.rst
-> @@ -1,7 +1,7 @@
->   .. SPDX-License-Identifier: GPL-2.0
->   .. include:: ../disclaimer-zh_CN.rst
->   
-> -:Original: Documentation/Devicetree/index.rst
-> +:Original: Documentation/devicetree/index.rst
->   
->   :翻译:
->   
-> diff --git a/Documentation/translations/zh_CN/devicetree/of_unittest.rst b/Documentation/translations/zh_CN/devicetree/of_unittest.rst
-> index abd94e771ef8..11eb08ca8866 100644
-> --- a/Documentation/translations/zh_CN/devicetree/of_unittest.rst
-> +++ b/Documentation/translations/zh_CN/devicetree/of_unittest.rst
-> @@ -1,7 +1,7 @@
->   .. SPDX-License-Identifier: GPL-2.0
->   .. include:: ../disclaimer-zh_CN.rst
->   
-> -:Original: Documentation/Devicetree/of_unittest.rst
-> +:Original: Documentation/devicetree/of_unittest.rst
->   
->   :翻译:
->   
-> diff --git a/Documentation/translations/zh_CN/devicetree/usage-model.rst b/Documentation/translations/zh_CN/devicetree/usage-model.rst
-> index accdc33475a0..c6aee82c7e6e 100644
-> --- a/Documentation/translations/zh_CN/devicetree/usage-model.rst
-> +++ b/Documentation/translations/zh_CN/devicetree/usage-model.rst
-> @@ -1,7 +1,7 @@
->   .. SPDX-License-Identifier: GPL-2.0
->   .. include:: ../disclaimer-zh_CN.rst
->   
-> -:Original: Documentation/Devicetree/usage-model.rst
-> +:Original: Documentation/devicetree/usage-model.rst
->   
->   :翻译:
->   
+> In the first email, there is a file named 'reproduce', it shows the
+> basic test process:
+>
+> "
+>   use 'performane' cpufre  governor for all CPUs
+>
+>   netserver -4 -D
+>   modprobe sctp
+>   netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
+>   netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
+>   netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
+>   (repeat 36 times in total)
+>   ...
+>
+> "
+>
+> Which starts 36 (25% of nr_cpus) netperf clients. And the clients number
+> also matters, I tried to increase the client number from 36 to 72(50%),
+> and the regression is changed from 69.4% to 73.7%
+>
 
+Am I understanding correctly that this 69.4% (or 73.7%) regression is
+with cgroup v2?
+
+Eric did the experiments on v2 but on real hardware where the
+performance impact was negligible.
+
+BTW do you see similar regression for tcp as well or just sctp?

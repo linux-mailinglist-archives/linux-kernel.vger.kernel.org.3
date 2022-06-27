@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9430255C152
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F3555C32D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239667AbiF0MAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
+        id S235457AbiF0L3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238917AbiF0Lwt (ORCPT
+        with ESMTP id S235268AbiF0L2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:52:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B30DF1D;
-        Mon, 27 Jun 2022 04:46:25 -0700 (PDT)
+        Mon, 27 Jun 2022 07:28:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5747C65B7;
+        Mon, 27 Jun 2022 04:27:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F17461187;
-        Mon, 27 Jun 2022 11:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6764EC3411D;
-        Mon, 27 Jun 2022 11:46:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 183F5B81120;
+        Mon, 27 Jun 2022 11:27:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61B66C341CB;
+        Mon, 27 Jun 2022 11:27:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330384;
-        bh=/OV4TQT7m05Fi0VZVfG2VTpYR5hu8IQh+pTF8a8E0mw=;
+        s=korg; t=1656329254;
+        bh=E01gtDYA+DLamTvwTd/8qIBpMQTy5fBElgZmB4vlylI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hHuydioKCse2QR7eMMQiz8HO1WK4Y1c/mqsIDHNjw/jwqEodPbCzTMG0Y+OKr9chZ
-         NdnP2LztawpauRDoTdpPT8tVDWuSjqi9mugfW3JXabS431U/dmZbvN2tWVJtT3W2uN
-         2bN077MMGp0u4NTLhO28FvEWnl+0dPzWNkP0Q/5o=
+        b=U3r4DwOAHfyz/MXe+IYDvbQaI+k+kOhkaNSIRYvTFa7fC04KCBM8PazGHF1OPbN+G
+         hbWJ7wxxhbL/ba3qAeQzFf6K4cvkEL2a9VdB2ZKgotnMOznAS0vKC0vVO2RGnCzJdz
+         fHUt1SUSSs481pbbTB8eF50nnvLPS0GjT3D2kK9Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.18 140/181] iio: imu: inv_icm42600: Fix broken icm42600 (chip id 0 value)
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.10 102/102] powerpc/pseries: wire up rng during setup_arch()
 Date:   Mon, 27 Jun 2022 13:21:53 +0200
-Message-Id: <20220627111948.747069861@linuxfoundation.org>
+Message-Id: <20220627111936.491194994@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +55,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 106b391e1b859100a3f38f0ad874236e9be06bde upstream.
+commit e561e472a3d441753bd012333b057f48fef1045b upstream.
 
-The 0 value used for INV_CHIP_ICM42600 was not working since the
-match in i2c/spi was checking against NULL value.
+The platform's RNG must be available before random_init() in order to be
+useful for initial seeding, which in turn means that it needs to be
+called from setup_arch(), rather than from an init call. Fortunately,
+each platform already has a setup_arch function pointer, which means
+it's easy to wire this up. This commit also removes some noisy log
+messages that don't add much.
 
-To keep this check, add a first INV_CHIP_INVALID 0 value as safe
-guard.
-
-Fixes: 31c24c1e93c3 ("iio: imu: inv_icm42600: add core of new inv_icm42600 driver")
-Signed-off-by: Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>
-Link: https://lore.kernel.org/r/20220609102301.4794-1-jmaneyrol@invensense.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: a489043f4626 ("powerpc/pseries: Implement arch_get_random_long() based on H_RANDOM")
+Cc: stable@vger.kernel.org # v3.13+
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220611151015.548325-4-Jason@zx2c4.com
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/imu/inv_icm42600/inv_icm42600.h      |    1 +
- drivers/iio/imu/inv_icm42600/inv_icm42600_core.c |    2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ arch/powerpc/platforms/pseries/pseries.h |    2 ++
+ arch/powerpc/platforms/pseries/rng.c     |   11 +++--------
+ arch/powerpc/platforms/pseries/setup.c   |    2 ++
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
---- a/drivers/iio/imu/inv_icm42600/inv_icm42600.h
-+++ b/drivers/iio/imu/inv_icm42600/inv_icm42600.h
-@@ -17,6 +17,7 @@
- #include "inv_icm42600_buffer.h"
+--- a/arch/powerpc/platforms/pseries/pseries.h
++++ b/arch/powerpc/platforms/pseries/pseries.h
+@@ -114,4 +114,6 @@ int dlpar_workqueue_init(void);
+ void pseries_setup_security_mitigations(void);
+ void pseries_lpar_read_hblkrm_characteristics(void);
  
- enum inv_icm42600_chip {
-+	INV_CHIP_INVALID,
- 	INV_CHIP_ICM42600,
- 	INV_CHIP_ICM42602,
- 	INV_CHIP_ICM42605,
---- a/drivers/iio/imu/inv_icm42600/inv_icm42600_core.c
-+++ b/drivers/iio/imu/inv_icm42600/inv_icm42600_core.c
-@@ -565,7 +565,7 @@ int inv_icm42600_core_probe(struct regma
- 	bool open_drain;
- 	int ret;
++void pseries_rng_init(void);
++
+ #endif /* _PSERIES_PSERIES_H */
+--- a/arch/powerpc/platforms/pseries/rng.c
++++ b/arch/powerpc/platforms/pseries/rng.c
+@@ -10,6 +10,7 @@
+ #include <asm/archrandom.h>
+ #include <asm/machdep.h>
+ #include <asm/plpar_wrappers.h>
++#include "pseries.h"
  
--	if (chip < 0 || chip >= INV_CHIP_NB) {
-+	if (chip <= INV_CHIP_INVALID || chip >= INV_CHIP_NB) {
- 		dev_err(dev, "invalid chip = %d\n", chip);
- 		return -ENODEV;
- 	}
+ 
+ static int pseries_get_random_long(unsigned long *v)
+@@ -24,19 +25,13 @@ static int pseries_get_random_long(unsig
+ 	return 0;
+ }
+ 
+-static __init int rng_init(void)
++void __init pseries_rng_init(void)
+ {
+ 	struct device_node *dn;
+ 
+ 	dn = of_find_compatible_node(NULL, NULL, "ibm,random");
+ 	if (!dn)
+-		return -ENODEV;
+-
+-	pr_info("Registering arch random hook.\n");
+-
++		return;
+ 	ppc_md.get_random_seed = pseries_get_random_long;
+-
+ 	of_node_put(dn);
+-	return 0;
+ }
+-machine_subsys_initcall(pseries, rng_init);
+--- a/arch/powerpc/platforms/pseries/setup.c
++++ b/arch/powerpc/platforms/pseries/setup.c
+@@ -824,6 +824,8 @@ static void __init pSeries_setup_arch(vo
+ 
+ 	if (swiotlb_force == SWIOTLB_FORCE)
+ 		ppc_swiotlb_enable = 1;
++
++	pseries_rng_init();
+ }
+ 
+ static void pseries_panic(char *str)
 
 

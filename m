@@ -2,45 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF8055CACA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C141855D614
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237531AbiF0Lpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
+        id S239303AbiF0L7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237426AbiF0Lmu (ORCPT
+        with ESMTP id S238773AbiF0Lwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:42:50 -0400
+        Mon, 27 Jun 2022 07:52:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD13F64;
-        Mon, 27 Jun 2022 04:37:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D773DE82;
+        Mon, 27 Jun 2022 04:45:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC1F760C98;
-        Mon, 27 Jun 2022 11:37:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D731BC3411D;
-        Mon, 27 Jun 2022 11:37:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECA86610A0;
+        Mon, 27 Jun 2022 11:45:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03F4C341C7;
+        Mon, 27 Jun 2022 11:45:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329862;
-        bh=fjO+gy8E13zpEMADm2t3CoBV0cHGMWdxR1twvteRKVU=;
+        s=korg; t=1656330335;
+        bh=qQsK/KFw7+vQ8Q7idBFmYFRhYdTXO8Kc12ms4xSFZYs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TLXfOMcf576RWs5HsHaqXN7cLiqe4xymkIuiYtbk1hLWSSKGPGcW8dDPwp3p6S5gn
-         HmAIT/eDxAr/f+ddTpM3z/xG/U10ADgE4NPOHD9FSXVTNGngA4bARuoxWQuoKtZ/Di
-         /ctcHKboED1q8jG2VcfTU1OzX3y175gKKe1D6g5E=
+        b=2EYLagDGa7OH7gUFFFY5N0jba1VjObtIORYr2o6l4ZrsSYZDM/drbW0D7wbF8wXuc
+         wf7EleAYKz/f+RoxfBaJYrED77OHzCkyVoNLVuTR/7aBtPOeKqMhQanj4TryxsCjKi
+         REKlAUKqeWBKGxLGHwDTmCs6Qoq2/MzjN848cgIA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5.15 127/135] memory: samsung: exynos5422-dmc: Fix refcount leak in of_get_dram_timings
-Date:   Mon, 27 Jun 2022 13:22:14 +0200
-Message-Id: <20220627111941.838407231@linuxfoundation.org>
+        stable@vger.kernel.org, Marcelo Tosatti <mtosatti@redhat.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Michael Larabel <Michael@MichaelLarabel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Minchan Kim <minchan@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 5.18 162/181] mm: lru_cache_disable: use synchronize_rcu_expedited
+Date:   Mon, 27 Jun 2022 13:22:15 +0200
+Message-Id: <20220627111949.383620931@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,92 +66,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Marcelo Tosatti <mtosatti@redhat.com>
 
-commit 1332661e09304b7b8e84e5edc11811ba08d12abe upstream.
+commit 31733463372e8d88ea54bfa1e35178aad9b2ffd2 upstream.
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-This function doesn't call of_node_put() in some error paths.
-To unify the structure, Add put_node label and goto it on errors.
+commit ff042f4a9b050 ("mm: lru_cache_disable: replace work queue
+synchronization with synchronize_rcu") replaced lru_cache_disable's usage
+of work queues with synchronize_rcu.
 
-Fixes: 6e7674c3c6df ("memory: Add DMC driver for Exynos5422")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-Link: https://lore.kernel.org/r/20220602041721.64348-1-linmq006@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Some users reported large performance regressions due to this commit, for
+example:
+https://lore.kernel.org/all/20220521234616.GO1790663@paulmck-ThinkPad-P17-Gen-1/T/
+
+Switching to synchronize_rcu_expedited fixes the problem.
+
+Link: https://lkml.kernel.org/r/YpToHCmnx/HEcVyR@fuller.cnet
+Fixes: ff042f4a9b050 ("mm: lru_cache_disable: replace work queue synchronization with synchronize_rcu")
+Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
+Tested-by: Michael Larabel <Michael@MichaelLarabel.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Mel Gorman <mgorman@techsingularity.net>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Phil Elwell <phil@raspberrypi.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/memory/samsung/exynos5422-dmc.c |   29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+ mm/swap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/memory/samsung/exynos5422-dmc.c
-+++ b/drivers/memory/samsung/exynos5422-dmc.c
-@@ -1187,33 +1187,39 @@ static int of_get_dram_timings(struct ex
- 
- 	dmc->timing_row = devm_kmalloc_array(dmc->dev, TIMING_COUNT,
- 					     sizeof(u32), GFP_KERNEL);
--	if (!dmc->timing_row)
--		return -ENOMEM;
-+	if (!dmc->timing_row) {
-+		ret = -ENOMEM;
-+		goto put_node;
-+	}
- 
- 	dmc->timing_data = devm_kmalloc_array(dmc->dev, TIMING_COUNT,
- 					      sizeof(u32), GFP_KERNEL);
--	if (!dmc->timing_data)
--		return -ENOMEM;
-+	if (!dmc->timing_data) {
-+		ret = -ENOMEM;
-+		goto put_node;
-+	}
- 
- 	dmc->timing_power = devm_kmalloc_array(dmc->dev, TIMING_COUNT,
- 					       sizeof(u32), GFP_KERNEL);
--	if (!dmc->timing_power)
--		return -ENOMEM;
-+	if (!dmc->timing_power) {
-+		ret = -ENOMEM;
-+		goto put_node;
-+	}
- 
- 	dmc->timings = of_lpddr3_get_ddr_timings(np_ddr, dmc->dev,
- 						 DDR_TYPE_LPDDR3,
- 						 &dmc->timings_arr_size);
- 	if (!dmc->timings) {
--		of_node_put(np_ddr);
- 		dev_warn(dmc->dev, "could not get timings from DT\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_node;
- 	}
- 
- 	dmc->min_tck = of_lpddr3_get_min_tck(np_ddr, dmc->dev);
- 	if (!dmc->min_tck) {
--		of_node_put(np_ddr);
- 		dev_warn(dmc->dev, "could not get tck from DT\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_node;
- 	}
- 
- 	/* Sorted array of OPPs with frequency ascending */
-@@ -1227,13 +1233,14 @@ static int of_get_dram_timings(struct ex
- 					     clk_period_ps);
- 	}
- 
--	of_node_put(np_ddr);
- 
- 	/* Take the highest frequency's timings as 'bypass' */
- 	dmc->bypass_timing_row = dmc->timing_row[idx - 1];
- 	dmc->bypass_timing_data = dmc->timing_data[idx - 1];
- 	dmc->bypass_timing_power = dmc->timing_power[idx - 1];
- 
-+put_node:
-+	of_node_put(np_ddr);
- 	return ret;
- }
- 
+diff --git a/mm/swap.c b/mm/swap.c
+index f3922a96b2e9..034bb24879a3 100644
+--- a/mm/swap.c
++++ b/mm/swap.c
+@@ -881,7 +881,7 @@ void lru_cache_disable(void)
+ 	 * lru_disable_count = 0 will have exited the critical
+ 	 * section when synchronize_rcu() returns.
+ 	 */
+-	synchronize_rcu();
++	synchronize_rcu_expedited();
+ #ifdef CONFIG_SMP
+ 	__lru_add_drain_all(true);
+ #else
+-- 
+2.36.1
+
 
 

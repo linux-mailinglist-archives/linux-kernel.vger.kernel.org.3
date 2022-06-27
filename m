@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8622255C2B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF6455D708
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234355AbiF0Mde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
+        id S234372AbiF0MeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232608AbiF0Mdd (ORCPT
+        with ESMTP id S232608AbiF0MeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:33:33 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E2DB868
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656333212; x=1687869212;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Oaxxcjv1mbEWRgt4DBW/roUDduX65VM82Ml8Nt0Jh04=;
-  b=OEdRX0gBckNLYpMhfBJ/elkq1G9YP4iTzGcDf5kZetpKFGEXPCiZ/Sg4
-   lfJjdcEJpNVGLqPZcRWfJ3xY4IfWDGfQKpF8J6yABz07Jfj5Ep+W5iXRu
-   sVcVCVU31enlo2xNHqeSrBL3HtoIBeXCFXRphz4kMjfb7OW2TnK6mVbms
-   Q=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jun 2022 05:33:32 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 05:33:31 -0700
-Received: from [10.216.42.196] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 27 Jun
- 2022 05:33:29 -0700
-Message-ID: <0a39b462-fe41-55fd-c013-9c8b0f2deb42@quicinc.com>
-Date:   Mon, 27 Jun 2022 18:03:25 +0530
+        Mon, 27 Jun 2022 08:34:22 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409ECBC90;
+        Mon, 27 Jun 2022 05:34:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656333261; x=1687869261;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3cZhrIXL/31n4yULxyK6MSoWTderF7rYg/64LrImcrE=;
+  b=l8Ek+mVAIYB77pTxT3xHwJOrlKPN4ZrqO6g4PMZfW3yWZ5dhKW5aRNrY
+   AuhGC9X5i6JisqKxIoQ0kQc1CvRomRcPKcXgpNFdODLhM4x/t5KFa4+Lj
+   FY2ne7/Fbikw+Jwxuxy1H2NrO96+0BxVvPKwEo9oaDo0b0jzoiGMey4s6
+   zkouTkaHzUMtQB+/b0Kn72CxPzHEmTbkmFqIqq6sNtPdceuoin1DUqPWv
+   TQpOx9K40n0LvlTp5/Nx31mfU0i7SD37c4I34adDkn1I/qhJPa+oTjfhX
+   afsyuaEFkl0fEW/+og9+h9I7aHp5h9FiWeOevMVIVQ6H2nZFN0Cjsdn1u
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="367753998"
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="367753998"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 05:34:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="679565746"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Jun 2022 05:34:16 -0700
+Date:   Mon, 27 Jun 2022 20:34:15 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Shakeel Butt <shakeelb@google.com>, Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        network dev <netdev@vger.kernel.org>,
+        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
+Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
+Message-ID: <20220627123415.GA32052@shbuild999.sh.intel.com>
+References: <CADvbK_csvmkKe46hT9792=+Qcjor2EvkkAnr--CJK3NGX-N9BQ@mail.gmail.com>
+ <CADvbK_eQUmb942vC+bG+NRzM1ki1LiCydEDR1AezZ35Jvsdfnw@mail.gmail.com>
+ <20220623185730.25b88096@kernel.org>
+ <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
+ <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
+ <20220624070656.GE79500@shbuild999.sh.intel.com>
+ <20220624144358.lqt2ffjdry6p5u4d@google.com>
+ <20220625023642.GA40868@shbuild999.sh.intel.com>
+ <20220627023812.GA29314@shbuild999.sh.intel.com>
+ <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v5] devcoredump : Serialize devcd_del work
-Content-Language: en-US
-To:     <linux-kernel@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <tglx@linutronix.de>,
-        <sboyd@kernel.org>, <rafael@kernel.org>,
-        <johannes@sipsolutions.net>, <keescook@chromium.org>
-References: <1653660220-19197-1-git-send-email-quic_mojha@quicinc.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <1653660220-19197-1-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,220 +86,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 27, 2022 at 10:46:21AM +0200, Eric Dumazet wrote:
+> On Mon, Jun 27, 2022 at 4:38 AM Feng Tang <feng.tang@intel.com> wrote:
+[snip]
+> > > >
+> > > > Thanks Feng. Can you check the value of memory.kmem.tcp.max_usage_in_bytes
+> > > > in /sys/fs/cgroup/memory/system.slice/lkp-bootstrap.service after making
+> > > > sure that the netperf test has already run?
+> > >
+> > > memory.kmem.tcp.max_usage_in_bytes:0
+> >
+> > Sorry, I made a mistake that in the original report from Oliver, it
+> > was 'cgroup v2' with a 'debian-11.1' rootfs.
+> >
+> > When you asked about cgroup info, I tried the job on another tbox, and
+> > the original 'job.yaml' didn't work, so I kept the 'netperf' test
+> > parameters and started a new job which somehow run with a 'debian-10.4'
+> > rootfs and acutally run with cgroup v1.
+> >
+> > And as you mentioned cgroup version does make a big difference, that
+> > with v1, the regression is reduced to 1% ~ 5% on different generations
+> > of test platforms. Eric mentioned they also got regression report,
+> > but much smaller one, maybe it's due to the cgroup version?
+> 
+> This was using the current net-next tree.
+> Used recipe was something like:
+> 
+> Make sure cgroup2 is mounted or mount it by mount -t cgroup2 none $MOUNT_POINT.
+> Enable memory controller by echo +memory > $MOUNT_POINT/cgroup.subtree_control.
+> Create a cgroup by mkdir $MOUNT_POINT/job.
+> Jump into that cgroup by echo $$ > $MOUNT_POINT/job/cgroup.procs.
+> 
+> <Launch tests>
+> 
+> The regression was smaller than 1%, so considered noise compared to
+> the benefits of the bug fix.
+ 
+Yes, 1% is just around noise level for a microbenchmark.
 
-Friendly reminder !!
+I went check the original test data of Oliver's report, the tests was
+run 6 rounds and the performance data is pretty stable (0Day's report
+will show any std deviation bigger than 2%)
 
--Mukesh
-On 5/27/2022 7:33 PM, Mukesh Ojha wrote:
-> In following scenario(diagram), when one thread X running dev_coredumpm()
-> adds devcd device to the framework which sends uevent notification to
-> userspace and another thread Y reads this uevent and call to
-> devcd_data_write() which eventually try to delete the queued timer that
-> is not initialized/queued yet.
-> 
-> So, debug object reports some warning and in the meantime, timer is
-> initialized and queued from X path. and from Y path, it gets reinitialized
-> again and timer->entry.pprev=NULL and try_to_grab_pending() stucks.
-> 
-> To fix this, introduce mutex and a boolean flag to serialize the behaviour.
-> 
->   	cpu0(X)			                cpu1(Y)
-> 
->      dev_coredump() uevent sent to user space
->      device_add()  ======================> user space process Y reads the
->                                            uevents writes to devcd fd
->                                            which results into writes to
-> 
->                                           devcd_data_write()
->                                             mod_delayed_work()
->                                               try_to_grab_pending()
->                                                 del_timer()
->                                                   debug_assert_init()
->     INIT_DELAYED_WORK()
->     schedule_delayed_work()
->                                                     debug_object_fixup()
->                                                       timer_fixup_assert_init()
->                                                         timer_setup()
->                                                           do_init_timer()
->                                                         /*
->                                                          Above call reinitializes
->                                                          the timer to
->                                                          timer->entry.pprev=NULL
->                                                          and this will be checked
->                                                          later in timer_pending() call.
->                                                         */
->                                                   timer_pending()
->                                                    !hlist_unhashed_lockless(&timer->entry)
->                                                      !h->pprev
->                                                  /*
->                                                    del_timer() checks h->pprev and finds
->                                                    it to be NULL due to which
->                                                    try_to_grab_pending() stucks.
->                                                  */
-> 
-> Link: https://lore.kernel.org/lkml/2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com/
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
-> v4->v5:
->   - Rebased it.
-> 
-> v3->v4:
->   - flg variable renamed to delete_work.
-> 
-> v2->v3:
->   Addressed comments from gregkh
->   - Wrapped the commit text and corrected the alignment.
->   - Described the reason to introduce new variables.
->   - Restored the blank line.
->   - rename the del_wk_queued to flg.
->   Addressed comments from tglx
->   - Added a comment which explains the race which looks obvious however
->     would not occur between disabled_store and devcd_del work.
-> 
-> 
-> v1->v2:
->   - Added del_wk_queued flag to serialize the race between devcd_data_write()
->     and disabled_store() => devcd_free().
->   drivers/base/devcoredump.c | 83 ++++++++++++++++++++++++++++++++++++++++++++--
->   1 file changed, 81 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
-> index f4d794d..1c06781 100644
-> --- a/drivers/base/devcoredump.c
-> +++ b/drivers/base/devcoredump.c
-> @@ -25,6 +25,47 @@ struct devcd_entry {
->   	struct device devcd_dev;
->   	void *data;
->   	size_t datalen;
-> +	/*
-> +	 * Here, mutex is required to serialize the calls to del_wk work between
-> +	 * user/kernel space which happens when devcd is added with device_add()
-> +	 * and that sends uevent to user space. User space reads the uevents,
-> +	 * and calls to devcd_data_write() which try to modify the work which is
-> +	 * not even initialized/queued from devcoredump.
-> +	 *
-> +	 *
-> +	 *
-> +	 *        cpu0(X)                                 cpu1(Y)
-> +	 *
-> +	 *        dev_coredump() uevent sent to user space
-> +	 *        device_add()  ======================> user space process Y reads the
-> +	 *                                              uevents writes to devcd fd
-> +	 *                                              which results into writes to
-> +	 *
-> +	 *                                             devcd_data_write()
-> +	 *                                               mod_delayed_work()
-> +	 *                                                 try_to_grab_pending()
-> +	 *                                                   del_timer()
-> +	 *                                                     debug_assert_init()
-> +	 *       INIT_DELAYED_WORK()
-> +	 *       schedule_delayed_work()
-> +	 *
-> +	 *
-> +	 * Also, mutex alone would not be enough to avoid scheduling of
-> +	 * del_wk work after it get flush from a call to devcd_free()
-> +	 * mentioned as below.
-> +	 *
-> +	 *	disabled_store()
-> +	 *        devcd_free()
-> +	 *          mutex_lock()             devcd_data_write()
-> +	 *          flush_delayed_work()
-> +	 *          mutex_unlock()
-> +	 *                                   mutex_lock()
-> +	 *                                   mod_delayed_work()
-> +	 *                                   mutex_unlock()
-> +	 * So, delete_work flag is required.
-> +	 */
-> +	struct mutex mutex;
-> +	bool delete_work;
->   	struct module *owner;
->   	ssize_t (*read)(char *buffer, loff_t offset, size_t count,
->   			void *data, size_t datalen);
-> @@ -84,7 +125,12 @@ static ssize_t devcd_data_write(struct file *filp, struct kobject *kobj,
->   	struct device *dev = kobj_to_dev(kobj);
->   	struct devcd_entry *devcd = dev_to_devcd(dev);
->   
-> -	mod_delayed_work(system_wq, &devcd->del_wk, 0);
-> +	mutex_lock(&devcd->mutex);
-> +	if (!devcd->delete_work) {
-> +		devcd->delete_work = true;
-> +		mod_delayed_work(system_wq, &devcd->del_wk, 0);
-> +	}
-> +	mutex_unlock(&devcd->mutex);
->   
->   	return count;
->   }
-> @@ -112,7 +158,12 @@ static int devcd_free(struct device *dev, void *data)
->   {
->   	struct devcd_entry *devcd = dev_to_devcd(dev);
->   
-> +	mutex_lock(&devcd->mutex);
-> +	if (!devcd->delete_work)
-> +		devcd->delete_work = true;
-> +
->   	flush_delayed_work(&devcd->del_wk);
-> +	mutex_unlock(&devcd->mutex);
->   	return 0;
->   }
->   
-> @@ -122,6 +173,30 @@ static ssize_t disabled_show(struct class *class, struct class_attribute *attr,
->   	return sysfs_emit(buf, "%d\n", devcd_disabled);
->   }
->   
-> +/*
-> + *
-> + *	disabled_store()                                	worker()
-> + *	 class_for_each_device(&devcd_class,
-> + *		NULL, NULL, devcd_free)
-> + *         ...
-> + *         ...
-> + *	   while ((dev = class_dev_iter_next(&iter))
-> + *                                                             devcd_del()
-> + *                                                               device_del()
-> + *                                                                 put_device() <- last reference
-> + *             error = fn(dev, data)                           devcd_dev_release()
-> + *             devcd_free(dev, data)                           kfree(devcd)
-> + *             mutex_lock(&devcd->mutex);
-> + *
-> + *
-> + * In the above diagram, It looks like disabled_store() would be racing with parallely
-> + * running devcd_del() and result in memory abort while acquiring devcd->mutex which
-> + * is called after kfree of devcd memory  after dropping its last reference with
-> + * put_device(). However, this will not happens as fn(dev, data) runs
-> + * with its own reference to device via klist_node so it is not its last reference.
-> + * so, above situation would not occur.
-> + */
-> +
->   static ssize_t disabled_store(struct class *class, struct class_attribute *attr,
->   			      const char *buf, size_t count)
->   {
-> @@ -278,13 +353,16 @@ void dev_coredumpm(struct device *dev, struct module *owner,
->   	devcd->read = read;
->   	devcd->free = free;
->   	devcd->failing_dev = get_device(dev);
-> +	devcd->delete_work = false;
->   
-> +	mutex_init(&devcd->mutex);
->   	device_initialize(&devcd->devcd_dev);
->   
->   	dev_set_name(&devcd->devcd_dev, "devcd%d",
->   		     atomic_inc_return(&devcd_count));
->   	devcd->devcd_dev.class = &devcd_class;
->   
-> +	mutex_lock(&devcd->mutex);
->   	if (device_add(&devcd->devcd_dev))
->   		goto put_device;
->   
-> @@ -301,10 +379,11 @@ void dev_coredumpm(struct device *dev, struct module *owner,
->   
->   	INIT_DELAYED_WORK(&devcd->del_wk, devcd_del);
->   	schedule_delayed_work(&devcd->del_wk, DEVCD_TIMEOUT);
-> -
-> +	mutex_unlock(&devcd->mutex);
->   	return;
->    put_device:
->   	put_device(&devcd->devcd_dev);
-> +	mutex_unlock(&devcd->mutex);
->    put_module:
->   	module_put(owner);
->    free:
+The test platform is a 4 sockets 72C/144T machine, and I run the
+same job (nr_tasks = 25% * nr_cpus) on one CascadeLake AP (4 nodes)
+and one Icelake 2 sockets platform, and saw 75% and 53% regresson on
+them.
+
+In the first email, there is a file named 'reproduce', it shows the
+basic test process:
+
+"
+  use 'performane' cpufre  governor for all CPUs
+
+  netserver -4 -D
+  modprobe sctp
+  netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
+  netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
+  netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
+  (repeat 36 times in total) 
+  ...
+
+"
+
+Which starts 36 (25% of nr_cpus) netperf clients. And the clients number
+also matters, I tried to increase the client number from 36 to 72(50%),
+and the regression is changed from 69.4% to 73.7%
+
+Thanks,
+Feng
+
+> >
+> > Thanks,
+> > Feng

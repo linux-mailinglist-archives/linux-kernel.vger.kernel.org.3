@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C83E55DB09
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828FD55C807
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbiF0Fu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 01:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        id S232135AbiF0Fxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 01:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232133AbiF0Fup (ORCPT
+        with ESMTP id S229753AbiF0Fxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 01:50:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6711A5FA9;
-        Sun, 26 Jun 2022 22:50:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBFAB6125A;
-        Mon, 27 Jun 2022 05:50:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC1A2C341C8;
-        Mon, 27 Jun 2022 05:50:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656309021;
-        bh=viTgpc0ZXjhdDBzCZ8VzjBVCUhW3/DRBr454jT9Y9SQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YdcFSFZIQCIYZhXRmGp4FgqzQinaNm3I9bYxlmml0qfnWx8uCridG4BL8NQV+tfUb
-         Sxh0QHvhryaoOPMVsOyP0ZJfgHQwQj3pQQxw8paw7ijrsFyG2Bc3DB739U+eAyeFIw
-         NrMZZhBl+KTSd4xWxeTRHgorAOg2qU9ZkQZPdC84wYe+xIV//7V8lHDXZ6y5pBAyrB
-         pg8l2ubcBZJT2irqF1X3+nMhL74fkJFRt6URZeRhEmiKH4Y+GMaIkq49exTGxo4r9M
-         TGdT3s4y3ZO235Upxv2em/nCkzvNBMBMG3XmiXuIiyX4CklO0kCdZYtlb4AXvBxsCO
-         AgupdcdKlc+xQ==
-Date:   Mon, 27 Jun 2022 11:20:14 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jie Hai <haijie1@huawei.com>
-Cc:     wangzhou1@hisilicon.com, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/8] Documentation: Add debugfs doc for hisi_dma
-Message-ID: <YrlFFm+/dgC53JJH@matsya>
-References: <20220625074422.3479591-1-haijie1@huawei.com>
- <20220625074422.3479591-8-haijie1@huawei.com>
+        Mon, 27 Jun 2022 01:53:47 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D57AF2AF7;
+        Sun, 26 Jun 2022 22:53:44 -0700 (PDT)
+Received: from [192.168.254.32] (unknown [47.189.24.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B588120CD148;
+        Sun, 26 Jun 2022 22:53:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B588120CD148
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1656309224;
+        bh=2G49cShhAolevVu8WMXvOpG1Mrf19q/QEnAA5fF6zKw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=M2QTmBtLQdaD8mBvjWyhywM2I/e4ndS5HBPLSBSnpn5EJinQ5HXXX9Jeqdi8xYovw
+         kBq1Lf68Ew1OgNotx0OvrxrKJ6iw+BzIp4yV05WHbeBRzzaJD5Wc5xamODfIip0BjV
+         pp91nkD/8Msu4ztJSg5vFD+CxcDCMheTNBa0w514=
+Message-ID: <17aa8390-fe27-94fe-0098-c9c76dffafa5@linux.microsoft.com>
+Date:   Mon, 27 Jun 2022 00:53:42 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220625074422.3479591-8-haijie1@huawei.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v15 6/6] arm64: Introduce arch_stack_walk_reliable()
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
+ <20220617210717.27126-1-madvenka@linux.microsoft.com>
+ <20220617210717.27126-7-madvenka@linux.microsoft.com>
+ <YrgflcfxP7pYtob7@FVFF77S0Q05N>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <YrgflcfxP7pYtob7@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,35 +58,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-06-22, 15:44, Jie Hai wrote:
-> Add debugfs descriptions for HiSilicon DMA driver.
+
+
+On 6/26/22 03:57, Mark Rutland wrote:
+> On Fri, Jun 17, 2022 at 04:07:17PM -0500, madvenka@linux.microsoft.com wrote:
+>> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>>
+>> Introduce arch_stack_walk_reliable() for ARM64. This works like
+>> arch_stack_walk() except that it returns -EINVAL if the stack trace is not
+>> reliable.
+>>
+>> Until all the reliability checks are in place, arch_stack_walk_reliable()
+>> may not be used by livepatch. But it may be used by debug and test code.
 > 
-> Signed-off-by: Jie Hai <haijie1@huawei.com>
-> ---
->  Documentation/ABI/testing/debugfs-hisi-dma | 9 +++++++++
->  1 file changed, 9 insertions(+)
->  create mode 100644 Documentation/ABI/testing/debugfs-hisi-dma
+> For the moment I would strongly perfer *not* to add this until we have the
+> missing bits and pieces sorted out.
 > 
-> diff --git a/Documentation/ABI/testing/debugfs-hisi-dma b/Documentation/ABI/testing/debugfs-hisi-dma
-> new file mode 100644
-> index 000000000000..162c97945748
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/debugfs-hisi-dma
 
-debugfs is not an ABI so no need to document this, so pls drop this
+Yes. I am removing this from the patch series.
 
-> @@ -0,0 +1,9 @@
-> +What:           /sys/kernel/debug/hisi_dma/<bdf>/regs
-> +Date:           Mar 2022
-> +Contact:        dmaengine@vger.kernel.org
-> +Description:    Dump the debug registers from the hisi dma.
-> +
-> +What:           /sys/kernel/debug/hisi_dma/<bdf>/channel[id]/regs
-> +Date:           Mar 2022
-> +Contact:        dmaengine@vger.kernel.org
-> +Description:    Dump the channel related debug registers from the hisi dma.
-> -- 
-> 2.33.0
+> Until then, I'd like to ensure that any infrastructure we add is immediately
+> useful and tested. One way to do that would be to enhance the stack dumping
+> code (i.e. dump_backtrace()) to log some metadata.
+> 
+> As an end-goal, I'd like to get to a point where we can do:
+> 
+> * Explicit logging when trace terminate at the final frame, e.g.
+> 
+>   stacktrace:
+>     function_c+offset/total
+>     function_b+offset/total
+>     function_a+offset/total
+>     <unwind successful>
+> 
+> * Explicit logging of early termination, e.g.
+> 
+>   stacktrace:
+>     function_c+offset/total
+>     <unwind terminated early (bad FP)>
+> 
+> * Unreliability on individual elements, e.g.
+> 
+>   stacktrace:
+>     function_c+offset/total
+>     function_b+offset/total (?)
+>     function_a+offset/total
+> 
+> * Annotations for special unwinding, e.g.
+> 
+>   stacktrace:
+>     function_c+offset/total (K) // kretprobes trampoline
+>     function_b+offset/total (F) // ftrace trampoline
+>     function_a+offset/total (FK) // ftrace and kretprobes
+>     other_function+offset/total (P) // from pt_regs::pc
+>     another_function+offset/total (L?) // from pt_regs::lr, unreliable
+>     something_else+offset/total
+> 
+>   Note: the comments here are just to explain the idea, I don't expect those in
+>   the actual output.
+> 
+> That'll justify some of the infrastructure we need for reliable unwinding, and
+> ensure that it is tested, well before we actually enable reliable stacktracing.
+> 
 
--- 
-~Vinod
+In the current code structure, the annotations are a problem.
+
+The printing of the entry along with the annotations and metadata cannot be done in
+the unwind functions themselves as the caller may not even want anything printed.
+The printing has to be done in consume_entry() if the caller wants to do it. But
+consume_entry() only gets the PC as the argument (apart from the cookie passed by
+the caller). It currently has no way of figuring out where the PC was obtained from
+(ftrace, kretprobe, pt_regs, etc) or if the PC is reliable.
+
+We need to replace the PC argument with a pointer to a structure that contains the
+PC as well as other information about the PC. unwind_init() and unwind_next() need
+to update that for each frame.
+
+If this approach is acceptable, I will submit a patch series for that. Please let
+me know.
+
+Thanks.
+
+Madhavan

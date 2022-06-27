@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636A555C132
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE6855D3C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237098AbiF0LmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
+        id S235485AbiF0LcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236654AbiF0LjC (ORCPT
+        with ESMTP id S235648AbiF0Lbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:39:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12440BE09;
-        Mon, 27 Jun 2022 04:35:09 -0700 (PDT)
+        Mon, 27 Jun 2022 07:31:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FD6F6A;
+        Mon, 27 Jun 2022 04:29:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BDEA60DF6;
-        Mon, 27 Jun 2022 11:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97BFBC341CF;
-        Mon, 27 Jun 2022 11:35:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E763B81116;
+        Mon, 27 Jun 2022 11:28:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC1EC385A5;
+        Mon, 27 Jun 2022 11:28:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329708;
-        bh=hYDa6Bz31lTHXpIPhf/aJ/mFl8ah0rfXXrvW8+o6EOM=;
+        s=korg; t=1656329337;
+        bh=vHphNEGDnvQP6fenj0WdjSl93B5+8QPE+d2p67vjjAI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pK0wZwKzPa33H21QygPbJHdYtNXU2h7h8IBmkzfejJXBPFMPNBpNvW4A9d8LQCWoQ
-         bWcP5mQr+vUbu8ZnAN2c9bDY4z4Ld+zMI2yEQgNsJMDMhMme8Yslu7UiIWm28UJSTc
-         Nvx94XJu02p0asKpFPlTemOYXW1SmZSJPuEnXBts=
+        b=qSUgt0EP5KoJo8sfnkpEr3kobnS6Z+87Nd1A3Nlg6kHObbZ/r2FoEx2BwC4QTDvXo
+         Uf1UHV1/8ZHbhdXHXcQiDYUE3Zs7jVgSTB7Uz4ga6boyHjmR4PuoMHVmWuzhxjVbnS
+         OWOmR+EaorQWqrtAZ3Y1OqupjTA5pr9s7ZVTD4Qk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xu Yang <xu.yang_2@nxp.com>
-Subject: [PATCH 5.15 089/135] usb: chipidea: udc: check request status before setting device address
+        stable@vger.kernel.org, Julien Grall <jgrall@amazon.com>,
+        Juergen Gross <jgross@suse.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 25/60] x86/xen: Remove undefined behavior in setup_features()
 Date:   Mon, 27 Jun 2022 13:21:36 +0200
-Message-Id: <20220627111940.741804472@linuxfoundation.org>
+Message-Id: <20220627111928.406738132@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,34 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Yang <xu.yang_2@nxp.com>
+From: Julien Grall <jgrall@amazon.com>
 
-commit b24346a240b36cfc4df194d145463874985aa29b upstream.
+[ Upstream commit ecb6237fa397b7b810d798ad19322eca466dbab1 ]
 
-The complete() function may be called even though request is not
-completed. In this case, it's necessary to check request status so
-as not to set device address wrongly.
+1 << 31 is undefined. So switch to 1U << 31.
 
-Fixes: 10775eb17bee ("usb: chipidea: udc: update gadget states according to ch9")
-cc: <stable@vger.kernel.org>
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-Link: https://lore.kernel.org/r/20220623030242.41796-1-xu.yang_2@nxp.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 5ead97c84fa7 ("xen: Core Xen implementation")
+Signed-off-by: Julien Grall <jgrall@amazon.com>
+Reviewed-by: Juergen Gross <jgross@suse.com>
+Link: https://lore.kernel.org/r/20220617103037.57828-1-julien@xen.org
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/chipidea/udc.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/xen/features.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -1040,6 +1040,9 @@ isr_setup_status_complete(struct usb_ep
- 	struct ci_hdrc *ci = req->context;
- 	unsigned long flags;
- 
-+	if (req->status < 0)
-+		return;
-+
- 	if (ci->setaddr) {
- 		hw_usb_set_address(ci, ci->address);
- 		ci->setaddr = false;
+diff --git a/drivers/xen/features.c b/drivers/xen/features.c
+index 25c053b09605..2c306de228db 100644
+--- a/drivers/xen/features.c
++++ b/drivers/xen/features.c
+@@ -29,6 +29,6 @@ void xen_setup_features(void)
+ 		if (HYPERVISOR_xen_version(XENVER_get_features, &fi) < 0)
+ 			break;
+ 		for (j = 0; j < 32; j++)
+-			xen_features[i * 32 + j] = !!(fi.submap & 1<<j);
++			xen_features[i * 32 + j] = !!(fi.submap & 1U << j);
+ 	}
+ }
+-- 
+2.35.1
+
 
 

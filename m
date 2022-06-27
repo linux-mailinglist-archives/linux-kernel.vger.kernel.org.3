@@ -2,107 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB4855CB2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492FF55C9C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238287AbiF0Pbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
+        id S238388AbiF0PdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238193AbiF0Pb2 (ORCPT
+        with ESMTP id S238262AbiF0PcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:31:28 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F0D19C3D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:31:25 -0700 (PDT)
-Received: from ramsan.of.borg ([84.195.186.194])
-        by xavier.telenet-ops.be with bizsmtp
-        id oFXH2700S4C55Sk01FXHaj; Mon, 27 Jun 2022 17:31:23 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1o5qhp-0014ye-0o; Mon, 27 Jun 2022 17:31:17 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1o5qho-004jF0-J1; Mon, 27 Jun 2022 17:31:16 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>
-Cc:     Mark Brown <broonie@kernel.org>, linux-mtd@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 7/7] memory: renesas-rpc-if: Reinitialize registers during system resume
-Date:   Mon, 27 Jun 2022 17:31:14 +0200
-Message-Id: <923c057c77b146710a82d486f89ce3a8ebda7ccd.1656341824.git.geert+renesas@glider.be>
+        Mon, 27 Jun 2022 11:32:11 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B371A07F;
+        Mon, 27 Jun 2022 08:31:54 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id q18so8456650pld.13;
+        Mon, 27 Jun 2022 08:31:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iZDC1AGRQHEGpUuB3ISkYbuot/iQPwlOXTIDim4MzLc=;
+        b=O+GWloioEOJpO0XyXVRSMZTQsER89gKRWgIfzRViNiUH+wc06BhSdI/DYNimqD0H/7
+         +pBzmJ7cigXalaMs2EYCeYKV+G6WBWbR7VsAdyeDZvbyF635dgSBJ9nXlWkul7FYLsu8
+         gAtMXnwoSaQlBXInB76dUgvLj6KmA/5ZhOoN5PXuJRteFiHKTnGTlUuAh61yLcYZn323
+         AGGQSk+5H0R6Snc1R2Toqjss7pGQnsZttUZ8diX7VWTqboNL5/2x0EEKY7FPIvyhj3+l
+         8U+0xCg4eQ3aluY9uc5Aw2N+SRaH40XIYSKcjsS9Uk6Yh8XYwdhjkXZpQ/NAeL8ogA9R
+         2+yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iZDC1AGRQHEGpUuB3ISkYbuot/iQPwlOXTIDim4MzLc=;
+        b=QqGRFvPCY2XcHSHrdqmje5aY3Cn6u+jtFZfp06+llDLBu19y2Oq38IADxWdb9UuElQ
+         7VihEbJVnh3Mm75TAd0zuc4kZBBiLeUNcirpD4mmpc/eJ7hZ0UdvB1YdmfokE66GZQNk
+         PXou5khJJd4M6iRa5jRxSlNctWOHprHvzVMt1H4gx4f5YItfZSrjmDA6qd2DL9Mcp12R
+         jqHXA4HHlLrmviIVozXapM+d7lZ3h1XjD3rz+p/Soc9qZg9z4Eb7qWKqfVoR1yfyybwA
+         jhfwqN50OVn0hFDf+CQPX5AZ39Iq92AEsFbxR3TkSDln6Y6iZozTS8zOWl+PZh6gypO6
+         TiuA==
+X-Gm-Message-State: AJIora+o4rl4RcGjPs8P0ruJRd9y7Ot3HbJqnILvn2HLjGB2WolycIHF
+        kS91AU3oz2vvv8fwjsLs2RM=
+X-Google-Smtp-Source: AGRyM1sEiEhuPfofrRLQqFzFlVdXiZYLCqnhQsSu7hoQrMhPrjLPj9CQQVl/oAKCcOOKm40jQb6U7g==
+X-Received: by 2002:a17:902:cec4:b0:16a:1fc3:b6e6 with SMTP id d4-20020a170902cec400b0016a1fc3b6e6mr15435957plg.129.1656343914201;
+        Mon, 27 Jun 2022 08:31:54 -0700 (PDT)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:36:f0eb:a18:55d7:977b])
+        by smtp.gmail.com with ESMTPSA id y6-20020aa78f26000000b005251ec8bb5bsm7595705pfr.199.2022.06.27.08.31.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 08:31:53 -0700 (PDT)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     corbet@lwn.net, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        paulmck@kernel.org, akpm@linux-foundation.org,
+        keescook@chromium.org, songmuchun@bytedance.com,
+        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
+        michael.h.kelley@microsoft.com, kys@microsoft.com
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        vkuznets@redhat.com, wei.liu@kernel.org, parri.andrea@gmail.com,
+        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
+        kirill.shutemov@intel.com, andi.kleen@intel.com
+Subject: [PATCH 0/2] swiotlb: Split up single swiotlb lock
+Date:   Mon, 27 Jun 2022 11:31:48 -0400
+Message-Id: <20220627153150.106995-1-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1656341824.git.geert+renesas@glider.be>
-References: <cover.1656341824.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During PSCI system suspend, R-Car Gen3 SoCs may be powered down, and
-thus the RPC-IF register state may be lost.  Consequently, when using
-the RPC-IF after system resume, data corruption may happen.
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-Fix this by reinitializing the hardware state during system resume.
-As this requires resuming the RPC-IF core device, this can only be done
-when the device is under active control of the HyperBus or SPI child
-driver.
+Traditionally swiotlb was not performance critical because it was only
+used for slow devices. But in some setups, like TDX/SEV confidential
+guests, all IO has to go through swiotlb. Currently swiotlb only has a
+single lock. Under high IO load with multiple CPUs this can lead to
+significat lock contention on the swiotlb lock.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/memory/renesas-rpc-if.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Patch 1 is to introduce swiotlb area concept and split up single swiotlb
+lock.
+Patch 2 set swiotlb area number with lapic number
 
-diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
-index ec76e603ad24d214..2a49d4511c8296c5 100644
---- a/drivers/memory/renesas-rpc-if.c
-+++ b/drivers/memory/renesas-rpc-if.c
-@@ -757,6 +757,20 @@ static int rpcif_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static int rpcif_resume(struct device *dev)
-+{
-+	struct rpcif_priv *rpc = dev_get_drvdata(dev);
-+
-+	if (!pm_runtime_enabled(dev)) {
-+		/* Not yet activated or deactivated by child device */
-+		return 0;
-+	}
-+
-+	return rpcif_hw_init(dev, rpc->bus_size == 2);
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(rpcif_pm_ops, NULL, rpcif_resume);
-+
- static const struct of_device_id rpcif_of_match[] = {
- 	{ .compatible = "renesas,rcar-gen3-rpc-if", .data = (void *)RPCIF_RCAR_GEN3 },
- 	{ .compatible = "renesas,rzg2l-rpc-if", .data = (void *)RPCIF_RZ_G2L },
-@@ -770,6 +784,7 @@ static struct platform_driver rpcif_driver = {
- 	.driver = {
- 		.name =	"rpc-if",
- 		.of_match_table = rpcif_of_match,
-+		.pm = pm_sleep_ptr(&rpcif_pm_ops),
- 	},
- };
- module_platform_driver(rpcif_driver);
+
+Tianyu Lan (2):
+  swiotlb: Split up single swiotlb lock
+  x86/ACPI: Set swiotlb area according to the number of lapic entry in
+    MADT
+
+ .../admin-guide/kernel-parameters.txt         |   4 +-
+ arch/x86/kernel/acpi/boot.c                   |   3 +
+ include/linux/swiotlb.h                       |  27 +++
+ kernel/dma/swiotlb.c                          | 202 ++++++++++++++----
+ 4 files changed, 197 insertions(+), 39 deletions(-)
+
 -- 
 2.25.1
 

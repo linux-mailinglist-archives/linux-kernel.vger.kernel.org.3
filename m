@@ -2,118 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050C155CFEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC9D55CDB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232705AbiF0HRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
+        id S232864AbiF0HSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbiF0HRP (ORCPT
+        with ESMTP id S232641AbiF0HSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:17:15 -0400
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB8E5FE6;
-        Mon, 27 Jun 2022 00:17:13 -0700 (PDT)
-Received: by mail-qv1-f47.google.com with SMTP id y14so13529784qvs.10;
-        Mon, 27 Jun 2022 00:17:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e/zqkQPFTUj9N5yUlKAt6CBYdzhsrN+6ZcFTDaIiaZY=;
-        b=yKlbCeeWoczArlS08sJa8qkBDxpUuSNgLCYucSj9Pj0yIPSMsOtt+GcBFXvt//HGsU
-         WrN6KtzGDIVMEN3DmgsReyaQow5y6V1oVGLlnwzasW6BaZr47A4iR8AB/A0i/HYoWouv
-         GkBwJEb/XZbeIIckKDx7tCicFpkkqWhSIXdd9DDcwfoXPp3qqlrnZUUrJwhpoFhE0EzY
-         h3CldsH3cCCkT37cZ2mGKFPO8XQG4hvUhZcNJwSZ2QjnNqwbdOA2LO4pPwBDEeX5Mq/3
-         /PQUmml6QF0UKvu4MhffwfSc7jKpZE20hBdDiOaGXSSCfSatByzuT0FRaqh9JFMFmC+k
-         FGRQ==
-X-Gm-Message-State: AJIora+YHohVoY5h9kfjHt8qw8u1NfEiVGih3fLIe0c1XX/VlW/10QIe
-        Uw3z7n9LASoE7aanlcHkCdRZfG3SVecI5g==
-X-Google-Smtp-Source: AGRyM1t6D0kJxzhDzKgLa9OikDBLTIlLI87jQEeKacvqoyjuqewB8LkiTwHryMozHnbbl4pg23hEcw==
-X-Received: by 2002:ac8:5749:0:b0:305:1ea5:4a7 with SMTP id 9-20020ac85749000000b003051ea504a7mr7816225qtx.291.1656314232362;
-        Mon, 27 Jun 2022 00:17:12 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id w20-20020a05620a445400b006af37b005bdsm664399qkp.128.2022.06.27.00.17.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 00:17:11 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id o19so8675891ybg.2;
-        Mon, 27 Jun 2022 00:17:11 -0700 (PDT)
-X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
- s14-20020a056902120e00b006346f296b84mr12087179ybu.604.1656314231501; Mon, 27
- Jun 2022 00:17:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <165515741424.1554877.9363755381201121213.stgit@warthog.procyon.org.uk>
- <165515742832.1554877.2073456606206090838.stgit@warthog.procyon.org.uk>
-In-Reply-To: <165515742832.1554877.2073456606206090838.stgit@warthog.procyon.org.uk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 27 Jun 2022 09:16:59 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWWtdoAwWo_qitV+s-3amxKzbVSDJ3f51E9fKT3MQwLAw@mail.gmail.com>
-Message-ID: <CAMuHMdWWtdoAwWo_qitV+s-3amxKzbVSDJ3f51E9fKT3MQwLAw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] certs: Add FIPS selftests
-To:     David Howells <dhowells@redhat.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Simo Sorce <simo@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Mon, 27 Jun 2022 03:18:31 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E23935F5A;
+        Mon, 27 Jun 2022 00:18:26 -0700 (PDT)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr9i8Wbli1rxfAA--.5381S2;
+        Mon, 27 Jun 2022 15:18:21 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] modpost: Add line break in the section mismatch warning
+Date:   Mon, 27 Jun 2022 15:18:20 +0800
+Message-Id: <1656314300-2749-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxr9i8Wbli1rxfAA--.5381S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF4UWF1UZF1fJryfuFyUZFb_yoW8AF48pa
+        yFk3sruryIyr4vqayIkrykZ347J34rWF93C3srCw4DWrsruw1kZr97AF4xZF90yFW8AFWS
+        qF18trn5u3yDA37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4x
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjX_-PUUUU
+        U==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+The section mismatch warning may be too long, add an line break in it.
 
-On Tue, Jun 14, 2022 at 12:29 AM David Howells <dhowells@redhat.com> wrote:
-> Add some selftests for signature checking when FIPS mode is enabled.  These
-> need to be done before we start actually using the signature checking for
-> things and must panic the kernel upon failure.
->
-> Note that the tests must not check the blacklist lest this provide a way to
-> prevent a kernel from booting by installing a hash of a test key in the
-> appropriate UEFI table.
->
-> Reported-by: Simo Sorce <simo@redhat.com>
-> Signed-off-by: David Howells <dhowells@redhat.com>
+Without this patch:
 
-Thanks for your patch, which is now commit 3cde3174eb910513 ("certs:
-Add FIPS selftests") in v5.19-rc4.
+  LD      vmlinux.o
+  MODPOST vmlinux.symvers
+WARNING: modpost: vmlinux.o(___ksymtab+prom_init_numa_memory+0x0): Section mismatch in reference from the variable __ksymtab_prom_init_numa_memory to the function .init.text:prom_init_numa_memory()
+The symbol prom_init_numa_memory is exported and annotated __init
+Fix this by removing the __init annotation of prom_init_numa_memory or drop the export.
 
-> --- a/crypto/asymmetric_keys/Kconfig
-> +++ b/crypto/asymmetric_keys/Kconfig
-> @@ -75,4 +75,14 @@ config SIGNED_PE_FILE_VERIFICATION
->           This option provides support for verifying the signature(s) on a
->           signed PE binary.
->
-> +config FIPS_SIGNATURE_SELFTEST
-> +       bool "Run FIPS selftests on the X.509+PKCS7 signature verification"
+With this patch:
 
-Is there any reason this cannot be tristate, so I can always enable
-this as a module, and run the test by loading the module whenever
-I want?
+  LD      vmlinux.o
+  MODPOST vmlinux.symvers
+WARNING: modpost: vmlinux.o(___ksymtab+prom_init_numa_memory+0x0): Section mismatch in reference
+from the variable __ksymtab_prom_init_numa_memory to the function .init.text:prom_init_numa_memory()
+The symbol prom_init_numa_memory is exported and annotated __init
+Fix this by removing the __init annotation of prom_init_numa_memory or drop the export.
 
-> +       help
-> +         This option causes some selftests to be run on the signature
-> +         verification code, using some built in data.  This is required
-> +         for FIPS.
-> +       depends on KEYS
-> +       depends on ASYMMETRIC_KEY_TYPE
-> +       depends on PKCS7_MESSAGE_PARSER
-> +
+This is based on Linux 5.19-rc4.
 
-Gr{oetje,eeting}s,
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ scripts/mod/modpost.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-                        Geert
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 620dc8c..4cc894f 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1320,8 +1320,8 @@ static void report_sec_mismatch(const char *modname,
+ 	get_pretty_name(from_is_func, &from, &from_p);
+ 	get_pretty_name(to_is_func, &to, &to_p);
+ 
+-	warn("%s(%s+0x%llx): Section mismatch in reference from the %s %s%s "
+-	     "to the %s %s:%s%s\n",
++	warn("%s(%s+0x%llx): Section mismatch in reference\n"
++	     "from the %s %s%s to the %s %s:%s%s\n",
+ 	     modname, fromsec, fromaddr, from, fromsym, from_p, to, tosec,
+ 	     tosym, to_p);
+ 
+-- 
+2.1.0
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

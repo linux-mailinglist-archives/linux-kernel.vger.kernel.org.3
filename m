@@ -2,93 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E244855CAA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4E855CB11
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242155AbiF0X2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
+        id S242014AbiF0XVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242122AbiF0X2R (ORCPT
+        with ESMTP id S241766AbiF0XU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:28:17 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51146DBE
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:28:14 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id o9so15162966edt.12
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:28:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Spj1S0nEmr3mdqe+SBysZnlIvOHa+5hXVGG2oJZ/gY4=;
-        b=gw3JBCSK7pUmYmcwcMUIWMn5+CWQcbCcDcRx8oxASvz6jD1mczE+qT/ZBB96doH0dX
-         qxC84Qwu/KkCO1VhbGAoN9YlrzNXn09yMegVa/n1J8QvW3Q3oJx4knBJfVyM5HtrHzZJ
-         Ev5mkfHH/F3gv31lSwwOzmPUd433yiR6r7Vq4=
+        Mon, 27 Jun 2022 19:20:58 -0400
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3802409C;
+        Mon, 27 Jun 2022 16:20:57 -0700 (PDT)
+Received: by mail-il1-f175.google.com with SMTP id 9so7068761ill.5;
+        Mon, 27 Jun 2022 16:20:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Spj1S0nEmr3mdqe+SBysZnlIvOHa+5hXVGG2oJZ/gY4=;
-        b=v0jq4k/lQ5A5ZjI382Jx1ncUBsDFyDdGYY0wTn8nsXsKPF8EOol1bLdXHBWks65yKx
-         ac4iRk+Q8SUrpHfPJjiJwAzq1crfSyQBHlPT+U5x1L7Wv9ArIVgeDa0PF4lPqGz5l6uX
-         r959tJ1QSV+SJllvIIsHeDNFpCY/xmgSWlC8yhGtOJNdDCP6okheZOq/izAfDveU7uvD
-         TW7qjh3/eaoqhpAsST0K2oJQZwkAJqb4L2HrlL3HUpGA1qxszNbT9CBZZ7BA7EY3tCfY
-         leeqKOe6LRJ6Hqk5OtJALLRpJM0tDmA0Cq8TXQ4OFzOK9umYllbD8mE4UvcK7e/dwN6J
-         Q1vA==
-X-Gm-Message-State: AJIora/v6dXdmMUkH0MUAK/Z32n5rK+b8KYTI15YlijiR3jRDRJ3gjGt
-        HzlpPZ+r5HPC/pY+WPMqjYzszEv2PaxrchNo
-X-Google-Smtp-Source: AGRyM1tuJSFdlnF5awyww44DzZELW8up4AGXlJMmRHbd0JnhLksQljq6sNTNClIgMyrUs4Cp+IVAyg==
-X-Received: by 2002:a05:6402:2687:b0:437:652e:26a1 with SMTP id w7-20020a056402268700b00437652e26a1mr20032523edd.36.1656372492691;
-        Mon, 27 Jun 2022 16:28:12 -0700 (PDT)
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
-        by smtp.gmail.com with ESMTPSA id a18-20020a1709063a5200b007262d69543fsm5510527ejf.106.2022.06.27.16.28.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 16:28:12 -0700 (PDT)
-Received: by mail-wm1-f50.google.com with SMTP id i67-20020a1c3b46000000b003a03567d5e9so6746398wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:28:12 -0700 (PDT)
-X-Received: by 2002:a05:600c:5107:b0:3a0:4342:ed75 with SMTP id
- o7-20020a05600c510700b003a04342ed75mr15187921wms.93.1656372020510; Mon, 27
- Jun 2022 16:20:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com>
- <1656090912-18074-3-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n52RW+UFJ=hqMWjwR8qvEbww7QjzPW1nhL3Atd97QXAnYw@mail.gmail.com>
- <007ea4c9-9701-f4ab-3278-5d36bf2018c4@quicinc.com> <CAE-0n53kNCK0ajHfY2WQr5HEQZtZSBLnhfbTuZwaUNEOZhsKPg@mail.gmail.com>
- <fa7f8bf1-33cd-5515-0143-6596df2bd740@quicinc.com> <CAE-0n51g-EVsC-i9=sJV-ySa8VnE+yT7cg=b-TNMi9+3uBiOVA@mail.gmail.com>
- <326912ff-9771-0711-366d-79acd436908b@quicinc.com> <CAE-0n51qrdrFtSr0vRwgYkMgSZfnzQuinaUROQsp30QoDchWQA@mail.gmail.com>
- <0ff3d6a3-dc5c-7c77-f8a1-6c4f6c1a3215@quicinc.com> <CAE-0n515hMKqQ+Vj1Sg54PpwkbWMYJ77QN+y+KZNBWymjhpWKw@mail.gmail.com>
- <66ff4642-f268-f5b0-7e28-b196368c508a@quicinc.com> <5cf094cf-343a-82d7-91c4-1284683f9748@quicinc.com>
- <CAA8EJprqq=vxXT2DmEWii_Ajx2UbkHRexPTT58xFcWkBa_D5hA@mail.gmail.com>
- <6523e533-960b-d148-0f87-2ad327a3ac3b@quicinc.com> <CAA8EJprQBnZAc-2AxXD8cV_qMoKrusNa+VSHW9Kw-xKS_ZWAkg@mail.gmail.com>
-In-Reply-To: <CAA8EJprQBnZAc-2AxXD8cV_qMoKrusNa+VSHW9Kw-xKS_ZWAkg@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 27 Jun 2022 16:20:08 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WvNrfYaUgbDayxU0wJUbZbgwVMWjeyTjtd+Sqcvj=e2A@mail.gmail.com>
-Message-ID: <CAD=FV=WvNrfYaUgbDayxU0wJUbZbgwVMWjeyTjtd+Sqcvj=e2A@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] drm/msm/dp: decoupling dp->id out of dp
- controller_id at scxxxx_dp_cfg table
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ceugb8p4sPvAqdgfnrtKA+vm4NF5OVcyALYNjlDqlwc=;
+        b=sxj7HwZX/9oe0maUX8lgNW1svrV1RXJUlII9vme75BkpkfheoxhToZYRxI80TGpXH8
+         oCBft+NZVynC1t4FozPjyqVlYnqLnvQgU7NZ55YOmhWo6iVM64BQR1SQx3RMFyj3C6kJ
+         XSNfGvic1hZ9ZTDGE2DfG4F+hpMWC5wdAJEnWcSdu0j9e+R/nT08UeivWDNs6MvdWL2S
+         BdwXT4MN9QzoYR+Bu/jZXosj5pl2iuQYbmrQqzfg4a7zRuAXMzRJS7uRNzk7Jvn9C4ir
+         UrLqKT0lSaxZRz7s/f88DnVZJTz+OdxVQ2AzB7qfU8gTb+rJ7niSQT6VxdgQhU39jKo/
+         DfRA==
+X-Gm-Message-State: AJIora+lPxxCLJohhuAmgLza3D53v87JxPUAjSmzsL5vD9nQ3CDSd2+b
+        Z8r59ebBqZ2JodvezgozMw==
+X-Google-Smtp-Source: AGRyM1s2ztwoSBusasaBa/b2ACZCEycSaaxHL4lJfIIeTxh/zrx32YNfVPG2AlRLoX75ei2t68AjEQ==
+X-Received: by 2002:a05:6e02:214e:b0:2d3:df8c:611 with SMTP id d14-20020a056e02214e00b002d3df8c0611mr8403927ilv.295.1656372057040;
+        Mon, 27 Jun 2022 16:20:57 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id y4-20020a056e02128400b002da7e147de7sm3137057ilq.17.2022.06.27.16.20.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 16:20:56 -0700 (PDT)
+Received: (nullmailer pid 3155702 invoked by uid 1000);
+        Mon, 27 Jun 2022 23:20:54 -0000
+Date:   Mon, 27 Jun 2022 17:20:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Jose Abreu <joabreu@synopsys.com>, devicetree@vger.kernel.org,
         Vinod Koul <vkoul@kernel.org>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        alsa-devel@alsa-project.org, linux-riscv@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Heng Sia <jee.heng.sia@intel.com>, dmaengine@vger.kernel.org,
+        linux-spi@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH 01/14] dt-bindings: display: convert ilitek,ili9341.txt
+ to dt-schema
+Message-ID: <20220627232054.GA3155668-robh@kernel.org>
+References: <20220618123035.563070-1-mail@conchuod.ie>
+ <20220618123035.563070-2-mail@conchuod.ie>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220618123035.563070-2-mail@conchuod.ie>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,107 +88,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, 18 Jun 2022 13:30:23 +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> A dt-schema binding for the Ilitek ili9341 was created as
+> panel/ilitek,ili9341.yaml but the txt binding was ignored in the
+> process. Move the remaining items in the txt binding to the yaml one &
+> delete it.
+> 
+> The example in the txt binding has a spi-max-frequency which disagrees
+> with the yaml replacement (and its own documentation) so change that to
+> conform with the binding. There are no users in tree of the Adafruit
+> yx240qv29 to check against.
+> 
+> Link: https://cdn-learn.adafruit.com/assets/assets/000/046/879/original/SPEC-YX240QV29-T_Rev.A__1_.pdf
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../bindings/display/ilitek,ili9341.txt       | 27 -----------
+>  .../display/panel/ilitek,ili9341.yaml         | 48 +++++++++++++------
+>  2 files changed, 34 insertions(+), 41 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/display/ilitek,ili9341.txt
+> 
 
-On Sat, Jun 25, 2022 at 1:48 AM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Sat, 25 Jun 2022 at 04:23, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
-> > On 6/24/2022 5:11 PM, Dmitry Baryshkov wrote:
-> > > On Sat, 25 Jun 2022 at 03:03, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
-> > >> On 6/24/2022 4:56 PM, Kuogee Hsieh wrote:
-> > >> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c
-> > >> b/drivers/gpu/drm/msm/dp/dp_display.c
-> > >> index dcd80c8a794c..7816e82452ca 100644
-> > >> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> > >> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> > >> @@ -140,8 +140,8 @@ static const struct msm_dp_config sc7180_dp_cfg = {
-> > >>
-> > >>    static const struct msm_dp_config sc7280_dp_cfg = {
-> > >>           .descs = (const struct msm_dp_desc[]) {
-> > >> -               [MSM_DP_CONTROLLER_0] = { .io_start = 0x0ae90000,
-> > >> .connector_type = DRM_MODE_CONNECTOR_DisplayPort, .wide_bus_en = true },
-> > >>                   [MSM_DP_CONTROLLER_1] = { .io_start = 0x0aea0000,
-> > >> .connector_type = DRM_MODE_CONNECTOR_eDP, .wide_bus_en = true },
-> > >> +               [MSM_DP_CONTROLLER_0] = { .io_start = 0x0ae90000,
-> > >> .connector_type = DRM_MODE_CONNECTOR_DisplayPort, .wide_bus_en = true },
-> > >>           },
-> > >>           .num_descs = 2,
-> > >>    };
-> > >>
-> > >>
-> > >> The reason order is important is because  in this function below, even
-> > >> though it matches the address to find which one to use it loops through
-> > >> the array and so the value of *id will change depending on which one is
-> > >> located where.
-> > >>
-> > >> static const struct msm_dp_desc *dp_display_get_desc(struct
-> > >> platform_device *pdev,
-> > >>                                unsigned int *id)
-> > >> {
-> > >>       const struct msm_dp_config *cfg = of_device_get_match_data(&pdev->dev);
-> > >>       struct resource *res;
-> > >>       int i;
-> > >>
-> > >>       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > >>       if (!res)
-> > >>           return NULL;
-> > >>
-> > >>       for (i = 0; i < cfg->num_descs; i++) {
-> > >>           if (cfg->descs[i].io_start == res->start) {
-> > >>               *id = i;
-> > >
-> > > The id is set to the index of the corresponding DP instance in the
-> > > descs array, which is MSM_DP_CONTROLLER_n. Correct up to now.
-> >
-> > Right, this is where I misunderstood his explanation.
-> >
-> > Even if we swap the order, but retain the index correctly it will still
-> > work today.
-> >
-> > Hes not sure of the root-cause of why turning on the primary display
-> > first fixes the issue.
-> >
-> > I think till we root-cause that, lets put this on hold.
->
-> Agreed. Let's find the root cause.
-
-FWIW, I was poking a little bit about the glitch that Kuogee was
-trying to fix here. Through a bunch of hacky heuristics I think the
-dpu_hw_ctl_trigger_flush_v1() is the function that "causes" the
-corruption. Specifically I managed to do something like:
-
-if (hacky_heuristic)
-  pr_info("About to call flush\n);
-  mdelay(2000);
-}
-ctl->ops.trigger_flush(ctl)
-if (hacky_heuristic)
-  pr_info("Finished calling flush\n);
-  mdelay(2000);
-  pr_info("Finished calling flush delay done\n);
-}
-
-I then watched my display and reproduced the problem. When I saw the
-problem I looked over at the console and saw "Finished calling flush"
-was the last thing printed.
-
-I don't know if this helps much. Presumably we're flushing a bunch of
-previous operations so whatever we had queued up probably matters
-more, but maybe it'll give a clue?
-
-
-Other notes FWIW:
-
-* If you increase the amount of time of the glitching, you can
-actually see that we are glitching both the internal and external
-displays.
-
-* You can actually make the glitch stay on the screen "permanently" by
-unplugging the external display while the internal screen is off. I
-don't know why it doesn't always happen, but it seems to happen often
-enough. Presumably if someone knew the display controller well they
-could try to figure out what state it was in and debug the problem.
-
-
--Doug
+Reviewed-by: Rob Herring <robh@kernel.org>

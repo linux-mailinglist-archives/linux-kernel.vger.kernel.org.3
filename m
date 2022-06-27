@@ -2,261 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEB855E374
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F2C55D1FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235235AbiF0Osc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
+        id S236270AbiF0OvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235431AbiF0Osa (ORCPT
+        with ESMTP id S234353AbiF0OvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:48:30 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AA8DE8D;
-        Mon, 27 Jun 2022 07:48:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656341309; x=1687877309;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GZMliLRlHleESM1HM8TNKFzFHDsF5p46y9U7WBnfrg8=;
-  b=R72+llGxHVb5SnZpGDreeaXa2EHFd8xxGNZJRn2+fu4VhXu+1y8vrf4w
-   ijIHVHdBhs9LMgZ5sndjECu7I5ZbDpPQ6RcE60c3bj/tLBWHl6PuX+Bi0
-   v9OH1rymlvA35bizrB5LmKYPmQvHhhaATKab4Odb2eMI00XHgWrr8eL9b
-   2DX+i9zZJwiR1/Vx8QFJOsFZX1cwMmS4XmnmdMc1Qrj1cY/hIUtItLv7a
-   yDQFpHZWZdQAY+Gsu87AtWt84O7d/t9kM1gY9zdg/ucrZjfA5sV3CPzJE
-   JjnsKpiRN1l+icjNjiOxTuXyO6z6bU7wJS6KQ+m+hTYMj4yxDGgbIIHrS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="280224472"
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="280224472"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 07:48:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="679604256"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Jun 2022 07:48:23 -0700
-Date:   Mon, 27 Jun 2022 22:48:22 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Shakeel Butt <shakeelb@google.com>, Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Xin Long <lucien.xin@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
+        Mon, 27 Jun 2022 10:51:01 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962A013F27;
+        Mon, 27 Jun 2022 07:51:00 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RDdDxX002132;
+        Mon, 27 Jun 2022 14:50:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=GLOe9lxkfuX+Gw1KqeixsrAKsvM7NMK0r19OKjprfz0=;
+ b=nUrDxAOiFMGXoMJyfKJLn93hZeq4fp5CaN8l6n5NW15U+qPjp0FN+vuFN24n0/Q3/kas
+ DCDvQMeOa/039AVOWLUGPwUC4cgQ+/mcrCHqWhmbSH+wPClraVlMuCkLFSrnnGKmBfCp
+ sajCYLU/2Lb/PchSk2DVWv+JybNu8ZQqR0FDTwwKpQFhy9BXslXuV/aOGpSNJgOIVBKO
+ sWtxGqv8tHeuObs/4TKll0qvdIEF0T+Y4+fvMAGbGhxxUI8l83jnrzgHj5trEQIM1QeD
+ wATi1mdx5X+OmRK5krbWL5eiL/jzy9/qXImIHnFzTMb7mmJo6GTqZ05XRHsPfMFU1ft1 +Q== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gws52betq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jun 2022 14:50:08 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25REiqou003624;
+        Mon, 27 Jun 2022 14:50:07 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2040.outbound.protection.outlook.com [104.47.73.40])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gwrt1p22d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jun 2022 14:50:06 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=naeYvD5IBjQ00k/c3lcsQd+fgDUdYq9WC+Jz0iEUc8rJOT4gaRiWXKasPdmyRq7mH3Eclh2fV3f+OelIc7Q72DgioacFOv8+A7QGwHboKK0FcgeCPEdz+0iuTcXvNJovRNdWIwJifp1kq8jzYfDbXOPWrxqqhSUs/obdpibYah/snNI5OGr7LVpvhKkYz9pINehE6oEafWtipRRIUAt4XRWiJZVAIvAu/3DdNgGaA6FQbnNw05FSJIUtEaRiQ+eXuVEojyrF5ytLOIFbpBeYCU0940H+hTXetBu1vbQQOOX6Mr+UHvsHjbcjIJ9/e8IHPdAv9e1GBg03zPu68P927A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GLOe9lxkfuX+Gw1KqeixsrAKsvM7NMK0r19OKjprfz0=;
+ b=iCEUQC8AW/vLhTj6LMgQC32pzliMou0Yv47rvQn/dqwoSnIqPxCN7uLXjg+ag8H9QJ+LCG69U7lc3io7RKGWmqJ6xHI41IGNL/SIri6UDtnkBsGLvH2WifnC5244JpW8bA7MfuascVmErhyn/emYyc6JzB8qDXDSeOkFnGrGOWVag99r1HvsAA5a8gbcgr/w9kSytfxdDvV/CPlYuSt16kDBvY+Qsfwimvrnd1MWz2HwyD2LS1pW5b1xKoYXJZTHLAcw7vXwMCL/o2/QXwUEm20re9c04e63pNWOL0+00IaI+9njEVJvy6a6of51f0LgkEcGhMjp5A7XtUag5KEilA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GLOe9lxkfuX+Gw1KqeixsrAKsvM7NMK0r19OKjprfz0=;
+ b=fUvkhip6ZTsdyGm5rLWcwgICDayYjMtrIKqsVPk1GDqNZPpZ/m9uG1+Cvxw4+NPbeZCiHpmispTmkMOl+HyhxWV320ACDENO7LbD+4sQjdVuMv+GQ88oRy1+MApcJjMfyfmbkB+aHpKX2hc1+GyhKVgEIe60ujvHhIdzwQank+8=
+Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
+ by BLAPR10MB5108.namprd10.prod.outlook.com (2603:10b6:208:330::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.17; Mon, 27 Jun
+ 2022 14:50:05 +0000
+Received: from BN0PR10MB5128.namprd10.prod.outlook.com
+ ([fe80::9920:1ac4:2d14:e703]) by BN0PR10MB5128.namprd10.prod.outlook.com
+ ([fe80::9920:1ac4:2d14:e703%5]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
+ 14:50:05 +0000
+From:   Chuck Lever III <chuck.lever@oracle.com>
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
+CC:     Jeff Layton <jlayton@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
-Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
-Message-ID: <20220627144822.GA20878@shbuild999.sh.intel.com>
-References: <20220623185730.25b88096@kernel.org>
- <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
- <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
- <20220624070656.GE79500@shbuild999.sh.intel.com>
- <20220624144358.lqt2ffjdry6p5u4d@google.com>
- <20220625023642.GA40868@shbuild999.sh.intel.com>
- <20220627023812.GA29314@shbuild999.sh.intel.com>
- <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
- <20220627123415.GA32052@shbuild999.sh.intel.com>
- <CANn89iJAoYCebNbXpNMXRoDUkFMhg9QagetVU9NZUq+GnLMgqQ@mail.gmail.com>
+        "ldv-project@linuxtesting.org" <ldv-project@linuxtesting.org>
+Subject: Re: [PATCH] NFSD: restore EINVAL error translation in nfsd_commit()
+Thread-Topic: [PATCH] NFSD: restore EINVAL error translation in nfsd_commit()
+Thread-Index: AQHYiNWUeae+GVdydkKNOxhPY75Q261jWLMA
+Date:   Mon, 27 Jun 2022 14:50:05 +0000
+Message-ID: <9AB7582F-468D-4074-A295-E5536884E9AF@oracle.com>
+References: <1656190363-29148-1-git-send-email-khoroshilov@ispras.ru>
+In-Reply-To: <1656190363-29148-1-git-send-email-khoroshilov@ispras.ru>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.100.31)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0f684464-cfdf-4a66-b77d-08da584c529a
+x-ms-traffictypediagnostic: BLAPR10MB5108:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NjPmqJih8nwWyYBxLIOW6EcKnlrrZYLiEL3/jNB5VXWpvCikrFvt3fcQWfbfd5kBOkLz/lB1f4dY4A3QMOzjNwldkWzK8YMpeUKK/27MxrcGpZgDd8bH8wka8CL7tvHLqy10jCjfTTLliJFd5P6AJ6qYamstQewQCfLiuAihmHOVRrMEz0h5FxsNeYlDTnc6DI3zA0AZRq7vPLltgmPh7dOQ2vL9vsYAyuP7epnBG2lpLpxBjH/umG14b9Vo1lt4i64uGXzJIJmn5SNQac8MixAMWmxXZPs79ui6z/CIRFvZ0fBrZVHg1NKmm6Cp/6PBaNg+uqTNZuKBebXU5r6JU1t8RymGKUg2Xperlk26shwABAFGG0sG46P05yUSPp0+B7aynrhTIAwaJ5jRQBXIqKGSZ2M291CbWulaV4vrkGPExnJmknoWdgb+TdTEOwGoVC4voMSE5WAVgFQTKLmzqZOFN5zGAhtlZT4ObYwhWe+rma0CoCJnf86244syU3Ba95E1iVwYBYGpI3POK0DbwwrYlflP8e3Jn2CI7egRp5NLXS0VEIsWgPeb/nV/XWtYXa9PYTnUPbpSzShnCsngDKJprTm3BiYYhK4Ixc0J/Smenh7kTulqm6MTHxQRFOwnhob0j5AUYHnOqu/7ZII6OAK3tl3jzwG2bC6JVbQ9q9/p6GBEHq++OmEaGDfLwk8n9SNOo0GZEKcLhHGlzmivwZWAPuUavJWdLSFq+F/MQMa4IpZhFYnLzeecB1dUw4SgJox5wE3ms0lTG8EXeKGYcbLhfUuURg8JtJ1m43MpbHnsKyabMizJj2EsCCzwfopzHm+TkcPWWakMP47OxFuSv7+OkO9YyOl+bwIP1VDAZEc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(376002)(396003)(136003)(39860400002)(366004)(2616005)(53546011)(38100700002)(71200400001)(41300700001)(86362001)(6506007)(2906002)(36756003)(8936002)(966005)(478600001)(186003)(5660300002)(83380400001)(26005)(76116006)(38070700005)(122000001)(6512007)(33656002)(64756008)(66476007)(66446008)(8676002)(54906003)(6916009)(6486002)(66556008)(66946007)(316002)(4326008)(91956017)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?C6XYD2w2sc97t2vy6ufb3nnBiWzw/r0B1FrWGSk9yiPYHKslA/TKL4dOSkh7?=
+ =?us-ascii?Q?YSNVJGaF/HAmyWD4Z9vHsGIGkEAvZ6ud8ygj3gAOFA7TGh7Exl292sAzeR3Q?=
+ =?us-ascii?Q?d5rhh34/gGe0Bzkt82bl7iE/K2xUhc5Vs7cPssfdqEl8jp79PA0ybMFVpDCa?=
+ =?us-ascii?Q?Q6dfVuwze6bKEjG+ebrCj7aaUR3vpz3+s/q+wpYDxm++Yt/DVuFNKDpPQ6t2?=
+ =?us-ascii?Q?+kptjM+YDwizHm0jBOrLdWKOAH3klUDp/K3nEA300YWaSqJtB1PcjOJwwWLH?=
+ =?us-ascii?Q?W0W0dfwChWiBv7pM5zRbCPDkAoCzdtOiGOgMy1JSLPZuGytvw/qyLlkaFm7j?=
+ =?us-ascii?Q?TKaYeUVqWz2/2drd7Y3+HEZv0pKsNm71SYI6dnxeM0IHivOABqI2jAFnSxPH?=
+ =?us-ascii?Q?ewgQb3gEfMJaW2s05J2mXWPu89tv4nW9qfn9bUoHISlubOlTtla05MxcyHND?=
+ =?us-ascii?Q?/A1B09D81PwP/DPvegvvzdjns2w6RitSklUAw6dccFZMK+ZUsj6KImFLCBGn?=
+ =?us-ascii?Q?2ddNfMQR8JZPiF0kvmg3/lA+zGj3OjAxMEw0TOUlZ16j6dN5ghI3dA2mHWZB?=
+ =?us-ascii?Q?YPXDBdr0PBjtjBEgoYmUtKRtJjoTzNhkVKpV4lOTtcKvBGgrb7bDzOZvkX/H?=
+ =?us-ascii?Q?oTKo2TupJnOUoL4RDpprLhWEu3s2Kpghx7QMAKFc2XCvz/6Qyxyamvmen/Zu?=
+ =?us-ascii?Q?8zBfiA2WEJk+x6QDIyTQTXKAwui7chxBaAToP0oTyrYAqY08aw2ojSNdxZ4k?=
+ =?us-ascii?Q?ky60MF38VZ0rJy9AarRMakbJGU4EK5bUY657mLrNfLmNJeuqAWNBcmj2ySDL?=
+ =?us-ascii?Q?fnUxHinvAY/ElQujp1pA4CmH9jUc36Yrd/gYKPgnCmFt+eIx0BA0Zuct2YKF?=
+ =?us-ascii?Q?ZEI/TJQkM+aZ7vp+Y74d6Nc/IMD7/+3Fg4nExxo6REqBctajbn7rOnXQ1fwf?=
+ =?us-ascii?Q?aONQDNMBpp87bslJZtqleUd0LFEFLBzoArW9G/HzCzpdcWDQZwg84j43DYNu?=
+ =?us-ascii?Q?CFOvsJdkyxTxM+7ppD63V/Vwlk2eDJTtXmpFqFzfFsPRxmW0JIkI2TZAQ09R?=
+ =?us-ascii?Q?GFj+DD0WYPPlczMWCXp9JxyZN65OeUrKeLSn/s4spsZessQAOdp4WAeEW1mO?=
+ =?us-ascii?Q?4pADsGcbU4oG8FWIZmz7Ju4gWIpuo0h360VWgcms3YDsAehhmibQq+YUVl9v?=
+ =?us-ascii?Q?WNIelvKm8oGNZ4HJDCa7jXZZrhmDomkPnn8AdP9ft+xD2QSxz36BlV0vC9GN?=
+ =?us-ascii?Q?tFoZOrXrF5tc0tgcD/fIBP42Os0PemF+QExZ4QejK5pFAQ60KNrPt++L2owI?=
+ =?us-ascii?Q?Kq6XItwMWhPLwqEkLEhq2DTe2NUGzKkRvM3inbtRZlSbAoDgllu4t7CQlu2T?=
+ =?us-ascii?Q?UFRuRdh3t2xQa154sW1kHeRSQa7RNSUiretJXX0JS8QagP6Oyktq2hBI/LBE?=
+ =?us-ascii?Q?XpFa6O3twjE7Q5wEYNEi+eIONp19w28c2oNO+X90gARZPkYq33+sRojOeT/n?=
+ =?us-ascii?Q?PN+YwLO440cEN5vt8YVm8uI8GziON8S6bg8so2yTciWYM+M6ABav+y6vCCGE?=
+ =?us-ascii?Q?td1a1aUqpW//8+s5nYQPpaqzbJfb5OgO89Uzj1cBrafx5HsN6RKOrKEnZnaK?=
+ =?us-ascii?Q?1Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <E933CEACC894594B920DF9CBAA3D5F24@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANn89iJAoYCebNbXpNMXRoDUkFMhg9QagetVU9NZUq+GnLMgqQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f684464-cfdf-4a66-b77d-08da584c529a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 14:50:05.2820
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Kgxl10YJgCpx6g/SyTmWQmpc3Yavy6e2G9ZudACUQg0gDledQS/vJIt2OGZ5jE7EdzGOUjPdYtjJPFHxT/kGZg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5108
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
+ definitions=2022-06-27_06:2022-06-24,2022-06-27 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ phishscore=0 adultscore=0 malwarescore=0 bulkscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206270065
+X-Proofpoint-ORIG-GUID: V64WZALkhm3hhSFYEzHkyAPf8D0Gtoon
+X-Proofpoint-GUID: V64WZALkhm3hhSFYEzHkyAPf8D0Gtoon
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 04:07:55PM +0200, Eric Dumazet wrote:
-> On Mon, Jun 27, 2022 at 2:34 PM Feng Tang <feng.tang@intel.com> wrote:
-> >
-> > On Mon, Jun 27, 2022 at 10:46:21AM +0200, Eric Dumazet wrote:
-> > > On Mon, Jun 27, 2022 at 4:38 AM Feng Tang <feng.tang@intel.com> wrote:
-> > [snip]
-> > > > > >
-> > > > > > Thanks Feng. Can you check the value of memory.kmem.tcp.max_usage_in_bytes
-> > > > > > in /sys/fs/cgroup/memory/system.slice/lkp-bootstrap.service after making
-> > > > > > sure that the netperf test has already run?
-> > > > >
-> > > > > memory.kmem.tcp.max_usage_in_bytes:0
-> > > >
-> > > > Sorry, I made a mistake that in the original report from Oliver, it
-> > > > was 'cgroup v2' with a 'debian-11.1' rootfs.
-> > > >
-> > > > When you asked about cgroup info, I tried the job on another tbox, and
-> > > > the original 'job.yaml' didn't work, so I kept the 'netperf' test
-> > > > parameters and started a new job which somehow run with a 'debian-10.4'
-> > > > rootfs and acutally run with cgroup v1.
-> > > >
-> > > > And as you mentioned cgroup version does make a big difference, that
-> > > > with v1, the regression is reduced to 1% ~ 5% on different generations
-> > > > of test platforms. Eric mentioned they also got regression report,
-> > > > but much smaller one, maybe it's due to the cgroup version?
-> > >
-> > > This was using the current net-next tree.
-> > > Used recipe was something like:
-> > >
-> > > Make sure cgroup2 is mounted or mount it by mount -t cgroup2 none $MOUNT_POINT.
-> > > Enable memory controller by echo +memory > $MOUNT_POINT/cgroup.subtree_control.
-> > > Create a cgroup by mkdir $MOUNT_POINT/job.
-> > > Jump into that cgroup by echo $$ > $MOUNT_POINT/job/cgroup.procs.
-> > >
-> > > <Launch tests>
-> > >
-> > > The regression was smaller than 1%, so considered noise compared to
-> > > the benefits of the bug fix.
-> >
-> > Yes, 1% is just around noise level for a microbenchmark.
-> >
-> > I went check the original test data of Oliver's report, the tests was
-> > run 6 rounds and the performance data is pretty stable (0Day's report
-> > will show any std deviation bigger than 2%)
-> >
-> > The test platform is a 4 sockets 72C/144T machine, and I run the
-> > same job (nr_tasks = 25% * nr_cpus) on one CascadeLake AP (4 nodes)
-> > and one Icelake 2 sockets platform, and saw 75% and 53% regresson on
-> > them.
-> >
-> > In the first email, there is a file named 'reproduce', it shows the
-> > basic test process:
-> >
-> > "
-> >   use 'performane' cpufre  governor for all CPUs
-> >
-> >   netserver -4 -D
-> >   modprobe sctp
-> >   netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
-> >   netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
-> >   netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
-> >   (repeat 36 times in total)
-> >   ...
-> >
-> > "
-> >
-> > Which starts 36 (25% of nr_cpus) netperf clients. And the clients number
-> > also matters, I tried to increase the client number from 36 to 72(50%),
-> > and the regression is changed from 69.4% to 73.7%"
-> >
-> 
-> This seems like a lot of opportunities for memcg folks :)
-> 
-> struct page_counter has poor field placement [1], and no per-cpu cache.
-> 
-> [1] "atomic_long_t usage" is sharing cache line with read mostly fields.
-> 
-> (struct mem_cgroup also has poor field placement, mainly because of
-> struct page_counter)
-> 
->     28.69%  [kernel]       [k] copy_user_enhanced_fast_string
->     16.13%  [kernel]       [k] intel_idle_irq
->      6.46%  [kernel]       [k] page_counter_try_charge
->      6.20%  [kernel]       [k] __sk_mem_reduce_allocated
->      5.68%  [kernel]       [k] try_charge_memcg
->      5.16%  [kernel]       [k] page_counter_cancel
+Hello Alexey-
 
-Yes, I also analyzed the perf-profile data, and made some layout changes
-which could recover the changes from 69% to 40%.
+> On Jun 25, 2022, at 4:52 PM, Alexey Khoroshilov <khoroshilov@ispras.ru> w=
+rote:
+>=20
+> commit 555dbf1a9aac ("nfsd: Replace use of rwsem with errseq_t")
+> incidentally broke translation of -EINVAL to nfserr_notsupp.
+> The patch restores that.
+>=20
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>=20
+> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+> Fixes: 555dbf1a9aac ("nfsd: Replace use of rwsem with errseq_t")
 
-7c80b038d23e1f4c 4890b686f4088c90432149bd6de 332b589c49656a45881bca4ecc0
----------------- --------------------------- --------------------------- 
-     15722           -69.5%       4792           -40.8%       9300        netperf.Throughput_Mbps
- 
+LGTM. Applied to the for-rc topic branch here:
 
-diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
-index 1bfcfb1af352..aa37bd39116c 100644
---- a/include/linux/cgroup-defs.h
-+++ b/include/linux/cgroup-defs.h
-@@ -179,14 +179,13 @@ struct cgroup_subsys_state {
- 	atomic_t online_cnt;
- 
- 	/* percpu_ref killing and RCU release */
--	struct work_struct destroy_work;
- 	struct rcu_work destroy_rwork;
--
-+	struct cgroup_subsys_state *parent;
-+	struct work_struct destroy_work;
- 	/*
- 	 * PI: the parent css.	Placed here for cache proximity to following
- 	 * fields of the containing structure.
- 	 */
--	struct cgroup_subsys_state *parent;
- };
- 
- /*
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 9ecead1042b9..963b88ab9930 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -239,9 +239,6 @@ struct mem_cgroup {
- 	/* Private memcg ID. Used to ID objects that outlive the cgroup */
- 	struct mem_cgroup_id id;
- 
--	/* Accounted resources */
--	struct page_counter memory;		/* Both v1 & v2 */
--
- 	union {
- 		struct page_counter swap;	/* v2 only */
- 		struct page_counter memsw;	/* v1 only */
-@@ -251,6 +248,9 @@ struct mem_cgroup {
- 	struct page_counter kmem;		/* v1 only */
- 	struct page_counter tcpmem;		/* v1 only */
- 
-+	/* Accounted resources */
-+	struct page_counter memory;		/* Both v1 & v2 */
-+
- 	/* Range enforcement for interrupt charges */
- 	struct work_struct high_work;
- 
-@@ -313,7 +313,6 @@ struct mem_cgroup {
- 	atomic_long_t		memory_events[MEMCG_NR_MEMORY_EVENTS];
- 	atomic_long_t		memory_events_local[MEMCG_NR_MEMORY_EVENTS];
- 
--	unsigned long		socket_pressure;
- 
- 	/* Legacy tcp memory accounting */
- 	bool			tcpmem_active;
-@@ -349,6 +348,7 @@ struct mem_cgroup {
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
- 	struct deferred_split deferred_split_queue;
- #endif
-+	unsigned long		socket_pressure;
- 
- 	struct mem_cgroup_per_node *nodeinfo[];
- };
+https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git
 
-And some of these are specific for network and may not be a universal
-win, though I think the 'cgroup_subsys_state' could keep the
-read-mostly 'parent' away from following written-mostly counters.
 
-Btw, I tried your debug patch which compiled fail with 0Day's kbuild
-system, but it did compile ok on my local machine.
+> ---
+> fs/nfsd/vfs.c | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
+> index 840e3af63a6f..1b09d7293bc5 100644
+> --- a/fs/nfsd/vfs.c
+> +++ b/fs/nfsd/vfs.c
+> @@ -1173,6 +1173,7 @@ nfsd_commit(struct svc_rqst *rqstp, struct svc_fh *=
+fhp, u64 offset,
+> 			nfsd_copy_write_verifier(verf, nn);
+> 			err2 =3D filemap_check_wb_err(nf->nf_file->f_mapping,
+> 						    since);
+> +			err =3D nfserrno(err2);
+> 			break;
+> 		case -EINVAL:
+> 			err =3D nfserr_notsupp;
+> @@ -1180,8 +1181,8 @@ nfsd_commit(struct svc_rqst *rqstp, struct svc_fh *=
+fhp, u64 offset,
+> 		default:
+> 			nfsd_reset_write_verifier(nn);
+> 			trace_nfsd_writeverf_reset(nn, rqstp, err2);
+> +			err =3D nfserrno(err2);
+> 		}
+> -		err =3D nfserrno(err2);
+> 	} else
+> 		nfsd_copy_write_verifier(verf, nn);
+>=20
+> --=20
+> 2.7.4
+>=20
 
-Thanks,
-Feng
+--
+Chuck Lever
 
-> 
-> > Thanks,
-> > Feng
-> >
-> > > >
-> > > > Thanks,
-> > > > Feng
+
+

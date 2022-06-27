@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F2755C1A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAF555C82A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236958AbiF0Lk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
+        id S238639AbiF0LwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236340AbiF0Lg5 (ORCPT
+        with ESMTP id S238327AbiF0LsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:36:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01DC101E;
-        Mon, 27 Jun 2022 04:32:11 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B3BF5AE;
+        Mon, 27 Jun 2022 04:40:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3792E60920;
-        Mon, 27 Jun 2022 11:32:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA38C341C7;
-        Mon, 27 Jun 2022 11:32:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 853A2B81135;
+        Mon, 27 Jun 2022 11:40:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF33EC3411D;
+        Mon, 27 Jun 2022 11:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329530;
-        bh=9bAV0+306x5lteaFMiWqSZkBkr8FcYIqevBwLdY+pKo=;
+        s=korg; t=1656330040;
+        bh=fLv9Z5zYBa6k80avfKlFPpGIGGwWWoBNa9hCd1onJXc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y3L449+yfM0z3LEm1KONAjQkGC3QqteminuNX+qNGUzaTwfsqS0ODRL07dAKHarD8
-         o1z2JFWCZe8OvBej0CjCKjai3vySoKh7ZSHddBHC4xz6kUBe42i397oSEATeUQnVup
-         EupasvdKhSSHjkecSJMizhc6fV0T3RbZ2hSOrvGE=
+        b=WBbESK9oXgHwUWtVTk4gV4lx2p+6k4TP0vuoCmcTWFRSqUaa/zYKZ2MsaV/20tuVf
+         2bz9S3SiCBp5ZEeTe2HcE9lpxx3cc9OoG3BJoFszzOFPzFZcurM6iOdrEVYUN0I112
+         ERUFOmKOTAEbT3OMquV5nPcpFE/9f70pZayvMXoc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.15 029/135] USB: serial: pl2303: add support for more HXN (G) types
-Date:   Mon, 27 Jun 2022 13:20:36 +0200
-Message-Id: <20220627111939.005772297@linuxfoundation.org>
+        stable@vger.kernel.org, Ivan Vecera <ivecera@redhat.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 064/181] ethtool: Fix get module eeprom fallback
+Date:   Mon, 27 Jun 2022 13:20:37 +0200
+Message-Id: <20220627111946.422009251@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,72 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Ivan Vecera <ivecera@redhat.com>
 
-commit ae60aac59a9ad8ab64a4b07de509a534a75b6bac upstream.
+[ Upstream commit a3bb7b63813f674fb62bac321cdd897cc62de094 ]
 
-Add support for further HXN (G) type devices (GT variant, GL variant, GS
-variant and GR) and document the bcdDevice mapping.
+Function fallback_set_params() checks if the module type returned
+by a driver is ETH_MODULE_SFF_8079 and in this case it assumes
+that buffer returns a concatenated content of page  A0h and A2h.
+The check is wrong because the correct type is ETH_MODULE_SFF_8472.
 
-Note that the TA and TB types use the same bcdDevice as some GT and GE
-variants, respectively, but that the HX status request can be used to
-determine which is which.
-
-Also note that we currently do not distinguish between the various HXN
-(G) types in the driver but that this may change eventually (e.g. when
-adding GPIO support).
-
-Reported-by: Charles Yeh <charlesyeh522@gmail.com>
-Link: https://lore.kernel.org/r/YrF77b9DdeumUAee@hovoldconsulting.com
-Cc: stable@vger.kernel.org	# 5.13
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 96d971e307cc ("ethtool: Add fallback to get_module_eeprom from netlink command")
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Link: https://lore.kernel.org/r/20220616160856.3623273-1-ivecera@redhat.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/pl2303.c |   29 +++++++++++++++++------------
- 1 file changed, 17 insertions(+), 12 deletions(-)
+ net/ethtool/eeprom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -436,22 +436,27 @@ static int pl2303_detect_type(struct usb
- 		break;
- 	case 0x200:
- 		switch (bcdDevice) {
--		case 0x100:
-+		case 0x100:	/* GC */
- 		case 0x105:
-+			return TYPE_HXN;
-+		case 0x300:	/* GT / TA */
-+			if (pl2303_supports_hx_status(serial))
-+				return TYPE_TA;
-+			fallthrough;
- 		case 0x305:
-+		case 0x400:	/* GL */
- 		case 0x405:
-+			return TYPE_HXN;
-+		case 0x500:	/* GE / TB */
-+			if (pl2303_supports_hx_status(serial))
-+				return TYPE_TB;
-+			fallthrough;
-+		case 0x505:
-+		case 0x600:	/* GS */
- 		case 0x605:
--			/*
--			 * Assume it's an HXN-type if the device doesn't
--			 * support the old read request value.
--			 */
--			if (!pl2303_supports_hx_status(serial))
--				return TYPE_HXN;
--			break;
--		case 0x300:
--			return TYPE_TA;
--		case 0x500:
--			return TYPE_TB;
-+		case 0x700:	/* GR */
-+		case 0x705:
-+			return TYPE_HXN;
- 		}
- 		break;
- 	}
+diff --git a/net/ethtool/eeprom.c b/net/ethtool/eeprom.c
+index 7e6b37a54add..1c94bb8ea03f 100644
+--- a/net/ethtool/eeprom.c
++++ b/net/ethtool/eeprom.c
+@@ -36,7 +36,7 @@ static int fallback_set_params(struct eeprom_req_info *request,
+ 	if (request->page)
+ 		offset = request->page * ETH_MODULE_EEPROM_PAGE_LEN + offset;
+ 
+-	if (modinfo->type == ETH_MODULE_SFF_8079 &&
++	if (modinfo->type == ETH_MODULE_SFF_8472 &&
+ 	    request->i2c_address == 0x51)
+ 		offset += ETH_MODULE_EEPROM_PAGE_LEN * 2;
+ 
+-- 
+2.35.1
+
 
 

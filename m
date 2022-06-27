@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CC755B63F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 06:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B218055B641
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 06:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbiF0Eli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 00:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S231851AbiF0Enp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 00:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiF0Elg (ORCPT
+        with ESMTP id S229492AbiF0Enm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 00:41:36 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15BB138;
-        Sun, 26 Jun 2022 21:41:34 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25R3LsI5001481;
-        Mon, 27 Jun 2022 04:41:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : content-type :
- mime-version; s=pp1; bh=X5IXJsh+NQ8VHaFe6RBYacgzLr/AWbAQyLQdscvjKIk=;
- b=kVEkHcrFo0wfjaKkOJ/w9vIVbjJXy2P6DIGX1UoO1HHB4IMw8Vf9R9n20tLkvG8OBWOj
- yHeLvHK/99WnDKP74cSyx5gcEXWVChYjzugQML+dfHW9mXbk/DMwBL0zCIcED4uk+MJm
- hLFVvAdJIjbL0nQpPz7qF0MOEB9p1Qc1BbaXdILAgQFjMcHIKFvM21nDQjsJQxpgixNI
- 9CJ+7gT4jO7bfr2I1CVLeowxp3NHBWRfucvzCG/YDF0XRJDs3PntMTLcODpSHAnjxHKI
- uYKCNrHBnJFAVsKRVozgyLyfz96JdF690jZPcqs2z/356/GOtcqxY6+kIE9UvErE9bMN ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gy4k31bk2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 04:41:08 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25R4aJSx012951;
-        Mon, 27 Jun 2022 04:41:08 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gy4k31bjh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 04:41:08 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25R4atDu012295;
-        Mon, 27 Jun 2022 04:41:07 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma01dal.us.ibm.com with ESMTP id 3gwt09415r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 04:41:06 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25R4f5iZ15729366
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jun 2022 04:41:06 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CFD88C605F;
-        Mon, 27 Jun 2022 04:41:05 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 76B2BC6055;
-        Mon, 27 Jun 2022 04:40:59 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.43.47.235])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Jun 2022 04:40:59 +0000 (GMT)
-X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v7 11/12] mm/demotion: Add documentation for memory tiering
-In-Reply-To: <YraLWdkqv7irf3MV@debian.me>
-References: <20220622082513.467538-1-aneesh.kumar@linux.ibm.com>
- <20220622082513.467538-12-aneesh.kumar@linux.ibm.com>
- <YraLWdkqv7irf3MV@debian.me>
-Date:   Mon, 27 Jun 2022 10:10:56 +0530
-Message-ID: <87a69yzpk7.fsf@linux.ibm.com>
+        Mon, 27 Jun 2022 00:43:42 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2135.outbound.protection.outlook.com [40.107.244.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8312185;
+        Sun, 26 Jun 2022 21:43:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fg+GaX0/o5Pv/+sdt9k9nmFks3ulUKcMyfMbA8gfDCcVvto+SOJeuEUBsbdjbApUDgBqm9ej0StNrizWFTLXd4YMixXFa8dpCwZ0jozDw/DPcbufuQUINhN44Hxg+Y4D+OqG3DJve8q8nMv3wMSRppTmnhpBSyhtmCghmHR6nEv0y1TNqxEfpTgNid4bnGRtC5w3y0bGGPIWEUo3DpCOIWE0lIaPNTVlbXxUSPHFXUq13I/c4YmVJGts3lXYsTCU9K+pjuQ51tAeg/xtgOPvlga687G7k//bYVy7B31Pmb3/AuyvngkdZ6j660RyYGQ44VVM5cgKcp35bWu/AN+J4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nNx1TNd02XU5nWbvCJwS79wPQDHEkqOQKTYwqrHRfuY=;
+ b=ImdVZYglIMvOmNTU6fj87eCRTT6cuf5augAMHctaVVcsccs8tPSx9kJdptvb04BMpNpBqQm3s3+BqrroBkw9H2reKuzDac7seAxwi1y7iktrFdFSfFijO4tJuqsfy81oJF2zhhAw1OmTbbKE57JrXbQWNhgXDtIp+IEopeGMvcjochUf+lLyn8nvrjutXG44QghLrZJCt8MyIJywaWabaPEw6uY6AfV8+ItN515ckTGeyTAFE/QydSjEmBGAWdByFyZOafqx3fuIhxl5d7O8x3neZ8iD0JJmGr0FKDSmi1HTu82fcFODxKiqa9UNDrRM1RyqlcU5Rh5ejYVeJtY//g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nNx1TNd02XU5nWbvCJwS79wPQDHEkqOQKTYwqrHRfuY=;
+ b=rR3Eauz/qmz7bk6zwRs4IzyK0RyOU3HhlvpNZxS8KEBKCP/YPPtH4dydWxTH4lwKjCxY1zSs0VwiOXZedQoUAAFmbCqONVD/EsHmNXXQ/NPI9KwX9Dv6kPQMuHW+7e0e92sknx80VffHJVb+ukrpwyhQITkqyeNdhmFzKx/zQPU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by CY4PR04MB0630.namprd04.prod.outlook.com (2603:10b6:903:e9::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Mon, 27 Jun
+ 2022 04:43:39 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::ec96:5112:c2d5:9377]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::ec96:5112:c2d5:9377%8]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
+ 04:43:38 +0000
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, Xin Ji <xji@analogixsemi.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v11 1/3] usb: typec: tcpci: move tcpci.h to include/linux/usb/
+Date:   Mon, 27 Jun 2022 12:43:29 +0800
+Message-Id: <20220627044331.2180641-1-xji@analogixsemi.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WkxdDUgPCgiW6TnpzOOKDuL4bxD3FWI2
-X-Proofpoint-ORIG-GUID: wN5EjCrF8A3Ayf2J_qHyGotWpPDuWb3O
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+X-ClientProxiedBy: TYBP286CA0003.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:404:ce::15) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-27_02,2022-06-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- mlxlogscore=999 adultscore=0 spamscore=0 lowpriorityscore=0 phishscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 mlxscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206270020
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 54b8c7aa-76b8-4134-3d5b-08da57f79a5c
+X-MS-TrafficTypeDiagnostic: CY4PR04MB0630:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xBYihBaaTfA9p2v2wEbZSbQYyH8gR9eDknx4GEFNMAhPHF1aF2c+SK84Dj7PQr3DtKIS11+ABl+ZrijppYP3uiZzu31n/v0Ca3Fk7GEOzpjRpY2SWZosKlgy68DamPLGlhEko14TiWUMDeyvsL84YdgFnIVgARXPjpktUeCdDAE/uzDJG5bmUz7mOG/pA1Mz4WuM/o1XZXEgrg4n9YI9WYoJJ+BifZq0veDBgkPtc/tssLLUnQBAfA9Bs4LG33IJrrz9supws64LVuMXix3aqGhqXG+5oHx0dI7NhMdYmETLAZjl3jcFHhhiCqfxQIZlOVoijgCb/1YLPF3Tq70VoYe3b+eoZRX7netGUiaTTfTzJp9qgaNIUSATKjCfjr3o1N3Buwk8M1Up9XNJlMLXSF8kyKEwsKGPo4smG6xp/79CIIL9Z+cG6LA7n41uK3rlm4bJ2bYrLbFfykt8dKi5CF05bzg8Cj6Hsarjzn5N/Th0KMQ+5M68B8RbUMWpetPwpMZ92WBhAM4/1H2lFsJtE6bRNjbO5DW20yEyMptYkYm9vR4nHyKKv5ez33Q5V1qNGBWaf9aPQxGcyRaP9gvsGmR7RF1mTG9q/2UU9Tr7Fl6yzh37sOy026PelspKnezPhbSxhHAPpu6YCn9lMpunJbgOsnCbDQEWWN8IWQdotrUPNn9dfqrxDq1U6xQcdjYtvsrWklyAsE83Zph3XRjipLNXOlPAfFb/iQdhoa91aMGsIUfrJGtmDiL13yXhR/fMzNvaMxRhozgBGLazrX69x7DZlG+q0LX7w1ZZf+9gjsc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(136003)(346002)(376002)(396003)(39840400004)(2906002)(478600001)(38100700002)(8936002)(6486002)(36756003)(83380400001)(316002)(6512007)(26005)(66556008)(6506007)(2616005)(38350700002)(41300700001)(186003)(4326008)(66946007)(1076003)(6666004)(66476007)(110136005)(86362001)(5660300002)(8676002)(55236004)(52116002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NkY1WK8waCZ5ssqEYtHHxdJX+kIiJS3lRWgOEVml/6O8A2KJT18R20ikBT7X?=
+ =?us-ascii?Q?Ao7Lm09BOyErkHjkHmHMgY8KbtZMpZ7+JqIlXEKnqcUxvgiBwaOu/IYDI3Bx?=
+ =?us-ascii?Q?m4lAa5NzmvaMmDn/pvFQT/v7tKfh/I3iPjaqEY5ZPnEo9RClngiyxnJFbSTW?=
+ =?us-ascii?Q?/qqwUm/HI/JZOparZIm1MF+UAuSqCyQaOO0j0huUALzBvRxzRCP/a54a71du?=
+ =?us-ascii?Q?moG4aIATIEX/Ynmsr7lqxpKligyskmnuikyvfZCF6f0b00IXD2KC0pj/Sl+M?=
+ =?us-ascii?Q?yb63T1XcF6Hz4QqR4WNlfTXeyMCIfi0rqQHFrly3mV4kwYctC2MzU51GD/Jw?=
+ =?us-ascii?Q?Yfny3BiHOewLiYXBsoqRCcIAwndqk1B0RYRwgTVZb8q5ztCo7VkjgRO6e/ga?=
+ =?us-ascii?Q?GiKL7I0Orlv9kf1poSvLlJSyYYwjZGDdqbBA7Oszm0gVI8rOeg05T/AQPskE?=
+ =?us-ascii?Q?DHaPwoa7kg2xt46qXh17Mya5Lw1QdaAdZypBFZILZGs9jJ/zPXPT/71TpG6H?=
+ =?us-ascii?Q?32GZFzUFXOhwhdz5SQq1V0doiOVyZPloJdcMlP3yYrlDMPsJv1USlmslxoup?=
+ =?us-ascii?Q?bobw6jKoLbKgKn0Gsee/jEJXbdbfi4e3r+8W59TvnZk2D6UgbTkWHnV7OeFl?=
+ =?us-ascii?Q?93ycbyNvOh4WVcZOiVRHOl2f8aS+pRPyR6MR4ludul8mQ6u4N7vQuiRtkMZl?=
+ =?us-ascii?Q?rjSInNaqcfrKF8LT/0qxmSo7jxQ9OQHJcNxz24+FX4trnyXUOhq8WuYYmFXJ?=
+ =?us-ascii?Q?TD93fhAIYbreRP2xM4J9BPd/nz26d8vGq0cXjvO3Ip5HKat+klDy7Y3X3Hji?=
+ =?us-ascii?Q?U7bId4QKAz0jhyd+/WB6qI8MPpp9lTvT7ObT+eMLzfxTwa21fJ09C9AjwX9b?=
+ =?us-ascii?Q?yScyvAlhNnay4QDEuMqsDC/SlEMWm24kt+RqznNUqafJdp0q9pM4gtZ/czCJ?=
+ =?us-ascii?Q?YhDAhhK4crk/3lNBO1nykO/letaJAD5/p3sftb8LxzoXx5tk8gB2Z8T8QYR+?=
+ =?us-ascii?Q?qgC27lOtg37VlxVOqg5KDgyO8rwTXFGKbG+jVu93CrCZbTgD0wShFQRuaU7K?=
+ =?us-ascii?Q?mZnyJzYyFmpbcQSErRLTRwT+hTsgzeR0BMY71qnoWA4A8kPyI1XkI6vM3Qrv?=
+ =?us-ascii?Q?LX/pW1X/5SIaPDzy38z27MT8gCOqHiLsm7tdK9mL8qttmYuqGXUyRYsHgbRM?=
+ =?us-ascii?Q?d3SHyQfcTCtIUTpG+kAqabhgizWHSLFdEyOoERf/noUsSbcSPscVHHjNAlP5?=
+ =?us-ascii?Q?4lMeWjAWwKX7ansa+UiUs9EnwYZ3/nYCX/eZaz3koi7Aqa77CF2WJ+cfSvzF?=
+ =?us-ascii?Q?tMPk2fqSU+vWsoRt68a4+YghQgLM81pEq+cLfXcuC1DWx82Lh0WXd5rFxhml?=
+ =?us-ascii?Q?WbVDMK2J9dZijECmLBkMO0sr8xdEig6qZ0TmtndN7ogSQb3CC00PIwgJ8XLl?=
+ =?us-ascii?Q?aSZ97FeTd6OMCHXP6EWyeFIVRgjK6NC5t01+bHtcXh7XM4dMGbOVIlaRBBl+?=
+ =?us-ascii?Q?C+zhMQNYnk8Tm5aPVqMC0fpmvMqNwhNaWulgKqBIpn1poKAxps9B7rKiyLog?=
+ =?us-ascii?Q?UtgC3P6WsDEwJcen1Ca6xQta7V+pJ9lIEAa4eAx5?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54b8c7aa-76b8-4134-3d5b-08da57f79a5c
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2022 04:43:38.6808
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ue6apeRhRwkA9LWxhS2u6qUVdgDJF2SvXQ9spcwxG6OqF2WA6x8pFg6BNkkGS8kshaK3t6P/UwaZXUrxT/TVtA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR04MB0630
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,440 +117,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
+USB PD controllers which consisting of a microcontroller (acting as the TCPM)
+and a port controller (TCPC) - may require that the driver for the PD
+controller accesses directly also the on-chip port controller in some cases.
 
-> On Wed, Jun 22, 2022 at 01:55:12PM +0530, Aneesh Kumar K.V wrote:
->> From: Jagdish Gediya <jvgediya@linux.ibm.com>
->> 
->
-> Hi Aneesh and Jagdish,
->
-> The documentation can be improved, see below.
->
->> All N_MEMORY nodes are divided into 3 memoty tiers with tier ID value
->> MEMORY_TIER_HBM_GPU, MEMORY_TIER_DRAM and MEMORY_TIER_PMEM. By default,
->> all nodes are assigned to default memory tier.
->> 
->> Demotion path for all N_MEMORY nodes is prepared based on the tier ID value
->> of memory tiers.
->> 
->> This patch adds documention for memory tiering introduction, its sysfs
->> interfaces and how demotion is performed based on memory tiers.
->> 
->
-> I think the patch message should just be:
-> "Add documentation for memory tiering. It also covers its sysfs
-> interfaces and how demotion is performed based on memory tiers."
->
->> +===========
->> +Memory tiers
->> +============
->> +
->> +This document describes explicit memory tiering support along with
->> +demotion based on memory tiers.
->> +
->
-> This causes htmldocs error, for which I have applied the fixup at [1].
->
->> +Memory nodes are divided into 3 types of memory tiers with tier ID
->> +value as shown based on their hardware characteristics.
->> +
->> +
->> +MEMORY_TIER_HBM_GPU
->> +MEMORY_TIER_DRAM
->> +MEMORY_TIER_PMEM
->> +
->
-> Use bullet list.
->
->> +Sysfs interfaces
->> +================
->> +
->> +Nodes belonging to specific tier can be read from,
->> +/sys/devices/system/memtier/memtierN/nodelist (Read-Only)
->> +
->> +Where N is 0 - 2.
->
-> The "where" sentence can be compounded into the previous sentence above.
->
->> +
->> +Example 1:
->> +For a system where Node 0 is CPU + DRAM nodes, Node 1 is HBM node,
->> +node 2 is a PMEM node an ideal tier layout will be
->> +
->> +$ cat /sys/devices/system/memtier/memtier0/nodelist
->> +1
->> +$ cat /sys/devices/system/memtier/memtier1/nodelist
->> +0
->> +$ cat /sys/devices/system/memtier/memtier2/nodelist
->> +2
->> +
->
-> The code snippets should have been inside literal code blocks.
->
->> +Example 2:
->> +For a system where Node 0 & 1 are CPU + DRAM nodes, node 2 & 3 are PMEM
->> +nodes.
->> +
->> +$ cat /sys/devices/system/memtier/memtier0/nodelist
->> +cat: /sys/devices/system/memtier/memtier0/nodelist: No such file or
->> +directory
->> +$ cat /sys/devices/system/memtier/memtier1/nodelist
->> +0-1
->> +$ cat /sys/devices/system/memtier/memtier2/nodelist
->> +2-3
->> +
->
-> Use literal code block.
->
->> +Default memory tier can be read from,
->> +/sys/devices/system/memtier/default_tier (Read-Only)
->> +
->> +e.g.
->> +$ cat /sys/devices/system/memtier/default_tier
->> +memtier200
->> +
->> +Max memory tier ID supported can be read from,
->> +/sys/devices/system/memtier/max_tier (Read-Only)
->> +
->> +e.g.
->> +$ cat /sys/devices/system/memtier/max_tier
->> +400
->> +
->> +Individual node's memory tier can be read of set using,
->> +/sys/devices/system/node/nodeN/memtier	(Read-Write)
->> +
->> +where N = node id
->> +
->> +When this interface is written, Node is moved from the old memory tier
->> +to new memory tier and demotion targets for all N_MEMORY nodes are
->> +built again.
->> +
->> +For example 1 mentioned above,
->> +$ cat /sys/devices/system/node/node0/memtier
->> +1
->> +$ cat /sys/devices/system/node/node1/memtier
->> +0
->> +$ cat /sys/devices/system/node/node2/memtier
->> +2
->> +
->
-> The same suggestions above apply here, too.
->
->> +Enable/Disable demotion
->> +-----------------------
->> +
->> +By default demotion is disabled, it can be enabled/disabled using
->> +below sysfs interface,
->> +
->> +$ echo 0/1 or false/true > /sys/kernel/mm/numa/demotion_enabled
->> +
->
-> Use literal code block.
->
->> +preferred and allowed demotion nodes
->> +------------------------------------
->> +
->> +Preferred nodes for a specific N_MEMORY node are the best nodes
->> +from the next possible lower memory tier. Allowed nodes for any
->> +node are all the nodes available in all possible lower memory
->> +tiers.
->> +
->> +Example:
->> +
->> +For a system where Node 0 & 1 are CPU + DRAM nodes, node 2 & 3 are PMEM
->> +nodes,
->> +
->> +node distances:
->> +node   0    1    2    3
->> +   0  10   20   30   40
->> +   1  20   10   40   30
->> +   2  30   40   10   40
->> +   3  40   30   40   10
->> +
->
-> Use reST table.
->
->> +memory_tiers[0] = <empty>
->> +memory_tiers[1] = 0-1
->> +memory_tiers[2] = 2-3
->> +
->> +node_demotion[0].preferred = 2
->> +node_demotion[0].allowed   = 2, 3
->> +node_demotion[1].preferred = 3
->> +node_demotion[1].allowed   = 3, 2
->> +node_demotion[2].preferred = <empty>
->> +node_demotion[2].allowed   = <empty>
->> +node_demotion[3].preferred = <empty>
->> +node_demotion[3].allowed   = <empty>
->> +
->
-> What are these above? Node properties? BTW, use literal code block.
->
-> If you don't understand these suggestions above, here is the diff:
+Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
 
-I got with the below diff.
-patch: **** malformed patch at line 180: @@ -148,35 +153,40 @@ from the next possible lower memory tier. Allowed nodes for any
+Signed-off-by: Xin Ji <xji@analogixsemi.com>
 
-But I did modify the documentation based on your feedback and it is much
-better than what I had. Thanks for the review. I will send v8 with the
-changes folded. I did add the below to commit message. Hope that is ok. 
+---
+V9 -> V10: Rebase on the latest code
+V8 -> V9 : Add more commit message
+V7 -> V8 : Fix Guanter's comment, remove unnecessary explain
+---
+ drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
+ drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
+ drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
+ {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
+ 5 files changed, 5 insertions(+), 7 deletions(-)
+ rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
 
-[update doc format by Bagas Sanjaya <bagasdotme@gmail.com>]
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index f33e08eb7670..812784702d53 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -13,11 +13,10 @@
+ #include <linux/property.h>
+ #include <linux/regmap.h>
+ #include <linux/usb/pd.h>
++#include <linux/usb/tcpci.h>
+ #include <linux/usb/tcpm.h>
+ #include <linux/usb/typec.h>
+ 
+-#include "tcpci.h"
+-
+ #define	PD_RETRY_COUNT_DEFAULT			3
+ #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
+ #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
+diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.c b/drivers/usb/typec/tcpm/tcpci_maxim.c
+index df2505570f07..4b6705f3d7b7 100644
+--- a/drivers/usb/typec/tcpm/tcpci_maxim.c
++++ b/drivers/usb/typec/tcpm/tcpci_maxim.c
+@@ -11,11 +11,10 @@
+ #include <linux/module.h>
+ #include <linux/regmap.h>
+ #include <linux/usb/pd.h>
++#include <linux/usb/tcpci.h>
+ #include <linux/usb/tcpm.h>
+ #include <linux/usb/typec.h>
+ 
+-#include "tcpci.h"
+-
+ #define PD_ACTIVITY_TIMEOUT_MS				10000
+ 
+ #define TCPC_VENDOR_ALERT				0x80
+diff --git a/drivers/usb/typec/tcpm/tcpci_mt6360.c b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+index 8a952eaf9016..1b7c31278ebb 100644
+--- a/drivers/usb/typec/tcpm/tcpci_mt6360.c
++++ b/drivers/usb/typec/tcpm/tcpci_mt6360.c
+@@ -11,10 +11,9 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
++#include <linux/usb/tcpci.h>
+ #include <linux/usb/tcpm.h>
+ 
+-#include "tcpci.h"
+-
+ #define MT6360_REG_PHYCTRL1	0x80
+ #define MT6360_REG_PHYCTRL3	0x82
+ #define MT6360_REG_PHYCTRL7	0x86
+diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+index b56a0880a044..3291ca4948da 100644
+--- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
++++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+@@ -10,9 +10,9 @@
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+ #include <linux/gpio/consumer.h>
++#include <linux/usb/tcpci.h>
+ #include <linux/usb/tcpm.h>
+ #include <linux/regmap.h>
+-#include "tcpci.h"
+ 
+ #define RT1711H_VID		0x29CF
+ #define RT1711H_PID		0x1711
+diff --git a/drivers/usb/typec/tcpm/tcpci.h b/include/linux/usb/tcpci.h
+similarity index 99%
+rename from drivers/usb/typec/tcpm/tcpci.h
+rename to include/linux/usb/tcpci.h
+index b2edd45f13c6..20c0bedb8ec8 100644
+--- a/drivers/usb/typec/tcpm/tcpci.h
++++ b/include/linux/usb/tcpci.h
+@@ -9,6 +9,7 @@
+ #define __LINUX_USB_TCPCI_H
+ 
+ #include <linux/usb/typec.h>
++#include <linux/usb/tcpm.h>
+ 
+ #define TCPC_VENDOR_ID			0x0
+ #define TCPC_PRODUCT_ID			0x2
+-- 
+2.25.1
 
->
-> ---- >8 ----
->
-> diff --git a/Documentation/admin-guide/mm/memory-tiering.rst b/Documentation/admin-guide/mm/memory-tiering.rst
-> index 0a75e0dab1fd8e..10ec5aab6ddd53 100644
-> --- a/Documentation/admin-guide/mm/memory-tiering.rst
-> +++ b/Documentation/admin-guide/mm/memory-tiering.rst
-> @@ -14,13 +14,13 @@ Introduction
->  
->  Many systems have multiple types of memory devices e.g. GPU, DRAM and
->  PMEM. The memory subsystem of these systems can be called a memory
-> -tiering system because the performance of the different types of
-> +tiering system because the performance of each type of
->  memory is different. Memory tiers are defined based on the hardware
->  capabilities of memory nodes. Each memory tier is assigned a tier ID
->  value that determines the memory tier position in demotion order.
->  
->  The memory tier assignment of each node is independent of each
-> -other. Moving a node from one tier to another tier doesn't affect
-> +other. Moving a node from one tier to another doesn't affect
->  the tier assignment of any other node.
->  
->  Memory tiers are used to build the demotion targets for nodes. A node
-> @@ -32,10 +32,9 @@ Memory tier rank
->  Memory nodes are divided into 3 types of memory tiers with tier ID
->  value as shown based on their hardware characteristics.
->  
-> -
-> -MEMORY_TIER_HBM_GPU
-> -MEMORY_TIER_DRAM
-> -MEMORY_TIER_PMEM
-> +  * MEMORY_TIER_HBM_GPU
-> +  * MEMORY_TIER_DRAM
-> +  * MEMORY_TIER_PMEM
->  
->  Memory tiers initialization and (re)assignments
->  ===============================================
-> @@ -49,68 +48,73 @@ hotplug, the memory tier with default tier ID is assigned to the memory node.
->  Sysfs interfaces
->  ================
->  
-> -Nodes belonging to specific tier can be read from,
-> -/sys/devices/system/memtier/memtierN/nodelist (Read-Only)
-> +Nodes belonging to specific tier can be read from
-> +/sys/devices/system/memtier/memtierN/nodelist, where N is 0 - 2 (read-only)
->  
-> -Where N is 0 - 2.
-> +Examples:
->  
-> -Example 1:
-> -For a system where Node 0 is CPU + DRAM nodes, Node 1 is HBM node,
-> -node 2 is a PMEM node an ideal tier layout will be
-> +1. On a system where Node 0 is CPU + DRAM nodes, Node 1 is HBM node,
-> +   node 2 is a PMEM node an ideal tier layout will be:
->  
-> -$ cat /sys/devices/system/memtier/memtier0/nodelist
-> -1
-> -$ cat /sys/devices/system/memtier/memtier1/nodelist
-> -0
-> -$ cat /sys/devices/system/memtier/memtier2/nodelist
-> -2
-> +   .. code-block::
->  
-> -Example 2:
-> -For a system where Node 0 & 1 are CPU + DRAM nodes, node 2 & 3 are PMEM
-> -nodes.
-> +      $ cat /sys/devices/system/memtier/memtier0/nodelist
-> +      1
-> +      $ cat /sys/devices/system/memtier/memtier1/nodelist
-> +      0
-> +      $ cat /sys/devices/system/memtier/memtier2/nodelist
-> +      2
->  
-> -$ cat /sys/devices/system/memtier/memtier0/nodelist
-> -cat: /sys/devices/system/memtier/memtier0/nodelist: No such file or
-> -directory
-> -$ cat /sys/devices/system/memtier/memtier1/nodelist
-> -0-1
-> -$ cat /sys/devices/system/memtier/memtier2/nodelist
-> -2-3
-> +2. On a system where Node 0 & 1 are CPU + DRAM nodes, node 2 & 3 are PMEM
-> +   nodes:
->  
-> -Default memory tier can be read from,
-> -/sys/devices/system/memtier/default_tier (Read-Only)
-> +   .. code-block::
->  
-> -e.g.
-> -$ cat /sys/devices/system/memtier/default_tier
-> -memtier200
-> +      $ cat /sys/devices/system/memtier/memtier0/nodelist
-> +      cat: /sys/devices/system/memtier/memtier0/nodelist: No such file or
-> +      directory
-> +      $ cat /sys/devices/system/memtier/memtier1/nodelist
-> +      0-1
-> +      $ cat /sys/devices/system/memtier/memtier2/nodelist
-> +      2-3
->  
-> -Max memory tier ID supported can be read from,
-> -/sys/devices/system/memtier/max_tier (Read-Only)
-> +Default memory tier can be read from
-> +/sys/devices/system/memtier/default_tier (read-only), e.g.:
->  
-> -e.g.
-> -$ cat /sys/devices/system/memtier/max_tier
-> -400
-> +.. code-block::
->  
-> -Individual node's memory tier can be read of set using,
-> -/sys/devices/system/node/nodeN/memtier	(Read-Write)
-> +   $ cat /sys/devices/system/memtier/default_tier
-> +   memtier200
->  
-> -where N = node id
-> +Max memory tier ID supported can be read from
-> +/sys/devices/system/memtier/max_tier (read-only), e.g.:
->  
-> -When this interface is written, Node is moved from the old memory tier
-> +.. code-block::
-> +
-> +   $ cat /sys/devices/system/memtier/max_tier
-> +   400
-> +
-> +Individual node's memory tier can be read or set using
-> +/sys/devices/system/node/nodeN/memtier (read-write), where N = node id.
-> +
-> +When this interface is written, node is moved from the old memory tier
->  to new memory tier and demotion targets for all N_MEMORY nodes are
->  built again.
->  
-> -For example 1 mentioned above,
-> -$ cat /sys/devices/system/node/node0/memtier
-> -1
-> -$ cat /sys/devices/system/node/node1/memtier
-> -0
-> -$ cat /sys/devices/system/node/node2/memtier
-> -2
-> +For example 1 mentioned above:
-> +
-> +.. code-block::
-> +
-> +   $ cat /sys/devices/system/node/node0/memtier
-> +   1
-> +   $ cat /sys/devices/system/node/node1/memtier
-> +   0
-> +   $ cat /sys/devices/system/node/node2/memtier
-> +   2
->  
->  Additional memory tiers can be created by writing a tier ID value to this file.
-> -This results in a new memory tier creation and moving the specific NUMA node to
-> -that memory tier.
-> +This results into creating a new tier and moving the specific NUMA node to
-> +that tier.
->  
->  Demotion
->  ========
-> @@ -128,19 +132,20 @@ be used.
->  
->  Instead of a page being discarded during reclaim, it can be moved to
->  persistent memory. Allowing page migration during reclaim enables
-> -these systems to migrate pages from fast(higher) tiers to slow(lower)
-> -tiers when the fast(higher) tier is under pressure.
-> +these systems to migrate pages from fast (higher) tiers to slow (lower)
-> +tiers when the fast (higher) tier is under pressure.
->  
->  
->  Enable/Disable demotion
->  -----------------------
->  
-> -By default demotion is disabled, it can be enabled/disabled using
-> -below sysfs interface,
-> +By default demotion is disabled. It can be toggled by:
->  
-> -$ echo 0/1 or false/true > /sys/kernel/mm/numa/demotion_enabled
-> +.. code-block::
->  
-> -preferred and allowed demotion nodes
-> +   $ echo 0/1 or false/true > /sys/kernel/mm/numa/demotion_enabled
-> +
-> +Preferred and allowed demotion nodes
->  ------------------------------------
->  
->  Preferred nodes for a specific N_MEMORY node are the best nodes
-> @@ -148,35 +153,40 @@ from the next possible lower memory tier. Allowed nodes for any
->  node are all the nodes available in all possible lower memory
->  tiers.
->  
-> -Example:
-> +For example, on a system where Node 0 & 1 are CPU + DRAM nodes,
-> +node 2 & 3 are PMEM nodes:
->  
-> -For a system where Node 0 & 1 are CPU + DRAM nodes, node 2 & 3 are PMEM
-> -nodes,
-> +  * node distances
->  
-> -node distances:
-> -node   0    1    2    3
-> -   0  10   20   30   40
-> -   1  20   10   40   30
-> -   2  30   40   10   40
-> -   3  40   30   40   10
-> +    ====  ==   ==   ==   ==
-> +    node   0    1    2    3
-> +    ====  ==   ==   ==   ==
-> +       0  10   20   30   40
-> +       1  20   10   40   30
-> +       2  30   40   10   40
-> +       3  40   30   40   10
-> +    ====  ==   ==   ==   ==
->  
-> -memory_tiers[0] = <empty>
-> -memory_tiers[1] = 0-1
-> -memory_tiers[2] = 2-3
-> +  * node properties
->  
-> -node_demotion[0].preferred = 2
-> -node_demotion[0].allowed   = 2, 3
-> -node_demotion[1].preferred = 3
-> -node_demotion[1].allowed   = 3, 2
-> -node_demotion[2].preferred = <empty>
-> -node_demotion[2].allowed   = <empty>
-> -node_demotion[3].preferred = <empty>
-> -node_demotion[3].allowed   = <empty>
-> +    .. code-block::
-> +
-> +       memory_tiers[0] = <empty>
-> +       memory_tiers[1] = 0-1
-> +       memory_tiers[2] = 2-3
-> +
-> +       node_demotion[0].preferred = 2
-> +       node_demotion[0].allowed   = 2, 3
-> +       node_demotion[1].preferred = 3
-> +       node_demotion[1].allowed   = 3, 2
-> +       node_demotion[2].preferred = <empty>
-> +       node_demotion[2].allowed   = <empty>
-> +       node_demotion[3].preferred = <empty>
-> +       node_demotion[3].allowed   = <empty>
->  
->  Memory allocation for demotion
->  ------------------------------
->  
-> -If a page needs to be demoted from any node, the kernel 1st tries
-> -to allocate a new page from the node's preferred node and fallbacks to
-> -node's allowed targets in allocation fallback order.
-> -
-> +If a page needs to be demoted from any node, the kernel first tries
-> +to allocate a new page from the node's preferred target node and fallbacks
-> +to node's allowed targets in allocation fallback order.
->
->
-> Thanks.
->
-> [1]: https://lore.kernel.org/linux-doc/YrZ5cTFOSuWxlF2t@debian.me/
->
-> -- 
-> An old man doll... just what I always wanted! - Clara

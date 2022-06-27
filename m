@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20ADD55D275
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784B055C86E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236992AbiF0LlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
+        id S236764AbiF0Lj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236449AbiF0Lhc (ORCPT
+        with ESMTP id S236491AbiF0Lhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:37:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73182630;
-        Mon, 27 Jun 2022 04:32:52 -0700 (PDT)
+        Mon, 27 Jun 2022 07:37:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3227428E;
+        Mon, 27 Jun 2022 04:33:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5663CB81122;
-        Mon, 27 Jun 2022 11:32:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F1A4C3411D;
-        Mon, 27 Jun 2022 11:32:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C399C609D0;
+        Mon, 27 Jun 2022 11:33:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88273C3411D;
+        Mon, 27 Jun 2022 11:33:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329570;
-        bh=nBwQpZBkMM39gY6r+F8ekVsav1X2LCZZ21G0wIdCbTw=;
+        s=korg; t=1656329603;
+        bh=wzRgcUUicdNbJvqPsdmDmco70kK+s770X+3oBxpih3A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oLqO66zBNyMza1/5tGvR25QChr8qcozMD3R2l7RiiiVf48GUydavrhAzzpcWEisML
-         ddrarg8iYJFVFjWxC6db8+SxG6WMtb5tq8GBlVhnHUuTy9EuXxU1eGKj9UuomoVpVJ
-         xW550zowNSNmfflD4yKbTW8WFpwldPd30goi7pEc=
+        b=LXcruiE2XyOw3bbSS19h6DGjWCTDvAHCJDOz1yvsxwC/1LHmkv7dlqJN9eUGpwwa4
+         odgal72VlzRw0Pus8D160NvwMkIWHRT7JHA6ct23PWLItsaT3DlzVuVRikgETCYQq6
+         wlTlSuIF9iCQqnPTSG+qH5P6ywgXxqTaCnE+CkDY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 035/135] netfilter: use get_random_u32 instead of prandom
-Date:   Mon, 27 Jun 2022 13:20:42 +0200
-Message-Id: <20220627111939.178588612@linuxfoundation.org>
+Subject: [PATCH 5.15 036/135] scsi: scsi_debug: Fix zone transition to full condition
+Date:   Mon, 27 Jun 2022 13:20:43 +0200
+Message-Id: <20220627111939.207028712@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
 References: <20220627111938.151743692@linuxfoundation.org>
@@ -55,129 +57,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit b1fd94e704571f98b21027340eecf821b2bdffba ]
+[ Upstream commit 566d3c57eb526f32951af15866086e236ce1fc8a ]
 
-bh might occur while updating per-cpu rnd_state from user context,
-ie. local_out path.
+When a write command to a sequential write required or sequential write
+preferred zone result in the zone write pointer reaching the end of the
+zone, the zone condition must be set to full AND the number of implicitly
+or explicitly open zones updated to have a correct accounting for zone
+resources. However, the function zbc_inc_wp() only sets the zone condition
+to full without updating the open zone counters, resulting in a zone state
+machine breakage.
 
-BUG: using smp_processor_id() in preemptible [00000000] code: nginx/2725
-caller is nft_ng_random_eval+0x24/0x54 [nft_numgen]
-Call Trace:
- check_preemption_disabled+0xde/0xe0
- nft_ng_random_eval+0x24/0x54 [nft_numgen]
+Introduce the helper function zbc_set_zone_full() and use it in
+zbc_inc_wp() to correctly transition zones to the full condition.
 
-Use the random driver instead, this also avoids need for local prandom
-state. Moreover, prandom now uses the random driver since d4150779e60f
-("random32: use real rng for non-deterministic randomness").
-
-Based on earlier patch from Pablo Neira.
-
-Fixes: 6b2faee0ca91 ("netfilter: nft_meta: place prandom handling in a helper")
-Fixes: 978d8f9055c3 ("netfilter: nft_numgen: add map lookups for numgen random operations")
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Link: https://lore.kernel.org/r/20220608011302.92061-1-damien.lemoal@opensource.wdc.com
+Fixes: f0d1cf9378bd ("scsi: scsi_debug: Add ZBC zone commands")
+Reviewed-by: Niklas Cassel <niklas.cassel@wdc.com>
+Acked-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nft_meta.c   | 13 ++-----------
- net/netfilter/nft_numgen.c | 12 +++---------
- 2 files changed, 5 insertions(+), 20 deletions(-)
+ drivers/scsi/scsi_debug.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/net/netfilter/nft_meta.c b/net/netfilter/nft_meta.c
-index a7e01e9952f1..44d9b38e5f90 100644
---- a/net/netfilter/nft_meta.c
-+++ b/net/netfilter/nft_meta.c
-@@ -14,6 +14,7 @@
- #include <linux/in.h>
- #include <linux/ip.h>
- #include <linux/ipv6.h>
-+#include <linux/random.h>
- #include <linux/smp.h>
- #include <linux/static_key.h>
- #include <net/dst.h>
-@@ -32,8 +33,6 @@
- #define NFT_META_SECS_PER_DAY		86400
- #define NFT_META_DAYS_PER_WEEK		7
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index cfeadd5f61f1..747e1cbb7ec9 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -2747,6 +2747,24 @@ static void zbc_open_zone(struct sdebug_dev_info *devip,
+ 	}
+ }
  
--static DEFINE_PER_CPU(struct rnd_state, nft_prandom_state);
--
- static u8 nft_meta_weekday(void)
++static inline void zbc_set_zone_full(struct sdebug_dev_info *devip,
++				     struct sdeb_zone_state *zsp)
++{
++	switch (zsp->z_cond) {
++	case ZC2_IMPLICIT_OPEN:
++		devip->nr_imp_open--;
++		break;
++	case ZC3_EXPLICIT_OPEN:
++		devip->nr_exp_open--;
++		break;
++	default:
++		WARN_ONCE(true, "Invalid zone %llu condition %x\n",
++			  zsp->z_start, zsp->z_cond);
++		break;
++	}
++	zsp->z_cond = ZC5_FULL;
++}
++
+ static void zbc_inc_wp(struct sdebug_dev_info *devip,
+ 		       unsigned long long lba, unsigned int num)
  {
- 	time64_t secs = ktime_get_real_seconds();
-@@ -267,13 +266,6 @@ static bool nft_meta_get_eval_ifname(enum nft_meta_keys key, u32 *dest,
- 	return true;
- }
+@@ -2759,7 +2777,7 @@ static void zbc_inc_wp(struct sdebug_dev_info *devip,
+ 	if (zsp->z_type == ZBC_ZONE_TYPE_SWR) {
+ 		zsp->z_wp += num;
+ 		if (zsp->z_wp >= zend)
+-			zsp->z_cond = ZC5_FULL;
++			zbc_set_zone_full(devip, zsp);
+ 		return;
+ 	}
  
--static noinline u32 nft_prandom_u32(void)
--{
--	struct rnd_state *state = this_cpu_ptr(&nft_prandom_state);
--
--	return prandom_u32_state(state);
--}
--
- #ifdef CONFIG_IP_ROUTE_CLASSID
- static noinline bool
- nft_meta_get_eval_rtclassid(const struct sk_buff *skb, u32 *dest)
-@@ -385,7 +377,7 @@ void nft_meta_get_eval(const struct nft_expr *expr,
- 		break;
- #endif
- 	case NFT_META_PRANDOM:
--		*dest = nft_prandom_u32();
-+		*dest = get_random_u32();
- 		break;
- #ifdef CONFIG_XFRM
- 	case NFT_META_SECPATH:
-@@ -514,7 +506,6 @@ int nft_meta_get_init(const struct nft_ctx *ctx,
- 		len = IFNAMSIZ;
- 		break;
- 	case NFT_META_PRANDOM:
--		prandom_init_once(&nft_prandom_state);
- 		len = sizeof(u32);
- 		break;
- #ifdef CONFIG_XFRM
-diff --git a/net/netfilter/nft_numgen.c b/net/netfilter/nft_numgen.c
-index 722cac1e90e0..4e43214e88de 100644
---- a/net/netfilter/nft_numgen.c
-+++ b/net/netfilter/nft_numgen.c
-@@ -9,12 +9,11 @@
- #include <linux/netlink.h>
- #include <linux/netfilter.h>
- #include <linux/netfilter/nf_tables.h>
-+#include <linux/random.h>
- #include <linux/static_key.h>
- #include <net/netfilter/nf_tables.h>
- #include <net/netfilter/nf_tables_core.h>
+@@ -2778,7 +2796,7 @@ static void zbc_inc_wp(struct sdebug_dev_info *devip,
+ 			n = num;
+ 		}
+ 		if (zsp->z_wp >= zend)
+-			zsp->z_cond = ZC5_FULL;
++			zbc_set_zone_full(devip, zsp);
  
--static DEFINE_PER_CPU(struct rnd_state, nft_numgen_prandom_state);
--
- struct nft_ng_inc {
- 	u8			dreg;
- 	u32			modulus;
-@@ -104,12 +103,9 @@ struct nft_ng_random {
- 	u32			offset;
- };
- 
--static u32 nft_ng_random_gen(struct nft_ng_random *priv)
-+static u32 nft_ng_random_gen(const struct nft_ng_random *priv)
- {
--	struct rnd_state *state = this_cpu_ptr(&nft_numgen_prandom_state);
--
--	return reciprocal_scale(prandom_u32_state(state), priv->modulus) +
--	       priv->offset;
-+	return reciprocal_scale(get_random_u32(), priv->modulus) + priv->offset;
- }
- 
- static void nft_ng_random_eval(const struct nft_expr *expr,
-@@ -137,8 +133,6 @@ static int nft_ng_random_init(const struct nft_ctx *ctx,
- 	if (priv->offset + priv->modulus - 1 < priv->offset)
- 		return -EOVERFLOW;
- 
--	prandom_init_once(&nft_numgen_prandom_state);
--
- 	return nft_parse_register_store(ctx, tb[NFTA_NG_DREG], &priv->dreg,
- 					NULL, NFT_DATA_VALUE, sizeof(u32));
- }
+ 		num -= n;
+ 		lba += n;
 -- 
 2.35.1
 

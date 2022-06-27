@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F9555CA02
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E797255D74A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241234AbiF0WSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 18:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
+        id S239097AbiF0WSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 18:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242543AbiF0WSQ (ORCPT
+        with ESMTP id S235166AbiF0WSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 18:18:16 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724CADAE;
-        Mon, 27 Jun 2022 15:18:15 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id z191so11094896iof.6;
-        Mon, 27 Jun 2022 15:18:15 -0700 (PDT)
+        Mon, 27 Jun 2022 18:18:41 -0400
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BED7642;
+        Mon, 27 Jun 2022 15:18:41 -0700 (PDT)
+Received: by mail-il1-f170.google.com with SMTP id a7so1893287ilj.2;
+        Mon, 27 Jun 2022 15:18:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=YibwpeFlLUAXldT3IcMtZUEv7yVm8RZ87dZAwMJufVw=;
-        b=TDiCVHNBbVvdpOvubT15ZyiXc0b1JK3R1chgZ8hRRLf1V3a8zMVyBPNSMnG7s0AZOK
-         tA3zP1NW7nDTI3mFMNHEyIgxlazgA5xbmDlwE+RLCsc/KMFR8lGQnEZCK6Gf2mJWJrzB
-         c7pzKBP/+CRxT1mfyVIrUZCx8C5hcHXeQ2Z/Yx2AicuVfjje+d9Fxq5r1om7swgAsljL
-         5rGzdiBGJzXgzjnsURexCffGKEeRj3rNi+A2Uq28F2YUGO6UX7bsnbkIHCSOqE1M6pp+
-         Jo9yc7//Rmx0V4x3zrP+lexfUhl2R7RMjZjXPOJN2bAqeyeOrGk12/Us43uOxfAgoLS2
-         Cizg==
-X-Gm-Message-State: AJIora8XyDEE3fJvqyoGcF2hPdUnYTPTlRrg+orU6UuB5cZldLRQ35PB
-        pZoIG/pSR6XpaFg3pR6Ji4PJs4M1Iw==
-X-Google-Smtp-Source: AGRyM1v1uMcYY0sXxp0P098New6WbDFXGNit8XNV3ZEYVn08nGYcoSP532Tx60bnDX9w8a+/DBwomQ==
-X-Received: by 2002:a05:6602:13c3:b0:672:6e5b:f91d with SMTP id o3-20020a05660213c300b006726e5bf91dmr7538403iov.68.1656368294681;
-        Mon, 27 Jun 2022 15:18:14 -0700 (PDT)
+        bh=TinNrZwW9VbhH3StzTR7UiBzPmI2Egrn9VNHzUuDipc=;
+        b=SGjviu5FM4SHUfUFTNYol31ObKxPYxXVl3YfdjhpYP78xhHwiRzIIHlq7pvzNZo/e5
+         7y8VFGWv4EQESIsSV72tdiKKTva0HGxuIJu+m+r84Eqa0aWXVvSPuLWwzMj9Lq6p3s2G
+         2Re0688AkJh0QiOIKZd5EdV+nvfbvlmNpyMtjqF3ws7ccehmaa8kXvshlKRM9zwcusT9
+         OPyYc8BqmCGENIzSpemGDKthBVLVlf8Fllr/L3xyRHOPL/7ZZNQx8JbxcilN7UWrkyyW
+         t1X1ydDXNSz9eOAjyjNdb62GdpZDyWVQfleS+qdGtRmNVi5CA+zh9GbHUQeIlL3I4z3a
+         N+bA==
+X-Gm-Message-State: AJIora/fl36ByvKVxqyK+9j2zgBr/r3N++IvT+A7bI7yBnpWSOZIf6l6
+        3uY+SZuYmxNPAK5wiH4C6Q==
+X-Google-Smtp-Source: AGRyM1uvU2Wwldp0sFih7rHmPBueA66RFAVQTQjb+le6I+JxZPEmEYOG82wWeDLq2Y/S9FZ/R//loA==
+X-Received: by 2002:a92:cb0e:0:b0:2d9:224b:94f7 with SMTP id s14-20020a92cb0e000000b002d9224b94f7mr8029211ilo.44.1656368320491;
+        Mon, 27 Jun 2022 15:18:40 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id z18-20020a92bf12000000b002d11c598e12sm5052398ilh.61.2022.06.27.15.18.13
+        by smtp.gmail.com with ESMTPSA id d18-20020a056602185200b00669e1a9588esm5817053ioi.43.2022.06.27.15.18.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 15:18:14 -0700 (PDT)
-Received: (nullmailer pid 3065966 invoked by uid 1000);
-        Mon, 27 Jun 2022 22:18:12 -0000
-Date:   Mon, 27 Jun 2022 16:18:12 -0600
+        Mon, 27 Jun 2022 15:18:40 -0700 (PDT)
+Received: (nullmailer pid 3066682 invoked by uid 1000);
+        Mon, 27 Jun 2022 22:18:38 -0000
+Date:   Mon, 27 Jun 2022 16:18:38 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, arm@kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Olof Johansson <olof@lixom.net>, linux-gpio@vger.kernel.org,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org, soc@kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v3 04/40] dt-bindings: pinctrl: nuvoton,wpcm450-pinctrl:
- align key node name
-Message-ID: <20220627221812.GA3065912-robh@kernel.org>
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org>
- <20220616005333.18491-4-krzysztof.kozlowski@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        marex@denx.de, robh+dt@kernel.org, kernel@pengutronix.de,
+        paul.elder@ideasonboard.com, abailon@baylibre.com,
+        s.hauer@pengutronix.de, linux-pm@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>, aford173@gmail.com,
+        linux-imx@nxp.com, l.stach@pengutronix.de,
+        krzysztof.kozlowski+dt@linaro.org, Markus.Niebel@ew.tq-group.com,
+        festevam@gmail.com, shawnguo@kernel.org,
+        linux-kernel@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        abelvesa@kernel.org, abel.vesa@nxp.com, djakov@kernel.org
+Subject: Re: [PATCH V2 1/9] dt-bindings: interconnect: imx8m: Add bindings
+ for imx8mp noc
+Message-ID: <20220627221838.GA3066625-robh@kernel.org>
+References: <20220616073320.2203000-1-peng.fan@oss.nxp.com>
+ <20220616073320.2203000-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220616005333.18491-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220616073320.2203000-2-peng.fan@oss.nxp.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -70,18 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Jun 2022 17:52:57 -0700, Krzysztof Kozlowski wrote:
-> gpio-keys schema requires keys to have more generic name.
+On Thu, 16 Jun 2022 15:33:12 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> i.MX8MP features same NoC/NIC as i.MX8MM/N/Q, and use two compatible
+> strings.
 > 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
-> 
-> Changes since v2:
-> 1. Name it "button-uid"
-> ---
->  .../devicetree/bindings/pinctrl/nuvoton,wpcm450-pinctrl.yaml    | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml     | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>

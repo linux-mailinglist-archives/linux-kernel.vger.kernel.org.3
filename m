@@ -2,93 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D84955CD59
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245AF55D7ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbiF0ITp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
+        id S233097AbiF0IVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231998AbiF0ITm (ORCPT
+        with ESMTP id S232218AbiF0IVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:19:42 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85868E45;
-        Mon, 27 Jun 2022 01:19:40 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LWgcp4plPz4xDB;
-        Mon, 27 Jun 2022 18:19:38 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1656317979;
-        bh=7g/3i3juQG76SYtldFCyXOFRWfeOFgQJvo6kNSgX9JI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kINRBB6qxfkklttarj7+0VGOt5rZIjAxq447Pa0H5xUJiTpA2lcfOp6nhvO09b0lh
-         OMzTBBpfwxsqLxo5J4MmP1GSj2rJpl8ApTyQjlXvfH11k/eZdwPKVBj9hHXRCBVTiV
-         kISKyB3igW0g7qalbY4BjreIly5e8uNBWjyjrsbK0dYLxE/JwBgvxWpsqdU4sXEOvv
-         HDX7cqKS2onLozI/Lu75XBqhycFXBVXzDT48eDh9MUbzO24DMCGGvF8gnr+39UM9Td
-         m3pzW26YIUMU7GgadRtMk76upq7YkUt5urTbv0yY3RPGtdBcZQ9D0Jr3zUo1uGLBhn
-         0Qy5mDUJAOeTQ==
-Date:   Mon, 27 Jun 2022 18:19:37 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Ben Gardon <bgardon@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the kvm tree
-Message-ID: <20220627181937.3be67263@canb.auug.org.au>
+        Mon, 27 Jun 2022 04:21:06 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1636F49;
+        Mon, 27 Jun 2022 01:21:03 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VHWTgZ-_1656318059;
+Received: from 30.97.57.54(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VHWTgZ-_1656318059)
+          by smtp.aliyun-inc.com;
+          Mon, 27 Jun 2022 16:21:00 +0800
+Message-ID: <fd926012-6845-05e4-077b-6c8cfbf3d3cc@linux.alibaba.com>
+Date:   Mon, 27 Jun 2022 16:20:55 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+j5HvyYz1P499cVlhWwTAPs";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Content-Language: en-US
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+Subject: [RFC] libubd: library for ubd(userspace block driver based on
+ io_uring passthrough)
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-block@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        joseph.qi@linux.alibaba.com,
+        Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/+j5HvyYz1P499cVlhWwTAPs
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Ming,
 
-Hi all,
+We are learning your ubd code and developing a library: libubd for ubd.
+This article explains why we need libubd and how we design it.
 
-After merging the kvm tree, today's linux-next build (htmldocs) produced
-this warning:
+Related threads:
+(1) https://lore.kernel.org/all/Yk%2Fn7UtGK1vVGFX0@T590/
+(2) https://lore.kernel.org/all/YnDhorlKgOKiWkiz@T590/
+(3) https://lore.kernel.org/all/20220509092312.254354-1-ming.lei@redhat.com/
+(4) https://lore.kernel.org/all/20220517055358.3164431-1-ming.lei@redhat.com/
 
-Documentation/virt/kvm/api.rst:8210: WARNING: Title underline too short.
 
-8.38 KVM_CAP_VM_DISABLE_NX_HUGE_PAGES
----------------------------
-Documentation/virt/kvm/api.rst:8217: WARNING: Unexpected indentation.
+Userspace block driver(ubd)[1], based on io_uring passthrough,
+allows users to define their own backend storage in userspace
+and provides block devices such as /dev/ubdbX.
+Ming Lei has provided kernel driver code: ubd_drv.c[2]
+and userspace code: ubdsrv[3].
 
-Introduced by commit
+ubd_drv.c simply passes all blk-mq IO requests
+to ubdsrv through io_uring sqes/cqes. We think the kernel code
+is pretty well-designed.
 
-  084cc29f8bbb ("KVM: x86/MMU: Allow NX huge pages to be disabled on a per-=
-vm basis")
+ubdsrv is implemented by a single daemon
+and target(backend) IO handling(null_tgt and loop_tgt) 
+is embedded in the daemon. 
+While trying ubdsrv, we find ubdsrv is hard to be used 
+by our backend.
+First is description of our backend:
 
---=20
-Cheers,
-Stephen Rothwell
+(1) a distributing system sends/receives IO requests 
+    through network.
 
---Sig_/+j5HvyYz1P499cVlhWwTAPs
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+(2) The system use RPC calls among hundreds of
+     storage servers and RPC calls are associated with data buffers
+     allocated from a memory pool.
 
------BEGIN PGP SIGNATURE-----
+(3) On each server for each device(/dev/vdX), our backend runs
+     many threads to handle IO requests and manage the device. 
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK5aBkACgkQAVBC80lX
-0Gz2HAf8DYtPt/dHj5EvB7SbRpRlmFjmtN3UB+bz7NtUsFXFXf0prtUCPDq9qBl7
-ty4Pa0KPgEItbcgfBBldD8pvE/IWFfuNdjiu+Asz3NjURfLaQDhCB+N5wFl/GfbO
-W4dK0fwbiADyLwvOanpwmNY/qkGdB53Kvi6XPad1sETaDEwVDZpZzKnewHaa6O6y
-wqgubhL2NYWT1GIOXHopImATlA3il9LDwCB+krWgYrtV+HeWBRvZNmuO7H/SQNjU
-UHaMIZ6XyfDeVndPGmdkZNS8Vp2CvHtOmA1aBEhGwBMoXpwZFkHeWSZuhsVGjUNn
-E8S+FulQWwgPBIvQFdMCluczCcu1ww==
-=tz3s
------END PGP SIGNATURE-----
+Second are reasons why ubdsrv is hard to use for us:
 
---Sig_/+j5HvyYz1P499cVlhWwTAPs--
+(1) ubdsrv requires the target(backend) issues IO requests
+    to the io_uring provided by ubdsrv but our backend 
+    uses something like RPC and does not support io_uring.
+
+(2) ubdsrv forks a daemon and it takes over everything.
+    Users should type "list/stop/del" ctrl-commands to interact with
+    the daemon. It is inconvenient for our backend
+    because it has threads(from a C++ thread library) running inside.
+
+(3) ubdsrv PRE-allocates internal data buffers for each ubd device.
+    The data flow is:
+    bio vectors <-1-> ubdsrv data buffer <-2-> backend buffer(our RPC buffer).
+    Since ubdsrv does not export its internal data buffer to backend,
+    the second copy is unavoidable. 
+    PRE-allocating data buffer may not be a good idea for wasting memory
+    if there are hundreds of ubd devices(/dev/ubdbX).
+
+To better use ubd in more complicated scenarios, we have developed libubd.
+It does not assume implementation of backend and can be embedded into it.
+We refer to the code structure of tcmu-runner[4], 
+which includes a library(libtcmu) for users 
+to embed tcmu-runner inside backend's code. 
+It:
+
+(1) Does not fork/pthread_create but embedded in backend's threads
+
+(2) Provides libubd APIs for backend to add/delete ubd devices 
+    and fetch/commit IO requests
+
+(3) simply passes backend-provided data buffers to ubd_drv.c in kernel,
+    since the backend actually has no knowledge 
+    on incoming data size until it gets an IO descriptor.
+
+Note: 
+
+(1) libubd is just a POC demo and is not stick to the principles of
+    designing a library and we are still developing it now...
+
+(2) The repo[5] including some useful examples using libubd. 
+
+(3) We modify the kernel part: ubd_drv.c and 
+    it[6] is against Ming Lei's newest branch[2]
+    because we forked our branch from his early branch
+    (v5.17-ubd-dev).
+
+Thanks,
+Zhang
+
+[1]https://lore.kernel.org/all/Yk%2Fn7UtGK1vVGFX0@T590/
+[2]https://github.com/ming1/linux/tree/my_for-5.19-ubd-devel_v3
+[3]https://github.com/ming1/ubdsrv
+[4]https://github.com/open-iscsi/tcmu-runner
+[5]https://github.com/old-memories/libubd
+[6]https://github.com/old-memories/linux/tree/v5.17-ubd-dev-mq-ubuf

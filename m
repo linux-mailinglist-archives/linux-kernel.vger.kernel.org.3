@@ -2,137 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB4E55C5BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CDC55C2D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238726AbiF0QUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S239272AbiF0QX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238381AbiF0QUK (ORCPT
+        with ESMTP id S236443AbiF0QXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:20:10 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217261164
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:20:09 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id g4so2652284pgc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:20:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=l6X68KuyBDU81KFCllZcPJCpgvdaKM9lp1nYP5LV1kY=;
-        b=QYuHqx8JmD3fGZhFw9UuYiMUgaHHG5YjGJZr+BhXEcVvOKmxYAAHNIYT4pML0YKcd9
-         UOpJZM3FxgCDYFkMEGVBOlFqLEi8hSMYRQnc+e7vRrYWrYSatKpLhI/fy9hbjAzv1Pnb
-         Fzbk/A5QTs7U7PdF27OM5n8DIpWN30JeOZDLCACOEVdlNkDU2Q35PBJKkpYSbiWrD6Tw
-         wUqWe7xVXLUA8Y8WFwrTpTXlCat4Ci9KWWfxvDWzzZ/KX8yqgOjmViXM2APbm4qweJdE
-         PTl/Ci9fvhKr/8UGP8qNqQ7aXyTDMrVnpzr/DD4SM5yQhjeV+eXwvVZzqlB5dla5a1gv
-         MANA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=l6X68KuyBDU81KFCllZcPJCpgvdaKM9lp1nYP5LV1kY=;
-        b=D9F0fQ5TuEekbL+eVcfAM2dpiupfQdWFgdFbbhVRKr0HRc2INaNYIHeDvCLBBXxQns
-         0vPG2JbuH0yNcstp1RaGF8udKu++jBII7Q+z9LVzI1r8ZZ7ENyAmIuYbyflvYaxtAbYy
-         wfyHivoAOXWsYVoukkH0ZE1ZNXfINbc7Qz7+PRsYseZDmsFeyMgk5tTSRvpcQZisuwR7
-         A3lhG06tWDs4VtIDpuXAXLDa1CkaLIB43H/Jvf7om4bcZ7A+jrj/fNfO+QWW0ck5Ee4+
-         G5aUKlwtsFDNk0RVHPqjDtU5+YyOybXyhorm16ZTAMSj3gvxAh+ZHBC3wuRlf/Ty0eo4
-         EckQ==
-X-Gm-Message-State: AJIora+Z9PxXpwzcW3UMEQZ4aXAOs38UeXPLPm78NO2C49j71ObtTp9E
-        X9353bcEyRZVyVDg+KK+YM8iww==
-X-Google-Smtp-Source: AGRyM1sm+8Ne4/LREAP1BhpBHmHl7sHKXi5L+eGvKtbQn5emgnCoxtJdYUMElvkncDMjnmXaWe/0bg==
-X-Received: by 2002:a63:710c:0:b0:40c:adcf:ce72 with SMTP id m12-20020a63710c000000b0040cadcfce72mr13747246pgc.310.1656346808483;
-        Mon, 27 Jun 2022 09:20:08 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id 10-20020a17090a174a00b001ec84049064sm7538417pjm.41.2022.06.27.09.20.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 09:20:08 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 16:20:04 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Oliver Upton <oupton@google.com>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v5 2/4] KVM: mmu: add a helper to account memory used by
- KVM MMU.
-Message-ID: <YrnYtMGmGDxCrwdv@google.com>
-References: <20220606222058.86688-1-yosryahmed@google.com>
- <20220606222058.86688-3-yosryahmed@google.com>
+        Mon, 27 Jun 2022 12:23:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C081A44A
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:23:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 060381758;
+        Mon, 27 Jun 2022 09:23:24 -0700 (PDT)
+Received: from bogus (unknown [10.57.39.193])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 106C03F66F;
+        Mon, 27 Jun 2022 09:23:21 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 17:22:11 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 00/20] arch_topology: Updates to add socket support
+ and fix cluster ids
+Message-ID: <20220627162211.t2dlu2no2turnc6r@bogus>
+References: <20220621192034.3332546-1-sudeep.holla@arm.com>
+ <Yrm2lG3uskxT26Of@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220606222058.86688-3-yosryahmed@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yrm2lG3uskxT26Of@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022, Yosry Ahmed wrote:
-> Add a helper to account pages used by KVM for page tables in secondary
-> pagetable stats. This function will be used by subsequent patches in
-> different archs.
+On Mon, Jun 27, 2022 at 02:54:28PM +0100, Ionela Voinescu wrote:
+> Hi Sudeep,
 > 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> ---
->  include/linux/kvm_host.h | 9 +++++++++
->  1 file changed, 9 insertions(+)
+> On Tuesday 21 Jun 2022 at 20:20:14 (+0100), Sudeep Holla wrote:
+> > Hi All,
+> > 
+> > This version updates cacheinfo to populate and use the information from
+> > there for all the cache topology.
+> > 
+> > This series intends to fix some discrepancies we have in the CPU topology
+> > parsing from the device tree /cpu-map node. Also this diverges from the
+> > behaviour on a ACPI enabled platform. The expectation is that both DT
+> > and ACPI enabled systems must present consistent view of the CPU topology.
+> > 
+> > Currently we assign generated cluster count as the physical package identifier
+> > for each CPU which is wrong. The device tree bindings for CPU topology supports
+> > sockets to infer the socket or physical package identifier for a given CPU.
+> > Also we don't check if all the cores/threads belong to the same cluster before
+> > updating their sibling masks which is fine as we don't set the cluster id yet.
+> > 
+> > These changes also assigns the cluster identifier as parsed from the device tree
+> > cluster nodes within /cpu-map without support for nesting of the clusters.
+> > Finally, it also add support for socket nodes in /cpu-map. With this the
+> > parsing of exact same information from ACPI PPTT and /cpu-map DT node
+> > aligns well.
+> > 
+> > The only exception is that the last level cache id information can be
+> > inferred from the same ACPI PPTT while we need to parse CPU cache nodes
+> > in the device tree.
+> > 
+> > Hi Greg,
+> > 
+> > I had not cc-ed you on earlier 3 versions as we had some disagreement
+> > amongst Arm developers which we have not settled. Let me know how you want to
 > 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 883e86ec8e8c4..645585f3a4bed 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -2246,6 +2246,15 @@ static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
->  }
->  #endif /* CONFIG_KVM_XFER_TO_GUEST_WORK */
->  
-> +/*
-> + * If nr > 1, we assume virt is the address of the first page of a block of
-
-But what if @nr is -2, which is technically less than 1?  :-)
-
-> + * pages that were allocated together (i.e accounted together).
-
-Don't document assumptions, document the rules.  And avoid "we", pronouns are
-ambiguous, e.g. is "we" the author, or KVM, or something else entirely?
-
-/*
- * If more than one page is being (un)accounted, @virt must be the address of
- * the first page of a block of pages what were allocated together.
- */
-
-
-> + */
-> +static inline void kvm_account_pgtable_pages(void *virt, int nr)
-> +{
-> +	mod_lruvec_page_state(virt_to_page(virt), NR_SECONDARY_PAGETABLE, nr);
-> +}
-> +
->  /*
->   * This defines how many reserved entries we want to keep before we
->   * kick the vcpu to the userspace to avoid dirty ring full.  This
-> -- 
-> 2.36.1.255.ge46751e96f-goog
+> s/not/now :)
 > 
+> > merge this once you agree with the changes. I can set pull request if
+> > you prefer. Let me know.
+> > 
+> > v4[3]->v4:
+> > 	- Updated ACPI PPTT fw_token to use table offset instead of virtual
+> > 	  address as it could get changed for everytime it is mapped before
+> > 	  the global acpi_permanent_mmap is set
+> > 	- Added warning for the topology with nested clusters
+> > 	- Added update to cpu_clustergroup_mask so that introduction of
+> > 	  correct cluster_id doesn't break existing platforms by limiting
+> > 	  the span of clustergroup_mask(by Ionela)
+> > 
+> 
+> I've tested v4 on quite a few platforms:
+>  - DT: Juno R0, DB845c, RB5
+>  - ACPI: TX2, Ampere Altra, Kunpeng920
+> 
+> and it all looks good from my point of view (topology and sched domain
+> hierarchy).
+> 
+> So for the full set (after the changes requested for 16/20 and 20/20):
+> 
+> Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
+>
+
+Thanks for all the review and testing. Much appreciated!
+
+-- 
+Regards,
+Sudeep

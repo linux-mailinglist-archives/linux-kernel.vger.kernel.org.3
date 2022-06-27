@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B7555CB3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EB955CB1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234811AbiF0LZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S238400AbiF0LzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbiF0LYq (ORCPT
+        with ESMTP id S238554AbiF0Lsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:24:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3C36581;
-        Mon, 27 Jun 2022 04:24:45 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC90C101E2;
+        Mon, 27 Jun 2022 04:42:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E013B8111B;
-        Mon, 27 Jun 2022 11:24:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC64FC36AE2;
-        Mon, 27 Jun 2022 11:24:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F7856120F;
+        Mon, 27 Jun 2022 11:42:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B652C3411D;
+        Mon, 27 Jun 2022 11:42:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329083;
-        bh=Vn9mI427kOedHB8tP0Fi9QXMu8BjFDGnwHZ9a+pfulM=;
+        s=korg; t=1656330132;
+        bh=FYaoYojNg2Ks/W0fzjugy1DmD1KBhOnAMSpztY8eezo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zHfZ4bDBNDxlFZqr6fPIkLrpKC7tSoNNhFJSsHwuhhhLfczSyDw9JHxOATEtcjX5l
-         nccpACUvQUbaQARdkSOP4bGlrqSgAGnXzpvbAE2jdDWZ3LLMB0zkn9tJW+oNszmDdB
-         6xn/Yt8te58I+y4Hl9epYHCyE73MP3ZbRQMopO14=
+        b=YiCE8S+QeLGa+Apj7UT7vzvpOCZWz1xocCu9hy/lUg2S1OQtyW8V+rzkzViaTVbbF
+         toXm68chkyZla3DQGggaA1bI2LL57OO22rFFIgBdxBarYqawAwNb1mkzkvlLf84BZT
+         dZDpyDa2Fa7clMr7KdbskxkDZ31sCDeLnIIXcPJI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kailang Yang <kailang@realtek.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 007/102] ALSA: hda/realtek - ALC897 headset MIC no sound
+        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 045/181] scsi: scsi_debug: Fix zone transition to full condition
 Date:   Mon, 27 Jun 2022 13:20:18 +0200
-Message-Id: <20220627111933.680535808@linuxfoundation.org>
+Message-Id: <20220627111945.868643663@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,54 +57,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kailang Yang <kailang@realtek.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-commit fe6900bd8156467365bd5b976df64928fdebfeb0 upstream.
+[ Upstream commit 566d3c57eb526f32951af15866086e236ce1fc8a ]
 
-There is not have Headset Mic verb table in BIOS default.
-So, it will have recording issue from headset MIC.
-Add the verb table value without jack detect. It will turn on Headset Mic.
+When a write command to a sequential write required or sequential write
+preferred zone result in the zone write pointer reaching the end of the
+zone, the zone condition must be set to full AND the number of implicitly
+or explicitly open zones updated to have a correct accounting for zone
+resources. However, the function zbc_inc_wp() only sets the zone condition
+to full without updating the open zone counters, resulting in a zone state
+machine breakage.
 
-Signed-off-by: Kailang Yang <kailang@realtek.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/719133a27d8844a890002cb817001dfa@realtek.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Introduce the helper function zbc_set_zone_full() and use it in
+zbc_inc_wp() to correctly transition zones to the full condition.
+
+Link: https://lore.kernel.org/r/20220608011302.92061-1-damien.lemoal@opensource.wdc.com
+Fixes: f0d1cf9378bd ("scsi: scsi_debug: Add ZBC zone commands")
+Reviewed-by: Niklas Cassel <niklas.cassel@wdc.com>
+Acked-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |    9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/scsi/scsi_debug.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -10447,6 +10447,7 @@ enum {
- 	ALC668_FIXUP_MIC_DET_COEF,
- 	ALC897_FIXUP_LENOVO_HEADSET_MIC,
- 	ALC897_FIXUP_HEADSET_MIC_PIN,
-+	ALC897_FIXUP_HP_HSMIC_VERB,
- };
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index 592a290e6cfa..6cdd67f2a08e 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -2788,6 +2788,24 @@ static void zbc_open_zone(struct sdebug_dev_info *devip,
+ 	}
+ }
  
- static const struct hda_fixup alc662_fixups[] = {
-@@ -10866,6 +10867,13 @@ static const struct hda_fixup alc662_fix
- 		.chained = true,
- 		.chain_id = ALC897_FIXUP_LENOVO_HEADSET_MIC
- 	},
-+	[ALC897_FIXUP_HP_HSMIC_VERB] = {
-+		.type = HDA_FIXUP_PINS,
-+		.v.pins = (const struct hda_pintbl[]) {
-+			{ 0x19, 0x01a1913c }, /* use as headset mic, without its own jack detect */
-+			{ }
-+		},
-+	},
- };
++static inline void zbc_set_zone_full(struct sdebug_dev_info *devip,
++				     struct sdeb_zone_state *zsp)
++{
++	switch (zsp->z_cond) {
++	case ZC2_IMPLICIT_OPEN:
++		devip->nr_imp_open--;
++		break;
++	case ZC3_EXPLICIT_OPEN:
++		devip->nr_exp_open--;
++		break;
++	default:
++		WARN_ONCE(true, "Invalid zone %llu condition %x\n",
++			  zsp->z_start, zsp->z_cond);
++		break;
++	}
++	zsp->z_cond = ZC5_FULL;
++}
++
+ static void zbc_inc_wp(struct sdebug_dev_info *devip,
+ 		       unsigned long long lba, unsigned int num)
+ {
+@@ -2800,7 +2818,7 @@ static void zbc_inc_wp(struct sdebug_dev_info *devip,
+ 	if (zsp->z_type == ZBC_ZONE_TYPE_SWR) {
+ 		zsp->z_wp += num;
+ 		if (zsp->z_wp >= zend)
+-			zsp->z_cond = ZC5_FULL;
++			zbc_set_zone_full(devip, zsp);
+ 		return;
+ 	}
  
- static const struct snd_pci_quirk alc662_fixup_tbl[] = {
-@@ -10891,6 +10899,7 @@ static const struct snd_pci_quirk alc662
- 	SND_PCI_QUIRK(0x1028, 0x0698, "Dell", ALC668_FIXUP_DELL_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1028, 0x069f, "Dell", ALC668_FIXUP_DELL_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x103c, 0x1632, "HP RP5800", ALC662_FIXUP_HP_RP5800),
-+	SND_PCI_QUIRK(0x103c, 0x8719, "HP", ALC897_FIXUP_HP_HSMIC_VERB),
- 	SND_PCI_QUIRK(0x103c, 0x873e, "HP", ALC671_FIXUP_HP_HEADSET_MIC2),
- 	SND_PCI_QUIRK(0x103c, 0x885f, "HP 288 Pro G8", ALC671_FIXUP_HP_HEADSET_MIC2),
- 	SND_PCI_QUIRK(0x1043, 0x1080, "Asus UX501VW", ALC668_FIXUP_HEADSET_MODE),
+@@ -2819,7 +2837,7 @@ static void zbc_inc_wp(struct sdebug_dev_info *devip,
+ 			n = num;
+ 		}
+ 		if (zsp->z_wp >= zend)
+-			zsp->z_cond = ZC5_FULL;
++			zbc_set_zone_full(devip, zsp);
+ 
+ 		num -= n;
+ 		lba += n;
+-- 
+2.35.1
+
 
 

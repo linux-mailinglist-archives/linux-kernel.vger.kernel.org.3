@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234AA55CC0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6322E55DB75
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239648AbiF0L55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S235376AbiF0L2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238401AbiF0LvA (ORCPT
+        with ESMTP id S235247AbiF0L13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:51:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43368265C;
-        Mon, 27 Jun 2022 04:44:06 -0700 (PDT)
+        Mon, 27 Jun 2022 07:27:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A5895A3;
+        Mon, 27 Jun 2022 04:27:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6C1A61240;
-        Mon, 27 Jun 2022 11:44:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFE1FC3411D;
-        Mon, 27 Jun 2022 11:44:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 154CC6149A;
+        Mon, 27 Jun 2022 11:27:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B3DFC3411D;
+        Mon, 27 Jun 2022 11:27:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330245;
-        bh=BNLFPZpsAc5Nj2RvB66h6RKzrBanhSoyZjQoghUykW8=;
+        s=korg; t=1656329226;
+        bh=jaYeSq8RMd7CvRO05tklhk/K8wwDlJj9FKd33kmk2SU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AWEag8nIJMpqQl026y++H/kFvIyxh58LgyTEPCA4c7Q20ilsGo58Zi3LMSp2/JMeR
-         YNcyo5FckHHqnQbc5HF3T9RkGEB0SCjwFY3+FDims7u+CchsecO8xuFUHxJrVg7Oop
-         8HoJXwgF7AHUO4OJPu1UmHSij+9umNjhz3KXo9Ag=
+        b=M6QaMv9Vkq+XZnTGCPwHKDWBSa6mMdgxfSlkPSjvbGe8u0GSfUeuVivpO1a6pCDBY
+         1wC9C/9W4eVpqfDvNUIKl0+xXdrpkdIHmA3JPWS6yNl6sQ1tW7muipDTW3AwCB/fdG
+         VXqLo2Vck/4M472Do3/Tq0a4kfHWVLgIyVtF6bVk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.18 130/181] iio:humidity:hts221: rearrange iio trigger get and register
-Date:   Mon, 27 Jun 2022 13:21:43 +0200
-Message-Id: <20220627111948.460505700@linuxfoundation.org>
+        stable@vger.kernel.org, Lucas Stach <l.stach@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH 5.10 093/102] ARM: dts: imx6qdl: correct PU regulator ramp delay
+Date:   Mon, 27 Jun 2022 13:21:44 +0200
+Message-Id: <20220627111936.225858508@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Rokosov <DDRokosov@sberdevices.ru>
+From: Lucas Stach <l.stach@pengutronix.de>
 
-commit 10b9c2c33ac706face458feab8965f11743c98c0 upstream.
+commit 93a8ba2a619816d631bd69e9ce2172b4d7a481b8 upstream.
 
-IIO trigger interface function iio_trigger_get() should be called after
-iio_trigger_register() (or its devm analogue) strictly, because of
-iio_trigger_get() acquires module refcnt based on the trigger->owner
-pointer, which is initialized inside iio_trigger_register() to
-THIS_MODULE.
-If this call order is wrong, the next iio_trigger_put() (from sysfs
-callback or "delete module" path) will dereference "default" module
-refcnt, which is incorrect behaviour.
+Contrary to what was believed at the time, the ramp delay of 150us is not
+plenty for the PU LDO with the default step time of 512 pulses of the 24MHz
+clock. Measurements have shown that after enabling the LDO the voltage on
+VDDPU_CAP jumps to ~750mV in the first step and after that the regulator
+executes the normal ramp up as defined by the step size control.
 
-Fixes: e4a70e3e7d84 ("iio: humidity: add support to hts221 rh/temp combo device")
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220524181150.9240-6-ddrokosov@sberdevices.ru
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+This means it takes the regulator between 360us and 370us to ramp up to
+the nominal 1.15V voltage for this power domain. With the old setting of
+the ramp delay the power up of the PU GPC domain would happen in the middle
+of the regulator ramp with the voltage being at around 900mV. Apparently
+this was enough for most units to properly power up the peripherals in the
+domain and execute the reset. Some units however, fail to power up properly,
+especially when the chip is at a low temperature. In that case any access
+to the GPU registers would yield an incorrect result with no way to recover
+from this situation.
+
+Change the ramp delay to 380us to cover the measured ramp up time with a
+bit of additional slack.
+
+Fixes: 40130d327f72 ("ARM: dts: imx6qdl: Allow disabling the PU regulator, add a enable ramp delay")
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/humidity/hts221_buffer.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/imx6qdl.dtsi |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/humidity/hts221_buffer.c
-+++ b/drivers/iio/humidity/hts221_buffer.c
-@@ -135,9 +135,12 @@ int hts221_allocate_trigger(struct iio_d
- 
- 	iio_trigger_set_drvdata(hw->trig, iio_dev);
- 	hw->trig->ops = &hts221_trigger_ops;
-+
-+	err = devm_iio_trigger_register(hw->dev, hw->trig);
-+
- 	iio_dev->trig = iio_trigger_get(hw->trig);
- 
--	return devm_iio_trigger_register(hw->dev, hw->trig);
-+	return err;
- }
- 
- static int hts221_buffer_preenable(struct iio_dev *iio_dev)
+--- a/arch/arm/boot/dts/imx6qdl.dtsi
++++ b/arch/arm/boot/dts/imx6qdl.dtsi
+@@ -756,7 +756,7 @@
+ 					regulator-name = "vddpu";
+ 					regulator-min-microvolt = <725000>;
+ 					regulator-max-microvolt = <1450000>;
+-					regulator-enable-ramp-delay = <150>;
++					regulator-enable-ramp-delay = <380>;
+ 					anatop-reg-offset = <0x140>;
+ 					anatop-vol-bit-shift = <9>;
+ 					anatop-vol-bit-width = <5>;
 
 

@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DDB55E0FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17F555DF53
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237583AbiF0On0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
+        id S237512AbiF0OpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236271AbiF0OnX (ORCPT
+        with ESMTP id S236702AbiF0OpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:43:23 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB0CDEF4
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:43:22 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id o4so9442893wrh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=I3nC8B6be2rJKcDVylzZNDnz/D1EgBd9lnRAuMjTZ0A=;
-        b=OflRcSKTk5KJCsJhl/OOpbqhK8lJUAG5ameoeZ6v2VCXjDvoRSiavCQ3R1SeKuwP7R
-         KbeemSWZj0FBD0BGYqlJ9zS8r30ytnBo+ZfnhbBnEGCCqGR3VFgmCBFbM2Ri1w9nKmD3
-         Puk4NGy6VbGJKlsvbgETb7enuUR4hHJxrlL9u/Sn+TdoGHt16rM9rdRt04CQ42UTxvO6
-         Kzxmo/2csAxoA6QVmMiAYzHNH4FzLTzgjs6VRdFBeRRrEEdOz6cKDRINsq4la0W19ECu
-         u9sf6CUJIC8M2wLb+kZTBI0plSWsnXdcymHtHQ14ks2Lqp8b0msjqo9WP4H8G6nqd6wR
-         LRdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=I3nC8B6be2rJKcDVylzZNDnz/D1EgBd9lnRAuMjTZ0A=;
-        b=P2uowBFHQXJ7Iblh3tg99Nh9Zi2jli6RqMCDd5g1MiKk/M1sc/QWjftSWBL8dmk9fP
-         KjJOiUp8gx4vbSfiSDV6kv29hPFHLFmYJfzilTROJ4VduQJciu6FV/K3WX8EhKPW9EWd
-         XXOrd4ceyq24Nh9uAT8h6kyKrO/PUw8C2ZrRDq/cZJlZiCl0Sll0Oh97qKRGfxnoqm3C
-         MBY2+P41BoFapbfEMnegoih30qa2nucLBmfQrQ8VQAN6gcnRFL4+wn5BFX5oxv6ntrNI
-         4PYPAIROkrHpS4AU85IacVQ4t6MPLFbhAufbKbBrFRKVLIi/PeuosULr9vGOVYrlLmaR
-         kBMQ==
-X-Gm-Message-State: AJIora8LC8WIHeW8Ma/wBTw+aDHtslb5Y2Ot/mqHcz5Vl1advlzIPW+d
-        lCsYylRyZOYYDkkiL6HtONWpgA==
-X-Google-Smtp-Source: AGRyM1tP0/3e0jF/X+My1isKflET6012raahzAfSWgsOfNodPOmlFfVxCEOpkadCal8x3313vLkjhQ==
-X-Received: by 2002:a5d:5a19:0:b0:21b:8eb8:f54b with SMTP id bq25-20020a5d5a19000000b0021b8eb8f54bmr12266223wrb.663.1656341000915;
-        Mon, 27 Jun 2022 07:43:20 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id e7-20020adfe7c7000000b0021b9100b844sm10943277wrn.91.2022.06.27.07.43.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 07:43:20 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 15:43:18 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     frank zago <frank@zago.net>, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v6 1/4] mfd: ch341: add core driver for the WCH CH341 in
- I2C/SPI/GPIO mode
-Message-ID: <YrnCBpvA8/y38Brg@google.com>
-References: <20220616013747.126051-1-frank@zago.net>
- <20220616013747.126051-2-frank@zago.net>
- <Yrm48AYxkmoUgdwr@google.com>
- <Yrm+kH6NvTy5A9WO@kroah.com>
+        Mon, 27 Jun 2022 10:45:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36961DF22
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:45:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656341121;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yyYHa7y7EUCo9FXbppA7Bdwl7O2prZRvBIG44/C0Bxw=;
+        b=HmgfQJJcf3tN1lvtUn2+E+YoSOCViAPhDPcpkYp8PlylGwCV/FQNJnMl8VkefC87TMNjWL
+        9FHQrw/nAi8FuHGsvPeQbBJz1DottkyMeWZ1ZcRf8XGc2EphU+G4Y/o9c4woo/dD0EB9fj
+        nSOvJZGsFt+LtR983CG9W5N394SYbLo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-218-CNTJjapDMpuv8IMhdLFhYg-1; Mon, 27 Jun 2022 10:45:17 -0400
+X-MC-Unique: CNTJjapDMpuv8IMhdLFhYg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8EBB938149C4;
+        Mon, 27 Jun 2022 14:45:17 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.18.25.210])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1473740C1289;
+        Mon, 27 Jun 2022 14:45:17 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id E1EFA220463; Mon, 27 Jun 2022 10:45:16 -0400 (EDT)
+Date:   Mon, 27 Jun 2022 10:45:16 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xie Yongji <xieyongji@bytedance.com>
+Subject: Re: Re: Re: [RFC PATCH] fuse: support cache revalidation in
+ writeback_cache mode
+Message-ID: <YrnCfISl7Nl8Wk52@redhat.com>
+References: <20220325132126.61949-1-zhangjiachen.jaycee@bytedance.com>
+ <CAJfpeguESQm1KsQLyoMRTevLttV8N8NTGsb2tRbNS1AQ_pNAww@mail.gmail.com>
+ <CAFQAk7ibzCn8OD84-nfg6_AePsKFTu9m7pXuQwcQP5OBp7ZCag@mail.gmail.com>
+ <CAJfpegsbaz+RRcukJEOw+H=G3ft43vjDMnJ8A24JiuZFQ24eHA@mail.gmail.com>
+ <CAFQAk7hakYNfBaOeMKRmMPTyxFb2xcyUTdugQG1D6uZB_U1zBg@mail.gmail.com>
+ <Ymfu8fGbfYi4FxQ4@miu.piliscsaba.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yrm+kH6NvTy5A9WO@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Ymfu8fGbfYi4FxQ4@miu.piliscsaba.redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,222 +69,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Jun 2022, Greg Kroah-Hartman wrote:
-
-> On Mon, Jun 27, 2022 at 03:04:32PM +0100, Lee Jones wrote:
-> > USB review please.
-> > 
-> > > The CH341 is a multifunction chip, presenting 3 different USB PID. One
-> > > 
-> > > of these functions is for I2C/SPI/GPIO. This new set of drivers will
-> > > manage I2C and GPIO.
-> > > 
-> > > Signed-off-by: frank zago <frank@zago.net>
-> > > ---
-> > >  MAINTAINERS               |  7 +++
-> > >  drivers/mfd/Kconfig       | 10 +++++
-> > >  drivers/mfd/Makefile      |  1 +
-> > >  drivers/mfd/ch341-core.c  | 90 +++++++++++++++++++++++++++++++++++++++
-> > >  include/linux/mfd/ch341.h | 18 ++++++++
-> > >  5 files changed, 126 insertions(+)
-> > >  create mode 100644 drivers/mfd/ch341-core.c
-> > >  create mode 100644 include/linux/mfd/ch341.h
-> > > 
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 43d3d07afccd..628eeaa9bf68 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -21475,6 +21475,13 @@ M:	David Härdeman <david@hardeman.nu>
-> > >  S:	Maintained
-> > >  F:	drivers/media/rc/winbond-cir.c
-> > >  
-> > > +WINCHIPHEAD CH341 I2C/GPIO MFD DRIVER
-> > > +M:	Frank Zago <frank@zago.net>
-> > > +L:	linux-usb@vger.kernel.org
-> > > +S:	Maintained
-> > > +F:	drivers/mfd/ch341-core.c
-> > > +F:	include/linux/mfd/ch341.h
-> > > +
-> > >  WINSYSTEMS EBC-C384 WATCHDOG DRIVER
-> > >  M:	William Breathitt Gray <vilhelm.gray@gmail.com>
-> > >  L:	linux-watchdog@vger.kernel.org
-> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > > index 3b59456f5545..893acc821a42 100644
-> > > --- a/drivers/mfd/Kconfig
-> > > +++ b/drivers/mfd/Kconfig
-> > > @@ -1784,6 +1784,16 @@ config MFD_LOCHNAGAR
-> > >  	help
-> > >  	  Support for Cirrus Logic Lochnagar audio development board.
-> > >  
-> > > +config MFD_CH341
-> > > +	tristate "WinChipHead CH341 in I2C/SPI/GPIO mode"
-> > > +	depends on USB
-> > > +	help
-> > > +	  If you say yes to this option, support for the CH341 series
-> > > +	  of chips, running in I2C/SPI/GPIO mode will be included.
-> > > +
-> > > +	  This driver can also be built as a module.  If so, the
-> > > +	  module will be called ch341-core.
-> > > +
-> > >  config MFD_ARIZONA
-> > >  	select REGMAP
-> > >  	select REGMAP_IRQ
-> > > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > > index 858cacf659d6..fd615ab3929f 100644
-> > > --- a/drivers/mfd/Makefile
-> > > +++ b/drivers/mfd/Makefile
-> > > @@ -13,6 +13,7 @@ obj-$(CONFIG_MFD_ASIC3)		+= asic3.o tmio_core.o
-> > >  obj-$(CONFIG_ARCH_BCM2835)	+= bcm2835-pm.o
-> > >  obj-$(CONFIG_MFD_BCM590XX)	+= bcm590xx.o
-> > >  obj-$(CONFIG_MFD_BD9571MWV)	+= bd9571mwv.o
-> > > +obj-$(CONFIG_MFD_CH341)		+= ch341-core.o
-> > >  obj-$(CONFIG_MFD_CROS_EC_DEV)	+= cros_ec_dev.o
-> > >  obj-$(CONFIG_MFD_ENE_KB3930)	+= ene-kb3930.o
-> > >  obj-$(CONFIG_MFD_EXYNOS_LPASS)	+= exynos-lpass.o
-> > > diff --git a/drivers/mfd/ch341-core.c b/drivers/mfd/ch341-core.c
-> > > new file mode 100644
-> > > index 000000000000..f08a67dd6074
-> > > --- /dev/null
-> > > +++ b/drivers/mfd/ch341-core.c
-> > > @@ -0,0 +1,90 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Core driver for the CH341A, CH341B and CH341T in I2C/SPI/GPIO
-> > > + * mode. There are cell drivers available for I2C and GPIO. SPI is not
-> > > + * yet supported.
-> > > + *
-> > > + * Copyright 2022, Frank Zago
-> > > + * Copyright (c) 2017 Gunar Schorcht (gunar@schorcht.net)
-> > > + * Copyright (c) 2016 Tse Lun Bien
-> > > + * Copyright (c) 2014 Marco Gittler
-> > > + * Copyright (c) 2006-2007 Till Harbaum (Till@Harbaum.org)
-> > > + */
-> > > +
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/mfd/ch341.h>
-> > > +#include <linux/mfd/core.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/slab.h>
-> > > +#include <linux/usb.h>
-> > > +
-> > > +static const struct mfd_cell ch341_devs[] = {
-> > > +	{
-> > > +		.name = "ch341-gpio",
-> > > +	},
-> > > +	{
-> > > +		.name = "ch341-i2c",
-> > > +	},
-> > > +};
-> > > +
-> > > +static int ch341_usb_probe(struct usb_interface *iface,
-> > > +			   const struct usb_device_id *usb_id)
-> > > +{
-> > > +	struct usb_endpoint_descriptor *bulk_out;
-> > > +	struct usb_endpoint_descriptor *bulk_in;
-> > > +	struct usb_endpoint_descriptor *intr_in;
-> > > +	struct ch341_ddata *ddata;
-> > > +	int ret;
-> > > +
-> > > +	ddata = devm_kzalloc(&iface->dev, sizeof(*ddata), GFP_KERNEL);
-> > > +	if (!ddata)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	ddata->usb_dev = interface_to_usbdev(iface);
-> > > +	mutex_init(&ddata->usb_lock);
-> > > +
-> > > +	ret = usb_find_common_endpoints(iface->cur_altsetting, &bulk_in,
-> > > +					&bulk_out, &intr_in, NULL);
-> > > +	if (ret) {
-> > > +		dev_err(&iface->dev, "Could not find all endpoints\n");
-> > > +		return -ENODEV;
-> > > +	}
-> > > +
-> > > +	ddata->ep_in = bulk_in->bEndpointAddress;
-> > > +	ddata->ep_out = bulk_out->bEndpointAddress;
-> > > +	ddata->ep_intr = intr_in->bEndpointAddress;
-> > > +	ddata->ep_intr_interval = intr_in->bInterval;
-> > > +
-> > > +	usb_set_intfdata(iface, ddata);
-> > > +
-> > > +	ret = mfd_add_devices(&iface->dev, PLATFORM_DEVID_AUTO, ch341_devs,
-> > > +			      ARRAY_SIZE(ch341_devs), NULL, 0, NULL);
-> > > +	if (ret)
-> > > +		return dev_err_probe(&iface->dev, ret,
-> > > +				     "Failed to register child devices\n");
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static void ch341_usb_disconnect(struct usb_interface *usb_if)
-> > > +{
-> > > +	mfd_remove_devices(&usb_if->dev);
-> > > +}
-> > > +
-> > > +static const struct usb_device_id ch341_usb_table[] = {
-> > > +	{ USB_DEVICE(0x1a86, 0x5512) },
-> > > +	{ }
-> > > +};
-> > > +MODULE_DEVICE_TABLE(usb, ch341_usb_table);
-> > > +
-> > > +static struct usb_driver ch341_usb_driver = {
-> > > +	.name       = "ch341-mfd",
-> > > +	.id_table   = ch341_usb_table,
-> > > +	.probe      = ch341_usb_probe,
-> > > +	.disconnect = ch341_usb_disconnect,
-> > > +};
-> > > +module_usb_driver(ch341_usb_driver);
-> > > +
-> > > +MODULE_AUTHOR("Frank Zago <frank@zago.net>");
-> > > +MODULE_DESCRIPTION("CH341 USB to I2C/SPI/GPIO adapter");
-> > > +MODULE_LICENSE("GPL");
-> > > diff --git a/include/linux/mfd/ch341.h b/include/linux/mfd/ch341.h
-> > > new file mode 100644
-> > > index 000000000000..44f5da0720bd
-> > > --- /dev/null
-> > > +++ b/include/linux/mfd/ch341.h
-> > > @@ -0,0 +1,18 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +/* Definitions for the CH341 driver */
-> > > +
-> > > +#include <linux/mutex.h>
-> > > +#include <linux/types.h>
-> > > +
-> > > +struct usb_device;
-> > > +struct usb_interface;
-> > > +
-> > > +struct ch341_ddata {
-> > > +	struct usb_device *usb_dev;
-> > > +	struct mutex usb_lock;
-> > > +
-> > > +	int ep_in;
-> > > +	int ep_out;
-> > > +	int ep_intr;
-> > > +	u8 ep_intr_interval;
-> > > +};
+On Tue, Apr 26, 2022 at 03:09:05PM +0200, Miklos Szeredi wrote:
+> On Mon, Apr 25, 2022 at 09:52:44PM +0800, Jiachen Zhang wrote:
 > 
+> > Some users may want both the high performance of writeback mode and a
+> > little bit more consistency among FUSE mounts. In the current
+> > writeback mode implementation, users of one FUSE mount can never see
+> > the file expansion done by other FUSE mounts.
 > 
-> Looks sane enough, but doesn't actually do any USB data transfers, maybe
-> that happens somewhere else...
+> Okay.
+> 
+> Here's a preliminary patch that you could try.
+> 
+> Thanks,
+> Miklos
+> 
+> ---
+>  fs/fuse/dir.c             |   35 ++++++++++++++++++++++-------------
+>  fs/fuse/file.c            |   17 +++++++++++++++--
+>  fs/fuse/fuse_i.h          |   14 +++++++++++++-
+>  fs/fuse/inode.c           |   32 +++++++++++++++++++++++++++-----
+>  include/uapi/linux/fuse.h |    5 +++++
+>  5 files changed, 82 insertions(+), 21 deletions(-)
+> 
+> --- a/include/uapi/linux/fuse.h
+> +++ b/include/uapi/linux/fuse.h
+> @@ -194,6 +194,7 @@
+>   *  - add FUSE_SECURITY_CTX init flag
+>   *  - add security context to create, mkdir, symlink, and mknod requests
+>   *  - add FUSE_HAS_INODE_DAX, FUSE_ATTR_DAX
+> + *  - add FUSE_WRITEBACK_CACHE_V2 init flag
+>   */
+>  
+>  #ifndef _LINUX_FUSE_H
+> @@ -353,6 +354,9 @@ struct fuse_file_lock {
+>   * FUSE_SECURITY_CTX:	add security context to create, mkdir, symlink, and
+>   *			mknod
+>   * FUSE_HAS_INODE_DAX:  use per inode DAX
+> + * FUSE_WRITEBACK_CACHE_V2:
+> + *			- allow time/size to be refreshed if no pending write
+> + * 			- time/size not cached for falocate/copy_file_range
+>   */
+>  #define FUSE_ASYNC_READ		(1 << 0)
+>  #define FUSE_POSIX_LOCKS	(1 << 1)
+> @@ -389,6 +393,7 @@ struct fuse_file_lock {
+>  /* bits 32..63 get shifted down 32 bits into the flags2 field */
+>  #define FUSE_SECURITY_CTX	(1ULL << 32)
+>  #define FUSE_HAS_INODE_DAX	(1ULL << 33)
+> +#define FUSE_WRITEBACK_CACHE_V2	(1ULL << 34)
+>  
+>  /**
+>   * CUSE INIT request/reply flags
+> --- a/fs/fuse/inode.c
+> +++ b/fs/fuse/inode.c
+> @@ -222,19 +222,37 @@ void fuse_change_attributes_common(struc
+>  u32 fuse_get_cache_mask(struct inode *inode)
+>  {
+>  	struct fuse_conn *fc = get_fuse_conn(inode);
+> +	struct fuse_inode *fi = get_fuse_inode(inode);
+>  
+>  	if (!fc->writeback_cache || !S_ISREG(inode->i_mode))
+>  		return 0;
+>  
+> +	/*
+> +	 * In writeback_cache_v2 mode if all the following conditions are met,
+> +	 * then allow the attributes to be refreshed:
+> +	 *
+> +	 * - inode is not dirty (I_DIRTY_INODE)
+> +	 * - inode is not in the process of being written (I_SYNC)
+> +	 * - inode has no dirty pages (I_DIRTY_PAGES)
+> +	 * - inode does not have any page writeback in progress
+> +	 *
+> +	 * Note: checking PAGECACHE_TAG_WRITEBACK is not sufficient in fuse,
+> +	 * since inode can appear to have no PageWriteback pages, yet still have
+> +	 * outstanding write request.
+> +	 */
 
-I expect those to happen in *both* of these:
+Hi,
 
-  static const struct mfd_cell ch341_devs[] = {
-	{
-		.name = "ch341-gpio",
-	},
-	{
-		.name = "ch341-i2c",
-	},
-  };
+I started following this thread just now after Jiachen pointed me to
+previous conversations. Without going into too much details.
 
-Is that correct Frank?
+Based on above description, so we will update mtime/ctime/i_size only
+if inode does not have dirty pages or nothing is in progress. So that
+means sometime we will update it and other times we will ignore it. 
 
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Do I understand it correctly. I am wondering how that is useful to
+applications. 
 
-Thanks.
+I thought that other remote filesystems might have leasing for this so
+that one client can acquire the lease and cache changes and when lease
+is broken, this client pushes out all the changes and other client gets
+the lease.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Given we don't have any lease mechanism, we probably need to define the
+semantics more clearly and we should probably document it as well.
+
+Thanks
+Vivek
+

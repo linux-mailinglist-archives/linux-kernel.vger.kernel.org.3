@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58AB755DC65
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7106555D133
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238530AbiF0Lv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S234607AbiF0LX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238283AbiF0LsN (ORCPT
+        with ESMTP id S234583AbiF0LXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:48:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80B1F58A;
-        Mon, 27 Jun 2022 04:40:13 -0700 (PDT)
+        Mon, 27 Jun 2022 07:23:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F966575;
+        Mon, 27 Jun 2022 04:23:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FC5F611BB;
-        Mon, 27 Jun 2022 11:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C979C341C8;
-        Mon, 27 Jun 2022 11:40:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 375626144F;
+        Mon, 27 Jun 2022 11:23:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28268C341C7;
+        Mon, 27 Jun 2022 11:23:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330012;
-        bh=g2Nhrh54UwyRFNswu+rpLHa8AlauXVh4NiBHckrXeAs=;
+        s=korg; t=1656328997;
+        bh=A2migJAf3lhueRVP05DdDRYtA3dnSY0+3MDuPOjx5+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pzDqIFoNGVKeiVUbUREB8RWLSZrHt1T4lUZwdNxegimDc6N0v6lQ97BgyQzbWRmAL
-         UHQzmvDr9zeGn9KSgnjEq1UvVOS6vYzJNcKUvUG2aPY38RjhTsBw2nj4lqbPgZ+6Gz
-         5/mUJxmthg5bv4v7eZvYcSmcgg6U+dgtEII6agdI=
+        b=mMp4h5yfo//noILpdkD21PkSvza8b+/+tqWEDFSvUNE4LOLr7p8KNW4ZBlVnXd2b8
+         vetYpyRnrCrLGBp1n55DnLfd71K23GabwzarXJ5PuKnvs6BedV+ryr/d47eHwteeTm
+         Q6dZrzD89yNOreg5tsrZnPtqJKLSpbavYH7trIxI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ondrej Spacek <ondrej.spacek@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 055/181] phy: aquantia: Fix AN when higher speeds than 1G are not advertised
+        stable@vger.kernel.org, Benjamin Marzinski <bmarzins@redhat.com>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 5.10 017/102] dm mirror log: clear log bits up to BITS_PER_LONG boundary
 Date:   Mon, 27 Jun 2022 13:20:28 +0200
-Message-Id: <20220627111946.163198634@linuxfoundation.org>
+Message-Id: <20220627111933.977067159@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,63 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Manoil <claudiu.manoil@nxp.com>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-[ Upstream commit 9b7fd1670a94a57d974795acebde843a5c1a354e ]
+commit 90736eb3232d208ee048493f371075e4272e0944 upstream.
 
-Even when the eth port is resticted to work with speeds not higher than 1G,
-and so the eth driver is requesting the phy (via phylink) to advertise up
-to 1000BASET support, the aquantia phy device is still advertising for 2.5G
-and 5G speeds.
-Clear these advertising defaults when requested.
+Commit 85e123c27d5c ("dm mirror log: round up region bitmap size to
+BITS_PER_LONG") introduced a regression on 64-bit architectures in the
+lvm testsuite tests: lvcreate-mirror, mirror-names and vgsplit-operation.
 
-Cc: Ondrej Spacek <ondrej.spacek@nxp.com>
-Fixes: 09c4c57f7bc41 ("net: phy: aquantia: add support for auto-negotiation configuration")
-Signed-off-by: Claudiu Manoil <claudiu.manoil@nxp.com>
-Link: https://lore.kernel.org/r/20220610084037.7625-1-claudiu.manoil@nxp.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+If the device is shrunk, we need to clear log bits beyond the end of the
+device. The code clears bits up to a 32-bit boundary and then calculates
+lc->sync_count by summing set bits up to a 64-bit boundary (the commit
+changed that; previously, this boundary was 32-bit too). So, it was using
+some non-zeroed bits in the calculation and this caused misbehavior.
+
+Fix this regression by clearing bits up to BITS_PER_LONG boundary.
+
+Fixes: 85e123c27d5c ("dm mirror log: round up region bitmap size to BITS_PER_LONG")
+Cc: stable@vger.kernel.org
+Reported-by: Benjamin Marzinski <bmarzins@redhat.com>
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/aquantia_main.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ drivers/md/dm-log.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/aquantia_main.c b/drivers/net/phy/aquantia_main.c
-index a8db1a19011b..c7047f5d7a9b 100644
---- a/drivers/net/phy/aquantia_main.c
-+++ b/drivers/net/phy/aquantia_main.c
-@@ -34,6 +34,8 @@
- #define MDIO_AN_VEND_PROV			0xc400
- #define MDIO_AN_VEND_PROV_1000BASET_FULL	BIT(15)
- #define MDIO_AN_VEND_PROV_1000BASET_HALF	BIT(14)
-+#define MDIO_AN_VEND_PROV_5000BASET_FULL	BIT(11)
-+#define MDIO_AN_VEND_PROV_2500BASET_FULL	BIT(10)
- #define MDIO_AN_VEND_PROV_DOWNSHIFT_EN		BIT(4)
- #define MDIO_AN_VEND_PROV_DOWNSHIFT_MASK	GENMASK(3, 0)
- #define MDIO_AN_VEND_PROV_DOWNSHIFT_DFLT	4
-@@ -231,9 +233,20 @@ static int aqr_config_aneg(struct phy_device *phydev)
- 			      phydev->advertising))
- 		reg |= MDIO_AN_VEND_PROV_1000BASET_HALF;
+--- a/drivers/md/dm-log.c
++++ b/drivers/md/dm-log.c
+@@ -615,7 +615,7 @@ static int disk_resume(struct dm_dirty_l
+ 			log_clear_bit(lc, lc->clean_bits, i);
  
-+	/* Handle the case when the 2.5G and 5G speeds are not advertised */
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_2500baseT_Full_BIT,
-+			      phydev->advertising))
-+		reg |= MDIO_AN_VEND_PROV_2500BASET_FULL;
-+
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_5000baseT_Full_BIT,
-+			      phydev->advertising))
-+		reg |= MDIO_AN_VEND_PROV_5000BASET_FULL;
-+
- 	ret = phy_modify_mmd_changed(phydev, MDIO_MMD_AN, MDIO_AN_VEND_PROV,
- 				     MDIO_AN_VEND_PROV_1000BASET_HALF |
--				     MDIO_AN_VEND_PROV_1000BASET_FULL, reg);
-+				     MDIO_AN_VEND_PROV_1000BASET_FULL |
-+				     MDIO_AN_VEND_PROV_2500BASET_FULL |
-+				     MDIO_AN_VEND_PROV_5000BASET_FULL, reg);
- 	if (ret < 0)
- 		return ret;
- 	if (ret > 0)
--- 
-2.35.1
-
+ 	/* clear any old bits -- device has shrunk */
+-	for (i = lc->region_count; i % (sizeof(*lc->clean_bits) << BYTE_SHIFT); i++)
++	for (i = lc->region_count; i % BITS_PER_LONG; i++)
+ 		log_clear_bit(lc, lc->clean_bits, i);
+ 
+ 	/* copy clean across to sync */
 
 

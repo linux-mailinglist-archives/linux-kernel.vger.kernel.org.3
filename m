@@ -2,129 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2701655C24B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9027855C47F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240844AbiF0U7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 16:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
+        id S240775AbiF0U7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 16:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239653AbiF0U7g (ORCPT
+        with ESMTP id S238130AbiF0U7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 16:59:36 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290845FD5;
-        Mon, 27 Jun 2022 13:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656363575; x=1687899575;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Qlh2pWlwHqBy4thP9knrY3EK29U5a83tGaMLEWAlvBo=;
-  b=PTRCsYMFkf0MBbsG6QK1IcSOcg0iK0AYE0g60CcsyJwIM5a7TuRjZU2D
-   m7sI24Q61lKqEL8kX4wuDEC2KwloyxMGs28AfBKaJ0Frewu2+30zKvwdD
-   /xCYlbqVXj46zwd8ZIhrjIWu7yLkqRiNwi19nu3nfifDe/Js3+uzHl+QW
-   YLKd24Xbbs6vctqVYOfka8/Ki4mcV5tnOrxfJTxwi/PlQl0QG7f4H8WG1
-   Uf5KjmcLeTJK1h7G/b6ypEa8uOvMpWTUDnoP4yqogjDDkMXuwWxTOlBZU
-   5OOZOvn/+F7MrVnVknETgj2HpO+XmZFJcQ1m0wZa9yJS2i/rua2kn5CpT
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="282295696"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="282295696"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 13:59:34 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="732476412"
-Received: from jsagoe-mobl1.amr.corp.intel.com (HELO [10.209.12.66]) ([10.209.12.66])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 13:59:33 -0700
-Message-ID: <84e93539-a2f9-f68e-416a-ea3d8fc725af@intel.com>
-Date:   Mon, 27 Jun 2022 13:58:35 -0700
+        Mon, 27 Jun 2022 16:59:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D125FC7;
+        Mon, 27 Jun 2022 13:59:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4FD9617B9;
+        Mon, 27 Jun 2022 20:59:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17655C34115;
+        Mon, 27 Jun 2022 20:59:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656363549;
+        bh=IwJ0CC/Vj6OL7cqtOj68jFfnXHtLikaHxffslXL7QKM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=NEZbbKPdh/+XjDaRuZHmG3M8+RTApW/KGSSyd/1S2bnKgYHwAZBMlPEzM1dfuvvy3
+         jX+Az+0lNPLv/1bf9wiwk2Ti/WleKjJ6+Q8T32/b6oy928BhhhNmb5FIbQqLq99kmq
+         k9F13ldNorsGovIr6dbFfGIEP8Q0JrctxA1Hpv0O5QVP0rXi1tzXQ9xk8oKi+GJKe1
+         SVQcbXKPPUORPzYhJAeSW8z/IEbwDoGSHgpcll3+Y2V2aixliajikPc6mbdajsWfZK
+         /4Wag6ZtKGPO20VGucK24r5W785YnE7BK6L2Bkwx+dS1d72vNaD5sdenHuAAH35dPz
+         IBswkBlGs0ahA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id CB8475C04B1; Mon, 27 Jun 2022 13:59:07 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 13:59:07 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rushikesh.s.kadam@intel.com, neeraj.iitr10@gmail.com,
+        frederic@kernel.org, rostedt@goodmis.org, vineeth@bitbyteword.org
+Subject: Re: [PATCH v2 8/8] rcu/kfree: Fix kfree_rcu_shrink_count() return
+ value
+Message-ID: <20220627205907.GM1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220622225102.2112026-1-joel@joelfernandes.org>
+ <20220622225102.2112026-10-joel@joelfernandes.org>
+ <Yrn9a5pOvhvL/eZj@pc638.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 07/22] x86/virt/tdx: Implement SEAMCALL function
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-References: <cover.1655894131.git.kai.huang@intel.com>
- <095e6bbc57b4470e1e9a9104059a5238c9775f00.1655894131.git.kai.huang@intel.com>
- <069a062e-a4a6-09af-7b74-7f4929f2ec0b@intel.com>
- <5ce7ebfe54160ea35e432bf50207ebed32db31fc.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <5ce7ebfe54160ea35e432bf50207ebed32db31fc.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yrn9a5pOvhvL/eZj@pc638.lan>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/22 22:23, Kai Huang wrote:
-> On Fri, 2022-06-24 at 11:38 -0700, Dave Hansen wrote:
->> On 6/22/22 04:16, Kai Huang wrote:
->>> SEAMCALL instruction causes #GP when SEAMRR isn't enabled, and #UD when
->>> CPU is not in VMX operation.  The TDX_MODULE_CALL macro doesn't handle
->>> SEAMCALL exceptions.  Leave to the caller to guarantee those conditions
->>> before calling __seamcall().
->>
->> I was trying to make the argument earlier that you don't need *ANY*
->> detection for TDX, other than the ability to make a SEAMCALL.
->> Basically, patch 01/22 could go away.
-...
->> So what does patch 01/22 buy us?  One EXTABLE entry?
+On Mon, Jun 27, 2022 at 08:56:43PM +0200, Uladzislau Rezki wrote:
+> > As per the comments in include/linux/shrinker.h, .count_objects callback
+> > should return the number of freeable items, but if there are no objects
+> > to free, SHRINK_EMPTY should be returned. The only time 0 is returned
+> > should be when we are unable to determine the number of objects, or the
+> > cache should be skipped for another reason.
+> > 
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > ---
+> >  kernel/rcu/tree.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index 711679d10cbb..935788e8d2d7 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -3722,7 +3722,7 @@ kfree_rcu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
+> >  		atomic_set(&krcp->backoff_page_cache_fill, 1);
+> >  	}
+> >  
+> > -	return count;
+> > +	return count == 0 ? SHRINK_EMPTY : count;
+> >  }
+> >  
+> >  static unsigned long
+> > -- 
+> > 2.37.0.rc0.104.g0611611a94-goog
+> > 
+> Looks good to me!
 > 
-> There are below pros if we can detect whether TDX is enabled by BIOS during boot
-> before initializing the TDX Module:
-> 
-> 1) There are requirements from customers to report whether platform supports TDX
-> and the TDX keyID numbers before initializing the TDX module so the userspace
-> cloud software can use this information to do something.  Sorry I cannot find
-> the lore link now.
+> Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-<sigh>
+Now that you mention it, this does look independent of the rest of
+the series.  I have pulled it in with Uladzislau's Reviewed-by.
 
-Never listen to customers literally.  It'll just lead you down the wrong
-path.  They told you, "we need $FOO in dmesg" and you ran with it
-without understanding why.  The fact that you even *need* to find the
-lore link is because you didn't bother to realize what they really needed.
-
-dmesg is not ABI.  It's for humans.  If you need data out of the kernel,
-do it with a *REAL* ABI.  Not dmesg.
-
-> 2) As you can see, it can be used to handle ACPI CPU/memory hotplug and driver
-> managed memory hotplug.  Kexec() support patch also can use it.
-> 
-> Particularly, in concept, ACPI CPU/memory hotplug is only related to whether TDX
-> is enabled by BIOS, but not whether TDX module is loaded, or the result of
-> initializing the TDX module.  So I think we should have some code to detect TDX
-> during boot.
-
-This is *EXACTLY* why our colleagues at Intel needs to tell us about
-what the OS and firmware should do when TDX is in varying states of decay.
-
-Does the mere presence of the TDX module prevent hotplug?  Or, if a
-system has the TDX module loaded but no intent to ever use TDX, why
-can't it just use hotplug like a normal system which is not addled with
-the TDX albatross around its neck?
-
-> Also, it seems adding EXTABLE to TDX_MODULE_CALL doesn't have significantly less
-> code comparing to detecting TDX during boot:
-
-It depends on a bunch of things.  It might only be a line or two of
-assembly.
-
-If you actually went and tried it, you might be able to convince me it's
-a bad idea.
+							Thanx, Paul

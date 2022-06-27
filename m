@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9F255C73D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F07B55CF62
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235536AbiF0LaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
+        id S236953AbiF0LmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235330AbiF0L3G (ORCPT
+        with ESMTP id S236590AbiF0Lin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:29:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EF6AA;
-        Mon, 27 Jun 2022 04:28:04 -0700 (PDT)
+        Mon, 27 Jun 2022 07:38:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E945BCB6;
+        Mon, 27 Jun 2022 04:35:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32513B8111A;
-        Mon, 27 Jun 2022 11:28:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD59C3411D;
-        Mon, 27 Jun 2022 11:28:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADEBC60DBD;
+        Mon, 27 Jun 2022 11:35:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9193C341C7;
+        Mon, 27 Jun 2022 11:35:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329282;
-        bh=vgvNJrHBHS9C46/WmKV1U9Crcq8Uj+IGHmrgSflbAnM=;
+        s=korg; t=1656329705;
+        bh=wkT9UHQRmlllcIk11aMHmLKWq0J84Omjdf8rIqTp0J4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QHSIVXWJOokS/oyvlSx1Swf6mcTX6jfSz1dka+5HR3eLkdQdv0bGLe9UjpGzQspX2
-         lrz/3Cz0n0oVUjhHuJ4rZ6FVRVV7bVHia7Dt/Yz8HRYlPepzFmRbYehv+5KkkEc+m4
-         qVnPPUMNJNt1QW3vuv8ErFWMT8rV9n50NwNnSR/A=
+        b=2RipE7/re72EFO97xCLXEq1batdG6vjXjGr1xvK2F17dU/nru/HwXSAxKXRtj+h9d
+         C52ovEwHbZODHkZo6wd2EaTH4Atmk/tOz7JPyJbcyWsgoOojFl0BeXQxMCJmi+xq3o
+         gp46lRDp3Sxv5hU3Ld/cYCOlFt0RBfaF6nMAMEZM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.10 083/102] iio: adc: axp288: Override TS pin bias current for some models
-Date:   Mon, 27 Jun 2022 13:21:34 +0200
-Message-Id: <20220627111935.930159000@linuxfoundation.org>
+        stable@vger.kernel.org, Andrey Konovalov <andreyknvl@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH 5.15 088/135] USB: gadget: Fix double-free bug in raw_gadget driver
+Date:   Mon, 27 Jun 2022 13:21:35 +0200
+Message-Id: <20220627111940.712994645@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +54,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Alan Stern <stern@rowland.harvard.edu>
 
-commit 048058399f19d43cf21de9f5d36cd8144337d004 upstream.
+commit 90bc2af24638659da56397ff835f3c95a948f991 upstream.
 
-Since commit 9bcf15f75cac ("iio: adc: axp288: Fix TS-pin handling") we
-preserve the bias current set by the firmware at boot. This fixes issues
-we were seeing on various models.
+Re-reading a recently merged fix to the raw_gadget driver showed that
+it inadvertently introduced a double-free bug in a failure pathway.
+If raw_ioctl_init() encounters an error after the driver ID number has
+been allocated, it deallocates the ID number before returning.  But
+when dev_free() runs later on, it will then try to deallocate the ID
+number a second time.
 
-Some models like the Nuvision Solo 10 Draw tablet actually need the
-old hardcoded 80ųA bias current for battery temperature monitoring
-to work properly.
+Closely related to this issue is another error in the recent fix: The
+ID number is stored in the raw_dev structure before the code checks to
+see whether the structure has already been initialized, in which case
+the new ID number would overwrite the earlier value.
 
-Add a quirk entry for the Nuvision Solo 10 Draw to the DMI quirk table
-to restore setting the bias current to 80ųA on this model.
+The solution to both bugs is to keep the new ID number in a local
+variable, and store it in the raw_dev structure only after the check
+for prior initialization.  No errors can occur after that point, so
+the double-free will never happen.
 
-Fixes: 9bcf15f75cac ("iio: adc: axp288: Fix TS-pin handling")
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215882
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220506095040.21008-1-hdegoede@redhat.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: f2d8c2606825 ("usb: gadget: Fix non-unique driver names in raw-gadget driver")
+CC: Andrey Konovalov <andreyknvl@gmail.com>
+CC: <stable@vger.kernel.org>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/r/YrMrRw5AyIZghN0v@rowland.harvard.edu
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/axp288_adc.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/usb/gadget/legacy/raw_gadget.c |   13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
---- a/drivers/iio/adc/axp288_adc.c
-+++ b/drivers/iio/adc/axp288_adc.c
-@@ -196,6 +196,14 @@ static const struct dmi_system_id axp288
- 		},
- 		.driver_data = (void *)(uintptr_t)AXP288_ADC_TS_BIAS_80UA,
- 	},
-+	{
-+		/* Nuvision Solo 10 Draw */
-+		.matches = {
-+		  DMI_MATCH(DMI_SYS_VENDOR, "TMAX"),
-+		  DMI_MATCH(DMI_PRODUCT_NAME, "TM101W610L"),
-+		},
-+		.driver_data = (void *)(uintptr_t)AXP288_ADC_TS_BIAS_80UA,
-+	},
- 	{}
- };
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -430,6 +430,7 @@ out_put:
+ static int raw_ioctl_init(struct raw_dev *dev, unsigned long value)
+ {
+ 	int ret = 0;
++	int driver_id_number;
+ 	struct usb_raw_init arg;
+ 	char *udc_driver_name;
+ 	char *udc_device_name;
+@@ -452,10 +453,9 @@ static int raw_ioctl_init(struct raw_dev
+ 		return -EINVAL;
+ 	}
+ 
+-	ret = ida_alloc(&driver_id_numbers, GFP_KERNEL);
+-	if (ret < 0)
+-		return ret;
+-	dev->driver_id_number = ret;
++	driver_id_number = ida_alloc(&driver_id_numbers, GFP_KERNEL);
++	if (driver_id_number < 0)
++		return driver_id_number;
+ 
+ 	driver_driver_name = kmalloc(DRIVER_DRIVER_NAME_LENGTH_MAX, GFP_KERNEL);
+ 	if (!driver_driver_name) {
+@@ -463,7 +463,7 @@ static int raw_ioctl_init(struct raw_dev
+ 		goto out_free_driver_id_number;
+ 	}
+ 	snprintf(driver_driver_name, DRIVER_DRIVER_NAME_LENGTH_MAX,
+-				DRIVER_NAME ".%d", dev->driver_id_number);
++				DRIVER_NAME ".%d", driver_id_number);
+ 
+ 	udc_driver_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
+ 	if (!udc_driver_name) {
+@@ -507,6 +507,7 @@ static int raw_ioctl_init(struct raw_dev
+ 	dev->driver.driver.name = driver_driver_name;
+ 	dev->driver.udc_name = udc_device_name;
+ 	dev->driver.match_existing_only = 1;
++	dev->driver_id_number = driver_id_number;
+ 
+ 	dev->state = STATE_DEV_INITIALIZED;
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+@@ -521,7 +522,7 @@ out_free_udc_driver_name:
+ out_free_driver_driver_name:
+ 	kfree(driver_driver_name);
+ out_free_driver_id_number:
+-	ida_free(&driver_id_numbers, dev->driver_id_number);
++	ida_free(&driver_id_numbers, driver_id_number);
+ 	return ret;
+ }
  
 
 

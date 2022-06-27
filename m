@@ -2,154 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 139C755E1DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FB355E225
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234547AbiF0M4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S234764AbiF0M7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234185AbiF0Mzx (ORCPT
+        with ESMTP id S234643AbiF0M6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:55:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FD19D129
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656334549;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=OVZ/LcnMWPN7fhBcYyaEBqrNmBX9SmIqzRP+nADepog=;
-        b=NBX7rF2okUC7SF4c8gUNEAp5jFyDvn3vM7QgjaPWG53mCWozb/lTzLhAMQcs/h48+qzgCb
-        MuQqy/+FjfM/Pl+LA4Ahr29u8MIzpdoL5wvYxVorzukarEX2iD++a98dGpVZ2HVH/9DV4a
-        32WWTy0MNEIo3meNDgCcumUdS4Gvt/M=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-346-iOyWrtXrNTa1LhoQCw5lWQ-1; Mon, 27 Jun 2022 08:55:47 -0400
-X-MC-Unique: iOyWrtXrNTa1LhoQCw5lWQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61B6E2806AAF;
-        Mon, 27 Jun 2022 12:55:47 +0000 (UTC)
-Received: from laptop.redhat.com (unknown [10.39.193.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7DBDA18EAA;
-        Mon, 27 Jun 2022 12:55:45 +0000 (UTC)
-From:   Eric Auger <eric.auger@redhat.com>
-To:     eric.auger.pro@gmail.com, eric.auger@redhat.com,
-        jean-philippe@linaro.org, jroedel@suse.de,
-        linux-acpi@vger.kernel.org, iommu@lists.linux-foundation.org,
-        rafael@kernel.org, lenb@kernel.org
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev
-Subject: [PATCH] ACPI: VIOT: Fix ACS setup
-Date:   Mon, 27 Jun 2022 14:55:34 +0200
-Message-Id: <20220627125534.1035912-1-eric.auger@redhat.com>
+        Mon, 27 Jun 2022 08:58:51 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657D310541;
+        Mon, 27 Jun 2022 05:58:26 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id k129so3968775wme.0;
+        Mon, 27 Jun 2022 05:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JMkhE15DqUuUYsqdeVw0YV5US1cbKTxDmN+AZSpDcP0=;
+        b=h0RUdzs/T1fLlIR1/zIfcZGTBTOxi0NalXvCnyBA3PGTv2E7elyVjIS0kcS62w7C9w
+         kdGiI6r4eCjtXJcrM3R8GaNCejm6jR3xF/0YbyuR7hgwhhYbFxlKfl6qs6JQpV6/zT54
+         nAKGvxumCU2NoVQn9kpTtB8CCDUCHlzQQvvtLOHvk63ZigC9CbUFSxdui5ZR7BL7hy1n
+         Qi0H15xrkblODPN/Nx5fwtrO+ikBEKHoMCTKgDuDJrLL2HgUiPP85P19d6arDE65G/tL
+         UqPyRYAtkryAZe99Mf98zV+2YvRoTCF15jc48N8OMDFVmtoHJZu2YS2UMdifPdRKr1ru
+         JWwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JMkhE15DqUuUYsqdeVw0YV5US1cbKTxDmN+AZSpDcP0=;
+        b=MAKjOn8bFg2VL3Snmoe5cwdDZPfdUahk0bgC0epKoCuW93oekHxrHKk5Uz2XYIxX3k
+         89d8SE+fy5owPO/TbT3fgX6IpmzPxUPDo4k4nFjCYBwyhftM5Acp/xjY+/92gWjW0B26
+         BQJhCTL7pZ+K6DBZ1rQlx9k+hzvXrflC05/PtHJpEJ5Kek6W7IZv85rEbBTS6A9l58GR
+         6O6Mh6TW9oFGd+u2DvzGEWlHMfVci1WkCVFauuupm/4bAJCuvl0r8u+bCdclBJ6nrFjY
+         Ct0djpJDjx8M6oD1zwTsWoJsw71+cnV94fqCgT8CpyQyimtf4RECWrP8HHLhjRSv/BYW
+         FIPA==
+X-Gm-Message-State: AJIora8FoUet1SgzNXsmHTOB6ubzgvz+/JMRW8b1ieILn/kWiSvtPTzl
+        FNQuV7mTOHO5CSC+/V2tCR59m9mP0jLFPgNvsfM=
+X-Google-Smtp-Source: AGRyM1vjPE5hZwDXlzx8IvGj9TaZn/xlyGJ8rqNUB+DR5A3YYTBJAKlAN4COeaY6depDsGtZbnoGdALGOzVDvpJyCQE=
+X-Received: by 2002:a7b:c20d:0:b0:3a0:39e4:19e8 with SMTP id
+ x13-20020a7bc20d000000b003a039e419e8mr20413223wmi.166.1656334704704; Mon, 27
+ Jun 2022 05:58:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com> <20220524152144.40527-4-schultz.hans+netdev@gmail.com>
+In-Reply-To: <20220524152144.40527-4-schultz.hans+netdev@gmail.com>
+From:   Hans S <schultz.hans@gmail.com>
+Date:   Mon, 27 Jun 2022 14:58:13 +0200
+Message-ID: <CAKUejP7xPByVP2Qe0fFCxhU_vX84qp2i_7RFnL9ZYMVr0xH=jw@mail.gmail.com>
+Subject: Re: [PATCH V3 net-next 3/4] net: dsa: mv88e6xxx: mac-auth/MAB implementation
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently acpi_viot_init() gets called after the pci
-device has been scanned and pci_enable_acs() has been called.
-So pci_request_acs() fails to be taken into account leading
-to wrong single iommu group topologies when dealing with
-multi-function root ports for instance.
+Hi Vladimir,
+maybe you have missed my upstreaming of this patch set...
 
-We cannot simply move the acpi_viot_init() earlier, similarly
-as the IORT init because the VIOT parsing relies on the pci
-scan. However we can detect VIOT is present earlier and in
-such a case, request ACS. Introduce a new acpi_viot_early_init()
-routine that allows to call pci_request_acs() before the scan.
+According to our earlier discussions I have now implemented the
+feature, so that the ATU locked entries are owned by the driver, so to
+make the entries dynamic I add the entries to a list and use kernel
+timers to age out the entries as they should be 'dynamic'. See
+mv88e6xxx_switchdev.c.
 
-Fixes: 3cf485540e7b ("ACPI: Add driver for the VIOT table")
-Signed-off-by: Eric Auger <eric.auger@redhat.com>
-Reported-by: Jin Liu <jinl@redhat.com>
----
- drivers/acpi/bus.c        |  1 +
- drivers/acpi/viot.c       | 23 +++++++++++++++++------
- include/linux/acpi_viot.h |  2 ++
- 3 files changed, 20 insertions(+), 6 deletions(-)
+Hans
 
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index 86fa61a21826..906ad8153fd9 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -1400,6 +1400,7 @@ static int __init acpi_init(void)
- 
- 	pci_mmcfg_late_init();
- 	acpi_iort_init();
-+	acpi_viot_early_init();
- 	acpi_hest_init();
- 	acpi_ghes_init();
- 	acpi_scan_init();
-diff --git a/drivers/acpi/viot.c b/drivers/acpi/viot.c
-index d2256326c73a..3c1be123e4d6 100644
---- a/drivers/acpi/viot.c
-+++ b/drivers/acpi/viot.c
-@@ -248,6 +248,23 @@ static int __init viot_parse_node(const struct acpi_viot_header *hdr)
- 	return ret;
- }
- 
-+/**
-+ * acpi_viot_early_init - Test the presence of VIOT and enable ACS
-+ *
-+ * If the VIOT does exist, ACS must be enabled. This cannot be
-+ * done in acpi_viot_init() which is called after the bus scan
-+ */
-+void __init acpi_viot_early_init(void)
-+{
-+	acpi_status status;
-+	struct acpi_table_header *hdr;
-+
-+	status = acpi_get_table(ACPI_SIG_VIOT, 0, &hdr);
-+	if (!ACPI_FAILURE(status))
-+		pci_request_acs();
-+	acpi_put_table(hdr);
-+}
-+
- /**
-  * acpi_viot_init - Parse the VIOT table
-  *
-@@ -319,12 +336,6 @@ static int viot_pci_dev_iommu_init(struct pci_dev *pdev, u16 dev_id, void *data)
- 			epid = ((domain_nr - ep->segment_start) << 16) +
- 				dev_id - ep->bdf_start + ep->endpoint_id;
- 
--			/*
--			 * If we found a PCI range managed by the viommu, we're
--			 * the one that has to request ACS.
--			 */
--			pci_request_acs();
--
- 			return viot_dev_iommu_init(&pdev->dev, ep->viommu,
- 						   epid);
- 		}
-diff --git a/include/linux/acpi_viot.h b/include/linux/acpi_viot.h
-index 1eb8ee5b0e5f..e58d60f8ff2e 100644
---- a/include/linux/acpi_viot.h
-+++ b/include/linux/acpi_viot.h
-@@ -6,10 +6,12 @@
- #include <linux/acpi.h>
- 
- #ifdef CONFIG_ACPI_VIOT
-+void __init acpi_viot_early_init(void);
- void __init acpi_viot_init(void);
- int viot_iommu_configure(struct device *dev);
- #else
- static inline void acpi_viot_init(void) {}
-+static inline void acpi_viot_early_init(void) {}
- static inline int viot_iommu_configure(struct device *dev)
- {
- 	return -ENODEV;
--- 
-2.35.3
-
+On Tue, May 24, 2022 at 5:22 PM Hans Schultz <schultz.hans@gmail.com> wrote:
+>
+> This implementation for the Marvell mv88e6xxx chip series, is
+> based on handling ATU miss violations occurring when packets
+> ingress on a port that is locked. The mac address triggering
+> the ATU miss violation is communicated through switchdev to
+> the bridge module, which adds a fdb entry with the fdb locked
+> flag set. The entry is kept according to the bridges ageing
+> time, thus simulating a dynamic entry.
+>
+> Note: The locked port must have learning enabled for the ATU
+> miss violation to occur.
+>
+> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+> ---
+>  drivers/net/dsa/mv88e6xxx/Makefile            |   1 +
+>  drivers/net/dsa/mv88e6xxx/chip.c              |  40 ++-
+>  drivers/net/dsa/mv88e6xxx/chip.h              |   5 +
+>  drivers/net/dsa/mv88e6xxx/global1.h           |   1 +
+>  drivers/net/dsa/mv88e6xxx/global1_atu.c       |  35 ++-
+>  .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c   | 249 ++++++++++++++++++
+>  .../net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h   |  40 +++
+>  drivers/net/dsa/mv88e6xxx/port.c              |  32 ++-
+>  drivers/net/dsa/mv88e6xxx/port.h              |   2 +
+>  9 files changed, 389 insertions(+), 16 deletions(-)
+>  create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.c
+>  create mode 100644 drivers/net/dsa/mv88e6xxx/mv88e6xxx_switchdev.h
+>

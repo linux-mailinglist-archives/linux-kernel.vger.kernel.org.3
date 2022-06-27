@@ -2,91 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE7655D7CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D3B55CBB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242800AbiF0W6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 18:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
+        id S242203AbiF0XAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241880AbiF0W6I (ORCPT
+        with ESMTP id S241243AbiF0XAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 18:58:08 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8726A10C;
-        Mon, 27 Jun 2022 15:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656370687; x=1687906687;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zVmwtCQNF6fzOVCPckEQuUt0SlS/3Ly8rekwR8DjUy4=;
-  b=gjQee9DuVZRDzrXgSfciibX16tkM1lEU8bJYoRxU1OvwYeUgu7a2oUuK
-   zmv8Pa+6mokamj/Zofq698nLSSVTqEqinvs4gHIGKK6D1g3oZRnG1p7/q
-   G+zQSqsChyc2SuhkVLlRuiXwzWuo4l6hTjfbM4ZX8vidRpmwEXn6MEpDG
-   ZOocKNpqPggZ5iddJKb5/MwI85FEqy4SJx7uBCHfU5IUuFTt+SL4ZWxel
-   8OnuPSa13MgLBz2DdlGOw9JViwTGx+Ukic6vXvssEXOpyOVxMMMhXS/1O
-   qZFlMNgNXdKjbNXod3eLpkY3izdN/yMb+dlZcfLv40CEiB91USJqqa3Pu
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="282672819"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="282672819"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 15:58:07 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="732509814"
-Received: from jsagoe-mobl1.amr.corp.intel.com (HELO [10.209.12.66]) ([10.209.12.66])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 15:58:06 -0700
-Message-ID: <3253e9fa-14f8-085e-5f13-bb70fea89abf@intel.com>
-Date:   Mon, 27 Jun 2022 15:57:07 -0700
+        Mon, 27 Jun 2022 19:00:16 -0400
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B9120F61;
+        Mon, 27 Jun 2022 16:00:15 -0700 (PDT)
+Received: by mail-il1-f172.google.com with SMTP id p9so6749546ilj.7;
+        Mon, 27 Jun 2022 16:00:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BBFolvCCjJnxhxohRNSfL/AQrqOPHqKgSw2LBcN2NnQ=;
+        b=bfXVza1My8NSlUM8fMnH6rlEd9095RBvJGqKsD3Zsdz7rTOiJnG252FT3Sb/axL2E1
+         cHTl+aYPFp1SNDQZ79q/9KrLR+p9sndPKTqGIup2ydW+V02jbfongpRrmXx8ENLS4mJX
+         UXAVwVviNmomi0kmLf/qNF+iKR46jlnAMlNQxomIuBW8UFtK7nhAtfBdaS627M1KdopS
+         xqSfRf+57ma3Z8tHl6DljT5HQbtiNsQMtK66X46s15KUPRzyupoTB4rdTn2cdQdLNhmu
+         bR94PUVvOqY4TUyaEffV8Xr3x4sDAta0ybSrJC/b55lV//7JLUEUj9HaTJ6mjtS2/mHs
+         YysQ==
+X-Gm-Message-State: AJIora+Yhm21t4Q9bqmh40J4StOcbHE0IldgvsqGTP3tAVuV90qX8tA4
+        2bnHhiiSFVT/MbdvomkViw==
+X-Google-Smtp-Source: AGRyM1s3mDmWtHR9KacZ3brBzVulekXmlkOSi7niZLvqZ3o/vbqhjQZ0fgaGh7zEyYExAh29I7iuRQ==
+X-Received: by 2002:a05:6e02:154d:b0:2da:9539:3093 with SMTP id j13-20020a056e02154d00b002da95393093mr4813252ilu.131.1656370814723;
+        Mon, 27 Jun 2022 16:00:14 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id u18-20020a92ccd2000000b002d8d813892csm5083745ilq.8.2022.06.27.16.00.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 16:00:14 -0700 (PDT)
+Received: (nullmailer pid 3126600 invoked by uid 1000);
+        Mon, 27 Jun 2022 23:00:12 -0000
+Date:   Mon, 27 Jun 2022 17:00:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        krzk+dt@kernel.org, devicetree@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 6/7] ASoC: dt-bindings: fsl-sai: Add new property to
+ configure dataline
+Message-ID: <20220627230012.GA3122063-robh@kernel.org>
+References: <1655451877-16382-1-git-send-email-shengjiu.wang@nxp.com>
+ <1655451877-16382-7-git-send-email-shengjiu.wang@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 15/22] x86/virt/tdx: Allocate and set up PAMTs for
- TDMRs
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-References: <cover.1655894131.git.kai.huang@intel.com>
- <c504a8acd06dc455050c25e2a4cc70aef5eb9358.1655894131.git.kai.huang@intel.com>
- <e72703b0-767a-ec88-7cb6-f95a3564d823@intel.com>
- <b376aef05bc032fdf8cc23762ce77a14830440cd.camel@intel.com>
- <b43bf089-1202-a1fe-cbb3-d4e0926cab67@intel.com>
- <a610ae9bd554f31364193abc928fad86ed5ebf7c.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <a610ae9bd554f31364193abc928fad86ed5ebf7c.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1655451877-16382-7-git-send-email-shengjiu.wang@nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 15:50, Kai Huang wrote:
->> Are Kirill's magic 0/1/2 numbers the same as
->>
->> 	TDX_PG_4K,
->> 	TDX_PG_2M,
->> 	TDX_PG_1G,
->>
->> ?
-> Yes they are the same.  Kirill uses 0/1/2 as input of TDX_ACCEPT_PAGE TDCALL. 
-> Here I only need them to distinguish different page sizes.
+On Fri, Jun 17, 2022 at 03:44:36PM +0800, Shengjiu Wang wrote:
+> "fsl,dataline" is added to configure the dataline of SAI.
+> It has 3 value for each configuration, first one means the type:
+> I2S(1) or PDM(2), second one is dataline mask for 'rx', third one is
+> dataline mask for 'tx'. for example:
 > 
-> Do you mean we should put TDX_PG_4K/2M/1G definition to asm/tdx.h, and
-> try_accept_one() should use them instead of magic 0/1/2?
+> fsl,dataline = <1 0xff 0xff 2 0xff 0x11>,
+> 
+> it means I2S type rx mask is 0xff, tx mask is 0xff, PDM type
+> rx mask is 0xff, tx mask is 0x11 (dataline 1 and 4 enabled).
+> 
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/sound/fsl-sai.txt | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/fsl-sai.txt b/Documentation/devicetree/bindings/sound/fsl-sai.txt
+> index c71c5861d787..4c66e6a1a533 100644
+> --- a/Documentation/devicetree/bindings/sound/fsl-sai.txt
+> +++ b/Documentation/devicetree/bindings/sound/fsl-sai.txt
+> @@ -49,6 +49,14 @@ Required properties:
+>  			  receive data by following their own bit clocks and
+>  			  frame sync clocks separately.
+>  
+> +  - fsl,dataline        : configure the dataline. it has 3 value for each configuration
+> +                          first one means the type: I2S(1) or PDM(2)
+> +                          second one is dataline mask for 'rx'
+> +                          third one is dataline mask for 'tx'.
+> +                          for example: fsl,dataline = <1 0xff 0xff 2 0xff 0x11>;
+> +                          it means I2S type rx mask is 0xff, tx mask is 0xff, PDM type
+> +                          rx mask is 0xff, tx mask is 0x11 (dataline 1 and 4 enabled).
 
-I honestly don't care how you do it as long as the magic numbers go away
-(within reason).
+You mean 0 and 4 enabled? Or 1 and 4?
+
+How many 3 cell entries can you have?
+
+Rob

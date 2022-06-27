@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A9F55C3DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BD255C373
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237127AbiF0LmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        id S234949AbiF0LcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236834AbiF0Lju (ORCPT
+        with ESMTP id S235569AbiF0Lbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:39:50 -0400
+        Mon, 27 Jun 2022 07:31:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705EDBE1;
-        Mon, 27 Jun 2022 04:35:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C28F1106;
+        Mon, 27 Jun 2022 04:29:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DFB860DF6;
-        Mon, 27 Jun 2022 11:35:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21290C3411D;
-        Mon, 27 Jun 2022 11:35:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7988614EC;
+        Mon, 27 Jun 2022 11:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E34A8C341C8;
+        Mon, 27 Jun 2022 11:29:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329716;
-        bh=e1XX8I8SnpXBYkbVjJf9BRbY5atBzPtKnsb27yFGmSI=;
+        s=korg; t=1656329346;
+        bh=nNlTjBxA5nd4i3KBDtgYY2oKAdkO4zFbe5ZgGJlmHII=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wCGtk4ad2f6gRQylyCHILMKrTzJDybIL/iOCg7iZdZsFUEycPDdSjLEv8AM3k0iFC
-         wtu8easQ+K5wNymvP5wGiz01LzQglbjHZRxMuBGYW2qdfc+x3jdN4Yo4IIy+9x7aTI
-         54NtjxlJtLZ6U+/HjwzNvVpQZTUJkKY/WSiRi1WM=
+        b=csFzvCv8uDz3d8GjQWpLmYy6tBD2lANdewHzkFYltAT2eEpo4WhAbGF7+QiJvHZ2E
+         26WoIw11QbI1lMM1xU6aSOpY7Wj1ajA/uEgT695aH3OOIpcSFi7Sh6lHa/ehqUBWgF
+         SacISkhqkWCvFofCP/5yitnlQmVgYB8pYo3lDCpE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nikolay Borisov <nborisov@suse.com>,
-        Filipe Manana <fdmanana@suse.com>,
-        Zygo Blaxell <ce3g8jdj@umail.furryterror.org>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.15 092/135] btrfs: dont set lock_owner when locking extent buffer for reading
+        stable@vger.kernel.org,
+        Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [PATCH 5.4 28/60] ice: ethtool: advertise 1000M speeds properly
 Date:   Mon, 27 Jun 2022 13:21:39 +0200
-Message-Id: <20220627111940.828016130@linuxfoundation.org>
+Message-Id: <20220627111928.515000449@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +57,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zygo Blaxell <ce3g8jdj@umail.furryterror.org>
+From: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
 
-commit 97e86631bccddfbbe0c13f9a9605cdef11d31296 upstream.
+[ Upstream commit c3d184c83ff4b80167e34edfc3d21df424bf27ff ]
 
-In 196d59ab9ccc "btrfs: switch extent buffer tree lock to rw_semaphore"
-the functions for tree read locking were rewritten, and in the process
-the read lock functions started setting eb->lock_owner = current->pid.
-Previously lock_owner was only set in tree write lock functions.
+In current implementation ice_update_phy_type enables all link modes
+for selected speed. This approach doesn't work for 1000M speeds,
+because both copper (1000baseT) and optical (1000baseX) standards
+cannot be enabled at once.
 
-Read locks are shared, so they don't have exclusive ownership of the
-underlying object, so setting lock_owner to any single value for a
-read lock makes no sense.  It's mostly harmless because write locks
-and read locks are mutually exclusive, and none of the existing code
-in btrfs (btrfs_init_new_buffer and print_eb_refs_lock) cares what
-nonsense is written in lock_owner when no writer is holding the lock.
+Fix this, by adding the function `ice_set_phy_type_from_speed()`
+for 1000M speeds.
 
-KCSAN does care, and will complain about the data race incessantly.
-Remove the assignments in the read lock functions because they're
-useless noise.
-
-Fixes: 196d59ab9ccc ("btrfs: switch extent buffer tree lock to rw_semaphore")
-CC: stable@vger.kernel.org # 5.15+
-Reviewed-by: Nikolay Borisov <nborisov@suse.com>
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: Zygo Blaxell <ce3g8jdj@umail.furryterror.org>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 48cb27f2fd18 ("ice: Implement handlers for ethtool PHY/link operations")
+Signed-off-by: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/locking.c |    3 ---
- 1 file changed, 3 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_ethtool.c | 39 +++++++++++++++++++-
+ 1 file changed, 38 insertions(+), 1 deletion(-)
 
---- a/fs/btrfs/locking.c
-+++ b/fs/btrfs/locking.c
-@@ -45,7 +45,6 @@ void __btrfs_tree_read_lock(struct exten
- 		start_ns = ktime_get_ns();
- 
- 	down_read_nested(&eb->lock, nest);
--	eb->lock_owner = current->pid;
- 	trace_btrfs_tree_read_lock(eb, start_ns);
+diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
+index fc9ff985a62b..b297a3ca22fc 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
++++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
+@@ -2337,6 +2337,42 @@ ice_setup_autoneg(struct ice_port_info *p, struct ethtool_link_ksettings *ks,
+ 	return err;
  }
  
-@@ -62,7 +61,6 @@ void btrfs_tree_read_lock(struct extent_
- int btrfs_try_tree_read_lock(struct extent_buffer *eb)
- {
- 	if (down_read_trylock(&eb->lock)) {
--		eb->lock_owner = current->pid;
- 		trace_btrfs_try_tree_read_lock(eb);
- 		return 1;
- 	}
-@@ -90,7 +88,6 @@ int btrfs_try_tree_write_lock(struct ext
- void btrfs_tree_read_unlock(struct extent_buffer *eb)
- {
- 	trace_btrfs_tree_read_unlock(eb);
--	eb->lock_owner = 0;
- 	up_read(&eb->lock);
- }
++/**
++ * ice_set_phy_type_from_speed - set phy_types based on speeds
++ * and advertised modes
++ * @ks: ethtool link ksettings struct
++ * @phy_type_low: pointer to the lower part of phy_type
++ * @phy_type_high: pointer to the higher part of phy_type
++ * @adv_link_speed: targeted link speeds bitmap
++ */
++static void
++ice_set_phy_type_from_speed(const struct ethtool_link_ksettings *ks,
++			    u64 *phy_type_low, u64 *phy_type_high,
++			    u16 adv_link_speed)
++{
++	/* Handle 1000M speed in a special way because ice_update_phy_type
++	 * enables all link modes, but having mixed copper and optical
++	 * standards is not supported.
++	 */
++	adv_link_speed &= ~ICE_AQ_LINK_SPEED_1000MB;
++
++	if (ethtool_link_ksettings_test_link_mode(ks, advertising,
++						  1000baseT_Full))
++		*phy_type_low |= ICE_PHY_TYPE_LOW_1000BASE_T |
++				 ICE_PHY_TYPE_LOW_1G_SGMII;
++
++	if (ethtool_link_ksettings_test_link_mode(ks, advertising,
++						  1000baseKX_Full))
++		*phy_type_low |= ICE_PHY_TYPE_LOW_1000BASE_KX;
++
++	if (ethtool_link_ksettings_test_link_mode(ks, advertising,
++						  1000baseX_Full))
++		*phy_type_low |= ICE_PHY_TYPE_LOW_1000BASE_SX |
++				 ICE_PHY_TYPE_LOW_1000BASE_LX;
++
++	ice_update_phy_type(phy_type_low, phy_type_high, adv_link_speed);
++}
++
+ /**
+  * ice_set_link_ksettings - Set Speed and Duplex
+  * @netdev: network interface device structure
+@@ -2472,7 +2508,8 @@ ice_set_link_ksettings(struct net_device *netdev,
+ 		adv_link_speed = curr_link_speed;
  
+ 	/* Convert the advertise link speeds to their corresponded PHY_TYPE */
+-	ice_update_phy_type(&phy_type_low, &phy_type_high, adv_link_speed);
++	ice_set_phy_type_from_speed(ks, &phy_type_low, &phy_type_high,
++				    adv_link_speed);
+ 
+ 	if (!autoneg_changed && adv_link_speed == curr_link_speed) {
+ 		netdev_info(netdev, "Nothing changed, exiting without setting anything.\n");
+-- 
+2.35.1
+
 
 

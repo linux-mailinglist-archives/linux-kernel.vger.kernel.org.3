@@ -2,57 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2FF55DC48
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C4855DC86
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241092AbiF0VRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 17:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
+        id S241147AbiF0VST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 17:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239149AbiF0VRD (ORCPT
+        with ESMTP id S237982AbiF0VSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 17:17:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181EE186C9;
-        Mon, 27 Jun 2022 14:17:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C07C4B81B8B;
-        Mon, 27 Jun 2022 21:17:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A4DC34115;
-        Mon, 27 Jun 2022 21:16:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656364619;
-        bh=KJZHE6p9iAGgWYymY+W6sviEHo9dVLIq1LS+KPen0+8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=iw/0VEsnNwpDBo4zTgY5GYJ9e/L6Sa/sR6Rk35mHfpmloVey0Bd8WTuvJ28ORzflh
-         Ew/Q4pA53xFAv5/p3Zi1YqcZTFdPhQ3TIzgb93IuxVoiJLt5+L3oAatm6TFjndYaI1
-         WdB7dwLD/s9LmRcM+uR7LUot4RM4aEQztW6kCsY2F4uIHmHP3H8M5JJOq1vtqLt5EU
-         e33KI/w3BvlInQ5ZFzCgpAmrSl6EMib51vNwA13iMbkUuqZoDFxZZTljfUtV5Ob2qA
-         ISvM3cIMHyOWClTARLKTxcpn3wmtGIH31cIpgONRwNvKCbPC2nLoeA+7rMKK35Lp8D
-         T8kLTucUUDA2Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1DC075C04B1; Mon, 27 Jun 2022 14:16:58 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 14:16:58 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "frederic@kernel.org" <frederic@kernel.org>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rcu: Add a warnings in sync_sched_exp_online_cleanup()
-Message-ID: <20220627211658.GN1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220621012412.2724457-1-qiang1.zhang@intel.com>
- <PH0PR11MB588005D38E08891423310EBBDAB29@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Mon, 27 Jun 2022 17:18:12 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBD618B02
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:18:11 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id w17so14785151wrg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:18:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7fqf134knRgs1GXmfgOSjMnBIhN/vd4XYE5cKns7XrQ=;
+        b=HXbtK2wb/8k7BKwx03O3vJd+frVE8kbRJOxAidgzWU3+M46idUPj4JY/ji2or61qN6
+         iFQfdI2q9HbabuCUzIKyuCuZZP+svfWOurR7utrBBG8lxHgf64RUya9tYBYoq/IZnb3/
+         vASCFCOveG3OPw4M9ElkzqOYoiWkSkXpjjzjUUkhiJcB7Uovli7STe8/BYj4orSkm5AF
+         LTlyYI4wyNCu+hgP9xZwpFMXRxL0suMMMq/Wud/F2UCWdoxIQljh+9HLdF+xzDphLUPc
+         JhfNdVvIWSYHIRmsF16qeXPK1XW0ExS6lCFXaFznUtqNyynV9EM41UOdeXzlroAzAzkv
+         hWjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7fqf134knRgs1GXmfgOSjMnBIhN/vd4XYE5cKns7XrQ=;
+        b=P/kR8R6joLqa2kI2gb/ONoZuJGe7+a2Eve3Y3V9UChU0uaJADx6VUERwWNOqNyNpko
+         IvyMTJmTiTFjFdgH2FUNvVJl6BYP/fGhNdO/BZfbBRjc1kAMIWoEdFauIlM6KR6MLxHp
+         vt7M3qvWc/+p6Zw2krMWSh+jJb21t488duO64wjVGYCkTFn/OOsU/ZqXCwUEj/Ldpdo+
+         VD5JWFau7no1lLemI4UVi5sH5OxUIGt8vMy9ar4hpMgzXZtv1kQHIJcrSVH5VYUbfiFO
+         d4lYi8P3FqLQXsjjgbpOO0IRo4ZxybJcewvpZMR8y5bV4Hp2yTZG4aYfzhCs8zt0TPEp
+         5CWA==
+X-Gm-Message-State: AJIora8qnyi9EU4GrIcq0dI62LQwxIqf3s/d7MEOBQ72GjmXBx7cb7UT
+        gdIhVcLfgvwPUhX9dQuMTGo5RA==
+X-Google-Smtp-Source: AGRyM1v3rnjEGEokBmIwXs+uwnFrAQV1ikK8BVpbbLHWxG5jXedwQJfIfb9jsTWa7DY6Tagub7QPEA==
+X-Received: by 2002:adf:d1ed:0:b0:21b:c74b:594 with SMTP id g13-20020adfd1ed000000b0021bc74b0594mr8958606wrd.221.1656364689777;
+        Mon, 27 Jun 2022 14:18:09 -0700 (PDT)
+Received: from [192.168.2.222] ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id az14-20020a05600c600e00b003a04c74efd1sm3048630wmb.21.2022.06.27.14.18.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 14:18:09 -0700 (PDT)
+Message-ID: <ed893417-2c5e-c019-04c6-c7c7ee138ef1@conchuod.ie>
+Date:   Mon, 27 Jun 2022 22:18:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB588005D38E08891423310EBBDAB29@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 06/16] dt-bindings: timer: add Canaan k210 to Synopsys
+ DesignWare timer
+Content-Language: en-US
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Heng Sia <jee.heng.sia@intel.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20220627194003.2395484-1-mail@conchuod.ie>
+ <20220627194003.2395484-7-mail@conchuod.ie>
+ <20220627211314.dc2hempelyl5ayjg@mobilestation>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <20220627211314.dc2hempelyl5ayjg@mobilestation>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,49 +102,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 22, 2022 at 11:43:26PM +0000, Zhang, Qiang1 wrote:
+On 27/06/2022 22:13, Serge Semin wrote:
+> On Mon, Jun 27, 2022 at 08:39:54PM +0100, Conor Dooley wrote:
+>> From: Conor Dooley <conor.dooley@microchip.com>
+>>
+>> The Canaan k210 apparently has a Sysnopsys Designware timer but
+>> according to the documentation & devicetree it has 2 interrupts rather
+>> than the standard one. Add a custom compatible that supports the 2
+>> interrupt configuration and falls back to the standard binding (which
+>> is currently the one in use in the devicetree entry).
+>>
 > 
-> Add Cc 
+>> Link: https://canaan-creative.com/wp-content/uploads/2020/03/kendryte_standalone_programming_guide_20190311144158_en.pdf #Page 58
 > 
-> Currently, the sync_sched_exp_online_cleanup() is invoked in
-> cpuhp per-cpu kthreads when CPU is going online, so the CPU id
-> obtained by get_cpu() should always be equal to the CPU id of
-> the passed parameter, that is to say, the smp_call_function_single()
-> never be invoked, if be invoked, there may be problem with cpu-hotplug,
-> this commit add WARN_ON_ONCE() to remind everyone.
+> Firstly, it's page 51 in the framework of the document pages
+> enumeration.
+
+Ah yes, sorry about that.
+
 > 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->  kernel/rcu/tree_exp.h | 2 ++
->  1 file changed, 2 insertions(+)
+> Judging by the comment in the document above and what the HW reference
+> manual says regarding the IRQ signals, what you really have on K210 is
+> the DW APB Timer IP-cores each configured with two embedded timers.
+> It's done by the IP-core synthesize parameter NUM_TIMERS={1..8}, which
+> in your case equals to 2. A similar situation is on our SoC and, for
+> instance, here:
 > 
-> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-> index be667583a554..ae8dcfd4486c 100644
-> --- a/kernel/rcu/tree_exp.h
-> +++ b/kernel/rcu/tree_exp.h
-> @@ -865,6 +865,8 @@ static void sync_sched_exp_online_cleanup(int cpu)
->  		put_cpu();
->  		return;
->  	}
-> +
-> +	WARN_ON_ONCE(my_cpu != cpu);
-
-If we are going to add this sort of warning, why not instead add it
-to rcutree_online_cpu()?
-
-The reason the warning has not been present is the prospect of concurrent
-onlining at boot time, which might have rcutree_online_cpu() invoked
-from CPU 0 for multiple CPUs at boot.  However, the for_each_online_cpu()
-loop has recently been removed from rcu_init().
-
-But I would like to hear what others think.  Would such a warning
-significantly help debugging?
-
-							Thanx, Paul
-
->  	/* Quiescent state needed on some other CPU, send IPI. */
->  	ret = smp_call_function_single(cpu, rcu_exp_handler, NULL, 0);
->  	put_cpu();
-> -- 
-> 2.25.1
+> arch/arm/boot/dts/berlin2q.dtsi
+> arch/arm/boot/dts/berlin2.dtsi
+> arch/arm/boot/dts/berlin2cd.dtsi
+> (Though the Berlin2 APB Timer have been configured with 8 timers.)
 > 
+> So the correct modification would be:
+> 1. Split up the nodes into two ones with one IRQ per each node.
+> 2. Make sure I was right by testing the new dts out.
+> 3. Update the DT-node only and leave the DT-bindings as is.
+
+Hmm, sounds good. Will give that a whirl tomorrow.
+Thanks for the info/suggestions Sergey.
+

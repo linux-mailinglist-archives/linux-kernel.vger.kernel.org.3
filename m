@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E5B55DEF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AD455C64C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235200AbiF0OzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S236712AbiF0OzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235118AbiF0OzF (ORCPT
+        with ESMTP id S235757AbiF0OzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:55:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF2415FE7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:55:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 27 Jun 2022 10:55:06 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7211015FE8;
+        Mon, 27 Jun 2022 07:55:05 -0700 (PDT)
+Received: from [192.168.1.101] (abxi223.neoplus.adsl.tpnet.pl [83.9.2.223])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0E1E615A1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:55:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49AC4C3411D;
-        Mon, 27 Jun 2022 14:55:03 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="g4N42kJX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656341701;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WgEinyux4HlcnBBbLgqEe2jqcu3BiHmbct/DDxcrzfA=;
-        b=g4N42kJXVt1UCxJAERhIJhvgsWqV1XEzPPyo4U2CVs9N0qupusktT5AZ4pty7mjiTTFYbY
-        V4Ym8SNocQbDpJcaxomrczDPK5/XIQpnelXVXsr5g9qaU3gyfg7qcNL7ygGyxeHk5hf9gz
-        /vCA/Pnz5qy97Ts2ZN+84Uzb8wOvUJ8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8401e912 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 27 Jun 2022 14:55:00 +0000 (UTC)
-Date:   Mon, 27 Jun 2022 16:54:54 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        ebiederm@xmission.com,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>
-Subject: Re: [PATCH] signal: break out of wait loops on kthread_stop()
-Message-ID: <YrnEvjcG8tmF3dRV@zx2c4.com>
-References: <20220627120020.608117-1-Jason@zx2c4.com>
- <YrmwJyueoz1Z4ti0@hirez.programming.kicks-ass.net>
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 686473F81B;
+        Mon, 27 Jun 2022 16:55:02 +0200 (CEST)
+Message-ID: <8c20bd56-2c25-b5ad-f0c2-84c2719707e9@somainline.org>
+Date:   Mon, 27 Jun 2022 16:55:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YrmwJyueoz1Z4ti0@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 2/2] thermal: qcom: tsens-v1: Add support for MSM8992/4
+ TSENS
+Content-Language: en-US
+To:     ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220501202025.211567-1-konrad.dybcio@somainline.org>
+ <20220501202025.211567-2-konrad.dybcio@somainline.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220501202025.211567-2-konrad.dybcio@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,18 +56,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 03:27:03PM +0200, Peter Zijlstra wrote:
-> On Mon, Jun 27, 2022 at 02:00:20PM +0200, Jason A. Donenfeld wrote:
-> 
-> > +bool __kthread_should_stop(struct task_struct *k)
-> > +{
-> > +	return (k->flags & PF_KTHREAD) &&
-> > +	       test_bit(KTHREAD_SHOULD_STOP, &to_kthread(k)->flags);
-> > +}
-> 
-> This used to be a racy pattern; not sure it still is since Eric poked at
-> this last, but please use __to_kthread() instead.
 
-Ah, indeed. Will send a v2.
 
-Jason
+On 1.05.2022 22:20, Konrad Dybcio wrote:
+> MSM8994, despite being heavily based on MSM8974, uses the
+> 1.2 version of TSENS. Also, 8994 being 8994, it has a custom
+> way of calculating the slope.
+> 
+> MSM8992 in turn is a cut-down version of MSM8994 and uses
+> the same TSENS hardware, albeit with a different set of sensors.
+> 
+> Also tested on 8976 (by a person who didn't want to be named)
+> to make sure the 11->16 max_sensors changes didn't break anything.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+Bumping this, as it's seemingly went unseen.
+
+Konrad

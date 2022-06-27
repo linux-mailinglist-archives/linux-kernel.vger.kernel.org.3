@@ -2,160 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A73655D417
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3195755C5A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbiF0HL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
+        id S232646AbiF0HLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiF0HLZ (ORCPT
+        with ESMTP id S229986AbiF0HL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:11:25 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0E35F52
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:11:24 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id d11-20020a6bb40b000000b006727828a19fso5326043iof.15
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:11:24 -0700 (PDT)
+        Mon, 27 Jun 2022 03:11:29 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F50E2DEC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:11:27 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id m14-20020a17090a668e00b001ee6ece8368so2177504pjj.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:11:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=VC489kzuovEEc/JjK52uB+SecoHVH3Iyul2HAGQcsXI=;
+        b=MrgQd+okioRjqEakwYkl/vGrE/9AD5FYiASLWkCeHI6dkeoj9XCZ+HQzTzbvVkbTR4
+         ASazfaHLrS9V50zrP62vKDublFCYk9Nd99+46kKmaKAY8aaTtSZzxdXExmpkXMztl40e
+         WiGVkNKjJHW+BbrzwFom8wrXVKgUF7Ujq+bdmgPfyQ+55WZMqCns8+MJZohi5tGzlpHy
+         OK2E63vKT6AEePSSr2sRm6nCc65KregTWWqhlAAqqXInbPg5oasfydYn2VU3/w21yxy1
+         Jjzzv2DBfcuprwAHygueRAO8wKm8CjUGbJmwR02qCV4BdK898U57O1fQoOPmGmRdb/fj
+         36Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=dlXIjc1Fz8xnNFqUPA8RuqcnGDzpMp9dQqsY2cW9s0Q=;
-        b=IY+AI4VD2u7INmvMj6rvaKq+4otQY/b6H3dehbD1T+IsMzj6pgwUxA8uTDvFBzkALs
-         Fy40uQmBK6XVIaV3njH4AgyxscH1jAjBxx747+BWRAIq6Fet/REKKZowZlLBSccZtWgZ
-         KvmDwxin8UJ9jFF4uofjnaaRVunlh5x46N+YsWBUmyptPhvHCOhPhq+SRN4tjPsh+KUd
-         AfOi2wXxftiG0/w5hlkkmTdMUgNJqG+xM4ezoGJRoSOfqAfaj6rIM0QcruHQi8ngrhKY
-         ZQOLv/+rJvLl161+S/zTIb42Di9tsY0y2dWIMSgh9TECoRixhzuiPzeq68qJJYm/w3hG
-         1TCQ==
-X-Gm-Message-State: AJIora+NMU+UC269nMxq9d0nn5Gtj05xkwbe6uWuUdeBvW/dtu3cvoKG
-        kFXFb7OuLFbsYmbO9jWqE2ZjegUGIWTVN/nWi1TMVYh0dPqu
-X-Google-Smtp-Source: AGRyM1uEqgM9HARc07iExUWF+t/2BiCbz5N40Sn4h7wiB9s1t77N4JufQKYvjQu2eU4f2Dkoyqxv+ZDFRcfoXIk+fZ4KGMcDPeaQ
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=VC489kzuovEEc/JjK52uB+SecoHVH3Iyul2HAGQcsXI=;
+        b=kl3r+la5bOfx/xWvz2wKoTtOQTLyOPTsswrV9iZw+hrtW8EEwDYXj0r+GNo6MsI3SX
+         Mugzi96OdAnn0imNVpszv0R3JJ5E4XAJCxd6cVdMCKA494X8kX2+4QiI2NKP/jp3RLtg
+         nt50gXtdn1uGsuE9r7vOuJsFJz2S4fWbiH8eGbsyJEdy0zmxcxF6kmHbjf145WvqHfqa
+         zbfnyDxfDqD9xVmqE31M7F6BpGnReclRaxXHFJ6mQLDqlTYx6VCBEP0Fj1ZPknbQYin4
+         ZmQhAt0d+A8e2vogimq+eMNy5twDyPJVfIGe5Tn3ycpoVWyPyCzU0RQnYIeATUqVzayS
+         9eMA==
+X-Gm-Message-State: AJIora+eHwl5lnpKQ3ZWHvq4ltgzKsn59ITZu+LhVdD4Q3r36ONpPeLF
+        LW1FQa+XN5Ry5sTR2mZ6d/eZEg==
+X-Google-Smtp-Source: AGRyM1vjV/YTOrhBmQQVXmcT0VuWuGHSjICuTX3ElxCqHg66zT6fKrnc3hYmiwQlXzVbL01ivPaUYw==
+X-Received: by 2002:a17:902:f813:b0:169:8f5d:c343 with SMTP id ix19-20020a170902f81300b001698f5dc343mr13164391plb.98.1656313886990;
+        Mon, 27 Jun 2022 00:11:26 -0700 (PDT)
+Received: from localhost ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id c195-20020a624ecc000000b00525472e6e15sm6400932pfb.194.2022.06.27.00.11.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 00:11:26 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 15:11:23 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, longman@redhat.com,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Cgroups <cgroups@vger.kernel.org>, duanxiongchun@bytedance.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH v6 00/11] Use obj_cgroup APIs to charge the LRU pages
+Message-ID: <YrlYG0ecJyzFTVVz@FVFYT0MHHV2J.usts.net>
+References: <20220621125658.64935-1-songmuchun@bytedance.com>
+ <CAJD7tkbeTtkMcVri9vzKHATjxAVZfC_vPNfApJiyRxY53c8pZQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:27c6:b0:657:7e7a:11f3 with SMTP id
- l6-20020a05660227c600b006577e7a11f3mr6157230ios.40.1656313883590; Mon, 27 Jun
- 2022 00:11:23 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 00:11:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ab092305e268a016@google.com>
-Subject: [syzbot] general protection fault in gfs2_evict_inode (2)
-From:   syzbot <syzbot+8a5fc6416c175cecea34@syzkaller.appspotmail.com>
-To:     agruenba@redhat.com, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJD7tkbeTtkMcVri9vzKHATjxAVZfC_vPNfApJiyRxY53c8pZQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Jun 26, 2022 at 03:32:02AM -0700, Yosry Ahmed wrote:
+> On Tue, Jun 21, 2022 at 5:57 AM Muchun Song <songmuchun@bytedance.com> wrote:
+> >
+> > This version is rebased on mm-unstable. Hopefully, Andrew can get this series
+> > into mm-unstable which will help to determine whether there is a problem or
+> > degradation. I am also doing some benchmark tests in parallel.
+> >
+> > Since the following patchsets applied. All the kernel memory are charged
+> > with the new APIs of obj_cgroup.
+> >
+> >         commit f2fe7b09a52b ("mm: memcg/slab: charge individual slab objects instead of pages")
+> >         commit b4e0b68fbd9d ("mm: memcontrol: use obj_cgroup APIs to charge kmem pages")
+> >
+> > But user memory allocations (LRU pages) pinning memcgs for a long time -
+> > it exists at a larger scale and is causing recurring problems in the real
+> > world: page cache doesn't get reclaimed for a long time, or is used by the
+> > second, third, fourth, ... instance of the same job that was restarted into
+> > a new cgroup every time. Unreclaimable dying cgroups pile up, waste memory,
+> > and make page reclaim very inefficient.
+> >
+> > We can convert LRU pages and most other raw memcg pins to the objcg direction
+> > to fix this problem, and then the LRU pages will not pin the memcgs.
+> >
+> > This patchset aims to make the LRU pages to drop the reference to memory
+> > cgroup by using the APIs of obj_cgroup. Finally, we can see that the number
+> > of the dying cgroups will not increase if we run the following test script.
+> 
+> This is amazing work!
+> 
+> Sorry if I came late, I didn't follow the threads of previous versions
+> so this might be redundant, I just have a couple of questions.
+> 
+> a) If LRU pages keep getting parented until they reach root_mem_cgroup
+> (assuming they can), aren't these pages effectively unaccounted at
+> this point or leaked? Is there protection against this?
+>
 
-syzbot found the following issue on:
+In this case, those pages are accounted in root memcg level. Unfortunately,
+there is no mechanism now to transfer a page's memcg from one to another.
+ 
+> b) Since moving charged pages between memcgs is now becoming easier by
+> using the APIs of obj_cgroup, I wonder if this opens the door for
+> future work to transfer charges to memcgs that are actually using
+> reparented resources. For example, let's say cgroup A reads a few
+> pages into page cache, and then they are no longer used by cgroup A.
+> cgroup B, however, is using the same pages that are currently charged
+> to cgroup A, so it keeps taxing cgroup A for its use. When cgroup A
+> dies, and these pages are reparented to A's parent, can we possibly
+> mark these reparented pages (maybe in the page tables somewhere) so
+> that next time they get accessed we recharge them to B instead
+> (possibly asynchronously)?
+> I don't have much experience about page tables but I am pretty sure
+> they are loaded so maybe there is no room in PTEs for something like
+> this, but I have always wondered about what we can do for this case
+> where a cgroup is consistently using memory charged to another cgroup.
+> Maybe when this memory is reparented is a good point in time to decide
+> to recharge appropriately. It would also fix the reparenty leak to
+> root problem (if it even exists).
+> 
 
-HEAD commit:    ca1fdab7fd27 Merge tag 'efi-urgent-for-v5.19-1' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=102e8560080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=542d3d75f0e6f36f
-dashboard link: https://syzkaller.appspot.com/bug?extid=8a5fc6416c175cecea34
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+From my point of view, this is going to be an improvement to the memcg
+subsystem in the future.  IIUC, most reparented pages are page cache
+pages without be mapped to users. So page tables are not a suitable
+place to record this information. However, we already have this information
+in struct obj_cgroup and struct mem_cgroup. If a page's obj_cgroup is not
+equal to the page's obj_cgroup->memcg->objcg, it means this page have
+been reparented. I am thinking if a place where a page is mapped (probably
+page fault patch) or page (cache) is written (usually vfs write path)
+is suitable to transfer page's memcg from one to another. But need more
+thinking, e.g. How to decide if a reparented page needs to be transferred?
+If we need more information to make this decision, where to store those
+information? This is my primary thoughts on this question.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Thanks.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8a5fc6416c175cecea34@syzkaller.appspotmail.com
-
-gfs2: fsid=syz:syz.0: first mount done, others may mount
-general protection fault, probably for non-canonical address 0xdffffc0000000011: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000088-0x000000000000008f]
-CPU: 1 PID: 10573 Comm: syz-executor.0 Not tainted 5.19.0-rc3-syzkaller-00038-gca1fdab7fd27 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:evict_linked_inode fs/gfs2/super.c:1329 [inline]
-RIP: 0010:gfs2_evict_inode+0xbf2/0x2030 fs/gfs2/super.c:1384
-Code: 03 80 3c 02 00 0f 85 bd 13 00 00 48 8b 9d 00 09 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bb 8c 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 e0
-RSP: 0018:ffffc90005ae7670 EFLAGS: 00010217
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc90003a83000
-RDX: 0000000000000011 RSI: ffffffff838de301 RDI: 000000000000008c
-RBP: ffff88802cd6c000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000001
-R13: ffff88802e1a5160 R14: ffff88802e1a5698 R15: ffff88802e1a5610
-FS:  00007f4c042c5700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fa58679d090 CR3: 000000007d0e3000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- evict+0x2ed/0x6b0 fs/inode.c:664
- iput_final fs/inode.c:1744 [inline]
- iput.part.0+0x562/0x820 fs/inode.c:1770
- iput+0x58/0x70 fs/inode.c:1760
- init_journal fs/gfs2/ops_fstype.c:870 [inline]
- init_inodes+0x28c/0x2720 fs/gfs2/ops_fstype.c:924
- gfs2_fill_super+0x1b49/0x28a0 fs/gfs2/ops_fstype.c:1242
- get_tree_bdev+0x440/0x760 fs/super.c:1292
- gfs2_get_tree+0x4a/0x270 fs/gfs2/ops_fstype.c:1325
- vfs_get_tree+0x89/0x2f0 fs/super.c:1497
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1320/0x1fa0 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f4c0308a63a
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f4c042c4f88 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f4c0308a63a
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f4c042c4fe0
-RBP: 00007f4c042c5020 R08: 00007f4c042c5020 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007f4c042c4fe0 R15: 0000000020047a20
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:evict_linked_inode fs/gfs2/super.c:1329 [inline]
-RIP: 0010:gfs2_evict_inode+0xbf2/0x2030 fs/gfs2/super.c:1384
-Code: 03 80 3c 02 00 0f 85 bd 13 00 00 48 8b 9d 00 09 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d bb 8c 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 e0
-RSP: 0018:ffffc90005ae7670 EFLAGS: 00010217
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc90003a83000
-RDX: 0000000000000011 RSI: ffffffff838de301 RDI: 000000000000008c
-RBP: ffff88802cd6c000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000001
-R13: ffff88802e1a5160 R14: ffff88802e1a5698 R15: ffff88802e1a5610
-FS:  00007f4c042c5700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fa58679d090 CR3: 000000007d0e3000 CR4: 0000000000350ee0
-----------------
-Code disassembly (best guess):
-   0:	03 80 3c 02 00 0f    	add    0xf00023c(%rax),%eax
-   6:	85 bd 13 00 00 48    	test   %edi,0x48000013(%rbp)
-   c:	8b 9d 00 09 00 00    	mov    0x900(%rbp),%ebx
-  12:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  19:	fc ff df
-  1c:	48 8d bb 8c 00 00 00 	lea    0x8c(%rbx),%rdi
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
-  2e:	48 89 f8             	mov    %rdi,%rax
-  31:	83 e0 07             	and    $0x7,%eax
-  34:	83 c0 03             	add    $0x3,%eax
-  37:	38 d0                	cmp    %dl,%al
-  39:	7c 08                	jl     0x43
-  3b:	84 d2                	test   %dl,%dl
-  3d:	0f                   	.byte 0xf
-  3e:	85 e0                	test   %esp,%eax
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> Thanks again for this work and please excuse my ignorance if any part
+> of what I said doesn't make sense :)
+> 
+> >
+> > ```bash
+> > #!/bin/bash
+> >
+> > dd if=/dev/zero of=temp bs=4096 count=1
+> > cat /proc/cgroups | grep memory
+> >
+> > for i in {0..2000}
+> > do
+> >         mkdir /sys/fs/cgroup/memory/test$i
+> >         echo $$ > /sys/fs/cgroup/memory/test$i/cgroup.procs
+> >         cat temp >> log
+> >         echo $$ > /sys/fs/cgroup/memory/cgroup.procs
+> >         rmdir /sys/fs/cgroup/memory/test$i
+> > done
+> >
+> > cat /proc/cgroups | grep memory
+> >
+> > rm -f temp log
+> > ```
+> >
+> > v5: https://lore.kernel.org/all/20220530074919.46352-1-songmuchun@bytedance.com/
+> > v4: https://lore.kernel.org/all/20220524060551.80037-1-songmuchun@bytedance.com/
+> > v3: https://lore.kernel.org/all/20220216115132.52602-1-songmuchun@bytedance.com/
+> > v2: https://lore.kernel.org/all/20210916134748.67712-1-songmuchun@bytedance.com/
+> > v1: https://lore.kernel.org/all/20210814052519.86679-1-songmuchun@bytedance.com/
+> > RFC v4: https://lore.kernel.org/all/20210527093336.14895-1-songmuchun@bytedance.com/
+> > RFC v3: https://lore.kernel.org/all/20210421070059.69361-1-songmuchun@bytedance.com/
+> > RFC v2: https://lore.kernel.org/all/20210409122959.82264-1-songmuchun@bytedance.com/
+> > RFC v1: https://lore.kernel.org/all/20210330101531.82752-1-songmuchun@bytedance.com/
+> >
+> > v6:
+> >  - Collect Acked-by and Reviewed-by from Roman and Michal Koutný. Thanks.
+> >  - Rebase to mm-unstable.
+> >
+> > v5:
+> >  - Lots of improvements from Johannes, Roman and Waiman.
+> >  - Fix lockdep warning reported by kernel test robot.
+> >  - Add two new patches to do code cleanup.
+> >  - Collect Acked-by and Reviewed-by from Johannes and Roman.
+> >  - I didn't replace local_irq_disable/enable() to local_lock/unlock_irq() since
+> >    local_lock/unlock_irq() takes an parameter, it needs more thinking to transform
+> >    it to local_lock.  It could be an improvement in the future.
+> >
+> > v4:
+> >  - Resend and rebased on v5.18.
+> >
+> > v3:
+> >  - Removed the Acked-by tags from Roman since this version is based on
+> >    the folio relevant.
+> >
+> > v2:
+> >  - Rename obj_cgroup_release_kmem() to obj_cgroup_release_bytes() and the
+> >    dependencies of CONFIG_MEMCG_KMEM (suggested by Roman, Thanks).
+> >  - Rebase to linux 5.15-rc1.
+> >  - Add a new pacth to cleanup mem_cgroup_kmem_disabled().
+> >
+> > v1:
+> >  - Drop RFC tag.
+> >  - Rebase to linux next-20210811.
+> >
+> > RFC v4:
+> >  - Collect Acked-by from Roman.
+> >  - Rebase to linux next-20210525.
+> >  - Rename obj_cgroup_release_uncharge() to obj_cgroup_release_kmem().
+> >  - Change the patch 1 title to "prepare objcg API for non-kmem usage".
+> >  - Convert reparent_ops_head to an array in patch 8.
+> >
+> > Thanks for Roman's review and suggestions.
+> >
+> > RFC v3:
+> >  - Drop the code cleanup and simplification patches. Gather those patches
+> >    into a separate series[1].
+> >  - Rework patch #1 suggested by Johannes.
+> >
+> > RFC v2:
+> >  - Collect Acked-by tags by Johannes. Thanks.
+> >  - Rework lruvec_holds_page_lru_lock() suggested by Johannes. Thanks.
+> >  - Fix move_pages_to_lru().
+> >
+> > Muchun Song (11):
+> >   mm: memcontrol: remove dead code and comments
+> >   mm: rename unlock_page_lruvec{_irq, _irqrestore} to
+> >     lruvec_unlock{_irq, _irqrestore}
+> >   mm: memcontrol: prepare objcg API for non-kmem usage
+> >   mm: memcontrol: make lruvec lock safe when LRU pages are reparented
+> >   mm: vmscan: rework move_pages_to_lru()
+> >   mm: thp: make split queue lock safe when LRU pages are reparented
+> >   mm: memcontrol: make all the callers of {folio,page}_memcg() safe
+> >   mm: memcontrol: introduce memcg_reparent_ops
+> >   mm: memcontrol: use obj_cgroup APIs to charge the LRU pages
+> >   mm: lru: add VM_WARN_ON_ONCE_FOLIO to lru maintenance function
+> >   mm: lru: use lruvec lock to serialize memcg changes
+> >
+> >  fs/buffer.c                      |   4 +-
+> >  fs/fs-writeback.c                |  23 +-
+> >  include/linux/memcontrol.h       | 218 +++++++++------
+> >  include/linux/mm_inline.h        |   6 +
+> >  include/trace/events/writeback.h |   5 +
+> >  mm/compaction.c                  |  39 ++-
+> >  mm/huge_memory.c                 | 153 ++++++++--
+> >  mm/memcontrol.c                  | 584 +++++++++++++++++++++++++++------------
+> >  mm/migrate.c                     |   4 +
+> >  mm/mlock.c                       |   2 +-
+> >  mm/page_io.c                     |   5 +-
+> >  mm/swap.c                        |  49 ++--
+> >  mm/vmscan.c                      |  66 ++---
+> >  13 files changed, 776 insertions(+), 382 deletions(-)
+> >
+> >
+> > base-commit: 882be1ed6b1b5073fc88552181b99bd2b9c0031f
+> > --
+> > 2.11.0
+> >
+> >
+> 

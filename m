@@ -2,60 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D6E55CB6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606BC55E12B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232848AbiF0HbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
+        id S232776AbiF0Hco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbiF0HbS (ORCPT
+        with ESMTP id S232850AbiF0Hcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:31:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145BF389A;
-        Mon, 27 Jun 2022 00:31:10 -0700 (PDT)
+        Mon, 27 Jun 2022 03:32:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B5A5FE6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:32:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4F98B80F92;
-        Mon, 27 Jun 2022 07:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90B09C341C8;
-        Mon, 27 Jun 2022 07:31:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4DD5B80CA5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:32:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C426C341C8;
+        Mon, 27 Jun 2022 07:32:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656315067;
-        bh=LvUqnHVulczahgyXpi9jFp5F1xbG8GaIH3qq2YaHXQo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t6JcbhWMkiQZukzZlOa1CPbJHHuLBPxa8qSHy7YIk8V3kRDmGVbBRhmRMpIe4ICGi
-         RlWoRu3qXIUqEKpkzXJI4gk5mnLeacu9j3sZf9NzHmYnWThcZayRuwqQdMUlgs5woq
-         UVus+IWW0dCW0xGr5b3N1ps4b7PjFdO7CCyFiEEjediRO3gurPmqlJYqRyxdoLJpwB
-         TC9zyyV9cim7XqWQuwHY784z4563wh6RUCe/k4wc+aQfTAV/28A/nmj2BzOx7x04jB
-         J904wT2rvx1/IOmzh8iwORn5VKx1qoaCfyOITogdCVNEndUdPXxDRWp331GVe4gyNl
-         huQtOBdR6U85A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1o5jD6-0004yY-D6; Mon, 27 Jun 2022 09:31:04 +0200
-Date:   Mon, 27 Jun 2022 09:31:04 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        s=k20201202; t=1656315158;
+        bh=oRzFw+QoSeFZcHWgfFlSW6JTW6TExChSidIjg0mxE2Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RFkda938osRp68VLJuwyRXvZr5IggLtnmxt4WQeICbE5fpFX3GPFt/9HNAorRsBGT
+         FoC9YpYT7mJglTIuXeiLsUMVO9Kcee8MCL36H79QKtyFmd3FFUgkDRsFidhKGM99U/
+         kaiojECVp15Zf0kMaHLaHeu07rulcOFHa9dMIggUHd9ToQEuINjDIx6QEz01M1qZdF
+         6trakzlJlyx1okKU2xnRbDZKbYqhwITqmOWGBn7BvdTQwdZNURB3dvYgkblMeYN4Sw
+         8MOc/gaUWW9CHhEQ2Dspf7pQIqihn7n6lEzegKqhv1r50jcsYHwh9YuZUUTdCb6IZL
+         5cl3LqsCpMJbQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o5jEZ-003LKN-Qa;
+        Mon, 27 Jun 2022 08:32:36 +0100
+Date:   Mon, 27 Jun 2022 08:32:35 +0100
+Message-ID: <87czeu36jw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: qcom: Add support for modular builds
-Message-ID: <YrlcuExtGFp/ASF+@hovoldconsulting.com>
-References: <20220519094646.23009-1-johan+linaro@kernel.org>
- <20220623155213.GA1450949@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220623155213.GA1450949@bhelgaas>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V12 01/10] APCI: irq: Add support for multiple GSI domains
+In-Reply-To: <d7bc898d-187c-7cb5-73c5-ab28602548ca@loongson.cn>
+References: <1655273250-23495-1-git-send-email-lvjianmin@loongson.cn>
+        <1655273250-23495-2-git-send-email-lvjianmin@loongson.cn>
+        <87k09ipfe2.wl-maz@kernel.org>
+        <0247b7d5-aca9-5db1-e712-4783ee672110@loongson.cn>
+        <87fsk2p8b5.wl-maz@kernel.org>
+        <d7bc898d-187c-7cb5-73c5-ab28602548ca@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,108 +75,232 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 10:52:13AM -0500, Bjorn Helgaas wrote:
-> On Thu, May 19, 2022 at 11:46:46AM +0200, Johan Hovold wrote:
-> > Allow the Qualcomm PCIe controller driver to be built as a module, which
-> > is useful for multi-platform kernels as well as during development.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On Sat, 25 Jun 2022 10:34:34 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
+>=20
+>=20
+>=20
+> On 2022/6/18 =E4=B8=8B=E5=8D=886:36, Marc Zyngier wrote:
+> > On Wed, 15 Jun 2022 10:28:47 +0100,
+> > Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> >>=20
+> >>=20
+> >>=20
+> >> On 2022/6/15 =E4=B8=8B=E5=8D=883:14, Marc Zyngier wrote:
+> >>> On Wed, 15 Jun 2022 07:07:21 +0100,
+> >>> Jianmin Lv <lvjianmin@loongson.cn> wrote:
+> >>>>=20
+> >>>> From: Marc Zyngier <maz@kernel.org>
+> >>>>=20
+> >>>> In an unfortunate departure from the ACPI spec, the LoongArch
+> >>>> architecture split its GSI space across multiple interrupt
+> >>>> controllers.
+> >>>>=20
+> >>>> In order to be able to reuse sthe core code and prevent
+> >>>> architectures from reinventing an already square wheel, offer
+> >>>> the arch code the ability to register a dispatcher function
+> >>>> that will return the domain fwnode for a given GSI.
+> >>>>=20
+> >>>> The ARM GIC drivers are updated to support this (with a single
+> >>>> domain, as intended).
+> >>>>=20
+> >>>> Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
+> >>>=20
+> >>> I don't think this tag is appropriate here.
+> >>>=20
+> >>>> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> >>>> Cc: Hanjun Guo <guohanjun@huawei.com>
+> >>>> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> >>>> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> >>>> ---
+> >>>>    drivers/acpi/irq.c           | 40 +++++++++++++++++++++++--------=
+---------
+> >>>>    drivers/irqchip/irq-gic-v3.c | 18 ++++++++++++------
+> >>>>    drivers/irqchip/irq-gic.c    | 18 ++++++++++++------
+> >>>>    include/linux/acpi.h         |  2 +-
+> >>>>    4 files changed, 48 insertions(+), 30 deletions(-)
+> >>>>=20
+> >>>> diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
+> >>>> index c68e694..b7460ab 100644
+> >>>> --- a/drivers/acpi/irq.c
+> >>>> +++ b/drivers/acpi/irq.c
+> >>>> @@ -12,7 +12,7 @@
+> >>>>      enum acpi_irq_model_id acpi_irq_model;
+> >>>>    -static struct fwnode_handle *acpi_gsi_domain_id;
+> >>>> +static struct fwnode_handle *(*acpi_get_gsi_domain_id)(u32 gsi);
+> >>>>      /**
+> >>>>     * acpi_gsi_to_irq() - Retrieve the linux irq number for a given =
+GSI
+> >>>> @@ -26,10 +26,7 @@
+> >>>>     */
+> >>>>    int acpi_gsi_to_irq(u32 gsi, unsigned int *irq)
+> >>>>    {
+> >>>> -	struct irq_domain *d =3D irq_find_matching_fwnode(acpi_gsi_domain_=
+id,
+> >>>> -							DOMAIN_BUS_ANY);
+> >>>> -
+> >>>> -	*irq =3D irq_find_mapping(d, gsi);
+> >>>> +	*irq =3D acpi_register_gsi(NULL, gsi, -1, -1);
+> >>>=20
+> >>> What is this?
+> >>>=20
+> >>> - This wasn't part of my initial patch, and randomly changing patches
+> >>>     without mentioning it isn't acceptable
+> >>>=20
+> >>> - you *cannot* trigger a registration here, as this isn't what the API
+> >>>     advertises
+> >>>=20
+> >>> - what makes you think that passing random values (NULL, -1... )to
+> >>>     acpi_register_gsi() is an acceptable thing to do?
+> >>>=20
+> >>> The original patch had:
+> >>>=20
+> >>> @@ -26,8 +26,10 @@ static struct fwnode_handle *acpi_gsi_domain_id;
+> >>>      */
+> >>>     int acpi_gsi_to_irq(u32 gsi, unsigned int *irq)
+> >>>     {
+> >>> -	struct irq_domain *d =3D irq_find_matching_fwnode(acpi_gsi_domain_i=
+d,
+> >>> -							DOMAIN_BUS_ANY);
+> >>> +	struct irq_domain *d;
+> >>> +
+> >>> +	d =3D irq_find_matching_fwnode(acpi_get_gsi_domain_id(gsi),
+> >>> +				     DOMAIN_BUS_ANY);
+> >>>       	*irq =3D irq_find_mapping(d, gsi);
+> >>>     	/*
+> >>>=20
+> >>> and I don't think it needs anything else. If something breaks, let's
+> >>> discuss it, but don't abuse the API nor the fact that I usually don't
+> >>> review my own patches to sneak things in...
+> >>>=20
+> >>=20
+> >> Sorry, Marc, I don't know how to communicate with you for my change
+> >> here before submitting the patch, maybe I should mention it in the
+> >> patch commit or code.
+> >=20
+> > It should at least be discussed first, like you are doing it here.
+> >=20
+> >> When I use the patch, I found that acpi_gsi_to_irq in driver/acpi/irq.c
+> >> only handle existed mapping and will return -EINVAL if mapping not
+> >> found. When I test on my machine, a calling stack is as following:
+> >>=20
+> >>=20
+> >> acpi_bus_init
+> >> ->acpi_enable_subsystem
+> >>    ->acpi_ev_install_xrupt_handlers
+> >>      ->acpi_ev_install_sci_handler
+> >>        ->acpi_os_install_interrupt_handler
+> >>          ->acpi_gsi_to_irq
+> >>=20
+> >>=20
+> >> the acpi_gsi_to_irq returned -EINVAL because of no mapping found. I
+> >> looked into acpi_gsi_to_irq of x86, acpi_register_gsi is called in it
+> >> so that new mapping for gsi is created if no mapping is found.
+> >=20
+> > So it looks like we have a discrepancy between the x86 and ARM on that
+> > front.
+> >=20
+> > Lorenzo, Hanjun, can you please have a look at this and shed some
+> > light on what the expected behaviour is? It looks like we never
+> > encountered an issue with this on arm64, which tends to indicate that
+> > we don't usually use the above path.
+> >=20
+> >> I looked into generic acpi_register_gsi, the existed mapping will be
+> >> checked first by calling irq_find_mapping, so I think calling
+> >> acpi_register_gsi in acpi_gsi_to_irq can address the problem.
+> >>=20
+> >> But you're right, I'm wrong that I passed random value of -1 to
+> >> acpi_register_gsi. I don't find a right way to address the problem
+> >> without changing acpi_gsi_to_irq. I'll continue to work for the
+> >> problem.
+> >=20
+> > At the very least, this should be indirected so that the existing
+> > behaviour isn't affected, no matter how badly broken arm64 may or may
+> > not be here. Please have a look at the patch below that should help
+> > you with this.
+> >=20
+> > Thanks,
+> >=20
+> > 	M.
+> >=20
+> >  From 3e6b87ea49473d0eb384f42e76d584a1495a538c Mon Sep 17 00:00:00 2001
+> > From: Marc Zyngier <maz@kernel.org>
+> > Date: Sat, 18 Jun 2022 11:29:33 +0100
+> > Subject: [PATCH] ACPI: irq: Allow acpi_gsi_to_irq() to have an arch-spe=
+cific
+> >   fallback
+> >=20
+> > It appears that the generic version of acpi_gsi_to_irq() doesn't
+> > fallback to establishing a mapping if there is no pre-existing
+> > one while the x86 version does.
+> >=20
+> > While arm64 seems unaffected by it, LoongArch is relying on the x86
+> > behaviour. In an effort to prevent new architectures from reinventing
+> > the proverbial wheel, provide an optional callback that the arch code
+> > can set to restore the x86 behaviour.
+> >=20
+> > Hopefully we can eventually get rid of this in the future once
+> > the expected behaviour has been clarified.
+> >=20
+> > Reported-by: Jianmin Lv <lvjianmin@loongson.cn>
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
 > > ---
-
-> > +static void qcom_pcie_host_deinit(struct qcom_pcie *pcie)
-> > +{
-> > +	qcom_ep_reset_assert(pcie);
-> > +	if (pcie->cfg->ops->post_deinit)
-> > +		pcie->cfg->ops->post_deinit(pcie);
-> > +	phy_power_off(pcie->phy);
-> > +	pcie->cfg->ops->deinit(pcie);
-> 
-> These post_deinit/deinit names look backwards.  Why would we call a
-> "post_deinit()" method *before* the "deinit()" method?  It would make
-> sense if we called "pre_deinit()" followed by "deinit()".
-
-Yeah, that annoys me as well, but those are the names the driver
-currently use.
-
-I considered renaming the deinit callback but instead sent a follow up
-patch to remove both of these callbacks now that the pipe clock rework
-that depends on them has been merged, but seems like the post_init one
-will be needed for the DBI accesses.
-
-I can respin the above mentioned patch to drop or or rename the badly
-named one when things settle down a bit.
-
-> >  static const struct dw_pcie_host_ops qcom_pcie_dw_ops = {
-> >  	.host_init = qcom_pcie_host_init,
-> >  };
-> > @@ -1651,6 +1660,22 @@ static int qcom_pcie_probe(struct platform_device *pdev)
-> >  	return ret;
-> >  }
-> >  
-> > +static int qcom_pcie_remove(struct platform_device *pdev)
-> > +{
-> > +	struct qcom_pcie *pcie = platform_get_drvdata(pdev);
-> > +	struct device *dev = &pdev->dev;
+> >   drivers/acpi/irq.c   | 8 ++++++--
+> >   include/linux/acpi.h | 1 +
+> >   2 files changed, 7 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/acpi/irq.c b/drivers/acpi/irq.c
+> > index 6e1633ac1756..66c5f01995d0 100644
+> > --- a/drivers/acpi/irq.c
+> > +++ b/drivers/acpi/irq.c
+> > @@ -13,6 +13,7 @@
+> >   enum acpi_irq_model_id acpi_irq_model;
+> >     static struct fwnode_handle *(*acpi_get_gsi_domain_id)(u32 gsi);
+> > +static int (*acpi_gsi_to_irq_fallback)(u32 gsi);
+> >     /**
+> >    * acpi_gsi_to_irq() - Retrieve the linux irq number for a given GSI
+> > @@ -33,9 +34,12 @@ int acpi_gsi_to_irq(u32 gsi, unsigned int *irq)
+> >     	*irq =3D irq_find_mapping(d, gsi);
+> >   	/*
+> > -	 * *irq =3D=3D 0 means no mapping, that should
+> > -	 * be reported as a failure
+> > +	 * *irq =3D=3D 0 means no mapping, that should be reported as a
+> > +	 * failure, unless there is an arch-specific fallback handler.
+> >   	 */
+> > +	if (!*irq && acpi_gsi_to_irq_fallback)
+> > +		*irq =3D acpi_gsi_to_irq_fallback(gsi);
 > > +
-> > +	dw_pcie_host_deinit(&pcie->pci->pp);
-> > +	qcom_pcie_host_deinit(pcie);
-> > +
-> > +	phy_exit(pcie->phy);
-> > +
-> > +	pm_runtime_put_sync(dev);
-> > +	pm_runtime_disable(dev);
-> 
-> Why is this not more symmetric with qcom_pcie_probe()?  Maybe struct
-> dw_pcie_host_ops needs a new .host_deinit() pointer that would be
-> called from dw_pcie_host_deinit()?
+> >   	return (*irq > 0) ? 0 : -EINVAL;
+> >   }
+> >   EXPORT_SYMBOL_GPL(acpi_gsi_to_irq);
+> > diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> > index 957e23f727ea..71d3719e3ec4 100644
+> > --- a/include/linux/acpi.h
+> > +++ b/include/linux/acpi.h
+> > @@ -357,6 +357,7 @@ int acpi_isa_irq_to_gsi (unsigned isa_irq, u32 *gsi=
+);
+> >     void acpi_set_irq_model(enum acpi_irq_model_id model,
+> >   			struct fwnode_handle *(*)(u32));
+> > +void acpi_set_gsi_to_irq_fallback(int (*)(u32));
+> >  =20
+>=20
+> Hi, Marc
+>=20
+> I want to make sure that if acpi_set_gsi_to_irq_fallback should be
+> implemented in driver/acpi/irq.c as acpi_set_irq_model, e.g.:
+>=20
+> void __init acpi_set_gsi_to_irq_fallback(int (*fn)(u32))
+> {
+> 	acpi_gsi_to_irq_fallback =3D fn;
+> }
+>=20
+> And then, arch related code can call acpi_set_gsi_to_irq_fallback
+> to register a callback.
 
-Yeah, I considered that too but decided it's not needed to implement
-modular builds for this driver. Instead I did the ground work by adding
-a deinit helper function so that it's easier to track any additions to
-the host_init() callback and which can later be called by core if
-someone decides to clean up core and add a deinit callback.
+Yes. I had something like that, but forgot to add it to the patch,
+apparently.
 
-Looks like someone just posted something along these lines, but this
-would conflict with the split MSI series which is otherwise ready to be
-merged:
+=17	M.
 
-	https://lore.kernel.org/r/20220624143947.8991-9-Sergey.Semin@baikalelectronics.ru
-
-Also note that there are other drivers that implement remove() without
-this callback already today.
-
-> In the probe path, we have this:
-> 
->   qcom_pcie_probe
->     pm_runtime_enable
->     pm_runtime_get_sync
->     phy_init(pcie->phy)
->     dw_pcie_host_init
->       pp->ops->host_init
->         qcom_pcie_host_init             # .host_init()
->           pcie->cfg->ops->init(pcie)
->           phy_power_on(pcie->phy)
->           pcie->cfg->ops->post_init(pcie)
->           qcom_ep_reset_deassert(pcie)
-> 
-> The remove path does do things in the opposite order, which makes
-> sense, but the call to qcom_pcie_host_deinit() breaks the symmetry:
-> 
->   qcom_pcie_remove
->     dw_pcie_host_deinit
->     qcom_pcie_host_deinit
->       qcom_ep_reset_assert
->       pcie->cfg->ops->post_deinit
->       phy_power_off(pcie->phy)
->       pcie->cfg->ops->deinit
->     phy_exit(pcie->phy)
->     pm_runtime_put_sync
->     pm_runtime_disable
-
-Yeah, I didn't want to go rewrite core just for this basic driver
-functionality. Especially with so many things already in flux.
-
-As mentioned above, everything is instead prepared to move over to such
-a callback if and when it materialises.
-
-Johan
+--=20
+Without deviation from the norm, progress is not possible.

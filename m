@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E06A55D95F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6496355E36C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239995AbiF0L6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S240060AbiF0L6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238623AbiF0Lv6 (ORCPT
+        with ESMTP id S238626AbiF0Lv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:51:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6EE7660;
-        Mon, 27 Jun 2022 04:44:54 -0700 (PDT)
+        Mon, 27 Jun 2022 07:51:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BE0A461;
+        Mon, 27 Jun 2022 04:44:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D141B80D37;
-        Mon, 27 Jun 2022 11:44:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5065C3411D;
-        Mon, 27 Jun 2022 11:44:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94F28612E3;
+        Mon, 27 Jun 2022 11:44:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD7DC341C7;
+        Mon, 27 Jun 2022 11:44:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330292;
-        bh=prAZB8L5jCOXRzpnKNMD8lRNgmHpfgzOwrR98cT5clo=;
+        s=korg; t=1656330295;
+        bh=vdb3E6WRlDL20adQ9KZ21R2W9oW3boQenfgRmu7+Rxg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ENUEP4Ec/lALyVNOCJpkF8eaO5tHFKrdnErJkGiTD1Y4rd6+JfMlic+7oxfG9zXy1
-         5Ln4kFSDad6f26//3BH8HKg9vooqwOqFB6UGRg8Pr799FMhfwVDBVw7la1CLf2VdTH
-         dsKJLixMX00Ew5GZJBu4OdGRi0FRWh/KzHgi0H54=
+        b=ppL0uATf7RO5lJ8ljfiUwJNTtY7AH4CEMWOs+Uf7eL3IFf5nsW4oomXU/BV2a8PyW
+         Xwg+B6sxo/qxbEcFxlBgSMIiMaHRYgtPGaEZ5AUR4kj+ujXSu0h32uRuC8yZLAh3Qe
+         mdIRe4pcGNWVV9bUymWks/7lQWvIyoeb2S6ZbFtA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Jialin Zhang <zhangjialin11@huawei.com>,
         Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.18 149/181] iio: adc: adi-axi-adc: Fix refcount leak in adi_axi_adc_attach_client
-Date:   Mon, 27 Jun 2022 13:22:02 +0200
-Message-Id: <20220627111949.005101165@linuxfoundation.org>
+Subject: [PATCH 5.18 150/181] iio: adc: ti-ads131e08: add missing fwnode_handle_put() in ads131e08_alloc_channels()
+Date:   Mon, 27 Jun 2022 13:22:03 +0200
+Message-Id: <20220627111949.033741522@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
 References: <20220627111944.553492442@linuxfoundation.org>
@@ -55,45 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Jialin Zhang <zhangjialin11@huawei.com>
 
-commit ada7b0c0dedafd7d059115adf49e48acba3153a8 upstream.
+commit 47dcf770abc793f347a65a24c24d550c936f08b0 upstream.
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+fwnode_handle_put() should be used when terminating
+device_for_each_child_node() iteration with break or return to prevent
+stale device node references from being left behind.
 
-Fixes: ef04070692a2 ("iio: adc: adi-axi-adc: add support for AXI ADC IP core")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220524074517.45268-1-linmq006@gmail.com
+Fixes: d935eddd2799 ("iio: adc: Add driver for Texas Instruments ADS131E0x ADC family")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Jialin Zhang <zhangjialin11@huawei.com>
+Link: https://lore.kernel.org/r/20220517033020.2033324-1-zhangjialin11@huawei.com
 Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/adi-axi-adc.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/iio/adc/ti-ads131e08.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
---- a/drivers/iio/adc/adi-axi-adc.c
-+++ b/drivers/iio/adc/adi-axi-adc.c
-@@ -322,16 +322,19 @@ static struct adi_axi_adc_client *adi_ax
+--- a/drivers/iio/adc/ti-ads131e08.c
++++ b/drivers/iio/adc/ti-ads131e08.c
+@@ -739,7 +739,7 @@ static int ads131e08_alloc_channels(stru
+ 	device_for_each_child_node(dev, node) {
+ 		ret = fwnode_property_read_u32(node, "reg", &channel);
+ 		if (ret)
+-			return ret;
++			goto err_child_out;
  
- 		if (!try_module_get(cl->dev->driver->owner)) {
- 			mutex_unlock(&registered_clients_lock);
-+			of_node_put(cln);
- 			return ERR_PTR(-ENODEV);
+ 		ret = fwnode_property_read_u32(node, "ti,gain", &tmp);
+ 		if (ret) {
+@@ -747,7 +747,7 @@ static int ads131e08_alloc_channels(stru
+ 		} else {
+ 			ret = ads131e08_pga_gain_to_field_value(st, tmp);
+ 			if (ret < 0)
+-				return ret;
++				goto err_child_out;
+ 
+ 			channel_config[i].pga_gain = tmp;
  		}
+@@ -758,7 +758,7 @@ static int ads131e08_alloc_channels(stru
+ 		} else {
+ 			ret = ads131e08_validate_channel_mux(st, tmp);
+ 			if (ret)
+-				return ret;
++				goto err_child_out;
  
- 		get_device(cl->dev);
- 		cl->info = info;
- 		mutex_unlock(&registered_clients_lock);
-+		of_node_put(cln);
- 		return cl;
- 	}
+ 			channel_config[i].mux = tmp;
+ 		}
+@@ -784,6 +784,10 @@ static int ads131e08_alloc_channels(stru
+ 	st->channel_config = channel_config;
  
- 	mutex_unlock(&registered_clients_lock);
-+	of_node_put(cln);
- 
- 	return ERR_PTR(-EPROBE_DEFER);
+ 	return 0;
++
++err_child_out:
++	fwnode_handle_put(node);
++	return ret;
  }
+ 
+ static void ads131e08_regulator_disable(void *data)
 
 

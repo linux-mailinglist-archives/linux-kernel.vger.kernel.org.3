@@ -2,97 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE3655C12C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B18E55DE6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240274AbiF0MPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
+        id S240293AbiF0MQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233238AbiF0MPl (ORCPT
+        with ESMTP id S233238AbiF0MQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:15:41 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CFDDED0;
-        Mon, 27 Jun 2022 05:15:40 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id h187so14193128ybg.0;
-        Mon, 27 Jun 2022 05:15:40 -0700 (PDT)
+        Mon, 27 Jun 2022 08:16:44 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD98DED0;
+        Mon, 27 Jun 2022 05:16:44 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id h9-20020a17090a648900b001ecb8596e43so9230421pjj.5;
+        Mon, 27 Jun 2022 05:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gzxBbJxhdHK6PNoavR99hps1yhOfCLiWPLboRKYj7ko=;
+        b=ZRFbVcvsBqhinQXNr/BOVOG9sV99j1Dkygit4IkDetSqhua+BHHR6GqN5kV1qSnThz
+         xIaiZ3SYUUAoXBZVhNgovSnGPg6F2yJOiZ/JVVa7dFDoHGNLVGe8FROiDZwnMefWq/G6
+         ohPY9NdesHaJYPKSfhgQgU/xcW8rzUT9kgrzm8SuVV1BbKTi1VxbLATSiE13Zwkeg0Mn
+         N1A9yQ8ekUkK8wWu6MKX09H4SNITQrJZZR/uzQeI360+EnGCpXu6srsBvpmDwdJ/G13o
+         WWIg1foMw6ZmcZoDMjvA0khfRBdx8qnwYADyLxoNpFup+fno95QRfRBgVRoun4OBFpUE
+         2G7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VV+3h/hOlp+Oqi8pE+qwrDgICcdZetvcWIrS7f4iZ4w=;
-        b=G7q2GM+3KjuplnwzdyqeXX35Pt2AyhnLviySmtIC8IlqNWM8IGUmFn2P/6vNDDSp+P
-         ya/W+NfULx2HpeefUvoYUeRLaL+TUnrcgYPjJ44fLmG8QkEkQW77avNhrl1mt/iIwrxo
-         2bVhAEzZMfgPBhVMyaPvw1rrqrGV/DeTqWyj23q+EvZHnzNxH69EShEVWdqbrtVSN07w
-         EfWKGy1PnZA264cxmq7z+SovfThnMmDqEBwqkjs1EwkCUrG9XYkMbH7QLNOFC+0ZaNAp
-         Ko2GZ+ZxPrCqMq3imQ3S7H1QOmXRlm/T2oMHsdxfpWhMNUKF6mmEeXe5SwNurj9R0tUZ
-         yooA==
-X-Gm-Message-State: AJIora8BUxpk/3H3Nb5qKv+iQy1zZnETPq1iYl0qR1HT8HiTblwy61Wa
-        BL8S0QptSIjE/mzBJxFGbltq4gYkhlrrfog21EwTht++
-X-Google-Smtp-Source: AGRyM1sIcaPnangclcdjMv/KoVhma5+DuiOxcAfH1kPxywchCZWgQK9kFKsDeE0uJPZcFhHgSU8CfaEJReHPYqf6oMg=
-X-Received: by 2002:a05:6902:147:b0:669:b0af:c7ea with SMTP id
- p7-20020a056902014700b00669b0afc7eamr12416736ybh.622.1656332139357; Mon, 27
- Jun 2022 05:15:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gzxBbJxhdHK6PNoavR99hps1yhOfCLiWPLboRKYj7ko=;
+        b=Efmosx55uethjpNLWm6LUvGs2BIYIiSeXBsl/TvjzubqkBuZrE9W96PFOIMhWqgLd/
+         e5g3wkitAgOyHZYA1XDtDJhRcE3Jntewpwz5mQ6mTC/MLDF07FiQh1GdxNbidAzn5f6P
+         YU4DaiT0Ob/FQewjDLivGeGnybK7k/W3j70NdE0mw3Gqov/fEbIcNS4Z7TVnK0zCOXWU
+         WgaM9tbXSuz2URfE+2ckXEaWu24z9lZvnEYAEOiKpkcaVdAJ1H0714MB9fxR9Jx5dIS0
+         rGtjyVuefPYe9HIhaPq7+N5B7qmmg9+IMdjCYGEXgUqwT97zKcIYxKe3DtO/hBShLXak
+         uLVg==
+X-Gm-Message-State: AJIora84SPPddxmwUyQ8Izqd/WuqupDn5Q8mfWrYNrUpJ5IY160OWfPF
+        AeBH5fRUjJ1PFzm9VD8d8SY=
+X-Google-Smtp-Source: AGRyM1tg6C4UQ21pl4+ohFSN9n9PXFWmzvYebZbqdMhPyjty+7iSxesWjR6H5X46le/MTfoHBdLS4A==
+X-Received: by 2002:a17:90b:1d84:b0:1ed:5918:74e3 with SMTP id pf4-20020a17090b1d8400b001ed591874e3mr8785846pjb.173.1656332203802;
+        Mon, 27 Jun 2022 05:16:43 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.82])
+        by smtp.gmail.com with ESMTPSA id h6-20020a170902680600b00163ffe73300sm7057389plk.137.2022.06.27.05.16.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 05:16:43 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org
+Cc:     mathew.j.martineau@linux.intel.com, matthieu.baerts@tessares.net,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH net-next] net: mptcp: fix some spelling mistake in mptcp
+Date:   Mon, 27 Jun 2022 20:16:25 +0800
+Message-Id: <20220627121626.1595732-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <1843211.tdWV9SEqCh@kreacher> <2653857.mvXUDI8C0e@kreacher>
- <2726954.BEx9A2HvPv@kreacher> <YrmWpn03cys9WUK3@google.com>
-In-Reply-To: <YrmWpn03cys9WUK3@google.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Jun 2022 14:15:25 +0200
-Message-ID: <CAJZ5v0h=_grbXEJa2LKKvbkQ+GkLPvnnThnD-_J01ToC2-48cQ@mail.gmail.com>
-Subject: Re: [GIT PULL] Immutable branch between MFD and ACPI due for the
- v5.20 merge window
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee,
+From: Menglong Dong <imagedong@tencent.com>
 
-On Mon, Jun 27, 2022 at 1:43 PM Lee Jones <lee.jones@linaro.org> wrote:
->
-> Rafael,
->
-> As requested.
->
-> The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
->
->   Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-mfd-acpi-for-rafael-v5.20
->
-> for you to fetch changes up to 0c9b9c2ac0df57b6b5949a51c45043b345698428:
->
->   mfd: core: Use acpi_dev_for_each_child() (2022-06-27 12:22:06 +0100)
->
-> ----------------------------------------------------------------
-> Immutable branch between MFD and ACPI due for the v5.20 merge window
->
-> ----------------------------------------------------------------
-> Rafael J. Wysocki (1):
->       mfd: core: Use acpi_dev_for_each_child()
->
->  drivers/mfd/mfd-core.c | 31 ++++++++++++++++++++++++-------
->  1 file changed, 24 insertions(+), 7 deletions(-)
->
-> --
+codespell finds some spelling mistake in mptcp:
 
-Pulled, thank you!
+net/mptcp/subflow.c:1624: interaces ==> interfaces
+net/mptcp/pm_netlink.c:1130: regarless ==> regardless
+
+Just fix them.
+
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
+---
+ net/mptcp/pm_netlink.c | 2 +-
+ net/mptcp/subflow.c    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
+index e099f2a12504..3de83e2a2611 100644
+--- a/net/mptcp/pm_netlink.c
++++ b/net/mptcp/pm_netlink.c
+@@ -1127,7 +1127,7 @@ void mptcp_pm_nl_subflow_chk_stale(const struct mptcp_sock *msk, struct sock *ss
+ 			}
+ 			unlock_sock_fast(ssk, slow);
+ 
+-			/* always try to push the pending data regarless of re-injections:
++			/* always try to push the pending data regardless of re-injections:
+ 			 * we can possibly use backup subflows now, and subflow selection
+ 			 * is cheap under the msk socket lock
+ 			 */
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index 654cc602ff2c..8c3e699d3387 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -1621,7 +1621,7 @@ int mptcp_subflow_create_socket(struct sock *sk, struct socket **new_sock)
+ 	/* the newly created socket really belongs to the owning MPTCP master
+ 	 * socket, even if for additional subflows the allocation is performed
+ 	 * by a kernel workqueue. Adjust inode references, so that the
+-	 * procfs/diag interaces really show this one belonging to the correct
++	 * procfs/diag interfaces really show this one belonging to the correct
+ 	 * user.
+ 	 */
+ 	SOCK_INODE(sf)->i_ino = SOCK_INODE(sk->sk_socket)->i_ino;
+-- 
+2.36.1
+

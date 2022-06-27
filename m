@@ -2,143 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E92F55CD42
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434BE55C128
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238039AbiF0P2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
+        id S238077AbiF0P3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236142AbiF0P2y (ORCPT
+        with ESMTP id S238050AbiF0P3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:28:54 -0400
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC83C186D6;
-        Mon, 27 Jun 2022 08:28:53 -0700 (PDT)
-Received: by mail-qv1-f41.google.com with SMTP id y14so15176369qvs.10;
-        Mon, 27 Jun 2022 08:28:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cew7BXEncqN8cEBUoXDCQbsV+p26HXetoRwi9DMFMVs=;
-        b=LRCTX8Y9dgMJqFIhwE/i3uqSDSIkxJvrDlBHNfnzO3MBQAQT5QsMtwG4QLOHrj3SZQ
-         tgqfWWU4QRYOpyBFW45sknacopm/e6R/768lGXMsdACYhclu6w5c7h7B6n88mO1uIy/t
-         g1d8XrrD8oRwKv5Hd29DFvSha25IGnWo2yDcyHwud4xoXjWTlJnLzr0H7pTXAxw8amJC
-         qV8q1fdeyWtDbeRTfTYCXDc9gP95WN1U204nH/eTYWgJ4ytVYkLpPGjWdRJDiWHtOufA
-         Rg9U3d0FkbrlLRR5hxMgdv9dQcmxGnDxrOQsT29MxgH7CXOULyqvAUzcC8BoMfstQYA+
-         5Enw==
-X-Gm-Message-State: AJIora8RdXeJPwxKmn/rtf7qqnu05UQdULt/SK2nPQygvu1nIlUDFMNq
-        eqM09dGCMmE+wgRIMeJzZbsT36a5d9M9Ew==
-X-Google-Smtp-Source: AGRyM1sobL/E7i+JAR2kzgBGM7ySAhIBjURHEBoPEwdKho8M6wnfZWmdyw16sCo3pZqnR6qOmcciWA==
-X-Received: by 2002:ac8:59c6:0:b0:305:2f9c:a53e with SMTP id f6-20020ac859c6000000b003052f9ca53emr9367546qtf.59.1656343732501;
-        Mon, 27 Jun 2022 08:28:52 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id t22-20020a05622a181600b00316dc1ffbb9sm7116624qtc.32.2022.06.27.08.28.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 08:28:51 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id p7so15933769ybm.7;
-        Mon, 27 Jun 2022 08:28:51 -0700 (PDT)
-X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
- bu5-20020a056902090500b0064a2089f487mr14703242ybb.202.1656343731074; Mon, 27
- Jun 2022 08:28:51 -0700 (PDT)
+        Mon, 27 Jun 2022 11:29:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CE641900D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656343760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hs91Syf01nEkXMgHThKmIN042V1ZQVRmN49C9uaVFIE=;
+        b=dLXunApOuq8itNQpIfIr34exZ6GQXliF+21it94TBN2K8ieCAnzW8AQI/vvw6yaoMgBSaA
+        VWZfdtqQthww6ekwg8mir90xX9LAjqVfdAAvIV5qy1CnFffXcG90T4TBJohxCnYPnexVFL
+        RsV0DaiUAt9ox+m8bjVCFmcXt+cqN5M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-1-bl0KVvUDMHSunmYDcwrysg-1; Mon, 27 Jun 2022 11:29:17 -0400
+X-MC-Unique: bl0KVvUDMHSunmYDcwrysg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5B6B801233;
+        Mon, 27 Jun 2022 15:29:16 +0000 (UTC)
+Received: from T590 (ovpn-8-31.pek2.redhat.com [10.72.8.31])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DCD2F2026D07;
+        Mon, 27 Jun 2022 15:29:11 +0000 (UTC)
+Date:   Mon, 27 Jun 2022 23:29:06 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+Cc:     linux-block@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        joseph.qi@linux.alibaba.com
+Subject: Re: [RFC] libubd: library for ubd(userspace block driver based on
+ io_uring passthrough)
+Message-ID: <YrnMwgW7TemVdbXv@T590>
+References: <fd926012-6845-05e4-077b-6c8cfbf3d3cc@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20190625075746.10439-1-vigneshr@ti.com> <20190625075746.10439-4-vigneshr@ti.com>
-In-Reply-To: <20190625075746.10439-4-vigneshr@ti.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 27 Jun 2022 17:28:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUCdjfAoZm-cb4v+STt5C0T6OejdcCCQNBRqqAHL6JD=w@mail.gmail.com>
-Message-ID: <CAMuHMdUCdjfAoZm-cb4v+STt5C0T6OejdcCCQNBRqqAHL6JD=w@mail.gmail.com>
-Subject: Re: [PATCH v8 3/5] mtd: Add support for HyperBus memory devices
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Boris Brezillon <bbrezillon@kernel.org>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Tokunori Ikegami <ikegami.t@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fd926012-6845-05e4-077b-6c8cfbf3d3cc@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vignesh,
+Hi Ziyang,
 
-On Tue, Jun 25, 2019 at 10:00 AM Vignesh Raghavendra <vigneshr@ti.com> wrote:
-> Cypress' HyperBus is Low Signal Count, High Performance Double Data Rate
-> Bus interface between a host system master and one or more slave
-> interfaces. HyperBus is used to connect microprocessor, microcontroller,
-> or ASIC devices with random access NOR flash memory (called HyperFlash)
-> or self refresh DRAM (called HyperRAM).
->
-> Its a 8-bit data bus (DQ[7:0]) with  Read-Write Data Strobe (RWDS)
-> signal and either Single-ended clock(3.0V parts) or Differential clock
-> (1.8V parts). It uses ChipSelect lines to select b/w multiple slaves.
-> At bus level, it follows a separate protocol described in HyperBus
-> specification[1].
->
-> HyperFlash follows CFI AMD/Fujitsu Extended Command Set (0x0002) similar
-> to that of existing parallel NORs. Since HyperBus is x8 DDR bus,
-> its equivalent to x16 parallel NOR flash with respect to bits per clock
-> cycle. But HyperBus operates at >166MHz frequencies.
-> HyperRAM provides direct random read/write access to flash memory
-> array.
->
-> But, HyperBus memory controllers seem to abstract implementation details
-> and expose a simple MMIO interface to access connected flash.
->
-> Add support for registering HyperFlash devices with MTD framework. MTD
-> maps framework along with CFI chip support framework are used to support
-> communicating with flash.
->
-> Framework is modelled along the lines of spi-nor framework. HyperBus
-> memory controller (HBMC) drivers calls hyperbus_register_device() to
-> register a single HyperFlash device. HyperFlash core parses MMIO access
-> information from DT, sets up the map_info struct, probes CFI flash and
-> registers it with MTD framework.
->
-> Some HBMC masters need calibration/training sequence[3] to be carried
-> out, in order for DLL inside the controller to lock, by reading a known
-> string/pattern. This is done by repeatedly reading CFI Query
-> Identification String. Calibration needs to be done before trying to detect
-> flash as part of CFI flash probe.
->
-> HyperRAM is not supported at the moment.
+On Mon, Jun 27, 2022 at 04:20:55PM +0800, Ziyang Zhang wrote:
+> Hi Ming,
+> 
+> We are learning your ubd code and developing a library: libubd for ubd.
+> This article explains why we need libubd and how we design it.
+> 
+> Related threads:
+> (1) https://lore.kernel.org/all/Yk%2Fn7UtGK1vVGFX0@T590/
+> (2) https://lore.kernel.org/all/YnDhorlKgOKiWkiz@T590/
+> (3) https://lore.kernel.org/all/20220509092312.254354-1-ming.lei@redhat.com/
+> (4) https://lore.kernel.org/all/20220517055358.3164431-1-ming.lei@redhat.com/
+> 
+> 
+> Userspace block driver(ubd)[1], based on io_uring passthrough,
+> allows users to define their own backend storage in userspace
+> and provides block devices such as /dev/ubdbX.
+> Ming Lei has provided kernel driver code: ubd_drv.c[2]
+> and userspace code: ubdsrv[3].
+> 
+> ubd_drv.c simply passes all blk-mq IO requests
+> to ubdsrv through io_uring sqes/cqes. We think the kernel code
+> is pretty well-designed.
+> 
+> ubdsrv is implemented by a single daemon
+> and target(backend) IO handling(null_tgt and loop_tgt) 
+> is embedded in the daemon. 
+> While trying ubdsrv, we find ubdsrv is hard to be used 
+> by our backend.
 
-Thanks for your patch, which is now commit dcc7d3446a0fa19b ("mtd:
-Add support for HyperBus memory devices") in v5.3.
+ubd is supposed to provide one generic framework for user space block
+driver, and it can be used for doing lots of fun/useful thing.
 
-> HyperBus specification can be found at[1]
-> HyperFlash datasheet can be found at[2]
->
-> [1] https://www.cypress.com/file/213356/download
-> [2] https://www.cypress.com/file/213346/download
-> [3] http://www.ti.com/lit/ug/spruid7b/spruid7b.pdf
->     Table 12-5741. HyperFlash Access Sequence
+If I understand correctly, this isn't same with your use case:
 
-The last link no longer works.  Do you have a replacement?
-Thanks!
+1) your user space block driver isn't generic, and should be dedicated
+for Alibaba's uses
 
-Gr{oetje,eeting}s,
+2) your case has been there for long time, and you want to switch from other
+approach(maybe tcmu) to ubd given ubd has better performance.
 
-                        Geert
+> First is description of our backend:
+> 
+> (1) a distributing system sends/receives IO requests 
+>     through network.
+> 
+> (2) The system use RPC calls among hundreds of
+>      storage servers and RPC calls are associated with data buffers
+>      allocated from a memory pool.
+> 
+> (3) On each server for each device(/dev/vdX), our backend runs
+>      many threads to handle IO requests and manage the device. 
+> 
+> Second are reasons why ubdsrv is hard to use for us:
+> 
+> (1) ubdsrv requires the target(backend) issues IO requests
+>     to the io_uring provided by ubdsrv but our backend 
+>     uses something like RPC and does not support io_uring.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+As one generic framework, the io command has to be io_uring
+passthrough, and the io doesn't have to be handled by io_uring.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+But IMO io_uring is much more efficient, so I'd try to make async io
+(io uring) as the 1st citizen in the framework, especially for new
+driver.
+
+But it can support other way really, such as use io_uring with eventfd,
+the other userspace context can handle io, then wake up io_uring context
+via eventfd. You may not use io_uring for handling io, but you still
+need to communicate with the context for handling io_uring passthrough
+command, and one mechanism(such as eventfd) has to be there for the
+communication.
+
+> 
+> (2) ubdsrv forks a daemon and it takes over everything.
+>     Users should type "list/stop/del" ctrl-commands to interact with
+>     the daemon. It is inconvenient for our backend
+>     because it has threads(from a C++ thread library) running inside.
+
+No, list/stop/del won't interact with the daemon, and the per-queue
+pthread is only handling IO commands(io_uring passthrough) and IO request.
+
+> 
+> (3) ubdsrv PRE-allocates internal data buffers for each ubd device.
+>     The data flow is:
+>     bio vectors <-1-> ubdsrv data buffer <-2-> backend buffer(our RPC buffer).
+>     Since ubdsrv does not export its internal data buffer to backend,
+>     the second copy is unavoidable. 
+>     PRE-allocating data buffer may not be a good idea for wasting memory
+>     if there are hundreds of ubd devices(/dev/ubdbX).
+
+The preallocation is just virtual memory, which is cheap and not pinned, but
+ubdsrv does support buffer provided by io command, see:
+
+https://github.com/ming1/linux/commit/0a964a1700e11ba50227b6d633edf233bdd8a07d
+
+> 
+> To better use ubd in more complicated scenarios, we have developed libubd.
+> It does not assume implementation of backend and can be embedded into it.
+> We refer to the code structure of tcmu-runner[4], 
+> which includes a library(libtcmu) for users 
+> to embed tcmu-runner inside backend's code. 
+> It:
+> 
+> (1) Does not fork/pthread_create but embedded in backend's threads
+
+That is because your backend may not use io_uring, I guess.
+
+But it is pretty easy to move the decision of creating pthread to target
+code, which can be done in the interface of .prepare_target().
+
+> 
+> (2) Provides libubd APIs for backend to add/delete ubd devices 
+>     and fetch/commit IO requests
+
+The above could be the main job of libubd.
+
+> 
+> (3) simply passes backend-provided data buffers to ubd_drv.c in kernel,
+>     since the backend actually has no knowledge 
+>     on incoming data size until it gets an IO descriptor.
+
+I can understand your requirement, not look at your code yet, but libubd
+should be pretty thin from function viewpoint, and there are lots of common
+things to abstract/share among all drivers, please see recent ubdsrv change:
+
+https://github.com/ming1/ubdsrv/commits/master
+
+in which:
+	- coroutine is added for handling target io
+	- the target interface(ubdsrv_tgt_type) has been cleaned/improved for
+	supporting complicated target
+	- c++ support
+
+IMO, libubd isn't worth of one freshly new project, and it could be integrated
+into ubdsrv easily. The potential users could be existed usersapce
+block driver projects.
+
+If you don't object, I am happy to co-work with you to add the support
+for libubd in ubdsrv, then we can avoid to invent a wheel.
+
+> 
+> Note: 
+> 
+> (1) libubd is just a POC demo and is not stick to the principles of
+>     designing a library and we are still developing it now...
+> 
+> (2) The repo[5] including some useful examples using libubd. 
+> 
+> (3) We modify the kernel part: ubd_drv.c and 
+>     it[6] is against Ming Lei's newest branch[2]
+>     because we forked our branch from his early branch
+>     (v5.17-ubd-dev).
+
+Please look at the following tree for ubd driver:
+
+https://github.com/ming1/linux/tree/my_for-5.19-ubd-devel_v3
+
+in which most of your change should have been there already.
+
+I will post v3 soon, please feel free to review after it is out and
+see if it is fine for you.
+
+
+Thanks,
+Ming
+

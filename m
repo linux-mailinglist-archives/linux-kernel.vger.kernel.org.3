@@ -2,116 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F109655D34C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F2355C5B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237438AbiF0SZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 14:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
+        id S240258AbiF0S2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240238AbiF0SZL (ORCPT
+        with ESMTP id S240206AbiF0S1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 14:25:11 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC2D13D7B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:23:42 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id cw10so20932668ejb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:23:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Z0GjknphkWGhoR5RB3y0Cv/lqmFOhZuN8xbb2n6aFXo=;
-        b=DARD8kZ5NWv16d9clLPhlRkbV6/HIsGbnxqz01koy03YjM+WOj25a8kQpmBqQFlVF3
-         Xba4oY3SbBrVUyl9OAPdcHtBQr3LIX40TZUimEid4zxOQbETo9ur6wodet2NfIwqo7mf
-         lNR6X75kaxr7+n8zWDa8cZKG0Txa8RCyy8ZVqqZKd7qoiL+XizOqzoqV0pvQxHYPci3i
-         7ZaqrCC7E3wicWfj3TRAeipnAEmFG7zMjSAb9dkcCf0muwZg2pGwPu2oissZh7RX530W
-         lSyUAVjAM9xOmXlKPpYKyfxrR0ezqmyq0fPX3BkH7uyiT9njOjfZuox5skky+pJ0RbN5
-         lPDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Z0GjknphkWGhoR5RB3y0Cv/lqmFOhZuN8xbb2n6aFXo=;
-        b=eq3EqBVfnwYe5uAGlXh9LuZn+vKgmC7Z6Bp37WAlnswHf/CyS6ppwqv7vxGhderqD3
-         pdSzsVbkDXnHKCJgYC8xDs439gzYJZspEUMvY8C3lSfhkmQUESAmkT5E01JcZrZ1leor
-         jhGOKPL359zjhPPvEpzY4KY8/n66yy2qJZ7JZ1PkdmHcn3mGLUyyRUw+HCUdJe5MX13s
-         3RCleU2ePx0mry28SqKapa6jV2Py3zwCN5MgcimyPauskbXfATEl5bb4/kzZ+kcAFRYG
-         qYJ4xBzUwZU2f8KIG7AHLBTxmMf+PnxslXAtrMeRBSl0rQ0+TCSohV+x1oNi5tcoyA8q
-         8EXg==
-X-Gm-Message-State: AJIora8FdlJD85D83fltqSy4WgxCdK21OvBQatRkQt/D1JBhqjurI0QM
-        GuDSimFr5jC6t9ISCiu1SXrxzqH34rJMJBY=
-X-Google-Smtp-Source: AGRyM1uTdRObXadkhKk8dqeBRkPE7nkI8OlKAnAFHGJCVWL1ZmgYKW6yAh1C6mkJHRpUKnzPDiGVUw==
-X-Received: by 2002:a17:906:e4c:b0:726:94a0:2701 with SMTP id q12-20020a1709060e4c00b0072694a02701mr9981194eji.360.1656354220511;
-        Mon, 27 Jun 2022 11:23:40 -0700 (PDT)
-Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id f26-20020a170906139a00b006ff045d7c9bsm5291852ejc.173.2022.06.27.11.23.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 11:23:34 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 18:23:25 +0000
-From:   Wedson Almeida Filho <wedsonaf@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Tejun Heo <tj@kernel.org>, Petr Mladek <pmladek@suse.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: Re: re. Spurious wakeup on a newly created kthread
-Message-ID: <Yrn1nQU3h+vHK1nz@google.com>
-References: <CAHk-=wiC7rj1o7vTnYUPfD7YxAu09MZiZbahHqvLm9+Cgg1dFw@mail.gmail.com>
- <874k0863x8.fsf@email.froward.int.ebiederm.org>
- <CAHk-=wgTG2K3erROP19320zBN6BHVf0hRfXGdawkGR4gzrJN6w@mail.gmail.com>
- <CAHk-=whLsaRKaFKS0UffeCYYCVyP0bbiB4BTYTaXtScgu6R9yA@mail.gmail.com>
- <87pmiw1fy6.fsf@email.froward.int.ebiederm.org>
- <CAHk-=wiutNT47oNhyk_WvMj2qp4pehYFptXCUzW=u_2STLQiww@mail.gmail.com>
- <CAHk-=whX_=BNZ4kVEAu2NV3CMnhwsuYTyE65FQXUMx8VPNOAOA@mail.gmail.com>
- <87y1xkwa28.fsf@email.froward.int.ebiederm.org>
- <YrjxcR2M6AD6S9dW@google.com>
- <YrlYDppYKw6HRP1j@hirez.programming.kicks-ass.net>
+        Mon, 27 Jun 2022 14:27:53 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B811BE86
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656354334; x=1687890334;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xe7kacyl9bO/ZeCSzMnNJMOTxfLtXjZzNmW8e5Zn/ok=;
+  b=Vnfqxn3oB/gkdY63Fqbwae2k/sekdJb6XuV4/stT3PkmKI+smi1KFgx+
+   2HE6tLFgFQp5zoLxXm9+36/guowdbH7oNeP99X6zSoywgPvvSxYi3oPXy
+   VdDdW/NQBoLJBB8nFb/spnbFQQ+MYlFL+qSA1+8BQn35Epfjfr46OB6bZ
+   0fAI080BKCCPRaR8O8ApyWkdJ9ExcWxwE7auzP9wOk8ftAaujtlU7vIbt
+   qaEIxIindLMig3NgEbmChZj1XMCyg0nFul/cf5dKpsrR+kWV3lVVJIy+9
+   Km/JpTwAaYM0F8uhJpfsQXp+nBGqI+VO+yp2meRNmnPT/vjvbgO0+j0wz
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="264572146"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="264572146"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 11:25:31 -0700
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="732427370"
+Received: from jsagoe-mobl1.amr.corp.intel.com (HELO [10.209.12.66]) ([10.209.12.66])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 11:25:30 -0700
+Message-ID: <fe896ec7-cfce-e8ce-240d-88cca47f8996@intel.com>
+Date:   Mon, 27 Jun 2022 11:24:33 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrlYDppYKw6HRP1j@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v8 4/5] x86/mm: Add noalias variants of
+ set_memory_*crypted() functions
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220609025220.2615197-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <b4190b5d-89e8-b02f-5ef6-c05047af8166@intel.com>
+ <20220627151257.fhynhvcnpk22kflw@black.fi.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220627151257.fhynhvcnpk22kflw@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 09:11:10AM +0200, Peter Zijlstra wrote:
-> Current freezer can thaw at random points in time, even before SMP
-> bringup if you're unlucky. And yes, I think it can induce 'spurious'
-> wakeups as well.
-
-Thanks, Peter, that's good to know!
-
-> But really; like Linus already said upsteam, every wait loop *MUST*
-> already be able to deal with spurious wakeups. This is why pretty much
-> every wait primitive we have looks like:
+On 6/27/22 08:12, Kirill A. Shutemov wrote:
+> It made me thing about my recent story with load_unaligned_zeropad(). 
+> If we leave the page in direct mapping mapped as private and
+> load_unaligned_zeropad() will roll off to it, we will get SEPT violation
+> that will terminate the TD as it is considered unaccepted.
 > 
-> 	for (;;) {
-> 		set_current_state(state);
-> 		if (cond)
-> 			break;
-> 		schedule();
-> 	}
-> 	__set_current_state(RUNNING);
+> I think we must keep aliases in think. And vmap() doesn't make much sense
+> in this case :/
 > 
-> Which is immune to random wake-ups since it need @cond to make progress.
-> *NEVER* rely on just the wakeup itself for progress, that's buggy as
-> heck in lots of ways.
+> I urge you folks to consider DMA API again. Or have any other way to tap
+> into swiotlb pool.
 
-Yes, I wonder how many more instances of this kind of bug we have
-lurking around given that this one in core kernel code appears to have
-been around for at least 17 years.
+Ugh.  This is a good point.  We need *PHYSICAL* pages to pad the front
+of any page we use for the quotes.  That means some crazy code like:
+
+	struct page *pages[nr_pages];
+	struct page *pages_vmap[nr_pages];
+
+	for (i = 0; i < nr_pages; i++) {
+		// allocate an extra "padding" page:
+		pages[i] = alloc_pages(1, GFP_WHATEVER);
+				       ^ note the order=1
+		// record the page that will be vmap()'d:
+		pages_vmap[i] = pages[i]+1;
+		set_pages_decrypted(page_to_virt(pages_vmap[i]));
+	}
+
+	vmap(pages_vmap, nr_pages);
+
+That's just adorable.  The other way is to do alloc_pages_exact() with
+*one* extra page and just use contiguous memory for it.
+
+I still don't like the idea of using the DMA API itself.  But, maybe we
+need some common infrastructure that the DMA API and this code use which
+says, "get me some pages that I can safely make shared".

@@ -2,103 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B5855C36B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3003455C5C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238835AbiF0RtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S239646AbiF0Ruh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237960AbiF0RtS (ORCPT
+        with ESMTP id S238159AbiF0Ruf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:49:18 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C11F95A7;
-        Mon, 27 Jun 2022 10:49:17 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id q18so8800374pld.13;
-        Mon, 27 Jun 2022 10:49:17 -0700 (PDT)
+        Mon, 27 Jun 2022 13:50:35 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27379CE1B
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:50:34 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-101d96fe0a5so13900537fac.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:50:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Q/XtlNuHXhafjy3rxC1P4ckBLS+ZGb1ojWGQwnT715k=;
-        b=DMJ6zGSh3YK1ZkElm2Zi3EXx1p6etIdPsq5cq61RjwJvHblj0Uulq05L7ggfOKPyOm
-         bAb2N8CuU2UL9miA2w/KfcaMt4BTnCeWAk9dWkrWkuCfd8SClbEnoIF4+j3aij30KMpI
-         WgrX83gVKe2sYMTdCxNtC1g0p1ZIbX8k2odYYv5BVNvggiQi0ag5rzNqf2jfgY0JaZ3l
-         2Sq1NKMfXyRwNeRNMvJABfpWVP2a8+8W7DVzLRPYMtj4VXES+FuqYomiNLfoP5RIcwW0
-         kS+jp6Qfn5VMb4kZQd3zrHLgLdZB0DS6Gu6nT5wVnQ1f3O0hSPlnDlE3zxkwGlDCTFbO
-         qh3Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rvLc0KAoeCG/x6cMf474PJVr5c3IRBsOYfpRWzYOz64=;
+        b=b13f20McHwfbhFM7Uv3QqZ+tK3PojQDPvs6uKN1cxttfYLzxMVnB/WnBHOprwgqQlr
+         bX5UDBaIRyM6Pfqq1fUb4ehpuiHnwdiuB5ZuEfdtK5FQfRUrnXpSqIZaxGN6Wa3458H3
+         oYa7qNKfJLj9mBObyCW0Fm1L8ESGgjWD8t7abMrFLqGCsJhW0S/M37WiHVRZ5Asqmqzk
+         T0G9hekokpmUXqnaevM0IGbHvC5N7kgcvl76wTbygNP+3JS1X+mD6Nb15KJNKT2fVsri
+         hZHlUd0jDQBT0aJ4yE8Xkk776Gt8YCORIXRlJsQMcJUfF+13gdNdxvoNKxtpplNDFMyH
+         GBnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Q/XtlNuHXhafjy3rxC1P4ckBLS+ZGb1ojWGQwnT715k=;
-        b=N25Ln+5MrvKycWnxDlO5WZembequUyhgYKJ0voTbjVpyLwqHGn+6r+0aDA5LVvXJDX
-         zpP/LVzI0aI+FA/Csh7jrvWS2baDmo2u/LpdSQf79UJKReLJBnW+dmJN7WJa1V0Sx3e/
-         Wkkt30X1IQYtmXHg1+lt8MTWHsZcXIPNU1wMlv9Bdruczsr7YSKzjEuMoscEfIFuDgYk
-         1Extr188SlBSK7wCkryk2zle5kDl643KXByQrDDkCY5WsxGpUjb88Tx1O0DXobHs7Crt
-         6WOOZC6bEvMH9c/UQygm8LLrE7bku7AATEfn/pRtUHiqDa7hQeTM4o9OjflyEfaTgHB8
-         SMKQ==
-X-Gm-Message-State: AJIora9CdsmUBPDMw0uE+VdCPUMR9SFuv76wenFxjJbjaRVahQQG5dh+
-        dXxV4pO8zDjP9xKSIqDK+KU=
-X-Google-Smtp-Source: AGRyM1uN8L/N5Ha+/fwCqCw4RCUrJB8FnuLEIj/Dp+IBksweEovux+P4oGZQir6vqjaLTlpKlh7RJg==
-X-Received: by 2002:a17:903:291:b0:168:c6b3:1976 with SMTP id j17-20020a170903029100b00168c6b31976mr16193993plr.9.1656352156725;
-        Mon, 27 Jun 2022 10:49:16 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id q14-20020a63d60e000000b0040cf5cd74cdsm7255032pgg.19.2022.06.27.10.49.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 10:49:16 -0700 (PDT)
-Message-ID: <55211a69-df6d-4b69-a596-06372b69ca31@gmail.com>
-Date:   Mon, 27 Jun 2022 10:49:12 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rvLc0KAoeCG/x6cMf474PJVr5c3IRBsOYfpRWzYOz64=;
+        b=oX0foLEitM5IndYmfLlGL4zgS4DzDar77PTK4UuRKoELXbCT5hi/rnWnL1YvOZTlNi
+         zJmNo19TsaQ/+W3TI1hUNVR/4m8d/rPmX7BYakuhJtr1Vt+YDZkNEOEIsoPngNAX2Jg4
+         ujNlb6Q/PQdgXEoS6EKNQWOijczzlXOXdntETy0UwBWISx7nJofKA4LKFYX6rAWLwP0s
+         IbNv9Sy8eCmpwe/gUGpuOXPpBtRvtjsTTBLEvCearSfFUquUxOjiu4S/4V3zuWPB6AyX
+         sIMngFcFmgjEt7MayczmAocZLZTWWfMRXQtYGb78j7fO6bgKRI7ochfnOiQsVqlCeEFq
+         m0lQ==
+X-Gm-Message-State: AJIora9TmemwvAVhYIUgBe/5F7QVi7bUGpnyD49tGvdopIPwuSpcy3on
+        ZfdUEpgBHMirj3mj+51k+G60eZJJ2FKAPa/9PWVwhQ==
+X-Google-Smtp-Source: AGRyM1vGo0mK62j7gn7FGNVciNy5Vm+ednBSsRuJC5Vz4W9QRbFg8IOFjq77y9jLpFVvqi0CbrYtxJR3JSgRSty//L0=
+X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
+ ba22-20020a056870c59600b001016409ae62mr11029906oab.112.1656352233275; Mon, 27
+ Jun 2022 10:50:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.18 000/181] 5.18.8-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220627111944.553492442@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220627160440.31857-1-vkuznets@redhat.com>
+In-Reply-To: <20220627160440.31857-1-vkuznets@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Mon, 27 Jun 2022 10:50:22 -0700
+Message-ID: <CALMp9eQL2a+mStk-cLwVX6NVqwAso2UYxAO7UD=Xi2TSGwUM2A@mail.gmail.com>
+Subject: Re: [PATCH 00/14] KVM: nVMX: Use vmcs_config for setting up nested
+ VMX MSRs
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 04:19, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.8 release.
-> There are 181 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.8-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Mon, Jun 27, 2022 at 9:04 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>
+> Changes since RFC:
+> - "KVM: VMX: Extend VMX controls macro shenanigans" PATCH added and the
+>   infrastructure is later used in other patches [Sean] PATCHes 1-3 added
+>   to support the change.
+> - "KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup" PATCH
+>   added [Sean].
+> - Commit messages added.
+>
+> vmcs_config is a sanitized version of host VMX MSRs where some controls are
+> filtered out (e.g. when Enlightened VMCS is enabled, some know bugs are
+> discovered, some inconsistencies in controls are detected,...) but
+> nested_vmx_setup_ctls_msrs() uses raw host MSRs instead. This may end up
+> in exposing undesired controls to L1. Switch to using vmcs_config instead.
+>
+> Sean Christopherson (1):
+>   KVM: VMX: Clear controls obsoleted by EPT at runtime, not setup
+>
+> Vitaly Kuznetsov (13):
+>   KVM: VMX: Check VM_ENTRY_IA32E_MODE in setup_vmcs_config()
+>   KVM: VMX: Check CPU_BASED_{INTR,NMI}_WINDOW_EXITING in
+>     setup_vmcs_config()
+>   KVM: VMX: Tweak the special handling of SECONDARY_EXEC_ENCLS_EXITING
+>     in setup_vmcs_config()
+>   KVM: VMX: Extend VMX controls macro shenanigans
+>   KVM: VMX: Move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering out of
+>     setup_vmcs_config()
+>   KVM: VMX: Add missing VMEXIT controls to vmcs_config
+>   KVM: VMX: Add missing VMENTRY controls to vmcs_config
+>   KVM: VMX: Add missing CPU based VM execution controls to vmcs_config
+>   KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs
+>   KVM: VMX: Store required-1 VMX controls in vmcs_config
+>   KVM: nVMX: Use sanitized required-1 bits for VMX control MSRs
+>   KVM: VMX: Cache MSR_IA32_VMX_MISC in vmcs_config
+>   KVM: nVMX: Use cached host MSR_IA32_VMX_MISC value for setting up
+>     nested MSR
+>
+>  arch/x86/kvm/vmx/capabilities.h |  16 +--
+>  arch/x86/kvm/vmx/nested.c       |  37 +++---
+>  arch/x86/kvm/vmx/nested.h       |   2 +-
+>  arch/x86/kvm/vmx/vmx.c          | 198 ++++++++++++++------------------
+>  arch/x86/kvm/vmx/vmx.h          | 118 +++++++++++++++++++
+>  5 files changed, 229 insertions(+), 142 deletions(-)
+>
+> --
+> 2.35.3
+>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Just checking that this doesn't introduce any backwards-compatibility
+issues. That is, all features that were reported as being available in
+the past should still be available moving forward.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Thanks,
+
+--jim

@@ -2,136 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801C155CAF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A6E55CB9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236192AbiF0OPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
+        id S235449AbiF0ORI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235991AbiF0OOx (ORCPT
+        with ESMTP id S234732AbiF0ORD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:14:53 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E0012AF1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:14:50 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id n10so8342551plp.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:14:50 -0700 (PDT)
+        Mon, 27 Jun 2022 10:17:03 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B976513EBC;
+        Mon, 27 Jun 2022 07:16:59 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id o9so13215636edt.12;
+        Mon, 27 Jun 2022 07:16:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=/1pEyyNCsqbdIDyIk4tQ2++JMSyF3lNesIio8vbDJJ0=;
-        b=vRygcjE1RbBzh8t5qstRzPJBuA1Uzs5Ezt/4rabDxNmeFtrfbNKOe1BHEnCROyXVJj
-         1lR3ZhoD1OnFXkKOjqQFZHTC+f97zivXNQL3w1MyS6XrsqatKybpSDIJmXmHKtiurwyv
-         JQOM85TSdoojed5yzS59daVmnUmU+1SqLjmuI2a3p9XsAcSivCNNKjUKegZ+TUgTb797
-         xT9BHQIcZfprUIqB8cJ6EHJ8F1mpxlsupp2mq+EuLInHcsbSvBRua4jtiVwMBYxsH5zV
-         HxibyIbmUZ+bPudanwAHAR+1IFSkwnhD4qB7GFKUWZ+ZKiMT2GlQq0zYUTNTUz9nxCrQ
-         Vtug==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mxDYyaY89H5EEfQVpEFxonV022j7M6z20MFWKjTlNFg=;
+        b=Qk0/EglqTX5KDRowJv35NcK7NDq76PkEU72HzKvwT77kpEL65fNlFFuC8njT9TUmVv
+         oprUM/cV0SpRVAwIqHxCIfR3jTxTN2rheZ75ZX4i1Fbt6sylkGae3VDGg6zLxLRYVDOQ
+         UIoHYKzRCM3jY1kUFzsWyiGkveLVr2u43nyoEhxTV00D1aKwPyzyjSdpIadRfqtowDqd
+         HcYTrrbNUK+JGJrcYh2KzAOf/iKYc2oCPrPZJUK36KBQiPZe9CoAJiP4q1z+eEqOFyWw
+         T1bgSkFTgCUqLunj0XMMO0gvldNMl09Ib9pKcPhbi6Tz0UU8DhLKBym8dJEOWlcQkKnZ
+         73Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=/1pEyyNCsqbdIDyIk4tQ2++JMSyF3lNesIio8vbDJJ0=;
-        b=kOSYYq73NFJbeLYoSmG/oqcQjW/NF9pWduTtgtlEKmpeEfqIXB65+U1CFDVrd70Dp8
-         1UzaNKPkBA2PfQ1rBl6lTUiRiml9Ilf0cuof9PoVqkPkpIWCpO3saVTAjC4R37cmVvcB
-         RZtBz2UXmiR+LRZRCFxG1eqIu32Hw4AmbfM3v4EpVnw3OZZJNoxWuw2xdPHNr8n6pjMY
-         hQOSGf3mmM+mb+W0pm1yy8RNny3whkcAqkzDeHuHX1xjM16CG9HRiwTucpm3ZppsLixp
-         que1r1kvQcBdr609hyEZSad9+pFh8+DHy5Pdym11mMMkHOBvmqrEsZ8rIJXnm4LQJ++y
-         wIag==
-X-Gm-Message-State: AJIora9KbB5/Y9m8Ca+qYw3K4ZzcEKor8WSOzHFu/LW5d+0lLJl0RWA3
-        7U8Qj0xoqtWLx+N7gp9XlyE9biqzUQrA6VgG
-X-Google-Smtp-Source: AGRyM1s51NooW5cHYYqEauofyEExbdlF2joSTp28zhB89OYB96VIj4M097T3t1l8IEc1OA9uMN0LlQ==
-X-Received: by 2002:a17:902:8644:b0:168:fe0e:f92d with SMTP id y4-20020a170902864400b00168fe0ef92dmr14615111plt.23.1656339290034;
-        Mon, 27 Jun 2022 07:14:50 -0700 (PDT)
-Received: from [10.176.0.6] ([199.101.192.171])
-        by smtp.gmail.com with ESMTPSA id g29-20020aa79f1d000000b0051c4f6d2d95sm7440786pfr.106.2022.06.27.07.14.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 07:14:49 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] uacce: Handle parent driver module removal
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        jean-philippe <jean-philippe@linaro.org>,
-        Wangzhou <wangzhou1@hisilicon.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        acc@openeuler.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
-        Yang Shen <shenyang39@huawei.com>
-References: <20220624142122.30528-1-zhangfei.gao@linaro.org>
- <20220624142122.30528-2-zhangfei.gao@linaro.org> <Yrmu9DcNObmraG72@kroah.com>
-From:   Zhangfei Gao <zhangfei.gao@linaro.org>
-Message-ID: <9ab01d6b-76c2-885c-2827-57912dee62e0@linaro.org>
-Date:   Mon, 27 Jun 2022 22:14:29 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mxDYyaY89H5EEfQVpEFxonV022j7M6z20MFWKjTlNFg=;
+        b=d/m+91Z3QY6BwFACV2+NMKT2Y1rmNFjAWpvoXc9/hcYlScRRHkQr6BJiUXs8tWMzLC
+         ZFHFge7OL2aSA6wrIUqy9dG+HIwxmwryLn8yrhKRFpM5Jy8yowcgDrxmgoKAF3pbjlk/
+         Wo43ymwZXITsVk2LGmo0NKb5mJbviCoztx5W9fTFDJ1OqDNsByEsaLhmQdEhmOzSQNVd
+         2GdD+Z4eKOkFPGor7Pnn+t8g6yqSPVNm2TePav+18r1/HvwgxJ+QVv1T53MJwfMY9Cqz
+         Rv2+GvYRHxYITTcum211nhMgRM68tnuxuj7A4APvGXa9+1pUgkl8az8bymMRG7C0Zidu
+         LgkA==
+X-Gm-Message-State: AJIora+GgkpNcZTEwB0EN51LSAudeaJBLzAN7jHnpnEjF1ErL9Qm/8e2
+        +9YzznrhBwioo8P02DrHplq7QFJqstNYYP/wYCE=
+X-Google-Smtp-Source: AGRyM1smieOYkbwkdYTJgUqEsMZQclsTD1DaOkAuXXPHKDskOVgnam8GfZY8mVRNQRLOv4PDHfacH1xT6lu8DV40k4s=
+X-Received: by 2002:a05:6402:42d3:b0:435:2c49:313d with SMTP id
+ i19-20020a05640242d300b004352c49313dmr16224916edc.86.1656339418100; Mon, 27
+ Jun 2022 07:16:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <Yrmu9DcNObmraG72@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20220626004326.8548-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220626004326.8548-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <87wnd3erab.wl-maz@kernel.org> <CA+V-a8tcxj_N0sBHhgAZAN8WSJ12JnDzAvUUnCXto3wHLqNVwg@mail.gmail.com>
+ <87v8snehwi.wl-maz@kernel.org> <CAMuHMdVt9FjCtvMgJcCh=g2b+8b-fgabGbOLDcXNrrPMpC+3jQ@mail.gmail.com>
+ <CA+V-a8uLzLJ=wB6oUu0b2oZO=FPSCTSrqb=3m9=BJxATFKmjMw@mail.gmail.com>
+ <CAMuHMdUWC_7MPnP6LcOqi96FAhrAENC4iwtv2ksZVnvR8BC4ww@mail.gmail.com> <0fdbfdd0ee1c7ca39f8d3e2f86af1194@kernel.org>
+In-Reply-To: <0fdbfdd0ee1c7ca39f8d3e2f86af1194@kernel.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 27 Jun 2022 15:16:31 +0100
+Message-ID: <CA+V-a8u8X+bne_a3LY13zGTKr-hOWhm=R9gGX1JyE8PzWRNXpQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] irqchip/sifive-plic: Add support for Renesas
+ RZ/Five SoC
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Marc,
 
-
-On 2022/6/27 下午9:21, Greg Kroah-Hartman wrote:
-> On Fri, Jun 24, 2022 at 10:21:21PM +0800, Zhangfei Gao wrote:
->> Change cdev owner to parent driver owner, which blocks rmmod parent
->> driver module once fd is opened.
->>
->> Signed-off-by: Yang Shen <shenyang39@huawei.com>
->> Signed-off-by: Zhangfei Gao <zhangfei.gao@linaro.org>
->> ---
->>   drivers/misc/uacce/uacce.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
->> index 281c54003edc..f82f2dd30e76 100644
->> --- a/drivers/misc/uacce/uacce.c
->> +++ b/drivers/misc/uacce/uacce.c
->> @@ -484,7 +484,7 @@ int uacce_register(struct uacce_device *uacce)
->>   		return -ENOMEM;
->>   
->>   	uacce->cdev->ops = &uacce_fops;
->> -	uacce->cdev->owner = THIS_MODULE;
->> +	uacce->cdev->owner = uacce->parent->driver->owner;
-> What if parent is not set?  What if parent does not have a driver set to
-> it yet?  Why would a device's parent module control the lifespan of this
-> child device's cdev?
-Have used try_module_get(uacce->parent->driver->owner) in open, and 
-module_put in release.
-Seems same issue.
-
+On Mon, Jun 27, 2022 at 2:53 PM Marc Zyngier <maz@kernel.org> wrote:
 >
-> This feels wrong and like a layering violation here.
+> On 2022-06-27 14:12, Geert Uytterhoeven wrote:
+> > Hi Prabhakar,
+> >
+> > On Mon, Jun 27, 2022 at 3:06 PM Lad, Prabhakar
+> > <prabhakar.csengg@gmail.com> wrote:
+> >> On Mon, Jun 27, 2022 at 9:53 AM Geert Uytterhoeven
+> >> <geert@linux-m68k.org> wrote:
+> >> > On Sun, Jun 26, 2022 at 2:19 PM Marc Zyngier <maz@kernel.org> wrote:
+> >> > > On Sun, 26 Jun 2022 10:38:18 +0100,
+> >> > > "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+> >> > > > On Sun, Jun 26, 2022 at 9:56 AM Marc Zyngier <maz@kernel.org> wrote:
+> >> > > > > On Sun, 26 Jun 2022 01:43:26 +0100,
+> >> > > > > Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> >> > > > > > The Renesas RZ/Five SoC has a RISC-V AX45MP AndesCore with NCEPLIC100. The
+> >> > > > > > NCEPLIC100 supports both edge-triggered and level-triggered interrupts. In
+> >> > > > > > case of edge-triggered interrupts NCEPLIC100 ignores the next interrupt
+> >> > > > > > edge until the previous completion message has been received and
+> >> > > > > > NCEPLIC100 doesn't support pending interrupt counter, hence losing the
+> >> > > > > > interrupts if not acknowledged in time.
+> >> > > > > >
+> >> > > > > > So the workaround for edge-triggered interrupts to be handled correctly
+> >> > > > > > and without losing is that it needs to be acknowledged first and then
+> >> > > > > > handler must be run so that we don't miss on the next edge-triggered
+> >> > > > > > interrupt.
+> >> > > > > >
+> >> > > > > > This patch adds a new compatible string for Renesas RZ/Five SoC and adds
+> >> > > > > > support to change interrupt flow based on the interrupt type. It also
+> >> > > > > > implements irq_ack and irq_set_type callbacks.
+> >> > > > > >
+> >> > > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >> >
+> >> > > > > > +     if (of_device_is_compatible(node, "renesas,r9a07g043-plic")) {
+> >> > > > > > +             priv->of_data = RENESAS_R9A07G043_PLIC;
+> >> > > > > > +             plic_chip.name = "Renesas RZ/Five PLIC";
+> >> > > > >
+> >> > > > > NAK. The irq_chip structure isn't the place for platform marketing.
+> >> > > > > This is way too long anyway (and same for the edge version), and you
+> >> > > > > even sent me a patch to make that structure const...
+> >> > > > >
+> >> > > > My bad will drop this.
+> >> > >
+> >> > > And why you're at it, please turn this rather random 'of_data' into
+> >> > > something like:
+> >> > >
+> >> > > diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+> >> > > index bb87e4c3b88e..cd1683b77caf 100644
+> >> > > --- a/drivers/irqchip/irq-sifive-plic.c
+> >> > > +++ b/drivers/irqchip/irq-sifive-plic.c
+> >> > > @@ -64,6 +64,10 @@ struct plic_priv {
+> >> > >         struct cpumask lmask;
+> >> > >         struct irq_domain *irqdomain;
+> >> > >         void __iomem *regs;
+> >> > > +       enum {
+> >> > > +               VANILLA_PLIC,
+> >> > > +               RENESAS_R9A07G043_PLIC,
+> >> > > +       } flavour;
+> >> > >  };
+> >> > >
+> >> > >  struct plic_handler {
+> >> > >
+> >> > > to give some structure to the whole thing, because I'm pretty sure
+> >> > > we'll see more braindead implementations as time goes by.
+> >> >
+> >> > What about using a feature flag (e.g. had_edge_irqs) instead?
+> >>
+> >> diff --git a/drivers/irqchip/irq-sifive-plic.c
+> >> b/drivers/irqchip/irq-sifive-plic.c
+> >> index 9f16833dcb41..247c3c98b655 100644
+> >> --- a/drivers/irqchip/irq-sifive-plic.c
+> >> +++ b/drivers/irqchip/irq-sifive-plic.c
+> >> @@ -60,13 +60,13 @@
+> >>  #define        PLIC_DISABLE_THRESHOLD          0x7
+> >>  #define        PLIC_ENABLE_THRESHOLD           0
+> >>
+> >> +#define PLIC_QUIRK_EDGE_INTERRUPT      BIT(0)
+> >>
+> >>  struct plic_priv {
+> >>         struct cpumask lmask;
+> >>         struct irq_domain *irqdomain;
+> >>         void __iomem *regs;
+> >> +       u32 plic_quirks;
+> >>  };
+> >>
+> >> What about something like above?
+> >
+> > LGTM.
+> >
+> > Marc suggested to make this unsigned long, but TBH, that won't make
+> > much of a difference.  PLICs are present on RV32 SoCs, too, so you
+> > cannot rely on having more than 32 bits anyway.
 >
-> If a parent's module is unloaded, then invalidate the cdev for the
-> device when you tear it down before the module is unloaded.
-
-Yes, make sense.
+> But it will make a difference on a 64bit platform, as we want to
+> use test_bit() and co to check for features.
 >
-> Yes, the interaction between the driver model and a cdev is messy, and
-> always tricky (see the recent ksummit discussion about this again, and
-> last year's discussion), but that does not mean you should add laying
-> violations like this to the codebase.  Please fix this properly.
+Ok will change that to unsigned long and use the test_bit/set_bit instead.
 
-Thanks Greg
-
-Yes, I was in hesitation whether adding the patch 1, but it looks very 
-simple.
-In fact, the patch 2 can cover both removing device and rmmod parent 
-driver module.
-
-We can just keep patch 2.
-
-Thanks
-
+Cheers,
+Prabhakar

@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A01155CB7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7397355C375
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237856AbiF0LrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
+        id S237203AbiF0Lo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237327AbiF0Lmn (ORCPT
+        with ESMTP id S237339AbiF0Lmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:42:43 -0400
+        Mon, 27 Jun 2022 07:42:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDA2D5A;
-        Mon, 27 Jun 2022 04:36:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9F8D6C;
+        Mon, 27 Jun 2022 04:36:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D33FB8111E;
-        Mon, 27 Jun 2022 11:36:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE23C3411D;
-        Mon, 27 Jun 2022 11:36:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57065B81122;
+        Mon, 27 Jun 2022 11:36:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC32C3411D;
+        Mon, 27 Jun 2022 11:36:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329813;
-        bh=TcHc6ly3RnIaoYHfj4FYHbIuRRaerYtPooK/T4HWDNg=;
+        s=korg; t=1656329817;
+        bh=I3QWXVJ9FVedJtIHdTU02ubMeFLjM3USY4KbQkG/yL8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iD4txPJ7n/WoD7i8wvUDlNqAPwtB6hWsQhEsPM1oRddcym008hQS47TLcXfPH4L9A
-         7ogH/okLPuntUqUjw/ZZQ7MeNu1C8gihbryiJukPa/PCiEC3zjWWwfVJZwJSrOQHZ4
-         WozU/lUMjGuxYhVO9LrISQ9+jVrEh8VDX2ZQr/DA=
+        b=jGhtzgK0VWA0Im5npXcjCHZGkv8O2z7N7+FGBLgfrfNYrgJk02+dSfZnbLSlPNMqe
+         so4L72khffN9iIR4neJzIBn6dNeeLES6/qI2xf8tdShSmBTQ10Cp9IJsso501u2XBO
+         I+7lmOf4X7kV54cBU4EokzeV9JpEjPhRS2h1ULqo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
+        stable@vger.kernel.org, stable@kernel.org,
+        Tanveer Alam <tanveer1.alam@intel.com>,
         Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5.15 084/135] xhci: turn off port power in shutdown
-Date:   Mon, 27 Jun 2022 13:21:31 +0200
-Message-Id: <20220627111940.598796004@linuxfoundation.org>
+Subject: [PATCH 5.15 085/135] xhci-pci: Allow host runtime PM as default for Intel Raptor Lake xHCI
+Date:   Mon, 27 Jun 2022 13:21:32 +0200
+Message-Id: <20220627111940.627403211@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
 References: <20220627111938.151743692@linuxfoundation.org>
@@ -54,86 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Tanveer Alam <tanveer1.alam@intel.com>
 
-commit 83810f84ecf11dfc5a9414a8b762c3501b328185 upstream.
+commit 7516da47a349e74de623243a27f9b8a91446bf4f upstream.
 
-If ports are not turned off in shutdown then runtime suspended
-self-powered USB devices may survive in U3 link state over S5.
+In the same way as Intel Alder Lake TCSS (Type-C Subsystem) the Raptor
+Lake TCSS xHCI needs to be runtime suspended whenever possible to
+allow the TCSS hardware block to enter D3cold and thus save energy.
 
-During subsequent boot, if firmware sends an IPC command to program
-the port in DISCONNECT state, it will time out, causing significant
-delay in the boot time.
-
-Turning off roothub port power is also recommended in xhci
-specification 4.19.4 "Port Power" in the additional note.
-
-Cc: stable@vger.kernel.org
+Cc: stable@kernel.org
+Signed-off-by: Tanveer Alam <tanveer1.alam@intel.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220623111945.1557702-3-mathias.nyman@linux.intel.com
+Link: https://lore.kernel.org/r/20220623111945.1557702-4-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/host/xhci-hub.c |    2 +-
- drivers/usb/host/xhci.c     |   15 +++++++++++++--
- drivers/usb/host/xhci.h     |    2 ++
- 3 files changed, 16 insertions(+), 3 deletions(-)
+ drivers/usb/host/xhci-pci.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -652,7 +652,7 @@ struct xhci_hub *xhci_get_rhub(struct us
-  * It will release and re-aquire the lock while calling ACPI
-  * method.
-  */
--static void xhci_set_port_power(struct xhci_hcd *xhci, struct usb_hcd *hcd,
-+void xhci_set_port_power(struct xhci_hcd *xhci, struct usb_hcd *hcd,
- 				u16 index, bool on, unsigned long *flags)
- 	__must_hold(&xhci->lock)
- {
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -774,6 +774,8 @@ static void xhci_stop(struct usb_hcd *hc
- void xhci_shutdown(struct usb_hcd *hcd)
- {
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+	unsigned long flags;
-+	int i;
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -61,6 +61,7 @@
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI		0x461e
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_XHCI		0x464e
+ #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI	0x51ed
++#define PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_XHCI		0xa71e
  
- 	if (xhci->quirks & XHCI_SPURIOUS_REBOOT)
- 		usb_disable_xhci_ports(to_pci_dev(hcd->self.sysdev));
-@@ -789,12 +791,21 @@ void xhci_shutdown(struct usb_hcd *hcd)
- 		del_timer_sync(&xhci->shared_hcd->rh_timer);
- 	}
+ #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
+@@ -270,7 +271,8 @@ static void xhci_pci_quirks(struct devic
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_N_XHCI ||
+-	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI))
++	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_INTEL_RAPTOR_LAKE_XHCI))
+ 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
  
--	spin_lock_irq(&xhci->lock);
-+	spin_lock_irqsave(&xhci->lock, flags);
- 	xhci_halt(xhci);
-+
-+	/* Power off USB2 ports*/
-+	for (i = 0; i < xhci->usb2_rhub.num_ports; i++)
-+		xhci_set_port_power(xhci, xhci->main_hcd, i, false, &flags);
-+
-+	/* Power off USB3 ports*/
-+	for (i = 0; i < xhci->usb3_rhub.num_ports; i++)
-+		xhci_set_port_power(xhci, xhci->shared_hcd, i, false, &flags);
-+
- 	/* Workaround for spurious wakeups at shutdown with HSW */
- 	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
- 		xhci_reset(xhci, XHCI_RESET_SHORT_USEC);
--	spin_unlock_irq(&xhci->lock);
-+	spin_unlock_irqrestore(&xhci->lock, flags);
- 
- 	xhci_cleanup_msix(xhci);
- 
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2174,6 +2174,8 @@ int xhci_hub_control(struct usb_hcd *hcd
- int xhci_hub_status_data(struct usb_hcd *hcd, char *buf);
- int xhci_find_raw_port_number(struct usb_hcd *hcd, int port1);
- struct xhci_hub *xhci_get_rhub(struct usb_hcd *hcd);
-+void xhci_set_port_power(struct xhci_hcd *xhci, struct usb_hcd *hcd, u16 index,
-+			 bool on, unsigned long *flags);
- 
- void xhci_hc_died(struct xhci_hcd *xhci);
- 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
 
 

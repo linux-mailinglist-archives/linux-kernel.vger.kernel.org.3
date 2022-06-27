@@ -2,58 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BBB755D7E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C1955C821
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233779AbiF0Kf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
+        id S233875AbiF0Kg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiF0Kfy (ORCPT
+        with ESMTP id S233588AbiF0KgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:35:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BE9063CE
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:35:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656326151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xKvZnCkoXt+4PjaORqXBx6ym+v+SmPmR3DG/cTeVOIc=;
-        b=TyCWNKVAb/jGQKWqnpdEbxcUdezIaNlFe8FKKlNxzFatZryfVVNiLb25mfAp0qtdwTo21X
-        nxNd59oG2pOlJkjWHU0Gnrbq3Cq6XwwL6WwtytXT9mHk0a/qNqkthXxywzSFit+nZk1PKf
-        P02Cg8AnRl93tPOi3XiBAfsYlBABIeA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-326-MRuSKrRuP0GnZrfy_gPN4Q-1; Mon, 27 Jun 2022 06:35:48 -0400
-X-MC-Unique: MRuSKrRuP0GnZrfy_gPN4Q-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CE66F101A586;
-        Mon, 27 Jun 2022 10:35:47 +0000 (UTC)
-Received: from localhost (ovpn-13-65.pek2.redhat.com [10.72.13.65])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1CA9E492CA3;
-        Mon, 27 Jun 2022 10:35:46 +0000 (UTC)
-Date:   Mon, 27 Jun 2022 18:35:43 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Tao Liu <ltao@redhat.com>
-Cc:     vgoyal@redhat.com, dyoung@redhat.com, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-Subject: Re: [PATCH v2] kdump: round up the total memory size to 128M for
- crashkernel reservation
-Message-ID: <YrmH/728erRohHeU@MiWiFi-R3L-srv>
-References: <20220627074440.187222-1-ltao@redhat.com>
+        Mon, 27 Jun 2022 06:36:25 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB19063CE;
+        Mon, 27 Jun 2022 03:36:24 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 25RAZuUw045156;
+        Mon, 27 Jun 2022 05:35:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1656326156;
+        bh=9F5SoVyG6vTy+xKAz4DQZx53RbUN3yIhlnK2kgDE/aY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=dpPzAC8DcT+V80prGXqI2Pb+UikO8Gj3gOigyw3Jr+xfD4G3o4E1tYU19q4JqG1tK
+         bvtspUtIk+gdUj7BQ5V+NcpOJ7T30+hd7apgZVLO33UpG+Gl6W/aY0j2plpRiqfc3K
+         DhCUfF7vr3Q0Nz+S2oW0u3RTgidGg4vyACDH5YnQ=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 25RAZuF3087355
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 27 Jun 2022 05:35:56 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 27
+ Jun 2022 05:35:56 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 27 Jun 2022 05:35:56 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 25RAZtBd091967;
+        Mon, 27 Jun 2022 05:35:55 -0500
+Date:   Mon, 27 Jun 2022 16:05:54 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Michael Walle <michael@walle.cc>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        Joel Stanley <joel@jms.id.au>
+Subject: Re: [RFC PATCH 3/6] mtd: spi-nor: core: run calibration when
+ initialization is done
+Message-ID: <20220627103554.hcvvu4r7bebd2qum@ti.com>
+References: <20210311191216.7363-1-p.yadav@ti.com>
+ <20210311191216.7363-4-p.yadav@ti.com>
+ <20220517160226.4107f282@xps-13>
+ <20220518060640.os5fp5rez4ie7qc4@ti.com>
+ <20220518091931.279c5398@xps-13>
+ <20220518075651.mvdhfnfbgutecgyq@ti.com>
+ <b3bfa5a6-caac-94ed-6741-04db9c2a9ee0@kaod.org>
+ <20220627091404.54257obrdazcjhre@ti.com>
+ <82015d89-cab5-3e9a-a40e-e5dafa17ec0c@kaod.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
-In-Reply-To: <20220627074440.187222-1-ltao@redhat.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <82015d89-cab5-3e9a-a40e-e5dafa17ec0c@kaod.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,88 +83,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/27/22 at 03:44pm, Tao Liu wrote:
-> The total memory size we get in kernel is usually slightly less than
-> the actual memory size because BIOS/firmware will reserve some memory
-> region. So it won't export all memory as usable.
+On 27/06/22 11:43AM, Cédric Le Goater wrote:
+> On 6/27/22 11:14, Pratyush Yadav wrote:
+> > On 18/05/22 10:51AM, Cédric Le Goater wrote:
+[...]
 > 
-> E.g, on my x86_64 kvm guest with 1G memory, the total_mem value shows:
-> UEFI boot with ovmf:   0x3faef000
-> Legacy boot kvm guest: 0x3ff7ec00
+> > > > This series does that by looking at the MTD
+> > > > partitions. For that to happen, we need to create those partitions
+> > > > first, which happens after mtd_device_register().
+> > > 
+> > > hmm, that might work for some boards. This is not at all the case for
+> > > the BMC boards. Vendors can put any kind of flash model and/or layout
+> > > and the driver needs to be more generic.
+> > 
+> > Yes, vendors can choose any layout, but one partition on that layout
+> > would be your calibration pattern. I think you can use a different
+> > compatible for that partition.
 > 
-> When specifying crashkernel=1G-2G:128M, if we have a 1G memory machine,
-> we get total size 1023M from firmware. Then it will not fall into
-> 1G-2G, thus no memory reserved. User will never know this, it is hard
-> to let user know the exact total value in kernel.
+> OK. and that it would become more generic then.
 > 
-> One way is to use dmi/smbios to get physical memory size, but it's not
-> reliable as well. According to Prarit hardware vendors sometimes screw
-> this up. Thus round up total size to 128M to work around this problem.
+> > I have not thought this through yet though.
 > 
-> This patch is a resend of [1] and rebased onto v5.19-rc2, and the
-> original credit goes to Dave Young <dyoung@redhat.com>.
+> If a partition is required, that's a dependency on mtdpart.
+> 
+> It could be done from spi_nor_probe() after mtd_device_register() with
+> some spimem handler using the 'struct mtd_partition' for the {size,offset}
+> parameters.
 
-This should be put into cover letter, or put together with change log.
-Other than this, LGTM,
+Hmm, yes but I've got this feedback from multiple people that we should 
+not do the calibration after mtd_device_register() since at that point 
+the device is usable from userspace. Maybe we can come up with an API 
+from MTD parsers that can just return us a list of partitions but not 
+actually register them?
 
-Acked-by: Baoquan He <bhe@redhat.com>
+> 
+> > > 
+> > > > But I am planning to use device tree to get that information now so this
+> > > > should no longer be needed and we can do calibration before registering
+> > > > the device with MTD.
+> > > 
+> > > Perfect, we can move the calibration hook in spi_nor_create_read_dirmap()
+> > > then, or in devm_spi_mem_dirmap_create(), which would make more sense IMHO.
+> > 
+> > Sorry, I still don't get why you want to tie dirmap and calibration
+> > together. Just let them be independent and let flash drivers take care
+> > of when to call what. SPI MEM should not care.
+> 
+> I know you would prefer a specific handler and that can still be done.
+> 
+> Thanks,
+> 
+> C.
 
-> 
-> [1]: http://lists.infradead.org/pipermail/kexec/2018-April/020568.html
-> 
-> Signed-off-by: Tao Liu <ltao@redhat.com>
-> ---
-> v1 -> v2:
-> Modified commit log based on Baoquan's advice.
-> ---
->  kernel/crash_core.c | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-> index 71122e01623c..b58b27cbdb61 100644
-> --- a/kernel/crash_core.c
-> +++ b/kernel/crash_core.c
-> @@ -9,6 +9,7 @@
->  #include <linux/init.h>
->  #include <linux/utsname.h>
->  #include <linux/vmalloc.h>
-> +#include <linux/sizes.h>
->  
->  #include <asm/page.h>
->  #include <asm/sections.h>
-> @@ -43,6 +44,15 @@ static int __init parse_crashkernel_mem(char *cmdline,
->  					unsigned long long *crash_base)
->  {
->  	char *cur = cmdline, *tmp;
-> +	unsigned long long total_mem = system_ram;
-> +
-> +	/*
-> +	 * Firmware sometimes reserves some memory regions for its own use,
-> +	 * so the system memory size is less than the actual physical memory
-> +	 * size. Work around this by rounding up the total size to 128M,
-> +	 * which is enough for most test cases.
-> +	 */
-> +	total_mem = roundup(total_mem, SZ_128M);
->  
->  	/* for each entry of the comma-separated list */
->  	do {
-> @@ -87,13 +97,13 @@ static int __init parse_crashkernel_mem(char *cmdline,
->  			return -EINVAL;
->  		}
->  		cur = tmp;
-> -		if (size >= system_ram) {
-> +		if (size >= total_mem) {
->  			pr_warn("crashkernel: invalid size\n");
->  			return -EINVAL;
->  		}
->  
->  		/* match ? */
-> -		if (system_ram >= start && system_ram < end) {
-> +		if (total_mem >= start && total_mem < end) {
->  			*crash_size = size;
->  			break;
->  		}
-> -- 
-> 2.33.1
-> 
-
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

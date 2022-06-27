@@ -2,124 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785E655E1BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D1A55D09F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242288AbiF0XeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
+        id S242072AbiF0XfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241313AbiF0XeH (ORCPT
+        with ESMTP id S236667AbiF0XfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:34:07 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740C6DF8B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:34:06 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id p7so17950540ybm.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:34:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=36OIarfx5PzM4kjZSSg0l/qf9yDisYQa76AlgarhvfQ=;
-        b=VkW70IK+3vPfOcOnRfWuB6LlV+6vmO/mzt/JCIbzEK4bLDfPMmrzfix3SzjJvMofg5
-         NjMF1m9bTZAD8EtP+QATDYGTVZptEXbY1wLv5kvTGX8Vcn+YL4rFBBLgIPkCe5FVRnKX
-         RjkNcsqd9AQibP3cTF85ik1u2xfUI53T2U5HwUU9m3bjG+RFbm7U5NYQSWaWN2jBXT56
-         pRjpx+pbNDOdeJkw4SxT7B5C3A6kqxk6OgMNMc0hd6RQ+F0WNojoMUFFGMfHETX0UMUR
-         EEBDJKNfqSwVDy65n69nDAgOeoLQxrLxd+OXmqDj1JOV8CgLWJZe4U1q/W8tVjfVJ/HE
-         wYDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=36OIarfx5PzM4kjZSSg0l/qf9yDisYQa76AlgarhvfQ=;
-        b=LsXxApwDDTPTzcP3wl7F3l8y1qQr3rLpEglrYvBp/X1HlkELJIjRWDvQi4AV3pj9Hy
-         FmCLahx1k1GRwf7410PB85czbbnYJBFufXK4BRjIUCRLB3ni5mVRq4oyS07h527yGeqz
-         /OQ9OZZLwGsZ2jKvdsNQngstKN22B43s2ciaAC6ZyQgDqmloSOfy250zNZveDcmIegK6
-         0IREd+vMVCB/6Rffnjo5CyeTzHTG8NvqvjcXM32AL/nA+nnUqZ2T7p5FtpsG/ACpxXBm
-         JE0uOWNs8+DgCJjFM7e/QYjRqCoqoDEYf+BviqrMkBFZR5Gu44RuZszCMzHsZdXPM1qC
-         5uvw==
-X-Gm-Message-State: AJIora8kMxJ2h98GvYyEL4gjvINsE1iVyFlypt5+LnkkGWi6f5n0gMxf
-        iBSmHpmWbz47kxRf41WjZdbe0TSEhKFHAeovdYS3eA==
-X-Google-Smtp-Source: AGRyM1vC5NaCuMcoNthT4i9leFW9x27xMZpQY1Eu6fWof/sJuw4UGnnR6x/z3pEdr/3/k4fegrTT9sWv8QUD6Wjdyok=
-X-Received: by 2002:a25:d4d6:0:b0:669:b717:187b with SMTP id
- m205-20020a25d4d6000000b00669b717187bmr15523053ybf.405.1656372845601; Mon, 27
- Jun 2022 16:34:05 -0700 (PDT)
+        Mon, 27 Jun 2022 19:35:19 -0400
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07DFADF8B;
+        Mon, 27 Jun 2022 16:35:18 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 3767D5ED512;
+        Tue, 28 Jun 2022 09:35:17 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1o5yGB-00BrO7-Sf; Tue, 28 Jun 2022 09:35:15 +1000
+Date:   Tue, 28 Jun 2022 09:35:15 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v3 25/25] xfs: Support large folios
+Message-ID: <20220627233515.GG227878@dread.disaster.area>
+References: <20211216210715.3801857-1-willy@infradead.org>
+ <20211216210715.3801857-26-willy@infradead.org>
+ <YrO243DkbckLTfP7@magnolia>
+ <Yrku31ws6OCxRGSQ@magnolia>
+ <Yrm6YM2uS+qOoPcn@casper.infradead.org>
+ <YrosM1+yvMYliw2l@magnolia>
 MIME-Version: 1.0
-References: <20220624084400.1454579-1-davidgow@google.com> <CAGS_qxqrcyEH+C=63R8uT+K2opkXm6Da1wa4pyNupLUsy1iAKw@mail.gmail.com>
-In-Reply-To: <CAGS_qxqrcyEH+C=63R8uT+K2opkXm6Da1wa4pyNupLUsy1iAKw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 27 Jun 2022 16:33:54 -0700
-Message-ID: <CAGS_qxra2cCoJvduj4Burtm+_wP2dg_hBFqwVZuhAkb38S4iyg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Enable virtio/PCI by default on UML
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrosM1+yvMYliw2l@magnolia>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=62ba3eb5
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=kj9zAlcOel0A:10 a=JPEYwPQDsx4A:10 a=JfrnYn6hAAAA:8 a=VwQbUJbxAAAA:8
+        a=7-415B0cAAAA:8 a=Tx_KuMWrBpQ_Xf1fj60A:9 a=CjuIK1q_8ugA:10
+        a=1CNFftbPRP8L7MoqJWF3:22 a=AjGcO6oz07-iQ99wixmX:22
+        a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 3:57 PM Daniel Latypov <dlatypov@google.com> wrote:
->
-> On Fri, Jun 24, 2022 at 1:44 AM David Gow <davidgow@google.com> wrote:
-> >
-> > There are several tests which depend on PCI, and hence need a bunch of
-> > extra options to run under UML. This makes it awkward to give
-> > configuration instructions (whether in documentation, or as part of a
-> > .kunitconfig file), as two separate, incompatible sets of config options
-> > are required for UML and "most other architectures".
-> >
-> > For non-UML architectures, it's possible to add default kconfig options
-> > via the qemu_config python files, but there's no equivalent for UML. Add
-> > a new tools/testing/kunit/configs/arch_uml.config file containing extra
-> > kconfig options to use on UML.
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>
+On Mon, Jun 27, 2022 at 03:16:19PM -0700, Darrick J. Wong wrote:
+> On Mon, Jun 27, 2022 at 03:10:40PM +0100, Matthew Wilcox wrote:
+> > On Sun, Jun 26, 2022 at 09:15:27PM -0700, Darrick J. Wong wrote:
+> > > On Wed, Jun 22, 2022 at 05:42:11PM -0700, Darrick J. Wong wrote:
+> > > > [resend with shorter 522.out file to keep us under the 300k maximum]
+> > > > 
+> > > > On Thu, Dec 16, 2021 at 09:07:15PM +0000, Matthew Wilcox (Oracle) wrote:
+> > > > > Now that iomap has been converted, XFS is large folio safe.
+> > > > > Indicate to the VFS that it can now create large folios for XFS.
+> > > > > 
+> > > > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > > > > Reviewed-by: Christoph Hellwig <hch@lst.de>
+> > > > > Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+> > > > > ---
+> > > > >  fs/xfs/xfs_icache.c | 2 ++
+> > > > >  1 file changed, 2 insertions(+)
+> > > > > 
+> > > > > diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
+> > > > > index da4af2142a2b..cdc39f576ca1 100644
+> > > > > --- a/fs/xfs/xfs_icache.c
+> > > > > +++ b/fs/xfs/xfs_icache.c
+> > > > > @@ -87,6 +87,7 @@ xfs_inode_alloc(
+> > > > >  	/* VFS doesn't initialise i_mode or i_state! */
+> > > > >  	VFS_I(ip)->i_mode = 0;
+> > > > >  	VFS_I(ip)->i_state = 0;
+> > > > > +	mapping_set_large_folios(VFS_I(ip)->i_mapping);
+> > > > >  
+> > > > >  	XFS_STATS_INC(mp, vn_active);
+> > > > >  	ASSERT(atomic_read(&ip->i_pincount) == 0);
+> > > > > @@ -320,6 +321,7 @@ xfs_reinit_inode(
+> > > > >  	inode->i_rdev = dev;
+> > > > >  	inode->i_uid = uid;
+> > > > >  	inode->i_gid = gid;
+> > > > > +	mapping_set_large_folios(inode->i_mapping);
+> > > > 
+> > > > Hmm.  Ever since 5.19-rc1, I've noticed that fsx in generic/522 now
+> > > > reports file corruption after 20 minutes of runtime.  The corruption is
+> > > > surprisingly reproducible (522.out.bad attached below) in that I ran it
+> > > > three times and always got the same bad offset (0x6e000) and always the
+> > > > same opcode (6213798(166 mod 256) MAPREAD).
+> > > > 
+> > > > I turned off multipage folios and now 522 has run for over an hour
+> > > > without problems, so before I go do more debugging, does this ring a
+> > > > bell to anyone?
+> > > 
+> > > I tried bisecting, but that didn't yield anything productive and
+> > > 5.19-rc4 still fails after 25 minutes; however, it seems that g/522 will
+> > > run without problems for at least 3-4 days after reverting this patch
+> > > from -rc3.
+> > > 
+> > > So I guess I have a blunt force fix if we can't figure this one out
+> > > before 5.19 final, but I'd really rather not.  Will keep trying this
+> > > week.
+> > 
+> > I'm on holiday for the next week, so I'm not going to be able to spend
+> > any time on this until then.  I have a suspicion that this may be the
+> > same bug Zorro is seeing here:
+> > 
+> > https://lore.kernel.org/linux-mm/20220613010850.6kmpenitmuct2osb@zlang-mailbox/
+> > 
+> > At least I hope it is, and finding a folio that has been freed would
+> > explain (apparent) file corruption.
+> 
+> Hm.  I suppose it /could/ be a lost folio getting into the works
+> somewhere.
+> 
+> Today I remembered fsx -X, which makes this reproduce a bit faster (~3-8
+> minutes instead of 20-25).  That has helped me to narrow things down a
+> little more:
+> 
+> - Turning off INSERT/COLLAPSE_RANGE doesn't make the problem go away,
+>   but it does make reading the fsx log much easier.
+> 
+> - Turning off clone/dedupe (either via -J -B or formatting with -m
+>   reflink=0) makes the problem go away completely.  If you define
+>   letting fsx run for 90 minutes as "completely".
+> 
+> - Neutering vfs_dedupe_file_range_compare by replacing it with an -EBADE
+>   return doesn't affect the reproducibility, so it's not the comparison
+>   function misbehaving.
+> - I modified fsx.c so that when there's file corruption, it'll report
+>   both the first 16 bytes of corruption as well as every corruption that
+>   happens on a page boundary.
+> 
+> - I also modified run_fsx() to diff the good and junk files, and
+>   complain about any corruption happening on a page boundary.  Now I see
+>   things like this:
+> 
+> 2153984(  0 mod 256): SKIPPED (no operation)
+> 2153985(  1 mod 256): DEDUPE 0xf000 thru 0x23fff        (0x15000 bytes) to 0x2a000 thru 0x3efff ******BBBB
+> 2153986(  2 mod 256): COPY 0xe794 thru 0x2ae41  (0x1c6ae bytes) to 0x60ac4 thru 0x7d171
+> 2153987(  3 mod 256): TRUNCATE DOWN     from 0x7d172 to 0x535da
+> 2153988(  4 mod 256): SKIPPED (no operation)
+> 2153989(  5 mod 256): MAPREAD  0x40b93 thru 0x535d9     (0x12a47 bytes)
+> 2153990(  6 mod 256): COPY 0x5edd thru 0x20282  (0x1a3a6 bytes) to 0x3a9aa thru 0x54d4f
+> 2153991(  7 mod 256): SKIPPED (no operation)
+> 2153992(  8 mod 256): SKIPPED (no operation)
+> 2153993(  9 mod 256): ZERO     0x542d3 thru 0x67006     (0x12d34 bytes)
+> 2153994( 10 mod 256): COPY 0x42cf6 thru 0x538a7 (0x10bb2 bytes) to 0x23fe7 thru 0x34b98 ******EEEE
+> 2153995( 11 mod 256): MAPWRITE 0x5a1fc thru 0x6b067     (0x10e6c bytes)
+> 2153996( 12 mod 256): SKIPPED (no operation)
+> 2153997( 13 mod 256): CLONE 0x38000 thru 0x38fff        (0x1000 bytes) to 0x77000 thru 0x77fff
+> 2153998( 14 mod 256): FALLOC   0x49bdd thru 0x62a55     (0x18e78 bytes) INTERIOR
+> 2153999( 15 mod 256): CLONE 0xf000 thru 0x1bfff (0xd000 bytes) to 0x2c000 thru 0x38fff  ******JJJJ
+> Log of operations saved to "/mnt/junk.fsxops"; replay with --replay-ops
+> Correct content saved for comparison
+> (maybe hexdump "/mnt/junk" vs "/mnt/junk.fsxgood")
+> junk file 177
+> -02e000  ec  20  ec  5a  ec  78  ec  b2  ec  e6  ec  1e  ec  43  ec  0f
+> -02f000  ec  30  ec  32  ec  4c  ec  ac  ec  5c  ec  d2  ec  62  ec  d3
+> -030000  ec  73  ec  ce  ec  8c  ec  cb  ec  94  ec  59  ec  81  ec  34
+> +02e000  77  db  f1  db  ba  db  01  db  d5  db  9c  db  4d  db  de  db
+> +02f000  b3  d8  35  d8  e2  d8  bb  d8  a4  d8  c8  d8  5b  d8  83  d8
+> +030000  23  d8  c8  d8  22  d8  da  d8  97  d8  e0  d8  7e  d8  61  d8
+> 
+> When I remount the test filesystem, I see further corruption:
+> 
+> $ diff -Naurp <(od -tx1 -Ax -c $TEST_DIR/junk.fsxgood) <(od -tx1 -Ax -c $TEST_DIR/junk) | grep '^[+-]0..000'
+> -011000  ec  20  ec  5a  ec  78  ec  b2  ec  e6  ec  1e  ec  43  ec  0f
+> -012000  ec  30  ec  32  ec  4c  ec  ac  ec  5c  ec  d2  ec  62  ec  d3
+> -013000  ec  73  ec  ce  ec  8c  ec  cb  ec  94  ec  59  ec  81  ec  34
+> +011000  77  db  f1  db  ba  db  01  db  d5  db  9c  db  4d  db  de  db
+> +012000  b3  d8  35  d8  e2  d8  bb  d8  a4  d8  c8  d8  5b  d8  83  d8
+> +013000  23  d8  c8  d8  22  d8  da  d8  97  d8  e0  d8  7e  d8  61  d8
+> -02e000  ec  20  ec  5a  ec  78  ec  b2  ec  e6  ec  1e  ec  43  ec  0f
+> -02f000  ec  30  ec  32  ec  4c  ec  ac  ec  5c  ec  d2  ec  62  ec  d3
+> -030000  ec  73  ec  ce  ec  8c  ec  cb  ec  94  ec  59  ec  81  ec  34
+> +02e000  77  db  f1  db  ba  db  01  db  d5  db  9c  db  4d  db  de  db
+> +02f000  b3  d8  35  d8  e2  d8  bb  d8  a4  d8  c8  d8  5b  d8  83  d8
+> +030000  23  d8  c8  d8  22  d8  da  d8  97  d8  e0  d8  7e  d8  61  d8
+> 
+> This is really quite strange!  The same corruption patterns we saw at
+> pages 0x2e - 0x30 now appear at 0x11-0x13 after the remount!
 
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
+Hmmmm - look at what the last operation before failure
+does - it clones 0xf000-0x1bfff to 0x2c000-0x38fff. IOWs, those
+ranges *should* be identical and the the corruption is actually
+occuring at 0x11000-0x13fff. It's not until that range gets cloned
+to 0x2e000-0x30fff that the corruption is detected.
 
-LGTM, modulo the pytype error mentioned before.
+So we're looking in the wrong spot for the page cache corruption -
+we need to be looking at operations over the range 0x11000-0x13fff
+for misbehaviour, not where fsx detected the corrupt data.
 
-> >                         tree = kunit_kernel.LinuxSourceTree(build_dir)
-> > +                       # Stub out the source tree operations, so we don't have
-> > +                       # the defaults for any given architecture get in the
-> > +                       # way.
-> > +                       tree._ops = kunit_kernel.LinuxSourceTreeOperations(None, None)
->
-> This runs and typechecks under mypy, but not under pytype.
-> The problem is that the first argument is type str, not Optional[str].
->
-> I think a fix would be to just use LinuxSourceTreeOperationsUml() instead here.
->
-> Since you recently switched machines, you might want to run:
-> $ pip install pytype
->
-> And then
-> $ ./tools/testing/kunit/run_checks.py
-> would run pytype and show you the complaints here.
+> By comparison, the junk.fsxgood file only contains this 77/db/f1
+> sequence at:
+> 
+> $ od -tx1 -Ax -c $TEST_DIR/junk.fsxgood | grep '77  db  f1'
+> 008530  db  34  db  77  db  f1  db  ba  db  01  db  d5  db  9c  db  4d
+> 03d000  77  db  f1  db  ba  db  01  db  d5  db  9c  db  4d  db  de  db
+> 
+> Curiously, the same byte trios at 0x2f000 and 0x30000 have similar
+> repetitions at similar looking offsets:
+> 
+> $ od -tx1 -Ax -c $TEST_DIR/junk.fsxgood | grep 'b3  d8  35'
+> 009530  d8  bb  d8  b3  d8  35  d8  e2  d8  bb  d8  a4  d8  c8  d8  5b
+> 03e000  b3  d8  35  d8  e2  d8  bb  d8  a4  d8  c8  d8  5b  d8  83  d8
+> $ od -tx1 -Ax -c $TEST_DIR/junk.fsxgood | grep '23  d8  c8'
+> 00a530  d8  f5  d8  23  d8  c8  d8  22  d8  da  d8  97  d8  e0  d8  7e
+> 03f000  23  d8  c8  d8  22  d8  da  d8  97  d8  e0  d8  7e  d8  61  d8
+> 
+> Though the only pattern that happens consistently is that garbage bytes
+> end up at the reflink dest, and later at the reflink source.  I never
+> see any VM_BUG_ON_FOLIO asserts, nor does KASAN report anything.
 
-Oh, I see what you're doing here, we want to avoid the new step where
-UML now adds to the .kunitconfig file.
+Smells like the page cache over the clone source is not getting
+marked dirty and/or flushed to disk correctly before the clone is
+run. It then shares the extent with stale data to the new location
+(the destination) which then fails the contents validation.
 
-Something like this could work
-- tree._ops = kunit_kernel.LinuxSourceTreeOperations(None, None)
-+ tree._ops = kunit_kernel.LinuxSourceTreeOperations('none', None)
-or we could put 'fake', etc.
+Do we have a case where we are only writing back the head page of
+the multipage folio?
 
-If we're not happy with using this class directly (since it's meant to
-subclassed), an alternative, more targeted approach could be:
- mock.patch.object(tree._ops, 'make_arch_config', lambda x: x).start()
-But I don't like this and would prefer the above.
+> I also added a debug function to dump the folios it finds in the
+> pagecache for the fsx junk file, but nothing looks odd:
+> 
+>      522-5099  [001]   491.954659: console:              [U] FSX FAILURE
+>   xfs_io-5125  [002]   491.961232: console:              XFS (sda): EXPERIMENTAL online scrub feature in use. Use at your own risk!
+>   xfs_io-5125  [002]   491.961238: bprint:               filemap_dump: ino 0xb1 pos 0x0 pfn 0x515cc order 0
+>   xfs_io-5125  [002]   491.961238: bprint:               filemap_dump: ino 0xb1 pos 0x1000 pfn 0x515cd order 0
+>   xfs_io-5125  [002]   491.961239: bprint:               filemap_dump: ino 0xb1 pos 0x2000 pfn 0x515ce order 0
+>   xfs_io-5125  [002]   491.961239: bprint:               filemap_dump: ino 0xb1 pos 0x3000 pfn 0x515cf order 0
+>   xfs_io-5125  [002]   491.961239: bprint:               filemap_dump: ino 0xb1 pos 0x4000 pfn 0x50c48 order 0
+>   xfs_io-5125  [002]   491.961240: bprint:               filemap_dump: ino 0xb1 pos 0x5000 pfn 0x50c49 order 0
+>   xfs_io-5125  [002]   491.961240: bprint:               filemap_dump: ino 0xb1 pos 0x6000 pfn 0x50c4a order 0
+>   xfs_io-5125  [002]   491.961241: bprint:               filemap_dump: ino 0xb1 pos 0x7000 pfn 0xc8a8 order 0
+>   xfs_io-5125  [002]   491.961241: bprint:               filemap_dump: ino 0xb1 pos 0x8000 pfn 0x50988 order 2
+>   xfs_io-5125  [002]   491.961241: bprint:               filemap_dump: ino 0xb1 pos 0xc000 pfn 0x509e0 order 2
+>   xfs_io-5125  [002]   491.961242: bprint:               filemap_dump: ino 0xb1 pos 0x10000 pfn 0x4db64 order 2
 
-Daniel
+So this is the folio that likely has the problem (the source)...
+
+>   xfs_io-5125  [002]   491.961242: bprint:               filemap_dump: ino 0xb1 pos 0x14000 pfn 0x50c4c order 0
+>   xfs_io-5125  [002]   491.961243: bprint:               filemap_dump: ino 0xb1 pos 0x15000 pfn 0x12485 order 0
+>   xfs_io-5125  [002]   491.961243: bprint:               filemap_dump: ino 0xb1 pos 0x16000 pfn 0x50c4d order 0
+>   xfs_io-5125  [002]   491.961243: bprint:               filemap_dump: ino 0xb1 pos 0x17000 pfn 0x50c4e order 0
+>   xfs_io-5125  [002]   491.961244: bprint:               filemap_dump: ino 0xb1 pos 0x18000 pfn 0x4eef8 order 2
+>   xfs_io-5125  [002]   491.961244: bprint:               filemap_dump: ino 0xb1 pos 0x1c000 pfn 0x4eefc order 2
+>   xfs_io-5125  [002]   491.961245: bprint:               filemap_dump: ino 0xb1 pos 0x20000 pfn 0x4eef0 order 2
+>   xfs_io-5125  [002]   491.961245: bprint:               filemap_dump: ino 0xb1 pos 0x24000 pfn 0x50f2c order 2
+>   xfs_io-5125  [002]   491.961245: bprint:               filemap_dump: ino 0xb1 pos 0x28000 pfn 0x50f28 order 2
+>   xfs_io-5125  [002]   491.961246: bprint:               filemap_dump: ino 0xb1 pos 0x2c000 pfn 0x50f24 order 2
+
+... not the one at the destination here.
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

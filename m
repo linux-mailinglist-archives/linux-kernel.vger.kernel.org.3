@@ -2,89 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87B955CE32
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6258E55CCA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233917AbiF0JRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
+        id S233953AbiF0JR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233841AbiF0JQ3 (ORCPT
+        with ESMTP id S233936AbiF0JRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:16:29 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B6A6250
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:16:28 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id z7so11994456edm.13
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=4yCp6aTXqUcXVsV0Np3Dwjlcr0jYRXR8pM5bj50a/ow=;
-        b=A/AH+rqyBgloYrW3r5UfZDex8wxiYwvMlaBdRYE7DqkFvHJv1lz7pOR/uEcpmNDf9l
-         zoKpIHNYtN3yFJ228uMZNAnlykPHvFa+gNngWSmW2m3U5tHGDjyFU4fCRgLVZzCX+7v7
-         iR6YiT2ta/zahwUpgsriaTIUU8CowWzLoEqU2tRQxCpf26W4PdbMuwSkSY+07eDKgS1Y
-         CFBaeepxTVduRlMysqV8xzkmf0E/oeTQ5QJ5f3Q3Kdyq/jkfsZTJsuuge1K+u3xnN+wo
-         us/25Le2kjU2H/YI3g0DTEVpCEu+hydMJ5uDE9vI5MBrlPKjTo7RU45fA4UjsxPspsU3
-         xwKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4yCp6aTXqUcXVsV0Np3Dwjlcr0jYRXR8pM5bj50a/ow=;
-        b=Yl+9IL280zVYo43rPvmZqKbF93jbOOJefVfrxyePiSjybkh3P8aBT6zS02Pe/BIstR
-         LBvbirLVGmj165/61KKLeiml+xioj+fZbJ2G0zeVnuR8fl/fkET2r6uQvsyVW0cYh+Cg
-         Fb5bpQNo3irqDRRZrOY4Qve1KC3O3Ua2IuF0SONwYE9mvWtZT4Qs+bPmFBMR3fLQSdTE
-         0lX9u8HPTnDNQata2xsMbVnIOQ5vH+dJI8VWg/o2Z78GP7794VEb/1qpr2TyXcO5vll7
-         umgyNu2r91UhQTFl8bsUEAJOohHdBvfI0O2i3FcC5Ml4ZLknMBZcaPS26E94pT6XKc5m
-         E1yw==
-X-Gm-Message-State: AJIora+t0YL7HvjfPd1iOwhEdKSikxj6XmBWHaQvjyhftewwii5Tu/ci
-        TOMtCf/URdXqNYAldyBLqqOhSw==
-X-Google-Smtp-Source: AGRyM1tGxNBHWOJWILt1IIISQWZABMsK2JgKp45IPF/kZntw7pMPmbIgZBPos3nCiw1YiVXFdIO6Nw==
-X-Received: by 2002:a05:6402:2549:b0:437:788d:b363 with SMTP id l9-20020a056402254900b00437788db363mr10845669edb.406.1656321387840;
-        Mon, 27 Jun 2022 02:16:27 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gy10-20020a170906f24a00b006f3ef214e2csm4805395ejb.146.2022.06.27.02.16.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 02:16:27 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski@linaro.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        arm@kernel.org, alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        olof@lixom.net
-Subject: Re: (subset) [PATCH v3 40/40] ARM: dts: at91: drop unneeded status from gpio-keys
-Date:   Mon, 27 Jun 2022 11:16:00 +0200
-Message-Id: <165632135506.81841.16359602083216967103.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220616005333.18491-40-krzysztof.kozlowski@linaro.org>
-References: <20220616005224.18391-1-krzysztof.kozlowski@linaro.org> <20220616005333.18491-40-krzysztof.kozlowski@linaro.org>
+        Mon, 27 Jun 2022 05:17:55 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175E662F4;
+        Mon, 27 Jun 2022 02:17:53 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LWhsP34JVz1L8j0;
+        Mon, 27 Jun 2022 17:15:37 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 17:17:50 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 17:17:49 +0800
+Subject: Re: [PATCH 5/5] arm64: kdump: Don't defer the reservation of crash
+ high memory
+To:     Baoquan He <bhe@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+CC:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        "Eric Biederman" <ebiederm@xmission.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Frank Rowand" <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>, <kexec@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        "Dave Kleikamp" <dave.kleikamp@oracle.com>,
+        liushixin <liushixin2@huawei.com>
+References: <20220613080932.663-1-thunder.leizhen@huawei.com>
+ <20220613080932.663-6-thunder.leizhen@huawei.com>
+ <YrFYHYgX3mC//t2l@MiWiFi-R3L-srv>
+ <3f66323d-f371-b931-65fb-edfae0f01c88@huawei.com> <YrIIJkhKWSuAqkCx@arm.com>
+ <YrLUREAoBMSZo7RR@MiWiFi-R3L-srv> <YrRzvO5F0dumsbAU@arm.com>
+ <Yrkbak66vYT55H4x@MiWiFi-R3L-srv>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <e3318551-4134-245a-c060-86ab81eb3e68@huawei.com>
+Date:   Mon, 27 Jun 2022 17:17:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
+In-Reply-To: <Yrkbak66vYT55H4x@MiWiFi-R3L-srv>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Jun 2022 17:53:33 -0700, Krzysztof Kozlowski wrote:
-> Nodes do not need explicit status=okay.
+
+
+On 2022/6/27 10:52, Baoquan He wrote:
+> On 06/23/22 at 03:07pm, Catalin Marinas wrote:
+>> On Wed, Jun 22, 2022 at 04:35:16PM +0800, Baoquan He wrote:
+>>> On 06/21/22 at 07:04pm, Catalin Marinas wrote:
+>>>> The problem with splitting is that you can end up with two entries in
+>>>> the TLB for the same VA->PA mapping (e.g. one for a 4KB page and another
+>>>> for a 2MB block). In the lucky case, the CPU will trigger a TLB conflict
+>>>> abort (but can be worse like loss of coherency).
+>>>
+>>> Thanks for this explanation. Is this a drawback of arm64 design? X86
+>>> code do the same thing w/o issue, is there way to overcome this on
+>>> arm64 from hardware or software side?
+>>
+>> It is a drawback of the arm64 implementations. Having multiple TLB
+>> entries for the same VA would need additional logic in hardware to
+>> detect, so the microarchitects have pushed back. In ARMv8.4, some
+>> balanced was reached with FEAT_BBM so that the only visible side-effect
+>> is a potential TLB conflict abort that could be resolved by software.
 > 
+> I see, thx.
+> 
+>>
+>>> I ever got a arm64 server with huge memory, w or w/o crashkernel setting 
+>>> have different bootup time. And the more often TLB miss and flush will
+>>> cause performance cost. It is really a pity if we have very powerful
+>>> arm64 cpu and system capacity, but bottlenecked by this drawback.
+>>
+>> Is it only the boot time affected or the runtime performance as well?
+> 
+> Sorry for late reply. What I observerd is the boot time serious latecy
+> with huge memory. Since the timestamp is not available at that time,
+> we can't tell the number. I didn't notice the runtime performance.
+
+There's some data here, and I see you're not on the cc list.
+
+https://lore.kernel.org/linux-mm/1656241815-28494-1-git-send-email-guanghuifeng@linux.alibaba.com/T/
+
+> 
+> .
 > 
 
-Applied, thanks!
-
-[40/40] ARM: dts: at91: drop unneeded status from gpio-keys
-        https://git.kernel.org/krzk/linux/c/592feeea113553be142680a25a9c0850daae3567
-
-Best regards,
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Regards,
+  Zhen Lei

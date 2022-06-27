@@ -2,89 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB40655D7D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7724755C155
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233635AbiF0K1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
+        id S233024AbiF0K20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiF0K1A (ORCPT
+        with ESMTP id S229531AbiF0K2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:27:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4440D5FEF;
-        Mon, 27 Jun 2022 03:27:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D03BE612C3;
-        Mon, 27 Jun 2022 10:26:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96F80C3411D;
-        Mon, 27 Jun 2022 10:26:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656325619;
-        bh=vjTgWiHh+robp6L83MZ74F5DMaJm4hX3GEkyX/9p/ss=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ZwSP23aHPP1I3leRTLNvLo1GAOJZqOl1HOcixTm7IAeczV1M8txQaKNuf1cpTwfEy
-         pU95hRPpxaOFsMjvaBeQa7JsYUJKSSJslYDfZGIJ1E7fz0IrA5lZSxzgIpyyFFbVfN
-         aLOtpAcaAI4f7x7R4hoEIM3XO47OCOYhGdy7N5lBvqOZhtbvHN5bXyCs2lK2udCb12
-         /rBSUfw8JVEH8hDyOdxM3b0UGCDtbDJFWzIaP0oFSVXSTOtcuiU8hL18FKjSsPiRV5
-         f+b6bJ1oOflDlSF4ttcRODc8KaHTcpcD9fI1fIrhMHc25ri4RQBXHdOdpQVhaYJnd8
-         kti9DU8aPeLyA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: net: wireless: ath11k: add new DT entry for board ID
-In-Reply-To: <20220621135339.1269409-1-robimarko@gmail.com> (Robert Marko's
-        message of "Tue, 21 Jun 2022 15:53:38 +0200")
-References: <20220621135339.1269409-1-robimarko@gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-Date:   Mon, 27 Jun 2022 13:26:51 +0300
-Message-ID: <87o7yeo104.fsf@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 27 Jun 2022 06:28:24 -0400
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7126144
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:28:23 -0700 (PDT)
+Received: by mail-wr1-x44a.google.com with SMTP id z11-20020adfc00b000000b0021a3ab8ec82so1082144wre.23
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:28:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=s3eRgQeQQvBRcBzSbIvyRJKDsKq3OdYe9Y1yRn0fcpo=;
+        b=o6mG6eicSxWD/sxjsoLYHS/sWTPbwX/sUFlawHFsI/YkYx30RZS+bCniGbhmPfUafs
+         Jh+noSSwZiQEsQVDt9wYYwYIBfTDMApEfjGbnu0q2E6U/jxwsEMVKx3xYXJHRNizgiAa
+         VrwPEh1m8uAIIGOQHxxdh+U6+0kPvNm9+fBmHy3XG13HV6yd9hmRFcGAc23nawUkMBK1
+         wWubfDS1vqMBG+l2Tf3XYP5a2yppLXzJYCzkhqRmlcZC73qJVYdt4kAd56HtCdMuvob4
+         hk2J60qoknmGH4PryUgyG0roy2T1bGYjahVzh5iGbV11cRFnn3avV+4YpxUtU1KALxYE
+         ziIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=s3eRgQeQQvBRcBzSbIvyRJKDsKq3OdYe9Y1yRn0fcpo=;
+        b=CphmmyGa92/ovgRP9vo416tJuqd0U9L/gXo7Jmvbn+2ylduIZKbXvx6ZSa77wWGbih
+         v8jdNEM6uKroi3kjHfc5yWe0h8NcNha7stYkpuca7NitSWM983nYNiA7V6TY5qyXDJvJ
+         1CqY75u+8Z95qy3/sDZA22oXzbbqUV0g26uR6PK88Rb7BMpADbiM/vQPbSxiwRrtePSi
+         gPgj7gFQIh3RsNx0BXEy+EkLRm11z3H6jk6mqtDtO3Ap8cJZTH5oAwxcaq/c5lyDcg+D
+         Yk0td42R4jmNiUu7oBK4xmVcwfRQJhbo0gNXJuuEOKI1Iup0/l3+ayg4Qb5wcvYu6Tpa
+         sPfQ==
+X-Gm-Message-State: AJIora/PjdrC1aMXpP+XYBZja5yvF+iVzPX+qEajyfEZDT2qJiFbOUKA
+        xqRXY7jitc2mR/cUrTtjEqgKVjZEJ8ThMMUEvcA=
+X-Google-Smtp-Source: AGRyM1uCJPS0drBW8eKmuFsKAQJY862R7KMK2UnlDEAyPmBwd2SP9WKQrOr/7DvaHYht1MK2oVhxFK69nQwE2Ee8nZU=
+X-Received: from sene.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:27c4])
+ (user=sebastianene job=sendgmr) by 2002:a05:600c:4e0c:b0:39c:519f:9f35 with
+ SMTP id b12-20020a05600c4e0c00b0039c519f9f35mr19697228wmq.153.1656325702277;
+ Mon, 27 Jun 2022 03:28:22 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 10:28:09 +0000
+Message-Id: <20220627102810.1811311-1-sebastianene@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v8 0/2] Detect stalls on guest vCPUS
+From:   Sebastian Ene <sebastianene@google.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        maz@kernel.org, will@kernel.org, vdonnefort@google.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Ene <sebastianene@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Marko <robimarko@gmail.com> writes:
+This adds a mechanism to detect stalls on the guest vCPUS by creating a
+per CPU hrtimer which periodically 'pets' the host backend driver.
+On a conventional watchdog-core driver, the userspace is responsible for
+delivering the 'pet' events by writing to the particular /dev/watchdogN node.
+In this case we require a strong thread affinity to be able to
+account for lost time on a per vCPU basis.
 
-> bus + qmi-chip-id + qmi-board-id and optionally the variant are currently
-> used for identifying the correct board data file.
->
-> This however is sometimes not enough as all of the IPQ8074 boards that I
-> have access to dont have the qmi-board-id properly fused and simply return
-> the default value of 0xFF.
->
-> So, to provide the correct qmi-board-id add a new DT property that allows
-> the qmi-board-id to be overridden from DTS in cases where its not set.
-> This is what vendors have been doing in the stock firmwares that were
-> shipped on boards I have.
+This device driver acts as a soft lockup detector by relying on the host
+backend driver to measure the elapesed time between subsequent 'pet' events.
+If the elapsed time doesn't match an expected value, the backend driver
+decides that the guest vCPU is locked and resets the guest. The host
+backend driver takes into account the time that the guest is not
+running. The communication with the backend driver is done through MMIO
+and the register layout of the virtual watchdog is described as part of
+the backend driver changes.
 
-What's wrong with using 0xff? Ie. something like this:
+The host backend driver is implemented as part of:
+https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
 
-bus=ahb,qmi-chip-id=0,qmi-board-id=255,variant=foo
+Changelog v8:
+ - fix the yamlint dtschema warning caused by the missing 'reg' property 
 
-Or maybe even just skip qmi-board-id entirely if it's not supported? So
-that the board file string would be something like:
+Changelog v7:
+ - fix the dtschema warnings for 'timeout-sec' property
+ - rename vcpu_stall_detector.yaml to qemu,vcpu_stall_detector.yaml and
+   place the file under misc
+ - improve the Kconfig description for the driver by making it KVM
+   specific
 
-bus=ahb,qmi-chip-id=0,variant=foo
+Changelog v6:
+ - fix issues reported by lkp@intel robot:
+     building for ARCH=h8300 incorrect type in assignment
+     (different address spaces)
 
-I really would like to avoid adding more DT properties unless it's
-absolutely critical.
+Sebastian Ene (2):
+  dt-bindings: vcpu_stall_detector: Add qemu,vcpu-stall-detector
+    compatible
+  misc: Add a mechanism to detect stalls on guest vCPUs
+
+ .../misc/qemu,vcpu-stall-detector.yaml        |  51 ++++
+ drivers/misc/Kconfig                          |  12 +
+ drivers/misc/Makefile                         |   1 +
+ drivers/misc/vcpu_stall_detector.c            | 222 ++++++++++++++++++
+ 4 files changed, 286 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/misc/qemu,vcpu-stall-detector.yaml
+ create mode 100644 drivers/misc/vcpu_stall_detector.c
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.37.0.rc0.161.g10f37bed90-goog
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

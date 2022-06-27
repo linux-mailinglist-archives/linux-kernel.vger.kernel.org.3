@@ -2,86 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6901C55D825
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5F955C215
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239706AbiF0R4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
+        id S239770AbiF0SAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233706AbiF0R4S (ORCPT
+        with ESMTP id S233706AbiF0R76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:56:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAF0DD130
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:56:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656352575;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7mg0Natnz3fvAeghSvOE7uGBbb8dCDKfIOYVJA1IZdI=;
-        b=Zb0yvIIiR1MYdKc+CI1hAaKGqdoF6EFUZtiMBbbjOIwRfl/Tg5dmqiK5J+Vh3XO8WMjoTB
-        9mRIkXi06Svl5pJ2ZAyCl6kKCeFRUg+I03tgIuDndf/aFZyjOx3bZJwDXmkm9u7g5gl4/k
-        z1ck+U8BUt5+Nd/OQIbdhAy3s8TSBRs=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-458-cwrii3WkNGO6XUs5CzURUQ-1; Mon, 27 Jun 2022 13:56:14 -0400
-X-MC-Unique: cwrii3WkNGO6XUs5CzURUQ-1
-Received: by mail-wm1-f69.google.com with SMTP id r186-20020a1c44c3000000b003a02fa133ceso3874252wma.2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:56:14 -0700 (PDT)
+        Mon, 27 Jun 2022 13:59:58 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39903B7CA;
+        Mon, 27 Jun 2022 10:59:58 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id h85so10376528iof.4;
+        Mon, 27 Jun 2022 10:59:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7mg0Natnz3fvAeghSvOE7uGBbb8dCDKfIOYVJA1IZdI=;
-        b=prtKnGiZCQDGaZxYjrnuclLx2Vn4+i4efP3Xhgefd0PU9aPQKfMAhC17px3/1pzmTc
-         XBc9YG00fVBBQuHZiMvHYPH4O6LLSrqpfAV9XBh8ddhYHPFFMwl8Dhdv249t+DCg7qAo
-         QBfLxjBBOtjA3s962HGvnX5+X1iL2TuRvgsqdpbV5fSAYjddr+acySv44gzcHA0s77yn
-         bQpLoj6iqN1/V56woTGEwF9E9oDbGPBRTeDjMiZDRFNMr5QuAbdakdX28dyvPa0agYKQ
-         F0HAH4TYJ6cRi0Zo7AA9i4qgdUKYCvlIz2O7RvTWvfvBy5qXSMTMlujkTrWLm6DL41c4
-         GwVg==
-X-Gm-Message-State: AJIora9MuvkMvoIHNvKTHrpZk2eE1tzPw3FZ4uawm6dcp3N4ttXLhpyY
-        TXvYDZIertdQMaqDup5qnDTFWhE4Yx16naQyUgHxfq7HBhaRjps3OJwVjSfbhi13GmVifKzuVxH
-        pIdiE+j7uV2wHsGo8rTpf+uZG
-X-Received: by 2002:a7b:ce06:0:b0:3a0:39e0:b322 with SMTP id m6-20020a7bce06000000b003a039e0b322mr22328475wmc.55.1656352573195;
-        Mon, 27 Jun 2022 10:56:13 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v9Y7H5IcsM3l7PZbohhBaSs2zzWjrBXo14Wtwusb5syFFsweFwhx/NmH5jUhL61mdYxQz8JA==
-X-Received: by 2002:a7b:ce06:0:b0:3a0:39e0:b322 with SMTP id m6-20020a7bce06000000b003a039e0b322mr22328450wmc.55.1656352572958;
-        Mon, 27 Jun 2022 10:56:12 -0700 (PDT)
-Received: from work-vm (cpc109025-salf6-2-0-cust480.10-2.cable.virginm.net. [82.30.61.225])
-        by smtp.gmail.com with ESMTPSA id r13-20020adfe68d000000b0021018642ff8sm11776063wrm.76.2022.06.27.10.56.11
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=XogYVUgT3W3Q8+7OypuWUvQY31VgP/RT9SPk1+m3+FU=;
+        b=P1U5WA7glJBrsjBJuLAWdbBpoCGdAbSB/3LokD/2aLtZxdX/tUw6Nb05Q4uVYFSJ+Z
+         gGLUlqB6c4Khwma9dEe9gvHDHfyhT91L2PYLjKQ94bneP0O5PCvNvmoFMggtYQasmMIH
+         y2GxFpn6PrRGiofbD7V6loPG3ccC8Lk22jS8lSm6MIBmRJ+shSF2Y6O/tT88H6jvnSnb
+         9cV1GCBVW+bREy/Y1syWTOvLJhoL/k5NdDal32SeNhXgIBfR0lO2KNEy0Mbr6zlT6WtX
+         k1yd+QwTTsNfxIyFaV5WKnVkYEU5X4kZBneIR3ySTS2RkBmxgmrMJcFvmElzhedgXIfY
+         Ue/A==
+X-Gm-Message-State: AJIora8X2HMxP/FsDb8gyrFF0/cIZuQqGsrbnZtNO4nhBktHhmArifQ+
+        tmxBUlvagW01fEG+lhdvE3F64g0A/A==
+X-Google-Smtp-Source: AGRyM1vAnwCiFcCCYZPO4BGu1uNq+/KAgXdRX2IZdwF+ppESdewzYUfeD2cIKxI+ap3H/K+z1y5OaQ==
+X-Received: by 2002:a5d:9a84:0:b0:675:51d2:f1cd with SMTP id c4-20020a5d9a84000000b0067551d2f1cdmr1367241iom.173.1656352797431;
+        Mon, 27 Jun 2022 10:59:57 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id x17-20020a056e020f1100b002d943793c68sm4849162ilj.56.2022.06.27.10.59.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 10:56:12 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 18:56:09 +0100
-From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/26] hugetlb: Introduce HugeTLB high-granularity
- mapping
-Message-ID: <YrnvORvPKbzgxLCu@work-vm>
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <YrYCeYy0rjfGhT/W@casper.infradead.org>
- <CADrL8HUtdd=yEtY=bhHRYVjA30O1CAd6XEj+oTNjviWkSmzowQ@mail.gmail.com>
+        Mon, 27 Jun 2022 10:59:57 -0700 (PDT)
+Received: (nullmailer pid 2674770 invoked by uid 1000);
+        Mon, 27 Jun 2022 17:59:55 -0000
+Date:   Mon, 27 Jun 2022 11:59:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lizhi Hou <lizhi.hou@xilinx.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 1/2] of: create of_root if no dtb provided
+Message-ID: <20220627175955.GA2665611-robh@kernel.org>
+References: <20220624034327.2542112-1-frowand.list@gmail.com>
+ <20220624034327.2542112-2-frowand.list@gmail.com>
+ <20220624141320.3c473605@fixe.home>
+ <6d40876c-2751-01bb-94ab-7c9ab90e636f@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CADrL8HUtdd=yEtY=bhHRYVjA30O1CAd6XEj+oTNjviWkSmzowQ@mail.gmail.com>
-User-Agent: Mutt/2.2.5 (2022-05-16)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6d40876c-2751-01bb-94ab-7c9ab90e636f@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,43 +72,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* James Houghton (jthoughton@google.com) wrote:
-> On Fri, Jun 24, 2022 at 11:29 AM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Fri, Jun 24, 2022 at 05:36:30PM +0000, James Houghton wrote:
-> > > [1] This used to be called HugeTLB double mapping, a bad and confusing
-> > >     name. "High-granularity mapping" is not a great name either. I am open
-> > >     to better names.
-> >
-> > Oh good, I was grinding my teeth every time I read it ;-)
-> >
-> > How does "Fine granularity" work for you?
-> > "sub-page mapping" might work too.
+On Fri, Jun 24, 2022 at 11:44:07AM -0500, Frank Rowand wrote:
+> On 6/24/22 08:13, Clément Léger wrote:
+> > Le Thu, 23 Jun 2022 22:43:26 -0500,
+> > frowand.list@gmail.com a écrit :
+> > 
+> >>  
+> >> +/*
+> >> + * __dtb_empty_root_begin[] magically created by cmd_dt_S_dtb in
+> >> + * scripts/Makefile.lib
+> >> + */
+> >> +extern void *__dtb_empty_root_begin;
+> >> +
+> >>  /*
+> >>   * of_fdt_limit_memory - limit the number of regions in the /memory node
+> >>   * @limit: maximum entries
+> >> @@ -1332,8 +1338,13 @@ bool __init early_init_dt_scan(void *params)
+> >>   */
+> >>  void __init unflatten_device_tree(void)
+> >>  {
+> > 
+> > Hi Frank,
+> > 
+> > This function is only defined when CONFIG_OF_EARLY_FLATTREE is enabled.
 > 
-> "Granularity", as I've come to realize, is hard to say, so I think I
-> prefer sub-page mapping. :) So to recap the suggestions I have so far:
+> More precisely, only if CONFIG_OF_FLATTREE is enabled.  But that would
+> most likely be seleved by CONFIG_OF_EARLY_FLATTREE, so in practice the
+> issue you raise is valid.
 > 
-> 1. Sub-page mapping
-> 2. Granular mapping
-> 3. Flexible mapping
+> > Which means that on platforms that do not select this, the default
+> > empty device-tree creation will not be done.
 > 
-> I'll pick one of these (or maybe some other one that works better) for
-> the next version of this series.
+> Yes, so platforms that need this functionality need to select this
+> option.
+> 
+> > 
+> > This configuration option is selected by the platform and not by the
+> > user. On x86, only one config enables this (X86_INTEL_CE) which means
+> > this won't work on all the other platforms even if CONFIG_OF is
+> > selected. I would need this to work by only selected CONFIG_OF.
+> 
+> Maybe this means that CONFIG_OF should be changed to select
+> CONFIG_OF_FLATTREE.  Any opinions on this Rob?
 
-<shrug> Just a name; SPM might work (although may confuse those
-architectures which had subprotection for normal pages), and at least
-we can mispronounce it.
+I don't think that works in the PDT (Sparc) case.
 
-In 14/26 your commit message says:
+I think either CONFIG_OF_FLATTREE or CONFIG_OF_EARLY_FLATTREE will need 
+to become user selectable.
 
-  1. Faults can be passed to handle_userfault. (Userspace will want to
-     use UFFD_FEATURE_REAL_ADDRESS to get the real address to know which
-     region they should be call UFFDIO_CONTINUE on later.)
+> 
+> > That's why I decided to add the of_root creation in of_core_init()
+> > using a function (of_fdt_unflatten()) that is provided if CONFIG_OF is
+> > defined.
+> 
+> I mentioned this in response to the previous patch series, but will
+> repeat here for those who might not have read that email thread.
+> 
+> I do not want the root live tree to be created buy different code in
+> different places; I want one central place where this occurs.  When
+> the tree can be created in multiple places by different code blocks,
+> it becomes more difficult to understand the code and more likely that
+> one of the tree creation code blocks is not updated when another is.
 
-can you explain what that new UFFD_FEATURE does?
++1
 
-Dave
-
--- 
-Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
-
+Rob

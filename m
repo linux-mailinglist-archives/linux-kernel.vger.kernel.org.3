@@ -2,56 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5CF55B786
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 07:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C256155B772
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 07:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbiF0FGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 01:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
+        id S232135AbiF0FIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 01:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiF0FGw (ORCPT
+        with ESMTP id S229714AbiF0FIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 01:06:52 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F30726EA;
-        Sun, 26 Jun 2022 22:06:51 -0700 (PDT)
-Received: from [192.168.254.32] (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2ED8420CD15E;
-        Sun, 26 Jun 2022 22:06:50 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2ED8420CD15E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1656306410;
-        bh=ptE65eWw/KVf5Qv9m3tSe+Guw7shYAImcZXGyiZYlag=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PcaGdrYf2ecurMB+zVTYzcBYlK1W8lxfYe46xnDkz9Rdk1XDznscP4qL7Dm468bnV
-         achw3aNfsJrb3r/0tj99oH90bMbZvQFgUbTA2bM26K9ui4Te5vY/Fi7PLD33y5Rkm9
-         kYUZRsIvif3JNe5wFpsFFjCUuN9FQhU1O0UUQ1VA=
-Message-ID: <8c64f0f4-be71-c462-5b74-34a4236265ae@linux.microsoft.com>
-Date:   Mon, 27 Jun 2022 00:06:49 -0500
+        Mon, 27 Jun 2022 01:08:41 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15332DC3;
+        Sun, 26 Jun 2022 22:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656306520; x=1687842520;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=Sw1KTVkqveRatJqsRHyJilac0Q0XsQzusp80Ox1oQaI=;
+  b=sd2xV2r1xorymCN3iZIofzEcR4hET98eF6qGtvt1bBGQuvq7P8yFAzpn
+   B5Dq6BqOtrKX0nk+h23sjV9rhvABoitkVeNMdwI0TOSfIm40UfGBBOYh2
+   mZGnk5ixZIy1tZpU6+XuHivnZx5kccKOCbiOxBrgEQ3tXontXhPc1Ds0V
+   k=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Jun 2022 22:07:39 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 22:07:39 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 26 Jun 2022 22:07:39 -0700
+Received: from [10.50.51.171] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 26 Jun
+ 2022 22:07:34 -0700
+Message-ID: <503f1a8b-eadb-d3a6-6e24-d60437f778b6@quicinc.com>
+Date:   Mon, 27 Jun 2022 10:37:31 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v15 5/6] arm64: Create a list of SYM_CODE functions, check
- return PC against list
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V15 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
 Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
- <20220617210717.27126-1-madvenka@linux.microsoft.com>
- <20220617210717.27126-6-madvenka@linux.microsoft.com>
- <Yrgc/Z7uG29XihFg@FVFF77S0Q05N>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <Yrgc/Z7uG29XihFg@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+To:     Lee Jones <lee.jones@linaro.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
+        <quic_jprakash@quicinc.com>
+References: <1655200111-18357-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1655200111-18357-7-git-send-email-quic_c_skakit@quicinc.com>
+ <YquZRcuRCrdF+Q1z@google.com>
+ <eccbb030-97f7-3a6c-958e-05adcdca6210@quicinc.com>
+ <YrAt6dq6ty9p8d05@google.com>
+ <a11732d6-a9b1-7ead-e89a-564a57a7192b@quicinc.com>
+In-Reply-To: <a11732d6-a9b1-7ead-e89a-564a57a7192b@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,148 +77,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Lee,
 
 
-On 6/26/22 03:46, Mark Rutland wrote:
-> On Fri, Jun 17, 2022 at 04:07:16PM -0500, madvenka@linux.microsoft.com wrote:
->> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+On 6/20/2022 4:37 PM, Satya Priya Kakitapalli (Temp) wrote:
+>
+> On 6/20/2022 1:50 PM, Lee Jones wrote:
+>> On Mon, 20 Jun 2022, Satya Priya Kakitapalli (Temp) wrote:
 >>
->> SYM_CODE functions don't follow the usual calling conventions. Check if the
->> return PC in a stack frame falls in any of these. If it does, consider the
->> stack trace unreliable.
->>
->> Define a special section for unreliable functions
->> =================================================
->>
->> Define a SYM_CODE_END() macro for arm64 that adds the function address
->> range to a new section called "sym_code_functions".
->>
->> Linker file
->> ===========
->>
->> Include the "sym_code_functions" section under read-only data in
->> vmlinux.lds.S.
->>
->> Initialization
->> ==============
->>
->> Define an early_initcall() to create a sym_code_functions[] array from
->> the linker data.
->>
->> Unwinder check
->> ==============
->>
->> Add a reliability check in unwind_check_reliability() that compares a
->> return PC with sym_code_functions[]. If there is a match, then return
->> failure.
->>
->> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
->> Reviewed-by: Mark Brown <broonie@kernel.org>
->> ---
->>  arch/arm64/include/asm/linkage.h  | 11 +++++++
->>  arch/arm64/include/asm/sections.h |  1 +
->>  arch/arm64/kernel/stacktrace.c    | 55 +++++++++++++++++++++++++++++++
->>  arch/arm64/kernel/vmlinux.lds.S   | 10 ++++++
->>  4 files changed, 77 insertions(+)
->>
->> diff --git a/arch/arm64/include/asm/linkage.h b/arch/arm64/include/asm/linkage.h
->> index 43f8c25b3fda..d4058de4af78 100644
->> --- a/arch/arm64/include/asm/linkage.h
->> +++ b/arch/arm64/include/asm/linkage.h
->> @@ -39,4 +39,15 @@
->>  	SYM_START(name, SYM_L_WEAK, SYM_A_NONE)		\
->>  	bti c ;
->>  
->> +/*
->> + * Record the address range of each SYM_CODE function in a struct code_range
->> + * in a special section.
->> + */
->> +#define SYM_CODE_END(name)				\
->> +	SYM_END(name, SYM_T_NONE)			;\
->> +99:	.pushsection "sym_code_functions", "aw"		;\
->> +	.quad	name					;\
->> +	.quad	99b					;\
->> +	.popsection
->> +
->>  #endif
->> diff --git a/arch/arm64/include/asm/sections.h b/arch/arm64/include/asm/sections.h
->> index 40971ac1303f..50cfd1083563 100644
->> --- a/arch/arm64/include/asm/sections.h
->> +++ b/arch/arm64/include/asm/sections.h
->> @@ -22,6 +22,7 @@ extern char __irqentry_text_start[], __irqentry_text_end[];
->>  extern char __mmuoff_data_start[], __mmuoff_data_end[];
->>  extern char __entry_tramp_text_start[], __entry_tramp_text_end[];
->>  extern char __relocate_new_kernel_start[], __relocate_new_kernel_end[];
->> +extern char __sym_code_functions_start[], __sym_code_functions_end[];
->>  
->>  static inline size_t entry_tramp_text_size(void)
->>  {
->> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
->> index 5ef2ce217324..eda8581f7dbe 100644
->> --- a/arch/arm64/kernel/stacktrace.c
->> +++ b/arch/arm64/kernel/stacktrace.c
->> @@ -62,6 +62,31 @@ struct unwind_state {
->>  	bool reliable;
->>  };
->>  
->> +struct code_range {
->> +	unsigned long	start;
->> +	unsigned long	end;
->> +};
->> +
->> +static struct code_range	*sym_code_functions;
->> +static int			num_sym_code_functions;
->> +
->> +int __init init_sym_code_functions(void)
->> +{
->> +	size_t size = (unsigned long)__sym_code_functions_end -
->> +		      (unsigned long)__sym_code_functions_start;
->> +
->> +	sym_code_functions = (struct code_range *)__sym_code_functions_start;
->> +	/*
->> +	 * Order it so that sym_code_functions is not visible before
->> +	 * num_sym_code_functions.
->> +	 */
->> +	smp_mb();
->> +	num_sym_code_functions = size / sizeof(struct code_range);
->> +
->> +	return 0;
->> +}
->> +early_initcall(init_sym_code_functions);
-> 
-> There's no reason to need an initcall for this; we can iterate over this
-> directly using __sym_code_functions_start and __sym_code_functions_end, like we
-> do for exception tables today.
-> 
-> For example:
-> 
-> static inline bool pc_is_sym_code(unsigned long pc)
-> {
-> 	extern struct code_range *__sym_code_functions_start;
-> 	extern struct code_range *__sym_code_functions_end;
-> 
-> 	struct code_range *r;
-> 
-> 	for (r = __sym_code_functions_start; r < __sym_code_functions_end; r++) {
-> 		if (pc >= r->start && pc < r->end)
-> 			return true;
-> 	}
-> 
-> 	return false;
+>>> On 6/17/2022 2:27 AM, Lee Jones wrote:
+>>>> On Tue, 14 Jun 2022, Satya Priya wrote:
+>>>>
+>>>>> Use i2c_new_dummy_device() to register pm8008-regulator
+>>>>> client present at a different address space, instead of
+>>>>> defining a separate DT node. This avoids calling the probe
+>>>>> twice for the same chip, once for each client pm8008-infra
+>>>>> and pm8008-regulator.
+>>>>>
+>>>>> As a part of this define pm8008_regmap_init() to do regmap
+>>>>> init for both the clients and define pm8008_get_regmap() to
+>>>>> pass the regmap to the regulator driver.
+>>>>>
+>>>>> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+>>>>> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+>>>>> ---
+>>>>> Changes in V15:
+>>>>>    - None.
+>>>>>
+>>>>> Changes in V14:
+>>>>>    - None.
+>>>>>
+>>>>> Changes in V13:
+>>>>>    - None.
+>>>>>
+>>>>>    drivers/mfd/qcom-pm8008.c       | 34 
+>>>>> ++++++++++++++++++++++++++++++++--
+>>>>>    include/linux/mfd/qcom_pm8008.h |  9 +++++++++
+>>>>>    2 files changed, 41 insertions(+), 2 deletions(-)
+>>>>>    create mode 100644 include/linux/mfd/qcom_pm8008.h
+>>>>>
+>>>>> diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
+>>>>> index 569ffd50..55e2a8e 100644
+>>>>> --- a/drivers/mfd/qcom-pm8008.c
+>>>>> +++ b/drivers/mfd/qcom-pm8008.c
+>>>>> @@ -9,6 +9,7 @@
+>>>>>    #include <linux/interrupt.h>
+>>>>>    #include <linux/irq.h>
+>>>>>    #include <linux/irqdomain.h>
+>>>>> +#include <linux/mfd/qcom_pm8008.h>
+>>>>>    #include <linux/module.h>
+>>>>>    #include <linux/of_device.h>
+>>>>>    #include <linux/of_platform.h>
+>>>>> @@ -57,6 +58,7 @@ enum {
+>>>>>    struct pm8008_data {
+>>>>>        struct device *dev;
+>>>>> +    struct regmap *regulators_regmap;
+>>>>>        int irq;
+>>>>>        struct regmap_irq_chip_data *irq_data;
+>>>>>    };
+>>>>> @@ -150,6 +152,12 @@ static struct regmap_config 
+>>>>> qcom_mfd_regmap_cfg = {
+>>>>>        .max_register    = 0xFFFF,
+>>>>>    };
+>>>>> +struct regmap *pm8008_get_regmap(const struct pm8008_data *chip)
+>>>>> +{
+>>>>> +    return chip->regulators_regmap;
+>>>>> +}
+>>>>> +EXPORT_SYMBOL_GPL(pm8008_get_regmap);
+>>>> Seems like abstraction for the sake of abstraction.
+>>>>
+>>>> Why not do the dereference inside the regulator driver?
+>>> To derefer this in the regulator driver, we need to have the 
+>>> pm8008_data
+>>> struct definition in the qcom_pm8008 header file.
+>>>
+>>> I think it doesn't look great to have only that structure in header 
+>>> and all
+>>> other structs and enum in the mfd driver.
+>> Then why pass 'pm8008_data' at all?
+>
+>
+> There is one more option, instead of passing the pm8008_data, we could 
+> pass the pdev->dev.parent and get the pm8008 chip data directly in the 
+> pm8008_get_regmap() like below
+>
+>
+> struct regmap *pm8008_get_regmap(const struct device *dev)
+>  {
+>      const struct pm8008_data *chip = dev_get_drvdata(dev);
+>
+>      return chip->regulators_regmap;
 > }
-> 
+> EXPORT_SYMBOL_GPL(pm8008_get_regmap);
+>
+>
+> By doing this we can avoid having declaration of pm8008_data also in 
+> the header. Please let me know if this looks good.
+>
 
-OK.
+Could you please confirm on this?
 
-However, I have decided to hold off on the reliability checks until we have the right
-structure in the unwind code. I am also trying to address the question of reliability
-with a single FP check in my FP validation series.
 
-So, for now, I will remove the reliability checks part of the patch series.
-
-Thanks for the review though. It will be useful when I revisit this in the future and
-resend.
-
-Thanks.
-
-Madhavan
+>> What's preventing you from passing 'regmap'?
+>
+>
+> I didn't get what you meant here, could you please elaborate a bit?
+>
+>

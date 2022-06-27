@@ -2,164 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6E355CA6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3489055D0C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240004AbiF0MCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
+        id S240032AbiF0MC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239513AbiF0L5s (ORCPT
+        with ESMTP id S239640AbiF0L54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:57:48 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2045.outbound.protection.outlook.com [40.107.94.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152FBBE0E;
-        Mon, 27 Jun 2022 04:53:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EiQp6RSK6Bp5CrUbB+NIMtpZ8WbZ4v3UW4tOW6dSq8Xv1i6SJ3HAPlX8Oc+X8YMSkqlA3tL+byZlNPWYeeJtw6aug3AXQFknZHzWpYGTXdw6AODsschrXYXhvHgQGNOVpQlDYqIVwtJnsYRpSXqVw9mQ4mmeStndQ/mehMttDGoJHB3wO09UJoEUEmaM3ZnZluGqvZhRo4C2To2msEiMGbAN2ZgchDlwGBseLQ10PSgNm68DuNE4rr4PfVoRXctSU51kOVeHgRfLuDMfd1Yds6wqhJ5pFZEF+tj4aTne0d2/c5BXW9GPnsoTR694I1zMQDX8F8D2oMdX9dKUzuqyRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0FAhb/jWOMwJX3RJdhgmcwf1MNNk4DXJwGeLYVsIaeE=;
- b=Not35WzUxiIg3bDruN6FEW7xvzC6WV5wBxmHnbOlTc3GRYqKFDNp2A2eW3Gp0JPFg5sQY9HSK5AQ48cDYYVjnoJqIrbuyLGxdfc/Vqb0VU0D3g5fpjDxGbF4PgrBv6OB8ttIxXHoSPCeqS3PQU88sOwwi3GoQk8kbzhfvg21k89yeY8bl/9ThHfvmyfiWMsDbXWsjy/HYBK9lQ3CLkO3xobFMLK67frpoxRWJcgTiyRoGin4L/GLr+ydF5mU9tbIVa8d9PwugpPK4Zlu8X0olYClpKWqi0vF78pExEbgavL1/kqQT/WifPSUBTuarYEH6ItmhiJiSLnFZyG3uVJOnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0FAhb/jWOMwJX3RJdhgmcwf1MNNk4DXJwGeLYVsIaeE=;
- b=L3EoLTjW80ze6griDse9ckkocIK/aKkTjzCNr5kVLY3+3lTXD7fpXtOgvVr96Ry2SSv50MdRt7qIIMQQ6UQTc8vVqlUF7lXPwAWy7qL4ru7nqRarYZWeJzN94Tal+UcvFjuAcVxKCWDJGNbaCNCMpPTUm2d7PL8RjCEI/2YVhHFxZH1u1cZcM6BYkujiuzv0G/gXZl7tDcxTXwGXwFSTdFGZQlhmXlMQrXnot8dk3NTi1y694DAfM7Da3ooS2Fq0gMzskQH5esSEswXqspcdKVtaCu4/8LVYfiKvCNEBoW5mQpnnyOd1Cc38uvI/Io6z7JinSgv2QM5exB/PxXNM2Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- BY5PR12MB5015.namprd12.prod.outlook.com (2603:10b6:a03:1db::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.16; Mon, 27 Jun
- 2022 11:53:32 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::190c:967c:2b86:24a8]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::190c:967c:2b86:24a8%4]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
- 11:53:32 +0000
-Message-ID: <bb1353fa-0c05-76eb-4d88-e43f60dcfec0@nvidia.com>
-Date:   Mon, 27 Jun 2022 12:53:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: linux-next: build warning after merge of the tegra tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Colin Cross <ccross@android.com>,
-        Olof Johansson <olof@lixom.net>,
-        Thierry Reding <treding@nvidia.com>
-Cc:     Bitan Biswas <bbiswas@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220627091519.323d5a82@canb.auug.org.au>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20220627091519.323d5a82@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS9PR06CA0551.eurprd06.prod.outlook.com
- (2603:10a6:20b:485::12) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Mon, 27 Jun 2022 07:57:56 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D885DF64
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:54:11 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id o16-20020a05600c379000b003a02eaea815so4750078wmr.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:54:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=nNoaWz2DLfztpbfMaaOu9PND9CXL/stNC5CxyVcj8tw=;
+        b=s0FEU6AivObD1lzT2SuxslJpVSIXyDDsuFB0W7kASRDUlSFyBNXIGpEBrYgWxxbOLr
+         pADpmFpbeRHDXuUrloWKz+QrjRXV87KEleWiYHYpTRkMzZ3mbZk+pt04e5a3kVnMU6GZ
+         CZj+MLN0u+Cl0VoSCJPdrZDls00sd1/daPXrU5CXskGv8kFtkeALfEiWJi5e/hkjlABy
+         n4s9LX1uBbD5hvzmkV8vijcL7h5ep3jCVXzFrK9MTGQH/H+2viSJie24i/o8JhccnYUo
+         /cip9/pXsctWiRyYT31HX0pRTcNqmuS7XA/ddac5oBXR8bMFreniec+taVX+53lzpAPg
+         RALg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=nNoaWz2DLfztpbfMaaOu9PND9CXL/stNC5CxyVcj8tw=;
+        b=bgdYAQpxVOIQJ3kn3cEBN2IE5ZMsyQb5NWxkXSeVCCL7fcdkBQ9bShXHK9elMn7KyI
+         AUSWNtBBZ1jNO5VaXdt0iypyjzSfZo36YMiDhZGhquBfuQDE8X5VNBXgKVc3X2piKLd4
+         Q2wR1eudEDIccGLSgxsgpQBKldkr0vujMYdY2ZWN9mu3gd4irzUbXVrqIN3ox+TbKcMC
+         4cISmMitQyJlJvatGM+79N5nbHsyvHQnqjGqM9s69io34CFwRrmXvqYsh6EGbDG6uzCM
+         hivDXLOqG0FHC8CEfvZEPQlfWKO684E+Tj166sQdWM7dXk5BqfQ9C/OYxao27nlD+W+6
+         RIJQ==
+X-Gm-Message-State: AJIora9av7/cHlZMh0C14Oqs1Wj56xu9mhYzSN7CALhLPwqcBeYeuhj0
+        IMTfI5C1cvpRuj7Xrr6Eac/vHg==
+X-Google-Smtp-Source: AGRyM1v2YCbjkUWS+vtyeJezfTvhqmE7y9nvKbHozDF85HWmhsPzgY7ui0/J/OUKoCoLxEqG21Y3Xw==
+X-Received: by 2002:a05:600c:a42:b0:39c:9166:5a55 with SMTP id c2-20020a05600c0a4200b0039c91665a55mr14839526wmq.141.1656330849806;
+        Mon, 27 Jun 2022 04:54:09 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id a7-20020adffb87000000b0021b89181863sm10331609wrr.41.2022.06.27.04.54.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 04:54:09 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 12:54:07 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        sre@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
+        lgirdwood@gmail.com, lars@metafoo.de, rafael@kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/10] mfd: axp20x: Add support for AXP192
+Message-ID: <YrmaX6/dbYKAFDQ4@google.com>
+References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
+ <20220603135714.12007-7-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cc87ae4d-e2ba-4b5a-dbc6-08da5833a88d
-X-MS-TrafficTypeDiagnostic: BY5PR12MB5015:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Bj3g+ai+6bd7xeAJQQN4fza/KwQAnO2ZKLchaYF0Xr7UVapCeVDXB0qhuxcQlxUH4aw0Q+swsoy5eprmecdesWR8Ee/p5qU2XJ16izgV8TuVFAA7gpOe5bj8DYQeYauF2eOfouLGRf2VmgC6jI77SkU4Wxqz89xIAW8RjirUoEVWLXbc26p+9mRX6/jwHEbUGhgNZ00J4bUKydpJktirIxDRMwuISkcQ1JIZVbyQC6wLX73IPpCa7DtXy81KKrWn6Lm3e50HqKFeji806HuA0FcuF32T4UTXdFB7bmj9YDOXLaDspYO61nVOafiJtuzSM+riOoFUJF/BaFwYNPqCnKZsRv336o1rqb1YviNzzrH2z6mbmi2IuCDoxcIbKvcUEgqI10JYI0f1yaY7/M9+o7pZY4n364c5JL6GzTGTuvn2TV255ejGz+eCmhS2s7YQZyNtd7JUPdq9h7QrC00ujwmo8WiRFFvzWvOIfb0Bg+z6CrnrdUFAEBaddwcx0FMoeYnuHWkOKs44di+06zTafF5nV2ZAegeq454zo3I4tPn5ch+eWhXYK9odqMF9+3lDpq6pA024zXV2kaK/YfiKDPSMBRVmFcDBd70e/dfA5ujyGtckjVdSFUt4QM7Iols8KI5n0PLmluCjRQ1bV5vtu5Z9HQxvjrE1AG5RyZjAh72oDGgsTbsf4gSzGxQoIruqZTJJcPNcuXo1sODtyMhzifPg06klojbf2ctEDZigxRqhEwzF05l1FZX5sIO/MqwsZ8wSDAfWVi3Z5RmxclK/wkJcX9Fd2gh5jHZHE11G0uPgAlr7Vn7ZNVZvH45QNvUn3vNFvCpT1tpugpT5PUx7UTXPcdiYdNDAWeAWl0/XooHw38IJYDc11A4T6u/jvmHfLzFXWuM++wdHeh02zjB6z95HFmWvcxxJFkGkKOQTf+w=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(396003)(136003)(366004)(39860400002)(6666004)(41300700001)(6486002)(66476007)(6506007)(2616005)(66556008)(8676002)(966005)(26005)(83380400001)(38100700002)(6512007)(86362001)(31686004)(31696002)(478600001)(55236004)(36756003)(4744005)(53546011)(316002)(186003)(54906003)(2906002)(8936002)(110136005)(6636002)(5660300002)(66946007)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cnEvSE42TkRmSjBtSGc1RysybnRER1RaT2xPdlVybXFnZ243cVpwZmljakRn?=
- =?utf-8?B?VEl2Q3Z3WWxRdmlOZ1RjVitpbHZDU3hVWHdQdkNqMWhQVWYyUDhlUVBtSk9N?=
- =?utf-8?B?cHRVYXdYRTJ5OWhGSXQwSitqVXR2NWpsZXVHdlR3OXFMNCtWemwxL2c5L1or?=
- =?utf-8?B?Mm05b1kyZjdSRTg3QWN5WERPdVZSa1JiemJ5bUhONXgyOFpHMFhGS3FsVkY2?=
- =?utf-8?B?S3BVbjRDWlpyK3h4WkJtSTVySDZGWExtMVVHWklUZkxDSXl3clp1VmJhNkxm?=
- =?utf-8?B?c1N6Sks3UlVNUFNrZ0VqN1dQeWV1UUVrRlNlTFJKT0t5bUlhdVZZY2VDUndH?=
- =?utf-8?B?REsxdi9YSnZ1bExNb2F0RExHVUJTVGpIY1J6T0p3ZVF0OHpzMC9PVUllTmNi?=
- =?utf-8?B?V2xEL0gveE9qZnZRWXVWZlQwY1NRZmpxRUk3elVhUVdMaFhvR2dHM3didWxT?=
- =?utf-8?B?VUE4eGozUE82ZnNudHJTeUZSUFA3bDAxTEtBNi80bDE1QjNCa3Jjb2F4MTlv?=
- =?utf-8?B?UkROaFRURCtPM1pnZWlVdEQ4VnI5d0NCa25zSFZyeUJ4Z0pHUWtXK3lVUGdv?=
- =?utf-8?B?L3R6VHBrREpaaWRHZ0pJNEN4bU84T1UwcnRvVFJCNktoNXB3NC9jZEQ0RlBm?=
- =?utf-8?B?OUpHYm1pdlR1d3lVQlo2VHJnUVJ2eVJFYjBhR0l1cVBhYmluWUQ1Vi9maDln?=
- =?utf-8?B?QWhqMjZrekwwS3E4cW1NR2hpRnB4eUVUL2VvbHNFaDVKeG1SRWp0UXd0TWZz?=
- =?utf-8?B?RU9Qb0xSeThuTUdQQnJ0QXZ1VzZtMyt5dTBSV2EzSi8wMUtrenJraXliOVNY?=
- =?utf-8?B?RzVGY3hmanZRUzFlSE0zYW1Cd3EwREFteFFnNTNMYnk1RTRjS0w3bVVHSk15?=
- =?utf-8?B?ZUdhZUZZcFZtRTRDSWZ2ODFqeWIzSDAxSXBTRlozK0lpUWtKUFphTWJlbzhx?=
- =?utf-8?B?UjN4dmIwOWx2UDBCek5jVzBHTGJTV01VOExWcVZtUm9LUHdaT3hyQzRKOHBI?=
- =?utf-8?B?UFh1MG1UUUVvSjJneUxHOEoyMGtnNUEyZnR0NUIwZHQ3L2djZmNsRVIyeGhz?=
- =?utf-8?B?OGRad1c5WjRLb1hxRHFTc3ZqWFoyRzREOGdrQ3F5anBrZDFLcVRZUHU0czZv?=
- =?utf-8?B?UnRjNGFrMDdiRUROSXhlLzVWelhFVitmWDE0b1pndjN0WXQyZXJEck1ER0xZ?=
- =?utf-8?B?Qlk3RFBudjl4aUlCTkI5YjIwUmZHSTlJaDY1Q2p2bjhuSis2TWtjZG5LcWNK?=
- =?utf-8?B?TllFWGFIcGR6c2JIa043TzdxSTRkblVBQy9TaGcwU1A5UXhkMFQvYytwUmp6?=
- =?utf-8?B?WkRJWkpUNDFUdGV0TytuNGRZcDFHM0lRNVRyWlpmYnQxZUQwUmtWTUdLb3ph?=
- =?utf-8?B?R3VkUkhETTJqM0JqSFN0UndPbFNmTXkzSnNRNkkzTFFNR2xOTFE2c1FzZzZU?=
- =?utf-8?B?aTZMa0Y5eTBKR2lONERpNXRwUTkxK3ZmV3d3U0Q3bnVvMUsyTmZncGpwMkxt?=
- =?utf-8?B?dlI0YU1YMVdTQXBJSXRrTWRtV3RORm9pSHZENHgrZDA0Sk9zUDRVMUpvOFp3?=
- =?utf-8?B?MEhkNkFHOHVDSlFieCs2aWxnTEFjem9ZMXVZQ1QzajQ4Nkl5YkdTbnExOTBS?=
- =?utf-8?B?enMrYlVPSnl2bkx2Yk9EUkJhcEk0amQ1ZWRUWTZ0bnR4dkZ6cXZnZW1rNTJh?=
- =?utf-8?B?MHhBMjhqK0x3QTBLSHNLd1piVm1UZ3RtdlVZZ21YTDMwYXRxMHJzUGJwOVcx?=
- =?utf-8?B?cWpnSGI3QnhQanhQZVpiclptMTlnSnREYTltL3lLWVFiaTFQSjQwN0ZJeW1N?=
- =?utf-8?B?NE5kVWl5VmlKTEhEbXlKNlA0ZUFZQkR2REUyN3pMaGhCZkFYSUFrTjJ6NG9l?=
- =?utf-8?B?Wnk4bjRKTGxLSVZZMHcxLzdjZEdMbjB5ZXY2YWZOd0h2U0o2SnVHYUo2WFlu?=
- =?utf-8?B?TC9rUmo1YXFEcWJlOFBCTjUzNzBldEhxMkQ1UFdyaUtNYnUvSkJ5Ym53c0Rv?=
- =?utf-8?B?RHhNOWNBM3pxaVlTMTZLb2Z4MzI3aWF1cU13SEsyTTdjWm9FNlprNmRlUC9a?=
- =?utf-8?B?NjVBZVFGUWV3ZEZ1ZWw1MjVJZ0p4SkgrQnNRaDN2TXlCTVU0c1ZXcU1VQkFw?=
- =?utf-8?B?WThvYk1JSk9MMTFJbExMSFJ4czdtdHgzaklCTXMxQWZsZ25DWjVhbUtJTEl6?=
- =?utf-8?B?Vmc9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc87ae4d-e2ba-4b5a-dbc6-08da5833a88d
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2022 11:53:32.3604
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wK42kwtxb7HbE5/55ZtKlQv/yk3tJLHYdqEx7l/urgw9Q9kLPDwlV73/Wj1eVo6SjnbhZ1+l2mNv9GRV7d3efg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5015
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220603135714.12007-7-aidanmacdonald.0x0@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Fri, 03 Jun 2022, Aidan MacDonald wrote:
 
-On 27/06/2022 00:15, Stephen Rothwell wrote:
-> Hi all,
+> The AXP192 PMIC is similar to the AXP202/AXP209, but with different
+> regulators, additional GPIOs, and a different IRQ register layout.
 > 
-> After merging the tegra tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  drivers/mfd/axp20x-i2c.c   |   2 +
+>  drivers/mfd/axp20x.c       | 150 +++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/axp20x.h |  84 +++++++++++++++++++++
+>  3 files changed, 236 insertions(+)
 > 
-> In file included from drivers/soc/tegra/fuse/fuse-tegra.c:7:
-> include/linux/device.h:136:33: warning: 'dev_attr_production' defined but not used [-Wunused-variable]
->    136 |         struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
->        |                                 ^~~~~~~~~
-> drivers/soc/tegra/fuse/fuse-tegra.c:441:8: note: in expansion of macro 'DEVICE_ATTR_RO'
->    441 | static DEVICE_ATTR_RO(production);
->        |        ^~~~~~~~~~~~~~
-> 
-> Introduced by commit
-> 
->    2258fe488a20 ("soc/tegra: fuse: Expose Tegra production status")
->
+> diff --git a/drivers/mfd/axp20x-i2c.c b/drivers/mfd/axp20x-i2c.c
+> index 00ab48018d8d..9ada58fad77f 100644
+> --- a/drivers/mfd/axp20x-i2c.c
+> +++ b/drivers/mfd/axp20x-i2c.c
+> @@ -62,6 +62,7 @@ static int axp20x_i2c_remove(struct i2c_client *i2c)
+>  #ifdef CONFIG_OF
+>  static const struct of_device_id axp20x_i2c_of_match[] = {
+>  	{ .compatible = "x-powers,axp152", .data = (void *)AXP152_ID },
+> +	{ .compatible = "x-powers,axp192", .data = (void *)AXP192_ID },
+>  	{ .compatible = "x-powers,axp202", .data = (void *)AXP202_ID },
+>  	{ .compatible = "x-powers,axp209", .data = (void *)AXP209_ID },
+>  	{ .compatible = "x-powers,axp221", .data = (void *)AXP221_ID },
+> @@ -75,6 +76,7 @@ MODULE_DEVICE_TABLE(of, axp20x_i2c_of_match);
+>  
+>  static const struct i2c_device_id axp20x_i2c_id[] = {
+>  	{ "axp152", 0 },
+> +	{ "axp192", 0 },
+>  	{ "axp202", 0 },
+>  	{ "axp209", 0 },
+>  	{ "axp221", 0 },
+> diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+> index 8161a5dc68e8..7f64e5c83fe2 100644
+> --- a/drivers/mfd/axp20x.c
+> +++ b/drivers/mfd/axp20x.c
+> @@ -34,6 +34,7 @@
+>  
+>  static const char * const axp20x_model_names[] = {
+>  	"AXP152",
+> +	"AXP192",
+>  	"AXP202",
+>  	"AXP209",
+>  	"AXP221",
+> @@ -92,6 +93,35 @@ static const struct regmap_access_table axp20x_volatile_table = {
+>  	.n_yes_ranges	= ARRAY_SIZE(axp20x_volatile_ranges),
+>  };
+>  
+> +static const struct regmap_range axp192_writeable_ranges[] = {
+> +	regmap_reg_range(AXP192_DATACACHE(0), AXP192_DATACACHE(5)),
+> +	regmap_reg_range(AXP192_PWR_OUT_CTRL, AXP192_IRQ5_STATE),
+> +	regmap_reg_range(AXP20X_DCDC_MODE, AXP192_N_RSTO_CTRL),
+> +	regmap_reg_range(AXP20X_CC_CTRL, AXP20X_CC_CTRL),
+> +};
+> +
+> +static const struct regmap_range axp192_volatile_ranges[] = {
+> +	regmap_reg_range(AXP20X_PWR_INPUT_STATUS, AXP192_USB_OTG_STATUS),
+> +	regmap_reg_range(AXP192_IRQ1_STATE, AXP192_IRQ4_STATE),
+> +	regmap_reg_range(AXP192_IRQ5_STATE, AXP192_IRQ5_STATE),
+> +	regmap_reg_range(AXP20X_ACIN_V_ADC_H, AXP20X_IPSOUT_V_HIGH_L),
+> +	regmap_reg_range(AXP20X_TIMER_CTRL, AXP20X_TIMER_CTRL),
+> +	regmap_reg_range(AXP192_GPIO2_0_STATE, AXP192_GPIO2_0_STATE),
+> +	regmap_reg_range(AXP192_GPIO4_3_STATE, AXP192_GPIO4_3_STATE),
+> +	regmap_reg_range(AXP192_N_RSTO_CTRL, AXP192_N_RSTO_CTRL),
+> +	regmap_reg_range(AXP20X_CHRG_CC_31_24, AXP20X_CC_CTRL),
+> +};
+> +
+> +static const struct regmap_access_table axp192_writeable_table = {
+> +	.yes_ranges	= axp192_writeable_ranges,
+> +	.n_yes_ranges	= ARRAY_SIZE(axp192_writeable_ranges),
+> +};
+> +
+> +static const struct regmap_access_table axp192_volatile_table = {
+> +	.yes_ranges	= axp192_volatile_ranges,
+> +	.n_yes_ranges	= ARRAY_SIZE(axp192_volatile_ranges),
+> +};
+> +
+>  /* AXP22x ranges are shared with the AXP809, as they cover the same range */
+>  static const struct regmap_range axp22x_writeable_ranges[] = {
+>  	regmap_reg_range(AXP20X_DATACACHE(0), AXP20X_IRQ5_STATE),
+> @@ -173,6 +203,25 @@ static const struct resource axp152_pek_resources[] = {
+>  	DEFINE_RES_IRQ_NAMED(AXP152_IRQ_PEK_FAL_EDGE, "PEK_DBF"),
+>  };
+>  
+> +static const struct resource axp192_gpio_resources[] = {
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_GPIO0_INPUT, "GPIO0"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_GPIO1_INPUT, "GPIO1"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_GPIO2_INPUT, "GPIO2"),
+> +};
+> +
+> +static const struct resource axp192_ac_power_supply_resources[] = {
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_ACIN_PLUGIN, "ACIN_PLUGIN"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_ACIN_REMOVAL, "ACIN_REMOVAL"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_ACIN_OVER_V, "ACIN_OVER_V"),
+> +};
+> +
+> +static const struct resource axp192_usb_power_supply_resources[] = {
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_PLUGIN, "VBUS_PLUGIN"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_REMOVAL, "VBUS_REMOVAL"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_VALID, "VBUS_VALID"),
+> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_NOT_VALID, "VBUS_NOT_VALID"),
+> +};
+> +
+>  static const struct resource axp20x_ac_power_supply_resources[] = {
+>  	DEFINE_RES_IRQ_NAMED(AXP20X_IRQ_ACIN_PLUGIN, "ACIN_PLUGIN"),
+>  	DEFINE_RES_IRQ_NAMED(AXP20X_IRQ_ACIN_REMOVAL, "ACIN_REMOVAL"),
+> @@ -245,6 +294,15 @@ static const struct regmap_config axp152_regmap_config = {
+>  	.cache_type	= REGCACHE_RBTREE,
+>  };
+>  
+> +static const struct regmap_config axp192_regmap_config = {
+> +	.reg_bits	= 8,
+> +	.val_bits	= 8,
+> +	.wr_table	= &axp192_writeable_table,
+> +	.volatile_table	= &axp192_volatile_table,
+> +	.max_register	= AXP20X_CC_CTRL,
+> +	.cache_type	= REGCACHE_RBTREE,
+> +};
+> +
+>  static const struct regmap_config axp20x_regmap_config = {
+>  	.reg_bits	= 8,
+>  	.val_bits	= 8,
+> @@ -304,6 +362,55 @@ static const struct regmap_irq axp152_regmap_irqs[] = {
+>  	INIT_REGMAP_IRQ(AXP152, GPIO0_INPUT,		2, 0),
+>  };
+>  
+> +static const struct regmap_irq axp192_regmap_irqs[] = {
+> +	INIT_REGMAP_IRQ(AXP192, ACIN_OVER_V,		0, 7),
+> +	INIT_REGMAP_IRQ(AXP192, ACIN_PLUGIN,		0, 6),
+> +	INIT_REGMAP_IRQ(AXP192, ACIN_REMOVAL,		0, 5),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_OVER_V,		0, 4),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_PLUGIN,		0, 3),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_REMOVAL,		0, 2),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_V_LOW,		0, 1),
+> +	INIT_REGMAP_IRQ(AXP192, BATT_PLUGIN,		1, 7),
+> +	INIT_REGMAP_IRQ(AXP192, BATT_REMOVAL,	        1, 6),
+> +	INIT_REGMAP_IRQ(AXP192, BATT_ENT_ACT_MODE,	1, 5),
+> +	INIT_REGMAP_IRQ(AXP192, BATT_EXIT_ACT_MODE,	1, 4),
+> +	INIT_REGMAP_IRQ(AXP192, CHARG,		        1, 3),
+> +	INIT_REGMAP_IRQ(AXP192, CHARG_DONE,		1, 2),
+> +	INIT_REGMAP_IRQ(AXP192, BATT_TEMP_HIGH,	        1, 1),
+> +	INIT_REGMAP_IRQ(AXP192, BATT_TEMP_LOW,	        1, 0),
+> +	INIT_REGMAP_IRQ(AXP192, DIE_TEMP_HIGH,	        2, 7),
+> +	INIT_REGMAP_IRQ(AXP192, CHARG_I_LOW,		2, 6),
+> +	INIT_REGMAP_IRQ(AXP192, DCDC1_V_LONG,	        2, 5),
+> +	INIT_REGMAP_IRQ(AXP192, DCDC2_V_LONG,	        2, 4),
+> +	INIT_REGMAP_IRQ(AXP192, DCDC3_V_LONG,	        2, 3),
+> +	INIT_REGMAP_IRQ(AXP192, PEK_SHORT,		2, 1),
+> +	INIT_REGMAP_IRQ(AXP192, PEK_LONG,		2, 0),
+> +	INIT_REGMAP_IRQ(AXP192, N_OE_PWR_ON,		3, 7),
+> +	INIT_REGMAP_IRQ(AXP192, N_OE_PWR_OFF,	        3, 6),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_VALID,		3, 5),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_NOT_VALID,	        3, 4),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_SESS_VALID,	3, 3),
+> +	INIT_REGMAP_IRQ(AXP192, VBUS_SESS_END,	        3, 2),
+> +	INIT_REGMAP_IRQ(AXP192, LOW_PWR_LVL,	        3, 0),
+> +	INIT_REGMAP_IRQ(AXP192, TIMER,			4, 7),
+> +	INIT_REGMAP_IRQ(AXP192, GPIO2_INPUT,		4, 2),
+> +	INIT_REGMAP_IRQ(AXP192, GPIO1_INPUT,		4, 1),
+> +	INIT_REGMAP_IRQ(AXP192, GPIO0_INPUT,		4, 0),
+> +};
+> +
+> +static int axp192_get_irq_reg(unsigned int base_reg, int i)
 
+Nit: If you have to respin this set, please rename 'i'.
 
-Thanks for reporting. I have sent an updated patch to fix this [0].
+Unless used as an iterator, 'i' is a terrible variable name.
 
-Cheers
-Jon
+> +{
+> +	/* linear mapping for IRQ1 to IRQ4 */
+> +	if (i < 4)
+> +		return base_reg + i;
+> +
+> +	/* handle IRQ5 separately */
+> +	if (base_reg == AXP192_IRQ1_EN)
+> +		return AXP192_IRQ5_EN;
+> +	else
+> +		return AXP192_IRQ5_STATE;
+> +}
+> +
+>  static const struct regmap_irq axp20x_regmap_irqs[] = {
+>  	INIT_REGMAP_IRQ(AXP20X, ACIN_OVER_V,		0, 7),
+>  	INIT_REGMAP_IRQ(AXP20X, ACIN_PLUGIN,		0, 6),
+> @@ -514,6 +621,19 @@ static const struct regmap_irq_chip axp152_regmap_irq_chip = {
+>  	.num_regs		= 3,
+>  };
+>  
+> +static const struct regmap_irq_chip axp192_regmap_irq_chip = {
+> +	.name			= "axp192_irq_chip",
+> +	.status_base		= AXP192_IRQ1_STATE,
+> +	.ack_base		= AXP192_IRQ1_STATE,
+> +	.mask_base		= AXP192_IRQ1_EN,
+> +	.mask_invert		= true,
+> +	.init_ack_masked	= true,
+> +	.irqs			= axp192_regmap_irqs,
+> +	.num_irqs		= ARRAY_SIZE(axp192_regmap_irqs),
+> +	.num_regs		= 5,
+> +	.get_irq_reg		= axp192_get_irq_reg,
+> +};
+> +
+>  static const struct regmap_irq_chip axp20x_regmap_irq_chip = {
+>  	.name			= "axp20x_irq_chip",
+>  	.status_base		= AXP20X_IRQ1_STATE,
+> @@ -588,6 +708,30 @@ static const struct regmap_irq_chip axp809_regmap_irq_chip = {
+>  	.num_regs		= 5,
+>  };
+>  
+> +static const struct mfd_cell axp192_cells[] = {
+> +	{
+> +		.name		= "axp192-gpio",
+> +		.of_compatible	= "x-powers,axp192-gpio",
+> +		.num_resources	= ARRAY_SIZE(axp192_gpio_resources),
+> +		.resources	= axp192_gpio_resources,
+> +	}, {
+> +		.name		= "axp20x-regulator",
 
-[0] 
-https://lore.kernel.org/linux-tegra/20220627114119.110825-1-jonathanh@nvidia.com/T/#u
+Nit: Is it possible to put one line entries at the bottom?
+
+And format like this:
+
+    { .name = "axp20x-regulator" }
+
+> +	}, {
+> +		.name		= "axp192-adc",
+> +		.of_compatible	= "x-powers,axp192-adc",
+> +	}, {
+> +		.name		= "axp20x-ac-power-supply",
+> +		.of_compatible	= "x-powers,axp202-ac-power-supply",
+> +		.num_resources	= ARRAY_SIZE(axp192_ac_power_supply_resources),
+> +		.resources	= axp192_ac_power_supply_resources,
+> +	}, {
+> +		.name		= "axp20x-usb-power-supply",
+> +		.of_compatible	= "x-powers,axp192-usb-power-supply",
+> +		.num_resources	= ARRAY_SIZE(axp192_usb_power_supply_resources),
+> +		.resources	= axp192_usb_power_supply_resources,
+> +	}
+> +};
+
+For my own reference (apply this as-is to your sign-off block):
+
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 
 -- 
-nvpublic
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

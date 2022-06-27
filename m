@@ -2,137 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CFB55E269
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839CE55C5E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237824AbiF0PNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        id S237779AbiF0PN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237962AbiF0PM5 (ORCPT
+        with ESMTP id S238005AbiF0PNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:12:57 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF03811819
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:12:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656342776; x=1687878776;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NbIrdKrUNh3MxRBYH+k9IK39tT7o7aV72Bn2pVO6UI0=;
-  b=bK2UcJdtnabwb6b/hw6asJw0xnmbAD4c4+rAFv6eeDQpfaACr52gBeX2
-   KIPLK1fJmBy6+Gy0i/2elj6RAYf5M7v4x5zIU6RXaMn+rbZYBksHM6bRP
-   KvpGZFosx1XlBaGPtR7fZPavh+OYqHln0Qwjo3b9siPnaZhREjeQtqnNv
-   uV2sBJ5JCbTJB95G8OBFgk11ei5JBR3aX8F5/1+MOKoPAZjbAdf9hr7jU
-   rgQgonxVhC2WaXVtFohLan+eT0KjbfnwrdyGK5B/wdwlHZhsSah4l0VM0
-   5DOVp6zyJV4MRyw+01NcnJNdJjdgvlhBbvCj/LEss8cwvcZ34rCuOD+s9
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="282203196"
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="282203196"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 08:12:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="594338030"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Jun 2022 08:12:51 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 9FDC0D9; Mon, 27 Jun 2022 18:12:57 +0300 (EEST)
-Date:   Mon, 27 Jun 2022 18:12:57 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 4/5] x86/mm: Add noalias variants of
- set_memory_*crypted() functions
-Message-ID: <20220627151257.fhynhvcnpk22kflw@black.fi.intel.com>
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220609025220.2615197-5-sathyanarayanan.kuppuswamy@linux.intel.com>
- <b4190b5d-89e8-b02f-5ef6-c05047af8166@intel.com>
+        Mon, 27 Jun 2022 11:13:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 328685FFF
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656342782;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ARdvDRYqFQEpUSYWNh7p3WDzIDlCQtznR2856ZwQR38=;
+        b=gW6/t2nJH8PAXDixQuQKnj/aHKA22vqsvEjs2CKz3/J+I8ul3HapcF9EMvCfJOzpnxtSvb
+        uuz0iVQXIClDIDSuR+zbt4wqYNr9hy2OcZ08yY8ovSSMY+DeeeIT8ddSJ/rrTvIkZ51A8M
+        rGkXTIt27RCmjiGsvEMsEpJVAC7+KoQ=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-111-M4idXYLWMliHXyCc_4gvYQ-1; Mon, 27 Jun 2022 11:13:00 -0400
+X-MC-Unique: M4idXYLWMliHXyCc_4gvYQ-1
+Received: by mail-ed1-f70.google.com with SMTP id f13-20020a0564021e8d00b00437a2acb543so1102239edf.7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:13:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=ARdvDRYqFQEpUSYWNh7p3WDzIDlCQtznR2856ZwQR38=;
+        b=hQ1KDarbTT+1cCNOpRNJYXzBd4RwEYT62UrnQPkD2aoF44SHXbtoU36WRq2J769zMj
+         trpEt7shSv0eZI4GtsTNToNJMxQB23mVGQTqwLIPk95ivWbLU4fCelYn/WsPvwIJTzJR
+         Z3njnU6UHus4wQ8Kict7sX1nprb4ads4V8f7uRnKZT3cxNsa22dsdcif3w05k7/yB2Gd
+         ogUizSeqLsKPukQxoRjvi81N//63UKRKIfTR5OMPpwZfz9lK1kgyFZDIcH7vmvLdp5z1
+         enjODgQoJ1LfPjfo7QDHprL2V/Foy6axY350iuXSOJygvQ4TrbKuZEvL7zXQFmbKcZG6
+         ZyZw==
+X-Gm-Message-State: AJIora9t81fiqGePJ6cvViD0IsU0Nh0LMzAdOBWZqDvOn6txETGBdlny
+        lHdl5Mt2c1hijN22ndkNPANDlYvI+/dzc8AL7JfOlMAuNPFh32dSpMCig33L/FivQ9F/hTUNvEd
+        imgcN/d4G+N6iavO8vwy8bj/4vWMlTT+DUCR3nZapG2ccA4sW/ATjGQR+YkB66i8ojGzl/BQJXH
+        gm
+X-Received: by 2002:a17:906:5512:b0:726:be2c:a2e5 with SMTP id r18-20020a170906551200b00726be2ca2e5mr2270041ejp.88.1656342779681;
+        Mon, 27 Jun 2022 08:12:59 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1ujLOPA2JVmlJ+R4KMLfx0HjYsH41cRwgwuV7mZUbliS5V6Ns2xRIbDBxPpYaLhiDmvcPjGPQ==
+X-Received: by 2002:a17:906:5512:b0:726:be2c:a2e5 with SMTP id r18-20020a170906551200b00726be2ca2e5mr2270015ejp.88.1656342779400;
+        Mon, 27 Jun 2022 08:12:59 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id w13-20020a170906d20d00b00726298147b1sm5049433ejz.161.2022.06.27.08.12.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 08:12:58 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v1 02/10] KVM: VMX: Add missing CPU based VM
+ execution controls to vmcs_config
+In-Reply-To: <YrUBYTXRxBGYsd1a@google.com>
+References: <20220622164432.194640-1-vkuznets@redhat.com>
+ <20220622164432.194640-3-vkuznets@redhat.com>
+ <YrUBYTXRxBGYsd1a@google.com>
+Date:   Mon, 27 Jun 2022 17:12:58 +0200
+Message-ID: <87wnd2uolh.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b4190b5d-89e8-b02f-5ef6-c05047af8166@intel.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 06:19:23AM -0700, Dave Hansen wrote:
-> On 6/8/22 19:52, Kuppuswamy Sathyanarayanan wrote:
-> > set_memory_*crypted() functions are used to modify the "shared" page
-> > attribute of the given memory. Using these APIs will modify the page
-> > attributes of the aliased mappings (which also includes the direct
-> > mapping).
-> > 
-> > But such aliased mappings modification is not desirable in use cases
-> > like TDX guest, where the requirement is to create the shared mapping
-> > without touching the direct map. It is used when allocating VMM shared
-> > buffers using alloc_pages()/vmap()/set_memory_*crypted() API
-> > combinations.
-> > 
-> > So to support such use cases, add support for noalias variants of
-> > set_memory_*crypted() functions.
-> 
-> This changelog has a lot of words, but doesn't tell us much.
-> 
-> It basically says, we don't want to touch the direct map in use cases
-> where we don't want to touch the direct map.  Not helpful.
-> 
-> The alias processing is there for a reason.  What is it?  Why don't you
-> need alias processing for TDX?  Sure, you decided you don't want to
-> touch the direct map, but *WHY*?  Why is it normally OK to touch the
-> direct map, but not OK in this case?  Even better, why is it *DESIRABLE*
-> to leave the direct map alone?  Lastly, why is this safe?  If alias
-> processing was to protect us from something, why is losing that
-> protection OK here?
+Sean Christopherson <seanjc@google.com> writes:
 
-The whole idea of alloc_pages()/vmap()/set_memory_decrypted() exercise is
-to avoid direct map fragmentation.
+> Maybe say "dynamically enabled" or so instead of "missing"?
+>
 
-Alias processing modifies direct mapping and highmap in addition to the
-mapping user requested the modification for. Alias processing is required
-to keep different mappings in sync, but here we want to avoid this because
-it leads to direct mapping fragmentation.
+...
 
-Normally, direct mapping modifications are done for long-lasting
-allocation where fragmentation is lesser concern. Here we have transient
-allocation which may repeat over and over trashing the direct mapping.
+> On Wed, Jun 22, 2022, Vitaly Kuznetsov wrote:
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> ---
+>>  arch/x86/kvm/vmx/vmx.c | 15 ++++++++++++++-
+>>  1 file changed, 14 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+>> index 24da9e93bdab..01294a2fc1c1 100644
+>> --- a/arch/x86/kvm/vmx/vmx.c
+>> +++ b/arch/x86/kvm/vmx/vmx.c
+>> @@ -2483,8 +2483,14 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+>>  	      CPU_BASED_INVLPG_EXITING |
+>>  	      CPU_BASED_RDPMC_EXITING;
+>>  
+>> -	opt = CPU_BASED_TPR_SHADOW |
+>> +	opt = CPU_BASED_INTR_WINDOW_EXITING |
+>> +	      CPU_BASED_RDTSC_EXITING |
+>> +	      CPU_BASED_TPR_SHADOW |
+>> +	      CPU_BASED_NMI_WINDOW_EXITING |
+>> +	      CPU_BASED_USE_IO_BITMAPS |
+>> +	      CPU_BASED_MONITOR_TRAP_FLAG |
+>>  	      CPU_BASED_USE_MSR_BITMAPS |
+>> +	      CPU_BASED_PAUSE_EXITING |
+>>  	      CPU_BASED_ACTIVATE_SECONDARY_CONTROLS |
+>>  	      CPU_BASED_ACTIVATE_TERTIARY_CONTROLS;
 
-Speaking of safety, I wanted initially claim that it is safe as only owner
-of the allocation will touch the memory and it only does via the vmap
-mapping.
-
-*BUT* 
-
-It made me thing about my recent story with load_unaligned_zeropad(). 
-If we leave the page in direct mapping mapped as private and
-load_unaligned_zeropad() will roll off to it, we will get SEPT violation
-that will terminate the TD as it is considered unaccepted.
-
-I think we must keep aliases in think. And vmap() doesn't make much sense
-in this case :/
-
-I urge you folks to consider DMA API again. Or have any other way to tap
-into swiotlb pool.
+CPU_BASED_INTR_WINDOW_EXITING and CPU_BASED_NMI_WINDOW_EXITING are
+actually "dynamically enabled" but CPU_BASED_RDTSC_EXITING/
+CPU_BASED_USE_IO_BITMAPS/ CPU_BASED_MONITOR_TRAP_FLAG /
+CPU_BASED_PAUSE_EXITING are not (and I found the first two immediately
+after implementing 'macro shananigans' you suggested, of course :-), KVM
+just doesn't use them for L1. So this is going to get splitted in two
+patches.
 
 -- 
- Kirill A. Shutemov
+Vitaly
+

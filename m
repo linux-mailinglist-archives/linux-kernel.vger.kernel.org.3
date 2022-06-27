@@ -2,289 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3988755DFD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F6355CA5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235871AbiF0MfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
+        id S236140AbiF0Mgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233224AbiF0MfM (ORCPT
+        with ESMTP id S233892AbiF0Mgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:35:12 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F9BBF4C;
-        Mon, 27 Jun 2022 05:35:10 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LWnF21KKnz1L8f7;
-        Mon, 27 Jun 2022 20:32:54 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 27 Jun 2022 20:35:07 +0800
-CC:     <yangyicong@hisilicon.com>, <bhelgaas@google.com>,
-        <rafael@kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <lenb@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        wanghuiqiang <wanghuiqiang@huawei.com>,
-        "liudongdong (C)" <liudongdong3@huawei.com>
-Subject: Re: [PATCH] PCI/ACPI: Always advertise ASPM support if
- CONFIG_PCIEASPM=y
-To:     Bjorn Helgaas <helgaas@kernel.org>
-References: <20220625190103.GA1559134@bhelgaas>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <71ed227d-f359-dc4a-f3bc-5bd0ceb7a6b5@huawei.com>
-Date:   Mon, 27 Jun 2022 20:35:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Mon, 27 Jun 2022 08:36:41 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1108DEB9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:36:40 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id v14so12864049wra.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=jhMnhvP16Ty9k8cx9JCXsgpH4aaz/Fmtpfaqc20VWcw=;
+        b=U2eoD6YDVpV31d326aqV/g/RltpyIY9rjQhWggIwoWRflNvpYzNZjKN5ZWbHmBMAni
+         BxvYB5z4hvivkexCcJPbQVEWe2aJV4lWBt/7wWqncgkl2lFMlZuDesqTog7utiql1i5/
+         Xz+MmTHHTMwk6bNlD+gi+eqn1zpJbjwNe/9uHC+VDab2/YDsuNFLHOq8TgipaXv7/N3W
+         UY4moBD/9CIxU4vaWTuOi/rQOb8x7su6rnXCgGxD0vBfZGpC4348dQ0dHayejMpY152u
+         72GldKPx+N641AUIDCh8tF+cEUt5AZRc1Zd9qNdxRvOlV7AowEZmC+bfG8Njf1HBUajK
+         CHbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=jhMnhvP16Ty9k8cx9JCXsgpH4aaz/Fmtpfaqc20VWcw=;
+        b=7y5INFcJlszsIbqB5rtVIVMTyU+gVYhllTcT0mRG3V3JO+ON8Flfj1SEWdd6H/daSW
+         KsDX5RPffrZSYWJ6GQsaqlNfMPD334VqEnlHEMb3MtffVFPE3y9vaZQzqKu4j4COSlfl
+         Ndwf6KB9GhoXfHv2JX7WypAjm+kXF3xITDKWuvIsXCeHM5wkO7y2aJeTDDOqnsK/jLo/
+         wLVetdk/1erF+uqriMEauBA2MDiAOjJG2D/F8pM4IiZZx7HREsu5sZV4ZrDvWQ/rJU2v
+         Mvm0S8XmwtoAv0THNWbci/WVLUkIZZiarcAWNA+CclHuj3Kl8u2xP7Lu694uTa0z7WUC
+         /oLQ==
+X-Gm-Message-State: AJIora/nyUIcgLK7zgql5Tp6E032OFuj6gqXco21k3wq2N0desdDzDh6
+        7LWeZrst3hdX5V0+WXF94YM=
+X-Google-Smtp-Source: AGRyM1svJUkoG5oAT5Lk55huQ5TszxhpG9aNgEtz8h6NX5RX9cQJEWBIL7AVwXyu5Ir1dSZHN90+xg==
+X-Received: by 2002:a5d:5107:0:b0:21b:8c5d:1072 with SMTP id s7-20020a5d5107000000b0021b8c5d1072mr12859255wrt.378.1656333399251;
+        Mon, 27 Jun 2022 05:36:39 -0700 (PDT)
+Received: from elementary ([94.73.36.128])
+        by smtp.gmail.com with ESMTPSA id e12-20020a5d530c000000b002185d79dc7fsm10398933wrv.75.2022.06.27.05.36.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 05:36:38 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 14:36:36 +0200
+From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@linux.ie, jani.nikula@linux.intel.com,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH v3 3/3] drm/doc: Add KUnit documentation
+Message-ID: <20220627123636.GA1772666@elementary>
+References: <20220613171738.111013-1-jose.exposito89@gmail.com>
+ <20220613171738.111013-4-jose.exposito89@gmail.com>
+ <c50e5c87-3198-08b7-1e32-d0959af1f296@redhat.com>
+ <YrYmR+aCdO3ldORB@phenom.ffwll.local>
+ <b16eba9c-30cc-c71f-ad95-eb5398f84af8@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20220625190103.GA1559134@bhelgaas>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b16eba9c-30cc-c71f-ad95-eb5398f84af8@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/26 3:01, Bjorn Helgaas wrote:
-> On Mon, May 09, 2022 at 08:20:23PM +0800, Yicong Yang wrote:
->> On 2022/5/6 2:41, Bjorn Helgaas wrote:
->>> On Thu, May 05, 2022 at 08:36:42PM +0800, Yicong Yang wrote:
->>>> On 2022/5/4 6:38, Bjorn Helgaas wrote:
->>>>> On Mon, Apr 25, 2022 at 03:06:34PM +0800, Yicong Yang wrote:
->>>>>> When we have CONFIG_PCIEASPM enabled it means OS can always
->>>>>> support ASPM no matter user have disabled it through
->>>>>> pcie_aspm=off or not. But currently we won't advertise ASPM
->>>>>> support in _OSC negotiation if user disables it, which doesn't
->>>>>> match the fact. This will also have side effects that other
->>>>>> PCIe services like AER and hotplug will be disabled as ASPM
->>>>>> support is required and we won't negotiate other services if
->>>>>> ASPM support is absent.
->>>>>>
->>>>>> So this patch makes OS always advertising ASPM support if
->>>>>> CONFIG_PCIEASPM=y.  It intends no functional change to
->>>>>> pcie_aspm=off as it will still mark aspm_disabled=1 and
->>>>>> aspm_support_enabled=false, driver will check these status
->>>>>> before configuring ASPM.
->>>>>>
->>>>>> Tested this patch with pcie_aspm=off:
->>>>>> estuary:/$ dmesg | egrep -i "aspm|osc"
->>>>>> [    0.000000] PCIe ASPM is disabled
->>>>>> [    8.706961] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM
->>>>>> ClockPM Segments MSI EDR HPX-Type3]
->>>>>> [    8.726032] acpi PNP0A08:00: _OSC: platform does not support [LTR]
->>>>>> [    8.742818] acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME
->>>>>> AER PCIeCapability DPC]
->>>>>> estuary:/sys/module/pcie_aspm/parameters$ cat policy
->>>>>> [default] performance powersave powersupersave
->>>>>> estuary:/sys/module/pcie_aspm/parameters$ echo powersave > policy
->>>>>> bash: echo: write error: Operation not permitted
->>>>>>
->>>>>> Cc: Rafael J. Wysocki <rafael@kernel.org>
->>>>>> Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
->>>>>> [https://lore.kernel.org/linux-pci/20220407154257.GA235990@bhelgaas/]
->>>>>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->>>>>> ---
->>>>>>  drivers/acpi/pci_root.c | 2 +-
->>>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
->>>>>> index 6f9e75d14808..17e78582e633 100644
->>>>>> --- a/drivers/acpi/pci_root.c
->>>>>> +++ b/drivers/acpi/pci_root.c
->>>>>> @@ -393,7 +393,7 @@ static u32 calculate_support(void)
->>>>>>  	support |= OSC_PCI_HPX_TYPE_3_SUPPORT;
->>>>>>  	if (pci_ext_cfg_avail())
->>>>>>  		support |= OSC_PCI_EXT_CONFIG_SUPPORT;
->>>>>> -	if (pcie_aspm_support_enabled())
->>>>>> +	if (IS_ENABLED(CONFIG_PCIEASPM))
->>>>>
->>>>> Is there any way firmware could tell the difference between
->>>>> "CONFIG_PCIEASPM not set" and "CONFIG_PCIEASPM=y and booted with
->>>>> 'pcie_aspm=off'"?
->>>>>
->>>>> If not, why would we even check whether CONFIG_PCIEASPM is set?
->>>>
->>>> If we announce ASPM support when CONFIG_PCIEASPM=n it'll work as well
->>>> but negotiation and the log don't match the fact. We'll get misleading
->>>> messages that ASPM is supported by OS by it cannot be enable as there's
->>>> no driver.
->>>>
->>>> As mentioned by the PCIe Firmware Spec r3.3,
->>>> "ASPM Optionality supported
->>>>  The operating system sets this bit to 1 if it properly recognizes
->>>>  and manages ASPM support on PCI Express components which report
->>>>  support for ASPM L1 only in the ASPM Support field within the Link
->>>>  Capabilities Register. Otherwise, the operating system sets this
->>>>  bit to 0"
->>>
->>> Yes.  I don't completely understand this bit, but I think it's related
->>> to the fact that L0s support was originally required for all links, so
->>> the only defined ASPM Support encodings were these:
->>>
->>>   01b - L0s supported
->>>   11b - L0s and L1 supported
->>>
->>> The "ASPM Optionality" ECN [1] of June 19, 2009, added these new
->>> encodings:
->>>
->>>   00b - No ASPM support
->>>   10b - L1 supported
->>>
->>> So I think the _OSC "ASPM Optionality Supported" bit tells the
->>> firmware that the OS supports this new possibility of devices that
->>> support L1 but not L0s.
->>>
->>> Linux currently never sets the "ASPM Optionality Supported" bit, but
->>> it probably should, because I think we *do* support L1 even if L0s
->>> isn't supported.
->>
->> Yes, it sounds sensible to me. Actually I intended to refer BIT[1] which we're
->> currently using for advertising ASPM support in _OSC, but I copied the wrong
->> field...apologize.
->>
->> "Active State Power Management supported
->> The operating system sets this bit to 1 if it natively supports configuration
->> of Active State Power Management registers in PCI Express devices. Otherwise,
->> the operating system sets this bit to 0."
->>
->> IIUC, CONFIG_PCIEASPM=y means the OS *natively* support ASPM configuration so
->> we should set this bit to 1 even if we boot with pcie_aspm=off; otherwise the
->> OS has no native support of ASPM the bit should be 0. Currently the _OSC
->> negotiation seems to violent the spec a bit when booting with pcie_aspm=off
->> on a OS with CONFIG_PCIASPM=y.
-> 
-> We have three cases:
-> 
->   1) CONFIG_PCIEASPM=y
-> 
->      Linux allocates ASPM link_state for downstream ports and manages
->      ASPM.
-> 
->   2) CONFIG_PCIEASPM=y and booted with "pcie_aspm=off"
-> 
->      aspm_support_enabled is false, so Linux does not allocate ASPM
->      link_state and does not manage ASPM.  There is no way to change
->      aspm_support_enabled at runtime.  pcie_aspm_get_link() always
->      returns NULL, so ASPM cannot be enabled by drivers or by the
->      sysfs knobs (aspm_ctrl_attrs[]).
-> 
->   3) CONFIG_PCIEASPM is unset
-> 
->      aspm.c is not even compiled, so ASPM cannot be enabled by drivers
->      or sysfs.
-> 
-> Currently we set OSC_PCI_ASPM_SUPPORT only for case 1.  This patch
-> would set it for both case 1 and case 2.
-> 
-> But I think case 2 and case 3 are indistinguishable from the
-> platform's point of view.  The only difference is that case 2 includes
-> some ASPM code in the image that can never be used.
-> 
+Hi Javier, Daniel,
 
-In the currently implementation there's no difference since in case 2 and 3
-OS will declare no ASPM support.
-
-But with this patch, case 2 will have some differences.
-
-[without this patch]
-- os won't declare the support of ASPM in the dmesg
-- os won't have ASPM control as well as other services
-
-[with this patch]
-- os will declare the support of ASPM in the dmesg
-- os may get the ASPM control but won't actually enable it
-
-> I think part of the motivation for this patch is that we'd like AER,
-> hotplug, etc to work even in case 2.
-
-Yes it's the initial purpose of this patch. The control of pcie_aspm=off
-implicitly influence other services which have no explicit dependence on
-ASPM.
-
->  We could make an argument for
-> doing that, but then AER and hotplug should work even in case 3.
+On Fri, Jun 24, 2022 at 11:18:40PM +0200, Javier Martinez Canillas wrote:
+> Hello Daniel,
 > 
-> If we want to do that, I think we should do it head-on by relaxing
-> this test in os_control_query_checks():
+> On 6/24/22 23:01, Daniel Vetter wrote:
+> >
+> > [...]
+> > 
+> > Hey so since you have a bunch of patches merged into drm already but seem
+> > to lack drm-misc commit rights to push these yourself I think it's time to
+> > get those:
+> > 
+> > https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#drm-misc
+> >
+> > And I guess Javier can help you with any questions you might have and make
+> > sure the request gets through by poking folks on #dri-devel irc?
+> >
 > 
->   if ((support & ACPI_PCIE_REQ_SUPPORT) != ACPI_PCIE_REQ_SUPPORT) {
->     decode_osc_support(root, "not requesting OS control; OS requires",
-> 		       ACPI_PCIE_REQ_SUPPORT);
->     return false;
->   }
+> Yes, he already requested commit access and got the acks, so I think is
+> just a matter of time until he has this sorted out.
 > 
+> José, please don't hesitate to ask if you need any help or clarification
+> once you have a setup to push your patches. The dim documentation [0] is
+> superb but I know that it can be somewhat stressful the first time :)
 
-Are we back to the initial approach [1] or something like that? If so, we're
-going to declare no ASPM support and then firmware will have a chance to have
-it. We'll have native hotplug but ASPM maybe controlled by the firmware.
-This may violate the spec, per the PCI Firmware spec, r3.3, sec 4.5.3 as we
-discussed previously [2]:
+Thanks for creating my ssh account :D
 
-  // Only allow native hot plug control if the OS supports:
-  // * ASPM
-  // * Clock PM
-  // * MSI/MSI-X
+The tool is really well documented, setting it up was a piece of cake.
+I pushed the patches to drm-misc-next. The output didn't show any
+errors or warnings, hopefully meaning that I didn't mess up.
 
-But with the approach in this patch we won't have this violation.
+Jose
 
-[1] https://lore.kernel.org/linux-pci/20220407131602.14727-1-yangyicong@hisilicon.com/
-[2] https://lore.kernel.org/linux-pci/20220407154257.GA235990@bhelgaas/
-
->>>> When CONFIG_PCIEASPM=n we have no aspm driver and apparently cannot
->>>> support any ASPM features so we should set the bit to 0 to match the spec.
->>>
->>> I think you're saying that firmware could not tell the difference, but
->>> the Linux log messages might be slightly misleading.  I assume you
->>> mean this message:
->>>
->>>   acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI EDR HPX-Type3]
->>>
->>> where we would claim that we support ASPM even when CONFIG_PCIEASPM is
->>> unset.
->>>
->>
->> yes. That's what I mean misleading.
->>
->>> The purpose of that message is to expose what Linux is telling the
->>> platform via _OSC.  If we're telling the platform we support ASPM, I
->>> think the message should reflect that.
->>>
->>
->> agree.
->>
->>> But I'm actually not sure there's real value in advertising ASPM
->>> support to the platform when CONFIG_PCIEASPM=y but we're booted with
->>> "pcie_aspm=off".  It sounds like this was found by using that option
->>> (even though it wasn't *needed*) and finding that Linux didn't request
->>> control of other PCIe services.  I don't know if that's worth
->>> changing.
->>>
->>
->> It's found in one of our test scenes that the AER is not worked. The issue
->> is implicit as AER is influenced by the ASPM which it shouldn't be. And
->> the implementation of pcie_aspm=off seems don't follow the spec. This patch
->> intends to make the code follow the spec in this corner case and by the way
->> fixes the issue I met. In the general cases there intends no change.
->>
->> For the usage of pcie_aspm=off there may be cases of turning off ASPM when
->> the firmware grant the control to the OS. On some platform user may disable
->> ASPM through firmware by ACPI FADT, but on other platform OS may always get
->> the control of ASPM so this provide a way of disabling it. But I think it's
->> not proper to assume user doesn't want other services like AER either.
->>
->> Since we haven't met any realistic issue on this boot option, I'd really
->> appreciate your suggestions on this.
->>
->> Regards,
->> Yicong
-> .
+> [0]: https://drm.pages.freedesktop.org/maintainer-tools/dim.html
+>  -- 
+> Best regards,
+> 
+> Javier Martinez Canillas
+> Linux Engineering
+> Red Hat
 > 

@@ -2,126 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FF855DCB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A72E55D517
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233964AbiF0KmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S233728AbiF0Knf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233884AbiF0KmO (ORCPT
+        with ESMTP id S233941AbiF0Knd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:42:14 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D156424;
-        Mon, 27 Jun 2022 03:42:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656326533; x=1687862533;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sd/cHeGy8jdWVz1qnBVANjV157gqCMkdgO7Xv3oof5I=;
-  b=cZuFqAM8KbuYQ6MzeN9j/1XcEagNY5FR6/Sr4lb070nxY1MdK5cRztfl
-   lkX3m9sT1GFR/x1cOWdp8PpHAivROuzS5+y0736w8NEc9uEXW1ZuZpuOW
-   L7ZdZbAidz6/THlinamhq8azUpxhDgVucXPyhg2Pw6nXmpK0A13hhOp4i
-   rEkawS9zLSuTWguyqaxQIaIxZ8XWdhDoGeMPRpuCn6wGuDqRzTOQKl4pZ
-   0Cbqg+iIZ4zULsRmGCy/140XyuhaYdluPQZsrdhMIeNO2GXyoe+kS1FQ5
-   0U65Xse98QrgZbvYTPM7JxJa5t+W/o+HaRctYIMy9s3SRYNYdAXRU2JlQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="282511843"
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="282511843"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 03:42:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="622510788"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 27 Jun 2022 03:42:05 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 90E5FD9; Mon, 27 Jun 2022 13:42:11 +0300 (EEST)
-Date:   Mon, 27 Jun 2022 13:42:11 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv7 14/14] x86/tdx: Add unaccepted memory support
-Message-ID: <20220627104211.whyuxx7h5tebrasb@black.fi.intel.com>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-15-kirill.shutemov@linux.intel.com>
- <7c74e86e-295f-0958-cbdf-b54b4ca688dd@intel.com>
+        Mon, 27 Jun 2022 06:43:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F0463B2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:43:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 783A21F951;
+        Mon, 27 Jun 2022 10:43:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1656326609; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=913pFliSOFSOwHKgY6avbycIQ9PTocqTOysVZ4q9heA=;
+        b=G/gyAJ398lrS4a0YfJckO2bbsB1hhON3Bll/sjN9J45ewTrPzhvcLJPYPFt5EojoGySjaA
+        8Kax7vmOeZHjfR7uFQDm8uyuVpFXdQTHgJZdXE63golMcC1HTtRR/0SRPqCHZMqz6dD7yj
+        sOiWwd2MnM0Px64w0Hya53R4SoSrrlk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1656326609;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=913pFliSOFSOwHKgY6avbycIQ9PTocqTOysVZ4q9heA=;
+        b=4lt6UKfKvM8kCPomJOwGtOIy87c3zPp30BoLuSZDirrxhgQXH9XzKZ6izzs4Ti+GXGZnHh
+        RJ+Xkp//0cE8DXCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 653F613AB2;
+        Mon, 27 Jun 2022 10:43:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VRcpGNGJuWJzTQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 27 Jun 2022 10:43:29 +0000
+Message-ID: <4fe7074e-e98b-5f3d-3aa4-03567d15c212@suse.cz>
+Date:   Mon, 27 Jun 2022 12:43:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7c74e86e-295f-0958-cbdf-b54b4ca688dd@intel.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [CFP LPC 2022] Kernel Memory Management Microconference
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Linux-MM layout <linux-mm@kvack.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>
+References: <d24e9ac9-0903-3c15-c446-2962f44a360f@suse.cz>
+In-Reply-To: <d24e9ac9-0903-3c15-c446-2962f44a360f@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 09:22:03AM -0700, Dave Hansen wrote:
-> On 6/14/22 05:02, Kirill A. Shutemov wrote:
-> >  static inline void __accept_memory(phys_addr_t start, phys_addr_t end)
-> >  {
-> >  	/* Platform-specific memory-acceptance call goes here */
-> > -	error("Cannot accept memory");
-> > +	if (is_tdx_guest())
-> > +		tdx_accept_memory(start, end);
-> > +	else
-> > +		error("Cannot accept memory: unknown platform\n");
-> >  }
-> 
-> There are quite a few of these
-> 
-> 	if (tdx())
-> 		...
-> 
-> conditions in common code here.  Shouldn't this be something like a
-> CC_ATTR_MEM_ACCEPT?
-> 
-> 	if (cc_platform_has(CC_ATTR_MEM_ACCEPT))
-> 		cc_accept_memory(...);
-> 	else
-> 		error("Cannot accept memory: unknown platform\n");
-> 
-> I understand that TDX is the first one to the party.  Is this the time
-> to add the cc_ infrastructure?
+Hi,
 
-We need if tdx() check *somewhere* as how exactly memory gets accepted is
-specific to a particular platform.
+this is a reminder to submit your proposals as the deadline is approaching
+quickly! And thanks to all who already submitted.
 
-There are two callsites where memory acceptance happens. One of them is in
-boot stub where we don't have cc_ infrastructure. So it will boil down to
-a single cc_accept_memory() that will have 'if tdx()' inside.
+Vlastimil
 
-I don't see much sense in the exercise. We can as well keep the 'if' in
-accept_memory().
+On 5/24/22 22:48, Vlastimil Babka wrote:
+> Hi,
+> 
+> this year there will be a brand new
+> 
+> 	Kernel Memory Management Microconference
+> 
+> co-lead by Matthew Wilcox and myself at the Linux Plumbers Conference
+> (LPC), September 12-14, Dublin, Ireland, or remotely.
+> 
+> This microconference supplements the recently concluded LSF/MM event
+> by providing an opportunity to discuss current topics with a different
+> audience, in a different location, and at a different time of year.
+> We would like to discuss current problems in memory management,
+> for example:
+> 
+> 	* Multi-generational LRU vs traditional LRU
+> 
+> 	* Do we need three different slab allocators?
+> 
+> 	* How far do we take the folio conversion?
+> 
+> 	* Can we handle page pinning and page mapcount more
+> 	  effectively?
+> 
+> 	* How can we effectively cache reflinked files?
+> 
+> 	* Can we support 1GB pages other than through hugetlbfs?
+> 
+> 	* How should we handle memory failures better?
+> 
+> Please submit your proposals at:
+> 
+> 	https://lpc.events/event/16/abstracts/
+> 
+> and select "Kernel Memory Management MC" as the track.
+> Please do that by the 1st of July to allow us to plan the schedule on time.
+> 
+> We're looking forward to your proposals and seeing you either in Dublin
+> or virtually!
+> 
+> Thanks,
+> Vlastimil
+> 
 
--- 
- Kirill A. Shutemov

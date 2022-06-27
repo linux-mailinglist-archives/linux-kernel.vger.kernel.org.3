@@ -2,306 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F55A55C3EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B4555CFB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233656AbiF0IyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S233622AbiF0Iyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiF0IyR (ORCPT
+        with ESMTP id S230329AbiF0Iyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:54:17 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90AD62DE
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:54:14 -0700 (PDT)
-Received: from dslb-188-104-058-231.188.104.pools.vodafone-ip.de ([188.104.58.231] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1o5kVS-0005uS-KM; Mon, 27 Jun 2022 10:54:07 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH] staging: r8188eu: make power sequences static
-Date:   Mon, 27 Jun 2022 10:53:54 +0200
-Message-Id: <20220627085354.28849-1-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
+        Mon, 27 Jun 2022 04:54:37 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02E8632F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:54:35 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1656320073;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lYtRoPZU94l44IB7XMhlqGu/BmFm++kHBnUT6UzlKII=;
+        b=ip2dno0gIC8N4gE5uN1e0jQX5Ld4LQfqQZurE8gIF3U/cjtCMfAfSH3j5kdGpMPj2hSsHE
+        o2vz9AOZjXnFl2NgY8w4DdfxH6dFSb5RPqXYQNT47xo95fu9EYd/8e4C21MLqpghHQK038
+        RQF0uGFptbdfHx3xFwZ34Rcq2PpZgSA=
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     cai.huoqing@linux.dev
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm: Remove the unused param "struct drm_buddy *mm"
+Date:   Mon, 27 Jun 2022 16:54:04 +0800
+Message-Id: <20220627085405.221435-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify the handling of "power sequences". At the moment, this is rather
-complicated:
-The hal layer calls HalPwrSeqCmdParsing. This function takes a pointer to
-a power sequence. The sequences themselves are defined as global variables
-in a separate file. There's an alias for each sequence, the callers of
-HalPwrSeqCmdParsing use these aliases instead of the sequences themselves.
+Remove the param "struct drm_buddy *mm" which is unused in
+the function drm_block_alloc()/drm_block_free().
 
-There's no point in passing the sequences around. We can move the
-sequences into the same file as the HalPwrSeqCmdParsing function where
-they are used. Callers of HalPwrSeqCmdParsing can refer to a sequence by
-using a numeric define rather than a pointer to the sequence.
-
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
 ---
- drivers/staging/r8188eu/Makefile              |  1 -
- drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c  | 45 ---------------
- drivers/staging/r8188eu/hal/HalPwrSeqCmd.c    | 57 ++++++++++++++++++-
- drivers/staging/r8188eu/hal/usb_halinit.c     |  8 +--
- .../staging/r8188eu/include/Hal8188EPwrSeq.h  | 13 -----
- .../staging/r8188eu/include/HalPwrSeqCmd.h    |  8 ++-
- .../staging/r8188eu/include/rtl8188e_hal.h    |  5 --
- 7 files changed, 67 insertions(+), 70 deletions(-)
- delete mode 100644 drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c
- delete mode 100644 drivers/staging/r8188eu/include/Hal8188EPwrSeq.h
+ drivers/gpu/drm/drm_buddy.c | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/Makefile b/drivers/staging/r8188eu/Makefile
-index 1d7982b618ba..eea16eb7caa0 100644
---- a/drivers/staging/r8188eu/Makefile
-+++ b/drivers/staging/r8188eu/Makefile
-@@ -5,7 +5,6 @@ r8188eu-y = \
- 		hal/HalHWImg8188E_RF.o \
- 		hal/HalPhyRf_8188e.o \
- 		hal/HalPwrSeqCmd.o \
--		hal/Hal8188EPwrSeq.o \
- 		hal/Hal8188ERateAdaptive.o \
- 		hal/hal_intf.o \
- 		hal/hal_com.o \
-diff --git a/drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c b/drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c
-deleted file mode 100644
-index 6505e1fcb070..000000000000
---- a/drivers/staging/r8188eu/hal/Hal8188EPwrSeq.c
-+++ /dev/null
-@@ -1,45 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/* Copyright(c) 2007 - 2011 Realtek Corporation. */
--
--#include "../include/Hal8188EPwrSeq.h"
--#include "../include/rtl8188e_hal.h"
--
--struct wl_pwr_cfg rtl8188E_power_on_flow[] = {
--	{ 0x0006, PWR_CMD_POLLING, BIT(1), BIT(1) },
--	{ 0x0002, PWR_CMD_WRITE, BIT(0) | BIT(1), 0 }, /* reset BB */
--	{ 0x0026, PWR_CMD_WRITE, BIT(7), BIT(7) }, /* schmitt trigger */
--	{ 0x0005, PWR_CMD_WRITE, BIT(7), 0 }, /* disable HWPDN (control by DRV)*/
--	{ 0x0005, PWR_CMD_WRITE, BIT(4) | BIT(3), 0 }, /* disable WL suspend*/
--	{ 0x0005, PWR_CMD_WRITE, BIT(0), BIT(0) },
--	{ 0x0005, PWR_CMD_POLLING, BIT(0), 0 },
--	{ 0x0023, PWR_CMD_WRITE, BIT(4), 0 },
--	{ 0xFFFF, PWR_CMD_END, 0, 0 },
--};
--
--struct wl_pwr_cfg rtl8188E_card_disable_flow[] = {
--	{ 0x001F, PWR_CMD_WRITE, 0xFF, 0 }, /* turn off RF */
--	{ 0x0023, PWR_CMD_WRITE, BIT(4), BIT(4) }, /* LDO Sleep mode */
--	{ 0x0005, PWR_CMD_WRITE, BIT(1), BIT(1) }, /* turn off MAC by HW state machine */
--	{ 0x0005, PWR_CMD_POLLING, BIT(1), 0 },
--	{ 0x0026, PWR_CMD_WRITE, BIT(7), BIT(7) }, /* schmitt trigger */
--	{ 0x0005, PWR_CMD_WRITE, BIT(3) | BIT(4), BIT(3) }, /* enable WL suspend */
--	{ 0x0007, PWR_CMD_WRITE, 0xFF, 0 }, /* enable bandgap mbias in suspend */
--	{ 0x0041, PWR_CMD_WRITE, BIT(4), 0 }, /* Clear SIC_EN register */
--	{ 0xfe10, PWR_CMD_WRITE, BIT(4), BIT(4) }, /* Set USB suspend enable local register */
--	{ 0xFFFF, PWR_CMD_END, 0, 0 },
--};
--
--/* This is used by driver for LPSRadioOff Procedure, not for FW LPS Step */
--struct wl_pwr_cfg rtl8188E_enter_lps_flow[] = {
--	{ 0x0522, PWR_CMD_WRITE, 0xFF, 0x7F },/* Tx Pause */
--	{ 0x05F8, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */
--	{ 0x05F9, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */
--	{ 0x05FA, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */
--	{ 0x05FB, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */
--	{ 0x0002, PWR_CMD_WRITE, BIT(0), 0 }, /* CCK and OFDM are disabled, clocks are gated */
--	{ 0x0002, PWR_CMD_DELAY, 0, PWRSEQ_DELAY_US },
--	{ 0x0100, PWR_CMD_WRITE, 0xFF, 0x3F }, /* Reset MAC TRX */
--	{ 0x0101, PWR_CMD_WRITE, BIT(1), 0 }, /* check if removed later */
--	{ 0x0553, PWR_CMD_WRITE, BIT(5), BIT(5) }, /* Respond TxOK to scheduler */
--	{ 0xFFFF, PWR_CMD_END, 0, 0 },
--};
-diff --git a/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c b/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c
-index 4a4563b900b3..b5f6d41464db 100644
---- a/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c
-+++ b/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c
-@@ -3,9 +3,50 @@
+diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
+index 11bb59399471..192c8b99fb43 100644
+--- a/drivers/gpu/drm/drm_buddy.c
++++ b/drivers/gpu/drm/drm_buddy.c
+@@ -11,10 +11,8 @@
  
- #include "../include/HalPwrSeqCmd.h"
+ static struct kmem_cache *slab_blocks;
  
--u8 HalPwrSeqCmdParsing(struct adapter *padapter, struct wl_pwr_cfg pwrseqcmd[])
-+static struct wl_pwr_cfg rtl8188E_power_on_flow[] = {
-+	{ 0x0006, PWR_CMD_POLLING, BIT(1), BIT(1) },
-+	{ 0x0002, PWR_CMD_WRITE, BIT(0) | BIT(1), 0 }, /* reset BB */
-+	{ 0x0026, PWR_CMD_WRITE, BIT(7), BIT(7) }, /* schmitt trigger */
-+	{ 0x0005, PWR_CMD_WRITE, BIT(7), 0 }, /* disable HWPDN (control by DRV)*/
-+	{ 0x0005, PWR_CMD_WRITE, BIT(4) | BIT(3), 0 }, /* disable WL suspend*/
-+	{ 0x0005, PWR_CMD_WRITE, BIT(0), BIT(0) },
-+	{ 0x0005, PWR_CMD_POLLING, BIT(0), 0 },
-+	{ 0x0023, PWR_CMD_WRITE, BIT(4), 0 },
-+	{ 0xFFFF, PWR_CMD_END, 0, 0 },
-+};
-+
-+static struct wl_pwr_cfg rtl8188E_card_disable_flow[] = {
-+	{ 0x001F, PWR_CMD_WRITE, 0xFF, 0 }, /* turn off RF */
-+	{ 0x0023, PWR_CMD_WRITE, BIT(4), BIT(4) }, /* LDO Sleep mode */
-+	{ 0x0005, PWR_CMD_WRITE, BIT(1), BIT(1) }, /* turn off MAC by HW state machine */
-+	{ 0x0005, PWR_CMD_POLLING, BIT(1), 0 },
-+	{ 0x0026, PWR_CMD_WRITE, BIT(7), BIT(7) }, /* schmitt trigger */
-+	{ 0x0005, PWR_CMD_WRITE, BIT(3) | BIT(4), BIT(3) }, /* enable WL suspend */
-+	{ 0x0007, PWR_CMD_WRITE, 0xFF, 0 }, /* enable bandgap mbias in suspend */
-+	{ 0x0041, PWR_CMD_WRITE, BIT(4), 0 }, /* Clear SIC_EN register */
-+	{ 0xfe10, PWR_CMD_WRITE, BIT(4), BIT(4) }, /* Set USB suspend enable local register */
-+	{ 0xFFFF, PWR_CMD_END, 0, 0 },
-+};
-+
-+/* This is used by driver for LPSRadioOff Procedure, not for FW LPS Step */
-+static struct wl_pwr_cfg rtl8188E_enter_lps_flow[] = {
-+	{ 0x0522, PWR_CMD_WRITE, 0xFF, 0x7F },/* Tx Pause */
-+	{ 0x05F8, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */
-+	{ 0x05F9, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */
-+	{ 0x05FA, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */
-+	{ 0x05FB, PWR_CMD_POLLING, 0xFF, 0 }, /* Should be zero if no packet is transmitted */
-+	{ 0x0002, PWR_CMD_WRITE, BIT(0), 0 }, /* CCK and OFDM are disabled, clocks are gated */
-+	{ 0x0002, PWR_CMD_DELAY, 0, PWRSEQ_DELAY_US },
-+	{ 0x0100, PWR_CMD_WRITE, 0xFF, 0x3F }, /* Reset MAC TRX */
-+	{ 0x0101, PWR_CMD_WRITE, BIT(1), 0 }, /* check if removed later */
-+	{ 0x0553, PWR_CMD_WRITE, BIT(5), BIT(5) }, /* Respond TxOK to scheduler */
-+	{ 0xFFFF, PWR_CMD_END, 0, 0 },
-+};
-+
-+u8 HalPwrSeqCmdParsing(struct adapter *padapter, enum r8188eu_pwr_seq seq)
+-static struct drm_buddy_block *drm_block_alloc(struct drm_buddy *mm,
+-					       struct drm_buddy_block *parent,
+-					       unsigned int order,
+-					       u64 offset)
++static struct drm_buddy_block *
++drm_block_alloc(struct drm_buddy_block *parent, unsigned int order, u64 offset)
  {
- 	struct wl_pwr_cfg pwrcfgcmd = {0};
-+	struct wl_pwr_cfg *pwrseqcmd;
- 	u8 poll_bit = false;
- 	u32 aryidx = 0;
- 	u8 value = 0;
-@@ -14,6 +55,20 @@ u8 HalPwrSeqCmdParsing(struct adapter *padapter, struct wl_pwr_cfg pwrseqcmd[])
- 	u32 max_poll_count = 5000;
- 	int res;
+ 	struct drm_buddy_block *block;
  
-+	switch (seq) {
-+	case PWR_ON_FLOW:
-+		pwrseqcmd = rtl8188E_power_on_flow;
-+		break;
-+	case DISABLE_FLOW:
-+		pwrseqcmd = rtl8188E_card_disable_flow;
-+		break;
-+	case LPS_ENTER_FLOW:
-+		pwrseqcmd = rtl8188E_enter_lps_flow;
-+		break;
-+	default:
-+		return false;
-+	};
-+
- 	do {
- 		pwrcfgcmd = pwrseqcmd[aryidx];
+@@ -32,8 +30,7 @@ static struct drm_buddy_block *drm_block_alloc(struct drm_buddy *mm,
+ 	return block;
+ }
  
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index cb9b4bcc536a..bb3045111147 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -11,7 +11,7 @@
- #include "../include/rtw_iol.h"
- #include "../include/usb_ops.h"
- #include "../include/usb_osintf.h"
--#include "../include/Hal8188EPwrSeq.h"
-+#include "../include/HalPwrSeqCmd.h"
- 
- static void _ConfigNormalChipOutEP_8188E(struct adapter *adapt, u8 NumOutPipe)
+-static void drm_block_free(struct drm_buddy *mm,
+-			   struct drm_buddy_block *block)
++static void drm_block_free(struct drm_buddy_block *block)
  {
-@@ -59,7 +59,7 @@ u32 rtl8188eu_InitPowerOn(struct adapter *adapt)
- 	if (haldata->bMacPwrCtrlOn)
- 		return _SUCCESS;
+ 	kmem_cache_free(slab_blocks, block);
+ }
+@@ -131,7 +128,7 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
+ 		root_size = rounddown_pow_of_two(size);
+ 		order = ilog2(root_size) - ilog2(chunk_size);
  
--	if (!HalPwrSeqCmdParsing(adapt, Rtl8188E_NIC_PWR_ON_FLOW))
-+	if (!HalPwrSeqCmdParsing(adapt, PWR_ON_FLOW))
- 		return _FAIL;
+-		root = drm_block_alloc(mm, NULL, order, offset);
++		root = drm_block_alloc(NULL, order, offset);
+ 		if (!root)
+ 			goto out_free_roots;
  
- 	/*  Enable MAC DMA/WMAC/SCHEDULE/SEC block */
-@@ -798,7 +798,7 @@ static void CardDisableRTL8188EU(struct adapter *Adapter)
- 	rtw_write8(Adapter, REG_CR, 0x0);
+@@ -151,7 +148,7 @@ int drm_buddy_init(struct drm_buddy *mm, u64 size, u64 chunk_size)
  
- 	/*  Run LPS WL RFOFF flow */
--	HalPwrSeqCmdParsing(Adapter, Rtl8188E_NIC_LPS_ENTER_FLOW);
-+	HalPwrSeqCmdParsing(Adapter, LPS_ENTER_FLOW);
+ out_free_roots:
+ 	while (i--)
+-		drm_block_free(mm, mm->roots[i]);
++		drm_block_free(mm->roots[i]);
+ 	kfree(mm->roots);
+ out_free_list:
+ 	kfree(mm->free_list);
+@@ -172,7 +169,7 @@ void drm_buddy_fini(struct drm_buddy *mm)
  
- 	/*  2. 0x1F[7:0] = 0		turn off RF */
+ 	for (i = 0; i < mm->n_roots; ++i) {
+ 		WARN_ON(!drm_buddy_block_is_free(mm->roots[i]));
+-		drm_block_free(mm, mm->roots[i]);
++		drm_block_free(mm->roots[i]);
+ 	}
  
-@@ -828,7 +828,7 @@ static void CardDisableRTL8188EU(struct adapter *Adapter)
- 	rtw_write8(Adapter, REG_32K_CTRL, val8 & (~BIT(0)));
+ 	WARN_ON(mm->avail != mm->size);
+@@ -191,14 +188,14 @@ static int split_block(struct drm_buddy *mm,
+ 	BUG_ON(!drm_buddy_block_is_free(block));
+ 	BUG_ON(!drm_buddy_block_order(block));
  
- 	/*  Card disable power action flow */
--	HalPwrSeqCmdParsing(Adapter, Rtl8188E_NIC_DISABLE_FLOW);
-+	HalPwrSeqCmdParsing(Adapter, DISABLE_FLOW);
+-	block->left = drm_block_alloc(mm, block, block_order, offset);
++	block->left = drm_block_alloc(block, block_order, offset);
+ 	if (!block->left)
+ 		return -ENOMEM;
  
- 	/*  Reset MCU IO Wrapper */
- 	res = rtw_read8(Adapter, REG_RSV_CTRL + 1, &val8);
-diff --git a/drivers/staging/r8188eu/include/Hal8188EPwrSeq.h b/drivers/staging/r8188eu/include/Hal8188EPwrSeq.h
-deleted file mode 100644
-index e4c5b5d23cb4..000000000000
---- a/drivers/staging/r8188eu/include/Hal8188EPwrSeq.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
--/* Copyright(c) 2007 - 2011 Realtek Corporation. */
--
--#ifndef __HAL8188EPWRSEQ_H__
--#define __HAL8188EPWRSEQ_H__
--
--#include "HalPwrSeqCmd.h"
--
--extern struct wl_pwr_cfg rtl8188E_power_on_flow[];
--extern struct wl_pwr_cfg rtl8188E_card_disable_flow[];
--extern struct wl_pwr_cfg rtl8188E_enter_lps_flow[];
--
--#endif /* __HAL8188EPWRSEQ_H__ */
-diff --git a/drivers/staging/r8188eu/include/HalPwrSeqCmd.h b/drivers/staging/r8188eu/include/HalPwrSeqCmd.h
-index 49c02cce569e..869f54d99e57 100644
---- a/drivers/staging/r8188eu/include/HalPwrSeqCmd.h
-+++ b/drivers/staging/r8188eu/include/HalPwrSeqCmd.h
-@@ -53,7 +53,13 @@ struct wl_pwr_cfg {
- #define GET_PWR_CFG_MASK(__PWR_CMD)		__PWR_CMD.msk
- #define GET_PWR_CFG_VALUE(__PWR_CMD)		__PWR_CMD.value
+-	block->right = drm_block_alloc(mm, block, block_order,
++	block->right = drm_block_alloc(block, block_order,
+ 				       offset + (mm->chunk_size << block_order));
+ 	if (!block->right) {
+-		drm_block_free(mm, block->left);
++		drm_block_free(block->left);
+ 		return -ENOMEM;
+ 	}
  
-+enum r8188eu_pwr_seq {
-+	PWR_ON_FLOW,
-+	DISABLE_FLOW,
-+	LPS_ENTER_FLOW,
-+};
-+
- /*	Prototype of protected function. */
--u8 HalPwrSeqCmdParsing(struct adapter *padapter, struct wl_pwr_cfg PwrCfgCmd[]);
-+u8 HalPwrSeqCmdParsing(struct adapter *padapter, enum r8188eu_pwr_seq seq);
+@@ -257,8 +254,8 @@ static void __drm_buddy_free(struct drm_buddy *mm,
  
- #endif
-diff --git a/drivers/staging/r8188eu/include/rtl8188e_hal.h b/drivers/staging/r8188eu/include/rtl8188e_hal.h
-index d2a069d4e1cc..5cd62b216720 100644
---- a/drivers/staging/r8188eu/include/rtl8188e_hal.h
-+++ b/drivers/staging/r8188eu/include/rtl8188e_hal.h
-@@ -26,11 +26,6 @@
- #include "odm_RegConfig8188E.h"
- #include "odm_RTL8188E.h"
+ 		list_del(&buddy->link);
  
--/* 		RTL8188E Power Configuration CMDs for USB/SDIO interfaces */
--#define Rtl8188E_NIC_PWR_ON_FLOW		rtl8188E_power_on_flow
--#define Rtl8188E_NIC_DISABLE_FLOW		rtl8188E_card_disable_flow
--#define Rtl8188E_NIC_LPS_ENTER_FLOW		rtl8188E_enter_lps_flow
--
- #define DRVINFO_SZ	4 /*  unit is 8bytes */
- #define PageNum_128(_Len)	(u32)(((_Len)>>7) + ((_Len) & 0x7F ? 1 : 0))
+-		drm_block_free(mm, block);
+-		drm_block_free(mm, buddy);
++		drm_block_free(block);
++		drm_block_free(buddy);
  
+ 		block = parent;
+ 	}
 -- 
-2.30.2
+2.25.1
 

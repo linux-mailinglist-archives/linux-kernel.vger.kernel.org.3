@@ -2,148 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45F455C6BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0088C55D83B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234643AbiF0NEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S234952AbiF0NHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234707AbiF0NEK (ORCPT
+        with ESMTP id S234890AbiF0NHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:04:10 -0400
-Received: from mx0a-002c1b01.pphosted.com (mx0a-002c1b01.pphosted.com [148.163.151.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1561EB7F7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:03:12 -0700 (PDT)
-Received: from pps.filterd (m0127839.ppops.net [127.0.0.1])
-        by mx0a-002c1b01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25R69fXu032430;
-        Mon, 27 Jun 2022 06:03:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint20171006;
- bh=Jcnfzgcuk+FV4ZbhBwAahUjfCmLbt/JUREx0UHn6/GU=;
- b=ilmN6dIJfCQIsKgPLS9l/V067lNJpDkgPfCuEAONEc1KUrKsb099T8NDh70y9F7YrdPG
- 5Csxx2IJDU4MjTvOiyyZWkAi2XREkXDjST7GCJQbcmsqhVcBB5T33Cmi/5dw+QJYEw34
- LGXrEOtPuCUWKxj28erAUz++GEmOlCuiyxdfhkWIHtglqDc/aVjB62EjHkAjGNMsYWUe
- IA26nRdnZpCMmC70RQxgM7NXrUUAv5CpSSDFHEXTNLjd4AhGCuWiZEmWq4MmWQ6jxQ41
- MwtqfUXqhb3AFEPVzkUde/IQIFmtn4ddOb8SyCBaRwY4GjkgHKowxrDmI3LvFx8SCB6V eQ== 
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
-        by mx0a-002c1b01.pphosted.com (PPS) with ESMTPS id 3gx1eguh32-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 06:03:03 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SG86e3y1hcbS9VHLks58rp7Ii/rfGLSgRANXvjmjE6eOPIVxSh+Eh0YWXP/WvvRDAot8+s0UQx2sbO5Ezy26muy4BgQTZwu84V5en+1xUXMuUuzoTGOukSc/BaXHcJ72ZUbN1ufPx204mdSlscGX55H060fiBcmxA39PT3x0jisD/c5dckzfXXsHLuPOqjPMTxY8g79aHNwy122r5eDGC8JPcVgLoVqMStfGwV+6N13/P3zYMikChP9VPw/iXNw+TWsbeeICrCDDsBc9CGsQomf3+9AoUMmzY69R1nA5f8rPmB7gAVyGhLGtViZcOFrTeyyCzW8vRjtqG2L9pJ2ZeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jcnfzgcuk+FV4ZbhBwAahUjfCmLbt/JUREx0UHn6/GU=;
- b=jgIsjF79AbwEE+SFJlst6fuDmVlpKpmkpqMvQuXkW24PWx/5lgE6r8Zk9gM4I54585EIdCswkJuasjedrUjuDymBtj+v61g1iVdO0LWKJdzBE8o/ScC7rCamv8u4K4zuFzxh3TI36nZtqkRvJgT5jC+Mc3WUl1IlUUeVz6F9mTlc8m/llGl0Z6xTpqFgEpgAAnKsdrZWYJvw3d3O5ISlqsqtbCjuHTcH7k9z9v6rmiqnq26wpd0ByC+4lmp6hz1oX+dnNCcos8fiJSrYXTPvV54E1jdNfuW5vYK1rxO4IWDHCsoRGtuXHSJM3JAmYYAtc174a/21zJ3e4TTHcPNekQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
- dkim=pass header.d=nutanix.com; arc=none
-Received: from PH0PR02MB7384.namprd02.prod.outlook.com (2603:10b6:510:12::12)
- by CO1PR02MB8492.namprd02.prod.outlook.com (2603:10b6:303:15b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.15; Mon, 27 Jun
- 2022 13:03:01 +0000
-Received: from PH0PR02MB7384.namprd02.prod.outlook.com
- ([fe80::898c:892a:2385:3df6]) by PH0PR02MB7384.namprd02.prod.outlook.com
- ([fe80::898c:892a:2385:3df6%5]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
- 13:03:01 +0000
-Message-ID: <285ac7f8-20f2-c260-90e2-6271ecddaf73@nutanix.com>
-Date:   Mon, 27 Jun 2022 18:31:39 +0530
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [RFC PATCH 10/26] hugetlb: add for_each_hgm_shift
-To:     James Houghton <jthoughton@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Jue Wang <juew@google.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220624173656.2033256-1-jthoughton@google.com>
- <20220624173656.2033256-11-jthoughton@google.com>
-From:   "manish.mishra" <manish.mishra@nutanix.com>
-In-Reply-To: <20220624173656.2033256-11-jthoughton@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA0PR01CA0057.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:ac::15) To PH0PR02MB7384.namprd02.prod.outlook.com
- (2603:10b6:510:12::12)
+        Mon, 27 Jun 2022 09:07:30 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22ADB53;
+        Mon, 27 Jun 2022 06:06:54 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id eq6so12907873edb.6;
+        Mon, 27 Jun 2022 06:06:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=references:from:to:cc:subject:date:in-reply-to:message-id
+         :mime-version;
+        bh=Og1be9n3VJuoYVVqYwwqw56Ub9H2bVsORIbJIIqf7K4=;
+        b=Wu0kXiCavC8JwpQyxs8T72mOivG0aXRYf6OdBKnDSewAVSltsIgFWVEFJlrCpCna9Z
+         oOSTX8uyHXnw0cjx7jk2AH6aecrCGvVIbEWZnB/fbY5eJz83TtOb155EpVZ/KDcTMPLX
+         /xYPuFq1YVZbCTYcxa67t+DmQvaXvx31fuCF3+JZyPgxDABNra8+IU/9BBkjk6hept0y
+         u1JejVQfdsuuqA14Op6Hoz6yEBjaAtbs6tiJSjGVIHBS6G3s+nue6XqOJ1/T02bsT/LL
+         I05veIdNcRpzlYCulHEmO+oJEdsuhWLY3gMl7VzC3gHNxjoF3hU3++myGGi8omPFAp8D
+         HZIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=Og1be9n3VJuoYVVqYwwqw56Ub9H2bVsORIbJIIqf7K4=;
+        b=Z9+JAMnyTQmH1km/OEwLbxuE4Lcl2rRMv0VUm+kmiVd+K3eiO2Mlgk5NVD3voKJTn5
+         67oXOYa+kfkIEOgCNQYUtEYq7AasMfSMVGI8tGKPcEu78j7RpO6UnxugX9ydqxrhqbqf
+         38EfuCN+CYunJ0Thi/Vy/dF5qVsPMrKCjiP6dGZC9dkpBU8BzHKXPcwow/VtOu80XQuB
+         SnIvO7ZUQfuD3Ln1ZfXxvBZCei4+ZgN+MhtqRxv51RJxXn255Etz7plS4SAiylXXUvln
+         DX7uOw5eTke4utiQJcU3X4okvjF4F2bEFaUVkLx4nT6uZGpgc1e25ff/3pBxYGegOdH1
+         6r6Q==
+X-Gm-Message-State: AJIora+IVj0qQsCCdGaqSmPMKCawsEt0Ilh4N5MYgDHGUVFidShWgbzY
+        nHl98oSgHL9I3nTSLhXLjaM=
+X-Google-Smtp-Source: AGRyM1sdFYw/gA/pvthK9nXJetTj9y/RKSK1qtU81NYUz/k7MhR0W/D9ce7h8b57luSzlQu8gXiccA==
+X-Received: by 2002:a05:6402:d05:b0:435:b2a6:94eb with SMTP id eb5-20020a0564020d0500b00435b2a694ebmr15985376edb.87.1656335213382;
+        Mon, 27 Jun 2022 06:06:53 -0700 (PDT)
+Received: from localhost (92.40.170.45.threembb.co.uk. [92.40.170.45])
+        by smtp.gmail.com with ESMTPSA id cb25-20020a0564020b7900b004359dafe822sm7578913edb.29.2022.06.27.06.06.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 06:06:52 -0700 (PDT)
+References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
+ <20220603135714.12007-7-aidanmacdonald.0x0@gmail.com>
+ <YrmaX6/dbYKAFDQ4@google.com>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        sre@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org,
+        lgirdwood@gmail.com, lars@metafoo.de, rafael@kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/10] mfd: axp20x: Add support for AXP192
+Date:   Mon, 27 Jun 2022 14:02:00 +0100
+In-reply-to: <YrmaX6/dbYKAFDQ4@google.com>
+Message-ID: <pA6goDL2KKtUckLScUkFqzlvRxCHYZaB@localhost>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cba5d351-d35c-48e4-e4b2-08da583d5da0
-X-MS-TrafficTypeDiagnostic: CO1PR02MB8492:EE_
-x-proofpoint-crosstenant: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lVElD+Kk6gsZfQPH8Tod9QwCYj6EeSlQY0U0JBqAlkty0JluVoa+OfnEOfCHN8Dns8coVFNIrBj92J6snR/JSGWYt/Uv9qV8dAZT0xEF9yjMnG043mkinY9yS/J+ZklPCp9XFFR4wPjig1AABEVPnJuNyeWicZsdfMA7Vs6FOw0l9veGVC/Im/myjjJwoe1aZr3IkxXwhBXiE98tnr8MFwvbZx/endv5CWWe48iZRlPJPdsJC+2o1rVYTm+XlhOxjaI5F1s+PTH4s1KkIdYON8TzP3OpHise392QaoMCc9KN95Kz3+AA3AOget9j/svNXablGRqTsMuHKrbOviGmBU/CB/e0NxKpMea74S6dfsDAIkBYNxj3B6MnQ/g9rIeUO/MWzpbI3ZXBGS76AXWlMk9kGOj4rSbKNeyedPqxNgIphPpi0hFliOHuRe+TYSBQPbUjQGj9Vko9gFGkEWtLsITMWE3jt2i6eZ/3mvP6+F1RthEHT0tmkVHlgIXf6f4PVQkRxk3xHDKpd8AAvDY/+xdk79s5DVMNcow6U1OPIFhbf84N+h9MqmmRPZdEoPn/BwfqxsvPCarQm75Ghg+I5tQgIWIT1ARVzwFvZ34z3j71cQs4pXDB1U0roisSELtduin/j9f1uHoT5lvYmRqlR/kmUqOTq0lMojeziYr+JjhYjbf176lSeORZvFbDpmGwTQr5TJQ30LJdDfAG0GXy1FycPvCyLUe74e8BPv62gWUL29+kVIyxwDWcEovoiyFaU+TatTbey2LnBQ7wEdTkt4mS++bobVDVAPOgRkFtDMj8h9V3okNUrUiEgVjMJdPw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR02MB7384.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(376002)(396003)(136003)(366004)(39860400002)(7416002)(110136005)(31686004)(8936002)(54906003)(5660300002)(478600001)(6486002)(2616005)(186003)(83380400001)(2906002)(6666004)(6512007)(53546011)(31696002)(26005)(316002)(8676002)(66946007)(4326008)(38100700002)(41300700001)(66476007)(86362001)(6506007)(66556008)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WFk3eHAyQlM4VWQ4SkVkMDNsL3N3Q3ZxblVNa3E3bmZoQm1tQllabHhSMHlk?=
- =?utf-8?B?b21RNDJ5MDUzRzk3d1FLQkpwdjMrZE84MG9CQUJXWjkyU0pnYVpEa0lLUXRL?=
- =?utf-8?B?cWY4TWVIZGdPUDJWV2R0VVM3Y3YyaWlDUW91c1ZMcUpwZU1zK3NIMXZRdHJY?=
- =?utf-8?B?cG5oSTBEMVRvYWRDaUswek5WZU9nYUp1RDJxUTVwYlBJTlFGUGthYStpSzVj?=
- =?utf-8?B?S1lBZFpWZXJUTjAyd1FERThxa2E4UzdmWGsyVzdTNnB6ZEdWQmNkM0QxMHY5?=
- =?utf-8?B?TnlCcnJIdVRlL2pxUkN6YVZBeW14YlFzTHNkK3dCYXJ6UDdVcFdrb0NwS0c1?=
- =?utf-8?B?SUNPR0NRMVI4RTR6RUlKQW0rRmRnV3hHL0IxSE80N0xlQjVzVzd4b3NTY1Jk?=
- =?utf-8?B?VUVUZnhrdWM1bDNRd1Nkdm1KaTAvTEFMaWN0ZkhjUENaU0x2bDZVQ1BoODZ2?=
- =?utf-8?B?MDhmb3VuTGlBZjErNDZNcFVudEtHcTUvSjBHNDlTc3NHVFJMeXpWbVQySDA0?=
- =?utf-8?B?bTQvKzBBTWNRWEN0Yll4SkZwTW5XZ0M0NnM5d0pjWVIzNUcyUmQ2WUxTUVpC?=
- =?utf-8?B?ajFLU2hCWUZWQmdUTUxERkpmaEFSNXR5RlZrbHVvSWdOR2NKTzVzZHJJUDlI?=
- =?utf-8?B?NExoVXZDd3hpa1NBTEZXcTIyNmw4TVh0TWE3emVlVldXdmZwN1kwb000eEw3?=
- =?utf-8?B?SWhZN1FHZCtCMnp2T0hWZWhhVWdrTHJBSVZZQXRVYVJXRmR0WGloNW9sb0I2?=
- =?utf-8?B?YzJPblJBbXorVGlHc3djN0lseXlrM0t5ZllEN1k5bFdoa1RZVjZoSExYYy9h?=
- =?utf-8?B?a1FWTEVTOUxvMFMxVDNuanNmV1A3c1pQUzR0TVBPWlV2cWJuVGJjQTRJT0dX?=
- =?utf-8?B?SDQ1UWZid0hmZjVDSGRrY2c3cjlqQkFmN1E4WGd1U29KaGVBdFdDL002eVBx?=
- =?utf-8?B?TmhlUG1aWlVpY1Y4NVR5Q2g3dmE0ODdTRmlSUUUzaUNoY3VaOFVyQTAvY0lt?=
- =?utf-8?B?QXVVeWptUlBZWWl5VktLZ3RuQVBvZ2ZrZ0h0dmh1Q2hCMVExczlxdUZVWk85?=
- =?utf-8?B?ekRqN2pmOUo3R0wzZG5FNHJKSzFIYWI1RW9ETXJGdlYyQ3lsL3dLTG1KNTJC?=
- =?utf-8?B?cm1kMG9YdEEzVFpQZDZvWkppL25vVTVMSlJwS0xQYUtqWWtobDRMenA5dTVW?=
- =?utf-8?B?dHhoaWI5QVlHL0NHYnFsOGlYVHB4UTRXOE5UVzNzYTAwcFJNNnp1by82YzhH?=
- =?utf-8?B?NG00MlpRL0I4OFZiRGpIaWdtN0VIK2xGTUt4UDQ0akxRbitWTVY5S2w1ZnRi?=
- =?utf-8?B?Vnc2Q3VBeE5Kd0ZxMFdXVnJaelA5VGNUNkVMY21ZNmtBSUQ4eitoM0pSWXBJ?=
- =?utf-8?B?R0lPWVZJN25UQTd0R2d2SHMwZFBSMnNKMFhrelVnNWF0bmtUb2Z0TkVUSDFS?=
- =?utf-8?B?cHM4R1JKa0Nxa205elpNSTNXUWJGRVJrQzV1QkVqY0xYekNTaGdvYk1TWDNF?=
- =?utf-8?B?cVhNSXRXanF6RTBjZHd3WkRFcElNcjhSR2VXWWI2RkEycmFtWit4ZmV6L215?=
- =?utf-8?B?QWdTUmQ3a1hVVnVwUTBwY3lCVlZvTW9VS01CT1BMM1VPZFJuL1VaM3pha3Jo?=
- =?utf-8?B?V3o3QkxMUnEwOVk1dG9sWjN0d0JDdmlNSVJwMGQxUGRLYjV2SXY2ZTlPeDcy?=
- =?utf-8?B?Mk5KZDFyNXBzajE1UnQzZnpFQS81MjlpZGcrVisvZnlka1Y3YVNaTTVnSFB3?=
- =?utf-8?B?K3N0Wmk1SFlTdktMRmY5bVRjQnlmQUN1M0FkZFN0VUxEZDNzbklMbzcxWjVE?=
- =?utf-8?B?MDc2cG84SGZvWWsxWFAwbTMra3lmQkM2NGkwcS9iSHpWOGpscHcwRGJYeEF6?=
- =?utf-8?B?SDFQT1lSUU9iLzRpUk85UE5rK1RXbEErck8wMitDRlU5V0tmaUF3WFk0RlNV?=
- =?utf-8?B?RmFQMXFhbVJBOVZyOENObWJiak0yQlZZVnJjMEpNemZ4eTFEeXo0cFFIalFh?=
- =?utf-8?B?dCtPVjhGdHNWVS9TMFN6bHgvZzNHRUY4L1RZdlhiYlh0WE1TMjVwOEYwYjFC?=
- =?utf-8?B?Nm5GaDI5V2RiSGtjRHZobnJkU244T3R2RnVaMm5BQXBqcjBYSnJJSlRjRFQx?=
- =?utf-8?B?R2oxOVRyWU9WeXVPemJxalYwWkVFV3ZMSllsVXhjeTAwRXZCTThXNnQwaXJo?=
- =?utf-8?B?Ymc9PQ==?=
-X-OriginatorOrg: nutanix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cba5d351-d35c-48e4-e4b2-08da583d5da0
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR02MB7384.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2022 13:03:01.6701
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a/bR321JeAu3DpMVBLZVOf1Za/ZbiPQbxViN/iE0a7MGsb2zrhs/dPAizSWoVKO85FBtP2c7r3q95xB9UZsMvIt/wV1w7k447ahYhcIekA0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR02MB8492
-X-Proofpoint-GUID: tZMajvCN9b104sJG-qnFg5CpJ-uxPViq
-X-Proofpoint-ORIG-GUID: tZMajvCN9b104sJG-qnFg5CpJ-uxPViq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -151,35 +77,257 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 24/06/22 11:06 pm, James Houghton wrote:
-> This is a helper macro to loop through all the usable page sizes for a
-> high-granularity-enabled HugeTLB VMA. Given the VMA's hstate, it will
-> loop, in descending order, through the page sizes that HugeTLB supports
-> for this architecture; it always includes PAGE_SIZE.
-reviewed-by:manish.mishra@nutanix.com
-> Signed-off-by: James Houghton <jthoughton@google.com>
-> ---
->   mm/hugetlb.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
+Lee Jones <lee.jones@linaro.org> writes:
+
+> On Fri, 03 Jun 2022, Aidan MacDonald wrote:
 >
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 8b10b941458d..557b0afdb503 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -6989,6 +6989,16 @@ bool hugetlb_hgm_enabled(struct vm_area_struct *vma)
->   	/* All shared VMAs have HGM enabled. */
->   	return vma->vm_flags & VM_SHARED;
->   }
-> +static unsigned int __shift_for_hstate(struct hstate *h)
-> +{
-> +	if (h >= &hstates[hugetlb_max_hstate])
-> +		return PAGE_SHIFT;
-> +	return huge_page_shift(h);
-> +}
-> +#define for_each_hgm_shift(hstate, tmp_h, shift) \
-> +	for ((tmp_h) = hstate; (shift) = __shift_for_hstate(tmp_h), \
-> +			       (tmp_h) <= &hstates[hugetlb_max_hstate]; \
-> +			       (tmp_h)++)
->   #endif /* CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING */
->   
->   /*
+>> The AXP192 PMIC is similar to the AXP202/AXP209, but with different
+>> regulators, additional GPIOs, and a different IRQ register layout.
+>> 
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>> ---
+>>  drivers/mfd/axp20x-i2c.c   |   2 +
+>>  drivers/mfd/axp20x.c       | 150 +++++++++++++++++++++++++++++++++++++
+>>  include/linux/mfd/axp20x.h |  84 +++++++++++++++++++++
+>>  3 files changed, 236 insertions(+)
+>> 
+>> diff --git a/drivers/mfd/axp20x-i2c.c b/drivers/mfd/axp20x-i2c.c
+>> index 00ab48018d8d..9ada58fad77f 100644
+>> --- a/drivers/mfd/axp20x-i2c.c
+>> +++ b/drivers/mfd/axp20x-i2c.c
+>> @@ -62,6 +62,7 @@ static int axp20x_i2c_remove(struct i2c_client *i2c)
+>>  #ifdef CONFIG_OF
+>>  static const struct of_device_id axp20x_i2c_of_match[] = {
+>>  	{ .compatible = "x-powers,axp152", .data = (void *)AXP152_ID },
+>> +	{ .compatible = "x-powers,axp192", .data = (void *)AXP192_ID },
+>>  	{ .compatible = "x-powers,axp202", .data = (void *)AXP202_ID },
+>>  	{ .compatible = "x-powers,axp209", .data = (void *)AXP209_ID },
+>>  	{ .compatible = "x-powers,axp221", .data = (void *)AXP221_ID },
+>> @@ -75,6 +76,7 @@ MODULE_DEVICE_TABLE(of, axp20x_i2c_of_match);
+>>  
+>>  static const struct i2c_device_id axp20x_i2c_id[] = {
+>>  	{ "axp152", 0 },
+>> +	{ "axp192", 0 },
+>>  	{ "axp202", 0 },
+>>  	{ "axp209", 0 },
+>>  	{ "axp221", 0 },
+>> diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+>> index 8161a5dc68e8..7f64e5c83fe2 100644
+>> --- a/drivers/mfd/axp20x.c
+>> +++ b/drivers/mfd/axp20x.c
+>> @@ -34,6 +34,7 @@
+>>  
+>>  static const char * const axp20x_model_names[] = {
+>>  	"AXP152",
+>> +	"AXP192",
+>>  	"AXP202",
+>>  	"AXP209",
+>>  	"AXP221",
+>> @@ -92,6 +93,35 @@ static const struct regmap_access_table axp20x_volatile_table = {
+>>  	.n_yes_ranges	= ARRAY_SIZE(axp20x_volatile_ranges),
+>>  };
+>>  
+>> +static const struct regmap_range axp192_writeable_ranges[] = {
+>> +	regmap_reg_range(AXP192_DATACACHE(0), AXP192_DATACACHE(5)),
+>> +	regmap_reg_range(AXP192_PWR_OUT_CTRL, AXP192_IRQ5_STATE),
+>> +	regmap_reg_range(AXP20X_DCDC_MODE, AXP192_N_RSTO_CTRL),
+>> +	regmap_reg_range(AXP20X_CC_CTRL, AXP20X_CC_CTRL),
+>> +};
+>> +
+>> +static const struct regmap_range axp192_volatile_ranges[] = {
+>> +	regmap_reg_range(AXP20X_PWR_INPUT_STATUS, AXP192_USB_OTG_STATUS),
+>> +	regmap_reg_range(AXP192_IRQ1_STATE, AXP192_IRQ4_STATE),
+>> +	regmap_reg_range(AXP192_IRQ5_STATE, AXP192_IRQ5_STATE),
+>> +	regmap_reg_range(AXP20X_ACIN_V_ADC_H, AXP20X_IPSOUT_V_HIGH_L),
+>> +	regmap_reg_range(AXP20X_TIMER_CTRL, AXP20X_TIMER_CTRL),
+>> +	regmap_reg_range(AXP192_GPIO2_0_STATE, AXP192_GPIO2_0_STATE),
+>> +	regmap_reg_range(AXP192_GPIO4_3_STATE, AXP192_GPIO4_3_STATE),
+>> +	regmap_reg_range(AXP192_N_RSTO_CTRL, AXP192_N_RSTO_CTRL),
+>> +	regmap_reg_range(AXP20X_CHRG_CC_31_24, AXP20X_CC_CTRL),
+>> +};
+>> +
+>> +static const struct regmap_access_table axp192_writeable_table = {
+>> +	.yes_ranges	= axp192_writeable_ranges,
+>> +	.n_yes_ranges	= ARRAY_SIZE(axp192_writeable_ranges),
+>> +};
+>> +
+>> +static const struct regmap_access_table axp192_volatile_table = {
+>> +	.yes_ranges	= axp192_volatile_ranges,
+>> +	.n_yes_ranges	= ARRAY_SIZE(axp192_volatile_ranges),
+>> +};
+>> +
+>>  /* AXP22x ranges are shared with the AXP809, as they cover the same range */
+>>  static const struct regmap_range axp22x_writeable_ranges[] = {
+>>  	regmap_reg_range(AXP20X_DATACACHE(0), AXP20X_IRQ5_STATE),
+>> @@ -173,6 +203,25 @@ static const struct resource axp152_pek_resources[] = {
+>>  	DEFINE_RES_IRQ_NAMED(AXP152_IRQ_PEK_FAL_EDGE, "PEK_DBF"),
+>>  };
+>>  
+>> +static const struct resource axp192_gpio_resources[] = {
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_GPIO0_INPUT, "GPIO0"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_GPIO1_INPUT, "GPIO1"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_GPIO2_INPUT, "GPIO2"),
+>> +};
+>> +
+>> +static const struct resource axp192_ac_power_supply_resources[] = {
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_ACIN_PLUGIN, "ACIN_PLUGIN"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_ACIN_REMOVAL, "ACIN_REMOVAL"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_ACIN_OVER_V, "ACIN_OVER_V"),
+>> +};
+>> +
+>> +static const struct resource axp192_usb_power_supply_resources[] = {
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_PLUGIN, "VBUS_PLUGIN"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_REMOVAL, "VBUS_REMOVAL"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_VALID, "VBUS_VALID"),
+>> +	DEFINE_RES_IRQ_NAMED(AXP192_IRQ_VBUS_NOT_VALID, "VBUS_NOT_VALID"),
+>> +};
+>> +
+>>  static const struct resource axp20x_ac_power_supply_resources[] = {
+>>  	DEFINE_RES_IRQ_NAMED(AXP20X_IRQ_ACIN_PLUGIN, "ACIN_PLUGIN"),
+>>  	DEFINE_RES_IRQ_NAMED(AXP20X_IRQ_ACIN_REMOVAL, "ACIN_REMOVAL"),
+>> @@ -245,6 +294,15 @@ static const struct regmap_config axp152_regmap_config = {
+>>  	.cache_type	= REGCACHE_RBTREE,
+>>  };
+>>  
+>> +static const struct regmap_config axp192_regmap_config = {
+>> +	.reg_bits	= 8,
+>> +	.val_bits	= 8,
+>> +	.wr_table	= &axp192_writeable_table,
+>> +	.volatile_table	= &axp192_volatile_table,
+>> +	.max_register	= AXP20X_CC_CTRL,
+>> +	.cache_type	= REGCACHE_RBTREE,
+>> +};
+>> +
+>>  static const struct regmap_config axp20x_regmap_config = {
+>>  	.reg_bits	= 8,
+>>  	.val_bits	= 8,
+>> @@ -304,6 +362,55 @@ static const struct regmap_irq axp152_regmap_irqs[] = {
+>>  	INIT_REGMAP_IRQ(AXP152, GPIO0_INPUT,		2, 0),
+>>  };
+>>  
+>> +static const struct regmap_irq axp192_regmap_irqs[] = {
+>> +	INIT_REGMAP_IRQ(AXP192, ACIN_OVER_V,		0, 7),
+>> +	INIT_REGMAP_IRQ(AXP192, ACIN_PLUGIN,		0, 6),
+>> +	INIT_REGMAP_IRQ(AXP192, ACIN_REMOVAL,		0, 5),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_OVER_V,		0, 4),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_PLUGIN,		0, 3),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_REMOVAL,		0, 2),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_V_LOW,		0, 1),
+>> +	INIT_REGMAP_IRQ(AXP192, BATT_PLUGIN,		1, 7),
+>> +	INIT_REGMAP_IRQ(AXP192, BATT_REMOVAL,	        1, 6),
+>> +	INIT_REGMAP_IRQ(AXP192, BATT_ENT_ACT_MODE,	1, 5),
+>> +	INIT_REGMAP_IRQ(AXP192, BATT_EXIT_ACT_MODE,	1, 4),
+>> +	INIT_REGMAP_IRQ(AXP192, CHARG,		        1, 3),
+>> +	INIT_REGMAP_IRQ(AXP192, CHARG_DONE,		1, 2),
+>> +	INIT_REGMAP_IRQ(AXP192, BATT_TEMP_HIGH,	        1, 1),
+>> +	INIT_REGMAP_IRQ(AXP192, BATT_TEMP_LOW,	        1, 0),
+>> +	INIT_REGMAP_IRQ(AXP192, DIE_TEMP_HIGH,	        2, 7),
+>> +	INIT_REGMAP_IRQ(AXP192, CHARG_I_LOW,		2, 6),
+>> +	INIT_REGMAP_IRQ(AXP192, DCDC1_V_LONG,	        2, 5),
+>> +	INIT_REGMAP_IRQ(AXP192, DCDC2_V_LONG,	        2, 4),
+>> +	INIT_REGMAP_IRQ(AXP192, DCDC3_V_LONG,	        2, 3),
+>> +	INIT_REGMAP_IRQ(AXP192, PEK_SHORT,		2, 1),
+>> +	INIT_REGMAP_IRQ(AXP192, PEK_LONG,		2, 0),
+>> +	INIT_REGMAP_IRQ(AXP192, N_OE_PWR_ON,		3, 7),
+>> +	INIT_REGMAP_IRQ(AXP192, N_OE_PWR_OFF,	        3, 6),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_VALID,		3, 5),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_NOT_VALID,	        3, 4),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_SESS_VALID,	3, 3),
+>> +	INIT_REGMAP_IRQ(AXP192, VBUS_SESS_END,	        3, 2),
+>> +	INIT_REGMAP_IRQ(AXP192, LOW_PWR_LVL,	        3, 0),
+>> +	INIT_REGMAP_IRQ(AXP192, TIMER,			4, 7),
+>> +	INIT_REGMAP_IRQ(AXP192, GPIO2_INPUT,		4, 2),
+>> +	INIT_REGMAP_IRQ(AXP192, GPIO1_INPUT,		4, 1),
+>> +	INIT_REGMAP_IRQ(AXP192, GPIO0_INPUT,		4, 0),
+>> +};
+>> +
+>> +static int axp192_get_irq_reg(unsigned int base_reg, int i)
+>
+> Nit: If you have to respin this set, please rename 'i'.
+>
+> Unless used as an iterator, 'i' is a terrible variable name.
+>
+
+Ack. I had to rework the regmap changes and split them out to their
+own series, so I'll fix this when I rebase.
+
+>> +{
+>> +	/* linear mapping for IRQ1 to IRQ4 */
+>> +	if (i < 4)
+>> +		return base_reg + i;
+>> +
+>> +	/* handle IRQ5 separately */
+>> +	if (base_reg == AXP192_IRQ1_EN)
+>> +		return AXP192_IRQ5_EN;
+>> +	else
+>> +		return AXP192_IRQ5_STATE;
+>> +}
+>> +
+>>  static const struct regmap_irq axp20x_regmap_irqs[] = {
+>>  	INIT_REGMAP_IRQ(AXP20X, ACIN_OVER_V,		0, 7),
+>>  	INIT_REGMAP_IRQ(AXP20X, ACIN_PLUGIN,		0, 6),
+>> @@ -514,6 +621,19 @@ static const struct regmap_irq_chip axp152_regmap_irq_chip = {
+>>  	.num_regs		= 3,
+>>  };
+>>  
+>> +static const struct regmap_irq_chip axp192_regmap_irq_chip = {
+>> +	.name			= "axp192_irq_chip",
+>> +	.status_base		= AXP192_IRQ1_STATE,
+>> +	.ack_base		= AXP192_IRQ1_STATE,
+>> +	.mask_base		= AXP192_IRQ1_EN,
+>> +	.mask_invert		= true,
+>> +	.init_ack_masked	= true,
+>> +	.irqs			= axp192_regmap_irqs,
+>> +	.num_irqs		= ARRAY_SIZE(axp192_regmap_irqs),
+>> +	.num_regs		= 5,
+>> +	.get_irq_reg		= axp192_get_irq_reg,
+>> +};
+>> +
+>>  static const struct regmap_irq_chip axp20x_regmap_irq_chip = {
+>>  	.name			= "axp20x_irq_chip",
+>>  	.status_base		= AXP20X_IRQ1_STATE,
+>> @@ -588,6 +708,30 @@ static const struct regmap_irq_chip axp809_regmap_irq_chip = {
+>>  	.num_regs		= 5,
+>>  };
+>>  
+>> +static const struct mfd_cell axp192_cells[] = {
+>> +	{
+>> +		.name		= "axp192-gpio",
+>> +		.of_compatible	= "x-powers,axp192-gpio",
+>> +		.num_resources	= ARRAY_SIZE(axp192_gpio_resources),
+>> +		.resources	= axp192_gpio_resources,
+>> +	}, {
+>> +		.name		= "axp20x-regulator",
+>
+> Nit: Is it possible to put one line entries at the bottom?
+>
+> And format like this:
+>
+>     { .name = "axp20x-regulator" }
+>
+
+OK.
+
+>> +	}, {
+>> +		.name		= "axp192-adc",
+>> +		.of_compatible	= "x-powers,axp192-adc",
+>> +	}, {
+>> +		.name		= "axp20x-ac-power-supply",
+>> +		.of_compatible	= "x-powers,axp202-ac-power-supply",
+>> +		.num_resources	= ARRAY_SIZE(axp192_ac_power_supply_resources),
+>> +		.resources	= axp192_ac_power_supply_resources,
+>> +	}, {
+>> +		.name		= "axp20x-usb-power-supply",
+>> +		.of_compatible	= "x-powers,axp192-usb-power-supply",
+>> +		.num_resources	= ARRAY_SIZE(axp192_usb_power_supply_resources),
+>> +		.resources	= axp192_usb_power_supply_resources,
+>> +	}
+>> +};
+>
+> For my own reference (apply this as-is to your sign-off block):
+>
+>   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+
+Thanks!
+
+Regards, Aidan

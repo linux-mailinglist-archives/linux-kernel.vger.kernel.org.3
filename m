@@ -2,73 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688A055C25C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23DA55D227
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242187AbiF0WEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 18:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
+        id S242332AbiF0WEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 18:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242741AbiF0WDG (ORCPT
+        with ESMTP id S242847AbiF0WD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 18:03:06 -0400
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DEA1E3F4;
-        Mon, 27 Jun 2022 15:01:01 -0700 (PDT)
-Received: by mail-il1-f177.google.com with SMTP id a16so6954104ilr.6;
-        Mon, 27 Jun 2022 15:01:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TZkUYB3BYeJsEsDSI6PmO4Ag8GHC0FQvV7iN+YB5Q0Q=;
-        b=zCp96mdzfFQ20ZZJPRmAEPFKrfLyyMs7EZ6is7dWfXsrtHO7OtKrjNg0wxaPeuz9ju
-         Z9yaEMaNFcFm7Cayu8tTQeKZFtgxQs5j/r+rzr1FGSec1/enyqQMRJoEY/3mOijncGXE
-         rpHKRK3/x2p6J8Z8zXi706446KG9/WEJjnSh9q7UMwwDp9YQBc4ZJpE4AIWE9OqHxi6L
-         qjU/zLR5rVIH/6wYzlXshsv2F65jfnRUT/OPDS8e5SIaj5oo55ZhApWuF/8i3CVa4HZw
-         VXasQ7qWsaH3YtSdRi//P+7fEzecaXW0FsdopgFl5oVf2UG+nfg7xgPjHQwCTOu2w3aj
-         K6zg==
-X-Gm-Message-State: AJIora/6z3SsFJ4Q4YYpArAv+GoMFZEQFfNrBf3bRE9WE1IOQMK+Ldw5
-        H4suWLQ2xww/0QPoDSc7Kg==
-X-Google-Smtp-Source: AGRyM1ssOJCADmXqWwlgb8kDzOGggbdItlatIWFU04SmaYPNYTJ0Nxv2RE7Xu59Xf0OzqmtEW0/lww==
-X-Received: by 2002:a05:6e02:188a:b0:2d4:7fd:dbf with SMTP id o10-20020a056e02188a00b002d407fd0dbfmr8113049ilu.217.1656367260514;
-        Mon, 27 Jun 2022 15:01:00 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id bo22-20020a056638439600b0033c8edf022bsm2409410jab.144.2022.06.27.15.00.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 15:01:00 -0700 (PDT)
-Received: (nullmailer pid 3041223 invoked by uid 1000);
-        Mon, 27 Jun 2022 22:00:58 -0000
-Date:   Mon, 27 Jun 2022 16:00:58 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Corey Minyard <minyard@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Wolfram Sang <wsa@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v8 2/3] bindings: ipmi: Add binding for SSIF BMC driver
-Message-ID: <20220627220058.GA3036977-robh@kernel.org>
-References: <20220615090259.1121405-1-quan@os.amperecomputing.com>
- <20220615090259.1121405-3-quan@os.amperecomputing.com>
+        Mon, 27 Jun 2022 18:03:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60A91EC7C;
+        Mon, 27 Jun 2022 15:02:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 531A560EC2;
+        Mon, 27 Jun 2022 22:02:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E0E1C34115;
+        Mon, 27 Jun 2022 22:02:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656367328;
+        bh=3y+4OUbLcC0/yZPll44HqMz1xr/6OTXCkUJnS1fTw/A=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=J3ajaKZMSj3Cuwt9hX6EvdU+h/E7LCwiFe2zCO3IdtzIhbM0jGZndYa05szBelTnc
+         gBk7wLECxK6jA0lJ8iKdZOOUgCoyTJ1W9NlljBTjk4cXZ4bmOaOoLICZyHAVyXA/NS
+         QyeyX+u3zWacxSBFv8I+6DFqvPdwCV4FAd2O7ucEBh7TOggbZC3G2g8aTZzzl9Pf0g
+         4qACbJ4yPjbNPGlHy9pInTwo2qnKZnmsqzAM4bIZLrFUVTax4NYRc5by5OzlqMWMDn
+         rCu1qtxrkl5CMhwhjDhkvyJTAf15vWC/kmovQBR9CFaaYtWdgpDNgp14jAhSQZxeeB
+         1MGRYHWq858dw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 530CE5C04B1; Mon, 27 Jun 2022 15:02:07 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 15:02:07 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Update rcu_preempt_deferred_qs() comments for no
+ preemptible RCU
+Message-ID: <20220627220207.GR1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220620064224.2630382-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220615090259.1121405-3-quan@os.amperecomputing.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220620064224.2630382-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,39 +58,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 04:02:58PM +0700, Quan Nguyen wrote:
-> Add device tree binding document for the SSIF BMC driver.
+On Mon, Jun 20, 2022 at 02:42:24PM +0800, Zqiang wrote:
+> For no preemptible RCU, the rcu_preempt_deferred_qs() only report
+> expedited QS state of current CPU, since preemption does not occur
+> in RCU critical sections, there are no tasks insert to leaf rnp
+> blocked-tasks list, that is to say the tasks structure's ->rcu_blocked_node
+> and the leaf rnp structure's  ->blkd_tasks are always empty.
 > 
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> ---
-> v8:
->   + None
-> 
-> v7:
->   + Change compatible string from "ampere,ssif-bmc" to "ssif-bmc"  [Jae]
-> 
-> v6:
->   + None
-> 
-> v5:
->   + None
-> 
-> v4:
->   + Fix warning with dt_binding_check [Rob]
->   + Change aspeed-ssif-bmc.yaml to ssif-bmc.yaml [Quan]
-> 
-> v3:
->   + Switched to use DT schema format [Rob]
-> 
-> v2:
->   + None
-> 
->  .../devicetree/bindings/ipmi/ssif-bmc.yaml    | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/ipmi/ssif-bmc.yaml
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+Good catch -- that comment is quite misleading.
 
-If a tag was not added on purpose, please state why and what changed.
+Is the wordsmithed version shown below OK?
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit 5ddf65777c8d0f60ff9137eef3b23dd4c77e6108
+Author: Zqiang <qiang1.zhang@intel.com>
+Date:   Mon Jun 20 14:42:24 2022 +0800
+
+    rcu: Update rcu_preempt_deferred_qs() comments for !PREEMPT kernels
+    
+    In non-premptible kernels, tasks never do context switches within
+    RCU read-side critical sections.  Therefore, in such kernels, each
+    leaf rcu_node structure's ->blkd_tasks list will always be empty.
+    The comment on the non-preemptible version of rcu_preempt_deferred_qs()
+    confuses this point, so this commit therefore fixes it.
+    
+    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+index 86772c95ed0ae..4152816dd29f6 100644
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+@@ -932,10 +932,13 @@ static notrace bool rcu_preempt_need_deferred_qs(struct task_struct *t)
+ 	return false;
+ }
+ 
+-// Except that we do need to respond to a request by an expedited grace
+-// period for a quiescent state from this CPU.  Note that requests from
+-// tasks are handled when removing the task from the blocked-tasks list
+-// below.
++// Except that we do need to respond to a request by an expedited
++// grace period for a quiescent state from this CPU.  Note that in
++// non-preemptible kernels, there can be no context switches within RCU
++// read-side critical sections, which in turn means that the leaf rcu_node
++// structure's blocked-tasks list is always empty.  is therefore no need to
++// actually check it.  Instead, a quiescent state from this CPU suffices,
++// and this function is only called from such a quiescent state.
+ notrace void rcu_preempt_deferred_qs(struct task_struct *t)
+ {
+ 	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);

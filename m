@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3028655D3EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B5855C36B
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239843AbiF0RtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
+        id S238835AbiF0RtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239355AbiF0RtA (ORCPT
+        with ESMTP id S237960AbiF0RtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:49:00 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230BA65D3;
-        Mon, 27 Jun 2022 10:48:57 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id g26so20711622ejb.5;
-        Mon, 27 Jun 2022 10:48:57 -0700 (PDT)
+        Mon, 27 Jun 2022 13:49:18 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C11F95A7;
+        Mon, 27 Jun 2022 10:49:17 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id q18so8800374pld.13;
+        Mon, 27 Jun 2022 10:49:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5so6o3lsHdESNYtq8PIm0PWXq9C33in8/VcoE/KuhZ4=;
-        b=F6h0bcmYl7K7s/6rP6jzo27nQJEU2tETOnQkeRMUQQdQCanPbM2tGY3WXO1jakZlPh
-         hCwi8dKTuFOfp9mw4ayy9sIUozJOKgh+kYOcDTX7bXfT01fj9PoHXtBMmoEq04gQEhMh
-         +IrEhvcgoWR2Djz7OOULFWt4f/gLThPeuoeGA+uhmpSlcrlbRtwogehZC/C/gj/mwCMk
-         RLPlsH3DOsJoVO19QGNH3i3jX/c246SMBHTNhvO4hxMC8YkSH8QjBEmnhYiuSFUo6WgO
-         xEKDJ+CtL6xaVihWW/c9rmtozVgs5rrrNHdsWVUeEz7nzXbRQULMQMt/A84Nvq5d+Rcg
-         EHKw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Q/XtlNuHXhafjy3rxC1P4ckBLS+ZGb1ojWGQwnT715k=;
+        b=DMJ6zGSh3YK1ZkElm2Zi3EXx1p6etIdPsq5cq61RjwJvHblj0Uulq05L7ggfOKPyOm
+         bAb2N8CuU2UL9miA2w/KfcaMt4BTnCeWAk9dWkrWkuCfd8SClbEnoIF4+j3aij30KMpI
+         WgrX83gVKe2sYMTdCxNtC1g0p1ZIbX8k2odYYv5BVNvggiQi0ag5rzNqf2jfgY0JaZ3l
+         2Sq1NKMfXyRwNeRNMvJABfpWVP2a8+8W7DVzLRPYMtj4VXES+FuqYomiNLfoP5RIcwW0
+         kS+jp6Qfn5VMb4kZQd3zrHLgLdZB0DS6Gu6nT5wVnQ1f3O0hSPlnDlE3zxkwGlDCTFbO
+         qh3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=5so6o3lsHdESNYtq8PIm0PWXq9C33in8/VcoE/KuhZ4=;
-        b=5MfblzSL9UF8WjhwYuhvCY3t8/JfquRa5CPopNwaj6lxsx30+NEw6yh0fhbUvPFADu
-         mdjzS2axnnZ/BdmTh06v7kUw2cZmRIUJWOZyQFq2iozWYctLvrW5/Be/anQreYT+D9DB
-         3paT2F/xh/DgNHL+KuRPjhv7x7k7/muBFUYbqGKP6Tii9tzP3malMgx81gHJ0Nuiahth
-         5ewqGQc57anbTVLaomJFrUJAdCTXQIDPEz/pja99MC1CPwsGy0vDOeaPBkNMu7FoqGbm
-         nv8pbWNqfD30er55eLEYnaVHnvya0gneF/F36ZCjFbzVkWlydLOAnihI3XJgwXDz9IKL
-         sk6g==
-X-Gm-Message-State: AJIora+kmlLqAwlWc3ce4dgB16U4XLO1HcgsBCuGXYVcVRLDzrwyJfPh
-        8f9DhtqZ8zzP+aYiQClj5c8=
-X-Google-Smtp-Source: AGRyM1uuE2HKf24Zx9OfG8R2hLlm2cKBKMz2MUwW/ZGSONbzIn1BkpnC6am+iavXIT7LbrQThJD4Ug==
-X-Received: by 2002:a17:906:4302:b0:726:8efe:3bda with SMTP id j2-20020a170906430200b007268efe3bdamr11343420ejm.184.1656352135523;
-        Mon, 27 Jun 2022 10:48:55 -0700 (PDT)
-Received: from localhost.localdomain (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
-        by smtp.gmail.com with ESMTPSA id i25-20020a056402055900b00435681476c7sm7980916edx.10.2022.06.27.10.48.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 10:48:54 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>, Qu Wenruo <wqu@suse.com>,
-        Filipe Manana <fdmanana@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>, David Sterba <dsterba@suse.cz>
-Subject: [PATCH] btrfs: Replace kmap_atomic() with kmap_local_page()
-Date:   Mon, 27 Jun 2022 19:48:49 +0200
-Message-Id: <20220627174849.29962-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        bh=Q/XtlNuHXhafjy3rxC1P4ckBLS+ZGb1ojWGQwnT715k=;
+        b=N25Ln+5MrvKycWnxDlO5WZembequUyhgYKJ0voTbjVpyLwqHGn+6r+0aDA5LVvXJDX
+         zpP/LVzI0aI+FA/Csh7jrvWS2baDmo2u/LpdSQf79UJKReLJBnW+dmJN7WJa1V0Sx3e/
+         Wkkt30X1IQYtmXHg1+lt8MTWHsZcXIPNU1wMlv9Bdruczsr7YSKzjEuMoscEfIFuDgYk
+         1Extr188SlBSK7wCkryk2zle5kDl643KXByQrDDkCY5WsxGpUjb88Tx1O0DXobHs7Crt
+         6WOOZC6bEvMH9c/UQygm8LLrE7bku7AATEfn/pRtUHiqDa7hQeTM4o9OjflyEfaTgHB8
+         SMKQ==
+X-Gm-Message-State: AJIora9CdsmUBPDMw0uE+VdCPUMR9SFuv76wenFxjJbjaRVahQQG5dh+
+        dXxV4pO8zDjP9xKSIqDK+KU=
+X-Google-Smtp-Source: AGRyM1uN8L/N5Ha+/fwCqCw4RCUrJB8FnuLEIj/Dp+IBksweEovux+P4oGZQir6vqjaLTlpKlh7RJg==
+X-Received: by 2002:a17:903:291:b0:168:c6b3:1976 with SMTP id j17-20020a170903029100b00168c6b31976mr16193993plr.9.1656352156725;
+        Mon, 27 Jun 2022 10:49:16 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id q14-20020a63d60e000000b0040cf5cd74cdsm7255032pgg.19.2022.06.27.10.49.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 10:49:16 -0700 (PDT)
+Message-ID: <55211a69-df6d-4b69-a596-06372b69ca31@gmail.com>
+Date:   Mon, 27 Jun 2022 10:49:12 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.18 000/181] 5.18.8-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220627111944.553492442@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,106 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap_atomic() is being deprecated in favor of kmap_local_page() where it
-is feasible. With kmap_local_page() mappings are per thread, CPU local,
-and not globally visible.
+On 6/27/22 04:19, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.8 release.
+> There are 181 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.8-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-As far as I can see, the kmap_atomic() calls in compression.c and in
-inode.c can be safely converted.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-Above all else, David Sterba has confirmed that "The context in
-check_compressed_csum is atomic [...]" and that "kmap_atomic() in inode.c
-[...] also can be replaced by kmap_local_page().".[1]
-
-Therefore, convert all kmap_atomic() calls currently still left in fs/btrfs
-to kmap_local_page().
-
-Tested with xfstests on a QEMU + KVM 32-bits VM with 4GB RAM and booting a
-kernel with HIGHMEM64GB enabled.
-
-[1] https://lore.kernel.org/linux-btrfs/20220601132545.GM20
-633@twin.jikos.cz/
-
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Suggested-by: David Sterba <dsterba@suse.cz>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
-
-Tests of groups "quick" and "compress" output several errors largely due
-to memory leaks and shift-out-of-bounds. However, these errors are exactly
-the same which are output without this and other conversions of mine to use
-kmap_local_page(). Therefore, it looks like these changes don't introduce
-regressions.
-
-The previous RFC PATCH can be ignored:
-https://lore.kernel.org/lkml/20220624084215.7287-1-fmdefrancesco@gmail.com/
-
-With this patch, in fs/btrfs there are no longer call sites of kmap() and
-kmap_atomic().
-
- fs/btrfs/compression.c |  4 ++--
- fs/btrfs/inode.c       | 12 ++++++------
- 2 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/fs/btrfs/compression.c b/fs/btrfs/compression.c
-index f4564f32f6d9..b49719ae45b4 100644
---- a/fs/btrfs/compression.c
-+++ b/fs/btrfs/compression.c
-@@ -175,10 +175,10 @@ static int check_compressed_csum(struct btrfs_inode *inode, struct bio *bio,
- 		/* Hash through the page sector by sector */
- 		for (pg_offset = 0; pg_offset < bytes_left;
- 		     pg_offset += sectorsize) {
--			kaddr = kmap_atomic(page);
-+			kaddr = kmap_local_page(page);
- 			crypto_shash_digest(shash, kaddr + pg_offset,
- 					    sectorsize, csum);
--			kunmap_atomic(kaddr);
-+			kunmap_local(kaddr);
- 
- 			if (memcmp(&csum, cb_sum, csum_size) != 0) {
- 				btrfs_print_data_csum_error(inode, disk_start,
-diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-index e921d6c432ac..0a7a621710f6 100644
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@ -332,9 +332,9 @@ static int insert_inline_extent(struct btrfs_trans_handle *trans,
- 			cur_size = min_t(unsigned long, compressed_size,
- 				       PAGE_SIZE);
- 
--			kaddr = kmap_atomic(cpage);
-+			kaddr = kmap_local_page(cpage);
- 			write_extent_buffer(leaf, kaddr, ptr, cur_size);
--			kunmap_atomic(kaddr);
-+			kunmap_local(kaddr);
- 
- 			i++;
- 			ptr += cur_size;
-@@ -345,9 +345,9 @@ static int insert_inline_extent(struct btrfs_trans_handle *trans,
- 	} else {
- 		page = find_get_page(inode->vfs_inode.i_mapping, 0);
- 		btrfs_set_file_extent_compression(leaf, ei, 0);
--		kaddr = kmap_atomic(page);
-+		kaddr = kmap_local_page(page);
- 		write_extent_buffer(leaf, kaddr, ptr, size);
--		kunmap_atomic(kaddr);
-+		kunmap_local(kaddr);
- 		put_page(page);
- 	}
- 	btrfs_mark_buffer_dirty(leaf);
-@@ -3357,11 +3357,11 @@ static int check_data_csum(struct inode *inode, struct btrfs_bio *bbio,
- 	offset_sectors = bio_offset >> fs_info->sectorsize_bits;
- 	csum_expected = ((u8 *)bbio->csum) + offset_sectors * csum_size;
- 
--	kaddr = kmap_atomic(page);
-+	kaddr = kmap_local_page(page);
- 	shash->tfm = fs_info->csum_shash;
- 
- 	crypto_shash_digest(shash, kaddr + pgoff, len, csum);
--	kunmap_atomic(kaddr);
-+	kunmap_local(kaddr);
- 
- 	if (memcmp(csum, csum_expected, csum_size))
- 		goto zeroit;
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.36.1
-
+Florian

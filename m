@@ -2,93 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD9255D16F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE3F55E2EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233581AbiF0Je2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
+        id S233591AbiF0JfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233591AbiF0JeX (ORCPT
+        with ESMTP id S232769AbiF0JfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:34:23 -0400
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF0163D9;
-        Mon, 27 Jun 2022 02:34:21 -0700 (PDT)
-Received: by mail-qv1-f50.google.com with SMTP id y14so13877081qvs.10;
-        Mon, 27 Jun 2022 02:34:21 -0700 (PDT)
+        Mon, 27 Jun 2022 05:35:18 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162DD63DD
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:35:18 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id q6so17793541eji.13
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:35:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TeN/iwsTV4FhP/OywXKY/fx1M3aFIWw7RCkbflk2R9o=;
+        b=WdWufUduLcKXBmqthhLKerQLhk1pUFi7XWTD9qKZ3PlDx5Y7FjMPp8ypB8pn82kYKi
+         BWSaxzMgNqx9STnQ46/HTMxh014kcmYRTqsqAQ08HNwys5PInRLlaxCG7RqB2iU3/pQK
+         Y3UHsv5GwvBYbZdrNKivf/IuS2O6MgYLqD08RMXgfElnyrjg+waj73Eseg3z+rGjdnkM
+         A5Ec6P/315Yqt3hvigPyvgpTsZtqSSM+S7JoXw2IUzApO34x6jRHqwaTk4bk7podakac
+         ESSpBJdo7E1FoMYDyDkzql1ExNYhOqa4sVgaUB31NUnwCifu/DcaIfCxeWsEPjwBizit
+         QkOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R5th0qpP/J1ycxyypwJPUwSeLA3QY+9VgG/84MEtg00=;
-        b=LKmvaQuvjMNtr2jA3MZX5X+OVC62FMHIl/huLurFrECWr2caDZ4gw/8A+gNgbe6cfI
-         I1pLeabPlqAwpIyiIxX/97CM6MSQqPssYFz8EMl8RpoVoQSj2/yeHGuMoh7ZwWf4TJWc
-         ywyZreVkO4VQGuTSHX8P1aPrrGKe/D/f/AVroalK2FzHwNOBY2/ofwerz+E9NiGy9mM8
-         l02nSjj/Wwx9wknMAfWsdUauQ2hdAIqjIdhJiC+ekaIRJzIhvjoqiGqofYpr7Hb8VcYU
-         7QIWirmvEqhEqWnDy7SsTQU8pEhTdD+IfnTFbct123BeXt+8hMbAj2NWYPx7VDmyvFrG
-         U/IA==
-X-Gm-Message-State: AJIora803xRn0luYV7G7mQCuuUSiOefHJgUq+J1D1+AoAgbb8bAq7BAE
-        ccCjbPEjqZtHrAjuq5XZ+E6uyT9YUaGG8A==
-X-Google-Smtp-Source: AGRyM1utvzLdA+PTPQs9Kw/g22g0rpxqI/GgMV2tm1q04ZDXA/G7m7E5sr2HvGffP6r6mhKyo/q4Qg==
-X-Received: by 2002:a05:6214:21ce:b0:470:f4e:951b with SMTP id d14-20020a05621421ce00b004700f4e951bmr7793594qvh.14.1656322460566;
-        Mon, 27 Jun 2022 02:34:20 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id p24-20020ac84098000000b00317ccf991a3sm5954243qtl.19.2022.06.27.02.34.20
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TeN/iwsTV4FhP/OywXKY/fx1M3aFIWw7RCkbflk2R9o=;
+        b=ciiWQ4WJtWDnSHe0frcUG2rqJ+Q8nRYwpQmZd+sYmjNeogdUg7tEFygFlAZW6R2KbN
+         fUo0c/bhD2UIqulD7u5VTYc/qoj7yaKFF+Ulj/LmdIwDwbr3QfNF7hEH+/3t0I05chZ0
+         XmRp2UTNcedkaIykgiwPE4rxtbzdGqP5oYs5o59ECi5PNZgwlc1D79RwAfDWcsbhxnqG
+         x2vTAIa1+xLL+dYtE91Yz2tvlMFBedXl3jLbMG7kr8yjhJUsMYQm8KOXoGEhAU/5S12J
+         LYE3gTh5dZxRyqSNjS17gBlEvvsFGgR9ik20kaD8EOF7DSc1ss6c92D6dvWUUrUaUXeT
+         JPEA==
+X-Gm-Message-State: AJIora/vW8eAb7IiqZm8Z1qz+NQe4a3fZdJgD26nPZyw4Zxl96TIHuex
+        Q9y79XPMFQtxKPvEYLaV0y6FxA==
+X-Google-Smtp-Source: AGRyM1uTdIi0aYEYixohA+nAVSHM9M59wtJB/1A4P8XfRZh7rsryDIKZ3vrVQ13PulLSe/wHT/dBAg==
+X-Received: by 2002:a17:907:62a9:b0:726:2a3b:8507 with SMTP id nd41-20020a17090762a900b007262a3b8507mr12026191ejc.666.1656322516674;
+        Mon, 27 Jun 2022 02:35:16 -0700 (PDT)
+Received: from [192.168.0.247] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z21-20020a170906815500b00722e7e26d22sm4812672ejw.58.2022.06.27.02.35.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 02:34:20 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-3177f4ce3e2so79475447b3.5;
-        Mon, 27 Jun 2022 02:34:20 -0700 (PDT)
-X-Received: by 2002:a0d:c787:0:b0:31b:a963:e1de with SMTP id
- j129-20020a0dc787000000b0031ba963e1demr6407552ywd.283.1656322459903; Mon, 27
- Jun 2022 02:34:19 -0700 (PDT)
+        Mon, 27 Jun 2022 02:35:16 -0700 (PDT)
+Message-ID: <aafd58d6-8705-96ee-7813-9b3bae7bb3d1@linaro.org>
+Date:   Mon, 27 Jun 2022 11:35:15 +0200
 MIME-Version: 1.0
-References: <20220623103024.24222-1-chris.paterson2@renesas.com>
-In-Reply-To: <20220623103024.24222-1-chris.paterson2@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 27 Jun 2022 11:34:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXeR_7gJb0PJVheUjyR68=a9yCD5ixtskKB0EZT3-HVrw@mail.gmail.com>
-Message-ID: <CAMuHMdXeR_7gJb0PJVheUjyR68=a9yCD5ixtskKB0EZT3-HVrw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: r9a07g054l2-smarc: Correct SoC name
- in comment
-To:     Chris Paterson <chris.paterson2@renesas.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] ARM: dts: aspeed: Add device tree for Ampere's Mt.
+ Mitchell BMC
+Content-Language: en-US
+To:     Quan Nguyen <quan@os.amperecomputing.com>,
+        openbmc@lists.ozlabs.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        Open Source Submission <patches@amperecomputing.com>
+Cc:     Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20220621092120.2427152-1-quan@os.amperecomputing.com>
+ <97934f38-4da5-ab9e-7089-d6e48edd5e6a@linaro.org>
+ <9120c167-38c2-f8c4-e039-4202d5844639@os.amperecomputing.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9120c167-38c2-f8c4-e039-4202d5844639@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 12:30 PM Chris Paterson
-<chris.paterson2@renesas.com> wrote:
-> This dts is for the RZ/V2L SMARC EVK, not RZ/G2L.
->
-> Fixes: f91c4c74796a ("arm64: dts: renesas: Add initial device tree for RZ/V2L SMARC EVK")
-> Signed-off-by: Chris Paterson <chris.paterson2@renesas.com>
+On 27/06/2022 11:32, Quan Nguyen wrote:
+>>> +
+>>> +	ltc2497_reg: ltc2497_regulator {
+>>
+>> No underscores in node name, no specific names (Devicetree spec requires
+>> generic), so ltc2497 has to go. You could add some more specific
+>> prefix/suffix to describe the function.
+>>
+> This is to monitor peripheral voltage so it would be updated to:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.20.
+But it is a regulator, not a voltage monitor, so the node name could be:
+regulator-0
+regulator-voltage-mon
+voltage-mon-regulator
 
-Gr{oetje,eeting}s,
+> 
+>           voltage_monitor: voltage-monitor {
+> 
+>>> +		compatible = "regulator-fixed";
+>>> +		regulator-name = "ltc2497_reg";
+>>> +		regulator-min-microvolt = <3300000>;
+>>> +		regulator-max-microvolt = <3300000>;
+>>> +		regulator-always-on;
+>>> +	};
+>>> +
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof

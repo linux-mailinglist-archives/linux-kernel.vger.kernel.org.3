@@ -2,86 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3082255E30D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD0555E179
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236262AbiF0NrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236225AbiF0NrV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S236236AbiF0NrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 27 Jun 2022 09:47:21 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955B660C0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656337640; x=1687873640;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Gnsf+QTLVChURM0F3ZGZR9Oqi9oIQdMjnKYpZYGncic=;
-  b=NeNb2Jvn13siisZn8tYNSaWW0Os0tl1v80PguT//2FobrSsOLLakN7i8
-   Mch9B6CYPFgdTl2m3nejAkoJLqeyL1c1Q9SyuVC2ddFKUppwiMc8aSq5k
-   tX8J0AYRnrWUMsYoUA9HuL1BcUZMLjpxdqYahaXAlb37wbM6Ed51alvxU
-   E=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 27 Jun 2022 06:47:20 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 06:47:20 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 27 Jun 2022 06:47:19 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 27 Jun
- 2022 06:47:18 -0700
-Date:   Mon, 27 Jun 2022 09:47:16 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-CC:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <ying.huang@intel.com>, <songmuchun@bytedance.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/2] mm/swapfile: fix possible data races of
- inuse_pages
-Message-ID: <Yrm05NQs5+tCZawR@qian>
-References: <20220625093346.48894-1-linmiaohe@huawei.com>
- <20220625093346.48894-2-linmiaohe@huawei.com>
- <Yrml4mB3sa5fZVJa@qian>
- <fe3c4834-71a6-7867-2108-eca43fde62fc@huawei.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236017AbiF0NrU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 27 Jun 2022 09:47:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C301A5FE6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:47:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3E7C175A;
+        Mon, 27 Jun 2022 06:47:19 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 251923F5A1;
+        Mon, 27 Jun 2022 06:47:19 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 14:47:17 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 18/20] arch_topology: Set cluster identifier in each
+ core/thread from /cpu-map
+Message-ID: <Yrm05bAzu6c29XXB@arm.com>
+References: <20220621192034.3332546-1-sudeep.holla@arm.com>
+ <20220621192034.3332546-19-sudeep.holla@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fe3c4834-71a6-7867-2108-eca43fde62fc@huawei.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220621192034.3332546-19-sudeep.holla@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 09:27:43PM +0800, Miaohe Lin wrote:
-> On 2022/6/27 20:43, Qian Cai wrote:
-> > On Sat, Jun 25, 2022 at 05:33:45PM +0800, Miaohe Lin wrote:
-> >> si->inuse_pages could still be accessed concurrently now. The plain reads
-> >> outside si->lock critical section, i.e. swap_show and si_swapinfo, which
-> >> results in data races. READ_ONCE and WRITE_ONCE is used to fix such data
-> >> races. Note these data races should be ok because they're just used for
-> >> showing swap info.
-> > 
-> > Was this found by kcsan? If so, it would be useful to record the exact
-> > kscan report in the commit message.
+On Tuesday 21 Jun 2022 at 20:20:32 (+0100), Sudeep Holla wrote:
+> Let us set the cluster identifier as parsed from the device tree
+> cluster nodes within /cpu-map.
 > 
-> Sorry, it's found via code inspection.
+> We don't support nesting of clusters yet as there are no real hardware
+> to support clusters of clusters.
+> 
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/base/arch_topology.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 39be5dbaf4da..75604f783bfc 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -497,7 +497,7 @@ static int __init get_cpu_for_node(struct device_node *node)
+>  }
+>  
+>  static int __init parse_core(struct device_node *core, int package_id,
+> -			     int core_id)
+> +			     int cluster_id, int core_id)
+>  {
+>  	char name[20];
+>  	bool leaf = true;
+> @@ -513,6 +513,7 @@ static int __init parse_core(struct device_node *core, int package_id,
+>  			cpu = get_cpu_for_node(t);
+>  			if (cpu >= 0) {
+>  				cpu_topology[cpu].package_id = package_id;
+> +				cpu_topology[cpu].cluster_id = cluster_id;
+>  				cpu_topology[cpu].core_id = core_id;
+>  				cpu_topology[cpu].thread_id = i;
+>  			} else if (cpu != -ENODEV) {
+> @@ -534,6 +535,7 @@ static int __init parse_core(struct device_node *core, int package_id,
+>  		}
+>  
+>  		cpu_topology[cpu].package_id = package_id;
+> +		cpu_topology[cpu].cluster_id = cluster_id;
+>  		cpu_topology[cpu].core_id = core_id;
+>  	} else if (leaf && cpu != -ENODEV) {
+>  		pr_err("%pOF: Can't get CPU for leaf core\n", core);
+> @@ -543,7 +545,8 @@ static int __init parse_core(struct device_node *core, int package_id,
+>  	return 0;
+>  }
+>  
+> -static int __init parse_cluster(struct device_node *cluster, int depth)
+> +static int __init
+> +parse_cluster(struct device_node *cluster, int cluster_id, int depth)
+>  {
+>  	char name[20];
+>  	bool leaf = true;
+> @@ -563,7 +566,7 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
+>  		c = of_get_child_by_name(cluster, name);
+>  		if (c) {
+>  			leaf = false;
+> -			ret = parse_cluster(c, depth + 1);
+> +			ret = parse_cluster(c, i, depth + 1);
+>  			of_node_put(c);
+>  			if (ret != 0)
+>  				return ret;
+> @@ -587,7 +590,7 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
+>  			}
+>  
+>  			if (leaf) {
+> -				ret = parse_core(c, 0, core_id++);
+> +				ret = parse_core(c, 0, cluster_id, core_id++);
+>  			} else {
+>  				pr_err("%pOF: Non-leaf cluster with core %s\n",
+>  				       cluster, name);
+> @@ -626,7 +629,7 @@ static int __init parse_dt_topology(void)
+>  	if (!map)
+>  		goto out;
+>  
+> -	ret = parse_cluster(map, 0);
+> +	ret = parse_cluster(map, -1, 0);
+>  	if (ret != 0)
+>  		goto out_map;
+>  
+> -- 
+> 2.36.1
+> 
 
-Well, if we are going to do a WRITE_ONCE() in those places just for
-documentation purpose now, I think we will need to fix all places in the mm
-subsystem to be consistent.
+Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+
+Thanks,
+Ionela.

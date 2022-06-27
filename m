@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70ED355DBFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 875AB55C686
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235530AbiF0LaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
+        id S237217AbiF0Lmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235133AbiF0L3G (ORCPT
+        with ESMTP id S236884AbiF0LkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:29:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA6CA6;
-        Mon, 27 Jun 2022 04:28:01 -0700 (PDT)
+        Mon, 27 Jun 2022 07:40:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40EABF4D;
+        Mon, 27 Jun 2022 04:35:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26683B81116;
-        Mon, 27 Jun 2022 11:28:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99CCBC3411D;
-        Mon, 27 Jun 2022 11:27:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7063960CA4;
+        Mon, 27 Jun 2022 11:35:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E52C341C7;
+        Mon, 27 Jun 2022 11:35:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329279;
-        bh=/U2yq+Js1bVAShlLkoTADj5bBuk/MmaXULBdYrraMHA=;
+        s=korg; t=1656329727;
+        bh=VLQyzPYvXcOhroRTJOIwWKIJLr+kYg5ugNy72uYPY+s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qiTDWTZggTb5/LBUBHK2ymZB0lRgjI/qCJm37LBTDa87a5ac9pBzzEuWY93ky0foB
-         dmfwTm9iroq7TPEPEgBl0eYF6sL/R5fVSI/E+JFo/gEFSRTgOsVSZ1lAopZmWXXg7T
-         nCKRo5o80cGsv30J+3+Avy55HiZJXnKqpNTftjaw=
+        b=SUMBdrjEjpnjd20LKqWpg/1XZWdmMK0Wr4QsF0vepBUjqVqE7V3SHXvvI51119/7O
+         hfZCocXW/dTqz8EmVsW5d63U+87kqT6SzAQB4KlRJmryvjIdgQwQ71COGTpC86a6e+
+         iLgpBD3FBkie/2qqYfOUJ2PdrA9zQt9jPT2DaUTw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jun Li <jun.li@nxp.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH 5.10 092/102] ARM: dts: imx7: Move hsic_phy power domain to HSIC PHY node
+        stable@vger.kernel.org, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.15 096/135] iio:chemical:ccs811: rearrange iio trigger get and register
 Date:   Mon, 27 Jun 2022 13:21:43 +0200
-Message-Id: <20220627111936.196205159@linuxfoundation.org>
+Message-Id: <20220627111940.943278924@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: Dmitry Rokosov <DDRokosov@sberdevices.ru>
 
-commit 552ca27929ab28b341ae9b2629f0de3a84c98ee8 upstream.
+commit d710359c0b445e8c03e24f19ae2fb79ce7282260 upstream.
 
-Move the power domain to its actual user. This keeps the power domain
-enabled even when the USB host is runtime suspended. This is necessary
-to detect any downstream events, like device attach.
+IIO trigger interface function iio_trigger_get() should be called after
+iio_trigger_register() (or its devm analogue) strictly, because of
+iio_trigger_get() acquires module refcnt based on the trigger->owner
+pointer, which is initialized inside iio_trigger_register() to
+THIS_MODULE.
+If this call order is wrong, the next iio_trigger_put() (from sysfs
+callback or "delete module" path) will dereference "default" module
+refcnt, which is incorrect behaviour.
 
-Fixes: 02f8eb40ef7b ("ARM: dts: imx7s: Add power domain for imx7d HSIC")
-Suggested-by: Jun Li <jun.li@nxp.com>
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Fixes: f1f065d7ac30 ("iio: chemical: ccs811: Add support for data ready trigger")
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20220524181150.9240-5-ddrokosov@sberdevices.ru
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/imx7s.dtsi |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/chemical/ccs811.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/arm/boot/dts/imx7s.dtsi
-+++ b/arch/arm/boot/dts/imx7s.dtsi
-@@ -102,6 +102,7 @@
- 		compatible = "usb-nop-xceiv";
- 		clocks = <&clks IMX7D_USB_HSIC_ROOT_CLK>;
- 		clock-names = "main_clk";
-+		power-domains = <&pgc_hsic_phy>;
- 		#phy-cells = <0>;
- 	};
+--- a/drivers/iio/chemical/ccs811.c
++++ b/drivers/iio/chemical/ccs811.c
+@@ -499,11 +499,11 @@ static int ccs811_probe(struct i2c_clien
  
-@@ -1104,7 +1105,6 @@
- 				compatible = "fsl,imx7d-usb", "fsl,imx27-usb";
- 				reg = <0x30b30000 0x200>;
- 				interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
--				power-domains = <&pgc_hsic_phy>;
- 				clocks = <&clks IMX7D_USB_CTRL_CLK>;
- 				fsl,usbphy = <&usbphynop3>;
- 				fsl,usbmisc = <&usbmisc3 0>;
+ 		data->drdy_trig->ops = &ccs811_trigger_ops;
+ 		iio_trigger_set_drvdata(data->drdy_trig, indio_dev);
+-		indio_dev->trig = data->drdy_trig;
+-		iio_trigger_get(indio_dev->trig);
+ 		ret = iio_trigger_register(data->drdy_trig);
+ 		if (ret)
+ 			goto err_poweroff;
++
++		indio_dev->trig = iio_trigger_get(data->drdy_trig);
+ 	}
+ 
+ 	ret = iio_triggered_buffer_setup(indio_dev, NULL,
 
 

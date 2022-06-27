@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C61F55C40F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1EF55CC85
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbiF0LeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
+        id S235430AbiF0L3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235855AbiF0Lcu (ORCPT
+        with ESMTP id S235242AbiF0L2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:32:50 -0400
+        Mon, 27 Jun 2022 07:28:48 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B0DBC27;
-        Mon, 27 Jun 2022 04:29:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41876587;
+        Mon, 27 Jun 2022 04:27:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11E94B81120;
-        Mon, 27 Jun 2022 11:29:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4817AC3411D;
-        Mon, 27 Jun 2022 11:29:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24796B81123;
+        Mon, 27 Jun 2022 11:27:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5825BC341C8;
+        Mon, 27 Jun 2022 11:27:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329382;
-        bh=CSba8t3KPko6bwOZeRrf8R9GFqgz31Oy3X9V/EUquhI=;
+        s=korg; t=1656329244;
+        bh=lkdp9TG2/+HjYn1m8Nr4MRQIkow3L5qBfoi9/2E0Trc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y5kLny5XTR3bK+XDBa7zryEsERgzDhrtsD4M8ZPSa0T7f3a/Ohhb7qqH8QAVX+zY9
-         PGogmvs1n/mLG54Ftp/n/RULe2MqUdMnEU2gaNbwr7FkCm4D1M3MPPoUzZbXMz96/i
-         7VcdHW5rmmrVaGDV0oUwl9GhqX6S9Wic9JDsfZMA=
+        b=sO2jvOmaDBnEPtHCa9NqK2jLz7uvuzbAB3MrahEQ3Vsq94qagI2YxdR/6DRv4vIbH
+         zpmgSf7y65JTfoA5OoV3F3laToYcVW2DivUR4lpdRKoDFgWyFiZiBZCrvVOD9OuXeK
+         GrdvPml4hDpjUyMa5ixboAKpKWbJ+I7wUKxX5YyU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.4 39/60] iio:accel:bma180: rearrange iio trigger get and register
+        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH 5.10 099/102] modpost: fix section mismatch check for exported init/exit sections
 Date:   Mon, 27 Jun 2022 13:21:50 +0200
-Message-Id: <20220627111928.840058568@linuxfoundation.org>
+Message-Id: <20220627111936.402838961@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
-References: <20220627111927.641837068@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Rokosov <DDRokosov@sberdevices.ru>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-commit e5f3205b04d7f95a2ef43bce4b454a7f264d6923 upstream.
+commit 28438794aba47a27e922857d27b31b74e8559143 upstream.
 
-IIO trigger interface function iio_trigger_get() should be called after
-iio_trigger_register() (or its devm analogue) strictly, because of
-iio_trigger_get() acquires module refcnt based on the trigger->owner
-pointer, which is initialized inside iio_trigger_register() to
-THIS_MODULE.
-If this call order is wrong, the next iio_trigger_put() (from sysfs
-callback or "delete module" path) will dereference "default" module
-refcnt, which is incorrect behaviour.
+Since commit f02e8a6596b7 ("module: Sort exported symbols"),
+EXPORT_SYMBOL* is placed in the individual section ___ksymtab(_gpl)+<sym>
+(3 leading underscores instead of 2).
 
-Fixes: 0668a4e4d297 ("iio: accel: bma180: Fix indio_dev->trig assignment")
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220524181150.9240-2-ddrokosov@sberdevices.ru
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Since then, modpost cannot detect the bad combination of EXPORT_SYMBOL
+and __init/__exit.
+
+Fix the .fromsec field.
+
+Fixes: f02e8a6596b7 ("module: Sort exported symbols")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/accel/bma180.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ scripts/mod/modpost.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/accel/bma180.c
-+++ b/drivers/iio/accel/bma180.c
-@@ -793,11 +793,12 @@ static int bma180_probe(struct i2c_clien
- 		data->trig->dev.parent = &client->dev;
- 		data->trig->ops = &bma180_trigger_ops;
- 		iio_trigger_set_drvdata(data->trig, indio_dev);
--		indio_dev->trig = iio_trigger_get(data->trig);
- 
- 		ret = iio_trigger_register(data->trig);
- 		if (ret)
- 			goto err_trigger_free;
-+
-+		indio_dev->trig = iio_trigger_get(data->trig);
- 	}
- 
- 	ret = iio_triggered_buffer_setup(indio_dev, NULL,
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1119,7 +1119,7 @@ static const struct sectioncheck section
+ },
+ /* Do not export init/exit functions or data */
+ {
+-	.fromsec = { "__ksymtab*", NULL },
++	.fromsec = { "___ksymtab*", NULL },
+ 	.bad_tosec = { INIT_SECTIONS, EXIT_SECTIONS, NULL },
+ 	.mismatch = EXPORT_TO_INIT_EXIT,
+ 	.symbol_white_list = { DEFAULT_SYMBOL_WHITE_LIST, NULL },
 
 

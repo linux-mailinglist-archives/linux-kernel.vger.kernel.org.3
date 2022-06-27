@@ -2,108 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F3455C8D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4929C55D6BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbiF0Hmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        id S233075AbiF0Hod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232630AbiF0Hmf (ORCPT
+        with ESMTP id S233036AbiF0Hoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:42:35 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85A060D7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:42:34 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id j21so15152378lfe.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:42:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j5aCEp0ikpHdasUm3ZOwjExx0rx7L4GFT03C4LhIeUo=;
-        b=g4k9FP05mCAeGlUQ0znUQnEHeKdOhlileDmpMNoNHjwTQG6z17dva3vLD2GDHUrl7R
-         DQx+QoNLEUgIfj0voDfvym0DoLlvvpWHscJ96SdNe4AzFoWogdbCQ15zcTgjqgWMZ22b
-         foyg4jhu1EtqNLSpMDPgz/MC1gOC5fsn6MkPllhel8AfWE6anqxlIHxBdjn/hEip5XOe
-         XlpNp4IlsHzW8IU9afihMM7mjBnRP2tUvq41q0zZUrJqGUT0+ncVMYw6E+yEVQyjR00I
-         nslInUjfsuZ/avh/xiSew70ioVSbetsYT5zOatzPBQTwfAgTKRpISC2v2kG+5cIVgf4D
-         /mmw==
+        Mon, 27 Jun 2022 03:44:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C576560D1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:44:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656315869;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9JFk1orzuEaIozJoxvbuTHAStsu1Q5iabE/7CHYRH08=;
+        b=QNrVJsYcpODWUZyAxHiYFXKcp1ZTGa/ctDln4O+/E8SDQ5O4QD7GJ18vtf8tKw6KiXyquZ
+        xaOhRmaf4Im+MboVR70/abREcBZsHE3Bm6nodU/40XMQhOt+V3jVC7Kdn87qRScFwfdSz/
+        6O7lHP1J313E+xiyLirTGBT97vIiX9k=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-6-YnvMGtw-NZeUx5InO5mTng-1; Mon, 27 Jun 2022 03:44:26 -0400
+X-MC-Unique: YnvMGtw-NZeUx5InO5mTng-1
+Received: by mail-wr1-f70.google.com with SMTP id q15-20020a5d61cf000000b0021bc2461141so358486wrv.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:44:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j5aCEp0ikpHdasUm3ZOwjExx0rx7L4GFT03C4LhIeUo=;
-        b=KjHBCCSZo6ZKqbkogwRvQLGgooDQ3NlHEvJ/iJLz6buD7jXk0zQk2h2eTE0g5rlMHp
-         JznqUc2ry+8imIgoU6gEMD6N9pLjSRrUb5HQf5+ZsGg7sKlz+8H47bsmIAmbBHSwspKE
-         47fQqMf+zCnC1dRc3noAZ3i/qxSZbExaVcCIkZmJe+aeuA8jiuK8BIwcmVLtONb8thNr
-         /cCYKCZcv+8KztSDIUzppdXgQgLzXmPu+8OlnQMW+nTbLOVx7mobMpj/G33/NwcHN9kP
-         Oh9CaVKytcKO1bfHOhjwXiUCpKYu+lfnOmcHhdfHy998jqNyu8h2XSecyBd7R+gUgmNs
-         Bn9w==
-X-Gm-Message-State: AJIora+nhqklj41fhatediDL+pp2y36GONeSo0hL72Zld2Lap8WUgc18
-        ZpjSDWAGzQ+PnrRcn7UJ7IcXVHgouXF72a/DFhczFQ==
-X-Google-Smtp-Source: AGRyM1uOBNKtt+ZduX7vM0bhh209MPU7VZsCZRicPbUVUzQMj9TBCgPs4E28F98J48K1Qbz0wCNrRPntGkZz6P0t110=
-X-Received: by 2002:a05:6512:1056:b0:47f:6f00:66c2 with SMTP id
- c22-20020a056512105600b0047f6f0066c2mr7335308lfb.410.1656315752909; Mon, 27
- Jun 2022 00:42:32 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9JFk1orzuEaIozJoxvbuTHAStsu1Q5iabE/7CHYRH08=;
+        b=6SfAR5qI11RA/YcvzT8Fle/c//r7ErVg8fEyIPU7kqF9IC53xq3OpGD8/joU1t9EWL
+         5lqbpqbA1g+YjtSFKrCCWtKl+GjlSzZeD5iHQ0elrwaXKDAkZmtJu/HhGyZBfXLiJoHE
+         HOSxi52F+s7DQUUC/jY7+PLjMlNxmWHBD1lMLEs1AZOh0jbhWtQv/hLS4Chys0i7Ay/o
+         upLLSIqUr08IorpeKd6ka7BJ646xOsq/F7vlC11rzqnxAmJL01CCvXapKKLSWmuglFQB
+         kINRpeb5ohA/UgqAr9d7ixwjvnZXwDymxcbpcCzbjMTsC4ULS45ordIukNavGBRI3gKM
+         reLA==
+X-Gm-Message-State: AJIora+AgirvnNFCM6CwATX8HGl8vK3bzScdoUw12cNdRt8/265x0nYs
+        +d6NQuxIWkb4GulHOe9ixjJtsDRrI1jyD+PE9G6uQSJutktKWmdivVv/Mq08/PpuVxdSJAKqiu6
+        0i4WrUQxVzqLOTcAXOyGw/7iO
+X-Received: by 2002:a5d:49cc:0:b0:21b:aaec:eba8 with SMTP id t12-20020a5d49cc000000b0021baaeceba8mr10755140wrs.660.1656315865084;
+        Mon, 27 Jun 2022 00:44:25 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sbVryOidUE0xJ953k5Axs8LsqG+OeJXJtKMhrC6JEI5Et8HZUs3TNohurBNJO6jZ45MJflcw==
+X-Received: by 2002:a5d:49cc:0:b0:21b:aaec:eba8 with SMTP id t12-20020a5d49cc000000b0021baaeceba8mr10755126wrs.660.1656315864813;
+        Mon, 27 Jun 2022 00:44:24 -0700 (PDT)
+Received: from redhat.com ([2.54.45.90])
+        by smtp.gmail.com with ESMTPSA id k8-20020a05600c1c8800b003a04722d745sm5020741wms.23.2022.06.27.00.44.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 00:44:24 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 03:44:20 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] virtio-net: fix race between ndo_open() and
+ virtio_device_ready()
+Message-ID: <20220627033422-mutt-send-email-mst@kernel.org>
+References: <20220627063656.52397-1-jasowang@redhat.com>
 MIME-Version: 1.0
-References: <000000000000dab76c05d0bc284c@google.com> <00000000000095e3d105e2553f0a@google.com>
- <CACT4Y+Yf4ckOJjGkkFh_HYEKDjQo34wN=q18ADbP3=vhd5eQJQ@mail.gmail.com> <YrlelmgGpTtBva/0@google.com>
-In-Reply-To: <YrlelmgGpTtBva/0@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 27 Jun 2022 09:42:21 +0200
-Message-ID: <CACT4Y+Zt1tc_wGak6T=ydnQp2-Bn+a+zqRhaoHV1Or79-OA=FQ@mail.gmail.com>
-Subject: Re: [syzbot] possible deadlock in console_unlock (2)
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     syzbot <syzbot+0b7c8bfd17c00d016fb4@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, elver@google.com, glider@google.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        john.ogness@linutronix.de, linux-kernel@vger.kernel.org,
-        npiggin@gmail.com, pmladek@suse.com, rdunlap@infradead.org,
-        rostedt@goodmis.org, swboyd@chromium.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627063656.52397-1-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Jun 2022 at 09:39, Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (22/06/27 09:11), Dmitry Vyukov wrote:
-> > > syzbot suspects this issue was fixed by commit:
-> > >
-> > > commit faebd693c59387b7b765fab64b543855e15a91b4
-> > > Author: John Ogness <john.ogness@linutronix.de>
-> > > Date:   Thu Apr 21 21:22:36 2022 +0000
-> > >
-> > >     printk: rename cpulock functions
-> > >
-> > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17ed359bf00000
-> > > start commit:   aa051d36ce4a Merge tag 'for-linus-2022052401' of git://git..
-> > > git tree:       upstream
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=6c31e1555a4c59f3
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=0b7c8bfd17c00d016fb4
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a5aad6f00000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d697c3f00000
-> > >
-> > > If the result looks correct, please mark the issue as fixed by replying with:
-> > >
-> > > #syz fix: printk: rename cpulock functions
-> > >
-> > > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> >
-> >
-> > I guess this is also:
-> >
-> > #syz fix: printk: add kthread console printers
->
-> Dmirty, we have reverted console kthreads for the time being.
+On Mon, Jun 27, 2022 at 02:36:56PM +0800, Jason Wang wrote:
+> We used to call virtio_device_ready() after netdev registration.
 
-Will keep in mind that if these reports re-appear, it's fine.
+s/used to call/currently call/
+
+> This
+> cause
+
+s/This cause/Since ndo_open can be called immediately
+after register_netdev, this means there exists/
+
+> a race between ndo_open() and virtio_device_ready(): if
+> ndo_open() is called before virtio_device_ready(), the driver may
+> start to use the device before DRIVER_OK which violates the spec.
+> 
+> Fixing
+
+s/Fixing/Fix/
+
+> this by switching to use register_netdevice() and protect the
+> virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
+> only be called after virtio_device_ready().
+> 
+> Fixes: 4baf1e33d0842 ("virtio_net: enable VQs early")
+
+it's an unusual use of Fixes - the patch in question does not
+introduce the problem, it just does not fix it completely.
+But OK I guess.
+
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+
+With commit log changes:
+
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+
+> ---
+>  drivers/net/virtio_net.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index db05b5e930be..8a5810bcb839 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -3655,14 +3655,20 @@ static int virtnet_probe(struct virtio_device *vdev)
+>  	if (vi->has_rss || vi->has_rss_hash_report)
+>  		virtnet_init_default_rss(vi);
+>  
+> -	err = register_netdev(dev);
+> +	/* serialize netdev register + virtio_device_ready() with ndo_open() */
+> +	rtnl_lock();
+> +
+> +	err = register_netdevice(dev);
+>  	if (err) {
+>  		pr_debug("virtio_net: registering device failed\n");
+> +		rtnl_unlock();
+>  		goto free_failover;
+>  	}
+>  
+>  	virtio_device_ready(vdev);
+>  
+> +	rtnl_unlock();
+> +
+>  	err = virtnet_cpu_notif_add(vi);
+>  	if (err) {
+>  		pr_debug("virtio_net: registering cpu notifier failed\n");
+> -- 
+> 2.25.1
+

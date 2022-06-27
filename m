@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B4155DF54
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5720455CD41
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240367AbiF0UKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 16:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S240897AbiF0ULU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 16:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239355AbiF0UKt (ORCPT
+        with ESMTP id S239355AbiF0ULT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 16:10:49 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9061E1F2E9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:10:47 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id f10-20020a4aa68a000000b0042579cb6238so2090018oom.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:10:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hFExjqqaFZRyzvRO/3MzKxEpNEgPwycl58jKIyFzQp8=;
-        b=MP3Z0zzW726o54qM6nWHhk5n9UljfNI9Z1E1qmkbbR0n68hrYbTO4sSZypZFX8bPT/
-         FYdihhVt0SggpXBlCwnoA1HYQndVt1WGsOYdbbIrVr5f15/mMPmSJ0gDbYjVxAFWq5kF
-         9PLE7Jwy2kJWhFofHh8Ws1OvDPlDUpfzuc9w4QtSjFFTW4u1vwD582pXJrIzdVIjzO2f
-         zOZtE7jLyifrzhaIo6XEC33l+c6fP4FT3aK2/XF38lHjI2AB6Sk9xld5ja0ROPl4Mm29
-         Ik8RDEBmaoHcrIqzTxAWf8trKeoK0h7AwznQN0pIgj6N3/ymhCgjQaaHdIpiM/WIP3wD
-         TArg==
+        Mon, 27 Jun 2022 16:11:19 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FB21F63D;
+        Mon, 27 Jun 2022 13:11:18 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id a7so1691756ilj.2;
+        Mon, 27 Jun 2022 13:11:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=hFExjqqaFZRyzvRO/3MzKxEpNEgPwycl58jKIyFzQp8=;
-        b=RKhN114r7ONpxVQ4+4szFP6UJn+MMdOic4b5ffjrP2acIBXO9mW+9zFvnibxTwpr15
-         OIXV8ls24UcZLkVzn27Er+0TZHP4b2MEDoEx5aJdG+gAwtiIjTFmpVrcjkuayzejFqSu
-         0q7Qp+UVSutwBppLX0AdawuQaSu1dC1oHQJ36CN6oEqVfHam6O3TwASfB2zaFNHcdfXi
-         +IH6gsdQGC+pnjKFqM0TMJ5msyNdlJLUrBGc2M+cttRwlbC3CpRVjAbjD5AB4oiF8qfl
-         i+vFB+LV+365VXx3b9R1PRubFB07zbQOOzj0OvNdi2uamGHqPET9pzEp2zVeAxJozWmb
-         lbIw==
-X-Gm-Message-State: AJIora/Vz/wj/2wdDTh6LOuzT/UIF/V3RSZsJ09F1cS8Y2rCpP1kX8Gx
-        a206vZqzsZKZyWk51qRYuAwnzw==
-X-Google-Smtp-Source: AGRyM1tEovjEORdjnv/VCojfJMAHXrvvk7tPOwNbVkO0shIRs17+RLgsnRW380Ev5ttYeBU/LmQdVg==
-X-Received: by 2002:a4a:8688:0:b0:41f:8ef5:5b3e with SMTP id x8-20020a4a8688000000b0041f8ef55b3emr6630331ooh.34.1656360646805;
-        Mon, 27 Jun 2022 13:10:46 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id e28-20020a0568301f3c00b00616e3fcadaasm78599oth.62.2022.06.27.13.10.45
+        bh=WmVmVFMKveQUONc3dNmWKj+nM/pymV3PGXj6xht+MSA=;
+        b=iRhI9c6hnH+WVfQP9OlT1dv4zWpvmcf6GU0TcfZ/uI3D2C6Xg0kXlujeOOCfaZD9j1
+         QjoITC+aCk2LxuKPoRJqk8QOeRmCQHPnh28Nj0W+9xmsyR61cgf/ivFFVObS/UspMN0a
+         uVdAfDSNUWEnMXVfc6HqEpzYTc025EBHE1rklR2HJlC9Z79v9IHzbnvRziNLVwdu2m5U
+         sy3ZeDaxkjNKrxE+Jpv3xtErS9kUq2XqaC+WwIMgkm9UfWZRuTAotElOmqGJUeBzq9I5
+         yyNZwGTTO9IuPu9BGS0YlB6WB0EXnLsBsnkZvcBnwCVKh/+JdhmGeyqMpBVrbkX/hLrz
+         IxIg==
+X-Gm-Message-State: AJIora8ExkIWW5efeDcScq5aPLWE4iBETBxIdqVX+6RgQ9Ljpi0otCED
+        QzLYN8zo7wVU+6AtkHQGXw==
+X-Google-Smtp-Source: AGRyM1vocMH+6Jkwk0x+mDB7H/DyaXAZ/Vwy4yBGgg7z5rkn/NWQdDVLGK9+MYckr91jkwef7QxD1g==
+X-Received: by 2002:a05:6e02:1b8a:b0:2da:8ab6:71a7 with SMTP id h10-20020a056e021b8a00b002da8ab671a7mr4725596ili.218.1656360677273;
+        Mon, 27 Jun 2022 13:11:17 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id a30-20020a027a1e000000b00339c67df872sm5176743jac.129.2022.06.27.13.11.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 13:10:46 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 15:10:44 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: dts: qcom: align OPP table names with DT schema
-Message-ID: <YroOxPn/mQjJiJtX@builder.lan>
-References: <20220627093250.84391-1-krzysztof.kozlowski@linaro.org>
+        Mon, 27 Jun 2022 13:11:16 -0700 (PDT)
+Received: (nullmailer pid 2876044 invoked by uid 1000);
+        Mon, 27 Jun 2022 20:11:15 -0000
+Date:   Mon, 27 Jun 2022 14:11:15 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] dt-bindings: arm: Convert CoreSight bindings to
+ DT schema
+Message-ID: <20220627201115.GA2870653-robh@kernel.org>
+References: <20220603011933.3277315-1-robh@kernel.org>
+ <20220603011933.3277315-3-robh@kernel.org>
+ <01e9e2a0-df0a-3b31-f819-d68c6eb0f01d@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220627093250.84391-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <01e9e2a0-df0a-3b31-f819-d68c6eb0f01d@arm.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,479 +69,378 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 27 Jun 04:32 CDT 2022, Krzysztof Kozlowski wrote:
+On Mon, Jun 20, 2022 at 06:17:20PM +0100, Suzuki K Poulose wrote:
+> Hi Rob
+> 
+> A big Thank You for the effort ! A minor comment below.
+> 
+> On 03/06/2022 02:19, Rob Herring wrote:
+> > Each CoreSight component has slightly different requirements and
+> > nothing applies to every component, so each CoreSight component has its
+> > own schema document.
+> > 
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > --
+> > v2:
+> >   - Add missing arm,coresight-dynamic-replicator.yaml and
+> >     arm,coresight-static-funnel.yaml
+> >   - Update MAINTAINERS
+> >   - Fix coresight.txt references
+> >   - Fix double blank line
+> > ---
+> >   .../bindings/arm/arm,coresight-catu.yaml      | 101 +++++
+> >   .../bindings/arm/arm,coresight-cti.yaml       |   3 +-
+> >   .../arm/arm,coresight-dynamic-funnel.yaml     | 126 ++++++
+> >   .../arm/arm,coresight-dynamic-replicator.yaml | 126 ++++++
+> >   .../bindings/arm/arm,coresight-etb10.yaml     |  92 ++++
+> >   .../bindings/arm/arm,coresight-etm.yaml       | 156 +++++++
+> >   .../arm/arm,coresight-static-funnel.yaml      |  89 ++++
+> >   .../arm/arm,coresight-static-replicator.yaml  |  90 ++++
+> >   .../bindings/arm/arm,coresight-stm.yaml       | 101 +++++
+> >   .../bindings/arm/arm,coresight-tmc.yaml       | 131 ++++++
+> >   .../bindings/arm/arm,coresight-tpiu.yaml      |  91 ++++
+> >   .../arm/arm,embedded-trace-extension.yaml     |   1 -
+> >   .../devicetree/bindings/arm/coresight.txt     | 402 ------------------
+> >   Documentation/trace/coresight/coresight.rst   |   2 +-
+> >   MAINTAINERS                                   |   3 +-
+> >   15 files changed, 1106 insertions(+), 408 deletions(-)
+> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-catu.yaml
+> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dynamic-funnel.yaml
+> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dynamic-replicator.yaml
+> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-etb10.yaml
+> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
+> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml
+> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
+> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
+> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-tmc.yaml
+> >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-tpiu.yaml
+> >   delete mode 100644 Documentation/devicetree/bindings/arm/coresight.txt
+> > 
+> 
+> ...
+> 
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
+> > new file mode 100644
+> > index 000000000000..e0377ce48537
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-etm.yaml
+> > @@ -0,0 +1,156 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/arm/arm,coresight-etm.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Arm CoreSight Embedded Trace MacroCell
+> > +
+> > +maintainers:
+> > +  - Mathieu Poirier <mathieu.poirier@linaro.org>
+> > +  - Mike Leach <mike.leach@linaro.org>
+> > +  - Leo Yan <leo.yan@linaro.org>
+> > +  - Suzuki K Poulose <suzuki.poulose@arm.com>
+> > +
+> > +description: |
+> > +  CoreSight components are compliant with the ARM CoreSight architecture
+> > +  specification and can be connected in various topologies to suit a particular
+> > +  SoCs tracing needs. These trace components can generally be classified as
+> > +  sinks, links and sources. Trace data produced by one or more sources flows
+> > +  through the intermediate links connecting the source to the currently selected
+> > +  sink.
+> > +
+> > +  The Embedded Trace Macrocell (ETM) is a real-time trace module providing
+> > +  instruction and data tracing of a processor.
+> > +
+> > +select:
+> > +  properties:
+> > +    compatible:
+> > +      contains:
+> > +        enum:
+> > +          - arm,coresight-etm3x
+> > +          - arm,coresight-etm4x
+> > +          - arm,coresight-etm4x-sysreg
+> > +  required:
+> > +    - compatible
+> > +
+> > +allOf:
+> > +  - if:
+> > +      not:
+> > +        properties:
+> > +          compatible:
+> > +            contains:
+> > +              const: arm,coresight-etm4x-sysreg
+> > +    then:
+> > +      $ref: /schemas/arm/primecell.yaml#
+> > +      required:
+> > +        - reg
 
-> DT schema expects names of operating points tables to start with
-> "opp-table":
-> 
->   ipq6018-cp01-c1.dtb: cpu_opp_table: $nodename:0: 'cpu_opp_table' does not match '^opp-table(-[a-z0-9]+)?$'
-> 
-> Use hyphens instead of underscores, fix the names to match DT schema or
-> remove the prefix entirely when it is not needed.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+^^^^
 
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - description:
+> > +          Embedded Trace Macrocell with memory mapped access.
+> > +        items:
+> > +          - enum:
+> > +              - arm,coresight-etm3x
+> > +              - arm,coresight-etm4x
+> > +          - const: arm,primecell
+> > +      - description:
+> > +          Embedded Trace Macrocell (version 4.x), with system register access only
+> > +        const: arm,coresight-etm4x-sysreg
+> > +
+> > +  reg:
+> > +    maxItems: 1
 > 
-> ---
+> The register field is mandatory for everything, except
+> arm,coresight-etm4x-sysreg. Is there a way to enforce that
+> selectively for the others ?
+
+Yes, that's what it is doing up above that I flagged.
+
+
+> > +  clocks:
+> > +    minItems: 1
+> > +    maxItems: 2
+> > +
+> > +  clock-names:
+> > +    minItems: 1
+> > +    items:
+> > +      - const: apb_pclk
+> > +      - const: atclk
+> > +
+> > +  arm,coresight-loses-context-with-cpu:
+> > +    type: boolean
+> > +    description:
+> > +      Indicates that the hardware will lose register context on CPU power down
+> > +      (e.g. CPUIdle). An example of where this may be needed are systems which
+> > +      contain a coresight component and CPU in the same power domain. When the
+> > +      CPU powers down the coresight component also powers down and loses its
+> > +      context.
+> > +
+> > +  arm,cp14:
+> > +    type: boolean
+> > +    description:
+> > +      Must be present if the system accesses ETM/PTM management registers via
+> > +      co-processor 14.
+> > +
+> > +  qcom,skip-power-up:
+> > +    type: boolean
+> > +    description:
+> > +      Indicates that an implementation can skip powering up the trace unit.
+> > +      TRCPDCR.PU does not have to be set on Qualcomm Technologies Inc. systems
+> > +      since ETMs are in the same power domain as their CPU cores. This property
+> > +      is required to identify such systems with hardware errata where the CPU
+> > +      watchdog counter is stopped when TRCPDCR.PU is set.
+> > +
+> > +  cpu:
+> > +    description:
+> > +      phandle to the cpu this ETM is bound to.
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +
+> > +  out-ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +    additionalProperties: false
+> > +
+> > +    properties:
+> > +      port:
+> > +        description: Output connection from the ETM to CoreSight Trace bus.
+> > +        $ref: /schemas/graph.yaml#/properties/port > +
+> > +required:
+> > +  - compatible
+> > +  - clocks
+> > +  - clock-names
+> > +  - cpu
+> > +  - out-ports
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    ptm@2201c000 {
+> > +        compatible = "arm,coresight-etm3x", "arm,primecell";
+> > +        reg = <0x2201c000 0x1000>;
+> > +
+> > +        cpu = <&cpu0>;
+> > +        clocks = <&oscclk6a>;
+> > +        clock-names = "apb_pclk";
+> > +        out-ports {
+> > +            port {
+> > +                ptm0_out_port: endpoint {
+> > +                    remote-endpoint = <&funnel_in_port0>;
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > +
+> > +    ptm@2201d000 {
+> > +        compatible = "arm,coresight-etm3x", "arm,primecell";
+> > +        reg = <0x2201d000 0x1000>;
+> > +
+> > +        cpu = <&cpu1>;
+> > +        clocks = <&oscclk6a>;
+> > +        clock-names = "apb_pclk";
+> > +        out-ports {
+> > +            port {
+> > +                ptm1_out_port: endpoint {
+> > +                    remote-endpoint = <&funnel_in_port1>;
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > +...
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml
+> > new file mode 100644
+> > index 000000000000..b9da30ab9ccd
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-static-funnel.yaml
+> > @@ -0,0 +1,89 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/arm/arm,coresight-static-funnel.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > 
-> Changes since v1:
-> 1. Extend commit msg.
-> ---
->  arch/arm64/boot/dts/qcom/ipq6018.dtsi |  2 +-
->  arch/arm64/boot/dts/qcom/msm8916.dtsi |  2 +-
->  arch/arm64/boot/dts/qcom/sc7180.dtsi  | 18 +++++++++---------
->  arch/arm64/boot/dts/qcom/sc7280.dtsi  | 12 ++++++------
->  arch/arm64/boot/dts/qcom/sdm630.dtsi  |  4 ++--
->  arch/arm64/boot/dts/qcom/sdm845.dtsi  | 16 ++++++++--------
->  arch/arm64/boot/dts/qcom/sm6350.dtsi  |  4 ++--
->  arch/arm64/boot/dts/qcom/sm8150.dtsi  |  8 ++++----
->  arch/arm64/boot/dts/qcom/sm8250.dtsi  | 16 ++++++++--------
->  arch/arm64/boot/dts/qcom/sm8350.dtsi  |  4 ++--
->  arch/arm64/boot/dts/qcom/sm8450.dtsi  |  2 +-
->  11 files changed, 44 insertions(+), 44 deletions(-)
+> ...
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> index 0034a20a9705..8f528b8a5fec 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> @@ -87,7 +87,7 @@ L2_0: l2-cache {
->  		};
->  	};
->  
-> -	cpu_opp_table: cpu_opp_table {
-> +	cpu_opp_table: opp-table-cpu {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-> index 05472510e29d..ec22668e641b 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-> @@ -216,7 +216,7 @@ CLUSTER_PWRDN: cluster-gdhs {
->  		};
->  	};
->  
-> -	cpu_opp_table: cpu-opp-table {
-> +	cpu_opp_table: opp-table-cpu {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index 0abc765c615e..3a222ac71cca 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -398,7 +398,7 @@ CLUSTER_SLEEP_0: cluster-sleep-0 {
->  		};
->  	};
->  
-> -	cpu0_opp_table: cpu0_opp_table {
-> +	cpu0_opp_table: opp-table-cpu0 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -453,7 +453,7 @@ cpu0_opp10: opp-1804800000 {
->  		};
->  	};
->  
-> -	cpu6_opp_table: cpu6_opp_table {
-> +	cpu6_opp_table: opp-table-cpu6 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -725,7 +725,7 @@ sdhc_1: sdhci@7c4000 {
->  
->  			status = "disabled";
->  
-> -			sdhc1_opp_table: sdhc1-opp-table {
-> +			sdhc1_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
->  				opp-100000000 {
-> @@ -744,7 +744,7 @@ opp-384000000 {
->  			};
->  		};
->  
-> -		qup_opp_table: qup-opp-table {
-> +		qup_opp_table: opp-table-qup {
->  			compatible = "operating-points-v2";
->  
->  			opp-75000000 {
-> @@ -2602,7 +2602,7 @@ sdhc_2: sdhci@8804000 {
->  
->  			status = "disabled";
->  
-> -			sdhc2_opp_table: sdhc2-opp-table {
-> +			sdhc2_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
->  				opp-100000000 {
-> @@ -2621,7 +2621,7 @@ opp-202000000 {
->  			};
->  		};
->  
-> -		qspi_opp_table: qspi-opp-table {
-> +		qspi_opp_table: opp-table-qspi {
->  			compatible = "operating-points-v2";
->  
->  			opp-75000000 {
-> @@ -2825,7 +2825,7 @@ video-encoder {
->  				compatible = "venus-encoder";
->  			};
->  
-> -			venus_opp_table: venus-opp-table {
-> +			venus_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
->  				opp-150000000 {
-> @@ -2963,7 +2963,7 @@ dpu_intf0_out: endpoint {
->  					};
->  				};
->  
-> -				mdp_opp_table: mdp-opp-table {
-> +				mdp_opp_table: opp-table {
->  					compatible = "operating-points-v2";
->  
->  					opp-200000000 {
-> @@ -3042,7 +3042,7 @@ dsi0_out: endpoint {
->  					};
->  				};
->  
-> -				dsi_opp_table: dsi-opp-table {
-> +				dsi_opp_table: opp-table {
->  					compatible = "operating-points-v2";
->  
->  					opp-187500000 {
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index fbe0633a0841..b387fab78bd8 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -417,7 +417,7 @@ CLUSTER_SLEEP_0: cluster-sleep-0 {
->  		};
->  	};
->  
-> -	cpu0_opp_table: cpu0-opp-table {
-> +	cpu0_opp_table: opp-table-cpu0 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -477,7 +477,7 @@ cpu0_opp_2016mhz: opp-2016000000 {
->  		};
->  	};
->  
-> -	cpu4_opp_table: cpu4-opp-table {
-> +	cpu4_opp_table: opp-table-cpu4 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -547,7 +547,7 @@ cpu4_opp_2611mhz: opp-2611200000 {
->  		};
->  	};
->  
-> -	cpu7_opp_table: cpu7-opp-table {
-> +	cpu7_opp_table: opp-table-cpu7 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -763,7 +763,7 @@ psci {
->  		method = "smc";
->  	};
->  
-> -	qspi_opp_table: qspi-opp-table {
-> +	qspi_opp_table: opp-table-qspi {
->  		compatible = "operating-points-v2";
->  
->  		opp-75000000 {
-> @@ -787,7 +787,7 @@ opp-300000000 {
->  		};
->  	};
->  
-> -	qup_opp_table: qup-opp-table {
-> +	qup_opp_table: opp-table-qup {
->  		compatible = "operating-points-v2";
->  
->  		opp-75000000 {
-> @@ -3334,7 +3334,7 @@ video-firmware {
->  				iommus = <&apps_smmu 0x21a2 0x0>;
->  			};
->  
-> -			venus_opp_table: venus-opp-table {
-> +			venus_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
->  				opp-133330000 {
-> diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> index 2a2944e16945..b4367339d8b9 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-> @@ -1405,7 +1405,7 @@ mmcc: clock-controller@c8c0000 {
->  					<0>;
->  		};
->  
-> -		dsi_opp_table: dsi-opp-table {
-> +		dsi_opp_table: opp-table-dsi {
->  			compatible = "operating-points-v2";
->  
->  			opp-131250000 {
-> @@ -1494,7 +1494,7 @@ mdp5_intf1_out: endpoint {
->  					};
->  				};
->  
-> -				mdp_opp_table: mdp-opp {
-> +				mdp_opp_table: opp-table {
->  					compatible = "operating-points-v2";
->  
->  					opp-150000000 {
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index b96d0aa9f10b..2e9d93d6b28a 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -462,7 +462,7 @@ CLUSTER_SLEEP_0: cluster-sleep-0 {
->  		};
->  	};
->  
-> -	cpu0_opp_table: cpu0_opp_table {
-> +	cpu0_opp_table: opp-table-cpu0 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -557,7 +557,7 @@ cpu0_opp18: opp-1766400000 {
->  		};
->  	};
->  
-> -	cpu4_opp_table: cpu4_opp_table {
-> +	cpu4_opp_table: opp-table-cpu4 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -1104,7 +1104,7 @@ rng: rng@793000 {
->  			clock-names = "core";
->  		};
->  
-> -		qup_opp_table: qup-opp-table {
-> +		qup_opp_table: opp-table-qup {
->  			compatible = "operating-points-v2";
->  
->  			opp-50000000 {
-> @@ -3569,7 +3569,7 @@ sdhc_2: sdhci@8804000 {
->  
->  			status = "disabled";
->  
-> -			sdhc2_opp_table: sdhc2-opp-table {
-> +			sdhc2_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
->  				opp-9600000 {
-> @@ -3594,7 +3594,7 @@ opp-201500000 {
->  			};
->  		};
->  
-> -		qspi_opp_table: qspi-opp-table {
-> +		qspi_opp_table: opp-table-qspi {
->  			compatible = "operating-points-v2";
->  
->  			opp-19200000 {
-> @@ -3971,7 +3971,7 @@ video-core1 {
->  				compatible = "venus-encoder";
->  			};
->  
-> -			venus_opp_table: venus-opp-table {
-> +			venus_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
->  				opp-100000000 {
-> @@ -4208,7 +4208,7 @@ clock_camcc: clock-controller@ad00000 {
->  			clock-names = "bi_tcxo";
->  		};
->  
-> -		dsi_opp_table: dsi-opp-table {
-> +		dsi_opp_table: opp-table-dsi {
->  			compatible = "operating-points-v2";
->  
->  			opp-19200000 {
-> @@ -4310,7 +4310,7 @@ dpu_intf2_out: endpoint {
->  					};
->  				};
->  
-> -				mdp_opp_table: mdp-opp-table {
-> +				mdp_opp_table: opp-table {
->  					compatible = "operating-points-v2";
->  
->  					opp-19200000 {
-> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> index d4f8f33f3f0c..9297aa53d860 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> @@ -497,7 +497,7 @@ sdhc_1: sdhci@7c4000 {
->  
->  			status = "disabled";
->  
-> -			sdhc1_opp_table: sdhc1-opp-table {
-> +			sdhc1_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
->  				opp-19200000 {
-> @@ -941,7 +941,7 @@ sdhc_2: sdhci@8804000 {
->  
->  			status = "disabled";
->  
-> -			sdhc2_opp_table: sdhc2-opp-table {
-> +			sdhc2_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
->  				opp-100000000 {
-> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> index d3fd0af61766..c0c96c557bb0 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> @@ -288,7 +288,7 @@ CLUSTER_SLEEP_0: cluster-sleep-0 {
->  		};
->  	};
->  
-> -	cpu0_opp_table: cpu0_opp_table {
-> +	cpu0_opp_table: opp-table-cpu0 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -383,7 +383,7 @@ cpu0_opp18: opp-1785600000 {
->  		};
->  	};
->  
-> -	cpu4_opp_table: cpu4_opp_table {
-> +	cpu4_opp_table: opp-table-cpu4 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -473,7 +473,7 @@ cpu4_opp17: opp-2419200000 {
->  		};
->  	};
->  
-> -	cpu7_opp_table: cpu7_opp_table {
-> +	cpu7_opp_table: opp-table-cpu7 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -3563,7 +3563,7 @@ sdhc_2: sdhci@8804000 {
->  
->  			status = "disabled";
->  
-> -			sdhc2_opp_table: sdhc2-opp-table {
-> +			sdhc2_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
->  				opp-19200000 {
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> index 8098330aeb4f..e13e0e8a786b 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> @@ -336,7 +336,7 @@ CLUSTER_SLEEP_0: cluster-sleep-0 {
->  		};
->  	};
->  
-> -	cpu0_opp_table: cpu0_opp_table {
-> +	cpu0_opp_table: opp-table-cpu0 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -426,7 +426,7 @@ cpu0_opp17: opp-1804800000 {
->  		};
->  	};
->  
-> -	cpu4_opp_table: cpu4_opp_table {
-> +	cpu4_opp_table: opp-table-cpu4 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -521,7 +521,7 @@ cpu4_opp18: opp-2419200000 {
->  		};
->  	};
->  
-> -	cpu7_opp_table: cpu7_opp_table {
-> +	cpu7_opp_table: opp-table-cpu7 {
->  		compatible = "operating-points-v2";
->  		opp-shared;
->  
-> @@ -914,7 +914,7 @@ rng: rng@793000 {
->  			clock-names = "core";
->  		};
->  
-> -		qup_opp_table: qup-opp-table {
-> +		qup_opp_table: opp-table-qup {
->  			compatible = "operating-points-v2";
->  
->  			opp-50000000 {
-> @@ -2937,7 +2937,7 @@ sdhc_2: sdhci@8804000 {
->  
->  			status = "disabled";
->  
-> -			sdhc2_opp_table: sdhc2-opp-table {
-> +			sdhc2_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
->  				opp-19200000 {
-> @@ -3123,7 +3123,7 @@ video-encoder {
->  				compatible = "venus-encoder";
->  			};
->  
-> -			venus_opp_table: venus-opp-table {
-> +			venus_opp_table: opp-table {
->  				compatible = "operating-points-v2";
->  
->  				opp-720000000 {
-> @@ -3486,7 +3486,7 @@ dpu_intf2_out: endpoint {
->  					};
->  				};
->  
-> -				mdp_opp_table: mdp-opp-table {
-> +				mdp_opp_table: opp-table {
->  					compatible = "operating-points-v2";
->  
->  					opp-200000000 {
-> @@ -3656,7 +3656,7 @@ dsi1_phy: dsi-phy@ae96400 {
->  
->  				status = "disabled";
->  
-> -				dsi_opp_table: dsi-opp-table {
-> +				dsi_opp_table: opp-table {
->  					compatible = "operating-points-v2";
->  
->  					opp-187500000 {
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> index 743cba9b683c..db497b954f4c 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> @@ -638,7 +638,7 @@ ipcc: mailbox@408000 {
->  			#mbox-cells = <2>;
->  		};
->  
-> -		qup_opp_table_100mhz: qup-100mhz-opp-table {
-> +		qup_opp_table_100mhz: opp-table-qup100mhz {
->  			compatible = "operating-points-v2";
->  
->  			opp-50000000 {
-> @@ -657,7 +657,7 @@ opp-100000000 {
->  			};
->  		};
->  
-> -		qup_opp_table_120mhz: qup-120mhz-opp-table {
-> +		qup_opp_table_120mhz: opp-table-qup120mhz {
->  			compatible = "operating-points-v2";
->  
->  			opp-50000000 {
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 7d08fad76371..ab4ea6672b48 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -343,7 +343,7 @@ CLUSTER_PD: cpu-cluster0 {
->  		};
->  	};
->  
-> -	qup_opp_table_100mhz: qup-100mhz-opp-table {
-> +	qup_opp_table_100mhz: opp-table-qup {
->  		compatible = "operating-points-v2";
->  
->  		opp-50000000 {
-> -- 
-> 2.34.1
+> > +  - compatible
+> > +  - in-ports
+> > +  - out-ports
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    funnel {
+> > +        /* non-configurable replicators don't show up on the
+> > +        * AMBA bus.  As such no need to add "arm,primecell".
+> > +        */
 > 
+> minor nit. Comment styling.
+> 
+> > +        compatible = "arm,coresight-static-funnel";
+> 
+> ...
+> 
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
+> > new file mode 100644
+> > index 000000000000..66ee97370fb2
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-static-replicator.yaml
+> > @@ -0,0 +1,90 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/arm/arm,coresight-static-replicator.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Arm CoreSight Static Trace Bus Replicator
+> 
+> ...
+> 
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    replicator {
+> > +        /* non-configurable replicators don't show up on the
+> > +        * AMBA bus.  As such no need to add "arm,primecell".
+> > +        */
+> 
+> same as above.
+> 
+> > +        compatible = "arm,coresight-static-replicator";
+> > +
+> > +        out-ports {
+> > +            #address-cells = <1>;
+> > +            #size-cells = <0>;
+> > +
+> > +            /* replicator output ports */
+> > +            port@0 {
+> > +                reg = <0>;
+> > +                replicator_out_port0: endpoint {
+> > +                    remote-endpoint = <&etb_in_port>;
+> > +                };
+> > +            };
+> > +
+> > +            port@1 {
+> > +                reg = <1>;
+> > +                replicator_out_port1: endpoint {
+> > +                    remote-endpoint = <&tpiu_in_port>;
+> > +                };
+> > +            };
+> > +        };
+> > +
+> > +        in-ports {
+> > +            port {
+> > +                replicator_in_port0: endpoint {
+> > +                    remote-endpoint = <&funnel_out_port0>;
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > +...
+> > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
+> > new file mode 100644
+> > index 000000000000..905008faa012
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-stm.yaml
+> > @@ -0,0 +1,101 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/arm/arm,coresight-stm.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Arm CoreSight System Trace MacroCell
+> > +
+> > +maintainers:
+> > +  - Mathieu Poirier <mathieu.poirier@linaro.org>
+> > +  - Mike Leach <mike.leach@linaro.org>
+> > +  - Leo Yan <leo.yan@linaro.org>
+> > +  - Suzuki K Poulose <suzuki.poulose@arm.com>
+> > +
+> > +description: |
+> > +  CoreSight components are compliant with the ARM CoreSight architecture
+> > +  specification and can be connected in various topologies to suit a particular
+> > +  SoCs tracing needs. These trace components can generally be classified as
+> > +  sinks, links and sources. Trace data produced by one or more sources flows
+> > +  through the intermediate links connecting the source to the currently selected
+> > +  sink.
+> > +
+> > +  The STM is a trace source that is integrated into a CoreSight system, designed
+> > +  primarily for high-bandwidth trace of instrumentation embedded into software.
+> > +  This instrumentation is made up of memory-mapped writes to the STM Advanced
+> > +  eXtensible Interface (AXI) slave, which carry information about the behavior
+> > +  of the software.
+> > +
+> > +select:
+> > +  properties:
+> > +    compatible:
+> > +      contains:
+> > +        const: arm,coresight-stm
+> > +  required:
+> > +    - compatible
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/arm/primecell.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - const: arm,coresight-stm
+> > +      - const: arm,primecell
+> > +
+> > +  reg:
+> > +    maxItems: 2
+> 
+> stm-stimulus-base is mandatory for stm. So I believe, we should add
+> 
+> 	minItems: 2
+> above ?
+
+That's the default if not explicit.
+
+Rob

@@ -2,53 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0D255D80D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A6F55C634
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237172AbiF0PGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
+        id S237221AbiF0PGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236317AbiF0PGE (ORCPT
+        with ESMTP id S235080AbiF0PGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:06:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C9A175B7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:06:03 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o5qJL-0000rM-G9; Mon, 27 Jun 2022 17:05:59 +0200
-Received: from pengutronix.de (p200300ea0f229100e97a6e34b3068c93.dip0.t-ipconnect.de [IPv6:2003:ea:f22:9100:e97a:6e34:b306:8c93])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BD2BDA0461;
-        Mon, 27 Jun 2022 15:05:57 +0000 (UTC)
-Date:   Mon, 27 Jun 2022 17:05:57 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Max Staudt <max@enpas.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
-        Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH v9] can, tty: can327 CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <20220627150557.qluqtejrddj5nfif@pengutronix.de>
-References: <20220618195031.10975-1-max@enpas.org>
+        Mon, 27 Jun 2022 11:06:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 921A617A85
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:06:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656342398;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fBes51M+2wr38BVd4ZzSnLeIo2T+7HxUzwOt8bM5avs=;
+        b=CLkczHFgRwfElVINKckhd9QDh4/NHwtap5As9Lg+F8Gywp80yIlcX2Ak3aqpYCGenTHDZi
+        K3ZbwUpuDqsJTZAhRfsd5u2bTjOYLifXfcHmqYkMIyZQjF6QbvUA8rjx8GpHU+1YYorUcB
+        r5GPcx5MxPwozoDroc9HfGsmaDlZd4I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-630-PsvuwOuVO_i-ReYZdtquMQ-1; Mon, 27 Jun 2022 11:06:35 -0400
+X-MC-Unique: PsvuwOuVO_i-ReYZdtquMQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8C9FE29DD997;
+        Mon, 27 Jun 2022 15:06:34 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.18.25.210])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 82BCE2166B26;
+        Mon, 27 Jun 2022 15:06:34 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id 27351220463; Mon, 27 Jun 2022 11:06:34 -0400 (EDT)
+Date:   Mon, 27 Jun 2022 11:06:34 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fuse: add FOPEN_INVAL_ATTR
+Message-ID: <YrnHeqckLknFleud@redhat.com>
+References: <20220608104202.19461-1-zhangjiachen.jaycee@bytedance.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kovmxfmurem5z7iw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220618195031.10975-1-max@enpas.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220608104202.19461-1-zhangjiachen.jaycee@bytedance.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,50 +62,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 08, 2022 at 06:42:02PM +0800, Jiachen Zhang wrote:
+> So that the fuse daemon can ask kernel to invalidate the attr cache on file
+> open.
 
---kovmxfmurem5z7iw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Will be great if there was a proper context around this. Without any
+explanation, how one is supposed to understand how this is useful.
 
-On 18.06.2022 21:50:31, Max Staudt wrote:
-> This is the can327 driver. It does a surprisingly good job at turning
-> ELM327 based OBD-II interfaces into cheap CAN interfaces for simple
-> homebrew projects.
->=20
-> Please see the included documentation for details and limitations:
-> Documentation/networking/device_drivers/can/can327.rst
->=20
-> Cc: linux-can <linux-can@vger.kernel.org>
-> Signed-off-by: Max Staudt <max@enpas.org>
-> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+By going through other email threads, looks like, with writeback
+cache enabled, you want to invalidate attr cache and data cache
+when file is opened next time. Right?
 
-Added with some minor coding style improvements (line breaks and
-whitespace changes) to make checkpatch and clang-format happier to
-can-next/master!
+IOW, when file is closed, its changes will be flushed out. And when
+file is reopened, server somehow is supposed to determine if file
+has changed (on server by another client) and based on that determine
+whether to invalidate attr and data cache on next open?
 
-regards,
-Marc
+Even without that, on next open, it probably makes sense to being
+invalidate attr cache. We have notion to invalidate data cache. So
+it will be kind of odd that we can invalidate data but not attrs
+on next open. Am I understanding it right?
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Thanks
+Vivek
 
---kovmxfmurem5z7iw
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+> ---
+>  fs/fuse/file.c            | 4 ++++
+>  include/uapi/linux/fuse.h | 2 ++
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> index fdcec3aa7830..9609d13ec351 100644
+> --- a/fs/fuse/file.c
+> +++ b/fs/fuse/file.c
+> @@ -213,6 +213,10 @@ void fuse_finish_open(struct inode *inode, struct file *file)
+>  		file_update_time(file);
+>  		fuse_invalidate_attr_mask(inode, FUSE_STATX_MODSIZE);
+>  	}
+> +
+> +	if (ff->open_flags & FOPEN_INVAL_ATTR)
+> +		fuse_invalidate_attr(inode);
+> +
+>  	if ((file->f_mode & FMODE_WRITE) && fc->writeback_cache)
+>  		fuse_link_write_file(file);
+>  }
+> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+> index d6ccee961891..0b0b7d308ddb 100644
+> --- a/include/uapi/linux/fuse.h
+> +++ b/include/uapi/linux/fuse.h
+> @@ -301,6 +301,7 @@ struct fuse_file_lock {
+>   * FOPEN_CACHE_DIR: allow caching this directory
+>   * FOPEN_STREAM: the file is stream-like (no file position at all)
+>   * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
+> + * FOPEN_INVAL_ATTR: invalidate the attr cache on open
+>   */
+>  #define FOPEN_DIRECT_IO		(1 << 0)
+>  #define FOPEN_KEEP_CACHE	(1 << 1)
+> @@ -308,6 +309,7 @@ struct fuse_file_lock {
+>  #define FOPEN_CACHE_DIR		(1 << 3)
+>  #define FOPEN_STREAM		(1 << 4)
+>  #define FOPEN_NOFLUSH		(1 << 5)
+> +#define FOPEN_INVAL_ATTR	(1 << 6)
+>  
+>  /**
+>   * INIT request/reply flags
+> -- 
+> 2.20.1
+> 
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmK5x1IACgkQrX5LkNig
-013dFgf+LN9lKCXv+ZaFhnWN+BiF6lyNXdlpVLeVO6jgWqyo6for8l9+HvhSwocq
-kDSI8YA1u1IND3ggP+FncOVNl6qbXJwnqls3qThDrNhULxXBOj16ekdN5mUTIX63
-Q8fhk066NMqIIav31rKXHDaovI1G5hfd72QEWzNg5ABbOoe7msF46tp+AzBWbRSn
-HdvANjNdKaYKuskXJmfCwYEWl+uUQuD99XWrkQqHY2Uv8lF0eqUEJAYmkgZf2fVk
-cWXetuE+r+6z/dbXofOF6gKZ3Y34iEchUw1KHTT9a6ATTPX37ulzUKUTrkopLSAr
-IsPXJcnWJpO/tyRQvSPla/pvZcPv4A==
-=5RII
------END PGP SIGNATURE-----
-
---kovmxfmurem5z7iw--

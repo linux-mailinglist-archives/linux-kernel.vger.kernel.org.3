@@ -2,164 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D4355D6A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DB255CBFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238219AbiF0P1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S237093AbiF0Pby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238076AbiF0P1p (ORCPT
+        with ESMTP id S238187AbiF0Pbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:27:45 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C482B18E2D;
-        Mon, 27 Jun 2022 08:27:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
-  s=amazon201209; t=1656343663; x=1687879663;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version:subject;
-  bh=YEgapIC6vw4gM3xTcvv8zbRwoB5EdirAlDgdpfFvDmI=;
-  b=HWYTG1vAw/a/bCVys46MZt4O6f8JZZ+GB+GZKhEyjKqKqD426hp6pPNO
-   PyGs21h3uZ2lZI88AiJ6EuBAvgEf9l9hgZQH0Xok9cSAc9qdyyyyMM6XA
-   PPFk1NA7Ghgv8Uav1vGxqAHo1zvk7d1YE+kFM/BT4fV3tVY0DYupT2g8e
-   M=;
-X-IronPort-AV: E=Sophos;i="5.92,226,1650931200"; 
-   d="scan'208";a="1028517709"
-Subject: RE: [PATCH v4] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves,
- if present
-Thread-Topic: [PATCH v4] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves,
- if present
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-c275e159.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 27 Jun 2022 15:23:55 +0000
-Received: from EX13D32EUC004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-c275e159.us-west-2.amazon.com (Postfix) with ESMTPS id 6A41C814F0;
-        Mon, 27 Jun 2022 15:23:55 +0000 (UTC)
-Received: from EX13D32EUC003.ant.amazon.com (10.43.164.24) by
- EX13D32EUC004.ant.amazon.com (10.43.164.121) with Microsoft SMTP Server (TLS)
- id 15.0.1497.36; Mon, 27 Jun 2022 15:23:54 +0000
-Received: from EX13D32EUC003.ant.amazon.com ([10.43.164.24]) by
- EX13D32EUC003.ant.amazon.com ([10.43.164.24]) with mapi id 15.00.1497.036;
- Mon, 27 Jun 2022 15:23:54 +0000
-From:   "Durrant, Paul" <pdurrant@amazon.co.uk>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        "Joerg Roedel" <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Thread-Index: AQHYhkt9PlSgQj3r2kG3c5Kzi5Ybkq1jZe+AgAAAylA=
-Date:   Mon, 27 Jun 2022 15:23:54 +0000
-Message-ID: <91a4b01e8d9b4b3c9ed43614810e75ce@EX13D32EUC003.ant.amazon.com>
-References: <20220622151728.13622-1-pdurrant@amazon.com>
- <YrnKc6RoqDM/At3T@google.com>
-In-Reply-To: <YrnKc6RoqDM/At3T@google.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.165.192]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 27 Jun 2022 11:31:36 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F9619C24;
+        Mon, 27 Jun 2022 08:31:34 -0700 (PDT)
+Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LWs6X2L4Gz67VxZ;
+        Mon, 27 Jun 2022 23:27:32 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 17:31:32 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 16:31:28 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <damien.lemoal@opensource.wdc.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <hch@lst.de>,
+        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+        <iommu@lists.linux.dev>, <linux-scsi@vger.kernel.org>,
+        <linuxarm@huawei.com>, John Garry <john.garry@huawei.com>
+Subject: [PATCH v4 0/5] DMA mapping changes for SCSI core
+Date:   Mon, 27 Jun 2022 23:25:16 +0800
+Message-ID: <1656343521-62897-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-12.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Sean Christopherson <seanjc@google.com>
-> Sent: 27 June 2022 16:19
-> To: Durrant, Paul <pdurrant@amazon.co.uk>
-> Cc: x86@kernel.org; kvm@vger.kernel.org; linux-kernel@vger.kernel.org; Da=
-vid Woodhouse
-> <dwmw2@infradead.org>; Paolo Bonzini <pbonzini@redhat.com>; Vitaly Kuznet=
-sov <vkuznets@redhat.com>;
-> Wanpeng Li <wanpengli@tencent.com>; Jim Mattson <jmattson@google.com>; Jo=
-erg Roedel <joro@8bytes.org>;
-> Thomas Gleixner <tglx@linutronix.de>; Ingo Molnar <mingo@redhat.com>; Bor=
-islav Petkov <bp@alien8.de>;
-> Dave Hansen <dave.hansen@linux.intel.com>; H. Peter Anvin <hpa@zytor.com>
-> Subject: RE: [EXTERNAL][PATCH v4] KVM: x86/xen: Update Xen CPUID Leaf 4 (=
-tsc info) sub-leaves, if
-> present
->=20
-> CAUTION: This email originated from outside of the organization. Do not c=
-lick links or open
-> attachments unless you can confirm the sender and know the content is saf=
-e.
->=20
->=20
->=20
-> On Wed, Jun 22, 2022, Paul Durrant wrote:
-> > The scaling information in subleaf 1 should match the values set by KVM=
- in
-> > the 'vcpu_info' sub-structure 'time_info' (a.k.a. pvclock_vcpu_time_inf=
-o)
-> > which is shared with the guest, but is not directly available to the VM=
-M.
-> > The offset values are not set since a TSC offset is already applied.
-> > The TSC frequency should also be set in sub-leaf 2.
-> >
-> > Cache pointers to the sub-leaves when CPUID is updated by the VMM and
-> > populate the relevant information prior to entering the guest.
->=20
-> All of my comments about the code still apply.
->=20
-> https://lore.kernel.org/all/YrMqtHzNSean+qkh@google.com
->=20
+As reported in [0], DMA mappings whose size exceeds the IOMMU IOVA caching
+limit may see a big performance hit.
 
-Apologies. Not sure how I missed them; I'll send a response shortly.
+This series introduces a new DMA mapping API, dma_opt_mapping_size(), so
+that drivers may know this limit when performance is a factor in the
+mapping.
 
-> > Signed-off-by: Paul Durrant <pdurrant@amazon.com>
-> > ---
-> > Cc: David Woodhouse <dwmw2@infradead.org>
->=20
-> Cc: can go in the changelog, it's helpful info to carry with the commit a=
-s it
-> documents who was made aware of the patch, e.g. show who may have had a c=
-ance to
-> object/review.
->=20
-> >
-> > v2:
-> >  - Make sure sub-leaf pointers are NULLed if the time leaf is removed
-> >
-> > v3:
-> >  - Add leaf limit check in kvm_xen_set_cpuid()
-> >
-> > v4:
-> >  - Update commit comment
->=20
-> Please start with the most recent verison and work backardwards, that way=
- reviewers
-> can quickly see the delta for _this_ version.  I.e.
->=20
->=20
-> v4:
->=20
-> v3:
->=20
-> v2:
->=20
-> v1:
+The SCSI SAS transport code is modified only to use this limit. For now I
+did not want to touch other hosts as I have a concern that this change
+could cause a performance regression.
 
-Ok.
+I also added a patch for libata-scsi as it does not currently honour the
+shost max_sectors limit.
 
-  Paul
+[0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
+[1] https://lore.kernel.org/linux-iommu/f5b78c9c-312e-70ab-ecbb-f14623a4b6e3@arm.com/
+
+Changes since v3:
+- Apply max DMA optimial limit to SAS hosts only
+  Note: Even though "scsi: core: Cap shost max_sectors only once when
+  adding" is a subset of a previous patch I did not transfer the RB tags
+- Rebase on v5.19-rc4
+
+Changes since v2:
+- Rebase on v5.19-rc1
+- Add Damien's tag to 2/4 (thanks)
+
+Changes since v1:
+- Relocate scsi_add_host_with_dma() dma_dev check (Reported by Dan)
+- Add tags from Damien and Martin (thanks)
+  - note: I only added Martin's tag to the SCSI patch
+
+John Garry (5):
+  dma-mapping: Add dma_opt_mapping_size()
+  dma-iommu: Add iommu_dma_opt_mapping_size()
+  scsi: core: Cap shost max_sectors according to DMA mapping limits only
+    once
+  scsi: scsi_transport_sas: Cap shost max_sectors according to DMA
+    optimal mapping limit
+  libata-scsi: Cap ata_device->max_sectors according to
+    shost->max_sectors
+
+ Documentation/core-api/dma-api.rst |  9 +++++++++
+ drivers/ata/libata-scsi.c          |  1 +
+ drivers/iommu/dma-iommu.c          |  6 ++++++
+ drivers/iommu/iova.c               |  5 +++++
+ drivers/scsi/hosts.c               |  5 +++++
+ drivers/scsi/scsi_lib.c            |  4 ----
+ drivers/scsi/scsi_transport_sas.c  |  6 ++++++
+ include/linux/dma-map-ops.h        |  1 +
+ include/linux/dma-mapping.h        |  5 +++++
+ include/linux/iova.h               |  2 ++
+ kernel/dma/mapping.c               | 12 ++++++++++++
+ 11 files changed, 52 insertions(+), 4 deletions(-)
+
+-- 
+2.35.3
 

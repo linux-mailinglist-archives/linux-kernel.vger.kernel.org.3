@@ -2,174 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EC555D171
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7671555DF06
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238368AbiF0QGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
+        id S235656AbiF0QGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235656AbiF0QG2 (ORCPT
+        with ESMTP id S238946AbiF0QGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:06:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 454C5B483
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656345986;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Et0fBT88jZFdIetfnOLa7eYQfFaPq0dKwFkCGFAcX7M=;
-        b=NrtvoVi5e71lfXGt+dTQLNCIgNJ5lxN41IaYn+fSMqsFDwyajDWmdbilou9iabauOhvypH
-        TMiDDgMulG2F7v6fbXa6HifaIxyrQmXL0+OdstGusDzEkmFClgvTLriQCi1FiZDlvLXuCc
-        xtA9pirFcdk0dr8ZJejfmC+gnRqGdlc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-6-sSrWIMV4N_m8cv_f2Z7iiw-1; Mon, 27 Jun 2022 12:06:25 -0400
-X-MC-Unique: sSrWIMV4N_m8cv_f2Z7iiw-1
-Received: by mail-wm1-f70.google.com with SMTP id o28-20020a05600c511c00b003a04f97f27aso260448wms.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:06:24 -0700 (PDT)
+        Mon, 27 Jun 2022 12:06:40 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111ED18B11;
+        Mon, 27 Jun 2022 09:06:39 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id o10so13776602edi.1;
+        Mon, 27 Jun 2022 09:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iuUWp9TRDjV8xfxvCWucHl38XhVPl+OOiSPhV3nTBNU=;
+        b=P1KgjzNMzTbU02Xdz1jhSzqkjg+/Ua9ZFGv2do6fIZsZHHbzn0SJAI7GJWkOVK7lQ6
+         r6tgeY6+6cc1y5N3JSaLXF4u6vgo38QWnEK1/yC5LcyY8j+XMshtbWTOkphK6N/frYV1
+         KewycUy7CV0QtMIzvflQrnNWwBEVWb17wHMeluD01ar2fPCSdM6uhQ1Dub06c358ESh5
+         pfa850qzPD3mtK5431jZXZvxvnp/Lr5T1CHYH/udwJs24gfVVmGC93WeOaWnrmveTQGZ
+         AoDNUdI05wizpG/NPB/VnqhtKrtouINsOD/HQUU0x1TrrIckJxO59IlWHrtnRGNOEe5E
+         SKxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Et0fBT88jZFdIetfnOLa7eYQfFaPq0dKwFkCGFAcX7M=;
-        b=zPp14lLCg0EpAtLWbZdDfDtyq8x+j9N17CoMs35L7LAT3i/WX4p9Xh4dk49J/y/z6d
-         u2+g82iTLnkBvAsoT6t0RAoC/Oz7fQ2adGS+QE8QPktrEO24Cg1qkab/lZZoCKaT0YAZ
-         ubF0uTafGsDFSyI9TUickVPmuC79pyACLMjBwirEJZCCRk4a8NZRefxELUEb8/OoW7PU
-         ADQF9zVu6p//kcloOQPasWEeQjP4VFH/kfi+71kmHkc9d9aRPyKYT+YupUpuWhF2MxSX
-         428oR+MYI6GRR/H0JqvGqyu5R2tiFrWJralYjqVOFW+/yvHvxxKEQ/ubLkU2vs1L8H+K
-         dECg==
-X-Gm-Message-State: AJIora+B2WYUe/6fUgW5lIOEu/MxtFgmxsWB1AeayiEWyFcfkbozND7q
-        6EY32CjA90gIE7AhU7lHLdCSR/LrRZSbSL/Ei/p+n6yA7D5OqNMxxXyBLu3/IdaU2UnmE1yH+bY
-        zFb1FM1/QRUnzcI4QKXy34OmwI7A59v6XLlJR5t72kq4W1vEzpF8JMVPMRsB7YWDk8sx44PAHxo
-        ZK
-X-Received: by 2002:a05:600c:4f08:b0:39c:9437:da06 with SMTP id l8-20020a05600c4f0800b0039c9437da06mr15905007wmq.181.1656345983802;
-        Mon, 27 Jun 2022 09:06:23 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1v+tzLlkmyLWgs6sbrQRofFBaYY7XIFbbta3ZJQIjl0O65OYMJ11jwxkV5OFeVW9JYuXDa+jw==
-X-Received: by 2002:a05:600c:4f08:b0:39c:9437:da06 with SMTP id l8-20020a05600c4f0800b0039c9437da06mr15904963wmq.181.1656345983407;
-        Mon, 27 Jun 2022 09:06:23 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id z22-20020a05600c221600b003a0499df21asm5169981wml.25.2022.06.27.09.06.22
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iuUWp9TRDjV8xfxvCWucHl38XhVPl+OOiSPhV3nTBNU=;
+        b=yinJ/aJCeehb0A6OTM3BskGRNoybsxlifp5it0xyVj2D7CsfXm2cHmlF6Tub/1CoSR
+         p+ghQ6FbYj+50Yu6km/MMG+Fo07DHu1taGpPSqdUEa2ap2NrIzbDe6aZWpn29Thw7j6C
+         Upbd05oJzCpOLhLsm+q8hqD/V6V+gtxhEkoWwODuuDQB1eOog34SGlgDckrSXyaA1dpd
+         h4TzeTW/mfOYW+It/J0AJWN1pFgMhJCIPyl9dJdOvHsrAk1B9kIw73mSeVSwwUzVN/+9
+         sh74SBAsaYXUVno0tvOXIOqBKlxZkeUZMQrWRioFEHbCyucQl4O5oBjv+lLVRD3/TjY3
+         UMTw==
+X-Gm-Message-State: AJIora+mTuG1OR6Zea6aujFhH9pUhp6wEePORZfHfCYQiDKemOqu+X9z
+        Y5sNvV3GGDB+NGZCuR1I778=
+X-Google-Smtp-Source: AGRyM1vvn6z+JQ7FLdOGqNSyhTsbwQd6U8hADBkygQKpKeWIgtARIaam0U5/zWgvi0rwVmhQij6o+Q==
+X-Received: by 2002:a05:6402:4252:b0:437:6618:1738 with SMTP id g18-20020a056402425200b0043766181738mr17811363edb.259.1656345997452;
+        Mon, 27 Jun 2022 09:06:37 -0700 (PDT)
+Received: from skbuf ([188.25.231.135])
+        by smtp.gmail.com with ESMTPSA id d10-20020a056402400a00b004357ab9cfb1sm7789834eda.26.2022.06.27.09.06.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 09:06:22 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v1 00/10] KVM: nVMX: Use vmcs_config for setting up
- nested VMX MSRs
-In-Reply-To: <YrUF1Zj35BYvXrB6@google.com>
-References: <20220622164432.194640-1-vkuznets@redhat.com>
- <YrUF1Zj35BYvXrB6@google.com>
-Date:   Mon, 27 Jun 2022 18:06:21 +0200
-Message-ID: <87tu86um4i.fsf@redhat.com>
+        Mon, 27 Jun 2022 09:06:36 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 19:06:34 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3 net-next 2/4] net: switchdev: add support for
+ offloading of fdb locked flag
+Message-ID: <20220627160634.wylbknsbsafvs3ij@skbuf>
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
+ <20220524152144.40527-3-schultz.hans+netdev@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524152144.40527-3-schultz.hans+netdev@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On Tue, May 24, 2022 at 05:21:42PM +0200, Hans Schultz wrote:
+> Used for Mac-auth/MAB feature in the offloaded case.
+> 
+> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+> ---
+>  include/net/dsa.h       | 6 ++++++
+>  include/net/switchdev.h | 3 ++-
+>  net/bridge/br.c         | 3 ++-
+>  net/bridge/br_fdb.c     | 7 +++++--
+>  net/bridge/br_private.h | 2 +-
+>  5 files changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/net/dsa.h b/include/net/dsa.h
+> index 14f07275852b..a5a843b2d67d 100644
+> --- a/include/net/dsa.h
+> +++ b/include/net/dsa.h
+> @@ -330,6 +330,12 @@ struct dsa_port {
+>  	/* List of VLANs that CPU and DSA ports are members of. */
+>  	struct mutex		vlans_lock;
+>  	struct list_head	vlans;
+> +
+> +	/* List and maintenance of locked ATU entries */
+> +	struct mutex		locked_entries_list_lock;
+> +	struct list_head	atu_locked_entries_list;
+> +	atomic_t		atu_locked_entry_cnt;
+> +	struct delayed_work	atu_work;
 
-> On Wed, Jun 22, 2022, Vitaly Kuznetsov wrote:
->> vmcs_config is a sanitized version of host VMX MSRs where some controls are
->> filtered out (e.g. when Enlightened VMCS is enabled, some know bugs are 
->> discovered, some inconsistencies in controls are detected,...) but
->> nested_vmx_setup_ctls_msrs() uses raw host MSRs instead. This may end up
->> in exposing undesired controls to L1. Switch to using vmcs_config instead.
->> 
->> RFC part: vmcs_config's sanitization now is a mix of "what can't be enabled"
->> and "what KVM doesn't want" and we need to separate these as for nested VMX
->> MSRs only the first category makes sense. This gives vmcs_config a slightly
->> different meaning "controls which can be (theoretically) used". An alternative
->> approach would be to store sanitized host MSRs values separately, sanitize
->> them and and use in nested_vmx_setup_ctls_msrs() but currently I don't see
->> any benefits. Comments welcome!
->
-> I like the idea overall, even though it's a decent amount of churn.  It seems
-> easier to maintain than separate paths for nested.  The alternative would be to
-> add common helpers to adjust the baseline configurations, but I don't see any
-> way to programmatically make that approach more robust.
->
-> An idea to further harden things.  Or: an excuse to extend macro shenanigans :-)
->
-> If we throw all of the "opt" and "min" lists into macros, e.g. KVM_REQUIRED_*
-> and KVM_OPTIONAL_*, and then use those to define a KVM_KNOWN_* field, we can
-> prevent using the mutators to set/clear unknown bits at runtime via BUILD_BUG_ON().
-> The core builders, e.g. vmx_exec_control(), can still set unknown bits, i.e. set
-> bits that aren't enumerated to L1, but that's easier to audit and this would catch
-> regressions for the issues fixed in patches.
->
-> It'll required making add_atomic_switch_msr_special() __always_inline (or just
-> open code it), but that's not a big deal.
->
-> E.g. if we have
->
->   #define KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL <blah blah blah>
->   #define KVM_OPTIONAL_CPU_BASED_VM_EXEC_CONTROL <blah blah blah>
->
-> Then the builders for the controls shadows can do:
->
-> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> index 286c88e285ea..5eb75822a09e 100644
-> --- a/arch/x86/kvm/vmx/vmx.h
-> +++ b/arch/x86/kvm/vmx/vmx.h
-> @@ -468,6 +468,8 @@ static inline u8 vmx_get_rvi(void)
->  }
+DSA is not Marvell only, so please remove these from struct dsa_port and
+place them somewhere like struct mv88e6xxx_port. Also, the change has
+nothing to do in a patch with the "net: switchdev: " prefix.
+
+>  };
 >  
->  #define BUILD_CONTROLS_SHADOW(lname, uname, bits)                              \
-> +#define KVM_KNOWN_ ## uname                                                    \
-> +       (KVM_REQUIRED_ ## uname | KVM_OPTIONAL_ ## uname)                       \
+>  /* TODO: ideally DSA ports would have a single dp->link_dp member,
+> diff --git a/include/net/switchdev.h b/include/net/switchdev.h
+> index aa0171d5786d..62f4f7c9c7c2 100644
+> --- a/include/net/switchdev.h
+> +++ b/include/net/switchdev.h
+> @@ -245,7 +245,8 @@ struct switchdev_notifier_fdb_info {
+>  	u16 vid;
+>  	u8 added_by_user:1,
+>  	   is_local:1,
+> -	   offloaded:1;
+> +	   offloaded:1,
+> +	   locked:1;
 
-I'm certainly not a macro jedi and I failed to make this compile as gcc
-hates when I put '#define's in macros but I made a simpler version with
-(presumeably) the same outcome. v1 is out, thanks for the suggestion!
+As mentioned by Ido, please update br_switchdev_fdb_populate() as part
+of this change, in the bridge->switchdev direction. We should add a
+comment near struct switchdev_notifier_fdb_info stating just that,
+so that people don't forget.
 
->  static inline void lname##_controls_set(struct vcpu_vmx *vmx, u##bits val)     \
->  {                                                                              \
->         if (vmx->loaded_vmcs->controls_shadow.lname != val) {                   \
-> @@ -485,10 +487,12 @@ static inline u##bits lname##_controls_get(struct vcpu_vmx *vmx)          \
->  }                                                                              \
->  static inline void lname##_controls_setbit(struct vcpu_vmx *vmx, u##bits val)  \
->  {                                                                              \
-> +       BUILD_BUG_ON(!(val & KVM_KNOWN_ ## uname));                             \
->         lname##_controls_set(vmx, lname##_controls_get(vmx) | val);             \
->  }                                                                              \
->  static inline void lname##_controls_clearbit(struct vcpu_vmx *vmx, u##bits val)        \
->  {                                                                              \
-> +       BUILD_BUG_ON(!(val & KVM_KNOWN_ ## uname));                             \
->         lname##_controls_set(vmx, lname##_controls_get(vmx) & ~val);            \
->  }
->  BUILD_CONTROLS_SHADOW(vm_entry, VM_ENTRY_CONTROLS, 32)
->
->
->
-> Handling the controls that are restricted to CONFIG_X86_64=y will be midly annoying,
-> but adding a base set isn't too bad, e.g.
->
-> #define __KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL <blah blah blah>
-> #ifdef CONFIG_X86_64
-> #define KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL (__KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL | \
-> 						CPU_BASED_CR8_LOAD_EXITING |		   \
-> 						CPU_BASED_CR8_STORE_EXITING)
-> #else
-> #define KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL __KVM_REQUIRED_CPU_BASED_VM_EXEC_CONTROL
-> #endif
->
-
--- 
-Vitaly
+>  };
+>  
+>  struct switchdev_notifier_port_obj_info {
+> diff --git a/net/bridge/br.c b/net/bridge/br.c
+> index 96e91d69a9a8..12933388a5a4 100644
+> --- a/net/bridge/br.c
+> +++ b/net/bridge/br.c
+> @@ -166,7 +166,8 @@ static int br_switchdev_event(struct notifier_block *unused,
+>  	case SWITCHDEV_FDB_ADD_TO_BRIDGE:
+>  		fdb_info = ptr;
+>  		err = br_fdb_external_learn_add(br, p, fdb_info->addr,
+> -						fdb_info->vid, false);
+> +						fdb_info->vid, false,
+> +						fdb_info->locked);
+>  		if (err) {
+>  			err = notifier_from_errno(err);
+>  			break;
+> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
+> index 6b83e2d6435d..92469547283a 100644
+> --- a/net/bridge/br_fdb.c
+> +++ b/net/bridge/br_fdb.c
+> @@ -1135,7 +1135,7 @@ static int __br_fdb_add(struct ndmsg *ndm, struct net_bridge *br,
+>  					   "FDB entry towards bridge must be permanent");
+>  			return -EINVAL;
+>  		}
+> -		err = br_fdb_external_learn_add(br, p, addr, vid, true);
+> +		err = br_fdb_external_learn_add(br, p, addr, vid, true, false);
+>  	} else {
+>  		spin_lock_bh(&br->hash_lock);
+>  		err = fdb_add_entry(br, p, addr, ndm, nlh_flags, vid, nfea_tb);
+> @@ -1365,7 +1365,7 @@ void br_fdb_unsync_static(struct net_bridge *br, struct net_bridge_port *p)
+>  
+>  int br_fdb_external_learn_add(struct net_bridge *br, struct net_bridge_port *p,
+>  			      const unsigned char *addr, u16 vid,
+> -			      bool swdev_notify)
+> +			      bool swdev_notify, bool locked)
+>  {
+>  	struct net_bridge_fdb_entry *fdb;
+>  	bool modified = false;
+> @@ -1385,6 +1385,9 @@ int br_fdb_external_learn_add(struct net_bridge *br, struct net_bridge_port *p,
+>  		if (!p)
+>  			flags |= BIT(BR_FDB_LOCAL);
+>  
+> +		if (locked)
+> +			flags |= BIT(BR_FDB_ENTRY_LOCKED);
+> +
+>  		fdb = fdb_create(br, p, addr, vid, flags);
+>  		if (!fdb) {
+>  			err = -ENOMEM;
+> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
+> index be17c99efe65..88913e6a59e1 100644
+> --- a/net/bridge/br_private.h
+> +++ b/net/bridge/br_private.h
+> @@ -815,7 +815,7 @@ int br_fdb_sync_static(struct net_bridge *br, struct net_bridge_port *p);
+>  void br_fdb_unsync_static(struct net_bridge *br, struct net_bridge_port *p);
+>  int br_fdb_external_learn_add(struct net_bridge *br, struct net_bridge_port *p,
+>  			      const unsigned char *addr, u16 vid,
+> -			      bool swdev_notify);
+> +			      bool swdev_notify, bool locked);
+>  int br_fdb_external_learn_del(struct net_bridge *br, struct net_bridge_port *p,
+>  			      const unsigned char *addr, u16 vid,
+>  			      bool swdev_notify);
+> -- 
+> 2.30.2
+> 
 

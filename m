@@ -2,172 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCAAF55E1EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE8C55DFDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240177AbiF0SVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 14:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
+        id S239656AbiF0SWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240181AbiF0SVW (ORCPT
+        with ESMTP id S240206AbiF0SWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 14:21:22 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0087910561
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:21:19 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2ef5380669cso93837647b3.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zAvy14WQSJajEvtEq9Z9V458WL9rypKqsSWZ5e8ff+Q=;
-        b=QfczmHRT9/HR8HyazKLbsqrs7cCP2iZKaxG/OXGSPnAc8W5YAiaVA0WqjZ3/6QtXqU
-         42K81l24QIf3XynW/JKjRGJ7dmfzwI2FUm73m5CnsNDIqxjEz+NWZjbRqeUpE3CO+oZH
-         +WHVevlpyQHs4NMeAMNGbQrzcjZNAN6YiP+T/yfSSMD0p0fn3Nshe7kDoUKHwoSYa4N3
-         VnE5Z7u+uJPgYCZdcfgQYEKpStJa5alN/Ge9h9ME6zGeGt1uUwucGuzxD4iyBvikWn6I
-         UNKi3EkIpSabWBkxoc2zg+IeRkTOZHzN8h/RLyTzMjG2hCOwCIaltZxdV6oluuLg1E7j
-         RMQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zAvy14WQSJajEvtEq9Z9V458WL9rypKqsSWZ5e8ff+Q=;
-        b=Xf3hBqAxkoSMcaK2l0oCyujqhRt/Ovczy1+puv+Rf4R8M/9NB/vX3sT40mgvMSpVNt
-         BQdo/p0LR3HVH3tXqluzNt7AWfx31Mj+5/zXobobhr+blRML3SMK4iGf8tU9bD1q0bzk
-         /yyrNpy5i4SWvmY9iZWkxp0LdUj8mvBfugOfdHL4uc7jZP6Ur9a9J+peRaftLBZX+uhO
-         6T0p7l0OtdK3p/RsicRK9i6CnuJbsNDMQnIgNZx7m2iLrH3ssQtb0SfHFZBTvcQii0I1
-         DWAGBTW+3cdlndRBABrLsGF7vshIRnM4/xpXjY9wVkpsttZNJw32iqjytwJLRdKe4vdI
-         o6Wg==
-X-Gm-Message-State: AJIora98o5+8TUMUWldR8fC49Zyv5Gyo6fJe5QZQo7MpZarEKygNHDwb
-        JTROujM/YpQApPNm1PtihLsFwtLhpaRJ9Tdd+ohPTQ==
-X-Google-Smtp-Source: AGRyM1ut1mmdvIzz+fGssaCHywTk0zdoNUyWRaIm6VKkay06+F6yyhsbCZbfM6hX7GjWG5RLUmdofYrPpF5aZ5NeSXg=
-X-Received: by 2002:a0d:eace:0:b0:317:87ac:b3a8 with SMTP id
- t197-20020a0deace000000b0031787acb3a8mr16855244ywe.126.1656354078827; Mon, 27
- Jun 2022 11:21:18 -0700 (PDT)
+        Mon, 27 Jun 2022 14:22:00 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2057.outbound.protection.outlook.com [40.107.237.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DB114D0E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:21:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q+Sb0bjji3nc/X8mgWTCVcjQJUDVfCVh/yL5hzgra24+TcNW5JeZCRECK1BCjcCyrmnjLRivb/H+Qxn25PiD8fuJ9Asz9eQ0SIizbt2rnMn6dh3/gGrHaTmVd5DFwDkFxZjq4zAbi4JibNQFYJAAAdspo8YdM4qE9DuEYPDe4D564Kg5rbgMkJxbpURpZ4Xk0wzvD6hCMs6aOTM1QbDNJiZ6VYF3JdVJ+blGIOlJOo3CxYaUHrTD7evIS1YfT/klHvQY0eQeuvrbb36OmIzLuAp6IFe6QdOpb0hHRmD7437sS2QLmDvYjYwkgU1wUY3g2bTw2BWnm1OWLBzVtCtOPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5gXMBiGLx+pDr/NjzMy90MvYZG7T1ruhcX291tts0VE=;
+ b=Zy18CMGwqSNLFZOBAhRr8ioIfCWtSmrcuRU/6XH/Wij+V/rsRaGLodtnW8M79CrJeBrTajAbyMdgSEIWR9xrH2aoc09YMg8VvdyW5vBrGvRF9qNvpgKquRWMBd36lTfwdPk6Uy3yUaMqKpZ6PH3LYvo+wgFQNfQcM52OJeHHQrOoetPBuFa/oQshLMuzqHBag7eNgZL/baFxm03jHp5FsfH2SHIcVOe4N2/tUgp+rmt5FqkBTwgIaTKh8AZFZKwVRaoPti5mbxW5SEm/PS81DRruFHQyMACJDDatJ631XuuQbCuC/Nww4hRwa2QuYZDSr+Mb+jEPmZaanj+qfKOZbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5gXMBiGLx+pDr/NjzMy90MvYZG7T1ruhcX291tts0VE=;
+ b=mTDTF1Jg4nY3dsuX5fdzaFvP+TiMj19ArDZkES7JVdPSJFM7PYuI9SJs/bnDoxl6PLqn884A8Ce1fZ3Ec8WyQnTWq3sEdHCZrZ6E8SHvX040BtJ2JJZ68uNt/xb0DVlXC7Hhy0kNC3241lm4GDtFPJEyKTSfjTUZ5QEi8yHPnTg=
+Received: from BL1PR12MB5144.namprd12.prod.outlook.com (2603:10b6:208:316::6)
+ by IA1PR12MB6116.namprd12.prod.outlook.com (2603:10b6:208:3e8::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Mon, 27 Jun
+ 2022 18:21:39 +0000
+Received: from BL1PR12MB5144.namprd12.prod.outlook.com
+ ([fe80::589b:a1f6:9c87:a8ba]) by BL1PR12MB5144.namprd12.prod.outlook.com
+ ([fe80::589b:a1f6:9c87:a8ba%7]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
+ 18:21:39 +0000
+From:   "Deucher, Alexander" <Alexander.Deucher@amd.com>
+To:     "Mukunda, Vijendar" <Vijendar.Mukunda@amd.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
+CC:     "Dommati, Sunil-kumar" <Sunil-kumar.Dommati@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        "Hiregoudar, Basavaraj" <Basavaraj.Hiregoudar@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Mukunda, Vijendar" <Vijendar.Mukunda@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>
+Subject: RE: [PATCH] drm: amd: amdgpu: fix checkpatch warnings
+Thread-Topic: [PATCH] drm: amd: amdgpu: fix checkpatch warnings
+Thread-Index: AQHYiiW9de+ky4v8Gk6KiKpE/Is28a1jj+oAgAAA81A=
+Date:   Mon, 27 Jun 2022 18:21:39 +0000
+Message-ID: <BL1PR12MB51440F9451F48B65B5BDF9C9F7B99@BL1PR12MB5144.namprd12.prod.outlook.com>
+References: <20220627125834.481731-1-Vijendar.Mukunda@amd.com>
+ <BL1PR12MB51446E8B038638B916529967F7B99@BL1PR12MB5144.namprd12.prod.outlook.com>
+In-Reply-To: <BL1PR12MB51446E8B038638B916529967F7B99@BL1PR12MB5144.namprd12.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-06-27T18:17:05Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=a25d9b6f-d79c-49d4-80e6-8858df9f19ed;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-06-27T18:21:37Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 13bcde53-599a-449d-a14d-0f63b7ca9c22
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6d50d966-1cb8-423e-ab00-08da5869e0b9
+x-ms-traffictypediagnostic: IA1PR12MB6116:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TsHwZ+PA6uq17CxTywH9ARjBpfJmiPwDAJOkDve7fbk8Cn/cYxFInTsS/bJhhVgzeZP9Jl19oSRhrN5LaRDcTgJJ1scRg0KISl/A4N8i8G8OPS2jfvBO4MfOhHbDRZ8yhFw4OEs91EJ3iTDHMGqkp6t10oGyI/UlmW87sOoQu4nKX4phjcLeLtXLxwnsRrNSk5hQH2LbrUszewnKb2leeUYrUPC3ye/N69f4E6nhg5wzS99mUhpj9qZfplcYTdd1y/AYX9eY1Zrz7PVjW3faDA+ER4SveoLztUChSDonekmMwNx2tLwWf7Z03W8LUY600GWBTeVFQ1/oNDa/UdtmTGRzzFabWrtiWG9Ljm7D3YPVeNxNo/9rLbxFhnsCsVqkzPISDmg0Y4BSVxM/CZ7HjdvyoLFNJO9M1px3Y14xZnS0MLCpOn2F43E9YGkhKaQk4zAM71cAKNMuzZQmvXDEuCDlK6K8HBjG2y7aKgcSpzv0tY7LCNcWvm7pqANF4CCh1eQS04bSt5dCWt4ecVH/o75215TFnQzynD2X30iT9vsUTnZYEg7FIA4Ka5I+4v0ZN1OJ0+9maKdus2jirVFoGR9KelJBMbUxh0HjwCbwWDm3dm1igCWwGEHFImhARVP9xxS1ecgCc/KcN7glQvkW5VwQYunZcDklEQ8M4ZGKap0gqy/iwMWCJOaXrOAASGGELPvYYQ1IsRYGnYFrfrf/XUiFd0IbFCaWll/LaJMA4VDhWhnVcclw2UGfBNsqyzTioHXT/1WZPsmEoAnfX+T49PAapGZV4o6k2ynGN6zQSUo=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5144.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(39860400002)(366004)(136003)(346002)(64756008)(110136005)(38100700002)(66946007)(55016003)(66476007)(66556008)(4326008)(8676002)(66446008)(8936002)(52536014)(76116006)(54906003)(186003)(38070700005)(41300700001)(9686003)(478600001)(5660300002)(2906002)(33656002)(2940100002)(26005)(6506007)(316002)(122000001)(86362001)(53546011)(71200400001)(83380400001)(7696005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZFberPoTvgvi/zsoN8+knOvMt/OcvwDcHyQ0YXUtTb2H/zcfm9yih2NJblVT?=
+ =?us-ascii?Q?1bHFIbdCcIqzknSc7yXFFmdoSrj7ttESJKML3lKdzjcoGgN/D+o5t8q5JYwb?=
+ =?us-ascii?Q?66FXnt9TBlYyL0pZ97R5iZjbmUF2Lg4dmDfzkZzapmbCmUz6tm9k4y+zxwwx?=
+ =?us-ascii?Q?8vO7qjaDUtRwdBAsy9M1f+91cXhDU/O4Z8+yYsOs2WmyYXFGSIrB07SbCK+5?=
+ =?us-ascii?Q?0vkKNw3vFoUgEftK+9HfNTDrd+o1mrXqSFAHn/dCzcgh8K3rntu9ng+kCByr?=
+ =?us-ascii?Q?7xv102ZLXPMQR9Bf+l3kjgc7AosSTja1TOrhhSQ49XGHMIs9LzpYtXN1eJDJ?=
+ =?us-ascii?Q?Qvax66pwVgGUOUqNihIs1NGPS9YLlKLGGFgqtFEeHzxvaInM/0U6Flf1Z9Fu?=
+ =?us-ascii?Q?FBLFlY1iyTD3Q+t28stsQ6SBT5O2P12VThB6lhHC3Ea/2ctJjuXjmdAS8YPt?=
+ =?us-ascii?Q?ezi1ssH61tJTDQ5ZjIfJ271/nkB1vIvw0pXADsXX9vdYK3Zyd0M/JzfXeg5Z?=
+ =?us-ascii?Q?b4N/O+mV9r9rz1LON/ja54l7iaPEXkZDVWoERq0tjUBBdE5g0eSc/E6KIhk+?=
+ =?us-ascii?Q?U12JYKKDkb7o1nOJS8qIW8l4WY/MXyjDszJCoQ9OMApaO5oWy5GPcw72PqOc?=
+ =?us-ascii?Q?emWkSNFOijfO8j7TuT8mdH+f/35OP+wFI0fWMlcLf7B04aU5bDk/FvXy+ZAV?=
+ =?us-ascii?Q?dusLKn6tiDIMlIJA5T55bxa+inRE+tMC9lsbISZffal/Gm3R6G0e0aq3NjNJ?=
+ =?us-ascii?Q?oUMiNul0Nc0mTThCO0EGHO6uMd13FUp8SHx/5SUcBfgGHmTGo5oEaCp2bvsA?=
+ =?us-ascii?Q?VqyDuPRonLW7aGzVazghCR8HUPXkTLe2yOM7TYUkzNJRo04X6MAmlhdfb3Ns?=
+ =?us-ascii?Q?UgMqb2tLg3dSAUO2f969bedPUYTqa17iRk6KGj+/azeh5OAuEEu5bNBLN0Md?=
+ =?us-ascii?Q?Ed4HyATMCrHHeWHkuJSXBUv3dMHlgxC4EpuxFzKU8Eo2qyIghZho/brVTn9t?=
+ =?us-ascii?Q?DKuGGaA+BdCLmewHFWmxMaUFmaQYsKwTCV+xHKw/hVFESfH7x/Qbq4yfO4hY?=
+ =?us-ascii?Q?rg3SiTMzgWpzUWPkpu0HyC7XVa95LWDsswXSt0otXxTkvJAs+S4pdJjaMq1f?=
+ =?us-ascii?Q?OnH6+DcWh9ijeu/Mw3jv8wsjtLggOrjDOycTRbE+i1t0iSgCja4OlWrme+mG?=
+ =?us-ascii?Q?Lw42EBGDjmzeBp+XxujuTEF2q7OiP83HzoFqGqJurBCY2GEf0V92zjEcdpxA?=
+ =?us-ascii?Q?P3v8CzALBDuWz1LaL2vEbDyM3uGaPK1pENo4Rbrm+Q1wHes80vJgVTsYcdoN?=
+ =?us-ascii?Q?YoQM8usQSrmmeXuX7XL47+j/UrLTJJbdxq3/BzhR9QgFoU9FArvcoB/ToCI3?=
+ =?us-ascii?Q?Er1XI1WtT5cXjUnN7RMT1tc/HywQOon1dYab0eIjwX1/QPP++8jR0/VcTVy3?=
+ =?us-ascii?Q?gijA/XdTkkBDzT9v4KposP7dRQJggt33AFscbbHtT3uAtNBpXipgjZhjbDDW?=
+ =?us-ascii?Q?AyuPRum1PSwnMiVNnM8nXCNKUYGiogvDeLuuzB4C7wcE+5ltegJNOOfQu+KZ?=
+ =?us-ascii?Q?cxAkAmuUIQQ01xUa6ZNF5pCnvIIf3LP/NahIv18r?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220623080344.783549-1-saravanak@google.com> <20220623080344.783549-3-saravanak@google.com>
- <20220623100421.GY1615@pengutronix.de> <20220627175046.GA2644138-robh@kernel.org>
-In-Reply-To: <20220627175046.GA2644138-robh@kernel.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 27 Jun 2022 11:20:42 -0700
-Message-ID: <CAGETcx8YSuq+_tiWwShjZBeHd7+CHwLRdvdT6yb3xfEUD7DB0Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when fw_devlink.strict=1
-To:     Rob Herring <robh@kernel.org>
-Cc:     sascha hauer <sha@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, peng fan <peng.fan@nxp.com>,
-        kevin hilman <khilman@kernel.org>,
-        ulf hansson <ulf.hansson@linaro.org>,
-        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
-        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
-        andrew lunn <andrew@lunn.ch>,
-        heiner kallweit <hkallweit1@gmail.com>,
-        russell king <linux@armlinux.org.uk>,
-        "david s. miller" <davem@davemloft.net>,
-        eric dumazet <edumazet@google.com>,
-        jakub kicinski <kuba@kernel.org>,
-        paolo abeni <pabeni@redhat.com>,
-        linus walleij <linus.walleij@linaro.org>,
-        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
-        david ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5144.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d50d966-1cb8-423e-ab00-08da5869e0b9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 18:21:39.0796
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: g1dj51r/7T/WJCZOIe19WWcmSyMEfqA3mJewKMLLXfMmVNGfUfOWOn0cj35lHij43F0DP8IRpsv6A3FrcXoJJA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6116
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 10:50 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, Jun 23, 2022 at 12:04:21PM +0200, sascha hauer wrote:
-> > On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
-> > > Commit 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
-> > > enabled iommus and dmas dependency enforcement by default. On some
-> > > systems, this caused the console device's probe to get delayed until the
-> > > deferred_probe_timeout expires.
-> > >
-> > > We need consoles to work as soon as possible, so mark the console device
-> > > node with FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to delay
-> > > the probe of the console device for suppliers without drivers. The
-> > > driver can then make the decision on where it can probe without those
-> > > suppliers or defer its probe.
-> > >
-> > > Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
-> > > Reported-by: Sascha Hauer <sha@pengutronix.de>
-> > > Reported-by: Peng Fan <peng.fan@nxp.com>
-> > > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > > Tested-by: Peng Fan <peng.fan@nxp.com>
-> > > ---
-> > >  drivers/of/base.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/drivers/of/base.c b/drivers/of/base.c
-> > > index d4f98c8469ed..a19cd0c73644 100644
-> > > --- a/drivers/of/base.c
-> > > +++ b/drivers/of/base.c
-> > > @@ -1919,6 +1919,8 @@ void of_alias_scan(void * (*dt_alloc)(u64 size, u64 align))
-> > >                     of_property_read_string(of_aliases, "stdout", &name);
-> > >             if (name)
-> > >                     of_stdout = of_find_node_opts_by_path(name, &of_stdout_options);
-> > > +           if (of_stdout)
-> > > +                   of_stdout->fwnode.flags |= FWNODE_FLAG_BEST_EFFORT;
+[AMD Official Use Only - General]
+
+> -----Original Message-----
+> From: Deucher, Alexander
+> Sent: Monday, June 27, 2022 2:18 PM
+> To: Vijendar Mukunda <Vijendar.Mukunda@amd.com>; broonie@kernel.org;
+> alsa-devel@alsa-project.org; dri-devel@lists.freedesktop.org; amd-
+> gfx@lists.freedesktop.org
+> Cc: Dommati, Sunil-kumar <Sunil-kumar.Dommati@amd.com>; David Airlie
+> <airlied@linux.ie>; Hiregoudar, Basavaraj <Basavaraj.Hiregoudar@amd.com>;
+> Pan, Xinhui <Xinhui.Pan@amd.com>; open list <linux-
+> kernel@vger.kernel.org>; Kai-Heng Feng <kai.heng.feng@canonical.com>;
+> Daniel Vetter <daniel@ffwll.ch>; Mukunda, Vijendar
+> <Vijendar.Mukunda@amd.com>; Koenig, Christian
+> <Christian.Koenig@amd.com>
+> Subject: RE: [PATCH] drm: amd: amdgpu: fix checkpatch warnings
+>=20
+> [AMD Official Use Only - General]
+>=20
+> > -----Original Message-----
+> > From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of
+> > Vijendar Mukunda
+> > Sent: Monday, June 27, 2022 8:59 AM
+> > To: broonie@kernel.org; alsa-devel@alsa-project.org; dri-
+> > devel@lists.freedesktop.org; amd-gfx@lists.freedesktop.org
+> > Cc: Dommati, Sunil-kumar <Sunil-kumar.Dommati@amd.com>; David Airlie
+> > <airlied@linux.ie>; Hiregoudar, Basavaraj
+> > <Basavaraj.Hiregoudar@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;
+> open
+> > list <linux- kernel@vger.kernel.org>; Kai-Heng Feng
+> > <kai.heng.feng@canonical.com>; Daniel Vetter <daniel@ffwll.ch>;
+> > Mukunda, Vijendar <Vijendar.Mukunda@amd.com>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; Koenig, Christian
+> > <Christian.Koenig@amd.com>
+> > Subject: [PATCH] drm: amd: amdgpu: fix checkpatch warnings
 > >
-> > The device given in the stdout-path property doesn't necessarily have to
-> > be consistent with the console= parameter. The former is usually
-> > statically set in the device trees contained in the kernel while the
-> > latter is dynamically set by the bootloader. So if you change the
-> > console uart in the bootloader then you'll still run into this trap.
+> > From: vijendar <vijendar.mukunda@amd.com>
 > >
-> > It's problematic to consult only the device tree for dependencies. I
-> > found several examples of drivers in the tree for which dma support
-> > is optional. They use it if they can, but continue without it when
-> > not available. "hwlock" is another property which consider several
-> > drivers as optional. Also consider SoCs in early upstreaming phases
-> > when the device tree is merged with "dmas" or "hwlock" properties,
-> > but the corresponding drivers are not yet upstreamed. It's not nice
-> > to defer probing of all these devices for a long time.
+> > Fixed below checkpatch warnings and errors
 > >
-> > I wonder if it wouldn't be a better approach to just probe all devices
-> > and record the device(node) they are waiting on. Then you know that you
-> > don't need to probe them again until the device they are waiting for
-> > is available.
->
-> Can't we have a driver flag 'I have optional dependencies' that will
-> trigger probe without all dependencies and then the driver can defer
-> probe if required dependencies are not yet met.
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:131: CHECK: Comparison to
+> NULL
+> > could be written "apd"
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:150: CHECK: Comparison to
+> NULL
+> > could be written "apd"
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:196: CHECK: Prefer kernel
+> type
+> > 'u64' over 'uint64_t'
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:224: CHECK: Please don't use
+> > multiple blank lines
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:226: CHECK: Comparison to
+> NULL
+> > could be written "!adev->acp.acp_genpd"
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:233: CHECK: Please don't use
+> > multiple blank lines
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:239: CHECK: Alignment
+> should
+> > match open parenthesis
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:241: CHECK: Comparison to
+> NULL
+> > could be written "!adev->acp.acp_cell"
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:247: CHECK: Comparison to
+> NULL
+> > could be written "!adev->acp.acp_res"
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:253: CHECK: Comparison to
+> NULL
+> > could be written "!i2s_pdata"
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:350: CHECK: Alignment
+> should
+> > match open parenthesis
+> > drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c:550: ERROR: that open brace
+> {
+> > should be on the previous line
+> >
+> > Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+>=20
+> Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+>=20
 
-Haha... that's kinda what I'm working on right now. But named
-intentionally in a more limited sense of "I can't wait for the
-timeout" where fw_devlink will relax and allow the driver to probe
-(and have it make the call) once we hit late_initcall(). I'm
-explicitly limiting it to "timeout" because we don't want everyone
-adding this flag everytime they hit an issue. That'll beat the point
-of fw_devlink=on.
+I'm also fine to have this go through the audio tree if it is a pre-requisi=
+te for your jadeite audio series.
 
-Also, setting the flag for a driver to fix one system might break
-another system because in the other system the user might want to wait
-for the timeout because the supplier drivers would be loaded before
-the timeout.
+Alex
 
-Another option is to restart the timer (if it hasn't expired) when
-filesystems get mounted (in addition to the current "when new driver
-gets registered). That way, we might be able to drop the timeout from
-10s to 5s.
-
--Saravana
+> > ---
+> >  drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c | 27
+> > +++++++++----------------
+> >  1 file changed, 10 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
+> > b/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
+> > index cc9c9f8b23b2..ba1605ff521f 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acp.c
+> > @@ -128,7 +128,7 @@ static int acp_poweroff(struct generic_pm_domain
+> > *genpd)
+> >  	struct amdgpu_device *adev;
+> >
+> >  	apd =3D container_of(genpd, struct acp_pm_domain, gpd);
+> > -	if (apd !=3D NULL) {
+> > +	if (apd) {
+> >  		adev =3D apd->adev;
+> >  	/* call smu to POWER GATE ACP block
+> >  	 * smu will
+> > @@ -147,7 +147,7 @@ static int acp_poweron(struct generic_pm_domain
+> > *genpd)
+> >  	struct amdgpu_device *adev;
+> >
+> >  	apd =3D container_of(genpd, struct acp_pm_domain, gpd);
+> > -	if (apd !=3D NULL) {
+> > +	if (apd) {
+> >  		adev =3D apd->adev;
+> >  	/* call smu to UNGATE ACP block
+> >  	 * smu will
+> > @@ -193,7 +193,7 @@ static int acp_genpd_remove_device(struct device
+> > *dev, void *data)  static int acp_hw_init(void *handle)  {
+> >  	int r;
+> > -	uint64_t acp_base;
+> > +	u64 acp_base;
+> >  	u32 val =3D 0;
+> >  	u32 count =3D 0;
+> >  	struct i2s_platform_data *i2s_pdata =3D NULL; @@ -220,37 +220,32
+> @@
+> > static int acp_hw_init(void *handle)
+> >  		return -EINVAL;
+> >
+> >  	acp_base =3D adev->rmmio_base;
+> > -
+> > -
+> >  	adev->acp.acp_genpd =3D kzalloc(sizeof(struct acp_pm_domain),
+> > GFP_KERNEL);
+> > -	if (adev->acp.acp_genpd =3D=3D NULL)
+> > +	if (!adev->acp.acp_genpd)
+> >  		return -ENOMEM;
+> >
+> >  	adev->acp.acp_genpd->gpd.name =3D "ACP_AUDIO";
+> >  	adev->acp.acp_genpd->gpd.power_off =3D acp_poweroff;
+> >  	adev->acp.acp_genpd->gpd.power_on =3D acp_poweron;
+> > -
+> > -
+> >  	adev->acp.acp_genpd->adev =3D adev;
+> >
+> >  	pm_genpd_init(&adev->acp.acp_genpd->gpd, NULL, false);
+> >
+> > -	adev->acp.acp_cell =3D kcalloc(ACP_DEVS, sizeof(struct mfd_cell),
+> > -							GFP_KERNEL);
+> > +	adev->acp.acp_cell =3D kcalloc(ACP_DEVS, sizeof(struct mfd_cell),
+> > +GFP_KERNEL);
+> >
+> > -	if (adev->acp.acp_cell =3D=3D NULL) {
+> > +	if (!adev->acp.acp_cell) {
+> >  		r =3D -ENOMEM;
+> >  		goto failure;
+> >  	}
+> >
+> >  	adev->acp.acp_res =3D kcalloc(5, sizeof(struct resource), GFP_KERNEL)=
+;
+> > -	if (adev->acp.acp_res =3D=3D NULL) {
+> > +	if (!adev->acp.acp_res) {
+> >  		r =3D -ENOMEM;
+> >  		goto failure;
+> >  	}
+> >
+> >  	i2s_pdata =3D kcalloc(3, sizeof(struct i2s_platform_data), GFP_KERNEL=
+);
+> > -	if (i2s_pdata =3D=3D NULL) {
+> > +	if (!i2s_pdata) {
+> >  		r =3D -ENOMEM;
+> >  		goto failure;
+> >  	}
+> > @@ -346,8 +341,7 @@ static int acp_hw_init(void *handle)
+> >  	adev->acp.acp_cell[3].platform_data =3D &i2s_pdata[2];
+> >  	adev->acp.acp_cell[3].pdata_size =3D sizeof(struct i2s_platform_data)=
+;
+> >
+> > -	r =3D mfd_add_hotplug_devices(adev->acp.parent, adev->acp.acp_cell,
+> > -								ACP_DEVS);
+> > +	r =3D mfd_add_hotplug_devices(adev->acp.parent, adev->acp.acp_cell,
+> > +ACP_DEVS);
+> >  	if (r)
+> >  		goto failure;
+> >
+> > @@ -546,8 +540,7 @@ static const struct amd_ip_funcs acp_ip_funcs =3D {
+> >  	.set_powergating_state =3D acp_set_powergating_state,  };
+> >
+> > -const struct amdgpu_ip_block_version acp_ip_block =3D -{
+> > +const struct amdgpu_ip_block_version acp_ip_block =3D {
+> >  	.type =3D AMD_IP_BLOCK_TYPE_ACP,
+> >  	.major =3D 2,
+> >  	.minor =3D 2,
+> > --
+> > 2.25.1

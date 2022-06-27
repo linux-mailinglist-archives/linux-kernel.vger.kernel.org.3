@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D988755D617
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA9355D095
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234690AbiF0LYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
+        id S238890AbiF0Lx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbiF0LYJ (ORCPT
+        with ESMTP id S238373AbiF0LsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:24:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D959C6570;
-        Mon, 27 Jun 2022 04:24:05 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91856FD26;
+        Mon, 27 Jun 2022 04:40:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CF36B81116;
-        Mon, 27 Jun 2022 11:24:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE36C3411D;
-        Mon, 27 Jun 2022 11:24:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2545F611B8;
+        Mon, 27 Jun 2022 11:40:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 354A7C36AE2;
+        Mon, 27 Jun 2022 11:40:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329043;
-        bh=mMkmVKer74gbOMIKTqwBA5hzA8580mKSYpCDSXeUC7A=;
+        s=korg; t=1656330057;
+        bh=rtkociItVY4GySdFeYnZVICr5i00ah2LEMi002RbqO0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pmNVL2qWI8jCTfEnC0h7FQPL2SWvQxSccD5dHuWlgZAhChonkdE8PnxwfKeBgA5/M
-         Wpw2ONMS3PPQL4kZ4BfTl0A8AHqs8KRbPX4u4Eezq4mWrl8Ip0mU+hKPWhmCl/P++E
-         vjDccQQhIZdGjPWoTC9BkodguA+O9xqwDomO0Xvc=
+        b=rnRCI6fMtiw2tiT3Pyj6w++XBn2nTP9HeT8mlFqXGz/VyXI7wj9L2rnPaZIutl+tn
+         80Ub27oV/fkQ6KTJqJKdDXBE4t4i1eb1smNCPuj3eG4gktUTsyzBcXAJED3k0cmP+N
+         6EdwkC+6xgp/d8kxLHn+gSvs5r9/XS2QoRJgiD0U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ondrej Spacek <ondrej.spacek@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 030/102] phy: aquantia: Fix AN when higher speeds than 1G are not advertised
-Date:   Mon, 27 Jun 2022 13:20:41 +0200
-Message-Id: <20220627111934.360247127@linuxfoundation.org>
+Subject: [PATCH 5.18 069/181] net: phy: at803x: fix NULL pointer dereference on AR9331 PHY
+Date:   Mon, 27 Jun 2022 13:20:42 +0200
+Message-Id: <20220627111946.565417165@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +56,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Manoil <claudiu.manoil@nxp.com>
+From: Oleksij Rempel <o.rempel@pengutronix.de>
 
-[ Upstream commit 9b7fd1670a94a57d974795acebde843a5c1a354e ]
+[ Upstream commit 9926de7315be3d606cc011a305ad9adb9e8e14c9 ]
 
-Even when the eth port is resticted to work with speeds not higher than 1G,
-and so the eth driver is requesting the phy (via phylink) to advertise up
-to 1000BASET support, the aquantia phy device is still advertising for 2.5G
-and 5G speeds.
-Clear these advertising defaults when requested.
+Latest kernel will explode on the PHY interrupt config, since it depends
+now on allocated priv. So, run probe to allocate priv to fix it.
 
-Cc: Ondrej Spacek <ondrej.spacek@nxp.com>
-Fixes: 09c4c57f7bc41 ("net: phy: aquantia: add support for auto-negotiation configuration")
-Signed-off-by: Claudiu Manoil <claudiu.manoil@nxp.com>
-Link: https://lore.kernel.org/r/20220610084037.7625-1-claudiu.manoil@nxp.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+ ar9331_switch ethernet.1:10 lan0 (uninitialized): PHY [!ahb!ethernet@1a000000!mdio!switch@10:00] driver [Qualcomm Atheros AR9331 built-in PHY] (irq=13)
+ CPU 0 Unable to handle kernel paging request at virtual address 0000000a, epc == 8050e8a8, ra == 80504b34
+         ...
+ Call Trace:
+ [<8050e8a8>] at803x_config_intr+0x5c/0xd0
+ [<80504b34>] phy_request_interrupt+0xa8/0xd0
+ [<8050289c>] phylink_bringup_phy+0x2d8/0x3ac
+ [<80502b68>] phylink_fwnode_phy_connect+0x118/0x130
+ [<8074d8ec>] dsa_slave_create+0x270/0x420
+ [<80743b04>] dsa_port_setup+0x12c/0x148
+ [<8074580c>] dsa_register_switch+0xaf0/0xcc0
+ [<80511344>] ar9331_sw_probe+0x370/0x388
+ [<8050cb78>] mdio_probe+0x44/0x70
+ [<804df300>] really_probe+0x200/0x424
+ [<804df7b4>] __driver_probe_device+0x290/0x298
+ [<804df810>] driver_probe_device+0x54/0xe4
+ [<804dfd50>] __device_attach_driver+0xe4/0x130
+ [<804dcb00>] bus_for_each_drv+0xb4/0xd8
+ [<804dfac4>] __device_attach+0x104/0x1a4
+ [<804ddd24>] bus_probe_device+0x48/0xc4
+ [<804deb44>] deferred_probe_work_func+0xf0/0x10c
+ [<800a0ffc>] process_one_work+0x314/0x4d4
+ [<800a17fc>] worker_thread+0x2a4/0x354
+ [<800a9a54>] kthread+0x134/0x13c
+ [<8006306c>] ret_from_kernel_thread+0x14/0x1c
+
+Same Issue would affect some other PHYs (QCA8081, QCA9561), so fix it
+too.
+
+Fixes: 3265f4218878 ("net: phy: at803x: add fiber support")
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/aquantia_main.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ drivers/net/phy/at803x.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/phy/aquantia_main.c b/drivers/net/phy/aquantia_main.c
-index 41e7c1432497..75a62d1cc737 100644
---- a/drivers/net/phy/aquantia_main.c
-+++ b/drivers/net/phy/aquantia_main.c
-@@ -34,6 +34,8 @@
- #define MDIO_AN_VEND_PROV			0xc400
- #define MDIO_AN_VEND_PROV_1000BASET_FULL	BIT(15)
- #define MDIO_AN_VEND_PROV_1000BASET_HALF	BIT(14)
-+#define MDIO_AN_VEND_PROV_5000BASET_FULL	BIT(11)
-+#define MDIO_AN_VEND_PROV_2500BASET_FULL	BIT(10)
- #define MDIO_AN_VEND_PROV_DOWNSHIFT_EN		BIT(4)
- #define MDIO_AN_VEND_PROV_DOWNSHIFT_MASK	GENMASK(3, 0)
- #define MDIO_AN_VEND_PROV_DOWNSHIFT_DFLT	4
-@@ -230,9 +232,20 @@ static int aqr_config_aneg(struct phy_device *phydev)
- 			      phydev->advertising))
- 		reg |= MDIO_AN_VEND_PROV_1000BASET_HALF;
- 
-+	/* Handle the case when the 2.5G and 5G speeds are not advertised */
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_2500baseT_Full_BIT,
-+			      phydev->advertising))
-+		reg |= MDIO_AN_VEND_PROV_2500BASET_FULL;
-+
-+	if (linkmode_test_bit(ETHTOOL_LINK_MODE_5000baseT_Full_BIT,
-+			      phydev->advertising))
-+		reg |= MDIO_AN_VEND_PROV_5000BASET_FULL;
-+
- 	ret = phy_modify_mmd_changed(phydev, MDIO_MMD_AN, MDIO_AN_VEND_PROV,
- 				     MDIO_AN_VEND_PROV_1000BASET_HALF |
--				     MDIO_AN_VEND_PROV_1000BASET_FULL, reg);
-+				     MDIO_AN_VEND_PROV_1000BASET_FULL |
-+				     MDIO_AN_VEND_PROV_2500BASET_FULL |
-+				     MDIO_AN_VEND_PROV_5000BASET_FULL, reg);
- 	if (ret < 0)
- 		return ret;
- 	if (ret > 0)
+diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
+index 6a467e7817a6..59fe356942b5 100644
+--- a/drivers/net/phy/at803x.c
++++ b/drivers/net/phy/at803x.c
+@@ -2072,6 +2072,8 @@ static struct phy_driver at803x_driver[] = {
+ 	/* ATHEROS AR9331 */
+ 	PHY_ID_MATCH_EXACT(ATH9331_PHY_ID),
+ 	.name			= "Qualcomm Atheros AR9331 built-in PHY",
++	.probe			= at803x_probe,
++	.remove			= at803x_remove,
+ 	.suspend		= at803x_suspend,
+ 	.resume			= at803x_resume,
+ 	.flags			= PHY_POLL_CABLE_TEST,
+@@ -2087,6 +2089,8 @@ static struct phy_driver at803x_driver[] = {
+ 	/* Qualcomm Atheros QCA9561 */
+ 	PHY_ID_MATCH_EXACT(QCA9561_PHY_ID),
+ 	.name			= "Qualcomm Atheros QCA9561 built-in PHY",
++	.probe			= at803x_probe,
++	.remove			= at803x_remove,
+ 	.suspend		= at803x_suspend,
+ 	.resume			= at803x_resume,
+ 	.flags			= PHY_POLL_CABLE_TEST,
+@@ -2151,6 +2155,8 @@ static struct phy_driver at803x_driver[] = {
+ 	PHY_ID_MATCH_EXACT(QCA8081_PHY_ID),
+ 	.name			= "Qualcomm QCA8081",
+ 	.flags			= PHY_POLL_CABLE_TEST,
++	.probe			= at803x_probe,
++	.remove			= at803x_remove,
+ 	.config_intr		= at803x_config_intr,
+ 	.handle_interrupt	= at803x_handle_interrupt,
+ 	.get_tunable		= at803x_get_tunable,
 -- 
 2.35.1
 

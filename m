@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32A655C2AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 943BF55D3D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236116AbiF0Lff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S237234AbiF0Lni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235913AbiF0Lcz (ORCPT
+        with ESMTP id S237014AbiF0Ll1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:32:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D68109;
-        Mon, 27 Jun 2022 04:29:51 -0700 (PDT)
+        Mon, 27 Jun 2022 07:41:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED00CE2E;
+        Mon, 27 Jun 2022 04:35:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1AA2B8111B;
-        Mon, 27 Jun 2022 11:29:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C014C3411D;
-        Mon, 27 Jun 2022 11:29:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B022E6109A;
+        Mon, 27 Jun 2022 11:35:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCCA0C3411D;
+        Mon, 27 Jun 2022 11:35:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329388;
-        bh=xYxiTnQiNYNkHpstZ5wyUZKasR0aKcFMUnvba22Y3So=;
+        s=korg; t=1656329757;
+        bh=RmxleTHRx9eDngqkQmJd38Pc//gTKX73d1yQFgoNmmk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NuiS/QlI5YJJokHKY1PGi79Y6zEA37KVJ4n6TUzQ7LOh+80OmgwULkfGfrpqnfbif
-         HqMx89+e+258q9fR+ZgAIGG9ebja8YijbCkE47LkHjISNHrwJgerQokl43LlPQ13yb
-         D4by3J5SDQ4yHoNajps0bnDbOorUCbDDpi0Miobg=
+        b=nVb2WoPLvRkF/+/uowenZcyDlmUfNQ8mxWJV+GnNMBqhER1GlGrVSV5FzfYaPZhOk
+         bt0hIpYeHUvPKs+p4xq6hRmwh30ileWVe2LarCxd+A8o45eGDv8MCsqgMzpTwjrAI5
+         9hbs1CH+4njdZsDXJUsEHavsTddBURARZ+9ReuRY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Hans de Goede <hdegoede@redhat.com>, Stable@vger.kernel.org,
+        stable@vger.kernel.org, Liam Beguin <liambeguin@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Peter Rosin <peda@axentia.se>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.4 41/60] iio: accel: mma8452: ignore the return value of reset operation
+Subject: [PATCH 5.15 105/135] iio: afe: rescale: Fix boolean logic bug
 Date:   Mon, 27 Jun 2022 13:21:52 +0200
-Message-Id: <20220627111928.898410833@linuxfoundation.org>
+Message-Id: <20220627111941.202746905@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
-References: <20220627111927.641837068@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-commit bf745142cc0a3e1723f9207fb0c073c88464b7b4 upstream.
+commit 9decacd8b3a432316d61c4366f302e63384cb08d upstream.
 
-On fxls8471, after set the reset bit, the device will reset immediately,
-will not give ACK. So ignore the return value of this reset operation,
-let the following code logic to check whether the reset operation works.
+When introducing support for processed channels I needed
+to invert the expression:
 
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Fixes: ecabae713196 ("iio: mma8452: Initialise before activating")
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/1655292718-14287-1-git-send-email-haibo.chen@nxp.com
-Cc: <Stable@vger.kernel.org>
+  if (!iio_channel_has_info(schan, IIO_CHAN_INFO_RAW) ||
+      !iio_channel_has_info(schan, IIO_CHAN_INFO_SCALE))
+        dev_err(dev, "source channel does not support raw/scale\n");
+
+To the inverse, meaning detect when we can usse raw+scale
+rather than when we can not. This was the result:
+
+  if (iio_channel_has_info(schan, IIO_CHAN_INFO_RAW) ||
+      iio_channel_has_info(schan, IIO_CHAN_INFO_SCALE))
+       dev_info(dev, "using raw+scale source channel\n");
+
+Ooops. Spot the error. Yep old George Boole came up and bit me.
+That should be an &&.
+
+The current code "mostly works" because we have not run into
+systems supporting only raw but not scale or only scale but not
+raw, and I doubt there are few using the rescaler on anything
+such, but let's fix the logic.
+
+Cc: Liam Beguin <liambeguin@gmail.com>
+Cc: stable@vger.kernel.org
+Fixes: 53ebee949980 ("iio: afe: iio-rescale: Support processed channels")
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Liam Beguin <liambeguin@gmail.com>
+Acked-by: Peter Rosin <peda@axentia.se>
+Link: https://lore.kernel.org/r/20220524075448.140238-1-linus.walleij@linaro.org
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/accel/mma8452.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/iio/afe/iio-rescale.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iio/accel/mma8452.c
-+++ b/drivers/iio/accel/mma8452.c
-@@ -1489,10 +1489,14 @@ static int mma8452_reset(struct i2c_clie
- 	int i;
- 	int ret;
+--- a/drivers/iio/afe/iio-rescale.c
++++ b/drivers/iio/afe/iio-rescale.c
+@@ -148,7 +148,7 @@ static int rescale_configure_channel(str
+ 	chan->ext_info = rescale->ext_info;
+ 	chan->type = rescale->cfg->type;
  
--	ret = i2c_smbus_write_byte_data(client,	MMA8452_CTRL_REG2,
-+	/*
-+	 * Find on fxls8471, after config reset bit, it reset immediately,
-+	 * and will not give ACK, so here do not check the return value.
-+	 * The following code will read the reset register, and check whether
-+	 * this reset works.
-+	 */
-+	i2c_smbus_write_byte_data(client, MMA8452_CTRL_REG2,
- 					MMA8452_CTRL_REG2_RST);
--	if (ret < 0)
--		return ret;
- 
- 	for (i = 0; i < 10; i++) {
- 		usleep_range(100, 200);
+-	if (iio_channel_has_info(schan, IIO_CHAN_INFO_RAW) ||
++	if (iio_channel_has_info(schan, IIO_CHAN_INFO_RAW) &&
+ 	    iio_channel_has_info(schan, IIO_CHAN_INFO_SCALE)) {
+ 		dev_info(dev, "using raw+scale source channel\n");
+ 	} else if (iio_channel_has_info(schan, IIO_CHAN_INFO_PROCESSED)) {
 
 

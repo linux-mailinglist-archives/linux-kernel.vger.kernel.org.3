@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D3855C47D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EF255D7AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239607AbiF0L5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
+        id S235433AbiF0LaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238404AbiF0LvA (ORCPT
+        with ESMTP id S235398AbiF0L3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:51:00 -0400
+        Mon, 27 Jun 2022 07:29:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6EF2655;
-        Mon, 27 Jun 2022 04:44:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1052A1A1;
+        Mon, 27 Jun 2022 04:27:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F371361192;
-        Mon, 27 Jun 2022 11:44:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01D9CC341C7;
-        Mon, 27 Jun 2022 11:44:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA4AF614AA;
+        Mon, 27 Jun 2022 11:27:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0029C3411D;
+        Mon, 27 Jun 2022 11:27:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330242;
-        bh=8GWOuV/TkliZCMmfzY6sCs4GDqU6Wk0+fQ/NyL1eARQ=;
+        s=korg; t=1656329276;
+        bh=ShBXjdZ70bXLuW/SP3ddtNNrSYVB5kptjxT63VXTJqc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2rDT4BlBKgwLICsQGpEyX8h1WFzEbEkbyeAr5B9q3g+rW8ZpJ9Gqa/gCC85u1wIhC
-         FiwB3k/L9szmYa/8mC9i9QAtqxjedZPz6UcljLZi9W0JafOyXQT0UaPez3udqoRTq3
-         0+7+2M5FErn9ITWl/Ar4sJY9MxyGYsBJHrdVE1xE=
+        b=bQy88gtEgWwsNynLsJCbC8kkGKNGGdejH9Tft36MNN0G9UsVm+9qmQe9LQkmGlsyj
+         vp9HsM3Sv84iCwmHfC/rI8w4aU+Iuafy7FEa7BO3rsSH+nY6883NaVWCR4fncPK3IC
+         XceOffA45G002rwGXGbJ6/Coq0lrblAPQlmoF7VQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 5.18 129/181] f2fs: do not count ENOENT for error case
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.10 091/102] powerpc/powernv: wire up rng during setup_arch
 Date:   Mon, 27 Jun 2022 13:21:42 +0200
-Message-Id: <20220627111948.431830642@linuxfoundation.org>
+Message-Id: <20220627111936.164853103@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,32 +55,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jaegeuk Kim <jaegeuk@kernel.org>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 82c7863ed95d0914f02c7c8c011200a763bc6725 upstream.
+commit f3eac426657d985b97c92fa5f7ae1d43f04721f3 upstream.
 
-Otherwise, we can get a wrong cp_error mark.
+The platform's RNG must be available before random_init() in order to be
+useful for initial seeding, which in turn means that it needs to be
+called from setup_arch(), rather than from an init call.
 
-Cc: <stable@vger.kernel.org>
-Fixes: a7b8618aa2f0 ("f2fs: avoid infinite loop to flush node pages")
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Complicating things, however, is that POWER8 systems need some per-cpu
+state and kmalloc, which isn't available at this stage. So we split
+things up into an early phase and a later opportunistic phase. This
+commit also removes some noisy log messages that don't add much.
+
+Fixes: a4da0d50b2a0 ("powerpc: Implement arch_get_random_long/int() for powernv")
+Cc: stable@vger.kernel.org # v3.13+
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+[mpe: Add of_node_put(), use pnv naming, minor change log editing]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220621140849.127227-1-Jason@zx2c4.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/f2fs/node.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/powerpc/platforms/powernv/powernv.h |    2 +
+ arch/powerpc/platforms/powernv/rng.c     |   52 +++++++++++++++++++++----------
+ arch/powerpc/platforms/powernv/setup.c   |    2 +
+ 3 files changed, 40 insertions(+), 16 deletions(-)
 
---- a/fs/f2fs/node.c
-+++ b/fs/f2fs/node.c
-@@ -1454,7 +1454,9 @@ page_hit:
- out_err:
- 	ClearPageUptodate(page);
- out_put_err:
--	f2fs_handle_page_eio(sbi, page->index, NODE);
-+	/* ENOENT comes from read_node_page which is not an error. */
-+	if (err != -ENOENT)
-+		f2fs_handle_page_eio(sbi, page->index, NODE);
- 	f2fs_put_page(page, 1);
- 	return ERR_PTR(err);
+--- a/arch/powerpc/platforms/powernv/powernv.h
++++ b/arch/powerpc/platforms/powernv/powernv.h
+@@ -42,4 +42,6 @@ ssize_t memcons_copy(struct memcons *mc,
+ u32 memcons_get_size(struct memcons *mc);
+ struct memcons *memcons_init(struct device_node *node, const char *mc_prop_name);
+ 
++void pnv_rng_init(void);
++
+ #endif /* _POWERNV_H */
+--- a/arch/powerpc/platforms/powernv/rng.c
++++ b/arch/powerpc/platforms/powernv/rng.c
+@@ -17,6 +17,7 @@
+ #include <asm/prom.h>
+ #include <asm/machdep.h>
+ #include <asm/smp.h>
++#include "powernv.h"
+ 
+ #define DARN_ERR 0xFFFFFFFFFFFFFFFFul
+ 
+@@ -28,7 +29,6 @@ struct powernv_rng {
+ 
+ static DEFINE_PER_CPU(struct powernv_rng *, powernv_rng);
+ 
+-
+ int powernv_hwrng_present(void)
+ {
+ 	struct powernv_rng *rng;
+@@ -98,9 +98,6 @@ static int initialise_darn(void)
+ 			return 0;
+ 		}
+ 	}
+-
+-	pr_warn("Unable to use DARN for get_random_seed()\n");
+-
+ 	return -EIO;
  }
+ 
+@@ -163,32 +160,55 @@ static __init int rng_create(struct devi
+ 
+ 	rng_init_per_cpu(rng, dn);
+ 
+-	pr_info_once("Registering arch random hook.\n");
+-
+ 	ppc_md.get_random_seed = powernv_get_random_long;
+ 
+ 	return 0;
+ }
+ 
+-static __init int rng_init(void)
++static int __init pnv_get_random_long_early(unsigned long *v)
+ {
+ 	struct device_node *dn;
+-	int rc;
++
++	if (!slab_is_available())
++		return 0;
++
++	if (cmpxchg(&ppc_md.get_random_seed, pnv_get_random_long_early,
++		    NULL) != pnv_get_random_long_early)
++		return 0;
+ 
+ 	for_each_compatible_node(dn, NULL, "ibm,power-rng") {
+-		rc = rng_create(dn);
+-		if (rc) {
+-			pr_err("Failed creating rng for %pOF (%d).\n",
+-				dn, rc);
++		if (rng_create(dn))
+ 			continue;
+-		}
+-
+ 		/* Create devices for hwrng driver */
+ 		of_platform_device_create(dn, NULL, NULL);
+ 	}
+ 
+-	initialise_darn();
++	if (!ppc_md.get_random_seed)
++		return 0;
++	return ppc_md.get_random_seed(v);
++}
++
++void __init pnv_rng_init(void)
++{
++	struct device_node *dn;
+ 
++	/* Prefer darn over the rest. */
++	if (!initialise_darn())
++		return;
++
++	dn = of_find_compatible_node(NULL, NULL, "ibm,power-rng");
++	if (dn)
++		ppc_md.get_random_seed = pnv_get_random_long_early;
++
++	of_node_put(dn);
++}
++
++static int __init pnv_rng_late_init(void)
++{
++	unsigned long v;
++	/* In case it wasn't called during init for some other reason. */
++	if (ppc_md.get_random_seed == pnv_get_random_long_early)
++		pnv_get_random_long_early(&v);
+ 	return 0;
+ }
+-machine_subsys_initcall(powernv, rng_init);
++machine_subsys_initcall(powernv, pnv_rng_late_init);
+--- a/arch/powerpc/platforms/powernv/setup.c
++++ b/arch/powerpc/platforms/powernv/setup.c
+@@ -193,6 +193,8 @@ static void __init pnv_setup_arch(void)
+ 	pnv_check_guarded_cores();
+ 
+ 	/* XXX PMCS */
++
++	pnv_rng_init();
+ }
+ 
+ static void __init pnv_init(void)
 
 

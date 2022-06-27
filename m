@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DE255C197
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E228955C592
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237859AbiF0PUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
+        id S237944AbiF0PUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237807AbiF0PTW (ORCPT
+        with ESMTP id S237827AbiF0PTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:19:22 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA7911450;
-        Mon, 27 Jun 2022 08:19:21 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id o10so13568738edi.1;
-        Mon, 27 Jun 2022 08:19:21 -0700 (PDT)
+        Mon, 27 Jun 2022 11:19:24 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386E912AE1;
+        Mon, 27 Jun 2022 08:19:23 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z19so13492295edb.11;
+        Mon, 27 Jun 2022 08:19:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=hFmbK8M11XjJzoVFfZwjfb4w2B8a5R3YTDT8W3rNvcQ=;
-        b=EqM+us6vfLvad4kXXDn1AjcivBngldlek+jWxMpAm2Vc5HI676j2YS3QWCgrYGSLPc
-         nRsdJCfinQfKudnDj9eJBV49m05r2C4B9nlJf+hA4FoLosukjqDb0yTd44foaslGZdDt
-         KKBeTRTh6E1mSiP5NqCAWJpr0N6+mg+LA3TZuRcITUVJ4fW6nUPmCHo1qFiMsVicE6gE
-         5s4Uqxx+XFgdULrm3sH/eUGT3PVAKuFQ6O/huxcr+cWL4ws8cDtN3AYviMN5XimUd6Z6
-         abxOfzEEd5JmNAWlPyql1ecRqjgsGyFJZx4Mnejy95REwj4QYRxA6XuC/AvUZphGgaLl
-         7pKg==
+        bh=y9fLCoDjX9rrrX0oj8XNyUYP/ZsreaQRf2qQi5uPknQ=;
+        b=pLeurTZ6VbuBl15KuR6fVVIpAjrXu1MWRc6f+75rhPwq1s/LHegop0H73efOqzZWeB
+         CbJQjcqz3VkGTR7z3xshixE5nkH/B/ieCZwEBYcIWKRo6lcE4RTcNpzfxRXl35qSlMNE
+         8tS5spLfrlEfUOmXeycqtITRMggZ3jH5t2XTTV1Lds02cA0otEdxG8NjKn7L949ZFWnu
+         xEpPXfRHcXvXKpVd9e3YcsLhMustaOrZzoWhG+uvlBrxiZknjRwz7WJTPL/He+ToA2b8
+         /uPELxBnRTiKstgXGA96w0h3oGZubgW4u9qAI4UkCHSW9EWy581uHofSQwxmIu09oIlt
+         MyQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=hFmbK8M11XjJzoVFfZwjfb4w2B8a5R3YTDT8W3rNvcQ=;
-        b=i9XAvM6rQzS0PjluBDQRmJGk6lIjmK+/bwjnNLcMD/AqJ+9d97ZsAjUD2H53t6wGhe
-         3UVqBFqt/654hAFYtwwqQNQC0FO2EnwkV7JZFpHZVy8WBWX7ixLa0wG5tVvOzbFIiSxg
-         43tps2EioOxVYeRFbfAq8FxW6z8KOsCd/OZf7jVhOFOr5g4Uolf1rN1YT19WhXvT15vE
-         LTLIULGjuIecfaSDjldrampeY2rQOmqDMFT/yPsfQ1EjYBljalQMxEY6MwqdYmotjn9s
-         CvaEH+lSNVswB2AN3+C7QEiXpbrGC38dSeKvkqAIDVxKhlO8Oox4GQmnBcH118qc8FQr
-         EiJg==
-X-Gm-Message-State: AJIora8QoqlO5PkuEAWrAn3BVzhggjd6XBCwM8thzVmePxEYPnn+fyXF
-        oSlhQaLI2zpRXwx4hqO2xSjuSQDrPfU=
-X-Google-Smtp-Source: AGRyM1tRBnxf9cJdr2BSxJoHKIVNW+/xKayrwlNzxMc/10JnS47CN4eTCmWwkLRx0xYneB7u0fUPvA==
-X-Received: by 2002:a05:6402:3299:b0:435:787f:8058 with SMTP id f25-20020a056402329900b00435787f8058mr17029183eda.79.1656343159850;
-        Mon, 27 Jun 2022 08:19:19 -0700 (PDT)
+        bh=y9fLCoDjX9rrrX0oj8XNyUYP/ZsreaQRf2qQi5uPknQ=;
+        b=RAoB8j4Y0l61Svb0L3eLqwlQDX6B15ruP3H8MJF2BKGqJm8cTGByQTlvXRUSlZmpRG
+         jw7nG8n39MC18eVdTP1lBcsNYJSgq+dNjdZW11fprfxyeQ7Y/kKTbnajE7ioYgSfgH0i
+         mEr8t8542JUL4ru72zcVRStnzclayks8ircRAdUyG30timOGdaZIJoZbwVyMcVAr7qLg
+         7YYIMFg8IdyQ5lpXdby+1+YwcyyS0K95GRV4eeEgItzqQuPM+lGngl0JDbz0eX9FdXg1
+         ajMjBD7+vNGmXddeaP6MY2ZbdLlitRj59vXRW+v3I7CwkiPR7KmeC891ACx7tqVw45zG
+         L0UA==
+X-Gm-Message-State: AJIora+6WSe5J9fApRF95bxt3+YPBVRUk0iqT0jMbSAlGI++tgtEfghY
+        nflDfHJxkDwAGRVMrqFRj5I=
+X-Google-Smtp-Source: AGRyM1uTtKgDwut5RI26tx1pUpEvODCSgxKJR29m8yG2RZvqCW1pnlbj1xuBuqOptkfmmuXsD7xo0g==
+X-Received: by 2002:a50:cb8b:0:b0:435:68a3:4d40 with SMTP id k11-20020a50cb8b000000b0043568a34d40mr17552648edi.394.1656343161640;
+        Mon, 27 Jun 2022 08:19:21 -0700 (PDT)
 Received: from felia.fritz.box (200116b826511b0021a0c74157938809.dip.versatel-1u1.de. [2001:16b8:2651:1b00:21a0:c741:5793:8809])
-        by smtp.gmail.com with ESMTPSA id z8-20020a170906434800b00722f2a0944fsm5076901ejm.107.2022.06.27.08.19.18
+        by smtp.gmail.com with ESMTPSA id z8-20020a170906434800b00722f2a0944fsm5076901ejm.107.2022.06.27.08.19.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 08:19:19 -0700 (PDT)
+        Mon, 27 Jun 2022 08:19:21 -0700 (PDT)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Federico Vaga <federico.vaga@vaga.pv.it>,
@@ -59,9 +59,9 @@ Cc:     Jean Delvare <jdelvare@suse.com>,
         linux-hwmon@vger.kernel.org, kernel-janitors@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [RFC PATCH 03/11] docs: kernel-docs: reflect that it is community-maintained
-Date:   Mon, 27 Jun 2022 17:18:11 +0200
-Message-Id: <20220627151819.22694-4-lukas.bulwahn@gmail.com>
+Subject: [RFC PATCH 04/11] docs: kernel-docs: add a reference mentioned in submitting-drivers.rst
+Date:   Mon, 27 Jun 2022 17:18:12 +0200
+Message-Id: <20220627151819.22694-5-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
 References: <20220627151819.22694-1-lukas.bulwahn@gmail.com>
@@ -75,62 +75,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove and rephrase statements that only make sense if a single author
-exclusively would maintain this document, but we would really want to
-consider this being a page maintained by the kernel community, as it is
-placed in the kernel repository,  and let us hope that more contributors
-suggest some more documents.
+One section in submitting-drivers.rst was just a collection of references
+to other external documentation. All except the one added in this commit
+is already mentioned in kernel-docs or other places in the kernel
+documentation.
 
-Further, do some minor word-smithing.
+Add Arjan van de Ven's article on How to NOT write kernel driver to this
+index of further kernel documentation.
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- Documentation/process/kernel-docs.rst | 22 +++++++++-------------
- 1 file changed, 9 insertions(+), 13 deletions(-)
+ Documentation/process/kernel-docs.rst | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
 diff --git a/Documentation/process/kernel-docs.rst b/Documentation/process/kernel-docs.rst
-index 5d6fa71895cc..b2523267ffc7 100644
+index b2523267ffc7..502289d63385 100644
 --- a/Documentation/process/kernel-docs.rst
 +++ b/Documentation/process/kernel-docs.rst
-@@ -3,7 +3,8 @@
- Index of Further Kernel Documentation
- =====================================
+@@ -134,6 +134,20 @@ On-line docs
+         describes how to write user-mode utilities for communicating with
+         Card Services.
  
--          Juan-Mariano de Goyeneche <jmseyas@dit.upm.es>
-+Initial Author: Juan-Mariano de Goyeneche (<jmseyas@dit.upm.es>;
-+email address is defunct now.)
++    * Title: **How NOT to write kernel drivers**
++
++      :Author: Arjan van de Ven.
++      :URL: https://landley.net/kdocs/ols/2002/ols2002-pages-545-555.pdf
++      :Date: 2002
++      :Keywords: driver.
++      :Description: Programming bugs and Do-nots in kernel driver development
++      :Abstract: *Quit a few tutorials, articles and books give an introduction
++        on how to write Linux kernel drivers. Unfortunately the things one
++        should NOT do in Linux kernel code is either only a minor appendix
++        or, more commonly, completely absent. This paper tries to briefly touch
++        the areas in which the most common and serious bugs and do-nots are
++        encountered.*
++
+     * Title: **Global spinlock list and usage**
  
- The need for a document like this one became apparent in the
- linux-kernel mailing list as the same questions, asking for pointers
-@@ -16,21 +17,16 @@ philosophy and design decisions behind this code.
- 
- Unfortunately, not many documents are available for beginners to
- start. And, even if they exist, there was no "well-known" place which
--kept track of them. These lines try to cover this lack. All documents
--available on line known by the author are listed, while some reference
--books are also mentioned.
-+kept track of them. These lines try to cover this lack.
- 
- PLEASE, if you know any paper not listed here or write a new document,
--send me an e-mail, and I'll include a reference to it here. Any
--corrections, ideas or comments are also welcomed.
-+include a reference to it here, following the kernel's patch submission
-+process. Any corrections, ideas or comments are also welcome.
- 
--The papers that follow are listed in no particular order. All are
--cataloged with the following fields: the document's "Title", the
--"Author"/s, the "URL" where they can be found, some "Keywords" helpful
--when searching for specific topics, and a brief "Description" of the
--Document.
--
--Enjoy!
-+All documents are cataloged with the following fields: the document's
-+"Title", the "Author"/s, the "URL" where they can be found, some
-+"Keywords" helpful when searching for specific topics, and a brief
-+"Description" of the Document.
- 
- .. note::
- 
+       :Author: Rick Lindsley.
 -- 
 2.17.1
 

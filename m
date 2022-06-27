@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD8355DC5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27EC55DA66
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235038AbiF0L0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
+        id S236699AbiF0LkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235023AbiF0L0J (ORCPT
+        with ESMTP id S236622AbiF0Lhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:26:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B8B766C;
-        Mon, 27 Jun 2022 04:25:48 -0700 (PDT)
+        Mon, 27 Jun 2022 07:37:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A250B7647;
+        Mon, 27 Jun 2022 04:34:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06D5AB8111B;
-        Mon, 27 Jun 2022 11:25:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53B70C3411D;
-        Mon, 27 Jun 2022 11:25:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B6D860C16;
+        Mon, 27 Jun 2022 11:34:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30659C36AEC;
+        Mon, 27 Jun 2022 11:34:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329145;
-        bh=HntDoXniYj/5of/4GddtV0AzCXgaQh2XJZbRGx/gDMQ=;
+        s=korg; t=1656329654;
+        bh=yaSV6uBt+vuqUdI0AEJ2je99Or9bv9Z6Be/O9K1FXvI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YgHDHf7SwGPESoc1JKZ1as8BB32bzxMqKic7Mo5kdiJ6Ng1Q8//RuuIIJix6NINgn
-         N3s76WioZsH2Wk+/juGcTi+oVcGBecdSiSfzhoYn8cQhZJNThEa1C7Jmffx1GEAHX7
-         q+8QDeJPPahqoG9uDJU+UMLm2JA/lon9ODWcybdA=
+        b=2DyYaPp/llufwzH3ps1r/eEgelmkMF7dkfWrh2CZnlNIEa7AGF1dPEAkmpXcjeYZQ
+         5h4QgbBtu6a3+IEWTy7UDq8gm56PhkAVMvCUWg1xpo5R7RfvefRJZKEIko0bdnXNcH
+         MY3SiRDvHbVtErTG/+xv4f5C/XarsluzKmuoq1kg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 065/102] usb: typec: wcove: Drop wrong dependency to INTEL_SOC_PMIC
+        stable@vger.kernel.org,
+        Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [PATCH 5.15 069/135] ice: ethtool: advertise 1000M speeds properly
 Date:   Mon, 27 Jun 2022 13:21:16 +0200
-Message-Id: <20220627111935.400675859@linuxfoundation.org>
+Message-Id: <20220627111940.161786454@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,43 +57,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
 
-[ Upstream commit 9ef165406308515dcf2e3f6e97b39a1c56d86db5 ]
+[ Upstream commit c3d184c83ff4b80167e34edfc3d21df424bf27ff ]
 
-Intel SoC PMIC is a generic name for all PMICs that are used
-on Intel platforms. In particular, INTEL_SOC_PMIC kernel configuration
-option refers to Crystal Cove PMIC, which has never been a part
-of any Intel Broxton hardware. Drop wrong dependency from Kconfig.
+In current implementation ice_update_phy_type enables all link modes
+for selected speed. This approach doesn't work for 1000M speeds,
+because both copper (1000baseT) and optical (1000baseX) standards
+cannot be enabled at once.
 
-Note, the correct dependency is satisfied via ACPI PMIC OpRegion driver,
-which the Type-C depends on.
+Fix this, by adding the function `ice_set_phy_type_from_speed()`
+for 1000M speeds.
 
-Fixes: d2061f9cc32d ("usb: typec: add driver for Intel Whiskey Cove PMIC USB Type-C PHY")
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20220620104316.57592-1-andriy.shevchenko@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 48cb27f2fd18 ("ice: Implement handlers for ethtool PHY/link operations")
+Signed-off-by: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/tcpm/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/net/ethernet/intel/ice/ice_ethtool.c | 39 +++++++++++++++++++-
+ 1 file changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-index 557f392fe24d..073fd2ea5e0b 100644
---- a/drivers/usb/typec/tcpm/Kconfig
-+++ b/drivers/usb/typec/tcpm/Kconfig
-@@ -56,7 +56,6 @@ config TYPEC_WCOVE
- 	tristate "Intel WhiskeyCove PMIC USB Type-C PHY driver"
- 	depends on ACPI
- 	depends on MFD_INTEL_PMC_BXT
--	depends on INTEL_SOC_PMIC
- 	depends on BXT_WC_PMIC_OPREGION
- 	help
- 	  This driver adds support for USB Type-C on Intel Broxton platforms
+diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
+index 19f115402969..982db894754f 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
++++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
+@@ -2150,6 +2150,42 @@ ice_setup_autoneg(struct ice_port_info *p, struct ethtool_link_ksettings *ks,
+ 	return err;
+ }
+ 
++/**
++ * ice_set_phy_type_from_speed - set phy_types based on speeds
++ * and advertised modes
++ * @ks: ethtool link ksettings struct
++ * @phy_type_low: pointer to the lower part of phy_type
++ * @phy_type_high: pointer to the higher part of phy_type
++ * @adv_link_speed: targeted link speeds bitmap
++ */
++static void
++ice_set_phy_type_from_speed(const struct ethtool_link_ksettings *ks,
++			    u64 *phy_type_low, u64 *phy_type_high,
++			    u16 adv_link_speed)
++{
++	/* Handle 1000M speed in a special way because ice_update_phy_type
++	 * enables all link modes, but having mixed copper and optical
++	 * standards is not supported.
++	 */
++	adv_link_speed &= ~ICE_AQ_LINK_SPEED_1000MB;
++
++	if (ethtool_link_ksettings_test_link_mode(ks, advertising,
++						  1000baseT_Full))
++		*phy_type_low |= ICE_PHY_TYPE_LOW_1000BASE_T |
++				 ICE_PHY_TYPE_LOW_1G_SGMII;
++
++	if (ethtool_link_ksettings_test_link_mode(ks, advertising,
++						  1000baseKX_Full))
++		*phy_type_low |= ICE_PHY_TYPE_LOW_1000BASE_KX;
++
++	if (ethtool_link_ksettings_test_link_mode(ks, advertising,
++						  1000baseX_Full))
++		*phy_type_low |= ICE_PHY_TYPE_LOW_1000BASE_SX |
++				 ICE_PHY_TYPE_LOW_1000BASE_LX;
++
++	ice_update_phy_type(phy_type_low, phy_type_high, adv_link_speed);
++}
++
+ /**
+  * ice_set_link_ksettings - Set Speed and Duplex
+  * @netdev: network interface device structure
+@@ -2286,7 +2322,8 @@ ice_set_link_ksettings(struct net_device *netdev,
+ 		adv_link_speed = curr_link_speed;
+ 
+ 	/* Convert the advertise link speeds to their corresponded PHY_TYPE */
+-	ice_update_phy_type(&phy_type_low, &phy_type_high, adv_link_speed);
++	ice_set_phy_type_from_speed(ks, &phy_type_low, &phy_type_high,
++				    adv_link_speed);
+ 
+ 	if (!autoneg_changed && adv_link_speed == curr_link_speed) {
+ 		netdev_info(netdev, "Nothing changed, exiting without setting anything.\n");
 -- 
 2.35.1
 

@@ -2,119 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B74855C88A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9527D55DCEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242611AbiF0W2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 18:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
+        id S242617AbiF0W2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 18:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240465AbiF0W17 (ORCPT
+        with ESMTP id S242599AbiF0W21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 18:27:59 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D1A18B04
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 15:27:53 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id i67-20020a1c3b46000000b003a03567d5e9so6686796wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 15:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6H5qeaobYQUTlAspwPBB2xrGsBk6hNCYhAOl2xyT8HY=;
-        b=ZED/uT+o8rKMOGeHCqoMWdgu8ZJTnJ+JF0CGr6haoTY9/Z0J70WP8FGexhIE1A8lZf
-         U92GeOIIlijje3boPQ4yMZfNSWlAbs31Y/4dpM5ZHsTHu3b82VZdjnstB4f3KNtySNoc
-         DiFW30HK2GcVlb31wU+6p03mNdOcp0b/fkGzhD1ZTCuul8jdopQJHGSUSEscCuabO5CE
-         1RHHmtV4ZCX7odTdU8K8b6WuEGSbdSDCRpCrQA3b0CBvYJ061vuO+XKnByFrVa/X57Ds
-         TBHjQQiJ2LVjawYyLtV4BEqQN6xlmT4ksvLYxlT/zhk/F4tceOWWbx/4Ru4nZumnnYk2
-         tjHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6H5qeaobYQUTlAspwPBB2xrGsBk6hNCYhAOl2xyT8HY=;
-        b=2tYy5uD/SBk9fcyY34Ub6cO3clYStLz3898C3UGZhmTxfFSEBZtHkSOf5SJJsCWcOG
-         s9+5Hm2BXBrt0UX45g8Hyp9SByq2XIVYjKFRig20uvplSimk1tNJFPzU1WyWD8PGJTIa
-         GCtnRTd1ILGHqMzJlrKWjOtOquyol5hofPN36FH2U510ZjAfwFRAlojwoZK7DjWEj78Q
-         cOBn9mBvW6n2ObDnGIXo29RWbm6Qf0KUIwmqQ0l2iwprisYRhDJdarKeYt18BZCSEdWw
-         dFwsoXPulLVUJO5h1BEZcJEhuxgo8BQO/joOA6P1f2yk2rxKNFCdTBxqOYUoW1snw1Vy
-         MKgQ==
-X-Gm-Message-State: AJIora8AgJh86GJ5JcdNrIbuf49+r1yn8yqpJ8rwjIv8Lz6FCkMJ36Bl
-        /HgUS8x+oHRhPMbql/OhOEEbN09StpnS3qhfjcP7
-X-Google-Smtp-Source: AGRyM1v9d9aBEV9xES44UyVjQACuMzur27anppTkxqi4LIgjEA/6+QcupXLwrwvNFaQIQJKh1od8tjVzHqKz+P9UfQs=
-X-Received: by 2002:a7b:c152:0:b0:3a0:3e53:aa17 with SMTP id
- z18-20020a7bc152000000b003a03e53aa17mr19448317wmi.78.1656368872087; Mon, 27
- Jun 2022 15:27:52 -0700 (PDT)
+        Mon, 27 Jun 2022 18:28:27 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC61613E0E;
+        Mon, 27 Jun 2022 15:28:21 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 99DBD2D3;
+        Mon, 27 Jun 2022 22:28:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 99DBD2D3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1656368900; bh=sqIB6wvrcODWFpVRELCRk3qr6U5GjoJLZ6jWg7iZ8RM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=tBdwa2gyqh0UWNpCqHtyxH00UrvUUHQCOygDftFAF48yMR+elnJmgrjHB4CIB36rc
+         eJs15+rKB1Td8rbLIXE6NVfHABElEG0kY+P/UzVzJg0/W3DoWNlbl6iXkgSCvb7J0U
+         Ivr0SH42v1FfRmhD3WuQPSXfQzYj1Q2XzNiFX+QwRQRO+WKPJ5Jll9Ip07JFmCv9bq
+         JC8AXKkzdOs4pNLsVTSwo9ZsgoTT2o1N2Mr6HUe450vUOL1wdcg8NwUhgYX9M4Rz6d
+         c63fjFL4BVgN37IAfVPt/gpAcbfJzT9eYPe+61wnUaCh2jhbyqoOZpmgQ0+Jbp9H4L
+         6IYIOkLpk+w5Q==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH 1/3] Documentation: kunit: remove duplicate kunit-tool.rst
+In-Reply-To: <96154234-7842-3bc9-d89f-eb20be40e6de@linuxfoundation.org>
+References: <20220603195626.121922-1-dlatypov@google.com>
+ <87pmix3ktq.fsf@meer.lwn.net>
+ <2c3399e9-4f4e-a71a-4030-e4e6d72b5d4e@linuxfoundation.org>
+ <8735ft3co5.fsf@meer.lwn.net>
+ <96154234-7842-3bc9-d89f-eb20be40e6de@linuxfoundation.org>
+Date:   Mon, 27 Jun 2022 16:28:20 -0600
+Message-ID: <87lethyc57.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20220621233939.993579-1-fred@cloudflare.com> <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
- <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com> <CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com>
- <20220627121137.cnmctlxxtcgzwrws@wittgenstein> <CAHC9VhSQH9tE-NgU6Q-GLqSy7R6FVjSbp4Tc4gVTbjZCqAWy5Q@mail.gmail.com>
- <6a8fba0a-c9c9-61ba-793a-c2e0c2924f88@iogearbox.net>
-In-Reply-To: <6a8fba0a-c9c9-61ba-793a-c2e0c2924f88@iogearbox.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 27 Jun 2022 18:27:41 -0400
-Message-ID: <CAHC9VhQQJH95jTWMOGDB4deS=whSfnaF_e73zoabOOeHJMv+0Q@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Frederick Lawler <fred@cloudflare.com>,
-        Casey Schaufler <casey@schaufler-ca.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 6:15 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> On 6/27/22 11:56 PM, Paul Moore wrote:
-> > On Mon, Jun 27, 2022 at 8:11 AM Christian Brauner <brauner@kernel.org> wrote:
-> >> On Thu, Jun 23, 2022 at 11:21:37PM -0400, Paul Moore wrote:
-> >
-> > ...
-> >
-> >>> This is one of the reasons why I usually like to see at least one LSM
-> >>> implementation to go along with every new/modified hook.  The
-> >>> implementation forces you to think about what information is necessary
-> >>> to perform a basic access control decision; sometimes it isn't always
-> >>> obvious until you have to write the access control :)
-> >>
-> >> I spoke to Frederick at length during LSS and as I've been given to
-> >> understand there's a eBPF program that would immediately use this new
-> >> hook. Now I don't want to get into the whole "Is the eBPF LSM hook
-> >> infrastructure an LSM" but I think we can let this count as a legitimate
-> >> first user of this hook/code.
-> >
-> > Yes, for the most part I don't really worry about the "is a BPF LSM a
-> > LSM?" question, it's generally not important for most discussions.
-> > However, there is an issue unique to the BPF LSMs which I think is
-> > relevant here: there is no hook implementation code living under
-> > security/.  While I talked about a hook implementation being helpful
-> > to verify the hook prototype, it is also helpful in providing an
-> > in-tree example for other LSMs; unfortunately we don't get that same
-> > example value when the initial hook implementation is a BPF LSM.
+Shuah Khan <skhan@linuxfoundation.org> writes:
+
+> On 6/24/22 4:43 PM, Jonathan Corbet wrote:
+>> Shuah Khan <skhan@linuxfoundation.org> writes:
+>> 
+>>>> So not that long ago these patches were going through Shuah...it seems
+>>>> that's not happening anymore?  I can pick up kunit docs patches,
+>>>> certainly.  I've taken the silence on these as assent and applied them.
+>>>>
+>>>
+>>> I am still taking ksefltest and kunit doc patches through my tree. I wait
+>>> for Brendan to ack at times. This one didn't show up in linux-kselftest
+>>> list it appears.
+>>>
+>>> If you cc linux-kselftest and I get an ack from Brendan, I will take this
+>>> through kselftest tree.
+>> 
+>> As I said up above, I went ahead and applied them.  I can drop them
+>> again if you want to carry them, just let me know.
+>> 
 >
-> I would argue that such a patch series must come together with a BPF
-> selftest which then i) contains an in-tree usage example, ii) adds BPF
-> CI test coverage. Shipping with a BPF selftest at least would be the
-> usual expectation.
+> Jon, yes please go ahead and drop this one. I will wait for Brendan
+> to ack it. Reduces confusion in the future. Very often, there is code
+> dependencies as well.
 
-I'm not going to disagree with that, I generally require matching
-tests for new SELinux kernel code, but I was careful to mention code
-under 'security/' and not necessarily just a test implementation :)  I
-don't want to get into a big discussion about it, but I think having a
-working implementation somewhere under 'security/' is more
-discoverable for most LSM folks.
+OK, I have dropped those three commits.  Note that I also had to drop
+Randy's patch which had been waiting since April:
 
--- 
-paul-moore.com
+  https://lore.kernel.org/linux-doc/20220401024707.10550-1-rdunlap%40infradead.org/
+
+since it conflicts with the above.  So you'll want to pick that one up
+too.
+
+Thanks,
+
+jon

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BF955CF1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F1A55CD9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237359AbiF0LpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        id S238683AbiF0L7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237416AbiF0Lmt (ORCPT
+        with ESMTP id S238726AbiF0Lwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:42:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C07F30;
-        Mon, 27 Jun 2022 04:37:33 -0700 (PDT)
+        Mon, 27 Jun 2022 07:52:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1666DB857;
+        Mon, 27 Jun 2022 04:45:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF004B81117;
-        Mon, 27 Jun 2022 11:37:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 118D9C3411D;
-        Mon, 27 Jun 2022 11:37:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9176612AE;
+        Mon, 27 Jun 2022 11:45:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA7E3C341CF;
+        Mon, 27 Jun 2022 11:45:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329850;
-        bh=B2hSXjbr+rHpgwDe32O/tcnJQcZZzJ7ADtnfxO42u40=;
+        s=korg; t=1656330318;
+        bh=ZNgvKeXZtttq9V+DTUA+x2cKls0AD7Igat+A75HaGIk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bedk/Vm+MrRX3kyJ511Nh3TY3As1ONjGamOHaNasC/7W7KD+tu2gxCfUqtQ3HaMgP
-         QmVYhVriPCOXuZ7T3SM6ENCVQR0n1Kj5fTFF7UhCvn8U7mJ5xezt/QXTbSuXgK7EMs
-         cFepkgER8ecspNXNg+bFwBZGxldrplXDFJDQWRWI=
+        b=YbSoPCuNi/MtglBWipI3F0Wpb98qq6IB8P5zPBRE/DnrSPtzm+cAZmGmYXnmuVvtW
+         RS+6mbcHchexjlgWfNSSRgslLyC6CrFlqOOGypl6hatZfb9F8SfsY0nlBjhdechI7a
+         +a7phzq/Ju5lHfc4U08+Uxgc6vKda8am83fWz30c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aswath Govindraju <a-govindraju@ti.com>,
-        Nishanth Menon <nm@ti.com>
-Subject: [PATCH 5.15 123/135] arm64: dts: ti: k3-am64-main: Remove support for HS400 speed mode
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.18 157/181] powerpc/microwatt: wire up rng during setup_arch()
 Date:   Mon, 27 Jun 2022 13:22:10 +0200
-Message-Id: <20220627111941.724118150@linuxfoundation.org>
+Message-Id: <20220627111949.237945884@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +55,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aswath Govindraju <a-govindraju@ti.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 0c0af88f3f318e73237f7fadd02d0bf2b6c996bb upstream.
+commit 20a9689b3607456d92c6fb764501f6a95950b098 upstream.
 
-AM64 SoC, does not support HS400 and HS200 is the maximum supported speed
-mode[1]. Therefore, fix the device tree node to reflect the same.
+The platform's RNG must be available before random_init() in order to be
+useful for initial seeding, which in turn means that it needs to be
+called from setup_arch(), rather than from an init call. Fortunately,
+each platform already has a setup_arch function pointer, which means
+it's easy to wire this up. This commit also removes some noisy log
+messages that don't add much.
 
-[1] - https://www.ti.com/lit/ds/symlink/am6442.pdf
-      (SPRSP56C – JANUARY 2021 – REVISED FEBRUARY 2022)
-
-Fixes: 8abae9389bdb ("arm64: dts: ti: Add support for AM642 SoC")
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Link: https://lore.kernel.org/r/20220512064859.32059-1-a-govindraju@ti.com
+Fixes: c25769fddaec ("powerpc/microwatt: Add support for hardware random number generator")
+Cc: stable@vger.kernel.org # v5.14+
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220611151015.548325-2-Jason@zx2c4.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi |    2 --
- 1 file changed, 2 deletions(-)
+ arch/powerpc/platforms/microwatt/microwatt.h |    7 +++++++
+ arch/powerpc/platforms/microwatt/rng.c       |   10 +++-------
+ arch/powerpc/platforms/microwatt/setup.c     |    8 ++++++++
+ 3 files changed, 18 insertions(+), 7 deletions(-)
+ create mode 100644 arch/powerpc/platforms/microwatt/microwatt.h
 
---- a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-@@ -456,13 +456,11 @@
- 		clock-names = "clk_ahb", "clk_xin";
- 		mmc-ddr-1_8v;
- 		mmc-hs200-1_8v;
--		mmc-hs400-1_8v;
- 		ti,trm-icp = <0x2>;
- 		ti,otap-del-sel-legacy = <0x0>;
- 		ti,otap-del-sel-mmc-hs = <0x0>;
- 		ti,otap-del-sel-ddr52 = <0x6>;
- 		ti,otap-del-sel-hs200 = <0x7>;
--		ti,otap-del-sel-hs400 = <0x4>;
- 	};
+--- /dev/null
++++ b/arch/powerpc/platforms/microwatt/microwatt.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _MICROWATT_H
++#define _MICROWATT_H
++
++void microwatt_rng_init(void);
++
++#endif /* _MICROWATT_H */
+--- a/arch/powerpc/platforms/microwatt/rng.c
++++ b/arch/powerpc/platforms/microwatt/rng.c
+@@ -11,6 +11,7 @@
+ #include <asm/archrandom.h>
+ #include <asm/cputable.h>
+ #include <asm/machdep.h>
++#include "microwatt.h"
  
- 	sdhci1: mmc@fa00000 {
+ #define DARN_ERR 0xFFFFFFFFFFFFFFFFul
+ 
+@@ -29,7 +30,7 @@ static int microwatt_get_random_darn(uns
+ 	return 1;
+ }
+ 
+-static __init int rng_init(void)
++void __init microwatt_rng_init(void)
+ {
+ 	unsigned long val;
+ 	int i;
+@@ -37,12 +38,7 @@ static __init int rng_init(void)
+ 	for (i = 0; i < 10; i++) {
+ 		if (microwatt_get_random_darn(&val)) {
+ 			ppc_md.get_random_seed = microwatt_get_random_darn;
+-			return 0;
++			return;
+ 		}
+ 	}
+-
+-	pr_warn("Unable to use DARN for get_random_seed()\n");
+-
+-	return -EIO;
+ }
+-machine_subsys_initcall(, rng_init);
+--- a/arch/powerpc/platforms/microwatt/setup.c
++++ b/arch/powerpc/platforms/microwatt/setup.c
+@@ -16,6 +16,8 @@
+ #include <asm/xics.h>
+ #include <asm/udbg.h>
+ 
++#include "microwatt.h"
++
+ static void __init microwatt_init_IRQ(void)
+ {
+ 	xics_init();
+@@ -32,10 +34,16 @@ static int __init microwatt_populate(voi
+ }
+ machine_arch_initcall(microwatt, microwatt_populate);
+ 
++static void __init microwatt_setup_arch(void)
++{
++	microwatt_rng_init();
++}
++
+ define_machine(microwatt) {
+ 	.name			= "microwatt",
+ 	.probe			= microwatt_probe,
+ 	.init_IRQ		= microwatt_init_IRQ,
++	.setup_arch		= microwatt_setup_arch,
+ 	.progress		= udbg_progress,
+ 	.calibrate_decr		= generic_calibrate_decr,
+ };
 
 

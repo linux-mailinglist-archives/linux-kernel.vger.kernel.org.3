@@ -2,266 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D6255CD68
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4968955CA45
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241535AbiF0XaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S240371AbiF0Xag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241263AbiF0XaP (ORCPT
+        with ESMTP id S242076AbiF0Xab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:30:15 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545F62E0;
-        Mon, 27 Jun 2022 16:30:12 -0700 (PDT)
-Received: (Authenticated sender: frank@zago.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id E74D3100008;
-        Mon, 27 Jun 2022 23:30:07 +0000 (UTC)
-Message-ID: <ad04b435-87d4-8f15-e5b8-d9c8fd364024@zago.net>
-Date:   Mon, 27 Jun 2022 18:30:06 -0500
+        Mon, 27 Jun 2022 19:30:31 -0400
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AA2D54;
+        Mon, 27 Jun 2022 16:30:29 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id a16so7075052ilr.6;
+        Mon, 27 Jun 2022 16:30:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=x8JlGuBlsyv8u11qNoGLGDrkEldcGlScrLvA1xIrWcM=;
+        b=qt7+fpuKX5G1NeZmhbolrtM+hLR1hBtYZx41xJ30DhLXJVGVCgP/mkh773Xn45uoxu
+         4Hs2VYCJDD15KPNDEREPC4+re3a549fS5VN2XhrOIjNSXELZFxyPgAdlDTZqiF7xkER0
+         yMgySKEHN8EM638I8C/By6Q1G82ZWTJDmyHwF/ATvg/asjSi1oU3+rpjDpYCzzDYmpTh
+         qLRCwd2sUw4ooWrL9ZOMege66/Xn3IRN0EMx3KNLGGLz4zhfqnbbZHriZJbdL8obnYk9
+         rPPO14aUiZ4vOU9nidlLwxJ+vhZuOmk7pVuvAkPVE52XcxLUn1E/N6lwnjL1WKrpg+A5
+         WxaQ==
+X-Gm-Message-State: AJIora/KXRTB4Qq1diY0yDAYtZbXUyXK755ZUOr6XMfnJQqMdPeJ0g08
+        1U5hIFrYVCTdxBpEw58XWw==
+X-Google-Smtp-Source: AGRyM1v++vx5C2PZ1+V37WXzVu58JZoOtbgG4MxkB9S8u2iPl6cebvqf5cCXt4rpl+8ThnjePE2X0Q==
+X-Received: by 2002:a05:6e02:1d19:b0:2d9:1705:892b with SMTP id i25-20020a056e021d1900b002d91705892bmr8430986ila.61.1656372628833;
+        Mon, 27 Jun 2022 16:30:28 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id s16-20020a5d9290000000b00672f405e911sm5910587iom.38.2022.06.27.16.30.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 16:30:28 -0700 (PDT)
+Received: (nullmailer pid 3169022 invoked by uid 1000);
+        Mon, 27 Jun 2022 23:30:25 -0000
+Date:   Mon, 27 Jun 2022 17:30:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Heng Sia <jee.heng.sia@intel.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 05/14] dt-bindings: timer: add Canaan k210 to Synopsys
+ DesignWare timer
+Message-ID: <20220627233025.GA3167724-robh@kernel.org>
+References: <20220618123035.563070-1-mail@conchuod.ie>
+ <20220618123035.563070-6-mail@conchuod.ie>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 1/4] mfd: ch341: add core driver for the WCH CH341 in
- I2C/SPI/GPIO mode
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20220616013747.126051-1-frank@zago.net>
- <20220616013747.126051-2-frank@zago.net> <Yrm48AYxkmoUgdwr@google.com>
- <Yrm+kH6NvTy5A9WO@kroah.com> <YrnCBpvA8/y38Brg@google.com>
-From:   Frank Zago <frank@zago.net>
-In-Reply-To: <YrnCBpvA8/y38Brg@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220618123035.563070-6-mail@conchuod.ie>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 09:43, Lee Jones wrote:
-> On Mon, 27 Jun 2022, Greg Kroah-Hartman wrote:
+On Sat, Jun 18, 2022 at 01:30:27PM +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
->> On Mon, Jun 27, 2022 at 03:04:32PM +0100, Lee Jones wrote:
->>> USB review please.
->>>
->>>> The CH341 is a multifunction chip, presenting 3 different USB PID. One
->>>>
->>>> of these functions is for I2C/SPI/GPIO. This new set of drivers will
->>>> manage I2C and GPIO.
->>>>
->>>> Signed-off-by: frank zago <frank@zago.net>
->>>> ---
->>>>  MAINTAINERS               |  7 +++
->>>>  drivers/mfd/Kconfig       | 10 +++++
->>>>  drivers/mfd/Makefile      |  1 +
->>>>  drivers/mfd/ch341-core.c  | 90 +++++++++++++++++++++++++++++++++++++++
->>>>  include/linux/mfd/ch341.h | 18 ++++++++
->>>>  5 files changed, 126 insertions(+)
->>>>  create mode 100644 drivers/mfd/ch341-core.c
->>>>  create mode 100644 include/linux/mfd/ch341.h
->>>>
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index 43d3d07afccd..628eeaa9bf68 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -21475,6 +21475,13 @@ M:	David Härdeman <david@hardeman.nu>
->>>>  S:	Maintained
->>>>  F:	drivers/media/rc/winbond-cir.c
->>>>  
->>>> +WINCHIPHEAD CH341 I2C/GPIO MFD DRIVER
->>>> +M:	Frank Zago <frank@zago.net>
->>>> +L:	linux-usb@vger.kernel.org
->>>> +S:	Maintained
->>>> +F:	drivers/mfd/ch341-core.c
->>>> +F:	include/linux/mfd/ch341.h
->>>> +
->>>>  WINSYSTEMS EBC-C384 WATCHDOG DRIVER
->>>>  M:	William Breathitt Gray <vilhelm.gray@gmail.com>
->>>>  L:	linux-watchdog@vger.kernel.org
->>>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
->>>> index 3b59456f5545..893acc821a42 100644
->>>> --- a/drivers/mfd/Kconfig
->>>> +++ b/drivers/mfd/Kconfig
->>>> @@ -1784,6 +1784,16 @@ config MFD_LOCHNAGAR
->>>>  	help
->>>>  	  Support for Cirrus Logic Lochnagar audio development board.
->>>>  
->>>> +config MFD_CH341
->>>> +	tristate "WinChipHead CH341 in I2C/SPI/GPIO mode"
->>>> +	depends on USB
->>>> +	help
->>>> +	  If you say yes to this option, support for the CH341 series
->>>> +	  of chips, running in I2C/SPI/GPIO mode will be included.
->>>> +
->>>> +	  This driver can also be built as a module.  If so, the
->>>> +	  module will be called ch341-core.
->>>> +
->>>>  config MFD_ARIZONA
->>>>  	select REGMAP
->>>>  	select REGMAP_IRQ
->>>> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
->>>> index 858cacf659d6..fd615ab3929f 100644
->>>> --- a/drivers/mfd/Makefile
->>>> +++ b/drivers/mfd/Makefile
->>>> @@ -13,6 +13,7 @@ obj-$(CONFIG_MFD_ASIC3)		+= asic3.o tmio_core.o
->>>>  obj-$(CONFIG_ARCH_BCM2835)	+= bcm2835-pm.o
->>>>  obj-$(CONFIG_MFD_BCM590XX)	+= bcm590xx.o
->>>>  obj-$(CONFIG_MFD_BD9571MWV)	+= bd9571mwv.o
->>>> +obj-$(CONFIG_MFD_CH341)		+= ch341-core.o
->>>>  obj-$(CONFIG_MFD_CROS_EC_DEV)	+= cros_ec_dev.o
->>>>  obj-$(CONFIG_MFD_ENE_KB3930)	+= ene-kb3930.o
->>>>  obj-$(CONFIG_MFD_EXYNOS_LPASS)	+= exynos-lpass.o
->>>> diff --git a/drivers/mfd/ch341-core.c b/drivers/mfd/ch341-core.c
->>>> new file mode 100644
->>>> index 000000000000..f08a67dd6074
->>>> --- /dev/null
->>>> +++ b/drivers/mfd/ch341-core.c
->>>> @@ -0,0 +1,90 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +/*
->>>> + * Core driver for the CH341A, CH341B and CH341T in I2C/SPI/GPIO
->>>> + * mode. There are cell drivers available for I2C and GPIO. SPI is not
->>>> + * yet supported.
->>>> + *
->>>> + * Copyright 2022, Frank Zago
->>>> + * Copyright (c) 2017 Gunar Schorcht (gunar@schorcht.net)
->>>> + * Copyright (c) 2016 Tse Lun Bien
->>>> + * Copyright (c) 2014 Marco Gittler
->>>> + * Copyright (c) 2006-2007 Till Harbaum (Till@Harbaum.org)
->>>> + */
->>>> +
->>>> +#include <linux/kernel.h>
->>>> +#include <linux/mfd/ch341.h>
->>>> +#include <linux/mfd/core.h>
->>>> +#include <linux/module.h>
->>>> +#include <linux/slab.h>
->>>> +#include <linux/usb.h>
->>>> +
->>>> +static const struct mfd_cell ch341_devs[] = {
->>>> +	{
->>>> +		.name = "ch341-gpio",
->>>> +	},
->>>> +	{
->>>> +		.name = "ch341-i2c",
->>>> +	},
->>>> +};
->>>> +
->>>> +static int ch341_usb_probe(struct usb_interface *iface,
->>>> +			   const struct usb_device_id *usb_id)
->>>> +{
->>>> +	struct usb_endpoint_descriptor *bulk_out;
->>>> +	struct usb_endpoint_descriptor *bulk_in;
->>>> +	struct usb_endpoint_descriptor *intr_in;
->>>> +	struct ch341_ddata *ddata;
->>>> +	int ret;
->>>> +
->>>> +	ddata = devm_kzalloc(&iface->dev, sizeof(*ddata), GFP_KERNEL);
->>>> +	if (!ddata)
->>>> +		return -ENOMEM;
->>>> +
->>>> +	ddata->usb_dev = interface_to_usbdev(iface);
->>>> +	mutex_init(&ddata->usb_lock);
->>>> +
->>>> +	ret = usb_find_common_endpoints(iface->cur_altsetting, &bulk_in,
->>>> +					&bulk_out, &intr_in, NULL);
->>>> +	if (ret) {
->>>> +		dev_err(&iface->dev, "Could not find all endpoints\n");
->>>> +		return -ENODEV;
->>>> +	}
->>>> +
->>>> +	ddata->ep_in = bulk_in->bEndpointAddress;
->>>> +	ddata->ep_out = bulk_out->bEndpointAddress;
->>>> +	ddata->ep_intr = intr_in->bEndpointAddress;
->>>> +	ddata->ep_intr_interval = intr_in->bInterval;
->>>> +
->>>> +	usb_set_intfdata(iface, ddata);
->>>> +
->>>> +	ret = mfd_add_devices(&iface->dev, PLATFORM_DEVID_AUTO, ch341_devs,
->>>> +			      ARRAY_SIZE(ch341_devs), NULL, 0, NULL);
->>>> +	if (ret)
->>>> +		return dev_err_probe(&iface->dev, ret,
->>>> +				     "Failed to register child devices\n");
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static void ch341_usb_disconnect(struct usb_interface *usb_if)
->>>> +{
->>>> +	mfd_remove_devices(&usb_if->dev);
->>>> +}
->>>> +
->>>> +static const struct usb_device_id ch341_usb_table[] = {
->>>> +	{ USB_DEVICE(0x1a86, 0x5512) },
->>>> +	{ }
->>>> +};
->>>> +MODULE_DEVICE_TABLE(usb, ch341_usb_table);
->>>> +
->>>> +static struct usb_driver ch341_usb_driver = {
->>>> +	.name       = "ch341-mfd",
->>>> +	.id_table   = ch341_usb_table,
->>>> +	.probe      = ch341_usb_probe,
->>>> +	.disconnect = ch341_usb_disconnect,
->>>> +};
->>>> +module_usb_driver(ch341_usb_driver);
->>>> +
->>>> +MODULE_AUTHOR("Frank Zago <frank@zago.net>");
->>>> +MODULE_DESCRIPTION("CH341 USB to I2C/SPI/GPIO adapter");
->>>> +MODULE_LICENSE("GPL");
->>>> diff --git a/include/linux/mfd/ch341.h b/include/linux/mfd/ch341.h
->>>> new file mode 100644
->>>> index 000000000000..44f5da0720bd
->>>> --- /dev/null
->>>> +++ b/include/linux/mfd/ch341.h
->>>> @@ -0,0 +1,18 @@
->>>> +/* SPDX-License-Identifier: GPL-2.0 */
->>>> +/* Definitions for the CH341 driver */
->>>> +
->>>> +#include <linux/mutex.h>
->>>> +#include <linux/types.h>
->>>> +
->>>> +struct usb_device;
->>>> +struct usb_interface;
->>>> +
->>>> +struct ch341_ddata {
->>>> +	struct usb_device *usb_dev;
->>>> +	struct mutex usb_lock;
->>>> +
->>>> +	int ep_in;
->>>> +	int ep_out;
->>>> +	int ep_intr;
->>>> +	u8 ep_intr_interval;
->>>> +};
->>
->>
->> Looks sane enough, but doesn't actually do any USB data transfers, maybe
->> that happens somewhere else...
+> The Canaan k210 apparently has a Sysnopsys Designware timer but
+> according to the documentation & devicetree it has 2 interrupts rather
+> than the standard one. Add a custom compatible that supports the 2
+> interrupt configuration and falls back to the standard binding (which
+> is currently the one in use in the devicetree entry).
 > 
-> I expect those to happen in *both* of these:
+> Link: https://canaan-creative.com/wp-content/uploads/2020/03/kendryte_standalone_programming_guide_20190311144158_en.pdf #Page 58
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../bindings/timer/snps,dw-apb-timer.yaml     | 28 +++++++++++++++----
+>  1 file changed, 22 insertions(+), 6 deletions(-)
 > 
->   static const struct mfd_cell ch341_devs[] = {
-> 	{
-> 		.name = "ch341-gpio",
-> 	},
-> 	{
-> 		.name = "ch341-i2c",
-> 	},
->   };
-> 
-> Is that correct Frank?
+> diff --git a/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml b/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
+> index d33c9205a909..9a76acc7a66f 100644
+> --- a/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
+> +++ b/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
+> @@ -12,6 +12,9 @@ maintainers:
+>  properties:
+>    compatible:
+>      oneOf:
+> +      - items:
+> +          - const: canaan,k210-apb-timer
+> +          - const: snps,dw-apb-timer
+>        - const: snps,dw-apb-timer
+>        - enum:
+>            - snps,dw-apb-timer-sp
+> @@ -21,9 +24,6 @@ properties:
+>    reg:
+>      maxItems: 1
+>  
+> -  interrupts:
+> -    maxItems: 1
+> -
+>    resets:
+>      maxItems: 1
+>  
+> @@ -41,7 +41,23 @@ properties:
+>  
+>    clock-frequency: true
+>  
+> -additionalProperties: false
+> +unevaluatedProperties: false
+> +
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: canaan,k210-apb-timer
+> +
+> +then:
+> +  properties:
+> +    interrupts:
+> +      maxItems: 2
 
-Yes, that's correct.
+When more than 1, you need to define what they are and the order.
 
-Frank
-
+> +
+> +else:
+> +  properties:
+> +    interrupts:
+> +      maxItems: 1
+>  
+>  required:
+>    - compatible
+> @@ -60,8 +76,8 @@ oneOf:
+>  examples:
+>    - |
+>      timer@ffe00000 {
+> -      compatible = "snps,dw-apb-timer";
+> -      interrupts = <0 170 4>;
+> +      compatible = "canaan,k210-apb-timer", "snps,dw-apb-timer";
+> +      interrupts = <0 170 4>, <0 170 4>;
+>        reg = <0xffe00000 0x1000>;
+>        clocks = <&timer_clk>, <&timer_pclk>;
+>        clock-names = "timer", "pclk";
+> -- 
+> 2.36.1
+> 
+> 

@@ -2,160 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2DE55D1EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F2955D169
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239806AbiF0RJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S238236AbiF0RLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239784AbiF0RIz (ORCPT
+        with ESMTP id S235780AbiF0RLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:08:55 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2CA14D26;
-        Mon, 27 Jun 2022 10:08:52 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id E0F4E8E22A7;
-        Mon, 27 Jun 2022 17:08:51 +0000 (UTC)
-Received: from pdx1-sub0-mail-a264.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id CA2208E2337;
-        Mon, 27 Jun 2022 17:08:45 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1656349731; a=rsa-sha256;
-        cv=none;
-        b=dSRKaH/VBsuIR/EKNCYc3/LOlXwbBYNbowhQjlqwKwtxh+4p4rLUnjNg+E/+e/29VbJfdH
-        dWjDaGAyc35RhSB8aS3DRV5mlMalPyoZloTU0frGWcYYhlx/6DLy7qb/R8/VNrRyqvTw3Y
-        3Dm9iXGopKgWdxstd/fQM8fh+IJ3gtAMa1HOgctqgoNEoiD4bbCJhPqkhLhVzp2mHFRWvO
-        8vU/6ZcNytOxxJsV+wIRuUb1DA4u2wBgEYW+uJKZ13S1OKaHB4vY7INS9AXgWzOHCtvHJW
-        cdlCjMe8BI9oplNnHmkC0qUgOje8PQfylrdjV/Ul+pfG7YZ71JsNcRRVtGmiKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1656349731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=A7rki0r08AUT6i9LuNpWaBSxJsAW+yxPZqeTseOKr+4=;
-        b=dCnkX5l/x5H/D37l8ajU6rkF0/GfQJBNLcM9sBoZ5mdNwYJCW0gij4FlKCHyvgRY+McMwf
-        /2FtvNWpKN0n53JINSt4yvHGRLfWckQGXuDVDzt0UkTjQtJHjzXDP8mPuOFTv+2oXozhPb
-        kadqX6BV5O+1248qjJCOy8NJiCEeIKt1UM2YpPwbeQKY0TQ3bgtxZN4U65/ow4/hy1zQE/
-        Zw8/1HjpXgKHGLJViz/Ir9HceevuTVvIiVA8hAfmVnn2xbkjGA+/8aYwncCVuDbvD6SeO0
-        fg7V6cMv+Gv/lAO9wtWyranOfKqPF4T+rM9QdLDhBfZnETXLaYawg9S3YGb7Og==
-ARC-Authentication-Results: i=1;
-        rspamd-689699966c-64ltc;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Tank-Glossy: 6a948fd5697b681b_1656349731544_2004021686
-X-MC-Loop-Signature: 1656349731544:1516900649
-X-MC-Ingress-Time: 1656349731543
-Received: from pdx1-sub0-mail-a264.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.98.242.248 (trex/6.7.1);
-        Mon, 27 Jun 2022 17:08:51 +0000
-Received: from offworld (unknown [104.36.31.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 27 Jun 2022 13:11:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0890A13DD1
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:11:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a264.dreamhost.com (Postfix) with ESMTPSA id 4LWvMF0fxgz1HG;
-        Mon, 27 Jun 2022 10:08:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1656349721;
-        bh=A7rki0r08AUT6i9LuNpWaBSxJsAW+yxPZqeTseOKr+4=;
-        h=Date:From:To:Cc:Subject:Content-Type:Content-Transfer-Encoding;
-        b=ldvzY8nksHVe2/GUGV428zwNVO5iNGArcT7KFGpIylrjHs3uaS8wGc9m/QWmBbfbG
-         u1TynMspXB0zToXWkZ0JkP65qx77V3h24FBBnlmI7A6i/QlflmXLFsELbjORuuAFez
-         CTMiDaEkcCkXxbhzO6fdv6p/JjG5lSMpijlaymqjg4HtIUCZChrk7HphLvbF59zORy
-         NPGjKCYJqkR/aGvC1JbzE/AHvL+bUkNebNkmSpa3h/FQL4LDUS9vNZSsXpOSnpuvTx
-         AH5cInpT4D7gBGzr4GfRs8enaNidCDZCZu4BAi+e3PWLftC5qupr2Cy62XjuGEgFf6
-         PllX0X13QMiqQ==
-Date:   Mon, 27 Jun 2022 10:08:38 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     syzbot <syzbot+ce3408364c4a234dd90c@syzkaller.appspotmail.com>
-Cc:     aldas60@gmail.com, gregkh@linuxfoundation.org,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
-        nathan@kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING: locking bug in hfa384x_usbctlx_completion_task
-Message-ID: <20220627170838.y7kbvazgpd52xd6d@offworld>
-References: <000000000000e3fc8905e2608d4f@google.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBBA0B818E3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 17:11:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03066C3411D;
+        Mon, 27 Jun 2022 17:11:41 +0000 (UTC)
+Date:   Mon, 27 Jun 2022 13:11:40 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     John 'Warthog9' Hawley <warthog9@eaglescrag.net>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: possible trace_printk() bug in v5.19-rc1
+Message-ID: <20220627131140.56761db9@gandalf.local.home>
+In-Reply-To: <308F6A3B-1FB9-42CD-8239-12B0FD0F5FDB@oracle.com>
+References: <F6C267B0-83EA-4151-A4EC-44482AC52C59@oracle.com>
+        <20220616113400.15335d91@gandalf.local.home>
+        <E309A098-DA06-490D-A75C-E6295C2987B9@oracle.com>
+        <20220617155019.373adda7@gandalf.local.home>
+        <3BAD2CD9-3A34-4140-A28C-0FE798B83C41@oracle.com>
+        <355D2478-33D3-4046-8422-E512F42C51BC@oracle.com>
+        <20220624190819.59df11d3@rorschach.local.home>
+        <3EB14A14-767B-4B66-9B28-97DDE7EECFD2@oracle.com>
+        <20220625134552.08c1a23a@rorschach.local.home>
+        <0bf1d366-348c-0f91-8f0a-fc9cc6228783@kernel.org>
+        <12417afa-331b-e0f6-a3b0-19623e38590b@eaglescrag.net>
+        <308F6A3B-1FB9-42CD-8239-12B0FD0F5FDB@oracle.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <000000000000e3fc8905e2608d4f@google.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's nice to see this sort of stuff actually tested :)
+On Mon, 27 Jun 2022 17:08:03 +0000
+Chuck Lever III <chuck.lever@oracle.com> wrote:
 
-On Sun, 26 Jun 2022, syzbot wrote:
+> Updated from your copr repo. The problem persists.
 
->------------[ cut here ]------------
->DEBUG_LOCKS_WARN_ON(1)
->WARNING: CPU: 1 PID: 21 at kernel/locking/lockdep.c:231 hlock_class kernel=
-/locking/lockdep.c:231 [inline]
->WARNING: CPU: 1 PID: 21 at kernel/locking/lockdep.c:231 hlock_class kernel=
-/locking/lockdep.c:220 [inline]
->WARNING: CPU: 1 PID: 21 at kernel/locking/lockdep.c:231 check_wait_context=
- kernel/locking/lockdep.c:4727 [inline]
->WARNING: CPU: 1 PID: 21 at kernel/locking/lockdep.c:231 __lock_acquire+0x1=
-356/0x5660 kernel/locking/lockdep.c:5003
->Modules linked in:
->CPU: 1 PID: 21 Comm: kworker/1:0 Not tainted 5.19.0-rc3-syzkaller-00071-g1=
-05f3fd2f789 #0
->Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Go=
-ogle 01/01/2011
->Workqueue: events hfa384x_usbctlx_completion_task
+The symbol lookup problem still exists. What about the get_sockaddr() not
+processing?
 
-Sorry about that, the below should fix it. Thanks.
+Would you be able to send me a trace.dat file that has this issue?
 
----8<-------------------------------
-=46rom: Davidlohr Bueso <dave@stgolabs.net>
-Subject: [PATCH] staging/wlan-ng: get the correct struct hfa384x in work ca=
-llback
+Thanks,
 
-hfa384x_usbctlx_completion_task() is bogusly using the reaper BH when
-in fact this is the completion_bh. This was reflected when trying
-to acquire the hw->ctlxq.lock and getting a failed lockdep class
-initialized to it.
+-- Steve
 
-Reported-by: syzbot+ce3408364c4a234dd90c@syzkaller.appspotmail.com
-Fixes: 9442e81d7e7 (staging/wlan-ng, prism2usb: replace completion_bh taskl=
-et with work)
-Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
----
-  drivers/staging/wlan-ng/hfa384x_usb.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/staging/wlan-ng/hfa384x_usb.c b/drivers/staging/wlan-n=
-g/hfa384x_usb.c
-index 33844526c797..02fdef7a16c8 100644
---- a/drivers/staging/wlan-ng/hfa384x_usb.c
-+++ b/drivers/staging/wlan-ng/hfa384x_usb.c
-@@ -2632,7 +2632,7 @@ static void hfa384x_usbctlx_reaper_task(struct work_s=
-truct *work)
-   */
-  static void hfa384x_usbctlx_completion_task(struct work_struct *work)
-  {
--	struct hfa384x *hw =3D container_of(work, struct hfa384x, reaper_bh);
-+	struct hfa384x *hw =3D container_of(work, struct hfa384x, completion_bh);
-	struct hfa384x_usbctlx *ctlx, *temp;
-	unsigned long flags;
-
---
-2.36.1
+> 
+> [root@manet ~]# trace-cmd version
+> 
+> trace-cmd version 3.1.1 (not-a-git-repo)
+> 
+> usage:
+>   trace-cmd [COMMAND] ...
+> 
+>   commands:
+>      record - record a trace into a trace.dat file
+>      set - set a ftrace configuration parameter
+> 
+>   ...
+> 
+>      dump - read out the meta data from a trace file
+>      convert - convert trace file to different version
+> 
+> [root@manet ~]# ls -l /usr/lib64/libtrace*
+> lrwxrwxrwx 1 root root     20 Jul 22  2021 /usr/lib64/libtracecmd.so.1 -> libtracecmd.so.1.0.0
+> -rwxr-xr-x 1 root root 142032 Jul 22  2021 /usr/lib64/libtracecmd.so.1.0.0
+> lrwxrwxrwx 1 root root     22 Jun 25 14:28 /usr/lib64/libtraceevent.so.1 -> libtraceevent.so.1.6.1
+> -rwxr-xr-x 1 root root 153944 Jun 25 14:29 /usr/lib64/libtraceevent.so.1.6.1
+> lrwxrwxrwx 1 root root     19 Jun 25 17:53 /usr/lib64/libtracefs.so.1 -> libtracefs.so.1.4.1
+> -rwxr-xr-x 1 root root 133384 Jun 25 17:53 /usr/lib64/libtracefs.so.1.4.1
+> [root@manet ~]#

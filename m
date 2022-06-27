@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7B355C9D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9D455C81F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237139AbiF0Lm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
+        id S234622AbiF0Lds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236849AbiF0Lj5 (ORCPT
+        with ESMTP id S235272AbiF0Lb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:39:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E35DBE05;
-        Mon, 27 Jun 2022 04:35:20 -0700 (PDT)
+        Mon, 27 Jun 2022 07:31:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F972194;
+        Mon, 27 Jun 2022 04:29:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E908C60DB5;
-        Mon, 27 Jun 2022 11:35:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2BABC3411D;
-        Mon, 27 Jun 2022 11:35:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B36E5614EC;
+        Mon, 27 Jun 2022 11:29:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5C05C341C7;
+        Mon, 27 Jun 2022 11:29:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329719;
-        bh=E9OVjCRFyV4VdwxiJQ10BHfsuMgdr3aG9OmgwR+lTLU=;
+        s=korg; t=1656329352;
+        bh=YjnRasFIojLLIzPHUxVjdng4DpIWoFgETIHdtiiqFO0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yAPjOcThiQiuN1O2O68c/qkSX7ClcgJQKo8sFmla4guIl9FcLULaNHbjrlYA3i6uZ
-         NqzXxYoep6RoFmBYPW9b+xYVZ7lA8xqVHutXbTR9oapcFEL3DwwLcZzV76TM11jAGl
-         fWoPNT3loMUcHpZsQT08L4eeVZ4TwlKFPCAcaWZk=
+        b=eKasqgINKd5ZaMBudpxZkOQHEaJQaY8kWfSbSfnX5HxR5yWDjRC7q33jf82+wDN9i
+         ZDsFpXarltqPDXgNsKwnhDOSxy70F9/16WvpUQwgQFWWl0K1w2o6BpILtJL8hJoVkZ
+         /lpMSEJrmfaKeWzcbMGKCT5zE0auE9xCd+zR3BwU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.15 093/135] btrfs: fix deadlock with fsync+fiemap+transaction commit
-Date:   Mon, 27 Jun 2022 13:21:40 +0200
-Message-Id: <20220627111940.857424772@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [PATCH 5.4 30/60] igb: Make DMA faster when CPU is active on the PCIe link
+Date:   Mon, 27 Jun 2022 13:21:41 +0200
+Message-Id: <20220627111928.574105609@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,133 +58,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-commit bf7ba8ee759b7b7a34787ddd8dc3f190a3d7fa24 upstream.
+[ Upstream commit 4e0effd9007ea0be31f7488611eb3824b4541554 ]
 
-We are hitting the following deadlock in production occasionally
+Intel I210 on some Intel Alder Lake platforms can only achieve ~750Mbps
+Tx speed via iperf. The RR2DCDELAY shows around 0x2xxx DMA delay, which
+will be significantly lower when 1) ASPM is disabled or 2) SoC package
+c-state stays above PC3. When the RR2DCDELAY is around 0x1xxx the Tx
+speed can reach to ~950Mbps.
 
-Task 1		Task 2		Task 3		Task 4		Task 5
-		fsync(A)
-		 start trans
-						start commit
-				falloc(A)
-				 lock 5m-10m
-				 start trans
-				  wait for commit
-fiemap(A)
- lock 0-10m
-  wait for 5m-10m
-   (have 0-5m locked)
+According to the I210 datasheet "8.26.1 PCIe Misc. Register - PCIEMISC",
+"DMA Idle Indication" doesn't seem to tie to DMA coalesce anymore, so
+set it to 1b for "DMA is considered idle when there is no Rx or Tx AND
+when there are no TLPs indicating that CPU is active detected on the
+PCIe link (such as the host executes CSR or Configuration register read
+or write operation)" and performing Tx should also fall under "active
+CPU on PCIe link" case.
 
-		 have btrfs_need_log_full_commit
-		  !full_sync
-		  wait_ordered_extents
-								finish_ordered_io(A)
-								lock 0-5m
-								DEADLOCK
+In addition to that, commit b6e0c419f040 ("igb: Move DMA Coalescing init
+code to separate function.") seems to wrongly changed from enabling
+E1000_PCIEMISC_LX_DECISION to disabling it, also fix that.
 
-We have an existing dependency of file extent lock -> transaction.
-However in fsync if we tried to do the fast logging, but then had to
-fall back to committing the transaction, we will be forced to call
-btrfs_wait_ordered_range() to make sure all of our extents are updated.
-
-This creates a dependency of transaction -> file extent lock, because
-btrfs_finish_ordered_io() will need to take the file extent lock in
-order to run the ordered extents.
-
-Fix this by stopping the transaction if we have to do the full commit
-and we attempted to do the fast logging.  Then attach to the transaction
-and commit it if we need to.
-
-CC: stable@vger.kernel.org # 5.15+
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: b6e0c419f040 ("igb: Move DMA Coalescing init code to separate function.")
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Link: https://lore.kernel.org/r/20220621221056.604304-1-anthony.l.nguyen@intel.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/file.c |   67 +++++++++++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 52 insertions(+), 15 deletions(-)
+ drivers/net/ethernet/intel/igb/igb_main.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
---- a/fs/btrfs/file.c
-+++ b/fs/btrfs/file.c
-@@ -2337,25 +2337,62 @@ int btrfs_sync_file(struct file *file, l
- 	 */
- 	btrfs_inode_unlock(inode, BTRFS_ILOCK_MMAP);
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index 26c8d09ad4dd..8734dfd001bb 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -9404,11 +9404,10 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
+ 	struct e1000_hw *hw = &adapter->hw;
+ 	u32 dmac_thr;
+ 	u16 hwm;
++	u32 reg;
  
--	if (ret != BTRFS_NO_LOG_SYNC) {
-+	if (ret == BTRFS_NO_LOG_SYNC) {
-+		ret = btrfs_end_transaction(trans);
-+		goto out;
-+	}
-+
-+	/* We successfully logged the inode, attempt to sync the log. */
-+	if (!ret) {
-+		ret = btrfs_sync_log(trans, root, &ctx);
- 		if (!ret) {
--			ret = btrfs_sync_log(trans, root, &ctx);
--			if (!ret) {
--				ret = btrfs_end_transaction(trans);
--				goto out;
--			}
-+			ret = btrfs_end_transaction(trans);
-+			goto out;
- 		}
--		if (!full_sync) {
--			ret = btrfs_wait_ordered_range(inode, start, len);
--			if (ret) {
--				btrfs_end_transaction(trans);
--				goto out;
--			}
--		}
--		ret = btrfs_commit_transaction(trans);
--	} else {
-+	}
-+
-+	/*
-+	 * At this point we need to commit the transaction because we had
-+	 * btrfs_need_log_full_commit() or some other error.
-+	 *
-+	 * If we didn't do a full sync we have to stop the trans handle, wait on
-+	 * the ordered extents, start it again and commit the transaction.  If
-+	 * we attempt to wait on the ordered extents here we could deadlock with
-+	 * something like fallocate() that is holding the extent lock trying to
-+	 * start a transaction while some other thread is trying to commit the
-+	 * transaction while we (fsync) are currently holding the transaction
-+	 * open.
-+	 */
-+	if (!full_sync) {
- 		ret = btrfs_end_transaction(trans);
-+		if (ret)
-+			goto out;
-+		ret = btrfs_wait_ordered_range(inode, start, len);
-+		if (ret)
-+			goto out;
-+
-+		/*
-+		 * This is safe to use here because we're only interested in
-+		 * making sure the transaction that had the ordered extents is
-+		 * committed.  We aren't waiting on anything past this point,
-+		 * we're purely getting the transaction and committing it.
-+		 */
-+		trans = btrfs_attach_transaction_barrier(root);
-+		if (IS_ERR(trans)) {
-+			ret = PTR_ERR(trans);
-+
-+			/*
-+			 * We committed the transaction and there's no currently
-+			 * running transaction, this means everything we care
-+			 * about made it to disk and we are done.
-+			 */
-+			if (ret == -ENOENT)
-+				ret = 0;
-+			goto out;
+ 	if (hw->mac.type > e1000_82580) {
+ 		if (adapter->flags & IGB_FLAG_DMAC) {
+-			u32 reg;
+-
+ 			/* force threshold to 0. */
+ 			wr32(E1000_DMCTXTH, 0);
+ 
+@@ -9441,7 +9440,6 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
+ 			/* Disable BMC-to-OS Watchdog Enable */
+ 			if (hw->mac.type != e1000_i354)
+ 				reg &= ~E1000_DMACR_DC_BMC2OSW_EN;
+-
+ 			wr32(E1000_DMACR, reg);
+ 
+ 			/* no lower threshold to disable
+@@ -9458,12 +9456,12 @@ static void igb_init_dmac(struct igb_adapter *adapter, u32 pba)
+ 			 */
+ 			wr32(E1000_DMCTXTH, (IGB_MIN_TXPBSIZE -
+ 			     (IGB_TX_BUF_4096 + adapter->max_frame_size)) >> 6);
 +		}
- 	}
-+
-+	ret = btrfs_commit_transaction(trans);
- out:
- 	ASSERT(list_empty(&ctx.list));
- 	err = file_check_and_advance_wb_err(file);
+ 
+-			/* make low power state decision controlled
+-			 * by DMA coal
+-			 */
++		if (hw->mac.type >= e1000_i210 ||
++		    (adapter->flags & IGB_FLAG_DMAC)) {
+ 			reg = rd32(E1000_PCIEMISC);
+-			reg &= ~E1000_PCIEMISC_LX_DECISION;
++			reg |= E1000_PCIEMISC_LX_DECISION;
+ 			wr32(E1000_PCIEMISC, reg);
+ 		} /* endif adapter->dmac is not disabled */
+ 	} else if (hw->mac.type == e1000_82580) {
+-- 
+2.35.1
+
 
 

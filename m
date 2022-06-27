@@ -2,133 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0D855C532
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF5B55D1BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234063AbiF0KRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
+        id S234210AbiF0KR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233938AbiF0KRT (ORCPT
+        with ESMTP id S233852AbiF0KR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:17:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 738536442
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656325036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=29XAW3SdVV053hARy2DHbS6TO7CBuYcWdq0hwUUUOu8=;
-        b=i02/zf9jeGNZ63POGBjKzIzknhWwA0Rptr8MX0ZqVp0Y857DyCi4KiPZAaOCClZ78BZd6m
-        yvi3IpMAaJCtKdRY7kPPaZvTaf1XFjO6HszsqiRJUEgOpKUarZvkbpGB4JCV6BRbsJ901R
-        XcYIEeIT3QogvF0Wv+gJJBQj20IwBeI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-_16kP6lEP1-vh2RorxSJ6Q-1; Mon, 27 Jun 2022 06:17:13 -0400
-X-MC-Unique: _16kP6lEP1-vh2RorxSJ6Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 27 Jun 2022 06:17:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59C1643C;
+        Mon, 27 Jun 2022 03:17:56 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 474EC83395C;
-        Mon, 27 Jun 2022 10:17:12 +0000 (UTC)
-Received: from localhost (ovpn-13-65.pek2.redhat.com [10.72.13.65])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CDC4A404E4DD;
-        Mon, 27 Jun 2022 10:17:10 +0000 (UTC)
-Date:   Mon, 27 Jun 2022 18:17:07 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        liushixin <liushixin2@huawei.com>
-Subject: Re: [PATCH 5/5] arm64: kdump: Don't defer the reservation of crash
- high memory
-Message-ID: <YrmDo7Sx1jNQ4WFd@MiWiFi-R3L-srv>
-References: <20220613080932.663-1-thunder.leizhen@huawei.com>
- <20220613080932.663-6-thunder.leizhen@huawei.com>
- <YrFYHYgX3mC//t2l@MiWiFi-R3L-srv>
- <3f66323d-f371-b931-65fb-edfae0f01c88@huawei.com>
- <YrIIJkhKWSuAqkCx@arm.com>
- <YrLUREAoBMSZo7RR@MiWiFi-R3L-srv>
- <YrRzvO5F0dumsbAU@arm.com>
- <Yrkbak66vYT55H4x@MiWiFi-R3L-srv>
- <e3318551-4134-245a-c060-86ab81eb3e68@huawei.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 513486601822;
+        Mon, 27 Jun 2022 11:17:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656325075;
+        bh=gPMKA+TXzvNNQnJbtffGIvH6FH7jJsGG4bhtsEAfauI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kdaVIi5qjxIA3P/VeS0G7C9MeuJYH+nakGyrLNF1vOrlRBU1/K/aLyVs9nxMtt6Mt
+         D/Wxie+0/Iu0BY3M9XCfTQcMesgoYKnwz1W9V1ldlY5DwUXcevFE9EFaMU/SKewQ0d
+         YOJFP1vhQzw1h7DwhCoFr3q6J8QkKH2j2GEWtRmAW5a2diEJZ5zi6GKNj+IQo9oXnM
+         aGYyCH2LK3rbLt8Sxg1CuVoOIEvhNpvOEkaO9qI6NF7QCdNi/cuKHjeMc3KA8omCiw
+         6rb27icKMdqJoYHpZ1P/lKjecWdIws2Pc/kRCN6Z6TRodOQ+LWPnLnRzYfqwznwyip
+         HEbJcAUPmrBLw==
+Message-ID: <ed0396cc-c180-1c60-20ec-83b4d4eb1993@collabora.com>
+Date:   Mon, 27 Jun 2022 12:17:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e3318551-4134-245a-c060-86ab81eb3e68@huawei.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v12 06/10] drm/mediatek: Add MT8195 External DisplayPort
+ support
+Content-Language: en-US
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
+        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
+        airlied@linux.ie
+Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
+        wenst@chromium.org, ck.hu@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fbdev@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220627080341.5087-1-rex-bc.chen@mediatek.com>
+ <20220627080341.5087-7-rex-bc.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220627080341.5087-7-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/27/22 at 05:17pm, Leizhen (ThunderTown) wrote:
+Il 27/06/22 10:03, Bo-Chen Chen ha scritto:
+> From: Guillaume Ranquet <granquet@baylibre.com>
 > 
+> This patch adds External DisplayPort support to the mt8195 eDP driver.
 > 
-> On 2022/6/27 10:52, Baoquan He wrote:
-> > On 06/23/22 at 03:07pm, Catalin Marinas wrote:
-> >> On Wed, Jun 22, 2022 at 04:35:16PM +0800, Baoquan He wrote:
-> >>> On 06/21/22 at 07:04pm, Catalin Marinas wrote:
-> >>>> The problem with splitting is that you can end up with two entries in
-> >>>> the TLB for the same VA->PA mapping (e.g. one for a 4KB page and another
-> >>>> for a 2MB block). In the lucky case, the CPU will trigger a TLB conflict
-> >>>> abort (but can be worse like loss of coherency).
-> >>>
-> >>> Thanks for this explanation. Is this a drawback of arm64 design? X86
-> >>> code do the same thing w/o issue, is there way to overcome this on
-> >>> arm64 from hardware or software side?
-> >>
-> >> It is a drawback of the arm64 implementations. Having multiple TLB
-> >> entries for the same VA would need additional logic in hardware to
-> >> detect, so the microarchitects have pushed back. In ARMv8.4, some
-> >> balanced was reached with FEAT_BBM so that the only visible side-effect
-> >> is a potential TLB conflict abort that could be resolved by software.
-> > 
-> > I see, thx.
-> > 
-> >>
-> >>> I ever got a arm64 server with huge memory, w or w/o crashkernel setting 
-> >>> have different bootup time. And the more often TLB miss and flush will
-> >>> cause performance cost. It is really a pity if we have very powerful
-> >>> arm64 cpu and system capacity, but bottlenecked by this drawback.
-> >>
-> >> Is it only the boot time affected or the runtime performance as well?
-> > 
-> > Sorry for late reply. What I observerd is the boot time serious latecy
-> > with huge memory. Since the timestamp is not available at that time,
-> > we can't tell the number. I didn't notice the runtime performance.
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> [Bo-Chen: Move some dp features here and modify for reviewers' comments.]
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>   drivers/gpu/drm/mediatek/mtk_dp.c | 217 ++++++++++++++++++++++++------
+>   1 file changed, 174 insertions(+), 43 deletions(-)
 > 
-> There's some data here, and I see you're not on the cc list.
-> 
-> https://lore.kernel.org/linux-mm/1656241815-28494-1-git-send-email-guanghuifeng@linux.alibaba.com/T/
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
+> index 9e9b516409e2..1697c61462b7 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
+> @@ -111,6 +111,7 @@ struct mtk_dp {
+>   	struct regmap *regs;
+>   
+>   	bool enabled;
+> +	bool has_fec;
+>   
+>   	struct drm_connector *conn;
+>   };
+> @@ -123,6 +124,11 @@ static struct regmap_config mtk_dp_regmap_config = {
+>   	.name = "mtk-dp-registers",
+>   };
+>   
+> +static bool mtk_dp_is_edp(struct mtk_dp *mtk_dp)
+> +{
+> +	return mtk_dp->next_bridge;
+> +}
+> +
+>   static struct mtk_dp *mtk_dp_from_bridge(struct drm_bridge *b)
+>   {
+>   	return container_of(b, struct mtk_dp, bridge);
+> @@ -401,6 +407,20 @@ static bool mtk_dp_plug_state(struct mtk_dp *mtk_dp)
+>   		  HPD_DB_DP_TRANS_P0_MASK);
+>   }
+>   
+> +static bool mtk_dp_plug_state_avoid_pulse(struct mtk_dp *mtk_dp)
+> +{
+> +	int wait;
+> +
+> +	for (wait = 7; !mtk_dp_plug_state(mtk_dp) && wait > 0; --wait)
+> +		/* Avoid short pulses on the HPD isr */
+> +		usleep_range(1000, 5000);
+> +
+> +	if (wait == 0)
+> +		return false;
+> +
 
-Thanks, Zhen Lei. I also saw the patch. That seems to be a good way,
-since there's only one process running at that time. Not sure if there's
-still risk of multiple TLB entries for the same VA existing.
+You can as well use existing APIs for that:
 
+static bool mtk_dp_plug_state_avoid_pulse(struct mtk_dp *mtk_dp)
+{
+	int ret;
+
+	return !!(readx_poll_timeout(mtk_dp_plug_state, mtk_dp, ret, ret,
+				     4000, (7 * 4000)));
+}
+
+P.S.: I've used 4000 instead of 5000 on purpose, check the definition of
+       readx_poll_timeout for more information.
+
+All the rest of this commit looks good to me.
+
+Cheers,
+Angelo

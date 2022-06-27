@@ -2,114 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B144B55E14B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E0055D7DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234060AbiF0Jg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
+        id S234045AbiF0Jg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbiF0Jgc (ORCPT
+        with ESMTP id S233712AbiF0Jg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:36:32 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB4763E7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656322591; x=1687858591;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I237VzvHZrO95w+7uVTfyjRoDhOy1MYS/DEqL30Knf4=;
-  b=Oxutq2GR9rLF6RFiPnIjqwwzX3V/SDB0iILBIvJw7edmP+dS0uYGK8C8
-   Eh/0h06LFYEF616sJ3kOz+1aN3Q+PcGuN8PCnJXmdonRKxfJluK9h0qaF
-   V3J9TlL7OMlnfxzgSCHgqPqukoK11I/LF2ZweffNB9ybbu6zQ9obhZ/C7
-   AcD3C9fl+L+pRLnFjahmr4ijvh/B2A2Wqu5HAkFOvYF/oPwsx9xRDkMes
-   fugRFOCeUfN+BLcCe7Ub1eP7kC5B/teylvmEyMCw/PjqukwR/RuTHSrdv
-   dUskkR+6hYeZWTaCRSn7tYeqZWRA0exD3/QCYc5qC1y+tvVmXCnLzCIqp
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="264452798"
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="264452798"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 02:36:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="646356543"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Jun 2022 02:36:29 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o5lAS-0008PV-IO;
-        Mon, 27 Jun 2022 09:36:28 +0000
-Date:   Mon, 27 Jun 2022 17:35:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        Robert Richter <rric@kernel.org>
-Subject: drivers/pci/controller/pci-xgene.c:626:34: warning: unused variable
- 'xgene_pcie_match_table'
-Message-ID: <202206271743.QveZ7pGm-lkp@intel.com>
+        Mon, 27 Jun 2022 05:36:26 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF2163DC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:36:24 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id z13so15505268lfj.13
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:36:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z3HaeNcG7GUwNm8/fRozB97Y4i9x1s+O7tYwK4jHD7M=;
+        b=QF8DGzrvzH59XuF11YGPgC2m9vdevVtFLu4cKsHEkVjP5E0eo/k5PcEn0wMOl4eeY6
+         Uycf77mBuTJ24IgCm8IhzAUUjCrQm79ID5XfSX9Eg6+CscbLmwa3LvRkzIsrj33PLc0w
+         CUQgHWPSwcdPgGEbbF+AxjKzWVhxDrCKJf7W31rezkmauEpSgHJVRZtVeZVMnVTEcWqW
+         oqx09f24DL1am2dLozxyQtmgIPUGvRZX0BNxuSDG/nECpVsItM8d5b95TocEHhNUVfXB
+         ASDXvIaxD/GHxOb6o9w9Da3cE9BQ+6lHhr6rPARYUyOTlHMa/f3qt3aFtRpFzClUnJQv
+         gMKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z3HaeNcG7GUwNm8/fRozB97Y4i9x1s+O7tYwK4jHD7M=;
+        b=VyEr3fyoeHOX1qqP7V7KNSClnvf7IfyZALluZnZNYOyITKdi5m7KNY7ero08Ezc3VM
+         MpFEJvQBfQbUOzzs+mD+hQQl+pRvMT1Tbrr7r/O6309RD49pmpMrKsC+0kt5whmnOFhg
+         OhuCpSLmL5suofs8CSY4bOkYs8WbdLno6NpxrfG2paCAw9lIvgeWTIR6fuCjCX9llLUH
+         DAai3Ey2mp3OGJiIBbravV8IRhm9JnP761koZ0dLIIxozaraIoL7p/gOs3o1l8fobpDP
+         JHEkl/Jb601MIW6OMYg0vJmGz+QrtRTki6FmDpGPHq6tp06t6qUV68lyqEZ27ri2fVJM
+         zwtw==
+X-Gm-Message-State: AJIora/krAiKxmClbdPR5GxhrgcA76JvqiVxwfHW5IuGDgS0Omj7k2EC
+        U0OAxSYa185Ft47Vll6s+tF0acA86w2VMvVzVmhT0g==
+X-Google-Smtp-Source: AGRyM1vYmbCQxG+ZhuBiTxL9XeaO2JU+1o3ytJ35pL/oYBvWbmwYUIsGf47OtQGSi23B/9gdJnm/5/Bwtcvaf+20MBw=
+X-Received: by 2002:ac2:4bcf:0:b0:47f:86f2:812d with SMTP id
+ o15-20020ac24bcf000000b0047f86f2812dmr7505512lfq.400.1656322583045; Mon, 27
+ Jun 2022 02:36:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220607120530.2447112-1-tarumizu.kohei@fujitsu.com>
+ <YqNCDrqcp9t8HlUJ@kroah.com> <OSBPR01MB203749DA00C7BEE5741AFEB980AA9@OSBPR01MB2037.jpnprd01.prod.outlook.com>
+ <YqiAY689pOJbHKUd@kroah.com> <TY2PR01MB20426C7822E46B2E8B2525FB80AF9@TY2PR01MB2042.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY2PR01MB20426C7822E46B2E8B2525FB80AF9@TY2PR01MB2042.jpnprd01.prod.outlook.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 27 Jun 2022 11:36:11 +0200
+Message-ID: <CACRpkdaV8+06gzxi3ou4+nxa28R5Rhzg+KJ8HWh4gyK4AkoC9g@mail.gmail.com>
+Subject: Re: [PATCH v5 0/6] Add hardware prefetch control driver for A64FX and x86
+To:     "tarumizu.kohei@fujitsu.com" <tarumizu.kohei@fujitsu.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "eugenis@google.com" <eugenis@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "pcc@google.com" <pcc@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "marcos@orca.pet" <marcos@orca.pet>,
+        "marcan@marcan.st" <marcan@marcan.st>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "ast@kernel.org" <ast@kernel.org>,
+        "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Fri, Jun 17, 2022 at 11:21 AM tarumizu.kohei@fujitsu.com
+<tarumizu.kohei@fujitsu.com> wrote:
 
-First bad commit (maybe != root cause):
+Jumping in here.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   03c765b0e3b4cb5063276b086c76f7a612856a9a
-commit: 6e5a1fff9096ecd259dedcbbdc812aa90986a40e PCI: Avoid building empty drivers
-date:   1 year, 4 months ago
-config: x86_64-buildonly-randconfig-r001-20220627 (https://download.01.org/0day-ci/archive/20220627/202206271743.QveZ7pGm-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 016342e319fd31e41cf5ed16a6140a8ea2de74dd)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6e5a1fff9096ecd259dedcbbdc812aa90986a40e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6e5a1fff9096ecd259dedcbbdc812aa90986a40e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/pci/controller/
+> Hi Greg,
+>
+> > That's not ok.  Linux is a "general purpose" operating system and needs to
+> > work well for all applications.  Doing application-specific-tuning based on the
+> > specific hardware like this is a nightmare for users,
+>
+> Hardware prefetch behavior is enabled by default in x86 and A64FX.
+> Many applications can perform well without changing the register
+> setting. Use this feature for some applications that want to be
+> improved performance.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+The right way to solve this is to make the Linux kernel contain the necessary
+heuristics to identify which tasks and thus cores need this to improve
+efficiency and then apply it automatically.
 
-All warnings (new ones prefixed by >>):
+Putting it in userspace is making a human do a machines job which isn't
+sustainable.
 
->> drivers/pci/controller/pci-xgene.c:626:34: warning: unused variable 'xgene_pcie_match_table' [-Wunused-const-variable]
-   static const struct of_device_id xgene_pcie_match_table[] = {
-                                    ^
-   1 warning generated.
+By putting the heuristics in kernelspace Linux will improve performance also
+on workloads the human operator didn't think of as the machine will
+detect them from
+statictical or other behaviour patterns.
 
-
-vim +/xgene_pcie_match_table +626 drivers/pci/controller/pci-xgene.c
-
-5f6b6ccdbe1cdf drivers/pci/host/pci-xgene.c Tanmay Inamdar 2014-10-01  625  
-5f6b6ccdbe1cdf drivers/pci/host/pci-xgene.c Tanmay Inamdar 2014-10-01 @626  static const struct of_device_id xgene_pcie_match_table[] = {
-5f6b6ccdbe1cdf drivers/pci/host/pci-xgene.c Tanmay Inamdar 2014-10-01  627  	{.compatible = "apm,xgene-pcie",},
-5f6b6ccdbe1cdf drivers/pci/host/pci-xgene.c Tanmay Inamdar 2014-10-01  628  	{},
-5f6b6ccdbe1cdf drivers/pci/host/pci-xgene.c Tanmay Inamdar 2014-10-01  629  };
-5f6b6ccdbe1cdf drivers/pci/host/pci-xgene.c Tanmay Inamdar 2014-10-01  630  
-
-:::::: The code at line 626 was first introduced by commit
-:::::: 5f6b6ccdbe1cdfa5aa4347ec5412509b8995db27 PCI: xgene: Add APM X-Gene PCIe driver
-
-:::::: TO: Tanmay Inamdar <tinamdar@apm.com>
-:::::: CC: Bjorn Helgaas <bhelgaas@google.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yours,
+Linus Walleij

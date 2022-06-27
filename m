@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4530155C656
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17A955C291
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236022AbiF0Mbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        id S235881AbiF0Mbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236003AbiF0MbI (ORCPT
+        with ESMTP id S236031AbiF0MbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:31:08 -0400
+        Mon, 27 Jun 2022 08:31:11 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 219BB766F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:31:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3119EBF7F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:31:10 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15B69176C;
-        Mon, 27 Jun 2022 05:31:08 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3242C19F0;
+        Mon, 27 Jun 2022 05:31:10 -0700 (PDT)
 Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE2CB3F792;
-        Mon, 27 Jun 2022 05:31:05 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 172523F792;
+        Mon, 27 Jun 2022 05:31:07 -0700 (PDT)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
@@ -30,9 +30,9 @@ Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
         adrian.slatineanu@arm.com, souvik.chakravarty@arm.com,
         wleavitt@marvell.com, wbartczak@marvell.com,
         Cristian Marussi <cristian.marussi@arm.com>
-Subject: [PATCH v3 7/9] firmware: arm_scmi: Use FastChannel tracing
-Date:   Mon, 27 Jun 2022 13:30:36 +0100
-Message-Id: <20220627123038.1427067-8-cristian.marussi@arm.com>
+Subject: [PATCH v3 8/9] firmware: arm_scmi: Add scmi_driver optional setup/teardown callbacks
+Date:   Mon, 27 Jun 2022 13:30:37 +0100
+Message-Id: <20220627123038.1427067-9-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220627123038.1427067-1-cristian.marussi@arm.com>
 References: <20220627123038.1427067-1-cristian.marussi@arm.com>
@@ -47,112 +47,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of SCMI FastChannel event tracing.
+Add optional .setup and .teardown methods to the scmi_driver descriptor:
+such callbacks, if provided, will be called by the SCIM core at driver
+registration time, so that, an SCMI driver, registered as usual with the
+module_scmi_driver() helper macro, can provide custom callbacks to be
+run once for all at module load/unload time to perform specific setup
+or teardown operations before/after .probe and .remove steps.
 
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
- drivers/firmware/arm_scmi/perf.c     | 10 ++++++++++
- drivers/firmware/arm_scmi/powercap.c | 10 ++++++++++
- 2 files changed, 20 insertions(+)
+ drivers/firmware/arm_scmi/bus.c | 15 +++++++++++++--
+ include/linux/scmi_protocol.h   |  2 ++
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
-index 521458fda355..64ea2d2f2875 100644
---- a/drivers/firmware/arm_scmi/perf.c
-+++ b/drivers/firmware/arm_scmi/perf.c
-@@ -16,6 +16,8 @@
- #include <linux/scmi_protocol.h>
- #include <linux/sort.h>
+diff --git a/drivers/firmware/arm_scmi/bus.c b/drivers/firmware/arm_scmi/bus.c
+index f6fe723ab869..e95085a66bc4 100644
+--- a/drivers/firmware/arm_scmi/bus.c
++++ b/drivers/firmware/arm_scmi/bus.c
+@@ -132,12 +132,21 @@ int scmi_driver_register(struct scmi_driver *driver, struct module *owner,
+ {
+ 	int retval;
  
-+#include <trace/events/scmi.h>
+-	if (!driver->probe)
++	if (!driver->probe || !driver->id_table)
+ 		return -EINVAL;
+ 
++	if (driver->setup) {
++		retval = driver->setup();
++		if (retval)
++			return retval;
++	}
 +
- #include "protocols.h"
- #include "notify.h"
+ 	retval = scmi_protocol_device_request(driver->id_table);
+-	if (retval)
++	if (retval) {
++		if (driver->teardown)
++			driver->teardown();
+ 		return retval;
++	}
  
-@@ -363,6 +365,8 @@ static int scmi_perf_limits_set(const struct scmi_protocol_handle *ph,
- 	if (dom->fc_info && dom->fc_info[PERF_FC_LIMIT].set_addr) {
- 		struct scmi_fc_info *fci = &dom->fc_info[PERF_FC_LIMIT];
+ 	driver->driver.bus = &scmi_bus_type;
+ 	driver->driver.name = driver->name;
+@@ -156,6 +165,8 @@ void scmi_driver_unregister(struct scmi_driver *driver)
+ {
+ 	driver_unregister(&driver->driver);
+ 	scmi_protocol_device_unrequest(driver->id_table);
++	if (driver->teardown)
++		driver->teardown();
+ }
+ EXPORT_SYMBOL_GPL(scmi_driver_unregister);
  
-+		trace_scmi_fc_call(SCMI_PROTOCOL_PERF, PERF_LIMITS_SET,
-+				   domain, min_perf, max_perf);
- 		iowrite32(max_perf, fci->set_addr);
- 		iowrite32(min_perf, fci->set_addr + 4);
- 		ph->hops->fastchannel_db_ring(fci->set_db);
-@@ -409,6 +413,8 @@ static int scmi_perf_limits_get(const struct scmi_protocol_handle *ph,
+diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
+index ad9641dbdd25..a922707bdfe8 100644
+--- a/include/linux/scmi_protocol.h
++++ b/include/linux/scmi_protocol.h
+@@ -805,6 +805,8 @@ struct scmi_device_id {
  
- 		*max_perf = ioread32(fci->get_addr);
- 		*min_perf = ioread32(fci->get_addr + 4);
-+		trace_scmi_fc_call(SCMI_PROTOCOL_PERF, PERF_LIMITS_GET,
-+				   domain, *min_perf, *max_perf);
- 		return 0;
- 	}
- 
-@@ -446,6 +452,8 @@ static int scmi_perf_level_set(const struct scmi_protocol_handle *ph,
- 	if (dom->fc_info && dom->fc_info[PERF_FC_LEVEL].set_addr) {
- 		struct scmi_fc_info *fci = &dom->fc_info[PERF_FC_LEVEL];
- 
-+		trace_scmi_fc_call(SCMI_PROTOCOL_PERF, PERF_LEVEL_SET,
-+				   domain, level, 0);
- 		iowrite32(level, fci->set_addr);
- 		ph->hops->fastchannel_db_ring(fci->set_db);
- 		return 0;
-@@ -484,6 +492,8 @@ static int scmi_perf_level_get(const struct scmi_protocol_handle *ph,
- 
- 	if (dom->fc_info && dom->fc_info[PERF_FC_LEVEL].get_addr) {
- 		*level = ioread32(dom->fc_info[PERF_FC_LEVEL].get_addr);
-+		trace_scmi_fc_call(SCMI_PROTOCOL_PERF, PERF_LEVEL_GET,
-+				   domain, *level, 0);
- 		return 0;
- 	}
- 
-diff --git a/drivers/firmware/arm_scmi/powercap.c b/drivers/firmware/arm_scmi/powercap.c
-index ed61df6a68c4..7bd6fab35650 100644
---- a/drivers/firmware/arm_scmi/powercap.c
-+++ b/drivers/firmware/arm_scmi/powercap.c
-@@ -12,6 +12,8 @@
- #include <linux/module.h>
- #include <linux/scmi_protocol.h>
- 
-+#include <trace/events/scmi.h>
-+
- #include "protocols.h"
- #include "notify.h"
- 
-@@ -323,6 +325,8 @@ static int scmi_powercap_cap_get(const struct scmi_protocol_handle *ph,
- 	dom = pi->powercaps + domain_id;
- 	if (dom->fc_info && dom->fc_info[POWERCAP_FC_CAP].get_addr) {
- 		*power_cap = ioread32(dom->fc_info[POWERCAP_FC_CAP].get_addr);
-+		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_CAP_GET,
-+				   domain_id, *power_cap, 0);
- 		return 0;
- 	}
- 
-@@ -388,6 +392,8 @@ static int scmi_powercap_cap_set(const struct scmi_protocol_handle *ph,
- 
- 		iowrite32(power_cap, fci->set_addr);
- 		ph->hops->fastchannel_db_ring(fci->set_db);
-+		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_CAP_SET,
-+				   domain_id, power_cap, 0);
- 		return 0;
- 	}
- 
-@@ -427,6 +433,8 @@ static int scmi_powercap_pai_get(const struct scmi_protocol_handle *ph,
- 	dom = pi->powercaps + domain_id;
- 	if (dom->fc_info && dom->fc_info[POWERCAP_FC_PAI].get_addr) {
- 		*pai = ioread32(dom->fc_info[POWERCAP_FC_PAI].get_addr);
-+		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_PAI_GET,
-+				   domain_id, *pai, 0);
- 		return 0;
- 	}
- 
-@@ -469,6 +477,8 @@ static int scmi_powercap_pai_set(const struct scmi_protocol_handle *ph,
- 	if (pc->fc_info && pc->fc_info[POWERCAP_FC_PAI].set_addr) {
- 		struct scmi_fc_info *fci = &pc->fc_info[POWERCAP_FC_PAI];
- 
-+		trace_scmi_fc_call(SCMI_PROTOCOL_POWERCAP, POWERCAP_PAI_SET,
-+				   domain_id, pai, 0);
- 		iowrite32(pai, fci->set_addr);
- 		ph->hops->fastchannel_db_ring(fci->set_db);
- 		return 0;
+ struct scmi_driver {
+ 	const char *name;
++	int (*setup)(void);
++	void (*teardown)(void);
+ 	int (*probe)(struct scmi_device *sdev);
+ 	void (*remove)(struct scmi_device *sdev);
+ 	const struct scmi_device_id *id_table;
 -- 
 2.32.0
 

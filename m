@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A967955C5C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41B355DC30
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236964AbiF0LlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
+        id S238779AbiF0Lxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236247AbiF0LhK (ORCPT
+        with ESMTP id S238336AbiF0LsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:37:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34873115A;
-        Mon, 27 Jun 2022 04:32:19 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38229F5A1;
+        Mon, 27 Jun 2022 04:40:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D39E6B8111C;
-        Mon, 27 Jun 2022 11:32:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1850EC3411D;
-        Mon, 27 Jun 2022 11:32:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C980861180;
+        Mon, 27 Jun 2022 11:40:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B85C341C7;
+        Mon, 27 Jun 2022 11:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329536;
-        bh=hGuOut/iB47OP+a8fIGR+FF0ZAQpLfuGm7US7TJUxkg=;
+        s=korg; t=1656330046;
+        bh=D1S1Yty5XrdXUr+pNNeKQBUfDvsurleJROtK6ST4Bew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tC97zqfzY9p8dScToQ7DpSHP45FrERofrgQ4I6bW7frQIbN6DyYNNNMExFZDXpwKQ
-         JvJ9dvbIjTL9EqXZQuXp2h1H0y/erT6NnlahE1IblqzEw5UazZRl6xh4hDoNl2Vrmd
-         NZahsoBHIIajCi7/ofJHDTrYlchXzrenCPl2KRro=
+        b=ecEGG1iWkk4fuUep0A3C/CEzjft5BagNZqNaD9zj3+Hk1dBzj33TlnI2tf0f9G14f
+         P/Gj3zvJ1j2FVjyXJ5VJyO1n8Yg504j1ZjvifVwx7TJZMpMaCrpJWo/RIlKntUUcNG
+         5mHv9/Ajw7m67wr2uutCVaaktctMWZW7EDkT1a1U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>,
-        Carlo Lobrano <c.lobrano@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.15 030/135] USB: serial: option: add Telit LE910Cx 0x1250 composition
-Date:   Mon, 27 Jun 2022 13:20:37 +0200
-Message-Id: <20220627111939.035190279@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Yuming Chen <chenyuming.junnan@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 065/181] net/sched: sch_netem: Fix arithmetic in netem_dump() for 32-bit platforms
+Date:   Mon, 27 Jun 2022 13:20:38 +0200
+Message-Id: <20220627111946.450908786@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +59,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Carlo Lobrano <c.lobrano@gmail.com>
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-commit 342fc0c3b345525da21112bd0478a0dc741598ea upstream.
+[ Upstream commit a2b1a5d40bd12b44322c2ccd40bb0ec1699708b6 ]
 
-Add support for the following Telit LE910Cx composition:
+As reported by Yuming, currently tc always show a latency of UINT_MAX
+for netem Qdisc's on 32-bit platforms:
 
-0x1250: rmnet, tty, tty, tty, tty
+    $ tc qdisc add dev dummy0 root netem latency 100ms
+    $ tc qdisc show dev dummy0
+    qdisc netem 8001: root refcnt 2 limit 1000 delay 275s  275s
+                                               ^^^^^^^^^^^^^^^^
 
-Reviewed-by: Daniele Palmas <dnlplm@gmail.com>
-Signed-off-by: Carlo Lobrano <c.lobrano@gmail.com>
-Link: https://lore.kernel.org/r/20220614075623.2392607-1-c.lobrano@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Let us take a closer look at netem_dump():
+
+        qopt.latency = min_t(psched_tdiff_t, PSCHED_NS2TICKS(q->latency,
+                             UINT_MAX);
+
+qopt.latency is __u32, psched_tdiff_t is signed long,
+(psched_tdiff_t)(UINT_MAX) is negative for 32-bit platforms, so
+qopt.latency is always UINT_MAX.
+
+Fix it by using psched_time_t (u64) instead.
+
+Note: confusingly, users have two ways to specify 'latency':
+
+  1. normally, via '__u32 latency' in struct tc_netem_qopt;
+  2. via the TCA_NETEM_LATENCY64 attribute, which is s64.
+
+For the second case, theoretically 'latency' could be negative.  This
+patch ignores that corner case, since it is broken (i.e. assigning a
+negative s64 to __u32) anyways, and should be handled separately.
+
+Thanks Ted Lin for the analysis [1] .
+
+[1] https://github.com/raspberrypi/linux/issues/3512
+
+Reported-by: Yuming Chen <chenyuming.junnan@bytedance.com>
+Fixes: 112f9cb65643 ("netem: convert to qdisc_watchdog_schedule_ns")
+Reviewed-by: Cong Wang <cong.wang@bytedance.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Acked-by: Stephen Hemminger <stephen@networkplumber.org>
+Link: https://lore.kernel.org/r/20220616234336.2443-1-yepeilin.cs@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/option.c |    1 +
- 1 file changed, 1 insertion(+)
+ net/sched/sch_netem.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1279,6 +1279,7 @@ static const struct usb_device_id option
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1231, 0xff),	/* Telit LE910Cx (RNDIS) */
- 	  .driver_info = NCTRL(2) | RSVD(3) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(TELIT_VENDOR_ID, 0x1250, 0xff, 0x00, 0x00) },	/* Telit LE910Cx (rmnet) */
- 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1260),
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, 0x1261),
+diff --git a/net/sched/sch_netem.c b/net/sched/sch_netem.c
+index ed4ccef5d6a8..5449ed114e40 100644
+--- a/net/sched/sch_netem.c
++++ b/net/sched/sch_netem.c
+@@ -1146,9 +1146,9 @@ static int netem_dump(struct Qdisc *sch, struct sk_buff *skb)
+ 	struct tc_netem_rate rate;
+ 	struct tc_netem_slot slot;
+ 
+-	qopt.latency = min_t(psched_tdiff_t, PSCHED_NS2TICKS(q->latency),
++	qopt.latency = min_t(psched_time_t, PSCHED_NS2TICKS(q->latency),
+ 			     UINT_MAX);
+-	qopt.jitter = min_t(psched_tdiff_t, PSCHED_NS2TICKS(q->jitter),
++	qopt.jitter = min_t(psched_time_t, PSCHED_NS2TICKS(q->jitter),
+ 			    UINT_MAX);
+ 	qopt.limit = q->limit;
+ 	qopt.loss = q->loss;
+-- 
+2.35.1
+
 
 

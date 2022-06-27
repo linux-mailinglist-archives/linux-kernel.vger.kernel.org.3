@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23D455C271
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3092455D701
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235977AbiF0Le5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S235989AbiF0LfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236198AbiF0Ld1 (ORCPT
+        with ESMTP id S236207AbiF0Ld1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Jun 2022 07:33:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFFBCE2A;
-        Mon, 27 Jun 2022 04:30:35 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B510ECE35;
+        Mon, 27 Jun 2022 04:30:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8685DB8111A;
-        Mon, 27 Jun 2022 11:30:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EABBCC341CD;
-        Mon, 27 Jun 2022 11:30:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B43F614F0;
+        Mon, 27 Jun 2022 11:30:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C18C341D2;
+        Mon, 27 Jun 2022 11:30:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329432;
-        bh=XtTYzG2sSKDKpLMoDkSYqdHNzo+dDX9KmREtNYeCC4Y=;
+        s=korg; t=1656329435;
+        bh=zTmVWyeo9uBh0jWVQ7ODzF2cjoMO46JiMkOWCxwDuJY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oNg7W+z2dXbG9reXz8dl72Df6Pg9JOdo7GwQxC/+NOc6pF/xy9LxaGfRQ/QFJmvJB
-         kl48CYO03xEtXmKv+cMP5qjFDlhjbw9WOaAF+uFbTLOnWSY7Oyy1IFuHQekF11dtTf
-         pmfppipHe60TDtvzO7kAdBQvNVnW97TEex66xDUs=
+        b=ROVGLgvXqBkipx1qNjGShsbrd1S2BThlQILZj/oAzq3UcmxxNoXv3lFEERiDjNaIp
+         23oawrg36eXEdA+yYElmZg/UhPBgqGwnzffP/xLWHZynyBUZyavOMEsnV2gjbGfytO
+         3tCgv2TY7FdXjnjzB/c5re89ACbUWaoZI39tRD8w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.4 58/60] random: update comment from copy_to_user() -> copy_to_iter()
-Date:   Mon, 27 Jun 2022 13:22:09 +0200
-Message-Id: <20220627111929.398188532@linuxfoundation.org>
+        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH 5.4 59/60] kbuild: link vmlinux only once for CONFIG_TRIM_UNUSED_KSYMS (2nd attempt)
+Date:   Mon, 27 Jun 2022 13:22:10 +0200
+Message-Id: <20220627111929.426963379@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
 References: <20220627111927.641837068@linuxfoundation.org>
@@ -53,30 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-commit 63b8ea5e4f1a87dea4d3114293fc8e96a8f193d7 upstream.
+commit 53632ba87d9f302a8d97a11ec2f4f4eec7bb75ea upstream.
 
-This comment wasn't updated when we moved from read() to read_iter(), so
-this patch makes the trivial fix.
+If CONFIG_TRIM_UNUSED_KSYMS is enabled and the kernel is built from
+a pristine state, the vmlinux is linked twice.
 
-Fixes: 1b388e7765f2 ("random: convert to using fops->read_iter()")
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Commit 3fdc7d3fe4c0 ("kbuild: link vmlinux only once for
+CONFIG_TRIM_UNUSED_KSYMS") explains why this happens, but it did not fix
+the issue at all.
+
+Now I realized I had applied a wrong patch.
+
+In v1 patch [1], the autoksyms_recursive target correctly recurses to
+"$(MAKE) -f $(srctree)/Makefile autoksyms_recursive".
+
+In v2 patch [2], I accidentally dropped the diff line, and it recurses to
+"$(MAKE) -f $(srctree)/Makefile vmlinux".
+
+Restore the code I intended in v1.
+
+[1]: https://lore.kernel.org/linux-kbuild/1521045861-22418-8-git-send-email-yamada.masahiro@socionext.com/
+[2]: https://lore.kernel.org/linux-kbuild/1521166725-24157-8-git-send-email-yamada.masahiro@socionext.com/
+
+Fixes: 3fdc7d3fe4c0 ("kbuild: link vmlinux only once for CONFIG_TRIM_UNUSED_KSYMS")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Tested-by: Sami Tolvanen <samitolvanen@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    2 +-
+ Makefile |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -450,7 +450,7 @@ static ssize_t get_random_bytes_user(str
+--- a/Makefile
++++ b/Makefile
+@@ -1073,7 +1073,7 @@ PHONY += autoksyms_recursive
+ ifdef CONFIG_TRIM_UNUSED_KSYMS
+ autoksyms_recursive: descend modules.order
+ 	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/adjust_autoksyms.sh \
+-	  "$(MAKE) -f $(srctree)/Makefile vmlinux"
++	  "$(MAKE) -f $(srctree)/Makefile autoksyms_recursive"
+ endif
  
- 	/*
- 	 * Immediately overwrite the ChaCha key at index 4 with random
--	 * bytes, in case userspace causes copy_to_user() below to sleep
-+	 * bytes, in case userspace causes copy_to_iter() below to sleep
- 	 * forever, so that we still retain forward secrecy in that case.
- 	 */
- 	crng_make_state(chacha_state, (u8 *)&chacha_state[4], CHACHA_KEY_SIZE);
+ # For the kernel to actually contain only the needed exported symbols,
 
 

@@ -2,129 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2755955C3CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3005355CAFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239867AbiF0SBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 14:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
+        id S240033AbiF0SDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233706AbiF0SBg (ORCPT
+        with ESMTP id S236877AbiF0SDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 14:01:36 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C8EB7CA;
-        Mon, 27 Jun 2022 11:01:35 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id cf14so14178755edb.8;
-        Mon, 27 Jun 2022 11:01:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HwEhp9Xv9rongHC1qnO1cBomEmnStSyCV7TDMuunF9g=;
-        b=AWYhjfCLkGMyI1hYkQDJgd32k04jzz+MR9ISAgxv0PNT/uAsrjdHcitLVrQhbZiEzd
-         7CCAvXF+ZmEMSd9zU+saUZYCWp4SpHdhX/hziZ2oiENgodFGR84fWJVYeWMQkGh8HAH8
-         pG165mH/Vgk2ymRVylbuMs0gRKkvexq53o5e1+mLHWIwT3d5D2bajXVG3/A0wB8nMjV1
-         UMFYAhXu5U+3G5zhs/vPthAvvknGrBlsl4hQlcLw0P8wTRbhpNhOwEkuwoRBO/oorVbb
-         FnsBtUeZKeOsEXAwvHnv9wBBByYwx9c1NWUU4GDrTUEpwb5c5Y0Rg5yQ2G9lV7uo+6UZ
-         A70Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HwEhp9Xv9rongHC1qnO1cBomEmnStSyCV7TDMuunF9g=;
-        b=5Zhek5BPN4LkXZd5qE3JtdpCC6iFTKVmThyAQdwIGbSJ+0Apab6VRiv5UiBq2J0H6l
-         0tfghR95P/Yg51GG0SUlzc527+dNoUn5lpVz/zfaEQHI2HvbvzecNAW4dGqJS5VYk7oj
-         BEktGdYNaFk9iKtTve7X+Bjc9NCPXHFeRPXzSeVN3WTfJg0ujEDY2QC7KrM3CLjteVgl
-         UQz9eUUPKr1N2b1jHWSI0KDgmHs05TB2ECXFCLY4vvnCnVnMqAsrZPs08MIj1XAziT+p
-         KyD238Z7NgBN0cDmh4UqinUcbS+DaKEOeAb7f/eXS2sxiqBqdaA7He9okJyEb/uDSpDt
-         xNbg==
-X-Gm-Message-State: AJIora+wNvQ7NTYRN2R/xaC2Kgag8QPF2k4b8/tM7bY5WAGXYW1+pZ6T
-        Wv3rA14ZoNliNv0REvEeXwI=
-X-Google-Smtp-Source: AGRyM1tBMYRlO1nnXM5PucZjyvxj1gsIhGMabn0rfkuaG81mTWAtt40Q0ba7BlIeDyDoQblVEDqvsA==
-X-Received: by 2002:a05:6402:43c7:b0:435:8a92:e8d0 with SMTP id p7-20020a05640243c700b004358a92e8d0mr18461674edc.174.1656352893923;
-        Mon, 27 Jun 2022 11:01:33 -0700 (PDT)
-Received: from opensuse.localnet (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
-        by smtp.gmail.com with ESMTPSA id bh25-20020a170906a0d900b00722e1635531sm5309891ejb.193.2022.06.27.11.01.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 11:01:32 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     David Sterba <dsterba@suse.com>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Chris Down <chris@chrisdown.name>,
-        Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        Gabriel Niebler <gniebler@suse.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Sterba <dsterba@suse.cz>
-Subject: Re: [RFC PATCH] btrfs: Replace kmap_atomic() with kmap_local_page()
-Date:   Mon, 27 Jun 2022 20:01:31 +0200
-Message-ID: <8960694.CDJkKcVGEf@opensuse>
-In-Reply-To: <20220624084215.7287-1-fmdefrancesco@gmail.com>
-References: <20220624084215.7287-1-fmdefrancesco@gmail.com>
+        Mon, 27 Jun 2022 14:03:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903A564FA;
+        Mon, 27 Jun 2022 11:03:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFCF4B81751;
+        Mon, 27 Jun 2022 18:03:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AAF6C3411D;
+        Mon, 27 Jun 2022 18:03:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656352981;
+        bh=SiYVuzJmsR0EcUFaEmT4JvsyCWMGN3J+T2tx2tthy3w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=J5J5zZnwFHz8UepsXkhw2qbsq6c7XmzL7CE/fSTm0hk7cuPpDZT1WzKc5sIxDFRHF
+         l6G7huxhqT1vdNz8YIGQndcBTqkSs1gbJ3aBLDs3Cu59R9AfENXKlTIkX7ZRDMdUqj
+         egTfWceRwScmwcPQd01oxEp1F/gtdhX02I5RjoAkizlX4N0YtsWjeFiV2pgXQo9UUi
+         /Ud5yucnoIMIf+JEORc72jGEM5X1AaFaHsGE+n7QjL5arWu/UItnb9ICmo1jje1aC3
+         fah4i9fEXHNqIBRnM0M9FU1OPYfzYnv/gAZasVuOlS07QzP6R6QCClg8R2gpFMx/v9
+         QCMI3lLFyV8mw==
+Date:   Mon, 27 Jun 2022 11:02:52 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "XueBing Chen" <chenxuebing@jari.cn>
+Cc:     davem@davemloft.net, pabeni@redhat.com, jeroendb@google.com,
+        csully@google.com, awogbemila@google.com, arnd@arndb.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gve: drop unexpected word 'a' in comments
+Message-ID: <20220627110252.16f322bc@kernel.org>
+In-Reply-To: <762564ba.c84.18199e7b56b.Coremail.chenxuebing@jari.cn>
+References: <762564ba.c84.18199e7b56b.Coremail.chenxuebing@jari.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_HEX autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On venerd=C3=AC 24 giugno 2022 10:42:15 CEST Fabio M. De Francesco wrote:
-> kmap_atomic() is being deprecated in favor of kmap_local_page() where it
-> is feasible. With kmap_local_page() mappings are per thread, CPU local,
-> and not globally visible.
->=20
-> As far as I can see, the kmap_atomic() calls in compression.c and in
-> inode.c can be safely converted.
->=20
-> Above all else, David Sterba has confirmed that "The context in
-> check_compressed_csum is atomic [...]" and that "kmap_atomic() in inode.c
-> [...] also can be replaced by kmap_local_page().".[1]
->=20
-> Therefore, convert all kmap_atomic() calls currently still left in fs/
-btrfs
-> to kmap_local_page().
->=20
-> This is an RFC only because, testing with "./check -g quick" (xfstests)=20
-on
-> a QEMU + KVM 32-bits VM with 4GB RAM and booting a kernel with=20
-HIGHMEM64GB
-> enabled, outputs several errors. These errors seem to be exactly the same
-> which are being output without this patch. It apparently seems that these
-> changes don't introduce further errors, however I'd like to ask for
-> comments before sending a "real" patch.
->=20
-> With this patch, there are no more call sites for kmap() and=20
-kmap_atomic()
-> in fs/btrfs.
->=20
-> [1] https://lore.kernel.org/linux-btrfs/
-20220601132545.GM20633@twin.jikos.cz/
->=20
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Suggested-by: David Sterba <dsterba@suse.cz>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->  fs/btrfs/compression.c |  4 ++--
->  fs/btrfs/inode.c       | 12 ++++++------
->  2 files changed, 8 insertions(+), 8 deletions(-)
->=20
+On Sat, 25 Jun 2022 16:08:28 +0800 (GMT+08:00) XueBing Chen wrote:
+> Subject: [PATCH] gve: drop unexpected word 'a' in comments
+> Date: Sat, 25 Jun 2022 16:08:28 +0800 (GMT+08:00)
+> X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
+>  Copyright (c) 2002-2022 www.mailtech.cn
+>  mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+> 
+> 
+> there is an unexpected word 'a' in the comments that need to be dropped
 
-Please discard this RFC.
-
-I've just submitted a real patch:
-
-https://lore.kernel.org/lkml/20220627174849.29962-1-fmdefrancesco@gmail.com/
-
-Thanks,
-
-=46abio
-
-
+Jilin Yuan <yuanjilin@cdjrlc.com> is already sending this sort of patches,
+are you working together? You patches don't follow the guidance we gave
+in: https://lore.kernel.org/all/20220623092208.1abbd9dc@kernel.org/
+please apply that feedback for your submissions.

@@ -2,113 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6474055DA13
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CB555CF3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232968AbiF0I3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S232838AbiF0IbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbiF0I3i (ORCPT
+        with ESMTP id S233631AbiF0IbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:29:38 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B5F625B;
-        Mon, 27 Jun 2022 01:29:37 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id 65so8279608pfw.11;
-        Mon, 27 Jun 2022 01:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ukkF+qHOzzJMvCgB5J2nCt+SiXX4tns6CZy4txdYFbU=;
-        b=XxyEOMZwFzVx5EqLSOdfvMnVEC1pw/bEOwoadIsKwf1nVcHANtQJ22GQmY1QPa/0n/
-         fx7Nqz9oO4lusnDOnJQq/hBe0NL62WNXNxb2FVZKsAGwv7jjJl6KgArZ5IuCfU4WtYrk
-         clOJhaaue+7migoHXRwutGvYSWZXu0fPYEe9X6VF+sQT2ulz7yn9PeutINSUiZ5kw7Z5
-         295/GFrIzBjTkxAcs4s+iMb9rerAqOmbWJ1vG70DgxWYzx7Kg8ZEWYkdd1t8/e7o8fOZ
-         OIbccFFmOvAVQGWX11VoQl8Timd35Qy3RvBGIWwPnO7YZAzwkZXdiOXMT9kG5f1hpfdz
-         V75g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ukkF+qHOzzJMvCgB5J2nCt+SiXX4tns6CZy4txdYFbU=;
-        b=cfxkCd+NLvKNwQt6BZ+BD8e1/FYfjTU/Y4GD3VXuvNjEY2lhsM8tzY94SyxKVM6E0h
-         /miGbysuLgkArtlluVMQMbhMJM4sC751Jrdr10LwU29vgxsryDvo04uaPbJMZYhYjDQs
-         1YkxinOVgCxW7gHHI+9iSGpwDag23dYtbbIP+DnTwI/Zpf2E6z45VcIJmdvt4niHDvec
-         jMtqeYPkHjP7/3fyYQJtFpqy47dvD11tIM7QPE+qiG+P9WX8nbD3ezBKPgKwcduiXElD
-         Hcyetd+veNLNw4ae9BRr2Z6XGQPTF3PEv2XxASiEXgGrrlvIqs4K+AuYMMuCEu/72LvI
-         2E3Q==
-X-Gm-Message-State: AJIora8XpkWgrz+Svd7GyO3srs7GyEgCzWCVp59mUpZbYvhfygnLL3Ac
-        3pNcK3HBIc7sIT/iv++gm7U=
-X-Google-Smtp-Source: AGRyM1t5rT9Mx8i6fAAE3TL6UtytoFVyXcLJMuFRwjYYPjWjgJuidF7BRMqT7CWr0IQsni4W0A7WMA==
-X-Received: by 2002:aa7:8e9e:0:b0:525:1d15:8fb8 with SMTP id a30-20020aa78e9e000000b005251d158fb8mr13469032pfr.35.1656318576800;
-        Mon, 27 Jun 2022 01:29:36 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-68.three.co.id. [180.214.232.68])
-        by smtp.gmail.com with ESMTPSA id bf27-20020a056a000d9b00b0051bd9981ccbsm6497050pfb.39.2022.06.27.01.29.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 01:29:36 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id B3DDC10388D; Mon, 27 Jun 2022 15:29:30 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Allison Randal <allison@lohutok.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND next] Documentation: samsung-s3c24xx: Add blank line after SPDX directive
-Date:   Mon, 27 Jun 2022 15:29:28 +0700
-Message-Id: <20220627082928.11239-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        Mon, 27 Jun 2022 04:31:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C734D6372
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656318651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0FSrYIRiRp+sdnJ8v9p7qdMvB+z2KusLGHkelIoJIOQ=;
+        b=O9FiXROikKZ66LT1CqWx5PyZFX2kRmBbg81JWTob1vB8Ji8u0BCfrCkUf73HGGpC/1Uuf6
+        Cg5sm3m7wK/uB8GRQafASWHnUHJ3i8BDrtfErbXUE7ecNWUPJ8Q7rUE4ZlN74/96iYnWgS
+        Azl5/Wy/5t4jEGEgYsXTjQxsjENxHrY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-588-p16YOYOeNWW67BUH3RUEzQ-1; Mon, 27 Jun 2022 04:30:47 -0400
+X-MC-Unique: p16YOYOeNWW67BUH3RUEzQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 71D43803B22;
+        Mon, 27 Jun 2022 08:30:47 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-12-66.pek2.redhat.com [10.72.12.66])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 857091121314;
+        Mon, 27 Jun 2022 08:30:44 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net V2] virtio-net: fix race between ndo_open() and virtio_device_ready()
+Date:   Mon, 27 Jun 2022 16:30:40 +0800
+Message-Id: <20220627083040.53506-1-jasowang@redhat.com>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After merging spdx tree for linux-next testing, Stephen Rothwell reported
-htmldocs warning:
+We currently call virtio_device_ready() after netdev
+registration. Since ndo_open() can be called immediately
+after register_netdev, this means there exists a race between
+ndo_open() and virtio_device_ready(): the driver may start to use the
+device before DRIVER_OK which violates the spec.
 
-Documentation/arm/samsung-s3c24xx/cpufreq.rst:2: WARNING: Explicit markup ends without a blank line; unexpected unindent.
+Fix this by switching to use register_netdevice() and protect the
+virtio_device_ready() with rtnl_lock() to make sure ndo_open() can
+only be called after virtio_device_ready().
 
-It is due to missing blank line separator between SPDX directive and
-page title.
-
-Add the blank line to fix the warning.
-
-Link: https://lore.kernel.org/linux-next/20220614164506.6afd65a6@canb.auug.org.au/
-Fixes: b7bc1c9e5b04da ("treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_147.RULE")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Allison Randal <allison@lohutok.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-next@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Fixes: 4baf1e33d0842 ("virtio_net: enable VQs early")
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Jason Wang <jasowang@redhat.com>
 ---
- Documentation/arm/samsung-s3c24xx/cpufreq.rst | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/virtio_net.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/arm/samsung-s3c24xx/cpufreq.rst b/Documentation/arm/samsung-s3c24xx/cpufreq.rst
-index ed19ce1a462921..cd22697cf60660 100644
---- a/Documentation/arm/samsung-s3c24xx/cpufreq.rst
-+++ b/Documentation/arm/samsung-s3c24xx/cpufreq.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0-only
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index db05b5e930be..8a5810bcb839 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -3655,14 +3655,20 @@ static int virtnet_probe(struct virtio_device *vdev)
+ 	if (vi->has_rss || vi->has_rss_hash_report)
+ 		virtnet_init_default_rss(vi);
+ 
+-	err = register_netdev(dev);
++	/* serialize netdev register + virtio_device_ready() with ndo_open() */
++	rtnl_lock();
 +
- =======================
- S3C24XX CPUfreq support
- =======================
++	err = register_netdevice(dev);
+ 	if (err) {
+ 		pr_debug("virtio_net: registering device failed\n");
++		rtnl_unlock();
+ 		goto free_failover;
+ 	}
+ 
+ 	virtio_device_ready(vdev);
+ 
++	rtnl_unlock();
++
+ 	err = virtnet_cpu_notif_add(vi);
+ 	if (err) {
+ 		pr_debug("virtio_net: registering cpu notifier failed\n");
 -- 
-An old man doll... just what I always wanted! - Clara
+2.25.1
 

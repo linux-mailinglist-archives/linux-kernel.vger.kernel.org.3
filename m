@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF32355D5A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC25355D063
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238096AbiF0LuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+        id S236051AbiF0LgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238154AbiF0Lrx (ORCPT
+        with ESMTP id S236399AbiF0Ldq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:47:53 -0400
+        Mon, 27 Jun 2022 07:33:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C061BC3F;
-        Mon, 27 Jun 2022 04:39:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E26DED3;
+        Mon, 27 Jun 2022 04:31:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDDD6B8111B;
-        Mon, 27 Jun 2022 11:39:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E061C3411D;
-        Mon, 27 Jun 2022 11:39:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DDFB5B8111B;
+        Mon, 27 Jun 2022 11:31:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25073C3411D;
+        Mon, 27 Jun 2022 11:31:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329986;
-        bh=TPUh7iX5vNlOlZ/R9f6sa8AJcNfkI5+7JZxh5LNL6ks=;
+        s=korg; t=1656329470;
+        bh=S9vWGgVqVYCNhr7Z7R7ejfti0oFHgHEFPN3yugt+dbE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tWoPRse+5HQ4jqTIfmG4ElsDMCGmV78JDFL+tGUh4XmBZxkkxgh/pCWv2bXvLUwp8
-         DwcFgfrtFTfLA/RMIbhBsEMkINOLIDu8Jg9i2/Iqhs04N2Ua+DpiFxFKDYtZabSVRG
-         gEANSQYMhtI3fKHx43srNQ96ETH+u7RAE8wVHWBU=
+        b=NEdcrc6e0HEpEpAmKbEh4dXS2rJBtp6mgtBFA38nerRd5T5PfeNd12SsaaglUb8NY
+         bJFMVirHygDwjZyFMgQwpXP8tk75KPp4iUDPFiIGMDjXGzt652HtbUu2qzUepi8PDF
+         IadN8YbKVBY+Jn/jKG55uGMDSDnSdWMgQP7U3Dh0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maximilian Luz <luzmaximilian@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 043/181] drm/msm: Fix double pm_runtime_disable() call
-Date:   Mon, 27 Jun 2022 13:20:16 +0200
-Message-Id: <20220627111945.811504398@linuxfoundation.org>
+        stable@vger.kernel.org, Rosemarie ORiorden <roriorden@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.15 010/135] net: openvswitch: fix parsing of nw_proto for IPv6 fragments
+Date:   Mon, 27 Jun 2022 13:20:17 +0200
+Message-Id: <20220627111938.457403384@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,70 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maximilian Luz <luzmaximilian@gmail.com>
+From: Rosemarie O'Riorden <roriorden@redhat.com>
 
-[ Upstream commit ce0db505bc0c51ef5e9ba446c660de7e26f78f29 ]
+commit 12378a5a75e33f34f8586706eb61cca9e6d4690c upstream.
 
-Following commit 17e822f7591f ("drm/msm: fix unbalanced
-pm_runtime_enable in adreno_gpu_{init, cleanup}"), any call to
-adreno_unbind() will disable runtime PM twice, as indicated by the call
-trees below:
+When a packet enters the OVS datapath and does not match any existing
+flows installed in the kernel flow cache, the packet will be sent to
+userspace to be parsed, and a new flow will be created. The kernel and
+OVS rely on each other to parse packet fields in the same way so that
+packets will be handled properly.
 
-  adreno_unbind()
-   -> pm_runtime_force_suspend()
-   -> pm_runtime_disable()
+As per the design document linked below, OVS expects all later IPv6
+fragments to have nw_proto=44 in the flow key, so they can be correctly
+matched on OpenFlow rules. OpenFlow controllers create pipelines based
+on this design.
 
-  adreno_unbind()
-   -> gpu->funcs->destroy() [= aNxx_destroy()]
-   -> adreno_gpu_cleanup()
-   -> pm_runtime_disable()
+This behavior was changed by the commit in the Fixes tag so that
+nw_proto equals the next_header field of the last extension header.
+However, there is no counterpart for this change in OVS userspace,
+meaning that this field is parsed differently between OVS and the
+kernel. This is a problem because OVS creates actions based on what is
+parsed in userspace, but the kernel-provided flow key is used as a match
+criteria, as described in Documentation/networking/openvswitch.rst. This
+leads to issues such as packets incorrectly matching on a flow and thus
+the wrong list of actions being applied to the packet. Such changes in
+packet parsing cannot be implemented without breaking the userspace.
 
-Note that pm_runtime_force_suspend() is called right before
-gpu->funcs->destroy() and both functions are called unconditionally.
+The offending commit is partially reverted to restore the expected
+behavior.
 
-With recent addition of the eDP AUX bus code, this problem manifests
-itself when the eDP panel cannot be found yet and probing is deferred.
-On the first probe attempt, we disable runtime PM twice as described
-above. This then causes any later probe attempt to fail with
+The change technically made sense and there is a good reason that it was
+implemented, but it does not comply with the original design of OVS.
+If in the future someone wants to implement such a change, then it must
+be user-configurable and disabled by default to preserve backwards
+compatibility with existing OVS versions.
 
-  [drm:adreno_load_gpu [msm]] *ERROR* Couldn't power up the GPU: -13
-
-preventing the driver from loading.
-
-As there seem to be scenarios where the aNxx_destroy() functions are not
-called from adreno_unbind(), simply removing pm_runtime_disable() from
-inside adreno_unbind() does not seem to be the proper fix. This is what
-commit 17e822f7591f ("drm/msm: fix unbalanced pm_runtime_enable in
-adreno_gpu_{init, cleanup}") intended to fix. Therefore, instead check
-whether runtime PM is still enabled, and only disable it in that case.
-
-Fixes: 17e822f7591f ("drm/msm: fix unbalanced pm_runtime_enable in adreno_gpu_{init, cleanup}")
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
-Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Rob Clark <robdclark@gmail.com>
-Link: https://lore.kernel.org/r/20220606211305.189585-1-luzmaximilian@gmail.com
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: fa642f08839b ("openvswitch: Derive IP protocol number for IPv6 later frags")
+Link: https://docs.openvswitch.org/en/latest/topics/design/#fragments
+Signed-off-by: Rosemarie O'Riorden <roriorden@redhat.com>
+Acked-by: Eelco Chaudron <echaudro@redhat.com>
+Link: https://lore.kernel.org/r/20220621204845.9721-1-roriorden@redhat.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/msm/adreno/adreno_gpu.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/openvswitch/flow.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-index 1219f71629a5..1ced7b108f2c 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-@@ -1002,7 +1002,8 @@ void adreno_gpu_cleanup(struct adreno_gpu *adreno_gpu)
- 	for (i = 0; i < ARRAY_SIZE(adreno_gpu->info->fw); i++)
- 		release_firmware(adreno_gpu->fw[i]);
- 
--	pm_runtime_disable(&priv->gpu_pdev->dev);
-+	if (pm_runtime_enabled(&priv->gpu_pdev->dev))
-+		pm_runtime_disable(&priv->gpu_pdev->dev);
- 
- 	msm_gpu_cleanup(&adreno_gpu->base);
- }
--- 
-2.35.1
-
+--- a/net/openvswitch/flow.c
++++ b/net/openvswitch/flow.c
+@@ -266,7 +266,7 @@ static int parse_ipv6hdr(struct sk_buff
+ 	if (flags & IP6_FH_F_FRAG) {
+ 		if (frag_off) {
+ 			key->ip.frag = OVS_FRAG_TYPE_LATER;
+-			key->ip.proto = nexthdr;
++			key->ip.proto = NEXTHDR_FRAGMENT;
+ 			return 0;
+ 		}
+ 		key->ip.frag = OVS_FRAG_TYPE_FIRST;
 
 

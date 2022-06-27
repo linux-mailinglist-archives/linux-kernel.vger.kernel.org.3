@@ -2,141 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D617755DF8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE1655CD46
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236848AbiF0OMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        id S236865AbiF0OMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236232AbiF0OMP (ORCPT
+        with ESMTP id S236890AbiF0OM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:12:15 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC61013EAC;
-        Mon, 27 Jun 2022 07:12:12 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RCn06J027978;
-        Mon, 27 Jun 2022 09:12:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=LBdjpKTcBhVvtkLLUBtkb/1VdJ7fQ8gDmZFGNTWayfE=;
- b=fnaYPZ5uPq36JgjWi/d2PV5oyTX1D7bprGTyECuQXLlcUaYQuPqFwEYju+UoDdZxhvp7
- idlKzgaw2f0iGhObVQb4lKJozYh8X1QQRKdKMGuu0sXVeDlxCtoWPKbJvZgg+xy/zBJ/
- LJmIpbNFfhdBqHm3FqepN8s3JvU8AhZDroUo9IFtnAj1w/ANLDHRQLkghOy4MRbt2iRB
- Zw/HvJKbFs7OfzdgTcZRASXRJRe9we7vlXTfTN8iLHXqVKKy1NvNzsXXTuU5dzKUKGe9
- zSVjMNNIvEyS6HX1ahpF4A0GjRuj8CuiVcyI43z2vrVGq6thcPQaLWwn2pSsMF5Nz3Hd Gg== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3gwxsq2qjm-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 27 Jun 2022 09:12:04 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 27 Jun
- 2022 15:12:02 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Mon, 27 Jun 2022 15:12:02 +0100
-Received: from sbinding-cirrus-dsktp.ad.cirrus.com (unknown [198.90.238.163])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 4C9AB2A1;
-        Mon, 27 Jun 2022 14:12:02 +0000 (UTC)
-From:   Stefan Binding <sbinding@opensource.cirrus.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-CC:     <linux-acpi@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v2 2/2] ASoC: cs35l41: Read System Name from ACPI _SUB to identify firmware
-Date:   Mon, 27 Jun 2022 15:11:48 +0100
-Message-ID: <20220627141148.804319-3-sbinding@opensource.cirrus.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220627141148.804319-1-sbinding@opensource.cirrus.com>
-References: <20220627141148.804319-1-sbinding@opensource.cirrus.com>
+        Mon, 27 Jun 2022 10:12:27 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE02113EBE
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:12:20 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RBZsqA020295;
+        Mon, 27 Jun 2022 16:12:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=xTWgsntQB7Zv0E3+cnrZlzVMbwkfSZpuUeZ8UUOqGFo=;
+ b=MVAPgV1vbSJPzWYdZiVFJ1tGvt4Xv3WL0QpX21CLOR2JoG4/Tqt2TIRzD0k9cZ9ecEFW
+ VRDHDc+LXTJQCtu0wQiokH2ZC4sEYX44T12GQFnwGA3aJqpdlqmyp80q9zWmnZXnvFsg
+ 1iZoCpTLBx87MxB4OdoBaGIVIxOtbpO8rQqi2jOc2Rq8uk50eTw6lHbG2DKNbtOfKg4c
+ rH7KoZMbflrg4B3Zk5LkX8UlH2EZ04iUq4kArBw9vlkCROmM81L0wHy833Kyujtb4Vi9
+ A6xIjinDHX/YK7o6nLuDrRWYqskN0lsM9AGQv7bWLqFfYJ/ryOfYcxY5ZdSftATMY0uB nQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gwsq120h4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 16:12:00 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 020C710002A;
+        Mon, 27 Jun 2022 16:11:59 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F1DDD221777;
+        Mon, 27 Jun 2022 16:11:58 +0200 (CEST)
+Received: from [10.48.1.86] (10.75.127.49) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 27 Jun
+ 2022 16:11:58 +0200
+Message-ID: <60bb3c99-ee07-7bab-3f9b-9f12a2b812e2@foss.st.com>
+Date:   Mon, 27 Jun 2022 16:11:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: nVqwWAef1-kB0jlDTGZjUHy0HqOHRlIi
-X-Proofpoint-ORIG-GUID: nVqwWAef1-kB0jlDTGZjUHy0HqOHRlIi
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] drm/stm: ltdc: fix various coding-style warnings
+Content-Language: en-US
+To:     Yannick Fertre <yannick.fertre@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220603134334.592805-1-yannick.fertre@foss.st.com>
+From:   Philippe CORNU <philippe.cornu@foss.st.com>
+In-Reply-To: <20220603134334.592805-1-yannick.fertre@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When loading firmware, wm_adsp uses a number of parameters to
-determine the path of the firmware and tuning files to load.
-One of these parameters is system_name.
-Add support in cs35l41 to read this system name from the ACPI
-_SUB ID in order to uniquely identify the firmware and tuning
-mapped to a particular system.
 
-Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
----
- sound/soc/codecs/cs35l41.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
 
-diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
-index 8766e19d85f1..9ab016094b32 100644
---- a/sound/soc/codecs/cs35l41.c
-+++ b/sound/soc/codecs/cs35l41.c
-@@ -6,6 +6,7 @@
- //
- // Author: David Rhodes <david.rhodes@cirrus.com>
- 
-+#include <linux/acpi.h>
- #include <linux/delay.h>
- #include <linux/err.h>
- #include <linux/init.h>
-@@ -1142,6 +1143,24 @@ static int cs35l41_dsp_init(struct cs35l41_private *cs35l41)
- 	return ret;
- }
- 
-+static int cs35l41_probe_acpi(struct cs35l41_private *cs35l41)
-+{
-+	acpi_handle handle = ACPI_HANDLE(cs35l41->dev);
-+	const char *sub;
-+
-+	/* If there is no ACPI_HANDLE, there is no ACPI for this system, return 0 */
-+	if (!handle)
-+		return 0;
-+
-+	sub = acpi_get_subsystem_id(handle);
-+	if (IS_ERR(sub))
-+		return PTR_ERR(sub);
-+
-+	cs35l41->dsp.system_name = sub;
-+	dev_dbg(cs35l41->dev, "Susystem ID: %s\n", cs35l41->dsp.system_name);
-+	return 0;
-+}
-+
- int cs35l41_probe(struct cs35l41_private *cs35l41, const struct cs35l41_hw_cfg *hw_cfg)
- {
- 	u32 regid, reg_revid, i, mtl_revid, int_status, chipid_match;
-@@ -1270,6 +1289,10 @@ int cs35l41_probe(struct cs35l41_private *cs35l41, const struct cs35l41_hw_cfg *
- 		goto err;
- 	}
- 
-+	ret = cs35l41_probe_acpi(cs35l41);
-+	if (ret < 0)
-+		goto err;
-+
- 	ret = cs35l41_dsp_init(cs35l41);
- 	if (ret < 0)
- 		goto err;
-@@ -1316,6 +1339,7 @@ void cs35l41_remove(struct cs35l41_private *cs35l41)
- 	pm_runtime_disable(cs35l41->dev);
- 
- 	regmap_write(cs35l41->regmap, CS35L41_IRQ1_MASK1, 0xFFFFFFFF);
-+	kfree(cs35l41->dsp.system_name);
- 	wm_adsp2_remove(&cs35l41->dsp);
- 	cs35l41_safe_reset(cs35l41->regmap, cs35l41->hw_cfg.bst_type);
- 
--- 
-2.25.1
-
+On 6/3/22 15:43, Yannick Fertre wrote:
+> Fix issues reported by checkpatch.pl:
+> - Braces {} should be used on all arms
+> - Blank lines
+> 
+> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+> ---
+>   drivers/gpu/drm/stm/ltdc.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+> index a4098aaff243..6a9f613839b5 100644
+> --- a/drivers/gpu/drm/stm/ltdc.c
+> +++ b/drivers/gpu/drm/stm/ltdc.c
+> @@ -908,9 +908,9 @@ static void ltdc_crtc_mode_set_nofb(struct drm_crtc *crtc)
+>   		drm_connector_list_iter_end(&iter);
+>   	}
+>   
+> -	if (bridge && bridge->timings)
+> +	if (bridge && bridge->timings) {
+>   		bus_flags = bridge->timings->input_bus_flags;
+> -	else if (connector) {
+> +	} else if (connector) {
+>   		bus_flags = connector->display_info.bus_flags;
+>   		if (connector->display_info.num_bus_formats)
+>   			bus_formats = connector->display_info.bus_formats[0];
+> @@ -1917,7 +1917,6 @@ int ltdc_load(struct drm_device *ddev)
+>   			DRM_ERROR("Failed to register LTDC interrupt\n");
+>   			goto err;
+>   		}
+> -
+>   	}
+>   
+>   	crtc = devm_kzalloc(dev, sizeof(*crtc), GFP_KERNEL);
+Dear Yannick,
+Many thanks for your patch,
+Applied on drm-misc-next.
+Have a good day
+Philippe :-)

@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A625C55DFBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46FC55C866
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235870AbiF0OMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
+        id S236826AbiF0OMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234846AbiF0OML (ORCPT
+        with ESMTP id S234872AbiF0OML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 27 Jun 2022 10:12:11 -0400
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F57313E27;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302F713E3C;
         Mon, 27 Jun 2022 07:12:10 -0700 (PDT)
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RCn06H027978;
-        Mon, 27 Jun 2022 09:12:03 -0500
+        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RCn06I027978;
+        Mon, 27 Jun 2022 09:12:04 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=kKHbTQVbRij3BjfskU5kHjjPsm8UzILiriN2/NeS3tw=;
- b=XRoISmmBHi7eUskptbmw4mr1Cn01vxEOvcqMYh08Tgjjj1b0+XUsbLqxBZ5LCzB15lKa
- UA+NxJaHZ9Hcws5JevDSe3S7bd+2DRaihHEzG1SgnbtqahszBpY+Your9j3JbBqNsBfk
- sgJfeJpA68cOlDY4n1D4+YUjUcHeiz/GCpNcr8vz3OhylWCLsf+8fG0pGny59363wWRR
- rzCvEb4NjvYVxPaEaA3m5jleQV/tTJRMGJ9+fU9N5PrEtGSRlXFvEsooEnenYpjgQeqI
- c9yt7vWmBroJkH1DQQnTmr0vRcUC6a1nRsnAXiCyH02wswhkO1vUmVeYvCDbdsfUy/Dl 7w== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=MlSBP/F7VDrPTrgH+ofw5XPxgvmlmwggZfsEimmCKQM=;
+ b=EzWum5smrDY4VMrOBPCgt3TBYfX/yITpnYWOxDyJiRj9zbFcVA58q3RNAM7u6B1y5Emz
+ ZT+jiUDKl9IrcAMP18qKezP8wpkCebfcp12xfW1l/uVtNIkutRu2/O2zUPs0/FMdQj7j
+ qW80vSqOSMIn/DZe1eDdzhG8YBwweoDiYOWj+2/a9/XV2iB1YKAtd+nOq2VTwTkURriA
+ Imeq7rMPYwgh32m0AEdsg7vzqJD+TnpUK2JT8XF1I3kSaxubkYBmGgusQZg//RO/5Gnp
+ 4HOB3MBIwE6TFHAtTjKqcAr6J5ZoXYf9OgCbKtD3GgGIY+TDrYEGPwVs/qJuk9DStm91 pg== 
 Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3gwxsq2qjm-1
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3gwxsq2qjm-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 27 Jun 2022 09:12:03 -0500
+        Mon, 27 Jun 2022 09:12:04 -0500
 Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
  (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 27 Jun
@@ -39,8 +39,8 @@ Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
  Transport; Mon, 27 Jun 2022 15:12:02 +0100
 Received: from sbinding-cirrus-dsktp.ad.cirrus.com (unknown [198.90.238.163])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 31B4F2A1;
-        Mon, 27 Jun 2022 14:12:01 +0000 (UTC)
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0D05B11D1;
+        Mon, 27 Jun 2022 14:12:02 +0000 (UTC)
 From:   Stefan Binding <sbinding@opensource.cirrus.com>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
@@ -48,15 +48,17 @@ To:     "Rafael J . Wysocki" <rafael@kernel.org>,
 CC:     <linux-acpi@vger.kernel.org>, <alsa-devel@alsa-project.org>,
         <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
         Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v2 0/2] Read _SUB from ACPI to be able to identify firmware
-Date:   Mon, 27 Jun 2022 15:11:46 +0100
-Message-ID: <20220627141148.804319-1-sbinding@opensource.cirrus.com>
+Subject: [PATCH v2 1/2] ACPI: utils: Add api to read _SUB from ACPI
+Date:   Mon, 27 Jun 2022 15:11:47 +0100
+Message-ID: <20220627141148.804319-2-sbinding@opensource.cirrus.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220627141148.804319-1-sbinding@opensource.cirrus.com>
+References: <20220627141148.804319-1-sbinding@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: yEnf3Se5JcKdyp-XF1hPLQQKIteU4Zts
-X-Proofpoint-ORIG-GUID: yEnf3Se5JcKdyp-XF1hPLQQKIteU4Zts
+X-Proofpoint-GUID: AGgw-DCTO6OuSKekfRjLo7dcmRYjKcYi
+X-Proofpoint-ORIG-GUID: AGgw-DCTO6OuSKekfRjLo7dcmRYjKcYi
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -67,34 +69,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CS35L41 has a DSP which is able to run firmware, as well as a tuning file.
-Different systems may want to use different firmwares and tuning files, and
-some firmwares/tunings may not be compatible with other systems.
-To allow a system to select the correct fimware/tuning, we can read an _SUB
-from the ACPI. This _SUB can then be used to uniquely identify the system
-in the firmware/tuning file name.
+Add a wrapper function to read the _SUB string from ACPI.
 
-Add a helper function which reads the _SUB, so this can be used by other
-parts in the future.
-Add support inside the CS35L41 ASoC driver to read this _SUB, and save it
-appropriately.
+Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+---
+ drivers/acpi/utils.c | 38 ++++++++++++++++++++++++++++++++++++++
+ include/linux/acpi.h |  6 ++++++
+ 2 files changed, 44 insertions(+)
 
-Changes since v1:
-- Add length validation for SSID String
-- Rename API
-- Allocate memory inside API
-- Use ACPI_HANDLE macro instead of ACPI_COMPANION
-- Improve error handling
-
-Stefan Binding (2):
-  ACPI: utils: Add api to read _SUB from ACPI
-  ASoC: cs35l41: Read System Name from ACPI _SUB to identify firmware
-
- drivers/acpi/utils.c       | 38 ++++++++++++++++++++++++++++++++++++++
- include/linux/acpi.h       |  6 ++++++
- sound/soc/codecs/cs35l41.c | 24 ++++++++++++++++++++++++
- 3 files changed, 68 insertions(+)
-
+diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+index 3a9773a09e19..4ef9ee4ad0d8 100644
+--- a/drivers/acpi/utils.c
++++ b/drivers/acpi/utils.c
+@@ -291,6 +291,44 @@ int acpi_get_local_address(acpi_handle handle, u32 *addr)
+ }
+ EXPORT_SYMBOL(acpi_get_local_address);
+ 
++#define ACPI_MAX_SUB_BUF_SIZE	9
++
++const char *acpi_get_subsystem_id(acpi_handle handle)
++{
++	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
++	union acpi_object *obj;
++	acpi_status status;
++	const char *sub;
++
++	status = acpi_evaluate_object(handle, METHOD_NAME__SUB, NULL, &buffer);
++	if (ACPI_FAILURE(status)) {
++		acpi_handle_debug(handle, "Reading ACPI _SUB failed: %#x\n", status);
++		return ERR_PTR(-ENODATA);
++	}
++
++	obj = buffer.pointer;
++	if (obj->type == ACPI_TYPE_STRING) {
++		if (strlen(obj->string.pointer) < ACPI_MAX_SUB_BUF_SIZE &&
++		    strlen(obj->string.pointer) > 0) {
++			sub = kstrdup(obj->string.pointer, GFP_KERNEL);
++			if (!sub)
++				sub = ERR_PTR(-ENOMEM);
++		} else {
++			acpi_handle_err(handle, "ACPI _SUB Length %d is Invalid\n",
++					strlen(obj->string.pointer));
++			sub = ERR_PTR(-EINVAL);
++		}
++	} else {
++		acpi_handle_warn(handle, "Warning ACPI _SUB did not return a string\n");
++		sub = ERR_PTR(-EINVAL);
++	}
++
++	acpi_os_free(buffer.pointer);
++
++	return sub;
++}
++EXPORT_SYMBOL_GPL(acpi_get_subsystem_id);
++
+ acpi_status
+ acpi_evaluate_reference(acpi_handle handle,
+ 			acpi_string pathname,
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 4f82a5bc6d98..1c13fc077f42 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -762,6 +762,7 @@ static inline u64 acpi_arch_get_root_pointer(void)
+ #endif
+ 
+ int acpi_get_local_address(acpi_handle handle, u32 *addr);
++const char *acpi_get_subsystem_id(acpi_handle handle);
+ 
+ #else	/* !CONFIG_ACPI */
+ 
+@@ -1023,6 +1024,11 @@ static inline int acpi_get_local_address(acpi_handle handle, u32 *addr)
+ 	return -ENODEV;
+ }
+ 
++static inline const char *acpi_get_subsystem_id(acpi_handle handle);
++{
++	return ERR_PTR(-ENODEV);
++}
++
+ static inline int acpi_register_wakeup_handler(int wake_irq,
+ 	bool (*wakeup)(void *context), void *context)
+ {
 -- 
 2.25.1
 

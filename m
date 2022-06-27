@@ -2,152 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0ACC55DF88
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7A1455E037
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237420AbiF0OaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        id S237449AbiF0Oaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237312AbiF0O34 (ORCPT
+        with ESMTP id S236266AbiF0Oad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:29:56 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFE1B53;
-        Mon, 27 Jun 2022 07:29:55 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id u12so19536183eja.8;
-        Mon, 27 Jun 2022 07:29:54 -0700 (PDT)
+        Mon, 27 Jun 2022 10:30:33 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27DCFC2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:30:32 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id b24so6209020qkn.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:30:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0RQuo68FMs3Ewydqyi9IiONXYW4rMeUPNWTwYPpOosc=;
-        b=MzdoIB26iFVkILG/Mt1s4LYfQHztPMX/C175dvEV/uVJscpVucKtWQ97vnpCaAWfSU
-         CpwChSeVLUhGL2n/eTsAriuJAwzs7oBqz24JQCXnw2p/Bnbr7ZZCpxnPM2GrK+74+NSN
-         KewxQkzDoIgCIVL85Wk9C2SjShc6hPsL5iCNBCxgua3NId6txqObxC8rq1qWhRiOIFl8
-         N0hnSamEe3u5/VIoR6JKFFEj8+xjXYdRw9Zsn2+M+jipeb7NlFK2V8HV+swBFEwdRkUs
-         ftWitiLffThm52kMhgYnxog0xp2seWLjSpwIQ7bxCftk7UMtiId2MMuHS/1LYDgsNUqD
-         Uxag==
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=+cJ3oW5JhP5CUvm7VtdWYx3n1WPkEHSvCw63kv0T4LU=;
+        b=zKSz6Fh1HpYzt9lkFd4E5jvmSjpRZNIYbJsVE9KPIGCT8TrvuwD0p98HjFoUKqxI9/
+         c1EDzYqPD2Q5jinMHD+OTh0tm2cRoJhw279fQjgZJI8iqyBEeti0R2vTz6GL0vAKTFnw
+         z8Qzj7kV8vLHrnNUFgIlfi1kgEy2YfDYtcEOHHG4Kn448ZEFGQAmmLG82T4LOOV1ZI83
+         NldkkmZgsCMbxE3QLeNNFI3auIUy3idvVI5U8tQP2r7H6NZNzwU1Y/+hl6apmTacEwwq
+         s47xzvu9mphE24bX7TpPAqcFQoJG617eSse6aEU5Zhm2ZKjapJg5EDAnfdKn9VUCbVHX
+         EH7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0RQuo68FMs3Ewydqyi9IiONXYW4rMeUPNWTwYPpOosc=;
-        b=ZkyWkZQ9gP9ulm30pkQHnC2k1MRK+4Rc+gNKfrxR2sGGfqx9rlGdZ72pl3VSI+68WQ
-         0rsOF0QNld/kd77wRXQjg1kUZR5rd49is0oeQmhZHfnjNwUPcoE645B7ZPY6KA+ElGpk
-         d2Kw303QNOflweasg2CjtCFX+s1ru3xoO03E5yZuhzOEpwnqeLnFY4+zOmFvbj8+to61
-         UzOdqDSf/5Dbn5VLZV7vaoJeh5pufpDvp0zjlcCzXRN18VJsK68xlOC51eE/0EoV49SJ
-         kwY348ncD8W9VcdI8fBFvU3PNZZmw8b1lHGcRBdQt0MWOj+CW3poxox9L+36QJGIXYRm
-         Ns7w==
-X-Gm-Message-State: AJIora+6cjd4oBhGIsngjnqGadiWpZ/1V/q4/jPY0ZAF2OEpKmozU3/E
-        LxJCL4DN4lLNApxYw4fR8ajVxkLeycWSt5LnlkM=
-X-Google-Smtp-Source: AGRyM1v6HvBJpI2zjqwnkNHhBqV1cK4hlM/aYv8C+uEiiVwmn1Os3FAYlv54APEOIV/+t60608gsPU0byrK9p/yBglY=
-X-Received: by 2002:a17:907:72c4:b0:726:9406:f760 with SMTP id
- du4-20020a17090772c400b007269406f760mr9624040ejc.247.1656340193621; Mon, 27
- Jun 2022 07:29:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220626004326.8548-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220626004326.8548-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <87tu87eh5h.wl-maz@kernel.org> <CA+V-a8sihw9=Ychakh6tV+1+MpRayr=1VSnhSYZNp0F+f4Hdnw@mail.gmail.com>
- <1eb7b6525a98b330894b6ce2f9167dc2@kernel.org>
-In-Reply-To: <1eb7b6525a98b330894b6ce2f9167dc2@kernel.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 27 Jun 2022 15:29:27 +0100
-Message-ID: <CA+V-a8upv16o86RFCcPVRjucM3WJUOwOejF_TzPwLibjq1_SXg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: interrupt-controller: sifive,plic:
- Document Renesas RZ/Five SoC
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=+cJ3oW5JhP5CUvm7VtdWYx3n1WPkEHSvCw63kv0T4LU=;
+        b=dExwluAsz3/A05sqCdF9pneFU3DsCOvfrcYhbm5GEU1scVTR0B9fWlX6wlpGEocUSU
+         4Zq4nl0P4+ijL00oufL6+7jNrzOeFcwlCZv9EJ31viVkBlko7Nrt4uX+NCfRhhcEdcWv
+         u1ywkx/9MdRUS1D66uBgg2JAiFnHL03KKCE9V0l5ZjpfKMMhavaxkKDJNxqpYtPZ4DvF
+         kmTFJ31ppZr7LMp3RNLFi5LOQbwpvsd4UM6TbfpueWQH6H5iTI9yCv2Vrtwc7L1vsXLY
+         dST2zGwm3ApsTxT2zu+t+aACwO/XwsQsiEXc9WhTXDJ1dSgQJI10m1riAW7pyfbbc7V6
+         IP7w==
+X-Gm-Message-State: AJIora+qu5wusd4ujiyCeYBI0hW6CDaKHtx8W8h4++NzoL79ow3NbPDX
+        tjZlHRSiOLYWC/QYYzxugxmaJg==
+X-Google-Smtp-Source: AGRyM1shh8VchPY9Xks8fxKysZypOt7C4DGr6K8kbqi9W4sY2Et67+Bx7c+FAJWcc3BX2aQrrTcYVQ==
+X-Received: by 2002:a05:620a:4412:b0:6af:2f47:7de2 with SMTP id v18-20020a05620a441200b006af2f477de2mr2679155qkp.649.1656340231749;
+        Mon, 27 Jun 2022 07:30:31 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id i1-20020a05620a404100b006a6ae636ce0sm9535296qko.131.2022.06.27.07.30.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 07:30:31 -0700 (PDT)
+Message-ID: <b7b053603323ca241caa42cd5a6599b9263b9864.camel@ndufresne.ca>
+Subject: Re: DMA-buf and uncached system memory
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linaro-mm-sig@lists.linaro.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media <linux-media@vger.kernel.org>
+Date:   Mon, 27 Jun 2022 10:30:30 -0400
+In-Reply-To: <e67392e43bfc037db6969297b65b0b6945df8b27.camel@pengutronix.de>
+References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
+         <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
+         <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
+         <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
+         <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com>
+         <20220623101326.18beeab3@eldfell>
+         <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
+         <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
+         <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
+         <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
+         <e691bccc-171d-f674-2817-13a945970f4a@amd.com>
+         <95cca943bbfda6af07339fb8d2dc7f4da3aa0280.camel@pengutronix.de>
+         <0abe475a7b4b04758c03a9d19b228e86d95ac1dd.camel@ndufresne.ca>
+         <e67392e43bfc037db6969297b65b0b6945df8b27.camel@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+Le lundi 27 juin 2022 =C3=A0 16:06 +0200, Lucas Stach a =C3=A9crit=C2=A0:
+> Am Montag, dem 27.06.2022 um 09:54 -0400 schrieb Nicolas Dufresne:
+> > Le jeudi 23 juin 2022 =C3=A0 11:33 +0200, Lucas Stach a =C3=A9crit=C2=
+=A0:
+> > > >=20
+> > > > See for example on AMD/Intel hardware most of the engines can perfe=
+ctly=20
+> > > > deal with cache coherent memory accesses. Only the display engines =
+can't.
+> > > >=20
+> > > > So on import time we can't even say if the access can be coherent a=
+nd=20
+> > > > snoop the CPU cache or not because we don't know how the imported=
+=20
+> > > > DMA-buf will be used later on.
+> > > >=20
+> > > So for those mixed use cases, wouldn't it help to have something
+> > > similar to the dma_sync in the DMA-buf API, so your scanout usage can
+> > > tell the exporter that it's going to do non-snoop access and any dirt=
+y
+> > > cache lines must be cleaned? Signaling this to the exporter would all=
+ow
+> > > to skip the cache maintenance if the buffer is in CPU uncached memory=
+,
+> > > which again is a default case for the ARM SoC world.
+> >=20
+> > Telling the exporter for every scan is unneeded overhead. If that infor=
+mation is
+> > made available "properly", then tracking it in attach/detach is suffici=
+ent and
+> > lightweight.
+>=20
+> That isn't sufficient. The AMD GPU is a single device, but internally
+> has different engines that have different capabilities with regard to
+> snooping the caches. So you will likely end up with needing the cache
+> clean if the V4L2 buffer is going directly to scanout, which doesn't
+> snoop, but if the usage changes to sampling you don't need any cache
+> flushes.
+>=20
+> Also I don't see a big overhead when comparing a kernel internal call
+> that tells the exporter that the importer is going to access the buffer
+> without snooping and thus needs the cache clean once every frame and
+> the need to always clean the cache before DQBUF when a potentially non-
+> snooping importer is attached.
 
-On Mon, Jun 27, 2022 at 3:22 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On 2022-06-27 13:27, Lad, Prabhakar wrote:
-> > Hi Marc,
-> >
-> > Thank you for the review.
-> >
-> > On Sun, Jun 26, 2022 at 1:35 PM Marc Zyngier <maz@kernel.org> wrote:
-> >>
-> >> On Sun, 26 Jun 2022 01:43:25 +0100,
-> >> Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >> >
-> >> > Document Renesas RZ/Five (R9A07G043) SoC.
-> >> >
-> >> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >> > ---
-> >> > v1->v2:
-> >> > * Fixed binding doc
-> >> > * Fixed review comments pointed by Krzysztof.
-> >> >
-> >> > RFC->v1:
-> >> > * Fixed Review comments pointed by Geert and Rob
-> >> > ---
-> >> >  .../sifive,plic-1.0.0.yaml                    | 44 +++++++++++++++++--
-> >> >  1 file changed, 41 insertions(+), 3 deletions(-)
-> >> >
-> >> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> >> > index 27092c6a86c4..59df367d1e44 100644
-> >> > --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> >> > +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
-> >> > @@ -28,7 +28,10 @@ description:
-> >> >
-> >> >    While the PLIC supports both edge-triggered and level-triggered interrupts,
-> >> >    interrupt handlers are oblivious to this distinction and therefore it is not
-> >> > -  specified in the PLIC device-tree binding.
-> >> > +  specified in the PLIC device-tree binding for SiFive PLIC (and similar PLIC's),
-> >> > +  but for the Renesas RZ/Five Soc (AX45MP AndesCore) which has NCEPLIC100 we need
-> >> > +  to specify the interrupt type as the flow for EDGE interrupts is different
-> >> > +  compared to LEVEL interrupts.
-> >> >
-> >> >    While the RISC-V ISA doesn't specify a memory layout for the PLIC, the
-> >> >    "sifive,plic-1.0.0" device is a concrete implementation of the PLIC that
-> >> > @@ -57,6 +60,7 @@ properties:
-> >> >            - enum:
-> >> >                - allwinner,sun20i-d1-plic
-> >> >            - const: thead,c900-plic
-> >> > +      - const: renesas,r9a07g043-plic
-> >>
-> >> Since it is the NCEPLIC100 that is broken, shouldn't the compatible
-> >> string actually reflect that? I'd rather see 'andes,nceplic100' once
-> >> and for all instead of starting with Renesas, quickly followed by all
-> >> the other licensees that will inevitably integrate the same IP (which
-> >> isn't even specific to the AX45MP).
-> >>
-> >> This IP also comes with all sort of added (mis-)features, which may or
-> >> may not be used in the future, and it would make sense to identify it
-> >> specifically.
-> >>
-> > Agreed, I'll update it as above.
->
-> Please synchronise with Samuel to have a common series that fixes
-> both the Renesas and Thead platforms.
->
-Yes Ive dropped an email to Samuel.
+Ack, thanks for the information.
 
-Cheers,
-Prabhakar
+>=20
+> Regards,
+> Lucas
+>=20
+

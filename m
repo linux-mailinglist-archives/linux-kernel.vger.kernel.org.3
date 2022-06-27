@@ -2,82 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2456355DB23
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7305455C135
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236301AbiF0Nvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
+        id S236416AbiF0Nyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236296AbiF0Nv3 (ORCPT
+        with ESMTP id S235121AbiF0Ny2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:51:29 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F97A47E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:51:27 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id cu16so14767493qvb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:51:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=IO/5LQDipzPqsfiPf2oKew6mU+NIadwTqMByhggPg0I=;
-        b=GOyk+HaLucKVVNkgp6ddt+d56vzd0A8t7G4KOm1AbUEU5/BeYVRzygTy8xCIa+lNPf
-         Si1v7SHohI30eBXdgPyC7mZJixMFZ35tJljXaSgkh0Li26Q+p0JAIButdSaunBS85MXd
-         WXo6/Mf1UKxdoyn+uUXME6FEzJ7YFXrx6o2LDBi9QFHEZtTbCLtan2urHYd2GWdvzte5
-         3V0ii1UopvsZFN2VxRhYSgOy6FU3B7szGbIf0CymZAbD0Ba5wzZmNVE7nN1mxUBGPJ2n
-         duSOw6JuHYdOLa2znVpddX5BlAaBgG0AbhYMuNzwZXU/IS2NZvQlGSPIK6kyuB6VzIBx
-         PFKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=IO/5LQDipzPqsfiPf2oKew6mU+NIadwTqMByhggPg0I=;
-        b=KhEj635TiVPaosDI1f4xgBoCf9Ud1Nt9yRfIqyd1R2nJSrUHlRUlBMJPWaxLPX4yuh
-         XSn5cWtNWS1S3tAjvVQB/IzIgQfXaviZMdLC5ic0L8gqzFWC8BjXXqYIvTUvPpZIdKbX
-         RQiGVGgq+8nKunbu2VHzAhb5iFUh9wsfgj5AxihnKZpnoWkhDmeEqA7v0d2WrRohYh0x
-         x+a04/sJMK26HFya2o/U7ZIsiLGeYTsM/vRoC1yPVkBzNNAT8CspKYBV1sToInN8KXS8
-         234WQuMxQGR7SxQzwILLEsXeiSP/D7h+8InYcCGqwdquX7RyjEPpbdx42VcPSIcNEQtr
-         sisg==
-X-Gm-Message-State: AJIora9344mGuGfcTSVB2Iv4N824n54137n09DnETg4HElyfcBcPCBKE
-        0FW1YyPGrkND7UiMvOaC58/K+Q==
-X-Google-Smtp-Source: AGRyM1uwTUgcdBTwPIHf6SCg4Il6IWSeM4ajg7IuHzzyn8HZDcP+XrUxKuXlZI8HzHEN016LOLSDHA==
-X-Received: by 2002:a05:622a:5985:b0:31b:899:3093 with SMTP id gb5-20020a05622a598500b0031b08993093mr2059921qtb.616.1656337886689;
-        Mon, 27 Jun 2022 06:51:26 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id s24-20020ac85ed8000000b00317c519be8bsm6996967qtx.66.2022.06.27.06.51.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 06:51:26 -0700 (PDT)
-Message-ID: <36eef859d63640b4456360e17383635644703e3d.camel@ndufresne.ca>
-Subject: Re: DMA-buf and uncached system memory
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     "Sharma, Shashank" <Shashank.Sharma@amd.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linaro-mm-sig@lists.linaro.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media <linux-media@vger.kernel.org>
-Date:   Mon, 27 Jun 2022 09:51:24 -0400
-In-Reply-To: <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
-References: <91ff0bbb-ea3a-2663-3453-dea96ccd6dd8@amd.com>
-         <YCuPhOT4GhY3RR/6@phenom.ffwll.local>
-         <9178e19f5c0e141772b61b759abaa0d176f902b6.camel@ndufresne.ca>
-         <CAPj87rPYQNkgVEdHECQcHcYe2nCpgF3RYQKk_=wwhvJSxwHXCg@mail.gmail.com>
-         <c6e65ee1-531e-d72c-a6a6-da7149e34f18@amd.com>
-         <20220623101326.18beeab3@eldfell>
-         <954d0a9b-29ef-52ef-f6ca-22d7e6aa3f4d@amd.com>
-         <4b69f9f542d6efde2190b73c87096e87fa24d8ef.camel@pengutronix.de>
-         <adc626ec-ff5a-5c06-44ce-09111be450cd@amd.com>
-         <fbb228cd78e9bebd7e7921c19e0c4c09d0891f23.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Mon, 27 Jun 2022 09:54:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5156631F;
+        Mon, 27 Jun 2022 06:54:27 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RDN1Uh003946;
+        Mon, 27 Jun 2022 13:53:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=GAWoFxCNJhIvlMoWt/ylWRzzaBWADkUmC7Q0ZaAXQKw=;
+ b=C0ydIsLJo8x0/XnILLmB+DUZEBR5KX89h2JbxUzVNC6/KgG1neIl2vXdYCVInE2Li/c8
+ nuiA2CuFmQzyvXOxgYSSZnxlPvWVr6pr2LGCrp1g2SQgwew1o7KKGlCP54NS692fwiGh
+ o+Kf4WPsKd9moa4t6SCvS8V7bvScgy0N4319jWM0y2XuyczOSQyqfwssbSLHhZ11Pgms
+ xZyyiaIv4pRZTvM/RN5WLB7UhuLG0M/TCOH4d3qa6bripbGyddUftQhirwg7YKsw8FZX
+ Dk1q8o9yzRyQ4x8eNhyV0VAg/tJeaM2LPzNXTqxr/RWOyckxyg/ddpti8mKle1fPF+25 iQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gydcv8vq7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 13:53:56 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25RDaoDs024237;
+        Mon, 27 Jun 2022 13:53:56 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gydcv8vn1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 13:53:55 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25RDq9Bo028366;
+        Mon, 27 Jun 2022 13:53:51 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04fra.de.ibm.com with ESMTP id 3gwt092age-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 13:53:51 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25RDrmtT23003544
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jun 2022 13:53:48 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 581B4AE051;
+        Mon, 27 Jun 2022 13:53:48 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D0F45AE045;
+        Mon, 27 Jun 2022 13:53:47 +0000 (GMT)
+Received: from pomme.tlslab.ibm.com (unknown [9.101.4.33])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Jun 2022 13:53:47 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, nathanl@linux.ibm.com,
+        haren@linux.vnet.ibm.com, npiggin@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v3 0/4] Extending NMI watchdog during LPM
+Date:   Mon, 27 Jun 2022 15:53:43 +0200
+Message-Id: <20220627135347.32624-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.36.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 356kCkZtDT4EdcQIcQ430xVDqLe2qI9o
+X-Proofpoint-GUID: kkjhEORm_2eMvJi08KpG6Xk7BV_E4iDG
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 adultscore=0 spamscore=0 mlxscore=0 clxscore=1015 phishscore=0
+ mlxlogscore=972 suspectscore=0 malwarescore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206270059
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,47 +90,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When a partition is transferred, once it arrives at the destination node,
+the partition is active but much of its memory must be transferred from the
+start node.
 
-Le jeudi 23 juin 2022 =C3=A0 10:58 +0200, Lucas Stach a =C3=A9crit=C2=A0:
-> > > In the DMA API keeping things mapped is also a valid use-case, but th=
-en
-> > > you need to do explicit domain transfers via the dma_sync_* family,
-> > > which DMA-buf has not inherited. Again those sync are no-ops on cache
-> > > coherent architectures, but do any necessary cache maintenance on non
-> > > coherent arches.
-> >=20
-> > Correct, yes. Coherency is mandatory for DMA-buf, you can't use=20
-> > dma_sync_* on it when you are the importer.
-> >=20
-> > The exporter could of course make use of that because he is the owner o=
-f=20
-> > the buffer.
->=20
-> In the example given here with UVC video, you don't know that the
-> buffer will be exported and needs to be coherent without
-> synchronization points, due to the mapping cache at the DRM side. So
-> V4L2 naturally allocates the buffers from CPU cached memory. If the
-> expectation is that those buffers are device coherent without relying
-> on the map/unmap_attachment calls, then V4L2 needs to always
-> synchronize caches on DQBUF when the=C2=A0 buffer is allocated from CPU
-> cached memory and a single DMA-buf attachment exists. And while writing
-> this I realize that this is probably exactly what V4L2 should do...
+It depends on the activity in the partition, but the more CPU the partition
+has, the more memory to be transferred is likely to be. This causes latency
+when accessing pages that need to be transferred, and often, for large
+partitions, it triggers the NMI watchdog.
 
-I'm not sure we are making any progress here. Doing so will just regress
-performance of coherent devices used to render UVC video feeds. In fact, th=
-ey
-are all coherent except the display controller (on Intel). What my colleagu=
-e was
-suggesting me to try (with the expectation that some adaptation will be nee=
-ded,
-perhaps new signalling flags), is to read the dma_coherency_mask values on =
-the
-devices that calls attach() and adapt v4l2 exporter accordingly.
+The NMI watchdog causes the CPU stack to dump where it appears to be
+stuck. In this case, it does not bring much information since it can happen
+during any memory access of the kernel.
 
-Its likely wrong as-is, not intended to be used for that, but the value is =
-that
-it tries to fix the problem, unlike what I'm reading here.
+In addition, the NMI interrupt mechanism is not secure and can generate a
+dump system in the event that the interruption is taken while MSR[RI]=0.
 
-Nicolas
+Depending on the LPAR size and load, it may be interesting to extend the
+NMI watchdog timer during the LPM.
+
+That's configurable through sysctl with the new introduced variable
+(specific to powerpc) nmi_watchdog_factor. This value represents the
+percentage added to watchdog_tresh to set the NMI watchdog timeout during a
+LPM.
+
+Changes in v3:
+ - don't export watchdog_mutex
+ - fix a comment in mobilty.c, wait_for_vasi_session_completed()
+ - fix a build issue when !CONFIG_PPC_WATCHDOG
+ - rework some printk and rename the sysctl variable.
+
+v2:
+https://lore.kernel.org/all/20220614135414.37746-1-ldufour@linux.ibm.com/
+
+Laurent Dufour (4):
+  powerpc/mobility: wait for memory transfer to complete
+  watchdog: export lockup_detector_reconfigure
+  powerpc/watchdog: introduce a NMI watchdog's factor
+  pseries/mobility: set NMI watchdog factor during LPM
+
+ Documentation/admin-guide/sysctl/kernel.rst | 12 +++
+ arch/powerpc/include/asm/nmi.h              |  2 +
+ arch/powerpc/kernel/watchdog.c              | 21 ++++-
+ arch/powerpc/platforms/pseries/mobility.c   | 85 ++++++++++++++++++++-
+ include/linux/nmi.h                         |  2 +
+ kernel/watchdog.c                           | 21 +++--
+ 6 files changed, 135 insertions(+), 8 deletions(-)
+
+-- 
+2.36.1
 

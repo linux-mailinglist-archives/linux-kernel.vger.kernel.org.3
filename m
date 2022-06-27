@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B53455D1A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1359D55E1BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239546AbiF0MBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
+        id S239454AbiF0L7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238802AbiF0Lwj (ORCPT
+        with ESMTP id S238817AbiF0Lwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:52:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB12CBE28;
-        Mon, 27 Jun 2022 04:45:46 -0700 (PDT)
+        Mon, 27 Jun 2022 07:52:40 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBA3DEB1;
+        Mon, 27 Jun 2022 04:45:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69AEFB80DFB;
-        Mon, 27 Jun 2022 11:45:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B7FC3411D;
-        Mon, 27 Jun 2022 11:45:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A22B2CE171A;
+        Mon, 27 Jun 2022 11:45:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91BBAC3411D;
+        Mon, 27 Jun 2022 11:45:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330344;
-        bh=B2hSXjbr+rHpgwDe32O/tcnJQcZZzJ7ADtnfxO42u40=;
+        s=korg; t=1656330346;
+        bh=WZXy+Bd4DgG1VVzSNOzT8zUIRZ/5VvEGPPSlCWy6ceA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ex7EXjzSB5iNzrwl67cE39evtyBuMAOY1bAQLKATaORBaFf0P4mJk++uzCLhudpt4
-         1IOQlVFT6SHnOPpfGB72ZHLv9veFS8Yyp7z2ZIXVHyXpRlkMaq6jEyvgI/SvxMn2d1
-         5rCPJk4/yPFIB2oQxmyJmnlXIGO8uuNKoiim2138=
+        b=OJRY1j2lVU8ljeDq7RIc6pcyZ+yJhwh8f3h6HIAkyP4Kx2/3EZ2IPPJWxEYgR/ReQ
+         K3C1nBAbB1TcgEpIptNo2CQpKRO9lIHg49wfQ6nonQgebxq/exBueZgaLS1DypecdP
+         IEgi0InggnDMWU671hhIhM2L6AG8r7fSny70Fem8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aswath Govindraju <a-govindraju@ti.com>,
-        Nishanth Menon <nm@ti.com>
-Subject: [PATCH 5.18 165/181] arm64: dts: ti: k3-am64-main: Remove support for HS400 speed mode
-Date:   Mon, 27 Jun 2022 13:22:18 +0200
-Message-Id: <20220627111949.471277410@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 5.18 166/181] ARM: exynos: Fix refcount leak in exynos_map_pmu
+Date:   Mon, 27 Jun 2022 13:22:19 +0200
+Message-Id: <20220627111949.499927418@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
 References: <20220627111944.553492442@linuxfoundation.org>
@@ -54,40 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aswath Govindraju <a-govindraju@ti.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 0c0af88f3f318e73237f7fadd02d0bf2b6c996bb upstream.
+commit c4c79525042a4a7df96b73477feaf232fe44ae81 upstream.
 
-AM64 SoC, does not support HS400 and HS200 is the maximum supported speed
-mode[1]. Therefore, fix the device tree node to reflect the same.
+of_find_matching_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
+of_node_put() checks null pointer.
 
-[1] - https://www.ti.com/lit/ds/symlink/am6442.pdf
-      (SPRSP56C – JANUARY 2021 – REVISED FEBRUARY 2022)
-
-Fixes: 8abae9389bdb ("arm64: dts: ti: Add support for AM642 SoC")
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Link: https://lore.kernel.org/r/20220512064859.32059-1-a-govindraju@ti.com
+Fixes: fce9e5bb2526 ("ARM: EXYNOS: Add support for mapping PMU base address via DT")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220523145513.12341-1-linmq006@gmail.com
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi |    2 --
- 1 file changed, 2 deletions(-)
+ arch/arm/mach-exynos/exynos.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
-@@ -456,13 +456,11 @@
- 		clock-names = "clk_ahb", "clk_xin";
- 		mmc-ddr-1_8v;
- 		mmc-hs200-1_8v;
--		mmc-hs400-1_8v;
- 		ti,trm-icp = <0x2>;
- 		ti,otap-del-sel-legacy = <0x0>;
- 		ti,otap-del-sel-mmc-hs = <0x0>;
- 		ti,otap-del-sel-ddr52 = <0x6>;
- 		ti,otap-del-sel-hs200 = <0x7>;
--		ti,otap-del-sel-hs400 = <0x4>;
- 	};
+--- a/arch/arm/mach-exynos/exynos.c
++++ b/arch/arm/mach-exynos/exynos.c
+@@ -149,6 +149,7 @@ static void exynos_map_pmu(void)
+ 	np = of_find_matching_node(NULL, exynos_dt_pmu_match);
+ 	if (np)
+ 		pmu_base_addr = of_iomap(np, 0);
++	of_node_put(np);
+ }
  
- 	sdhci1: mmc@fa00000 {
+ static void __init exynos_init_irq(void)
 
 

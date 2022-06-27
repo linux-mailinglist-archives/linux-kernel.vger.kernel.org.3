@@ -2,156 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58E055DD81
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891AF55E066
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239687AbiF0MEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
+        id S239805AbiF0MFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235473AbiF0MEf (ORCPT
+        with ESMTP id S239790AbiF0ME5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:04:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5151263F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:00:30 -0700 (PDT)
+        Mon, 27 Jun 2022 08:04:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4E612D0A
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:01:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9527614FA
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:00:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 515CAC3411D;
-        Mon, 27 Jun 2022 12:00:28 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GBOW8G4J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656331226;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ycbBTZciPg+5lBq40A1ayaOu2m5A5HL4W3lQwpUVo0M=;
-        b=GBOW8G4JScRqESGRtEueEKDWk4iC8rLAGJEYhSRFbMOv3zC0aymEWKLVMQSQMfsaLIWQwb
-        hhLLeyqmzIS+SIoNr9rO2EBmPETM0VBeSjz5M8g7JpPiySrizAs6/DFvuFxjRzmFEGkXWr
-        /5EEccsGsNZukOi9SfHICYEVdXfewao=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3bb9b886 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 27 Jun 2022 12:00:26 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        peterz@infradead.org, ebiederm@xmission.com
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>
-Subject: [PATCH] signal: break out of wait loops on kthread_stop()
-Date:   Mon, 27 Jun 2022 14:00:20 +0200
-Message-Id: <20220627120020.608117-1-Jason@zx2c4.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E68CB81063
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:01:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01681C3411D;
+        Mon, 27 Jun 2022 12:00:57 +0000 (UTC)
+Date:   Mon, 27 Jun 2022 13:00:54 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>, Will Deacon <will@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv3 7/8] x86: Expose untagging mask in
+ /proc/$PID/arch_status
+Message-ID: <Yrmb9gvd4KsIPy/b@arm.com>
+References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
+ <20220610143527.22974-8-kirill.shutemov@linux.intel.com>
+ <144af1ab-1e7e-b75c-331c-d9c2e55b9062@intel.com>
+ <20220611012830.hs437yikbjgwlije@black.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220611012830.hs437yikbjgwlije@black.fi.intel.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I was recently surprised to learn that msleep_interruptible(),
-wait_for_completion_interruptible_timeout(), and related functions
-simply hung when I called kthread_stop() on kthreads using them. The
-solution to fixing the case with msleep_interruptible() was more simply
-to move to schedule_timeout_interruptible(). Why?
+Hi Kirill,
 
-The reason is that msleep_interruptible(), and many functions just like
-it, has a loop like this:
+Sorry, this fell through the cracks (thanks to Will for reminding me).
 
-        while (timeout && !signal_pending(current))
-                timeout = schedule_timeout_interruptible(timeout);
+On Sat, Jun 11, 2022 at 04:28:30AM +0300, Kirill A. Shutemov wrote:
+> On Fri, Jun 10, 2022 at 08:24:38AM -0700, Dave Hansen wrote:
+> > On 6/10/22 07:35, Kirill A. Shutemov wrote:
+> > > +/*
+> > > + * Report architecture specific information
+> > > + */
+> > > +int proc_pid_arch_status(struct seq_file *m, struct pid_namespace *ns,
+> > > +			struct pid *pid, struct task_struct *task)
+> > > +{
+> > > +	/*
+> > > +	 * Report AVX512 state if the processor and build option supported.
+> > > +	 */
+> > > +	if (cpu_feature_enabled(X86_FEATURE_AVX512F))
+> > > +		avx512_status(m, task);
+> > > +
+> > > +	seq_printf(m, "untag_mask:\t%#lx\n", mm_untag_mask(task->mm));
+> > > +
+> > > +	return 0;
+> > > +}
+> > 
+> > Arch-specific gunk is great for, well, arch-specific stuff.  AVX-512 and
+> > its, um, "quirks", really won't show up anywhere else.  But x86 isn't
+> > even the first to be doing this address tagging business.
+> > 
+> > Shouldn't we be talking to the ARM folks about a common way to do this?
+> 
+> + Catalin, Will.
+> 
+> I guess we can expose the mask via proc for ARM too, but I'm not sure if
+> we can unify interface further without breaking existing TBI users: TBI is
+> enabled per-thread while LAM is per-process.
 
-The call to kthread_stop() woke up the thread, so schedule_timeout_
-interruptible() returned early, but because signal_pending() returned
-true, it went back into another timeout, which was never woken up.
+Hardware TBI is enabled for all user space at boot (it was like this
+form the beginning). The TBI syscall interface is per-thread (TIF flag)
+but it doesn't change any hardware behaviour. The mask is fixed in
+hardware, unchangeable. I'm fine with reporting an untag_mask in a
+common way, only that setting it won't be possible on arm64.
 
-This wait loop pattern is common to various pieces of code, and I
-suspect that subtle misuse in a kthread that caused a deadlock in the
-code I looked at last week is also found elsewhere.
+If arm64 ever gains support for a modifiable untag_mask, it's a good
+chance it would be per mm as well since the controls for TBI are per
+page table.
 
-So this commit causes signal_pending() to return true when
-kthread_stop() is called. This is already what's done for
-TIF_NOTIFY_SIGNAL, for these same purposes of breaking out of wait
-loops, so a similar KTHREAD_SHOULD_STOP check isn't too much different.
-
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Eric W. Biederman <ebiederm@xmission.com>
-Cc: Toke Høiland-Jørgensen <toke@redhat.com>
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- include/linux/kthread.h      | 1 +
- include/linux/sched/signal.h | 9 +++++++++
- kernel/kthread.c             | 6 ++++++
- 3 files changed, 16 insertions(+)
-
-diff --git a/include/linux/kthread.h b/include/linux/kthread.h
-index 30e5bec81d2b..7061dde23237 100644
---- a/include/linux/kthread.h
-+++ b/include/linux/kthread.h
-@@ -87,6 +87,7 @@ void kthread_bind(struct task_struct *k, unsigned int cpu);
- void kthread_bind_mask(struct task_struct *k, const struct cpumask *mask);
- int kthread_stop(struct task_struct *k);
- bool kthread_should_stop(void);
-+bool __kthread_should_stop(struct task_struct *k);
- bool kthread_should_park(void);
- bool __kthread_should_park(struct task_struct *k);
- bool kthread_freezable_should_stop(bool *was_frozen);
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index cafbe03eed01..08700c65b806 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -11,6 +11,7 @@
- #include <linux/refcount.h>
- #include <linux/posix-timers.h>
- #include <linux/mm_types.h>
-+#include <linux/kthread.h>
- #include <asm/ptrace.h>
- 
- /*
-@@ -397,6 +398,14 @@ static inline int signal_pending(struct task_struct *p)
- 	 */
- 	if (unlikely(test_tsk_thread_flag(p, TIF_NOTIFY_SIGNAL)))
- 		return 1;
-+
-+	/*
-+	 * Likewise, KTHREAD_SHOULD_STOP isn't really a signal, but it also
-+	 * requires the same behavior, lest wait loops go forever.
-+	 */
-+	if (unlikely(__kthread_should_stop(p)))
-+		return 1;
-+
- 	return task_sigpending(p);
- }
- 
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index 3c677918d8f2..7e0743330cd4 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -145,6 +145,12 @@ void free_kthread_struct(struct task_struct *k)
- 	kfree(kthread);
- }
- 
-+bool __kthread_should_stop(struct task_struct *k)
-+{
-+	return (k->flags & PF_KTHREAD) &&
-+	       test_bit(KTHREAD_SHOULD_STOP, &to_kthread(k)->flags);
-+}
-+
- /**
-  * kthread_should_stop - should this kthread return now?
-  *
 -- 
-2.35.1
-
+Catalin

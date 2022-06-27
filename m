@@ -2,42 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F8055B639
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 06:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 068F055B63A
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 06:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbiF0E3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 00:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S231577AbiF0Ede (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 00:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiF0E33 (ORCPT
+        with ESMTP id S229519AbiF0Edc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 00:29:29 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0218C48
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 21:29:27 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VHRfB.M_1656304164;
-Received: from 30.32.122.103(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VHRfB.M_1656304164)
-          by smtp.aliyun-inc.com;
-          Mon, 27 Jun 2022 12:29:25 +0800
-Message-ID: <5b40e07d-7ed3-7eba-ea71-52e5a06c1ec8@linux.alibaba.com>
-Date:   Mon, 27 Jun 2022 12:29:28 +0800
+        Mon, 27 Jun 2022 00:33:32 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09C4A2703;
+        Sun, 26 Jun 2022 21:33:32 -0700 (PDT)
+Received: from [192.168.254.32] (unknown [47.189.24.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B38A120CD148;
+        Sun, 26 Jun 2022 21:33:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B38A120CD148
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1656304411;
+        bh=avE7xHHELqklzPDcSt/YrOSC54CUqeqgCWJf4YeqCVI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AbmNMsBTteWcN2qnNTjhnSHk3tPGG66xQvbhOJeywSKTIVS/xs1/1IUJZkFKa0O3C
+         RN5sjJueloOEnAO9+foLCHUlIAFtCyuPSwtg3JONIrX+H18mNMBokugjAySLgXCAMX
+         z9lYTQ5GLt3kqXGk8WbjHsa8KqM3lbw7EG3KlhLU=
+Message-ID: <b7f62c2e-b2ef-1528-d126-b2e0c001a7c4@linux.microsoft.com>
+Date:   Sun, 26 Jun 2022 23:33:29 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 7/7] migrate_pages(): fix failure counting for retry
-To:     Huang Ying <ying.huang@intel.com>, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        shy828301@gmail.com, ziy@nvidia.com
-References: <20220624025309.1033400-1-ying.huang@intel.com>
- <20220627022515.1067946-1-ying.huang@intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220627022515.1067946-1-ying.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v15 0/6] arm64: Reorganize the unwinder and implement
+ stack trace reliability checks
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Will Deacon <will@kernel.org>, broonie@kernel.org,
+        jpoimboe@redhat.com, ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maz@kernel.org, Kalesh Singh <kaleshsingh@google.com>
+References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
+ <20220617210717.27126-1-madvenka@linux.microsoft.com>
+ <20220623173224.GB16966@willie-the-truck>
+ <66545c21-cfcf-60eb-4acf-39be99520369@linux.microsoft.com>
+ <YrgkdBtbFmOvKJpX@FVFF77S0Q05N>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <YrgkdBtbFmOvKJpX@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -46,68 +63,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6/27/2022 10:25 AM, Huang Ying wrote:
-> After 10 retries, we will give up and the remaining pages will be
-> counted as failure in nr_failed and nr_thp_failed.  We should count
-> the failure in nr_failed_pages too.  This is done in this patch.
+On 6/26/22 04:18, Mark Rutland wrote:
+> On Fri, Jun 24, 2022 at 12:19:01AM -0500, Madhavan T. Venkataraman wrote:
+>>
+>>
+>> On 6/23/22 12:32, Will Deacon wrote:
+>>> On Fri, Jun 17, 2022 at 04:07:11PM -0500, madvenka@linux.microsoft.com wrote:
+>>>> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>>>>
+>>>> I have synced this patch series to v5.19-rc2.
+>>>> I have also removed the following patch.
+>>>>
+>>>> 	[PATCH v14 7/7] arm64: Select HAVE_RELIABLE_STACKTRACE
+>>>>
+>>>> as HAVE_RELIABLE_STACKTRACE depends on STACK_VALIDATION which is not present
+>>>> yet. This patch will be added in the future once Objtool is enhanced to
+>>>> provide stack validation in some form.
+>>>
+>>> Given that it's not at all obvious that we're going to end up using objtool
+>>> for arm64, does this patch series gain us anything in isolation?
+>>>
+>>
+>> BTW, I have synced my patchset to 5.19-rc2 and sent it as v15.
+>>
+>> So, to answer your question, patches 1 thru 3 in v15 are still useful even if we don't
+>> consider reliable stacktrace. These patches reorganize the unwinder code based on
+>> comments from both Mark Rutland and Mark Brown. Mark Brown has already OKed them.
+>> If Mark Rutland OKes them, we should upstream them.
 > 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Fixes: 5984fabb6e82 ("mm: move_pages: report the number of non-attempted pages")
-> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> ---
->   mm/migrate.c | 5 +++++
->   1 file changed, 5 insertions(+)
+> Sorry for the delay; I have been rather swamped recently and haven't had the
+> time to give this the time it needs.
 > 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 70a0e1f34c03..e42bd409d3aa 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1344,6 +1344,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   	int thp_retry = 1;
->   	int nr_failed = 0;
->   	int nr_failed_pages = 0;
-> +	int nr_retry_pages = 0;
->   	int nr_succeeded = 0;
->   	int nr_thp_succeeded = 0;
->   	int nr_thp_failed = 0;
-> @@ -1364,6 +1365,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   	for (pass = 0; pass < 10 && (retry || thp_retry); pass++) {
->   		retry = 0;
->   		thp_retry = 0;
-> +		nr_retry_pages = 0;
->   
->   		list_for_each_entry_safe(page, page2, from, lru) {
->   			/*
-> @@ -1449,12 +1451,14 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   				nr_thp_failed += thp_retry;
->   				if (!no_subpage_counting)
->   					nr_failed += retry;
-> +				nr_failed_pages += nr_retry_pages;
+> I'm happy with patches 1 and 2, and I've acked those in case Will wants to pick
+> them.
+> 
+> Kalesh (cc'd) is working to share the unwinder code with hyp, and I think that
+> we need to take a step back and consider how we can make the design work
+> cleanly with that. I'd had a go at prototyping making the unwinder more data
+> driven, but I haven't come up with something satisfactory so far.
+> 
+> It would be good if you could look at / comment on each others series.
+> 
 
-Can you move this a little forward to update 'nr_failed_pages' in one 
-place, which seems more readable?
-nr_failed_pages += nr_subpages + nr_retry_pages;
+I will review Kalesh's unwinder changes.
 
-Otherwise,
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Thanks.
 
->   				goto out;
->   			case -EAGAIN:
->   				if (is_thp)
->   					thp_retry++;
->   				else
->   					retry++;
-> +				nr_retry_pages += nr_subpages;
->   				break;
->   			case MIGRATEPAGE_SUCCESS:
->   				nr_succeeded += nr_subpages;
-> @@ -1481,6 +1485,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->   	if (!no_subpage_counting)
->   		nr_failed += retry;
->   	nr_thp_failed += thp_retry;
-> +	nr_failed_pages += nr_retry_pages;
->   	/*
->   	 * Try to migrate subpages of fail-to-migrate THPs, no nr_failed
->   	 * counting in this round, since all subpages of a THP is counted
+Madhavan

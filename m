@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D655A55D17B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5B755C3F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239651AbiF0MAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S237274AbiF0Lmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238922AbiF0Lwt (ORCPT
+        with ESMTP id S236911AbiF0Lka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:52:49 -0400
+        Mon, 27 Jun 2022 07:40:30 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57462DF22;
-        Mon, 27 Jun 2022 04:46:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CC4BF78;
+        Mon, 27 Jun 2022 04:35:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E91A3B80D37;
-        Mon, 27 Jun 2022 11:46:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C86C3411D;
-        Mon, 27 Jun 2022 11:46:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D7A3B81125;
+        Mon, 27 Jun 2022 11:35:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E52AC3411D;
+        Mon, 27 Jun 2022 11:35:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330387;
-        bh=SxpGI+CQk3fn6M8/MgNMGVqxpD3nKniUZv1qZm4HGwE=;
+        s=korg; t=1656329733;
+        bh=UE4q3p4KNvc7QvUyuEIy9Kn/QC0ZrrOcRjeRERd7ZP8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XY7uRXaEps9mOa4O0Gwi+kNrzkoNXynOUYhKr5DcOvV8w8JGfHJGOeRcQc4NvNBUZ
-         Aqzj1CALBJtMW71GmzBMnAZUNi7UwmVFbyMYGxqUIYP4cmMcNDZWQ2bF672yqQyG3L
-         iZI0ju83birm18lPptqiz02Ipk6kgez/YO7tCnGM=
+        b=kT0o/xNFGVvxb/NVwYW219+ugLka3+w27FVrjRyY9wddIY8QDCDjoBRkGbWbAEnYw
+         7a4yMuUAz8YioRiHOZcNeFP9lX8NgfsXeQMHM5S/6IgIwvINX9LqWsoVg4Jb4nCDH4
+         G6jGK7bu/r7eQtoIcoGa6jjk2ytvr7CR3sj8RQZ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aashish Sharma <shraash@google.com>,
-        kernel test robot <lkp@intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>, Stable@vger.kernel.org,
+        stable@vger.kernel.org, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.18 131/181] iio:proximity:sx9324: Check ret value of device_property_read_u32_array()
+Subject: [PATCH 5.15 097/135] iio:accel:kxcjk-1013: rearrange iio trigger get and register
 Date:   Mon, 27 Jun 2022 13:21:44 +0200
-Message-Id: <20220627111948.489224737@linuxfoundation.org>
+Message-Id: <20220627111940.972096570@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,42 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aashish Sharma <shraash@google.com>
+From: Dmitry Rokosov <DDRokosov@sberdevices.ru>
 
-commit 70171ed6dc53d2f580166d47f5b66cf51a6d0092 upstream.
+commit ed302925d708f2f97ae5e9fd6c56c16bb34f6629 upstream.
 
-0-day reports:
+IIO trigger interface function iio_trigger_get() should be called after
+iio_trigger_register() (or its devm analogue) strictly, because of
+iio_trigger_get() acquires module refcnt based on the trigger->owner
+pointer, which is initialized inside iio_trigger_register() to
+THIS_MODULE.
+If this call order is wrong, the next iio_trigger_put() (from sysfs
+callback or "delete module" path) will dereference "default" module
+refcnt, which is incorrect behaviour.
 
-drivers/iio/proximity/sx9324.c:868:3: warning: Value stored
-to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
-
-Put an if condition to break out of switch if ret is non-zero.
-
-Signed-off-by: Aashish Sharma <shraash@google.com>
-Fixes: a8ee3b32f5da ("iio:proximity:sx9324: Add dt_binding support")
-Reported-by: kernel test robot <lkp@intel.com>
-[swboyd@chromium.org: Reword commit subject, add fixes tag]
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
-Link: https://lore.kernel.org/r/20220613232224.2466278-1-swboyd@chromium.org
+Fixes: c1288b833881 ("iio: accel: kxcjk-1013: Increment ref counter for indio_dev->trig")
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20220524181150.9240-3-ddrokosov@sberdevices.ru
 Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/proximity/sx9324.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/iio/accel/kxcjk-1013.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/iio/proximity/sx9324.c
-+++ b/drivers/iio/proximity/sx9324.c
-@@ -885,6 +885,9 @@ sx9324_get_default_reg(struct device *de
- 			break;
- 		ret = device_property_read_u32_array(dev, prop, pin_defs,
- 						     ARRAY_SIZE(pin_defs));
-+		if (ret)
-+			break;
+--- a/drivers/iio/accel/kxcjk-1013.c
++++ b/drivers/iio/accel/kxcjk-1013.c
+@@ -1553,12 +1553,12 @@ static int kxcjk1013_probe(struct i2c_cl
+ 
+ 		data->dready_trig->ops = &kxcjk1013_trigger_ops;
+ 		iio_trigger_set_drvdata(data->dready_trig, indio_dev);
+-		indio_dev->trig = data->dready_trig;
+-		iio_trigger_get(indio_dev->trig);
+ 		ret = iio_trigger_register(data->dready_trig);
+ 		if (ret)
+ 			goto err_poweroff;
+ 
++		indio_dev->trig = iio_trigger_get(data->dready_trig);
 +
- 		for (pin = 0; pin < SX9324_NUM_PINS; pin++)
- 			raw |= (pin_defs[pin] << (2 * pin)) &
- 			       SX9324_REG_AFE_PH0_PIN_MASK(pin);
+ 		data->motion_trig->ops = &kxcjk1013_trigger_ops;
+ 		iio_trigger_set_drvdata(data->motion_trig, indio_dev);
+ 		ret = iio_trigger_register(data->motion_trig);
 
 

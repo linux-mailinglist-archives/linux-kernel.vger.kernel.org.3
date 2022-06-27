@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58AE55CDF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C654955C6A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237954AbiF0Lt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
+        id S237988AbiF0Ltd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238080AbiF0Lrp (ORCPT
+        with ESMTP id S238091AbiF0Lrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:47:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DD3E0C9;
-        Mon, 27 Jun 2022 04:39:28 -0700 (PDT)
+        Mon, 27 Jun 2022 07:47:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734BEE0D4;
+        Mon, 27 Jun 2022 04:39:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D607B81123;
-        Mon, 27 Jun 2022 11:39:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E11C3411D;
-        Mon, 27 Jun 2022 11:39:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BD4EB8111B;
+        Mon, 27 Jun 2022 11:39:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA9BC3411D;
+        Mon, 27 Jun 2022 11:39:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329965;
-        bh=6B5uUYwWf1fmHLXAP5QerfJShSxa6q+o1Lx1NcBbvLY=;
+        s=korg; t=1656329968;
+        bh=9bAV0+306x5lteaFMiWqSZkBkr8FcYIqevBwLdY+pKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NJB5eVXZVrTPMZozSL0Go+vy4SYBFnU7XR3YgOZWnVP9WEhOcE4hnY5O69A0XUkiV
-         sIDgSl+gYCrHM4t5u7Bo/WPNpq8ZJdwYyeWjah2uRK7uhCEAa/VzX5Gi8GsPTwN3dQ
-         W7cED11wxb2XsHxBjOuQbI1LQn0KTbZBo/oLfDC0=
+        b=aSbST5viX5731oVPv1KBbm2641On7LdF8F2BreQn3Vss0F22SzrwihFJ3jL64HQeb
+         t1CnB7u+Kcuq05pna8IvwYo75bkcQOW2ZDvqkrhg87JIfPM6cfVHp0jRwvaU+mJuJ/
+         DZAm8Q+icbSAMMZErHYYxy9c/Cp7EDBYEkc6BvyM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Wheeler <daniel.wheeler@amd.com>,
-        Wenjing Liu <Wenjing.Liu@amd.com>,
-        Alan Liu <HaoPing.Liu@amd.com>,
-        George Shen <george.shen@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.18 037/181] drm/amd/display: Fix typo in override_lane_settings
-Date:   Mon, 27 Jun 2022 13:20:10 +0200
-Message-Id: <20220627111945.638007868@linuxfoundation.org>
+        stable@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.18 038/181] USB: serial: pl2303: add support for more HXN (G) types
+Date:   Mon, 27 Jun 2022 13:20:11 +0200
+Message-Id: <20220627111945.667730346@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
 References: <20220627111944.553492442@linuxfoundation.org>
@@ -57,38 +54,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: George Shen <george.shen@amd.com>
+From: Johan Hovold <johan@kernel.org>
 
-commit 98b02e9f002b21944176774cf420c4d674f6201c upstream.
+commit ae60aac59a9ad8ab64a4b07de509a534a75b6bac upstream.
 
-[Why]
-The function currently skips overriding the drive
-settings of the first lane.
+Add support for further HXN (G) type devices (GT variant, GL variant, GS
+variant and GR) and document the bcdDevice mapping.
 
-[How]
-Change for loop to start at 0 instead of 1.
+Note that the TA and TB types use the same bcdDevice as some GT and GE
+variants, respectively, but that the HX status request can be used to
+determine which is which.
 
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Reviewed-by: Wenjing Liu <Wenjing.Liu@amd.com>
-Acked-by: Alan Liu <HaoPing.Liu@amd.com>
-Signed-off-by: George Shen <george.shen@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Also note that we currently do not distinguish between the various HXN
+(G) types in the driver but that this may change eventually (e.g. when
+adding GPIO support).
+
+Reported-by: Charles Yeh <charlesyeh522@gmail.com>
+Link: https://lore.kernel.org/r/YrF77b9DdeumUAee@hovoldconsulting.com
+Cc: stable@vger.kernel.org	# 5.13
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/serial/pl2303.c |   29 +++++++++++++++++------------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
 
---- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-@@ -944,7 +944,7 @@ static void override_lane_settings(const
- 
- 		return;
- 
--	for (lane = 1; lane < LANE_COUNT_DP_MAX; lane++) {
-+	for (lane = 0; lane < LANE_COUNT_DP_MAX; lane++) {
- 		if (lt_settings->voltage_swing)
- 			lane_settings[lane].VOLTAGE_SWING = *lt_settings->voltage_swing;
- 		if (lt_settings->pre_emphasis)
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -436,22 +436,27 @@ static int pl2303_detect_type(struct usb
+ 		break;
+ 	case 0x200:
+ 		switch (bcdDevice) {
+-		case 0x100:
++		case 0x100:	/* GC */
+ 		case 0x105:
++			return TYPE_HXN;
++		case 0x300:	/* GT / TA */
++			if (pl2303_supports_hx_status(serial))
++				return TYPE_TA;
++			fallthrough;
+ 		case 0x305:
++		case 0x400:	/* GL */
+ 		case 0x405:
++			return TYPE_HXN;
++		case 0x500:	/* GE / TB */
++			if (pl2303_supports_hx_status(serial))
++				return TYPE_TB;
++			fallthrough;
++		case 0x505:
++		case 0x600:	/* GS */
+ 		case 0x605:
+-			/*
+-			 * Assume it's an HXN-type if the device doesn't
+-			 * support the old read request value.
+-			 */
+-			if (!pl2303_supports_hx_status(serial))
+-				return TYPE_HXN;
+-			break;
+-		case 0x300:
+-			return TYPE_TA;
+-		case 0x500:
+-			return TYPE_TB;
++		case 0x700:	/* GR */
++		case 0x705:
++			return TYPE_HXN;
+ 		}
+ 		break;
+ 	}
 
 

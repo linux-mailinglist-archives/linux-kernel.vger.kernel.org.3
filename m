@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1D055CB3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39A455C61C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbiF0L0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S239462AbiF0L5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234911AbiF0LZR (ORCPT
+        with ESMTP id S238346AbiF0Luu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:25:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A9F65BE;
-        Mon, 27 Jun 2022 04:25:12 -0700 (PDT)
+        Mon, 27 Jun 2022 07:50:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC5A2640;
+        Mon, 27 Jun 2022 04:43:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2C153B81123;
-        Mon, 27 Jun 2022 11:25:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D88DC3411D;
-        Mon, 27 Jun 2022 11:25:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D3C161240;
+        Mon, 27 Jun 2022 11:43:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F3A9C3411D;
+        Mon, 27 Jun 2022 11:43:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329109;
-        bh=FyoFVqtZUvwcbGZZh1GV52hKkfQQUNKMb6E4lVcaMVk=;
+        s=korg; t=1656330235;
+        bh=YKO1eM2YLao07HJsQnH3Deq/iTutfUzqtIVBaEnnHag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fMriZVm2Nm6Mbgf5q/q+JlyQAbDrwih2COKSSlLUPRlAGJgZIOf0+DrvMiwtJcVhQ
-         RtcXcMgDsrn547G27zbmbKqAMhyJnGpt1sdEaJe7XaiCRQNaoIKOFM4kMOF2irZXoX
-         wbay9F1zvvfJJ9lZKDz+mcukZsuZfBkHrOiPDmHY=
+        b=SrPQlCpT5sLTTDipvIRA6p8OBz5AOwp8iPsbai3af3F0M4tn58ja2No7CKUigdjkZ
+         MZSVZ+Jlm1QSPdGTvA+xswUX3eu+w4tJ/sZYo15oQYVPmdHsu8WTM9QGSBC3JtJN19
+         H5SVd2ytrofv36FYsc9vZFhNfZ01McDCrBAOAwMc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 054/102] nvme: centralize setting the timeout in nvme_alloc_request
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 092/181] iommu/ipmmu-vmsa: Fix compatible for rcar-gen4
 Date:   Mon, 27 Jun 2022 13:21:05 +0200
-Message-Id: <20220627111935.074765866@linuxfoundation.org>
+Message-Id: <20220627111947.226990111@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,97 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+From: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-[ Upstream commit 0d2e7c840b178bf9a47bd0de89d8f9182fa71d86 ]
+[ Upstream commit 9f7d09fe23a0112c08d2326d9116fccb5a912660 ]
 
-The function nvme_alloc_request() is called from different context
-(I/O and Admin queue) where callers do not consider the I/O timeout when
-called from I/O queue context.
+Fix compatible string for R-Car Gen4.
 
-Update nvme_alloc_request() to set the default I/O and Admin timeout
-value based on whether the queuedata is set or not.
-
-Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: ae684caf465b ("iommu/ipmmu-vmsa: Add support for R-Car Gen4")
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Link: https://lore.kernel.org/r/20220617010107.3229784-1-yoshihiro.shimoda.uh@renesas.com
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/core.c     | 11 +++++++++--
- drivers/nvme/host/lightnvm.c |  3 ++-
- drivers/nvme/host/pci.c      |  2 --
- 3 files changed, 11 insertions(+), 5 deletions(-)
+ drivers/iommu/ipmmu-vmsa.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 0aa68da51ed7..4a7154cbca50 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -553,6 +553,11 @@ struct request *nvme_alloc_request(struct request_queue *q,
- 	if (IS_ERR(req))
- 		return req;
- 
-+	if (req->q->queuedata)
-+		req->timeout = NVME_IO_TIMEOUT;
-+	else /* no queuedata implies admin queue */
-+		req->timeout = ADMIN_TIMEOUT;
-+
- 	req->cmd_flags |= REQ_FAILFAST_DRIVER;
- 	nvme_clear_nvme_request(req);
- 	nvme_req(req)->cmd = cmd;
-@@ -927,7 +932,8 @@ int __nvme_submit_sync_cmd(struct request_queue *q, struct nvme_command *cmd,
- 	if (IS_ERR(req))
- 		return PTR_ERR(req);
- 
--	req->timeout = timeout ? timeout : ADMIN_TIMEOUT;
-+	if (timeout)
-+		req->timeout = timeout;
- 
- 	if (buffer && bufflen) {
- 		ret = blk_rq_map_kern(q, req, buffer, bufflen, GFP_KERNEL);
-@@ -1097,7 +1103,8 @@ static int nvme_submit_user_cmd(struct request_queue *q,
- 	if (IS_ERR(req))
- 		return PTR_ERR(req);
- 
--	req->timeout = timeout ? timeout : ADMIN_TIMEOUT;
-+	if (timeout)
-+		req->timeout = timeout;
- 	nvme_req(req)->flags |= NVME_REQ_USERCMD;
- 
- 	if (ubuffer && bufflen) {
-diff --git a/drivers/nvme/host/lightnvm.c b/drivers/nvme/host/lightnvm.c
-index 8e562d0f2c30..88a7c8eac455 100644
---- a/drivers/nvme/host/lightnvm.c
-+++ b/drivers/nvme/host/lightnvm.c
-@@ -774,7 +774,8 @@ static int nvme_nvm_submit_user_cmd(struct request_queue *q,
- 		goto err_cmd;
- 	}
- 
--	rq->timeout = timeout ? timeout : ADMIN_TIMEOUT;
-+	if (timeout)
-+		rq->timeout = timeout;
- 
- 	if (ppa_buf && ppa_len) {
- 		ppa_list = dma_pool_alloc(dev->dma_pool, GFP_KERNEL, &ppa_dma);
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 7de24a10dd92..f2d0148d4050 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -1356,7 +1356,6 @@ static enum blk_eh_timer_return nvme_timeout(struct request *req, bool reserved)
- 		return BLK_EH_RESET_TIMER;
- 	}
- 
--	abort_req->timeout = ADMIN_TIMEOUT;
- 	abort_req->end_io_data = NULL;
- 	blk_execute_rq_nowait(abort_req->q, NULL, abort_req, 0, abort_endio);
- 
-@@ -2283,7 +2282,6 @@ static int nvme_delete_queue(struct nvme_queue *nvmeq, u8 opcode)
- 	if (IS_ERR(req))
- 		return PTR_ERR(req);
- 
--	req->timeout = ADMIN_TIMEOUT;
- 	req->end_io_data = nvmeq;
- 
- 	init_completion(&nvmeq->delete_done);
+diff --git a/drivers/iommu/ipmmu-vmsa.c b/drivers/iommu/ipmmu-vmsa.c
+index 8fdb84b3642b..1d42084d0276 100644
+--- a/drivers/iommu/ipmmu-vmsa.c
++++ b/drivers/iommu/ipmmu-vmsa.c
+@@ -987,7 +987,7 @@ static const struct of_device_id ipmmu_of_ids[] = {
+ 		.compatible = "renesas,ipmmu-r8a779a0",
+ 		.data = &ipmmu_features_rcar_gen4,
+ 	}, {
+-		.compatible = "renesas,rcar-gen4-ipmmu",
++		.compatible = "renesas,rcar-gen4-ipmmu-vmsa",
+ 		.data = &ipmmu_features_rcar_gen4,
+ 	}, {
+ 		/* Terminator */
 -- 
 2.35.1
 

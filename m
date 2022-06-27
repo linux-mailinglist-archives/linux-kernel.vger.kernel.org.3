@@ -2,116 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C11755D468
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3806755CBAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240408AbiF0Sj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 14:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38658 "EHLO
+        id S240239AbiF0Skp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238686AbiF0Sj4 (ORCPT
+        with ESMTP id S239972AbiF0Skn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 14:39:56 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16467B25
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:39:55 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id s10so12016883ljh.12
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:39:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j4hbmbJoMUR/043f1gtsU9ggy7W36/KPjU+Af3Jvda8=;
-        b=W2bp3N/nc6A9fd8TGl01wDh9lzy9wHDNwzOb6PTiyT5sHPZ9gZsWvNOfQM+oO2QLy6
-         hn6cLw585q9YpYXzFr7ggc2fH86iRssYldTefymZoF3iUnFAgSvdGVCjX9WlaZ8im9q4
-         6g6HM3bkfYLU9V7ObvqHMofQwZw4Jmsz8Xv/qWgl3KXxofKkdfsaKS/5x/303/PhHMEn
-         UhvAdPSSo0YVDSgcCT9pjeyj8yay52Ham8/uSv14B1iA991nV1cdeUFb9e0SmtFRjFyg
-         tN7V4WRIv4w6Qqqv8Em05r4ZKFGt6EiC6pPmL/IG4V61eL8MjRNAhkz8U2fXq0jp1cLS
-         ULUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j4hbmbJoMUR/043f1gtsU9ggy7W36/KPjU+Af3Jvda8=;
-        b=UKGLBkm7oROtv1Xknez+VEJsgOvD0bqo5o1NEUkY799qAaCYx4w1tFXdLyhottazea
-         Ul7edZtkF/7uFBY7L/HAMzmdOciYZInNoCsSHpTVxnaSnBkXUdfLonZlsvnNiUIY/vg2
-         L4OrRwygCvbY3IlvZMFSBIfFTXfWLlpaX0dYK8RZ9X+mU2V48b+QVfPnQYlDJkmhIHWt
-         sxrb4fuoAEasMiRAEwj/ng6ZkV5HZUC8xMOUUOXichedHzmvLxqPRCLq8mfZnqQ4lleg
-         BxhcvqN7aM2bFScoBsAgwhvglx7IJiQLQnMZEzWGyd1mZxKNBz0uXZehkYJQEQXW0o2o
-         mhYA==
-X-Gm-Message-State: AJIora8FcaFPAEQUO7yczhHp+K4ldkYqJb5iWFfhDIjHCdWEHDFJYRbx
-        dFI3j4TfBkIuaaAuhivySL7cIyWQ0yaQzu6V1pb9mY10Z0hQ2g==
-X-Google-Smtp-Source: AGRyM1t2YlhNyy2b2oS22ZEa07490K1W8KWHnnHXnjPVpPlJppubAGVaXmqVB682qW55u19S3zFl1fTsyodE0sxBOaw=
-X-Received: by 2002:a2e:2a43:0:b0:25a:84a9:921c with SMTP id
- q64-20020a2e2a43000000b0025a84a9921cmr7461767ljq.83.1656355193311; Mon, 27
- Jun 2022 11:39:53 -0700 (PDT)
+        Mon, 27 Jun 2022 14:40:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D954B87;
+        Mon, 27 Jun 2022 11:40:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2722B615BF;
+        Mon, 27 Jun 2022 18:40:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF629C3411D;
+        Mon, 27 Jun 2022 18:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656355241;
+        bh=O8g6wcf1QPgEoRwydS1Km0FjoqvElRpx0Nu7vzP9UR8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sBZK3ryOqz5TPWSBlfX9n5Vby5bHZfrSgipJnCcgzOE9VOGOY70NSMsFWGS36HFqg
+         L5fHwjjgHjaIJGhpEZ9W+hiV0fiDWT6Aa485P6FapAaPdZ20LDXwMwFfHgKz44dzvH
+         ycVRSlKGPLGj7h75EjMv+eTAEgZltda3NdGHVxcYRl8dvVVLsY+3Y/yN30crrhHOox
+         ReBKd/YoyZuIPXYD6e1PgNqK20R53gUDKcd8AO+tQs7XscCpykqODHcMSJkwf2J1hN
+         Oc8BTCe8lcXht5e7Yav8zcHUVfGkglc2I0YcBl6rBrmROJn5XnUKVb2ukCuQ93sP9u
+         yMtEj3P/0J3fQ==
+Date:   Mon, 27 Jun 2022 11:40:31 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Richie Pearn <richard.pearn@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH net-next 1/4] time64.h: define PSEC_PER_NSEC and use it
+ in tc-taprio
+Message-ID: <20220627114031.77c5a6e6@kernel.org>
+In-Reply-To: <20220627100614.s2arerirkmcnd37z@skbuf>
+References: <20220626120505.2369600-1-vladimir.oltean@nxp.com>
+        <20220626120505.2369600-2-vladimir.oltean@nxp.com>
+        <5db4e640-8165-d7bf-c6b6-192ea7edfafd@arm.com>
+        <20220627085101.jw55y3fakqcw7zgi@skbuf>
+        <4e4b9e1a-778e-9ca1-5c15-65e45a532790@arm.com>
+        <20220627100614.s2arerirkmcnd37z@skbuf>
 MIME-Version: 1.0
-References: <20220627161123.1386853-1-pgonda@google.com> <Yrnync27TAhgSRUq@google.com>
-In-Reply-To: <Yrnync27TAhgSRUq@google.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Mon, 27 Jun 2022 12:39:41 -0600
-Message-ID: <CAMkAt6q9iTsJO=UY_6588Zqa_rUjr5c01H5NsCj-4FiuTGnncw@mail.gmail.com>
-Subject: Re: [PATCH] KVM: SEV: Clear the pages pointer in sev_unpin_memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm list <kvm@vger.kernel.org>, Greg Thelen <gthelen@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 12:10 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Jun 27, 2022, Peter Gonda wrote:
-> > Clear to the @pages array pointer in sev_unpin_memory to avoid leaving a
-> > dangling pointer to invalid memory.
-> >
-> > Signed-off-by: Peter Gonda <pgonda@google.com>
-> > Cc: Greg Thelen <gthelen@google.com>
-> > Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > Cc: Sean Christopherson <seanjc@google.com>
-> > Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> > Cc: kvm@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > ---
-> >  arch/x86/kvm/svm/sev.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> > index 309bcdb2f929..485ad86c01c6 100644
-> > --- a/arch/x86/kvm/svm/sev.c
-> > +++ b/arch/x86/kvm/svm/sev.c
-> > @@ -452,6 +452,7 @@ static void sev_unpin_memory(struct kvm *kvm, struct page **pages,
-> >       unpin_user_pages(pages, npages);
-> >       kvfree(pages);
-> >       sev->pages_locked -= npages;
-> > +     *pages = NULL;
->
-> Would this have helped detect a real bug?  I generally like cleaning up, but this
-> leaves things in a somewhat inconsistent state, e.g. when unpinning a kvm_enc_region,
-> pages will be NULL but npages will be non-zero.  It's somewhat moot because the
-> region is immediately freed in that case, but that begs the question of what real
-> benefit this provides.  sev_dbg_crypt() is the only flow where there's much danger
-> of a use-after-free.
->
+On Mon, 27 Jun 2022 10:06:15 +0000 Vladimir Oltean wrote:
+> > I do not have a strong opinion on where to put it. But I think that if you put a
+> > section above TIME64_MAX should work.  
+> 
+> @networking people: do you mind if in v2 I move this patch to the end,
+> hardcode 1000 in the current DSA patch 4/4, and then replace it afterwards
+> with PSEC_PER_NSEC, together with tc-taprio? I'd like to leave the code
+> in a clean state, but remember this is also a patch that fixes a
+> functional issue, even if on net-next, so one dependency less can't
+> hurt, for those who'll want to backport.
 
-No strong opinion here, I just thought since this is a helper that
-takes a 'struct page **pages" we may as well clear this. While there
-are no bugs caught now if someone were to introduce something wrong
-this would make it more clear.
+Makes sense.
 
-We could update sev_unpin_memory() to take a int *npages so it can be
-cleared as well. Since kvm_enc_region describes a region with u64
-instead of pointers that seemed "safer" give you'd have to cast them
-to dereference.
-
-Totally fine with the NACK of course. =]

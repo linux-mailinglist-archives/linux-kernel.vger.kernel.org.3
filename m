@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC44855C4EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F33BC55D35A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237579AbiF0LoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43548 "EHLO
+        id S235643AbiF0LfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237179AbiF0Lmc (ORCPT
+        with ESMTP id S236297AbiF0Lde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:42:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70648DF0E;
-        Mon, 27 Jun 2022 04:36:29 -0700 (PDT)
+        Mon, 27 Jun 2022 07:33:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4660DE85;
+        Mon, 27 Jun 2022 04:30:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 279EAB81117;
-        Mon, 27 Jun 2022 11:36:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E6EAC36AE2;
-        Mon, 27 Jun 2022 11:36:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38D0F612D8;
+        Mon, 27 Jun 2022 11:30:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47DE0C3411D;
+        Mon, 27 Jun 2022 11:30:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329786;
-        bh=4w0rb8WM7fGTNmflEmNCvYh4biFDvlmKXvwa62Cg0+s=;
+        s=korg; t=1656329450;
+        bh=kkt3gAkpk4zSt5RnRBLPq4ddCp0djTQjV7HBZwGkRQc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BoDwWpmrih7xFRqP9a4roue5Dh0ee3BWOfMdDcylUGw2VVH8UmivwCbW8VkeAD7g2
-         Yg+Wa62483WdyYFHOWwq9gVwr/axEB/RWsLiZ/siCZQlyk2k0+WZtD9ITkxERrKPNY
-         Kru2yuIMSHB70KLsNw8KplnkZpYMaMKMD5mwmelM=
+        b=KGobKaAqFvrsExtmcMeKl6MhmHpiLfwOzTOXw/5Z6gtwhCRbWohYJnlU24+1qiP3R
+         eTKx02eS3DWx0u3GUPCzoqOh9B46fl0ZCi8r7rIaZ/BRa58ffhJO5fPt6RnjhXgdtm
+         BOjOr1fQp8s+VfdMHn+e7Haz8pZ4ENsUwUYQ5n10=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH 5.15 114/135] parisc/stifb: Fix fb_is_primary_device() only available with CONFIG_FB_STI
+        stable@vger.kernel.org,
+        Sathvika Vasireddy <sathvika@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.4 50/60] powerpc/rtas: Allow ibm,platform-dump RTAS call with null buffer address
 Date:   Mon, 27 Jun 2022 13:22:01 +0200
-Message-Id: <20220627111941.461212505@linuxfoundation.org>
+Message-Id: <20220627111929.162390729@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,52 +58,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Andrew Donnellan <ajd@linux.ibm.com>
 
-commit 1d0811b03eb30b2f0793acaa96c6ce90b8b9c87a upstream.
+commit 7bc08056a6dabc3a1442216daf527edf61ac24b6 upstream.
 
-Fix this build error noticed by the kernel test robot:
+Add a special case to block_rtas_call() to allow the ibm,platform-dump RTAS
+call through the RTAS filter if the buffer address is 0.
 
-drivers/video/console/sticore.c:1132:5: error: redefinition of 'fb_is_primary_device'
- arch/parisc/include/asm/fb.h:18:19: note: previous definition of 'fb_is_primary_device'
+According to PAPR, ibm,platform-dump is called with a null buffer address
+to notify the platform firmware that processing of a particular dump is
+finished.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: stable@vger.kernel.org   # v5.10+
+Without this, on a pseries machine with CONFIG_PPC_RTAS_FILTER enabled, an
+application such as rtas_errd that is attempting to retrieve a dump will
+encounter an error at the end of the retrieval process.
+
+Fixes: bd59380c5ba4 ("powerpc/rtas: Restrict RTAS requests from userspace")
+Cc: stable@vger.kernel.org
+Reported-by: Sathvika Vasireddy <sathvika@linux.ibm.com>
+Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+Reviewed-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Reviewed-by: Nathan Lynch <nathanl@linux.ibm.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220614134952.156010-1-ajd@linux.ibm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/parisc/include/asm/fb.h    |    2 +-
- drivers/video/console/sticore.c |    2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ arch/powerpc/kernel/rtas.c |   11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/arch/parisc/include/asm/fb.h
-+++ b/arch/parisc/include/asm/fb.h
-@@ -12,7 +12,7 @@ static inline void fb_pgprotect(struct f
- 	pgprot_val(vma->vm_page_prot) |= _PAGE_NO_CACHE;
- }
+--- a/arch/powerpc/kernel/rtas.c
++++ b/arch/powerpc/kernel/rtas.c
+@@ -988,7 +988,7 @@ static struct rtas_filter rtas_filters[]
+ 	{ "get-time-of-day", -1, -1, -1, -1, -1 },
+ 	{ "ibm,get-vpd", -1, 0, -1, 1, 2 },
+ 	{ "ibm,lpar-perftools", -1, 2, 3, -1, -1 },
+-	{ "ibm,platform-dump", -1, 4, 5, -1, -1 },
++	{ "ibm,platform-dump", -1, 4, 5, -1, -1 },		/* Special cased */
+ 	{ "ibm,read-slot-reset-state", -1, -1, -1, -1, -1 },
+ 	{ "ibm,scan-log-dump", -1, 0, 1, -1, -1 },
+ 	{ "ibm,set-dynamic-indicator", -1, 2, -1, -1, -1 },
+@@ -1035,6 +1035,15 @@ static bool block_rtas_call(int token, i
+ 				size = 1;
  
--#if defined(CONFIG_STI_CONSOLE) || defined(CONFIG_FB_STI)
-+#if defined(CONFIG_FB_STI)
- int fb_is_primary_device(struct fb_info *info);
- #else
- static inline int fb_is_primary_device(struct fb_info *info)
---- a/drivers/video/console/sticore.c
-+++ b/drivers/video/console/sticore.c
-@@ -1127,6 +1127,7 @@ int sti_call(const struct sti_struct *st
- 	return ret;
- }
- 
-+#if defined(CONFIG_FB_STI)
- /* check if given fb_info is the primary device */
- int fb_is_primary_device(struct fb_info *info)
- {
-@@ -1142,6 +1143,7 @@ int fb_is_primary_device(struct fb_info
- 	return (sti->info == info);
- }
- EXPORT_SYMBOL(fb_is_primary_device);
-+#endif
- 
- MODULE_AUTHOR("Philipp Rumpf, Helge Deller, Thomas Bogendoerfer");
- MODULE_DESCRIPTION("Core STI driver for HP's NGLE series graphics cards in HP PARISC machines");
+ 			end = base + size - 1;
++
++			/*
++			 * Special case for ibm,platform-dump - NULL buffer
++			 * address is used to indicate end of dump processing
++			 */
++			if (!strcmp(f->name, "ibm,platform-dump") &&
++			    base == 0)
++				return false;
++
+ 			if (!in_rmo_buf(base, end))
+ 				goto err;
+ 		}
 
 

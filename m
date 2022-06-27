@@ -2,109 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342F355B4D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 03:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122D355B4E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 03:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiF0BFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 21:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
+        id S229951AbiF0BKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 21:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiF0BFm (ORCPT
+        with ESMTP id S229486AbiF0BKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 21:05:42 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364052AE6;
-        Sun, 26 Jun 2022 18:05:42 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-101b4f9e825so11175592fac.5;
-        Sun, 26 Jun 2022 18:05:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bEDEWM/uIediVqxTgHJ1ffqjVVrgXA7HPhbIDVnGRjA=;
-        b=N0kobSzdTz1T5pZSU48sBPPO1LDhIsX6IU8x3mwYeyaf9BsgbSveanERApsoUkF6e3
-         2wR3FtV9u/Fx6PCJX7oe/R/5ul4XjCJrnIh3GJEMSR88iF6j3rkjiJoncM+02Z4fLOYB
-         v+QcK249wDse+JdkMxAOzb0lLtvlrlJv/8Qf4iY4B9Vy302menS+GWt0kexRSOQj4bvN
-         HUv0frlzdNtwdCCnJ+gIESQUF0ZynlonbAkkqOFNPPg8MyUnxKZzVb7n/S0KvPajOWF/
-         tX63CdA8mNYxHFVjGEh9J+rrhsvA3T0EEJ27F1MI8qmjVWMWIIw9zeNB4yqYo2mo52SV
-         b3mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bEDEWM/uIediVqxTgHJ1ffqjVVrgXA7HPhbIDVnGRjA=;
-        b=lR+DPMbcnwqfvOyjdzqmKeA+LeFzbAIIS3RNFVaVvmhHdTk8EDNzz+I1WzCkf7I6Yr
-         3tIiFO6eSU/fpmJm6eISm5NvWvvLEl6hUBL+5D1rFf70Keg+vbnYl4i8CGHuSEuyp29+
-         TAp/K9bhohFAambgjM03WHtJPFb1uoQ/VWbjsaD5L4aKhBM85BEfClU8x0EugDQTnsOP
-         /GKciBUUZbTvQpcv/WfHimmkGCMYYhrtUGErHLDZ5DxeLzzK5ZDyBHOwwCXUIVJvnNGN
-         XKLZgABQzkq+WsRkDmKV3r6Oos5s+ZyBhy59luun5eiilIy0SXk24yRVW6EwEV8L6sSZ
-         oOgg==
-X-Gm-Message-State: AJIora/+JKWHpvZ5ENX9HusRHrMZxVgvWyarSTf9HvCKkOPs13+ARzGh
-        OHpU2FiIRSNa98Q72VNV7WGhYoeAZK4vh7w6HHc=
-X-Google-Smtp-Source: AGRyM1usK8XoCZ+Jm60xYYm5XWgIu/hR2mwVJiqsxvAhVLdVx5kpsc2MfE0Cvr+InPsxFp+qlwuYqkLSOhZFREg+e/I=
-X-Received: by 2002:a05:6870:b52a:b0:101:d9d7:e879 with SMTP id
- v42-20020a056870b52a00b00101d9d7e879mr6548422oap.258.1656291940718; Sun, 26
- Jun 2022 18:05:40 -0700 (PDT)
+        Sun, 26 Jun 2022 21:10:13 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800C826E9;
+        Sun, 26 Jun 2022 18:10:12 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 25R19uS5010238;
+        Mon, 27 Jun 2022 10:09:57 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 25R19uS5010238
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1656292197;
+        bh=5BLN0cyqfGikv5WV62zBzoDe5H8TTxZ+zfg+tx/rKAI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MTVj7kms14DUS/IVI8COXaEGLvTBJVqBEGhvdd6NzhzRlbOnFx7dfzwbwtjuUIOaz
+         lzMRKB8NKveAK0azBXCZSHst7o6Z/+IAYWmvWzzVxD6PvsAkeb0npPnqSaNai6VUUB
+         OsL3a9g5yhdNKwokK2s0WwjteevNCLwQ1WTXaKqQvJQ74xV3vodf4QQ7W8jdPsNwrC
+         kz0hd5NMo0pLm60igPklbYtBzI2NrFHKH0ZQSEzC59jDvgMSLR0LSTGyIlxiYwlWn6
+         47Aq2FPI+budX7PmXEuFdtEAQslkiOkLWHZmdjWPBq19Wz3PswaKn3UZ0TXad8EFhK
+         9inuXME1A9+mg==
+X-Nifty-SrcIP: [209.85.221.52]
+Received: by mail-wr1-f52.google.com with SMTP id v14so10861859wra.5;
+        Sun, 26 Jun 2022 18:09:57 -0700 (PDT)
+X-Gm-Message-State: AJIora+9kt5E1HaHl3Td4gVY+O8zeK/IwwW+qK61bNd7byTpTeqRgN1X
+        91NMszQBdc/tczeMUp0sA7a3KL9Dcur2/P2djPk=
+X-Google-Smtp-Source: AGRyM1ufanJCl9KWCeyKvSCdGOORFzfHQTyAPXmN4eSgxzhpsGwZTjKzLo8WRFdi+h/pbUr4G+Oj9FbmjxGUhR6OuLc=
+X-Received: by 2002:adf:e104:0:b0:21b:9938:b07a with SMTP id
+ t4-20020adfe104000000b0021b9938b07amr9763735wrz.682.1656292195865; Sun, 26
+ Jun 2022 18:09:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220625061844.226764-1-xiangyang3@huawei.com>
-In-Reply-To: <20220625061844.226764-1-xiangyang3@huawei.com>
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-Date:   Mon, 27 Jun 2022 06:35:28 +0530
-Message-ID: <CAFqt6zYd2GVv4kb4tWVVen-pq4ynN=q8jbE+AWmsjfeD8SJmqg@mail.gmail.com>
-Subject: Re: [PATCH -next] mm/memcontrol.c: replace cgroup_memory_nokmem with mem_cgroup_kmem_disabled()
-To:     Xiang Yang <xiangyang3@huawei.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>, roman.gushchin@linux.dev,
-        shakeelb@google.com, songmuchun@bytedance.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org
+References: <CAK7LNARjq-x+8rdXfkVt2YEoJsjnZNntxurYTwOqEaAX71m04w@mail.gmail.com>
+ <CAHk-=wgcsUU-TNoLS7Q6YF3RCSVAKwNM7gFOwqnPQTiU_oGEWA@mail.gmail.com>
+In-Reply-To: <CAHk-=wgcsUU-TNoLS7Q6YF3RCSVAKwNM7gFOwqnPQTiU_oGEWA@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 27 Jun 2022 10:09:19 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQLUGMfWqCNcXQ88xVq2oKTO-daY3JWF7GTKfJMeZ=jOw@mail.gmail.com>
+Message-ID: <CAK7LNAQLUGMfWqCNcXQ88xVq2oKTO-daY3JWF7GTKfJMeZ=jOw@mail.gmail.com>
+Subject: Re: [GIT PULL] Kbuild fixes for v5.19-rc4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 11:51 AM Xiang Yang <xiangyang3@huawei.com> wrote:
+Hi Linus,
+
+
+On Mon, Jun 27, 2022 at 3:20 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> mem_cgroup_kmem_disabled() checks whether the kmem accounting is off.
-> Therefore, replace cgroup_memory_nokmem with mem_cgroup_kmem_disabled(),
-> which is the same work in percpu.c and slab_common.c.
+> On Sat, Jun 25, 2022 at 3:16 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Please pull a couple of Kbuild fixes.
 >
-> Signed-off-by: Xiang Yang <xiangyang3@huawei.com>
-Acked-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
-> ---
->  mm/memcontrol.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Masahiro, I already complained about this once:
 >
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 85adc43c5a25..4672c9ddd188 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -3815,7 +3815,7 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
->  #ifdef CONFIG_MEMCG_KMEM
->  static int memcg_online_kmem(struct mem_cgroup *memcg)
->  {
-> -       if (cgroup_memory_nokmem)
-> +       if (mem_cgroup_kmem_disabled())
->                 return 0;
+>     Section mismatch in reference from the variable .. declared __init
 >
->         if (unlikely(mem_cgroup_is_root(memcg)))
-> @@ -3830,7 +3830,7 @@ static int memcg_online_kmem(struct mem_cgroup *memcg)
+> and now you re-introduced this sneakily by just putting it in another place.
 >
->  static void memcg_offline_kmem(struct mem_cgroup *memcg)
->  {
-> -       if (cgroup_memory_nokmem)
-> +       if (mem_cgroup_kmem_disabled())
->                 return;
+> I told you last time that you need to *FIX* these things before adding
+> the warning, instead of adding a warning and then waiting for others
+> to fix them.
+
+Sorry for not explaining this in my email.
+
+I just thought I had fixed all the warnings,
+at least the ones previously reported in linux-next:
+https://lore.kernel.org/all/20220602092809.04008a86@canb.auug.org.au/
+
+
+
+
+> Yes, it's fixing an earlier mistake, but that earlier mistake is over
+> a decade old by now.
 >
->         if (unlikely(mem_cgroup_is_root(memcg)))
-> --
-> 2.22.0
+> Now, the only warning that seems to show up for me is about
+> tick_nohz_full_setup. Which is only called from housekeeping_setup()
+> in kernel/sched/isolation.c if I grepped correctly.
+
+
+Sorry, I did not notice this.
+It did not show up in allmodconfig test.
+tick_nohz_full_setup() is only compiled when CONFIG_NO_HZ_FULL=y.
+
+I rely on the 0day bot for randconfig tests, but I did not get the report.
+
+
+Sorry about that.
+
+
 >
+> And that seems only ever built-in as far as I can tell, so the whole
+> export seems pointless, and the fix is presumably to remove the
+> export_SYMBOL_GPL entirely.
 >
+> So it seems fixable.
+>
+> But I'm upset about this sneaking in when we _talked_ about this issue earlier.
+>
+> Paul - that export was added by commit ae9e557b5be2 ("time: Export
+> tick start/stop functions for rcutorture"), and it seems to have been
+> bogus even at that time.
+>
+>               Linus
+
+
+I can send a patch.
+
+
+-- 
+Best Regards
+Masahiro Yamada

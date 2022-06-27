@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1CF55C2C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F161955CCA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236694AbiF0LkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
+        id S239032AbiF0L4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236498AbiF0Lhf (ORCPT
+        with ESMTP id S237964AbiF0Lt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:37:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40993290;
-        Mon, 27 Jun 2022 04:33:38 -0700 (PDT)
+        Mon, 27 Jun 2022 07:49:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA04F2C;
+        Mon, 27 Jun 2022 04:43:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0268FB81117;
-        Mon, 27 Jun 2022 11:33:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 579CBC3411D;
-        Mon, 27 Jun 2022 11:33:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF7AE61274;
+        Mon, 27 Jun 2022 11:43:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04FD8C341D0;
+        Mon, 27 Jun 2022 11:43:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329615;
-        bh=a5OrQc6zCfZOOPj7beO3LYZfOp0JdsRpSNA96LCPC8U=;
+        s=korg; t=1656330203;
+        bh=/23RHVTrOfPcGrYygrtoRfvlXfe9Z/ivIRH7rlkwIlk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wt9btUnkCoELC8YOIhrnofviKiWYqt+C3NZFkiYbOgXLVcE7eToIPauzWO0EmgyXF
-         z/44NmDLHjJVpwDGyvO14Kr5hR7LKVGE7wKX/lLdUD6szmghQrV38s2HPzqCfNfP8V
-         Lp8LZYJgjE/1OZi34h4oYjPqGdLYRNWAIJBwnk5Y=
+        b=2ZZ/lNyaUqm58YivTWLrLq7TAMQqNvYUnSbwx0bC2ls/ATUWpV4K5zso6aDO8QJmQ
+         gRIEIwWSVEKJ8TSsLPV3EMWQTX1lsWN86ZPGV+g2l4G/0FIle+KVjYp2v1fD6qs10/
+         RpC9I0v3GjktvIF8mlZ7T9GT4iDnL5XMIxEn479o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rob Clark <robdclark@chromium.org>,
+        stable@vger.kernel.org,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 057/135] drm/msm/dp: dp_link_parse_sink_count() return immediately if aux read failed
+Subject: [PATCH 5.18 091/181] regmap-irq: Fix offset/index mismatch in read_sub_irq_data()
 Date:   Mon, 27 Jun 2022 13:21:04 +0200
-Message-Id: <20220627111939.812819579@linuxfoundation.org>
+Message-Id: <20220627111947.198281044@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,100 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuogee Hsieh <quic_khsieh@quicinc.com>
+From: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
-[ Upstream commit f61550b3864b9578527c28cf9c465316ac1566e1 ]
+[ Upstream commit 3f05010f243be06478a9b11cfce0ce994f5a0890 ]
 
-Add checking aux read/write status at both dp_link_parse_sink_count()
-and dp_link_parse_sink_status_filed() to avoid long timeout delay if
-dp aux read/write failed at timeout due to cable unplugged.
+We need to divide the sub-irq status register offset by register
+stride to get an index for the status buffer to avoid an out of
+bounds write when the register stride is greater than 1.
 
-Changes in V4:
--- split this patch as stand alone patch
-
-Changes in v5:
--- rebase on msm-next branch
-
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Tested-by: Stephen Boyd <swboyd@chromium.org>
-Link: https://lore.kernel.org/r/1638985262-2072-1-git-send-email-quic_khsieh@quicinc.com
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Fixes: a2d21848d921 ("regmap: regmap-irq: Add main status register support")
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Link: https://lore.kernel.org/r/20220620200644.1961936-3-aidanmacdonald.0x0@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dp/dp_display.c | 12 +++++++++---
- drivers/gpu/drm/msm/dp/dp_link.c    | 19 ++++++++++++++-----
- 2 files changed, 23 insertions(+), 8 deletions(-)
+ drivers/base/regmap/regmap-irq.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index a66ee63253a3..32b8dbb917bf 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -712,9 +712,15 @@ static int dp_irq_hpd_handle(struct dp_display_private *dp, u32 data)
- 		return 0;
- 	}
+diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+index 4f785bc7981c..a6db605707b0 100644
+--- a/drivers/base/regmap/regmap-irq.c
++++ b/drivers/base/regmap/regmap-irq.c
+@@ -387,6 +387,7 @@ static inline int read_sub_irq_data(struct regmap_irq_chip_data *data,
+ 		subreg = &chip->sub_reg_offsets[b];
+ 		for (i = 0; i < subreg->num_regs; i++) {
+ 			unsigned int offset = subreg->offset[i];
++			unsigned int index = offset / map->reg_stride;
  
--	ret = dp_display_usbpd_attention_cb(&dp->pdev->dev);
--	if (ret == -ECONNRESET) { /* cable unplugged */
--		dp->core_initialized = false;
-+	/*
-+	 * dp core (ahb/aux clks) must be initialized before
-+	 * irq_hpd be handled
-+	 */
-+	if (dp->core_initialized) {
-+		ret = dp_display_usbpd_attention_cb(&dp->pdev->dev);
-+		if (ret == -ECONNRESET) { /* cable unplugged */
-+			dp->core_initialized = false;
-+		}
- 	}
- 	DRM_DEBUG_DP("hpd_state=%d\n", state);
+ 			if (chip->not_fixed_stride)
+ 				ret = regmap_read(map,
+@@ -395,7 +396,7 @@ static inline int read_sub_irq_data(struct regmap_irq_chip_data *data,
+ 			else
+ 				ret = regmap_read(map,
+ 						chip->status_base + offset,
+-						&data->status_buf[offset]);
++						&data->status_buf[index]);
  
-diff --git a/drivers/gpu/drm/msm/dp/dp_link.c b/drivers/gpu/drm/msm/dp/dp_link.c
-index a5bdfc5029de..d4d31e5bda07 100644
---- a/drivers/gpu/drm/msm/dp/dp_link.c
-+++ b/drivers/gpu/drm/msm/dp/dp_link.c
-@@ -737,18 +737,25 @@ static int dp_link_parse_sink_count(struct dp_link *dp_link)
- 	return 0;
- }
- 
--static void dp_link_parse_sink_status_field(struct dp_link_private *link)
-+static int dp_link_parse_sink_status_field(struct dp_link_private *link)
- {
- 	int len = 0;
- 
- 	link->prev_sink_count = link->dp_link.sink_count;
--	dp_link_parse_sink_count(&link->dp_link);
-+	len = dp_link_parse_sink_count(&link->dp_link);
-+	if (len < 0) {
-+		DRM_ERROR("DP parse sink count failed\n");
-+		return len;
-+	}
- 
- 	len = drm_dp_dpcd_read_link_status(link->aux,
- 		link->link_status);
--	if (len < DP_LINK_STATUS_SIZE)
-+	if (len < DP_LINK_STATUS_SIZE) {
- 		DRM_ERROR("DP link status read failed\n");
--	dp_link_parse_request(link);
-+		return len;
-+	}
-+
-+	return dp_link_parse_request(link);
- }
- 
- /**
-@@ -1023,7 +1030,9 @@ int dp_link_process_request(struct dp_link *dp_link)
- 
- 	dp_link_reset_data(link);
- 
--	dp_link_parse_sink_status_field(link);
-+	ret = dp_link_parse_sink_status_field(link);
-+	if (ret)
-+		return ret;
- 
- 	if (link->request.test_requested == DP_TEST_LINK_EDID_READ) {
- 		dp_link->sink_request |= DP_TEST_LINK_EDID_READ;
+ 			if (ret)
+ 				break;
 -- 
 2.35.1
 

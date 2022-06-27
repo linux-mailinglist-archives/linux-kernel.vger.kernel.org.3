@@ -2,358 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151B355B527
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 04:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 187CB55B52C
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 04:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbiF0COu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 22:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
+        id S231192AbiF0CTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 22:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiF0COt (ORCPT
+        with ESMTP id S229736AbiF0CTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 22:14:49 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CD7270C;
-        Sun, 26 Jun 2022 19:14:48 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id x20so1296753plx.6;
-        Sun, 26 Jun 2022 19:14:48 -0700 (PDT)
+        Sun, 26 Jun 2022 22:19:21 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D517C6D
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 19:19:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=p/CeoCTDhGdykZrVT9uCTA5wI+N8E9qPFrIhbM1twyQ=;
-        b=kCCTfCQ1mvklpJXP7NiWhdLXjBOOxYtl795VwPhnA7hgO4lUAw/aHLjRHCxxJU2inN
-         1OcURComNU+XF/Tkggxo6flVJIqrTG+zra0iiaSR3uHLjtZZ6+UKQ/99ltW09+dOMK9g
-         CAygQ7kVIoLkJiW4TlO9S9V8e2++18JTOw3n1vjgmw0Dtq7MfcDKb9aUWnpMQ/xM/HiH
-         mn76tQAjg+7gqxs4th0nZcjweZT/yX0ZONmuQAGaIPHTKe5XpptcXd9nJKwYIRyFuZsV
-         Edru6wXyWDmvzuuKVpGCyK9Mu5VsN3hH0p92ViJKRsQkoWqpLWA8BSJkitMCcF8nCJXO
-         vEJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=p/CeoCTDhGdykZrVT9uCTA5wI+N8E9qPFrIhbM1twyQ=;
-        b=v9MjBJlbkyi/DJQFmTp05jAXp4+J2+j8NmXinpN10vRBRHeDDYUkT5GrQusG0me7+j
-         As2CjWWH4+x8srO/Ve6N5ZdbHNVWLuH/yVHRCGkMLdIwLVT+Bjgawy682ZYgYCo8WhRn
-         dteNM3C4i9cpPwWJR/nn9j2Rt0Ru99vlYcESXRc2JU0KNh9udCuy5rKhfCCMT7DmujDw
-         hI4KIgfwC1ZQJVAnTvgwLsfDwGYZj+vByDjAgPfblR+7uAmVG2c+9DujcBOw9EBiQly9
-         DOWoqyt7JYOU1yznzdQYD1g6U48nF38IybMqP15B5QM9SSKC7InijVyWqfVChqK0AJBS
-         J//A==
-X-Gm-Message-State: AJIora/ypcsbcnpzDT9jsbpWE7rJRIh+3t/OuWkEXZB7LKbEfr7c1yzf
-        rGYRiN/gcyLkIOZL/e8/DQiZdocN2Do=
-X-Google-Smtp-Source: AGRyM1tdkHDaq/xuwGyhiD4/4kUWaQf4E1SbbajDWVNwklhip7Sx0UNqhvitVWgBy/g5BhWrspL3VQ==
-X-Received: by 2002:a17:902:aa8a:b0:16a:1ea5:d417 with SMTP id d10-20020a170902aa8a00b0016a1ea5d417mr12271446plr.4.1656296087523;
-        Sun, 26 Jun 2022 19:14:47 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-21.three.co.id. [180.214.233.21])
-        by smtp.gmail.com with ESMTPSA id y27-20020a634b1b000000b0040cff9def93sm5749291pga.66.2022.06.26.19.14.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jun 2022 19:14:46 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 6F8481038C5; Mon, 27 Jun 2022 09:14:42 +0700 (WIB)
-Date:   Mon, 27 Jun 2022 09:14:42 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jeff Xie <xiehuan09@gmail.com>
-Cc:     rostedt@goodmis.org, mingo@redhat.com, mhiramat@kernel.org,
-        zanussi@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        linux-doc@vger.kernel.org, corbet@lwn.net, chensong_2000@189.cn
-Subject: Re: [PATCH v13 4/4] Documentation: trace/objtrace: Add documentation
- for objtrace
-Message-ID: <YrkSkuluNhGcMyOu@debian.me>
-References: <20220626025604.277413-1-xiehuan09@gmail.com>
- <20220626025604.277413-5-xiehuan09@gmail.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656296360; x=1687832360;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cD2gMKTjv7EJ0cPzSfXgyR3a70E2nOJB64lioBBSoPk=;
+  b=C+UOSmPd7prwnyG4ymSQJiURbXX2lVnPMMpcNnRUdSPhOPSS45ZfdJer
+   30CV0NE5NEdUePGE/EbMsxiywzr6e0avSYrpqsTljOEW/T7MjXaKkyBkK
+   gJIKRJk31Z1BobeBFs7ePNIB2Ug6EN1VAvAawOIyGkOII7FgQZDk7ALHL
+   8=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 Jun 2022 19:19:19 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 19:19:19 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 26 Jun 2022 19:19:19 -0700
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 26 Jun 2022 19:19:17 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH v7 0/4] tracing/probes: allow no event name input when create group 
+Date:   Mon, 27 Jun 2022 10:19:04 +0800
+Message-ID: <1656296348-16111-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220626025604.277413-5-xiehuan09@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 10:56:04AM +0800, Jeff Xie wrote:
-> Added documentation explaining how to use objtrace trigger to get the value
-> of the object.
-> 
+take kprobe event as example, when create a group of events,
+p[:[GRP/]EVENT] [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS],
+according to this format, we must input EVENT name,
 
-Write "Add documentation..." instead.
+this change allow only GRP/ input, EVENT name auto generate from KSYM,
+p[:[GRP/][EVENT]] [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS]
 
-> +- objtrace
-> +
-> +  This command provides a way to get the value of any object, The object
-> +  can be obtained from the dynamic event(kprobe_event/uprobe_event) or the
-> +  static event(tracepoint).
-> +
-> +  Usage:
-> +  When using the kprobe event, only need to set the objtrace(a new trigger),
-> +  we can get the value of the object. The object is from the setting of the
-> +  kprobe event.
-> +
+similar change apply to eprobe and uprobe.
 
-Did you mean "the object value can be obtained by only needing to set the
-objtrace?"
+V2: (v1: https://lore.kernel.org/lkml/1651397651-30454-1-git-send-email-quic_linyyuan@quicinc.com/)
+    fix remove comment in V1 patch1,
+    remove v1 patch2 as it is NACK.
 
-> +  For example:
-> +  For the function bio_add_page():
-> +
-> +  int bio_add_page(struct bio *bio, struct page *page,
-> +	unsigned int len, unsigned int offset)
-> +
-> +  Firstly, we can set the base of the object, thus the first string "arg1"
-> +  stands for the value of the first parameter of this function bio_add_gage(),
-> +
-> +  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-> +
+v3: (v2 : https://lore.kernel.org/lkml/1653795294-19764-1-git-send-email-quic_linyyuan@quicinc.com/)
+    add selftest cases for kprobe and eprobe event,
+    remove macro used in v1,v2,
+    change location to generate eprobe event name.
 
-Did you mean "the first parameter (arg1) is the parameter value of function
-that is passed to kprobe_event, in this case the object base"?
+v4: (v3 : https://lore.kernel.org/lkml/1653978552-18637-1-git-send-email-quic_linyyuan@quicinc.com/)
+    fix comment of kprobe/eprobe test case.
 
-> +  Secondly, we can get the value dynamically based on above object.
-> +
-> +  find the offset of the bi_size in struct bio:
-> +  $ gdb vmlinux
-> +  (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
-> +  $1 = (unsigned int *) 0x28
-> +
-> +  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
-> +	p_bio_add_page_0/trigger
-> +
-> +  # cd /sys/kernel/debug/tracing/
-> +  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-> +  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
-> +
-> +  # du -sh /test.txt
-> +  12.0K   /test.txt
-> +
-> +  # cat  /test.txt > /dev/null
-> +  # cat ./trace
-> +  # tracer: nop
-> +  #
-> +  # entries-in-buffer/entries-written: 128/128   #P:4
-> +  #
-> +  #                                _-----=> irqs-off/BH-disabled
-> +  #                               / _----=> need-resched
-> +  #                              | / _---=> hardirq/softirq
-> +  #                              || / _--=> preempt-depth
-> +  #                              ||| / _-=> migrate-disable
-> +  #                              |||| /     delay
-> +  #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> +  #              | |         |   |||||     |         |
-> +               cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-> +               cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-> +               cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
-> +               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-> +               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-> +               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
-> +               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-> +               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-> +               cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +               cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-> +            <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +            <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-> +             ...
-> +
+v5: (v4: https://lore.kernel.org/lkml/1654171861-24014-1-git-send-email-quic_linyyuan@quicinc.com/)
+    for eprobe, when only input a "SYSTEM.", it is invalid.
+    add Acked-by from Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-The output is messy, because for code example and output, literal code
-blocks aren't used, hence trigger new warnings:
+v6: (v5: https://lore.kernel.org/lkml/1655168698-19898-1-git-send-email-quic_linyyuan@quicinc.com/)
+    change some code order according review comment from Tom Zanussi,
+    some minor changes.
 
-Documentation/trace/events.rst:564: WARNING: Inline emphasis start-string without end-string.
-Documentation/trace/events.rst:564: WARNING: Inline emphasis start-string without end-string.
-Documentation/trace/events.rst:573: WARNING: Inline emphasis start-string without end-string.
-Documentation/trace/events.rst:573: WARNING: Inline emphasis start-string without end-string.
-Documentation/trace/events.rst:602: WARNING: Unexpected indentation.
-Documentation/trace/events.rst:622: WARNING: Block quote ends without a blank line; unexpected unindent.
-Documentation/trace/events.rst:630: WARNING: Unexpected indentation.
+v7: (v6: https://lore.kernel.org/lkml/1655776787-18133-1-git-send-email-quic_linyyuan@quicinc.com/)
+    move log index to a separate patch according review comment
 
-I had to apply the following fixup (with rewording):
+Linyu Yuan (4):
+  tracing: eprobe: add missing log index
+  tracing: eprobe: remove duplicate is_good_name() operation
+  tracing: auto generate event name when create a group of events
+  selftests/ftrace: add test case for GRP/ only input
 
----- >8 ----
-
-diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
-index 0dc47516013331..c15f1d25d4a071 100644
---- a/Documentation/trace/events.rst
-+++ b/Documentation/trace/events.rst
-@@ -549,85 +549,89 @@ The following commands are supported:
- - objtrace
- 
-   This command provides a way to get the value of any object, The object
--  can be obtained from the dynamic event(kprobe_event/uprobe_event) or the
--  static event(tracepoint).
-+  can be obtained from the dynamic event (kprobe_event/uprobe_event) or the
-+  static event (tracepoint).
- 
-   Usage:
--  When using the kprobe event, only need to set the objtrace(a new trigger),
--  we can get the value of the object. The object is from the setting of the
--  kprobe event.
-+  When using the kprobe event, by only need to set the objtrace (a new
-+  trigger), we can get the value of object that is set by kprobe event.
- 
--  For example:
--  For the function bio_add_page():
-+  For example, for the function bio_add_page():
- 
--  int bio_add_page(struct bio *bio, struct page *page,
--	unsigned int len, unsigned int offset)
-+  .. code-block:: c
- 
--  Firstly, we can set the base of the object, thus the first string "arg1"
--  stands for the value of the first parameter of this function bio_add_gage(),
-+     int bio_add_page(struct bio *bio, struct page *page,
-+	              unsigned int len, unsigned int offset)
- 
--  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-+  Firstly, we can set the base of the object as first parameter (arg1) to
-+  to the function:
- 
--  Secondly, we can get the value dynamically based on above object.
-+  .. code-block::
- 
--  find the offset of the bi_size in struct bio:
--  $ gdb vmlinux
--  (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
--  $1 = (unsigned int *) 0x28
-+     # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
- 
--  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
--	p_bio_add_page_0/trigger
-+  Secondly, we can get the value dynamically based on the object:
- 
--  # cd /sys/kernel/debug/tracing/
--  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
--  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
-+  .. code-block::
- 
--  # du -sh /test.txt
--  12.0K   /test.txt
-+     find the offset of the bi_size in struct bio:
-+     $ gdb vmlinux
-+     (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
-+     $1 = (unsigned int *) 0x28
- 
--  # cat  /test.txt > /dev/null
--  # cat ./trace
--  # tracer: nop
--  #
--  # entries-in-buffer/entries-written: 128/128   #P:4
--  #
--  #                                _-----=> irqs-off/BH-disabled
--  #                               / _----=> need-resched
--  #                              | / _---=> hardirq/softirq
--  #                              || / _--=> preempt-depth
--  #                              ||| / _-=> migrate-disable
--  #                              |||| /     delay
--  #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
--  #              | |         |   |||||     |         |
--               cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
--               cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
--               cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
--               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
--               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
--               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
--               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
--               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
--               cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
--               cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
--            <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
--            <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
--             ...
-+     # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
-+       p_bio_add_page_0/trigger
-+
-+     # cd /sys/kernel/debug/tracing/
-+     # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
-+     # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
-+
-+     # du -sh /test.txt
-+     12.0K   /test.txt
-+
-+     # cat  /test.txt > /dev/null
-+     # cat ./trace
-+     # tracer: nop
-+     #
-+     # entries-in-buffer/entries-written: 128/128   #P:4
-+     #
-+     #                                _-----=> irqs-off/BH-disabled
-+     #                               / _----=> need-resched
-+     #                              | / _---=> hardirq/softirq
-+     #                              || / _--=> preempt-depth
-+     #                              ||| / _-=> migrate-disable
-+     #                              |||| /     delay
-+     #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+     #              | |         |   |||||     |         |
-+                  cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-+                  cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
-+                  cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
-+                  cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-+                  cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
-+                  cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
-+                  cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-+                  cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
-+                  cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+                  cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
-+               <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
-+               <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
-+                ...
- 
- 7. In-kernel trace event API
- ============================
-
-
-Thanks.
+ Documentation/trace/kprobetrace.rst                |  8 +++----
+ Documentation/trace/uprobetracer.rst               |  8 +++----
+ kernel/trace/trace.c                               |  8 +++----
+ kernel/trace/trace_dynevent.c                      |  2 +-
+ kernel/trace/trace_eprobe.c                        | 28 +++++++++++-----------
+ kernel/trace/trace_kprobe.c                        | 16 ++++++++-----
+ kernel/trace/trace_probe.c                         |  4 ++++
+ kernel/trace/trace_uprobe.c                        | 12 ++++++----
+ .../ftrace/test.d/dynevent/add_remove_eprobe.tc    |  9 ++++++-
+ .../ftrace/test.d/dynevent/add_remove_kprobe.tc    |  7 ++++++
+ 10 files changed, 64 insertions(+), 38 deletions(-)
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.7.4
+

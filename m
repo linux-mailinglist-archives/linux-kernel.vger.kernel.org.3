@@ -2,55 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DA555C95C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3586C55CA00
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239565AbiF0MAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
+        id S239117AbiF0MBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238844AbiF0Lwm (ORCPT
+        with ESMTP id S239008AbiF0Lw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:52:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF74DE87
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:45:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C5A76114D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:45:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E820AC341C7;
-        Mon, 27 Jun 2022 11:45:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656330354;
-        bh=VwADrRZxFk1rx290fAkceHuvRfDBtWvrEJXtxd3r2+M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qo2nk0KSOwfsUGuWeIrmyKqTCUNAZIDAkfFoNw4Ut/1aIDOAkKWq1iK5HF8Gixklm
-         tIpA6xPXFAax0TtCIKCzysoM2W3chXUDd7SU0IfqaZJRKe4oirtcAHGbMDjMkNO8FS
-         34UrMWzSWeZyCuR/EBXumonWH9+Vh69wM6KSUDogqgDgNZTHWGR1eFGAgkRBGwpcfv
-         /MuJ7eBMf/I2PV/pYtzFpbfD8PDee+vkuzTZu9vfob4uzjmz8DihrT0JXV059ItckD
-         SycYYkUBL/OqBIqQDAq5AdevAEnvStSYyiW2W0njPmEYhfWhhvEWEdFdZrbr3AsleN
-         yVf+TLN+wsInQ==
-Date:   Mon, 27 Jun 2022 12:45:49 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
-        s.nawrocki@samsung.com, jrdr.linux@gmail.com, lgirdwood@gmail.com,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: samsung: s3c24xx-i2s: Fix typo in DAIFMT handling
-Message-ID: <YrmYbZV4mj9d9++t@sirena.org.uk>
-References: <20220627094335.3051210-1-ckeepax@opensource.cirrus.com>
- <803785ef-42b7-647c-9653-702067439ae9@linaro.org>
+        Mon, 27 Jun 2022 07:52:59 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E53CDF46
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:47:09 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id k22so12667729wrd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:47:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=DNfZf1ALusxNZItYPzLBSfgjkhIQRGT+paZKIzAlEKg=;
+        b=sV0flEb6e8vzBIQcGxl/RLcS74O4Nx86dAcc93mn8FPtVTw4L5J2j0DXwIo4b1jLiO
+         TXHVeiIcfQZLyRgCwf+yZPOodVlfqP7U2xrt+TCXRZ+nxCfubcoofsr285ENaoFYiLrN
+         yo6kSYEVQvXzaisFGfYxVAMk6fdCXNeTqKrUclCUe1cKod1balAyTsQTFW1Sruvgjn3U
+         IFQxkz9S5+LvuuIYFxHS7wfyALzJolDZGfzDPYieb8saBvE7lAZGOy/5K1saLTZBAzr5
+         E/GzyemEfHqv9Eq0lkfWGAuM5iwXChMCfoShbooumaD06p/179duedibRQra51wMX1bb
+         SvJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=DNfZf1ALusxNZItYPzLBSfgjkhIQRGT+paZKIzAlEKg=;
+        b=5gnxPDx0Mp5VAvcS/32VSM30Jp7o0y40/w1pOtbUpMScwcf0Nt3BSOPnxnNBjgl/pf
+         SwwlrfYyKuAZa8Iz2tvg1wc+v5VOkB+BqeoXYDomZ9OvQRkCTKE6zlBdgg81JLAV/LXD
+         jNulAnrHkcbDslKcPJeVGRhsmHuFfpVMvJ2VPUCpUdaypuWk5wnpvyjmnMAxcPmb3Ooz
+         wzqF9a4EFEWSd5/oPucHIVkC8iIN41KsqTccOwnCYqkC7hXfjKgfIh7pEoEx1yeZrXWU
+         MMfSMaurb8k2NFCLFsGZCBPZHfvV7U1K1g/cV2SwEuMpurYkgpluHNMP09EEFo+2+DbO
+         EaQQ==
+X-Gm-Message-State: AJIora9cvNOiGFpasWP//r4Urz2A5FPyh4U34D+ptKOjRie7ydEJE8yB
+        AU2ZXzdqRmUncnkxCTp9R5pd1g==
+X-Google-Smtp-Source: AGRyM1v/Irv5206u/VfQLtfpPzA9fr8PJqMfZhF2phPpC4wOEt4/o9BLlBG0Ze4sOEA0d8pg3/fEhg==
+X-Received: by 2002:a5d:64a3:0:b0:21b:b86f:e9cc with SMTP id m3-20020a5d64a3000000b0021bb86fe9ccmr11701408wrp.156.1656330428099;
+        Mon, 27 Jun 2022 04:47:08 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id t10-20020adfe10a000000b00210320d9fbfsm12218547wrz.18.2022.06.27.04.47.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 04:47:07 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 12:47:05 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, johnson.wang@mediatek.com,
+        hsin-hsiung.wang@mediatek.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] mfd: mt6397: Add basic support for MT6331+MT6332
+ PMIC
+Message-ID: <YrmYuRy2ZgIw21JX@google.com>
+References: <20220617110728.90132-1-angelogioacchino.delregno@collabora.com>
+ <20220617110728.90132-3-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cGrbKaug4SaBI0GC"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <803785ef-42b7-647c-9653-702067439ae9@linaro.org>
-X-Cookie: Your supervisor is thinking about you.
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220617110728.90132-3-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,51 +78,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 17 Jun 2022, AngeloGioacchino Del Regno wrote:
 
---cGrbKaug4SaBI0GC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Add support for the MT6331 PMIC with MT6332 Companion PMIC, found
+> in MT6795 Helio X10 smartphone platforms.
+> 
+> This combo has support for multiple devices but, for a start,
+> only the following have been implemented:
+> - Regulators (two instances, one in MT6331, one in MT6332)
+> - RTC (MT6331)
+> - Keys (MT6331)
+> - Interrupts (MT6331 also dispatches MT6332's interrupts)
+> 
+> There's more to be implemented, especially for MT6332, which
+> will come at a later stage.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  drivers/mfd/mt6397-core.c            |  47 ++
+>  drivers/mfd/mt6397-irq.c             |   9 +-
+>  include/linux/mfd/mt6331/core.h      |  40 ++
+>  include/linux/mfd/mt6331/registers.h | 584 ++++++++++++++++++++++++
+>  include/linux/mfd/mt6332/core.h      |  65 +++
+>  include/linux/mfd/mt6332/registers.h | 642 +++++++++++++++++++++++++++
+>  include/linux/mfd/mt6397/core.h      |   2 +
+>  7 files changed, 1388 insertions(+), 1 deletion(-)
+>  create mode 100644 include/linux/mfd/mt6331/core.h
+>  create mode 100644 include/linux/mfd/mt6331/registers.h
+>  create mode 100644 include/linux/mfd/mt6332/core.h
+>  create mode 100644 include/linux/mfd/mt6332/registers.h
 
-On Mon, Jun 27, 2022 at 11:49:46AM +0200, Krzysztof Kozlowski wrote:
-> On 27/06/2022 11:43, Charles Keepax wrote:
-> > The conversion of the set_fmt callback to direct clock specification
-> > included a small typo, correct the affected code.
+Does not apply.  Please rebase.
 
-> > Fixes: 91c49199e6d6 ("ASoC: samsung: Update to use set_fmt_new callback")
-
-> Where is this commit from? It's not in next.
-
-0b491c7c1b2555ef08285fd49a8567f2f9f34ff8 - if you can't find something
-search for the subject, people often get things wrong.
-
-> You should put such big patchsets in your own repo (e.g. on
-> Github/Gitlab) and feed it to linux-next or at least to LKP.
-
-The size of the patch set isn't really relevant here, the same issue can
-apply to anything that can be built in more than one configuration.
-People should of course try to do things that work but equally we
-shouldn't be putting procedural blockers in place, we have integration
-trees for a reason.
-
-> This way you would get build coverage... because it seems the build was
-> missing in your case.
-
-That coverage has apparently also been missing in -next for several
-weeks.
-
---cGrbKaug4SaBI0GC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK5mG0ACgkQJNaLcl1U
-h9BVlAf+OdXMLIbXe5mSgKiE3F5jvcMaD820Gt9mVcl9LubefegZsfo7YwlfYblG
-T9PiPgq0pwJOjh2fYmW0ISNuL3KqSgd3PCyOs9BkRCj0ELAtDn15G3UGVtjwEQjH
-h70i8Iy4MbZQu8CZEBen+earhLqXvuqe3dH27eJUyDjSCHzvOq7zkCfeFS6JCXFQ
-02I5/NBZGYC6r71IYGlpgRhMj94/PYKhnvhyfh+1dnVLEC9WD3eAZOB1YRfLDcBk
-jv4XUFP81VyzcGlNbj6K57AMPMGNWFo5R0K5oYPTwUx6ytuSdx/+kAXPIWuG2eLH
-iMgqgebuD6gmWiew3VdW9sJF6uBj8g==
-=G3oz
------END PGP SIGNATURE-----
-
---cGrbKaug4SaBI0GC--
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

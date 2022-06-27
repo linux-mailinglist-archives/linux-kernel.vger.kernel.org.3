@@ -2,78 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489F755C48B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 594A155C550
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbiF0KT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
+        id S234192AbiF0KUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiF0KTy (ORCPT
+        with ESMTP id S234096AbiF0KU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:19:54 -0400
+        Mon, 27 Jun 2022 06:20:28 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7384110FB;
-        Mon, 27 Jun 2022 03:19:53 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C95B10FB;
+        Mon, 27 Jun 2022 03:20:27 -0700 (PDT)
+Received: from [192.168.10.6] (unknown [39.45.206.71])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1FB026601822;
-        Mon, 27 Jun 2022 11:19:51 +0100 (BST)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 98CEE6601822;
+        Mon, 27 Jun 2022 11:20:23 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656325192;
-        bh=B05eVpTPDvSH5kRE63nQuTVqlP0G5H8QGhr6i4PP/Gc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=l4HYQVy3A/okvck/4kADeDAZ40G3lPo1V3YtIyhBRqCsHQ63SLEuTrXmPmbSnRx0C
-         rYfEKCpN20OqZYXFmT/lhfaf9yBqo1Nr0V7Lg6P1IcumzGQXvgvIHNSp8OS4uQ2kla
-         ZB3ztKRby9hpCfegz/jeWZCT4YsqK66gaZhbUVP+C8XYh+BR4qLh9E0ic660E52BD7
-         6k+KXgn2Z9RDvQsjpCoqGMC4TT8EG25uyRMcZjVFfe0+BZLR53m1ngblpQXLA2rPZB
-         8ZmUEJNwxCli92Yjqhbr9WTC/UfAouP3LiMKoL2naDSRDAmv4Z1LreJFby+/ZnA8U/
-         3rc/2tcs99gVg==
-Message-ID: <39d87507-8cbd-27bd-258f-0dad84ff3b0b@collabora.com>
-Date:   Mon, 27 Jun 2022 12:19:48 +0200
+        s=mail; t=1656325226;
+        bh=A9r/BSry6EJHsBgDufrR9K+SKyuhrzoYWIWq3KRiJoU=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=SCPIB5zfhRm85OMUNUvxAS01wbSjUx/hvQS/YVerLcCtUPyqEp8b1Ul/Uh14ZPddU
+         buQGjzKEDvEW/b3E3b0yc0D9qyU388lUPH6Btl+2bfjQ7br2tgqnlNAivbN1DidRxA
+         CDcL7TckuRPUYMWoPDtj1apYcQn2WnMwkaQsCSHJ+UW+gQMY8YV1lv4Uzh/K8eJyRt
+         nGNYR5e3vMUlOXS/jWQIiJDjq+E5c5xE+MKd6oiS9s30DWT7YOKH5YPhJcO2RRYPRu
+         8NPPgn8k7zhljmlk4q6nOvBWlxudlWhJGTP/OPo/FJKDEhVmG62mWxiN/Rn2psUh6D
+         3IVw7jYasXD8A==
+Message-ID: <63316ba7-f612-af5a-3f33-125cf89de754@collabora.com>
+Date:   Mon, 27 Jun 2022 15:20:16 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v12 08/10] drm/mediatek: set monitor to DP_SET_POWER_D3 to
- avoid garbage
+Cc:     usama.anjum@collabora.com, "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        "open list:NETWORKING [TCP]" <netdev@vger.kernel.org>,
+        Sami Farin <hvtaifwkbgefbaei@gmail.com>
+Subject: Re: [RFC] EADDRINUSE from bind() on application restart after killing
 Content-Language: en-US
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
-        tzimmermann@suse.de, matthias.bgg@gmail.com, deller@gmx.de,
-        airlied@linux.ie
-Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
-        wenst@chromium.org, ck.hu@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fbdev@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220627080341.5087-1-rex-bc.chen@mediatek.com>
- <20220627080341.5087-9-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220627080341.5087-9-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Eric Dumazet <edumazet@google.com>
+References: <5099dc39-c6d9-115a-855b-6aa98d17eb4b@collabora.com>
+ <CANn89i+R9RgmD=AQ4vX1Vb_SQAj4c3fi7-ZtQz-inYY4Sq4CMQ@mail.gmail.com>
+ <8eb9b438-7018-4fe3-8be6-bb023df99594@collabora.com>
+ <CANn89iJ1DfmuPz5pGdw=j9o+3O4R9tnTNFKi-ppW1O2sfmnN4g@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CANn89iJ1DfmuPz5pGdw=j9o+3O4R9tnTNFKi-ppW1O2sfmnN4g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 27/06/22 10:03, Bo-Chen Chen ha scritto:
-> Set the monitor power state to DP_SET_POWER_D3 to avoid garbage.
+Hi Eric,
+
+On 5/30/22 8:28 PM, Eric Dumazet wrote:
+>> The following command and patch work for my use case. The socket in
+>> TIME_WAIT_2 or TIME_WAIT state are closed when zapped.
+>>
+>> Can you please upstream this patch?
+> Yes, I will when net-next reopens, thanks for testing it.
+Have you tried upstreaming it?
+
+Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+
 > 
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+>>> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+>>> index 9984d23a7f3e1353d2e1fc9053d98c77268c577e..1b7bde889096aa800b2994c64a3a68edf3b62434
+>>> 100644
+>>> --- a/net/ipv4/tcp.c
+>>> +++ b/net/ipv4/tcp.c
+>>> @@ -4519,6 +4519,15 @@ int tcp_abort(struct sock *sk, int err)
+>>>                         local_bh_enable();
+>>>                         return 0;
+>>>                 }
+>>> +               if (sk->sk_state == TCP_TIME_WAIT) {
+>>> +                       struct inet_timewait_sock *tw = inet_twsk(sk);
+>>> +
+>>> +                       refcount_inc(&tw->tw_refcnt);
+>>> +                       local_bh_disable();
+>>> +                       inet_twsk_deschedule_put(tw);
+>>> +                       local_bh_enable();
+>>> +                       return 0;
+>>> +               }
+>>>                 return -EOPNOTSUPP;
+>>>         }
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+-- 
+Muhammad Usama Anjum

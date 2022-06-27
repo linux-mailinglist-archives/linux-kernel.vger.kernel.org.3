@@ -2,226 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A495955E35E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE6F55CA33
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239144AbiF0QN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47994 "EHLO
+        id S239036AbiF0QMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239139AbiF0QNy (ORCPT
+        with ESMTP id S238999AbiF0QME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:13:54 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C240F17E0E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:13:53 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d17so9441333pfq.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:13:53 -0700 (PDT)
+        Mon, 27 Jun 2022 12:12:04 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDD8140D2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:11:59 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id x138so6782826pfc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:11:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3T3dACI/J1KzbkodVYl5rHCT2kW21BLvkYUwrihnqgI=;
-        b=W2aRsj/VPceuu3uWRO3mZTUavf+6cQEhdyDFpOr6f79tfu+vdwt+MjA/i6LqGbKpli
-         XjZVK10ciDt6xJ8Fx9VcYqleeEzqJDVqZqV7Sx8j0Lrs8y3hBEBAriNCzspCMCDBZADe
-         gZMgnnv6zZUNgyXTC1j33asq6umc1UsmE6jahM9xSiL73V4cTbeWjErk6tp655FjNyg3
-         cDRcEhcwnHb3epYKB+dE0B4/mvNX4hz+ptZ7Imb8yhSU2h09VlCtTN7hKJOR1ErHnGKa
-         KtMYqGmsQSbYA0T2tqG+N6WDPLbnyY8DEhaZxJTpCFH5cJYMNzvXfnjkvJ8IC7zJqNWk
-         BASA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QSB6tq8B5cwtKotfoR7RizrMhJVAHRxsw0c1BjDvvhU=;
+        b=i1hJ5DeEmoJYw2l4WQ8n43hSRbva2Sb4StNNmtaZWKUsIcFH7+qAbQMp95fEXhcdKL
+         y2QDy7UFUTWaaRaWuHHxxG0zmJfziSuXNLxsdvh0W+P981Pk6b+yEhvfsZqUOsbB2wmF
+         dgXa+OntMLCe3PgtwnD3GwuXDHmFyJeinJwad8oDdW48lXs2TC45pgkyaYLSAHUfCMrK
+         WpDDRsewu0tHaECxeW7/Z9fsfCnMdh6aai60ucHX/wo3FpVMfdY+BdOycO6Ih8eZZXlW
+         xMa0RGitHiz1KRfr/pQKku02BnSNVWiAtnZigz55uWUaLzYOEnTdqly3qcaQUxhBryBu
+         44Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3T3dACI/J1KzbkodVYl5rHCT2kW21BLvkYUwrihnqgI=;
-        b=b91ra8bwb1DiUWgRrD7U/7H86b0HCxaVdmeq1+xYzfcfWSUmbt9jCTZMUnu83PbwMe
-         WLuJcZ0JyFmNn3ILpD7/UUjOiFhPCkl2wZkMvV/57QtGVp0ZFffEbBby7koyUTArqeOF
-         JFpmABuFuTr0Yc3U7p12h6phRFe5xU5DU0wOpQlqrXMX7BOHfYTdVR55I2XtfPQdB2Vh
-         FKRZtdPKySKCLDkrMRz0mR4HT/RIQVXz6e7oh/p4fxYGNv7VdvuZhbEZ0mQ80oTLIA7c
-         Z7Xs4ISipp6ll2kAX+yXnDzMHURMjacAPhveIOFz0zGcP8niGeeNmyxyy0gJwOlDcToH
-         nD0g==
-X-Gm-Message-State: AJIora8ancMp3tnbcx9Hj5qAtgtRX4tAtrVbDIA3PSt9YXi2bSqR2C4T
-        kTwpCsS3MYMm4CjF71D0bME=
-X-Google-Smtp-Source: AGRyM1trjL3b+PeZR613EcKOLoL1O0lkZD3G/ULUPLia8Egpheoa+b6k9BSOamj14ZDFbjIHYc/xHg==
-X-Received: by 2002:a63:3ec6:0:b0:40d:27a:7847 with SMTP id l189-20020a633ec6000000b0040d027a7847mr13287106pga.606.1656346433083;
-        Mon, 27 Jun 2022 09:13:53 -0700 (PDT)
-Received: from DESKTOP-IM4PCEA.localdomain ([49.207.219.170])
-        by smtp.googlemail.com with ESMTPSA id o15-20020a17090ab88f00b001ece373522dsm7401175pjr.10.2022.06.27.09.13.48
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QSB6tq8B5cwtKotfoR7RizrMhJVAHRxsw0c1BjDvvhU=;
+        b=HE5nJtICSGRiZz3gjYtnqEkV94twcqWWNOdATtKnG2Tp2f7+DehF27i41EWb2Hcq22
+         Pit3vIQX4SzPCGzteblFB4HUIKW3WaWlWl1ovYoc+thisiJRcVC14M0M33M7i7sOawUZ
+         D0UVc+yGBS7FJ4ytT6QCIv2FDQbp0xoNG6Igejj4W0SHK0N+sZTOqd2/CXuNyuLkzFvo
+         OcSlgjSybX8J2LbFfmP6f4agL8f6PCbvQ578fUtZK5aMEO0RDvuzXbpRBfKd31DmAZG9
+         Gq7dNiso8M3Nn2j2NdF3KFzpy2F9QUYz30ZGfr2b2MzIoZ44ZnHo3FcphNYW96iIvkAx
+         bcwA==
+X-Gm-Message-State: AJIora/J2/HqRlpYJgSHhyX/cT5NZWuv4XEUq5SC5taIh/VCZm+Hf2ss
+        B7APwZJRyY7/Tn9kwOdG9uu2BlxZxxpB+A==
+X-Google-Smtp-Source: AGRyM1s/pLm96R1iZU+IkUHBDnPQBfn+/TP68BwerIAfBOBnIss7A/K8cEUKr+Vra3JLYWh1gB6zSw==
+X-Received: by 2002:a63:8f13:0:b0:40c:f042:13a8 with SMTP id n19-20020a638f13000000b0040cf04213a8mr13708678pgd.619.1656346318584;
+        Mon, 27 Jun 2022 09:11:58 -0700 (PDT)
+Received: from google.com (55.212.185.35.bc.googleusercontent.com. [35.185.212.55])
+        by smtp.gmail.com with ESMTPSA id q11-20020a170902dacb00b001635b86a790sm7568586plx.44.2022.06.27.09.11.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 09:13:52 -0700 (PDT)
-From:   Mintu Patel <mintupatel89@gmail.com>
-To:     mintupatel89@gmail.com
-Cc:     badolevishal1116@gmail.com, chinmoyghosh2001@gmail.com,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org, vimal.kumar32@gmail.com,
-        will@kernel.org
-Subject: [PATCH v2] rt_spin_lock: To list the correct owner of rt_spin_lock
-Date:   Mon, 27 Jun 2022 21:41:38 +0530
-Message-Id: <20220627161136.3468-1-mintupatel89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220619142038.1274-1-mintupatel89@gmail.com>
-References: <20220619142038.1274-1-mintupatel89@gmail.com>
+        Mon, 27 Jun 2022 09:11:57 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 09:11:54 -0700
+From:   Zach O'Keefe <zokeefe@google.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        syzbot <syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: [syzbot] KASAN: null-ptr-deref Read in hugepage_vma_check
+Message-ID: <YrnWykdEI4N1ONMx@google.com>
+References: <0000000000003189f305e19f5d3e@google.com>
+ <20220617165256.b5b9b257b30bc1dbb21fc8c6@linux-foundation.org>
+ <Yq0Y0B1XGNIbCveO@casper.infradead.org>
+ <CAHbLzkofHiQiRU3QBmK3Tr9xozSt1EFtT4hCLh5w_Mcspm35Hg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHbLzkofHiQiRU3QBmK3Tr9xozSt1EFtT4hCLh5w_Mcspm35Hg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-   rt_spin_lock is actually mutex on RT Kernel so it goes for contention
-   for lock. Currently owners of rt_spin_lock are decided before actual
-   acquiring of lock. This patch would depict the correct owner of
-   rt_spin_lock. The patch would help in solving crashes and deadlock
-   due to race condition of lock
+On 17 Jun 17:33, Yang Shi wrote:
+> On Fri, Jun 17, 2022 at 5:14 PM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Fri, Jun 17, 2022 at 04:52:56PM -0700, Andrew Morton wrote:
+> > > On Fri, 17 Jun 2022 00:04:23 -0700 syzbot <syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com> wrote:
+> > >
+> > > > Hello,
+> > > >
+> > > > syzbot found the following issue on:
+> > > >
+> > > > HEAD commit:    c6d7e3b385f1 Add linux-next specific files for 20220616
+> > > > git tree:       linux-next
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=10d9fb1bf00000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=9d495405e4a98620
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=4d875b4d2e2b60bae9b4
+> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > >
+> > > > Unfortunately, I don't have any reproducer for this issue yet.
+> > > >
+> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > Reported-by: syzbot+4d875b4d2e2b60bae9b4@syzkaller.appspotmail.com
+> > > >
+> > > > ==================================================================
+> > > > BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:71 [inline]
+> > > > BUG: KASAN: null-ptr-deref in test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+> > > > BUG: KASAN: null-ptr-deref in hugepage_vma_check+0x8e/0x750 mm/huge_memory.c:82
+> > > > Read of size 8 at addr 00000000000005a8 by task syz-executor.5/21978
+> > >
+> > > vma->vm_mm is NULL in show_smap->hugepage_vma_check().
+> > >
+> > > Perhaps m_start() should be checking the mm after taking
+> > > mmap_read_lock() instead of before?
+> > >
+> > > Matthew, you mucked with it last ;) Can you please take a look?
+> >
+> > I think this is Yang Shi's fault.  The last patch in that series which
+> > touches this area does:
+> >
+> >         seq_printf(m, "THPeligible:    %d\n",
+> > -                  hugepage_vma_check(vma, vma->vm_flags, true));
+> > +                  hugepage_vma_check(vma, vma->vm_flags, true, false));
+> >
+> > and hugepage_vma_check() does:
+> >
+> >         if ((vm_flags & VM_NOHUGEPAGE) ||
+> >             test_bit(MMF_DISABLE_THP, &vma->vm_mm->flags))
+> >                 return false;
+> >
+> > Before those patches, it calls transparent_hugepage_active() which
+> > does not (afaict) touch vma->vm_mm.
+> 
+> No, transparent_hugepage_active() also could touch vma->vm_mm. The
+> above code was transhuge_vma_enabled() called by
+> transparent_hugepage_active() before my patch, my patch just
+> open-coded it.
+> 
+> But hugepage_vma_check() does check vma in different order from
+> transparent_hugepage_active(), so the old code may not reach it at
+> all.
+> 
+> And I don't think the mm could go away since it is pinned, but the
+> returned vma may not belong to this mm, for example, gate vma which
+> doesn't have a mm. Its size is PAGE_SIZE, so the old code returns
+> earlier before touching mm.
+> 
+> One possible solution is to move vma size check before touching mm, like:
+> 
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 2e2a8b5bc567..1a9f15a89091 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -73,6 +73,16 @@ bool hugepage_vma_check(struct vm_area_struct *vma,
+>                         unsigned long vm_flags,
+>                         bool smaps, bool in_pf)
+>  {
+> +       /*
+> +        * Check alignment for file vma and size for both file and anon vma.
+> +        *
+> +        * Skip the check for page fault. Huge fault does the check in fault
+> +        * handlers. And this check is not suitable for huge PUD fault.
+> +        */
+> +       if (!in_pf &&
+> +           !transhuge_vma_suitable(vma, (vma->vm_end - HPAGE_PMD_SIZE)))
+> +               return false;
+> +
+>         /*
+>          * Explicitly disabled through madvise or prctl, or some
+>          * architectures may disable THP for some mappings, for
+> @@ -99,16 +109,6 @@ bool hugepage_vma_check(struct vm_area_struct *vma,
+>         if (vm_flags & VM_NO_KHUGEPAGED)
+>                 return false;
+> 
+> -       /*
+> -        * Check alignment for file vma and size for both file and anon vma.
+> -        *
+> -        * Skip the check for page fault. Huge fault does the check in fault
+> -        * handlers. And this check is not suitable for huge PUD fault.
+> -        */
+> -       if (!in_pf &&
+> -           !transhuge_vma_suitable(vma, (vma->vm_end - HPAGE_PMD_SIZE)))
+> -               return false;
+> -
+>         /*
+>          * Enabled via shmem mount options or sysfs settings.
+>          * Must be done before hugepage flags check since shmem has its
+> 
+> Or we may have to check gate vma explicitly.
+>
 
-acquiring rt_spin_lock        acquired the lock       released the lock
-                    <-------->                <------->
-                    contention period         Held period
+I think this is already fixed already with Andrew's fix in mm-unstable:
 
-Thread1                             Thread2
-_try_to_take_rt_mutex+0x95c+0x74    enqueue_task_dl+0x8cc/0x8dc
-rt_spin_lock_slowlock_locked+0xac+2 rt_mutex_setprio+0x28c/0x574
-rt_spin_lock_slowlock+0x5c/0x90     task_blocks_rt_mutex+0x240/0x310
-rt_spin_lock+0x58/0x5c              rt_spin_lock_slowlock_locked+0xac/0x2
-driverA_acquire_lock+0x28/0x56      rt_spin_lock_slowlock+0x5c/0x90
-				    rt_spin_lock+0x58/0x5c
-                                    driverB_acquire_lock+0x48/0x6c
-
-As per above call traces sample, Thread1 acquired the rt_spin_lock and
-went to critical section on the other hand Thread2 kept trying to acquire
-the same rt_spin_lock held by Thread1 ie contention period is too high.
-Finally Thread2 entered to dl queue due to high held time of the lock by
-Thread1. The below patch would help us to know the correct owner of
-rt_spin_lock and point us the driver's critical section. Respective
-driver need to be debugged for longer held period of lock.
-
-   ex: cat /sys/kernel/debug/tracing/trace
-
-   kworker/u13:0-150   [003] .....11   202.761025: rt_spinlock_acquire:
-Process: kworker/u13:0 is acquiring lock: &kbdev->hwaccess_lock
-   kworker/u13:0-150   [003] .....11   202.761039: rt_spinlock_acquired:
-Process: kworker/u13:0 has acquired lock: &kbdev->hwaccess_lock
-   kworker/u13:0-150   [003] .....11   202.761042: rt_spinlock_released:
-Process: kworker/u13:0 has released lock: &kbdev->hwaccess_lock
-
-Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
-Signed-off-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
-Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
-Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
----
- include/trace/events/lock.h     | 38 +++++++++++++++++++++++++++++++++
- kernel/locking/rtmutex.c        |  4 ++++
- kernel/locking/rtmutex_common.h | 14 ++++++++++++
- 3 files changed, 56 insertions(+)
-
-diff --git a/include/trace/events/lock.h b/include/trace/events/lock.h
-index d7512129a324..0564474341c8 100644
---- a/include/trace/events/lock.h
-+++ b/include/trace/events/lock.h
-@@ -36,6 +36,44 @@ TRACE_EVENT(lock_acquire,
- 		  __get_str(name))
- );
- 
-+DECLARE_EVENT_CLASS(rt_lock_class,
-+
-+	TP_PROTO(struct lockdep_map *lock, struct task_struct *pname),
-+
-+	TP_ARGS(lock, pname),
-+
-+	TP_STRUCT__entry(
-+		__string(name, lock->name)
-+		__string(process_name, pname->comm)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name, lock->name);
-+		__assign_str(process_name, pname->comm);
-+	),
-+
-+	TP_printk("Process: %s is acquiring lock: %s", __get_str(process_name),
-+		__get_str(name))
-+);
-+
-+DEFINE_EVENT(rt_lock_class, rt_spinlock_acquire,
-+	TP_PROTO(struct lockdep_map *lock, struct task_struct *pname),
-+	TP_ARGS(lock, pname));
-+
-+DEFINE_EVENT_PRINT(rt_lock_class, rt_spinlock_acquired,
-+	TP_PROTO(struct lockdep_map *lock, struct task_struct *pname),
-+	TP_ARGS(lock, pname),
-+	TP_printk("Process: %s has acquired lock: %s", __get_str(process_name),
-+		__get_str(name))
-+	);
-+
-+DEFINE_EVENT_PRINT(rt_lock_class, rt_spinlock_released,
-+	TP_PROTO(struct lockdep_map *lock, struct task_struct *pname),
-+	TP_ARGS(lock, pname),
-+	TP_printk("Process: %s has released lock: %s", __get_str(process_name),
-+		__get_str(name))
-+	);
-+
- DECLARE_EVENT_CLASS(lock,
- 
- 	TP_PROTO(struct lockdep_map *lock, unsigned long ip),
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 602eb7821a1b..80ba2c0d7923 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -26,6 +26,7 @@
- #include <linux/timer.h>
- #include <linux/ww_mutex.h>
- #include <linux/blkdev.h>
-+#include <trace/events/lock.h>
- 
- #include "rtmutex_common.h"
- 
-@@ -1144,7 +1145,9 @@ void __lockfunc rt_spin_lock(spinlock_t *lock)
- 	rcu_read_lock();
- 	migrate_disable();
- 	spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
-+	do_trace_rt_spinlock_acquire(lock, current);
- 	rt_spin_lock_fastlock(&lock->lock, rt_spin_lock_slowlock);
-+	do_trace_rt_spinlock_acquired(lock, current);
- }
- EXPORT_SYMBOL(rt_spin_lock);
- 
-@@ -1169,6 +1172,7 @@ void __lockfunc rt_spin_unlock(spinlock_t *lock)
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index df04c0057271..fbe02815c41a 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -73,6 +73,9 @@ bool hugepage_vma_check(struct vm_area_struct *vma,
+                        unsigned long vm_flags,
+                        bool smaps)
  {
- 	/* NOTE: we always pass in '1' for nested, for simplicity */
- 	spin_release(&lock->dep_map, 1, _RET_IP_);
-+	do_trace_rt_spinlock_released(lock, current);
- 	rt_spin_lock_fastunlock(&lock->lock, rt_spin_lock_slowunlock);
- 	migrate_enable();
- 	rcu_read_unlock();
-diff --git a/kernel/locking/rtmutex_common.h b/kernel/locking/rtmutex_common.h
-index 546aaf058b9e..185ffc1e7015 100644
---- a/kernel/locking/rtmutex_common.h
-+++ b/kernel/locking/rtmutex_common.h
-@@ -25,6 +25,20 @@
-  * @pi_tree_entry:	pi node to enqueue into the mutex owner waiters tree
-  * @task:		task reference to the blocked task
-  */
++       if (!vma->vm_mm)
++               return false;
 +
-+#ifdef CONFIG_RT_SPIN_LOCK_TRACING
-+#define do_trace_rt_spinlock_acquire(lock, task) \
-+	trace_rt_spinlock_acquire(&lock->dep_map, task)
-+#define do_trace_rt_spinlock_acquired(lock, task) \
-+	trace_rt_spinlock_acquired(&lock->dep_map, task)
-+#define do_trace_rt_spinlock_released(lock, task) \
-+	trace_rt_spinlock_released(&lock->dep_map, task)
-+#else
-+#define do_trace_rt_spinlock_acquire(lock, task) do {} while(0)
-+#define do_trace_rt_spinlock_acquired(lock, task) do {} while(0)
-+#define do_trace_rt_spinlock_released(lock, task) do {} while(0)
-+#endif
-+
- struct rt_mutex_waiter {
- 	struct rb_node          tree_entry;
- 	struct rb_node          pi_tree_entry;
--- 
-2.25.1
+        if (!transhuge_vma_enabled(vma, vm_flags))
+                return false;
 
+Which isn't included in the tree testing here. IMHO this is cleaner than messing
+with an already subtle ordering.
+
+
+> >
+> > I haven't been paying attention to that patch series, so I don't have
+> > a constructive suggestion for how to fix.
+> >
+> > > > CPU: 0 PID: 21978 Comm: syz-executor.5 Not tainted 5.19.0-rc2-next-20220616-syzkaller #0
+> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > > > Call Trace:
+> > > >  <TASK>
+> > > >  __dump_stack lib/dump_stack.c:88 [inline]
+> > > >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> > > >  kasan_report+0xbe/0x1f0 mm/kasan/report.c:495
+> > > >  check_region_inline mm/kasan/generic.c:183 [inline]
+> > > >  kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+> > > >  instrument_atomic_read include/linux/instrumented.h:71 [inline]
+> > > >  test_bit include/asm-generic/bitops/instrumented-non-atomic.h:134 [inline]
+> > > >  hugepage_vma_check+0x8e/0x750 mm/huge_memory.c:82
+> > > >  show_smap+0x1c6/0x470 fs/proc/task_mmu.c:866
+> > > >  traverse.part.0+0xcf/0x5f0 fs/seq_file.c:111
+> > > >  traverse fs/seq_file.c:101 [inline]
+> > > >  seq_read_iter+0x90f/0x1280 fs/seq_file.c:195
+> > > >  seq_read+0x337/0x4b0 fs/seq_file.c:162
+> > > >  do_loop_readv_writev fs/read_write.c:763 [inline]
+> > > >  do_loop_readv_writev fs/read_write.c:750 [inline]
+> > > >  do_iter_read+0x4f8/0x750 fs/read_write.c:805
+> > > >  vfs_readv+0xe5/0x150 fs/read_write.c:923
+> > > >  do_preadv fs/read_write.c:1015 [inline]
+> > > >  __do_sys_preadv fs/read_write.c:1065 [inline]
+> > > >  __se_sys_preadv fs/read_write.c:1060 [inline]
+> > > >  __x64_sys_preadv+0x22b/0x310 fs/read_write.c:1060
+> > > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > > >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> > > >  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> > > > RIP: 0033:0x7f5c1d889109
+> > > > Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > > > RSP: 002b:00007f5c1ea69168 EFLAGS: 00000246 ORIG_RAX: 0000000000000127
+> > > > RAX: ffffffffffffffda RBX: 00007f5c1d99bf60 RCX: 00007f5c1d889109
+> > > > RDX: 0000000000000001 RSI: 00000000200006c0 RDI: 0000000000000005
+> > > > RBP: 00007f5c1d8e305d R08: 0000000000000000 R09: 0000000000000000
+> > > > R10: 00000000fffffffe R11: 0000000000000246 R12: 0000000000000000
+> > > > R13: 00007ffd8514b43f R14: 00007f5c1ea69300 R15: 0000000000022000
+> > > >  </TASK>
+> > > > ==================================================================
+> > > >
+> > > >
+> > > > ---
+> > > > This report is generated by a bot. It may contain errors.
+> > > > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > > > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > > >
+> > > > syzbot will keep track of this issue. See:
+> > > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 

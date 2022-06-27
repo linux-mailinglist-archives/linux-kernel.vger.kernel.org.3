@@ -2,123 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AAF455C626
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E1055E062
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239063AbiF0Rep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+        id S239175AbiF0RfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236463AbiF0Rel (ORCPT
+        with ESMTP id S232477AbiF0RfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:34:41 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64D1B1CD;
-        Mon, 27 Jun 2022 10:34:39 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id p69so10277998iod.10;
-        Mon, 27 Jun 2022 10:34:39 -0700 (PDT)
+        Mon, 27 Jun 2022 13:35:08 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C60FD114;
+        Mon, 27 Jun 2022 10:35:06 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id k9so432114pfg.5;
+        Mon, 27 Jun 2022 10:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9CsM32t4Z5wOlsd6CfHVHJCzLBpNtvXv2dbWYHZaXLU=;
+        b=RK4Ufv1btDwvSThAEWtsmECgPZQsYJ8Q+g/0z45hnkXo1YSOm/3RK0fC8enuDFwdi9
+         HRmTRmJ9XNIZeawPvns8+lzFKC+rXq11VKQBtoesSsc7NUozujFZOmMRVKKoFlKFUj9D
+         i4pT8sOCkbn/kxvyxsFoRT/TaTV73NRfywWmEzaK7oBqGnn5tXf79xSGejTnSx+c3WBS
+         +w67wB47EoboF8fFgyJoE4yK7WfFW8O8tPIi1SpuHVzmDOuBdv1NygpSx9ZWOUeq8K4e
+         DXEgPnrXq+xYbL+2/k1mm8qO6tkSYmnr1iKB7BkGMKlVSjVB+Ar/JPaxR0HtBGrkDzrg
+         n3pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a/8X5CuFWSs44Wf8DabrTq3lrtrQa6yryAnIBK8XrMM=;
-        b=dpTwiJs0sVdT1dprtR6W49mKRmiOZLvX5QJCz7jLaFoMhZ613SSTKyOjtjAveo6f9A
-         QPxBnkiAQXYnLrS+bZKV5vhwtPD/menrEhc7E0mDpeMR2SETfT/cM4GQxRRj8bX4wkTU
-         b/eCoCRC/RbBKBU2SHKxRGq8sVjwQl2vdyBlFv5gEEwlP4bWZWta0xqIeGC78IcaSAtz
-         OVRMszn/hNqDJDDA2yV0uSaQCdG+tBhNBVnwkugxeCGpz9IiNUL0E3Sw9R+KMVwAUtqX
-         /qIhBATsJkFj8VMAb+53kmuODivn4ojdzNuz9q5R/hOIOvfu4CGibjST1azv2xe2eHz/
-         1e/g==
-X-Gm-Message-State: AJIora8k2Xj/cnpRQnvlyI9Hu7EPJd9KBbf7EHwXKJFXG8RTmpb74Tam
-        QaTvFEEOrW4RuxVmz/oQetcRCiGmGw==
-X-Google-Smtp-Source: AGRyM1sywh7nza/vYaLVKSMTgBH/gRL4kZTOpa021AlwH6FPO+QZDC2J6Bq3pJHgENIJ1ZNse6UfLQ==
-X-Received: by 2002:a5e:c60a:0:b0:674:fd9d:e31f with SMTP id f10-20020a5ec60a000000b00674fd9de31fmr7164558iok.148.1656351278940;
-        Mon, 27 Jun 2022 10:34:38 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id i39-20020a023b67000000b00339e90e57e6sm4946959jaf.104.2022.06.27.10.34.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 10:34:38 -0700 (PDT)
-Received: (nullmailer pid 2637344 invoked by uid 1000);
-        Mon, 27 Jun 2022 17:34:36 -0000
-Date:   Mon, 27 Jun 2022 11:34:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hakan Jansson <hakan.jansson@infineon.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: net: broadcom-bluetooth: Add CYW55572
- DT binding
-Message-ID: <20220627173436.GA2616639-robh@kernel.org>
-References: <cover.1655723462.git.hakan.jansson@infineon.com>
- <acd9e85b1ba82875e83ca68ae2aa62d828bfdfa3.1655723462.git.hakan.jansson@infineon.com>
- <2c753258-b68e-b2ad-c4cc-f0a437769bc2@linaro.org>
- <cb973352-36f9-8d70-95ac-5b63a566422c@infineon.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9CsM32t4Z5wOlsd6CfHVHJCzLBpNtvXv2dbWYHZaXLU=;
+        b=yqkF1ynEgqA6MevAw0gNbwRXVy2ebMD+/SzTQx+mSIFmDdciYtBMc29OmSxOq7gNeV
+         z/lNBP9tnzJhrNJrtLlIF3GMcfpa1e97UiQ8NYALrHTlQpQqEJ9P92oWG3uBN4hxMx1E
+         BDqBPEer9LfaBtlGRlAk7yypmvkAQA0lE48FkkBYixHjP4U6cVRs8feLzEC9oS2VvqNI
+         9SWNbmGi0Ql/3Hf1LvxHs8g+Q78vEv4AhbRDr1fRWSehh7nZnHwIKPFyAuB0BCzNS0Rm
+         011ROCvQReVPHMF8Wn6gdSPPYmqnZCi+CmshUeuHzrk+wJz3vjkpBB0dgz1URRH/wXLf
+         mGaw==
+X-Gm-Message-State: AJIora9zvfNi0R9O0nChug9irSLtoajJ8wNgopetpNNba74fTnLcO5de
+        eBHV5b+6boKyiHLK4PWvpCF9qxFfXB7RyA==
+X-Google-Smtp-Source: AGRyM1upCKTPMsUWpygoe5VlMqEFj+0nvXAo6yP/f57cp5lQIlM99+6uwPDDgGOxC0t0zuTT8/BNXA==
+X-Received: by 2002:a63:6d4a:0:b0:40c:f5db:f08a with SMTP id i71-20020a636d4a000000b0040cf5dbf08amr13369355pgc.124.1656351305354;
+        Mon, 27 Jun 2022 10:35:05 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c0f:ec3f:8053:b39e:a633:cf03? ([2401:4900:1c0f:ec3f:8053:b39e:a633:cf03])
+        by smtp.gmail.com with ESMTPSA id rt22-20020a17090b509600b001ec98cc43e4sm7555707pjb.49.2022.06.27.10.35.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 10:35:05 -0700 (PDT)
+Message-ID: <f08574e9-3e1e-0bc4-c95c-83fb955d2869@gmail.com>
+Date:   Mon, 27 Jun 2022 23:05:01 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cb973352-36f9-8d70-95ac-5b63a566422c@infineon.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH] platform: x86: Remove duplicated include in
+ barco-p50-gpio.c
+Content-Language: en-GB
+To:     Peter Korsgaard <peter@korsgaard.com>
+Cc:     santoshkumar.yadav@barco.com, peter.korsgaard@barco.com,
+        hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        saurav.girepunje@hotmail.com
+References: <YriUMDJoip0Mknh3@Sauravs-MacBook-Air.local>
+ <8735fr1bqh.fsf@dell.be.48ers.dk>
+ <924eb8a2-a040-0632-872b-e1951c71c169@gmail.com>
+ <87y1xizj06.fsf@dell.be.48ers.dk>
+From:   Saurav Girepunje <saurav.girepunje@gmail.com>
+In-Reply-To: <87y1xizj06.fsf@dell.be.48ers.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 04:06:25PM +0200, Hakan Jansson wrote:
-> Hi Krzysztof,
-> 
-> Thanks for replying.
-> 
-> On 6/20/2022 2:32 PM, Krzysztof Kozlowski wrote:
-> > > CYW55572 is a Wi-Fi + Bluetooth combo device from Infineon.
-> > > Extend the binding with its DT compatible.
-> > > 
-> > > Signed-off-by: Hakan Jansson <hakan.jansson@infineon.com>
-> > > ---
-> > >   Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml | 1 +
-> > >   1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
-> > > index df59575840fe..71fe9b17f8f1 100644
-> > > --- a/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
-> > > +++ b/Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml
-> > > @@ -24,6 +24,7 @@ properties:
-> > >         - brcm,bcm43540-bt
-> > >         - brcm,bcm4335a0
-> > >         - brcm,bcm4349-bt
-> > > +      - infineon,cyw55572-bt
-> > Patch is okay, but just to be sure - is it entirely different device
-> > from Infineon or some variant of Broadcom block?
-> 
-> CYW55572 is a new device from Infineon. It is not the same as any Broadcom
-> device.
-> 
-> >   Are all existing
-> > properties applicable to it as well?
-> 
-> Yes, all existing properties are applicable.
 
-Including 'brcm,bt-pcm-int-params'? I don't see a BT reset signal 
-either, but maybe that's not pinned out in the AzureWave module which 
-was the only documentation details I could find[1].
 
-I think a separate doc will be better as it can be more precise as to 
-what's allowed or not. It's fine to reuse the same property names 
-though.
-
-Rob
-
-[1] https://www.azurewave.com/img/infineon/AW-XH316_DS_DF_A_STD.pdf
+On 27/06/22 12:32 pm, Peter Korsgaard wrote:
+>>>>>> "Saurav" == Saurav Girepunje <saurav.girepunje@gmail.com> writes:
+> 
+>  > On 27/06/22 12:41 am, Peter Korsgaard wrote:
+>  >>>>>>> "Saurav" == Saurav Girepunje <saurav.girepunje@gmail.com> writes:
+>  >> 
+>  >> > Remove the duplicate include of linux/io.h in barco-p50-gpio.c
+>  >> > file.
+>  >> 
+>  >> > Signed-off-by: Saurav Girepunje <saurav.girepunje@gmail.com>
+>  >> 
+>  >> What tree is this against? The io.h include in the line just above
+>  >> delay.h was already removed by:
+>  >> 
+> 
+>  > I am using git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git .
+> 
+> staging? That seems an odd tree to make platform/x86 changes
+> from. Just using the mainline tree would be a better choice.
+Ok, Sure
+> 
+>  > if it fix on another tree . Please ignore this patch.
+> 
+> git describe --contains 011881b80ebe773914b59905bce0f5e0ef93e7ba
+> v5.19-rc2~1^2~5
+> 
+> So it is in 5.19-rc2, released 2 weeks ago.
+> 
+Yes

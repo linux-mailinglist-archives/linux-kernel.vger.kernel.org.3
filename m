@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8131F55D44F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D97955D923
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235993AbiF0Lf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
+        id S239857AbiF0L60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236382AbiF0Ldp (ORCPT
+        with ESMTP id S238178AbiF0Lv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:33:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0873B71;
-        Mon, 27 Jun 2022 04:31:05 -0700 (PDT)
+        Mon, 27 Jun 2022 07:51:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AB765D8;
+        Mon, 27 Jun 2022 04:44:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CA166150E;
-        Mon, 27 Jun 2022 11:31:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9196DC3411D;
-        Mon, 27 Jun 2022 11:31:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6925BB80DFB;
+        Mon, 27 Jun 2022 11:44:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB77CC3411D;
+        Mon, 27 Jun 2022 11:44:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329465;
-        bh=vgvNJrHBHS9C46/WmKV1U9Crcq8Uj+IGHmrgSflbAnM=;
+        s=korg; t=1656330274;
+        bh=Ohcf7nGk8n9vCs4Z+7cqN7DCW8MDM/AmhWQ9xORVs54=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BY/HP/TYdDG9uB39Q3V6eH6cfR2FaF4nlbNDPZyfqLLIlqYQymKv3bFT27ugF8msh
-         a/kXwRO4HGL/1AgvLriQuuCoGrM7BSOaOcCvfnzRmjI50aJgUsm0hTklH4zMt/6dC4
-         Z3pdI+OZTeDIPISUeKtqfvNxQY4XzhOHMiZlYGxM=
+        b=xHx+BQDLykS/x83wz7TbgE9OQ9zloUAj73aFM8PUKgulwF6tyxDfqi6jwX0pfFuNP
+         MQXG2N/uRImTObkKEVVZcnQ33xVr5SkpR829n2qd2Qe0aO55h9VnEvCzcpFuImRw2L
+         aAHN0DNCA1LoeXx333pF/ZctgF96ELNp6RaO1fRM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.4 45/60] iio: adc: axp288: Override TS pin bias current for some models
+Subject: [PATCH 5.18 143/181] iio: adc: aspeed: Fix refcount leak in aspeed_adc_set_trim_data
 Date:   Mon, 27 Jun 2022 13:21:56 +0200
-Message-Id: <20220627111929.015392263@linuxfoundation.org>
+Message-Id: <20220627111948.832841064@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
-References: <20220627111927.641837068@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 048058399f19d43cf21de9f5d36cd8144337d004 upstream.
+commit 8a2b6b5687984a010ed094b4f436a2f091987758 upstream.
 
-Since commit 9bcf15f75cac ("iio: adc: axp288: Fix TS-pin handling") we
-preserve the bias current set by the firmware at boot. This fixes issues
-we were seeing on various models.
+of_find_node_by_name() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-Some models like the Nuvision Solo 10 Draw tablet actually need the
-old hardcoded 80ųA bias current for battery temperature monitoring
-to work properly.
-
-Add a quirk entry for the Nuvision Solo 10 Draw to the DMI quirk table
-to restore setting the bias current to 80ųA on this model.
-
-Fixes: 9bcf15f75cac ("iio: adc: axp288: Fix TS-pin handling")
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215882
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220506095040.21008-1-hdegoede@redhat.com
+Fixes: d0a4c17b4073 ("iio: adc: aspeed: Get and set trimming data.")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220516075206.34580-1-linmq006@gmail.com
 Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/axp288_adc.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/iio/adc/aspeed_adc.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/iio/adc/axp288_adc.c
-+++ b/drivers/iio/adc/axp288_adc.c
-@@ -196,6 +196,14 @@ static const struct dmi_system_id axp288
- 		},
- 		.driver_data = (void *)(uintptr_t)AXP288_ADC_TS_BIAS_80UA,
- 	},
-+	{
-+		/* Nuvision Solo 10 Draw */
-+		.matches = {
-+		  DMI_MATCH(DMI_SYS_VENDOR, "TMAX"),
-+		  DMI_MATCH(DMI_PRODUCT_NAME, "TM101W610L"),
-+		},
-+		.driver_data = (void *)(uintptr_t)AXP288_ADC_TS_BIAS_80UA,
-+	},
- 	{}
- };
- 
+--- a/drivers/iio/adc/aspeed_adc.c
++++ b/drivers/iio/adc/aspeed_adc.c
+@@ -186,6 +186,7 @@ static int aspeed_adc_set_trim_data(stru
+ 		return -EOPNOTSUPP;
+ 	}
+ 	scu = syscon_node_to_regmap(syscon);
++	of_node_put(syscon);
+ 	if (IS_ERR(scu)) {
+ 		dev_warn(data->dev, "Failed to get syscon regmap\n");
+ 		return -EOPNOTSUPP;
 
 

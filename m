@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAAF655C316
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F3355DCA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235584AbiF0Lar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
+        id S237246AbiF0Lmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235460AbiF0L3e (ORCPT
+        with ESMTP id S236900AbiF0LkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:29:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED55E33B;
-        Mon, 27 Jun 2022 04:28:25 -0700 (PDT)
+        Mon, 27 Jun 2022 07:40:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23C6BF69;
+        Mon, 27 Jun 2022 04:35:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3D81B81123;
-        Mon, 27 Jun 2022 11:28:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A02C36AF3;
-        Mon, 27 Jun 2022 11:28:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E7B060CA5;
+        Mon, 27 Jun 2022 11:35:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 676F7C3411D;
+        Mon, 27 Jun 2022 11:35:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329303;
-        bh=trcPkf+EXPWSnihqZu36c4JcAydRwY2vhM6nuMOJUUY=;
+        s=korg; t=1656329730;
+        bh=hukwWuigzV21quC7Sf4EGCOyizLdoQuLY9l8pf4YG5c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zLs7eXLG24unDYqN0kslKWdDG1p1vYP3VUU78Qoa6Klcn+UFQMI4OQkZd05yO6kc5
-         wlUEIQrst0IXodsp5cdvfWvIH7Mix/dF3GZdmZNgjAh9kAInfcTbrqh5E/x+eOdkiF
-         gdToVIp8sLlDg0fuzOevXyfJtDsP3PZAzPpNcZS4=
+        b=Zw62WMlLUT6eTt2fQgG7WIL/IEsY768l7kq5s/Q/80l4isZuS5HgiH7yppAYm+6L3
+         2ky7vI1+1cfQEEpxG9FGX/5uRLRhf+92v1ydIsWA/XOsmvEugdkoFERZ6wgJy0YSkE
+         sg/iYb7e9fcSkjV+BiH1YBvchlgMl2wsjyRfICeg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yonglin Tan <yonglin.tan@outlook.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.4 15/60] USB: serial: option: add Quectel EM05-G modem
+        stable@vger.kernel.org, Thomas Richter <tmricht@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 079/135] s390/cpumf: Handle events cycles and instructions identical
 Date:   Mon, 27 Jun 2022 13:21:26 +0200
-Message-Id: <20220627111928.107308193@linuxfoundation.org>
+Message-Id: <20220627111940.452928409@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
-References: <20220627111927.641837068@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,104 +56,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yonglin Tan <yonglin.tan@outlook.com>
+From: Thomas Richter <tmricht@linux.ibm.com>
 
-commit 33b29dbb39bcbd0a96e440646396bbf670b914fa upstream.
+[ Upstream commit be857b7f77d130dbbd47c91fc35198b040f35865 ]
 
-The EM05-G modem has 2 USB configurations that are configurable via the AT
-command AT+QCFG="usbnet",[ 0 | 2 ] which make the modem enumerate with
-the following interfaces, respectively:
+Events CPU_CYCLES and INSTRUCTIONS can be submitted with two different
+perf_event attribute::type values:
+ - PERF_TYPE_HARDWARE: when invoked via perf tool predefined events name
+   cycles or cpu-cycles or instructions.
+ - pmu->type: when invoked via perf tool event name cpu_cf/CPU_CYLCES/ or
+   cpu_cf/INSTRUCTIONS/. This invocation also selects the PMU to which
+   the event belongs.
+Handle both type of invocations identical for events CPU_CYLCES and
+INSTRUCTIONS. They address the same hardware.
+The result is different when event modifier exclude_kernel is also set.
+Invocation with event modifier for user space event counting fails.
 
-"RMNET"	: AT + DIAG + NMEA + Modem + QMI
-"MBIM"	: MBIM + AT + DIAG + NMEA + Modem
+Output before:
 
-The detailed description of the USB configuration for each mode as follows:
+ # perf stat -e cpum_cf/cpu_cycles/u -- true
 
-RMNET Mode
---------------
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 21 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=030a Rev= 3.18
-S:  Manufacturer=Quectel
-S:  Product=Quectel EM05-G
-C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+ Performance counter stats for 'true':
 
-MBIM Mode
---------------
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 16 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=030a Rev= 3.18
-S:  Manufacturer=Quectel
-S:  Product=Quectel EM05-G
-C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
-A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
-I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+   <not supported>      cpum_cf/cpu_cycles/u
 
-Signed-off-by: Yonglin Tan <yonglin.tan@outlook.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+       0.000761033 seconds time elapsed
+
+       0.000076000 seconds user
+       0.000725000 seconds sys
+
+ #
+
+Output after:
+ # perf stat -e cpum_cf/cpu_cycles/u -- true
+
+ Performance counter stats for 'true':
+
+           349,613      cpum_cf/cpu_cycles/u
+
+       0.000844143 seconds time elapsed
+
+       0.000079000 seconds user
+       0.000800000 seconds sys
+ #
+
+Fixes: 6a82e23f45fe ("s390/cpumf: Adjust registration of s390 PMU device drivers")
+Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+Acked-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
+[agordeev@linux.ibm.com corrected commit ID of Fixes commit]
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/serial/option.c |    3 +++
- 1 file changed, 3 insertions(+)
+ arch/s390/kernel/perf_cpum_cf.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -252,6 +252,7 @@ static void option_instat_callback(struc
- #define QUECTEL_PRODUCT_EG95			0x0195
- #define QUECTEL_PRODUCT_BG96			0x0296
- #define QUECTEL_PRODUCT_EP06			0x0306
-+#define QUECTEL_PRODUCT_EM05G			0x030a
- #define QUECTEL_PRODUCT_EM12			0x0512
- #define QUECTEL_PRODUCT_RM500Q			0x0800
- #define QUECTEL_PRODUCT_EC200S_CN		0x6002
-@@ -1134,6 +1135,8 @@ static const struct usb_device_id option
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0xff, 0xff),
- 	  .driver_info = RSVD(1) | RSVD(2) | RSVD(3) | RSVD(4) | NUMEP2 },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0, 0) },
-+	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G, 0xff),
-+	  .driver_info = RSVD(6) | ZLP },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM12, 0xff, 0xff, 0xff),
- 	  .driver_info = RSVD(1) | RSVD(2) | RSVD(3) | RSVD(4) | NUMEP2 },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM12, 0xff, 0, 0) },
+diff --git a/arch/s390/kernel/perf_cpum_cf.c b/arch/s390/kernel/perf_cpum_cf.c
+index cceb8ec707e4..d2a2a18b5580 100644
+--- a/arch/s390/kernel/perf_cpum_cf.c
++++ b/arch/s390/kernel/perf_cpum_cf.c
+@@ -516,6 +516,26 @@ static int __hw_perf_event_init(struct perf_event *event, unsigned int type)
+ 	return err;
+ }
+ 
++/* Events CPU_CYLCES and INSTRUCTIONS can be submitted with two different
++ * attribute::type values:
++ * - PERF_TYPE_HARDWARE:
++ * - pmu->type:
++ * Handle both type of invocations identical. They address the same hardware.
++ * The result is different when event modifiers exclude_kernel and/or
++ * exclude_user are also set.
++ */
++static int cpumf_pmu_event_type(struct perf_event *event)
++{
++	u64 ev = event->attr.config;
++
++	if (cpumf_generic_events_basic[PERF_COUNT_HW_CPU_CYCLES] == ev ||
++	    cpumf_generic_events_basic[PERF_COUNT_HW_INSTRUCTIONS] == ev ||
++	    cpumf_generic_events_user[PERF_COUNT_HW_CPU_CYCLES] == ev ||
++	    cpumf_generic_events_user[PERF_COUNT_HW_INSTRUCTIONS] == ev)
++		return PERF_TYPE_HARDWARE;
++	return PERF_TYPE_RAW;
++}
++
+ static int cpumf_pmu_event_init(struct perf_event *event)
+ {
+ 	unsigned int type = event->attr.type;
+@@ -525,7 +545,7 @@ static int cpumf_pmu_event_init(struct perf_event *event)
+ 		err = __hw_perf_event_init(event, type);
+ 	else if (event->pmu->type == type)
+ 		/* Registered as unknown PMU */
+-		err = __hw_perf_event_init(event, PERF_TYPE_RAW);
++		err = __hw_perf_event_init(event, cpumf_pmu_event_type(event));
+ 	else
+ 		return -ENOENT;
+ 
+-- 
+2.35.1
+
 
 

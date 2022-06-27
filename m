@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04E255E007
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D909055D8EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233032AbiF0HjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
+        id S232832AbiF0Hko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233016AbiF0HjL (ORCPT
+        with ESMTP id S233033AbiF0Hkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:39:11 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B88D62
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:39:10 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id m14so7431106plg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:39:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=84vnIVuBqL0L/KhL8ipRi5YoW8T44EFGau2fZe7lDYk=;
-        b=CR/V6XamEcp4AysM+5uSYwPtEEVAnfzAP1WEyrROMMF/OxFkPytNejVdT/tRIbqUOQ
-         cPMwXL+8unmxZ/OaykahbtP2Pjx9VmlFmAn3a24zwEKFYjrHuC5c8EvGeK79TU4m2q3U
-         5TFseuEJx24N6shyWULlNx2uoRGt4UAzAQFS8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=84vnIVuBqL0L/KhL8ipRi5YoW8T44EFGau2fZe7lDYk=;
-        b=QXrMDSg8PxuNaU5YfK6WIV6kmWlDegqtv9iJpnS7kN7QAADxjqa3KyqxdEB0zKUF+Z
-         heGuqVfVimrdSAZpF+nx8XW5XupqrL18PYBrULOf7C+Q8vQ5CbteAF+YU0FZtvTRoUi1
-         2h3GKDew6tY21/DwX2WTe3js2ch85NjFEK+rvFn3gcgiFam6rJz3G8pC2Jp47J3BKmw6
-         BlstrXL9qTa/AsrUsunmZUFe0uQ5fdOb4jwvK6Xd4NvVBIkV5SjMh+9IciXzOcikky/x
-         XwgplDFgWNLHQXMuiIcn4dnsH5fCWG9wCibIzOc19acNQpwK4prbhWbBfJfOJlkQM8wl
-         gUCA==
-X-Gm-Message-State: AJIora8e49vHxhAwHMAxs70P5i4QtgpM/Ph6eiO7SIaTUjgWinBjW7e6
-        1iAsOTvcjUcv5j3fn+3nbe6Lvw==
-X-Google-Smtp-Source: AGRyM1s2mJD4A0ufT2RCu0F7qPDwL3ap1UgQJSr3ShtTgfGexhtlWxJMyoFHbHEZ1/ooqmo1CQSr2Q==
-X-Received: by 2002:a17:902:f151:b0:16a:466a:4ae4 with SMTP id d17-20020a170902f15100b0016a466a4ae4mr13910802plb.61.1656315550312;
-        Mon, 27 Jun 2022 00:39:10 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:52a:ee1f:c89c:ee78])
-        by smtp.gmail.com with ESMTPSA id a4-20020a62bd04000000b00525714c3e07sm6480649pff.48.2022.06.27.00.39.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 00:39:09 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 16:39:02 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+0b7c8bfd17c00d016fb4@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, elver@google.com, glider@google.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        john.ogness@linutronix.de, linux-kernel@vger.kernel.org,
-        npiggin@gmail.com, pmladek@suse.com, rdunlap@infradead.org,
-        rostedt@goodmis.org, senozhatsky@chromium.org, swboyd@chromium.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] possible deadlock in console_unlock (2)
-Message-ID: <YrlelmgGpTtBva/0@google.com>
-References: <000000000000dab76c05d0bc284c@google.com>
- <00000000000095e3d105e2553f0a@google.com>
- <CACT4Y+Yf4ckOJjGkkFh_HYEKDjQo34wN=q18ADbP3=vhd5eQJQ@mail.gmail.com>
+        Mon, 27 Jun 2022 03:40:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B1D60E0;
+        Mon, 27 Jun 2022 00:40:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61E8CB80F9D;
+        Mon, 27 Jun 2022 07:40:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3166FC341CB;
+        Mon, 27 Jun 2022 07:40:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656315637;
+        bh=MzjeRwNuJsz8lcgalKEQ4uPa0idcPi8oD5nNWGIpJfE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VaX5mrEEdE2Z9agLkU0695/N0Do+K7kF7EzotBofAEeAZi3H81+ru7iELCi7+CXud
+         I7sc6MspU0l3UFZ6WiWU8Owcp0WOSW2xzI9iypARvXToBYm/vVtpIyJWtiYf2Mru+y
+         FwkAxPjXWB1ui6WY2lNeo7CZ3yli2jfGTjOVhR2fZOuqt0nFgyNGNIJSQN3GQRxw1I
+         ieVGf6EXs6UgX1ltdxJsmBhvXeUoNUVbQoBIRCsTBqIpxYBI8cmysEiTKfFkrUqkmi
+         pVJXRRGBX2OAvkj97g2ROqu5HI59sS5ykPbmuohM1fFANHeS6HmQGfzQuqDm8gZvVu
+         A6I7kl8DIplEQ==
+Received: by mail-vs1-f44.google.com with SMTP id e7so8125888vsp.13;
+        Mon, 27 Jun 2022 00:40:37 -0700 (PDT)
+X-Gm-Message-State: AJIora8VZG/2DetFAtOv3Z8Cy95+A9cudWuxyApNewGlJi+PlBUeexk1
+        9fVOUXz7bQM3T7S9bvJCsOSZARvMeyhITUi6dq0=
+X-Google-Smtp-Source: AGRyM1u9UMEKzaQ6qY0F+LTaZrCPsaY5ETieZQ4tBTTwNl2TC5aylcJ0FKqZSQCmSwgkYlER6Qj74Jpb2RbFugMABwo=
+X-Received: by 2002:a05:6102:366f:b0:356:352f:9de2 with SMTP id
+ bg15-20020a056102366f00b00356352f9de2mr2343073vsb.2.1656315636148; Mon, 27
+ Jun 2022 00:40:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+Yf4ckOJjGkkFh_HYEKDjQo34wN=q18ADbP3=vhd5eQJQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220627051257.38543-1-samuel@sholland.org> <20220627051257.38543-2-samuel@sholland.org>
+In-Reply-To: <20220627051257.38543-2-samuel@sholland.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 27 Jun 2022 15:40:25 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSq1NsBWRCg+kpTbJRwSeE30P9NVB5di6vzi7m2CFRzHw@mail.gmail.com>
+Message-ID: <CAJF2gTSq1NsBWRCg+kpTbJRwSeE30P9NVB5di6vzi7m2CFRzHw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] dt-bindings: interrupt-controller: Require trigger
+ type for T-HEAD PLIC
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,32 +78,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/06/27 09:11), Dmitry Vyukov wrote:
-> > syzbot suspects this issue was fixed by commit:
-> >
-> > commit faebd693c59387b7b765fab64b543855e15a91b4
-> > Author: John Ogness <john.ogness@linutronix.de>
-> > Date:   Thu Apr 21 21:22:36 2022 +0000
-> >
-> >     printk: rename cpulock functions
-> >
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17ed359bf00000
-> > start commit:   aa051d36ce4a Merge tag 'for-linus-2022052401' of git://git..
-> > git tree:       upstream
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=6c31e1555a4c59f3
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=0b7c8bfd17c00d016fb4
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a5aad6f00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d697c3f00000
-> >
-> > If the result looks correct, please mark the issue as fixed by replying with:
-> >
-> > #syz fix: printk: rename cpulock functions
-> >
-> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> 
-> 
-> I guess this is also:
-> 
-> #syz fix: printk: add kthread console printers
+On Mon, Jun 27, 2022 at 1:13 PM Samuel Holland <samuel@sholland.org> wrote:
+>
+> The RISC-V PLIC specification unfortunately allows PLIC implementations
+> to ignore edges seen while an edge-triggered interrupt is being handled:
+>
+>   Depending on the design of the device and the interrupt handler,
+>   in between sending an interrupt request and receiving notice of its
+>   handler=E2=80=99s completion, the gateway might either ignore additiona=
+l
+>   matching edges or increment a counter of pending interrupts.
+>
+> For PLICs with that misfeature, software needs to know the trigger type
+> of each interrupt. This allows it to work around the issue by completing
+> edge-triggered interrupts before handling them. Such a workaround is
+> required to avoid missing any edges.
+>
+> The T-HEAD C9xx PLIC is an example of a PLIC with this behavior.
+Actually, C9xx support pulse signals which configed by
+pad_plic_int_cfg_x for SoC vendor:
 
-Dmirty, we have reverted console kthreads for the time being.
+https://github.com/T-head-Semi/openc906/blob/main/C906_RTL_FACTORY/gen_rtl/=
+plic/rtl/plic_int_kid.v
+104: assign int_new_pending =3D pad_plic_int_cfg_x ? int_pulse
+105:
+        : level_int_pending;
+
+They could put pad_plic_int_cfg_x into the SoC software config
+registers region or bind them to constant values.
+
+>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+>
+>  .../sifive,plic-1.0.0.yaml                    | 31 ++++++++++++++++---
+>  1 file changed, 27 insertions(+), 4 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifiv=
+e,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/=
+sifive,plic-1.0.0.yaml
+> index 27092c6a86c4..3c589cbca851 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-=
+1.0.0.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-=
+1.0.0.yaml
+> @@ -26,9 +26,13 @@ description:
+>    with priority below this threshold will not cause the PLIC to raise it=
+s
+>    interrupt line leading to the context.
+>
+> -  While the PLIC supports both edge-triggered and level-triggered interr=
+upts,
+> -  interrupt handlers are oblivious to this distinction and therefore it =
+is not
+> -  specified in the PLIC device-tree binding.
+> +  The PLIC supports both edge-triggered and level-triggered interrupts. =
+For
+> +  edge-triggered interrupts, the RISC-V PLIC spec allows two responses t=
+o edges
+> +  seen while an interrupt handler is active; the PLIC may either queue t=
+hem or
+> +  ignore them. In the first case, handlers are oblivious to the trigger =
+type, so
+> +  it is not included in the interrupt specifier. In the second case, sof=
+tware
+> +  needs to know the trigger type, so it can reorder the interrupt flow t=
+o avoid
+> +  missing interrupts.
+>
+>    While the RISC-V ISA doesn't specify a memory layout for the PLIC, the
+>    "sifive,plic-1.0.0" device is a concrete implementation of the PLIC th=
+at
+> @@ -65,7 +69,8 @@ properties:
+>      const: 0
+>
+>    '#interrupt-cells':
+> -    const: 1
+> +    minimum: 1
+> +    maximum: 2
+>
+>    interrupt-controller: true
+>
+> @@ -91,6 +96,24 @@ required:
+>    - interrupts-extended
+>    - riscv,ndev
+>
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - thead,c900-plic
+> +
+> +    then:
+> +      properties:
+> +        '#interrupt-cells':
+> +          const: 2
+> +
+> +    else:
+> +      properties:
+> +        '#interrupt-cells':
+> +          const: 1
+> +
+>  additionalProperties: false
+>
+>  examples:
+> --
+> 2.35.1
+>
+
+
+--=20
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

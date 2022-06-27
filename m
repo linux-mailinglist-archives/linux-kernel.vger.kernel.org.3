@@ -2,152 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A43555C245
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B6155CBA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbiF0GVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 02:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
+        id S232430AbiF0GVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 02:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiF0GVf (ORCPT
+        with ESMTP id S229999AbiF0GVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 02:21:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43302BDA;
-        Sun, 26 Jun 2022 23:21:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 602A8612B4;
-        Mon, 27 Jun 2022 06:21:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F07FC341C8;
-        Mon, 27 Jun 2022 06:21:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656310893;
-        bh=hk9+mMFsgmDnegzAol0i+gs3JTJRWP8+Fr77+Or2q7w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FmeHYhyRxDBjlMgOrmLE7ult6qm3mSfK51byhC6Ma5CtFZd/8gVce6GQd8s+VTiIi
-         4O0hHnVCQNOuY0srPKLL1Zb+Rf4bUMmehyTvd/5W48BpAqZYsFqTDtLMHNg6a1kCjC
-         hnVpis6CkL6RxQZfTAxxTlZCvp23T5dopST+nTlKZzcHvTQqrPJVf9T6igV37Gn3hK
-         GBTT7qqEhHLy7dGHayQU9imgIVg6VSClZppi59/1I8Yge/mZQeF7OgSbFnf0Glchzr
-         /rP0B29JTl8mW9B5lX4yVkKDv5AYEyVsdChknKPT19R34V+EwfSkOwzGKAWX0UDL5o
-         Vk7qGMHn3j9Lw==
-Date:   Mon, 27 Jun 2022 11:51:29 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jie Hai <haijie1@huawei.com>
-Cc:     wangzhou1@hisilicon.com, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/8] dmaengine: hisilicon: Add multi-thread support for a
- DMA channel
-Message-ID: <YrlMaasl+ORdDJaN@matsya>
-References: <20220625074422.3479591-1-haijie1@huawei.com>
- <20220625074422.3479591-4-haijie1@huawei.com>
+        Mon, 27 Jun 2022 02:21:37 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546A82BCC
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 23:21:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656310897; x=1687846897;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=izwFnX+6z545+eh0FSlT5xUFypO7lEFeLqpSq1YYwzY=;
+  b=E2IdeWQsewv3U+TmvNLWLHxcvQF1vyaZsjsOdeUinNKKLQAOSLsMm+GD
+   V9W1LK+gmr+Hvq5+D9YT4EYfZTTLM/8jXNQWQ3m6Od6kfPzXelWt813NL
+   7G1CCvqmOzD8Cwj4qa2/0kMNP1TnQaGSwc3IFJCZllOGyeM+aUhlQgtSD
+   btIH2HXZL/4uLuOC5Dh0SP/rY1hGiHgHd4kI8PBx5CZLdVCXliiskwR/c
+   1KinAcZHNivNSAMkt0GY8erf0E6/mmYYy0D1VbPoL6zBzc3Xi4FGsVq4v
+   GXGYUW2QM+uV3wXpOAy0rpP7T7oeK+pJh/3PHbCkXi4QXxJFDm7WU1oKB
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="264413270"
+X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
+   d="scan'208";a="264413270"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 23:21:36 -0700
+X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
+   d="scan'208";a="836058465"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.239.13.94])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 23:21:35 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <shy828301@gmail.com>, <ziy@nvidia.com>
+Subject: Re: [PATCH 7/7] migrate_pages(): fix failure counting for retry
+References: <20220624025309.1033400-1-ying.huang@intel.com>
+        <20220627022515.1067946-1-ying.huang@intel.com>
+        <5b40e07d-7ed3-7eba-ea71-52e5a06c1ec8@linux.alibaba.com>
+Date:   Mon, 27 Jun 2022 14:21:31 +0800
+In-Reply-To: <5b40e07d-7ed3-7eba-ea71-52e5a06c1ec8@linux.alibaba.com> (Baolin
+        Wang's message of "Mon, 27 Jun 2022 12:29:28 +0800")
+Message-ID: <87mtdy7hjo.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220625074422.3479591-4-haijie1@huawei.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-06-22, 15:44, Jie Hai wrote:
-> When we get a DMA channel and try to use it in multiple threads it
-> will cause oops and hanging the system.
-> 
-> % echo 100 > /sys/module/dmatest/parameters/threads_per_chan
-> % echo 100 > /sys/module/dmatest/parameters/iterations
-> % echo 1 > /sys/module/dmatest/parameters/run
-> [383493.327077] Unable to handle kernel paging request at virtual
-> 		address dead000000000108
-> [383493.335103] Mem abort info:
-> [383493.335103]   ESR = 0x96000044
-> [383493.335105]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [383493.335107]   SET = 0, FnV = 0
-> [383493.335108]   EA = 0, S1PTW = 0
-> [383493.335109]   FSC = 0x04: level 0 translation fault
-> [383493.335110] Data abort info:
-> [383493.335111]   ISV = 0, ISS = 0x00000044
-> [383493.364739]   CM = 0, WnR = 1
-> [383493.367793] [dead000000000108] address between user and kernel
-> 		address ranges
-> [383493.375021] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-> [383493.437574] CPU: 63 PID: 27895 Comm: dma0chan0-copy2 Kdump:
-> 		loaded Tainted: GO 5.17.0-rc4+ #2
-> [383493.457851] pstate: 204000c9 (nzCv daIF +PAN -UAO -TCO -DIT
-> 		-SSBS BTYPE=--)
-> [383493.465331] pc : vchan_tx_submit+0x64/0xa0
-> [383493.469957] lr : vchan_tx_submit+0x34/0xa0
-> 
-> This happens because of data race. Each thread rewrite channels's
-> descriptor as soon as device_issue_pending is called. It leads to
-> the situation that the driver thinks that it uses the right
-> descriptor in interrupt handler while channels's descriptor has
-> been changed by other thread.
-> 
-> With current fixes channels's descriptor changes it's value only
-> when it has been used. A new descriptor is acquired from
-> vc->desc_issued queue that is already filled with descriptors
-> that are ready to be sent. Threads have no direct access to DMA
-> channel descriptor. Now it is just possible to queue a descriptor
-> for further processing.
-> 
-> Fixes: e9f08b65250d ("dmaengine: hisilicon: Add Kunpeng DMA engine support")
-> Signed-off-by: Jie Hai <haijie1@huawei.com>
-> ---
->  drivers/dma/hisi_dma.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/dma/hisi_dma.c b/drivers/dma/hisi_dma.c
-> index 0a0f8a4d168a..0385419be8d5 100644
-> --- a/drivers/dma/hisi_dma.c
-> +++ b/drivers/dma/hisi_dma.c
-> @@ -271,7 +271,6 @@ static void hisi_dma_start_transfer(struct hisi_dma_chan *chan)
->  
->  	vd = vchan_next_desc(&chan->vc);
->  	if (!vd) {
-> -		dev_err(&hdma_dev->pdev->dev, "no issued task!\n");
+Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 
-how is this a fix?
+> On 6/27/2022 10:25 AM, Huang Ying wrote:
+>> After 10 retries, we will give up and the remaining pages will be
+>> counted as failure in nr_failed and nr_thp_failed.  We should count
+>> the failure in nr_failed_pages too.  This is done in this patch.
+>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>> Fixes: 5984fabb6e82 ("mm: move_pages: report the number of non-attempted pages")
+>> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> Cc: Zi Yan <ziy@nvidia.com>
+>> Cc: Yang Shi <shy828301@gmail.com>
+>> ---
+>>   mm/migrate.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index 70a0e1f34c03..e42bd409d3aa 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1344,6 +1344,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   	int thp_retry = 1;
+>>   	int nr_failed = 0;
+>>   	int nr_failed_pages = 0;
+>> +	int nr_retry_pages = 0;
+>>   	int nr_succeeded = 0;
+>>   	int nr_thp_succeeded = 0;
+>>   	int nr_thp_failed = 0;
+>> @@ -1364,6 +1365,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   	for (pass = 0; pass < 10 && (retry || thp_retry); pass++) {
+>>   		retry = 0;
+>>   		thp_retry = 0;
+>> +		nr_retry_pages = 0;
+>>     		list_for_each_entry_safe(page, page2, from, lru) {
+>>   			/*
+>> @@ -1449,12 +1451,14 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   				nr_thp_failed += thp_retry;
+>>   				if (!no_subpage_counting)
+>>   					nr_failed += retry;
+>> +				nr_failed_pages += nr_retry_pages;
+>
+> Can you move this a little forward to update 'nr_failed_pages' in one
+> place, which seems more readable?
+> nr_failed_pages += nr_subpages + nr_retry_pages;
 
->  		chan->desc = NULL;
->  		return;
->  	}
-> @@ -303,7 +302,7 @@ static void hisi_dma_issue_pending(struct dma_chan *c)
->  
->  	spin_lock_irqsave(&chan->vc.lock, flags);
->  
-> -	if (vchan_issue_pending(&chan->vc))
-> +	if (vchan_issue_pending(&chan->vc) && !chan->desc)
+Sure.  Will do this in the next version!
 
-This looks good
+> Otherwise,
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
->  		hisi_dma_start_transfer(chan);
->  
->  	spin_unlock_irqrestore(&chan->vc.lock, flags);
-> @@ -442,11 +441,10 @@ static irqreturn_t hisi_dma_irq(int irq, void *data)
->  				    chan->qp_num, chan->cq_head);
->  		if (FIELD_GET(STATUS_MASK, cqe->w0) == STATUS_SUCC) {
->  			vchan_cookie_complete(&desc->vd);
-> +			hisi_dma_start_transfer(chan);
+Thanks!
 
-Why should this fix the error reported?
+Best Regards,
+Huang, Ying
 
->  		} else {
->  			dev_err(&hdma_dev->pdev->dev, "task error!\n");
->  		}
-> -
-> -		chan->desc = NULL;
->  	}
->  
->  	spin_unlock(&chan->vc.lock);
-> -- 
-> 2.33.0
-
--- 
-~Vinod
+>
+>>   				goto out;
+>>   			case -EAGAIN:
+>>   				if (is_thp)
+>>   					thp_retry++;
+>>   				else
+>>   					retry++;
+>> +				nr_retry_pages += nr_subpages;
+>>   				break;
+>>   			case MIGRATEPAGE_SUCCESS:
+>>   				nr_succeeded += nr_subpages;
+>> @@ -1481,6 +1485,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>>   	if (!no_subpage_counting)
+>>   		nr_failed += retry;
+>>   	nr_thp_failed += thp_retry;
+>> +	nr_failed_pages += nr_retry_pages;
+>>   	/*
+>>   	 * Try to migrate subpages of fail-to-migrate THPs, no nr_failed
+>>   	 * counting in this round, since all subpages of a THP is counted

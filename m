@@ -2,61 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434BE55C128
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF2E55E04A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238077AbiF0P3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
+        id S238171AbiF0P36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238050AbiF0P3W (ORCPT
+        with ESMTP id S238050AbiF0P3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:29:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CE641900D
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:29:21 -0700 (PDT)
+        Mon, 27 Jun 2022 11:29:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A904F19289
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:29:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656343760;
+        s=mimecast20190719; t=1656343791;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=hs91Syf01nEkXMgHThKmIN042V1ZQVRmN49C9uaVFIE=;
-        b=dLXunApOuq8itNQpIfIr34exZ6GQXliF+21it94TBN2K8ieCAnzW8AQI/vvw6yaoMgBSaA
-        VWZfdtqQthww6ekwg8mir90xX9LAjqVfdAAvIV5qy1CnFffXcG90T4TBJohxCnYPnexVFL
-        RsV0DaiUAt9ox+m8bjVCFmcXt+cqN5M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=h1/trUpMNLnNGyxwx4diC/Ki/CZLIBKxLxUT9R2hz7A=;
+        b=ZolJ/8IonSKWTE/g4XrGF9Nz9tot6da63w181aiJOV2bN/CcDz3x0PSu3CuuNxvLBQEGzD
+        xpNbn0nB5d+BK0mnJQtJ1NdDjnk+6H/Te0d9PX0MpAHiJKaAcJZMJvn/SJV3Ytp1YVzUUx
+        iolnPZ8H1PEyR+Dzg72qpzLLUyKMLUE=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-1-bl0KVvUDMHSunmYDcwrysg-1; Mon, 27 Jun 2022 11:29:17 -0400
-X-MC-Unique: bl0KVvUDMHSunmYDcwrysg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5B6B801233;
-        Mon, 27 Jun 2022 15:29:16 +0000 (UTC)
-Received: from T590 (ovpn-8-31.pek2.redhat.com [10.72.8.31])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DCD2F2026D07;
-        Mon, 27 Jun 2022 15:29:11 +0000 (UTC)
-Date:   Mon, 27 Jun 2022 23:29:06 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-Cc:     linux-block@vger.kernel.org, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        joseph.qi@linux.alibaba.com
-Subject: Re: [RFC] libubd: library for ubd(userspace block driver based on
- io_uring passthrough)
-Message-ID: <YrnMwgW7TemVdbXv@T590>
-References: <fd926012-6845-05e4-077b-6c8cfbf3d3cc@linux.alibaba.com>
+ us-mta-650-Lzli3YyYMr6unj7vwSEWew-1; Mon, 27 Jun 2022 11:29:50 -0400
+X-MC-Unique: Lzli3YyYMr6unj7vwSEWew-1
+Received: by mail-il1-f197.google.com with SMTP id a6-20020a92a306000000b002da987fc9f2so1395867ili.17
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:29:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=h1/trUpMNLnNGyxwx4diC/Ki/CZLIBKxLxUT9R2hz7A=;
+        b=JB1x/x8+rdqjQCBXWyaFTT2LqVXeED65EyT8nntZb6LQgtj68KKoEVhS3cGTzgmDZ3
+         gZ3y/ngQs4xnYkBuE2xG8Nqdv46R6VpOkIpbOWy+x8OfPxWaWRheelSJl7ML016QA4fv
+         yoHZx1SNdsj7EXNYmwAIelGMAsSAOakLFLFbZ25mi8nGMUIoNDPLzEjx053vY8E6qdza
+         i3sG35VVf6szTQxkW1TiL43Kx8Do+eANui9NN7IyIBNewJ5A7IvYbBwHKGL8by6AtlhH
+         S/sf4lDFL865qPnsupJGmjDrIuixndxe62z/iLCdEYop4IWHv1eAzQPnvtPKb+ZgK9Ge
+         B43Q==
+X-Gm-Message-State: AJIora/hbhqg2NjuJCOZg6+EWpcIEZG1VdO9gtujaJS73MhaeAwRuSGQ
+        ZJli9+RBgHu+FdBc0fUKw1FrAMMB6/n33jOl1R8+ofQzGpgZK8k+lsckPk0glxATRSrS2VbPEmw
+        x6hE1pJb0h2oElIACUdQPqLGE
+X-Received: by 2002:a05:6638:13d5:b0:331:a6f2:3dbf with SMTP id i21-20020a05663813d500b00331a6f23dbfmr8013033jaj.9.1656343789724;
+        Mon, 27 Jun 2022 08:29:49 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1uGpsqgUWS6Ce0E8mwLwamXIm8UbctHTOly4JQ9TWGUiHMN6AjyXmJH3vXAr+/oepx37YDf+Q==
+X-Received: by 2002:a05:6638:13d5:b0:331:a6f2:3dbf with SMTP id i21-20020a05663813d500b00331a6f23dbfmr8013019jaj.9.1656343789476;
+        Mon, 27 Jun 2022 08:29:49 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id d1-20020a026041000000b00331f63a3dfasm4808082jaf.122.2022.06.27.08.29.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 08:29:48 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 11:29:47 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 1/4] mm/gup: Add FOLL_INTERRUPTIBLE
+Message-ID: <YrnM6x7QWo6NmFqf@xz-m1.local>
+References: <20220622213656.81546-1-peterx@redhat.com>
+ <20220622213656.81546-2-peterx@redhat.com>
+ <20220625003554.GJ23621@ziepe.ca>
+ <YrZjeEv1Z2IDMwgy@xz-m1.local>
+ <20220625235904.GK23621@ziepe.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <fd926012-6845-05e4-077b-6c8cfbf3d3cc@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220625235904.GK23621@ziepe.ca>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,171 +86,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ziyang,
-
-On Mon, Jun 27, 2022 at 04:20:55PM +0800, Ziyang Zhang wrote:
-> Hi Ming,
+On Sat, Jun 25, 2022 at 08:59:04PM -0300, Jason Gunthorpe wrote:
+> On Fri, Jun 24, 2022 at 09:23:04PM -0400, Peter Xu wrote:
+> > If to go back to the original question with a shorter answer: if the ioctl
+> > context that GUP upon a page that will never be with a uffd context, then
+> > it's probably not gonna help at all.. at least not before we use
+> > FAULT_FLAG_INTERRUPTIBLE outside uffd page fault handling.
 > 
-> We are learning your ubd code and developing a library: libubd for ubd.
-> This article explains why we need libubd and how we design it.
-> 
-> Related threads:
-> (1) https://lore.kernel.org/all/Yk%2Fn7UtGK1vVGFX0@T590/
-> (2) https://lore.kernel.org/all/YnDhorlKgOKiWkiz@T590/
-> (3) https://lore.kernel.org/all/20220509092312.254354-1-ming.lei@redhat.com/
-> (4) https://lore.kernel.org/all/20220517055358.3164431-1-ming.lei@redhat.com/
-> 
-> 
-> Userspace block driver(ubd)[1], based on io_uring passthrough,
-> allows users to define their own backend storage in userspace
-> and provides block devices such as /dev/ubdbX.
-> Ming Lei has provided kernel driver code: ubd_drv.c[2]
-> and userspace code: ubdsrv[3].
-> 
-> ubd_drv.c simply passes all blk-mq IO requests
-> to ubdsrv through io_uring sqes/cqes. We think the kernel code
-> is pretty well-designed.
-> 
-> ubdsrv is implemented by a single daemon
-> and target(backend) IO handling(null_tgt and loop_tgt) 
-> is embedded in the daemon. 
-> While trying ubdsrv, we find ubdsrv is hard to be used 
-> by our backend.
+> I think I would be more interested in this if it could abort a swap
+> in, for instance. Doesn't this happen if it flows the interruptible
+> flag into the VMA's fault handler?
 
-ubd is supposed to provide one generic framework for user space block
-driver, and it can be used for doing lots of fun/useful thing.
+The idea makes sense, but it doesn't work like that right now, afaict. We
+need to teach lock_page_or_retry() to be able to consume the flag as
+discussed.
 
-If I understand correctly, this isn't same with your use case:
-
-1) your user space block driver isn't generic, and should be dedicated
-for Alibaba's uses
-
-2) your case has been there for long time, and you want to switch from other
-approach(maybe tcmu) to ubd given ubd has better performance.
-
-> First is description of our backend:
-> 
-> (1) a distributing system sends/receives IO requests 
->     through network.
-> 
-> (2) The system use RPC calls among hundreds of
->      storage servers and RPC calls are associated with data buffers
->      allocated from a memory pool.
-> 
-> (3) On each server for each device(/dev/vdX), our backend runs
->      many threads to handle IO requests and manage the device. 
-> 
-> Second are reasons why ubdsrv is hard to use for us:
-> 
-> (1) ubdsrv requires the target(backend) issues IO requests
->     to the io_uring provided by ubdsrv but our backend 
->     uses something like RPC and does not support io_uring.
-
-As one generic framework, the io command has to be io_uring
-passthrough, and the io doesn't have to be handled by io_uring.
-
-But IMO io_uring is much more efficient, so I'd try to make async io
-(io uring) as the 1st citizen in the framework, especially for new
-driver.
-
-But it can support other way really, such as use io_uring with eventfd,
-the other userspace context can handle io, then wake up io_uring context
-via eventfd. You may not use io_uring for handling io, but you still
-need to communicate with the context for handling io_uring passthrough
-command, and one mechanism(such as eventfd) has to be there for the
-communication.
-
-> 
-> (2) ubdsrv forks a daemon and it takes over everything.
->     Users should type "list/stop/del" ctrl-commands to interact with
->     the daemon. It is inconvenient for our backend
->     because it has threads(from a C++ thread library) running inside.
-
-No, list/stop/del won't interact with the daemon, and the per-queue
-pthread is only handling IO commands(io_uring passthrough) and IO request.
-
-> 
-> (3) ubdsrv PRE-allocates internal data buffers for each ubd device.
->     The data flow is:
->     bio vectors <-1-> ubdsrv data buffer <-2-> backend buffer(our RPC buffer).
->     Since ubdsrv does not export its internal data buffer to backend,
->     the second copy is unavoidable. 
->     PRE-allocating data buffer may not be a good idea for wasting memory
->     if there are hundreds of ubd devices(/dev/ubdbX).
-
-The preallocation is just virtual memory, which is cheap and not pinned, but
-ubdsrv does support buffer provided by io command, see:
-
-https://github.com/ming1/linux/commit/0a964a1700e11ba50227b6d633edf233bdd8a07d
-
-> 
-> To better use ubd in more complicated scenarios, we have developed libubd.
-> It does not assume implementation of backend and can be embedded into it.
-> We refer to the code structure of tcmu-runner[4], 
-> which includes a library(libtcmu) for users 
-> to embed tcmu-runner inside backend's code. 
-> It:
-> 
-> (1) Does not fork/pthread_create but embedded in backend's threads
-
-That is because your backend may not use io_uring, I guess.
-
-But it is pretty easy to move the decision of creating pthread to target
-code, which can be done in the interface of .prepare_target().
-
-> 
-> (2) Provides libubd APIs for backend to add/delete ubd devices 
->     and fetch/commit IO requests
-
-The above could be the main job of libubd.
-
-> 
-> (3) simply passes backend-provided data buffers to ubd_drv.c in kernel,
->     since the backend actually has no knowledge 
->     on incoming data size until it gets an IO descriptor.
-
-I can understand your requirement, not look at your code yet, but libubd
-should be pretty thin from function viewpoint, and there are lots of common
-things to abstract/share among all drivers, please see recent ubdsrv change:
-
-https://github.com/ming1/ubdsrv/commits/master
-
-in which:
-	- coroutine is added for handling target io
-	- the target interface(ubdsrv_tgt_type) has been cleaned/improved for
-	supporting complicated target
-	- c++ support
-
-IMO, libubd isn't worth of one freshly new project, and it could be integrated
-into ubdsrv easily. The potential users could be existed usersapce
-block driver projects.
-
-If you don't object, I am happy to co-work with you to add the support
-for libubd in ubdsrv, then we can avoid to invent a wheel.
-
-> 
-> Note: 
-> 
-> (1) libubd is just a POC demo and is not stick to the principles of
->     designing a library and we are still developing it now...
-> 
-> (2) The repo[5] including some useful examples using libubd. 
-> 
-> (3) We modify the kernel part: ubd_drv.c and 
->     it[6] is against Ming Lei's newest branch[2]
->     because we forked our branch from his early branch
->     (v5.17-ubd-dev).
-
-Please look at the following tree for ubd driver:
-
-https://github.com/ming1/linux/tree/my_for-5.19-ubd-devel_v3
-
-in which most of your change should have been there already.
-
-I will post v3 soon, please feel free to review after it is out and
-see if it is fine for you.
-
+I don't see a major blocker for it if lock_page_or_retry() is the only one
+we'd like to touch.  Say, the only caller currently is do_swap_page()
+(there's also remove_device_exclusive_entry() but just deeper in the
+stack). Looks doable so far but I'll need to think about it..  I can keep
+you updated if I get something, but it'll be separate from this patchset.
 
 Thanks,
-Ming
+
+-- 
+Peter Xu
 

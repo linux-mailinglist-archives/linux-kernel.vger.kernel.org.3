@@ -2,96 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80C3955C740
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DB055DADD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233352AbiF0JHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
+        id S233416AbiF0JHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232845AbiF0JHY (ORCPT
+        with ESMTP id S232471AbiF0JHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:07:24 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1B96398;
-        Mon, 27 Jun 2022 02:07:23 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 184so8499066pga.12;
-        Mon, 27 Jun 2022 02:07:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tRneTDLFQMzVfO2N/gHNDmUeVj26egu5hiaZEE0FtjA=;
-        b=fQ6t0azwoBYBWQ8D03hqBSBzPvIyFe3pEoBa6IZz851wn1dYbZd0wh1MP3LHlJrK1Z
-         PR26etFEelPHmooDifKqYpWUU2au6IzvThqe7T/W9DIHRtZzh76Gl+aJbsl81IElKp1g
-         Xr6UAyqwZDm/OodxwZM5UIxd2tz5aK2ERESgtEinTj0kBv/8fpavsVUfi8Rsqv9ts2zr
-         ncCAouqGAx6myEp+eMgvDhtVPZNwQol0xcDdNC7W9qEI9YVLNQJ154N9AIB3kGxtm+fV
-         CVRlFohYoB+MOLR5g4J5qiaCzmq6dBpKT+foP0DhKFsDGm3HoQ+jvSJSF5xyzu8rxB6W
-         YHOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=tRneTDLFQMzVfO2N/gHNDmUeVj26egu5hiaZEE0FtjA=;
-        b=2+HVaGeblmrvfKQU4BF2350WUu+WPqfW+xMu+Y6JMVAU0qb/kxgp1oJ4Io9aNHxAxV
-         W+u/cBugNEFS1iiiCrGO8vqgVODj+G8Lr54505Bt4Jrhn3DIQjsFOboBabY9kkc6qKtG
-         dduEqmwSRGgtt+A/g6fJyw+B2UJ6CEdfl9BAafuSLIdpTM66FFDIv6WuNCeBZLDm+kZn
-         FA5SO79pEgSSCZrrp3TaBv04yK61yiLwoJlGDLncVOuU8E4RV6JqerSB7PHIW41S0n+z
-         NLwwgobkZkCB6WJBgcZD/v9sqSNyAyJG4KSijxUNPu3j9wM4garZpNsgIDQytLu4+iIw
-         hshQ==
-X-Gm-Message-State: AJIora+RdjWOflFb5cxk5C9q/WJcMZgbxC/cKG+AcUDebpDKCsKprf2w
-        NXqvRUvhrmFA1lyi2V+nPPU=
-X-Google-Smtp-Source: AGRyM1tfSRVndX1YIfPY/R7kGngBQ/GIQ02B+ypq/d09Iko+wa3RjVqYr5haNhwuwrvCLhik3vADLA==
-X-Received: by 2002:a62:1b85:0:b0:525:604d:7dd3 with SMTP id b127-20020a621b85000000b00525604d7dd3mr13781932pfb.4.1656320842802;
-        Mon, 27 Jun 2022 02:07:22 -0700 (PDT)
-Received: from localhost ([121.167.227.144])
-        by smtp.gmail.com with ESMTPSA id u12-20020a056a00098c00b00525184bad5csm6752959pfg.63.2022.06.27.02.07.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 02:07:22 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 27 Jun 2022 18:07:20 +0900
-From:   Tejun Heo <tj@kernel.org>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
-Subject: Re: [PATCH cgroup] cgroup: set the correct return code if hierarchy
- limits are reached
-Message-ID: <YrlzSFkywHthpAZN@mtj.duckdns.org>
-References: <186d5b5b-a082-3814-9963-bf57dfe08511@openvz.org>
- <d8a9e9c6-856e-1502-95ac-abf9700ff568@openvz.org>
+        Mon, 27 Jun 2022 05:07:35 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791A363A2;
+        Mon, 27 Jun 2022 02:07:33 -0700 (PDT)
+X-UUID: 23f17b2fbb3043a588c92764b0d1dd80-20220627
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:f70f43ab-e014-4ee0-9be2-df16cfa7cdc2,OB:0,LO
+        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:25
+X-CID-META: VersionHash:b14ad71,CLOUDID:1bda232e-1756-4fa3-be7f-474a6e4be921,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 23f17b2fbb3043a588c92764b0d1dd80-20220627
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1260323630; Mon, 27 Jun 2022 17:07:29 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 27 Jun 2022 17:07:28 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Mon, 27 Jun 2022 17:07:28 +0800
+Message-ID: <5a5d11158dd45355e5e6c3b5decbe41495bd19ad.camel@mediatek.com>
+Subject: Re: [PATCH v14 01/15] dt-bindings: mediatek,dpi: Add DP_INTF
+ compatible
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 27 Jun 2022 17:07:28 +0800
+In-Reply-To: <a2612c2628eefbbf909d4847b3d0067746813f33.camel@mediatek.com>
+References: <20220624030946.14961-1-rex-bc.chen@mediatek.com>
+         <20220624030946.14961-2-rex-bc.chen@mediatek.com>
+         <a2612c2628eefbbf909d4847b3d0067746813f33.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d8a9e9c6-856e-1502-95ac-abf9700ff568@openvz.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 05:12:55AM +0300, Vasily Averin wrote:
-> When cgroup_mkdir reaches the limits of the cgroup hierarchy, it should
-> not return -EAGAIN, but instead react similarly to reaching the global
-> limit.
+On Mon, 2022-06-27 at 15:50 +0800, CK Hu wrote:
+> Hi, Bo-Chen:
+> 
+> On Fri, 2022-06-24 at 11:09 +0800, Bo-Chen Chen wrote:
+> > From: Markus Schneider-Pargmann <msp@baylibre.com>
+> > 
+> > DP_INTF is similar to DPI but does not have the exact same feature
+> > set
+> > or register layouts.
+> > 
+> > DP_INTF is the sink of the display pipeline that is connected to
+> > the
+> > DisplayPort controller and encoder unit. It takes the same clocks
+> > as
+> > DPI.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> > [Bo-Chen: Modify reviewers' comments.]
+> 
+> Except this line,
+> 
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> 
 
-While I'm not necessarily against this change, I find the rationale to
-be somewhat lacking. Can you please elaborate why -ENOSPC is the right
-one while -EAGAIN is incorrect?
+Hello CK,
 
-Thanks.
+What do you mean?
+Do you mean I should drop this line?
 
--- 
-tejun
+BRs,
+Bo-Chen
+> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
+> >  .../bindings/display/mediatek/mediatek,dpi.yaml       | 11 ++++++-
+> > --
+> > --
+> >  1 file changed, 6 insertions(+), 5 deletions(-)
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
+> > am
+> > l
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
+> > am
+> > l
+> > index 77ee1b923991..8e526a4b134e 100644
+> > ---
+> > a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
+> > am
+> > l
+> > +++
+> > b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.y
+> > am
+> > l
+> > @@ -4,16 +4,16 @@
+> >  $id: 
+> > http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
+> >  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> >  
+> > -title: mediatek DPI Controller Device Tree Bindings
+> > +title: mediatek DPI and DP_INTF Controller
+> >  
+> >  maintainers:
+> >    - CK Hu <ck.hu@mediatek.com>
+> >    - Jitao shi <jitao.shi@mediatek.com>
+> >  
+> >  description: |
+> > -  The Mediatek DPI function block is a sink of the display
+> > subsystem
+> > and
+> > -  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a
+> > parallel
+> > -  output bus.
+> > +  The Mediatek DPI and DP_INTF function blocks are a sink of the
+> > display
+> > +  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422
+> > pixel data on a
+> > +  parallel output bus.
+> >  
+> >  properties:
+> >    compatible:
+> > @@ -24,6 +24,7 @@ properties:
+> >        - mediatek,mt8183-dpi
+> >        - mediatek,mt8186-dpi
+> >        - mediatek,mt8192-dpi
+> > +      - mediatek,mt8195-dp-intf
+> >  
+> >    reg:
+> >      maxItems: 1
+> > @@ -55,7 +56,7 @@ properties:
+> >      $ref: /schemas/graph.yaml#/properties/port
+> >      description:
+> >        Output port node. This port should be connected to the input
+> > port of an
+> > -      attached HDMI or LVDS encoder chip.
+> > +      attached HDMI, LVDS or DisplayPort encoder chip.
+> >  
+> >  required:
+> >    - compatible
+> 
+> 
+

@@ -2,268 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DECF55D1D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29D655C83E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237270AbiF0OXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
+        id S236999AbiF0OZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236999AbiF0OXG (ORCPT
+        with ESMTP id S237007AbiF0OY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:23:06 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3640413F22
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:22:53 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id s1so13288946wra.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=FeV1hNgcIlRD8vtoxkTZySTIebKF1oNgpi73Pm+Sqqw=;
-        b=hnVY5/tYmCOiBd+Gqly3Rjz9bsbVA75CKg3xCAgOyaGdffrQzR0Q9lwJB8tDl/9s6y
-         TdvCaH2YmBoxcd9PyJZgSi3pjdTwErqECq5Pgm5ivZPdaM50uI9YAAYbF/ZKeCTfQPoN
-         VsjziyH0TMtYKJEKVy9dIqQ01VXqhfRcSluv/SGK8H61f6nWLQNAlSaGlFCAv1RZ/cu0
-         W48fSZdiGvFkCK2ElrF9nnfD8VeoowhUUdrqVuLSduciVqzfwS3FCq1eZfGdaDw6G/LM
-         gZAWmFkjgikMvoOw/SOnDBaGZbuofeFOODU4uJr7eJSm6ofTRvefIySBwjRn8xbKEFCD
-         a90Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=FeV1hNgcIlRD8vtoxkTZySTIebKF1oNgpi73Pm+Sqqw=;
-        b=sKPIKXq1oG9c1LG8e9uEmkjiqOp6NGZWz8aSGf8DBygebPJRlMRdbGLkD6wji2w/zh
-         iz4EKROMCF6/F55dJsqTXrVlBlh+coSeH9vJTiSShkY6ceJZGoc3rTPlTw0fU+AuVfT7
-         s336oFYIUKjd4RsI7SuLCa5FKbulpjFmphTKUACxcmTVsabKD83X8oylgeN9Vq95VhIL
-         /Z7Qrpu/E+yomJaQ8aqkWP38GZt45oWwXCkoppkuAgXvWOSaPWhhl4NmMN63O4y6/Ad1
-         1h5JA2WjClp+TT3LmfL55wwMjMvqewjuAevXUlcVW435ZHWSIM8HL2llWPyewvyjRmQK
-         vkog==
-X-Gm-Message-State: AJIora/P6WhP1OTq7PPgaK53bCHGSEbgNKt1pljvrq9ScuWFIHPWfmEq
-        0Mq+M4ZmKM27mTOZL5F+Gav/hg==
-X-Google-Smtp-Source: AGRyM1sjI6M8T0da+YH6qaHw6hmjwF4LQrCjEPKNsXZM7MhPVYOv+/xv1jHeE9vsMc6PWjZh2kKoKQ==
-X-Received: by 2002:adf:d1c2:0:b0:21b:e465:1e36 with SMTP id b2-20020adfd1c2000000b0021be4651e36mr5818287wrd.271.1656339771707;
-        Mon, 27 Jun 2022 07:22:51 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id bg21-20020a05600c3c9500b003a046549a85sm8120659wmb.37.2022.06.27.07.22.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 07:22:51 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 15:22:49 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     cy_huang <u0084500@gmail.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        broonie@kernel.org, dmitry.torokhov@gmail.com, lgirdwood@gmail.com,
-        cy_huang@richtek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] mfd: rt5120: Add Richtek PMIC support
-Message-ID: <Yrm9ObaltUiQUTqS@google.com>
-References: <1655892104-10874-1-git-send-email-u0084500@gmail.com>
- <1655892104-10874-3-git-send-email-u0084500@gmail.com>
+        Mon, 27 Jun 2022 10:24:58 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31EC13F17;
+        Mon, 27 Jun 2022 07:24:56 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RDUGw7019903;
+        Mon, 27 Jun 2022 16:24:47 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=5ybBWdltrOVfB3COS/9ZMlv6Yfed7gpPzfjsJK88MFQ=;
+ b=Mq7bMvfS4SG4urWivh0l6nssNofuNvhEzdofEwfDpnRk0kOTKFpwYRmyc20+JY9iKO5c
+ AIY0iUqFrHOHFbzuuzuv6AhuG0Y+4JDKUcNr6PMzfoVerbh2Nu4UJ9k0N7D6xIrVy4XV
+ Opwpa79OTwfTjuLwqm61Om36nmsLHMRAeDv1nHXPsOVMNPtLm+m4Gh44td1cVZtp032S
+ gJdyPpXvhqL91igL2MKSKsAcuw5dmFmMhG26D9bXgR74VJU/DHp9GsPw85nLWzXeZFXE
+ 47BxfjNgfR66rpcxHAYH6moxl7HIQKacY+fNyb14VpxN+A5UNbmw2IHafYcnV30p5VZO Vw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gy9mr1sy0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 16:24:47 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3363510002A;
+        Mon, 27 Jun 2022 16:24:47 +0200 (CEST)
+Received: from Webmail-eu.st.com (eqndag1node6.st.com [10.75.129.135])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CE12C217B6A;
+        Mon, 27 Jun 2022 16:24:46 +0200 (CEST)
+Received: from localhost (10.75.127.49) by EQNDAG1NODE6.st.com (10.75.129.135)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 27 Jun
+ 2022 16:23:55 +0200
+From:   Fabien Dessenne <fabien.dessenne@foss.st.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Fabien Dessenne <fabien.dessenne@foss.st.com>
+Subject: [PATCH] pinctrl: stm32: fix optional IRQ support to gpios
+Date:   Mon, 27 Jun 2022 16:23:50 +0200
+Message-ID: <20220627142350.742973-1-fabien.dessenne@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1655892104-10874-3-git-send-email-u0084500@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To EQNDAG1NODE6.st.com
+ (10.75.129.135)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Jun 2022, cy_huang wrote:
+To act as an interrupt controller, a gpio bank relies on the
+"interrupt-parent" of the pin controller.
+When this optional "interrupt-parent" misses, do not create any IRQ domain.
 
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Add Richtek RT5120 PMIC I2C driver.
+This fixes a "NULL pointer in stm32_gpio_domain_alloc()" kernel crash when
+the interrupt-parent = <exti> property is not declared in the Device Tree.
 
-Why a whole new driver?
+Fixes: 0eb9f683336d ("pinctrl: Add IRQ support to STM32 gpios")
 
-How different is this to rt5033?
+Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
+---
+ drivers/pinctrl/stm32/pinctrl-stm32.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-Looks like this could easily be woven into this existing support?
-
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
->  drivers/mfd/Kconfig  |  12 +++++
->  drivers/mfd/Makefile |   1 +
->  drivers/mfd/rt5120.c | 125 +++++++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 138 insertions(+)
->  create mode 100644 drivers/mfd/rt5120.c
-> 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 3b59456..866619c 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1127,6 +1127,18 @@ config MFD_RT5033
->  	  sub-devices like charger, fuel gauge, flash LED, current source,
->  	  LDO and Buck.
->  
-> +config MFD_RT5120
-> +	tristate "Richtek RT5120 Power Management IC"
-> +	depends on I2C
-> +	select MFD_CORE
-> +	select REGMAP_I2C
-> +	select REGMAP_IRQ
-> +	help
-> +	  The enables support for Richtek RT5120 PMIC. It includes four high
-> +	  efficiency buck converters and one LDO voltage regulator. The device
-> +	  is targeted at providing the CPU voltage, memory, I/O and peripheral
-> +	  power rails in home entertainment devices.
-> +
->  config MFD_RC5T583
->  	bool "Ricoh RC5T583 Power Management system device"
->  	depends on I2C=y
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 858cacf..27e8add 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -234,6 +234,7 @@ obj-$(CONFIG_MFD_HI655X_PMIC)   += hi655x-pmic.o
->  obj-$(CONFIG_MFD_DLN2)		+= dln2.o
->  obj-$(CONFIG_MFD_RT4831)	+= rt4831.o
->  obj-$(CONFIG_MFD_RT5033)	+= rt5033.o
-> +obj-$(CONFIG_MFD_RT5120)	+= rt5120.o
->  obj-$(CONFIG_MFD_SKY81452)	+= sky81452.o
->  
->  intel-soc-pmic-objs		:= intel_soc_pmic_core.o intel_soc_pmic_crc.o
-> diff --git a/drivers/mfd/rt5120.c b/drivers/mfd/rt5120.c
-> new file mode 100644
-> index 00000000..e7c5f3c
-> --- /dev/null
-> +++ b/drivers/mfd/rt5120.c
-> @@ -0,0 +1,125 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/regmap.h>
-> +
-> +#define RT5120_REG_INTENABLE	0x1D
-> +#define RT5120_REG_INTSTAT	0x1E
-> +#define RT5120_REG_FZCMODE	0x44
-> +
-> +#define RT5120_INT_HOTDIE	0
-> +#define RT5120_INT_PWRKEY_REL	5
-> +#define RT5120_INT_PWRKEY_PRESS	6
-> +
-> +static const struct regmap_range rt5120_rd_yes_ranges[] = {
-> +	regmap_reg_range(0x03, 0x13),
-> +	regmap_reg_range(0x1c, 0x20),
-> +	regmap_reg_range(0x44, 0x44)
-> +};
-> +
-> +static const struct regmap_range rt5120_wr_yes_ranges[] = {
-> +	regmap_reg_range(0x06, 0x13),
-> +	regmap_reg_range(0x1c, 0x20),
-> +	regmap_reg_range(0x44, 0x44)
-> +};
-> +
-> +static const struct regmap_access_table rt5120_rd_table = {
-> +	.yes_ranges = rt5120_rd_yes_ranges,
-> +	.n_yes_ranges = ARRAY_SIZE(rt5120_rd_yes_ranges),
-> +};
-> +
-> +static const struct regmap_access_table rt5120_wr_table = {
-> +	.yes_ranges = rt5120_wr_yes_ranges,
-> +	.n_yes_ranges = ARRAY_SIZE(rt5120_wr_yes_ranges),
-> +};
-> +
-> +static const struct regmap_config rt5120_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.max_register = RT5120_REG_FZCMODE,
-> +
-> +	.wr_table = &rt5120_wr_table,
-> +	.rd_table = &rt5120_rd_table,
-> +};
-> +
-> +static const struct regmap_irq rt5120_irqs[] = {
-> +	REGMAP_IRQ_REG_LINE(RT5120_INT_HOTDIE, 8),
-> +	REGMAP_IRQ_REG_LINE(RT5120_INT_PWRKEY_REL, 8),
-> +	REGMAP_IRQ_REG_LINE(RT5120_INT_PWRKEY_PRESS, 8)
-> +};
-> +
-> +static const struct regmap_irq_chip rt5120_irq_chip = {
-> +	.name = "rt5120-pmic",
-> +	.status_base = RT5120_REG_INTSTAT,
-> +	.mask_base = RT5120_REG_INTENABLE,
-> +	.ack_base = RT5120_REG_INTSTAT,
-> +	.mask_invert = true,
-> +	.use_ack = true,
-> +	.num_regs = 1,
-> +	.irqs = rt5120_irqs,
-> +	.num_irqs = ARRAY_SIZE(rt5120_irqs),
-> +};
-> +
-> +static const struct resource rt5120_regulator_resources[] = {
-> +	DEFINE_RES_IRQ(RT5120_INT_HOTDIE)
-> +};
-> +
-> +static const struct resource rt5120_pwrkey_resources[] = {
-> +	DEFINE_RES_IRQ_NAMED(RT5120_INT_PWRKEY_PRESS, "pwrkey-press"),
-> +	DEFINE_RES_IRQ_NAMED(RT5120_INT_PWRKEY_REL, "pwrkey-release")
-> +};
-> +
-> +static const struct mfd_cell rt5120_devs[] = {
-> +	MFD_CELL_RES("rt5120-regulator", rt5120_regulator_resources),
-> +	MFD_CELL_OF("rt5120-pwrkey", rt5120_pwrkey_resources, NULL, 0, 0,
-> +		    "richtek,rt5120-pwrkey")
-> +};
-> +
-> +static int rt5120_probe(struct i2c_client *i2c)
-> +{
-> +	struct regmap *regmap;
-> +	struct regmap_irq_chip_data *irq_data;
-> +	int ret;
-> +
-> +	regmap = devm_regmap_init_i2c(i2c, &rt5120_regmap_config);
-> +	if (IS_ERR(regmap)) {
-> +		ret = PTR_ERR(regmap);
-> +		dev_err(&i2c->dev, "Failed to init regmap (%d)\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_regmap_add_irq_chip(&i2c->dev, regmap, i2c->irq,
-> +				       IRQF_ONESHOT, 0, &rt5120_irq_chip,
-> +				       &irq_data);
-> +	if (ret) {
-> +		dev_err(&i2c->dev, "Failed to add irq chip (%d)\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO, rt5120_devs,
-> +				    ARRAY_SIZE(rt5120_devs), NULL, 0,
-> +				    regmap_irq_get_domain(irq_data));
-> +}
-> +
-> +static const struct of_device_id rt5120_device_match_table[] = {
-> +	{ .compatible = "richtek,rt5120", },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, rt5120_device_match_table);
-> +
-> +static struct i2c_driver rt5120_driver = {
-> +	.driver = {
-> +		.name = "rt5120",
-> +		.of_match_table = rt5120_device_match_table,
-> +	},
-> +	.probe_new = rt5120_probe,
-> +};
-> +module_i2c_driver(rt5120_driver);
-> +
-> +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
-> +MODULE_DESCRIPTION("Richtek RT5120 I2C driver");
-> +MODULE_LICENSE("GPL v2");
-
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index 57a33fb0f2d7..14bcca73238a 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -1338,16 +1338,18 @@ static int stm32_gpiolib_register_bank(struct stm32_pinctrl *pctl, struct fwnode
+ 	bank->secure_control = pctl->match_data->secure_control;
+ 	spin_lock_init(&bank->lock);
+ 
+-	/* create irq hierarchical domain */
+-	bank->fwnode = fwnode;
++	if (pctl->domain) {
++		/* create irq hierarchical domain */
++		bank->fwnode = fwnode;
+ 
+-	bank->domain = irq_domain_create_hierarchy(pctl->domain, 0,
+-					STM32_GPIO_IRQ_LINE, bank->fwnode,
+-					&stm32_gpio_domain_ops, bank);
++		bank->domain = irq_domain_create_hierarchy(pctl->domain, 0, STM32_GPIO_IRQ_LINE,
++							   bank->fwnode, &stm32_gpio_domain_ops,
++							   bank);
+ 
+-	if (!bank->domain) {
+-		err = -ENODEV;
+-		goto err_clk;
++		if (!bank->domain) {
++			err = -ENODEV;
++			goto err_clk;
++		}
+ 	}
+ 
+ 	err = gpiochip_add_data(&bank->gpio_chip, bank);
+@@ -1510,6 +1512,8 @@ int stm32_pctl_probe(struct platform_device *pdev)
+ 	pctl->domain = stm32_pctrl_get_irq_domain(pdev);
+ 	if (IS_ERR(pctl->domain))
+ 		return PTR_ERR(pctl->domain);
++	if (!pctl->domain)
++		dev_warn(dev, "pinctrl without interrupt support\n");
+ 
+ 	/* hwspinlock is optional */
+ 	hwlock_id = of_hwspin_lock_get_id(pdev->dev.of_node, 0);
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.25.1
+

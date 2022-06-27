@@ -2,86 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4968955CA45
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECBE55C520
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240371AbiF0Xag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
+        id S242204AbiF0XcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242076AbiF0Xab (ORCPT
+        with ESMTP id S236744AbiF0XcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:30:31 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AA2D54;
-        Mon, 27 Jun 2022 16:30:29 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id a16so7075052ilr.6;
-        Mon, 27 Jun 2022 16:30:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=x8JlGuBlsyv8u11qNoGLGDrkEldcGlScrLvA1xIrWcM=;
-        b=qt7+fpuKX5G1NeZmhbolrtM+hLR1hBtYZx41xJ30DhLXJVGVCgP/mkh773Xn45uoxu
-         4Hs2VYCJDD15KPNDEREPC4+re3a549fS5VN2XhrOIjNSXELZFxyPgAdlDTZqiF7xkER0
-         yMgySKEHN8EM638I8C/By6Q1G82ZWTJDmyHwF/ATvg/asjSi1oU3+rpjDpYCzzDYmpTh
-         qLRCwd2sUw4ooWrL9ZOMege66/Xn3IRN0EMx3KNLGGLz4zhfqnbbZHriZJbdL8obnYk9
-         rPPO14aUiZ4vOU9nidlLwxJ+vhZuOmk7pVuvAkPVE52XcxLUn1E/N6lwnjL1WKrpg+A5
-         WxaQ==
-X-Gm-Message-State: AJIora/KXRTB4Qq1diY0yDAYtZbXUyXK755ZUOr6XMfnJQqMdPeJ0g08
-        1U5hIFrYVCTdxBpEw58XWw==
-X-Google-Smtp-Source: AGRyM1v++vx5C2PZ1+V37WXzVu58JZoOtbgG4MxkB9S8u2iPl6cebvqf5cCXt4rpl+8ThnjePE2X0Q==
-X-Received: by 2002:a05:6e02:1d19:b0:2d9:1705:892b with SMTP id i25-20020a056e021d1900b002d91705892bmr8430986ila.61.1656372628833;
-        Mon, 27 Jun 2022 16:30:28 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id s16-20020a5d9290000000b00672f405e911sm5910587iom.38.2022.06.27.16.30.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 16:30:28 -0700 (PDT)
-Received: (nullmailer pid 3169022 invoked by uid 1000);
-        Mon, 27 Jun 2022 23:30:25 -0000
-Date:   Mon, 27 Jun 2022 17:30:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Heng Sia <jee.heng.sia@intel.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 05/14] dt-bindings: timer: add Canaan k210 to Synopsys
- DesignWare timer
-Message-ID: <20220627233025.GA3167724-robh@kernel.org>
-References: <20220618123035.563070-1-mail@conchuod.ie>
- <20220618123035.563070-6-mail@conchuod.ie>
+        Mon, 27 Jun 2022 19:32:11 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5003610B9;
+        Mon, 27 Jun 2022 16:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656372729; x=1687908729;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O5LxPAYhM+CNwQqbN7pv8Mq8jswCUClbEwHdElRgSyk=;
+  b=TEMGItocrxw5O1QM9oYXq2R/5yGVBOlMN4y3e5hnettICKueBvEa4EAV
+   9cRM1v8AOdTdAQFMKvXGlmlEZI3z4L7cS20NHn/onjVTcE/0RCXR3SY29
+   +xwG1P9MzYXEIWn/Oxq1tbfGc0p+FfV+DTdeOzk9BLMHQhlAGQa96GkDi
+   sqjNJm7R9b+9/lLQFpHXWTHQzL8ov3MsX77uz3otsWeNTENo4NRb63R21
+   XtLiHoV5gfXcrq189HGwev6DyA4U8HCvUNEeNPDAXpXdFOjt5YnhRtWos
+   UNP2NCWlRBawDEvMqj0UJeqxcH0QsPAwCcl0TSNr+/VMQV38RLpZiEs2l
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="261391227"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="261391227"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 16:32:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="646646287"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 27 Jun 2022 16:32:06 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o5yD7-0009DG-Up;
+        Mon, 27 Jun 2022 23:32:05 +0000
+Date:   Tue, 28 Jun 2022 07:31:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+Subject: Re: [PATCH v3 1/2] ACPI: utils: Add api to read _SUB from ACPI
+Message-ID: <202206280722.5wvfmDeu-lkp@intel.com>
+References: <20220627155138.807420-2-sbinding@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220618123035.563070-6-mail@conchuod.ie>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220627155138.807420-2-sbinding@opensource.cirrus.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,85 +69,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 01:30:27PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> The Canaan k210 apparently has a Sysnopsys Designware timer but
-> according to the documentation & devicetree it has 2 interrupts rather
-> than the standard one. Add a custom compatible that supports the 2
-> interrupt configuration and falls back to the standard binding (which
-> is currently the one in use in the devicetree entry).
-> 
-> Link: https://canaan-creative.com/wp-content/uploads/2020/03/kendryte_standalone_programming_guide_20190311144158_en.pdf #Page 58
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../bindings/timer/snps,dw-apb-timer.yaml     | 28 +++++++++++++++----
->  1 file changed, 22 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml b/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-> index d33c9205a909..9a76acc7a66f 100644
-> --- a/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-> +++ b/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-> @@ -12,6 +12,9 @@ maintainers:
->  properties:
->    compatible:
->      oneOf:
-> +      - items:
-> +          - const: canaan,k210-apb-timer
-> +          - const: snps,dw-apb-timer
->        - const: snps,dw-apb-timer
->        - enum:
->            - snps,dw-apb-timer-sp
-> @@ -21,9 +24,6 @@ properties:
->    reg:
->      maxItems: 1
->  
-> -  interrupts:
-> -    maxItems: 1
-> -
->    resets:
->      maxItems: 1
->  
-> @@ -41,7 +41,23 @@ properties:
->  
->    clock-frequency: true
->  
-> -additionalProperties: false
-> +unevaluatedProperties: false
-> +
-> +if:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: canaan,k210-apb-timer
-> +
-> +then:
-> +  properties:
-> +    interrupts:
-> +      maxItems: 2
+Hi Stefan,
 
-When more than 1, you need to define what they are and the order.
+Thank you for the patch! Perhaps something to improve:
 
-> +
-> +else:
-> +  properties:
-> +    interrupts:
-> +      maxItems: 1
->  
->  required:
->    - compatible
-> @@ -60,8 +76,8 @@ oneOf:
->  examples:
->    - |
->      timer@ffe00000 {
-> -      compatible = "snps,dw-apb-timer";
-> -      interrupts = <0 170 4>;
-> +      compatible = "canaan,k210-apb-timer", "snps,dw-apb-timer";
-> +      interrupts = <0 170 4>, <0 170 4>;
->        reg = <0xffe00000 0x1000>;
->        clocks = <&timer_clk>, <&timer_pclk>;
->        clock-names = "timer", "pclk";
-> -- 
-> 2.36.1
-> 
-> 
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on broonie-sound/for-next linus/master v5.19-rc4 next-20220627]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Binding/Read-_SUB-from-ACPI-to-be-able-to-identify-firmware/20220627-235448
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220628/202206280722.5wvfmDeu-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/7dd124b65442fd6622e7df2949795f735d8356be
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Stefan-Binding/Read-_SUB-from-ACPI-to-be-able-to-identify-firmware/20220627-235448
+        git checkout 7dd124b65442fd6622e7df2949795f735d8356be
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/acpi/utils.c:17:
+   drivers/acpi/utils.c: In function 'acpi_get_subsystem_id':
+>> drivers/acpi/utils.c:317:49: warning: format '%d' expects argument of type 'int', but argument 4 has type 'size_t' {aka 'long unsigned int'} [-Wformat=]
+     317 |                         acpi_handle_err(handle, "ACPI _SUB Length %d is Invalid\n",
+         |                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     318 |                                         strlen(obj->string.pointer));
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                         |
+         |                                         size_t {aka long unsigned int}
+   include/linux/acpi.h:1172:46: note: in definition of macro 'acpi_handle_err'
+    1172 |         acpi_handle_printk(KERN_ERR, handle, fmt, ##__VA_ARGS__)
+         |                                              ^~~
+   drivers/acpi/utils.c:317:68: note: format string is defined here
+     317 |                         acpi_handle_err(handle, "ACPI _SUB Length %d is Invalid\n",
+         |                                                                   ~^
+         |                                                                    |
+         |                                                                    int
+         |                                                                   %ld
+
+
+vim +317 drivers/acpi/utils.c
+
+   295	
+   296	const char *acpi_get_subsystem_id(acpi_handle handle)
+   297	{
+   298		struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+   299		union acpi_object *obj;
+   300		acpi_status status;
+   301		const char *sub;
+   302	
+   303		status = acpi_evaluate_object(handle, METHOD_NAME__SUB, NULL, &buffer);
+   304		if (ACPI_FAILURE(status)) {
+   305			acpi_handle_debug(handle, "Reading ACPI _SUB failed: %#x\n", status);
+   306			return ERR_PTR(-ENODATA);
+   307		}
+   308	
+   309		obj = buffer.pointer;
+   310		if (obj->type == ACPI_TYPE_STRING) {
+   311			if (strlen(obj->string.pointer) < ACPI_MAX_SUB_BUF_SIZE &&
+   312			    strlen(obj->string.pointer) > 0) {
+   313				sub = kstrdup(obj->string.pointer, GFP_KERNEL);
+   314				if (!sub)
+   315					sub = ERR_PTR(-ENOMEM);
+   316			} else {
+ > 317				acpi_handle_err(handle, "ACPI _SUB Length %d is Invalid\n",
+   318						strlen(obj->string.pointer));
+   319				sub = ERR_PTR(-EINVAL);
+   320			}
+   321		} else {
+   322			acpi_handle_warn(handle, "Warning ACPI _SUB did not return a string\n");
+   323			sub = ERR_PTR(-EINVAL);
+   324		}
+   325	
+   326		acpi_os_free(buffer.pointer);
+   327	
+   328		return sub;
+   329	}
+   330	EXPORT_SYMBOL_GPL(acpi_get_subsystem_id);
+   331	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

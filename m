@@ -2,127 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433E955CBD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 349F055DC2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238453AbiF0PeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S238847AbiF0Pgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238576AbiF0Pdy (ORCPT
+        with ESMTP id S238756AbiF0Pfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:33:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AF01A39B;
-        Mon, 27 Jun 2022 08:33:52 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A9F666015C9;
-        Mon, 27 Jun 2022 16:33:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656344030;
-        bh=WzLxqB/YMSV3d8PSEanjQ/qOkirN2jSeH7M6yPLb6bY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Kiw/fpDfzNHiUkjVs5KgG9+JKq/bEnX5sBvOJou4gARcDdyWQEWnOpE6wjVVzoT5R
-         PKlViGOxmcFVp2K64r3AqSr7C+D+lYPib6ILwuYE6mGtJ3BE610P8ggr9TkqmQ3YQl
-         GpXr8Jmr7yGCS34fBur97iMYWJdnQvN1XtskYxPPG/2zzOS/kbY7MEISCTzeTZE75p
-         cuvLUFQx5TxlsLizuLMqGDxch++RQLBcNTy9dyi3pL4LPcsoVlfpxuQ1R20KwmyQIE
-         nzmoBkV4nw/n65h/2D2lEH4/jkfOi/iI3dDispFKhCHkEN6UawbQqGRHuhEabZpRBm
-         yTTGP/y8FRr/g==
-Message-ID: <43f393d2dcdd0bfac66bfc420e9261d31b3ceedc.camel@collabora.com>
-Subject: Re: [PATCH 1/4] media: mediatek: vcodec: dec: Fix 4K frame size
- enumeration
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>
-Date:   Mon, 27 Jun 2022 11:33:39 -0400
-In-Reply-To: <20220627112402.2332046-2-wenst@chromium.org>
-References: <20220627112402.2332046-1-wenst@chromium.org>
-         <20220627112402.2332046-2-wenst@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Mon, 27 Jun 2022 11:35:52 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475EC1AD88
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:35:45 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RF6Qip004248;
+        Mon, 27 Jun 2022 15:35:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=3tfjcfA1umXJ4zRA8k81/Dm9rb1xlzZ/FzN7iv+qR7k=;
+ b=i4DAl4iToA77Ek7S+1qQWoVgwOooNicJZmnXoz+PYNZ3i5BBiezgII4hIBEmqazgasOv
+ znFq47ecF9kYvVDmw7BdYRJv9BWI7JLZS6Nqreyqap56NPFIZOqnX/FrVh+c2AuLffjd
+ qGvp6047lzshP827GB/9UrCLFjlUWDi9cvCCdgEcoTBrDhnb6lnk0T85qHVql7kHFoB7
+ aSy8KrY44ndOyARXfxnE3T2M2hslErbYSxA4VZqxs5NEA/s50mVCPzS5Bv5c1C6ULt1b
+ /hqfe0QnEng7ysiz0vXisXqPDUJ8c1UEq1ZrVg32yE7s0/bNgayd3JZzjEdGdWLmQsX3 zA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gyeht9q5v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 15:35:12 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25RFKerq003707;
+        Mon, 27 Jun 2022 15:35:12 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gyeht9q3s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 15:35:12 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25RFYjZJ004307;
+        Mon, 27 Jun 2022 15:35:09 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3gwt08u55t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 15:35:09 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25RFZEwo28574032
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jun 2022 15:35:14 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 41C2BA405F;
+        Mon, 27 Jun 2022 15:35:07 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 286D1A405B;
+        Mon, 27 Jun 2022 15:35:03 +0000 (GMT)
+Received: from [9.43.63.124] (unknown [9.43.63.124])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Jun 2022 15:35:02 +0000 (GMT)
+Message-ID: <92eae2ef-f9b6-019a-5a8e-728cdd9bbbc0@linux.vnet.ibm.com>
+Date:   Mon, 27 Jun 2022 21:05:02 +0530
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH v3 11/12] powerpc: Remove unreachable() from WARN_ON()
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Cc:     "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>
+References: <20220624183238.388144-1-sv@linux.ibm.com>
+ <20220624183238.388144-12-sv@linux.ibm.com>
+ <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
+From:   Sathvika Vasireddy <sv@linux.vnet.ibm.com>
+In-Reply-To: <70b6d08d-aced-7f4e-b958-a3c7ae1a9319@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4KBnhyse84Bsf1tf-lv6ToDA5RguKz1x
+X-Proofpoint-ORIG-GUID: DRBNFF3yOeqTv-LmNDmfHMb205HicYjd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=974 adultscore=0
+ suspectscore=0 mlxscore=0 lowpriorityscore=0 priorityscore=1501
+ malwarescore=0 phishscore=0 spamscore=0 impostorscore=0 clxscore=1015
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206270067
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le lundi 27 juin 2022 =C3=A0 19:23 +0800, Chen-Yu Tsai a =C3=A9crit=C2=A0:
-> This partially reverts commit b018be06f3c7 ("media: mediatek: vcodec:
-> Read max resolution from dec_capability"). In this commit, the maximum
-> resolution ended up being a function of both the firmware capability and
-> the current set format.
->=20
-> However, frame size enumeration for output (coded) formats should not
-> depend on the format set, but should return supported resolutions for
-> the format requested by userspace.
->=20
-> Fix this so that the driver returns the supported resolutions correctly,
-> even if the instance only has default settings, or if the output format
-> is currently set to VP8F, which does not support 4K.
->=20
-> Fixes: b018be06f3c7 ("media: mediatek: vcodec: Read max resolution from d=
-ec_capability")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> ---
->  drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c    | 2 --
->  .../platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c    | 7 +++++++
->  2 files changed, 7 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/dr=
-ivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> index 5d6fdf18c3a6..fcb4b8131c49 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-> @@ -595,8 +595,6 @@ static int vidioc_enum_framesizes(struct file *file, =
-void *priv,
->  		fsize->type =3D V4L2_FRMSIZE_TYPE_STEPWISE;
->  		fsize->stepwise =3D dec_pdata->vdec_framesizes[i].stepwise;
-> =20
-> -		fsize->stepwise.max_width =3D ctx->max_width;
-> -		fsize->stepwise.max_height =3D ctx->max_height;
->  		mtk_v4l2_debug(1, "%x, %d %d %d %d %d %d",
->  				ctx->dev->dec_capability,
->  				fsize->stepwise.min_width,
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_statel=
-ess.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-> index 16d55785d84b..9a4d3e3658aa 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-> @@ -360,6 +360,13 @@ static void mtk_vcodec_add_formats(unsigned int four=
-cc,
-> =20
->  		mtk_vdec_framesizes[count_framesizes].fourcc =3D fourcc;
->  		mtk_vdec_framesizes[count_framesizes].stepwise =3D stepwise_fhd;
 
-While at it, can you constify stepwise_fhd, it is scary to think that someo=
-ne
-could modify it and cause big headache.
+On 25/06/22 12:16, Christophe Leroy wrote:
+>
+> Le 24/06/2022 à 20:32, Sathvika Vasireddy a écrit :
+>> objtool is throwing *unannotated intra-function call*
+>> warnings with a few instructions that are marked
+>> unreachable. Remove unreachable() from WARN_ON()
+>> to fix these warnings, as the codegen remains same
+>> with and without unreachable() in WARN_ON().
+> Did you try the two exemples described in commit 1e688dd2a3d6
+> ("powerpc/bug: Provide better flexibility to WARN_ON/__WARN_FLAGS() with
+> asm goto") ?
+>
+> Without your patch:
+>
+> 00000640 <test>:
+>    640:	81 23 00 84 	lwz     r9,132(r3)
+>    644:	71 29 40 00 	andi.   r9,r9,16384
+>    648:	40 82 00 0c 	bne     654 <test+0x14>
+>    64c:	80 63 00 0c 	lwz     r3,12(r3)
+>    650:	4e 80 00 20 	blr
+>    654:	0f e0 00 00 	twui    r0,0
+>
+> 00000658 <test9w>:
+>    658:	2c 04 00 00 	cmpwi   r4,0
+>    65c:	41 82 00 0c 	beq     668 <test9w+0x10>
+>    660:	7c 63 23 96 	divwu   r3,r3,r4
+>    664:	4e 80 00 20 	blr
+>    668:	0f e0 00 00 	twui    r0,0
+>    66c:	38 60 00 00 	li      r3,0
+>    670:	4e 80 00 20 	blr
+>
+>
+> With your patch:
+>
+> 00000640 <test>:
+>    640:	81 23 00 84 	lwz     r9,132(r3)
+>    644:	71 29 40 00 	andi.   r9,r9,16384
+>    648:	40 82 00 0c 	bne     654 <test+0x14>
+>    64c:	80 63 00 0c 	lwz     r3,12(r3)
+>    650:	4e 80 00 20 	blr
+>    654:	0f e0 00 00 	twui    r0,0
+>    658:	4b ff ff f4 	b       64c <test+0xc>		<==
+>
+> 0000065c <test9w>:
+>    65c:	2c 04 00 00 	cmpwi   r4,0
+>    660:	41 82 00 0c 	beq     66c <test9w+0x10>
+>    664:	7c 63 23 96 	divwu   r3,r3,r4
+>    668:	4e 80 00 20 	blr
+>    66c:	0f e0 00 00 	twui    r0,0
+>    670:	38 60 00 00 	li      r3,0			<==
+>    674:	4e 80 00 20 	blr				<==
+>    678:	38 60 00 00 	li      r3,0
+>    67c:	4e 80 00 20 	blr
+>
+The builtin variant of unreachable (__builtin_unreachable()) works.
 
-> +		if (!(ctx->dev->dec_capability & VCODEC_CAPABILITY_4K_DISABLED) &&
-> +		    fourcc !=3D V4L2_PIX_FMT_VP8_FRAME) {
-> +			mtk_vdec_framesizes[count_framesizes].stepwise.max_width =3D
-> +				VCODEC_DEC_4K_CODED_WIDTH;
-> +			mtk_vdec_framesizes[count_framesizes].stepwise.max_height =3D
-> +				VCODEC_DEC_4K_CODED_HEIGHT;
-> +		}
->  		num_framesizes++;
->  		break;
->  	case V4L2_PIX_FMT_MM21:
+How about using that instead of unreachable() ?
+
+
+- Sathvika
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCD955E01D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F070B55CF67
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239363AbiF0L47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S235060AbiF0L15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238044AbiF0Ltu (ORCPT
+        with ESMTP id S235115AbiF0L0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:49:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5546E71;
-        Mon, 27 Jun 2022 04:43:27 -0700 (PDT)
+        Mon, 27 Jun 2022 07:26:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2DF65A8;
+        Mon, 27 Jun 2022 04:26:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D76FB61268;
-        Mon, 27 Jun 2022 11:43:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4002C341C7;
-        Mon, 27 Jun 2022 11:43:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2AF78B8111D;
+        Mon, 27 Jun 2022 11:26:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A801C3411D;
+        Mon, 27 Jun 2022 11:26:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330206;
-        bh=iloeB/dZ6LP3VpD/hj6iCJ5H6/wOfIuWN46VZKW9bYI=;
+        s=korg; t=1656329196;
+        bh=/OV4TQT7m05Fi0VZVfG2VTpYR5hu8IQh+pTF8a8E0mw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mw36LNMgd22PpNhjC0VpUaDE9Y7HPqEhcbZ6f5hN9pMEIMFFK0c8BR/zwnC8iNKNe
-         XxV5j6kCbeLpM6e/k8SowsB2/xXuJe4V+sRntPOrk2tg6dD5BpiypX0fUk1+aHVjBx
-         lxfAWlQj+BeK4oJZAlB56hxzdxpnnmpaQABj2zM4=
+        b=ZS0VeCB9tqSm9DrOqrKEgbJdtaFh6ufZWoD1CMWG8duXblCRrfA5EKs8pY38zQZWz
+         XdMdW7JNTesKKjqn87/HsNRvim+Hx4NzAFiHGweQE0bISaJiDAlMZJ4VhZ0kLdm0ee
+         /cSXPk4K7qVx7g75rbpcLTegbvKWu+OI0vfcdFM0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Dan Vacura <w36195@motorola.com>
-Subject: [PATCH 5.18 118/181] usb: gadget: uvc: fix list double add in uvcg_video_pump
+        Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.10 080/102] iio: imu: inv_icm42600: Fix broken icm42600 (chip id 0 value)
 Date:   Mon, 27 Jun 2022 13:21:31 +0200
-Message-Id: <20220627111948.117853093@linuxfoundation.org>
+Message-Id: <20220627111935.842264654@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Vacura <w36195@motorola.com>
+From: Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>
 
-commit 96163f835e65f8c9897487fac965819f0651d671 upstream.
+commit 106b391e1b859100a3f38f0ad874236e9be06bde upstream.
 
-A panic can occur if the endpoint becomes disabled and the
-uvcg_video_pump adds the request back to the req_free list after it has
-already been queued to the endpoint. The endpoint complete will add the
-request back to the req_free list. Invalidate the local request handle
-once it's been queued.
+The 0 value used for INV_CHIP_ICM42600 was not working since the
+match in i2c/spi was checking against NULL value.
 
-<6>[  246.796704][T13726] configfs-gadget gadget: uvc: uvc_function_set_alt(1, 0)
-<3>[  246.797078][   T26] list_add double add: new=ffffff878bee5c40, prev=ffffff878bee5c40, next=ffffff878b0f0a90.
-<6>[  246.797213][   T26] ------------[ cut here ]------------
-<2>[  246.797224][   T26] kernel BUG at lib/list_debug.c:31!
-<6>[  246.807073][   T26] Call trace:
-<6>[  246.807180][   T26]  uvcg_video_pump+0x364/0x38c
-<6>[  246.807366][   T26]  process_one_work+0x2a4/0x544
-<6>[  246.807394][   T26]  worker_thread+0x350/0x784
-<6>[  246.807442][   T26]  kthread+0x2ac/0x320
+To keep this check, add a first INV_CHIP_INVALID 0 value as safe
+guard.
 
-Fixes: f9897ec0f6d3 ("usb: gadget: uvc: only pump video data if necessary")
-Cc: stable@vger.kernel.org
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Dan Vacura <w36195@motorola.com>
-Link: https://lore.kernel.org/r/20220617163154.16621-1-w36195@motorola.com
+Fixes: 31c24c1e93c3 ("iio: imu: inv_icm42600: add core of new inv_icm42600 driver")
+Signed-off-by: Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>
+Link: https://lore.kernel.org/r/20220609102301.4794-1-jmaneyrol@invensense.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/function/uvc_video.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/iio/imu/inv_icm42600/inv_icm42600.h      |    1 +
+ drivers/iio/imu/inv_icm42600/inv_icm42600_core.c |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -415,6 +415,9 @@ static void uvcg_video_pump(struct work_
- 			uvcg_queue_cancel(queue, 0);
- 			break;
- 		}
-+
-+		/* Endpoint now owns the request */
-+		req = NULL;
- 		video->req_int_count++;
- 	}
+--- a/drivers/iio/imu/inv_icm42600/inv_icm42600.h
++++ b/drivers/iio/imu/inv_icm42600/inv_icm42600.h
+@@ -17,6 +17,7 @@
+ #include "inv_icm42600_buffer.h"
  
+ enum inv_icm42600_chip {
++	INV_CHIP_INVALID,
+ 	INV_CHIP_ICM42600,
+ 	INV_CHIP_ICM42602,
+ 	INV_CHIP_ICM42605,
+--- a/drivers/iio/imu/inv_icm42600/inv_icm42600_core.c
++++ b/drivers/iio/imu/inv_icm42600/inv_icm42600_core.c
+@@ -565,7 +565,7 @@ int inv_icm42600_core_probe(struct regma
+ 	bool open_drain;
+ 	int ret;
+ 
+-	if (chip < 0 || chip >= INV_CHIP_NB) {
++	if (chip <= INV_CHIP_INVALID || chip >= INV_CHIP_NB) {
+ 		dev_err(dev, "invalid chip = %d\n", chip);
+ 		return -ENODEV;
+ 	}
 
 

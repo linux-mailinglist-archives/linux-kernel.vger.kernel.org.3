@@ -2,93 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB1A55DF0F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE9355CB49
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238001AbiF0Ox6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
+        id S237378AbiF0O63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237920AbiF0OxC (ORCPT
+        with ESMTP id S237147AbiF0OwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:53:02 -0400
-Received: from m151.mail.126.com (m151.mail.126.com [220.181.15.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07763140FE
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:52:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=lO5E1
-        iVju2S4FFAAYHenXYqOGz9bc9aUBgCSHMh99PY=; b=OvutJ4gGnxODPgZb2jn13
-        98rgBV+mscbe6Y+aNES7S1PFVKO8NDgfUGAm2q0pOa/zia0h0LCTupPFzagDo1KY
-        pqHEaP/ssNlVV083CZB5snUGBC4QVDzpR6N+dbCkB1qRMmwlmjrsydUpzWPr+TJb
-        cXt4evHZG4dTYDeuMACDuA=
-Received: from windhl$126.com ( [123.112.70.164] ) by ajax-webmail-wmsvr1
- (Coremail) ; Mon, 27 Jun 2022 22:51:38 +0800 (CST)
-X-Originating-IP: [123.112.70.164]
-Date:   Mon, 27 Jun 2022 22:51:38 +0800 (CST)
-From:   "Liang He" <windhl@126.com>
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     broonie@kernel.org, ckeepax@opensource.cirrus.com,
-        michal.simek@xilinx.com, abhyuday.godhasara@xilinx.com,
-        simont@opensource.cirrus.com, ronak.jain@xilinx.com,
-        peng.fan@nxp.com, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] firmware: Hold a reference for
- of_find_compatible_node()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <Yrm6JztPuqYmKlKF@kroah.com>
-References: <20220621032625.4078445-1-windhl@126.com>
- <Yrm6JztPuqYmKlKF@kroah.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Mon, 27 Jun 2022 10:52:25 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D7B414089;
+        Mon, 27 Jun 2022 07:52:21 -0700 (PDT)
+Received: from [192.168.100.8] (unknown [112.20.112.134])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT0wUxLliSxxgAA--.6493S3;
+        Mon, 27 Jun 2022 22:52:05 +0800 (CST)
+Message-ID: <0ebe206c-61d6-d39a-8ad7-bc53a1094405@loongson.cn>
+Date:   Mon, 27 Jun 2022 22:52:05 +0800
 MIME-Version: 1.0
-Message-ID: <578840ee.438c.181a5a58c00.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AcqowABXWbH7w7li8cUcAA--.20186W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3BstF1pED0GQJQAAsY
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 03/20] docs: zh_CN: page_frags.rst: fix a broken
+ reference
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Alex Shi <alexs@kernel.org>, linux-kernel@vger.kernel.org
+References: <cover.1656234456.git.mchehab@kernel.org>
+ <a12e18044ddb2ca16a1fed10823d59558d6de405.1656234456.git.mchehab@kernel.org>
+From:   YanTeng Si <siyanteng@loongson.cn>
+In-Reply-To: <a12e18044ddb2ca16a1fed10823d59558d6de405.1656234456.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxT0wUxLliSxxgAA--.6493S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrKF1DKF4kCryrJrWUJF47Arb_yoWDKrb_Za
+        1kJFWrAF1Dt34xKw48GF1xJr40vFWFkr18JryDt3yrK3WjqrZ8Was2q3sYvas8Xws3uFn8
+        K3ykXwsayrnrtjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbI8YjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z2
+        80aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
+        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx
+        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc2xS
+        Y4AK67AK6ry5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWU
+        twCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        xU2rgAUUUUU
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgpBdCAyMDIyLTA2LTI3IDIyOjA5OjQzLCAiR3JlZyBLSCIgPGdyZWdraEBsaW51eGZvdW5kYXRp
-b24ub3JnPiB3cm90ZToKPk9uIFR1ZSwgSnVuIDIxLCAyMDIyIGF0IDExOjI2OjI1QU0gKzA4MDAs
-IExpYW5nIEhlIHdyb3RlOgo+PiBJbiBvZl9yZWdpc3Rlcl90cnVzdGVkX2ZvdW5kYXRpb25zKCks
-IHdlIG5lZWQgdG8gaG9sZCB0aGUgcmVmZXJlbmNlCj4+IHJldHVybmVkIGJ5IG9mX2ZpbmRfY29t
-cGF0aWJsZV9ub2RlKCkgYW5kIHRoZW4gdXNlIGl0IHRvIGNhbGwKPj4gb2Zfbm9kZV9wdXQoKSBm
-b3IgcmVmY291bnQgYmFsYW5jZS4KPj4gCj4+IFNpZ25lZC1vZmYtYnk6IExpYW5nIEhlIDx3aW5k
-aGxAMTI2LmNvbT4KPj4gLS0tCj4+ICBpbmNsdWRlL2xpbnV4L2Zpcm13YXJlL3RydXN0ZWRfZm91
-bmRhdGlvbnMuaCB8IDggKysrKysrLS0KPj4gIDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMo
-KyksIDIgZGVsZXRpb25zKC0pCj4+IAo+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9maXJt
-d2FyZS90cnVzdGVkX2ZvdW5kYXRpb25zLmggYi9pbmNsdWRlL2xpbnV4L2Zpcm13YXJlL3RydXN0
-ZWRfZm91bmRhdGlvbnMuaAo+PiBpbmRleCBiZTU5ODRiZGE1OTIuLjM5OTQ3MWMyZjFjNyAxMDA2
-NDQKPj4gLS0tIGEvaW5jbHVkZS9saW51eC9maXJtd2FyZS90cnVzdGVkX2ZvdW5kYXRpb25zLmgK
-Pj4gKysrIGIvaW5jbHVkZS9saW51eC9maXJtd2FyZS90cnVzdGVkX2ZvdW5kYXRpb25zLmgKPj4g
-QEAgLTcxLDEyICs3MSwxNiBAQCBzdGF0aWMgaW5saW5lIHZvaWQgcmVnaXN0ZXJfdHJ1c3RlZF9m
-b3VuZGF0aW9ucygKPj4gIAo+PiAgc3RhdGljIGlubGluZSB2b2lkIG9mX3JlZ2lzdGVyX3RydXN0
-ZWRfZm91bmRhdGlvbnModm9pZCkKPj4gIHsKPj4gKwlzdHJ1Y3QgZGV2aWNlX25vZGUgKm5wID0g
-b2ZfZmluZF9jb21wYXRpYmxlX25vZGUoTlVMTCwgTlVMTCwgInRsbSx0cnVzdGVkLWZvdW5kYXRp
-b25zIik7Cj4+ICsKPj4gKwlvZl9ub2RlX3B1dChucCk7Cj4+ICsJaWYgKCFucCkKPgo+V2hpbGUg
-dGhpcyBpcyB0ZWNobmljYWxseSBjb3JyZWN0LCB5b3UgYXJlIG5vdyBjaGVja2luZyB0byBzZWUg
-aWYgdGhpcwo+cG9pbnRzIHRvIGEgbWVtb3J5IGxvY2F0aW9uIHRoYXQgeW91IG5vIGxvbmdlciBr
-bm93IHdoYXQgaXQgcmVhbGx5Cj5iZWxvbmdzIHRvLiAgQyB3aWxsIGxldCB5b3UgZG8gdGhpcywg
-YnV0IGl0IG1pZ2h0IGJlIG5pY2VyIHRvIGZpeCBpdCB1cAo+cHJvcGVybHkgc28gaXQgZG9lc24n
-dCBsb29rIGxpa2UgdGhpcy4KPgo+dGhhbmtzLAo+Cj5ncmVnIGstaAoKSGmjrEdyZWcgS0ijrAoK
-VGhhbmtzIHZlcnkgbXVjaCBmb3IgeW91ciBlZmZvcnQgdG8gcmV2aWV3IG15IHBhdGNoLgoKSW4g
-ZmFjdCwgSSBoYXZlIHJlcG9ydGVkIGEgY29tbWl0IGZvciB0aGlzIGtpbmQgb2YgJ2NoZWNrLWFm
-dGVyLXB1dCcgY29kaW5nIHN0eWxlOgpodHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAyMjA2
-MTcxMTI2MzYuNDA0MTY3MS0xLXdpbmRobEAxMjYuY29tLwoKQnV0IEkgaGF2ZSBiZWVuIHRvbGQg
-dG8ga2VlcCBzdWNoIHN0eWxlIGFuZCBJIHRoaW5rIHRoZSBleHBsYW5hdGlvbiBpcyBhbHNvIHJl
-YXNvbmFibGUuClNvIHdoZW4gSSBtYWtlIHRoaXMgcGF0Y2gsIEkgYW0gaW5kZWVkIGNvbmZ1c2Vk
-IHdoYXQgSSBzaG91bGQgd3JpdGUuCgpGaW5hbGx5LCBJIHRoaW5rIGl0IGlzIGJldHRlciB0byBi
-ZSBjb25zaXN0ZW50IHdpdGggY3VycmVudCBjb2Rpbmcgc3R5bGUgc28KSSBjaG9zZSB0aGlzICdj
-aGVjay1hZnRlci1wdXQnIHN0eWxlLgoKQnV0IGlmIHlvdSB0aGluayBpdCBpcyBiZXR0ZXIgdG8g
-dXNlIGEgbm9ybWFsIG9yZGVyLCBpLmUuLCBjaGVjay10aGVuLXB1dCwKSSBhbSwgb2YgY2F1c2Us
-IHZlcnkgaGFwcHkgdG8gc2VuZCBhIG5ldyBwYXRjaCBmb3IgdGhpcyBidWcgYW5kIEkgd2lsbAph
-bHNvIGtlZXAgdG8gdXNlIHRoaXMgY29kaW5nIHN0eWxlIGluIGZ1dHVyZS4KClRoYW5rcyBhZ2Fp
-bi4KCkxpYW5nIAoK
+
+在 2022/6/26 17:10, Mauro Carvalho Chehab 写道:
+> typo:
+> 	page_frag.rst -> page_frags.rst
+>
+> Fixes: f51debc256f8 ("docs/zh_CN: add vm page_frags translation")
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+
+Acked-by: Yanteng Si<siyanteng@loongson.cn>
+
+Thanks,
+Yanteng
+
+> ---
+>
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1656234456.git.mchehab@kernel.org/
+>
+>   Documentation/translations/zh_CN/vm/page_frags.rst | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/translations/zh_CN/vm/page_frags.rst b/Documentation/translations/zh_CN/vm/page_frags.rst
+> index ad27fed33634..38ecddb9e1c0 100644
+> --- a/Documentation/translations/zh_CN/vm/page_frags.rst
+> +++ b/Documentation/translations/zh_CN/vm/page_frags.rst
+> @@ -1,4 +1,4 @@
+> -:Original: Documentation/vm/page_frag.rst
+> +:Original: Documentation/vm/page_frags.rst
+>   
+>   :翻译:
+>   
+

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1B455DF8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2779755D9A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239793AbiF0L6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
+        id S235754AbiF0Led (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238465AbiF0LvO (ORCPT
+        with ESMTP id S235989AbiF0LdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:51:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7915D65C1;
-        Mon, 27 Jun 2022 04:44:32 -0700 (PDT)
+        Mon, 27 Jun 2022 07:33:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FA5BCA9;
+        Mon, 27 Jun 2022 04:30:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB44261150;
-        Mon, 27 Jun 2022 11:44:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B82C3411D;
-        Mon, 27 Jun 2022 11:44:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89038B81120;
+        Mon, 27 Jun 2022 11:30:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 017DEC3411D;
+        Mon, 27 Jun 2022 11:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330271;
-        bh=s2PJ6AvPvEed3uDSlF+Egx5Za1Gv+BMJQwt6EC4A4NY=;
+        s=korg; t=1656329400;
+        bh=oS4JqcnqTMwkuhSqxF7Xow7fCFBCovJFEcg1qA2kNVE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AAP9AnoPc4g9HsXgu9UEuEgXcjy3CdIHnZ0AhIXBP3TMlRZ1ygqbuPkDVSm2pzlBx
-         uXQT1qsicTtc3hiauEeKI562X96l6oST6wg/aBraQyPsjRtu1F/XyVITN6a1ZhH65M
-         nyiMl+ddYOqXWAtukj53gtgtIgQtHFyDYv5Ctxk4=
+        b=Cy8MMJx1kBwNvWFBFynh2Ut8Gl49vS6VbfYwIJje7bmLDVwN9rqXZSpp58ms9xPEb
+         HaEzptH8qooah0WnjdDQrzJ+/+FbfzSCCOV8syNhTiflu909RY4PFruez/ZJ99iwkG
+         bBDkLYer91qXQtr4o53eWWppiTdGSh/bgxIamPD0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Liam Beguin <liambeguin@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>, Stable@vger.kernel.org,
+        stable@vger.kernel.org,
+        Olivier Moysan <olivier.moysan@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.18 142/181] iio: test: fix missing MODULE_LICENSE for IIO_RESCALE=m
+Subject: [PATCH 5.4 44/60] iio: adc: stm32: fix maximum clock rate for stm32mp15x
 Date:   Mon, 27 Jun 2022 13:21:55 +0200
-Message-Id: <20220627111948.803931529@linuxfoundation.org>
+Message-Id: <20220627111928.986365479@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +57,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liam Beguin <liambeguin@gmail.com>
+From: Olivier Moysan <olivier.moysan@foss.st.com>
 
-commit 7a2f6f61e8ee016b75e1b1dd62fbd03e6d6db37d upstream.
+commit 990539486e7e311fb5dab1bf4d85d1a8973ae644 upstream.
 
-When IIO_RESCALE_KUNIT_TEST=y and IIO_RESCALE=m,
-drivers/iio/afe/iio-rescale.o is built twice causing the
-MODULE_LICENSE() to be lost, as shown by:
+Change maximum STM32 ADC input clock rate to 36MHz, as specified
+in STM32MP15x datasheets.
 
-  ERROR: modpost: missing MODULE_LICENSE() in drivers/iio/afe/iio-rescale.o
-
-Rework the build configuration to have the dependency specified in the
-Kconfig.
-
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Fixes: 8e74a48d17d5 ("iio: test: add basic tests for the iio-rescale driver")
-Signed-off-by: Liam Beguin <liambeguin@gmail.com>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
-Link: https://lore.kernel.org/r/20220601142138.3331278-1-liambeguin@gmail.com
+Fixes: d58c67d1d851 ("iio: adc: stm32-adc: add support for STM32MP1")
+Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Link: https://lore.kernel.org/r/20220609095234.375925-1-olivier.moysan@foss.st.com
 Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/test/Kconfig  | 2 +-
- drivers/iio/test/Makefile | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/iio/adc/stm32-adc-core.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/test/Kconfig b/drivers/iio/test/Kconfig
-index 56ca0ad7e77a..4c66c3f18c34 100644
---- a/drivers/iio/test/Kconfig
-+++ b/drivers/iio/test/Kconfig
-@@ -6,7 +6,7 @@
- # Keep in alphabetical order
- config IIO_RESCALE_KUNIT_TEST
- 	bool "Test IIO rescale conversion functions"
--	depends on KUNIT=y && !IIO_RESCALE
-+	depends on KUNIT=y && IIO_RESCALE=y
- 	default KUNIT_ALL_TESTS
- 	help
- 	  If you want to run tests on the iio-rescale code say Y here.
-diff --git a/drivers/iio/test/Makefile b/drivers/iio/test/Makefile
-index f15ae0a6394f..880360f8d02c 100644
---- a/drivers/iio/test/Makefile
-+++ b/drivers/iio/test/Makefile
-@@ -4,6 +4,6 @@
- #
- 
- # Keep in alphabetical order
--obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o ../afe/iio-rescale.o
-+obj-$(CONFIG_IIO_RESCALE_KUNIT_TEST) += iio-test-rescale.o
- obj-$(CONFIG_IIO_TEST_FORMAT) += iio-test-format.o
- CFLAGS_iio-test-format.o += $(DISABLE_STRUCTLEAK_PLUGIN)
--- 
-2.36.1
-
+--- a/drivers/iio/adc/stm32-adc-core.c
++++ b/drivers/iio/adc/stm32-adc-core.c
+@@ -815,7 +815,7 @@ static const struct stm32_adc_priv_cfg s
+ static const struct stm32_adc_priv_cfg stm32mp1_adc_priv_cfg = {
+ 	.regs = &stm32h7_adc_common_regs,
+ 	.clk_sel = stm32h7_adc_clk_sel,
+-	.max_clk_rate_hz = 40000000,
++	.max_clk_rate_hz = 36000000,
+ 	.has_syscfg = HAS_VBOOSTER | HAS_ANASWVDD,
+ 	.num_irqs = 2,
+ };
 
 

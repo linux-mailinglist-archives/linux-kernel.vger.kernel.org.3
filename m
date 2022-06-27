@@ -2,72 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F4355CD85
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD3A55CA66
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235788AbiF0N1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 09:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
+        id S235820AbiF0N2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 09:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235683AbiF0N1s (ORCPT
+        with ESMTP id S235802AbiF0N2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 09:27:48 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8597641B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:27:47 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LWpRZ0xQFz9spN;
-        Mon, 27 Jun 2022 21:27:06 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 27 Jun 2022 21:27:44 +0800
-Subject: Re: [PATCH v3 1/2] mm/swapfile: fix possible data races of
- inuse_pages
-To:     Qian Cai <quic_qiancai@quicinc.com>
-CC:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <ying.huang@intel.com>, <songmuchun@bytedance.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220625093346.48894-1-linmiaohe@huawei.com>
- <20220625093346.48894-2-linmiaohe@huawei.com> <Yrml4mB3sa5fZVJa@qian>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <fe3c4834-71a6-7867-2108-eca43fde62fc@huawei.com>
-Date:   Mon, 27 Jun 2022 21:27:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 27 Jun 2022 09:28:12 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FD83BC
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:28:12 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id o16so13095168wra.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 06:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ls6yB7m2qi6FUlQi0e95Lc81JKfij9i9l6rtcmcTak8=;
+        b=Jd0mnpnyP4rJZ9Y4IhxngJKeUIOf0Z/VNFHnAFqnaaAy2z7OkGrRewlJPEiUcsZD87
+         PIlMG2oSpUu7u+GTFQMuajnL9dKQcpt5pyZKd1deRSVB9nOYV+B1myKwmSZAuHx6AibA
+         iolrI0LSUo0gNVgzQaibDJi4t0Yo4v0AjbRpiA8hL/vk3PGO2oHFrruanBcjtZVAVDRA
+         3wjH05iBG8qcXs00ugZgTErw9NBaOSTFBGgP1h7srx00mHlBAfY+BCGjC9CKeauFNGdF
+         I0YCsAlWvVvbLiFJlGyzEVR6+25+InTsPs2H6eAxdiIMfYGka2kjiXU1sCuOKycmgnOt
+         toTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ls6yB7m2qi6FUlQi0e95Lc81JKfij9i9l6rtcmcTak8=;
+        b=VmAFDp1L9xVMoef1FThuEOnqyVLltlr5nu5x9eUYtnUPOijn+b/dbp/emfS8knKotD
+         0dkmQf2nAn+4CgpJfA0BAwy/E+wfmJA9lY3dpEB0eTJHQjuK9tGT7HLVXlYdNWUkogYS
+         vTQxh+1Ongn5zZUHc7CR+SY472wNET0B5Vfbb03aRcfOaAV4bX67cOTIu0bTsyHJp+TI
+         uP28uVi7eWZ8jgWfRUsmmlt0y6BehANy6UGobehP8qsTbhDsoFot2tLZa56tMiq017Vd
+         bVOMNo+C8XjTKiQFJFbtRs7TWUWkVo4vDV8B9fcAkcYadcAT+n4Kf3o2f1xWca3FaBtW
+         728g==
+X-Gm-Message-State: AJIora/XGJmecoPiwSnJscoF5S1GGFxVmfpt52Ngq6umyAKwEAlxX6m9
+        o+33s8TyEyQmzi4u6pHoUdN2uw==
+X-Google-Smtp-Source: AGRyM1tsqKmfD0LspHT7HlY65vqjpsSthGGW/eUJ1V0K0Z5bfsNimFwCoKv+V2gUeWRwD9QslV7Qgg==
+X-Received: by 2002:a5d:5984:0:b0:21b:a858:3678 with SMTP id n4-20020a5d5984000000b0021ba8583678mr12519365wri.293.1656336490689;
+        Mon, 27 Jun 2022 06:28:10 -0700 (PDT)
+Received: from [192.168.0.251] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id j22-20020a05600c485600b0039aef592ca0sm13404144wmo.35.2022.06.27.06.28.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 06:28:10 -0700 (PDT)
+Message-ID: <4ec8e2d2-f199-976d-52ae-bbba2d6ac40c@linaro.org>
+Date:   Mon, 27 Jun 2022 15:28:09 +0200
 MIME-Version: 1.0
-In-Reply-To: <Yrml4mB3sa5fZVJa@qian>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] ASoC: samsung: s3c24xx-i2s: Fix typo in DAIFMT handling
 Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
+        s.nawrocki@samsung.com, jrdr.linux@gmail.com, lgirdwood@gmail.com,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org
+References: <20220627094335.3051210-1-ckeepax@opensource.cirrus.com>
+ <803785ef-42b7-647c-9653-702067439ae9@linaro.org>
+ <YrmYbZV4mj9d9++t@sirena.org.uk>
+ <a25126ed-ef39-8316-6ae5-9551aa8120b0@linaro.org>
+ <YrmvZonpB5GhLGbG@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YrmvZonpB5GhLGbG@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/27 20:43, Qian Cai wrote:
-> On Sat, Jun 25, 2022 at 05:33:45PM +0800, Miaohe Lin wrote:
->> si->inuse_pages could still be accessed concurrently now. The plain reads
->> outside si->lock critical section, i.e. swap_show and si_swapinfo, which
->> results in data races. READ_ONCE and WRITE_ONCE is used to fix such data
->> races. Note these data races should be ok because they're just used for
->> showing swap info.
+On 27/06/2022 15:23, Mark Brown wrote:
+>>> That coverage has apparently also been missing in -next for several
+>>> weeks.
 > 
-> Was this found by kcsan? If so, it would be useful to record the exact
-> kscan report in the commit message.
-
-Sorry, it's found via code inspection.
-
-Thanks.
-
-> .
+>> Eh, it seems defconfigs for this old platform do not select sound, so we
+>> rely on randconfig. :(
 > 
+> It's not even turning up in an allmodconfig?
 
+No, because it is old driver for S3C24xx platform which:
+1. Does not have compile test (I can try to fix that),
+2. Depends on/Is selected by S3C24xx code which is not multiplatform
+thus is not enabled on ARM allyes/allmod.
+
+Best regards,
+Krzysztof

@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D4E55DB57
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5624055CC9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233387AbiF0K3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
+        id S233538AbiF0Kan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbiF0K3q (ORCPT
+        with ESMTP id S232441AbiF0Kal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:29:46 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32101266B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:29:46 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id g4so1804501pgc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:29:46 -0700 (PDT)
+        Mon, 27 Jun 2022 06:30:41 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BA86261;
+        Mon, 27 Jun 2022 03:30:39 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 89so14165695qvc.0;
+        Mon, 27 Jun 2022 03:30:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=v3Ue/YqhI3wZIXhjzUhJiR88+uLRCHqFYS5gNvpHTOg=;
-        b=eMNLJG1TZA5X1Hp1kTF1W/tSAJ/fkP4eDfHsHZdcugxv6+Ycl3CqTb8s/RQ2rwMlma
-         yDNRn40ej6TeEe698MxZZPrjUmT317zCp5mqCAqsqGht9u6XT3w2c3rl3P+KOyKqEj+U
-         ABFWorvaud+H6/+BhsBqpe/D9KWqwQUUV2Qa1xu6XTl2Vde7/rszBKJTmuG3CJXtA0Tg
-         t4KUifUZzS9WHXInqkzjgwFQsimWUjmkeJeSYLybhi0y3EYRCII+jPsEinDhv25LquPZ
-         Bzy4Y8M7v/xAifQ/c3snWP5W1FTK8zx9maJ0TgcppMj2y3D9ijhP9xTlOv/q/aPvCtDf
-         EZiw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cZfAPaEvqTx34DnDPzb0WJHLTgfejH45gbcwnO/wivg=;
+        b=G2l+hKTC3b/3VUqvEpG03cbAWnBPUCxVt0TElZyrlXe9sLwg2fGZr+Xbz7KNps23gX
+         FUHqn/6nL6V+5PnjpOPvbU4+0MmRB82Um2XU44C0uYkdL/cw5EC6nUECFdLsKTNCSEIL
+         TYiO7Zif4ZqUm3feIrFdS5VmRvbQcaaCtvnT2zdYqNg6RoAbf/rb6RLjUw4wzHMJvJJo
+         FmbQ93mhlFAyaXF901/8R+aOozJuguPprdQpTYaYCVaftU/st+gZ+DjZ4DzPsSSYEcVo
+         KBQi1zWKuk77SiLYtPDPK8cAa3OTSPMfBFrqeaP0+noIs6TO5oysc1G4glI+yYaHj6nx
+         GIvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=v3Ue/YqhI3wZIXhjzUhJiR88+uLRCHqFYS5gNvpHTOg=;
-        b=xxx36RN9quW4HvOkMi3pk2vRZQ3/kBzIm8FZVNjgdQFNkPaBUs315dKFCTkoaURRHQ
-         U76gH2F/QtQdUDOXc3UcOvNrdxlTmATTA1B/5r7BpZToWaTrlYDk2l1aYEn4FclPn0yV
-         UBGU7vdamko+Q9uCszDv3ygynvhUJIiGMBNWb2EjDtZsHaefJhq4nE0Fh0m93gRsdqCK
-         M2J73GP/j7z5NXq6NeQOZKafBTTj1pGI3YKOp2DhwjvqbvkdKwKWO8Ny8n4OFPNi9Gk8
-         MLKjP6x0DFGczU7fNN99qDN23oUT88h6WDqa9skaqgLivzCJQWAfP8yH8LgVxoiXVqvO
-         mnTg==
-X-Gm-Message-State: AJIora/HeefqWbLszlWPDNa7TRqJy1UeJqluIjaAXnn9zApAq8JeBQ5Z
-        yxwvYX9ZBgzhgP/Gy9x/Sky7NPvpFYAK7VfNlcg=
-X-Google-Smtp-Source: AGRyM1shR2SPrnGHr9WEZTkI49qfGmMxocbXq29oboYiLhEo69thaGxiZwHMm+I8QJytWCPmgRa4bQ==
-X-Received: by 2002:a05:6a00:22d6:b0:525:74b3:d020 with SMTP id f22-20020a056a0022d600b0052574b3d020mr13738014pfj.80.1656325785719;
-        Mon, 27 Jun 2022 03:29:45 -0700 (PDT)
-Received: from desktop-hypoxic.kamiya.io ([42.120.103.58])
-        by smtp.gmail.com with ESMTPSA id jj4-20020a170903048400b0016a2b68823esm6819598plb.141.2022.06.27.03.29.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 03:29:45 -0700 (PDT)
-From:   Yangxi Xiang <xyangxi5@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        nick black <dankamongmen@gmail.com>,
-        Yangxi Xiang <xyangxi5@gmail.com>
-Subject: [PATCH] vt: fix memory overlapping when deleting chars in the buffer
-Date:   Mon, 27 Jun 2022 18:29:40 +0800
-Message-Id: <20220627102940.23232-1-xyangxi5@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cZfAPaEvqTx34DnDPzb0WJHLTgfejH45gbcwnO/wivg=;
+        b=YcpWuWmC7AWCvvtsu8YSe61YPS/2vBbs9ohJQcxdK7gO9m/daWje/8CFZ6UD0uuIS/
+         TqNRU8QSiyXMyITnunAIqMrHRz6hkW0XpZGUn3qYO5rfnONSMFfZMMI5tIfx/GojunuC
+         yv2NWhDmw06EaTDSxU2gEpSv/9iNf0MhOXCa2d+fnxFcaK9Z4gJRl7PQoa3a10+32Sj8
+         v4FMv5njJEPC3uQJC9HW3XPakB/uuutYNquntqtCMZAKBULsPouxYqRAUFnktocSsNc2
+         o4L+pkYdy3x4tjv7+svpVerfSn6mXmZjQbIYjXETAC+iU3sWguTcWuwdL9GAMgVBRbkT
+         fVCA==
+X-Gm-Message-State: AJIora+8TfA0F3xzWX/FFhYGpCbd8gAfUaR64hakAfaaq+kUbU3kOCkm
+        rAyjg0rCgckKrYNo1PAUlxOpgRUSTCo6ESsO9jM=
+X-Google-Smtp-Source: AGRyM1voIwXZ4dMPnpLAqnCx3C8loYQQRTztZqdu3BPiOLJoENjZC+j0T+13kENmWdRQC8XyE5oler0toFCdYmPZk3w=
+X-Received: by 2002:a05:622a:1791:b0:317:76d8:d17f with SMTP id
+ s17-20020a05622a179100b0031776d8d17fmr8667214qtk.82.1656325838358; Mon, 27
+ Jun 2022 03:30:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220621135339.1269409-1-robimarko@gmail.com> <87o7yeo104.fsf@kernel.org>
+In-Reply-To: <87o7yeo104.fsf@kernel.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Mon, 27 Jun 2022 12:30:27 +0200
+Message-ID: <CAOX2RU4G-009qYZF7-LcCT9SCeAmj=v9Hdk+NU-nebq=fGdjBQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: net: wireless: ath11k: add new DT entry
+ for board ID
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     davem@davemloft.net, Eric Dumazet <edumazet@google.com>,
+        kuba@kernel.org, pabeni@redhat.com,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A memory overlapping copy occurs when deleting a long line. Fix it by
-using scr_memmovew.
+On Mon, 27 Jun 2022 at 12:27, Kalle Valo <kvalo@kernel.org> wrote:
+>
+> Robert Marko <robimarko@gmail.com> writes:
+>
+> > bus + qmi-chip-id + qmi-board-id and optionally the variant are currently
+> > used for identifying the correct board data file.
+> >
+> > This however is sometimes not enough as all of the IPQ8074 boards that I
+> > have access to dont have the qmi-board-id properly fused and simply return
+> > the default value of 0xFF.
+> >
+> > So, to provide the correct qmi-board-id add a new DT property that allows
+> > the qmi-board-id to be overridden from DTS in cases where its not set.
+> > This is what vendors have been doing in the stock firmwares that were
+> > shipped on boards I have.
+>
+> What's wrong with using 0xff? Ie. something like this:
+>
+> bus=ahb,qmi-chip-id=0,qmi-board-id=255,variant=foo
+>
+> Or maybe even just skip qmi-board-id entirely if it's not supported? So
+> that the board file string would be something like:
+>
+> bus=ahb,qmi-chip-id=0,variant=foo
+>
+> I really would like to avoid adding more DT properties unless it's
+> absolutely critical.
 
-Signed-off-by: Yangxi Xiang <xyangxi5@gmail.com>
----
- drivers/tty/vt/vt.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Well, I suppose that due to the variant property we can avoid "correcting" the
+qmi-board-id
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index f8c87c4d7399..d87bff9d8ed5 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -853,9 +853,13 @@ static void insert_char(struct vc_data *vc, unsigned int nr)
- static void delete_char(struct vc_data *vc, unsigned int nr)
- {
- 	unsigned short *p = (unsigned short *) vc->vc_pos;
-+	unsigned short cp = (vc->vc_cols - vc->state.x - nr) * 2;
- 
- 	vc_uniscr_delete(vc, nr);
--	scr_memcpyw(p, p + nr, (vc->vc_cols - vc->state.x - nr) * 2);
-+	if (cp > nr)
-+		scr_memmovew(p, p + nr, cp);
-+	else
-+		scr_memcpyw(p, p + nr, cp);
- 	scr_memsetw(p + vc->vc_cols - vc->state.x - nr, vc->vc_video_erase_char,
- 			nr * 2);
- 	vc->vc_need_wrap = 0;
--- 
-2.17.1
-
+Regards,
+Robert
+>
+> --
+> https://patchwork.kernel.org/project/linux-wireless/list/
+>
+> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B72B55CCE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF8955C7FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241180AbiF0UTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 16:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39930 "EHLO
+        id S241195AbiF0UTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 16:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241159AbiF0UTM (ORCPT
+        with ESMTP id S241187AbiF0UTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 16:19:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7741EAF5;
-        Mon, 27 Jun 2022 13:19:11 -0700 (PDT)
+        Mon, 27 Jun 2022 16:19:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD33E1EAEE;
+        Mon, 27 Jun 2022 13:19:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45D9F61749;
-        Mon, 27 Jun 2022 20:19:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B17C7C34115;
-        Mon, 27 Jun 2022 20:19:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C7B4B81ACC;
+        Mon, 27 Jun 2022 20:19:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACA9C385A2;
+        Mon, 27 Jun 2022 20:19:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656361150;
-        bh=yXcCDa02Pb/sLH1ELYF8BJG91/X5CPQ+JW86ylnakJQ=;
+        s=k20201202; t=1656361153;
+        bh=WuhLwVReyPIuFiHnuKnYYLH+rlvl1fOWMReZYjq2KMA=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=iXqf5ccLqMwaFW61gUboVSI30DUgWqxa/h12Sm8iyH4BK5cr/cCx0+2tJ8BDZ7bLf
-         zETrLvBSbjbgIUGN6bN+x5vh4cGNTsEYly/eBkhF+Qb16aBCPxx38Wo+swxRbLQ1ky
-         b5qJNG6DkBCrY+k4UeCV+u26trxtRoD0KTJJnqEH4rfON9P+uSzosduQFUSCKG7Ebz
-         9C78TDqe/pjix1/kjgnKAuKuyXSEdAPjLR4K0lZMbxCpFT6biSE6qfahi44qiaVXI7
-         CtwWfGnWOvfb86Hzs4FkyBXYmjN6xLPq20Kv7M+i3kLN1NjO9NOhUYCIBSnTY8KhS3
-         IMMPr+9KN3H8Q==
+        b=EzvLipb/md2jDxG97HKhkbVnANDIcXdB9kf1WhKt5pJMqo31/DRMReHEF/yPd0NHq
+         lAokPdTX87zAbGK1wokDszHYzYkOgO234P616ZZPoLk+6AfycMhWmdhNC2fauIeoNL
+         HLAocQYD/+epH+VC2NbaqYnAkgE+x/rwTVCvMOIqETvkDvPf1ZYSI7p2ASxeLY7wYy
+         fPVJUMtPkVpAKYmw8OlVjjSE9PoH9uBYEdH6FLTkPbM9V3AxfUrAEgxRKceaTV2V6y
+         7NVCI4a+raTe9wQ0/6dgRWWghZXfAr2//NBeffs6+g9XXMmwzXS7vPiP+l0LC2F56D
+         zGX3ZvEa3nNmQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     jarkko.nikula@bitmer.com, tiwai@suse.com, perex@perex.cz,
-        daowens01@gmail.com, peter.ujfalusi@gmail.com, lgirdwood@gmail.com
-Cc:     linux-kernel@vger.kernel.org, dowens@precisionplanting.com,
-        linux-omap@vger.kernel.org, alsa-devel@alsa-project.org
-In-Reply-To: <20220620183744.3176557-1-dowens@precisionplanting.com>
-References: <20220620183744.3176557-1-dowens@precisionplanting.com>
-Subject: Re: [PATCH v4] ASoC: ti: omap-mcbsp: duplicate sysfs error
-Message-Id: <165636114844.3997797.17880127627282990674.b4-ty@kernel.org>
-Date:   Mon, 27 Jun 2022 21:19:08 +0100
+To:     tiwai@suse.com, srinivas.kandagatla@linaro.org, perex@perex.cz,
+        bgoswami@quicinc.com, lgirdwood@gmail.com,
+        yassine.oudjana@gmail.com
+Cc:     linux-kernel@vger.kernel.org, y.oudjana@protonmail.com,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org
+In-Reply-To: <20220622061745.35399-1-y.oudjana@protonmail.com>
+References: <20220622061745.35399-1-y.oudjana@protonmail.com>
+Subject: Re: [PATCH] ASoC: wcd9335: Use int array instead of bitmask for TX mixers
+Message-Id: <165636115088.3997797.3429241707337810347.b4-ty@kernel.org>
+Date:   Mon, 27 Jun 2022 21:19:10 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,14 +56,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Jun 2022 13:37:43 -0500, David Owens wrote:
-> From: David Owens <daowens01@gmail.com>
+On Wed, 22 Jun 2022 10:17:45 +0400, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
 > 
-> Convert to managed versions of sysfs and clk allocation to simplify
-> unbinding and error handling in probe.  Managed sysfs node
-> creation specifically addresses the following error seen the second time
-> probe is attempted after sdma_pcm_platform_register() previously requsted
-> probe deferral:
+> Currently slim_tx_mixer_get reports all TX mixers as enabled when
+> at least one is, due to it reading the entire tx_port_value bitmask
+> without testing the specific bit corresponding to a TX port.
+> Furthermore, using the same bitmask for all capture DAIs makes
+> setting one mixer affect them all. To prevent this, and since
+> the SLIM TX muxes effectively only connect to one of the mixers
+> at a time, turn tx_port_value into an int array storing the DAI
+> index each of the ports is connected to.
 > 
 > [...]
 
@@ -72,8 +76,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: ti: omap-mcbsp: duplicate sysfs error
-      commit: 6d31e225742a1955db8a0c6f6f52beb748a2895e
+[1/1] ASoC: wcd9335: Use int array instead of bitmask for TX mixers
+      commit: 4b07ef55d1d4178dbec584195be148685ea25c59
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

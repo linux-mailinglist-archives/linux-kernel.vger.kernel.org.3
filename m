@@ -2,230 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48D755B529
+	by mail.lfdr.de (Postfix) with ESMTP id 151B355B527
 	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 04:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbiF0COT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 22:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S231527AbiF0COu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 22:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiF0COR (ORCPT
+        with ESMTP id S229867AbiF0COt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 22:14:17 -0400
-Received: from qq.com (smtpbg465.qq.com [59.36.132.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763DE270C
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 19:14:15 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1656296035txn2x220
-Received: from localhost.localdomain ( [113.200.76.118])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 27 Jun 2022 10:13:53 +0800 (CST)
-X-QQ-SSF: 01400000000000C0F000000A0000000
-X-QQ-FEAT: GFUnPs55yMXjhB9hu27UN/jjlpzlI15WzDmJXWxLSBWfAZqXNHLVgi1cpSHEy
-        oPilcCSLTj3Cl9x3k0jpd1p8sp5iloeNqiZj6bpm/TShaXpx0UZEr2/ytpoHxWg0uldij4A
-        z172FAWNDw9lWvzVvjNIfY93hsL2XrtN4/9/zZ75FCDujyL63q3XwwS9UWaJMjqxZdH4CBo
-        u3dMEVFm7YGP4vpN+cDm4UjGgmZqUVjbhwj2aRnZH+40qE/gngtu3xGotyHBxGpl2quGEP8
-        lv/Th6YHQqaPMkYZ9ovZxtWdTqNvwz8+n7ha1p/MqFeWHWjZYTpv2/8KguMXA9nE6DgvIYW
-        WKq303nM76pgMGhH24GagyOiGolv/Mwwz/mWnQV
-X-QQ-GoodBg: 1
-From:   Guo Hui <guohui@uniontech.com>
-To:     peterz@infradead.org
-Cc:     longman@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, will@kernel.org,
-        boqun.feng@gmail.com, virtualization@lists.linux-foundation.org,
-        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org,
-        Guo Hui <guohui@uniontech.com>
-Subject: [PATCH v2] x86/paravirt: useless assignment instructions cause Unixbench full core   performance degradation
-Date:   Mon, 27 Jun 2022 10:13:50 +0800
-Message-Id: <20220627021350.25714-1-guohui@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <f6b68466-968c-4a91-655a-23970280a072@redhat.com>
-References: <f6b68466-968c-4a91-655a-23970280a072@redhat.com>
+        Sun, 26 Jun 2022 22:14:49 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CD7270C;
+        Sun, 26 Jun 2022 19:14:48 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id x20so1296753plx.6;
+        Sun, 26 Jun 2022 19:14:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=p/CeoCTDhGdykZrVT9uCTA5wI+N8E9qPFrIhbM1twyQ=;
+        b=kCCTfCQ1mvklpJXP7NiWhdLXjBOOxYtl795VwPhnA7hgO4lUAw/aHLjRHCxxJU2inN
+         1OcURComNU+XF/Tkggxo6flVJIqrTG+zra0iiaSR3uHLjtZZ6+UKQ/99ltW09+dOMK9g
+         CAygQ7kVIoLkJiW4TlO9S9V8e2++18JTOw3n1vjgmw0Dtq7MfcDKb9aUWnpMQ/xM/HiH
+         mn76tQAjg+7gqxs4th0nZcjweZT/yX0ZONmuQAGaIPHTKe5XpptcXd9nJKwYIRyFuZsV
+         Edru6wXyWDmvzuuKVpGCyK9Mu5VsN3hH0p92ViJKRsQkoWqpLWA8BSJkitMCcF8nCJXO
+         vEJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=p/CeoCTDhGdykZrVT9uCTA5wI+N8E9qPFrIhbM1twyQ=;
+        b=v9MjBJlbkyi/DJQFmTp05jAXp4+J2+j8NmXinpN10vRBRHeDDYUkT5GrQusG0me7+j
+         As2CjWWH4+x8srO/Ve6N5ZdbHNVWLuH/yVHRCGkMLdIwLVT+Bjgawy682ZYgYCo8WhRn
+         dteNM3C4i9cpPwWJR/nn9j2Rt0Ru99vlYcESXRc2JU0KNh9udCuy5rKhfCCMT7DmujDw
+         hI4KIgfwC1ZQJVAnTvgwLsfDwGYZj+vByDjAgPfblR+7uAmVG2c+9DujcBOw9EBiQly9
+         DOWoqyt7JYOU1yznzdQYD1g6U48nF38IybMqP15B5QM9SSKC7InijVyWqfVChqK0AJBS
+         J//A==
+X-Gm-Message-State: AJIora/ypcsbcnpzDT9jsbpWE7rJRIh+3t/OuWkEXZB7LKbEfr7c1yzf
+        rGYRiN/gcyLkIOZL/e8/DQiZdocN2Do=
+X-Google-Smtp-Source: AGRyM1tdkHDaq/xuwGyhiD4/4kUWaQf4E1SbbajDWVNwklhip7Sx0UNqhvitVWgBy/g5BhWrspL3VQ==
+X-Received: by 2002:a17:902:aa8a:b0:16a:1ea5:d417 with SMTP id d10-20020a170902aa8a00b0016a1ea5d417mr12271446plr.4.1656296087523;
+        Sun, 26 Jun 2022 19:14:47 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-21.three.co.id. [180.214.233.21])
+        by smtp.gmail.com with ESMTPSA id y27-20020a634b1b000000b0040cff9def93sm5749291pga.66.2022.06.26.19.14.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Jun 2022 19:14:46 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 6F8481038C5; Mon, 27 Jun 2022 09:14:42 +0700 (WIB)
+Date:   Mon, 27 Jun 2022 09:14:42 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     rostedt@goodmis.org, mingo@redhat.com, mhiramat@kernel.org,
+        zanussi@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        linux-doc@vger.kernel.org, corbet@lwn.net, chensong_2000@189.cn
+Subject: Re: [PATCH v13 4/4] Documentation: trace/objtrace: Add documentation
+ for objtrace
+Message-ID: <YrkSkuluNhGcMyOu@debian.me>
+References: <20220626025604.277413-1-xiehuan09@gmail.com>
+ <20220626025604.277413-5-xiehuan09@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign9
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220626025604.277413-5-xiehuan09@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The instructions assigned to the vcpu_is_preempted function parameter
-in the X86 architecture physical machine are redundant instructions,
-causing the multi-core performance of Unixbench to drop by about 4% to 5%.
-The C function is as follows:
-static bool vcpu_is_preempted(long vcpu);
+On Sun, Jun 26, 2022 at 10:56:04AM +0800, Jeff Xie wrote:
+> Added documentation explaining how to use objtrace trigger to get the value
+> of the object.
+> 
 
-The parameter 'vcpu' in the function osq_lock
-that calls the function vcpu_is_preempted is assigned as follows:
+Write "Add documentation..." instead.
 
-The C code is in the function node_cpu:
-cpu = node->cpu - 1;
+> +- objtrace
+> +
+> +  This command provides a way to get the value of any object, The object
+> +  can be obtained from the dynamic event(kprobe_event/uprobe_event) or the
+> +  static event(tracepoint).
+> +
+> +  Usage:
+> +  When using the kprobe event, only need to set the objtrace(a new trigger),
+> +  we can get the value of the object. The object is from the setting of the
+> +  kprobe event.
+> +
 
-The instructions corresponding to the C code are:
-mov 0x14(%rax),%edi
-sub $0x1,%edi
+Did you mean "the object value can be obtained by only needing to set the
+objtrace?"
 
-The above instructions are unnecessary
-in the X86 Native operating environment,
-causing high cache-misses and degrading performance.
+> +  For example:
+> +  For the function bio_add_page():
+> +
+> +  int bio_add_page(struct bio *bio, struct page *page,
+> +	unsigned int len, unsigned int offset)
+> +
+> +  Firstly, we can set the base of the object, thus the first string "arg1"
+> +  stands for the value of the first parameter of this function bio_add_gage(),
+> +
+> +  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+> +
 
-This patch uses static_key to not execute this instruction
-in the Native runtime environment.
+Did you mean "the first parameter (arg1) is the parameter value of function
+that is passed to kprobe_event, in this case the object base"?
 
-The code is as follows:
+> +  Secondly, we can get the value dynamically based on above object.
+> +
+> +  find the offset of the bi_size in struct bio:
+> +  $ gdb vmlinux
+> +  (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
+> +  $1 = (unsigned int *) 0x28
+> +
+> +  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
+> +	p_bio_add_page_0/trigger
+> +
+> +  # cd /sys/kernel/debug/tracing/
+> +  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+> +  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
+> +
+> +  # du -sh /test.txt
+> +  12.0K   /test.txt
+> +
+> +  # cat  /test.txt > /dev/null
+> +  # cat ./trace
+> +  # tracer: nop
+> +  #
+> +  # entries-in-buffer/entries-written: 128/128   #P:4
+> +  #
+> +  #                                _-----=> irqs-off/BH-disabled
+> +  #                               / _----=> need-resched
+> +  #                              | / _---=> hardirq/softirq
+> +  #                              || / _--=> preempt-depth
+> +  #                              ||| / _-=> migrate-disable
+> +  #                              |||| /     delay
+> +  #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> +  #              | |         |   |||||     |         |
+> +               cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+> +               cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+> +               cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
+> +               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+> +               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+> +               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
+> +               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
+> +               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
+> +               cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> +               cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> +            <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +            <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+> +             ...
+> +
 
-DEFINE_STATIC_KEY_FALSE(preemted_key);
+The output is messy, because for code example and output, literal code
+blocks aren't used, hence trigger new warnings:
 
-static inline int node_cpu(struct optimistic_spin_node *node)
-{
-     int cpu = 0;
+Documentation/trace/events.rst:564: WARNING: Inline emphasis start-string without end-string.
+Documentation/trace/events.rst:564: WARNING: Inline emphasis start-string without end-string.
+Documentation/trace/events.rst:573: WARNING: Inline emphasis start-string without end-string.
+Documentation/trace/events.rst:573: WARNING: Inline emphasis start-string without end-string.
+Documentation/trace/events.rst:602: WARNING: Unexpected indentation.
+Documentation/trace/events.rst:622: WARNING: Block quote ends without a blank line; unexpected unindent.
+Documentation/trace/events.rst:630: WARNING: Unexpected indentation.
 
-     if (!static_branch_unlikely(&preemted_key))
-             cpu = node->cpu - 1;
+I had to apply the following fixup (with rewording):
 
-     return cpu;
-}
+---- >8 ----
 
-The patch effect is as follows two machines,
-Unixbench runs with full core score:
-
-1. Machine configuration:
-Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz
-CPU core: 40
-Memory: 256G
-OS Kernel: 5.19-rc3
-
-Before using the patch:
-System Benchmarks Index Values               BASELINE       RESULT    INDEX
-Dhrystone 2 using register variables         116700.0  948326591.2  81261.9
-Double-Precision Whetstone                       55.0     211986.3  38543.0
-Execl Throughput                                 43.0      43453.2  10105.4
-File Copy 1024 bufsize 2000 maxblocks          3960.0     438936.2   1108.4
-File Copy 256 bufsize 500 maxblocks            1655.0     118197.4    714.2
-File Copy 4096 bufsize 8000 maxblocks          5800.0    1534674.7   2646.0
-Pipe Throughput                               12440.0   46482107.6  37365.0
-Pipe-based Context Switching                   4000.0    1915094.2   4787.7
-Process Creation                                126.0      85442.2   6781.1
-Shell Scripts (1 concurrent)                     42.4      69400.7  16368.1
-Shell Scripts (8 concurrent)                      6.0       8877.2  14795.3
-System Call Overhead                          15000.0    4714906.1   3143.3
-                                                                   ========
-System Benchmarks Index Score                                        7923.3
-
-After using the patch:
-System Benchmarks Index Values               BASELINE       RESULT    INDEX
-Dhrystone 2 using register variables         116700.0  947032915.5  81151.1
-Double-Precision Whetstone                       55.0     211971.2  38540.2
-Execl Throughput                                 43.0      45054.8  10477.9
-File Copy 1024 bufsize 2000 maxblocks          3960.0     515024.9   1300.6
-File Copy 256 bufsize 500 maxblocks            1655.0     146354.6    884.3
-File Copy 4096 bufsize 8000 maxblocks          5800.0    1679995.9   2896.5
-Pipe Throughput                               12440.0   46466394.2  37352.4
-Pipe-based Context Switching                   4000.0    1898221.4   4745.6
-Process Creation                                126.0      85653.1   6797.9
-Shell Scripts (1 concurrent)                     42.4      69437.3  16376.7
-Shell Scripts (8 concurrent)                      6.0       8898.9  14831.4
-System Call Overhead                          15000.0    4658746.7   3105.8
-                                                                   ========
-System Benchmarks Index Score                                        8248.8
-
-2. Machine configuration:
-Hygon C86 7185 32-core Processor
-CPU core: 128
-Memory: 256G
-OS Kernel: 5.19-rc3
-
-Before using the patch:
-System Benchmarks Index Values               BASELINE       RESULT    INDEX
-Dhrystone 2 using register variables         116700.0 2256644068.3 193371.4
-Double-Precision Whetstone                       55.0     438969.9  79812.7
-Execl Throughput                                 43.0      10108.6   2350.8
-File Copy 1024 bufsize 2000 maxblocks          3960.0     275892.8    696.7
-File Copy 256 bufsize 500 maxblocks            1655.0      72082.7    435.5
-File Copy 4096 bufsize 8000 maxblocks          5800.0     925043.4   1594.9
-Pipe Throughput                               12440.0  118905512.5  95583.2
-Pipe-based Context Switching                   4000.0    7820945.7  19552.4
-Process Creation                                126.0      31233.3   2478.8
-Shell Scripts (1 concurrent)                     42.4      49042.8  11566.7
-Shell Scripts (8 concurrent)                      6.0       6656.0  11093.3
-System Call Overhead                          15000.0    6816047.5   4544.0
-                                                                   ========
-System Benchmarks Index Score                                        7756.6
-
-After using the patch:
-System Benchmarks Index Values               BASELINE       RESULT    INDEX
-Dhrystone 2 using register variables         116700.0 2252272929.4 192996.8
-Double-Precision Whetstone                       55.0     451847.2  82154.0
-Execl Throughput                                 43.0      10595.1   2464.0
-File Copy 1024 bufsize 2000 maxblocks          3960.0     301279.3    760.8
-File Copy 256 bufsize 500 maxblocks            1655.0      79291.3    479.1
-File Copy 4096 bufsize 8000 maxblocks          5800.0    1039755.2   1792.7
-Pipe Throughput                               12440.0  118701468.1  95419.2
-Pipe-based Context Switching                   4000.0    8073453.3  20183.6
-Process Creation                                126.0      33440.9   2654.0
-Shell Scripts (1 concurrent)                     42.4      52722.6  12434.6
-Shell Scripts (8 concurrent)                      6.0       7050.4  11750.6
-System Call Overhead                          15000.0    6834371.5   4556.2
-                                                                   ========
-System Benchmarks Index Score                                        8157.8
-
-Signed-off-by: Guo Hui <guohui@uniontech.com>
----
- arch/x86/kernel/paravirt-spinlocks.c | 4 ++++
- kernel/locking/osq_lock.c            | 9 ++++++++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/paravirt-spinlocks.c b/arch/x86/kernel/paravirt-spinlocks.c
-index 9e1ea99ad..7a55f8407 100644
---- a/arch/x86/kernel/paravirt-spinlocks.c
-+++ b/arch/x86/kernel/paravirt-spinlocks.c
-@@ -33,6 +33,8 @@ bool pv_is_native_vcpu_is_preempted(void)
- 		__raw_callee_save___native_vcpu_is_preempted;
- }
+diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
+index 0dc47516013331..c15f1d25d4a071 100644
+--- a/Documentation/trace/events.rst
++++ b/Documentation/trace/events.rst
+@@ -549,85 +549,89 @@ The following commands are supported:
+ - objtrace
  
-+DECLARE_STATIC_KEY_FALSE(preemted_key);
-+
- void __init paravirt_set_cap(void)
- {
- 	if (!pv_is_native_spin_unlock())
-@@ -40,4 +42,6 @@ void __init paravirt_set_cap(void)
+   This command provides a way to get the value of any object, The object
+-  can be obtained from the dynamic event(kprobe_event/uprobe_event) or the
+-  static event(tracepoint).
++  can be obtained from the dynamic event (kprobe_event/uprobe_event) or the
++  static event (tracepoint).
  
- 	if (!pv_is_native_vcpu_is_preempted())
- 		setup_force_cpu_cap(X86_FEATURE_VCPUPREEMPT);
-+	else
-+		static_branch_enable(&preemted_key);
- }
-diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
-index d5610ad52..a8798e701 100644
---- a/kernel/locking/osq_lock.c
-+++ b/kernel/locking/osq_lock.c
-@@ -22,9 +22,16 @@ static inline int encode_cpu(int cpu_nr)
- 	return cpu_nr + 1;
- }
+   Usage:
+-  When using the kprobe event, only need to set the objtrace(a new trigger),
+-  we can get the value of the object. The object is from the setting of the
+-  kprobe event.
++  When using the kprobe event, by only need to set the objtrace (a new
++  trigger), we can get the value of object that is set by kprobe event.
  
-+DEFINE_STATIC_KEY_FALSE(preemted_key);
-+
- static inline int node_cpu(struct optimistic_spin_node *node)
- {
--	return node->cpu - 1;
-+	int cpu = 0;
-+
-+	if (!static_branch_unlikely(&preemted_key))
-+		cpu = node->cpu - 1;
-+
-+	return cpu;
- }
+-  For example:
+-  For the function bio_add_page():
++  For example, for the function bio_add_page():
  
- static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
+-  int bio_add_page(struct bio *bio, struct page *page,
+-	unsigned int len, unsigned int offset)
++  .. code-block:: c
+ 
+-  Firstly, we can set the base of the object, thus the first string "arg1"
+-  stands for the value of the first parameter of this function bio_add_gage(),
++     int bio_add_page(struct bio *bio, struct page *page,
++	              unsigned int len, unsigned int offset)
+ 
+-  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
++  Firstly, we can set the base of the object as first parameter (arg1) to
++  to the function:
+ 
+-  Secondly, we can get the value dynamically based on above object.
++  .. code-block::
+ 
+-  find the offset of the bi_size in struct bio:
+-  $ gdb vmlinux
+-  (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
+-  $1 = (unsigned int *) 0x28
++     # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+ 
+-  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
+-	p_bio_add_page_0/trigger
++  Secondly, we can get the value dynamically based on the object:
+ 
+-  # cd /sys/kernel/debug/tracing/
+-  # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+-  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
++  .. code-block::
+ 
+-  # du -sh /test.txt
+-  12.0K   /test.txt
++     find the offset of the bi_size in struct bio:
++     $ gdb vmlinux
++     (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
++     $1 = (unsigned int *) 0x28
+ 
+-  # cat  /test.txt > /dev/null
+-  # cat ./trace
+-  # tracer: nop
+-  #
+-  # entries-in-buffer/entries-written: 128/128   #P:4
+-  #
+-  #                                _-----=> irqs-off/BH-disabled
+-  #                               / _----=> need-resched
+-  #                              | / _---=> hardirq/softirq
+-  #                              || / _--=> preempt-depth
+-  #                              ||| / _-=> migrate-disable
+-  #                              |||| /     delay
+-  #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+-  #              | |         |   |||||     |         |
+-               cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+-               cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+-               cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
+-               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+-               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+-               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
+-               cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
+-               cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
+-               cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
+-               cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
+-               cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
+-               cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
+-               cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
+-               cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
+-               cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
+-               cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+-               cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+-               cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+-               cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+-               cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+-            <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
+-            <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
+-            <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
+-            <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
+-            <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+-            <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+-            <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
+-            <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+-             ...
++     # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
++       p_bio_add_page_0/trigger
++
++     # cd /sys/kernel/debug/tracing/
++     # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
++     # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
++
++     # du -sh /test.txt
++     12.0K   /test.txt
++
++     # cat  /test.txt > /dev/null
++     # cat ./trace
++     # tracer: nop
++     #
++     # entries-in-buffer/entries-written: 128/128   #P:4
++     #
++     #                                _-----=> irqs-off/BH-disabled
++     #                               / _----=> need-resched
++     #                              | / _---=> hardirq/softirq
++     #                              || / _--=> preempt-depth
++     #                              ||| / _-=> migrate-disable
++     #                              |||| /     delay
++     #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
++     #              | |         |   |||||     |         |
++                  cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
++                  cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
++                  cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
++                  cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
++                  cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
++                  cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
++                  cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
++                  cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
++                  cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
++                  cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
++                  cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
++                  cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
++                  cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
++                  cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
++                  cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
++                  cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
++                  cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
++                  cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
++                  cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
++                  cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
++               <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
++               <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
++               <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
++               <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
++               <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
++               <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
++               <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
++               <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
++                ...
+ 
+ 7. In-kernel trace event API
+ ============================
+
+
+Thanks.
+
 -- 
-2.20.1
-
-
-
+An old man doll... just what I always wanted! - Clara

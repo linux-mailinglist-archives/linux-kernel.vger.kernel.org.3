@@ -2,62 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB6755D9E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780B955D702
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238700AbiF0Lwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
+        id S236931AbiF0Lkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238400AbiF0LsY (ORCPT
+        with ESMTP id S236668AbiF0Lhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:48:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61E8BA3;
-        Mon, 27 Jun 2022 04:41:08 -0700 (PDT)
+        Mon, 27 Jun 2022 07:37:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FB4B1CF;
+        Mon, 27 Jun 2022 04:34:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80FE0B81126;
-        Mon, 27 Jun 2022 11:41:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B41E2C3411D;
-        Mon, 27 Jun 2022 11:41:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFD05B81122;
+        Mon, 27 Jun 2022 11:34:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A72C3411D;
+        Mon, 27 Jun 2022 11:34:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330066;
-        bh=ISJvGI472kGimxCXpbo+gRj92Mt7djO20oMihAyYXU8=;
+        s=korg; t=1656329669;
+        bh=Yyipdz0XzKZ0zgmwRFh5h1EHwsuJNqosUSfRRf+D3kk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WXCkav960fr7k0kiPL3GBXU3GBH4hdYXK2aQorQau9D7yakld4bdlxmXd75NACeHe
-         hXo1m8UjpCciGSBr7xuk9pEJ23mZaJ4Ng0rpM9/XDr94KPSMvWN40RhdXAqpXovSnU
-         /pRLacakyUTM3YNdicpjL9MtrTF0e/3qFc3B5nv4=
+        b=Wp+OY+JJGObYvyDAlU7d2UFOjBtxKEzvtD+j0Mxt0xVklFM1omrxBhZbKIJGlnwFO
+         qk4DcbdCGca+GDQ4Wg+e7PhSGiJjQEARPGAwVa3NaZxlppGLwHdoVDpf9qYIHwPufI
+         tvYPrCTF1P6+7wWNfCmuOtUGxKZ8PVcPLeT9GfvQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ali Saidi <alisaidi@amazon.com>,
-        German Gomez <german.gomez@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        James Clark <james.clark@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Li Huafei <lihuafei1@huawei.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Forrington <nick.forrington@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Lee Duncan <lduncan@suse.com>,
+        Sergey Gorenko <sergeygo@nvidia.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 072/181] perf arm-spe: Dont set data source if its not a memory operation
+Subject: [PATCH 5.15 038/135] scsi: iscsi: Exclude zero from the endpoint ID range
 Date:   Mon, 27 Jun 2022 13:20:45 +0200
-Message-Id: <20220627111946.651930333@linuxfoundation.org>
+Message-Id: <20220627111939.264369566@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -72,97 +58,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leo Yan <leo.yan@linaro.org>
+From: Sergey Gorenko <sergeygo@nvidia.com>
 
-[ Upstream commit 51ba539f5bdb5a8cc7b1dedd5e73ac54564a7602 ]
+[ Upstream commit f6eed15f3ea76596ccc689331e1cc850b999133b ]
 
-Except for memory load and store operations, ARM SPE records also can
-support other operation types, bug when set the data source field the
-current code assumes a record is a either load operation or store
-operation, this leads to wrongly synthesize memory samples.
+The kernel returns an endpoint ID as r.ep_connect_ret.handle in the
+iscsi_uevent. The iscsid validates a received endpoint ID and treats zero
+as an error. The commit referenced in the fixes line changed the endpoint
+ID range, and zero is always assigned to the first endpoint ID.  So, the
+first attempt to create a new iSER connection always fails.
 
-This patch strictly checks the record operation type, it only sets data
-source only for the operation types ARM_SPE_LD and ARM_SPE_ST,
-otherwise, returns zero for data source.  Therefore, we can synthesize
-memory samples only when data source is a non-zero value, the function
-arm_spe__is_memory_event() is useless and removed.
-
-Fixes: e55ed3423c1bb29f ("perf arm-spe: Synthesize memory event")
-Reviewed-by: Ali Saidi <alisaidi@amazon.com>
-Reviewed-by: German Gomez <german.gomez@arm.com>
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Tested-by: Ali Saidi <alisaidi@amazon.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: alisaidi@amazon.com
-Cc: Andrew Kilroy <andrew.kilroy@arm.com>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: James Clark <james.clark@arm.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Kajol Jain <kjain@linux.ibm.com>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: Li Huafei <lihuafei1@huawei.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Nick Forrington <nick.forrington@arm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Will Deacon <will@kernel.org>
-Link: http://lore.kernel.org/lkml/20220517020326.18580-5-alisaidi@amazon.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Link: https://lore.kernel.org/r/20220613123854.55073-1-sergeygo@nvidia.com
+Fixes: 3c6ae371b8a1 ("scsi: iscsi: Release endpoint ID when its freed")
+Reviewed-by: Max Gurtovoy <mgurtovoy@nvidia.com>
+Reviewed-by: Mike Christie <michael.christie@oracle.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Signed-off-by: Sergey Gorenko <sergeygo@nvidia.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/util/arm-spe.c | 22 ++++++++--------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
+ drivers/scsi/scsi_transport_iscsi.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
-index 1a80151baed9..d040406f3314 100644
---- a/tools/perf/util/arm-spe.c
-+++ b/tools/perf/util/arm-spe.c
-@@ -387,26 +387,16 @@ static int arm_spe__synth_instruction_sample(struct arm_spe_queue *speq,
- 	return arm_spe_deliver_synth_event(spe, speq, event, &sample);
- }
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index bcdfcb25349a..5947b9d5746e 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -213,7 +213,12 @@ iscsi_create_endpoint(int dd_size)
+ 		return NULL;
  
--#define SPE_MEM_TYPE	(ARM_SPE_L1D_ACCESS | ARM_SPE_L1D_MISS | \
--			 ARM_SPE_LLC_ACCESS | ARM_SPE_LLC_MISS | \
--			 ARM_SPE_REMOTE_ACCESS)
--
--static bool arm_spe__is_memory_event(enum arm_spe_sample_type type)
--{
--	if (type & SPE_MEM_TYPE)
--		return true;
--
--	return false;
--}
--
- static u64 arm_spe__synth_data_source(const struct arm_spe_record *record)
- {
- 	union perf_mem_data_src	data_src = { 0 };
- 
- 	if (record->op == ARM_SPE_LD)
- 		data_src.mem_op = PERF_MEM_OP_LOAD;
--	else
-+	else if (record->op == ARM_SPE_ST)
- 		data_src.mem_op = PERF_MEM_OP_STORE;
-+	else
-+		return 0;
- 
- 	if (record->type & (ARM_SPE_LLC_ACCESS | ARM_SPE_LLC_MISS)) {
- 		data_src.mem_lvl = PERF_MEM_LVL_L3;
-@@ -510,7 +500,11 @@ static int arm_spe_sample(struct arm_spe_queue *speq)
- 			return err;
- 	}
- 
--	if (spe->sample_memory && arm_spe__is_memory_event(record->type)) {
+ 	mutex_lock(&iscsi_ep_idr_mutex);
+-	id = idr_alloc(&iscsi_ep_idr, ep, 0, -1, GFP_NOIO);
++
 +	/*
-+	 * When data_src is zero it means the record is not a memory operation,
-+	 * skip to synthesize memory sample for this case.
++	 * First endpoint id should be 1 to comply with user space
++	 * applications (iscsid).
 +	 */
-+	if (spe->sample_memory && data_src) {
- 		err = arm_spe__synth_mem_sample(speq, spe->memory_id, data_src);
- 		if (err)
- 			return err;
++	id = idr_alloc(&iscsi_ep_idr, ep, 1, -1, GFP_NOIO);
+ 	if (id < 0) {
+ 		mutex_unlock(&iscsi_ep_idr_mutex);
+ 		printk(KERN_ERR "Could not allocate endpoint ID. Error %d.\n",
 -- 
 2.35.1
 

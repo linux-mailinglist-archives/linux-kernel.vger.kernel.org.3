@@ -2,126 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B88E55B52F
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 04:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA6455B531
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 04:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbiF0CTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 22:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
+        id S231752AbiF0CZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 22:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbiF0CT2 (ORCPT
+        with ESMTP id S229468AbiF0CZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 22:19:28 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B5DB8E
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 19:19:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656296367; x=1687832367;
+        Sun, 26 Jun 2022 22:25:08 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169482AD0
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 19:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656296708; x=1687832708;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lrXxvgDU/MnoDDeXXkn7zZSgJ7McVQVSLVnuIbYNY50=;
-  b=M+HnXr+rIN0fdy7jCNl+Q6kPZU9yeqvUNobHpDrVT2ZCWl8Lq6hploi1
-   P2wvoYcYRMyJCPb/7j03yi3K43sh6j6f0/UE/Gr2nYsUj8gvPt9Gd3EXl
-   yQL5B6ciU4b9WxGSv+1IHMRpaUucvU3sbZZD8jGNoHgFiiRKtezKsw8m0
-   U=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 26 Jun 2022 19:19:27 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 19:19:27 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 26 Jun 2022 19:19:26 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 26 Jun 2022 19:19:25 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v7 4/4] selftests/ftrace: add test case for GRP/ only input
-Date:   Mon, 27 Jun 2022 10:19:08 +0800
-Message-ID: <1656296348-16111-5-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1656296348-16111-1-git-send-email-quic_linyyuan@quicinc.com>
-References: <1656296348-16111-1-git-send-email-quic_linyyuan@quicinc.com>
+  bh=xrLa/qvK6z+0n+mfC12qZ9ZlrFmavRnbmmLZYXho3nE=;
+  b=FwOMBQpis0DS6E9AzunYz1hFQKMvOYJ1o3OC2hWU4JRiBWgJxyiIm/o1
+   1BmH4JEGvOX5UrZPYR8DIs0uju+4wd8pmA3f172kuoO4qi2ad3kM/sHsu
+   43Mg1FpWjSlE61kPjDyDC2Nam/LCBE4P56P9dQWYKOau1br5dMds7KYLP
+   LFjWjIpj62/pFmEYQdZ1SfQVRyGsdJ/JtBVFrfP7wR5m2wVBt45eBWyVR
+   KSLLkTa/+8Q2C0ILvKA9rjVkczQbgdW8aQjZFeKOkgJiB+r5mBmFx0Tv4
+   kXMWiya5AUpeTHurca2fa1ik9nKby8jVr36WBz1y+64ymg+zmMLmdJt7R
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="343022749"
+X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
+   d="scan'208";a="343022749"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 19:25:07 -0700
+X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
+   d="scan'208";a="835992361"
+Received: from yhuang6-mobl1.sh.intel.com ([10.67.65.240])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 19:25:04 -0700
+From:   Huang Ying <ying.huang@intel.com>
+To:     akpm@linux-foundation.org
+Cc:     baolin.wang@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, shy828301@gmail.com, ziy@nvidia.com,
+        Huang Ying <ying.huang@intel.com>
+Subject: [PATCH 6/7] migrate_pages(): fix failure counting for THP splitting
+Date:   Mon, 27 Jun 2022 10:24:50 +0800
+Message-Id: <20220627022450.1067783-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220624025309.1033400-1-ying.huang@intel.com>
+References: <20220624025309.1033400-1-ying.huang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add kprobe and eprobe event test for new GRP/ only format.
+If THP is failed to be migrated, it may be split and retry.  But after
+splitting, the head page will be left in "from" list, although THP
+migration failure has been counted already.  If the head page is
+failed to be migrated too, the failure will be counted twice
+incorrectly.  So this is fixed in this patch via moving the head page
+of THP after splitting to "thp_split_pages" too.
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+Fixes: 5984fabb6e82 ("mm: move_pages: report the number of non-attempted pages")
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: Zi Yan <ziy@nvidia.com>
+Cc: Yang Shi <shy828301@gmail.com>
 ---
-v3: first add in this version
-v4: remove restriction of test case
-v5: add Acked-by tag
-v6: no change
-v7: no change
+ mm/migrate.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
- .../selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc        | 9 ++++++++-
- .../selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc        | 7 +++++++
- 2 files changed, 15 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
-index 60c02b4..c300eb0 100644
---- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_eprobe.tc
-@@ -1,7 +1,7 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- # description: Generic dynamic event - add/remove eprobe events
--# requires: dynamic_events events/syscalls/sys_enter_openat "e[:[<group>/]<event>] <attached-group>.<attached-event> [<args>]":README
-+# requires: dynamic_events events/syscalls/sys_enter_openat "<attached-group>.<attached-event> [<args>]":README
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 9d1883d5927f..70a0e1f34c03 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -1305,6 +1305,8 @@ static inline int try_split_thp(struct page *page, struct list_head *split_pages
+ 	lock_page(page);
+ 	rc = split_huge_page_to_list(page, split_pages);
+ 	unlock_page(page);
++	if (!rc)
++		list_move_tail(&page->lru, split_pages);
  
- echo 0 > events/enable
+ 	return rc;
+ }
+@@ -1364,7 +1366,6 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+ 		thp_retry = 0;
  
-@@ -87,4 +87,11 @@ echo "-:eprobes/$EPROBE $SYSTEM/$EVENT $OPTIONS" >> dynamic_events
- ! grep -q "$EPROBE" dynamic_events
- ! test -d events/eprobes/$EPROBE
- 
-+if grep -q "e\[:\[<group>/]\[<event>]]" README; then
-+	echo "e:mygroup/ $SYSTEM/$EVENT $OPTIONS" >> dynamic_events
-+	test -d events/mygroup
-+	echo "-:mygroup/" >> dynamic_events
-+	! test -d events/mygroup
-+fi
-+
- clear_trace
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc
-index b4da41d..13d43f4 100644
---- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_kprobe.tc
-@@ -23,4 +23,11 @@ grep -q myevent1 dynamic_events
- 
- echo > dynamic_events
- 
-+if grep -q "p\[:\[<group>/]\[<event>]]" README; then
-+	echo "p:mygroup/ $PLACE" >> dynamic_events
-+	test -d events/mygroup
-+	echo "-:mygroup/" >> dynamic_events
-+	! test -d events/mygroup
-+fi
-+
- clear_trace
+ 		list_for_each_entry_safe(page, page2, from, lru) {
+-retry:
+ 			/*
+ 			 * THP statistics is based on the source huge page.
+ 			 * Capture required information that might get lost
+@@ -1411,7 +1412,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+ 					nr_thp_failed++;
+ 					if (!try_split_thp(page, &thp_split_pages)) {
+ 						nr_thp_split++;
+-						goto retry;
++						break;
+ 					}
+ 				/* Hugetlb migration is unsupported */
+ 				} else if (!no_subpage_counting) {
+@@ -1431,7 +1432,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+ 					/* THP NUMA faulting doesn't split THP to retry. */
+ 					if (!nosplit && !try_split_thp(page, &thp_split_pages)) {
+ 						nr_thp_split++;
+-						goto retry;
++						break;
+ 					}
+ 				} else if (!no_subpage_counting) {
+ 					nr_failed++;
 -- 
-2.7.4
+2.30.2
 

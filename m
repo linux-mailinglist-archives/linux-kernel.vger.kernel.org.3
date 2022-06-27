@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E301955C910
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6D055CD33
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238432AbiF0Pk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
+        id S238480AbiF0PlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235053AbiF0Pk4 (ORCPT
+        with ESMTP id S235053AbiF0PlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:40:56 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5190C19C3F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:40:55 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id d14so9693812pjs.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:40:55 -0700 (PDT)
+        Mon, 27 Jun 2022 11:41:12 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8201619C3F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:41:11 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id h85so9968358iof.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:41:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TC6g15wrTkPeRuhsLCZ7RRPMHOeLkiW/5pErHta2paU=;
-        b=L3FOzOKxk3TNWmFmjYZ+ZUbrkXftsVVvL32leyWauv4QcEh1LDKlGi+3pkzoFHlIyG
-         9EVbwu/g82AiMv0MjQJkqHLta3sz34oDzDzrT6+4fcpIuJ2OMb7hv+qVzbBumMVYVUPJ
-         +nLp22mUZLp6dnK6xHEyo+iPrzj85kBwGedcoIRjY0dOc2ZRafgwCe9ukZsatQIaHyNw
-         DaLvbtUafqS4WJokje5gfu+bhdtX9gKG0HwcuguBYW+VuolH3zJ1wlGrm5UK3ZtsfFOI
-         FDDxAz634m9LIEyQy/XVuwXlCgTcaskDgWGSBp0QynwjXGR8WuMnAmPktqkmwSLWrnLZ
-         1xWw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s00W1mDas2ROotCpuaXWz753ewwp+FXFxzVhVP96CWA=;
+        b=a1S9kw2hWVIi1wNJDSadBp90D9+E1awUzKuvzbcboa4U0nPG0qViKbmK7hDv2aKEtO
+         vyYcH8aXg2K+3fl61pUIMKJWTKYuJGk5A2Q/Kcow+m1EMx42501M42a91GjsN0nW+KIk
+         N5ZN73a4FFsQWJ8fTGJe0+JCDB2PhFIcNI9gVs71z3d5viMbyGeBcud/NGH7ujsN4Zd4
+         wVo6I7bJzTmehOZKgIXcK2bqV6Rve6bx33HSKOyMhEZ9D63Xfy0Y7U9RupxD3uy50a6b
+         91wUfsgDfNUr66QoL+sEv7XbbV/lhmgOstZstW+g+T+gy4EidDWHTSKlFqzc9GNRRZKX
+         /rag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TC6g15wrTkPeRuhsLCZ7RRPMHOeLkiW/5pErHta2paU=;
-        b=2vxZhkNVIlKJ19OGN340ZXt/+ggj0Yyy3O/GKKCDbuAxIY5WjqtW67JSmSxPpULR5H
-         DKAzSufIMgOTQ9SfDdvCovDXZO5mud38ABFSFDVUGlGqASJymTm3mE0Z3/ZzUNcYj6f1
-         YWlfbj9RtG/ecsAchsuOIlilcKUMEgZ5O+cDMnMQEAOL0puqMQYZJ7LKGwJNz/MW8tYN
-         be5juKM5rqsSC55CID5+k3jLJlbALi43NM8o3eZAQMq/5eg3y++XqMmGu7D9IY33eXPz
-         5JkasFrSsXYjmyLcyaaMwOI7yx0cdZHZpYIRyu1RDH+ekOl9eDYV4XEwDDvsR79AA178
-         iG3w==
-X-Gm-Message-State: AJIora8d81NFQo9g/MCKxdpOstPFFRBuaYfJiyxhvCjFdmHHiAlnYR4u
-        Lh8ODRMPCilkUCRekJ0pbmkY2A==
-X-Google-Smtp-Source: AGRyM1tgnbhwcVzntaAEwlGuNaKkPLdLbi82rqgPr2nyG9p9ixwzklHaDG76MhcDO0rWHAUWID4Oow==
-X-Received: by 2002:a17:902:f608:b0:168:e92b:47e8 with SMTP id n8-20020a170902f60800b00168e92b47e8mr61841plg.115.1656344454645;
-        Mon, 27 Jun 2022 08:40:54 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id z4-20020a1709027e8400b00163f3e91ea0sm2300546pla.238.2022.06.27.08.40.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 08:40:53 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 15:40:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peter Xu <peterx@redhat.com>
-Subject: Re: [PATCH 2/4] KVM: x86/mmu: Defer "full" MMU setup until after
- vendor hardware_setup()
-Message-ID: <YrnPgZvgWDpb6+R1@google.com>
-References: <20220624232735.3090056-1-seanjc@google.com>
- <20220624232735.3090056-3-seanjc@google.com>
- <YrZTxZm4kq0rXcKQ@google.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s00W1mDas2ROotCpuaXWz753ewwp+FXFxzVhVP96CWA=;
+        b=n7aDyf00EKoWN5oxHpQppjSASIHZBwuONon0bmcxODTuGcw2wzZY8/zzFp9TrQiArr
+         zyX7YiC91tJnQA3lZ+EZWAZQddqPLZEuZb0RLFFLDTozeugr5cMDrLqjESa9tIlS/x1o
+         MQyjSn8zz0ouHIpM7CtN3PCr3/H2b8DHj0BlqTRe83JmRDN9xwqJj4NaT7zmfmr1hrgH
+         EKJ5OOFCdlt0UIkdrYXwry0utf3Z8y+tQZs6cZ3XHj4zwn5lm+vb/N0Vqci9A4NA9eCx
+         PP6wRh4q67dEhgt9fqF5qq+xHPMrZsRB9qo/arh2hvcvKgOdXFaSaRZK5p9gGXs+rTlQ
+         lkgA==
+X-Gm-Message-State: AJIora+Ji+98DAAb29gnJec2NN9EHwjwzhSUxu5WzT4uOkpeGWUrrPKH
+        uWpZNcCTstOfrpDGygbcre8=
+X-Google-Smtp-Source: AGRyM1vSZr7hfUk224TiOmG3VMbHGejpb+qqza+Cyxa61heehJtXTsclsb+jPd+S8vpRnaTo9M9DLQ==
+X-Received: by 2002:a05:6602:883:b0:674:ed5d:c6f9 with SMTP id f3-20020a056602088300b00674ed5dc6f9mr6951479ioz.162.1656344470806;
+        Mon, 27 Jun 2022 08:41:10 -0700 (PDT)
+Received: from localhost.localdomain (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with ESMTPSA id k9-20020a6b3c09000000b00669a3f60e99sm5336035iob.31.2022.06.27.08.41.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 27 Jun 2022 08:41:10 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, zhaohui.shi@horizon.ai,
+        Schspa Shi <schspa@gmail.com>
+Subject: [PATCH v2] sched/rt: fix bad task migration for rt tasks
+Date:   Mon, 27 Jun 2022 23:40:51 +0800
+Message-Id: <20220627154051.92599-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YrZTxZm4kq0rXcKQ@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,65 +71,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022, David Matlack wrote:
-> On Fri, Jun 24, 2022 at 11:27:33PM +0000, Sean Christopherson wrote:
-> > Alternatively, the setup could be done in kvm_configure_mmu(), but that
-> > would require vendor code to call e.g. kvm_unconfigure_mmu() in teardown
-> > and error paths, i.e. doesn't actually save code and is arguably uglier.
-> [...]
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 17ac30b9e22c..ceb81e04aea3 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -6673,10 +6673,8 @@ void kvm_mmu_x86_module_init(void)
-> >   * loaded as many of the masks/values may be modified by VMX or SVM, i.e. need
-> >   * to be reset when a potentially different vendor module is loaded.
-> >   */
-> > -int kvm_mmu_vendor_module_init(void)
-> > +void kvm_mmu_vendor_module_init(void)
-> >  {
-> > -	int ret = -ENOMEM;
-> > -
-> >  	/*
-> >  	 * MMU roles use union aliasing which is, generally speaking, an
-> >  	 * undefined behavior. However, we supposedly know how compilers behave
-> > @@ -6687,7 +6685,13 @@ int kvm_mmu_vendor_module_init(void)
-> >  	BUILD_BUG_ON(sizeof(union kvm_mmu_extended_role) != sizeof(u32));
-> >  	BUILD_BUG_ON(sizeof(union kvm_cpu_role) != sizeof(u64));
-> >  
-> > +	/* Reset the PTE masks before the vendor module's hardware setup. */
-> >  	kvm_mmu_reset_all_pte_masks();
-> > +}
-> > +
-> > +int kvm_mmu_hardware_setup(void)
-> > +{
-> 
-> Instead of putting this code in a new function and calling it after
-> hardware_setup(), we could put it in kvm_configure_mmu().a
+Commit 95158a89dd50 ("sched,rt: Use the full cpumask for balancing")
+allow find_lock_lowest_rq to pick a task with migration disabled.
+This commit is intended to push the current running task on this CPU
+away.
 
-Ya, I noted that as an alternative in the changelog but obviously opted to not
-do the allocation in kvm_configure_mmu().  I view kvm_configure_mmu() as a necessary
-evil.  Ideally vendor code wouldn't call into the MMU during initialization, and
-common x86 would fully dictate the order of calls so that MMU setup.  We could force
-that, but it'd require something gross like filling a struct passed into
-ops->hardware_setup(), and probably would be less robust (more likely to omit a
-"required" field).
+There is a race scenarios, which allows a migration disabled task to
+be migrated to another CPU.
 
-In other words, I like the explicit kvm_mmu_hardware_setup() call from common x86,
-e.g. to show that vendor code needs to do setup before the MMU, and so that MMU
-setup isn't buried in a somewhat arbitrary location in vendor hardware setup. 
+When there is a RT task with higher priority, rt sched class was
+intended to migrate higher priority task to lowest rq via push_rt_tasks,
+this BUG will happen here.
 
-I'm not dead set against handling this in kvm_configure_mmu() (though I'd probably
-vote to rename it to kvm_mmu_hardware_setup()) if anyone has a super strong opinion.
+With the system running on PREEMPT_RT, rt_spin_lock will disable
+migration, this will make the problem easier to reproduce.
+
+I have seen this crash on PREEMPT_RT, from the logs, there is a race
+when trying to migrate higher priority tasks to the lowest rq.
+
+Please refer to the following scenarios.
+
+           CPU0                                  CPU1
+------------------------------------------------------------------
+push_rt_task
+  check is_migration_disabled(next_task)
+                                        task not running and
+                                        migration_disabled == 0
+  find_lock_lowest_rq(next_task, rq);
+    _double_lock_balance(this_rq, busiest);
+      raw_spin_rq_unlock(this_rq);
+      double_rq_lock(this_rq, busiest);
+        <<wait for busiest rq>>
+                                            <wakeup>
+                                        task become running
+                                        migrate_disable();
+                                          <context out>
+  deactivate_task(rq, next_task, 0);
+  set_task_cpu(next_task, lowest_rq->cpu);
+    WARN_ON_ONCE(is_migration_disabled(p));
+      ---------OOPS-------------
+
+Crash logs as fellowing:
+[123671.996430] WARNING: CPU: 2 PID: 13470 at kernel/sched/core.c:2485
+set_task_cpu+0x8c/0x108
+[123671.996800] pstate: 20400009 (nzCv daif +PAN -UAO -TCO BTYPE=--)
+[123671.996811] pc : set_task_cpu+0x8c/0x108
+[123671.996820] lr : set_task_cpu+0x7c/0x108
+[123671.996828] sp : ffff80001268bd30
+[123671.996832] pmr_save: 00000060
+[123671.996835] x29: ffff80001268bd30 x28: ffff0001a3d68e80
+[123671.996844] x27: ffff80001225f4a8 x26: ffff800010ab62cb
+[123671.996854] x25: ffff80026d95e000 x24: 0000000000000005
+[123671.996864] x23: ffff00019746c1b0 x22: 0000000000000000
+[123671.996873] x21: ffff00027ee33a80 x20: 0000000000000000
+[123671.996882] x19: ffff00019746ba00 x18: 0000000000000000
+[123671.996890] x17: 0000000000000000 x16: 0000000000000000
+[123671.996899] x15: 000000000000000a x14: 000000000000349e
+[123671.996908] x13: ffff800012f4503d x12: 0000000000000001
+[123671.996916] x11: 0000000000000000 x10: 0000000000000000
+[123671.996925] x9 : 00000000000c0000 x8 : ffff00027ee58700
+[123671.996933] x7 : ffff00027ee8da80 x6 : ffff00027ee8e580
+[123671.996942] x5 : ffff00027ee8dcc0 x4 : 0000000000000005
+[123671.996951] x3 : ffff00027ee8e338 x2 : 0000000000000000
+[123671.996959] x1 : 00000000000000ff x0 : 0000000000000002
+[123671.996969] Call trace:
+[123671.996975]  set_task_cpu+0x8c/0x108
+[123671.996984]  push_rt_task.part.0+0x144/0x184
+[123671.996995]  push_rt_tasks+0x28/0x3c
+[123671.997002]  task_woken_rt+0x58/0x68
+[123671.997009]  ttwu_do_wakeup+0x5c/0xd0
+[123671.997019]  ttwu_do_activate+0xc0/0xd4
+[123671.997028]  try_to_wake_up+0x244/0x288
+[123671.997036]  wake_up_process+0x18/0x24
+[123671.997045]  __irq_wake_thread+0x64/0x80
+[123671.997056]  __handle_irq_event_percpu+0x110/0x124
+[123671.997064]  handle_irq_event_percpu+0x50/0xac
+[123671.997072]  handle_irq_event+0x84/0xfc
+
+To fix it, we need to check migration_disabled flag again and retry
+to retry to push the current running task on this CPU away.
+
+Fixes: 95158a89dd50 ("sched,rt: Use the full cpumask for balancing")
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+
+-- 
+
+Changelog:
+v1 -> v2:
+        - Modify commit message to add fixed commit information.
+        - Going to retry to push the current running task on this CPU
+          away, instead doing nothing for this migrate disabled task.
+
+---
+ kernel/sched/core.c | 6 ++++++
+ kernel/sched/rt.c   | 9 +++++++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index da0bf6fe9ecd..3003baa28d2d 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2512,6 +2512,11 @@ int push_cpu_stop(void *arg)
+ 	if (!lowest_rq)
+ 		goto out_unlock;
  
-> This will result in a larger patch diff, but has it eliminates a subtle
-> and non-trivial-to-verify dependency ordering between
++	if (unlikely(is_migration_disabled(p))) {
++		p->migration_flags |= MDF_PUSH;
++		goto out_double_unlock;
++	}
++
+ 	// XXX validate p is still the highest prio task
+ 	if (task_rq(p) == rq) {
+ 		deactivate_task(rq, p, 0);
+@@ -2520,6 +2525,7 @@ int push_cpu_stop(void *arg)
+ 		resched_curr(lowest_rq);
+ 	}
+ 
++out_double_unlock:
+ 	double_unlock_balance(rq, lowest_rq);
+ 
+ out_unlock:
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 8c9ed9664840..6a1efccdc122 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -2115,6 +2115,15 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 	if (WARN_ON(next_task == rq->curr))
+ 		return 0;
+ 
++	/*
++	 * It is possible the task has running for a while, we need to check
++	 * task migration disable flag again. If task migration is disabled,
++	 * the retry code will retry to push the current running task on this
++	 * CPU away.
++	 */
++	if (unlikely(is_migration_disabled(next_task)))
++		goto retry;
++
+ 	/* We might release rq lock */
+ 	get_task_struct(next_task);
+ 
+-- 
+2.24.3 (Apple Git-128)
 
-Verification is "trivial" in that this WARN will fire if the order is swapped:
-
-	if (WARN_ON_ONCE(!nr_sptes_per_pte_list))
-		return -EIO;
-
-> kvm_configure_mmu() and kvm_mmu_hardware_setup() and it will co-locate
-> the initialization of nr_sptes_per_pte_list and the code that uses it to
-> create pte_list_desc_cache in a single function.

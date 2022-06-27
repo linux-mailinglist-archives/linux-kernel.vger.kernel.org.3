@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488C255C8C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3028655D3EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239332AbiF0RsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 13:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
+        id S239843AbiF0RtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 13:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239557AbiF0RsP (ORCPT
+        with ESMTP id S239355AbiF0RtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:48:15 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3216BC8E
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:48:13 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id a2so17933333lfg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 10:48:13 -0700 (PDT)
+        Mon, 27 Jun 2022 13:49:00 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230BA65D3;
+        Mon, 27 Jun 2022 10:48:57 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id g26so20711622ejb.5;
+        Mon, 27 Jun 2022 10:48:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6aKB/QLCWmLrVGWONqEu+ORb8Q8cClKmFQluSXDoGZQ=;
-        b=i6zQDWekT3tX0R35o7h69Vg58Aqg2ifNeXuz7vS/si1KOVWhvAIIiDsflaLJYiHEbF
-         jtjOiSayX4xlpArK1PT3iJ27XuJWEt23imCAIL7lafzyP4kucEHso7QrpwhTX+6NvMNx
-         06OBRaK2cA6nnRAqYFWF9D697LNkjqIH18dBawktIMAZNmNkD3GGiqrkHimod//LyRIe
-         exFaGKq7UudYhVsmiYu2+S+0ZEqAu/o0h69JuVOSCoKmeIasfVhfLSBrK+SEe4+NbeOl
-         FEIF1cSbWGeOfLw9LXKWx/fDHD6VK2Vl4uEc5LPQ25b3Qsnbb8BI80sfLOKzhgCKfbRX
-         glFw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5so6o3lsHdESNYtq8PIm0PWXq9C33in8/VcoE/KuhZ4=;
+        b=F6h0bcmYl7K7s/6rP6jzo27nQJEU2tETOnQkeRMUQQdQCanPbM2tGY3WXO1jakZlPh
+         hCwi8dKTuFOfp9mw4ayy9sIUozJOKgh+kYOcDTX7bXfT01fj9PoHXtBMmoEq04gQEhMh
+         +IrEhvcgoWR2Djz7OOULFWt4f/gLThPeuoeGA+uhmpSlcrlbRtwogehZC/C/gj/mwCMk
+         RLPlsH3DOsJoVO19QGNH3i3jX/c246SMBHTNhvO4hxMC8YkSH8QjBEmnhYiuSFUo6WgO
+         xEKDJ+CtL6xaVihWW/c9rmtozVgs5rrrNHdsWVUeEz7nzXbRQULMQMt/A84Nvq5d+Rcg
+         EHKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6aKB/QLCWmLrVGWONqEu+ORb8Q8cClKmFQluSXDoGZQ=;
-        b=vPK3RlTcwCs2/iuNW3MVjICm+rZNQ2/ooN0jYw7swzXEALTTfvYb49s35279r+L9U/
-         Sj5PX4Or8XG8FyiE5BfmqvuS+2Abslx9aJtF6yjR5RLhVx6wN6dIMk8XU86S8WcCfAsF
-         5BC/AF7Tb3+dslQbwYMei40YTuB3qtqTtcoYce9JTDWgzIh6uQwPDZyUrADZTNfpPTIl
-         AVmHQZr8H0i3VEbW8dyABCos1ZJEKidgnAnhihxTOwRu1Jdh1jJiR3Ah/rR9FNIJYyb6
-         r4SZDzD4wDTerkklX9Ij8plzlOL5DZANQbrbb8IwtfNhZY4yB7ztL6H0RTCCi0ZqGpTz
-         jMww==
-X-Gm-Message-State: AJIora9/lLBQ9igS8pH2BzODNVTRE1L47AHOZ5magWDuxtDzU0QUZk4s
-        SAxCYVgVKBSxh4rVXTKXTObCRv8qTV59pGknj1qVpw==
-X-Google-Smtp-Source: AGRyM1vOwBmc/srzedpGTqPpTfRqYGh2g1w/wn6UMZGTSUFahPMJtlm9T22FvntsocrRqlh0nhqWSfHHdvpG1QdZLwU=
-X-Received: by 2002:ac2:495d:0:b0:47f:a2bc:762c with SMTP id
- o29-20020ac2495d000000b0047fa2bc762cmr8801666lfi.93.1656352091777; Mon, 27
- Jun 2022 10:48:11 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5so6o3lsHdESNYtq8PIm0PWXq9C33in8/VcoE/KuhZ4=;
+        b=5MfblzSL9UF8WjhwYuhvCY3t8/JfquRa5CPopNwaj6lxsx30+NEw6yh0fhbUvPFADu
+         mdjzS2axnnZ/BdmTh06v7kUw2cZmRIUJWOZyQFq2iozWYctLvrW5/Be/anQreYT+D9DB
+         3paT2F/xh/DgNHL+KuRPjhv7x7k7/muBFUYbqGKP6Tii9tzP3malMgx81gHJ0Nuiahth
+         5ewqGQc57anbTVLaomJFrUJAdCTXQIDPEz/pja99MC1CPwsGy0vDOeaPBkNMu7FoqGbm
+         nv8pbWNqfD30er55eLEYnaVHnvya0gneF/F36ZCjFbzVkWlydLOAnihI3XJgwXDz9IKL
+         sk6g==
+X-Gm-Message-State: AJIora+kmlLqAwlWc3ce4dgB16U4XLO1HcgsBCuGXYVcVRLDzrwyJfPh
+        8f9DhtqZ8zzP+aYiQClj5c8=
+X-Google-Smtp-Source: AGRyM1uuE2HKf24Zx9OfG8R2hLlm2cKBKMz2MUwW/ZGSONbzIn1BkpnC6am+iavXIT7LbrQThJD4Ug==
+X-Received: by 2002:a17:906:4302:b0:726:8efe:3bda with SMTP id j2-20020a170906430200b007268efe3bdamr11343420ejm.184.1656352135523;
+        Mon, 27 Jun 2022 10:48:55 -0700 (PDT)
+Received: from localhost.localdomain (host-87-6-98-182.retail.telecomitalia.it. [87.6.98.182])
+        by smtp.gmail.com with ESMTPSA id i25-20020a056402055900b00435681476c7sm7980916edx.10.2022.06.27.10.48.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 10:48:54 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>,
+        Chris Down <chris@chrisdown.name>, Qu Wenruo <wqu@suse.com>,
+        Filipe Manana <fdmanana@suse.com>,
+        Gabriel Niebler <gniebler@suse.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>, David Sterba <dsterba@suse.cz>
+Subject: [PATCH] btrfs: Replace kmap_atomic() with kmap_local_page()
+Date:   Mon, 27 Jun 2022 19:48:49 +0200
+Message-Id: <20220627174849.29962-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220618005457.2379324-1-vipinsh@google.com>
-In-Reply-To: <20220618005457.2379324-1-vipinsh@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Mon, 27 Jun 2022 10:47:35 -0700
-Message-ID: <CAHVum0euKMV+rCLXMQ4NuDAqowyeCkO1LheSafR2tm=R4aUfJw@mail.gmail.com>
-Subject: Re: [PATCH] scripts/tags.sh: Include tools directory in tags generation
-To:     gregkh@linuxfoundation.org, rkovhaev@gmail.com
-Cc:     dmatlack@google.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,70 +74,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 17, 2022 at 5:55 PM Vipin Sharma <vipinsh@google.com> wrote:
->
-> Add tools directory in generating tags and quiet the "No such file or
-> directory" warnings.
->
-> It reverts the changes introduced in commit 162343a876f1
-> ("scripts/tags.sh: exclude tools directory from tags generation") while
-> maintainig the original intent of the patch to get rid of the warnings.
-> This allows the root level cscope files to include tools source code
-> besides kernel and a single place to browse the code for both.
->
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> ---
->
-> I have found myself many times to browse tools and other part of the
-> kernel code together. Excluding tools from the root level cscope makes
-> it difficult to efficiently move between files and find user api
-> definitions.
->
-> Root cause of these warning is due to generated .cmd files which use
-> relative paths in some files, I am not sure how to make them absolute
-> file paths which can satisfy realpath warnings. Also, not sure if those
-> warnings are helpful and should be kept. Passing "-q" to realpath seems
-> easier solution. Please, let me know if there is a better alternative.
->
-> Thanks
->
->  scripts/tags.sh | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
->
-> diff --git a/scripts/tags.sh b/scripts/tags.sh
-> index 01fab3d4f90b5..e137cf15aae9d 100755
-> --- a/scripts/tags.sh
-> +++ b/scripts/tags.sh
-> @@ -25,13 +25,6 @@ else
->         tree=${srctree}/
->  fi
->
-> -# ignore userspace tools
-> -if [ -n "$COMPILED_SOURCE" ]; then
-> -       ignore="$ignore ( -path ./tools ) -prune -o"
-> -else
-> -       ignore="$ignore ( -path ${tree}tools ) -prune -o"
-> -fi
-> -
->  # Detect if ALLSOURCE_ARCHS is set. If not, we assume SRCARCH
->  if [ "${ALLSOURCE_ARCHS}" = "" ]; then
->         ALLSOURCE_ARCHS=${SRCARCH}
-> @@ -100,7 +93,7 @@ all_compiled_sources()
->                 find $ignore -name "*.cmd" -exec \
->                         grep -Poh '(?(?=^source_.* \K).*|(?=^  \K\S).*(?= \\))' {} \+ |
->                 awk '!a[$0]++'
-> -       } | xargs realpath -es $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
-> +       } | xargs realpath -esq $([ -z "$KBUILD_ABS_SRCTREE" ] && echo --relative-to=.) |
->         sort -u
->  }
->
-> --
-> 2.37.0.rc0.104.g0611611a94-goog
->
+kmap_atomic() is being deprecated in favor of kmap_local_page() where it
+is feasible. With kmap_local_page() mappings are per thread, CPU local,
+and not globally visible.
 
-Hi Greg,
+As far as I can see, the kmap_atomic() calls in compression.c and in
+inode.c can be safely converted.
 
-Any update on the patch?
+Above all else, David Sterba has confirmed that "The context in
+check_compressed_csum is atomic [...]" and that "kmap_atomic() in inode.c
+[...] also can be replaced by kmap_local_page().".[1]
 
-Thanks
-Vipin
+Therefore, convert all kmap_atomic() calls currently still left in fs/btrfs
+to kmap_local_page().
+
+Tested with xfstests on a QEMU + KVM 32-bits VM with 4GB RAM and booting a
+kernel with HIGHMEM64GB enabled.
+
+[1] https://lore.kernel.org/linux-btrfs/20220601132545.GM20
+633@twin.jikos.cz/
+
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Suggested-by: David Sterba <dsterba@suse.cz>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+
+Tests of groups "quick" and "compress" output several errors largely due
+to memory leaks and shift-out-of-bounds. However, these errors are exactly
+the same which are output without this and other conversions of mine to use
+kmap_local_page(). Therefore, it looks like these changes don't introduce
+regressions.
+
+The previous RFC PATCH can be ignored:
+https://lore.kernel.org/lkml/20220624084215.7287-1-fmdefrancesco@gmail.com/
+
+With this patch, in fs/btrfs there are no longer call sites of kmap() and
+kmap_atomic().
+
+ fs/btrfs/compression.c |  4 ++--
+ fs/btrfs/inode.c       | 12 ++++++------
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/fs/btrfs/compression.c b/fs/btrfs/compression.c
+index f4564f32f6d9..b49719ae45b4 100644
+--- a/fs/btrfs/compression.c
++++ b/fs/btrfs/compression.c
+@@ -175,10 +175,10 @@ static int check_compressed_csum(struct btrfs_inode *inode, struct bio *bio,
+ 		/* Hash through the page sector by sector */
+ 		for (pg_offset = 0; pg_offset < bytes_left;
+ 		     pg_offset += sectorsize) {
+-			kaddr = kmap_atomic(page);
++			kaddr = kmap_local_page(page);
+ 			crypto_shash_digest(shash, kaddr + pg_offset,
+ 					    sectorsize, csum);
+-			kunmap_atomic(kaddr);
++			kunmap_local(kaddr);
+ 
+ 			if (memcmp(&csum, cb_sum, csum_size) != 0) {
+ 				btrfs_print_data_csum_error(inode, disk_start,
+diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+index e921d6c432ac..0a7a621710f6 100644
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -332,9 +332,9 @@ static int insert_inline_extent(struct btrfs_trans_handle *trans,
+ 			cur_size = min_t(unsigned long, compressed_size,
+ 				       PAGE_SIZE);
+ 
+-			kaddr = kmap_atomic(cpage);
++			kaddr = kmap_local_page(cpage);
+ 			write_extent_buffer(leaf, kaddr, ptr, cur_size);
+-			kunmap_atomic(kaddr);
++			kunmap_local(kaddr);
+ 
+ 			i++;
+ 			ptr += cur_size;
+@@ -345,9 +345,9 @@ static int insert_inline_extent(struct btrfs_trans_handle *trans,
+ 	} else {
+ 		page = find_get_page(inode->vfs_inode.i_mapping, 0);
+ 		btrfs_set_file_extent_compression(leaf, ei, 0);
+-		kaddr = kmap_atomic(page);
++		kaddr = kmap_local_page(page);
+ 		write_extent_buffer(leaf, kaddr, ptr, size);
+-		kunmap_atomic(kaddr);
++		kunmap_local(kaddr);
+ 		put_page(page);
+ 	}
+ 	btrfs_mark_buffer_dirty(leaf);
+@@ -3357,11 +3357,11 @@ static int check_data_csum(struct inode *inode, struct btrfs_bio *bbio,
+ 	offset_sectors = bio_offset >> fs_info->sectorsize_bits;
+ 	csum_expected = ((u8 *)bbio->csum) + offset_sectors * csum_size;
+ 
+-	kaddr = kmap_atomic(page);
++	kaddr = kmap_local_page(page);
+ 	shash->tfm = fs_info->csum_shash;
+ 
+ 	crypto_shash_digest(shash, kaddr + pgoff, len, csum);
+-	kunmap_atomic(kaddr);
++	kunmap_local(kaddr);
+ 
+ 	if (memcmp(csum, csum_expected, csum_size))
+ 		goto zeroit;
+-- 
+2.36.1
+

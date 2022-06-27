@@ -2,104 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BDF55DC6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A07C55D61E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239734AbiF0Vo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 17:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
+        id S241398AbiF0Vok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 17:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238227AbiF0VoZ (ORCPT
+        with ESMTP id S238227AbiF0Voj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 17:44:25 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A0821A9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:44:23 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id m2so9357691plx.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:44:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2DM7O+xeJYoNrNXSTSzJHmAYrPinlDaSA++1ejz3ymc=;
-        b=F0YFq63p5i7NOuMN/IasvD8XOPzYJWBWKgQD0KZsqA7hfLt3woM6a1j57oEmR5stEt
-         8YxScgF6Bl1U8snTuYEpupD24OX77NttFzS8u9OYtNXZ37I+uFLpwW0MEonnQNlXCjA+
-         mzOQLIyfYF108r5GDlMilhA9ke1TRnqMzRS7w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2DM7O+xeJYoNrNXSTSzJHmAYrPinlDaSA++1ejz3ymc=;
-        b=JDaJ8C6cBSAbVvMeqLrO+X7IfNxebXeFohmH7XOe4iAnZJWPJDVrRztZCbkrRFagMe
-         3JMgDCQbQsr76PIwaOqilY3OkDyGm+jEOMiU+M2YKMxG/LTN/h0DtbqURr9a+M2WqVPK
-         T0pdx8bSGJYXXEeLdnLgasyASEkwY9Y0icVTU/aAPe7Ks2I7zi223UGIt6dJnyvSQL99
-         cmyFAiYCF86uCbfoHYKav9hQ04qA+CLD4QcCDIBBxQnLY9W82mI0Bhphiy5zUbJb+J78
-         TScGZtoScbhzYpGM+Ox2gWTqxR0DDHxhAsWzfGxxbIQfF158W8XMH/ogg7fHz2ILMwIY
-         tEiQ==
-X-Gm-Message-State: AJIora/mlUG6r5B7Q9AiaUu+Bo+glwJ70zQYIXJwBWUIHncWJw6QqXzv
-        1Bhd//Cd2bWuNvSoeil0JlVRwA==
-X-Google-Smtp-Source: AGRyM1shwHswGVWhkjtx56cLBZ+RvsKlBRm1kWfZ8Avt5R2j/EcZ5F4FsYvL4b13OTLcXKN2vNAMsw==
-X-Received: by 2002:a17:90b:46ca:b0:1ec:9a27:f706 with SMTP id jx10-20020a17090b46ca00b001ec9a27f706mr18709602pjb.12.1656366263326;
-        Mon, 27 Jun 2022 14:44:23 -0700 (PDT)
-Received: from fff6dc920c55 ([203.220.223.63])
-        by smtp.gmail.com with ESMTPSA id x15-20020a170902a38f00b0016b8b5b0aa0sm574323pla.86.2022.06.27.14.44.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 14:44:22 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 21:44:14 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.18 000/181] 5.18.8-rc1 review
-Message-ID: <20220627214414.GA8@fff6dc920c55>
-References: <20220627111944.553492442@linuxfoundation.org>
+        Mon, 27 Jun 2022 17:44:39 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22E6825F4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:44:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F276A1758;
+        Mon, 27 Jun 2022 14:44:37 -0700 (PDT)
+Received: from [10.57.85.164] (unknown [10.57.85.164])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CCFD33F792;
+        Mon, 27 Jun 2022 14:44:35 -0700 (PDT)
+Message-ID: <6b330119-fbf2-1c34-7ad3-0ae789658d22@arm.com>
+Date:   Mon, 27 Jun 2022 22:44:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH v5] coresight: etm4x: avoid build failure with unrolled
+ loops
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+References: <17600de3-b295-ebdf-b9fa-323d2bc3cb93@arm.com>
+ <20220623174131.3818333-1-ndesaulniers@google.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220623174131.3818333-1-ndesaulniers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 01:19:33PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.8 release.
-> There are 181 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Hi Nick,
+
+Thanks for the rework.
+
+On 23/06/2022 18:41, Nick Desaulniers wrote:
+> When the following configs are enabled:
+> * CORESIGHT
+> * CORESIGHT_SOURCE_ETM4X
+> * UBSAN
+> * UBSAN_TRAP
 > 
-> Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
-> Anything received after that time might be too late.
+> Clang fails assemble the kernel with the error:
+> <instantiation>:1:7: error: expected constant expression in '.inst' directive
+> .inst (0xd5200000|((((2) << 19) | ((1) << 16) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 7) & 0x7)) << 12) | ((((((((((0x160 + (i * 4))))) >> 2))) & 0xf)) << 8) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 4) & 0x7)) << 5)))|(.L__reg_num_x8))
+>        ^
+> drivers/hwtracing/coresight/coresight-etm4x-core.c:702:4: note: while in
+> macro instantiation
+> etm4x_relaxed_read32(csa, TRCCNTVRn(i));
+> ^
+> drivers/hwtracing/coresight/coresight-etm4x.h:403:4: note: expanded from
+> macro 'etm4x_relaxed_read32'
+> read_etm4x_sysreg_offset((offset), false)))
+> ^
+> drivers/hwtracing/coresight/coresight-etm4x.h:383:12: note: expanded
+> from macro 'read_etm4x_sysreg_offset'
+> __val = read_etm4x_sysreg_const_offset((offset));       \
+>          ^
+> drivers/hwtracing/coresight/coresight-etm4x.h:149:2: note: expanded from
+> macro 'read_etm4x_sysreg_const_offset'
+> READ_ETM4x_REG(ETM4x_OFFSET_TO_REG(offset))
+> ^
+> drivers/hwtracing/coresight/coresight-etm4x.h:144:2: note: expanded from
+> macro 'READ_ETM4x_REG'
+> read_sysreg_s(ETM4x_REG_NUM_TO_SYSREG((reg)))
+> ^
+> arch/arm64/include/asm/sysreg.h:1108:15: note: expanded from macro
+> 'read_sysreg_s'
+> asm volatile(__mrs_s("%0", r) : "=r" (__val));                  \
+>               ^
+> arch/arm64/include/asm/sysreg.h:1074:2: note: expanded from macro '__mrs_s'
+> "       mrs_s " v ", " __stringify(r) "\n"                      \
+>   ^
+> 
+> Consider the definitions of TRCSSCSRn and TRCCNTVRn:
+> drivers/hwtracing/coresight/coresight-etm4x.h:56
+>   #define TRCCNTVRn(n)      (0x160 + (n * 4))
+> drivers/hwtracing/coresight/coresight-etm4x.h:81
+>   #define TRCSSCSRn(n)      (0x2A0 + (n * 4))
+> 
+> Where the macro parameter is expanded to i; a loop induction variable
+> from etm4_disable_hw.
+> 
+> When any compiler can determine that loops may be unrolled, then the
+> __builtin_constant_p check in read_etm4x_sysreg_offset() defined in
+> drivers/hwtracing/coresight/coresight-etm4x.h may evaluate to true. This
+> can lead to the expression `(0x160 + (i * 4))` being passed to
+> read_etm4x_sysreg_const_offset. Via the trace above, this is passed
+> through READ_ETM4x_REG, read_sysreg_s, and finally to __mrs_s where it
+> is string-ified and used directly in inline asm.
+> 
+> Regardless of which compiler or compiler options determine whether a
+> loop can or can't be unrolled, which determines whether
+> __builtin_constant_p evaluates to true when passed an expression using a
+> loop induction variable, it is NEVER safe to allow the preprocessor to
+> construct inline asm like:
+>    asm volatile (".inst (0x160 + (i * 4))" : "=r"(__val));
+>                                   ^ expected constant expression
+> 
+> Replace unsafe uses of calls to etm4x_relaxed_read32 with
+> csdev_access_relaxed_read32 when the parameter is an expression that
+> would be invalid inline asm so that it does not depend on the ability of
+> the compiler to optimize __builtin_constant_p of the expression to true.
+> Only when the second parameter of etm4x_relaxed_read32 expands to an
+> expression dependent on a loop induction variable do we need to fix
+> this.
+> 
+> For such cases where the induction variable is used in an expression,
+> perform the following function call replacements:
+> * etm4x_relaxed_write32 -> csdev_access_relaxed_write32
+> * etm4x_relaxed_write64 -> csdev_access_relaxed_write64
+> * etm4x_relaxed_read32 -> csdev_access_relaxed_read32
+> * etm4x_read32 -> csdev_access_read32
+> * etm4x_read64 -> csdev_access_read64
+> 
+> This is not a bug in clang; it's a potentially unsafe use of the macro
+> arguments in read_etm4x_sysreg_offset dependent on __builtin_constant_p.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1310
+> Reported-by: Arnd Bergmann <arnd@kernel.org>
+> Suggested-by: Arnd Bergmann <arnd@kernel.org>
+> Suggested-by: Tao Zhang <quic_taozha@quicinc.com>
+> Suggested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Hi Greg,
-
-5.18.8-rc1 tested.
-
-Run tested on:
-- Allwinner H6 (Tanix TX6)
-- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
-
-In addition - build tested for:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- NXP iMX6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos
-
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>

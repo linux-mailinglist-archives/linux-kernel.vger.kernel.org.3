@@ -2,44 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37ADD55DA1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9882055D4E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbiF0GSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 02:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S232359AbiF0GVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 02:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbiF0GSs (ORCPT
+        with ESMTP id S231776AbiF0GVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 02:18:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 438982713
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 23:18:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 10B471758;
-        Sun, 26 Jun 2022 23:18:47 -0700 (PDT)
-Received: from [10.162.42.6] (unknown [10.162.42.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B19AE3F5A1;
-        Sun, 26 Jun 2022 23:18:43 -0700 (PDT)
-Message-ID: <f0cfe169-44fa-5653-d454-149ef286d3bb@arm.com>
-Date:   Mon, 27 Jun 2022 11:48:40 +0530
+        Mon, 27 Jun 2022 02:21:05 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651AF2BCC;
+        Sun, 26 Jun 2022 23:21:04 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id s17so8548757iob.7;
+        Sun, 26 Jun 2022 23:21:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=+Ua18/p8hkHhPEFibJ7/14yqoaJ6Vlr8Bwa0LwoGmco=;
+        b=AgGZJExEG28jIEYgz0q7+FWzHtSIrG685VZQRA0qSFwJOzD0b5+SfHxij9xZXoPYQ0
+         EYrr3Sr2h72eK2PK9o4Ri0E3T4mds7HlVYApbtVhMj5WChyv2JQrkgQiF9fzVcrzRttf
+         WuD26hfwQXAaqToChLfQsqycbE4QKTkaosnOC6h6pLk2ozxzyZyy+NHvwmh+5YcE6aDn
+         f4UkIeg88PxhuGOoeF69lPb5WSK/0GkzAgkN/HUxxGDMX6TFzUf6QocWwlXATWxvMcvs
+         LjLt1gR1lEXzgbBrz5fJcbMxKkhad+VTKPG7z+DFqtjgpavSVZ46mblqfNIw5wOvGS99
+         6kxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=+Ua18/p8hkHhPEFibJ7/14yqoaJ6Vlr8Bwa0LwoGmco=;
+        b=PJXgEfKx/B1sZhOtcHr75H6zy9sS6OJC6ko2xhqRJWSt5VG7W4JfQ+NA8f0YIUjZ57
+         carhtb85yaWFp0r1WtebjDm2QbkhQf4Ri6Pb+YT+SDIqiSq2KdroOp9Yz48t43qDpHF7
+         5lz6C1Ch7Hw3JglfV5ychLhSFEchxaaZwaf6AfLDBtxDa55CgB7JSFoliOKN/Ci/zQRU
+         JPUBPe6OR6VcmxPpJ8/TXqN/Tolntynwj9k7OLemVLTDf4jZTEL62mpLAfyyFory4m+D
+         OqhsRT+HylnUQ29DVmTO0vE0u7ywhfNGmDUtG/nr9o5eHru/x5vhSR+GZb1I2VqdZbcr
+         0uLw==
+X-Gm-Message-State: AJIora9HUeQHpUAY4Gx23qyi8vDbEuqdlvRusXUiEU6Zo9t1K++cBuCp
+        E36erKG/Cz+KUHaatay0TIZo19IW307vZWakzGY=
+X-Google-Smtp-Source: AGRyM1spyVdearMCY8BhTc2GpLt3ndrewBGOYQFb3iYqgwxAOES/t4SaLMpcB+yWfLPLRcNF6K4toXeKvJBs+ISL25A=
+X-Received: by 2002:a05:6638:1415:b0:331:d318:83ab with SMTP id
+ k21-20020a056638141500b00331d31883abmr7162512jad.126.1656310863812; Sun, 26
+ Jun 2022 23:21:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] mm: hugetlb: kill set_huge_swap_pte_at()
-Content-Language: en-US
-To:     Qi Zheng <zhengqi.arch@bytedance.com>, mike.kravetz@oracle.com,
-        songmuchun@bytedance.com, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, will@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220626145717.53572-1-zhengqi.arch@bytedance.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220626145717.53572-1-zhengqi.arch@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220607000851.39798-1-irogers@google.com> <CA+icZUWpSF6ge76JVp1qBC5QhC1AwNacs5Di=e1QSbAD+SVKUA@mail.gmail.com>
+ <YqjggY64PKfog0YW@kernel.org> <CA+icZUUx_Re+w9S7eHXma9aC=8T8ypp8=+tkJy7zJMrUocMSKQ@mail.gmail.com>
+ <Yrh7uSL0AybSqd0V@kernel.org>
+In-Reply-To: <Yrh7uSL0AybSqd0V@kernel.org>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Mon, 27 Jun 2022 08:20:27 +0200
+Message-ID: <CA+icZUXt8rBadACnXPUdeQbR_nJbqYG+pGPF=767jHV+B2uYsA@mail.gmail.com>
+Subject: Re: [Linux v5.19-rc1] tools/perf/a.out remains after make -C
+ tools/perf clean
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,64 +71,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jun 26, 2022 at 5:31 PM Arnaldo Carvalho de Melo
+<arnaldo.melo@gmail.com> wrote:
+>
+> Em Wed, Jun 15, 2022 at 12:11:48AM +0200, Sedat Dilek escreveu:
+> > On Tue, Jun 14, 2022 at 9:24 PM Arnaldo Carvalho de Melo
+> > <arnaldo.melo@gmail.com> wrote:
+> > >
+> > > Em Tue, Jun 07, 2022 at 08:59:31PM +0200, Sedat Dilek escreveu:
+> > > > Hi,
+> > > >
+> > > > I observed this some time ago - so this is not only Linux v5.19-rc1 related.
+> > > >
+> > > > $ LC_ALL=C make -C tools/perf clean 2>&1 | tee ../make-log_perf-clean.txt
+> > > > make: Entering directory '/home/dileks/src/linux-kernel/git/tools/perf'
+> > > >  CLEAN   x86
+> > > >  CLEAN   libtraceevent
+> > > >  CLEAN   libapi
+> > > >  CLEAN   libbpf
+> > > >  CLEAN   libsubcmd
+> > > >  CLEAN   libperf
+> > > >  CLEAN   fixdep
+> > > >  CLEAN   feature-detect
+> > > >  CLEAN   python
+> > > >  CLEAN   bpf-skel
+> > > >  CLEAN   core-objs
+> > > >  CLEAN   core-progs
+> > > >  CLEAN   core-gen
+> > > >  CLEAN   Documentation
+> > > > make: Leaving directory '/home/dileks/src/linux-kernel/git/tools/perf'
+> > > >
+> > > > $ git status -s
+> > > > M tools/perf/util/unwind-libunwind-local.c
+> > > > ?? tools/perf/a.out
+> > > >
+> > > > $ rm -v tools/perf/a.out
+> > > > 'tools/perf/a.out' deleted
+> > > >
+> > > > $ git checkout -- tools/perf/util/unwind-libunwind-local.c
+> > > >
+> > > > $ git status -s
+> > > > [ empty ]
+> > >
+> > > Interesting, since Linus complained at some point that after building
+> > > perf some new temp file was left there I added 'git status' to my
+> > > scripts to always get this flagged.
+> > >
+> > > I'm not seeing this here.
+> > >
+> >
+> > Just re-checked with Linux v5.19-rc2 and attaching tools/perf/a.out +
+> > tools/perf/Makefile.config.
+> >
+> > Check perf binary:
+> >
+> > $ ~/bin/perf -vv
+> > perf version 5.19.0-rc2
+> >                 dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
+> >    dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
+> >                 glibc: [ on  ]  # HAVE_GLIBC_SUPPORT
+> >         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
+> >                libbfd: [ on  ]  # HAVE_LIBBFD_SUPPORT
+> >            debuginfod: [ OFF ]  # HAVE_DEBUGINFOD_SUPPORT
+> >                libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
+> >               libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+> > numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+> >               libperl: [ on  ]  # HAVE_LIBPERL_SUPPORT
+> >             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
+> >              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
+> >             libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
+> >             libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
+> >    libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
+> >                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
+> >                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
+> >             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
+> >                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
+> >                   aio: [ on  ]  # HAVE_AIO_SUPPORT
+> >                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
+> >               libpfm4: [ OFF ]  # HAVE_LIBPFM
+> >
+> > Tried `make distclean`.
+> > Tried `make tools/ clean` but tools/tracing/rtla produces errors (rm clean).
+> > Still exists: tools/perf/a.out.
+>
+> I started seeing this here, will investigate and re-read your reports,
+> thanks for sending them!
+>
 
+Thanks for the feedback.
 
-On 6/26/22 20:27, Qi Zheng wrote:
-> The commit e5251fd43007 ("mm/hugetlb: introduce set_huge_swap_pte_at()
-> helper") add set_huge_swap_pte_at() to handle swap entries on
-> architectures that support hugepages consisting of contiguous ptes.
-> And currently the set_huge_swap_pte_at() is only overridden by arm64.
-> 
-> The set_huge_swap_pte_at() provide a sz parameter to help determine
-> the number of entries to be updated. But in fact, all hugetlb swap
-> entries contain pfn information, so we can find the corresponding
-> folio through the pfn recorded in the swap entry, then the folio_size()
-> is the number of entries that need to be updated.
-> 
-> And considering that users will easily cause bugs by ignoring the
-> difference between set_huge_swap_pte_at() and set_huge_pte_at().
-> Let's handle swap entries in set_huge_pte_at() and remove the
-> set_huge_swap_pte_at(), then we can call set_huge_pte_at()
-> anywhere, which simplifies our coding.
-> 
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> ---
->  arch/arm64/include/asm/hugetlb.h |  3 ---
->  arch/arm64/mm/hugetlbpage.c      | 34 ++++++++++++++++----------------
->  include/linux/hugetlb.h          | 13 ------------
->  mm/hugetlb.c                     |  8 +++-----
->  mm/rmap.c                        | 11 +++--------
->  5 files changed, 23 insertions(+), 46 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/hugetlb.h b/arch/arm64/include/asm/hugetlb.h
-> index 1fd2846dbefe..d20f5da2d76f 100644
-> --- a/arch/arm64/include/asm/hugetlb.h
-> +++ b/arch/arm64/include/asm/hugetlb.h
-> @@ -46,9 +46,6 @@ extern void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
->  			   pte_t *ptep, unsigned long sz);
->  #define __HAVE_ARCH_HUGE_PTEP_GET
->  extern pte_t huge_ptep_get(pte_t *ptep);
-> -extern void set_huge_swap_pte_at(struct mm_struct *mm, unsigned long addr,
-> -				 pte_t *ptep, pte_t pte, unsigned long sz);
-> -#define set_huge_swap_pte_at set_huge_swap_pte_at
->  
->  void __init arm64_hugetlb_cma_reserve(void);
->  
-> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-> index c9e076683e5d..58b89b9d13e0 100644
-> --- a/arch/arm64/mm/hugetlbpage.c
-> +++ b/arch/arm64/mm/hugetlbpage.c
-> @@ -238,6 +238,13 @@ static void clear_flush(struct mm_struct *mm,
->  	flush_tlb_range(&vma, saddr, addr);
->  }
->  
-> +static inline struct folio *hugetlb_swap_entry_to_folio(swp_entry_t entry)
-> +{
-> +	VM_BUG_ON(!is_migration_entry(entry) && !is_hwpoison_entry(entry));
-> +
-> +	return page_folio(pfn_to_page(swp_offset(entry)));
-> +}
+If you need further information or have something for testing, please
+let me know.
 
-Extracting this huge page size from swap entry is an additional operation which
-will increase the over all cost for set_huge_swap_pte_at(). At present the size
-value is readily available near set_huge_swap_pte_at() call sites.
+-sed@-

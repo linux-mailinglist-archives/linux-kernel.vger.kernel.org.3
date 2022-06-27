@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C654955C6A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240D855C98D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237988AbiF0Ltd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
+        id S236459AbiF0Lid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238091AbiF0Lrq (ORCPT
+        with ESMTP id S236412AbiF0LhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:47:46 -0400
+        Mon, 27 Jun 2022 07:37:23 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734BEE0D4;
-        Mon, 27 Jun 2022 04:39:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A72B11;
+        Mon, 27 Jun 2022 04:32:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BD4EB8111B;
-        Mon, 27 Jun 2022 11:39:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA9BC3411D;
-        Mon, 27 Jun 2022 11:39:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 303C6B80E6F;
+        Mon, 27 Jun 2022 11:32:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CB96C3411D;
+        Mon, 27 Jun 2022 11:32:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329968;
-        bh=9bAV0+306x5lteaFMiWqSZkBkr8FcYIqevBwLdY+pKo=;
+        s=korg; t=1656329549;
+        bh=O+K58Y8XS0NwtGq2lbcrHbcvtEFN2KTPEyGnAd9qpdY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aSbST5viX5731oVPv1KBbm2641On7LdF8F2BreQn3Vss0F22SzrwihFJ3jL64HQeb
-         t1CnB7u+Kcuq05pna8IvwYo75bkcQOW2ZDvqkrhg87JIfPM6cfVHp0jRwvaU+mJuJ/
-         DZAm8Q+icbSAMMZErHYYxy9c/Cp7EDBYEkc6BvyM=
+        b=wh7YdLENBZZ/BSS+chb2aezmuXMi9avO1VKt/ArYPAtffEMZon5pFp0k/uZhagqgZ
+         TN81/qWD3jZFVaaenhixofqsKKBDfSuTJt+CxkIIliBfv4E+N7DTm8P5/s393RDVva
+         7Jrb1JR2Ybw1LyVcs/fGvHc/Lm/qDtckgMEmWctY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Charles Yeh <charlesyeh522@gmail.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.18 038/181] USB: serial: pl2303: add support for more HXN (G) types
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 004/135] ALSA: hda/conexant: Fix missing beep setup
 Date:   Mon, 27 Jun 2022 13:20:11 +0200
-Message-Id: <20220627111945.667730346@linuxfoundation.org>
+Message-Id: <20220627111938.285623141@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,72 +53,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit ae60aac59a9ad8ab64a4b07de509a534a75b6bac upstream.
+commit 5faa0bc69102f3a4c605581564c367be5eb94dfa upstream.
 
-Add support for further HXN (G) type devices (GT variant, GL variant, GS
-variant and GR) and document the bcdDevice mapping.
+Currently the Conexant codec driver sets up the beep NID after calling
+snd_hda_gen_parse_auto_config().  It turned out that this results in
+the insufficient setup for the beep control, as the generic parser
+handles the fake path in snd_hda_gen_parse_auto_config() only if the
+beep_nid is set up beforehand.
 
-Note that the TA and TB types use the same bcdDevice as some GT and GE
-variants, respectively, but that the HX status request can be used to
-determine which is which.
+For dealing with the beep widget properly, call cx_auto_parse_beep()
+before snd_hda_gen_parse_auto_config() call.
 
-Also note that we currently do not distinguish between the various HXN
-(G) types in the driver but that this may change eventually (e.g. when
-adding GPIO support).
-
-Reported-by: Charles Yeh <charlesyeh522@gmail.com>
-Link: https://lore.kernel.org/r/YrF77b9DdeumUAee@hovoldconsulting.com
-Cc: stable@vger.kernel.org	# 5.13
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Fixes: 51e19ca5f755 ("ALSA: hda/conexant - Clean up beep code")
+Cc: <stable@vger.kernel.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216152
+Link: https://lore.kernel.org/r/20220620104008.1994-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/pl2303.c |   29 +++++++++++++++++------------
- 1 file changed, 17 insertions(+), 12 deletions(-)
+ sound/pci/hda/patch_conexant.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -436,22 +436,27 @@ static int pl2303_detect_type(struct usb
- 		break;
- 	case 0x200:
- 		switch (bcdDevice) {
--		case 0x100:
-+		case 0x100:	/* GC */
- 		case 0x105:
-+			return TYPE_HXN;
-+		case 0x300:	/* GT / TA */
-+			if (pl2303_supports_hx_status(serial))
-+				return TYPE_TA;
-+			fallthrough;
- 		case 0x305:
-+		case 0x400:	/* GL */
- 		case 0x405:
-+			return TYPE_HXN;
-+		case 0x500:	/* GE / TB */
-+			if (pl2303_supports_hx_status(serial))
-+				return TYPE_TB;
-+			fallthrough;
-+		case 0x505:
-+		case 0x600:	/* GS */
- 		case 0x605:
--			/*
--			 * Assume it's an HXN-type if the device doesn't
--			 * support the old read request value.
--			 */
--			if (!pl2303_supports_hx_status(serial))
--				return TYPE_HXN;
--			break;
--		case 0x300:
--			return TYPE_TA;
--		case 0x500:
--			return TYPE_TB;
-+		case 0x700:	/* GR */
-+		case 0x705:
-+			return TYPE_HXN;
- 		}
- 		break;
- 	}
+--- a/sound/pci/hda/patch_conexant.c
++++ b/sound/pci/hda/patch_conexant.c
+@@ -1079,11 +1079,11 @@ static int patch_conexant_auto(struct hd
+ 	if (err < 0)
+ 		goto error;
+ 
+-	err = snd_hda_gen_parse_auto_config(codec, &spec->gen.autocfg);
++	err = cx_auto_parse_beep(codec);
+ 	if (err < 0)
+ 		goto error;
+ 
+-	err = cx_auto_parse_beep(codec);
++	err = snd_hda_gen_parse_auto_config(codec, &spec->gen.autocfg);
+ 	if (err < 0)
+ 		goto error;
+ 
 
 

@@ -2,180 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F0B55C6DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E4555CC62
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240489AbiF0MTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S235607AbiF0Mah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234757AbiF0MTA (ORCPT
+        with ESMTP id S232906AbiF0Mae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:19:00 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6823BC2F
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:18:59 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id e28so7626109wra.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=1g17xM8gnJx00whU//iJuDwTqW1vNMfdEO12lxgIMRg=;
-        b=nnRWhRQQn7M0KwLCecW+Y+EkDq9bIjiupyRwyOtlwv8MrNFBuARr4zHKZSKrIsTIJ3
-         0gVSH/b6ge/jCVktMQDQ9QJX+6tNNIRN2Q/t/GUu+KI1gIxGwHNo1WhQnFKh8HiSn/X7
-         T9D3s0EQPQHzZgXuF2Z8RgB64TURRpe8MnzR8VF+xLoTuDZUpN1v3nXW1GmVcbNvzJWO
-         EI6NRPO7CBAKwlqTVeEdrnJn5pTXP6yzTXLbxSZ3AdWKHH6s6ZEKXdHUDRpzyqTh0l5l
-         B3vZkhEahSCbwj8OTzKuyLIElzg+4OYLundvzQmrZ8/Na3/9XU2mD6yo5y6mawwpE/E2
-         CItA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=1g17xM8gnJx00whU//iJuDwTqW1vNMfdEO12lxgIMRg=;
-        b=TS3Ff1Xfs/7PZsJ5TTDPybTxD5Tb38tTePv1BXvpm3uVO0V4eDDogRXl2nN+AJkT1j
-         zX/yYQzaV2SKifGYmvkA+c9l/5WGE8raS7Y2DgJpJJix53Drv7Y5FNNmoVSl7M6hUqtp
-         +ft0E258VH8ROEmhFkB5pKWAt3J+nHq4KtP9JEgxCBPSVchnfWR3bWbpYnVqc5flvnOg
-         RYjol2HAOmlhCCON5IOI45dHB/XF2e0t2ki9zBbBHSEMElrqGUqx3DmtMGIXrGrjsKdx
-         3JKhS+mJmJPQ9eitkV/A4ZYEvuCcgXfTX95d+GUE8R+jwpsgil+LcjY3kghhF3zJIVf6
-         kzOg==
-X-Gm-Message-State: AJIora+RNTEgIcKBDMus/k6RWwjry2QpQtFcHcbOxdq03lGT3b41YEBT
-        EvJljQwhJBSrFZYtouopWUTu4A==
-X-Google-Smtp-Source: AGRyM1u4TP5LCca8253ru9d3GMUu8AESPz11A5pMqCmyN2YYdwnSPSoviXwuo6a+AgFlUTtD0v38Tg==
-X-Received: by 2002:a5d:69cd:0:b0:21b:a9a2:e6e2 with SMTP id s13-20020a5d69cd000000b0021ba9a2e6e2mr12114876wrw.332.1656332338290;
-        Mon, 27 Jun 2022 05:18:58 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:6f56:f3c6:ba4f:bf5c? ([2001:861:44c0:66c0:6f56:f3c6:ba4f:bf5c])
-        by smtp.gmail.com with ESMTPSA id ay4-20020a05600c1e0400b003a047dccfffsm5564078wmb.42.2022.06.27.05.18.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 05:18:57 -0700 (PDT)
-Message-ID: <19a3fd3b-ec9a-6b8e-5a79-46ff13f8f4e5@baylibre.com>
-Date:   Mon, 27 Jun 2022 14:18:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] drm/bridge: add it6505 driver read config from dt
- property
-Content-Language: en-US
-To:     allen <allen.chen@ite.com.tw>
-Cc:     Pin-yen Lin <treapking@google.com>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220627054038.18600-1-allen.chen@ite.com.tw>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220627054038.18600-1-allen.chen@ite.com.tw>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 27 Jun 2022 08:30:34 -0400
+X-Greylist: delayed 515 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Jun 2022 05:30:31 PDT
+Received: from mail.itpri.com (mx1.itpri.com [185.125.111.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAC8766F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:30:31 -0700 (PDT)
+X-Virus-Scanned: Yes
+From:   alexander.atanasov@virtuozzo.com
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Cc:     kernel@openvz.org,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] Create debugfs file with virtio balloon usage information
+Date:   Mon, 27 Jun 2022 12:20:38 +0000
+Message-Id: <20220627122038.1921522-1-alexander.atanasov@virtuozzo.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2022 07:40, allen wrote:
-> From: allen chen <allen.chen@ite.com.tw>
-> 
-> add read max-lane and max-pixel-clock from dt property
+From: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
 
-Those 2 properties should be documented first in the DT bindings.
+Allow the guest to know how much it is ballooned by the host.
+It is useful when debugging out of memory conditions.
 
-Neil
+When host gets back memory from the guest it is accounted
+as used memory in the guest but the guest have no way to know
+how much it is actually ballooned.
 
-> 
-> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> ---
->   drivers/gpu/drm/bridge/ite-it6505.c | 35 ++++++++++++++++++++++++++---
->   1 file changed, 32 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> index 4b673c4792d77..c9121d4635a52 100644
-> --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -436,6 +436,8 @@ struct it6505 {
->   	bool powered;
->   	bool hpd_state;
->   	u32 afe_setting;
-> +	u32 max_dpi_pixel_clock;
-> +	u32 max_lane_count;
->   	enum hdcp_state hdcp_status;
->   	struct delayed_work hdcp_work;
->   	struct work_struct hdcp_wait_ksv_list;
-> @@ -1466,7 +1468,8 @@ static void it6505_parse_link_capabilities(struct it6505 *it6505)
->   	it6505->lane_count = link->num_lanes;
->   	DRM_DEV_DEBUG_DRIVER(dev, "Sink support %d lanes training",
->   			     it6505->lane_count);
-> -	it6505->lane_count = min_t(int, it6505->lane_count, MAX_LANE_COUNT);
-> +	it6505->lane_count = min_t(int, it6505->lane_count,
-> +				   it6505->max_lane_count);
->   
->   	it6505->branch_device = drm_dp_is_branch(it6505->dpcd);
->   	DRM_DEV_DEBUG_DRIVER(dev, "Sink %sbranch device",
-> @@ -2895,7 +2898,7 @@ it6505_bridge_mode_valid(struct drm_bridge *bridge,
->   	if (mode->flags & DRM_MODE_FLAG_INTERLACE)
->   		return MODE_NO_INTERLACE;
->   
-> -	if (mode->clock > DPI_PIXEL_CLK_MAX)
-> +	if (mode->clock > it6505->max_dpi_pixel_clock)
->   		return MODE_CLOCK_HIGH;
->   
->   	it6505->video_info.clock = mode->clock;
-> @@ -3057,6 +3060,8 @@ static void it6505_parse_dt(struct it6505 *it6505)
->   {
->   	struct device *dev = &it6505->client->dev;
->   	u32 *afe_setting = &it6505->afe_setting;
-> +	u32 *max_lane_count = &it6505->max_lane_count;
-> +	u32 *max_dpi_pixel_clock = &it6505->max_dpi_pixel_clock;
->   
->   	it6505->lane_swap_disabled =
->   		device_property_read_bool(dev, "no-laneswap");
-> @@ -3072,7 +3077,31 @@ static void it6505_parse_dt(struct it6505 *it6505)
->   	} else {
->   		*afe_setting = 0;
->   	}
-> -	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %d", *afe_setting);
-> +
-> +	if (device_property_read_u32(dev, "max-lane-count",
-> +				     max_lane_count) == 0) {
-> +		if (*max_lane_count > 4 || *max_lane_count == 3) {
-> +			dev_err(dev, "max lane count error, use default");
-> +			*max_lane_count = MAX_LANE_COUNT;
-> +		}
-> +	} else {
-> +		*max_lane_count = MAX_LANE_COUNT;
-> +	}
-> +
-> +	if (device_property_read_u32(dev, "max-dpi-pixel-clock",
-> +				     max_dpi_pixel_clock) == 0) {
-> +		if (*max_dpi_pixel_clock > 297000) {
-> +			dev_err(dev, "max pixel clock error, use default");
-> +			*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
-> +		}
-> +	} else {
-> +		*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
-> +	}
-> +
-> +	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %u, max_lane_count: %u",
-> +			     it6505->afe_setting, it6505->max_lane_count);
-> +	DRM_DEV_DEBUG_DRIVER(dev, "using max_dpi_pixel_clock: %u kHz",
-> +			     it6505->max_dpi_pixel_clock);
->   }
->   
->   static ssize_t receive_timing_debugfs_show(struct file *file, char __user *buf,
+Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+---
+ drivers/virtio/virtio_balloon.c | 91 +++++++++++++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
+
+diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloon.c
+index b9737da6c4dd..a32a52c28a1f 100644
+--- a/drivers/virtio/virtio_balloon.c
++++ b/drivers/virtio/virtio_balloon.c
+@@ -10,6 +10,7 @@
+ #include <linux/virtio_balloon.h>
+ #include <linux/swap.h>
+ #include <linux/workqueue.h>
++#include <linux/debugfs.h>
+ #include <linux/delay.h>
+ #include <linux/slab.h>
+ #include <linux/module.h>
+@@ -731,6 +732,91 @@ static void report_free_page_func(struct work_struct *work)
+ 	}
+ }
+ 
++/*
++ * DEBUGFS Interface
++ */
++#ifdef CONFIG_DEBUG_FS
++
++/**
++ * virtio_balloon_debug_show - shows statistics of balloon operations.
++ * @f: pointer to the &struct seq_file.
++ * @offset: ignored.
++ *
++ * Provides the statistics that can be accessed in virtio-balloon in the debugfs.
++ *
++ * Return: zero on success or an error code.
++ */
++static int virtio_balloon_debug_show(struct seq_file *f, void *offset)
++{
++	struct virtio_balloon *b = f->private;
++	u32 num_pages;
++	struct sysinfo i;
++
++	si_meminfo(&i);
++
++	seq_printf(f, "%-22s:", "capabilities");
++
++	if (virtio_has_feature(b->vdev, VIRTIO_BALLOON_F_MUST_TELL_HOST))
++		seq_puts(f, " tell_host");
++
++	if (virtio_has_feature(b->vdev, VIRTIO_BALLOON_F_STATS_VQ))
++		seq_puts(f, " stats");
++
++	if (virtio_has_feature(b->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
++		seq_puts(f, " deflate_on_oom");
++
++	if (virtio_has_feature(b->vdev, VIRTIO_BALLOON_F_FREE_PAGE_HINT))
++		seq_puts(f, " free_page_hint");
++
++	if (virtio_has_feature(b->vdev, VIRTIO_BALLOON_F_PAGE_POISON))
++		seq_puts(f, " page_poison");
++
++	if (virtio_has_feature(b->vdev, VIRTIO_BALLOON_F_REPORTING))
++		seq_puts(f, " reporting");
++
++	seq_puts(f, "\n");
++
++	seq_printf(f, "%-22s: %d\n", "page_size", 4096);
++
++	virtio_cread_le(b->vdev, struct virtio_balloon_config, actual,
++			&num_pages);
++	/* Memory returned to host or amount we can inflate if possible */
++	seq_printf(f, "%-22s: %u\n", "ballooned_pages", num_pages);
++
++	/* Total Memory for the guest from host */
++	seq_printf(f, "%-22s: %lu\n", "total_pages", i.totalram);
++
++	/* Current memory for the guest */
++	seq_printf(f, "%-22s: %lu\n", "current_pages", i.totalram-num_pages);
++
++	return 0;
++}
++
++DEFINE_SHOW_ATTRIBUTE(virtio_balloon_debug);
++
++static void  virtio_balloon_debugfs_init(struct virtio_balloon *b)
++{
++	debugfs_create_file("virtio-balloon", 0444, NULL, b,
++			    &virtio_balloon_debug_fops);
++}
++
++static void  virtio_balloon_debugfs_exit(struct virtio_balloon *b)
++{
++	debugfs_remove(debugfs_lookup("virtio-balloon", NULL));
++}
++
++#else
++
++static inline void virtio_balloon_debugfs_init(struct virtio_balloon *b)
++{
++}
++
++static inline void virtio_balloon_debugfs_exit(struct virtio_balloon *b)
++{
++}
++
++#endif	/* CONFIG_DEBUG_FS */
++
+ #ifdef CONFIG_BALLOON_COMPACTION
+ /*
+  * virtballoon_migratepage - perform the balloon page migration on behalf of
+@@ -1019,6 +1105,9 @@ static int virtballoon_probe(struct virtio_device *vdev)
+ 
+ 	if (towards_target(vb))
+ 		virtballoon_changed(vdev);
++
++	virtio_balloon_debugfs_init(vb);
++
+ 	return 0;
+ 
+ out_unregister_oom:
+@@ -1065,6 +1154,8 @@ static void virtballoon_remove(struct virtio_device *vdev)
+ {
+ 	struct virtio_balloon *vb = vdev->priv;
+ 
++	virtio_balloon_debugfs_exit(vb);
++
+ 	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_REPORTING))
+ 		page_reporting_unregister(&vb->pr_dev_info);
+ 	if (virtio_has_feature(vb->vdev, VIRTIO_BALLOON_F_DEFLATE_ON_OOM))
+-- 
+2.25.1
 

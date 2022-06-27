@@ -2,449 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21DC55CDAA
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B004755C7FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233661AbiF0Kbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38346 "EHLO
+        id S233020AbiF0Kdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiF0Kbo (ORCPT
+        with ESMTP id S232597AbiF0Kdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:31:44 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F4A6163;
-        Mon, 27 Jun 2022 03:31:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656325902; x=1687861902;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=eDm1C43BNjodQTqk/kM+BPvE/Kk0mTDyJMEPDHe3erY=;
-  b=HG16Is1GQUz5533LMbWWwCQdgEmae6XGJ8Q/mTgt8g+LeE7+imNq7rt0
-   fTo747vQZ6XdRSeLCanmtni4LRbkFq0wEm61QTM8ku7bb4k6uJMxXG5Vw
-   Zqns9ayi52J/ofKFzmETs3Zfn3LFZvSBnW3H4SRLWprsYi+UpY4gmDOyh
-   q1mNP4AnQtyv/1PlGnbcC44CyU2cJ6htmsACjz+qgBLdhbxxgmOdj6UFO
-   ATtk631WY+zA1sWghBBLGNKaAZH7M6h7gR4UmJ61oEdMsX9zAbZvMRxmr
-   6TH2zbsJj5rDwpzmk0IYSxtzNhgOPAkST5nhdHTw3wt9k85JeUP5s3gxM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="264462451"
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="264462451"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 03:31:41 -0700
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="616744674"
-Received: from fzaeni-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.88.6])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 03:31:38 -0700
-Message-ID: <b376aef05bc032fdf8cc23762ce77a14830440cd.camel@intel.com>
-Subject: Re: [PATCH v5 15/22] x86/virt/tdx: Allocate and set up PAMTs for
- TDMRs
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Mon, 27 Jun 2022 22:31:36 +1200
-In-Reply-To: <e72703b0-767a-ec88-7cb6-f95a3564d823@intel.com>
-References: <cover.1655894131.git.kai.huang@intel.com>
-         <c504a8acd06dc455050c25e2a4cc70aef5eb9358.1655894131.git.kai.huang@intel.com>
-         <e72703b0-767a-ec88-7cb6-f95a3564d823@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Mon, 27 Jun 2022 06:33:47 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC6E63E3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:33:44 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-317a66d62dfso80788227b3.7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 03:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VODoDzVCZKAUsZE7kTSW4XAB++NVoyofY4K1h7c/MA8=;
+        b=PeN5F9996BxEsiLqg8K7vhp+0lEyXGsvf74OFPjhmfln/aUk+Kaj3vlc4Vg46HXgtS
+         nlJ+4A2XzwWCmY6wJPtGva6pK7KNJpO+YhSuqX66yq0yQ/8tOV86ihN4LL8IC2aYBS7G
+         HPLGg1wHE7F1dEFQaUAg5haTAFpNfTbbcp1dnwXYdz9iQ0FF1rrMHMEL1IWc0Zl7Ucuy
+         FM+a8ra8lJkROVKYKu8pmxGL8TeIwxGibw1pgpWFEUI1MsssfHLaSaPgNaaQuFdEBL4P
+         K9wzkwg0yGnwHaze3tLtGLvT1Lqi3/ixp59EQDw8GH6QByea9UiP/0k+SKviVXbZ++pf
+         ajFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VODoDzVCZKAUsZE7kTSW4XAB++NVoyofY4K1h7c/MA8=;
+        b=AlpuGk0zwbzor65CeQSWwztEKMl2u89dINxp6SNhsMnKnTDOBf0OmGz1uxrKAjATVb
+         bz/zlwHjSDNCvpUzVCCYpsfKfPnWgOSlKiEMn5eq11oRjTI3YoEKH+8Pph5PG/0tWX0I
+         PAeLz4dKLSSX5eaTNhFPFZN/5mKoSt2w0t2TvrFXRiflYD++g+1/6WjSLbfsHJ9+b2iy
+         XLXTv81cPQKckh44webAKRJkgsw31zlRtZuBYFX9p9rdwMKEvzHH4pjIbfzP0i5d1cNd
+         ptTHlI6mhBBCN4NGrAjgL5WwuxL+CqlllGjDdKKHGOVWXLSz1pLg05kkDSAiLqve3P+1
+         1j1g==
+X-Gm-Message-State: AJIora+19kaqR7biVgnw1ebz/WekUgWy2vE1W/oXl74ZPBurG3i83GAZ
+        lVUkikSAfnu79iAsTX6ECV40BsDSwMKIQChpWE3HE3E48GRlhg==
+X-Google-Smtp-Source: AGRyM1t2kjGjxYE+LjwZz8xCIgNDrkse8xEEP248ngplx1lPQ5sKx81AV05OwXlhicvmmEKmxlVwaMvNkIEgbMs3SAE=
+X-Received: by 2002:a81:4bc5:0:b0:317:9c15:6ceb with SMTP id
+ y188-20020a814bc5000000b003179c156cebmr13783151ywa.31.1656326023558; Mon, 27
+ Jun 2022 03:33:43 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220625095459.3786827-1-chenhuacai@loongson.cn> <20220625095459.3786827-2-chenhuacai@loongson.cn>
+In-Reply-To: <20220625095459.3786827-2-chenhuacai@loongson.cn>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Mon, 27 Jun 2022 18:33:07 +0800
+Message-ID: <CAMZfGtV+xJ_FLooUPhZDcBOae_VnRHwGZqc3Ae1a0oNoLKk=iA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] LoongArch: Add sparse memory vmemmap support
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        Min Zhou <zhoumin@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-06-24 at 13:13 -0700, Dave Hansen wrote:
-> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > index 4988a91d5283..ec496e96d120 100644
-> > --- a/arch/x86/Kconfig
-> > +++ b/arch/x86/Kconfig
-> > @@ -1973,6 +1973,7 @@ config INTEL_TDX_HOST
-> > =C2=A0	depends on CPU_SUP_INTEL
-> > =C2=A0	depends on X86_64
-> > =C2=A0	depends on KVM_INTEL
-> > +	depends on CONTIG_ALLOC
-> > =C2=A0	select ARCH_HAS_CC_PLATFORM
-> > =C2=A0	select ARCH_KEEP_MEMBLOCK
-> > =C2=A0	help
-> > diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> > index fd9f449b5395..36260dd7e69f 100644
-> > --- a/arch/x86/virt/vmx/tdx/tdx.c
-> > +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> > @@ -558,6 +558,196 @@ static int create_tdmrs(struct tdmr_info *tdmr_ar=
-ray,
-> > int *tdmr_num)
-> > =C2=A0	return 0;
-> > =C2=A0}
-> > =C2=A0
-> > +/* Page sizes supported by TDX */
-> > +enum tdx_page_sz {
-> > +	TDX_PG_4K,
-> > +	TDX_PG_2M,
-> > +	TDX_PG_1G,
-> > +	TDX_PG_MAX,
-> > +};
->=20
-> Are these the same constants as the magic numbers in Kirill's
-> try_accept_one()?
+On Sat, Jun 25, 2022 at 5:54 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> From: Feiyang Chen <chenfeiyang@loongson.cn>
+>
+> Add sparse memory vmemmap support for LoongArch. SPARSEMEM_VMEMMAP
+> uses a virtually mapped memmap to optimise pfn_to_page and page_to_pfn
+> operations. This is the most efficient option when sufficient kernel
+> resources are available.
+>
+> Signed-off-by: Min Zhou <zhoumin@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> ---
+>  arch/loongarch/Kconfig                 |  2 +
+>  arch/loongarch/include/asm/pgtable.h   |  5 +-
+>  arch/loongarch/include/asm/sparsemem.h |  8 +++
+>  arch/loongarch/mm/init.c               | 71 +++++++++++++++++++++++++-
+>  include/linux/mm.h                     |  2 +
+>  mm/sparse-vmemmap.c                    | 10 ++++
+>  6 files changed, 96 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index dc19cf3071ea..8e56ca28165e 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -49,6 +49,7 @@ config LOONGARCH
+>         select ARCH_USE_QUEUED_RWLOCKS
+>         select ARCH_USE_QUEUED_SPINLOCKS
+>         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+> +       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
 
-try_accept_once() uses 'enum pg_level' PG_LEVEL_{4K,2M,1G} directly.  They =
-can
-be used directly too, but 'enum pg_level' has more than we need here:
-
-enum pg_level {
-        PG_LEVEL_NONE,                                                     =
-   =20
-        PG_LEVEL_4K,                                                       =
-   =20
-        PG_LEVEL_2M,                                                       =
-   =20
-        PG_LEVEL_1G,
-        PG_LEVEL_512G,                                                     =
-   =20
-        PG_LEVEL_NUM                                                       =
-   =20
-};=20
-
-It has PG_LEVEL_NONE, so PG_LEVEL_4K starts with 1.
-
-Below in tdmr_set_up_pamt(), I have two local arrays to store the base/size=
- for
-all TDX supported page sizes:
-
-	unsigned long pamt_base[TDX_PG_MAX];
-	unsigned long pamt_size[TDX_PG_MAX];=20
-
-And a loop to calculate the size of PAMT for each page size:
-
-	for (pgsz =3D TDX_PG_4K; pgsz < TDX_PG_MAX; pgsz++) {
-		pamt_size[pgsz] =3D tdmr_get_pamt_sz(tdmr, pgsz);
-		...
-	}
-
-And later a similar loop to get the PAMT base of each page size too.
-
-I can change them to:
-
-	/*
-	 * TDX only supports 4K, 2M and 1G page, but doesn't
-	 * support 512G page size.
-	 */
-#define TDX_PG_LEVEL_MAX	PG_LEVEL_512G
-
-	unsigned long pamt_base[TDX_PG_LEVEL_MAX];
-	unsigned long pamt_size[TDX_PG_LEVEL_MAX];
-
-And change the loop to:
-
-	for (pgsz =3D PG_LEVEL_4K; pgsz < TDX_PG_LEVEL_MAX; pgsz++) {
-		pamt_size[pgsz] =3D tdmr_get_pamt_sz(tdmr, pgsz);
-		...
-	}
-
-This would waste one 'unsigned long' for both pamt_base and pamt_size array=
-, as
-entry 0 isn't used for both of them.  Or we explicitly -1 array index:
-
-	for (pgsz =3D PG_LEVEL_4K; pgsz < TDX_PG_LEVEL_MAX; pgsz++) {
-		pamt_size[pgsz - 1] =3D tdmr_get_pamt_sz(tdmr, pgsz);
-		...
-	}
-
-What's your opinion?=20
-
-> > +/*
-> > + * Calculate PAMT size given a TDMR and a page size.  The returned
-> > + * PAMT size is always aligned up to 4K page boundary.
-> > + */
-> > +static unsigned long tdmr_get_pamt_sz(struct tdmr_info *tdmr,
-> > +				      enum tdx_page_sz pgsz)
-> > +{
-> > +	unsigned long pamt_sz;
-> > +	int pamt_entry_nr;
->=20
-> 'nr_pamt_entries', please.
-
-OK.
-
->=20
-> > +	switch (pgsz) {
-> > +	case TDX_PG_4K:
-> > +		pamt_entry_nr =3D tdmr->size >> PAGE_SHIFT;
-> > +		break;
-> > +	case TDX_PG_2M:
-> > +		pamt_entry_nr =3D tdmr->size >> PMD_SHIFT;
-> > +		break;
-> > +	case TDX_PG_1G:
-> > +		pamt_entry_nr =3D tdmr->size >> PUD_SHIFT;
-> > +		break;
-> > +	default:
-> > +		WARN_ON_ONCE(1);
-> > +		return 0;
-> > +	}
-> > +
-> > +	pamt_sz =3D pamt_entry_nr * tdx_sysinfo.pamt_entry_size;
-> > +	/* TDX requires PAMT size must be 4K aligned */
-> > +	pamt_sz =3D ALIGN(pamt_sz, PAGE_SIZE);
-> > +
-> > +	return pamt_sz;
-> > +}
-> > +
-> > +/*
-> > + * Pick a NUMA node on which to allocate this TDMR's metadata.
-> > + *
-> > + * This is imprecise since TDMRs are 1G aligned and NUMA nodes might
-> > + * not be.  If the TDMR covers more than one node, just use the _first=
-_
-> > + * one.  This can lead to small areas of off-node metadata for some
-> > + * memory.
-> > + */
-> > +static int tdmr_get_nid(struct tdmr_info *tdmr)
-> > +{
-> > +	unsigned long start_pfn, end_pfn;
-> > +	int i, nid;
-> > +
-> > +	/* Find the first memory region covered by the TDMR */
-> > +	memblock_for_each_tdx_mem_pfn_range(i, &start_pfn, &end_pfn, &nid)
-> > {
-> > +		if (end_pfn > (tdmr_start(tdmr) >> PAGE_SHIFT))
-> > +			return nid;
-> > +	}
-> > +
-> > +	/*
-> > +	 * No memory region found for this TDMR.  It cannot happen since
-> > +	 * when one TDMR is created, it must cover at least one (or
-> > +	 * partial) memory region.
-> > +	 */
-> > +	WARN_ON_ONCE(1);
-> > +	return 0;
-> > +}
->=20
-> You should really describe what you are doing.  At first glance "return
-> 0;" looks like "declare success".  How about something like this?
->=20
-> 	/*
-> 	 * Fall back to allocating the TDMR from node 0 when no memblock
-> 	 * can be found.  This should never happen since TDMRs originate
-> 	 * from the memblocks.
-> 	 */
->=20
-> Does that miss any of the points you were trying to make?
-
-No. Your comments looks better and will use yours.  Thanks.
-
->=20
-> > +static int tdmr_set_up_pamt(struct tdmr_info *tdmr)
-> > +{
-> > +	unsigned long pamt_base[TDX_PG_MAX];
-> > +	unsigned long pamt_size[TDX_PG_MAX];
-> > +	unsigned long tdmr_pamt_base;
-> > +	unsigned long tdmr_pamt_size;
-> > +	enum tdx_page_sz pgsz;
-> > +	struct page *pamt;
-> > +	int nid;
-> > +
-> > +	nid =3D tdmr_get_nid(tdmr);
-> > +
-> > +	/*
-> > +	 * Calculate the PAMT size for each TDX supported page size
-> > +	 * and the total PAMT size.
-> > +	 */
-> > +	tdmr_pamt_size =3D 0;
-> > +	for (pgsz =3D TDX_PG_4K; pgsz < TDX_PG_MAX; pgsz++) {
-> > +		pamt_size[pgsz] =3D tdmr_get_pamt_sz(tdmr, pgsz);
-> > +		tdmr_pamt_size +=3D pamt_size[pgsz];
-> > +	}
-> > +
-> > +	/*
-> > +	 * Allocate one chunk of physically contiguous memory for all
-> > +	 * PAMTs.  This helps minimize the PAMT's use of reserved areas
-> > +	 * in overlapped TDMRs.
-> > +	 */
-> > +	pamt =3D alloc_contig_pages(tdmr_pamt_size >> PAGE_SHIFT, GFP_KERNEL,
-> > +			nid, &node_online_map);
-> > +	if (!pamt)
-> > +		return -ENOMEM;
->=20
-> I'm not sure it's worth mentioning, but this doesn't really need to be
-> GFP_KERNEL.  __GFP_HIGHMEM would actually be just fine.  But,
-> considering that this is 64-bit only, that's just a technicality.
-
-
-
->=20
-> > +	/* Calculate PAMT base and size for all supported page sizes. */
->=20
-> That comment isn't doing much good.  If you say anything here it should b=
-e:
->=20
-> 	/*
-> 	 * Break the contiguous allocation back up into
-> 	 * the individual PAMTs for each page size:
-> 	 */
->=20
-> Also, this is *not* "calculating size".  That's done above.
-
-Thanks will use this comment.
-
->=20
-> > +	tdmr_pamt_base =3D page_to_pfn(pamt) << PAGE_SHIFT;
-> > +	for (pgsz =3D TDX_PG_4K; pgsz < TDX_PG_MAX; pgsz++) {
-> > +		pamt_base[pgsz] =3D tdmr_pamt_base;
-> > +		tdmr_pamt_base +=3D pamt_size[pgsz];
-> > +	}
-> > +
-> > +	tdmr->pamt_4k_base =3D pamt_base[TDX_PG_4K];
-> > +	tdmr->pamt_4k_size =3D pamt_size[TDX_PG_4K];
-> > +	tdmr->pamt_2m_base =3D pamt_base[TDX_PG_2M];
-> > +	tdmr->pamt_2m_size =3D pamt_size[TDX_PG_2M];
-> > +	tdmr->pamt_1g_base =3D pamt_base[TDX_PG_1G];
-> > +	tdmr->pamt_1g_size =3D pamt_size[TDX_PG_1G];
-> > +
-> > +	return 0;
-> > +}
-> >=20
-> > +static void tdmr_get_pamt(struct tdmr_info *tdmr, unsigned long *pamt_=
-pfn,
-> > +			  unsigned long *pamt_npages)
-> > +{
-> > +	unsigned long pamt_base, pamt_sz;
-> > +
-> > +	/*
-> > +	 * The PAMT was allocated in one contiguous unit.  The 4K PAMT
-> > +	 * should always point to the beginning of that allocation.
-> > +	 */
-> > +	pamt_base =3D tdmr->pamt_4k_base;
-> > +	pamt_sz =3D tdmr->pamt_4k_size + tdmr->pamt_2m_size + tdmr-
-> > >pamt_1g_size;
-> > +
-> > +	*pamt_pfn =3D pamt_base >> PAGE_SHIFT;
-> > +	*pamt_npages =3D pamt_sz >> PAGE_SHIFT;
-> > +}
-> > +
-> > +static void tdmr_free_pamt(struct tdmr_info *tdmr)
-> > +{
-> > +	unsigned long pamt_pfn, pamt_npages;
-> > +
-> > +	tdmr_get_pamt(tdmr, &pamt_pfn, &pamt_npages);
-> > +
-> > +	/* Do nothing if PAMT hasn't been allocated for this TDMR */
-> > +	if (!pamt_npages)
-> > +		return;
-> > +
-> > +	if (WARN_ON_ONCE(!pamt_pfn))
-> > +		return;
-> > +
-> > +	free_contig_range(pamt_pfn, pamt_npages);
-> > +}
-> > +
-> > +static void tdmrs_free_pamt_all(struct tdmr_info *tdmr_array, int tdmr=
-_num)
-> > +{
-> > +	int i;
-> > +
-> > +	for (i =3D 0; i < tdmr_num; i++)
-> > +		tdmr_free_pamt(tdmr_array_entry(tdmr_array, i));
-> > +}
-> > +
-> > +/* Allocate and set up PAMTs for all TDMRs */
-> > +static int tdmrs_set_up_pamt_all(struct tdmr_info *tdmr_array, int
-> > tdmr_num)
-> > +{
-> > +	int i, ret =3D 0;
-> > +
-> > +	for (i =3D 0; i < tdmr_num; i++) {
-> > +		ret =3D tdmr_set_up_pamt(tdmr_array_entry(tdmr_array, i));
-> > +		if (ret)
-> > +			goto err;
-> > +	}
-> > +
-> > +	return 0;
-> > +err:
-> > +	tdmrs_free_pamt_all(tdmr_array, tdmr_num);
-> > +	return ret;
-> > +}
-> > +
-> > +static unsigned long tdmrs_get_pamt_pages(struct tdmr_info *tdmr_array=
-,
-> > +					  int tdmr_num)
->=20
-> "get" is for refcounting.  tdmrs_count_pamt_pages() would be preferable.
-
-Will use count.  Thanks.
-
->=20
-> > +{
-> > +	unsigned long pamt_npages =3D 0;
-> > +	int i;
-> > +
-> > +	for (i =3D 0; i < tdmr_num; i++) {
-> > +		unsigned long pfn, npages;
-> > +
-> > +		tdmr_get_pamt(tdmr_array_entry(tdmr_array, i), &pfn,
-> > &npages);
-> > +		pamt_npages +=3D npages;
-> > +	}
-> > +
-> > +	return pamt_npages;
-> > +}
-> > +
-> > =C2=A0/*
-> > =C2=A0=C2=A0* Construct an array of TDMRs to cover all memory regions i=
-n memblock.
-> > =C2=A0=C2=A0* This makes sure all pages managed by the page allocator a=
-re TDX
-> > @@ -572,8 +762,13 @@ static int construct_tdmrs_memeblock(struct tdmr_i=
-nfo
-> > *tdmr_array,
-> > =C2=A0	if (ret)
-> > =C2=A0		goto err;
-> > =C2=A0
-> > +	ret =3D tdmrs_set_up_pamt_all(tdmr_array, *tdmr_num);
-> > +	if (ret)
-> > +		goto err;
-> > +
-> > =C2=A0	/* Return -EINVAL until constructing TDMRs is done */
-> > =C2=A0	ret =3D -EINVAL;
-> > +	tdmrs_free_pamt_all(tdmr_array, *tdmr_num);
-> > =C2=A0err:
-> > =C2=A0	return ret;
-> > =C2=A0}
-> > @@ -644,6 +839,11 @@ static int init_tdx_module(void)
-> > =C2=A0	 * process are done.
-> > =C2=A0	 */
-> > =C2=A0	ret =3D -EINVAL;
-> > +	if (ret)
-> > +		tdmrs_free_pamt_all(tdmr_array, tdmr_num);
-> > +	else
-> > +		pr_info("%lu pages allocated for PAMT.\n",
-> > +				tdmrs_get_pamt_pages(tdmr_array,
-> > tdmr_num));
-> > =C2=A0out_free_tdmrs:
-> > =C2=A0	/*
-> > =C2=A0	 * The array of TDMRs is freed no matter the initialization is
->=20
-> The rest looks OK.
+I think this should be a separate patch to enable HVO (HugeTLB Vmemmap
+Optimization) since it is irrelevant to this patch.
 
 Thanks.
 
---=20
-Thanks,
--Kai
-
-
+>         select ARCH_WANTS_NO_INSTR
+>         select BUILDTIME_TABLE_SORT
+>         select COMMON_CLK
+> @@ -422,6 +423,7 @@ config ARCH_FLATMEM_ENABLE
+>
+>  config ARCH_SPARSEMEM_ENABLE
+>         def_bool y
+> +       select SPARSEMEM_VMEMMAP_ENABLE
+>         help
+>           Say Y to support efficient handling of sparse physical memory,
+>           for architectures which are either NUMA (Non-Uniform Memory Access)
+> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
+> index 9c811c3f7572..b701ec7a0309 100644
+> --- a/arch/loongarch/include/asm/pgtable.h
+> +++ b/arch/loongarch/include/asm/pgtable.h
+> @@ -92,7 +92,10 @@ extern unsigned long zero_page_mask;
+>  #define VMALLOC_START  MODULES_END
+>  #define VMALLOC_END    \
+>         (vm_map_base +  \
+> -        min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE)
+> +        min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+> +
+> +#define vmemmap                ((struct page *)((VMALLOC_END + PMD_SIZE) & PMD_MASK))
+> +#define VMEMMAP_END    ((unsigned long)vmemmap + VMEMMAP_SIZE - 1)
+>
+>  #define pte_ERROR(e) \
+>         pr_err("%s:%d: bad pte %016lx.\n", __FILE__, __LINE__, pte_val(e))
+> diff --git a/arch/loongarch/include/asm/sparsemem.h b/arch/loongarch/include/asm/sparsemem.h
+> index 3d18cdf1b069..a1e440f6bec7 100644
+> --- a/arch/loongarch/include/asm/sparsemem.h
+> +++ b/arch/loongarch/include/asm/sparsemem.h
+> @@ -11,6 +11,14 @@
+>  #define SECTION_SIZE_BITS      29 /* 2^29 = Largest Huge Page Size */
+>  #define MAX_PHYSMEM_BITS       48
+>
+> +#ifndef CONFIG_SPARSEMEM_VMEMMAP
+> +#define VMEMMAP_SIZE   0
+> +#else
+> +#define VMEMMAP_SIZE   (sizeof(struct page) * (1UL << (cpu_pabits + 1 - PAGE_SHIFT)))
+> +#endif
+> +
+> +#include <linux/mm_types.h>
+> +
+>  #endif /* CONFIG_SPARSEMEM */
+>
+>  #ifdef CONFIG_MEMORY_HOTPLUG
+> diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
+> index 7094a68c9b83..35128229fe46 100644
+> --- a/arch/loongarch/mm/init.c
+> +++ b/arch/loongarch/mm/init.c
+> @@ -22,7 +22,7 @@
+>  #include <linux/pfn.h>
+>  #include <linux/hardirq.h>
+>  #include <linux/gfp.h>
+> -#include <linux/initrd.h>
+> +#include <linux/hugetlb.h>
+>  #include <linux/mmzone.h>
+>
+>  #include <asm/asm-offsets.h>
+> @@ -157,6 +157,75 @@ void arch_remove_memory(u64 start, u64 size, struct vmem_altmap *altmap)
+>  #endif
+>  #endif
+>
+> +#ifdef CONFIG_SPARSEMEM_VMEMMAP
+> +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
+> +                                        int node, struct vmem_altmap *altmap)
+> +{
+> +       unsigned long addr = start;
+> +       unsigned long next;
+> +       pgd_t *pgd;
+> +       p4d_t *p4d;
+> +       pud_t *pud;
+> +       pmd_t *pmd;
+> +
+> +       for (addr = start; addr < end; addr = next) {
+> +               next = pmd_addr_end(addr, end);
+> +
+> +               pgd = vmemmap_pgd_populate(addr, node);
+> +               if (!pgd)
+> +                       return -ENOMEM;
+> +               p4d = vmemmap_p4d_populate(pgd, addr, node);
+> +               if (!p4d)
+> +                       return -ENOMEM;
+> +               pud = vmemmap_pud_populate(p4d, addr, node);
+> +               if (!pud)
+> +                       return -ENOMEM;
+> +
+> +               pmd = pmd_offset(pud, addr);
+> +               if (pmd_none(*pmd)) {
+> +                       void *p = NULL;
+> +
+> +                       p = vmemmap_alloc_block_buf(PMD_SIZE, node, NULL);
+> +                       if (p) {
+> +                               pmd_t entry;
+> +
+> +                               entry = pfn_pmd(virt_to_pfn(p), PAGE_KERNEL);
+> +                               pmd_val(entry) |= _PAGE_HUGE | _PAGE_HGLOBAL;
+> +                               set_pmd_at(&init_mm, addr, pmd, entry);
+> +
+> +                               continue;
+> +                       }
+> +               } else if (pmd_val(*pmd) & _PAGE_HUGE) {
+> +                       vmemmap_verify((pte_t *)pmd, node, addr, next);
+> +                       continue;
+> +               }
+> +               if (vmemmap_populate_basepages(addr, next, node, NULL))
+> +                       return -ENOMEM;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +#if CONFIG_PGTABLE_LEVELS == 2
+> +int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+> +               struct vmem_altmap *altmap)
+> +{
+> +       return vmemmap_populate_basepages(start, end, node, NULL);
+> +}
+> +#else
+> +int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+> +               struct vmem_altmap *altmap)
+> +{
+> +       return vmemmap_populate_hugepages(start, end, node, NULL);
+> +}
+> +#endif
+> +
+> +void vmemmap_free(unsigned long start, unsigned long end,
+> +               struct vmem_altmap *altmap)
+> +{
+> +}
+> +#endif
+> +
+>  /*
+>   * Align swapper_pg_dir in to 64K, allows its address to be loaded
+>   * with a single LUI instruction in the TLB handlers.  If we used
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index bc8f326be0ce..3472b924a1ea 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3203,6 +3203,8 @@ void *sparse_buffer_alloc(unsigned long size);
+>  struct page * __populate_section_memmap(unsigned long pfn,
+>                 unsigned long nr_pages, int nid, struct vmem_altmap *altmap,
+>                 struct dev_pagemap *pgmap);
+> +void pmd_init(void *addr);
+> +void pud_init(void *addr);
+>  pgd_t *vmemmap_pgd_populate(unsigned long addr, int node);
+>  p4d_t *vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node);
+>  pud_t *vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node);
+> diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+> index f4fa61dbbee3..33e2a1ceee72 100644
+> --- a/mm/sparse-vmemmap.c
+> +++ b/mm/sparse-vmemmap.c
+> @@ -587,6 +587,10 @@ pmd_t * __meminit vmemmap_pmd_populate(pud_t *pud, unsigned long addr, int node)
+>         return pmd;
+>  }
+>
+> +void __weak __meminit pmd_init(void *addr)
+> +{
+> +}
+> +
+>  pud_t * __meminit vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node)
+>  {
+>         pud_t *pud = pud_offset(p4d, addr);
+> @@ -594,11 +598,16 @@ pud_t * __meminit vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node)
+>                 void *p = vmemmap_alloc_block_zero(PAGE_SIZE, node);
+>                 if (!p)
+>                         return NULL;
+> +               pmd_init(p);
+>                 pud_populate(&init_mm, pud, p);
+>         }
+>         return pud;
+>  }
+>
+> +void __weak __meminit pud_init(void *addr)
+> +{
+> +}
+> +
+>  p4d_t * __meminit vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node)
+>  {
+>         p4d_t *p4d = p4d_offset(pgd, addr);
+> @@ -606,6 +615,7 @@ p4d_t * __meminit vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node)
+>                 void *p = vmemmap_alloc_block_zero(PAGE_SIZE, node);
+>                 if (!p)
+>                         return NULL;
+> +               pud_init(p);
+>                 p4d_populate(&init_mm, p4d, p);
+>         }
+>         return p4d;
+> --
+> 2.27.0
+>

@@ -2,141 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFFC55D602
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669A255CAAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbiF0JD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
+        id S233772AbiF0JFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbiF0JD1 (ORCPT
+        with ESMTP id S232174AbiF0JFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:03:27 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ABB26C7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:03:24 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LWhYm2R5szkWjZ;
-        Mon, 27 Jun 2022 17:02:04 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 27 Jun 2022 17:02:47 +0800
-Subject: Re: [PATCH v2 7/9] mm, hwpoison: make __page_handle_poison returns
- int
-To:     Naoya Horiguchi <nao.horiguchi@gmail.com>, <linux-mm@kvack.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
- <20220623235153.2623702-8-naoya.horiguchi@linux.dev>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <ecbcdd7e-b21f-315b-7eff-1eb692e320f7@huawei.com>
-Date:   Mon, 27 Jun 2022 17:02:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 27 Jun 2022 05:05:30 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E226343
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:05:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656320730; x=1687856730;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=y7Bnm7t7TjTtAlu/JwqIMutYoVkhtjRFLIevu8zu33M=;
+  b=kjnAKax71JhOti02pmVTzP4usxtjsf4rm1QFo+q61xmsajwVBEMVYuFI
+   +g/pzAjJ5X4kImxP4Bl6bMKo5pRriIZgCDJ1Qw25KzV/WMyV2jTxdLUFq
+   XAm859TaQiG5v8kwaHCBTXHEdRD51vYHJ+o4q2zGxVRKpyLgnvuMIf8pA
+   JxtMUSk+/qwp7CySxlKAlB1KoDzM+gLXatLroL+28iAcPiiRQv5DMR62S
+   awaLyiAwMFpWdR+yk/8szaY/y4aCwJsj3/twCzvDdb3GinuFCkle4W2cj
+   8yU1PyX5TiUn3XY5Z/SU4DG+Ok/iqM931ccSys7nJ8N65OA4mZowQ+dAR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="343090083"
+X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
+   d="scan'208";a="343090083"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 02:05:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
+   d="scan'208";a="679500670"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Jun 2022 02:05:28 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o5kgR-0008OK-Hp;
+        Mon, 27 Jun 2022 09:05:27 +0000
+Date:   Mon, 27 Jun 2022 17:05:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guo Ren <guoren@linux.alibaba.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: arch/riscv/kernel/compat_syscall_table.o:undefined reference to
+ `compat_sys_fadvise64_64'
+Message-ID: <202206271631.is6IZBec-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220623235153.2623702-8-naoya.horiguchi@linux.dev>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/24 7:51, Naoya Horiguchi wrote:
-> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> 
-> __page_handle_poison() returns bool that shows whether
-> take_page_off_buddy() has passed or not now.  But we will want to
-> distinguish another case of "dissolve has passed but taking off failed"
-> by its return value. So change the type of the return value.
-> No functional change.
-> 
-> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> ---
->  mm/memory-failure.c | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
-> 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index ce045d0d6115..db85f644a1e3 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -71,7 +71,13 @@ atomic_long_t num_poisoned_pages __read_mostly = ATOMIC_LONG_INIT(0);
->  
->  static bool hw_memory_failure __read_mostly = false;
->  
-> -static bool __page_handle_poison(struct page *page)
-> +/*
-> + * Return values:
-> + *   1:   the page is dissolved (if needed) and taken off from buddy,
-> + *   0:   the page is dissolved (if needed) and not taken off from buddy,
-> + *   < 0: failed to dissolve.
-> + */
-> +static int __page_handle_poison(struct page *page)
->  {
->  	int ret;
->  
-> @@ -81,7 +87,7 @@ static bool __page_handle_poison(struct page *page)
->  		ret = take_page_off_buddy(page);
->  	zone_pcp_enable(page_zone(page));
->  
-> -	return ret > 0;
-> +	return ret;
->  }
->  
->  static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, bool release)
-> @@ -91,7 +97,7 @@ static bool page_handle_poison(struct page *page, bool hugepage_or_freepage, boo
->  		 * Doing this check for free pages is also fine since dissolve_free_huge_page
->  		 * returns 0 for non-hugetlb pages as well.
->  		 */
-> -		if (!__page_handle_poison(page))
-> +		if (__page_handle_poison(page) <= 0)
->  			/*
->  			 * We could fail to take off the target page from buddy
->  			 * for example due to racy page allocation, but that's
-> @@ -1048,7 +1054,7 @@ static int me_huge_page(struct page_state *ps, struct page *p)
->  		 * subpages.
->  		 */
->  		put_page(hpage);
-> -		if (__page_handle_poison(p)) {
-> +		if (__page_handle_poison(p) > 0) {
->  			page_ref_inc(p);
->  			res = MF_RECOVERED;
->  		}
-> @@ -1698,8 +1704,7 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
->  	 */
->  	if (res == 0) {
->  		unlock_page(head);
-> -		res = MF_FAILED;
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   03c765b0e3b4cb5063276b086c76f7a612856a9a
+commit: 9be8459298eadb39b9fe9974b890239e9c123107 riscv: compat: Add COMPAT Kbuild skeletal support
+date:   6 weeks ago
+config: riscv-randconfig-m031-20220627 (https://download.01.org/0day-ci/archive/20220627/202206271631.is6IZBec-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9be8459298eadb39b9fe9974b890239e9c123107
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9be8459298eadb39b9fe9974b890239e9c123107
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-It seems the previous discussion in [1] is missed. But that doesn't matter as pointed out by [1]. :)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+All errors (new ones prefixed by >>):
 
-Thanks.
+   riscv64-linux-ld: riscv64-linux-ld: DWARF error: could not find abbrev number 56
+>> arch/riscv/kernel/compat_syscall_table.o:(.rodata+0x6f8): undefined reference to `compat_sys_fadvise64_64'
 
-[1]: https://lkml.org/lkml/2022/6/8/10
-
-> -		if (__page_handle_poison(p)) {
-> +		if (__page_handle_poison(p) > 0) {
->  			page_ref_inc(p);
->  			res = MF_RECOVERED;
->  		}
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

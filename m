@@ -2,135 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E7855B4AB
+	by mail.lfdr.de (Postfix) with ESMTP id 86E7155B4AC
 	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 02:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiF0Adu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 20:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
+        id S229986AbiF0Ad5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 20:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiF0Ads (ORCPT
+        with ESMTP id S229732AbiF0Ady (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 20:33:48 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2611ED8F
-        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 17:33:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1656290027; x=1687826027;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0w3fR5dFNaU97jWfVx9KomMSpa0jR4GXte5D1bSThjY=;
-  b=skxmJNiCuHs5MMjpTEpLPcsnq3U+O8Q/Eajp0tZT3R7DFT9nI5TYFPpY
-   EbM5hwS08oQx5F6sa3lpFG15ei28L39vz3GNWb1d7R2lfFm8Lw0YGr4Xi
-   RmyCb5ukOdWa46NC0nFtJtsm+s3BOHPhrQEcv07CEr7wBWh0K3vWJP5hM
-   w=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 26 Jun 2022 17:33:46 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 17:33:46 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 26 Jun 2022 17:33:46 -0700
-Received: from [10.253.34.55] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 26 Jun
- 2022 17:33:44 -0700
-Message-ID: <02eb1afc-3e1f-0d3f-d082-1ce6aaf9924f@quicinc.com>
-Date:   Mon, 27 Jun 2022 08:33:42 +0800
+        Sun, 26 Jun 2022 20:33:54 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7720CD8F;
+        Sun, 26 Jun 2022 17:33:51 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LWTHK54kWz4xDH;
+        Mon, 27 Jun 2022 10:33:49 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1656290030;
+        bh=dxBX31GVCNAdZ1uAyn2cnF+nj9OyO//pM/osEPOjVrU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jnKcjtOAxBiJgJbGuYYxvWLn/IV243hNhpQatgFePZYyWonZIW9Bzia1/4Sr25Kok
+         mehd/VpvIFTeeDdDv2rRMB3dqOzF86khs/dwy6Vs9KYXVetNEWhOwTRPofMWFRz3qI
+         0oPkxGmlPgt1LLqXU0T990W6nc20k77zhTEQ35meAPrO10sU8v3Kxyo5m8vxApK7ZS
+         YO9Rr7IIAnglGAIjqfKH3EJjU8U4poSgDPI2wDiIxTostX10gcebKnsx2MPxz/NeUB
+         tAEN7A7JgRKkUTSQpqq0+fkzVn61Lz3NiC84bjbc1wcSpfGaBDxiuIPK12Axty4oRL
+         Pus2K6R3UynkQ==
+Date:   Mon, 27 Jun 2022 10:33:48 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>
+Subject: linux-next: manual merge of the drm-msm-lumag tree with Linus' tree
+Message-ID: <20220627103348.2e9fc4f9@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6 1/3] tracing: eprobe: remove duplicate is_good_name()
- operation
-Content-Language: en-US
-To:     Tom Zanussi <zanussi@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>
-References: <1655776787-18133-1-git-send-email-quic_linyyuan@quicinc.com>
- <1655776787-18133-2-git-send-email-quic_linyyuan@quicinc.com>
- <3f1b974be23b058cc0f004b518df21716b9dfcfd.camel@kernel.org>
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <3f1b974be23b058cc0f004b518df21716b9dfcfd.camel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Be7PE3xcqyhgLsFb_d+3qxr";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Tom,
+--Sig_/Be7PE3xcqyhgLsFb_d+3qxr
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 6/26/2022 1:25 AM, Tom Zanussi wrote:
-> Hi Linyu,
->
-> On Tue, 2022-06-21 at 09:59 +0800, Linyu Yuan wrote:
->> traceprobe_parse_event_name() already validate SYSTEM and EVENT name,
->> there is no need to call is_good_name() after it.
->>
->> Add trace_probe_log_set_index(1) to allow report correct error
->> if user input wrong SYSTEM.EVENT format.
->>
->> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
->> ---
->> v2: drop v1 change as it is NACK.
->>      add it to remove duplicate is_good_name().
->> v3: move it as first patch.
->> v4: no change
->> v5: add Acked-by tag
->> v6: keep is_good_name() check for group and event name
->>      add trace_probe_log_set_index(1) to report correct error message.
->>
->>   kernel/trace/trace_eprobe.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/kernel/trace/trace_eprobe.c
->> b/kernel/trace/trace_eprobe.c
->> index 7d44785..8979cb9e 100644
->> --- a/kernel/trace/trace_eprobe.c
->> +++ b/kernel/trace/trace_eprobe.c
->> @@ -881,13 +881,12 @@ static int __trace_eprobe_create(int argc,
->> const char *argv[])
->>          if (!is_good_name(event) || !is_good_name(group))
->>                  goto parse_error;
->>   
->> +       trace_probe_log_set_index(1);
-> Is this something that you noticed missing in the original code and are
-> adding now?  If so, please make this a separate patch.  Or is this
-> something that's needed for the new 'generating event name' code?  If
-> that's the case, please move this to the other patch.
->
-> This one should only contain the code related to the duplicate
-> is_good_name() removal mentioned in the subject.  Or if this really
-> does belong here, please provide more explanation of why it's needed if
-> you remove the duplicate is_good_name() code.
-thanks, the original code should have this setting, i will create a 
-separate patch.
->
-> Thanks,
->
-> Tom
->
->>          sys_event = argv[1];
->>          ret = traceprobe_parse_event_name(&sys_event, &sys_name,
->> buf2,
->>                                            sys_event - argv[1]);
->>          if (ret || !sys_name)
->>                  goto parse_error;
->> -       if (!is_good_name(sys_event) || !is_good_name(sys_name))
->> -               goto parse_error;
->>   
->>          mutex_lock(&event_mutex);
->>          event_call = find_and_get_event(sys_name, sys_event);
+Hi all,
+
+Today's linux-next merge of the drm-msm-lumag tree got a conflict in:
+
+  drivers/gpu/drm/msm/msm_fence.c
+
+between commit:
+
+  3c7a52217a8c ("drm/msm: Drop update_fences()")
+
+from Linus' tree and commit:
+
+  bda2eac959ae ("drm/msm: Fix fence rollover issue")
+
+from the drm-msm-lumag tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/msm/msm_fence.c
+index 38e3323bc232,a35a6746c7cd..000000000000
+--- a/drivers/gpu/drm/msm/msm_fence.c
++++ b/drivers/gpu/drm/msm/msm_fence.c
+@@@ -46,14 -54,13 +54,15 @@@ bool msm_fence_completed(struct msm_fen
+  		(int32_t)(*fctx->fenceptr - fence) >=3D 0;
+  }
+ =20
+- /* called from irq handler and workqueue (in recover path) */
++ /* called from irq handler */
+  void msm_update_fence(struct msm_fence_context *fctx, uint32_t fence)
+  {
+ -	spin_lock(&fctx->spinlock);
+ +	unsigned long flags;
+ +
+ +	spin_lock_irqsave(&fctx->spinlock, flags);
+- 	fctx->completed_fence =3D max(fence, fctx->completed_fence);
++ 	if (fence_after(fence, fctx->completed_fence))
++ 		fctx->completed_fence =3D fence;
+ -	spin_unlock(&fctx->spinlock);
+ +	spin_unlock_irqrestore(&fctx->spinlock, flags);
+  }
+ =20
+  struct msm_fence {
+
+--Sig_/Be7PE3xcqyhgLsFb_d+3qxr
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmK4+uwACgkQAVBC80lX
+0GyTDwgAhpm9xjOv+BvN8kbatE1ZBEj1+CJGqHISwE12ojGvAETF/IqOe3C3Hc9D
+JxpmOukOKWKFuVFrPpH1pXkcp4KpMnLL9JQzODC2qjZZP0flz932ajwju4MHW2+y
+XcMSj89JOIUK+F+uC/poyQ/MqqjxvmOcn5N6smm0vWv1BIy/hVreSHoAXEr0DFFh
+6ArAN2kj1I48fkgVUFiOCfTGW0UJR7/luqhSTpg82j4N0AwCFsnLMj7ola24lsK+
+fxf63+lC+oOWxLyHtRoi+W1i5/ou0nuoqN3SF5Imf6tWAn3JbvrPu945wWOmaLQu
+YscNJVgdZH2Q0pW8g82bf81VhI68ng==
+=zNKw
+-----END PGP SIGNATURE-----
+
+--Sig_/Be7PE3xcqyhgLsFb_d+3qxr--

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8153655E326
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C83B55C909
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236620AbiF0Liz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
+        id S234834AbiF0LY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236450AbiF0Lhc (ORCPT
+        with ESMTP id S234780AbiF0LYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:37:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBE1262C;
-        Mon, 27 Jun 2022 04:32:44 -0700 (PDT)
+        Mon, 27 Jun 2022 07:24:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DB5658B;
+        Mon, 27 Jun 2022 04:24:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C75B60023;
-        Mon, 27 Jun 2022 11:32:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C3DDC3411D;
-        Mon, 27 Jun 2022 11:32:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A071D61458;
+        Mon, 27 Jun 2022 11:24:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB10C3411D;
+        Mon, 27 Jun 2022 11:24:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329563;
-        bh=NV9RtVFudLDqIXphuh/TH5G1CLuIWV62EEo6CBzyooM=;
+        s=korg; t=1656329077;
+        bh=vEOyzikwHr8yUIyT1NrM8XxN7gOHcBAHFwZsTCrnaNM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I0N+R2e8rXPdYFTBdemsXavd9rf8jlwv/FsMxqMj81dx9n+NNlDz+ACbLOVguKfvU
-         peWc49S6vUs7CkDULM7LNJTPZxtcJMu/fyfo+BZeq6oR8PzDBIX87SrRHtNqFVL6qf
-         6fVQD8DsTizjVeNy6nC3NFEr5M3VjlkfnXEm/RWI=
+        b=edZSr5JYUekTSbL5mqLAD0ZW6n9XktTLFVaG0rMAzpBbdSYAWUZR18FGUy0lMxf18
+         TUuUjEHOhZk0xCSxW9bTUpWZiMPeboDkf+0MbDSohF9rglg3Naag+CEaETwaeUg57I
+         roRLgRVDrxB1aT6R2py3d96znlw0wf9uN54Ssivk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tim Crawford <tcrawford@system76.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 009/135] ALSA: hda/realtek: Add quirk for Clevo NS50PU
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 005/102] ALSA: hda/conexant: Fix missing beep setup
 Date:   Mon, 27 Jun 2022 13:20:16 +0200
-Message-Id: <20220627111938.428499739@linuxfoundation.org>
+Message-Id: <20220627111933.621750485@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,30 +53,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tim Crawford <tcrawford@system76.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 627ce0d68eb4b53e995b08089fa9da1e513ec5ba upstream.
+commit 5faa0bc69102f3a4c605581564c367be5eb94dfa upstream.
 
-Fixes headset detection on Clevo NS50PU.
+Currently the Conexant codec driver sets up the beep NID after calling
+snd_hda_gen_parse_auto_config().  It turned out that this results in
+the insufficient setup for the beep control, as the generic parser
+handles the fake path in snd_hda_gen_parse_auto_config() only if the
+beep_nid is set up beforehand.
 
-Signed-off-by: Tim Crawford <tcrawford@system76.com>
+For dealing with the beep widget properly, call cx_auto_parse_beep()
+before snd_hda_gen_parse_auto_config() call.
+
+Fixes: 51e19ca5f755 ("ALSA: hda/conexant - Clean up beep code")
 Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220622150017.9897-1-tcrawford@system76.com
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216152
+Link: https://lore.kernel.org/r/20220620104008.1994-1-tiwai@suse.de
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ sound/pci/hda/patch_conexant.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9000,6 +9000,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x1558, 0x70f3, "Clevo NH77DPQ", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1558, 0x70f4, "Clevo NH77EPY", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1558, 0x70f6, "Clevo NH77DPQ-Y", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
-+	SND_PCI_QUIRK(0x1558, 0x7716, "Clevo NS50PU", ALC256_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1558, 0x8228, "Clevo NR40BU", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1558, 0x8520, "Clevo NH50D[CD]", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1558, 0x8521, "Clevo NH77D[CD]", ALC293_FIXUP_SYSTEM76_MIC_NO_PRESENCE),
+--- a/sound/pci/hda/patch_conexant.c
++++ b/sound/pci/hda/patch_conexant.c
+@@ -1072,11 +1072,11 @@ static int patch_conexant_auto(struct hd
+ 	if (err < 0)
+ 		goto error;
+ 
+-	err = snd_hda_gen_parse_auto_config(codec, &spec->gen.autocfg);
++	err = cx_auto_parse_beep(codec);
+ 	if (err < 0)
+ 		goto error;
+ 
+-	err = cx_auto_parse_beep(codec);
++	err = snd_hda_gen_parse_auto_config(codec, &spec->gen.autocfg);
+ 	if (err < 0)
+ 		goto error;
+ 
 
 

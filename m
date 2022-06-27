@@ -2,94 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B8255CB7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2D655C420
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239122AbiF0UYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 16:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
+        id S240607AbiF0UZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 16:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240356AbiF0UYx (ORCPT
+        with ESMTP id S240411AbiF0UZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 16:24:53 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296451A80D;
-        Mon, 27 Jun 2022 13:24:52 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id pk21so21549157ejb.2;
-        Mon, 27 Jun 2022 13:24:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/kOow9vitS6PwBDRVMXZUrJIKbzM8TurUiTbE4cjhJ4=;
-        b=A0Enxr6I6cTRhN63dLpe6rDqZ3D79PzQxc9oz1zz2lIrHjLxPZCVurJiXm89ZWhHH/
-         m4YNqRqNgvXWdIUg450/RJlldqXJ34xjWFVlbdJiVCj3oTmUeD2V77j9hmhXKnlo3zf5
-         RiEZ2bw+Fd6FzWkC8jGWdNJ1gGsAJVAItAuMW/dvgWAzfhPNlmkvDK57sBJGPeXk2brY
-         YYAqaDimsa9Te3WTRN82SuXqzEYfaByw/OSQBUgio4JrmGWkjVLf6J1k0Id2mR5NEHIy
-         QMZORRdWigc4xtfmDZE0YDXwVHc+U6BRHGIj+Dp91NZhGRJiRZULn+CBoB83oZmjYk7x
-         75FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/kOow9vitS6PwBDRVMXZUrJIKbzM8TurUiTbE4cjhJ4=;
-        b=hJtIEEkmh7grDXcUUaIz/IgSr6AdqBFiTYPESIJeav3uy/hjkEiILD+3ZCDS29fHG9
-         SZ4ppwaHMzbKwraEHm6Wnxao0lqNxIGno1pIH7QUCJHwdshwfUM1WHOJSl09CkXjz8Jd
-         BwL2AarKv/qRsMclzEqegWG5JhHDWxHS8m8/p1TxAgPkBgH+7vG4cBiITJLbTHNyEzsF
-         ZHEPeajto4UIytFxH53bjy8qDAqE+8p6lmYTlZsXb7yrHICH5K772ivPT863E4IzAGO7
-         L1DvsAn/D8vRMHKiOtXrGMK2Vp3raKjXvAFs2ODDqKObk2fW+K7qs8F7LAgrN+o5Lxij
-         B8xg==
-X-Gm-Message-State: AJIora+mHqzQ02gKrc6kY0+11poJNU61Am6xZeU8AgXK7aRQQeXw0ZV1
-        ETVNcqn91O43QrXFL9zvcxk=
-X-Google-Smtp-Source: AGRyM1ucO41refGoDSFrPDo7tl8WOhspo5azxD7hXvL5SqjtjYyW8BRdSebUwVQIweoQxmtDlm9+AA==
-X-Received: by 2002:a17:906:7007:b0:6ff:8028:42e with SMTP id n7-20020a170906700700b006ff8028042emr14573895ejj.278.1656361490665;
-        Mon, 27 Jun 2022 13:24:50 -0700 (PDT)
-Received: from jernej-laptop.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id p22-20020a170906605600b00722c44f9301sm5311968ejj.224.2022.06.27.13.24.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 13:24:49 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Samuel Holland <samuel@sholland.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [RESEND PATCH] rtc: sun6i: add support for R329 RTC
-Date:   Mon, 27 Jun 2022 22:24:48 +0200
-Message-ID: <12003397.O9o76ZdvQC@jernej-laptop>
-In-Reply-To: <20220626042756.58961-1-samuel@sholland.org>
-References: <20220626042756.58961-1-samuel@sholland.org>
+        Mon, 27 Jun 2022 16:25:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA3519006;
+        Mon, 27 Jun 2022 13:25:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A644861749;
+        Mon, 27 Jun 2022 20:25:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE6F2C34115;
+        Mon, 27 Jun 2022 20:25:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656361530;
+        bh=jpnWZVxb9HV/DtYzyR0zp85pAnSe8Y8gDthm+NamXjk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=McABRWdl8ZU1sUTBJ5QBjSnxP358lySY34thuCaWvZsgfLSzUXUV9s+uTqBNPmP20
+         wilfErzbh3hekctCYICSkYl3RnByre5l3RxPl/Ug6Q/wwfc3XfHGyCuHUB+hgIalyZ
+         FrT8Fr9HatTgK5WpbDQMCR/ONWYbt55GDGQkwyxMRCh0ZEbnyerWVFfZfcXlrNTg9u
+         g7qro3k5WPH58owstLhWZqyH7/DONZ3YxIG2sWLCZ9yV5SMhnOpX+2fNyQZHRfzH0E
+         jli66pKVoJak8EpHDRXS4U7KcbszEOwUIcpaOM0TOYOgD/W7IdXuDaOyP7+Y1AA5i0
+         L5ij6c9tlS40A==
+Date:   Mon, 27 Jun 2022 15:25:28 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ren Zhijie <renzhijie2@huawei.com>, Jon Mason <jdmason@kudzu.us>
+Cc:     kishon@ti.com, lpieralisi@kernel.org, kw@linux.com,
+        bhelgaas@google.com, Frank.Li@nxp.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] PCI: endpoint: Fix Kconfig dependency
+Message-ID: <20220627202528.GA1775049@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627200750.GA1774052@bhelgaas>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne nedelja, 26. junij 2022 ob 06:27:56 CEST je Samuel Holland napisal(a):
-> From: Icenowy Zheng <icenowy@aosc.io>
+On Mon, Jun 27, 2022 at 03:07:50PM -0500, Bjorn Helgaas wrote:
+> On Mon, Jun 27, 2022 at 02:57:14PM -0500, Bjorn Helgaas wrote:
+> > On Fri, Jun 24, 2022 at 09:19:11AM +0800, Ren Zhijie wrote:
+> > > If CONFIG_NTB is not set and CONFIG_PCI_EPF_VNTB is y.
+> > > 
+> > > make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-, will be failed, like this:
+> > > 
+> > > drivers/pci/endpoint/functions/pci-epf-vntb.o: In function `epf_ntb_cmd_handler':
+> > > pci-epf-vntb.c:(.text+0x95e): undefined reference to `ntb_db_event'
+> > > pci-epf-vntb.c:(.text+0xa1f): undefined reference to `ntb_link_event'
+> > > pci-epf-vntb.c:(.text+0xa42): undefined reference to `ntb_link_event'
+> > > drivers/pci/endpoint/functions/pci-epf-vntb.o: In function `pci_vntb_probe':
+> > > pci-epf-vntb.c:(.text+0x1250): undefined reference to `ntb_register_device'
+> > > 
+> > > The functions ntb_*() are defined in drivers/ntb/core.c, which need CONFIG_NTB setting y to be build-in.
+> > > To fix this build error, add depends on NTB.
+> > > 
+> > > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > > Fixes: ff32fac00d97("NTB: EPF: support NTB transfer between PCI RC and EP connection")
+> > > Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+> > > Acked-by: Frank Li <frank.li@nxp.com>
+> > 
+> > Am I missing something? 
+> > 
+> >   02:54:01 ~/linux (next)$ git checkout -b wip/ren-endpoint-ntb v5.19-rc1
+> >   Switched to a new branch 'wip/ren-endpoint-ntb'
+> >   02:54:23 ~/linux (wip/ren-endpoint-ntb)$ b4 am -om/ https://lore.kernel.org/r/20220624011911.164146-1-renzhijie2@huawei.com
+> >   02:54:47 ~/linux (wip/ren-endpoint-ntb)$ git am m/20220624_renzhijie2_pci_endpoint_fix_kconfig_dependency.mbx
+> >   Applying: PCI: endpoint: Fix Kconfig dependency
+> >   error: patch failed: drivers/pci/endpoint/functions/Kconfig:29
+> > 
+> > Obviously I could fix this manually, but if there's something wrong
+> > with your patch posting process, we should fix it.
 > 
-> Allwinner R329 has a RTC with a similar time storage with H616 but a
-> slightly different clock part.
-> 
-> As we have already handled the R329 RTC clocks in the CCU driver, add a
-> compatible string to RTC driver to allow probing of the RTC.
-> 
-> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> Oh, I see the problem.  This patch depends on some other VNTB patch
+> that hasn't been merged yet.  That means this fix should be squashed
+> into the VNTB patch that adds "config PCI_EPF_VNTB".
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Well, I saw *part* of the problem.  This fixes something that is in
+-next, added by ff32fac00d97 ("NTB: EPF: support NTB transfer between
+PCI RC and EP connection") [1], which was merged by Jon.
 
-Best regards,
-Jernej
+So I guess Jon will squash and update his branch or merge the
+fixup(s).
 
+(Jon, if you squash, note there are several typos in the commit log:
+s/Virtual NTB/virtual NTB/, s/include/includes/, s/3 part/3 parts/,
+s/virutal/virtual, s/pci/PCI/, s/BUS/Bus/)
 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ff32fac00d97
+
+> > > ---
+> > > v2: Fix some commit message errors
+> > > ---
+> > >  drivers/pci/endpoint/functions/Kconfig | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/drivers/pci/endpoint/functions/Kconfig b/drivers/pci/endpoint/functions/Kconfig
+> > > index 362555b024e8..9beee4f0f4ee 100644
+> > > --- a/drivers/pci/endpoint/functions/Kconfig
+> > > +++ b/drivers/pci/endpoint/functions/Kconfig
+> > > @@ -29,6 +29,7 @@ config PCI_EPF_NTB
+> > >  config PCI_EPF_VNTB
+> > >          tristate "PCI Endpoint NTB driver"
+> > >          depends on PCI_ENDPOINT
+> > > +        depends on NTB
+> > >          select CONFIGFS_FS
+> > >          help
+> > >            Select this configuration option to enable the Non-Transparent
+> > > -- 
+> > > 2.17.1
+> > > 

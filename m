@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478D255DE4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB5C55C88D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235252AbiF0L13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
+        id S236905AbiF0Llz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235085AbiF0L0f (ORCPT
+        with ESMTP id S236389AbiF0LiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:26:35 -0400
+        Mon, 27 Jun 2022 07:38:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3890C658B;
-        Mon, 27 Jun 2022 04:26:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A124BC8C;
+        Mon, 27 Jun 2022 04:35:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE9616149A;
-        Mon, 27 Jun 2022 11:26:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4685C3411D;
-        Mon, 27 Jun 2022 11:26:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6B6D60DE9;
+        Mon, 27 Jun 2022 11:34:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE528C3411D;
+        Mon, 27 Jun 2022 11:34:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329175;
-        bh=rKBuajnzp1OaffylZWmkNesYTVoaItWgcdxM1fDoUWc=;
+        s=korg; t=1656329699;
+        bh=Hv5XT+wihpAxWcKTmxWkBoWJWkQXIxwXbE/EI2bjpSU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YkPV5QKNkM5DhUEi7bL58Xi5uGgs38bfe+1jCWv9BEngRXIEsuWICf4KHz8cKRuhq
-         DY2g2KPsTCpCcexM6AzN9hXfl6U1CODTWbMjm+YQszKxmgcif9YVuWAmFekMcVoEJF
-         IOxSSuWWTONK2cjnExCFZu6eZGSDCS2Vu5yhlyp8=
+        b=XI48GDAiKusfm+iKGv5JEMGnmlCtZy8NXfS2FhsGimc8VuW0jYt7tnNZeRUzGydmo
+         RsN3MUka5P1dFfc7TfJS8udM6U0Vc0bewsTh71Ugw8SA59rBkS9cqLCZ1lNrNP9Y2b
+         dWo4V986G369+mtGseHTVr80vpbUB8uBDzI54tCI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.10 074/102] iio:accel:bma180: rearrange iio trigger get and register
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 078/135] gpio: winbond: Fix error code in winbond_gpio_get()
 Date:   Mon, 27 Jun 2022 13:21:25 +0200
-Message-Id: <20220627111935.665116782@linuxfoundation.org>
+Message-Id: <20220627111940.424633379@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Rokosov <DDRokosov@sberdevices.ru>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit e5f3205b04d7f95a2ef43bce4b454a7f264d6923 upstream.
+[ Upstream commit 9ca766eaea2e87b8b773bff04ee56c055cb76d4e ]
 
-IIO trigger interface function iio_trigger_get() should be called after
-iio_trigger_register() (or its devm analogue) strictly, because of
-iio_trigger_get() acquires module refcnt based on the trigger->owner
-pointer, which is initialized inside iio_trigger_register() to
-THIS_MODULE.
-If this call order is wrong, the next iio_trigger_put() (from sysfs
-callback or "delete module" path) will dereference "default" module
-refcnt, which is incorrect behaviour.
+This error path returns 1, but it should instead propagate the negative
+error code from winbond_sio_enter().
 
-Fixes: 0668a4e4d297 ("iio: accel: bma180: Fix indio_dev->trig assignment")
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220524181150.9240-2-ddrokosov@sberdevices.ru
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: a0d65009411c ("gpio: winbond: Add driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/accel/bma180.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpio/gpio-winbond.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/iio/accel/bma180.c
-+++ b/drivers/iio/accel/bma180.c
-@@ -1068,11 +1068,12 @@ static int bma180_probe(struct i2c_clien
- 		data->trig->dev.parent = dev;
- 		data->trig->ops = &bma180_trigger_ops;
- 		iio_trigger_set_drvdata(data->trig, indio_dev);
--		indio_dev->trig = iio_trigger_get(data->trig);
+diff --git a/drivers/gpio/gpio-winbond.c b/drivers/gpio/gpio-winbond.c
+index 7f8f5b02e31d..4b61d975cc0e 100644
+--- a/drivers/gpio/gpio-winbond.c
++++ b/drivers/gpio/gpio-winbond.c
+@@ -385,12 +385,13 @@ static int winbond_gpio_get(struct gpio_chip *gc, unsigned int offset)
+ 	unsigned long *base = gpiochip_get_data(gc);
+ 	const struct winbond_gpio_info *info;
+ 	bool val;
++	int ret;
  
- 		ret = iio_trigger_register(data->trig);
- 		if (ret)
- 			goto err_trigger_free;
-+
-+		indio_dev->trig = iio_trigger_get(data->trig);
- 	}
+ 	winbond_gpio_get_info(&offset, &info);
  
- 	ret = iio_triggered_buffer_setup(indio_dev, NULL,
+-	val = winbond_sio_enter(*base);
+-	if (val)
+-		return val;
++	ret = winbond_sio_enter(*base);
++	if (ret)
++		return ret;
+ 
+ 	winbond_sio_select_logical(*base, info->dev);
+ 
+-- 
+2.35.1
+
 
 

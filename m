@@ -2,125 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9188B55C21F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAF855C1E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237670AbiF0T5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 15:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
+        id S239389AbiF0T6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 15:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236841AbiF0T5Q (ORCPT
+        with ESMTP id S238751AbiF0T5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 15:57:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398AD1ADBE;
-        Mon, 27 Jun 2022 12:57:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA516616C0;
-        Mon, 27 Jun 2022 19:57:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0822BC34115;
-        Mon, 27 Jun 2022 19:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656359834;
-        bh=78sDUKZ2VOrx+wfjwEhAXMfNb3LhLyH+qU9P0nCrDEw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=G+e38rmaNU2+a2FAz/5SH7tIn5QnWfzk1Ey3zf+n55m1yWCIk2NJ8yX+mcp1YTRa6
-         mxjb99zbyaUiQM+tDo4EZa4Ll7OnCapwIjrD8cr8CKhf2RIp/e8pdPLLAmy4n4Kkwc
-         B08UkqUZf66lqsgJMPznsA8RhmUlCfASP9RihfprQKDlfsLusWbB8e8vjlx+cMRK3n
-         fbCCn/G0Dra4LskaoqTPELJc1pBbOycoPk3Xhn2utgq2AuyKGuM9MXMbsKE0fT1WnB
-         P43VM4VU7C2iHw5dqkSUHU1iPRqNKAWXRTSOXWvXSEAwgTM8PLcVUTj0Oa6YUsCwQK
-         Xd3sv04H+/0VA==
-Date:   Mon, 27 Jun 2022 14:57:12 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ren Zhijie <renzhijie2@huawei.com>
-Cc:     kishon@ti.com, lpieralisi@kernel.org, kw@linux.com,
-        bhelgaas@google.com, jdmason@kudzu.us, Frank.Li@nxp.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] PCI: endpoint: Fix Kconfig dependency
-Message-ID: <20220627195712.GA1772707@bhelgaas>
+        Mon, 27 Jun 2022 15:57:49 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020571AF20
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:57:49 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id r133so10733898iod.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:57:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lqwOAoba/ks14RAlOuCuq3KoOwqWCZzhrVHd00SRYuU=;
+        b=EIi1+WIUXf3QH2AIHTiPlmrQhAjCiWwqMV/c4LV89ASzefFOIA7JDqpFHQ3unPykkr
+         I3VNmPE2O7qeNSlRDakDrvJcfUqnFL+Bvt1bVCFcVYdruUYTODGwQl6TJDVEo2l3y0Sn
+         pE9upRnscBoiyPkoLPi087ULasFmtuJW8BBgw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lqwOAoba/ks14RAlOuCuq3KoOwqWCZzhrVHd00SRYuU=;
+        b=EmjxTwZtLvMAEObCRbQVrbek8srhJGZsGl9wLfOhsZAs161Dfe/p51u6iDKtzL6sI0
+         IUIlEBED2U7Wm/Hn/6ymp8kmt1UtZKKN8MIBqc5p98PJ55nrHVkckL3l1mA72VXdCy0f
+         atkKLDKR5OOQ0C4i9GWgVMXxKz8vJYRD8TkA8ctmOl+/TAHpy1OkYO6Vb7AV2VdMRTlD
+         NVTP9Zx8Tl/lCFDUsJfTHxBNBOJG/6RswXWPy7mQvvmQ6BBcBkI/Mw34iSOfGiuqlDxo
+         H+Ds1jnnSDi6mqc7v7hvChaGqc8A35V4ySDJqIeEsdl0m18t3og8ZJDr8fGoUC7GC6Xi
+         dMhA==
+X-Gm-Message-State: AJIora9H/Xff5mXc234vpc/JAl4ZaJy3z+G3KU+OCLltLSvDXrnk+1XL
+        zhpnwBqwGZk3afRqQbXwRgstXA==
+X-Google-Smtp-Source: AGRyM1vPUY5rBcsCKVKLXXe91Fex4P38D7+JHGrIjDVlAu1abFJfQoGRYq2ydMVgVtbhYTyQBUJapQ==
+X-Received: by 2002:a5d:9c45:0:b0:675:1774:74a2 with SMTP id 5-20020a5d9c45000000b00675177474a2mr7127442iof.104.1656359868372;
+        Mon, 27 Jun 2022 12:57:48 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id t16-20020a92dc10000000b002d94906dacfsm4889401iln.67.2022.06.27.12.57.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 12:57:48 -0700 (PDT)
+Subject: Re: [PATCH] tools: Strong conversion of void type pointer could be
+ removed
+To:     Li kunyu <kunyu@nfschina.com>, shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220627085654.2902-1-kunyu@nfschina.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <9b587975-db5b-c7bf-eb8f-bd6e5c3d9f54@linuxfoundation.org>
+Date:   Mon, 27 Jun 2022 13:57:47 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220624011911.164146-1-renzhijie2@huawei.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220627085654.2902-1-kunyu@nfschina.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 24, 2022 at 09:19:11AM +0800, Ren Zhijie wrote:
-> If CONFIG_NTB is not set and CONFIG_PCI_EPF_VNTB is y.
+On 6/27/22 2:56 AM, Li kunyu wrote:
+> The void pointer argument does not require a cast assignment because it
+> is the address passed.
 > 
-> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-, will be failed, like this:
-> 
-> drivers/pci/endpoint/functions/pci-epf-vntb.o: In function `epf_ntb_cmd_handler':
-> pci-epf-vntb.c:(.text+0x95e): undefined reference to `ntb_db_event'
-> pci-epf-vntb.c:(.text+0xa1f): undefined reference to `ntb_link_event'
-> pci-epf-vntb.c:(.text+0xa42): undefined reference to `ntb_link_event'
-> drivers/pci/endpoint/functions/pci-epf-vntb.o: In function `pci_vntb_probe':
-> pci-epf-vntb.c:(.text+0x1250): undefined reference to `ntb_register_device'
-> 
-> The functions ntb_*() are defined in drivers/ntb/core.c, which need CONFIG_NTB setting y to be build-in.
-> To fix this build error, add depends on NTB.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: ff32fac00d97("NTB: EPF: support NTB transfer between PCI RC and EP connection")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
-> Acked-by: Frank Li <frank.li@nxp.com>
 
-Am I missing something? 
+Please include information on you found this problem with output
+from the tool if any used. Send v2 with that information included
+in the commit log.
 
-  02:54:01 ~/linux (next)$ git checkout -b wip/ren-endpoint-ntb v5.19-rc1
-  Switched to a new branch 'wip/ren-endpoint-ntb'
-  02:54:23 ~/linux (wip/ren-endpoint-ntb)$ b4 am -om/ https://lore.kernel.org/r/20220624011911.164146-1-renzhijie2@huawei.com
-  Looking up https://lore.kernel.org/r/20220624011911.164146-1-renzhijie2%40huawei.com
-  Analyzing 1 messages in the thread
-  Checking attestation on all messages, may take a moment...
-  ---
-    [PATCH] PCI: endpoint: Fix Kconfig dependency
-  ---
-  Total patches: 1
-  ---
-   Link: https://lore.kernel.org/r/20220624011911.164146-1-renzhijie2@huawei.com
-   Base: not specified
-	 git am m/20220624_renzhijie2_pci_endpoint_fix_kconfig_dependency.mbx
-  02:54:47 ~/linux (wip/ren-endpoint-ntb)$ git am m/20220624_renzhijie2_pci_endpoint_fix_kconfig_dependency.mbx
-  Applying: PCI: endpoint: Fix Kconfig dependency
-  error: patch failed: drivers/pci/endpoint/functions/Kconfig:29
-  error: drivers/pci/endpoint/functions/Kconfig: patch does not apply
-  Patch failed at 0001 PCI: endpoint: Fix Kconfig dependency
-  hint: Use 'git am --show-current-patch' to see the failed patch
-  When you have resolved this problem, run "git am --continue".
-  If you prefer to skip this patch, run "git am --skip" instead.
-  To restore the original branch and stop patching, run "git am --abort".
-
-Obviously I could fix this manually, but if there's something wrong
-with your patch posting process, we should fix it.
-
+> Signed-off-by: Li kunyu <kunyu@nfschina.com>
 > ---
-> v2: Fix some commit message errors
-> ---
->  drivers/pci/endpoint/functions/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+>   tools/testing/selftests/x86/fsgsbase.c      | 2 +-
+>   tools/testing/selftests/x86/test_vsyscall.c | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/pci/endpoint/functions/Kconfig b/drivers/pci/endpoint/functions/Kconfig
-> index 362555b024e8..9beee4f0f4ee 100644
-> --- a/drivers/pci/endpoint/functions/Kconfig
-> +++ b/drivers/pci/endpoint/functions/Kconfig
-> @@ -29,6 +29,7 @@ config PCI_EPF_NTB
->  config PCI_EPF_VNTB
->          tristate "PCI Endpoint NTB driver"
->          depends on PCI_ENDPOINT
-> +        depends on NTB
->          select CONFIGFS_FS
->          help
->            Select this configuration option to enable the Non-Transparent
-> -- 
-> 2.17.1
+> diff --git a/tools/testing/selftests/x86/fsgsbase.c b/tools/testing/selftests/x86/fsgsbase.c
+> index 8c780cce941d..5d99261317e1 100644
+> --- a/tools/testing/selftests/x86/fsgsbase.c
+> +++ b/tools/testing/selftests/x86/fsgsbase.c
+> @@ -63,7 +63,7 @@ static void clearhandler(int sig)
+>   
+>   static void sigsegv(int sig, siginfo_t *si, void *ctx_void)
+>   {
+> -	ucontext_t *ctx = (ucontext_t*)ctx_void;
+> +	ucontext_t *ctx = ctx_void;
+>   
+>   	if (!want_segv) {
+>   		clearhandler(SIGSEGV);
+> diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
+> index 5b45e6986aea..2416941a0952 100644
+> --- a/tools/testing/selftests/x86/test_vsyscall.c
+> +++ b/tools/testing/selftests/x86/test_vsyscall.c
+> @@ -184,7 +184,7 @@ static volatile unsigned long segv_err;
+>   
+>   static void sigsegv(int sig, siginfo_t *info, void *ctx_void)
+>   {
+> -	ucontext_t *ctx = (ucontext_t *)ctx_void;
+> +	ucontext_t *ctx = ctx_void;
+>   
+>   	segv_err =  ctx->uc_mcontext.gregs[REG_ERR];
+>   	siglongjmp(jmpbuf, 1);
 > 
+
+thanks,
+-- Shuah

@@ -2,53 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B0955D874
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B32B55E350
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241080AbiF0XJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
+        id S235121AbiF0XLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237641AbiF0XJt (ORCPT
+        with ESMTP id S238302AbiF0XLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:09:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E459F167C3;
-        Mon, 27 Jun 2022 16:09:48 -0700 (PDT)
+        Mon, 27 Jun 2022 19:11:03 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AFB205C5;
+        Mon, 27 Jun 2022 16:11:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 256BE61553;
-        Mon, 27 Jun 2022 23:09:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C87C34115;
-        Mon, 27 Jun 2022 23:09:47 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2B49CCE1DF8;
+        Mon, 27 Jun 2022 23:11:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D33C34115;
+        Mon, 27 Jun 2022 23:10:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656371387;
-        bh=lVxtZm/634oR9E7yrwfVlfrL+tRbWuHpVIgCUdapOC0=;
+        s=k20201202; t=1656371458;
+        bh=A+8dqd+AYtgSfVTCQHJYjy06M4VETooFTm66t1vpOwc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ImUCJO8QqovLCmKM5Oac0qiExEpJmnHHAB5wH3SlaHB+uf18B5WcQnF/S9Q7fxsIz
-         PLm9BpKBEecjd6flgmk6NaIth+HZ87vVlfpriY0pblMKcQV5v6DhvqiPf109LaJZgW
-         5UmVJFBKUI96fLj6jvB+mKjCRf9o8xeLTytvuonhwMlGDeBzs18lp+ZlLSIEBuwZ0l
-         KWYYTSnZKQWL785U2Wl8Lz+x0lXizEl+9KwhUVmyynCuWgzVzFrBxEjm+Dn0NGleBl
-         sloj/NMe5NhDY666hQxUFJpvhqxk7jq/TWK0qb6uK6ncOIT9aIA9+OcA9qwilNydck
-         RWrH6Z9C5zOuQ==
-Date:   Tue, 28 Jun 2022 02:09:42 +0300
+        b=k1Hip1o7gkv8fv4LES1pswBpFQ7RHJK+da2DXyPCYbJx7cifcAANHhZTobUcBH10C
+         7FNKbDaWe0owUaomv5xx4OvQEBZHzAGzMihvvNYtfutcY/jYK0l21HHgP0rfl1H7+w
+         NQImFAWgs3U6Najjm8mDGvaDTMJolXy9i0fE5OmJP1JIurmpBlEdfCYAemIfAz4ByH
+         AxxB9wqjmVxOntaW4rDStD+WqeSNH4GABfO4fdIz39hZnbSFv/rElggariIVYoO7x9
+         /7L+qel8OK+odjSsJgml4v3vWycZNYGAK3AeWX+ZMWxHe5j/eXd2QISfBgPfb+WGQK
+         hoAOM8fYJz/jg==
+Date:   Tue, 28 Jun 2022 02:10:54 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: Re: [PATCH v6 5/9] tpm, tpm_tis: Only handle supported interrupts
-Message-ID: <Yro4tl7g1IqkEszT@kernel.org>
-References: <20220621132447.16281-1-LinoSanfilippo@gmx.de>
- <20220621132447.16281-6-LinoSanfilippo@gmx.de>
- <Yrf/azvJlzWfOE9y@kernel.org>
- <6b950660-6a78-f329-39b4-11d585e4959c@gmx.de>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] X.509: Support parsing certificate using SM2 algorithm
+Message-ID: <Yro4/nbOGOWRUgWS@kernel.org>
+References: <20220627091958.20751-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6b950660-6a78-f329-39b4-11d585e4959c@gmx.de>
+In-Reply-To: <20220627091958.20751-1-tianjia.zhang@linux.alibaba.com>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,44 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 26, 2022 at 02:18:17PM +0200, Lino Sanfilippo wrote:
-> On 26.06.22 at 08:40, Jarkko Sakkinen wrote:
-> >
-> > I would instead mask out bits and write a helper function
-> > taking care of this:
-> >
-> > static u8 tpm_tis_filter_sts_mask(u8 int_mask, u8 sts_mask)
-> > {
-> >         struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> >
-> >         if (!(int_mask & TPM_INTF_STS_VALID_INT))
-> >                 sts_mask &= ~TPM_STS_VALID;
-> >
-> >         if (!(int_mask & TPM_INTF_DATA_AVAIL_INT))
-> >                 sts_mask &= ~TPM_STS_DATA_AVAIL;
-> >
-> >         if (!(int_mask & TPM_INTF_CMD_READY_INT))
-> > 		sts_mask &= ~TPM_STS_COMMAND_READY;
-> >
-> >         return sts_mask;
-> > }
-> >
-> > Less operations and imho somewhat cleaner structure.
-> >
-> > Add suggested-by if you want.
+On Mon, Jun 27, 2022 at 05:19:58PM +0800, Tianjia Zhang wrote:
+> The SM2-with-SM3 certificate generated by latest openssl no longer
+> reuses the OID_id_ecPublicKey, but directly uses OID_sm2. This patch
+> supports this type of x509 certificate parsing.
 > 
-> I thought of a helper like this before but then decided to
-> not introduce another function to keep the code changes minimal. But yes,
-> it is indeed cleaner. I will do the change and resubmit the series.
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+>  crypto/asymmetric_keys/x509_cert_parser.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> Thanks for the review!
+> diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
+> index 2899ed80bb18..7a9b084e2043 100644
+> --- a/crypto/asymmetric_keys/x509_cert_parser.c
+> +++ b/crypto/asymmetric_keys/x509_cert_parser.c
+> @@ -508,6 +508,9 @@ int x509_extract_key_data(void *context, size_t hdrlen,
+>  	case OID_gost2012PKey512:
+>  		ctx->cert->pub->pkey_algo = "ecrdsa";
+>  		break;
+> +	case OID_sm2:
+> +		ctx->cert->pub->pkey_algo = "sm2";
+> +		break;
+>  	case OID_id_ecPublicKey:
+>  		if (parse_OID(ctx->params, ctx->params_size, &oid) != 0)
+>  			return -EBADMSG;
+> -- 
+> 2.24.3 (Apple Git-128)
 > 
-> Regards,
-> Lino
 
-Yeah, please don't add suggested-by, it's such a minor detail
-in the overall patch :-) Thanks for taking time to fix these
-glitches and also taking all the feedback into account (and
-also being patient).
- 
+Thanks, I can pick this.
+
 BR, Jarkko

@@ -2,93 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B15855C380
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0673255CA7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233934AbiF0JaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
+        id S234025AbiF0Jaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233884AbiF0JaJ (ORCPT
+        with ESMTP id S233634AbiF0Jaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:30:09 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D163718A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:30:08 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id o4so8182722wrh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=cd0dGlxS3lhXEywnR/6FkGKK1ogQZNR4Q8TNrLmu+N4=;
-        b=GXXWOwmac4DoGtIkpAqyAR8KvIPiWKfClDuoGQKkauZpU1Gh1cIo3nYg1PvsGU16nA
-         gxnNkgf8DDiHP9FwNbV65gvsTKz52FIdzrS1tB5NZwliU509YCUph9hRydj2Ed1VymEp
-         hRRxAEaWcDxASuemfk1tdAdrU1ABkaRWzBIoJqnDqlyCwWE7TMa7TjHy8Stxx569hqU8
-         Xw91uryUe0c69spzuDdIOQHQNA/EcQ4FD66lsT+g3lQ7hgk7yZql9yNLkEi7cUHYzwt5
-         IgkV8YIuH1rKD4DqPEwRgwsGE7HTAGX3pOni9tPmlyaGQgYJ3sQYwhRFG+ima8Oe1FZE
-         9LlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=cd0dGlxS3lhXEywnR/6FkGKK1ogQZNR4Q8TNrLmu+N4=;
-        b=72SeYP1K/fTZM0mHh0F2wJ4f9H62RjvDKd1tKuWPabbuWy2kAXEATife0QWRKdBTDS
-         DLK8Wqch6zUXBzG6RxuFCq4XrFZAWycLWnCl4yss3pliyYRTN3NO/rYIVWwp7gHBsj3Y
-         GSxOedQSY8G+JG0u0eDQUmbE+AkuK5bobADy6tMtLSO95lfDRpmdGZqqIhzOOIcrKjZD
-         HfGwDEgtpKbE4OCvDPX6FN1e79FG8C7+2DyKIZxQ9hO4JaaJpQWNCfmR/tGs4Ntbtezb
-         dMUVw6J6G+4+lP8l8rHjKVUovRPb4uhiqBYuridsXPzaLbF81NkJjHEzlsVb0YIC3Lgi
-         xPyA==
-X-Gm-Message-State: AJIora8y+SLWrl5fub7M36QhG4+DTYLyPI2+n+1baxxzSUprZHs6+IGf
-        ifjN9G8DJpRDmyfp7R2FWLirQA==
-X-Google-Smtp-Source: AGRyM1t91+8MZTKoH2nDlZBDD7AUAi9ckE5QNRxXAmU2VDI7I2qnhR0/WxRLoNA6o3J693aI7BafjQ==
-X-Received: by 2002:a05:6000:1f08:b0:21b:ae8f:4f0a with SMTP id bv8-20020a0560001f0800b0021bae8f4f0amr11784449wrb.456.1656322207431;
-        Mon, 27 Jun 2022 02:30:07 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id m12-20020adffe4c000000b0020d106c0386sm9747810wrs.89.2022.06.27.02.30.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 02:30:06 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 10:30:05 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v1 08/11] mfd: intel_soc_pmic_bxtwc: Use bits.h macros
- for all masks
-Message-ID: <Yrl4nXfHs1oM2dpV@google.com>
-References: <20220616165823.4919-1-andriy.shevchenko@linux.intel.com>
- <20220616165823.4919-8-andriy.shevchenko@linux.intel.com>
+        Mon, 27 Jun 2022 05:30:52 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E04125DB
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IokvEg/kIxjdCTozh/TqGPoHY64HoI20u+uoITAFI+4=; b=oV7q+l4Rua4HzPC6b1q5Btq6wY
+        BI5So1sA7UW9Nn2pxg0Yja6EZdZH69RNGRVbk+rve17K9JyEaRJHpZabTCPOewiopvWKXJdThI8Jy
+        tKwuxq2Zq7A8pHhAzHApV7F0WxT/FWnT2AIbn0pB7B+B3NfLOdSMv2ph1jp1iwqofgetvI0C4Nghd
+        HgdvDH/K/2bgcJLVwvZCAiVVCgsLna9F8SpbWIO052Rry94x5fKBuJP00zaw9e/yNCxoGayknXwUT
+        ruo01fc8FRSUvp1Ra3a78LGoWG9leNDfB7r6uaIX7cEqUTYklW4GPI7Z9B7PUKOTc4oSu9jqCqwds
+        4qL0IpWA==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o5l4X-00BEZD-Hr; Mon, 27 Jun 2022 09:30:21 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F132F30045A;
+        Mon, 27 Jun 2022 11:30:18 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DB8F020C57C6B; Mon, 27 Jun 2022 11:30:18 +0200 (CEST)
+Date:   Mon, 27 Jun 2022 11:30:18 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Guo Hui <guohui@uniontech.com>
+Cc:     longman@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, will@kernel.org,
+        boqun.feng@gmail.com, virtualization@lists.linux-foundation.org,
+        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] x86/paravirt: useless assignment instructions cause
+ Unixbench full core performance degradation
+Message-ID: <Yrl4qoXcVj9Y6Cpa@hirez.programming.kicks-ass.net>
+References: <f6b68466-968c-4a91-655a-23970280a072@redhat.com>
+ <20220627021350.25714-1-guohui@uniontech.com>
+ <YrlhGqqce0NCQ6hi@hirez.programming.kicks-ass.net>
+ <3c020577-2045-fa12-9e33-65ece10bda30@uniontech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220616165823.4919-8-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <3c020577-2045-fa12-9e33-65ece10bda30@uniontech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022, Andy Shevchenko wrote:
-65;6800;1c
-> Currently we are using BIT(), but GENMASK(). Make use of the latter one
-> as well (far less error-prone, far more concise).
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/mfd/intel_soc_pmic_bxtwc.c | 21 +++++++++++----------
->  1 file changed, 11 insertions(+), 10 deletions(-)
+On Mon, Jun 27, 2022 at 05:18:02PM +0800, Guo Hui wrote:
+> Ok thanks Peter, your suggestion is very good, I will modify my patch as you
+> suggested.
 
-For my own reference (apply this as-is to your sign-off block):
-
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Because it messes up the order in which people normally read text.
+Why is top-posting such a bad thing?
+Top-posting.
+What is the most annoying thing in e-mail?

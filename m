@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CD655D25C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E6155C6D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236010AbiF0LfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
+        id S239897AbiF0L62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236247AbiF0Lda (ORCPT
+        with ESMTP id S238203AbiF0Lvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:33:30 -0400
+        Mon, 27 Jun 2022 07:51:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11355D119;
-        Mon, 27 Jun 2022 04:30:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595E965D3;
+        Mon, 27 Jun 2022 04:44:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9046561355;
-        Mon, 27 Jun 2022 11:30:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B93DC3411D;
-        Mon, 27 Jun 2022 11:30:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB5F0612AC;
+        Mon, 27 Jun 2022 11:44:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B987CC3411D;
+        Mon, 27 Jun 2022 11:44:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329442;
-        bh=NGrFpnGNy+UhulDZSNrnYduBOQTEXJrXmxA3Afg3+7g=;
+        s=korg; t=1656330280;
+        bh=WtMZyv1YS+QuA1a3BRnBhNCU85O6xrK2sJtEOq+THBs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g4SkJgiGRXXWGAe4hAKmoo0L8gkqfqVGqfy37QsQGJUojIGWhlaIGyP9eM5bmpeL5
-         9yHMPg0YjmWv9oEMoh7aBDTEZe942zgeH2r51IZcIUc/nFq6X7VTHH4BvBlyo1FKCE
-         mWstepnwD1Ksodo9meXaAR3Wmyq0Q2DAEdLeDhqQ=
+        b=Q5Fj/lD4JXhRAG/4TAZl2+4LCuAcZZ2aycAZzH1cVKR+EwopH5FNLXG+odqOLJRqn
+         1i/+szoWB5iJZktUz7E1uF7A95C01S5g7Y4z5CaoBQGbS9EnohoXH9+kLdtXOxwQae
+         5frE+mq7zqIrwxMMu+vWDrjD57UFkmbX4um3OvO0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 5.4 47/60] xtensa: Fix refcount leak bug in time.c
+        stable@vger.kernel.org,
+        Yannick Brosseau <yannick.brosseau@gmail.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.18 145/181] iio: adc: stm32: Fix IRQs on STM32F4 by removing custom spurious IRQs message
 Date:   Mon, 27 Jun 2022 13:21:58 +0200
-Message-Id: <20220627111929.073062554@linuxfoundation.org>
+Message-Id: <20220627111948.889519143@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
-References: <20220627111927.641837068@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +57,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
 
-commit a0117dc956429f2ede17b323046e1968d1849150 upstream.
+commit 99bded02dae5e1e2312813506c41dc8db2fb656c upstream.
 
-In calibrate_ccount(), of_find_compatible_node() will return a node
-pointer with refcount incremented. We should use of_node_put() when
-it is not used anymore.
+The check for spurious IRQs introduced in 695e2f5c289bb assumed that the bits
+in the control and status registers are aligned. This is true for the H7 and MP1
+version, but not the F4. The interrupt was then never handled on the F4.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Liang He <windhl@126.com>
-Message-Id: <20220617124432.4049006-1-windhl@126.com>
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Instead of increasing the complexity of the comparison and check each bit specifically,
+we remove this check completely and rely on the generic handler for spurious IRQs.
+
+Fixes: 695e2f5c289b ("iio: adc: stm32-adc: fix a regression when using dma and irq")
+Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Link: https://lore.kernel.org/r/20220516203939.3498673-3-yannick.brosseau@gmail.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/xtensa/kernel/time.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/iio/adc/stm32-adc.c |   10 ----------
+ 1 file changed, 10 deletions(-)
 
---- a/arch/xtensa/kernel/time.c
-+++ b/arch/xtensa/kernel/time.c
-@@ -160,6 +160,7 @@ static void __init calibrate_ccount(void
- 	cpu = of_find_compatible_node(NULL, NULL, "cdns,xtensa-cpu");
- 	if (cpu) {
- 		clk = of_clk_get(cpu, 0);
-+		of_node_put(cpu);
- 		if (!IS_ERR(clk)) {
- 			ccount_freq = clk_get_rate(clk);
- 			return;
+--- a/drivers/iio/adc/stm32-adc.c
++++ b/drivers/iio/adc/stm32-adc.c
+@@ -1407,7 +1407,6 @@ static irqreturn_t stm32_adc_threaded_is
+ 	struct stm32_adc *adc = iio_priv(indio_dev);
+ 	const struct stm32_adc_regspec *regs = adc->cfg->regs;
+ 	u32 status = stm32_adc_readl(adc, regs->isr_eoc.reg);
+-	u32 mask = stm32_adc_readl(adc, regs->ier_eoc.reg);
+ 
+ 	/* Check ovr status right now, as ovr mask should be already disabled */
+ 	if (status & regs->isr_ovr.mask) {
+@@ -1422,11 +1421,6 @@ static irqreturn_t stm32_adc_threaded_is
+ 		return IRQ_HANDLED;
+ 	}
+ 
+-	if (!(status & mask))
+-		dev_err_ratelimited(&indio_dev->dev,
+-				    "Unexpected IRQ: IER=0x%08x, ISR=0x%08x\n",
+-				    mask, status);
+-
+ 	return IRQ_NONE;
+ }
+ 
+@@ -1436,10 +1430,6 @@ static irqreturn_t stm32_adc_isr(int irq
+ 	struct stm32_adc *adc = iio_priv(indio_dev);
+ 	const struct stm32_adc_regspec *regs = adc->cfg->regs;
+ 	u32 status = stm32_adc_readl(adc, regs->isr_eoc.reg);
+-	u32 mask = stm32_adc_readl(adc, regs->ier_eoc.reg);
+-
+-	if (!(status & mask))
+-		return IRQ_WAKE_THREAD;
+ 
+ 	if (status & regs->isr_ovr.mask) {
+ 		/*
 
 

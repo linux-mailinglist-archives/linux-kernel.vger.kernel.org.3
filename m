@@ -2,143 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245AF55D7ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA6A55D2EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiF0IVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
+        id S233243AbiF0IVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232218AbiF0IVG (ORCPT
+        with ESMTP id S233178AbiF0IVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:21:06 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1636F49;
-        Mon, 27 Jun 2022 01:21:03 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VHWTgZ-_1656318059;
-Received: from 30.97.57.54(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VHWTgZ-_1656318059)
-          by smtp.aliyun-inc.com;
-          Mon, 27 Jun 2022 16:21:00 +0800
-Message-ID: <fd926012-6845-05e4-077b-6c8cfbf3d3cc@linux.alibaba.com>
-Date:   Mon, 27 Jun 2022 16:20:55 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Content-Language: en-US
-From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-Subject: [RFC] libubd: library for ubd(userspace block driver based on
- io_uring passthrough)
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, io-uring@vger.kernel.org,
+        Mon, 27 Jun 2022 04:21:15 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA506279
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:21:15 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id l6so7486152plg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:21:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QEdYkhc/vgHXgRfRmjc0nzpx3LEjhX5ml1rzqRnP/4s=;
+        b=FBGP8QbnA/Q993e72LgTAcq4R2SHAg39ll9+8sV4mS/OaV53vVEBH3G9PmoL/WU5Ng
+         EgGKJAzBw78GDCL2he0DRiOLKUjOFhu9QGvBP+wDybeVNL1aH0Uu3m8RA979bs8c6/JB
+         GT19bNcR6pZDiEPk5dGI9EBAeVL2okq1qn6xzP5hsN8ZwKcWUvmi6zS2ytXG6s2QDXlu
+         bUZ7692vrOpbQAIextdiUprzZ0S7YfY4JeIydOon1xbf6qnfWgOEBvkWi+z7rej7Qv3t
+         4CaUDdfON8gcc+Z0Pl+nCFP16aNZeaJbm+km/qFaJoNR/kYnDgKmrPMb2UKPxa1HxUID
+         yn3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=QEdYkhc/vgHXgRfRmjc0nzpx3LEjhX5ml1rzqRnP/4s=;
+        b=HSq9ypvf89V96RjXb/6kyXXh01VbnTdeC1LKqcvYjGjtY8sw9Xf+wUvwK4KtO17r04
+         Eb0g/Ec9J+C3CD+/Xn48vmQENCnOo0tC/exo45wfn06omuJICqeQ/7xWXqJ63/QM3aCh
+         8/qJTAFKKS43jOQXfz/qJeGtpRyOirgx0rIMdDYX93aRkV/L+7vPHs/AHHCiaV8Bmlji
+         jcKvSkRAAemwWrRiPWYufzPOXKes+SPEPxYEgBMRH/AGVwL/1gF5tPtVBnpAuyVTnqxv
+         inJqJswJ0aRxxCekBeypvtOnMmQTJIsR61RtBa/DKJRHSOGjcpeq6CMAfqlLOuQb522/
+         RLlQ==
+X-Gm-Message-State: AJIora/npTr3T+HMDY0/rTWrfIkd1+4eNB98frXaxZ9M/QP0qLV4mNfR
+        8IzXw2mNr9S/pIsMHcAcsmU=
+X-Google-Smtp-Source: AGRyM1s4u5NPA/YOTVo+6n8fYNjPSjmjD7+mf9utAl655FKO6jiPaFvR5fTcoPhraldp8VpBWPz9EQ==
+X-Received: by 2002:a17:90a:ba04:b0:1ee:e6b0:edff with SMTP id s4-20020a17090aba0400b001eee6b0edffmr2201137pjr.153.1656318074516;
+        Mon, 27 Jun 2022 01:21:14 -0700 (PDT)
+Received: from localhost ([121.167.227.144])
+        by smtp.gmail.com with ESMTPSA id u12-20020a17090341cc00b0016a6cd546d6sm6150889ple.251.2022.06.27.01.21.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 01:21:14 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 27 Jun 2022 17:21:12 +0900
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
         linux-kernel@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        joseph.qi@linux.alibaba.com,
-        Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: Re: re. Spurious wakeup on a newly created kthread
+Message-ID: <YrloeE/LEnfYvqp3@mtj.duckdns.org>
+References: <20220622140853.31383-1-pmladek@suse.com>
+ <YraWWl+Go17uPOgR@mtj.duckdns.org>
+ <YrllOoGRqp+Cdc9/@dhcp22.suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YrllOoGRqp+Cdc9/@dhcp22.suse.cz>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ming,
+Hello, Michal.
 
-We are learning your ubd code and developing a library: libubd for ubd.
-This article explains why we need libubd and how we design it.
+On Mon, Jun 27, 2022 at 10:07:22AM +0200, Michal Hocko wrote:
+> So if somebody has woken up our thread from inside kthread() then it
+> doesn't have that pointer on the stack and I couldn't it find elsewhere
+> either. Maybe somebody has an idea where to look at.
 
-Related threads:
-(1) https://lore.kernel.org/all/Yk%2Fn7UtGK1vVGFX0@T590/
-(2) https://lore.kernel.org/all/YnDhorlKgOKiWkiz@T590/
-(3) https://lore.kernel.org/all/20220509092312.254354-1-ming.lei@redhat.com/
-(4) https://lore.kernel.org/all/20220517055358.3164431-1-ming.lei@redhat.com/
+One way could be bpftrace'ing or printking __wake_up_common() and
+friends to dump backtrace if it's trying to wake a kthread whose comm
+starts with kworker/ and doesn't have (struct worker
+*)kthread_data(task)->pool set.
 
+Thanks.
 
-Userspace block driver(ubd)[1], based on io_uring passthrough,
-allows users to define their own backend storage in userspace
-and provides block devices such as /dev/ubdbX.
-Ming Lei has provided kernel driver code: ubd_drv.c[2]
-and userspace code: ubdsrv[3].
-
-ubd_drv.c simply passes all blk-mq IO requests
-to ubdsrv through io_uring sqes/cqes. We think the kernel code
-is pretty well-designed.
-
-ubdsrv is implemented by a single daemon
-and target(backend) IO handling(null_tgt and loop_tgt) 
-is embedded in the daemon. 
-While trying ubdsrv, we find ubdsrv is hard to be used 
-by our backend.
-First is description of our backend:
-
-(1) a distributing system sends/receives IO requests 
-    through network.
-
-(2) The system use RPC calls among hundreds of
-     storage servers and RPC calls are associated with data buffers
-     allocated from a memory pool.
-
-(3) On each server for each device(/dev/vdX), our backend runs
-     many threads to handle IO requests and manage the device. 
-
-Second are reasons why ubdsrv is hard to use for us:
-
-(1) ubdsrv requires the target(backend) issues IO requests
-    to the io_uring provided by ubdsrv but our backend 
-    uses something like RPC and does not support io_uring.
-
-(2) ubdsrv forks a daemon and it takes over everything.
-    Users should type "list/stop/del" ctrl-commands to interact with
-    the daemon. It is inconvenient for our backend
-    because it has threads(from a C++ thread library) running inside.
-
-(3) ubdsrv PRE-allocates internal data buffers for each ubd device.
-    The data flow is:
-    bio vectors <-1-> ubdsrv data buffer <-2-> backend buffer(our RPC buffer).
-    Since ubdsrv does not export its internal data buffer to backend,
-    the second copy is unavoidable. 
-    PRE-allocating data buffer may not be a good idea for wasting memory
-    if there are hundreds of ubd devices(/dev/ubdbX).
-
-To better use ubd in more complicated scenarios, we have developed libubd.
-It does not assume implementation of backend and can be embedded into it.
-We refer to the code structure of tcmu-runner[4], 
-which includes a library(libtcmu) for users 
-to embed tcmu-runner inside backend's code. 
-It:
-
-(1) Does not fork/pthread_create but embedded in backend's threads
-
-(2) Provides libubd APIs for backend to add/delete ubd devices 
-    and fetch/commit IO requests
-
-(3) simply passes backend-provided data buffers to ubd_drv.c in kernel,
-    since the backend actually has no knowledge 
-    on incoming data size until it gets an IO descriptor.
-
-Note: 
-
-(1) libubd is just a POC demo and is not stick to the principles of
-    designing a library and we are still developing it now...
-
-(2) The repo[5] including some useful examples using libubd. 
-
-(3) We modify the kernel part: ubd_drv.c and 
-    it[6] is against Ming Lei's newest branch[2]
-    because we forked our branch from his early branch
-    (v5.17-ubd-dev).
-
-Thanks,
-Zhang
-
-[1]https://lore.kernel.org/all/Yk%2Fn7UtGK1vVGFX0@T590/
-[2]https://github.com/ming1/linux/tree/my_for-5.19-ubd-devel_v3
-[3]https://github.com/ming1/ubdsrv
-[4]https://github.com/open-iscsi/tcmu-runner
-[5]https://github.com/old-memories/libubd
-[6]https://github.com/old-memories/linux/tree/v5.17-ubd-dev-mq-ubuf
+-- 
+tejun

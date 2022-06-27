@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D6A55DB5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8419F55C539
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238375AbiF0LwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S234677AbiF0LYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238319AbiF0LsQ (ORCPT
+        with ESMTP id S234635AbiF0LXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:48:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDBFF5A0;
-        Mon, 27 Jun 2022 04:40:35 -0700 (PDT)
+        Mon, 27 Jun 2022 07:23:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B8F64F8;
+        Mon, 27 Jun 2022 04:23:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BD0F61150;
-        Mon, 27 Jun 2022 11:40:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F3DC3411D;
-        Mon, 27 Jun 2022 11:40:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E034B8111B;
+        Mon, 27 Jun 2022 11:23:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C86B3C3411D;
+        Mon, 27 Jun 2022 11:23:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330034;
-        bh=d8JKmmRVrPL5SRlGvMibHDSx/F6Do94oJhCPca3ayR8=;
+        s=korg; t=1656329022;
+        bh=nBwQpZBkMM39gY6r+F8ekVsav1X2LCZZ21G0wIdCbTw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2a6der1T5v+Yw1OLCRTp0N9uy+/vAV1QY/39QevHNIDXEXxr5djVNA5dvvKFsek8t
-         JaOFj2tWyN4hSYhJE76BlLAmlLKhZBdN/9ZEklXxuOF7vdM0feawtEtTgQqQZhFvye
-         2v5FjSQoQS+ifdfFSLmxuiN5zxapJNb3QVxR0xiA=
+        b=FlQz7UQS+IPrAeac/PmOpHILCpncuEbvtj3l1jqXtb2Qi+c0oYGqbYLohkYY6gZZX
+         e8rx5CQ9SCMCrRtUXjxDpsKIOm3j/xexAMRiWCQk0HfddGgnEsG6CBnfsu/sl+wmry
+         KMaZiFjkaE/sJQsABbI17duJdIGzTv8+qjX8I9vY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 062/181] igb: fix a use-after-free issue in igb_clean_tx_ring
+Subject: [PATCH 5.10 024/102] netfilter: use get_random_u32 instead of prandom
 Date:   Mon, 27 Jun 2022 13:20:35 +0200
-Message-Id: <20220627111946.364439499@linuxfoundation.org>
+Message-Id: <20220627111934.184207757@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,91 +55,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit 3f6a57ee8544ec3982f8a3cbcbf4aea7d47eb9ec ]
+[ Upstream commit b1fd94e704571f98b21027340eecf821b2bdffba ]
 
-Fix the following use-after-free bug in igb_clean_tx_ring routine when
-the NIC is running in XDP mode. The issue can be triggered redirecting
-traffic into the igb NIC and then closing the device while the traffic
-is flowing.
+bh might occur while updating per-cpu rnd_state from user context,
+ie. local_out path.
 
-[   73.322719] CPU: 1 PID: 487 Comm: xdp_redirect Not tainted 5.18.3-apu2 #9
-[   73.330639] Hardware name: PC Engines APU2/APU2, BIOS 4.0.7 02/28/2017
-[   73.337434] RIP: 0010:refcount_warn_saturate+0xa7/0xf0
-[   73.362283] RSP: 0018:ffffc9000081f798 EFLAGS: 00010282
-[   73.367761] RAX: 0000000000000000 RBX: ffffc90000420f80 RCX: 0000000000000000
-[   73.375200] RDX: ffff88811ad22d00 RSI: ffff88811ad171e0 RDI: ffff88811ad171e0
-[   73.382590] RBP: 0000000000000900 R08: ffffffff82298f28 R09: 0000000000000058
-[   73.390008] R10: 0000000000000219 R11: ffffffff82280f40 R12: 0000000000000090
-[   73.397356] R13: ffff888102343a40 R14: ffff88810359e0e4 R15: 0000000000000000
-[   73.404806] FS:  00007ff38d31d740(0000) GS:ffff88811ad00000(0000) knlGS:0000000000000000
-[   73.413129] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   73.419096] CR2: 000055cff35f13f8 CR3: 0000000106391000 CR4: 00000000000406e0
-[   73.426565] Call Trace:
-[   73.429087]  <TASK>
-[   73.431314]  igb_clean_tx_ring+0x43/0x140 [igb]
-[   73.436002]  igb_down+0x1d7/0x220 [igb]
-[   73.439974]  __igb_close+0x3c/0x120 [igb]
-[   73.444118]  igb_xdp+0x10c/0x150 [igb]
-[   73.447983]  ? igb_pci_sriov_configure+0x70/0x70 [igb]
-[   73.453362]  dev_xdp_install+0xda/0x110
-[   73.457371]  dev_xdp_attach+0x1da/0x550
-[   73.461369]  do_setlink+0xfd0/0x10f0
-[   73.465166]  ? __nla_validate_parse+0x89/0xc70
-[   73.469714]  rtnl_setlink+0x11a/0x1e0
-[   73.473547]  rtnetlink_rcv_msg+0x145/0x3d0
-[   73.477709]  ? rtnl_calcit.isra.0+0x130/0x130
-[   73.482258]  netlink_rcv_skb+0x8d/0x110
-[   73.486229]  netlink_unicast+0x230/0x340
-[   73.490317]  netlink_sendmsg+0x215/0x470
-[   73.494395]  __sys_sendto+0x179/0x190
-[   73.498268]  ? move_addr_to_user+0x37/0x70
-[   73.502547]  ? __sys_getsockname+0x84/0xe0
-[   73.506853]  ? netlink_setsockopt+0x1c1/0x4a0
-[   73.511349]  ? __sys_setsockopt+0xc8/0x1d0
-[   73.515636]  __x64_sys_sendto+0x20/0x30
-[   73.519603]  do_syscall_64+0x3b/0x80
-[   73.523399]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   73.528712] RIP: 0033:0x7ff38d41f20c
-[   73.551866] RSP: 002b:00007fff3b945a68 EFLAGS: 00000246 ORIG_RAX: 000000000000002c
-[   73.559640] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff38d41f20c
-[   73.567066] RDX: 0000000000000034 RSI: 00007fff3b945b30 RDI: 0000000000000003
-[   73.574457] RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000000
-[   73.581852] R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff3b945ab0
-[   73.589179] R13: 0000000000000000 R14: 0000000000000003 R15: 00007fff3b945b30
-[   73.596545]  </TASK>
-[   73.598842] ---[ end trace 0000000000000000 ]---
+BUG: using smp_processor_id() in preemptible [00000000] code: nginx/2725
+caller is nft_ng_random_eval+0x24/0x54 [nft_numgen]
+Call Trace:
+ check_preemption_disabled+0xde/0xe0
+ nft_ng_random_eval+0x24/0x54 [nft_numgen]
 
-Fixes: 9cbc948b5a20c ("igb: add XDP support")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Link: https://lore.kernel.org/r/e5c01d549dc37bff18e46aeabd6fb28a7bcf84be.1655388571.git.lorenzo@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Use the random driver instead, this also avoids need for local prandom
+state. Moreover, prandom now uses the random driver since d4150779e60f
+("random32: use real rng for non-deterministic randomness").
+
+Based on earlier patch from Pablo Neira.
+
+Fixes: 6b2faee0ca91 ("netfilter: nft_meta: place prandom handling in a helper")
+Fixes: 978d8f9055c3 ("netfilter: nft_numgen: add map lookups for numgen random operations")
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/igb/igb_main.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ net/netfilter/nft_meta.c   | 13 ++-----------
+ net/netfilter/nft_numgen.c | 12 +++---------
+ 2 files changed, 5 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 68be2976f539..1c26bec7d6fa 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -4819,8 +4819,11 @@ static void igb_clean_tx_ring(struct igb_ring *tx_ring)
- 	while (i != tx_ring->next_to_use) {
- 		union e1000_adv_tx_desc *eop_desc, *tx_desc;
+diff --git a/net/netfilter/nft_meta.c b/net/netfilter/nft_meta.c
+index a7e01e9952f1..44d9b38e5f90 100644
+--- a/net/netfilter/nft_meta.c
++++ b/net/netfilter/nft_meta.c
+@@ -14,6 +14,7 @@
+ #include <linux/in.h>
+ #include <linux/ip.h>
+ #include <linux/ipv6.h>
++#include <linux/random.h>
+ #include <linux/smp.h>
+ #include <linux/static_key.h>
+ #include <net/dst.h>
+@@ -32,8 +33,6 @@
+ #define NFT_META_SECS_PER_DAY		86400
+ #define NFT_META_DAYS_PER_WEEK		7
  
--		/* Free all the Tx ring sk_buffs */
--		dev_kfree_skb_any(tx_buffer->skb);
-+		/* Free all the Tx ring sk_buffs or xdp frames */
-+		if (tx_buffer->type == IGB_TYPE_SKB)
-+			dev_kfree_skb_any(tx_buffer->skb);
-+		else
-+			xdp_return_frame(tx_buffer->xdpf);
+-static DEFINE_PER_CPU(struct rnd_state, nft_prandom_state);
+-
+ static u8 nft_meta_weekday(void)
+ {
+ 	time64_t secs = ktime_get_real_seconds();
+@@ -267,13 +266,6 @@ static bool nft_meta_get_eval_ifname(enum nft_meta_keys key, u32 *dest,
+ 	return true;
+ }
  
- 		/* unmap skb header data */
- 		dma_unmap_single(tx_ring->dev,
+-static noinline u32 nft_prandom_u32(void)
+-{
+-	struct rnd_state *state = this_cpu_ptr(&nft_prandom_state);
+-
+-	return prandom_u32_state(state);
+-}
+-
+ #ifdef CONFIG_IP_ROUTE_CLASSID
+ static noinline bool
+ nft_meta_get_eval_rtclassid(const struct sk_buff *skb, u32 *dest)
+@@ -385,7 +377,7 @@ void nft_meta_get_eval(const struct nft_expr *expr,
+ 		break;
+ #endif
+ 	case NFT_META_PRANDOM:
+-		*dest = nft_prandom_u32();
++		*dest = get_random_u32();
+ 		break;
+ #ifdef CONFIG_XFRM
+ 	case NFT_META_SECPATH:
+@@ -514,7 +506,6 @@ int nft_meta_get_init(const struct nft_ctx *ctx,
+ 		len = IFNAMSIZ;
+ 		break;
+ 	case NFT_META_PRANDOM:
+-		prandom_init_once(&nft_prandom_state);
+ 		len = sizeof(u32);
+ 		break;
+ #ifdef CONFIG_XFRM
+diff --git a/net/netfilter/nft_numgen.c b/net/netfilter/nft_numgen.c
+index 722cac1e90e0..4e43214e88de 100644
+--- a/net/netfilter/nft_numgen.c
++++ b/net/netfilter/nft_numgen.c
+@@ -9,12 +9,11 @@
+ #include <linux/netlink.h>
+ #include <linux/netfilter.h>
+ #include <linux/netfilter/nf_tables.h>
++#include <linux/random.h>
+ #include <linux/static_key.h>
+ #include <net/netfilter/nf_tables.h>
+ #include <net/netfilter/nf_tables_core.h>
+ 
+-static DEFINE_PER_CPU(struct rnd_state, nft_numgen_prandom_state);
+-
+ struct nft_ng_inc {
+ 	u8			dreg;
+ 	u32			modulus;
+@@ -104,12 +103,9 @@ struct nft_ng_random {
+ 	u32			offset;
+ };
+ 
+-static u32 nft_ng_random_gen(struct nft_ng_random *priv)
++static u32 nft_ng_random_gen(const struct nft_ng_random *priv)
+ {
+-	struct rnd_state *state = this_cpu_ptr(&nft_numgen_prandom_state);
+-
+-	return reciprocal_scale(prandom_u32_state(state), priv->modulus) +
+-	       priv->offset;
++	return reciprocal_scale(get_random_u32(), priv->modulus) + priv->offset;
+ }
+ 
+ static void nft_ng_random_eval(const struct nft_expr *expr,
+@@ -137,8 +133,6 @@ static int nft_ng_random_init(const struct nft_ctx *ctx,
+ 	if (priv->offset + priv->modulus - 1 < priv->offset)
+ 		return -EOVERFLOW;
+ 
+-	prandom_init_once(&nft_numgen_prandom_state);
+-
+ 	return nft_parse_register_store(ctx, tb[NFTA_NG_DREG], &priv->dreg,
+ 					NULL, NFT_DATA_VALUE, sizeof(u32));
+ }
 -- 
 2.35.1
 

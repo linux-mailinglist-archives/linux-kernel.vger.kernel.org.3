@@ -2,201 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08AA55C85D
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2A955D7C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbiF0MZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
+        id S235700AbiF0M0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234964AbiF0MZa (ORCPT
+        with ESMTP id S231736AbiF0M0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:25:30 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1278BF40
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:25:28 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id go6so9172704pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:25:28 -0700 (PDT)
+        Mon, 27 Jun 2022 08:26:49 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552962AF6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:26:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656332804; x=1687868804;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=o0hlgqge4vBLcDbmlxxHLGco8WrvdV4A0094ftULd7c=;
+  b=FF6lGTizgDWqN3W4MQQvqqRpoNj5MzqCm6yO0gcaWsFkMFoR9XDz0yXV
+   LUpYqqC/mySLrqsoy0pyGecgf9QLD3yFiHWtWQV3jxP3iABvwIqBxgVqP
+   1mJgjFmn2Ade/v4Ow54RRilk+1K9J7jQXnuN5JbqhkLP0cCFKcVTpp0Px
+   VmQKwvA62v1nERBNqlJ5zipEuOAeKMUmWYpNk/42UUgF2FJDFMI38bU+Y
+   FEeedRyYUb6J7GjxuonW+T3MoFJF1L5qmsvz618ztZ5FUZbYVOyJXxckp
+   L4aI0M9w53GqaQCt6jxhWCIoaIZUVIR/7CAXbOcr+akeo0S+PB3pztHjb
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="179648349"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jun 2022 05:26:43 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 27 Jun 2022 05:26:44 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Mon, 27 Jun 2022 05:26:43 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LOKoxTVFQELP8iPDtbkzgm2BE0HSvpeoTctG3BHtiDziUjpYFqIA5szVtydQo5hUI5K2RJS9mZT6Qpmex0Rol1mvnoc+UrNPrG8vCQ++UuvFQHCVBZX8d9D+8wfMErgTwPjanoyK6QMC4J4SQa4/UDFyl1EqpJzuUgDInqnWXXL9uUtyboVixEB80OM22WlZA6DnX3Cs8vd4IH4GapLFF372nea56h7PmQCtBGeWNbUFQjU+5l+olqE63YbtBiW/AwSrVmJceoAbGTS1FoEqczZzAjchEoxrf9jAoK+R62oH9YJRfKMJaSfymzwAJbFSu03+Qc1TFqNBh/BOy/4KSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=o0hlgqge4vBLcDbmlxxHLGco8WrvdV4A0094ftULd7c=;
+ b=icX2kmACTBkRsVzMVjjV9D6RzrjmZTNJzf9Q5PBKAKUu2O+nHn9U+0zXdfPIAnvaT1pHNMP+HpvKFPyQ0OBDTo9aYZ9QXf8WksOqYt9rhYjtEPc7PwX/g5y9LnC3dUz8h81HKtCYYhfIWpiQNXJoI3k22KlMRruHrPcwpW0ji9gJcpz5X9KjhnFTzUhTylbzo7Q7EQ+xJC6x1va2jBv4EuJNk0v0mrg2+Yo79kwenYhplh5inodHXmGescZG2KEemJiUw4XwxmY+o7wiwwIRwmN8a3St3um5kh5rneZhoSH1tt8jrgts9+gf/rMSfEY8KKEqdrwtYlFvb1WqqYbm5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nL5kCpdHJ5lvv28tpD7gSBplt/IeArxopwj7iRrgus8=;
-        b=3bEynDEeeDWasmrPGb0b2nl020uxdS0OGeT2sY6K6tHwVkjVvWAx3iKvAcGRYl6GEL
-         UOB5uK/P9C3DbU/6ihI3bEp6q6bXM2xrZz/a8jc2eJZZbloj0SqWv/mnN8vOFzY+Cp+B
-         WTmrhRBXNNL70v1TC3AxvxCLHrUWHwl8HPgLxP064AbJVP8VdXGO/hClKpuZgI9LTJyS
-         44TnEtjvkzFHHJZlhRv7E1DDh0ULkfmoqeDQv4wzWDMh763uFgVfNmPv8HWTidkXNpwM
-         On3AGQhmVGxaSd6tuVHYnwhtudQE8K8+thfQzA6LIzRlXdvV+HmY//kPsUrO42K9mCQa
-         41ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nL5kCpdHJ5lvv28tpD7gSBplt/IeArxopwj7iRrgus8=;
-        b=O74DYi1i2vXXc0ovG7Fv/h33RW90XJnUADMdOeI1AhvdBjh5qjmXkHB01pAYNVF8b3
-         MVHJCiYRxrl1ogx2VyLTyiQddcNgkrrN5Spv+yvYrAL2T2MLko7W9IG4lwpZW2cXNrrd
-         KZdhYIgp4PCUZ+FjloPIXnJ0orTSZFkpJVmOfnP3u+Ge6azpStfiwlr+IzO/jN1hLgjk
-         /kVDHjl5jb5MZhMcrl8Lmjs8PhARW8pJumt5WF8TkjY+V+rj7OdUryaHQd/tFt7+5jd2
-         X7PVpC1MqhpZSgZJMNo75G0wUlop7gcdIg1tjsBak3JFUA4cJNVmuZIOFSJZp+dbLkX0
-         ceNg==
-X-Gm-Message-State: AJIora9PetRBRbiSomgEw+3TT6WlemIHTwjtnrj+hMPm8CSHVHhtqT5m
-        3HdBUBVTW8apvoUmEeGqmf3sig==
-X-Google-Smtp-Source: AGRyM1tZYwNiEaCiX2kDUvizwp5BwzjUTRHMWhE0UKVEcsuylfwPPU8Fz3TaFaQey2NmAfc5hZi5Yg==
-X-Received: by 2002:a17:903:234c:b0:16a:4d9d:ed09 with SMTP id c12-20020a170903234c00b0016a4d9ded09mr14382760plh.120.1656332728300;
-        Mon, 27 Jun 2022 05:25:28 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id i4-20020a17090332c400b0016a4db13435sm7070485plr.191.2022.06.27.05.25.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 05:25:27 -0700 (PDT)
-Message-ID: <96b570c0-14e6-2dca-aa9d-b54ff84924f7@kernel.dk>
-Date:   Mon, 27 Jun 2022 06:25:26 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: Linux 5.10.125
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o0hlgqge4vBLcDbmlxxHLGco8WrvdV4A0094ftULd7c=;
+ b=djaTfzoFbaOgMPzO1ACUDNwp9KlmrFJ/fB8qfzg89ki3L8CJUEu5QBAZqaPyBuQ9njIW1ugMNV54rHkXOZLIsevhk1NvVPKYL9b8eQCVADsT1hYsGdG9Y60k3nlkSTeqLoP7OaCMNyOQ+eR0li30xYzRMoAOd7DG8UEhmto18hc=
+Received: from DM4PR11MB6479.namprd11.prod.outlook.com (2603:10b6:8:8c::19) by
+ DM6PR11MB4300.namprd11.prod.outlook.com (2603:10b6:5:1dc::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5373.17; Mon, 27 Jun 2022 12:26:39 +0000
+Received: from DM4PR11MB6479.namprd11.prod.outlook.com
+ ([fe80::1954:e4ab:eafd:9cb4]) by DM4PR11MB6479.namprd11.prod.outlook.com
+ ([fe80::1954:e4ab:eafd:9cb4%5]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
+ 12:26:39 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <peda@axentia.se>, <regressions@leemhuis.info>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>
+CC:     <du@axentia.se>, <Patrice.Vilchez@microchip.com>,
+        <Cristian.Birsan@microchip.com>, <Ludovic.Desroches@microchip.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <gregkh@linuxfoundation.org>, <saravanak@google.com>
+Subject: Re: Regression: memory corruption on Atmel SAMA5D31
+Thread-Topic: Regression: memory corruption on Atmel SAMA5D31
+Thread-Index: AQHYL7i/by/02n1wA0qavxdAEojSfw==
+Date:   Mon, 27 Jun 2022 12:26:39 +0000
+Message-ID: <272fb9f0-ad33-d956-4d0f-3524c553689c@microchip.com>
+References: <13c6c9a2-6db5-c3bf-349b-4c127ad3496a@axentia.se>
+ <b5c57978-212f-55c4-2f0b-b38a8f157ca3@microchip.com>
+ <a024180a-493c-af20-0910-da30dd5fe364@axentia.se>
+ <6d9561a4-39e4-3dbe-5fe2-c6f88ee2a4c6@axentia.se>
+ <ed24a281-1790-8e24-5f5a-25b66527044b@microchip.com>
+ <d563c7ba-6431-2639-9f2a-2e2c6788e625@axentia.se>
+ <e5a715c5-ad9f-6fd4-071e-084ab950603e@microchip.com>
+ <220ddbef-5592-47b7-5150-4291f9532c6d@axentia.se>
+ <6ad73fa2-0ebb-1e96-a45a-b70faca623dd@axentia.se>
+ <0879d887-6558-bb9f-a1b9-9220be984380@leemhuis.info>
+ <4a1e8827-1ff0-4034-d96e-f561508df432@microchip.com>
+ <1a398441-c901-2dae-679e-f0b5b1c43b18@axentia.se>
+ <14e5ccbe-8275-c316-e3e1-f77461309249@microchip.com>
+ <c5928610-4902-27f3-7312-e8c85eefad39@axentia.se>
+ <bfb4cb27-e2e1-e709-1c27-d938e4d30eab@leemhuis.info>
+ <6b1bae01-d8fb-1676-3dee-9d5d376e37f1@microchip.com>
+ <0d8b2d9c-af85-7148-ff13-aa968a7f51ad@microchip.com>
+ <AM0PR02MB4436C535FDD72EFE422D8B10BCB39@AM0PR02MB4436.eurprd02.prod.outlook.com>
+In-Reply-To: <AM0PR02MB4436C535FDD72EFE422D8B10BCB39@AM0PR02MB4436.eurprd02.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Greg Thelen <gthelen@google.com>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
-        jslaby@suse.cz
-References: <1656164548242121@kroah.com>
- <xr93fsjr5901.fsf@gthelen-ubiquity2.mtv.corp.google.com>
- <ea9b3819-418a-5b79-8bcd-0b28ead70a61@kernel.dk>
- <6bc6ae48-b569-2002-118a-d3468b0278cd@kernel.dk>
- <xr93czeu64sx.fsf@gthelen-ubiquity2.mtv.corp.google.com>
- <YrlGDylVhmjFZpZf@kroah.com> <YrlkvDVa79j4+JVx@kroah.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YrlkvDVa79j4+JVx@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8d4b9657-4084-4563-0a75-08da58384914
+x-ms-traffictypediagnostic: DM6PR11MB4300:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qpa716N4YuYGWcix3/Fz2GT79r9lFetIDkk7YTRlQqUIENosYKTA1MekbCyDEvLYfxLxKZaSP44tqe5GkmvxwjHFhETsUePBMVB3NLZ4bJRz+Lu//XAr98PK6/DdHgI/LFqKd+nVOcMufmjHJBp8UTNaXJIfGB9nenUlg/hW7Pvl/T84lnrruQcKUD2DH+ie2HaUDN9seBtjz75cTJ3Km8Hb0hHDmvtxchRpJLwoLfFwvr2EkhyujnKd0HPzqwO057ICo6kjkhHavrNAqpQFOgM/OTGvgaAy+7FVzoJoUWRGmnrUsxXwq2FczdK6KEdv7b2W3uffLbKIzIGxGILYsUuRxE4tcT6IqxoslXh/N3myOnf0IGdpXIecWaZqQ1GK273tg9V4U8Rbej1F/rz3esD/qKD4gnAtS7CF0A3foFCj0ope/8mxJJbRIe9TNuIYnie2u6B+w9yJfaPUTlvN4fxVn0QreqRBrJTe5F0fPK3nm7jEZv0Y3wsRVGVA96zpvqbS68LxNyEkVxY//p3bDoxGntEYS1SIDdv/4j6bkVubwXpWcDyiGTbBa+r7GYHK8n03SxutR2V/fUBxT3ZUAHAP7NqfbbSMU9z3oQEUf0AOwkx+Qxy0pd9nF0NAVn3zFOCIfzxTFTibTFlhtv7WsLIBWq9kgLmuPODrtRV1oSZb4KkjKfxa2DISlhJS4sqEOYkQijhSHtDdkITpM+AU3SwQt0xi1XEMh+PGZ1EP4gfrajSAgs+VryEw21eSzPKGE6Taj1yGFM+TpiR2/KlUyR7VhYnhXUCEeJJYomCOsqU59PviYxiSYR073NHIbcUPB4kPvhApMACLlIreB+YDVIiJyuNgntGON2CdBEy0Tgk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6479.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(376002)(136003)(396003)(366004)(346002)(6506007)(6486002)(53546011)(478600001)(66476007)(41300700001)(6512007)(26005)(5660300002)(66556008)(38070700005)(2616005)(122000001)(186003)(86362001)(66946007)(31696002)(38100700002)(36756003)(8936002)(83380400001)(316002)(2906002)(31686004)(64756008)(4326008)(110136005)(71200400001)(54906003)(91956017)(8676002)(76116006)(66446008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TXdjME8weHh0bG9HT01peGlYejQ0OXR5aUtKSG9zam9mZmdGcjRFMXNCMTRH?=
+ =?utf-8?B?a0tuTTdmVDBGdDE1K1FrcXh1SHpUNndVVWhwU3hLb2hJOSsvVUg2S240ZXBi?=
+ =?utf-8?B?dlVvb3hFeXpjZzQ1T2Ewc2tRWnhzSVVoYUlHMVpKelVXUmlsbFJ3UUFzRHh1?=
+ =?utf-8?B?TTBNakY3WCtpOWRIQzh4SXFWTHdXVmk3TmxxQXBsRUNrTlRmZGhmbDByK3FR?=
+ =?utf-8?B?ZHhaN3hJM1NKVWNpOWVxRlM5Q3pXMk9EOHh3OEV6cjdvRkhSVlc5UXZ0Rmlv?=
+ =?utf-8?B?UXloUEJTQVAxQytJcUJJSUFsb3puTS92VFNMQU1hMlhtekw0SXhYTTVNdkZx?=
+ =?utf-8?B?NitzV3F4ZXNDNWI0YW9MRUhLOHBldlJoc0JPLy9JZk1YN2tVWU15Z2V6MHhT?=
+ =?utf-8?B?VHl5Um8rWDRRaWl4ZmEwS3dScmx2aFVqKzVoOGdyK1lXd3JZVEswa1ZSdnBi?=
+ =?utf-8?B?cytXa1RIQzNicDhzT2orTmQvWjZlTUpGZ1lmcHdWUmJQQ3QvdStlclZpUHZZ?=
+ =?utf-8?B?TlpTWVRCbXdSNXV1aEVnbXJCbWVhQXRjS1l2VTV1V2YrbGFqTVd4alJFZGI2?=
+ =?utf-8?B?b1kyVzZIdFdDUHNZaVZwSGNWTTFpRG02QmRSYUlVYVd2NmQzMmhrSDBSRVBM?=
+ =?utf-8?B?cTAyZVMyZUNITTliaXFRa2QwbEhUamxFVGV3dFF1ckQ0YUM3dFd1OUJiNVVW?=
+ =?utf-8?B?TmhMWFlPZ2FiKzRKTVkxd3VVdlNNUW8wcVBFclhhNkFhTkM4NldlbXBBMkFz?=
+ =?utf-8?B?UDRjcjB1bW5aZDNYdzVqWk9vbzZubHp0RDFvL2pxcTNEZHZUUzNFTUlqcEFi?=
+ =?utf-8?B?V2lFME1mS2RSVFdMZWxnZHBEU2hmY1RtaFdkWFUrakZ6UkRGZVB1aWxud3JF?=
+ =?utf-8?B?bm9MWG9VeXZJWWhNVDlkVE94bGd0R2d6QXdKaGpGbmhYNVZ2STdPNzUvU3Qv?=
+ =?utf-8?B?K2FlZmFXMmxNdFd4dWhVZGo1ZVIxQ0MreTI3TjZBR1FSR0praHlRaGg2YUlO?=
+ =?utf-8?B?c2tQcVd4WXk5Vm5PYTQ2akhNVTY3Vzd2RUk1Y2E2enR4WnBLUzBNZGhhT1hM?=
+ =?utf-8?B?Z2ExMVhETTlQSjllemZPejdVSkh3VXN5ZXNzU0o2TldHeGhUSTBXaE5JQVlV?=
+ =?utf-8?B?UGo5Z0U0Sk9ncGh5MFR6Z09GRWlQU0V6VFp4UUJsQ2tKVFdqeEpQcXlmeDly?=
+ =?utf-8?B?Mm5mdEQ1dGVBcE4xZDVjYy91NEVlYWZEVXNJSHlVVlZqYW1mY3ZDdXhSN0FP?=
+ =?utf-8?B?cGx6WEN2N28wSUZCb2lIbWpPbHRoSEwydm93UFlBTEQ2R1BVWW5FMDNCbkxR?=
+ =?utf-8?B?aE50SFRXNW5QT3B4ZlE4ZjB2eEx4WHhURTArUWt4NTY5TjNkYUttcnQzWFVl?=
+ =?utf-8?B?bENQWTY5UXVzVm1GK2FhT3dpY0ZyUzc4RGVaMkJOWk9KYUFlc2xiYktodzFS?=
+ =?utf-8?B?RzB1MFpmQTlZVjNlbzVYRWdiSjFWNERjVXRJM0oxejZjeHh2WlY3VjdTR2VO?=
+ =?utf-8?B?NERqekJFZWdHc0huUnluS0NlMXZxcU1JZytLU2Vqb3NqVnJ0UE9sT3orSE1Z?=
+ =?utf-8?B?VWFxNVZVek9hdTB2MERhS1RoWEtpcU10R04zME96c0hEWmRxblpOTGF1b0Np?=
+ =?utf-8?B?Nm8veExDUHBmNk9mbUJtSkFWZStMQ2JieENsd3loazVvR2dGK0taTUJ2L3Zr?=
+ =?utf-8?B?OGczYzFIWHgxTS83NDA4SWR0WDRiQVNvZXkwYldENVNLZzBWTER2NlkwcXF4?=
+ =?utf-8?B?QjFyNUx1Nk5NL0trTTV5aXhQM21pSWtFb3JOY201eXdRODY1OE1kYVlla2VW?=
+ =?utf-8?B?VHU5ZjlNZGZBY0hlNzl3MFhhMjZTbXlRTmVzakw4RlZvWnAyKzNrRVJGaVNE?=
+ =?utf-8?B?TUpGM2EvRzhYOVg1VElCbk9rZzFURnhUc2hxd0k0NVh4aW9GWnJSeS8waEZi?=
+ =?utf-8?B?cmRETys1aE9yRVA0RGVPVTBKdEtaWFlMWWpDcEMzZnlyV0RBYmU2ekRRRkN1?=
+ =?utf-8?B?L1NjTTE2alRmRDl0Zm94eTdSTVkyNnU2dW9LNmFabVNYSTBBcXdXd0gwd0gw?=
+ =?utf-8?B?VHp2RW9IaFlQWHZaSjFRVHNrV3ZLU1I0SGRQZDNEOHh2Ky9nYVlXMG5rN2xr?=
+ =?utf-8?B?TzJIdHVEeVpqUER3RjY2UG4xaEFyZVQwcUVoaFZUUGMvdjkxYlRRVmozTHRZ?=
+ =?utf-8?B?eFE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <73270A8768037B4ABF3896C07C09F600@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6479.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d4b9657-4084-4563-0a75-08da58384914
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 12:26:39.3653
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kcJ4lXgLPBY0Bs5PGg54s3CrRtUIlsnY5Mq/L+tKSqt1QzsIH7GOTWJ95I1Em3ONZrGGP2luttLKkdps7HPamzvooIb58opn00i0qIBVVk4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4300
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 2:05 AM, Greg Kroah-Hartman wrote:
-> On Mon, Jun 27, 2022 at 07:54:23AM +0200, Greg Kroah-Hartman wrote:
->> On Sun, Jun 26, 2022 at 10:42:06PM -0700, Greg Thelen wrote:
->>> Jens Axboe <axboe@kernel.dk> wrote:
->>>
->>>> On 6/26/22 6:04 PM, Jens Axboe wrote:
->>>>> On 6/26/22 4:56 PM, Greg Thelen wrote:
->>>>>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
->>>>>>
->>>>>>> I'm announcing the release of the 5.10.125 kernel.
->>>>>>>
->>>>>>> All users of the 5.10 kernel series must upgrade.
->>>>>>>
->>>>>>> The updated 5.10.y git tree can be found at:
->>>>>>> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
->>>>>>> and can be browsed at the normal kernel.org git web browser:
->>>>>>> 	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
->>>>>>>
->>>>>>> thanks,
->>>>>>>
->>>>>>> greg k-h
->>>>>>>
->>>>>>> ------------
->>>>>>>
->>>>>>>  Makefile                              |    2 
->>>>>>>  arch/arm64/mm/cache.S                 |    2 
->>>>>>>  arch/s390/mm/pgtable.c                |    2 
->>>>>>>  drivers/tty/serial/serial_core.c      |   34 ++++--------
->>>>>>>  drivers/usb/gadget/function/u_ether.c |   11 +++-
->>>>>>>  fs/io_uring.c                         |   23 +++++---
->>>>>>>  fs/zonefs/super.c                     |   92 ++++++++++++++++++++++------------
->>>>>>>  net/ipv4/inet_hashtables.c            |   31 ++++++++---
->>>>>>>  8 files changed, 122 insertions(+), 75 deletions(-)
->>>>>>>
->>>>>>> Christian Borntraeger (1):
->>>>>>>       s390/mm: use non-quiescing sske for KVM switch to keyed guest
->>>>>>>
->>>>>>> Damien Le Moal (1):
->>>>>>>       zonefs: fix zonefs_iomap_begin() for reads
->>>>>>>
->>>>>>> Eric Dumazet (1):
->>>>>>>       tcp: add some entropy in __inet_hash_connect()
->>>>>>>
->>>>>>> Greg Kroah-Hartman (1):
->>>>>>>       Linux 5.10.125
->>>>>>>
->>>>>>> Jens Axboe (1):
->>>>>>>       io_uring: add missing item types for various requests
->>>>>>>
->>>>>>> Lukas Wunner (1):
->>>>>>>       serial: core: Initialize rs485 RTS polarity already on probe
->>>>>>>
->>>>>>> Marian Postevca (1):
->>>>>>>       usb: gadget: u_ether: fix regression in setting fixed MAC address
->>>>>>>
->>>>>>> Will Deacon (1):
->>>>>>>       arm64: mm: Don't invalidate FROM_DEVICE buffers at start of DMA transfer
->>>>>>>
->>>>>>> Willy Tarreau (5):
->>>>>>>       tcp: use different parts of the port_offset for index and offset
->>>>>>>       tcp: add small random increments to the source port
->>>>>>>       tcp: dynamically allocate the perturb table used by source ports
->>>>>>>       tcp: increase source port perturb table to 2^16
->>>>>>>       tcp: drop the hash_32() part from the index calculation
->>>>>>
->>>>>> 5.10.125 commit df3f3bb5059d20ef094d6b2f0256c4bf4127a859 ("io_uring: add
->>>>>> missing item types for various requests") causes panic when running
->>>>>> test/iopoll.t from https://github.com/axboe/liburing commit
->>>>>> dda4848a9911120a903bef6284fb88286f4464c9 (liburing-2.2).
->>>>>>
->>>>>> Here's a manually annotated panic message:
->>>>>> [  359.047161] list_del corruption, ffffa42098824f80->next is LIST_POISON1 (dead000000000100)
->>>>>> [  359.055393] kernel BUG at lib/list_debug.c:47!
->>>>>> [  359.059786] invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC PTI
->>>>>> [  359.065463] CPU: 11 PID: 15862 Comm: iopoll.t Tainted: G S        I       5.10.124 #1
->>>>>> [  359.081804] RIP: 0010:__list_del_entry_valid+0x49/0x80
->>>>>> [  359.086880] Code: c2 22 48 39 d1 74 25 48 8b 11 48 39 f2 75 2d 48 8b 50 08 48 39 f2 75 34 b0 01 5d c3 48 c7 c7 68 15 79 b1 31 c0 e8 c5 a2 5a 00 <0f> 0b 48 c7 c7 d8 8e 76 b1 31 c0 e8 b5 a2 5a 00 0f 0b 48 c7 c7 69
->>>>>> [  359.105431] RSP: 0018:ffffb6b66785bd58 EFLAGS: 00010046
->>>>>> [  359.110592] RAX: 000000000000004e RBX: ffffa42098824f00 RCX: d07284ea1fbba400
->>>>>> [  359.117642] RDX: ffffa43f7f4f05b8 RSI: ffffa43f7f4dff48 RDI: ffffa43f7f4dff48
->>>>>> [  359.124691] RBP: ffffb6b66785bd58 R08: 0000000000000000 R09: ffffffffb1f38540
->>>>>> [  359.131740] R10: 00000000ffff7fff R11: 0000000000000000 R12: 0000000000000282
->>>>>> [  359.138789] R13: ffffb6b66785beb8 R14: ffffa42095d33e00 R15: ffffa420937e3d20
->>>>>> [  359.145836] FS:  00000000004f8380(0000) GS:ffffa43f7f4c0000(0000) knlGS:0000000000000000
->>>>>> [  359.153830] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>> [  359.159506] CR2: 0000000000539388 CR3: 000000027b57c006 CR4: 00000000003706e0
->>>>>> [  359.166552] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>>>>> [  359.173600] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>>>>> [  359.180647] Call Trace:
->>>>>> [  359.183064]  io_dismantle_req+0x1da/0x2b0
->>>>>>                     __list_del_entry [include/linux/list.h:132]
->>>>>>                     list_del [include/linux/list.h:146]
->>>>>>                     io_req_drop_files [fs/io_uring.c:5934]
->>>>>>                     io_req_clean_work [fs/io_uring.c:1315]
->>>>>>                     io_dismantle_req [fs/io_uring.c:1911]
->>>>>> [  359.187023]  io_do_iopoll+0x4e5/0x790
->>>>>> [  359.194602]  __se_sys_io_uring_enter+0x39b/0x6f0
->>>>>> [  359.208318]  __x64_sys_io_uring_enter+0x29/0x30
->>>>>> [  359.212793]  do_syscall_64+0x31/0x40
->>>>>> [  359.216324]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
->>>>>
->>>>> Well that sucks, I wonder why mine didn't fail like that. I'll see if I
->>>>> can hit this and send a fix. Thanks for reporting!
->>>>
->>>> Below should do it, I apologize for that. I think my test box booted the
->>>> previous kernel which is why it didn't hit it in my regression tests :-(
->>>>
->>>> Greg, can you add this to 5.10-stable? Verified it ran tests with the
->>>> right kernel now...
->>
->> Great, I'll go just do a release with this in it right now to help
->> others out.
-> 
-> 5.10.126 is now released with this fix.
-
-Thanks - to both Gregs!
-
--- 
-Jens Axboe
-
+T24gNi8yMS8yMiAxMzo0NiwgUGV0ZXIgUm9zaW4gd3JvdGU6DQo+IEVYVEVSTkFMIEVNQUlMOiBE
+byBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhl
+IGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gMjAyMi0wNi0yMCBhdCAxNjoyMiwgVHVkb3IuQW1iYXJ1
+c0BtaWNyb2NoaXAuY29tIHdyb3RlOg0KPj4NCj4+Pg0KPj4+IGdpdEBnaXRodWIuY29tOmFtYmFy
+dXMvbGludXgtMGRheS5naXQsIGJyYW5jaCBkbWEtcmVncmVzc2lvbi1oZG1hYy12NS4xOC1yYzct
+NHRoLWF0dGVtcHQNCj4+Pg0KPj4NCj4+IEhpLCBQZXRlciwNCj4+DQo+PiBJJ3ZlIGp1c3QgZm9y
+Y2VkIHB1c2hlZCBvbiB0aGlzIGJyYW5jaCwgSSBoYWQgYSB0eXBvIHNvbWV3aGVyZSBhbmQgd2l0
+aCB0aGF0IGZpeGVkIEkgY291bGQNCj4+IG5vIGxvbmdlciByZXByb2R1Y2UgdGhlIGJ1Zy4gVGVz
+dGVkIGZvciB+MjAgbWludXRlcy4gV291bGQgeW91IHBsZWFzZSB0ZXN0IGxhc3QgMyBwYXRjaGVz
+DQo+PiBhbmQgdGVsbCBtZSBpZiB5b3UgY2FuIHN0aWxsIHJlcHJvZHVjZSB0aGUgYnVnPw0KPiAN
+Cj4gSGkhDQo+IA0KPiBJIHJlYmFzZWQgeW91ciBwYXRjaGVzIG9udG8gbXkgY3VycmVudCBicmFu
+Y2ggd2hpY2ggaXMgdjUuMTguMiBwbHVzIGEgZmV3IHVucmVsYXRlZA0KPiBjaGFuZ2VzIChhdCBs
+ZWFzdCB0aGV5IGFyZSB1bnJlbGF0ZWQgYWZ0ZXIgcmVtb3ZpbmcgdGhlIHByZXZpb3VzIHdvcmth
+cm91bmQgdG8gZGlzYWJsZQ0KPiBuYW5kLWRtYSBlbnRpcmVseSkuDQo+IA0KPiBUaGUgdW5yZWxh
+dGVkIHBhdGNoZXMgYXJlIHR3byBiYWNrcG9ydHMgc28gdGhhdCBkcml2ZXJzIHJlY29nbml6ZSBu
+ZXcgY29tcGF0aWJsZXMgWzFdWzJdLA0KPiB3aGljaCBzaG91bGQgYmUgY29tcGxldGVseSBoYXJt
+bGVzcywgcGx1cyBhIGNvdXBsZSBvZiBwcm9wb3NlZCBmaXhlcyB0aGF0IGhhcHBlbnMgdG8gZml4
+DQo+IGVlcHJvbSBpc3N1ZXMgd2l0aCB0aGUgYXQ5MSBJMkMgZHJpdmVyIGZyb20gQ29kcmluIENp
+dWJvdGFyaXUgWzNdLg0KPiANCj4gT24gdGhhdCBrZXJuZWwsIEkgY2FuIHN0aWxsIHJlcHJvZHVj
+ZS4gSXQgc2VlbXMgYSBiaXQgaGFyZGVyIHRvIHJlcHJvZHVjZSB0aGUgcHJvYmxlbSBub3cNCj4g
+dGhvdWdoLiBJZiB0aGUgc3lzdGVtIGlzIG90aGVyd2lzZSBpZGxlLCB0aGUgc2hhMjU2c3VtIHRl
+c3QgZGlkIG5vdCByZXByb2R1Y2UgaW4gYSBydW4gb2YNCj4gMTUwKyBhdHRlbXB0cywgYnV0IGlm
+IEkgbGV0IHRoZSAicmVhbCIgYXBwbGljYXRpb24gcnVuIHdoaWxlIEkgZG8gdGhlIHRlc3QsIEkg
+Z2V0IGEgZmFpbHVyZSByYXRlDQo+IG9mIGFib3V0IDEwJSwgc2VlIGJlbG93LiBUaGUgcmVhbCBh
+cHBsaWNhdGlvbiBidXJucyBzb21lIENQVSAoYnV0IG5vdCBhbGwgb2YgaXQpIGFuZA0KPiBjb21t
+dW5pY2F0ZXMgd2l0aCBIVyB1c2luZyBJMkMsIG5hdGl2ZSBVQVJUcyBhbmQgdHdvIG9mIHRoZSBm
+b3VyIFVTQi1zZXJpYWwgcG9ydHMNCj4gKEZUREksIHdpdGggdGhlIGxhdGVuY3kgc2V0IHRvIDFt
+cyBhcyBtZW50aW9uZWQgZWFybGllciksIHNvIEkgZ3Vlc3MgdGhlcmUgaXMgbW9yZSBETUENCj4g
+cHJlc3N1cmUgb3Igc29tZXRoaW5nPyBUaGVyZSBpcyBhIDEwMG1icHMgbmV0d29yayBjb25uZWN0
+aW9uLCBidXQgaXQgd2FzIGxlZnQgImlkbGUiDQo+IGR1cmluZyB0aGlzIHRlc3QuDQo+IA0KDQpU
+aGFua3MsIFBldGVyLg0KSSBnb3QgYmFjayB0byB0aGUgb2ZmaWNlLCBJJ20gcmVjaGVja2luZyB3
+aGF0IGNvdWxkIGdvIHdyb25nLg0KDQp0YQ0K

@@ -2,79 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FE655D522
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA7F55DC8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234498AbiF0LVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
+        id S239769AbiF0L6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbiF0LVJ (ORCPT
+        with ESMTP id S238428AbiF0LvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:21:09 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE8B6566
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 04:21:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656328866; x=1687864866;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=eDPD5a5Tj8Fg/jh61oE/jKEduG2p47Yi5l4SsATd2jY=;
-  b=f3l+xbe/7ASGNGifrCODb3rmG2azGSZC9UFUhKXvwzwv+emCC5mvQIc6
-   gDxbMQY+99eJ/mMe5vTmx1tXffD0DJous+kjJi/MlNXTqkQL7oHGxe3ju
-   E2z7RFiN7/G8kwR9IVs6o/yMEwCVkwNn13epfpzUtAy0AOt2bgS1W2gNv
-   Qq15Zidw45B43buZJTdI25VWXiq8gPnZ1Z4H0B7Vz/pa+Eb+Ex+SM2kZC
-   ieCQDKd0UYOth6hYgcq+Pc9R5jG99IHwqnYs+wxoet24wGTMYedGgpAAL
-   DCv7WXRh1tLY50S4zpHlzuFAlabUhgtc1ytV+mxJsvDeZ26jeFVQOAVGe
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="261840757"
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="261840757"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 04:21:06 -0700
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="540075677"
-Received: from fzaeni-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.88.6])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 04:21:02 -0700
-Message-ID: <9c7d99469179340eeecabaf3e9c414fc98900626.camel@intel.com>
-Subject: Re: [PATCH v8 2/5] x86/tdx: Add TDX Guest event notify interrupt
- support
-From:   Kai Huang <kai.huang@intel.com>
-To:     "Yao, Jiewen" <jiewen.yao@intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "marcelo.cerri@canonical.com" <marcelo.cerri@canonical.com>,
-        "tim.gardner@canonical.com" <tim.gardner@canonical.com>,
-        "khalid.elmously@canonical.com" <khalid.elmously@canonical.com>,
-        "Cox, Philip" <philip.cox@canonical.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Mon, 27 Jun 2022 23:21:00 +1200
-In-Reply-To: <MW4PR11MB5872E3B775A680678331D6358CB79@MW4PR11MB5872.namprd11.prod.outlook.com>
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220609025220.2615197-3-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <78873cc1db47ba00a4c01f38290521c1a6072820.camel@intel.com>
-         <efb2cdab-289b-8757-fe5e-5348519b0474@linux.intel.com>
-         <385B219C-4DB2-480C-913C-411AB4D644ED@intel.com>
-         <MW4PR11MB5872E3B775A680678331D6358CB79@MW4PR11MB5872.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Mon, 27 Jun 2022 07:51:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937576456;
+        Mon, 27 Jun 2022 04:44:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34112612AC;
+        Mon, 27 Jun 2022 11:44:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 402D3C36AEB;
+        Mon, 27 Jun 2022 11:44:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656330262;
+        bh=zyaz1kKI1UfWXouXyE9m5IrDIHR01qz/5SuQTLMp0mY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mZcrHSQ1xF+ASvZEhCia8rB/ypvzXAfBE0MiLe/qkmZO5+KIQvF57lgM4N1Me4TDz
+         GG+O2a3xQn9n3CUMIFRJ9iUoeSQyGqx43f6vJTwWp6TukMVhBAXhlM4SQCWjkHWGlx
+         QXhRSphGaxQe0TgKXB/5/mvfdBlPAWH5pntP740k=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Gurucharan <gurucharanx.g@intel.com>
+Subject: [PATCH 5.18 088/181] ice: ethtool: Prohibit improper channel config for DCB
+Date:   Mon, 27 Jun 2022 13:21:01 +0200
+Message-Id: <20220627111947.111775837@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,32 +57,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-06-25 at 15:35 +1200, Yao, Jiewen wrote:
-> Thank you, Jun.
->=20
-> Yes. I confirmed that we will include below change to GHCI.next spec.
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> 3.5 TDG.VP.VMCALL<SetupEventNotifyInterrupt>
->=20
-> From: "The host VMM should use SEAMCALL [TDWRVPS] leaf to inject an inter=
-rupt at the requested-interrupt vector into the TD via the posted-interrupt=
- descriptor. "
->=20
-> To: "The host VMM should use SEAMCALL [TDWRVPS] leaf to inject an interru=
-pt at the requested-interrupt vector into the TD VCPU that executed TDG.VP.=
-VMCALL <SetupEventNotifyInterrupt> via the posted-interrupt descriptor. "
->=20
+From: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
 
-Hi Sathy,
+[ Upstream commit a632b2a4c920ce5af29410fb091f7ee6d2e77dc6 ]
 
-With this change, I don't think we should use system vector anymore.  Inste=
-ad,
-we just need one non-migratable IRQ which has a fixed vector on a fixed cpu=
-.
+Do not allow setting less channels, than Traffic Classes there are
+via ethtool. There must be at least one channel per Traffic Class.
 
---=20
-Thanks,
--Kai
+If you set less channels, than Traffic Classes there are, then during
+ice_vsi_rebuild there would be allocated only the requested amount
+of tx/rx rings in ice_vsi_alloc_arrays. But later in ice_vsi_setup_q_map
+there would be requested at least one channel per Traffic Class. This
+results in setting num_rxq > alloc_rxq and num_txq > alloc_txq.
+Later, there would be a NULL pointer dereference in
+ice_vsi_map_rings_to_vectors, because we go beyond of rx_rings or
+tx_rings arrays.
+
+Change ice_set_channels() to return error if you try to allocate less
+channels, than Traffic Classes there are.
+Change ice_vsi_setup_q_map() and ice_vsi_setup_q_map_mqprio() to return
+status code instead of void.
+Add error handling for ice_vsi_setup_q_map() and
+ice_vsi_setup_q_map_mqprio() in ice_vsi_init() and ice_vsi_cfg_tc().
+
+[53753.889983] INFO: Flow control is disabled for this traffic class (0) on this vsi.
+[53763.984862] BUG: unable to handle kernel NULL pointer dereference at 0000000000000028
+[53763.992915] PGD 14b45f5067 P4D 0
+[53763.996444] Oops: 0002 [#1] SMP NOPTI
+[53764.000312] CPU: 12 PID: 30661 Comm: ethtool Kdump: loaded Tainted: GOE    --------- -  - 4.18.0-240.el8.x86_64 #1
+[53764.011825] Hardware name: Intel Corporation WilsonCity/WilsonCity, BIOS WLYDCRB1.SYS.0020.P21.2012150710 12/15/2020
+[53764.022584] RIP: 0010:ice_vsi_map_rings_to_vectors+0x7e/0x120 [ice]
+[53764.029089] Code: 41 0d 0f b7 b7 12 05 00 00 0f b6 d0 44 29 de 44 0f b7 c6 44 01 c2 41 39 d0 7d 2d 4c 8b 47 28 44 0f b7 ce 83 c6 01 4f 8b 04 c8 <49> 89 48 28 4                           c 8b 89 b8 01 00 00 4d 89 08 4c 89 81 b8 01 00 00 44
+[53764.048379] RSP: 0018:ff550dd88ea47b20 EFLAGS: 00010206
+[53764.053884] RAX: 0000000000000002 RBX: 0000000000000004 RCX: ff385ea42fa4a018
+[53764.061301] RDX: 0000000000000006 RSI: 0000000000000005 RDI: ff385e9baeedd018
+[53764.068717] RBP: 0000000000000010 R08: 0000000000000000 R09: 0000000000000004
+[53764.076133] R10: 0000000000000002 R11: 0000000000000004 R12: 0000000000000000
+[53764.083553] R13: 0000000000000000 R14: ff385e658fdd9000 R15: ff385e9baeedd018
+[53764.090976] FS:  000014872c5b5740(0000) GS:ff385e847f100000(0000) knlGS:0000000000000000
+[53764.099362] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[53764.105409] CR2: 0000000000000028 CR3: 0000000a820fa002 CR4: 0000000000761ee0
+[53764.112851] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[53764.120301] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[53764.127747] PKRU: 55555554
+[53764.130781] Call Trace:
+[53764.133564]  ice_vsi_rebuild+0x611/0x870 [ice]
+[53764.138341]  ice_vsi_recfg_qs+0x94/0x100 [ice]
+[53764.143116]  ice_set_channels+0x1a8/0x3e0 [ice]
+[53764.147975]  ethtool_set_channels+0x14e/0x240
+[53764.152667]  dev_ethtool+0xd74/0x2a10
+[53764.156665]  ? __mod_lruvec_state+0x44/0x110
+[53764.161280]  ? __mod_lruvec_state+0x44/0x110
+[53764.165893]  ? page_add_file_rmap+0x15/0x170
+[53764.170518]  ? inet_ioctl+0xd1/0x220
+[53764.174445]  ? netdev_run_todo+0x5e/0x290
+[53764.178808]  dev_ioctl+0xb5/0x550
+[53764.182485]  sock_do_ioctl+0xa0/0x140
+[53764.186512]  sock_ioctl+0x1a8/0x300
+[53764.190367]  ? selinux_file_ioctl+0x161/0x200
+[53764.195090]  do_vfs_ioctl+0xa4/0x640
+[53764.199035]  ksys_ioctl+0x60/0x90
+[53764.202722]  __x64_sys_ioctl+0x16/0x20
+[53764.206845]  do_syscall_64+0x5b/0x1a0
+[53764.210887]  entry_SYSCALL_64_after_hwframe+0x65/0xca
+
+Fixes: 87324e747fde ("ice: Implement ethtool ops for channels")
+Signed-off-by: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
+Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/ethernet/intel/ice/ice_ethtool.c | 10 +++++
+ drivers/net/ethernet/intel/ice/ice_lib.c     | 42 +++++++++++++++++---
+ 2 files changed, 47 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
+index 2a6f30c26592..8aee4ae4cc8c 100644
+--- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
++++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
+@@ -3477,6 +3477,16 @@ static int ice_set_channels(struct net_device *dev, struct ethtool_channels *ch)
+ 	new_rx = ch->combined_count + ch->rx_count;
+ 	new_tx = ch->combined_count + ch->tx_count;
+ 
++	if (new_rx < vsi->tc_cfg.numtc) {
++		netdev_err(dev, "Cannot set less Rx channels, than Traffic Classes you have (%u)\n",
++			   vsi->tc_cfg.numtc);
++		return -EINVAL;
++	}
++	if (new_tx < vsi->tc_cfg.numtc) {
++		netdev_err(dev, "Cannot set less Tx channels, than Traffic Classes you have (%u)\n",
++			   vsi->tc_cfg.numtc);
++		return -EINVAL;
++	}
+ 	if (new_rx > ice_get_max_rxq(pf)) {
+ 		netdev_err(dev, "Maximum allowed Rx channels is %d\n",
+ 			   ice_get_max_rxq(pf));
+diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
+index 454e01ae09b9..f7f9c973ec54 100644
+--- a/drivers/net/ethernet/intel/ice/ice_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_lib.c
+@@ -909,7 +909,7 @@ static void ice_set_dflt_vsi_ctx(struct ice_hw *hw, struct ice_vsi_ctx *ctxt)
+  * @vsi: the VSI being configured
+  * @ctxt: VSI context structure
+  */
+-static void ice_vsi_setup_q_map(struct ice_vsi *vsi, struct ice_vsi_ctx *ctxt)
++static int ice_vsi_setup_q_map(struct ice_vsi *vsi, struct ice_vsi_ctx *ctxt)
+ {
+ 	u16 offset = 0, qmap = 0, tx_count = 0, pow = 0;
+ 	u16 num_txq_per_tc, num_rxq_per_tc;
+@@ -982,7 +982,18 @@ static void ice_vsi_setup_q_map(struct ice_vsi *vsi, struct ice_vsi_ctx *ctxt)
+ 	else
+ 		vsi->num_rxq = num_rxq_per_tc;
+ 
++	if (vsi->num_rxq > vsi->alloc_rxq) {
++		dev_err(ice_pf_to_dev(vsi->back), "Trying to use more Rx queues (%u), than were allocated (%u)!\n",
++			vsi->num_rxq, vsi->alloc_rxq);
++		return -EINVAL;
++	}
++
+ 	vsi->num_txq = tx_count;
++	if (vsi->num_txq > vsi->alloc_txq) {
++		dev_err(ice_pf_to_dev(vsi->back), "Trying to use more Tx queues (%u), than were allocated (%u)!\n",
++			vsi->num_txq, vsi->alloc_txq);
++		return -EINVAL;
++	}
+ 
+ 	if (vsi->type == ICE_VSI_VF && vsi->num_txq != vsi->num_rxq) {
+ 		dev_dbg(ice_pf_to_dev(vsi->back), "VF VSI should have same number of Tx and Rx queues. Hence making them equal\n");
+@@ -1000,6 +1011,8 @@ static void ice_vsi_setup_q_map(struct ice_vsi *vsi, struct ice_vsi_ctx *ctxt)
+ 	 */
+ 	ctxt->info.q_mapping[0] = cpu_to_le16(vsi->rxq_map[0]);
+ 	ctxt->info.q_mapping[1] = cpu_to_le16(vsi->num_rxq);
++
++	return 0;
+ }
+ 
+ /**
+@@ -1187,7 +1200,10 @@ static int ice_vsi_init(struct ice_vsi *vsi, bool init_vsi)
+ 	if (vsi->type == ICE_VSI_CHNL) {
+ 		ice_chnl_vsi_setup_q_map(vsi, ctxt);
+ 	} else {
+-		ice_vsi_setup_q_map(vsi, ctxt);
++		ret = ice_vsi_setup_q_map(vsi, ctxt);
++		if (ret)
++			goto out;
++
+ 		if (!init_vsi) /* means VSI being updated */
+ 			/* must to indicate which section of VSI context are
+ 			 * being modified
+@@ -3464,7 +3480,7 @@ void ice_vsi_cfg_netdev_tc(struct ice_vsi *vsi, u8 ena_tc)
+  *
+  * Prepares VSI tc_config to have queue configurations based on MQPRIO options.
+  */
+-static void
++static int
+ ice_vsi_setup_q_map_mqprio(struct ice_vsi *vsi, struct ice_vsi_ctx *ctxt,
+ 			   u8 ena_tc)
+ {
+@@ -3513,7 +3529,18 @@ ice_vsi_setup_q_map_mqprio(struct ice_vsi *vsi, struct ice_vsi_ctx *ctxt,
+ 
+ 	/* Set actual Tx/Rx queue pairs */
+ 	vsi->num_txq = offset + qcount_tx;
++	if (vsi->num_txq > vsi->alloc_txq) {
++		dev_err(ice_pf_to_dev(vsi->back), "Trying to use more Tx queues (%u), than were allocated (%u)!\n",
++			vsi->num_txq, vsi->alloc_txq);
++		return -EINVAL;
++	}
++
+ 	vsi->num_rxq = offset + qcount_rx;
++	if (vsi->num_rxq > vsi->alloc_rxq) {
++		dev_err(ice_pf_to_dev(vsi->back), "Trying to use more Rx queues (%u), than were allocated (%u)!\n",
++			vsi->num_rxq, vsi->alloc_rxq);
++		return -EINVAL;
++	}
+ 
+ 	/* Setup queue TC[0].qmap for given VSI context */
+ 	ctxt->info.tc_mapping[0] = cpu_to_le16(qmap);
+@@ -3531,6 +3558,8 @@ ice_vsi_setup_q_map_mqprio(struct ice_vsi *vsi, struct ice_vsi_ctx *ctxt,
+ 	dev_dbg(ice_pf_to_dev(vsi->back), "vsi->num_rxq = %d\n",  vsi->num_rxq);
+ 	dev_dbg(ice_pf_to_dev(vsi->back), "all_numtc %u, all_enatc: 0x%04x, tc_cfg.numtc %u\n",
+ 		vsi->all_numtc, vsi->all_enatc, vsi->tc_cfg.numtc);
++
++	return 0;
+ }
+ 
+ /**
+@@ -3580,9 +3609,12 @@ int ice_vsi_cfg_tc(struct ice_vsi *vsi, u8 ena_tc)
+ 
+ 	if (vsi->type == ICE_VSI_PF &&
+ 	    test_bit(ICE_FLAG_TC_MQPRIO, pf->flags))
+-		ice_vsi_setup_q_map_mqprio(vsi, ctx, ena_tc);
++		ret = ice_vsi_setup_q_map_mqprio(vsi, ctx, ena_tc);
+ 	else
+-		ice_vsi_setup_q_map(vsi, ctx);
++		ret = ice_vsi_setup_q_map(vsi, ctx);
++
++	if (ret)
++		goto out;
+ 
+ 	/* must to indicate which section of VSI context are being modified */
+ 	ctx->info.valid_sections = cpu_to_le16(ICE_AQ_VSI_PROP_RXQ_MAP_VALID);
+-- 
+2.35.1
+
 
 

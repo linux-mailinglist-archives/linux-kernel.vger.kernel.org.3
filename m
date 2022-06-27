@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E864455C3E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E233055C4E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235201AbiF0L1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S239353AbiF0L4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235070AbiF0L00 (ORCPT
+        with ESMTP id S237698AbiF0Ls7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:26:26 -0400
+        Mon, 27 Jun 2022 07:48:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCC495AA;
-        Mon, 27 Jun 2022 04:26:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4EED56;
+        Mon, 27 Jun 2022 04:42:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BE9A614A0;
-        Mon, 27 Jun 2022 11:26:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A6B9C3411D;
-        Mon, 27 Jun 2022 11:26:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D8BC6125A;
+        Mon, 27 Jun 2022 11:42:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A97A4C3411D;
+        Mon, 27 Jun 2022 11:42:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329166;
-        bh=Zcfs2U8vP/9R8N+d/lYmQk1LfbiJ4kO8za9Vkp43rW8=;
+        s=korg; t=1656330177;
+        bh=HntDoXniYj/5of/4GddtV0AzCXgaQh2XJZbRGx/gDMQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W8UZWvvxPKDGPLfEJ/HICh9MuU2uSQO+GBQVcFSgdwrb98+1zCEop9VkO1w7j/fu7
-         Z9znGKB+ze7kxQt0/3WBjV6I/uFMQHfPzO1nh+MIkwdsMkuM6FxkzjaqF2NASxHJ1B
-         BvoJQNM0zUfTBfS3wEWx1nglREY/LK30Pzd5uPjc=
+        b=FwW663oRxhk0weJBrAFasQ7clz4ab62S5WKThL3dujN4HZrUJxcf3gFfHOFDG+vn2
+         K8dNm+TasM8wdVPsYQqqulkm6BlH3abEKLbLVdG4PKCOCAZllx4wAstMxKllVsWqRk
+         p4/mYF+Jy2KAuF5yF3yfi+vGujCOqRZ3dKFYe10c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xu Yang <xu.yang_2@nxp.com>
-Subject: [PATCH 5.10 071/102] usb: chipidea: udc: check request status before setting device address
-Date:   Mon, 27 Jun 2022 13:21:22 +0200
-Message-Id: <20220627111935.576659631@linuxfoundation.org>
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 110/181] usb: typec: wcove: Drop wrong dependency to INTEL_SOC_PMIC
+Date:   Mon, 27 Jun 2022 13:21:23 +0200
+Message-Id: <20220627111947.889105732@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,34 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Yang <xu.yang_2@nxp.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-commit b24346a240b36cfc4df194d145463874985aa29b upstream.
+[ Upstream commit 9ef165406308515dcf2e3f6e97b39a1c56d86db5 ]
 
-The complete() function may be called even though request is not
-completed. In this case, it's necessary to check request status so
-as not to set device address wrongly.
+Intel SoC PMIC is a generic name for all PMICs that are used
+on Intel platforms. In particular, INTEL_SOC_PMIC kernel configuration
+option refers to Crystal Cove PMIC, which has never been a part
+of any Intel Broxton hardware. Drop wrong dependency from Kconfig.
 
-Fixes: 10775eb17bee ("usb: chipidea: udc: update gadget states according to ch9")
-cc: <stable@vger.kernel.org>
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-Link: https://lore.kernel.org/r/20220623030242.41796-1-xu.yang_2@nxp.com
+Note, the correct dependency is satisfied via ACPI PMIC OpRegion driver,
+which the Type-C depends on.
+
+Fixes: d2061f9cc32d ("usb: typec: add driver for Intel Whiskey Cove PMIC USB Type-C PHY")
+Reported-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20220620104316.57592-1-andriy.shevchenko@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/chipidea/udc.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/typec/tcpm/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -1034,6 +1034,9 @@ isr_setup_status_complete(struct usb_ep
- 	struct ci_hdrc *ci = req->context;
- 	unsigned long flags;
- 
-+	if (req->status < 0)
-+		return;
-+
- 	if (ci->setaddr) {
- 		hw_usb_set_address(ci, ci->address);
- 		ci->setaddr = false;
+diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
+index 557f392fe24d..073fd2ea5e0b 100644
+--- a/drivers/usb/typec/tcpm/Kconfig
++++ b/drivers/usb/typec/tcpm/Kconfig
+@@ -56,7 +56,6 @@ config TYPEC_WCOVE
+ 	tristate "Intel WhiskeyCove PMIC USB Type-C PHY driver"
+ 	depends on ACPI
+ 	depends on MFD_INTEL_PMC_BXT
+-	depends on INTEL_SOC_PMIC
+ 	depends on BXT_WC_PMIC_OPREGION
+ 	help
+ 	  This driver adds support for USB Type-C on Intel Broxton platforms
+-- 
+2.35.1
+
 
 

@@ -2,152 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6A555C631
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5978255DBB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbiF0HwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S233085AbiF0HpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbiF0HwD (ORCPT
+        with ESMTP id S231735AbiF0Ho5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:52:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9CC76174
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656316309;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xZRxk45blbbVKouBNkJa4r6LzelZm251Oyfsi7Y/n3g=;
-        b=U+9Xtuar5jpg1NiJ/d/M//KPzzMfb924bFaaOdXVSfovuM9gBhH+baI2F0S1yQwfce52cN
-        pF2azUy+2H8NhAkW83nAPLgslbQkloUXrtz3Uinjy2UVbWHDlUy9UzfDvR/Wp6L/fjJjdv
-        7dQMpgG2cwUC9HEl6nisnUSviDhZw7Y=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-59-GVZDCNw-OxyYp1Mg5P2hcA-1; Mon, 27 Jun 2022 03:51:48 -0400
-X-MC-Unique: GVZDCNw-OxyYp1Mg5P2hcA-1
-Received: by mail-pj1-f69.google.com with SMTP id h11-20020a17090a130b00b001eca05382e7so3228768pja.9
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:51:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xZRxk45blbbVKouBNkJa4r6LzelZm251Oyfsi7Y/n3g=;
-        b=S3YDQVTW1e8XBeVcEOfd8HNnXU2qdzrMTBGDr5OCEJiDygl3j6l149xOolT+Tqk8Q7
-         +hJEfA7grZogudQADy535Z8bCkSQxUVmhsVG9FZfVSJhT087q8hj6cfoLSmGDCU2KWke
-         AQdPmqHVWaZFLouOJ/9fvvcWXOcvx76a/L8cUg2JRFANnSwgT7qcPrspLnDhcxSqVkOS
-         w+25qz/cwdNcdRWEHBQokBp4BHbSEG/sMoZ9F0ROlthiMnWpKjyYyj3SkgUrQjK/smfP
-         0RYWjRx2iwZxDMuWu26N+Jt6Bci/RFMprztFex7wuvtnw4B6yA8LAHhlkFIcS8Y2HowL
-         396A==
-X-Gm-Message-State: AJIora9f0CJnmkYrOnQTsa/ksrrgnfDoI1bRAuMiuAxBDzCfAUV7KXAV
-        YIN1CX87y5UddGa3RmxTLLRhMtSLd6987Pv1vHGuRDcT69FT2uiP5jvO/bqfkv4zSQgZJM4N7HN
-        LSCfOpFNk41PEUJHRQI2sHWc4
-X-Received: by 2002:a17:903:230d:b0:16a:73ce:9068 with SMTP id d13-20020a170903230d00b0016a73ce9068mr13186034plh.57.1656316307234;
-        Mon, 27 Jun 2022 00:51:47 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vA7kWLyjSTH2Ul73cyviWapNDDOK80s/6Tz5T94ix0V5MyOp52lL87RqwN812fFM4e7ARtjQ==
-X-Received: by 2002:a17:903:230d:b0:16a:73ce:9068 with SMTP id d13-20020a170903230d00b0016a73ce9068mr13186019plh.57.1656316306908;
-        Mon, 27 Jun 2022 00:51:46 -0700 (PDT)
-Received: from localhost.localdomain.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id em20-20020a17090b015400b001eae86cf683sm6520169pjb.42.2022.06.27.00.51.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 00:51:46 -0700 (PDT)
-From:   Tao Liu <ltao@redhat.com>
-To:     bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     akpm@linux-foundation.org, Tao Liu <ltao@redhat.com>
-Subject: [PATCH v2] kdump: round up the total memory size to 128M for crashkernel reservation
-Date:   Mon, 27 Jun 2022 15:44:41 +0800
-Message-Id: <20220627074440.187222-1-ltao@redhat.com>
-X-Mailer: git-send-email 2.33.1
+        Mon, 27 Jun 2022 03:44:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D32360C6;
+        Mon, 27 Jun 2022 00:44:56 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E35756601824;
+        Mon, 27 Jun 2022 08:44:52 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656315894;
+        bh=98ifQbG2wsM55eIgKV0UnH7X42SVzBCwPS6JtUzdqNY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PdCo2C2OuBcV/T11XPWp3z93NWE6k8d2tKMy8CgviMeERazXsNCHqTRs9GyOv+C4n
+         THQkk2DRJ+WpUEDCgUzzwj5JNLoyFMLW4145KxoQbJW75T5jnlV1kpYXlCcposD0f1
+         0HG5CdK7NerVKo0eo6Vg+wBJhxPz65aCVl383FpEXXPk3q8xnPhnFUgblpDFji74ZI
+         GNDCgN91TPbmYWbjuLRUdqgD7MNsgDKaOlu36YONK1gaYWSSmerV0oEbLRwaRFfFkl
+         6o0qNC1sOJq7VrK6xl7YHt8QpGkC2bltAKKusU/l+CRq0HuuZvKiwVFvGiWp5Uzw8r
+         iGL8eWcTylyXA==
+Message-ID: <2111b4a7-d195-0333-1d43-02fcd91f89e2@collabora.com>
+Date:   Mon, 27 Jun 2022 09:44:50 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 4/7] dt-bindings: clock: mediatek: Add clock driver
+ bindings for MT6795
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        David Heidelberg <david.heidelberg@collabora.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        y.oudjana@protonmail.com, jason-jh.lin@mediatek.com,
+        ck.hu@mediatek.com, fparent@baylibre.com, rex-bc.chen@mediatek.com,
+        tinghan.shen@mediatek.com, chun-jie.chen@mediatek.com,
+        weiyi.lu@mediatek.com, ikjn@chromium.org, miles.chen@mediatek.com,
+        sam.shih@mediatek.com, wenst@chromium.org,
+        bgolaszewski@baylibre.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
+        kernel@collabora.com
+References: <20220624093525.243077-1-angelogioacchino.delregno@collabora.com>
+ <20220624093525.243077-5-angelogioacchino.delregno@collabora.com>
+ <cea65d6a-7d9b-7b14-9984-bcd7f115da47@linaro.org>
+ <728b2c54-0dc0-533f-bab8-fca228f6c1b1@collabora.com>
+ <ee945844-5d78-7c2b-215e-25fe5617b481@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <ee945844-5d78-7c2b-215e-25fe5617b481@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The total memory size we get in kernel is usually slightly less than
-the actual memory size because BIOS/firmware will reserve some memory
-region. So it won't export all memory as usable.
+Il 26/06/22 12:31, Krzysztof Kozlowski ha scritto:
+> On 26/06/2022 11:47, David Heidelberg wrote:
+>> On 25/06/2022 22:29, Krzysztof Kozlowski wrote:
+>>> On 24/06/2022 11:35, AngeloGioacchino Del Regno wrote:
+>>>> Add the bindings for the clock drivers of the MediaTek Helio X10
+>>>> MT6795 SoC.
+>>>>
+>>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>> ---
+>>>>    .../bindings/clock/mediatek,mt6795-clock.yaml | 66 +++++++++++++++++
+>>>>    .../clock/mediatek,mt6795-sys-clock.yaml      | 74 +++++++++++++++++++
+>>>>    2 files changed, 140 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt6795-clock.yaml
+>>>>    create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt6795-clock.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt6795-clock.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..795fb18721c3
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/clock/mediatek,mt6795-clock.yaml
+>>>> @@ -0,0 +1,66 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: "http://devicetree.org/schemas/clock/mediatek,mt6795-clock.yaml#"
+>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>>>> +
+>>>> +title: MediaTek Functional Clock Controller for MT6795
+>>>> +
+>>>> +maintainers:
+>>>> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>> +  - Chun-Jie Chen <chun-jie.chen@mediatek.com>
+>>>> +
+>>>> +description: |
+>>>> +  The clock architecture in MediaTek like below
+>>>> +  PLLs -->
+>>>> +          dividers -->
+>>>> +                      muxes
+>>>> +                           -->
+>>>> +                              clock gate
+>>>> +
+>>>> +  The devices provide clock gate control in different IP blocks.
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    enum:
+>>>> +      - mediatek,mt6795-mfgcfg
+>>>> +      - mediatek,mt6795-vdecsys
+>>>> +      - mediatek,mt6795-vencsys
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  '#clock-cells':
+>>>> +    const: 1
+>>>> +
+>>>> +required:
+>>>> +  - compatible
+>>>> +  - reg
+>>>> +  - '#clock-cells'
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +examples:
+>>>> +  - |
+>>>> +    soc {
+>>>> +        #address-cells = <2>;
+>>>> +        #size-cells = <2>;
+>>>> +
+>>>> +        mfgcfg: clock-controller@13000000 {
+>>>> +            compatible = "mediatek,mt6795-mfgcfg";
+>>>> +            reg = <0 0x13000000 0 0x1000>;
+>>>> +            #clock-cells = <1>;
+>>>> +        };
+>>>> +
+>>>> +        vdecsys: clock-controller@16000000 {
+>>>> +            compatible = "mediatek,mt6795-vdecsys";
+>>>> +            reg = <0 0x16000000 0 0x1000>;
+>>>> +            #clock-cells = <1>;
+>>>> +        };
+>>>> +
+>>>> +        vencsys: clock-controller@18000000 {
+>>>> +            compatible = "mediatek,mt6795-vencsys";
+>>>> +            reg = <0 0x18000000 0 0x1000>;
+>>>> +            #clock-cells = <1>;
+>>>> +        };
+>>>> +    };
+>>>> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..44b96af9ceaf
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/clock/mediatek,mt6795-sys-clock.yaml
+>>>> @@ -0,0 +1,74 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: "http://devicetree.org/schemas/clock/mediatek,mt6795-sys-clock.yaml#"
+>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>>>> +
+>>>> +title: MediaTek System Clock Controller for MT6795
+>>>> +
+>>>> +maintainers:
+>>>> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>> +  - Chun-Jie Chen <chun-jie.chen@mediatek.com>
+>>>> +
+>>>> +description:
+>>>> +  The Mediatek system clock controller provides various clocks and system configuration
+>>> Wrap according to Linux coding convention, so at 80.
+>>
+>> What I understood that 100 length was agreed [1] as a limit. I haven't
+>> noticed any recent change regarding to line length.
+>>
+>> [1]
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bdc48fa11e46f867ea4d75fa59ee87a7f48be144
+> 
+> The coding style (also in change above) clearly states:
+> "The preferred limit on the length of a single line is 80 columns."
+> Just read the first line of new diff/hunk...
+> 
+> checkpatch was indeed long time converted not to complain on 80 but on
+> 100, but that does not change coding style. The point of that was only
+> to accept 100 wrapping when it is beneficial,  iow, it increases the
+> code readability.
+> 
+> It's not the case here and coding style clearly asks for 80. Wrap at 80.
+> 
 
-E.g, on my x86_64 kvm guest with 1G memory, the total_mem value shows:
-UEFI boot with ovmf:   0x3faef000
-Legacy boot kvm guest: 0x3ff7ec00
+Hello David, Krzysztof,
 
-When specifying crashkernel=1G-2G:128M, if we have a 1G memory machine,
-we get total size 1023M from firmware. Then it will not fall into
-1G-2G, thus no memory reserved. User will never know this, it is hard
-to let user know the exact total value in kernel.
+there's no problem at all, I can resend... after all, it's a fast fix and
+all it takes is 10 minutes of my time!
 
-One way is to use dmi/smbios to get physical memory size, but it's not
-reliable as well. According to Prarit hardware vendors sometimes screw
-this up. Thus round up total size to 128M to work around this problem.
-
-This patch is a resend of [1] and rebased onto v5.19-rc2, and the
-original credit goes to Dave Young <dyoung@redhat.com>.
-
-[1]: http://lists.infradead.org/pipermail/kexec/2018-April/020568.html
-
-Signed-off-by: Tao Liu <ltao@redhat.com>
----
-v1 -> v2:
-Modified commit log based on Baoquan's advice.
----
- kernel/crash_core.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-index 71122e01623c..b58b27cbdb61 100644
---- a/kernel/crash_core.c
-+++ b/kernel/crash_core.c
-@@ -9,6 +9,7 @@
- #include <linux/init.h>
- #include <linux/utsname.h>
- #include <linux/vmalloc.h>
-+#include <linux/sizes.h>
- 
- #include <asm/page.h>
- #include <asm/sections.h>
-@@ -43,6 +44,15 @@ static int __init parse_crashkernel_mem(char *cmdline,
- 					unsigned long long *crash_base)
- {
- 	char *cur = cmdline, *tmp;
-+	unsigned long long total_mem = system_ram;
-+
-+	/*
-+	 * Firmware sometimes reserves some memory regions for its own use,
-+	 * so the system memory size is less than the actual physical memory
-+	 * size. Work around this by rounding up the total size to 128M,
-+	 * which is enough for most test cases.
-+	 */
-+	total_mem = roundup(total_mem, SZ_128M);
- 
- 	/* for each entry of the comma-separated list */
- 	do {
-@@ -87,13 +97,13 @@ static int __init parse_crashkernel_mem(char *cmdline,
- 			return -EINVAL;
- 		}
- 		cur = tmp;
--		if (size >= system_ram) {
-+		if (size >= total_mem) {
- 			pr_warn("crashkernel: invalid size\n");
- 			return -EINVAL;
- 		}
- 
- 		/* match ? */
--		if (system_ram >= start && system_ram < end) {
-+		if (total_mem >= start && total_mem < end) {
- 			*crash_size = size;
- 			break;
- 		}
--- 
-2.33.1
+Cheers,
+Angelo
 

@@ -2,693 +2,449 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D57255E285
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21DC55CDAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233510AbiF0KbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 06:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
+        id S233661AbiF0Kbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 06:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbiF0Ka7 (ORCPT
+        with ESMTP id S231252AbiF0Kbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 06:30:59 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5BE62D7;
-        Mon, 27 Jun 2022 03:30:48 -0700 (PDT)
-X-UUID: 0bafa932750b4551b7c5197945cce3bf-20220627
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.7,REQID:dcfe5252-9fd0-41bd-b998-846f539e1025,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:87442a2,CLOUDID:16d2252e-1756-4fa3-be7f-474a6e4be921,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 0bafa932750b4551b7c5197945cce3bf-20220627
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1823173727; Mon, 27 Jun 2022 18:30:41 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 27 Jun 2022 18:30:39 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Mon, 27 Jun 2022 18:30:39 +0800
-Message-ID: <5f94612c26c79604fe62550808c481c0031456e5.camel@mediatek.com>
-Subject: Re: [PATCH v12 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "mripard@kernel.org" <mripard@kernel.org>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "airlied@linux.ie" <airlied@linux.ie>
-CC:     "msp@baylibre.com" <msp@baylibre.com>,
-        "granquet@baylibre.com" <granquet@baylibre.com>,
-        "Jitao Shi =?UTF-8?Q?=28=E7=9F=B3=E8=AE=B0=E6=B6=9B=29?=" 
-        <jitao.shi@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        "CK Hu =?UTF-8?Q?=28=E8=83=A1=E4=BF=8A=E5=85=89=29?=" 
-        <ck.hu@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 27 Jun 2022 18:30:39 +0800
-In-Reply-To: <269ba882-1975-7148-524a-2bb8eb8667b7@collabora.com>
-References: <20220627080341.5087-1-rex-bc.chen@mediatek.com>
-         <20220627080341.5087-6-rex-bc.chen@mediatek.com>
-         <269ba882-1975-7148-524a-2bb8eb8667b7@collabora.com>
+        Mon, 27 Jun 2022 06:31:44 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F4A6163;
+        Mon, 27 Jun 2022 03:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656325902; x=1687861902;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=eDm1C43BNjodQTqk/kM+BPvE/Kk0mTDyJMEPDHe3erY=;
+  b=HG16Is1GQUz5533LMbWWwCQdgEmae6XGJ8Q/mTgt8g+LeE7+imNq7rt0
+   fTo747vQZ6XdRSeLCanmtni4LRbkFq0wEm61QTM8ku7bb4k6uJMxXG5Vw
+   Zqns9ayi52J/ofKFzmETs3Zfn3LFZvSBnW3H4SRLWprsYi+UpY4gmDOyh
+   q1mNP4AnQtyv/1PlGnbcC44CyU2cJ6htmsACjz+qgBLdhbxxgmOdj6UFO
+   ATtk631WY+zA1sWghBBLGNKaAZH7M6h7gR4UmJ61oEdMsX9zAbZvMRxmr
+   6TH2zbsJj5rDwpzmk0IYSxtzNhgOPAkST5nhdHTw3wt9k85JeUP5s3gxM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="264462451"
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="264462451"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 03:31:41 -0700
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="616744674"
+Received: from fzaeni-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.212.88.6])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 03:31:38 -0700
+Message-ID: <b376aef05bc032fdf8cc23762ce77a14830440cd.camel@intel.com>
+Subject: Re: [PATCH v5 15/22] x86/virt/tdx: Allocate and set up PAMTs for
+ TDMRs
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+Date:   Mon, 27 Jun 2022 22:31:36 +1200
+In-Reply-To: <e72703b0-767a-ec88-7cb6-f95a3564d823@intel.com>
+References: <cover.1655894131.git.kai.huang@intel.com>
+         <c504a8acd06dc455050c25e2a4cc70aef5eb9358.1655894131.git.kai.huang@intel.com>
+         <e72703b0-767a-ec88-7cb6-f95a3564d823@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-27 at 18:07 +0800, AngeloGioacchino Del Regno wrote:
-> Il 27/06/22 10:03, Bo-Chen Chen ha scritto:
-> > From: Markus Schneider-Pargmann <msp@baylibre.com>
-> > 
-> > This patch adds a embedded displayport driver for the MediaTek
-> > mt8195 SoC.
-> > 
-> > It supports the MT8195, the embedded DisplayPort units. It offers
-> > DisplayPort 1.4 with up to 4 lanes.
-> > 
-> > The driver creates a child device for the phy. The child device
-> > will
-> > never exist without the parent being active. As they are sharing a
-> > register range, the parent passes a regmap pointer to the child so
-> > that
-> > both can work with the same register range. The phy driver sets
-> > device
-> > data that is read by the parent to get the phy device that can be
-> > used
-> > to control the phy properties.
-> > 
-> > This driver is based on an initial version by
-> > Jitao shi <jitao.shi@mediatek.com>
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
-> > Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >   drivers/gpu/drm/mediatek/Kconfig       |   10 +
-> >   drivers/gpu/drm/mediatek/Makefile      |    1 +
-> >   drivers/gpu/drm/mediatek/mtk_dp.c      | 2198
-> > ++++++++++++++++++++++++
-> >   drivers/gpu/drm/mediatek/mtk_dp_reg.h  |  543 ++++++
-> >   drivers/gpu/drm/mediatek/mtk_drm_drv.c |    3 +
-> >   drivers/gpu/drm/mediatek/mtk_drm_drv.h |    3 +
-> >   6 files changed, 2758 insertions(+)
-> >   create mode 100644 drivers/gpu/drm/mediatek/mtk_dp.c
-> >   create mode 100644 drivers/gpu/drm/mediatek/mtk_dp_reg.h
-> > 
-> 
-> 
-> > diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c
-> > b/drivers/gpu/drm/mediatek/mtk_dp.c
-> > new file mode 100644
-> > index 000000000000..9e9b516409e2
-> > --- /dev/null
-> > +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
-> > @@ -0,0 +1,2198 @@
-> > +// SPDX-License-Identifier: GPL-2.0
+On Fri, 2022-06-24 at 13:13 -0700, Dave Hansen wrote:
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > index 4988a91d5283..ec496e96d120 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -1973,6 +1973,7 @@ config INTEL_TDX_HOST
+> > =C2=A0	depends on CPU_SUP_INTEL
+> > =C2=A0	depends on X86_64
+> > =C2=A0	depends on KVM_INTEL
+> > +	depends on CONTIG_ALLOC
+> > =C2=A0	select ARCH_HAS_CC_PLATFORM
+> > =C2=A0	select ARCH_KEEP_MEMBLOCK
+> > =C2=A0	help
+> > diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> > index fd9f449b5395..36260dd7e69f 100644
+> > --- a/arch/x86/virt/vmx/tdx/tdx.c
+> > +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> > @@ -558,6 +558,196 @@ static int create_tdmrs(struct tdmr_info *tdmr_ar=
+ray,
+> > int *tdmr_num)
+> > =C2=A0	return 0;
+> > =C2=A0}
+> > =C2=A0
+> > +/* Page sizes supported by TDX */
+> > +enum tdx_page_sz {
+> > +	TDX_PG_4K,
+> > +	TDX_PG_2M,
+> > +	TDX_PG_1G,
+> > +	TDX_PG_MAX,
+> > +};
+>=20
+> Are these the same constants as the magic numbers in Kirill's
+> try_accept_one()?
+
+try_accept_once() uses 'enum pg_level' PG_LEVEL_{4K,2M,1G} directly.  They =
+can
+be used directly too, but 'enum pg_level' has more than we need here:
+
+enum pg_level {
+        PG_LEVEL_NONE,                                                     =
+   =20
+        PG_LEVEL_4K,                                                       =
+   =20
+        PG_LEVEL_2M,                                                       =
+   =20
+        PG_LEVEL_1G,
+        PG_LEVEL_512G,                                                     =
+   =20
+        PG_LEVEL_NUM                                                       =
+   =20
+};=20
+
+It has PG_LEVEL_NONE, so PG_LEVEL_4K starts with 1.
+
+Below in tdmr_set_up_pamt(), I have two local arrays to store the base/size=
+ for
+all TDX supported page sizes:
+
+	unsigned long pamt_base[TDX_PG_MAX];
+	unsigned long pamt_size[TDX_PG_MAX];=20
+
+And a loop to calculate the size of PAMT for each page size:
+
+	for (pgsz =3D TDX_PG_4K; pgsz < TDX_PG_MAX; pgsz++) {
+		pamt_size[pgsz] =3D tdmr_get_pamt_sz(tdmr, pgsz);
+		...
+	}
+
+And later a similar loop to get the PAMT base of each page size too.
+
+I can change them to:
+
+	/*
+	 * TDX only supports 4K, 2M and 1G page, but doesn't
+	 * support 512G page size.
+	 */
+#define TDX_PG_LEVEL_MAX	PG_LEVEL_512G
+
+	unsigned long pamt_base[TDX_PG_LEVEL_MAX];
+	unsigned long pamt_size[TDX_PG_LEVEL_MAX];
+
+And change the loop to:
+
+	for (pgsz =3D PG_LEVEL_4K; pgsz < TDX_PG_LEVEL_MAX; pgsz++) {
+		pamt_size[pgsz] =3D tdmr_get_pamt_sz(tdmr, pgsz);
+		...
+	}
+
+This would waste one 'unsigned long' for both pamt_base and pamt_size array=
+, as
+entry 0 isn't used for both of them.  Or we explicitly -1 array index:
+
+	for (pgsz =3D PG_LEVEL_4K; pgsz < TDX_PG_LEVEL_MAX; pgsz++) {
+		pamt_size[pgsz - 1] =3D tdmr_get_pamt_sz(tdmr, pgsz);
+		...
+	}
+
+What's your opinion?=20
+
 > > +/*
-> > + * Copyright (c) 2019-2022 MediaTek Inc.
-> > + * Copyright (c) 2022 BayLibre
+> > + * Calculate PAMT size given a TDMR and a page size.  The returned
+> > + * PAMT size is always aligned up to 4K page boundary.
 > > + */
-> > +
-> > +#include <drm/display/drm_dp.h>
-> > +#include <drm/display/drm_dp_helper.h>
-> > +#include <drm/drm_atomic_helper.h>
-> > +#include <drm/drm_bridge.h>
-> > +#include <drm/drm_crtc.h>
-> > +#include <drm/drm_edid.h>
-> > +#include <drm/drm_of.h>
-> > +#include <drm/drm_panel.h>
-> > +#include <drm/drm_print.h>
-> > +#include <drm/drm_probe_helper.h>
-> > +#include <linux/arm-smccc.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/delay.h>
-> > +#include <linux/errno.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/nvmem-consumer.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_irq.h>
-> > +#include <linux/of_platform.h>
-> > +#include <linux/phy/phy.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/pm_runtime.h>
-> > +#include <linux/regmap.h>
-> > +#include <sound/hdmi-codec.h>
-> > +#include <video/videomode.h>
-> > +
-> > +#include "mtk_dp_reg.h"
-> > +
-> > +#define MTK_DP_SIP_CONTROL_AARCH32 0x82000523
-> 
-> Why have you forced this SIP call to AArch32 SMC convention?
-> Is there any particular reason why this should always be AA32 and
-> *never* AA64?
-> 
-> In any case, you've got MediaTek SIP macros in
-> include/soc/mediatek/mtk_sip_svc.h
-> so, please, include that header and either redefine this as
-> 
-> MTK_SIP_CMD(0x523) or add a new macro in there to force
-> ARM_SMCCC_SMC_32
-> convention with a very explanatory comment saying why some calls need
-> to
-> be forced to use the AArch32 SMC convention.
-> 
-
-Hello Angelo,
-
-Thanks for your review.
-ok, I will do this in next version.
-
-> > +
-> > +#define MTK_VDOSYS1_MAX_FRAMERATE 60
-> > +#define MTK_DP_4P1T 4
-> > +#define MTK_DP_HDE 2
-> > +#define MTK_DP_PIX_PER_ADDR 2
-> > +#define MTK_DP_AUX_WAIT_REPLY_COUNT 20
-> > +#define MTK_DP_CHECK_SINK_CAP_TIMEOUT_COUNT 3
-> > +#define MTK_DP_TBC_BUF_READ_START_ADDR 0x08
-> > +#define MTK_DP_TRAIN_RETRY_LIMIT 8
-> > +#define MTK_DP_TRAIN_MAX_ITERATIONS 5
-> > +#define MTK_DP_DP_VERSION_11 0x11
-> 
-> MTK_DP_HW_VERSION_11 0x11 ?
-> 
-> ...but anyway, this definition is unused, so please either use it or
-> drop it.
-> 
-
-it's fro audio patch, and I will move this there.
-
-> > +
-> > +enum mtk_dp_train_state {
-> > +	MTK_DP_TRAIN_STATE_TRAINING,
-> > +	MTK_DP_TRAIN_STATE_NORMAL,
-> > +};
-> > +
-> > +struct mtk_dp_timings {
-> > +	struct videomode vm;
-> > +	u8 frame_rate;
-> > +};
-> > +
-> > +struct mtk_dp_irq_sta {
-> > +	bool hpd_disconnect;
-> > +	bool hpd_inerrupt;
-> > +};
-> > +
-> > +struct mtk_dp_train_info {
-> > +	bool tps3;
-> > +	bool tps4;
-> > +	bool sink_ssc;
-> > +	bool cable_plugged_in;
-> > +	bool cable_state_change;
-> > +	bool cr_done;
-> > +	bool eq_done;
-> > +	/* link_rate is in multiple of 0.27Gbps */
-> > +	int link_rate;
-> > +	int lane_count;
-> > +	struct mtk_dp_irq_sta irq_sta;
-> > +};
-> > +
-> > +struct mtk_dp_info {
-> > +	u32 depth;
-> > +	enum dp_pixelformat format;
-> > +	struct mtk_dp_timings timings;
-> > +};
-> > +
-> > +struct dp_cal_data {
-> > +	unsigned int glb_bias_trim;
-> > +	unsigned int clktx_impse;
-> > +
-> > +	unsigned int ln_tx_impsel_pmos[4];
-> > +	unsigned int ln_tx_impsel_nmos[4];
-> > +};
-> > +
-> > +struct mtk_dp {
-> > +	struct device *dev;
-> > +	struct platform_device *phy_dev;
-> > +	struct phy *phy;
-> > +	struct dp_cal_data cal_data;
-> > +	u8 max_lanes;
-> > +	u8 max_linkrate;
-> > +
-> > +	struct drm_device *drm_dev;
-> > +	struct drm_bridge bridge;
-> > +	struct drm_bridge *next_bridge;
-> > +	struct drm_dp_aux aux;
-> > +
-> > +	u8 rx_cap[DP_RECEIVER_CAP_SIZE];
-> > +
-> > +	struct mtk_dp_info info;
-> > +
-> > +	struct mtk_dp_train_info train_info;
-> > +	enum mtk_dp_train_state train_state;
-> > +
-> > +	struct regmap *regs;
-> > +
-> > +	bool enabled;
-> > +
-> > +	struct drm_connector *conn;
-> > +};
-> > +
-> > +static struct regmap_config mtk_dp_regmap_config = {
-> > +	.reg_bits = 32,
-> > +	.val_bits = 32,
-> > +	.reg_stride = 4,
-> > +	.max_register = SEC_OFFSET + 0x90,
-> > +	.name = "mtk-dp-registers",
-> > +};
-> > +
-> > +static struct mtk_dp *mtk_dp_from_bridge(struct drm_bridge *b)
+> > +static unsigned long tdmr_get_pamt_sz(struct tdmr_info *tdmr,
+> > +				      enum tdx_page_sz pgsz)
 > > +{
-> > +	return container_of(b, struct mtk_dp, bridge);
-> > +}
-> > +
-> > +static u32 mtk_dp_read(struct mtk_dp *mtk_dp, u32 offset)
-> > +{
-> > +	u32 read_val;
-> > +	int ret;
-> > +
-> > +	ret = regmap_read(mtk_dp->regs, offset, &read_val);
-> > +	if (ret) {
-> > +		dev_err(mtk_dp->dev, "Failed to read register 0x%x:
-> > %d\n",
-> > +			offset, ret);
+> > +	unsigned long pamt_sz;
+> > +	int pamt_entry_nr;
+>=20
+> 'nr_pamt_entries', please.
+
+OK.
+
+>=20
+> > +	switch (pgsz) {
+> > +	case TDX_PG_4K:
+> > +		pamt_entry_nr =3D tdmr->size >> PAGE_SHIFT;
+> > +		break;
+> > +	case TDX_PG_2M:
+> > +		pamt_entry_nr =3D tdmr->size >> PMD_SHIFT;
+> > +		break;
+> > +	case TDX_PG_1G:
+> > +		pamt_entry_nr =3D tdmr->size >> PUD_SHIFT;
+> > +		break;
+> > +	default:
+> > +		WARN_ON_ONCE(1);
 > > +		return 0;
 > > +	}
 > > +
-> > +	return read_val;
+> > +	pamt_sz =3D pamt_entry_nr * tdx_sysinfo.pamt_entry_size;
+> > +	/* TDX requires PAMT size must be 4K aligned */
+> > +	pamt_sz =3D ALIGN(pamt_sz, PAGE_SIZE);
+> > +
+> > +	return pamt_sz;
 > > +}
 > > +
-> > +static void mtk_dp_write(struct mtk_dp *mtk_dp, u32 offset, u32
-> > val)
+> > +/*
+> > + * Pick a NUMA node on which to allocate this TDMR's metadata.
+> > + *
+> > + * This is imprecise since TDMRs are 1G aligned and NUMA nodes might
+> > + * not be.  If the TDMR covers more than one node, just use the _first=
+_
+> > + * one.  This can lead to small areas of off-node metadata for some
+> > + * memory.
+> > + */
+> > +static int tdmr_get_nid(struct tdmr_info *tdmr)
 > > +{
-> 
-> This should be int... you should propagate the error to the caller,
-> and also
-> eventually take action in case you get an error.
-> 
-> > +	if (regmap_write(mtk_dp->regs, offset, val))
-> > +		dev_err(mtk_dp->dev,
-> > +			"Failed to write register 0x%x with value
-> > 0x%x\n",
-> > +			offset, val);
-> > +}
+> > +	unsigned long start_pfn, end_pfn;
+> > +	int i, nid;
 > > +
-> > +static void mtk_dp_update_bits(struct mtk_dp *mtk_dp, u32 offset,
-> > +			       u32 val, u32 mask)
+> > +	/* Find the first memory region covered by the TDMR */
+> > +	memblock_for_each_tdx_mem_pfn_range(i, &start_pfn, &end_pfn, &nid)
+> > {
+> > +		if (end_pfn > (tdmr_start(tdmr) >> PAGE_SHIFT))
+> > +			return nid;
+> > +	}
+> > +
+> > +	/*
+> > +	 * No memory region found for this TDMR.  It cannot happen since
+> > +	 * when one TDMR is created, it must cover at least one (or
+> > +	 * partial) memory region.
+> > +	 */
+> > +	WARN_ON_ONCE(1);
+> > +	return 0;
+> > +}
+>=20
+> You should really describe what you are doing.  At first glance "return
+> 0;" looks like "declare success".  How about something like this?
+>=20
+> 	/*
+> 	 * Fall back to allocating the TDMR from node 0 when no memblock
+> 	 * can be found.  This should never happen since TDMRs originate
+> 	 * from the memblocks.
+> 	 */
+>=20
+> Does that miss any of the points you were trying to make?
+
+No. Your comments looks better and will use yours.  Thanks.
+
+>=20
+> > +static int tdmr_set_up_pamt(struct tdmr_info *tdmr)
 > > +{
-> 
-> Same here.
-> 
+> > +	unsigned long pamt_base[TDX_PG_MAX];
+> > +	unsigned long pamt_size[TDX_PG_MAX];
+> > +	unsigned long tdmr_pamt_base;
+> > +	unsigned long tdmr_pamt_size;
+> > +	enum tdx_page_sz pgsz;
+> > +	struct page *pamt;
+> > +	int nid;
+> > +
+> > +	nid =3D tdmr_get_nid(tdmr);
+> > +
+> > +	/*
+> > +	 * Calculate the PAMT size for each TDX supported page size
+> > +	 * and the total PAMT size.
+> > +	 */
+> > +	tdmr_pamt_size =3D 0;
+> > +	for (pgsz =3D TDX_PG_4K; pgsz < TDX_PG_MAX; pgsz++) {
+> > +		pamt_size[pgsz] =3D tdmr_get_pamt_sz(tdmr, pgsz);
+> > +		tdmr_pamt_size +=3D pamt_size[pgsz];
+> > +	}
+> > +
+> > +	/*
+> > +	 * Allocate one chunk of physically contiguous memory for all
+> > +	 * PAMTs.  This helps minimize the PAMT's use of reserved areas
+> > +	 * in overlapped TDMRs.
+> > +	 */
+> > +	pamt =3D alloc_contig_pages(tdmr_pamt_size >> PAGE_SHIFT, GFP_KERNEL,
+> > +			nid, &node_online_map);
+> > +	if (!pamt)
+> > +		return -ENOMEM;
+>=20
+> I'm not sure it's worth mentioning, but this doesn't really need to be
+> GFP_KERNEL.  __GFP_HIGHMEM would actually be just fine.  But,
+> considering that this is 64-bit only, that's just a technicality.
 
-I don't think we need to control this.
-From most drivers, I see there are many example which are not control
-the error of write register function.
 
-If there is any error, the root cause is power domain is not enabled.
-In this case, we can not go to these register setting. Besides, we also
-can saves hundreds of driver lines to handle the write register error.
 
-> > +	if (regmap_update_bits(mtk_dp->regs, offset, mask, val))
-> > +		dev_err(mtk_dp->dev,
-> > +			"Failed to update register 0x%x with value
-> > 0x%x, mask 0x%x\n",
-> > +			offset, val, mask);
+>=20
+> > +	/* Calculate PAMT base and size for all supported page sizes. */
+>=20
+> That comment isn't doing much good.  If you say anything here it should b=
+e:
+>=20
+> 	/*
+> 	 * Break the contiguous allocation back up into
+> 	 * the individual PAMTs for each page size:
+> 	 */
+>=20
+> Also, this is *not* "calculating size".  That's done above.
+
+Thanks will use this comment.
+
+>=20
+> > +	tdmr_pamt_base =3D page_to_pfn(pamt) << PAGE_SHIFT;
+> > +	for (pgsz =3D TDX_PG_4K; pgsz < TDX_PG_MAX; pgsz++) {
+> > +		pamt_base[pgsz] =3D tdmr_pamt_base;
+> > +		tdmr_pamt_base +=3D pamt_size[pgsz];
+> > +	}
+> > +
+> > +	tdmr->pamt_4k_base =3D pamt_base[TDX_PG_4K];
+> > +	tdmr->pamt_4k_size =3D pamt_size[TDX_PG_4K];
+> > +	tdmr->pamt_2m_base =3D pamt_base[TDX_PG_2M];
+> > +	tdmr->pamt_2m_size =3D pamt_size[TDX_PG_2M];
+> > +	tdmr->pamt_1g_base =3D pamt_base[TDX_PG_1G];
+> > +	tdmr->pamt_1g_size =3D pamt_size[TDX_PG_1G];
+> > +
+> > +	return 0;
+> > +}
+> >=20
+> > +static void tdmr_get_pamt(struct tdmr_info *tdmr, unsigned long *pamt_=
+pfn,
+> > +			  unsigned long *pamt_npages)
+> > +{
+> > +	unsigned long pamt_base, pamt_sz;
+> > +
+> > +	/*
+> > +	 * The PAMT was allocated in one contiguous unit.  The 4K PAMT
+> > +	 * should always point to the beginning of that allocation.
+> > +	 */
+> > +	pamt_base =3D tdmr->pamt_4k_base;
+> > +	pamt_sz =3D tdmr->pamt_4k_size + tdmr->pamt_2m_size + tdmr-
+> > >pamt_1g_size;
+> > +
+> > +	*pamt_pfn =3D pamt_base >> PAGE_SHIFT;
+> > +	*pamt_npages =3D pamt_sz >> PAGE_SHIFT;
 > > +}
 > > +
-> > +static void mtk_dp_bulk_16bit_write(struct mtk_dp *mtk_dp, u32
-> > offset, u8 *buf,
-> > +				    size_t length)
+> > +static void tdmr_free_pamt(struct tdmr_info *tdmr)
+> > +{
+> > +	unsigned long pamt_pfn, pamt_npages;
+> > +
+> > +	tdmr_get_pamt(tdmr, &pamt_pfn, &pamt_npages);
+> > +
+> > +	/* Do nothing if PAMT hasn't been allocated for this TDMR */
+> > +	if (!pamt_npages)
+> > +		return;
+> > +
+> > +	if (WARN_ON_ONCE(!pamt_pfn))
+> > +		return;
+> > +
+> > +	free_contig_range(pamt_pfn, pamt_npages);
+> > +}
+> > +
+> > +static void tdmrs_free_pamt_all(struct tdmr_info *tdmr_array, int tdmr=
+_num)
 > > +{
 > > +	int i;
-> > +	int num_regs = (length + 1) / 2;
 > > +
-> 
-> ... and here.
-> 
-> > +	/* 2 bytes per register */
-> > +	for (i = 0; i < num_regs; i++) {
-> > +		u32 val = buf[i * 2] |
-> > +			  (i * 2 + 1 < length ? buf[i * 2 + 1] << 8 :
-> > 0);
-> > +
-> > +		mtk_dp_write(mtk_dp, offset + i * 4, val);
-> 
-> P.S.: Does it make sense to keep writing if you get an error?
->        I'd say that doing this may lead to unexpected hardware
-> status.
-> 
-
-If one register failed to write, it should be for *all* registers and
-not only for *one* register.
-
-> > +	}
+> > +	for (i =3D 0; i < tdmr_num; i++)
+> > +		tdmr_free_pamt(tdmr_array_entry(tdmr_array, i));
 > > +}
 > > +
-> > +static unsigned long mtk_dp_sip_atf_call(struct mtk_dp *mtk_dp,
-> > +					 unsigned int cmd, unsigned int
-> > para)
+> > +/* Allocate and set up PAMTs for all TDMRs */
+> > +static int tdmrs_set_up_pamt_all(struct tdmr_info *tdmr_array, int
+> > tdmr_num)
 > > +{
-> > +	struct arm_smccc_res res;
+> > +	int i, ret =3D 0;
 > > +
-> > +	arm_smccc_smc(MTK_DP_SIP_CONTROL_AARCH32, cmd, para, 0, 0, 0,
-> > 0, 0,
-> > +		      &res);
-> > +
-> > +	dev_dbg(mtk_dp->dev, "sip cmd 0x%x, p1 0x%x, ret 0x%lx-0x%lx",
-> > +		cmd, para, res.a0, res.a1);
-> > +
-> > +	return res.a1;
-> 
-> We have SIP_SVC_E_(xxxxx) error codes defined in mtk_sip_svc.h...
-> this makes me
-> think that res.a1 is not an unsigned long for real: please confirm.
-> 
-
-ok, I will confirm that.
-
-> > +}
-> > +
-> 
-> ..snip..
-> 
-> > +
-> > +static void mtk_dp_set_color_format(struct mtk_dp *mtk_dp,
-> > +				    enum dp_pixelformat color_format)
-> > +{
-> > +	u32 val;
-> > +
-> > +	mtk_dp->info.format = color_format;
-> > +
-> > +	/* update MISC0 */
-> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3034,
-> > +			   color_format << DP_TEST_COLOR_FORMAT_SHIFT,
-> > +			   DP_TEST_COLOR_FORMAT_MASK);
-> > +
-> > +	switch (color_format) {
-> > +	case DP_PIXELFORMAT_YUV422:
-> > +		val = PIXEL_ENCODE_FORMAT_DP_ENC0_P0_YCBCR422;
-> > +		break;
-> > +	case DP_PIXELFORMAT_YUV420:
-> > +		val = PIXEL_ENCODE_FORMAT_DP_ENC0_P0_YCBCR420;
-> > +		break;
-> > +	case DP_PIXELFORMAT_RGB:
-> > +	case DP_PIXELFORMAT_YUV444:
-> > +		val = PIXEL_ENCODE_FORMAT_DP_ENC0_P0_RGB;
-> > +		break;
-> > +	case DP_PIXELFORMAT_Y_ONLY:
-> > +	case DP_PIXELFORMAT_RAW:
-> > +	case DP_PIXELFORMAT_RESERVED:
-> > +	default:
-> > +		drm_warn(mtk_dp->drm_dev, "Unsupported color format:
-> > %d\n",
-> > +			 color_format);
-> > +		return;
-> 
-> return -EINVAL here?
-> 
-
-ok, I will take care the error handle.
-
-> > +	}
-> > +
-> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_303C,
-> > +			   val, PIXEL_ENCODE_FORMAT_DP_ENC0_P0_MASK);
-> 
-> ... and return 0 here.
-> 
-> > +}
-> > +
-> > +static void mtk_dp_set_color_depth(struct mtk_dp *mtk_dp)
-> > +{
-> > +	u32 val;
-> > +	/* Only support 8 bits currently */
-> > +	u32 color_depth = DP_MSA_MISC_8_BPC;
-> > +
-> > +	mtk_dp->info.depth = color_depth;
-> > +
-> > +	/* Update MISC0 */
-> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_3034,
-> > +			   color_depth, DP_TEST_BIT_DEPTH_MASK);
-> > +
-> > +	switch (color_depth) {
-> > +	case DP_MSA_MISC_6_BPC:
-> > +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_6BIT;
-> > +		break;
-> > +	case DP_MSA_MISC_8_BPC:
-> > +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_8BIT;
-> > +		break;
-> > +	case DP_MSA_MISC_10_BPC:
-> > +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_10BIT;
-> > +		break;
-> > +	case DP_MSA_MISC_12_BPC:
-> > +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_12BIT;
-> > +		break;
-> > +	case DP_MSA_MISC_16_BPC:
-> > +		val = VIDEO_COLOR_DEPTH_DP_ENC0_P0_16BIT;
-> > +		break;
-> 
-> ditto
-> 
-> > +	default:
-> > +		drm_warn(mtk_dp->drm_dev, "Unsupported color depth
-> > %d\n",
-> > +			 color_depth);
-> > +		return;
-> > +	}
-> > +
-> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_ENC0_P0_303C, val,
-> > +			   VIDEO_COLOR_DEPTH_DP_ENC0_P0_MASK);
-> > +}
-> > +
-> 
-> ..snip..
-> 
-> > +
-> > +static int mtk_dp_phy_configure(struct mtk_dp *mtk_dp,
-> > +				u32 link_rate, int lane_count)
-> > +{
-> > +	int ret;
-> > +	union phy_configure_opts phy_opts = {
-> > +		.dp = {
-> > +			.link_rate = link_rate_to_mb_per_s(mtk_dp,
-> > link_rate),
-> > +			.set_rate = 1,
-> > +			.lanes = lane_count,
-> > +			.set_lanes = 1,
-> > +			.ssc = mtk_dp->train_info.sink_ssc,
-> > +		}
-> > +	};
-> > +
-> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
-> > DP_PWR_STATE_BANDGAP,
-> > +			   DP_PWR_STATE_MASK);
-> > +
-> > +	ret = phy_configure(mtk_dp->phy, &phy_opts);
-> > +
-> 
-> This new blank line is unnecessary, please remove.
-> 
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	mtk_dp_set_cal_data(mtk_dp);
-> > +	mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
-> > +			   DP_PWR_STATE_BANDGAP_TPLL_LANE,
-> > DP_PWR_STATE_MASK);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> 
-> ..snip..
-> 
-> > +
-> > +static void mtk_dp_calculate_pixrate(struct mtk_dp *mtk_dp)
-> > +{
-> > +	u8 target_frame_rate = 60;
-> 
-> Don't assign any value here: this will make sure to avoid double
-> assignments later.
-> 
-> > +	u32 target_pixel_clk;
-> > +	struct drm_display_mode mode;
-> > +	struct mtk_dp_timings *timings = &mtk_dp->info.timings;
-> > +
-> > +	drm_display_mode_from_videomode(&timings->vm, &mode);
-> > +
-> > +	if (mtk_dp->info.timings.frame_rate > 0) {
-> > +		target_frame_rate = mtk_dp->info.timings.frame_rate;
-> > +		target_pixel_clk = mode.htotal * mode.vtotal *
-> > +				   target_frame_rate;
-> > +	} else {
-> > +		target_pixel_clk = mode.htotal * mode.vtotal *
-> > +				   target_frame_rate;
-> > +	}
-> 
-> This should be
-> 
-> 	if (mtk_dp->info.timings.frame_rate > 0)
-> 		target_frame_rate = mtk_dp->info.timings.frame_rate;
-> 	else
-> 		target_frame_rate = 60;
-> 
-> 	target_pixel_clk = mode.htotal * mode.vtotal *
-> target_frame_rate;
-> 
-
-ok.
-
-> > +}
-> > +
-> > +static void mtk_dp_set_tx_out(struct mtk_dp *mtk_dp)
-> > +{
-> > +	mtk_dp_msa_bypass_disable(mtk_dp);
-> > +	mtk_dp_calculate_pixrate(mtk_dp);
-> > +	mtk_dp_pg_disable(mtk_dp);
-> > +	mtk_dp_setup_tu(mtk_dp);
-> > +}
-> > +
-> > +static ssize_t mtk_dp_hpd_sink_event(struct mtk_dp *mtk_dp)
-> > +{
-> > +	ssize_t ret;
-> > +	u8 sink_count;
-> > +	bool locked;
-> > +	u8 link_status[DP_LINK_STATUS_SIZE] = {};
-> > +	u32 sink_count_reg = DP_SINK_COUNT_ESI;
-> > +	u32 link_status_reg = DP_LANE0_1_STATUS;
-> > +
-> > +	ret = drm_dp_dpcd_readb(&mtk_dp->aux, sink_count_reg,
-> > &sink_count);
-> > +	if (ret < 0) {
-> 
-> This function can never return anything > 1, so this should probably
-> be:
-> 
-> 	if (ret < 1) {
-> 		drm_err ....
-> 		return ret == 0 ? -EIO : ret;
-> 	}
-> 
-
-ok, I will check this.
-
-BRs,
-Bo-Chen
-
-> > +		drm_err(mtk_dp->drm_dev, "Read sink count failed\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	ret = drm_dp_dpcd_read(&mtk_dp->aux, link_status_reg,
-> > link_status,
-> > +			       sizeof(link_status));
-> > +	if (!ret) {
-> > +		drm_err(mtk_dp->drm_dev, "Read link status failed\n");
-> > +		return ret;
-> > +	}
-> > +
-> > +	locked = drm_dp_channel_eq_ok(link_status,
-> > +				      mtk_dp->train_info.lane_count);
-> > +	if (!locked && mtk_dp->train_state >
-> > MTK_DP_TRAIN_STATE_TRAINING)
-> > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_TRAINING;
-> > +
-> > +	if (link_status[1] & DP_REMOTE_CONTROL_COMMAND_PENDING)
-> > +		drm_dp_dpcd_writeb(&mtk_dp->aux,
-> > DP_DEVICE_SERVICE_IRQ_VECTOR,
-> > +				   DP_REMOTE_CONTROL_COMMAND_PENDING);
-> > +
-> > +	if (DP_GET_SINK_COUNT(sink_count) &&
-> > +	    (link_status[2] & DP_DOWNSTREAM_PORT_STATUS_CHANGED)) {
-> > +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_TRAINING;
-> > +		msleep(20);
+> > +	for (i =3D 0; i < tdmr_num; i++) {
+> > +		ret =3D tdmr_set_up_pamt(tdmr_array_entry(tdmr_array, i));
+> > +		if (ret)
+> > +			goto err;
 > > +	}
 > > +
 > > +	return 0;
+> > +err:
+> > +	tdmrs_free_pamt_all(tdmr_array, tdmr_num);
+> > +	return ret;
 > > +}
 > > +
-> 
-> ..snip..
-> 
-> > +
-> > +static int mtk_dp_train_flow(struct mtk_dp *mtk_dp, u8
-> > target_link_rate,
-> > +			     u8 target_lane_count)
+> > +static unsigned long tdmrs_get_pamt_pages(struct tdmr_info *tdmr_array=
+,
+> > +					  int tdmr_num)
+>=20
+> "get" is for refcounting.  tdmrs_count_pamt_pages() would be preferable.
+
+Will use count.  Thanks.
+
+>=20
 > > +{
-> > +	u8 lane_adjust[2] = {};
-> > +	bool pass_tps1 = false;
-> > +	bool pass_tps2_3 = false;
-> > +	int train_retries;
-> > +	int status_control;
-> > +	int iteration_count;
-> > +	int ret;
-> > +	u8 prev_lane_adjust;
+> > +	unsigned long pamt_npages =3D 0;
+> > +	int i;
 > > +
-> > +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LINK_BW_SET,
-> > target_link_rate);
-> > +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LANE_COUNT_SET,
-> > +			   target_lane_count |
-> > DP_LANE_COUNT_ENHANCED_FRAME_EN);
+> > +	for (i =3D 0; i < tdmr_num; i++) {
+> > +		unsigned long pfn, npages;
 > > +
-> > +	if (mtk_dp->train_info.sink_ssc)
-> > +		drm_dp_dpcd_writeb(&mtk_dp->aux, DP_DOWNSPREAD_CTRL,
-> > +				   DP_SPREAD_AMP_0_5);
+> > +		tdmr_get_pamt(tdmr_array_entry(tdmr_array, i), &pfn,
+> > &npages);
+> > +		pamt_npages +=3D npages;
+> > +	}
 > > +
-> > +	train_retries = 0;
-> > +	status_control = 0;
-> > +	iteration_count = 1;
-> > +	prev_lane_adjust = 0xFF;
+> > +	return pamt_npages;
+> > +}
 > > +
-> > +	mtk_dp_set_lanes(mtk_dp, target_lane_count / 2);
-> > +	ret = mtk_dp_phy_configure(mtk_dp, target_link_rate,
-> > target_lane_count);
+> > =C2=A0/*
+> > =C2=A0=C2=A0* Construct an array of TDMRs to cover all memory regions i=
+n memblock.
+> > =C2=A0=C2=A0* This makes sure all pages managed by the page allocator a=
+re TDX
+> > @@ -572,8 +762,13 @@ static int construct_tdmrs_memeblock(struct tdmr_i=
+nfo
+> > *tdmr_array,
+> > =C2=A0	if (ret)
+> > =C2=A0		goto err;
+> > =C2=A0
+> > +	ret =3D tdmrs_set_up_pamt_all(tdmr_array, *tdmr_num);
 > > +	if (ret)
-> > +		return -EINVAL;
-> 
-> Why are you overriding the error value here?
-> 
+> > +		goto err;
 > > +
-> > +	dev_dbg(mtk_dp->dev,
-> > +		"Link train target_link_rate = 0x%x, target_lane_count
-> > = 0x%x\n",
-> > +		target_link_rate, target_lane_count);
-> > +
-> 
-> Cheers,
-> Angelo
+> > =C2=A0	/* Return -EINVAL until constructing TDMRs is done */
+> > =C2=A0	ret =3D -EINVAL;
+> > +	tdmrs_free_pamt_all(tdmr_array, *tdmr_num);
+> > =C2=A0err:
+> > =C2=A0	return ret;
+> > =C2=A0}
+> > @@ -644,6 +839,11 @@ static int init_tdx_module(void)
+> > =C2=A0	 * process are done.
+> > =C2=A0	 */
+> > =C2=A0	ret =3D -EINVAL;
+> > +	if (ret)
+> > +		tdmrs_free_pamt_all(tdmr_array, tdmr_num);
+> > +	else
+> > +		pr_info("%lu pages allocated for PAMT.\n",
+> > +				tdmrs_get_pamt_pages(tdmr_array,
+> > tdmr_num));
+> > =C2=A0out_free_tdmrs:
+> > =C2=A0	/*
+> > =C2=A0	 * The array of TDMRs is freed no matter the initialization is
+>=20
+> The rest looks OK.
+
+Thanks.
+
+--=20
+Thanks,
+-Kai
+
 

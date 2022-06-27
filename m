@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4341A55E25E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B8B55C193
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236949AbiF0Lkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
+        id S235434AbiF0LaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236693AbiF0Lhx (ORCPT
+        with ESMTP id S235420AbiF0L3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:37:53 -0400
+        Mon, 27 Jun 2022 07:29:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FFAB84E;
-        Mon, 27 Jun 2022 04:34:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85CC131;
+        Mon, 27 Jun 2022 04:28:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB61C608D4;
-        Mon, 27 Jun 2022 11:34:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD86C3411D;
-        Mon, 27 Jun 2022 11:34:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 756D061456;
+        Mon, 27 Jun 2022 11:28:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3219DC3411D;
+        Mon, 27 Jun 2022 11:28:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329678;
-        bh=9QGJbyTlVUNAzfSE1doz10YkoD1SL9YbeGU0BFssGrA=;
+        s=korg; t=1656329293;
+        bh=A2migJAf3lhueRVP05DdDRYtA3dnSY0+3MDuPOjx5+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m6pMd7keBxs/THnURovsm795Iactp2Tc1jnwVZk4X2mwJAq/s/6p5EvjE7E4ZlFFM
-         GjM5HWj2fHr6BNGYIVt87U6nFQr33dgy1fIpvdALSU7PFDcsrOd+GPDV1tN0BDjRA9
-         6MU/jeUOb/GcvI8SJfq1V8dEspTaf/YlMZVWzT/w=
+        b=cAmAoMrlsvb2u5BBuRiwM8uhJF2lfGDY3c2Lt6sqKnIn1uioYN4eCrk7BHkpCZ2ah
+         Kqkmp2PrtXofyWCiNKWl/9nyPpLme21UtopVYtIjDPsKkstMpCfJ7j2tu1zRSu+OD3
+         xADEP9DHJ504ES2nVlOh+AJ1dtT/1tTO7MUY1xRk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Enzo Matsumiya <ematsumiya@suse.de>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 076/135] nvme-pci: add NO APST quirk for Kioxia device
+        stable@vger.kernel.org, Benjamin Marzinski <bmarzins@redhat.com>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 5.4 12/60] dm mirror log: clear log bits up to BITS_PER_LONG boundary
 Date:   Mon, 27 Jun 2022 13:21:23 +0200
-Message-Id: <20220627111940.367162166@linuxfoundation.org>
+Message-Id: <20220627111928.015873235@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,54 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Enzo Matsumiya <ematsumiya@suse.de>
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-[ Upstream commit 5a6254d55e2a9f7919ead8580d7aa0c7a382b26a ]
+commit 90736eb3232d208ee048493f371075e4272e0944 upstream.
 
-This particular Kioxia device times out and aborts I/O during any load,
-but it's more easily observable with discards (fstrim).
+Commit 85e123c27d5c ("dm mirror log: round up region bitmap size to
+BITS_PER_LONG") introduced a regression on 64-bit architectures in the
+lvm testsuite tests: lvcreate-mirror, mirror-names and vgsplit-operation.
 
-The device gets to a state that is also not possible to use
-"nvme set-feature" to disable APST.
-Booting with nvme_core.default_ps_max_latency=0 solves the issue.
+If the device is shrunk, we need to clear log bits beyond the end of the
+device. The code clears bits up to a 32-bit boundary and then calculates
+lc->sync_count by summing set bits up to a 64-bit boundary (the commit
+changed that; previously, this boundary was 32-bit too). So, it was using
+some non-zeroed bits in the calculation and this caused misbehavior.
 
-We had a dozen or so of these devices behaving this same way in
-customer environments.
+Fix this regression by clearing bits up to BITS_PER_LONG boundary.
 
-Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 85e123c27d5c ("dm mirror log: round up region bitmap size to BITS_PER_LONG")
+Cc: stable@vger.kernel.org
+Reported-by: Benjamin Marzinski <bmarzins@redhat.com>
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nvme/host/core.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/md/dm-log.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 9bc9f6d225bd..3ef1f9112ee0 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -2475,6 +2475,20 @@ static const struct nvme_core_quirk_entry core_quirks[] = {
- 		.vid = 0x14a4,
- 		.fr = "22301111",
- 		.quirks = NVME_QUIRK_SIMPLE_SUSPEND,
-+	},
-+	{
-+		/*
-+		 * This Kioxia CD6-V Series / HPE PE8030 device times out and
-+		 * aborts I/O during any load, but more easily reproducible
-+		 * with discards (fstrim).
-+		 *
-+		 * The device is left in a state where it is also not possible
-+		 * to use "nvme set-feature" to disable APST, but booting with
-+		 * nvme_core.default_ps_max_latency=0 works.
-+		 */
-+		.vid = 0x1e0f,
-+		.mn = "KCD6XVUL6T40",
-+		.quirks = NVME_QUIRK_NO_APST,
- 	}
- };
+--- a/drivers/md/dm-log.c
++++ b/drivers/md/dm-log.c
+@@ -615,7 +615,7 @@ static int disk_resume(struct dm_dirty_l
+ 			log_clear_bit(lc, lc->clean_bits, i);
  
--- 
-2.35.1
-
+ 	/* clear any old bits -- device has shrunk */
+-	for (i = lc->region_count; i % (sizeof(*lc->clean_bits) << BYTE_SHIFT); i++)
++	for (i = lc->region_count; i % BITS_PER_LONG; i++)
+ 		log_clear_bit(lc, lc->clean_bits, i);
+ 
+ 	/* copy clean across to sync */
 
 

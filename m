@@ -2,280 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE1655CF32
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D598455DA17
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236961AbiF0OWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
+        id S236959AbiF0OY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237201AbiF0OVf (ORCPT
+        with ESMTP id S236951AbiF0OWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:21:35 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2189E13CF9;
-        Mon, 27 Jun 2022 07:21:33 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RDUGvG019903;
-        Mon, 27 Jun 2022 16:21:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=zspda62bHDTpbxjlx3pNU8tSQuN0TE9W+gSeJGZZuks=;
- b=CJOwTPStfgOH01/tErFc9mX2FtMPxEgWXNsuMoccQbNKRzQPePFi9DpEtzx7nh60FMps
- dJTznLO0Fi967vOnp/DL8NW+2afa84PtIuf5GG5BV/V+brvXLOLor/eE18Law97gpcHy
- UommIdmZnnR/KbR1tCR7R7D7S2XUqJdLHCPX1vlXbKvqbrKTBcLwCOYQM0UbLIBIZAvU
- nCz2Ha0fbEbWbpNcWxrPx/ba82XtHtUGXI/ksExNt7yBunLO4TXPXbOGwmD64Xh7E7X/
- POjR/jYnD8uXL1wxkm/m6+2eh09jqw8UL/qukvFvEtUA5yCMdJWHm0Wvza0NCtngbPbq mw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gy9mr1sd3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jun 2022 16:21:19 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7F97F10002A;
-        Mon, 27 Jun 2022 16:21:17 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F318822177F;
-        Mon, 27 Jun 2022 16:21:16 +0200 (CEST)
-Received: from [10.48.1.102] (10.75.127.46) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 27 Jun
- 2022 16:21:15 +0200
-Message-ID: <845d6817-d2e4-7925-f7f5-da1102514636@foss.st.com>
-Date:   Mon, 27 Jun 2022 16:21:15 +0200
+        Mon, 27 Jun 2022 10:22:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2896F13EAE;
+        Mon, 27 Jun 2022 07:22:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7001B8175C;
+        Mon, 27 Jun 2022 14:22:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8558DC3411D;
+        Mon, 27 Jun 2022 14:22:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656339732;
+        bh=tbJJZM38KKTKF7ztOTPHwtQvMueD3cEf4XJoqh9xBGA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VlKVh1Gn1syHgeSU2fgl8TITGLA1uHaj9Pz6nTUhb0dtZANF4DTYTZ/ajfONoF3wT
+         lp2O2xb1l4zhUtpOykJ+l2Ru7/7puXju+W0YerouKtdl2eNB0ZA7pZlwWA22gr2qSN
+         cwRgrNdYpgXUfk7d+rdMpQiPGnG6z/fOXs/bAgJtXSyQHC1X3TwFyA9CNB8UqQ/emO
+         JXjli1QLv8lFiyJH+iUkwtjwysbzN4jZu6CXnL0X7kLXHFD8n7QvCLEkSZqIiLxbNS
+         ReWhsDwxucI+VdmzIbDcxYg6ZkIrpxPEDCMnd7jjcGuKjL0KSsTerZRmlv+k4CG6c2
+         i7YMpyq5brTjQ==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o5pcw-003TFl-BT;
+        Mon, 27 Jun 2022 15:22:10 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/4] dt-bindings: usb: typec: add bindings for stm32g0
- controller
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <robh+dt@kernel.org>, <heikki.krogerus@linux.intel.com>,
-        <gregkh@linuxfoundation.org>
-CC:     <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>
-References: <20220624155413.399190-1-fabrice.gasnier@foss.st.com>
- <20220624155413.399190-2-fabrice.gasnier@foss.st.com>
- <ddb0e946-c955-1404-c1cd-c2548f34ec35@linaro.org>
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-In-Reply-To: <ddb0e946-c955-1404-c1cd-c2548f34ec35@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Date:   Mon, 27 Jun 2022 15:22:10 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: interrupt-controller: sifive,plic:
+ Document Renesas RZ/Five SoC
+In-Reply-To: <CA+V-a8sihw9=Ychakh6tV+1+MpRayr=1VSnhSYZNp0F+f4Hdnw@mail.gmail.com>
+References: <20220626004326.8548-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220626004326.8548-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <87tu87eh5h.wl-maz@kernel.org>
+ <CA+V-a8sihw9=Ychakh6tV+1+MpRayr=1VSnhSYZNp0F+f4Hdnw@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <1eb7b6525a98b330894b6ce2f9167dc2@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: prabhakar.csengg@gmail.com, prabhakar.mahadev-lad.rj@bp.renesas.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, sagar.kadam@sifive.com, palmer@dabbelt.com, paul.walmsley@sifive.com, linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, geert+renesas@glider.be, linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, biju.das.jz@bp.renesas.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/24/22 18:16, Krzysztof Kozlowski wrote:
-> On 24/06/2022 17:54, Fabrice Gasnier wrote:
->> This patch adds DT schema documentation for the STM32G0 Type-C controller.
+On 2022-06-27 13:27, Lad, Prabhakar wrote:
+> Hi Marc,
 > 
-> No "This patch"
-
-Hi Krzysztof,
-
-ack,
-
+> Thank you for the review.
 > 
-> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-> 
->> STM32G0 provides an integrated USB Type-C and power delivery interface.
->> It can be programmed with a firmware to handle UCSI protocol over I2C
->> interface. A GPIO is used as an interrupt line.
->> It may be used as a wakeup source, so use optional "wakeup-source" and
->> "power-domains" properties to support wakeup.
->>
->> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
->> ---
->>  .../bindings/usb/st,typec-stm32g0.yaml        | 83 +++++++++++++++++++
->>  1 file changed, 83 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml b/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
->> new file mode 100644
->> index 0000000000000..b2729bd015a1a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/usb/st,typec-stm32g0.yaml
->> @@ -0,0 +1,83 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/usb/st,typec-stm32g0.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> 
-> No quotes.
+> On Sun, Jun 26, 2022 at 1:35 PM Marc Zyngier <maz@kernel.org> wrote:
+>> 
+>> On Sun, 26 Jun 2022 01:43:25 +0100,
+>> Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>> >
+>> > Document Renesas RZ/Five (R9A07G043) SoC.
+>> >
+>> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>> > ---
+>> > v1->v2:
+>> > * Fixed binding doc
+>> > * Fixed review comments pointed by Krzysztof.
+>> >
+>> > RFC->v1:
+>> > * Fixed Review comments pointed by Geert and Rob
+>> > ---
+>> >  .../sifive,plic-1.0.0.yaml                    | 44 +++++++++++++++++--
+>> >  1 file changed, 41 insertions(+), 3 deletions(-)
+>> >
+>> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+>> > index 27092c6a86c4..59df367d1e44 100644
+>> > --- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+>> > +++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+>> > @@ -28,7 +28,10 @@ description:
+>> >
+>> >    While the PLIC supports both edge-triggered and level-triggered interrupts,
+>> >    interrupt handlers are oblivious to this distinction and therefore it is not
+>> > -  specified in the PLIC device-tree binding.
+>> > +  specified in the PLIC device-tree binding for SiFive PLIC (and similar PLIC's),
+>> > +  but for the Renesas RZ/Five Soc (AX45MP AndesCore) which has NCEPLIC100 we need
+>> > +  to specify the interrupt type as the flow for EDGE interrupts is different
+>> > +  compared to LEVEL interrupts.
+>> >
+>> >    While the RISC-V ISA doesn't specify a memory layout for the PLIC, the
+>> >    "sifive,plic-1.0.0" device is a concrete implementation of the PLIC that
+>> > @@ -57,6 +60,7 @@ properties:
+>> >            - enum:
+>> >                - allwinner,sun20i-d1-plic
+>> >            - const: thead,c900-plic
+>> > +      - const: renesas,r9a07g043-plic
+>> 
+>> Since it is the NCEPLIC100 that is broken, shouldn't the compatible
+>> string actually reflect that? I'd rather see 'andes,nceplic100' once
+>> and for all instead of starting with Renesas, quickly followed by all
+>> the other licensees that will inevitably integrate the same IP (which
+>> isn't even specific to the AX45MP).
+>> 
+>> This IP also comes with all sort of added (mis-)features, which may or
+>> may not be used in the future, and it would make sense to identify it
+>> specifically.
+>> 
+> Agreed, I'll update it as above.
 
-ack,
+Please synchronise with Samuel to have a common series that fixes
+both the Renesas and Thead platforms.
 
-> 
->> +
->> +title: STMicroelectronics STM32G0 Type-C controller bindings
-> 
-> s/bindings//
+Thanks,
 
-ack,
-
-> 
->> +
->> +description: |
->> +  The STM32G0 MCU can be programmed to control Type-C connector(s) through I2C
->> +  typically using the UCSI protocol over I2C, with a dedicated alert
->> +  (interrupt) pin.
->> +
->> +maintainers:
->> +  - Fabrice Gasnier <fabrice.gasnier@foss.st.com>
->> +
->> +properties:
->> +  compatible:
->> +    const: st,stm32g0-typec
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  connector:
->> +    type: object> +    allOf:
->> +      - $ref: ../connector/usb-connector.yaml#
-> 
-> Full path, so /schemas/connector/...
-> 
-> unevaluatedProperties: false
-
-ack,
-
-> 
->> +
->> +  firmware-name:
->> +    description: |
->> +      Should contain the name of the default firmware image
->> +      file located on the firmware search path
->> +
->> +  wakeup-source: true
->> +  power-domains: true
-> 
-> maxItems
-
-Do you mean maxItems regarding the "power-domains" property ?
-This will depend on the user platform, where it's used as an I2C device.
-So I'm not sure this can / should be specified here.
-Could please you clarify ?
-
-> 
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +    i2c5 {
-> 
-> Just "i2c"
-
-ack,
-
-> 
->> +      #address-cells = <1>;
->> +      #size-cells = <0>;
->> +
->> +      stm32g0@53 {
-> 
-> Generic node name describing class of the device.
-
-
-I wasn't aware of generic node name for an I2C device (not talking of
-the controller). I may have missed it.
-
-Could you please clarify ?
-
-> 
->> +        compatible = "st,stm32g0-typec";
->> +        reg = <0x53>;
->> +        /* Alert pin on GPIO PE12 */
->> +        interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
->> +        interrupt-parent = <&gpioe>;
->> +
->> +        /* Example with one type-C connector */
->> +        connector {
->> +          compatible = "usb-c-connector";
->> +          label = "USB-C";
->> +
->> +          port {
-> 
-> This does not look like proper schema of connector.yaml.
-
-This refers to graph.yaml [1], where similar example is seen [2].
-
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/graph.yaml#L79
-
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/graph.yaml#L207
-
-    device-1 {
-        port {
-            device_1_output: endpoint {
-                remote-endpoint = <&device_2_input>;
-            };
-        };
-    };
-    device-2 {
-        port {
-            device_2_input: endpoint {
-                remote-endpoint = <&device_1_output>;
-            };
-        };
-    };
-
-
-Could you please clarify this point too ?
-
-> 
->> +            con_usb_c_ep: endpoint {
->> +              remote-endpoint = <&usbotg_hs_ep>;
->> +            };
->> +          };
->> +        };
->> +      };
->> +    };
->> +
->> +    usbotg_hs {
-> 
-> Generic node names, no underscores in node names.
-
-ack, I guess you'd recommend "usb" here. I'll update it.
-
-Thanks for reviewing,
-Best Regards,
-Fabrice
-
-> 
->> +      usb-role-switch;
->> +      port {
->> +        usbotg_hs_ep: endpoint {
->> +          remote-endpoint = <&con_usb_c_ep>;
->> +        };
->> +      };
->> +    };
->> +...
-> 
-> 
-> Best regards,
-> Krzysztof
+          M.
+-- 
+Jazz is not dead. It just smells funny...

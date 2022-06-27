@@ -2,46 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D090655CDF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0D155DA5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232798AbiF0HO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S232809AbiF0HOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232066AbiF0HO0 (ORCPT
+        with ESMTP id S230329AbiF0HOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:14:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EC1A26F2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:14:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4CDD81758;
-        Mon, 27 Jun 2022 00:14:25 -0700 (PDT)
-Received: from [10.162.42.6] (unknown [10.162.42.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 32FF03F5A1;
-        Mon, 27 Jun 2022 00:14:21 -0700 (PDT)
-Message-ID: <b46f5390-830d-08fd-0d6d-3fda7d31c36a@arm.com>
-Date:   Mon, 27 Jun 2022 12:44:19 +0530
+        Mon, 27 Jun 2022 03:14:33 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596085F56;
+        Mon, 27 Jun 2022 00:14:32 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id a4so1424483lfm.0;
+        Mon, 27 Jun 2022 00:14:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1vhD6QvwPb1Sk0ztcGCX9DIwPhwZXx+jWZOw6iM4IT4=;
+        b=BAIkya7n14RIykaoNgFlpV/r3TQL/WNsEaKH7PY7aa/oang0UBV1YhJSag35l0RO6w
+         VZ2j3uINQ3aQYfK8IMMSkPMQJQ3UxWe9/IB+/BxsB3XfbPFbvDwiiXtUMklAXqfefPC/
+         Ckk9RqlYgDteapU5sKgZGFIQ/ggZJCHmKQuT8LwizCUd7q1m/NDwW+lXsEhfTUbzOUDE
+         C5/gKwtALVMoIDRH8MQYaQr6N8BYuNvyuN7qcQA40dkTrEve4pDXkiBxmJmWr0z4TXOH
+         1rurxGuK7Ua8OvElU3uPCrKKQEawbYW6BP1wCPdLiz01Hzq6f31aRsMGKl00SwNXSVXe
+         XUUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1vhD6QvwPb1Sk0ztcGCX9DIwPhwZXx+jWZOw6iM4IT4=;
+        b=tbBfzrONuyQqpIodRRsfhfeBbcrikKbOFWYS+coNEqG5fEB42nX+x8yjcbdKst758K
+         +Gd8HTbZ0F/cnnDKSnXTrPRbRtY/6a7hbJ+eloO44zYZWOKXMF/k373FkFlOje+XXKUa
+         owpDLPCN5eaLNH9MfWUvX52SRhDGelPRPiRmZ/czmMqjZinSQxISvFpOQ1x4gWgoQxSy
+         oecR/6tEoIK866PI5Q9SuskSqgOPH9D3A1RQHWFJyet2Rcm6mlNVpy+jIyMWBdUmqFUz
+         HFnX1Zfq2xghUshJVrFbmWIsLNfHiTu2lZ3lvS9wimxUoVqCwVhJYtLaCmvxy0uRsBFZ
+         93wg==
+X-Gm-Message-State: AJIora9cPa/DUUwX+txWZyeAiG7saMJL/6+8o9aWOeelYSBWlI82GwJ3
+        e7MQ8ZnJtQFOoZUA4wf3cTM=
+X-Google-Smtp-Source: AGRyM1s3ipXM6rHscQ0lTPauWlKgFP+yMT68KWO8w0OHs08H9fUOh/0tp6DBqhGuWsgzcwouWyQTDQ==
+X-Received: by 2002:a05:6512:3486:b0:47f:8790:85b with SMTP id v6-20020a056512348600b0047f8790085bmr8020143lfr.551.1656314070682;
+        Mon, 27 Jun 2022 00:14:30 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-118-164.nat.spd-mgts.ru. [109.252.118.164])
+        by smtp.googlemail.com with ESMTPSA id h18-20020a05651c125200b0025a91928236sm1292403ljh.90.2022.06.27.00.14.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jun 2022 00:14:30 -0700 (PDT)
+Message-ID: <ecc72279-0892-d5ab-689d-87b8fba5147e@gmail.com>
+Date:   Mon, 27 Jun 2022 10:14:24 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] mm: hugetlb: kill set_huge_swap_pte_at()
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 22/31] soc/tegra: Migrate to dev_pm_opp_set_config()
 Content-Language: en-US
-To:     Qi Zheng <zhengqi.arch@bytedance.com>, mike.kravetz@oracle.com,
-        songmuchun@bytedance.com, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, will@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20220626145717.53572-1-zhengqi.arch@bytedance.com>
- <f0cfe169-44fa-5653-d454-149ef286d3bb@arm.com>
- <037fc8c3-9b71-cb83-8882-95d5459a494f@bytedance.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <037fc8c3-9b71-cb83-8882-95d5459a494f@bytedance.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <449b344f037c7ef1970bc84d31e0d4c4cb4d2951.1653564321.git.viresh.kumar@linaro.org>
+ <20220624004831.po35sowzfo4c47b3@vireshk-i7>
+ <20220624005700.oj4etaajbutvsym7@vireshk-i7>
+ <73d39022-c6fc-0c21-cb68-9714846f02bf@gmail.com>
+ <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20220627064526.2nkezq4nufpkl4y2@vireshk-i7>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,74 +85,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/27/22 12:25, Qi Zheng wrote:
+27.06.2022 09:45, Viresh Kumar пишет:
+>> Looks okay. If you'll solve the cpufreq problem where OPP config is set
+>> by two drivers for the same cpu device
+> This is supported, there is some early freeing of resources on the
+> removal path though, the reasoning for which I already gave in another
+> email. Though, I am open to sorting that out as well, but nothing
+> breaks the code for now AFAICT.
 > 
-> 
-> On 2022/6/27 14:18, Anshuman Khandual wrote:
->>
->>
->> On 6/26/22 20:27, Qi Zheng wrote:
->>> The commit e5251fd43007 ("mm/hugetlb: introduce set_huge_swap_pte_at()
->>> helper") add set_huge_swap_pte_at() to handle swap entries on
->>> architectures that support hugepages consisting of contiguous ptes.
->>> And currently the set_huge_swap_pte_at() is only overridden by arm64.
->>>
->>> The set_huge_swap_pte_at() provide a sz parameter to help determine
->>> the number of entries to be updated. But in fact, all hugetlb swap
->>> entries contain pfn information, so we can find the corresponding
->>> folio through the pfn recorded in the swap entry, then the folio_size()
->>> is the number of entries that need to be updated.
->>>
->>> And considering that users will easily cause bugs by ignoring the
->>> difference between set_huge_swap_pte_at() and set_huge_pte_at().
->>> Let's handle swap entries in set_huge_pte_at() and remove the
->>> set_huge_swap_pte_at(), then we can call set_huge_pte_at()
->>> anywhere, which simplifies our coding.
->>>
->>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->>> ---
->>>   arch/arm64/include/asm/hugetlb.h |  3 ---
->>>   arch/arm64/mm/hugetlbpage.c      | 34 ++++++++++++++++----------------
->>>   include/linux/hugetlb.h          | 13 ------------
->>>   mm/hugetlb.c                     |  8 +++-----
->>>   mm/rmap.c                        | 11 +++--------
->>>   5 files changed, 23 insertions(+), 46 deletions(-)
->>>
->>> diff --git a/arch/arm64/include/asm/hugetlb.h b/arch/arm64/include/asm/hugetlb.h
->>> index 1fd2846dbefe..d20f5da2d76f 100644
->>> --- a/arch/arm64/include/asm/hugetlb.h
->>> +++ b/arch/arm64/include/asm/hugetlb.h
->>> @@ -46,9 +46,6 @@ extern void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
->>>                  pte_t *ptep, unsigned long sz);
->>>   #define __HAVE_ARCH_HUGE_PTEP_GET
->>>   extern pte_t huge_ptep_get(pte_t *ptep);
->>> -extern void set_huge_swap_pte_at(struct mm_struct *mm, unsigned long addr,
->>> -                 pte_t *ptep, pte_t pte, unsigned long sz);
->>> -#define set_huge_swap_pte_at set_huge_swap_pte_at
->>>     void __init arm64_hugetlb_cma_reserve(void);
->>>   diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
->>> index c9e076683e5d..58b89b9d13e0 100644
->>> --- a/arch/arm64/mm/hugetlbpage.c
->>> +++ b/arch/arm64/mm/hugetlbpage.c
->>> @@ -238,6 +238,13 @@ static void clear_flush(struct mm_struct *mm,
->>>       flush_tlb_range(&vma, saddr, addr);
->>>   }
->>>   +static inline struct folio *hugetlb_swap_entry_to_folio(swp_entry_t entry)
->>> +{
->>> +    VM_BUG_ON(!is_migration_entry(entry) && !is_hwpoison_entry(entry));
->>> +
->>> +    return page_folio(pfn_to_page(swp_offset(entry)));
->>> +}
->>
->> Extracting this huge page size from swap entry is an additional operation which
->> will increase the over all cost for set_huge_swap_pte_at(). At present the size
-> 
-> Hmm, I think this cost is very small. And replacing
-> set_huge_swap_pte_at() by transparently handling swap entries helps
-> reduce possible bugs, which is worthwhile.
 
-Possible bugs ? There are just six call sites for this function.
-Although this proposed patch is functionally correct, I dont see
-a valid enough reason to increase the overall cost in the path.
+In case of Tegra, we use tegra-cpufreq driver that sets supported_hw and
+registers cpufreq-dt. If cpufreq-dt driver defers the probe, then the
+supported_hw will be lost on the re-probe. I haven't checked yet, but I
+suppose that cpufreq-dt driver defers on Tegra30 because of the CPU
+regulator and that's why we get the "OPP table is missing" error.

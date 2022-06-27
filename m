@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1229B55C3E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EE855D2F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238634AbiF0LwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
+        id S234878AbiF0LZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238332AbiF0LsS (ORCPT
+        with ESMTP id S234809AbiF0LYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:48:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365BFF5B5;
-        Mon, 27 Jun 2022 04:40:45 -0700 (PDT)
+        Mon, 27 Jun 2022 07:24:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52862656C;
+        Mon, 27 Jun 2022 04:24:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63E71B8113A;
-        Mon, 27 Jun 2022 11:40:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F85C341C7;
-        Mon, 27 Jun 2022 11:40:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3D006144F;
+        Mon, 27 Jun 2022 11:24:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47BBC3411D;
+        Mon, 27 Jun 2022 11:24:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330043;
-        bh=mWL7/54HZCr/k7UXZsz1bzBhAmI7c/Igb97da6crnUk=;
+        s=korg; t=1656329089;
+        bh=TQMR5GeaKVHamVvhcMQGhylT9Fg4yyVgSp+mcSkGwB0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2uxhd8/4V3mDmwH1HsP3r75L/RovTQ/xwALr1GffAncHAGItp510wPLw5PyEa5qb+
-         S5sI2228eQuiQLXPll+8goCTpySqgzSNxU9brCt7YRxfKRTxg33S69o1xsVRwsne6p
-         XFZHt4cvgMSCk4ULO4BlzUMOPbV/+tqQ2/EVrgso=
+        b=neAcmcGN8Pvk/m0JotnyykLg0y6l+bGXXmdanHINzWwR7iOdAFJk6hJmNCddrjaX1
+         ZpXJc0gnjZJZeYueaytfCk1XyZl/DmNyaQfJskrf/SfOAZZaJ9/b7CyWdTlfL864vV
+         lAQ/zn7FMYKsZTbvL9CZxE5VQ5s67BgPpRM6Uz4M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Lee Duncan <lduncan@suse.com>,
-        Sergey Gorenko <sergeygo@nvidia.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 047/181] scsi: iscsi: Exclude zero from the endpoint ID range
+        stable@vger.kernel.org, Tim Crawford <tcrawford@system76.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 009/102] ALSA: hda/realtek: Add quirk for Clevo PD70PNT
 Date:   Mon, 27 Jun 2022 13:20:20 +0200
-Message-Id: <20220627111945.927460986@linuxfoundation.org>
+Message-Id: <20220627111933.739833016@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,48 +54,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Gorenko <sergeygo@nvidia.com>
+From: Tim Crawford <tcrawford@system76.com>
 
-[ Upstream commit f6eed15f3ea76596ccc689331e1cc850b999133b ]
+commit d49951219b0249d3eff49e4f02e0de82357bc8a0 upstream.
 
-The kernel returns an endpoint ID as r.ep_connect_ret.handle in the
-iscsi_uevent. The iscsid validates a received endpoint ID and treats zero
-as an error. The commit referenced in the fixes line changed the endpoint
-ID range, and zero is always assigned to the first endpoint ID.  So, the
-first attempt to create a new iSER connection always fails.
+Fixes speaker output and headset detection on Clevo PD70PNT.
 
-Link: https://lore.kernel.org/r/20220613123854.55073-1-sergeygo@nvidia.com
-Fixes: 3c6ae371b8a1 ("scsi: iscsi: Release endpoint ID when its freed")
-Reviewed-by: Max Gurtovoy <mgurtovoy@nvidia.com>
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Sergey Gorenko <sergeygo@nvidia.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Tim Crawford <tcrawford@system76.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220617133028.50568-1-tcrawford@system76.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 2c0dd64159b0..5d21f07456c6 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -212,7 +212,12 @@ iscsi_create_endpoint(int dd_size)
- 		return NULL;
- 
- 	mutex_lock(&iscsi_ep_idr_mutex);
--	id = idr_alloc(&iscsi_ep_idr, ep, 0, -1, GFP_NOIO);
-+
-+	/*
-+	 * First endpoint id should be 1 to comply with user space
-+	 * applications (iscsid).
-+	 */
-+	id = idr_alloc(&iscsi_ep_idr, ep, 1, -1, GFP_NOIO);
- 	if (id < 0) {
- 		mutex_unlock(&iscsi_ep_idr_mutex);
- 		printk(KERN_ERR "Could not allocate endpoint ID. Error %d.\n",
--- 
-2.35.1
-
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -2643,6 +2643,7 @@ static const struct snd_pci_quirk alc882
+ 	SND_PCI_QUIRK(0x1558, 0x67e1, "Clevo PB71[DE][CDF]", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
+ 	SND_PCI_QUIRK(0x1558, 0x67e5, "Clevo PC70D[PRS](?:-D|-G)?", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
+ 	SND_PCI_QUIRK(0x1558, 0x67f1, "Clevo PC70H[PRS]", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
++	SND_PCI_QUIRK(0x1558, 0x67f5, "Clevo PD70PN[NRT]", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
+ 	SND_PCI_QUIRK(0x1558, 0x70d1, "Clevo PC70[ER][CDF]", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
+ 	SND_PCI_QUIRK(0x1558, 0x7714, "Clevo X170SM", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
+ 	SND_PCI_QUIRK(0x1558, 0x7715, "Clevo X170KM-G", ALC1220_FIXUP_CLEVO_PB51ED),
 
 

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFABE55C44F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9F255C73D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239376AbiF0L5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
+        id S235536AbiF0LaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238167AbiF0Lu2 (ORCPT
+        with ESMTP id S235330AbiF0L3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:50:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADEE1106;
-        Mon, 27 Jun 2022 04:43:36 -0700 (PDT)
+        Mon, 27 Jun 2022 07:29:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EF6AA;
+        Mon, 27 Jun 2022 04:28:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDC1061241;
-        Mon, 27 Jun 2022 11:43:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B719AC3411D;
-        Mon, 27 Jun 2022 11:43:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32513B8111A;
+        Mon, 27 Jun 2022 11:28:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD59C3411D;
+        Mon, 27 Jun 2022 11:28:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330215;
-        bh=MI0bsniUwDkWSt13JruOm4ZUqJHUFJtapMTmtz/L4J8=;
+        s=korg; t=1656329282;
+        bh=vgvNJrHBHS9C46/WmKV1U9Crcq8Uj+IGHmrgSflbAnM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K6Rohf26nWFU1gudn4ypUpNukFl7nHzF4fwN06yeWdOf0IUN/FY19xf8X8IMFxtCQ
-         +xBbV71PJYqi5suNE4Nda3uC675qfXHzOECvVVqatqIxvO19ouKBPlo8D0uGHuF4kP
-         Mh3U/0TrSytWKV21yX8eRWFQmiFfpRgWtcCXB/RY=
+        b=QHSIVXWJOokS/oyvlSx1Swf6mcTX6jfSz1dka+5HR3eLkdQdv0bGLe9UjpGzQspX2
+         lrz/3Cz0n0oVUjhHuJ4rZ6FVRVV7bVHia7Dt/Yz8HRYlPepzFmRbYehv+5KkkEc+m4
+         qVnPPUMNJNt1QW3vuv8ErFWMT8rV9n50NwNnSR/A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xu Yang <xu.yang_2@nxp.com>
-Subject: [PATCH 5.18 121/181] usb: chipidea: udc: check request status before setting device address
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.10 083/102] iio: adc: axp288: Override TS pin bias current for some models
 Date:   Mon, 27 Jun 2022 13:21:34 +0200
-Message-Id: <20220627111948.203330169@linuxfoundation.org>
+Message-Id: <20220627111935.930159000@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,34 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Yang <xu.yang_2@nxp.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-commit b24346a240b36cfc4df194d145463874985aa29b upstream.
+commit 048058399f19d43cf21de9f5d36cd8144337d004 upstream.
 
-The complete() function may be called even though request is not
-completed. In this case, it's necessary to check request status so
-as not to set device address wrongly.
+Since commit 9bcf15f75cac ("iio: adc: axp288: Fix TS-pin handling") we
+preserve the bias current set by the firmware at boot. This fixes issues
+we were seeing on various models.
 
-Fixes: 10775eb17bee ("usb: chipidea: udc: update gadget states according to ch9")
-cc: <stable@vger.kernel.org>
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-Link: https://lore.kernel.org/r/20220623030242.41796-1-xu.yang_2@nxp.com
+Some models like the Nuvision Solo 10 Draw tablet actually need the
+old hardcoded 80ųA bias current for battery temperature monitoring
+to work properly.
+
+Add a quirk entry for the Nuvision Solo 10 Draw to the DMI quirk table
+to restore setting the bias current to 80ųA on this model.
+
+Fixes: 9bcf15f75cac ("iio: adc: axp288: Fix TS-pin handling")
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215882
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20220506095040.21008-1-hdegoede@redhat.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/chipidea/udc.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/iio/adc/axp288_adc.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -1048,6 +1048,9 @@ isr_setup_status_complete(struct usb_ep
- 	struct ci_hdrc *ci = req->context;
- 	unsigned long flags;
+--- a/drivers/iio/adc/axp288_adc.c
++++ b/drivers/iio/adc/axp288_adc.c
+@@ -196,6 +196,14 @@ static const struct dmi_system_id axp288
+ 		},
+ 		.driver_data = (void *)(uintptr_t)AXP288_ADC_TS_BIAS_80UA,
+ 	},
++	{
++		/* Nuvision Solo 10 Draw */
++		.matches = {
++		  DMI_MATCH(DMI_SYS_VENDOR, "TMAX"),
++		  DMI_MATCH(DMI_PRODUCT_NAME, "TM101W610L"),
++		},
++		.driver_data = (void *)(uintptr_t)AXP288_ADC_TS_BIAS_80UA,
++	},
+ 	{}
+ };
  
-+	if (req->status < 0)
-+		return;
-+
- 	if (ci->setaddr) {
- 		hw_usb_set_address(ci, ci->address);
- 		ci->setaddr = false;
 
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6916155D76C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 061FE55E1BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236557AbiF0Lla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
+        id S236701AbiF0LkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236593AbiF0Lhn (ORCPT
+        with ESMTP id S236615AbiF0Lhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:37:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC4565D3;
-        Mon, 27 Jun 2022 04:34:09 -0700 (PDT)
+        Mon, 27 Jun 2022 07:37:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA7D65F7;
+        Mon, 27 Jun 2022 04:34:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FDCB60C16;
-        Mon, 27 Jun 2022 11:34:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50DB4C341C8;
-        Mon, 27 Jun 2022 11:34:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3BF2B81125;
+        Mon, 27 Jun 2022 11:34:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BC99C341C8;
+        Mon, 27 Jun 2022 11:34:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329648;
-        bh=mQxZLlG1fnMhdpl5nNqIAaOfKrFy36I2HEN0sikocns=;
+        s=korg; t=1656329651;
+        bh=FS4UsGrJSd7A4rXzVZh89z4lEri7pdoYVOv5z3umqiA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O2D/3URiyPXZxzskLYAsadIICc+uEGkpO3IQdFXxvX1Ny2qAJKbIWsnutgr0vB1vE
-         vd4wa6NApvv6OQzOQfVKzp6zYYsVDwOOkLiH0Rr/a/WglKswVZya7yF5npVgM2B2jR
-         NlcjMV3EVjfnL3bWanJi60T/+nrqFmoLSCidG3X4=
+        b=c4MbUE8f0zux7J6ZwcMrca51WziRlp2VuGrhu5QK3QtMpVtmJGGFZTJ3VXqX2Rbgn
+         Pa8iBlFsOTFWArosCH8j2KxVDBCRt2pUclyHY3P6ZHddVkBPpt5BlogXwzuE0McS78
+         2kAFX00Uhi6KjYKsZ5AAFgQ21SY4wCZSfflGLCkg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, k2ci <kernel-bot@kylinos.cn>,
-        huhai <huhai@kylinos.cn>,
-        Genjian Zhang <zhanggenjian@kylinos.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-afs@lists.infradead.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 067/135] MIPS: Remove repetitive increase irq_err_count
-Date:   Mon, 27 Jun 2022 13:21:14 +0200
-Message-Id: <20220627111940.103110990@linuxfoundation.org>
+Subject: [PATCH 5.15 068/135] afs: Fix dynamic root getattr
+Date:   Mon, 27 Jun 2022 13:21:15 +0200
+Message-Id: <20220627111940.131728397@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
 References: <20220627111938.151743692@linuxfoundation.org>
@@ -57,59 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: huhai <huhai@kylinos.cn>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit c81aba8fde2aee4f5778ebab3a1d51bd2ef48e4c ]
+[ Upstream commit cb78d1b5efffe4cf97e16766329dd7358aed3deb ]
 
-commit 979934da9e7a ("[PATCH] mips: update IRQ handling for vr41xx") added
-a function irq_dispatch, and it'll increase irq_err_count when the get_irq
-callback returns a negative value, but increase irq_err_count in get_irq
-was not removed.
+The recent patch to make afs_getattr consult the server didn't account
+for the pseudo-inodes employed by the dynamic root-type afs superblock
+not having a volume or a server to access, and thus an oops occurs if
+such a directory is stat'd.
 
-And also, modpost complains once gpio-vr41xx drivers become modules.
-  ERROR: modpost: "irq_err_count" [drivers/gpio/gpio-vr41xx.ko] undefined!
+Fix this by checking to see if the vnode->volume pointer actually points
+anywhere before following it in afs_getattr().
 
-So it would be a good idea to remove repetitive increase irq_err_count in
-get_irq callback.
+This can be tested by stat'ing a directory in /afs.  It may be
+sufficient just to do "ls /afs" and the oops looks something like:
 
-Fixes: 27fdd325dace ("MIPS: Update VR41xx GPIO driver to use gpiolib")
-Fixes: 979934da9e7a ("[PATCH] mips: update IRQ handling for vr41xx")
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: huhai <huhai@kylinos.cn>
-Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+        BUG: kernel NULL pointer dereference, address: 0000000000000020
+        ...
+        RIP: 0010:afs_getattr+0x8b/0x14b
+        ...
+        Call Trace:
+         <TASK>
+         vfs_statx+0x79/0xf5
+         vfs_fstatat+0x49/0x62
+
+Fixes: 2aeb8c86d499 ("afs: Fix afs_getattr() to refetch file status if callback break occurred")
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
+Tested-by: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: https://lore.kernel.org/r/165408450783.1031787.7941404776393751186.stgit@warthog.procyon.org.uk/
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/vr41xx/common/icu.c | 2 --
- drivers/gpio/gpio-vr41xx.c    | 2 --
- 2 files changed, 4 deletions(-)
+ fs/afs/inode.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/vr41xx/common/icu.c b/arch/mips/vr41xx/common/icu.c
-index 7b7f25b4b057..9240bcdbe74e 100644
---- a/arch/mips/vr41xx/common/icu.c
-+++ b/arch/mips/vr41xx/common/icu.c
-@@ -640,8 +640,6 @@ static int icu_get_irq(unsigned int irq)
+diff --git a/fs/afs/inode.c b/fs/afs/inode.c
+index a47666ba48f5..785bacb972da 100644
+--- a/fs/afs/inode.c
++++ b/fs/afs/inode.c
+@@ -733,7 +733,8 @@ int afs_getattr(struct user_namespace *mnt_userns, const struct path *path,
  
- 	printk(KERN_ERR "spurious ICU interrupt: %04x,%04x\n", pend1, pend2);
+ 	_enter("{ ino=%lu v=%u }", inode->i_ino, inode->i_generation);
  
--	atomic_inc(&irq_err_count);
--
- 	return -1;
- }
- 
-diff --git a/drivers/gpio/gpio-vr41xx.c b/drivers/gpio/gpio-vr41xx.c
-index 98cd715ccc33..8d09b619c166 100644
---- a/drivers/gpio/gpio-vr41xx.c
-+++ b/drivers/gpio/gpio-vr41xx.c
-@@ -217,8 +217,6 @@ static int giu_get_irq(unsigned int irq)
- 	printk(KERN_ERR "spurious GIU interrupt: %04x(%04x),%04x(%04x)\n",
- 	       maskl, pendl, maskh, pendh);
- 
--	atomic_inc(&irq_err_count);
--
- 	return -EINVAL;
- }
- 
+-	if (!(query_flags & AT_STATX_DONT_SYNC) &&
++	if (vnode->volume &&
++	    !(query_flags & AT_STATX_DONT_SYNC) &&
+ 	    !test_bit(AFS_VNODE_CB_PROMISED, &vnode->flags)) {
+ 		key = afs_request_key(vnode->volume->cell);
+ 		if (IS_ERR(key))
 -- 
 2.35.1
 

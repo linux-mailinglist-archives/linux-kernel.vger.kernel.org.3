@@ -2,183 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB41D55E0B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E00C955C6DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238509AbiF0Pd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
+        id S238727AbiF0Pdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238264AbiF0PdB (ORCPT
+        with ESMTP id S238365AbiF0PdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:33:01 -0400
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2CE1A072;
-        Mon, 27 Jun 2022 08:32:59 -0700 (PDT)
+        Mon, 27 Jun 2022 11:33:18 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F55913F08;
+        Mon, 27 Jun 2022 08:33:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
-  s=amazon201209; t=1656343980; x=1687879980;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version:subject;
-  bh=YclDPQ8xJyzX28733WQC4oZRwA3ZmY9Y4p4xJQQbjgQ=;
-  b=UqryxeHxyVdzIVK22zNg8KUTeZEmXNLiHVpRGcEHLdix8PXJh12AthLt
-   yHMZtAx1mCGIw484Z3FPBbdBlJJFD50npoMaGtN46gb2DlPTE4xsbiB1p
-   a1RFlT4xY8bcu56W///BVJ0vU5e8xLHPauPqxtEZwqjNy4J1YamvS8hkK
-   8=;
-X-IronPort-AV: E=Sophos;i="5.92,226,1650931200"; 
-   d="scan'208";a="205466353"
-Subject: RE: [PATCH] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves,
- if present
-Thread-Topic: [PATCH] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves,
- if present
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-b09d0114.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 27 Jun 2022 15:32:42 +0000
-Received: from EX13D32EUC003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-b09d0114.us-east-1.amazon.com (Postfix) with ESMTPS id D97A8816FA;
-        Mon, 27 Jun 2022 15:32:37 +0000 (UTC)
-Received: from EX13D32EUC003.ant.amazon.com (10.43.164.24) by
- EX13D32EUC003.ant.amazon.com (10.43.164.24) with Microsoft SMTP Server (TLS)
- id 15.0.1497.36; Mon, 27 Jun 2022 15:32:36 +0000
-Received: from EX13D32EUC003.ant.amazon.com ([10.43.164.24]) by
- EX13D32EUC003.ant.amazon.com ([10.43.164.24]) with mapi id 15.00.1497.036;
- Mon, 27 Jun 2022 15:32:36 +0000
-From:   "Durrant, Paul" <pdurrant@amazon.co.uk>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "Jim Mattson" <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Thread-Index: AQHYhhnGr94/Tz5Zr06wX+PVouePzq1bgNUAgAAEIQCAB+LOUA==
-Date:   Mon, 27 Jun 2022 15:32:36 +0000
-Message-ID: <0abf9f5de09e45ef9eb06b56bf16e3e6@EX13D32EUC003.ant.amazon.com>
-References: <20220622092202.15548-1-pdurrant@amazon.com>
- <YrMqtHzNSean+qkh@google.com>
- <834f41a88e9f49b6b72d9d3672d702e5@EX13D32EUC003.ant.amazon.com>
-In-Reply-To: <834f41a88e9f49b6b72d9d3672d702e5@EX13D32EUC003.ant.amazon.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.165.192]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1656343990; x=1687879990;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tbyIxpKpueAF0ZAPFJeYqVJyHPz52aBeX2V7v4Ze61c=;
+  b=CnyM4mTU43+4o15C99aQ6sl/+FZSQuw8eSlEGx4o3bF1Y7Nns/IxzEn6
+   +46vCDeQAKry+pyetGzsmK92uDRoDZN/mJR5sNHL7O3r70zbSVii4Y/Cv
+   z9QzzkR3A/gUdScOkkzpDrTKUmSP9kyX/3FjfvfHfv+Ism5M0ugVz9qkF
+   U=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Jun 2022 08:33:09 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 08:33:08 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 27 Jun 2022 08:33:08 -0700
+Received: from [10.110.113.167] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 27 Jun
+ 2022 08:33:07 -0700
+Message-ID: <9b197183-5306-bf19-0195-2dc1bb72c33b@quicinc.com>
+Date:   Mon, 27 Jun 2022 08:33:06 -0700
 MIME-Version: 1.0
-X-Spam-Status: No, score=-12.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1 2/3] drm/msm/dp: decoupling dp->id out of dp
+ controller_id at scxxxx_dp_cfg table
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>, <agross@kernel.org>,
+        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
+        <daniel@ffwll.ch>, <dianders@chromium.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <vkoul@kernel.org>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1656090912-18074-1-git-send-email-quic_khsieh@quicinc.com>
+ <66ff4642-f268-f5b0-7e28-b196368c508a@quicinc.com>
+ <5cf094cf-343a-82d7-91c4-1284683f9748@quicinc.com>
+ <CAA8EJprqq=vxXT2DmEWii_Ajx2UbkHRexPTT58xFcWkBa_D5hA@mail.gmail.com>
+ <26263c16-8cbc-ccca-6081-7eba14635d73@quicinc.com>
+ <CAA8EJpqEoXXA=eKGHRGuQ3VOHnmEShY8u_SMZ6WFWORCFhFcrw@mail.gmail.com>
+ <8445f93a-00f0-64af-5650-07f2bc487742@quicinc.com>
+ <CAA8EJpqB2KPyvFehK9WRGgiVnqvD24cz5BcHsw8a5PQ2Vs1oKA@mail.gmail.com>
+ <CAA8EJppZdyutyNBG+OFinickQoDxg0i4GwbaNQubo_LSRWNh4w@mail.gmail.com>
+ <1a2e7574-8f78-d48e-a189-020ffcd39f60@quicinc.com>
+ <CAE-0n52L1fvvpEH56+HD_UXuV61tMvhh8Qjp781bW9tTKRQymw@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n52L1fvvpEH56+HD_UXuV61tMvhh8Qjp781bW9tTKRQymw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-[snip]
-> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > index 00e23dc518e0..8b45f9975e45 100644
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -3123,6 +3123,7 @@ static int kvm_guest_time_update(struct kvm_vcp=
-u *v)
-> > >       if (vcpu->xen.vcpu_time_info_cache.active)
-> > >               kvm_setup_guest_pvclock(v, &vcpu->xen.vcpu_time_info_ca=
-che, 0);
-> > >       kvm_hv_setup_tsc_page(v->kvm, &vcpu->hv_clock);
-> > > +     kvm_xen_setup_tsc_info(v);
-> >
-> > This can be called inside this if statement, no?
-> >
-> >         if (unlikely(vcpu->hw_tsc_khz !=3D tgt_tsc_khz)) {
-> >
-> >         }
-> >
 
-I think it ought to be done whenever the shared copy of Xen's vcpu_info is =
-updated (it will always match on real Xen) so unconditionally calling it he=
-re seems reasonable.
+On 6/24/2022 6:15 PM, Stephen Boyd wrote:
+> Quoting Kuogee Hsieh (2022-06-24 18:02:50)
+>> On 6/24/2022 5:46 PM, Dmitry Baryshkov wrote:
+>>> On Sat, 25 Jun 2022 at 03:28, Dmitry Baryshkov
+>>> <dmitry.baryshkov@linaro.org> wrote:
+>>>> On Sat, 25 Jun 2022 at 03:23, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>>>>> On 6/24/2022 5:21 PM, Dmitry Baryshkov wrote:
+>>>>>> On Sat, 25 Jun 2022 at 03:19, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>>>>>>> How can I have eDP call dpu_encoder_init() before DP calls with
+>>>>>>> _dpu_kms_initialize_displayport()?
+>>>>>> Why do you want to do it? They are two different encoders.
+>>>>> eDP is primary display which in normal case should be bring up first if
+>>>>> DP is also presented.
+>>>> I do not like the concept of primary display. It is the user, who must
+>>>> decide which display is primary to him. I have seen people using just
+>>>> external monitors and ignoring built-in eDP completely.from
+>>>> Also, why does the bring up order matters here? What do you gain by
+>>>> bringing up eDP before the DP?
+>>> I should probably rephrase my question to be more clear. How does
+>>> changing the order of DP vs eDP bringup help you 'to fix screen
+>>> corruption'.
+>> it did fix the primary display correction issue if edp go first and i do
+>> not know the root cause yet.
+>>
+>> We are still investigating it.
+>>
+>> However I do think currently msm_dp_config sc7280_dp_cfg has issues need
+>> be addressed.
+>>
+> What issues exist with sc7280_dp_cfg? It looks correct to me.
 
-> > >       return 0;
-> > >  }
-> > >
-> > > diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-> > > index 610beba35907..a016ff85264d 100644
-> > > --- a/arch/x86/kvm/xen.c
-> > > +++ b/arch/x86/kvm/xen.c
-> > > @@ -10,6 +10,9 @@
-> > >  #include "xen.h"
-> > >  #include "hyperv.h"
-> > >  #include "lapic.h"
-> > > +#include "cpuid.h"
-> > > +
-> > > +#include <asm/xen/cpuid.h>
-> > >
-> > >  #include <linux/eventfd.h>
-> > >  #include <linux/kvm_host.h>
-> > > @@ -1855,3 +1858,41 @@ void kvm_xen_destroy_vm(struct kvm *kvm)
-> > >       if (kvm->arch.xen_hvm_config.msr)
-> > >               static_branch_slow_dec_deferred(&kvm_xen_enabled);
-> > >  }
-> > > +
-> > > +void kvm_xen_set_cpuid(struct kvm_vcpu *vcpu)
-> >
-> > This is a very, very misleading name.  It does not "set" anything.  Giv=
-en that
-> > this patch adds "set" and "setup", I expected the "set" to you know, se=
-t the CPUID
-> > leaves and the "setup" to prepar for that, not the other way around.
-> >
-> > If the leaves really do need to be cached, kvm_xen_after_set_cpuid() is=
- probably
-> > the least awful name.
-> >
 
-Ok I'll rename it kvm_xen_after_set_cpuid().
+If we are going to bring up a new chipset with edp as primary only, i am 
+not sure the below configuration will work?
 
-> > > +{
-> > > +     u32 base =3D 0;
-> > > +     u32 function;
-> > > +
-> > > +     for_each_possible_hypervisor_cpuid_base(function) {
-> > > +             struct kvm_cpuid_entry2 *entry =3D kvm_find_cpuid_entry=
-(vcpu, function, 0);
-> > > +
-> > > +             if (entry &&
-> > > +                 entry->ebx =3D=3D XEN_CPUID_SIGNATURE_EBX &&
-> > > +                 entry->ecx =3D=3D XEN_CPUID_SIGNATURE_ECX &&
-> > > +                 entry->edx =3D=3D XEN_CPUID_SIGNATURE_EDX) {
-> > > +                     base =3D function;
-> > > +                     break;
-> > > +             }
-> > > +     }
-> > > +     if (!base)
-> > > +             return;
-> > > +
-> > > +     function =3D base | XEN_CPUID_LEAF(3);
-> > > +     vcpu->arch.xen.tsc_info_1 =3D kvm_find_cpuid_entry(vcpu, functi=
-on, 1);
-> > > +     vcpu->arch.xen.tsc_info_2 =3D kvm_find_cpuid_entry(vcpu, functi=
-on, 2);
-> >
-> > Is it really necessary to cache the leave?  Guest CPUID isn't optimized=
-, but it's
-> > not _that_ slow, and unless I'm missing something updating the TSC freq=
-uency and
-> > scaling info should be uncommon, i.e. not performance critical.
-
-If we're updating the values in the leaves on every entry into the guest (a=
-s with calls to kvm_setup_guest_pvclock()) then I think the cached pointers=
- are worthwhile.
-
-  Paul
-
+> static const struct msm_dp_config sc7280_dp_cfg = {
+>          .descs = (const struct msm_dp_desc[]) {
+>                  [MSM_DP_CONTROLLER_1] = { .io_start = 0x0aea0000, .connector_type = DRM_MODE_CONNECTOR_eDP, .wide_bus_en = true },
+>          },
+>          .num_descs = 1,
+> };

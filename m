@@ -2,118 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED0055D3F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD57F55E30C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbiF0ONo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
+        id S236928AbiF0OO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236192AbiF0ONl (ORCPT
+        with ESMTP id S236877AbiF0OOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:13:41 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8958FAE79;
-        Mon, 27 Jun 2022 07:13:40 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso9632532pjk.0;
-        Mon, 27 Jun 2022 07:13:40 -0700 (PDT)
+        Mon, 27 Jun 2022 10:14:21 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D68213F2D
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:14:18 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id b26so882852wrc.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:14:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uXrsIcbQX9kiX4dGH6TZ9BISJlnoJsgnlX/GklfNetU=;
-        b=J1NJpjM/NInTPRzBm9VeTT2HkM+nGa8FmGa7PiZBcjJ22kEhWKy9px8G1bcA+mIljw
-         ODJtE9uC2NK6F3TEawN9JFEzWb7KBQdu9p3n0jFkJ24KKOG3NTirPeXyJ3pzEpZ5LgOo
-         bmmyS4E7vNx1bkSt834DKLFN6XQg1OTur3kucMxFe7An38rlEunyE1mkyE2BOy/sQuYK
-         Da+U4KRgqq3ucgMuMQYe3iKL7zmt1//hNzm+Ovx3KOS3XJhytIyoD/uKUhbTXI+uDrNG
-         u6GK6XIN4Wj+N/ZkaFnRSNTvuA6GfnwLUdpF62lSpoxNHcIVAynTujnszeoc5g9bsNvw
-         p2Mg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=fzRgLe9m2O60QsakGbQjRYT6Y0at8N6xntNn4PtH2sA=;
+        b=rS2K1O+/NsrN3tYcW0JAMAWEvt6Kd9yF8NX/xZe+b81YZyaLNrglwaAvGbYbT/9sIR
+         SmNoJOkd94Fsnzi+kwjhFayt8Hbal0A0ozXoZKouWFZhWyCwaJlURlS8wSy1kK6xsrEz
+         rJBbm9NpQXs4dN7egShMBlumK1iGVDF9bRyYDeMgMXGIdFzBE1QDk7JVGs13Jokg04Ru
+         nP39kgNr1J0Z3FebRgSe8xtRklnQ0oGntNE8aIV6l/SWct83wMAPmymJZeOYnSDezmsA
+         v3vmFKxtidbJG7q2P091YmqycVloNUH64OxYgwGEBYjUHuI4mosXBrXksb2Wa2YSBnGE
+         Zskg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uXrsIcbQX9kiX4dGH6TZ9BISJlnoJsgnlX/GklfNetU=;
-        b=oRRPXdGPahI/Oxs6H1TIS1Zno6lTIozlx/p9zaNeqyzvsNhIrinyFSLMOH60oNTrwz
-         ZZ0TepbDkzXd/BhHI5hjcQKUqi//blxl4ZLm7yUdUA28IV9Tg9hkjuC83Ap/XtCKhjPB
-         jlVAdjfbDVCrwtAwzxxLuJljU/3IbXX+JWv/KQC8jLQO4Jez0g//tRxxlANPd6tDWPDu
-         cUOhtAE4OEngbhvZxl1d6md10fDEm97dDurvR8DkRK52Y/mDxYeKzf6OtTWtiyleWZTy
-         /sfoXonUfUYdh6Y+GrV2k1EJ6pimUA6zf+ZqkJzYSvZnAdeulRT4BI21UqI3wCJOqTs6
-         6hVQ==
-X-Gm-Message-State: AJIora81TzYNtUZexSVnJwa8w2hG73rwyhtqvgurI+9wwuRXdbWbahs3
-        er8QDAMH27wsKv9C2TK3WFk=
-X-Google-Smtp-Source: AGRyM1si1PoMCw2NoE92GWgmSMrsBswIkr+8/TBVU13iRHkG1p0l0ljC4R0GCMvcyfHHLIzF+1N5ow==
-X-Received: by 2002:a17:90b:4c49:b0:1ec:e8a2:b5f0 with SMTP id np9-20020a17090b4c4900b001ece8a2b5f0mr20718959pjb.21.1656339219957;
-        Mon, 27 Jun 2022 07:13:39 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z9-20020a1709027e8900b0016b865ea2d6sm997876pla.82.2022.06.27.07.13.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 07:13:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e640e330-5318-e60e-d3e3-16d9bd7b289a@roeck-us.net>
-Date:   Mon, 27 Jun 2022 07:13:37 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=fzRgLe9m2O60QsakGbQjRYT6Y0at8N6xntNn4PtH2sA=;
+        b=Qnpnxb83QsglNHNW84kuqo/t1zqPVbZz35DcgBdoovlry7OLwFA/A4v2eL0RngYomH
+         cU2lK19kQDzKesH3EC3LiWNiKB7TriAa92whCEFXH50Q+xv0c9vnm7doLw/ym/mV3oyv
+         0qpzTYyWlZpAXF/qZs0k+kEHoOfzpkAX6RpERimq469t1DySzD1rsDtcFOfscokgVNq+
+         AVcRoxeLCaa19JggA+GPgpsCtqH01RP4whzoQ2Dp5dHnwYNz52N6UjbRwT/8hgYKz9ES
+         lIvrxaOXVlVv889G/nnU5drO4NM1VykzKZL2FFc0lSgXnYUg+Sp8/QMH4Vzec0nPO5Lp
+         n9xQ==
+X-Gm-Message-State: AJIora/MumCuTEZPQrjiiN5XjsCKZRbs+SqNwe3w3kmu5ejD5o3S7X+o
+        c6aeq2nXpOrlHYONt0f89LOE4Q==
+X-Google-Smtp-Source: AGRyM1tysibMVY1W8fJ2UJWIdLpfevMVr6nGvPZqcPjcZSbaSdql0n8PPX5Emq6JfIdmv+SyRqY26Q==
+X-Received: by 2002:a5d:584e:0:b0:21c:e4db:35e with SMTP id i14-20020a5d584e000000b0021ce4db035emr4279421wrf.192.1656339256659;
+        Mon, 27 Jun 2022 07:14:16 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id x11-20020adff0cb000000b0021b92171d28sm13048073wro.54.2022.06.27.07.14.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 07:14:15 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 15:14:13 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, ChiYuan Huang <cy_huang@richtek.com>
+Subject: Re: [PATCH v2 08/15] mfd: mt6370: Add Mediatek MT6370 support
+Message-ID: <Yrm7NTID16g8gM5t@google.com>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+ <20220613111146.25221-9-peterwu.pub@gmail.com>
+ <Yqph8jwHU8rPooJA@google.com>
+ <CABtFH5KLVQFYOBGZ--9+s4GrHXbsDao-yL-KCFwL3FD_kbNhjg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] watchdog: sp805_wdt: add arm cmsdk apb wdt support
-Content-Language: en-US
-To:     Bing Fan <hptsfb@gmail.com>, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1656037482-19505-1-git-send-email-hptsfb@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <1656037482-19505-1-git-send-email-hptsfb@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABtFH5KLVQFYOBGZ--9+s4GrHXbsDao-yL-KCFwL3FD_kbNhjg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/23/22 19:24, Bing Fan wrote:
-> From: Bing Fan <tombinfan@tencent.com>
-> 
-> Support arm CMSDK ip apb watchdog device.
-> Description details of this device can be found in the
-> document DDI0479D_m_class_processor_system_r1p1_trm.pdf
-> on the arm's document web. Which periphid is 0x001bb824.
-> The registers are basically the same as the 805, just a
-> few more: Periphid4/5/6/7 with offset 0xFD0/0xFD4/0xFD8/0xFDC.
-> For the register description of arm,sp805, please refer
-> to the document DDI0270-arm-sp805.pdf.
-> 
-> Signed-off-by: Bing Fan <tombinfan@tencent.com>
+On Sat, 18 Jun 2022, ChiaEn Wu wrote:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   drivers/watchdog/sp805_wdt.c | 5 +++++
->   1 file changed, 5 insertions(+)
+> Hi Lee,
 > 
-> diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
-> index f9479a3fe2a6..78ba36689eec 100644
-> --- a/drivers/watchdog/sp805_wdt.c
-> +++ b/drivers/watchdog/sp805_wdt.c
-> @@ -1,3 +1,4 @@
-> +// SPDX-License-Identifier: GPL-2.0+
->   /*
->    * drivers/char/watchdog/sp805-wdt.c
->    *
-> @@ -341,6 +342,10 @@ static const struct amba_id sp805_wdt_ids[] = {
->   		.id	= 0x00141805,
->   		.mask	= 0x00ffffff,
->   	},
-> +	{
-> +		.id     = 0x001bb824,
-> +		.mask   = 0x00ffffff,
-> +	},
->   	{ 0, 0 },
->   };
->   
+> Thanks for your helpful comments, we have some questions and replies below.
+> 
+> Lee Jones <lee.jones@linaro.org> 於 2022年6月16日 週四 清晨6:49寫道：
+> 
+> >
+> > On Mon, 13 Jun 2022, ChiaEn Wu wrote:
+> >
+> > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > >
+> > > Add Mediatek MT6370 MFD support.
+> > >
+> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > > ---
+> > >  drivers/mfd/Kconfig  |  13 ++
+> > >  drivers/mfd/Makefile |   1 +
+> > >  drivers/mfd/mt6370.c | 349 +++++++++++++++++++++++++++++++++++++++++++
+> > >  3 files changed, 363 insertions(+)
+> > >  create mode 100644 drivers/mfd/mt6370.c
+> > >
+> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > > index 3b59456f5545..d9a7524a3e0e 100644
+> > > --- a/drivers/mfd/Kconfig
+> > > +++ b/drivers/mfd/Kconfig
+> > > @@ -937,6 +937,19 @@ config MFD_MT6360
+> > >         PMIC part includes 2-channel BUCKs and 2-channel LDOs
+> > >         LDO part includes 4-channel LDOs
+> > >
+> > > +config MFD_MT6370
+> > > +     tristate "Mediatek MT6370 SubPMIC"
+> > > +     select MFD_CORE
+> > > +     select REGMAP_I2C
+> > > +     select REGMAP_IRQ
+> > > +     depends on I2C
+> > > +     help
+> > > +       Say Y here to enable MT6370 SubPMIC functional support.
+> > > +       It integrate single cell battery charger with adc monitoring, RGB
+> >
+> > s/integrates/consists of a/
+> >
+> > "ADC"
+> 
+> We will fine it in the next patch.
+> 
+> >
+> > > +       LEDs, dual channel flashlight, WLED backlight driver, display bias
+> >
+> > > +       voltage supply, one general purpose LDO, and cc logic
+> > > +       controller with USBPD commmunication capable.
+> >
+> > The last part makes no sense - "and is USBPD"?
+> 
+> If we modify this help text to
+> "one general purpose LDO, and the USB Type-C & PD controller complies
+> with the latest USB Type-C and PD standards",
+> did these modifications meet your expectations?
 
+"one general purpose LDO and a USB Type-C & PD controller that
+complies with the latest USB Type-C and PD standards"
+
+Better?
+
+> > >  config MFD_MT6397
+> > >       tristate "MediaTek MT6397 PMIC Support"
+> > >       select MFD_CORE
+> > > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> > > index 858cacf659d6..62b27125420e 100644
+> > > --- a/drivers/mfd/Makefile
+> > > +++ b/drivers/mfd/Makefile
+> > > @@ -242,6 +242,7 @@ obj-$(CONFIG_INTEL_SOC_PMIC_BXTWC)        += intel_soc_pmic_bxtwc.o
+> > >  obj-$(CONFIG_INTEL_SOC_PMIC_CHTWC)   += intel_soc_pmic_chtwc.o
+> > >  obj-$(CONFIG_INTEL_SOC_PMIC_CHTDC_TI)        += intel_soc_pmic_chtdc_ti.o
+> > >  obj-$(CONFIG_MFD_MT6360)     += mt6360-core.o
+> > > +obj-$(CONFIG_MFD_MT6370)     += mt6370.o
+> > >  mt6397-objs                  := mt6397-core.o mt6397-irq.o mt6358-irq.o
+> > >  obj-$(CONFIG_MFD_MT6397)     += mt6397.o
+> > >  obj-$(CONFIG_INTEL_SOC_PMIC_MRFLD)   += intel_soc_pmic_mrfld.o
+> > > diff --git a/drivers/mfd/mt6370.c b/drivers/mfd/mt6370.c
+> > > new file mode 100644
+> > > index 000000000000..6af9f73c9c0c
+> > > --- /dev/null
+> > > +++ b/drivers/mfd/mt6370.c
+> > > @@ -0,0 +1,349 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +
+> > > +#include <linux/bits.h>
+> > > +#include <linux/i2c.h>
+> > > +#include <linux/interrupt.h>
+> > > +#include <linux/kernel.h>
+> > > +#include <linux/mfd/core.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/regmap.h>
+> > > +
+> > > +enum {
+> > > +     MT6370_USBC_I2C = 0,
+> > > +     MT6370_PMU_I2C,
+> > > +     MT6370_MAX_I2C
+> > > +};
+> > > +
+> > > +#define MT6370_REG_DEV_INFO  0x100
+> > > +#define MT6370_REG_CHG_IRQ1  0x1C0
+> > > +#define MT6370_REG_CHG_MASK1 0x1E0
+> > > +
+> > > +#define MT6370_VENID_MASK    GENMASK(7, 4)
+> > > +
+> > > +#define MT6370_NUM_IRQREGS   16
+> > > +#define MT6370_USBC_I2CADDR  0x4E
+> > > +#define MT6370_REG_ADDRLEN   2
+> > > +#define MT6370_REG_MAXADDR   0x1FF
+> > > +
+> > > +/* IRQ definitions */
+> > > +#define MT6370_IRQ_DIRCHGON          0
+> > > +#define MT6370_IRQ_CHG_TREG          4
+> > > +#define MT6370_IRQ_CHG_AICR          5
+> > > +#define MT6370_IRQ_CHG_MIVR          6
+> > > +#define MT6370_IRQ_PWR_RDY           7
+> > > +#define MT6370_IRQ_FL_CHG_VINOVP     11
+> > > +#define MT6370_IRQ_CHG_VSYSUV                12
+> > > +#define MT6370_IRQ_CHG_VSYSOV                13
+> > > +#define MT6370_IRQ_CHG_VBATOV                14
+> > > +#define MT6370_IRQ_CHG_VINOVPCHG     15
+> > > +#define MT6370_IRQ_TS_BAT_COLD               20
+> > > +#define MT6370_IRQ_TS_BAT_COOL               21
+> > > +#define MT6370_IRQ_TS_BAT_WARM               22
+> > > +#define MT6370_IRQ_TS_BAT_HOT                23
+> > > +#define MT6370_IRQ_TS_STATC          24
+> > > +#define MT6370_IRQ_CHG_FAULT         25
+> > > +#define MT6370_IRQ_CHG_STATC         26
+> > > +#define MT6370_IRQ_CHG_TMR           27
+> > > +#define MT6370_IRQ_CHG_BATABS                28
+> > > +#define MT6370_IRQ_CHG_ADPBAD                29
+> > > +#define MT6370_IRQ_CHG_RVP           30
+> > > +#define MT6370_IRQ_TSHUTDOWN         31
+> > > +#define MT6370_IRQ_CHG_IINMEAS               32
+> > > +#define MT6370_IRQ_CHG_ICCMEAS               33
+> > > +#define MT6370_IRQ_CHGDET_DONE               34
+> > > +#define MT6370_IRQ_WDTMR             35
+> > > +#define MT6370_IRQ_SSFINISH          36
+> > > +#define MT6370_IRQ_CHG_RECHG         37
+> > > +#define MT6370_IRQ_CHG_TERM          38
+> > > +#define MT6370_IRQ_CHG_IEOC          39
+> > > +#define MT6370_IRQ_ADC_DONE          40
+> > > +#define MT6370_IRQ_PUMPX_DONE                41
+> > > +#define MT6370_IRQ_BST_BATUV         45
+> > > +#define MT6370_IRQ_BST_MIDOV         46
+> > > +#define MT6370_IRQ_BST_OLP           47
+> > > +#define MT6370_IRQ_ATTACH            48
+> > > +#define MT6370_IRQ_DETACH            49
+> > > +#define MT6370_IRQ_HVDCP_STPDONE     51
+> > > +#define MT6370_IRQ_HVDCP_VBUSDET_DONE        52
+> > > +#define MT6370_IRQ_HVDCP_DET         53
+> > > +#define MT6370_IRQ_CHGDET            54
+> > > +#define MT6370_IRQ_DCDT                      55
+> > > +#define MT6370_IRQ_DIRCHG_VGOK               59
+> > > +#define MT6370_IRQ_DIRCHG_WDTMR              60
+> > > +#define MT6370_IRQ_DIRCHG_UC         61
+> > > +#define MT6370_IRQ_DIRCHG_OC         62
+> > > +#define MT6370_IRQ_DIRCHG_OV         63
+> > > +#define MT6370_IRQ_OVPCTRL_SWON              67
+> > > +#define MT6370_IRQ_OVPCTRL_UVP_D     68
+> > > +#define MT6370_IRQ_OVPCTRL_UVP               69
+> > > +#define MT6370_IRQ_OVPCTRL_OVP_D     70
+> > > +#define MT6370_IRQ_OVPCTRL_OVP               71
+> > > +#define MT6370_IRQ_FLED_STRBPIN              72
+> > > +#define MT6370_IRQ_FLED_TORPIN               73
+> > > +#define MT6370_IRQ_FLED_TX           74
+> > > +#define MT6370_IRQ_FLED_LVF          75
+> > > +#define MT6370_IRQ_FLED2_SHORT               78
+> > > +#define MT6370_IRQ_FLED1_SHORT               79
+> > > +#define MT6370_IRQ_FLED2_STRB                80
+> > > +#define MT6370_IRQ_FLED1_STRB                81
+> > > +#define mT6370_IRQ_FLED2_STRB_TO     82
+> > > +#define MT6370_IRQ_FLED1_STRB_TO     83
+> > > +#define MT6370_IRQ_FLED2_TOR         84
+> > > +#define MT6370_IRQ_FLED1_TOR         85
+> > > +#define MT6370_IRQ_OTP                       93
+> > > +#define MT6370_IRQ_VDDA_OVP          94
+> > > +#define MT6370_IRQ_VDDA_UV           95
+> > > +#define MT6370_IRQ_LDO_OC            103
+> > > +#define MT6370_IRQ_BLED_OCP          118
+> > > +#define MT6370_IRQ_BLED_OVP          119
+> > > +#define MT6370_IRQ_DSV_VNEG_OCP              123
+> > > +#define MT6370_IRQ_DSV_VPOS_OCP              124
+> > > +#define MT6370_IRQ_DSV_BST_OCP               125
+> > > +#define MT6370_IRQ_DSV_VNEG_SCP              126
+> > > +#define MT6370_IRQ_DSV_VPOS_SCP              127
+> > > +
+> > > +struct mt6370_info {
+> > > +     struct i2c_client *i2c[MT6370_MAX_I2C];
+> > > +     struct device *dev;
+> > > +     struct regmap *regmap;
+> > > +     struct regmap_irq_chip_data *irq_data;
+> > > +};
+> >
+> > Can we shove all of the above into a header file?
+> 
+> Well... In Patch v1, we put these "#define IRQ" into
+> "include/dt-bindings/mfd/mediatek,mt6370.h".
+> But the reviewer of DT files hoped us to remove this header file, we
+> put these "#define IRQ" in this .c file.
+> Shall we leave them here or put them into the header file in
+> "driver/power/supply/mt6370-charger.h"?
+
+Where are they used?
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

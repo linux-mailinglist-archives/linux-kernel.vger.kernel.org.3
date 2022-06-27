@@ -2,200 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510E355CA47
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAA755D56F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241021AbiF0VNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 17:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        id S241046AbiF0VPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 17:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234920AbiF0VNU (ORCPT
+        with ESMTP id S234920AbiF0VP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 17:13:20 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBBD167C7;
-        Mon, 27 Jun 2022 14:13:18 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id by38so12468809ljb.10;
-        Mon, 27 Jun 2022 14:13:18 -0700 (PDT)
+        Mon, 27 Jun 2022 17:15:26 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2092.outbound.protection.outlook.com [40.107.220.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898B2167C7;
+        Mon, 27 Jun 2022 14:15:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HsV27MPMIQMpWj2RjTduTl0PKMdybG40hemOOhX1gnik3BTUnz6bSGHFP14vN4nSHe8JPArYap5l9SSJdFGZVN6Hv55Hebm/pSfcl7EsgJGMPrnFx1QIplW9vd65UDtsnjZm1VLF+BCKUJjP5ICjFWWTgtuOzmL+zZ6MFxiatgVteShhueTFNlNgkrmMQ3ZX3g5y/UEA+egMGPFIP5XennhYoHKznO1agGZR9CheaaLgFZVzWfuTektJZWydn3SxmDQpHzikYQu2DHuyie7+c1+M3HLmz7+ItwMmmXtc5fI5o/nM9P3wV0zEaJvkvdIEtDLyfVEJ4qC7cq1bzctzJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V6aId0008up4bS+7T/y4Rs6MgnHWl9sg3YGUC3zSfNY=;
+ b=CN4syDQVdH1dsYKbvWQEpS/1vXBKBzOw9tIuom7q4qUGGhrVOgck5DLqKoXdSSn1Z9PY5+2tUo2xEWY4/z1YH/wgpkyGYQAycGIegzFFNqkh7ZLC6/9ZBx+9Q0iGs9vHiddR6H5ap33vKT+kQ381goa/mfhvNp/x5BoofS6Avv8DdWrNAvu06kO23yS8l4SQFFSU9npW28nl5c11LPtZHJe4F1ATnadFCNfjPEPNudhDLoLsSiEdbtSl4YB5r2U3h9MssPqZJoKbEIL0Eto3KIX1vky8CNx0l69XM3xEMIAUk4SF1WjP3zPOef2WkVPM+vDNmkwFT+gfOwWQByiEHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Apd1Cl8iWlr7VPj1iuOe666SC1Q2pQo9qEBUCr9vf6Q=;
-        b=ilyEOtv07N3ArdjBB7bMKwAqjb/e0wlxydgdur1zOwDRqzH4IPqX2FlQxVaGAXw6Kc
-         Gc0VmznO21rzcUs44XvprgCJ41kZL5S9X1gx6kQ+guwTI6uiSc4zItEWOnsDW3kNAVlF
-         sfGw15jYmTuWW1FxW/Lb57dg0O1NF3p/fPa5o15TUnzZIQmB98u2AvQRL0iesgljp0tc
-         xc9//5AKa4Iw3dQz5Ksx+KmaP7act61c7ia75qFkgn5dlsfLCparb572EaPCLMdTHnjX
-         0Dp5EEprtNhtw/ZXAV6oYcWZi6HDJptcetDIzhKexpPO7ZBBmv8UMK0X2PqLjPdeMC7b
-         JSUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Apd1Cl8iWlr7VPj1iuOe666SC1Q2pQo9qEBUCr9vf6Q=;
-        b=mejYong5MDR9uk8cJkLhT9piKk/avBZg1NnjCyyJLI1w8IqYqtuZXdmFKTGpFnUE9L
-         6wpzwHvuQHobi2lKX5psMS5rd9sqwdikDtaVC4mzhRPMYGVpz/mBwH5xunDxZ7mJevXt
-         31OXPmaOD+zfRIuYsupecxqirhsSe8TYDzWpqekcg3Ehr5Lab8uwtELugCNaph06LKRn
-         XmNFQLDuG2xa3HjSTN5dwwPYFaVhMnpv3o/EGJ5hO/uGyaEoNZn2vB1GZfXWBvNx0hQC
-         L0c2vea+rNYYBe93efkQ03+VhxG0LraqvfPMk2XP68GnXCSvSzpgX0D7WFW8aU+ikot2
-         3MUQ==
-X-Gm-Message-State: AJIora9cx/8Rx4rvJkmOdWvHW2YfW1998uzcAwHZCZpoIMfuX6CiOWoQ
-        tLyU9mtRRpDfN6WLf3V4g6M=
-X-Google-Smtp-Source: AGRyM1t9VxFwTJAlhP264dX7IvF0c94LGOWuU36vJO57G/WRfCPD7iXEUNRYkA0yEtu/rvZ1Rje57Q==
-X-Received: by 2002:a2e:9191:0:b0:25a:8858:f60d with SMTP id f17-20020a2e9191000000b0025a8858f60dmr7495670ljg.423.1656364397334;
-        Mon, 27 Jun 2022 14:13:17 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id z9-20020a2eb529000000b0025bc79181b4sm358400ljm.36.2022.06.27.14.13.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 14:13:16 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 00:13:14 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Heng Sia <jee.heng.sia@intel.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 06/16] dt-bindings: timer: add Canaan k210 to Synopsys
- DesignWare timer
-Message-ID: <20220627211314.dc2hempelyl5ayjg@mobilestation>
-References: <20220627194003.2395484-1-mail@conchuod.ie>
- <20220627194003.2395484-7-mail@conchuod.ie>
-MIME-Version: 1.0
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=V6aId0008up4bS+7T/y4Rs6MgnHWl9sg3YGUC3zSfNY=;
+ b=cnuUZPc6o7xCxmY8ZYpKhzJmxD7GrJ4YJrBx1tUix4ekpZfnxrUy9ajSpXqEw2hAWNWQ8PvygwH/EJjXENCe57MYk9hw5cNAxMM589JXRh0ze7NImkA8J0jMaTgHSOkyUai0UBPBg2wUHp2hjxBR0ysKb/NY+X3tlXL5+/uhm+o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from MWHPR01MB2638.prod.exchangelabs.com (2603:10b6:300:fe::18) by
+ BYAPR01MB4584.prod.exchangelabs.com (2603:10b6:a03:97::25) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5373.15; Mon, 27 Jun 2022 21:15:19 +0000
+Received: from MWHPR01MB2638.prod.exchangelabs.com
+ ([fe80::e1e5:b43e:c774:40d2]) by MWHPR01MB2638.prod.exchangelabs.com
+ ([fe80::e1e5:b43e:c774:40d2%7]) with mapi id 15.20.5373.016; Mon, 27 Jun 2022
+ 21:15:19 +0000
+Date:   Mon, 27 Jun 2022 14:15:17 -0700
+From:   Darren Hart <darren@os.amperecomputing.com>
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Doug Rady <dcrady@os.amperecomputing.com>
+Subject: Re: [PATCH] ACPI/APEI: Better fix to avoid spamming the console with
+ old error logs
+Message-ID: <Yrod5bc5JCz03wH3@fedora>
+References: <YqpX9npa/wR7mafR@agluck-desk3.sc.intel.com>
+ <20220622170906.33759-1-tony.luck@intel.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220627194003.2395484-7-mail@conchuod.ie>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220622170906.33759-1-tony.luck@intel.com>
+X-ClientProxiedBy: MW3PR05CA0026.namprd05.prod.outlook.com
+ (2603:10b6:303:2b::31) To MWHPR01MB2638.prod.exchangelabs.com
+ (2603:10b6:300:fe::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b791bdde-27c6-4c2f-33ca-08da5882231b
+X-MS-TrafficTypeDiagnostic: BYAPR01MB4584:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2JrAuZhGoJ1Bb5hmbjBvDOhhhBE3Zluwln+LYR3WciY+IBz24ZkCTXTEC+Cwx8IUnXuY1XqH2D3rM5WaFBpiILM0SYbqr6RK60ea7/8VHpPTPi/WnK5WCje/Vzs3olIOUuuGoRU78qHMLqfQU6RammuHUtHFZ1SqcB/d/vd++eGIqSGXyL3jPQ0r6zuv+UyYTzQPNezfwGY3r0WiSYRQX/UVahlkGM2OFuOsXTZwTIyUEo205G38H5MROIr/inHq8hvzGjuwRrQ3TJ67A6hRuJEVYVUAk9PzpJz3eR7KLvdLGsZafIxs6DB7Ha3Weg2uV3XovZtDIgYa5uOZylFWfb990mifEkYjwOE7FeAEq/cyZ/mKSJUu3Ouaj/34N2CfXq2FK/kx3c3xvF/CQuB4bYt7uxvtuRnNmJaxR43CkakIzmd9s0hAa/FsGUoMqZVOmYp/yg9cQ35Cxs0CN9u0/kcCSD788EaFHg46knLlPOIKnY/vZ/Xoek1l2JdyPIWRJL2fZeDXc82zIXIACzZk3kJ/GIeP5NhAB2121MUYHUyBmudSZWho5RA1IRlqVK+dop1T5BQihU7T/TN+2HoDjWEs9ZEeAW0luAsisUXia2TTHtCifl6CDDxCxdZ/+JttSBo94+Oskk4q97ErjUardd3FxXh1d7U8c7pZPSR9J4dwfgSS+0uuwn8+AzwKJsXUeev5GVV/VYWsRdrXqcC0m6p0+ujSeUE0H9zO397XmIS76tDxeKQxbV2SxDZSzbMLAP0fFSiWyYB44qK8pYxPyCi270n5+VTo4CA7KqA5ETo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR01MB2638.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(396003)(366004)(376002)(39850400004)(136003)(346002)(6486002)(478600001)(4326008)(107886003)(6512007)(86362001)(66556008)(38350700002)(6916009)(41300700001)(26005)(54906003)(6506007)(9686003)(66946007)(2906002)(52116002)(33716001)(316002)(8676002)(5660300002)(4744005)(66476007)(8936002)(38100700002)(83380400001)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hIXyUOADtlzERqp131muq9vb/s2Cx9OfCy7lxC2Fxri+szazetHQ7uHGfAsj?=
+ =?us-ascii?Q?GZQjSytYX5gFQex9dVyckELf/t61M4bva6W2YwQX4GNdsvzkrm9tqaagQqoZ?=
+ =?us-ascii?Q?q1jaktBKnWXhyYQ2OAAXAVmb8HBpaeQu1Hbo5pT60ptRKit6BPePS9WwdC3V?=
+ =?us-ascii?Q?2BabmqdRqjwIXW29spm5fTBsuf+mAlsGkQVVRB+fj8RJLXt1MYx5e26mv5bK?=
+ =?us-ascii?Q?TtAQVeYwPEjAWS41ijvXd1XPxeHWkZdTrX7lCywL4q8eAj0/+h4fl7/K9Znj?=
+ =?us-ascii?Q?U0vHZAK5laHizTZbNp4zYivcnyuyWI3IlpXC4wLLHAkRY3cNFsxu5rv3+FUh?=
+ =?us-ascii?Q?rwobXqpRJG4qnLsuFwfzwCWQsI3ckM8uTU+vTc35zrWiPhdY5USF6dPPgpRQ?=
+ =?us-ascii?Q?sMo40p9Dt6y+ki6lPcQFPqTlyA4+ndyHgCppIu3tBs8eR1ze2I96ZVwy7r28?=
+ =?us-ascii?Q?siQRJ0AvERbzJpFfW7vGm3CKxvkP5aX+7JJepqYGq1kBTc7f25ZC2+zppGMl?=
+ =?us-ascii?Q?441kJE0djUfiL6uZtBUWgLo21X0leIF76v9rBd9XxNP/5jnzAJNKOZK/IQEK?=
+ =?us-ascii?Q?SBS+witttUdG2mSBkaCMlTMXNDksONbBk9lo8aPXqlQrrGt8hvzzuMkYV5Xa?=
+ =?us-ascii?Q?8gFaB3Iam5PC8qaT8IQG82CSZ5uKrGvfUJUVVq1tPElVPLYWORVlzDKfQEBx?=
+ =?us-ascii?Q?VL+a8HxBKmG1a1LVPf2Jdf3WQm7dT+iplvVRxA/SBvwlYDRcIbAQJgJpHr7Z?=
+ =?us-ascii?Q?Bn3lJ6a0OHHz2zCOB1yR+xaM9XlpC3dKR2a+z5NZFguOBcLpJmInjqznvQsB?=
+ =?us-ascii?Q?tQ1F/+LWGsM5Eruewv7y5eIpxkR04ZmAZCDYlWDPRRnPvLsu0EwbzijMQxgU?=
+ =?us-ascii?Q?o2x3SuU+9WTofd3V/kediDfy5XIqe54XIgOOOl3w7QEmjS6TIle3X9RgVKZD?=
+ =?us-ascii?Q?dvr6YpKv4Cy88yjN/Iq4OeZ3lt9yt5whP+8GwmpOAZLP4Na6AjB5ElhNw19c?=
+ =?us-ascii?Q?HEOmBg899yXimfGxvczvTB9Ra0pe1LoQeBlX7bPmvu8jK3hZAfOT36ZkSkqk?=
+ =?us-ascii?Q?w98iug4ZVCo+elprWerTQva+J6pfGTozUqdqA+IJEtHrLRnakp1QXoj+ridt?=
+ =?us-ascii?Q?QbUxZa0ELZTDHK1ZQ2bm5EKjRt7WAHvsg9GVW+69eqY4THivirsUQZUd5r/v?=
+ =?us-ascii?Q?lHLa7Enk946DrnVoDJnMkvQtcFg+goKuWIfscuqjXHx4dSna9oGID6Z9USS6?=
+ =?us-ascii?Q?jlL+NCQYBGb6cBdODVgmhHxtM/rLR5ohWvir4OgsJlJbaUJUPy7oYnW7ReFi?=
+ =?us-ascii?Q?xdHGwIDkoVQA2/yCPaWNANVJsztZTBfz+wvIKaTOF4F9HJaoIPj+Iek0iJfV?=
+ =?us-ascii?Q?ocSGwyLTrgjt4xmm3nYvTA6/ncGkq6P0Ipnn9nZxmmCnrU+MGOZIhmzZakrP?=
+ =?us-ascii?Q?l92WWug5avGDUh//c12CyR4ubhEgszbDG3jYU2GhL4WkL+b11EP1LQp6bUt1?=
+ =?us-ascii?Q?ybtwzBihfxjLjbqZtjUygK3+Zbw9nnmE25n7y1pIVm7ggSwNzeehsoh+AgdK?=
+ =?us-ascii?Q?iDUHO0dGs6SCQi4u91RwVjHbULulALavXx8hgdqRazJ1ZJpHNVvVd+3ees+o?=
+ =?us-ascii?Q?+8Mrz4fRzmZxpaDxU3eST2o=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b791bdde-27c6-4c2f-33ca-08da5882231b
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR01MB2638.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2022 21:15:18.8230
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hy2wEQptShxLI8dQADu6Ik4uu9Rsa3dGVxMXNDp2Mi0uGZTQN63Ko+ftecUo87kSL17nvgbNvWwHQeFoo4obGYO0jboVIE7TADfW0B5u/aftMvhPAToNdE4G3ttX3GAU
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB4584
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 08:39:54PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Wed, Jun 22, 2022 at 10:09:06AM -0700, Tony Luck wrote:
+> The fix in commit 3f8dec116210 ("ACPI/APEI: Limit printable size of BERT
+> table data") does not work as intended on systems where the BIOS has a
+> fixed size block of memory for the BERT table, relying on s/w to quit
+> when it finds a record with estatus->block_status == 0. On these systems
+> all errors are suppressed because the check:
 > 
-> The Canaan k210 apparently has a Sysnopsys Designware timer but
-> according to the documentation & devicetree it has 2 interrupts rather
-> than the standard one. Add a custom compatible that supports the 2
-> interrupt configuration and falls back to the standard binding (which
-> is currently the one in use in the devicetree entry).
+> 	if (region_len < ACPI_BERT_PRINT_MAX_LEN)
 > 
-
-> Link: https://canaan-creative.com/wp-content/uploads/2020/03/kendryte_standalone_programming_guide_20190311144158_en.pdf #Page 58
-
-Firstly, it's page 51 in the framework of the document pages
-enumeration.
-
-Judging by the comment in the document above and what the HW reference
-manual says regarding the IRQ signals, what you really have on K210 is
-the DW APB Timer IP-cores each configured with two embedded timers.
-It's done by the IP-core synthesize parameter NUM_TIMERS={1..8}, which
-in your case equals to 2. A similar situation is on our SoC and, for
-instance, here:
-
-arch/arm/boot/dts/berlin2q.dtsi
-arch/arm/boot/dts/berlin2.dtsi
-arch/arm/boot/dts/berlin2cd.dtsi
-(Though the Berlin2 APB Timer have been configured with 8 timers.)
-
-So the correct modification would be:
-1. Split up the nodes into two ones with one IRQ per each node.
-2. Make sure I was right by testing the new dts out.
-3. Update the DT-node only and leave the DT-bindings as is.
-
--Sergey
-
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../bindings/timer/snps,dw-apb-timer.yaml     | 28 +++++++++++++++----
->  1 file changed, 22 insertions(+), 6 deletions(-)
+> always fails.
 > 
-> diff --git a/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml b/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-> index d33c9205a909..9a76acc7a66f 100644
-> --- a/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-> +++ b/Documentation/devicetree/bindings/timer/snps,dw-apb-timer.yaml
-> @@ -12,6 +12,9 @@ maintainers:
->  properties:
->    compatible:
->      oneOf:
-> +      - items:
-> +          - const: canaan,k210-apb-timer
-> +          - const: snps,dw-apb-timer
->        - const: snps,dw-apb-timer
->        - enum:
->            - snps,dw-apb-timer-sp
-> @@ -21,9 +24,6 @@ properties:
->    reg:
->      maxItems: 1
->  
-> -  interrupts:
-> -    maxItems: 1
-> -
->    resets:
->      maxItems: 1
->  
-> @@ -41,7 +41,23 @@ properties:
->  
->    clock-frequency: true
->  
-> -additionalProperties: false
-> +unevaluatedProperties: false
-> +
-> +if:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: canaan,k210-apb-timer
-> +
-> +then:
-> +  properties:
-> +    interrupts:
-> +      maxItems: 2
-> +
-> +else:
-> +  properties:
-> +    interrupts:
-> +      maxItems: 1
->  
->  required:
->    - compatible
-> @@ -60,8 +76,8 @@ oneOf:
->  examples:
->    - |
->      timer@ffe00000 {
-> -      compatible = "snps,dw-apb-timer";
-> -      interrupts = <0 170 4>;
-> +      compatible = "canaan,k210-apb-timer", "snps,dw-apb-timer";
-> +      interrupts = <0 170 4>, <0 170 4>;
->        reg = <0xffe00000 0x1000>;
->        clocks = <&timer_clk>, <&timer_pclk>;
->        clock-names = "timer", "pclk";
-> -- 
-> 2.36.1
-> 
+> New scheme skips individual CPER records that are too large, and also
+> limits the total number of records that will be printed to 5.
+
+Apologies for the delay.
+
+This seems like a reasonable approach. Working to confirm new behavior on Ampere
+Altra systems (specifically how region_len and estatus_len are related).
+
+-- 
+Darren Hart
+Ampere Computing / OS and Kernel

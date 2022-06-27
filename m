@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B730555CB12
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2215D55D732
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239558AbiF0Qhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
+        id S237826AbiF0Qi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239532AbiF0Qh0 (ORCPT
+        with ESMTP id S239250AbiF0QiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:37:26 -0400
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D56120AA;
-        Mon, 27 Jun 2022 09:37:24 -0700 (PDT)
-Received: by mail-pj1-f54.google.com with SMTP id i8-20020a17090aee8800b001ecc929d14dso10555760pjz.0;
-        Mon, 27 Jun 2022 09:37:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=h+CBkZaCUAPsWCF3WoXppHNKCyy0dZJN6jYn++00T3g=;
-        b=7p1fFtmxjpgpdCxfjBHM1/VvTSG6Lpy9043NJpMYFZvwJzsJKlyeMseOTDj9+yFtBO
-         XP8VxNnsyciE6/OHjDc3RAd81A9hgwmtxesSC4opzbmEV9lJmPwSHWxvyNXSK8/9ntIv
-         8T15ZK1PnGHKIaW48WErH/47wJRY8itJXSxsDCC1VDpHcuS3ovEuvnO/i+7dlclnAa5k
-         D9W2ds7N4JRSTbOgdxCjCgW9rPEgI7ew+a7pooShyhtFixgNmJrVOCjR27Iha1SUGGXR
-         xJv+HfCOdoYqcBrLj1lJl5qEnlSY1TVx9L53ibCszzCShfZYqJ6Xc2B8x/FdAqZt/9K1
-         4CFA==
-X-Gm-Message-State: AJIora98faboZt6EoG9xTun9oAE15ZN3Zn5yWNpmiQ9BQ+7BscbWGnxi
-        FfvNNhEUr+B0DwEUrDoA/PE=
-X-Google-Smtp-Source: AGRyM1uxX09PPBW2F2Ve5hEmUYge6i2EYx09NheABWO/DbMTHVZ8M4EiHWU/Ay5mZjKCh3PMVRT2OQ==
-X-Received: by 2002:a17:902:d4c8:b0:16a:480b:b79c with SMTP id o8-20020a170902d4c800b0016a480bb79cmr235609plg.15.1656347843352;
-        Mon, 27 Jun 2022 09:37:23 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:ebc3:3a94:fe74:44f0? ([2620:15c:211:201:ebc3:3a94:fe74:44f0])
-        by smtp.gmail.com with ESMTPSA id v19-20020aa78093000000b0051b693baadcsm7559184pff.205.2022.06.27.09.37.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 09:37:22 -0700 (PDT)
-Message-ID: <ed7e268e-94c5-38b1-286d-e2cb10412334@acm.org>
-Date:   Mon, 27 Jun 2022 09:37:21 -0700
+        Mon, 27 Jun 2022 12:38:25 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC979B858;
+        Mon, 27 Jun 2022 09:38:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1656347901;
+        bh=yd22nbeWjoHI5mPQLuBmGHFqp7xWncZwRwI9JVbyqGE=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=b8tQbookbrnDkzUPpy1yCTH+YHcnv3PTTUgcNB62ISoRi13YXVlJSJFYcLI/J6BSQ
+         /YL9OfgL/SX8rI2BrrzpZR2tx2v7yN1yVBdRpTg+EKxT5Osn0G/n6pPVtKNTRFeQF0
+         anmOe2Z+MkqEEKkDu9ec0BCsN/R9weUS+maBhD58=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.34.201]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MulqD-1noL2E0Voh-00rrdd; Mon, 27
+ Jun 2022 18:38:21 +0200
+Message-ID: <49e7b2de-3fac-70f3-5607-a0c511b13fd6@gmx.de>
+Date:   Mon, 27 Jun 2022 18:38:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: use-after-free in srpt_enable_tpg()
-Content-Language: en-US
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <17649b9c-7e42-1625-8bc9-8ad333ab771c@fujitsu.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <17649b9c-7e42-1625-8bc9-8ad333ab771c@fujitsu.com>
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 5.18 000/181] 5.18.8-rc1 review
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:qAzEVzOlHfMBpYVB8i8dviaOgdIQGYytRRtrHnHuYC1Yb6F1HUH
+ tgK56CDqMMtiVoIe85p4Muwi/kolyUBnlL8NWLMp/DCuVoI+84eP18sRiZK06brgg069Z7g
+ hq+yb0e1LfWXvOcoBGl3MOh8yOxx6ifGxeNOSc33OMQDB0ooOLJDYb+ZSLIhMsu5LluIMCJ
+ wE1VDm0/JjSmgViI4z7dA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YtcChZPsR04=:ntYZcw5nFwRHwnwVlAoUF+
+ XoDBv2QJFMzizlOx+1pQ3QqMDTk5k+XmPVDxcUpiVEzh6W93T97HzPHmTH3GFCT3jf+/uv3cO
+ r7qxG42gmVIq/cxLYr6tJz6beA7UL83ehanStm8n/SpcBtgH4ptnN3WF06FVRaABGek2iCjHU
+ NVF2rpJAq3CFOjie7h13TBPu8fZu5QjrWmW1DofHZpIwrPdJ8zpABEL3KLf52QCE6MaHukPQ4
+ +lFpavcT6l0G7R1jraS3uxSrepbz392WrzDLhEF0xeuVeqK/vJnjVIqlXUpg1RKqxtn5jfmnB
+ eIx6lsxrqFsPo18De3EzBS0aa3bTFcmYgS5JOo297kMbJTCbC+VklpbQaqP7euGaazq839ipW
+ uRRPXUVZEIeT4Ec0dkjzRm96T3oJqfG57AwrfwtqMUirzus95asLlNQNpWlQ62US15satmL2P
+ l/y1898LtniJATMkYqltLZISh/8fCyjwUguu6xIizIn3214vjfwVkd8Nys5H8U8x0mc7JCFMI
+ gC+hEojgNcjK6yaGI/a8EByA9dUElbtIMNk6+VPNP6eyQLsZdp1C6SyPofawZGWH04Nsnn5NA
+ MoFLdmOvBxSe5U1r5MCaJGV2cMGRCu2ZQt4ZKUuaTp8EnbfIg8HMHctNKoVyzZopbL1R2a1F8
+ Slp0KsoIOV856FF9ijYguUQtEsLiFfpjHdBvFkf2z+SRfoXfa72MNmEOHCMEeD538esSVK2wj
+ Omswd9Onqb60Vt108o4OiYHnAw1yHTVSBy16Rdw74RIfTe4nPoad00NgGlPhktLEzxjyyOR3+
+ M7XXhd7fthoY1TLgf2Bn3vBfaqUoqgC2ZSj8c55cBAHnKQBTzbJ8jzAVAzjP1ICUKcogY5Qqt
+ Cun9RQqlpyGDgYG2DVkY0wHLL1Fwlr5ARH4/FKZL++PsiMZTvbrcrk0vqawYcJzyA9ieUu/+X
+ uZNmfMyhBsIaGK5ItvESOItgYEe3SiLeFw8HywIDuENk+WA9TrKGjCJrD/3jsdfkqwsIUQVsw
+ Vca6YS1kFLumVuaHNVtzKuKdVYkwadXP2c9/wrh9Z+dNp63X2ygkoyfXS0Eim+oCaiYdoFB1y
+ 5Oix4S6+VyL8lVWx1OmNDs6zNW2ol9awZx/
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,16 +69,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 00:09, lizhijian@fujitsu.com wrote:
-> So far, I doubt if the previous defect of configfs mentioned in
-> 9b64f7d0b: "(RDMA/srpt: Postpone HCA removal until after configfs
-> directory removal)" has got a better solution. if not, i have no a
-> clear mechanism to avoid it yet.
-> 
-> feedbacks are very welcome.
-Mike, are you perhaps aware of any plans to add functions to the LIO 
-core for removing tpg and wwn objects?
+hallo Greg
 
-Thanks,
+5.18.8-rc1
 
-Bart.
+compiles (see [1]), boots and runs here on x86_64
+(Intel i5-11400, Fedora 36)
+
+[1]
+a regression against 5.18.7:
+
+...
+
+LD      vmlinux.o
+   MODPOST vmlinux.symvers
+WARNING: modpost: vmlinux.o(___ksymtab_gpl+tick_nohz_full_setup+0x0):
+Section mismatch in reference from the variable
+__ksymtab_tick_nohz_full_setup to the function
+.init.text:tick_nohz_full_setup()
+The symbol tick_nohz_full_setup is exported and annotated __init
+Fix this by removing the __init annotation of tick_nohz_full_setup or
+drop the export.
+...
+
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de
+
+
+Thanks
+
+Ronald
+

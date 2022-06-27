@@ -2,74 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE1355E361
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD6955DB4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240079AbiF0MLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
+        id S240166AbiF0MLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbiF0MLR (ORCPT
+        with ESMTP id S233113AbiF0MLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:11:17 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6ACD129
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:11:16 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id h23so18651990ejj.12
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=C3KL/sYPaJbDkn8gHvUu80xf6BHf0wMPSq7pgt2dfq4=;
-        b=pKEwEnLEh8eqTkxHzxxMwYACs1ZSGTH5+wEp9YlifpBiyk69QxOsm0mfCb0/1Ya20f
-         M6WIuZaXX1CT47L2Vf+JZGLNmbP2UKH+lfLAAZI7/pfli1Jzf/Kpk093ITmcNLIwwwHg
-         3K/coyY0CPCy45hA5P04xwlclE1EW0HaPQfHboyYOyVl0O18seEg3KcqiaJAMPw8341u
-         cdawriRVsEB71eokqznyk4+g4n60khejwOpfca1/nvrv1Xky5yzoeJAqX0eU29kw5gPD
-         lDZl6n0pdnkSWSrEdjHuMnoAAcZ7z9yrZ7pfWf5FUGv8TfwDKvGGanfFEXAvPhaQezo9
-         efQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=C3KL/sYPaJbDkn8gHvUu80xf6BHf0wMPSq7pgt2dfq4=;
-        b=IFKE+LEwUU1yQVzBCkDB6SIZfofi1Z7BBG3RV9VZP3s4oeIiXO1KG2ehfriSiHjuuz
-         6hhLDXyawk2GyXM5uFiFF5aMnVM4ly51BHTZAiWS9eywcY/M4USXqOBx1VpIYZ5LfpMk
-         YQNIWT8ZeTphNn77ZogS6ICSEBnsluU9P8L4PZhuJFw3dJ0ypmjbwXsbefBPqgR2Zjvn
-         OwtYS9LBGhHzg6XEna94+dxt3nAYBkg925n9mhRPNO1FNpeI+MzY7Rodd6duOXdWY6bC
-         J6MYa3LtDWPKUE+bZTqEbUkrM/4GV28D2+8NRrNJNtyNrxvOh7p8DqyslLJ4oHpgbQgt
-         IpFQ==
-X-Gm-Message-State: AJIora+RAD+EqNtQsFyCfw5zutc66IQuQPQ0cci4KYWNsWrn3iTPnPN1
-        jOxGmK6fgox3w5mo/BrJKpRvcQ==
-X-Google-Smtp-Source: AGRyM1uXHMGZ2GyrPysszA/LYuf0pD6D/mj5ICrd5hPH/m735Qkr/ACQEbCz1XcuXuY5CbJ9dSfnzg==
-X-Received: by 2002:a17:907:9620:b0:722:fc5e:3259 with SMTP id gb32-20020a170907962000b00722fc5e3259mr11884062ejc.579.1656331875094;
-        Mon, 27 Jun 2022 05:11:15 -0700 (PDT)
-Received: from [192.168.0.249] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id b12-20020a05640202cc00b004335e08d6c9sm7473365edx.33.2022.06.27.05.11.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 05:11:14 -0700 (PDT)
-Message-ID: <a25126ed-ef39-8316-6ae5-9551aa8120b0@linaro.org>
-Date:   Mon, 27 Jun 2022 14:11:13 +0200
+        Mon, 27 Jun 2022 08:11:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E1ED12D;
+        Mon, 27 Jun 2022 05:11:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACBFBB8117E;
+        Mon, 27 Jun 2022 12:11:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8BBC3411D;
+        Mon, 27 Jun 2022 12:11:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656331905;
+        bh=lN/r9d/SD827cGR9LTMT8U4qhtJ7GeJIvd2S8K1gKh0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O9Y/7rkpxtUWfwtqptPABSQ9MnmZeKcFhIuUgd2g4TKqOJymCv21FzM5W+volxX27
+         HLwF+PZCGgJa9ksN1ket46bu+BI++Zkr8ztJdXYNyyIbZNIS6ESMy0BfQEEDdvF/G3
+         1AMPQciYcwRgzO2/n1elJxkIKKJWRgV5vk7imUWzY7iaWzsYqEuhcGz9J3z3tJM0C4
+         9CFJX8nObRhR2WqaDSAOkWF0U1ZYGg79MTfDjW3mZfhhYxQ8j27LuAjjTjbnqoka/v
+         6bj5vMUQYWiiVN9eUWNkb3eAdk/ShR48YFdv3wSIV8vhjnfgqOPFQqCCvPBTguIRr3
+         gRDgD7s3x/aHA==
+Date:   Mon, 27 Jun 2022 14:11:37 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>,
+        Casey Schaufler <casey@schaufler-ca.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com
+Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
+Message-ID: <20220627121137.cnmctlxxtcgzwrws@wittgenstein>
+References: <20220621233939.993579-1-fred@cloudflare.com>
+ <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
+ <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
+ <CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] ASoC: samsung: s3c24xx-i2s: Fix typo in DAIFMT handling
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
-        s.nawrocki@samsung.com, jrdr.linux@gmail.com, lgirdwood@gmail.com,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org
-References: <20220627094335.3051210-1-ckeepax@opensource.cirrus.com>
- <803785ef-42b7-647c-9653-702067439ae9@linaro.org>
- <YrmYbZV4mj9d9++t@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YrmYbZV4mj9d9++t@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,49 +63,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2022 13:45, Mark Brown wrote:
-> On Mon, Jun 27, 2022 at 11:49:46AM +0200, Krzysztof Kozlowski wrote:
->> On 27/06/2022 11:43, Charles Keepax wrote:
->>> The conversion of the set_fmt callback to direct clock specification
->>> included a small typo, correct the affected code.
+On Thu, Jun 23, 2022 at 11:21:37PM -0400, Paul Moore wrote:
+> On Wed, Jun 22, 2022 at 10:24 AM Frederick Lawler <fred@cloudflare.com> wrote:
+> > On 6/21/22 7:19 PM, Casey Schaufler wrote:
+> > > On 6/21/2022 4:39 PM, Frederick Lawler wrote:
+> > >> While creating a LSM BPF MAC policy to block user namespace creation, we
+> > >> used the LSM cred_prepare hook because that is the closest hook to
+> > >> prevent
+> > >> a call to create_user_ns().
+> > >>
+> > >> The calls look something like this:
+> > >>
+> > >>      cred = prepare_creds()
+> > >>          security_prepare_creds()
+> > >>              call_int_hook(cred_prepare, ...
+> > >>      if (cred)
+> > >>          create_user_ns(cred)
+> > >>
+> > >> We noticed that error codes were not propagated from this hook and
+> > >> introduced a patch [1] to propagate those errors.
+> > >>
+> > >> The discussion notes that security_prepare_creds()
+> > >> is not appropriate for MAC policies, and instead the hook is
+> > >> meant for LSM authors to prepare credentials for mutation. [2]
+> > >>
+> > >> Ultimately, we concluded that a better course of action is to introduce
+> > >> a new security hook for LSM authors. [3]
+> > >>
+> > >> This patch set first introduces a new security_create_user_ns() function
+> > >> and create_user_ns LSM hook, then marks the hook as sleepable in BPF.
+> > >
+> > > Why restrict this hook to user namespaces? It seems that an LSM that
+> > > chooses to preform controls on user namespaces may want to do so for
+> > > network namespaces as well.
+> >
+> > IIRC, CLONE_NEWUSER is the only namespace flag that does not require
+> > CAP_SYS_ADMIN. There is a security use case to prevent this namespace
+> > from being created within an unprivileged environment. I'm not opposed
+> > to a more generic hook, but I don't currently have a use case to block
+> > any others. We can also say the same is true for the other namespaces:
+> > add this generic security function to these too.
+> >
+> > I'm curious what others think about this too.
 > 
->>> Fixes: 91c49199e6d6 ("ASoC: samsung: Update to use set_fmt_new callback")
+> While user namespaces are obviously one of the more significant
+> namespaces from a security perspective, I do think it seems reasonable
+> that the LSMs could benefit from additional namespace creation hooks.
+> However, I don't think we need to do all of them at once, starting
+> with a userns hook seems okay to me.
 > 
->> Where is this commit from? It's not in next.
-> 
-> 0b491c7c1b2555ef08285fd49a8567f2f9f34ff8 - if you can't find something
-> search for the subject, people often get things wrong.
+> I also think that using the same LSM hook as an access control point
+> for all of the different namespaces would be a mistake.  At the very
 
-Finding it by subject does not solve problem with Fixes tag, that it
-might be pointing to incorrect commit (e.g. rebased).
+Agreed.
 
-> 
->> You should put such big patchsets in your own repo (e.g. on
->> Github/Gitlab) and feed it to linux-next or at least to LKP.
-> 
-> The size of the patch set isn't really relevant here, the same issue can
-> apply to anything that can be built in more than one configuration.
-> People should of course try to do things that work but equally we
-> shouldn't be putting procedural blockers in place, we have integration
-> trees for a reason.
+> least we would need to pass a flag or some form of context to the hook
+> to indicate which new namespace(s) are being requested and I fear that
+> is a problem waiting to happen.  That isn't to say someone couldn't
+> mistakenly call the security_create_user_ns(...) from the mount
+> namespace code, but I suspect that is much easier to identify as wrong
+> than the equivalent security_create_ns(USER, ...).
 
-I would say that size of the patchset is a proof someone is doing bigger
-work and we want the bigger work to be tested even before hitting
-maintainer's tree.
-
-My comment was not a requirement (procedural blocker) but a suggestion,
-because maybe Charles was not aware that developer trees can be tested
-for free.
+Yeah, I think that's a pretty unlikely scenario.
 
 > 
->> This way you would get build coverage... because it seems the build was
->> missing in your case.
+> We also should acknowledge that while in most cases the current task's
+> credentials are probably sufficient to make any LSM access control
+> decisions around namespace creation, it's possible that for some
+> namespaces we would need to pass additional, namespace specific info
+> to the LSM.  With a shared LSM hook this could become rather awkward.
+
+Agreed.
+
 > 
-> That coverage has apparently also been missing in -next for several
-> weeks.
+> > > Also, the hook seems backwards. You should
+> > > decide if the creation of the namespace is allowed before you create it.
+> > > Passing the new namespace to a function that checks to see creating a
+> > > namespace is allowed doesn't make a lot off sense.
+> >
+> > I think having more context to a security hook is a good thing.
+> 
+> This is one of the reasons why I usually like to see at least one LSM
+> implementation to go along with every new/modified hook.  The
+> implementation forces you to think about what information is necessary
+> to perform a basic access control decision; sometimes it isn't always
+> obvious until you have to write the access control :)
 
-Eh, it seems defconfigs for this old platform do not select sound, so we
-rely on randconfig. :(
+I spoke to Frederick at length during LSS and as I've been given to
+understand there's a eBPF program that would immediately use this new
+hook. Now I don't want to get into the whole "Is the eBPF LSM hook
+infrastructure an LSM" but I think we can let this count as a legitimate
+first user of this hook/code.
 
-Best regards,
-Krzysztof
+> 
+> [aside: If you would like to explore the SELinux implementation let me
+> know, I'm happy to work with you on this.  I suspect Casey and the
+> other LSM maintainers would also be willing to do the same for their
+> LSMs.]
+> 
+> In this particular case I think the calling task's credentials are
+> generally all that is needed.  You mention that the newly created
+
+Agreed.
+
+> namespace would be helpful, so I'll ask: what info in the new ns do
+> you believe would be helpful in making an access decision about its
+> creation?
+> 
+> Once we've sorted that we can make a better decision about the hook
+> placement, but right now my gut feeling is that we only need to pass
+> the task's creds, and I think placing the hook right after the UID/GID
+> mapping check (before the new ns allocation) would be the best spot.
+
+When I toyed with this I placed it directly into create_user_ns() and
+only relied on the calling task's cred. I just created an eBPF program
+that verifies the caller is capable(CAP_SYS_ADMIN). Since both the
+chrooted and mapping check return EPERM it doesn't really matter that
+much where exactly. Conceptually it makes more sense to me to place it
+after the mapping check because then all the preliminaries are done.
+
+Christian

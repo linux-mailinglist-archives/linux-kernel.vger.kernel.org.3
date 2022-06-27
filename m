@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F3355DCA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B42A55D565
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237246AbiF0Lmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
+        id S235231AbiF0L11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236900AbiF0LkW (ORCPT
+        with ESMTP id S235088AbiF0L0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:40:22 -0400
+        Mon, 27 Jun 2022 07:26:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23C6BF69;
-        Mon, 27 Jun 2022 04:35:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1186B657B;
+        Mon, 27 Jun 2022 04:26:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E7B060CA5;
-        Mon, 27 Jun 2022 11:35:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 676F7C3411D;
-        Mon, 27 Jun 2022 11:35:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A697F614A4;
+        Mon, 27 Jun 2022 11:26:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B79D0C3411D;
+        Mon, 27 Jun 2022 11:26:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329730;
-        bh=hukwWuigzV21quC7Sf4EGCOyizLdoQuLY9l8pf4YG5c=;
+        s=korg; t=1656329178;
+        bh=+3NWgB8HIlGFeNlKiovmSOs5fC1vXOQkzR7b4yd8WeM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zw62WMlLUT6eTt2fQgG7WIL/IEsY768l7kq5s/Q/80l4isZuS5HgiH7yppAYm+6L3
-         2ky7vI1+1cfQEEpxG9FGX/5uRLRhf+92v1ydIsWA/XOsmvEugdkoFERZ6wgJy0YSkE
-         sg/iYb7e9fcSkjV+BiH1YBvchlgMl2wsjyRfICeg=
+        b=dysWHhTYM/HvRaKGGs6oIxJC0U90eKSv2ARBOQLMLLF9jGVBUXKnJdPhL+08uqvog
+         /WPk94KllM+R+sH9lx7s7nNvaaflJbkX54N7e8rqkZm8boUjV2GwgzRDgvdBkCA3yL
+         Fx6l2GjV+rt9c1EMfpA/wuTgbqR+w3xwYZFbaujk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Richter <tmricht@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 079/135] s390/cpumf: Handle events cycles and instructions identical
+        stable@vger.kernel.org, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.10 075/102] iio:accel:mxc4005: rearrange iio trigger get and register
 Date:   Mon, 27 Jun 2022 13:21:26 +0200
-Message-Id: <20220627111940.452928409@linuxfoundation.org>
+Message-Id: <20220627111935.694114966@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
+References: <20220627111933.455024953@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,102 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Richter <tmricht@linux.ibm.com>
+From: Dmitry Rokosov <DDRokosov@sberdevices.ru>
 
-[ Upstream commit be857b7f77d130dbbd47c91fc35198b040f35865 ]
+commit 9354c224c9b4f55847a0de3e968cba2ebf15af3b upstream.
 
-Events CPU_CYCLES and INSTRUCTIONS can be submitted with two different
-perf_event attribute::type values:
- - PERF_TYPE_HARDWARE: when invoked via perf tool predefined events name
-   cycles or cpu-cycles or instructions.
- - pmu->type: when invoked via perf tool event name cpu_cf/CPU_CYLCES/ or
-   cpu_cf/INSTRUCTIONS/. This invocation also selects the PMU to which
-   the event belongs.
-Handle both type of invocations identical for events CPU_CYLCES and
-INSTRUCTIONS. They address the same hardware.
-The result is different when event modifier exclude_kernel is also set.
-Invocation with event modifier for user space event counting fails.
+IIO trigger interface function iio_trigger_get() should be called after
+iio_trigger_register() (or its devm analogue) strictly, because of
+iio_trigger_get() acquires module refcnt based on the trigger->owner
+pointer, which is initialized inside iio_trigger_register() to
+THIS_MODULE.
+If this call order is wrong, the next iio_trigger_put() (from sysfs
+callback or "delete module" path) will dereference "default" module
+refcnt, which is incorrect behaviour.
 
-Output before:
-
- # perf stat -e cpum_cf/cpu_cycles/u -- true
-
- Performance counter stats for 'true':
-
-   <not supported>      cpum_cf/cpu_cycles/u
-
-       0.000761033 seconds time elapsed
-
-       0.000076000 seconds user
-       0.000725000 seconds sys
-
- #
-
-Output after:
- # perf stat -e cpum_cf/cpu_cycles/u -- true
-
- Performance counter stats for 'true':
-
-           349,613      cpum_cf/cpu_cycles/u
-
-       0.000844143 seconds time elapsed
-
-       0.000079000 seconds user
-       0.000800000 seconds sys
- #
-
-Fixes: 6a82e23f45fe ("s390/cpumf: Adjust registration of s390 PMU device drivers")
-Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-Acked-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
-[agordeev@linux.ibm.com corrected commit ID of Fixes commit]
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 47196620c82f ("iio: mxc4005: add data ready trigger for mxc4005")
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20220524181150.9240-4-ddrokosov@sberdevices.ru
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/s390/kernel/perf_cpum_cf.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ drivers/iio/accel/mxc4005.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/s390/kernel/perf_cpum_cf.c b/arch/s390/kernel/perf_cpum_cf.c
-index cceb8ec707e4..d2a2a18b5580 100644
---- a/arch/s390/kernel/perf_cpum_cf.c
-+++ b/arch/s390/kernel/perf_cpum_cf.c
-@@ -516,6 +516,26 @@ static int __hw_perf_event_init(struct perf_event *event, unsigned int type)
- 	return err;
- }
- 
-+/* Events CPU_CYLCES and INSTRUCTIONS can be submitted with two different
-+ * attribute::type values:
-+ * - PERF_TYPE_HARDWARE:
-+ * - pmu->type:
-+ * Handle both type of invocations identical. They address the same hardware.
-+ * The result is different when event modifiers exclude_kernel and/or
-+ * exclude_user are also set.
-+ */
-+static int cpumf_pmu_event_type(struct perf_event *event)
-+{
-+	u64 ev = event->attr.config;
+--- a/drivers/iio/accel/mxc4005.c
++++ b/drivers/iio/accel/mxc4005.c
+@@ -461,8 +461,6 @@ static int mxc4005_probe(struct i2c_clie
+ 		data->dready_trig->dev.parent = &client->dev;
+ 		data->dready_trig->ops = &mxc4005_trigger_ops;
+ 		iio_trigger_set_drvdata(data->dready_trig, indio_dev);
+-		indio_dev->trig = data->dready_trig;
+-		iio_trigger_get(indio_dev->trig);
+ 		ret = devm_iio_trigger_register(&client->dev,
+ 						data->dready_trig);
+ 		if (ret) {
+@@ -470,6 +468,8 @@ static int mxc4005_probe(struct i2c_clie
+ 				"failed to register trigger\n");
+ 			return ret;
+ 		}
 +
-+	if (cpumf_generic_events_basic[PERF_COUNT_HW_CPU_CYCLES] == ev ||
-+	    cpumf_generic_events_basic[PERF_COUNT_HW_INSTRUCTIONS] == ev ||
-+	    cpumf_generic_events_user[PERF_COUNT_HW_CPU_CYCLES] == ev ||
-+	    cpumf_generic_events_user[PERF_COUNT_HW_INSTRUCTIONS] == ev)
-+		return PERF_TYPE_HARDWARE;
-+	return PERF_TYPE_RAW;
-+}
-+
- static int cpumf_pmu_event_init(struct perf_event *event)
- {
- 	unsigned int type = event->attr.type;
-@@ -525,7 +545,7 @@ static int cpumf_pmu_event_init(struct perf_event *event)
- 		err = __hw_perf_event_init(event, type);
- 	else if (event->pmu->type == type)
- 		/* Registered as unknown PMU */
--		err = __hw_perf_event_init(event, PERF_TYPE_RAW);
-+		err = __hw_perf_event_init(event, cpumf_pmu_event_type(event));
- 	else
- 		return -ENOENT;
++		indio_dev->trig = iio_trigger_get(data->dready_trig);
+ 	}
  
--- 
-2.35.1
-
+ 	return devm_iio_device_register(&client->dev, indio_dev);
 
 

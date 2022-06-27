@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A5E55CAD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FAE55D790
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235484AbiF0L3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S235392AbiF0LcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235389AbiF0L26 (ORCPT
+        with ESMTP id S235555AbiF0Lbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:28:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ECFA199;
-        Mon, 27 Jun 2022 04:27:45 -0700 (PDT)
+        Mon, 27 Jun 2022 07:31:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C70010CD;
+        Mon, 27 Jun 2022 04:29:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5822614A2;
-        Mon, 27 Jun 2022 11:27:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93C05C341C7;
-        Mon, 27 Jun 2022 11:27:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0E90B8111B;
+        Mon, 27 Jun 2022 11:29:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE6E0C3411D;
+        Mon, 27 Jun 2022 11:29:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329264;
-        bh=4w0rb8WM7fGTNmflEmNCvYh4biFDvlmKXvwa62Cg0+s=;
+        s=korg; t=1656329343;
+        bh=SpUk5xopBVEJbsXDCPPzUrXYRKodP1EeLbPsa/mnV5c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZYvy5j8MswRoXls0Q8yPT+FhqpKk87EkkqUa53/fb9I1nGFS3t1ScBUem01pqOjfA
-         y+J6JQ7pL0unWai+gxwRk69OkM8nLc8gbn4iFZEQllxBdzsHNzR3jzlUqC2DrgIsez
-         EYtS3jF6IEEXzjEwXpp01wwDTRAym6meFq0Vk50U=
+        b=NAxAvQQc17HlJe5D1b1fxOQtfwrdnFzpCMxqCikoGmBCl8BGahtYbiowninu4ynjB
+         LW0sh99vFJsb52KYSjcWfVy77orzlaoDfoMLnaMjP03Nj+0V6r8hPypjAKbiYzu/fy
+         9Ozt6noYLDIu9UND0KKY/D9nkrOlDgN9kzxRaCPQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH 5.10 087/102] parisc/stifb: Fix fb_is_primary_device() only available with CONFIG_FB_STI
+        stable@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-afs@lists.infradead.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 27/60] afs: Fix dynamic root getattr
 Date:   Mon, 27 Jun 2022 13:21:38 +0200
-Message-Id: <20220627111936.046180187@linuxfoundation.org>
+Message-Id: <20220627111928.485967575@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
-References: <20220627111933.455024953@linuxfoundation.org>
+In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
+References: <20220627111927.641837068@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,52 +57,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: David Howells <dhowells@redhat.com>
 
-commit 1d0811b03eb30b2f0793acaa96c6ce90b8b9c87a upstream.
+[ Upstream commit cb78d1b5efffe4cf97e16766329dd7358aed3deb ]
 
-Fix this build error noticed by the kernel test robot:
+The recent patch to make afs_getattr consult the server didn't account
+for the pseudo-inodes employed by the dynamic root-type afs superblock
+not having a volume or a server to access, and thus an oops occurs if
+such a directory is stat'd.
 
-drivers/video/console/sticore.c:1132:5: error: redefinition of 'fb_is_primary_device'
- arch/parisc/include/asm/fb.h:18:19: note: previous definition of 'fb_is_primary_device'
+Fix this by checking to see if the vnode->volume pointer actually points
+anywhere before following it in afs_getattr().
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: stable@vger.kernel.org   # v5.10+
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This can be tested by stat'ing a directory in /afs.  It may be
+sufficient just to do "ls /afs" and the oops looks something like:
+
+        BUG: kernel NULL pointer dereference, address: 0000000000000020
+        ...
+        RIP: 0010:afs_getattr+0x8b/0x14b
+        ...
+        Call Trace:
+         <TASK>
+         vfs_statx+0x79/0xf5
+         vfs_fstatat+0x49/0x62
+
+Fixes: 2aeb8c86d499 ("afs: Fix afs_getattr() to refetch file status if callback break occurred")
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
+Tested-by: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: https://lore.kernel.org/r/165408450783.1031787.7941404776393751186.stgit@warthog.procyon.org.uk/
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/parisc/include/asm/fb.h    |    2 +-
- drivers/video/console/sticore.c |    2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ fs/afs/inode.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/arch/parisc/include/asm/fb.h
-+++ b/arch/parisc/include/asm/fb.h
-@@ -12,7 +12,7 @@ static inline void fb_pgprotect(struct f
- 	pgprot_val(vma->vm_page_prot) |= _PAGE_NO_CACHE;
- }
+diff --git a/fs/afs/inode.c b/fs/afs/inode.c
+index 90eac3ec01cb..622363af4c1b 100644
+--- a/fs/afs/inode.c
++++ b/fs/afs/inode.c
+@@ -739,7 +739,8 @@ int afs_getattr(const struct path *path, struct kstat *stat,
  
--#if defined(CONFIG_STI_CONSOLE) || defined(CONFIG_FB_STI)
-+#if defined(CONFIG_FB_STI)
- int fb_is_primary_device(struct fb_info *info);
- #else
- static inline int fb_is_primary_device(struct fb_info *info)
---- a/drivers/video/console/sticore.c
-+++ b/drivers/video/console/sticore.c
-@@ -1127,6 +1127,7 @@ int sti_call(const struct sti_struct *st
- 	return ret;
- }
+ 	_enter("{ ino=%lu v=%u }", inode->i_ino, inode->i_generation);
  
-+#if defined(CONFIG_FB_STI)
- /* check if given fb_info is the primary device */
- int fb_is_primary_device(struct fb_info *info)
- {
-@@ -1142,6 +1143,7 @@ int fb_is_primary_device(struct fb_info
- 	return (sti->info == info);
- }
- EXPORT_SYMBOL(fb_is_primary_device);
-+#endif
- 
- MODULE_AUTHOR("Philipp Rumpf, Helge Deller, Thomas Bogendoerfer");
- MODULE_DESCRIPTION("Core STI driver for HP's NGLE series graphics cards in HP PARISC machines");
+-	if (!(query_flags & AT_STATX_DONT_SYNC) &&
++	if (vnode->volume &&
++	    !(query_flags & AT_STATX_DONT_SYNC) &&
+ 	    !test_bit(AFS_VNODE_CB_PROMISED, &vnode->flags)) {
+ 		key = afs_request_key(vnode->volume->cell);
+ 		if (IS_ERR(key))
+-- 
+2.35.1
+
 
 

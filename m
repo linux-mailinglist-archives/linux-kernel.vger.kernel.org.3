@@ -2,79 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FB355CF8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D812A55DB45
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233179AbiF0Izh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 04:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48686 "EHLO
+        id S233638AbiF0Ipo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 04:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233055AbiF0Izd (ORCPT
+        with ESMTP id S233019AbiF0Ipj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 04:55:33 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA496372
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:55:31 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id e40so11989704eda.2
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=RsBoiseaTkJc51iVjuUsait0HqgvtgtMrYkH57RHGCU=;
-        b=skhj6rL+UZnb3uqF9ljVTdtpJi84kWTrupgEdBvRS3QgaOVnezJVrkAGrGgv6lwF1/
-         3d+Cf7kpB4c6T3MDM1IHVWRw4zKkP5ErkBe5MiyNhOb3VHcLptGsyxMN86lyIkSPfLZ6
-         8lbuEjmq4yaQwnRR9fvPslm2+S20+4kxiGjZwpc5HTiLopSQPYwhe2WUmzi5Hdz+E5cL
-         gnhymObz/v31wdKPoKOsXoWXi99z7gzGLL6WwNDHZO+rx1vx9go6Z0/ebUX3FH4kM5JR
-         MAt9z+4m9z7+EVx/bFKLzfIMBbG6Bva2+NVmJO7WBVSc1PcdLs+t9Tx5QU8lIiLWXGJ+
-         LUrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RsBoiseaTkJc51iVjuUsait0HqgvtgtMrYkH57RHGCU=;
-        b=cxVU3O+CPrK/fekkyzhE+0H6b4dwD9wdW9dN18PG40db3vqKm1pkYnwxk/FPSwjjBQ
-         BqQrL655/2hDyzh14sm8OicAx1rn1g19gYIXFt2jGOn9L8IKffTEsWp/uUnJgCJNA2mx
-         vCw6wo5VkCSbYcK8ObSeQnawHnOCSatcHf0y22qKBupR08vWpTpyDsF/db6o/dOjoTww
-         92drgptVmRS5NUraLT0Ytmymvbm0MZWQ718SmsmYJCLlLwAO5bbNk7AZVGO0n5RH7UUL
-         oLvC2f6JROwgVgBWjgUvm/lCXs1LSlcOZfHlCVge4ZrsmsF0DVDruLuek8veG8ZdoKVI
-         z+KA==
-X-Gm-Message-State: AJIora+H5wTlFZhRw4SrOiz3RyQBXS4jR4IPA723nIMnfsieqpuo+Ids
-        L++zLumnaC0dWCWj5IBiGMwA97hvG85TgQ==
-X-Google-Smtp-Source: AGRyM1uHTpdt+MsqhWdxTZPyIYF7oRz48lzwDRSQCGhJKEvO+cfipqWJDMQS+cbwyV3uuOPXNkhmjA==
-X-Received: by 2002:a05:6402:452:b0:434:a373:f9f8 with SMTP id p18-20020a056402045200b00434a373f9f8mr15706814edw.290.1656320130078;
-        Mon, 27 Jun 2022 01:55:30 -0700 (PDT)
-Received: from [192.168.0.247] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id bg6-20020a170906a04600b00722e31fcf42sm4768843ejb.184.2022.06.27.01.55.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 01:55:29 -0700 (PDT)
-Message-ID: <cd6fb785-50d4-8945-b7bc-951856f1c5ae@linaro.org>
-Date:   Mon, 27 Jun 2022 10:55:28 +0200
+        Mon, 27 Jun 2022 04:45:39 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906B1631E
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:45:38 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LWh9H1MqMzkWnN;
+        Mon, 27 Jun 2022 16:44:19 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 16:45:36 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 27 Jun
+ 2022 16:45:36 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+        <iommu@lists.linux-foundation.org>
+CC:     <joro@8bytes.org>, <will@kernel.org>, <yf.wang@mediatek.com>
+Subject: [PATCH -next] iommu/dma: Fix missing mutex_init() in iommu_get_msi_cookie()
+Date:   Mon, 27 Jun 2022 16:55:33 +0800
+Message-ID: <20220627085533.1469141-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/5] ARM: dts: exynos: align SDHCI node name with dtschema
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        'Ulf Hansson' <ulf.hansson@linaro.org>,
-        'Rob Herring' <robh+dt@kernel.org>,
-        'Krzysztof Kozlowski' <krzysztof.kozlowski+dt@linaro.org>,
-        'Jaehoon Chung' <jh80.chung@samsung.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20220626120342.38851-1-krzysztof.kozlowski@linaro.org>
- <CGME20220626120350epcas5p25a98e0669eeb11ce7959ace0f3634926@epcas5p2.samsung.com>
- <20220626120342.38851-2-krzysztof.kozlowski@linaro.org>
- <000a01d889c5$adb3bd30$091b3790$@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <000a01d889c5$adb3bd30$091b3790$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,33 +50,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2022 03:31, Alim Akhtar wrote:
-> 
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
->> Sent: Sunday, June 26, 2022 5:34 PM
->> To: Ulf Hansson <ulf.hansson@linaro.org>; Rob Herring
->> <robh+dt@kernel.org>; Krzysztof Kozlowski
->> <krzysztof.kozlowski+dt@linaro.org>; Alim Akhtar
->> <alim.akhtar@samsung.com>; Jaehoon Chung <jh80.chung@samsung.com>;
->> linux-mmc@vger.kernel.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
->> samsung-soc@vger.kernel.org
->> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Subject: [PATCH 1/5] ARM: dts: exynos: align SDHCI node name with
->> dtschema
->>
->> The node names should be generic and DT schema expects "mmc".
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
-> 
->  (for patch 1 ~ 4)
-> 
-> Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+cookie_alloc() is called by iommu_get_dma_cookie() and iommu_get_msi_cookie(),
+but the mutex is only initialized in iommu_get_dma_cookie(), move mutex_init()
+into cookie_alloc() to make sure the mutex will be initialized.
 
-Tooling does not handle such cases.
+Fixes: ac9a5d522bb8 ("iommu/dma: Fix race condition during iova_domain initialization")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/iommu/dma-iommu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 1910f4f1612b..e29157380c48 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -294,6 +294,7 @@ static struct iommu_dma_cookie *cookie_alloc(enum iommu_dma_cookie_type type)
+ 	if (cookie) {
+ 		INIT_LIST_HEAD(&cookie->msi_page_list);
+ 		cookie->type = type;
++		mutex_init(&cookie->mutex);
+ 	}
+ 	return cookie;
+ }
+@@ -311,7 +312,6 @@ int iommu_get_dma_cookie(struct iommu_domain *domain)
+ 	if (!domain->iova_cookie)
+ 		return -ENOMEM;
+ 
+-	mutex_init(&domain->iova_cookie->mutex);
+ 	return 0;
+ }
+ 
+-- 
+2.25.1
+

@@ -2,129 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988DE55CB43
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBFA55D098
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbiF0JAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 05:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S233765AbiF0JAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 05:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233580AbiF0JAB (ORCPT
+        with ESMTP id S233761AbiF0JAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 05:00:01 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71936394
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:59:59 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id eo8so12044682edb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 01:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OJD3PXeQcR9dqZ5Y7yZVLU8WDdZSUs8hEAVEMiuij4s=;
-        b=mBcUp//R90f/Wq5aerXEP5Jb3KTttQ3I+AqwSlNt/W7te4T7VYw+iFp0bnSvhyclS5
-         SuaYvm9L+9uEl7UZwFbpIvCpwbiuSo6BhQ8jzrn/7Nl/3EBUqzMK1KEpc09m4+VuS9Ia
-         TXyP+XGJZKLTzLyq1Qyl4jyhHiiMz6S0NgesKDKGmDv1QhulRYmsCGo/BAVk5kb8NqJx
-         0q8wQgaqz43l3T+r/p1tHqEviIJYRfTiSvK8M0bHYs7qgkA5hfeHpPHUKo5lyc/MC+Oh
-         jLNPwkhR9c/Sh1h18sYqi0iQUaayC9xcNnwwzbcunlvd/UpaZ3A23OkZS2rDJxAtogBV
-         ikMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OJD3PXeQcR9dqZ5Y7yZVLU8WDdZSUs8hEAVEMiuij4s=;
-        b=mqFsPYkokLfQmNKS02Cxbh8c3mi2MGmEbu6f88l2C7GLmOzSpw1QgDC9PcjaPtRbhl
-         35qOesRNVk7vj/cFec0G8ULH7S/17XXTZCRnbTtKnhldBdJVnU9T8ciR/8fdSmxbKg4P
-         pm6srHEQtIyx0dLAhS9HjyTIUbwHLYQ1iNMZyXmefL0FTfaTmdRndCr+hlm4ZBhPAE/6
-         3OyyuQTwT4+q7Q641RQRe/E06fIzfcTeCXt4IUXKmmWVsM8Dx7t+leMC9Q9LDTG1n3aM
-         UB8TGMPlb2SCmJKZENNGAZyy/YlNICly74qMaSEmEJaAmixvLCnwipsJbFC7xQvYvVYz
-         pbSQ==
-X-Gm-Message-State: AJIora/UpBr56ZwRlcSuzXEgaFj14/beQlEJWsnRLTINiNI8wNTsVDcK
-        4RM/vLpw9dhRuGFcmT1pqImJBT47V5AnRw==
-X-Google-Smtp-Source: AGRyM1vx9hW9lzNzpgqm+U8e8cip5LlD6oegAC5bL8EXEcSPE33v/USYPPy/Vv76y2er5Hvfx5q6kg==
-X-Received: by 2002:a05:6402:1d50:b0:436:beac:a4e3 with SMTP id dz16-20020a0564021d5000b00436beaca4e3mr15491833edb.191.1656320398400;
-        Mon, 27 Jun 2022 01:59:58 -0700 (PDT)
-Received: from [192.168.0.247] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o19-20020a17090611d300b007109b15c109sm4806316eja.66.2022.06.27.01.59.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 01:59:58 -0700 (PDT)
-Message-ID: <6fa1db53-6e4e-b6b1-2313-dee7aadad5ae@linaro.org>
-Date:   Mon, 27 Jun 2022 10:59:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 2/7] dt-bindings: clock: Add MediaTek Helio X10 MT6795
- clock bindings
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        y.oudjana@protonmail.com, jason-jh.lin@mediatek.com,
-        ck.hu@mediatek.com, fparent@baylibre.com, rex-bc.chen@mediatek.com,
-        tinghan.shen@mediatek.com, chun-jie.chen@mediatek.com,
-        weiyi.lu@mediatek.com, ikjn@chromium.org, miles.chen@mediatek.com,
-        sam.shih@mediatek.com, wenst@chromium.org,
-        bgolaszewski@baylibre.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
-        kernel@collabora.com, Rob Herring <robh@kernel.org>
-References: <20220624093525.243077-1-angelogioacchino.delregno@collabora.com>
- <20220624093525.243077-3-angelogioacchino.delregno@collabora.com>
- <de5a0e6f-411f-0c7b-ae1e-1117a4126d2d@linaro.org>
- <9554982a-c48b-e902-2d96-b317c46df698@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9554982a-c48b-e902-2d96-b317c46df698@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 27 Jun 2022 05:00:34 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1BC63A3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 02:00:33 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25R8BuKP028114;
+        Mon, 27 Jun 2022 09:00:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=7ybi4uuv2UsSkdNGFKxhBjHg13ZgnNx2vnAcPa0TLDk=;
+ b=gdKXSh5AJCNeUzLE0CSE5iWcQPI64C3VDbZiwrpqBpJGuFwwJvLCZYrR+Y7q+gv3p2R2
+ LKlTZUl89FO7mn9AQZ4We2m8xm4QyFsuk4Me72pFYIKsARAZe96errc9ued2KKT4+91B
+ PPKBViYQl/GZ0p/0m9t/o0NwOKmKnLmE3Qbds/6+s+sBNomRl+o1V/hyYQvxpekOCGpy
+ FxqkndyKVTRzjtulkdTSPDiSO4ZxydCZVUfo5/aio1+j0osWBdy3n0uqoXlkfPAugVUy
+ zghRE7I2LhqYe7MDiHsY1Dbn5l/6kGuXDd2uIc3bGT8ksLb5JRxM5yNeleWZta2Pnp28 QQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gy8tx1a0x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 09:00:11 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25R8EYFm016389;
+        Mon, 27 Jun 2022 09:00:10 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gy8tx19y3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 09:00:10 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25R8opZ9019411;
+        Mon, 27 Jun 2022 09:00:08 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3gwt08tkch-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jun 2022 09:00:08 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25R905Qb23003460
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Jun 2022 09:00:06 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E2F464C04E;
+        Mon, 27 Jun 2022 09:00:05 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B30C4C046;
+        Mon, 27 Jun 2022 09:00:04 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.15.159])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 27 Jun 2022 09:00:04 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
+Subject: Re: [PATCH] powerpc: perf: Fix refcount leak bug in imc-pmu.c
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+In-Reply-To: <20220618071353.4059000-1-windhl@126.com>
+Date:   Mon, 27 Jun 2022 14:30:01 +0530
+Cc:     Michael Ellerman <mpe@ellerman.id.au>, benh@kernel.crashing.org,
+        paulus@samba.org, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <5B61320C-C37F-4B60-BE2B-461722D44742@linux.vnet.ibm.com>
+References: <20220618071353.4059000-1-windhl@126.com>
+To:     Liang He <windhl@126.com>
+X-Mailer: Apple Mail (2.3696.100.31)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: zXsXuV6a2jBqMgCfbfqhXcrLvpQo9LTl
+X-Proofpoint-ORIG-GUID: gSeTZLwweVeVvJgGXu_YjN97T9abW9_b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 phishscore=0 adultscore=0 mlxscore=0 suspectscore=0
+ mlxlogscore=999 clxscore=1011 bulkscore=0 malwarescore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206270036
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2022 10:49, AngeloGioacchino Del Regno wrote:
-> Il 25/06/22 22:30, Krzysztof Kozlowski ha scritto:
->> On 24/06/2022 11:35, AngeloGioacchino Del Regno wrote:
->>> Add the bindings for MT6795's clock controller.
->>>
->>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>> Acked-by: Rob Herring <robh@kernel.org>
->>> ---
->>>   include/dt-bindings/clock/mt6795-clk.h | 275 +++++++++++++++++++++++++
->>>   1 file changed, 275 insertions(+)
->>>   create mode 100644 include/dt-bindings/clock/mt6795-clk.h
->>>
->>> diff --git a/include/dt-bindings/clock/mt6795-clk.h b/include/dt-bindings/clock/mt6795-clk.h
->>> new file mode 100644
->>> index 000000000000..9902906ac902
->>> --- /dev/null
->>> +++ b/include/dt-bindings/clock/mt6795-clk.h
->>
->> Vendor prefix.
->>
-> 
-> For consistency, I'd really like to keep the filename as it is.
-> 
-> At least in this directory, all of the MediaTek clock bindings
-> are using the format mtXXXX-clk.h... and that's not only seen
-> in MediaTek, but also in Broadcom, Renesas, RockChip, HiSilicon,
-> nVidia, etc.
 
-Several new files are introduced with vendor prefix. The same as in
-bindings - old bindings were without vendor, so for consistency we would
-never switch to vendor one.
 
-For consistency with Documentation/devicetree/bindings and with all new
-files in binding headers, please add vendor prefix.
+> On 18-Jun-2022, at 12:43 PM, Liang He <windhl@126.com> wrote:
+>=20
+> In update_events_in_group(), of_find_node_by_phandle() will return
+> a node pointer with refcount incremented. We should use of_node_put()
+> in fail path or when it is not used anymore.
+>=20
+> Signed-off-by: Liang He <windhl@126.com>
 
-Best regards,
-Krzysztof
+Reviewed-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+> ---
+> arch/powerpc/perf/imc-pmu.c | 10 ++++++++--
+> 1 file changed, 8 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/powerpc/perf/imc-pmu.c b/arch/powerpc/perf/imc-pmu.c
+> index d7976ab40d38..d517aba94d1b 100644
+> --- a/arch/powerpc/perf/imc-pmu.c
+> +++ b/arch/powerpc/perf/imc-pmu.c
+> @@ -240,8 +240,10 @@ static int update_events_in_group(struct =
+device_node *node, struct imc_pmu *pmu)
+> 	ct =3D of_get_child_count(pmu_events);
+>=20
+> 	/* Get the event prefix */
+> -	if (of_property_read_string(node, "events-prefix", &prefix))
+> +	if (of_property_read_string(node, "events-prefix", &prefix)) {
+> +		of_node_put(pmu_events);
+> 		return 0;
+> +	}
+>=20
+> 	/* Get a global unit and scale data if available */
+> 	if (of_property_read_string(node, "scale", &g_scale))
+> @@ -255,8 +257,10 @@ static int update_events_in_group(struct =
+device_node *node, struct imc_pmu *pmu)
+>=20
+> 	/* Allocate memory for the events */
+> 	pmu->events =3D kcalloc(ct, sizeof(struct imc_events), =
+GFP_KERNEL);
+> -	if (!pmu->events)
+> +	if (!pmu->events) {
+> +		of_node_put(pmu_events);
+> 		return -ENOMEM;
+> +	}
+>=20
+> 	ct =3D 0;
+> 	/* Parse the events and update the struct */
+> @@ -266,6 +270,8 @@ static int update_events_in_group(struct =
+device_node *node, struct imc_pmu *pmu)
+> 			ct++;
+> 	}
+>=20
+> +	of_node_put(pmu_events);
+> +
+> 	/* Allocate memory for attribute group */
+> 	attr_group =3D kzalloc(sizeof(*attr_group), GFP_KERNEL);
+> 	if (!attr_group) {
+> --=20
+> 2.25.1
+>=20
+

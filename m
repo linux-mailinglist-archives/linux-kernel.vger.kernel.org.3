@@ -2,53 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F5B55E260
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5109455E024
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235686AbiF0MaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
+        id S235808AbiF0Ma5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232906AbiF0MaC (ORCPT
+        with ESMTP id S232906AbiF0May (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:30:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E3B64D8
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:30:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E55C460C66
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01CA7C3411D;
-        Mon, 27 Jun 2022 12:29:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656333000;
-        bh=bf1hSYJqFeSB0yfJ08Jubf8Nw0Aqq11+gwvcPoJtXvQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YH75glbB7MNamTtykFB8MSGCQKjerYQK/KbwiTVdcbK6+WdcNVT/2hFPX93sQES3x
-         4MA1ZbJ+flVEeHHidE2+uY5Nbr7QQtDw2Rzx7o/iCNscQ3z5GT8zN+JBh/J/sZIctU
-         XlE8rOGsT3jOH5cEuZSxPATLXiyrdi0daToRpZdg=
-Date:   Mon, 27 Jun 2022 14:29:57 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yangxi Xiang <xyangxi5@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        nick black <dankamongmen@gmail.com>
-Subject: Re: [PATCH] vt: fix memory overlapping when deleting chars in the
- buffer
-Message-ID: <YrmixTj6aF3Pwq0I@kroah.com>
-References: <YrmPi/D4dZAySgll@kroah.com>
- <20220627114016.11114-1-xyangxi5@gmail.com>
+        Mon, 27 Jun 2022 08:30:54 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF5DE766F
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:30:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB42C1758;
+        Mon, 27 Jun 2022 05:30:52 -0700 (PDT)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8D5C53F792;
+        Mon, 27 Jun 2022 05:30:50 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        daniel.lezcano@linaro.org, tarek.el-sherbiny@arm.com,
+        adrian.slatineanu@arm.com, souvik.chakravarty@arm.com,
+        wleavitt@marvell.com, wbartczak@marvell.com,
+        Cristian Marussi <cristian.marussi@arm.com>
+Subject: [PATCH v3 0/9] SCMIv3.1 Powercap protocol and driver
+Date:   Mon, 27 Jun 2022 13:30:29 +0100
+Message-Id: <20220627123038.1427067-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627114016.11114-1-xyangxi5@gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,19 +45,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 07:40:16PM +0800, Yangxi Xiang wrote:
-> > And what commit id does this fix, or has it always been broken?
-> 
-> It fixes the commit 81732c3 (tty vt: Fix line garbage in virtual
-> console on command line edition). The line buffer is not always
-> broken, because the memcpy utilized the hardware acceleration, whose
-> result is not deterministic. I fix this issue by replacing the
-> scr_memcpyw with scr_memmovew used in insert_char, and preserving the
-> memcpy optimization when the buffers are not overlapping.
+Hi all,
 
-Great, can you please resend the patch with that information all in it,
-and the proper Fixes: line tag added?
+this short series introduces the last missing bit of SCMIv3.1, Powercap
+protocol. Along the series, there is a small refactoring around the SCMI
+FastChannels handling routines so as to reuse as much as possible the
+pre-existent (and tested) FastChannel code from the Perf protocol.
 
-thanks,
+New SCMI FC tracing support is added too along the way.
 
-greg k-h
+As a last step in the series an ARM SCMI based powercap driver is added,
+which takes care to expose via the Powercap framework all the SCMI Powercap
+zones that have been discovered asking the SCMI platform firmware.
+
+Basic testing has been performed against an emulated SCMI platform
+supporting SCMIv3.1 Powercap protocol using powercap-utils, with the
+exclusion of the FCs bits whose generalization has been only tested for
+regression on a JUNO platform sporting a regular SCP/SCMI v2.10 fw.
+
+The series is based on sudeep/for-next/scmi [1] on top of:
+
+commit 754f04cac362 ("firmware: arm_scmi: Relax CLOCK_DESCRIBE_RATES out-of-spec checks")
+
+Thanks,
+Cristian
+
+v2 --> v3:
+- added and used some SCMI Fastchannel tracing support
+- reverted logic of Kconfig to configure usage of SCMI FC
+- using strscpy with new SHORT_NAME_SZ in Powercap protocol
+- added devm_protocol_acquire helper
+
+v1 --> v2:
+- fixed measurements thresholds updates to trigger notification
+  enable update commands
+- added a bit more comments
+- usig bitfield.h macros
+- fixed sparse complaint about missing static on global
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/log/?h=for-next/scmi
+----
+
+
+
+Cristian Marussi (9):
+  dt-bindings: firmware: arm,scmi: Add powercap protocol
+  firmware: arm_scmi: Add SCMIv3.1 Powercap protocol basic support
+  firmware: arm_scmi: Generalize FastChannel support
+  firmware: arm_scmi: Add SCMIv3.1 Powercap FastChannels support
+  firmware: arm_scmi: Make use of FastChannels configurable
+  include: trace: Add SCMI FastChannel tracing
+  firmware: arm_scmi: Use FastChannel tracing
+  firmware: arm_scmi: Add scmi_driver optional setup/teardown callbacks
+  powercap: arm_scmi: Add SCMI Powercap based driver
+
+ .../bindings/firmware/arm,scmi.yaml           |  10 +
+ drivers/firmware/arm_scmi/Kconfig             |  13 +
+ drivers/firmware/arm_scmi/Makefile            |   2 +-
+ drivers/firmware/arm_scmi/bus.c               |  15 +-
+ drivers/firmware/arm_scmi/driver.c            | 173 ++++
+ drivers/firmware/arm_scmi/perf.c              | 225 ++---
+ drivers/firmware/arm_scmi/powercap.c          | 866 ++++++++++++++++++
+ drivers/firmware/arm_scmi/protocols.h         |  23 +
+ drivers/powercap/Kconfig                      |  13 +
+ drivers/powercap/Makefile                     |   1 +
+ drivers/powercap/arm_scmi_powercap.c          | 537 +++++++++++
+ include/linux/scmi_protocol.h                 | 129 +++
+ include/trace/events/scmi.h                   |  25 +
+ 13 files changed, 1858 insertions(+), 174 deletions(-)
+ create mode 100644 drivers/firmware/arm_scmi/powercap.c
+ create mode 100644 drivers/powercap/arm_scmi_powercap.c
+
+-- 
+2.32.0
+

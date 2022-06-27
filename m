@@ -2,49 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5F555E352
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6706355DE11
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241221AbiF0XL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S240135AbiF0XOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241011AbiF0XLY (ORCPT
+        with ESMTP id S237641AbiF0XOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:11:24 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EEE20BCF
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:11:21 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id e195-20020a6bb5cc000000b0066cc9ece80fso6355944iof.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:11:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=/lJPqgqzm8dhJUrPMF0qEsPebda9jDQJGT3puopnEYg=;
-        b=rbPgiXr1zw1zrVFFelh4iOt44YR/XwHVShZJRdCtLk124tsLiWXerWFsQ3rS2AMaWC
-         nJAV0H4jf5tzZ8J0QOVQ3S0c5H15X4yPLxPYBfve1j2YyQie5bPDWa7QcYocVWVBChGd
-         puHMdb3BazFzuLcYBoxf374V0F5htDH4l6p1gsWATq7Zhk+p6oOU5zP063CsrqjtLSSF
-         3TWkePwJPI20S08fDlWFqPLNT0C/+6uka23rTabUqbettRv2MyMqI0u3iLLvQ2TP7AGD
-         6kFMnfl+M2aIMtxGDKXzZYEDQu1v5Lpvwh0mncmZPw6ZjzJkqN84rFd04mL0ce8Mk/CB
-         SJCQ==
-X-Gm-Message-State: AJIora8TKdSJtwMQdgwrwT2a2R0MUIdaSQTRSeJn1MIIwuzUxy9lEeSV
-        4gHCSfCkoms2JK6adMTzgIHWYfxqmUn7xTXZQia3w/k9NXxb
-X-Google-Smtp-Source: AGRyM1uXLsJAavWFIa3CHbs2tR9FSOoEyG93iRJLFwCzFJdGRF0v3rKxT+AN9HiInTUQvnK1we/stQ5Tb8gqN/+SLA9RXkXKMixy
+        Mon, 27 Jun 2022 19:14:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848E623140;
+        Mon, 27 Jun 2022 16:14:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10C656155C;
+        Mon, 27 Jun 2022 23:14:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C99BC341C8;
+        Mon, 27 Jun 2022 23:14:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656371685;
+        bh=h4FR0qftIvkH2uTSynr4CWcZ4lbRTfiY9kRTXC9vhC0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pVumDj2bJvP3+KrO/DN9mUcf4t+RsXVIMpp/dDhtG24b3DoZqbMhF1Y0p4FNqIY5+
+         m+GZjCtQzd+mmgOhqsfrrph8ROF9fIUiJYfwHg5uPSfErIvUBv8NcFeS+w+NnrO/Db
+         ms4S+uoY70BrYvOdLhVZ9YQLn8elgC3OG5cM/cUuz7ZZh+jDVSNBZFU6Zz9vLQo7fc
+         o2/6CRy7mwpJTsjz3r013qEeFBsXYa3FiTRF1uuodjuoLy8qHxTT1Qn0j24uVZqyc2
+         y4dfsB+u8civcJn6Ur0g3rW40NiuYMyD+6ixn2LstAep8DOWmByGR9ojvRyNZqUMe9
+         6oFZ2w//886pw==
+Date:   Tue, 28 Jun 2022 02:14:41 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        Eric Biggers <ebiggers@google.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 RESEND] KEYS: asymmetric: enforce SM2 signature use
+ pkey algo
+Message-ID: <Yro54bzvRZqbmCxb@kernel.org>
+References: <20220627092027.20858-1-tianjia.zhang@linux.alibaba.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1686:b0:331:c1ed:9f55 with SMTP id
- f6-20020a056638168600b00331c1ed9f55mr9733118jat.201.1656371481048; Mon, 27
- Jun 2022 16:11:21 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 16:11:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000be7cba05e276093f@google.com>
-Subject: [syzbot] WARNING: HA
-From:   syzbot <syzbot+fc6c9a8f13210d4b2dd2@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627092027.20858-1-tianjia.zhang@linux.alibaba.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,40 +59,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Jun 27, 2022 at 05:20:27PM +0800, Tianjia Zhang wrote:
+> The signature verification of SM2 needs to add the Za value and
+> recalculate sig->digest, which requires the detection of the pkey_algo
+> in public_key_verify_signature(). As Eric Biggers said, the pkey_algo
+> field in sig is attacker-controlled and should be use pkey->pkey_algo
+> instead of sig->pkey_algo, and secondly, if sig->pkey_algo is NULL, it
+> will also cause signature verification failure.
+> 
+> The software_key_determine_akcipher() already forces the algorithms
+> are matched, so the SM3 algorithm is enforced in the SM2 signature,
+> although this has been checked, we still avoid using any algorithm
+> information in the signature as input.
+> 
+> Fixes: 215525639631 ("X.509: support OSCCA SM2-with-SM3 certificate verification")
+> Reported-by: Eric Biggers <ebiggers@google.com>
+> Cc: stable@vger.kernel.org # v5.10+
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> ---
+>  crypto/asymmetric_keys/public_key.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
+> index 7c9e6be35c30..3f17ee860f89 100644
+> --- a/crypto/asymmetric_keys/public_key.c
+> +++ b/crypto/asymmetric_keys/public_key.c
+> @@ -309,7 +309,8 @@ static int cert_sig_digest_update(const struct public_key_signature *sig,
+>  	if (ret)
+>  		return ret;
+>  
+> -	tfm = crypto_alloc_shash(sig->hash_algo, 0, 0);
+> +	/* SM2 signatures always use the SM3 hash algorithm */
+> +	tfm = crypto_alloc_shash("sm3", 0, 0);
 
-syzbot found the following issue on:
+So, why this should not validate sig->hash_alog *to be* "sm3"?
 
-HEAD commit:    08897940f458 Add linux-next specific files for 20220623
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=15696f7ff00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fb185a52c6ad0a8e
-dashboard link: https://syzkaller.appspot.com/bug?extid=fc6c9a8f13210d4b2dd2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15bfb93ff00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=118010a8080000
+I.e. add instead guard before crypto_alloc_hash:
 
-Bisection is inconclusive: the issue happens on the oldest tested release.
+        if (strncmp(sig->hash_algo, "sm3") != 0) {
+                /* error */
+        }
+        /* continue */
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13a2a888080000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1062a888080000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17a2a888080000
+>  	if (IS_ERR(tfm))
+>  		return PTR_ERR(tfm);
+>  
+> @@ -414,8 +415,7 @@ int public_key_verify_signature(const struct public_key *pkey,
+>  	if (ret)
+>  		goto error_free_key;
+>  
+> -	if (sig->pkey_algo && strcmp(sig->pkey_algo, "sm2") == 0 &&
+> -	    sig->data_size) {
+> +	if (strcmp(pkey->pkey_algo, "sm2") == 0 && sig->data_size) {
+>  		ret = cert_sig_digest_update(sig, tfm);
+>  		if (ret)
+>  			goto error_free_key;
+> -- 
+> 2.24.3 (Apple Git-128)
+> 
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fc6c9a8f13210d4b2dd2@syzkaller.appspotmail.com
-
-netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
-=====================================================
-WARNING: HA
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+BR, Jarkko

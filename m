@@ -2,101 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2215D55D732
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D237E55C6AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237826AbiF0Qi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
+        id S239309AbiF0QjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239250AbiF0QiZ (ORCPT
+        with ESMTP id S234772AbiF0Qi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:38:25 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC979B858;
-        Mon, 27 Jun 2022 09:38:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1656347901;
-        bh=yd22nbeWjoHI5mPQLuBmGHFqp7xWncZwRwI9JVbyqGE=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=b8tQbookbrnDkzUPpy1yCTH+YHcnv3PTTUgcNB62ISoRi13YXVlJSJFYcLI/J6BSQ
-         /YL9OfgL/SX8rI2BrrzpZR2tx2v7yN1yVBdRpTg+EKxT5Osn0G/n6pPVtKNTRFeQF0
-         anmOe2Z+MkqEEKkDu9ec0BCsN/R9weUS+maBhD58=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.34.201]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MulqD-1noL2E0Voh-00rrdd; Mon, 27
- Jun 2022 18:38:21 +0200
-Message-ID: <49e7b2de-3fac-70f3-5607-a0c511b13fd6@gmx.de>
-Date:   Mon, 27 Jun 2022 18:38:20 +0200
+        Mon, 27 Jun 2022 12:38:59 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D7718361
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:38:58 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id n185so5769304wmn.4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:38:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2X0YMR4doGI5s4MFYhx72Aqlx/HSr/zz0dnGpOBKJrI=;
+        b=eo1IOeTJvZiZniGYJFFgAk698L+00MlWQOrG2gWirsUWOqoesM22S/XvZRZWJAMyKK
+         i9JzzAUR+049lxrM/++AAAMKJ2+KcXVwuEPUheYreeiKEVybhSe+gjvvt2m0ro/+VgCj
+         BmLs/lMSb6pqsjaRd0YT5nINZNC3sstCSO9hkwfvFrWyAUEQZgZp2tHM/PctFwr4Pmp3
+         EwDJb5tDrb99wryofOaorvPD/qJt1pmIodVoH1sUASx1hZw57aDSVrZoWBbBmA7AwwPm
+         FACK3P8s8SMel7DWA8oxiHJWtEokPH5KTX2b5h5s4NFH2+zAFFX6tL5LpGJFy+NxqGJw
+         vTfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2X0YMR4doGI5s4MFYhx72Aqlx/HSr/zz0dnGpOBKJrI=;
+        b=pEJ6+gAlYl2LPjnDi+KqDXDhHtIYMvFsdtF3R/wHWEnXH7dp1ChuYMlIbtuitr2DGt
+         WBHklU76T4iTCObqahHGBKc+zl7dfWza0AdvsARJ5riy1AHNum6UtDW/sHBmpCUbaJei
+         V+QbeRDnYCnCfNTdmBgrXpBnSjCAO3Z6sL1h+H51hqM8Nl3+9Chb5D7a+fqg2H+RJQoV
+         yNfDobQRXS5Rmrj3P0dHKdpv6hfiXs8EMcR6dXXBpsCCungFP8w+9jK1jzTdIjI2YqVn
+         8JZrLCyCMopO7abIdEMllrr1QjT+mmydqYr1b1jBgs7oxttKgNUy8FqSdl4LCiy9AAxH
+         LkuQ==
+X-Gm-Message-State: AJIora8yH7Is+lW8LsrdJilJSGq9MqfqqWXiJHPcrAWvj/S+DwG1GFtz
+        4/6rz5K8q5583ENkn+di9/Xs0NhIHh5y2Dci6FLZuQ==
+X-Google-Smtp-Source: AGRyM1v7yilIE6a1bBX0SDsItjQBLoyAw+z0fd/Z6DYlMHs2qDS/BSvav9Ttef9A19nGeYif8daXLEZ5hFPStHYwBME=
+X-Received: by 2002:a7b:c10c:0:b0:3a0:439d:6d66 with SMTP id
+ w12-20020a7bc10c000000b003a0439d6d66mr14029728wmi.149.1656347936902; Mon, 27
+ Jun 2022 09:38:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 5.18 000/181] 5.18.8-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:qAzEVzOlHfMBpYVB8i8dviaOgdIQGYytRRtrHnHuYC1Yb6F1HUH
- tgK56CDqMMtiVoIe85p4Muwi/kolyUBnlL8NWLMp/DCuVoI+84eP18sRiZK06brgg069Z7g
- hq+yb0e1LfWXvOcoBGl3MOh8yOxx6ifGxeNOSc33OMQDB0ooOLJDYb+ZSLIhMsu5LluIMCJ
- wE1VDm0/JjSmgViI4z7dA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YtcChZPsR04=:ntYZcw5nFwRHwnwVlAoUF+
- XoDBv2QJFMzizlOx+1pQ3QqMDTk5k+XmPVDxcUpiVEzh6W93T97HzPHmTH3GFCT3jf+/uv3cO
- r7qxG42gmVIq/cxLYr6tJz6beA7UL83ehanStm8n/SpcBtgH4ptnN3WF06FVRaABGek2iCjHU
- NVF2rpJAq3CFOjie7h13TBPu8fZu5QjrWmW1DofHZpIwrPdJ8zpABEL3KLf52QCE6MaHukPQ4
- +lFpavcT6l0G7R1jraS3uxSrepbz392WrzDLhEF0xeuVeqK/vJnjVIqlXUpg1RKqxtn5jfmnB
- eIx6lsxrqFsPo18De3EzBS0aa3bTFcmYgS5JOo297kMbJTCbC+VklpbQaqP7euGaazq839ipW
- uRRPXUVZEIeT4Ec0dkjzRm96T3oJqfG57AwrfwtqMUirzus95asLlNQNpWlQ62US15satmL2P
- l/y1898LtniJATMkYqltLZISh/8fCyjwUguu6xIizIn3214vjfwVkd8Nys5H8U8x0mc7JCFMI
- gC+hEojgNcjK6yaGI/a8EByA9dUElbtIMNk6+VPNP6eyQLsZdp1C6SyPofawZGWH04Nsnn5NA
- MoFLdmOvBxSe5U1r5MCaJGV2cMGRCu2ZQt4ZKUuaTp8EnbfIg8HMHctNKoVyzZopbL1R2a1F8
- Slp0KsoIOV856FF9ijYguUQtEsLiFfpjHdBvFkf2z+SRfoXfa72MNmEOHCMEeD538esSVK2wj
- Omswd9Onqb60Vt108o4OiYHnAw1yHTVSBy16Rdw74RIfTe4nPoad00NgGlPhktLEzxjyyOR3+
- M7XXhd7fthoY1TLgf2Bn3vBfaqUoqgC2ZSj8c55cBAHnKQBTzbJ8jzAVAzjP1ICUKcogY5Qqt
- Cun9RQqlpyGDgYG2DVkY0wHLL1Fwlr5ARH4/FKZL++PsiMZTvbrcrk0vqawYcJzyA9ieUu/+X
- uZNmfMyhBsIaGK5ItvESOItgYEe3SiLeFw8HywIDuENk+WA9TrKGjCJrD/3jsdfkqwsIUQVsw
- Vca6YS1kFLumVuaHNVtzKuKdVYkwadXP2c9/wrh9Z+dNp63X2ygkoyfXS0Eim+oCaiYdoFB1y
- 5Oix4S6+VyL8lVWx1OmNDs6zNW2ol9awZx/
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220615130901.1151397-1-german.gomez@arm.com> <20220615130901.1151397-2-german.gomez@arm.com>
+In-Reply-To: <20220615130901.1151397-2-german.gomez@arm.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 27 Jun 2022 09:38:44 -0700
+Message-ID: <CAP-5=fU2duRRY3f0PKuM_a4_Nwi3zy576ajKMVp1cs_qfcr8kw@mail.gmail.com>
+Subject: Re: [PATCH] perf test: Add test for branch stack sampling
+To:     German Gomez <german.gomez@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hallo Greg
+On Wed, Jun 15, 2022 at 6:09 AM German Gomez <german.gomez@arm.com> wrote:
+>
+> Add a self test for branch stack sampling, to check that we get the
+> expected branch types, and filters behave as expected.
+>
+> Suggested-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> Signed-off-by: German Gomez <german.gomez@arm.com>
 
-5.18.8-rc1
+Love tests, thanks! There are already shell tests that compile C code
+but they do it by having the C code within the shell test, for
+example:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/shell/pipe_test.sh?h=perf/core#n14
+Having it this way I thinks means the tests can run properly when
+installed, as we don't install non-sh files:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/Makefile.perf?h=perf/core#n1016
 
-compiles (see [1]), boots and runs here on x86_64
-(Intel i5-11400, Fedora 36)
+Thanks,
+Ian
 
-[1]
-a regression against 5.18.7:
-
-...
-
-LD      vmlinux.o
-   MODPOST vmlinux.symvers
-WARNING: modpost: vmlinux.o(___ksymtab_gpl+tick_nohz_full_setup+0x0):
-Section mismatch in reference from the variable
-__ksymtab_tick_nohz_full_setup to the function
-.init.text:tick_nohz_full_setup()
-The symbol tick_nohz_full_setup is exported and annotated __init
-Fix this by removing the __init annotation of tick_nohz_full_setup or
-drop the export.
-...
-
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de
-
-
-Thanks
-
-Ronald
-
+> ---
+>  tools/perf/tests/shell/lib/brstack/main.h | 16 +++++
+>  tools/perf/tests/shell/lib/brstack/test.c | 24 +++++++
+>  tools/perf/tests/shell/test_brstack.sh    | 86 +++++++++++++++++++++++
+>  3 files changed, 126 insertions(+)
+>  create mode 100644 tools/perf/tests/shell/lib/brstack/main.h
+>  create mode 100644 tools/perf/tests/shell/lib/brstack/test.c
+>  create mode 100755 tools/perf/tests/shell/test_brstack.sh
+>
+> diff --git a/tools/perf/tests/shell/lib/brstack/main.h b/tools/perf/tests/shell/lib/brstack/main.h
+> new file mode 100644
+> index 000000000..94d2665ec
+> --- /dev/null
+> +++ b/tools/perf/tests/shell/lib/brstack/main.h
+> @@ -0,0 +1,16 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define BENCH_RUNS 99999
+> +
+> +void bench(void);
+> +
+> +int main(void)
+> +{
+> +       int cnt = 0;
+> +
+> +       while (1) {
+> +               if ((cnt++) > BENCH_RUNS)
+> +                       break;
+> +               bench();                /* call */
+> +       }                               /* branch (uncond) */
+> +       return 0;
+> +}
+> diff --git a/tools/perf/tests/shell/lib/brstack/test.c b/tools/perf/tests/shell/lib/brstack/test.c
+> new file mode 100644
+> index 000000000..8a2308901
+> --- /dev/null
+> +++ b/tools/perf/tests/shell/lib/brstack/test.c
+> @@ -0,0 +1,24 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "main.h"
+> +
+> +int cnt;
+> +
+> +void bar(void)
+> +{
+> +}                              /* return */
+> +
+> +void foo(void)
+> +{
+> +       bar();                  /* call */
+> +}                              /* return */
+> +
+> +void bench(void)
+> +{
+> +       void (*foo_ind)(void) = foo;
+> +
+> +       if ((cnt++) % 3)        /* branch (cond) */
+> +               foo();          /* call */
+> +
+> +       bar();                  /* call */
+> +       foo_ind();              /* call (ind) */
+> +}
+> diff --git a/tools/perf/tests/shell/test_brstack.sh b/tools/perf/tests/shell/test_brstack.sh
+> new file mode 100755
+> index 000000000..2b1a1b20a
+> --- /dev/null
+> +++ b/tools/perf/tests/shell/test_brstack.sh
+> @@ -0,0 +1,86 @@
+> +#!/bin/sh
+> +# Check branch stack sampling
+> +
+> +# SPDX-License-Identifier: GPL-2.0
+> +# German Gomez <german.gomez@arm.com>, 2022
+> +
+> +set -e
+> +
+> +# we need a C compiler to build the test programs
+> +# so bail if none is found
+> +if ! [ -x "$(command -v cc)" ]; then
+> +       echo "failed: no compiler, install gcc"
+> +       exit 2
+> +fi
+> +
+> +# skip the test if the hardware doesn't support branch stack sampling
+> +perf record -b -o- -- true > /dev/null || exit 2
+> +
+> +TMPDIR=$(mktemp -d /tmp/__perf_test.program.XXXXX)
+> +
+> +cleanup() {
+> +       rm -rf $TMPDIR
+> +}
+> +
+> +trap cleanup exit term int
+> +
+> +test_user_branches() {
+> +       echo
+> +       echo "Testing user branch stack sampling"
+> +       echo
+> +
+> +       cc -fno-inline -g "$(dirname $0)/lib/brstack/test.c" -o $TMPDIR/a.out
+> +
+> +       perf record -o $TMPDIR/perf.data -q --branch-filter any,save_type,u -- $TMPDIR/a.out
+> +       perf script -i $TMPDIR/perf.data --fields brstacksym | xargs -n1 > $TMPDIR/perf.script
+> +
+> +       # example of branch entries:
+> +       #       foo+0x14/bar+0x40/P/-/-/0/CALL
+> +
+> +       set -x
+> +       egrep -m1 "^bench\+[^ ]*/foo\+[^ ]*/IND_CALL$"  $TMPDIR/perf.script
+> +       egrep -m1 "^foo\+[^ ]*/bar\+[^ ]*/CALL$"        $TMPDIR/perf.script
+> +       egrep -m1 "^bench\+[^ ]*/foo\+[^ ]*/CALL$"      $TMPDIR/perf.script
+> +       egrep -m1 "^bench\+[^ ]*/bar\+[^ ]*/CALL$"      $TMPDIR/perf.script
+> +       egrep -m1 "^bar\+[^ ]*/foo\+[^ ]*/RET$"         $TMPDIR/perf.script
+> +       egrep -m1 "^foo\+[^ ]*/bench\+[^ ]*/RET$"       $TMPDIR/perf.script
+> +       egrep -m1 "^bench\+[^ ]*/bench\+[^ ]*/COND$"    $TMPDIR/perf.script
+> +       egrep -m1 "^main\+[^ ]*/main\+[^ ]*/UNCOND$"    $TMPDIR/perf.script
+> +       set +x
+> +
+> +       # some branch types are still not being tested:
+> +       # IND COND_CALL COND_RET SYSCALL SYSRET IRQ SERROR NO_TX
+> +}
+> +
+> +test_filter() {
+> +       local filter=$1
+> +       local expect=$2
+> +
+> +       echo
+> +       echo "Testing branch stack filtering permutation ($filter,$expect)"
+> +       echo
+> +
+> +       cc -fno-inline -g "$(dirname $0)/lib/brstack/test.c" -o $TMPDIR/a.out
+> +
+> +       perf record -o $TMPDIR/perf.data -q --branch-filter $filter,save_type,u -- $TMPDIR/a.out
+> +       perf script -i $TMPDIR/perf.data --fields brstack | xargs -n1 > $TMPDIR/perf.script
+> +
+> +       # fail if we find any branch type that doesn't match any of the expected ones
+> +       # also consider UNKNOWN branch types (-)
+> +       if egrep -vm1 "^[^ ]*/($expect|-|( *))$" $TMPDIR/perf.script; then
+> +               return 1
+> +       fi
+> +}
+> +
+> +test_user_branches
+> +
+> +# first argument <arg0> is the argument passed to "--branch-stack <arg0>,save_type,u"
+> +# second argument are the expected branch types for the given filter
+> +test_filter "any_call" "CALL|IND_CALL|COND_CALL|SYSCALL|IRQ|FAULT_DATA|FAULT_INST"
+> +test_filter "call"     "CALL|SYSCALL"
+> +test_filter "cond"     "COND"
+> +test_filter "any_ret"  "RET|COND_RET|SYSRET|ERET"
+> +
+> +test_filter "call,cond"                "CALL|SYSCALL|COND"
+> +test_filter "any_call,cond"            "CALL|IND_CALL|COND_CALL|IRQ|FAULT_DATA|FAULT_INST|SYSCALL|COND"
+> +test_filter "cond,any_call,any_ret"    "COND|CALL|IND_CALL|COND_CALL|SYSCALL|IRQ|FAULT_DATA|FAULT_INST|RET|COND_RET|SYSRET|ERET"
+> --
+> 2.25.1
+>

@@ -2,194 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BAC55C1C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4FC55CD9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238543AbiF0Tjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 15:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
+        id S240436AbiF0TlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 15:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbiF0Tjq (ORCPT
+        with ESMTP id S238708AbiF0TlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 15:39:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D6A112A8D;
-        Mon, 27 Jun 2022 12:39:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 65D001758;
-        Mon, 27 Jun 2022 12:39:45 -0700 (PDT)
-Received: from [10.57.84.159] (unknown [10.57.84.159])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE96A3F792;
-        Mon, 27 Jun 2022 12:39:43 -0700 (PDT)
-Message-ID: <8b237fd0-96f0-ad48-dfcb-e4a46e4463eb@arm.com>
-Date:   Mon, 27 Jun 2022 20:39:32 +0100
+        Mon, 27 Jun 2022 15:41:18 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4B51705A
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:41:16 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id u12-20020a05600c210c00b003a02b16d2b8so6261771wml.2
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 12:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QIsRfhdQMUkP3ryaWA3tv1Mq4oyLE45ECuiu3trpN00=;
+        b=B9k2d87DXty7I8E8LE+438emVeZlup2sIzCEsaWM1/EJIZIIppoNtZkCPt2B28TvB1
+         fdKtH1VPlJ16WyEMx1xIBZTokOGXYXJAfUsriSAw/CpgnU/+PGc/DWxZ7qOcSPbfaeGR
+         rM1s3NrexWkt4JIzMD25YQaH95anZDeTxbULdV8w7TEGkH8RBATcyyLwr/sjLesRwRcy
+         0U9RvCUP+tg6PUtyUgz0XndXRLxU9I3XVPAehNBfQE275chl7nDU8XSSIbYZ6ThnJBeb
+         RD/AeP34/mdXcNfB37IJm17xr1DNsnhqVVkZHleXi5mgtiwiFAN6khWnFjFTaYy47kFf
+         W8iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QIsRfhdQMUkP3ryaWA3tv1Mq4oyLE45ECuiu3trpN00=;
+        b=oVQmqTKuC1nBhgdUaGfeWX+GCswPgs945LNddVIuH8QZ9hwCx7U6Km+HpBjH8Hszyf
+         TVa2uqqxyhA+R4w8jtuzjflH4XGZ5jtNc4mPBJ4r7EP0sabSoHERtkIgHn58fxPjldAL
+         aZElou5Z4PGeJn4JgA/en+4ZC5Yrn12hVHMHISA/fXq//1XjApW0bgN9G54psyNaIgxa
+         6z2mRA/U3TC+3coiNzFCYjPAV/EQATQcFI29WhklLwW4Chc/tnKATGKIjlyUTbMJ2Cbn
+         BneVZK4cdf37ZlUWmFajIp+NcevmjcKR1xe19g40FavKIRXo9iku7f3pQzJB5n06OsPP
+         a9UQ==
+X-Gm-Message-State: AJIora8AYzFZjeGwHpYn3KthCtzutlM5kJfivMjDEkpD8MeEJCOZqRLu
+        z0lsETi8WsrR41o4SbndJRAmVw==
+X-Google-Smtp-Source: AGRyM1tvTVBKfByGAdgX8FjccMcjonG0JFKRVmUJw6/qO5b6Hes7fhYw0GHyt2p7jd1AwDC9JUm25Q==
+X-Received: by 2002:a05:600c:4f15:b0:39c:7eaf:97e7 with SMTP id l21-20020a05600c4f1500b0039c7eaf97e7mr22218520wmq.199.1656358875365;
+        Mon, 27 Jun 2022 12:41:15 -0700 (PDT)
+Received: from henark71.. ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id e9-20020a5d4e89000000b0021a3a87fda9sm11428047wru.47.2022.06.27.12.41.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 12:41:14 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Cassel <niklas.cassel@wdc.com>,
+        Dillon Min <dillon.minfei@gmail.com>,
+        Heng Sia <jee.heng.sia@intel.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v2 00/16] Canaan devicetree fixes
+Date:   Mon, 27 Jun 2022 20:39:48 +0100
+Message-Id: <20220627194003.2395484-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 1/2] vfio/type1: Simplify bus_type determination
-Content-Language: en-GB
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     cohuck@redhat.com, kvm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        jgg@nvidia.com, baolu.lu@linux.intel.com, iommu@lists.linux.dev
-References: <194a12d3434d7b38f84fa96503c7664451c8c395.1656092606.git.robin.murphy@arm.com>
- <20220627132136.2b902875.alex.williamson@redhat.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220627132136.2b902875.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-27 20:21, Alex Williamson wrote:
-> On Fri, 24 Jun 2022 18:51:44 +0100
-> Robin Murphy <robin.murphy@arm.com> wrote:
-> 
->> Since IOMMU groups are mandatory for drivers to support, it stands to
->> reason that any device which has been successfully added to a group
->> must be on a bus supported by that IOMMU driver, and therefore a domain
->> viable for any device in the group must be viable for all devices in
->> the group. This already has to be the case for the IOMMU API's internal
->> default domain, for instance. Thus even if the group contains devices on
->> different buses, that can only mean that the IOMMU driver actually
->> supports such an odd topology, and so without loss of generality we can
->> expect the bus type of any device in a group to be suitable for IOMMU
->> API calls.
->>
->> Furthermore, scrutiny reveals a lack of protection for the bus being
->> removed while vfio_iommu_type1_attach_group() is using it; the reference
->> that VFIO holds on the iommu_group ensures that data remains valid, but
->> does not prevent the group's membership changing underfoot.
->>
->> We can address both concerns by recycling vfio_bus_type() into some
->> superficially similar logic to indirect the IOMMU API calls themselves.
->> Each call is thus protected from races by the IOMMU group's own locking,
->> and we no longer need to hold group-derived pointers beyond that scope.
->> It also gives us an easy path for the IOMMU API's migration of bus-based
->> interfaces to device-based, of which we can already take the first step
->> with device_iommu_capable(). As with domains, any capability must in
->> practice be consistent for devices in a given group - and after all it's
->> still the same capability which was expected to be consistent across an
->> entire bus! - so there's no need for any complicated validation.
->>
->> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
->> ---
->>
->> v3: Complete rewrite yet again, and finally it doesn't feel like we're
->> stretching any abstraction boundaries the wrong way, and the diffstat
->> looks right too. I did think about embedding IOMMU_CAP_INTR_REMAP
->> directly in the callback, but decided I like the consistency of minimal
->> generic wrappers. And yes, if the capability isn't supported then it
->> does end up getting tested for the whole group, but meh, it's harmless.
->>
->>   drivers/vfio/vfio_iommu_type1.c | 42 +++++++++++++++++----------------
->>   1 file changed, 22 insertions(+), 20 deletions(-)
->>
->> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
->> index c13b9290e357..a77ff00c677b 100644
->> --- a/drivers/vfio/vfio_iommu_type1.c
->> +++ b/drivers/vfio/vfio_iommu_type1.c
->> @@ -1679,18 +1679,6 @@ static int vfio_dma_do_map(struct vfio_iommu *iommu,
->>   	return ret;
->>   }
->>   
->> -static int vfio_bus_type(struct device *dev, void *data)
->> -{
->> -	struct bus_type **bus = data;
->> -
->> -	if (*bus && *bus != dev->bus)
->> -		return -EINVAL;
->> -
->> -	*bus = dev->bus;
->> -
->> -	return 0;
->> -}
->> -
->>   static int vfio_iommu_replay(struct vfio_iommu *iommu,
->>   			     struct vfio_domain *domain)
->>   {
->> @@ -2153,13 +2141,25 @@ static void vfio_iommu_iova_insert_copy(struct vfio_iommu *iommu,
->>   	list_splice_tail(iova_copy, iova);
->>   }
->>   
-> 
-> Any objection if I add the following comment:
-> 
-> /* Redundantly walks non-present capabilities to simplify caller */
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Not at all, feel free - I guess if I felt it was worth pre-empting the 
-review question then it probably is subtle enough to deserve a code comment!
+Hey all,
+This series should rid us of dtbs_check errors for the RISC-V Canaan k210
+based boards. To make keeping it that way a little easier, I changed the
+Canaan devicetree Makefile so that it would build all of the devicetrees
+in the directory if SOC_CANAAN.
+
+I *DO NOT* have any Canaan hardware so I have not tested any of this in
+action. Since I sent v1, I tried to buy some since it's cheap - but could
+out of the limited stockists none seemed to want to deliver to Ireland :(
+I based the series on next-20220617.
+
+For the bindings, I am never sure about which of {unevaluated,additional}
+Properties is correct to use, but the if statements in the binding didn't
+work with additional so I used unevaluated...
+
+@Mark, for your ASoC binding I was not sure about the properties that I
+made depend on the compatible, but I looked in tree and was not able to
+find other users to contradict what's in the Canaan devicetrees nor did
+I get that much help from their docs.
+
+@Serge, I dropped your R-b since I changed the enum.
+
+@Rob, <N days ago>'s removal of ilitek,ili9341.txt is moved to ths series
+since I was editing the dt-schema binding anyway.
 
 Thanks,
-Robin.
+Conor.
 
-> 
-> Thanks,
-> Alex
-> 
->> +static int vfio_iommu_device_capable(struct device *dev, void *data)
->> +{
->> +	return device_iommu_capable(dev, (enum iommu_cap)data);
->> +}
->> +
->> +static int vfio_iommu_domain_alloc(struct device *dev, void *data)
->> +{
->> +	struct iommu_domain **domain = data;
->> +
->> +	*domain = iommu_domain_alloc(dev->bus);
->> +	return 1; /* Don't iterate */
->> +}
->> +
->>   static int vfio_iommu_type1_attach_group(void *iommu_data,
->>   		struct iommu_group *iommu_group, enum vfio_group_type type)
->>   {
->>   	struct vfio_iommu *iommu = iommu_data;
->>   	struct vfio_iommu_group *group;
->>   	struct vfio_domain *domain, *d;
->> -	struct bus_type *bus = NULL;
->>   	bool resv_msi, msi_remap;
->>   	phys_addr_t resv_msi_base = 0;
->>   	struct iommu_domain_geometry *geo;
->> @@ -2192,18 +2192,19 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
->>   		goto out_unlock;
->>   	}
->>   
->> -	/* Determine bus_type in order to allocate a domain */
->> -	ret = iommu_group_for_each_dev(iommu_group, &bus, vfio_bus_type);
->> -	if (ret)
->> -		goto out_free_group;
->> -
->>   	ret = -ENOMEM;
->>   	domain = kzalloc(sizeof(*domain), GFP_KERNEL);
->>   	if (!domain)
->>   		goto out_free_group;
->>   
->> +	/*
->> +	 * Going via the iommu_group iterator avoids races, and trivially gives
->> +	 * us a representative device for the IOMMU API call. We don't actually
->> +	 * want to iterate beyond the first device (if any).
->> +	 */
->>   	ret = -EIO;
->> -	domain->domain = iommu_domain_alloc(bus);
->> +	iommu_group_for_each_dev(iommu_group, &domain->domain,
->> +				 vfio_iommu_domain_alloc);
->>   	if (!domain->domain)
->>   		goto out_free_domain;
->>   
->> @@ -2258,7 +2259,8 @@ static int vfio_iommu_type1_attach_group(void *iommu_data,
->>   	list_add(&group->next, &domain->group_list);
->>   
->>   	msi_remap = irq_domain_check_msi_remap() ||
->> -		    iommu_capable(bus, IOMMU_CAP_INTR_REMAP);
->> +		    iommu_group_for_each_dev(iommu_group, (void *)IOMMU_CAP_INTR_REMAP,
->> +					     vfio_iommu_device_capable);
->>   
->>   	if (!allow_unsafe_interrupts && !msi_remap) {
->>   		pr_warn("%s: No interrupt remapping support.  Use the module param \"allow_unsafe_interrupts\" to enable VFIO IOMMU support on this platform\n",
-> 
+Changes since v1:
+- I added a new dt node & compatible for the SRAM memory controller due
+  Damien's wish to preserve the inter-op with U-Boot.
+- The dw-apb-ssi binding now uses the default rx/tx widths
+- A new patch fixes bus {ranges,reg} warnings
+- Rearranged the patches in a slightly more logical order
+
+Conor Dooley (16):
+  dt-bindings: display: convert ilitek,ili9341.txt to dt-schema
+  dt-bindings: display: panel: allow ilitek,ili9341 in isolation
+  ASoC: dt-bindings: convert designware-i2s to dt-schema
+  spi: dt-bindings: dw-apb-ssi: update spi-{r,t}x-bus-width
+  dt-bindings: dma: add Canaan k210 to Synopsys DesignWare DMA
+  dt-bindings: timer: add Canaan k210 to Synopsys DesignWare timer
+  dt-bindings: memory-controllers: add canaan k210 sram controller
+  riscv: dts: canaan: fix the k210's memory node.
+  riscv: dts: canaan: add a specific compatible for k210's dma
+  riscv: dts: canaan: add a specific compatible for k210's timers
+  riscv: dts: canaan: fix mmc node names
+  riscv: dts: canaan: fix kd233 display spi frequency
+  riscv: dts: canaan: use custom compatible for k210 i2s
+  riscv: dts: canaan: remove spi-max-frequency from controllers
+  riscv: dts: canaan: fix bus {ranges,reg} warnings
+  riscv: dts: canaan: build all devicetress if SOC_CANAAN
+
+ .../bindings/display/ilitek,ili9341.txt       | 27 ------
+ .../display/panel/ilitek,ili9341.yaml         | 60 ++++++++----
+ .../bindings/dma/snps,dw-axi-dmac.yaml        | 35 +++++--
+ .../memory-controllers/canaan,k210-sram.yaml  | 53 +++++++++++
+ .../bindings/sound/designware-i2s.txt         | 35 -------
+ .../bindings/sound/snps,designware-i2s.yaml   | 93 +++++++++++++++++++
+ .../bindings/spi/snps,dw-apb-ssi.yaml         |  6 --
+ .../bindings/timer/snps,dw-apb-timer.yaml     | 28 ++++--
+ arch/riscv/boot/dts/canaan/Makefile           | 10 +-
+ arch/riscv/boot/dts/canaan/canaan_kd233.dts   |  4 +-
+ arch/riscv/boot/dts/canaan/k210.dtsi          | 38 ++++----
+ .../riscv/boot/dts/canaan/sipeed_maix_bit.dts |  2 +-
+ .../boot/dts/canaan/sipeed_maix_dock.dts      |  2 +-
+ arch/riscv/boot/dts/canaan/sipeed_maix_go.dts |  2 +-
+ .../boot/dts/canaan/sipeed_maixduino.dts      |  2 +-
+ 15 files changed, 269 insertions(+), 128 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/ilitek,ili9341.txt
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/canaan,k210-sram.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/designware-i2s.txt
+ create mode 100644 Documentation/devicetree/bindings/sound/snps,designware-i2s.yaml
+
+-- 
+2.36.1
+

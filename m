@@ -2,193 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB87055E213
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA29C55E0D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237963AbiF0P4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        id S239187AbiF0QRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237456AbiF0P4t (ORCPT
+        with ESMTP id S235713AbiF0QRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:56:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7331AE;
-        Mon, 27 Jun 2022 08:56:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 437666162F;
-        Mon, 27 Jun 2022 15:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EADAC3411D;
-        Mon, 27 Jun 2022 15:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656345407;
-        bh=0uKIHk5NAfqiC1sw9PWOYGqU8fOKFZ6Vg6CrIR19Zgk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hZHHtIFw51nNpjsX7K/dxIQcTbD2G+uJd1OfO3hGMoQGBgPQxqvCUqglpOJ+0Miq1
-         /K9FJ6bviXkg8wvG9kV6dx2lv8AS20+9aO0WKX6mGy4sWw4nEM0sKNiC1vw1oXz0S8
-         MZC45o3icMlBflLrxfR5pKEh6xshNAP+BJb5XnUEKnHgz3Eq1HkDflYfMJKH94Uv9/
-         pInFmw9bADF7m9RkzBOUbRJioaLOLLZd5TIE004Mec+oRIdJki75A6bh0/lDJXQQ5a
-         H6/cA13NJWiimkA6z33xsWtpyYowiwfMSH4XGy7/ueH8+uOhaRdVFplx04Sh009dWU
-         0kV3+gimxBa0w==
-Date:   Mon, 27 Jun 2022 17:56:39 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Frederick Lawler <fred@cloudflare.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Casey Schaufler <casey@schaufler-ca.com>, kpsingh@kernel.org,
-        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        jmorris@namei.org, serge@hallyn.com, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@cloudflare.com
-Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
-Message-ID: <20220627155639.b5jky27loen3ydrz@wittgenstein>
-References: <20220621233939.993579-1-fred@cloudflare.com>
- <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
- <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
- <CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com>
- <20220627121137.cnmctlxxtcgzwrws@wittgenstein>
- <b7c23d54-d196-98d1-8187-605f6d4dca4d@cloudflare.com>
+        Mon, 27 Jun 2022 12:17:41 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BF618B17;
+        Mon, 27 Jun 2022 09:17:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
+  s=amazon201209; t=1656346659; x=1687882659;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   content-transfer-encoding:mime-version:subject;
+  bh=USxLX1hhBixQIrWe2JRk26WbQIpHEUrB18xFgZhH74s=;
+  b=AEgoPJ7+VsOyrvO1wKlydr4J21BuVveM2+xSBNqfnUgrKJfHwlc/Gtue
+   9euZcFZOEXD5a2WBjFdxEnESS52fJ0oNaWFHCqFJLH7JE3gR1t0CzYpkO
+   UxpVI01V97DO+Caiqp9LkSI7q8Z2wk2TAb2xNsgd87Owb6Y5yvKVzVKSY
+   c=;
+X-IronPort-AV: E=Sophos;i="5.92,226,1650931200"; 
+   d="scan'208";a="102349472"
+Subject: RE: [PATCH] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves,
+ if present
+Thread-Topic: [PATCH] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves,
+ if present
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 27 Jun 2022 15:56:51 +0000
+Received: from EX13D32EUC003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com (Postfix) with ESMTPS id 8C15DA37DA;
+        Mon, 27 Jun 2022 15:56:46 +0000 (UTC)
+Received: from EX13D32EUC003.ant.amazon.com (10.43.164.24) by
+ EX13D32EUC003.ant.amazon.com (10.43.164.24) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.36; Mon, 27 Jun 2022 15:56:45 +0000
+Received: from EX13D32EUC003.ant.amazon.com ([10.43.164.24]) by
+ EX13D32EUC003.ant.amazon.com ([10.43.164.24]) with mapi id 15.00.1497.036;
+ Mon, 27 Jun 2022 15:56:45 +0000
+From:   "Durrant, Paul" <pdurrant@amazon.co.uk>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        "Jim Mattson" <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Thread-Index: AQHYhhnGr94/Tz5Zr06wX+PVouePzq1bgNUAgAAEIQCAB+LOUIAAB6YAgAAA80A=
+Date:   Mon, 27 Jun 2022 15:56:45 +0000
+Message-ID: <e4711fc9017246978a0b452f1b5ca868@EX13D32EUC003.ant.amazon.com>
+References: <20220622092202.15548-1-pdurrant@amazon.com>
+ <YrMqtHzNSean+qkh@google.com>
+ <834f41a88e9f49b6b72d9d3672d702e5@EX13D32EUC003.ant.amazon.com>
+ <0abf9f5de09e45ef9eb06b56bf16e3e6@EX13D32EUC003.ant.amazon.com>
+ <YrnSFGURsmxV2Qmu@google.com>
+In-Reply-To: <YrnSFGURsmxV2Qmu@google.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.43.165.192]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b7c23d54-d196-98d1-8187-605f6d4dca4d@cloudflare.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-12.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 10:51:48AM -0500, Frederick Lawler wrote:
-> On 6/27/22 7:11 AM, Christian Brauner wrote:
-> > On Thu, Jun 23, 2022 at 11:21:37PM -0400, Paul Moore wrote:
-> > > On Wed, Jun 22, 2022 at 10:24 AM Frederick Lawler <fred@cloudflare.com> wrote:
-> > > > On 6/21/22 7:19 PM, Casey Schaufler wrote:
-> > > > > On 6/21/2022 4:39 PM, Frederick Lawler wrote:
-> > > > > > While creating a LSM BPF MAC policy to block user namespace creation, we
-> > > > > > used the LSM cred_prepare hook because that is the closest hook to
-> > > > > > prevent
-> > > > > > a call to create_user_ns().
-> > > > > > 
-> > > > > > The calls look something like this:
-> > > > > > 
-> > > > > >       cred = prepare_creds()
-> > > > > >           security_prepare_creds()
-> > > > > >               call_int_hook(cred_prepare, ...
-> > > > > >       if (cred)
-> > > > > >           create_user_ns(cred)
-> > > > > > 
-> > > > > > We noticed that error codes were not propagated from this hook and
-> > > > > > introduced a patch [1] to propagate those errors.
-> > > > > > 
-> > > > > > The discussion notes that security_prepare_creds()
-> > > > > > is not appropriate for MAC policies, and instead the hook is
-> > > > > > meant for LSM authors to prepare credentials for mutation. [2]
-> > > > > > 
-> > > > > > Ultimately, we concluded that a better course of action is to introduce
-> > > > > > a new security hook for LSM authors. [3]
-> > > > > > 
-> > > > > > This patch set first introduces a new security_create_user_ns() function
-> > > > > > and create_user_ns LSM hook, then marks the hook as sleepable in BPF.
-> > > > > 
-> > > > > Why restrict this hook to user namespaces? It seems that an LSM that
-> > > > > chooses to preform controls on user namespaces may want to do so for
-> > > > > network namespaces as well.
-> > > > 
-> > > > IIRC, CLONE_NEWUSER is the only namespace flag that does not require
-> > > > CAP_SYS_ADMIN. There is a security use case to prevent this namespace
-> > > > from being created within an unprivileged environment. I'm not opposed
-> > > > to a more generic hook, but I don't currently have a use case to block
-> > > > any others. We can also say the same is true for the other namespaces:
-> > > > add this generic security function to these too.
-> > > > 
-> > > > I'm curious what others think about this too.
-> > > 
-> > > While user namespaces are obviously one of the more significant
-> > > namespaces from a security perspective, I do think it seems reasonable
-> > > that the LSMs could benefit from additional namespace creation hooks.
-> > > However, I don't think we need to do all of them at once, starting
-> > > with a userns hook seems okay to me.
-> > > 
-> > > I also think that using the same LSM hook as an access control point
-> > > for all of the different namespaces would be a mistake.  At the very
-> > 
-> > Agreed. >
-> > > least we would need to pass a flag or some form of context to the hook
-> > > to indicate which new namespace(s) are being requested and I fear that
-> > > is a problem waiting to happen.  That isn't to say someone couldn't
-> > > mistakenly call the security_create_user_ns(...) from the mount
-> > > namespace code, but I suspect that is much easier to identify as wrong
-> > > than the equivalent security_create_ns(USER, ...).
-> > 
-> > Yeah, I think that's a pretty unlikely scenario.
-> > 
-> > > 
-> > > We also should acknowledge that while in most cases the current task's
-> > > credentials are probably sufficient to make any LSM access control
-> > > decisions around namespace creation, it's possible that for some
-> > > namespaces we would need to pass additional, namespace specific info
-> > > to the LSM.  With a shared LSM hook this could become rather awkward.
-> > 
-> > Agreed.
-> > 
-> > > 
-> > > > > Also, the hook seems backwards. You should
-> > > > > decide if the creation of the namespace is allowed before you create it.
-> > > > > Passing the new namespace to a function that checks to see creating a
-> > > > > namespace is allowed doesn't make a lot off sense.
-> > > > 
-> > > > I think having more context to a security hook is a good thing.
-> > > 
-> > > This is one of the reasons why I usually like to see at least one LSM
-> > > implementation to go along with every new/modified hook.  The
-> > > implementation forces you to think about what information is necessary
-> > > to perform a basic access control decision; sometimes it isn't always
-> > > obvious until you have to write the access control :)
-> > 
-> > I spoke to Frederick at length during LSS and as I've been given to
-> > understand there's a eBPF program that would immediately use this new
-> > hook. Now I don't want to get into the whole "Is the eBPF LSM hook
-> > infrastructure an LSM" but I think we can let this count as a legitimate
-> > first user of this hook/code.
-> > 
-> > > 
-> > > [aside: If you would like to explore the SELinux implementation let me
-> > > know, I'm happy to work with you on this.  I suspect Casey and the
-> > > other LSM maintainers would also be willing to do the same for their
-> > > LSMs.]
-> > > 
-> 
-> I can take a shot at making a SELinux implementation, but the question
-> becomes: is that for v2 or a later patch? I don't think the implementation
-> for SELinux would be too complicated (i.e. make a call to avc_has_perm()?)
-> but, testing and revisions might take a bit longer.
-> 
-> > > In this particular case I think the calling task's credentials are
-> > > generally all that is needed.  You mention that the newly created
-> > 
-> > Agreed.
-> > 
-> > > namespace would be helpful, so I'll ask: what info in the new ns do
-> > > you believe would be helpful in making an access decision about its
-> > > creation?
-> > > 
-> 
-> In the other thread [1], there was mention of xattr mapping support. As I
-> understand Caseys response to this thread [2], that feature is no longer
-> requested for this hook.
+> -----Original Message-----
+> From: Sean Christopherson <seanjc@google.com>
+> Sent: 27 June 2022 16:52
+> To: Durrant, Paul <pdurrant@amazon.co.uk>
+> Cc: x86@kernel.org; kvm@vger.kernel.org; linux-kernel@vger.kernel.org; Pa=
+olo Bonzini
+> <pbonzini@redhat.com>; Vitaly Kuznetsov <vkuznets@redhat.com>; Wanpeng Li=
+ <wanpengli@tencent.com>; Jim
+> Mattson <jmattson@google.com>; Joerg Roedel <joro@8bytes.org>; Thomas Gle=
+ixner <tglx@linutronix.de>;
+> Ingo Molnar <mingo@redhat.com>; Borislav Petkov <bp@alien8.de>; Dave Hans=
+en
+> <dave.hansen@linux.intel.com>; H. Peter Anvin <hpa@zytor.com>
+> Subject: RE: [EXTERNAL][PATCH] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc=
+ info) sub-leaves, if present
+>=20
+> CAUTION: This email originated from outside of the organization. Do not c=
+lick links or open
+> attachments unless you can confirm the sender and know the content is saf=
+e.
+>=20
+>=20
+>=20
+> On Mon, Jun 27, 2022, Durrant, Paul wrote:
+> > > -----Original Message-----
+> > [snip]
+> > > > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > > > index 00e23dc518e0..8b45f9975e45 100644
+> > > > > --- a/arch/x86/kvm/x86.c
+> > > > > +++ b/arch/x86/kvm/x86.c
+> > > > > @@ -3123,6 +3123,7 @@ static int kvm_guest_time_update(struct kvm=
+_vcpu *v)
+> > > > >       if (vcpu->xen.vcpu_time_info_cache.active)
+> > > > >               kvm_setup_guest_pvclock(v, &vcpu->xen.vcpu_time_inf=
+o_cache, 0);
+> > > > >       kvm_hv_setup_tsc_page(v->kvm, &vcpu->hv_clock);
+> > > > > +     kvm_xen_setup_tsc_info(v);
+> > > >
+> > > > This can be called inside this if statement, no?
+> > > >
+> > > >         if (unlikely(vcpu->hw_tsc_khz !=3D tgt_tsc_khz)) {
+> > > >
+> > > >         }
+> > > >
+> >
+> > I think it ought to be done whenever the shared copy of Xen's vcpu_info=
+ is
+> > updated (it will always match on real Xen) so unconditionally calling i=
+t here
+> > seems reasonable.
+>=20
+> But isn't the call pointless if the vCPU's hw_tsc_khz is unchanged?  E.g =
+if the
+> params were explicitly passed in, then it would look like:
+>=20
+>         if (unlikely(vcpu->hw_tsc_khz !=3D tgt_tsc_khz)) {
+>                 kvm_get_time_scale(NSEC_PER_SEC, tgt_tsc_khz * 1000LL,
+>                                    &vcpu->hv_clock.tsc_shift,
+>                                    &vcpu->hv_clock.tsc_to_system_mul);
+>                 vcpu->hw_tsc_khz =3D tgt_tsc_khz;
+>=20
+>                 kvm_xen_setup_tsc_info(vcpu, tgt_tsc_khz,
+>                                        vcpu->hv_clock.tsc_shift,
+>                                        vcpu->hv_clock.tsc_to_system_mul);
+>         }
+>=20
+> Explicitly passing in the arguments probably isn't necessary, just use a =
+more
+> precise name, e.g. kvm_xen_update_tsc_khz(), to make it clear that the up=
+date is
+> limited to TSC frequency changes.
+>=20
+> > > > > +{
+> > > > > +     u32 base =3D 0;
+> > > > > +     u32 function;
+> > > > > +
+> > > > > +     for_each_possible_hypervisor_cpuid_base(function) {
+> > > > > +             struct kvm_cpuid_entry2 *entry =3D kvm_find_cpuid_e=
+ntry(vcpu, function, 0);
+> > > > > +
+> > > > > +             if (entry &&
+> > > > > +                 entry->ebx =3D=3D XEN_CPUID_SIGNATURE_EBX &&
+> > > > > +                 entry->ecx =3D=3D XEN_CPUID_SIGNATURE_ECX &&
+> > > > > +                 entry->edx =3D=3D XEN_CPUID_SIGNATURE_EDX) {
+> > > > > +                     base =3D function;
+> > > > > +                     break;
+> > > > > +             }
+> > > > > +     }
+> > > > > +     if (!base)
+> > > > > +             return;
+> > > > > +
+> > > > > +     function =3D base | XEN_CPUID_LEAF(3);
+> > > > > +     vcpu->arch.xen.tsc_info_1 =3D kvm_find_cpuid_entry(vcpu, fu=
+nction, 1);
+> > > > > +     vcpu->arch.xen.tsc_info_2 =3D kvm_find_cpuid_entry(vcpu, fu=
+nction, 2);
+> > > >
+> > > > Is it really necessary to cache the leave?  Guest CPUID isn't optim=
+ized, but it's
+> > > > not _that_ slow, and unless I'm missing something updating the TSC =
+frequency and
+> > > > scaling info should be uncommon, i.e. not performance critical.
+> >
+> > If we're updating the values in the leaves on every entry into the gues=
+t (as
+> > with calls to kvm_setup_guest_pvclock()) then I think the cached pointe=
+rs are
+> > worthwhile.
+>=20
+> But why would you update on every entry to the guest?   Isn't this a rare=
+ operation
+> if the update is limited to changes in the host CPU's TSC frequency?  Or =
+am I
+> missing something?
 
-I think that is an orthogonal problem at least wrt to this hook.
+No, I am indeed forgetting that there is no offset to update (there once wa=
+s) so indeed the values will only change if the freq changes... so I'll dro=
+p the caching.
 
-> 
-> Users can still access the older parent ns from the passed in cred, but I
-> was thinking of handling the transition point here. There's probably more
-> suitable hooks for that case.
-
-Yes.
+  Paul

@@ -2,166 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A7255B54A
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 04:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F8155B54E
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 04:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiF0CiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 22:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
+        id S231151AbiF0Cnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 22:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiF0CiU (ORCPT
+        with ESMTP id S229538AbiF0Cnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 22:38:20 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D0E2DC3;
-        Sun, 26 Jun 2022 19:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656297498; x=1687833498;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vqAGO4WsqTcOAwT6UqFx9w0d7monXGB2WJM15gkxapM=;
-  b=K5yHD85c2gy4fP3ooX36HshSVRTkjIeIUuTcWSC3zq6rt0xQeRtpOyvt
-   3kipBQbA78Cbj2sdOakHd8pWZ+6MxWg15ePknogw59dSemxvyZy8xZJ7D
-   Grv38keWv6B5ZEkOHh9gDHnBY+47XkAFwNRJ8tGodyMRTK7pFgVRORU9G
-   4+uY5FIzwMUFFpfFV2IRNUgPsszGG5PjOhnc2Y9a0FL46bJ7+CcBI6JX0
-   k7Y4EDCFrvP/H6uLOWYMkQlbhIOKBod9deVtw0GbG8CQcyady74bCzoFA
-   3HH/cZGicV5BZAiq5L56Mf3zpk+c87Vo6c4o2jZDeaN6DipjO+Y6qJa+j
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10390"; a="264381695"
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="264381695"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2022 19:38:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,225,1650956400"; 
-   d="scan'208";a="646203825"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Jun 2022 19:38:13 -0700
-Date:   Mon, 27 Jun 2022 10:38:12 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Shakeel Butt <shakeelb@google.com>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Xin Long <lucien.xin@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
-Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
-Message-ID: <20220627023812.GA29314@shbuild999.sh.intel.com>
-References: <20220619150456.GB34471@xsang-OptiPlex-9020>
- <20220622172857.37db0d29@kernel.org>
- <CADvbK_csvmkKe46hT9792=+Qcjor2EvkkAnr--CJK3NGX-N9BQ@mail.gmail.com>
- <CADvbK_eQUmb942vC+bG+NRzM1ki1LiCydEDR1AezZ35Jvsdfnw@mail.gmail.com>
- <20220623185730.25b88096@kernel.org>
- <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
- <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
- <20220624070656.GE79500@shbuild999.sh.intel.com>
- <20220624144358.lqt2ffjdry6p5u4d@google.com>
- <20220625023642.GA40868@shbuild999.sh.intel.com>
+        Sun, 26 Jun 2022 22:43:42 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F5B2BE5;
+        Sun, 26 Jun 2022 19:43:41 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id bo5so7699654pfb.4;
+        Sun, 26 Jun 2022 19:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7zPquDCtZyzOA5PY0kmGl8Aq5WV/QI7GoaYVVezsWQc=;
+        b=RXYOiN1ZRkDNUMdc6EvAB2KgoCOIpKk5DqqITbyH4Vm2P8rSvNhv9GnBqND274rhqK
+         uEQKv//gzOUb9VEv/V8H4tq5ku32/hpJzNKhjlPVSLXGkTRuFszOKydarYHMgh9HeCyL
+         YUjLPgikAFoMxMZuq+MbPb3K/W7CGyjllQWAa1r4GSc437jPi0AVKL96hrMwGK5GRZlF
+         ZYAm/lPHrps4RRmF4HU0mMlZzqLxjDCmWdPINdBMIMnIffS2YyB4DOndO2qkm8m4lqtw
+         ZMev55V+h13X3llJWzpTR5eyeCJFqdPXOwPZxjrsfoBsNDq8WLB9tHCp00HGV39lN5dC
+         xRzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7zPquDCtZyzOA5PY0kmGl8Aq5WV/QI7GoaYVVezsWQc=;
+        b=5BvV1jkf9IXJiFlanWiqUF+r07eh0Qx1v4AF+3hDT6xVoydCnt3P5rVyFXWDYNGM8a
+         0TD+Bbdgxm1X6QQT9xRMHTo+1fEPIj2fMSjPLcrOljE8LYcUU2qqyT1FcUWD5CrqsBN4
+         NkUW5jGJVSc67/X20X7Tj8fsPctTWmJGTt2M9dIwTbtJ8c1oY5/KQD5++aS43Ehqe16D
+         RNyEkqJ8uWR7B2jAYLis4kzyLj5xcdBpKae0Q7sOLx/zl6dWzOG+ldUV7XRSpZD9CGUj
+         gIT+8XDJKmIRA+s7t+NaDtj8cxaVkT9sAjw+LqTgxwiRYQfUl9ARAQj8MKbFtMhHA742
+         nkPQ==
+X-Gm-Message-State: AJIora9IclGtfLgpTfZzZHqmUOIXeURXuDdZyG+Y88V1DuZuipy4jQSc
+        grYVRJLbJEQxkqy0wjVyN4QdWJJNMPo=
+X-Google-Smtp-Source: AGRyM1uxOY5c+2dolNZFaGjY0xMUlqUk6YWCBkPiq0IWdnBHfUD8ill9/ZeItAmTbEN/32/O4RXXlQ==
+X-Received: by 2002:a63:5203:0:b0:40d:bf0c:d123 with SMTP id g3-20020a635203000000b0040dbf0cd123mr8462230pgb.287.1656297820946;
+        Sun, 26 Jun 2022 19:43:40 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-21.three.co.id. [180.214.233.21])
+        by smtp.gmail.com with ESMTPSA id u12-20020a17090341cc00b0016a6cd546d6sm5429307ple.251.2022.06.26.19.43.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Jun 2022 19:43:40 -0700 (PDT)
+Message-ID: <9811d0e3-6c0d-6854-e654-4546fbe23860@gmail.com>
+Date:   Mon, 27 Jun 2022 09:43:35 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220625023642.GA40868@shbuild999.sh.intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] Documentation: samsung-s3c24xx: Add blank line after SPDX
+ directive
+Content-Language: en-US
+To:     linux-doc@vger.kernel.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+References: <20220614164506.6afd65a6@canb.auug.org.au>
+ <20220614084658.509389-1-bagasdotme@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220614084658.509389-1-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,BODY_SINGLE_WORD,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SCC_BODY_SINGLE_WORD,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 10:36:42AM +0800, Feng Tang wrote:
-> On Fri, Jun 24, 2022 at 02:43:58PM +0000, Shakeel Butt wrote:
-> > On Fri, Jun 24, 2022 at 03:06:56PM +0800, Feng Tang wrote:
-> > > On Thu, Jun 23, 2022 at 11:34:15PM -0700, Shakeel Butt wrote:
-> > [...]
-> > > > 
-> > > > Feng, can you please explain the memcg setup on these test machines
-> > > > and if the tests are run in root or non-root memcg?
-> > > 
-> > > I don't know the exact setup, Philip/Oliver from 0Day can correct me.
-> > > 
-> > > I logged into a test box which runs netperf test, and it seems to be
-> > > cgoup v1 and non-root memcg. The netperf tasks all sit in dir:
-> > > '/sys/fs/cgroup/memory/system.slice/lkp-bootstrap.service'
-> > > 
-> > 
-> > Thanks Feng. Can you check the value of memory.kmem.tcp.max_usage_in_bytes
-> > in /sys/fs/cgroup/memory/system.slice/lkp-bootstrap.service after making
-> > sure that the netperf test has already run?
-> 
-> memory.kmem.tcp.max_usage_in_bytes:0
- 
-Sorry, I made a mistake that in the original report from Oliver, it
-was 'cgroup v2' with a 'debian-11.1' rootfs. 
-
-When you asked about cgroup info, I tried the job on another tbox, and
-the original 'job.yaml' didn't work, so I kept the 'netperf' test
-parameters and started a new job which somehow run with a 'debian-10.4'
-rootfs and acutally run with cgroup v1. 
-
-And as you mentioned cgroup version does make a big difference, that
-with v1, the regression is reduced to 1% ~ 5% on different generations
-of test platforms. Eric mentioned they also got regression report,
-but much smaller one, maybe it's due to the cgroup version?
-
-Thanks,
-Feng
-
-> And here is more memcg stats (let me know if you want to check more)
-> 
-> > If this is non-zero then network memory accounting is enabled and the
-> > slowdown is expected.
-> 
-> >From the perf-profile data in original report, both
-> __sk_mem_raise_allocated() and __sk_mem_reduce_allocated() are called
-> much more often, which call memcg charge/uncharge functions.
-> 
-> IIUC, the call chain is:
-> 
-> __sk_mem_raise_allocated
->     sk_memory_allocated_add
->     mem_cgroup_charge_skmem
->         charge memcg->tcpmem (for cgroup v2)
-> 	try_charge memcg (for v1)
-> 
-> Also from Eric's one earlier commit log:
-> 
-> "
-> net: implement per-cpu reserves for memory_allocated
-> ...
-> This means we are going to call sk_memory_allocated_add()
-> and sk_memory_allocated_sub() more often.
-> ...
-> "
-> 
-> So this slowdown is related to the more calling of charge/uncharge? 
-> 
-> Thanks,
-> Feng
-> 
-> > > And the rootfs is a debian based rootfs
-> > > 
-> > > Thanks,
-> > > Feng
-> > > 
-> > > 
-> > > > thanks,
-> > > > Shakeel
+ping

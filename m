@@ -2,195 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB47055B587
-	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 05:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9958555B5A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 27 Jun 2022 05:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbiF0C5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 26 Jun 2022 22:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        id S232422AbiF0C54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 26 Jun 2022 22:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232342AbiF0C4w (ORCPT
+        with ESMTP id S232390AbiF0C5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 26 Jun 2022 22:56:52 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2129.outbound.protection.outlook.com [40.107.255.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4D73897;
-        Sun, 26 Jun 2022 19:56:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b4ytobRh4J6suXwFoWR1SaMCElYQY3QLflafBErBI/Ek7LdyFo8HKNUoeAnHb1pnYLNvhpCtakzJDUT/QkGbN5nj8auvFsY3BndSKKGdfk8F3/zzdcUf12xQse63uLzBHesY44Al5k02QutLgI8xNZvwYqTO+WeplFvlywcmr5BiVB5mNheIhYhu4SagTrrLym/Ug0BNEHW1ChBnMQ6cD6x2l+ZhiLKKXGgPjB5XnXP2W+a+ddMlXVsv/+FF2Hpef/zWchGfzjegpX8XwNRMzKPSp/YJ1Hc4FMOTn09BYjlSGIzvuL24qbaSM/fnBajeUFj4xZ91ocQD2zIesHI4OQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WQ49xSlZIJPTccrfMzZGzPdatXmrn9asRWER3HG+LzQ=;
- b=D/qwyUF8aWZX9i8z9JOc6BooljaBe+qkSsvNoogEvP1tC4DqQFn92EdnT6jhcTCOSB2bDjdsgCX789HTdYHIXN8u6vxVlzGhggoCkgqR6YyG7lXu0u0L9GCOMyT9Z1+Pb3gP5tVXI6cyu4jDI+s99FCwvkLQBhhqMJPfogzmkPfIi/ekt1fE5lWXWmn1t5HvnotGO+SeTkSZFLhLUkO08pXaBbYDYtnwYErgmDaezze7bkFyXkQlBZosu5dYSmFKH1mZSYtdobI4yK9QAxRUipv59QMWWBb+R7DxOkHv4RdDTs7aK+3pkgk4abKjTfpWlmmTo+zQ/S2Ol3x37WdeBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WQ49xSlZIJPTccrfMzZGzPdatXmrn9asRWER3HG+LzQ=;
- b=Ju9Cb1pVrNCRAimn+c+L3r6QEDH+eBWwGzcft44WuhGFvp4O5m6CZX4FSweyRbdak5qobcXp4ECREp+GWXYo9tM/BtXj66bNYd/5V2Q9lN9BN3Y97/GZcV4hnHXssWF+gF7X+fpAa4vPbiWjL0RlHZ75IaiMNO9euCsjIBFLr3sC40dsR0l8Rtl7RCciZ8ttJYlEXL5ektah1/HBE3IQ5STJrgOIy/3E3aZQ/hjrTcQykeE4hf78NZeI5ao8NdK72g02mPfKE+y6myj6scG674+JvmjnjhmYjAhMNU0by+6FnNICUomCzopmrv1CkASgxQDH/OoOrb854Y/tTNw4NA==
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by SI2PR06MB4460.apcprd06.prod.outlook.com (2603:1096:4:158::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Mon, 27 Jun
- 2022 02:56:41 +0000
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::46d:a7a:f047:e9bf]) by HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::46d:a7a:f047:e9bf%5]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
- 02:56:41 +0000
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <roger.quadros@nokia.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>
-Subject: RE: [PATCH v2] usb: gadget: f_mass_storage: Make CD-ROM emulation
- works with Windows OS
-Thread-Topic: [PATCH v2] usb: gadget: f_mass_storage: Make CD-ROM emulation
- works with Windows OS
-Thread-Index: AQHYh3DSTidIVUKmfU2+k/4XOqVQ6a1engoAgAPzy4A=
-Date:   Mon, 27 Jun 2022 02:56:40 +0000
-Message-ID: <HK0PR06MB320272ACB1CA4ADFF8DDABC080B99@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <20220624021916.318067-1-neal_liu@aspeedtech.com>
- <YrXJss4cTtfenu90@rowland.harvard.edu>
-In-Reply-To: <YrXJss4cTtfenu90@rowland.harvard.edu>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: df87cdd0-d391-467a-8889-08da57e8a947
-x-ms-traffictypediagnostic: SI2PR06MB4460:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: h6Yp/w1NQjuUGj+70oQejAtFIWrkmka3UtdLehdTr4B35hKNtMHwJKrRmbrOoteEav+AxWAbjAJmWEwd5l8g8yWNo4Sxc3/dezS3A2MzxGW42uVfLLILUlK3Nh1bO1XGKv1McEXl+IlfKKZUBQ7uJzgjy3pq0qYtjsIXD0F/XRjP+7k9UcuwzcpidfIp7QgAG1GS4D2D03nUY/pOvf5/y5+/f3TgM18yegu1+dmLOfVY+/HXK4WUjhrUhMoFm7mDyajjzHdJY/aWdCygMECAWCoPxqIoJXgpSIJGmvMptYoeuDJJDoy9KRSgU3m2YbEW6wUYHmHSj3nJPLYWdWR3c2EyLDCalS1xMNESzGkJWC7XLJVK7o02trmSYpqImlSs37VgoXkx5QZvPEkCLfxVcEIXidrO3tkWFTA9rlPxuxkyp3hGqJPJHS++QaLNVN9LERMrDlgH5/u+lBXygKe+yxcMIm95xOtOASVYFA+nY11vrm3/cPHOO+vBS1/hAfcHCAyTWm3CUmlTp3vtD8e2hwS+gAqG/OUaC7J3I+mk1hPaca9b9YyzNe96pBgv5yZUjY5cTrxpDQTfbkiGSugfehCkLk+JYbYxkhmxdHrYnjSNGWl/wb4g+XeDJjTlcPlwIuHk7acq2XqahBL+0ee0oTw8kOAFRBS9npO+4zEwPrrsuOL/l7CiRXwUSUIL7tQGT8ZUvHmyn37ws91jkfvpbYZYCsotNdYC8MrjGylRE/43YI52uAmSwRp4zh+eVMaI/hjOFF16hynV2LbYuKWtqYdO7y8rlgZ9fTQn0AHE+SU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39840400004)(376002)(396003)(136003)(346002)(366004)(41300700001)(186003)(26005)(7696005)(83380400001)(8676002)(6506007)(107886003)(9686003)(6916009)(38070700005)(38100700002)(55016003)(52536014)(33656002)(4326008)(66476007)(2906002)(5660300002)(7416002)(86362001)(478600001)(71200400001)(54906003)(66946007)(66556008)(122000001)(316002)(76116006)(64756008)(66446008)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JPuCAIT8+/l4Y7UawCr7lWzsf0WHNkQBCEoUvsLJXEQWUa4twXSTpFlRLXzF?=
- =?us-ascii?Q?FVoyMRA9p1OGnNCX1LruOXUm/SjhZ+JQi8VDSu0RB/dYPSctpWvkpgmWphkG?=
- =?us-ascii?Q?pqQ6Qrz4KsWXFwX+NNDgvtYBPRBREora5FUTuJCXA0VnhJRqZ/m86t3FnCWO?=
- =?us-ascii?Q?ZwAKJVBInayOfdzPyjjXaL+dMESrR9TN+QluKxnjw9sKfttHSm0e5mKY76C9?=
- =?us-ascii?Q?jbgMJ8ERyI3xPtQwW/rMNf7ubBxq1vk/BL0sYx7ZXE85M1pZHbR4+mUeCboN?=
- =?us-ascii?Q?kv9HlbexxzAptivrZPRL3OMUwkr3t6u3edkIMOsVUB2QgR41c1OFxqhuxiVS?=
- =?us-ascii?Q?d4a3D67kONzwfgaZvXQf3gLGxZqfoG2aeLS02KmmdGF3rWgC1Rlr+nPxLH4V?=
- =?us-ascii?Q?NQOLThzABg68QQutqqTFM4bebSkvZAfyEgrgJqkCAF7rb8jMxx6yzXBefJQn?=
- =?us-ascii?Q?ElSFWRAzCze6+x4hYmVPL3UwjqFeyZP9FAWNbgI/IcHlB2vfKOjk2deklvGY?=
- =?us-ascii?Q?G/vfKtV16fcG9N5gZFs87DScsukwmQwS1UpxrOLE0+Y0k0QECCGj9NCtf6lS?=
- =?us-ascii?Q?glqQ+NWrlPnrOFk0h1Cw6CKZGaJKCs1EegDAAUTU3n319JVFBW7ZY6AMaHuV?=
- =?us-ascii?Q?IaY3zmsUeoaeyV1GeODvNHqxl95XFlENAF8IdjOmRD9wLIkF0crtpKgr7mF5?=
- =?us-ascii?Q?I6xahvR7BHoWjqBY+p7e5E7tHcQeG5xa1iV+D+j3X78Ga4JXZD3Z2QZYihTQ?=
- =?us-ascii?Q?cHKEwwjzGVvX7pw35gmy5b7SD7gNzmuENudo4nOhQ0T4MuitaCI1YYFlvSnw?=
- =?us-ascii?Q?zznoToG6snN+j5Etf5d7KTTAHQ/x98YVsfK7C70wmg6caa7iQ2wM3b1Li/7t?=
- =?us-ascii?Q?7mgXHlB25Hr1q/2r2PjXZ26YYx1juuhzuIwmtT1V7nmLGu8sUX8D/zsOf/Gs?=
- =?us-ascii?Q?GUhgEtx2R6/IZE3SBPJRaVXCV8GKbSpj8S0aDNC8BKNxZAhd3BN6sEU445kN?=
- =?us-ascii?Q?L9SBKkGj1VasZuLaCORZtsIBmCOfb4TzcYsMAXi6QpnLgOV9BXB2ajOfJJpe?=
- =?us-ascii?Q?KejqMFdWr/UmBwZGZLCpQtoGUAlGc2GBVcTqLSickDjecJbq4Q2lpIfI0Ps5?=
- =?us-ascii?Q?hVIIJOknMGaS0Ndgp+m4GCv7plaSquPwH2N/trDzv+B54fYQHXJplWkfRCaH?=
- =?us-ascii?Q?bz0cshZbPF8gjqZqAgoZMXHIPd2jtsF5sl3tJkcv/uGHj7BDRARGOok09XHd?=
- =?us-ascii?Q?XK98nptSTdfO/PfO+pce4n2/q1ChWP+ibX6Jj0VlT8eFKRQTfuNx4qOYTsXQ?=
- =?us-ascii?Q?TUJifWcp0TE87mDcZI5m7ElmqzB8sOfb7EuSvNOp0jht4Ae1ss0kIk158RhY?=
- =?us-ascii?Q?YdbD57nYc7v1GdkW4IfDRkABGH3+dRx8ND+aSzIHJDllOOrHwfvSnTnfRPTl?=
- =?us-ascii?Q?Rl0421Qj7nmkji8QYkCYZLuWE47vg3PbIU2QjacOUH7ySNv6RHDHQMQ1EcoH?=
- =?us-ascii?Q?SAGbP7+fMrg04tsCrEArI4iceqYXoYc9BUTzwN9gI09DkQ+HWLRzz2TBml/1?=
- =?us-ascii?Q?FKiYaWb2q6XHqOvPfTI4AhDzNQP/1fBeA/a6p8or?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: df87cdd0-d391-467a-8889-08da57e8a947
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 02:56:41.0256
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PVznq7sSWnfwqeqaHv/erq2FO0KndLiZUgcSxq5Txmg057pqrf0eo/T7EePfk1bHMeripGuKXJpeKgoxPOU0pw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4460
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 26 Jun 2022 22:57:54 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DCE38AE
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 19:57:53 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-317ae1236feso67519627b3.11
+        for <linux-kernel@vger.kernel.org>; Sun, 26 Jun 2022 19:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=a2fOd84tKma8EBOoYLl1yXcF/bVpn+tXFfh8wONSJHw=;
+        b=ld2t9CLo7nP+OT5H09VRlzkjhJzVA/xlWaaKHg5RZ3dWu31QWLXofNhGoSm3pl/aNs
+         kTQYjc+efB3HD0NhScP7BDurQ+CBnrzDdVC1GiErxiMXbacl1x+bQeBGYfxGNaAu6apP
+         oY06Z0bj04lSRXQoq2MiJQXbMWYNTcG+E05x7qGCHiXic4RW983rBeOO1d3nVfCATkyE
+         RAS+MgMjm63UEswkEEreSlH41Kw3aTu2VCsC36zZBB1cJSf0Uk1C1SLaLvrnyc3XxvSt
+         xe5pgbPZLnRfkOQgJKwgV9kk32SpkNS8H6xbGVizl/TcqVgigKr4K8CFHi2Jtkit7nGM
+         VPiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=a2fOd84tKma8EBOoYLl1yXcF/bVpn+tXFfh8wONSJHw=;
+        b=kZWNZXfYZ4qj7XN3+91QnEXRbqdUf1WMueFBZg/DYcCosEZ+zIPAu4gjoRlPK5w0VX
+         Qcd9zXTBT7v9wN7IBNRwPWRO50//61aFKhfXH9K+w7I621eJy/feX/zlZO5PHxpQ/zkH
+         u96YZOQRIidoAbspgwaSAcNrWmCp8Zz3wkTcv3x3/2c9TD31Ph3dII86cQu99lWBbxwJ
+         zvhANkOJ/mv4WjjGru60iIUumy6CknShCGQ2/b7xWTG4xajaSBkSmQFuHR8Uy10gganH
+         UxC73RLvgLOBId5JlU1h4s5pzXW0rssTvCjt20Cm1oa5wmQhcl0KU6KUut4HlWRsmfpj
+         crgQ==
+X-Gm-Message-State: AJIora8lTg4GN5LNuBzXNxKIKR6RK48lJ/UVfNoTvxh856HwYaC2lhfu
+        st6sfgGZxvM4fUbH9Voi3ZVj/V18o9eS
+X-Google-Smtp-Source: AGRyM1sOfbkoS05RkdeEbrjjtiZ+bs28kS1Kb1As8SCl552Ng8sc/DP26748w4s3JvZD2H1AlSUv1oQzdZ0L
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:646b:8b65:8f13:1c18])
+ (user=irogers job=sendgmr) by 2002:a25:1944:0:b0:66c:7ba4:7481 with SMTP id
+ 65-20020a251944000000b0066c7ba47481mr11127858ybz.640.1656298672703; Sun, 26
+ Jun 2022 19:57:52 -0700 (PDT)
+Date:   Sun, 26 Jun 2022 19:57:40 -0700
+Message-Id: <20220627025744.106527-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
+Subject: [PATCH v6 0/4] Rewrite jevents program in python
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Felix Fietkau <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
+        Like Xu <likexu@tencent.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Nick Forrington <nick.forrington@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com, sandipan.das@amd.com,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Fri, Jun 24, 2022 at 10:19:16AM +0800, Neal Liu wrote:
-> > Add read TOC with format 1 to support CD-ROM emulation with Windows
-> > OS.
-> > This patch is tested on Windows OS Server 2019.
-> >
-> > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-> > ---
-> >  drivers/usb/gadget/function/f_mass_storage.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/usb/gadget/function/f_mass_storage.c
-> > b/drivers/usb/gadget/function/f_mass_storage.c
-> > index 3a77bca0ebe1..9edf76c22605 100644
-> > --- a/drivers/usb/gadget/function/f_mass_storage.c
-> > +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> > @@ -1209,7 +1209,8 @@ static int do_read_toc(struct fsg_common
-> > *common, struct fsg_buffhd *bh)
-> >
-> >  	switch (format) {
-> >  	case 0:
-> > -		/* Formatted TOC */
-> > +	case 1:
-> > +		/* Formatted TOC, Session info */
->=20
-> This comment is a little misleading.  0 is formatted TOC, and 1 is
-> multi-session info.  The way you wrote it, it looks like the comment appl=
-ies to
-> both formats.  Do it like this:
->=20
-> 	case 0:		/* Formatted TOC */
-> 	case 1:		/* Multi-session info */
->=20
+New architectures bring new complexity, such as Intel's hybrid
+models. jevents provides an alternative to specifying events in the
+kernel and exposing them through sysfs, however, it is difficult to
+work with. For example, an error in the json input would yield an
+error message but no json file or location. It is also a challenge to
+update jsmn.c given its forked nature.
 
-Okay, looks more clear. I'll fix it in next patch.
+The changes here switch from jevents.c to a rewrite in python called
+jevents.py. This means there is a build time dependency on python, but
+such a dependency already exists for asciidoc (used to generate perf's
+man pages). If the build detects that python isn't present or is older
+than version 3.6 (released Dec. 2016) then an empty file is
+substituted for the generated one.
 
-> >  		len =3D 4 + 2*8;		/* 4 byte header + 2 descriptors */
-> >  		memset(buf, 0, len);
-> >  		buf[1] =3D len - 2;	/* TOC Length excludes length field */
->=20
-> It looks like you ignored one of the problems I pointed out in my earlier=
- email:
->=20
-> > When format is 1, the driver is supposed to ignore the start_track
-> > value.  Your patch does not do this.
->=20
-> Please fix this.
->=20
+A challenge with this code is in avoiding regressions. For this reason
+the jevents.py produces identical output to jevents.c, validated with a
+test script and build target.
 
-Do you mean ignore the "start_track > 1" above?
-Do this check only for format 0? Or format 0 & 2?
+v6. Adds Tested-by from Zhengjun Xing <zhengjun.xing@linux.intel.com>
+    and Thomas Richter <tmricht@linux.ibm.com>. Fixes issues spotted
+    by Jiri Olsa <jolsa@kernel.org>, jsmn.c wasn't deleted and the
+    empty pmu-events.c didn't pass the pmu-events test. It also adds a
+    missing mkdir which is necessary before creating pmu-events.c and
+    tweaks the quiet display code in the empty case to display a gen.
+v5. Adds a 2>/dev/null as suggested by David Laight
+    <David.Laight@aculab.com>.
+v4. Fixes the build for systems with python2 installed by adding a
+    patch that makes python3 the preferred python (Reported-by: John
+    Garry <john.garry@huawei.com>). It also fixes a bash-ism in the
+    jevents-test.sh and fixes the handling of an empty string for a
+    metric BriefDescription as one was added for sapphirerapids in the
+    metric Execute.
+v3. Updates the patches for merged changes (on
+    acme/tmp.perf/core). Re-runs all comparisons to make sure the
+    generated pmu-events.c isn't altered at all by this change. Adds
+    the jevents.c ExtSel fix in:
+    https://lore.kernel.org/lkml/20220525140410.1706851-1-zhengjun.xing@linux.intel.com/
+    Bumps the python version from 3.5 to 3.6, as f-strings weren't
+    introduced until 3.6.
 
->=20
-> > @@ -1250,7 +1251,7 @@ static int do_read_toc(struct fsg_common
-> *common, struct fsg_buffhd *bh)
-> >  		return len;
-> >
-> >  	default:
-> > -		/* Multi-session, PMA, ATIP, CD-TEXT not supported/required */
-> > +		/* PMA, ATIP, CD-TEXT not supported/required */
-> >  		curlun->sense_data =3D SS_INVALID_FIELD_IN_CDB;
-> >  		return -EINVAL;
-> >  	}
-> > --
-> > 2.25.1
-> >
+v2. Fixes the build for architectures that don't have pmu-events json
+    (Suggested-by: John Garry <john.garry@huawei.com>) and fixes the
+    build for python not being present or too old (Suggested-by: Peter
+    Zijlstra <peterz@infradead.org>/John Garry <john.garry@huawei.com>).
+
+Ian Rogers (4):
+  perf python: Prefer python3
+  perf jevents: Add python converter script
+  perf jevents: Switch build to use jevents.py
+  perf jevents: Remove jevents.c
+
+ tools/perf/Makefile.config               |   27 +-
+ tools/perf/Makefile.perf                 |   16 +-
+ tools/perf/pmu-events/Build              |   17 +-
+ tools/perf/pmu-events/empty-pmu-events.c |  158 +++
+ tools/perf/pmu-events/jevents.c          | 1342 ----------------------
+ tools/perf/pmu-events/jevents.py         |  409 +++++++
+ tools/perf/pmu-events/jsmn.c             |  352 ------
+ tools/perf/pmu-events/jsmn.h             |   68 --
+ tools/perf/pmu-events/json.c             |  162 ---
+ tools/perf/pmu-events/json.h             |   39 -
+ 10 files changed, 604 insertions(+), 1986 deletions(-)
+ create mode 100644 tools/perf/pmu-events/empty-pmu-events.c
+ delete mode 100644 tools/perf/pmu-events/jevents.c
+ create mode 100755 tools/perf/pmu-events/jevents.py
+ delete mode 100644 tools/perf/pmu-events/jsmn.c
+ delete mode 100644 tools/perf/pmu-events/jsmn.h
+ delete mode 100644 tools/perf/pmu-events/json.c
+ delete mode 100644 tools/perf/pmu-events/json.h
+
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
+

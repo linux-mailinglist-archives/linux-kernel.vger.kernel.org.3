@@ -2,63 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5101655CB42
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E7255CECC
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236779AbiF0OK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S236803AbiF0OKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236765AbiF0OK0 (ORCPT
+        with ESMTP id S236782AbiF0OKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:10:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BBE13DDF
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:10:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77A90B80D32
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:10:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E511FC3411D;
-        Mon, 27 Jun 2022 14:10:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656339023;
-        bh=qMUwohhlHARUhNHLE9bGM9ZIS6WIDOrJL7LQvqtJRnw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KzALHXDlOIZttvb9tnzrMDlHbQ81x/A4/AqqcJid6RdQc2Cm4kTVGI6w5IxQF6JyH
-         qziJCIgjjlv8K8QT8KNJ8uiAxCKMZJwviXEMcxk//YMuVuRfjRxYq5ZQY1ay8z2ZV9
-         b5rK+uiTDrE/o1AbRmxgG8d+ktlgiARyhqwB7uFU=
-Date:   Mon, 27 Jun 2022 16:10:20 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Agam Kohli <agamkohli9@gmail.com>
-Cc:     arve@android.com, tkjos@android.com, maco@android.com,
-        joel@joelfernandes.org, brauner@kernel.org, hridya@google.com,
-        surenb@google.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: android: binder_alloc: Fixed include warning
-Message-ID: <Yrm6TErI3atNbgCd@kroah.com>
-References: <20220610175048.79446-1-agamkohli9@gmail.com>
+        Mon, 27 Jun 2022 10:10:44 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C6D13E15;
+        Mon, 27 Jun 2022 07:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=LzAnuHwwUJ6LdcbOlmZ//SGplp0xj1L9V6mRYE0195Q=; b=nqb88zVq/RA6sKlL8JH9plcQD8
+        ocDWm8M2RNyZRk783mEuQcIt1qqvjDAdnlrsnZHAJiwJwcvAvGIoRS1tF6TOXUEMI4beDEtAjTQ60
+        bV8iUHmwq+YPuwoXGFW+9wjZBk8QxwncrlmeiHQqxwEkuy3EdlwU8Wuni51Td3Vyo0K6UepEO5dRr
+        wtm9u1jMF8DCS9/XgQ9B1q+60S4yc9IiGJu6OGzbBGjJsEdqk9uTVpgA8I5i1BDq+DYrgEAivY/48
+        MdNLjiDiB6cir4SQeVor8b+zKpY2LkNH/a/g3wHnJIO+L+g9svP+NrN3Nc/mscTZRXZynQqX3yw58
+        NayyVyfQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o5pRo-00BQ2y-Vw; Mon, 27 Jun 2022 14:10:41 +0000
+Date:   Mon, 27 Jun 2022 15:10:40 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v3 25/25] xfs: Support large folios
+Message-ID: <Yrm6YM2uS+qOoPcn@casper.infradead.org>
+References: <20211216210715.3801857-1-willy@infradead.org>
+ <20211216210715.3801857-26-willy@infradead.org>
+ <YrO243DkbckLTfP7@magnolia>
+ <Yrku31ws6OCxRGSQ@magnolia>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220610175048.79446-1-agamkohli9@gmail.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yrku31ws6OCxRGSQ@magnolia>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 01:50:48PM -0400, Agam Kohli wrote:
-> Changed include from asm/ to linux/
+On Sun, Jun 26, 2022 at 09:15:27PM -0700, Darrick J. Wong wrote:
+> On Wed, Jun 22, 2022 at 05:42:11PM -0700, Darrick J. Wong wrote:
+> > [resend with shorter 522.out file to keep us under the 300k maximum]
+> > 
+> > On Thu, Dec 16, 2021 at 09:07:15PM +0000, Matthew Wilcox (Oracle) wrote:
+> > > Now that iomap has been converted, XFS is large folio safe.
+> > > Indicate to the VFS that it can now create large folios for XFS.
+> > > 
+> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > > Reviewed-by: Christoph Hellwig <hch@lst.de>
+> > > Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+> > > ---
+> > >  fs/xfs/xfs_icache.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/fs/xfs/xfs_icache.c b/fs/xfs/xfs_icache.c
+> > > index da4af2142a2b..cdc39f576ca1 100644
+> > > --- a/fs/xfs/xfs_icache.c
+> > > +++ b/fs/xfs/xfs_icache.c
+> > > @@ -87,6 +87,7 @@ xfs_inode_alloc(
+> > >  	/* VFS doesn't initialise i_mode or i_state! */
+> > >  	VFS_I(ip)->i_mode = 0;
+> > >  	VFS_I(ip)->i_state = 0;
+> > > +	mapping_set_large_folios(VFS_I(ip)->i_mapping);
+> > >  
+> > >  	XFS_STATS_INC(mp, vn_active);
+> > >  	ASSERT(atomic_read(&ip->i_pincount) == 0);
+> > > @@ -320,6 +321,7 @@ xfs_reinit_inode(
+> > >  	inode->i_rdev = dev;
+> > >  	inode->i_uid = uid;
+> > >  	inode->i_gid = gid;
+> > > +	mapping_set_large_folios(inode->i_mapping);
+> > 
+> > Hmm.  Ever since 5.19-rc1, I've noticed that fsx in generic/522 now
+> > reports file corruption after 20 minutes of runtime.  The corruption is
+> > surprisingly reproducible (522.out.bad attached below) in that I ran it
+> > three times and always got the same bad offset (0x6e000) and always the
+> > same opcode (6213798(166 mod 256) MAPREAD).
+> > 
+> > I turned off multipage folios and now 522 has run for over an hour
+> > without problems, so before I go do more debugging, does this ring a
+> > bell to anyone?
+> 
+> I tried bisecting, but that didn't yield anything productive and
+> 5.19-rc4 still fails after 25 minutes; however, it seems that g/522 will
+> run without problems for at least 3-4 days after reverting this patch
+> from -rc3.
+> 
+> So I guess I have a blunt force fix if we can't figure this one out
+> before 5.19 final, but I'd really rather not.  Will keep trying this
+> week.
 
-This says what you did, but not why you did it.
+I'm on holiday for the next week, so I'm not going to be able to spend
+any time on this until then.  I have a suspicion that this may be the
+same bug Zorro is seeing here:
 
-Please document why.
+https://lore.kernel.org/linux-mm/20220613010850.6kmpenitmuct2osb@zlang-mailbox/
 
-thanks,
-
-greg k-h
+At least I hope it is, and finding a folio that has been freed would
+explain (apparent) file corruption.

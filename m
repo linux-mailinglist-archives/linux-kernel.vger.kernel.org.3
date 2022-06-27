@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828FD55C807
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DC955D0BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbiF0Fxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 01:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40030 "EHLO
+        id S232133AbiF0Fyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 01:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiF0Fxr (ORCPT
+        with ESMTP id S229753AbiF0Fya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 01:53:47 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D57AF2AF7;
-        Sun, 26 Jun 2022 22:53:44 -0700 (PDT)
-Received: from [192.168.254.32] (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B588120CD148;
-        Sun, 26 Jun 2022 22:53:43 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B588120CD148
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1656309224;
-        bh=2G49cShhAolevVu8WMXvOpG1Mrf19q/QEnAA5fF6zKw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=M2QTmBtLQdaD8mBvjWyhywM2I/e4ndS5HBPLSBSnpn5EJinQ5HXXX9Jeqdi8xYovw
-         kBq1Lf68Ew1OgNotx0OvrxrKJ6iw+BzIp4yV05WHbeBRzzaJD5Wc5xamODfIip0BjV
-         pp91nkD/8Msu4ztJSg5vFD+CxcDCMheTNBa0w514=
-Message-ID: <17aa8390-fe27-94fe-0098-c9c76dffafa5@linux.microsoft.com>
-Date:   Mon, 27 Jun 2022 00:53:42 -0500
+        Mon, 27 Jun 2022 01:54:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762C4273E;
+        Sun, 26 Jun 2022 22:54:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 239C1B80DF9;
+        Mon, 27 Jun 2022 05:54:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E45C341C8;
+        Mon, 27 Jun 2022 05:54:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1656309266;
+        bh=yxC1mNqWAaZOUyt2kc8qXbxHKEMGITvMCWYj3u08vfE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EY9AKcGnkijNeOEKntrhb8p867u0c30nfJu1RzFqePrzPfwX3vdXYxN5gEM//5dtU
+         pj2E3zdlEuROLmu/PdU1YQa4XJ9wThxm2G/8pS7J/D8/YAR7Wp44RBDMkpuuiYJ+D5
+         cRkw++xn7c5VsqqXRCFfkYGphtHXZ/R1jgFuOgic=
+Date:   Mon, 27 Jun 2022 07:54:23 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Greg Thelen <gthelen@google.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, torvalds@linux-foundation.org,
+        stable@vger.kernel.org, lwn@lwn.net, jslaby@suse.cz
+Subject: Re: Linux 5.10.125
+Message-ID: <YrlGDylVhmjFZpZf@kroah.com>
+References: <1656164548242121@kroah.com>
+ <xr93fsjr5901.fsf@gthelen-ubiquity2.mtv.corp.google.com>
+ <ea9b3819-418a-5b79-8bcd-0b28ead70a61@kernel.dk>
+ <6bc6ae48-b569-2002-118a-d3468b0278cd@kernel.dk>
+ <xr93czeu64sx.fsf@gthelen-ubiquity2.mtv.corp.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v15 6/6] arm64: Introduce arch_stack_walk_reliable()
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
- <20220617210717.27126-1-madvenka@linux.microsoft.com>
- <20220617210717.27126-7-madvenka@linux.microsoft.com>
- <YrgflcfxP7pYtob7@FVFF77S0Q05N>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <YrgflcfxP7pYtob7@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xr93czeu64sx.fsf@gthelen-ubiquity2.mtv.corp.google.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,85 +56,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jun 26, 2022 at 10:42:06PM -0700, Greg Thelen wrote:
+> Jens Axboe <axboe@kernel.dk> wrote:
+> 
+> > On 6/26/22 6:04 PM, Jens Axboe wrote:
+> >> On 6/26/22 4:56 PM, Greg Thelen wrote:
+> >>> Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> >>>
+> >>>> I'm announcing the release of the 5.10.125 kernel.
+> >>>>
+> >>>> All users of the 5.10 kernel series must upgrade.
+> >>>>
+> >>>> The updated 5.10.y git tree can be found at:
+> >>>> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.10.y
+> >>>> and can be browsed at the normal kernel.org git web browser:
+> >>>> 	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+> >>>>
+> >>>> thanks,
+> >>>>
+> >>>> greg k-h
+> >>>>
+> >>>> ------------
+> >>>>
+> >>>>  Makefile                              |    2 
+> >>>>  arch/arm64/mm/cache.S                 |    2 
+> >>>>  arch/s390/mm/pgtable.c                |    2 
+> >>>>  drivers/tty/serial/serial_core.c      |   34 ++++--------
+> >>>>  drivers/usb/gadget/function/u_ether.c |   11 +++-
+> >>>>  fs/io_uring.c                         |   23 +++++---
+> >>>>  fs/zonefs/super.c                     |   92 ++++++++++++++++++++++------------
+> >>>>  net/ipv4/inet_hashtables.c            |   31 ++++++++---
+> >>>>  8 files changed, 122 insertions(+), 75 deletions(-)
+> >>>>
+> >>>> Christian Borntraeger (1):
+> >>>>       s390/mm: use non-quiescing sske for KVM switch to keyed guest
+> >>>>
+> >>>> Damien Le Moal (1):
+> >>>>       zonefs: fix zonefs_iomap_begin() for reads
+> >>>>
+> >>>> Eric Dumazet (1):
+> >>>>       tcp: add some entropy in __inet_hash_connect()
+> >>>>
+> >>>> Greg Kroah-Hartman (1):
+> >>>>       Linux 5.10.125
+> >>>>
+> >>>> Jens Axboe (1):
+> >>>>       io_uring: add missing item types for various requests
+> >>>>
+> >>>> Lukas Wunner (1):
+> >>>>       serial: core: Initialize rs485 RTS polarity already on probe
+> >>>>
+> >>>> Marian Postevca (1):
+> >>>>       usb: gadget: u_ether: fix regression in setting fixed MAC address
+> >>>>
+> >>>> Will Deacon (1):
+> >>>>       arm64: mm: Don't invalidate FROM_DEVICE buffers at start of DMA transfer
+> >>>>
+> >>>> Willy Tarreau (5):
+> >>>>       tcp: use different parts of the port_offset for index and offset
+> >>>>       tcp: add small random increments to the source port
+> >>>>       tcp: dynamically allocate the perturb table used by source ports
+> >>>>       tcp: increase source port perturb table to 2^16
+> >>>>       tcp: drop the hash_32() part from the index calculation
+> >>>
+> >>> 5.10.125 commit df3f3bb5059d20ef094d6b2f0256c4bf4127a859 ("io_uring: add
+> >>> missing item types for various requests") causes panic when running
+> >>> test/iopoll.t from https://github.com/axboe/liburing commit
+> >>> dda4848a9911120a903bef6284fb88286f4464c9 (liburing-2.2).
+> >>>
+> >>> Here's a manually annotated panic message:
+> >>> [  359.047161] list_del corruption, ffffa42098824f80->next is LIST_POISON1 (dead000000000100)
+> >>> [  359.055393] kernel BUG at lib/list_debug.c:47!
+> >>> [  359.059786] invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC PTI
+> >>> [  359.065463] CPU: 11 PID: 15862 Comm: iopoll.t Tainted: G S        I       5.10.124 #1
+> >>> [  359.081804] RIP: 0010:__list_del_entry_valid+0x49/0x80
+> >>> [  359.086880] Code: c2 22 48 39 d1 74 25 48 8b 11 48 39 f2 75 2d 48 8b 50 08 48 39 f2 75 34 b0 01 5d c3 48 c7 c7 68 15 79 b1 31 c0 e8 c5 a2 5a 00 <0f> 0b 48 c7 c7 d8 8e 76 b1 31 c0 e8 b5 a2 5a 00 0f 0b 48 c7 c7 69
+> >>> [  359.105431] RSP: 0018:ffffb6b66785bd58 EFLAGS: 00010046
+> >>> [  359.110592] RAX: 000000000000004e RBX: ffffa42098824f00 RCX: d07284ea1fbba400
+> >>> [  359.117642] RDX: ffffa43f7f4f05b8 RSI: ffffa43f7f4dff48 RDI: ffffa43f7f4dff48
+> >>> [  359.124691] RBP: ffffb6b66785bd58 R08: 0000000000000000 R09: ffffffffb1f38540
+> >>> [  359.131740] R10: 00000000ffff7fff R11: 0000000000000000 R12: 0000000000000282
+> >>> [  359.138789] R13: ffffb6b66785beb8 R14: ffffa42095d33e00 R15: ffffa420937e3d20
+> >>> [  359.145836] FS:  00000000004f8380(0000) GS:ffffa43f7f4c0000(0000) knlGS:0000000000000000
+> >>> [  359.153830] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >>> [  359.159506] CR2: 0000000000539388 CR3: 000000027b57c006 CR4: 00000000003706e0
+> >>> [  359.166552] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> >>> [  359.173600] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >>> [  359.180647] Call Trace:
+> >>> [  359.183064]  io_dismantle_req+0x1da/0x2b0
+> >>>                     __list_del_entry [include/linux/list.h:132]
+> >>>                     list_del [include/linux/list.h:146]
+> >>>                     io_req_drop_files [fs/io_uring.c:5934]
+> >>>                     io_req_clean_work [fs/io_uring.c:1315]
+> >>>                     io_dismantle_req [fs/io_uring.c:1911]
+> >>> [  359.187023]  io_do_iopoll+0x4e5/0x790
+> >>> [  359.194602]  __se_sys_io_uring_enter+0x39b/0x6f0
+> >>> [  359.208318]  __x64_sys_io_uring_enter+0x29/0x30
+> >>> [  359.212793]  do_syscall_64+0x31/0x40
+> >>> [  359.216324]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> >> 
+> >> Well that sucks, I wonder why mine didn't fail like that. I'll see if I
+> >> can hit this and send a fix. Thanks for reporting!
+> >
+> > Below should do it, I apologize for that. I think my test box booted the
+> > previous kernel which is why it didn't hit it in my regression tests :-(
+> >
+> > Greg, can you add this to 5.10-stable? Verified it ran tests with the
+> > right kernel now...
 
+Great, I'll go just do a release with this in it right now to help
+others out.
 
-On 6/26/22 03:57, Mark Rutland wrote:
-> On Fri, Jun 17, 2022 at 04:07:17PM -0500, madvenka@linux.microsoft.com wrote:
->> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>
->> Introduce arch_stack_walk_reliable() for ARM64. This works like
->> arch_stack_walk() except that it returns -EINVAL if the stack trace is not
->> reliable.
->>
->> Until all the reliability checks are in place, arch_stack_walk_reliable()
->> may not be used by livepatch. But it may be used by debug and test code.
-> 
-> For the moment I would strongly perfer *not* to add this until we have the
-> missing bits and pieces sorted out.
-> 
-
-Yes. I am removing this from the patch series.
-
-> Until then, I'd like to ensure that any infrastructure we add is immediately
-> useful and tested. One way to do that would be to enhance the stack dumping
-> code (i.e. dump_backtrace()) to log some metadata.
-> 
-> As an end-goal, I'd like to get to a point where we can do:
-> 
-> * Explicit logging when trace terminate at the final frame, e.g.
-> 
->   stacktrace:
->     function_c+offset/total
->     function_b+offset/total
->     function_a+offset/total
->     <unwind successful>
-> 
-> * Explicit logging of early termination, e.g.
-> 
->   stacktrace:
->     function_c+offset/total
->     <unwind terminated early (bad FP)>
-> 
-> * Unreliability on individual elements, e.g.
-> 
->   stacktrace:
->     function_c+offset/total
->     function_b+offset/total (?)
->     function_a+offset/total
-> 
-> * Annotations for special unwinding, e.g.
-> 
->   stacktrace:
->     function_c+offset/total (K) // kretprobes trampoline
->     function_b+offset/total (F) // ftrace trampoline
->     function_a+offset/total (FK) // ftrace and kretprobes
->     other_function+offset/total (P) // from pt_regs::pc
->     another_function+offset/total (L?) // from pt_regs::lr, unreliable
->     something_else+offset/total
-> 
->   Note: the comments here are just to explain the idea, I don't expect those in
->   the actual output.
-> 
-> That'll justify some of the infrastructure we need for reliable unwinding, and
-> ensure that it is tested, well before we actually enable reliable stacktracing.
-> 
-
-In the current code structure, the annotations are a problem.
-
-The printing of the entry along with the annotations and metadata cannot be done in
-the unwind functions themselves as the caller may not even want anything printed.
-The printing has to be done in consume_entry() if the caller wants to do it. But
-consume_entry() only gets the PC as the argument (apart from the cookie passed by
-the caller). It currently has no way of figuring out where the PC was obtained from
-(ftrace, kretprobe, pt_regs, etc) or if the PC is reliable.
-
-We need to replace the PC argument with a pointer to a structure that contains the
-PC as well as other information about the PC. unwind_init() and unwind_next() need
-to update that for each frame.
-
-If this approach is acceptable, I will submit a patch series for that. Please let
-me know.
-
-Thanks.
-
-Madhavan
+greg k-h

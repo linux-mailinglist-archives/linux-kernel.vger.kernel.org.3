@@ -2,108 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E46155C6FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094FF55E2F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbiF0Myu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S234391AbiF0Mzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232282AbiF0Myr (ORCPT
+        with ESMTP id S233023AbiF0Mzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:54:47 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77E0B866
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:54:46 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id i8-20020a17090aee8800b001ecc929d14dso10189338pjz.0
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=o3xBP+E3kmKQgb+KNGWuqjsb+ry6d1Jr12qAFBaZCTY=;
-        b=Pah6BB+spmfitgU1poq8uRHpycpH9Js/8JqrDPw5KbdyifTiJanR8zJY9apSoHxsKk
-         Vqzan3Ji/cnQUduaI1esis4oTtmM2s+CcDyz2XqEFHrFB8BMzgIpXZGO87TQdH29iIfW
-         CsoU2KPZlLvBWhaGnctIjHAXOEym9A6C54pnw9X6alTJBVCYVPHVsPK/NResGIvCFkz/
-         AZVo0XdMrj8V+Xm3whc5oPDcaGYez39fsdGGGTaCity3AJf9X4Wkh+AQw6zAI0BO390w
-         BBqGtUah7eklrb/OxHWnUYWQ/Dl+CU0QsZrbixDfaPW875vM1yxBdryXxYZbthHBB7qE
-         OQNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=o3xBP+E3kmKQgb+KNGWuqjsb+ry6d1Jr12qAFBaZCTY=;
-        b=tou3RNAXWGpHtcvt3DJo+reVs+czJBnD61TeeWQJcq3L7x0zOCv+DW5AVnG1G4Hwl4
-         h7PwQkIY5Cblr50Wlick9qzu3REn9MmTmgWK6UFMGdO6V0ixaxzqon+zrCBrqaZpYDiw
-         u93ndtXJUK+Ltw+bC6xmFlRR/zcqn8gaD62eLGa+Ct7b5klKnluSPWKPTDVU8vDJYGaW
-         XJqg6ejD4Upih2qgTLnk3YDHX+6gYv/0mCUbDdsgxLF5WLB6/jxEwKvCIrDtZqLvajDR
-         nhznLTiDpiGPEFYuSMIJJqGsId2wMA43jXsl54WE6TKa53p5V/eVifcaWce3D0QFuaFL
-         +SxQ==
-X-Gm-Message-State: AJIora+0B/ahBWkTett6gD9to+K4zRH9bR8Wd/gS12xuceeh+nc+kPE4
-        0IFS3PcvsNaP0tcbK9+U8o+J5/W3ORvB5X69cQY=
-X-Google-Smtp-Source: AGRyM1tAOTpUJw8keP8h8CQCVuPUmiTgi5MxuuCPylTYpVooG+YJifC2N6tiUdiZ3iQwjapIBQkzKQ==
-X-Received: by 2002:a17:902:ebcb:b0:168:e3ba:4b5a with SMTP id p11-20020a170902ebcb00b00168e3ba4b5amr14362593plg.11.1656334486307;
-        Mon, 27 Jun 2022 05:54:46 -0700 (PDT)
-Received: from desktop-hypoxic.kamiya.io ([42.120.103.58])
-        by smtp.gmail.com with ESMTPSA id a27-20020aa794bb000000b005252a06750esm7244686pfl.182.2022.06.27.05.54.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 05:54:44 -0700 (PDT)
-From:   Yangxi Xiang <xyangxi5@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        nick black <dankamongmen@gmail.com>,
-        Yangxi Xiang <xyangxi5@gmail.com>
-Subject: [PATCH v2] vt: fix memory overlapping when deleting chars in the buffer
-Date:   Mon, 27 Jun 2022 20:54:28 +0800
-Message-Id: <20220627125428.19885-1-xyangxi5@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 27 Jun 2022 08:55:36 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08548BC31
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:55:35 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 14261660178D;
+        Mon, 27 Jun 2022 13:55:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656334533;
+        bh=ifdpDVxFAJ7x6mxjxCa3kTl2O13CzEnu51wJDDLj6yY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RyIN62IlNGKr46nFhj1YIqMhkUGQA5IpK/U7l43Krbqfr1kdu0XwcBrWz/6/2uwvx
+         SKOWM6L2frNS1rf/I1Bl2/V14E6B2P34q/WCw4ZiIZWUJJtLK2Dqgm3IIZHo2/2a9I
+         BUNNlbpAaT6821/KUUXllBkfX8H3dKMtFWfMQlNE6O4GPj94f+aMBwCoEejB/0muHR
+         a55UMYRUGRXWBdpe95SIRu13607xv7YY/qQXnQw70/T0dZnL1nDtgI2E6YobpgXWMT
+         AiiX+KvNvYjxJfBdz85+RVYBnM7/fqY/MifNQmUTJl922YDOAZaaVm1o/uLKtcj7n7
+         Syo3ePm5kq9qQ==
+Message-ID: <7f565036-df78-a4e7-db5e-259115daaf79@collabora.com>
+Date:   Mon, 27 Jun 2022 14:55:29 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] drm/bridge: add it6505 driver read config from dt
+ property
+Content-Language: en-US
+To:     allen <allen.chen@ite.com.tw>
+Cc:     Pin-yen Lin <treapking@google.com>,
+        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
+        Hermes Wu <Hermes.Wu@ite.com.tw>,
+        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
+        Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>,
+        Pin-yen Lin <treapking@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+References: <20220623093154.52701-1-allen.chen@ite.com.tw>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220623093154.52701-1-allen.chen@ite.com.tw>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A memory overlapping copy occurs when deleting a long line. This memory
-overlapping copy can cause data corruption when scr_memcpyw is optimized
-to memcpy because memcpy does not ensure its behavior if the destination
-buffer overlaps with the source buffer. The line buffer is not always
-broken, because the memcpy utilizes the hardware acceleration, whose
-result is not deterministic.
+Il 23/06/22 11:31, allen ha scritto:
+> From: allen chen <allen.chen@ite.com.tw>
+> 
+> add read max-lane and max-pixel-clock from dt property
+> 
+> Signed-off-by: Allen-kh Cheng <allen-kh.cheng@mediatek.corp-partner.google.com>
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 
-Fix this problem by using replacing the scr_memcpyw with scr_memmovew, and
-preserving the memcpy optimization when the buffers are not overlapping.
+Hello Allen,
 
-Fixes: 81732c3b2fed ("Fix line garbage in virtual console").
-Signed-off-by: Yangxi Xiang <xyangxi5@gmail.com>
----
- drivers/tty/vt/vt.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+as Sam also pointed out, please fix your S-o-b email: it has to match with the
+author one.
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index f8c87c4d7399..d87bff9d8ed5 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -853,9 +853,13 @@ static void insert_char(struct vc_data *vc, unsigned int nr)
- static void delete_char(struct vc_data *vc, unsigned int nr)
- {
- 	unsigned short *p = (unsigned short *) vc->vc_pos;
-+	unsigned short cp = (vc->vc_cols - vc->state.x - nr) * 2;
- 
- 	vc_uniscr_delete(vc, nr);
--	scr_memcpyw(p, p + nr, (vc->vc_cols - vc->state.x - nr) * 2);
-+	if (cp > nr)
-+		scr_memmovew(p, p + nr, cp);
-+	else
-+		scr_memcpyw(p, p + nr, cp);
- 	scr_memsetw(p + vc->vc_cols - vc->state.x - nr, vc->vc_video_erase_char,
- 			nr * 2);
- 	vc->vc_need_wrap = 0;
--- 
-2.17.1
+Anyway, you're adding devicetree properties, so this implies that you should
+also change the dt-bindings documentation for this driver... and also, I have
+some more comments, check below:
 
+> ---
+>   drivers/gpu/drm/bridge/ite-it6505.c | 35 ++++++++++++++++++++++++++---
+>   1 file changed, 32 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
+> index 4b673c4792d77..c9121d4635a52 100644
+> --- a/drivers/gpu/drm/bridge/ite-it6505.c
+> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
+> @@ -436,6 +436,8 @@ struct it6505 {
+>   	bool powered;
+>   	bool hpd_state;
+>   	u32 afe_setting;
+> +	u32 max_dpi_pixel_clock;
+> +	u32 max_lane_count;
+>   	enum hdcp_state hdcp_status;
+>   	struct delayed_work hdcp_work;
+>   	struct work_struct hdcp_wait_ksv_list;
+> @@ -1466,7 +1468,8 @@ static void it6505_parse_link_capabilities(struct it6505 *it6505)
+>   	it6505->lane_count = link->num_lanes;
+>   	DRM_DEV_DEBUG_DRIVER(dev, "Sink support %d lanes training",
+>   			     it6505->lane_count);
+> -	it6505->lane_count = min_t(int, it6505->lane_count, MAX_LANE_COUNT);
+> +	it6505->lane_count = min_t(int, it6505->lane_count,
+> +				   it6505->max_lane_count);
+>   
+>   	it6505->branch_device = drm_dp_is_branch(it6505->dpcd);
+>   	DRM_DEV_DEBUG_DRIVER(dev, "Sink %sbranch device",
+> @@ -2895,7 +2898,7 @@ it6505_bridge_mode_valid(struct drm_bridge *bridge,
+>   	if (mode->flags & DRM_MODE_FLAG_INTERLACE)
+>   		return MODE_NO_INTERLACE;
+>   
+> -	if (mode->clock > DPI_PIXEL_CLK_MAX)
+> +	if (mode->clock > it6505->max_dpi_pixel_clock)
+>   		return MODE_CLOCK_HIGH;
+>   
+>   	it6505->video_info.clock = mode->clock;
+> @@ -3057,6 +3060,8 @@ static void it6505_parse_dt(struct it6505 *it6505)
+>   {
+>   	struct device *dev = &it6505->client->dev;
+>   	u32 *afe_setting = &it6505->afe_setting;
+> +	u32 *max_lane_count = &it6505->max_lane_count;
+> +	u32 *max_dpi_pixel_clock = &it6505->max_dpi_pixel_clock;
+>   
+>   	it6505->lane_swap_disabled =
+>   		device_property_read_bool(dev, "no-laneswap");
+> @@ -3072,7 +3077,31 @@ static void it6505_parse_dt(struct it6505 *it6505)
+>   	} else {
+>   		*afe_setting = 0;
+>   	}
+> -	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %d", *afe_setting);
+> +
+> +	if (device_property_read_u32(dev, "max-lane-count",
+
+Please use the standard property "data-lanes" from video-interfaces.yaml.
+
+> +				     max_lane_count) == 0) {
+> +		if (*max_lane_count > 4 || *max_lane_count == 3) {
+> +			dev_err(dev, "max lane count error, use default");
+> +			*max_lane_count = MAX_LANE_COUNT;
+> +		}
+> +	} else {
+> +		*max_lane_count = MAX_LANE_COUNT;
+> +	}
+> +
+> +	if (device_property_read_u32(dev, "max-dpi-pixel-clock",
+> +				     max_dpi_pixel_clock) == 0) {
+
+What about "max-pixel-clock-khz" or "max-pixel-clock-hz"?
+
+
+Regards,
+Angelo

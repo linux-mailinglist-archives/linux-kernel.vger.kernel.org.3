@@ -2,121 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CDC55C2D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8039C55C795
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239272AbiF0QX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
+        id S238441AbiF0QWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 12:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236443AbiF0QXZ (ORCPT
+        with ESMTP id S236443AbiF0QWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:23:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C081A44A
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:23:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 060381758;
-        Mon, 27 Jun 2022 09:23:24 -0700 (PDT)
-Received: from bogus (unknown [10.57.39.193])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 106C03F66F;
-        Mon, 27 Jun 2022 09:23:21 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 17:22:11 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 00/20] arch_topology: Updates to add socket support
- and fix cluster ids
-Message-ID: <20220627162211.t2dlu2no2turnc6r@bogus>
-References: <20220621192034.3332546-1-sudeep.holla@arm.com>
- <Yrm2lG3uskxT26Of@arm.com>
+        Mon, 27 Jun 2022 12:22:51 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A741F2660
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:22:50 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id b2so1616839plx.7
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 09:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cV3hVzy9TYCqPFueATEq37SOh6vFTuLA/SrvAB62Xzg=;
+        b=BseriqoiozT548bWf87kfEM21QE/lsC7Xh53iRBx2LmFdeNav386MocuZafko2ZdzZ
+         JQe5ovxOhcstFhT8iCD21C825q81Za8C3tdgW13ebnSYPD7k8WHS3yPH0VHQSCGZnmQf
+         FicGbHrtEuD0O3jI+Q4LIietAgpYwoWp5qedMxPLBADENHHnn+UkkXouxHyxDA/j0F9g
+         moM6KAIDklQszHLohnncrg9SWHa8qDcecTbUS930nHP7JYFxSIbGRQKh+59wLE+AXy7E
+         fCLhJT8SPzPCj5eph3yGYAVFqleuzS1aYTb4Me1axhRhNHXk+NS3u9/PAs9nbb1c6HO+
+         fcfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cV3hVzy9TYCqPFueATEq37SOh6vFTuLA/SrvAB62Xzg=;
+        b=YIi+ote/lT/xdjD8IbcVIW1ZTxjiCISogsaYTw0lyE0eUk5ehDP856dvPvC9XAPwm6
+         cf2W8uwsfkRooDbast24QHsGcU3XaP5VMn0v7MI7rN5jwYcccJl4ePAxSxF0OJDwWcZl
+         XY6Skug4KIJg4iI3QvwJtTL8cG5HJc6ZW9Vt4V9ACp88Izn/SrIx6OiV0ILUONvxXGSR
+         w5GDXlDW7v1WlDiBVabt9cLH1yF5EtlQoX7tuoI6scwPLsDKJuGst8RJUO0flT/b/FFJ
+         GdLRIfw2m0I0M6onMhOUDXc0L1brnTDN4Z7DcEn6nu9IISjIU/Xz8CpgTEt6QDNkONGc
+         QB7w==
+X-Gm-Message-State: AJIora9hqOCEvLdMfSpSMRfeyqQYw6Y0eM3fBwlImBbgGx2bVzksFC1g
+        TxDHQvA9qNijUCHUDnCeziOIgw==
+X-Google-Smtp-Source: AGRyM1v1/klo71FJcOnTZoW3zB85VLk+X/utjbZmu0W37du2cpFLJFufJZy1ShhykQNqxxTcsGcOvw==
+X-Received: by 2002:a17:902:e54f:b0:16a:29de:9603 with SMTP id n15-20020a170902e54f00b0016a29de9603mr15741779plf.46.1656346970060;
+        Mon, 27 Jun 2022 09:22:50 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id o14-20020a17090a4e8e00b001e2bd411079sm9752135pjh.20.2022.06.27.09.22.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 09:22:49 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 16:22:46 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v5 3/4] KVM: x86/mmu: count KVM mmu usage in secondary
+ pagetable stats.
+Message-ID: <YrnZVgq1E/u1nYm0@google.com>
+References: <20220606222058.86688-1-yosryahmed@google.com>
+ <20220606222058.86688-4-yosryahmed@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yrm2lG3uskxT26Of@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220606222058.86688-4-yosryahmed@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 02:54:28PM +0100, Ionela Voinescu wrote:
-> Hi Sudeep,
-> 
-> On Tuesday 21 Jun 2022 at 20:20:14 (+0100), Sudeep Holla wrote:
-> > Hi All,
-> > 
-> > This version updates cacheinfo to populate and use the information from
-> > there for all the cache topology.
-> > 
-> > This series intends to fix some discrepancies we have in the CPU topology
-> > parsing from the device tree /cpu-map node. Also this diverges from the
-> > behaviour on a ACPI enabled platform. The expectation is that both DT
-> > and ACPI enabled systems must present consistent view of the CPU topology.
-> > 
-> > Currently we assign generated cluster count as the physical package identifier
-> > for each CPU which is wrong. The device tree bindings for CPU topology supports
-> > sockets to infer the socket or physical package identifier for a given CPU.
-> > Also we don't check if all the cores/threads belong to the same cluster before
-> > updating their sibling masks which is fine as we don't set the cluster id yet.
-> > 
-> > These changes also assigns the cluster identifier as parsed from the device tree
-> > cluster nodes within /cpu-map without support for nesting of the clusters.
-> > Finally, it also add support for socket nodes in /cpu-map. With this the
-> > parsing of exact same information from ACPI PPTT and /cpu-map DT node
-> > aligns well.
-> > 
-> > The only exception is that the last level cache id information can be
-> > inferred from the same ACPI PPTT while we need to parse CPU cache nodes
-> > in the device tree.
-> > 
-> > Hi Greg,
-> > 
-> > I had not cc-ed you on earlier 3 versions as we had some disagreement
-> > amongst Arm developers which we have not settled. Let me know how you want to
-> 
-> s/not/now :)
-> 
-> > merge this once you agree with the changes. I can set pull request if
-> > you prefer. Let me know.
-> > 
-> > v4[3]->v4:
-> > 	- Updated ACPI PPTT fw_token to use table offset instead of virtual
-> > 	  address as it could get changed for everytime it is mapped before
-> > 	  the global acpi_permanent_mmap is set
-> > 	- Added warning for the topology with nested clusters
-> > 	- Added update to cpu_clustergroup_mask so that introduction of
-> > 	  correct cluster_id doesn't break existing platforms by limiting
-> > 	  the span of clustergroup_mask(by Ionela)
-> > 
-> 
-> I've tested v4 on quite a few platforms:
->  - DT: Juno R0, DB845c, RB5
->  - ACPI: TX2, Ampere Altra, Kunpeng920
-> 
-> and it all looks good from my point of view (topology and sched domain
-> hierarchy).
-> 
-> So for the full set (after the changes requested for 16/20 and 20/20):
-> 
-> Tested-by: Ionela Voinescu <ionela.voinescu@arm.com>
->
+On Mon, Jun 06, 2022, Yosry Ahmed wrote:
+> Count the pages used by KVM mmu on x86 for in secondary pagetable stats.
 
-Thanks for all the review and testing. Much appreciated!
+"for in" is funky.  And it's worth providing a brief explanation of what the
+secondary pagetable stats actually are.  "secondary" is confusingly close to
+"second level pagetables", e.g. might be misconstrued as KVM counters for the
+number of stage-2 / two-dimension paging page (TDP) tables.
 
--- 
-Regards,
-Sudeep
+Code looks good, though it needs a rebased on kvm/queue.

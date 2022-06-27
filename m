@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14E955C429
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D6455C485
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235207AbiF0L1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45262 "EHLO
+        id S234576AbiF0L1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235069AbiF0L0Z (ORCPT
+        with ESMTP id S233236AbiF0L0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:26:25 -0400
+        Mon, 27 Jun 2022 07:26:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB6B65D4;
-        Mon, 27 Jun 2022 04:26:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE0795B3;
+        Mon, 27 Jun 2022 04:26:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F91A614A0;
-        Mon, 27 Jun 2022 11:26:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1594CC3411D;
-        Mon, 27 Jun 2022 11:26:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB962614A2;
+        Mon, 27 Jun 2022 11:26:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E56E0C3411D;
+        Mon, 27 Jun 2022 11:26:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329169;
-        bh=wT2Xzz8Kl8V+HIEwFT7SJ0I8IoK2XrtUFmxPpLzf01w=;
+        s=korg; t=1656329172;
+        bh=YEWPxdckj3HbKhMDZMzBuatDvbXySe6JrnuwUn0KqiM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z6O2iFRvtH4qlEqkfXQ6ESf4SDTmB9NxIZlL0DTSFK8KAtRnDKl4iETDG8iMlFz2d
-         vPEuKcqZAXFOdKlr+hN8BsutGJHkBe56py2jX5BW3SVKEw8dZrFDe/t8EAgKvjnEG/
-         rNB8VyJYKllsdgrP6HimqA8Nxyd9+X0070dckbys=
+        b=tEn9wJBweli80b5adlDn4iAsnPP5Cx3fR6/qpQtPFlniKkTs9qyF6iwS4r9PfFIlL
+         FxLF3w0SrGhpXMZn1aTiVUiOoMjx50es/GzR3y4B95AE9Hg61NTj79PHU3aAp1MzuB
+         GrHmwVe1EAzqWsuMIuFNwGdF0J2gDiFX0zMbM+Qw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 5.10 072/102] f2fs: attach inline_data after setting compression
-Date:   Mon, 27 Jun 2022 13:21:23 +0200
-Message-Id: <20220627111935.606422078@linuxfoundation.org>
+        stable@vger.kernel.org, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.10 073/102] iio:chemical:ccs811: rearrange iio trigger get and register
+Date:   Mon, 27 Jun 2022 13:21:24 +0200
+Message-Id: <20220627111935.635574402@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220627111933.455024953@linuxfoundation.org>
 References: <20220627111933.455024953@linuxfoundation.org>
@@ -53,68 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jaegeuk Kim <jaegeuk@kernel.org>
+From: Dmitry Rokosov <DDRokosov@sberdevices.ru>
 
-commit 4cde00d50707c2ef6647b9b96b2cb40b6eb24397 upstream.
+commit d710359c0b445e8c03e24f19ae2fb79ce7282260 upstream.
 
-This fixes the below corruption.
+IIO trigger interface function iio_trigger_get() should be called after
+iio_trigger_register() (or its devm analogue) strictly, because of
+iio_trigger_get() acquires module refcnt based on the trigger->owner
+pointer, which is initialized inside iio_trigger_register() to
+THIS_MODULE.
+If this call order is wrong, the next iio_trigger_put() (from sysfs
+callback or "delete module" path) will dereference "default" module
+refcnt, which is incorrect behaviour.
 
-[345393.335389] F2FS-fs (vdb): sanity_check_inode: inode (ino=6d0, mode=33206) should not have inline_data, run fsck to fix
-
-Cc: <stable@vger.kernel.org>
-Fixes: 677a82b44ebf ("f2fs: fix to do sanity check for inline inode")
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Fixes: f1f065d7ac30 ("iio: chemical: ccs811: Add support for data ready trigger")
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20220524181150.9240-5-ddrokosov@sberdevices.ru
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/f2fs/namei.c |   17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ drivers/iio/chemical/ccs811.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@ -91,8 +91,6 @@ static struct inode *f2fs_new_inode(stru
- 	if (test_opt(sbi, INLINE_XATTR))
- 		set_inode_flag(inode, FI_INLINE_XATTR);
- 
--	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
--		set_inode_flag(inode, FI_INLINE_DATA);
- 	if (f2fs_may_inline_dentry(inode))
- 		set_inode_flag(inode, FI_INLINE_DENTRY);
- 
-@@ -109,10 +107,6 @@ static struct inode *f2fs_new_inode(stru
- 
- 	f2fs_init_extent_tree(inode, NULL);
- 
--	stat_inc_inline_xattr(inode);
--	stat_inc_inline_inode(inode);
--	stat_inc_inline_dir(inode);
--
- 	F2FS_I(inode)->i_flags =
- 		f2fs_mask_flags(mode, F2FS_I(dir)->i_flags & F2FS_FL_INHERITED);
- 
-@@ -129,6 +123,14 @@ static struct inode *f2fs_new_inode(stru
- 			set_compress_context(inode);
+--- a/drivers/iio/chemical/ccs811.c
++++ b/drivers/iio/chemical/ccs811.c
+@@ -500,11 +500,11 @@ static int ccs811_probe(struct i2c_clien
+ 		data->drdy_trig->dev.parent = &client->dev;
+ 		data->drdy_trig->ops = &ccs811_trigger_ops;
+ 		iio_trigger_set_drvdata(data->drdy_trig, indio_dev);
+-		indio_dev->trig = data->drdy_trig;
+-		iio_trigger_get(indio_dev->trig);
+ 		ret = iio_trigger_register(data->drdy_trig);
+ 		if (ret)
+ 			goto err_poweroff;
++
++		indio_dev->trig = iio_trigger_get(data->drdy_trig);
  	}
  
-+	/* Should enable inline_data after compression set */
-+	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
-+		set_inode_flag(inode, FI_INLINE_DATA);
-+
-+	stat_inc_inline_xattr(inode);
-+	stat_inc_inline_inode(inode);
-+	stat_inc_inline_dir(inode);
-+
- 	f2fs_set_inode_flags(inode);
- 
- 	trace_f2fs_new_inode(inode, 0);
-@@ -317,6 +319,9 @@ static void set_compress_inode(struct f2
- 		if (!is_extension_exist(name, ext[i], false))
- 			continue;
- 
-+		/* Do not use inline_data with compression */
-+		stat_dec_inline_inode(inode);
-+		clear_inode_flag(inode, FI_INLINE_DATA);
- 		set_compress_context(inode);
- 		return;
- 	}
+ 	ret = iio_triggered_buffer_setup(indio_dev, NULL,
 
 

@@ -2,79 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB2B55E200
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20D555C9FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237418AbiF0O1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 10:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S237442AbiF0O16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 10:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237344AbiF0O1Y (ORCPT
+        with ESMTP id S237570AbiF0O1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 10:27:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DD313F21;
-        Mon, 27 Jun 2022 07:27:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7EE5EB817CF;
-        Mon, 27 Jun 2022 14:27:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EBEC3411D;
-        Mon, 27 Jun 2022 14:27:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656340041;
-        bh=TnJe5GtjYTivQDaip5nx0C9FQQe/W49iagWHzZpEVqg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RJ1BibMLtKVYG/mbMot4Vmh/rnLk7kdmdwq3LkHswz6YkDJwPZJKlUL1OuW0dpCQD
-         YKJ33EIEfNVVs6aBjrLGiT86XoIcikMSHksQPRRvVOdDR71ycoH8GTXXVfK8fV3Vdr
-         fPdPBeLmqEpf3oMPAUDPgdy8i0sQAw8BmbyRy9nupzbIMs0CZyI91xmyH0a/QxAvpF
-         IOhoNkozuR7eTx7KAnNGzlMlMH0S4xrQKAGrmHQAWFKYwF1t0LJ7bhHoo4Rd7dIHQX
-         mLf1vucr+MTikDigGq4pxQYpmb5mXNv/znGWviXBqVljnyWjHqrodbvdpRwpod9m/T
-         fNZJJzxSDuuqQ==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1o5phv-003TLr-3j;
-        Mon, 27 Jun 2022 15:27:19 +0100
+        Mon, 27 Jun 2022 10:27:48 -0400
+Received: from smtpproxy21.qq.com (smtpbg701.qq.com [203.205.195.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A5E13F28
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 07:27:46 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1656340056t09cedwu
+Received: from localhost.localdomain ( [113.200.76.118])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 27 Jun 2022 22:27:34 +0800 (CST)
+X-QQ-SSF: 01400000002000D0F000C00A0000000
+X-QQ-FEAT: Mzskoac49OhQU500IjO78DhojBQSVQY5LrRe4VDr5T3QMGZTvCJrn2JUWeURT
+        bcfoOes4gEgommRY4shN8o4bfMVaFeRUnv2c2vWOknpSQyUr3FUGVKzUtQaKX4n/zaAyGWI
+        jBOgr9cEhmneAgOq/m76lJtsH+GAOdZ0LUfz6/215PZlGHfkI88jDjE6j+g04zriUkbqQhE
+        lMmmr2RQk9inCQefZ1xQwcQ3ZDYKTR54K9cjLuK9yQx/7oEpJBgGZtAr6IvUPvcrzhPCRkS
+        TC5mArahUCJqTadSIzaqd9Sq3x0A/Zh/ZPTjj78oI7thYgjykkSbAPoYxnOw3xID+jnJp1I
+        IlFRM2TOwBixHobAmlgQdG2T3/+eqzle9pKzd7g
+X-QQ-GoodBg: 2
+From:   Guo Hui <guohui@uniontech.com>
+To:     peterz@infradead.org
+Cc:     longman@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, will@kernel.org,
+        boqun.feng@gmail.com, virtualization@lists.linux-foundation.org,
+        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org,
+        Guo Hui <guohui@uniontech.com>
+Subject: [PATCH v4] x86/paravirt: useless assignment instructions cause Unixbench full core   performance degradation
+Date:   Mon, 27 Jun 2022 22:27:32 +0800
+Message-Id: <20220627142732.31067-1-guohui@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <YrlhGqqce0NCQ6hi@hirez.programming.kicks-ass.net>
+References: <YrlhGqqce0NCQ6hi@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Date:   Mon, 27 Jun 2022 15:27:19 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Chao-ying Fu <cfu@wavecomp.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@kernel.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Paul Burton <paulburton@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH v2 07/12] clocksource: mips-gic-timer: Always use cluster
- 0 counter as clocksource
-In-Reply-To: <5ff65346-ba7b-c440-a7e7-73c84fe13165@syrmia.com>
-References: <20220525121030.16054-1-Dragan.Mladjenovic@syrmia.com>
- <20220525121030.16054-8-Dragan.Mladjenovic@syrmia.com>
- <5ff65346-ba7b-c440-a7e7-73c84fe13165@syrmia.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <efc1d0884a821377ba007e7d77344260@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: Dragan.Mladjenovic@syrmia.com, tglx@linutronix.de, cfu@wavecomp.com, daniel.lezcano@linaro.org, geert@linux-m68k.org, gerg@kernel.org, hauke@hauke-m.de, ilya.lipnitskiy@gmail.com, jiaxun.yang@flygoat.com, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, paulburton@kernel.org, peterz@infradead.org, fancer.lancer@gmail.com, yangtiezhu@loongson.cn, tsbogend@alpha.franken.de
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign3
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,118 +56,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-27 15:17, Dragan Mladjenovic wrote:
-> On 25-May-22 14:10, Dragan Mladjenovic wrote:
->> From: Paul Burton <paulburton@kernel.org>
->> 
->> In a multi-cluster MIPS system we have multiple GICs - one in each
->> cluster - each of which has its own independent counter. The counters 
->> in
->> each GIC are not synchronised in any way, so they can drift relative 
->> to
->> one another through the lifetime of the system. This is problematic 
->> for
->> a clocksource which ought to be global.
->> 
->> Avoid problems by always accessing cluster 0's counter, using
->> cross-cluster register access. This adds overhead so we only do so on
->> systems where we actually have CPUs present in multiple clusters.
->> For now, be extra conservative and don't use gic counter for vdso or
->> sched_clock in this case.
->> 
->> Signed-off-by: Paul Burton <paulburton@kernel.org>
->> Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
->> Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
->> 
->> diff --git a/drivers/clocksource/mips-gic-timer.c 
->> b/drivers/clocksource/mips-gic-timer.c
->> index be4175f415ba..6632d314a2c0 100644
->> --- a/drivers/clocksource/mips-gic-timer.c
->> +++ b/drivers/clocksource/mips-gic-timer.c
->> @@ -170,6 +170,37 @@ static u64 gic_hpt_read(struct clocksource *cs)
->>   	return gic_read_count();
->>   }
->>   +static u64 gic_hpt_read_multicluster(struct clocksource *cs)
->> +{
->> +	unsigned int hi, hi2, lo;
->> +	u64 count;
->> +
->> +	mips_cm_lock_other(0, 0, 0, CM_GCR_Cx_OTHER_BLOCK_GLOBAL);
->> +
->> +	if (mips_cm_is64) {
->> +		count = read_gic_redir_counter();
->> +		goto out;
->> +	}
->> +
->> +	hi = read_gic_redir_counter_32h();
->> +	while (true) {
->> +		lo = read_gic_redir_counter_32l();
->> +
->> +		/* If hi didn't change then lo didn't wrap & we're done */
->> +		hi2 = read_gic_redir_counter_32h();
->> +		if (hi2 == hi)
->> +			break;
->> +
->> +		/* Otherwise, repeat with the latest hi value */
->> +		hi = hi2;
->> +	}
->> +
->> +	count = (((u64)hi) << 32) + lo;
->> +out:
->> +	mips_cm_unlock_other();
->> +	return count;
->> +}
->> +
->>   static struct clocksource gic_clocksource = {
->>   	.name			= "GIC",
->>   	.read			= gic_hpt_read,
->> @@ -204,6 +235,11 @@ static int __init __gic_clocksource_init(void)
->>   	/* Calculate a somewhat reasonable rating value. */
->>   	gic_clocksource.rating = 200 + gic_frequency / 10000000;
->>   +	if (mips_cps_multicluster_cpus()) {
->> +		gic_clocksource.read = &gic_hpt_read_multicluster;
->> +		gic_clocksource.vdso_clock_mode = VDSO_CLOCKMODE_NONE;
->> +	}
->> +
->>   	ret = clocksource_register_hz(&gic_clocksource, gic_frequency);
->>   	if (ret < 0)
->>   		pr_warn("Unable to register clocksource\n");
->> @@ -262,7 +298,8 @@ static int __init gic_clocksource_of_init(struct 
->> device_node *node)
->>   	 * stable CPU frequency or on the platforms with CM3 and CPU 
->> frequency
->>   	 * change performed by the CPC core clocks divider.
->>   	 */
->> -	if (mips_cm_revision() >= CM_REV_CM3 || 
->> !IS_ENABLED(CONFIG_CPU_FREQ)) {
->> +	if ((mips_cm_revision() >= CM_REV_CM3 || 
->> !IS_ENABLED(CONFIG_CPU_FREQ)) &&
->> +	     !mips_cps_multicluster_cpus()) {
->>   		sched_clock_register(mips_cm_is64 ?
->>   				     gic_read_count_64 : gic_read_count_2x32,
->>   				     64, gic_frequency);
-> 
-> Hi,
-> 
-> I was expecting some comments on this, but I'll ask first. We now
-> taking a conservative approach of not using gic as sched_clock in
-> multicluster case. Is this necessary or can sched_clock tolerate a
-> fixed delta between clocks on different cpu clusters?
+The instructions assigned to the vcpu_is_preempted function parameter
+in the X86 architecture physical machine are redundant instructions,
+causing the multi-core performance of Unixbench to drop by about 4% to 5%.
+The C function is as follows:
+static bool vcpu_is_preempted(long vcpu);
 
-I don't think that's wise. We generally go into all sort of
-troubles to keep sched_clock() strictly identical between CPUs,
-and there are tons of things that rely on this (the scheduler
-itself, but any sort of tracing...). You just have to grep
-for the various use cases.
+The parameter 'vcpu' in the function osq_lock
+that calls the function vcpu_is_preempted is assigned as follows:
 
-A consequence of the above is that the kernel can (and will)
-snapshot a sched_clock value, and compare it to the value on
-the current CPU. Imagine what happens if the difference is
-negative...
+The C code is in the function node_cpu:
+cpu = node->cpu - 1;
 
-So I don't know what the deal is with the MIPS GIC, but if any
-of the above can happen, you're doomed.
+The instructions corresponding to the C code are:
+mov 0x14(%rax),%edi
+sub $0x1,%edi
 
-         M.
+The above instructions are unnecessary
+in the X86 Native operating environment,
+causing high cache-misses and degrading performance.
+
+This patch uses static_key to not execute this instruction
+in the Native runtime environment.
+
+The patch effect is as follows two machines,
+Unixbench runs with full core score:
+
+1. Machine configuration:
+Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz
+CPU core: 40
+Memory: 256G
+OS Kernel: 5.19-rc3
+
+Before using the patch:
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0  948326591.2  81261.9
+Double-Precision Whetstone                       55.0     211986.3  38543.0
+Execl Throughput                                 43.0      43453.2  10105.4
+File Copy 1024 bufsize 2000 maxblocks          3960.0     438936.2   1108.4
+File Copy 256 bufsize 500 maxblocks            1655.0     118197.4    714.2
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1534674.7   2646.0
+Pipe Throughput                               12440.0   46482107.6  37365.0
+Pipe-based Context Switching                   4000.0    1915094.2   4787.7
+Process Creation                                126.0      85442.2   6781.1
+Shell Scripts (1 concurrent)                     42.4      69400.7  16368.1
+Shell Scripts (8 concurrent)                      6.0       8877.2  14795.3
+System Call Overhead                          15000.0    4714906.1   3143.3
+                                                                   ========
+System Benchmarks Index Score                                        7923.3
+
+After using the patch:
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0  947032915.5  81151.1
+Double-Precision Whetstone                       55.0     211971.2  38540.2
+Execl Throughput                                 43.0      45054.8  10477.9
+File Copy 1024 bufsize 2000 maxblocks          3960.0     515024.9   1300.6
+File Copy 256 bufsize 500 maxblocks            1655.0     146354.6    884.3
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1679995.9   2896.5
+Pipe Throughput                               12440.0   46466394.2  37352.4
+Pipe-based Context Switching                   4000.0    1898221.4   4745.6
+Process Creation                                126.0      85653.1   6797.9
+Shell Scripts (1 concurrent)                     42.4      69437.3  16376.7
+Shell Scripts (8 concurrent)                      6.0       8898.9  14831.4
+System Call Overhead                          15000.0    4658746.7   3105.8
+                                                                   ========
+System Benchmarks Index Score                                        8248.8
+
+2. Machine configuration:
+Hygon C86 7185 32-core Processor
+CPU core: 128
+Memory: 256G
+OS Kernel: 5.19-rc3
+
+Before using the patch:
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0 2256644068.3 193371.4
+Double-Precision Whetstone                       55.0     438969.9  79812.7
+Execl Throughput                                 43.0      10108.6   2350.8
+File Copy 1024 bufsize 2000 maxblocks          3960.0     275892.8    696.7
+File Copy 256 bufsize 500 maxblocks            1655.0      72082.7    435.5
+File Copy 4096 bufsize 8000 maxblocks          5800.0     925043.4   1594.9
+Pipe Throughput                               12440.0  118905512.5  95583.2
+Pipe-based Context Switching                   4000.0    7820945.7  19552.4
+Process Creation                                126.0      31233.3   2478.8
+Shell Scripts (1 concurrent)                     42.4      49042.8  11566.7
+Shell Scripts (8 concurrent)                      6.0       6656.0  11093.3
+System Call Overhead                          15000.0    6816047.5   4544.0
+                                                                   ========
+System Benchmarks Index Score                                        7756.6
+
+After using the patch:
+System Benchmarks Index Values               BASELINE       RESULT    INDEX
+Dhrystone 2 using register variables         116700.0 2252272929.4 192996.8
+Double-Precision Whetstone                       55.0     451847.2  82154.0
+Execl Throughput                                 43.0      10595.1   2464.0
+File Copy 1024 bufsize 2000 maxblocks          3960.0     301279.3    760.8
+File Copy 256 bufsize 500 maxblocks            1655.0      79291.3    479.1
+File Copy 4096 bufsize 8000 maxblocks          5800.0    1039755.2   1792.7
+Pipe Throughput                               12440.0  118701468.1  95419.2
+Pipe-based Context Switching                   4000.0    8073453.3  20183.6
+Process Creation                                126.0      33440.9   2654.0
+Shell Scripts (1 concurrent)                     42.4      52722.6  12434.6
+Shell Scripts (8 concurrent)                      6.0       7050.4  11750.6
+System Call Overhead                          15000.0    6834371.5   4556.2
+                                                                   ========
+System Benchmarks Index Score                                        8157.8
+
+Signed-off-by: Guo Hui <guohui@uniontech.com>
+---
+ arch/x86/kernel/paravirt-spinlocks.c |  4 ++++
+ kernel/locking/osq_lock.c            | 12 +++++++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/paravirt-spinlocks.c b/arch/x86/kernel/paravirt-spinlocks.c
+index 9e1ea99ad..a2eb375e2 100644
+--- a/arch/x86/kernel/paravirt-spinlocks.c
++++ b/arch/x86/kernel/paravirt-spinlocks.c
+@@ -33,6 +33,8 @@ bool pv_is_native_vcpu_is_preempted(void)
+ 		__raw_callee_save___native_vcpu_is_preempted;
+ }
+ 
++DECLARE_STATIC_KEY_TRUE(vcpu_has_preemption);
++
+ void __init paravirt_set_cap(void)
+ {
+ 	if (!pv_is_native_spin_unlock())
+@@ -40,4 +42,6 @@ void __init paravirt_set_cap(void)
+ 
+ 	if (!pv_is_native_vcpu_is_preempted())
+ 		setup_force_cpu_cap(X86_FEATURE_VCPUPREEMPT);
++	else
++		static_branch_disable(&vcpu_has_preemption);
+ }
+diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
+index d5610ad52..adb41080d 100644
+--- a/kernel/locking/osq_lock.c
++++ b/kernel/locking/osq_lock.c
+@@ -27,6 +27,16 @@ static inline int node_cpu(struct optimistic_spin_node *node)
+ 	return node->cpu - 1;
+ }
+ 
++DEFINE_STATIC_KEY_TRUE(vcpu_has_preemption);
++
++static inline bool vcpu_is_preempted_node(struct optimistic_spin_node *node)
++{
++	if (!static_branch_unlikely(&vcpu_has_preemption))
++		return false;
++
++	return vcpu_is_preempted(node_cpu(node->prev));
++}
++
+ static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
+ {
+ 	int cpu_nr = encoded_cpu_val - 1;
+@@ -141,7 +151,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+ 	 * polling, be careful.
+ 	 */
+ 	if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
+-				  vcpu_is_preempted(node_cpu(node->prev))))
++						vcpu_is_preempted_node(node)))
+ 		return true;
+ 
+ 	/* unqueue */
 -- 
-Jazz is not dead. It just smells funny...
+2.20.1
+
+
+

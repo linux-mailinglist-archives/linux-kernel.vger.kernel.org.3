@@ -2,91 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A5155C74A
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6A555C631
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233033AbiF0Hoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
+        id S232990AbiF0HwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbiF0Ho3 (ORCPT
+        with ESMTP id S232663AbiF0HwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:44:29 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D26F60D1;
-        Mon, 27 Jun 2022 00:44:28 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id h9-20020a17090a648900b001ecb8596e43so8582300pjj.5;
-        Mon, 27 Jun 2022 00:44:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tM23DjKii0UyrfYxqToXR++sx6Bv3c907PpEkNZJ2IA=;
-        b=dI02UiK+96GyCjAy/y23ssTkiBgfOaHaN3IBGsga9xGkd+AyiW/G8NLimlhP7mDzid
-         HF1FGWMcSKfmkcswYGRXowRE6oJqMTSYGc8tSfW9IZ+UK65cSlNRu7oZhimZFxjYcWgN
-         YEITqrDuNYsxnkPCwk/dSJfr7zLztlakSD0jgnE4YdCBDqYcQkGb9Gqj8FVyCaIfaI34
-         ARMWU7YQJtMVugDoK1W6lq+EfQCr553ew2IPWHC5lh6tOUr/fDMGIuLN4S9no0DfXbDq
-         Ux4PvOcm6MKynLK7o5UzgKmMKCuj/7qhwxaLReQNzTEy3DJv+CsSK1FgOoTyph5IWfOp
-         rF2w==
+        Mon, 27 Jun 2022 03:52:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9CC76174
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:51:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656316309;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xZRxk45blbbVKouBNkJa4r6LzelZm251Oyfsi7Y/n3g=;
+        b=U+9Xtuar5jpg1NiJ/d/M//KPzzMfb924bFaaOdXVSfovuM9gBhH+baI2F0S1yQwfce52cN
+        pF2azUy+2H8NhAkW83nAPLgslbQkloUXrtz3Uinjy2UVbWHDlUy9UzfDvR/Wp6L/fjJjdv
+        7dQMpgG2cwUC9HEl6nisnUSviDhZw7Y=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-59-GVZDCNw-OxyYp1Mg5P2hcA-1; Mon, 27 Jun 2022 03:51:48 -0400
+X-MC-Unique: GVZDCNw-OxyYp1Mg5P2hcA-1
+Received: by mail-pj1-f69.google.com with SMTP id h11-20020a17090a130b00b001eca05382e7so3228768pja.9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 00:51:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tM23DjKii0UyrfYxqToXR++sx6Bv3c907PpEkNZJ2IA=;
-        b=tXmj/jE/RqPM+mGdn9aVWbsw8fzV+pyriWZhphhe0zGv+/Y5dbsFVZngxDds2AIyEp
-         j5k2jVLdDapeIMusmJ2wooLvKNDhHqxm2H0nMxEZAodIISGNcuZBFKc3kPoASZluqoSc
-         GEmMP2nlzV5cOfRbDXvqDh6tgUDED6KLpkbNAILQmSfaFILX/b7hf/3yuSdQUFpvTrXL
-         4lGc/UxEHcF/1U0JftTqjfvzWW/SUMvuAaZflA+FYJSyz1/aSAOjeJtC6qe0fvl7DIo2
-         VySdEm3MC/EYNkIGVt7xhAegzVCCSbLEhMj0X3qg2uSXf3gkWRp8rTuHhKgN/4BBkPoq
-         7TAQ==
-X-Gm-Message-State: AJIora9c57TF4QCBm620gkEvH68rvPSGdm+2bhjTI5IFAOo0x0io8is4
-        IiSuH3RS28mwWTRjQOAht5g=
-X-Google-Smtp-Source: AGRyM1vpMa1Rx5ZotLVNR2KoNDFDjw+ICFL3zsLdYS5iFxlXhBb8hY4Utdd2KR9rEdRfYiOTahd6vA==
-X-Received: by 2002:a17:902:e5c4:b0:16a:33e4:417b with SMTP id u4-20020a170902e5c400b0016a33e4417bmr13334640plf.133.1656315867831;
-        Mon, 27 Jun 2022 00:44:27 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-68.three.co.id. [180.214.232.68])
-        by smtp.gmail.com with ESMTPSA id bw11-20020a056a00408b00b00525184bad54sm6435642pfb.126.2022.06.27.00.44.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 00:44:27 -0700 (PDT)
-Message-ID: <a87da917-29b7-3689-9130-bae042a4bccb@gmail.com>
-Date:   Mon, 27 Jun 2022 14:44:23 +0700
+        bh=xZRxk45blbbVKouBNkJa4r6LzelZm251Oyfsi7Y/n3g=;
+        b=S3YDQVTW1e8XBeVcEOfd8HNnXU2qdzrMTBGDr5OCEJiDygl3j6l149xOolT+Tqk8Q7
+         +hJEfA7grZogudQADy535Z8bCkSQxUVmhsVG9FZfVSJhT087q8hj6cfoLSmGDCU2KWke
+         AQdPmqHVWaZFLouOJ/9fvvcWXOcvx76a/L8cUg2JRFANnSwgT7qcPrspLnDhcxSqVkOS
+         w+25qz/cwdNcdRWEHBQokBp4BHbSEG/sMoZ9F0ROlthiMnWpKjyYyj3SkgUrQjK/smfP
+         0RYWjRx2iwZxDMuWu26N+Jt6Bci/RFMprztFex7wuvtnw4B6yA8LAHhlkFIcS8Y2HowL
+         396A==
+X-Gm-Message-State: AJIora9f0CJnmkYrOnQTsa/ksrrgnfDoI1bRAuMiuAxBDzCfAUV7KXAV
+        YIN1CX87y5UddGa3RmxTLLRhMtSLd6987Pv1vHGuRDcT69FT2uiP5jvO/bqfkv4zSQgZJM4N7HN
+        LSCfOpFNk41PEUJHRQI2sHWc4
+X-Received: by 2002:a17:903:230d:b0:16a:73ce:9068 with SMTP id d13-20020a170903230d00b0016a73ce9068mr13186034plh.57.1656316307234;
+        Mon, 27 Jun 2022 00:51:47 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vA7kWLyjSTH2Ul73cyviWapNDDOK80s/6Tz5T94ix0V5MyOp52lL87RqwN812fFM4e7ARtjQ==
+X-Received: by 2002:a17:903:230d:b0:16a:73ce:9068 with SMTP id d13-20020a170903230d00b0016a73ce9068mr13186019plh.57.1656316306908;
+        Mon, 27 Jun 2022 00:51:46 -0700 (PDT)
+Received: from localhost.localdomain.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id em20-20020a17090b015400b001eae86cf683sm6520169pjb.42.2022.06.27.00.51.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 00:51:46 -0700 (PDT)
+From:   Tao Liu <ltao@redhat.com>
+To:     bhe@redhat.com, vgoyal@redhat.com, dyoung@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     akpm@linux-foundation.org, Tao Liu <ltao@redhat.com>
+Subject: [PATCH v2] kdump: round up the total memory size to 128M for crashkernel reservation
+Date:   Mon, 27 Jun 2022 15:44:41 +0800
+Message-Id: <20220627074440.187222-1-ltao@redhat.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] Documentation: samsung-s3c24xx: Add blank line after SPDX
- directive
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-doc@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-References: <20220614164506.6afd65a6@canb.auug.org.au>
- <20220614084658.509389-1-bagasdotme@gmail.com>
- <9811d0e3-6c0d-6854-e654-4546fbe23860@gmail.com> <YrldGaQFoNLcNgak@kroah.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <YrldGaQFoNLcNgak@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/22 14:32, Greg Kroah-Hartman wrote:
-> On Mon, Jun 27, 2022 at 09:43:35AM +0700, Bagas Sanjaya wrote:
->> ping
-> 
-> I see no context here :(
+The total memory size we get in kernel is usually slightly less than
+the actual memory size because BIOS/firmware will reserve some memory
+region. So it won't export all memory as usable.
 
-OK, will resend the patch.
+E.g, on my x86_64 kvm guest with 1G memory, the total_mem value shows:
+UEFI boot with ovmf:   0x3faef000
+Legacy boot kvm guest: 0x3ff7ec00
 
+When specifying crashkernel=1G-2G:128M, if we have a 1G memory machine,
+we get total size 1023M from firmware. Then it will not fall into
+1G-2G, thus no memory reserved. User will never know this, it is hard
+to let user know the exact total value in kernel.
+
+One way is to use dmi/smbios to get physical memory size, but it's not
+reliable as well. According to Prarit hardware vendors sometimes screw
+this up. Thus round up total size to 128M to work around this problem.
+
+This patch is a resend of [1] and rebased onto v5.19-rc2, and the
+original credit goes to Dave Young <dyoung@redhat.com>.
+
+[1]: http://lists.infradead.org/pipermail/kexec/2018-April/020568.html
+
+Signed-off-by: Tao Liu <ltao@redhat.com>
+---
+v1 -> v2:
+Modified commit log based on Baoquan's advice.
+---
+ kernel/crash_core.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+index 71122e01623c..b58b27cbdb61 100644
+--- a/kernel/crash_core.c
++++ b/kernel/crash_core.c
+@@ -9,6 +9,7 @@
+ #include <linux/init.h>
+ #include <linux/utsname.h>
+ #include <linux/vmalloc.h>
++#include <linux/sizes.h>
+ 
+ #include <asm/page.h>
+ #include <asm/sections.h>
+@@ -43,6 +44,15 @@ static int __init parse_crashkernel_mem(char *cmdline,
+ 					unsigned long long *crash_base)
+ {
+ 	char *cur = cmdline, *tmp;
++	unsigned long long total_mem = system_ram;
++
++	/*
++	 * Firmware sometimes reserves some memory regions for its own use,
++	 * so the system memory size is less than the actual physical memory
++	 * size. Work around this by rounding up the total size to 128M,
++	 * which is enough for most test cases.
++	 */
++	total_mem = roundup(total_mem, SZ_128M);
+ 
+ 	/* for each entry of the comma-separated list */
+ 	do {
+@@ -87,13 +97,13 @@ static int __init parse_crashkernel_mem(char *cmdline,
+ 			return -EINVAL;
+ 		}
+ 		cur = tmp;
+-		if (size >= system_ram) {
++		if (size >= total_mem) {
+ 			pr_warn("crashkernel: invalid size\n");
+ 			return -EINVAL;
+ 		}
+ 
+ 		/* match ? */
+-		if (system_ram >= start && system_ram < end) {
++		if (total_mem >= start && total_mem < end) {
+ 			*crash_size = size;
+ 			break;
+ 		}
 -- 
-An old man doll... just what I always wanted! - Clara
+2.33.1
+

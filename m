@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223E755E079
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D4855D486
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242273AbiF0XBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
+        id S238433AbiF0XBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235179AbiF0XBC (ORCPT
+        with ESMTP id S234525AbiF0XBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:01:02 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0677C2126B
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:01:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656370862; x=1687906862;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LZ2Z6Mud2kHMPs5zp5nnFkCNGZcbtPNzvKWYSxz61aw=;
-  b=XV1wRIXUzIRJKxdN4Q+jnAlsrCu6gifVYsqLzB70iYICqxShYws9YlIF
-   sO7366CUVtAPvEtVss4CLT7TJip38E07reBTxLS5nlvzPC0a3jXH+x+ty
-   RG/KtMrukpFY32AhsZnqVPf7fgD2h8DRV1LMePbk1otLFJID2KDJ/92vT
-   C9oUdTHV56tkSMKnYpLDLCLYslm7onHajLcX3sYh16vibB8U60UbVgQ7q
-   E53kRyj0RYDiT10wTG/P3+povC1M9r1RT6gddlKPpXVl3tzyNWDzNf266
-   856762J1bZFzqxKMIMLcMWNADCte1OEOnYwQNHwkU1nt4mDycU1LhJ/v6
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="279126924"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="279126924"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 16:01:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="646635990"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Jun 2022 16:00:59 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o5xj0-0009Aw-JD;
-        Mon, 27 Jun 2022 23:00:58 +0000
-Date:   Tue, 28 Jun 2022 07:00:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [alobakin:xdp_hints 5/52] net/bpf/prog_ops.c:693:6: error:
- redefinition of 'bpf_xdp_sock_is_valid_access'
-Message-ID: <202206280654.HfCop1BC-lkp@intel.com>
+        Mon, 27 Jun 2022 19:01:39 -0400
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05042181F;
+        Mon, 27 Jun 2022 16:01:38 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id v185so4514667ioe.11;
+        Mon, 27 Jun 2022 16:01:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lpKVkKBL4hwLuytBAWCH0H+6GlA+1TbJjzhCMr6KhnM=;
+        b=lzdi83S3S4/QG7FhftVoLiTLGSBQ1e+UXpbTMmwmEhCdMLaW3jK+YnrrXvSs2AIlY7
+         lix4wjWVKrjeP50bYSpchu9tEE5YIcJOXa76ARYdlf2SXtevfJoqBbZmNKSc2LzsngzG
+         WYr9hVySIX+0x+RXkoYGV9UJR4D85NDzG3SM567AzU/XFIlsses/LDBUK1Han2EEgDt9
+         HcPYvnGCJXfobEJ+EBqpVeH/UHRG1CNVsAE+zoDNKGqz5G7u76tyup/S4WFOM3dT7Bwg
+         hFoc45ZsL/o4F5y3iuTS0YuiJ0AmFzI8220g0VFVV8eqeC4gz7zqrUe1rwJwsVT5PJiE
+         tpfA==
+X-Gm-Message-State: AJIora8hbDbI1kio1X3oUrftHbcpI/toM+rI1d5vin4F8TiRkUQKd7FH
+        CixBTbI9M/y2kAGlhyi0dQ==
+X-Google-Smtp-Source: AGRyM1uUa0kp3OfL68WByh4IyIlz4b3QFVxaqq9Gx50PlJoCdCTSX+FQZUt6SvBeTf2wJ14yT6pdCg==
+X-Received: by 2002:a05:6638:210e:b0:33c:953d:5676 with SMTP id n14-20020a056638210e00b0033c953d5676mr5128147jaj.196.1656370897954;
+        Mon, 27 Jun 2022 16:01:37 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id f11-20020a02a80b000000b0033c14d2386bsm3428569jaj.75.2022.06.27.16.01.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 16:01:37 -0700 (PDT)
+Received: (nullmailer pid 3128662 invoked by uid 1000);
+        Mon, 27 Jun 2022 23:01:35 -0000
+Date:   Mon, 27 Jun 2022 17:01:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>, git@xilinx.com,
+        Michal Simek <michal.simek@xilinx.com>,
+        saikrishna12468@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 2/4] dt-bindings: pinctrl-zynqmp: Add output-enable
+ configuration
+Message-ID: <20220627230135.GA3128629-robh@kernel.org>
+References: <1655462819-28801-1-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
+ <1655462819-28801-3-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <1655462819-28801-3-git-send-email-lakshmi.sai.krishna.potthuri@xilinx.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,71 +68,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/alobakin/linux xdp_hints
-head:   bb2e21053c861694b01175cc7057b0ab05db75a9
-commit: 9d29d62a53069847d538390eab0b7c8fcefdd178 [5/52] net, xdp: decouple XDP code from the core networking code
-config: xtensa-randconfig-r024-20220627 (https://download.01.org/0day-ci/archive/20220628/202206280654.HfCop1BC-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/alobakin/linux/commit/9d29d62a53069847d538390eab0b7c8fcefdd178
-        git remote add alobakin https://github.com/alobakin/linux
-        git fetch --no-tags alobakin xdp_hints
-        git checkout 9d29d62a53069847d538390eab0b7c8fcefdd178
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash net/bpf/
+On Fri, 17 Jun 2022 16:16:57 +0530, Sai Krishna Potthuri wrote:
+> Add 'output-enable' configuration parameter to the properties list.
+> 
+> Signed-off-by: Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>
+> ---
+>  .../devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml      | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> net/bpf/prog_ops.c:693:6: error: redefinition of 'bpf_xdp_sock_is_valid_access'
-     693 | bool bpf_xdp_sock_is_valid_access(int off, int size, enum bpf_access_type type,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/net/xdp_sock.h:9,
-                    from net/bpf/prog_ops.c:5:
-   include/linux/bpf.h:2459:20: note: previous definition of 'bpf_xdp_sock_is_valid_access' with type 'bool(int,  int,  enum bpf_access_type,  struct bpf_insn_access_aux *)' {aka '_Bool(int,  int,  enum bpf_access_type,  struct bpf_insn_access_aux *)'}
-    2459 | static inline bool bpf_xdp_sock_is_valid_access(int off, int size,
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> net/bpf/prog_ops.c:708:5: error: redefinition of 'bpf_xdp_sock_convert_ctx_access'
-     708 | u32 bpf_xdp_sock_convert_ctx_access(enum bpf_access_type type,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/net/xdp_sock.h:9,
-                    from net/bpf/prog_ops.c:5:
-   include/linux/bpf.h:2466:19: note: previous definition of 'bpf_xdp_sock_convert_ctx_access' with type 'u32(enum bpf_access_type,  const struct bpf_insn *, struct bpf_insn *, struct bpf_prog *, u32 *)' {aka 'unsigned int(enum bpf_access_type,  const struct bpf_insn *, struct bpf_insn *, struct bpf_prog *, unsigned int *)'}
-    2466 | static inline u32 bpf_xdp_sock_convert_ctx_access(enum bpf_access_type type,
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/bpf_xdp_sock_is_valid_access +693 net/bpf/prog_ops.c
-
-   692	
- > 693	bool bpf_xdp_sock_is_valid_access(int off, int size, enum bpf_access_type type,
-   694					  struct bpf_insn_access_aux *info)
-   695	{
-   696		if (off < 0 || off >= offsetofend(struct bpf_xdp_sock, queue_id))
-   697			return false;
-   698	
-   699		if (off % size != 0)
-   700			return false;
-   701	
-   702		switch (off) {
-   703		default:
-   704			return size == sizeof(__u32);
-   705		}
-   706	}
-   707	
- > 708	u32 bpf_xdp_sock_convert_ctx_access(enum bpf_access_type type,
-   709					    const struct bpf_insn *si,
-   710					    struct bpf_insn *insn_buf,
-   711					    struct bpf_prog *prog, u32 *target_size)
-   712	{
-   713		struct bpf_insn *insn = insn_buf;
-   714	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Acked-by: Rob Herring <robh@kernel.org>

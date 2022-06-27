@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F2655C5E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1361D55C937
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235542AbiF0LaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
+        id S239174AbiF0LzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235408AbiF0L3H (ORCPT
+        with ESMTP id S238562AbiF0Lsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:29:07 -0400
+        Mon, 27 Jun 2022 07:48:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAAFB7;
-        Mon, 27 Jun 2022 04:28:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944FE101FA;
+        Mon, 27 Jun 2022 04:42:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56774614A0;
-        Mon, 27 Jun 2022 11:28:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6028FC341C7;
-        Mon, 27 Jun 2022 11:28:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12CDA61208;
+        Mon, 27 Jun 2022 11:42:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27290C3411D;
+        Mon, 27 Jun 2022 11:42:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329284;
-        bh=qBg9c1Wa0DxN8KQkjTmsMOTevIElqmC9fhezyiiKe7I=;
+        s=korg; t=1656330141;
+        bh=Ovg5KfB61gT914x/8BIG61Aa3Dqe0xiyAs4tQvKXrZk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YY8oO+uSY8Qs96Q2yWZZJDQgR87QPDfqsbxkGN4j8dgWWD2NwSfzK5/1mvXohjJmV
-         vz1NALp4OBHdn9rQtKBkl+Ly2RAynXuTVdykY6VU5FRrAy1n6W0KeQsQ/lmIoA7CXo
-         lVZrx8Tqn+n6iFEZPXd5k4xrjWQ0A/q+p+XeW7A8=
+        b=UTMagV/1B473pk7V174topPJNhaiFx/jb+NASVaRTAnIYQlbBO3ncMsXVbIxgliaz
+         vaRdFWWnOMWdgT7D4UMB5NrrFnZNvRrSMv0g5s93hhNNHcLiExBpIkA4QYrTkkeT1M
+         4aFKJOkHuArgTDYtRIi4DMVDjAIJUT9uMB7qrK5Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
-        guodaxing <guodaxing@huawei.com>
-Subject: [PATCH 5.4 01/60] vt: drop old FONT ioctls
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 099/181] nvme: move the Samsung X5 quirk entry to the core quirks
 Date:   Mon, 27 Jun 2022 13:21:12 +0200
-Message-Id: <20220627111927.688770302@linuxfoundation.org>
+Message-Id: <20220627111947.566413521@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111927.641837068@linuxfoundation.org>
-References: <20220627111927.641837068@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,302 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Christoph Hellwig <hch@lst.de>
 
-commit ff2047fb755d4415ec3c70ac799889371151796d upstream.
+[ Upstream commit e6487833182a8a0187f0292aca542fc163ccd03e ]
 
-Drop support for these ioctls:
-* PIO_FONT, PIO_FONTX
-* GIO_FONT, GIO_FONTX
-* PIO_FONTRESET
+This device shares the PCI ID with the Samsung 970 Evo Plus that
+does not need or want the quirks.  Move the the quirk entry to the
+core table based on the model number instead.
 
-As was demonstrated by commit 90bfdeef83f1 (tty: make FONTX ioctl use
-the tty pointer they were actually passed), these ioctls are not used
-from userspace, as:
-1) they used to be broken (set up font on current console, not the open
-   one) and racy (before the commit above)
-2) KDFONTOP ioctl is used for years instead
-
-Note that PIO_FONTRESET is defunct on most systems as VGA_CONSOLE is set
-on them for ages. That turns on BROKEN_GRAPHICS_PROGRAMS which makes
-PIO_FONTRESET just return an error.
-
-We are removing KD_FONT_FLAG_OLD here as it was used only by these
-removed ioctls. kd.h header exists both in kernel and uapi headers, so
-we can remove the kernel one completely. Everyone includeing kd.h will
-now automatically get the uapi one.
-
-There are now unused definitions of the ioctl numbers and "struct
-consolefontdesc" in kd.h, but as it is a uapi header, I am not touching
-these.
-
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20210105120239.28031-8-jslaby@suse.cz
-Cc: guodaxing <guodaxing@huawei.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: bc360b0b1611 ("nvme-pci: add quirks for Samsung X5 SSDs")
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Pankaj Raghav <p.raghav@samsung.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/vt/vt.c       |   39 ------------
- drivers/tty/vt/vt_ioctl.c |  147 ----------------------------------------------
- include/linux/kd.h        |    8 --
- 3 files changed, 3 insertions(+), 191 deletions(-)
- delete mode 100644 include/linux/kd.h
+ drivers/nvme/host/core.c | 14 ++++++++++++++
+ drivers/nvme/host/pci.c  |  4 ----
+ 2 files changed, 14 insertions(+), 4 deletions(-)
 
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -4541,16 +4541,8 @@ static int con_font_get(struct vc_data *
- 
- 	if (op->data && font.charcount > op->charcount)
- 		rc = -ENOSPC;
--	if (!(op->flags & KD_FONT_FLAG_OLD)) {
--		if (font.width > op->width || font.height > op->height) 
--			rc = -ENOSPC;
--	} else {
--		if (font.width != 8)
--			rc = -EIO;
--		else if ((op->height && font.height > op->height) ||
--			 font.height > 32)
--			rc = -ENOSPC;
--	}
-+	if (font.width > op->width || font.height > op->height)
-+		rc = -ENOSPC;
- 	if (rc)
- 		goto out;
- 
-@@ -4578,7 +4570,7 @@ static int con_font_set(struct vc_data *
- 		return -EINVAL;
- 	if (op->charcount > 512)
- 		return -EINVAL;
--	if (op->width <= 0 || op->width > 32 || op->height > 32)
-+	if (op->width <= 0 || op->width > 32 || !op->height || op->height > 32)
- 		return -EINVAL;
- 	size = (op->width+7)/8 * 32 * op->charcount;
- 	if (size > max_font_size)
-@@ -4588,31 +4580,6 @@ static int con_font_set(struct vc_data *
- 	if (IS_ERR(font.data))
- 		return PTR_ERR(font.data);
- 
--	if (!op->height) {		/* Need to guess font height [compat] */
--		int h, i;
--		u8 *charmap = font.data;
--
--		/*
--		 * If from KDFONTOP ioctl, don't allow things which can be done
--		 * in userland,so that we can get rid of this soon
--		 */
--		if (!(op->flags & KD_FONT_FLAG_OLD)) {
--			kfree(font.data);
--			return -EINVAL;
--		}
--
--		for (h = 32; h > 0; h--)
--			for (i = 0; i < op->charcount; i++)
--				if (charmap[32*i+h-1])
--					goto nonzero;
--
--		kfree(font.data);
--		return -EINVAL;
--
--	nonzero:
--		op->height = h;
--	}
--
- 	font.charcount = op->charcount;
- 	font.width = op->width;
- 	font.height = op->height;
---- a/drivers/tty/vt/vt_ioctl.c
-+++ b/drivers/tty/vt/vt_ioctl.c
-@@ -241,48 +241,6 @@ int vt_waitactive(int n)
- #define GPLAST 0x3df
- #define GPNUM (GPLAST - GPFIRST + 1)
- 
--
--
--static inline int 
--do_fontx_ioctl(struct vc_data *vc, int cmd, struct consolefontdesc __user *user_cfd, int perm, struct console_font_op *op)
--{
--	struct consolefontdesc cfdarg;
--	int i;
--
--	if (copy_from_user(&cfdarg, user_cfd, sizeof(struct consolefontdesc))) 
--		return -EFAULT;
-- 	
--	switch (cmd) {
--	case PIO_FONTX:
--		if (!perm)
--			return -EPERM;
--		op->op = KD_FONT_OP_SET;
--		op->flags = KD_FONT_FLAG_OLD;
--		op->width = 8;
--		op->height = cfdarg.charheight;
--		op->charcount = cfdarg.charcount;
--		op->data = cfdarg.chardata;
--		return con_font_op(vc, op);
--
--	case GIO_FONTX:
--		op->op = KD_FONT_OP_GET;
--		op->flags = KD_FONT_FLAG_OLD;
--		op->width = 8;
--		op->height = cfdarg.charheight;
--		op->charcount = cfdarg.charcount;
--		op->data = cfdarg.chardata;
--		i = con_font_op(vc, op);
--		if (i)
--			return i;
--		cfdarg.charheight = op->height;
--		cfdarg.charcount = op->charcount;
--		if (copy_to_user(user_cfd, &cfdarg, sizeof(struct consolefontdesc)))
--			return -EFAULT;
--		return 0;
--	}
--	return -EINVAL;
--}
--
- static inline int 
- do_unimap_ioctl(int cmd, struct unimapdesc __user *user_ud, int perm, struct vc_data *vc)
- {
-@@ -919,30 +877,6 @@ int vt_ioctl(struct tty_struct *tty,
- 		break;
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 1ea85c88d795..a2862a56fadc 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -2487,6 +2487,20 @@ static const struct nvme_core_quirk_entry core_quirks[] = {
+ 		.vid = 0x1e0f,
+ 		.mn = "KCD6XVUL6T40",
+ 		.quirks = NVME_QUIRK_NO_APST,
++	},
++	{
++		/*
++		 * The external Samsung X5 SSD fails initialization without a
++		 * delay before checking if it is ready and has a whole set of
++		 * other problems.  To make this even more interesting, it
++		 * shares the PCI ID with internal Samsung 970 Evo Plus that
++		 * does not need or want these quirks.
++		 */
++		.vid = 0x144d,
++		.mn = "Samsung Portable SSD X5",
++		.quirks = NVME_QUIRK_DELAY_BEFORE_CHK_RDY |
++			  NVME_QUIRK_NO_DEEPEST_PS |
++			  NVME_QUIRK_IGNORE_DEV_SUBNQN,
  	}
+ };
  
--	case PIO_FONT: {
--		if (!perm)
--			return -EPERM;
--		op.op = KD_FONT_OP_SET;
--		op.flags = KD_FONT_FLAG_OLD | KD_FONT_FLAG_DONT_RECALC;	/* Compatibility */
--		op.width = 8;
--		op.height = 0;
--		op.charcount = 256;
--		op.data = up;
--		ret = con_font_op(vc, &op);
--		break;
--	}
--
--	case GIO_FONT: {
--		op.op = KD_FONT_OP_GET;
--		op.flags = KD_FONT_FLAG_OLD;
--		op.width = 8;
--		op.height = 32;
--		op.charcount = 256;
--		op.data = up;
--		ret = con_font_op(vc, &op);
--		break;
--	}
--
- 	case PIO_CMAP:
-                 if (!perm)
- 			ret = -EPERM;
-@@ -954,36 +888,6 @@ int vt_ioctl(struct tty_struct *tty,
-                 ret = con_get_cmap(up);
- 		break;
- 
--	case PIO_FONTX:
--	case GIO_FONTX:
--		ret = do_fontx_ioctl(vc, cmd, up, perm, &op);
--		break;
--
--	case PIO_FONTRESET:
--	{
--		if (!perm)
--			return -EPERM;
--
--#ifdef BROKEN_GRAPHICS_PROGRAMS
--		/* With BROKEN_GRAPHICS_PROGRAMS defined, the default
--		   font is not saved. */
--		ret = -ENOSYS;
--		break;
--#else
--		{
--		op.op = KD_FONT_OP_SET_DEFAULT;
--		op.data = NULL;
--		ret = con_font_op(vc, &op);
--		if (ret)
--			break;
--		console_lock();
--		con_set_default_unimap(vc);
--		console_unlock();
--		break;
--		}
--#endif
--	}
--
- 	case KDFONTOP: {
- 		if (copy_from_user(&op, up, sizeof(op))) {
- 			ret = -EFAULT;
-@@ -1097,54 +1001,6 @@ void vc_SAK(struct work_struct *work)
- 
- #ifdef CONFIG_COMPAT
- 
--struct compat_consolefontdesc {
--	unsigned short charcount;       /* characters in font (256 or 512) */
--	unsigned short charheight;      /* scan lines per character (1-32) */
--	compat_caddr_t chardata;	/* font data in expanded form */
--};
--
--static inline int
--compat_fontx_ioctl(struct vc_data *vc, int cmd,
--		   struct compat_consolefontdesc __user *user_cfd,
--		   int perm, struct console_font_op *op)
--{
--	struct compat_consolefontdesc cfdarg;
--	int i;
--
--	if (copy_from_user(&cfdarg, user_cfd, sizeof(struct compat_consolefontdesc)))
--		return -EFAULT;
--
--	switch (cmd) {
--	case PIO_FONTX:
--		if (!perm)
--			return -EPERM;
--		op->op = KD_FONT_OP_SET;
--		op->flags = KD_FONT_FLAG_OLD;
--		op->width = 8;
--		op->height = cfdarg.charheight;
--		op->charcount = cfdarg.charcount;
--		op->data = compat_ptr(cfdarg.chardata);
--		return con_font_op(vc, op);
--
--	case GIO_FONTX:
--		op->op = KD_FONT_OP_GET;
--		op->flags = KD_FONT_FLAG_OLD;
--		op->width = 8;
--		op->height = cfdarg.charheight;
--		op->charcount = cfdarg.charcount;
--		op->data = compat_ptr(cfdarg.chardata);
--		i = con_font_op(vc, op);
--		if (i)
--			return i;
--		cfdarg.charheight = op->height;
--		cfdarg.charcount = op->charcount;
--		if (copy_to_user(user_cfd, &cfdarg, sizeof(struct compat_consolefontdesc)))
--			return -EFAULT;
--		return 0;
--	}
--	return -EINVAL;
--}
--
- struct compat_console_font_op {
- 	compat_uint_t op;        /* operation code KD_FONT_OP_* */
- 	compat_uint_t flags;     /* KD_FONT_FLAG_* */
-@@ -1221,9 +1077,6 @@ long vt_compat_ioctl(struct tty_struct *
- 	/*
- 	 * these need special handlers for incompatible data structures
- 	 */
--	case PIO_FONTX:
--	case GIO_FONTX:
--		return compat_fontx_ioctl(vc, cmd, up, perm, &op);
- 
- 	case KDFONTOP:
- 		return compat_kdfontop_ioctl(up, perm, &op, vc);
---- a/include/linux/kd.h
-+++ /dev/null
-@@ -1,8 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LINUX_KD_H
--#define _LINUX_KD_H
--
--#include <uapi/linux/kd.h>
--
--#define KD_FONT_FLAG_OLD		0x80000000	/* Invoked via old interface [compat] */
--#endif /* _LINUX_KD_H */
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 17aeb7d5c485..ddea0fb90c28 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -3475,10 +3475,6 @@ static const struct pci_device_id nvme_id_table[] = {
+ 				NVME_QUIRK_128_BYTES_SQES |
+ 				NVME_QUIRK_SHARED_TAGS |
+ 				NVME_QUIRK_SKIP_CID_GEN },
+-	{ PCI_DEVICE(0x144d, 0xa808),   /* Samsung X5 */
+-		.driver_data =  NVME_QUIRK_DELAY_BEFORE_CHK_RDY|
+-				NVME_QUIRK_NO_DEEPEST_PS |
+-				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
+ 	{ PCI_DEVICE_CLASS(PCI_CLASS_STORAGE_EXPRESS, 0xffffff) },
+ 	{ 0, }
+ };
+-- 
+2.35.1
+
 
 

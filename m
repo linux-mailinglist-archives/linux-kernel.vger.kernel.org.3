@@ -2,93 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D4F55D08F
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAAF55E1EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238982AbiF0STf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 14:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
+        id S240177AbiF0SVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 14:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234890AbiF0STc (ORCPT
+        with ESMTP id S240181AbiF0SVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 14:19:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E3EE008;
-        Mon, 27 Jun 2022 11:19:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F468B81A2E;
-        Mon, 27 Jun 2022 18:19:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E2BC3411D;
-        Mon, 27 Jun 2022 18:19:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1656353969;
-        bh=TWYurZfD/jUE/28ERIZq8LqjtfVRpiQiuznUyRsMsO8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FeAwLx+rI+mBj0NI0QoHuA4Rvcx16ZYK+rUfbIaWckGhHUG3auHvoG7DiEo27CxjZ
-         Or0f6z+BNgZY2MAa270mBYYezoq1NWsREaFd+XKeSK7xj8hfT8F1fpz3SFBnoMTSxl
-         /E1FBs2J9PvQ62Si3qjuZde6FIQGne1a+3Bh+mks=
-Date:   Mon, 27 Jun 2022 11:19:27 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     David Sterba <dsterba@suse.com>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        linux-parisc@vger.kernel.org, David Sterba <dsterba@suse.cz>
-Subject: Re: [RESEND PATCH v4 1/2] highmem: Make __kunmap_{local,atomic}()
- take "const void *"
-Message-Id: <20220627111927.3ef94745aab4491901d43028@linux-foundation.org>
-In-Reply-To: <2192593.iZASKD2KPV@opensuse>
-References: <20220616210037.7060-1-fmdefrancesco@gmail.com>
-        <20220616210037.7060-2-fmdefrancesco@gmail.com>
-        <2192593.iZASKD2KPV@opensuse>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 27 Jun 2022 14:21:22 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0087910561
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:21:19 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2ef5380669cso93837647b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 11:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zAvy14WQSJajEvtEq9Z9V458WL9rypKqsSWZ5e8ff+Q=;
+        b=QfczmHRT9/HR8HyazKLbsqrs7cCP2iZKaxG/OXGSPnAc8W5YAiaVA0WqjZ3/6QtXqU
+         42K81l24QIf3XynW/JKjRGJ7dmfzwI2FUm73m5CnsNDIqxjEz+NWZjbRqeUpE3CO+oZH
+         +WHVevlpyQHs4NMeAMNGbQrzcjZNAN6YiP+T/yfSSMD0p0fn3Nshe7kDoUKHwoSYa4N3
+         VnE5Z7u+uJPgYCZdcfgQYEKpStJa5alN/Ge9h9ME6zGeGt1uUwucGuzxD4iyBvikWn6I
+         UNKi3EkIpSabWBkxoc2zg+IeRkTOZHzN8h/RLyTzMjG2hCOwCIaltZxdV6oluuLg1E7j
+         RMQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zAvy14WQSJajEvtEq9Z9V458WL9rypKqsSWZ5e8ff+Q=;
+        b=Xf3hBqAxkoSMcaK2l0oCyujqhRt/Ovczy1+puv+Rf4R8M/9NB/vX3sT40mgvMSpVNt
+         BQdo/p0LR3HVH3tXqluzNt7AWfx31Mj+5/zXobobhr+blRML3SMK4iGf8tU9bD1q0bzk
+         /yyrNpy5i4SWvmY9iZWkxp0LdUj8mvBfugOfdHL4uc7jZP6Ur9a9J+peRaftLBZX+uhO
+         6T0p7l0OtdK3p/RsicRK9i6CnuJbsNDMQnIgNZx7m2iLrH3ssQtb0SfHFZBTvcQii0I1
+         DWAGBTW+3cdlndRBABrLsGF7vshIRnM4/xpXjY9wVkpsttZNJw32iqjytwJLRdKe4vdI
+         o6Wg==
+X-Gm-Message-State: AJIora98o5+8TUMUWldR8fC49Zyv5Gyo6fJe5QZQo7MpZarEKygNHDwb
+        JTROujM/YpQApPNm1PtihLsFwtLhpaRJ9Tdd+ohPTQ==
+X-Google-Smtp-Source: AGRyM1ut1mmdvIzz+fGssaCHywTk0zdoNUyWRaIm6VKkay06+F6yyhsbCZbfM6hX7GjWG5RLUmdofYrPpF5aZ5NeSXg=
+X-Received: by 2002:a0d:eace:0:b0:317:87ac:b3a8 with SMTP id
+ t197-20020a0deace000000b0031787acb3a8mr16855244ywe.126.1656354078827; Mon, 27
+ Jun 2022 11:21:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220623080344.783549-1-saravanak@google.com> <20220623080344.783549-3-saravanak@google.com>
+ <20220623100421.GY1615@pengutronix.de> <20220627175046.GA2644138-robh@kernel.org>
+In-Reply-To: <20220627175046.GA2644138-robh@kernel.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 27 Jun 2022 11:20:42 -0700
+Message-ID: <CAGETcx8YSuq+_tiWwShjZBeHd7+CHwLRdvdT6yb3xfEUD7DB0Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] of: base: Avoid console probe delay when fw_devlink.strict=1
+To:     Rob Herring <robh@kernel.org>
+Cc:     sascha hauer <sha@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        russell king <linux@armlinux.org.uk>,
+        "david s. miller" <davem@davemloft.net>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, kernel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 27 Jun 2022 19:02:31 +0200 "Fabio M. De Francesco" <fmdefrancesco@gmail.com> wrote:
-
-> > v1->v2: Change the commit message to clearly explain why these functions
-> >         should require pointers to const void. The fundamental argument
-> >         behind the commit message changes is semantic correctness.
-> >         Obviously, there are no changes to the code.
-> >         Many thanks to David Sterba and Ira Weiny for suggestions and
-> >         reviews.
+On Mon, Jun 27, 2022 at 10:50 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Jun 23, 2022 at 12:04:21PM +0200, sascha hauer wrote:
+> > On Thu, Jun 23, 2022 at 01:03:43AM -0700, Saravana Kannan wrote:
+> > > Commit 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
+> > > enabled iommus and dmas dependency enforcement by default. On some
+> > > systems, this caused the console device's probe to get delayed until the
+> > > deferred_probe_timeout expires.
+> > >
+> > > We need consoles to work as soon as possible, so mark the console device
+> > > node with FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to delay
+> > > the probe of the console device for suppliers without drivers. The
+> > > driver can then make the decision on where it can probe without those
+> > > suppliers or defer its probe.
+> > >
+> > > Fixes: 71066545b48e ("driver core: Set fw_devlink.strict=1 by default")
+> > > Reported-by: Sascha Hauer <sha@pengutronix.de>
+> > > Reported-by: Peng Fan <peng.fan@nxp.com>
+> > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > Tested-by: Peng Fan <peng.fan@nxp.com>
+> > > ---
+> > >  drivers/of/base.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/drivers/of/base.c b/drivers/of/base.c
+> > > index d4f98c8469ed..a19cd0c73644 100644
+> > > --- a/drivers/of/base.c
+> > > +++ b/drivers/of/base.c
+> > > @@ -1919,6 +1919,8 @@ void of_alias_scan(void * (*dt_alloc)(u64 size, u64 align))
+> > >                     of_property_read_string(of_aliases, "stdout", &name);
+> > >             if (name)
+> > >                     of_stdout = of_find_node_opts_by_path(name, &of_stdout_options);
+> > > +           if (of_stdout)
+> > > +                   of_stdout->fwnode.flags |= FWNODE_FLAG_BEST_EFFORT;
 > >
-> >  arch/parisc/include/asm/cacheflush.h |  6 +++---
-> >  arch/parisc/kernel/cache.c           |  2 +-
-> >  include/linux/highmem-internal.h     | 10 +++++-----
-> >  mm/highmem.c                         |  2 +-
-> >  4 files changed, 10 insertions(+), 10 deletions(-)
-> 
-> @Andrew:
-> 
-> Ira Weiny asked David Sterba for taking this patch through his tree because 
-> it is a pre-requisite for a patch to fs/btrfs. He agreed with the above-
-> mentioned suggestion, however I suppose that an ACK by you is needed.
-> 
-> Can you please take a look at this patch and say what you think about it?
+> > The device given in the stdout-path property doesn't necessarily have to
+> > be consistent with the console= parameter. The former is usually
+> > statically set in the device trees contained in the kernel while the
+> > latter is dynamically set by the bootloader. So if you change the
+> > console uart in the bootloader then you'll still run into this trap.
+> >
+> > It's problematic to consult only the device tree for dependencies. I
+> > found several examples of drivers in the tree for which dma support
+> > is optional. They use it if they can, but continue without it when
+> > not available. "hwlock" is another property which consider several
+> > drivers as optional. Also consider SoCs in early upstreaming phases
+> > when the device tree is merged with "dmas" or "hwlock" properties,
+> > but the corresponding drivers are not yet upstreamed. It's not nice
+> > to defer probing of all these devices for a long time.
+> >
+> > I wonder if it wouldn't be a better approach to just probe all devices
+> > and record the device(node) they are waiting on. Then you know that you
+> > don't need to probe them again until the device they are waiting for
+> > is available.
+>
+> Can't we have a driver flag 'I have optional dependencies' that will
+> trigger probe without all dependencies and then the driver can defer
+> probe if required dependencies are not yet met.
 
-Looks OK to me.  It's one of those "if it compiles, it's good" things.
+Haha... that's kinda what I'm working on right now. But named
+intentionally in a more limited sense of "I can't wait for the
+timeout" where fw_devlink will relax and allow the driver to probe
+(and have it make the call) once we hit late_initcall(). I'm
+explicitly limiting it to "timeout" because we don't want everyone
+adding this flag everytime they hit an issue. That'll beat the point
+of fw_devlink=on.
 
-I don't believe the patch has ever appeared on linux-mm?  Please send
-it there for some review then go ahead and merge it up.
+Also, setting the flag for a driver to fix one system might break
+another system because in the other system the user might want to wait
+for the timeout because the supplier drivers would be loaded before
+the timeout.
 
+Another option is to restart the timer (if it hasn't expired) when
+filesystems get mounted (in addition to the current "when new driver
+gets registered). That way, we might be able to drop the timeout from
+10s to 5s.
+
+-Saravana

@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FCD55CC91
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BDF55DC6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238446AbiF0VoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 17:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
+        id S239734AbiF0Vo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 17:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238130AbiF0VoC (ORCPT
+        with ESMTP id S238227AbiF0VoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 17:44:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16B3C4A;
-        Mon, 27 Jun 2022 14:44:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E4A861807;
-        Mon, 27 Jun 2022 21:44:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E6AC34115;
-        Mon, 27 Jun 2022 21:44:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656366240;
-        bh=LfrOR1GLG7WwBLTfzlsmnGUM2EA+lpkFh7SvKxOWWKk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=rfK9P8pHno5T6lJi+V+mTVgizJbb+g2VPIRs539BQmf2FNvcI8Aw0Dr5HR0IEt0ks
-         Z9yEFU06HjOCrwHbJJbUKNVCdextka6vpZra5oB9WBwVwehqWt7wBsZRjzKyl1KUo6
-         6iRvj0LQzzCTiZEoJ/P59IZRJm5d6X1IFuxbKR0RbS4FzdGRjC2kcULuFHqj8S7rqQ
-         UYK4nenczXJ4bGwDkhHAZr54T9ViUNhqAMysLaGQxYeip7tEyF3fJSIdtNlU8Q5ja/
-         TFRVs7A4sqPCaK+TMjw3Sg5U4/vCbeN4C9rUXPOAsfYssouIw1TkM9T0RJptzZpx4g
-         qgwM0La+5GIMQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A87D35C04B1; Mon, 27 Jun 2022 14:43:59 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 14:43:59 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, rostedt@goodmis.org,
-        vineeth@bitbyteword.org
-Subject: Re: [PATCH v2 8/8] rcu/kfree: Fix kfree_rcu_shrink_count() return
- value
-Message-ID: <20220627214359.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220622225102.2112026-1-joel@joelfernandes.org>
- <20220622225102.2112026-10-joel@joelfernandes.org>
- <Yrn9a5pOvhvL/eZj@pc638.lan>
- <20220627205907.GM1790663@paulmck-ThinkPad-P17-Gen-1>
- <YroelcGVNhQj91ab@google.com>
+        Mon, 27 Jun 2022 17:44:25 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A0821A9
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:44:23 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id m2so9357691plx.3
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 14:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2DM7O+xeJYoNrNXSTSzJHmAYrPinlDaSA++1ejz3ymc=;
+        b=F0YFq63p5i7NOuMN/IasvD8XOPzYJWBWKgQD0KZsqA7hfLt3woM6a1j57oEmR5stEt
+         8YxScgF6Bl1U8snTuYEpupD24OX77NttFzS8u9OYtNXZ37I+uFLpwW0MEonnQNlXCjA+
+         mzOQLIyfYF108r5GDlMilhA9ke1TRnqMzRS7w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2DM7O+xeJYoNrNXSTSzJHmAYrPinlDaSA++1ejz3ymc=;
+        b=JDaJ8C6cBSAbVvMeqLrO+X7IfNxebXeFohmH7XOe4iAnZJWPJDVrRztZCbkrRFagMe
+         3JMgDCQbQsr76PIwaOqilY3OkDyGm+jEOMiU+M2YKMxG/LTN/h0DtbqURr9a+M2WqVPK
+         T0pdx8bSGJYXXEeLdnLgasyASEkwY9Y0icVTU/aAPe7Ks2I7zi223UGIt6dJnyvSQL99
+         cmyFAiYCF86uCbfoHYKav9hQ04qA+CLD4QcCDIBBxQnLY9W82mI0Bhphiy5zUbJb+J78
+         TScGZtoScbhzYpGM+Ox2gWTqxR0DDHxhAsWzfGxxbIQfF158W8XMH/ogg7fHz2ILMwIY
+         tEiQ==
+X-Gm-Message-State: AJIora/mlUG6r5B7Q9AiaUu+Bo+glwJ70zQYIXJwBWUIHncWJw6QqXzv
+        1Bhd//Cd2bWuNvSoeil0JlVRwA==
+X-Google-Smtp-Source: AGRyM1shwHswGVWhkjtx56cLBZ+RvsKlBRm1kWfZ8Avt5R2j/EcZ5F4FsYvL4b13OTLcXKN2vNAMsw==
+X-Received: by 2002:a17:90b:46ca:b0:1ec:9a27:f706 with SMTP id jx10-20020a17090b46ca00b001ec9a27f706mr18709602pjb.12.1656366263326;
+        Mon, 27 Jun 2022 14:44:23 -0700 (PDT)
+Received: from fff6dc920c55 ([203.220.223.63])
+        by smtp.gmail.com with ESMTPSA id x15-20020a170902a38f00b0016b8b5b0aa0sm574323pla.86.2022.06.27.14.44.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 14:44:22 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 21:44:14 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 000/181] 5.18.8-rc1 review
+Message-ID: <20220627214414.GA8@fff6dc920c55>
+References: <20220627111944.553492442@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YroelcGVNhQj91ab@google.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,50 +71,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 09:18:13PM +0000, Joel Fernandes wrote:
-> On Mon, Jun 27, 2022 at 01:59:07PM -0700, Paul E. McKenney wrote:
-> > On Mon, Jun 27, 2022 at 08:56:43PM +0200, Uladzislau Rezki wrote:
-> > > > As per the comments in include/linux/shrinker.h, .count_objects callback
-> > > > should return the number of freeable items, but if there are no objects
-> > > > to free, SHRINK_EMPTY should be returned. The only time 0 is returned
-> > > > should be when we are unable to determine the number of objects, or the
-> > > > cache should be skipped for another reason.
-> > > > 
-> > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > > ---
-> > > >  kernel/rcu/tree.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > > > index 711679d10cbb..935788e8d2d7 100644
-> > > > --- a/kernel/rcu/tree.c
-> > > > +++ b/kernel/rcu/tree.c
-> > > > @@ -3722,7 +3722,7 @@ kfree_rcu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
-> > > >  		atomic_set(&krcp->backoff_page_cache_fill, 1);
-> > > >  	}
-> > > >  
-> > > > -	return count;
-> > > > +	return count == 0 ? SHRINK_EMPTY : count;
-> > > >  }
-> > > >  
-> > > >  static unsigned long
-> > > > -- 
-> > > > 2.37.0.rc0.104.g0611611a94-goog
-> > > > 
-> > > Looks good to me!
-> > > 
-> > > Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > 
-> > Now that you mention it, this does look independent of the rest of
-> > the series.  I have pulled it in with Uladzislau's Reviewed-by.
+On Mon, Jun 27, 2022 at 01:19:33PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.8 release.
+> There are 181 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Thanks Paul and Vlad!
-> 
-> Paul, apologies for being quiet. I have been working on the series and the
-> review comments carefully. I appreciate your help with this work.
+> Responses should be made by Wed, 29 Jun 2022 11:19:09 +0000.
+> Anything received after that time might be too late.
 
-Not a problem.  After all, this stuff is changing some of the trickier
-parts of RCU.  We must therefore assume that some significant time and
-effort will be required to get it right.
+Hi Greg,
 
-							Thanx, Paul
+5.18.8-rc1 tested.
+
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
+
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
+
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi

@@ -2,86 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E196055C96E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263C455D1CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241098AbiF0XS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:18:59 -0400
+        id S241936AbiF0XTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:19:15 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241232AbiF0XRE (ORCPT
+        with ESMTP id S241627AbiF0XRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:17:04 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93548237DD;
-        Mon, 27 Jun 2022 16:17:03 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id m13so11289896ioj.0;
-        Mon, 27 Jun 2022 16:17:03 -0700 (PDT)
+        Mon, 27 Jun 2022 19:17:22 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E173523BC4
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:17:18 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id i8-20020a17090aee8800b001ecc929d14dso11135521pjz.0
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UfpGy5tAS73+sWM9gF7ZBJ3p3zHT7pkTPz/eUsHxpcI=;
+        b=dcaUdCPejyAkT3avAyglqGr7MqNZ5eKZYM5/Uz4+a8chd/ag+waBxUPMVRuW0zcxE6
+         PaSo/TML+OWIcqh36qorQYlV18WpR127C39WYyy8GgAii1jUJHgWZaiQIPu+mk0ms0y3
+         Ef68PLPXfEsVzi/tV/u9eH69F6vTBJEMl3PXw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ch0+XgUThIc/l8CQOuy5NljTuESRwdl/Mc/QQ/GRHwY=;
-        b=pjU7DN1sQJFsGG2xkaentequitCQpPr4TdiKIC8KP91Yzh2S0zfkfheJ15HWFTK7Ti
-         ie7pbz+r3DcvPY8gt7FIwXQTICVzR9te7HIVusBI5cpUp+iz8smL2Vi8JPxWvd0o9ss+
-         BpEtFIZ0Uk73fEtprN1QrEkfLeQ7clhfK1+a0xnInd4KRKuyXIpUL2ZUVdVL5QO4F54o
-         4Rj0C9RThf8P7gMkVaYxGXMe7Hw+CzYFj/b+vxixO6A1V5ivfLRL9AFtWGboGSfLdt1w
-         8N84UlxJIxsaUD3RKFtivBKSg+VnhJnq7sG0Nda0fnvj0Y8NNNsvSQcs4rp0EfkNk+qG
-         0CiA==
-X-Gm-Message-State: AJIora/+dEhUkOmNP3bpVzUeQ1tiLMYvMB8T2IuIl/mznBf6FhmeUjNo
-        FlnMQ2YPTFbGrqRtakH6qw==
-X-Google-Smtp-Source: AGRyM1sQjARQFnKoj25XCNLdCib4jTOupm0g5QOmkXXsBc0eHF5rPc9gxrBwiTwvftgDQ3k5Qq4cZA==
-X-Received: by 2002:a05:6638:190f:b0:339:bc9b:4d90 with SMTP id p15-20020a056638190f00b00339bc9b4d90mr9292586jal.153.1656371822830;
-        Mon, 27 Jun 2022 16:17:02 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id p16-20020a92d690000000b002daa70b6a83sm630571iln.20.2022.06.27.16.17.00
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UfpGy5tAS73+sWM9gF7ZBJ3p3zHT7pkTPz/eUsHxpcI=;
+        b=hYbYzdUevdFs4QrqYBEpexpmqbMngNk7MGZtJsFJjb3ZaSsszjEe1KjbDyfl+uffKx
+         ICQQdZC4IxMEZW24Pt7ysN3ySFknnd8TIT/koMIGToRU3lDepnAMZc7S/rXeFNoEqsM2
+         +BP/5AGBPQp3vAHpqWuxV0S7Alif4FlsYlJTOoiPIGADarh0Wujf5jRGCDQn8crAXUpH
+         4jvJav2UVjJgTSjCDFO08DOf4R2LMpAIY/W/10qHh+Ff5ArZByDQQaEs6yCK/1YIgkfr
+         CDTr4t+lMaVBdw8IBdRHRBtUu/dqzyM4ZGBg8YGR7bRN422APrzZPpKsvVUIYJlRCQiy
+         WQrw==
+X-Gm-Message-State: AJIora9Rmuiu7tQRNMqO2UKK7yse2dYAfX62mNjQsfVbVU1tAfnPLXah
+        F7cbGcam5V5ZD9xFokJ69OVfJg==
+X-Google-Smtp-Source: AGRyM1vBDIoIwFowDxA/kWckz2krNOLSTScAcLHwIuD1+7PfwAx8sEEsuEgsxZqoZBoqq14Fos0Y2A==
+X-Received: by 2002:a17:90b:1a81:b0:1ed:3c0:3abb with SMTP id ng1-20020a17090b1a8100b001ed03c03abbmr18859689pjb.5.1656371838412;
+        Mon, 27 Jun 2022 16:17:18 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:18c2:6594:17be:c241])
+        by smtp.gmail.com with ESMTPSA id g207-20020a6252d8000000b0050dc762817esm7929148pfb.88.2022.06.27.16.17.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 16:17:02 -0700 (PDT)
-Received: (nullmailer pid 3150543 invoked by uid 1000);
-        Mon, 27 Jun 2022 23:17:00 -0000
-Date:   Mon, 27 Jun 2022 17:17:00 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        Dillon Min <dillon.minfei@gmail.com>,
-        Heng Sia <jee.heng.sia@intel.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 02/14] dt-bindings: display: panel: allow ilitek,ili9341
- in isolation
-Message-ID: <20220627231700.GA3144115-robh@kernel.org>
-References: <20220618123035.563070-1-mail@conchuod.ie>
- <20220618123035.563070-3-mail@conchuod.ie>
+        Mon, 27 Jun 2022 16:17:18 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] soc: qcom: cmd-db: replace strscpy_pad() with strncpy()
+Date:   Mon, 27 Jun 2022 16:17:00 -0700
+Message-Id: <20220627161642.1.Ie7b480cd99e2c13319220cbc108caf2bcd41286b@changeid>
+X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220618123035.563070-3-mail@conchuod.ie>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,21 +69,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 01:30:24PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> The dt-binding for the ilitek,ili9341 does not allow it to be used as a
-> compatible in isolation. This generates a warning for the Canaan kd233
-> devicetree:
-> arch/riscv/boot/dts/canaan/canaan_kd233.dtb: panel@0: compatible:0: 'ilitek,ili9341' is not one of ['st,sf-tc240t-9370-t']
->         From schema: Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
-> arch/riscv/boot/dts/canaan/canaan_kd233.dtb: panel@0: compatible: ['ilitek,ili9341'] is too short
->         From schema: Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
-> Allow ilitek,ili9341 to be selected in isolation.
+Commit ac0126a01735 ("soc: qcom: cmd-db: replace strncpy() with
+strscpy_pad()") breaks booting on my sc7280-herobrine-herobrine
+device. From printouts I see that at bootup the function is called
+with an id of "lnbclka2" which is 8 bytes big.
 
-Just because you get a warning doesn't mean it is right. ili9341 is a 
-panel driver IC, not a complete panel. It needs a more specific 
-compatible.
+Previously all 8 bytes of this string were copied to the
+destination. Now only 7 bytes will be copied since strscpy_pad() saves
+a byte for '\0' termination.
 
-Rob
+We don't need the '\0' termination in the destination. Let's go back
+to strncpy(). According to the warning:
+  If a caller is using non-NUL-terminated strings, strncpy() can still
+  be used, but destinations should be marked with the __nonstring
+  attribute to avoid future compiler warnings.
+...so we'll do that.
+
+Fixes: ac0126a01735 ("soc: qcom: cmd-db: replace strncpy() with strscpy_pad()")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ drivers/soc/qcom/cmd-db.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/soc/qcom/cmd-db.c b/drivers/soc/qcom/cmd-db.c
+index c5137c25d819..0aafe90277bc 100644
+--- a/drivers/soc/qcom/cmd-db.c
++++ b/drivers/soc/qcom/cmd-db.c
+@@ -141,14 +141,14 @@ static int cmd_db_get_header(const char *id, const struct entry_header **eh,
+ 	const struct rsc_hdr *rsc_hdr;
+ 	const struct entry_header *ent;
+ 	int ret, i, j;
+-	u8 query[8];
++	u8 query[8] __nonstring;
+ 
+ 	ret = cmd_db_ready();
+ 	if (ret)
+ 		return ret;
+ 
+ 	/* Pad out query string to same length as in DB */
+-	strscpy_pad(query, id, sizeof(query));
++	strncpy(query, id, sizeof(query));
+ 
+ 	for (i = 0; i < MAX_SLV_ID; i++) {
+ 		rsc_hdr = &cmd_db_header->header[i];
+-- 
+2.37.0.rc0.161.g10f37bed90-goog
 

@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D3455C1C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0F255DB68
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239963AbiF0L6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
+        id S237849AbiF0Lq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238616AbiF0Lvv (ORCPT
+        with ESMTP id S237199AbiF0Lmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:51:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107DC959A;
-        Mon, 27 Jun 2022 04:44:50 -0700 (PDT)
+        Mon, 27 Jun 2022 07:42:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2082FDF15;
+        Mon, 27 Jun 2022 04:36:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A41BB612AC;
-        Mon, 27 Jun 2022 11:44:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB6C3C3411D;
-        Mon, 27 Jun 2022 11:44:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB122B8111C;
+        Mon, 27 Jun 2022 11:36:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55482C341C7;
+        Mon, 27 Jun 2022 11:36:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330289;
-        bh=ScQpEIpxHjSqDrGr76uERJiMqoOSdBON+D/RKrJ4bQo=;
+        s=korg; t=1656329789;
+        bh=PalIoX5naWrh/vs8WCxofd6uQD0HhrIyss029FosdZY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1BJw7fyU1OLiNFT+7vPvwWeGDjE4viQFAvQn/GbheRmV5BRAqBpC3zxMnky8dm472
-         2wzgb3bnp7JA5xSMrFVOOmwA8Tqn+s3KUcIOZPKJYVMgzB0mh8SR4jvb2RA8U4a10+
-         g2/jMXIMLVZF0U8r9CrksKD7rQO8gsz2SQwLEUfA=
+        b=cOQqwrLdAOkOPLui3qoAhte1296D8YYiaSQzQdqUtPEx0HBEHM6ztGzf6i5YeHUBd
+         U6raisZ28QtRsLwYw0YSXHeoIOEQsNrzn0hxLwZQLPnCY6BBLQvgxA6dTQN6BnSkb6
+         EDcN8iZb2ruLwBiR0Ff2ovPCFOOywsQqdZkOs2Gk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Jialin Zhang <zhangjialin11@huawei.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.18 148/181] iio: adc: rzg2l_adc: add missing fwnode_handle_put() in rzg2l_adc_parse_properties()
-Date:   Mon, 27 Jun 2022 13:22:01 +0200
-Message-Id: <20220627111948.976077610@linuxfoundation.org>
+        stable@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>
+Subject: [PATCH 5.15 115/135] parisc: Enable ARCH_HAS_STRICT_MODULE_RWX
+Date:   Mon, 27 Jun 2022 13:22:02 +0200
+Message-Id: <20220627111941.490346629@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,46 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jialin Zhang <zhangjialin11@huawei.com>
+From: Helge Deller <deller@gmx.de>
 
-commit d836715f588ea15f905f607c27bc693587058db4 upstream.
+commit 0a1355db36718178becd2bfe728a023933d73123 upstream.
 
-fwnode_handle_put() should be used when terminating
-device_for_each_child_node() iteration with break or return to prevent
-stale device node references from being left behind.
+Fix a boot crash on a c8000 machine as reported by Dave.  Basically it changes
+patch_map() to return an alias mapping to the to-be-patched code in order to
+prevent writing to write-protected memory.
 
-Fixes: d484c21bacfa ("iio: adc: Add driver for Renesas RZ/G2L A/D converter")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Jialin Zhang <zhangjialin11@huawei.com>
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20220517033526.2035735-1-zhangjialin11@huawei.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Suggested-by: John David Anglin <dave.anglin@bell.net>
+Cc: stable@vger.kernel.org   # v5.2+
+Link: https://lore.kernel.org/all/e8ec39e8-25f8-e6b4-b7ed-4cb23efc756e@bell.net/
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/rzg2l_adc.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ arch/parisc/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/iio/adc/rzg2l_adc.c
-+++ b/drivers/iio/adc/rzg2l_adc.c
-@@ -334,11 +334,15 @@ static int rzg2l_adc_parse_properties(st
- 	i = 0;
- 	device_for_each_child_node(&pdev->dev, fwnode) {
- 		ret = fwnode_property_read_u32(fwnode, "reg", &channel);
--		if (ret)
-+		if (ret) {
-+			fwnode_handle_put(fwnode);
- 			return ret;
-+		}
- 
--		if (channel >= RZG2L_ADC_MAX_CHANNELS)
-+		if (channel >= RZG2L_ADC_MAX_CHANNELS) {
-+			fwnode_handle_put(fwnode);
- 			return -EINVAL;
-+		}
- 
- 		chan_array[i].type = IIO_VOLTAGE;
- 		chan_array[i].indexed = 1;
+--- a/arch/parisc/Kconfig
++++ b/arch/parisc/Kconfig
+@@ -9,6 +9,7 @@ config PARISC
+ 	select ARCH_WANT_FRAME_POINTERS
+ 	select ARCH_HAS_ELF_RANDOMIZE
+ 	select ARCH_HAS_STRICT_KERNEL_RWX
++	select ARCH_HAS_STRICT_MODULE_RWX
+ 	select ARCH_HAS_UBSAN_SANITIZE_ALL
+ 	select ARCH_NO_SG_CHAIN
+ 	select ARCH_SUPPORTS_HUGETLBFS if PA20
 
 

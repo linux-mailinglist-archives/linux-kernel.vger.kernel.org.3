@@ -2,53 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B32B55E350
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5F555E352
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbiF0XLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 19:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
+        id S241221AbiF0XL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 19:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238302AbiF0XLD (ORCPT
+        with ESMTP id S241011AbiF0XLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 19:11:03 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AFB205C5;
-        Mon, 27 Jun 2022 16:11:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2B49CCE1DF8;
-        Mon, 27 Jun 2022 23:11:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D33C34115;
-        Mon, 27 Jun 2022 23:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656371458;
-        bh=A+8dqd+AYtgSfVTCQHJYjy06M4VETooFTm66t1vpOwc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k1Hip1o7gkv8fv4LES1pswBpFQ7RHJK+da2DXyPCYbJx7cifcAANHhZTobUcBH10C
-         7FNKbDaWe0owUaomv5xx4OvQEBZHzAGzMihvvNYtfutcY/jYK0l21HHgP0rfl1H7+w
-         NQImFAWgs3U6Najjm8mDGvaDTMJolXy9i0fE5OmJP1JIurmpBlEdfCYAemIfAz4ByH
-         AxxB9wqjmVxOntaW4rDStD+WqeSNH4GABfO4fdIz39hZnbSFv/rElggariIVYoO7x9
-         /7L+qel8OK+odjSsJgml4v3vWycZNYGAK3AeWX+ZMWxHe5j/eXd2QISfBgPfb+WGQK
-         hoAOM8fYJz/jg==
-Date:   Tue, 28 Jun 2022 02:10:54 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] X.509: Support parsing certificate using SM2 algorithm
-Message-ID: <Yro4/nbOGOWRUgWS@kernel.org>
-References: <20220627091958.20751-1-tianjia.zhang@linux.alibaba.com>
+        Mon, 27 Jun 2022 19:11:24 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EEE20BCF
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:11:21 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id e195-20020a6bb5cc000000b0066cc9ece80fso6355944iof.5
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 16:11:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=/lJPqgqzm8dhJUrPMF0qEsPebda9jDQJGT3puopnEYg=;
+        b=rbPgiXr1zw1zrVFFelh4iOt44YR/XwHVShZJRdCtLk124tsLiWXerWFsQ3rS2AMaWC
+         nJAV0H4jf5tzZ8J0QOVQ3S0c5H15X4yPLxPYBfve1j2YyQie5bPDWa7QcYocVWVBChGd
+         puHMdb3BazFzuLcYBoxf374V0F5htDH4l6p1gsWATq7Zhk+p6oOU5zP063CsrqjtLSSF
+         3TWkePwJPI20S08fDlWFqPLNT0C/+6uka23rTabUqbettRv2MyMqI0u3iLLvQ2TP7AGD
+         6kFMnfl+M2aIMtxGDKXzZYEDQu1v5Lpvwh0mncmZPw6ZjzJkqN84rFd04mL0ce8Mk/CB
+         SJCQ==
+X-Gm-Message-State: AJIora8TKdSJtwMQdgwrwT2a2R0MUIdaSQTRSeJn1MIIwuzUxy9lEeSV
+        4gHCSfCkoms2JK6adMTzgIHWYfxqmUn7xTXZQia3w/k9NXxb
+X-Google-Smtp-Source: AGRyM1uXLsJAavWFIa3CHbs2tR9FSOoEyG93iRJLFwCzFJdGRF0v3rKxT+AN9HiInTUQvnK1we/stQ5Tb8gqN/+SLA9RXkXKMixy
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220627091958.20751-1-tianjia.zhang@linux.alibaba.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:1686:b0:331:c1ed:9f55 with SMTP id
+ f6-20020a056638168600b00331c1ed9f55mr9733118jat.201.1656371481048; Mon, 27
+ Jun 2022 16:11:21 -0700 (PDT)
+Date:   Mon, 27 Jun 2022 16:11:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000be7cba05e276093f@google.com>
+Subject: [syzbot] WARNING: HA
+From:   syzbot <syzbot+fc6c9a8f13210d4b2dd2@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,35 +52,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 05:19:58PM +0800, Tianjia Zhang wrote:
-> The SM2-with-SM3 certificate generated by latest openssl no longer
-> reuses the OID_id_ecPublicKey, but directly uses OID_sm2. This patch
-> supports this type of x509 certificate parsing.
-> 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
->  crypto/asymmetric_keys/x509_cert_parser.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
-> index 2899ed80bb18..7a9b084e2043 100644
-> --- a/crypto/asymmetric_keys/x509_cert_parser.c
-> +++ b/crypto/asymmetric_keys/x509_cert_parser.c
-> @@ -508,6 +508,9 @@ int x509_extract_key_data(void *context, size_t hdrlen,
->  	case OID_gost2012PKey512:
->  		ctx->cert->pub->pkey_algo = "ecrdsa";
->  		break;
-> +	case OID_sm2:
-> +		ctx->cert->pub->pkey_algo = "sm2";
-> +		break;
->  	case OID_id_ecPublicKey:
->  		if (parse_OID(ctx->params, ctx->params_size, &oid) != 0)
->  			return -EBADMSG;
-> -- 
-> 2.24.3 (Apple Git-128)
-> 
+Hello,
 
-Thanks, I can pick this.
+syzbot found the following issue on:
 
-BR, Jarkko
+HEAD commit:    08897940f458 Add linux-next specific files for 20220623
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=15696f7ff00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fb185a52c6ad0a8e
+dashboard link: https://syzkaller.appspot.com/bug?extid=fc6c9a8f13210d4b2dd2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15bfb93ff00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=118010a8080000
+
+Bisection is inconclusive: the issue happens on the oldest tested release.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13a2a888080000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1062a888080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17a2a888080000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fc6c9a8f13210d4b2dd2@syzkaller.appspotmail.com
+
+netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+=====================================================
+WARNING: HA
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

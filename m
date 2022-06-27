@@ -2,109 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C411D55CE79
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D703355DD95
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbiF0HBx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 27 Jun 2022 03:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
+        id S232524AbiF0HCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiF0HBv (ORCPT
+        with ESMTP id S230096AbiF0HCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:01:51 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D489D5F7E;
-        Mon, 27 Jun 2022 00:01:49 -0700 (PDT)
-Received: from canpemm500008.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LWdsT55gFzkWpD;
-        Mon, 27 Jun 2022 15:00:29 +0800 (CST)
-Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
- canpemm500008.china.huawei.com (7.192.105.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 27 Jun 2022 15:01:16 +0800
-Received: from kwepemm600007.china.huawei.com ([7.193.23.208]) by
- kwepemm600007.china.huawei.com ([7.193.23.208]) with mapi id 15.01.2375.024;
- Mon, 27 Jun 2022 15:01:16 +0800
-From:   haijie <haijie1@huawei.com>
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     "Wangzhou (B)" <wangzhou1@hisilicon.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/8] dmaengine: hisilicon: Fix CQ head update
-Thread-Topic: [PATCH 2/8] dmaengine: hisilicon: Fix CQ head update
-Thread-Index: AQHYiGfM3YbFHDZNZ0e0XQ9uDDsCpq1iQvQAgACSJCA=
-Date:   Mon, 27 Jun 2022 07:01:16 +0000
-Message-ID: <494c689c9141429caae0285a9e778c3b@huawei.com>
-References: <20220625074422.3479591-1-haijie1@huawei.com>
- <20220625074422.3479591-3-haijie1@huawei.com> <YrlKZgC999AYMvXY@matsya>
-In-Reply-To: <YrlKZgC999AYMvXY@matsya>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.67.102.167]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 27 Jun 2022 03:02:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214CD5F85;
+        Mon, 27 Jun 2022 00:02:38 -0700 (PDT)
+Received: from localhost.localdomain (unknown [39.45.206.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 02B056601824;
+        Mon, 27 Jun 2022 08:02:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656313356;
+        bh=NkkjEoi7BGZXZx4C9tWVopSMwjLqJE9iVqgsolVJlSw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lKK4GWAkOcn735UQAKvXWrnaV0iS4KwEjAcKoYvhhXAyCVszdbqVNqzqagzj6t96Y
+         ZhbM7BsvunS3+mIJRRg27KY8qsj3UxCGy36BxWB9xNfnCYFpGfGNQQxJOr0AVyXzMa
+         eqBxqS897B3bVyjGj7zEEG+dse5/xwu9dIevruuaXdjaLCq3zTSXKreG/hJ7ydB3Yv
+         j4u4I+gvf21bICypl0x+t3Q7KSc9p9MPHABJpWScWUeuH/jVYQu3iubmp4r2SVHz2o
+         DQ4W0Jr1mWjGX7eN9f83S0lb0qH52g+bX5bTHs0uXe1Z22RiTXTFbVpMxwPJ3mYxE0
+         0mvHNtZ2NMBtw==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kieran Bingham <kbingham@kernel.org>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] kbuild: fix sub directory output build of kselftests
+Date:   Mon, 27 Jun 2022 12:02:14 +0500
+Message-Id: <20220627070214.432390-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Vinod,
+Build of kselftests fail if kernel's top most Makefile is used for
+running or building kselftests with separate output directory which is
+sub-directory. srctree is set to .. erroneously.
 
-This happens bacause I rearranged this patch without checking, it will be corrected in v2.
+make kselftest-all O=/linux_mainline/build
+Makefile:1080: ../scripts/Makefile.extrawarn: No such file or directory
 
-Thanks.
+make kselftest-all O=build
+Makefile:1080: ../scripts/Makefile.extrawarn: No such file or directory
 
------Original Message-----
-From: Vinod Koul [mailto:vkoul@kernel.org] 
-Sent: Monday, June 27, 2022 2:13 PM
-To: haijie <haijie1@huawei.com>
-Cc: Wangzhou (B) <wangzhou1@hisilicon.com>; dmaengine@vger.kernel.org; linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/8] dmaengine: hisilicon: Fix CQ head update
+Fix this by comparing abs_srctree with CURDIR instead of abs_objtree.
+CURDIR changes based on from where the command has been run and it sets
+the srctree correctly.
 
-On 25-06-22, 15:44, Jie Hai wrote:
-> After completion of data transfer of one or multiple descriptors, the 
-> completion status and the current head pointer to submission queue are 
-> written into the CQ and interrupt can be generated to inform the 
-> software. In interrupt process CQ is read and cq_head is updated.
-> 
-> hisi_dma_irq updates cq_head only when the completion status is 
-> success. When an abnormal interrupt reports, cq_head will not update 
-> which will cause subsequent interrupt processes read the error CQ and 
-> never report the correct status.
-> 
-> This patch updates cq_head whenever CQ is accessed.
-> 
-> Fixes: e9f08b65250d ("dmaengine: hisilicon: Add Kunpeng DMA engine 
-> support")
-> 
+Fixes: 25b146c5b8cee("kbuild: allow Kbuild to start from any directory")
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Changes in V2:
+- Correct the bugfix instead of workaround
 
-No need for blank line
-> Signed-off-by: Jie Hai <haijie1@huawei.com>
-> ---
->  drivers/dma/hisi_dma.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/dma/hisi_dma.c b/drivers/dma/hisi_dma.c index 
-> 98bc488893cc..0a0f8a4d168a 100644
-> --- a/drivers/dma/hisi_dma.c
-> +++ b/drivers/dma/hisi_dma.c
-> @@ -436,12 +436,11 @@ static irqreturn_t hisi_dma_irq(int irq, void *data)
->  	desc = chan->desc;
->  	cqe = chan->cq + chan->cq_head;
->  	if (desc) {
-> +		chan->cq_head = (chan->cq_head + 1) %
-> +				hdma_dev->chan_depth;
-> +		hisi_dma_chan_write(q_base, HISI_DMA_Q_CQ_HEAD_PTR,
+V1: https://lore.kernel.org/lkml/20220223191016.1658728-1-usama.anjum@collabora.com/
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-q_base?
+diff --git a/Makefile b/Makefile
+index e66358b64ede..4090d7afcda4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -238,12 +238,12 @@ ifeq ($(need-sub-make),)
+ # so that IDEs/editors are able to understand relative filenames.
+ MAKEFLAGS += --no-print-directory
+ 
+-ifeq ($(abs_srctree),$(abs_objtree))
++ifeq ($(abs_srctree),$(CURDIR))
+         # building in the source tree
+         srctree := .
+ 	building_out_of_srctree :=
+ else
+-        ifeq ($(abs_srctree)/,$(dir $(abs_objtree)))
++        ifeq ($(abs_srctree)/,$(dir $(CURDIR)))
+                 # building in a subdirectory of the source tree
+                 srctree := ..
+         else
+-- 
+2.30.2
 
---
-~Vinod

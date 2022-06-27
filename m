@@ -2,77 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E0F55CBE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515E355E008
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241072AbiF0UHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 16:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
+        id S241103AbiF0UH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 16:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241066AbiF0UHn (ORCPT
+        with ESMTP id S237249AbiF0UH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 16:07:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 771E91EAC6
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:07:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656360461;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ecqp7u4gJaJ1mXBxwxi4FG5ZEdhI/0Q2gMOetVHGIac=;
-        b=I6uygNf9NLWyYkiVXyTpjNLUpaz+LuiTCtj6gpREk4VOJPZhL4jERePVIVtS5JnSiI0s4c
-        mn1zkfedANnxANVWsHqzUq6idFDGvvxdi6LaDkPekAYSl+E5pskKFxU/lrsLx7NqdpeuvC
-        4G7usOLIghLRV3T16cGbig5v+Tx0iHk=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-437-8e6gJHyuPgmVoe2sfJ6wKQ-1; Mon, 27 Jun 2022 16:07:38 -0400
-X-MC-Unique: 8e6gJHyuPgmVoe2sfJ6wKQ-1
-Received: by mail-io1-f70.google.com with SMTP id d11-20020a6bb40b000000b006727828a19fso6205229iof.15
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 13:07:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=Ecqp7u4gJaJ1mXBxwxi4FG5ZEdhI/0Q2gMOetVHGIac=;
-        b=Am55Y5xWhkdjoW4fupTS9J0b7v1Vc3FQ4urEuV4RC9fPy8JTFQEdGrdF6BvcIsJu9y
-         LCfbD0Z3JliE1dxbuwNR4WpYu7LuTemEQVdiKFxisBH3L3NaI6X34WC9bTsPkQABqfuN
-         7PHMgq22dtydysVo0M21cJf9Uak9tczkZwyoFlUYpUUZmmUAUnmWCczuhTnZ0hLk+h6C
-         9u8xedYTa5FQJUQMIudRxFHCgiU0yg9i2A904+zYNapsjDxMSj5h6PxGmQnDdBWDIopk
-         4F281a+IhqQ6o83+1AdcHvUaMIjxJk9aTsYW6Yw0DEbBPk4U2F2vMwTd1ImjBRjwedGG
-         fqPw==
-X-Gm-Message-State: AJIora/ZryJtZBk4BZdAYhyFYO+FyaXQVRGo8m1wguoJsHeJ7s5e2SWO
-        FLcX56RUlaPsMk6ZKueTkjAWfYOCDOG2On6uUJtmXTCZffXsxmjUzfS66KOqngr8sVvcYhKoY9b
-        //FsLayky6Kr+dUlHmEr9EcN8
-X-Received: by 2002:a05:6638:22c7:b0:333:f684:ccc4 with SMTP id j7-20020a05663822c700b00333f684ccc4mr8853611jat.57.1656360457270;
-        Mon, 27 Jun 2022 13:07:37 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sNIPUYijEfnPKfQZWxOpm7YokpOplZ2wBAN4sSDoCyh8jOJGTEHm2vhuygZD7iG02GUVE7+w==
-X-Received: by 2002:a05:6638:22c7:b0:333:f684:ccc4 with SMTP id j7-20020a05663822c700b00333f684ccc4mr8853601jat.57.1656360457084;
-        Mon, 27 Jun 2022 13:07:37 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id x66-20020a0294c8000000b00339dd803fddsm5190825jah.174.2022.06.27.13.07.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 13:07:36 -0700 (PDT)
-Date:   Mon, 27 Jun 2022 14:07:35 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
-        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] vfio: do not set FMODE_LSEEK flag
-Message-ID: <20220627140735.32723d4a.alex.williamson@redhat.com>
-In-Reply-To: <20220625110115.39956-9-Jason@zx2c4.com>
-References: <20220625110115.39956-1-Jason@zx2c4.com>
-        <20220625110115.39956-9-Jason@zx2c4.com>
-Organization: Red Hat
+        Mon, 27 Jun 2022 16:07:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6681EAC8;
+        Mon, 27 Jun 2022 13:07:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37451B81AD1;
+        Mon, 27 Jun 2022 20:07:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B08F7C3411D;
+        Mon, 27 Jun 2022 20:07:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656360471;
+        bh=PEF5oPoXv6B1fccK8/hH1cXGUgU2nGyTWsqpDEZ2vhU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=mxgUeXkcJ52XR6O87ZEKKE3Kz2rJTV++8nqp7XwOpVb6l7kzk/oQRd6FhJYOMBNAg
+         Y9Q6cyoad3+J86qItTaEpD6t2DxEI29KSLOu0trF4SXK7NGIl3i13w+LmtO2yRcSmp
+         tNaYSU7ORt62+aBsAqVMxEAAk3GOVPqq/ac4wb3bjkRtANg1e/idl5dBC9QlmMCkPY
+         wPg8bOrsbIqOSjLoeSGYVSfCh3dqOZSa4l7EWY/5uaDHAajzJL8uSlxk/tOgaJh0db
+         cedjCkWwMiEsoLQWDv5Rt7LG/i0xMiyfsUZ1mswaxjVtJgDaJevTaSQmWq6aA5QY4u
+         /vYuodlXS5r0Q==
+Date:   Mon, 27 Jun 2022 15:07:50 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ren Zhijie <renzhijie2@huawei.com>
+Cc:     kishon@ti.com, lpieralisi@kernel.org, kw@linux.com,
+        bhelgaas@google.com, jdmason@kudzu.us, Frank.Li@nxp.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] PCI: endpoint: Fix Kconfig dependency
+Message-ID: <20220627200750.GA1774052@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220627195712.GA1772707@bhelgaas>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,32 +54,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Jun 2022 13:01:15 +0200
-"Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
-
-> This file does not support llseek, so don't set the flag advertising it.
+On Mon, Jun 27, 2022 at 02:57:14PM -0500, Bjorn Helgaas wrote:
+> On Fri, Jun 24, 2022 at 09:19:11AM +0800, Ren Zhijie wrote:
+> > If CONFIG_NTB is not set and CONFIG_PCI_EPF_VNTB is y.
+> > 
+> > make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-, will be failed, like this:
+> > 
+> > drivers/pci/endpoint/functions/pci-epf-vntb.o: In function `epf_ntb_cmd_handler':
+> > pci-epf-vntb.c:(.text+0x95e): undefined reference to `ntb_db_event'
+> > pci-epf-vntb.c:(.text+0xa1f): undefined reference to `ntb_link_event'
+> > pci-epf-vntb.c:(.text+0xa42): undefined reference to `ntb_link_event'
+> > drivers/pci/endpoint/functions/pci-epf-vntb.o: In function `pci_vntb_probe':
+> > pci-epf-vntb.c:(.text+0x1250): undefined reference to `ntb_register_device'
+> > 
+> > The functions ntb_*() are defined in drivers/ntb/core.c, which need CONFIG_NTB setting y to be build-in.
+> > To fix this build error, add depends on NTB.
+> > 
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Fixes: ff32fac00d97("NTB: EPF: support NTB transfer between PCI RC and EP connection")
+> > Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+> > Acked-by: Frank Li <frank.li@nxp.com>
 > 
-> Cc: Alex Williamson <alex.williamson@redhat.com>
-> Cc: Cornelia Huck <cohuck@redhat.com>
-> Cc: kvm@vger.kernel.org
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  drivers/vfio/vfio.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Am I missing something? 
 > 
-> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
-> index 61e71c1154be..d194dda89542 100644
-> --- a/drivers/vfio/vfio.c
-> +++ b/drivers/vfio/vfio.c
-> @@ -1129,7 +1129,7 @@ static struct file *vfio_device_open(struct vfio_device *device)
->  	 * Appears to be missing by lack of need rather than
->  	 * explicitly prevented.  Now there's need.
->  	 */
-> -	filep->f_mode |= (FMODE_LSEEK | FMODE_PREAD | FMODE_PWRITE);
-> +	filep->f_mode |= (FMODE_PREAD | FMODE_PWRITE);
->  
->  	if (device->group->type == VFIO_NO_IOMMU)
->  		dev_warn(device->dev, "vfio-noiommu device opened by user "
+>   02:54:01 ~/linux (next)$ git checkout -b wip/ren-endpoint-ntb v5.19-rc1
+>   Switched to a new branch 'wip/ren-endpoint-ntb'
+>   02:54:23 ~/linux (wip/ren-endpoint-ntb)$ b4 am -om/ https://lore.kernel.org/r/20220624011911.164146-1-renzhijie2@huawei.com
+>   Looking up https://lore.kernel.org/r/20220624011911.164146-1-renzhijie2%40huawei.com
+>   Analyzing 1 messages in the thread
+>   Checking attestation on all messages, may take a moment...
+>   ---
+>     [PATCH] PCI: endpoint: Fix Kconfig dependency
+>   ---
+>   Total patches: 1
+>   ---
+>    Link: https://lore.kernel.org/r/20220624011911.164146-1-renzhijie2@huawei.com
+>    Base: not specified
+> 	 git am m/20220624_renzhijie2_pci_endpoint_fix_kconfig_dependency.mbx
+>   02:54:47 ~/linux (wip/ren-endpoint-ntb)$ git am m/20220624_renzhijie2_pci_endpoint_fix_kconfig_dependency.mbx
+>   Applying: PCI: endpoint: Fix Kconfig dependency
+>   error: patch failed: drivers/pci/endpoint/functions/Kconfig:29
+>   error: drivers/pci/endpoint/functions/Kconfig: patch does not apply
+>   Patch failed at 0001 PCI: endpoint: Fix Kconfig dependency
+>   hint: Use 'git am --show-current-patch' to see the failed patch
+>   When you have resolved this problem, run "git am --continue".
+>   If you prefer to skip this patch, run "git am --skip" instead.
+>   To restore the original branch and stop patching, run "git am --abort".
+> 
+> Obviously I could fix this manually, but if there's something wrong
+> with your patch posting process, we should fix it.
 
-Acked-by: Alex Williamson <alex.williamson@redhat.com>
+Oh, I see the problem.  This patch depends on some other VNTB patch
+that hasn't been merged yet.  That means this fix should be squashed
+into the VNTB patch that adds "config PCI_EPF_VNTB".
 
+> > ---
+> > v2: Fix some commit message errors
+> > ---
+> >  drivers/pci/endpoint/functions/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/pci/endpoint/functions/Kconfig b/drivers/pci/endpoint/functions/Kconfig
+> > index 362555b024e8..9beee4f0f4ee 100644
+> > --- a/drivers/pci/endpoint/functions/Kconfig
+> > +++ b/drivers/pci/endpoint/functions/Kconfig
+> > @@ -29,6 +29,7 @@ config PCI_EPF_NTB
+> >  config PCI_EPF_VNTB
+> >          tristate "PCI Endpoint NTB driver"
+> >          depends on PCI_ENDPOINT
+> > +        depends on NTB
+> >          select CONFIGFS_FS
+> >          help
+> >            Select this configuration option to enable the Non-Transparent
+> > -- 
+> > 2.17.1
+> > 

@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECDC55DAED
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9141455C67A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236077AbiF0LgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
+        id S239078AbiF0Lyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235859AbiF0Lek (ORCPT
+        with ESMTP id S238502AbiF0Lsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:34:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E499CE9;
-        Mon, 27 Jun 2022 04:31:26 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854B5C73;
+        Mon, 27 Jun 2022 04:41:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A31260929;
-        Mon, 27 Jun 2022 11:31:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 171A2C341C7;
-        Mon, 27 Jun 2022 11:31:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16D7261234;
+        Mon, 27 Jun 2022 11:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2510BC341CB;
+        Mon, 27 Jun 2022 11:41:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329485;
-        bh=/eEdYIYtH/PtEylqtnmlVB4DCSajApuye58PGqvuQsM=;
+        s=korg; t=1656330118;
+        bh=VpWj+S8VyobIWzAtYMHALe6noLPSFdKL2+fOn4VwhAQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IMFEJjF4Ry89QyiVIpWFVcPyQQa8jLMjqcj9JrE+kN0No8ynYMW4oPiPxUY20SzrD
-         aXX1LEwWExWlrzdn5Lp641sVEABBnRp78LcJLfUPVglm7zjR1150GRNI7DqIxIhYi8
-         8UfQf/s4oop/GEsNHwQnWb1LpXtZpdHcXoRA5N70=
+        b=Lb4OchllwpDv66/PmbGESbtP3NDqTK7NaZLRJ3icbCVyYZfznFk/xSre+zqZqYLVD
+         4iE5nRLDOcfrXYcL7qsdg5mzIh/WuOt2m832Vh1i+rVKLtXsSpcNCHJGb3JKZ76o1O
+         Dh7abvHxQ5fEqHPB91BmZo2Cak0zxHSBd/zfukY0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.15 015/135] btrfs: prevent remounting to v1 space cache for subpage mount
-Date:   Mon, 27 Jun 2022 13:20:22 +0200
-Message-Id: <20220627111938.601933459@linuxfoundation.org>
+        stable@vger.kernel.org, Antoine Tenart <atenart@kernel.org>,
+        Jon Maxwell <jmaxwell37@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Curtis Taylor <cutaylor-pub@yahoo.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 050/181] bpf: Fix request_sock leak in sk lookup helpers
+Date:   Mon, 27 Jun 2022 13:20:23 +0200
+Message-Id: <20220627111946.017686385@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +58,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Jon Maxwell <jmaxwell37@gmail.com>
 
-commit 0591f04036218d572d54349ea8c7914ad9c82b2b upstream.
+[ Upstream commit 3046a827316c0e55fc563b4fb78c93b9ca5c7c37 ]
 
-Upstream commit 9f73f1aef98b ("btrfs: force v2 space cache usage for
-subpage mount") forces subpage mount to use v2 cache, to avoid
-deprecated v1 cache which doesn't support subpage properly.
+A customer reported a request_socket leak in a Calico cloud environment. We
+found that a BPF program was doing a socket lookup with takes a refcnt on
+the socket and that it was finding the request_socket but returning the parent
+LISTEN socket via sk_to_full_sk() without decrementing the child request socket
+1st, resulting in request_sock slab object leak. This patch retains the
+existing behaviour of returning full socks to the caller but it also decrements
+the child request_socket if one is present before doing so to prevent the leak.
 
-But there is a loophole that user can still remount to v1 cache.
+Thanks to Curtis Taylor for all the help in diagnosing and testing this. And
+thanks to Antoine Tenart for the reproducer and patch input.
 
-The existing check will only give users a warning, but does not really
-prevent to do the remount.
+v2 of this patch contains, refactor as per Daniel Borkmann's suggestions to
+validate RCU flags on the listen socket so that it balances with bpf_sk_release()
+and update comments as per Martin KaFai Lau's suggestion. One small change to
+Daniels suggestion, put "sk = sk2" under "if (sk2 != sk)" to avoid an extra
+instruction.
 
-Although remounting to v1 will not cause any problems since the v1 cache
-will always be marked invalid when mounted with a different page size,
-it's still better to prevent v1 cache at all for subpage mounts.
-
-Fixes: 9f73f1aef98b ("btrfs: force v2 space cache usage for subpage mount")
-CC: stable@vger.kernel.org # 5.15+
-Signed-off-by: Qu Wenruo <wqu@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f7355a6c0497 ("bpf: Check sk_fullsock() before returning from bpf_sk_lookup()")
+Fixes: edbf8c01de5a ("bpf: add skc_lookup_tcp helper")
+Co-developed-by: Antoine Tenart <atenart@kernel.org>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Signed-off-by: Jon Maxwell <jmaxwell37@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Tested-by: Curtis Taylor <cutaylor-pub@yahoo.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Link: https://lore.kernel.org/bpf/56d6f898-bde0-bb25-3427-12a330b29fb8@iogearbox.net
+Link: https://lore.kernel.org/bpf/20220615011540.813025-1-jmaxwell37@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/super.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ net/core/filter.c | 34 ++++++++++++++++++++++++++++------
+ 1 file changed, 28 insertions(+), 6 deletions(-)
 
---- a/fs/btrfs/super.c
-+++ b/fs/btrfs/super.c
-@@ -1917,6 +1917,14 @@ static int btrfs_remount(struct super_bl
- 	if (ret)
- 		goto restore;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 8847316ee20e..af1e77f2f24a 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6506,10 +6506,21 @@ __bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+ 					   ifindex, proto, netns_id, flags);
  
-+	/* V1 cache is not supported for subpage mount. */
-+	if (fs_info->sectorsize < PAGE_SIZE && btrfs_test_opt(fs_info, SPACE_CACHE)) {
-+		btrfs_warn(fs_info,
-+	"v1 space cache is not supported for page size %lu with sectorsize %u",
-+			   PAGE_SIZE, fs_info->sectorsize);
-+		ret = -EINVAL;
-+		goto restore;
-+	}
- 	btrfs_remount_begin(fs_info, old_opts, *flags);
- 	btrfs_resize_thread_pool(fs_info,
- 		fs_info->thread_pool_size, old_thread_pool_size);
+ 	if (sk) {
+-		sk = sk_to_full_sk(sk);
+-		if (!sk_fullsock(sk)) {
++		struct sock *sk2 = sk_to_full_sk(sk);
++
++		/* sk_to_full_sk() may return (sk)->rsk_listener, so make sure the original sk
++		 * sock refcnt is decremented to prevent a request_sock leak.
++		 */
++		if (!sk_fullsock(sk2))
++			sk2 = NULL;
++		if (sk2 != sk) {
+ 			sock_gen_put(sk);
+-			return NULL;
++			/* Ensure there is no need to bump sk2 refcnt */
++			if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
++				WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
++				return NULL;
++			}
++			sk = sk2;
+ 		}
+ 	}
+ 
+@@ -6543,10 +6554,21 @@ bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+ 					 flags);
+ 
+ 	if (sk) {
+-		sk = sk_to_full_sk(sk);
+-		if (!sk_fullsock(sk)) {
++		struct sock *sk2 = sk_to_full_sk(sk);
++
++		/* sk_to_full_sk() may return (sk)->rsk_listener, so make sure the original sk
++		 * sock refcnt is decremented to prevent a request_sock leak.
++		 */
++		if (!sk_fullsock(sk2))
++			sk2 = NULL;
++		if (sk2 != sk) {
+ 			sock_gen_put(sk);
+-			return NULL;
++			/* Ensure there is no need to bump sk2 refcnt */
++			if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
++				WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
++				return NULL;
++			}
++			sk = sk2;
+ 		}
+ 	}
+ 
+-- 
+2.35.1
+
 
 

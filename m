@@ -2,203 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A896E55CD3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C283C55C9A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238682AbiF0P7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
+        id S238752AbiF0P7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237989AbiF0P67 (ORCPT
+        with ESMTP id S238706AbiF0P7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:58:59 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7FAD79;
-        Mon, 27 Jun 2022 08:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1656345536; x=1687881536;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=ZlpdHq241mLJEz8rw3ymS24Qz2G4YYyFVs7JbaiUFBE=;
-  b=cGq/Sv3dvCWWyE3e0rIPWZuf6DpuKCsx2RZPD5vpPPlH9k5PVDdO4AGN
-   yZPh2QuVLe7i4Fvyy5vb5UunKBfiYl7wswtmHa44KpP01kzVIRofo8YYo
-   SrWih6luR6M9N7mDQli1BwPHOpVt4e1WI/CW8UczA4y8EKeWcmgqXtLQD
-   hShoRimwgFEHhNkTUipSOG8vsTqLAhBVmR5uFX7qMJyJt7CGUK/GSHN9X
-   xUzRzfQSHtz6nhGV/NkMhzPY+YPdZ5BXe6fzyHb55Gs5ihmNzJHnWgApi
-   7XN1QYzMRVDSnC4Hr8SzEHBdnyf0syj0OTMJhpv48ckFbfGAF6kfJakgG
-   A==;
-X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
-   d="scan'208";a="165277493"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jun 2022 08:58:52 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 27 Jun 2022 08:58:52 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Mon, 27 Jun 2022 08:58:51 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MQOdPDlJuv2Qxqjq/N5L1dUEOmil1RITJUa2a1pdlLBW98QU24sSofMWiShomgLLPBOK4Q4Hfe516cM5YNF3us7tbQHLknQ189HPUfhEpU3a4gNzSsXwXcVuxSNiIReMF1k7cobge0Z6j33FO18C0cAqvDGDj7Mdc/IJdnB2DSg6KCdaCF8Cr/JdnRQpwA1IFXOVh5tdXCStJPQnaqw3AhFiEV+VsAHVX0qLrxGV9yoK/E3Ul5CblwNMaVvKpp7BbGau8qkN3/LSjvOv+CTsve2vmMUsgjLegP6l+KZMmBEzjxqs/xH/hQIbNSRRnRK/2t2AvCpyGbT8YuX0xaDIVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZlpdHq241mLJEz8rw3ymS24Qz2G4YYyFVs7JbaiUFBE=;
- b=fnMXIU5g/NuDFNM1W2eBtOobiLRtL2adpC2zYVP25bih4RQjkqnA5JUjlWh4cs7g6COfg2kEMStulM8lfYfqU9HYxNGZOwbYX530FPwcpfjeBYKoJX/s9ruVemXGK94Ob9j9IeiW1ejbAjO8e5J4evOA4U/Z8Q/9ZfiuWrPXpw85KdaBKaWPLBxCxXSE54U5TTbewUzJXMjmSQ5wMUd7sQUDDwP3bzXeJYmJWj6ZeZebqtlvAXmnqqtYIKMkwYN28tu+vtRI2ePWBMxcz4z8wXfifAl1Pkokr20EttfQPo+II/8fk7Ne5V2FT38E7b73y8imeLYiie/ThxxXPuozMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZlpdHq241mLJEz8rw3ymS24Qz2G4YYyFVs7JbaiUFBE=;
- b=tR//rGBlkbDYYBkQ1GQy8CYU3pnbHfPevEN/hUtiF4/yCS3YMsNn34C5nLzfpyYgKN2kB1EimxcNQZRocY9PcYRIKX+pOIofqCYdTj+KrHS9OVlQTIeXOb3+NYFn7PRrp0YLxPTcijLksBqwLBLXMogntKO6liAk/0aynVCSP58=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by CH0PR11MB5722.namprd11.prod.outlook.com (2603:10b6:610:113::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Mon, 27 Jun
- 2022 15:58:47 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa%4]) with mapi id 15.20.5373.018; Mon, 27 Jun 2022
- 15:58:47 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <palmer@dabbelt.com>, <palmer@rivosinc.com>
-CC:     <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lee.jones@linaro.org>,
-        <robh+dt@kernel.org>, <linux-mmc@vger.kernel.org>,
-        <paul.walmsley@sifive.com>, <linux-riscv@lists.infradead.org>,
-        <atulkhare@rivosinc.com>, <support.opensource@diasemi.com>,
-        <andrew@lunn.ch>, <heiko@sntech.de>,
-        <krzysztof.kozlowski@linaro.org>, <stwiss.opensource@diasemi.com>,
-        <aou@eecs.berkeley.edu>, <ulf.hansson@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v3 4/4] riscv: dts: sifive: "fix" pmic watchdog node name
-Thread-Topic: [PATCH v3 4/4] riscv: dts: sifive: "fix" pmic watchdog node name
-Thread-Index: AQHYeeIGXs9WOWYBI0qGmFVsFT4u2a1NYDuAgAAJMwCAFiBfgA==
-Date:   Mon, 27 Jun 2022 15:58:47 +0000
-Message-ID: <737ca8a9-1403-e594-b466-d652536e482e@microchip.com>
-References: <20220606201343.514391-1-mail@conchuod.ie>
- <20220606201343.514391-5-mail@conchuod.ie>
- <ee29eefa-9206-b84a-e27c-4e4388865db0@microchip.com>
- <2247394.ElGaqSPkdT@diego>
-In-Reply-To: <2247394.ElGaqSPkdT@diego>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 97618203-8d80-41a9-4d9a-08da5855eba2
-x-ms-traffictypediagnostic: CH0PR11MB5722:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vK88hJVvq+sg2lHaatmmWKE7WeR0F8gyzWlr239tSjIxyxElcp7KBS/kvoSGqsVs4tPvapXYoUbdabtW4ztq73lb9NVt4p8Slzfjpm5gtCmcHiGfDJFDZrB9teCvQHLiykKv2ynNq56uqWwaRAbZfhrah56eAmrMgb2sGkwxyAihVtvHR4CgA/SHtD6STzqgnrPhJKumwPFlChU+51tLx044J1rSqcSYFVTh5TI/79Uj4y6b/UiU/FzowUpLXxOKpWW8r022uQtf6M3jT1TuP2YS45HxkENob8/hGCZ7PXAYleyiibqIoXrSSV2o/Rh9aZ+DVF4VQ8fH5Bdq6GR1FNZQymIymM1g1EzwB0wDL0H7/0DYJEsoLwM/IW0BnGkomE/sCFomRgWG66Q6uwRbVxmtxES7QB4L5T3IkZDLu/dS2ogZ0jW8DgPRHDeWa+aKrkcAb3PvuYREZmue+JSgyUcthuE2bCWte8ldyFOVmOxLEZdxbg959/gSIt0wiOt6M5xWO0pau9ntWI/fYE0jQiSlZToYeQbu6d8FCBccMltVsbi8DOu7uBPHbR1h0srgoN6cacvJ0lb3cT5t3oHnfQv4o0RamKxMBFbUcAxa3B/cZCfm95IA3y6kuDF4nsmtU199ICWAJ3LBuCuW1rt6Ok2NjbnAjTo30Sj1a5zSp2CKAltgCnJCSHldTLkrldQnq33mfTzN3JItW5sZn7Q7TiIv7jtcovoErrgoDaab/1RBHX1ocIxmCZowfJUbBmSuOemZ/LI9g90PivJpkw7IgCP10vsqH7X3lPpziynN3pCL1Zzhhg+O2wJkugLe1zRc6XOwJQCc5lFlntubhJHJxBJDby5Gk3/X2xxmaREp+8ngZVWBELKXDYJ4ZsVh1F2kNF5hBQVp6E0Gj9nvZw0gsg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(346002)(396003)(136003)(39860400002)(366004)(54906003)(31686004)(2906002)(966005)(53546011)(36756003)(38100700002)(5660300002)(122000001)(316002)(110136005)(41300700001)(86362001)(83380400001)(2616005)(6512007)(8676002)(66946007)(66446008)(66476007)(91956017)(4326008)(66574015)(64756008)(76116006)(66556008)(6506007)(71200400001)(186003)(8936002)(26005)(478600001)(7416002)(6486002)(38070700005)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MXU5T0FvT01MNmY4a2FRZ2FvSDVDV3FvMlBBWWJIUVJ6dEhsQjlHajVGSFdM?=
- =?utf-8?B?VXFkWjBIcXdIYmRvQTBhbWVhK3lvTjcwcHAyMmlVNWlneEcyZ04wUitSZFZM?=
- =?utf-8?B?MTVZTEJBVlcrUWNtOGQydkJteXBINGZvYWJwVTJyZUtrRXduem02R3gyTk9q?=
- =?utf-8?B?cjRUd2J5azF2bjBFaFVCR1lneC9Ca29uT1ZjOXNJQWZCYjFDRVFneVhtTUUr?=
- =?utf-8?B?aTRsQXVGWXdlcnZSVnNxa3hISnMyMUFvOGErenRyb2xDa3JQR1VBRi83ZWg1?=
- =?utf-8?B?VVJ1QzlnRzBFSXhvbHIySHNSTmo1N2szQU51WEQwS1RlZ3pJSW16ME1BcXpj?=
- =?utf-8?B?dXZLSk8rZWJCVHNwNi9WamtMM0ErN2IwZ0tUZDNmRDA2RVdCcWhMSzFhdXBE?=
- =?utf-8?B?MHpIbzh0eGNuQW9sTGEwUUg3cFFGMDV6SS9CWFRzVVpNc1JjYng2M2N0RFZ3?=
- =?utf-8?B?dDZPRlFLcmVuU2k0UWhtYk1kaHc2eXdEeGIvNGxZaFZTTnBIMEkzTXFMSlF0?=
- =?utf-8?B?eC9rVFhWM044Yk1EZWFhZ0tsNi84dVkvb1czajVGZHl3M09oWk9yTlE5V2Uw?=
- =?utf-8?B?TXRNY0ZMQ09VT1N5bUNHb3VHY0JCUHlJS0ZKOFZFUjNJeU1ZSjB1RnByTkVQ?=
- =?utf-8?B?Z3d3SXNiQldmaFFVTWpJaUJoU3RGNTVWTkI4aS9RaGpWZVpQYVZwMkRMNlc3?=
- =?utf-8?B?MG94Wmt6VE45Wi9lakhaTi9UUS9OY2p5dEJrVFRNbXVwY1E2TWNYUjlNWENS?=
- =?utf-8?B?TWlyZFhoYXFjMllaQXd4OHhLRUlPc0hjU3hucGN0UGJOa3lEWHVDR0dnSWlt?=
- =?utf-8?B?T0dJb00zSDBOTEtkcWVtT2w4cWhDM09GS1kvYjFuMDJjUXpBd0RkU1B4REw1?=
- =?utf-8?B?b0I3MWk2Q1NzNkp3VXpMdnIvMmRmcU1OWDZvZ01NQjdGQnJQcGhwY2RqanhN?=
- =?utf-8?B?Z1Q5SC95dkV0ZmRJem9YNm1GMzMwTUlCbEdJQ0dHdHZ6UnhrcTNCZXlOYlZ0?=
- =?utf-8?B?QnJoSzdvWENpL3YxTzhjdHhnK2V5RTNPcVNPYWVuNk8xTElvUStXelQ4U200?=
- =?utf-8?B?Mm42RTl1VUNFbjVUaUt1YlptWDZyQldESUNqUEc2Y0szQTZOVUFENlh5N2FY?=
- =?utf-8?B?ejRmSCtBUHJYNXhEb2ZNbEVrcTBkaW1NY2lJYmRtYlRlU0VJVlNrSXk5R1U0?=
- =?utf-8?B?T3paSk1FcHVWeVpKKzBKMm1kaVFvRnhFMjF4MGwyQ1lDOW1kdUJqOElBMGg1?=
- =?utf-8?B?TFhMUXkvNDFlMHg5dW5SKzExaTVxWEVaQzcyVmIrSDVnOWNnWHQwbWdHSlFT?=
- =?utf-8?B?SHl0eEZ6NGM3bmgvNXdTT2ZBUzIxdkJzNmNYV2laczlXSjNXM0tmaHVNYUlV?=
- =?utf-8?B?MTlnSmJZdXo0ZjF5aDdhYlk0NVBoRWQxelBCUm1MbmE0RElWY0ZlTDFIV2lx?=
- =?utf-8?B?NGdka01kZHZBT2RTQ1RDMXhkOGN2OWJkN1lhWDM5WmxUeUxQamZYQmwzNHZ4?=
- =?utf-8?B?UHQxVEFGNzV2OGNlR1RXdHBHK1RPcXQ4bC9hM3p5SmMrU0ZlMjNBYlR3bGNi?=
- =?utf-8?B?cjJUejBKeGdjbkhNVVJCTENvQ0V0ZUtQSXlhUzJ4UDlnaUlNUzBuQ3poVkdn?=
- =?utf-8?B?SVFkM0pkdDJHNGlVVE1YMlAwVXNkam50TnRjSytvTE9jdjJvVWpjSjhBRGFE?=
- =?utf-8?B?dDlVaFIyem0xcHNqTnY1VEhKeXRuSW1ZZWd2Y2o4U1dkdWl6NnU0b2RTVVR4?=
- =?utf-8?B?ays1cHNXSE5PMSt2MjhRK1BKeVFUU25UUC9uRVlUT0JHWWliUWFDU3p5bG5t?=
- =?utf-8?B?a1g3RENFaWIzWVdmMXVYck9pZzkxU0RCTkc3TThtVHJJS2dCQ1FNU2srWVBC?=
- =?utf-8?B?UEpPalRGZDI0SEsyZ0lvb1I1ZW1MZ0YwVHJ3Z2VKZnZ2YjViTWY3VzdscC9O?=
- =?utf-8?B?eGFDbW9PZW5FNTZYK29ZeEFZZFNOTmtDdFRCYnRrUGo4TUN3TkNrTFhqb2FM?=
- =?utf-8?B?eCthMWRUYWJxS2xSK09zcDRoZmhiL3BjK2V6T2RVbFdQZ0xXWW11QjVJSmtz?=
- =?utf-8?B?N3dQZERNNllRVkxSMjFUbStZdTd0VjlvaDlLSk9kNTYwQytPNWFHY0lmYXlm?=
- =?utf-8?Q?N3SNscQG0tMc4w1G19h0x/yl9?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6CE78646FA60AE4CB0A497294B7F63CD@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 27 Jun 2022 11:59:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 078D0D79
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656345551;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PrdaOUdviFNqJUrxeM9jQQOmGHi626ZP241EikWZxH4=;
+        b=PcpO/86mxhC20LeX1LRowMVUciLybSxewqSS4jbfGIENPYBXzDQt1Qtl9mR4cnk3BYE58u
+        kRomsyCCEybfolhmS+5TSc9NPLrKELD9W+Gr/qpTBVCAzJHI6hq4st7io5zYZRv14RGwmK
+        lLnpbv3/im5/wquJyzNARaTe8XtmsEE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-462-WeusmHWPNzy5143zaHwmuA-1; Mon, 27 Jun 2022 11:59:00 -0400
+X-MC-Unique: WeusmHWPNzy5143zaHwmuA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 11F7F2806AD1;
+        Mon, 27 Jun 2022 15:59:00 +0000 (UTC)
+Received: from [10.22.10.125] (unknown [10.22.10.125])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 45DA6415F5E;
+        Mon, 27 Jun 2022 15:58:59 +0000 (UTC)
+Message-ID: <c69f25d2-128d-0ff8-ecba-93c82e1adfde@redhat.com>
+Date:   Mon, 27 Jun 2022 11:58:58 -0400
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97618203-8d80-41a9-4d9a-08da5855eba2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2022 15:58:47.4780
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MA5xkgnIdpVin6/sMDPPW3yaDcaHv/KXYPKoqDIVAnruv4zWMsSBPMBwTsSXUWDHreu3MRlXWNYEXQYqtDa6a/ePdXgLFxppo8YbYsWhrFU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5722
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4] x86/paravirt: useless assignment instructions cause
+ Unixbench full core performance degradation
+Content-Language: en-US
+To:     Guo Hui <guohui@uniontech.com>, peterz@infradead.org
+Cc:     jgross@suse.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, boqun.feng@gmail.com,
+        virtualization@lists.linux-foundation.org,
+        wangxiaohua@uniontech.com, linux-kernel@vger.kernel.org
+References: <YrlhGqqce0NCQ6hi@hirez.programming.kicks-ass.net>
+ <20220627142732.31067-1-guohui@uniontech.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220627142732.31067-1-guohui@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QSBwaW5nIGFuZCBhbiBvZmZlcjoNCg0KUGFsbWVyLCBkbyB5b3Ugd2FudCBtZSB0byB0YWtlIHRo
-ZSByYW5kb20gZHQgY2xlYW51cHMgdGhyb3VnaA0KbXkgdHJlZSAmIHNhdmUgeW91IHRoZSBoYXNz
-bGUgb2YgZm9sbG93aW5nIGFsb25nIHdpdGggdGhlbT8NCg0KVGhhbmtzLA0KQ29ub3IuDQoNCk9u
-IDEzLzA2LzIwMjIgMTU6MDUsIEhlaWtvIFN0w7xibmVyIHdyb3RlOg0KPiBFWFRFUk5BTCBFTUFJ
-TDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBrbm93
-IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IEFtIE1vbnRhZywgMTMuIEp1bmkgMjAyMiwgMTU6
-MzM6NDkgQ0VTVCBzY2hyaWViIENvbm9yLkRvb2xleUBtaWNyb2NoaXAuY29tOg0KPj4NCj4+IE9u
-IDA2LzA2LzIwMjIgMjE6MTMsIENvbm9yIERvb2xleSB3cm90ZToNCj4+PiBGcm9tOiBDb25vciBE
-b29sZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPg0KPj4+DQo+Pj4gQWZ0ZXIgY29udmVy
-dGluZyB0aGUgcG1pYyB3YXRjaGRvZyBiaW5kaW5nIHRvIHlhbWwsIGR0YnNfY2hlY2sgY29tcGxh
-aW5zDQo+Pj4gdGhhdCB0aGUgbm9kZSBuYW1lIGRvZXNuJ3QgbWF0Y2ggdGhlIGJpbmRpbmcuICJG
-aXgiIGl0Lg0KPj4NCj4+IEhleSBQYWxtZXIsDQo+PiBUaGUgdGhyZWUgZHQtYmluZGluZyBjaGFu
-Z2VzIHdlcmUgYWNjZXB0ZWQgLSBkbyBJIG5lZWQgdG8gcG9rZSBTaUZpdmUgdG8NCj4+IGFjayB0
-aGUgZHRzIGNoYW5nZSBvciBhcmUgeW91IGZpbmUganVzdCB0YWtpbmcgaXQ/DQo+IA0KPiBJIGRv
-bid0IHRoaW5rIGEgbm9kZS1uYW1lIGhhcyByZWxldmFuY2UgdG8gdmVuZG9yIGRlY2lzaW9ucyA7
-LSkgLg0KPiANCj4gTG9va2luZyBhdCBiaW5kaW5ncy93YXRjaGRvZy93YXRjaGRvZy55YW1sIHdl
-IGNsZWFybHkgc2VlIHRoYXQNCj4gdGhlIG5vZGUgbmFtZSBpcyBhbHdheXMgd2F0Y2hkb2cgb3Ig
-d2F0Y2hkb2dAZm9vLCBzbyB0aGlzIGNoYW5nZQ0KPiBpcyBjbGVhcmx5IGNvcnJlY3QuDQo+IA0K
-PiBSZXZpZXdlZC1ieTogSGVpa28gU3R1ZWJuZXIgPGhlaWtvQHNudGVjaC5kZT4NCj4gDQo+IA0K
-Pj4gVGhhbmtzLA0KPj4gQ29ub3IuDQo+Pg0KPj4+DQo+Pj4gUmV2aWV3ZWQtYnk6IEtyenlzenRv
-ZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4NCj4+PiBTaWduZWQt
-b2ZmLWJ5OiBDb25vciBEb29sZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPg0KPj4+IC0t
-LQ0KPj4+ICAgYXJjaC9yaXNjdi9ib290L2R0cy9zaWZpdmUvaGlmaXZlLXVubWF0Y2hlZC1hMDAu
-ZHRzIHwgMiArLQ0KPj4+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0
-aW9uKC0pDQo+Pj4NCj4+PiBkaWZmIC0tZ2l0IGEvYXJjaC9yaXNjdi9ib290L2R0cy9zaWZpdmUv
-aGlmaXZlLXVubWF0Y2hlZC1hMDAuZHRzIGIvYXJjaC9yaXNjdi9ib290L2R0cy9zaWZpdmUvaGlm
-aXZlLXVubWF0Y2hlZC1hMDAuZHRzDQo+Pj4gaW5kZXggYzRlZDllZmRmZjAzLi4xZjM4NmIwN2E4
-MzIgMTAwNjQ0DQo+Pj4gLS0tIGEvYXJjaC9yaXNjdi9ib290L2R0cy9zaWZpdmUvaGlmaXZlLXVu
-bWF0Y2hlZC1hMDAuZHRzDQo+Pj4gKysrIGIvYXJjaC9yaXNjdi9ib290L2R0cy9zaWZpdmUvaGlm
-aXZlLXVubWF0Y2hlZC1hMDAuZHRzDQo+Pj4gQEAgLTkwLDcgKzkwLDcgQEAgcnRjIHsNCj4+PiAg
-ICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiZGxnLGRhOTA2My1ydGMiOw0KPj4+ICAg
-ICAgICAgICAgIH07DQo+Pj4NCj4+PiAtICAgICAgICAgICB3ZHQgew0KPj4+ICsgICAgICAgICAg
-IHdhdGNoZG9nIHsNCj4+PiAgICAgICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiZGxnLGRh
-OTA2My13YXRjaGRvZyI7DQo+Pj4gICAgICAgICAgICAgfTsNCj4+Pg0KPj4gX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCj4+IGxpbnV4LXJpc2N2IG1haWxp
-bmcgbGlzdA0KPj4gbGludXgtcmlzY3ZAbGlzdHMuaW5mcmFkZWFkLm9yZw0KPj4gaHR0cDovL2xp
-c3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51eC1yaXNjdg0KPj4NCj4gDQo+
-IA0KPiANCj4gDQoNCg==
+On 6/27/22 10:27, Guo Hui wrote:
+> The instructions assigned to the vcpu_is_preempted function parameter
+> in the X86 architecture physical machine are redundant instructions,
+> causing the multi-core performance of Unixbench to drop by about 4% to 5%.
+> The C function is as follows:
+> static bool vcpu_is_preempted(long vcpu);
+>
+> The parameter 'vcpu' in the function osq_lock
+> that calls the function vcpu_is_preempted is assigned as follows:
+>
+> The C code is in the function node_cpu:
+> cpu = node->cpu - 1;
+>
+> The instructions corresponding to the C code are:
+> mov 0x14(%rax),%edi
+> sub $0x1,%edi
+>
+> The above instructions are unnecessary
+> in the X86 Native operating environment,
+> causing high cache-misses and degrading performance.
+>
+> This patch uses static_key to not execute this instruction
+> in the Native runtime environment.
+>
+> The patch effect is as follows two machines,
+> Unixbench runs with full core score:
+>
+> 1. Machine configuration:
+> Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz
+> CPU core: 40
+> Memory: 256G
+> OS Kernel: 5.19-rc3
+>
+> Before using the patch:
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0  948326591.2  81261.9
+> Double-Precision Whetstone                       55.0     211986.3  38543.0
+> Execl Throughput                                 43.0      43453.2  10105.4
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     438936.2   1108.4
+> File Copy 256 bufsize 500 maxblocks            1655.0     118197.4    714.2
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1534674.7   2646.0
+> Pipe Throughput                               12440.0   46482107.6  37365.0
+> Pipe-based Context Switching                   4000.0    1915094.2   4787.7
+> Process Creation                                126.0      85442.2   6781.1
+> Shell Scripts (1 concurrent)                     42.4      69400.7  16368.1
+> Shell Scripts (8 concurrent)                      6.0       8877.2  14795.3
+> System Call Overhead                          15000.0    4714906.1   3143.3
+>                                                                     ========
+> System Benchmarks Index Score                                        7923.3
+>
+> After using the patch:
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0  947032915.5  81151.1
+> Double-Precision Whetstone                       55.0     211971.2  38540.2
+> Execl Throughput                                 43.0      45054.8  10477.9
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     515024.9   1300.6
+> File Copy 256 bufsize 500 maxblocks            1655.0     146354.6    884.3
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1679995.9   2896.5
+> Pipe Throughput                               12440.0   46466394.2  37352.4
+> Pipe-based Context Switching                   4000.0    1898221.4   4745.6
+> Process Creation                                126.0      85653.1   6797.9
+> Shell Scripts (1 concurrent)                     42.4      69437.3  16376.7
+> Shell Scripts (8 concurrent)                      6.0       8898.9  14831.4
+> System Call Overhead                          15000.0    4658746.7   3105.8
+>                                                                     ========
+> System Benchmarks Index Score                                        8248.8
+>
+> 2. Machine configuration:
+> Hygon C86 7185 32-core Processor
+> CPU core: 128
+> Memory: 256G
+> OS Kernel: 5.19-rc3
+>
+> Before using the patch:
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0 2256644068.3 193371.4
+> Double-Precision Whetstone                       55.0     438969.9  79812.7
+> Execl Throughput                                 43.0      10108.6   2350.8
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     275892.8    696.7
+> File Copy 256 bufsize 500 maxblocks            1655.0      72082.7    435.5
+> File Copy 4096 bufsize 8000 maxblocks          5800.0     925043.4   1594.9
+> Pipe Throughput                               12440.0  118905512.5  95583.2
+> Pipe-based Context Switching                   4000.0    7820945.7  19552.4
+> Process Creation                                126.0      31233.3   2478.8
+> Shell Scripts (1 concurrent)                     42.4      49042.8  11566.7
+> Shell Scripts (8 concurrent)                      6.0       6656.0  11093.3
+> System Call Overhead                          15000.0    6816047.5   4544.0
+>                                                                     ========
+> System Benchmarks Index Score                                        7756.6
+>
+> After using the patch:
+> System Benchmarks Index Values               BASELINE       RESULT    INDEX
+> Dhrystone 2 using register variables         116700.0 2252272929.4 192996.8
+> Double-Precision Whetstone                       55.0     451847.2  82154.0
+> Execl Throughput                                 43.0      10595.1   2464.0
+> File Copy 1024 bufsize 2000 maxblocks          3960.0     301279.3    760.8
+> File Copy 256 bufsize 500 maxblocks            1655.0      79291.3    479.1
+> File Copy 4096 bufsize 8000 maxblocks          5800.0    1039755.2   1792.7
+> Pipe Throughput                               12440.0  118701468.1  95419.2
+> Pipe-based Context Switching                   4000.0    8073453.3  20183.6
+> Process Creation                                126.0      33440.9   2654.0
+> Shell Scripts (1 concurrent)                     42.4      52722.6  12434.6
+> Shell Scripts (8 concurrent)                      6.0       7050.4  11750.6
+> System Call Overhead                          15000.0    6834371.5   4556.2
+>                                                                     ========
+> System Benchmarks Index Score                                        8157.8
+>
+> Signed-off-by: Guo Hui <guohui@uniontech.com>
+> ---
+>   arch/x86/kernel/paravirt-spinlocks.c |  4 ++++
+>   kernel/locking/osq_lock.c            | 12 +++++++++++-
+>   2 files changed, 15 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kernel/paravirt-spinlocks.c b/arch/x86/kernel/paravirt-spinlocks.c
+> index 9e1ea99ad..a2eb375e2 100644
+> --- a/arch/x86/kernel/paravirt-spinlocks.c
+> +++ b/arch/x86/kernel/paravirt-spinlocks.c
+> @@ -33,6 +33,8 @@ bool pv_is_native_vcpu_is_preempted(void)
+>   		__raw_callee_save___native_vcpu_is_preempted;
+>   }
+>   
+> +DECLARE_STATIC_KEY_TRUE(vcpu_has_preemption);
+> +
+>   void __init paravirt_set_cap(void)
+>   {
+>   	if (!pv_is_native_spin_unlock())
+> @@ -40,4 +42,6 @@ void __init paravirt_set_cap(void)
+>   
+>   	if (!pv_is_native_vcpu_is_preempted())
+>   		setup_force_cpu_cap(X86_FEATURE_VCPUPREEMPT);
+> +	else
+> +		static_branch_disable(&vcpu_has_preemption);
+>   }
+> diff --git a/kernel/locking/osq_lock.c b/kernel/locking/osq_lock.c
+> index d5610ad52..adb41080d 100644
+> --- a/kernel/locking/osq_lock.c
+> +++ b/kernel/locking/osq_lock.c
+> @@ -27,6 +27,16 @@ static inline int node_cpu(struct optimistic_spin_node *node)
+>   	return node->cpu - 1;
+>   }
+>   
+> +DEFINE_STATIC_KEY_TRUE(vcpu_has_preemption);
+> +
+> +static inline bool vcpu_is_preempted_node(struct optimistic_spin_node *node)
+> +{
+> +	if (!static_branch_unlikely(&vcpu_has_preemption))
+> +		return false;
+> +
+> +	return vcpu_is_preempted(node_cpu(node->prev));
+> +}
+> +
+>   static inline struct optimistic_spin_node *decode_cpu(int encoded_cpu_val)
+>   {
+>   	int cpu_nr = encoded_cpu_val - 1;
+> @@ -141,7 +151,7 @@ bool osq_lock(struct optimistic_spin_queue *lock)
+>   	 * polling, be careful.
+>   	 */
+>   	if (smp_cond_load_relaxed(&node->locked, VAL || need_resched() ||
+> -				  vcpu_is_preempted(node_cpu(node->prev))))
+> +						vcpu_is_preempted_node(node)))
+>   		return true;
+>   
+>   	/* unqueue */
+
+The patch looks good. I do have a minor nit though.
+
+Usually, DEFINE_STATIC_KEY_TRUE() is paired with static_branch_likely() 
+and DEFINE_STATIC_KEY_FALSE() is paired with static_branch_unlikely(). I 
+think what Peter meant is to use DEFINE_STATIC_KEY_FALSE() and enable 
+vcpu_has_preemption together with X86_FEATURE_VCPUPREEMPT in the same if 
+block.
+
+Cheers,
+Longman
+

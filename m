@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4F755D093
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DA555C22F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239625AbiF0MAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56004 "EHLO
+        id S237302AbiF0Lnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238898AbiF0Lws (ORCPT
+        with ESMTP id S236874AbiF0Lle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:52:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F20DF0F;
-        Mon, 27 Jun 2022 04:46:22 -0700 (PDT)
+        Mon, 27 Jun 2022 07:41:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC03BD110;
+        Mon, 27 Jun 2022 04:36:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 869E261187;
-        Mon, 27 Jun 2022 11:46:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 997C5C3411D;
-        Mon, 27 Jun 2022 11:46:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DAE2B81123;
+        Mon, 27 Jun 2022 11:36:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEDEAC3411D;
+        Mon, 27 Jun 2022 11:35:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656330382;
-        bh=JI8q8nWm4Q7nBzEZmsr6UgIbIz5QfLN/iEi1FTJoC14=;
+        s=korg; t=1656329760;
+        bh=vz1h5OMLWpWAZLkaKT/60WGVx/L9y5HB7yfD7b9RAzk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PLVz4ZR9aLGSVqPDwg/ZQJcWJpBJMnuEb02XlRPGSG/2Tp3g24At7SDBychg/UfU2
-         A1seSsFs2t6B7JBfkK93snLAL9HmFnCM9d7t2Ji8y0QeRSvsW2pC/0fW26lHhgkBAH
-         O4wh/rTOO8eBmBybxC0sDUFdeIEiJWNSZPUgnpkM=
+        b=2dZqbT2DdngQz/fK/ZytrUbsuEDwjY0ht+Bcde3TJauvnZzHSR1bxvTyiFqom6v2+
+         8zhDSqZ3fMolW4uXxPMpbq+8vurrsS+zxqzpDCBGR7nPc7TbSlcsyw7guBf8ywR/8F
+         2bQ8tUdBmNPDlm5rnEdhOSRRDhFMLq0C44wMkVAg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
+        Yannick Brosseau <yannick.brosseau@gmail.com>,
         Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
         Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.18 139/181] iio: adc: stm32: fix maximum clock rate for stm32mp15x
-Date:   Mon, 27 Jun 2022 13:21:52 +0200
-Message-Id: <20220627111948.718532192@linuxfoundation.org>
+Subject: [PATCH 5.15 106/135] iio: adc: stm32: Fix ADCs iteration in irq handler
+Date:   Mon, 27 Jun 2022 13:21:53 +0200
+Message-Id: <20220627111941.230955576@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
-References: <20220627111944.553492442@linuxfoundation.org>
+In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
+References: <20220627111938.151743692@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,34 +57,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olivier Moysan <olivier.moysan@foss.st.com>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
 
-commit 990539486e7e311fb5dab1bf4d85d1a8973ae644 upstream.
+commit d2214cca4d3eadc74eac9e30301ec7cad5355f00 upstream.
 
-Change maximum STM32 ADC input clock rate to 36MHz, as specified
-in STM32MP15x datasheets.
+The irq handler was only checking the mask for the first ADCs in the case of the
+F4 and H7 generation, since it was iterating up to the num_irq value. This patch add
+the maximum number of ADC in the common register, which map to the number of entries of
+eoc_msk and ovr_msk in stm32_adc_common_regs. This allow the handler to check all ADCs in
+that module.
 
-Fixes: d58c67d1d851 ("iio: adc: stm32-adc: add support for STM32MP1")
-Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Tested on a STM32F429NIH6.
+
+Fixes: 695e2f5c289b ("iio: adc: stm32-adc: fix a regression when using dma and irq")
+Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
 Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Link: https://lore.kernel.org/r/20220609095234.375925-1-olivier.moysan@foss.st.com
+Link: https://lore.kernel.org/r/20220516203939.3498673-2-yannick.brosseau@gmail.com
 Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/stm32-adc-core.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/adc/stm32-adc-core.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 --- a/drivers/iio/adc/stm32-adc-core.c
 +++ b/drivers/iio/adc/stm32-adc-core.c
-@@ -805,7 +805,7 @@ static const struct stm32_adc_priv_cfg s
+@@ -64,6 +64,7 @@ struct stm32_adc_priv;
+  * @max_clk_rate_hz: maximum analog clock rate (Hz, from datasheet)
+  * @has_syscfg: SYSCFG capability flags
+  * @num_irqs:	number of interrupt lines
++ * @num_adcs:   maximum number of ADC instances in the common registers
+  */
+ struct stm32_adc_priv_cfg {
+ 	const struct stm32_adc_common_regs *regs;
+@@ -71,6 +72,7 @@ struct stm32_adc_priv_cfg {
+ 	u32 max_clk_rate_hz;
+ 	unsigned int has_syscfg;
+ 	unsigned int num_irqs;
++	unsigned int num_adcs;
+ };
+ 
+ /**
+@@ -352,7 +354,7 @@ static void stm32_adc_irq_handler(struct
+ 	 * before invoking the interrupt handler (e.g. call ISR only for
+ 	 * IRQ-enabled ADCs).
+ 	 */
+-	for (i = 0; i < priv->cfg->num_irqs; i++) {
++	for (i = 0; i < priv->cfg->num_adcs; i++) {
+ 		if ((status & priv->cfg->regs->eoc_msk[i] &&
+ 		     stm32_adc_eoc_enabled(priv, i)) ||
+ 		     (status & priv->cfg->regs->ovr_msk[i]))
+@@ -796,6 +798,7 @@ static const struct stm32_adc_priv_cfg s
+ 	.clk_sel = stm32f4_adc_clk_sel,
+ 	.max_clk_rate_hz = 36000000,
+ 	.num_irqs = 1,
++	.num_adcs = 3,
+ };
+ 
+ static const struct stm32_adc_priv_cfg stm32h7_adc_priv_cfg = {
+@@ -804,6 +807,7 @@ static const struct stm32_adc_priv_cfg s
+ 	.max_clk_rate_hz = 36000000,
+ 	.has_syscfg = HAS_VBOOSTER,
+ 	.num_irqs = 1,
++	.num_adcs = 2,
+ };
+ 
  static const struct stm32_adc_priv_cfg stm32mp1_adc_priv_cfg = {
- 	.regs = &stm32h7_adc_common_regs,
- 	.clk_sel = stm32h7_adc_clk_sel,
--	.max_clk_rate_hz = 40000000,
-+	.max_clk_rate_hz = 36000000,
+@@ -812,6 +816,7 @@ static const struct stm32_adc_priv_cfg s
+ 	.max_clk_rate_hz = 36000000,
  	.has_syscfg = HAS_VBOOSTER | HAS_ANASWVDD,
  	.num_irqs = 2,
++	.num_adcs = 2,
  };
+ 
+ static const struct of_device_id stm32_adc_of_match[] = {
 
 

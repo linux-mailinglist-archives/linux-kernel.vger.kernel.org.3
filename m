@@ -2,206 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA29C55E0D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F03E55D15A
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239187AbiF0QRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 12:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
+        id S237858AbiF0P5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235713AbiF0QRl (ORCPT
+        with ESMTP id S235477AbiF0P5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 12:17:41 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BF618B17;
-        Mon, 27 Jun 2022 09:17:39 -0700 (PDT)
+        Mon, 27 Jun 2022 11:57:17 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E124D79;
+        Mon, 27 Jun 2022 08:57:17 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id p14so9417390pfh.6;
+        Mon, 27 Jun 2022 08:57:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
-  s=amazon201209; t=1656346659; x=1687882659;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version:subject;
-  bh=USxLX1hhBixQIrWe2JRk26WbQIpHEUrB18xFgZhH74s=;
-  b=AEgoPJ7+VsOyrvO1wKlydr4J21BuVveM2+xSBNqfnUgrKJfHwlc/Gtue
-   9euZcFZOEXD5a2WBjFdxEnESS52fJ0oNaWFHCqFJLH7JE3gR1t0CzYpkO
-   UxpVI01V97DO+Caiqp9LkSI7q8Z2wk2TAb2xNsgd87Owb6Y5yvKVzVKSY
-   c=;
-X-IronPort-AV: E=Sophos;i="5.92,226,1650931200"; 
-   d="scan'208";a="102349472"
-Subject: RE: [PATCH] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves,
- if present
-Thread-Topic: [PATCH] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc info) sub-leaves,
- if present
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 27 Jun 2022 15:56:51 +0000
-Received: from EX13D32EUC003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com (Postfix) with ESMTPS id 8C15DA37DA;
-        Mon, 27 Jun 2022 15:56:46 +0000 (UTC)
-Received: from EX13D32EUC003.ant.amazon.com (10.43.164.24) by
- EX13D32EUC003.ant.amazon.com (10.43.164.24) with Microsoft SMTP Server (TLS)
- id 15.0.1497.36; Mon, 27 Jun 2022 15:56:45 +0000
-Received: from EX13D32EUC003.ant.amazon.com ([10.43.164.24]) by
- EX13D32EUC003.ant.amazon.com ([10.43.164.24]) with mapi id 15.00.1497.036;
- Mon, 27 Jun 2022 15:56:45 +0000
-From:   "Durrant, Paul" <pdurrant@amazon.co.uk>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        "Jim Mattson" <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Thread-Index: AQHYhhnGr94/Tz5Zr06wX+PVouePzq1bgNUAgAAEIQCAB+LOUIAAB6YAgAAA80A=
-Date:   Mon, 27 Jun 2022 15:56:45 +0000
-Message-ID: <e4711fc9017246978a0b452f1b5ca868@EX13D32EUC003.ant.amazon.com>
-References: <20220622092202.15548-1-pdurrant@amazon.com>
- <YrMqtHzNSean+qkh@google.com>
- <834f41a88e9f49b6b72d9d3672d702e5@EX13D32EUC003.ant.amazon.com>
- <0abf9f5de09e45ef9eb06b56bf16e3e6@EX13D32EUC003.ant.amazon.com>
- <YrnSFGURsmxV2Qmu@google.com>
-In-Reply-To: <YrnSFGURsmxV2Qmu@google.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.165.192]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q7ZSEV4LTD7LAEM2Qop9QWeKPyT8Eo98shgP/WcfAJM=;
+        b=TD25yDZjhKN9TW36xDeM7TC/WXolSNS4MNswQEtngcUO1oXtqBPpHKRVemyWExAlFW
+         TqyvvXlQnhbGsHE73jVzf9Y9myNUkq+LmwxSgmvbIrAkTKRE8ajBfNydza4Fe1PWDCGo
+         XN9lsNhRoOlrS3Twls6Nfrj9RBXQIGwY5DmVwoSfnp2Ara+fYn8fsBgPHgdzCdEMq0mO
+         UMFJ0JsZO9r/GyZxyRU76iYGgF/7rl0zwXLixDbWPgyWOQ63wjrZwwnOr3K1Jnv7a9PF
+         QKEiklV9Wc5SFJuofCme726CpZgab0fToWe4ZqGpSUmTSEqY0DkQgIKX3LCCrRr03tgp
+         bLGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q7ZSEV4LTD7LAEM2Qop9QWeKPyT8Eo98shgP/WcfAJM=;
+        b=aM5eFQd+hGMVAWRlr5jUU/6dHIi/lKYY2f1TbZCQ9FgwVpEnbEzCVASW1CbbN2oHcb
+         tzkvgeywhHPPgWBCdHQr4PxLPmDoS7f5vFZZUQ7w1gIEekeqfe1VaLtlU2B2nU+Om/hf
+         37oy2FZu2tTV9R/J0fxJHXjY3YjohGveXmFoYJoLkbrf1zMT9wjA79Z7cKiJ+WQnTbCL
+         gltOnsOevi1aOM85ANDSTQTh1ZTy6FWaCAsGju2Eun5G+3zCP0HUKdZvT+1cU4t7lly3
+         MEMyQyz5FZtDqOVmxWQwVzqZh6bF77EcjGIHU7DPIziNqyzBVhE8Gk44OelcCHdpxZpM
+         k1fA==
+X-Gm-Message-State: AJIora+NVseYGC0rXIHiYew8l/iGA56gXJaJC3X4JT2GKelcnTsBG+vv
+        a3uYz7ZW1E/OTyd7gt8g69Wle+sxRXxqDg==
+X-Google-Smtp-Source: AGRyM1v0/J58YZ3w/3MSk7WzTC+fbEwFJrbTeOxEdqpHzith/X6cEbp8QvXyQ3UyKtR/zcQ/eIEfuw==
+X-Received: by 2002:a05:6a00:1a0c:b0:523:1a23:957f with SMTP id g12-20020a056a001a0c00b005231a23957fmr15619816pfv.45.1656345436401;
+        Mon, 27 Jun 2022 08:57:16 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:26dc:1818:7133:85db])
+        by smtp.gmail.com with ESMTPSA id h4-20020a056a001a4400b005252e524d1csm7499932pfv.211.2022.06.27.08.57.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 08:57:15 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-next@vger.kernel.org, ntb@lists.linux.dev,
+        Alexander Fomichev <a.fomichev@yadro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Jon Mason <jdmason@kudzu.us>, Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH] drivers/ntb/test: avoid 64-bit modulus operation
+Date:   Mon, 27 Jun 2022 08:57:10 -0700
+Message-Id: <20220627155710.2067032-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Spam-Status: No, score=-12.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Sean Christopherson <seanjc@google.com>
-> Sent: 27 June 2022 16:52
-> To: Durrant, Paul <pdurrant@amazon.co.uk>
-> Cc: x86@kernel.org; kvm@vger.kernel.org; linux-kernel@vger.kernel.org; Pa=
-olo Bonzini
-> <pbonzini@redhat.com>; Vitaly Kuznetsov <vkuznets@redhat.com>; Wanpeng Li=
- <wanpengli@tencent.com>; Jim
-> Mattson <jmattson@google.com>; Joerg Roedel <joro@8bytes.org>; Thomas Gle=
-ixner <tglx@linutronix.de>;
-> Ingo Molnar <mingo@redhat.com>; Borislav Petkov <bp@alien8.de>; Dave Hans=
-en
-> <dave.hansen@linux.intel.com>; H. Peter Anvin <hpa@zytor.com>
-> Subject: RE: [EXTERNAL][PATCH] KVM: x86/xen: Update Xen CPUID Leaf 4 (tsc=
- info) sub-leaves, if present
->=20
-> CAUTION: This email originated from outside of the organization. Do not c=
-lick links or open
-> attachments unless you can confirm the sender and know the content is saf=
-e.
->=20
->=20
->=20
-> On Mon, Jun 27, 2022, Durrant, Paul wrote:
-> > > -----Original Message-----
-> > [snip]
-> > > > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > > > index 00e23dc518e0..8b45f9975e45 100644
-> > > > > --- a/arch/x86/kvm/x86.c
-> > > > > +++ b/arch/x86/kvm/x86.c
-> > > > > @@ -3123,6 +3123,7 @@ static int kvm_guest_time_update(struct kvm=
-_vcpu *v)
-> > > > >       if (vcpu->xen.vcpu_time_info_cache.active)
-> > > > >               kvm_setup_guest_pvclock(v, &vcpu->xen.vcpu_time_inf=
-o_cache, 0);
-> > > > >       kvm_hv_setup_tsc_page(v->kvm, &vcpu->hv_clock);
-> > > > > +     kvm_xen_setup_tsc_info(v);
-> > > >
-> > > > This can be called inside this if statement, no?
-> > > >
-> > > >         if (unlikely(vcpu->hw_tsc_khz !=3D tgt_tsc_khz)) {
-> > > >
-> > > >         }
-> > > >
-> >
-> > I think it ought to be done whenever the shared copy of Xen's vcpu_info=
- is
-> > updated (it will always match on real Xen) so unconditionally calling i=
-t here
-> > seems reasonable.
->=20
-> But isn't the call pointless if the vCPU's hw_tsc_khz is unchanged?  E.g =
-if the
-> params were explicitly passed in, then it would look like:
->=20
->         if (unlikely(vcpu->hw_tsc_khz !=3D tgt_tsc_khz)) {
->                 kvm_get_time_scale(NSEC_PER_SEC, tgt_tsc_khz * 1000LL,
->                                    &vcpu->hv_clock.tsc_shift,
->                                    &vcpu->hv_clock.tsc_to_system_mul);
->                 vcpu->hw_tsc_khz =3D tgt_tsc_khz;
->=20
->                 kvm_xen_setup_tsc_info(vcpu, tgt_tsc_khz,
->                                        vcpu->hv_clock.tsc_shift,
->                                        vcpu->hv_clock.tsc_to_system_mul);
->         }
->=20
-> Explicitly passing in the arguments probably isn't necessary, just use a =
-more
-> precise name, e.g. kvm_xen_update_tsc_khz(), to make it clear that the up=
-date is
-> limited to TSC frequency changes.
->=20
-> > > > > +{
-> > > > > +     u32 base =3D 0;
-> > > > > +     u32 function;
-> > > > > +
-> > > > > +     for_each_possible_hypervisor_cpuid_base(function) {
-> > > > > +             struct kvm_cpuid_entry2 *entry =3D kvm_find_cpuid_e=
-ntry(vcpu, function, 0);
-> > > > > +
-> > > > > +             if (entry &&
-> > > > > +                 entry->ebx =3D=3D XEN_CPUID_SIGNATURE_EBX &&
-> > > > > +                 entry->ecx =3D=3D XEN_CPUID_SIGNATURE_ECX &&
-> > > > > +                 entry->edx =3D=3D XEN_CPUID_SIGNATURE_EDX) {
-> > > > > +                     base =3D function;
-> > > > > +                     break;
-> > > > > +             }
-> > > > > +     }
-> > > > > +     if (!base)
-> > > > > +             return;
-> > > > > +
-> > > > > +     function =3D base | XEN_CPUID_LEAF(3);
-> > > > > +     vcpu->arch.xen.tsc_info_1 =3D kvm_find_cpuid_entry(vcpu, fu=
-nction, 1);
-> > > > > +     vcpu->arch.xen.tsc_info_2 =3D kvm_find_cpuid_entry(vcpu, fu=
-nction, 2);
-> > > >
-> > > > Is it really necessary to cache the leave?  Guest CPUID isn't optim=
-ized, but it's
-> > > > not _that_ slow, and unless I'm missing something updating the TSC =
-frequency and
-> > > > scaling info should be uncommon, i.e. not performance critical.
-> >
-> > If we're updating the values in the leaves on every entry into the gues=
-t (as
-> > with calls to kvm_setup_guest_pvclock()) then I think the cached pointe=
-rs are
-> > worthwhile.
->=20
-> But why would you update on every entry to the guest?   Isn't this a rare=
- operation
-> if the update is limited to changes in the host CPU's TSC frequency?  Or =
-am I
-> missing something?
+Redefine RESCHEDULE_RATIO to a closest power of 2 so that the following
+code in the perf_run_latency
 
-No, I am indeed forgetting that there is no offset to update (there once wa=
-s) so indeed the values will only change if the freq changes... so I'll dro=
-p the caching.
+	/* Avoid processor soft lock-ups */
+	if (!(pthr->tries % RESCHEDULE_RATIO))
+		schedule();
 
-  Paul
+doesn't do 64-bit modulus operation.
+This fixes the following build failures on 32-bit architectures visible
+in linux-next:
+
+  ERROR: modpost: "__umoddi3" [drivers/ntb/test/ntb_perf.ko] undefined!
+
+Fixes: dc150dfb081f ("ntb_perf: extend with burst latency measurement")
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ drivers/ntb/test/ntb_perf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/ntb/test/ntb_perf.c b/drivers/ntb/test/ntb_perf.c
+index 23e154bd41b9..536fab0030f3 100644
+--- a/drivers/ntb/test/ntb_perf.c
++++ b/drivers/ntb/test/ntb_perf.c
+@@ -126,7 +126,7 @@ MODULE_DESCRIPTION("PCIe NTB Performance Measurement Tool");
+ #define PERF_BUF_LEN 1024
+ 
+ #define LAT_MIN_TRIES	20
+-#define RESCHEDULE_RATIO	10000
++#define RESCHEDULE_RATIO	8192 /* power of 2, to avoid actual division */
+ 
+ static unsigned long max_mw_size;
+ module_param(max_mw_size, ulong, 0644);
+-- 
+2.30.2
+

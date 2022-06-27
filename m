@@ -2,104 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740FB55DC38
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 314B855E187
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbiF0H1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 03:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
+        id S232839AbiF0H1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 03:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232326AbiF0H1O (ORCPT
+        with ESMTP id S232645AbiF0H1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 03:27:14 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECDE35F99;
-        Mon, 27 Jun 2022 00:27:12 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb93MW7li8r1fAA--.5898S2;
-        Mon, 27 Jun 2022 15:27:08 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] modpost: Add line break in the section mismatch warning
-Date:   Mon, 27 Jun 2022 15:27:08 +0800
-Message-Id: <1656314828-3544-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dxb93MW7li8r1fAA--.5898S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uF4UWF1UZF1fJryfuFyUZFb_yoW8Aw48pa
-        yFk3sruryIyr4vqayIkrykZ347J34rWF93C3srCw4Dursruw1kZF97AF4xZF90yFWrAFWF
-        qF48trn5uayqk37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v2
-        6r126r1DMxkIecxEwVAFwVW8CwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF
-        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JUVT5LUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 27 Jun 2022 03:27:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9015FC9;
+        Mon, 27 Jun 2022 00:27:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF1A5B80F52;
+        Mon, 27 Jun 2022 07:27:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DE15C341C8;
+        Mon, 27 Jun 2022 07:27:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656314831;
+        bh=vFTJr/Grkt0LPk+fK8N93Ca4STI3uSOJVk5tMqMebJc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=d7v0PEBOh17WjF9MSisjH3YTaAM1Evn76Ekut3ReYQxI+GPCwE/Hga60X9d2+brFG
+         vPSq95wvhLbs4xInjjAxWgx8wf7OGh95Y+Kb1CVQeDFE9fqWAcvts95HaGREO9ltTa
+         tJqRoUtNOWQMekg0IOCOdLzMf92yfbzgOW+G17SyOMK+4ah+4fNTI1+l1jmsawNL7M
+         mCqgD8SrjVYlUxEDK+0oqen/Sl+TXfpBlu4i+4SfctduI8UE4WN+nhJgEGAQYR7uo0
+         gOMokqyUPERCoKe3Q66wH5c5lGpn3KyQc3vb2EhlvRTcHyWohHgIZDFau7yEwr0oZg
+         TKwsW/Sp9HkYQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o5j9J-003LCY-82;
+        Mon, 27 Jun 2022 08:27:09 +0100
+Date:   Mon, 27 Jun 2022 08:27:08 +0100
+Message-ID: <87edza36sz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-renesas-soc@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v1 3/3] irqchip/sifive-plic: Fix T-HEAD PLIC edge trigger handling
+In-Reply-To: <20220627051257.38543-4-samuel@sholland.org>
+References: <20220627051257.38543-1-samuel@sholland.org>
+        <20220627051257.38543-4-samuel@sholland.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: samuel@sholland.org, prabhakar.mahadev-lad.rj@bp.renesas.com, prabhakar.csengg@gmail.com, sagar.kadam@sifive.com, paul.walmsley@sifive.com, palmer@dabbelt.com, linux-renesas-soc@vger.kernel.org, guoren@kernel.org, geert+renesas@glider.be, tglx@linutronix.de, biju.das.jz@bp.renesas.com, aou@eecs.berkeley.edu, krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The section mismatch warning may be too long, add a line break
-to make it more readable.
+On Mon, 27 Jun 2022 06:12:57 +0100,
+Samuel Holland <samuel@sholland.org> wrote:
+> 
+> The T-HEAD PLIC ignores additional edges seen while an edge-triggered
+> interrupt is being handled. Because of this behavior, the driver needs
+> to complete edge-triggered interrupts in the .irq_ack callback before
+> handling them, instead of in the .irq_eoi callback afterward. Otherwise,
+> it could miss some interrupts.
+> 
+> Co-developed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+> Changes in v1:
+>  - Use a flag for enabling the changes instead of a variant ID
+>  - Use handle_edge_irq instead of handle_fasteoi_ack_irq
+>  - Do not set the handler name, as RISC-V selects GENERIC_IRQ_SHOW_LEVEL
 
-Without this patch:
+Where is the Renesas handling gone? Can you, at the very least work,
+with Lad instead of proposing an alternative series that ignores the
+goal of the first one, however good it is (and it is admittedly
+better)?
 
-  LD      vmlinux.o
-  MODPOST vmlinux.symvers
-WARNING: modpost: vmlinux.o(___ksymtab+prom_init_numa_memory+0x0): Section mismatch in reference from the variable __ksymtab_prom_init_numa_memory to the function .init.text:prom_init_numa_memory()
-The symbol prom_init_numa_memory is exported and annotated __init
-Fix this by removing the __init annotation of prom_init_numa_memory or drop the export.
+>
+>  drivers/irqchip/irq-sifive-plic.c | 76 +++++++++++++++++++++++++++++--
+>  1 file changed, 71 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+> index 90515865af08..462a93b4b088 100644
+> --- a/drivers/irqchip/irq-sifive-plic.c
+> +++ b/drivers/irqchip/irq-sifive-plic.c
+> @@ -69,6 +69,7 @@ struct plic_priv {
+>  	struct cpumask lmask;
+>  	struct irq_domain *irqdomain;
+>  	void __iomem *regs;
+> +	bool needs_edge_handling;
+>  };
+>  
+>  struct plic_handler {
+> @@ -86,6 +87,9 @@ static int plic_parent_irq __ro_after_init;
+>  static bool plic_cpuhp_setup_done __ro_after_init;
+>  static DEFINE_PER_CPU(struct plic_handler, plic_handlers);
+>  
+> +static struct irq_chip plic_edge_chip;
+> +static struct irq_chip plic_chip;
+> +
+>  static void __plic_toggle(void __iomem *enable_base, int hwirq, int enable)
+>  {
+>  	u32 __iomem *reg = enable_base + (hwirq / 32) * sizeof(u32);
+> @@ -181,6 +185,40 @@ static void plic_irq_eoi(struct irq_data *d)
+>  	}
+>  }
+>  
+> +static int plic_irq_set_type(struct irq_data *d, unsigned int flow_type)
+> +{
+> +	struct plic_priv *priv = irq_data_get_irq_chip_data(d);
+> +
+> +	if (!priv->needs_edge_handling)
+> +		return IRQ_SET_MASK_OK_NOCOPY;
+> +
+> +	switch (flow_type) {
+> +	case IRQ_TYPE_EDGE_RISING:
+> +		irq_set_chip_handler_name_locked(d, &plic_edge_chip,
+> +						 handle_edge_irq, NULL);
+> +		break;
+> +	case IRQ_TYPE_LEVEL_HIGH:
+> +		irq_set_chip_handler_name_locked(d, &plic_chip,
+> +						 handle_fasteoi_irq, NULL);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return IRQ_SET_MASK_OK;
+> +}
+> +
+> +static struct irq_chip plic_edge_chip = {
+> +	.name			= "PLIC",
+> +	.irq_ack		= plic_irq_eoi,
+> +	.irq_mask		= plic_irq_mask,
+> +	.irq_unmask		= plic_irq_unmask,
+> +#ifdef CONFIG_SMP
+> +	.irq_set_affinity	= plic_set_affinity,
+> +#endif
+> +	.irq_set_type		= plic_irq_set_type,
+> +};
+> +
+>  static struct irq_chip plic_chip = {
+>  	.name			= "PLIC",
+>  	.irq_mask		= plic_irq_mask,
+> @@ -189,8 +227,22 @@ static struct irq_chip plic_chip = {
+>  #ifdef CONFIG_SMP
+>  	.irq_set_affinity	= plic_set_affinity,
+>  #endif
+> +	.irq_set_type		= plic_irq_set_type,
+>  };
+>  
+> +static int plic_irq_domain_translate(struct irq_domain *d,
+> +				     struct irq_fwspec *fwspec,
+> +				     unsigned long *hwirq,
+> +				     unsigned int *type)
+> +{
+> +	struct plic_priv *priv = d->host_data;
+> +
+> +	if (priv->needs_edge_handling)
+> +		return irq_domain_translate_twocell(d, fwspec, hwirq, type);
+> +	else
+> +		return irq_domain_translate_onecell(d, fwspec, hwirq, type);
+> +}
+> +
+>  static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
+>  			      irq_hw_number_t hwirq)
+>  {
+> @@ -211,7 +263,7 @@ static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>  	unsigned int type;
+>  	struct irq_fwspec *fwspec = arg;
+>  
+> -	ret = irq_domain_translate_onecell(domain, fwspec, &hwirq, &type);
+> +	ret = plic_irq_domain_translate(domain, fwspec, &hwirq, &type);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -225,7 +277,7 @@ static int plic_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>  }
+>  
+>  static const struct irq_domain_ops plic_irqdomain_ops = {
+> -	.translate	= irq_domain_translate_onecell,
+> +	.translate	= plic_irq_domain_translate,
+>  	.alloc		= plic_irq_domain_alloc,
+>  	.free		= irq_domain_free_irqs_top,
+>  };
+> @@ -286,8 +338,9 @@ static int plic_starting_cpu(unsigned int cpu)
+>  	return 0;
+>  }
+>  
+> -static int __init plic_init(struct device_node *node,
+> -		struct device_node *parent)
+> +static int __init __plic_init(struct device_node *node,
+> +			      struct device_node *parent,
+> +			      bool needs_edge_handling)
+>  {
+>  	int error = 0, nr_contexts, nr_handlers = 0, i;
+>  	u32 nr_irqs;
+> @@ -298,6 +351,8 @@ static int __init plic_init(struct device_node *node,
+>  	if (!priv)
+>  		return -ENOMEM;
+>  
+> +	priv->needs_edge_handling = needs_edge_handling;
+> +
+>  	priv->regs = of_iomap(node, 0);
+>  	if (WARN_ON(!priv->regs)) {
+>  		error = -EIO;
+> @@ -415,6 +470,17 @@ static int __init plic_init(struct device_node *node,
+>  	return error;
+>  }
+>  
+> +static int __init plic_init(struct device_node *node,
+> +			    struct device_node *parent)
+> +{
+> +	return __plic_init(node, parent, false);
+> +}
+>  IRQCHIP_DECLARE(sifive_plic, "sifive,plic-1.0.0", plic_init);
+>  IRQCHIP_DECLARE(riscv_plic0, "riscv,plic0", plic_init); /* for legacy systems */
+> -IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", plic_init); /* for firmware driver */
+> +
+> +static int __init plic_edge_init(struct device_node *node,
+> +				     struct device_node *parent)
+> +{
+> +	return __plic_init(node, parent, true);
+> +}
+> +IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", plic_edge_init);
 
-With this patch:
+No. You are breaking existing platforms with established DTs. You must
+at least be able to run a new kernel with an old DT. Ideally the
+opposite too, but it is hard to retrofit this.
 
-  LD      vmlinux.o
-  MODPOST vmlinux.symvers
-WARNING: modpost: vmlinux.o(___ksymtab+prom_init_numa_memory+0x0): Section mismatch in reference
-from the variable __ksymtab_prom_init_numa_memory to the function .init.text:prom_init_numa_memory()
-The symbol prom_init_numa_memory is exported and annotated __init
-Fix this by removing the __init annotation of prom_init_numa_memory or drop the export.
+	M.
 
-This is based on Linux 5.19-rc4.
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
-
-v2: update the commit message
-
- scripts/mod/modpost.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 620dc8c..4cc894f 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1320,8 +1320,8 @@ static void report_sec_mismatch(const char *modname,
- 	get_pretty_name(from_is_func, &from, &from_p);
- 	get_pretty_name(to_is_func, &to, &to_p);
- 
--	warn("%s(%s+0x%llx): Section mismatch in reference from the %s %s%s "
--	     "to the %s %s:%s%s\n",
-+	warn("%s(%s+0x%llx): Section mismatch in reference\n"
-+	     "from the %s %s%s to the %s %s:%s%s\n",
- 	     modname, fromsec, fromaddr, from, fromsym, from_p, to, tosec,
- 	     tosym, to_p);
- 
 -- 
-2.1.0
-
+Without deviation from the norm, progress is not possible.

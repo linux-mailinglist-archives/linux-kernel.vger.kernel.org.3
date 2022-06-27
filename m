@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B5055C753
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C3755D1DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236388AbiF0LhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 07:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
+        id S238360AbiF0Lv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 07:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236295AbiF0Lg3 (ORCPT
+        with ESMTP id S238309AbiF0LsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 07:36:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76131E58;
-        Mon, 27 Jun 2022 04:32:01 -0700 (PDT)
+        Mon, 27 Jun 2022 07:48:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5233F59A;
+        Mon, 27 Jun 2022 04:40:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23DE4B81122;
-        Mon, 27 Jun 2022 11:32:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BDCDC3411D;
-        Mon, 27 Jun 2022 11:31:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54E0AB81123;
+        Mon, 27 Jun 2022 11:40:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8ABDC341C7;
+        Mon, 27 Jun 2022 11:40:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1656329518;
-        bh=z+1DQVTPAggy8DmvFiwP/5SP/t/XK2yDDfu1fqt3xws=;
+        s=korg; t=1656330025;
+        bh=ANm7NZ3p20kcA1xNI5TBb7Uyk/XbUVFrE8pqixiN7l8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=abqLj6Q/miXmci2flJaoCiW49nD0L+2T7fplpX79soYfQa8C6j2v8oywCjVJ9VTTc
-         2Pks3TN62LSnzsG1PkfXgahpFJB1FHtzKqGWHMQX0Md+Dfb+JJOwRolwaFnAt6kqqL
-         wsLgGJaK710fie/nvlIaKYBN0klr/5BS7n86EEKc=
+        b=IRNoEGdJwdHCDD2WfZfO+UNBIqaUyDOn/WIBUrnW5iUVXXVz1G6ZSms6LB+lWJMjN
+         M3jde3IdzV9TYGLDzyxIwzzlv29tTXaggRpIuI50mqHMXhA6/gaRrWlwABUALAhbBp
+         Wurvbb8c1RjOcCBqbbU0xVFkhSjIb7CqJpB4qlaM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nikos Tsironis <ntsironis@arrikto.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 5.15 025/135] dm era: commit metadata in postsuspend after worker stops
+        stable@vger.kernel.org,
+        syzbot+47af19f3307fc9c5c82e@syzkaller.appspotmail.com,
+        Jon Maloy <jmaloy@redhat.com>,
+        Ying Xue <ying.xue@windriver.com>,
+        Hoang Le <hoang.h.le@dektech.com.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 059/181] tipc: fix use-after-free Read in tipc_named_reinit
 Date:   Mon, 27 Jun 2022 13:20:32 +0200
-Message-Id: <20220627111938.890650023@linuxfoundation.org>
+Message-Id: <20220627111946.278079040@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220627111938.151743692@linuxfoundation.org>
-References: <20220627111938.151743692@linuxfoundation.org>
+In-Reply-To: <20220627111944.553492442@linuxfoundation.org>
+References: <20220627111944.553492442@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,91 +59,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikos Tsironis <ntsironis@arrikto.com>
+From: Hoang Le <hoang.h.le@dektech.com.au>
 
-commit 9ae6e8b1c9bbf6874163d1243e393137313762b7 upstream.
+[ Upstream commit 911600bf5a5e84bfda4d33ee32acc75ecf6159f0 ]
 
-During postsuspend dm-era does the following:
+syzbot found the following issue on:
+==================================================================
+BUG: KASAN: use-after-free in tipc_named_reinit+0x94f/0x9b0
+net/tipc/name_distr.c:413
+Read of size 8 at addr ffff88805299a000 by task kworker/1:9/23764
 
-1. Archives the current era
-2. Commits the metadata, as part of the RPC call for archiving the
-   current era
-3. Stops the worker
+CPU: 1 PID: 23764 Comm: kworker/1:9 Not tainted
+5.18.0-rc4-syzkaller-00878-g17d49e6e8012 #0
+Hardware name: Google Compute Engine/Google Compute Engine,
+BIOS Google 01/01/2011
+Workqueue: events tipc_net_finalize_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x495
+mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ tipc_named_reinit+0x94f/0x9b0 net/tipc/name_distr.c:413
+ tipc_net_finalize+0x234/0x3d0 net/tipc/net.c:138
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
+[...]
+==================================================================
 
-Until the worker stops, it might write to the metadata again. Moreover,
-these writes are not flushed to disk immediately, but are cached by the
-dm-bufio client, which writes them back asynchronously.
+In the commit
+d966ddcc3821 ("tipc: fix a deadlock when flushing scheduled work"),
+the cancel_work_sync() function just to make sure ONLY the work
+tipc_net_finalize_work() is executing/pending on any CPU completed before
+tipc namespace is destroyed through tipc_exit_net(). But this function
+is not guaranteed the work is the last queued. So, the destroyed instance
+may be accessed in the work which will try to enqueue later.
 
-As a result, the committed metadata of a suspended dm-era device might
-not be consistent with the in-core metadata.
+In order to completely fix, we re-order the calling of cancel_work_sync()
+to make sure the work tipc_net_finalize_work() was last queued and it
+must be completed by calling cancel_work_sync().
 
-In some cases, this can result in the corruption of the on-disk
-metadata. Suppose the following sequence of events:
-
-1. Load a new table, e.g. a snapshot-origin table, to a device with a
-   dm-era table
-2. Suspend the device
-3. dm-era commits its metadata, but the worker does a few more metadata
-   writes until it stops, as part of digesting an archived writeset
-4. These writes are cached by the dm-bufio client
-5. Load the dm-era table to another device.
-6. The new instance of the dm-era target loads the committed, on-disk
-   metadata, which don't include the extra writes done by the worker
-   after the metadata commit.
-7. Resume the new device
-8. The new dm-era target instance starts using the metadata
-9. Resume the original device
-10. The destructor of the old dm-era target instance is called and
-    destroys the dm-bufio client, which results in flushing the cached
-    writes to disk
-11. These writes might overwrite the writes done by the new dm-era
-    instance, hence corrupting its metadata.
-
-Fix this by committing the metadata after the worker stops running.
-
-stop_worker uses flush_workqueue to flush the current work. However, the
-work item may re-queue itself and flush_workqueue doesn't wait for
-re-queued works to finish.
-
-This could result in the worker changing the metadata after they have
-been committed, or writing to the metadata concurrently with the commit
-in the postsuspend thread.
-
-Use drain_workqueue instead, which waits until the work and all
-re-queued works finish.
-
-Fixes: eec40579d8487 ("dm: add era target")
-Cc: stable@vger.kernel.org # v3.15+
-Signed-off-by: Nikos Tsironis <ntsironis@arrikto.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: syzbot+47af19f3307fc9c5c82e@syzkaller.appspotmail.com
+Fixes: d966ddcc3821 ("tipc: fix a deadlock when flushing scheduled work")
+Acked-by: Jon Maloy <jmaloy@redhat.com>
+Signed-off-by: Ying Xue <ying.xue@windriver.com>
+Signed-off-by: Hoang Le <hoang.h.le@dektech.com.au>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-era-target.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ net/tipc/core.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/md/dm-era-target.c
-+++ b/drivers/md/dm-era-target.c
-@@ -1400,7 +1400,7 @@ static void start_worker(struct era *era
- static void stop_worker(struct era *era)
- {
- 	atomic_set(&era->suspended, 1);
--	flush_workqueue(era->wq);
-+	drain_workqueue(era->wq);
- }
+diff --git a/net/tipc/core.c b/net/tipc/core.c
+index 3f4542e0f065..434e70eabe08 100644
+--- a/net/tipc/core.c
++++ b/net/tipc/core.c
+@@ -109,10 +109,9 @@ static void __net_exit tipc_exit_net(struct net *net)
+ 	struct tipc_net *tn = tipc_net(net);
  
- /*----------------------------------------------------------------
-@@ -1570,6 +1570,12 @@ static void era_postsuspend(struct dm_ta
- 	}
- 
- 	stop_worker(era);
-+
-+	r = metadata_commit(era->md);
-+	if (r) {
-+		DMERR("%s: metadata_commit failed", __func__);
-+		/* FIXME: fail mode */
-+	}
- }
- 
- static int era_preresume(struct dm_target *ti)
+ 	tipc_detach_loopback(net);
++	tipc_net_stop(net);
+ 	/* Make sure the tipc_net_finalize_work() finished */
+ 	cancel_work_sync(&tn->work);
+-	tipc_net_stop(net);
+-
+ 	tipc_bcast_stop(net);
+ 	tipc_nametbl_stop(net);
+ 	tipc_sk_rht_destroy(net);
+-- 
+2.35.1
+
 
 

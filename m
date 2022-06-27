@@ -2,99 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE40055C5D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E06255C227
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240678AbiF0MXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 08:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57986 "EHLO
+        id S240683AbiF0MYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 08:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236111AbiF0MXR (ORCPT
+        with ESMTP id S236111AbiF0MYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 08:23:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE152AF6;
-        Mon, 27 Jun 2022 05:23:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69C3961579;
-        Mon, 27 Jun 2022 12:23:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB27C3411D;
-        Mon, 27 Jun 2022 12:23:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656332595;
-        bh=eeEIjLCY9DdE21LueCXIu3O/yu0uW912zXNkG4xLxS0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tFq62YspxGxftZnJ6OrewsR4FaS4F/tV4/QgWuanKDEgn1MmZmRMBpsTjwmtSFU/F
-         RAtUp1MBcDR50IXI9TZzVKZL5OmNBS45OP4/cisURcrYvGEY++or0wg34zGspAajeC
-         ZiwRXLZ8IpqIyEYmhv4MpusCopsKkBfjBkvTf35TMMAG2IZDB4p+Ot9Cp6bLbBph4V
-         hzLRvB72ToLu6JALrdAt8cgT7Vxuhvpy4k32mQQIip1feDxfoYaqWvcLS+VoNjtC7Z
-         sGhc47uMJr7P++NFItZJzsNE1DYGKLNXY7IyexA0L0wNinqb/2uKJwY5hTbtB1qwF2
-         lOLC4K/zqhJ0w==
-Date:   Mon, 27 Jun 2022 13:23:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        kbuild-all@lists.01.org, lkp@intel.com,
-        linux-arm-kernel@lists.infradead.org,
-        Michal Simek <monstr@monstr.eu>,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        Tejas Prajapati Rameshchandra <tejaspra@xilinx.com>,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: spi-xilinx: fix for_each_child.cocci warnings
-Message-ID: <YrmhLZxSITsSgPcD@sirena.org.uk>
-References: <alpine.DEB.2.22.394.2206261016410.2194@hadrien>
+        Mon, 27 Jun 2022 08:24:13 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBA72AF6
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 05:24:11 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LWn2B6f5Cz9swb;
+        Mon, 27 Jun 2022 20:23:30 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 27 Jun 2022 20:24:09 +0800
+Subject: Re: [PATCH v2 8/9] mm, hwpoison: skip raw hwpoison page in freeing
+ 1GB hugepage
+To:     Naoya Horiguchi <nao.horiguchi@gmail.com>, <linux-mm@kvack.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20220623235153.2623702-1-naoya.horiguchi@linux.dev>
+ <20220623235153.2623702-9-naoya.horiguchi@linux.dev>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <db45e4bc-f09a-771a-f90d-448d46bacce1@huawei.com>
+Date:   Mon, 27 Jun 2022 20:24:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Q4KmKTjowVw3pIAL"
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2206261016410.2194@hadrien>
-X-Cookie: Now I am depressed ...
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220623235153.2623702-9-naoya.horiguchi@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/6/24 7:51, Naoya Horiguchi wrote:
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> 
+> Currently if memory_failure() (modified to remove blocking code with
+> subsequent patch) is called on a page in some 1GB hugepage, memory error
+> handling fails and the raw error page gets into leaked state.  The impact
+> is small in production systems (just leaked single 4kB page), but this
+> limits the testability because unpoison doesn't work for it.
+> We can no longer create 1GB hugepage on the 1GB physical address range
+> with such leaked pages, that's not useful when testing on small systems.
+> 
+> When a hwpoison page in a 1GB hugepage is handled, it's caught by the
+> PageHWPoison check in free_pages_prepare() because the 1GB hugepage is
+> broken down into raw error pages before coming to this point:
+> 
+>         if (unlikely(PageHWPoison(page)) && !order) {
+>                 ...
+>                 return false;
+>         }
+> 
+> Then, the page is not sent to buddy and the page refcount is left 0.
+> 
+> Originally this check is supposed to work when the error page is freed from
+> page_handle_poison() (that is called from soft-offline), but now we are
+> opening another path to call it, so the callers of __page_handle_poison()
+> need to handle the case by considering the return value 0 as success. Then
+> page refcount for hwpoison is properly incremented so unpoison works.
+> 
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
---Q4KmKTjowVw3pIAL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It seems I misunderstand the commit log in [1]. But I hope I get the point this time. :)
 
-On Sun, Jun 26, 2022 at 10:18:46AM -0400, Julia Lawall wrote:
-> From: kernel test robot <lkp@intel.com>
->=20
-> for_each_available_child_of_node should have of_node_put() before return =
-around line 697.
-> for_each_available_child_of_node should have of_node_put() before break a=
-round line 703.
->=20
-> Generated by: scripts/coccinelle/iterators/for_each_child.cocci
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 
-This doesn't apply against current code, please check and resend.
+Thanks!
 
---Q4KmKTjowVw3pIAL
-Content-Type: application/pgp-signature; name="signature.asc"
+[1]https://lore.kernel.org/linux-mm/19981830-a5e6-bdba-4a1c-1cdcea61b93b@huawei.com/
 
------BEGIN PGP SIGNATURE-----
+> ---
+>  mm/memory-failure.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index db85f644a1e3..fc7b83cb6468 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1046,7 +1046,6 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+>  		res = truncate_error_page(hpage, page_to_pfn(p), mapping);
+>  		unlock_page(hpage);
+>  	} else {
+> -		res = MF_FAILED;
+>  		unlock_page(hpage);
+>  		/*
+>  		 * migration entry prevents later access on error hugepage,
+> @@ -1054,9 +1053,11 @@ static int me_huge_page(struct page_state *ps, struct page *p)
+>  		 * subpages.
+>  		 */
+>  		put_page(hpage);
+> -		if (__page_handle_poison(p) > 0) {
+> +		if (__page_handle_poison(p) >= 0) {
+>  			page_ref_inc(p);
+>  			res = MF_RECOVERED;
+> +		} else {
+> +			res = MF_FAILED;
+>  		}
+>  	}
+>  
+> @@ -1704,9 +1705,11 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
+>  	 */
+>  	if (res == 0) {
+>  		unlock_page(head);
+> -		if (__page_handle_poison(p) > 0) {
+> +		if (__page_handle_poison(p) >= 0) {
+>  			page_ref_inc(p);
+>  			res = MF_RECOVERED;
+> +		} else {
+> +			res = MF_FAILED;
+>  		}
+>  		action_result(pfn, MF_MSG_FREE_HUGE, res);
+>  		return res == MF_RECOVERED ? 0 : -EBUSY;
+> 
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK5oSwACgkQJNaLcl1U
-h9AbWAf+J4LNw9iAEcyO90yIGNB2l/qmuZFMT7mWmc5gVmF+H4vhb37jiC+mDpgA
-qjX9u+Yod8dGl70SncYCHXE6It+aUucAghhbiCcXP5oJZSiKVA0sURw/MkKCsttU
-SWZDomHwDlIMWT1AwZTY3B8EG8NN+GQnFSR8Jv5XhcMJqgOZz5Rn9JrpAhNKoV7X
-r1yG8BrROJ11vzWvNUVsYk+3vfRKToJxIvB83iHRME49vJ4Zg5srrX/NHFZ+B/Tq
-H5Wq2eFQDDjP+BFWEq3fcI/YpCJpZ8yrTQpJwxhBz5lQB/0WQADMd/w9AnMTKbfy
-PukOB/47OgcC8VWsC5BiOJ3mjNNm4w==
-=oohq
------END PGP SIGNATURE-----
-
---Q4KmKTjowVw3pIAL--

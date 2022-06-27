@@ -2,80 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839CE55C5E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1677C55DC67
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237779AbiF0PN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 11:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
+        id S238008AbiF0PZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 11:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238005AbiF0PNF (ORCPT
+        with ESMTP id S238014AbiF0PZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 11:13:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 328685FFF
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:13:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656342782;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ARdvDRYqFQEpUSYWNh7p3WDzIDlCQtznR2856ZwQR38=;
-        b=gW6/t2nJH8PAXDixQuQKnj/aHKA22vqsvEjs2CKz3/J+I8ul3HapcF9EMvCfJOzpnxtSvb
-        uuz0iVQXIClDIDSuR+zbt4wqYNr9hy2OcZ08yY8ovSSMY+DeeeIT8ddSJ/rrTvIkZ51A8M
-        rGkXTIt27RCmjiGsvEMsEpJVAC7+KoQ=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-111-M4idXYLWMliHXyCc_4gvYQ-1; Mon, 27 Jun 2022 11:13:00 -0400
-X-MC-Unique: M4idXYLWMliHXyCc_4gvYQ-1
-Received: by mail-ed1-f70.google.com with SMTP id f13-20020a0564021e8d00b00437a2acb543so1102239edf.7
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 08:13:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=ARdvDRYqFQEpUSYWNh7p3WDzIDlCQtznR2856ZwQR38=;
-        b=hQ1KDarbTT+1cCNOpRNJYXzBd4RwEYT62UrnQPkD2aoF44SHXbtoU36WRq2J769zMj
-         trpEt7shSv0eZI4GtsTNToNJMxQB23mVGQTqwLIPk95ivWbLU4fCelYn/WsPvwIJTzJR
-         Z3njnU6UHus4wQ8Kict7sX1nprb4ads4V8f7uRnKZT3cxNsa22dsdcif3w05k7/yB2Gd
-         ogUizSeqLsKPukQxoRjvi81N//63UKRKIfTR5OMPpwZfz9lK1kgyFZDIcH7vmvLdp5z1
-         enjODgQoJ1LfPjfo7QDHprL2V/Foy6axY350iuXSOJygvQ4TrbKuZEvL7zXQFmbKcZG6
-         ZyZw==
-X-Gm-Message-State: AJIora9t81fiqGePJ6cvViD0IsU0Nh0LMzAdOBWZqDvOn6txETGBdlny
-        lHdl5Mt2c1hijN22ndkNPANDlYvI+/dzc8AL7JfOlMAuNPFh32dSpMCig33L/FivQ9F/hTUNvEd
-        imgcN/d4G+N6iavO8vwy8bj/4vWMlTT+DUCR3nZapG2ccA4sW/ATjGQR+YkB66i8ojGzl/BQJXH
-        gm
-X-Received: by 2002:a17:906:5512:b0:726:be2c:a2e5 with SMTP id r18-20020a170906551200b00726be2ca2e5mr2270041ejp.88.1656342779681;
-        Mon, 27 Jun 2022 08:12:59 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1ujLOPA2JVmlJ+R4KMLfx0HjYsH41cRwgwuV7mZUbliS5V6Ns2xRIbDBxPpYaLhiDmvcPjGPQ==
-X-Received: by 2002:a17:906:5512:b0:726:be2c:a2e5 with SMTP id r18-20020a170906551200b00726be2ca2e5mr2270015ejp.88.1656342779400;
-        Mon, 27 Jun 2022 08:12:59 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id w13-20020a170906d20d00b00726298147b1sm5049433ejz.161.2022.06.27.08.12.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 08:12:58 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v1 02/10] KVM: VMX: Add missing CPU based VM
- execution controls to vmcs_config
-In-Reply-To: <YrUBYTXRxBGYsd1a@google.com>
-References: <20220622164432.194640-1-vkuznets@redhat.com>
- <20220622164432.194640-3-vkuznets@redhat.com>
- <YrUBYTXRxBGYsd1a@google.com>
-Date:   Mon, 27 Jun 2022 17:12:58 +0200
-Message-ID: <87wnd2uolh.fsf@redhat.com>
+        Mon, 27 Jun 2022 11:25:33 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7993718B29;
+        Mon, 27 Jun 2022 08:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656343532; x=1687879532;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xJP9OefAMxCTgdzZDCaOuKXFij4QIj41i5jxXMS1AdM=;
+  b=f+F119vY0+Oa3b+eLjeAwSBqKVjPEWXrHqBv6amHvJPB4/H1Kn/2k3Zh
+   hopZmpI/JyDcOMxE7OoyZdVNZFW5Bf9xiVO0BjTZP/m3d7l1zBd3dD0Z+
+   fBLQj5Q/KmkEKaCKmb9mSHOMmE765RCvNQA1OIUsyhw7XPyZdrjIv0pB9
+   eOPq3CBIsj0KypMKzc76MTyRfFNo2digNiMOiHI2+70WiJf1LOk1HXYf1
+   gQ29WwDOaoaOu/B1PT/GvnkZuzmOpPlm24jTax0eS7qPUU8dkUgUvOAX2
+   7tofhsMkbcEHKBhD1JW4kqgYl7m/L24q3k4LaTbSfrjN6nMSqrcReG/VU
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="279013691"
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="279013691"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 08:13:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,226,1650956400"; 
+   d="scan'208";a="766731304"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by orsmga005.jf.intel.com with ESMTP; 27 Jun 2022 08:12:58 -0700
+Date:   Mon, 27 Jun 2022 23:12:58 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Eric Dumazet <edumazet@google.com>, Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        network dev <netdev@vger.kernel.org>,
+        linux-s390@vger.kernel.org, MPTCP Upstream <mptcp@lists.linux.dev>,
+        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
+        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>, Ying Xu <yinxu@redhat.com>
+Subject: Re: [net] 4890b686f4: netperf.Throughput_Mbps -69.4% regression
+Message-ID: <20220627151258.GB20878@shbuild999.sh.intel.com>
+References: <20220623185730.25b88096@kernel.org>
+ <CANn89iLidqjiiV8vxr7KnUg0JvfoS9+TRGg=8ANZ8NBRjeQxsQ@mail.gmail.com>
+ <CALvZod7kULCvHAuk53FE-XBOi4-BbLdY3HCg6jfCZTJDxYsZow@mail.gmail.com>
+ <20220624070656.GE79500@shbuild999.sh.intel.com>
+ <20220624144358.lqt2ffjdry6p5u4d@google.com>
+ <20220625023642.GA40868@shbuild999.sh.intel.com>
+ <20220627023812.GA29314@shbuild999.sh.intel.com>
+ <CANn89i+6NPujMyiQxriZRt6vhv6hNrAntXxi1uOhJ0SSqnJ47w@mail.gmail.com>
+ <20220627123415.GA32052@shbuild999.sh.intel.com>
+ <CALvZod7i_=7bNZR-LAXBPXJFxj-1KBuYs+rmG0iABAE1T90BPg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALvZod7i_=7bNZR-LAXBPXJFxj-1KBuYs+rmG0iABAE1T90BPg@mail.gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,47 +86,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+On Mon, Jun 27, 2022 at 07:52:55AM -0700, Shakeel Butt wrote:
+> On Mon, Jun 27, 2022 at 5:34 AM Feng Tang <feng.tang@intel.com> wrote:
+> > Yes, 1% is just around noise level for a microbenchmark.
+> >
+> > I went check the original test data of Oliver's report, the tests was
+> > run 6 rounds and the performance data is pretty stable (0Day's report
+> > will show any std deviation bigger than 2%)
+> >
+> > The test platform is a 4 sockets 72C/144T machine, and I run the
+> > same job (nr_tasks = 25% * nr_cpus) on one CascadeLake AP (4 nodes)
+> > and one Icelake 2 sockets platform, and saw 75% and 53% regresson on
+> > them.
+> >
+> > In the first email, there is a file named 'reproduce', it shows the
+> > basic test process:
+> >
+> > "
+> >   use 'performane' cpufre  governor for all CPUs
+> >
+> >   netserver -4 -D
+> >   modprobe sctp
+> >   netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
+> >   netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
+> >   netperf -4 -H 127.0.0.1 -t SCTP_STREAM_MANY -c -C -l 300 -- -m 10K  &
+> >   (repeat 36 times in total)
+> >   ...
+> >
+> > "
+> >
+> > Which starts 36 (25% of nr_cpus) netperf clients. And the clients number
+> > also matters, I tried to increase the client number from 36 to 72(50%),
+> > and the regression is changed from 69.4% to 73.7%
+> >
+> 
+> Am I understanding correctly that this 69.4% (or 73.7%) regression is
+> with cgroup v2?
 
-> Maybe say "dynamically enabled" or so instead of "missing"?
->
+Yes.
 
-...
+> Eric did the experiments on v2 but on real hardware where the
+> performance impact was negligible.
+> 
+> BTW do you see similar regression for tcp as well or just sctp?
 
-> On Wed, Jun 22, 2022, Vitaly Kuznetsov wrote:
->> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->> ---
->>  arch/x86/kvm/vmx/vmx.c | 15 ++++++++++++++-
->>  1 file changed, 14 insertions(+), 1 deletion(-)
->> 
->> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->> index 24da9e93bdab..01294a2fc1c1 100644
->> --- a/arch/x86/kvm/vmx/vmx.c
->> +++ b/arch/x86/kvm/vmx/vmx.c
->> @@ -2483,8 +2483,14 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
->>  	      CPU_BASED_INVLPG_EXITING |
->>  	      CPU_BASED_RDPMC_EXITING;
->>  
->> -	opt = CPU_BASED_TPR_SHADOW |
->> +	opt = CPU_BASED_INTR_WINDOW_EXITING |
->> +	      CPU_BASED_RDTSC_EXITING |
->> +	      CPU_BASED_TPR_SHADOW |
->> +	      CPU_BASED_NMI_WINDOW_EXITING |
->> +	      CPU_BASED_USE_IO_BITMAPS |
->> +	      CPU_BASED_MONITOR_TRAP_FLAG |
->>  	      CPU_BASED_USE_MSR_BITMAPS |
->> +	      CPU_BASED_PAUSE_EXITING |
->>  	      CPU_BASED_ACTIVATE_SECONDARY_CONTROLS |
->>  	      CPU_BASED_ACTIVATE_TERTIARY_CONTROLS;
+Yes, I run TCP_SENDFILE case with 'send_size'==10K, it hits a
+70%+ regressioin. 
 
-CPU_BASED_INTR_WINDOW_EXITING and CPU_BASED_NMI_WINDOW_EXITING are
-actually "dynamically enabled" but CPU_BASED_RDTSC_EXITING/
-CPU_BASED_USE_IO_BITMAPS/ CPU_BASED_MONITOR_TRAP_FLAG /
-CPU_BASED_PAUSE_EXITING are not (and I found the first two immediately
-after implementing 'macro shananigans' you suggested, of course :-), KVM
-just doesn't use them for L1. So this is going to get splitted in two
-patches.
-
--- 
-Vitaly
-
+Thanks,
+Feng

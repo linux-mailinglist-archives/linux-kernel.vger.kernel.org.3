@@ -2,162 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E186A55D887
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD0A55D905
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237729AbiF1FQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 01:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S244956AbiF1FVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 01:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244838AbiF1FPr (ORCPT
+        with ESMTP id S244713AbiF1FUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 01:15:47 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073BB275CD
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 22:14:34 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id 9so7454595ill.5
-        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 22:14:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oG6UmMCeULY14p5Tnuuf681QLknd/2jzZKexPfhwXHo=;
-        b=1W2RaMrqcsbZfT9D9Kb4GB4UobqcaC7M7RaswpgReAuuCtk4JgzRIGdgBJ4g1WM4Fn
-         qru0MTS6IP2RQf6esYtsp9yaH1DLApJzzcfo58uEVpegkBj6EeVjj4f721h2sClNDsqX
-         pSzqRCOetnm4dXRflO8aNfBiBAmAaauNAQcnHDm4efmAMANpumeTKYK3ZpiHfY6BBtkd
-         DIwwQQ+JPDhlOv+KRBVtB4Nus1SC4UydB0PX88t1SSrRfsNJDNHu24zVD758Z0lv/L0n
-         VNvXuyupIqFLISQdJWMUTYPCE4aYf9DdyLUstPm4Pan7PCN7SKQLi3ot7dpsmoluote8
-         AZqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oG6UmMCeULY14p5Tnuuf681QLknd/2jzZKexPfhwXHo=;
-        b=eVX5BlXMCcx7jpKg+K9oDdOu8AB0lzfXgjRmN7Wm9qli/CcoosvZm+SV1oWj51qRL+
-         PLao+49H3gHJD00CWJwWoMs4tr9nrhdXzwT4RXezJ4AAkh+vxFfi3pZTrEVDnVKJD8Kz
-         2yFbAtxSOVuy9ATk3N8V8MvpFSPd0cVH4bAg5QuReXKqlc9P0a1U8QWhiPXWKsumvIdl
-         XxyPgHpm7Qzsc36YGRGTa4J9na+j1yLJeln+JqSZV0FjFG2s7s0iNoEYFO33y3IqBjer
-         cvwsi0bA4KporORArlL41CcsfsdhdgOTe7EzcreiiB/hYj4WeH4t3H4fYkyMBoywvt4M
-         D45g==
-X-Gm-Message-State: AJIora9m/JE3M8GpxUbsh/rmkbveOkvuqxZ3GEvJ32BZGVOc7kaC+SL9
-        6TJIAgmGPg1hJWIBMolY0Y/Ye/Vq8bgfvM9SAPAOLg==
-X-Google-Smtp-Source: AGRyM1usCg0sGk1noQH4VFjDiVGy6bpSg35rY0jEoBZXk9gygcdycANNmduNCCY/SZ2apIYZT4vNGm0cs9nYUijW8rc=
-X-Received: by 2002:a05:6e02:1a66:b0:2da:a3c6:d8f1 with SMTP id
- w6-20020a056e021a6600b002daa3c6d8f1mr2783376ilv.180.1656393272553; Mon, 27
- Jun 2022 22:14:32 -0700 (PDT)
+        Tue, 28 Jun 2022 01:20:40 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E6B2BB0F;
+        Mon, 27 Jun 2022 22:17:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CAF35CE1E21;
+        Tue, 28 Jun 2022 05:17:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57111C3411D;
+        Tue, 28 Jun 2022 05:17:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656393426;
+        bh=xmVWOoWZhk9VF36Zkrlyh06JziflhI5QKam3v92NMvA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TlVCCepDrRxZtmEXvs4LRZA3aNZ2uAYFJbUvtcR43+vNK9OATwsOgQcoKHIozHxnt
+         JkRTdfsD1EB1uy/ndCKrdW2nKzq/9e7Xi+fXPiDW7tUSn1qnu0X1s3xvY9Oolmv/pM
+         1Kq5ueb8cT7kVVYMhLmYHmE4AHFgRvHXK7hQFHTGGZiRbN5EUvjjb9ZKI7ZujfBtcR
+         kRyHZGd7G3HkWgEFgMzbOb7+969VpZJukq/q35rVkWw9y29nck2DILB+/fOQQafyQb
+         RH5yPGzTpsUolrfY5jwBcZfJiat1pjJKw9QOtA1Rf+qqJror9UPfZGJZGQVHKic4/R
+         1R4AZDAQHGUkQ==
+Date:   Mon, 27 Jun 2022 22:17:05 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH net-next v2 1/1] net: phy: ax88772a: fix lost pause
+ advertisement configuration
+Message-ID: <20220627221705.0a49f3c9@kernel.org>
+In-Reply-To: <20220626152703.18157-1-o.rempel@pengutronix.de>
+References: <20220626152703.18157-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-References: <20220608104202.19461-1-zhangjiachen.jaycee@bytedance.com> <YrnHeqckLknFleud@redhat.com>
-In-Reply-To: <YrnHeqckLknFleud@redhat.com>
-From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Date:   Tue, 28 Jun 2022 13:14:21 +0800
-Message-ID: <CAFQAk7jgV1EkLK120tPkcG0MvupRMLQcvLNj8aP-=45nymMnQw@mail.gmail.com>
-Subject: Re: Re: [PATCH] fuse: add FOPEN_INVAL_ATTR
-To:     Vivek Goyal <vgoyal@redhat.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 11:06 PM Vivek Goyal <vgoyal@redhat.com> wrote:
->
-> On Wed, Jun 08, 2022 at 06:42:02PM +0800, Jiachen Zhang wrote:
-> > So that the fuse daemon can ask kernel to invalidate the attr cache on file
-> > open.
->
-> Will be great if there was a proper context around this. Without any
-> explanation, how one is supposed to understand how this is useful.
->
-> By going through other email threads, looks like, with writeback
-> cache enabled, you want to invalidate attr cache and data cache
-> when file is opened next time. Right?
+On Sun, 26 Jun 2022 17:27:03 +0200 Oleksij Rempel wrote:
+> Subject: [PATCH net-next v2 1/1] net: phy: ax88772a: fix lost pause advertisement configuration
+> 
+> In case of asix_ax88772a_link_change_notify() workaround, we run soft
+> reset which will automatically clear MII_ADVERTISE configuration. The
+> PHYlib framework do not know about changed configuration state of the
+> PHY, so we need use phy_init_hw() to reinit PHY configuration.
+> 
+> Fixes: dde258469257 ("net: usb/phy: asix: add support for ax88772A/C PHYs")
 
-
-Hi Vivek,
-
-Yes, exactly. This patch is supposed to be a supplement to the
-writeback_cache consistency enhancement patch [1]. Sorry for the lack
-of explanation. I think I will send this and the enhancement patch as
-a patchset later after there is more comments and discussions.
-
->
-> IOW, when file is closed, its changes will be flushed out. And when
-> file is reopened, server somehow is supposed to determine if file
-> has changed (on server by another client) and based on that determine
-> whether to invalidate attr and data cache on next open?
-
-Yes, to achieve this so-called close-to-open consistency, this patch
-gives a knod to FUSE server handler to invalidate attributes cache on
-file open.
-
->
-> Even without that, on next open, it probably makes sense to being
-> invalidate attr cache. We have notion to invalidate data cache. So
-> it will be kind of odd that we can invalidate data but not attrs
-> on next open. Am I understanding it right?
-
-Yes, Exactly. It could also be used for immediate attr invalidation in
-write-through mode.
-
-[1] https://lore.kernel.org/linux-fsdevel/20220624055825.29183-1-zhangjiachen.jaycee@bytedance.com/
-
-Thanks,
-Jiachen
-
->
-> Thanks
-> Vivek
->
-> >
-> > Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-> > ---
-> >  fs/fuse/file.c            | 4 ++++
-> >  include/uapi/linux/fuse.h | 2 ++
-> >  2 files changed, 6 insertions(+)
-> >
-> > diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-> > index fdcec3aa7830..9609d13ec351 100644
-> > --- a/fs/fuse/file.c
-> > +++ b/fs/fuse/file.c
-> > @@ -213,6 +213,10 @@ void fuse_finish_open(struct inode *inode, struct file *file)
-> >               file_update_time(file);
-> >               fuse_invalidate_attr_mask(inode, FUSE_STATX_MODSIZE);
-> >       }
-> > +
-> > +     if (ff->open_flags & FOPEN_INVAL_ATTR)
-> > +             fuse_invalidate_attr(inode);
-> > +
-> >       if ((file->f_mode & FMODE_WRITE) && fc->writeback_cache)
-> >               fuse_link_write_file(file);
-> >  }
-> > diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-> > index d6ccee961891..0b0b7d308ddb 100644
-> > --- a/include/uapi/linux/fuse.h
-> > +++ b/include/uapi/linux/fuse.h
-> > @@ -301,6 +301,7 @@ struct fuse_file_lock {
-> >   * FOPEN_CACHE_DIR: allow caching this directory
-> >   * FOPEN_STREAM: the file is stream-like (no file position at all)
-> >   * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
-> > + * FOPEN_INVAL_ATTR: invalidate the attr cache on open
-> >   */
-> >  #define FOPEN_DIRECT_IO              (1 << 0)
-> >  #define FOPEN_KEEP_CACHE     (1 << 1)
-> > @@ -308,6 +309,7 @@ struct fuse_file_lock {
-> >  #define FOPEN_CACHE_DIR              (1 << 3)
-> >  #define FOPEN_STREAM         (1 << 4)
-> >  #define FOPEN_NOFLUSH                (1 << 5)
-> > +#define FOPEN_INVAL_ATTR     (1 << 6)
-> >
-> >  /**
-> >   * INIT request/reply flags
-> > --
-> > 2.20.1
-> >
->
+Why net-next?

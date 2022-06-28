@@ -2,160 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3623155C19C
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1352855C29F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240963AbiF1HMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 03:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
+        id S1343709AbiF1HFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 03:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238792AbiF1HMY (ORCPT
+        with ESMTP id S1343708AbiF1HFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 03:12:24 -0400
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7F3275ED;
-        Tue, 28 Jun 2022 00:12:23 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id 72-20020a9d064e000000b00616c2a174bcso4959937otn.8;
-        Tue, 28 Jun 2022 00:12:23 -0700 (PDT)
+        Tue, 28 Jun 2022 03:05:05 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDED27FC3
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 00:04:35 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id c13so16142122eds.10
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 00:04:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=yWK2i+HyLRsoCZd+vTN29Q2YEjkKWRk+CQpa4XDa6BY=;
+        b=fOgLokJSTExyqOjCNm2VxyMHWEQDeV705+1o1af5yokGij64Z4nDxITK+ZMbEIQBvr
+         KgRmUxfl4VAjrnmHrMA6gG6pEsTaZ1VajlmM9lTd1dNtH8YtPH4lR5ZTHMnCbrcPa4BF
+         C3K8hGaPWmIOCmCkmsURro6qKh7wd2fmlZXZg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oUnjhZMiGNi6v7nsbqYIrss5xtOvLOvLOLR2zcKJEss=;
-        b=pwgXE9ASW272OrQ+E7wc+SE/zdC/UVcnYBxOBu2c8vdTxqdsrKMf5etatU5rN3LqV6
-         ZTQ6kzJK9wLPj1yQ4YJqXr1lb3LfK2vG9Ulp12Edv/QbzCBd26BalTzHQHCdZqLkAahp
-         Fyrpaeb7PU+m+vb9uAwwA8e2T7MENtwY9bwVeFTedGdOjftdyV/f8KCW5ZtyBUjkSA7g
-         3MHNcw+JonBdn+oXwBfbufs6tT/FrYbEA25gMxj5awJvYteFd8+DdOpuUAKi0dE/xhg/
-         Jkg6qWYGio08y2L0eYGd9VlgYahjZ5EZcs5S8IYVP0a2j5PhSryccgHUlq/LUXuq/fff
-         VZuA==
-X-Gm-Message-State: AJIora8c9gX1J9zXRtsQgKi6+TqlKZ776WBgEZHA+dS1wAADNOIu1SQO
-        ZE6bsbds/9lyBfmFzrSwyjzn+FU9f1oItg==
-X-Google-Smtp-Source: AGRyM1s3Qlhtf97/24NjzMU/biTB7w/Oxmese2Z882WPUas3yKevC6g2NAF0plGs77VypkUoeoKfJg==
-X-Received: by 2002:a9d:4808:0:b0:616:b002:4516 with SMTP id c8-20020a9d4808000000b00616b0024516mr7571527otf.13.1656400343039;
-        Tue, 28 Jun 2022 00:12:23 -0700 (PDT)
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com. [209.85.210.49])
-        by smtp.gmail.com with ESMTPSA id m8-20020a4aab88000000b0041ea640396csm7302713oon.41.2022.06.28.00.12.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 00:12:22 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id w2-20020a056830110200b00616ce0dfcb2so3828822otq.1;
-        Tue, 28 Jun 2022 00:12:22 -0700 (PDT)
-X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
- bu5-20020a056902090500b0064a2089f487mr18678075ybb.202.1656399845934; Tue, 28
- Jun 2022 00:04:05 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=yWK2i+HyLRsoCZd+vTN29Q2YEjkKWRk+CQpa4XDa6BY=;
+        b=6H7wGiHR07rMx18Qf8esv/9QLXfkCm4M6G8SHUvciNXkHHE2P2WhdCfDbjkOJr9t4B
+         eLWu/btnqVV3FkfVCutOozkWYGedklAM6fG0F4NhXa7fRF/xYQpMATn1eopptGZe2uGT
+         jWQm3qKIwUHOAsMHuxxtb+ac068lVfAArUf+QKvikESwR3G16cigKsUoyKxS92zR8+4D
+         llpkrP9xBwDd3AFGlvlfT9Gct3rELqzCac2JJa1sBHFWoc/zksmUVYbT2fXKO3ZkeIvC
+         tUjo6H4kuyW0Ks1YbZQndeeIu56RfJx3SaOHjN4l2HWXy9w3nDJbs5TkFOb5HD5mDu+G
+         NmTg==
+X-Gm-Message-State: AJIora8Sv25EYJ+GyowxMKsf/EPf3I7hR4mqQWST5R6dR3DIWxGIhX34
+        WsPBaZRxj6sLDyodCcm3Bja81OQqg129pZc7Q9h1Sf8kxE9zBg==
+X-Google-Smtp-Source: AGRyM1t7TY1dIg6Bf+r11jbnnZRsYTZLxxtxdnijV+IZHWl/hdOH3aSsx56n1VZxEycMGDqZVRkU6+QDg1Pc/5XcKZ4=
+X-Received: by 2002:a05:6402:1cad:b0:437:8234:fdff with SMTP id
+ cz13-20020a0564021cad00b004378234fdffmr14575130edb.99.1656399873651; Tue, 28
+ Jun 2022 00:04:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220617125750.728590-1-arnd@kernel.org> <20220617125750.728590-4-arnd@kernel.org>
- <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com> <CAMuHMdVewn0OYA9oJfStk0-+vCKAUou+4Mvd5H2kmrSks1p5jg@mail.gmail.com>
- <b4e5a1c9-e375-63fb-ec7c-abb7384a6d59@gmail.com> <9289fd82-285c-035f-5355-4d70ce4f87b0@gmail.com>
-In-Reply-To: <9289fd82-285c-035f-5355-4d70ce4f87b0@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 28 Jun 2022 09:03:53 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXUihTPD9A9hs__Xr2ErfOqkZ5KgCHqm+9HvRf39uS5kA@mail.gmail.com>
-Message-ID: <CAMuHMdXUihTPD9A9hs__Xr2ErfOqkZ5KgCHqm+9HvRf39uS5kA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>, scsi <linux-scsi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        Khalid Aziz <khalid@gonehiking.org>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Matt Wang <wwentao@vmware.com>,
-        Miquel van Smoorenburg <mikevs@xs4all.net>,
-        Mark Salyzyn <salyzyn@android.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Denis Efremov <efremov@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
+References: <20220627112402.2332046-1-wenst@chromium.org> <20220627112402.2332046-2-wenst@chromium.org>
+ <f5e68826df868ae5a3cd5737fd9d7f7683bbad73.camel@collabora.com>
+ <CAGXv+5GA04LBN0bnLDdL8g_+_8HXpc-KwtPxpXyXi_WgUOPrtQ@mail.gmail.com> <f05953a93fb8f250f4da7c3384b6e1c43c7b1605.camel@collabora.com>
+In-Reply-To: <f05953a93fb8f250f4da7c3384b6e1c43c7b1605.camel@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 28 Jun 2022 15:04:22 +0800
+Message-ID: <CAGXv+5G-C1S3HKiMx5CjS_qqKN7kj+QfswG+u_O5sE4YAxZmYg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] media: mediatek: vcodec: dec: Fix 4K frame size enumeration
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
-
-On Tue, Jun 28, 2022 at 5:26 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> Am 28.06.2022 um 09:12 schrieb Michael Schmitz:
-> > On 27/06/22 20:26, Geert Uytterhoeven wrote:
-> >> On Sat, Jun 18, 2022 at 3:06 AM Michael Schmitz <schmitzmic@gmail.com>
-> >> wrote:
-> >>> Am 18.06.2022 um 00:57 schrieb Arnd Bergmann:
-> >>>> From: Arnd Bergmann <arnd@arndb.de>
-> >>>>
-> >>>> All architecture-independent users of virt_to_bus() and bus_to_virt()
-> >>>> have been fixed to use the dma mapping interfaces or have been
-> >>>> removed now.  This means the definitions on most architectures, and the
-> >>>> CONFIG_VIRT_TO_BUS symbol are now obsolete and can be removed.
-> >>>>
-> >>>> The only exceptions to this are a few network and scsi drivers for m68k
-> >>>> Amiga and VME machines and ppc32 Macintosh. These drivers work
-> >>>> correctly
-> >>>> with the old interfaces and are probably not worth changing.
-> >>> The Amiga SCSI drivers are all old WD33C93 ones, and replacing
-> >>> virt_to_bus by virt_to_phys in the dma_setup() function there would
-> >>> cause no functional change at all.
-> >> FTR, the sgiwd93 driver use dma_map_single().
+On Tue, Jun 28, 2022 at 3:28 AM Nicolas Dufresne
+<nicolas.dufresne@collabora.com> wrote:
+>
+> Le mardi 28 juin 2022 =C3=A0 00:08 +0800, Chen-Yu Tsai a =C3=A9crit :
+> > On Mon, Jun 27, 2022 at 11:32 PM Nicolas Dufresne
+> > <nicolas.dufresne@collabora.com> wrote:
+> > >
+> > > Hi Chen-Yu,
+> > >
+> > > Le lundi 27 juin 2022 =C3=A0 19:23 +0800, Chen-Yu Tsai a =C3=A9crit :
+> > > > This partially reverts commit b018be06f3c7 ("media: mediatek: vcode=
+c:
+> > > > Read max resolution from dec_capability"). In this commit, the maxi=
+mum
+> > > > resolution ended up being a function of both the firmware capabilit=
+y and
+> > > > the current set format.
+> > > >
+> > > > However, frame size enumeration for output (coded) formats should n=
+ot
+> > > > depend on the format set, but should return supported resolutions f=
+or
+> > > > the format requested by userspace.
+> > >
+> > > Good point. Though, I don't see any special casing for the CAPTURE ca=
+se. As this
+> > > HW does not include a scaler, it must only return 1 resolution when b=
+eing
+> > > enumerated for CAPTURE side (or not implement that enumeration, but i=
+ts
+> > > complicated to half implement something in m2m). The return unique si=
+ze should
+> > > match what G_FMT(CAPTURE) would return.
 > >
-> > Thanks! From what I see, it doesn't have to deal with bounce buffers
-> > though?
+> > There are no frame sizes added for the capture formats, so this functio=
+n
+> > effectively returns -EINVAL for any of them. This is also what rkvdec
+> > does: it only looks through the list of coded formats.
 >
-> Leaving the bounce buffer handling in place, and taking a few other
-> liberties - this is what converting the easiest case (a3000 SCSI) might
-> look like. Any obvious mistakes? The mvme147 driver would be very
-> similar to handle (after conversion to a platform device).
+> This is effectively against the spec, ENOTTY would be the only alternativ=
+e to
+> not implementing both sides. Though, I'll agree with you, this bugs preda=
+tes
+> anything here. Perhaps you could at add MM21 to the switch and returns EN=
+OTTY
+> there ?
 
-Thanks, looks reasonable.
+I think you are slightly misreading the code? The switch/case is in the
+function that adds supported formats, not the ioctl callback.
 
-> The driver allocates bounce buffers using kmalloc if it hits an
-> unaligned data buffer - can such buffers still even happen these days?
+But yeah, I can have the enum_framesizes callback match against capture
+formats and return -ENOTTY for them.
 
-No idea.
+For unmatched formats, either capture or output, is it still correct
+to return -EINVAL?
 
-> If I understand dma_map_single() correctly, the resulting dma handle
-> would be equally misaligned?
+> >
+> > Also, struct v4l2_frmsizeenum does not have a field saying whether it's
+> > capture or output side; it simply specifies a pixel format.
 >
-> To allocate a bounce buffer, would it be OK to use dma_alloc_coherent()
-> even though AFAIU memory used for DMA buffers generally isn't consistent
-> on m68k?
+> Acked.
 >
-> Thinking ahead to the other two Amiga drivers - I wonder whether
-> allocating a static bounce buffer or a DMA pool at driver init is likely
-> to succeed if the kernel runs from the low 16 MB RAM chunk? It certainly
-> won't succeed if the kernel runs from a higher memory address, so the
-> present bounce buffer logic around amiga_chip_alloc() might still need
-> to be used here.
+> >
+> > >
+> > > >
+> > > > Fix this so that the driver returns the supported resolutions corre=
+ctly,
+> > > > even if the instance only has default settings, or if the output fo=
+rmat
+> > > > is currently set to VP8F, which does not support 4K.
+> > > >
+> > > > Fixes: b018be06f3c7 ("media: mediatek: vcodec: Read max resolution =
+from dec_capability")
+> > > > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> > > > ---
+> > > >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c    | 2 --
+> > > >  .../platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c    | 7 +++=
+++++
+> > > >  2 files changed, 7 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.=
+c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+> > > > index 5d6fdf18c3a6..fcb4b8131c49 100644
+> > > > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+> > > > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+> > > > @@ -595,8 +595,6 @@ static int vidioc_enum_framesizes(struct file *=
+file, void *priv,
+> > > >               fsize->type =3D V4L2_FRMSIZE_TYPE_STEPWISE;
+> > > >               fsize->stepwise =3D dec_pdata->vdec_framesizes[i].ste=
+pwise;
+> > > >
+> > > > -             fsize->stepwise.max_width =3D ctx->max_width;
+> > > > -             fsize->stepwise.max_height =3D ctx->max_height;
+> > > >               mtk_v4l2_debug(1, "%x, %d %d %d %d %d %d",
+> > > >                               ctx->dev->dec_capability,
+> > > >                               fsize->stepwise.min_width,
+> > > > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_=
+stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_statele=
+ss.c
+> > > > index 16d55785d84b..9a4d3e3658aa 100644
+> > > > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_statele=
+ss.c
+> > > > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_statele=
+ss.c
+> > > > @@ -360,6 +360,13 @@ static void mtk_vcodec_add_formats(unsigned in=
+t fourcc,
+> > > >
+> > > >               mtk_vdec_framesizes[count_framesizes].fourcc =3D four=
+cc;
+> > > >               mtk_vdec_framesizes[count_framesizes].stepwise =3D st=
+epwise_fhd;
+> > > > +             if (!(ctx->dev->dec_capability & VCODEC_CAPABILITY_4K=
+_DISABLED) &&
+> > > > +                 fourcc !=3D V4L2_PIX_FMT_VP8_FRAME) {
+> > > > +                     mtk_vdec_framesizes[count_framesizes].stepwis=
+e.max_width =3D
+> > > > +                             VCODEC_DEC_4K_CODED_WIDTH;
+> > > > +                     mtk_vdec_framesizes[count_framesizes].stepwis=
+e.max_height =3D
+> > > > +                             VCODEC_DEC_4K_CODED_HEIGHT;
+> > > > +             }
+> > >
+> > > I don't particularly like to see this special cased check being added=
+ into
+> > > multiple places. Its also in your patch 2, and I think it exist in a =
+third
+> > > place. Could it be possible to have an internal helper to ensure we d=
+on't
+> >
+> > It's also in s_fmt(), so touched on in patch 4. I could also rewrite it=
+ so
+> > only this spot has the special case, and all the other places look thou=
+gh
+> > mtk_vdec_framesizes to get the maximum, like what I did for try_fmt in
+> > patch 3. What do you think?
 >
-> Leaves the question whether converting the gvp11 and a2091 drivers is
-> actually worth it, if bounce buffers still have to be handled explicitly.
+> I don't have a strong opinion, could be a totally internal (and unrelated=
+ to any
+> ioctl naming) helper that does the right thing.
 
-A2091 should be straight-forward, as A3000 is basically A2091 on the
-motherboard (comparing the two drivers, looks like someone's been
-sprinkling mb()s over the A3000 driver).
+According to offline discussions in chat, and looking at the code again,
+it seems we can get rid of ctx->max_{width,height} altogether.
 
-I don't have any of these SCSI host adapters (not counting the A590
-(~A2091) expansion of the old A500, which is not Linux-capable, and
- hasn't been powered on for 20 years).
+The check will only exist in mtk_vcodec_add_formats(), and the resolution
+clamping will only happen in the try_fmt callback.
 
-Gr{oetje,eeting}s,
+ChenYu
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> >
+> > Ultimately I think it would be better to move framesizes into the
+> > (driver-specific) pixel format data structure. That is a bigger refacto=
+ring
+> > than a simple fix though.
+>
+> Agreed.
+>
+> >
+> > > duplicate this logic ? Somehow, it seems there is something in common=
+ between
+> > > set_default, try_fmt and this code.
+> >
+> > Yes. That is what I mentioned in chat about refactoring the ioctls and =
+format
+> > handling code. set_default should really not set anything format specif=
+ic,
+> > but instead call set_fmt with a default format.
+>
+> So if this could have a simple helper that returns the max width/height f=
+or the
+> specified format and HW capability, I'm then fine with the series. If you=
+ can
+> change the EINVAL (which means nothing is supported) into ENOTTY for the =
+MM21
+> case, I'd also be more confortable (even though still a bit odd, but no l=
+onger a
+> lie).
+>
+> regards,
+> Nicolas
+>
+> >
+> >
+> > Regards
+> > ChenYu
+> >
+> > >
+> > > >               num_framesizes++;
+> > > >               break;
+> > > >       case V4L2_PIX_FMT_MM21:
+> > >
+>

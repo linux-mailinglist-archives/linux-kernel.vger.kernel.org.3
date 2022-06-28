@@ -2,186 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5805655C3ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CB455DEC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbiF1LPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 07:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
+        id S1344976AbiF1LPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 07:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiF1LPG (ORCPT
+        with ESMTP id S230489AbiF1LPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 07:15:06 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7D52D1CE
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 04:15:05 -0700 (PDT)
+        Tue, 28 Jun 2022 07:15:20 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631AC2CE07;
+        Tue, 28 Jun 2022 04:15:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656414905; x=1687950905;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1VzVOkwWtWO/RfrVesmDoo26OPyw3HnDy+zwq71hTHA=;
-  b=d+9xXpNdGBZQ4tN7zgL7SJzIgAPUstcsXMoX9ZWKj0n1mUEq/IGoI4cx
-   oA0chrd9+vM9Q5P3Nco8wNW4LfD/iKShKUFvegcDFdKQ1z9ez6xXVdA6M
-   jw1v7kPdcM5iJyYCXAGF7F4rwwAyZGP4fNl5A8hw31moOqnsxCgD/Ufp5
-   Tmg6Ho5Au6muzypdcImVV20+wihMLn5YYsgTMRYeUPF1iFKwYCv2eIQt6
-   GXAyrRkfrm4bTFRQUyS8A0tOcsiv+9lcLM6XXndBjscdulqldQf/+u7kj
-   rA7ABa50xFqOhnH9BOJGEOXrBf78584ELX+SH3uv/c5Y0T3n9S6hDpFyZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="345708833"
+  t=1656414919; x=1687950919;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VAm8GqMxSVbXa5l11MJLdH5RISvLfde2v1QEXHVyiio=;
+  b=mZq8HQm1gvx+ndU7H/4UXDpllHvZVhrQ1XAiisz3B81fZx3onExWwa6O
+   HVQxDRJDl50jvnbmrxEchDmq6UY8/i+ttGS+eDncCPGtynlXDroamI9ti
+   Uq51RMcF+qY6EIE39PfvMcnXDxErEvuU2MDeFHDV+KJ2SAyoSQ3S2hSqI
+   dLdVcrslX3VZW+FTuv6drbFpkgP25VRuSTGtqxOLLsDysNrBVHYiSkTT6
+   Ea8A9VKdMgtpUdr7diMyFGcq3zGsVKsEyAHor2tTs2WoAdvklRfh8+/gy
+   205fk4PmBhGiS2cOmHsS+LF9r8uF1CXZqm9uam08rIymaHIDGHF6iO5Pp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="281749895"
 X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="345708833"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:15:04 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="281749895"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:15:19 -0700
 X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="732712836"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Jun 2022 04:15:02 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o69BO-0009xE-3y;
-        Tue, 28 Jun 2022 11:15:02 +0000
-Date:   Tue, 28 Jun 2022 19:14:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Leon Romanovsky <leonro@nvidia.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Raed Salem <raeds@nvidia.com>
-Subject: [ammarfaizi2-block:mellanox/linux/queue-next 2/14]
- net/xfrm/xfrm_device.c:280:3: error: call to undeclared function
- 'dev_put_track'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202206281926.yJ1l888L-lkp@intel.com>
+   d="scan'208";a="693067914"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 04:15:16 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o69BV-000wl7-8C;
+        Tue, 28 Jun 2022 14:15:09 +0300
+Date:   Tue, 28 Jun 2022 14:15:09 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pali Rohar <pali@kernel.org>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hammer Hsieh <hammerh0314@gmail.com>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        Timur Tabi <timur@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh@kernel.org>,
+        sascha hauer <sha@pengutronix.de>, peng fan <peng.fan@nxp.com>,
+        kevin hilman <khilman@kernel.org>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        len brown <len.brown@intel.com>, pavel machek <pavel@ucw.cz>,
+        joerg roedel <joro@8bytes.org>, will deacon <will@kernel.org>,
+        andrew lunn <andrew@lunn.ch>,
+        heiner kallweit <hkallweit1@gmail.com>,
+        eric dumazet <edumazet@google.com>,
+        jakub kicinski <kuba@kernel.org>,
+        paolo abeni <pabeni@redhat.com>,
+        linus walleij <linus.walleij@linaro.org>,
+        hideaki yoshifuji <yoshfuji@linux-ipv6.org>,
+        david ahern <dsahern@kernel.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-actions@lists.infradead.org,
+        linux-unisoc@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH v1 0/2] Fix console probe delay when stdout-path isn't set
+Message-ID: <Yrrivbk2NSK3loBW@smile.fi.intel.com>
+References: <20220628020110.1601693-1-saravanak@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220628020110.1601693-1-saravanak@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block mellanox/linux/queue-next
-head:   62681695cd9969a82026b2b93d0c4ca1a8500eee
-commit: 0a1347c1f766cddc63032227434bc7b581904dc2 [2/14] xfrm: add new full offload flag
-config: i386-randconfig-a004-20220627 (https://download.01.org/0day-ci/archive/20220628/202206281926.yJ1l888L-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project df18167ac56d05f2ab55f9d874aee7ab6d5bc9a2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/0a1347c1f766cddc63032227434bc7b581904dc2
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block mellanox/linux/queue-next
-        git checkout 0a1347c1f766cddc63032227434bc7b581904dc2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
+On Mon, Jun 27, 2022 at 07:01:01PM -0700, Saravana Kannan wrote:
+> Since the series that fixes console probe delay based on stdout-path[1] got
+> pulled into driver-core-next, I made these patches on top of them.
+> 
+> Even if stdout-path isn't set in DT, this patch should take console
+> probe times back to how they were before the deferred_probe_timeout
+> clean up series[2].
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> net/xfrm/xfrm_device.c:280:3: error: call to undeclared function 'dev_put_track'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   dev_put_track(dev, &xso->dev_tracker);
-                   ^
-   net/xfrm/xfrm_device.c:280:3: note: did you mean 'get_net_track'?
-   include/net/net_namespace.h:331:27: note: 'get_net_track' declared here
-   static inline struct net *get_net_track(struct net *net,
-                             ^
-   1 error generated.
-
-
-vim +/dev_put_track +280 net/xfrm/xfrm_device.c
-
-   208	
-   209	int xfrm_dev_state_add(struct net *net, struct xfrm_state *x,
-   210			       struct xfrm_user_offload *xuo)
-   211	{
-   212		int err;
-   213		struct dst_entry *dst;
-   214		struct net_device *dev;
-   215		struct xfrm_dev_offload *xso = &x->xso;
-   216		xfrm_address_t *saddr;
-   217		xfrm_address_t *daddr;
-   218	
-   219		if (!x->type_offload)
-   220			return -EINVAL;
-   221	
-   222		/* We don't yet support UDP encapsulation and TFC padding. */
-   223		if (x->encap || x->tfcpad)
-   224			return -EINVAL;
-   225	
-   226		if (xuo->flags & ~(XFRM_OFFLOAD_IPV6 | XFRM_OFFLOAD_INBOUND))
-   227			return -EINVAL;
-   228	
-   229		dev = dev_get_by_index(net, xuo->ifindex);
-   230		if (!dev) {
-   231			if (!(xuo->flags & XFRM_OFFLOAD_INBOUND)) {
-   232				saddr = &x->props.saddr;
-   233				daddr = &x->id.daddr;
-   234			} else {
-   235				saddr = &x->id.daddr;
-   236				daddr = &x->props.saddr;
-   237			}
-   238	
-   239			dst = __xfrm_dst_lookup(net, 0, 0, saddr, daddr,
-   240						x->props.family,
-   241						xfrm_smark_get(0, x));
-   242			if (IS_ERR(dst))
-   243				return 0;
-   244	
-   245			dev = dst->dev;
-   246	
-   247			dev_hold(dev);
-   248			dst_release(dst);
-   249		}
-   250	
-   251		if (!dev->xfrmdev_ops || !dev->xfrmdev_ops->xdo_dev_state_add) {
-   252			xso->dev = NULL;
-   253			dev_put(dev);
-   254			return 0;
-   255		}
-   256	
-   257		if (x->props.flags & XFRM_STATE_ESN &&
-   258		    !dev->xfrmdev_ops->xdo_dev_state_advance_esn) {
-   259			xso->dev = NULL;
-   260			dev_put(dev);
-   261			return -EINVAL;
-   262		}
-   263	
-   264		xso->dev = dev;
-   265		netdev_tracker_alloc(dev, &xso->dev_tracker, GFP_ATOMIC);
-   266		xso->real_dev = dev;
-   267	
-   268		if (xuo->flags & XFRM_OFFLOAD_INBOUND)
-   269			xso->dir = XFRM_DEV_OFFLOAD_IN;
-   270		else
-   271			xso->dir = XFRM_DEV_OFFLOAD_OUT;
-   272	
-   273		xso->type = XFRM_DEV_OFFLOAD_CRYPTO;
-   274	
-   275		err = dev->xfrmdev_ops->xdo_dev_state_add(x);
-   276		if (err) {
-   277			xso->dev = NULL;
-   278			xso->dir = 0;
-   279			xso->real_dev = NULL;
- > 280			dev_put_track(dev, &xso->dev_tracker);
-   281			xso->type = XFRM_DEV_OFFLOAD_UNSPECIFIED;
-   282	
-   283			if (err != -EOPNOTSUPP)
-   284				return err;
-   285		}
-   286	
-   287		return 0;
-   288	}
-   289	EXPORT_SYMBOL_GPL(xfrm_dev_state_add);
-   290	
+Are you sure it's only limited to the serial drivers?
+(just asking, I don't know myself the answer)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With Best Regards,
+Andy Shevchenko
+
+

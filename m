@@ -2,163 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DEC55C452
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCFF355C822
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245665AbiF1I7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 04:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S1343498AbiF1I7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 04:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243923AbiF1I7N (ORCPT
+        with ESMTP id S245726AbiF1I72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 04:59:13 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB19EAB;
-        Tue, 28 Jun 2022 01:59:12 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25S8kK8r025506;
-        Tue, 28 Jun 2022 08:59:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=NJGYOtCXqHINCz1gB/ROdNxdoURtR0qXerIDni39BIE=;
- b=Kj+D2AaGJBMJ2oysdaOAHdGC4Xw5hPyNYSRJyduqCHNem7sdGRDBmBqfb4aybAAya9BN
- Kq8J/w9FBPaULVjCUyVqCqp4yDINdBDDRN2K+kQO9qZzAuPBhdDjp2mIVeVwp9I5Yyd7
- K9eMbZq7Ua1WGv+aY1KOAmfqnJ1dwPH04YMcoqvviBBcCp0kFDmrPOxvCh5fsuCTfNDM
- rd2bwR43taZqlSuAbR/DUPreg68AqEutAUFeADkpbZ7MerZm84tRh2+LJ9h95L3Yq0Gj
- 2dmiAS6I2fBDBOWX1Don1xYFpOwTv1vPIEro7+Xv5rNQUUxIhhRG60ixKc2Pypg090jd DQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gyxdy0a8h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 08:59:11 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25S8vmYY023106;
-        Tue, 28 Jun 2022 08:59:10 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gyxdy0a7h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 08:59:10 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25S8ogvN017242;
-        Tue, 28 Jun 2022 08:59:08 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 3gwt08vhef-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jun 2022 08:59:08 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25S8x5Gm22216990
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jun 2022 08:59:05 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AE5A1A4054;
-        Tue, 28 Jun 2022 08:59:05 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 276FEA405B;
-        Tue, 28 Jun 2022 08:59:04 +0000 (GMT)
-Received: from [9.171.42.158] (unknown [9.171.42.158])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Jun 2022 08:59:03 +0000 (GMT)
-Message-ID: <207a01aa-d92c-4a17-7b2f-aed59da4ce09@linux.ibm.com>
-Date:   Tue, 28 Jun 2022 10:59:03 +0200
+        Tue, 28 Jun 2022 04:59:28 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C9F2EA04
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:59:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1656406766; x=1687942766;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4tLgWVuhPtORkgHFfRn51MDvCCJeZfMRDl0Z3GZEF2Q=;
+  b=BdDmncEY5aDvFSo0pQFttPZNPcJYXkGuEXVc+ZNYNdFSwthZtZYmHQJT
+   Rcr9u4SJFTjUdQAwKn3caQ0ZfNgJTTTpeuYrjAiu1glY4kqk83sf+J9+8
+   SgabQrU0V8P0cETmL1RnbLZ0QT0PykyRPJ+zIzfrG3oyNeMsRZgAZBKhV
+   bDK80LndtJY+77jHMh2b9feNxU0XkGkIB5qVG5E5nUebELJZ9tw+TERCh
+   wx4H4tvsyNKWLNGLhR1MGJFSzdurveRwOdxW0WydCTE1fSuthHZtQbr16
+   ReI2e15O66EpD4OiBCHEBQLuAE4s3AEmzTYhmS6qygqnPiMVN3KgDk6Hy
+   g==;
+X-IronPort-AV: E=Sophos;i="5.92,227,1650902400"; 
+   d="scan'208";a="205008496"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Jun 2022 16:59:25 +0800
+IronPort-SDR: A3Eh7IUYaGYCAQF2Ov+SI0MDIQcUp8wPaW31k6R2wBasRodmf0+UvazDxexSjAe416CazPWV+J
+ sWtUJVwDzWfg0Sin03CvZOYrGbTNDkL8k4asgAmAwCqfjAdRqqIxA4Bax1PIPZkuBDwxN5nUtY
+ WwzRccx5cOMQM1lDThPdLHky17d8TItUgLzInDdSoG85nNuAn+yGM9WiM1+ikai9fNCTDD9wRV
+ wKhOKe0fdGLLsi4pJPWFSU7aI6AgePyC2sv52C1IrL9Lc07d0WyIqduC3/pcxjUHOf0Yx57gU6
+ bogRu1kV9FS0rKw35C+l6BLa
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Jun 2022 01:17:05 -0700
+IronPort-SDR: pk5y2jWMaTGCvHwg1973BCluEjoEGZyLeLBestpDHrFEzHjAgM6Jo1EhQa1GKoTne2Ps9cxu7S
+ 5X+YX/L2Iu3IsJEVUy40VZrXJ+eMsIgMJUYVAK1gGArkyNm+s2sXAzr73l1z3KKLzUO6uZVa2v
+ 2u0A1HadWVflhKEZ90O5+RT81JcMGaBYgsPYE/b4gudrUk8FLavUaQT2nd2M0uDc7yOpdz6FUc
+ jK+L3xx+M4KmxtIBcM//KceJkmujvJHktVommfB0zc0K5647u4fZ/ME6N1TjTZB3sMhDa80RmQ
+ ggA=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Jun 2022 01:59:25 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LXJSD6VHXz1Rwnm
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 01:59:24 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1656406764; x=1658998765; bh=4tLgWVuhPtORkgHFfRn51MDvCCJeZfMRDl0
+        Z3GZEF2Q=; b=MXOj3iHncCga2TST1BTd+EFNaUdnQI4uSukOtMt+dc3EGEftn7s
+        dlCLLSbDCS+1NGLTrCK8yMpm4BMjmXdvxUm8L3nt/Bqjsrd44BwVLSvWbLGJ9Ymp
+        FqA8M1sK1FFuarYsrpP0iiBqBwwfmzHzVVNI++hNqz/0wlVX7bSy/FSkV3axOlEE
+        +XSENYLhEdXUSwxG5AhtOY3Wwj4Ddtr2MBFKvsECH2oSDwAVS9l0hJ85JyqIgIAF
+        UKHyQ2mwcxusWDG4A/BxxDZKIwq23k3pXvx6B5UuIF04yNRd+KB9kJdvFH/7a1sD
+        ha5Y7W6wj4tpoRAx9zSYJ9z2EeZ7XBJlULw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id EHZhYYP1hoiq for <linux-kernel@vger.kernel.org>;
+        Tue, 28 Jun 2022 01:59:24 -0700 (PDT)
+Received: from [10.225.163.99] (unknown [10.225.163.99])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LXJSC4BgNz1RtVk;
+        Tue, 28 Jun 2022 01:59:23 -0700 (PDT)
+Message-ID: <16f727b8-c3b0-c828-0c5b-6728a6e7934f@opensource.wdc.com>
+Date:   Tue, 28 Jun 2022 17:59:22 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v10 2/3] KVM: s390: guest support for topology function
+Subject: Re: [PATCH] ata: pata_cs5535: Fix W=1 warnings
 Content-Language: en-US
-To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220620125437.37122-1-pmorel@linux.ibm.com>
- <20220620125437.37122-3-pmorel@linux.ibm.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <20220620125437.37122-3-pmorel@linux.ibm.com>
+To:     John Garry <john.garry@huawei.com>, s.shtylyov@omp.ru
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1656335540-50293-1-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1656335540-50293-1-git-send-email-john.garry@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 860zfobV2qBY6qSuhgetDywiU7s0RGhA
-X-Proofpoint-ORIG-GUID: Zm5aoLnQUkF1x_3ZV6vOGLl-qLAwG7PX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-27_09,2022-06-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- priorityscore=1501 phishscore=0 lowpriorityscore=0 impostorscore=0
- mlxlogscore=999 malwarescore=0 adultscore=0 mlxscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206280035
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/20/22 14:54, Pierre Morel wrote:
-> We report a topology change to the guest for any CPU hotplug.
-> 
-> The reporting to the guest is done using the Multiprocessor
-> Topology-Change-Report (MTCR) bit of the utility entry in the guest's
-> SCA which will be cleared during the interpretation of PTF.
-> 
-> On every vCPU creation we set the MCTR bit to let the guest know the
-> next time he uses the PTF with command 2 instruction that the
-> topology changed and that he should use the STSI(15.1.x) instruction
-> to get the topology details.
-> 
-> STSI(15.1.x) gives information on the CPU configuration topology.
-> Let's accept the interception of STSI with the function code 15 and
-> let the userland part of the hypervisor handle it when userland
-> support the CPU Topology facility.
-> 
-> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
-> ---
->  arch/s390/include/asm/kvm_host.h | 11 ++++++++---
->  arch/s390/kvm/kvm-s390.c         | 27 ++++++++++++++++++++++++++-
->  arch/s390/kvm/priv.c             | 15 +++++++++++----
->  arch/s390/kvm/vsie.c             |  3 +++
->  4 files changed, 48 insertions(+), 8 deletions(-)
-> 
-[...]
+On 6/27/22 22:12, John Garry wrote:
+> x86_64 allmodconfig build with W=3D1 gives these warnings:
+>=20
+> drivers/ata/pata_cs5535.c: In function =E2=80=98cs5535_set_piomode=E2=80=
+=99:
+> drivers/ata/pata_cs5535.c:93:11: error: variable =E2=80=98dummy=E2=80=99=
+ set but not used [-Werror=3Dunused-but-set-variable]
+>   u32 reg, dummy;
+>            ^~~~~
+> drivers/ata/pata_cs5535.c: In function =E2=80=98cs5535_set_dmamode=E2=80=
+=99:
+> drivers/ata/pata_cs5535.c:132:11: error: variable =E2=80=98dummy=E2=80=99=
+ set but not used [-Werror=3Dunused-but-set-variable]
+>   u32 reg, dummy;
+>            ^~~~~
+> cc1: all warnings being treated as errors
+>=20
+> Mark variables 'dummy' as "maybe unused" to satisfy when rdmsr() is
+> stubbed, which is the same as what we already do in pata_cs5536.c .
+>=20
+> Signed-off-by: John Garry <john.garry@huawei.com>
 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 8fcb56141689..95b96019ca8e 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -1691,6 +1691,25 @@ static int kvm_s390_get_cpu_model(struct kvm *kvm, struct kvm_device_attr *attr)
->  	return ret;
->  }
-> 
-> +/**
-> + * kvm_s390_sca_set_mtcr
+Looks good, but I wonder why I am not getting this warning. I always do
+W=3D1 and C=3D1 builds. I tried allmodconfig now and I am not getting the
+warning...
 
-I wonder if there is a better name, kvm_s390_report_topology_change maybe?
+>=20
+> diff --git a/drivers/ata/pata_cs5535.c b/drivers/ata/pata_cs5535.c
+> index 6725931f3c35..c2c3238ff84b 100644
+> --- a/drivers/ata/pata_cs5535.c
+> +++ b/drivers/ata/pata_cs5535.c
+> @@ -90,7 +90,7 @@ static void cs5535_set_piomode(struct ata_port *ap, s=
+truct ata_device *adev)
+>  	static const u16 pio_cmd_timings[5] =3D {
+>  		0xF7F4, 0x53F3, 0x13F1, 0x5131, 0x1131
+>  	};
+> -	u32 reg, dummy;
+> +	u32 reg, __maybe_unused dummy;
+>  	struct ata_device *pair =3D ata_dev_pair(adev);
+> =20
+>  	int mode =3D adev->pio_mode - XFER_PIO_0;
+> @@ -129,7 +129,7 @@ static void cs5535_set_dmamode(struct ata_port *ap,=
+ struct ata_device *adev)
+>  	static const u32 mwdma_timings[3] =3D {
+>  		0x7F0FFFF3, 0x7F035352, 0x7F024241
+>  	};
+> -	u32 reg, dummy;
+> +	u32 reg, __maybe_unused dummy;
+>  	int mode =3D adev->dma_mode;
+> =20
+>  	rdmsr(ATAC_CH0D0_DMA + 2 * adev->devno, reg, dummy);
 
-> + * @kvm: guest KVM description
-> + *
-> + * Is only relevant if the topology facility is present,
-> + * the caller should check KVM facility 11
-> + *
-> + * Updates the Multiprocessor Topology-Change-Report to signal
-> + * the guest with a topology change.
-> + */
-> +static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
-> +{
 
-Do we need a sca_lock read_section here? If we don't why not?
-Did not see one up the stack, but I might have overlooked something.
-
-> +	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
-> +
-> +	ipte_lock(kvm);
-> +	sca->utility |= SCA_UTILITY_MTCR;
-> +	ipte_unlock(kvm);
-> +}
-> +
-
-[...]
-
+--=20
+Damien Le Moal
+Western Digital Research

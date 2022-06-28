@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A9755E600
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E59655E7E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347260AbiF1PXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55170 "EHLO
+        id S231124AbiF1PZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347840AbiF1PXv (ORCPT
+        with ESMTP id S1346653AbiF1PYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:23:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2439427FD7;
-        Tue, 28 Jun 2022 08:23:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4561B81EB0;
-        Tue, 28 Jun 2022 15:23:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9736EC3411D;
-        Tue, 28 Jun 2022 15:23:47 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="iEiH28Go"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1656429825;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i7kqdjIR171pSbvH2lGZ2vQhHvcvnOwMVzW1AX6PeZ0=;
-        b=iEiH28GosiLiJnxavcGnyk5NieqsY7gvnZPBI0szZq5U9CMyoJ/2Y4rM7qnyOQGr99TMBX
-        L/f0Z/ndT7cY8lH03tAa4Xbg+9Utf9TovHh0lVQFf++q2+u3N3EEsQJHRtIx0l66cxH/vt
-        2iqJgyznkhYCwmhtJcFL7CI54Bh6d1Q=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 20f3a433 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 28 Jun 2022 15:23:45 +0000 (UTC)
-Date:   Tue, 28 Jun 2022 17:23:39 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     krzysztof.kozlowski@linaro.org, robh@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Kees Cook <keescook@chromium.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Will Deacon <will@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH] dt-bindings: chosen: document rng-seed property
-Message-ID: <Yrsc+50Y2UX1wlYH@zx2c4.com>
-References: <20220627152107.645860-1-Jason@zx2c4.com>
- <CAJMQK-jGsobw7i4NjQ4oezA0rU03ECs_nY=Txr6TgsHFu2jXhg@mail.gmail.com>
+        Tue, 28 Jun 2022 11:24:53 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B7B2DAB5;
+        Tue, 28 Jun 2022 08:24:48 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id r133so13221204iod.3;
+        Tue, 28 Jun 2022 08:24:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eLyuLD15Aw0Be/kq7JIpgE2do6KM/UKTXxIdVTRE3sc=;
+        b=qERk90jaQ3zsjXchyCff82HyevmOvxF4+R6XNB0yFggouQ4mUlgCpwCcOdwCxw5x7k
+         zsXNYwVPpWZ8aJy79efKYk7M0MSLdGkV79eAbAvUq5sYpmvYFn5JjJRXOFMrU8Mvl2od
+         A0KeaSjEG1WmET6j4ouMZqBCzQ3/jroUCPwXBi6XTvPb/1EHk/f7ZGeQxVlb0/eqoo+q
+         vD7TRhvoAuU4sQUwHV9I9lK4WmfTjr6e2NVxCwh8kl1E31o9zOF2C6SoWWo7aXi5FNT6
+         Qf87jozrVf7NjIPhYGiu5/O48Yb0bH9imTvh1wL2Vp7iSMhKKS6EDaqs8R4enoGyAFt7
+         HGag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eLyuLD15Aw0Be/kq7JIpgE2do6KM/UKTXxIdVTRE3sc=;
+        b=VwWsqbE+iGaJq3XHzaCY4eYGrY1Ru0NoFbZaT6Z261cgL+IOKcqF9Tq9Q42bm8LUNF
+         ifKTm5JREt66RksHtRTA5K5wLUpiygm0hh0l2VsqjToHlOTeLOivrihOj7c566empnrd
+         KHLGPX4zkjEV2yV3z3zwy9IbZiy5/1yWJcWYhJMSJ04h3NFzwDX3d+2hhMdGvNHBilTn
+         PugwQgW/0h95XspHmqhFbwkrvfKrr0gytSwcHDFqO/KVMy9Z9k4zTU5/f3+CSKAVE+/3
+         ySB0ZVXkhWrUM1dpYg8w0IOEFvhRuFWqORmL5RUjqFqLV8O0vg0vczk7SMm0pl3VkXRx
+         sv5w==
+X-Gm-Message-State: AJIora9JKxegb/WlapMsDZCm7cl90YVjb7zUOjTqmy/0BHZNAJDw51RM
+        1rQbUo0nNm46SCyCDHgzwzWf8ikkaniBkQ==
+X-Google-Smtp-Source: AGRyM1ur49F6ppP1KpfkrUv5BG+7OUqsCfEqHbgDFghyK1MNyzHYSTMXncripVNXUchzJ3K67vQaGw==
+X-Received: by 2002:a05:6638:4195:b0:33c:ae8e:c240 with SMTP id az21-20020a056638419500b0033cae8ec240mr4193770jab.269.1656429888118;
+        Tue, 28 Jun 2022 08:24:48 -0700 (PDT)
+Received: from localhost.localdomain (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with ESMTPSA id p18-20020a056638217200b00339cae5cb8fsm6222596jak.103.2022.06.28.08.24.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 Jun 2022 08:24:47 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     alex.williamson@redhat.com, cohuck@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Schspa Shi <schspa@gmail.com>
+Subject: [PATCH v2] vfio: Clear the caps->buf to NULL after free
+Date:   Tue, 28 Jun 2022 23:24:29 +0800
+Message-Id: <20220628152429.286-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJMQK-jGsobw7i4NjQ4oezA0rU03ECs_nY=Txr6TgsHFu2jXhg@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,49 +68,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hsin-Yi,
+API vfio_info_cap_add will free caps->buf, clear it to NULL after
+free.
 
-On Tue, Jun 28, 2022 at 11:39:38AM +0800, Hsin-Yi Wang wrote:
-> On Mon, Jun 27, 2022 at 11:21 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > Document the /chosen/rng-seed property, which has existed for quite some
-> > time but without an entry in this file.
-> >
-> > Fixes: 428826f5358c ("fdt: add support for rng-seed")
-> > Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Rob Herring <robh@kernel.org>
-> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> It's currently documented in
-> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/chosen.yaml
-> 
-> https://lore.kernel.org/lkml/CAL_Jsq+uSdk9YNbUW35yjN3q8-3FDobrxHmBpy=4RKmCfnB0KQ@mail.gmail.com/
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+---
+ drivers/vfio/vfio.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Well, let's see. That email says:
+diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
+index 61e71c1154be..a0fb93866f61 100644
+--- a/drivers/vfio/vfio.c
++++ b/drivers/vfio/vfio.c
+@@ -1812,6 +1812,7 @@ struct vfio_info_cap_header *vfio_info_cap_add(struct vfio_info_cap *caps,
+ 	buf = krealloc(caps->buf, caps->size + size, GFP_KERNEL);
+ 	if (!buf) {
+ 		kfree(caps->buf);
++		caps->buf = NULL;
+ 		caps->size = 0;
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+-- 
+2.24.3 (Apple Git-128)
 
-> Already documented here[1]. I've been meaning to delete chosen.txt so
-> that's a bit more obvious.
-> 
-> I realize it's a bit harder to find what's documented where. Long term
-> we'd like to generate documentation from the schema and integrate as
-> part of the spec. Short term, it would be quite trivial to make a 'am
-> I documented' utility.
-
-That sounds reasonable. But when was that email written? April 2, 2020.
-That's 817 days ago.
-
-So I call BS on this being a continued justification for rejecting this
-patch (which apparently was submitted by Florian over two years ago
-too). Rob clearly hasn't followed through. So please apply this patch so
-that chosen.txt remains maintained.
-
-Later if he moves forward with his plan, then no harm done, since the
-file will be deleted anyway.
-
-Sometimes it's best to reassess things based on the reality of the
-situation, you know?
-
-Jason

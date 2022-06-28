@@ -2,77 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A4455DD79
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB68055DE0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345651AbiF1MYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 08:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        id S1345649AbiF1M07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 08:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344426AbiF1MYC (ORCPT
+        with ESMTP id S231292AbiF1M05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 08:24:02 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB0212607;
-        Tue, 28 Jun 2022 05:24:00 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id w20so21949482lfa.11;
-        Tue, 28 Jun 2022 05:24:00 -0700 (PDT)
+        Tue, 28 Jun 2022 08:26:57 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8E222B2D;
+        Tue, 28 Jun 2022 05:26:56 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id s1so17431511wra.9;
+        Tue, 28 Jun 2022 05:26:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WQ9z0kTfCVSMtE397ipDHk7qIKZlvLyKSPAwwpIITAU=;
-        b=oJeWJ1qCSiib5W2lwNnI8DCmF6gEvOiXc4xzCpsOZIF6yapvctQSK6rHVW9x6GSyZu
-         LdwYH5tmtMCOnDshF1TN90IcBRf/m1kf3l8KqibN4dqzD8PiktilDXSiHrlG2NPQx78S
-         7hrmCOtAsUlNqthmCEwV3apGA0jXo/0DBOZ8yKzKLSUjRvbx74c5g4RAulCbAiA9syD8
-         HigV9bGGEhl34l8K//bfeCz6YnLOiKTY38nCsW5vueljvs97TuldTvbHMuJ6fQkItlmm
-         00JwVXoDF67FJw2eGGAbxzDG0hTxolzEHfgW4BoG6dNxmrsTJP7pwupxYfTIZ7aAdO1M
-         9Y1Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BBbAz4nN/kEqq17Hkjd67PQhLHR+U0drfdLc0GuJOK0=;
+        b=cxtKJCUSVEzVJj+iL4lJVQDHlo8KUSad6DH1tB6D4RVSogOwanBgqMd0a7/CM6A31q
+         YX6ICf9+Kg67EFa+6e3LOOIUc51JeiXLQ9jHtvpbY6f/EeXvVQyNfCSgbsTfp7Tb4+lW
+         PQZGbz0YrR5kLAldX7FCEF6OdyAUzit/IVw3pTBMv8kAER4StE17ex6WXGbi2FOm7f6U
+         T2ExIT3Za05kRaSn3Aar/nOm+pL/BXFjj19AwqbAneKuNWrj4lX/Yg+V3QSq5GSf65Ux
+         FurUnaV109XZAmrnMLufxcIQFk2Mgw1IbIoBETKMpQrcIzsTJkCXK1LjLeSGeyOklGXv
+         clqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WQ9z0kTfCVSMtE397ipDHk7qIKZlvLyKSPAwwpIITAU=;
-        b=Znc14CpT/sXEZIu8sJyAkuZcv0WjMJbmy4cUlR3lXbFvRX/U+YpJQ2YFKxmirkNMj8
-         FTJHqDQnM1du/4o+ppgBq9UaLa60upqPvtghNAqOtQ/qC0aoPH9svgaXpzG3ME/wYjez
-         GAmDdRto7eGHH5kBoNeNVTyHjz4WA9BBtrmuK3+qHG7+pZkTwQqx2eXBsgiBbaL3hzBp
-         pIIK9Q1yI5FrNgGbebwBN8XO+sSNbSZ4bZVHnu++gdNzbXL5hpcRVKcoODtOqJ2CWFoE
-         eYSUzcCnzExVgNFnAgAVj/SuAB+sXIAdBf7PU77m+dTIWr3y5L4CnURWdoCTn1wKF5dF
-         vhBw==
-X-Gm-Message-State: AJIora+JMh9mMXHoDT2bzSoycLPksu0rEnMofVH5K246ze4z4U1XiD4L
-        3mSB3S+KlEXOFMw/5cqRWs8=
-X-Google-Smtp-Source: AGRyM1vx1D1O75pkNnia/hKrEET3jpv4ZxA0jF7/IIn8/3AzukiI+aebALgZc18jCe8O9M3uhM4SAg==
-X-Received: by 2002:a05:6512:1095:b0:47f:7061:2751 with SMTP id j21-20020a056512109500b0047f70612751mr12478192lfg.392.1656419038779;
-        Tue, 28 Jun 2022 05:23:58 -0700 (PDT)
-Received: from mobilestation ([95.79.140.178])
-        by smtp.gmail.com with ESMTPSA id u22-20020a197916000000b0047f86b503absm2192747lfc.16.2022.06.28.05.23.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 05:23:58 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 15:23:56 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 17/17] PCI: dwc: Add Baikal-T1 PCIe controller support
-Message-ID: <20220628122356.ao6b3usaiwtvz4s7@mobilestation>
-References: <20220620171347.35beffaudlik7euw@mobilestation>
- <20220621182941.GA1322521@bhelgaas>
- <20220622170437.jhvb56jmdup5dcgh@mobilestation>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BBbAz4nN/kEqq17Hkjd67PQhLHR+U0drfdLc0GuJOK0=;
+        b=wSRo3QxC7NNeQfg/6r1YD3tAbl1sZl6mBt6ZIfo8vqA6/07MH6DxIXjbiXGaOhz1G5
+         29ytl9tKoR2mvWizwQEaMf9E+cbOjV91PZlS2XNKLvgiUxGq1YjCYZUwMH6+v4MqNOQR
+         it6zhCdQ5Dryec1NHLb0HBeWl5s0y9UFJUue45OpvC8+YPXcfNIaYM3wnGtiROVo1GAT
+         +k8D7QUVwcBjNyfqFXkaDxaTDtbS+6/Rjce+ESg4eUkLA+KXDesEpvlJUvNnIukdXpdu
+         TxxQkLcRDBKqmdFb0tOui7LdPz8e/Yjjp4QpSchhUPndmdk8cJahVbIBqCVTJ6NYxDAZ
+         MqzQ==
+X-Gm-Message-State: AJIora/Oo5lYfOxS/oql2FGzhyxknBGY4mxwa4Md0zr69Nt9SIi6S/ea
+        OAsrO/DAGPKM3Nj0PdVEC6HQjMVnTsbfvayGHUE=
+X-Google-Smtp-Source: AGRyM1voH42e5mjzI0lnr+10bt6FCTPk+PnGDK5RqDBBbHmDFr3LDPyV0ljIqlsW4S2b/SZB14dNXoGA9cuDTzQY6EQ=
+X-Received: by 2002:a5d:4c90:0:b0:21b:8b2a:1656 with SMTP id
+ z16-20020a5d4c90000000b0021b8b2a1656mr17171451wrs.249.1656419214549; Tue, 28
+ Jun 2022 05:26:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220622170437.jhvb56jmdup5dcgh@mobilestation>
+References: <20220524152144.40527-1-schultz.hans+netdev@gmail.com>
+ <20220524152144.40527-4-schultz.hans+netdev@gmail.com> <20220627180557.xnxud7d6ol22lexb@skbuf>
+In-Reply-To: <20220627180557.xnxud7d6ol22lexb@skbuf>
+From:   Hans S <schultz.hans@gmail.com>
+Date:   Tue, 28 Jun 2022 14:26:43 +0200
+Message-ID: <CAKUejP7ugMB9d3MVX3m9Brw12_ocFoT+nuJJucYdQH70kzC7=w@mail.gmail.com>
+Subject: Re: [PATCH V3 net-next 3/4] net: dsa: mv88e6xxx: mac-auth/MAB implementation
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Ido Schimmel <idosch@nvidia.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -83,376 +80,424 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bjorn,
-Do you have anything to say based on the notes below?
+On Mon, Jun 27, 2022 at 8:06 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+>
+> Hi Hans,
+>
+> On Tue, May 24, 2022 at 05:21:43PM +0200, Hans Schultz wrote:
+> > This implementation for the Marvell mv88e6xxx chip series, is
+> > based on handling ATU miss violations occurring when packets
+> > ingress on a port that is locked. The mac address triggering
+> > the ATU miss violation is communicated through switchdev to
+> > the bridge module, which adds a fdb entry with the fdb locked
+> > flag set. The entry is kept according to the bridges ageing
+> > time, thus simulating a dynamic entry.
+> >
+> > Note: The locked port must have learning enabled for the ATU
+> > miss violation to occur.
+> >
+> > Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+> > ---
+>
+> I'm sorry that I couldn't focus on the big picture of this patch,
+> but locking is an absolute disaster and I just stopped after a while,
+> it's really distracting :)
 
--Sergey
+The code works, but I think that we should "undisaster" it. :)
 
-On Wed, Jun 22, 2022 at 08:04:37PM +0300, Serge Semin wrote:
-> On Tue, Jun 21, 2022 at 01:29:41PM -0500, Bjorn Helgaas wrote:
-> > On Mon, Jun 20, 2022 at 08:13:47PM +0300, Serge Semin wrote:
-> > > On Wed, Jun 15, 2022 at 11:48:48AM -0500, Bjorn Helgaas wrote:
-> > > > On Fri, Jun 10, 2022 at 11:57:05AM +0300, Serge Semin wrote:
-> > > > > Baikal-T1 SoC is equipped with DWC PCIe v4.60a host controller. It can be
-> > > > > trained to work up to Gen.3 speed over up to x4 lanes. The host controller
-> > > > > is attached to the DW PCIe 3.0 PCS via the PIPE-4 interface, which in its
-> > > > > turn is connected to the DWC 10G PHY. The whole system is supposed to be
-> > > > > fed up with four clock sources: DBI peripheral clock, AXI application
-> > > > > clocks and external PHY/core reference clock generating the 100MHz signal.
-> > > > > In addition to that the platform provide a way to reset each part of the
-> > > > > controller: sticky/non-sticky bits, host controller core, PIPE interface,
-> > > > > PCS/PHY and Hot/Power reset signal. The driver also provides a way to
-> > > > > handle the GPIO-based PERST# signal.
-> > > > > 
-> > > > > Note due to the Baikal-T1 MMIO peculiarity we have to implement the DBI
-> > > > > interface accessors which make sure the IO operations are dword-aligned.
-> > 
-> > > > > +struct dw_pcie_ops bt1_pcie_dw_ops = {
-> > > > > +	.read_dbi = bt1_pcie_read_dbi,
-> > > > > +	.write_dbi = bt1_pcie_write_dbi,
-> > > > > +	.write_dbi2 = bt1_pcie_write_dbi2,
-> > > > > +	.start_link = bt1_pcie_start_ltssm,
-> > > > > +	.stop_link = bt1_pcie_stop_ltssm,
-> > > > > +};
-> > 
-> > > > Please rename to "dw_pcie_ops" as most
-> > > > drivers use. 
-> > > 
-> > > IMO matching the structure and its instance names is not a good idea.
-> > > Other than confusing objects nature, at the very least it forces you to
-> > > violate the local namespace convention. Thus in the line of the
-> > > dw_pcie->ops initialization it looks like you use some generic
-> > > operations while in fact you just refer to the locally defined
-> > > DW PCIe ops instance with the generic variable name. Moreover AFAICS
-> > > the latest platform drivers mainly use the vendor-specific prefix in
-> > > the dw_pcie_ops structure instance including the ones acked by you,
-> > > Lorenzo and Gustavo. What makes my code any different from them?
-> > 
-> 
-> > That's fair.  I suggest "bt1_pcie_ops" or "bt1_dw_pcie_ops" to match
-> > the other drivers that include the driver name:
-> > 
-> >   intel_pcie_ops
-> >   keembay_pcie_ops
-> >   kirin_dw_pcie_ops
-> >   tegra_dw_pcie_ops
-> 
-> +   ks_pcie_dw_pcie_ops
-> 
-> which is even further from the suggested names.)
-> 
-> > 
-> > They're not 100% consistent, but hopefully we can at least not make
-> > things *less* consistent.
-> 
-> I don't think we can make something less consistent if there is no real
-> consistency.) There are at most five ops descriptors can be defined in
-> the DW PCIe platform drivers:
-> 
-> 1. struct dw_pcie_ops - DW PCIe DBI interface accessors,
-> +-> dw_pcie_ops
-> +-> <vendor>_pcie_ops
-> +-> <vendor>_dw_pcie_ops
-> 
-> 2. struct pci_ops     - own or child PCIe config space accessors,
-> +-> dw_pcie_ops !!! in the driver core.
-> +-> <vendor>_pci_ops
-> +-> <vendor>_pcie_ops
-> +-> dw_child_pcie_ops
-> +-> <vendor>_child_pcie_ops
-> +-> <vendor>_child_pci_ops
-> 
-> 3. struct dw_pcie_host_ops - DW PCIe Root Port init/de-init operations
-> +-> <vendor>_pcie_host_ops
-> +-> <vendor>_pcie_dw_host_ops
-> 
-> 4. struct dw_pcie_ep_ops   - DW PCIe Endpoint init/de-init operations
-> +-> pcie_ep_ops
-> +-> pci_ep_ops
-> +-> <vendor>_pcie_ep_ops
-> 
-> As you can see each can have different naming approaches used in the
-> DW PCIe platform drivers here and there. Some of them have been utilized
-> more frequently, some of them - less. As for me what is really consistent
-> across all the DW PCIe platform drivers is the local namespace prefix
-> of the form "<vendor>_pcie". It is used in all the locally defined
-> functions names and more-or-less mainly in the local instances of the
-> operation descriptors. So if you want we can pick some approach and
-> make sure it is used in all the driver from now on. For instance,
-> 
-> struct dw_pcie_ops <vendor>_pcie_ops
-> struct dw_pcie_host_ops <vendor>_pcie_host_ops
-> struct dw_pcie_ep_ops <vendor>_pcie_ep_ops
-> struct pci_ops <vendor>_pci_ops // Can be confused with the struct
->                                 // dw_pcie_ops instance, but this what
->                                 // is mainly used in the available drivers.
-> struct pci_ops <vendor>_child_pci_ops // less frequent naming
->                                       // approach, but it looks more
->                                       // like the own CFG-space IOs.
-> 
-> Note the later two cases will violate the local namespace naming
-> convention of having "<vendor>_pcie" prefix.
-> 
-> In my case the names would look like:
-> struct dw_pcie_ops bt1_pcie_ops // What you suggest in the comment above
-> struct dw_pcie_host_ops bt1_pcie_host_ops
-> struct pci_ops bt1_pci_ops // It may look ambiguous with bt1_pcie_ops.
-> 
-> What do you think?
-> 
-> > 
-> > > > > +static int bt1_pcie_get_res(struct bt1_pcie *btpci)
-> > > 
-> > > > Can you name this something similar to what other drivers use?  There
-> > > > are a couple *_pcie_get_resources() functions (normally called from
-> > > > *_pcie_probe()), but no *_get_res() yet.
-> > > 
-> > > Earlier in this patchset I've introduced a new method to get
-> > > the CSRs ranges, PCIe speed, NoF lanes, etc resources. See the patch:
-> > > [PATCH v3 14/17] PCI: dwc: Introduce generic resources getter
-> > > The method has been named as "dw_pcie_get_res()". So the locally
-> > > defined function has been named to refer to that method. If you think
-> > > that using the "_resources" suffix is better (IMO there is no
-> > > significant difference) then we'll need to change the name there too.
-> > > Do you?
-> > 
-> 
-> > Yes.  I don't think there's value in names being gratuitously
-> > different.
-> 
-> Ok.
-> 
-> > 
-> > > > > +	/* AXI-interface is configured with 64-bit address bus width */
-> > > > > +	ret = dma_coerce_mask_and_coherent(&btpci->dw.pp.bridge->dev,
-> > > > > +					   DMA_BIT_MASK(64));
-> > > 
-> > > > Just to double-check since this is the first instance of
-> > > > dma_coerce_mask_and_coherent() in drivers/pci -- I guess Baikal-T1 is
-> > > > unique in needing this?
-> > > 
-> > > To be honest I've set it here just in case, seeing the dma_mask and
-> > > coherent_dma_mask are left uninitialized in the Host bridge device
-> > > instance, while it's still participate in the PCI devices hierarchy:
-> > > 
-> > > 1. platform_device.dev;
-> > >                    | (<= devm_pci_alloc_host_bridge(dev))
-> > >                    +---+
-> > >                       &v
-> > > 2. pci_host_bridge.dev.parent
-> > >                    | (<= pci_register_host_bridge(bridge) or)
-> > >                    | (<= pci_alloc_child_bus()              )
-> > >                   &v
-> > >            pci_bus.bridge
-> > >                    +-------------------+
-> > >                    |                   | (<= pci_setup_device())
-> > >                    v                   v
-> > > 3.     pci_bus.dev.parent  pci_dev.dev.parent
-> > >                            pci_dev.dma_mask = 0xffffffff;
-> > >                                    | (<= pci_device_add())
-> > >                                    +----+
-> > >                                        &v
-> > >                            pci_dev->dev.dma_mask
-> > >                            pci_dev->dev.coherent_dma_mask = 0xffffffffull;
-> > > 
-> > > So each device detected on the very first PCIe bus gets to have the
-> > > PCI host bridge device as a parent. But AFAICS the PCI subsystem core
-> > > code doesn't use the PCI host bridge DMA-mask and by default the
-> > > dma_mask/coherent_dma_mask fields of each PCIe peripheral device are
-> > > unconditionally initialized with DMA_BIT_MASK(32) (they are supposed
-> > > to be overridden by the device-driver anyway). So to speak we can
-> > > freely drop the dma_coerce_mask_and_coherent() method invocation from
-> > > my driver if you say it is required and the PCI host bridge DMA parameter
-> > > will never be used. What do you think?
-> > 
-> 
-> > I'd like the usage across drivers to be consistent unless there's a
-> > hardware difference that requires something different.  So if you can
-> > point to something different in bt1, great.  If not, do it the same as
-> > the other drivers.
-> 
-> Ok. I'll drop it from the driver then.
-> 
-> > 
-> > > > > +static void bt1_pcie_full_stop_bus(struct bt1_pcie *btpci, bool init)
-> > > > 
-> > > > Can you name this something similar to what other drivers use?
-> > > 
-> > > For instance? (Please note, the link_stop/link_start callbacks are
-> > > defined as separate methods above.) The current names correctly describe
-> > > the methods logic. So I wouldn't want to fully change their names.
-> > 
-> 
-> > Do any other drivers contain similar logic?  If so, please use a
-> > similar name.
-> 
-> host_init content is very platform-specific. So each driver has its own
-> callback implementation and logical sub-methods split up. My case
-> isn't an exception.
-> 
-> > 
-> > > > > +	 * Application reset controls are trigger-based so de-assert the core
-> > > > > +	 * resets only.
-> > > > > +	 */
-> > > > > +	ret = reset_control_bulk_assert(DW_PCIE_NUM_CORE_RSTS, pci->core_rsts);
-> > 
-> 
-> > BTW, the comment says "de-assert" but the code looks like "assert".
-> 
-> Right. It is supposed to be "assert" in accordance with what is
-> actually done.
-> 
-> > 
-> > > > > +	/* Make sure the reset is settled */
-> > > > > +	usleep_range(1, 10);
-> > > 
-> > > > Is this duration related to something in the PCIe spec?  Or the DWC
-> > > > spec? 
-> > > 
-> > > No. These durations are the chip-specific. Partly due to them being
-> > > specific for each SoC we can't implement a generic bus reset
-> > > procedure.
-> > > 
-> > > > I'd really like to use named constants when possible, although
-> > > > we have a ton of bare magic numbers currently.
-> > > > 
-> > > > Similar for the poll timeouts and the "state settled" sleep below.
-> > > 
-> > > I don't really see much need in this parametrization since these
-> > > numbers are used only once in the platform driver and their
-> > > application is easily inferable from the code context.
-> > 
-> 
-> > Even if they are used only once, it's helpful when constants like this
-> > can be connected to the spec or other justification for the specific
-> > values.
-> 
-> Ok. I'll replace the literals with the macros.
-> 
-> > 
-> > > > > +static struct bt1_pcie *bt1_pcie_create_data(struct platform_device *pdev)
-> > > > > +{
-> > > > > +	struct bt1_pcie *btpci;
-> > > > > +
-> > > > > +	btpci = devm_kzalloc(&pdev->dev, sizeof(*btpci), GFP_KERNEL);
-> > > > > +	if (!btpci)
-> > > > > +		return ERR_PTR(-ENOMEM);
-> > > > > +
-> > > > > +	btpci->pdev = pdev;
-> > > > > +
-> > > > > +	platform_set_drvdata(pdev, btpci);
-> > > > > +
-> > > > > +	return btpci;
-> > > 
-> > > > I don't think it's worth splitting this into a separate function.  I
-> > > > think it would be better to use the same structure as other dwc-based
-> > > > drivers and keep this in bt1_pcie_probe().
-> > > 
-> > > Sorry, I disagree in this matter. Generally I don't like the most of
-> > > the probe methods designed in the kernel well because after evolving
-> > > in time they get to be a mess if incoherent initializations,
-> > > allocations, requests, etc. Splitting it up into a set of smaller
-> > > coherent methods makes the code much clearer.
-> > 
-> 
-> > There's definitely some tension between making one driver better and
-> > making it different from all the others.  I'm all in favor of making
-> > all the drivers better and more consistent.  I'm less in favor of
-> > one-off improvements because consistency is extremely important for
-> > maintenance.
-> 
-> Well, if there were a consistency in the probe method design it would
-> have been another story, but in case of the DW PCIe there is none.
-> Some DW PCIe platform drivers perform all the probe actions right in
-> the probe method forming a long list of the weakly coherent things,
-> some of them have a few sub-functions called but still look the same,
-> some of them are mainly split up in the sub-methods, but still perform
-> some initialization right in the probe method. So in general there is
-> no unification and well defined convention in that regard.
-> 
-> My approach on the contrary makes the probe method code well unified.
-> Should any new additional step is required, the new method can be
-> added together with the cleanup antagonist. Similarly the
-> sub-methods update patches is easier to review than reading the
-> all-in-one probe code update. Moreover such design approach I've
-> been using in all the drivers submitted by me to the kernel and no
-> questions have been raised so far. Finally the driver is supposed to
-> be maintained by its author at the very least. So I definitely won't
-> have any problem with it especially after using the same design
-> pattern in all my drivers.
-> 
-> > 
-> > > > > +static int bt1_pcie_add_dw_port(struct bt1_pcie *btpci)
-> > > 
-> > > > All other dwc-based drivers call dw_pcie_host_init() from either
-> > > > *_pcie_probe() or *_add_pcie_port().  Please use a similar convention.
-> > > 
-> > > Not entirely. Tegra is an exception. So as before I don't think there
-> > > is a real convention. Most likely it's a result of a lucky coincident.
-> > > Moreover I don't really like such naming. Something like
-> > > VENDOR_pcie_add_root_port() would be much better.
-> > 
-> 
-> > I stand corrected.  Of the 21 dw_pcie_host_init() calls, 13 are from
-> > *_pcie_probe(), 7 are from *_add_pcie_port(), and tegra is from
-> > tegra_pcie_init_controller().  I think the *_add_pcie_port() structure
-> > is better because it makes room to support multiple root ports.
-> 
-> See the last comment. It concerns the same methods, but you suggest to
-> use the names "*_add_port()" there.
-> 
-> > 
-> > > > > +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
-> > > > 
-> > > > Why do you need this when no other dwc-based drivers do?  Is Baikal-T1
-> > > > different in this respect?
-> > > 
-> > > It's because eDMA engine embedded into the DW PCIe root port. 
-> > 
-> 
-> > Let's add a comment about the fact that this is needed because of the
-> > eDMA engine.
-> 
-> Ok.
-> 
-> > 
-> > > > > +static void bt1_pcie_del_dw_port(struct bt1_pcie *btpci)
-> > > 
-> > > > Can you call dw_pcie_host_deinit() from the same place as other
-> > > > drivers?
-> > > > 
-> > > >   $ git grep -p dw_pcie_host_deinit drivers/pci/controller/dwc
-> > > 
-> > > Sorry I'd rather leave it as is. There are only four drivers using
-> > > it and one of them don't follow what seems like a convention. I'd
-> > > rather have my driver code coherent:
-> > > bt1_pcie_add_pcie_port() is used to add the DW PCIe Root Port.
-> > > and
-> > > bt1_pcie_del_pcie_port() is used to remove the DW PCIe Root Port
-> > 
-> > I agree with your rationale.  Intel and kirin do:
-> > 
-> >   *_pcie_probe
-> >     dw_pcie_host_init
-> > 
-> >   *_pcie_remove
-> >     dw_pcie_host_deinit
-> > 
-> > and tegra is similar but from tegra_pcie_init_controller() and
-> > tegra_pcie_deinit_controller().  Exynos is the odd one out and calls
-> > dw_pcie_host_init() from exynos_add_pcie_port() but
-> > dw_pcie_host_deinit() from exynos_pcie_remove().
-> > 
-> > Your model is better since it removes the "single root port"
-> > assumption.  I would like the "bt1_pcie_add_port()" and
-> > "bt1_pcie_del_port()" (or "bt1_pcie_remove_port()", which would be
-> > slightly more parallel with "add") names to align with other drivers.
-> 
-> Ok. I'll use bt1_pcie_add_port() and bt1_pcie_del_port() names then.
-> * Note the DW PCIe platform drivers mainly use the _pcie_port() suffix
-> * in the add-method.
-> 
-> -Sergey
-> 
-> > 
-> > Bjorn
+>
+> Would you mind addressing the feedback below first, and I'll take
+> another look when you send v4?
+
+fine :)
+
+> >       if (err)
+> >               dev_err(chip->dev,
+> >                       "p%d: failed to force MAC link down\n", port);
+> > +     else
+> > +             if (mv88e6xxx_port_is_locked(chip, port, true))
+> > +                     mv88e6xxx_atu_locked_entry_flush(ds, port);
+>
+> This is superfluous, is it not? The bridge will transition a port whose
+> link goes down to BR_STATE_DISABLED, which will make dsa_port_set_state()
+> fast-age the dynamic FDB entries on the port, which you've already
+> handled below.
+
+I guess you are right.
+
+
+> >  }
+> >
+> >  static void mv88e6xxx_mac_link_up(struct dsa_switch *ds, int port,
+> > @@ -1685,6 +1689,9 @@ static void mv88e6xxx_port_fast_age(struct dsa_switch *ds, int port)
+> >       struct mv88e6xxx_chip *chip = ds->priv;
+> >       int err;
+> >
+> > +     if (mv88e6xxx_port_is_locked(chip, port, true))
+> > +             mv88e6xxx_atu_locked_entry_flush(ds, port);
+> > +
+>
+> Dumb question: if you only flush the locked entries at fast age if the
+> port is locked, then what happens with the existing locked entries if
+> the port becomes unlocked before an FDB flush takes place?
+> Shouldn't mv88e6xxx_port_set_lock() call mv88e6xxx_atu_locked_entry_flush()
+> too?
+
+That was my first thought too, but the way the flags are handled with
+the mask etc, does so that
+mv88e6xxx_port_set_lock() is called when other flags change. It could
+be done by the transition
+from locked->unlocked by checking if the port is locked already.
+On the other hand, the timers will timeout and the entries will be
+removed anyhow.
+
+> > +     if (mv88e6xxx_port_is_locked(chip, port, true))
+> > +             mv88e6xxx_atu_locked_entry_find_purge(ds, port, addr, vid);
+> > +
+> >       mv88e6xxx_reg_lock(chip);
+> >       err = mv88e6xxx_port_db_load_purge(chip, port, addr, vid,
+> > -                                        MV88E6XXX_G1_ATU_DATA_STATE_UC_STATIC);
+> > +                     MV88E6XXX_G1_ATU_DATA_STATE_UC_STATIC);
+>
+> Unrelated and unjustified change.
+>
+Ups, missed that one.
+
+> >  static int mv88e6xxx_port_setup(struct dsa_switch *ds, int port)
+> >  {
+> > -     return mv88e6xxx_setup_devlink_regions_port(ds, port);
+> > +     int err;
+> > +
+> > +     err = mv88e6xxx_setup_devlink_regions_port(ds, port);
+> > +     mv88e6xxx_init_violation_handler(ds, port);
+>
+> What's with this quirky placement? You need to do error checking and
+> call mv88e6xxx_teardown_violation_handler() if setting up the devlink
+> port regions fails, otherwise the port will fail to probe but no one
+> will quiesce its delayed ATU work.
+
+Yes, of course.
+
+> By the way, do all mv88e6xxx switches support 802.1X and MAC Auth Bypass,
+> or do we need to initialize these structures depending on some capability?
+
+I will have to look into that, but I think they all do support these features.
+
+> > +     err = mv88e6xxx_g1_write(chip, MV88E6XXX_G1_ATU_OP,
+> > +                              MV88E6XXX_G1_ATU_OP_BUSY | MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
+>
+> Split on 3 lines please.
+
+OK.
+
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     return mv88e6xxx_g1_atu_op_wait(chip);
+> > +}
+> > +
+> >  static int mv88e6xxx_g1_atu_op(struct mv88e6xxx_chip *chip, u16 fid, u16 op)
+> >  {
+> >       u16 val;
+> > @@ -356,11 +370,11 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+> >       int spid;
+> >       int err;
+> >       u16 val;
+> > +     u16 fid;
+> >
+> >       mv88e6xxx_reg_lock(chip);
+> >
+> > -     err = mv88e6xxx_g1_atu_op(chip, 0,
+> > -                               MV88E6XXX_G1_ATU_OP_GET_CLR_VIOLATION);
+> > +     err = mv88e6xxx_g1_read_atu_violation(chip);
+>
+> I cannot comment on the validity of this change: previously, we were
+> writing FID 0 as part of mv88e6xxx_g1_atu_op(), now we are reading back
+> the FID. Definitely too much going on in a single change, this needs a
+> separate patch with an explanation.
+
+It is of course needed to read the fid and I couldn't really
+understand the reasoning behind how it was before,
+but I will do as you say as best I can.
+
+>
+> >       if (err)
+> >               goto out;
+> >
+> > @@ -368,6 +382,10 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+> >       if (err)
+> >               goto out;
+> >
+> > +     err = mv88e6xxx_g1_read(chip, MV88E6352_G1_ATU_FID, &fid);
+> > +     if (err)
+> > +             goto out;
+>
+> Is it ok to read the MV88E6352_G1_ATU_FID register from an IRQ handler
+> common for all switches, I wonder?
+
+I don't know about the naming of this define (I probably overlooked
+the 6352 part), but it is the same as I have in the
+spec for 6097, and I don't see any alternative...
+
+> > +
+> >       err = mv88e6xxx_g1_atu_data_read(chip, &entry);
+> >       if (err)
+> >               goto out;
+> > @@ -382,6 +400,11 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+> >               dev_err_ratelimited(chip->dev,
+> >                                   "ATU age out violation for %pM\n",
+> >                                   entry.mac);
+> > +             err = mv88e6xxx_handle_violation(chip,
+> > +                                              chip->ports[spid].port,
+>
+> Dumb question: isn't chip->ports[spid].port == spid?
+
+Probably you are right.
+
+>
+> > +                                              &entry,
+> > +                                              fid,
+> > +                                              MV88E6XXX_G1_ATU_OP_AGE_OUT_VIOLATION);
+>
+> This fits on 3 lines instead of 5 (and same below).
+
+OK
+
+>
+> > +static void mv88e6xxx_atu_locked_entry_timer_work(struct atu_locked_entry *ale)
+>
+> Please find a more adequate name for this function.
+
+Any suggestions?
+
+>
+> > +{
+> > +     struct switchdev_notifier_fdb_info info = {
+> > +             .addr = ale->mac,
+> > +             .vid = ale->vid,
+> > +             .added_by_user = false,
+> > +             .is_local = false,
+>
+> No need to have an initializer for the false members.
+
+OK
+
+> > +             .offloaded = true,
+> > +             .locked = true,
+> > +     };
+> > +     struct mv88e6xxx_atu_entry entry;
+> > +     struct net_device *brport;
+> > +     struct dsa_port *dp;
+> > +
+> > +     entry.state = MV88E6XXX_G1_ATU_DATA_STATE_UC_UNUSED;
+> > +     entry.trunk = false;
+> > +     memcpy(&entry.mac, &ale->mac, ETH_ALEN);
+>
+> ether_addr_copy
+>
+> > +
+> > +     mv88e6xxx_reg_lock(ale->chip);
+> > +     mv88e6xxx_g1_atu_loadpurge(ale->chip, ale->fid, &entry);
+>
+> The portvec will be junk memory that's on stack, is that what you want?
+>
+Probably not what I want.
+
+> > +     if (brport) {
+> > +             if (!rtnl_is_locked()) {
+> > +                     rtnl_lock();
+>
+> No, no, no, no, no, no, no.
+>
+> As I've explained already:
+> https://patchwork.kernel.org/project/netdevbpf/patch/20220317093902.1305816-4-schultz.hans+netdev@gmail.com/#24782974
+> dsa_port_to_bridge_port() needs to be called with the rtnl_mutex held.
+>
+> Please take a moment to figure out which function expects which lock and
+> for what operation, then draw a call graph, figure out a consistent lock
+> hierarchy where things are always acquired in the same order, and if a
+> function needs a locking context but not all callers offer it, put an
+> ASSERT_RTNL() (for example) and transfer the locking responsibility to
+> the caller.
+
+As I remember it was because mv88e6xxx_atu_locked_entry_flush() was called both
+with and without the lock, but there was something I didn't know about
+how link down
+handling works.
+
+>
+> Doing this will also help you name your functions better than
+> "locked entry timer work" (which are called from... drum roll...
+> mv88e6xxx_port_fdb_del and mv88e6xxx_port_fast_age).
+>
+> Which by the way, reminds me that.....
+> You can't take rtnl_lock() from port_fdb_add() and port_fdb_del(),
+> see commits d7d0d423dbaa ("net: dsa: flush switchdev workqueue when
+> leaving the bridge") and 0faf890fc519 ("net: dsa: drop rtnl_lock from
+> dsa_slave_switchdev_event_work"), as you'll deadlock with
+> dsa_port_pre_bridge_leave(). In fact you never could, but for a slightly
+> different reason.
+>
+> From the discussion with Ido and Nikolay I get the impression that
+> you're not doing the right thing here either, notifying a
+> SWITCHDEV_FDB_DEL_TO_BRIDGE from what is effectively the
+> SWITCHDEV_FDB_DEL_TO_DEVICE handler (port_fdb_del).
+
+Hmm, my experience tells me that much is opposite the normal
+conventions when dealing with
+locked ports, as there was never switchdev notifications from the
+driver to the bridge before, but
+that is needed to keep ATU and FDB entries in sync.
+
+>
+> No inline functions in .c files.
+
+OK
+
+> Nasty lock ordering inversion. In mv88e6xxx_handle_violation() we take
+> &dp->locked_entries_list_lock with mv88e6xxx_reg_lock() held.
+> Here (in mv88e6xxx_atu_locked_entry_timer_work called from here) we take
+> mv88e6xxx_reg_lock() with &dp->locked_entries_list_lock held.
+>
+I will look into that.
+
+> > +     switch (type) {
+> > +     case MV88E6XXX_G1_ATU_OP_MISS_VIOLATION:
+> > +             if (atomic_read(&dp->atu_locked_entry_cnt) >= ATU_LOCKED_ENTRIES_MAX) {
+> > +                     mv88e6xxx_reg_unlock(chip);
+>
+> You call mv88e6xxx_reg_lock() from mv88e6xxx_g1_atu_prob_irq_thread_fn()
+> and mv88e6xxx_reg_unlock() from mv88e6xxx_handle_violation()? Nice!
+>
+> And I understand why that is: to avoid a lock ordering inversion with
+> rtnl_lock(). Just unlock the mv88e6xxx registers after the last hardware
+> access in mv88e6xxx_g1_atu_prob_irq_thread_fn() - after mv88e6xxx_g1_atu_mac_read(),
+> and call mv88e6xxx_handle_violation() with the registers unlocked, and
+> lock them when you need them.
+
+OK.
+
+> > +             locked_entry = kmalloc(sizeof(*locked_entry), GFP_ATOMIC);
+>
+> Please be consistent in your naming of struct atu_locked_entry
+> variables, be they "locked_entry" or "ale" or otherwise.
+> And please create a helper function that creates such a structure and
+> initializes it.
+
+OK
+
+> > +             if (!locked_entry)
+> > +                     return -ENOMEM;
+> > +             timer_setup(&locked_entry->timer, mv88e6xxx_atu_locked_entry_timer_handler, 0);
+>
+> Does this have to be a dedicated timer per entry, or can you just record
+> the "jiffies" at creation time per locked entry, and compare it with the
+> current jiffies from the periodic, sleepable mv88e6xxx_atu_locked_entry_cleanup?
+
+I think that approach should be sufficient too.
+
+>
+> Why is the rtnl_unlock() outside the switch statement but the rtnl_lock() inside?
+> Not to mention, the dsa_port_to_bridge_port() call needs to be under rtnl_lock().
+
+Just a small optimization as I also have another case of the switch
+(only one switch case if
+you didn't notice) belonging to the next patch set regarding dynamic
+ATU entries.
+
+> > +void mv88e6xxx_atu_locked_entry_flush(struct dsa_switch *ds, int port)
+> > +{
+> > +     struct dsa_port *dp = dsa_to_port(ds, port);
+> > +     struct atu_locked_entry *ale, *tmp;
+> > +
+> > +     mutex_lock(&dp->locked_entries_list_lock);
+> > +     list_for_each_entry_safe(ale, tmp, &dp->atu_locked_entries_list, list) {
+> > +             mv88e6xxx_atu_locked_entry_purge(ale);
+> > +             atomic_dec(&dp->atu_locked_entry_cnt);
+> > +     }
+> > +     mutex_unlock(&dp->locked_entries_list_lock);
+> > +
+> > +     if (atomic_read(&dp->atu_locked_entry_cnt) != 0)
+> > +             dev_err(ds->dev,
+> > +                     "ERROR: Locked entries count is not zero after flush on port %d\n",
+> > +                     port);
+>
+> And generally speaking, why would you expect it to be 0, since there's
+> nothing that stops this check from racing with mv88e6xxx_handle_violation?
+
+I guess you are right that when setting the port STP state to BLOCKED, there is
+the potential race you mention.
+
+> Also, random fact: no need to say ERROR when printing with the KERN_ERR
+> log level. It's kind of implied from the log level.
+
+Of course.
+
+> > +     dp->atu_locked_entry_cnt.counter = 0;
+>
+> atomic_set()
+
+Right!
+
+> This and mv88e6xxx_switchdev.c are the only source files belonging to
+> this driver which have the mv88e6xxx_ prefix (others are "chip.c" etc).
+> Can you please follow the convention?
+
+Yes. I think I got that idea from some other driver, thus avoiding
+switchdev.h file,
+but I will change it.
+
+> > +struct atu_locked_entry {
+>
+> mv88e6xxx driver specific structure names should be prefixed with mv88e6xxx_.
+
+OK
+
+> > +     u8      mac[ETH_ALEN];
+>
+> Either align everything with tabs, or nothing.
+
+Ups.
+
+> > +int mv88e6xxx_handle_violation(struct mv88e6xxx_chip *chip,
+> > +                            int port,
+> > +                            struct mv88e6xxx_atu_entry *entry,
+> > +                            u16 fid,
+> > +                            u16 type);
+>
+> Both this and the function definition can easily fit on 3 lines.
+
+OK
+
+> Please, no "if (chiplock) mutex_lock()" hacks. Just lockdep_assert_held(&chip->reg_lock),
+> which serves both for documentation and for validation purposes, ensure
+> the lock is always taken at the caller (which in this case is super easy)
+> and move on.
+
+As I am calling the function in if statement checks, it would make
+that code more messy, while with
+this approach the function can be called from anywhere. I also looked
+at having two functions, with
+one being a wrapper function taking the lock and calling the other...
+
+>
+> > +
+> > +     if (mv88e6xxx_port_read(chip, port, MV88E6XXX_PORT_CTL0, &reg))
+> > +             goto out;
+>
+> It would be good to actually propagate the error to the caller and
+> "locked" via a pass-by-reference bool pointer argument, not just say
+> that I/O errors mean that the port is unlocked.
+
+Again the wish to be able to call it from if statement checks,.
+
+> > +     reg &= MV88E6XXX_PORT_ASSOC_VECTOR_PAV_MASK;
+> > +     if (locked) {
+> > +             reg |= MV88E6XXX_PORT_ASSOC_VECTOR_IGNORE_WRONG |
+> > +                     MV88E6XXX_PORT_ASSOC_VECTOR_LOCKED_PORT |
+> > +                     MV88E6XXX_PORT_ASSOC_VECTOR_INT_AGE_OUT |
+> > +                     MV88E6XXX_PORT_ASSOC_VECTOR_HOLD_AT_1;
+>
+> I'd suggest aligning these macros vertically.
+
+They are according to the Linux kernel coding standard wrt indentation afaik.

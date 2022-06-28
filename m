@@ -2,78 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767D755E614
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5CD55E5F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346853AbiF1Nng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 09:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S1346800AbiF1Nnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 09:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346848AbiF1Nnd (ORCPT
+        with ESMTP id S1346854AbiF1Nnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 09:43:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1151CB09;
-        Tue, 28 Jun 2022 06:43:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 28 Jun 2022 09:43:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BC05C61
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 06:43:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656423812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cW2a4YUNnUssvuoOmnrQqPk0B+mOaabUamfGI9ndHfY=;
+        b=iGnJ9cWTdXbBgN9FDDK7iw6X6juJbQ1i79/zPeCDVumV7i19Xjt9bzA3EmKd6VFs3P8yd4
+        WpGPh79arViMEhZEJYMalLwEvr97VMT3Q6FAxSpWMoXJ22HyXunniPVNt0k4H0Ktb/sa0A
+        li45ygz6dtNBufl8hjFKOW5vMEqAEFA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-386-OLBmRs1BN464TwGQg1zc_w-1; Tue, 28 Jun 2022 09:43:29 -0400
+X-MC-Unique: OLBmRs1BN464TwGQg1zc_w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B55DB81E16;
-        Tue, 28 Jun 2022 13:43:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93634C3411D;
-        Tue, 28 Jun 2022 13:43:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656423806;
-        bh=Mu07+NkAeIWQxqDrSfWHBkagAH3qiS5hRkhUS/KEB+8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J26wAUkMEANntFYIvZPSyjRIRDBcF+0CYhgasflX/sFmF3R2jSZgCYNFz3Ynufqqz
-         nzeG/jqshDGe3knqrMZ6LXcKAICeN8pbhTN0uX0rgz8dRC1YlEMk7ISAYbSEGNsozr
-         vMxbVtI/cVWlsFmtm6PBsVByLIwnivkOj1AJrkxj/wXQRhS/ln9VsFhQnbbn/n2PIn
-         QzAw/V4dQkJ41Sn1oOGwbBEr5dwHr6L6ETynGtdZIr8NvIdrA2IOpy2Ggx+LW85NkG
-         M7m209vEq9dxSuBiAncmEIgn4Mvu51957qmvXRBAQRo+OwPw3t5gNRgFO+Buf2FD6s
-         0aBj8RlvROlWA==
-Date:   Tue, 28 Jun 2022 15:43:17 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Ralph Corderoy <ralph@inputplus.co.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nate Karstens <nate.karstens@garmin.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Changli Gao <xiaosuo@gmail.com>
-Subject: Re: [PATCH v2] Implement close-on-fork
-Message-ID: <20220628134317.heagqm6dplf5vk7u@wittgenstein>
-References: <20200515152321.9280-1-nate.karstens@garmin.com>
- <20220618114111.61EC71F981@orac.inputplus.co.uk>
- <Yq4qIxh5QnhQZ0SJ@casper.infradead.org>
- <20220619104228.A9789201F7@orac.inputplus.co.uk>
- <20220628131304.gbiqqxamg6pmvsxf@wittgenstein>
- <35d0facc934748f995c2e7ab695301f7@AcuMS.aculab.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 677023C16187;
+        Tue, 28 Jun 2022 13:43:28 +0000 (UTC)
+Received: from starship (unknown [10.40.194.38])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4A4F7404E4C8;
+        Tue, 28 Jun 2022 13:43:26 +0000 (UTC)
+Message-ID: <a5fe4ca7a412c7e4970d7c0d48b17cefcd91833c.camel@redhat.com>
+Subject: Re: [PATCH v6 00/17] Introducing AMD x2AVIC and hybrid-AVIC modes
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Tue, 28 Jun 2022 16:43:25 +0300
+In-Reply-To: <84d30ead-7c8e-1f81-aa43-8a959e3ae7d0@amd.com>
+References: <20220519102709.24125-1-suravee.suthikulpanit@amd.com>
+         <84d30ead-7c8e-1f81-aa43-8a959e3ae7d0@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <35d0facc934748f995c2e7ab695301f7@AcuMS.aculab.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,55 +64,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 01:38:07PM +0000, David Laight wrote:
-> From: Christian Brauner
-> > Sent: 28 June 2022 14:13
-> > 
-> > On Sun, Jun 19, 2022 at 11:42:28AM +0100, Ralph Corderoy wrote:
-> > > Hi Matthew, thanks for replying.
-> > >
-> > > > > The need for O_CLOFORK might be made more clear by looking at a
-> > > > > long-standing Go issue, i.e. unrelated to system(3), which was started
-> > > > > in 2017 by Russ Cox when he summed up the current race-condition
-> > > > > behaviour of trying to execve(2) a newly created file:
-> > > > > https://github.com/golang/go/issues/22315.
-> > > >
-> > > > The problem is that people advocating for O_CLOFORK understand its
-> > > > value, but not its cost.  Other google employees have a system which
-> > > > has literally millions of file descriptors in a single process.
-> > > > Having to maintain this extra state per-fd is a cost they don't want
-> > > > to pay (and have been quite vocal about earlier in this thread).
-> > >
-> > > So do you agree the userspace issue is best solved by *_CLOFORK and the
-> > > problem is how to implement *_CLOFORK at an acceptable cost?
-> > >
-> > > OTOH David Laight was making suggestions on moving the load to the
-> > > fork/exec path earlier in the thread, but OTOH Al Viro mentioned a
-> > > ‘portable solution’, though that could have been to a specific issue
-> > > rather than the more general case.
-> > >
-> > > How would you recommend approaching an acceptable cost is progressed?
-> > > Iterate on patch versions?  Open a bugzilla.kernel.org for central
-> > > tracking and linking from the other projects?  ..?
-> > 
-> > Quoting from that go thread
-> > 
-> > "If the OS had a "close all fds above x", we could use that. (I don't know of any that do, but it sure
-> > would help.)"
-> > 
-> > So why can't this be solved with:
-> > close_range(fd_first, fd_last, CLOSE_RANGE_CLOEXEC | CLOSE_RANGE_UNSHARE)?
-> > e.g.
-> > close_range(100, ~0U, CLOSE_RANGE_CLOEXEC | CLOSE_RANGE_UNSHARE)?
+On Tue, 2022-06-28 at 20:20 +0700, Suthikulpanit, Suravee wrote:
+> Maxim,
 > 
-> That is a relatively recent linux system call.
-> Although it can be (mostly) emulated by reading /proc/fd
-> - but that may not be mounted.
+> On 5/19/2022 5:26 PM, Suravee Suthikulpanit wrote:
+> > Introducing support for AMD x2APIC virtualization. This feature is
+> > indicated by the CPUID Fn8000_000A EDX[14], and it can be activated
+> > by setting bit 31 (enable AVIC) and bit 30 (x2APIC mode) of VMCB
+> > offset 60h.
+> > 
+> > With x2AVIC support, the guest local APIC can be fully virtualized in
+> > both xAPIC and x2APIC modes, and the mode can be changed during runtime.
+> > For example, when AVIC is enabled, the hypervisor set VMCB bit 31
+> > to activate AVIC for each vCPU. Then, it keeps track of each vCPU's
+> > APIC mode, and updates VMCB bit 30 to enable/disable x2APIC
+> > virtualization mode accordingly.
+> > 
+> > Besides setting bit VMCB bit 30 and 31, for x2AVIC, kvm_amd driver needs
+> > to disable interception for the x2APIC MSR range to allow AVIC hardware
+> > to virtualize register accesses.
+> > 
+> > This series also introduce a partial APIC virtualization (hybrid-AVIC)
+> > mode, where APIC register accesses are trapped (i.e. not virtualized
+> > by hardware), but leverage AVIC doorbell for interrupt injection.
+> > This eliminates need to disable x2APIC in the guest on system without
+> > x2AVIC support. (Note: suggested by Maxim)
+> > 
+> > Testing for v5:
+> >    * Test partial AVIC mode by launching a VM with x2APIC mode
+> >    * Tested booting a Linux VM with x2APIC physical and logical modes upto 512 vCPUs.
+> >    * Test the following nested SVM test use cases:
+> > 
+> >               L0     |    L1   |   L2
+> >         ----------------------------------
+> >                 AVIC |    APIC |    APIC
+> >                 AVIC |    APIC |  x2APIC
+> >          hybrid-AVIC |  x2APIC |    APIC
+> >          hybrid-AVIC |  x2APIC |  x2APIC
+> >               x2AVIC |    APIC |    APIC
+> >               x2AVIC |    APIC |  x2APIC
+> >               x2AVIC |  x2APIC |    APIC
+> >               x2AVIC |  x2APIC |  x2APIC
 > 
-> In any case another thread can open an fd between the close_range()
-> and fork() calls.
+> With the commit 3743c2f02517 ("KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base"),
+> APICV/AVIC is now inhibit when the guest kernel boots w/ option "nox2apic" or "x2apic_phys"
+> due to APICV_INHIBIT_REASON_APIC_ID_MODIFIED.
+> 
+> These cases used to work. In theory, we should be able to allow AVIC works in this case.
+> Is there a way to modify logic in kvm_lapic_xapic_id_updated() to allow these use cases
+> to work w/ APICv/AVIC?
+> 
+> Best Regards,
+> Suravee
+> 
 
-The CLOSE_RANGE_UNSHARE gives the calling thread a private file
-descriptor table before marking fs close-on-exec.
+This seems very strange, I assume you test the kvm/queue of today,
 
-close_range(100, ~0U, CLOSE_RANGE_CLOEXEC | CLOSE_RANGE_UNSHARE)?
+which contains a fix for a typo I had in the list of inhibit reasons
+(commit 5bdae49fc2f689b5f896b54bd9230425d3643dab - KVM: SEV: fix misplaced closing parenthesis)
+
+
+Could you share more details on the test? How many vCPUs in the guest, is x2apic exposed to the guest?
+
+
+Looking through the code the the __x2apic_disable, touches the MSR_IA32_APICBASE so I would expect
+the APICV_INHIBIT_REASON_APIC_BASE_MODIFIED inhibit to be triggered and not APICV_INHIBIT_REASON_APIC_ID_MODIFIED
+
+
+I don't see yet how the x2apic_phys can trigger these inhibits.
+
+Best regards,
+	Maxim Levitsky
+

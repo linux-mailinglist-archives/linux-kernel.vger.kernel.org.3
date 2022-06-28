@@ -2,90 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9633E55EC46
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC9A55EC4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 20:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234749AbiF1SK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 14:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
+        id S233397AbiF1SNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 14:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiF1SKz (ORCPT
+        with ESMTP id S230319AbiF1SNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 14:10:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF3017E2E;
-        Tue, 28 Jun 2022 11:10:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 28 Jun 2022 14:13:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C26D1B78B
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 11:13:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656440027;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BCsO+VHWvi/xygeTHehRQRa8L5qzqJMKZwPbHoiNY8A=;
+        b=dxp3cqmYoF9Btia3z80N5/nT7pNvgnYYv48iKd10Wl0wS9wIOs2IO4ZZwXFU5QHOR0UMeG
+        MvSvGkh0G4PrHH16JJgZ7y74kNlVk9KZaNJArJ/8ZBvDSwnXF6d/q1rsAZMnOky2djHyO7
+        QBJTXLkfyjyzSu/wSNKHvYZGRGpP7UA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-384-z1c1mbwEPzysVN0r0myy4Q-1; Tue, 28 Jun 2022 14:13:41 -0400
+X-MC-Unique: z1c1mbwEPzysVN0r0myy4Q-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E21761ADB;
-        Tue, 28 Jun 2022 18:10:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18346C3411D;
-        Tue, 28 Jun 2022 18:10:51 +0000 (UTC)
-Date:   Tue, 28 Jun 2022 14:10:50 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Gabriele Paoloni <gpaoloni@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org
-Subject: Re: [PATCH V4 06/20] tools/rv: Add dot2c
-Message-ID: <20220628141050.6d4ff81b@gandalf.local.home>
-In-Reply-To: <5b1e664b0c33f4da0430922718adc71a5d58d86c.1655368610.git.bristot@kernel.org>
-References: <cover.1655368610.git.bristot@kernel.org>
-        <5b1e664b0c33f4da0430922718adc71a5d58d86c.1655368610.git.bristot@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B543801233;
+        Tue, 28 Jun 2022 18:13:40 +0000 (UTC)
+Received: from [10.22.34.187] (unknown [10.22.34.187])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 170E4492CA3;
+        Tue, 28 Jun 2022 18:13:40 +0000 (UTC)
+Message-ID: <09abc75e-2ffb-1ab5-d0fc-1c15c943948d@redhat.com>
+Date:   Tue, 28 Jun 2022 14:13:39 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V7 4/5] asm-generic: spinlock: Add combo spinlock (ticket
+ & queued)
+Content-Language: en-US
+To:     guoren@kernel.org, palmer@rivosinc.com, arnd@arndb.de,
+        mingo@redhat.com, will@kernel.org, boqun.feng@gmail.com
+Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20220628081707.1997728-1-guoren@kernel.org>
+ <20220628081707.1997728-5-guoren@kernel.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220628081707.1997728-5-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Jun 2022 10:44:48 +0200
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
-
-> +    def __create_matrix(self):
-> +        # transform the array into a dictionary
-> +        events = self.events
-> +        states = self.states
-> +        events_dict = {}
-> +        states_dict = {}
-> +        nr_event = 0
-> +        for event in events:
-> +            events_dict[event] = nr_event
-> +            nr_event += 1
+On 6/28/22 04:17, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Some architecture has a flexible requirement on the type of spinlock.
+> Some LL/SC architectures of ISA don't force micro-arch to give a strong
+> forward guarantee. Thus different kinds of memory model micro-arch would
+> come out in one ISA. The ticket lock is suitable for exclusive monitor
+> designed LL/SC micro-arch with limited cores and "!NUMA". The
+> queue-spinlock could deal with NUMA/large-scale scenarios with a strong
+> forward guarantee designed LL/SC micro-arch.
+>
+> So, make the spinlock a combo with feature.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> ---
+>   include/asm-generic/spinlock.h | 43 ++++++++++++++++++++++++++++++++--
+>   kernel/locking/qspinlock.c     |  2 ++
+>   2 files changed, 43 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+> index f41dc7c2b900..a9b43089bf99 100644
+> --- a/include/asm-generic/spinlock.h
+> +++ b/include/asm-generic/spinlock.h
+> @@ -28,34 +28,73 @@
+>   #define __ASM_GENERIC_SPINLOCK_H
+>   
+>   #include <asm-generic/ticket_spinlock.h>
+> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> +#include <linux/jump_label.h>
+> +#include <asm-generic/qspinlock.h>
 > +
-> +        nr_state = 0
-> +        for state in states:
-> +            states_dict[state] = nr_state
-> +            nr_state = nr_state + 1
+> +DECLARE_STATIC_KEY_TRUE(use_qspinlock_key);
+> +#endif
 > +
+> +#undef arch_spin_is_locked
+> +#undef arch_spin_is_contended
+> +#undef arch_spin_value_unlocked
+> +#undef arch_spin_lock
+> +#undef arch_spin_trylock
+> +#undef arch_spin_unlock
+>   
+>   static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
+>   {
+> -	ticket_spin_lock(lock);
+> +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
+> +	if (static_branch_likely(&use_qspinlock_key))
+> +		queued_spin_lock(lock);
+> +	else
+> +#endif
+> +		ticket_spin_lock(lock);
+>   }
 
-Hmm, do you just like inconsistency?
+Why do you use a static key to control whether to use qspinlock or 
+ticket lock? In the next patch, you have
 
-		nr_event += 1
++#if !defined(CONFIG_NUMA) && defined(CONFIG_QUEUED_SPINLOCKS)
++	static_branch_disable(&use_qspinlock_key);
++#endif
 
-		nr_state = nr_state + 1
+So the current config setting determines if qspinlock will be used, not 
+some boot time parameter that user needs to specify. This patch will 
+just add useless code to lock/unlock sites. I don't see any benefit of 
+doing that.
 
-??
+Cheers,
+Longman
 
--- Steve

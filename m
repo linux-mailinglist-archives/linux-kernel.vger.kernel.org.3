@@ -2,138 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F26555E78E
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A6F55E8FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347870AbiF1Pde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S1347890AbiF1PeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348423AbiF1PdZ (ORCPT
+        with ESMTP id S1347889AbiF1PeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:33:25 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140073.outbound.protection.outlook.com [40.107.14.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA8D1EEE1;
-        Tue, 28 Jun 2022 08:33:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R/XXHhejpHiLzL4YHQp8C+1Yc6//naHzMSiew0GaEjfh+BDwie+XmItCzYF/SnGCgXrsZ3UMUzMbPfJ2CjtrYQVcvpiEZmM+cT0yy9WC7mrVvYzN1p4uIA7rhv1UjI8bvv3ao3mWs2e3CtbaajYlwSLW9qX6jhXiqS186f1x2bORwTI1qAD0xce2YP6WgCi0vNanoZnGnYUI/dj6V3vt9IGZvwCN/4vpB9DABCeX/s47wIwkLwQlMecdcCPrsZ2tqR2LbkiGJUFK8VRojXBf7NVSl4pIss+CoiUWhmmbZGrIeUPVCRqS+ErXZJK74IVKNVlHBIVRb1a9Kz8omhyWPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=di75XbfP9RwB6qzbud3+eS61e41dgw+MoM/b9DFLxGI=;
- b=XTJFqtieNczzGYL1x/dyMcc2oLTxOfnL8r5x+25IXw16l5UCKbImK8S5GWLnGf9gN4Vm8NjsFEc6LrfjBXYef5O6SLUhgZxnuJGlCGw6k3p4g6bj0y6TZ+IpcZRU4LgC70gEwWufCpXm1U47RFT1/oogoTSlb4AqDEI2XEJrgWvwydMa4nACTbOrwq27J1xfAHEjHrfZrdJ11BLtM1Vz9KRzfwpRse6U+0ne/5/OynQ5TChk6bB6ANksWA4ysko+N0SGq5rCGn5jOh6YQhceylFlcZH6GJx3V0qmIDl8GdwJZ56jEQw9R0oi3pNpEFby4yUZ5b6JRplDlGnLfEtmsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=di75XbfP9RwB6qzbud3+eS61e41dgw+MoM/b9DFLxGI=;
- b=gbtDdoYiBlqNk8qw8gFUho8sWozsfSk0lbjMlOyjwA3xwhbGBCCn5SdV0F/O7IaR99xiU0zfheQFmOVF4Iy7MfKQUYSSDXMuNqojt4xdujX6vngooZnJm57NBGPebD1C2wtn9PRQVIGro7QCszZ1+9hKj9xbo/Us7wkujQe9GXo=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AM0PR04MB5361.eurprd04.prod.outlook.com (2603:10a6:208:115::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5373.18; Tue, 28 Jun
- 2022 15:33:21 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::94fe:9cbe:247b:47ea]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::94fe:9cbe:247b:47ea%7]) with mapi id 15.20.5373.018; Tue, 28 Jun 2022
- 15:33:21 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Colin Foster <colin.foster@in-advantage.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Terry Bowman <terry.bowman@amd.com>
-Subject: Re: [PATCH v11 net-next 1/9] mfd: ocelot: add helper to get regmap
- from a resource
-Thread-Topic: [PATCH v11 net-next 1/9] mfd: ocelot: add helper to get regmap
- from a resource
-Thread-Index: AQHYiseGTWpqx8Siq0u0vYqv+P3KI61kxcMAgAAteAA=
-Date:   Tue, 28 Jun 2022 15:33:21 +0000
-Message-ID: <20220628153320.jrgofeemytyidbot@skbuf>
-References: <20220628081709.829811-1-colin.foster@in-advantage.com>
- <20220628081709.829811-2-colin.foster@in-advantage.com>
- <CAHp75VevH4LODkF4AELH=E5tQRZZ8LjbWN62sA14PydLMeDRgA@mail.gmail.com>
-In-Reply-To: <CAHp75VevH4LODkF4AELH=E5tQRZZ8LjbWN62sA14PydLMeDRgA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 54013e20-8fb6-4315-f5d0-08da591b8872
-x-ms-traffictypediagnostic: AM0PR04MB5361:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SBpCpvDd/XFTFLQDOi43lhNV9+ZrEem+rXu7NQPjXoJo83g82W+TKA72HVuwgARAaTzwom9QPXEvS91reJQBOThicv36/eOFQSyRnNWe7ZR6hU2wQ+5f8clspVOcdlp9THMeD3ckc/O3u6XhI+GVuhagOvGOkrTwmHzu8/hWaHNWjlBVfjBKRMYL40/4x+daEvGPya4z3f6F4MT46tieG1ELAlw96mRX29cBkSbsQ/V3CFppAyyVYCk9tXR5Mptet5s+rkZqbeWffctkSyUmr1nE+OiPE8IRpBGvb3HOF6nxLFdHlVjT1lwe8TdOb7EMC6kUIYSsKwLhmiELHAmzBvSpEBS06lD+jwoRv33daOZwS/4hfoyGr+xz/mMUzbFaYP+NS4KMADKEyjXuI0RyxDHJ3/wWvqUTiP9TIpgooUAqg3ep2EdMJPSgjVwJTCZ/O6XovDj+EDBiz4QD7FlEUcwPpCSWcNoEjPJomdewpzwiuGFLIVLR2EeGXoqhDh5r01HZTGLC/28g+znV7MnnhnZLDnMV1i+PYfFyoGPlmjJacI3er9Ar+MrBcNoslbAHT3bK5JkxCoO8nok9uj6EQUkd28+pOSNHhq8J6Glbo5zsygPqDl3CUafvuHn0jOdpkBTODm2vjjzCuS1JsEIxZhjPaalPSZMO7mNrpU6kXzWRykTNmbgh+StzR8OMlgaDft+V14bbTsHX7sKX74v0S+VK1yyeWgqK6NKn6PxFuLouAJx50d4lfmsZb2SW/O9G6Q0lvlg5HlOEj3r5SJ6PqhS8wWW67d002E3j6kfyp10=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(136003)(346002)(376002)(396003)(39860400002)(366004)(66446008)(8936002)(5660300002)(4326008)(76116006)(64756008)(8676002)(66556008)(44832011)(6506007)(7416002)(83380400001)(66946007)(122000001)(38100700002)(66476007)(6486002)(86362001)(54906003)(38070700005)(6916009)(71200400001)(1076003)(186003)(478600001)(9686003)(6512007)(33716001)(316002)(26005)(3716004)(2906002)(41300700001)(53546011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?v4qqOa8Po030KK9gw/QnYsOkNo4JnXZyzB9ceOGz/cl7eOFtcywXt4NgPt1K?=
- =?us-ascii?Q?EGBVdxjUFv8KKDdXJbrrXi9bRUAdtUg+JTCJ/RaN5ac0ixbrndtMGeZFFuIv?=
- =?us-ascii?Q?2ckD8y12oRF4x6gvXhNtvnvlVvLkQEg/0duMpnMXOidaf5fIepJVTUP7eW7O?=
- =?us-ascii?Q?WZMRv1Jk55570loDhWJ0mzrWxYWWy3O7B4aeTXTKSWBWznBaEMgUraBC0BP4?=
- =?us-ascii?Q?c+R2tV9tv4TgQQri4RxeWMAvrJRdpjPsm2k701LHgrfNpX++2XNH1JC/5CU6?=
- =?us-ascii?Q?5S4dutKLK9DZfE5+6am/wJn0bP31in2/rxI2YJ6ZNNSPo5C42hDa8q3Pu1vw?=
- =?us-ascii?Q?2m/g/QBQZ6ThMwEBtl67k4beX7kNMkU4SCAaykqOE4vx+nNsgIJXnN4hapbX?=
- =?us-ascii?Q?ieXbZYC7gLaH3Q0VTVYL1NIPVGE0sJ8UlHPyLByWbYO2HYP1vPxzZ5LOa84j?=
- =?us-ascii?Q?3YwDZOlJi2PTKbbqQOJYvLnUDXk/7+Yi1SgaPgyuBgSPasTCpt+bEzfKc3Qx?=
- =?us-ascii?Q?pQ3kOwiCn9F5h7QzIBryrjzs1fP9li6oI4TXoo4xrFxkSYfJdNvsoyqX9JNq?=
- =?us-ascii?Q?pupl6pK/8XPvtmgaqXdVnM92+Gdus5uSloAuWUAIFz6+jWaBeKHu3u2dGHsd?=
- =?us-ascii?Q?dAJ5LDDMK/3EYphaDUTkTyQRn234y6ry6GxnYG5ViByum6373a3cAjQaMB/w?=
- =?us-ascii?Q?LSqlYQo9//635TumnUJ0+kYGz824R087sLT2IsMgHc2piFCk+fHvWf46obHV?=
- =?us-ascii?Q?ud527dyCDaBq6x9pZYnbYMt9QJToddSuzx561/boy3L8slw3Kzq9tkztd/m9?=
- =?us-ascii?Q?Ph0DAdOLqbiFuyh91UgAZM+I1pVOtkNKuNdXGLoR71/OASXMmMu24riPGZQo?=
- =?us-ascii?Q?hMaIEMH9Fan0E7+D83k7yiVVlmBB3nRWnFgoT2bklO3YSZmZ5CFMEy11fXf8?=
- =?us-ascii?Q?miffauSW+t+Y4OZti9IEtfpmpGdzz/zUvUoXQb4wKVeVsBRr5oj69BNBOnwc?=
- =?us-ascii?Q?phT0wGeez/HzfuQG9OQBmAM6/E0NDp4WGkIHwK/cFe8DsPr+Qkk3qaoq8xMQ?=
- =?us-ascii?Q?mHHIkXGPhe7vm1QrEBcMBiJbNluEFkEm2KqX6d0qHbmNTz8+5Ys3LJCvBfdU?=
- =?us-ascii?Q?Sd7pVUoGpy+JC989N9ttck14ejk/woU77Bkn4Mbx0r38fE6l9jRKhSgVAZW6?=
- =?us-ascii?Q?bhyJtoZFDr0aGY9X44o0A6FHm9bFyasil4Iop2TNXHG6BfuuvasOdJ0T2kC8?=
- =?us-ascii?Q?ukAVj9kvMct1HBtrSX7tqTP5HiJ9uDMu6aWxfeNkWyspPMQ2WaesyFhGW2ZB?=
- =?us-ascii?Q?2YQcvd3wEayOnO22CKe2AlnMkFCmjPOjds4SlaaVTTKktxA2zeIYRRq+6nI3?=
- =?us-ascii?Q?yXz5yKCOPpN73J9CvDMXhW0HOPRIgjN7GfVqZ6SMmbQ3p2BjmugAods6OUEL?=
- =?us-ascii?Q?Q//o5lEbW9pQNwXRQn1qIDagYQl6F7DuON+c22d+3gnYvoVchv+z094e8rRt?=
- =?us-ascii?Q?KlL3FC4UtmKWbrCkQU2g6glk3piBIaDmBqZeSGiutYjUs/M1hJqJPnkPwqHI?=
- =?us-ascii?Q?28/7RWfzYuXkHoryLzEy9qp4wry3pYXoi2bP8YFQFWgPqHuJ2IOb0xgObmct?=
- =?us-ascii?Q?YQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <7A348D1C53E6944E8700E13E18AC9A96@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 28 Jun 2022 11:34:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA6A2C656;
+        Tue, 28 Jun 2022 08:34:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE69B6157F;
+        Tue, 28 Jun 2022 15:34:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51223C3411D;
+        Tue, 28 Jun 2022 15:34:04 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="M6VMqQUp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1656430442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y0lZ4KUV8UB2MGHdDpLNiE999LZukoHN15YiJs71eY4=;
+        b=M6VMqQUpNH3bgXpNntMSJk0EUmeXeiOCsJAd/6wU05hKKMEZF0ZT28RF0MCbQKGI+IwDHm
+        znP2O9feIB5Cj7qguw0NgXnl+HXGYDGve5Lc7eX4S8v9JyRUGUyXKDISN4xK04oIyo7Dba
+        Zt1VIpNZ1DxYR2GD1LOZpvv/AINVYhE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 532837ab (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 28 Jun 2022 15:34:02 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        robh@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Kees Cook <keescook@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Will Deacon <will@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] dt-bindings: chosen: remove
+Date:   Tue, 28 Jun 2022 17:33:54 +0200
+Message-Id: <20220628153354.870543-1-Jason@zx2c4.com>
+In-Reply-To: <YrserfmdD+QH+y/X@zx2c4.com>
+References: <YrserfmdD+QH+y/X@zx2c4.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54013e20-8fb6-4315-f5d0-08da591b8872
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2022 15:33:21.4102
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: O+ycLldjxriBRl9aaKcOzLJdNXfGchmcLzM4TUEVjNChM04DQAvdwjCQxOWpkseHNpMbkNEqxD5cf1oXPrIK/w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5361
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -141,41 +63,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 02:50:36PM +0200, Andy Shevchenko wrote:
-> On Tue, Jun 28, 2022 at 10:17 AM Colin Foster
-> <colin.foster@in-advantage.com> wrote:
-> >
-> > Several ocelot-related modules are designed for MMIO / regmaps. As such=
-,
-> > they often use a combination of devm_platform_get_and_ioremap_resource =
-and
-> > devm_regmap_init_mmio.
-> >
-> > Operating in an MFD might be different, in that it could be memory mapp=
-ed,
-> > or it could be SPI, I2C... In these cases a fallback to use IORESOURCE_=
-REG
-> > instead of IORESOURCE_MEM becomes necessary.
-> >
-> > When this happens, there's redundant logic that needs to be implemented=
- in
-> > every driver. In order to avoid this redundancy, utilize a single funct=
-ion
-> > that, if the MFD scenario is enabled, will perform this fallback logic.
->=20
-> > +       regs =3D devm_platform_get_and_ioremap_resource(pdev, index, &r=
-es);
-> > +
-> > +       if (!res)
-> > +               return ERR_PTR(-ENOENT);
->=20
-> This needs a comment why the original error code from devm_ call above
-> is not good here.
+Apparently this is no longer maintained and undesired. Remove it.
 
-I think what is really needed is an _optional() variant of
-ocelot_platform_init_regmap_from_resource(), which just returns NULL on
-missing resource and doesn't ioremap anything. It can be easily open
-coded, i.e. instead of creating devm_platform_get_and_ioremap_resource_opti=
-onal(),
-we could just call platform_get_resource() and devm_ioremap_resource()
-individually.=
+Link: https://lore.kernel.org/lkml/c8dddfe6-6385-ed34-e789-9f845c8a32bd@linaro.org/
+Link: https://lore.kernel.org/lkml/CAL_Jsq+uSdk9YNbUW35yjN3q8-3FDobrxHmBpy=4RKmCfnB0KQ@mail.gmail.com/
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ Documentation/devicetree/bindings/chosen.txt | 137 -------------------
+ 1 file changed, 137 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/chosen.txt
+
+diff --git a/Documentation/devicetree/bindings/chosen.txt b/Documentation/devicetree/bindings/chosen.txt
+deleted file mode 100644
+index 1cc3aa10dcb1..000000000000
+--- a/Documentation/devicetree/bindings/chosen.txt
++++ /dev/null
+@@ -1,137 +0,0 @@
+-The chosen node
+----------------
+-
+-The chosen node does not represent a real device, but serves as a place
+-for passing data between firmware and the operating system, like boot
+-arguments. Data in the chosen node does not represent the hardware.
+-
+-The following properties are recognized:
+-
+-
+-kaslr-seed
+------------
+-
+-This property is used when booting with CONFIG_RANDOMIZE_BASE as the
+-entropy used to randomize the kernel image base address location. Since
+-it is used directly, this value is intended only for KASLR, and should
+-not be used for other purposes (as it may leak information about KASLR
+-offsets). It is parsed as a u64 value, e.g.
+-
+-/ {
+-	chosen {
+-		kaslr-seed = <0xfeedbeef 0xc0def00d>;
+-	};
+-};
+-
+-Note that if this property is set from UEFI (or a bootloader in EFI
+-mode) when EFI_RNG_PROTOCOL is supported, it will be overwritten by
+-the Linux EFI stub (which will populate the property itself, using
+-EFI_RNG_PROTOCOL).
+-
+-stdout-path
+------------
+-
+-Device trees may specify the device to be used for boot console output
+-with a stdout-path property under /chosen, as described in the Devicetree
+-Specification, e.g.
+-
+-/ {
+-	chosen {
+-		stdout-path = "/serial@f00:115200";
+-	};
+-
+-	serial@f00 {
+-		compatible = "vendor,some-uart";
+-		reg = <0xf00 0x10>;
+-	};
+-};
+-
+-If the character ":" is present in the value, this terminates the path.
+-The meaning of any characters following the ":" is device-specific, and
+-must be specified in the relevant binding documentation.
+-
+-For UART devices, the preferred binding is a string in the form:
+-
+-	<baud>{<parity>{<bits>{<flow>}}}
+-
+-where
+-
+-	baud	- baud rate in decimal
+-	parity	- 'n' (none), 'o', (odd) or 'e' (even)
+-	bits	- number of data bits
+-	flow	- 'r' (rts)
+-
+-For example: 115200n8r
+-
+-Implementation note: Linux will look for the property "linux,stdout-path" or
+-on PowerPC "stdout" if "stdout-path" is not found.  However, the
+-"linux,stdout-path" and "stdout" properties are deprecated. New platforms
+-should only use the "stdout-path" property.
+-
+-linux,booted-from-kexec
+------------------------
+-
+-This property is set (currently only on PowerPC, and only needed on
+-book3e) by some versions of kexec-tools to tell the new kernel that it
+-is being booted by kexec, as the booting environment may differ (e.g.
+-a different secondary CPU release mechanism)
+-
+-linux,usable-memory-range
+--------------------------
+-
+-This property holds a base address and size, describing a limited region in
+-which memory may be considered available for use by the kernel. Memory outside
+-of this range is not available for use.
+-
+-This property describes a limitation: memory within this range is only
+-valid when also described through another mechanism that the kernel
+-would otherwise use to determine available memory (e.g. memory nodes
+-or the EFI memory map). Valid memory may be sparse within the range.
+-e.g.
+-
+-/ {
+-	chosen {
+-		linux,usable-memory-range = <0x9 0xf0000000 0x0 0x10000000>;
+-	};
+-};
+-
+-The main usage is for crash dump kernel to identify its own usable
+-memory and exclude, at its boot time, any other memory areas that are
+-part of the panicked kernel's memory.
+-
+-While this property does not represent a real hardware, the address
+-and the size are expressed in #address-cells and #size-cells,
+-respectively, of the root node.
+-
+-linux,elfcorehdr
+-----------------
+-
+-This property holds the memory range, the address and the size, of the elf
+-core header which mainly describes the panicked kernel's memory layout as
+-PT_LOAD segments of elf format.
+-e.g.
+-
+-/ {
+-	chosen {
+-		linux,elfcorehdr = <0x9 0xfffff000 0x0 0x800>;
+-	};
+-};
+-
+-While this property does not represent a real hardware, the address
+-and the size are expressed in #address-cells and #size-cells,
+-respectively, of the root node.
+-
+-linux,initrd-start and linux,initrd-end
+----------------------------------------
+-
+-These properties hold the physical start and end address of an initrd that's
+-loaded by the bootloader. Note that linux,initrd-start is inclusive, but
+-linux,initrd-end is exclusive.
+-e.g.
+-
+-/ {
+-	chosen {
+-		linux,initrd-start = <0x82000000>;
+-		linux,initrd-end = <0x82800000>;
+-	};
+-};
+-- 
+2.35.1
+

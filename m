@@ -2,126 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D430555E07B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F66E55D12C
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242125AbiF1AtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 20:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        id S242290AbiF1AwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 20:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233116AbiF1AtK (ORCPT
+        with ESMTP id S236425AbiF1AwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 20:49:10 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D588B11;
-        Mon, 27 Jun 2022 17:49:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656377349; x=1687913349;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Gm2N2ZUm+7WdloRrAvNjqF430gKN+MlOv6l36JlXkjc=;
-  b=lWrkUjEyY60Np13XzzZVMd59yZ63fF238KmrPaq6wbz2E5KOSM2FENSX
-   9eeMdhZcJKLg6L1Plre0LrcVR7nAZP/kNf0/HvQcF3RTA7fhS5xDD1vJY
-   X48FD9OEP+H/Y7X84jcqdfmu8WbLjpaPKM6QRHxxe9a02T2a+CNENWEpG
-   Y0Sg+iwDCg+jd/yfLqYToYcr2c41QGr9P4URs0wrE/qmuNQJOwh2GxdxU
-   Lf+CWvpize21ox6u5Hg7YhDLZnNJQG1436Vv0h/segkwkDB5vJa+AV5a7
-   rpSGj4rjnpTmONZVwIEG0GfuwBJTZEQL7PnLOgpiT/nMi4aMAYEx1xvMM
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="270345527"
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="270345527"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 17:49:08 -0700
-X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
-   d="scan'208";a="646669100"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.174.143]) ([10.249.174.143])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 17:49:05 -0700
-Message-ID: <28110f9c-b84c-591a-d365-ae4412408e48@intel.com>
-Date:   Tue, 28 Jun 2022 08:48:35 +0800
+        Mon, 27 Jun 2022 20:52:19 -0400
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621F5389
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 17:52:18 -0700 (PDT)
+Received: by mail-pl1-f193.google.com with SMTP id r1so9647508plo.10
+        for <linux-kernel@vger.kernel.org>; Mon, 27 Jun 2022 17:52:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MxFLykTwoVQ3UQOo8TuHdysXUGeMP/aljqZIpHUoMrs=;
+        b=5QhyTM0xmkLixfWxNJGeRT7VNfNHLuOs940iTV+sfIuRLxZOjDV55plJyjd7eWLBMy
+         GQpwTl9BJVZgFwxXdF4zqO8KQq4G0inuA5F/XrHB8KTda7CNIxqJKwbPSWo+ditUXL8S
+         RH09uTn0+cow+9/vDPNVuaRI9OkRUDMtx6xzJi/LToF7YDzD0DtsZ0gDjvMA95u7vyAQ
+         6PMUmtc2kKu18TJbLaNNZWqqSNKj4LKsUFM6wwysUxGXdeZ7hBq0mCGZQZIWTQ8A2deA
+         MJIw+T1GUeWfz6mswsqZRAYEpzD2NXF8+5nATezAmUEP3FnQaj51khVfs2b9mqKqCudh
+         Tm3A==
+X-Gm-Message-State: AJIora+8PtSqIgT9aXKjshJpn6rTGRmO8XX15sVNSQPNLBVXWW3Xcx3i
+        VWpiV/Bt/46Klf6Ds9UV2w==
+X-Google-Smtp-Source: AGRyM1ssFSnRV6rkpTstqoArtoFLNo0LWpcH0QBqlwfzE/NlvUxFtp1emTZ6QD9qEpht3qK43SlmFQ==
+X-Received: by 2002:a17:902:8e86:b0:168:d6d6:660f with SMTP id bg6-20020a1709028e8600b00168d6d6660fmr930658plb.35.1656377537962;
+        Mon, 27 Jun 2022 17:52:17 -0700 (PDT)
+Received: from localhost.localdomain ([156.146.53.107])
+        by smtp.gmail.com with ESMTPSA id u27-20020a62d45b000000b0050dc7628148sm7961421pfl.34.2022.06.27.17.52.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 17:52:17 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     quic_abhinavk@quicinc.com, robdclark@gmail.com,
+        dmitry.baryshkov@linaro.org
+Cc:     linux-kernel@vger.kernel.org, freedreno@lists.freedesktop.org,
+        dan.carpenter@oracle.com, kelulanainsley@gmail.com,
+        sunliming@kylinos.cn, kernel test robot <lkp@intel.com>
+Subject: [PATCH RESEND] drm/msm/dpu: Fix variable dereferenced before check
+Date:   Tue, 28 Jun 2022 08:52:04 +0800
+Message-Id: <20220628005204.838739-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH v5 15/22] x86/virt/tdx: Allocate and set up PAMTs for
- TDMRs
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-References: <cover.1655894131.git.kai.huang@intel.com>
- <c504a8acd06dc455050c25e2a4cc70aef5eb9358.1655894131.git.kai.huang@intel.com>
- <e72703b0-767a-ec88-7cb6-f95a3564d823@intel.com>
- <b376aef05bc032fdf8cc23762ce77a14830440cd.camel@intel.com>
- <b43bf089-1202-a1fe-cbb3-d4e0926cab67@intel.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <b43bf089-1202-a1fe-cbb3-d4e0926cab67@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/2022 4:41 AM, Dave Hansen wrote:
-> On 6/27/22 03:31, Kai Huang wrote:
->>>> +/* Page sizes supported by TDX */
->>>> +enum tdx_page_sz {
->>>> +	TDX_PG_4K,
->>>> +	TDX_PG_2M,
->>>> +	TDX_PG_1G,
->>>> +	TDX_PG_MAX,
->>>> +};
->>> Are these the same constants as the magic numbers in Kirill's
->>> try_accept_one()?
->> try_accept_once() uses 'enum pg_level' PG_LEVEL_{4K,2M,1G} directly.  They can
->> be used directly too, but 'enum pg_level' has more than we need here:
-> 
-> I meant this:
-> 
-> +       switch (level) {
-> +       case PG_LEVEL_4K:
-> +               page_size = 0;
-> +               break;
-> 
-> Because TDX_PG_4K==page_size==0, and for this:
-> 
-> +       case PG_LEVEL_2M:
-> +               page_size = 1;
+Fixes the following smatch warning:
 
-here we can just do
+drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:261
+dpu_encoder_phys_wb_atomic_check() warn: variable dereferenced before check 'conn_state'
 
-	page_size = level - 1;
+Fixes: d7d0e73f7de3 ("drm/msm/dpu: introduce the dpu_encoder_phys_* for writeback")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: sunliming <sunliming@kylinos.cn>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-or
-	
-	tdx_page_level = level - 1;
-
-yes, TDX's page level definition is one level smaller of Linux's definition.
-
-> where TDX_PG_2M==page_size==1
-> 
-> See?
-> 
-> Are Kirill's magic 0/1/2 numbers the same as
-> 
-> 	TDX_PG_4K,
-> 	TDX_PG_2M,
-> 	TDX_PG_1G,
-> 
-> ?
-
-
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+index 59da348ff339..0ec809ab06e7 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+@@ -252,11 +252,6 @@ static int dpu_encoder_phys_wb_atomic_check(
+ 	DPU_DEBUG("[atomic_check:%d, \"%s\",%d,%d]\n",
+ 			phys_enc->wb_idx, mode->name, mode->hdisplay, mode->vdisplay);
+ 
+-	if (!conn_state->writeback_job || !conn_state->writeback_job->fb)
+-		return 0;
+-
+-	fb = conn_state->writeback_job->fb;
+-
+ 	if (!conn_state || !conn_state->connector) {
+ 		DPU_ERROR("invalid connector state\n");
+ 		return -EINVAL;
+@@ -267,6 +262,11 @@ static int dpu_encoder_phys_wb_atomic_check(
+ 		return -EINVAL;
+ 	}
+ 
++	if (!conn_state->writeback_job || !conn_state->writeback_job->fb)
++		return 0;
++
++	fb = conn_state->writeback_job->fb;
++
+ 	DPU_DEBUG("[fb_id:%u][fb:%u,%u]\n", fb->base.id,
+ 			fb->width, fb->height);
+ 
+-- 
+2.25.1
 

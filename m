@@ -2,149 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3376655CDA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 15:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBDB55C2B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 14:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243118AbiF1Be0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 27 Jun 2022 21:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
+        id S243141AbiF1Bfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 27 Jun 2022 21:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243084AbiF1BeP (ORCPT
+        with ESMTP id S243082AbiF1Bfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 27 Jun 2022 21:34:15 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7B2167FE;
-        Mon, 27 Jun 2022 18:34:13 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id u15so22627043ejc.10;
-        Mon, 27 Jun 2022 18:34:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VFjFynZy6Y6LV26469hAz6HcHpk+ATW9nFKisizAaS0=;
-        b=HxBQCz+7pRrd8vYnRhzxjsYUhYVbh2740UtczLVj5Qadg66MxqD6v7B1UGENMsXSIh
-         NZ95KoNdnEnToocmddB8hVQm3umvd7EQ4umzgQcF+7ZKMGvwj21qIm4vl50UEADmBO8W
-         z/n9v0ZYxB6fIIjOLkTK7wQB9KorIFItL/CT/BUqj8or+kBD0Nu6JTxuVmz9x5N9Wrd3
-         Xvxps116OsXXejOkFAw3yct++Gvjy8/h29Uqxo0JpQx+hftir5R5vHETuPWv2Xepgycf
-         2xEUyuNHXxB0rkSuRMiahmG8E7kIlZRTSqiNp3yYJc/aCPu7xpb21I6Fji6+dgEIKsTG
-         NsaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VFjFynZy6Y6LV26469hAz6HcHpk+ATW9nFKisizAaS0=;
-        b=5957CKDIrDK6S8hTTLXiShFC/CPZ8WHNtSQe2qCwe1rGqoidceaqx55vieB6HAj6Ny
-         xaDb2fUfzCnjFSdysgQIfFrYhdRCoYU4rofPePmSG6PgmsAD4UXyoNILaIOWNZyKQ2J3
-         vRIuspMKEarqyut7jUSGeewC9fGIQow0zIhYx4+rtrnCjN2acfWW2M3yZKwzgcGWusTe
-         fca30qjhMyedIpk9S2lvoiaU517gstpcOuHRjkn8GPWbGbzSoebgV7FCy2sIwkTwTbHl
-         Qe4piQfgtHKkcPBNaVM87hTE7FEu5VqlznTeIKS6k+9KraxaFzIWLkcGuE/nzNPeL75x
-         W1gg==
-X-Gm-Message-State: AJIora8acucbtTtUsGRyraGa3mF9s6XlXfyUIYOOuBaizDLhQVWuklaX
-        C9jBbRd6IJz4og4bsHiWx9y/Dpoi8uI=
-X-Google-Smtp-Source: AGRyM1uPYb3BGEYytx9I9d6gFT5JgkCfrvivXpMHCUnwEbmD4KdUhvJMfNpU409V+fTN58hTaPKq2A==
-X-Received: by 2002:a17:907:7251:b0:723:dc32:aefb with SMTP id ds17-20020a170907725100b00723dc32aefbmr15069172ejc.91.1656380051539;
-        Mon, 27 Jun 2022 18:34:11 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id x13-20020a170906b08d00b00724261b592esm5693492ejy.186.2022.06.27.18.34.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jun 2022 18:34:11 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [net-next PATCH RFC 5/5] net: ethernet: stmicro: stmmac: permit MTU change with interface up
-Date:   Tue, 28 Jun 2022 03:33:42 +0200
-Message-Id: <20220628013342.13581-6-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220628013342.13581-1-ansuelsmth@gmail.com>
-References: <20220628013342.13581-1-ansuelsmth@gmail.com>
+        Mon, 27 Jun 2022 21:35:50 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AE11AF2D;
+        Mon, 27 Jun 2022 18:35:48 -0700 (PDT)
+X-UUID: e2100dd6e45a49ba848ccabc6625f7d1-20220628
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.7,REQID:54d8fdd5-4023-4efa-a3a0-4525b25c0589,OB:10,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:51
+X-CID-INFO: VERSION:1.1.7,REQID:54d8fdd5-4023-4efa-a3a0-4525b25c0589,OB:10,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:51
+X-CID-META: VersionHash:87442a2,CLOUDID:1fb8fdd5-5d6d-4eaf-a635-828a3ee48b7c,C
+        OID:af11b62a56bb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: e2100dd6e45a49ba848ccabc6625f7d1-20220628
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <chaotian.jing@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 926094020; Tue, 28 Jun 2022 09:35:42 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 28 Jun 2022 09:35:40 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 28 Jun 2022 09:35:39 +0800
+Message-ID: <8be385651b909c911a9225960cacff72cac96b5b.camel@mediatek.com>
+Subject: Re: [PATCH v13 3/3] mmc: mediatek: add support for SDIO eint wakup
+ IRQ
+From:   Chaotian Jing <chaotian.jing@mediatek.com>
+To:     Axe Yang <axe.yang@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Satya Tangirala <satyat@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Lucas Stach <dev@lynxeye.de>,
+        Eric Biggers <ebiggers@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Yong Mao <yong.mao@mediatek.com>
+Date:   Tue, 28 Jun 2022 09:35:39 +0800
+In-Reply-To: <20220623090445.1401-4-axe.yang@mediatek.com>
+References: <20220623090445.1401-1-axe.yang@mediatek.com>
+         <20220623090445.1401-4-axe.yang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the limitation where the interface needs to be down to change
-MTU by releasing and opening the stmmac driver to set the new MTU.
-Also call the set_filter function to correctly init the port.
-This permits to remove the EBUSY error while the ethernet port is
-running permitting a correct MTU change if for example a DSA request
-a MTU change for a switch CPU port.
-
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 28 +++++++++++++++----
- 1 file changed, 22 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 330aac10a6e7..2e08be895cde 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -5549,18 +5549,15 @@ static int stmmac_change_mtu(struct net_device *dev, int new_mtu)
- {
- 	struct stmmac_priv *priv = netdev_priv(dev);
- 	int txfifosz = priv->plat->tx_fifo_size;
-+	struct stmmac_dma_conf *dma_conf;
- 	const int mtu = new_mtu;
-+	int ret;
- 
- 	if (txfifosz == 0)
- 		txfifosz = priv->dma_cap.tx_fifo_size;
- 
- 	txfifosz /= priv->plat->tx_queues_to_use;
- 
--	if (netif_running(dev)) {
--		netdev_err(priv->dev, "must be stopped to change its MTU\n");
--		return -EBUSY;
--	}
--
- 	if (stmmac_xdp_is_enabled(priv) && new_mtu > ETH_DATA_LEN) {
- 		netdev_dbg(priv->dev, "Jumbo frames not supported for XDP\n");
- 		return -EINVAL;
-@@ -5572,8 +5569,27 @@ static int stmmac_change_mtu(struct net_device *dev, int new_mtu)
- 	if ((txfifosz < new_mtu) || (new_mtu > BUF_SIZE_16KiB))
- 		return -EINVAL;
- 
--	dev->mtu = mtu;
-+	if (netif_running(dev)) {
-+		netdev_dbg(priv->dev, "restarting interface to change its MTU\n");
-+		/* Try to allocate the new DMA conf with the new mtu */
-+		dma_conf = stmmac_setup_dma_desc(priv, mtu);
-+		if (IS_ERR(dma_conf)) {
-+			netdev_err(priv->dev, "failed allocating new dma conf for new MTU %d\n",
-+				   mtu);
-+			return PTR_ERR(dma_conf);
-+		}
- 
-+		stmmac_release(dev);
-+
-+		ret = __stmmac_open(dev, dma_conf);
-+		kfree(dma_conf);
-+		if (ret) {
-+			netdev_err(priv->dev, "failed reopening the interface after MTU change\n");
-+			return ret;
-+		}
-+	}
-+
-+	dev->mtu = mtu;
- 	netdev_update_features(dev);
- 
- 	return 0;
--- 
-2.36.1
+On Thu, 2022-06-23 at 17:04 +0800, Axe Yang wrote:
+> Add support for eint IRQ when MSDC is used as an SDIO host. This
+> feature requires SDIO device support async IRQ function. With this
+> feature, SDIO host can be awakened by SDIO card in suspend state,
+> without additional pin.
+> 
+> MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
+> turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
+> resume, switch GPIO function back to DAT1 mode then turn on clock.
+> 
+> Some device tree property should be added or modified in MSDC node
+> to support SDIO eint IRQ. Pinctrls "state_eint" is mandatory. Since
+> this feature depends on asynchronous interrupts, "wakeup-source",
+> "keep-power-in-suspend" and "cap-sdio-irq" flags are necessary, and
+> the interrupts list should be extended(the interrupt named with
+> sdio_wakeup):
+>         &mmcX {
+> 		...
+> 		interrupt-names = "msdc", "sdio_wakeup";
+> 		interrupts-extended = <...>,
+>                               	      <&pio xxx
+> IRQ_TYPE_LEVEL_LOW>;
+>                 ...
+>                 pinctrl-names = "default", "state_uhs", "state_eint";
+>                 ...
+>                 pinctrl-2 = <&mmc2_pins_eint>;
+>                 ...
+>                 cap-sdio-irq;
+> 		keep-power-in-suspend;
+> 		wakeup-source;
+>                 ...
+>         };
+> 
+> Co-developed-by: Yong Mao <yong.mao@mediatek.com>
+> Signed-off-by: Yong Mao <yong.mao@mediatek.com>
+> Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+Reviewed-by: Chaotian Jing <chaotian.jing@mediatek.com>
+> ---
+>  drivers/mmc/host/mtk-sd.c | 84 ++++++++++++++++++++++++++++++++++++-
+> --
+>  1 file changed, 78 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+> index 195dc897188b..f907b96cfd87 100644
+> --- a/drivers/mmc/host/mtk-sd.c
+> +++ b/drivers/mmc/host/mtk-sd.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Copyright (c) 2014-2015 MediaTek Inc.
+> + * Copyright (c) 2014-2015, 2022 MediaTek Inc.
+>   * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
+>   */
+>  
+> @@ -20,6 +20,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/pm.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/pm_wakeirq.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/slab.h>
+>  #include <linux/spinlock.h>
+> @@ -440,8 +441,10 @@ struct msdc_host {
+>  	struct pinctrl *pinctrl;
+>  	struct pinctrl_state *pins_default;
+>  	struct pinctrl_state *pins_uhs;
+> +	struct pinctrl_state *pins_eint;
+>  	struct delayed_work req_timeout;
+>  	int irq;		/* host interrupt */
+> +	int eint_irq;		/* interrupt from sdio device for
+> waking up system */
+>  	struct reset_control *reset;
+>  
+>  	struct clk *src_clk;	/* msdc source clock */
+> @@ -1520,17 +1523,46 @@ static void __msdc_enable_sdio_irq(struct
+> msdc_host *host, int enb)
+>  
+>  static void msdc_enable_sdio_irq(struct mmc_host *mmc, int enb)
+>  {
+> -	unsigned long flags;
+>  	struct msdc_host *host = mmc_priv(mmc);
+> +	unsigned long flags;
+> +	int ret;
+>  
+>  	spin_lock_irqsave(&host->lock, flags);
+>  	__msdc_enable_sdio_irq(host, enb);
+>  	spin_unlock_irqrestore(&host->lock, flags);
+>  
+> -	if (enb)
+> -		pm_runtime_get_noresume(host->dev);
+> -	else
+> -		pm_runtime_put_noidle(host->dev);
+> +	if (mmc_card_enable_async_irq(mmc->card) && host->pins_eint) {
+> +		if (enb) {
+> +			/*
+> +			 * In dev_pm_set_dedicated_wake_irq_reverse(),
+> eint pin will be set to
+> +			 * GPIO mode. We need to restore it to SDIO
+> DAT1 mode after that.
+> +			 * Since the current pinstate is pins_uhs, to
+> ensure pinctrl select take
+> +			 * affect successfully, we change the pinstate
+> to pins_eint firstly.
+> +			 */
+> +			pinctrl_select_state(host->pinctrl, host-
+> >pins_eint);
+> +			ret =
+> dev_pm_set_dedicated_wake_irq_reverse(host->dev, host->eint_irq);
+> +
+> +			if (ret) {
+> +				dev_err(host->dev, "Failed to register
+> SDIO wakeup irq!\n");
+> +				host->pins_eint = NULL;
+> +				pm_runtime_get_noresume(host->dev);
+> +			} else {
+> +				dev_dbg(host->dev, "SDIO eint irq:
+> %d!\n", host->eint_irq);
+> +			}
+> +
+> +			pinctrl_select_state(host->pinctrl, host-
+> >pins_uhs);
+> +		} else {
+> +			dev_pm_clear_wake_irq(host->dev);
+> +		}
+> +	} else {
+> +		if (enb) {
+> +			/* Ensure host->pins_eint is NULL */
+> +			host->pins_eint = NULL;
+> +			pm_runtime_get_noresume(host->dev);
+> +		} else {
+> +			pm_runtime_put_noidle(host->dev);
+> +		}
+> +	}
+>  }
+>  
+>  static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32 intsts)
+> @@ -2631,6 +2663,20 @@ static int msdc_drv_probe(struct
+> platform_device *pdev)
+>  		goto host_free;
+>  	}
+>  
+> +	/* Support for SDIO eint irq ? */
+> +	if ((mmc->pm_caps & MMC_PM_WAKE_SDIO_IRQ) && (mmc->pm_caps &
+> MMC_PM_KEEP_POWER)) {
+> +		host->eint_irq = platform_get_irq_byname(pdev,
+> "sdio_wakeup");
+> +		if (host->eint_irq > 0) {
+> +			host->pins_eint = pinctrl_lookup_state(host-
+> >pinctrl, "state_eint");
+> +			if (IS_ERR(host->pins_eint)) {
+> +				dev_err(&pdev->dev, "Cannot find
+> pinctrl eint!\n");
+> +				host->pins_eint = NULL;
+> +			} else {
+> +				device_init_wakeup(&pdev->dev, true);
+> +			}
+> +		}
+> +	}
+> +
+>  	msdc_of_property_parse(pdev, host);
+>  
+>  	host->dev = &pdev->dev;
+> @@ -2845,6 +2891,13 @@ static int __maybe_unused
+> msdc_runtime_suspend(struct device *dev)
+>  	struct msdc_host *host = mmc_priv(mmc);
+>  
+>  	msdc_save_reg(host);
+> +
+> +	if (host->pins_eint) {
+> +		disable_irq(host->irq);
+> +		pinctrl_select_state(host->pinctrl, host->pins_eint);
+> +		if (sdio_irq_claimed(mmc))
+> +			__msdc_enable_sdio_irq(host, 0);
+> +	}
+>  	msdc_gate_clock(host);
+>  	return 0;
+>  }
+> @@ -2860,12 +2913,18 @@ static int __maybe_unused
+> msdc_runtime_resume(struct device *dev)
+>  		return ret;
+>  
+>  	msdc_restore_reg(host);
+> +
+> +	if (host->pins_eint) {
+> +		pinctrl_select_state(host->pinctrl, host->pins_uhs);
+> +		enable_irq(host->irq);
+> +	}
+>  	return 0;
+>  }
+>  
+>  static int __maybe_unused msdc_suspend(struct device *dev)
+>  {
+>  	struct mmc_host *mmc = dev_get_drvdata(dev);
+> +	struct msdc_host *host = mmc_priv(mmc);
+>  	int ret;
+>  
+>  	if (mmc->caps2 & MMC_CAP2_CQE) {
+> @@ -2874,11 +2933,24 @@ static int __maybe_unused msdc_suspend(struct
+> device *dev)
+>  			return ret;
+>  	}
+>  
+> +	/*
+> +	 * Bump up runtime PM usage counter otherwise dev-
+> >power.needs_force_resume will
+> +	 * not be marked as 1, pm_runtime_force_resume() will go out
+> directly.
+> +	 */
+> +	if (host->pins_eint)
+> +		pm_runtime_get_noresume(dev);
+> +
+>  	return pm_runtime_force_suspend(dev);
+>  }
+>  
+>  static int __maybe_unused msdc_resume(struct device *dev)
+>  {
+> +	struct mmc_host *mmc = dev_get_drvdata(dev);
+> +	struct msdc_host *host = mmc_priv(mmc);
+> +
+> +	if (host->pins_eint)
+> +		pm_runtime_put_noidle(dev);
+> +
+>  	return pm_runtime_force_resume(dev);
+>  }
+>  
 

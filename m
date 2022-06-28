@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE84555E84B
-	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCEA55E718
+	for <lists+linux-kernel@lfdr.de>; Tue, 28 Jun 2022 18:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347704AbiF1PDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 28 Jun 2022 11:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        id S1347740AbiF1PDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 28 Jun 2022 11:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347687AbiF1PCx (ORCPT
+        with ESMTP id S1347706AbiF1PDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 28 Jun 2022 11:02:53 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAE233E89
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:02:52 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SELM8q006849
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:02:52 -0700
+        Tue, 28 Jun 2022 11:03:00 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE7F33E9F
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:02:59 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 25SEooR7009892
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:02:59 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Q0rmH/1tlJvFVDKrfJqrbwktOSP5EyNGr2kAA/EaMHs=;
- b=J3hUyIENMYVeE/OMKS/mvqaVWcUx4cLSRrtyimUL4g9wOhpgYCe2JOjuMXivCZFLKu1B
- slj6vTNYMTzvrZVcd2lpvjcaL1YW7Ahc09ViOeieTCB44MTU7z7fH3UnU9y6EDTMnfx1
- myw8jV7mSq+iZoLjcxmollcsn31gtf0BzgU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h03ax0a90-1
+ bh=yNGWca9EZYptSu02EU61qEdS1WccUVHJPmvgfuLJvJI=;
+ b=PT5C3RKF+bqqbTqcVYEy+XGiQto7YKGGtENqdyg9k/8eyAl4PcD5o1GLCI3d0bcHEiGn
+ 2S4V14Zj70GmXEVnnKDXoePpJF1hxiaC41MDdzd+urLPeHgpg9mdocvLyPYhFJ2SKQtY
+ RmiV/ABNzw4ABTJ42O156r6IXbKSk8MzWYI= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3h03ru0386-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:02:51 -0700
-Received: from twshared17349.03.ash7.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <linux-kernel@vger.kernel.org>; Tue, 28 Jun 2022 08:02:58 -0700
+Received: from twshared25107.07.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 28 Jun 2022 08:02:51 -0700
+ 15.1.2375.28; Tue, 28 Jun 2022 08:02:55 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id C0AD9244BBC9; Tue, 28 Jun 2022 08:02:37 -0700 (PDT)
+        id DAC6E244BBD1; Tue, 28 Jun 2022 08:02:37 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>,
         <io-uring@vger.kernel.org>
 CC:     <Kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
         Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH for-next 2/8] io_uring: restore bgid in io_put_kbuf
-Date:   Tue, 28 Jun 2022 08:02:22 -0700
-Message-ID: <20220628150228.1379645-3-dylany@fb.com>
+Subject: [PATCH for-next 3/8] io_uring: allow iov_len = 0 for recvmsg and buffer select
+Date:   Tue, 28 Jun 2022 08:02:23 -0700
+Message-ID: <20220628150228.1379645-4-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220628150228.1379645-1-dylany@fb.com>
 References: <20220628150228.1379645-1-dylany@fb.com>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: tpT2HexVr9_jNG_jY-P_aiM6s9UP-FRF
-X-Proofpoint-ORIG-GUID: tpT2HexVr9_jNG_jY-P_aiM6s9UP-FRF
+X-Proofpoint-ORIG-GUID: J7gRIa8TQKOnCR6iuT1FTFS2UemQJt_p
+X-Proofpoint-GUID: J7gRIa8TQKOnCR6iuT1FTFS2UemQJt_p
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-06-28_08,2022-06-28_01,2022-06-22_01
@@ -66,44 +66,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attempt to restore bgid. This is needed when recycling unused buffers as
-the next time around it will want the correct bgid.
+When using BUFFER_SELECT there is no technical requirement that the user
+actually provides iov, and this removes one copy_from_user call.
+
+So allow iov_len to be 0.
 
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- io_uring/kbuf.h | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ io_uring/net.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
-index 3d48f1ab5439..c64f02ea1c30 100644
---- a/io_uring/kbuf.h
-+++ b/io_uring/kbuf.h
-@@ -96,16 +96,20 @@ static inline void io_kbuf_recycle(struct io_kiocb *r=
-eq, unsigned issue_flags)
- static inline unsigned int __io_put_kbuf_list(struct io_kiocb *req,
- 					      struct list_head *list)
- {
-+	unsigned int ret =3D IORING_CQE_F_BUFFER | (req->buf_index << IORING_CQ=
-E_BUFFER_SHIFT);
- 	if (req->flags & REQ_F_BUFFER_RING) {
--		if (req->buf_list)
-+		if (req->buf_list) {
-+			req->buf_index =3D req->buf_list->bgid;
- 			req->buf_list->head++;
+diff --git a/io_uring/net.c b/io_uring/net.c
+index 19a805c3814c..5e84f7ab92a3 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -300,12 +300,18 @@ static int __io_recvmsg_copy_hdr(struct io_kiocb *r=
+eq,
+ 		return ret;
+=20
+ 	if (req->flags & REQ_F_BUFFER_SELECT) {
+-		if (iov_len > 1)
++		if (iov_len =3D=3D 0) {
++			sr->len =3D iomsg->fast_iov[0].iov_len =3D 0;
++			iomsg->fast_iov[0].iov_base =3D NULL;
++			iomsg->free_iov =3D NULL;
++		} else if (iov_len > 1) {
+ 			return -EINVAL;
+-		if (copy_from_user(iomsg->fast_iov, uiov, sizeof(*uiov)))
+-			return -EFAULT;
+-		sr->len =3D iomsg->fast_iov[0].iov_len;
+-		iomsg->free_iov =3D NULL;
++		} else {
++			if (copy_from_user(iomsg->fast_iov, uiov, sizeof(*uiov)))
++				return -EFAULT;
++			sr->len =3D iomsg->fast_iov[0].iov_len;
++			iomsg->free_iov =3D NULL;
 +		}
- 		req->flags &=3D ~REQ_F_BUFFER_RING;
  	} else {
-+		req->buf_index =3D req->kbuf->bgid;
- 		list_add(&req->kbuf->list, list);
- 		req->flags &=3D ~REQ_F_BUFFER_SELECTED;
- 	}
-=20
--	return IORING_CQE_F_BUFFER | (req->buf_index << IORING_CQE_BUFFER_SHIFT=
-);
-+	return ret;
- }
-=20
- static inline unsigned int io_put_kbuf_comp(struct io_kiocb *req)
+ 		iomsg->free_iov =3D iomsg->fast_iov;
+ 		ret =3D __import_iovec(READ, uiov, iov_len, UIO_FASTIOV,
 --=20
 2.30.2
 
